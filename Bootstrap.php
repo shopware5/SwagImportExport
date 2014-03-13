@@ -76,4 +76,23 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
         return true;
     }
 
+    public function registerMyNamespace()
+    {
+        $this->Application()->Loader()->registerNamespace(
+                'Shopware\Components', $this->Path() . 'Components/'
+        );
+    }
+
+    public function getDataAdapter($param)
+    {
+        $this->registerMyNamespace();
+
+        switch ($param) {
+            case 'categories':
+                return Enlight_Class::Instance('Shopware\Components\SwagImportExport\DataAdapters\Categories');
+            default:
+                throw new \Exception("Not supported data scope: $param");
+        }
+    }
+
 }
