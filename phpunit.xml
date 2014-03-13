@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<phpunit bootstrap="./Tests/Shopware/ImportExport/Bootstrap.php" colors="true">
+    <testsuites>
+        <testsuite name="Shopware ImportExport Plugin">
+            <directory>Tests/</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>
