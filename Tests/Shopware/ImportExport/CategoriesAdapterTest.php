@@ -16,5 +16,21 @@ class CategoriesAdapterTest extends ImportExportTestHelper
         
         $this->assertEquals(count($rawData), 62);
     }
+    
+    public function testExportLimit()
+    {
+        $categoriesAdapter = $this->Plugin()->getDataAdapter('categories');
+        
+        //sets offset and limit
+        $limitAdapter = $this->Plugin()->getDataAdapter('limit');
+        $limitAdapter->setOffset(0);
+        $limitAdapter->setLimit(20);
+        
+        $categoriesAdapter->setDataAdapterLimit($limitAdapter);
+        
+        $rawData = $categoriesAdapter->extract();
+        
+        $this->assertEquals(count($rawData), 20);
+    }
 
 }

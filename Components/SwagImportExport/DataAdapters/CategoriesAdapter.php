@@ -36,6 +36,10 @@ class CategoriesAdapter extends DataAdapter
             $attributesSelect = ",\n" . implode(",\n", $attributesSelect);
         }
         
+        $dapterLimit = $this->getDataAdapterLimit();
+        $limit = $dapterLimit->getLimit();
+        $offset = $dapterLimit->getOffset();
+        
         $sql = "
             SELECT
                 c.id as categoryID,
@@ -59,7 +63,7 @@ class CategoriesAdapter extends DataAdapter
             WHERE c.id != 1
             ORDER BY c.parent, c.position
 
-             LIMIT {$this->getOffset()},{$this->getLimit()}
+             LIMIT {$offset},{$limit}
         ";
 
         $stmt = Shopware()->Db()->query($sql);
