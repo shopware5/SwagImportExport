@@ -30,11 +30,4 @@ class ImportExportTestHelper extends \Enlight_Components_Test_Plugin_TestCase
         return $this->plugin;
     }
 
-    public function testPlugin()
-    {
-        $label = $this->Plugin()->getLabel();
-        
-        $this->assertEquals('Swag Import/Export', $label);
-    }
-
 }

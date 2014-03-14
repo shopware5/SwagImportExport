@@ -13,7 +13,7 @@ class AdaptersTests extends ImportExportTestHelper
         //get data scope
         $catergoriesAdapter = $this->Plugin()->getDataAdapter('categories');
         
-        $this->assertTrue($catergoriesAdapter instanceof CategoriesAdapter, 'catergoriesAdapter is not a instance of CategoriesAdapter');
+        $this->assertTrue($catergoriesAdapter instanceof CategoriesAdapter, 'Is not a instance of CategoriesAdapter');
     }
 
 }
