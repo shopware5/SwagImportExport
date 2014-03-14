@@ -4,20 +4,17 @@ namespace Shopware\Components\SwagImportExport\DataAdapters;
 
 class CategoriesAdapter extends DataAdapter
 {
-    private $offset = 0;
-    
-    private $limit = 500000;
 
     private $repository;
-    
+
     /**
      * Returns categories 
      * 
      * @return array
      */
-    public function extract()
+    public function getRawData()
     {
-        // ("SHOW COLUMNS FROM $table");
+        //get columns from attribute tables
         $stmt = Shopware()->Db()->query('SELECT * FROM s_categories_attributes LIMIT 1');
         $attributes = $stmt->fetch();
 
@@ -35,11 +32,12 @@ class CategoriesAdapter extends DataAdapter
 
             $attributesSelect = ",\n" . implode(",\n", $attributesSelect);
         }
-        
+
+        //gets limit adapter
         $dapterLimit = $this->getDataAdapterLimit();
         $limit = $dapterLimit->getLimit();
         $offset = $dapterLimit->getOffset();
-        
+
         $sql = "
             SELECT
                 c.id as categoryID,
@@ -62,8 +60,7 @@ class CategoriesAdapter extends DataAdapter
                 ON attr.categoryID = c.id
             WHERE c.id != 1
             ORDER BY c.parent, c.position
-
-             LIMIT {$offset},{$limit}
+            LIMIT {$offset},{$limit}
         ";
 
         $stmt = Shopware()->Db()->query($sql);
@@ -71,42 +68,19 @@ class CategoriesAdapter extends DataAdapter
 
         return $result;
     }
-    
+
     public function import()
     {
         
     }
-    
+
     public function getRepository()
     {
-        if($this->repository === null)
-        {
-            $this->repository = Shopware()->Models()->Category();
+        if ($this->repository === null) {
+            $this->repository = $this->getManager()->Category();
         }
-        
+
         return $this->repository;
     }
-        
-    public function getOffset()
-    {
-        return $this->offset;
-    }
-
-    public function getLimit()
-    {
-        return $this->limit;
-    }
-
-    public function setOffset($offset)
-    {
-        $this->offset = $offset;
-    }
-
-    public function setLimit($limit)
-    {
-        $this->limit = $limit;
-    }
-
-
 
 }

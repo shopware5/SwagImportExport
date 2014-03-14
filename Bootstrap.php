@@ -90,10 +90,12 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
         switch ($param) {
             case 'categories':
                 return Enlight_Class::Instance('Shopware\Components\SwagImportExport\DataAdapters\CategoriesAdapter');
+            case 'articles':
+                return Enlight_Class::Instance('Shopware\Components\SwagImportExport\DataAdapters\ArticlesAdapter');
             case 'limit':
                 return new Shopware\Components\SwagImportExport\DataAdapters\DataAdapterLimit();
             default:
-                throw new \Exception("Not supported data scope: $param");
+                throw new \Exception("Not supported data adapter: $param");
         }
     }
 
