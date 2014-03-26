@@ -5,9 +5,15 @@ namespace Shopware\Components\SwagImportExport\Utils;
 class DataLimit
 {
     
-    protected $limit = 50000;
+    protected $limit;
     
-    protected $offset = 0;
+    protected $offset;
+    
+    public function __construct(array $options)
+    {
+        $this->limit = $options['limit'];
+        $this->offset = $options['offset'];
+    }
 
     public function getLimit()
     {
@@ -17,16 +23,6 @@ class DataLimit
     public function getOffset()
     {
         return $this->offset;
-    }
-
-    public function setLimit($limit)
-    {
-        $this->limit = $limit;
-    }
-
-    public function setOffset($offset)
-    {
-        $this->offset = $offset;
     }
 
 }
