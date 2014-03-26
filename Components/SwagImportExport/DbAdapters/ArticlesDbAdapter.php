@@ -1,8 +1,8 @@
 <?php
 
-namespace Shopware\Components\SwagImportExport\DataAdapters;
+namespace Shopware\Components\SwagImportExport\DbAdapters;
 
-class ArticlesAdapter extends DataAdapter
+class ArticlesDbAdapter extends DataDbAdapter
 {
     private $repository;
 

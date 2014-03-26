@@ -1,8 +1,8 @@
 <?php
 
-namespace Shopware\Components\SwagImportExport\DataAdapters;
+namespace Shopware\Components\SwagImportExport\Utils;
 
-class DataAdapterLimit
+class DataLimit
 {
     
     protected $limit = 50000;

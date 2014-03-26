@@ -83,20 +83,11 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
         );
     }
 
-    public function getDataAdapter($param)
+    public function getDataFactory()
     {
         $this->registerMyNamespace();
 
-        switch ($param) {
-            case 'categories':
-                return Enlight_Class::Instance('Shopware\Components\SwagImportExport\DataAdapters\CategoriesAdapter');
-            case 'articles':
-                return Enlight_Class::Instance('Shopware\Components\SwagImportExport\DataAdapters\ArticlesAdapter');
-            case 'limit':
-                return new Shopware\Components\SwagImportExport\DataAdapters\DataAdapterLimit();
-            default:
-                throw new \Exception("Not supported data adapter: $param");
-        }
+        return Enlight_Class::Instance('Shopware\Components\SwagImportExport\Factories\DataFactory');
     }
 
 }
