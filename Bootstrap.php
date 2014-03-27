@@ -89,5 +89,12 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
 
         return Enlight_Class::Instance('Shopware\Components\SwagImportExport\Factories\DataFactory');
     }
+    
+    public function getProfileFactory()
+    {
+        $this->registerMyNamespace();
+
+        return Enlight_Class::Instance('Shopware\Components\SwagImportExport\Factories\ProfileFactory');
+    }
 
 }
