@@ -36,11 +36,11 @@ class DataClassesTest extends ImportExportTestHelper
         $dataFactory = $this->Plugin()->getDataFactory();
 
         //tests categories data adapter
-        $catergoriesDbAdapter = $dataFactory->createCategoriesDbAdapter();
+        $catergoriesDbAdapter = $dataFactory->createDbAdapter('categories');
         $this->assertTrue($catergoriesDbAdapter instanceof CategoriesDbAdapter, 'Is not a instance of CategoriesDbAdapter');
 
         //tests articles data adapter
-        $articlesDbAdapter = $dataFactory->createArticlesDbAdapter();
+        $articlesDbAdapter = $dataFactory->createDbAdapter('articles');
         $this->assertTrue($articlesDbAdapter instanceof ArticlesDbAdapter, 'Is not a instance of ArticlesDbAdapter');
     }
 

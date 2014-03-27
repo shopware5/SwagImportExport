@@ -2,10 +2,14 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
-class ArticlesDbAdapter extends DataDbAdapter
+class ArticlesDbAdapter implements DataDbAdapter
 {
     private $repository;
-
+    
+    public function read($ids, $columns)
+    {
+        
+    }
 
     public function getRepository()
     {

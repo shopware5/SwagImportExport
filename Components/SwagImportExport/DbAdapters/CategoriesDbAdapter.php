@@ -2,19 +2,75 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
-class CategoriesDbAdapter extends DataDbAdapter
+class CategoriesDbAdapter implements DataDbAdapter
 {
 
     private $repository;
+
+    public function readRecordIds($start = null, $limit = null, $filter = null)
+    {
+        $sqlLimit = '';
+        if ($start !== null && $limit !== null) {
+            $sqlLimit = "LIMIT {$start},{$limit}";
+        }
+        
+        $sql = "
+            SELECT
+                c.id
+            FROM s_categories c
+            WHERE c.id != 1
+            ORDER BY c.parent, c.position
+            $sqlLimit 
+        ";
+        
+        $stmt = Shopware()->Db()->query($sql);
+        $result = $stmt->fetchAll();
+
+        return $result;
+    }
 
     /**
      * Returns categories 
      * 
      * @return array
      */
-    public function getRawData()
+    public function read($ids, $columns)
     {
-        //get columns from attribute tables
+        $sql = "
+            SELECT
+                $columns
+            FROM s_categories c
+            LEFT JOIN s_categories_attributes attr
+                ON attr.categoryID = c.id
+            WHERE c.id IN ($ids)
+            ORDER BY c.parent, c.position
+        ";
+
+        $stmt = Shopware()->Db()->query($sql);
+        $result = $stmt->fetchAll();
+
+        return $result;
+    }
+    
+    
+    public function getDefaultColumns()
+    {
+        $columns = 'c.id,
+                    c.parent,
+                    c.description,
+                    c.position,
+                    c.metakeywords,
+                    c.metadescription,
+                    c.cmsheadline,
+                    c.cmstext,
+                    c.template,
+                    c.active,
+                    c.blog,
+                    c.showfiltergroups,
+                    c.external,
+                    c.hidefilter';
+
+        // Attributes
         $stmt = Shopware()->Db()->query('SELECT * FROM s_categories_attributes LIMIT 1');
         $attributes = $stmt->fetch();
 
@@ -32,42 +88,10 @@ class CategoriesDbAdapter extends DataDbAdapter
 
             $attributesSelect = ",\n" . implode(",\n", $attributesSelect);
         }
-
-        //gets limit adapter
-        $dapterLimit = $this->getDataAdapterLimit();
-        $limit = $dapterLimit->getLimit();
-        $offset = $dapterLimit->getOffset();
-
-        $sql = "
-            SELECT
-                c.id as categoryID,
-                c.parent as parentID,
-                c.description,
-                c.position,
-                c.metakeywords,
-                c.metadescription,
-                c.cmsheadline,
-                c.cmstext,
-                c.template,
-                c.active,
-                c.blog,
-                c.showfiltergroups,
-                c.external,
-                c.hidefilter
-                $attributesSelect
-            FROM s_categories c
-            LEFT JOIN s_categories_attributes attr
-                ON attr.categoryID = c.id
-            WHERE c.id != 1
-            ORDER BY c.parent, c.position
-            LIMIT {$offset},{$limit}
-        ";
-
-        $stmt = Shopware()->Db()->query($sql);
-        $result = $stmt->fetchAll();
-
-        return $result;
+        
+        return $columns . $attributesSelect;
     }
+    
 
     public function import()
     {

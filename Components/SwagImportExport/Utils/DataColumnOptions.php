@@ -12,4 +12,9 @@ class DataColumnOptions
         $this->columnOptions = $columnOptions;
     }
 
+    public function getColumnOptions()
+    {
+        return $this->columnOptions;
+    }
+
 }

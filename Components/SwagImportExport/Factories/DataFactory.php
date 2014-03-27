@@ -44,11 +44,13 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
         return new DataIO($dbAdapter, $colOpts, $limit, $filter);
     }
 
-    private function createDbAdapter($adapterType)
+    public function createDbAdapter($adapterType)
     {
         switch ($adapterType) {
             case 'categories':
                 return $this->createCategoriesDbAdapter();
+            case 'articles':
+                return $this->createArticlesDbAdapter();
             default: throw new \Exception('Db adapter type is not valid');
         }
     }
@@ -79,7 +81,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
      * 
      * @return \Shopware\Components\SwagImportExport\DbAdapters\CategoriesDbAdapter
      */    
-    public function createCategoriesDbAdapter()
+    protected function createCategoriesDbAdapter()
     {
         return new CategoriesDbAdapter();
     }
@@ -88,7 +90,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
      * 
      * @return \Shopware\Components\SwagImportExport\DbAdapters\ArticlesDbAdapter
      */
-    public function createArticlesDbAdapter()
+    protected function createArticlesDbAdapter()
     {
         return new ArticlesDbAdapter();
     }

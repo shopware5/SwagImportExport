@@ -32,5 +32,24 @@ class DataIO
         $this->limit = $limit;
         $this->filter = $filter;
     }
+    
+    /**
+     * 
+     * @param int $records
+     */
+    public function read($records)
+    {
+        //todo: 
+        //Check Exprot session
+        //predloadIds
+        
+        $this->getDbAdapter()->read($ids, $columns);
+    }
+    
+    
+    public function getDbAdapter()
+    {
+        return $this->dbAdapter;
+    }
 
 }
