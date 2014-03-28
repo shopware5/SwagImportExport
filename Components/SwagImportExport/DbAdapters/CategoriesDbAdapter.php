@@ -5,15 +5,21 @@ namespace Shopware\Components\SwagImportExport\DbAdapters;
 class CategoriesDbAdapter implements DataDbAdapter
 {
 
-    private $repository;
-
+    /**
+     * Returns record ids
+     * 
+     * @param int $start
+     * @param int $limit
+     * @param type $filter
+     * @return array
+     */
     public function readRecordIds($start = null, $limit = null, $filter = null)
     {
         $sqlLimit = '';
         if ($start !== null && $limit !== null) {
             $sqlLimit = "LIMIT {$start},{$limit}";
         }
-        
+
         $sql = "
             SELECT
                 c.id
@@ -22,7 +28,7 @@ class CategoriesDbAdapter implements DataDbAdapter
             ORDER BY c.parent, c.position
             $sqlLimit 
         ";
-        
+
         $stmt = Shopware()->Db()->query($sql);
         $result = $stmt->fetchAll();
 
@@ -51,8 +57,12 @@ class CategoriesDbAdapter implements DataDbAdapter
 
         return $result;
     }
-    
-    
+
+    /**
+     * Returns default categories columns name
+     * 
+     * @return string
+     */
     public function getDefaultColumns()
     {
         $columns = 'c.id,
@@ -88,23 +98,13 @@ class CategoriesDbAdapter implements DataDbAdapter
 
             $attributesSelect = ",\n" . implode(",\n", $attributesSelect);
         }
-        
+
         return $columns . $attributesSelect;
     }
-    
 
     public function import()
     {
         
-    }
-
-    public function getRepository()
-    {
-        if ($this->repository === null) {
-            $this->repository = $this->getManager()->Category();
-        }
-
-        return $this->repository;
     }
 
 }
