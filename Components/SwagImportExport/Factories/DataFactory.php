@@ -37,9 +37,9 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     private function createDataIO($type, $params)
     {
         $dbAdapter = $this->createDbAdapter($type);
-        $colOpts = $this->createColOpts();
-        $limit = $this->createLimit();
-        $filter = $this->createFilter();
+        $colOpts = $this->createColOpts($params['columnOptions']);
+        $limit = $this->createLimit($params['limit']);
+        $filter = $this->createFilter($params['filter']);
 
         return new DataIO($dbAdapter, $colOpts, $limit, $filter);
     }

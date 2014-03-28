@@ -11,13 +11,13 @@ use Shopware\Components\SwagImportExport\Utils\DataColumnOptions;
 use Shopware\Components\SwagImportExport\Utils\DataLimit;
 use Shopware\Components\SwagImportExport\Utils\DataFilter;
 
-class DataClassesTest extends ImportExportTestHelper
+class DataFactoryTest extends ImportExportTestHelper
 {
 
     public function getPostData()
     {
         $postData = array(
-            'columnOptions' => 'id, parent, description, active,',
+            'columnOptions' => 'id, parent, description, active',
             'filter' => '',
             'limit' => array('limit' => 50, 'offset' => 150)
         );
