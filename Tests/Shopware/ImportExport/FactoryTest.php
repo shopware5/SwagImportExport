@@ -14,6 +14,9 @@ use Shopware\Components\SwagImportExport\Utils\DataFilter;
 use Shopware\Components\SwagImportExport\Files\CsvFileWriter;
 use Shopware\Components\SwagImportExport\Files\XmlFileWriter;
 use Shopware\Components\SwagImportExport\Files\ExcelFileWriter;
+use Shopware\Components\SwagImportExport\Files\CsvFileReader;
+use Shopware\Components\SwagImportExport\Files\XmlFileReader;
+use Shopware\Components\SwagImportExport\Files\ExcelFileReader;
 
 class DataFactoryTest extends ImportExportTestHelper
 {
@@ -79,15 +82,24 @@ class DataFactoryTest extends ImportExportTestHelper
     public function testFiles()
     {
         $fileIOFactory = $this->Plugin()->getFileIOFactory();
-
+        
         $csvFileWriter = $fileIOFactory->createFileWriter('csv');
-        $this->assertTrue($csvFileWriter instanceof CsvFileWriter, 'Is not a instance of XmlFileWriter');
+        $this->assertTrue($csvFileWriter instanceof CsvFileWriter, 'Is not a instance of CsvFileWriter');
 
         $xmlFileWriter = $fileIOFactory->createFileWriter('xml');
         $this->assertTrue($xmlFileWriter instanceof XmlFileWriter, 'Is not a instance of XmlFileWriter');
 
         $excelFileWriter = $fileIOFactory->createFileWriter('excel');
-        $this->assertTrue($excelFileWriter instanceof ExcelFileWriter, 'Is not a instance of XmlFileWriter');
+        $this->assertTrue($excelFileWriter instanceof ExcelFileWriter, 'Is not a instance of ExcelFileWriter');
+        
+        $csvFileReader = $fileIOFactory->createFileReader('csv');
+        $this->assertTrue($csvFileReader instanceof CsvFileReader, 'Is not a instance of CsvFileReader');
+
+        $xmlFileReader = $fileIOFactory->createFileReader('xml');
+        $this->assertTrue($xmlFileReader instanceof XmlFileReader, 'Is not a instance of XmlFileReader');
+
+        $excelFileReader = $fileIOFactory->createFileReader('excel');
+        $this->assertTrue($excelFileReader instanceof ExcelFileReader, 'Is not a instance of ExcelFileReader');
     }
 
 }

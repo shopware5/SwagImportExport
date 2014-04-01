@@ -24,7 +24,7 @@ class DataIOTest extends ImportExportTestHelper
     {
         $postData = array(
             'filter' => '',
-            'limit' => array('limit' => 100, 'offset' => 0)
+            'limit' => array('limit' => 40, 'offset' => 0)
         );
 
         $dataFactory = $this->Plugin()->getDataFactory();
@@ -39,7 +39,7 @@ class DataIOTest extends ImportExportTestHelper
 
         $this->assertEquals(count($rawData1), 11);
         $this->assertEquals(count($rawData2), 21);
-        $this->assertEquals(count($rawData3), 62);
+        $this->assertEquals(count($rawData3), 40);
     }
 
 }

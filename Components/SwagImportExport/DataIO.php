@@ -68,7 +68,7 @@ class DataIO
         $filterAdapter = $this->getFilterAdapter();
 
         $ids = $dbAdapter->readRecordIds(
-                $limitAdapater->getOffset(), $limitAdapater->getLimit, $filterAdapter->getFilter()
+                $limitAdapater->getOffset(), $limitAdapater->getLimit(), $filterAdapter->getFilter()
         );
 
         $this->setRecordIds($ids);
