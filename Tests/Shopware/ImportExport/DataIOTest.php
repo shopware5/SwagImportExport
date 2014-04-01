@@ -14,12 +14,12 @@ class DataIOTest extends ImportExportTestHelper
         $dataIO = $dataFactory->getAdapter('categories', $postData);
 
         $dataIO->preloadRecordIds();
-        
+
         $allIds = $dataIO->getRecordIds();
-        
+
         $this->assertEquals(count($allIds), 62);
     }
-    
+
     public function testRead()
     {
         $postData = array(
@@ -35,11 +35,11 @@ class DataIOTest extends ImportExportTestHelper
 
         $rawData1 = $dataIO->read(11);
         $rawData2 = $dataIO->read(21);
-        $rawData3 = $dataIO->read(55);
+        $rawData3 = $dataIO->read(255);
 
         $this->assertEquals(count($rawData1), 11);
         $this->assertEquals(count($rawData2), 21);
-        $this->assertEquals(count($rawData3), 55);
+        $this->assertEquals(count($rawData3), 62);
     }
 
 }

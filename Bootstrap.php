@@ -61,7 +61,6 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
      */
     public function install()
     {
-
         return true;
     }
 
@@ -72,10 +71,12 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
      */
     public function uninstall()
     {
-
         return true;
     }
 
+    /**
+     * Register components directory
+     */
     public function registerMyNamespace()
     {
         $this->Application()->Loader()->registerNamespace(
@@ -83,18 +84,34 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
         );
     }
 
+    /**
+     * Returns DataFactory
+     */
     public function getDataFactory()
     {
         $this->registerMyNamespace();
 
         return Enlight_Class::Instance('Shopware\Components\SwagImportExport\Factories\DataFactory');
     }
-    
+
+    /**
+     * Returns ProfileFactory
+     */
     public function getProfileFactory()
     {
         $this->registerMyNamespace();
 
         return Enlight_Class::Instance('Shopware\Components\SwagImportExport\Factories\ProfileFactory');
+    }
+
+    /**
+     * Returns FileIOFactory
+     */
+    public function getFileIOFactory()
+    {
+        $this->registerMyNamespace();
+
+        return Enlight_Class::Instance('Shopware\Components\SwagImportExport\Factories\FileIOFactory');
     }
 
 }

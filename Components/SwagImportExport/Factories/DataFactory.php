@@ -44,6 +44,13 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
         return new DataIO($dbAdapter, $colOpts, $limit, $filter);
     }
 
+    /**
+     * Returns the necessary adapter
+     * 
+     * @param string $adapterType
+     * @return object dbAdapter
+     * @throws \Exception
+     */
     public function createDbAdapter($adapterType)
     {
         switch ($adapterType) {
@@ -56,7 +63,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     }
     
     /**
-     * Returns DataColumnOptions
+     * Returns columnOptions adapter
      * 
      * @param type $options
      * @return \Shopware\Components\SwagImportExport\Utils\DataColumnOptions
@@ -66,11 +73,23 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
         return new DataColumnOptions($options);
     }
     
+    /**
+     * Returns limit adapter
+     * 
+     * @param array $limit
+     * @return \Shopware\Components\SwagImportExport\Utils\DataLimit
+     */
     public function createLimit($limit)
     {
         return new DataLimit($limit);
     }
     
+    /**
+     * Returns filter adapter
+     * 
+     * @param type $filter
+     * @return \Shopware\Components\SwagImportExport\Utils\DataFilter
+     */
     public function createFilter($filter)
     {
         return new DataFilter($filter);

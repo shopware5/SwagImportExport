@@ -5,11 +5,15 @@ namespace Tests\Shopware\ImportExport;
 use Tests\Shopware\ImportExport\ImportExportTestHelper;
 use Shopware\Components\SwagImportExport\DataIO;
 use Shopware\Components\SwagImportExport\Factories\DataFactory;
+use Shopware\Components\SwagImportExport\Factories\FileIOFactory;
 use Shopware\Components\SwagImportExport\DbAdapters\CategoriesDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\ArticlesDbAdapter;
 use Shopware\Components\SwagImportExport\Utils\DataColumnOptions;
 use Shopware\Components\SwagImportExport\Utils\DataLimit;
 use Shopware\Components\SwagImportExport\Utils\DataFilter;
+use Shopware\Components\SwagImportExport\Files\CsvFileWriter;
+use Shopware\Components\SwagImportExport\Files\XmlFileWriter;
+use Shopware\Components\SwagImportExport\Files\ExcelFileWriter;
 
 class DataFactoryTest extends ImportExportTestHelper
 {
@@ -25,10 +29,13 @@ class DataFactoryTest extends ImportExportTestHelper
         return $postData;
     }
 
-    public function testDataFactory()
+    public function testFactories()
     {
         $dataFactory = $this->Plugin()->getDataFactory();
         $this->assertTrue($dataFactory instanceof DataFactory, 'Is not a instance of DataFactory');
+
+        $fileIOFactory = $this->Plugin()->getFileIOFactory();
+        $this->assertTrue($fileIOFactory instanceof FileIOFactory, 'Is not a instance of DataFactory');
     }
 
     public function testDbAdapters()
@@ -64,9 +71,23 @@ class DataFactoryTest extends ImportExportTestHelper
 
         $limit = $dataFactory->createLimit($postData['limit']);
         $this->assertTrue($limit instanceof DataLimit, 'Is not a instance of DataLimit');
-        
+
         $filter = $dataFactory->createFilter($postData['filter']);
         $this->assertTrue($filter instanceof DataFilter, 'Is not a instance of DataFilter');
+    }
+
+    public function testFiles()
+    {
+        $fileIOFactory = $this->Plugin()->getFileIOFactory();
+
+        $csvFileWriter = $fileIOFactory->createFileWriter('csv');
+        $this->assertTrue($csvFileWriter instanceof CsvFileWriter, 'Is not a instance of XmlFileWriter');
+
+        $xmlFileWriter = $fileIOFactory->createFileWriter('xml');
+        $this->assertTrue($xmlFileWriter instanceof XmlFileWriter, 'Is not a instance of XmlFileWriter');
+
+        $excelFileWriter = $fileIOFactory->createFileWriter('excel');
+        $this->assertTrue($excelFileWriter instanceof ExcelFileWriter, 'Is not a instance of XmlFileWriter');
     }
 
 }
