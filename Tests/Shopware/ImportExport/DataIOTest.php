@@ -20,7 +20,7 @@ class DataIOTest extends ImportExportTestHelper
         $this->assertEquals(count($allIds), 62);
     }
 
-    public function testRead()
+    public function testCategoriesRead()
     {
         $postData = array(
             'filter' => '',
@@ -41,5 +41,27 @@ class DataIOTest extends ImportExportTestHelper
         $this->assertEquals(count($rawData2), 21);
         $this->assertEquals(count($rawData3), 40);
     }
+    
+//    public function testArticlesRead()
+//    {
+//        $postData = array(
+//            'filter' => '',
+//            'limit' => array('limit' => 140, 'offset' => 0)
+//        );
+//
+//        $dataFactory = $this->Plugin()->getDataFactory();
+//
+//        $dataIO = $dataFactory->getAdapter('articles', $postData);
+//
+//        $dataIO->preloadRecordIds();
+//
+//        $rawData1 = $dataIO->read(11);
+//        $rawData2 = $dataIO->read(21);
+//        $rawData3 = $dataIO->read(255);
+//
+//        $this->assertEquals(count($rawData1), 11);
+//        $this->assertEquals(count($rawData2), 21);
+//        $this->assertEquals(count($rawData3), 140);
+//    }
 
 }

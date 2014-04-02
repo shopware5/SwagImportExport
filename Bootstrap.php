@@ -114,4 +114,14 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
         return Enlight_Class::Instance('Shopware\Components\SwagImportExport\Factories\FileIOFactory');
     }
 
+    /**
+     * Returns DataTransformerFactory
+     */
+    public function getDataTransformerFactory()
+    {
+        $this->registerMyNamespace();
+
+        return Enlight_Class::Instance('Shopware\Components\SwagImportExport\Factories\DataTransformerFactory');
+    }
+
 }
