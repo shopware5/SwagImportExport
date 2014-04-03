@@ -32,13 +32,24 @@ class DataIO
      */
     private $recordIds;
     
+    /**
+     * @var int 
+     */
+    private $maxRecordCount;
 
-    public function __construct($dbAdapter, $colOpts, $limit, $filter)
+    /**
+     * @var Shopware\CustomModels\ImportExport\Session 
+     */
+    private $dataSession;
+
+    public function __construct($dbAdapter, $colOpts, $limit, $filter, $dataSession, $maxRecordCount)
     {
         $this->dbAdapter = $dbAdapter;
         $this->columnOptions = $colOpts;
         $this->limit = $limit;
         $this->filter = $filter;
+        $this->dataSession = $dataSession;
+        $this->maxRecordCount = $maxRecordCount;
     }
 
     /**
@@ -72,6 +83,33 @@ class DataIO
         );
 
         $this->setRecordIds($ids);
+    }
+    
+    /**
+     * Returns the state of the session. 
+     * active: 
+     *     Session is running and we can read/write records.
+     * stopped: 
+     *     Session is stopped because we have reached the max number of records per operation.
+     * new: 
+     *     Session is brand new and still has no records ids. 
+     * finished: 
+     *     Session is finished but the output file is still not finished (in case of export) 
+     *     or the final db save is yet not performed (in case of import). 
+     * closed: 
+     *     Session is closed, file is fully exported/imported
+     */
+    public function getSessionState()
+    {
+        return $this->dataSession->getState();
+    }
+    
+    /**
+     * Returns the max records count initialized in the constructor.
+     */
+    public function getMaxRecordsCount()
+    {
+        return $this->maxRecordCount;
     }
 
     public function getDbAdapter()

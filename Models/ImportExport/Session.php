@@ -54,57 +54,65 @@ class Session extends ModelEntity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
     /**
      * var integer $profileId
      * ORM\Column(name="profile", type="integer", nullable=false)
      * ORM\OneToOne(targetEntity="\Shopware\Models\Media\Album", mappedBy="album")
-     
-    private $profileId;
-*/
+
+      private $profileId;
+     */
+
     /**
      * @var string $type
      *
      * @ORM\Column(name="type", type="string", length=200)
      */
-    private $type;
+    protected $type;
 
     /**
      * @var string $ids
      *
      * @ORM\Column(name="ids", type="text", nullable=false)
      */
-    private $ids;
+    protected $ids;
 
     /**
      * @var string $position
      *
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
-    private $position;
+    protected $position;
 
     /**
      * @var string $count
      *
      * @ORM\Column(name="count", type="integer", nullable=false)
      */
-    private $count;
-    
+    protected $count;
+
     /**
      * @var string $fileName
      *
      * @ORM\Column(name="file_name", type="string", length=200)
      */
-    private $fileName;
-    
+    protected $fileName;
+
     /**
-	 * @var datetime $createdAt
-	 *
-	 * @ORM\Column(name="created_at", type="datetime")
-	 */
-	protected $createdAt;
-    
+     * @var boolean $state
+     * 
+     * @ORM\Column(name="state", type="string", length=100)
+     */
+    protected $state = 'new';
+
+    /**
+     * @var datetime $createdAt
+     *
+     * @ORM\Column(name="created_at", type="datetime")
+     */
+    protected $createdAt;
+
     public function getId()
     {
         return $this->id;
@@ -139,34 +147,34 @@ class Session extends ModelEntity
     {
         return $this->fileName;
     }
-    
+
     public function onPrePersist()
-	{
-		$this->createdAt = new \DateTime('now');
-	}
+    {
+        $this->createdAt = new \DateTime('now');
+    }
 
-	/**
-	 * Set createdAt
-	 *
-	 * @param \DateTime $createdAt
-	 * @return Module
-	 */
-	public function setCreatedAt($createdAt)
-	{
-		$this->createdAt = $createdAt;
+    /**
+     * Set createdAt
+     *
+     * @param \DateTime $createdAt
+     * @return Module
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Get createdAt
-	 *
-	 * @return \DateTime 
-	 */
-	public function getCreatedAt()
-	{
-		return $this->createdAt;
-	}
+    /**
+     * Get createdAt
+     *
+     * @return \DateTime 
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
 
     public function setId($id)
     {
@@ -203,5 +211,14 @@ class Session extends ModelEntity
         $this->fileName = $fileName;
     }
 
-    
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    public function setState($state)
+    {
+        $this->state = $state;
+    }
+
 }

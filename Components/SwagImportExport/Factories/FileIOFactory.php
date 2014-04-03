@@ -2,12 +2,12 @@
 
 namespace Shopware\Components\SwagImportExport\Factories;
 
-use Shopware\Components\SwagImportExport\Files\CsvFileWriter;
-use Shopware\Components\SwagImportExport\Files\XmlFileWriter;
-use Shopware\Components\SwagImportExport\Files\ExcelFileWriter;
-use Shopware\Components\SwagImportExport\Files\CsvFileReader;
-use Shopware\Components\SwagImportExport\Files\XmlFileReader;
-use Shopware\Components\SwagImportExport\Files\ExcelFileReader;
+use Shopware\Components\SwagImportExport\FileIO\CsvFileWriter;
+use Shopware\Components\SwagImportExport\FileIO\XmlFileWriter;
+use Shopware\Components\SwagImportExport\FileIO\ExcelFileWriter;
+use Shopware\Components\SwagImportExport\FileIO\CsvFileReader;
+use Shopware\Components\SwagImportExport\FileIO\XmlFileReader;
+use Shopware\Components\SwagImportExport\FileIO\ExcelFileReader;
 
 class FileIOFactory extends \Enlight_Class implements \Enlight_Hook
 {

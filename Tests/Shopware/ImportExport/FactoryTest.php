@@ -26,7 +26,8 @@ class DataFactoryTest extends ImportExportTestHelper
         $postData = array(
             'columnOptions' => 'id, parent, description, active',
             'filter' => '',
-            'limit' => array('limit' => 50, 'offset' => 150)
+            'limit' => array('limit' => 50, 'offset' => 150),
+            'max_record_count' => 100,
         );
 
         return $postData;
@@ -79,7 +80,7 @@ class DataFactoryTest extends ImportExportTestHelper
         $this->assertTrue($filter instanceof DataFilter, 'Is not a instance of DataFilter');
     }
 
-    public function testFiles()
+    public function testFileIO()
     {
         $fileIOFactory = $this->Plugin()->getFileIOFactory();
         

@@ -6,7 +6,17 @@ use Tests\Shopware\ImportExport\ImportExportTestHelper;
 
 class DataIOTest extends ImportExportTestHelper
 {
-
+    
+    public function getPostData()
+    {
+        return array(
+            'filter' => '',
+            'limit' => array('limit' => 40, 'offset' => 0),
+            'max_record_count' => 100,
+        );
+    }
+    
+    
     public function testPreloadRecordIds()
     {
         $dataFactory = $this->Plugin()->getDataFactory();
@@ -22,10 +32,7 @@ class DataIOTest extends ImportExportTestHelper
 
     public function testCategoriesRead()
     {
-        $postData = array(
-            'filter' => '',
-            'limit' => array('limit' => 40, 'offset' => 0)
-        );
+        $postData = $this->getPostData();
 
         $dataFactory = $this->Plugin()->getDataFactory();
 
@@ -40,6 +47,17 @@ class DataIOTest extends ImportExportTestHelper
         $this->assertEquals(count($rawData1), 11);
         $this->assertEquals(count($rawData2), 21);
         $this->assertEquals(count($rawData3), 40);
+    }
+    
+    public function testSessionState()
+    {
+        $postData = $this->getPostData();
+
+        $dataFactory = $this->Plugin()->getDataFactory();
+
+        $dataIO = $dataFactory->getAdapter('categories', $postData);
+
+        $this->assertEquals($dataIO->getSessionState(), 'new');
     }
     
 //    public function testArticlesRead()
