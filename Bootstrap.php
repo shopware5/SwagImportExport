@@ -34,6 +34,26 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
 {
 
     /**
+     * @var Shopware\Components\SwagImportExport\Factories\DataFactory
+     */
+    private $dataFactory;
+
+    /**
+     * @var Shopware\Components\SwagImportExport\Factories\ProfileFactory
+     */
+    private $profileFactory;
+
+    /**
+     * @var Shopware\Components\SwagImportExport\Factories\FileIOFactory
+     */
+    private $fileIOFactory;
+
+    /**
+     * @var Shopware\Components\SwagImportExport\Factories\DataTransformerFactory
+     */
+    private $dataTransformerFactory;
+
+    /**
      * Returns the plugin label which is displayed in the plugin information and
      * in the Plugin Manager.
      * @return string
@@ -84,7 +104,7 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
     public function uninstall()
     {
         $this->removeDatabaseTables();
-        
+
         return true;
     }
 
@@ -103,9 +123,12 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
      */
     public function getDataFactory()
     {
-        $this->registerMyNamespace();
+        if ($this->dataFactory === null) {
+            $this->registerMyNamespace();
+            $this->dataFactory = Enlight_Class::Instance('Shopware\Components\SwagImportExport\Factories\DataFactory');
+        }
 
-        return Enlight_Class::Instance('Shopware\Components\SwagImportExport\Factories\DataFactory');
+        return $this->dataFactory;
     }
 
     /**
@@ -113,9 +136,12 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
      */
     public function getProfileFactory()
     {
-        $this->registerMyNamespace();
+        if ($this->profileFactory === null) {
+            $this->registerMyNamespace();
+            $this->profileFactory = Enlight_Class::Instance('Shopware\Components\SwagImportExport\Factories\ProfileFactory');
+        }
 
-        return Enlight_Class::Instance('Shopware\Components\SwagImportExport\Factories\ProfileFactory');
+        return $this->profileFactory;
     }
 
     /**
@@ -123,9 +149,12 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
      */
     public function getFileIOFactory()
     {
-        $this->registerMyNamespace();
-
-        return Enlight_Class::Instance('Shopware\Components\SwagImportExport\Factories\FileIOFactory');
+        if ($this->fileIOFactory === null) {
+            $this->registerMyNamespace();
+            $this->fileIOFactory = Enlight_Class::Instance('Shopware\Components\SwagImportExport\Factories\FileIOFactory');
+        }
+        
+        return $this->fileIOFactory;
     }
 
     /**
@@ -133,9 +162,12 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
      */
     public function getDataTransformerFactory()
     {
-        $this->registerMyNamespace();
+        if ($this->dataTransformerFactory === null) {
+            $this->registerMyNamespace();
+            $this->dataTransformerFactory = Enlight_Class::Instance('Shopware\Components\SwagImportExport\Factories\DataTransformerFactory');
+        }
 
-        return Enlight_Class::Instance('Shopware\Components\SwagImportExport\Factories\DataTransformerFactory');
+        return $this->dataTransformerFactory;
     }
 
     /**
