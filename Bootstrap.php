@@ -53,6 +53,16 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
     }
 
     /**
+     * After init event of the bootstrap class.
+     *
+     * The afterInit function registers the custom plugin models.
+     */
+    public function afterInit()
+    {
+        $this->registerCustomModels();
+    }
+
+    /**
      * Install function of the plugin bootstrap.
      *
      * Registers all necessary components and dependencies.
@@ -61,6 +71,8 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
      */
     public function install()
     {
+        $this->createDatabase();
+
         return true;
     }
 
@@ -71,6 +83,8 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
      */
     public function uninstall()
     {
+        $this->removeDatabaseTables();
+        
         return true;
     }
 
@@ -122,6 +136,40 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
         $this->registerMyNamespace();
 
         return Enlight_Class::Instance('Shopware\Components\SwagImportExport\Factories\DataTransformerFactory');
+    }
+
+    /**
+     * Creates the plugin database table over the doctrine schema tool.
+     */
+    private function createDatabase()
+    {
+        $em = $this->Application()->Models();
+        $tool = new \Doctrine\ORM\Tools\SchemaTool($em);
+
+        $classes = array(
+            $em->getClassMetadata('Shopware\CustomModels\ImportExport\Session')
+        );
+
+        try {
+            $tool->createSchema($classes);
+        } catch (\Doctrine\ORM\Tools\ToolsException $e) {
+            
+        }
+    }
+
+    /**
+     * Removes the plugin database tables
+     */
+    private function removeDatabaseTables()
+    {
+        $em = $this->Application()->Models();
+        $tool = new \Doctrine\ORM\Tools\SchemaTool($em);
+
+        $classes = array(
+            $em->getClassMetadata('Shopware\CustomModels\ImportExport\Session'),
+        );
+
+        $tool->dropSchema($classes);
     }
 
 }
