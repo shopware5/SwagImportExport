@@ -1,6 +1,6 @@
 <?php
 
-namespace Shopware\Components\SwagImportExport\Files;
+namespace Shopware\Components\SwagImportExport\FileIO;
 
 interface FileReader
 {

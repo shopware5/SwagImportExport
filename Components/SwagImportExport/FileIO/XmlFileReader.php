@@ -1,8 +1,8 @@
 <?php
 
-namespace Shopware\Components\SwagImportExport\Files;
+namespace Shopware\Components\SwagImportExport\FileIO;
 
-class CsvFileReader implements FileReader
+class XmlFileReader implements FileReader
 {
 
     public function readHeader($fileName)

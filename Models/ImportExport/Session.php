@@ -94,7 +94,7 @@ class Session extends ModelEntity
     /**
      * @var string $fileName
      *
-     * @ORM\Column(name="fileName", type="integer", nullable=false)
+     * @ORM\Column(name="file_name", type="string", length=200)
      */
     private $fileName;
     

@@ -1,8 +1,8 @@
 <?php
 
-namespace Shopware\Components\SwagImportExport\Files;
+namespace Shopware\Components\SwagImportExport\FileIO;
 
-class XmlFileWriter implements FileWriter
+class CsvFileWriter implements FileWriter
 {
 
     public function writeHeader($fileName, $headerDara)

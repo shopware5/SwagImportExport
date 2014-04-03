@@ -11,12 +11,12 @@ use Shopware\Components\SwagImportExport\DbAdapters\ArticlesDbAdapter;
 use Shopware\Components\SwagImportExport\Utils\DataColumnOptions;
 use Shopware\Components\SwagImportExport\Utils\DataLimit;
 use Shopware\Components\SwagImportExport\Utils\DataFilter;
-use Shopware\Components\SwagImportExport\Files\CsvFileWriter;
-use Shopware\Components\SwagImportExport\Files\XmlFileWriter;
-use Shopware\Components\SwagImportExport\Files\ExcelFileWriter;
-use Shopware\Components\SwagImportExport\Files\CsvFileReader;
-use Shopware\Components\SwagImportExport\Files\XmlFileReader;
-use Shopware\Components\SwagImportExport\Files\ExcelFileReader;
+use Shopware\Components\SwagImportExport\FileIO\CsvFileWriter;
+use Shopware\Components\SwagImportExport\FileIO\XmlFileWriter;
+use Shopware\Components\SwagImportExport\FileIO\ExcelFileWriter;
+use Shopware\Components\SwagImportExport\FileIO\CsvFileReader;
+use Shopware\Components\SwagImportExport\FileIO\XmlFileReader;
+use Shopware\Components\SwagImportExport\FileIO\ExcelFileReader;
 
 class DataFactoryTest extends ImportExportTestHelper
 {
