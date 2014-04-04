@@ -11,8 +11,10 @@ class DataIOTest extends ImportExportTestHelper
     {
         return array(
             'filter' => '',
+            'type' => 'export',
             'limit' => array('limit' => 40, 'offset' => 0),
             'max_record_count' => 100,
+            'format' => 'csv'
         );
     }
     
@@ -54,11 +56,23 @@ class DataIOTest extends ImportExportTestHelper
         $postData = $this->getPostData();
 
         $dataFactory = $this->Plugin()->getDataFactory();
-
+        
         $dataIO = $dataFactory->getAdapter('categories', $postData);
 
         $this->assertEquals($dataIO->getSessionState(), 'new');
     }
+    
+//    public function testStartSession()
+//    {
+//        $postData = $this->getPostData();
+//
+//        $dataFactory = $this->Plugin()->getDataFactory();
+//        
+//        $dataIO = $dataFactory->getAdapter('categories', $postData);
+//
+//        $dataIO->startSession();
+//    }
+    
     
 //    public function testArticlesRead()
 //    {

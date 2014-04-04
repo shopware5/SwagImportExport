@@ -30,7 +30,14 @@ class CategoriesDbAdapter implements DataDbAdapter
         ";
 
         $stmt = Shopware()->Db()->query($sql);
-        $result = $stmt->fetchAll();
+        $records = $stmt->fetchAll();
+
+        $result = array();
+        if ($records) {
+            foreach ($records as $value) {
+                $result[] = $value['id'];
+            }
+        }
 
         return $result;
     }

@@ -33,6 +33,20 @@ class DataIO
     private $recordIds;
     
     /**
+     * Type of the dataIO - export/import
+     * 
+     * @var string
+     */
+    private $type;
+    
+    /**
+     * Format of the doc - csv, xml
+     * 
+     * @var string
+     */
+    private $format;
+
+    /**
      * @var int 
      */
     private $maxRecordCount;
@@ -42,13 +56,15 @@ class DataIO
      */
     private $dataSession;
 
-    public function __construct($dbAdapter, $colOpts, $limit, $filter, $dataSession, $maxRecordCount)
+    public function __construct($dbAdapter, $colOpts, $limit, $filter, $dataSession, $type, $format, $maxRecordCount)
     {
         $this->dbAdapter = $dbAdapter;
         $this->columnOptions = $colOpts;
         $this->limit = $limit;
         $this->filter = $filter;
         $this->dataSession = $dataSession;
+        $this->type = $type;
+        $this->format = $format;
         $this->maxRecordCount = $maxRecordCount;
     }
 
@@ -70,6 +86,10 @@ class DataIO
         return $rawData;
     }
 
+    /**
+     * 
+     * @return \Shopware\Components\SwagImportExport\DataIO
+     */
     public function preloadRecordIds()
     {
         //todo: check from ExportSession        
@@ -81,8 +101,10 @@ class DataIO
         $ids = $dbAdapter->readRecordIds(
                 $limitAdapater->getOffset(), $limitAdapater->getLimit(), $filterAdapter->getFilter()
         );
-
+        
         $this->setRecordIds($ids);
+        
+        return $this;
     }
     
     /**
@@ -102,6 +124,52 @@ class DataIO
     public function getSessionState()
     {
         return $this->dataSession->getState();
+    }
+    
+    /**
+     * Check if the session contains ids.
+     * If the session has no ids, then the db adapter must be used to retrieve them.
+     * Then writes these ids to the session and sets the session state to "active".
+     * For now we will write the ids as a serialized array.
+     */
+    public function startSession() 
+    {
+        $ids = $this->preloadRecordIds()->getRecordIds();
+        $type = $this->getType();
+        
+        $session = $this->getDataSession();
+        
+        //set type
+        $session->setType($type);
+        
+        //set ids
+        $session->setIds(serialize($ids));
+        
+        //set position
+        $session->setPosition(0);
+        
+        //set count
+        $session->setCount(count($ids));
+        
+        $dateTime = new \DateTime('now');
+        
+        //set date/time
+        $session->setCreatedAt($dateTime);
+               
+        $fileName = $type . '-' . $dateTime->format('Y-m-d_H-i-s');
+        
+        //set count
+        $session->setFileName($fileName);
+        
+        //set format
+        $session->setFormat($this->getFormat());
+        
+        //change state
+        $session->setState('active');
+        
+        Shopware()->Models()->persist($session);
+            
+        Shopware()->Models()->flush();
     }
     
     /**
@@ -141,7 +209,22 @@ class DataIO
     {
         $this->recordIds = $recordIds;
     }
-
+    
+    public function getDataSession()
+    {
+        return $this->dataSession;
+    }
+    
+    public function getType()
+    {
+        return $this->type;
+    }
+    
+    public function getFormat()
+    {
+        return $this->format;
+    }
+    
     /**
      * Returns db columns
      * 
@@ -177,9 +260,9 @@ class DataIO
         $filterIds = array();
         $counter = 0;
 
-        foreach ($storedIds as $index => $param) {
+        foreach ($storedIds as $index => $id) {
             if ($index >= $start && $counter < $records) {
-                $filterIds[] = $param['id'];
+                $filterIds[] = $id;
                 $counter ++;
             }
         }

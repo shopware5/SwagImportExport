@@ -98,6 +98,13 @@ class Session extends ModelEntity
      * @ORM\Column(name="file_name", type="string", length=200)
      */
     protected $fileName;
+    
+    /**
+     * @var string $format
+     *
+     * @ORM\Column(name="format", type="string", length=100) 
+     */
+    protected $format;
 
     /**
      * @var boolean $state
@@ -147,23 +154,15 @@ class Session extends ModelEntity
     {
         return $this->fileName;
     }
-
-    public function onPrePersist()
+    
+    public function getFormat()
     {
-        $this->createdAt = new \DateTime('now');
+        $this->format;
     }
 
-    /**
-     * Set createdAt
-     *
-     * @param \DateTime $createdAt
-     * @return Module
-     */
-    public function setCreatedAt($createdAt)
+    public function getState()
     {
-        $this->createdAt = $createdAt;
-
-        return $this;
+        return $this->state;
     }
 
     /**
@@ -175,7 +174,7 @@ class Session extends ModelEntity
     {
         return $this->createdAt;
     }
-
+    
     public function setId($id)
     {
         $this->id = $id;
@@ -210,15 +209,28 @@ class Session extends ModelEntity
     {
         $this->fileName = $fileName;
     }
-
-    public function getState()
+    
+    public function setFormat($format)
     {
-        return $this->state;
+        $this->format = $format;
     }
 
     public function setState($state)
     {
         $this->state = $state;
+    }
+    
+    /**
+     * Set createdAt
+     *
+     * @param \DateTime $createdAt
+     * @return Module
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
     }
 
 }

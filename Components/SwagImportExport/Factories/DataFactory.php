@@ -18,16 +18,16 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     private $sessionRepository;
 
     /**
-     * @param string $type
+     * @param string $adapterType
      * @param array $postData
      * @return Shopware\Components\SwagImportExport\DataIO
      */
-    public function getAdapter($type,$postData)
+    public function getAdapter($adapterType,$postData)
     {
-        $adapter = $this->cache[$type];
+        $adapter = $this->cache[$adapterType];
 
         if ($adapter === null) {
-            $adapter = $this->createDataIO($type, $postData);
+            $adapter = $this->createDataIO($adapterType, $postData);
         }
         
         return $adapter;
@@ -37,9 +37,9 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
      * @param array $params
      * @return \Shopware\Components\SwagImportExport\DataIO
      */
-    private function createDataIO($type, $params)
+    private function createDataIO($adapterType, $params)
     {
-        $dbAdapter = $this->createDbAdapter($type);
+        $dbAdapter = $this->createDbAdapter($adapterType);
 
         $colOpts = $this->createColOpts($params['columnOptions']);
 
@@ -52,8 +52,12 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
         $dataSession = $this->loadSession($params);
 
         $maxRecordCount = $params['max_record_count'];
-
-        return new DataIO($dbAdapter, $colOpts, $limit, $filter, $dataSession, $maxRecordCount);
+        
+        $type = $params['type'];
+        
+        $format = $params['format'];
+        
+        return new DataIO($dbAdapter, $colOpts, $limit, $filter, $dataSession, $type, $format, $maxRecordCount);
     }
 
     /**
