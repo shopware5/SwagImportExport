@@ -8,9 +8,19 @@ use Shopware\Components\SwagImportExport\Transoformers\SmartyExpressionEvaluator
 class DataTransformerFactory extends \Enlight_Class implements \Enlight_Hook
 {
 
-    public function getTransformer($param)
+    public function createDataTransformerChain($profile, $options = null)
     {
-        switch ($param) {
+        
+    }
+    
+    public function createTransformer($key)
+    {
+        
+    }
+    
+    public function createValueConvertor($convertorType)
+    {
+        switch ($convertorType) {
             case 'phpEvaluator':
                 return new PhpExpressionEvaluator();
             case 'smartyEvaluator':

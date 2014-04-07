@@ -231,6 +231,13 @@ class DataIO
 
         Shopware()->Models()->flush();
     }
+    
+    public function getSessionId()
+    {
+        $session = $this->getDataSession();
+        
+        return $session->getId();
+    }
 
     /**
      * Returns the max records count initialized in the constructor.

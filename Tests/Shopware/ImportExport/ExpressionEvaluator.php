@@ -21,7 +21,7 @@ class ExpressionEvaluator extends ImportExportTestHelper
 
         $transformersFactory = $this->Plugin()->getDataTransformerFactory();
 
-        $phpEval = $transformersFactory->getTransformer('phpEvaluator');
+        $phpEval = $transformersFactory->createValueConvertor('phpEvaluator');
 
         $evalVariable1 = $phpEval->evaluate($expression1, $variables);
         $evalVariable2 = $phpEval->evaluate($expression2, $variables);
@@ -43,7 +43,7 @@ class ExpressionEvaluator extends ImportExportTestHelper
 
         $transformersFactory = $this->Plugin()->getDataTransformerFactory();
 
-        $smartyEval = $transformersFactory->getTransformer('smartyEvaluator');
+        $smartyEval = $transformersFactory->createValueConvertor('smartyEvaluator');
 
         $evalVariable1 = $smartyEval->evaluate($expression1, $variables);
         $evalVariable2 = $smartyEval->evaluate($expression2, $variables);
