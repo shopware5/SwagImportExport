@@ -5,29 +5,38 @@ namespace Shopware\Components\SwagImportExport\Profile;
 class Profile
 {
 
-    private $type;
-    private $nameMapping;
-    private $conversions;
-    private $treeTemplate;
+    private $profileEntity;
+    
+    /**
+     * @var array 
+     */
+    private $configNames;
+
+    public function __construct(Shopware\Components\SwagImportExport\Profile\Profile $profile)
+    {
+        $this->profileEntity = $profile;
+        $this->configNames = array('exportConversion', 'treeBuilder');
+    }
 
     public function getType()
     {
-        return $this->type;
+        return $this->profileEntity->getType();
     }
 
-    public function getNameMapping()
+    public function getConfigNames()
     {
-        return $this->nameMapping;
+        return $this->configNames;
     }
 
-    public function getConversions()
+    public function getConfig($name)
     {
-        return $this->conversions;
+        switch ($name) {
+            case 'exportConversion':
+                return $this->profileEntity->exportConversion();
+            case 'treeBuilder':
+                return $this->profileEntity->getTree();    
+            default:
+                throw new \Exception('Config does not exists');
+        }
     }
-
-    public function getTreeTemplate()
-    {
-        return $this->treeTemplate;
-    }
-
 }

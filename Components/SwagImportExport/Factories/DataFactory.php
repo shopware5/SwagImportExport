@@ -85,7 +85,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
         $session = $this->getSessionRepository()->findOneBy(array('id' => $sessionId));
 
         if (!$session) {
-            $session = $this->createSession($data);
+            $session = $this->createSession();
         }
 
         return $session;
@@ -125,9 +125,9 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     }
     
     /**
-     * Helper Method to get access to the media repository.
+     * Helper Method to get access to the session repository.
      *
-     * @return Shopware\Models\Media\Repository
+     * @return Shopware\CustomModels\ImportExport\Session
      */
     public function getSessionRepository()
     {

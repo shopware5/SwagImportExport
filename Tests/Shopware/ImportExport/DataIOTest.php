@@ -62,16 +62,16 @@ class DataIOTest extends ImportExportTestHelper
         $this->assertEquals($dataIO->getSessionState(), 'new');
     }
     
-//    public function testStartSession()
-//    {
-//        $postData = $this->getPostData();
-//
-//        $dataFactory = $this->Plugin()->getDataFactory();
-//        
-//        $dataIO = $dataFactory->getAdapter('categories', $postData);
-//
-//        $dataIO->startSession();
-//    }
+    public function testStartSession()
+    {
+        $postData = $this->getPostData();
+
+        $dataFactory = $this->Plugin()->getDataFactory();
+        
+        $dataIO = $dataFactory->getAdapter('categories', $postData);
+
+        $dataIO->startSession();
+    }
     
     
 //    public function testArticlesRead()

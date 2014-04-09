@@ -179,11 +179,12 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
         $tool = new \Doctrine\ORM\Tools\SchemaTool($em);
 
         $classes = array(
-            $em->getClassMetadata('Shopware\CustomModels\ImportExport\Session')
+            $em->getClassMetadata('Shopware\CustomModels\ImportExport\Session'),
+            $em->getClassMetadata('Shopware\CustomModels\ImportExport\Profile')
         );
 
-        try {
-            $tool->createSchema($classes);
+        try { 
+           $tool->createSchema($classes);
         } catch (\Doctrine\ORM\Tools\ToolsException $e) {
             
         }
@@ -199,6 +200,7 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
 
         $classes = array(
             $em->getClassMetadata('Shopware\CustomModels\ImportExport\Session'),
+            $em->getClassMetadata('Shopware\CustomModels\ImportExport\Profile')
         );
 
         $tool->dropSchema($classes);

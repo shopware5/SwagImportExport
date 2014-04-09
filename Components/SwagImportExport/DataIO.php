@@ -231,11 +231,11 @@ class DataIO
 
         Shopware()->Models()->flush();
     }
-    
+
     public function getSessionId()
     {
         $session = $this->getDataSession();
-        
+
         return $session->getId();
     }
 
