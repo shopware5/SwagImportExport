@@ -9,6 +9,8 @@ namespace Shopware\Components\SwagImportExport\FileIO;
 class XmlFileWriter implements FileWriter
 {
 
+    private $treeStructure = true;
+
     /**
      * Writes the header data in the file. The header data should be in a tree-like structure. 
      */
@@ -34,6 +36,11 @@ class XmlFileWriter implements FileWriter
     public function writeFooter($fileName, $footerData)
     {
         
+    }
+
+    public function hasTreeStructure()
+    {
+        return $this->treeStructure;
     }
 
 }

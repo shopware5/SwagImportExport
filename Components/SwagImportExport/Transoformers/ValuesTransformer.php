@@ -7,12 +7,15 @@ namespace Shopware\Components\SwagImportExport\Transoformers;
  */
 class ValuesTransformer implements DataTransformerAdapter
 {
-    
+
+    private $config;
+
     /**
      * The $config must contain the smarty or php transormation of values.
      */
-    public function setConfig($config)
+    public function initialize($config)
     {
+        $this->config = $config;
     }
 
     /**
@@ -20,6 +23,7 @@ class ValuesTransformer implements DataTransformerAdapter
      */
     public function transformForward($data)
     {
+        
     }
 
     /**
@@ -27,13 +31,15 @@ class ValuesTransformer implements DataTransformerAdapter
      */
     public function transformBackward($data)
     {
+        
     }
-    
+
     /**
      * Does nothing in this class
      */
     public function composeHeader($data)
     {
+        
     }
 
     /**
@@ -41,13 +47,15 @@ class ValuesTransformer implements DataTransformerAdapter
      */
     public function composeFooter($data)
     {
+        
     }
-    
+
     /**
      * Does nothing in this class
      */
     public function parseHeader($data)
     {
+        
     }
 
     /**
@@ -55,7 +63,7 @@ class ValuesTransformer implements DataTransformerAdapter
      */
     public function parseFooter($data)
     {
+        
     }
-    
-    
+
 }

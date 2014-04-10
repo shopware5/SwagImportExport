@@ -70,13 +70,13 @@ class DataIO
 
     /**
      * 
-     * @param int $records
+     * @param int $numberOfRecords
      */
-    public function read($records)
+    public function read($numberOfRecords)
     {
         $start = $this->dataSession->getPosition();
 
-        $ids = $this->loadIds($start, $records);
+        $ids = $this->loadIds($start, $numberOfRecords);
 
         $columns = $this->getColumns();
 
@@ -101,7 +101,7 @@ class DataIO
         $ids = $dbAdapter->readRecordIds(
                 $limitAdapater->getOffset(), $limitAdapater->getLimit(), $filterAdapter->getFilter()
         );
-
+        
         $this->setRecordIds($ids);
 
         return $this;
@@ -312,11 +312,11 @@ class DataIO
      * Returns number of ids
      * 
      * @param int $start
-     * @param int $records
+     * @param int $numberOfRecords
      * @return string
      * @throws \Exception
      */
-    private function loadIds($start, $records)
+    private function loadIds($start, $numberOfRecords)
     {
         $storedIds = $this->getRecordIds();
 
@@ -324,7 +324,7 @@ class DataIO
             throw new \Exception('No loaded records ids');
         }
 
-        $end = $start + $records;
+        $end = $start + $numberOfRecords;
 
         $filterIds = array();
         $counter = 0;

@@ -8,12 +8,14 @@ namespace Shopware\Components\SwagImportExport\Transoformers;
 class TreeTransformer implements DataTransformerAdapter
 {
 
+    private $config;
+
     /**
      * Sets the config that has the tree structure
      */
-    public function setConfig($config)
-    {
-        
+    public function initialize($config)
+    {        
+        $this->config = $config;
     }
 
     /**

@@ -15,7 +15,7 @@ class Profile
     public function __construct(Shopware\Components\SwagImportExport\Profile\Profile $profile)
     {
         $this->profileEntity = $profile;
-        $this->configNames = array('exportConversion', 'treeBuilder');
+        $this->configNames = array('exportConversion', 'tree');
     }
 
     public function getType()
@@ -32,8 +32,8 @@ class Profile
     {
         switch ($name) {
             case 'exportConversion':
-                return $this->profileEntity->exportConversion();
-            case 'treeBuilder':
+                return $this->profileEntity->getExportConversion();
+            case 'tree':
                 return $this->profileEntity->getTree();    
             default:
                 throw new \Exception('Config does not exists');

@@ -13,7 +13,7 @@ interface DataTransformerAdapter
     /**
      * Sets the main config which defines the data restructuring
      */
-    public function setConfig($config);
+    public function initialize($config);
 
     /**
      * Transforms the data in direction to formatted output file and returns the transformed data.

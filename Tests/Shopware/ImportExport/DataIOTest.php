@@ -10,6 +10,7 @@ class DataIOTest extends ImportExportTestHelper
     public function getPostData()
     {
         return array(
+            'adapter' => 'categories',
             'filter' => '',
             'type' => 'export',
             'limit' => array('limit' => 40, 'offset' => 0),
@@ -21,9 +22,12 @@ class DataIOTest extends ImportExportTestHelper
     
     public function testPreloadRecordIds()
     {
+        $postData = $this->getPostData();
+        $postData['limit'] = array();
+        
         $dataFactory = $this->Plugin()->getDataFactory();
 
-        $dataIO = $dataFactory->getAdapter('categories', $postData);
+        $dataIO = $dataFactory->createDataIO($postData);
 
         $dataIO->preloadRecordIds();
 
@@ -38,14 +42,14 @@ class DataIOTest extends ImportExportTestHelper
 
         $dataFactory = $this->Plugin()->getDataFactory();
 
-        $dataIO = $dataFactory->getAdapter('categories', $postData);
+        $dataIO = $dataFactory->createDataIO($postData);
 
         $dataIO->preloadRecordIds();
 
         $rawData1 = $dataIO->read(11);
         $rawData2 = $dataIO->read(21);
         $rawData3 = $dataIO->read(255);
-
+        
         $this->assertEquals(count($rawData1), 11);
         $this->assertEquals(count($rawData2), 21);
         $this->assertEquals(count($rawData3), 40);
@@ -57,7 +61,7 @@ class DataIOTest extends ImportExportTestHelper
 
         $dataFactory = $this->Plugin()->getDataFactory();
         
-        $dataIO = $dataFactory->getAdapter('categories', $postData);
+        $dataIO = $dataFactory->createDataIO($postData);
 
         $this->assertEquals($dataIO->getSessionState(), 'new');
     }
@@ -68,7 +72,7 @@ class DataIOTest extends ImportExportTestHelper
 
         $dataFactory = $this->Plugin()->getDataFactory();
         
-        $dataIO = $dataFactory->getAdapter('categories', $postData);
+        $dataIO = $dataFactory->createDataIO($postData);
 
         $dataIO->startSession();
     }

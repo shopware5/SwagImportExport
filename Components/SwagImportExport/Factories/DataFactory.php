@@ -37,9 +37,9 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
      * @param array $params
      * @return \Shopware\Components\SwagImportExport\DataIO
      */
-    private function createDataIO($adapterType, $params)
+    public function createDataIO($params)
     {
-        $dbAdapter = $this->createDbAdapter($adapterType);
+        $dbAdapter = $this->createDbAdapter($params['adapter']);
 
         $colOpts = $this->createColOpts($params['columnOptions']);
 

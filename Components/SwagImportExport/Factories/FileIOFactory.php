@@ -26,9 +26,9 @@ class FileIOFactory extends \Enlight_Class implements \Enlight_Hook
         }
     }
 
-    public function createFileWriter($param)
+    public function createFileWriter($params)
     {
-        switch ($param) {
+        switch ($params['format']) {
             case 'csv':
                 return new CsvFileWriter();
             case 'xml':
@@ -36,7 +36,7 @@ class FileIOFactory extends \Enlight_Class implements \Enlight_Hook
             case 'excel':
                 return new ExcelFileWriter();
             default:
-                throw new \Exception("File writer $param does not exists.");
+                throw new \Exception('File writer' . $params['type'] . 'does not exists.');
         }
     }
 
