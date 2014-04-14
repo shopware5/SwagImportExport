@@ -80,6 +80,7 @@ class ControllerTest extends ImportExportTestHelper
         // we create the file writer that will write (partially) the result file
         $fileWriter = $this->Plugin()->getFileIOFactory()->createFileWriter($postData);
         
+        $outputFileName = Shopware()->DocPath() . 'files/import_export/test.xml';
         
         $dataTransformerChain = $this->Plugin()->getDataTransformerFactory()->createDataTransformerChain(
             $profile, 
@@ -108,10 +109,13 @@ class ControllerTest extends ImportExportTestHelper
                 
                 // process that array with the full transformation chain
                 $data = $dataTransformerChain->transformForward($data);
-
                 // now the array should be a tree and we write it to the file
                 $fileWriter->writeRecords($outputFileName, $data);
 
+                echo '<pre>';
+                var_dump($data);
+                echo '</pre>';
+                exit;
                 // writing is successful, so we write the new position in the session;
                 // if if the new position goes above the limits provided by the 
                 $dataIO->progressSession();

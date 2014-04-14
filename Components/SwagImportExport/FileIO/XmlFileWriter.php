@@ -26,7 +26,10 @@ class XmlFileWriter implements FileWriter
      */
     public function writeRecords($fileName, $data)
     {
-        
+        $str = @file_put_contents($fileName, $data);
+        if ($str === false) {
+            throw new Exception("Cannot write in '$fileName'");
+        } 
     }
 
     /**

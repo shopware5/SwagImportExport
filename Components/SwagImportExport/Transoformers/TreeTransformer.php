@@ -39,8 +39,11 @@ class TreeTransformer implements DataTransformerAdapter
             $transformData[] = $this->transform($iterationPart, $record);
         }
         
-        //creates 
+        //creates iteration array
         $treeBody = array($iterationPart['name'] => $transformData);
+        
+        //todo: run xml convertor here ?
+        $treeBody = $this->convertToXml($treeBody);
         
         return $treeBody;
     }
@@ -80,7 +83,7 @@ class TreeTransformer implements DataTransformerAdapter
         if (isset($node['children'])) {
             if (isset($node['attributes'])) {
                 foreach ($node['attributes'] as $attribute) {
-                    $currentNode['_attribute'][$attribute['name']] = $mapper[$attribute['shopwareField']];
+                    $currentNode['_attributes'][$attribute['name']] = $mapper[$attribute['shopwareField']];
                 }
             }
 
@@ -90,7 +93,7 @@ class TreeTransformer implements DataTransformerAdapter
         } else {
             if (isset($node['attributes'])) {
                 foreach ($node['attributes'] as $attribute) {
-                    $currentNode['_attribute'][$attribute['name']] = $mapper[$attribute['shopwareField']];
+                    $currentNode['_attributes'][$attribute['name']] = $mapper[$attribute['shopwareField']];
                 }
 
                 $currentNode['_value'] = $mapper[$node['shopwareField']];
@@ -101,7 +104,7 @@ class TreeTransformer implements DataTransformerAdapter
 
         return $currentNode;
     }
-
+    
     /**
      * Transforms a list of nodes containing children and attributes into flat array.
      */
@@ -140,6 +143,14 @@ class TreeTransformer implements DataTransformerAdapter
     public function parseFooter($data)
     {
         
+    }
+    
+    private function convertToXml($data)
+    {
+        $convert = new \Shopware_Components_Convert_Xml();
+        $convertData = $convert->_encode($data);
+        
+        return $convertData;
     }
 
 }
