@@ -23,7 +23,7 @@ class ValuesTransformer implements DataTransformerAdapter
      */
     public function transformForward($data)
     {
-        
+        return $data;
     }
 
     /**

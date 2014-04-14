@@ -86,8 +86,6 @@ class ControllerTest extends ImportExportTestHelper
             array('isTree' => $fileWriter->hasTreeStructure())
         );
         
-        
-        
         if ($dataIO->getSessionState() == 'new') {
             // session has no ids stored yet, therefore we must start it and write the file headers
             $header = $dataTransformerChain->composeHeader();
@@ -107,17 +105,16 @@ class ControllerTest extends ImportExportTestHelper
                 // read a bunch of records into simple php array;
                 // the count of records may be less than 100 if we are at the end of the read.
                 $data = $dataIO->read(100);
-                exit();
                 
-//                // process that array with the full transformation chain
-//                $data = $dataTransformerChain->transformForward($data);
-//
-//                // now the array should be a tree and we write it to the file
-//                $fileWriter->writeRecords($outputFileName, $data);
-//
-//                // writing is successful, so we write the new position in the session;
-//                // if if the new position goes above the limits provided by the 
-//                $dataIO->progressSession();
+                // process that array with the full transformation chain
+                $data = $dataTransformerChain->transformForward($data);
+
+                // now the array should be a tree and we write it to the file
+                $fileWriter->writeRecords($outputFileName, $data);
+
+                // writing is successful, so we write the new position in the session;
+                // if if the new position goes above the limits provided by the 
+                $dataIO->progressSession();
                 
             } catch(Exception $e) {
                 // we need to analyze the exception somehow and decide whether to break the while loop;
