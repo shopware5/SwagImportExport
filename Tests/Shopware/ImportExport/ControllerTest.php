@@ -7,7 +7,7 @@ use Tests\Shopware\ImportExport\ImportExportTestHelper;
 class ControllerTest extends ImportExportTestHelper
 {
 
-    public function testCreateProfile()
+    public function testLifeCycle()
     {
 //        $name = 'magento';
 //        $type = 'categories';
@@ -73,7 +73,7 @@ class ControllerTest extends ImportExportTestHelper
         );
 
         $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
-
+        
         $dataFactory = $this->Plugin()->getDataFactory();
         $dataIO = $dataFactory->createDataIO($postData);
 
