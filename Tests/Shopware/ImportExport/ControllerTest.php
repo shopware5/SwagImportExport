@@ -91,7 +91,7 @@ class ControllerTest extends ImportExportTestHelper
             // session has no ids stored yet, therefore we must start it and write the file headers
             $header = $dataTransformerChain->composeHeader();
             $fileWriter->writeHeader($outputFileName, $header);
-            $dataIO->startSession();    
+            $dataIO->startSession();
         } else {
             // session has already loaded ids and some position, so we simply activate it
             $dataIO->resumeSession();

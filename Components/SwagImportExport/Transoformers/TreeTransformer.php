@@ -78,7 +78,7 @@ class TreeTransformer implements DataTransformerAdapter
      * @param array $mapper
      * @return array
      */
-    public function transform($node, $mapper)
+    public function transform($node, $mapper = null)
     {
         if (isset($node['children'])) {
             if (isset($node['attributes'])) {
@@ -116,9 +116,10 @@ class TreeTransformer implements DataTransformerAdapter
     /**
      * Composes a tree header based on config
      */
-    public function composeHeader($data)
+    public function composeHeader()
     {
-        
+        $xmlData = $this->splitTree('header');
+        return $xmlData;
     }
 
     /**
@@ -145,6 +146,52 @@ class TreeTransformer implements DataTransformerAdapter
         
     }
     
+    /**
+     * Spliting the tree into two parts
+     * 
+     * @param string $part
+     * @return string
+     * @throws \Exception
+     */
+    private function splitTree($part)
+    {
+        $tree = json_decode($this->config, true);
+
+        //replaceing iteration part with custom marker
+        $this->removeIterationPart($tree);
+        $data = $this->transform($tree);
+
+        //converting the whole template tree without the interation part
+        $convert = new \Shopware_Components_Convert_Xml();
+        $data = $convert->encode(array('root' => $data));
+
+        //spliting the the tree in to two parts
+        $treeParts = explode('<_currentMarker></_currentMarker>', $data);
+
+        switch ($part) {
+            case 'header':
+                return $treeParts[0];
+            case 'footer':
+                return $treeParts[1];
+            default:
+                throw new \Exception("Tree part $part does not exists.");
+        }
+    }
+
+    private function removeIterationPart(&$node)
+    {
+        if (isset($node['type']) && $node['type'] === 'record') {
+            $node = array('name'=>'_currentMarker');
+        }
+
+        if (isset($node['children'])) {
+            foreach ($node['children'] as &$child) {
+                $this->removeIterationPart($child);
+            }
+        }
+        
+    }
+    
     private function convertToXml($data)
     {
         $convert = new \Shopware_Components_Convert_Xml();
@@ -152,5 +199,5 @@ class TreeTransformer implements DataTransformerAdapter
         
         return $convertData;
     }
-
+    
 }

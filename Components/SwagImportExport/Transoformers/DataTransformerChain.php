@@ -49,7 +49,7 @@ class DataTransformerChain
      */
     public function composeHeader()
     {
-        $transformer = last($this->chain);
+        $transformer = end($this->chain);
         return $transformer->composeHeader();
     }
 
@@ -59,7 +59,7 @@ class DataTransformerChain
      */
     public function composeFooter()
     {
-        $transformer = last($this->chain);
+        $transformer = end($this->chain);
         return $transformer->composeFooter();
     }
 
@@ -69,7 +69,7 @@ class DataTransformerChain
      */
     public function parseHeader($data)
     {
-        $transformer = last($this->chain);
+        $transformer = end($this->chain);
         return $transformer->parseHeader($data);
     }
 
@@ -79,7 +79,7 @@ class DataTransformerChain
      */
     public function parseFooter($data)
     {
-        $transformer = last($this->chain);
+        $transformer = end($this->chain);
         return $transformer->parseFooter($data);
     }
 

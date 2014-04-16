@@ -28,7 +28,7 @@ interface DataTransformerAdapter
     /**
      * Composes the header of the formatted output file.
      */
-    public function composeHeader($data);
+    public function composeHeader();
 
     
     /**

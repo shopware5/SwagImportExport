@@ -16,7 +16,10 @@ class XmlFileWriter implements FileWriter
      */
     public function writeHeader($fileName, $headerData)
     {
-        
+        $str = @file_put_contents($fileName, $headerData);
+        if ($str === false) {
+            throw new Exception("Cannot write in '$fileName'");
+        } 
     }
 
     /**
@@ -26,7 +29,7 @@ class XmlFileWriter implements FileWriter
      */
     public function writeRecords($fileName, $data)
     {
-        $str = @file_put_contents($fileName, $data);
+        $str = @file_put_contents($fileName, $data, FILE_APPEND);
         if ($str === false) {
             throw new Exception("Cannot write in '$fileName'");
         } 
@@ -38,7 +41,10 @@ class XmlFileWriter implements FileWriter
      */
     public function writeFooter($fileName, $footerData)
     {
-        
+        $str = @file_put_contents($fileName, $footerData, FILE_APPEND);
+        if ($str === false) {
+            throw new Exception("Cannot write in '$fileName'");
+        } 
     }
 
     public function hasTreeStructure()

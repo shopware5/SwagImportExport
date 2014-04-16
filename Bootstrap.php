@@ -103,7 +103,7 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
      */
     public function uninstall()
     {
-        $this->removeDatabaseTables();
+//        $this->removeDatabaseTables();
 
         return true;
     }

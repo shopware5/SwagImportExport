@@ -37,7 +37,7 @@ class ValuesTransformer implements DataTransformerAdapter
     /**
      * Does nothing in this class
      */
-    public function composeHeader($data)
+    public function composeHeader()
     {
         
     }

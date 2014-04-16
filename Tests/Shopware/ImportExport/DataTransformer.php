@@ -83,7 +83,7 @@ class DataTransformer extends ImportExportTestHelper
                         }] 
                     }';
         
-        $mapper = array(
+        $rawData = array(
             array('id' => 14, 'parentid' => 0, 'name' => 'Name1', 'description' => 'This is desc', 'lang' => 'en',),
             array('id' => 15, 'parentid' => 14, 'name' => 'Name2', 'description' => 'This is desc2', 'lang' => 'en',),
             array('id' => 16, 'parentid' => 14, 'name' => 'Name3', 'description' => 'This is desc3', 'lang' => 'en',),
@@ -91,7 +91,7 @@ class DataTransformer extends ImportExportTestHelper
 
         $treeTransformer = $this->Plugin()->getDataTransformerFactory()->createDataTransformer('tree', $jsonTree);
         
-        $data = $treeTransformer->transformForward($mapper);
+        $data = $treeTransformer->transformForward($rawData);
         
         $this->assertEquals($testData, $data);
     }
