@@ -45,7 +45,7 @@ class TreeTransformer implements DataTransformerAdapter
         //todo: run xml convertor here ?
         $treeBody = $this->convertToXml($treeBody);
         
-        return $treeBody;
+        return trim($treeBody);
     }
 
     /**
@@ -125,9 +125,10 @@ class TreeTransformer implements DataTransformerAdapter
     /**
      * Composes a tree footer based on config
      */
-    public function composeFooter($data)
+    public function composeFooter()
     {
-        
+        $xmlData = $this->splitTree('footer');
+        return $xmlData;
     }
 
     /**

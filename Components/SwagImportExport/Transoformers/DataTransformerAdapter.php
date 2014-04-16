@@ -34,7 +34,7 @@ interface DataTransformerAdapter
     /**
      * Composes the footer of the formatted output file.
      */
-    public function composeFooter($data);
+    public function composeFooter();
     
     
     /**
