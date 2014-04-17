@@ -48,6 +48,11 @@ class DataTransformerFactory extends \Enlight_Class implements \Enlight_Hook
                 $transformer = new TreeTransformer();
                 break;
             case 'exportConversion':
+                //todo: maybe change the place of creating smarty evaluator?
+                $config = array(
+                    'expression' => $config,
+                    'evaluator' => $this->createValueConvertor('smartyEvaluator')
+                );
                 $transformer = new ValuesTransformer();
                 break;
             default:

@@ -4,7 +4,8 @@ namespace Shopware\Components\SwagImportExport\FileIO;
 
 class CsvFileWriter implements FileWriter
 {
-
+    private $treeStructure = false;
+    
     public function writeHeader($fileName, $headerDara)
     {
         
@@ -18,6 +19,11 @@ class CsvFileWriter implements FileWriter
     public function writeFooter($fileName, $headerDara)
     {
         
+    }
+
+    public function hasTreeStructure()
+    {
+        return $this->treeStructure;
     }
 
 }

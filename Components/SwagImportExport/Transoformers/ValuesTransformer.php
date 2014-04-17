@@ -9,13 +9,15 @@ class ValuesTransformer implements DataTransformerAdapter
 {
 
     private $config;
+    private $evaluator;
 
     /**
      * The $config must contain the smarty or php transormation of values.
      */
     public function initialize($config)
     {
-        $this->config = $config;
+        $this->config = $config['expression'];
+        $this->evaluator = $config['evaluator'];
     }
 
     /**
@@ -24,6 +26,12 @@ class ValuesTransformer implements DataTransformerAdapter
     public function transformForward($data)
     {
         return $data;
+        
+        //todo: discuss this !
+        //it should have columnName => expression 
+        foreach ($data as &$record) {
+            $record = $this->evaluator->evaluate($this->config, $record);
+        }
     }
 
     /**
