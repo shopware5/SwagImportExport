@@ -4,7 +4,7 @@ namespace Tests\Shopware\ImportExport;
 
 use Tests\Shopware\ImportExport\ImportExportTestHelper;
 
-class DataTransformer extends ImportExportTestHelper
+class DataFlatenTransformerTest extends ImportExportTestHelper
 {
 
     public function getJsonTree()
@@ -139,5 +139,4 @@ class DataTransformer extends ImportExportTestHelper
 
         $this->assertEquals($testData, $data);
     }
-
 }
