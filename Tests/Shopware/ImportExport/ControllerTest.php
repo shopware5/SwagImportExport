@@ -7,7 +7,7 @@ use Tests\Shopware\ImportExport\ImportExportTestHelper;
 class ControllerTest extends ImportExportTestHelper
 {
 
-    public function testLifeCycle()
+    public function testExportLifeCycle()
     {
 //        $name = 'magento';
 //        $type = 'categories';
@@ -59,16 +59,13 @@ class ControllerTest extends ImportExportTestHelper
 //        $exportConversion = '{if $active} false {else} true {/if}';
 //
 //        
-        $postData['profileId'] = 1;
-        $postData['type'] = 'xml';
-
         $postData = array(
             'profileId' => 1,
             'sessionId' => 1,
             'type' => 'export',
             'limit' => array('limit' => 40, 'offset' => 0),
             'max_record_count' => 100,
-            'format' => 'xml',
+            'format' => 'csv',
             'adapter' => 'categories',
         );
 
@@ -80,12 +77,13 @@ class ControllerTest extends ImportExportTestHelper
         // we create the file writer that will write (partially) the result file
         $fileWriter = $this->Plugin()->getFileIOFactory()->createFileWriter($postData);
 
-        $outputFileName = Shopware()->DocPath() . 'files/import_export/test.xml';
+//        $outputFileName = Shopware()->DocPath() . 'files/import_export/test.xml';
+        $outputFileName = Shopware()->DocPath() . 'files/import_export/test.csv';
 
         $dataTransformerChain = $this->Plugin()->getDataTransformerFactory()->createDataTransformerChain(
                 $profile, array('isTree' => $fileWriter->hasTreeStructure())
         );
-
+        
         if ($dataIO->getSessionState() == 'new') {
             // session has no ids stored yet, therefore we must start it and write the file headers
             $header = $dataTransformerChain->composeHeader();
@@ -134,6 +132,19 @@ class ControllerTest extends ImportExportTestHelper
         var_dump('completed');
         echo '</pre>';
         exit;
+    }
+    
+    
+    public function testImportLifeCycle()
+    {
+        $postData = array(
+            'profileId' => 1,
+            'sessionId' => 1,
+            'type' => 'export',
+            'max_record_count' => 100,
+            'format' => 'csv',
+            'adapter' => 'categories',
+        );
     }
 
 }
