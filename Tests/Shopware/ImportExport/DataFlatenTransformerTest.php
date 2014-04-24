@@ -56,7 +56,7 @@ class DataTreeTransformerTest extends ImportExportTestHelper
         return $jsonTree;
     }
 
-    public function testHeader()
+    public function testExportHeader()
     {
         $jsonTree = $this->getJsonTree();
 
@@ -71,7 +71,7 @@ class DataTreeTransformerTest extends ImportExportTestHelper
         $this->assertEquals($testData, $data);
     }
     
-    public function testData()
+    public function testExportData()
     {
         $jsonTree = $this->getJsonTree();
 

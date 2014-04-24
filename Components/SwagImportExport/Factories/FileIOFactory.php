@@ -12,9 +12,9 @@ use Shopware\Components\SwagImportExport\FileIO\ExcelFileReader;
 class FileIOFactory extends \Enlight_Class implements \Enlight_Hook
 {
 
-    public function createFileReader($param)
+    public function createFileReader($params)
     {
-        switch ($param) {
+        switch ($params['format']) {
             case 'csv':
                 return new CsvFileReader();
             case 'xml':
@@ -22,7 +22,7 @@ class FileIOFactory extends \Enlight_Class implements \Enlight_Hook
             case 'excel':
                 return new ExcelFileReader();
             default:
-                throw new \Exception("File reader $param does not exists.");
+                throw new \Exception('File reader '. $params['format'] . 'does not exists.');
         }
     }
 
@@ -36,7 +36,7 @@ class FileIOFactory extends \Enlight_Class implements \Enlight_Hook
             case 'excel':
                 return new ExcelFileWriter();
             default:
-                throw new \Exception('File writer' . $params['type'] . 'does not exists.');
+                throw new \Exception('File writer' . $params['format'] . 'does not exists.');
         }
     }
 

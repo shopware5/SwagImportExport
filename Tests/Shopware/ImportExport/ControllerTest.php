@@ -134,17 +134,50 @@ class ControllerTest extends ImportExportTestHelper
         exit;
     }
     
-    
     public function testImportLifeCycle()
     {
         $postData = array(
             'profileId' => 1,
             'sessionId' => 1,
-            'type' => 'export',
+            'type' => 'import',
             'max_record_count' => 100,
-            'format' => 'csv',
+            'format' => 'xml',
             'adapter' => 'categories',
         );
+        
+        $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
+        
+        $dataIO = $this->Plugin()->getDataFactory()->createDataIO($postData);
+        
+        echo '<pre>';
+        var_dump($dataIO);
+        echo '</pre>';
+        exit;
+        
+        // we create the file reader that will read the result file
+        $fileReader = $this->Plugin()->getFileIOFactory()->createFileReader($postData);
+        
+        $inputFileName = Shopware()->DocPath() . 'files/import_export/test.xml';
+        
+        $dataTransformerChain = $this->Plugin()->getDataTransformerFactory()->createDataTransformerChain(
+                $profile, array('isTree' => $fileReader->hasTreeStructure())
+        );
+        
+        if ($dataIO->getSessionState() == 'new') {
+            // session has no ids stored yet, therefore we must start it and write the file headers
+            $headerData = $fileReader->readHeader($inputFileName);
+            $dataTransformerChain->parseHeader($headerData);
+            $dataIO->startSession();
+        } else {
+            // session has already loaded ids and some position, so we simply activate it
+            $dataIO->resumeSession();
+        }
+        
+        echo '<pre>';
+        var_dump($dataTransformerChain);
+        echo '</pre>';
+        exit;
+        
     }
 
 }

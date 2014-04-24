@@ -25,16 +25,19 @@ class FlattenTransformer implements DataTransformerAdapter
      */
     public function transformForward($data)
     {
-        $xmlString = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><root>' . $data . '</root>';
-
+        $xmlString = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><shopware>' . $data . '</shopware>';
+        
+        $iterationPart = $this->getIterationPart();
+        $iterationTag = $iterationPart['name'];
+              
         $xml = new \SimpleXMLElement($xmlString);
 
-        foreach ($xml->Category as $category) {
+        foreach ($xml->{$iterationTag} as $element) {
             $this->tempData = array();
-            $this->collectData($category);
+            $this->collectData($element);
             $flatData .= implode(';', $this->tempData) . "\n";
         }
-
+        
         return $flatData;
     }
 
@@ -51,13 +54,7 @@ class FlattenTransformer implements DataTransformerAdapter
      */
     public function composeHeader()
     {
-        $tree = json_decode($this->config, true);
-
-        if ($this->iterationPart == null) {
-            $this->findIterationPart($tree);
-        }
-
-        $iterationPart = $this->iterationPart;
+        $iterationPart = $this->getIterationPart();
         $transformData = $this->transform($iterationPart);
         $transformData = array($iterationPart['name'] => $transformData);
         
@@ -174,7 +171,22 @@ class FlattenTransformer implements DataTransformerAdapter
 
         return $currentNode;
     }
+    
+    /**
+     * Returns the iteration part of the tree
+     * 
+     * @return array
+     */
+    public function getIterationPart()
+    {
+        if ($this->iterationPart == null) {
+            $tree = json_decode($this->config, true);
+            $this->findIterationPart($tree);
+        }
 
+        return $this->iterationPart;
+    }
+    
     /**
      * Creates columns name for the csv file
      * 

@@ -5,6 +5,8 @@ namespace Shopware\Components\SwagImportExport\FileIO;
 class XmlFileReader implements FileReader
 {
 
+    private $treeStructure = true;
+
     public function readHeader($fileName)
     {
         
@@ -20,4 +22,8 @@ class XmlFileReader implements FileReader
         
     }
 
+    public function hasTreeStructure()
+    {
+        return $this->treeStructure;
+    }
 }
