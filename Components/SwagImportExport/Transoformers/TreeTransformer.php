@@ -29,7 +29,7 @@ class TreeTransformer implements DataTransformerAdapter
         $iterationPart = $this->getIterationPart();
 
         $transformData = array();
-        
+
         //prepares the tree for xml convert
         foreach ($data as $record) {
             $transformData[] = $this->transformToTree($iterationPart, $record);
@@ -107,26 +107,26 @@ class TreeTransformer implements DataTransformerAdapter
     public function transformBackward($data)
     {
         $importMapper = $this->getImportMapper();
-        
+
         foreach ($data as $record) {
-           $this->bufferData = array();
-           $this->transformFromTree($record, $importMapper);
-           
-           $rawData[] = $this->bufferData;
+            $this->bufferData = array();
+            $this->transformFromTree($record, $importMapper);
+
+            $rawData[] = $this->bufferData;
         }
         
         return $rawData;
     }
-    
+
     public function transformFromTree($node, $importMapper, $parent = null)
     {
         if (isset($node['_value'])) {
             $this->saveBufferData($importMapper[$parent], $node['_value']);
-            
+
             if (isset($node['_attributes'])) {
                 $this->transformFromTree($node['_attributes'], $importMapper, $parent);
-            }            
-        } else if(is_array($node)){
+            }
+        } else if (is_array($node)) {
             foreach ($node as $key => $child) {
                 $this->transformFromTree($child, $importMapper, $key);
             }
@@ -211,7 +211,7 @@ class TreeTransformer implements DataTransformerAdapter
 
         $this->importMapper[$key] = $value;
     }
-    
+
     /**
      * @param string $key
      * @param string $value

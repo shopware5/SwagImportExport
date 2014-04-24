@@ -140,48 +140,71 @@ class DataFlatenTransformerTest extends ImportExportTestHelper
         $this->assertEquals($testData, $data);
     }
 
-    public function testImportData()
-    {
-        $jsonTree = $this->getJsonTree();
-
-        $xmlData = '<root>
-                        <Header>
-                            <HeaderChild></HeaderChild>
-                        </Header>
-                        <Categories>
-                            <Category Attribute1="3" Attribute2="1">
-                                <Id>3</Id>
-                                <Title Attribute3="1">Deutsch</Title>
-                                <Description>
-                                    <Value Attribute4="1">Deutsch</Value>
-                                </Description>
-                            </Category>
-                            <Category Attribute1="39" Attribute2="1">
-                                <Id>39</Id>
-                                <Title Attribute3="1">English</Title>
-                                <Description>
-                                    <Value Attribute4="1">English</Value>
-                                </Description>
-                            </Category>
-                        </Categories>
-                    </root>';
-
-        $treeTransformer = $this->Plugin()->getDataTransformerFactory()->createDataTransformer('tree', $jsonTree);
-
-        $inputFileName = Shopware()->DocPath() . 'files/import_export/test.xml';
-
-        $convert = new \Shopware_Components_Convert_Xml();
-
-        $convertData = $convert->decode($inputFileName);
-
-        $dataArray = $convertData['root']['Categories']['Category'];
-
-        $data = $treeTransformer->transformBackward($dataArray);
-
-        echo '<pre>';
-        var_dump($data);
-        echo '</pre>';
-        exit;
-    }
+//    public function testImportData()
+//    {
+//        $jsonTree = $this->getJsonTree();
+//
+//        $xmlData = '<root>
+//                        <Header>
+//                            <HeaderChild></HeaderChild>
+//                        </Header>
+//                        <Categories>
+//                            <Category Attribute1="3" Attribute2="1">
+//                                <Id>3</Id>
+//                                <Title Attribute3="1">Deutsch</Title>
+//                                <Description>
+//                                    <Value Attribute4="1">Deutsch</Value>
+//                                </Description>
+//                            </Category>
+//                            <Category Attribute1="39" Attribute2="1">
+//                                <Id>39</Id>
+//                                <Title Attribute3="1">English</Title>
+//                                <Description>
+//                                    <Value Attribute4="1">English</Value>
+//                                </Description>
+//                            </Category>
+//                        </Categories>
+//                    </root>';
+//
+//        $readedXml = '<Category Attribute1="3" Attribute2="1">
+//                                <Id>3</Id>
+//                                <Title Attribute3="1">Deutsch</Title>
+//                                <Description>
+//                                    <Value Attribute4="1">Deutsch</Value>
+//                                </Description>
+//                            </Category>
+//                            <Category Attribute1="39" Attribute2="1">
+//                                <Id>39</Id>
+//                                <Title Attribute3="1">English</Title>
+//                                <Description>
+//                                    <Value Attribute4="1">English</Value>
+//                                </Description>
+//                            </Category>';
+//
+//        $treeTransformer = $this->Plugin()->getDataTransformerFactory()->createDataTransformer('tree', $jsonTree);
+//
+//        //todo: this should come from the reader
+//        $inputFileName = Shopware()->DocPath() . 'files/import_export/test.xml';
+//
+//        $xml = new \XMLReader();
+//        $xml->open($inputFileName);
+//
+//        $countElements = 0;
+//        
+//        $mStart = microtime(true);
+//        
+//        while ($xml->read()) {
+//            if ($xml->nodeType == \XMLReader::END_ELEMENT && $xml->name == 'Category') {
+//                $countElements++;
+//            }
+//        }
+//        
+//        $mStop = microtime(true);
+//
+//
+//        $dataArray = $convertData['root']['Categories']['Category'];
+//
+//        $data = $treeTransformer->transformBackward($dataArray);
+//    }
 
 }
