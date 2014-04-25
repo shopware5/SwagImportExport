@@ -39,11 +39,11 @@ use Shopware\Components\Model\ModelEntity,
 /**
  * Session Model
  *
- * @ORM\Table(name="s_import_export_profile")
+ * @ORM\Table(name="s_import_export_expression")
  * @ORM\Entity(repositoryClass="Repository")
  * @ORM\HasLifecycleCallbacks
  */
-class Profile
+class Expression
 {
 
     /**
@@ -58,56 +58,44 @@ class Profile
     protected $id;
 
     /**
-     * @var Expressions[] $expressions
-     *
-	 * @ORM\OneToMany(targetEntity="Shopware\CustomModels\ImportExport\Expression", mappedBy="profile")
-	 */
-	protected $expressions;
+     * @ORM\ManyToOne(targetEntity="Shopware\CustomModels\ImportExport\Profile", cascade={"persist", "refresh"})
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     */
+    protected $profile;
 
     /**
-     * @var string $type
+     * @var string $exportConversion
      *
-     * @ORM\Column(name="type", type="string", length=200)
+     * @ORM\Column(name="export_conversion", type="text") 
      */
-    protected $type;
+    protected $exportConversion;
+
+    /**
+     * @var string $importConversion
+     *
+     * @ORM\Column(name="import_conversion", type="text") 
+     */
+    protected $importConversion;
     
-    /**
-     * @var text $name
-     *
-     * @ORM\Column(name="name", type="string", length=200) 
-     */
-    protected $name;
-
-    /**
-     * @var text $format
-     *
-     * @ORM\Column(name="tree", type="text") 
-     */
-    protected $tree;
-
+    
     public function getId()
     {
         return $this->id;
     }
 
-    public function getType()
+    public function getProfile()
     {
-        return $this->type;
+        return $this->profile;
     }
 
-    public function getTree()
+    public function getExportConversion()
     {
-        return $this->tree;
-    }
-    
-    public function getExpressions()
-    {
-        return $this->expressions;
+        return $this->exportConversion;
     }
 
-    public function getName()
+    public function getImportConversion()
     {
-        return $this->name;
+        return $this->importConversion;
     }
 
     public function setId($id)
@@ -115,33 +103,30 @@ class Profile
         $this->id = $id;
     }
 
-    public function setType($type)
-    {
-        $this->type = $type;
-    }
-
-    public function setTree(text $tree)
-    {
-        $this->tree = $tree;
-    }
-
-    public function setName(text $name)
-    {
-        $this->name = $name;
-    }
-    
     /**
-     * Adds an expression to the profile.
+     * Sets the shop object.
      *
-     * @param Expressions $expression
-     *
-     * @return $this
+     * @param \Shopware\CustomModels\ImportExport\Profile $profile
+     * @return Document
      */
-    public function addDocument($expression)
-	{
-		$this->expressions[] = $expression;
-		$expression->setProfile($this);
-		return $this;
-	}
+    public function setProfile(\Shopware\CustomModels\ImportExport\Profile $profile = null)
+    {
+        $this->profile = $profile;
 
+        return $this;
+    }
+
+    public function setExportConversion($exportConversion)
+    {
+        $this->exportConversion = $exportConversion;
+        
+        return $this;
+    }
+
+    public function setImportConversion($importConversion)
+    {
+        $this->importConversion = $importConversion;
+        
+        return $this;
+    }
 }
