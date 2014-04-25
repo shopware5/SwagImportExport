@@ -58,7 +58,7 @@ class DataFlatenTransformerTest extends ImportExportTestHelper
 
     public function testTreeTransformer()
     {
-        $providedData = array(
+        $providedData = array('Category' => array( 
             array(
                 '_attributes' => array('Attribute1' => '14', 'Attribute2' => '0'),
                 'Id' => '14',
@@ -83,10 +83,7 @@ class DataFlatenTransformerTest extends ImportExportTestHelper
                     'Value' => array('_attributes' => array('Attribute4' => 'en'), '_value' => 'This is desc3')
                 )
             ),
-        );
-
-        $convert = new \Shopware_Components_Convert_Xml();
-        $testData = trim($convert->_encode(array('Category' => $providedData)));
+        ));
 
         $jsonTree = $this->getJsonTree();
 
@@ -100,44 +97,25 @@ class DataFlatenTransformerTest extends ImportExportTestHelper
 
         $data = $treeTransformer->transformForward($rawData);
 
-        $this->assertEquals($testData, $data);
+        $this->assertEquals($providedData, $data);
     }
 
-    public function testHeader()
+    public function testHeaderFooter()
     {
         $jsonTree = $this->getJsonTree();
 
-        $testData = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-                    <root>
-                        <Header>
-                            <HeaderChild></HeaderChild>
-                        </Header>
-                        <Categories>';
-
-        $testData = trim(preg_replace('/\s+/', '', $testData));
+        $testData = array('Root' => array(
+            'Header' => array('HeaderChild' => null),
+            'Categories' => array('_currentMarker' => null),
+        ));
 
         $treeTransformer = $this->Plugin()->getDataTransformerFactory()->createDataTransformer('tree', $jsonTree);
 
-        $data = $treeTransformer->composeHeader();
-
-        $data = trim(preg_replace('/\s+/', '', $data));
-
-        $this->assertEquals($testData, $data);
-    }
-
-    public function testFooter()
-    {
-        $jsonTree = $this->getJsonTree();
-
-        $testData = '</Categories></root>';
-
-        $treeTransformer = $this->Plugin()->getDataTransformerFactory()->createDataTransformer('tree', $jsonTree);
-
-        $data = $treeTransformer->composeFooter();
-
-        $data = trim(preg_replace('/\s+/', '', $data));
-
-        $this->assertEquals($testData, $data);
+        $headerData = $treeTransformer->composeHeader();
+        $footerData = $treeTransformer->composeFooter();
+        
+        $this->assertEquals($testData, $headerData);
+        $this->assertEquals($testData, $footerData);
     }
 
 //    public function testImportData()

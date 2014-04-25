@@ -8,10 +8,21 @@ namespace Shopware\Components\SwagImportExport\Transoformers;
 class TreeTransformer implements DataTransformerAdapter
 {
 
-    private $config;
-    private $iterationPart;
-    private $importMapper;
-    private $bufferData;
+    protected $config;
+
+    /**
+     * @var array
+     */
+    protected $iterationPart;
+
+    /**
+     * @var array
+     */
+    protected $headerFooterData;
+    
+    
+    protected $bufferData;
+    protected $importMapper;
 
     /**
      * Sets the config that has the tree structure
@@ -38,32 +49,60 @@ class TreeTransformer implements DataTransformerAdapter
         //creates iteration array
         $treeBody = array($iterationPart['name'] => $transformData);
 
-        //todo: run xml convertor here ?
-        $treeBody = $this->convertToXml($treeBody);
+        return $treeBody;
+    }
+    
+    /**
+     * Transforms a list of nodes containing children and attributes into flat array.
+     */
+    public function transformBackward($data)
+    {
+        $importMapper = $this->getImportMapper();
 
-        return trim($treeBody);
+        foreach ($data as $record) {
+            $this->bufferData = array();
+            $this->transformFromTree($record, $importMapper);
+
+            $rawData[] = $this->bufferData;
+        }
+
+        return $rawData;
+    }
+    
+    /**
+     * Composes a tree header based on config
+     */
+    public function composeHeader()
+    {
+        $data = $this->getHeaderAndFooterData();
+
+        return $data;
     }
 
     /**
-     * Search the iteration part of the tree template
-     * 
-     * @param array $tree
-     * @return array
+     * Composes a tree footer based on config
      */
-    public function findIterationPart(array $tree)
+    public function composeFooter()
     {
-        foreach ($tree as $key => $value) {
-            if (is_array($value)) {
-                $this->findIterationPart($value);
-            }
+        $data = $this->getHeaderAndFooterData();
 
-            if ($key == 'type' && $value == 'record') {
-                $this->iterationPart = $tree;
-                return;
-            }
-        }
+        return $data;
+    }
 
-        return;
+    /**
+     * Parses a tree header based on config
+     */
+    public function parseHeader($data)
+    {
+        
+    }
+
+    /**
+     * Parses a tree footer based on config
+     */
+    public function parseFooter($data)
+    {
+        
     }
 
     /**
@@ -101,23 +140,6 @@ class TreeTransformer implements DataTransformerAdapter
         return $currentNode;
     }
 
-    /**
-     * Transforms a list of nodes containing children and attributes into flat array.
-     */
-    public function transformBackward($data)
-    {
-        $importMapper = $this->getImportMapper();
-
-        foreach ($data as $record) {
-            $this->bufferData = array();
-            $this->transformFromTree($record, $importMapper);
-
-            $rawData[] = $this->bufferData;
-        }
-        
-        return $rawData;
-    }
-
     public function transformFromTree($node, $importMapper, $parent = null)
     {
         if (isset($node['_value'])) {
@@ -134,39 +156,26 @@ class TreeTransformer implements DataTransformerAdapter
             $this->saveBufferData($importMapper[$parent], $node);
         }
     }
-
+    
     /**
-     * Composes a tree header based on config
+     * Search the iteration part of the tree template
+     * 
+     * @param array $tree
      */
-    public function composeHeader()
+    public function findIterationPart(array $tree)
     {
-        $xmlData = $this->splitTree('header');
-        return $xmlData;
-    }
+        foreach ($tree as $key => $value) {
+            if (is_array($value)) {
+                $this->findIterationPart($value);
+            }
 
-    /**
-     * Composes a tree footer based on config
-     */
-    public function composeFooter()
-    {
-        $xmlData = $this->splitTree('footer');
-        return $xmlData;
-    }
+            if ($key == 'type' && $value == 'record') {
+                $this->iterationPart = $tree;
+                return;
+            }
+        }
 
-    /**
-     * Parses a tree header based on config
-     */
-    public function parseHeader($data)
-    {
-        
-    }
-
-    /**
-     * Parses a tree footer based on config
-     */
-    public function parseFooter($data)
-    {
-        
+        return;
     }
 
     /**
@@ -182,6 +191,25 @@ class TreeTransformer implements DataTransformerAdapter
         }
 
         return $this->iterationPart;
+    }
+
+    public function getHeaderAndFooterData()
+    {
+        if ($this->headerFooterData === null) {
+            $tree = json_decode($this->config, true);
+            
+            //replaceing iteration part with custom marker
+            $this->removeIterationPart($tree);
+            $modifiedTree = $this->transformToTree($tree);
+            
+            if (!isset($tree['name'])) {
+                throw new \Exception('Root category in the tree does not exists');
+            }
+            
+            $this->headerFooterData = array($tree['name'] => $modifiedTree);
+        }
+        
+        return $this->headerFooterData;
     }
 
     /**
@@ -227,7 +255,7 @@ class TreeTransformer implements DataTransformerAdapter
      * 
      * @param mixed $node
      */
-    private function generateMapper($node)
+    protected function generateMapper($node)
     {
         if (isset($node['children'])) {
 
@@ -251,39 +279,7 @@ class TreeTransformer implements DataTransformerAdapter
         }
     }
 
-    /**
-     * Spliting the tree into two parts
-     * 
-     * @param string $part
-     * @return string
-     * @throws \Exception
-     */
-    private function splitTree($part)
-    {
-        $tree = json_decode($this->config, true);
-
-        //replaceing iteration part with custom marker
-        $this->removeIterationPart($tree);
-        $data = $this->transformToTree($tree);
-
-        //converting the whole template tree without the interation part
-        $convert = new \Shopware_Components_Convert_Xml();
-        $data = $convert->encode(array('root' => $data));
-
-        //spliting the the tree in to two parts
-        $treeParts = explode('<_currentMarker></_currentMarker>', $data);
-
-        switch ($part) {
-            case 'header':
-                return $treeParts[0];
-            case 'footer':
-                return $treeParts[1];
-            default:
-                throw new \Exception("Tree part $part does not exists.");
-        }
-    }
-
-    private function removeIterationPart(&$node)
+    protected function removeIterationPart(&$node)
     {
         if (isset($node['type']) && $node['type'] === 'record') {
             $node = array('name' => '_currentMarker');
@@ -294,14 +290,6 @@ class TreeTransformer implements DataTransformerAdapter
                 $this->removeIterationPart($child);
             }
         }
-    }
-
-    private function convertToXml($data)
-    {
-        $convert = new \Shopware_Components_Convert_Xml();
-        $convertData = $convert->_encode($data);
-
-        return $convertData;
     }
 
 }

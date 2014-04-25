@@ -9,17 +9,27 @@ namespace Shopware\Components\SwagImportExport\FileIO;
 class XmlFileWriter implements FileWriter
 {
 
-    private $treeStructure = true;
+    /**
+     * @var boolean
+     */
+    protected $treeStructure = true;
+
+    /**
+     * @var Shopware_Components_Convert_Xml
+     */
+    protected $xmlConvertor;
 
     /**
      * Writes the header data in the file. The header data should be in a tree-like structure. 
      */
     public function writeHeader($fileName, $headerData)
     {
-        $str = @file_put_contents($fileName, $headerData);
+        $dataParts = $this->splitHeaderFooter($headerData);
+
+        $str = @file_put_contents($fileName, $dataParts[0]);
         if ($str === false) {
             throw new Exception("Cannot write in '$fileName'");
-        } 
+        }
     }
 
     /**
@@ -29,10 +39,14 @@ class XmlFileWriter implements FileWriter
      */
     public function writeRecords($fileName, $data)
     {
-        $str = @file_put_contents($fileName, $data, FILE_APPEND);
+        //converting the whole template tree without the interation part
+        $convertor = $this->getXmlConvertor();
+        $data = $convertor->_encode($data);
+        
+        $str = @file_put_contents($fileName, trim($data), FILE_APPEND);
         if ($str === false) {
             throw new Exception("Cannot write in '$fileName'");
-        } 
+        }
     }
 
     /**
@@ -41,15 +55,52 @@ class XmlFileWriter implements FileWriter
      */
     public function writeFooter($fileName, $footerData)
     {
-        $str = @file_put_contents($fileName, $footerData, FILE_APPEND);
+        $dataParts = $this->splitHeaderFooter($footerData);
+        
+        $data = isset($dataParts[1]) ? $dataParts[1] : null;
+        
+        $str = @file_put_contents($fileName, $data, FILE_APPEND);
         if ($str === false) {
             throw new Exception("Cannot write in '$fileName'");
-        } 
+        }
     }
 
     public function hasTreeStructure()
     {
         return $this->treeStructure;
+    }
+
+    /**
+     * Spliting the tree into two parts
+     * 
+     * @param array $data
+     * @return string
+     * @throws \Exception
+     */
+    protected function splitHeaderFooter($data)
+    {
+        //converting the whole template tree without the interation part
+        $convertor = $this->getXmlConvertor();
+        $data = $convertor->encode($data);
+
+        //spliting the the tree in to two parts
+        $dataParts = explode('<_currentMarker></_currentMarker>', $data);
+
+        return $dataParts;
+    }
+
+    /**
+     * Returns Shopware_Components_Convert_Xml
+     * 
+     * @return object
+     */
+    protected function getXmlConvertor()
+    {
+        if ($this->xmlConvertor === null) {
+            $this->xmlConvertor = new \Shopware_Components_Convert_Xml();
+        }
+
+        return $this->xmlConvertor;
     }
 
 }
