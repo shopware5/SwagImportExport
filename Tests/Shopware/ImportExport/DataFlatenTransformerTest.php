@@ -60,13 +60,19 @@ class DataTreeTransformerTest extends ImportExportTestHelper
     {
         $jsonTree = $this->getJsonTree();
 
-        $testData = 'Category_Attribute1;Category_Attribute2;Category.Id;Category.Title_Attribute3;Category.Title;Category.Description.Value_Attribute4;Category.Description.Value';
+        $testData = array(
+                            'Category_Attribute1',
+                            'Category_Attribute2',
+                            'Category.Id',
+                            'Category.Title_Attribute3',
+                            'Category.Title',
+                            'Category.Description.Value_Attribute4',
+                            'Category.Description.Value'
+                    );
 
         $flattenTransformer = $this->Plugin()->getDataTransformerFactory()->createDataTransformer('flatten', $jsonTree);
 
         $data = $flattenTransformer->composeHeader();
-        
-        $data = trim(preg_replace('/\s+/', '', $data));
 
         $this->assertEquals($testData, $data);
     }
@@ -75,28 +81,21 @@ class DataTreeTransformerTest extends ImportExportTestHelper
     {
         $jsonTree = $this->getJsonTree();
 
-        $xmlData = '<Category Attribute1="3" Attribute2="1">
-                        <Id>3</Id>
-                        <Title Attribute3="1">Deutsch</Title>
-                        <Description>
-                            <Value Attribute4="1">Deutsch</Value>
-                        </Description>
-                    </Category>
-                    <Category Attribute1="39" Attribute2="1">
-                        <Id>39</Id>
-                        <Title Attribute3="1">English</Title>
-                        <Description>
-                            <Value Attribute4="1">English</Value>
-                        </Description>
-                    </Category>';
-
-        $testData = '3;1;3;1;Deutsch;1;Deutsch' . '39;1;39;1;English;1;English';
+        $dataProvider = array(
+            'Category' => array(
+                array(
+                    '_attributes' => array('Attribute1' => 47,'Attribute2' => 43),
+                    'Id' => 47,
+                    'Title' => array('_attributes' => array('Attribute3' => 1), '_value' => 'Teas and Accessories'),
+                    'Description' => array('Value' => array('_attributes' => array('Attribute4' => 1), '_value' => 'Teas and Accessories')),
+                )
+        ));
+        
+        $testData = array(array(47,43,47,1,'Teas and Accessories', 1, 'Teas and Accessories'));
         
         $flattenTransformer = $this->Plugin()->getDataTransformerFactory()->createDataTransformer('flatten', $jsonTree);
 
-        $data = $flattenTransformer->transformForward($xmlData);
-        
-        $data = trim(preg_replace('/\s+/', '', $data));
+        $data = $flattenTransformer->transformForward($dataProvider);
         
         $this->assertEquals($testData, $data);
     }

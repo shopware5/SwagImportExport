@@ -65,7 +65,7 @@ class ControllerTest extends ImportExportTestHelper
             'type' => 'export',
             'limit' => array('limit' => 40, 'offset' => 0),
             'max_record_count' => 100,
-            'format' => 'xml',
+            'format' => 'csv',
             'adapter' => 'categories',
         );
 
@@ -77,8 +77,8 @@ class ControllerTest extends ImportExportTestHelper
         // we create the file writer that will write (partially) the result file
         $fileWriter = $this->Plugin()->getFileIOFactory()->createFileWriter($postData);
 
-        $outputFileName = Shopware()->DocPath() . 'files/import_export/test.xml';
-//        $outputFileName = Shopware()->DocPath() . 'files/import_export/test.csv';
+//        $outputFileName = Shopware()->DocPath() . 'files/import_export/test.xml';
+        $outputFileName = Shopware()->DocPath() . 'files/import_export/test.csv';
 
         $dataTransformerChain = $this->Plugin()->getDataTransformerFactory()->createDataTransformerChain(
                 $profile, array('isTree' => $fileWriter->hasTreeStructure())

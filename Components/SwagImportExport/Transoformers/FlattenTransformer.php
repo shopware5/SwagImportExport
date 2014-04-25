@@ -8,9 +8,9 @@ namespace Shopware\Components\SwagImportExport\Transoformers;
 class FlattenTransformer implements DataTransformerAdapter
 {
 
-    private $config;
-    private $iterationPart;
-    private $tempData = array();
+    protected $config;
+    protected $iterationPart;
+    protected $tempData = array();
 
     /**
      * Sets the config that has the tree structure
@@ -25,19 +25,16 @@ class FlattenTransformer implements DataTransformerAdapter
      */
     public function transformForward($data)
     {
-        $xmlString = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><shopware>' . $data . '</shopware>';
-        
         $iterationPart = $this->getIterationPart();
-        $iterationTag = $iterationPart['name'];
-              
-        $xml = new \SimpleXMLElement($xmlString);
 
-        foreach ($xml->{$iterationTag} as $element) {
-            $this->tempData = array();
-            $this->collectData($element);
-            $flatData .= implode(';', $this->tempData) . "\n";
-        }
+        $nodeName = $iterationPart['name'];
         
+        foreach ($data[$nodeName] as $record) {
+            $this->tempData = array();
+            $this->collectData($record);
+            $flatData[] = $this->tempData;
+        }
+
         return $flatData;
     }
 
@@ -56,13 +53,11 @@ class FlattenTransformer implements DataTransformerAdapter
     {
         $iterationPart = $this->getIterationPart();
         $transformData = $this->transform($iterationPart);
-        $transformData = array($iterationPart['name'] => $transformData);
-        
-        $this->collectHeader($transformData);
-        
-        $columnNames .= implode(';', $this->tempData) . "\n";
-        
-        return $columnNames;
+        $data = array($iterationPart['name'] => $transformData);
+
+        $this->collectHeader($data);
+
+        return $this->tempData;
     }
 
     /**
@@ -112,32 +107,6 @@ class FlattenTransformer implements DataTransformerAdapter
     }
 
     /**
-     * 
-     * @param simplexml object $node
-     */
-    public function collectData($node)
-    {
-        if ($this->hasChildren($node)) {
-            if ($this->hasAttributes($node)) {
-                foreach ($node->attributes() as $attr) {
-                    $this->saveTempData($attr->__toString());
-                }
-            }
-
-            foreach ($node->children() as $key => $child) {
-                $this->collectData($child);
-            }
-        } else {
-            if ($this->hasAttributes($node)) {
-                foreach ($node->attributes() as $attr) {
-                    $this->saveTempData($attr->__toString());
-                }
-            }
-            $this->saveTempData($node->__toString());
-        }
-    }
-
-    /**
      * Preparing/Modifying nodes to converting into xml
      * and puts db data into this formated array
      * 
@@ -171,7 +140,52 @@ class FlattenTransformer implements DataTransformerAdapter
 
         return $currentNode;
     }
-    
+
+    /**
+     * Creates columns name for the csv file
+     * 
+     * @param array $node
+     * @param string $nodeKey
+     */
+    public function collectHeader($node, $nodeKey = null)
+    {
+        $dot = $nodeKey ? '.' : null;
+
+        if (is_array($node)) {
+            foreach ($node as $key => $value) {
+                if ($key == '_attributes') {
+                    foreach ($value as $keyAttr => $attr) {
+                        $this->saveTempData($nodeKey . '_' . $keyAttr);
+                    }
+                } else {
+                    if ($key == '_value') {
+                        $this->collectHeader($value, $nodeKey);
+                    } else {
+                        $this->collectHeader($value, $nodeKey . $dot . $key);
+                    }
+                }
+            }
+        } else {
+            $this->saveTempData($nodeKey);
+        }
+    }
+
+    /**
+     * Collects record data
+     * 
+     * @param mixed $node
+     */
+    public function collectData($node)
+    {
+        foreach ($node as $key => $value) {
+            if (is_array($value)) {
+                $this->collectData($value);
+            } else {
+                $this->saveTempData($value);
+            }
+        }
+    }
+
     /**
      * Returns the iteration part of the tree
      * 
@@ -186,66 +200,11 @@ class FlattenTransformer implements DataTransformerAdapter
 
         return $this->iterationPart;
     }
-    
-    /**
-     * Creates columns name for the csv file
-     * 
-     * @param array $node
-     * @param string $nodeKey
-     */
-    public function collectHeader($node, $nodeKey = null)
-    {
-        $dot = $nodeKey ? '.' : null;
-        
-        if (is_array($node)) {
-            foreach ($node as $key => $value) {
-                if ($key == '_attributes') {
-                    foreach($value as $keyAttr => $attr){
-                        $this->saveTempData($nodeKey . '_' . $keyAttr);
-                    }
-                } else {
-                    if ($key == '_value'){
-                        $this->collectHeader($value, $nodeKey);
-                    } else {
-                        $this->collectHeader($value, $nodeKey . $dot . $key);                        
-                    }
-                }
-            }
-        } else {
-            $this->saveTempData($nodeKey);
-        }
-    }
-
-    /**
-     * @param \SimpleXMLElement $node
-     * @return boolean
-     */
-    private function hasChildren(\SimpleXMLElement $node)
-    {
-        if (count($node->children()) > 0) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * @param \SimpleXMLElement $node
-     * @return boolean
-     */
-    private function hasAttributes(\SimpleXMLElement $node)
-    {
-        if (count($node->attributes()) > 0) {
-            return true;
-        }
-
-        return false;
-    }
 
     /**
      * @param string $data
      */
-    private function saveTempData($data)
+    public function saveTempData($data)
     {
         $this->tempData[] = $data;
     }
