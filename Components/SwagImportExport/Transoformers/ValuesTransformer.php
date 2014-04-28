@@ -8,7 +8,14 @@ namespace Shopware\Components\SwagImportExport\Transoformers;
 class ValuesTransformer implements DataTransformerAdapter
 {
 
+    /**
+     * @var Shopware\CustomModels\ImportExport\Expression
+     */
     private $config;
+
+    /**
+     * @var object 
+     */
     private $evaluator;
 
     /**
@@ -22,16 +29,28 @@ class ValuesTransformer implements DataTransformerAdapter
 
     /**
      * Maps the values by using the config export smarty fields and returns the new array
+     * 
+     * @param array $data
+     * @return array
      */
     public function transformForward($data)
     {
-        return $data;
-        
-        //todo: discuss this !
-        //it should have columnName => expression 
-        foreach ($data as &$record) {
-            $record = $this->evaluator->evaluate($this->config, $record);
+        $conversions = array();
+
+        //conversions mapper
+        foreach ($this->config as $expression) {
+            $conversions[$expression->getVariable()] = $expression->getExportConversion();
         }
+
+        foreach ($data as &$record) {
+            foreach ($conversions as $variableName => $conversion) {
+                if (isset($record[$variableName])) {                    
+                    $record[$variableName] = $this->evaluator->evaluate($conversion, $record);
+                }
+            }
+        }
+
+        return $data;
     }
 
     /**

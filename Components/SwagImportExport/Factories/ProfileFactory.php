@@ -17,7 +17,7 @@ class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
         }
 
         $profileEntity = $this->getProfileRepository()->findOneBy(array('id' => $params['profileId']));
-
+        
         if (!$profileEntity) {
             throw new \Exception('Profile does not exists');
         }

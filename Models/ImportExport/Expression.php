@@ -64,6 +64,13 @@ class Expression
     protected $profile;
 
     /**
+     * @var string $variable
+     *
+     * @ORM\Column(name="variable", type="string", length=200) 
+     */
+    protected $variable;
+    
+    /**
      * @var string $exportConversion
      *
      * @ORM\Column(name="export_conversion", type="text") 
@@ -103,6 +110,11 @@ class Expression
         $this->id = $id;
     }
 
+    public function getVariable()
+    {
+        return $this->variable;
+    }
+
     /**
      * Sets the shop object.
      *
@@ -129,4 +141,13 @@ class Expression
         
         return $this;
     }
+    
+    public function setVariable($variable)
+    {
+        $this->variable = $variable;
+        
+        return $this;
+    }
+
+
 }

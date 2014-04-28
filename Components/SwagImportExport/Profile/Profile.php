@@ -32,7 +32,7 @@ class Profile
     {
         switch ($name) {
             case 'exportConversion':
-                return $this->profileEntity->getExportConversion();
+                return $this->profileEntity->getExpressions();
             case 'tree':
                 return $this->profileEntity->getTree();    
             default:

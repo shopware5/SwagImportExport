@@ -4,7 +4,7 @@ namespace Tests\Shopware\ImportExport;
 
 use Tests\Shopware\ImportExport\ImportExportTestHelper;
 
-class ExpressionEvaluator extends ImportExportTestHelper
+class ExpressionEvaluatorTest extends ImportExportTestHelper
 {
 
     public function testPhpEvaluator()
