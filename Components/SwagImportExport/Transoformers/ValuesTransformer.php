@@ -35,30 +35,59 @@ class ValuesTransformer implements DataTransformerAdapter
      */
     public function transformForward($data)
     {
+        $data = $this->transform('export', $data);
+        
+        return $data;
+    }
+
+    /**
+     * Changes and returns the new values, before importing
+     * 
+     * @param array $data
+     * @return array
+     */
+    public function transformBackward($data)
+    {
+        $data = $this->transform('import', $data);
+        
+        return $data;
+    }
+    
+    /**
+     * @param string $type
+     * @param array $data
+     * @return array
+     * @throws \Exception
+     */
+    public function transform($type, $data)
+    {
         $conversions = array();
 
-        //conversions mapper
-        foreach ($this->config as $expression) {
-            $conversions[$expression->getVariable()] = $expression->getExportConversion();
+        switch ($type) {
+            case 'export':
+                $method = 'getExportConversion';
+                break;
+            case 'import':
+                $method = 'getImportConversion';
+                break;
+            default:
+                throw new \Exception("Convert type $type does not exists.");
         }
-
-        foreach ($data as &$record) {
-            foreach ($conversions as $variableName => $conversion) {
-                if (isset($record[$variableName])) {                    
-                    $record[$variableName] = $this->evaluator->evaluate($conversion, $record);
+        
+        foreach ($this->config as $expression) {
+            $conversions[$expression->getVariable()] = $expression->{$method}();
+        }
+        if (!empty($conversions)) {
+            foreach ($data as &$record) {
+                foreach ($conversions as $variableName => $conversion) {
+                    if (isset($record[$variableName])) {                    
+                        $record[$variableName] = $this->evaluator->evaluate($conversion, $record);
+                    }
                 }
             }
         }
 
         return $data;
-    }
-
-    /**
-     * Maps the values by using the config import smarty fields and returns the new array
-     */
-    public function transformBackward($data)
-    {
-        
     }
 
     /**
