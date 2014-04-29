@@ -85,6 +85,13 @@ class DataIO
 
         return $rawData;
     }
+    
+    public function write($data)
+    {
+        $dbAdapter = $this->getDbAdapter();
+        
+        $dbAdapter->write($data);
+    }
 
     /**
      * 
@@ -209,7 +216,7 @@ class DataIO
         $position = $session->getPosition();
         $count = $session->getCount();
 
-        $newPosition = $position + $step;
+        $newPosition = $position + $step + 1;
 
         if ($newPosition >= $count) {
             $session->setState('finished');

@@ -20,7 +20,6 @@ class TreeTransformer implements DataTransformerAdapter
      */
     protected $headerFooterData;
     
-    
     protected $bufferData;
     protected $importMapper;
 
@@ -219,9 +218,10 @@ class TreeTransformer implements DataTransformerAdapter
      */
     public function getImportMapper()
     {
-        $iterationPart = $this->getIterationPart();
-
-        $this->generateMapper($iterationPart);
+        if ($this->importMapper === null) {
+            $iterationPart = $this->getIterationPart();
+            $this->generateMapper($iterationPart);
+        }
 
         return $this->importMapper;
     }
@@ -279,6 +279,11 @@ class TreeTransformer implements DataTransformerAdapter
         }
     }
 
+    /**
+     * Replace the iteration part with custom tag "_currentMarker"
+     * 
+     * @param mixed $node
+     */
     protected function removeIterationPart(&$node)
     {
         if (isset($node['type']) && $node['type'] === 'record') {

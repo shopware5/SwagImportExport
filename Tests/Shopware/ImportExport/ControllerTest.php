@@ -106,11 +106,7 @@ class ControllerTest extends ImportExportTestHelper
 
                 // process that array with the full transformation chain
                 $data = $dataTransformerChain->transformForward($data);
-
-                echo '<pre>';
-                print_r($data);
-                echo '</pre>';
-                exit;
+                
                 // now the array should be a tree and we write it to the file
                 $fileWriter->writeRecords($outputFileName, $data);
 
@@ -152,7 +148,14 @@ class ControllerTest extends ImportExportTestHelper
         $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
 
         $dataIO = $this->Plugin()->getDataFactory()->createDataIO($postData);
-
+        
+        if ($dataIO->getSessionState() == 'closed') {
+            echo '<pre>';
+            var_dump('This session is already import.');
+            echo '</pre>';
+            exit;
+        }
+        
         // we create the file reader that will read the result file
         $fileReader = $this->Plugin()->getFileIOFactory()->createFileReader($postData);
 
@@ -184,11 +187,9 @@ class ControllerTest extends ImportExportTestHelper
                 $records = $fileReader->readRecords($inputFileName, $position, 100);
 
                 $data = $dataTransformerChain->transformBackward($records);
-
-                exit;
-                //todo: write method 
+                
                 $dataIO->write($data);
-
+                
                 $dataIO->progressSession();
             } catch (Exception $e) {
                 // we need to analyze the exception somehow and decide whether to break the while loop;
@@ -196,12 +197,8 @@ class ControllerTest extends ImportExportTestHelper
                 // may be we use
             }
         }
-
+        
         if ($dataIO->getSessionState() == 'finished') {
-            // Session finished means we have exported all the ids in the sesssion.
-            // Therefore we can close the file with a footer and mark the session as done.
-            $footer = $dataTransformerChain->composeFooter();
-            $fileWriter->writeFooter($outputFileName, $footer);
             $dataIO->closeSession();
         }
     }

@@ -21,29 +21,24 @@ class CsvFileReader implements FileReader
      */
     public function readRecords($fileName, $position, $step)
     {
-        
         $handle = fopen($fileName, 'r');
         
         if ($handle === false) {
             throw new \Exception("Can not open file $fileName");
         }
         
-        $columnNames = fgetcsv($handle);
-        $columnNames = explode(';', $columnNames[0]);
+        $columnNames = fgetcsv($handle, 0, ';');
         
         $readRows = array();
         $frame = $position + $step;
         $counter = 0;
         
-        while ($row = fgetcsv($handle)) {
-            
-            if ($counter > $position && $counter <= $frame ) {
-                
-                $tempData = null;                
-                $tempData = explode(';', $row[0]);       
+        while ($row = fgetcsv($handle, 0, ';')) {
+
+            if ($counter >= $position && $counter < $frame ) {
                 
                 foreach ($columnNames as $key => $name) {
-                    $data[$name] = isset($tempData[$key]) ? $tempData[$key] : '';
+                    $data[$name] = isset($row[$key]) ? $row[$key] : '';
                 }
                 $readRows[] = $data;
             }
@@ -54,7 +49,7 @@ class CsvFileReader implements FileReader
             
             $counter++;
         }
-         
+        
         fclose($handle);
         
         return $readRows;

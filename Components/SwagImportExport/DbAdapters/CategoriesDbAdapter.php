@@ -109,9 +109,74 @@ class CategoriesDbAdapter implements DataDbAdapter
         return $columns . $attributesSelect;
     }
 
-    public function import()
+    /**
+     * Insert/Update data into db
+     * 
+     * @param array $records
+     */
+    public function write($records)
     {
+        $columnNames = $this->getColumnNames(current($records));
         
+        $queryValues = $this->getQueryValues($records);
+        
+        $query = "REPLACE INTO `s_categories` ($columnNames) VALUES $queryValues ;";
+        
+        Shopware()->Db()->query($query);
     }
 
+    /**
+     * Returns column names
+     * 
+     * @param array $data
+     * @return string
+     */
+    public function getColumnNames($data)
+    {
+        foreach ($data as $columnName => $value) {
+            $columnNames[] = $columnName;
+        }
+        
+        $columnNames = "`" . implode("`,`", $columnNames) . "`";
+        
+        return $columnNames;
+    }
+    
+    /**
+     * Returns query values i.e. (3,1,'Deutsch','0'), (39,1,'English','0')
+     * 
+     * @param array $data
+     * @return string
+     * @throws Exception
+     */
+    public function getQueryValues($data)
+    {
+        $lastKey = end(array_keys(current($data)));
+        
+        $queryValues = '';
+        
+        foreach ($data as $category) {
+            $tempData = null;
+            
+            //todo: make better check for the categories !
+            if (empty($category['id']) || empty($category['parent']) || empty($category['description'])) {
+                throw new Exception('Categories requires id, parent and description');
+            }
+            
+            foreach ($category as $key => $value) {
+                
+                $comma = $key == $lastKey ? '' : ',';
+                
+                $tempData .= !(int)($value) ? "'" . $value . "'" : $value;
+                $tempData .= $comma;
+            }
+            
+            $queryValues .= ', (' . $tempData . ')';
+        }
+        
+        //removes the first comma
+        $queryValues[0] = ' ';
+        
+        return $queryValues;
+    }
 }
