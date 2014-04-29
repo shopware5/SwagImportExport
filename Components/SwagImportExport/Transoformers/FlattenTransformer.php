@@ -28,7 +28,7 @@ class FlattenTransformer implements DataTransformerAdapter
         $iterationPart = $this->getIterationPart();
 
         $nodeName = $iterationPart['name'];
-        
+
         foreach ($data[$nodeName] as $record) {
             $this->tempData = array();
             $this->collectData($record);
@@ -43,7 +43,13 @@ class FlattenTransformer implements DataTransformerAdapter
      */
     public function transformBackward($data)
     {
+        $iterationPart = $this->getIterationPart();
         
+        foreach ($data as $row) {
+            $tree[] = $this->transformToTree($iterationPart, $row, $iterationPart['name']);
+        }
+        
+        return $tree;
     }
 
     /**
@@ -139,6 +145,64 @@ class FlattenTransformer implements DataTransformerAdapter
         }
 
         return $currentNode;
+    }
+
+    /**
+     * Transform flat data into tree array
+     * 
+     * @param mixed $node
+     * @param array $data
+     * @return array
+     */
+    public function transformToTree($node, $data, $nodePath = null)
+    {
+        $currentPath = null;
+        
+        if (isset($node['children'])) {
+            if (isset($node['attributes'])) {
+                foreach ($node['attributes'] as $attribute) {
+                    $currentPath = $nodePath . '_' . $attribute['name'];
+                    $currentNode['_attributes'][$attribute['name']] = $this->getDataValue($data, $currentPath);
+                }
+            }
+
+            foreach ($node['children'] as $child) {
+                $currentPath = $nodePath . '.' .$child['name'];
+                $currentNode[$child['name']] = $this->transformToTree($child, $data, $currentPath);
+            }
+        } else {
+            if (isset($node['attributes'])) {
+                
+                foreach ($node['attributes'] as $attribute) {
+                    $currentPath = $nodePath . '_' . $attribute['name'];
+                    $currentNode['_attributes'][$attribute['name']] = $this->getDataValue($data, $currentPath);
+                }
+
+                $currentNode['_value'] = $this->getDataValue($data, $nodePath);
+            } else {
+                $currentNode = $this->getDataValue($data, $nodePath);
+            }
+        }
+
+        return $currentNode;
+    }
+
+    /**
+     * Returns data from the CSV
+     * If data don't match with the csv column names, throws exception
+     * 
+     * @param array $data
+     * @param string $nodePath
+     * @return mixed
+     * @throws \Exception
+     */
+    public function getDataValue($data, $nodePath)
+    {
+        if (!isset($data[$nodePath])){
+            throw new \Exception("Data does not match with CSV column name $nodePath");
+        }
+        
+        return $data[$nodePath];
     }
 
     /**

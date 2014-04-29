@@ -22,7 +22,7 @@ class FileIOFactory extends \Enlight_Class implements \Enlight_Hook
             case 'excel':
                 return new ExcelFileReader();
             default:
-                throw new \Exception('File reader '. $params['format'] . 'does not exists.');
+                throw new \Exception('File reader '. $params['format'] . ' does not exists.');
         }
     }
 
@@ -36,7 +36,7 @@ class FileIOFactory extends \Enlight_Class implements \Enlight_Hook
             case 'excel':
                 return new ExcelFileWriter();
             default:
-                throw new \Exception('File writer' . $params['format'] . 'does not exists.');
+                throw new \Exception('File writer' . $params['format'] . ' does not exists.');
         }
     }
 

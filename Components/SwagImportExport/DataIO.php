@@ -120,10 +120,17 @@ class DataIO
      *     or the final db save is yet not performed (in case of import). 
      * closed: 
      *     Session is closed, file is fully exported/imported
+     * 
+     * @return string
      */
     public function getSessionState()
     {
         return $this->dataSession->getState();
+    }
+    
+    public function getSessionPosition()
+    {
+        return $this->dataSession->getPosition();
     }
 
     /**
@@ -134,22 +141,36 @@ class DataIO
      */
     public function startSession()
     {
-        $ids = $this->preloadRecordIds()->getRecordIds();
         $type = $this->getType();
-
+        
         $session = $this->getDataSession();
+        
+        
+        //todo: make it without switch ???
+        switch ($type) {
+            case 'export':
+                $ids = $this->preloadRecordIds()->getRecordIds();
+
+                //set ids
+                $session->setIds(serialize($ids));
+                
+                //set count
+                $session->setCount(count($ids));
+                break;
+            case 'import':
+                
+                $session->setIds('');
+                break;
+
+            default:
+                throw new \Exception("Session type $type is not valid");
+        }
 
         //set type
         $session->setType($type);
 
-        //set ids
-        $session->setIds(serialize($ids));
-
         //set position
         $session->setPosition(0);
-
-        //set count
-        $session->setCount(count($ids));
 
         $dateTime = new \DateTime('now');
 
@@ -166,7 +187,7 @@ class DataIO
 
         //change state
         $session->setState('active');
-
+        
         Shopware()->Models()->persist($session);
 
         Shopware()->Models()->flush();
