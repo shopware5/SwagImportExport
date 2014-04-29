@@ -6,22 +6,22 @@ class DataIO
 {
 
     /**
-     * @var object Shopware\Components\DbAdapters
+     * @var \Shopware\Components\DbAdapters
      */
     private $dbAdapter;
 
     /**
-     * @var Shopware\Components\SwagImportExport\Utils\DataColumnOptions
+     * @var \Shopware\Components\SwagImportExport\Utils\DataColumnOptions
      */
     private $columnOptions;
 
     /**
-     * @var Shopware\Components\SwagImportExport\Utils\DataLimit
+     * @var \Shopware\Components\SwagImportExport\Utils\DataLimit
      */
     private $limit;
 
     /**
-     * @var Shopware\Components\SwagImportExport\Utils\DataFilter
+     * @var \Shopware\Components\SwagImportExport\Utils\DataFilter
      */
     private $filter;
 
@@ -52,7 +52,7 @@ class DataIO
     private $maxRecordCount;
 
     /**
-     * @var Shopware\CustomModels\ImportExport\Session 
+     * @var \Shopware\CustomModels\ImportExport\Session 
      */
     private $dataSession;
 
