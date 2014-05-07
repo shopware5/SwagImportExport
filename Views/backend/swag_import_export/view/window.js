@@ -44,6 +44,8 @@ Ext.define('Shopware.apps.SwagImportExport.view.Window', {
 	alias: 'widget.swag-import-export-window',
 	
     height: 450,
+    
+    layout: 'fit',
 	
     title: '{s name=swag_import_export/window/title}Import / Export{/s}',
 
@@ -61,7 +63,13 @@ Ext.define('Shopware.apps.SwagImportExport.view.Window', {
         return Ext.create('Ext.tab.Panel', {
             name: 'main-tab',
             items: [
+                Ext.create('Shopware.apps.SwagImportExport.view.manager.Manager', {
+					
+				}),
                 Ext.create('Shopware.apps.SwagImportExport.view.tab.Profile', {
+					
+				}),
+                Ext.create('Shopware.apps.SwagImportExport.view.log.Log', {
 					
 				})
 //                , Ext.create('Shopware.apps.Order.view.detail.Detail',{
