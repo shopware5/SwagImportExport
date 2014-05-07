@@ -92,6 +92,8 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
     public function install()
     {
         $this->createDatabase();
+        $this->createMenu();
+        $this->registerEvents();
 
         return true;
     }
@@ -153,7 +155,7 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
             $this->registerMyNamespace();
             $this->fileIOFactory = Enlight_Class::Instance('Shopware\Components\SwagImportExport\Factories\FileIOFactory');
         }
-        
+
         return $this->fileIOFactory;
     }
 
@@ -184,8 +186,8 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
             $em->getClassMetadata('Shopware\CustomModels\ImportExport\Expression')
         );
 
-        try { 
-           $tool->createSchema($classes);
+        try {
+            $tool->createSchema($classes);
         } catch (\Doctrine\ORM\Tools\ToolsException $e) {
             
         }
@@ -206,6 +208,53 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
         );
 
         $tool->dropSchema($classes);
+    }
+
+    /**
+     * Creates the Swag Import Export backend menu item.
+     */
+    public function createMenu()
+    {
+        $this->createMenuItem(
+                array(
+                    'label' => 'Swag Import Export',
+                    'controller' => 'SwagImportExport',
+                    'class' => 'swag-import-export-icon',
+                    'action' => 'Index',
+                    'active' => 1,
+                    'parent' => $this->Menu()->findOneBy('label', 'Inhalte'),
+                    'position' => 6,
+                )
+        );
+    }
+
+    /**
+     * Registers all necessary events.
+     */
+    protected function registerEvents()
+    {
+        $this->subscribeEvent(
+                'Enlight_Controller_Dispatcher_ControllerPath_Backend_SwagImportExport', 'getBackendController'
+        );
+    }
+
+    /**
+     * Returns the path to the backend controller.
+     *
+     * @param Enlight_Event_EventArgs $args
+     * @return string
+     */
+    public function getBackendController(Enlight_Event_EventArgs $args)
+    {
+        $this->Application()->Snippets()->addConfigDir(
+                $this->Path() . 'Snippets/'
+        );
+
+        $this->Application()->Template()->addTemplateDir(
+                $this->Path() . 'Views/'
+        );
+
+        return $this->Path() . '/Controllers/Backend/SwagImportExport.php';
     }
 
 }
