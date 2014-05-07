@@ -59,7 +59,6 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Manager', {
         
         return Ext.create('Ext.tab.Panel', {
             name: 'manager-main-tab',
-            height: 300,
             margins: 20,
             items: [
                 Ext.create('Shopware.apps.SwagImportExport.view.manager.Export', {

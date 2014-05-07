@@ -38,7 +38,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
 	 */
 	alias: 'widget.swag-import-export-manager-import',
     
-    title: '{s name=swag_import_export/manager/import/title}Export{/s}',
+    title: '{s name=swag_import_export/manager/import/title}Import{/s}',
 
 	layout: 'border',
 	
