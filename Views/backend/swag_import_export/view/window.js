@@ -43,7 +43,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.Window', {
 	 */
 	alias: 'widget.swag-import-export-window',
 	
-    height: 450,
+    height: 550,
     
     layout: 'fit',
 	

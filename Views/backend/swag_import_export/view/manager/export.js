@@ -60,23 +60,24 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
         me.formPanel = Ext.create('Ext.form.Panel', {
             bodyPadding: 20,
             border: 0,
+            autoScroll: true,
             defaults: {
                 labelStyle: 'font-weight: 700; text-align: right;'
             },
             items: [
-                me.mainFields()
+                me.mainFields(), me.additionalFields()
             ],
             dockedItems: [{
-                xtype: 'toolbar',
-                dock: 'bottom',
-                ui: 'shopware-ui',
-                cls: 'shopware-toolbar',
-                items: ['->', {
-                        text: 'Export',
-                        cls: 'primary',
-                        action: 'swag-import-export-manager-export'
-                    }]
-            }]
+                    xtype: 'toolbar',
+                    dock: 'bottom',
+                    ui: 'shopware-ui',
+                    cls: 'shopware-toolbar',
+                    items: ['->', {
+                            text: 'Export',
+                            cls: 'primary',
+                            action: 'swag-import-export-manager-export'
+                        }]
+                }]
         });
 
         return me.formPanel;
@@ -102,6 +103,31 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
                 }]
         });
     },
+    additionalFields: function() {
+        var me = this;
+
+        me.additionalFields = Ext.create('Ext.form.FieldSet', {
+            title: 'Additional export configuration',
+            padding: 12,
+            hidden: true,
+            defaults: {
+                labelStyle: 'font-weight: 700; text-align: right;'
+            },
+            items: [{
+                    xtype: 'container',
+                    padding: '0 0 8',
+                    items: [
+                        me.createVariantsCheckbox(),
+                        me.createCustomerGroupCheckbox(),
+                        me.createTranslationCheckbox(),
+                        me.createLimit(),
+                        me.createOffset()
+                    ]
+                }]
+        });
+
+        return me.additionalFields;
+    },
     createProfileCombo: function() {
         var me = this;
 
@@ -116,17 +142,27 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
                 }]
         });
 
+
         return Ext.create('Ext.form.field.ComboBox', {
             fieldLabel: 'Select profile',
             store: profiles,
             labelStyle: 'font-weight: 700; text-align: left;',
             width: 400,
             labelWidth: 150,
-            margin: '10 0 0 20',
             valueField: 'value',
             displayField: 'name',
             editable: false,
-            name: 'profile'
+            name: 'profile',
+            listeners: {
+                scope: me,
+                change: function(value) {
+                    if (value.getValue() === 'products') {
+                        me.additionalFields.show();
+                    } else {
+                        me.additionalFields.hide();
+                    }
+                }
+            },
         });
     },
     createFormatCombo: function() {
@@ -149,11 +185,56 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
             labelStyle: 'font-weight: 700; text-align: left;',
             width: 400,
             labelWidth: 150,
-            margin: '10 0 0 20',
             valueField: 'value',
             displayField: 'name',
             editable: false,
             name: 'format'
+        });
+    },
+    createVariantsCheckbox: function() {
+        return Ext.create('Ext.form.field.Checkbox', {
+            name: 'variants',
+            fieldLabel: 'Export variants',
+            inputValue: 1,
+            uncheckedValue: 0,
+            width: 400,
+            labelWidth: 150
+        });
+    },
+    createCustomerGroupCheckbox: function() {
+        return Ext.create('Ext.form.field.Checkbox', {
+            name: 'customerGroup',
+            fieldLabel: 'Include customer group specific prices',
+            inputValue: 1,
+            uncheckedValue: 0,
+            width: 400,
+            labelWidth: 150
+        });
+    },
+    createTranslationCheckbox: function() {
+        return Ext.create('Ext.form.field.Checkbox', {
+            name: 'translation',
+            fieldLabel: 'Include translations',
+            inputValue: 1,
+            uncheckedValue: 0,
+            width: 400,
+            labelWidth: 150
+        });
+    },
+    createLimit: function() {
+        return Ext.create('Ext.form.field.Number', {
+            name: 'translation',
+            fieldLabel: 'Limit',
+            width: 400,
+            labelWidth: 150
+        });
+    },
+    createOffset: function() {
+        return Ext.create('Ext.form.field.Number', {
+            name: 'offset',
+            fieldLabel: 'Offset',
+            width: 400,
+            labelWidth: 150
         });
     }
 });
