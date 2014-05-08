@@ -40,6 +40,10 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
     layout: 'fit',
     bodyPadding: 10,
     autoScroll: true,
+    snippets: {
+        configText: '{s name=configExportText}Depending on the data set you want to export, additional configuration options may needs to be set{/s}'
+    },
+    
     initComponent: function() {
         var me = this;
 
@@ -100,7 +104,8 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
                     xtype: 'container',
                     padding: '0 0 8',
                     items: [me.createProfileCombo(), me.createFormatCombo()]
-                }]
+            }],
+            html: '<i style="color: grey" >' + me.snippets.configText + '</i>'
         });
     },
     additionalFields: function() {
@@ -135,10 +140,10 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
             fields: ['value', 'name'],
             data: [{
                     "value": "categories",
-                    "name": 'Categories'
+                    "name": 'Shopware categories'
                 }, {
                     "value": "products",
-                    "name": 'Products'
+                    "name": 'Shopware products'
                 }]
         });
 
