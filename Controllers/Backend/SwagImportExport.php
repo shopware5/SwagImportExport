@@ -32,6 +32,10 @@
  */
 class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers_Backend_ExtJs
 {
+    /**
+     * @var Shopware\Models\Category\Category
+     */
+    protected $profileRepository;
 
     protected function convertToExtJSTree($node)
     {
@@ -73,6 +77,42 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
 
         $this->View()->assign(array('success' => true, 'data' => $this->convertToExtJSTree(json_decode($profile->getConfig('tree'), 1))));
+    }
+    
+    /**
+     * Returns all profiles into an array
+     */
+    public function getProfilesAction()
+    {
+        $profileRepository = $this->getProfileRepository();
+        
+        $query = $profileRepository->getProfilesListQuery(
+            $this->Request()->getParam('filter', array()),
+            $this->Request()->getParam('sort', array()),
+            $this->Request()->getParam('limit', null),
+            $this->Request()->getParam('start')
+        )->getQuery();
+        
+        $count = Shopware()->Models()->getQueryCount($query);
+
+        $data = $query->getArrayResult();
+        
+        $this->View()->assign(array(
+            'success' => true, 'data' => $data, 'total' => $count
+        ));
+    }
+    
+    /**
+     * Helper Method to get access to the category repository.
+     *
+     * @return Shopware\Models\Category\Repository
+     */
+    public function getProfileRepository()
+    {
+        if ($this->profileRepository === null) {
+            $this->profileRepository = Shopware()->Models()->getRepository('Shopware\CustomModels\ImportExport\Profile');
+        }
+        return $this->profileRepository;
     }
 
     public function Plugin()

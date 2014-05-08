@@ -44,6 +44,8 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
         configText: '{s name=configExportText}Depending on the data set you want to export, additional configuration options may needs to be set{/s}'
     },
     
+    profilesStore: Ext.create('Shopware.apps.SwagImportExport.store.ProfileList').load(),
+    
     initComponent: function() {
         var me = this;
 
@@ -136,32 +138,23 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
     createProfileCombo: function() {
         var me = this;
 
-        var profiles = Ext.create('Ext.data.Store', {
-            fields: ['value', 'name'],
-            data: [{
-                    "value": "categories",
-                    "name": 'Shopware categories'
-                }, {
-                    "value": "products",
-                    "name": 'Shopware products'
-                }]
-        });
-
-
         return Ext.create('Ext.form.field.ComboBox', {
+            allowBlank: false,
             fieldLabel: 'Select profile',
-            store: profiles,
+            store: me.profilesStore,
             labelStyle: 'font-weight: 700; text-align: left;',
             width: 400,
             labelWidth: 150,
-            valueField: 'value',
+            valueField: 'id',
             displayField: 'name',
             editable: false,
             name: 'profile',
             listeners: {
                 scope: me,
                 change: function(value) {
-                    if (value.getValue() === 'products') {
+                    var record = me.profilesStore.getById(value.getValue());
+                    var type = record.get('type');
+                    if (type === 'products') {
                         me.additionalFields.show();
                     } else {
                         me.additionalFields.hide();
@@ -185,6 +178,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
         });
 
         return Ext.create('Ext.form.field.ComboBox', {
+            allowBlank: false,
             fieldLabel: 'Select export format',
             store: formats,
             labelStyle: 'font-weight: 700; text-align: left;',
