@@ -55,27 +55,40 @@ Ext.define('Shopware.apps.SwagImportExport.view.tab.Profile', {
 	initComponent: function() {
 		var me = this;
 
-		var store = Ext.create('Ext.data.TreeStore', {
-			root: {
-				expanded: true,
-				children: [{
-						text: "detention",
-						leaf: true
-					}, {
-						text: "homework",
-						expanded: true,
-						children: [{
-								text: "book report",
-								leaf: true
-							}, {
-								text: "alegrbra",
-								leaf: true
-							}]
-					}, {
-						text: "buy lottery tickets",
-						leaf: true
-					}]
-			}
+		var store = Ext.create('Shopware.apps.SwagImportExport.store.Profile', {
+//			root: {
+//				text: "Root",
+//				type: "node",
+//				expanded: true,
+//				children: [{
+//						text: "Header",
+//						type: "node",
+//						expanded: true,
+//						children: [{
+//								text: "HeaderChild1",
+//								type: "node",
+//								expanded: true
+//							}]
+//					}, {
+//						text: "Categories",
+//						type: "node",
+//						expanded: true,
+//						children: [{
+//								text: "Category",
+//								type: "node",
+//								expanded: true,
+//								children: [{
+//										text: "HeaderChild1",
+//										type: "node",
+//										leaf: true
+//									}]
+//							}]
+//					}, {
+//						text: "Footer",
+//						type: "node",
+//						expanded: true
+//					}]
+//			}
 		});
 
 		me.items = [Ext.create('Shopware.apps.SwagImportExport.view.tab.profile.Toolbar', {

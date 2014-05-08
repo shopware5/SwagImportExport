@@ -80,13 +80,13 @@ Ext.define('Shopware.apps.SwagImportExport', {
      * Requires models for sub-application
      * @array
      */
-    models: [],
+    models: ['Profile'],
 
     /**
      * Requires stores for sub-application
      * @array
      */
-    stores: [],
+    stores: ['Profile'],
 
     /**
      * Returns the main application window for this is expected

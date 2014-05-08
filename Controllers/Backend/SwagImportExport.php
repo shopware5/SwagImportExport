@@ -32,4 +32,52 @@
  */
 class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers_Backend_ExtJs
 {
+
+    protected function convertToExtJSTree($node)
+    {
+        $extjsNode = array();
+        if (isset($node['name'])) {
+            $extjsNode['text'] = $node['name'];
+        }
+        if (isset($node['children'])) {
+            $extjsNode['expanded'] = true;
+            foreach ($node['children'] as $child) {
+                $extjsNode['children'][] = $this->convertToExtJSTree($child);
+            }
+        }
+        if (isset($node['attributes'])) {
+            if (!isset($extjsNode['children'])) {
+                $extjsNode['expanded'] = true;
+                $extjsNode['children'] = array();
+            }
+            foreach ($node['attributes'] as $attribute) {
+                $extjsNode['children'][] = array('text' => $attribute['name']);
+            }
+        }
+
+        return $extjsNode;
+    }
+
+    public function getProfileAction()
+    {
+        $postData = array(
+            'profileId' => 1,
+            'sessionId' => 70,
+            'type' => 'export',
+            'limit' => array('limit' => 40, 'offset' => 0),
+            'max_record_count' => 100,
+            'format' => 'xml',
+            'adapter' => 'categories',
+        );
+
+        $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
+
+        $this->View()->assign(array('success' => true, 'data' => $this->convertToExtJSTree(json_decode($profile->getConfig('tree'), 1))));
+    }
+
+    public function Plugin()
+    {
+        return Shopware()->Plugins()->Backend()->SwagImportExport();
+    }
+
 }
