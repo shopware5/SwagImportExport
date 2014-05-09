@@ -64,14 +64,19 @@ Ext.define('Shopware.apps.SwagImportExport', {
      * Requires controllers for sub-application
      * @array
      */
-    controllers: [ 'Main' ],
+    controllers: [ 'Main', 'Export' ],
 
     /**
      * Used views here to improve bulk loading
      */
     views: [
         'Window',
-        'tab.Profile'
+        'tab.Profile',
+        'manager.Manager',
+        'manager.Export',
+        'manager.Import',
+        'manager.Operation',
+        'manager.window.Export'
 //		'detail.Window',
 //		'detail.WrappingPaper'
     ],
@@ -80,13 +85,13 @@ Ext.define('Shopware.apps.SwagImportExport', {
      * Requires models for sub-application
      * @array
      */
-    models: ['Profile'],
+    models: ['Profile', 'ProfileList'],
 
     /**
      * Requires stores for sub-application
      * @array
      */
-    stores: ['Profile'],
+    stores: ['Profile', 'ProfileList'],
 
     /**
      * Returns the main application window for this is expected
