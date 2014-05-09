@@ -34,7 +34,20 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Main', {
 	
 	init: function() {
 		var me = this;
+        
+        me.control({
+            // Export button
+            'swag-import-export-manager-export button[action=swag-import-export-manager-export-button]': {
+                click: me.onExport
+            }
+        });
+        
 		me.mainWindow = me.getView('Window').create({}).show();
-	}
+	},
+    
+    onExport: function(btn) {
+        var form = btn.up('form');
+        
+    }
 });
 //{/block}

@@ -41,11 +41,22 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
     bodyPadding: 10,
     autoScroll: true,
     snippets: {
-        configText: '{s name=configExportText}Depending on the data set you want to export, additional configuration options may needs to be set{/s}'
+        configText: '{s name=wag_import_export/export/configText}Depending on the data set you want to export, additional configuration options may needs to be set{/s}',
+        exportButton: '{s name=swag_import_export/export/exportButton}Export{/s}',
+        fieldsetMain: '{s name=swag_import_export/export/fieldsetMain}Export configuration{/s}',
+        fieldsetAdditional: '{s name=swag_import_export/export/fieldsetAdditional}Additional export configuration{/s}',
+        selectProfile: '{s name=swag_import_export/export/selectProfile}Select profile{/s}',
+        selectFormat: '{s name=swag_import_export/export/selectFormat}Select export format{/s}',
+        variants: '{s name=swag_import_export/export/variants}Export variants{/s}',
+        customerGroup: '{s name=swag_import_export/export/customerGroup}Include customer group specific prices{/s}',
+        translations: '{s name=swag_import_export/export/translations}Include translations{/s}',
+        limit: '{s name=swag_import_export/export/limit}Limit{/s}',
+        offset: '{s name=swag_import_export/export/offset}Offset{/s}',
     },
-    
+    /*
+     * profile store
+     */
     profilesStore: Ext.create('Shopware.apps.SwagImportExport.store.ProfileList').load(),
-    
     initComponent: function() {
         var me = this;
 
@@ -53,6 +64,14 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
 
         me.callParent(arguments);
     },
+    /*
+     * Input elements width
+     */
+    configWidth: 400,
+    /*
+     * Label of the input elements width
+     */
+    configLabelWidth: 150,
     /**
      * Creates the main form panel for the component which
      * features all neccessary form elements
@@ -79,9 +98,9 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
                     ui: 'shopware-ui',
                     cls: 'shopware-toolbar',
                     items: ['->', {
-                            text: 'Export',
+                            text: me.snippets.exportButton,
                             cls: 'primary',
-                            action: 'swag-import-export-manager-export'
+                            action: 'swag-import-export-manager-export-button'
                         }]
                 }]
         });
@@ -97,7 +116,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
         var me = this;
 
         return Ext.create('Ext.form.FieldSet', {
-            title: 'Export configuration',
+            title: me.snippets.fieldsetMain,
             padding: 12,
             defaults: {
                 labelStyle: 'font-weight: 700; text-align: right;'
@@ -106,15 +125,20 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
                     xtype: 'container',
                     padding: '0 0 8',
                     items: [me.createProfileCombo(), me.createFormatCombo()]
-            }],
+                }],
             html: '<i style="color: grey" >' + me.snippets.configText + '</i>'
         });
     },
+    /**
+     * Additional fields
+     * 
+     * @return [object] generated Ext.form.FieldSet
+     */
     additionalFields: function() {
         var me = this;
 
         me.additionalFields = Ext.create('Ext.form.FieldSet', {
-            title: 'Additional export configuration',
+            title: me.snippets.fieldsetAdditional,
             padding: 12,
             hidden: true,
             defaults: {
@@ -135,16 +159,21 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
 
         return me.additionalFields;
     },
+    /*
+     * Profile drop down
+     * 
+     * @return [object] generated Ext.form.field.ComboBox
+     */
     createProfileCombo: function() {
         var me = this;
 
         return Ext.create('Ext.form.field.ComboBox', {
             allowBlank: false,
-            fieldLabel: 'Select profile',
+            fieldLabel: me.snippets.selectProfile,
             store: me.profilesStore,
             labelStyle: 'font-weight: 700; text-align: left;',
-            width: 400,
-            labelWidth: 150,
+            width: me.configWidth,
+            labelWidth: me.configLabelWidth,
             valueField: 'id',
             displayField: 'name',
             editable: false,
@@ -163,6 +192,11 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
             },
         });
     },
+    /*
+     * Format drop down
+     * 
+     * @return [object] generated Ext.form.field.ComboBox
+     */
     createFormatCombo: function() {
         var me = this;
 
@@ -179,61 +213,90 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
 
         return Ext.create('Ext.form.field.ComboBox', {
             allowBlank: false,
-            fieldLabel: 'Select export format',
+            fieldLabel: me.snippets.selectFormat,
             store: formats,
             labelStyle: 'font-weight: 700; text-align: left;',
-            width: 400,
-            labelWidth: 150,
+            width: me.configWidth,
+            labelWidth: me.configLabelWidth,
             valueField: 'value',
             displayField: 'name',
             editable: false,
             name: 'format'
         });
     },
+    /*
+     * Products variants checkbox
+     * 
+     * @return [object] generated Ext.form.field.Checkbox
+     */
     createVariantsCheckbox: function() {
+        var me = this;
+
         return Ext.create('Ext.form.field.Checkbox', {
             name: 'variants',
-            fieldLabel: 'Export variants',
-            inputValue: 1,
-            uncheckedValue: 0,
-            width: 400,
-            labelWidth: 150
+            fieldLabel: me.snippets.variants,
+            width: me.configWidth,
+            labelWidth: me.configLabelWidth
         });
     },
+    /*
+     * Customer group checkbox
+     * 
+     * @return [object] generated Ext.form.field.Checkbox
+     */
     createCustomerGroupCheckbox: function() {
+        var me = this;
+
         return Ext.create('Ext.form.field.Checkbox', {
             name: 'customerGroup',
-            fieldLabel: 'Include customer group specific prices',
-            inputValue: 1,
-            uncheckedValue: 0,
-            width: 400,
-            labelWidth: 150
+            fieldLabel: me.snippets.customerGroup,
+            width: me.configWidth,
+            labelWidth: me.configLabelWidth
         });
     },
+    /*
+     * Translation checkbox
+     * 
+     * @return [object] generated Ext.form.field.Checkbox
+     */
     createTranslationCheckbox: function() {
+        var me = this;
+
         return Ext.create('Ext.form.field.Checkbox', {
             name: 'translation',
-            fieldLabel: 'Include translations',
-            inputValue: 1,
-            uncheckedValue: 0,
-            width: 400,
-            labelWidth: 150
+            fieldLabel: me.snippets.translations,
+            width: me.configWidth,
+            labelWidth: me.configLabelWidth
         });
     },
+    /*
+     * Limit input field
+     * 
+     * @return [object] generated Ext.form.field.Number
+     */
     createLimit: function() {
+        var me = this;
+
         return Ext.create('Ext.form.field.Number', {
             name: 'translation',
-            fieldLabel: 'Limit',
-            width: 400,
-            labelWidth: 150
+            fieldLabel: me.snippets.limit,
+            width: me.configWidth,
+            labelWidth: me.configLabelWidth
         });
     },
+    /*
+     * Offset input field
+     * 
+     * @return [object] generated Ext.form.field.Number
+     */
     createOffset: function() {
+        var me = this;
+
         return Ext.create('Ext.form.field.Number', {
             name: 'offset',
-            fieldLabel: 'Offset',
-            width: 400,
-            labelWidth: 150
+            fieldLabel: me.snippets.offset,
+            width: me.configWidth,
+            labelWidth: me.configLabelWidth
         });
     }
 });
