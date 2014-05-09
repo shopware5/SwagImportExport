@@ -71,13 +71,13 @@ Ext.define('Shopware.apps.SwagImportExport', {
      */
     views: [
         'Window',
-        'tab.Profile',
-		'tab.profile.Form'
-        'manager.Manager',
-        'manager.Export',
-        'manager.Import',
-        'manager.Operation',
-        'manager.window.Export'
+		'tab.Profile',
+		'tab.profile.Form',
+		'manager.Manager',
+		'manager.Export',
+		'manager.Import',
+		'manager.Operation',
+		'manager.window.Export'
 //		'detail.Window',
 //		'detail.WrappingPaper'
     ],
