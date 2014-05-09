@@ -37,16 +37,29 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
      */
     protected $profileRepository;
 
-    protected function convertToExtJSTree($node)
+    protected function convertToExtJSTree($node, $isInIteration = false)
     {
         $extjsNode = array();
+
+        if ($node['type'] == 'record') {
+            $isIteration = true;
+
+            $extjsNode['iconCls'] = 'sprite-blue-folders-stack';
+        } else {
+            $isIteration = false;
+
+            if ($isInIteration) {
+                $extjsNode['iconCls'] = 'sprite-icon_taskbar_top_inhalte_active';
+            }
+        }
+
         if (isset($node['name'])) {
             $extjsNode['text'] = $node['name'];
         }
         if (isset($node['children'])) {
             $extjsNode['expanded'] = true;
             foreach ($node['children'] as $child) {
-                $extjsNode['children'][] = $this->convertToExtJSTree($child);
+                $extjsNode['children'][] = $this->convertToExtJSTree($child, $isIteration | $isInIteration);
             }
         }
         if (isset($node['attributes'])) {
@@ -55,7 +68,15 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                 $extjsNode['children'] = array();
             }
             foreach ($node['attributes'] as $attribute) {
-                $extjsNode['children'][] = array('text' => $attribute['name']);
+                $extjsNode['children'][] = array('text' => $attribute['name'], 'leaf' => true, 'iconCls' => 'sprite-sticky-notes-pin');
+            }
+        }
+        if (!isset($extjsNode['children'])) {
+            if ($isInIteration) {
+                $extjsNode['leaf'] = true;
+            } else {
+                $extjsNode['expanded'] = true;
+                $extjsNode['children'] = array();
             }
         }
 
@@ -75,8 +96,9 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         );
 
         $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
+        $root = $this->convertToExtJSTree(json_decode($profile->getConfig('tree'), 1));
 
-        $this->View()->assign(array('success' => true, 'data' => $this->convertToExtJSTree(json_decode($profile->getConfig('tree'), 1))));
+        $this->View()->assign(array('success' => true, 'children' => $root['children']));
     }
     
     /**

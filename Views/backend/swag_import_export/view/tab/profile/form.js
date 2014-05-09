@@ -29,30 +29,45 @@
  */
 //{namespace name=backend/swag_gift_packaging/view/main}
 //{block name="backend/swag_gift_packaging/view/main/window"}
-Ext.define('Shopware.apps.SwagImportExport.view.tab.profile.Toolbar', {
-	extend: 'Ext.toolbar.Toolbar',
+Ext.define('Shopware.apps.SwagImportExport.view.tab.profile.Form', {
+	extend: 'Ext.form.Panel',
 	
 	/**
 	 * List of short aliases for class names. Most useful for defining xtypes for widgets.
 	 * @string
 	 */
-	alias: 'widget.swag-import-export-tab-profile-toolbar',
+	alias: 'widget.swag-import-export-tab-profile-form',
 	
-	items: [
-		{
-			xtype: 'combobox',
-			store: ['Id'],
-			width: 150,
-			name: 'swColumn',
-			emptyText: 'Select Profile...'
-		}, {
-			xtype: 'tbseparator'
-		}, {
-			text: 'Create Own Profile',
-		}, {
-			text: 'Delete Selected Profile',
-			disabled: true
-		}
-	]
+	defaultType: 'textfield',
+	
+    initComponent: function() {
+		var me = this;
+		me.items = [me.mainFields()];
+	},
+	
+	mainFields: function() {
+		var me = this;
+
+		return Ext.create('Ext.form.FieldSet', {
+			padding: 12,
+			defaults: {
+				labelStyle: 'font-weight: 700; text-align: right;'
+			},
+			items: [{
+					xtype: 'container',
+					padding: '0 0 8',
+					items: [{
+							fieldLabel: 'First Name',
+							name: 'first',
+							allowBlank: false
+						}, {
+							fieldLabel: 'Last Name',
+							name: 'last',
+							allowBlank: false
+						}]
+				}],
+			dockedItems: []
+		});
+	}
 });
 //{/block}

@@ -37,9 +37,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.tab.Profile', {
 	 * @string
 	 */
 	alias: 'widget.swag-import-export-tab-profile',
-	
-    height: 450,
-	
+		
     title: '{s name=swag_import_export/tab/profile/title}Profile{/s}',
 
 	layout: 'border',
@@ -47,54 +45,25 @@ Ext.define('Shopware.apps.SwagImportExport.view.tab.Profile', {
 	style: {
 		background: '#fff'
 	},
-	
-	bodyPadding: 10,
-	
-	autoScroll: true,
+		
+	autoScroll: false,
 	
 	initComponent: function() {
 		var me = this;
 
 		var store = Ext.create('Shopware.apps.SwagImportExport.store.Profile', {
-//			root: {
-//				text: "Root",
-//				type: "node",
-//				expanded: true,
-//				children: [{
-//						text: "Header",
-//						type: "node",
-//						expanded: true,
-//						children: [{
-//								text: "HeaderChild1",
-//								type: "node",
-//								expanded: true
-//							}]
-//					}, {
-//						text: "Categories",
-//						type: "node",
-//						expanded: true,
-//						children: [{
-//								text: "Category",
-//								type: "node",
-//								expanded: true,
-//								children: [{
-//										text: "HeaderChild1",
-//										type: "node",
-//										leaf: true
-//									}]
-//							}]
-//					}, {
-//						text: "Footer",
-//						type: "node",
-//						expanded: true
-//					}]
-//			}
+			autoload: true
 		});
 
 		me.items = [Ext.create('Shopware.apps.SwagImportExport.view.tab.profile.Toolbar', {
-				region: 'north'
-			}),
-			Ext.create('Ext.tree.Panel', {
+				region: 'north',
+				style: {
+					borderRight: '1px solid #A4B5C0',
+					borderLeft: '1px solid #A4B5C0',
+					borderTop: '1px solid #A4B5C0',
+					borderBottom: '1px solid #A4B5C0',
+				}
+			}), Ext.create('Ext.tree.Panel', {
 				region: 'west',
 				store: store,
 				viewConfig: {
@@ -102,38 +71,69 @@ Ext.define('Shopware.apps.SwagImportExport.view.tab.Profile', {
 						ptype: 'treeviewdragdrop'
 					}
 				},
-				height: 300,
-				width: 250,
-				title: 'Files',
+				title: 'Profile',
+				width: 300,
 				useArrows: true,
 				dockedItems: [{
 						xtype: 'toolbar',
+						style: {
+							borderRight: '1px solid #A4B5C0',
+							borderLeft: '1px solid #A4B5C0',
+							borderTop: '1px solid #A4B5C0',
+						},
 						items: [{
-								text: 'Expand All',
+								text: 'Create Child Node',
 								handler: function() {
-									tree.expandAll();
 								}
 							}, {
-								text: 'Collapse All',
+								text: 'Create Attribute',
 								handler: function() {
-									tree.collapseAll();
+								}
+							}, {
+								text: 'Delete Selected',
+								handler: function() {
 								}
 							}]
 					}]
+			}), Ext.create('Ext.form.Panel', {
+				region: 'center',
+				bodyPadding: 12,
+				defaultType: 'textfield',
+				border: false,
+				bodyStyle: {
+					border: '0 !important'
+				},
+				items: [{
+						fieldLabel: 'Node Name',
+						width: 400,
+						labelWidth: 150,
+						name: 'nodeName',
+						allowBlank: false
+					}, {
+						fieldLabel: 'Shopware Column',
+						xtype: 'combobox',
+						emptyText: 'Select Column',
+						store: ['Id', 'Description'],
+						width: 400,
+						labelWidth: 150,
+						name: 'swColumn',
+						allowBlank: false
+					}],
+				dockedItems: [{
+						xtype: 'toolbar',
+						dock: 'bottom',
+						ui: 'shopware-ui',
+						cls: 'shopware-toolbar',
+						style: {
+							backgroundColor: '#F0F2F4'
+						},
+						items: ['->', {
+								text: 'Save',
+								cls: 'primary',
+								action: 'swag-import-export-manager-export'
+							}]
+					}]
 			})
-					//,
-//			{
-//				xtype: 'listTree',
-//				region: 'west',
-//				width: 300,
-//				collapsible: true,
-//				split: true
-//			},
-//			{
-//				region: 'center',
-//				xtype: 'taskGrid',
-//				title: 'All Lists'
-//			}
 		];
 		me.callParent(arguments);
 	}
