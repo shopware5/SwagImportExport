@@ -77,7 +77,7 @@ class ControllerTest extends ImportExportTestHelper
         // we create the file writer that will write (partially) the result file
         $fileWriter = $this->Plugin()->getFileIOFactory()->createFileWriter($postData);
 
-        $outputFileName = Shopware()->DocPath() . 'files/import_export/_test.xml';
+//        $outputFileName = Shopware()->DocPath() . 'files/import_export/_test.xml';
 //        $outputFileName = Shopware()->DocPath() . 'files/import_export/test.csv';
 
         $dataTransformerChain = $this->Plugin()->getDataTransformerFactory()->createDataTransformerChain(
@@ -85,6 +85,10 @@ class ControllerTest extends ImportExportTestHelper
         );
 
         if ($dataIO->getSessionState() == 'new') {
+            //todo: create file here ?
+            $fileName = $dataIO->generateFileName();
+            $outputFileName = Shopware()->DocPath() . $fileName;
+            
             // session has no ids stored yet, therefore we must start it and write the file headers
             $header = $dataTransformerChain->composeHeader();
             $fileWriter->writeHeader($outputFileName, $header);
@@ -168,6 +172,8 @@ class ControllerTest extends ImportExportTestHelper
         if ($dataIO->getSessionState() == 'new') {
 
             $totalCount = $fileReader->getTotalCount($inputFileName);
+            
+            $dataIO->getDataSession()->setFileName($inputFileName);
 
             $dataIO->getDataSession()->setCount($totalCount);
 
@@ -202,6 +208,22 @@ class ControllerTest extends ImportExportTestHelper
             $dataIO->closeSession();
         }
     }
+    
+//    public function testImportFakeCategories()
+//    {
+//        $fakeCategories = '';
+//        for ($index = 0; $index < 10000; $index++) {
+//            $fakeCategories .=",(3,'FakeCategory-$index',1)";
+//        }
+//        $fakeCategories[0] = ' ';
+//                
+//        $query = "REPLACE INTO `s_categories` (`parent`,`description`,`active`) VALUES $fakeCategories";
+//        
+//        Shopware()->Db()->query($query);
+//        
+//        echo 'Fake categories were added';
+//        exit;
+//    }
 
     public function testImportXmlLifeCycle()
     {

@@ -99,7 +99,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.window.Export', {
      */
     title: '{s name=swag_import_export/manager/window/export/title}Export window{/s}',
     /**
-     * Constructor for the export window
+     * Constructor for the generation window
      * Registers events and adds all needed content items to the window
      */
     initComponent: function() {
@@ -113,8 +113,8 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.window.Export', {
      */
     createItems: function() {
         var me = this;
-
-        me.exportProgress = me.createProgressBar('exporting', 'Exporting ...');
+        
+        me.exportProgress = me.createProgressBar('exporting', me.batchConfig.snippet);
 
         return [
             me.exportProgress,
@@ -125,7 +125,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.window.Export', {
      * Registers events in the event bus for firing events when needed
      */
     registerEvents: function() {
-        this.addEvents();
+        this.addEvents('startProcess', 'cancelProcess');
     },
     /**
      * Returns a new progress bar for a detailed view of the exporting progress status
@@ -140,7 +140,8 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.window.Export', {
             name: name,
             text: text,
             margin: '0 0 15',
-//            style: 'border-width: 1px !important;',
+            border: 1,
+            style: 'border-width: 1px !important;',
             cls: 'left-align'
         });
     },
@@ -179,7 +180,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.window.Export', {
             cls: 'primary',
             action: 'start',
             handler: function() {
-
+                me.fireEvent('startProcess', me, this);
             }
         });
     },
@@ -198,7 +199,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.window.Export', {
             disabled: false,
             hidden: true,
             handler: function() {
-
+                me.fireEvent('cancelProcess', this);
             }
         });
     },

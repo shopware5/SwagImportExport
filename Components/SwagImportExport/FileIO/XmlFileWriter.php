@@ -28,7 +28,7 @@ class XmlFileWriter implements FileWriter
 
         $str = @file_put_contents($fileName, $dataParts[0]);
         if ($str === false) {
-            throw new Exception("Cannot write in '$fileName'");
+            throw new \Exception("Cannot write in '$fileName'");
         }
     }
 
@@ -45,7 +45,7 @@ class XmlFileWriter implements FileWriter
         
         $str = @file_put_contents($fileName, trim($data), FILE_APPEND);
         if ($str === false) {
-            throw new Exception("Cannot write in '$fileName'");
+            throw new \Exception("Cannot write in '$fileName'");
         }
     }
 
@@ -61,7 +61,7 @@ class XmlFileWriter implements FileWriter
         
         $str = @file_put_contents($fileName, $data, FILE_APPEND);
         if ($str === false) {
-            throw new Exception("Cannot write in '$fileName'");
+            throw new \Exception("Cannot write in '$fileName'");
         }
     }
 

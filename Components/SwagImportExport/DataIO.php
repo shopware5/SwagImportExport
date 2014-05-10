@@ -2,6 +2,8 @@
 
 namespace Shopware\Components\SwagImportExport;
 
+use \Shopware\Components\SwagImportExport\Profile\Profile;
+
 class DataIO
 {
 
@@ -85,11 +87,11 @@ class DataIO
 
         return $rawData;
     }
-    
+
     public function write($data)
     {
         $dbAdapter = $this->getDbAdapter();
-        
+
         $dbAdapter->write($data);
     }
 
@@ -108,7 +110,7 @@ class DataIO
         $ids = $dbAdapter->readRecordIds(
                 $limitAdapater->getOffset(), $limitAdapater->getLimit(), $filterAdapter->getFilter()
         );
-        
+
         $this->setRecordIds($ids);
 
         return $this;
@@ -134,10 +136,38 @@ class DataIO
     {
         return $this->dataSession->getState();
     }
-    
+
     public function getSessionPosition()
     {
         return $this->dataSession->getPosition();
+    }
+
+    /**
+     * Generates file name
+     * 
+     * @param \Shopware\Components\SwagImportExport\Profile\Profile $profile
+     * @return string
+     */
+    public function generateFileName(Profile $profile)
+    {
+        $operationType = $this->getType();
+        $fileFormat = $this->getFormat();
+
+        $adapterType = $profile->getType();
+        $profileName = $profile->getName();
+        $profileName = str_replace(' ', '.', $profileName);
+
+        $session = $this->getDataSession();
+
+        $dateTime = new \DateTime('now');
+
+        $fileName = $operationType . '.' . $adapterType . '.' .
+                $profileName . '.' . $dateTime->format('d.m.Y') . '.' . $fileFormat;
+
+        //set count
+        $session->setFileName($fileName);
+
+        return $fileName;
     }
 
     /**
@@ -149,10 +179,10 @@ class DataIO
     public function startSession()
     {
         $type = $this->getType();
-        
+
         $session = $this->getDataSession();
-        
-        
+
+
         //todo: make it without switch ???
         switch ($type) {
             case 'export':
@@ -160,12 +190,12 @@ class DataIO
 
                 //set ids
                 $session->setIds(serialize($ids));
-                
+
                 //set count
                 $session->setCount(count($ids));
                 break;
             case 'import':
-                
+
                 $session->setIds('');
                 break;
 
@@ -184,17 +214,12 @@ class DataIO
         //set date/time
         $session->setCreatedAt($dateTime);
 
-        $fileName = $type . '-' . $dateTime->format('Y-m-d_H-i-s');
-
-        //set count
-        $session->setFileName($fileName);
-
         //set format
         $session->setFormat($this->getFormat());
 
         //change state
         $session->setState('active');
-        
+
         Shopware()->Models()->persist($session);
 
         Shopware()->Models()->flush();
@@ -206,11 +231,8 @@ class DataIO
      * Updates the session position with the current position (stored in a member variable).
      *
      */
-    public function progressSession()
+    public function progressSession($step)
     {
-        //todo: get step ???
-        $step = 100;
-
         $session = $this->getDataSession();
 
         $position = $session->getPosition();

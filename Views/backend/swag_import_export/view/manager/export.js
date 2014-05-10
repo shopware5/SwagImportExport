@@ -189,7 +189,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
                         me.additionalFields.hide();
                     }
                 }
-            },
+            }
         });
     },
     /*

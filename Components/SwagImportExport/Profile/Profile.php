@@ -22,6 +22,11 @@ class Profile
     {
         return $this->profileEntity->getType();
     }
+    
+    public function getName()
+    {
+        return $this->profileEntity->getName();
+    }
 
     public function getConfigNames()
     {
