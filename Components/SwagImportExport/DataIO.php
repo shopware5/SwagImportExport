@@ -84,7 +84,7 @@ class DataIO
 
         $dbAdapter = $this->getDbAdapter();
         $rawData = $dbAdapter->read($ids, $columns);
-
+        
         return $rawData;
     }
 
@@ -238,7 +238,7 @@ class DataIO
         $position = $session->getPosition();
         $count = $session->getCount();
 
-        $newPosition = $position + $step + 1;
+        $newPosition = $position + $step;
 
         if ($newPosition >= $count) {
             $session->setState('finished');
@@ -369,20 +369,16 @@ class DataIO
     private function loadIds($start, $numberOfRecords)
     {
         $storedIds = $this->getRecordIds();
-
+        
         if ($storedIds === null || empty($storedIds)) {
             throw new \Exception('No loaded records ids');
         }
-
+        
         $end = $start + $numberOfRecords;
-
-        $filterIds = array();
-        $counter = 0;
-
-        foreach ($storedIds as $index => $id) {
-            if ($index >= $start && $counter < $end) {
-                $filterIds[] = $id;
-                $counter ++;
+        
+        for ($index = $start; $index < $end; $index++) {
+            if (isset($storedIds[$index])) {
+                $filterIds[] = $storedIds[$index];
             }
         }
 

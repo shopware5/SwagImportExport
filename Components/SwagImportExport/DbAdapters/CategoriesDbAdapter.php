@@ -25,10 +25,9 @@ class CategoriesDbAdapter implements DataDbAdapter
                 c.id
             FROM s_categories c
             WHERE c.id != 1
-            ORDER BY c.parent, c.position
+            ORDER BY c.id ASC
             $sqlLimit 
         ";
-
         $stmt = Shopware()->Db()->query($sql);
         $records = $stmt->fetchAll();
 
@@ -56,7 +55,6 @@ class CategoriesDbAdapter implements DataDbAdapter
             LEFT JOIN s_categories_attributes attr
                 ON attr.categoryID = c.id
             WHERE c.id IN ($ids)
-            ORDER BY c.parent, c.position
         ";
 
         $stmt = Shopware()->Db()->query($sql);

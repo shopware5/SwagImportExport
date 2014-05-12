@@ -65,7 +65,7 @@ class ControllerTest extends ImportExportTestHelper
             'type' => 'export',
             'limit' => array('limit' => 40, 'offset' => 0),
             'max_record_count' => 100,
-            'format' => 'xml',
+            'format' => 'csv',
             'adapter' => 'categories',
         );
 
@@ -86,14 +86,19 @@ class ControllerTest extends ImportExportTestHelper
 
         if ($dataIO->getSessionState() == 'new') {
             //todo: create file here ?
-            $fileName = $dataIO->generateFileName();
-            $outputFileName = Shopware()->DocPath() . $fileName;
+            $fileName = $dataIO->generateFileName($profile);
+            $outputFileName = Shopware()->DocPath() . 'files/import_export/' . $fileName;
             
             // session has no ids stored yet, therefore we must start it and write the file headers
             $header = $dataTransformerChain->composeHeader();
             $fileWriter->writeHeader($outputFileName, $header);
             $dataIO->startSession();
         } else {
+            //todo: create file here ?
+            $fileName = $dataIO->generateFileName($profile);
+           
+            $outputFileName = Shopware()->DocPath() . 'files/import_export/' . $fileName;
+            
             // session has already loaded ids and some position, so we simply activate it
             $dataIO->resumeSession();
         }
@@ -116,7 +121,7 @@ class ControllerTest extends ImportExportTestHelper
 
                 // writing is successful, so we write the new position in the session;
                 // if if the new position goes above the limits provided by the 
-                $dataIO->progressSession();
+                $dataIO->progressSession(100);
             } catch (Exception $e) {
                 // we need to analyze the exception somehow and decide whether to break the while loop;
                 // there is a danger of endless looping in case of some read error or transformation error;
