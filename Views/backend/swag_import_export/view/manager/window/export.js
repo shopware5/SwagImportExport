@@ -198,6 +198,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.window.Export', {
             action: 'cancel',
             disabled: false,
             hidden: true,
+            width: 160,
             handler: function() {
                 me.fireEvent('cancelProcess', this);
             }

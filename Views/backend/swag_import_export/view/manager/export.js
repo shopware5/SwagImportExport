@@ -41,17 +41,17 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
     bodyPadding: 10,
     autoScroll: true,
     snippets: {
-        configText: '{s name=wag_import_export/export/configText}Depending on the data set you want to export, additional configuration options may needs to be set{/s}',
-        exportButton: '{s name=swag_import_export/export/exportButton}Export{/s}',
-        fieldsetMain: '{s name=swag_import_export/export/fieldsetMain}Export configuration{/s}',
-        fieldsetAdditional: '{s name=swag_import_export/export/fieldsetAdditional}Additional export configuration{/s}',
-        selectProfile: '{s name=swag_import_export/export/selectProfile}Select profile{/s}',
-        selectFormat: '{s name=swag_import_export/export/selectFormat}Select export format{/s}',
+        configText: '{s name=wag_import_export/export/config_text}Depending on the data set you want to export, additional configuration options may needs to be set{/s}',
+        exportButton: '{s name=swag_import_export/export/export_button}Export{/s}',
+        fieldsetMain: '{s name=swag_import_export/export/fieldset_main}Export configuration{/s}',
+        fieldsetAdditional: '{s name=swag_import_export/export/fieldset_additional}Additional export configuration{/s}',
+        selectProfile: '{s name=swag_import_export/export/select_profile}Select profile{/s}',
+        selectFormat: '{s name=swag_import_export/export/select_format}Select export format{/s}',
         variants: '{s name=swag_import_export/export/variants}Export variants{/s}',
-        customerGroup: '{s name=swag_import_export/export/customerGroup}Include customer group specific prices{/s}',
+        customerGroup: '{s name=swag_import_export/export/customer_group}Include customer group specific prices{/s}',
         translations: '{s name=swag_import_export/export/translations}Include translations{/s}',
         limit: '{s name=swag_import_export/export/limit}Limit{/s}',
-        offset: '{s name=swag_import_export/export/offset}Offset{/s}',
+        offset: '{s name=swag_import_export/export/offset}Offset{/s}'
     },
     /*
      * profile store

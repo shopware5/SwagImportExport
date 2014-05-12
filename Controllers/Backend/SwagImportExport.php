@@ -200,7 +200,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             try {
                 // read a bunch of records into simple php array;
                 // the count of records may be less than 100 if we are at the end of the read.
-                $data = $dataIO->read(10);
+                $data = $dataIO->read(1000);
 
                 // process that array with the full transformation chain
                 $data = $dataTransformerChain->transformForward($data);
@@ -210,20 +210,10 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
                 // writing is successful, so we write the new position in the session;
                 // if if the new position goes above the limits provided by the 
-                $dataIO->progressSession(10);
+                $dataIO->progressSession(1000);
             } catch (Exception $e) {
                 return $this->View()->assign(array('success' => false, 'msg'=> $e->getMessage()));
             }
-        }
-        
-        if ($dataIO->getSessionState() == 'finished') {
-            // Session finished means we have exported all the ids in the sesssion.
-            // Therefore we can close the file with a footer and mark the session as done.
-            $footer = $dataTransformerChain->composeFooter();
-            $fileWriter->writeFooter($outputFileName, $footer);
-            $dataIO->closeSession();
-            
-            $this->View()->assign(array('success' => true, 'msg'=> 'Export finished successfully'));
         }
         
         $position = $dataIO->getSessionPosition();
@@ -233,6 +223,14 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         
         if(!$data['sessionId']){
             $data['sessionId'] = $dataIO->getDataSession()->getId();
+        }
+        
+        if ($dataIO->getSessionState() == 'finished') {
+            // Session finished means we have exported all the ids in the sesssion.
+            // Therefore we can close the file with a footer and mark the session as done.
+            $footer = $dataTransformerChain->composeFooter();
+            $fileWriter->writeFooter($outputFileName, $footer);
+            $dataIO->closeSession();
         }
                 
         return $this->View()->assign(array('success' => true, 'data'=> $data));

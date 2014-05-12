@@ -37,6 +37,9 @@
 Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
     extend: 'Ext.app.Controller',
     snippets: {
+        exportWindow: '{s name=swag_import_export/export/window_title}Export window{/s}',
+        finished: '{s name=swag_import_export/export/finished}Export finished successfully {/s}',
+        process: '{s name=swag_import_export/export/process}Exporting... {/s}'
     },
     /**
      * This method creates listener for events fired from the export 
@@ -62,46 +65,60 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
                 form = btn.up('form'),
                 values = form.getValues();
 
-        //todo: make validation
+        if (Ext.isEmpty(values.profile) || Ext.isEmpty(values.format))
+        {
+            Shopware.Notification.createGrowlMessage(
+                    '{s name=swag_import_export/export/error_title}Swag import export{/s}',
+                    '{s name=swag_import_export/export/error_msg}Please select export configuration{/s}'
+                    );
+            return false;
+        }
 
         me.parameters = values;
 
         me.onCreateExportWindow();
     },
+    /**
+     * Creates batch configuration
+     */
     onCreateExportWindow: function() {
         var me = this;
 
         me.getBatchConfig = me.getConfig();
 
     },
+    /**
+     * Triggers if the start exporting button was pressed
+     * in the export window.
+     * 
+     * @param {object} Enlight.app.SubWindow win
+     * @param {object} Ext.button.Button btn
+     */
     onStartProcess: function(win, btn) {
         var me = this;
-        
+
         me.cancelOperation = false;
 
         me.runRequest(win);
-//
-//        btn.hide();
-//        win.cancelButton.show();
-//        win.closeButton.disable();
+
+        btn.hide();
+        win.cancelButton.show();
+        win.closeButton.disable();
     },
     /**
      * Returns the needed configuration for the next batch call
-     *
-     * @param win
-     * @returns Object
      */
     getConfig: function() {
         var me = this;
-        
-        me.batchConfig = { 
+
+        me.batchConfig = {
             requestUrl: '{url controller="SwagImportExport" action="export"}',
             params: {
                 profileId: me.parameters.profile,
                 format: me.parameters.format
             }
         };
-        
+
         Ext.Ajax.request({
             url: '{url controller="SwagImportExport" action="prepare"}',
             method: 'POST',
@@ -110,8 +127,8 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
                 var result = Ext.decode(response.responseText);
                 me.batchConfig.position = result.position;
                 me.batchConfig.totalCount = result.count;
-                me.batchConfig.snippet = 'Exporting... ' + me.batchConfig.position + ' / ' + me.batchConfig.totalCount;    
-                
+                me.batchConfig.snippet = me.snippets.process + me.batchConfig.position + ' / ' + me.batchConfig.totalCount;
+
                 me.window = me.getView('Shopware.apps.SwagImportExport.view.manager.window.Export').create({
                     batchConfig: me.batchConfig
                 }).show();
@@ -124,13 +141,12 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
                 });
             }
         });
-        
+
     },
     /**
      * This function sends a request to export data
      *
-     * @param offset
-     * @param win
+     * @param {object} Enlight.app.SubWindow win
      */
     runRequest: function(win) {
         var me = this,
@@ -150,19 +166,19 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
             timeout: 4000000,
             success: function(response) {
                 var result = Ext.decode(response.responseText);
-                if (result.msg){
-                    alert(result.msg);
+
+                me.batchConfig.params = result.data;
+                me.batchConfig.position = result.data.position;
+
+                win.exportProgress.updateProgress(
+                        me.batchConfig.position / me.batchConfig.totalCount,
+                        me.snippets.process + me.batchConfig.position + ' / ' + me.batchConfig.totalCount,
+                        true
+                        );
+
+                if (me.batchConfig.position === me.batchConfig.totalCount) {
+                    me.onProcessFinish(win);
                 } else {
-                    me.batchConfig.params = result.data;
-                    me.batchConfig.position = result.data.position;
-                    
-                    win.exportProgress.updateProgress(
-                            me.batchConfig.position / me.batchConfig.totalCount,
-                            'Exporting... ' + me.batchConfig.position + ' / ' + me.batchConfig.totalCount,
-                            true
-                    );
-//                    win.exportProgress.updateText('Exporting... ' + me.batchConfig.position + ' / ' + me.batchConfig.totalCount);
-                    
                     me.runRequest(win);
                 }
 
@@ -184,7 +200,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
      *
      * @param btn
      */
-    onCancelWatermarkProcess: function(btn) {
+    onCancelProcess: function(btn) {
         var me = this;
 
         btn.disable();
@@ -194,10 +210,12 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
     /**
      * Will be called when export finish
      *
-     * @param win
+     * @param {object} Enlight.app.SubWindow win
      */
     onProcessFinish: function(win) {
-
+        win.closeButton.enable();
+        win.cancelButton.disable();
+        win.exportProgress.updateText(me.snippets.finished + me.batchConfig.position + ' / ' + me.batchConfig.totalCount);
     }
 });
 //{/block}
