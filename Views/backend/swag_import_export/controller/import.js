@@ -33,26 +33,28 @@
  */
 
 //{namespace name="backend/swag_import_export/view/main"}
-//{block name="backend/swag_import_export/controller/export"}
-Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
+//{block name="backend/swag_import_export/controller/import"}
+Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
     extend: 'Ext.app.Controller',
     snippets: {
-        exportWindow: '{s name=swag_import_export/export/window_title}Export window{/s}',
-        finished: '{s name=swag_import_export/export/finished}Export finished successfully {/s}',
-        process: '{s name=swag_import_export/export/process}Exporting... {/s}'
+        window: '{s name=swag_import_export/import/window_title}Import window{/s}',
+        finished: '{s name=swag_import_export/import/finished}Importing finished successfully {/s}',
+        process: '{s name=swag_import_export/import/process}Importing... {/s}',
+        start: '{s name=swag_import_export/import/start}Start importing{/s}',
+        close: '{s name=swag_import_export/import/close}Close{/s}'
     },
     /**
-     * This method creates listener for events fired from the export 
+     * This method creates listener for events fired from the import 
      */
     init: function() {
         var me = this;
 
         me.control({
-            // Export button
-            'swag-import-export-manager-export button[action=swag-import-export-manager-export-button]': {
-                click: me.onExport
+            // Import button
+            'swag-import-export-manager-import button[action=swag-import-export-manager-import-button]': {
+                click: me.onImport
             },
-            'swag-import-export-manager-window-export': {
+            'swag-import-export-manager-window-import': {
                 startProcess: me.onStartProcess,
                 cancelProcess: me.onCancelProcess
             }
@@ -60,28 +62,33 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
 
         me.callParent(arguments);
     },
-    onExport: function(btn) {
+    /**
+     * 
+     * @param object btn
+     * @param object Ext.button.Button btn
+     */
+    onImport: function(btn) {
         var me = this,
                 form = btn.up('form'),
                 values = form.getValues();
-
-        if (Ext.isEmpty(values.profile) || Ext.isEmpty(values.format))
+        
+        if (Ext.isEmpty(values.profile) || Ext.isEmpty(values.importFile))
         {
             Shopware.Notification.createGrowlMessage(
-                    '{s name=swag_import_export/export/error_title}Swag import export{/s}',
-                    '{s name=swag_import_export/export/error_msg}Please select export configuration{/s}'
+                    '{s name=swag_import_export/import/error_title}Swag import export{/s}',
+                    '{s name=swag_import_export/import/error_msg}Please fill import configuration fields{/s}'
                     );
             return false;
         }
 
         me.parameters = values;
 
-        me.onCreateExportWindow();
+        me.onCreateImportWindow();
     },
     /**
      * Creates batch configuration
      */
-    onCreateExportWindow: function() {
+    onCreateImportWindow: function() {
         var me = this;
 
         me.getBatchConfig = me.getConfig();
@@ -103,7 +110,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
 
         btn.hide();
         win.cancelButton.show();
-        win.closeButton.disable();
+//        win.closeButton.disable();
     },
     /**
      * Returns the needed configuration for the next batch call
@@ -112,15 +119,17 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
         var me = this;
 
         me.batchConfig = {
-            requestUrl: '{url controller="SwagImportExport" action="export"}',
+            requestUrl: '{url controller="SwagImportExport" action="import"}',
+            action: 'close-window-import',
             params: {
                 profileId: me.parameters.profile,
-                format: me.parameters.format
-            }
+                importFile: me.parameters.importFile
+            },
+            snippets: me.snippets
         };
 
         Ext.Ajax.request({
-            url: '{url controller="SwagImportExport" action="prepareExport"}',
+            url: '{url controller="SwagImportExport" action="prepareImport"}',
             method: 'POST',
             params: me.batchConfig.params,
             success: function(response) {
@@ -129,7 +138,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
                 me.batchConfig.totalCount = result.count;
                 me.batchConfig.snippet = me.snippets.process + me.batchConfig.position + ' / ' + me.batchConfig.totalCount;
 
-                me.window = me.getView('Shopware.apps.SwagImportExport.view.manager.window.Export').create({
+                me.window = me.getView('Shopware.apps.SwagImportExport.view.manager.window.Import').create({
                     batchConfig: me.batchConfig
                 }).show();
 
@@ -141,7 +150,6 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
                 });
             }
         });
-
     },
     /**
      * This function sends a request to export data
@@ -170,7 +178,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
                 me.batchConfig.params = result.data;
                 me.batchConfig.position = result.data.position;
 
-                win.exportProgress.updateProgress(
+                win.importProgress.updateProgress(
                         me.batchConfig.position / me.batchConfig.totalCount,
                         me.snippets.process + me.batchConfig.position + ' / ' + me.batchConfig.totalCount,
                         true
@@ -192,7 +200,6 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
                 me.onProcessFinish(win);
             }
         });
-
     },
     /**
      * Sets cancelOperation to true which will be checked in the
@@ -217,7 +224,8 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
         
         win.closeButton.enable();
         win.cancelButton.disable();
-        win.exportProgress.updateText(me.snippets.finished + me.batchConfig.position + ' / ' + me.batchConfig.totalCount);
+        win.importProgress.updateText(me.snippets.finished + me.batchConfig.position + ' / ' + me.batchConfig.totalCount);
     }
+    
 });
 //{/block}

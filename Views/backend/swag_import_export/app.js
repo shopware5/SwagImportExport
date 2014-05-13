@@ -64,7 +64,7 @@ Ext.define('Shopware.apps.SwagImportExport', {
      * Requires controllers for sub-application
      * @array
      */
-    controllers: [ 'Main', 'Export' ],
+    controllers: [ 'Main', 'Export', 'Import' ],
 
     /**
      * Used views here to improve bulk loading
@@ -77,7 +77,8 @@ Ext.define('Shopware.apps.SwagImportExport', {
 		'manager.Export',
 		'manager.Import',
 		'manager.Operation',
-		'manager.window.Export'
+		'manager.window.Export',
+		'manager.window.Import'
 //		'detail.Window',
 //		'detail.WrappingPaper'
     ],

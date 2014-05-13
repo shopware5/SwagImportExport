@@ -64,18 +64,19 @@ class XmlFileReader implements FileReader
             $z->next($node);
             $z->read();
         }
-
+        
         // skip records
         $i = 0;
         while ($i < $position && $z->next($this->iterationTag)) {
             $i++;
         }
 
+        $j = 0;
         $records = array();
-        while ($i < $count && $z->next($this->iterationTag)) {
+        while ($j < $count && $z->next($this->iterationTag)) {
             $node = $z->expand();
             $records[] = $this->toArrayTree($node);
-            $i++;
+            $j++;
         }
 
         return $records;

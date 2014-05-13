@@ -32,6 +32,7 @@
  */
 class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers_Backend_ExtJs
 {
+
     /**
      * @var Shopware\Models\Category\Category
      */
@@ -100,96 +101,98 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
         $this->View()->assign(array('success' => true, 'children' => $root['children']));
     }
-    
+
     /**
      * Returns all profiles into an array
      */
     public function getProfilesAction()
     {
         $profileRepository = $this->getProfileRepository();
-        
+
         $query = $profileRepository->getProfilesListQuery(
             $this->Request()->getParam('filter', array()),
             $this->Request()->getParam('sort', array()),
             $this->Request()->getParam('limit', null),
             $this->Request()->getParam('start')
-        )->getQuery();
-        
+                )->getQuery();
+
         $count = Shopware()->Models()->getQueryCount($query);
 
         $data = $query->getArrayResult();
-        
+
         $this->View()->assign(array(
             'success' => true, 'data' => $data, 'total' => $count
         ));
     }
-    
-    public function prepareAction()
+
+    public function prepareExportAction()
     {
         $postData = array(
             'profileId' => (int) $this->Request()->getParam('profileId'),
             'type' => 'export',
             'format' => $this->Request()->getParam('format')
         );
-        
+
+        //todo: check for session
+
         $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
-        
+
         //get profile type
         $postData['adapter'] = $profile->getType();
-        
+
         $dataFactory = $this->Plugin()->getDataFactory();
         $dataIO = $dataFactory->createDataIO($postData);
-        
+
         $ids = $dataIO->preloadRecordIds()->getRecordIds();
-        
+
         $position = $dataIO->getSessionPosition();
         $position = $position == null ? 0 : $position;
-        
-        $this->View()->assign(array('success' => true, 'position'=> $position, 'count' => count($ids)));
+
+        $this->View()->assign(array('success' => true, 'position' => $position, 'count' => count($ids)));
     }
-    
+
     public function exportAction()
     {
-        
+
         $postData = array(
             'profileId' => (int) $this->Request()->getParam('profileId'),
             'type' => 'export',
             'format' => $this->Request()->getParam('format'),
             'sessionId' => $this->Request()->getParam('sessionId'),
         );
-        
+
         $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
-        
+
         //get profile type
         $postData['adapter'] = $profile->getType();
-        
+
         //create dataIO
         $dataFactory = $this->Plugin()->getDataFactory();
         $dataIO = $dataFactory->createDataIO($postData);
 
         // we create the file writer that will write (partially) the result file
         $fileWriter = $this->Plugin()->getFileIOFactory()->createFileWriter($postData);
-        
+
         $dataTransformerChain = $this->Plugin()->getDataTransformerFactory()->createDataTransformerChain(
                 $profile, array('isTree' => $fileWriter->hasTreeStructure())
         );
-        
+
         if ($dataIO->getSessionState() == 'new') {
             //todo: create file here ?
             $fileName = $dataIO->generateFileName($profile);
-           
+
             $outputFileName = Shopware()->DocPath() . 'files/import_export/' . $fileName;
-            
+
             // session has no ids stored yet, therefore we must start it and write the file headers
             $header = $dataTransformerChain->composeHeader();
             $fileWriter->writeHeader($outputFileName, $header);
-            
+
             $dataIO->startSession();
         } else {
             $fileName = $dataIO->getDataSession()->getFileName();
-            
+
             $outputFileName = Shopware()->DocPath() . 'files/import_export/' . $fileName;
-            
+
             // session has already loaded ids and some position, so we simply activate it
             $dataIO->resumeSession();
         }
@@ -204,7 +207,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
                 // process that array with the full transformation chain
                 $data = $dataTransformerChain->transformForward($data);
-                
+
                 // now the array should be a tree and we write it to the file
                 $fileWriter->writeRecords($outputFileName, $data);
 
@@ -212,19 +215,19 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                 // if if the new position goes above the limits provided by the 
                 $dataIO->progressSession(1000);
             } catch (Exception $e) {
-                return $this->View()->assign(array('success' => false, 'msg'=> $e->getMessage()));
+                return $this->View()->assign(array('success' => false, 'msg' => $e->getMessage()));
             }
         }
-        
+
         $position = $dataIO->getSessionPosition();
-        
-        $data = $postData;
-        $data['position'] =  $position == null ? 0 : $position;
-        
-        if(!$data['sessionId']){
-            $data['sessionId'] = $dataIO->getDataSession()->getId();
+
+        $post = $postData;
+        $post['position'] = $position == null ? 0 : $position;
+
+        if (!$post['sessionId']) {
+            $post['sessionId'] = $dataIO->getDataSession()->getId();
         }
-        
+
         if ($dataIO->getSessionState() == 'finished') {
             // Session finished means we have exported all the ids in the sesssion.
             // Therefore we can close the file with a footer and mark the session as done.
@@ -232,10 +235,131 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             $fileWriter->writeFooter($outputFileName, $footer);
             $dataIO->closeSession();
         }
-                
-        return $this->View()->assign(array('success' => true, 'data'=> $data));
+
+        return $this->View()->assign(array('success' => true, 'data' => $post));
     }
-    
+
+    public function prepareImportAction()
+    {
+        $postData = array(
+            'type' => 'import',
+            'profileId' => (int) $this->Request()->getParam('profileId'),
+            'file' => $this->Request()->getParam('importFile')
+        );
+
+        if (empty($postData['file'])) {
+            return $this->View()->assign(array('success' => false, 'msg' => 'Not valid file'));
+        }
+        
+        //get file format
+        $inputFileName = Shopware()->DocPath() . $postData['file'];
+        $extension = pathinfo($inputFileName, PATHINFO_EXTENSION);
+
+        $postData['format'] = $extension;
+
+        $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
+
+        //get profile type
+        $postData['adapter'] = $profile->getType();
+
+        // we create the file reader that will read the result file
+        $fileReader = $this->Plugin()->getFileIOFactory()->createFileReader($postData);
+
+        if($extension === 'xml'){
+            $tree = json_decode($profile->getConfig("tree"), true);
+            $fileReader->setTree($tree);            
+        }
+        
+        $totalCount = $fileReader->getTotalCount($inputFileName);
+
+        return $this->View()->assign(array('success' => true, 'position' => 0, 'count' => $totalCount));
+    }
+
+    public function importAction()
+    {
+        $postData = array(
+            'type' => 'import',
+            'profileId' => (int) $this->Request()->getParam('profileId'),
+            'importFile' => $this->Request()->getParam('importFile'),
+            'sessionId' => $this->Request()->getParam('sessionId')
+        );
+
+        //get file format
+        $inputFileName = Shopware()->DocPath() . $postData['importFile'];
+        $extension = pathinfo($inputFileName, PATHINFO_EXTENSION);
+
+        $postData['format'] = $extension;
+        
+        // we create the file reader that will read the result file
+        $fileReader = $this->Plugin()->getFileIOFactory()->createFileReader($postData);
+        
+        //load profile
+        $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
+        
+        //get profile type
+        $postData['adapter'] = $profile->getType();
+        
+        //create dataIO
+        $dataIO = $this->Plugin()->getDataFactory()->createDataIO($postData);
+        
+        $dataTransformerChain = $this->Plugin()->getDataTransformerFactory()->createDataTransformerChain(
+            $profile, array('isTree' => $fileReader->hasTreeStructure())
+        );
+        
+        if($extension === 'xml'){
+            $tree = json_decode($profile->getConfig("tree"), true);
+            $fileReader->setTree($tree);            
+        }
+                
+        if ($dataIO->getSessionState() == 'new') {
+
+            $totalCount = $fileReader->getTotalCount($inputFileName);
+            
+            $dataIO->getDataSession()->setFileName($inputFileName);
+
+            $dataIO->getDataSession()->setCount($totalCount);
+
+            $dataIO->startSession();
+        } else {
+            // session has already loaded ids and some position, so we simply activate it
+            $dataIO->resumeSession();
+        }
+        
+        if ($dataIO->getSessionState() == 'active') {
+
+            try {
+
+                //get current session position
+                $position = $dataIO->getSessionPosition();
+
+                $records = $fileReader->readRecords($inputFileName, $position, 100);
+
+                $data = $dataTransformerChain->transformBackward($records);
+                
+                $dataIO->write($data);
+                
+                $dataIO->progressSession(100);
+            } catch (Exception $e) {
+                // we need to analyze the exception somehow and decide whether to break the while loop;
+                // there is a danger of endless looping in case of some read error or transformation error;
+                // may be we use
+            }
+        }
+        $position = $dataIO->getSessionPosition();
+        $post = $postData;
+        $post['position'] = $position == null ? 0 : $position;
+
+        if (!$post['sessionId']) {
+            $post['sessionId'] = $dataIO->getDataSession()->getId();
+        }
+        
+        if ($dataIO->getSessionState() == 'finished') {
+            $dataIO->closeSession();
+        }
+        
+        return $this->View()->assign(array('success' => true, 'data' => $post));
+    }
+
     /**
      * Helper Method to get access to the category repository.
      *

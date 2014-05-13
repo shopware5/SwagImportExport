@@ -48,6 +48,10 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
                     productive environment, carry out a complete backup of your datebase, so that in the event of a failing import, it can be reinstalled easily. \n\
                     Depending on you server system and the size of the file, the import could take quite a while.{/s}',
     },
+    /*
+     * profile store
+     */
+    profilesStore: Ext.create('Shopware.apps.SwagImportExport.store.ProfileList').load(),
     initComponent: function() {
         var me = this;
 
@@ -83,7 +87,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
                     items: ['->', {
                             text: 'Import',
                             cls: 'primary',
-                            action: 'swag-import-export-manager-export'
+                            action: 'swag-import-export-manager-import-button'
                         }]
                 }]
         });
@@ -147,25 +151,13 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
     createProfileCombo: function() {
         var me = this;
 
-        var profiles = Ext.create('Ext.data.Store', {
-            fields: ['value', 'name'],
-            data: [{
-                    "value": "categories",
-                    "name": 'Categories'
-                }, {
-                    "value": "products",
-                    "name": 'Products'
-                }]
-        });
-
-
         return Ext.create('Ext.form.field.ComboBox', {
             fieldLabel: 'Select profile',
-            store: profiles,
+            store: me.profilesStore,
             labelStyle: 'font-weight: 700; text-align: left;',
             width: 400,
             labelWidth: 150,
-            valueField: 'value',
+            valueField: 'id',
             displayField: 'name',
             editable: false,
             name: 'profile'
@@ -181,30 +173,20 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
         // Media selection field
         me.mediaSelection = Ext.create('Shopware.MediaManager.MediaSelection', {
             name: 'importFile',
+            fieldLabel: 'Select file',
             multiSelect: false,
             anchor: '100%',
             validTypes: me.getImportAllowedExtensions(),
             allowBlank: false,
-            buttonOnly: true,
-            // Setting width manually as firefox shows a very small button otherwise
-            buttonConfig: {
-                width: 150
-            },
-            width: 153
+            buttonOnly: false,
+            width: 515,
+            labelWidth: 150
         });
 
         return Ext.create('Ext.container.Container', {
             margin: '0 0 5 0',
             layout: 'column',
             items: [
-                {
-                    xtype: 'textfield',
-                    name: 'importFileText',
-                    fieldLabel: 'Select file',
-                    labelWidth: 150,
-                    width: 400,
-                    allowBlank: false  // requires a non-empty value
-                },
                 me.mediaSelection
             ]
         });
