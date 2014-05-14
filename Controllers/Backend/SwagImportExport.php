@@ -32,26 +32,25 @@
  */
 class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers_Backend_ExtJs
 {
-
     /**
      * @var Shopware\Models\Category\Category
      */
     protected $profileRepository;
+    
+    protected $nextNodeId = 0;
 
     protected function convertToExtJSTree($node, $isInIteration = false)
     {
-        $extjsNode = array();
+        $extjsNode = array("id" => $node['id']);
+        $onlyAttributes = false;
 
         if ($node['type'] == 'record') {
             $isIteration = true;
 
             $extjsNode['iconCls'] = 'sprite-blue-folders-stack';
+            $extjsNode['type'] = 'iteration';
         } else {
             $isIteration = false;
-
-            if ($isInIteration) {
-                $extjsNode['iconCls'] = 'sprite-icon_taskbar_top_inhalte_active';
-            }
         }
 
         if (isset($node['name'])) {
@@ -65,24 +64,33 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         }
         if (isset($node['attributes'])) {
             if (!isset($extjsNode['children'])) {
+                $onlyAttributes = true;
                 $extjsNode['expanded'] = true;
                 $extjsNode['children'] = array();
             }
             foreach ($node['attributes'] as $attribute) {
-                $extjsNode['children'][] = array('text' => $attribute['name'], 'leaf' => true, 'iconCls' => 'sprite-sticky-notes-pin');
+                $extjsNode['children'][] = array("id" => $attribute['id'], 'text' => $attribute['name'], 'leaf' => true, 'iconCls' => 'sprite-sticky-notes-pin', 'type' => 'attribute', 'swColumn' => $attribute['shopwareField']);
             }
         }
-        if (!isset($extjsNode['children'])) {
+        if (!isset($extjsNode['children']) || $onlyAttributes) {
             if ($isInIteration) {
-                $extjsNode['leaf'] = true;
+                $extjsNode['iconCls'] = 'sprite-icon_taskbar_top_inhalte_active';
+                if (!$onlyAttributes) {
+                    $extjsNode['leaf'] = true;
+                }
+                $extjsNode['type'] = 'node';
+                $extjsNode['swColumn'] = $node['shopwareField'];
             } else {
                 $extjsNode['expanded'] = true;
                 $extjsNode['children'] = array();
             }
         }
+        
+        $extjsNode['inIteration'] = $isIteration | $isInIteration;
 
         return $extjsNode;
     }
+
 
     public function getProfileAction()
     {
@@ -101,6 +109,22 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
         $this->View()->assign(array('success' => true, 'children' => $root['children']));
     }
+    
+    public function createProfileAction()
+    {
+        $data = $this->Request()->getParam('data', 1);
+
+        if (isset($data['parentId'])) {
+            $data = array($data);
+        }
+
+        $lastId = time();
+        foreach ($data as &$node) {
+            $node['id'] = $lastId++;
+        }
+        
+        $this->View()->assign(array('success' => true, 'children' => $data));
+    }
 
     /**
      * Returns all profiles into an array
@@ -108,18 +132,18 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
     public function getProfilesAction()
     {
         $profileRepository = $this->getProfileRepository();
-
+        
         $query = $profileRepository->getProfilesListQuery(
             $this->Request()->getParam('filter', array()),
             $this->Request()->getParam('sort', array()),
             $this->Request()->getParam('limit', null),
             $this->Request()->getParam('start')
-                )->getQuery();
-
+        )->getQuery();
+        
         $count = Shopware()->Models()->getQueryCount($query);
 
         $data = $query->getArrayResult();
-
+        
         $this->View()->assign(array(
             'success' => true, 'data' => $data, 'total' => $count
         ));

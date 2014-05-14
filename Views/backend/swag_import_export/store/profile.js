@@ -1,7 +1,6 @@
 Ext.define('Shopware.apps.SwagImportExport.store.Profile', {
     extend: 'Ext.data.TreeStore',
-//    model: 'Shopware.apps.SwagImportExport.model.Profile',
-//    requires: 'Shopware.apps.SwagImportExport.model.Profile',
+    model: 'Shopware.apps.SwagImportExport.model.Profile',
     root: {
 //        text: 'Root',
 //        expanded: true        
@@ -9,11 +8,18 @@ Ext.define('Shopware.apps.SwagImportExport.store.Profile', {
     proxy: {
         type: 'ajax',
 		api:{
-			read:'{url controller="SwagImportExport" action="getProfile"}'
+			create: '{url controller="SwagImportExport" action="createProfile"}',
+			read:	'{url controller="SwagImportExport" action="getProfile"}',
+			update: '{url controller="SwagImportExport" action="updateProfile"}',
+			delete: '{url controller="SwagImportExport" action="deleteProfile"}'
         },
         actionMethods: 'POST',
         reader: {
             type: 'json'
-        }
+        },
+		writer: {
+			type: 'json',
+			root: 'data'
+		}
     }
 });
