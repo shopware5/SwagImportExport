@@ -432,7 +432,6 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
     public function exportAction()
     {
-
         $postData = array(
             'profileId' => (int) $this->Request()->getParam('profileId'),
             'type' => 'export',
@@ -460,8 +459,12 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         if ($dataIO->getSessionState() == 'new') {
             //todo: create file here ?
             $fileName = $dataIO->generateFileName($profile);
-
-            $outputFileName = Shopware()->DocPath() . 'files/import_export/' . $fileName;
+            $dir = $outputFileName = Shopware()->DocPath() . 'files/import_export/';
+            
+            if (!file_exists($dir)) {
+                mkdir($dir, 0777, true);
+            }
+            $outputFileName = $dir . $fileName;
 
             // session has no ids stored yet, therefore we must start it and write the file headers
             $header = $dataTransformerChain->composeHeader();
@@ -754,9 +757,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             $response->setHeader('Content-disposition', 'attachment; filename=' . $name);
             
             $response->setHeader('Content-Type', $application);
-            $response->setHeader('Content-Transfer-Encoding', 'binary');
-            $response->setHeader('Content-Length', filesize($file));
-            echo readfile($file);
+            readfile($file);
         } catch (\Exception $e) {
             $this->View()->assign(array(
                 'success' => false,

@@ -370,6 +370,12 @@ Ext.define('Shopware.apps.SwagImportExport.view.tab.Profile', {
 								node.set('text', me.formPanel.child('#nodeName').getValue());
 								node.set('swColumn', me.formPanel.child('#swColumn').getValue());
 								me.treeStore.sync({
+                                    success: function() {
+                                        Shopware.Notification.createGrowlMessage(
+                                                '{s name=swag_import_export/profile/title}Swag import export{/s}',
+                                                'Successfully updated.'
+                                                );
+                                    },
 									failure: function(batch, options) {
 										var error = batch.exceptions[0].getError(),
 												msg = Ext.isObject(error) ? error.status + ' ' + error.statusText : error;
