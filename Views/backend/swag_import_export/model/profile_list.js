@@ -58,6 +58,7 @@ Ext.define('Shopware.apps.SwagImportExport.model.ProfileList', {
          * @object
          */
         api: {
+			create:'{url controller="SwagImportExport" action="createProfiles"}',
             read:'{url controller="SwagImportExport" action="getProfiles"}'
         },
         /**
@@ -67,7 +68,11 @@ Ext.define('Shopware.apps.SwagImportExport.model.ProfileList', {
         reader: {
             type: 'json',
             root: 'data'
-        }
+        },
+		writer: {
+			type: 'json',
+			root: 'data'
+		}
     }
 });
 //{/block}

@@ -44,4 +44,21 @@ class Profile
                 throw new \Exception('Config does not exists');
         }
     }
+
+    public function setConfig($name, $value)
+    {
+        switch ($name) {
+            case 'tree':
+                $this->profileEntity->setTree($value);
+                break;
+            default:
+                throw new \Exception('Config does not exists');
+        }
+    }
+    
+    public function persist()
+    {
+        Shopware()->Models()->persist($this->profileEntity);
+    }
+
 }

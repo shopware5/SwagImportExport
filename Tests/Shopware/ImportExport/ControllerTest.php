@@ -234,7 +234,7 @@ class ControllerTest extends ImportExportTestHelper
     {
         $postData = array(
             'profileId' => 1,
-            'sessionId' => 18,
+            'sessionId' => 72,
             'type' => 'import',
             'max_record_count' => 100,
             'format' => 'xml',
@@ -273,15 +273,17 @@ class ControllerTest extends ImportExportTestHelper
         while ($dataIO->getSessionState() == 'active') {
             try {
                 $position = $dataIO->getSessionPosition();
+                echo $position, "\n";
 
-                $records = $fileReader->readRecords($inputFileName, $position, 100);
+                $records = $fileReader->readRecords($inputFileName, $position, 10);
                 $data = $dataTransformerChain->transformBackward($records);
-                
+                echo "aaaa";
 //                $data = $dataIO->read(100);
                 // writing is successful, so we write the new position in the session;
                 // if if the new position goes above the limits provided by the 
-                $dataIO->progressSession();
-            } catch (Exception $e) {
+                $dataIO->progressSession(10);
+            } catch (\Exception $e) {
+                echo $e->getMessage(), "\n";
                 // we need to analyze the exception somehow and decide whether to break the while loop;
                 // there is a danger of endless looping in case of some read error or transformation error;
                 // may be we use

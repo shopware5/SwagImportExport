@@ -94,11 +94,11 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         return $extjsNode;
     }
 
-
-    public function getProfileAction()
+    protected function getTree()
     {
+        $profileId = $this->Request()->getParam('profileId', 1);
         $postData = array(
-            'profileId' => 1,
+            'profileId' => $profileId,
             'sessionId' => 70,
             'type' => 'export',
             'limit' => array('limit' => 40, 'offset' => 0),
@@ -108,25 +108,269 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         );
 
         $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
-        $root = $this->convertToExtJSTree(json_decode($profile->getConfig('tree'), 1));
+        
+        return $profile->getConfig('tree');
+    }
+    
+    protected function appendNode($child, &$node)
+    {
+        if ($node['id'] == $child['parentId']) {
+            if ($child['type'] == 'attribute') {
+                $node['attributes'][] = array(
+                    'id' => $child['id'],
+                    'name' => $child['text'],
+                    'shopwareField' => $child['swColumn'],
+                );
+            } else if ($child['type'] == 'node') {
+                $node['children'][] = array(
+                    'id' => $child['id'],
+                    'name' => $child['text'],
+                    'shopwareField' => $child['swColumn'],
+                );
+            } else {
+                $node['children'][] = array(
+                    'id' => $child['id'],
+                    'name' => $child['text'],
+                );
+            }
+
+            return true;
+        } else {
+            if (isset($node['children'])) {
+                foreach ($node['children'] as &$childNode) {
+                    if ($this->appendNode($child, $childNode)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+    
+    protected function changeNode($child, &$node)
+    {
+        if ($node['id'] == $child['id']) {
+            $node['name'] = $child['text'];
+            if (isset($child['swColumn'])) {
+                $node['shopwareField'] = $child['swColumn'];
+            } else {
+                unset($node['shopwareField']);
+            }
+
+            return true;
+        } else {
+            if (isset($node['children'])) {
+                foreach ($node['children'] as &$childNode) {
+                    if ($this->changeNode($child, $childNode)) {
+                        return true;
+                    }
+                }
+            }
+            if (isset($node['attributes'])) {
+                foreach ($node['attributes'] as &$childNode) {
+                    if ($this->changeNode($child, $childNode)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    protected function deleteNode($child, &$node)
+    {
+        if (isset($node['children'])) {
+            foreach ($node['children'] as $key => &$childNode) {
+                if ($childNode['id'] == $child['id']) {
+                    unset($node['children'][$key]);
+                    return true;
+                } else if ($this->deleteNode($child, $childNode)) {
+                    return true;
+                }
+            }
+        }
+        if (isset($node['attributes'])) {
+            foreach ($node['attributes'] as $key => &$childNode) {
+                if ($childNode['id'] == $child['id']) {
+                    unset($node['attributes'][$key]);
+                    return true;
+                } else if ($this->deleteNode($child, $childNode)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public function getProfileAction()
+    {
+        $tree = $this->getTree();
+        $root = $this->convertToExtJSTree(json_decode($tree, 1));
+//        
+//        echo '<pre>';
+//        print_r(json_decode($tree, 1));
+//        echo '</pre>';
 
         $this->View()->assign(array('success' => true, 'children' => $root['children']));
     }
     
     public function createProfileAction()
     {
+        $profileId = $this->Request()->getParam('profileId', 1);
         $data = $this->Request()->getParam('data', 1);
+        $postData = array(
+            'profileId' => $profileId,
+            'sessionId' => 70,
+            'type' => 'export',
+            'limit' => array('limit' => 40, 'offset' => 0),
+            'max_record_count' => 100,
+            'format' => 'xml',
+            'adapter' => 'categories',
+        );
 
+        $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
+
+        $tree = json_decode($profile->getConfig('tree'), 1);
+        
         if (isset($data['parentId'])) {
             $data = array($data);
         }
+        
+        $errors = false;
 
-        $lastId = time();
         foreach ($data as &$node) {
-            $node['id'] = $lastId++;
+            $node['id'] = uniqid();
+            if (!$this->appendNode($node, $tree)) {
+                $errors = true;
+            }
+        }
+                
+        $profile->setConfig('tree', json_encode($tree));
+        $profile->persist();
+        
+        Shopware()->Models()->flush();
+        
+        if ($errors) {
+            $this->View()->assign(array('success' => false, 'message' => 'Some of the nodes could not be saved', 'children' => $data));
+        } else {
+            $this->View()->assign(array('success' => true, 'children' => $data));
+        }
+    }
+    
+    public function updateProfileAction()
+    {
+        $profileId = $this->Request()->getParam('profileId', 1);
+        $data = $this->Request()->getParam('data', 1);
+        $postData = array(
+            'profileId' => $profileId,
+            'sessionId' => 70,
+            'type' => 'export',
+            'limit' => array('limit' => 40, 'offset' => 0),
+            'max_record_count' => 100,
+            'format' => 'xml',
+            'adapter' => 'categories',
+        );
+
+        $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
+
+        $tree = json_decode($profile->getConfig('tree'), 1);
+        
+        if (isset($data['parentId'])) {
+            $data = array($data);
         }
         
-        $this->View()->assign(array('success' => true, 'children' => $data));
+        $errors = false;
+
+        foreach ($data as &$node) {
+            if (!$this->changeNode($node, $tree)) {
+                $errors = true;
+            }
+        }
+                
+        $profile->setConfig('tree', json_encode($tree));
+        $profile->persist();
+        
+        Shopware()->Models()->flush();
+        
+        if ($errors) {
+            $this->View()->assign(array('success' => false, 'message' => 'Some of the nodes could not be saved', 'children' => $data));
+        } else {
+            $this->View()->assign(array('success' => true, 'children' => $data));
+        }
+    }
+    
+    public function deleteProfileAction()
+    {
+        $profileId = $this->Request()->getParam('profileId', 1);
+        $data = $this->Request()->getParam('data', 1);
+        $postData = array(
+            'profileId' => $profileId,
+            'sessionId' => 70,
+            'type' => 'export',
+            'limit' => array('limit' => 40, 'offset' => 0),
+            'max_record_count' => 100,
+            'format' => 'xml',
+            'adapter' => 'categories',
+        );
+
+        $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
+
+        $tree = json_decode($profile->getConfig('tree'), 1);
+        
+        if (isset($data['parentId'])) {
+            $data = array($data);
+        }
+        
+        $errors = false;
+
+        foreach ($data as &$node) {
+            if (!$this->deleteNode($node, $tree)) {
+                $errors = true;
+            }
+        }
+                
+        $profile->setConfig('tree', json_encode($tree));
+        $profile->persist();
+        
+        Shopware()->Models()->flush();
+        
+        if ($errors) {
+            $this->View()->assign(array('success' => false, 'message' => 'Some of the nodes could not be saved', 'children' => $data));
+        } else {
+            $this->View()->assign(array('success' => true, 'children' => $data));
+        }
+    }
+
+    /**
+     * Returns all profiles into an array
+     */
+    public function createProfilesAction()
+    {
+        $profileRepository = $this->getProfileRepository();
+        $data = $this->Request()->getParam('data', 1);
+        $newTree = '{ "name": "Root", "children": [{ "name": "Header", "children": [], "id": "537359399c80a" }, { "name": "Categories", "children": [{ "name": "Category", "type": "record", "attributes": [], "children": [], "id": "537359399c90d" }], "id": "537359399c8b7" }], "id": "root" }';
+        
+        $profile = new \Shopware\CustomModels\ImportExport\Profile();
+        
+        $profile->setName($data['name']);
+        $profile->setType($data['type']);
+        $profile->setTree($newTree);
+        
+        Shopware()->Models()->persist($profile);
+        Shopware()->Models()->flush();
+        
+        $this->View()->assign(array(
+            'success' => true,
+            'data' => array(
+                "id" => $profile->getId(),
+                'name' => $profile->getName(),
+                'type' => $profile->getType(),
+                'tree' => $profile->getTree(),
+            )
+        ));
     }
 
     /**

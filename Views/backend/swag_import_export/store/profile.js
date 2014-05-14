@@ -11,7 +11,7 @@ Ext.define('Shopware.apps.SwagImportExport.store.Profile', {
 			create: '{url controller="SwagImportExport" action="createProfile"}',
 			read:	'{url controller="SwagImportExport" action="getProfile"}',
 			update: '{url controller="SwagImportExport" action="updateProfile"}',
-			delete: '{url controller="SwagImportExport" action="deleteProfile"}'
+			destroy: '{url controller="SwagImportExport" action="deleteProfile"}'
         },
         actionMethods: 'POST',
         reader: {

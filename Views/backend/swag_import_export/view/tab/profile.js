@@ -48,14 +48,21 @@ Ext.define('Shopware.apps.SwagImportExport.view.tab.Profile', {
 		
 	autoScroll: false,
 	
+	loadNew: function(profileId) {
+		var me = this;
+		
+		me.profileId = profileId;
+		me.treeStore.getProxy().setExtraParam('profileId',profileId);
+		me.treeStore.load({ params: { profileId: profileId } });
+		me.formPanel.hideFields();
+	},
+	
 	initComponent: function() {
 		var me = this;
 		
 		me.profilesStore = Ext.create('Shopware.apps.SwagImportExport.store.ProfileList').load();
 		
-		me.treeStore = Ext.create('Shopware.apps.SwagImportExport.store.Profile', {
-			autoload: true
-		});
+		me.treeStore = Ext.create('Shopware.apps.SwagImportExport.store.Profile', {	});
 		
 		me.selectedNodeId = 0;
 
@@ -89,13 +96,21 @@ Ext.define('Shopware.apps.SwagImportExport.view.tab.Profile', {
 				listeners: {
 					scope: me,
 					change: function(value) {
-						var record = me.profilesStore.getById(value.getValue());
+//						var record = me.profilesStore.getById(value.getValue());
+						me.loadNew(value.getValue());
 					}
 				}
 			}, {
 				xtype: 'tbseparator'
 			}, {
 				text: 'Create Own Profile',
+				handler: function() {
+					var callback = function(btn, text) {
+						me.profilesStore.add({ type: 'export', name: text, tree: "" });
+						me.profilesStore.sync();
+					}
+					Ext.MessageBox.prompt('Name', 'Please enter the profile name:', callback);
+				}
 			}, {
 				text: 'Delete Selected Profile',
 				disabled: true
@@ -134,10 +149,10 @@ Ext.define('Shopware.apps.SwagImportExport.view.tab.Profile', {
 							text: 'Create Child Node',
 							handler: function() {
 								var node = me.treeStore.getById(me.selectedNodeId);
-								node.data.leaf = false;
-								node.data.expanded = true;
-								node.data.type = '';
-								node.data.iconCls = '';
+								node.set('leaf', false);
+								node.set('expanded', true);
+								node.set('type', '');
+								node.set('iconCls', '');
 								
 								var data = { };
 								if (node.data.inIteration === true) {
@@ -146,8 +161,19 @@ Ext.define('Shopware.apps.SwagImportExport.view.tab.Profile', {
 									data = { text: "New Node", expanded: true };
 								}
 								var newNode = node.appendChild(data);
-								me.treeStore.sync();
-								console.log(newNode.data);
+								me.treeStore.sync({
+									failure: function(batch, options) {
+										var error = batch.exceptions[0].getError(),
+												msg = Ext.isObject(error) ? error.status + ' ' + error.statusText : error;
+
+										Ext.MessageBox.show({
+											title: 'Create Child Failed',
+											msg: msg,
+											icon: Ext.Msg.ERROR,
+											buttons: Ext.Msg.OK
+										});
+									}
+								});
 								me.treePanel.expand();
 								me.treePanel.getSelectionModel().select(me.treeStore.getById(newNode.data.id));
 							}
@@ -156,19 +182,24 @@ Ext.define('Shopware.apps.SwagImportExport.view.tab.Profile', {
 							text: 'Create Attribute',
 							handler: function() {
 								var node = me.treeStore.getById(me.selectedNodeId);
-								node.data.leaf = false;
-								node.data.expanded = true;
-								node.data.type = '';
-								node.data.iconCls = '';
+								node.set('leaf', false);
+								node.set('expanded', true);
 
-								var data = {};
-								if (node.data.inIteration === true) {
-									data = { text: "New Node", leaf: true, type: 'node', iconCls: 'sprite-icon_taskbar_top_inhalte_active', inIteration: true };
-								} else {
-									data = { text: "New Node", expanded: true };
-								}
+								var data = { text: "New Attribute", leaf: true, type: 'attribute', iconCls: 'sprite-sticky-notes-pin', inIteration: true };
 								var newNode = node.appendChild(data);
-								me.treeStore.sync();
+								me.treeStore.sync({
+									failure: function(batch, options) {
+										var error = batch.exceptions[0].getError(),
+												msg = Ext.isObject(error) ? error.status + ' ' + error.statusText : error;
+
+										Ext.MessageBox.show({
+											title: 'Create Attribute Failed',
+											msg: msg,
+											icon: Ext.Msg.ERROR,
+											buttons: Ext.Msg.OK
+										});
+									}
+								});
 								console.log(newNode.data);
 								me.treePanel.expand();
 								me.treePanel.getSelectionModel().select(me.treeStore.getById(newNode.data.id));
@@ -263,6 +294,11 @@ Ext.define('Shopware.apps.SwagImportExport.view.tab.Profile', {
 			bodyStyle: {
 				border: '0 !important'
 			},
+			hideFields: function() {
+				this.child('#nodeName').hide();
+				this.child('#swColumn').hide();
+				this.child('#iteration').hide();
+			},
 			fillForm: function() {
 				var node = me.treeStore.getById(me.selectedNodeId);
 				this.child('#nodeName').show();
@@ -324,7 +360,25 @@ Ext.define('Shopware.apps.SwagImportExport.view.tab.Profile', {
 					items: ['->', {
 							text: 'Save',
 							cls: 'primary',
-							action: 'swag-import-export-manager-profile-save'
+							action: 'swag-import-export-manager-profile-save',
+							handler: function() {
+								var node = me.treeStore.getById(me.selectedNodeId);
+								node.set('text', me.formPanel.child('#nodeName').getValue());
+								node.set('swColumn', me.formPanel.child('#swColumn').getValue());
+								me.treeStore.sync({
+									failure: function(batch, options) {
+										var error = batch.exceptions[0].getError(),
+												msg = Ext.isObject(error) ? error.status + ' ' + error.statusText : error;
+
+										Ext.MessageBox.show({
+											title: 'Save Failed',
+											msg: msg,
+											icon: Ext.Msg.ERROR,
+											buttons: Ext.Msg.OK
+										});
+									}
+								});
+							}
 						}]
 				}]
 		});
