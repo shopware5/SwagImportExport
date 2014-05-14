@@ -114,7 +114,6 @@ Ext.define('Shopware.apps.SwagImportExport.view.tab.profile.Tree', {
 //            }
 //        ];
 		
-		console.log(arguments);
         
         me.callParent(arguments);
 

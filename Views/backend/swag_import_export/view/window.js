@@ -68,34 +68,10 @@ Ext.define('Shopware.apps.SwagImportExport.view.Window', {
 				}),
                 Ext.create('Shopware.apps.SwagImportExport.view.tab.Profile', {
 					
-				}),
-                Ext.create('Shopware.apps.SwagImportExport.view.log.Log', {
-					
 				})
-//                , Ext.create('Shopware.apps.Order.view.detail.Detail',{
-//                    title: me.snippets.details,
-//                    record: me.record,
-//                    paymentsStore: me.paymentsStore,
-//                    shopsStore: me.shopsStore,
-//                    countriesStore: me.countriesStore
-//                }), Ext.create('Shopware.apps.Order.view.detail.Communication',{
-//                    title: me.snippets.communication,
-//                    record: me.record
-//                }), Ext.create('Shopware.apps.Order.view.detail.Position', {
-//                    title: me.snippets.position,
-//                    record: me.record,
-//                    taxStore: me.taxStore,
-//                    statusStore: me.statusStore
-//                }), Ext.create('Shopware.apps.Order.view.detail.Document',{
-//                    record: me.record,
-//                    documentTypesStore: me.documentTypesStore
-//                }), Ext.create('Shopware.apps.Order.view.detail.OrderHistory', {
-//                    title: me.snippets.history,
-//                    historyStore: me.historyStore,
-//                    record: me.record,
-//                    orderStatusStore: me.orderStatusStore,
-//                    paymentStatusStore:  me.paymentStatusStore
-//                })
+//                Ext.create('Shopware.apps.SwagImportExport.view.log.Log', {
+//					
+//				})
             ]
         });
     }

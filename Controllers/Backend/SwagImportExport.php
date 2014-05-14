@@ -359,7 +359,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
     {
         $profileRepository = $this->getProfileRepository();
         $data = $this->Request()->getParam('data', 1);
-        $newTree = '{ "name": "Root", "children": [{ "name": "Header", "children": [], "id": "537359399c80a" }, { "name": "Categories", "children": [{ "name": "Category", "type": "record", "attributes": [], "children": [], "id": "537359399c90d" }], "id": "537359399c8b7" }], "id": "root" }';
+        $newTree = '{"name":"Root","children":[{"name":"Header","children":[{"id":"537385ed7c799","name":"HeaderChild","shopwareField":""}],"id":"537359399c80a"},{"name":"Categories","children":[{"name":"Category","type":"record","attributes":[{"id":"53738653da10f","name":"Attribute1","shopwareField":"parent"}],"children":[{"id":"5373865547d06","name":"Id","shopwareField":"id"},{"id":"537386ac3302b","name":"Description","shopwareField":"description","children":[{"id":"5373870d38c80","name":"Value","shopwareField":"description"}],"attributes":[{"id":"53738718f26db","name":"Attribute2","shopwareField":"active"}]},{"id":"537388742e20e","name":"Title","shopwareField":"description"}],"id":"537359399c90d"}],"id":"537359399c8b7"}],"id":"root"}';
         
         $profile = new \Shopware\CustomModels\ImportExport\Profile();
         
@@ -524,6 +524,8 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
     public function prepareImportAction()
     {
+        return;
+        
         $postData = array(
             'type' => 'import',
             'profileId' => (int) $this->Request()->getParam('profileId'),
@@ -560,6 +562,8 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
     public function importAction()
     {
+        return;
+        
         $postData = array(
             'type' => 'import',
             'profileId' => (int) $this->Request()->getParam('profileId'),

@@ -86,7 +86,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
                     cls: 'shopware-toolbar',
                     items: ['->', {
                             text: 'Import',
-                            cls: 'primary',
+                            cls: 'secondary',
                             action: 'swag-import-export-manager-import-button'
                         }]
                 }]

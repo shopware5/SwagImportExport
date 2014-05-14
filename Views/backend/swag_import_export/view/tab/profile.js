@@ -55,6 +55,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.tab.Profile', {
 		me.treeStore.getProxy().setExtraParam('profileId',profileId);
 		me.treeStore.load({ params: { profileId: profileId } });
 		me.formPanel.hideFields();
+		me.treePanel.getView().setDisabled(false);
 	},
 	
 	initComponent: function() {
@@ -78,6 +79,8 @@ Ext.define('Shopware.apps.SwagImportExport.view.tab.Profile', {
 				}
 			}, me.createTreeItem(me), me.createFormPanel(me)
 		];
+		
+		me.treePanel.getView().setDisabled(true);
 		me.callParent(arguments);
 	},
 	
@@ -106,7 +109,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.tab.Profile', {
 				text: 'Create Own Profile',
 				handler: function() {
 					var callback = function(btn, text) {
-						me.profilesStore.add({ type: 'export', name: text, tree: "" });
+						me.profilesStore.add({ type: 'categories', name: text, tree: "" });
 						me.profilesStore.sync();
 					}
 					Ext.MessageBox.prompt('Name', 'Please enter the profile name:', callback);
@@ -151,8 +154,10 @@ Ext.define('Shopware.apps.SwagImportExport.view.tab.Profile', {
 								var node = me.treeStore.getById(me.selectedNodeId);
 								node.set('leaf', false);
 								node.set('expanded', true);
-								node.set('type', '');
-								node.set('iconCls', '');
+								if (node.get('type') !== 'iteration') {
+									node.set('type', '');
+									node.set('iconCls', '');
+								}
 								
 								var data = { };
 								if (node.data.inIteration === true) {
@@ -200,7 +205,6 @@ Ext.define('Shopware.apps.SwagImportExport.view.tab.Profile', {
 										});
 									}
 								});
-								console.log(newNode.data);
 								me.treePanel.expand();
 								me.treePanel.getSelectionModel().select(me.treeStore.getById(newNode.data.id));
 							}
@@ -331,7 +335,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.tab.Profile', {
 					hidden: true,
 					xtype: 'combobox',
 					emptyText: 'Select Column',
-					store: ['id', 'title', 'description', 'parent', 'active'],
+					store: ['id', 'description', 'parent', 'active'],
 					width: 400,
 					labelWidth: 150,
 					name: 'swColumn',

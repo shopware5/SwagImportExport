@@ -178,8 +178,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
                         );
 
                 if (me.batchConfig.position === me.batchConfig.totalCount) {
-                    console.log(result.data);
-                    me.fileName = result.data.fileName;
+					me.fileName = result.data.fileName;
                     me.onProcessFinish(win);
                 } else {
                     me.runRequest(win);

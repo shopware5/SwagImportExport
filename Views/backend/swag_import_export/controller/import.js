@@ -68,22 +68,27 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
      * @param object Ext.button.Button btn
      */
     onImport: function(btn) {
-        var me = this,
-                form = btn.up('form'),
-                values = form.getValues();
-        
-        if (Ext.isEmpty(values.profile) || Ext.isEmpty(values.importFile))
-        {
-            Shopware.Notification.createGrowlMessage(
-                    '{s name=swag_import_export/import/error_title}Swag import export{/s}',
-                    '{s name=swag_import_export/import/error_msg}Please fill import configuration fields{/s}'
-                    );
-            return false;
-        }
-
-        me.parameters = values;
-
-        me.onCreateImportWindow();
+		Shopware.Notification.createGrowlMessage(
+				'{s name=swag_import_export/import/error_title}Swag import export{/s}',
+				'Import is currently disabled'
+				);
+//            return false;
+//        var me = this,
+//                form = btn.up('form'),
+//                values = form.getValues();
+//        
+//        if (Ext.isEmpty(values.profile) || Ext.isEmpty(values.importFile))
+//        {
+//            Shopware.Notification.createGrowlMessage(
+//                    '{s name=swag_import_export/import/error_title}Swag import export{/s}',
+//                    '{s name=swag_import_export/import/error_msg}Please fill import configuration fields{/s}'
+//                    );
+//            return false;
+//        }
+//
+//        me.parameters = values;
+//
+//        me.onCreateImportWindow();
     },
     /**
      * Creates batch configuration
