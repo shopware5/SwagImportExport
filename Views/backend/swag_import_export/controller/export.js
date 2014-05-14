@@ -54,6 +54,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
             },
             'swag-import-export-manager-window-export': {
                 startProcess: me.onStartProcess,
+                downloadFile: me.onDownloadFile,
                 cancelProcess: me.onCancelProcess
             }
         });
@@ -177,6 +178,8 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
                         );
 
                 if (me.batchConfig.position === me.batchConfig.totalCount) {
+                    console.log(result.data);
+                    me.fileName = result.data.fileName;
                     me.onProcessFinish(win);
                 } else {
                     me.runRequest(win);
@@ -189,7 +192,8 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
                     text: "The server could not handle the request."
                 });
 
-                me.onProcessFinish(win);
+                win.closeButton.enable();
+                win.cancelButton.disable();
             }
         });
 
@@ -216,8 +220,15 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
         var me = this;
         
         win.closeButton.enable();
-        win.cancelButton.disable();
+        win.cancelButton.hide();
+        win.downloadButton.show();
         win.exportProgress.updateText(me.snippets.finished + me.batchConfig.position + ' / ' + me.batchConfig.totalCount);
+    },
+    onDownloadFile: function() {
+        var me = this,
+            url = '{url action="downloadFile"}' + '/fileName/' + me.fileName;
+    
+        window.open(url, '_blank');        
     }
 });
 //{/block}

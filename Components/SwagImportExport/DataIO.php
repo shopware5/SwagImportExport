@@ -162,7 +162,7 @@ class DataIO
         $dateTime = new \DateTime('now');
 
         $fileName = $operationType . '.' . $adapterType . '.' .
-                $profileName . '.' . $dateTime->format('d.m.Y') . '.' . $fileFormat;
+                $dateTime->format('Y.m.d.h.i.s') . '.' . $fileFormat;
 
         //set count
         $session->setFileName($fileName);

@@ -438,6 +438,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             'type' => 'export',
             'format' => $this->Request()->getParam('format'),
             'sessionId' => $this->Request()->getParam('sessionId'),
+            'fileName' => $this->Request()->getParam('fileName')
         );
 
         $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
@@ -506,13 +507,16 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         if (!$post['sessionId']) {
             $post['sessionId'] = $dataIO->getDataSession()->getId();
         }
-
+        
         if ($dataIO->getSessionState() == 'finished') {
             // Session finished means we have exported all the ids in the sesssion.
             // Therefore we can close the file with a footer and mark the session as done.
             $footer = $dataTransformerChain->composeFooter();
             $fileWriter->writeFooter($outputFileName, $footer);
             $dataIO->closeSession();
+        }
+        if (!$post['fileName']) {
+            $post['fileName'] = $fileName;
         }
 
         return $this->View()->assign(array('success' => true, 'data' => $post));
@@ -725,7 +729,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                 case 'csv':
                     $application = 'text/csv';
                     break;
-                case 'csv':
+                case 'xml':
                     $application = 'application/xml';
                     break;
                 default:

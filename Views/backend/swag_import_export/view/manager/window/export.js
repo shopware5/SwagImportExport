@@ -125,7 +125,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.window.Export', {
      * Registers events in the event bus for firing events when needed
      */
     registerEvents: function() {
-        this.addEvents('startProcess', 'cancelProcess');
+        this.addEvents('startProcess', 'cancelProcess', 'downloadFile');
     },
     /**
      * Returns a new progress bar for a detailed view of the exporting progress status
@@ -157,12 +157,14 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.window.Export', {
         me.startButton = me.createStartButton();
         me.closeButton = me.createCloseButton();
         me.cancelButton = me.createCancelButton();
+        me.downloadButton = me.createDownloadButton();
 
         return Ext.create('Ext.container.Container', {
             layout: 'hbox',
             items: [
                 me.startButton,
                 me.cancelButton,
+                me.downloadButton,
                 me.closeButton
             ]
         });
@@ -201,6 +203,20 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.window.Export', {
             width: 160,
             handler: function() {
                 me.fireEvent('cancelProcess', this);
+            }
+        });
+    },
+    createDownloadButton: function() {
+        var me = this;
+
+        return Ext.create('Ext.button.Button', {
+            text: 'Download',
+            hidden: true,
+            flex: 1,
+            action: 'download',
+            cls: 'primary',
+            handler: function() {
+                me.fireEvent('downloadFile', this);
             }
         });
     },
