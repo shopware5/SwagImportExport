@@ -33,12 +33,15 @@
 class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers_Backend_ExtJs
 {
     /**
-     * @var Shopware\Models\Category\Category
+     * @var Shopware\CustomModels\ImportExport\Profile
      */
     protected $profileRepository;
     
-    protected $nextNodeId = 0;
-
+    /*
+     * @var Shopware\CustomModels\ImportExport\Session
+     */
+    protected $sessionRepository;
+	protected $nextNodeId = 0;
     protected function convertToExtJSTree($node, $isInIteration = false)
     {
         $extjsNode = array("id" => $node['id']);
@@ -341,7 +344,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             
             $dataIO->getDataSession()->setFileName($inputFileName);
 
-            $dataIO->getDataSession()->setCount($totalCount);
+            $dataIO->getDataSession()->setTotalCount($totalCount);
 
             $dataIO->startSession();
         } else {
@@ -383,6 +386,25 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         
         return $this->View()->assign(array('success' => true, 'data' => $post));
     }
+    
+    public function getSessionsAction()
+    {
+        $sessionRepository = $this->getSessionRepository();
+        
+        $query = $sessionRepository->getSessionsListQuery(
+            $this->Request()->getParam('filter', array()),
+            $this->Request()->getParam('sort', array()),
+            $this->Request()->getParam('limit', null),
+            $this->Request()->getParam('start')
+                )->getQuery();
+
+        $data = $query->getArrayResult();
+
+        $this->View()->assign(array(
+            'success' => true, 'data' => $data
+        ));
+    }
+    
 
     /**
      * Helper Method to get access to the category repository.
@@ -395,6 +417,19 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             $this->profileRepository = Shopware()->Models()->getRepository('Shopware\CustomModels\ImportExport\Profile');
         }
         return $this->profileRepository;
+    }
+    
+    /**
+     * Helper Method to get access to the category repository.
+     *
+     * @return Shopware\Models\Category\Repository
+     */
+    public function getSessionRepository()
+    {
+        if ($this->sessionRepository === null) {
+            $this->sessionRepository = Shopware()->Models()->getRepository('Shopware\CustomModels\ImportExport\Session');
+        }
+        return $this->sessionRepository;
     }
 
     public function Plugin()

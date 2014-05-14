@@ -46,12 +46,14 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Operation', {
         type: '{s name=swag_import_export/column/type}Type{/s}',
         profile: '{s name=swag_import_export/column/profile}Profile{/s}',
         records: '{s name=swag_import_export/column/records}Records{/s}',
+        totalCount: '{s name=swag_import_export/column/totalCount}Total count{/s}',
         date: '{s name=swag_import_export/column/date}Date{/s}',
         status: '{s name=swag_import_export/column/status}Status{/s}',
         resume: '{s name=swag_import_export/action/resume}Resume operation{/s}',
         download: '{s name=swag_import_export/action/download}Download file{/s}',
         deleteFile: '{s name=swag_import_export/action/delete}Delete file{/s}'
     },
+    sessionStore: Ext.create('Shopware.apps.SwagImportExport.store.SessionList').load(),
     bodyPadding: 10,
     autoScroll: true,
     initComponent: function() {
@@ -61,24 +63,21 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Operation', {
     },
     createGrid: function() {
         var me = this;
-        
-        var files = Ext.create('Ext.data.Store', {
-            fields: ['fileName', 'type', 'profile', 'records', 'date', 'status'],
-            data: [
-                { "fileName": 'Shopware-export-08-05-2014', "type": "categories", "profile": 'shopware', "records": "62", "date": "08/05/2014", "status": 'completed'},
-                { "fileName": 'Shopware-export-07-04-2014', "type": "categories", "profile": 'shopware', "records": "50", "date": "08/05/2014", "status": 'closed'}
-            ]
-        });
 
         return Ext.create('Ext.grid.Panel', {
             title: me.snippets.panelTitle,
             id: 'operation-grid',
-            store: files,
+            store: me.sessionStore,
             multiSelect: true,
             viewConfig: {
                 enableTextSelection: true
             },
-            columns: me.getColumns()
+            columns: me.getColumns(),
+            features: [
+                {
+                    ftype: 'grouping'
+                }
+            ]
         });
     },
     /**
@@ -93,54 +92,56 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Operation', {
             {
                 header: me.snippets.file,
                 dataIndex: 'fileName',
-                flex: 3
+                flex: 5
             },
             {
                 header: me.snippets.type,
                 dataIndex: 'type',
-                flex: 2
-            },
-            {
-                header: me.snippets.profile,
-                dataIndex: 'profile',
-                flex: 2
-            },
-            {
-                header: me.snippets.records,
-                dataIndex: 'records',
                 flex: 1
             },
             {
+                header: me.snippets.records,
+                dataIndex: 'position',
+                flex: 1
+            },
+            {
+                header: me.snippets.totalCount,
+                dataIndex: 'totalCount',
+                flex: 1
+            },
+            {
+                xtype : 'datecolumn',
                 header: me.snippets.date,
-                dataIndex: 'date',
+                format: 'Y-m-d H:i:s',
+                dataIndex: 'createdAt',
                 flex: 2
             },
             {
                 header: me.snippets.status,
-                dataIndex: 'status',
-                flex: 2
+                dataIndex: 'state',
+                flex: 1
             },
             {
                 /**
                  * Special column type which provides
                  * clickable icons in each row
                  */
-                xtype:'actioncolumn',
-                width:90,
-                items:[
+                xtype: 'actioncolumn',
+                width: 90,
+                items: [
                     {
-                        iconCls:'sprite-arrow-circle-315',
-                        action:'resume',
-                        tooltip: me.snippets.resume
+                        iconCls: 'sprite-arrow-circle-315',
+                        action: 'resume',
+                        tooltip: me.snippets.resume + ' currently this option is disabled.'
                     },
                     {
-                        iconCls:'sprite-inbox-download',
-                        action:'download',
+                        iconCls: 'sprite-inbox-download',
+                        action: 'download',
                         tooltip: me.snippets.download
                     },
                     {
-                        iconCls:'sprite-minus-circle-frame',
-                        action:'deleteFile',
+                        iconCls: 'sprite-minus-circle-frame',
+                        action: 'deleteFile',
                         tooltip: me.snippets.deleteFile
                     }
                 ]

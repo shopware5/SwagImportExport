@@ -86,11 +86,11 @@ class Session extends ModelEntity
     protected $position;
 
     /**
-     * @var string $count
+     * @var string $totalCount
      *
-     * @ORM\Column(name="count", type="integer", nullable=false)
+     * @ORM\Column(name="total_count", type="integer", nullable=false)
      */
-    protected $count;
+    protected $totalCount;
 
     /**
      * @var string $fileName
@@ -145,9 +145,9 @@ class Session extends ModelEntity
         return $this->position;
     }
 
-    public function getCount()
+    public function getTotalCount()
     {
-        return $this->count;
+        return $this->totalCount;
     }
 
     public function getFileName()
@@ -200,9 +200,9 @@ class Session extends ModelEntity
         $this->position = $position;
     }
 
-    public function setCount($count)
+    public function setTotalCount($totalCount)
     {
-        $this->count = $count;
+        $this->totalCount = $totalCount;
     }
 
     public function setFileName($fileName)

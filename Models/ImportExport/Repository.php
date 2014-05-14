@@ -38,7 +38,7 @@ class Repository extends ModelRepository
 {
 
     /**
-     * Returns a query builder object to get all defined categories with an count of sub categories.
+     * Returns a query builder object to get all profiles.
      *
      * @param array $filterBy
      * @param array $orderBy
@@ -65,6 +65,42 @@ class Repository extends ModelRepository
                     ->setMaxResults($limit);
         }
 
+        return $builder;
+    }
+    
+    /**
+     * Returns a query builder object to get all sessions.
+     *
+     * @param array $filterBy
+     * @param array $orderBy
+     * @param null $limit
+     * @param null $offset
+     * @return \Shopware\Components\Model\QueryBuilder
+     */
+    public function getSessionsListQuery(array $filterBy = array(), array $orderBy = array(), $limit = null, $offset = null)
+    {
+        $builder = $this->createQueryBuilder('s');
+       
+        $builder->select(array(
+            's.id as id',
+            's.type as type',
+            's.position as position',
+            's.totalCount as totalCount',
+            's.fileName as fileName',
+            's.format as format',
+            's.state as state',
+            's.createdAt as createdAt',
+        ));
+
+        if (!empty($orderBy)) {
+            $builder->addOrderBy($orderBy);
+        }
+
+        if ($offset !== null && $limit !== null) {
+            $builder->setFirstResult($offset)
+                    ->setMaxResults($limit);
+        }
+        
         return $builder;
     }
 

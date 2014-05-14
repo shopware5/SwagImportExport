@@ -180,7 +180,7 @@ class ControllerTest extends ImportExportTestHelper
             
             $dataIO->getDataSession()->setFileName($inputFileName);
 
-            $dataIO->getDataSession()->setCount($totalCount);
+            $dataIO->getDataSession()->setTotalCount($totalCount);
 
             $dataIO->startSession();
         } else {
@@ -261,7 +261,7 @@ class ControllerTest extends ImportExportTestHelper
 
             $totalCount = $fileReader->getTotalCount($inputFileName);
 
-            $dataIO->getDataSession()->setCount($totalCount);
+            $dataIO->getDataSession()->setTotalCount($totalCount);
 
             $dataIO->startSession();
         } else {

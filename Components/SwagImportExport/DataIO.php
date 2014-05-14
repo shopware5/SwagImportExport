@@ -192,7 +192,7 @@ class DataIO
                 $session->setIds(serialize($ids));
 
                 //set count
-                $session->setCount(count($ids));
+                $session->setTotalCount(count($ids));
                 break;
             case 'import':
 
@@ -236,7 +236,7 @@ class DataIO
         $session = $this->getDataSession();
 
         $position = $session->getPosition();
-        $count = $session->getCount();
+        $count = $session->getTotalCount();
 
         $newPosition = $position + $step;
 
