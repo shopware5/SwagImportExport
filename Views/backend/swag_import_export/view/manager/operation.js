@@ -59,7 +59,14 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Operation', {
     initComponent: function() {
         var me = this;
         me.items = [me.createGrid()];
+//        me.dockedItems = [me.getPagingBar()];
         me.callParent(arguments);
+    },
+    /**
+     * Registers events in the event bus for firing events when needed
+     */
+    registerEvents: function() {
+        this.addEvents('deleteSession');
     },
     createGrid: function() {
         var me = this;
@@ -73,6 +80,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Operation', {
                 enableTextSelection: true
             },
             columns: me.getColumns(),
+            dockedItems: [me.getPagingBar()],
             features: [
                 {
                     ftype: 'grouping'
@@ -132,22 +140,67 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Operation', {
                     {
                         iconCls: 'sprite-arrow-circle-315',
                         action: 'resume',
-                        tooltip: me.snippets.resume + ' currently this option is disabled.'
+                        tooltip: me.snippets.resume + '. Currently this option is disabled.'
                     },
-                    {
-                        iconCls: 'sprite-inbox-download',
-                        action: 'download',
-                        tooltip: me.snippets.download
-                    },
-                    {
-                        iconCls: 'sprite-minus-circle-frame',
-                        action: 'deleteFile',
-                        tooltip: me.snippets.deleteFile
-                    }
+                    me.createDownloadFileColumn(),
+                    me.createDeleteSessionColumn()
                 ]
             }
         ];
+    },
+    /**
+     * Creates the paging toolbar for session grid and store paging. 
+     * The paging toolbar uses the same store as the Grid
+     *
+     * @return Ext.toolbar.Paging The paging toolbar for the session grid
+     */
+    getPagingBar:function () {
+        var me = this;
 
+        var pagingBar = Ext.create('Ext.toolbar.Paging', {
+            store: me.sessionStore,
+            dock: 'bottom',
+            displayInfo: true
+        });
+
+        return pagingBar;
+    },
+    createDownloadFileColumn: function() {
+        var me = this;
+        return {
+            iconCls: 'sprite-inbox-download',
+            action: 'download',
+            tooltip: me.snippets.download,
+            renderer: '<a href="http://daaa.com" target="_blank">Daaaa</a>',
+            /**
+             * Add button handler to fire the deleteSession event which is handled
+             * in the list controller.
+             */
+            handler:function (view, rowIndex, colIndex, item) {
+                var store = view.getStore(),
+                    record = store.getAt(rowIndex);
+
+                me.fireEvent('downloadFile', record);
+            }
+        };
+    },
+    createDeleteSessionColumn: function() {
+        var me = this;
+        return {
+            iconCls:'sprite-minus-circle-frame',
+            action:'deleteFile',
+            tooltip: me.snippets.deleteFile,
+            /**
+             * Add button handler to fire the deleteSession event which is handled
+             * in the list controller.
+             */
+            handler:function (view, rowIndex, colIndex, item) {
+                var store = view.getStore(),
+                    record = store.getAt(rowIndex);
+
+                me.fireEvent('deleteSession', record, store);
+            }
+        };
     }
 
 });

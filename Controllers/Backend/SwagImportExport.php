@@ -33,15 +33,23 @@
 class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers_Backend_ExtJs
 {
     /**
+     * Contains the shopware model manager
+     *
+     * @var \Shopware\Components\Model\ModelManager
+     */
+    protected $manager;
+    /**
      * @var Shopware\CustomModels\ImportExport\Profile
      */
-    protected $profileRepository;
-    
+    protected $profileRepository;    
     /*
      * @var Shopware\CustomModels\ImportExport\Session
      */
     protected $sessionRepository;
+    
+    
 	protected $nextNodeId = 0;
+    
     protected function convertToExtJSTree($node, $isInIteration = false)
     {
         $extjsNode = array("id" => $node['id']);
@@ -649,6 +657,109 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         ));
     }
     
+    /**
+     * Deletes a single order from the database.
+     * Expects a single order id which placed in the parameter id
+     */
+    public function deleteSessionAction()
+    {
+        try {
+            $sessionId = $this->Request()->getParam('id');
+
+            if (empty($sessionId) || !is_numeric($sessionId)) {
+                $this->View()->assign(array(
+                    'success' => false,
+                    'data' => $this->Request()->getParams(),
+                    'message' => 'No valid Id')
+                );
+                return;
+            }
+
+            $entity = $this->getSessionRepository()->find($sessionId);
+            $this->getManager()->remove($entity);
+
+            //Performs all of the collected actions.
+            $this->getManager()->flush();
+
+            $this->View()->assign(array(
+                'success' => true,
+                'data' => $this->Request()->getParams())
+            );
+        } catch (Exception $e) {
+            $this->View()->assign(array(
+                'success' => false,
+                'data' => $this->Request()->getParams(),
+                'message' => $e->getMessage())
+            );
+        }
+    }
+    /**
+     * Returns the shopware model manager
+     *
+     * @return Shopware\Components\Model\ModelManager
+     */
+    protected function getManager()
+    {
+        if ($this->manager === null) {
+            $this->manager = Shopware()->Models();
+        }
+        return $this->manager;
+    }
+    
+    /**
+     * Fires when the user want to open a generated order document from the backend order module.
+     * @return Returns the created pdf file with an echo.
+     */
+    public function downloadFileAction()
+    {
+        try {
+            $name = $this->Request()->getParam('fileName', null);
+            
+            
+            $file = Shopware()->DocPath() . 'files/import_export/' . $name;
+            
+            //get file format
+            $extension = pathinfo($file, PATHINFO_EXTENSION);
+            
+            switch ($extension) {
+                case 'csv':
+                    $application = 'text/csv';
+                    break;
+                case 'csv':
+                    $application = 'application/xml';
+                    break;
+                default:
+                    throw new \Exception('File extension is not valid');
+            }
+
+            if (!file_exists($file)) {
+                $this->View()->assign(array(
+                    'success' => false,
+                    'data' => $this->Request()->getParams(),
+                    'message' => 'File not exist'
+                ));
+            }
+
+            $response = $this->Response();
+            $response->setHeader('Cache-Control', 'public');
+            $response->setHeader('Content-Description', 'File Transfer');
+            $response->setHeader('Content-disposition', 'attachment; filename=' . $name);
+            
+            $response->setHeader('Content-Type', $application);
+            $response->setHeader('Content-Transfer-Encoding', 'binary');
+            $response->setHeader('Content-Length', filesize($file));
+            echo readfile($file);
+        } catch (\Exception $e) {
+            $this->View()->assign(array(
+                'success' => false,
+                'data' => $this->Request()->getParams(),
+                'message' => $e->getMessage()
+            ));
+            return;
+        }
+
+        Enlight_Application::Instance()->Events()->removeListener(new Enlight_Event_EventHandler('Enlight_Controller_Action_PostDispatch', ''));
+    }
 
     /**
      * Helper Method to get access to the category repository.
