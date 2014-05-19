@@ -657,14 +657,22 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $query = $sessionRepository->getSessionsListQuery(
             $this->Request()->getParam('filter', array()),
             $this->Request()->getParam('sort', array()),
-            $this->Request()->getParam('limit', null),
-            $this->Request()->getParam('start')
-                )->getQuery();
+            $this->Request()->getParam('limit', 25),
+            $this->Request()->getParam('start', 0)
+        )->getQuery();
 
-        $data = $query->getArrayResult();
+        $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+
+        $paginator = $this->getManager()->createPaginator($query);
+
+        //returns the total count of the query
+        $total = $paginator->count();
+
+        //returns the customer data
+        $data = $paginator->getIterator()->getArrayCopy();
 
         $this->View()->assign(array(
-            'success' => true, 'data' => $data
+            'success' => true, 'data' => $data, 'total' => $total
         ));
     }
     

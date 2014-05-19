@@ -214,6 +214,29 @@ class ControllerTest extends ImportExportTestHelper
         }
     }
     
+    public function testAPI()
+    {
+        $limit = $this->Request()->getParam('limit', 10);
+        $offset = $this->Request()->getParam('start', 0);
+        $sort = $this->Request()->getParam('sort', array());
+
+        $resource = \Shopware\Components\Api\Manager::getResource('category');
+
+        $filter = array(
+            array(
+                'property' => 'id',
+                'value' => array(3,4)
+            ),
+        );
+
+        $result = $resource->getList($offset, $limit, $filter, $sort);
+
+        echo '<pre>';
+        var_dump($result);
+        echo '</pre>';
+        exit;
+    }
+    
 //    public function testImportFakeCategories()
 //    {
 //        $fakeCategories = '';
