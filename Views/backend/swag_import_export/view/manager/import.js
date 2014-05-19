@@ -21,10 +21,10 @@
  * our trademarks remain entirely with us.
  */
 /**
- * Shopware SwagGiftPackaging Plugin
+ * Shopware SwagImportExport Plugin
  *
  * @category Shopware
- * @package Shopware\Plugins\SwagGiftPackaging
+ * @package Shopware\Plugins\SwagImportExport
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 //{namespace name=backend/swag_import_export/view/main}
@@ -44,9 +44,13 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
     bodyPadding: 10,
     autoScroll: true,
     snippets: {
-        configText: '{s name=configImportText}New imports should always be tested in advance in a test environment. Before importing any file in your \n\
+        configText: '{s name=swag_import_export/manager/import/config_import_text}New imports should always be tested in advance in a test environment. Before importing any file in your \n\
                     productive environment, carry out a complete backup of your datebase, so that in the event of a failing import, it can be reinstalled easily. \n\
                     Depending on you server system and the size of the file, the import could take quite a while.{/s}',
+        configTitle: "{s name=swag_import_export/manager/import/config_title}Import configuration{/s}",
+        dragAndDrop: "{s name=swag_import_export/manager/import/drag_and_drop}Drag'n'Drop import{/s}",
+        selectProfile: "{s name=swag_import_export/manager/import/select_profile}'Select profile'{/s}",
+        selectFile: "{s name=swag_import_export/manager/import/select_file}'Select file'{/s}",
     },
     /*
      * profile store
@@ -115,7 +119,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
         });
 
         return Ext.create('Ext.form.FieldSet', {
-            title: "Drag'n'Drop import",
+            title: me.snippets.dragAndDrop,
             padding: 12,
             defaults: {
                 labelStyle: 'font-weight: 700; text-align: right;'
@@ -132,7 +136,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
         var me = this;
 
         return Ext.create('Ext.form.FieldSet', {
-            title: "Import configuration",
+            title: me.snippets.configTitle,
             padding: 12,
             defaults: {
                 labelStyle: 'font-weight: 700; text-align: right;'
@@ -152,7 +156,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
         var me = this;
 
         return Ext.create('Ext.form.field.ComboBox', {
-            fieldLabel: 'Select profile',
+            fieldLabel: me.snippets.selectProfile,
             store: me.profilesStore,
             labelStyle: 'font-weight: 700; text-align: left;',
             width: 400,
@@ -173,7 +177,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
         // Media selection field
         me.mediaSelection = Ext.create('Shopware.MediaManager.MediaSelection', {
             name: 'importFile',
-            fieldLabel: 'Select file',
+            fieldLabel: me.snippets.selectFile,
             multiSelect: false,
             anchor: '100%',
             validTypes: me.getImportAllowedExtensions(),

@@ -21,10 +21,10 @@
  * our trademarks remain entirely with us.
  */
 /**
- * Shopware SwagGiftPackaging Plugin
+ * Shopware SwagImportExport Plugin
  *
  * @category Shopware
- * @package Shopware\Plugins\SwagGiftPackaging
+ * @package Shopware\Plugins\SwagImportExport
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 //{namespace name=backend/swag_import_export/view/main}

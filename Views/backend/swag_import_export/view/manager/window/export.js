@@ -21,10 +21,10 @@
  * our trademarks remain entirely with us.
  */
 /**
- * Shopware SwagGiftPackaging Plugin
+ * Shopware SwagImportExport Plugin
  *
  * @category Shopware
- * @package Shopware\Plugins\SwagGiftPackaging
+ * @package Shopware\Plugins\SwagImportExport
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 //{namespace name=backend/swag_import_export/view/main}
@@ -98,6 +98,12 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.window.Export', {
      * The title shown in the window header
      */
     title: '{s name=swag_import_export/manager/window/export/title}Export window{/s}',
+    snippets: {
+        start: '{s name=swag_import_export/manager/window/export/start}Start exporting{/s}',
+        cancel: '{s name=swag_import_export/manager/window/export/cancel}Cancel{/s}',
+        close: '{s name=swag_import_export/manager/window/export/close}Close{/s}',
+        download: '{s name=swag_import_export/manager/window/export/download}Download{/s}'
+    },
     /**
      * Constructor for the generation window
      * Registers events and adds all needed content items to the window
@@ -178,7 +184,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.window.Export', {
         var me = this;
 
         return Ext.create('Ext.button.Button', {
-            text: 'Start exporting',
+            text: me.snippets.start,
             cls: 'primary',
             action: 'start',
             handler: function() {
@@ -195,7 +201,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.window.Export', {
         var me = this;
 
         return Ext.create('Ext.button.Button', {
-            text: 'Cancel',
+            text: me.snippets.cancel,
             cls: 'primary',
             action: 'cancel',
             disabled: false,
@@ -210,7 +216,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.window.Export', {
         var me = this;
 
         return Ext.create('Ext.button.Button', {
-            text: 'Download',
+            text: me.snippets.download,
             hidden: true,
             flex: 1,
             action: 'download',
@@ -229,7 +235,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.window.Export', {
         var me = this;
 
         return Ext.create('Ext.button.Button', {
-            text: 'Close',
+            text: me.snippets.close,
             flex: 1,
             action: 'closeWindow',
             cls: 'secondary',
