@@ -3,6 +3,7 @@
 namespace Shopware\Components\SwagImportExport;
 
 use \Shopware\Components\SwagImportExport\Profile\Profile;
+use \Shopware\CustomModels\ImportExport\Profile as ProfileEntity;
 
 class DataIO
 {
@@ -176,12 +177,11 @@ class DataIO
      * Then writes these ids to the session and sets the session state to "active".
      * For now we will write the ids as a serialized array.
      */
-    public function startSession()
+    public function startSession(ProfileEntity $profile)
     {
         $type = $this->getType();
 
         $session = $this->getDataSession();
-
 
         //todo: make it without switch ???
         switch ($type) {
@@ -220,6 +220,9 @@ class DataIO
         //change state
         $session->setState('active');
 
+        //set profile
+        $session->setProfile($profile);
+        
         Shopware()->Models()->persist($session);
 
         Shopware()->Models()->flush();

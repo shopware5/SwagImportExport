@@ -137,13 +137,9 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Operation', {
                 xtype: 'actioncolumn',
                 width: 90,
                 items: [
-                    {
-                        iconCls: 'sprite-arrow-circle-315',
-                        action: 'resume',
-                        tooltip: me.snippets.resume + '. Currently this option is disabled.'
-                    },
-                    me.createDownloadFileColumn(),
-                    me.createDeleteSessionColumn()
+                    me.createResumeButton(),
+                    me.createDownloadFileButton(),
+                    me.createDeleteSessionButton()
                 ]
             }
         ];
@@ -165,13 +161,32 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Operation', {
 
         return pagingBar;
     },
-    createDownloadFileColumn: function() {
+    createResumeButton: function() {
+        var me = this;
+        
+        return {
+            iconCls: 'sprite-arrow-circle-315',
+            action: 'resume',
+            tooltip: me.snippets.resume,
+            /**
+             * Add button handler to fire the deleteSession event which is handled
+             * in the list controller.
+             */
+            handler:function (view, rowIndex, colIndex, item) {
+                var store = view.getStore(),
+                    record = store.getAt(rowIndex);
+                if(record.get('type') === 'export'){
+                    me.fireEvent('resumeExport', record);                    
+                }
+            }
+        };
+    },
+    createDownloadFileButton: function() {
         var me = this;
         return {
             iconCls: 'sprite-inbox-download',
             action: 'download',
             tooltip: me.snippets.download,
-            renderer: '<a href="http://daaa.com" target="_blank">Daaaa</a>',
             /**
              * Add button handler to fire the deleteSession event which is handled
              * in the list controller.
@@ -184,7 +199,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Operation', {
             }
         };
     },
-    createDeleteSessionColumn: function() {
+    createDeleteSessionButton: function() {
         var me = this;
         return {
             iconCls:'sprite-minus-circle-frame',

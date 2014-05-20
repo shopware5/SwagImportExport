@@ -55,14 +55,12 @@ class Session extends ModelEntity
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $id;
-
+    
     /**
-     * var integer $profileId
-     * ORM\Column(name="profile", type="integer", nullable=false)
-     * ORM\OneToOne(targetEntity="\Shopware\Models\Media\Album", mappedBy="album")
-
-      private $profileId;
+     * @ORM\ManyToOne(targetEntity="Shopware\CustomModels\ImportExport\Profile", cascade={"persist", "refresh"})
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
+    protected $profile;
 
     /**
      * @var string $type
@@ -124,10 +122,10 @@ class Session extends ModelEntity
     {
         return $this->id;
     }
-
-    public function getProfileId()
+    
+    public function getProfile()
     {
-        return $this->profileId;
+        return $this->profile;
     }
 
     public function getType()
@@ -179,10 +177,18 @@ class Session extends ModelEntity
     {
         $this->id = $id;
     }
-
-    public function setProfileId($profileId)
+    
+    /**
+     * Sets the profile object.
+     *
+     * @param \Shopware\CustomModels\ImportExport\Profile $profile
+     * @return Session
+     */
+    public function setProfile(\Shopware\CustomModels\ImportExport\Profile $profile = null)
     {
-        $this->profileId = $profileId;
+        $this->profile = $profile;
+
+        return $this;
     }
 
     public function setType($type)

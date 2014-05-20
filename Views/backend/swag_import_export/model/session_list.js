@@ -45,6 +45,7 @@ Ext.define('Shopware.apps.SwagImportExport.model.SessionList', {
     fields: [
         // {block name="backend/swag_import_export/model/session_list/fields"}{/block}
         { name: 'id', type: 'string' },
+        { name: 'profileId', type: 'string' },
         { name: 'type', type: 'string' },
         { name: 'position', type: 'string' },
         { name: 'totalCount', type: 'string' },

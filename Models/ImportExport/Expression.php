@@ -116,10 +116,10 @@ class Expression
     }
 
     /**
-     * Sets the shop object.
+     * Sets the profile object.
      *
      * @param \Shopware\CustomModels\ImportExport\Profile $profile
-     * @return Document
+     * @return Expression
      */
     public function setProfile(\Shopware\CustomModels\ImportExport\Profile $profile = null)
     {

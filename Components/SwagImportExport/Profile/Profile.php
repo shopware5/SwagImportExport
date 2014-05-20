@@ -56,6 +56,11 @@ class Profile
         }
     }
     
+    public function getEntity()
+    {
+        return $this->profileEntity;
+    }
+    
     public function persist()
     {
         Shopware()->Models()->persist($this->profileEntity);

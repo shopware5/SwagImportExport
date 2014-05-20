@@ -60,9 +60,16 @@ class Profile
     /**
      * @var Expressions[] $expressions
      *
-	 * @ORM\OneToMany(targetEntity="Shopware\CustomModels\ImportExport\Expression", mappedBy="profile")
-	 */
-	protected $expressions;
+     * @ORM\OneToMany(targetEntity="Shopware\CustomModels\ImportExport\Expression", mappedBy="profile")
+     */
+    protected $expressions;
+
+    /**
+     * @var Session[] $sessions
+     *
+     * @ORM\OneToMany(targetEntity="Shopware\CustomModels\ImportExport\Session", mappedBy="profile")
+     */
+    protected $sessions;
 
     /**
      * @var string $type
@@ -70,7 +77,7 @@ class Profile
      * @ORM\Column(name="type", type="string", length=200)
      */
     protected $type;
-    
+
     /**
      * @var text $name
      *
@@ -99,10 +106,15 @@ class Profile
     {
         return $this->tree;
     }
-    
+
     public function getExpressions()
     {
         return $this->expressions;
+    }
+
+    public function getSessions()
+    {
+        return $this->sessions;
     }
 
     public function getName()
@@ -129,7 +141,7 @@ class Profile
     {
         $this->name = $name;
     }
-    
+
     /**
      * Adds an expression to the profile.
      *
@@ -137,11 +149,25 @@ class Profile
      *
      * @return $this
      */
-    public function addDocument($expression)
-	{
-		$this->expressions[] = $expression;
-		$expression->setProfile($this);
-		return $this;
-	}
+    public function addExpression($expression)
+    {
+        $this->expressions[] = $expression;
+        $expression->setProfile($this);
+        return $this;
+    }
+
+    /**
+     * Adds an session to the profile.
+     *
+     * @param $session
+     *
+     * @return $this
+     */
+    public function addSession($session)
+    {
+        $this->sessions[] = $session;
+        $session->setProfile($this);
+        return $this;
+    }
 
 }

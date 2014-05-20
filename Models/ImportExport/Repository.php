@@ -83,6 +83,7 @@ class Repository extends ModelRepository
        
         $builder->select(array(
             's.id as id',
+            'p.id as profileId',
             's.type as type',
             's.position as position',
             's.totalCount as totalCount',
@@ -91,6 +92,8 @@ class Repository extends ModelRepository
             's.state as state',
             's.createdAt as createdAt',
         ));
+        
+        $builder->join('s.profile', 'p');
 
         if (!empty($orderBy)) {
             $builder->addOrderBy($orderBy);

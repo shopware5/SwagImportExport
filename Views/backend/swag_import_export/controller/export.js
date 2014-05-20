@@ -56,6 +56,9 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
                 startProcess: me.onStartProcess,
                 downloadFile: me.onDownloadFile,
                 cancelProcess: me.onCancelProcess
+            },
+            'swag-import-export-manager-operation': {
+                resumeExport: me.onResume
             }
         });
 
@@ -80,6 +83,23 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
         me.onCreateExportWindow();
     },
     /**
+     * Triggers if the resume button was pressed
+     * in the previous operation window.
+     * 
+     * @param object Shopware.apps.SwagImportExport.model.SessionList
+     */
+    onResume: function(record) {
+        var me = this;
+
+        me.parameters = {
+            sessionId: record.get('id'),
+            profile: record.get('profileId'),
+            format: record.get('format')
+        };
+        
+        me.getConfig();
+    },
+    /**
      * Creates batch configuration
      */
     onCreateExportWindow: function() {
@@ -97,7 +117,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
      */
     onStartProcess: function(win, btn) {
         var me = this;
-
+        
         me.cancelOperation = false;
 
         me.runRequest(win);
@@ -116,6 +136,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
             requestUrl: '{url controller="SwagImportExport" action="export"}',
             params: {
                 profileId: me.parameters.profile,
+                sessionId: me.parameters.sessionId,
                 format: me.parameters.format
             }
         };
@@ -142,7 +163,6 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
                 });
             }
         });
-
     },
     /**
      * This function sends a request to export data
@@ -151,14 +171,15 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
      */
     runRequest: function(win) {
         var me = this,
-                config = me.batchConfig,
-                params = config.params;
+            config = me.batchConfig,
+            params = config.params;
 
         // if cancel button was pressed
         if (me.cancelOperation) {
             win.closeButton.enable();
             return;
         }
+        
 
         Ext.Ajax.request({
             url: config.requestUrl,
