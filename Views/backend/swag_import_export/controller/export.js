@@ -49,8 +49,8 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
 
         me.control({
             // Export button
-            'swag-import-export-manager-export button[action=swag-import-export-manager-export-button]': {
-                click: me.onExport
+            'swag-import-export-manager-export': {
+                export: me.onExport
             },
             'swag-import-export-manager-window-export': {
                 startProcess: me.onStartProcess,
@@ -88,7 +88,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
      * 
      * @param object Shopware.apps.SwagImportExport.model.SessionList
      */
-    onResume: function(record) {
+    onResume: function(record, sessionStore) {
         var me = this;
 
         me.parameters = {
@@ -96,6 +96,8 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
             profile: record.get('profileId'),
             format: record.get('format')
         };
+        
+        me.sessionStore = sessionStore;
         
         me.getConfig();
     },
@@ -243,6 +245,11 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
         win.cancelButton.hide();
         win.downloadButton.show();
         win.exportProgress.updateText(me.snippets.finished + me.batchConfig.position + ' / ' + me.batchConfig.totalCount);
+        
+        if (!Ext.isEmpty(me.sessionStore)){
+            me.sessionStore.reload();
+        }
+        
     },
     onDownloadFile: function() {
         var me = this,

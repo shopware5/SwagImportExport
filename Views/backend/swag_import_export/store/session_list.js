@@ -40,8 +40,10 @@ Ext.define('Shopware.apps.SwagImportExport.store.SessionList', {
      */
     extend : 'Ext.data.Store',
     
+    autoLoad: false,
+    
     groupField: 'type',
-
+    
     /**
      * Define the used model for this store
      * @string

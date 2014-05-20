@@ -407,12 +407,11 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
     public function prepareExportAction()
     {
         $postData = array(
+            'sessionId' => $this->Request()->getParam('sessionId'),
             'profileId' => (int) $this->Request()->getParam('profileId'),
             'type' => 'export',
             'format' => $this->Request()->getParam('format')
         );
-
-        //todo: check for session
 
         $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
 
@@ -455,6 +454,13 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $dataTransformerChain = $this->Plugin()->getDataTransformerFactory()->createDataTransformerChain(
                 $profile, array('isTree' => $fileWriter->hasTreeStructure())
         );
+        
+        if ($dataIO->getSessionState() == 'closed') {
+            $postData['position'] = $dataIO->getSessionPosition();
+            $postData['fileName'] = $dataIO->getDataSession()->getFileName();
+            
+            return $this->View()->assign(array('success' => true, 'data' => $postData));
+        }
 
         if ($dataIO->getSessionState() == 'new') {
             //todo: create file here ?
@@ -470,7 +476,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             $header = $dataTransformerChain->composeHeader();
             $fileWriter->writeHeader($outputFileName, $header);
 
-            $dataIO->startSession();
+            $dataIO->startSession($profile->getEntity());
         } else {
             $fileName = $dataIO->getDataSession()->getFileName();
 
@@ -683,8 +689,8 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
     public function deleteSessionAction()
     {
         try {
-            $sessionId = $this->Request()->getParam('id');
-
+            $sessionId = (int) $this->Request()->getParam('id');
+            
             if (empty($sessionId) || !is_numeric($sessionId)) {
                 $this->View()->assign(array(
                     'success' => false,
@@ -693,7 +699,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                 );
                 return;
             }
-
+            
             $entity = $this->getSessionRepository()->find($sessionId);
             $this->getManager()->remove($entity);
 

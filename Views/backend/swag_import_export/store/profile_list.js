@@ -39,6 +39,8 @@ Ext.define('Shopware.apps.SwagImportExport.store.ProfileList', {
      * Define that this component is an extension of the Ext.data.TreeStore
      */
     extend : 'Ext.data.Store',
+    
+    autoLoad: false,
 
     /**
      * Define the used model for this store

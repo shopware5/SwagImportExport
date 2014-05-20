@@ -44,7 +44,14 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Manager', {
         background: '#fff'
     },
     autoScroll: true,
-    
+    /*
+     * profile store
+     */
+    profilesStore: Ext.create('Shopware.apps.SwagImportExport.store.ProfileList'),    
+    /*
+     * session store
+     */
+    sessionStore: Ext.create('Shopware.apps.SwagImportExport.store.SessionList'),
     initComponent: function() {
         var me = this;
 
@@ -54,15 +61,20 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Manager', {
     },
     
     createTabPanel: function() {
+        var me = this;
         
         return Ext.create('Ext.tab.Panel', {
             name: 'manager-main-tab',
             items: [
                 Ext.create('Shopware.apps.SwagImportExport.view.manager.Export', {
+                    profilesStore: me.profilesStore,
+                    sessionStore: me.sessionStore
                 }),
                 Ext.create('Shopware.apps.SwagImportExport.view.manager.Import', {
+                    profilesStore: me.profilesStore
                 }),
                 Ext.create('Shopware.apps.SwagImportExport.view.manager.Operation', {
+                    sessionStore: me.sessionStore
                 })
             ]
         });

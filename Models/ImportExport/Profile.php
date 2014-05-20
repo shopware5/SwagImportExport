@@ -132,12 +132,12 @@ class Profile
         $this->type = $type;
     }
 
-    public function setTree(text $tree)
+    public function setTree($tree)
     {
         $this->tree = $tree;
     }
 
-    public function setName(text $name)
+    public function setName($name)
     {
         $this->name = $name;
     }

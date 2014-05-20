@@ -55,6 +55,10 @@ class Repository extends ModelRepository
             'p.name as name',
             'p.tree as tree',
         ));
+        
+        if (!empty($filterBy)) {
+            $builder->addFilter($filterBy);
+        }
 
         if (!empty($orderBy)) {
             $builder->addOrderBy($orderBy);
@@ -94,6 +98,10 @@ class Repository extends ModelRepository
         ));
         
         $builder->join('s.profile', 'p');
+        
+        if (!empty($filterBy)) {
+            $builder->addFilter($filterBy);
+        }
 
         if (!empty($orderBy)) {
             $builder->addOrderBy($orderBy);

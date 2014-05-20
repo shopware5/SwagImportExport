@@ -56,7 +56,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
     /*
      * profile store
      */
-    profilesStore: Ext.create('Shopware.apps.SwagImportExport.store.ProfileList').load(),
+    profilesStore: Ext.create('Shopware.apps.SwagImportExport.store.ProfileList'),
     initComponent: function() {
         var me = this;
 
@@ -100,7 +100,10 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
                     items: ['->', {
                             text: me.snippets.exportButton,
                             cls: 'primary',
-                            action: 'swag-import-export-manager-export-button'
+                            action: 'swag-import-export-manager-export-button',
+                            handler: function(view, rowIndex, colIndex, item) {
+                                me.fireEvent('export', view, me.sessionStore);
+                            }
                         }]
                 }]
         });

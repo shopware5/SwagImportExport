@@ -55,7 +55,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
     /*
      * profile store
      */
-    profilesStore: Ext.create('Shopware.apps.SwagImportExport.store.ProfileList').load(),
+    
     initComponent: function() {
         var me = this;
 

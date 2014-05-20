@@ -53,7 +53,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Operation', {
         download: '{s name=swag_import_export/action/download}Download file{/s}',
         deleteFile: '{s name=swag_import_export/action/delete}Delete file{/s}'
     },
-    sessionStore: Ext.create('Shopware.apps.SwagImportExport.store.SessionList').load(),
+    
     bodyPadding: 10,
     autoScroll: true,
     initComponent: function() {
@@ -61,6 +61,12 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Operation', {
         me.items = [me.createGrid()];
 //        me.dockedItems = [me.getPagingBar()];
         me.callParent(arguments);
+    },
+    listeners: {
+        activate: function(tab, opt){
+            var me = this;
+            me.sessionStore.reload();
+        }
     },
     /**
      * Registers events in the event bus for firing events when needed
@@ -176,7 +182,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Operation', {
                 var store = view.getStore(),
                     record = store.getAt(rowIndex);
                 if(record.get('type') === 'export'){
-                    me.fireEvent('resumeExport', record);                    
+                    me.fireEvent('resumeExport', record, me.sessionStore);                    
                 }
             }
         };
