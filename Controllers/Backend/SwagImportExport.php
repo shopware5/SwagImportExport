@@ -533,11 +533,10 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
     public function prepareImportAction()
     {
-        return;
-        
         $postData = array(
-            'type' => 'import',
+            'sessionId' => $this->Request()->getParam('sessionId'),
             'profileId' => (int) $this->Request()->getParam('profileId'),
+            'type' => 'import',
             'file' => $this->Request()->getParam('importFile')
         );
 
@@ -555,7 +554,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
         //get profile type
         $postData['adapter'] = $profile->getType();
-
+        
         // we create the file reader that will read the result file
         $fileReader = $this->Plugin()->getFileIOFactory()->createFileReader($postData);
 
@@ -564,15 +563,19 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             $fileReader->setTree($tree);            
         }
         
+        //create dataIO
+        $dataIO = $this->Plugin()->getDataFactory()->createDataIO($postData);
+        
+        $position = $dataIO->getSessionPosition();
+        $position = $position == null ? 0 : $position;
+        
         $totalCount = $fileReader->getTotalCount($inputFileName);
 
-        return $this->View()->assign(array('success' => true, 'position' => 0, 'count' => $totalCount));
+        return $this->View()->assign(array('success' => true, 'position' => $position, 'count' => $totalCount));
     }
 
     public function importAction()
     {
-        return;
-        
         $postData = array(
             'type' => 'import',
             'profileId' => (int) $this->Request()->getParam('profileId'),
@@ -580,12 +583,12 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             'sessionId' => $this->Request()->getParam('sessionId')
         );
 
-        //get file format
-        $inputFileName = Shopware()->DocPath() . $postData['importFile'];
-        $extension = pathinfo($inputFileName, PATHINFO_EXTENSION);
+        $inputFile = Shopware()->DocPath() . $postData['importFile'];
+        if (!isset($postData['format'])){
+            //get file format
+            $postData['format'] = pathinfo($inputFile, PATHINFO_EXTENSION);            
+        }
 
-        $postData['format'] = $extension;
-        
         // we create the file reader that will read the result file
         $fileReader = $this->Plugin()->getFileIOFactory()->createFileReader($postData);
         
@@ -602,20 +605,20 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             $profile, array('isTree' => $fileReader->hasTreeStructure())
         );
         
-        if($extension === 'xml'){
+        if($postData['format'] === 'xml'){
             $tree = json_decode($profile->getConfig("tree"), true);
             $fileReader->setTree($tree);            
         }
-                
+        
         if ($dataIO->getSessionState() == 'new') {
 
-            $totalCount = $fileReader->getTotalCount($inputFileName);
+            $totalCount = $fileReader->getTotalCount($inputFile);
             
-            $dataIO->getDataSession()->setFileName($inputFileName);
+            $dataIO->getDataSession()->setFileName($postData['importFile']);
 
             $dataIO->getDataSession()->setTotalCount($totalCount);
 
-            $dataIO->startSession();
+            $dataIO->startSession($profile->getEntity());
         } else {
             // session has already loaded ids and some position, so we simply activate it
             $dataIO->resumeSession();
@@ -628,7 +631,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                 //get current session position
                 $position = $dataIO->getSessionPosition();
 
-                $records = $fileReader->readRecords($inputFileName, $position, 100);
+                $records = $fileReader->readRecords($inputFile, $position, 100);
 
                 $data = $dataTransformerChain->transformBackward($records);
                 
@@ -816,3 +819,4 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
     }
 
 }
+

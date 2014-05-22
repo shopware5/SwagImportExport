@@ -49,8 +49,9 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
                     Depending on you server system and the size of the file, the import could take quite a while.{/s}',
         configTitle: "{s name=swag_import_export/manager/import/config_title}Import configuration{/s}",
         dragAndDrop: "{s name=swag_import_export/manager/import/drag_and_drop}Drag'n'Drop import{/s}",
-        selectProfile: "{s name=swag_import_export/manager/import/select_profile}'Select profile'{/s}",
-        selectFile: "{s name=swag_import_export/manager/import/select_file}'Select file'{/s}",
+        selectProfile: "{s name=swag_import_export/manager/import/select_profile}Select profile{/s}",
+        selectFile: "{s name=swag_import_export/manager/import/select_file}Select file{/s}",
+        addButton: '{s name=fieldsText/addButton}Add files{/s}'
     },
     /*
      * profile store
@@ -90,7 +91,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
                     cls: 'shopware-toolbar',
                     items: ['->', {
                             text: 'Import',
-                            cls: 'secondary',
+                            cls: 'primary',
                             action: 'swag-import-export-manager-import-button'
                         }]
                 }]
@@ -150,7 +151,46 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
         });
     },
     createSelectFile: function() {
-
+        var me = this;
+        
+        if (Ext.isIE) {
+            me.addBtn = Ext.create('Shopware.app.FileUpload', {
+                requestURL: '{url controller="mediaManager" action="upload"}',
+                padding: 0,
+                padding: '6 0 0',
+                        fileInputConfig: {
+                            buttonOnly: true,
+                            width: 190,
+                            buttonText: me.snippets.addButton,
+                            buttonConfig: {
+                                iconCls: 'sprite-plus-circle'
+                            }
+                        }
+            });
+        } else {
+            me.addBtn = Ext.create('Ext.form.field.File', {
+                buttonOnly: true,
+                width: 190,
+                buttonText: me.snippets.addButton,
+                listeners: {
+                    scope: this,
+                    /**
+                     * Enable multi selection on the file upload button
+                     *
+                     * @param [object] btn - rendered Ext.button.Button
+                     * @return void
+                     */
+                    afterrender: function(btn) {
+                        btn.fileInputEl.dom.multiple = false;
+                    }
+                },
+                buttonConfig: {
+                    iconCls: 'sprite-plus-circle'
+                }
+            });
+        }
+        
+        return me.addBtn;
     },
     createProfileCombo: function() {
         var me = this;

@@ -57,6 +57,9 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
             'swag-import-export-manager-window-import': {
                 startProcess: me.onStartProcess,
                 cancelProcess: me.onCancelProcess
+            },
+            'swag-import-export-manager-operation': {
+                resumeImport: me.onResume
             }
         });
 
@@ -68,27 +71,22 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
      * @param object Ext.button.Button btn
      */
     onImport: function(btn) {
-		Shopware.Notification.createGrowlMessage(
-				'{s name=swag_import_export/import/error_title}Swag import export{/s}',
-				'Import is currently disabled'
-				);
-//            return false;
-//        var me = this,
-//                form = btn.up('form'),
-//                values = form.getValues();
-//        
-//        if (Ext.isEmpty(values.profile) || Ext.isEmpty(values.importFile))
-//        {
-//            Shopware.Notification.createGrowlMessage(
-//                    '{s name=swag_import_export/import/error_title}Swag import export{/s}',
-//                    '{s name=swag_import_export/import/error_msg}Please fill import configuration fields{/s}'
-//                    );
-//            return false;
-//        }
-//
-//        me.parameters = values;
-//
-//        me.onCreateImportWindow();
+        var me = this,
+                form = btn.up('form'),
+                values = form.getValues();
+        
+        if (Ext.isEmpty(values.profile) || Ext.isEmpty(values.importFile))
+        {
+            Shopware.Notification.createGrowlMessage(
+                    '{s name=swag_import_export/import/error_title}Swag import export{/s}',
+                    '{s name=swag_import_export/import/error_msg}Please fill import configuration fields{/s}'
+                    );
+            return false;
+        }
+
+        me.parameters = values;
+
+        me.onCreateImportWindow();
     },
     /**
      * Creates batch configuration
@@ -98,6 +96,21 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
 
         me.getBatchConfig = me.getConfig();
 
+    },
+    onResume: function(record, sessionStore) {
+        var me = this;
+
+        me.parameters = {
+            sessionId: record.get('id'),
+            profile: record.get('profileId'),
+            importFile: record.get('fileName'),
+            format: record.get('format')
+        };
+        
+        me.sessionStore = sessionStore;
+        
+        me.getConfig();
+        
     },
     /**
      * Triggers if the start exporting button was pressed
@@ -128,6 +141,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
             action: 'close-window-import',
             params: {
                 profileId: me.parameters.profile,
+                sessionId: me.parameters.sessionId,
                 importFile: me.parameters.importFile
             },
             snippets: me.snippets
@@ -142,6 +156,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
                 me.batchConfig.position = result.position;
                 me.batchConfig.totalCount = result.count;
                 me.batchConfig.snippet = me.snippets.process + me.batchConfig.position + ' / ' + me.batchConfig.totalCount;
+                me.batchConfig.progress = me.batchConfig.position / me.batchConfig.totalCount;
 
                 me.window = me.getView('Shopware.apps.SwagImportExport.view.manager.window.Import').create({
                     batchConfig: me.batchConfig

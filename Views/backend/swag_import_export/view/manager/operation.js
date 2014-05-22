@@ -184,6 +184,11 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Operation', {
                 if(record.get('type') === 'export'){
                     me.fireEvent('resumeExport', record, me.sessionStore);                    
                 }
+                
+                if(record.get('type') === 'import'){
+                    me.fireEvent('resumeImport', record, me.sessionStore);                    
+                }
+                
             }
         };
     },
