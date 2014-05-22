@@ -152,6 +152,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
                 me.batchConfig.position = result.position;
                 me.batchConfig.totalCount = result.count;
                 me.batchConfig.snippet = me.snippets.process + me.batchConfig.position + ' / ' + me.batchConfig.totalCount;
+                me.batchConfig.progress = me.batchConfig.position / me.batchConfig.totalCount;
 
                 me.window = me.getView('Shopware.apps.SwagImportExport.view.manager.window.Export').create({
                     batchConfig: me.batchConfig

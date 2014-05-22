@@ -97,21 +97,27 @@ class DataIO
     }
 
     /**
+     * Loads the record ids
      * 
      * @return \Shopware\Components\SwagImportExport\DataIO
      */
     public function preloadRecordIds()
     {
-        //todo: check from ExportSession        
+        $session = $this->dataSession;
+        $sotredIds = $session->getIds();
+        
+        if ($sotredIds) {
+            $ids = unserialize($sotredIds);
+        } else {
+            $dbAdapter = $this->getDbAdapter();
+            $limitAdapater = $this->getLimitAdapter();
+            $filterAdapter = $this->getFilterAdapter();
 
-        $dbAdapter = $this->getDbAdapter();
-        $limitAdapater = $this->getLimitAdapter();
-        $filterAdapter = $this->getFilterAdapter();
-
-        $ids = $dbAdapter->readRecordIds(
-                $limitAdapater->getOffset(), $limitAdapater->getLimit(), $filterAdapter->getFilter()
-        );
-
+            $ids = $dbAdapter->readRecordIds(
+                    $limitAdapater->getOffset(), $limitAdapater->getLimit(), $filterAdapter->getFilter()
+            );
+        }
+        
         $this->setRecordIds($ids);
 
         return $this;

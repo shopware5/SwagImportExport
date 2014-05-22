@@ -120,7 +120,11 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.window.Export', {
     createItems: function() {
         var me = this;
         
-        me.exportProgress = me.createProgressBar('exporting', me.batchConfig.snippet);
+        if (Ext.isEmpty(me.batchConfig.progress)){
+            me.batchConfig.progress = 0;
+        }
+        
+        me.exportProgress = me.createProgressBar('exporting', me.batchConfig.snippet, me.batchConfig.progress);
 
         return [
             me.exportProgress,
@@ -140,7 +144,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.window.Export', {
      * @param text
      * @returns [object]
      */
-    createProgressBar: function(name, text) {
+    createProgressBar: function(name, text, value) {
         return Ext.create('Ext.ProgressBar', {
             animate: true,
             name: name,
@@ -148,7 +152,8 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.window.Export', {
             margin: '0 0 15',
             border: 1,
             style: 'border-width: 1px !important;',
-            cls: 'left-align'
+            cls: 'left-align',
+            value: value
         });
     },
     /**
@@ -212,6 +217,11 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.window.Export', {
             }
         });
     },
+    /**
+     * Returns a download button for export popup
+     * 
+     * @returns Ext.button.Button
+     */
     createDownloadButton: function() {
         var me = this;
 
