@@ -89,7 +89,6 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
      * Deletes the selected profile
      */
     deleteSelectedProfile: function(combobox, store, id) {
-        console.log(combobox);
         combobox.reset();
         store.remove(store.getById(id));
         store.sync();

@@ -35,7 +35,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
     /**
      * Contains the shopware model manager
      *
-     * @var \Shopware\Components\Model\ModelManager
+     * @var Shopware\Components\Model\ModelManager
      */
     protected $manager;
     /**
@@ -48,6 +48,8 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
     protected $sessionRepository;
     
     /**
+     * Converts the JSON tree to ExtJS tree
+     *  
      * @TODO: move code to component
      */
     protected function convertToExtJSTree($node, $isInIteration = false)
@@ -109,25 +111,10 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             'children' => $children
         );
     }
-
-    protected function getTree()
-    {
-        $profileId = $this->Request()->getParam('profileId', 1);
-        $postData = array(
-            'profileId' => $profileId,
-            'sessionId' => 70,
-            'type' => 'export',
-            'limit' => array('limit' => 40, 'offset' => 0),
-            'max_record_count' => 100,
-            'format' => 'xml',
-            'adapter' => 'categories',
-        );
-
-        $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
-        
-        return $profile->getConfig('tree');
-    }
     
+    /**
+     * Helper function which appends child node to the tree
+     */
     protected function appendNode($child, &$node)
     {
         if ($node['id'] == $child['parentId']) {
@@ -164,6 +151,9 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         return false;
     }
     
+    /**
+     * Helper function which finds and changes node from the tree
+     */
     protected function changeNode($child, &$node)
     {
         if ($node['id'] == $child['id']) {
@@ -195,6 +185,9 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         return false;
     }
 
+    /**
+     * Helper function which finds and deletes node from the tree
+     */
     protected function deleteNode($child, &$node)
     {
         if (isset($node['children'])) {
@@ -223,33 +216,24 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
     public function getProfileAction()
     {
-        $tree = $this->getTree();
+        $profileId = $this->Request()->getParam('profileId', 1);
+        $profileRepository = $this->getProfileRepository();
+        $profileEntity = $profileRepository->findOneBy(array('id' => $profileId));
+        
+        $tree = $profileEntity->getTree();
         $root = $this->convertToExtJSTree(json_decode($tree, 1));
-//        
-//        echo '<pre>';
-//        print_r(json_decode($tree, 1));
-//        echo '</pre>';
 
         $this->View()->assign(array('success' => true, 'children' => $root['children']));
     }
     
-    public function createProfileAction()
+    public function createNodeAction()
     {
         $profileId = $this->Request()->getParam('profileId', 1);
         $data = $this->Request()->getParam('data', 1);
-        $postData = array(
-            'profileId' => $profileId,
-            'sessionId' => 70,
-            'type' => 'export',
-            'limit' => array('limit' => 40, 'offset' => 0),
-            'max_record_count' => 100,
-            'format' => 'xml',
-            'adapter' => 'categories',
-        );
+        $profileRepository = $this->getProfileRepository();
+        $profileEntity = $profileRepository->findOneBy(array('id' => $profileId));
 
-        $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
-
-        $tree = json_decode($profile->getConfig('tree'), 1);
+        $tree = json_decode($profileEntity->getTree(), 1);
         
         if (isset($data['parentId'])) {
             $data = array($data);
@@ -264,9 +248,9 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             }
         }
                 
-        $profile->setConfig('tree', json_encode($tree));
-        $profile->persist();
+        $profileEntity->setTree(json_encode($tree));
         
+        Shopware()->Models()->persist($profileEntity);
         Shopware()->Models()->flush();
         
         if ($errors) {
@@ -276,23 +260,14 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         }
     }
     
-    public function updateProfileAction()
+    public function updateNodeAction()
     {
         $profileId = $this->Request()->getParam('profileId', 1);
         $data = $this->Request()->getParam('data', 1);
-        $postData = array(
-            'profileId' => $profileId,
-            'sessionId' => 70,
-            'type' => 'export',
-            'limit' => array('limit' => 40, 'offset' => 0),
-            'max_record_count' => 100,
-            'format' => 'xml',
-            'adapter' => 'categories',
-        );
+        $profileRepository = $this->getProfileRepository();
+        $profileEntity = $profileRepository->findOneBy(array('id' => $profileId));
 
-        $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
-
-        $tree = json_decode($profile->getConfig('tree'), 1);
+        $tree = json_decode($profileEntity->getTree(), 1);
         
         if (isset($data['parentId'])) {
             $data = array($data);
@@ -306,9 +281,9 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             }
         }
                 
-        $profile->setConfig('tree', json_encode($tree));
-        $profile->persist();
+        $profileEntity->setTree(json_encode($tree));
         
+        Shopware()->Models()->persist($profileEntity);
         Shopware()->Models()->flush();
         
         if ($errors) {
@@ -318,23 +293,14 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         }
     }
     
-    public function deleteProfileAction()
+    public function deleteNodeAction()
     {
         $profileId = $this->Request()->getParam('profileId', 1);
         $data = $this->Request()->getParam('data', 1);
-        $postData = array(
-            'profileId' => $profileId,
-            'sessionId' => 70,
-            'type' => 'export',
-            'limit' => array('limit' => 40, 'offset' => 0),
-            'max_record_count' => 100,
-            'format' => 'xml',
-            'adapter' => 'categories',
-        );
+        $profileRepository = $this->getProfileRepository();
+        $profileEntity = $profileRepository->findOneBy(array('id' => $profileId));
 
-        $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
-
-        $tree = json_decode($profile->getConfig('tree'), 1);
+        $tree = json_decode($profileEntity->getTree(), 1);
         
         if (isset($data['parentId'])) {
             $data = array($data);
@@ -348,9 +314,9 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             }
         }
                 
-        $profile->setConfig('tree', json_encode($tree));
-        $profile->persist();
+        $profileEntity->setTree(json_encode($tree));
         
+        Shopware()->Models()->persist($profileEntity);
         Shopware()->Models()->flush();
         
         if ($errors) {
@@ -361,11 +327,10 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
     }
 
     /**
-     * Returns all profiles into an array
+     * Returns the new profile
      */
     public function createProfilesAction()
     {
-        $profileRepository = $this->getProfileRepository();
         $data = $this->Request()->getParam('data', 1);
         $newTree = '{"name":"Root","children":[{"name":"Header","children":[{"id":"537385ed7c799","name":"HeaderChild","shopwareField":""}],"id":"537359399c80a"},{"name":"Categories","children":[{"name":"Category","type":"record","attributes":[{"id":"53738653da10f","name":"Attribute1","shopwareField":"parent"}],"children":[{"id":"5373865547d06","name":"Id","shopwareField":"id"},{"id":"537386ac3302b","name":"Description","shopwareField":"description","children":[{"id":"5373870d38c80","name":"Value","shopwareField":"description"}],"attributes":[{"id":"53738718f26db","name":"Attribute2","shopwareField":"active"}]},{"id":"537388742e20e","name":"Title","shopwareField":"description"}],"id":"537359399c90d"}],"id":"537359399c8b7"}],"id":"root"}';
         
@@ -410,6 +375,22 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $this->View()->assign(array(
             'success' => true, 'data' => $data, 'total' => $count
         ));
+    }
+    
+    public function deleteProfilesAction()
+    {
+        $profileId = $this->Request()->getParam('profileId', 1);
+
+        try {
+            $profileRepository = $this->getProfileRepository();
+            $profileEntity = $profileRepository->findOneBy(array('id' => $profileId));
+
+            Shopware()->Models()->remove($profileEntity);
+            Shopware()->Models()->flush();
+        } catch (\Exception $e) {
+            $this->View()->assign(array('success' => false, 'message' => 'Unexpected error. The profile could not be deleted.', 'children' => $data));
+        }
+        $this->View()->assign(array('success' => true));
     }
 
     public function prepareExportAction()

@@ -73,7 +73,6 @@ Ext.define('Shopware.apps.SwagImportExport', {
         'Window',
         'profile.window.Mappings',
 		'profile.Profile',
-		'tab.profile.Form',
 		'manager.Manager',
 		'manager.Export',
 		'manager.Import',

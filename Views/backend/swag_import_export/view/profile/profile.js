@@ -51,7 +51,6 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
 	autoScroll: false,
 	
 	loadNew: function(profileId) {
-        console.log(profileId);
 		var me = this;
         if (profileId !== null) {
             me.profileId = profileId;
