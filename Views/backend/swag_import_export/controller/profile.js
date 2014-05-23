@@ -67,7 +67,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                 addNewNode: me.addNewNode,
                 saveNode: me.saveNode,
                 deleteNode: me.deleteNode,
-                addNewAttribute: me.addNewAttribute,
+                addNewAttribute: me.addNewAttribute
             }
         });
 

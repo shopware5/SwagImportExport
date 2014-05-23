@@ -22,12 +22,13 @@
  */
 
 /**
- * Shopware SwagGiftPackaging Plugin
+ * Shopware SwagImportExport Plugin
  *
  * @category Shopware
- * @package Shopware\Plugins\SwagGiftPackaging
+ * @package Shopware\Plugins\SwagImportExport
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
+
 //{namespace name="backend/swag_import_export/view/main"}
 //{block name="backend/swag_import_export/app"}
 Ext.define('Shopware.apps.SwagImportExport', {

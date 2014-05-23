@@ -379,13 +379,18 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
     
     public function deleteProfilesAction()
     {
-        $profileId = $this->Request()->getParam('profileId', 1);
+        $data = $this->Request()->getParam('data', 1);
+
+        if (isset($data['id'])) {
+            $data = array($data);
+        }
 
         try {
             $profileRepository = $this->getProfileRepository();
-            $profileEntity = $profileRepository->findOneBy(array('id' => $profileId));
-
-            Shopware()->Models()->remove($profileEntity);
+            foreach ($data as $profile) {
+                $profileEntity = $profileRepository->findOneBy(array('id' => $profile['id']));
+                Shopware()->Models()->remove($profileEntity);
+            }
             Shopware()->Models()->flush();
         } catch (\Exception $e) {
             $this->View()->assign(array('success' => false, 'message' => 'Unexpected error. The profile could not be deleted.', 'children' => $data));
