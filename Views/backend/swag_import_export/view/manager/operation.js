@@ -146,7 +146,14 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Operation', {
                     me.createResumeButton(),
                     me.createDownloadFileButton(),
                     me.createDeleteSessionButton()
-                ]
+                ],
+                renderer: function(value, appearance, record){
+                    
+                    //todo: display resume on records with closed status ?                    
+                    if (record.get('totalCount') == record.get('position')) {
+                        
+                    }                     
+                }
             }
         ];
     },
@@ -170,7 +177,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Operation', {
     createResumeButton: function() {
         var me = this;
         
-        return {
+        me.resumeButton = {
             iconCls: 'sprite-arrow-circle-315',
             action: 'resume',
             tooltip: me.snippets.resume,
@@ -191,6 +198,8 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Operation', {
                 
             }
         };
+        
+        return me.resumeButton;
     },
     createDownloadFileButton: function() {
         var me = this;
