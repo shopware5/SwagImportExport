@@ -66,7 +66,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.Window', {
                 Ext.create('Shopware.apps.SwagImportExport.view.manager.Manager', {
 					
 				}),
-                Ext.create('Shopware.apps.SwagImportExport.view.tab.Profile', {
+                Ext.create('Shopware.apps.SwagImportExport.view.profile.Profile', {
 					
 				})
 //                Ext.create('Shopware.apps.SwagImportExport.view.log.Log', {

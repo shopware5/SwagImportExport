@@ -64,15 +64,15 @@ Ext.define('Shopware.apps.SwagImportExport', {
      * Requires controllers for sub-application
      * @array
      */
-    controllers: [ 'Main', 'Export', 'Import', 'Operation' ],
+    controllers: [ 'Main', 'Export', 'Import', 'Operation', 'Profile' ],
 
     /**
      * Used views here to improve bulk loading
      */
     views: [
         'Window',
-        'Mappings',
-		'tab.Profile',
+        'profile.window.Mappings',
+		'profile.Profile',
 		'tab.profile.Form',
 		'manager.Manager',
 		'manager.Export',

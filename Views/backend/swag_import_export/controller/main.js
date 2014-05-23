@@ -36,18 +36,6 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Main', {
 		var me = this;
         
 		me.mainWindow = me.getView('Window').create({}).show();
-		
-		me.control({
-			'#show-mappings': {
-				click: me.handlePopup
-			}
-		});
-	},
-	
-	handlePopup: function() {
-		var me = this;
-		
-		me.mainWindow = me.getView('Mappings').create({}).show();
 	}
 });
 //{/block}

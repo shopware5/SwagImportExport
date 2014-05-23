@@ -42,64 +42,72 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
      * @var Shopware\CustomModels\ImportExport\Profile
      */
     protected $profileRepository;    
-    /*
+    /**
      * @var Shopware\CustomModels\ImportExport\Session
      */
     protected $sessionRepository;
     
-    
-	protected $nextNodeId = 0;
-    
+    /**
+     * @TODO: move code to component
+     */
     protected function convertToExtJSTree($node, $isInIteration = false)
     {
-        $extjsNode = array("id" => $node['id']);
-        $onlyAttributes = false;
+        $isIterationNode = false;
+        $type = '';
+        $isLeaf = true;
+        $children = array();
 
-        if ($node['type'] == 'record') {
-            $isIteration = true;
-
-            $extjsNode['iconCls'] = 'sprite-blue-folders-stack';
-            $extjsNode['type'] = 'iteration';
+        // Check if the current node is in the iteration
+        if ($isInIteration) {
+            $type = 'node';
+            $icon = 'sprite-icon_taskbar_top_inhalte_active';
+        } else if ($node['type'] == 'record') {
+            $isIterationNode = true;
+            $type = 'iteration';
+            $icon = 'sprite-blue-folders-stack';
         } else {
-            $isIteration = false;
+            $isLeaf = false;
         }
 
-        if (isset($node['name'])) {
-            $extjsNode['text'] = $node['name'];
-        }
-        if (isset($node['children'])) {
-            $extjsNode['expanded'] = true;
-            foreach ($node['children'] as $child) {
-                $extjsNode['children'][] = $this->convertToExtJSTree($child, $isIteration | $isInIteration);
-            }
-        }
+        // Get the attributes
         if (isset($node['attributes'])) {
-            if (!isset($extjsNode['children'])) {
-                $onlyAttributes = true;
-                $extjsNode['expanded'] = true;
-                $extjsNode['children'] = array();
-            }
             foreach ($node['attributes'] as $attribute) {
-                $extjsNode['children'][] = array("id" => $attribute['id'], 'text' => $attribute['name'], 'leaf' => true, 'iconCls' => 'sprite-sticky-notes-pin', 'type' => 'attribute', 'swColumn' => $attribute['shopwareField']);
+                $children[] = array(
+                    'id' => $attribute['id'],
+                    'text' => $attribute['name'],
+                    'leaf' => true,
+                    'iconCls' => 'sprite-sticky-notes-pin',
+                    'type' => 'attribute',
+                    'swColumn' => $attribute['shopwareField']
+                );
             }
         }
-        if (!isset($extjsNode['children']) || $onlyAttributes) {
-            if ($isInIteration) {
-                $extjsNode['iconCls'] = 'sprite-icon_taskbar_top_inhalte_active';
-                if (!$onlyAttributes) {
-                    $extjsNode['leaf'] = true;
-                }
-                $extjsNode['type'] = 'node';
-                $extjsNode['swColumn'] = $node['shopwareField'];
-            } else {
-                $extjsNode['expanded'] = true;
-                $extjsNode['children'] = array();
-            }
-        }
-        
-        $extjsNode['inIteration'] = $isIteration | $isInIteration;
 
-        return $extjsNode;
+        // Get the child nodes
+        if (isset($node['children'])) {
+            foreach ($node['children'] as $child) {
+                $children[] = $this->convertToExtJSTree($child, $isInIteration | $isIterationNode);
+            }
+            
+            if ($isInIteration) {
+                $type = '';
+                $icon = '';
+            }
+
+            $isLeaf = false;
+        }
+            
+        return array(
+            'id' => $node['id'],
+            'text' => $node['name'],
+            'type' => $type,
+            'leaf' => $isLeaf,
+            'expanded' => !$isLeaf,
+            'iconCls' => $icon,
+            'swColumn' => isset($node['shopwareField']) ? $node['shopwareField'] : $node['shopwareField'],
+            'inIteration' => $isInIteration | $isIterationNode,
+            'children' => $children
+        );
     }
 
     protected function getTree()

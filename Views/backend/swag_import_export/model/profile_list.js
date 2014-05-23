@@ -59,7 +59,8 @@ Ext.define('Shopware.apps.SwagImportExport.model.ProfileList', {
          */
         api: {
 			create:'{url controller="SwagImportExport" action="createProfiles"}',
-            read:'{url controller="SwagImportExport" action="getProfiles"}'
+            read:'{url controller="SwagImportExport" action="getProfiles"}',
+            destroy: '{url controller="SwagImportExport" action="deleteProfiles"}'
         },
         /**
          * Configure the data reader

@@ -29,7 +29,7 @@
  */
 //{namespace name=backend/swag_gift_packaging/view/main}
 //{block name="backend/swag_gift_packaging/view/main/window"}
-Ext.define('Shopware.apps.SwagImportExport.view.Mappings', {
+Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Mappings', {
 	
 	/**
 	 * Define that the order main window is an extension of the enlight application window
