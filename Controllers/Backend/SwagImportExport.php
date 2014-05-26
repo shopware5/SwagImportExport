@@ -459,12 +459,9 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         if ($dataIO->getSessionState() == 'new') {
             //todo: create file here ?
             $fileName = $dataIO->generateFileName($profile);
-            $dir = $outputFileName = Shopware()->DocPath() . 'files/import_export/';
+            $directory = $dataIO->getDirectory();
             
-            if (!file_exists($dir)) {
-                mkdir($dir, 0777, true);
-            }
-            $outputFileName = $dir . $fileName;
+            $outputFileName = $directory . $fileName;
 
             // session has no ids stored yet, therefore we must start it and write the file headers
             $header = $dataTransformerChain->composeHeader();

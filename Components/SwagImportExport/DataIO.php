@@ -77,8 +77,8 @@ class DataIO
      */
     public function read($numberOfRecords)
     {
-        $start = $this->dataSession->getPosition();
-
+        $start = $this->getSessionPosition();
+        
         $ids = $this->loadIds($start, $numberOfRecords);
 
         $columns = $this->getColumns();
@@ -175,6 +175,17 @@ class DataIO
         $session->setFileName($fileName);
 
         return $fileName;
+    }
+    
+    public function getDirectory()
+    {
+        $directory = Shopware()->DocPath() . 'files/import_export/';
+
+        if (!file_exists($directory)) {
+            mkdir($directory, 0777, true);
+        }
+        
+        return $directory;
     }
 
     /**
