@@ -576,7 +576,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             'importFile' => $this->Request()->getParam('importFile'),
             'sessionId' => $this->Request()->getParam('sessionId')
         );
-
+        
         $inputFile = Shopware()->DocPath() . $postData['importFile'];
         if (!isset($postData['format'])){
             //get file format
@@ -605,7 +605,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         }
         
         if ($dataIO->getSessionState() == 'new') {
-
+            
             $totalCount = $fileReader->getTotalCount($inputFile);
             
             $dataIO->getDataSession()->setFileName($postData['importFile']);
@@ -633,9 +633,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                 
                 $dataIO->progressSession(100);
             } catch (Exception $e) {
-                // we need to analyze the exception somehow and decide whether to break the while loop;
-                // there is a danger of endless looping in case of some read error or transformation error;
-                // may be we use
+                return $this->View()->assign(array('success' => false, 'msg' => $e->getMessage()));
             }
         }
         $position = $dataIO->getSessionPosition();

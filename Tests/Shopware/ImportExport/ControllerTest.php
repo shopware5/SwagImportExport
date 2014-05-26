@@ -92,7 +92,7 @@ class ControllerTest extends ImportExportTestHelper
             // session has no ids stored yet, therefore we must start it and write the file headers
             $header = $dataTransformerChain->composeHeader();
             $fileWriter->writeHeader($outputFileName, $header);
-            $dataIO->startSession();
+            $dataIO->startSession($profile->getEntity());
         } else {
             //todo: create file here ?
             $fileName = $dataIO->generateFileName($profile);
@@ -216,25 +216,63 @@ class ControllerTest extends ImportExportTestHelper
     
     public function testAPI()
     {
+//        
+//        $query = Shopware()->Models()->createQuery(
+//                'SELECT c.id as id, c.active as active, c.name as name, c.position as position, c.parentId as parentId, (SELECT COUNT(c2.id)
+//                FROM Shopware\Models\Category\Category c2
+//                WHERE c2.parentId = c.id) as childrenCount, COUNT(articles) as articleCount 
+//                FROM Shopware\Models\Category\Category c LEFT JOIN c.allArticles articles 
+//                WHERE c.id IN :id GROUP BY c.id ORDER BY c.parentId ASC, c.position ASC'
+//        );
+//        $query->setParameter('id', '(3,5)');
+//        $categories = $query->getArrayResult();
+//        
+//        echo '<pre>';
+//        var_dump($categories);
+//        echo '</pre>';
+//        exit;
+        
+        //categories
         $limit = $this->Request()->getParam('limit', 10);
         $offset = $this->Request()->getParam('start', 0);
         $sort = $this->Request()->getParam('sort', array());
-
+        
+        $start = microtime(true);
         $resource = \Shopware\Components\Api\Manager::getResource('category');
 
         $filter = array(
             array(
                 'property' => 'id',
-                'value' => array(3,4)
-            ),
+                'expression' => 'IN',
+                'value' => array(3,5,6)
+            )
         );
 
         $result = $resource->getList($offset, $limit, $filter, $sort);
-
         echo '<pre>';
         var_dump($result);
         echo '</pre>';
         exit;
+        $time = microtime(true) - $start;
+        echo '<pre>';
+        var_dump($time);
+        echo '</pre>';
+        exit;
+//        
+//        //products
+//        $limit = $this->Request()->getParam('limit', 10);
+//        $offset = $this->Request()->getParam('start', 0);
+//        $filter = $this->Request()->getParam('filter', array());
+//        $sort = $this->Request()->getParam('sort', array());
+//
+//        $resource = \Shopware\Components\Api\Manager::getResource('article');
+//        
+//        $records = $resource->getList($offset, $limit, $filter, $sort);
+//        
+//        echo '<pre>';
+//        \Doctrine\Common\Util\Debug::dump($records['data'][0]);
+//        echo '</pre>';
+//        exit;
     }
     
 //    public function testImportFakeCategories()
