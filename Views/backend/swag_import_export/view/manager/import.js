@@ -51,7 +51,8 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
         selectProfile: "{s name=swag_import_export/manager/import/select_profile}Select profile{/s}",
         dragAndDropFile: "{s name=swag_import_export/manager/import/drag_and_drop}SELECT FILE USING DRAG + DROP{/s}",
         selectFile: "{s name=swag_import_export/manager/import/select_file}Select file{/s}",
-        addButton: '{s name=fieldsText/addButton}Add files{/s}'
+        choose:  '{s name=swag_import_export/manager/import/choose}Please choose{/s}',
+        chooseButton:  '{s name=swag_import_export/manager/import/choose_button}Choose{/s}'
     },
     /*
      * profile store
@@ -146,7 +147,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
             items: [{
                     xtype: 'container',
                     padding: '0 0 8',
-                    items: [me.createFileInput(), me.createProfileCombo()]
+                    items: [me.createFileInput(), me.createSelectFile(), me.createProfileCombo()]
                 }]
         });
     },
@@ -169,6 +170,27 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
                 }
             }
         };
+    },
+    createSelectFile: function() {
+        var me = this;
+
+        me.addBtn = Ext.create('Ext.form.field.File', {
+            emptyText: me.snippets.choose,
+            buttonText: me.snippets.chooseButton,
+            name: 'importSelectFile',
+            id: 'importSelectFile',
+            width: 450,
+            labelWidth: 150,
+            fieldLabel: me.snippets.selectFile,
+//            allowBlank: false,
+            listeners: {
+                change: function(element, value, eOpts) {
+                    me.findProfile(value);
+                }
+            }
+        });
+        
+        return me.addBtn;
     },
     /**
      * Returns profile combo box

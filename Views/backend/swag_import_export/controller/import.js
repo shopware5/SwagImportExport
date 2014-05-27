@@ -85,21 +85,43 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
      */
     onImport: function(btn) {
         var me = this,
-                form = btn.up('form'),
+                form = btn.up('form').getForm(),
                 values = form.getValues();
         
-        if (Ext.isEmpty(values.profile) || Ext.isEmpty(values.importFile))
+        if (Ext.isEmpty(values.profile))
         {
             Shopware.Notification.createGrowlMessage(
                     '{s name=swag_import_export/import/error_title}Swag import export{/s}',
-                    '{s name=swag_import_export/import/error_msg}Please fill import configuration fields{/s}'
-                    );
-            return false;
+                    '{s name=swag_import_export/import/error_msg}Please select a profile{/s}'
+            );
+            return;
         }
+        
+        if (!Ext.isEmpty(values.importFile))
+        {
+            me.parameters = values;
 
-        me.parameters = values;
+            me.onCreateImportWindow();
+            return;
+        }
+        
+        var localFile = Ext.getCmp('importSelectFile').getValue();
 
-        me.onCreateImportWindow();
+        if (!Ext.isEmpty(localFile)){
+            console.log('todo: submit form');
+            
+//            form.submit({
+//                url: '{url module=backend controller="swagImportExport" action="uploadFile"}',
+//                waitMsg: 'Uploading',
+//                success: function(fp, o) {
+//                    console.log(varaible);
+//                     console.log(o);
+//                },
+//                failure: function(fp, o) {
+//                    console.log(o);
+//                }
+//            });
+        }
     },
     /**
      * Creates batch configuration
