@@ -48,8 +48,8 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
                     productive environment, carry out a complete backup of your datebase, so that in the event of a failing import, it can be reinstalled easily. \n\
                     Depending on you server system and the size of the file, the import could take quite a while.{/s}',
         configTitle: "{s name=swag_import_export/manager/import/config_title}Import configuration{/s}",
-        dragAndDrop: "{s name=swag_import_export/manager/import/drag_and_drop}Drag'n'Drop import{/s}",
         selectProfile: "{s name=swag_import_export/manager/import/select_profile}Select profile{/s}",
+        dragAndDropFile: "{s name=swag_import_export/manager/import/drag_and_drop}SELECT FILE USING DRAG + DROP{/s}",
         selectFile: "{s name=swag_import_export/manager/import/select_file}Select file{/s}",
         addButton: '{s name=fieldsText/addButton}Add files{/s}'
     },
@@ -109,13 +109,13 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
         var me = this;
 
         me.dropZone = Ext.create('Shopware.app.FileUpload', {
-            requestURL: '{url controller="mediaManager" action="upload"}',
+            requestURL: '{url controller="swagImportExport" action="uploadFile"}',
             hideOnLegacy: true,
             showInput: false,
             checkType: false,
             checkAmount: false,
             enablePreviewImage: false,
-            dropZoneText: 'UPLOAD FILES USING DRAG + DROP',
+            dropZoneText: me.snippets.dragAndDropFile,
             height: 100
         });
 
@@ -146,56 +146,39 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
             items: [{
                     xtype: 'container',
                     padding: '0 0 8',
-                    items: [me.createUploadField(), me.createProfileCombo()]
+                    items: [me.createFileInput(), me.createProfileCombo()]
                 }]
         });
     },
-    createSelectFile: function() {
+    /**
+     * Returns hidden file field
+     * 
+     * @returns Ext.form.TextField
+     */
+    createFileInput: function(){
         var me = this;
         
-        if (Ext.isIE) {
-            me.addBtn = Ext.create('Shopware.app.FileUpload', {
-                requestURL: '{url controller="mediaManager" action="upload"}',
-                padding: 0,
-                padding: '6 0 0',
-                        fileInputConfig: {
-                            buttonOnly: true,
-                            width: 190,
-                            buttonText: me.snippets.addButton,
-                            buttonConfig: {
-                                iconCls: 'sprite-plus-circle'
-                            }
-                        }
-            });
-        } else {
-            me.addBtn = Ext.create('Ext.form.field.File', {
-                buttonOnly: true,
-                width: 190,
-                buttonText: me.snippets.addButton,
-                listeners: {
-                    scope: this,
-                    /**
-                     * Enable multi selection on the file upload button
-                     *
-                     * @param [object] btn - rendered Ext.button.Button
-                     * @return void
-                     */
-                    afterrender: function(btn) {
-                        btn.fileInputEl.dom.multiple = false;
-                    }
-                },
-                buttonConfig: {
-                    iconCls: 'sprite-plus-circle'
+        return {
+            xtype: 'textfield',
+            id: 'swag-import-export-file',
+            name: 'importFile',
+            hidden: true,
+            listeners: {
+                change: function(element, value, eOpts) {
+                    me.findProfile(value);
                 }
-            });
-        }
-        
-        return me.addBtn;
+            }
+        };
     },
+    /**
+     * Returns profile combo box
+     * 
+     * @returns Ext.form.field.ComboBox
+     */
     createProfileCombo: function() {
         var me = this;
 
-        return Ext.create('Ext.form.field.ComboBox', {
+        me.profileCombo = Ext.create('Ext.form.field.ComboBox', {
             fieldLabel: me.snippets.selectProfile,
             store: me.profilesStore,
             labelStyle: 'font-weight: 700; text-align: left;',
@@ -206,6 +189,8 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
             editable: false,
             name: 'profile'
         });
+        
+        return me.profileCombo;
     },
     /**
      * Creates the container with the both upload fields.
@@ -235,12 +220,25 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
             ]
         });
     },
-    /**
-     * Method to set the allowed file extension for the import
-     * @return Array of strings
+        /**
+     * Finds profile and preselect if exists
+     * 
+     * @param [string] value
      */
-    getImportAllowedExtensions: function() {
-        return ['csv', 'xml', 'xls'];
+    findProfile: function(value) {
+        var me = this;
+        var parts = value.split('-');
+
+        for (var i = 0; i < parts.length; i++) {
+            
+            var index = me.profilesStore.find('name', parts[i]);
+            
+            if(index !== -1){
+                var record = me.profilesStore.getAt(index);
+                me.profileCombo.setValue(record.get('id'));
+                return;
+            }
+        }
     }
 
 });

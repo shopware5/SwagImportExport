@@ -60,10 +60,23 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
             },
             'swag-import-export-manager-operation': {
                 resumeImport: me.onResume
+            },
+            'swag-import-export-manager-import html5fileupload': {
+                uploadReady: me.onReload
             }
         });
 
         me.callParent(arguments);
+    },
+    /**
+     * Triggers when the file is uploaded via drag and drop
+     * 
+     * @param [object] target
+     */
+    onReload: function(target){
+        var response = Ext.decode(target.responseText),
+            fileField = Ext.getCmp('swag-import-export-file');
+        fileField.setValue(response.data.path);
     },
     /**
      * 

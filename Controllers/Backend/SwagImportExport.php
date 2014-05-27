@@ -723,6 +723,27 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         return $this->manager;
     }
     
+    public function uploadFileAction()
+    {
+        $albumRepo = $this->getManager()->getRepository('Shopware\Models\Media\Album');
+
+        $album = $albumRepo->findOneBy(array('name' => 'ImportFiles'));
+        
+        if (!$album) { 
+            $album = new Shopware\Models\Media\Album();
+            $album->setName('ImportFiles');
+            $album->setPosition(0);
+            $this->getManager()->persist($album);
+            $this->getManager()->flush($album);
+        } 
+        
+        $id = $album->getId();
+        
+        $this->Request()->setParam('albumID', $id);
+        
+        $this->forward('upload', 'mediaManager');
+    }
+
     /**
      * Fires when the user want to open a generated order document from the backend order module.
      * @return Returns the created pdf file with an echo.
@@ -806,6 +827,6 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
     {
         return Shopware()->Plugins()->Backend()->SwagImportExport();
     }
-
+    
 }
 
