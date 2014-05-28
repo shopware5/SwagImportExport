@@ -84,6 +84,7 @@ class DataIO
         $columns = $this->getColumns();
 
         $dbAdapter = $this->getDbAdapter();
+        
         $rawData = $dbAdapter->read($ids, $columns);
         
         return $rawData;
@@ -383,7 +384,7 @@ class DataIO
      * 
      * @param int $start
      * @param int $numberOfRecords
-     * @return string
+     * @return array
      * @throws \Exception
      */
     private function loadIds($start, $numberOfRecords)
@@ -402,7 +403,7 @@ class DataIO
             }
         }
 
-        return implode(',', $filterIds);
+        return $filterIds;
     }
 
 }

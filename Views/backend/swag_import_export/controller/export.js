@@ -126,7 +126,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
 
         btn.hide();
         win.cancelButton.show();
-        win.closeButton.disable();
+//        win.closeButton.disable();
     },
     /**
      * Returns the needed configuration for the next batch call

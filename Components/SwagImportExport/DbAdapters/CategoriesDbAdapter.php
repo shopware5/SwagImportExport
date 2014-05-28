@@ -4,6 +4,10 @@ namespace Shopware\Components\SwagImportExport\DbAdapters;
 
 class CategoriesDbAdapter implements DataDbAdapter
 {
+    /*
+     * Shopware\Components\Model\ModelManager
+     */
+    private $manager;
 
     /**
      * Returns record ids
@@ -15,21 +19,20 @@ class CategoriesDbAdapter implements DataDbAdapter
      */
     public function readRecordIds($start = null, $limit = null, $filter = null)
     {
-        $sqlLimit = '';
-        if ($start !== null && $limit !== null) {
-            $sqlLimit = "LIMIT {$start},{$limit}";
-        }
+        $manager = $this->getManager();
 
-        $sql = "
-            SELECT
-                c.id
-            FROM s_categories c
-            WHERE c.id != 1
-            ORDER BY c.id ASC
-            $sqlLimit 
-        ";
-        $stmt = Shopware()->Db()->query($sql);
-        $records = $stmt->fetchAll();
+        $builder = $manager->createQueryBuilder();
+
+        $builder->select('c.id');
+
+        $builder->from('Shopware\Models\Category\Category', 'c')
+                ->where('c.id != 1')
+                ->orderBy('c.parentId', 'ASC');
+
+        $builder->setFirstResult($start)
+                ->setMaxResults($limit);
+
+        $records = $builder->getQuery()->getResult();
 
         $result = array();
         if ($records) {
@@ -44,46 +47,50 @@ class CategoriesDbAdapter implements DataDbAdapter
     /**
      * Returns categories 
      * 
+     * @param type $ids
+     * @param type $columns
      * @return array
      */
     public function read($ids, $columns)
     {
-        $sql = "
-            SELECT
-                $columns
-            FROM s_categories c
-            LEFT JOIN s_categories_attributes attr
-                ON attr.categoryID = c.id
-            WHERE c.id IN ($ids)
-        ";
+        $manager = $this->getManager();
 
-        $stmt = Shopware()->Db()->query($sql);
-        $result = $stmt->fetchAll();
+        $builder = $manager->createQueryBuilder();
+        $builder->select($columns)
+                ->from('Shopware\Models\Category\Category', 'c')
+                ->leftJoin('c.attribute', 'attr')
+                ->where('c.id IN (:ids)')
+                ->setParameter('ids', $ids);
+
+        $result = $builder->getQuery()->getResult();
 
         return $result;
     }
 
     /**
-     * Returns default categories columns name
+     * Returns default categories columns name 
+     * and category attributes
      * 
-     * @return string
+     * @return array
      */
     public function getDefaultColumns()
     {
-        $columns = 'c.id,
-                    c.parent,
-                    c.description,
-                    c.position,
-                    c.metakeywords,
-                    c.metadescription,
-                    c.cmsheadline,
-                    c.cmstext,
-                    c.template,
-                    c.active,
-                    c.blog,
-                    c.showfiltergroups,
-                    c.external,
-                    c.hidefilter';
+        $columns = array(
+            'c.id',
+            'c.parentId',
+            'c.name',
+            'c.position',
+            'c.metaKeywords',
+            'c.metaDescription',
+            'c.cmsHeadline',
+            'c.cmsText',
+            'c.template',
+            'c.active',
+            'c.blog',
+            'c.showFilterGroups',
+            'c.external',
+            'c.hideFilter'
+        );
 
         // Attributes
         $stmt = Shopware()->Db()->query('SELECT * FROM s_categories_attributes LIMIT 1');
@@ -98,13 +105,18 @@ class CategoriesDbAdapter implements DataDbAdapter
             $prefix = 'attr';
             $attributesSelect = array();
             foreach ($attributes as $attribute) {
-                $attributesSelect[] = sprintf('%s.%s as attribute_%s', $prefix, $attribute, $attribute);
-            }
+                //underscore to camel case
+                //exmaple: underscore_to_camel_case -> underscoreToCamelCase
+                $catAttr = preg_replace("/\_(.)/e", "strtoupper('\\1')", $attribute);
 
-            $attributesSelect = ",\n" . implode(",\n", $attributesSelect);
+                $attributesSelect[] = sprintf('%s.%s as attribute%s', $prefix, $catAttr, ucwords($catAttr));
+            }
+            //$attributesSelect = ",\n" . implode(",\n", $attributesSelect);
         }
 
-        return $columns . $attributesSelect;
+        $defaultColumns = array_merge($columns, $attributesSelect);
+
+        return $defaultColumns;
     }
 
     /**
@@ -115,11 +127,11 @@ class CategoriesDbAdapter implements DataDbAdapter
     public function write($records)
     {
         $columnNames = $this->getColumnNames(current($records));
-        
+
         $queryValues = $this->getQueryValues($records);
-        
+
         $query = "REPLACE INTO `s_categories` ($columnNames) VALUES $queryValues ;";
-        
+
         Shopware()->Db()->query($query);
     }
 
@@ -134,12 +146,12 @@ class CategoriesDbAdapter implements DataDbAdapter
         foreach ($data as $columnName => $value) {
             $columnNames[] = $columnName;
         }
-        
+
         $columnNames = "`" . implode("`,`", $columnNames) . "`";
-        
+
         return $columnNames;
     }
-    
+
     /**
      * Returns query values i.e. (3,1,'Deutsch','0'), (39,1,'English','0')
      * 
@@ -150,31 +162,46 @@ class CategoriesDbAdapter implements DataDbAdapter
     public function getQueryValues($data)
     {
         $lastKey = end(array_keys(current($data)));
-        
+
         $queryValues = '';
-        
+
         foreach ($data as $category) {
             $tempData = null;
-            
+
             //todo: make better check for the categories !
             if (empty($category['id']) || empty($category['parent']) || empty($category['description'])) {
                 throw new Exception('Categories requires id, parent and description');
             }
-            
+
             foreach ($category as $key => $value) {
-                
+
                 $comma = $key == $lastKey ? '' : ',';
-                
-                $tempData .= !(int)($value) ? "'" . $value . "'" : $value;
+
+                $tempData .=!(int) ($value) ? "'" . $value . "'" : $value;
                 $tempData .= $comma;
             }
-            
+
             $queryValues .= ', (' . $tempData . ')';
         }
-        
+
         //removes the first comma
         $queryValues[0] = ' ';
-        
+
         return $queryValues;
     }
+
+    /**
+     * Returns entity manager
+     * 
+     * @return object
+     */
+    public function getManager()
+    {
+        if ($this->manager === null) {
+            $this->manager = Shopware()->Models();
+        }
+
+        return $this->manager;
+    }
+
 }
