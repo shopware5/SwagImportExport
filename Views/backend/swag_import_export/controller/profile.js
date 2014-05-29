@@ -68,10 +68,45 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                 saveNode: me.saveNode,
                 deleteNode: me.deleteNode,
                 addNewAttribute: me.addNewAttribute
+            },
+            'swag-import-export-window': {
+                addConversion: me.addConversion,
+                updateConversion: me.updateConversion,
+                deleteConversion: me.deleteConversion,
+                deleteMultipleConversions: me.deleteMultipleConversions
             }
         });
 
         me.callParent(arguments);
+    },
+    
+    addConversion: function(grid, editor) {
+        var me = this;
+
+        editor.cancelEdit();
+        var conversion = Ext.create('Shopware.apps.SwagImportExport.model.Conversion', {
+            profileId: 1,
+            variable: '',
+            exportConversion: '',
+            importConversion: ''
+        });
+
+        grid.getStore().add(conversion);
+        editor.startEdit(conversion, 0);
+    },
+    
+    updateConversion: function(store) {
+        store.sync();
+    },
+    
+    deleteConversion: function(store, index) {
+        store.removeAt(index);
+        store.sync();
+    },
+    
+    deleteMultipleConversions: function(store, selectionModel) {
+        store.remove(selectionModel.getSelection());
+        store.sync();
     },
     
     /**
@@ -99,10 +134,10 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
      * 
      * @param { Ext.tree.Panel } treeStore
      */
-    showMappings: function(profilesStore) {
+    showMappings: function(profileId) {
         var me = this;
 
-        me.mainWindow = me.getView('profile.window.Mappings').create({ }).show();
+        me.mainWindow = me.getView('profile.window.Mappings').create({ profileId: profileId }).show();
     },
 
     /**

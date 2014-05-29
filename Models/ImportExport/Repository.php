@@ -114,5 +114,44 @@ class Repository extends ModelRepository
         
         return $builder;
     }
+    
+    /**
+     * Returns a query builder object to get all expressions.
+     *
+     * @param array $filterBy
+     * @param array $orderBy
+     * @param null $limit
+     * @param null $offset
+     * @return \Shopware\Components\Model\QueryBuilder
+     */
+    public function getExpressionsListQuery(array $filterBy = array(), array $orderBy = array(), $limit = null, $offset = null)
+    {
+        $builder = $this->createQueryBuilder('e');
+       
+        $builder->select(array(
+            'e.id as id',
+            'p.id as profileId',
+            'e.variable as variable',
+            'e.exportConversion as exportConversion',
+            'e.importConversion as importConversion',
+        ));
+        
+        $builder->join('e.profile', 'p');
+        
+        if (!empty($filterBy)) {
+            $builder->addFilter($filterBy);
+        }
+
+        if (!empty($orderBy)) {
+            $builder->addOrderBy($orderBy);
+        }
+
+        if ($offset !== null && $limit !== null) {
+            $builder->setFirstResult($offset)
+                    ->setMaxResults($limit);
+        }
+        
+        return $builder;
+    }
 
 }

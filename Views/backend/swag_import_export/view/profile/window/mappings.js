@@ -21,14 +21,14 @@
  * our trademarks remain entirely with us.
  */
 /**
- * Shopware SwagGiftPackaging Plugin
+ * Shopware SwagImportExport Plugin
  *
  * @category Shopware
- * @package Shopware\Plugins\SwagGiftPackaging
+ * @package Shopware\Plugins\SwagImportExport
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-//{namespace name=backend/swag_gift_packaging/view/main}
-//{block name="backend/swag_gift_packaging/view/main/window"}
+//{namespace name=backend/swag_import_export/view/profile/window}
+//{block name="backend/swag_import_export/view/profile/window/mappings"}
 Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Mappings', {
 	
 	/**
@@ -51,117 +51,113 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Mappings', {
 
     initComponent:function () {
         var me = this;
-
+        
         //add the order list grid panel and set the store
         me.items = [ me.createGridPanel() ];
         me.callParent(arguments);
     },
-	
+
     createGridPanel: function() {
-		var me = this;
+        var me = this;
 
-		// sample static data for the store
-		var myData = [
-			['id', /*{literal}*/'{if $article.active} "false" {else} "true" {/if}'/*{/literal}*/, /*{literal}*/'{if $article.active == "false"} 1 {else} 0 {/if}'/*{/literal}*/],
-			['name', /*{literal}*/'{if $article.active} "false" {else} "true" {/if}'/*{/literal}*/, /*{literal}*/'{if $article.active == "false"} 1 {else} 0 {/if}'/*{/literal}*/],
-			['description', /*{literal}*/'{if $article.active} "false" {else} "true" {/if}'/*{/literal}*/, /*{literal}*/'{if $article.active == "false"} 1 {else} 0 {/if}'/*{/literal}*/],
-			['parentid', /*{literal}*/'{if $article.active} "false" {else} "true" {/if}'/*{/literal}*/, /*{literal}*/'{if $article.active == "false"} 1 {else} 0 {/if}'/*{/literal}*/]
-		];
+        var store = Ext.create('Shopware.apps.SwagImportExport.store.Conversion');
+        store.load({
+            params: {
+                profileId: me.profileId
+            }
+        });
+        
+        store.getProxy().setExtraParam('profileId', me.profileId);
 
-		// create the data store
-		var store = Ext.create('Ext.data.ArrayStore', {
-			fields: [
-				{ name: 'swField' },
-				{ name: 'export' },
-				{ name: 'import' }
-			],
-			data: myData
-		});
-		
-		
-		me.rowEditor = Ext.create('Ext.grid.plugin.RowEditing', {
+        me.rowEditor = Ext.create('Ext.grid.plugin.RowEditing', {
             clicksToMoveEditor: 2,
             autoCancel: true
         });
 
-		// create the Grid
-		return Ext.create('Ext.grid.Panel', {
-			store: store,
-			plugins: [ me.rowEditor ],
-			style: {
+        // create the Grid
+        me.conversionsGrid = Ext.create('Ext.grid.Panel', {
+            store: store,
+            plugins: [me.rowEditor],
+            listeners: {
+                edit: function(editor, e) {
+                    me.fireEvent('updateConversion', me.conversionsGrid.getStore());
+                }
+            },
+            style: {
                 borderTop: '1px solid #A4B5C0'
             },
             viewConfig: {
                 enableTextSelection: false,
-				stripeRows: true
+                stripeRows: true
             },
             tbar: me.createGridToolbar(),
             selModel: me.getGridSelModel(),
-			columns: [{
-					text: 'Shopware Field',
-					flex: 1,
-					sortable: true,
-					dataIndex: 'swField',
-					editor: {
-						xtype: 'combobox',
-						editable: false,
-						queryMode: 'local',
-						allowBlank: false,
-						store: [{ id: 1, name: 'id' }],
-						displayField: 'name',
-						valueField: 'id'
-					}
-				}, {
-					text: 'Export Conversion',
-					flex: 2,
-					sortable: false,
-					dataIndex: 'export',
-					editor: {
-						xtype: 'textarea',
-						allowBlank: false
-					}
-				}, {
-					text: 'Import Conversion',
-					flex: 2,
-					sortable: false,
-					dataIndex: 'import',
-					editor: {
-						xtype: 'textarea',
-						allowBlank: false
-					}
-				}, {
-					xtype: 'actioncolumn',
-					width: 90,
-					items: [
-						{
-							iconCls: 'sprite-minus-circle-frame',
-							action: 'deletePosition',
-							tooltip: 'Delete Mapping',
-							handler: function(view, rowIndex, colIndex, item) {
-							}
-						}]
-				}],
-			height: 350,
-			width: 600
-		});
-	},
+            columns: [{
+                    text: 'Shopware Field',
+                    flex: 1,
+                    sortable: true,
+                    dataIndex: 'variable',
+                    editor: {
+                        xtype: 'textarea',
+                        allowBlank: false
+                    }
+                }, {
+                    text: 'Export Conversion',
+                    flex: 2,
+                    sortable: false,
+                    dataIndex: 'exportConversion',
+                    editor: {
+                        xtype: 'textarea',
+                        allowBlank: true
+                    }
+                }, {
+                    text: 'Import Conversion',
+                    flex: 2,
+                    sortable: false,
+                    dataIndex: 'importConversion',
+                    editor: {
+                        xtype: 'textarea',
+                        allowBlank: true
+                    }
+                }, {
+                    xtype: 'actioncolumn',
+                    width: 90,
+                    items: [
+                        {
+                            iconCls: 'sprite-minus-circle-frame',
+                            action: 'deleteConversion',
+                            tooltip: 'Delete Mapping',
+                            handler: function(view, rowIndex, colIndex, item) {
+                                me.fireEvent("deleteConversion", me.conversionsGrid.getStore(), rowIndex);
+                            }
+                        }]
+                }],
+            height: 350,
+            width: 600
+        });
+
+        return me.conversionsGrid;
+    },
 	
 	/**
      * Creates the grid selection model for checkboxes
      *
      * @return [Ext.selection.CheckboxModel] grid selection model
      */
-    getGridSelModel:function () {
+    getGridSelModel: function() {
         var me = this;
-
+        
         var selModel = Ext.create('Ext.selection.CheckboxModel', {
-            listeners:{
+            listeners: {
                 // Unlocks the save button if the user has checked at least one checkbox
-                selectionchange:function (sm, selections) {
-                    me.deletePositionsButton.setDisabled(selections.length === 0);
+                selectionchange: function(sm, selections) {
+                    me.deleteConversionsButton.setDisabled(selections.length === 0);
                 }
             }
         });
+
+        $sel = selModel;
+
         return selModel;
     },
 	
@@ -172,26 +168,22 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Mappings', {
     createGridToolbar: function() {
         var me = this;
 
-        me.deletePositionsButton = Ext.create('Ext.button.Button', {
-            iconCls:'sprite-minus-circle-frame',
+        me.deleteConversionsButton = Ext.create('Ext.button.Button', {
+            iconCls: 'sprite-minus-circle-frame',
             text: 'Delete Selected',
-            disabled:true,
-            action:'deletePosition',
+            disabled: true,
+            action: 'deleteConversion',
             handler: function() {
-                me.fireEvent('deleteMultiplePositions', me.record, me.orderPositionGrid, {
-                    callback: function(order) {
-                        me.fireEvent('updateForms', order, me.up('window'));
-                    }
-                });
+                me.fireEvent('deleteMultipleConversions', me.conversionsGrid.getStore(), me.conversionsGrid.getSelectionModel());
             }
         });
 
-        me.addPositionButton = Ext.create('Ext.button.Button', {
+        me.addConversionButton = Ext.create('Ext.button.Button', {
             iconCls:'sprite-plus-circle-frame',
             text: 'Add New',
-            action:'addPosition',
+            action:'addConversion',
             handler: function() {
-                me.fireEvent('addPosition', me.record, me.orderPositionGrid, me.rowEditor)
+                me.fireEvent('addConversion', me.conversionsGrid, me.rowEditor);
             }
         });
 
@@ -199,10 +191,10 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Mappings', {
             dock:'top',
             ui: 'shopware-ui',
             items:[
-                me.addPositionButton,
-                me.deletePositionsButton
+                me.addConversionButton,
+                me.deleteConversionsButton
             ]
         });
-    },
+    }
 });
 //{/block}

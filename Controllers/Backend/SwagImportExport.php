@@ -46,6 +46,10 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
      * @var Shopware\CustomModels\ImportExport\Session
      */
     protected $sessionRepository;
+    /**
+     * @var Shopware\CustomModels\ImportExport\Expression
+     */
+    protected $expressionRepository;
     
     /**
      * Converts the JSON tree to ExtJS tree
@@ -80,7 +84,8 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                     'leaf' => true,
                     'iconCls' => 'sprite-sticky-notes-pin',
                     'type' => 'attribute',
-                    'swColumn' => $attribute['shopwareField']
+                    'swColumn' => $attribute['shopwareField'],
+                    'inIteration' => $isInIteration | $isIterationNode
                 );
             }
         }
@@ -396,6 +401,110 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             $this->View()->assign(array('success' => false, 'message' => 'Unexpected error. The profile could not be deleted.', 'children' => $data));
         }
         $this->View()->assign(array('success' => true));
+    }
+
+    public function getConversionsAction()
+    {
+        $profileId = $this->Request()->getParam('profileId');
+        $filter = $this->Request()->getParam('filter', array());
+        
+        $expressionRepository = $this->getExpressionRepository();
+        
+        $filter = array_merge(array('p.id' => $profileId), $filter);
+        
+        $query = $expressionRepository->getExpressionsListQuery(
+                        $filter, $this->Request()->getParam('sort', array()), $this->Request()->getParam('limit', null), $this->Request()->getParam('start')
+                )->getQuery();
+
+        $count = Shopware()->Models()->getQueryCount($query);
+
+        $data = $query->getArrayResult();
+
+        $this->View()->assign(array(
+            'success' => true, 'data' => $data, 'total' => $count
+        ));
+    }
+
+    public function createConversionAction()
+    {
+        $profileId = $this->Request()->getParam('profileId');
+        $data = $this->Request()->getParam('data', 1);
+        
+        $profileRepository = $this->getProfileRepository();
+        $profileEntity = $profileRepository->findOneBy(array('id' => $profileId));
+        
+        $expressionEntity = new \Shopware\CustomModels\ImportExport\Expression();
+        
+        $expressionEntity->setProfile($profileEntity);
+        $expressionEntity->setVariable($data['variable']);
+        $expressionEntity->setExportConversion($data['exportConversion']);
+        $expressionEntity->setImportConversion($data['importConversion']);
+        
+        Shopware()->Models()->persist($expressionEntity);
+        Shopware()->Models()->flush();
+        
+        $this->View()->assign(array(
+            'success' => true,
+            'data' => array(
+                "id" => $expressionEntity->getId(),
+                'profileId' => $expressionEntity->getProfile()->getId(),
+                'exportConversion' => $expressionEntity->getExportConversion(),
+                'importConversion' => $expressionEntity->getImportConversion(),
+            )
+        ));
+    }
+    
+    public function updateConversionAction()
+    {
+        $profileId = $this->Request()->getParam('profileId', 1);
+        $data = $this->Request()->getParam('data', 1);
+        
+        if (isset($data['id'])) {
+            $data = array($data);
+        }
+
+        $expressionRepository = $this->getExpressionRepository();
+        
+        try {
+            foreach ($data as $expression) {
+                $expressionEntity = $expressionRepository->findOneBy(array('id' => $expression['id']));
+                $expressionEntity->setVariable($expression['variable']);
+                $expressionEntity->setExportConversion($expression['exportConversion']);
+                $expressionEntity->setImportConversion($expression['importConversion']);
+                Shopware()->Models()->persist($expressionEntity);
+            }
+
+            Shopware()->Models()->flush();
+            
+            $this->View()->assign(array('success' => true, 'data' => $data));
+        } catch (\Exception $e) {
+            $this->View()->assign(array('success' => false, 'message' => $e->getMessage(), 'data' => $data));
+        }
+    }
+
+    public function deleteConversionAction()
+    {
+        $profileId = $this->Request()->getParam('profileId', 1);
+        $data = $this->Request()->getParam('data', 1);
+        
+        if (isset($data['id'])) {
+            $data = array($data);
+        }
+
+        $expressionRepository = $this->getExpressionRepository();
+        
+        try {
+            foreach ($data as $expression) {
+                $expressionEntity = $expressionRepository->findOneBy(array('id' => $expression['id']));
+                Shopware()->Models()->remove($expressionEntity);
+            }
+
+            Shopware()->Models()->flush();
+            
+            $this->View()->assign(array('success' => true, 'data' => $data));
+        } catch (\Exception $e) {
+            $this->View()->assign(array('success' => false, 'message' => $e->getMessage(), 'data' => $data));
+        }
     }
 
     public function prepareExportAction()
@@ -798,7 +907,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
     }
 
     /**
-     * Helper Method to get access to the category repository.
+     * Helper Method to get access to the profile repository.
      *
      * @return Shopware\Models\Category\Repository
      */
@@ -821,6 +930,19 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             $this->sessionRepository = Shopware()->Models()->getRepository('Shopware\CustomModels\ImportExport\Session');
         }
         return $this->sessionRepository;
+    }
+    
+    /**
+     * Helper Method to get access to the conversion repository.
+     *
+     * @return Shopware\Models\Category\Repository
+     */
+    public function getExpressionRepository()
+    {
+        if ($this->expressionRepository === null) {
+            $this->expressionRepository = Shopware()->Models()->getRepository('Shopware\CustomModels\ImportExport\Expression');
+        }
+        return $this->expressionRepository;
     }
 
     public function Plugin()

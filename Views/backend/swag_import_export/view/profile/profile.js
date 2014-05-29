@@ -39,10 +39,18 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
 	 * @string
 	 */
 	alias: 'widget.swag-import-export-profile-profile',
-		
-    title: '{s name=swag_import_export/profile/profile/title}Profile{/s}',
-
-	layout: 'border',
+    
+    snippets: {
+        title: '{s name=swag_import_export/profile/profile/title}Profile{/s}',
+        toolbar: {
+            emptyText: '{s name=swag_import_export/profile/profile/toolbar/empty_text}Select Profile...{/s}',
+            createProfile: '{s name=swag_import_export/profile/profile/toolbar/create_profile}Create Own Profile{/s}',
+            deleteProfile: '{s name=swag_import_export/profile/profile/toolbar/delete_profile}Delete Selected Profile{/s}',
+            showConversions: '{s name=swag_import_export/profile/profile/toolbar/show_conversions}Show Conversions{/s}'
+        }
+    },
+    
+    layout: 'border',
 	
 	style: {
 		background: '#fff'
@@ -52,13 +60,16 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
 	
 	loadNew: function(profileId) {
 		var me = this;
+        
+        me.profileId = profileId;
         if (profileId !== null) {
-            me.profileId = profileId;
+            me.toolbar.items.get('conversionsMenu').setDisabled(false);
             me.treeStore.getProxy().setExtraParam('profileId', profileId);
             me.treeStore.load({ params: { profileId: profileId } });
             me.formPanel.hideFields();
             me.treePanel.getView().setDisabled(false);
         } else {
+            me.toolbar.items.get('conversionsMenu').setDisabled(false);
             me.treePanel.getView().setDisabled(true);
             me.formPanel.hideFields();
             me.treePanel.collapseAll();
@@ -72,6 +83,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
 		me.treeStore = Ext.create('Shopware.apps.SwagImportExport.store.Profile');		
 		me.selectedNodeId = 0;
 
+        me.title = me.snippets.title;
         me.items = [me.createToolbar(), me.createTreeItem(), me.createFormPanel()];
 		
 		me.treePanel.getView().setDisabled(true);
@@ -94,7 +106,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
                     displayField: 'name',
                     editable: false,
                     name: 'profile',
-                    emptyText: 'Select Profile...',
+                    emptyText: me.snippets.toolbar.emptyText,
                     listeners: {
                         scope: me,
                         change: function(value) {
@@ -103,21 +115,22 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
                     }
                 },
                 '-', {
-                    text: 'Create Own Profile',
+                    text: me.snippets.toolbar.createProfile,
                     handler: function() {
                         me.fireEvent('createOwnProfile', me.profilesStore);
                     }
                 }, {
-                    text: 'Delete Selected Profile',
-//                    disabled: true,
+                    text: me.snippets.toolbar.deleteProfile,
+                    disabled: true,
                     handler: function() {
                         me.fireEvent('deleteSelectedProfile', me.toolbar.items.get('profilesCombo'), me.profilesStore, me.profileId);
                     }
                 }, {
-                    text: 'Show Conversions',
-                    id: 'show-mappings',
+                    itemId: 'conversionsMenu',
+                    text: me.snippets.toolbar.showConversions,
+                    disabled: true,
                     handler: function() {
-                        me.fireEvent('showMappings', me.profilesStore);
+                        me.fireEvent('showMappings', me.profileId);
                     }
                 }
             ],
@@ -140,10 +153,15 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
 			store: me.treeStore,
 			viewConfig: {
 				plugins: {
-					ptype: 'treeviewdragdrop'
-				}
-			},
-			title: 'Profile',
+					ptype: 'customtreeviewdragdrop'
+				},
+                listeners: {
+                    drop: function(node, data, overModel, dropPosition, eOpts) {
+                        me.treeStore.sync();
+                    }
+                }
+            },
+            title: 'Profile',
 			width: 300,
 			useArrows: true,
 			expandChildren: true,
@@ -209,8 +227,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
 						}
 					}
 				}
-
-			}
+            }
 		});
 		
 		return me.treePanel;
@@ -230,24 +247,19 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
 			hideFields: function() {
 				this.child('#nodeName').hide();
 				this.child('#swColumn').hide();
-				this.child('#iteration').hide();
 			},
 			fillForm: function() {
 				var node = me.treeStore.getById(me.selectedNodeId);
 				this.child('#nodeName').show();
 				this.child('#nodeName').setValue(node.data.text);
 				this.child('#swColumn').setValue(node.data.swColumn);
-				this.child('#iteration').setValue(node.data.type === 'iteration');
 				
 				if (node.data.type === 'attribute') {
 					this.child('#swColumn').show();
-					this.child('#iteration').hide();
 				} else if (node.data.type === 'node') {
 					this.child('#swColumn').show();
-					this.child('#iteration').hide();
 				} else {
 					this.child('#swColumn').hide();
-					this.child('#iteration').show();
 				}
 			},
 			items: [{
@@ -269,18 +281,6 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
 					labelWidth: 150,
 					name: 'swColumn',
 					allowBlank: false
-				}, {
-					itemId: 'iteration',
-					fieldLabel: 'Iteration Node',
-					hidden: true,
-					disabled: true,
-					xtype: 'checkbox',
-					emptyText: 'Select Column',
-					width: 400,
-					labelWidth: 150,
-					name: 'iteration',
-					trueText: 'T',
-					falseText: 'N'
 				}],
 			dockedItems: [{
 					xtype: 'toolbar',
