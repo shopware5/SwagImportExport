@@ -255,8 +255,8 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                 
         $profileEntity->setTree(json_encode($tree));
         
-        Shopware()->Models()->persist($profileEntity);
-        Shopware()->Models()->flush();
+        $this->getManager()->persist($profileEntity);
+        $this->getManager()->flush();
         
         if ($errors) {
             $this->View()->assign(array('success' => false, 'message' => 'Some of the nodes could not be saved', 'children' => $data));
@@ -288,8 +288,8 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                 
         $profileEntity->setTree(json_encode($tree));
         
-        Shopware()->Models()->persist($profileEntity);
-        Shopware()->Models()->flush();
+        $this->getManager()->persist($profileEntity);
+        $this->getManager()->flush();
         
         if ($errors) {
             $this->View()->assign(array('success' => false, 'message' => 'Some of the nodes could not be saved', 'children' => $data));
@@ -321,8 +321,8 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                 
         $profileEntity->setTree(json_encode($tree));
         
-        Shopware()->Models()->persist($profileEntity);
-        Shopware()->Models()->flush();
+        $this->getManager()->persist($profileEntity);
+        $this->getManager()->flush();
         
         if ($errors) {
             $this->View()->assign(array('success' => false, 'message' => 'Some of the nodes could not be saved', 'children' => $data));
@@ -345,8 +345,8 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $profile->setType($data['type']);
         $profile->setTree($newTree);
         
-        Shopware()->Models()->persist($profile);
-        Shopware()->Models()->flush();
+        $this->getManager()->persist($profile);
+        $this->getManager()->flush();
         
         $this->View()->assign(array(
             'success' => true,
@@ -373,7 +373,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             $this->Request()->getParam('start')
         )->getQuery();
         
-        $count = Shopware()->Models()->getQueryCount($query);
+        $count = $this->getManager()->getQueryCount($query);
 
         $data = $query->getArrayResult();
         
@@ -394,9 +394,9 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             $profileRepository = $this->getProfileRepository();
             foreach ($data as $profile) {
                 $profileEntity = $profileRepository->findOneBy(array('id' => $profile['id']));
-                Shopware()->Models()->remove($profileEntity);
+                $this->getManager()->remove($profileEntity);
             }
-            Shopware()->Models()->flush();
+            $this->getManager()->flush();
         } catch (\Exception $e) {
             $this->View()->assign(array('success' => false, 'message' => 'Unexpected error. The profile could not be deleted.', 'children' => $data));
         }
@@ -709,7 +709,6 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             $tree = json_decode($profile->getConfig("tree"), true);
             $fileReader->setTree($tree);            
         }
-        
         if ($dataIO->getSessionState() == 'new') {
             
             $totalCount = $fileReader->getTotalCount($inputFile);
@@ -730,7 +729,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
                 //get current session position
                 $position = $dataIO->getSessionPosition();
-
+                
                 $records = $fileReader->readRecords($inputFile, $position, 100);
 
                 $data = $dataTransformerChain->transformBackward($records);
@@ -753,7 +752,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         if ($dataIO->getSessionState() == 'finished') {
             $dataIO->closeSession();
         }
-        
+                
         return $this->View()->assign(array('success' => true, 'data' => $post));
     }
     
@@ -914,7 +913,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
     public function getProfileRepository()
     {
         if ($this->profileRepository === null) {
-            $this->profileRepository = Shopware()->Models()->getRepository('Shopware\CustomModels\ImportExport\Profile');
+            $this->profileRepository = $this->getManager()->getRepository('Shopware\CustomModels\ImportExport\Profile');
         }
         return $this->profileRepository;
     }
@@ -927,7 +926,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
     public function getSessionRepository()
     {
         if ($this->sessionRepository === null) {
-            $this->sessionRepository = Shopware()->Models()->getRepository('Shopware\CustomModels\ImportExport\Session');
+            $this->sessionRepository = $this->getManager()->getRepository('Shopware\CustomModels\ImportExport\Session');
         }
         return $this->sessionRepository;
     }

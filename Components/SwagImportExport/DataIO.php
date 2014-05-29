@@ -82,7 +82,7 @@ class DataIO
         $ids = $this->loadIds($start, $numberOfRecords);
 
         $columns = $this->getColumns();
-
+        
         $dbAdapter = $this->getDbAdapter();
         
         $rawData = $dbAdapter->read($ids, $columns);
@@ -93,7 +93,7 @@ class DataIO
     public function write($data)
     {
         $dbAdapter = $this->getDbAdapter();
-
+        
         $dbAdapter->write($data);
     }
 
@@ -269,7 +269,7 @@ class DataIO
         }
 
         Shopware()->Models()->persist($session);
-
+        
         Shopware()->Models()->flush();
     }
 

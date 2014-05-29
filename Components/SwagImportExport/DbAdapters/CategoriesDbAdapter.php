@@ -2,11 +2,14 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
+use Shopware\Models\Category\Category;
+
 class CategoriesDbAdapter implements DataDbAdapter
 {
     /*
      * Shopware\Components\Model\ModelManager
      */
+
     private $manager;
 
     /**
@@ -53,8 +56,16 @@ class CategoriesDbAdapter implements DataDbAdapter
      */
     public function read($ids, $columns)
     {
+        if (!$ids && empty($ids)) {
+            throw new \Exception('Can not read categories without ids.');
+        }
+        
+        if (!$columns && empty($columns)) {
+            throw new \Exception('Can not read categories without column names.');
+        }
+        
         $manager = $this->getManager();
-
+        
         $builder = $manager->createQueryBuilder();
         $builder->select($columns)
                 ->from('Shopware\Models\Category\Category', 'c')
@@ -63,6 +74,7 @@ class CategoriesDbAdapter implements DataDbAdapter
                 ->setParameter('ids', $ids);
 
         $result = $builder->getQuery()->getResult();
+        
 
         return $result;
     }
@@ -114,9 +126,11 @@ class CategoriesDbAdapter implements DataDbAdapter
             //$attributesSelect = ",\n" . implode(",\n", $attributesSelect);
         }
 
-        $defaultColumns = array_merge($columns, $attributesSelect);
-
-        return $defaultColumns;
+        if ($attributesSelect && !empty($attributesSelect)) {
+            $columns = array_merge($columns, $attributesSelect);            
+        }
+        
+        return $columns;
     }
 
     /**
@@ -126,74 +140,119 @@ class CategoriesDbAdapter implements DataDbAdapter
      */
     public function write($records)
     {
-        $columnNames = $this->getColumnNames(current($records));
+        $manager = $this->getManager();
 
-        $queryValues = $this->getQueryValues($records);
+        $catRepo = $manager->getRepository('Shopware\Models\Category\Category');
 
-        $query = "REPLACE INTO `s_categories` ($columnNames) VALUES $queryValues ;";
-
-        Shopware()->Db()->query($query);
-    }
-
-    /**
-     * Returns column names
-     * 
-     * @param array $data
-     * @return string
-     */
-    public function getColumnNames($data)
-    {
-        foreach ($data as $columnName => $value) {
-            $columnNames[] = $columnName;
-        }
-
-        $columnNames = "`" . implode("`,`", $columnNames) . "`";
-
-        return $columnNames;
-    }
-
-    /**
-     * Returns query values i.e. (3,1,'Deutsch','0'), (39,1,'English','0')
-     * 
-     * @param array $data
-     * @return string
-     * @throws Exception
-     */
-    public function getQueryValues($data)
-    {
-        $lastKey = end(array_keys(current($data)));
-
-        $queryValues = '';
-
-        foreach ($data as $category) {
-            $tempData = null;
-
-            //todo: make better check for the categories !
-            if (empty($category['id']) || empty($category['parent']) || empty($category['description'])) {
-                throw new Exception('Categories requires id, parent and description');
+        foreach ($records as $record) {
+            
+            //todo: maybe create option to force the id ?
+            if (!$record['id']){
+                //todo: log this result
+                continue;
+            }
+            
+            $category = $catRepo->findOneBy(array('id' => $record['id']));
+            
+            if (!$category) {
+                $category = new Category();
+                $category->setId($record['id']);                
             }
 
-            foreach ($category as $key => $value) {
+            $parentCat = $catRepo->findOneBy(array('id' => $record['parentId']));
 
-                $comma = $key == $lastKey ? '' : ',';
-
-                $tempData .=!(int) ($value) ? "'" . $value . "'" : $value;
-                $tempData .= $comma;
+            if (!$parentCat) {
+                //todo: log this result
+                continue;
             }
 
-            $queryValues .= ', (' . $tempData . ')';
+            $category->setParent($parentCat);
+            
+            if (!$record['name']){
+                //todo: log this result
+                continue;
+            }
+            $category->setName($record['name']);
+            
+            if ($record['active']) {
+                $category->setActive($record['active']);
+            }
+
+            $manager->persist($category);
+            $metadata = $manager->getClassMetaData(get_class($category));
+            $metadata->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);
+            $manager->flush();
         }
-
-        //removes the first comma
-        $queryValues[0] = ' ';
-
-        return $queryValues;
+        
+        
+//        $columnNames = $this->getColumnNames(current($records));
+//
+//        $queryValues = $this->getQueryValues($records);
+//
+//        $query = "REPLACE INTO `s_categories` ($columnNames) VALUES $queryValues ;";
+//
+//        Shopware()->Db()->query($query);
     }
+
+//    /**
+//     * Returns column names
+//     * 
+//     * @param array $data
+//     * @return string
+//     */
+//    public function getColumnNames($data)
+//    {
+//        foreach ($data as $columnName => $value) {
+//            $columnNames[] = $columnName;
+//        }
+//
+//        $columnNames = "`" . implode("`,`", $columnNames) . "`";
+//
+//        return $columnNames;
+//    }
+//
+//    /**
+//     * Returns query values i.e. (3,1,'Deutsch','0'), (39,1,'English','0')
+//     * 
+//     * @param array $data
+//     * @return string
+//     * @throws Exception
+//     */
+//    public function getQueryValues($data)
+//    {
+//        $lastKey = end(array_keys(current($data)));
+//
+//        $queryValues = '';
+//
+//        foreach ($data as $category) {
+//            $tempData = null;
+//
+//            //todo: make better check for the categories !
+//            if (empty($category['id']) || empty($category['parent']) || empty($category['description'])) {
+//                throw new Exception('Categories requires id, parent and description');
+//            }
+//
+//            foreach ($category as $key => $value) {
+//
+//                $comma = $key == $lastKey ? '' : ',';
+//
+//                $tempData .=!(int) ($value) ? "'" . $value . "'" : $value;
+//                $tempData .= $comma;
+//            }
+//
+//            $queryValues .= ', (' . $tempData . ')';
+//        }
+//
+//        //removes the first comma
+//        $queryValues[0] = ' ';
+//
+//        return $queryValues;
+//    }
 
     /**
      * Returns entity manager
      * 
-     * @return object
+     * @return Shopware\Components\Model\ModelManager
      */
     public function getManager()
     {
