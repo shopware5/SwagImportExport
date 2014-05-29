@@ -647,6 +647,10 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         //get file format
         $inputFileName = Shopware()->DocPath() . $postData['file'];
         $extension = pathinfo($inputFileName, PATHINFO_EXTENSION);
+        
+        if (!$this->isFormatValid($extension)) {
+            return $this->View()->assign(array('success' => false, 'msg' => 'Not valid file format'));
+        }
 
         $postData['format'] = $extension;
 
@@ -905,6 +909,23 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         }
 
         Enlight_Application::Instance()->Events()->removeListener(new Enlight_Event_EventHandler('Enlight_Controller_Action_PostDispatch', ''));
+    }
+    
+    /**
+     * Check is file format valid
+     * 
+     * @param string $extension
+     * @return boolean
+     */
+    public function isFormatValid($extension)
+    {
+        switch ($extension) {
+                case 'csv':
+                case 'xml':
+                    return true;
+                default:
+                    return false;
+            }
     }
 
     /**

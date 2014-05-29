@@ -196,6 +196,15 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
             params: me.batchConfig.params,
             success: function(response) {
                 var result = Ext.decode(response.responseText);
+                
+                if(result.success === false){
+                    Shopware.Msg.createStickyGrowlMessage({
+                        title: 'Import Error',
+                        text: result.msg
+                    });
+                    return;
+                }
+                
                 me.batchConfig.position = result.position;
                 me.batchConfig.totalCount = result.count;
                 me.batchConfig.snippet = me.snippets.process + me.batchConfig.position + ' / ' + me.batchConfig.totalCount;
