@@ -74,9 +74,16 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
      * @param [object] target
      */
     onReload: function(target){
-        var response = Ext.decode(target.responseText),
-            fileField = Ext.getCmp('swag-import-export-file');
-        fileField.setValue(response.data.path);
+        var me = this,
+            response = Ext.decode(target.responseText);
+        
+        if (response.success === false) {
+            return;
+        }
+        
+        var path = response.data.path;
+    
+        me.setFilePath(path);
     },
     /**
      * 
@@ -108,19 +115,20 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
         var localFile = Ext.getCmp('importSelectFile').getValue();
 
         if (!Ext.isEmpty(localFile)){
-            console.log('todo: submit form');
             
-//            form.submit({
-//                url: '{url module=backend controller="swagImportExport" action="uploadFile"}',
-//                waitMsg: 'Uploading',
-//                success: function(fp, o) {
-//                    console.log(varaible);
-//                     console.log(o);
-//                },
-//                failure: function(fp, o) {
-//                    console.log(o);
-//                }
-//            });
+            form.submit({
+                url: '{url module=backend controller="swagImportExport" action="uploadFile"}',
+                waitMsg: 'Uploading',
+                success: function(fp, response) {
+                    me.setFilePath(response.result.data.path);
+                    me.parameters = btn.up('form').getForm().getValues();
+                    me.onCreateImportWindow();
+                },
+                failure: function(fp, response) {
+                    //todo: handle the failure
+                    console.log(response);
+                }
+            });
         }
     },
     /**
@@ -205,6 +213,10 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
                 });
             }
         });
+    },
+    setFilePath: function(path){
+        var fileField = Ext.getCmp('swag-import-export-file');
+        fileField.setValue(path);
     },
     /**
      * This function sends a request to export data

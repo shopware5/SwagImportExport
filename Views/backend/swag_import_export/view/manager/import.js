@@ -117,7 +117,8 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
             checkAmount: false,
             enablePreviewImage: false,
             dropZoneText: me.snippets.dragAndDropFile,
-            height: 100
+            height: 100,
+            html: '<div id="selectedFile" style="margin-top: 10px; display: none"></div>'
         });
 
         return Ext.create('Ext.form.FieldSet', {
@@ -167,6 +168,22 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
             listeners: {
                 change: function(element, value, eOpts) {
                     me.findProfile(value);
+                    var el = Ext.get('selectedFile');
+                    el.update('<b>Selected: ' + value + '</b> ');
+                    if (!el.isVisible()) {
+                        el.slideIn('t', {
+                            duration: 200,
+                            easing: 'easeIn',
+                            listeners: {
+                                afteranimate: function() {
+                                    el.highlight();
+                                    el.setWidth(null);
+                                }
+                            }
+                        });
+                    } else {
+                        el.highlight();
+                    }
                 }
             }
         };
@@ -177,7 +194,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
         me.addBtn = Ext.create('Ext.form.field.File', {
             emptyText: me.snippets.choose,
             buttonText: me.snippets.chooseButton,
-            name: 'importSelectFile',
+            name: 'fileId',
             id: 'importSelectFile',
             width: 450,
             labelWidth: 150,

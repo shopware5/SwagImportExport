@@ -833,6 +833,8 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
     
     public function uploadFileAction()
     {
+        $this->Front()->Plugins()->Json()->setRenderer(false);
+        
         $albumRepo = $this->getManager()->getRepository('Shopware\Models\Media\Album');
 
         $album = $albumRepo->findOneBy(array('name' => 'ImportFiles'));
@@ -848,7 +850,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $id = $album->getId();
         
         $this->Request()->setParam('albumID', $id);
-        
+                
         $this->forward('upload', 'mediaManager');
     }
 
@@ -950,4 +952,3 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
     }
     
 }
-
