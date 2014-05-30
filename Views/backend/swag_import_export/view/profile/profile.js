@@ -61,6 +61,8 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
 	loadNew: function(profileId) {
 		var me = this;
         
+        console.log(profileId);
+        
         me.profileId = profileId;
         if (profileId !== null) {
             me.toolbar.items.get('conversionsMenu').setDisabled(false);
@@ -108,16 +110,16 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
                     name: 'profile',
                     emptyText: me.snippets.toolbar.emptyText,
                     listeners: {
-                        scope: me,
-                        change: function(value) {
-                            me.loadNew(value.getValue());
+                        change: function(combo, value) {
+                            console.log(value);
+                            me.loadNew(value);
                         }
                     }
                 },
                 '-', {
                     text: me.snippets.toolbar.createProfile,
                     handler: function() {
-                        me.fireEvent('createOwnProfile', me.profilesStore);
+                        me.fireEvent('createOwnProfile', me.profilesStore, me.toolbar.child('#profilesCombo'));
                     }
                 }, {
                     text: me.snippets.toolbar.deleteProfile,
@@ -198,35 +200,35 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
 				}],
 			listeners: {
 				itemclick: {
-					fn: function(view, record, item, index, event) {
-						me.selectedNodeId = record.data.id;
-						me.formPanel.fillForm();
-						
-						var toolbar = this.dockedItems.get('toolbar');
-						
-						if (record.data.type === 'attribute') {
-							toolbar.items.get('createAttribute').setDisabled(true);
-							toolbar.items.get('createChild').setDisabled(true);
-							toolbar.items.get('deleteSelected').setDisabled(false);
-						} else if (record.data.type === 'node') {
-							toolbar.items.get('createAttribute').setDisabled(false);
-							toolbar.items.get('createChild').setDisabled(false);
-							toolbar.items.get('deleteSelected').setDisabled(false);
-						} else {
-							if (record.data.inIteration === true) {
-								toolbar.items.get('createAttribute').setDisabled(false);
-							} else {
-								toolbar.items.get('createAttribute').setDisabled(true);
-							}
-							toolbar.items.get('createChild').setDisabled(false);
-							if (record.data.id === 'root') {
-								toolbar.items.get('deleteSelected').setDisabled(true);
-							} else {
-								toolbar.items.get('deleteSelected').setDisabled(false);
-							}
-						}
-					}
-				}
+                    fn: function(view, record, item, index, event) {
+                        me.selectedNodeId = record.data.id;
+                        me.formPanel.fillForm();
+
+                        var toolbar = this.dockedItems.get('toolbar');
+
+                        if (record.data.type === 'attribute') {
+                            toolbar.items.get('createAttribute').setDisabled(true);
+                            toolbar.items.get('createChild').setDisabled(true);
+                            toolbar.items.get('deleteSelected').setDisabled(false);
+                        } else if (record.data.type === 'node') {
+                            toolbar.items.get('createAttribute').setDisabled(false);
+                            toolbar.items.get('createChild').setDisabled(false);
+                            toolbar.items.get('deleteSelected').setDisabled(false);
+                        } else {
+                            if (record.data.inIteration === true) {
+                                toolbar.items.get('createAttribute').setDisabled(false);
+                            } else {
+                                toolbar.items.get('createAttribute').setDisabled(true);
+                            }
+                            toolbar.items.get('createChild').setDisabled(false);
+                            if (record.data.id === 'root') {
+                                toolbar.items.get('deleteSelected').setDisabled(true);
+                            } else {
+                                toolbar.items.get('deleteSelected').setDisabled(false);
+                            }
+                        }
+                    }
+                }
             }
 		});
 		

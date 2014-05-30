@@ -112,12 +112,67 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
     /**
      * Shows window with fields for the new profile and adds it
      */
-    createOwnProfile: function(store) {
-        var callback = function(btn, text) {
-            store.add({ type: 'categories', name: text, tree: "" });
-            store.sync();
-        };
-        Ext.MessageBox.prompt('Name', 'Please enter the profile name:', callback);
+    createOwnProfile: function(store, combo) {
+        var myForm = Ext.create('Ext.form.Panel', {
+            width: 500,
+            height: 150,
+            bodyPadding: 12,
+            title: 'New Profile',
+            border: false,
+            bodyStyle: {
+                border: '0 !important'
+            },
+            floating: true,
+            closable: true,
+            modal: true,
+            items: [{
+                    xtype: 'textfield',
+                    itemId: 'profileName',
+                    fieldLabel: 'Profile Name',
+                    name: 'profileName',
+                    allowBlank: false
+                }, {
+                    xtype: 'combobox',
+                    itemId: 'type',
+                    fieldLabel: 'Type',
+                    emptyText: 'Select Type',
+                    store: ['categories', 'articles'],
+                    name: 'type',
+                    allowBlank: false
+                }],
+            dockedItems: [{
+                    xtype: 'toolbar',
+                    dock: 'bottom',
+                    ui: 'shopware-ui',
+                    cls: 'shopware-toolbar',
+                    style: {
+                        backgroundColor: '#F0F2F4'
+                    },
+                    items: ['->', {
+                            text: 'Save',
+                            cls: 'primary',
+                            action: 'swag-import-export-manager-profile-save',
+                            handler: function() {
+                                var model = combo.store.add({ type: myForm.child('#type').getValue(), name: myForm.child('#profileName').getValue(), tree: "" });
+                                myForm.setLoading(true);
+                                combo.store.sync({
+                                    success: function() {
+                                        console.log(model[0].get('id'));
+                                        combo.setValue(model[0].get('id'));
+                                        myForm.setLoading(false);
+                                        myForm.close();
+                                    },
+                                    failure: function() {
+                                        myForm.setLoading(false);
+                                        myForm.close();
+                                    }
+                                });
+
+                            }
+                        }]
+                }]
+        });
+        myForm.show();
     },
     
     /**
