@@ -913,7 +913,18 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
     public function getColumnsAction()
     {
-        $dbAdapter = $this->Plugin()->getDataFactory()->createDbAdapter('categories');
+        $postData['profileId'] = $this->Request()->getParam('profileId');
+        
+        if (!$postData['profileId']) {
+            return $this->View()->assign(array(
+                'success' => false, 'message' => 'No profile Id'
+            ));
+        }
+
+        $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
+        $type = $profile->getType();
+        
+        $dbAdapter = $this->Plugin()->getDataFactory()->createDbAdapter($type);
         $columns = $dbAdapter->getDefaultColumns();
         
         foreach ($columns as &$column) {
