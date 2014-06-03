@@ -910,6 +910,35 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
         Enlight_Application::Instance()->Events()->removeListener(new Enlight_Event_EventHandler('Enlight_Controller_Action_PostDispatch', ''));
     }
+
+    public function getColumnsAction()
+    {
+        $dbAdapter = $this->Plugin()->getDataFactory()->createDbAdapter('categories');
+        $columns = $dbAdapter->getDefaultColumns();
+        
+        foreach ($columns as &$column) {
+            $match = '';
+            preg_match('/(?<=as ).*/', $column, $match);
+            
+            $match = trim($match[0]);
+            
+            if ($match != '') {
+                $column = $match;
+            } else {
+                preg_match('/(?<=\.).*/', $column, $match);
+                $match = trim($match[0]);
+                if ($match != '') {
+                    $column = $match;
+                }
+            }
+            
+            $column = array('id' => $column, 'name' => $column);
+        }
+        
+        $this->View()->assign(array(
+            'success' => true, 'data' => $columns, 'total' => count($columns)
+        ));
+    }
     
     /**
      * Check is file format valid

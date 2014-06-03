@@ -68,6 +68,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
             me.toolbar.items.get('conversionsMenu').setDisabled(false);
             me.treeStore.getProxy().setExtraParam('profileId', profileId);
             me.treeStore.load({ params: { profileId: profileId } });
+            me.columnStore.load({ params: { profileId: profileId } });
             me.formPanel.hideFields();
             me.treePanel.getView().setDisabled(false);
         } else {
@@ -84,6 +85,8 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
 		me.profilesStore = Ext.create('Shopware.apps.SwagImportExport.store.ProfileList').load();
 		me.treeStore = Ext.create('Shopware.apps.SwagImportExport.store.Profile');		
 		me.selectedNodeId = 0;
+        
+        me.columnStore = Ext.create('Shopware.apps.SwagImportExport.store.Column');
 
         me.title = me.snippets.title;
         me.items = [me.createToolbar(), me.createTreeItem(), me.createFormPanel()];
@@ -276,12 +279,14 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
 					itemId: 'swColumn',
 					fieldLabel: 'Shopware Column',
 					hidden: true,
-					xtype: 'combobox',
-					emptyText: 'Select Column',
-					store: ['id', 'description', 'parent', 'active'],
-					width: 400,
-					labelWidth: 150,
-					name: 'swColumn',
+                    xtype: 'combobox',
+                    emptyText: 'Select Column',
+                    store: me.columnStore,
+                    valueField: 'id',
+                    displayField: 'name',
+                    width: 400,
+                    labelWidth: 150,
+                    name: 'swColumn',
 					allowBlank: false
 				}],
 			dockedItems: [{
