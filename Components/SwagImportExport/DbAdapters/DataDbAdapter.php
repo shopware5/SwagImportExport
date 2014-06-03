@@ -6,4 +6,10 @@ interface DataDbAdapter
 {
 
     public function read($ids, $columns);
+
+    public function readRecordIds($start, $limit, $filter);
+
+    public function getDefaultColumns();
+
+    public function write($records);
 }

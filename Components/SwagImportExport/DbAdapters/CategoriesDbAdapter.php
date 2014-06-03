@@ -6,11 +6,11 @@ use Shopware\Models\Category\Category;
 
 class CategoriesDbAdapter implements DataDbAdapter
 {
-    /*
+
+    /**
      * Shopware\Components\Model\ModelManager
      */
-
-    private $manager;
+    protected $manager;
 
     /**
      * Returns record ids
@@ -59,13 +59,13 @@ class CategoriesDbAdapter implements DataDbAdapter
         if (!$ids && empty($ids)) {
             throw new \Exception('Can not read categories without ids.');
         }
-        
+
         if (!$columns && empty($columns)) {
             throw new \Exception('Can not read categories without column names.');
         }
-        
+
         $manager = $this->getManager();
-        
+
         $builder = $manager->createQueryBuilder();
         $builder->select($columns)
                 ->from('Shopware\Models\Category\Category', 'c')
@@ -74,7 +74,7 @@ class CategoriesDbAdapter implements DataDbAdapter
                 ->setParameter('ids', $ids);
 
         $result = $builder->getQuery()->getResult();
-        
+
 
         return $result;
     }
@@ -127,9 +127,9 @@ class CategoriesDbAdapter implements DataDbAdapter
         }
 
         if ($attributesSelect && !empty($attributesSelect)) {
-            $columns = array_merge($columns, $attributesSelect);            
+            $columns = array_merge($columns, $attributesSelect);
         }
-        
+
         return $columns;
     }
 
@@ -145,18 +145,18 @@ class CategoriesDbAdapter implements DataDbAdapter
         $catRepo = $manager->getRepository('Shopware\Models\Category\Category');
 
         foreach ($records as $record) {
-            
+
             //todo: maybe create option to force the id ?
-            if (!$record['id']){
+            if (!$record['id']) {
                 //todo: log this result
                 continue;
             }
-            
+
             $category = $catRepo->findOneBy(array('id' => $record['id']));
-            
+
             if (!$category) {
                 $category = new Category();
-                $category->setId($record['id']);                
+                $category->setId($record['id']);
             }
 
             $parentCat = $catRepo->findOneBy(array('id' => $record['parentId']));
@@ -167,13 +167,13 @@ class CategoriesDbAdapter implements DataDbAdapter
             }
 
             $category->setParent($parentCat);
-            
-            if (!$record['name']){
+
+            if (!$record['name']) {
                 //todo: log this result
                 continue;
             }
             $category->setName($record['name']);
-            
+
             if ($record['active']) {
                 $category->setActive($record['active']);
             }
@@ -183,8 +183,8 @@ class CategoriesDbAdapter implements DataDbAdapter
             $metadata->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);
             $manager->flush();
         }
-        
-        
+
+
 //        $columnNames = $this->getColumnNames(current($records));
 //
 //        $queryValues = $this->getQueryValues($records);

@@ -88,7 +88,7 @@ class ControllerTest extends ImportExportTestHelper
             //todo: create file here ?
             $fileName = $dataIO->generateFileName($profile);
             $outputFileName = Shopware()->DocPath() . 'files/import_export/' . $fileName;
-            
+
             // session has no ids stored yet, therefore we must start it and write the file headers
             $header = $dataTransformerChain->composeHeader();
             $fileWriter->writeHeader($outputFileName, $header);
@@ -96,9 +96,9 @@ class ControllerTest extends ImportExportTestHelper
         } else {
             //todo: create file here ?
             $fileName = $dataIO->generateFileName($profile);
-           
+
             $outputFileName = Shopware()->DocPath() . 'files/import_export/' . $fileName;
-            
+
             // session has already loaded ids and some position, so we simply activate it
             $dataIO->resumeSession();
         }
@@ -115,7 +115,7 @@ class ControllerTest extends ImportExportTestHelper
 
                 // process that array with the full transformation chain
                 $data = $dataTransformerChain->transformForward($data);
-                
+
                 // now the array should be a tree and we write it to the file
                 $fileWriter->writeRecords($outputFileName, $data);
 
@@ -157,14 +157,14 @@ class ControllerTest extends ImportExportTestHelper
         $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
 
         $dataIO = $this->Plugin()->getDataFactory()->createDataIO($postData);
-        
+
         if ($dataIO->getSessionState() == 'closed') {
             echo '<pre>';
             var_dump('This session is already import.');
             echo '</pre>';
             exit;
         }
-        
+
         // we create the file reader that will read the result file
         $fileReader = $this->Plugin()->getFileIOFactory()->createFileReader($postData);
 
@@ -177,7 +177,7 @@ class ControllerTest extends ImportExportTestHelper
         if ($dataIO->getSessionState() == 'new') {
 
             $totalCount = $fileReader->getTotalCount($inputFileName);
-            
+
             $dataIO->getDataSession()->setFileName($inputFileName);
 
             $dataIO->getDataSession()->setTotalCount($totalCount);
@@ -198,9 +198,9 @@ class ControllerTest extends ImportExportTestHelper
                 $records = $fileReader->readRecords($inputFileName, $position, 100);
 
                 $data = $dataTransformerChain->transformBackward($records);
-                
+
                 $dataIO->write($data);
-                
+
                 $dataIO->progressSession();
             } catch (Exception $e) {
                 // we need to analyze the exception somehow and decide whether to break the while loop;
@@ -208,12 +208,12 @@ class ControllerTest extends ImportExportTestHelper
                 // may be we use
             }
         }
-        
+
         if ($dataIO->getSessionState() == 'finished') {
             $dataIO->closeSession();
         }
     }
-    
+
     public function testAPI()
     {
 //        
@@ -236,7 +236,7 @@ class ControllerTest extends ImportExportTestHelper
         $limit = $this->Request()->getParam('limit', 10);
         $offset = $this->Request()->getParam('start', 0);
         $sort = $this->Request()->getParam('sort', array());
-        
+
         $start = microtime(true);
         $resource = \Shopware\Components\Api\Manager::getResource('category');
 
@@ -274,7 +274,7 @@ class ControllerTest extends ImportExportTestHelper
 //        echo '</pre>';
 //        exit;
     }
-    
+
 //    public function testImportFakeCategories()
 //    {
 //        $fakeCategories = '';
@@ -290,6 +290,279 @@ class ControllerTest extends ImportExportTestHelper
 //        echo 'Fake categories were added';
 //        exit;
 //    }
+
+    public function testImportFakeArticles()
+    {
+        $builder = Shopware()->Models()->createQueryBuilder();
+        
+        $builder->select(array(
+            'article.id as articleId',
+            'variants.id as variantId',
+            'article.name as name',
+            'variants.additionalText as additionalText',
+            'supplier.name as supplierName',
+            'articleTax.tax as tax',
+            'prices.price as netPrice',
+            'prices.pseudoPrice as pseudoPrice',
+            'prices.basePrice as basePrice',
+            'article.active as active',
+            'variants.inStock as inStock',
+            'variants.stockMin as stockMin',
+            'article.description as description',
+            'article.descriptionLong as descriptionLong',
+            'variants.shippingTime as shippingTime',
+            'variants.shippingFree as shippingFree',
+            'article.highlight as highlight',
+            'article.metaTitle as metaTitle',
+            'article.keywords as keywords',
+            'variants.minPurchase as minPurchase',
+            'variants.purchaseSteps as purchaseSteps',
+            'variants.maxPurchase as maxPurchase',
+            'variants.purchaseUnit as purchaseUnit',
+            'variants.referenceUnit as referenceUnit',
+            'variants.packUnit as packUnit',
+            'variants.unitId as unitId',
+            'article.priceGroupId as pricegroupId',
+            'article.priceGroupActive as priceGroupActive',
+            'article.lastStock as lastStock',
+            'variants.supplierNumber as supplierNumber',
+            'articleEsd.file as esd',
+            'variants.weight as weight',
+            'variants.width as width',
+            'variants.height as height',
+            'variants.len as length',
+            'variants.ean as ean',
+            'variantsUnit.unit as unit',
+        ));
+
+        $builder->from('Shopware\Models\Article\Detail', 'variants')
+            ->leftJoin('variants.article', 'article')
+            ->leftJoin('article.supplier', 'supplier')
+            ->leftJoin('article.esds', 'articleEsd')
+            ->leftJoin('variants.prices', 'prices')
+            ->leftJoin('variants.unit', 'variantsUnit')
+            ->leftJoin('article.tax', 'articleTax');
+        $builder
+                ->setFirstResult(100)
+                ->setMaxResults(5);
+        
+        $startA = microtime(true);
+        
+        $query = $builder->getQuery();
+        $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        
+        $paginator = Shopware()->Models()->createPaginator($query);
+
+        //returns the total count of the query
+        $totalResult = $paginator->count();
+
+        //returns the category data
+        $articles = $paginator->getIterator()->getArrayCopy();
+        
+        echo microtime(true) - $startA;
+        echo '<pre>';
+        \Doctrine\Common\Util\Debug::dump(($articles));
+        echo '</pre>';
+        exit;
+        
+
+//        $articlesDetailRepo = Shopware()->Models()->getRepository('Shopware\Models\Article\Detail');
+
+//        $articles = \Shopware\Components\Api\Manager::getResource('article');
+//        
+//        $startA = microtime(true);
+//        $result = $articles->getList(null, null);
+//        
+//        echo microtime(true) - $startA;
+//        
+//        echo '<pre>';
+//        var_dump($result['total']);
+//        echo '</pre>';
+//        exit;
+//
+//        echo '<pre>';
+//        var_dump($result['data'][0]);
+//        echo '</pre>';
+//        exit;
+//        $article = array(
+//            'supplierId' => '1',
+//            'mainDetailId' => '3',
+//            'taxId' => '1',
+//            'name' => 'fake-02',
+//            'description' => 'test description',
+//            'active' => '1',
+//            'priceGroupActive' => false,
+//            'lastStock' => false,
+//            'notification' => false,
+//            'autoNumber' => "90064",
+//            'attribute' => array(
+//                array(
+//                    
+//                )
+//            ),
+//            'mainPrices' => array(
+//                'price' => 777,
+//                'customerGroupKey' => 'EK',
+//                'customerGroup' => 0
+//            ),
+//            'mainDetail' => array(
+//                array(
+//                    'id' => 0,
+//                    'articleId' => 0,
+//                    'number' => 'DNH90064',
+//                    'active' => true,
+//                    'attribute' => array()
+//                ),
+//            )
+//        );
+//        $minimalTestArticle = array(
+//            'name' => 'Turnschuh',
+//            'active' => true,
+//            'tax' => 19,
+//            'supplier' => 'Turnschuh Inc.',
+//            'mainDetail' => array(
+//                'number' => 'turn',
+//                'prices' => array(
+//                    array(
+//                        'customerGroupKey' => 'EK',
+//                        'price' => 999,
+//                    ),
+//                )
+//            ),
+//            'configuratorSet' => array(
+//                'groups' => array(
+//                    array(
+//                        'name' => 'Größe',
+//                        'options' => array(
+//                            array('name' => 'S'),
+//                            array('name' => 'M'),
+//                            array('name' => 'L'),
+//                            array('name' => 'XL'),
+//                            array('name' => 'XXL'),
+//                        )
+//                    ),
+//                    array(
+//                        'name' => 'Farbe',
+//                        'options' => array(
+//                            array('name' => 'Weiß'),
+//                            array('name' => 'Gelb'),
+//                            array('name' => 'Blau'),
+//                            array('name' => 'Schwarz'),
+//                            array('name' => 'Rot'),
+//                        )
+//                    ),
+//                )
+//            ),
+//            'taxId' => 1,
+//            'variants' => array(
+//                array(
+//                    'isMain' => true,
+//                    'number' => 'turn',
+//                    'inStock' => 15,
+//                    'additionaltext' => 'L / Schwarz',
+//                    'configuratorOptions' => array(
+//                        array('group' => 'Größe', 'option' => 'L'),
+//                        array('group' => 'Farbe', 'option' => 'Schwarz'),
+//                    ),
+//                    'prices' => array(
+//                        array(
+//                            'customerGroupKey' => 'EK',
+//                            'price' => 1999,
+//                        ),
+//                    )
+//                ),
+//                array(
+//                    'isMain' => false,
+//                    'number' => 'turn.1',
+//                    'inStock' => 15,
+//                    'additionnaltext' => 'S / Schwarz',
+//                    'configuratorOptions' => array(
+//                        array('group' => 'Größe', 'option' => 'S'),
+//                        array('group' => 'Farbe', 'option' => 'Schwarz'),
+//                    ),
+//                    'prices' => array(
+//                        array(
+//                            'customerGroupKey' => 'EK',
+//                            'price' => 999,
+//                        ),
+//                    )
+//                ),
+//                array(
+//                    'isMain' => false,
+//                    'number' => 'turn.2',
+//                    'inStock' => 15,
+//                    'additionnaltext' => 'S / Rot',
+//                    'configuratorOptions' => array(
+//                        array('group' => 'Größe', 'option' => 'S'),
+//                        array('group' => 'Farbe', 'option' => 'Rot'),
+//                    ),
+//                    'prices' => array(
+//                        array(
+//                            'customerGroupKey' => 'EK',
+//                            'price' => 999,
+//                        ),
+//                    )
+//                ),
+//                array(
+//                    'isMain' => false,
+//                    'number' => 'turn.3',
+//                    'inStock' => 15,
+//                    'additionnaltext' => 'XL / Rot',
+//                    'configuratorOptions' => array(
+//                        array('group' => 'Größe', 'option' => 'XL'),
+//                        array('group' => 'Farbe', 'option' => 'Rot'),
+//                    ),
+//                    'prices' => array(
+//                        array(
+//                            'customerGroupKey' => 'EK',
+//                            'price' => 999,
+//                        ),
+//                    )
+//                )
+//            )
+//        );
+
+//        $minimalTestArticle = array(
+//            'name' => 'Fake-Article-02',
+//            'active' => true,
+//            'tax' => 19,
+//            'supplier' => 'Turnschuh Inc.',
+//            'mainDetail' => array(
+//                'number' => 'FAKE00002',
+//                'prices' => array(
+//                    array(
+//                        'customerGroupKey' => 'EK',
+//                        'price' => 999,
+//                    ),
+//                )
+//            )
+//        );
+//        
+//        $start = microtime(true);
+//        for ($index = 0; $index < 10000; $index++) {
+//            $minimalTestArticle = array(
+//                'name' => 'Fake-Article-' . $index,
+//                'active' => true,
+//                'tax' => 19,
+//                'supplier' => 'Turnschuh Inc.',
+//                'mainDetail' => array(
+//                    'number' => 'FAKE0000' . $index,
+//                    'prices' => array(
+//                        array(
+//                            'customerGroupKey' => 'EK',
+//                            'price' => 999,
+//                        ),
+//                    )
+//                )
+//            );
+//            $articles->create($minimalTestArticle);
+//        }
+//        
+//        $end = microtime(true);
+//        //10000 articles for 1 min
+//        
+//        echo $end - $start;
+    }
 
     public function testImportXmlLifeCycle()
     {
