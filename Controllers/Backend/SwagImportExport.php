@@ -22,6 +22,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Components\SwagImportExport\DataWorkflow;
 
 /**
  * Shopware ImportExport Plugin
@@ -518,11 +519,21 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
         $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
 
-        //get profile type
-        $postData['adapter'] = $profile->getType();
-
         $dataFactory = $this->Plugin()->getDataFactory();
-        $dataIO = $dataFactory->createDataIO($postData);
+        
+        $dbAdapter = $dataFactory->createDbAdapter($profile->getType());
+        $dataSession = $dataFactory->loadSession($postData);
+        
+        $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession);
+        
+        $colOpts = $dataFactory->createColOpts($postData['columnOptions']);
+        $limit = $dataFactory->createLimit($postData['limit']);
+        $filter = $dataFactory->createFilter($postData['filter']);
+        $maxRecordCount = $postData['max_record_count'];
+        $type = $postData['type'];
+        $format = $postData['format'];
+        
+        $dataIO->initialize($colOpts, $limit, $filter, $maxRecordCount, $type, $format);
 
         $ids = $dataIO->preloadRecordIds()->getRecordIds();
 
@@ -544,12 +555,22 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
         $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
 
-        //get profile type
-        $postData['adapter'] = $profile->getType();
-
-        //create dataIO
         $dataFactory = $this->Plugin()->getDataFactory();
-        $dataIO = $dataFactory->createDataIO($postData);
+        
+        $dbAdapter = $dataFactory->createDbAdapter($profile->getType());
+        $dataSession = $dataFactory->loadSession($postData);
+        
+        //create dataIO
+        $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession);
+        
+        $colOpts = $dataFactory->createColOpts($postData['columnOptions']);
+        $limit = $dataFactory->createLimit($postData['limit']);
+        $filter = $dataFactory->createFilter($postData['filter']);
+        $maxRecordCount = $postData['max_record_count'];
+        $type = $postData['type'];
+        $format = $postData['format'];
+        
+        $dataIO->initialize($colOpts, $limit, $filter, $type, $format, $maxRecordCount);
 
         // we create the file writer that will write (partially) the result file
         $fileWriter = $this->Plugin()->getFileIOFactory()->createFileWriter($postData);
@@ -558,77 +579,15 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                 $profile, array('isTree' => $fileWriter->hasTreeStructure())
         );
         
-        if ($dataIO->getSessionState() == 'closed') {
-            $postData['position'] = $dataIO->getSessionPosition();
-            $postData['fileName'] = $dataIO->getDataSession()->getFileName();
+        $dataWorkflow = new DataWorkflow($dataIO, $profile, $dataTransformerChain, $fileWriter);
+
+        try {
+            $post = $dataWorkflow->export($postData);
             
-            return $this->View()->assign(array('success' => true, 'data' => $postData));
+            return $this->View()->assign(array('success' => true, 'data' => $post));
+        } catch (Exception $e) {
+            return $this->View()->assign(array('success' => false, 'msg' => $e->getMessage()));
         }
-
-        if ($dataIO->getSessionState() == 'new') {
-            //todo: create file here ?
-            $fileName = $dataIO->generateFileName($profile);
-            $directory = $dataIO->getDirectory();
-            
-            $outputFileName = $directory . $fileName;
-
-            // session has no ids stored yet, therefore we must start it and write the file headers
-            $header = $dataTransformerChain->composeHeader();
-            $fileWriter->writeHeader($outputFileName, $header);
-
-            $dataIO->startSession($profile->getEntity());
-        } else {
-            $fileName = $dataIO->getDataSession()->getFileName();
-
-            $outputFileName = Shopware()->DocPath() . 'files/import_export/' . $fileName;
-
-            // session has already loaded ids and some position, so we simply activate it
-            $dataIO->resumeSession();
-        }
-        $dataIO->preloadRecordIds();
-
-        if ($dataIO->getSessionState() == 'active') {
-
-            try {
-                // read a bunch of records into simple php array;
-                // the count of records may be less than 100 if we are at the end of the read.
-                $data = $dataIO->read(1000);
-
-                // process that array with the full transformation chain
-                $data = $dataTransformerChain->transformForward($data);
-
-                // now the array should be a tree and we write it to the file
-                $fileWriter->writeRecords($outputFileName, $data);
-
-                // writing is successful, so we write the new position in the session;
-                // if if the new position goes above the limits provided by the 
-                $dataIO->progressSession(1000);
-            } catch (Exception $e) {
-                return $this->View()->assign(array('success' => false, 'msg' => $e->getMessage()));
-            }
-        }
-
-        $position = $dataIO->getSessionPosition();
-
-        $post = $postData;
-        $post['position'] = $position == null ? 0 : $position;
-
-        if (!$post['sessionId']) {
-            $post['sessionId'] = $dataIO->getDataSession()->getId();
-        }
-        
-        if ($dataIO->getSessionState() == 'finished') {
-            // Session finished means we have exported all the ids in the sesssion.
-            // Therefore we can close the file with a footer and mark the session as done.
-            $footer = $dataTransformerChain->composeFooter();
-            $fileWriter->writeFooter($outputFileName, $footer);
-            $dataIO->closeSession();
-        }
-        if (!$post['fileName']) {
-            $post['fileName'] = $fileName;
-        }
-
-        return $this->View()->assign(array('success' => true, 'data' => $post));
     }
 
     public function prepareImportAction()
@@ -662,17 +621,22 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         // we create the file reader that will read the result file
         $fileReader = $this->Plugin()->getFileIOFactory()->createFileReader($postData);
 
-        if($extension === 'xml'){
+        if ($extension === 'xml') {
             $tree = json_decode($profile->getConfig("tree"), true);
-            $fileReader->setTree($tree);            
+            $fileReader->setTree($tree);
         }
-        
+
+        $dataFactory = $this->Plugin()->getDataFactory();
+
+        $dbAdapter = $dataFactory->createDbAdapter($profile->getType());
+        $dataSession = $dataFactory->loadSession($postData);
+
         //create dataIO
-        $dataIO = $this->Plugin()->getDataFactory()->createDataIO($postData);
-        
+        $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession);
+
         $position = $dataIO->getSessionPosition();
         $position = $position == null ? 0 : $position;
-        
+
         $totalCount = $fileReader->getTotalCount($inputFileName);
 
         return $this->View()->assign(array('success' => true, 'position' => $position, 'count' => $totalCount));
@@ -702,64 +666,38 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         //get profile type
         $postData['adapter'] = $profile->getType();
         
+        $dataFactory = $this->Plugin()->getDataFactory();
+        
+        $dbAdapter = $dataFactory->createDbAdapter($profile->getType());
+        $dataSession = $dataFactory->loadSession($postData);
+        
         //create dataIO
-        $dataIO = $this->Plugin()->getDataFactory()->createDataIO($postData);
+        $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession);
         
+        $colOpts = $dataFactory->createColOpts($postData['columnOptions']);
+        $limit = $dataFactory->createLimit($postData['limit']);
+        $filter = $dataFactory->createFilter($postData['filter']);
+        $maxRecordCount = $postData['max_record_count'];
+        $type = $postData['type'];
+        $format = $postData['format'];
+        
+        $dataIO->initialize($colOpts, $limit, $filter, $type, $format, $maxRecordCount);
+
         $dataTransformerChain = $this->Plugin()->getDataTransformerFactory()->createDataTransformerChain(
-            $profile, array('isTree' => $fileReader->hasTreeStructure())
+                $profile, array('isTree' => $fileReader->hasTreeStructure())
         );
-        
-        if($postData['format'] === 'xml'){
-            $tree = json_decode($profile->getConfig("tree"), true);
-            $fileReader->setTree($tree);            
+
+        $dataWorkflow = new DataWorkflow($dataIO, $profile, $dataTransformerChain, $fileReader);
+
+        try {
+            $post = $dataWorkflow->import($postData, $inputFile);
+
+            return $this->View()->assign(array('success' => true, 'data' => $post));
+        } catch (Exception $e) {
+            return $this->View()->assign(array('success' => false, 'msg' => $e->getMessage()));
         }
-        if ($dataIO->getSessionState() == 'new') {
-            
-            $totalCount = $fileReader->getTotalCount($inputFile);
-            
-            $dataIO->getDataSession()->setFileName($postData['importFile']);
-
-            $dataIO->getDataSession()->setTotalCount($totalCount);
-
-            $dataIO->startSession($profile->getEntity());
-        } else {
-            // session has already loaded ids and some position, so we simply activate it
-            $dataIO->resumeSession();
-        }
-        
-        if ($dataIO->getSessionState() == 'active') {
-
-            try {
-
-                //get current session position
-                $position = $dataIO->getSessionPosition();
-                
-                $records = $fileReader->readRecords($inputFile, $position, 100);
-
-                $data = $dataTransformerChain->transformBackward($records);
-                
-                $dataIO->write($data);
-                
-                $dataIO->progressSession(100);
-            } catch (Exception $e) {
-                return $this->View()->assign(array('success' => false, 'msg' => $e->getMessage()));
-            }
-        }
-        $position = $dataIO->getSessionPosition();
-        $post = $postData;
-        $post['position'] = $position == null ? 0 : $position;
-
-        if (!$post['sessionId']) {
-            $post['sessionId'] = $dataIO->getDataSession()->getId();
-        }
-        
-        if ($dataIO->getSessionState() == 'finished') {
-            $dataIO->closeSession();
-        }
-                
-        return $this->View()->assign(array('success' => true, 'data' => $post));
     }
-    
+
     public function getSessionsAction()
     {
         $sessionRepository = $this->getSessionRepository();
@@ -910,7 +848,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
         Enlight_Application::Instance()->Events()->removeListener(new Enlight_Event_EventHandler('Enlight_Controller_Action_PostDispatch', ''));
     }
-
+    
     public function getColumnsAction()
     {
         $postData['profileId'] = $this->Request()->getParam('profileId');

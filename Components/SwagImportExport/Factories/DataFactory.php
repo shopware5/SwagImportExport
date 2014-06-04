@@ -37,27 +37,9 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
      * @param array $params
      * @return \Shopware\Components\SwagImportExport\DataIO
      */
-    public function createDataIO($params)
+    public function createDataIO($dbAdapter, $dataSession)
     {
-        $dbAdapter = $this->createDbAdapter($params['adapter']);
-
-        $colOpts = $this->createColOpts($params['columnOptions']);
-
-        $limit = $this->createLimit($params['limit']);
-
-        $filter = $this->createFilter($params['filter']);
-
-        // postdata contains a session id and we load it from the database;
-        // if this is the first time, an empty initialized session is created
-        $dataSession = $this->loadSession($params);
-
-        $maxRecordCount = $params['max_record_count'];
-        
-        $type = $params['type'];
-        
-        $format = $params['format'];
-        
-        return new DataIO($dbAdapter, $colOpts, $limit, $filter, $dataSession, $type, $format, $maxRecordCount);
+        return new DataIO($dbAdapter, $dataSession);
     }
 
     /**

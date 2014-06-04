@@ -59,13 +59,17 @@ class DataIO
      */
     private $dataSession;
 
-    public function __construct($dbAdapter, $colOpts, $limit, $filter, $dataSession, $type, $format, $maxRecordCount)
+    public function __construct($dbAdapter, $dataSession)
     {
         $this->dbAdapter = $dbAdapter;
+        $this->dataSession = $dataSession;
+    }
+    
+    public function initialize($colOpts, $limit, $filter, $type, $format, $maxRecordCount)
+    {
         $this->columnOptions = $colOpts;
         $this->limit = $limit;
         $this->filter = $filter;
-        $this->dataSession = $dataSession;
         $this->type = $type;
         $this->format = $format;
         $this->maxRecordCount = $maxRecordCount;
