@@ -146,8 +146,12 @@ class CategoriesDbAdapter implements DataDbAdapter
 
         foreach ($records as $record) {
 
-            //todo: maybe create option to force the id ?
-            if (!$record['id']) {
+            if (!$record['parentId']) {
+                //todo: log this result
+                continue;
+            }
+
+            if (!$record['name']) {
                 //todo: log this result
                 continue;
             }
@@ -156,28 +160,18 @@ class CategoriesDbAdapter implements DataDbAdapter
 
             if (!$category) {
                 $category = new Category();
-                $category->setId($record['id']);
             }
+            
+            $record['parent'] = $catRepo->findOneBy(array('id' => $record['parentId']));
 
-            $parentCat = $catRepo->findOneBy(array('id' => $record['parentId']));
+            $category->fromArray($record);
 
-            if (!$parentCat) {
-                //todo: log this result
-                continue;
+            $violations = $this->getManager()->validate($category);
+            
+            if ($violations->count() > 0) {
+                throw new \Exception($violations);
             }
-
-            $category->setParent($parentCat);
-
-            if (!$record['name']) {
-                //todo: log this result
-                continue;
-            }
-            $category->setName($record['name']);
-
-            if ($record['active']) {
-                $category->setActive($record['active']);
-            }
-
+            
             $manager->persist($category);
             $metadata = $manager->getClassMetaData(get_class($category));
             $metadata->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);
