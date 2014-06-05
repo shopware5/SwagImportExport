@@ -6,36 +6,37 @@ use \Shopware\Components\SwagImportExport\Profile\Profile;
 
 class DataWorkflow
 {
+
     /**
      * @var DataIO
      */
     protected $dataIO;
-    
+
     /**
      * @var type 
      */
     protected $profile;
-        
+
     /**
      * @var type 
      */
     protected $transformerChain;
-        
+
     /**
      * @var type 
      */
     protected $fileIO;
-        
+
     /**
      * @var type 
      */
     protected $dataSession;
-        
+
     /**
      * @var type 
      */
     protected $dbAdapter;
-    
+
     /**
      * @param DataIO $dataIO
      * @param type $profile
@@ -51,16 +52,16 @@ class DataWorkflow
         $this->transformerChain = $transformerChain;
         $this->fileIO = $fileIO;
     }
-    
+
     public function export($postData)
     {
         if ($this->dataIO->getSessionState() == 'closed') {
             $postData['position'] = $this->dataIO->getSessionPosition();
             $postData['fileName'] = $this->dataIO->getDataSession()->getFileName();
-            
+
             return $postData;
         }
-        
+
         if ($this->dataIO->getSessionState() == 'new') {
             //todo: create file here ?
             $fileName = $this->dataIO->generateFileName($this->profile);
@@ -105,7 +106,7 @@ class DataWorkflow
             $this->fileIO->writeFooter($outputFileName, $footer);
             $this->dataIO->closeSession();
         }
-        
+
         $position = $this->dataIO->getSessionPosition();
 
         $post = $postData;
@@ -114,24 +115,24 @@ class DataWorkflow
         if (!$post['sessionId']) {
             $post['sessionId'] = $this->dataIO->getDataSession()->getId();
         }
-        
+
         if (!$post['fileName']) {
             $post['fileName'] = $fileName;
         }
-        
+
         return $post;
     }
 
     public function import($postData, $inputFile)
     {
-        if($postData['format'] === 'xml'){
+        if ($postData['format'] === 'xml') {
             $tree = json_decode($this->profile->getConfig("tree"), true);
-            $this->fileIO->setTree($tree);            
+            $this->fileIO->setTree($tree);
         }
         if ($this->dataIO->getSessionState() == 'new') {
-            
+
             $totalCount = $this->fileIO->getTotalCount($inputFile);
-            
+
             $this->dataIO->getDataSession()->setFileName($postData['importFile']);
 
             $this->dataIO->getDataSession()->setTotalCount($totalCount);

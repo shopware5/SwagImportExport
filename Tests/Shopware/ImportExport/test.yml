@@ -1,0 +1,950 @@
+s_import_export_profile:
+    -
+        id: 1
+        type: categories
+        name: Test
+        tree: '{"name":"Root","children":[{"name":"Header","children":[{"id":"537385ed7c799","name":"HeaderChild","shopwareField":""}],"id":"537359399c80a"},{"name":"Categories","children":[{"name":"Category","type":"record","attributes":[{"id":"53738653da10f","name":"Attribute1","shopwareField":"parentId"}],"children":[{"id":"5373865547d06","name":"Id","shopwareField":"id"},{"id":"537386ac3302b","name":"Description","shopwareField":"description","children":[{"id":"5373870d38c80","name":"Value","shopwareField":"name"}],"attributes":[{"id":"53738718f26db","name":"Attribute2","shopwareField":"active"}]},{"id":"537388742e20e","name":"Title","shopwareField":"name"}],"id":"537359399c90d"}],"id":"537359399c8b7"}],"id":"root"}'
+s_categories:
+    -
+        id: 1
+        description: Root
+        position: 0
+        left: 0
+        right: 0
+        level: 0
+        added: 2012-07-30 15:24:59
+        changed: 2012-07-30 15:24:59
+        active: 1
+        blog: 0
+        showfiltergroups: 0
+        hidefilter: 0
+        hidetop: 0
+        mediaID: 0
+    -
+        id: 3
+        parent: 1
+        description: Deutsch
+        left: 0
+        right: 0
+        level: 0
+        added: 2014-06-04 11:15:21
+        changed: 2014-06-04 11:15:21
+        active: 1
+        blog: 0
+        showfiltergroups: 1
+        hidefilter: 0
+        hidetop: 0
+    -
+        id: 5
+        parent: 3
+        path: '|3|'
+        description: Genusswelten
+        left: 0
+        right: 0
+        level: 0
+        added: 2014-06-04 11:15:21
+        changed: 2014-06-04 11:15:21
+        active: 1
+        blog: 0
+        showfiltergroups: 1
+        hidefilter: 0
+        hidetop: 0
+    -
+        id: 6
+        parent: 3
+        path: '|3|'
+        description: Sommerwelten
+        left: 0
+        right: 0
+        level: 0
+        added: 2014-06-04 11:15:21
+        changed: 2014-06-04 11:15:21
+        active: 1
+        blog: 0
+        showfiltergroups: 1
+        hidefilter: 0
+        hidetop: 0
+    -
+        id: 8
+        parent: 3
+        path: '|3|'
+        description: Wohnwelten
+        left: 0
+        right: 0
+        level: 0
+        added: 2014-06-04 11:15:22
+        changed: 2014-06-04 11:15:22
+        active: 1
+        blog: 0
+        showfiltergroups: 1
+        hidefilter: 0
+        hidetop: 0
+#    -
+#        id: 9
+#        parent: 3
+#        path: '|3|'
+#        description: Freizeitwelten
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 10
+#        parent: 3
+#        path: '|3|'
+#        description: Beispiele
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 11
+#        parent: 5
+#        path: '|5|3|'
+#        description: Tees und Zubehör
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 12
+#        parent: 11
+#        path: '|11|5|3|'
+#        description: Tees
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 13
+#        parent: 11
+#        path: '|11|5|3|'
+#        description: Tee-Zubehör
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 14
+#        parent: 5
+#        path: '|5|3|'
+#        description: Edelbrände
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 15
+#        parent: 5
+#        path: '|5|3|'
+#        description: Köstlichkeiten
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 16
+#        parent: 9
+#        path: '|9|3|'
+#        description: Entertainment
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 17
+#        parent: 3
+#        path: '|3|'
+#        description: Trends + News
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 19
+#        parent: 10
+#        path: '|10|3|'
+#        description: Crossselling
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 20
+#        parent: 10
+#        path: '|10|3|'
+#        description: Darstellung
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 21
+#        parent: 10
+#        path: '|10|3|'
+#        description: Produktvergleiche & Filter
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 22
+#        parent: 10
+#        path: '|10|3|'
+#        description: Konfiguratorartikel
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 23
+#        parent: 10
+#        path: '|10|3|'
+#        description: Preisgestaltung
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 24
+#        parent: 10
+#        path: '|10|3|'
+#        description: Versandkosten
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 25
+#        parent: 10
+#        path: '|10|3|'
+#        description: Zahlungsarten
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 27
+#        parent: 10
+#        path: '|10|3|'
+#        description: In Kürze verfügbar
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 30
+#        parent: 10
+#        path: '|10|3|'
+#        description: Kundenbindung
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 31
+#        parent: 9
+#        path: '|9|3|'
+#        description: Vintage
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 32
+#        parent: 8
+#        path: '|8|3|'
+#        description: Möbel
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 33
+#        parent: 8
+#        path: '|8|3|'
+#        description: Küchenzubehör
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 34
+#        parent: 6
+#        path: '|6|3|'
+#        description: Beachwear
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 35
+#        parent: 6
+#        path: '|6|3|'
+#        description: Beauty & Care
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 36
+#        parent: 6
+#        path: '|6|3|'
+#        description: On World Tour
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 37
+#        parent: 6
+#        path: '|6|3|'
+#        description: Accessoires
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 38
+#        parent: 8
+#        path: '|8|3|'
+#        description: Dekoration
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 39
+#        parent: 1
+#        description: English
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:21
+#        changed: 2014-06-04 11:15:21
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 42
+#        parent: 39
+#        path: '|39|'
+#        description: Trends + News
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 43
+#        parent: 39
+#        path: '|39|'
+#        description: Worlds of indulgence
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 44
+#        parent: 39
+#        path: '|39|'
+#        description: Leisure worlds
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 45
+#        parent: 39
+#        path: '|39|'
+#        description: Home sweet home
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 46
+#        parent: 39
+#        path: '|39|'
+#        description: Summertime
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 47
+#        parent: 43
+#        path: '|43|39|'
+#        description: Teas and Accessories
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 48
+#        parent: 47
+#        path: '|47|43|39|'
+#        description: Teas
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 49
+#        parent: 47
+#        path: '|47|43|39|'
+#        description: Teas and accessories
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 50
+#        parent: 43
+#        path: '|43|39|'
+#        description: Brandies
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 51
+#        parent: 43
+#        path: '|43|39|'
+#        description: Delights
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 52
+#        parent: 44
+#        path: '|44|39|'
+#        description: Vintage
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 53
+#        parent: 44
+#        path: '|44|39|'
+#        description: Entertainment
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 54
+#        parent: 45
+#        path: '|45|39|'
+#        description: Furniture
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 55
+#        parent: 45
+#        path: '|45|39|'
+#        description: Kitchen Accessories
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 56
+#        parent: 45
+#        path: '|45|39|'
+#        description: Decoration
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 57
+#        parent: 46
+#        path: '|46|39|'
+#        description: Beachwear
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 58
+#        parent: 46
+#        path: '|46|39|'
+#        description: Beauty & Care
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 59
+#        parent: 46
+#        path: '|46|39|'
+#        description: Travel around the World
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 60
+#        parent: 46
+#        path: '|46|39|'
+#        description: Accessories
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 61
+#        parent: 39
+#        path: '|39|'
+#        description: Examples
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 62
+#        parent: 61
+#        path: '|61|39|'
+#        description: Available soon
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 64
+#        parent: 61
+#        path: '|61|39|'
+#        description: Customer loyalty
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 65
+#        parent: 61
+#        path: '|61|39|'
+#        description: Configurator articles
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 67
+#        parent: 61
+#        path: '|61|39|'
+#        description: Product comparison
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 68
+#        parent: 61
+#        path: '|61|39|'
+#        description: Presentation
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 69
+#        parent: 61
+#        path: '|61|39|'
+#        description: Crossselling
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 71
+#        parent: 61
+#        path: '|61|39|'
+#        description: Payment methods
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 72
+#        parent: 61
+#        path: '|61|39|'
+#        description: Shipping costs
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 73
+#        parent: 61
+#        path: '|61|39|'
+#        description: Price strategies
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 74
+#        parent: 10
+#        path: '|10|3|'
+#        description: Kundengruppen / B2B
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
+#    -
+#        id: 75
+#        parent: 10
+#        path: '|10|3|'
+#        description: Gutscheine
+#        left: 0
+#        right: 0
+#        level: 0
+#        added: 2014-06-04 11:15:22
+#        changed: 2014-06-04 11:15:22
+#        active: 1
+#        blog: 0
+#        showfiltergroups: 1
+#        hidefilter: 0
+#        hidetop: 0
