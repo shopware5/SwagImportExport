@@ -6,7 +6,7 @@ use Tests\Shopware\ImportExport\ImportExportTestHelper;
 
 class CategoriesDbAdapterTest extends ImportExportTestHelper
 {
-    
+
     protected function getDataSet()
     {
         return new \PHPUnit_Extensions_Database_DataSet_YamlDataSet(
@@ -44,35 +44,76 @@ class CategoriesDbAdapterTest extends ImportExportTestHelper
 //        $this->assertEquals(count($rawData), 62);
 //    }
 
-    public function testRead()
+    /**
+     * @dataProvider readProvider
+     */
+    public function testRead($columns, $ids, $expected, $expectedCount)
     {
-        $columns = 'c.id, c.parentId, c.name, c.active';
-
-        $ids = array(3, 5, 6, 8, 15);
-
         $dataFactory = $this->Plugin()->getDataFactory();
 
         $catDbAdapter = $dataFactory->createDbAdapter('categories');
 
         $rawData = $catDbAdapter->read($ids, $columns);
 
-        $this->assertEquals($rawData[2]['name'], 'Sommerwelten');
-        $this->assertEquals(count($rawData), 4);
+        foreach ($expected as $key1 => $value) {
+            foreach ($value as $key2 => $val) {
+                $this->assertEquals($rawData[$key1][$key2], $val);
+            }
+        }
+        $this->assertEquals(count($rawData), $expectedCount);
     }
 
-    public function testReadRecordIds()
+    public function readProvider()
     {
-        $start = 0;
-        $limit = 6;
+        $test1 = array(
+            'c.id, c.parentId, c.name, c.active',
+            array(3, 5, 6, 8, 15),
+            array(
+                2 => array(
+                    'name' => 'Sommerwelten'
+                )
+            ),
+            4
+        );
+        $test2 = array(
+            'c.id, c.parentId, c.name, c.active',
+            array(6, 8),
+            array(
+                0 => array(
+                    'id' => 6
+                ),
+                1 => array(
+                    'name' => 'Wohnwelten',
+                )
+            ),
+            2
+        );
+        $test3 = array('c.id, c.active', array(3, 15), array(0 => array('id' => 3)), 1);
 
+        return array(
+            $test1, $test2, $test3
+        );
+    }
+
+    /**
+     * @dataProvider readRecordIdsProvider
+     */
+    public function testReadRecordIds($start, $limit, $expectedCount)
+    {
         $dataFactory = $this->Plugin()->getDataFactory();
         $catDbAdapter = $dataFactory->createDbAdapter('categories');
 
         $ids = $catDbAdapter->readRecordIds($start, $limit);
-        $this->assertEquals(count($ids), 4);
+        $this->assertEquals($expectedCount, count($ids));
+    }
 
-        $allIds = $catDbAdapter->readRecordIds();
-        $this->assertEquals(count($allIds), 4);
+    public function readRecordIdsProvider()
+    {
+        return array(
+            array(0, 6, 4),
+            array(1, 2, 2),
+            array(0, 3, 3),
+        );
     }
 
     public function testDefaultColumns()
@@ -83,6 +124,54 @@ class CategoriesDbAdapterTest extends ImportExportTestHelper
         $columns = $catDbAdapter->getDefaultColumns();
 
         $this->assertTrue(is_array($columns));
+    }
+
+    /**
+     * @dataProvider writeProvider
+     */
+    public function testWrite($data, $expectedInsertedRows)
+    {
+        $beforeTestCount = $this->getDatabaseTester()->getConnection()->getRowCount('s_categories');
+        
+        $dataFactory = $this->Plugin()->getDataFactory();
+
+        $catDbAdapter = $dataFactory->createDbAdapter('categories');
+        $catDbAdapter->write($data);
+
+        $afterTestCount = $this->getDatabaseTester()->getConnection()->getRowCount('s_categories');
+        
+        $this->assertEquals($expectedInsertedRows, $afterTestCount - $beforeTestCount);
+    }
+
+    public function writeProvider()
+    {
+        return array(
+            array(
+                array(
+                    array(
+                        'id' => 15,
+                        'parentId' => 3,
+                        'name' => 'Test',
+                    ),
+                ),
+                1
+            ),
+            array(
+                array(
+                    array(
+                        'id' => 15,
+                        'parentId' => 3,
+                        'name' => 'Test',
+                    ),
+                    array(
+                        'id' => 19,
+                        'parentId' => 15,
+                        'name' => 'Test 2',
+                    ),
+                ),
+                2
+            ),
+        );
     }
 
 }
