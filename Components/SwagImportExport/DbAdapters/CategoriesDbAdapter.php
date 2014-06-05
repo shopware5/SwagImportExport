@@ -13,6 +13,11 @@ class CategoriesDbAdapter implements DataDbAdapter
     protected $manager;
 
     /**
+     * Shopware\Models\Category\Category
+     */
+    protected $repository;
+
+    /**
      * Returns record ids
      * 
      * @param int $start
@@ -50,8 +55,8 @@ class CategoriesDbAdapter implements DataDbAdapter
     /**
      * Returns categories 
      * 
-     * @param type $ids
-     * @param type $columns
+     * @param array $ids
+     * @param array $columns
      * @return array
      */
     public function read($ids, $columns)
@@ -142,8 +147,6 @@ class CategoriesDbAdapter implements DataDbAdapter
     {
         $manager = $this->getManager();
 
-        $catRepo = $manager->getRepository('Shopware\Models\Category\Category');
-
         foreach ($records as $record) {
 
             if (!$record['parentId']) {
@@ -156,92 +159,62 @@ class CategoriesDbAdapter implements DataDbAdapter
                 continue;
             }
 
-            $category = $catRepo->findOneBy(array('id' => $record['id']));
+            $category = $this->getRepository()->findOneBy(array('id' => $record['id']));
 
             if (!$category) {
                 $category = new Category();
             }
-            
-            $record['parent'] = $catRepo->findOneBy(array('id' => $record['parentId']));
+
+            $record = $this->prepareData($record);
 
             $category->fromArray($record);
 
-            $violations = $this->getManager()->validate($category);
-            
+            $violations = $manager->validate($category);
+
             if ($violations->count() > 0) {
                 throw new \Exception($violations);
             }
-            
+
             $manager->persist($category);
             $metadata = $manager->getClassMetaData(get_class($category));
             $metadata->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);
             $manager->flush();
         }
-
-
-//        $columnNames = $this->getColumnNames(current($records));
-//
-//        $queryValues = $this->getQueryValues($records);
-//
-//        $query = "REPLACE INTO `s_categories` ($columnNames) VALUES $queryValues ;";
-//
-//        Shopware()->Db()->query($query);
     }
 
-//    /**
-//     * Returns column names
-//     * 
-//     * @param array $data
-//     * @return string
-//     */
-//    public function getColumnNames($data)
-//    {
-//        foreach ($data as $columnName => $value) {
-//            $columnNames[] = $columnName;
-//        }
-//
-//        $columnNames = "`" . implode("`,`", $columnNames) . "`";
-//
-//        return $columnNames;
-//    }
-//
-//    /**
-//     * Returns query values i.e. (3,1,'Deutsch','0'), (39,1,'English','0')
-//     * 
-//     * @param array $data
-//     * @return string
-//     * @throws Exception
-//     */
-//    public function getQueryValues($data)
-//    {
-//        $lastKey = end(array_keys(current($data)));
-//
-//        $queryValues = '';
-//
-//        foreach ($data as $category) {
-//            $tempData = null;
-//
-//            //todo: make better check for the categories !
-//            if (empty($category['id']) || empty($category['parent']) || empty($category['description'])) {
-//                throw new Exception('Categories requires id, parent and description');
-//            }
-//
-//            foreach ($category as $key => $value) {
-//
-//                $comma = $key == $lastKey ? '' : ',';
-//
-//                $tempData .=!(int) ($value) ? "'" . $value . "'" : $value;
-//                $tempData .= $comma;
-//            }
-//
-//            $queryValues .= ', (' . $tempData . ')';
-//        }
-//
-//        //removes the first comma
-//        $queryValues[0] = ' ';
-//
-//        return $queryValues;
-//    }
+    /**
+     * @param array $data
+     * @return array
+     */
+    protected function prepareData(array $data)
+    {
+        //prepares the parent category
+        $data['parent'] = $this->getRepository()->findOneBy(array('id' => $data['parentId']));
+
+        //prepares the attributes
+        foreach ($data as $key => $value) {
+            if (preg_match('/^attribute/', $key)) {
+                $newKey = lcfirst(preg_replace('/^attribute/', '', $key));
+                $data['attribute'][$newKey] = $value;
+                unset($data[$key]);
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * Returns category repository
+     * 
+     * @return Shopware\Models\Category\Category
+     */
+    public function getRepository()
+    {
+        if ($this->repository === null) {
+            $this->repository = $this->getManager()->getRepository('Shopware\Models\Category\Category');
+        }
+        return $this->repository;
+    }
 
     /**
      * Returns entity manager
