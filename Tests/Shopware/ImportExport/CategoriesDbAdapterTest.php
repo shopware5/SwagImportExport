@@ -132,14 +132,14 @@ class CategoriesDbAdapterTest extends ImportExportTestHelper
     public function testWrite($data, $expectedInsertedRows)
     {
         $beforeTestCount = $this->getDatabaseTester()->getConnection()->getRowCount('s_categories');
-        
+
         $dataFactory = $this->Plugin()->getDataFactory();
 
         $catDbAdapter = $dataFactory->createDbAdapter('categories');
         $catDbAdapter->write($data);
 
         $afterTestCount = $this->getDatabaseTester()->getConnection()->getRowCount('s_categories');
-        
+
         $this->assertEquals($expectedInsertedRows, $afterTestCount - $beforeTestCount);
     }
 
@@ -170,6 +170,135 @@ class CategoriesDbAdapterTest extends ImportExportTestHelper
                     ),
                 ),
                 2
+            ),
+        );
+    }
+
+    /**
+     * @dataProvider insertOneProvider
+     */
+    public function testInsertOne($category, $expectedRow)
+    {
+        // Prepare expected data
+        $columnsSelect = implode(', ', array_keys($expectedRow));
+        $queryTableBefore = $this->getDatabaseTester()->getConnection()->createQueryTable(
+                's_categories', 'SELECT ' . $columnsSelect . ' FROM s_categories'
+        );
+
+        $expectedTable = new \PHPUnit_Extensions_Database_DataSet_DefaultTable($queryTableBefore->getTableMetaData());
+        $expectedTable->addTableRows($queryTableBefore);
+        $expectedTable->addRow($expectedRow);
+
+        // Start the action
+        $dataFactory = $this->Plugin()->getDataFactory();
+
+        $catDbAdapter = $dataFactory->createDbAdapter('categories');
+        $catDbAdapter->write(array($category));
+
+        // Assert
+        $queryTable = $this->getDatabaseTester()->getConnection()->createQueryTable(
+                's_categories', 'SELECT ' . $columnsSelect . ' FROM s_categories'
+        );
+
+        $this->assertTablesEqual($expectedTable, $queryTable);
+    }
+
+    public function insertOneProvider()
+    {
+        return array(
+            array(
+                array(
+                    'id' => 15,
+                    'parentId' => 3,
+                    'name' => 'Test',
+                ),
+                array(
+                    'id' => '15',
+                    'parent' => '3',
+                    'path' => '|3|',
+                    'description' => 'Test',
+                ),
+            ),
+            array(
+                array(
+                    'id' => 16,
+                    'parentId' => 8,
+                    'name' => 'Test123',
+                ),
+                array(
+                    'id' => '16',
+                    'parent' => '8',
+                    'path' => '|8|3|',
+                    'description' => 'Test123',
+                ),
+            ),
+        );
+    }
+
+    /**
+     * @dataProvider updateOneProvider
+     */
+    public function testUpdateOne($category, $expectedRow)
+    {
+        // Prepare expected data
+        $columnsSelect = implode(', ', array_keys($expectedRow));
+        $queryTableBefore = $this->getDatabaseTester()->getConnection()->createQueryTable(
+                's_categories', 'SELECT ' . $columnsSelect . ' FROM s_categories'
+        );
+        $rowCount = $queryTableBefore->getRowCount();
+        $expectedTable = new \PHPUnit_Extensions_Database_DataSet_DefaultTable($queryTableBefore->getTableMetaData());
+
+        for ($i = 0; $i < $rowCount; $i++) {
+            $row = $queryTableBefore->getRow($i);
+            if ($row['id'] == $expectedRow['id']) {
+                $expectedTable->addRow($expectedRow);
+            } else {
+                $expectedTable->addRow($row);
+            }
+        }
+
+        // Start the action
+        $dataFactory = $this->Plugin()->getDataFactory();
+
+        $catDbAdapter = $dataFactory->createDbAdapter('categories');
+        $catDbAdapter->write(array($category));
+
+        // Assert
+        $queryTable = $this->getDatabaseTester()->getConnection()->createQueryTable(
+                's_categories', 'SELECT ' . $columnsSelect . ' FROM s_categories'
+        );
+
+        $this->assertTablesEqual($expectedTable, $queryTable);
+    }
+
+    public function updateOneProvider()
+    {
+        return array(
+            array(
+                array(
+                    'id' => 8,
+                    'parentId' => 5,
+                    'name' => 'Test',
+                ),
+                array(
+                    'id' => '8',
+                    'parent' => '5',
+                    'path' => '|5|3|',
+                    'description' => 'Test',
+                ),
+            ),
+            array(
+                array(
+                    'id' => 6,
+                    'parentId' => 5,
+                    'name' => 'Test',
+                ),
+                array(
+                    'id' => '6',
+                    'parent' => '5',
+                    'path' => '|5|3|',
+                    'description' => 'Test',
+                ),
             ),
         );
     }
