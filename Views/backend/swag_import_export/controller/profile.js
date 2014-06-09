@@ -49,8 +49,11 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
             failed: '{s name=swag_import_export/profile/delete/failed}Delete List Failed{/s}'
         },
         addAttribute: {
-            failureTitle: '{s name=swag_import_export/profile/add_attribute/failure_title}Create Attribute Failed{/s}'
-        }
+            failureTitle: '{s name=swag_import_export/profile/add_attribute/failure_title}Create Attribute Failed{/s}',
+        },
+        categories: '{s name=swag_import_export/profile/type/categories}Categories{/s}',
+        articles: '{s name=swag_import_export/profile/type/articles}Articles{/s}',
+        newsletter: '{s name=swag_import_export/profile/type/newsletter}Newsletter receiver{/s}'
     },
     
     /**
@@ -113,6 +116,16 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
      * Shows window with fields for the new profile and adds it
      */
     createOwnProfile: function(store, combo) {
+        var me = this,
+            profileTypeStore = new Ext.data.SimpleStore({
+            fields: ['type', 'label'],
+            data: [
+                ['categories', me.snippets.categories],
+                ['articles', me.snippets.articles],
+                ['newsletter', me.snippets.newsletter]
+            ]
+        });
+        
         var myForm = Ext.create('Ext.form.Panel', {
             width: 500,
             height: 150,
@@ -136,8 +149,10 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                     itemId: 'type',
                     fieldLabel: 'Type',
                     emptyText: 'Select Type',
-                    store: ['categories', 'articles'],
+                    store: profileTypeStore,
                     name: 'type',
+                    valueField: 'type',
+                    displayField: 'label',
                     allowBlank: false
                 }],
             dockedItems: [{

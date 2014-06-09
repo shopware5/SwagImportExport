@@ -5,6 +5,7 @@ namespace Shopware\Components\SwagImportExport\Factories;
 use Shopware\Components\SwagImportExport\DataIO;
 use Shopware\Components\SwagImportExport\DbAdapters\CategoriesDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\ArticlesDbAdapter;
+use Shopware\Components\SwagImportExport\DbAdapters\NewsletterDbAdapter;
 use Shopware\Components\SwagImportExport\Utils\DataColumnOptions;
 use Shopware\Components\SwagImportExport\Utils\DataLimit;
 use Shopware\Components\SwagImportExport\Utils\DataFilter;
@@ -56,6 +57,8 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
                 return $this->createCategoriesDbAdapter();
             case 'articles':
                 return $this->createArticlesDbAdapter();
+            case 'newsletter':
+                return $this->createNewsletterDbAdapter();
             default: throw new \Exception('Db adapter type is not valid');
         }
     }
@@ -142,5 +145,16 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     {
         return new ArticlesDbAdapter();
     }
+    
+    /**
+     * 
+     * @return \Shopware\Components\SwagImportExport\DbAdapters\NewsletterDbAdapter
+     */
+    protected function createNewsletterDbAdapter()
+    {
+        return new NewsletterDbAdapter();
+    }
+    
+    
 
 }
