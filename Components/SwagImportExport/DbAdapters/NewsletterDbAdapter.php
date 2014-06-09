@@ -2,10 +2,17 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
-use Shopware\Models\Category\Category;
+use Shopware\Models\Newsletter\Address;
+use Shopware\Models\Newsletter\Group;
+use Shopware\Models\Newsletter\ContactData;
 
 class NewsletterDbAdapter implements DataDbAdapter
 {
+
+    protected $groupRepository;
+    protected $addressRepository;
+    protected $contactDataRepository;
+
     public function getDefaultColumns()
     {
         return array(
@@ -53,7 +60,7 @@ class NewsletterDbAdapter implements DataDbAdapter
         $builder->select('na.id')
                 ->from('Shopware\Models\Newsletter\Address', 'na')
                 ->orderBy('na.id', 'ASC');
-        
+
         if (!empty($filter)) {
             $builder->addFilter($filter);
         }
@@ -69,15 +76,76 @@ class NewsletterDbAdapter implements DataDbAdapter
                 $result[] = $value['id'];
             }
         }
-        
+
         return $result;
     }
 
     public function write($records)
     {
+//        $emailValidator = new \Zend_Validate_EmailAddress();
         
+        foreach ($records as $newsletterData) {
+
+            if (empty($newsletterData['email'])) {
+                //todo: log this result
+                continue;
+            }
+
+//            if (!$emailValidator->isValid($newsletterData['email'])) {
+//                 //todo: log this result
+//                continue;
+//            }
+
+            if ($newsletterData['groupName']) {
+                $group = $this->getGroupRepository()->findOneByName($newsletterData['groupName']);
+            }
+            if (!$group && $newsletterData['groupName']) {
+                $group = new Group();
+                $group->setName($newsletterData['groupName']);
+                $this->getManager()->persist($group);
+            } elseif (!$group && $groupId = Shopware()->Config()->get("sNEWSLETTERDEFAULTGROUP")) {
+                $group = $this->getGroupRepository()->findOneBy($groupId);
+            } elseif (!$group) {
+                //todo: log this result
+                continue;
+            }
+            
+            // Create/Update the Address entry
+            $recipient = $this->getAddressRepository()->findOneByEmail($newsletterData['email']);
+
+            if (!$recipient) {
+                $recipient = new Address();
+            }
+
+            $recipient->setEmail($newsletterData['email']);
+            $recipient->setIsCustomer(!empty($newsletterData['userID']));
+
+            //Only set the group if it was explicitly provided or it's a new entry
+            if ($group && ($newsletterData['groupName'] || !$recipient->getId())) {
+                $recipient->setNewsletterGroup($group);
+            }
+            $this->getManager()->persist($recipient);
+
+            //Create/Update the ContactData entry
+            $contactData = $this->getContactDataRepository()->findOneByEmail($newsletterData['email']);
+            
+            if (!$contactData) {
+                $contactData = new ContactData();
+            }
+            
+            $contactData->fromArray($newsletterData);
+            
+            //Only set the group if it was explicitly provided or it's a new entry
+            if ($group && ($newsletterData['groupName'] || !$contactData->getId())) {
+                $contactData->setGroupId($group->getId());
+            }
+            $contactData->setAdded(new \DateTime());
+
+            $this->getManager()->persist($contactData);
+            $this->getManager()->flush();
+        }
     }
-    
+
     /**
      * Returns entity manager
      * 
@@ -90,6 +158,42 @@ class NewsletterDbAdapter implements DataDbAdapter
         }
 
         return $this->manager;
+    }
+
+    /**
+     * Helper function to get access to the Group repository.
+     * @return Shopware\Models\Newsletter\Repository
+     */
+    protected function getGroupRepository()
+    {
+        if ($this->groupRepository === null) {
+            $this->groupRepository = $this->getManager()->getRepository('Shopware\Models\Newsletter\Group');
+        }
+        return $this->groupRepository;
+    }
+
+    /**
+     * Helper function to get access to the Address repository.
+     * @return Shopware\Models\Newsletter\Repository
+     */
+    protected function getAddressRepository()
+    {
+        if ($this->addressRepository === null) {
+            $this->addressRepository = $this->getManager()->getRepository('Shopware\Models\Newsletter\Address');
+        }
+        return $this->addressRepository;
+    }
+
+    /**
+     * Helper function to get access to the ContactData repository.
+     * @return Shopware\Components\Model\ModelRepository
+     */
+    protected function getContactDataRepository()
+    {
+        if ($this->contactDataRepository === null) {
+            $this->contactDataRepository = $this->getManager()->getRepository('Shopware\Models\Newsletter\ContactData');
+        }
+        return $this->contactDataRepository;
     }
 
 }
