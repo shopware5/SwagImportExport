@@ -30,11 +30,4 @@ class ImportExportTestHelper extends \Enlight_Components_Test_Plugin_TestCase
         return $this->plugin;
     }
 
-    public static function assertTablesEqual(PHPUnit_Extensions_Database_DataSet_ITable $expected, PHPUnit_Extensions_Database_DataSet_ITable $actual, $message = '')
-    {
-        $constraint = new \PHPUnit_Extensions_Database_Constraint_TableIsEqual($expected);
-
-        self::assertThat($actual, $constraint, $message);
-    }
-
 }
