@@ -9,6 +9,7 @@ use Shopware\Models\Newsletter\ContactData;
 class NewsletterDbAdapter implements DataDbAdapter
 {
 
+    protected $manager;
     protected $groupRepository;
     protected $addressRepository;
     protected $contactDataRepository;
@@ -142,8 +143,9 @@ class NewsletterDbAdapter implements DataDbAdapter
             $contactData->setAdded(new \DateTime());
 
             $this->getManager()->persist($contactData);
-            $this->getManager()->flush();
         }
+        
+        $this->getManager()->flush();
     }
 
     /**

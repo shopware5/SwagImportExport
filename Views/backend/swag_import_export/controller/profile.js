@@ -53,6 +53,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
         },
         categories: '{s name=swag_import_export/profile/type/categories}Categories{/s}',
         articles: '{s name=swag_import_export/profile/type/articles}Articles{/s}',
+        articlesInStock: '{s name=swag_import_export/profile/type/articlesInStock}Articles in stock{/s}',
         newsletter: '{s name=swag_import_export/profile/type/newsletter}Newsletter receiver{/s}'
     },
     
@@ -122,6 +123,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
             data: [
                 ['categories', me.snippets.categories],
                 ['articles', me.snippets.articles],
+                ['articlesInStock', me.snippets.articlesInStock],
                 ['newsletter', me.snippets.newsletter]
             ]
         });
