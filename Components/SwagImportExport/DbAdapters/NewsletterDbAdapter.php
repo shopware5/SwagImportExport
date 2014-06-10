@@ -84,6 +84,7 @@ class NewsletterDbAdapter implements DataDbAdapter
     public function write($records)
     {
 //        $emailValidator = new \Zend_Validate_EmailAddress();
+        $manager = $this->getManager();
         
         foreach ($records as $newsletterData) {
 
@@ -103,7 +104,7 @@ class NewsletterDbAdapter implements DataDbAdapter
             if (!$group && $newsletterData['groupName']) {
                 $group = new Group();
                 $group->setName($newsletterData['groupName']);
-                $this->getManager()->persist($group);
+                $manager->persist($group);
             } elseif (!$group && $groupId = Shopware()->Config()->get("sNEWSLETTERDEFAULTGROUP")) {
                 $group = $this->getGroupRepository()->findOneBy($groupId);
             } elseif (!$group) {
@@ -125,7 +126,7 @@ class NewsletterDbAdapter implements DataDbAdapter
             if ($group && ($newsletterData['groupName'] || !$recipient->getId())) {
                 $recipient->setNewsletterGroup($group);
             }
-            $this->getManager()->persist($recipient);
+            $manager->persist($recipient);
 
             //Create/Update the ContactData entry
             $contactData = $this->getContactDataRepository()->findOneByEmail($newsletterData['email']);
@@ -142,10 +143,10 @@ class NewsletterDbAdapter implements DataDbAdapter
             }
             $contactData->setAdded(new \DateTime());
 
-            $this->getManager()->persist($contactData);
+            $manager->persist($contactData);
         }
         
-        $this->getManager()->flush();
+        $manager->flush();
     }
 
     /**

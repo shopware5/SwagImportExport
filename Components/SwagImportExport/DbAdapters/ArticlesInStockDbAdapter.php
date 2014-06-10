@@ -6,9 +6,14 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
 {
 
     /**
-     * Shopware\Components\Model\ModelManager
+     * @var Shopware\Components\Model\ModelManager
      */
     protected $manager;
+    
+    /**
+     * @var Shopware\Models\Article\Detail
+     */
+    protected $repository;
 
     public function getDefaultColumns()
     {
@@ -32,7 +37,6 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
                 ->leftJoin('d.article', 'a')
                 ->leftJoin('a.supplier', 's')
                 ->leftJoin('d.prices', 'p')
-                ->where('d.inStock > 0')
                 ->where('d.id IN (:ids)')
                 ->setParameter('ids', $ids);
         
@@ -88,7 +92,43 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
 
     public function write($records)
     {
+        $manager = $this->getManager();
+
+        foreach ($records as $record) {
+            
+            if (empty($record['orderNumber'])) {
+                //todo: log this result
+                continue;
+            }
+            $articleDetail = $this->getRepository()->findOneBy(array("number" => $record['orderNumber']));
+            
+            if(!$articleDetail){
+                //todo: log this result
+                continue;
+            }
+            
+            $inStock = (int) $record['inStock'];
+            
+            $articleDetail->setInStock($inStock);
+            
+            $manager->persist($articleDetail);
+        }
         
+        $manager->flush();
+    }
+    
+    /**
+     * Returns article detail repository
+     * 
+     * @return Shopware\Models\Article\Detail
+     */
+    public function getRepository()
+    {
+        if ($this->repository === null) {
+            $this->repository = $this->getManager()->getRepository('Shopware\Models\Article\Detail');
+        }
+
+        return $this->repository;
     }
 
     /**
