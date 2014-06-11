@@ -22,13 +22,9 @@ class DbAdapterTest extends ImportExportTestHelper
 
     public static function getDataProvider($testCase)
     {
-        echo $testCase;
-        
-        
         if (static::$dataProvider == NULL) {
-            static::$dataProvider = static::parseYaml(static::$yamlFile);
+            static::$dataProvider = static::parseYaml(dirname(__FILE__) . '/' . static::$yamlFile);
         }
-        
         
         return static::$dataProvider[$testCase];
     }

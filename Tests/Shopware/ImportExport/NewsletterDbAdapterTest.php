@@ -4,54 +4,24 @@ namespace Tests\Shopware\ImportExport;
 
 use Tests\Shopware\ImportExport\DbAdapterTest;
 
-class CategoriesDbAdapterTest extends DbAdapterTest
+class NewsletterDbAdapterTest extends DbAdapterTest
 {
-    protected static $yamlFile = "TestCases/categoriesDbAdaptor.yml";
-
+    protected static $yamlFile = "TestCases/newslettersDbAdaptor.yml";
+    
     public function setUp()
     {
         parent::setUp();
-
-        $this->dbAdaptor = 'categories';
-        $this->dbTable = 's_categories';
+        
+        $this->dbAdaptor = 'newsletter';
+        $this->dbTable = 's_campaigns_mailaddresses';
     }
 
     protected function getDataSet()
     {
         return new \PHPUnit_Extensions_Database_DataSet_YamlDataSet(
-                dirname(__FILE__) . "/Database/categories.yml"
+                dirname(__FILE__) . "/Database/newsletters.yml"
         );
     }
-
-//    public function testRawData()
-//    {
-//        $dataFactory = $this->Plugin()->getDataFactory();
-//        
-//        
-//        
-//        $profile = $this->Plugin()->getProfileFactory()->getProfileSerialized()->readProfile($params);
-//        $dataIO = $dataFactory->getDataIO($profile->getType(), $params);
-//        
-//        
-//                
-//        $dataIO->loadSession();
-//        
-//                
-//        $dataIO->read(100);
-//        $dataIO->read(50);
-//                
-//        
-//              
-//        
-//        
-//        
-//        
-//        $catergoriesDbAdapter = $dataFactory->createCategoriesDbAdapter();
-//        
-//        $rawData = $catergoriesDbAdapter->read(array(1,2,3));
-//
-//        $this->assertEquals(count($rawData), 62);
-//    }
 
     /**
      * @dataProvider readProvider
@@ -63,7 +33,7 @@ class CategoriesDbAdapterTest extends DbAdapterTest
 
     public function readProvider()
     {
-        return static::getDataProvider('testRead');
+        return $this->getDataProvider('testRead');
     }
 
     /**
@@ -76,7 +46,7 @@ class CategoriesDbAdapterTest extends DbAdapterTest
 
     public function readRecordIdsProvider()
     {
-        return static::getDataProvider('testReadRecordIds');
+        return $this->getDataProvider('testReadRecordIds');
     }
 
     public function testDefaultColumns()
@@ -94,7 +64,7 @@ class CategoriesDbAdapterTest extends DbAdapterTest
 
     public function writeProvider()
     {
-        return static::getDataProvider('testWrite');
+        return $this->getDataProvider('testWrite');
     }
 
     /**
@@ -107,7 +77,7 @@ class CategoriesDbAdapterTest extends DbAdapterTest
 
     public function insertOneProvider()
     {
-        return static::getDataProvider('testInsertOne');
+        return $this->getDataProvider('testInsertOne');
     }
 
     /**
@@ -120,7 +90,7 @@ class CategoriesDbAdapterTest extends DbAdapterTest
 
     public function updateOneProvider()
     {
-        return static::getDataProvider('testUpdateOne');
+        return $this->getDataProvider('testUpdateOne');
     }
 
 }
