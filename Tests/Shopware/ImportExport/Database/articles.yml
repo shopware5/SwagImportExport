@@ -1,0 +1,98 @@
+s_articles:
+    -
+      id: 277
+      supplierID: 14
+      name: Test
+      description: ''
+      description_long: ''
+      datum: 2014-06-11
+      active: 1
+      taxID: 1
+      pseudosales: 0
+      topseller: 0
+      metaTitle: ''
+      keywords: ''
+      changetime: 2014-06-11 16:39:38
+      pricegroupID: 1
+      pricegroupActive: 0
+      laststock: 0
+      crossbundlelook: 0
+      notification: 0
+      template: ''
+      mode: 0
+      main_detail_id: 834
+s_articles_details:
+    -
+      id: 834
+      articleID: 277
+      ordernumber: SW10006
+      suppliernumber: ''
+      kind: 1
+      additionaltext: ''
+      impressions: 0
+      sales: 0
+      active: 1
+      instock: 0
+      stockmin: 0
+      weight: 0.000
+      position: 0
+      ean: ''
+      packunit: ''
+      shippingfree: 0
+      shippingtime: ''
+s_articles_prices:
+    -
+      id: 1
+      pricegroup: EK
+      from: 1
+      to: 3
+      articleID: 277
+      articledetailsID: 834
+      price: 63.025
+      pseudoprice: 0
+      baseprice: 0
+      percent: 0.00
+    -
+      id: 2
+      pricegroup: EK
+      from: 4
+      to: 7
+      articleID: 277
+      articledetailsID: 834
+      price: 59.874
+      pseudoprice: 0
+      baseprice: 0
+      percent: 5.00
+    -
+      id: 3
+      pricegroup: EK
+      from: 8
+      to: 11
+      articleID: 277
+      articledetailsID: 834
+      price: 59.244
+      pseudoprice: 0
+      baseprice: 0
+      percent: 6.00
+    -
+      id: 4
+      pricegroup: EK
+      from: 12
+      to: 15
+      articleID: 277
+      articledetailsID: 834
+      price: 58.613
+      pseudoprice: 0
+      baseprice: 0
+      percent: 7.00
+    -
+      id: 5
+      pricegroup: EK
+      from: 16
+      to: beliebig
+      articleID: 277
+      articledetailsID: 834
+      price: 57.983
+      pseudoprice: 0
+      baseprice: 0
+      percent: 8.00

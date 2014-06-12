@@ -5,6 +5,7 @@ namespace Shopware\Components\SwagImportExport\Factories;
 use Shopware\Components\SwagImportExport\DataIO;
 use Shopware\Components\SwagImportExport\DbAdapters\CategoriesDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\ArticlesDbAdapter;
+use Shopware\Components\SwagImportExport\DbAdapters\ArticlesPricesDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\ArticlesInStockDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\CustomerDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\NewsletterDbAdapter;
@@ -61,6 +62,8 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
                 return $this->createArticlesDbAdapter();
             case 'articlesInStock':
                 return $this->createArticlesInStockDbAdapter();
+            case 'articlesPrices':
+                return $this->createArticlesPricesDbAdapter();
             case 'customers':
                 return $this->createCustomerDbAdapter();
             case 'newsletter':
@@ -154,16 +157,26 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     
     /**
      * 
-     * @return \Shopware\Components\SwagImportExport\DbAdapters\NewsletterDbAdapter
+     * @return \Shopware\Components\SwagImportExport\DbAdapters\ArticlesInStockDbAdapter
      */
     protected function createArticlesInStockDbAdapter()
     {
         return new ArticlesInStockDbAdapter();
     }
-    
+
+    /**
+     * This method can be hookable
+     * 
+     * @return \Shopware\Components\SwagImportExport\DbAdapters\ArticlesPricesDbAdapter
+     */    
+    protected function createArticlesPricesDbAdapter()
+    {
+        return new ArticlesPricesDbAdapter();
+    }
+
     /**
      * 
-     * @return \Shopware\Components\SwagImportExport\DbAdapters\NewsletterDbAdapter
+     * @return \Shopware\Components\SwagImportExport\DbAdapters\CustomerDbAdapter
      */
     protected function createCustomerDbAdapter()
     {

@@ -61,8 +61,6 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
 	loadNew: function(profileId) {
 		var me = this;
         
-        console.log(profileId);
-        
         me.profileId = profileId;
         if (profileId !== null) {
             me.toolbar.items.get('conversionsMenu').setDisabled(false);
@@ -114,7 +112,6 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
                     emptyText: me.snippets.toolbar.emptyText,
                     listeners: {
                         change: function(combo, value) {
-                            console.log(value);
                             me.loadNew(value);
                         }
                     }
@@ -217,6 +214,10 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
                             toolbar.items.get('createAttribute').setDisabled(false);
                             toolbar.items.get('createChild').setDisabled(false);
                             toolbar.items.get('deleteSelected').setDisabled(false);
+                        } else if (record.data.type === 'iteration') {
+                            toolbar.items.get('createAttribute').setDisabled(false);
+                            toolbar.items.get('createChild').setDisabled(false);
+                            toolbar.items.get('deleteSelected').setDisabled(true);
                         } else {
                             if (record.data.inIteration === true) {
                                 toolbar.items.get('createAttribute').setDisabled(false);
@@ -280,6 +281,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
 					fieldLabel: 'Shopware Column',
 					hidden: true,
                     xtype: 'combobox',
+                    editable: false,
                     emptyText: 'Select Column',
                     store: me.columnStore,
                     valueField: 'id',

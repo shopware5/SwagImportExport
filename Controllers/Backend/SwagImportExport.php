@@ -282,7 +282,13 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $errors = false;
 
         foreach ($data as &$node) {
-            if (!$this->changeNode($node, $tree)) {
+            if (!$this->deleteNode($node, $tree)) {
+                $errors = true;
+            }
+//            if (!$this->changeNode($node, $tree)) {
+//                $errors = true;
+//            }
+            if (!$this->appendNode($node, $tree)) {
                 $errors = true;
             }
         }

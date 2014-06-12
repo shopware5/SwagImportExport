@@ -176,7 +176,6 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                                 myForm.setLoading(true);
                                 combo.store.sync({
                                     success: function() {
-                                        console.log(model[0].get('id'));
                                         combo.setValue(model[0].get('id'));
                                         myForm.setLoading(false);
                                         myForm.close();
