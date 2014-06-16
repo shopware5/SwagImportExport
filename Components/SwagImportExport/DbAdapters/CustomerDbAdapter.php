@@ -17,21 +17,23 @@ class CustomerDbAdapter implements DataDbAdapter
 
     public function getDefaultColumns()
     {
-        $default = array(
+        $default = array();
+
+        $default = array_merge($default, $this->getCustomerColumns());
+
+        $default = array_merge($default, $this->getBillingColumns());
+
+        $default = array_merge($default, $this->getShippingColumns());
+
+        return $default;
+    }
+
+    public function getCustomerColumns()
+    {
+        return array(
             'customer.email',
             'customer.hashPassword as password',
             'customer.encoderName as encoder',
-            'shipping.company as shippingCompany',
-            'shipping.department as shippingDepartment',
-            'shipping.salutation as shippingSalutation',
-            'shipping.firstName as shippingFirstname',
-            'shipping.lastName as shippingLastname',
-            'shipping.street as shippingStreet',
-            'shipping.streetNumber as shippingStreetnumber',
-            'shipping.zipCode as shippingZipcode',
-            'shipping.city as shippingCity',
-            'shipping.countryId as shippingCountryID',
-            'shipping.stateId as shippingStateID',
             'customer.paymentId as paymentID',
             'customer.newsletter as newsletter',
             'customer.accountMode as accountmode',
@@ -41,16 +43,12 @@ class CustomerDbAdapter implements DataDbAdapter
             'customer.shopId as subshopID',
             'customer.email as email',
         );
-        
-        $default = array_merge($default, $this->getBillingColumns());
-         
-         return $default;
     }
-    
+
     public function getBillingColumns()
     {
         return array(
-            'billing.number as customerNumber',            
+            'billing.number as customerNumber',
             'billing.company as billingCompany',
             'billing.department as billingDepartment',
             'billing.salutation as billingSalutation',
@@ -65,6 +63,23 @@ class CustomerDbAdapter implements DataDbAdapter
             'billing.countryId as billingCountryID',
             'billing.stateId as billingStateID',
             'billing.vatId as ustid',
+        );
+    }
+
+    public function getShippingColumns()
+    {
+        return array(
+            'shipping.company as shippingCompany',
+            'shipping.department as shippingDepartment',
+            'shipping.salutation as shippingSalutation',
+            'shipping.firstName as shippingFirstname',
+            'shipping.lastName as shippingLastname',
+            'shipping.street as shippingStreet',
+            'shipping.streetNumber as shippingStreetnumber',
+            'shipping.zipCode as shippingZipcode',
+            'shipping.city as shippingCity',
+            'shipping.countryId as shippingCountryID',
+            'shipping.stateId as shippingStateID',
         );
     }
 
@@ -141,15 +156,50 @@ class CustomerDbAdapter implements DataDbAdapter
             if (!$customer) {
                 $customer = new Customer();
             }
+
+            $customerData = $this->prepareCustomer($record);
+
+            $customerData['billing'] = $this->prepareBilling($record);
+
+            $customerData['shipping'] = $this->prepareShipping($record);
+
+            $customer->fromArray($customerData);
+
+            $violations = $this->getManager()->validate($customer);
             
-            $billingData = $this->prepareBilling($record);
-            echo '<pre>';
-            var_dump($billingData);
-            echo '</pre>';
-            exit;
+            if ($violations->count() > 0) {
+                throw new \Exception($violations);
+            }
+            
+            $manager->persist($customer);
         }
 
         $manager->flush();
+    }
+
+    protected function prepareCustomer(&$record)
+    {
+        if ($this->customerMap === null) {
+            $columns = $this->getCustomerColumns();
+
+            foreach ($columns as $column) {
+
+                $map = DataHelper::generateMappingFromColumns($column);
+                $this->customerMap[$map[0]] = $map[1];
+            }
+        }
+
+        $customerData = array();
+        foreach ($record as $key => $value) {
+            if (isset($this->customerMap[$key])) {
+                $customerData[$this->customerMap[$key]] = $value;
+                unset($record[$key]);
+            }
+        }
+
+        $customerData['password'] = $customerData['hashPassword'];
+
+        return $customerData;
     }
 
     protected function prepareBilling(&$record)
@@ -163,7 +213,7 @@ class CustomerDbAdapter implements DataDbAdapter
                 $this->billingMap[$map[0]] = $map[1];
             }
         }
-        
+
         $billingData = array();
         foreach ($record as $key => $value) {
             if (isset($this->billingMap[$key])) {
@@ -171,8 +221,31 @@ class CustomerDbAdapter implements DataDbAdapter
                 unset($record[$key]);
             }
         }
-        
+
         return $billingData;
+    }
+
+    protected function prepareShipping(&$record)
+    {
+        if ($this->shippingMap === null) {
+            $columns = $this->getShippingColumns();
+
+            foreach ($columns as $column) {
+
+                $map = DataHelper::generateMappingFromColumns($column);
+                $this->shippingMap[$map[0]] = $map[1];
+            }
+        }
+
+        $shippingData = array();
+        foreach ($record as $key => $value) {
+            if (isset($this->shippingMap[$key])) {
+                $shippingData[$this->shippingMap[$key]] = $value;
+                unset($record[$key]);
+            }
+        }
+
+        return $shippingData;
     }
 
     /**
