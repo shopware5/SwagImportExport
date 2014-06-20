@@ -53,9 +53,14 @@ class DataIO
      * @var int 
      */
     private $maxRecordCount;
+    
+    /**
+     * @var string
+     */
+    private $fileName;
 
     /**
-     * @var \Shopware\CustomModels\ImportExport\Session 
+     * @var \Shopware\Components\SwagImportExport\Session\Session
      */
     private $dataSession;
 
@@ -151,7 +156,9 @@ class DataIO
 
     public function getSessionPosition()
     {
-        return $this->dataSession->getPosition();
+        $position = $this->dataSession->getPosition();
+        
+        return $position == null ? 0 : $position;
     }
 
     /**
@@ -169,15 +176,12 @@ class DataIO
         $profileName = $profile->getName();
         $profileName = str_replace(' ', '.', $profileName);
 
-        $session = $this->getDataSession();
-
         $dateTime = new \DateTime('now');
 
         $fileName = $operationType . '.' . $adapterType . '.' .
                 $dateTime->format('Y.m.d.h.i.s') . '.' . $fileFormat;
-
-        //set count
-        $session->setFileName($fileName);
+	  
+        $this->setFileName($fileName);
 
         return $fileName;
     }
@@ -199,55 +203,32 @@ class DataIO
      * Then writes these ids to the session and sets the session state to "active".
      * For now we will write the ids as a serialized array.
      */
-    public function startSession(ProfileEntity $profile)
+    public function startSession(Profile $profile)
     {
-        $type = $this->getType();
+        $sessionData = array(
+            'type' => $this->getType(),
+            'fileName' => $this->getFileName(),
+            'format' => $this->getFormat(),
+        );
 
         $session = $this->getDataSession();
-
-        //todo: make it without switch ???
-        switch ($type) {
+        
+        switch ($sessionData['type']) {
             case 'export':
                 $ids = $this->preloadRecordIds()->getRecordIds();
-
-                //set ids
-                $session->setIds(serialize($ids));
-
-                //set count
-                $session->setTotalCount(count($ids));
+                
+                $sessionData['serializedIds'] = serialize($ids);
+                $sessionData['totalCountedIds'] = count($ids);
                 break;
             case 'import':
-
-                $session->setIds('');
+                $sessionData['serializedIds'] = '';
                 break;
 
             default:
-                throw new \Exception("Session type $type is not valid");
+                throw new \Exception('Session type '. $sessionData['type'] . ' is not valid');
         }
-
-        //set type
-        $session->setType($type);
-
-        //set position
-        $session->setPosition(0);
-
-        $dateTime = new \DateTime('now');
-
-        //set date/time
-        $session->setCreatedAt($dateTime);
-
-        //set format
-        $session->setFormat($this->getFormat());
-
-        //change state
-        $session->setState('active');
-
-        //set profile
-        $session->setProfile($profile);
         
-        Shopware()->Models()->persist($session);
-
-        Shopware()->Models()->flush();
+        $session->start($profile, $sessionData);
     }
 
     /**
@@ -258,23 +239,7 @@ class DataIO
      */
     public function progressSession($step)
     {
-        $session = $this->getDataSession();
-
-        $position = $session->getPosition();
-        $count = $session->getTotalCount();
-
-        $newPosition = $position + $step;
-
-        if ($newPosition >= $count) {
-            $session->setState('finished');
-            $session->setPosition($count);
-        } else {
-            $session->setPosition($newPosition);
-        }
-
-        Shopware()->Models()->persist($session);
-        
-        Shopware()->Models()->flush();
+        $this->getDataSession()->progress($step);        
     }
 
     /**
@@ -283,12 +248,7 @@ class DataIO
      */
     public function closeSession()
     {
-        $session = $this->getDataSession();
-        $session->setState('closed');
-
-        Shopware()->Models()->persist($session);
-
-        Shopware()->Models()->flush();
+        $this->getDataSession()->close();
     }
 
     /**
@@ -297,14 +257,11 @@ class DataIO
      */
     public function resumeSession()
     {
-        //todo: maybe check state before make it active ???
-        $session = $this->getDataSession();
-
-        $session->setState('active');
-
-        Shopware()->Models()->persist($session);
-
-        Shopware()->Models()->flush();
+        $sessionData = $this->getDataSession()->resume();
+        
+        $this->setRecordIds($sessionData['recordIds']);
+        
+        $this->setFileName($sessionData['fileName']);
     }
 
     public function getSessionId()
@@ -366,7 +323,17 @@ class DataIO
     {
         return $this->format;
     }
-
+    
+    public function getFileName()
+    {
+        return $this->fileName;
+    }
+    
+    public function setFileName($fileName)
+    {
+        $this->fileName = $fileName;
+    }
+    
     /**
      * Returns db columns
      * 

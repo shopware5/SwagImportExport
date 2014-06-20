@@ -2,10 +2,22 @@
 
 namespace Shopware\Components\SwagImportExport\FileIO;
 
+use Shopware\Components\SwagImportExport\Utils\FileHelper;
+
 class CsvFileWriter implements FileWriter
 {
 
     protected $treeStructure = false;
+
+    /**
+     * @var $fileHelper 
+     */
+    protected $fileHelper;
+
+    public function __construct(FileHelper $fileHelper)
+    {
+        $this->fileHelper = $fileHelper;
+    }
 
     /**
      * @param string $fileName
@@ -18,13 +30,10 @@ class CsvFileWriter implements FileWriter
         if (!is_array($headerData)) {
             throw new \Exception('Header data is not valid');
         }
-        
+
         $columnNames .= implode(';', $headerData) . "\n";
-                
-        $str = @file_put_contents($fileName, $columnNames);
-        if ($str === false) {
-            throw new \Exception("Cannot write header in '$fileName'");
-        }
+
+        $this->getFileHelper()->writeStringToFile($fileName, $columnNames);
     }
 
     public function writeRecords($fileName, $data)
@@ -34,21 +43,23 @@ class CsvFileWriter implements FileWriter
         foreach ($data as $record) {
             $flatData .= implode(';', $record) . "\n";
         }
-        
-        $str = @file_put_contents($fileName, $flatData, FILE_APPEND);
-        if ($str === false) {
-            throw new Exception("Cannot write records in '$fileName'");
-        }
+
+        $this->getFileHelper()->writeStringToFile($fileName, $flatData, FILE_APPEND);
     }
 
     public function writeFooter($fileName, $footerData)
     {
         
     }
-    
+
     public function hasTreeStructure()
     {
         return $this->treeStructure;
+    }
+
+    public function getFileHelper()
+    {
+        return $this->fileHelper;
     }
 
 }

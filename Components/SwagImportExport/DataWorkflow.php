@@ -8,32 +8,32 @@ class DataWorkflow
 {
 
     /**
-     * @var DataIO
+     * @var Shopware\Components\SwagImportExport\DataIO
      */
     protected $dataIO;
 
     /**
-     * @var type 
+     * @var \Shopware\Components\SwagImportExport\Profile\Profile 
      */
     protected $profile;
 
     /**
-     * @var type 
+     * @var Shopware\Components\SwagImportExport\Transoformers\DataTransformerChain 
      */
     protected $transformerChain;
 
     /**
-     * @var type 
+     * @var $fileIO 
      */
     protected $fileIO;
 
     /**
-     * @var type 
+     * @var Shopware\Components\SwagImportExport\Session\Session 
      */
     protected $dataSession;
 
     /**
-     * @var type 
+     * @var $dbAdapter 
      */
     protected $dbAdapter;
 
@@ -71,26 +71,22 @@ class DataWorkflow
             // session has no ids stored yet, therefore we must start it and write the file headers
             $header = $this->transformerChain->composeHeader();
             $this->fileIO->writeHeader($outputFileName, $header);
-
-            $this->dataIO->startSession();
+            $this->dataIO->startSession($this->profile);
         } else {
-            $fileName = $this->dataIO->getDataSession()->getFileName();
-
-            $outputFileName = Shopware()->DocPath() . 'files/import_export/' . $fileName;
-
             // session has already loaded ids and some position, so we simply activate it
             $this->dataIO->resumeSession();
-        }
-        $this->dataIO->preloadRecordIds();
 
+            $outputFileName = Shopware()->DocPath() . 'files/import_export/' . $this->dataIO->getFileName();
+        }
+        
         if ($this->dataIO->getSessionState() == 'active') {
             // read a bunch of records into simple php array;
             // the count of records may be less than 100 if we are at the end of the read.
             $data = $this->dataIO->read(1000);
-
+            
             // process that array with the full transformation chain
             $data = $this->transformerChain->transformForward($data);
-
+            
             // now the array should be a tree and we write it to the file
             $this->fileIO->writeRecords($outputFileName, $data);
 
@@ -98,7 +94,7 @@ class DataWorkflow
             // if if the new position goes above the limits provided by the 
             $this->dataIO->progressSession(1000);
         }
-
+        
         if ($this->dataIO->getSessionState() == 'finished') {
             // Session finished means we have exported all the ids in the sesssion.
             // Therefore we can close the file with a footer and mark the session as done.
@@ -107,20 +103,17 @@ class DataWorkflow
             $this->dataIO->closeSession();
         }
 
-        $position = $this->dataIO->getSessionPosition();
+        $postData['position'] = $this->dataIO->getSessionPosition();
 
-        $post = $postData;
-        $post['position'] = $position == null ? 0 : $position;
-
-        if (!$post['sessionId']) {
-            $post['sessionId'] = $this->dataIO->getDataSession()->getId();
+        if (!$postData['sessionId']) {
+            $postData['sessionId'] = $this->dataIO->getDataSession()->getId();
         }
 
-        if (!$post['fileName']) {
-            $post['fileName'] = $fileName;
+        if (!$postData['fileName']) {
+            $postData['fileName'] = $fileName;
         }
 
-        return $post;
+        return $postData;
     }
 
     public function import($postData, $inputFile)
@@ -132,12 +125,11 @@ class DataWorkflow
         if ($this->dataIO->getSessionState() == 'new') {
 
             $totalCount = $this->fileIO->getTotalCount($inputFile);
-
-            $this->dataIO->getDataSession()->setFileName($postData['importFile']);
-
+            
+            $this->dataIO->setFileName($postData['importFile']);
+            
             $this->dataIO->getDataSession()->setTotalCount($totalCount);
-
-            $this->dataIO->startSession($this->profile->getEntity());
+            $this->dataIO->startSession($this->profile);
         } else {
             // session has already loaded ids and some position, so we simply activate it
             $this->dataIO->resumeSession();
@@ -150,24 +142,23 @@ class DataWorkflow
             $records = $this->fileIO->readRecords($inputFile, $position, 100);
 
             $data = $this->transformerChain->transformBackward($records);
-
+            
             $this->dataIO->write($data);
-
+            
             $this->dataIO->progressSession(100);
         }
-        $position = $this->dataIO->getSessionPosition();
-        $post = $postData;
-        $post['position'] = $position == null ? 0 : $position;
-
-        if (!$post['sessionId']) {
-            $post['sessionId'] = $this->dataIO->getDataSession()->getId();
-        }
-
+        
         if ($this->dataIO->getSessionState() == 'finished') {
             $this->dataIO->closeSession();
         }
+        
+        $postData['position'] = $this->dataIO->getSessionPosition();
 
-        return $post;
+        if (!$postData['sessionId']) {
+            $postData['sessionId'] = $this->dataIO->getDataSession()->getId();
+        }
+        
+        return $postData;
     }
 
 }

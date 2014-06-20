@@ -4,6 +4,7 @@ namespace Shopware\Components\SwagImportExport\Utils;
 
 class DataHelper
 {
+
     public static function generateMappingFromColumns($column)
     {
         preg_match('/(?<=as ).*/', $column, $alias);
@@ -14,6 +15,5 @@ class DataHelper
 
         return array($alias, $name);
     }
-    
 
 }

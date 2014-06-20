@@ -3,6 +3,7 @@
 namespace Shopware\Components\SwagImportExport\Factories;
 
 use Shopware\Components\SwagImportExport\DataIO;
+use Shopware\Components\SwagImportExport\Session\Session;
 use Shopware\Components\SwagImportExport\DbAdapters\CategoriesDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\ArticlesDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\ArticlesPricesDbAdapter;
@@ -12,7 +13,7 @@ use Shopware\Components\SwagImportExport\DbAdapters\NewsletterDbAdapter;
 use Shopware\Components\SwagImportExport\Utils\DataColumnOptions;
 use Shopware\Components\SwagImportExport\Utils\DataLimit;
 use Shopware\Components\SwagImportExport\Utils\DataFilter;
-use Shopware\CustomModels\ImportExport\Session;
+use Shopware\CustomModels\ImportExport\Session as SessionEntity;
 
 class DataFactory extends \Enlight_Class implements \Enlight_Hook
 {
@@ -76,11 +77,13 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     {   
         $sessionId = $data['sessionId'];
 
-        $session = $this->getSessionRepository()->findOneBy(array('id' => $sessionId));
+        $sessionEntity = $this->getSessionRepository()->findOneBy(array('id' => $sessionId));
 
-        if (!$session) {
-            $session = $this->createSession();
+        if (!$sessionEntity) {
+            $sessionEntity = new SessionEntity();
         }
+        
+        $session = $this->createSession($sessionEntity);
 
         return $session;
     }
@@ -131,9 +134,9 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
         return $this->sessionRepository;
     }
     
-    protected function createSession()
+    protected function createSession(SessionEntity $sessionEntity)
     {
-        return new Session();
+        return new Session($sessionEntity);
     }
 
     /**

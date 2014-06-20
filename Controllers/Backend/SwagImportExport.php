@@ -579,7 +579,9 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $dataIO->initialize($colOpts, $limit, $filter, $type, $format, $maxRecordCount);
 
         // we create the file writer that will write (partially) the result file
-        $fileWriter = $this->Plugin()->getFileIOFactory()->createFileWriter($postData);
+        $fileFactory = $this->Plugin()->getFileIOFactory();
+        $fileHelper = $fileFactory->createFileHelper();
+        $fileWriter = $fileFactory->createFileWriter($postData, $fileHelper);
 
         $dataTransformerChain = $this->Plugin()->getDataTransformerFactory()->createDataTransformerChain(
                 $profile, array('isTree' => $fileWriter->hasTreeStructure())

@@ -8,6 +8,7 @@ use Shopware\Components\SwagImportExport\FileIO\ExcelFileWriter;
 use Shopware\Components\SwagImportExport\FileIO\CsvFileReader;
 use Shopware\Components\SwagImportExport\FileIO\XmlFileReader;
 use Shopware\Components\SwagImportExport\FileIO\ExcelFileReader;
+use Shopware\Components\SwagImportExport\Utils\FileHelper;
 
 class FileIOFactory extends \Enlight_Class implements \Enlight_Hook
 {
@@ -26,18 +27,23 @@ class FileIOFactory extends \Enlight_Class implements \Enlight_Hook
         }
     }
 
-    public function createFileWriter($params)
+    public function createFileWriter($params, $fileHelper)
     {
         switch ($params['format']) {
             case 'csv':
-                return new CsvFileWriter();
+                return new CsvFileWriter($fileHelper);
             case 'xml':
-                return new XmlFileWriter();
+                return new XmlFileWriter($fileHelper);
             case 'excel':
-                return new ExcelFileWriter();
+                return new ExcelFileWriter($fileHelper);
             default:
                 throw new \Exception('File writer' . $params['format'] . ' does not exists.');
         }
+    }
+    
+    public function createFileHelper()
+    {
+        return new FileHelper();
     }
 
 }

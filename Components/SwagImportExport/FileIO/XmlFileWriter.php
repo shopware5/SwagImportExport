@@ -2,6 +2,8 @@
 
 namespace Shopware\Components\SwagImportExport\FileIO;
 
+use Shopware\Components\SwagImportExport\Utils\FileHelper;
+
 /**
  * This class is responsible to generate XML file or portions of an XML file on the hard disk.
  * The input data must be in php array forming a tree-like structure
@@ -18,6 +20,16 @@ class XmlFileWriter implements FileWriter
      * @var Shopware_Components_Convert_Xml
      */
     protected $xmlConvertor;
+    
+    /**
+     * @var $fileHelper 
+     */
+    protected $fileHelper;
+    
+    public function __construct(FileHelper $fileHelper)
+    {
+        $this->fileHelper = $fileHelper;
+    }
 
     /**
      * Writes the header data in the file. The header data should be in a tree-like structure. 
@@ -25,11 +37,7 @@ class XmlFileWriter implements FileWriter
     public function writeHeader($fileName, $headerData)
     {
         $dataParts = $this->splitHeaderFooter($headerData);
-
-        $str = @file_put_contents($fileName, $dataParts[0]);
-        if ($str === false) {
-            throw new \Exception("Cannot write in '$fileName'");
-        }
+        $this->getFileHelper()->writeStringToFile($fileName, $dataParts[0]);
     }
 
     /**
@@ -42,11 +50,8 @@ class XmlFileWriter implements FileWriter
         //converting the whole template tree without the interation part
         $convertor = $this->getXmlConvertor();
         $data = $convertor->_encode($data);
-        
-        $str = @file_put_contents($fileName, trim($data), FILE_APPEND);
-        if ($str === false) {
-            throw new \Exception("Cannot write in '$fileName'");
-        }
+
+        $this->getFileHelper()->writeStringToFile($fileName, trim($data), FILE_APPEND);
     }
 
     /**
@@ -56,18 +61,20 @@ class XmlFileWriter implements FileWriter
     public function writeFooter($fileName, $footerData)
     {
         $dataParts = $this->splitHeaderFooter($footerData);
-        
+
         $data = isset($dataParts[1]) ? $dataParts[1] : null;
-        
-        $str = @file_put_contents($fileName, $data, FILE_APPEND);
-        if ($str === false) {
-            throw new \Exception("Cannot write in '$fileName'");
-        }
+
+        $this->getFileHelper()->writeStringToFile($fileName, $data, FILE_APPEND);
     }
 
     public function hasTreeStructure()
     {
         return $this->treeStructure;
+    }
+    
+    public function getFileHelper()
+    {
+        return $this->fileHelper;
     }
 
     /**
@@ -102,5 +109,5 @@ class XmlFileWriter implements FileWriter
 
         return $this->xmlConvertor;
     }
-
+    
 }
