@@ -8,11 +8,15 @@ class XmlFileReader implements FileReader
     protected $tree;
     protected $iterationPath;
     protected $iterationTag;
-    private $treeStructure = true;
+    /*
+     * @var boolen
+     */
+    protected $treeStructure = true;
+    protected $fileHelper;
 
-    public function __construct()
+    public function __construct($fileHelper)
     {
-        
+        $this->fileHelper = $fileHelper;
     }
 
     public function setTree($tree)
@@ -57,24 +61,25 @@ class XmlFileReader implements FileReader
 
     public function readRecords($fileName, $position, $count)
     {
-        $z = new \XMLReader();
-        $z->open($fileName);
+        //todo: add string argument
+        $reader = new \XMLReader();
+        $reader->open($fileName);
 
         foreach ($this->iterationPath as $node) {
-            $z->next($node);
-            $z->read();
+            $reader->next($node);
+            $reader->read();
         }
-        
+
         // skip records
         $i = 0;
-        while ($i < $position && $z->next($this->iterationTag)) {
+        while ($i < $position && $reader->next($this->iterationTag)) {
             $i++;
         }
 
         $j = 0;
         $records = array();
-        while ($j < $count && $z->next($this->iterationTag)) {
-            $node = $z->expand();
+        while ($j < $count && $reader->next($this->iterationTag)) {
+            $node = $reader->expand();
             $records[] = $this->toArrayTree($node);
             $j++;
         }

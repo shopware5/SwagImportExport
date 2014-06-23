@@ -122,13 +122,11 @@ class DataWorkflow
             $tree = json_decode($this->profile->getConfig("tree"), true);
             $this->fileIO->setTree($tree);
         }
+        
         if ($this->dataIO->getSessionState() == 'new') {
-
             $totalCount = $this->fileIO->getTotalCount($inputFile);
-            
             $this->dataIO->setFileName($postData['importFile']);
-            
-            $this->dataIO->getDataSession()->setTotalCount($totalCount);
+            $this->dataIO->getDataSession()->setTotalCount($totalCount);            
             $this->dataIO->startSession($this->profile);
         } else {
             // session has already loaded ids and some position, so we simply activate it

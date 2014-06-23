@@ -13,15 +13,15 @@ use Shopware\Components\SwagImportExport\Utils\FileHelper;
 class FileIOFactory extends \Enlight_Class implements \Enlight_Hook
 {
 
-    public function createFileReader($params)
+    public function createFileReader($params, $fileHelper)
     {
         switch ($params['format']) {
             case 'csv':
-                return new CsvFileReader();
+                return new CsvFileReader($fileHelper);
             case 'xml':
-                return new XmlFileReader();
+                return new XmlFileReader($fileHelper);
             case 'excel':
-                return new ExcelFileReader();
+                return new ExcelFileReader($fileHelper);
             default:
                 throw new \Exception('File reader '. $params['format'] . ' does not exists.');
         }

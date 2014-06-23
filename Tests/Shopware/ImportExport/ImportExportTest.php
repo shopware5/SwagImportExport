@@ -15,7 +15,7 @@ class ImportExportTest extends ImportExportTestHelper
         return preg_replace('/\s+/', '', $string);
     }
     
-    public function testExportCycle()
+    public function testXMLExportCycle()
     {
         
         $expectedHeader = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -152,6 +152,151 @@ class ImportExportTest extends ImportExportTestHelper
         $postData = array();
 
         $dataWorkflow->export($postData);        
+    }
+    
+    public function testXMLImportCycle()
+    {
+        $expectedRecords = array(
+            array(
+                'id' => '3',
+                'name' => 'Deutsch',
+                'active' => '1',
+                'parentId' => '1',
+            ),
+            array(
+                'id' => '39',
+                'name' => 'English',
+                'active' => '1',
+                'parentId' => '1',
+            ),
+            array(
+                'id' => '9',
+                'name' => 'Freizeitwelten',
+                'active' => '1',
+                'parentId' => '3',
+            ),
+            array(
+                'id' => '8',
+                'name' => 'Wohnwelten',
+                'active' => '1',
+                'parentId' => '3',
+            ),
+        );
+        
+        $readData = array(
+            array(
+                'Id' => '3',
+                'Description' => array(
+                    'Value' => 'Deutsch',
+                    '_attributes' => array(
+                        'Attribute2' => '1'
+                    )
+                ),
+                'Title' => 'Deutsch',
+                '_attributes' => array(
+                    'Attribute1' => '1'
+                )
+            ),
+            array(
+                'Id' => '39',
+                'Description' => array(
+                    'Value' => 'English',
+                    '_attributes' => array(
+                        'Attribute2' => '1'
+                    )
+                ),
+                'Title' => 'English',
+                '_attributes' => array(
+                    'Attribute1' => '1'
+                )
+            ),
+            array(
+                'Id' => '9',
+                'Description' => array(
+                    'Value' => 'Freizeitwelten',
+                    '_attributes' => array(
+                        'Attribute2' => '1'
+                    )
+                ),
+                'Title' => 'Freizeitwelten',
+                '_attributes' => array(
+                    'Attribute1' => '3'
+                )
+            ),
+            array(
+                'Id' => '8',
+                'Description' => array(
+                    'Value' => 'Wohnwelten',
+                    '_attributes' => array(
+                        'Attribute2' => '1'
+                    )
+                ),
+                'Title' => 'Wohnwelten',
+                '_attributes' => array(
+                    'Attribute1' => '3'
+                )
+            ),
+        );
+        
+        $profileData = array(
+            array('exportConversion', 'TestExportConversion'),
+            array('tree', '{"name":"Root","children":[{"name":"Header","children":[{"name":"HeaderChild","shopwareField":""}]},{"name":"Categories","children":[{"name":"Category","type":"record","attributes":[{"name":"Attribute1","shopwareField":"parentId"}],"children":[{"name":"Id","shopwareField":"id"},{"name":"Description","shopwareField":"name","children":[{"name":"Value","shopwareField":"name"}],"attributes":[{"name":"Attribute2","shopwareField":"active"}]},{"name":"Title","shopwareField":"name"}]}]}],"id":"root"}')
+        );
+
+        $params = array(
+            'format' => 'xml',
+            'importFile' => 'test.xml'
+        );
+
+        $dataFactory = $this->Plugin()->getDataFactory();
+
+        //Mocks db adapter 
+        $dbAdapter = $this->getMock('Shopware\Components\SwagImportExport\DbAdapters\CategoriesDbAdapter');
+        $dbAdapter->expects(
+                $this->any())
+                ->method('write')
+                ->will($this->returnCallback(function($records)use($expectedRecords) {
+                        $this->assertEquals($expectedRecords, $records);
+                }));
+        
+        //Mocks profile 
+        $profile = $this->getMock('Shopware\Components\SwagImportExport\Profile\Profile');
+        $profile->expects($this->any())->method('getType')->will($this->returnValue('categories'));
+        $profile->expects($this->any())->method('getName')->will($this->returnValue('shopware categories'));
+        $profile->expects($this->any())->method('getConfigNames')->will($this->returnValue(array('exportConversion', 'tree')));
+        $profile->expects($this->any())
+                ->method('getConfig')
+                ->will($this->returnValueMap($profileData));
+        
+        //Mocks data session entity
+        $dataSession = $this->getMock('Shopware\Components\SwagImportExport\Session\Session');
+        $dataSession->expects($this->at(0))->method('getState')->will($this->returnValue('new'));
+        $dataSession->expects($this->at(3))->method('getState')->will($this->returnValue('active'));
+        $dataSession->expects($this->at(6))->method('getState')->will($this->returnValue('finished'));
+        $dataSession->expects($this->any())->method('getFormat')->will($this->returnValue('xml'));
+        $dataSession->expects($this->any())->method('getType')->will($this->returnValue('import'));
+        $dataSession->expects($this->any())->method('start')->will($this->returnValue());
+        
+        
+        // mock fileReader
+        $fileReader = $this->getMock('Shopware\Components\SwagImportExport\FileIO\XmlFileReader');
+        $fileReader->expects($this->any())->method('hasTreeStructure')->will($this->returnValue(true));
+        $fileReader->expects($this->any())->method('readRecords')->will($this->returnValue($readData));
+        
+        
+        
+        //create dataIO
+        $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession);
+        
+        $dataIO->initialize($colOpts, $limit, $filter, 'import', 'xml', $maxRecordCount);
+
+        $dataTransformerChain = $this->Plugin()->getDataTransformerFactory()->createDataTransformerChain(
+                $profile, array('isTree' => $fileReader->hasTreeStructure())
+        );
+
+        $dataWorkflow = new DataWorkflow($dataIO, $profile, $dataTransformerChain, $fileReader);
+        
+        $dataWorkflow->import($params, $inputFile);
     }
 
 }
