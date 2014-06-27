@@ -50,7 +50,7 @@ class ImportExportTest extends ImportExportTestHelper
 
         $expectedFooter = '</Categories></Root>';
 
-        $rawData = array(
+        $rawData['categories'] = array(
             array(
                 'id' => 5,
                 'parentId' => 3,
@@ -73,7 +73,7 @@ class ImportExportTest extends ImportExportTestHelper
 
         $profileData = array(
             array('exportConversion', 'TestExportConversion'),
-            array('tree', '{"name":"Root","children":[{"name":"Header","children":[{"name":"HeaderChild","shopwareField":""}]},{"name":"Categories","children":[{"name":"Category","type":"record","attributes":[{"name":"Attribute1","shopwareField":"parentId"}],"children":[{"name":"Id","shopwareField":"id"},{"name":"Description","shopwareField":"name","children":[{"name":"Value","shopwareField":"name"}],"attributes":[{"name":"Attribute2","shopwareField":"active"}]},{"name":"Title","shopwareField":"name"}]}]}],"id":"root"}')
+            array('tree', '{"name":"Root","children":[{"name":"Header","children":[{"name":"HeaderChild","shopwareField":""}]},{"name":"Categories","children":[{"name":"Category","adapter":"categories","attributes":[{"name":"Attribute1","shopwareField":"parentId"}],"children":[{"name":"Id","shopwareField":"id"},{"name":"Description","shopwareField":"name","children":[{"name":"Value","shopwareField":"name"}],"attributes":[{"name":"Attribute2","shopwareField":"active"}]},{"name":"Title","shopwareField":"name"}]}]}],"id":"root"}')
         );
 
         $params = array('format' => 'xml');
