@@ -30,28 +30,66 @@ class CustomerDbAdapter implements DataDbAdapter
 
     public function getCustomerColumns()
     {
-        return array(
-            'customer.email',
+        $columns = array(
+            'customer.id as id',
             'customer.hashPassword as password',
             'customer.encoderName as encoder',
+            'customer.email as email',
+            'customer.active as active',
+            'customer.accountMode as accountMode',
             'customer.paymentId as paymentID',
+            'customer.firstLogin as firstLogin',
+            'customer.lastLogin as lastLogin',
+            'customer.sessionId as sessionId',
             'customer.newsletter as newsletter',
-            'customer.accountMode as accountmode',
+            'customer.validation as validation',
             'customer.affiliate as affiliate',
             'customer.groupKey as customergroup',
+            'customer.paymentPreset as paymentPreset',
             'customer.languageId as language',
             'customer.shopId as subshopID',
-            'customer.email as email',
+            'customer.referer as referer',
+            'customer.priceGroupId as priceGroupId',
+            'customer.internalComment as internalComment',
+            'customer.failedLogins as failedLogins',
+            'customer.lockedUntil as lockedUntil',
         );
+        
+        // Attributes
+        $stmt = Shopware()->Db()->query('SELECT * FROM s_user_attributes LIMIT 1');
+        $attributes = $stmt->fetch();
+
+        $attributesSelect = '';
+        if ($attributes) {
+            unset($attributes['id']);
+            unset($attributes['userID']);
+            $attributes = array_keys($attributes);
+
+            $prefix = 'attr';
+            $attributesSelect = array();
+            foreach ($attributes as $attribute) {
+                //underscore to camel case
+                //exmaple: underscore_to_camel_case -> underscoreToCamelCase
+                $catAttr = preg_replace("/\_(.)/e", "strtoupper('\\1')", $attribute);
+
+                $attributesSelect[] = sprintf('%s.%s as attrCustomer%s', $prefix, $catAttr, ucwords($catAttr));
+            }
+        }
+        
+        if ($attributesSelect && !empty($attributesSelect)) {
+            $columns = array_merge($columns, $attributesSelect);
+        }
+
+        return $columns;
     }
 
     public function getBillingColumns()
     {
-        return array(
-            'billing.number as customerNumber',
+        $columns = array(
             'billing.company as billingCompany',
             'billing.department as billingDepartment',
             'billing.salutation as billingSalutation',
+            'billing.number as customerNumber',
             'billing.firstName as billingFirstname',
             'billing.lastName as billingLastname',
             'billing.street as billingStreet',
@@ -63,12 +101,40 @@ class CustomerDbAdapter implements DataDbAdapter
             'billing.countryId as billingCountryID',
             'billing.stateId as billingStateID',
             'billing.vatId as ustid',
+            'billing.birthday as birthday',
         );
+        
+        // Attributes
+        $stmt = Shopware()->Db()->query('SELECT * FROM s_user_billingaddress_attributes LIMIT 1');
+        $attributes = $stmt->fetch();
+
+        $attributesSelect = '';
+        if ($attributes) {
+            unset($attributes['id']);
+            unset($attributes['billingID']);
+            $attributes = array_keys($attributes);
+
+            $prefix = 'attr';
+            $attributesSelect = array();
+            foreach ($attributes as $attribute) {
+                //underscore to camel case
+                //exmaple: underscore_to_camel_case -> underscoreToCamelCase
+                $catAttr = preg_replace("/\_(.)/e", "strtoupper('\\1')", $attribute);
+
+                $attributesSelect[] = sprintf('%s.%s as attrBilling%s', $prefix, $catAttr, ucwords($catAttr));
+            }
+        }
+        
+        if ($attributesSelect && !empty($attributesSelect)) {
+            $columns = array_merge($columns, $attributesSelect);
+        }
+
+        return $columns;
     }
 
     public function getShippingColumns()
     {
-        return array(
+        $columns = array(
             'shipping.company as shippingCompany',
             'shipping.department as shippingDepartment',
             'shipping.salutation as shippingSalutation',
@@ -81,6 +147,33 @@ class CustomerDbAdapter implements DataDbAdapter
             'shipping.countryId as shippingCountryID',
             'shipping.stateId as shippingStateID',
         );
+        
+        // Attributes
+        $stmt = Shopware()->Db()->query('SELECT * FROM s_user_shippingaddress_attributes LIMIT 1');
+        $attributes = $stmt->fetch();
+
+        $attributesSelect = '';
+        if ($attributes) {
+            unset($attributes['id']);
+            unset($attributes['shippingID']);
+            $attributes = array_keys($attributes);
+
+            $prefix = 'attr';
+            $attributesSelect = array();
+            foreach ($attributes as $attribute) {
+                //underscore to camel case
+                //exmaple: underscore_to_camel_case -> underscoreToCamelCase
+                $catAttr = preg_replace("/\_(.)/e", "strtoupper('\\1')", $attribute);
+
+                $attributesSelect[] = sprintf('%s.%s as attrShipping%s', $prefix, $catAttr, ucwords($catAttr));
+            }
+        }
+
+        if ($attributesSelect && !empty($attributesSelect)) {
+            $columns = array_merge($columns, $attributesSelect);
+        }
+
+        return $columns;
     }
 
     public function read($ids, $columns)
@@ -107,7 +200,7 @@ class CustomerDbAdapter implements DataDbAdapter
 
         $paginator = $manager->createPaginator($query);
 
-        $result = $paginator->getIterator()->getArrayCopy();
+        $result['customers'] = $paginator->getIterator()->getArrayCopy();
 
         return $result;
     }

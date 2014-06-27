@@ -78,8 +78,7 @@ class CategoriesDbAdapter implements DataDbAdapter
                 ->where('c.id IN (:ids)')
                 ->setParameter('ids', $ids);
 
-        $result = $builder->getQuery()->getResult();
-
+        $result['categories'] = $builder->getQuery()->getResult();
 
         return $result;
     }
@@ -128,9 +127,8 @@ class CategoriesDbAdapter implements DataDbAdapter
 
                 $attributesSelect[] = sprintf('%s.%s as attribute%s', $prefix, $catAttr, ucwords($catAttr));
             }
-            //$attributesSelect = ",\n" . implode(",\n", $attributesSelect);
         }
-
+        
         if ($attributesSelect && !empty($attributesSelect)) {
             $columns = array_merge($columns, $attributesSelect);
         }
