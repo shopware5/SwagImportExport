@@ -153,12 +153,13 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
 		me.treePanel = Ext.create('Ext.tree.Panel', {
 			region: 'west',
 			store: me.treeStore,
-			viewConfig: {
+            viewConfig: {
 				plugins: {
 					ptype: 'customtreeviewdragdrop'
 				},
                 listeners: {
                     drop: function(node, data, overModel, dropPosition, eOpts) {
+                        me.treeStore.sortChildren(overModel);
                         me.treeStore.sync();
                     }
                 }
@@ -210,7 +211,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
                             toolbar.items.get('createAttribute').setDisabled(true);
                             toolbar.items.get('createChild').setDisabled(true);
                             toolbar.items.get('deleteSelected').setDisabled(false);
-                        } else if (record.data.type === 'node') {
+                        } else if (record.data.type === 'leaf') {
                             toolbar.items.get('createAttribute').setDisabled(false);
                             toolbar.items.get('createChild').setDisabled(false);
                             toolbar.items.get('deleteSelected').setDisabled(false);
@@ -256,16 +257,30 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
 			},
 			fillForm: function() {
 				var node = me.treeStore.getById(me.selectedNodeId);
+                $node = node;
+                console.log(me.selectedNodeId);
 				this.child('#nodeName').show();
 				this.child('#nodeName').setValue(node.data.text);
 				this.child('#swColumn').setValue(node.data.swColumn);
 				
 				if (node.data.type === 'attribute') {
 					this.child('#swColumn').show();
-				} else if (node.data.type === 'node') {
+                    this.child('#adapter').hide();
+                    this.child('#parentKey').hide();
+				} else if (node.data.type === 'leaf') {
 					this.child('#swColumn').show();
+                    this.child('#adapter').hide();
+                    this.child('#parentKey').hide();
+				} else if (node.data.type === 'iteration') {
+					this.child('#swColumn').hide();
+                    this.child('#adapter').show();
+                    this.child('#parentKey').show();
+                    this.child('#adapter').setValue(node.data.adapter);
+                    this.child('#parentKey').setValue(node.data.parentKey);
 				} else {
 					this.child('#swColumn').hide();
+                    this.child('#adapter').hide();
+                    this.child('#parentKey').hide();
 				}
 			},
 			items: [{
@@ -290,6 +305,34 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
                     labelWidth: 150,
                     name: 'swColumn',
 					allowBlank: false
+				}, {
+					itemId: 'adapter',
+					fieldLabel: 'Adapter',
+					hidden: true,
+                    xtype: 'combobox',
+                    editable: false,
+                    emptyText: 'Select Column',
+                    store: ["article", "price"],
+//                    valueField: 'id',
+//                    displayField: 'name',
+                    width: 400,
+                    labelWidth: 150,
+                    name: 'adapter',
+					allowBlank: false
+				}, {
+					itemId: 'parentKey',
+					fieldLabel: 'Parent Key',
+					hidden: true,
+                    xtype: 'combobox',
+                    editable: false,
+                    emptyText: 'Select Column',
+                    store: ["articlesId"],
+//                    valueField: 'id',
+//                    displayField: 'name',
+                    width: 400,
+                    labelWidth: 150,
+                    name: 'parentKey',
+					allowBlank: false
 				}],
 			dockedItems: [{
 					xtype: 'toolbar',
@@ -304,7 +347,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
 							cls: 'primary',
 							action: 'swag-import-export-manager-profile-save',
 							handler: function() {
-								me.fireEvent('saveNode', me.treeStore, me.selectedNodeId, me.formPanel.child('#nodeName').getValue(), me.formPanel.child('#swColumn').getValue());
+								me.fireEvent('saveNode', me.treeStore, me.selectedNodeId, me.formPanel.child('#nodeName').getValue(), me.formPanel.child('#swColumn').getValue(), me.formPanel.child('#adapter').getValue(), me.formPanel.child('#parentKey').getValue());
 							}
 						}]
 				}]

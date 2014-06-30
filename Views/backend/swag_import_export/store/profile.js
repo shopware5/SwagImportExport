@@ -7,19 +7,19 @@ Ext.define('Shopware.apps.SwagImportExport.store.Profile', {
     },
     proxy: {
         type: 'ajax',
-		api:{
-			create: '{url controller="SwagImportExport" action="createNode"}',
-			read:	'{url controller="SwagImportExport" action="getProfile"}',
-			update: '{url controller="SwagImportExport" action="updateNode"}',
-			destroy: '{url controller="SwagImportExport" action="deleteNode"}'
+        api: {
+            create: '{url controller="SwagImportExport" action="createNode"}',
+            read: '{url controller="SwagImportExport" action="getProfile"}',
+            update: '{url controller="SwagImportExport" action="updateNode"}',
+            destroy: '{url controller="SwagImportExport" action="deleteNode"}'
         },
         actionMethods: 'POST',
         reader: {
             type: 'json'
         },
-		writer: {
-			type: 'json',
-			root: 'data'
-		}
+        writer: {
+            type: 'json',
+            root: 'data'
+        }
     }
 });

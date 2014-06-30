@@ -52,7 +52,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.tree.DragAndDrop', {
             // Custom checks
             for (i = 0; i < ln; i++) {
                 record = draggedRecords[i];
-                if (record.get('type') !== 'iteration' && record.get('inIteration') !== targetNode.get('inIteration')) {
+                if (record.get('adapter') !== targetNode.get('adapter')) {
                     return false;
                 }
             }

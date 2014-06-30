@@ -263,12 +263,14 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
      * @param { string } nodeName
      * @param { string } swColumn
      */
-    saveNode: function(treeStore, selectedNodeId, nodeName, swColumn) {
+    saveNode: function(treeStore, selectedNodeId, nodeName, swColumn, adapter, parentKey) {
         var me = this;
         
         var node = treeStore.getById(selectedNodeId);
         node.set('text', nodeName);
         node.set('swColumn', swColumn);
+        node.set('adapter', adapter);
+        node.set('parentKey', parentKey);
         treeStore.sync({
             success: function() {
                 Shopware.Notification.createGrowlMessage(
