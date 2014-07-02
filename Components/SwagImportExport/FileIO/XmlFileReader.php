@@ -6,8 +6,8 @@ class XmlFileReader implements FileReader
 {
 
     protected $tree;
-    protected $iterationPath;
-    protected $iterationTag;
+    protected $iterationPath = array();
+    protected $iterationTag = array();
     /*
      * @var boolen
      */
@@ -25,16 +25,26 @@ class XmlFileReader implements FileReader
         $this->findIterationNode($tree, array());
     }
 
-    protected function toArrayTree(\DOMElement $node)
+    protected function toArrayTree(\DOMElement $node, $path)
     {
         $hasChildren = false;
         $record = array();
-
+        $currentPath = $path . '/' . $node->nodeName;
+        
         if ($node->hasChildNodes()) {
-            foreach ($node->childNodes as $child) {
-                if ($child instanceof \DOMElement) {
-                    $hasChildren = true;
-                    $record[$child->nodeName] = $this->toArrayTree($child);
+            if (in_array($currentPath, $this->iterationPath)) {
+                foreach ($node->childNodes as $child) {
+                    if ($child instanceof \DOMElement) {
+                        $hasChildren = true;
+                        $record[$child->nodeName][] = $this->toArrayTree($child, $currentPath);
+                    }
+                }
+            } else {
+                foreach ($node->childNodes as $child) {
+                    if ($child instanceof \DOMElement) {
+                        $hasChildren = true;
+                        $record[$child->nodeName] = $this->toArrayTree($child, $currentPath);
+                    }
                 }
             }
         }
@@ -65,23 +75,23 @@ class XmlFileReader implements FileReader
         $reader = new \XMLReader();
         $reader->open($fileName);
 
-        foreach ($this->iterationPath as $node) {
+        // find the first iterationNode
+        foreach (explode('/', $this->iterationPath[0]) as $node) {
             $reader->next($node);
             $reader->read();
         }
 
         // skip records
         $i = 0;
-        while ($i < $position && $reader->next($this->iterationTag)) {
+        while ($i < $position && $reader->next($this->iterationTag[0])) {
             $i++;
         }
 
         $j = 0;
         $records = array();
-        while ($j < $count && $reader->next($this->iterationTag)) {
+        while ($j < $count && $reader->next($this->iterationTag[0])) {
             $node = $reader->expand();
-            $records[] = $this->toArrayTree($node);
-            $j++;
+            $records[] = $this->toArrayTree($node, $this->iterationPath[0]);
         }
 
         return $records;
@@ -101,10 +111,9 @@ class XmlFileReader implements FileReader
     {
         $path[] = $node["name"];
         foreach ($node['children'] as $child) {
-            if ($child['type'] == 'record') {
-                $this->iterationPath = $path;
-                $this->iterationTag = $child['name'];
-                return;
+            if (isset($child['adapter'])) {
+                $this->iterationPath[] = implode('/', $path);
+                $this->iterationTag[] = $child['name'];
             }
 
             $this->findIterationNode($child, $path);
