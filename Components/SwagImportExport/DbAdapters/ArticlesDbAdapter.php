@@ -115,65 +115,66 @@ class ArticlesDbAdapter implements DataDbAdapter
         }
 
         foreach ($records['articles'] as $index => $record) {
-            $article = null;
-            $variant = null;
-
-            if (isset($record['articleId']) && !empty($record['articleId'])) {
-                $article = $this->getManager()->find('Shopware\Models\Article\Article', $record['articleId']);
-                unset($record['articleId']);
-            } elseif (!$this->isMainVariant($record)) {
+            $articleModel = null;
+            $variantModel = null;
+            
+            if ($record['mainNumber'] !== $record['orderNumber']) {
                 $mainVariant = $this->getVariantRepository()->findOneBy(array('number' => $record['mainNumber']));
-
+                
                 if (!$mainVariant) {
                     throw new Exception('Variant does not exists');
                 }
-                $article = $mainVariant->getArticle();
-
+                $articleModel = $mainVariant->getArticle();
                 unset($record['mainNumber']);
-            }
-
-            if (!$article) {
+            } else if (isset($record['orderNumber']) && !empty($record['orderNumber'])) {
+                $variantModel = $this->getVariantRepository()->findOneBy(array('number' => $record['orderNumber']));
+                if ($variantModel) {
+                    $articleModel = $variantModel->getArticle();                    
+                }
+            } 
+            
+            if (!$articleModel) {
                 //if the article does not exists
-                $article = new ArticleModel();
+                $articleModel = new ArticleModel();
 
                 $articleData = $this->prerpareArticle($record);
 
-                $variant = $this->prerpareVariant($record, $article);
+                $variantModel = $this->prerpareVariant($record, $articleModel);
+                $articleModel->setDetails($variantModel);
 
-                $article->setDetails($variant);
-
-                $prices = $this->preparePrices($records['prices'], $index, $variant, $article, $articleData['tax']);
+                $prices = $this->preparePrices($records['prices'], $index, $variantModel, $articleModel, $articleData['tax']);
 
                 $articleData['mainDetail'] = array(
-                    'number' => $variant->getNumber(),
+                    'number' => $variantModel->getNumber(),
                     'prices' => $prices
                 );
-                $article->fromArray($articleData);
+                $articleModel->fromArray($articleData);
 
-                $violations = $this->getManager()->validate($article);
+                $violations = $this->getManager()->validate($articleModel);
 
                 if ($violations->count() > 0) {
                     throw new \Exception('No valid entity');
                 }
 
-                $this->getManager()->persist($article);
+                $this->getManager()->persist($articleModel);
             } else {
-
+                
                 //Variants
-                $variant = $this->prerpareVariant($record, $article);
-                $variant->setArticle($article);
+                $variantModel = $this->prerpareVariant($record, $articleModel, $variantModel);
+                $variantModel->setArticle($articleModel);
 
-                $prices = $this->preparePrices($records['prices'], $index, $variant, $article, $article->getTax());
+                $prices = $this->preparePrices($records['prices'], $index, $variantModel, $articleModel, $articleModel->getTax());
 
-                $variant->setPrices($prices);
+                $variantModel->setPrices($prices);
 
-                $violations = $this->getManager()->validate($variant);
+                $violations = $this->getManager()->validate($variantModel);
 
                 if ($violations->count() > 0) {
                     throw new \Exception('No valid entity');
                 }
 
-                $this->getManager()->persist($variant);
+                $this->getManager()->persist($variantModel);
+                
             }
 
             $this->getManager()->flush();
@@ -228,18 +229,13 @@ class ArticlesDbAdapter implements DataDbAdapter
         return $article;
     }
 
-    public function prerpareVariant(&$data, $article)
+    public function prerpareVariant(&$data, $article, $variantModel = null)
     {
         $variantData = array();
 
-        if (isset($data['variantId']) && !empty($data['variantId'])) {
-            $variant = $this->getManager()->find('Shopware\Models\Article\Detail', $data['variantId']);
-            unset($data['variantId']);
-        }
-
-        if (!$variant) {
-            $variant = new DetailModel();
-            $variant->setArticle($article);
+        if (!$variantModel) {
+            $variantModel = new DetailModel();
+            $variantModel->setArticle($article);
         }
 
         $variantsMap = $this->getMap('variant');
@@ -251,9 +247,9 @@ class ArticlesDbAdapter implements DataDbAdapter
             }
         }
 
-        $variant->fromArray($variantData);
+        $variantModel->fromArray($variantData);
 
-        return $variant;
+        return $variantModel;
     }
 
     public function preparePrices(&$data, $variantIndex, $variant, $article, $tax)
