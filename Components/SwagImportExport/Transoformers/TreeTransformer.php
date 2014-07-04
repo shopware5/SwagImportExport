@@ -21,6 +21,7 @@ class TreeTransformer implements DataTransformerAdapter
     protected $headerFooterData;
     
     //import properties
+    protected $mainType;
     protected $rawData;
     protected $bufferData;
     protected $importMapper;
@@ -72,6 +73,7 @@ class TreeTransformer implements DataTransformerAdapter
         $this->getIterationNodes();
         
         $iterationPart = $this->getIterationPart();
+        $this->mainType = $iterationPart['adapter'];
         
         $this->buildRawData($data, $iterationPart['adapter']);
         
@@ -140,6 +142,13 @@ class TreeTransformer implements DataTransformerAdapter
         foreach ($data as $record) {
             $this->transformFromTree($record, $importMapper, $type, $nodePath);
             $bufferData = $this->getBufferData($type);
+            
+            if ($this->getMainType() !== $type) {
+                $rawData = $this->getRawData();
+                $partentElement = count($rawData[$this->getMainType()]);
+                $bufferData['parentIndexElement'] = $partentElement;                
+            }
+            
             $this->setRawData($type, $bufferData);
             $this->unsetBufferData($type);
         }
@@ -405,6 +414,17 @@ class TreeTransformer implements DataTransformerAdapter
         $this->data = $data;
     }
     
+    public function getMainType()
+    {
+        return $this->mainType;
+    }
+
+    public function setMainType($mainType)
+    {
+        $this->mainType = $mainType;
+    }
+
+        
     public function getPreparedData($type, $recordLink)
     {
         if ($this->preparedData[$type] === null) {
