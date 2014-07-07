@@ -118,23 +118,26 @@ class ArticlesDbAdapter implements DataDbAdapter
             $articleModel = null;
             $variantModel = null;
             
-            if ($record['mainNumber'] !== $record['orderNumber']) {
+            if (!isset($record['orderNumber']) && empty($record['orderNumber'])) {
+                throw new \Exception('Order number is required.');
+            } 
+            
+            $variantModel = $this->getVariantRepository()->findOneBy(array('number' => $record['orderNumber']));
+
+            if ($variantModel) {
+                $articleModel = $variantModel->getArticle();                    
+            } else if ($record['mainNumber'] !== $record['orderNumber']) {
                 $mainVariant = $this->getVariantRepository()->findOneBy(array('number' => $record['mainNumber']));
-                
+
                 if (!$mainVariant) {
                     throw new Exception('Variant does not exists');
                 }
                 $articleModel = $mainVariant->getArticle();
                 unset($record['mainNumber']);
-            } else if (isset($record['orderNumber']) && !empty($record['orderNumber'])) {
-                $variantModel = $this->getVariantRepository()->findOneBy(array('number' => $record['orderNumber']));
-                if ($variantModel) {
-                    $articleModel = $variantModel->getArticle();                    
-                }
-            } 
+            }
             
             if (!$articleModel) {
-                //if the article does not exists
+                //creates artitcle and main variant
                 $articleModel = new ArticleModel();
 
                 $articleData = $this->prerpareArticle($record);
@@ -158,6 +161,12 @@ class ArticlesDbAdapter implements DataDbAdapter
 
                 $this->getManager()->persist($articleModel);
             } else {
+                //if it is main variant 
+                //updates the also the article
+                if ($record['mainNumber'] === $record['orderNumber']) {
+                    $articleData = $this->prerpareArticle($record);
+                    $articleModel->fromArray($articleData);
+                }
                 
                 //Variants
                 $variantModel = $this->prerpareVariant($record, $articleModel, $variantModel);
