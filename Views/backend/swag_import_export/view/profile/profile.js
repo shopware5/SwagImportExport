@@ -159,7 +159,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
 				},
                 listeners: {
                     drop: function(node, data, overModel, dropPosition, eOpts) {
-                        me.treeStore.sortChildren(overModel);
+                        me.treeStore.sort(overModel);
                         me.treeStore.sync();
                     }
                 }
