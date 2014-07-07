@@ -125,13 +125,13 @@ class XmlFileReader implements FileReader
         $z = new \XMLReader();
         $z->open($fileName);
 
-        foreach ($this->iterationPath as $node) {
+        foreach (explode('/', $this->iterationPath[0]) as $node) {
             $z->next($node);
             $z->read();
         }
 
         $count = 0;
-        while ($z->next($this->iterationTag)) {
+        while ($z->next($this->iterationTag[0])) {
             $count++;
         }
 
