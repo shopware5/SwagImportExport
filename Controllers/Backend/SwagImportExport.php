@@ -388,49 +388,62 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                             "children": [{ 
                                 "id": "5",
                                 "name": "Article",
-                                "adapter": "article",
+                                "adapter": "articles",
                                 "attributes": [{ 
                                     "id": "6",
-                                    "name": "Attribute1",
-                                    "shopwareField": "id"
+                                    "name": "variantId",
+                                    "shopwareField": "variantId"
                                 },{ 
                                     "id": "7",
-                                    "name": "Attribute2",
-                                    "shopwareField": "parentid"
+                                    "name": "orderNumber",
+                                    "shopwareField": "orderNumber"
                                 }],
                                 "children": [{ 
                                     "id": "8",
-                                    "name": "Id",
-                                    "shopwareField": "id"
+                                    "name": "mainNumber",
+                                    "shopwareField": "mainNumber"
                                 },{ 
                                     "id": "9",
-                                    "name": "Title",
-                                    "shopwareField": "name",
+                                    "name": "name",
+                                    "shopwareField": "name"
+                                },{ 
+                                    "id": "10",
+                                    "name": "tax",
+                                    "shopwareField": "tax"
+                                },{ 
+                                    "id": "11",
+                                    "name": "supplierName",
+                                    "shopwareField": "supplierName"
+                                },{ 
+                                    "id": "12",
+                                    "name": "additionalText",
+                                    "shopwareField": "additionalText",
                                     "attributes": [{ 
-                                        "name": "Attribute3",
-                                        "shopwareField": "lang"
+                                        "id": "13",
+                                        "name": "inStock",
+                                        "shopwareField": "inStock"
                                     }]
                                 },{
-                                    "id": "10",
+                                    "id": "13",
                                     "name": "Prices",
                                     "children": [{ 
-                                        "id": "11",
+                                        "id": "14",
                                         "name": "Price",
-                                        "adapter": "Price",
-                                        "parentKey": "articlesId",
+                                        "adapter": "prices",
+                                        "parentKey": "variantId",
                                         "attributes": [{ 
-                                            "id": "12",
-                                            "name": "Attribute4",
-                                            "shopwareField": "lang"
+                                            "id": "15",
+                                            "name": "group",
+                                            "shopwareField": "priceGroup"
                                         }],
                                         "children": [{
-                                            "id": "13",
-                                            "name": "groupName",
-                                            "shopwareField": "groupName"
+                                            "id": "16",
+                                            "name": "pricegroup",
+                                            "shopwareField": "priceGroup"
                                         }, {
-                                            "id": "14",
+                                            "id": "17",
                                             "name": "price",
-                                            "shopwareField": "price"
+                                            "shopwareField": "netPrice"
                                         }]
                                     }]
                                 }]
