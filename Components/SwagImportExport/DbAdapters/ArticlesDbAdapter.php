@@ -69,9 +69,11 @@ class ArticlesDbAdapter implements DataDbAdapter
         $articlesBuilder->select($columns['article'])
                 ->from('Shopware\Models\Article\Detail', 'variant')
                 ->join('variant.article', 'article')
+                ->leftJoin('article.attribute', 'attr')
                 ->leftJoin('Shopware\Models\Article\Detail', 'mv', \Doctrine\ORM\Query\Expr\Join::WITH, 'mv.articleId=article.id AND mv.kind=1')
                 ->leftJoin('article.tax', 'articleTax')
                 ->leftJoin('article.supplier', 'supplier')
+                ->leftJoin('article.propertyGroup', 'filterGroup')
                 ->leftJoin('article.esds', 'articleEsd')
                 ->leftJoin('variant.unit', 'variantsUnit')
                 ->where('variant.id IN (:ids)')
@@ -95,7 +97,6 @@ class ArticlesDbAdapter implements DataDbAdapter
         $otherColumns = array(
             'variantsUnit.unit as unit',
             'articleEsd.file as esd',
-            'supplier.name as supplierName',
         );
 
         $columns['article'] = array_merge(
@@ -326,20 +327,62 @@ class ArticlesDbAdapter implements DataDbAdapter
 
     public function getArticleColumns()
     {
-        return array(
+        $columns = array(
             'article.id as articleId',
             'article.name as name',
-            'article.active as active',
             'article.description as description',
             'article.descriptionLong as descriptionLong',
-            'article.highlight as highlight',
+            'article.added as date',
+            'article.active as active',
+            'article.pseudoSales as pseudoSales',
+            'article.highlight as topSeller',
             'article.metaTitle as metaTitle',
             'article.keywords as keywords',
+            'article.changed as changeTime',
             'article.priceGroupId as priceGroupId',
             'article.priceGroupActive as priceGroupActive',
             'article.lastStock as lastStock',
+            'article.crossBundleLook as crossBundleLook',
+            'article.notification as notification',
+            'article.template as template',
+            'article.mode as mode',
+            'article.availableFrom as availableFrom',
+            'article.availableTo as availableTo',
+            'supplier.id as supplierId',
+            'supplier.name as supplierName',
+            'articleTax.id as taxId',
             'articleTax.tax as tax',
+            'filterGroup.id as filterGroupId',
+            'filterGroup.name as filterGroupName',
         );
+
+        // Attributes
+        $stmt = Shopware()->Db()->query('SELECT * FROM s_articles_attributes LIMIT 1');
+        $attributes = $stmt->fetch();
+
+        $attributesSelect = '';
+        if ($attributes) {
+            unset($attributes['id']);
+            unset($attributes['articleID']);
+            unset($attributes['articledetailsID']);
+            $attributes = array_keys($attributes);
+
+            $prefix = 'attr';
+            $attributesSelect = array();
+            foreach ($attributes as $attribute) {
+                //underscore to camel case
+                //exmaple: underscore_to_camel_case -> underscoreToCamelCase
+                $catAttr = preg_replace("/\_(.)/e", "strtoupper('\\1')", $attribute);
+
+                $attributesSelect[] = sprintf('%s.%s as attribute%s', $prefix, $catAttr, ucwords($catAttr));
+            }
+        }
+        
+        if ($attributesSelect && !empty($attributesSelect)) {
+            $columns = array_merge($columns, $attributesSelect);
+        }
+        
+        return $columns;
     }
 
     public function getVariantColumns()
@@ -352,21 +395,23 @@ class ArticlesDbAdapter implements DataDbAdapter
             'variant.additionalText as additionalText',
             'variant.inStock as inStock',
             'variant.stockMin as stockMin',
-            'variant.shippingTime as shippingTime',
-            'variant.shippingFree as shippingFree',
-            'variant.supplierNumber as supplierNumber',
-            'variant.minPurchase as minPurchase',
-            'variant.purchaseSteps as purchaseSteps',
-            'variant.maxPurchase as maxPurchase',
-            'variant.purchaseUnit as purchaseUnit',
-            'variant.referenceUnit as referenceUnit',
-            'variant.packUnit as packUnit',
-            'variant.unitId as unitId',
             'variant.weight as weight',
+            'variant.position as position',
             'variant.width as width',
             'variant.height as height',
             'variant.len as length',
             'variant.ean as ean',
+            'variant.unitId as unitId',
+            'variant.purchaseSteps as purchaseSteps',
+            'variant.minPurchase as minPurchase',
+            'variant.maxPurchase as maxPurchase',
+            'variant.purchaseUnit as purchaseUnit',
+            'variant.referenceUnit as referenceUnit',
+            'variant.packUnit as packUnit',
+            'variant.packUnit as releaseDate',
+            'variant.shippingTime as shippingTime',
+            'variant.shippingFree as shippingFree',
+            'variant.supplierNumber as supplierNumber',
         );
     }
 
