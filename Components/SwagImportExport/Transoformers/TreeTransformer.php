@@ -56,7 +56,7 @@ class TreeTransformer implements DataTransformerAdapter
             $transformData[] = $this->transformToTree($iterationPart, $record, $adapter);
             unset($this->currentRecord);
         }
-                
+        
         //creates iteration array
         $treeBody = array($iterationPart['name'] => $transformData);
         
@@ -116,13 +116,13 @@ class TreeTransformer implements DataTransformerAdapter
         $records = $data[$recordLink];
         
         if (!$records) {
-            throw new \Exception('No records were found');
+            return;
         }
 
         foreach ($records as $record) {
             $transformData[] = $this->transformToTree($node, $record, $type);
         }
-        
+                
         return $transformData;
     }
     
@@ -428,6 +428,7 @@ class TreeTransformer implements DataTransformerAdapter
     public function getPreparedData($type, $recordLink)
     {
         if ($this->preparedData[$type] === null) {
+                        
             $data = $this->getData();
 
             foreach ($data[$type] as $record) {

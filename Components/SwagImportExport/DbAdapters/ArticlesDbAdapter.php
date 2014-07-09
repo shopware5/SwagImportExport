@@ -81,6 +81,7 @@ class ArticlesDbAdapter implements DataDbAdapter
 
         $result['articles'] = $articlesBuilder->getQuery()->getResult();
 
+        //prices
         $pricesBuilder = $manager->createQueryBuilder();
         $pricesBuilder->select($columns['price'])
                 ->from('Shopware\Models\Article\Detail', 'variant')
@@ -88,7 +89,37 @@ class ArticlesDbAdapter implements DataDbAdapter
                 ->where('variant.id IN (:ids)')
                 ->setParameter('ids', $ids);
         $result['prices'] = $pricesBuilder->getQuery()->getResult();
-
+        
+        //images
+        $imagesBuilder = $manager->createQueryBuilder();
+        $imagesBuilder->select($columns['image'])
+                ->from('Shopware\Models\Article\Detail', 'variant')
+                ->join('variant.article', 'article')
+                ->leftjoin('article.images', 'images')
+                ->where('variant.id IN (:ids)')
+                ->setParameter('ids', $ids);
+        $result['images'] = $imagesBuilder->getQuery()->getResult();
+        
+        //filter values
+        $propertyValuesBuilder = $manager->createQueryBuilder();
+        $propertyValuesBuilder->select($columns['propertyValues'])
+                ->from('Shopware\Models\Article\Detail', 'variant')
+                ->join('variant.article', 'article')
+                ->leftjoin('article.propertyValues', 'propertyValues')
+                ->where('variant.id IN (:ids)')
+                ->setParameter('ids', $ids);
+        $result['propertyValues'] = $propertyValuesBuilder->getQuery()->getResult();
+        
+        //similar 
+        $similarsBuilder = $manager->createQueryBuilder();
+        $similarsBuilder->select($columns['similar'])
+                ->from('Shopware\Models\Article\Detail', 'variant')
+                ->join('variant.article', 'article')
+                ->leftjoin('article.similar', 'similar')
+                ->where('variant.id IN (:ids)')
+                ->setParameter('ids', $ids);
+        $result['similars'] = $propertyValuesBuilder->getQuery()->getResult();
+        
         return $result;
     }
 
@@ -104,6 +135,9 @@ class ArticlesDbAdapter implements DataDbAdapter
         );
 
         $columns['price'] = $this->getPriceColumns();
+        $columns['image'] = $this->getImageColumns();
+        $columns['propertyValues'] = $this->getPropertyValueColumns();
+        $columns['similar'] = $this->getSimilarColumns();
 
         return $columns;
     }
@@ -226,6 +260,33 @@ class ArticlesDbAdapter implements DataDbAdapter
             $article['supplier'] = $supplier;
         }
         unset($data['supplierName']);
+        
+        //check if a priceGroup id is passed and load the priceGroup model or set the priceGroup parameter to null.
+        if (isset($data['priceGroupId'])) {
+            if (empty($data['priceGroupId'])) {
+                $article['priceGroupId'] = null;
+            } else {
+                $article['priceGroup'] = $this->getManager()->find('Shopware\Models\Price\Group', $data['priceGroupId']);
+                if (empty($article['priceGroup'])) {
+                    throw new \Exception(sprintf("Pricegroup by id %s not found", $data['priceGroupId']));
+                }
+            }
+            unset($data['priceGroup']);
+        }
+
+        //check if a propertyGroup is passed and load the propertyGroup model or set the propertyGroup parameter to null.
+        if (isset($data['propertyGroupId'])) {
+            if (empty($data['propertyGroupId'])) {
+                $article['propertyGroup'] = null;
+            } else {
+                $article['propertyGroup'] = $this->getManager()->find('\Shopware\Models\Property\Group', $data['filterGroupId']);
+
+                if (empty($article['propertyGroup'])) {
+                    throw new \Exception(sprintf("PropertyGroup by id %s not found", $data['filterGroupId']));
+                }
+            }
+            unset($data['propertyGroupId']);
+        } 
 
         $articleMap = $this->getMap('article');
 
@@ -426,6 +487,38 @@ class ArticlesDbAdapter implements DataDbAdapter
             'prices.customerGroupKey as priceGroup',
         );
     }
+    
+    public function getImageColumns()
+    {
+        return array(
+            'images.id as imageId',
+            'images.articleId as articleId',
+            'images.articleDetailId as variantId',
+            'images.path as imagePath',
+            'images.main as main',
+        );
+    }
+    
+    public function getPropertyValueColumns()
+    {
+        return array(
+            'propertyValues.id as propertyGroupId',
+            'article.id as articleId',
+            'propertyValues.value as value',
+            'propertyValues.position as position',
+            'propertyValues.optionId as optionId',
+            'propertyValues.valueNumeric as valueNumeric',
+        );
+    }
+    
+    public function getSimilarColumns()
+    {
+         return array(
+            'similar.id as id',
+            'article.id as articleId',
+        );
+    }
+    
 
     /**
      * Returns/Creates mapper depend on the key
