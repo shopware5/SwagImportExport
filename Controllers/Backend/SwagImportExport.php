@@ -618,13 +618,30 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
     public function prepareExportAction()
     {
+        $variants = $this->Request()->getParam('variants') ? true : false;
+        
+        if ($this->Request()->getParam('limit')) {
+            $limit = $this->Request()->getParam('limit');
+        }
+        
+        if ($this->Request()->getParam('offset')) {
+            $offset = $this->Request()->getParam('offset');
+        }
+        
         $postData = array(
             'sessionId' => $this->Request()->getParam('sessionId'),
             'profileId' => (int) $this->Request()->getParam('profileId'),
             'type' => 'export',
-            'format' => $this->Request()->getParam('format')
+            'format' => $this->Request()->getParam('format'),
+            'filter' =>  array(
+                'variants' => $variants
+            ),
+            'limit' =>  array(
+                'limit' => $limit,
+                'offset' => $offset,
+            ),
         );
-
+        
         $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
 
         $dataFactory = $this->Plugin()->getDataFactory();
@@ -635,7 +652,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession);
 
         $colOpts = $dataFactory->createColOpts($postData['columnOptions']);
-        $limit = $dataFactory->createLimit($postData['limit']);
+        $limit = $dataFactory->createLimit($postData['limit']);            
         $filter = $dataFactory->createFilter($postData['filter']);
         $maxRecordCount = $postData['max_record_count'];
         $type = $postData['type'];
@@ -644,7 +661,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $dataIO->initialize($colOpts, $limit, $filter, $maxRecordCount, $type, $format);
 
         $ids = $dataIO->preloadRecordIds()->getRecordIds();
-
+        
         $position = $dataIO->getSessionPosition();
         $position = $position == null ? 0 : $position;
 
@@ -653,12 +670,29 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
     public function exportAction()
     {
+        $variants = $this->Request()->getParam('variants') ? true : false;
+        
+        if ($this->Request()->getParam('limit')) {
+            $limit = $this->Request()->getParam('limit');
+        }
+        
+        if ($this->Request()->getParam('offset')) {
+            $offset = $this->Request()->getParam('offset');
+        }
+        
         $postData = array(
             'profileId' => (int) $this->Request()->getParam('profileId'),
             'type' => 'export',
             'format' => $this->Request()->getParam('format'),
             'sessionId' => $this->Request()->getParam('sessionId'),
-            'fileName' => $this->Request()->getParam('fileName')
+            'fileName' => $this->Request()->getParam('fileName'),
+            'filter' =>  array(
+                'variants' => $variants
+            ),
+            'limit' =>  array(
+                'limit' => $limit,
+                'offset' => $offset,
+            ),
         );
 
         $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);

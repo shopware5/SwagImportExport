@@ -152,8 +152,8 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
                     padding: '0 0 8',
                     items: [
                         me.createVariantsCheckbox(),
-                        me.createCustomerGroupCheckbox(),
-                        me.createTranslationCheckbox(),
+//                        me.createCustomerGroupCheckbox(),
+//                        me.createTranslationCheckbox(),
                         me.createLimit(),
                         me.createOffset()
                     ]
@@ -186,7 +186,8 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
                 change: function(value) {
                     var record = me.profilesStore.getById(value.getValue());
                     var type = record.get('type');
-                    if (type === 'products') {
+                    
+                    if (type === 'articles') {
                         me.additionalFields.show();
                     } else {
                         me.additionalFields.hide();
@@ -269,6 +270,8 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
             name: 'translation',
             fieldLabel: me.snippets.translations,
             width: me.configWidth,
+            inputValue: '1',
+            uncheckedValue: '0',
             labelWidth: me.configLabelWidth
         });
     },
@@ -281,7 +284,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
         var me = this;
 
         return Ext.create('Ext.form.field.Number', {
-            name: 'translation',
+            name: 'limit',
             fieldLabel: me.snippets.limit,
             width: me.configWidth,
             labelWidth: me.configLabelWidth

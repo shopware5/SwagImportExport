@@ -28,7 +28,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     protected $variantMap;
 
     public function readRecordIds($start, $limit, $filter)
-    {
+    {        
         $manager = $this->getManager();
 
         $builder = $manager->createQueryBuilder();
@@ -38,19 +38,25 @@ class ArticlesDbAdapter implements DataDbAdapter
         $builder->from('Shopware\Models\Article\Detail', 'detail')
                 ->orderBy('detail.articleId', 'ASC')
                 ->orderBy('detail.kind', 'ASC');
+        
+        if ($filter['variants']) {
+            $builder->where('detail.kind <> 3');
+        } else {
+            $builder->where('detail.kind = 1');
+        }
 
         $builder->setFirstResult($start)
                 ->setMaxResults($limit);
 
         $records = $builder->getQuery()->getResult();
-
+        
         $result = array();
         if ($records) {
             foreach ($records as $value) {
                 $result[] = $value['id'];
             }
         }
-
+        
         return $result;
     }
 
@@ -114,11 +120,11 @@ class ArticlesDbAdapter implements DataDbAdapter
         $similarsBuilder = $manager->createQueryBuilder();
         $similarsBuilder->select($columns['similar'])
                 ->from('Shopware\Models\Article\Detail', 'variant')
-                ->join('variant.article', 'article')
+                ->leftjoin('variant.article', 'article')
                 ->leftjoin('article.similar', 'similar')
                 ->where('variant.id IN (:ids)')
                 ->setParameter('ids', $ids);
-        $result['similars'] = $propertyValuesBuilder->getQuery()->getResult();
+        $result['similars'] = $similarsBuilder->getQuery()->getResult();
         
         return $result;
     }
@@ -514,7 +520,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     public function getSimilarColumns()
     {
          return array(
-            'similar.id as id',
+            'similar.id as similarId',
             'article.id as articleId',
         );
     }

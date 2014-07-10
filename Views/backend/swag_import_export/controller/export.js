@@ -139,7 +139,10 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
             params: {
                 profileId: me.parameters.profile,
                 sessionId: me.parameters.sessionId,
-                format: me.parameters.format
+                format: me.parameters.format,
+                limit: me.parameters.limit,
+                offset: me.parameters.offset,
+                variants: me.parameters.variants
             }
         };
 
