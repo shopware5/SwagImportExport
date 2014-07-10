@@ -49,7 +49,11 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
             failed: '{s name=swag_import_export/profile/delete/failed}Delete List Failed{/s}'
         },
         addAttribute: {
-            failureTitle: '{s name=swag_import_export/profile/add_attribute/failure_title}Create Attribute Failed{/s}',
+            failureTitle: '{s name=swag_import_export/profile/add_attribute/failure_title}Create Attribute Failed{/s}'
+        },
+        newProfile: {
+            failureTitle: '{s name="swag_import_export/profile/new_profile/failure_title"}Create New Profile Failed{/s}',
+            notAllFieldsFilledError: '{s name="swag_import_export/profile/new_profile/not_all_fields_filled_error"}Not all fields are filled!{/s}'
         },
         categories: '{s name=swag_import_export/profile/type/categories}Categories{/s}',
         articles: '{s name=swag_import_export/profile/type/articles}Articles{/s}',
@@ -172,20 +176,28 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                             cls: 'primary',
                             action: 'swag-import-export-manager-profile-save',
                             handler: function() {
-                                var model = combo.store.add({ type: myForm.child('#type').getValue(), name: myForm.child('#profileName').getValue(), tree: "" });
-                                myForm.setLoading(true);
-                                combo.store.sync({
-                                    success: function() {
-                                        combo.setValue(model[0].get('id'));
-                                        myForm.setLoading(false);
-                                        myForm.close();
-                                    },
-                                    failure: function() {
-                                        myForm.setLoading(false);
-                                        myForm.close();
-                                    }
-                                });
-
+                                if (myForm.getForm().isValid()) {
+                                    var model = combo.store.add({ type: myForm.child('#type').getValue(), name: myForm.child('#profileName').getValue(), tree: "" });
+                                    myForm.setLoading(true);
+                                    combo.store.sync({
+                                        success: function() {
+                                            combo.setValue(model[0].get('id'));
+                                            myForm.setLoading(false);
+                                            myForm.close();
+                                        },
+                                        failure: function() {
+                                            myForm.setLoading(false);
+                                            myForm.close();
+                                        }
+                                    });
+                                } else {
+                                    Ext.MessageBox.show({
+                                        title: me.snippets.newProfile.failureTitle,
+                                        msg: me.snippets.newProfile.notAllFieldsFilledError,
+                                        icon: Ext.Msg.ERROR,
+                                        buttons: Ext.Msg.OK
+                                    });
+                                }
                             }
                         }]
                 }]

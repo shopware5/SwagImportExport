@@ -193,7 +193,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                     unset($node['parentKey']);
                 }
             }
-            
+
             return $node;
         } else {
             if (isset($node['children'])) {
@@ -372,84 +372,12 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
     public function createProfilesAction()
     {
         $data = $this->Request()->getParam('data', 1);
-        $newTree = '{ 
-                        "id": "1", 
-                        "name": "Root", 
-                        "children": [{ 
-                            "id": "2", 
-                            "name": "Header", 
-                            "children": [{ 
-                                "id": "3",
-                                "name": "HeaderChild" 
-                            }] 
-                        },{
-                            "id": "4", 
-                            "name": "Articles", 
-                            "children": [{ 
-                                "id": "5",
-                                "name": "Article",
-                                "adapter": "articles",
-                                "attributes": [{ 
-                                    "id": "6",
-                                    "name": "variantId",
-                                    "shopwareField": "variantId"
-                                },{ 
-                                    "id": "7",
-                                    "name": "orderNumber",
-                                    "shopwareField": "orderNumber"
-                                }],
-                                "children": [{ 
-                                    "id": "8",
-                                    "name": "mainNumber",
-                                    "shopwareField": "mainNumber"
-                                },{ 
-                                    "id": "9",
-                                    "name": "name",
-                                    "shopwareField": "name"
-                                },{ 
-                                    "id": "10",
-                                    "name": "tax",
-                                    "shopwareField": "tax"
-                                },{ 
-                                    "id": "11",
-                                    "name": "supplierName",
-                                    "shopwareField": "supplierName"
-                                },{ 
-                                    "id": "12",
-                                    "name": "additionalText",
-                                    "shopwareField": "additionalText",
-                                    "attributes": [{ 
-                                        "id": "13",
-                                        "name": "inStock",
-                                        "shopwareField": "inStock"
-                                    }]
-                                },{
-                                    "id": "13",
-                                    "name": "Prices",
-                                    "children": [{ 
-                                        "id": "14",
-                                        "name": "Price",
-                                        "adapter": "prices",
-                                        "parentKey": "variantId",
-                                        "attributes": [{ 
-                                            "id": "15",
-                                            "name": "group",
-                                            "shopwareField": "priceGroup"
-                                        }],
-                                        "children": [{
-                                            "id": "16",
-                                            "name": "pricegroup",
-                                            "shopwareField": "priceGroup"
-                                        }, {
-                                            "id": "17",
-                                            "name": "price",
-                                            "shopwareField": "netPrice"
-                                        }]
-                                    }]
-                                }]
-                            }]
-                        }] 
-                    }';
+
+        if ($data['type'] == 'articles') {
+            $newTree = '{"id":"1","name":"Root","children":[{"id":"2","name":"Header","children":[{"id":"3","name":"HeaderChild"}]},{"id":"4","name":"Articles","children":[{"id":"5","name":"Article","adapter":"articles","attributes":[{"id":"6","name":"variantId","shopwareField":"variantId"},{"id":"7","name":"orderNumber","shopwareField":"orderNumber"}],"children":[{"id":"8","name":"mainNumber","shopwareField":"mainNumber"},{"id":"9","name":"name","shopwareField":"name"},{"id":"10","name":"tax","shopwareField":"tax"},{"id":"11","name":"supplierName","shopwareField":"supplierName"},{"id":"12","name":"additionalText","shopwareField":"additionalText","attributes":[{"id":"13","name":"inStock","shopwareField":"inStock"}]},{"id":"13","name":"Prices","children":[{"id":"14","name":"Price","adapter":"prices","parentKey":"variantId","attributes":[{"id":"15","name":"group","shopwareField":"priceGroup"}],"children":[{"id":"16","name":"pricegroup","shopwareField":"priceGroup"},{"id":"17","name":"price","shopwareField":"netPrice"}]}]}]}]}]}';
+        } else {
+            $newTree = '{"name":"Root","children":[{"name":"Header","children":[{"id":"537385ed7c799","name":"HeaderChild","shopwareField":""}],"id":"537359399c80a"},{"name":"Categories","children":[{"name":"Category","type":"record","attributes":[{"id":"53738653da10f","name":"Attribute1","shopwareField":"parent"}],"children":[{"id":"5373865547d06","name":"Id","shopwareField":"id"},{"id":"537386ac3302b","name":"Description","shopwareField":"description","children":[{"id":"5373870d38c80","name":"Value","shopwareField":"description"}],"attributes":[{"id":"53738718f26db","name":"Attribute2","shopwareField":"active"}]},{"id":"537388742e20e","name":"Title","shopwareField":"description"}],"id":"537359399c90d"}],"id":"537359399c8b7"}],"id":"root"}';
+        }
 
         $profile = new \Shopware\CustomModels\ImportExport\Profile();
 
@@ -989,6 +917,33 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         }
 
         Enlight_Application::Instance()->Events()->removeListener(new Enlight_Event_EventHandler('Enlight_Controller_Action_PostDispatch', ''));
+    }
+
+    public function getSectionsAction()
+    {
+        $postData['profileId'] = $this->Request()->getParam('profileId');
+
+        if (!$postData['profileId']) {
+            return $this->View()->assign(array(
+                        'success' => false, 'message' => 'No profile Id'
+            ));
+        }
+
+        $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
+        $type = $profile->getType();
+
+        if ($type == 'articles') {
+            $this->View()->assign(array(
+                'success' => true, 'data' => array(
+                    array('id' => 'article', 'name' => 'article'),
+                    array('id' => 'price', 'name' => 'price'),
+                ), 'total' => count($columns)
+            ));
+        } else {
+            $this->View()->assign(array(
+                'success' => true, 'data' => array($type), 'total' => count($columns)
+            ));
+        }
     }
 
     public function getColumnsAction()
