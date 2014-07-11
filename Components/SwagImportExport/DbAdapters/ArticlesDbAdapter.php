@@ -5,7 +5,9 @@ namespace Shopware\Components\SwagImportExport\DbAdapters;
 use Shopware\Models\Article\Article as ArticleModel;
 use Shopware\Models\Article\Detail as DetailModel;
 use Shopware\Models\Article\Price as Price;
+use Shopware\Models\Article\Image as Image;
 use Shopware\Models\Customer\Group as CustomerGroup;
+use Shopware\Models\Media\Media as MediaModel;
 use Shopware\Components\SwagImportExport\Utils\DataHelper as DataHelper;
 
 class ArticlesDbAdapter implements DataDbAdapter
@@ -191,6 +193,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $articleModel->setDetails($variantModel);
 
                 $prices = $this->preparePrices($records['prices'], $index, $variantModel, $articleModel, $articleData['tax']);
+                $articleData['images'] = $this->prepareImages($records['images'], $index, $articleModel);
 
                 $articleData['mainDetail'] = array(
                     'number' => $variantModel->getNumber(),
@@ -210,7 +213,10 @@ class ArticlesDbAdapter implements DataDbAdapter
                 //updates the also the article
                 if ($record['mainNumber'] === $record['orderNumber']) {
                     $articleData = $this->prerpareArticle($record);
+                    $articleData['images'] = $this->prepareImages($records['images'], $index, $articleModel);
+                    
                     $articleModel->fromArray($articleData);
+                    
                 }
                 
                 //Variants
@@ -388,14 +394,127 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $prices[] = $price;
 
                 unset($data[$index]);
-            } else {
-                break;
-            }
+            } 
         }
 
         return $prices;
     }
     
+    public function prepareImages(&$data, $variantIndex, ArticleModel $article)
+    {
+        foreach ($data as $key => $imageData) {
+            
+            if ($imageData['parentIndexElement'] === $variantIndex) {
+                
+                if (isset($imageData['id'])) {
+                    $imageModel = $this->getManager()->find(
+                            'Shopware\Models\Article\Image', (int) $imageData['id']
+                    );
+                    unset($imageData['id']);
+                } elseif ($article->getImages() && $imageData['path']) {
+                    foreach ($article->getImages() as $articleImage) {
+                        if ($imageData['path'] == $articleImage->getPath()) {
+                            $imageModel = $articleImage;
+                            break;
+                        }
+                    }
+                }
+                
+                if (!$imageModel) {
+                    
+                    if (!empty($imageData['mediaId'])) {
+                        $media = $this->getManager()->find(
+                                'Shopware\Models\Media\Media', (int) $imageData['mediaId']
+                        );
+                    }
+
+                    if (!($media instanceof MediaModel)) {
+                        throw new \Exception(sprintf("Media by mediaId %s not found", $imageData['mediaId']));
+                    }
+                    
+                    $imageModel = $this->createNewArticleImage($article, $media);
+                }
+                $imageModel->fromArray($imageData);
+                
+                $images[] = $imageModel;
+                unset($data[$key]);
+            }
+        }
+        
+        $hasMain = $this->getCollectionElementByProperty($images, 'main', 1);
+        
+        if (!$hasMain) {
+            $image = $images->get(0);
+            $image->setMain(1);
+        }
+        
+        return $images;        
+    }
+    
+    /**
+     * Helper function which creates a new article image with the passed media object.
+     * @param ArticleModel $article
+     * @param MediaModel $media
+     * @return Image
+     */
+    public function createNewArticleImage(ArticleModel $article, MediaModel $media)
+    {
+        $image = new Image();
+        $image = $this->updateArticleImageWithMedia(
+            $article,
+            $image,
+            $media
+        );
+        $this->getManager()->persist($image);
+        $article->getImages()->add($image);
+        return $image;
+    }
+
+    /**
+     * Helper function to map the media data into an article image
+     *
+     * @param ArticleModel $article
+     * @param Image $image
+     * @param MediaModel $media
+     * @return Image
+     */
+    public function updateArticleImageWithMedia(ArticleModel $article, Image $image, MediaModel $media)
+    {
+        $image->setMain(2);
+        $image->setMedia($media);
+        $image->setArticle($article);
+        $image->setPath($media->getName());
+        $image->setExtension($media->getExtension());
+        $image->setDescription($media->getDescription());
+
+        return $image;
+    }
+    
+    /**
+     * @param ArrayCollection $collection
+     * @param $property
+     * @param $value
+     * @throws \Exception
+     * @return null
+     */
+    protected function getCollectionElementByProperty(ArrayCollection $collection, $property, $value)
+    {
+        foreach ($collection as $entity) {
+            $method = 'get' . ucfirst($property);
+
+            if (!method_exists($entity, $method)) {
+                throw new \Exception(
+                    sprintf("Method %s not found on entity %s", $method, get_class($entity))
+                );
+                continue;
+            }
+            if ($entity->$method() == $value) {
+                return $entity;
+            }
+        }
+        return null;
+    }
+
     public function getArticleColumns()
     {
         $columns = array(
@@ -501,11 +620,12 @@ class ArticlesDbAdapter implements DataDbAdapter
     public function getImageColumns()
     {
         return array(
-            'images.id as imageId',
+            'images.id as id',
             'images.articleId as articleId',
             'images.articleDetailId as variantId',
-            'images.path as imagePath',
+            'images.path as path',
             'images.main as main',
+            'images.mediaId as mediaId',
         );
     }
     
