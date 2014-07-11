@@ -169,6 +169,62 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
     }
 
     /**
+     * Helper function which appends child node to the tree
+     */
+    protected function getNodeById($id, $node, $parentId = 'root')
+    {
+        if ($node['id'] == $id) {
+            $node['parentId'] = $parentId;
+            return $node;
+        } else {
+            if (isset($node['children'])) {
+                foreach ($node['children'] as $childNode) {
+                    $result = $this->getNodeById($id, $childNode, $node['id']);
+                    if ($result !== false) {
+                        return $result;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Helper function which appends child node to the tree
+     */
+    protected function moveNode($child, &$node)
+    {
+        if ($node['id'] == $child['parentId']) {
+            if ($child['type'] == 'attribute') {
+                unset($child['parentId']);
+                unset($child['type']);
+                $node['attributes'][] = $child;
+            } else if ($child['type'] == 'node') {
+                unset($child['parentId']);
+                unset($child['type']);
+                $node['children'][] = $child;
+            } else {
+                unset($child['parentId']);
+                unset($child['type']);
+                $node['children'][] = $child;
+            }
+            
+            return true;
+        } else {
+            if (isset($node['children'])) {
+                foreach ($node['children'] as &$childNode) {
+                    if ($this->moveNode($child, $childNode)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Helper function which finds and changes node from the tree
      */
     protected function changeNode($child, &$node)
@@ -194,21 +250,19 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                 }
             }
 
-            return $node;
+            return true;
         } else {
             if (isset($node['children'])) {
                 foreach ($node['children'] as &$childNode) {
-                    $res = $this->changeNode($child, $childNode);
-                    if ($res !== false) {
-                        return $res;
+                    if ($this->changeNode($child, $childNode)) {
+                        return true;
                     }
                 }
             }
             if (isset($node['attributes'])) {
                 foreach ($node['attributes'] as &$childNode) {
-                    $res = $this->changeNode($child, $childNode);
-                    if ($res !== false) {
-                        return $res;
+                    if ($this->changeNode($child, $childNode)) {
+                        return true;
                     }
                 }
             }
@@ -272,7 +326,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         }
 
         $errors = false;
-
+        
         foreach ($data as &$node) {
             $node['id'] = uniqid();
             if (!$this->appendNode($node, $tree)) {
@@ -306,21 +360,28 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         }
 
         $errors = false;
-
+        
         foreach ($data as &$node) {
-            $changedNode = $this->changeNode($node, $tree);
-            if ($changedNode === false) {
+            if (!$this->changeNode($node, $tree)) {
                 $errors = true;
-            } else if ($node['parentId'] != $changedNode['parentId']) {
+                break;
+            }
+            
+            $changedNode = $this->getNodeById($node['id'], $tree);
+
+
+            if ($node['parentId'] != $changedNode['parentId']) {
                 $changedNode['parentId'] = $node['parentId'];
+                $changedNode['type'] = $node['type'];
                 if (!$this->deleteNode($node, $tree)) {
                     $errors = true;
-                } else if (!$this->appendNode($changedNode, $tree)) {
+                    break;
+                } else if (!$this->moveNode($changedNode, $tree)) {
                     $errors = true;
+                    break;
                 }
             }
         }
-
         $profileEntity->setTree(json_encode($tree));
 
         $this->getManager()->persist($profileEntity);

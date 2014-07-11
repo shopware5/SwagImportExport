@@ -185,7 +185,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
 							text: 'New Iteration Node',
                             disabled: true,
 							handler: function() {
-                                me.fireEvent('addNewAttribute', me.treePanel, me.treeStore, me.selectedNodeId);
+                                me.fireEvent('addNewIteration', me.treePanel, me.treeStore, me.selectedNodeId);
 							}
 						}, {
 							itemId: 'createChild',
@@ -211,7 +211,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
 						}]
 				}],
 			listeners: {
-				itemclick: {
+				select: {
                     fn: function(view, record, item, index, event) {
                         me.selectedNodeId = record.data.id;
                         me.formPanel.fillForm();
@@ -219,14 +219,17 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
                         var toolbar = this.dockedItems.get('toolbar');
 
                         if (record.data.type === 'attribute') {
+                            toolbar.items.get('createIteration').setDisabled(true);
                             toolbar.items.get('createAttribute').setDisabled(true);
                             toolbar.items.get('createChild').setDisabled(true);
                             toolbar.items.get('deleteSelected').setDisabled(false);
                         } else if (record.data.type === 'leaf') {
+                            toolbar.items.get('createIteration').setDisabled(false);
                             toolbar.items.get('createAttribute').setDisabled(false);
                             toolbar.items.get('createChild').setDisabled(false);
                             toolbar.items.get('deleteSelected').setDisabled(false);
                         } else if (record.data.type === 'iteration') {
+                            toolbar.items.get('createIteration').setDisabled(false);
                             toolbar.items.get('createAttribute').setDisabled(false);
                             toolbar.items.get('createChild').setDisabled(false);
                             toolbar.items.get('deleteSelected').setDisabled(false);
@@ -236,6 +239,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
                             } else {
                                 toolbar.items.get('createAttribute').setDisabled(true);
                             }
+                            toolbar.items.get('createIteration').setDisabled(false);
                             toolbar.items.get('createChild').setDisabled(false);
                             if (record.data.id === 'root') {
                                 toolbar.items.get('deleteSelected').setDisabled(true);

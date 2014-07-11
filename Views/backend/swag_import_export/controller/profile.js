@@ -73,6 +73,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                 createOwnProfile: me.createOwnProfile,
                 deleteSelectedProfile: me.deleteSelectedProfile,
                 showMappings: me.showMappings,
+                addNewIteration: me.addNewIteration,
                 addNewNode: me.addNewNode,
                 saveNode: me.saveNode,
                 deleteNode: me.deleteNode,
@@ -232,6 +233,46 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
      * @param { Ext.data.TreeStore } treeStore
      * @param { int } selectedNodeId
      */
+    addNewIteration: function(treePanel, treeStore, selectedNodeId) {
+        var me = this;
+        
+        var node = treeStore.getById(selectedNodeId);
+        node.set('leaf', false);
+        node.set('expanded', true);
+        if (node.get('type') !== 'iteration') {
+            node.set('type', '');
+            node.set('iconCls', '');
+        }
+
+        var data = { text: "New Iteration Node", adapter:'none', leaf: true, type: 'iteration', iconCls: 'sprite-blue-folders-stack', inIteration: true };
+
+        var newNode = node.appendChild(data);
+        treeStore.sync({
+            failure: function(batch, options) {
+                var error = batch.exceptions[0].getError(),
+                        msg = Ext.isObject(error) ? error.status + ' ' + error.statusText : error;
+
+                Ext.MessageBox.show({
+                    title: me.snippets.addChild.failureTitle,
+                    msg: msg,
+                    icon: Ext.Msg.ERROR,
+                    buttons: Ext.Msg.OK
+                });
+            },
+            success: function() {
+                treePanel.expand();
+                treePanel.getSelectionModel().select(treeStore.getById(newNode.data.id));
+            }
+        });
+    },
+    
+    /**
+     * Adds new node to the tree as a child of the selected node
+     * 
+     * @param { Ext.tree.Panel } treePanel
+     * @param { Ext.data.TreeStore } treeStore
+     * @param { int } selectedNodeId
+     */
     addNewNode: function(treePanel, treeStore, selectedNodeId) {
         var me = this;
         
@@ -261,10 +302,12 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                     icon: Ext.Msg.ERROR,
                     buttons: Ext.Msg.OK
                 });
+            },
+            success: function() {
+                treePanel.expand();
+                treePanel.getSelectionModel().select(treeStore.getById(newNode.data.id));
             }
         });
-        treePanel.expand();
-        treePanel.getSelectionModel().select(treeStore.getById(newNode.data.id));
     },
     
     /**
@@ -380,10 +423,12 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                     icon: Ext.Msg.ERROR,
                     buttons: Ext.Msg.OK
                 });
+            },
+            success: function() {
+                treePanel.expand();
+                treePanel.getSelectionModel().select(treeStore.getById(newNode.data.id));
             }
         });
-        treePanel.expand();
-        treePanel.getSelectionModel().select(treeStore.getById(newNode.data.id));
     }
 });
 //{/block}
