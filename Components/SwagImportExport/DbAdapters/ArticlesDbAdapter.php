@@ -69,13 +69,13 @@ class ArticlesDbAdapter implements DataDbAdapter
         if (!$columns && empty($columns)) {
             throw new \Exception('Can not read articles without column names.');
         }
-
+        
         $manager = $this->getManager();
         $articlesBuilder = $manager->createQueryBuilder();
         $articlesBuilder->select($columns['article'])
                 ->from('Shopware\Models\Article\Detail', 'variant')
                 ->join('variant.article', 'article')
-                ->leftJoin('article.attribute', 'attr')
+                ->leftJoin('variant.attribute', 'attr')
                 ->leftJoin('Shopware\Models\Article\Detail', 'mv', \Doctrine\ORM\Query\Expr\Join::WITH, 'mv.articleId=article.id AND mv.kind=1')
                 ->leftJoin('article.tax', 'articleTax')
                 ->leftJoin('article.supplier', 'supplier')
@@ -86,7 +86,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 ->setParameter('ids', $ids);
 
         $result['articles'] = $articlesBuilder->getQuery()->getResult();
-
+        
         //prices
         $pricesBuilder = $manager->createQueryBuilder();
         $pricesBuilder->select($columns['price'])
@@ -103,6 +103,8 @@ class ArticlesDbAdapter implements DataDbAdapter
                 ->join('variant.article', 'article')
                 ->leftjoin('article.images', 'images')
                 ->where('variant.id IN (:ids)')
+                ->andWhere('variant.kind = 1')
+                ->andWhere('images.id IS NOT NULL')
                 ->setParameter('ids', $ids);
         $result['images'] = $imagesBuilder->getQuery()->getResult();
         
@@ -113,6 +115,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 ->join('variant.article', 'article')
                 ->leftjoin('article.propertyValues', 'propertyValues')
                 ->where('variant.id IN (:ids)')
+                ->andWhere('propertyValues.id IS NOT NULL')
                 ->setParameter('ids', $ids);
         $result['propertyValues'] = $propertyValuesBuilder->getQuery()->getResult();
         
@@ -120,9 +123,10 @@ class ArticlesDbAdapter implements DataDbAdapter
         $similarsBuilder = $manager->createQueryBuilder();
         $similarsBuilder->select($columns['similar'])
                 ->from('Shopware\Models\Article\Detail', 'variant')
-                ->leftjoin('variant.article', 'article')
+                ->join('variant.article', 'article')
                 ->leftjoin('article.similar', 'similar')
                 ->where('variant.id IN (:ids)')
+                ->andWhere('similar.id IS NOT NULL')
                 ->setParameter('ids', $ids);
         $result['similars'] = $similarsBuilder->getQuery()->getResult();
         
@@ -154,7 +158,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         if (empty($records['articles'])) {
             throw new \Exception('No article records were found.');
         }
-
+        
         foreach ($records['articles'] as $index => $record) {
             $articleModel = null;
             $variantModel = null;
@@ -222,11 +226,11 @@ class ArticlesDbAdapter implements DataDbAdapter
                 if ($violations->count() > 0) {
                     throw new \Exception('No valid entity');
                 }
-
+                
                 $this->getManager()->persist($variantModel);
                 
             }
-
+            
             $this->getManager()->flush();
         }
     }
@@ -306,7 +310,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         return $article;
     }
 
-    public function prerpareVariant(&$data, $article, $variantModel = null)
+    public function prerpareVariant(&$data, ArticleModel $article, $variantModel = null)
     {
         $variantData = array();
 
@@ -329,7 +333,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         return $variantModel;
     }
 
-    public function preparePrices(&$data, $variantIndex, $variant, $article, $tax)
+    public function preparePrices(&$data, $variantIndex, $variant, ArticleModel $article, $tax)
     {
         $prices = array();
 
@@ -391,7 +395,7 @@ class ArticlesDbAdapter implements DataDbAdapter
 
         return $prices;
     }
-
+    
     public function getArticleColumns()
     {
         $columns = array(
