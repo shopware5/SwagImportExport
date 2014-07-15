@@ -176,9 +176,9 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $articleModel = $variantModel->getArticle();                    
             } else if ($record['mainNumber'] !== $record['orderNumber']) {
                 $mainVariant = $this->getVariantRepository()->findOneBy(array('number' => $record['mainNumber']));
-
+                
                 if (!$mainVariant) {
-                    throw new Exception('Variant does not exists');
+                    throw new \Exception(sprintf('Variant with number %s does not exists', $record['mainNumber']));
                 }
                 $articleModel = $mainVariant->getArticle();
                 unset($record['mainNumber']);
@@ -189,19 +189,19 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $articleModel = new ArticleModel();
 
                 $articleData = $this->prerpareArticle($record);
-
                 $variantModel = $this->prerpareVariant($record, $articleModel);
                 $articleModel->setDetails($variantModel);
 
                 $prices = $this->preparePrices($records['prices'], $index, $variantModel, $articleModel, $articleData['tax']);
                 $articleData['images'] = $this->prepareImages($records['images'], $index, $articleModel);
+                $articleData['similar'] = $this->prepareSimilars($records['similars'], $index, $articleModel);
 
                 $articleData['mainDetail'] = array(
                     'number' => $variantModel->getNumber(),
                     'prices' => $prices
                 );
                 $articleModel->fromArray($articleData);
-
+                
                 $violations = $this->getManager()->validate($articleModel);
 
                 if ($violations->count() > 0) {
@@ -215,9 +215,9 @@ class ArticlesDbAdapter implements DataDbAdapter
                 if ($record['mainNumber'] === $record['orderNumber']) {
                     $articleData = $this->prerpareArticle($record);
                     $articleData['images'] = $this->prepareImages($records['images'], $index, $articleModel);
+                    $articleData['similar'] = $this->prepareSimilars($records['similars'], $index, $articleModel);
                     
                     $articleModel->fromArray($articleData);
-                    
                 }
                 
                 //Variants
@@ -495,20 +495,39 @@ class ArticlesDbAdapter implements DataDbAdapter
     public function prepareSimilars(&$similars, $similarIndex, $article)
     {
         $similarCollection = array();
-        
+
         foreach ($similars as $index => $similar) {
-            if ($similar['parentIndexElement'] == $similarIndex) {
-                $similarModel = $this->getRepository()->find($similar['similarId']);
-                
-                if ($similarModel) {
-                    $article->getSimilar()->add($similarModel);
-                } 
-                
-                unset($similars[$index]);
+            if ($similar['parentIndexElement'] != $similarIndex) {
+                continue;
+            }
+
+            if (!$similar['similarId']) {
+                continue;
+            }
+
+            if ($this->isSimilarArticleExists($article, $similar['similarId'])) {
+                continue;
+            }
+
+            $similarModel = $this->getManager()->getReference('Shopware\Models\Article\Article', $similar['similarId']);
+
+            $similarCollection[] = $similarModel;
+
+            unset($similars[$index]);
+        }
+
+        return $similarCollection;
+    }
+
+    public function isSimilarArticleExists($article, $similarId)
+    {
+        foreach ($article->getSimilar() as $similar){
+            if ($similar->getId == $similarId) {
+                return true;
             }
         }
         
-        return $similarCollection;
+        return false;
     }
 
     /**
