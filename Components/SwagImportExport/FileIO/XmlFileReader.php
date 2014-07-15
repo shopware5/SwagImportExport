@@ -92,6 +92,7 @@ class XmlFileReader implements FileReader
         while ($j < $count && $reader->next($this->iterationTag[0])) {
             $node = $reader->expand();
             $records[] = $this->toArrayTree($node, $this->iterationPath[0]);
+            $j++;
         }
 
         return $records;
