@@ -128,6 +128,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 ->join('variant.article', 'article')
                 ->leftjoin('article.similar', 'similar')
                 ->where('variant.id IN (:ids)')
+                ->andWhere('variant.kind = 1')
                 ->andWhere('similar.id IS NOT NULL')
                 ->setParameter('ids', $ids);
         $result['similars'] = $similarsBuilder->getQuery()->getResult();
@@ -234,11 +235,12 @@ class ArticlesDbAdapter implements DataDbAdapter
                 }
                 
                 $this->getManager()->persist($variantModel);
-                
             }
             
             $this->getManager()->flush();
+            $this->getManager()->clear($articleModel);
         }
+        
     }
 
     public function prerpareArticle(&$data)
@@ -490,6 +492,25 @@ class ArticlesDbAdapter implements DataDbAdapter
         return $image;
     }
     
+    public function prepareSimilars(&$similars, $similarIndex, $article)
+    {
+        $similarCollection = array();
+        
+        foreach ($similars as $index => $similar) {
+            if ($similar['parentIndexElement'] == $similarIndex) {
+                $similarModel = $this->getRepository()->find($similar['similarId']);
+                
+                if ($similarModel) {
+                    $article->getSimilar()->add($similarModel);
+                } 
+                
+                unset($similars[$index]);
+            }
+        }
+        
+        return $similarCollection;
+    }
+
     /**
      * @param ArrayCollection $collection
      * @param $property
