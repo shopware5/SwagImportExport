@@ -273,8 +273,10 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
             var index = me.profilesStore.find('name', parts[i]);
             
             if(index !== -1){
-                var record = me.profilesStore.getAt(index);
-                me.profileCombo.setValue(record.get('id'));
+                if (me.profileCombo.getValue() == undefined) {
+                    var record = me.profilesStore.getAt(index);
+                    me.profileCombo.setValue(record.get('id'));
+                }
                 return;
             }
         }
