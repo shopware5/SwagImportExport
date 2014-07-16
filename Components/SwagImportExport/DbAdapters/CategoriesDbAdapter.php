@@ -200,6 +200,31 @@ class CategoriesDbAdapter implements DataDbAdapter
 
         return $data;
     }
+    
+    /**
+     * @return array
+     */
+    public function getSections()
+    {
+        return array(
+            array('id' => 'article', 'name' => 'category')
+        );
+    }
+    
+    /**
+     * @param string $section
+     * @return mix
+     */
+    public function getColumns($section)
+    {
+        $method = 'get' . ucfirst($section) . 'Columns';
+        
+        if (method_exists($this, $method)) {
+            return $this->{$method}();
+        }
+
+        return false;
+    }
 
     /**
      * Returns category repository
