@@ -87,7 +87,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 ->where('variant.id IN (:ids)')
                 ->setParameter('ids', $ids);
 
-        $result['articles'] = $articlesBuilder->getQuery()->getResult();
+        $result['article'] = $articlesBuilder->getQuery()->getResult();
         
         //prices
         $pricesBuilder = $manager->createQueryBuilder();
@@ -96,7 +96,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 ->leftJoin('variant.prices', 'prices')
                 ->where('variant.id IN (:ids)')
                 ->setParameter('ids', $ids);
-        $result['prices'] = $pricesBuilder->getQuery()->getResult();
+        $result['price'] = $pricesBuilder->getQuery()->getResult();
         
         //images
         $imagesBuilder = $manager->createQueryBuilder();
@@ -108,7 +108,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 ->andWhere('variant.kind = 1')
                 ->andWhere('images.id IS NOT NULL')
                 ->setParameter('ids', $ids);
-        $result['images'] = $imagesBuilder->getQuery()->getResult();
+        $result['image'] = $imagesBuilder->getQuery()->getResult();
         
         //filter values
         $propertyValuesBuilder = $manager->createQueryBuilder();
@@ -119,7 +119,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 ->where('variant.id IN (:ids)')
                 ->andWhere('propertyValues.id IS NOT NULL')
                 ->setParameter('ids', $ids);
-        $result['propertyValues'] = $propertyValuesBuilder->getQuery()->getResult();
+        $result['propertyValue'] = $propertyValuesBuilder->getQuery()->getResult();
         
         //similar 
         $similarsBuilder = $manager->createQueryBuilder();
@@ -131,12 +131,16 @@ class ArticlesDbAdapter implements DataDbAdapter
                 ->andWhere('variant.kind = 1')
                 ->andWhere('similar.id IS NOT NULL')
                 ->setParameter('ids', $ids);
-        $result['similars'] = $similarsBuilder->getQuery()->getResult();
+        $result['similar'] = $similarsBuilder->getQuery()->getResult();
         
         return $result;
     }
 
-    public function getDefaultColumns()
+    /**
+     * Returns columns for export
+     * @return array
+     */
+    public function getExportColumns()
     {
         $otherColumns = array(
             'variantsUnit.unit as unit',
@@ -151,18 +155,29 @@ class ArticlesDbAdapter implements DataDbAdapter
         $columns['image'] = $this->getImageColumns();
         $columns['propertyValues'] = $this->getPropertyValueColumns();
         $columns['similar'] = $this->getSimilarColumns();
-
+        
         return $columns;
+    }
+    
+    /**
+     * Returns default columns
+     * @return array
+     */
+    public function getDefaultColumns()
+    {
+        return array_merge(
+                $this->getArticleColumns(), $this->getVariantColumns()
+        );
     }
 
     public function write($records)
     {
         //articles
-        if (empty($records['articles'])) {
+        if (empty($records['article'])) {
             throw new \Exception('No article records were found.');
         }
         
-        foreach ($records['articles'] as $index => $record) {
+        foreach ($records['article'] as $index => $record) {
             $articleModel = null;
             $variantModel = null;
             
@@ -192,9 +207,9 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $variantModel = $this->prerpareVariant($record, $articleModel);
                 $articleModel->setDetails($variantModel);
 
-                $prices = $this->preparePrices($records['prices'], $index, $variantModel, $articleModel, $articleData['tax']);
-                $articleData['images'] = $this->prepareImages($records['images'], $index, $articleModel);
-                $articleData['similar'] = $this->prepareSimilars($records['similars'], $index, $articleModel);
+                $prices = $this->preparePrices($records['price'], $index, $variantModel, $articleModel, $articleData['tax']);
+                $articleData['images'] = $this->prepareImages($records['image'], $index, $articleModel);
+                $articleData['similar'] = $this->prepareSimilars($records['similar'], $index, $articleModel);
 
                 $articleData['mainDetail'] = array(
                     'number' => $variantModel->getNumber(),
@@ -214,8 +229,8 @@ class ArticlesDbAdapter implements DataDbAdapter
                 //updates the also the article
                 if ($record['mainNumber'] === $record['orderNumber']) {
                     $articleData = $this->prerpareArticle($record);
-                    $articleData['images'] = $this->prepareImages($records['images'], $index, $articleModel);
-                    $articleData['similar'] = $this->prepareSimilars($records['similars'], $index, $articleModel);
+                    $articleData['images'] = $this->prepareImages($records['image'], $index, $articleModel);
+                    $articleData['similar'] = $this->prepareSimilars($records['similar'], $index, $articleModel);
                     
                     $articleModel->fromArray($articleData);
                 }
@@ -224,7 +239,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $variantModel = $this->prerpareVariant($record, $articleModel, $variantModel);
                 $variantModel->setArticle($articleModel);
 
-                $prices = $this->preparePrices($records['prices'], $index, $variantModel, $articleModel, $articleModel->getTax());
+                $prices = $this->preparePrices($records['price'], $index, $variantModel, $articleModel, $articleModel->getTax());
 
                 $variantModel->setPrices($prices);
 
@@ -241,6 +256,17 @@ class ArticlesDbAdapter implements DataDbAdapter
             $this->getManager()->clear($articleModel);
         }
         
+    }
+    
+    public function getSections()
+    {
+        return array(
+            array('id' => 'article', 'name' => 'article'),
+            array('id' => 'price', 'name' => 'price'),
+            array('id' => 'image', 'name' => 'image'),
+            array('id' => 'propertyValue', 'name' => 'propertyValue'),
+            array('id' => 'similar', 'name' => 'similar'),
+        );
     }
 
     public function prerpareArticle(&$data)
@@ -613,6 +639,17 @@ class ArticlesDbAdapter implements DataDbAdapter
         }
         
         return $columns;
+    }
+    
+    public function getColumns($section)
+    {
+        $method = 'get' . ucfirst($section) . 'Columns';
+        
+        if (method_exists($this, $method)) {
+            return $this->{$method}();
+        }
+
+        return false;
     }
 
     public function getVariantColumns()

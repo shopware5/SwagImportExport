@@ -286,7 +286,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
 
         var data = { };
         if (node.data.inIteration === true) {
-            data = { text: "New Node", leaf: true, type: 'node', iconCls: 'sprite-icon_taskbar_top_inhalte_active', inIteration: true };
+            data = { text: "New Node", leaf: true, type: 'leaf', iconCls: 'sprite-icon_taskbar_top_inhalte_active', inIteration: true };
         } else {
             data = { text: "New Node", expanded: true };
         }

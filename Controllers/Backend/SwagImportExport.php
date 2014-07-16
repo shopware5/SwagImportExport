@@ -993,23 +993,21 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
         $type = $profile->getType();
 
-        if ($type == 'articles') {
-            $this->View()->assign(array(
-                'success' => true, 'data' => array(
-                    array('id' => 'article', 'name' => 'article'),
-                    array('id' => 'price', 'name' => 'price'),
-                ), 'total' => count($columns)
-            ));
-        } else {
-            $this->View()->assign(array(
-                'success' => true, 'data' => array($type), 'total' => count($columns)
-            ));
-        }
+        $dbAdapter = $this->Plugin()->getDataFactory()->createDbAdapter($type);
+        
+        $sections = $dbAdapter->getSections();
+        
+        $this->View()->assign(array(
+            'success' => true, 
+            'data' => $sections, 
+            'total' => count($sections)
+        ));
     }
 
     public function getColumnsAction()
     {
         $postData['profileId'] = $this->Request()->getParam('profileId');
+        $section = $this->Request()->getParam('adapter', 'default');
 
         if (!$postData['profileId']) {
             return $this->View()->assign(array(
@@ -1021,7 +1019,14 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $type = $profile->getType();
 
         $dbAdapter = $this->Plugin()->getDataFactory()->createDbAdapter($type);
-        $columns = $dbAdapter->getDefaultColumns();
+        
+        $columns = $dbAdapter->getColumns($section);
+        
+        if (!$columns || empty($columns)) {
+            $this->View()->assign(array(
+                'success' => false, 'msg' => 'No colums found.'
+            ));
+        }
 
         foreach ($columns as &$column) {
             $match = '';
