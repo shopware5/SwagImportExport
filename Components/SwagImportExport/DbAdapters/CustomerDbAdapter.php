@@ -24,7 +24,7 @@ class CustomerDbAdapter implements DataDbAdapter
         $default = array_merge($default, $this->getBillingColumns());
 
         $default = array_merge($default, $this->getShippingColumns());
-
+        
         return $default;
     }
 
@@ -65,7 +65,7 @@ class CustomerDbAdapter implements DataDbAdapter
             unset($attributes['userID']);
             $attributes = array_keys($attributes);
 
-            $prefix = 'attr';
+            $prefix = 'attribute';
             $attributesSelect = array();
             foreach ($attributes as $attribute) {
                 //underscore to camel case
@@ -79,7 +79,7 @@ class CustomerDbAdapter implements DataDbAdapter
         if ($attributesSelect && !empty($attributesSelect)) {
             $columns = array_merge($columns, $attributesSelect);
         }
-
+        
         return $columns;
     }
 
@@ -114,7 +114,7 @@ class CustomerDbAdapter implements DataDbAdapter
             unset($attributes['billingID']);
             $attributes = array_keys($attributes);
 
-            $prefix = 'attr';
+            $prefix = 'billingAttribute';
             $attributesSelect = array();
             foreach ($attributes as $attribute) {
                 //underscore to camel case
@@ -158,7 +158,7 @@ class CustomerDbAdapter implements DataDbAdapter
             unset($attributes['shippingID']);
             $attributes = array_keys($attributes);
 
-            $prefix = 'attr';
+            $prefix = 'shippingAttribute';
             $attributesSelect = array();
             foreach ($attributes as $attribute) {
                 //underscore to camel case
@@ -200,7 +200,7 @@ class CustomerDbAdapter implements DataDbAdapter
 
         $paginator = $manager->createPaginator($query);
 
-        $result['customers'] = $paginator->getIterator()->getArrayCopy();
+        $result['default'] = $paginator->getIterator()->getArrayCopy();
 
         return $result;
     }
@@ -339,6 +339,31 @@ class CustomerDbAdapter implements DataDbAdapter
         }
 
         return $shippingData;
+    }
+    
+    /**
+     * @return array
+     */
+    public function getSections()
+    {
+        return array(
+            array('id' => 'default', 'name' => 'default ')
+        );
+    }
+    
+    /**
+     * @param string $section
+     * @return mix
+     */
+    public function getColumns($section)
+    {
+        $method = 'get' . ucfirst($section) . 'Columns';
+        
+        if (method_exists($this, $method)) {
+            return $this->{$method}();
+        }
+
+        return false;
     }
 
     /**

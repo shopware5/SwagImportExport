@@ -45,7 +45,7 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
 
         $paginator = $manager->createPaginator($query);
 
-        $result = $paginator->getIterator()->getArrayCopy();
+        $result['default'] = $paginator->getIterator()->getArrayCopy();
         
         return $result;
     }
@@ -58,8 +58,6 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
         
         $builder->select('d.id')
                 ->from('Shopware\Models\Article\Detail', 'd')
-                ->leftJoin('d.article', 'a')
-                ->leftJoin('a.supplier', 's')
                 ->leftJoin('d.prices', 'p')
                 ->where('d.inStock > 0')
                 ->andWhere("p.customerGroupKey = 'EK'")
@@ -74,8 +72,9 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
                 ->setMaxResults($limit);
         
         $query = $builder->getQuery();
+        
         $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-
+        
         $paginator = $manager->createPaginator($query);
 
         $records = $paginator->getIterator()->getArrayCopy();
@@ -115,6 +114,31 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
         }
         
         $manager->flush();
+    }
+    
+    /**
+     * @return array
+     */
+    public function getSections()
+    {
+        return array(
+            array('id' => 'default', 'name' => 'default ')
+        );
+    }
+    
+    /**
+     * @param string $section
+     * @return mix
+     */
+    public function getColumns($section)
+    {
+        $method = 'get' . ucfirst($section) . 'Columns';
+        
+        if (method_exists($this, $method)) {
+            return $this->{$method}();
+        }
+
+        return false;
     }
     
     /**

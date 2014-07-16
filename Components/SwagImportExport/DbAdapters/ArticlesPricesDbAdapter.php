@@ -63,7 +63,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                 ->where('price.id IN (:ids)')
                 ->setParameter('ids', $ids);
 
-        $result = $builder->getQuery()->getResult();
+        $result['default'] = $builder->getQuery()->getResult();
 
         return $result;
     }
@@ -71,16 +71,16 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
     public function getDefaultColumns()
     {
         return array(
-            'prices.id',
-            'prices.articleId',
-            'prices.articleDetailsId',
-            'prices.customerGroupKey',
-            'prices.from',
-            'prices.to',
-            'prices.price',
-            'prices.pseudoPrice',
-            'prices.basePrice',
-            'prices.percent',
+            'price.id',
+            'price.articleId',
+            'price.articleDetailsId',
+            'price.customerGroupKey',
+            'price.from',
+            'price.to',
+            'price.price',
+            'price.pseudoPrice',
+            'price.basePrice',
+            'price.percent',
         );
     }
 
@@ -167,6 +167,31 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
             $this->getManager()->persist($price);
             $this->getManager()->flush();
         }
+    }
+    
+    /**
+     * @return array
+     */
+    public function getSections()
+    {
+        return array(
+            array('id' => 'default', 'name' => 'default ')
+        );
+    }
+    
+    /**
+     * @param string $section
+     * @return mix
+     */
+    public function getColumns($section)
+    {
+        $method = 'get' . ucfirst($section) . 'Columns';
+        
+        if (method_exists($this, $method)) {
+            return $this->{$method}();
+        }
+
+        return false;
     }
 
     /**

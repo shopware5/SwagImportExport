@@ -46,8 +46,7 @@ class NewsletterDbAdapter implements DataDbAdapter
                 ->where('na.id IN (:ids)')
                 ->setParameter('ids', $ids);
 
-        $result = $builder->getQuery()->getResult();
-
+        $result['default'] = $builder->getQuery()->getResult();
 
         return $result;
     }
@@ -147,6 +146,31 @@ class NewsletterDbAdapter implements DataDbAdapter
         }
         
         $manager->flush();
+    }
+    
+    /**
+     * @return array
+     */
+    public function getSections()
+    {
+        return array(
+            array('id' => 'default', 'name' => 'default ')
+        );
+    }
+    
+    /**
+     * @param string $section
+     * @return mix
+     */
+    public function getColumns($section)
+    {
+        $method = 'get' . ucfirst($section) . 'Columns';
+        
+        if (method_exists($this, $method)) {
+            return $this->{$method}();
+        }
+
+        return false;
     }
 
     /**

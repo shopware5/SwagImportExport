@@ -434,30 +434,51 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
     {
         $data = $this->Request()->getParam('data', 1);
 
-        if ($data['type'] == 'articles') {
-            $newTree = '{"id":"1","name":"Root","children":[{"id":"2","name":"Header","children":[{"id":"3","name":"HeaderChild"}]},{"id":"4","name":"Articles","children":[{"id":"5","name":"Article","adapter":"articles","attributes":[{"id":"6","name":"variantId","shopwareField":"variantId"},{"id":"7","name":"orderNumber","shopwareField":"orderNumber"}],"children":[{"id":"8","name":"mainNumber","shopwareField":"mainNumber"},{"id":"9","name":"name","shopwareField":"name"},{"id":"10","name":"tax","shopwareField":"tax"},{"id":"11","name":"supplierName","shopwareField":"supplierName"},{"id":"12","name":"additionalText","shopwareField":"additionalText","attributes":[{"id":"13","name":"inStock","shopwareField":"inStock"}]},{"id":"13","name":"Prices","children":[{"id":"14","name":"Price","adapter":"prices","parentKey":"variantId","attributes":[{"id":"15","name":"group","shopwareField":"priceGroup"}],"children":[{"id":"16","name":"pricegroup","shopwareField":"priceGroup"},{"id":"17","name":"price","shopwareField":"netPrice"}]}]}]}]}]}';
-        } else {
-            $newTree = '{"name":"Root","children":[{"name":"Header","children":[{"id":"537385ed7c799","name":"HeaderChild","shopwareField":""}],"id":"537359399c80a"},{"name":"Categories","children":[{"name":"Category","adapter":"category","attributes":[{"id":"53738653da10f","name":"Attribute1","shopwareField":"parent"}],"children":[{"id":"5373865547d06","name":"Id","shopwareField":"id"},{"id":"537386ac3302b","name":"Description","shopwareField":"description","children":[{"id":"5373870d38c80","name":"Value","shopwareField":"description"}],"attributes":[{"id":"53738718f26db","name":"Attribute2","shopwareField":"active"}]},{"id":"537388742e20e","name":"Title","shopwareField":"description"}],"id":"537359399c90d"}],"id":"537359399c8b7"}],"id":"root"}';
+        try {
+            switch ($data['type']) {
+                case 'categories':
+                    $newTree = '{"name":"Root","children":[{"name":"Header","children":[{"id":"537385ed7c799","name":"HeaderChild","shopwareField":""}],"id":"537359399c80a"},{"name":"Categories","children":[{"name":"Category","adapter":"default","attributes":[{"id":"53738653da10f","name":"Attribute1","shopwareField":"parent"}],"children":[{"id":"5373865547d06","name":"Id","shopwareField":"id"},{"id":"537386ac3302b","name":"Description","shopwareField":"description","children":[{"id":"5373870d38c80","name":"Value","shopwareField":"description"}],"attributes":[{"id":"53738718f26db","name":"Attribute2","shopwareField":"active"}]},{"id":"537388742e20e","name":"Title","shopwareField":"description"}],"id":"537359399c90d"}],"id":"537359399c8b7"}],"id":"root"}';
+                    break;
+                case 'articles':
+                    $newTree = '{"id":"1","name":"Root","children":[{"id":"2","name":"Header","children":[{"id":"3","name":"HeaderChild"}]},{"id":"4","name":"Articles","children":[{"id":"5","name":"Article","adapter":"articles","attributes":[{"id":"6","name":"variantId","shopwareField":"variantId"},{"id":"7","name":"orderNumber","shopwareField":"orderNumber"}],"children":[{"id":"8","name":"mainNumber","shopwareField":"mainNumber"},{"id":"9","name":"name","shopwareField":"name"},{"id":"10","name":"tax","shopwareField":"tax"},{"id":"11","name":"supplierName","shopwareField":"supplierName"},{"id":"12","name":"additionalText","shopwareField":"additionalText","attributes":[{"id":"13","name":"inStock","shopwareField":"inStock"}]},{"id":"13","name":"Prices","children":[{"id":"14","name":"Price","adapter":"prices","parentKey":"variantId","attributes":[{"id":"15","name":"group","shopwareField":"priceGroup"}],"children":[{"id":"16","name":"pricegroup","shopwareField":"priceGroup"},{"id":"17","name":"price","shopwareField":"netPrice"}]}]}]}]}]}';
+                    break;
+                case 'articlesInStock':
+                    $newTree = '{"name":"Root","children":[{"name":"Header","children":[{"id":"537385ed7c799","name":"HeaderChild","shopwareField":""}],"id":"537359399c80a"},{"name":"Categories","children":[{"name":"Category","adapter":"default","attributes":[{"id":"53738653da10f","name":"Attribute1","shopwareField":"parent"}],"children":[{"id":"5373865547d06","name":"Id","shopwareField":"id"},{"id":"537386ac3302b","name":"Description","shopwareField":"description","children":[{"id":"5373870d38c80","name":"Value","shopwareField":"description"}],"attributes":[{"id":"53738718f26db","name":"Attribute2","shopwareField":"active"}]},{"id":"537388742e20e","name":"Title","shopwareField":"description"}],"id":"537359399c90d"}],"id":"537359399c8b7"}],"id":"root"}';
+                    break;
+                case 'articlesPrices':
+                    $newTree = '{"name":"Root","children":[{"name":"Header","children":[{"id":"537385ed7c799","name":"HeaderChild","shopwareField":""}],"id":"537359399c80a"},{"name":"Categories","children":[{"name":"Category","adapter":"default","attributes":[{"id":"53738653da10f","name":"Attribute1","shopwareField":"parent"}],"children":[{"id":"5373865547d06","name":"Id","shopwareField":"id"},{"id":"537386ac3302b","name":"Description","shopwareField":"description","children":[{"id":"5373870d38c80","name":"Value","shopwareField":"description"}],"attributes":[{"id":"53738718f26db","name":"Attribute2","shopwareField":"active"}]},{"id":"537388742e20e","name":"Title","shopwareField":"description"}],"id":"537359399c90d"}],"id":"537359399c8b7"}],"id":"root"}';
+                    break;
+                case 'customers':
+                    $newTree = '{"name":"Root","children":[{"name":"Header","children":[{"id":"537385ed7c799","name":"HeaderChild","shopwareField":""}],"id":"537359399c80a"},{"name":"Categories","children":[{"name":"Category","adapter":"default","attributes":[{"id":"53738653da10f","name":"Attribute1","shopwareField":"parent"}],"children":[{"id":"5373865547d06","name":"Id","shopwareField":"id"},{"id":"537386ac3302b","name":"Description","shopwareField":"description","children":[{"id":"5373870d38c80","name":"Value","shopwareField":"description"}],"attributes":[{"id":"53738718f26db","name":"Attribute2","shopwareField":"active"}]},{"id":"537388742e20e","name":"Title","shopwareField":"description"}],"id":"537359399c90d"}],"id":"537359399c8b7"}],"id":"root"}';
+                    break;
+                case 'newsletter':
+                    $newTree = '{"name":"Root","children":[{"name":"Header","children":[{"id":"537385ed7c799","name":"HeaderChild","shopwareField":""}],"id":"537359399c80a"},{"name":"Categories","children":[{"name":"Category","adapter":"default","attributes":[{"id":"53738653da10f","name":"Attribute1","shopwareField":"parent"}],"children":[{"id":"5373865547d06","name":"Id","shopwareField":"id"},{"id":"537386ac3302b","name":"Description","shopwareField":"description","children":[{"id":"5373870d38c80","name":"Value","shopwareField":"description"}],"attributes":[{"id":"53738718f26db","name":"Attribute2","shopwareField":"active"}]},{"id":"537388742e20e","name":"Title","shopwareField":"description"}],"id":"537359399c90d"}],"id":"537359399c8b7"}],"id":"root"}';
+                    break;
+                default :
+                    throw new \Exception('The profile could not be created.');
+            }
+
+            $profile = new \Shopware\CustomModels\ImportExport\Profile();
+
+            $profile->setName($data['name']);
+            $profile->setType($data['type']);
+            $profile->setTree($newTree);
+
+            $this->getManager()->persist($profile);
+            $this->getManager()->flush();
+
+            $this->View()->assign(array(
+                'success' => true,
+                'data' => array(
+                    "id" => $profile->getId(),
+                    'name' => $profile->getName(),
+                    'type' => $profile->getType(),
+                    'tree' => $profile->getTree(),
+                )
+            ));
+        } catch (\Exception $e) {
+            $this->View()->assign(array('success' => false, 'msg' => $e->getMessage()));
         }
-
-        $profile = new \Shopware\CustomModels\ImportExport\Profile();
-
-        $profile->setName($data['name']);
-        $profile->setType($data['type']);
-        $profile->setTree($newTree);
-
-        $this->getManager()->persist($profile);
-        $this->getManager()->flush();
-
-        $this->View()->assign(array(
-            'success' => true,
-            'data' => array(
-                "id" => $profile->getId(),
-                'name' => $profile->getName(),
-                'type' => $profile->getType(),
-                'tree' => $profile->getTree(),
-            )
-        ));
     }
 
     /**
@@ -496,7 +517,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             }
             $this->getManager()->flush();
         } catch (\Exception $e) {
-            $this->View()->assign(array('success' => false, 'message' => 'Unexpected error. The profile could not be deleted.', 'children' => $data));
+            $this->View()->assign(array('success' => false, 'msg' => 'Unexpected error. The profile could not be deleted.', 'children' => $data));
         }
         $this->View()->assign(array('success' => true));
     }
@@ -622,14 +643,16 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             'profileId' => (int) $this->Request()->getParam('profileId'),
             'type' => 'export',
             'format' => $this->Request()->getParam('format'),
-            'filter' =>  array(
-                'variants' => $variants
-            ),
+            'filter' =>  array(),
             'limit' =>  array(
                 'limit' => $limit,
                 'offset' => $offset,
             ),
         );
+        
+        if ($variants) {
+            $postData['filter']['variants'] = $variants;
+        }
         
         $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
 
@@ -660,7 +683,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
     public function exportAction()
     {
         $variants = $this->Request()->getParam('variants') ? true : false;
-        
+
         if ($this->Request()->getParam('limit')) {
             $limit = $this->Request()->getParam('limit');
         }
@@ -675,14 +698,16 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             'format' => $this->Request()->getParam('format'),
             'sessionId' => $this->Request()->getParam('sessionId'),
             'fileName' => $this->Request()->getParam('fileName'),
-            'filter' =>  array(
-                'variants' => $variants
-            ),
+            'filter' =>  array(),
             'limit' =>  array(
                 'limit' => $limit,
                 'offset' => $offset,
             ),
         );
+        
+        if ($variants) {
+            $postData['filter']['variants'] = $variants;
+        }
 
         $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
 

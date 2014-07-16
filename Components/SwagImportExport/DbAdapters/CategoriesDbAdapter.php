@@ -78,7 +78,7 @@ class CategoriesDbAdapter implements DataDbAdapter
                 ->where('c.id IN (:ids)')
                 ->setParameter('ids', $ids);
 
-        $result['categories'] = $builder->getQuery()->getResult();
+        $result['default'] = $builder->getQuery()->getResult();
 
         return $result;
     }
@@ -207,7 +207,7 @@ class CategoriesDbAdapter implements DataDbAdapter
     public function getSections()
     {
         return array(
-            array('id' => 'article', 'name' => 'category')
+            array('id' => 'default', 'name' => 'default')
         );
     }
     
