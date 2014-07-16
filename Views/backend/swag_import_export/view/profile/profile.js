@@ -66,7 +66,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
             me.toolbar.items.get('conversionsMenu').setDisabled(false);
             me.treeStore.getProxy().setExtraParam('profileId', profileId);
             me.treeStore.load({ params: { profileId: profileId } });
-            me.columnStore.load({ params: { profileId: profileId } });
+//            me.columnStore.load({ params: { profileId: profileId } });
             me.sectionStore.load({ params: { profileId: profileId } });
             me.formPanel.hideFields();
             me.treePanel.getView().setDisabled(false);
@@ -88,6 +88,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
 		me.selectedNodeId = 0;
         
         me.columnStore = Ext.create('Shopware.apps.SwagImportExport.store.Column');
+        me.parentKeyStore = Ext.create('Shopware.apps.SwagImportExport.store.Column');
         me.sectionStore = Ext.create('Shopware.apps.SwagImportExport.store.Section');
 
         me.title = me.snippets.title;
@@ -275,6 +276,8 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
 				this.child('#nodeName').show();
 				this.child('#nodeName').setValue(node.data.text);
 				this.child('#swColumn').setValue(node.data.swColumn);
+                
+                this.child('#swColumn').getStore().load({ params: { profileId: me.profileId, adapter: node.data.adapter } });
 				
 				if (node.data.type === 'attribute') {
 					this.child('#swColumn').show();
@@ -289,8 +292,9 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
                     this.child('#adapter').show();
                     this.child('#parentKey').show();
                     this.child('#adapter').setValue(node.data.adapter);
+                    this.child('#parentKey').getStore().load({ params: { profileId: me.profileId, adapter: node.data.adapter } });
                     this.child('#parentKey').setValue(node.data.parentKey);
-				} else {
+                } else {
 					this.child('#swColumn').hide();
                     this.child('#adapter').hide();
                     this.child('#parentKey').hide();
@@ -341,9 +345,9 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
                     xtype: 'combobox',
                     editable: false,
                     emptyText: 'Select Column',
-                    store: ["articlesId"],
-//                    valueField: 'id',
-//                    displayField: 'name',
+                    store: me.parentKeyStore,
+                    valueField: 'id',
+                    displayField: 'name',
                     width: 400,
                     labelWidth: 150,
                     name: 'parentKey',
