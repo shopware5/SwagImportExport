@@ -448,6 +448,9 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                 case 'articlesPrices':
                     $newTree = '{"name":"Root","children":[{"name":"Header","children":[{"id":"537385ed7c799","name":"HeaderChild","shopwareField":""}],"id":"537359399c80a"},{"name":"Categories","children":[{"name":"Category","adapter":"default","attributes":[{"id":"53738653da10f","name":"Attribute1","shopwareField":"parent"}],"children":[{"id":"5373865547d06","name":"Id","shopwareField":"id"},{"id":"537386ac3302b","name":"Description","shopwareField":"description","children":[{"id":"5373870d38c80","name":"Value","shopwareField":"description"}],"attributes":[{"id":"53738718f26db","name":"Attribute2","shopwareField":"active"}]},{"id":"537388742e20e","name":"Title","shopwareField":"description"}],"id":"537359399c90d"}],"id":"537359399c8b7"}],"id":"root"}';
                     break;
+                case 'orders':
+                    $newTree = '{"name":"Root","children":[{"name":"Header","children":[{"id":"537385ed7c799","name":"HeaderChild","shopwareField":""}],"id":"537359399c80a"},{"name":"Categories","children":[{"name":"Category","adapter":"default","attributes":[{"id":"53738653da10f","name":"Attribute1","shopwareField":"parent"}],"children":[{"id":"5373865547d06","name":"Id","shopwareField":"id"},{"id":"537386ac3302b","name":"Description","shopwareField":"description","children":[{"id":"5373870d38c80","name":"Value","shopwareField":"description"}],"attributes":[{"id":"53738718f26db","name":"Attribute2","shopwareField":"active"}]},{"id":"537388742e20e","name":"Title","shopwareField":"description"}],"id":"537359399c90d"}],"id":"537359399c8b7"}],"id":"root"}';
+                    break;
                 case 'customers':
                     $newTree = '{"name":"Root","children":[{"name":"Header","children":[{"id":"537385ed7c799","name":"HeaderChild","shopwareField":""}],"id":"537359399c80a"},{"name":"Categories","children":[{"name":"Category","adapter":"default","attributes":[{"id":"53738653da10f","name":"Attribute1","shopwareField":"parent"}],"children":[{"id":"5373865547d06","name":"Id","shopwareField":"id"},{"id":"537386ac3302b","name":"Description","shopwareField":"description","children":[{"id":"5373870d38c80","name":"Value","shopwareField":"description"}],"attributes":[{"id":"53738718f26db","name":"Attribute2","shopwareField":"active"}]},{"id":"537388742e20e","name":"Title","shopwareField":"description"}],"id":"537359399c90d"}],"id":"537359399c8b7"}],"id":"root"}';
                     break;
@@ -654,30 +657,34 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             $postData['filter']['variants'] = $variants;
         }
         
-        $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
+        try {
+            $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
 
-        $dataFactory = $this->Plugin()->getDataFactory();
+            $dataFactory = $this->Plugin()->getDataFactory();
 
-        $dbAdapter = $dataFactory->createDbAdapter($profile->getType());
-        $dataSession = $dataFactory->loadSession($postData);
+            $dbAdapter = $dataFactory->createDbAdapter($profile->getType());
+            $dataSession = $dataFactory->loadSession($postData);
 
-        $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession);
+            $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession);
 
-        $colOpts = $dataFactory->createColOpts($postData['columnOptions']);
-        $limit = $dataFactory->createLimit($postData['limit']);            
-        $filter = $dataFactory->createFilter($postData['filter']);
-        $maxRecordCount = $postData['max_record_count'];
-        $type = $postData['type'];
-        $format = $postData['format'];
+            $colOpts = $dataFactory->createColOpts($postData['columnOptions']);
+            $limit = $dataFactory->createLimit($postData['limit']);            
+            $filter = $dataFactory->createFilter($postData['filter']);
+            $maxRecordCount = $postData['max_record_count'];
+            $type = $postData['type'];
+            $format = $postData['format'];
 
-        $dataIO->initialize($colOpts, $limit, $filter, $maxRecordCount, $type, $format);
+            $dataIO->initialize($colOpts, $limit, $filter, $maxRecordCount, $type, $format);
 
-        $ids = $dataIO->preloadRecordIds()->getRecordIds();
-        
-        $position = $dataIO->getSessionPosition();
-        $position = $position == null ? 0 : $position;
+            $ids = $dataIO->preloadRecordIds()->getRecordIds();
 
-        $this->View()->assign(array('success' => true, 'position' => $position, 'count' => count($ids)));
+            $position = $dataIO->getSessionPosition();
+            $position = $position == null ? 0 : $position;
+
+            $this->View()->assign(array('success' => true, 'position' => $position, 'count' => count($ids)));
+        } catch (Exception $e) {
+            $this->View()->assign(array('success' => false, 'msg' => $e->getMessage()));
+        }
     }
 
     public function exportAction()

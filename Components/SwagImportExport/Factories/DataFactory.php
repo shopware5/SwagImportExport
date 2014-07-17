@@ -9,6 +9,7 @@ use Shopware\Components\SwagImportExport\DbAdapters\ArticlesDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\ArticlesPricesDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\ArticlesInStockDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\CustomerDbAdapter;
+use Shopware\Components\SwagImportExport\DbAdapters\OrdersDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\NewsletterDbAdapter;
 use Shopware\Components\SwagImportExport\Utils\DataColumnOptions;
 use Shopware\Components\SwagImportExport\Utils\DataLimit;
@@ -65,6 +66,8 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
                 return $this->createArticlesInStockDbAdapter();
             case 'articlesPrices':
                 return $this->createArticlesPricesDbAdapter();
+            case 'orders':
+                return $this->createOrdersDbAdapter();
             case 'customers':
                 return $this->createCustomerDbAdapter();
             case 'newsletter':
@@ -184,6 +187,15 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     protected function createCustomerDbAdapter()
     {
         return new CustomerDbAdapter();
+    }
+    
+    /**
+     * 
+     * @return \Shopware\Components\SwagImportExport\DbAdapters\OrdersDbAdapter
+     */
+    protected function createOrdersDbAdapter()
+    {
+        return new OrdersDbAdapter();
     }
     
     /**
