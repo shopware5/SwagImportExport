@@ -169,7 +169,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
     }
 
     /**
-     * Helper function which appends child node to the tree
+     * Helper function which finds node from the tree
      */
     protected function getNodeById($id, $node, $parentId = 'root')
     {
@@ -180,6 +180,14 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             if (isset($node['children'])) {
                 foreach ($node['children'] as $childNode) {
                     $result = $this->getNodeById($id, $childNode, $node['id']);
+                    if ($result !== false) {
+                        return $result;
+                    }
+                }
+            }
+            if (isset($node['attributes'])) {
+                foreach ($node['attributes'] as $attribute) {
+                    $result = $this->getNodeById($id, $attribute, $node['id']);
                     if ($result !== false) {
                         return $result;
                     }
@@ -291,8 +299,6 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                 if ($childNode['id'] == $child['id']) {
                     unset($node['attributes'][$key]);
                     return true;
-                } else if ($this->deleteNode($child, $childNode)) {
-                    return true;
                 }
             }
         }
@@ -368,8 +374,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             }
             
             $changedNode = $this->getNodeById($node['id'], $tree);
-
-
+            
             if ($node['parentId'] != $changedNode['parentId']) {
                 $changedNode['parentId'] = $node['parentId'];
                 $changedNode['type'] = $node['type'];
@@ -440,7 +445,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                     $newTree = '{"name":"Root","children":[{"name":"Header","children":[{"id":"537385ed7c799","name":"HeaderChild","shopwareField":""}],"id":"537359399c80a"},{"name":"Categories","children":[{"name":"Category","adapter":"default","attributes":[{"id":"53738653da10f","name":"Attribute1","shopwareField":"parent"}],"children":[{"id":"5373865547d06","name":"Id","shopwareField":"id"},{"id":"537386ac3302b","name":"Description","shopwareField":"description","children":[{"id":"5373870d38c80","name":"Value","shopwareField":"description"}],"attributes":[{"id":"53738718f26db","name":"Attribute2","shopwareField":"active"}]},{"id":"537388742e20e","name":"Title","shopwareField":"description"}],"id":"537359399c90d"}],"id":"537359399c8b7"}],"id":"root"}';
                     break;
                 case 'articles':
-                    $newTree = '{"id":"1","name":"Root","children":[{"id":"2","name":"Header","children":[{"id":"3","name":"HeaderChild"}]},{"id":"4","name":"Articles","children":[{"id":"5","name":"Article","adapter":"articles","attributes":[{"id":"6","name":"variantId","shopwareField":"variantId"},{"id":"7","name":"orderNumber","shopwareField":"orderNumber"}],"children":[{"id":"8","name":"mainNumber","shopwareField":"mainNumber"},{"id":"9","name":"name","shopwareField":"name"},{"id":"10","name":"tax","shopwareField":"tax"},{"id":"11","name":"supplierName","shopwareField":"supplierName"},{"id":"12","name":"additionalText","shopwareField":"additionalText","attributes":[{"id":"13","name":"inStock","shopwareField":"inStock"}]},{"id":"13","name":"Prices","children":[{"id":"14","name":"Price","adapter":"prices","parentKey":"variantId","attributes":[{"id":"15","name":"group","shopwareField":"priceGroup"}],"children":[{"id":"16","name":"pricegroup","shopwareField":"priceGroup"},{"id":"17","name":"price","shopwareField":"netPrice"}]}]}]}]}]}';
+                    $newTree = '{"id":"1","name":"Root","children":[{"id":"2","name":"Header","children":[{"id":"3","name":"HeaderChild"}]},{"id":"4","name":"Articles","children":[{"id":"5","name":"Article","adapter":"article","attributes":[{"id":"6","name":"variantId","shopwareField":"variantId"},{"id":"7","name":"orderNumber","shopwareField":"orderNumber"}],"children":[{"id":"8","name":"mainNumber","shopwareField":"mainNumber"},{"id":"9","name":"name","shopwareField":"name"},{"id":"10","name":"tax","shopwareField":"tax"},{"id":"11","name":"supplierName","shopwareField":"supplierName"},{"id":"12","name":"additionalText","shopwareField":"additionalText","attributes":[{"id":"13","name":"inStock","shopwareField":"inStock"}]},{"id":"13","name":"Prices","children":[{"id":"14","name":"Price","adapter":"price","parentKey":"variantId","attributes":[{"id":"15","name":"group","shopwareField":"priceGroup"}],"children":[{"id":"16","name":"pricegroup","shopwareField":"priceGroup"},{"id":"17","name":"price","shopwareField":"netPrice"}]}]}]}]}]}';
                     break;
                 case 'articlesInStock':
                     $newTree = '{"name":"Root","children":[{"name":"Header","children":[{"id":"537385ed7c799","name":"HeaderChild","shopwareField":""}],"id":"537359399c80a"},{"name":"Categories","children":[{"name":"Category","adapter":"default","attributes":[{"id":"53738653da10f","name":"Attribute1","shopwareField":"parent"}],"children":[{"id":"5373865547d06","name":"Id","shopwareField":"id"},{"id":"537386ac3302b","name":"Description","shopwareField":"description","children":[{"id":"5373870d38c80","name":"Value","shopwareField":"description"}],"attributes":[{"id":"53738718f26db","name":"Attribute2","shopwareField":"active"}]},{"id":"537388742e20e","name":"Title","shopwareField":"description"}],"id":"537359399c90d"}],"id":"537359399c8b7"}],"id":"root"}';
