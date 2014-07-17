@@ -63,6 +63,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
         
         me.profileId = profileId;
         if (profileId !== null) {
+            me.toolbar.items.get('deleteSelectedProfile').setDisabled(false);
             me.toolbar.items.get('conversionsMenu').setDisabled(false);
             me.treeStore.getProxy().setExtraParam('profileId', profileId);
             me.treeStore.load({ params: { profileId: profileId } });
@@ -71,7 +72,8 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
             me.formPanel.hideFields();
             me.treePanel.getView().setDisabled(false);
         } else {
-            me.toolbar.items.get('conversionsMenu').setDisabled(false);
+            me.toolbar.items.get('deleteSelectedProfile').setDisabled(true);
+            me.toolbar.items.get('conversionsMenu').setDisabled(true);
             me.treePanel.getView().setDisabled(true);
             me.formPanel.hideFields();
             me.treePanel.collapseAll();
@@ -127,6 +129,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
                         me.fireEvent('createOwnProfile', me.profilesStore, me.toolbar.child('#profilesCombo'));
                     }
                 }, {
+                    itemId: 'deleteSelectedProfile',
                     text: me.snippets.toolbar.deleteProfile,
                     disabled: true,
                     handler: function() {
@@ -276,23 +279,23 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
 				this.child('#nodeName').show();
 				this.child('#nodeName').setValue(node.data.text);
 				this.child('#swColumn').setValue(node.data.swColumn);
-                
-                this.child('#swColumn').getStore().load({ params: { profileId: me.profileId, adapter: node.data.adapter } });
 				
 				if (node.data.type === 'attribute') {
+                    this.child('#swColumn').getStore().load({ params: { profileId: me.profileId, adapter: node.data.adapter } });
 					this.child('#swColumn').show();
                     this.child('#adapter').hide();
                     this.child('#parentKey').hide();
 				} else if (node.data.type === 'leaf') {
+                    this.child('#swColumn').getStore().load({ params: { profileId: me.profileId, adapter: node.data.adapter } });
 					this.child('#swColumn').show();
                     this.child('#adapter').hide();
                     this.child('#parentKey').hide();
 				} else if (node.data.type === 'iteration') {
+                    this.child('#parentKey').getStore().load({ params: { profileId: me.profileId, adapter: node.data.adapter } });
 					this.child('#swColumn').hide();
                     this.child('#adapter').show();
                     this.child('#parentKey').show();
                     this.child('#adapter').setValue(node.data.adapter);
-                    this.child('#parentKey').getStore().load({ params: { profileId: me.profileId, adapter: node.data.adapter } });
                     this.child('#parentKey').setValue(node.data.parentKey);
                 } else {
 					this.child('#swColumn').hide();
