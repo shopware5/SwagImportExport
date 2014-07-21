@@ -363,7 +363,14 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
             fn: function(response) {
                 if (response === 'yes') {
                     var node = treeStore.getById(selectedNodeId);
-                    node.parentNode.removeChild(node);
+                    var parentNode = node.parentNode;
+                    parentNode.removeChild(node);
+                    
+                    if (parentNode.get('type') !== 'iteration') {
+                        parentNode.set('type', 'leaf');
+                        parentNode.set('iconCls', 'sprite-icon_taskbar_top_inhalte_active');
+                    }
+                    
                     treeStore.sync({
                         failure: function(batch, options) {
                             var error = batch.exceptions[0].getError(),

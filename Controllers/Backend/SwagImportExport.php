@@ -101,7 +101,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         }
 
         // Get the child nodes
-        if (isset($node['children'])) {
+        if (isset($node['children']) && count($node['children']) > 0) {
             foreach ($node['children'] as $child) {
                 $children[] = $this->convertToExtJSTree($child, $isInIteration | $isIterationNode, $adapter);
             }
