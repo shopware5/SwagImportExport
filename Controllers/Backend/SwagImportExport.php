@@ -147,6 +147,13 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                     'name' => $child['text'],
                     'shopwareField' => $child['swColumn'],
                 );
+            } else if ($child['type'] == 'iteration') {
+                $node['children'][] = array(
+                    'id' => $child['id'],
+                    'name' => $child['text'],
+                    'adapter' => $child['adapter'],
+                    'parentKey' => $child['parentKey'],
+                );
             } else {
                 $node['children'][] = array(
                     'id' => $child['id'],

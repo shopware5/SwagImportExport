@@ -255,6 +255,8 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
                 }
             }
 		});
+        
+        $tp = me.treePanel;
 		
 		return me.treePanel;
 	},
@@ -340,7 +342,12 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
                     width: 400,
                     labelWidth: 150,
                     name: 'adapter',
-					allowBlank: false
+					allowBlank: false,
+                    listeners: {
+                        change: function(field, newValue, oldValue, eOpts) {
+                            me.formPanel.child('#parentKey').getStore().load({ params: { profileId: me.profileId, adapter: newValue } });
+                        }
+                    }
 				}, {
 					itemId: 'parentKey',
 					fieldLabel: 'Parent Key',
@@ -369,7 +376,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
 							cls: 'primary',
 							action: 'swag-import-export-manager-profile-save',
 							handler: function() {
-								me.fireEvent('saveNode', me.treeStore, me.selectedNodeId, me.formPanel.child('#nodeName').getValue(), me.formPanel.child('#swColumn').getValue(), me.formPanel.child('#adapter').getValue(), me.formPanel.child('#parentKey').getValue());
+								me.fireEvent('saveNode', me.treePanel, me.treeStore, me.selectedNodeId, me.formPanel.child('#nodeName').getValue(), me.formPanel.child('#swColumn').getValue(), me.formPanel.child('#adapter').getValue(), me.formPanel.child('#parentKey').getValue());
 							}
 						}]
 				}]

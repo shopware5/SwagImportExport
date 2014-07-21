@@ -290,7 +290,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
 
         var data = { };
         if (node.data.inIteration === true) {
-            data = { text: "New Node", leaf: true, type: 'leaf', iconCls: 'sprite-icon_taskbar_top_inhalte_active', inIteration: true };
+            data = { text: "New Node", leaf: true, type: 'leaf', iconCls: 'sprite-icon_taskbar_top_inhalte_active', inIteration: true, adapter: node.get('adapter') };
         } else {
             data = { text: "New Node", expanded: true };
         }
@@ -322,20 +322,28 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
      * @param { string } nodeName
      * @param { string } swColumn
      */
-    saveNode: function(treeStore, selectedNodeId, nodeName, swColumn, adapter, parentKey) {
+    saveNode: function(treePanel, treeStore, selectedNodeId, nodeName, swColumn, adapter, parentKey) {
         var me = this;
         
         var node = treeStore.getById(selectedNodeId);
         node.set('text', nodeName);
         node.set('swColumn', swColumn);
-        node.set('adapter', adapter);
-        node.set('parentKey', parentKey);
+        
+        // change only when in iteration (because otherwise adapter will be empty)
+        if (node.get('type') === 'iteration') {
+            node.set('adapter', adapter);
+            node.set('parentKey', parentKey);
+        }
+        
         treeStore.sync({
             success: function() {
                 Shopware.Notification.createGrowlMessage(
                         me.snippets.save.title,
                         me.snippets.save.success
                         );
+                treePanel.getSelectionModel().deselectAll(true);
+                treePanel.expand();
+                treePanel.getSelectionModel().select(treeStore.getById(node.get('id')));
             },
             failure: function(batch, options) {
                 var error = batch.exceptions[0].getError(),
@@ -409,7 +417,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
         node.set('expanded', true);
         
         var children = node.childNodes;
-        var data = { text: "New Attribute", leaf: true, type: 'attribute', iconCls: 'sprite-sticky-notes-pin', inIteration: true };
+        var data = { text: "New Attribute", leaf: true, type: 'attribute', iconCls: 'sprite-sticky-notes-pin', inIteration: true, adapter: node.get('adapter') };
         var newNode;
 
         if (children.length > 0) {
