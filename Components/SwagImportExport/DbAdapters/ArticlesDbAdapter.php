@@ -137,10 +137,10 @@ class ArticlesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * Returns columns for export
+     * Returns default columns
      * @return array
      */
-    public function getExportColumns()
+    public function getDefaultColumns()
     {
         $otherColumns = array(
             'variantsUnit.unit as unit',
@@ -148,7 +148,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         );
 
         $columns['article'] = array_merge(
-                $this->getArticleColumns(), $this->getVariantColumns(), $otherColumns
+                $this->getArticleColumns(), $otherColumns
         );
 
         $columns['price'] = $this->getPriceColumns();
@@ -157,17 +157,6 @@ class ArticlesDbAdapter implements DataDbAdapter
         $columns['similar'] = $this->getSimilarColumns();
         
         return $columns;
-    }
-    
-    /**
-     * Returns default columns
-     * @return array
-     */
-    public function getDefaultColumns()
-    {
-        return array_merge(
-                $this->getArticleColumns(), $this->getVariantColumns()
-        );
     }
 
     public function write($records)
@@ -638,7 +627,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             $columns = array_merge($columns, $attributesSelect);
         }
         
-        return $columns;
+        return array_merge($columns, $this->getVariantColumns());
     }
     
     public function getColumns($section)

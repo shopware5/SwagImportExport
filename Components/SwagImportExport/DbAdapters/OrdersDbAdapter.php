@@ -211,6 +211,7 @@ class OrdersDbAdapter implements DataDbAdapter
     {
         return array(
             'details.id as orderDetailId',
+            'details.orderId as orderId',
             'details.articleId as articleId',
             'details.articleNumber as articleNumber',
             'details.articleName as articleName',
