@@ -8,6 +8,7 @@ use Shopware\Components\SwagImportExport\DbAdapters\CategoriesDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\ArticlesDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\ArticlesPricesDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\ArticlesInStockDbAdapter;
+use Shopware\Components\SwagImportExport\DbAdapters\ArticlesTranslationsDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\CustomerDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\OrdersDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\NewsletterDbAdapter;
@@ -64,6 +65,8 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
                 return $this->createArticlesDbAdapter();
             case 'articlesInStock':
                 return $this->createArticlesInStockDbAdapter();
+            case 'articlesTranslations':
+                return $this->createArticlesTranslationsDbAdapter();
             case 'articlesPrices':
                 return $this->createArticlesPricesDbAdapter();
             case 'orders':
@@ -168,6 +171,15 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     protected function createArticlesInStockDbAdapter()
     {
         return new ArticlesInStockDbAdapter();
+    }
+    
+    /**
+     * 
+     * @return \Shopware\Components\SwagImportExport\DbAdapters\ArticlesTranslationsDbAdapter
+     */
+    protected function createArticlesTranslationsDbAdapter()
+    {
+        return new ArticlesTranslationsDbAdapter();
     }
 
     /**

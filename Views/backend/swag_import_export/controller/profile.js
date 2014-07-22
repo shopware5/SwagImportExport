@@ -59,6 +59,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
         articles: '{s name=swag_import_export/profile/type/articles}Articles{/s}',
         articlesInStock: '{s name=swag_import_export/profile/type/articlesInStock}Articles in stock{/s}',
         articlesPrices: '{s name=swag_import_export/profile/type/articlesPrices}Articles Prices{/s}',
+        articlesTranslations: '{s name=swag_import_export/profile/type/articlesTranslations}Articles Translations{/s}',
         orders: '{s name=swag_import_export/profile/type/orders}Orders{/s}',
         customers: '{s name=swag_import_export/profile/type/customers}Customers{/s}',
         newsletter: '{s name=swag_import_export/profile/type/newsletter}Newsletter receiver{/s}'
@@ -133,6 +134,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                 ['articles', me.snippets.articles],
                 ['articlesInStock', me.snippets.articlesInStock],
                 ['articlesPrices', me.snippets.articlesPrices],
+                ['articlesTranslations', me.snippets.articlesTranslations],
                 ['orders', me.snippets.orders],
                 ['customers', me.snippets.customers],
                 ['newsletter', me.snippets.newsletter]
