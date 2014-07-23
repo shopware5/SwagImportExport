@@ -52,7 +52,12 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.tree.DragAndDrop', {
             // Custom checks
             for (i = 0; i < ln; i++) {
                 record = draggedRecords[i];
+                // check if the node is in the same iteration
                 if (record.get('adapter') !== targetNode.get('adapter')) {
+                    return false;
+                }
+                // special case check: node cannot be inserted in the same level as the iteration node
+                if (position === 'before' && record.get('adapter') !== targetNode.parentNode.get('adapter')) {
                     return false;
                 }
             }

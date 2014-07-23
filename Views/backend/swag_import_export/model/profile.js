@@ -1,8 +1,9 @@
 Ext.define('Shopware.apps.SwagImportExport.model.Profile', {
 	extend: 'Ext.data.Model',
 	fields: [
-//        { name: 'id', type: 'int', mapping: 'Id' },
+        { name: 'id', type: 'string', mapping: 'id' },
         { name: 'text', type: 'string', mapping: 'text' },
+        { name: 'index', type: 'int', mapping: 'index' },
 //        { name: 'leaf', type: 'boolean', mapping: 'Leaf' },
 //        { name: 'loaded', type: 'boolean', mapping: 'Loaded', defaultValue: false },
 //        { name: 'expanded', defaultValue: true },
