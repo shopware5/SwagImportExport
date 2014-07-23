@@ -246,6 +246,8 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
      */
     public function getBackendController(Enlight_Event_EventArgs $args)
     {
+        $this->registerMyNamespace();
+        
         $this->Application()->Snippets()->addConfigDir(
                 $this->Path() . 'Snippets/'
         );
