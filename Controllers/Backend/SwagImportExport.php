@@ -63,6 +63,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
      */
     protected function convertToExtJSTree($node, $isInIteration = false, $adapter = '')
     {
+        $isLeaf = true;
         $parentKey = '';
         $children = array();
         
@@ -76,6 +77,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             $icon = 'sprite-icon_taskbar_top_inhalte_active';
         } else {
             $icon = '';
+            $isLeaf = false;
         }
 
         // Get the attributes
@@ -94,6 +96,8 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                     'inIteration' => $isInIteration
                 );
             }
+            
+            $isLeaf = false;
         }
 
         // Get the child nodes
@@ -101,6 +105,8 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             foreach ($node['children'] as $child) {
                 $children[] = $this->convertToExtJSTree($child, $isInIteration, $adapter);
             }
+            
+            $isLeaf = false;
         }
 
         return array(
@@ -110,8 +116,8 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             'text' => $node['name'],
             'adapter' => $adapter,
             'parentKey' => $parentKey,
-            'leaf' => $node['type'] == 'leaf',
-            'expanded' => $node['type'] != 'leaf',
+            'leaf' => $isLeaf,
+            'expanded' => !$isLeaf,
             'iconCls' => $icon,
             'swColumn' => $node['shopwareField'],
             'inIteration' => $isInIteration,
