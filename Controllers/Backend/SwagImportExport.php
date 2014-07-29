@@ -128,6 +128,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             
             if ($node['parentId'] != $changedNode['parentId']) {
                 $changedNode['parentId'] = $node['parentId'];
+                $changedNode['index'] = $node['index'];
                 $changedNode['type'] = $node['type'];
                 if (!TreeHelper::deleteNode($node, $tree)) {
                     $errors = true;

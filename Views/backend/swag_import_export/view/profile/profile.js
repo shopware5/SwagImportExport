@@ -82,8 +82,6 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
 	
 	initComponent: function() {
 		var me = this;
-        
-        $me = me;
 		
 		me.profilesStore = Ext.create('Shopware.apps.SwagImportExport.store.ProfileList').load();
 		me.treeStore = Ext.create('Shopware.apps.SwagImportExport.store.Profile');		
@@ -167,10 +165,13 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
 				},
                 listeners: {
                     drop: function(node, data, overModel, dropPosition, eOpts) {
-                        me.treeStore.sort({
-                            property: 'index',
-                            direction: 'ASC'
-                        });
+                        if (dropPosition === 'append') {
+                            if (overModel.get('type') !== 'iteration') {
+                                overModel.set('type', '');
+                                overModel.set('iconCls', '');
+                            }
+                        }
+                        
                         me.treeStore.sync();
                     }
                 }
@@ -220,35 +221,35 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
 			listeners: {
 				select: {
                     fn: function(view, record, item, index, event) {
-                        me.selectedNodeId = record.data.id;
+                        me.selectedNodeId = record.getId();
                         me.formPanel.fillForm();
 
                         var toolbar = this.dockedItems.get('toolbar');
 
-                        if (record.data.type === 'attribute') {
+                        if (record.get('type') === 'attribute') {
                             toolbar.items.get('createIteration').setDisabled(true);
                             toolbar.items.get('createAttribute').setDisabled(true);
                             toolbar.items.get('createChild').setDisabled(true);
                             toolbar.items.get('deleteSelected').setDisabled(false);
-                        } else if (record.data.type === 'leaf') {
+                        } else if (record.get('type') === 'leaf') {
                             toolbar.items.get('createIteration').setDisabled(false);
                             toolbar.items.get('createAttribute').setDisabled(false);
                             toolbar.items.get('createChild').setDisabled(false);
                             toolbar.items.get('deleteSelected').setDisabled(false);
-                        } else if (record.data.type === 'iteration') {
+                        } else if (record.get('type') === 'iteration') {
                             toolbar.items.get('createIteration').setDisabled(false);
                             toolbar.items.get('createAttribute').setDisabled(false);
                             toolbar.items.get('createChild').setDisabled(false);
                             toolbar.items.get('deleteSelected').setDisabled(false);
                         } else {
-                            if (record.data.inIteration === true) {
+                            if (record.get('inIteration') === true) {
                                 toolbar.items.get('createAttribute').setDisabled(false);
                             } else {
                                 toolbar.items.get('createAttribute').setDisabled(true);
                             }
                             toolbar.items.get('createIteration').setDisabled(false);
                             toolbar.items.get('createChild').setDisabled(false);
-                            if (record.data.id === 'root') {
+                            if (record.getId() === 'root') {
                                 toolbar.items.get('deleteSelected').setDisabled(true);
                             } else {
                                 toolbar.items.get('deleteSelected').setDisabled(false);
@@ -282,26 +283,26 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
 			fillForm: function() {
 				var node = me.treeStore.getById(me.selectedNodeId);
 				this.child('#nodeName').show();
-				this.child('#nodeName').setValue(node.data.text);
-				this.child('#swColumn').setValue(node.data.swColumn);
+				this.child('#nodeName').setValue(node.get('text'));
+				this.child('#swColumn').setValue(node.get('swColumn'));
 				
-				if (node.data.type === 'attribute') {
-                    this.child('#swColumn').getStore().load({ params: { profileId: me.profileId, adapter: node.data.adapter } });
+				if (node.get('type') === 'attribute') {
+                    this.child('#swColumn').getStore().load({ params: { profileId: me.profileId, adapter: node.get('adapter') } });
 					this.child('#swColumn').show();
                     this.child('#adapter').hide();
                     this.child('#parentKey').hide();
-				} else if (node.data.type === 'leaf') {
-                    this.child('#swColumn').getStore().load({ params: { profileId: me.profileId, adapter: node.data.adapter } });
+				} else if (node.get('type') === 'leaf') {
+                    this.child('#swColumn').getStore().load({ params: { profileId: me.profileId, adapter: node.get('adapter') } });
 					this.child('#swColumn').show();
                     this.child('#adapter').hide();
                     this.child('#parentKey').hide();
-				} else if (node.data.type === 'iteration') {
-                    this.child('#parentKey').getStore().load({ params: { profileId: me.profileId, adapter: node.data.adapter } });
+				} else if (node.get('type') === 'iteration') {
+                    this.child('#parentKey').getStore().load({ params: { profileId: me.profileId, adapter: node.get('adapter') } });
 					this.child('#swColumn').hide();
                     this.child('#adapter').show();
                     this.child('#parentKey').show();
-                    this.child('#adapter').setValue(node.data.adapter);
-                    this.child('#parentKey').setValue(node.data.parentKey);
+                    this.child('#adapter').setValue(node.get('adapter'));
+                    this.child('#parentKey').setValue(node.get('parentKey'));
                 } else {
 					this.child('#swColumn').hide();
                     this.child('#adapter').hide();

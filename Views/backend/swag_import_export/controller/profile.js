@@ -243,14 +243,12 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
         var me = this;
         
         var node = treeStore.getById(selectedNodeId);
-        node.set('leaf', false);
-        node.set('expanded', true);
         if (node.get('type') !== 'iteration') {
             node.set('type', '');
             node.set('iconCls', '');
         }
 
-        var data = { text: "New Iteration Node", adapter:'none', leaf: true, type: 'iteration', iconCls: 'sprite-blue-folders-stack', inIteration: true };
+        var data = { text: "New Iteration Node", adapter:'none', expanded: true, type: 'iteration', iconCls: 'sprite-blue-folders-stack', inIteration: true };
 
         var newNode = node.appendChild(data);
         treeStore.sync({
@@ -283,16 +281,14 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
         var me = this;
         
         var node = treeStore.getById(selectedNodeId);
-        node.set('leaf', false);
-        node.set('expanded', true);
         if (node.get('type') !== 'iteration') {
             node.set('type', '');
             node.set('iconCls', '');
         }
 
         var data = { };
-        if (node.data.inIteration === true) {
-            data = { text: "New Node", leaf: true, type: 'leaf', iconCls: 'sprite-icon_taskbar_top_inhalte_active', inIteration: true, adapter: node.get('adapter') };
+        if (node.get('inIteration') === true) {
+            data = { text: "New Node", expanded: true, type: 'leaf', iconCls: 'sprite-icon_taskbar_top_inhalte_active', inIteration: true, adapter: node.get('adapter') };
         } else {
             data = { text: "New Node", expanded: true };
         }
@@ -376,7 +372,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                     var parentNode = node.parentNode;
                     parentNode.removeChild(node);
                     
-                    if (parentNode.get('type') !== 'iteration') {
+                    if (parentNode.get('type') !== 'iteration' && parentNode.get('inIteration') === true) {
                         parentNode.set('type', 'leaf');
                         parentNode.set('iconCls', 'sprite-icon_taskbar_top_inhalte_active');
                     }
@@ -394,12 +390,9 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                             });
                         }
                     });
-
-                    // If there is no selection, or the selection no longer exists in the store (it was part of the deleted node(s))
-                    // then select the "All Lists" root
-                    if (!selModel.hasSelection() || !treeStore.getNodeById(selModel.getSelection()[0].getId())) {
-                        selModel.select(0);
-                    }
+                            
+                    selModel.deselectAll();
+                    selModel.select(parentNode);
                 }
             }
         });
@@ -420,18 +413,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
         
         var children = node.childNodes;
         var data = { text: "New Attribute", leaf: true, type: 'attribute', iconCls: 'sprite-sticky-notes-pin', inIteration: true, adapter: node.get('adapter') };
-        var newNode;
-
-        if (children.length > 0) {
-            for (var i = 0; i < children.length; i++) {
-                if (children[i].get('type') !== 'attribute') {
-                    break;
-                }
-            }
-            newNode = node.insertChild(i, data);
-        } else {
-            newNode = node.appendChild(data);
-        }
+        var newNode = node.appendChild(data);
 
         treeStore.sync({
             failure: function(batch, options) {
@@ -447,7 +429,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
             },
             success: function() {
                 treePanel.expand();
-                treePanel.getSelectionModel().select(treeStore.getById(newNode.data.id));
+                treePanel.getSelectionModel().select(treeStore.getById(newNode.getId()));
             }
         });
     }

@@ -4,12 +4,6 @@ namespace Shopware\Components\SwagImportExport\Utils;
 
 class TreeHelper
 {
-    private $t;
-
-    public function __construct()
-    {
-        $this->t = 1;
-    }
 
     /**
      * Converts the JSON tree to ExtJS tree
@@ -32,7 +26,7 @@ class TreeHelper
             $icon = 'sprite-blue-folders-stack';
         } else if ($node['type'] == 'leaf') {
             $icon = 'sprite-icon_taskbar_top_inhalte_active';
-        } else {
+        } else { // $node['type'] == 'node' 
             $icon = '';
         }
 
@@ -183,15 +177,12 @@ class TreeHelper
         if ($node['id'] == $child['parentId']) { // the parent node is found
             if ($child['type'] == 'attribute') {
                 unset($child['parentId']);
-                unset($child['type']);
                 $node['attributes'][] = $child;
             } else if ($child['type'] == 'node') {
                 unset($child['parentId']);
-                unset($child['type']);
                 $node['children'][] = $child;
             } else {
                 unset($child['parentId']);
-                unset($child['type']);
                 $node['children'][] = $child;
             }
 
@@ -220,6 +211,7 @@ class TreeHelper
     {
         if ($node['id'] == $child['id']) { // the node is found
             $node['name'] = $child['text'];
+            $node['type'] = $child['type'];
             $node['index'] = $child['index'];
             if (isset($child['swColumn'])) {
                 $node['shopwareField'] = $child['swColumn'];
