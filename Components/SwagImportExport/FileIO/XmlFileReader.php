@@ -112,7 +112,7 @@ class XmlFileReader implements FileReader
     {
         $path[] = $node["name"];
         foreach ($node['children'] as $child) {
-            if (isset($child['adapter'])) {
+            if ($child['type'] == 'iteration') {
                 $this->iterationPath[] = implode('/', $path);
                 $this->iterationTag[] = $child['name'];
             }

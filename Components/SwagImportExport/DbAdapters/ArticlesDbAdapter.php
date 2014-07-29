@@ -2,11 +2,13 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Models\Article\Article as ArticleModel;
 use Shopware\Models\Article\Detail as DetailModel;
 use Shopware\Models\Article\Price as Price;
 use Shopware\Models\Article\Image as Image;
 use Shopware\Models\Customer\Group as CustomerGroup;
+use Shopware\Models\Article\Configurator;
 use Shopware\Models\Media\Media as MediaModel;
 use Shopware\Components\SwagImportExport\Utils\DataHelper as DataHelper;
 
@@ -30,7 +32,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     protected $variantMap;
 
     public function readRecordIds($start, $limit, $filter)
-    {        
+    {
         $manager = $this->getManager();
 
         $builder = $manager->createQueryBuilder();
@@ -85,7 +87,8 @@ class ArticlesDbAdapter implements DataDbAdapter
                 ->leftJoin('article.esds', 'articleEsd')
                 ->leftJoin('variant.unit', 'variantsUnit')
                 ->where('variant.id IN (:ids)')
-                ->setParameter('ids', $ids);
+                ->setParameter('ids', $ids)
+                ->orderBy("variant.kind");
 
         $result['article'] = $articlesBuilder->getQuery()->getResult();
         
@@ -117,10 +120,26 @@ class ArticlesDbAdapter implements DataDbAdapter
                 ->join('variant.article', 'article')
                 ->leftjoin('article.propertyValues', 'propertyValues')
                 ->where('variant.id IN (:ids)')
+                ->andWhere('variant.kind = 1')
                 ->andWhere('propertyValues.id IS NOT NULL')
                 ->setParameter('ids', $ids);
         $result['propertyValue'] = $propertyValuesBuilder->getQuery()->getResult();
         
+        //configurator
+        $configBuilder = $manager->createQueryBuilder();
+        $configBuilder->select($columns['configurator'])
+                ->from('Shopware\Models\Article\Detail', 'variant')
+                ->join('variant.article', 'article')
+                ->leftjoin('variant.configuratorOptions', 'configuratorOptions')
+                ->leftjoin('configuratorOptions.group', 'configuratorGroup')
+                ->leftjoin('article.configuratorSet', 'configuratorSet')
+                ->where('variant.id IN (:ids)')
+                ->andWhere('configuratorOptions.id IS NOT NULL')
+                ->andWhere('configuratorGroup.id IS NOT NULL')
+                ->andWhere('configuratorSet.id IS NOT NULL')
+                ->setParameter('ids', $ids);
+        $result['configurator'] = $configBuilder->getQuery()->getResult();
+
         //similar 
         $similarsBuilder = $manager->createQueryBuilder();
         $similarsBuilder->select($columns['similar'])
@@ -155,6 +174,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         $columns['image'] = $this->getImageColumns();
         $columns['propertyValues'] = $this->getPropertyValueColumns();
         $columns['similar'] = $this->getSimilarColumns();
+        $columns['configurator'] = $this->getConfiguratorColumns();
         
         return $columns;
     }
@@ -167,15 +187,17 @@ class ArticlesDbAdapter implements DataDbAdapter
         }
         
         foreach ($records['article'] as $index => $record) {
-            $articleModel = null;
-            $variantModel = null;
             
             if (!isset($record['orderNumber']) && empty($record['orderNumber'])) {
                 throw new \Exception('Order number is required.');
             } 
             
+            if (!isset($record['mainNumber']) && empty($record['mainNumber'])) {
+                throw new \Exception('Main order number is required.');
+            } 
+            
             $variantModel = $this->getVariantRepository()->findOneBy(array('number' => $record['orderNumber']));
-
+            
             if ($variantModel) {
                 $articleModel = $variantModel->getArticle();                    
             } else if ($record['mainNumber'] !== $record['orderNumber']) {
@@ -193,41 +215,45 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $articleModel = new ArticleModel();
 
                 $articleData = $this->prerpareArticle($record);
-                $variantModel = $this->prerpareVariant($record, $articleModel);
-                $articleModel->setDetails($variantModel);
-
+                
+                $mainDetailData = $this->prepareMainDetail($record, $articleData);
+            
+                $articleModel->setMainDetail($mainDetailData);
+                
+                $variantModel = $articleModel->getMainDetail();
+                
                 $prices = $this->preparePrices($records['price'], $index, $variantModel, $articleModel, $articleData['tax']);
+                $variantModel->setPrices($prices);
+                
                 $articleData['images'] = $this->prepareImages($records['image'], $index, $articleModel);
                 $articleData['similar'] = $this->prepareSimilars($records['similar'], $index, $articleModel);
-
-                $articleData['mainDetail'] = array(
-                    'number' => $variantModel->getNumber(),
-                    'prices' => $prices
-                );
+                $articleData['configuratorSet'] = $this->prepareArticleConfigurators($records['configurator'], $index, $articleModel);
+                
                 $articleModel->fromArray($articleData);
                 
                 $violations = $this->getManager()->validate($articleModel);
 
                 if ($violations->count() > 0) {
-                    throw new \Exception('No valid entity');
+                    throw new \Exception('No valid article entity');
                 }
-
+                
                 $this->getManager()->persist($articleModel);
             } else {
                 //if it is main variant 
                 //updates the also the article
                 if ($record['mainNumber'] === $record['orderNumber']) {
                     $articleData = $this->prerpareArticle($record);
-                    $articleData['images'] = $this->prepareImages($records['image'], $index, $articleModel);
+//                    $articleData['images'] = $this->prepareImages($records['image'], $index, $articleModel);
                     $articleData['similar'] = $this->prepareSimilars($records['similar'], $index, $articleModel);
-                    
                     $articleModel->fromArray($articleData);
                 }
                 
                 //Variants
                 $variantModel = $this->prerpareVariant($record, $articleModel, $variantModel);
-                $variantModel->setArticle($articleModel);
-
+                
+                $configuratorOptions = $this->prepareVariantConfigurators($records['configurator'], $index, $articleModel);
+                $variantModel->setConfiguratorOptions($configuratorOptions);
+                
                 $prices = $this->preparePrices($records['price'], $index, $variantModel, $articleModel, $articleModel->getTax());
 
                 $variantModel->setPrices($prices);
@@ -235,14 +261,16 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $violations = $this->getManager()->validate($variantModel);
 
                 if ($violations->count() > 0) {
-                    throw new \Exception('No valid entity');
+                    throw new \Exception('No valid detail entity');
                 }
-                
+            
                 $this->getManager()->persist($variantModel);
             }
             
             $this->getManager()->flush();
-            $this->getManager()->clear($articleModel);
+            
+            unset($articleModel);
+            unset($variantModel);
         }
         
     }
@@ -255,6 +283,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             array('id' => 'image', 'name' => 'image'),
             array('id' => 'propertyValue', 'name' => 'propertyValue'),
             array('id' => 'similar', 'name' => 'similar'),
+            array('id' => 'configurator', 'name' => 'configurator'),
         );
     }
 
@@ -321,8 +350,8 @@ class ArticlesDbAdapter implements DataDbAdapter
             unset($data['propertyGroupId']);
         } 
 
-        $articleMap = $this->getMap('article');
-
+        $articleMap = $this->getMap('articleVariant');
+        
         foreach ($data as $key => $value) {
             if (isset($articleMap[$key])) {
                 $article[$articleMap[$key]] = $value;
@@ -331,6 +360,22 @@ class ArticlesDbAdapter implements DataDbAdapter
         }
 
         return $article;
+    }
+    
+    public function prepareMainDetail($data, $article)
+    {
+        $variantData = array();
+        $variantsMap = $this->getMap('variant');
+
+        foreach ($data as $key => $value) {
+            if (isset($variantsMap[$key])) {
+                $variantData[$variantsMap[$key]] = $value;
+            }
+        }
+        
+        $variantData['article'] = $article;
+                
+        return $variantData;
     }
 
     public function prerpareVariant(&$data, ArticleModel $article, $variantModel = null)
@@ -343,7 +388,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         }
 
         $variantsMap = $this->getMap('variant');
-
+        
         foreach ($data as $key => $value) {
             if (isset($variantsMap[$key])) {
                 $variantData[$variantsMap[$key]] = $value;
@@ -352,6 +397,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         }
 
         $variantModel->fromArray($variantData);
+        $this->getManager()->persist($variantModel);
 
         return $variantModel;
     }
@@ -419,10 +465,19 @@ class ArticlesDbAdapter implements DataDbAdapter
     
     public function prepareImages(&$data, $variantIndex, ArticleModel $article)
     {
+        if ($data == null) {
+            return;
+        }
+        
         foreach ($data as $key => $imageData) {
             
             if ($imageData['parentIndexElement'] === $variantIndex) {
                 
+                //if imageData has only index element
+                if (count($imageData) < 2 ) {
+                    continue;
+                }
+                                
                 if (isset($imageData['id'])) {
                     $imageModel = $this->getManager()->find(
                             'Shopware\Models\Article\Image', (int) $imageData['id']
@@ -438,7 +493,6 @@ class ArticlesDbAdapter implements DataDbAdapter
                 }
                 
                 if (!$imageModel) {
-                    
                     if (!empty($imageData['mediaId'])) {
                         $media = $this->getManager()->find(
                                 'Shopware\Models\Media\Media', (int) $imageData['mediaId']
@@ -446,11 +500,13 @@ class ArticlesDbAdapter implements DataDbAdapter
                     }
 
                     if (!($media instanceof MediaModel)) {
-                        throw new \Exception(sprintf("Media by mediaId %s not found", $imageData['mediaId']));
+                        throw new \Exception(sprintf("Media by mediaId %s not found for article with number %s", 
+                                $imageData['mediaId'], $article->getMainDetail()->getNumber()));
                     }
                     
                     $imageModel = $this->createNewArticleImage($article, $media);
                 }
+                
                 $imageModel->fromArray($imageData);
                 
                 $images[] = $imageModel;
@@ -458,10 +514,14 @@ class ArticlesDbAdapter implements DataDbAdapter
             }
         }
         
+        if ($images === null) {
+            return;
+        }
+        
         $hasMain = $this->getCollectionElementByProperty($images, 'main', 1);
         
         if (!$hasMain) {
-            $image = $images->get(0);
+            $image = $images[0];
             $image->setMain(1);
         }
         
@@ -509,6 +569,10 @@ class ArticlesDbAdapter implements DataDbAdapter
     
     public function prepareSimilars(&$similars, $similarIndex, $article)
     {
+        if ($similars == null) {
+            return;
+        }
+        
         $similarCollection = array();
 
         foreach ($similars as $index => $similar) {
@@ -532,6 +596,228 @@ class ArticlesDbAdapter implements DataDbAdapter
         }
 
         return $similarCollection;
+    }
+    
+    public function prepareArticleConfigurators(&$configurators, $configuratorIndex, $article)
+    {
+        if ($configurators == null) {
+            return;
+        }
+        
+        $configuratorSet = null;
+        $optionPosition = 0;
+        
+        foreach ($configurators as $index => $configurator) {
+            if ($configurator['parentIndexElement'] != $configuratorIndex) {
+                continue;
+            }
+
+            if (!isset($configurator['configSetName'])) {
+                continue;
+            }
+            
+            if (!$configuratorSet) {
+                $configuratorSet = $this->getManager()->getRepository('Shopware\Models\Article\Configurator\Set')
+                        ->findOneBy(array('name' => $configurator['configSetName']));
+            }
+
+            if (!$configuratorSet) {
+                $configuratorSet = $article->getConfiguratorSet();
+            }
+            
+            if (!$configuratorSet) {
+                $configuratorSet = new Configurator\Set();
+                $number = $article->getMainDetail()->getNumber();
+                
+                if (isset($configurator['configSetName'])) {
+                    $configuratorSet->setName($configurator['configSetName']);
+                } else {
+                    $configuratorSet->setName('Set-' . $number);
+                }
+                
+                if (isset($configurator['configSetType'])) {
+                    $configuratorSet->setType($configurator['configSetType']);
+                }
+                $configuratorSet->setPublic(false);
+            }
+            
+            
+            //configurator group
+            $groupPosition = 0;
+            if (isset($configurator['configGroupId'])) {
+                $group = $this->getManager()
+                        ->getRepository('Shopware\Models\Article\Configurator\Group')
+                        ->find($configurator['configGroupId']);
+                if (!$group) {
+                    throw new \Exception(sprintf("ConfiguratorGroup by id %s not found", $configurator['configGroupId']));
+                }
+            } elseif (isset($configurator['configGroupName'])) {
+                $group = $this->getManager()
+                        ->getRepository('Shopware\Models\Article\Configurator\Group')
+                        ->findOneBy(array('name' => $configurator['configGroupName']));
+
+                if (!$group) {
+                    $group = new Configurator\Group();
+                    $group->setPosition($groupPosition);
+                }
+            } else {
+                throw new \Exception('At least the groupname is required');
+            }
+            
+            //configurator option
+            if (isset($configurator['configOptionId'])) {
+                $optionModel = $this->getManager()
+                        ->find('Shopware\Models\Article\Configurator\Option', $configurator['configOptionId']);
+                if (!$optionModel) {
+                    throw new \Exception(sprintf("ConfiguratorOption by id %s not found", $configurator['configOptionId']));
+                }
+            } else {
+                $optionModel = $this->getManager()
+                        ->getRepository('Shopware\Models\Article\Configurator\Option')->findOneBy(array(
+                            'name' => $configurator['configOptionName'],
+                            'groupId' => $group->getId()
+                        ));
+            }
+            
+            $optionData = array(
+                'id' => $configurator['configOptionId'],
+                'name' => $configurator['configOptionName'],
+            );
+            
+            if (!$optionModel) {
+                $optionModel = new Configurator\Option();
+            }
+            
+            $optionModel->fromArray($optionData);
+            $optionModel->setGroup($group);
+            $optionModel->setPosition($optionPosition++);
+            
+            $groupData = array(
+                'id' => $configurator['configGroupId'],                
+                'name' => $configurator['configGroupName'],                
+                'options' => array($optionModel)                
+            );
+            
+            $mainDetail = $article->getMainDetail();
+            
+            if (!$this->getAvailableOption($mainDetail->getConfiguratorOptions(), $optionData)) {
+                $mainDetail->setConfiguratorOptions(array($optionModel));
+            }
+            
+            $group->fromArray($groupData);
+            $configuratorSet->setOptions(array($optionModel));
+            $configuratorSet->setGroups(array($group));
+            $this->getManager()->persist($configuratorSet);
+            
+            unset($optionModel);
+            unset($group);
+            unset($configurators[$index]);
+        }
+        return $configuratorSet;
+    }
+    
+    public function prepareVariantConfigurators(&$configurators, $configuratorIndex, $article)
+    {
+        if ($configurators == null) {
+            return;
+        }
+        
+        foreach ($configurators as $index => $configurator) {
+            if ($configurator['parentIndexElement'] != $configuratorIndex) {
+                continue;
+            }
+            
+            if (!isset($configurator['configOptionName'])) {
+                continue;
+            }
+
+            if (!$article->getConfiguratorSet()) {
+                throw new \Exception('A configurator set has to be defined');
+            }
+            
+            $availableGroups = $article->getConfiguratorSet()->getGroups();
+            
+            $availableGroup = $this->getAvailableGroup($availableGroups, array(
+                'id' => $configurator['configGroupId'],
+                'name' => $configurator['configGroupName']
+            ));
+            
+            //group is in the article configurator set configured?
+            if (!$availableGroup) {
+                continue;
+            }
+            
+            //check if the option is available in the configured article configurator set.
+            $option = $this->getAvailableOption($availableGroup->getOptions(), array(
+                'id'   => $configurator['configOptionId'],
+                'name' => $configurator['configOptionName']
+            ));
+            
+            if (!$option) {
+                $option = $this->getManager()
+                        ->getRepository('Shopware\Models\Article\Configurator\Option')->findOneBy(array(
+                            'name' => $configurator['configOptionName'],
+                            'groupId' => $availableGroup->getId()
+                        ));
+            }
+
+            if (!$option) {
+                
+                $option = new Configurator\Option();
+                $option->setPosition(0);
+                $option->setName($configurator['configOptionName']);
+                $option->setGroup($availableGroup);
+                $this->getManager()->persist($option);
+            }
+            
+            $optionData[] = $option;            
+        }
+
+        return $optionData;
+    }
+    
+    /**
+     * Checks if the passed group data is already existing in the passed array collection.
+     * The group data are checked for "id" and "name".
+     *
+     * @param ArrayCollection $availableGroups
+     * @param array $groupData
+     * @return bool|Group
+     */
+    private function getAvailableGroup(ArrayCollection $availableGroups, array $groupData)
+    {
+        /**@var $availableGroup Option */
+        foreach ($availableGroups as $availableGroup) {
+            if ( ($availableGroup->getName() == $groupData['name'] && $groupData['name'] !== null)
+                || ($availableGroup->getId() == $groupData['id']) && $groupData['id'] !== null) {
+
+                return $availableGroup;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Checks if the passed option data is already existing in the passed array collection.
+     * The option data are checked for "id" and "name".
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $availableOptions
+     * @param array $optionData
+     * @return bool
+     */
+    private function getAvailableOption(ArrayCollection $availableOptions, array $optionData)
+    {
+        /**@var $availableOption Option */
+        foreach ($availableOptions as $availableOption) {
+            if ( ($availableOption->getName() == $optionData['name'] && $optionData['name'] !== null)
+                || ($availableOption->getId() == $optionData['id'] && $optionData['id'] !== null)) {
+
+                return $availableOption;
+            }
+        }
+
+        return false;
     }
 
     public function isSimilarArticleExists($article, $similarId)
@@ -571,6 +857,11 @@ class ArticlesDbAdapter implements DataDbAdapter
     }
 
     public function getArticleColumns()
+    {
+        return array_merge($this->getArticleVariantColumns(), $this->getVariantColumns());
+    }
+    
+    public function getArticleVariantColumns()
     {
         $columns = array(
             'article.id as articleId',
@@ -627,7 +918,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             $columns = array_merge($columns, $attributesSelect);
         }
         
-        return array_merge($columns, $this->getVariantColumns());
+        return $columns;
     }
     
     public function getColumns($section)
@@ -715,6 +1006,19 @@ class ArticlesDbAdapter implements DataDbAdapter
         );
     }
     
+    public function getConfiguratorColumns()
+    {
+        return array(
+            'variant.id as variantId',
+            'configuratorOptions.id as configOptionId',
+            'configuratorOptions.name as configOptionName',
+            'configuratorGroup.id as configGroupId',
+            'configuratorGroup.name as configGroupName',
+            'configuratorGroup.description as configGroupDescription',
+            'configuratorSet.name as configSetName',
+            'configuratorSet.type as configSetType',
+        );
+    }
 
     /**
      * Returns/Creates mapper depend on the key
@@ -749,7 +1053,7 @@ class ArticlesDbAdapter implements DataDbAdapter
 
         return false;
     }
-
+    
     /**
      * Returns article repository
      * 
@@ -765,7 +1069,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * Returns deatil repository
+     * Returns deatil repositorys_core_shops
      * 
      * @return Shopware\Models\Article\Detail
      */

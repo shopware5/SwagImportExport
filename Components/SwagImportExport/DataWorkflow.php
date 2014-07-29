@@ -137,13 +137,13 @@ class DataWorkflow
             //get current session position
             $position = $this->dataIO->getSessionPosition();
 
-            $records = $this->fileIO->readRecords($inputFile, $position, 100);
+            $records = $this->fileIO->readRecords($inputFile, $position, 1);
 
             $data = $this->transformerChain->transformBackward($records);
             
             $this->dataIO->write($data);
             
-            $this->dataIO->progressSession(100);
+            $this->dataIO->progressSession(1);
         }
         
         if ($this->dataIO->getSessionState() == 'finished') {
