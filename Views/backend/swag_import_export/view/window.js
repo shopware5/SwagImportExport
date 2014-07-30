@@ -31,32 +31,32 @@
 //{block name="backend/swag_gift_packaging/view/main/window"}
 Ext.define('Shopware.apps.SwagImportExport.view.Window', {
 	
-	/**
-	 * Define that the order main window is an extension of the enlight application window
-	 * @string
-	 */
-	extend: 'Enlight.app.Window',
+    /**
+     * Define that the order main window is an extension of the enlight application window
+     * @string
+     */
+    extend: 'Enlight.app.Window',
 	
-	/**
-	 * List of short aliases for class names. Most useful for defining xtypes for widgets.
-	 * @string
-	 */
-	alias: 'widget.swag-import-export-window',
+    /**
+     * List of short aliases for class names. Most useful for defining xtypes for widgets.
+     * @string
+     */
+    alias: 'widget.swag-import-export-window',
 	
     height: 600,
     
     layout: 'fit',
 	
     title: '{s name=swag_import_export/window/title}Import / Export{/s}',
-
-    initComponent:function () {
+    
+    initComponent: function() {
         var me = this;
 
         //add the order list grid panel and set the store
-        me.items = [ me.createTabPanel() ];
+        me.items = [me.createTabPanel()];
         me.callParent(arguments);
     },
-	
+    
     createTabPanel: function() {
         var me = this;
 
@@ -64,14 +64,14 @@ Ext.define('Shopware.apps.SwagImportExport.view.Window', {
             name: 'main-tab',
             items: [
                 Ext.create('Shopware.apps.SwagImportExport.view.manager.Manager', {
-					
-				}),
+                    
+                }),
                 Ext.create('Shopware.apps.SwagImportExport.view.profile.Profile', {
-					
-				})
-//                Ext.create('Shopware.apps.SwagImportExport.view.log.Log', {
-//					
-//				})
+                    
+                }),
+                Ext.create('Shopware.apps.SwagImportExport.view.log.Log', {
+                    
+                })
             ]
         });
     }

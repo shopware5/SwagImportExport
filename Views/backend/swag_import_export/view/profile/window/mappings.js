@@ -43,20 +43,79 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Mappings', {
 	 */
 	alias: 'widget.swag-import-export-window',
 	
-    height: 600,
+    width: 500,
+    height: 400,
     
-    layout: 'fit',
-	
+    layout: {
+        type: 'vbox',
+        align: 'stretch'
+    },
+    
     title: 'Conversions',
 
     initComponent:function () {
         var me = this;
         
+        me.selectedItem = null;
+        
         //add the order list grid panel and set the store
-        me.items = [ me.createGridPanel() ];
+        me.items = [
+            me.createGridPanel(),
+            me.createEditorsPanel()
+        ];
         me.callParent(arguments);
     },
+    
+    createEditorsPanel: function() {
+        var me = this;
+        
+        me.exportEditor = Ext.create('Ext.ux.aceeditor.Panel', {
+            flex: 2,
+            disabled: true,
+            title: 'Export Conversion',
+            sourceCode: '',
+            parser: 'smarty'
+        });
+        me.importEditor = Ext.create('Ext.ux.aceeditor.Panel', {
+            flex: 2,
+            disabled: true,
+            title: 'Import Conversion',
+            sourceCode: '',
+            parser: 'smarty'
+        });
 
+        return Ext.create('Ext.panel.Panel', {
+            flex: 1,
+            border: false,
+            layout: {
+                type: 'hbox',
+                align: 'stretch'
+            },
+            items: [me.exportEditor, me.importEditor],
+            dockedItems: [{
+                    xtype: 'toolbar',
+                    dock: 'bottom',
+                    ui: 'shopware-ui',
+                    cls: 'shopware-toolbar',
+                    style: {
+                        backgroundColor: '#F0F2F4'
+                    },
+                    items: ['->', {
+                            text: 'Save',
+                            cls: 'primary',
+                            action: 'swag-import-export-manager-profile-save',
+                            handler: function() {
+                                if (me.selectedItem !== null) {
+                                    me.selectedItem.set('exportConversion', me.exportEditor.getValue());
+                                    me.selectedItem.set('importConversion', me.importEditor.getValue());
+                                    me.fireEvent('updateConversion', me.conversionsGrid.getStore());
+                                }
+                            }
+                        }]
+                }]
+        });
+    },
+    
     createGridPanel: function() {
         var me = this;
 
@@ -76,6 +135,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Mappings', {
 
         // create the Grid
         me.conversionsGrid = Ext.create('Ext.grid.Panel', {
+            flex: 2,
             store: store,
             plugins: [me.rowEditor],
             listeners: {
@@ -98,26 +158,17 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Mappings', {
                     sortable: true,
                     dataIndex: 'variable',
                     editor: {
-                        xtype: 'textarea',
+                        xtype: 'combobox',
+                        editable: false,
+                        emptyText: 'Select Column',
+                        queryMode: 'local',
+                        store: Ext.create('Shopware.apps.SwagImportExport.store.Column').load({ params: { profileId: me.profileId, adapter: 'default' } }),
+                        valueField: 'id',
+                        displayField: 'name',
+                        width: 400,
+                        labelWidth: 150,
+                        name: 'swColumn',
                         allowBlank: false
-                    }
-                }, {
-                    text: 'Export Conversion',
-                    flex: 2,
-                    sortable: false,
-                    dataIndex: 'exportConversion',
-                    editor: {
-                        xtype: 'textarea',
-                        allowBlank: true
-                    }
-                }, {
-                    text: 'Import Conversion',
-                    flex: 2,
-                    sortable: false,
-                    dataIndex: 'importConversion',
-                    editor: {
-                        xtype: 'textarea',
-                        allowBlank: true
                     }
                 }, {
                     xtype: 'actioncolumn',
@@ -131,9 +182,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Mappings', {
                                 me.fireEvent("deleteConversion", me.conversionsGrid.getStore(), rowIndex);
                             }
                         }]
-                }],
-            height: 350,
-            width: 600
+                }]
         });
 
         return me.conversionsGrid;
@@ -152,6 +201,19 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Mappings', {
                 // Unlocks the save button if the user has checked at least one checkbox
                 selectionchange: function(sm, selections) {
                     me.deleteConversionsButton.setDisabled(selections.length === 0);
+                    if (selections.length === 1) {
+                        me.selectedItem = selections[0];
+                        me.exportEditor.setValue(me.selectedItem.get('exportConversion'));
+                        me.importEditor.setValue(me.selectedItem.get('importConversion'));
+                        me.exportEditor.setDisabled(false);
+                        me.importEditor.setDisabled(false);
+                    } else {
+                        me.selectedItem = null;
+                        me.exportEditor.setValue('');
+                        me.importEditor.setValue('');
+                        me.exportEditor.setDisabled(true);
+                        me.importEditor.setDisabled(true);
+                    }
                 }
             }
         });

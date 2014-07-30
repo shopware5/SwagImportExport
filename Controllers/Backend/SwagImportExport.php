@@ -791,6 +791,13 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                 'success' => false, 'msg' => 'No colums found.'
             ));
         }
+        
+        // merge all sections
+        if ($section == 'default') {
+            $columns = array_reduce($columns, function($carry, $item) {
+                return array_merge($carry, $item);
+            }, array());
+        }
 
         foreach ($columns as &$column) {
             $match = '';

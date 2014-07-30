@@ -236,6 +236,10 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
         $this->subscribeEvent(
                 'Enlight_Controller_Dispatcher_ControllerPath_Backend_SwagImportExport', 'getBackendController'
         );
+
+        $this->subscribeEvent(
+                'Enlight_Controller_Action_PostDispatch_Backend_Index', 'injectBackendAceEditor'
+        );
     }
 
     /**
@@ -247,7 +251,7 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
     public function getBackendController(Enlight_Event_EventArgs $args)
     {
         $this->registerMyNamespace();
-        
+
         $this->Application()->Snippets()->addConfigDir(
                 $this->Path() . 'Snippets/'
         );
@@ -257,6 +261,22 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
         );
 
         return $this->Path() . '/Controllers/Backend/SwagImportExport.php';
+    }
+
+    public function injectBackendAceEditor(Enlight_Event_EventArgs $args)
+    {
+        $controller = $args->getSubject();
+        $request = $controller->Request();
+        $response = $controller->Response();
+        $view = $controller->View();
+
+        if (!$request->isDispatched() || $response->isException() || !$view->hasTemplate()
+        ) {
+            return;
+        }
+
+        $view->addTemplateDir($this->Path() . 'Views/');
+        $view->extendsTemplate('backend/swag_import_export/menu_entry.tpl');
     }
 
 }
