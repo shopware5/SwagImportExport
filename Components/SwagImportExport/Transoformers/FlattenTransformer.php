@@ -38,7 +38,6 @@ class FlattenTransformer implements DataTransformerAdapter
             $this->collectData($record, $nodeName);
             $flatData[] = $this->tempData;
         }
-
         return $flatData;
     }
 
@@ -61,11 +60,11 @@ class FlattenTransformer implements DataTransformerAdapter
      */
     public function composeHeader()
     {
-        $iterationPart = $this->getMainIterationPart();
-        $transformData = $this->transform($iterationPart);
-        $data = array($iterationPart['name'] => $transformData);
-
-        $this->collectHeader($data);
+        $mainNode = $this->getMainIterationPart();
+        $this->processIterationParts($mainNode);
+        
+        $transformData = $this->transform($mainNode);
+        $this->collectHeader($transformData, $mainNode['name']);
         
         return $this->tempData;
     }
@@ -214,27 +213,28 @@ class FlattenTransformer implements DataTransformerAdapter
      * 
      * @param array $node
      * @param string $nodeKey
-     */
-    public function collectHeader($node, $nodeKey = null)
+     */    
+    public function collectHeader($node, $path)
     {
-        $dot = $nodeKey ? '.' : null;
-
-        if (is_array($node)) {
+        if ($this->iterationParts[$path] == 'price'){
+            //todo: prices
+        } elseif ($this->iterationParts[$path] == 'configurator') {
+            //todo: configurator
+        } else {
             foreach ($node as $key => $value) {
-                if ($key == '_attributes') {
-                    foreach ($value as $keyAttr => $attr) {
-                        $this->saveTempData($nodeKey . '#' . $keyAttr);
-                    }
+                
+                if (is_array($value)) {
+                    $currentPath = $path . '/' . $key;
+                    $this->collectHeader($value, $currentPath);
                 } else {
                     if ($key == '_value') {
-                        $this->collectHeader($value, $nodeKey);
+                        $pathParts = explode('/',$path);
+                        $this->saveTempData($pathParts[count($pathParts) - 1]);
                     } else {
-                        $this->collectHeader($value, $nodeKey . $dot . $key);
+                        $this->saveTempData($key);                        
                     }
                 }
             }
-        } else {
-            $this->saveTempData($nodeKey);
         }
     }
 
