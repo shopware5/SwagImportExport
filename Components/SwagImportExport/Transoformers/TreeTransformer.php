@@ -116,12 +116,13 @@ class TreeTransformer implements DataTransformerAdapter
         $records = $data[$recordLink];
         
         if (!$records) {
-            return;
+            $transformData[] = $this->transformToTree($node, null, $type);
+        } else {
+            foreach ($records as $record) {
+                $transformData[] = $this->transformToTree($node, $record, $type);
+            }            
         }
 
-        foreach ($records as $record) {
-            $transformData[] = $this->transformToTree($node, $record, $type);
-        }
                 
         return $transformData;
     }

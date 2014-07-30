@@ -9,7 +9,10 @@ class FlattenTransformer implements DataTransformerAdapter
 {
 
     protected $config;
-    protected $iterationPart;
+    protected $mainIterationPart;
+    protected $mainAdapter;
+    protected $iterationParts;
+    protected $iterationTempData;
     protected $tempData = array();
 
     /**
@@ -25,13 +28,14 @@ class FlattenTransformer implements DataTransformerAdapter
      */
     public function transformForward($data)
     {
-        $iterationPart = $this->getIterationPart();
+        $mainNode = $this->getMainIterationPart();
+        $this->processIterationParts($mainNode);
 
-        $nodeName = $iterationPart['name'];
+        $nodeName = $mainNode['name'];
 
         foreach ($data[$nodeName] as $record) {
             $this->tempData = array();
-            $this->collectData($record);
+            $this->collectData($record, $nodeName);
             $flatData[] = $this->tempData;
         }
 
@@ -43,7 +47,7 @@ class FlattenTransformer implements DataTransformerAdapter
      */
     public function transformBackward($data)
     {
-        $iterationPart = $this->getIterationPart();
+        $iterationPart = $this->getMainIterationPart();
         
         foreach ($data as $row) {
             $tree[] = $this->transformToTree($iterationPart, $row, $iterationPart['name']);
@@ -57,12 +61,12 @@ class FlattenTransformer implements DataTransformerAdapter
      */
     public function composeHeader()
     {
-        $iterationPart = $this->getIterationPart();
+        $iterationPart = $this->getMainIterationPart();
         $transformData = $this->transform($iterationPart);
         $data = array($iterationPart['name'] => $transformData);
 
         $this->collectHeader($data);
-
+        
         return $this->tempData;
     }
 
@@ -96,16 +100,16 @@ class FlattenTransformer implements DataTransformerAdapter
      * @param array $tree
      * @return array
      */
-    public function findIterationPart(array $tree)
+    public function findMainIterationPart(array $tree)
     {
         foreach ($tree as $key => $value) {
-            if (is_array($value)) {
-                $this->findIterationPart($value);
+            if ($key === 'adapter') {
+                $this->mainIterationPart = $tree;
+                return;
             }
 
-            if ($key == 'type' && $value == 'record') {
-                $this->iterationPart = $tree;
-                return;
+            if (is_array($value)) {
+                $this->findMainIterationPart($value);
             }
         }
 
@@ -219,7 +223,7 @@ class FlattenTransformer implements DataTransformerAdapter
             foreach ($node as $key => $value) {
                 if ($key == '_attributes') {
                     foreach ($value as $keyAttr => $attr) {
-                        $this->saveTempData($nodeKey . '_' . $keyAttr);
+                        $this->saveTempData($nodeKey . '#' . $keyAttr);
                     }
                 } else {
                     if ($key == '_value') {
@@ -238,31 +242,140 @@ class FlattenTransformer implements DataTransformerAdapter
      * Collects record data
      * 
      * @param mixed $node
+     * @param string $path
      */
-    public function collectData($node)
+    public function collectData($node, $path)
     {
-        foreach ($node as $key => $value) {
-            if (is_array($value)) {
-                $this->collectData($value);
+        if (isset($this->iterationParts[$path]) && $this->iterationParts[$path] != $this->getMainAdapter()){
+            if ($this->iterationParts[$path] == 'price'){
+                //todo: prices
+            } elseif ($this->iterationParts[$path] == 'configurator') {
+                //todo: configurator
             } else {
-                $this->saveTempData($value);
+                //processing images, similars and propertyValues
+                foreach ($node as $value) {
+                    $this->collectIterationData($value);
+                }
+                
+                foreach ($this->getIterationTempData() as $tempData) {
+                    if (is_array($tempData)) {
+                        $data = implode('|', $tempData);
+                        $this->saveTempData($data);
+                    }
+                }
+                unset($this->iterationTempData);
+            }
+            
+        } else {
+            foreach ($node as $key => $value) {
+                if (is_array($value)) {
+                    $currentPath = $path . '/' . $key;
+                    $this->collectData($value, $currentPath);
+                } else {
+                    $this->saveTempData($value);
+                }
+            }            
+        }
+        
+    }
+    
+    public function collectIterationData($node, $path = null)
+    {        
+        foreach ($node as $key => $value) {
+            if ($path) {
+                 $currentPath = $path . '/' . $key;
+            } else {
+                $currentPath = $key;
+            } 
+                
+            if (is_array($value)) {
+                $this->collectIterationData($value, $currentPath);
+            } else {
+                $this->saveIterationTempData($currentPath, $value);
             }
         }
     }
-
+        
     /**
      * Returns the iteration part of the tree
      * 
      * @return array
      */
-    public function getIterationPart()
+    public function getMainIterationPart()
     {
-        if ($this->iterationPart == null) {
+        if ($this->mainIterationPart == null) {
             $tree = json_decode($this->config, true);
-            $this->findIterationPart($tree);
+            $this->findMainIterationPart($tree);
         }
 
-        return $this->iterationPart;
+        return $this->mainIterationPart;
+    }
+    
+    public function getMainAdapter()
+    {
+        if ($this->mainAdapter == null) {
+            $mainIterationPart = $this->getMainIterationPart();
+            $this->mainAdapter = $mainIterationPart['adapter'];
+        }
+        
+        return $this->mainAdapter;
+    }
+    
+    /**
+     * Finds and saves iteration parts
+     * 
+     * @param array $nodes
+     * @param string $path
+     */
+    public function processIterationParts($nodes, $path = null)
+    {
+        foreach ($nodes as $key => $node) {
+            
+            if (isset($nodes['name'])) {
+                if ($path) {
+                    $currentPath = $path . '/' . $nodes['name'];
+                } else {
+                    $currentPath = $nodes['name'];
+                }                
+            } else {
+                $currentPath = $path;
+            }
+            
+            if ($key == 'type' && $node == 'iteration') {
+                
+                $this->saveIterationParts($currentPath, $nodes['adapter']);
+            }
+            
+            if (is_array($node)) {
+                $this->processIterationParts($node, $currentPath);
+            }
+        }
+    }
+    
+    public function saveIterationTempData($currentPath, $value)
+    {
+        $this->iterationTempData[$currentPath][] = $value;
+    }
+    
+    public function getIterationTempData()
+    {
+        return $this->iterationTempData;
+    }
+    
+    public function unsetIterationTempData()
+    {
+        unset($this->iterationTempData);
+    }
+    
+    /**
+     * Saves interation parts
+     * 
+     * @param string $path
+     * @param string $adapter
+     */
+    public function saveIterationParts($path, $adapter)
+    {
+        $this->iterationParts[$path] = $adapter;
     }
 
     /**
