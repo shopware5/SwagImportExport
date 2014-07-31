@@ -60,6 +60,7 @@ Ext.define('Shopware.apps.SwagImportExport.model.ProfileList', {
         api: {
 			create:'{url controller="SwagImportExport" action="createProfiles"}',
             read:'{url controller="SwagImportExport" action="getProfiles"}',
+            update: '{url controller="SwagImportExport" action="updateProfiles"}',
             destroy: '{url controller="SwagImportExport" action="deleteProfiles"}'
         },
         /**

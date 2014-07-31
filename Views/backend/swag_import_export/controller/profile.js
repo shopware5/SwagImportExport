@@ -75,6 +75,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
             'swag-import-export-profile-profile': {
                 createOwnProfile: me.createOwnProfile,
                 deleteSelectedProfile: me.deleteSelectedProfile,
+                renameSelectedProfile: me.renameSelectedProfile,
                 showMappings: me.showMappings,
                 addNewIteration: me.addNewIteration,
                 addNewNode: me.addNewNode,
@@ -189,6 +190,76 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                                     combo.store.sync({
                                         success: function() {
                                             combo.setValue(model[0].get('id'));
+                                            myForm.setLoading(false);
+                                            myForm.close();
+                                        },
+                                        failure: function() {
+                                            myForm.setLoading(false);
+                                            myForm.close();
+                                        }
+                                    });
+                                } else {
+                                    Ext.MessageBox.show({
+                                        title: me.snippets.newProfile.failureTitle,
+                                        msg: me.snippets.newProfile.notAllFieldsFilledError,
+                                        icon: Ext.Msg.ERROR,
+                                        buttons: Ext.Msg.OK
+                                    });
+                                }
+                            }
+                        }]
+                }]
+        });
+        myForm.show();
+    },
+
+    /**
+     * Renames the selected profile
+     */
+    renameSelectedProfile: function(store, id, combo) {
+        var me = this,
+            name = store.getById(id).get('name');
+        
+        var myForm = Ext.create('Ext.form.Panel', {
+            width: 300,
+            height: 110,
+            bodyPadding: 12,
+            title: 'New Profile',
+            border: false,
+            bodyStyle: {
+                border: '0 !important'
+            },
+            floating: true,
+            closable: true,
+            modal: true,
+            items: [{
+                    xtype: 'textfield',
+                    itemId: 'profileName',
+                    fieldLabel: 'Profile Name',
+                    name: 'profileName',
+                    value: name,
+                    allowBlank: false
+                }],
+            dockedItems: [{
+                    xtype: 'toolbar',
+                    dock: 'bottom',
+                    ui: 'shopware-ui',
+                    cls: 'shopware-toolbar',
+                    style: {
+                        backgroundColor: '#F0F2F4'
+                    },
+                    items: ['->', {
+                            text: 'Save',
+                            cls: 'primary',
+                            action: 'swag-import-export-manager-profile-save',
+                            handler: function() {
+                                if (myForm.getForm().isValid()) {
+                                    var model = store.getById(id);
+                                    model.set('name', myForm.child('#profileName').getValue());
+                                    myForm.setLoading(true);
+                                    store.sync({
+                                        success: function() {
+                                            combo.setValue(id);
                                             myForm.setLoading(false);
                                             myForm.close();
                                         },

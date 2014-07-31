@@ -46,6 +46,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
             emptyText: '{s name=swag_import_export/profile/profile/toolbar/empty_text}Select Profile...{/s}',
             createProfile: '{s name=swag_import_export/profile/profile/toolbar/create_profile}Create Own Profile{/s}',
             deleteProfile: '{s name=swag_import_export/profile/profile/toolbar/delete_profile}Delete Selected Profile{/s}',
+            renameProfile: '{s name=swag_import_export/profile/profile/toolbar/rename_profile}Rename Selected Profile{/s}',
             showConversions: '{s name=swag_import_export/profile/profile/toolbar/show_conversions}Show Conversions{/s}'
         }
     },
@@ -64,6 +65,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
         me.profileId = profileId;
         if (profileId !== null) {
             me.toolbar.items.get('deleteSelectedProfile').setDisabled(false);
+            me.toolbar.items.get('renameSelectedProfile').setDisabled(false);
             me.toolbar.items.get('conversionsMenu').setDisabled(false);
             me.treeStore.getProxy().setExtraParam('profileId', profileId);
             me.treeStore.load({ params: { profileId: profileId } });
@@ -73,6 +75,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
             me.treePanel.getView().setDisabled(false);
         } else {
             me.toolbar.items.get('deleteSelectedProfile').setDisabled(true);
+            me.toolbar.items.get('renameSelectedProfile').setDisabled(true);
             me.toolbar.items.get('conversionsMenu').setDisabled(true);
             me.treePanel.getView().setDisabled(true);
             me.formPanel.hideFields();
@@ -125,6 +128,13 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
                     text: me.snippets.toolbar.createProfile,
                     handler: function() {
                         me.fireEvent('createOwnProfile', me.profilesStore, me.toolbar.child('#profilesCombo'));
+                    }
+                }, {
+                    itemId: 'renameSelectedProfile',
+                    text: me.snippets.toolbar.renameProfile,
+                    disabled: true,
+                    handler: function() {
+                        me.fireEvent('renameSelectedProfile', me.profilesStore, me.profileId, me.toolbar.items.get('profilesCombo'));
                     }
                 }, {
                     itemId: 'deleteSelectedProfile',

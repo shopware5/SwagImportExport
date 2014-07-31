@@ -217,6 +217,40 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
     }
 
     /**
+     * Returns the new profile
+     */
+    public function updateProfilesAction()
+    {
+        $data = $this->Request()->getParam('data', 1);
+        
+        $profileRepository = $this->getProfileRepository();
+        $profileEntity = $profileRepository->findOneBy(array('id' => $data['id']));
+        
+        try {
+            if (!$profileEntity) {
+                throw new \Exception("Profile not found!");
+            }
+            
+            $profileEntity->setName($data['name']);
+
+            $this->getManager()->persist($profileEntity);
+            $this->getManager()->flush();
+
+            $this->View()->assign(array(
+                'success' => true,
+                'data' => array(
+                    "id" => $profileEntity->getId(),
+                    'name' => $profileEntity->getName(),
+                    'type' => $profileEntity->getType(),
+                    'tree' => $profileEntity->getTree(),
+                )
+            ));
+        } catch (\Exception $e) {
+            $this->View()->assign(array('success' => false, 'msg' => $e->getMessage()));
+        }
+    }
+
+    /**
      * Returns all profiles into an array
      */
     public function getProfilesAction()
