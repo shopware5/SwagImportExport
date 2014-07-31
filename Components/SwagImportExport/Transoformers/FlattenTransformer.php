@@ -34,9 +34,9 @@ class FlattenTransformer implements DataTransformerAdapter
         $nodeName = $mainNode['name'];
 
         foreach ($data[$nodeName] as $record) {
-            $this->tempData = array();
+            $this->resetTempData();
             $this->collectData($record, $nodeName);
-            $flatData[] = $this->tempData;
+            $flatData[] = $this->getTempData();
         }
         return $flatData;
     }
@@ -65,8 +65,8 @@ class FlattenTransformer implements DataTransformerAdapter
         
         $transformData = $this->transform($mainNode);
         $this->collectHeader($transformData, $mainNode['name']);
-        
-        return $this->tempData;
+
+        return $this->getTempData();
     }
 
     /**
@@ -149,6 +149,39 @@ class FlattenTransformer implements DataTransformerAdapter
 
         return $currentNode;
     }
+    
+    /**
+     * Creates and returns mapper of provided profile node
+     * 
+     * @param array $node
+     * @return array
+     */
+    public function createMapperFromProfile($node)
+    {
+        if (isset($node['children'])) {
+            if (isset($node['attributes'])) {
+                foreach ($node['attributes'] as $attribute) {
+                    $currentNode['_attributes'][$attribute['name']] = $attribute['shopwareField'];
+                }
+            }
+
+            foreach ($node['children'] as $child) {
+                $currentNode[$child['name']] = $this->createMapperFromProfile($child);
+            }
+        } else {
+            if (isset($node['attributes'])) {
+                foreach ($node['attributes'] as $attribute) {
+                    $currentNode['_attributes'][$attribute['name']] = $attribute['shopwareField'];
+                }
+
+                $currentNode['_value'] = $node['shopwareField'];
+            } else {
+                $currentNode = $node['shopwareField'];
+            }
+        }
+
+        return $currentNode;
+    }
 
     /**
      * Transform flat data into tree array
@@ -212,14 +245,28 @@ class FlattenTransformer implements DataTransformerAdapter
      * Creates columns name for the csv file
      * 
      * @param array $node
-     * @param string $nodeKey
+     * @param string $path
      */    
     public function collectHeader($node, $path)
     {
         if ($this->iterationParts[$path] == 'price'){
-            //todo: prices
+            $priceProfile = $this->getNodeFromProfile($this->getMainIterationPart(), 'price');
+            $priceNodeMapper = $this->createMapperFromProfile($priceProfile);
+            
+            //only saving the price groups
+            $this->createHeaderPriceGroup($priceNodeMapper);
+            
+            //saving nodes different from price groups
+            foreach ($this->getCustomerGroups() as $group) {
+                $this->createHeaderPriceNodes($priceNodeMapper, $group->getKey());                
+            }
         } elseif ($this->iterationParts[$path] == 'configurator') {
-            //todo: configurator
+            $configuratorProfile = $this->getNodeFromProfile($this->getMainIterationPart(), 'configurator');
+            $configuratorNodeMapper = $this->createMapperFromProfile($configuratorProfile);
+            
+            //group name, group description and group id is skipped
+            $this->createHeaderConfigurator($configuratorNodeMapper);
+            
         } else {
             foreach ($node as $key => $value) {
                 
@@ -237,7 +284,98 @@ class FlattenTransformer implements DataTransformerAdapter
             }
         }
     }
+    
+    /**
+     * Saves price nodes as column names
+     * 
+     * @param array $node
+     * @param string $groupKey
+     * @param string $path
+     */
+    public function createHeaderPriceNodes($node, $groupKey, $path = null)
+    {
+        foreach ($node as $key => $value) {
 
+            if (is_array($value)) {
+                $currentPath = $path . '/' . $key;
+                $this->createHeaderPriceNodes($value, $groupKey, $currentPath);
+            } else {
+                //skipping price group
+                if ($value == 'priceGroup') {
+                    continue;
+                }
+                if ($key == '_value') {
+                    $pathParts = explode('/', $path);
+                    $name = $pathParts[count($pathParts) - 1] . '_' . $groupKey ;
+                    $this->saveTempData($name);
+                } else {
+                    $key .= '_' . $groupKey;
+                    $this->saveTempData($key);
+                }
+            }
+        }
+    }
+    
+    /**
+     * Saves only the prices group nodes
+     * 
+     * @param array $node
+     * @param string $path
+     */
+    public function createHeaderPriceGroup($node, $path = null)
+    {
+        foreach ($node as $key => $value) {
+
+            if (is_array($value)) {
+                $currentPath = $path . '/' . $key;
+                $this->createHeaderPriceGroup($value, $currentPath);
+            } else {
+                //skipping price group
+                if ($value != 'priceGroup') {
+                    continue;
+                }
+                
+                if ($key == '_value') {
+                    $pathParts = explode('/', $path);
+                    $name = $pathParts[count($pathParts) - 1];
+                    $this->saveTempData($name);
+                } else {
+                    $this->saveTempData($key);
+                }
+            }
+        }
+    }
+    
+    /**
+     * Saves configurator nodes, also skipping
+     * configGroupId, configGroupName and configGroupDescription
+     * 
+     * @param array $node
+     * @param string $path
+     */
+    public function createHeaderConfigurator($node, $path = null)
+    {
+        foreach ($node as $key => $value) {
+
+            if (is_array($value)) {
+                $currentPath = $path . '/' . $key;
+                $this->createHeaderConfigurator($value, $currentPath);
+            } else {
+                if ($value == 'configGroupId' || $value == 'configGroupName' || $value == 'configGroupDescription') {
+                    continue;
+                }
+                
+                if ($key == '_value') {
+                    $pathParts = explode('/', $path);
+                    $name = $pathParts[count($pathParts) - 1];
+                    $this->saveTempData($name);
+                } else {
+                    $this->saveTempData($key);
+                }
+            }
+        }
+    }
+    
     /**
      * Collects record data
      * 
@@ -276,7 +414,6 @@ class FlattenTransformer implements DataTransformerAdapter
                 }
             }            
         }
-        
     }
     
     public function collectIterationData($node, $path = null)
@@ -367,6 +504,23 @@ class FlattenTransformer implements DataTransformerAdapter
         unset($this->iterationTempData);
     }
     
+    public function getNodeFromProfile($node, $adapter)
+    {
+        foreach ($node as $key => $value) {
+            
+            if ($key == 'adapter' && $value == $adapter) {
+                return $node;
+            }
+            
+            if (is_array($value)) {
+                $seakNode = $this->getNodeFromProfile($value, $adapter);
+                if ($seakNode) {
+                    return $seakNode;
+                }
+            }
+        }
+    }
+    
     /**
      * Saves interation parts
      * 
@@ -377,6 +531,16 @@ class FlattenTransformer implements DataTransformerAdapter
     {
         $this->iterationParts[$path] = $adapter;
     }
+    
+    public function resetTempData()
+    {
+        $this->tempData = array();
+    }
+    
+    public function getTempData()
+    {
+        return $this->tempData;
+    }
 
     /**
      * @param string $data
@@ -384,6 +548,13 @@ class FlattenTransformer implements DataTransformerAdapter
     public function saveTempData($data)
     {
         $this->tempData[] = $data;
+    }
+    
+    public function getCustomerGroups()
+    {
+        $groups = Shopware()->Models()->getRepository('Shopware\Models\Customer\Group')->findAll();
+        
+        return $groups;
     }
 
 }
