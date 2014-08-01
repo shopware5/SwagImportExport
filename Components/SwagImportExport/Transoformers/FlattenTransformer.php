@@ -39,7 +39,7 @@ class FlattenTransformer implements DataTransformerAdapter
             $this->collectData($record, $nodeName);
             $flatData[] = $this->getTempData();
         }
-
+        
         return $flatData;
     }
 
@@ -299,7 +299,7 @@ class FlattenTransformer implements DataTransformerAdapter
         foreach ($node as $key => $value) {
 
             if (is_array($value)) {
-                $currentPath = $path . '/' . $key;
+                $currentPath = $this->getMergedPath($path, $key);
                 $this->createHeaderPriceNodes($value, $groupKey, $currentPath);
             } else {
                 if ($value == 'priceGroup') {
@@ -405,7 +405,22 @@ class FlattenTransformer implements DataTransformerAdapter
                 }
 
             } elseif ($this->iterationParts[$path] == 'configurator') {
-                //todo: configurator
+                $configuratorProfile = $this->getNodeFromProfile($this->getMainIterationPart(), 'configurator');
+                $configuratorTreeMapper = $this->createMapperFromProfile($configuratorProfile);
+                $configuratorFlatMapper = $this->treeToFlat($configuratorTreeMapper);
+                
+                foreach ($node as $key => $configurator) {
+                    $this->collectConfiguratorData($configurator, $configuratorFlatMapper);
+                }
+                
+                foreach ($this->getIterationTempData() as $tempData) {
+                    if (is_array($tempData)) {
+                        $data = implode('|', $tempData);
+                        $this->saveTempData($data);
+                    }
+                }
+                
+                unset($this->iterationTempData);
             } else {
                 //processing images, similars and propertyValues
                 foreach ($node as $value) {
@@ -423,7 +438,7 @@ class FlattenTransformer implements DataTransformerAdapter
         } else {
             foreach ($node as $key => $value) {
                 if (is_array($value)) {
-                    $currentPath = $path . '/' . $key;
+                    $currentPath = $this->getMergedPath($path, $key);
                     $this->collectData($value, $currentPath);
                 } else {
                     $this->saveTempData($value);
@@ -435,11 +450,7 @@ class FlattenTransformer implements DataTransformerAdapter
     public function collectIterationData($node, $path = null)
     {        
         foreach ($node as $key => $value) {
-            if ($path) {
-                 $currentPath = $path . '/' . $key;
-            } else {
-                $currentPath = $key;
-            } 
+            $currentPath = $this->getMergedPath($path, $key);
                 
             if (is_array($value)) {
                 $this->collectIterationData($value, $currentPath);
@@ -472,11 +483,7 @@ class FlattenTransformer implements DataTransformerAdapter
     public function getPriceGroupFromNode($node, $mapper, $path = null)
     {
         foreach ($node as $key => $value) {
-            if ($path) {
-                 $currentPath = $path . '/' . $key;
-            } else {
-                $currentPath = $key;
-            } 
+            $currentPath = $this->getMergedPath($path, $key);
 
             if (is_array($value)) {
                 $result = $this->getPriceGroupFromNode($value, $mapper, $currentPath);
@@ -495,11 +502,7 @@ class FlattenTransformer implements DataTransformerAdapter
     public function collectPriceData($node, $mapper, $path = null, $emptyResult = false)
     {
          foreach ($node as $key => $value) {
-            if ($path) {
-                $currentPath = $path . '/' . $key;
-            } else {
-                $currentPath = $key;
-            } 
+            $currentPath = $this->getMergedPath($path, $key);
 
             if (is_array($value)) {
                 $this->collectPriceData($value, $mapper, $currentPath, $emptyResult);
@@ -514,8 +517,8 @@ class FlattenTransformer implements DataTransformerAdapter
             }
         }
     }
-    
-    public function treeToFlat($node)
+     
+   public function treeToFlat($node)
     {
         $this->resetTempMapper();
         $this->convertToFlat($node);
@@ -526,11 +529,7 @@ class FlattenTransformer implements DataTransformerAdapter
     protected function convertToFlat($node, $path)
     {
         foreach ($node as $key => $value) {
-            if ($path) {
-                $currentPath = $path . '/' . $key;
-            } else {
-                $currentPath = $key;
-            }
+            $currentPath = $this->getMergedPath($path, $key);
 
             if (is_array($value)) {
                 $this->convertToFlat($value, $currentPath);
@@ -576,11 +575,7 @@ class FlattenTransformer implements DataTransformerAdapter
         foreach ($nodes as $key => $node) {
             
             if (isset($nodes['name'])) {
-                if ($path) {
-                    $currentPath = $path . '/' . $nodes['name'];
-                } else {
-                    $currentPath = $nodes['name'];
-                }                
+                $currentPath = $this->getMergedPath($path, $nodes['name']);
             } else {
                 $currentPath = $path;
             }
@@ -628,6 +623,83 @@ class FlattenTransformer implements DataTransformerAdapter
         }
     }
     
+    /**
+     * Returns configuration group value by given node and mapper
+     * 
+     * @param array $node
+     * @param array $mapper
+     * @param string $path
+     * @return string
+     */
+    public function findConfigurationGroupValue($node, $mapper, $path = null)
+    {
+        foreach ($node as $key => $value) {
+            $currentPath = $this->getMergedPath($path, $key);
+            
+            if (is_array($value)) {
+                $result = $this->findConfigurationGroupValue($value, $mapper, $currentPath);
+                
+                if ($result) {
+                    return $result;
+                }
+                
+            } else {
+                 if ($mapper[$currentPath] == 'configGroupName'){
+                     return $value;
+                 }
+            }
+        } 
+    }
+    
+    /**
+     * 
+     * @param array $node
+     * @param array $mapper
+     * @param string $path
+     * @param array $originalNode
+     */
+    public function collectConfiguratorData($node, $mapper, $path = null, $originalNode = null)
+    {
+        foreach ($node as $key => $value) {
+            
+            $currentPath = $this->getMergedPath($path, $key);
+            
+            if (is_array($value)) {
+                $this->collectConfiguratorData($value, $mapper, $currentPath, $node);
+            } else {
+                if ($mapper[$currentPath] == 'configGroupName'
+                    || $mapper[$currentPath] == 'configGroupDescription'
+                    || $mapper[$currentPath] == 'configGroupId') {
+                    continue;
+                }
+                
+                if ($mapper[$currentPath] == 'configOptionName'){
+                    $group = $this->findConfigurationGroupValue($originalNode, $mapper);
+                    
+                    if ($value && $group) {
+                        $mixedValue = $group . ':' . $value;                        
+                    }
+                    
+                    $this->saveIterationTempData($currentPath, $mixedValue);
+                    unset($mixedValue);
+                } else {
+                    $this->saveIterationTempData($currentPath, $value);
+                }
+            }
+        }
+    }
+    
+    public function getMergedPath($path, $key)
+    {
+        if ($path) {
+            $newPath = $path . '/' . $key;
+        } else {
+            $newPath = $key;
+        }
+        
+        return $newPath;
+    }
+
     /**
      * Saves interation parts
      * 
