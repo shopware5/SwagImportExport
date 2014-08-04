@@ -827,7 +827,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         }
         
         // merge all sections
-        if ($section == 'default') {
+        if ($section == 'default' && count($dbAdapter->getSections()) > 1) {
             $columns = array_reduce($columns, function($carry, $item) {
                 return array_merge($carry, $item);
             }, array());

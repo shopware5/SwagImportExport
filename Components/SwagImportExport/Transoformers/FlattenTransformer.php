@@ -48,10 +48,11 @@ class FlattenTransformer implements DataTransformerAdapter
      */
     public function transformBackward($data)
     {
-        $iterationPart = $this->getMainIterationPart();
+        $mainNode = $this->getMainIterationPart();
+        $this->processIterationParts($mainNode);
         
         foreach ($data as $row) {
-            $tree[] = $this->transformToTree($iterationPart, $row, $iterationPart['name']);
+            $tree[] = $this->transformToTree($mainNode, $row, $mainNode['name']);
         }
         
         return $tree;
@@ -184,6 +185,37 @@ class FlattenTransformer implements DataTransformerAdapter
 
         return $currentNode;
     }
+    
+    /**
+     * Finds the name of column with price field
+     * 
+     * @param array $node
+     * @return string|boolean
+     */
+    protected function findPriceNode($node)
+    {
+        if ($node['shopwareField'] == 'price') {
+            return $node['name'];
+        } else {
+            if (isset($node['children'])) {
+                foreach($node['children'] as $child) {
+                    $return = $this->findPriceNode($child);
+                    if ($return !== FALSE) {
+                        return $return;
+                    }
+                }
+            }
+            if (isset($node['attributes'])) {
+                foreach($node['attributes'] as $attribute) {
+                    $return = $this->findPriceNode($attribute);
+                    if ($return !== FALSE) {
+                        return $return;
+                    }
+                }
+            }
+        }
+        return FALSE;
+    }
 
     /**
      * Transform flat data into tree array
@@ -192,33 +224,108 @@ class FlattenTransformer implements DataTransformerAdapter
      * @param array $data
      * @return array
      */
-    public function transformToTree($node, $data, $nodePath = null)
+    public function transformToTree($node, $data, $nodePath = null, $iteration = 0)
     {
         $currentPath = null;
         
+        if (isset($this->iterationParts[$nodePath])) { // iteration
+            $iteration++;
+            if ($node['adapter'] == 'price') {
+                //find name of column with *price* values
+                $priceColumnName = $this->findPriceNode($node);
+
+                $prices = array();
+                $matches = array();
+                
+                // find groups and extract values
+                $priceColumns = preg_grep("/" . $priceColumnName . "_+(.*)/i", array_keys($data));
+                foreach ($priceColumns as &$columns) {
+                    preg_match("/" . $priceColumnName . "_+(?P<group>.*)/i", $columns, $matches);
+                    $prices[] = $this->transformPricesToTree($node, $data, $matches['group']);
+                }
+                return $prices;
+            } else if ($node['adapter'] == 'configurator') {
+                return array();
+            }
+        }
+
         if (isset($node['children'])) {
             if (isset($node['attributes'])) {
                 foreach ($node['attributes'] as $attribute) {
-                    $currentPath = $nodePath . '_' . $attribute['name'];
-                    $currentNode['_attributes'][$attribute['name']] = $this->getDataValue($data, $currentPath);
+                    $currentNode['_attributes'][$attribute['name']] = $this->getDataValue($data, $attribute['name'], $iteration);
                 }
             }
 
             foreach ($node['children'] as $child) {
-                $currentPath = $nodePath . '.' .$child['name'];
+                $currentPath = $nodePath . '/' .$child['name'];
                 $currentNode[$child['name']] = $this->transformToTree($child, $data, $currentPath);
             }
         } else {
             if (isset($node['attributes'])) {
-                
                 foreach ($node['attributes'] as $attribute) {
-                    $currentPath = $nodePath . '_' . $attribute['name'];
-                    $currentNode['_attributes'][$attribute['name']] = $this->getDataValue($data, $currentPath);
+                    $currentNode['_attributes'][$attribute['name']] = $this->getDataValue($data, $attribute['name'], $iteration);
                 }
 
-                $currentNode['_value'] = $this->getDataValue($data, $nodePath);
+                $currentNode['_value'] = $this->getDataValue($data, $node['name'], $iteration);
             } else {
-                $currentNode = $this->getDataValue($data, $nodePath);
+                $currentNode = $this->getDataValue($data, $node['name'], $iteration);
+            }
+        }
+
+        return $currentNode;
+    }
+
+    /**
+     * Transform flat price data into tree array
+     * 
+     * @param mixed $node
+     * @param array $data
+     * @param string $group
+     * @return array
+     */
+    protected function transformPricesToTree($node, $data, $group)
+    {
+        if (isset($node['children'])) {
+            if (isset($node['attributes'])) {
+                foreach ($node['attributes'] as $attribute) {
+                    if ($attribute['shopwareField'] != 'priceGroup') {
+                        $value = $this->getDataValue($data, $attribute['name'] . '_' . $group);
+                    } else {
+                        $value = $group;
+                    }
+                    $currentNode['_attributes'][$attribute['name']] = $value;
+                }
+            }
+
+            // the check for group value is not done here, but on the next level (recursion)
+            // because the node may have attribute(s)
+            foreach ($node['children'] as $child) {
+                $currentNode[$child['name']] = $this->transformPricesToTree($child, $data, $group);
+            }
+        } else {
+            if (isset($node['attributes'])) {
+                foreach ($node['attributes'] as $attribute) {
+                    if ($attribute['shopwareField'] != 'priceGroup') {
+                        $value = $this->getDataValue($data, $attribute['name'] . '_' . $group);
+                    } else {
+                        $value = $group;
+                    }
+                    $currentNode['_attributes'][$attribute['name']] = $value;
+                }
+
+                if ($node['shopwareField'] != 'priceGroup') {
+                    $value = $this->getDataValue($data, $node['name'] . '_' . $group);
+                } else {
+                    $value = $group;
+                }
+                $currentNode['_value'] = $value;
+            } else {
+                if ($node['shopwareField'] != 'priceGroup') {
+                    $value = $this->getDataValue($data, $node['name'] . '_' . $group);
+                } else {
+                    $value = $group;
+                }
+                $currentNode = $value;
             }
         }
 
@@ -230,17 +337,23 @@ class FlattenTransformer implements DataTransformerAdapter
      * If data don't match with the csv column names, throws exception
      * 
      * @param array $data
-     * @param string $nodePath
+     * @param string $key
+     * @param int $iteration
+     * @param string $adapter
      * @return mixed
      * @throws \Exception
      */
-    public function getDataValue($data, $nodePath)
+    public function getDataValue($data, $key, $iteration = 0)
     {
-        if (!isset($data[$nodePath])){
-            throw new \Exception("Data does not match with CSV column name $nodePath");
+        if (!isset($data[$key])){
+            throw new \Exception("Data does not match with CSV column name $key");
         }
         
-        return $data[$nodePath];
+        if ($iteration > 1) { // if it is sub iteration node
+            return explode('|', $data['key']);
+        }
+
+        return $data[$key];
     }
 
     /**
