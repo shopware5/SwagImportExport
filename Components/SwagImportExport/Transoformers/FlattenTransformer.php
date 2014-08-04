@@ -190,16 +190,17 @@ class FlattenTransformer implements DataTransformerAdapter
      * Finds the name of column with price field
      * 
      * @param array $node
+     * @param string $shopwareField
      * @return string|boolean
      */
-    protected function findPriceNode($node)
+    protected function findNodeByShopwareField($node, $shopwareField)
     {
-        if ($node['shopwareField'] == 'price') {
+        if ($node['shopwareField'] == $shopwareField) {
             return $node['name'];
         } else {
             if (isset($node['children'])) {
                 foreach($node['children'] as $child) {
-                    $return = $this->findPriceNode($child);
+                    $return = $this->findNodeByShopwareField($child, $shopwareField);
                     if ($return !== FALSE) {
                         return $return;
                     }
@@ -207,7 +208,7 @@ class FlattenTransformer implements DataTransformerAdapter
             }
             if (isset($node['attributes'])) {
                 foreach($node['attributes'] as $attribute) {
-                    $return = $this->findPriceNode($attribute);
+                    $return = $this->findNodeByShopwareField($attribute, $shopwareField);
                     if ($return !== FALSE) {
                         return $return;
                     }
@@ -232,11 +233,14 @@ class FlattenTransformer implements DataTransformerAdapter
             $iteration++;
             if ($node['adapter'] == 'price') {
                 //find name of column with *price* values
-                $priceColumnName = $this->findPriceNode($node);
+                $priceColumnName = $this->findNodeByShopwareField($node, 'price');
+                if ($priceColumnName === FALSE) {
+                    throw new \Exception("Price column not found");
+                }
 
                 $prices = array();
                 $matches = array();
-                
+
                 // find groups and extract values
                 $priceColumns = preg_grep("/" . $priceColumnName . "_+(.*)/i", array_keys($data));
                 foreach ($priceColumns as &$columns) {
@@ -245,7 +249,41 @@ class FlattenTransformer implements DataTransformerAdapter
                 }
                 return $prices;
             } else if ($node['adapter'] == 'configurator') {
-                return array();
+                // find fields
+                $columnMapper = array(
+                    'configOptionName' => $this->findNodeByShopwareField($node, 'configOptionName'),
+                    'configGroupName' => $this->findNodeByShopwareField($node, 'configGroupName'),
+                    'configSetName' => $this->findNodeByShopwareField($node, 'configSetName'),
+                );
+                
+                if ($columnMapper['configOptionName'] === FALSE) {
+                    throw new \Exception("configOptionName column not found");
+                }
+                if ($columnMapper['configGroupName'] === FALSE) {
+                    throw new \Exception("configGroupName column not found");
+                }
+                if ($columnMapper['configSetName'] === FALSE) {
+                    throw new \Exception("configSetName column not found");
+                }
+                
+                $configs = array();
+                
+                $values = explode(',', $this->getDataValue($data, $columnMapper['configOptionName']));
+                $setNames = explode(',', $this->getDataValue($data, $columnMapper['configSetName']));
+                
+                if (count($values) != count($setNames)) {
+                    throw new \Exception("Mismatch number of configOptionNames and configSetNames.");
+                } else {
+                    for ($i = 0; $i < count($values); $i++) {
+                        $value = explode(':', $values[$i]);
+                        $configs[] = $this->transformConfiguratorToTree($node, array(
+                            $columnMapper['configGroupName'] => $value[0],
+                            $columnMapper['configOptionName'] => $value[1],
+                            $columnMapper['configSetName'] => $setNames[$i]
+                        ));
+                    }
+                }
+                return $configs;
             }
         }
 
@@ -324,6 +362,62 @@ class FlattenTransformer implements DataTransformerAdapter
                     $value = $this->getDataValue($data, $node['name'] . '_' . $group);
                 } else {
                     $value = $group;
+                }
+                $currentNode = $value;
+            }
+        }
+
+        return $currentNode;
+    }
+
+    /**
+     * Transform flat configurator data into tree array
+     * 
+     * @param mixed $node
+     * @param array $data
+     * @return array
+     */
+    protected function transformConfiguratorToTree($node, $data)
+    {
+        if (isset($node['children'])) {
+            if (isset($node['attributes'])) {
+                foreach ($node['attributes'] as $attribute) {
+                    if (isset($data[$attribute['name']])) {
+                        $value = $data[$attribute['name']];
+                    } else {
+                        $value = '';
+                    }
+                    $currentNode['_attributes'][$attribute['name']] = $value;
+                }
+            }
+
+            // the check for group value is not done here, but on the next level (recursion)
+            // because the node may have attribute(s)
+            foreach ($node['children'] as $child) {
+                $currentNode[$child['name']] = $this->transformConfiguratorToTree($child, $data);
+            }
+        } else {
+            if (isset($node['attributes'])) {
+                foreach ($node['attributes'] as $attribute) {
+                    if (isset($data[$attribute['name']])) {
+                        $value = $data[$attribute['name']];
+                    } else {
+                        $value = '';
+                    }
+                    $currentNode['_attributes'][$attribute['name']] = $value;
+                }
+
+                if (isset($data[$node['name']])) {
+                    $value = $data[$node['name']];
+                } else {
+                    $value = '';
+                }
+                $currentNode['_value'] = $value;
+            } else {
+                if (isset($data[$node['name']])) {
+                    $value = $data[$node['name']];
+                } else {
+                    $value = '';
                 }
                 $currentNode = $value;
             }
