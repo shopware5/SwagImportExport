@@ -523,9 +523,9 @@ class FlattenTransformer implements DataTransformerAdapter
                 $configuratorFlatMapper = $this->treeToFlat($configuratorTreeMapper);
                 
                 foreach ($node as $key => $configurator) {
-                    $this->collectConfiguratorData($configurator, $configuratorFlatMapper);
+                    $this->collectConfiguratorData($configurator, $configuratorFlatMapper, null, $configurator);
                 }
-                
+                                
                 foreach ($this->getIterationTempData() as $tempData) {
                     if (is_array($tempData)) {
                         $data = implode('|', $tempData);
@@ -792,7 +792,7 @@ class FlattenTransformer implements DataTransformerAdapter
                     if ($value && $group) {
                         $mixedValue = $group . ':' . $value;                        
                     }
-                    
+                                        
                     $this->saveIterationTempData($currentPath, $mixedValue);
                     unset($mixedValue);
                 } else {

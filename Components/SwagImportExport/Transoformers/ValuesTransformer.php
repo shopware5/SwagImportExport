@@ -77,11 +77,17 @@ class ValuesTransformer implements DataTransformerAdapter
         foreach ($this->config as $expression) {
             $conversions[$expression->getVariable()] = $expression->{$method}();
         }
+        
         if (!empty($conversions)) {
-            foreach ($data as &$record) {
-                foreach ($conversions as $variableName => $conversion) {
-                    if (isset($record[$variableName])) {                    
-                        $record[$variableName] = $this->evaluator->evaluate($conversion, $record);
+            foreach ($data as &$records) {
+                foreach ($records as &$record) {
+                    foreach ($conversions as $variableName => $conversion) {
+                        if (isset($record[$variableName])) {  
+                            $evalData = $this->evaluator->evaluate($conversion, $record);
+                            if ($evalData) {
+                                $record[$variableName] = $this->evaluator->evaluate($conversion, $record);
+                            }
+                        }
                     }
                 }
             }
@@ -89,6 +95,26 @@ class ValuesTransformer implements DataTransformerAdapter
 
         return $data;
     }
+    
+//    if we dont now the array dept we need to make it recurcive
+//    the function below is will do the job, but check the speed before commiting
+//    public function evaluateData(&$data, $conversions)
+//    {
+//        foreach ($data as $key => &$record) {
+//            if (is_array($record)) {
+//                $this->evaluateData($record, $conversions);
+//            } else {
+//                foreach ($conversions as $variableName => $conversion) {
+//                    if ($key === $variableName) {
+//                        $evalData = $this->evaluator->evaluate($conversion, $data);
+//                        if ($evalData) {
+//                            $data[$variableName] = $evalData;                            
+//                        }
+//                    }
+//                }                
+//            }
+//        }
+//    }
 
     /**
      * Does nothing in this class
