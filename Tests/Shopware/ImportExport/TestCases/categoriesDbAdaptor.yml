@@ -1,0 +1,109 @@
+testRead:
+    test1:
+        columns: 'c.id, c.parentId, c.name, c.active'
+        ids: [3, 5, 6, 8, 15]
+        expected:
+            2:
+                name: 'Sommerwelten'
+        expectedCount: 4
+    test2:
+        columns: 'c.id, c.parentId, c.name, c.active'
+        ids: [6, 8]
+        expected:
+            0:
+                id: 6
+            1:
+                name: 'Wohnwelten'
+        expectedCount: 2
+    test3:
+        columns: 'c.id, c.active'
+        ids: [3, 15]
+        expected:
+            0:
+                id: 3
+        expectedCount: 1
+    test3:
+        columns: 'c.id, c.active'
+        ids: [3, 8]
+        expected:
+            0:
+                id: 3
+                active: 1
+            1:
+                id: 8
+                active: 1
+        expectedCount: 2
+testReadRecordIds:
+    test1:
+        start: 0
+        limit: 6
+        expectedCount: 4
+    test2:
+        start: 1
+        limit: 2
+        expectedCount: 2
+    test3:
+        start: 0
+        limit: 3
+        expectedCount: 3
+testWrite:
+    test1:
+        data:
+            record1:
+                id: 15
+                parentId: 3
+                name: 'Test'
+        expectedInsertedRows: 1
+    test2:
+        data:
+            record1:
+                id: 15
+                parentId: 3
+                name: 'Test'
+            record2:
+                id: 19
+                parentId: 15
+                name: 'Test 2'
+        expectedInsertedRows: 2
+testInsertOne:
+    test1:
+        category:
+            id: 15
+            parentId: 3
+            name: 'Test'
+        expectedRow:
+            id: 15
+            parent: 3
+            path: '|3|'
+            description: 'Test'
+    test2:
+        category:
+            id: 16
+            parentId: 8
+            name: 'Test123'
+        expectedRow:
+            id: 16
+            parent: 8
+            path: '|8|3|'
+            description: 'Test123'
+testUpdateOne:
+    test1:
+        category:
+            id: 8
+            parentId: 5
+            name: 'Test'
+        expectedRow:
+            id: 8
+            parent: 5
+            path: '|5|3|'
+            description: 'Test'
+    test2:
+        category:
+            id: 6
+            parentId: 5
+            name: 'Test'
+        expectedRow:
+            id: 6
+            parent: 5
+            path: '|5|3|'
+            description: 'Test'

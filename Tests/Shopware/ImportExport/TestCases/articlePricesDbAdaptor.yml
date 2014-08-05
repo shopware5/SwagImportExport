@@ -1,0 +1,46 @@
+testRead:
+    test1:
+        columns: 'price.id, price.price'
+        ids: [1, 2, 3, 4, 5]
+        expected:
+            1:
+                price: 59.874
+        expectedCount: 5
+testReadRecordIds:
+    test1:
+        start: 0
+        limit: 6
+        expectedCount: 5
+testWrite:
+    test1:
+        data:
+            record1:
+                ordernumber: 'SW10006'
+                price: 70
+                pricegroup: 'EK'
+                from: 20
+                pseudoprice: 0
+                baseprice: 0
+        expectedInsertedRows: 1
+#testInsertOne:
+#    test1:
+#        price:
+#            ordernumber: 'SW10006'
+#            price: 70
+#            pricegroup: 'EK'
+#            from: 5
+#            pseudoprice: 0
+#            baseprice: 0
+#        expectedRow:
+#            id: 15
+#testUpdateOne:
+#    test1:
+#        price:
+#            ordernumber: 'SW10006'
+#            price: 70
+#            pricegroup: 'EK'
+#            from: 5
+#            pseudoprice: 0
+#            baseprice: 0
+#        expectedRow:
+#            id: 8
