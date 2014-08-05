@@ -118,6 +118,9 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
         $this->Application()->Loader()->registerNamespace(
                 'Shopware\Components', $this->Path() . 'Components/'
         );
+        $this->Application()->Loader()->registerNamespace(
+                'Shopware\Commands', $this->Path() . 'Commands/'
+        );
     }
 
     /**
@@ -240,6 +243,9 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
         $this->subscribeEvent(
                 'Enlight_Controller_Action_PostDispatch_Backend_Index', 'injectBackendAceEditor'
         );
+        $this->subscribeEvent(
+                'Shopware_Console_Add_Command', 'onAddConsoleCommand'
+        );
     }
 
     /**
@@ -277,6 +283,14 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
 
         $view->addTemplateDir($this->Path() . 'Views/');
         $view->extendsTemplate('backend/swag_import_export/menu_entry.tpl');
+    }
+
+    public function onAddConsoleCommand(Enlight_Event_EventArgs $args)
+    {
+        $this->registerMyNamespace();
+        return new Doctrine\Common\Collections\ArrayCollection(array(
+            new \Shopware\Commands\SwagImportExport\ImportArticlesCommand(),
+        ));
     }
 
 }

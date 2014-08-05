@@ -53,7 +53,7 @@ class Session
     {
         $sessionEntity = $this->getEntity();
         
-        if ($data['totalCountedIds'] > 0) {
+        if (isset($data['totalCountedIds']) && $data['totalCountedIds'] > 0) {
                 //set count
                 $sessionEntity->setTotalCount($data['totalCountedIds']);            
         }

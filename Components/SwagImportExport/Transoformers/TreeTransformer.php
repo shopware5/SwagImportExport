@@ -146,7 +146,11 @@ class TreeTransformer implements DataTransformerAdapter
             
             if ($this->getMainType() !== $type) {
                 $rawData = $this->getRawData();
-                $partentElement = count($rawData[$this->getMainType()]);
+                if (isset($rawData[$this->getMainType()])) {
+                    $partentElement = count($rawData[$this->getMainType()]);
+                } else {
+                    $partentElement = 0;
+                }
                 $bufferData['parentIndexElement'] = $partentElement;                
             }
             
@@ -392,7 +396,11 @@ class TreeTransformer implements DataTransformerAdapter
     
     public function getBufferData($type)
     {
-        return $this->bufferData[$type];
+        if (isset($this->bufferData[$type])) {
+            return $this->bufferData[$type];
+        } else {
+            return null;
+        }
     }
 
     public function setBufferData($bufferData)
