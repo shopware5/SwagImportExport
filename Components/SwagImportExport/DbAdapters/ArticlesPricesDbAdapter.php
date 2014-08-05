@@ -87,7 +87,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
     public function write($records)
     {
         $manager = $this->getManager();
-        foreach ($records as $record) {
+        foreach ($records['default'] as $record) {
 
             if (empty($record['ordernumber'])) {
                 continue;

@@ -93,7 +93,7 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
     {
         $manager = $this->getManager();
 
-        foreach ($records as $record) {
+        foreach ($records['default'] as $record) {
             
             if (empty($record['orderNumber'])) {
                 //todo: log this result

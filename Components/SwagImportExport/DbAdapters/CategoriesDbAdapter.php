@@ -144,19 +144,21 @@ class CategoriesDbAdapter implements DataDbAdapter
     public function write($records)
     {
         $manager = $this->getManager();
-
-        foreach ($records as $record) {
+        
+        foreach ($records['default'] as $record) {
 
             if (!$record['parentId']) {
+                throw new \Exception('Parent id is required');
                 //todo: log this result
                 continue;
             }
 
             if (!$record['name']) {
+                throw new \Exception('Name is required');
                 //todo: log this result
                 continue;
             }
-
+            
             $category = $this->getRepository()->findOneBy(array('id' => $record['id']));
 
             if (!$category) {

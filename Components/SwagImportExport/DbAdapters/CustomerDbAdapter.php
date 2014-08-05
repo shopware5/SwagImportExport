@@ -181,7 +181,7 @@ class CustomerDbAdapter implements DataDbAdapter
         $manager = $this->getManager();
 
         $builder = $manager->createQueryBuilder();
-
+        
         $builder->select($columns)
                 ->from('\Shopware\Models\Customer\Customer', 'customer')
                 ->join('customer.billing', 'billing')
@@ -201,7 +201,7 @@ class CustomerDbAdapter implements DataDbAdapter
         $paginator = $manager->createPaginator($query);
 
         $result['default'] = $paginator->getIterator()->getArrayCopy();
-
+        
         return $result;
     }
 
@@ -229,7 +229,7 @@ class CustomerDbAdapter implements DataDbAdapter
                 $result[] = $value['id'];
             }
         }
-
+        
         return $result;
     }
 
@@ -237,11 +237,12 @@ class CustomerDbAdapter implements DataDbAdapter
     {
         $manager = $this->getManager();
 
-        foreach ($records as $record) {
+        foreach ($records['default'] as $record) {
 
             if (!$record['email']) {
+                throw new \Exception("User email is required field.");
                 //todo: log this result
-                return;
+                continue;
             }
 
             $customer = $this->getRepository()->findOneBy(array('email' => $record['email']));
