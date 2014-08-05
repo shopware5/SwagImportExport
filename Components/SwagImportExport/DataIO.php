@@ -186,15 +186,33 @@ class DataIO
         return $fileName;
     }
     
+    /**
+     * Returns directory of the import/export plugin
+     * 
+     * @return string
+     */
     public function getDirectory()
     {
         $directory = Shopware()->DocPath() . 'files/import_export/';
 
         if (!file_exists($directory)) {
-            mkdir($directory, 0777, true);
+            $this->createDirectory($directory);
         }
         
         return $directory;
+    }
+    
+    /**
+     * Creates directory
+     * 
+     * @param string $path
+     * @throws \Exception
+     */
+    public function createDirectory($path)
+    {
+        if (!mkdir($path, 0777, true)) {
+            throw new \Exception("Failed to create directory $path");
+        }
     }
 
     /**

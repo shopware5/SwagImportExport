@@ -65,8 +65,9 @@ class DataWorkflow
         if ($this->dataIO->getSessionState() == 'new') {
             //todo: create file here ?
             $fileName = $this->dataIO->generateFileName($this->profile);
-
-            $outputFileName = Shopware()->DocPath() . 'files/import_export/' . $fileName;
+            $directory = $this->dataIO->getDirectory();
+            
+            $outputFileName = $directory . $fileName;
 
             // session has no ids stored yet, therefore we must start it and write the file headers
             $header = $this->transformerChain->composeHeader();
