@@ -857,6 +857,55 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         ));
     }
 
+    public function getParentKeysAction()
+    {
+        $postData['profileId'] = $this->Request()->getParam('profileId');
+        $section = $this->Request()->getParam('adapter', 'default');
+
+        if (!$postData['profileId']) {
+            return $this->View()->assign(array(
+                        'success' => false, 'message' => 'No profile Id'
+            ));
+        }
+
+        $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
+        $type = $profile->getType();
+        
+        if (!in_array($type, array('articles', 'orders'))) {
+            $this->View()->assign(array(
+                'success' => true, 'data' => array(), 'total' => 0
+            ));
+            return;
+        }
+
+        $dbAdapter = $this->Plugin()->getDataFactory()->createDbAdapter($type);
+
+        $columns = $dbAdapter->getParentKeys($section);
+
+        foreach ($columns as &$column) {
+            $match = '';
+            preg_match('/(?<=as ).*/', $column, $match);
+
+            $match = trim($match[0]);
+
+            if ($match != '') {
+                $column = $match;
+            } else {
+                preg_match('/(?<=\.).*/', $column, $match);
+                $match = trim($match[0]);
+                if ($match != '') {
+                    $column = $match;
+                }
+            }
+
+            $column = array('id' => $column, 'name' => $column);
+        }
+
+        $this->View()->assign(array(
+            'success' => true, 'data' => $columns, 'total' => count($columns)
+        ));
+    }
+
     /**
      * Check is file format valid
      * 

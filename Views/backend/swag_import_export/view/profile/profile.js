@@ -91,7 +91,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
 		me.selectedNodeId = 0;
         
         me.columnStore = Ext.create('Shopware.apps.SwagImportExport.store.Column');
-        me.parentKeyStore = Ext.create('Shopware.apps.SwagImportExport.store.Column');
+        me.parentKeyStore = Ext.create('Shopware.apps.SwagImportExport.store.ParentKey');
         me.sectionStore = Ext.create('Shopware.apps.SwagImportExport.store.Section');
 
         me.title = me.snippets.title;

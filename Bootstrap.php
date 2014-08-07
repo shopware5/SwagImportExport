@@ -289,7 +289,8 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
     {
         $this->registerMyNamespace();
         return new Doctrine\Common\Collections\ArrayCollection(array(
-            new \Shopware\Commands\SwagImportExport\ImportArticlesCommand(),
+            new \Shopware\Commands\SwagImportExport\ImportCommand(),
+            new \Shopware\Commands\SwagImportExport\ExportCommand(),
         ));
     }
 
