@@ -111,13 +111,15 @@ class XmlFileReader implements FileReader
     protected function findIterationNode($node, array $path)
     {
         $path[] = $node["name"];
-        foreach ($node['children'] as $child) {
-            if ($child['type'] == 'iteration') {
-                $this->iterationPath[] = implode('/', $path);
-                $this->iterationTag[] = $child['name'];
-            }
+        if (isset($node['children'])) {
+            foreach ($node['children'] as $child) {
+                if ($child['type'] == 'iteration') {
+                    $this->iterationPath[] = implode('/', $path);
+                    $this->iterationTag[] = $child['name'];
+                }
 
-            $this->findIterationNode($child, $path);
+                $this->findIterationNode($child, $path);
+            }
         }
     }
 

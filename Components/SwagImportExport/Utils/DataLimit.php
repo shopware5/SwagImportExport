@@ -11,8 +11,13 @@ class DataLimit
     
     public function __construct(array $options)
     {
-        $this->limit = $options['limit'];
-        $this->offset = $options['offset'];
+        if (isset($options['limit'])) {
+            $this->limit = $options['limit'];
+        } 
+        
+        if (isset($options['offset'])) {
+            $this->offset = $options['offset'];
+        } 
     }
 
     public function getLimit()

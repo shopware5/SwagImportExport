@@ -28,7 +28,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     protected $groupRepository;
     
     //mappers
-    protected $articleMap;
+    protected $articleVariantMap;
     protected $variantMap;
 
     public function readRecordIds($start, $limit, $filter)
@@ -139,7 +139,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 ->andWhere('configuratorSet.id IS NOT NULL')
                 ->setParameter('ids', $ids);
         $result['configurator'] = $configBuilder->getQuery()->getResult();
-
+        
         //similar 
         $similarsBuilder = $manager->createQueryBuilder();
         $similarsBuilder->select($columns['similar'])
@@ -428,7 +428,11 @@ class ArticlesDbAdapter implements DataDbAdapter
 
                 $priceData['from'] = intval($priceData['from']);
 
-                $priceData['to'] = intval($priceData['to']);
+                if (isset($priceData['to'])) {
+                    $priceData['to'] = intval($priceData['to']);
+                } else {
+                    $priceData['to'] = 0;
+                }
 
                 // if the "to" value isn't numeric, set the place holder "beliebig"
                 if ($priceData['to'] <= 0) {
@@ -440,9 +444,21 @@ class ArticlesDbAdapter implements DataDbAdapter
                 }
 
                 $priceData['price'] = floatval(str_replace(",", ".", $priceData['price']));
-                $priceData['basePrice'] = floatval(str_replace(",", ".", $priceData['basePrice']));
-                $priceData['pseudoPrice'] = floatval(str_replace(",", ".", $priceData['pseudoPrice']));
-                $priceData['percent'] = floatval(str_replace(",", ".", $priceData['percent']));
+                if (isset($priceData['basePrice'])) {
+                    $priceData['basePrice'] = floatval(str_replace(",", ".", $priceData['basePrice']));
+                } else {
+                    $priceData['basePrice'] = 0.0;
+                }
+                if (isset($priceData['pseudoPrice'])) {
+                    $priceData['pseudoPrice'] = floatval(str_replace(",", ".", $priceData['pseudoPrice']));
+                } else {
+                    $priceData['pseudoPrice'] = 0.0;
+                }
+                if (isset($priceData['percent'])) {
+                    $priceData['percent'] = floatval(str_replace(",", ".", $priceData['percent']));
+                } else {
+                    $priceData['percent'] = 0.0;
+                }
 
                 if ($customerGroup->getTaxInput()) {
                     $priceData['price'] = $priceData['price'] / (100 + $tax->getTax()) * 100;
@@ -580,7 +596,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 continue;
             }
 
-            if (!$similar['similarId']) {
+            if (!isset($similar['similarId']) || !$similar['similarId']) {
                 continue;
             }
 
@@ -727,12 +743,13 @@ class ArticlesDbAdapter implements DataDbAdapter
                 continue;
             }
             
-            if (!isset($configurator['configOptionName'])) {
+            if (!isset($configurator['configOptionName']) || empty($configurator['configOptionName'])) {
                 continue;
             }
 
             if (!$article->getConfiguratorSet()) {
-                throw new \Exception('A configurator set has to be defined');
+                $articleNumber = $article->getMainDetail()->getNumber();
+                throw new \Exception(sprintf('A configurator set has to be defined on article %s', $articleNumber));
             }
             
             $availableGroups = $article->getConfiguratorSet()->getGroups();

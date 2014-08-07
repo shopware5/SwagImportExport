@@ -85,7 +85,7 @@ class NewsletterDbAdapter implements DataDbAdapter
 //        $emailValidator = new \Zend_Validate_EmailAddress();
         $manager = $this->getManager();
         
-        foreach ($records as $newsletterData) {
+        foreach ($records['default'] as $newsletterData) {
 
             if (empty($newsletterData['email'])) {
                 //todo: log this result

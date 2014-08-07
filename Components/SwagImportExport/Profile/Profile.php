@@ -12,7 +12,7 @@ class Profile
      */
     private $configNames;
 
-    public function __construct(Shopware\Components\SwagImportExport\Profile\Profile $profile)
+    public function __construct($profile)
     {
         $this->profileEntity = $profile;
         $this->configNames = array('exportConversion', 'tree');

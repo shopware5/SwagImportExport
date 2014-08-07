@@ -111,7 +111,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
      * @param array $limit
      * @return \Shopware\Components\SwagImportExport\Utils\DataLimit
      */
-    public function createLimit($limit)
+    public function createLimit(array $limit)
     {
         return new DataLimit($limit);
     }
