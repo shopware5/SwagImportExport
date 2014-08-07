@@ -195,7 +195,7 @@ class FlattenTransformer implements DataTransformerAdapter
      */
     protected function findNodeByShopwareField($node, $shopwareField)
     {
-        if ($node['shopwareField'] == $shopwareField) {
+        if (isset($node['shopwareField']) && $node['shopwareField'] == $shopwareField) {
             return $node['name'];
         } else {
             if (isset($node['children'])) {
