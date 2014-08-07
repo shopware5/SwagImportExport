@@ -139,7 +139,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 ->andWhere('configuratorSet.id IS NOT NULL')
                 ->setParameter('ids', $ids);
         $result['configurator'] = $configBuilder->getQuery()->getResult();
-
+        
         //similar 
         $similarsBuilder = $manager->createQueryBuilder();
         $similarsBuilder->select($columns['similar'])
@@ -743,12 +743,13 @@ class ArticlesDbAdapter implements DataDbAdapter
                 continue;
             }
             
-            if (!isset($configurator['configOptionName'])) {
+            if (!isset($configurator['configOptionName']) || empty($configurator['configOptionName'])) {
                 continue;
             }
 
             if (!$article->getConfiguratorSet()) {
-                throw new \Exception('A configurator set has to be defined');
+                $articleNumber = $article->getMainDetail()->getNumber();
+                throw new \Exception(sprintf('A configurator set has to be defined on article %s', $articleNumber));
             }
             
             $availableGroups = $article->getConfiguratorSet()->getGroups();

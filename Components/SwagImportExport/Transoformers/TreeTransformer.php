@@ -215,13 +215,13 @@ class TreeTransformer implements DataTransformerAdapter
      */
     public function transformToTree($node, $mapper = null, $adapterType = null)
     {
-        if (isset($node['adapter']) && $node['adapter'] != $adapterType) {
+        if (isset($node['adapter']) && is_array($node) && $node['adapter'] != $adapterType) {
             $currentNode = $this->buildIterationNode($node);
             
             return $currentNode;
         }
-
-        if (isset($node['children'])) {
+        
+        if (isset($node['children']) && is_array($node) && count($node['children']) > 0) {
             if (isset($node['attributes'])) {
                 foreach ($node['attributes'] as $attribute) {
                     $currentNode['_attributes'][$attribute['name']] = $mapper[$attribute['shopwareField']];
@@ -232,7 +232,7 @@ class TreeTransformer implements DataTransformerAdapter
                 $currentNode[$child['name']] = $this->transformToTree($child, $mapper, $node['adapter']);
             }
         } else {
-            if (isset($node['attributes'])) {
+            if (isset($node['attributes']) && is_array($node)) {
                 foreach ($node['attributes'] as $attribute) {
                     $currentNode['_attributes'][$attribute['name']] = $mapper[$attribute['shopwareField']];
                 }
@@ -268,7 +268,7 @@ class TreeTransformer implements DataTransformerAdapter
             return;
         }
         
-        if (isset($node['_value'])) {
+        if (is_array($node) && isset($node['_value'])) {
             if (isset($importMapper[$nodePath])) {
                 $this->saveBufferData($adapter, $importMapper[$nodePath], $node['_value']);
             }

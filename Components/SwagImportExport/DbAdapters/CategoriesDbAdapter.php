@@ -159,6 +159,11 @@ class CategoriesDbAdapter implements DataDbAdapter
                 continue;
             }
             
+            $parentCategory = $this->getRepository()->findOneBy(array('id' => $record['parentId']));
+            if (!$parentCategory) {
+                throw new \Exception('Parent category does not exists.');
+            }
+            
             $category = $this->getRepository()->findOneBy(array('id' => $record['id']));
 
             if (!$category) {
