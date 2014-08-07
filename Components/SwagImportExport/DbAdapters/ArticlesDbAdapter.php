@@ -207,9 +207,9 @@ class ArticlesDbAdapter implements DataDbAdapter
                     throw new \Exception(sprintf('Variant with number %s does not exists', $record['mainNumber']));
                 }
                 $articleModel = $mainVariant->getArticle();
-                unset($record['mainNumber']);
+//                unset($record['mainNumber']);
             }
-            
+
             if (!$articleModel) {
                 //creates artitcle and main variant
                 $articleModel = new ArticleModel();
@@ -217,9 +217,9 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $articleData = $this->prerpareArticle($record);
                 
                 $mainDetailData = $this->prepareMainDetail($record, $articleData);
-            
-                $articleModel->setMainDetail($mainDetailData);
                 
+                $articleModel->setMainDetail($mainDetailData);
+            
                 $variantModel = $articleModel->getMainDetail();
                 
                 $prices = $this->preparePrices($records['price'], $index, $variantModel, $articleModel, $articleData['tax']);
@@ -250,7 +250,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 
                 //Variants
                 $variantModel = $this->prerpareVariant($record, $articleModel, $variantModel);
-                
+            
                 $configuratorOptions = $this->prepareVariantConfigurators($records['configurator'], $index, $articleModel);
                 $variantModel->setConfiguratorOptions($configuratorOptions);
                 
@@ -389,6 +389,7 @@ class ArticlesDbAdapter implements DataDbAdapter
 
         $variantsMap = $this->getMap('variant');
         
+        unset($data['mainNumber']);
         foreach ($data as $key => $value) {
             if (isset($variantsMap[$key])) {
                 $variantData[$variantsMap[$key]] = $value;
@@ -947,6 +948,38 @@ class ArticlesDbAdapter implements DataDbAdapter
         }
 
         return false;
+    }
+
+    public function getParentKeys($section)
+    {
+        switch ($section) {
+            case 'article':
+                return array(
+                    'article.id as articleId',
+                    'variant.id as variantId',
+                    'variant.number as orderNumber',
+                );
+            case 'price':
+                return array(
+                    'prices.articleDetailsId as variantId',
+                );
+            case 'propertyValue':
+                return array(
+                    'article.id as articleId',
+                );
+            case 'similar':
+                return array(
+                    'article.id as articleId',
+                );
+            case 'image':
+                return array(
+                    'article.id as articleId',
+                );
+            case 'configurator':
+                return array(
+                    'variant.id as variantId',
+                );
+        }
     }
 
     public function getVariantColumns()
