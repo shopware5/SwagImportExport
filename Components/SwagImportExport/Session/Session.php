@@ -127,7 +127,7 @@ class Session
      * Checks also the current position - if all the ids of the session are done, then the function does nothing.
      * Otherwise it sets the session state from "suspended" to "active", so that it is ready again for processing.
      */
-    public function resume(DataIO $dataIO)
+    public function resume()
     {
         $sessionEntity = $this->getEntity();
 

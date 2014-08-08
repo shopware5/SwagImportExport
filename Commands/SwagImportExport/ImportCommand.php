@@ -10,7 +10,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Shopware\Components\SwagImportExport\DataWorkflow;
 
-class AbstractCommand extends ShopwareCommand
+class ImportCommand extends ShopwareCommand
 {
 
     protected $profile;
@@ -19,12 +19,50 @@ class AbstractCommand extends ShopwareCommand
     protected $filePath;
     protected $sessionId;
 
-    protected function prepareImportDefaultConfig()
+    /**
+     * {@inheritdoc}
+     */
+    protected function configure()
     {
-        $this->addArgument('filepath', InputArgument::REQUIRED, 'Path to file to read from.')
+        $this->setName('sw:import')
+                ->setDescription('Import data from files.')
+                ->addArgument('filepath', InputArgument::REQUIRED, 'Path to file to read from.')
                 ->addOption('profile', 'p', InputOption::VALUE_REQUIRED, 'How many times should the message be printed?', null)
-                ->addOption('format', 'f', InputOption::VALUE_REQUIRED, 'What is the format of the imported file - XML or CSV?', null);
-        return $this;
+                ->addOption('format', 'f', InputOption::VALUE_REQUIRED, 'What is the format of the imported file - XML or CSV?', null)
+                ->setHelp("The <info>%command.name%</info> imports data from a file.");
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $this->prepareImportInputValidation($input, $output);
+
+        $output->writeln('<info>' . sprintf("Using profile: %s.", $this->profile) . '</info>');
+        $output->writeln('<info>' . sprintf("Using format: %s.", $this->format) . '</info>');
+        $output->writeln('<info>' . sprintf("Using file: %s.", $this->filePath) . '</info>');
+
+        $return = $this->prepareImport($input, $output);
+        $count = $return['count'];
+        $output->writeln('<info>' . sprintf("Total count: %d.", $count) . '</info>');
+
+        $return = $this->importAction($input, $output);
+        $this->sessionId = $return['data']['sessionId'];
+        $position = $return['data']['position'];
+        $output->writeln('<info>' . sprintf("Position: %d.", $position) . '</info>');
+
+        while ($position < $count) {
+//            try {
+            $return = $this->importAction($input, $output);
+//            } catch (\Exception $e) {
+//                echo $e->getTrace(), "\n";
+//                echo $e->getTraceAsString(), "\n";
+//                exit;
+//            }
+            $position = $return['data']['position'];
+            $output->writeln('<info>' . sprintf("Processed: %d.", $position) . '</info>');
+        }
     }
 
     protected function prepareImportInputValidation(InputInterface $input, OutputInterface $output)

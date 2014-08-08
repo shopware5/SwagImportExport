@@ -46,6 +46,21 @@ class OrdersDbAdapter implements DataDbAdapter
 
         return $result;
     }
+    
+    public function getParentKey($section)
+    {
+        switch ($section) {
+            case 'order':
+                return array(
+                    'orders.id as orderId',
+//                    'orders.number as number',
+                );
+            case 'detail':
+                return array(
+                    'details.orderId as orderId',
+                );
+        }
+    }
 
     /**
      * Returns categories 

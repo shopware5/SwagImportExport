@@ -7,6 +7,7 @@ use Shopware\Components\SwagImportExport\Session\Session;
 use Shopware\Components\SwagImportExport\DbAdapters\CategoriesDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\ArticlesDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\ArticlesPricesDbAdapter;
+use Shopware\Components\SwagImportExport\DbAdapters\ArticlesImagesDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\ArticlesInStockDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\ArticlesTranslationsDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\CustomerDbAdapter;
@@ -69,6 +70,8 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
                 return $this->createArticlesTranslationsDbAdapter();
             case 'articlesPrices':
                 return $this->createArticlesPricesDbAdapter();
+            case 'articlesImages':
+                return $this->createArticlesImagesDbAdapter();
             case 'orders':
                 return $this->createOrdersDbAdapter();
             case 'customers':
@@ -190,6 +193,15 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     protected function createArticlesPricesDbAdapter()
     {
         return new ArticlesPricesDbAdapter();
+    }
+    /**
+     * This method can be hookable
+     * 
+     * @return \Shopware\Components\SwagImportExport\DbAdapters\ArticlesImagesDbAdapter
+     */    
+    protected function createArticlesImagesDbAdapter()
+    {
+        return new ArticlesImagesDbAdapter();
     }
 
     /**
