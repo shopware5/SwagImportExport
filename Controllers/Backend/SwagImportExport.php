@@ -139,7 +139,9 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                 }
             }
         }
-        $profileEntity->setTree(json_encode($tree));
+        $reorderedTree = TreeHelper::reorderTree($tree);
+
+        $profileEntity->setTree(json_encode($reorderedTree));
 
         $this->getManager()->persist($profileEntity);
         $this->getManager()->flush();

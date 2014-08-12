@@ -283,6 +283,35 @@ class TreeHelper
 
         return false;
     }
+    
+    /**
+     * Sorting tree via index key
+     * 
+     * @param array $node
+     * @return array
+     */
+    static public function reorderTree($node)
+    {
+        $reorderdNode = array();
+        if (is_array($node) && isset($node['children'])) {
+            foreach ($node as $key => $value) {
+                if ($key === 'children' || $key === 'attributes') {
+                    foreach ($value as $innerValue) {
+                        $value3 = self::reorderTree($innerValue);
+                        $reorderdNode[$key][$innerValue['index']] = $value3;
+                    }
+                    ksort($reorderdNode[$key]);
+                    
+                } else {
+                    $reorderdNode[$key] = $value;
+                }
+            }
+        } else {
+            $reorderdNode = $node;
+        }
+        
+        return $reorderdNode;
+    }
 
     /**
      * Returns the default tree for a profile by given profile type
