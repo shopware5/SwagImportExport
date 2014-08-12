@@ -283,6 +283,35 @@ class TreeHelper
 
         return false;
     }
+    
+    /**
+     * Sorting tree via index key
+     * 
+     * @param array $node
+     * @return array
+     */
+    static public function reorderTree($node)
+    {
+        $reorderdNode = array();
+        if (is_array($node) && isset($node['children'])) {
+            foreach ($node as $key => $value) {
+                if ($key === 'children' || $key === 'attributes') {
+                    foreach ($value as $innerValue) {
+                        $value3 = self::reorderTree($innerValue);
+                        $reorderdNode[$key][$innerValue['index']] = $value3;
+                    }
+                    ksort($reorderdNode[$key]);
+                    
+                } else {
+                    $reorderdNode[$key] = $value;
+                }
+            }
+        } else {
+            $reorderdNode = $node;
+        }
+        
+        return $reorderdNode;
+    }
 
     /**
      * Returns the default tree for a profile by given profile type
@@ -311,7 +340,7 @@ class TreeHelper
             case 'customers':
                 return '{"id":"root","name":"Root","type":"node","children":[{"id":"537359399c80a","name":"Header","index":0,"type":"node","children":[{"id":"537385ed7c799","name":"HeaderChild","index":0,"type":"node","shopwareField":""}]},{"id":"537359399c8b7","name":"customers","index":1,"type":"node","shopwareField":"","children":[{"id":"537359399c90d","name":"customer","index":0,"type":"iteration","adapter":"default","parentKey":"","shopwareField":"","attributes":[],"children":[{"id":"53e0cc0031ddf","type":"leaf","index":0,"name":"email","shopwareField":"email"},{"id":"53e0cc2796a9e","type":"leaf","index":1,"name":"password","shopwareField":"password","attributes":[{"id":"53e0cc3777d9e","type":"attribute","index":0,"name":"encoder","shopwareField":"encoder"}]},{"id":"53e0cc4a33ce8","type":"","index":2,"name":"billing","shopwareField":"","children":[{"id":"53e0cc58a0f85","type":"leaf","index":1,"name":"salutation","shopwareField":"billingSalutation"},{"id":"53e0cc6e57cbd","type":"leaf","index":2,"name":"firstname","shopwareField":"billingFirstname"},{"id":"53e0cc865d8a5","type":"leaf","index":3,"name":"lastname","shopwareField":"billingLastname"}],"attributes":[{"id":"53e0ccc960803","type":"attribute","index":0,"name":"customer","shopwareField":"customerNumber"}]},{"id":"53e0cd14c7f97","type":"","index":3,"name":"shipping","shopwareField":"","children":[{"id":"53e0cd20a46b2","type":"leaf","index":0,"name":"company_name","shopwareField":"shippingCompany"},{"id":"53e0cd3ed570c","type":"leaf","index":1,"name":"salutation","shopwareField":"shippingSalutation"},{"id":"53e0cd4dbdb61","type":"leaf","index":2,"name":"lastname","shopwareField":"shippingLastname"},{"id":"53e0cd6a80305","type":"leaf","index":3,"name":"street","shopwareField":"shippingStreet"},{"id":"53e0cd82f3182","type":"leaf","index":4,"name":"street_number","shopwareField":"shippingStreetnumber"},{"id":"53e0cd94ab617","type":"leaf","index":5,"name":"city","shopwareField":"shippingCity"},{"id":"53e0cda558ee3","type":"leaf","index":6,"name":"zip_code","shopwareField":"shippingZipcode"}]}]}]}]}';
             case 'newsletter':
-                return '{"id":"root","name":"Root","type":"node","children":[{"id":"537359399c80a","name":"Header","index":0,"type":"node","children":[{"id":"537385ed7c799","name":"HeaderChild","index":0,"type":"node","shopwareField":""}]},{"id":"537359399c8b7","name":"Users","index":1,"type":"node","shopwareField":"","children":[{"id":"537359399c90d","name":"user","index":0,"type":"iteration","adapter":"default","parentKey":"","shopwareField":"","attributes":[{"id":"53738653da10f","name":"userID","index":0,"shopwareField":"userID"}],"children":[{"id":"5373865547d06","name":"email","index":1,"type":"leaf","shopwareField":"email"},{"id":"537386ac3302b","name":"Information","index":2,"type":"node","shopwareField":"description","attributes":[],"children":[{"id":"5373870d38c80","name":"salutation","index":0,"type":"leaf","shopwareField":"salutation"},{"id":"53cd096c0e116","name":"first_name","index":1,"type":"leaf","shopwareField":"firstName"},{"id":"53cd098005374","name":"last_name","index":2,"type":"leaf","shopwareField":"lastName"},{"id":"53cd09a440859","name":"street","index":3,"type":"leaf","shopwareField":"street"},{"id":"53cd09b26e7dc","name":"street_number","index":4,"type":"leaf","shopwareField":"streetNumber"},{"id":"53cd09c6c183e","name":"city","index":5,"type":"leaf","shopwareField":"city"},{"id":"53cd09d35b7c5","name":"zip_code","index":6,"type":"leaf","shopwareField":"zipCode"}]},{"id":"537388742e20e","name":"group","index":3,"type":"leaf","shopwareField":"groupName"},{"id":"53cd09ff37910","name":"last_read","index":4,"type":"leaf","shopwareField":"lastRead"}]}]}]}';
+                return '{"id":"root","name":"Root","type":"node","children":{"1":{"id":"537359399c8b7","name":"Users","index":0,"type":"node","shopwareField":"","children":[{"id":"537359399c90d","name":"user","index":0,"type":"iteration","adapter":"default","parentKey":"","shopwareField":"","attributes":[],"children":[{"id":"53e4b0f86aded","type":"leaf","index":0,"name":"email","shopwareField":"email"},{"id":"53e4b103bf001","type":"leaf","index":1,"name":"group","shopwareField":"groupName"},{"id":"53e4b105ea8c2","type":"leaf","index":2,"name":"salutation","shopwareField":"salutation"},{"id":"53e4b107872be","type":"leaf","index":3,"name":"firstname","shopwareField":"firstName"},{"id":"53e4b108d49f9","type":"leaf","index":4,"name":"lastname","shopwareField":"lastName"},{"id":"53e4b10a38e08","type":"leaf","index":5,"name":"street","shopwareField":"street"},{"id":"53e4b10c1d522","type":"leaf","index":6,"name":"streetnumber","shopwareField":"streetNumber"},{"id":"53e4b10d68c09","type":"leaf","index":7,"name":"zipcode","shopwareField":"zipCode"},{"id":"53e4b157416fc","type":"leaf","index":8,"name":"city","shopwareField":"city"},{"id":"53e4b1592dd4b","type":"leaf","index":9,"name":"lastmailing","shopwareField":"lastNewsletter"},{"id":"53e4b15a69651","type":"leaf","index":10,"name":"lastread","shopwareField":"lastRead"},{"id":"53e4b15bde918","type":"leaf","index":11,"name":"userID","shopwareField":"userID"}]}]}}}';
             default :
                 throw new \Exception('The profile could not be created.');
         }
