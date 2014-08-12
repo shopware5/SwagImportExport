@@ -138,6 +138,9 @@ class NewsletterDbAdapter implements DataDbAdapter
             
             //Only set the group if it was explicitly provided or it's a new entry
             if ($group && ($newsletterData['groupName'] || !$contactData->getId())) {
+                $manager->persist($group);
+                $manager->flush();
+                
                 $contactData->setGroupId($group->getId());
             }
             $contactData->setAdded(new \DateTime());
