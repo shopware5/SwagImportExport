@@ -39,14 +39,12 @@ class CsvFileWriter implements FileWriter
 
     public function writeRecords($fileName, $data)
     {
-//        $convertor = new \Shopware_Components_Convert_Csv;
-//        $convertor->sSettings['newline'] = "\r\n";
-//        $flatData = $convertor->encode($data);
-        
         $flatData = '';
-
-        foreach ($data as $record) {
-            $flatData .= implode(';', $record) . "\n";
+        
+        $convertor = new \Shopware_Components_Convert_Csv;
+        $keys = array_keys(current($data));
+        foreach ($data as $line) {
+            $flatData .= $convertor->_encode_line($line, $keys) . $convertor->sSettings['newline'];
         }
 
         $this->getFileHelper()->writeStringToFile($fileName, $flatData, FILE_APPEND);
