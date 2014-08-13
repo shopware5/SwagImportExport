@@ -39,6 +39,7 @@ class CsvFileWriter implements FileWriter
     public function writeRecords($fileName, $data)
     {
         $convertor = new \Shopware_Components_Convert_Csv;
+        $convertor->sSettings['encoding'] = 'UTF-8';
         $convertor->sSettings['newline'] = "\r\n";
         $flatData = $convertor->encode($data);
 
