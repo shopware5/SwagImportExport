@@ -88,8 +88,7 @@ class NewsletterDbAdapter implements DataDbAdapter
         foreach ($records['default'] as $newsletterData) {
 
             if (empty($newsletterData['email'])) {
-                //todo: log this result
-                continue;
+                throw new \Exception('Email address is required');
             }
 
 //            if (!$emailValidator->isValid($newsletterData['email'])) {
@@ -107,8 +106,7 @@ class NewsletterDbAdapter implements DataDbAdapter
             } elseif (!$group && $groupId = Shopware()->Config()->get("sNEWSLETTERDEFAULTGROUP")) {
                 $group = $this->getGroupRepository()->findOneBy($groupId);
             } elseif (!$group) {
-                //todo: log this result
-                continue;
+                throw new \Exception('Group is required');
             }
             
             // Create/Update the Address entry

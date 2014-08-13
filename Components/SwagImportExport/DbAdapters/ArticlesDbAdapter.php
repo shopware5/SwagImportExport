@@ -890,7 +890,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             'article.active as active',
             'article.pseudoSales as pseudoSales',
             'article.highlight as topSeller',
-            'article.metaTitle as metaTitle',
+//            'article.metaTitle as metaTitle',
             'article.keywords as keywords',
             "DATE_FORMAT(article.changed, '%Y-%m-%d %H:%i:%s') as changeTime",
             'article.priceGroupId as priceGroupId',

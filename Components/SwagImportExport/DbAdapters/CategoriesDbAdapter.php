@@ -3,6 +3,7 @@
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
 use Shopware\Models\Category\Category;
+use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
 
 class CategoriesDbAdapter implements DataDbAdapter
 {
@@ -78,8 +79,10 @@ class CategoriesDbAdapter implements DataDbAdapter
                 ->where('c.id IN (:ids)')
                 ->setParameter('ids', $ids);
 
-        $result['default'] = $builder->getQuery()->getResult();
-
+        $categories = $builder->getQuery()->getResult();
+        
+        $result['default'] = DbAdapterHelper::decodeHtmlEntities($categories);
+        
         return $result;
     }
 
