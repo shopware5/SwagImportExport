@@ -32,15 +32,22 @@ class CsvFileWriter implements FileWriter
         }
 
         $columnNames .= implode(';', $headerData) . "\n";
+        $columnNames .= "\xEF\xBB\xBF";
 
         $this->getFileHelper()->writeStringToFile($fileName, $columnNames);
     }
 
     public function writeRecords($fileName, $data)
     {
-        $convertor = new \Shopware_Components_Convert_Csv;
-        $convertor->sSettings['newline'] = "\r\n";
-        $flatData = $convertor->encode($data);
+//        $convertor = new \Shopware_Components_Convert_Csv;
+//        $convertor->sSettings['newline'] = "\r\n";
+//        $flatData = $convertor->encode($data);
+        
+        $flatData = '';
+
+        foreach ($data as $record) {
+            $flatData .= implode(';', $record) . "\n";
+        }
 
         $this->getFileHelper()->writeStringToFile($fileName, $flatData, FILE_APPEND);
     }
