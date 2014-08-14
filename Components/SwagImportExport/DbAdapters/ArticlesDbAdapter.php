@@ -192,15 +192,11 @@ class ArticlesDbAdapter implements DataDbAdapter
                 throw new \Exception('Order number is required.');
             } 
             
-            if (!isset($record['mainNumber']) && empty($record['mainNumber'])) {
-                throw new \Exception('Main order number is required.');
-            } 
-            
             $variantModel = $this->getVariantRepository()->findOneBy(array('number' => $record['orderNumber']));
             
             if ($variantModel) {
                 $articleModel = $variantModel->getArticle();                    
-            } else if ($record['mainNumber'] !== $record['orderNumber']) {
+            } else if (isset($record['mainNumber']) && $record['mainNumber'] !== $record['orderNumber']) {
                 $mainVariant = $this->getVariantRepository()->findOneBy(array('number' => $record['mainNumber']));
                 
                 if (!$mainVariant) {
@@ -243,7 +239,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 //updates the also the article
                 if ($record['mainNumber'] === $record['orderNumber']) {
                     $articleData = $this->prerpareArticle($record);
-//                    $articleData['images'] = $this->prepareImages($records['image'], $index, $articleModel);
+                    $articleData['images'] = $this->prepareImages($records['image'], $index, $articleModel);
                     $articleData['similar'] = $this->prepareSimilars($records['similar'], $index, $articleModel);
                     $articleModel->fromArray($articleData);
                 }
@@ -317,7 +313,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             $supplier = $this->getManager()->getRepository('Shopware\Models\Article\Supplier')->findOneBy(array('name' => $data['supplierName']));
             if (!$supplier) {
                 $supplier = new \Shopware\Models\Article\Supplier();
-                $supplier->setName($article['supplierName']);
+                $supplier->setName($data['supplierName']);
             }
             $article['supplier'] = $supplier;
         }
@@ -510,13 +506,16 @@ class ArticlesDbAdapter implements DataDbAdapter
                 }
                 
                 if (!$imageModel) {
-                    if (!empty($imageData['mediaId'])) {
+                    if (isset($imageData['mediaId']) && !empty($imageData['mediaId'])) {
                         $media = $this->getManager()->find(
                                 'Shopware\Models\Media\Media', (int) $imageData['mediaId']
                         );
+                    } elseif (isset($imageData['path']) && !empty($imageData['path'])){
+                        $media = $this->getMediaRepository()->findOneBy(array('name' => $imageData['path']));
                     }
 
                     if (!($media instanceof MediaModel)) {
+                        continue;
                         throw new \Exception(sprintf("Media by mediaId %s not found for article with number %s", 
                                 $imageData['mediaId'], $article->getMainDetail()->getNumber()));
                     }
@@ -1145,11 +1144,25 @@ class ArticlesDbAdapter implements DataDbAdapter
 
         return $this->groupRepository;
     }
+    
+    /**
+     * Returns media repository
+     * 
+     * @return Shopware\Models\Media\Media
+     */
+    public function getMediaRepository()
+    {
+        if ($this->mediaRepository === null) {
+            $this->mediaRepository = $this->getManager()->getRepository('Shopware\Models\Media\Media');
+        }
+
+        return $this->mediaRepository;
+    }
+
 
     /*
      * @return Shopware\Components\Model\ModelManager
      */
-
     public function getManager()
     {
         if ($this->manager === null) {
