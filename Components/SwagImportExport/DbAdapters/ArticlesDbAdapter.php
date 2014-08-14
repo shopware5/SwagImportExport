@@ -192,15 +192,11 @@ class ArticlesDbAdapter implements DataDbAdapter
                 throw new \Exception('Order number is required.');
             } 
             
-            if (!isset($record['mainNumber']) && empty($record['mainNumber'])) {
-                throw new \Exception('Main order number is required.');
-            }
-            
             $variantModel = $this->getVariantRepository()->findOneBy(array('number' => $record['orderNumber']));
             
             if ($variantModel) {
                 $articleModel = $variantModel->getArticle();                    
-            } else if ($record['mainNumber'] !== $record['orderNumber']) {
+            } else if (isset($record['mainNumber']) && $record['mainNumber'] !== $record['orderNumber']) {
                 $mainVariant = $this->getVariantRepository()->findOneBy(array('number' => $record['mainNumber']));
                 
                 if (!$mainVariant) {
