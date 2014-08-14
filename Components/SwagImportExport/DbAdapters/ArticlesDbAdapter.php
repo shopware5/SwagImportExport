@@ -11,6 +11,7 @@ use Shopware\Models\Customer\Group as CustomerGroup;
 use Shopware\Models\Article\Configurator;
 use Shopware\Models\Media\Media as MediaModel;
 use Shopware\Components\SwagImportExport\Utils\DataHelper as DataHelper;
+use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
 
 class ArticlesDbAdapter implements DataDbAdapter
 {
@@ -90,7 +91,8 @@ class ArticlesDbAdapter implements DataDbAdapter
                 ->setParameter('ids', $ids)
                 ->orderBy("variant.kind");
 
-        $result['article'] = $articlesBuilder->getQuery()->getResult();
+        $articles = $articlesBuilder->getQuery()->getResult();
+        $result['article'] = DbAdapterHelper::decodeHtmlEntities($articles);
         
         //prices
         $pricesBuilder = $manager->createQueryBuilder();
