@@ -47,7 +47,7 @@ class OrdersDbAdapter implements DataDbAdapter
         return $result;
     }
     
-    public function getParentKey($section)
+    public function getParentKeys($section)
     {
         switch ($section) {
             case 'order':
@@ -164,6 +164,9 @@ class OrdersDbAdapter implements DataDbAdapter
        return array(
             'orders.id as orderId',
             'orders.number as number',
+            'orders.customerId as customerId',
+            'orders.status as status',
+            'orders.cleared as cleared',
             'orders.orderTime as orderTime',
             'orders.transactionId as transactionId',
             'orders.partnerId as partnerId',
@@ -172,13 +175,19 @@ class OrdersDbAdapter implements DataDbAdapter
             'orders.invoiceAmountNet as invoiceAmountNet',
             'orders.invoiceShipping as invoiceShipping',
             'orders.invoiceShippingNet as invoiceShippingNet',
+            'orders.comment as comment',
+            'orders.customerComment as customerComment',
+            'orders.internalComment as internalComment',
             'orders.net as net',
+            'orders.taxFree as taxFree',
+            'orders.temporaryId as temporaryId',
             'orders.referer as referer',
             'orders.clearedDate as clearedDate',
             'orders.trackingCode as trackingCode',
             'orders.languageIso as languageIso',
             'orders.currency as currency',
             'orders.currencyFactor as currencyFactor',
+            'orders.remoteAddress as remoteAddress',
             'payment.id as paymentId',
             'payment.description as paymentDescription',
             'paymentStatus.id as statusId',
@@ -228,14 +237,21 @@ class OrdersDbAdapter implements DataDbAdapter
             'details.id as orderDetailId',
             'details.orderId as orderId',
             'details.articleId as articleId',
+            'details.taxId as taxId',
+            'details.taxRate as taxRate',
+            'details.statusId as statusId',
             'details.articleNumber as articleNumber',
+            'details.number as number',
             'details.articleName as articleName',
             'details.price as price',
             'details.quantity as quantity',
             'details.price * details.quantity as invoice',
+            'details.shipped as shipped',
+            'details.shippedGroup as shippedGroup',
             'details.releaseDate as releasedate',
             'taxes.tax as tax',
             'details.esdArticle as esd',
+            'details.config as config',
             'details.mode as mode',
         );
     }
