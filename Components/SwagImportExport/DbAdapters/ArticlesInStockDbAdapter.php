@@ -18,11 +18,12 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
     public function getDefaultColumns()
     {
         return array(
-            'd.number as orderNumber',
-            'd.inStock as inStock',
-            'a.name as name',
-            'd.additionalText as additionalText',
-            's.name as supplier',
+            'variant.number as orderNumber',
+            'variant.inStock as inStock',
+            'article.name as name',
+            'variant.additionalText as additionalText',
+            'articleSupplier.name as supplier',
+            'prices.price as price',
         );
     }
 
@@ -32,12 +33,18 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
 
         $builder = $manager->createQueryBuilder();
         
+        //prices
+        $columns = array_merge(
+                $columns, array('customerGroup.taxInput as taxInput', 'articleTax.tax as tax')
+        );
         $builder->select($columns)
-                ->from('Shopware\Models\Article\Detail', 'd')
-                ->leftJoin('d.article', 'a')
-                ->leftJoin('a.supplier', 's')
-                ->leftJoin('d.prices', 'p')
-                ->where('d.id IN (:ids)')
+                ->from('Shopware\Models\Article\Detail', 'variant')
+                ->leftJoin('variant.article', 'article')
+                ->leftJoin('article.supplier', 'articleSupplier')
+                ->leftJoin('variant.prices', 'prices')
+                ->leftJoin('prices.customerGroup', 'customerGroup')
+                ->leftJoin('article.tax', 'articleTax')
+                ->where('variant.id IN (:ids)')
                 ->setParameter('ids', $ids);
         
         $query = $builder->getQuery();
@@ -46,6 +53,12 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
         $paginator = $manager->createPaginator($query);
 
         $result['default'] = $paginator->getIterator()->getArrayCopy();
+        
+        foreach ($result['default'] as &$record) {
+            if ($record['taxInput']) {
+                $record['price'] = $record['price'] * (100 + $record['tax']) / 100; 
+            }
+        }
         
         return $result;
     }
@@ -96,12 +109,14 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
         foreach ($records['default'] as $record) {
             
             if (empty($record['orderNumber'])) {
+                throw new \Exception('Order number is required');
                 //todo: log this result
                 continue;
             }
             $articleDetail = $this->getRepository()->findOneBy(array("number" => $record['orderNumber']));
             
             if(!$articleDetail){
+                throw new \Exception(sprintf('Article with ordernumber: %s was not found', $record['orderNumber']));
                 //todo: log this result
                 continue;
             }
