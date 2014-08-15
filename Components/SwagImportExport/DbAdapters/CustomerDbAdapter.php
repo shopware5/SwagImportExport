@@ -4,6 +4,7 @@ namespace Shopware\Components\SwagImportExport\DbAdapters;
 
 use Shopware\Models\Customer\Customer;
 use Shopware\Components\SwagImportExport\Utils\DataHelper;
+use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
 
 class CustomerDbAdapter implements DataDbAdapter
 {
@@ -200,7 +201,9 @@ class CustomerDbAdapter implements DataDbAdapter
 
         $paginator = $manager->createPaginator($query);
 
-        $result['default'] = $paginator->getIterator()->getArrayCopy();
+        $customers = $paginator->getIterator()->getArrayCopy();
+        
+        $result['default'] = DbAdapterHelper::decodeHtmlEntities($customers);
         
         return $result;
     }
