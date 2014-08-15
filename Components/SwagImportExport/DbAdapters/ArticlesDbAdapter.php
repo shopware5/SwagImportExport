@@ -255,6 +255,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                     $articleData = $this->prerpareArticle($record);
                     $articleData['images'] = $this->prepareImages($records['image'], $index, $articleModel);
                     $articleData['similar'] = $this->prepareSimilars($records['similar'], $index, $articleModel);
+                    
                     $articleModel->fromArray($articleData);
                 }
                 
@@ -541,6 +542,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $imageModel->fromArray($imageData);
                 
                 $images[] = $imageModel;
+                unset($imageModel);
                 unset($data[$key]);
             }
         }
