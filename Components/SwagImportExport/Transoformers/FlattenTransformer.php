@@ -622,7 +622,7 @@ class FlattenTransformer implements DataTransformerAdapter
                                 
                 foreach ($this->getIterationTempData() as $tempData) {
                     if (is_array($tempData)) {
-                        $data = implode('|', $tempData);
+                        $data = implode(',', $tempData);
                         $this->saveTempData($data);
                     }
                 }

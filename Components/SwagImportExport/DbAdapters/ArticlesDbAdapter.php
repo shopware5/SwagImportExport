@@ -95,13 +95,25 @@ class ArticlesDbAdapter implements DataDbAdapter
         $result['article'] = DbAdapterHelper::decodeHtmlEntities($articles);
         
         //prices
+        $columns['price'] = array_merge(
+                $columns['price'], array('customerGroup.taxInput as taxInput', 'articleTax.tax as tax')
+        );
         $pricesBuilder = $manager->createQueryBuilder();
         $pricesBuilder->select($columns['price'])
                 ->from('Shopware\Models\Article\Detail', 'variant')
+                ->join('variant.article', 'article')
                 ->leftJoin('variant.prices', 'prices')
+                ->leftJoin('prices.customerGroup', 'customerGroup')
+                ->leftJoin('article.tax', 'articleTax')
                 ->where('variant.id IN (:ids)')
                 ->setParameter('ids', $ids);
         $result['price'] = $pricesBuilder->getQuery()->getResult();
+
+        foreach ($result['price'] as &$record) {
+            if ($record['taxInput']) {
+                $record['price'] = $record['price'] * (100 + $record['tax']) / 100; 
+            }
+        }
         
         //images
         $imagesBuilder = $manager->createQueryBuilder();
@@ -443,6 +455,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 }
 
                 $priceData['price'] = floatval(str_replace(",", ".", $priceData['price']));
+
                 if (isset($priceData['basePrice'])) {
                     $priceData['basePrice'] = floatval(str_replace(",", ".", $priceData['basePrice']));
                 } else {
@@ -659,24 +672,23 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $configuratorSet->setPublic(false);
             }
             
-            
             //configurator group
             $groupPosition = 0;
             if (isset($configurator['configGroupId'])) {
-                $group = $this->getManager()
+                $groupModel = $this->getManager()
                         ->getRepository('Shopware\Models\Article\Configurator\Group')
                         ->find($configurator['configGroupId']);
-                if (!$group) {
+                if (!$groupModel) {
                     throw new \Exception(sprintf("ConfiguratorGroup by id %s not found", $configurator['configGroupId']));
                 }
             } elseif (isset($configurator['configGroupName'])) {
-                $group = $this->getManager()
+                $groupModel = $this->getManager()
                         ->getRepository('Shopware\Models\Article\Configurator\Group')
                         ->findOneBy(array('name' => $configurator['configGroupName']));
 
-                if (!$group) {
-                    $group = new Configurator\Group();
-                    $group->setPosition($groupPosition);
+                if (!$groupModel) {
+                    $groupModel = new Configurator\Group();
+                    $groupModel->setPosition($groupPosition);
                 }
             } else {
                 throw new \Exception('At least the groupname is required');
@@ -693,7 +705,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $optionModel = $this->getManager()
                         ->getRepository('Shopware\Models\Article\Configurator\Option')->findOneBy(array(
                             'name' => $configurator['configOptionName'],
-                            'groupId' => $group->getId()
+                            'groupId' => $groupModel->getId()
                         ));
             }
             
@@ -707,7 +719,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             }
             
             $optionModel->fromArray($optionData);
-            $optionModel->setGroup($group);
+            $optionModel->setGroup($groupModel);
             $optionModel->setPosition($optionPosition++);
             
             $groupData = array(
@@ -716,21 +728,21 @@ class ArticlesDbAdapter implements DataDbAdapter
                 'options' => array($optionModel)                
             );
             
-            $mainDetail = $article->getMainDetail();
+            $groupModel->fromArray($groupData);
             
-            if (!$this->getAvailableOption($mainDetail->getConfiguratorOptions(), $optionData)) {
-                $mainDetail->setConfiguratorOptions(array($optionModel));
-            }
-            
-            $group->fromArray($groupData);
-            $configuratorSet->setOptions(array($optionModel));
-            $configuratorSet->setGroups(array($group));
-            $this->getManager()->persist($configuratorSet);
+            $options[] = $optionModel;
+            $groups[] = $groupModel;
             
             unset($optionModel);
-            unset($group);
+            unset($groupModel);
             unset($configurators[$index]);
         }
+        
+        $article->getMainDetail()->setConfiguratorOptions($options);
+        $configuratorSet->setOptions($options);
+        $configuratorSet->setGroups($groups);
+        $this->getManager()->persist($configuratorSet);
+        
         return $configuratorSet;
     }
     
