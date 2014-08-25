@@ -249,9 +249,14 @@ class ArticlesDbAdapter implements DataDbAdapter
                 
                 $this->getManager()->persist($articleModel);
             } else {
+                
+                if ($variantModel) {
+                    $updateFlag = true;
+                }
+                
                 //if it is main variant 
                 //updates the also the article
-                if ($record['mainNumber'] === $record['orderNumber']) {
+                if ($record['mainNumber'] === $record['orderNumber'] || $updateFlag) {
                     $articleData = $this->prerpareArticle($record);
                     $articleData['images'] = $this->prepareImages($records['image'], $index, $articleModel);
                     $articleData['similar'] = $this->prepareSimilars($records['similar'], $index, $articleModel);
@@ -261,9 +266,11 @@ class ArticlesDbAdapter implements DataDbAdapter
                 
                 //Variants
                 $variantModel = $this->prerpareVariant($record, $articleModel, $variantModel);
-            
-                $configuratorOptions = $this->prepareVariantConfigurators($records['configurator'], $index, $articleModel);
-                $variantModel->setConfiguratorOptions($configuratorOptions);
+                
+                if ($record['mainNumber'] || $updateFlag) {
+                    $configuratorOptions = $this->prepareVariantConfigurators($records['configurator'], $index, $articleModel);
+                    $variantModel->setConfiguratorOptions($configuratorOptions);
+                }
                 
                 $prices = $this->preparePrices($records['price'], $index, $variantModel, $articleModel, $articleModel->getTax());
 
@@ -377,7 +384,11 @@ class ArticlesDbAdapter implements DataDbAdapter
     {
         $variantData = array();
         $variantsMap = $this->getMap('variant');
-
+        
+        if ($article['active']) {
+            $variantData['active'] = 1;
+        }
+        
         foreach ($data as $key => $value) {
             if (isset($variantsMap[$key])) {
                 $variantData[$variantsMap[$key]] = $value;
@@ -400,9 +411,8 @@ class ArticlesDbAdapter implements DataDbAdapter
 
         $variantsMap = $this->getMap('variant');
         
-        unset($data['mainNumber']);
         foreach ($data as $key => $value) {
-            if (isset($variantsMap[$key])) {
+            if (isset($variantsMap[$key]) && $key != 'mainNumber') {
                 $variantData[$variantsMap[$key]] = $value;
                 unset($data[$key]);
             }
@@ -644,8 +654,8 @@ class ArticlesDbAdapter implements DataDbAdapter
             if ($configurator['parentIndexElement'] != $configuratorIndex) {
                 continue;
             }
-
-            if (!isset($configurator['configSetName'])) {
+            
+            if (!isset($configurator['configSetName']) || empty($configurator['configSetName'])) {
                 continue;
             }
             
@@ -740,10 +750,12 @@ class ArticlesDbAdapter implements DataDbAdapter
             unset($configurators[$index]);
         }
         
-        $article->getMainDetail()->setConfiguratorOptions($options);
-        $configuratorSet->setOptions($options);
-        $configuratorSet->setGroups($groups);
-        $this->getManager()->persist($configuratorSet);
+        if ($configuratorSet && $groups && $options) {
+            $article->getMainDetail()->setConfiguratorOptions($options);
+            $configuratorSet->setOptions($options);
+            $configuratorSet->setGroups($groups);
+            $this->getManager()->persist($configuratorSet);
+        }
         
         return $configuratorSet;
     }
@@ -1006,6 +1018,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             'variant.kind as kind',
             'variant.additionalText as additionalText',
             'variant.inStock as inStock',
+            'variant.active as variantActive',
             'variant.stockMin as stockMin',
             'variant.weight as weight',
             'variant.position as position',
