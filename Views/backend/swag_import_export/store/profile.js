@@ -1,9 +1,13 @@
 Ext.define('Shopware.apps.SwagImportExport.store.Profile', {
     extend: 'Ext.data.TreeStore',
     model: 'Shopware.apps.SwagImportExport.model.Profile',
+    defaultRootId: '/',
     root: {
-//        text: 'Root',
-//        expanded: true        
+        expanded: true,
+        text: "Root",
+        children: [
+            { text: "Root", leaf: false }
+        ]
     },
     proxy: {
         type: 'ajax',

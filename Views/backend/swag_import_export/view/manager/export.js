@@ -51,7 +51,12 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
         customerGroup: '{s name=swag_import_export/export/customer_group}Include customer group specific prices{/s}',
         translations: '{s name=swag_import_export/export/translations}Include translations{/s}',
         limit: '{s name=swag_import_export/export/limit}Limit{/s}',
-        offset: '{s name=swag_import_export/export/offset}Offset{/s}'
+        offset: '{s name=swag_import_export/export/offset}Offset{/s}',
+        orderNumberFrom:  '{s name=order_number_From}Ordernumber from{/s}',
+        dateFrom:  '{s name=date_from}Date from{/s}',
+        dateTo:  '{s name=date_to}Date to{/s}',
+        orderState:  '{s name=order_state}Order state{/s}',
+        paymentState:  '{s name=payment_state}Payment state{/s}'
     },
     /*
      * profile store
@@ -81,6 +86,10 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
     createFormPanel: function() {
         var me = this;
 
+        var formPanelItems = [me.mainFields()];
+        
+        formPanelItems = formPanelItems.concat(me.additionalFields());
+        
         // Form panel which holds off all options
         me.formPanel = Ext.create('Ext.form.Panel', {
             bodyPadding: 20,
@@ -89,9 +98,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
             defaults: {
                 labelStyle: 'font-weight: 700; text-align: right;'
             },
-            items: [
-                me.mainFields(), me.additionalFields()
-            ],
+            items: formPanelItems,
             dockedItems: [{
                     xtype: 'toolbar',
                     dock: 'bottom',
@@ -140,7 +147,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
     additionalFields: function() {
         var me = this;
 
-        me.additionalFields = Ext.create('Ext.form.FieldSet', {
+        me.articleFields = Ext.create('Ext.form.FieldSet', {
             title: me.snippets.fieldsetAdditional,
             padding: 12,
             hidden: true,
@@ -152,15 +159,78 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
                     padding: '0 0 8',
                     items: [
                         me.createVariantsCheckbox(),
-//                        me.createCustomerGroupCheckbox(),
-//                        me.createTranslationCheckbox(),
                         me.createLimit(),
                         me.createOffset()
                     ]
                 }]
         });
-
-        return me.additionalFields;
+        var orderStatusStore = Ext.create('Shopware.store.OrderStatus');
+        
+        me.orderFields = Ext.create('Ext.form.FieldSet', {
+            title: me.snippets.fieldsetAdditional,
+            padding: 12,
+            hidden: true,
+            defaults: {
+                labelStyle: 'font-weight: 700; text-align: right;',
+            },
+            items: [{
+                    xtype: 'container',
+                    padding: '0 0 8',
+                    items: [
+                        {
+                            xtype: 'textfield',
+                            fieldLabel: me.snippets.orderNumberFrom,
+                            name: 'ordernumberFrom',
+                            labelWidth: 150,
+                            width: 400
+                        },
+                        {
+                            xtype: 'datefield',
+                            fieldLabel: me.snippets.dateFrom,
+                            name: 'dateFrom',
+                            maxValue: new Date(),
+                            submitFormat: 'd.m.Y',
+                            labelWidth: 150,
+                            width: 400
+                        },
+                        {
+                            xtype: 'datefield',
+                            fieldLabel: me.snippets.dateTo,
+                            name: 'dateTo',
+                            maxValue: new Date(),
+                            submitFormat: 'd.m.Y',
+                            labelWidth: 150,
+                            width: 400
+                        },
+                        {
+                            xtype: 'combobox',
+                            name: 'orderstate',
+                            fieldLabel: me.snippets.orderState,
+                            emptyText: me.snippets.choose,
+                            store: Ext.create('Shopware.store.OrderStatus'),
+                            editable: false,
+                            displayField: 'description',
+                            valueField: 'id',
+                            labelWidth: 150,
+                            width: 400
+                        },
+                        {
+                            xtype: 'combobox',
+                            name: 'paymentstate',
+                            fieldLabel: me.snippets.paymentState,
+                            emptyText: me.snippets.choose,
+                            store: Ext.create('Shopware.store.PaymentStatus'),
+                            editable: false,
+                            displayField: 'description',
+                            valueField: 'id',
+                            labelWidth: 150,
+                            width: 400
+                        }
+                    ]
+                }]
+        });
+        
+        return [me.articleFields, me.orderFields];
     },
     /*
      * Profile drop down
@@ -188,9 +258,14 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
                     var type = record.get('type');
                     
                     if (type === 'articles') {
-                        me.additionalFields.show();
+                        me.articleFields.show();
+                        me.orderFields.hide();
+                    } else if (type === 'orders') {
+                        me.orderFields.show();
+                        me.articleFields.hide();
                     } else {
-                        me.additionalFields.hide();
+                        me.articleFields.hide();
+                        me.orderFields.hide();
                     }
                 }
             }

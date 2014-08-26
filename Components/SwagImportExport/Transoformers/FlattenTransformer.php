@@ -238,15 +238,36 @@ class FlattenTransformer implements DataTransformerAdapter
                     throw new \Exception("Price column not found");
                 }
 
+                $dataColumns = array_keys($data);
+                $isEkGroupMissing = false;
                 $prices = array();
                 $matches = array();
-
-                // find groups and extract values
-                $priceColumns = preg_grep("/" . $priceColumnName . "_+(.*)/i", array_keys($data));
+                $groups = array();
+                
+                // find groups
+                $priceColumns = preg_grep("/^" . $priceColumnName . "_+(.*)/i", $dataColumns);
                 foreach ($priceColumns as &$columns) {
-                    preg_match("/" . $priceColumnName . "_+(?P<group>.*)/i", $columns, $matches);
-                    $prices[] = $this->transformPricesToTree($node, $data, $matches['group']);
+                    preg_match("/" . $priceColumnName . "_+(?P<group>.*)$/i", $columns, $matches);
+                    $groups[] = $matches['group'];
                 }
+                
+                // special case for EK group ('_EK' may be missing)
+                if (!in_array('EK', $groups)) {
+                    array_unshift($groups, 'EK');
+                    $isEkGroupMissing = true;
+                }
+                
+                // TODO: add filters here
+                
+                // extract values
+                foreach ($groups as $group) {
+                    // special case for EK group ('_EK' may be missing)
+                    if ($group == 'EK' && $isEkGroupMissing) {
+                        $group = '';
+                    }
+                    $prices[] = $this->transformPricesToTree($node, $data, $group);
+                }
+                
                 return $prices;
             } else if ($node['adapter'] == 'configurator') {
                 // find fields
@@ -323,13 +344,22 @@ class FlattenTransformer implements DataTransformerAdapter
      */
     protected function transformPricesToTree($node, $data, $group)
     {
+        // special case for EK group ('_EK' may be missing)
+        if ($group != '') {
+            $groupValue = $group;
+            $groupExtension = '_' . $group;
+        } else {
+            $groupValue = 'EK';
+            $groupExtension = '';
+        }
+        
         if (isset($node['children'])) {
             if (isset($node['attributes'])) {
                 foreach ($node['attributes'] as $attribute) {
                     if ($attribute['shopwareField'] != 'priceGroup') {
-                        $value = $this->getDataValue($data, $attribute['name'] . '_' . $group);
+                        $value = $this->getDataValue($data, $attribute['name'] . $groupExtension);
                     } else {
-                        $value = $group;
+                        $value = $groupValue;
                     }
                     $currentNode['_attributes'][$attribute['name']] = $value;
                 }
@@ -344,24 +374,24 @@ class FlattenTransformer implements DataTransformerAdapter
             if (isset($node['attributes'])) {
                 foreach ($node['attributes'] as $attribute) {
                     if ($attribute['shopwareField'] != 'priceGroup') {
-                        $value = $this->getDataValue($data, $attribute['name'] . '_' . $group);
+                        $value = $this->getDataValue($data, $attribute['name'] . $groupExtension);
                     } else {
-                        $value = $group;
+                        $value = $groupValue;
                     }
                     $currentNode['_attributes'][$attribute['name']] = $value;
                 }
 
                 if ($node['shopwareField'] != 'priceGroup') {
-                    $value = $this->getDataValue($data, $node['name'] . '_' . $group);
+                    $value = $this->getDataValue($data, $node['name'] . $groupExtension);
                 } else {
-                    $value = $group;
+                    $value = $groupValue;
                 }
                 $currentNode['_value'] = $value;
             } else {
                 if ($node['shopwareField'] != 'priceGroup') {
-                    $value = $this->getDataValue($data, $node['name'] . '_' . $group);
+                    $value = $this->getDataValue($data, $node['name'] . $groupExtension);
                 } else {
-                    $value = $group;
+                    $value = $groupValue;
                 }
                 $currentNode = $value;
             }

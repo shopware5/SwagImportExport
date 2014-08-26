@@ -31,6 +31,32 @@ class OrdersDbAdapter implements DataDbAdapter
 
         $builder->select('orders.id')
                 ->from('Shopware\Models\Order\Order', 'orders');
+                        
+        if (isset($filter['orderstate']) && is_numeric($filter['orderstate'])) {
+            $builder->andWhere('orders.status = :orderstate');
+            $builder->setParameter('orderstate', $filter['orderstate']);
+        }
+
+        if (isset($filter['paymentstate']) && is_numeric($filter['paymentstate'])) {
+            $builder->andWhere('orders.cleared = :paymentstate');
+            $builder->setParameter('paymentstate', $filter['paymentstate']);
+        }
+
+        if (isset($filter['orderNumberFrom']) && is_numeric($filter['orderNumberFrom'])) {
+            $builder->andWhere('orders.number > :orderNumberFrom');
+            $builder->setParameter('orderNumberFrom', $filter['paymentstate']);
+        }
+
+        if (isset($filter['dateFrom']) && $filter['dateFrom']) {
+            $builder->andWhere('orders.orderTime >= :dateFrom');
+            $builder->setParameter('dateFrom', $filter['dateFrom']);
+        }
+
+        if (isset($filter['dateTo']) && $filter['dateTo']) {
+            $dateTo = $filter['dateTo'];
+            $builder->andWhere('orders.orderTime <= :dateTo');
+            $builder->setParameter('dateTo', $dateTo->get('yyyy-MM-dd HH:mm:ss'));
+        }
         
         $builder->setFirstResult($start)
                 ->setMaxResults($limit);
@@ -167,7 +193,7 @@ class OrdersDbAdapter implements DataDbAdapter
             'orders.customerId as customerId',
             'orders.status as status',
             'orders.cleared as cleared',
-            'orders.orderTime as orderTime',
+            "DATE_FORMAT(orders.orderTime, '%Y-%m-%d %H:%i:%s') as orderTime",
             'orders.transactionId as transactionId',
             'orders.partnerId as partnerId',
             'orders.shopId as shopId',

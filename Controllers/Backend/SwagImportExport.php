@@ -66,7 +66,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $tree = $profileEntity->getTree();
         $root = TreeHelper::convertToExtJSTree(json_decode($tree, 1));
 
-        $this->View()->assign(array('success' => true, 'children' => $root['children']));
+        $this->View()->assign(array('success' => true, 'children' => $root));
     }
 
     public function createNodeAction()
@@ -122,6 +122,11 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             if (!TreeHelper::changeNode($node, $tree)) {
                 $errors = true;
                 break;
+            }
+            
+            // the root cannot be moved or deleted
+            if ($node['id'] == 'root') {
+                continue;
             }
             
             $changedNode = TreeHelper::getNodeById($node['id'], $tree);
@@ -425,6 +430,33 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             $postData['filter']['variants'] = $variants;
         }
         
+        //order filter
+        if ($this->Request()->getParam('ordernumberFrom')) {
+            $postData['filter']['ordernumberFrom'] = $this->Request()->getParam('ordernumberFrom');
+        }
+        
+        if ($this->Request()->getParam('dateFrom')) {
+            $dateFrom = $this->Request()->getParam('dateFrom');
+            $postData['filter']['dateFrom'] = new \DateTime($dateFrom);
+        }
+        
+        if ($this->Request()->getParam('dateTo')) {
+            $dateTo = $this->Request()->getParam('dateTo');
+            $dateTo = new Zend_Date($dateTo);
+            $dateTo->setHour('23');
+            $dateTo->setMinute('59');
+            $dateTo->setSecond('59');
+            $postData['filter']['dateTo'] = $dateTo;
+        }
+        
+        if ($this->Request()->getParam('orderstate')) {
+            $postData['filter']['orderstate'] = $this->Request()->getParam('orderstate');
+        }
+        
+        if ($this->Request()->getParam('paymentstate')) {
+            $postData['filter']['paymentstate'] = $this->Request()->getParam('paymentstate');
+        }
+        
         try {
             $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
 
@@ -457,6 +489,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
     public function exportAction()
     {
+        //article filter
         $variants = $this->Request()->getParam('variants') ? true : false;
 
         if ($this->Request()->getParam('limit')) {
@@ -482,6 +515,33 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         
         if ($variants) {
             $postData['filter']['variants'] = $variants;
+        }
+        
+        //order filter
+        if ($this->Request()->getParam('ordernumberFrom')) {
+            $postData['filter']['ordernumberFrom'] = $this->Request()->getParam('ordernumberFrom');
+        }
+        
+        if ($this->Request()->getParam('dateFrom')) {
+            $dateFrom = $this->Request()->getParam('dateFrom');
+            $postData['filter']['dateFrom'] = new \DateTime($dateFrom);
+        }
+        
+        if ($this->Request()->getParam('dateTo')) {
+            $dateTo = $this->Request()->getParam('dateTo');
+            $dateTo = new Zend_Date($dateTo);
+            $dateTo->setHour('23');
+            $dateTo->setMinute('59');
+            $dateTo->setSecond('59');
+            $postData['filter']['dateTo'] = $dateTo;
+        }
+        
+        if ($this->Request()->getParam('orderstate')) {
+            $postData['filter']['orderstate'] = $this->Request()->getParam('orderstate');
+        }
+        
+        if ($this->Request()->getParam('paymentstate')) {
+            $postData['filter']['paymentstate'] = $this->Request()->getParam('paymentstate');
         }
 
         $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
