@@ -166,6 +166,16 @@ class ArticlesDbAdapter implements DataDbAdapter
                 ->setParameter('ids', $ids);
         $result['similar'] = $similarsBuilder->getQuery()->getResult();
         
+        //categories
+        $categoriesBuilder = $manager->createQueryBuilder();
+        $categoriesBuilder->select($columns['category'])
+                ->from('Shopware\Models\Article\Detail', 'variant')
+                ->join('variant.article', 'article')
+                ->leftjoin('article.categories', 'categories')
+                ->where('variant.id IN (:ids)')
+                ->setParameter('ids', $ids);
+        $result['category'] = $categoriesBuilder->getQuery()->getResult();
+        
         return $result;
     }
 
@@ -189,6 +199,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         $columns['propertyValues'] = $this->getPropertyValueColumns();
         $columns['similar'] = $this->getSimilarColumns();
         $columns['configurator'] = $this->getConfiguratorColumns();
+        $columns['category'] = $this->getCategoryColumns();
         
         return $columns;
     }
@@ -302,6 +313,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             array('id' => 'propertyValue', 'name' => 'propertyValue'),
             array('id' => 'similar', 'name' => 'similar'),
             array('id' => 'configurator', 'name' => 'configurator'),
+            array('id' => 'category', 'name' => 'category'),
         );
     }
 
@@ -1006,6 +1018,10 @@ class ArticlesDbAdapter implements DataDbAdapter
                 return array(
                     'variant.id as variantId',
                 );
+            case 'category':
+                return array(
+                    'article.id as articleId',
+                );
         }
     }
 
@@ -1098,6 +1114,14 @@ class ArticlesDbAdapter implements DataDbAdapter
         );
     }
 
+    public function getCategoryColumns()
+    {
+         return array(
+            'categories.id as categoryId',
+            'article.id as articleId',
+        );
+    }
+    
     /**
      * Returns/Creates mapper depend on the key
      * Exmaple: articles, variants, prices ...
