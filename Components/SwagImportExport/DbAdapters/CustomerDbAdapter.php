@@ -21,7 +21,7 @@ class CustomerDbAdapter implements DataDbAdapter
         $default = array();
 
         $default = array_merge($default, $this->getCustomerColumns());
-
+        
         $default = array_merge($default, $this->getBillingColumns());
 
         $default = array_merge($default, $this->getShippingColumns());
@@ -34,6 +34,7 @@ class CustomerDbAdapter implements DataDbAdapter
         $columns = array(
             'customer.id as id',
             'customer.hashPassword as password',
+            'unhashedPassword',
             'customer.encoderName as encoder',
             'customer.email as email',
             'customer.active as active',
@@ -183,6 +184,12 @@ class CustomerDbAdapter implements DataDbAdapter
 
         $builder = $manager->createQueryBuilder();
         
+        foreach ($columns as $key => $value) {
+            if ($value == 'unhashedPassword') {
+                unset($columns[$key]);
+            }
+        }
+                
         $builder->select($columns)
                 ->from('\Shopware\Models\Customer\Customer', 'customer')
                 ->join('customer.billing', 'billing')
@@ -239,7 +246,9 @@ class CustomerDbAdapter implements DataDbAdapter
     public function write($records)
     {
         $manager = $this->getManager();
-
+        $passwordManager = Shopware()->PasswordEncoder();
+        $db = Shopware()->Db();
+        
         foreach ($records['default'] as $record) {
 
             if (!$record['email']) {
@@ -249,29 +258,58 @@ class CustomerDbAdapter implements DataDbAdapter
             }
 
             $customer = $this->getRepository()->findOneBy(array('email' => $record['email']));
+            
+            if (isset($record['unhashedPassword']) && $record['unhashedPassword'] 
+                && (!isset($record['password']) || !$record['password'])) {
+                
+                if (!isset($record['encoder']) || !$record['encoder']) {
+                    $record['encoder'] = $passwordManager->getDefaultPasswordEncoderName();
+                }
 
+                $encoder = $passwordManager->getEncoderByName($record['encoder']);
+
+                $record['password'] = $encoder->encodePassword($record['unhashedPassword']);
+
+                unset($record['unhashedPassword']);
+            }
+            
             if (!$customer) {
                 $customer = new Customer();
             }
 
+            if (isset($record['password']) && !$record['password']) {
+                throw new \Exception('Password must be provided');
+            }
+            
+            if (isset($record['password']) && (!isset($record['encoder']) || !$record['encoder'])) {
+                throw new \Exception('Password encoder must be provided');
+            }
+           
             $customerData = $this->prepareCustomer($record);
 
             $customerData['billing'] = $this->prepareBilling($record);
 
             $customerData['shipping'] = $this->prepareShipping($record);
-
+            
             $customer->fromArray($customerData);
 
             $violations = $this->getManager()->validate($customer);
-            
+
             if ($violations->count() > 0) {
                 throw new \Exception($violations);
             }
             
             $manager->persist($customer);
+            $manager->flush();
+            
+            if (isset($customerData['encoderName']) && $customerData['encoderName']) {
+                $customerId = $customer->getId();
+                
+                $data['encoder'] = lcfirst($customerData['encoderName']);
+                $whereUser = array('id=' . $customerId);
+                $db->update('s_user', $data, $whereUser);
+            }
         }
-
-        $manager->flush();
     }
 
     protected function prepareCustomer(&$record)
@@ -285,7 +323,7 @@ class CustomerDbAdapter implements DataDbAdapter
                 $this->customerMap[$map[0]] = $map[1];
             }
         }
-
+        
         $customerData = array();
         foreach ($record as $key => $value) {
             if (isset($this->customerMap[$key])) {
@@ -293,8 +331,9 @@ class CustomerDbAdapter implements DataDbAdapter
                 unset($record[$key]);
             }
         }
-
-        $customerData['password'] = $customerData['hashPassword'];
+        
+        $customerData['rawPassword'] = $customerData['hashPassword'];
+        unset($record['hashPassword']);
 
         return $customerData;
     }
