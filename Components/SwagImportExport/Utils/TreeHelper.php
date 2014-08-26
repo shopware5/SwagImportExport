@@ -296,8 +296,14 @@ class TreeHelper
         if (is_array($node) && isset($node['children'])) {
             foreach ($node as $key => $value) {
                 if ($key === 'children' || $key === 'attributes') {
-                    foreach ($value as $innerValue) {
+                    $count = count($value);
+                    foreach ($value as $currentIndex => $innerValue) {
                         $value3 = self::reorderTree($innerValue);
+                        
+                        // fix for to-be-deleted nodes
+                        if (isset($reorderdNode[$key][$innerValue['index']])) {
+                            $reorderdNode[$key][$count + $currentIndex] = $reorderdNode[$key][$innerValue['index']];
+                        }
                         $reorderdNode[$key][$innerValue['index']] = $value3;
                     }
                     ksort($reorderdNode[$key]);
@@ -314,7 +320,8 @@ class TreeHelper
     }
 
     /**
-     * Returns the default tree for a profile by given profile type
+     * Returns the default tree for a profile by given profile type. <br/>
+     * Note: The id of the root node MUST be 'root', but the name may be different.
      * 
      * @param string $profileType
      * @return string|boolean
