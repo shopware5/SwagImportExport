@@ -238,15 +238,23 @@ class FlattenTransformer implements DataTransformerAdapter
                     throw new \Exception("Price column not found");
                 }
 
+                $dataColumns = array_keys($data);
                 $prices = array();
                 $matches = array();
-
-                // find groups and extract values
-                $priceColumns = preg_grep("/" . $priceColumnName . "_+(.*)/i", array_keys($data));
+                $groups = array();
+                
+                // find groups
+                $priceColumns = preg_grep("/^" . $priceColumnName . "_+(.*)/i", $dataColumns);
                 foreach ($priceColumns as &$columns) {
-                    preg_match("/" . $priceColumnName . "_+(?P<group>.*)/i", $columns, $matches);
-                    $prices[] = $this->transformPricesToTree($node, $data, $matches['group']);
+                    preg_match("/" . $priceColumnName . "_+(?P<group>.*)$/i", $columns, $matches);
+                    $groups[] = $matches['group'];
                 }
+                
+                // extract values
+                foreach ($groups as $group) {
+                    $prices[] = $this->transformPricesToTree($node, $data, $group);
+                }
+                
                 return $prices;
             } else if ($node['adapter'] == 'configurator') {
                 // find fields
