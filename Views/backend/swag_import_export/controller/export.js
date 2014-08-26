@@ -77,7 +77,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
                     );
             return false;
         }
-
+        
         me.parameters = values;
 
         me.onCreateExportWindow();
@@ -142,7 +142,12 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
                 format: me.parameters.format,
                 limit: me.parameters.limit,
                 offset: me.parameters.offset,
-                variants: me.parameters.variants
+                variants: me.parameters.variants,
+                ordernumberFrom: me.parameters.ordernumberFrom,
+                dateFrom: me.parameters.dateFrom,
+                dateTo: me.parameters.dateTo,
+                orderstate: me.parameters.orderstate,
+                paymentstate: me.parameters.paymentstate
             }
         };
 
