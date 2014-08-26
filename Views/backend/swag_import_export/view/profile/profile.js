@@ -186,6 +186,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
                     }
                 }
             },
+            rootVisible: false,
             title: 'Profile',
 			width: 310,
 			useArrows: true,
@@ -270,8 +271,6 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
             }
 		});
         
-        $tp = me.treePanel;
-		
 		return me.treePanel;
 	},
 	

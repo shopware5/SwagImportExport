@@ -66,7 +66,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $tree = $profileEntity->getTree();
         $root = TreeHelper::convertToExtJSTree(json_decode($tree, 1));
 
-        $this->View()->assign(array('success' => true, 'children' => $root['children']));
+        $this->View()->assign(array('success' => true, 'children' => $root));
     }
 
     public function createNodeAction()
@@ -122,6 +122,11 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             if (!TreeHelper::changeNode($node, $tree)) {
                 $errors = true;
                 break;
+            }
+            
+            // the root cannot be moved or deleted
+            if ($node['id'] == 'root') {
+                continue;
             }
             
             $changedNode = TreeHelper::getNodeById($node['id'], $tree);
