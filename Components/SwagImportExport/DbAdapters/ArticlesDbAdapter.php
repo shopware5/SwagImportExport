@@ -210,7 +210,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         if (empty($records['article'])) {
             throw new \Exception('No article records were found.');
         }
-        
+
         foreach ($records['article'] as $index => $record) {
             
             if (!isset($record['orderNumber']) && empty($record['orderNumber'])) {
@@ -247,6 +247,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $variantModel->setPrices($prices);
                 
                 $articleData['images'] = $this->prepareImages($records['image'], $index, $articleModel);
+                $articleData['categories'] = $this->prepareCategories($records['category'], $index, $articleModel);
                 $articleData['similar'] = $this->prepareSimilars($records['similar'], $index, $articleModel);
                 $articleData['configuratorSet'] = $this->prepareArticleConfigurators($records['configurator'], $index, $articleModel);
                 
@@ -271,6 +272,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                     $articleData = $this->prerpareArticle($record);
                     $articleData['images'] = $this->prepareImages($records['image'], $index, $articleModel);
                     $articleData['similar'] = $this->prepareSimilars($records['similar'], $index, $articleModel);
+                    $articleData['categories'] = $this->prepareCategories($records['category'], $index, $articleModel);
                     
                     $articleModel->fromArray($articleData);
                 }
@@ -514,6 +516,50 @@ class ArticlesDbAdapter implements DataDbAdapter
         return $prices;
     }
     
+    public function prepareCategories(&$data, $variantIndex, ArticleModel $article)
+    {
+        if ($data == null) {
+            return;
+        }
+
+        $articleCategories = $article->getCategories();
+
+        foreach ($data as $key => $categoryData) {
+
+            if ($categoryData['parentIndexElement'] === $variantIndex) {
+
+                if (!isset($categoryData['categoryId']) || !$categoryData['categoryId']) {
+                    continue;
+                }
+
+                foreach ($articleCategories as $articleCategory) {
+                    if ($articleCategory->getId() == (int) $categoryData['categoryId']) {
+                        continue;
+                    }
+                }
+
+                $categoryModel = $this->getManager()->find(
+                        'Shopware\Models\Category\Category', (int) $categoryData['categoryId']
+                );
+
+                if (!$categoryModel) {
+                    throw new \Exception(sprintf('Category with id %s could not be found.', $categoryData['categoryId']));
+                }
+
+
+                $categories[] = $categoryModel;
+                unset($categoryModel);
+                unset($data[$key]);
+            }
+        }
+
+        if ($categories === null) {
+            return;
+        }
+
+        return $categories;
+    }
+
     public function prepareImages(&$data, $variantIndex, ArticleModel $article)
     {
         if ($data == null) {
