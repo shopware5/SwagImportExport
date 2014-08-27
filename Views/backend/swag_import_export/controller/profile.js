@@ -445,12 +445,28 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                     var parentNode = node.parentNode;
                     parentNode.removeChild(node);
                     
-                    if (parentNode.get('type') !== 'iteration' && parentNode.get('inIteration') === true && parentNode.childNodes.length === 0) {
-                        parentNode.set('type', 'leaf');
-                        parentNode.set('iconCls', 'sprite-icon_taskbar_top_inhalte_active');
+                    if (parentNode.get('type') !== 'iteration' && parentNode.get('inIteration') === true) {
+                        var bChildNodes = false;
+                        
+                        // check if there is at least one leaf, iteration or node
+                        for (var i = 0; i < parentNode.childNodes.length; i++) {
+                            if (parentNode.childNodes[i].get('type') !== 'attribute') {
+                                bChildNodes = true;
+                                break;
+                            }
+                        }
+                        
+                        if (!bChildNodes) {
+                            parentNode.set('type', 'leaf');
+                            parentNode.set('iconCls', 'sprite-icon_taskbar_top_inhalte_active');
+                        }
                     }
                     
                     treeStore.sync({
+                        success: function() {
+                            selModel.deselectAll();
+                            selModel.select(parentNode);
+                        },
                         failure: function(batch, options) {
                             var error = batch.exceptions[0].getError(),
                                     msg = Ext.isObject(error) ? error.status + ' ' + error.statusText : error;
@@ -463,9 +479,6 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                             });
                         }
                     });
-                            
-                    selModel.deselectAll();
-                    selModel.select(parentNode);
                 }
             }
         });

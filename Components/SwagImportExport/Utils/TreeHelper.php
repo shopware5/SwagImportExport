@@ -266,6 +266,9 @@ class TreeHelper
             foreach ($node['children'] as $key => &$childNode) {
                 if ($childNode['id'] == $child['id']) {
                     unset($node['children'][$key]);
+                    if (count($node['children']) == 0) {
+                        unset($node['children']);
+                    }
                     return true;
                 } else if (static::deleteNode($child, $childNode)) {
                     return true;
@@ -276,6 +279,9 @@ class TreeHelper
             foreach ($node['attributes'] as $key => &$childNode) {
                 if ($childNode['id'] == $child['id']) {
                     unset($node['attributes'][$key]);
+                    if (count($node['attributes']) == 0) {
+                        unset($node['attributes']);
+                    }
                     return true;
                 }
             }
