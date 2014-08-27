@@ -166,6 +166,16 @@ class ArticlesDbAdapter implements DataDbAdapter
                 ->setParameter('ids', $ids);
         $result['similar'] = $similarsBuilder->getQuery()->getResult();
         
+        //categories
+        $categoriesBuilder = $manager->createQueryBuilder();
+        $categoriesBuilder->select($columns['category'])
+                ->from('Shopware\Models\Article\Detail', 'variant')
+                ->join('variant.article', 'article')
+                ->leftjoin('article.categories', 'categories')
+                ->where('variant.id IN (:ids)')
+                ->setParameter('ids', $ids);
+        $result['category'] = $categoriesBuilder->getQuery()->getResult();
+        
         return $result;
     }
 
@@ -189,6 +199,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         $columns['propertyValues'] = $this->getPropertyValueColumns();
         $columns['similar'] = $this->getSimilarColumns();
         $columns['configurator'] = $this->getConfiguratorColumns();
+        $columns['category'] = $this->getCategoryColumns();
         
         return $columns;
     }
@@ -199,7 +210,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         if (empty($records['article'])) {
             throw new \Exception('No article records were found.');
         }
-        
+
         foreach ($records['article'] as $index => $record) {
             
             if (!isset($record['orderNumber']) && empty($record['orderNumber'])) {
@@ -236,6 +247,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $variantModel->setPrices($prices);
                 
                 $articleData['images'] = $this->prepareImages($records['image'], $index, $articleModel);
+                $articleData['categories'] = $this->prepareCategories($records['category'], $index, $articleModel);
                 $articleData['similar'] = $this->prepareSimilars($records['similar'], $index, $articleModel);
                 $articleData['configuratorSet'] = $this->prepareArticleConfigurators($records['configurator'], $index, $articleModel);
                 
@@ -260,6 +272,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                     $articleData = $this->prerpareArticle($record);
                     $articleData['images'] = $this->prepareImages($records['image'], $index, $articleModel);
                     $articleData['similar'] = $this->prepareSimilars($records['similar'], $index, $articleModel);
+                    $articleData['categories'] = $this->prepareCategories($records['category'], $index, $articleModel);
                     
                     $articleModel->fromArray($articleData);
                 }
@@ -302,6 +315,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             array('id' => 'propertyValue', 'name' => 'propertyValue'),
             array('id' => 'similar', 'name' => 'similar'),
             array('id' => 'configurator', 'name' => 'configurator'),
+            array('id' => 'category', 'name' => 'category'),
         );
     }
 
@@ -502,6 +516,50 @@ class ArticlesDbAdapter implements DataDbAdapter
         return $prices;
     }
     
+    public function prepareCategories(&$data, $variantIndex, ArticleModel $article)
+    {
+        if ($data == null) {
+            return;
+        }
+
+        $articleCategories = $article->getCategories();
+
+        foreach ($data as $key => $categoryData) {
+
+            if ($categoryData['parentIndexElement'] === $variantIndex) {
+
+                if (!isset($categoryData['categoryId']) || !$categoryData['categoryId']) {
+                    continue;
+                }
+
+                foreach ($articleCategories as $articleCategory) {
+                    if ($articleCategory->getId() == (int) $categoryData['categoryId']) {
+                        continue;
+                    }
+                }
+
+                $categoryModel = $this->getManager()->find(
+                        'Shopware\Models\Category\Category', (int) $categoryData['categoryId']
+                );
+
+                if (!$categoryModel) {
+                    throw new \Exception(sprintf('Category with id %s could not be found.', $categoryData['categoryId']));
+                }
+
+
+                $categories[] = $categoryModel;
+                unset($categoryModel);
+                unset($data[$key]);
+            }
+        }
+
+        if ($categories === null) {
+            return;
+        }
+
+        return $categories;
+    }
+
     public function prepareImages(&$data, $variantIndex, ArticleModel $article)
     {
         if ($data == null) {
@@ -1006,6 +1064,10 @@ class ArticlesDbAdapter implements DataDbAdapter
                 return array(
                     'variant.id as variantId',
                 );
+            case 'category':
+                return array(
+                    'article.id as articleId',
+                );
         }
     }
 
@@ -1098,6 +1160,14 @@ class ArticlesDbAdapter implements DataDbAdapter
         );
     }
 
+    public function getCategoryColumns()
+    {
+         return array(
+            'categories.id as categoryId',
+            'article.id as articleId',
+        );
+    }
+    
     /**
      * Returns/Creates mapper depend on the key
      * Exmaple: articles, variants, prices ...
