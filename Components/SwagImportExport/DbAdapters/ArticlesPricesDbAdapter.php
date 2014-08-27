@@ -169,7 +169,9 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
 
             if ($customerGroup->getTaxInput()) {
                 $record['price'] = $record['price'] / (100 + $tax->getTax()) * 100;
-                $record['pseudoPrice'] = $record['pseudoPrice'] / (100 + $tax->getTax()) * 100;
+                if (isset($record['pseudoPrice'])) {
+                    $record['pseudoPrice'] = $record['pseudoPrice'] / (100 + $tax->getTax()) * 100;
+                }
             }
 
             $price = new \Shopware\Models\Article\Price();
@@ -179,7 +181,9 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
             $price->setFrom($record['from']);
             $price->setTo('beliebig');
             $price->setPrice($record['price']);
-            $price->setPseudoPrice($record['pseudoPrice']);
+            if (isset($record['pseudoPrice'])) {
+                $price->setPseudoPrice($record['pseudoPrice']);
+            }
             $price->setBasePrice($record['basePrice']);
             $price->setPercent($record['percent']);
 
