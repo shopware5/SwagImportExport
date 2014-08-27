@@ -115,6 +115,7 @@ class OrdersDbAdapter implements DataDbAdapter
                 ->leftJoin('shipping.country', 'shippingCountry')
                 ->leftJoin('orders.payment', 'payment')
                 ->leftJoin('orders.paymentStatus', 'paymentStatus')
+                ->leftJoin('orders.orderStatus', 'orderStatus')
                 ->leftJoin('orders.dispatch', 'dispatch')
                 ->leftJoin('orders.customer', 'customer')
                 ->where('orders.id IN (:ids)')
@@ -150,15 +151,127 @@ class OrdersDbAdapter implements DataDbAdapter
     }
 
     /**
-     * Insert/Update data into db
+     * Update order
      * 
      * @param array $records
      */
     public function write($records)
     {
-        
+        foreach ($records['order'] as $index => $record) {
+
+            if ((!isset($record['orderId']) || !$record['orderId']) && (!isset($record['number']) || !$record['number'])) {
+                throw new \Exception('Order id or order number must be provided');
+            }
+
+            if (isset($record['orderId']) && $record['orderId']) {
+                $orderModel = $this->getRepository()->find($record['orderId']);
+
+                if (!$orderModel) {
+                    throw new \Exception(sprintf('Order with id %s was not found', $record['orderId']));
+                }
+            } else {
+                $orderModel = $this->getRepository()->findOneBy(array('number' => $record['number']));
+
+                if (!$orderModel) {
+                    throw new \Exception(sprintf('Order with number %s was not found', $record['number']));
+                }
+            }
+
+            if (isset($record['paymentId']) && is_numeric($record['status'])) {
+                $paymentStatusModel = $this->getManager()->find('\Shopware\Models\Order\Status', $record['paymentId']);
+
+                if (!$paymentStatusModel) {
+                    throw new \Exception(sprintf('Payment status id %s was not found', $record['paymentId']));
+                }
+
+                $orderModel->setPaymentStatus($paymentStatusModel);
+            }
+
+            if (isset($record['status']) && is_numeric($record['status'])) {
+                $orderStatusModel = $this->getManager()->find('\Shopware\Models\Order\Status', $record['status']);
+
+                if (!$orderStatusModel) {
+                    throw new \Exception(sprintf('Payment status id %s was not found', $record['status']));
+                }
+
+                $orderModel->setOrderStatus($orderStatusModel);
+            }
+
+            if (isset($record['trackingCode']) && $record['trackingCode']) {
+                $orderModel->setTrackingCode($record['trackingCode']);
+            }
+
+            if (isset($record['comment']) && $record['comment']) {
+                $orderModel->setComment($record['comment']);
+            }
+
+            if (isset($record['customerComment']) && $record['customerComment']) {
+                $orderModel->setCustomerComment($record['customerComment']);
+            }
+
+            if (isset($record['internalComment']) && $record['internalComment']) {
+                $orderModel->setInternalComment($record['internalComment']);
+            }
+
+            if (isset($record['transactionId']) && $record['transactionId']) {
+                $orderModel->setTransactionId($record['transactionId']);
+            }
+
+            if (isset($record['clearedDate']) && $record['clearedDate']) {
+                $orderModel->setClearedDate($record['clearedDate']);
+            }
+
+            $this->updateDetails($records['detail'], $index);
+
+            $this->getManager()->persist($orderModel);
+        }
+
+        $this->getManager()->flush();
     }
-    
+
+    public function updateDetails(&$data, $detailIndex)
+    {
+        if ($data == null) {
+            return;
+        }
+
+        foreach ($data as $key => $detailData) {
+
+            if ($detailData['parentIndexElement'] === $detailIndex) {
+
+                if (!isset($detailData['orderDetailId'])) {
+                    throw new \Exception('Order detail id must be provided.');
+                }
+
+                $detailModel = $this->getManager()->find(
+                        'Shopware\Models\Order\Detail', (int) $detailData['orderDetailId']
+                );
+
+                if (!$detailModel) {
+                    throw new \Exception(sprintf('Order detail with id %s was not found', $detailData['orderDetailId']));
+                }
+
+                if (isset($detailData['shipped']) && $detailData['shipped']) {
+                    $detailModel->setShipped($detailData['shipped']);
+                }
+
+                if (isset($detailData['statusId']) && is_numeric($detailData['statusId'])) {
+                    $detailStatusModel = $this->getManager()->find('\Shopware\Models\Order\DetailStatus', $detailData['statusId']);
+
+                    if (!$detailStatusModel) {
+                        throw new \Exception(sprintf('Detail status with id %s was not found', $detailData['statusId']));
+                    }
+
+                    $detailModel->setStatus($detailStatusModel);
+                }
+            }
+
+            $this->getManager()->persist($detailModel);
+            unset($data[$key]);
+            unset($detailModel);
+        }
+    }
+
     /**
      * @return array
      */
@@ -216,8 +329,8 @@ class OrdersDbAdapter implements DataDbAdapter
             'orders.remoteAddress as remoteAddress',
             'payment.id as paymentId',
             'payment.description as paymentDescription',
-            'paymentStatus.id as statusId',
-            'paymentStatus.description as statusDescription',
+            'paymentStatus.id as paymentStatusId',
+            'paymentStatus.description as paymentStatusDescription',
             'dispatch.id as dispatchId',
             'dispatch.description as dispatchDescription',
             
@@ -283,14 +396,14 @@ class OrdersDbAdapter implements DataDbAdapter
     }
 
     /**
-     * Returns category repository
+     * Returns order repository
      * 
-     * @return Shopware\Models\Category\Category
+     * @return Shopware\Models\Order\Order
      */
     public function getRepository()
     {
         if ($this->repository === null) {
-            $this->repository = $this->getManager()->getRepository('Shopware\Models\Category\Category');
+            $this->repository = $this->getManager()->getRepository('Shopware\Models\Order\Order');
         }
         return $this->repository;
     }
