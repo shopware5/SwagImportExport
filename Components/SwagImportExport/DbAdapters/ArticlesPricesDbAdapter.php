@@ -52,6 +52,10 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
         if (!$columns && empty($columns)) {
             throw new \Exception('Can not read articles without column names.');
         }
+        
+        $columns = array_merge(
+                $columns, array('customerGroup.taxInput as taxInput', 'articleTax.tax as tax')
+        );
 
         $manager = $this->getManager();
 
@@ -59,11 +63,18 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
         $builder->select($columns)
                 ->from('Shopware\Models\Article\Article', 'article')
                 ->leftJoin('article.details', 'detail')
+                ->leftJoin('article.tax', 'articleTax')
                 ->leftJoin('detail.prices', 'price')
+                ->leftJoin('price.customerGroup', 'customerGroup')
                 ->where('price.id IN (:ids)')
                 ->setParameter('ids', $ids);
 
         $result['default'] = $builder->getQuery()->getResult();
+        foreach ($result['default'] as &$record) {
+            if ($record['taxInput']) {
+                $record['price'] = $record['price'] * (100 + $record['tax']) / 100;
+            }
+        }
 
         return $result;
     }
@@ -74,13 +85,15 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
             'price.id',
             'price.articleId',
             'price.articleDetailsId',
-            'price.customerGroupKey',
             'price.from',
             'price.to',
             'price.price',
             'price.pseudoPrice',
             'price.basePrice',
             'price.percent',
+            'price.customerGroupKey as priceGroup',
+//            'articleTax.id as taxId',
+//            'articleTax.tax as tax',
         );
     }
 
@@ -89,28 +102,28 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
         $manager = $this->getManager();
         foreach ($records['default'] as $record) {
 
-            if (empty($record['ordernumber'])) {
+            if (empty($record['articleDetailsId'])) {
                 continue;
             }
 
-            if (empty($record['pricegroup'])) {
-                $record['pricegroup'] = 'EK';
+            if (empty($record['priceGroup'])) {
+                $record['priceGroup'] = 'EK';
             }
             
-            $customerGroup = $this->getGroupRepository()->findOneBy(array("key" => $record['pricegroup']));
+            $customerGroup = $this->getGroupRepository()->findOneBy(array("key" => $record['priceGroup']));
             if (!$customerGroup) {
                 continue;
             }
             
-            $articleDetail = $this->getDetailRepository()->findOneBy(array("number" => $record['ordernumber']));
+            $articleDetail = $this->getDetailRepository()->findOneBy(array("id" => $record['articleDetailsId']));
             if (!$articleDetail) {
                 continue;
             }
 
-            if (isset($record['baseprice'])) {
-                $record['baseprice'] = floatval(str_replace(",", ".", $record['baseprice']));
+            if (isset($record['basePrice'])) {
+                $record['basePrice'] = floatval(str_replace(",", ".", $record['basePrice']));
             } else {
-                $record['baseprice'] = 0;
+                $record['basePrice'] = 0;
             }
 
             if (isset($record['percent'])) {
@@ -135,23 +148,30 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
 
             $query = $manager->createQuery('DELETE FROM Shopware\Models\Article\Price price WHERE price.customerGroup = :customerGroup AND price.articleDetailsId = :detailId AND price.from >= :from');
             $query->setParameters(array(
-                'customerGroup' => $record['pricegroup'],
+                'customerGroup' => $record['priceGroup'],
                 'detailId' => $articleDetail->getId(),
                 'from' => $record['from'],
             ));
             $query->execute();
-
+            
             if ($record['from'] != 1) {
                 $query = $manager->createQuery('UPDATE Shopware\Models\Article\Price price SET price.to = :to WHERE price.customerGroup = :customerGroup AND price.articleDetailsId = :detailId AND price.articleId = :articleId AND price.to LIKE \'beliebig\'');
                 $query->setParameters(array(
                     'to' => $record['from'] - 1,
-                    'customerGroup' => $record['pricegroup'],
+                    'customerGroup' => $record['priceGroup'],
                     'detailId' => $articleDetail->getId(),
                     'articleId' => $articleDetail->getArticle()->getId(),
                 ));
                 $query->execute();
             }
-            
+
+            $tax = $articleDetail->getArticle()->getTax();
+
+            if ($customerGroup->getTaxInput()) {
+                $record['price'] = $record['price'] / (100 + $tax->getTax()) * 100;
+                $record['pseudoPrice'] = $record['pseudoPrice'] / (100 + $tax->getTax()) * 100;
+            }
+
             $price = new \Shopware\Models\Article\Price();
             $price->setArticle($articleDetail->getArticle());
             $price->setDetail($articleDetail);
@@ -159,14 +179,14 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
             $price->setFrom($record['from']);
             $price->setTo('beliebig');
             $price->setPrice($record['price']);
-            $price->setPseudoPrice($record['pseudoprice']);
-            $price->setBasePrice($record['baseprice']);
+            $price->setPseudoPrice($record['pseudoPrice']);
+            $price->setBasePrice($record['basePrice']);
             $price->setPercent($record['percent']);
 
 
             $this->getManager()->persist($price);
-            $this->getManager()->flush();
         }
+        $this->getManager()->flush();
     }
     
     /**

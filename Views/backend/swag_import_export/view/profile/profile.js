@@ -182,15 +182,22 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
                             }
                         }
                         
-                        me.treeStore.sync();
+                        me.treeStore.sync({
+                            success: function() {
+                                // fix selection
+                                me.treePanel.getSelectionModel().deselectAll(true);
+                                me.treePanel.expand();
+                                me.treePanel.getSelectionModel().select(me.treeStore.getById(data.records[0].get('id')));
+                            }
+                        });
                     }
                 }
             },
             rootVisible: false,
             title: 'Profile',
-			width: 310,
-			useArrows: true,
-			expandChildren: true,
+            width: 310,
+            useArrows: true,
+            expandChildren: true,
 			dockedItems: [{
 					itemId: 'toolbar',
 					xtype: 'toolbar',

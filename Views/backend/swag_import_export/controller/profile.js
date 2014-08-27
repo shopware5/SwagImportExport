@@ -445,7 +445,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                     var parentNode = node.parentNode;
                     parentNode.removeChild(node);
                     
-                    if (parentNode.get('type') !== 'iteration' && parentNode.get('inIteration') === true) {
+                    if (parentNode.get('type') !== 'iteration' && parentNode.get('inIteration') === true && parentNode.childNodes.length === 0) {
                         parentNode.set('type', 'leaf');
                         parentNode.set('iconCls', 'sprite-icon_taskbar_top_inhalte_active');
                     }
