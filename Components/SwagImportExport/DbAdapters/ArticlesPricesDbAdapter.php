@@ -70,6 +70,8 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                 ->setParameter('ids', $ids);
 
         $result['default'] = $builder->getQuery()->getResult();
+        
+        // add the tax if needed
         foreach ($result['default'] as &$record) {
             if ($record['taxInput']) {
                 $record['price'] = $record['price'] * (100 + $record['tax']) / 100;
@@ -97,12 +99,18 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
         );
     }
 
+    /**
+     * Imports the records. <br/>
+     * <b>Note:</b> The logic is copied from the old Import/Export Module
+     * 
+     * @param array $records
+     */
     public function write($records)
     {
         $manager = $this->getManager();
         foreach ($records['default'] as $record) {
 
-            if (empty($record['articleDetailsId'])) {
+            if (empty($record['articleDetailsId'])) { // maybe this should be required field
                 continue;
             }
 
@@ -167,6 +175,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
 
             $tax = $articleDetail->getArticle()->getTax();
 
+            // remove tax
             if ($customerGroup->getTaxInput()) {
                 $record['price'] = $record['price'] / (100 + $tax->getTax()) * 100;
                 if (isset($record['pseudoPrice'])) {
@@ -249,7 +258,6 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
     /*
      * @return Shopware\Components\Model\ModelManager
      */
-
     public function getManager()
     {
         if ($this->manager === null) {

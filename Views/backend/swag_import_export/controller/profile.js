@@ -77,6 +77,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                 createOwnProfile: me.createOwnProfile,
                 deleteSelectedProfile: me.deleteSelectedProfile,
                 renameSelectedProfile: me.renameSelectedProfile,
+                duplicateSelectedProfile: me.duplicateSelectedProfile,
                 showMappings: me.showMappings,
                 addNewIteration: me.addNewIteration,
                 addNewNode: me.addNewNode,
@@ -285,6 +286,19 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
         myForm.show();
     },
     
+    /**
+     * Duplicate the selected profile
+     */
+    duplicateSelectedProfile: function(combobox, store, id) {
+        var model = store.getById(id);
+        var copy = store.add({ type: model.get('type'), name: model.get('name') + ' (copy)', tree: model.get('tree') });
+        store.sync({
+            success: function() {
+                combobox.setValue(copy[0].get('id'));
+            }
+        });
+    },
+
     /**
      * Deletes the selected profile
      */
