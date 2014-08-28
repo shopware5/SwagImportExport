@@ -77,6 +77,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                 createOwnProfile: me.createOwnProfile,
                 deleteSelectedProfile: me.deleteSelectedProfile,
                 renameSelectedProfile: me.renameSelectedProfile,
+                duplicateSelectedProfile: me.duplicateSelectedProfile,
                 showMappings: me.showMappings,
                 addNewIteration: me.addNewIteration,
                 addNewNode: me.addNewNode,
@@ -286,6 +287,19 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
     },
     
     /**
+     * Duplicate the selected profile
+     */
+    duplicateSelectedProfile: function(combobox, store, id) {
+        var model = store.getById(id);
+        var copy = store.add({ type: model.get('type'), name: model.get('name') + ' (copy)', tree: model.get('tree') });
+        store.sync({
+            success: function() {
+                combobox.setValue(copy[0].get('id'));
+            }
+        });
+    },
+
+    /**
      * Deletes the selected profile
      */
     deleteSelectedProfile: function(combobox, store, id) {
@@ -446,11 +460,27 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                     parentNode.removeChild(node);
                     
                     if (parentNode.get('type') !== 'iteration' && parentNode.get('inIteration') === true) {
-                        parentNode.set('type', 'leaf');
-                        parentNode.set('iconCls', 'sprite-icon_taskbar_top_inhalte_active');
+                        var bChildNodes = false;
+                        
+                        // check if there is at least one leaf, iteration or node
+                        for (var i = 0; i < parentNode.childNodes.length; i++) {
+                            if (parentNode.childNodes[i].get('type') !== 'attribute') {
+                                bChildNodes = true;
+                                break;
+                            }
+                        }
+                        
+                        if (!bChildNodes) {
+                            parentNode.set('type', 'leaf');
+                            parentNode.set('iconCls', 'sprite-icon_taskbar_top_inhalte_active');
+                        }
                     }
                     
                     treeStore.sync({
+                        success: function() {
+                            selModel.deselectAll();
+                            selModel.select(parentNode);
+                        },
                         failure: function(batch, options) {
                             var error = batch.exceptions[0].getError(),
                                     msg = Ext.isObject(error) ? error.status + ' ' + error.statusText : error;
@@ -463,9 +493,6 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                             });
                         }
                     });
-                            
-                    selModel.deselectAll();
-                    selModel.select(parentNode);
                 }
             }
         });
