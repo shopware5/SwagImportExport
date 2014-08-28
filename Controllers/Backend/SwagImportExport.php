@@ -59,7 +59,13 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
     public function getProfileAction()
     {
-        $profileId = $this->Request()->getParam('profileId', 1);
+        $profileId = $this->Request()->getParam('profileId', -1);
+        
+        if ($profileId === -1) {
+            $this->View()->assign(array('success' => false, 'children' => array()));
+            return;
+        }
+        
         $profileRepository = $this->getProfileRepository();
         $profileEntity = $profileRepository->findOneBy(array('id' => $profileId));
 
