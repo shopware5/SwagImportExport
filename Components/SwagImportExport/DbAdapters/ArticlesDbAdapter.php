@@ -173,7 +173,8 @@ class ArticlesDbAdapter implements DataDbAdapter
                 ->join('variant.article', 'article')
                 ->leftjoin('article.categories', 'categories')
                 ->where('variant.id IN (:ids)')
-                ->setParameter('ids', $ids);
+                ->setParameter('ids', $ids)
+                ->groupBy('categories.id');
         $result['category'] = $categoriesBuilder->getQuery()->getResult();
         
         return $result;
