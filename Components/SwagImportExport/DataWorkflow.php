@@ -53,7 +53,7 @@ class DataWorkflow
         $this->fileIO = $fileIO;
     }
 
-    public function export($postData)
+    public function export($postData, $outputFileName = '')
     {
         if ($this->dataIO->getSessionState() == 'closed') {
             $postData['position'] = $this->dataIO->getSessionPosition();
@@ -64,10 +64,15 @@ class DataWorkflow
 
         if ($this->dataIO->getSessionState() == 'new') {
             //todo: create file here ?
-            $fileName = $this->dataIO->generateFileName($this->profile);
-            $directory = $this->dataIO->getDirectory();
+            if ($outputFileName === '') {
+                $fileName = $this->dataIO->generateFileName($this->profile);
+                $directory = $this->dataIO->getDirectory();
             
-            $outputFileName = $directory . $fileName;
+                $outputFileName = $directory . $fileName;
+            } else {
+                $fileName = basename($outputFileName);
+                $this->dataIO->setFileName($fileName);
+            }
 
             // session has no ids stored yet, therefore we must start it and write the file headers
             $header = $this->transformerChain->composeHeader();
@@ -77,7 +82,9 @@ class DataWorkflow
             // session has already loaded ids and some position, so we simply activate it
             $this->dataIO->resumeSession();
 
-            $outputFileName = Shopware()->DocPath() . 'files/import_export/' . $this->dataIO->getFileName();
+            if ($outputFileName === '') {
+                $outputFileName = Shopware()->DocPath() . 'files/import_export/' . $this->dataIO->getFileName();
+            }
         }
         
         if ($this->dataIO->getSessionState() == 'active') {

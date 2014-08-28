@@ -40,6 +40,7 @@ class ExportCommand extends ShopwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        // Validation of user input
         $this->prepareExportInputValidation($input, $output);
 
         $output->writeln('<info>' . sprintf("Using profile: %s.", $this->profile) . '</info>');
@@ -50,14 +51,14 @@ class ExportCommand extends ShopwareCommand
         $count = $return['count'];
         $output->writeln('<info>' . sprintf("Total count: %d.", $count) . '</info>');
 
-        $return = $this->exportAction($input, $output);
-        $this->sessionId = $return['data']['sessionId'];
-        $position = $return['data']['position'];
+        $data = $this->exportAction($input, $output);
+        $this->sessionId = $data['sessionId'];
+        $position = $data['position'];
         $output->writeln('<info>' . sprintf("Position: %d.", $position) . '</info>');
 
         while ($position < $count) {
-            $return = $this->exportAction($input, $output);
-            $position = $return['data']['position'];
+            $data = $this->exportAction($input, $output);
+            $position = $data['position'];
             $output->writeln('<info>' . sprintf("Processed: %d.", $position) . '</info>');
         }
     }
@@ -151,7 +152,7 @@ class ExportCommand extends ShopwareCommand
         $position = $dataIO->getSessionPosition();
         $position = $position == null ? 0 : $position;
 
-        return array('success' => true, 'position' => $position, 'count' => count($ids));
+        return array('position' => $position, 'count' => count($ids));
     }
 
     public function exportAction(InputInterface $input, OutputInterface $output)
@@ -161,7 +162,7 @@ class ExportCommand extends ShopwareCommand
             'type' => 'export',
             'format' => $this->format,
             'sessionId' => $this->sessionId,
-            'fileName' => $this->filePath,
+            'fileName' => basename($this->filePath),
             'filter' => array(),
             'limit' => array(
                 'limit' => $this->limit,
@@ -203,9 +204,9 @@ class ExportCommand extends ShopwareCommand
 
         $dataWorkflow = new DataWorkflow($dataIO, $profile, $dataTransformerChain, $fileWriter);
 
-        $post = $dataWorkflow->export($postData);
+        $post = $dataWorkflow->export($postData, $this->filePath);
 
-        return array('success' => true, 'data' => $post);
+        return $post;
     }
 
     protected function Plugin()
