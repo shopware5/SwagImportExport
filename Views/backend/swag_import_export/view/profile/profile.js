@@ -89,7 +89,6 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
 	initComponent: function() {
 		var me = this;
 		
-		me.profilesStore = Ext.create('Shopware.apps.SwagImportExport.store.ProfileList').load();
 		me.treeStore = Ext.create('Shopware.apps.SwagImportExport.store.Profile');		
 		me.selectedNodeId = 0;
         
