@@ -11,9 +11,14 @@ class OrdersDbAdapter implements DataDbAdapter
     protected $manager;
 
     /**
-     * Shopware\Models\Category\Category
+     * Shopware\Models\Order\Order
      */
     protected $repository;
+    
+    /**
+     * Shopware\Models\Order\Detail
+     */
+    protected $detailRepository;
 
     /**
      * Returns record ids
@@ -29,8 +34,9 @@ class OrdersDbAdapter implements DataDbAdapter
 
         $builder = $manager->createQueryBuilder();
 
-        $builder->select('orders.id')
-                ->from('Shopware\Models\Order\Order', 'orders');
+        $builder->select('details.id')
+                ->from('Shopware\Models\Order\Detail', 'details')
+                ->leftJoin('details.order', 'orders');
                         
         if (isset($filter['orderstate']) && is_numeric($filter['orderstate'])) {
             $builder->andWhere('orders.status = :orderstate');
@@ -72,21 +78,6 @@ class OrdersDbAdapter implements DataDbAdapter
 
         return $result;
     }
-    
-    public function getParentKeys($section)
-    {
-        switch ($section) {
-            case 'order':
-                return array(
-                    'orders.id as orderId',
-//                    'orders.number as number',
-                );
-            case 'detail':
-                return array(
-                    'details.orderId as orderId',
-                );
-        }
-    }
 
     /**
      * Returns categories 
@@ -104,11 +95,14 @@ class OrdersDbAdapter implements DataDbAdapter
         if (!$columns && empty($columns)) {
             throw new \Exception('Can not read categories without column names.');
         }
-
+        
         $manager = $this->getManager();
         $builder = $manager->createQueryBuilder();
-        $builder->select($columns['order'])
-                ->from('Shopware\Models\Order\Order', 'orders')
+        
+        $builder->select($columns)
+                ->from('Shopware\Models\Order\Detail', 'details')
+                ->leftJoin('details.order', 'orders')
+                ->leftJoin('details.tax', 'taxes')
                 ->leftJoin('orders.billing', 'billing')
                 ->leftJoin('billing.country', 'billingCountry')
                 ->leftJoin('orders.shipping', 'shipping')
@@ -118,36 +112,12 @@ class OrdersDbAdapter implements DataDbAdapter
                 ->leftJoin('orders.orderStatus', 'orderStatus')
                 ->leftJoin('orders.dispatch', 'dispatch')
                 ->leftJoin('orders.customer', 'customer')
-                ->where('orders.id IN (:ids)')
+                ->where('details.id IN (:ids)')
                 ->setParameter('ids', $ids);
 
-        $result['order'] = $builder->getQuery()->getResult();
-        
-        //details
-        $datailsBuilder = $manager->createQueryBuilder();
-        $datailsBuilder->select($columns['detail'])
-                ->from('Shopware\Models\Order\Order', 'orders')
-                ->leftJoin('orders.details', 'details')
-                ->leftJoin('details.tax', 'taxes')
-                ->where('orders.id IN (:ids)')
-                ->setParameter('ids', $ids);
-        $result['detail'] = $datailsBuilder->getQuery()->getResult();
+        $result['default'] = $builder->getQuery()->getResult();
         
         return $result;
-    }
-
-    /**
-     * Returns default categories columns name 
-     * and category attributes
-     * 
-     * @return array
-     */
-    public function getDefaultColumns()
-    {
-        return array(
-            'order' => $this->getOrderColumns(),
-            'detail' => $this->getDetailColumns(),
-        );
     }
 
     /**
@@ -157,27 +127,29 @@ class OrdersDbAdapter implements DataDbAdapter
      */
     public function write($records)
     {
-        foreach ($records['order'] as $index => $record) {
+        foreach ($records['default'] as $index => $record) {
 
-            if ((!isset($record['orderId']) || !$record['orderId']) && (!isset($record['number']) || !$record['number'])) {
-                throw new \Exception('Order id or order number must be provided');
+            if ((!isset($record['orderId']) || !$record['orderId']) && (!isset($record['number']) || !$record['number']) && (!isset($record['orderDetailId']) || !$record['orderDetailId'])) {
+                throw new \Exception('Order number or order detail id must be provided');
             }
 
-            if (isset($record['orderId']) && $record['orderId']) {
-                $orderModel = $this->getRepository()->find($record['orderId']);
+            if (isset($record['orderDetailId']) && $record['orderDetailId']) {
+                $orderDetailModel = $this->getDetailRepository()->find($record['orderDetailId']);
 
-                if (!$orderModel) {
-                    throw new \Exception(sprintf('Order with id %s was not found', $record['orderId']));
+                if (!$orderDetailModel) {
+                    throw new \Exception(sprintf('Order detail id %s was not found', $record['orderDetailId']));
                 }
             } else {
-                $orderModel = $this->getRepository()->findOneBy(array('number' => $record['number']));
+                $orderDetailModel = $this->getDetailRepository()->findOneBy(array('number' => $record['number']));
 
-                if (!$orderModel) {
+                if (!$orderDetailModel) {
                     throw new \Exception(sprintf('Order with number %s was not found', $record['number']));
                 }
             }
 
-            if (isset($record['paymentId']) && is_numeric($record['status'])) {
+            $orderModel = $orderDetailModel->getOrder();
+
+            if (isset($record['paymentId']) && is_numeric($record['paymentId'])) {
                 $paymentStatusModel = $this->getManager()->find('\Shopware\Models\Order\Status', $record['paymentId']);
 
                 if (!$paymentStatusModel) {
@@ -191,85 +163,56 @@ class OrdersDbAdapter implements DataDbAdapter
                 $orderStatusModel = $this->getManager()->find('\Shopware\Models\Order\Status', $record['status']);
 
                 if (!$orderStatusModel) {
-                    throw new \Exception(sprintf('Payment status id %s was not found', $record['status']));
+                    throw new \Exception(sprintf('Status %s was not found', $record['status']));
                 }
 
                 $orderModel->setOrderStatus($orderStatusModel);
             }
 
-            if (isset($record['trackingCode']) && $record['trackingCode']) {
+            if (isset($record['trackingCode'])) {
                 $orderModel->setTrackingCode($record['trackingCode']);
             }
 
-            if (isset($record['comment']) && $record['comment']) {
+            if (isset($record['comment'])) {
                 $orderModel->setComment($record['comment']);
             }
 
-            if (isset($record['customerComment']) && $record['customerComment']) {
+            if (isset($record['customerComment'])) {
                 $orderModel->setCustomerComment($record['customerComment']);
             }
 
-            if (isset($record['internalComment']) && $record['internalComment']) {
+            if (isset($record['internalComment'])) {
                 $orderModel->setInternalComment($record['internalComment']);
             }
 
-            if (isset($record['transactionId']) && $record['transactionId']) {
+            if (isset($record['transactionId'])) {
                 $orderModel->setTransactionId($record['transactionId']);
             }
 
-            if (isset($record['clearedDate']) && $record['clearedDate']) {
+            if (isset($record['clearedDate'])) {
                 $orderModel->setClearedDate($record['clearedDate']);
             }
 
-            $this->updateDetails($records['detail'], $index);
+            if (isset($record['shipped'])) {
+                $orderDetailModel->setShipped($record['shipped']);
+            }
+
+            if (isset($record['statusId']) && is_numeric($record['statusId'])) {
+                $detailStatusModel = $this->getManager()->find('\Shopware\Models\Order\DetailStatus', $record['statusId']);
+
+                if (!$detailStatusModel) {
+                    throw new \Exception(sprintf('Detail status with id %s was not found', $record['statusId']));
+                }
+
+                $orderDetailModel->setStatus($detailStatusModel);
+            }
 
             $this->getManager()->persist($orderModel);
+            unset($orderDetailModel);
+            unset($orderModel);
         }
 
         $this->getManager()->flush();
-    }
-
-    public function updateDetails(&$data, $detailIndex)
-    {
-        if ($data == null) {
-            return;
-        }
-
-        foreach ($data as $key => $detailData) {
-
-            if ($detailData['parentIndexElement'] === $detailIndex) {
-
-                if (!isset($detailData['orderDetailId'])) {
-                    throw new \Exception('Order detail id must be provided.');
-                }
-
-                $detailModel = $this->getManager()->find(
-                        'Shopware\Models\Order\Detail', (int) $detailData['orderDetailId']
-                );
-
-                if (!$detailModel) {
-                    throw new \Exception(sprintf('Order detail with id %s was not found', $detailData['orderDetailId']));
-                }
-
-                if (isset($detailData['shipped']) && $detailData['shipped']) {
-                    $detailModel->setShipped($detailData['shipped']);
-                }
-
-                if (isset($detailData['statusId']) && is_numeric($detailData['statusId'])) {
-                    $detailStatusModel = $this->getManager()->find('\Shopware\Models\Order\DetailStatus', $detailData['statusId']);
-
-                    if (!$detailStatusModel) {
-                        throw new \Exception(sprintf('Detail status with id %s was not found', $detailData['statusId']));
-                    }
-
-                    $detailModel->setStatus($detailStatusModel);
-                }
-            }
-
-            $this->getManager()->persist($detailModel);
-            unset($data[$key]);
-            unset($detailModel);
-        }
     }
 
     /**
@@ -278,8 +221,7 @@ class OrdersDbAdapter implements DataDbAdapter
     public function getSections()
     {
         return array(
-            array('id' => 'order', 'name' => 'order'),
-            array('id' => 'detail', 'name' => 'detail')
+            array('id' => 'default', 'name' => 'default')
         );
     }
     
@@ -298,11 +240,14 @@ class OrdersDbAdapter implements DataDbAdapter
         return false;
     }
     
-    public function getOrderColumns()
+    public function getDefaultColumns()
     {
        return array(
-            'orders.id as orderId',
-            'orders.number as number',
+            'details.orderId as orderId',
+            'details.id as orderDetailId',
+            'details.articleId as articleId',
+            'details.number as number',
+           
             'orders.customerId as customerId',
             'orders.status as status',
             'orders.cleared as cleared',
@@ -333,6 +278,22 @@ class OrdersDbAdapter implements DataDbAdapter
             'paymentStatus.description as paymentStatusDescription',
             'dispatch.id as dispatchId',
             'dispatch.description as dispatchDescription',
+           
+            'details.taxId as taxId',
+            'details.taxRate as taxRate',
+            'details.statusId as statusId',
+            'details.articleNumber as articleNumber',
+            'details.articleName as articleName',
+            'details.price as price',
+            'details.quantity as quantity',
+            'details.price * details.quantity as invoice',
+            'details.shipped as shipped',
+            'details.shippedGroup as shippedGroup',
+            'details.releaseDate as releasedate',
+            'taxes.tax as tax',
+            'details.esdArticle as esd',
+            'details.config as config',
+            'details.mode as mode',
             
             'billing.company as billingCompany',
             'billing.department as billingDepartment',
@@ -369,31 +330,6 @@ class OrdersDbAdapter implements DataDbAdapter
             'customer.affiliate as affiliate',
         );
     }
-    
-    public function getDetailColumns()
-    {
-        return array(
-            'details.id as orderDetailId',
-            'details.orderId as orderId',
-            'details.articleId as articleId',
-            'details.taxId as taxId',
-            'details.taxRate as taxRate',
-            'details.statusId as statusId',
-            'details.articleNumber as articleNumber',
-            'details.number as number',
-            'details.articleName as articleName',
-            'details.price as price',
-            'details.quantity as quantity',
-            'details.price * details.quantity as invoice',
-            'details.shipped as shipped',
-            'details.shippedGroup as shippedGroup',
-            'details.releaseDate as releasedate',
-            'taxes.tax as tax',
-            'details.esdArticle as esd',
-            'details.config as config',
-            'details.mode as mode',
-        );
-    }
 
     /**
      * Returns order repository
@@ -406,6 +342,19 @@ class OrdersDbAdapter implements DataDbAdapter
             $this->repository = $this->getManager()->getRepository('Shopware\Models\Order\Order');
         }
         return $this->repository;
+    }
+    
+    /**
+     * Returns order detail repository
+     * 
+     * @return Shopware\Models\Order\Detail
+     */
+    public function getDetailRepository()
+    {
+        if ($this->detailRepository === null) {
+            $this->detailRepository = $this->getManager()->getRepository('Shopware\Models\Order\Detail');
+        }
+        return $this->detailRepository;
     }
 
     /**

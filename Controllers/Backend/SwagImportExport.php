@@ -933,7 +933,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
         $type = $profile->getType();
         
-        if (!in_array($type, array('articles', 'orders'))) {
+        if (!in_array($type, array('articles'))) {
             $this->View()->assign(array(
                 'success' => true, 'data' => array(), 'total' => 0
             ));
