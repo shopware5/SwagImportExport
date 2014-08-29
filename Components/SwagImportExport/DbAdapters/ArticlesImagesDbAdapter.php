@@ -9,7 +9,9 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
      * Shopware\Components\Model\ModelManager
      */
     protected $manager;
+    protected $articleRepository;
     protected $articleDetailRepository;
+    protected $db;
 
     /**
      * Returns record ids
@@ -68,14 +70,45 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
         $builder = $manager->createQueryBuilder();
         $builder->select($columns)
                 ->from('Shopware\Models\Article\Image', 'aimage')
-                ->join('aimage.article', 'article')
-                ->join('article.details', 'articleDetail')
+                ->innerJoin('aimage.article', 'article')
+                ->innerJoin('article.details', 'articleDetail')
+                ->leftJoin('aimage.mappings', 'im')
+                ->leftJoin('im.rules', 'mr')
+                ->leftJoin('mr.option', 'co')
+                ->leftJoin('co.group', 'cg')
                 ->where('aimage.id IN (:ids)')
-                ->andWhere('articleDetail.kind = 1')
-//                ->groupBy('aimage.id')
+                ->groupBy('aimage.id')
                 ->setParameter('ids', $ids);
 
         $result['default'] = $builder->getQuery()->getResult();
+
+        foreach ($result['default'] as &$image) {
+            if (empty($image['relations'])) {
+                continue;
+            }
+
+            $relations = explode(',', $image['relations']);
+            $relations = array_unique($relations);
+
+            $out = array();
+            foreach ($relations as $rule) {
+                $split = explode('|', $rule);
+                $ruleId = $split[0];
+                $optionId = $split[1];
+                $name = $split[2];
+                $groupName = $split[3];
+
+                $out[$ruleId][] = "$groupName:$name";
+            }
+
+            $temp = array();
+            foreach ($out as $group) {
+                $name = $group['name'];
+                $temp [] = "{" . implode(',', $group) . "}";
+            }
+
+            $image['relations'] = implode('&', $temp);
+        }
 
         return $result;
     }
@@ -98,6 +131,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
             'aimage.position as position',
             'aimage.width as width',
             'aimage.height as height',
+            "GroupConcat(im.id, '|', mr.optionId, '|' , co.name, '|', cg.name) as relations"
         );
 
         return $columns;
@@ -110,7 +144,8 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
      */
     public function write($records)
     {
-        $db = Shopware()->Db();
+        $configuratorGroupRepository = $this->getManager()->getRepository('Shopware\Models\Article\Configurator\Group');
+        $configuratorOptionRepository = $this->getManager()->getRepository('Shopware\Models\Article\Configurator\Option');
 
         foreach ($records['default'] as $record) {
             if (empty($record['ordernumber']) || empty($record['image'])) {
@@ -121,6 +156,40 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
             $articleDetailModel = $this->getArticleDetailRepository()->findOneBy(array('number' => $record['ordernumber']));
             if (!$articleDetailModel) {
                 throw new \Exception(sprintf('Article with number %s does not exists', $record['ordernumber']));
+            }
+
+            if (isset($record['relations']) && !empty($record['relations'])) {
+                $relations = array();
+                $results = explode("&", $record['relations']);
+
+                $i = 0;
+                foreach ($results as $result) {
+                    if ($result !== "") {
+                        $result = preg_replace('/{|}/', '', $result);
+
+                        foreach (explode(',', $result) as $value) {
+                            list($group, $option) = explode(":", $value);
+
+                            // Try to get given configurator group/option. Continue, if they don't exist
+                            $cGroupModel = $configuratorGroupRepository->findOneBy(array('name' => $group));
+                            if ($cGroupModel === null) {
+                                continue;
+                            }
+                            $cOptionModel = $configuratorOptionRepository->findOneBy(
+                                    array('name' => $option,
+                                        'groupId' => $cGroupModel->getId()
+                                    )
+                            );
+                            if ($cOptionModel === null) {
+                                continue;
+                            }
+                            $relations[$i][] = array("group" => $cGroupModel, "option" => $cOptionModel);
+                            unset($cGroupModel);
+                            unset($cOptionModel);
+                        }
+                        $i++;
+                    }
+                }
             }
 
             /** @var \Shopware\Models\Article\Article $article */
@@ -167,16 +236,49 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
             $this->getManager()->persist($image);
             $this->getManager()->flush($image);
 
+            if ($relations && !empty($relations)) {
+                $this->setImageMappings($relations, $image->getId());
+            }
+
             // Prevent multiple images from being a preview
             if ((int) $record['main'] === 1) {
-                $db->update('s_articles_img', 
-                        array('main' => 2), 
-                        array(
-                            'articleID = ?' => $article->getId(),
-                            'id <> ?' => $image->getId()
+                $this->getDb()->update('s_articles_img', array('main' => 2), array(
+                    'articleID = ?' => $article->getId(),
+                    'id <> ?' => $image->getId()
                         )
                 );
             }
+
+            unset($media);
+            unset($image);
+        }
+    }
+
+    /**
+     * Sets image mapping for variants
+     * 
+     * @param array $relationGroups
+     * @param int $imageId
+     */
+    protected function setImageMappings($relationGroups, $imageId)
+    {
+        foreach ($relationGroups as $relationGroup) {
+            foreach ($relationGroup as $relation) {
+                $optionModel = $relation['option'];
+
+                if (!$mappingID) {
+                    $this->getDb()->insert('s_article_img_mappings', array(
+                        'image_id' => $imageId
+                    ));
+                    $mappingID = $this->getDb()->lastInsertId();
+                }
+
+                $this->getDb()->insert('s_article_img_mapping_rules', array(
+                    'mapping_id' => $mappingID,
+                    'option_id' => $optionModel->getId()
+                ));
+            }
+            unset($mappingID);
         }
     }
 
@@ -229,6 +331,29 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
             $this->articleDetailRepository = $this->getManager()->getRepository('Shopware\Models\Article\Detail');
         }
         return $this->articleDetailRepository;
+    }
+
+    /**
+     * Helper function to get access to the article repository.
+     * @return Shopware\Models\Article\Repository
+     */
+    public function getArticleRepository()
+    {
+        if ($this->articleRepository === null) {
+            $this->articleRepository = $this->getManager()->getRepository('Shopware\Models\Article\Article');
+        }
+        return $this->articleRepository;
+    }
+
+    /**
+     * Helper function to get access to the datebase.
+     */
+    public function getDb()
+    {
+        if ($this->db === null) {
+            $this->db = Shopware()->Db();
+        }
+        return $this->db;
     }
 
     /**
