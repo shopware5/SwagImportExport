@@ -372,7 +372,14 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
                         $return = $commandHelper->importAction();
                         $position = $return['data']['position'];
                     }
+                    
+                    // move the file
+                    if (!rename(Shopware()->DocPath() . 'files/import_cron/' . $file, Shopware()->DocPath() . 'files/import_export/' . $file)) {
+                        throw new \Exception('File could not be moved');
+                    }
                 } catch (\Exception $e) {
+                    // move file as broken (no check)
+                    rename(Shopware()->DocPath() . 'files/import_cron/' . $file, Shopware()->DocPath() . 'files/import_export/broken-' . $file);
                     return $e->getMessage();
                 }
             }
