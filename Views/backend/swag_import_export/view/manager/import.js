@@ -54,9 +54,6 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
         choose:  '{s name=swag_import_export/manager/import/choose}Please choose{/s}',
         chooseButton:  '{s name=swag_import_export/manager/import/choose_button}Choose{/s}'
     },
-    /*
-     * profile store
-     */
     
     initComponent: function() {
         var me = this;

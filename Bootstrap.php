@@ -94,6 +94,7 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
         $this->createDatabase();
         $this->createMenu();
         $this->registerEvents();
+        $this->registerCronJobs();
 
         return true;
     }
@@ -115,11 +116,31 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
      */
     public function registerMyNamespace()
     {
+        // Register Doctrine RegExp extension
+        $config = $this->Application()->Models()->getConfiguration();
+        $classLoader = new \Doctrine\Common\ClassLoader('DoctrineExtensions', $this->Path() . 'Components/');
+        $classLoader->register();
+        $config->addCustomStringFunction('GroupConcat', 'DoctrineExtensions\Query\Mysql\GroupConcat');
+        
         $this->Application()->Loader()->registerNamespace(
                 'Shopware\Components', $this->Path() . 'Components/'
         );
         $this->Application()->Loader()->registerNamespace(
                 'Shopware\Commands', $this->Path() . 'Commands/'
+        );
+    }
+
+    /**
+     * Register cron jobs
+     */
+    private function registerCronJobs()
+    {
+        $this->createCronJob(
+                'ImportAction', 'ImportCron', 86400, true
+        );
+
+        $this->subscribeEvent(
+                'Shopware_CronJob_ImportCron', 'onRunImportCronJob'
         );
     }
 
@@ -206,8 +227,8 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
 
         $classes = array(
             $em->getClassMetadata('Shopware\CustomModels\ImportExport\Session'),
-            $em->getClassMetadata('Shopware\CustomModels\ImportExport\Profile'),
-            $em->getClassMetadata('Shopware\CustomModels\ImportExport\Expression')
+//            $em->getClassMetadata('Shopware\CustomModels\ImportExport\Profile'),
+//            $em->getClassMetadata('Shopware\CustomModels\ImportExport\Expression')
         );
 
         $tool->dropSchema($classes);
@@ -269,6 +290,11 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
         return $this->Path() . '/Controllers/Backend/SwagImportExport.php';
     }
 
+    /**
+     * Injects Ace Editor used in Conversions GUI
+     * 
+     * @param Enlight_Event_EventArgs $args
+     */
     public function injectBackendAceEditor(Enlight_Event_EventArgs $args)
     {
         $controller = $args->getSubject();
@@ -285,13 +311,74 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
         $view->extendsTemplate('backend/swag_import_export/menu_entry.tpl');
     }
 
+    /**
+     * Adds the console commands (sw:import and sw:export)
+     * 
+     * @param Enlight_Event_EventArgs $args
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
     public function onAddConsoleCommand(Enlight_Event_EventArgs $args)
     {
         $this->registerMyNamespace();
         return new Doctrine\Common\Collections\ArrayCollection(array(
             new \Shopware\Commands\SwagImportExport\ImportCommand(),
             new \Shopware\Commands\SwagImportExport\ExportCommand(),
+            new \Shopware\Commands\SwagImportExport\ProfilesCommand(),
         ));
+    }
+
+    /**
+     * Cronjob for import
+     * 
+     * @param Shopware_Components_Cron_CronJob $job
+     * @return boolean
+     */
+    public function onRunImportCronJob(Shopware_Components_Cron_CronJob $job)
+    {
+        $files = scandir(Shopware()->DocPath() . 'files/import_cron/', SCANDIR_SORT_ASCENDING);
+        
+        if ($files === false) {
+            return false;
+        }
+        
+        $manager = Shopware()->Models();
+        
+        $profileRepository = $manager->getRepository('Shopware\CustomModels\ImportExport\Profile');
+        
+        
+        foreach($files as $file) {
+            $type = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+            if ($type == 'xml' || $type == 'csv') {
+                $profile = \Shopware\Components\SwagImportExport\Utils\CommandHelper::findProfileByName($file, $profileRepository);
+
+                if ($profile === FALSE) {
+                    throw new \Exception('No profile found!');
+                }
+
+                $commandHelper = \Shopware\Components\SwagImportExport\Utils\CommandHelper(array(
+                    'profileEntity' => $profile,
+                    'filePath' => Shopware()->DocPath() . 'files/import_cron/' . $file,
+                    'format' => $type,
+                ));
+
+                try {
+                    $return = $commandHelper->prepareImport();
+                    $count = $return['count'];
+
+                    $return = $helper->importAction();
+                    $position = $return['data']['position'];
+
+                    while ($position < $count) {
+                        $return = $helper->importAction();
+                        $position = $return['data']['position'];
+                    }
+                } catch (\Exception $e) {
+                    return $e->getMessage();
+                }
+            }
+        }
+        
+        return true;
     }
 
 }

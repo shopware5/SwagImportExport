@@ -57,6 +57,11 @@ Ext.define('Shopware.apps.SwagImportExport.view.Window', {
         me.callParent(arguments);
     },
     
+    /*
+     * profile store
+     */
+    profilesStore: Ext.create('Shopware.apps.SwagImportExport.store.ProfileList').load(),
+    
     createTabPanel: function() {
         var me = this;
 
@@ -64,10 +69,10 @@ Ext.define('Shopware.apps.SwagImportExport.view.Window', {
             name: 'main-tab',
             items: [
                 Ext.create('Shopware.apps.SwagImportExport.view.manager.Manager', {
-                    
+                    profilesStore: me.profilesStore
                 }),
                 Ext.create('Shopware.apps.SwagImportExport.view.profile.Profile', {
-                    
+                    profilesStore: me.profilesStore
                 }),
                 Ext.create('Shopware.apps.SwagImportExport.view.log.Log', {
                     

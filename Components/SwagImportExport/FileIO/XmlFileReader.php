@@ -32,17 +32,12 @@ class XmlFileReader implements FileReader
         $currentPath = $path . '/' . $node->nodeName;
         
         if ($node->hasChildNodes()) {
-            if (in_array($currentPath, $this->iterationPath)) {
-                foreach ($node->childNodes as $child) {
-                    if ($child instanceof \DOMElement) {
-                        $hasChildren = true;
+            foreach ($node->childNodes as $child) {
+                if ($child instanceof \DOMElement) {
+                    $hasChildren = true;
+                    if (in_array($currentPath, $this->iterationPath) && in_array($child->nodeName, $this->iterationTag)) {
                         $record[$child->nodeName][] = $this->toArrayTree($child, $currentPath);
-                    }
-                }
-            } else {
-                foreach ($node->childNodes as $child) {
-                    if ($child instanceof \DOMElement) {
-                        $hasChildren = true;
+                    } else {
                         $record[$child->nodeName] = $this->toArrayTree($child, $currentPath);
                     }
                 }

@@ -45,10 +45,6 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Manager', {
     },
     autoScroll: true,
     /*
-     * profile store
-     */
-    profilesStore: Ext.create('Shopware.apps.SwagImportExport.store.ProfileList').load(),    
-    /*
      * session store
      */
     sessionStore: Ext.create('Shopware.apps.SwagImportExport.store.SessionList'),

@@ -3,18 +3,20 @@
 namespace Shopware\Commands\SwagImportExport;
 
 use Shopware\Commands\ShopwareCommand;
-use Shopware\Components\Model\ModelManager;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Shopware\Components\SwagImportExport\DataWorkflow;
+use Shopware\Components\SwagImportExport\Utils\CommandHelper;
 
 class ExportCommand extends ShopwareCommand
 {
 
     protected $profile;
     protected $profileEntity;
+    protected $exportVariants;
+    protected $limit;
+    protected $offset;
     protected $format;
     protected $filePath;
     protected $sessionId;
@@ -24,12 +26,12 @@ class ExportCommand extends ShopwareCommand
      */
     protected function configure()
     {
-        $this->setName('sw:export')
+        $this->setName('sw:importexport:export')
                 ->setDescription('Export data to files.')
                 ->addArgument('filepath', InputArgument::REQUIRED, 'Path to file to read from.')
-                ->addOption('profile', 'p', InputOption::VALUE_REQUIRED, 'How many times should the message be printed?', null)
+                ->addOption('profile', 'p', InputOption::VALUE_REQUIRED, 'Which profile will be used?', null)
                 ->addOption('format', 'f', InputOption::VALUE_REQUIRED, 'What is the format of the imported file - XML or CSV?', null)
-                ->addOption('exportVariants', 'ev', InputOption::VALUE_NONE, 'Should the variants be exported?', null)
+                ->addOption('exportVariants', 'x', InputOption::VALUE_NONE, 'Should the variants be exported?', null)
                 ->addOption('offset', 'o', InputOption::VALUE_REQUIRED, 'What is the offset?', null)
                 ->addOption('limit', 'l', InputOption::VALUE_REQUIRED, 'What is the limit?', null)
                 ->setHelp("The <info>%command.name%</info> imports data from a file.");
@@ -40,24 +42,35 @@ class ExportCommand extends ShopwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        // Validation of user input
         $this->prepareExportInputValidation($input, $output);
+
+        $this->registerErrorHandler($output);
+        
+        $helper = new CommandHelper(array(
+            'profileEntity' => $this->profileEntity,
+            'filePath' => $this->filePath,
+            'format' => $this->format,
+            'exportVariants' => $this->exportVariants,
+            'limit' => $this->limit,
+            'offset' => $this->offset,
+        ));
 
         $output->writeln('<info>' . sprintf("Using profile: %s.", $this->profile) . '</info>');
         $output->writeln('<info>' . sprintf("Using format: %s.", $this->format) . '</info>');
         $output->writeln('<info>' . sprintf("Using file: %s.", $this->filePath) . '</info>');
 
-        $return = $this->prepareExport($input, $output);
+        $return = $helper->prepareExport();
         $count = $return['count'];
         $output->writeln('<info>' . sprintf("Total count: %d.", $count) . '</info>');
 
-        $return = $this->exportAction($input, $output);
-        $this->sessionId = $return['data']['sessionId'];
-        $position = $return['data']['position'];
-        $output->writeln('<info>' . sprintf("Position: %d.", $position) . '</info>');
+        $data = $helper->exportAction();
+        $position = $data['position'];
+        $output->writeln('<info>' . sprintf("Processed: %d.", $position) . '</info>');
 
         while ($position < $count) {
-            $return = $this->exportAction($input, $output);
-            $position = $return['data']['position'];
+            $data = $helper->exportAction();
+            $position = $data['position'];
             $output->writeln('<info>' . sprintf("Processed: %d.", $position) . '</info>');
         }
     }
@@ -99,113 +112,17 @@ class ExportCommand extends ShopwareCommand
         }
 
         // if no format is specified try to find it from the filename
-        if ($this->format === NULL) {
+        if (empty($this->format)) {
             $this->format = pathinfo($this->filePath, PATHINFO_EXTENSION);
         }
-
+        
+        // format should be case insensitive
+        $this->format = strtolower($this->format);
+        
         // validate type
         if (!in_array($this->format, array('csv', 'xml'))) {
-            throw new \Exception(sprintf('Invalid format: \'%s\'!', $this->format));
+            throw new \Exception(sprintf('Invalid format: \'%s\'! Valid formats are: CSV and XML.', $this->format));
         }
-    }
-
-    protected function prepareExport(InputInterface $input, OutputInterface $output)
-    {
-        $this->sessionId = null;
-        $postData = array(
-            'sessionId' => $this->sessionId,
-            'profileId' => (int) $this->profileEntity->getId(),
-            'type' => 'export',
-            'format' => $this->format,
-            'filter' => array(),
-            'limit' => array(
-                'limit' => $this->limit,
-                'offset' => $this->offset,
-            ),
-        );
-
-        if ($this->exportVariants) {
-            $postData['filter']['variants'] = $this->exportVariants;
-        }
-
-        $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
-
-        $dataFactory = $this->Plugin()->getDataFactory();
-
-        $dbAdapter = $dataFactory->createDbAdapter($profile->getType());
-        $dataSession = $dataFactory->loadSession($postData);
-
-        $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession);
-
-        $colOpts = $dataFactory->createColOpts($postData['columnOptions']);
-        $limit = $dataFactory->createLimit($postData['limit']);
-        $filter = $dataFactory->createFilter($postData['filter']);
-        $maxRecordCount = $postData['max_record_count'];
-        $type = $postData['type'];
-        $format = $postData['format'];
-
-        $dataIO->initialize($colOpts, $limit, $filter, $maxRecordCount, $type, $format);
-
-        $ids = $dataIO->preloadRecordIds()->getRecordIds();
-
-        $position = $dataIO->getSessionPosition();
-        $position = $position == null ? 0 : $position;
-
-        return array('success' => true, 'position' => $position, 'count' => count($ids));
-    }
-
-    public function exportAction(InputInterface $input, OutputInterface $output)
-    {
-        $postData = array(
-            'profileId' => (int) $this->profileEntity->getId(),
-            'type' => 'export',
-            'format' => $this->format,
-            'sessionId' => $this->sessionId,
-            'fileName' => $this->filePath,
-            'filter' => array(),
-            'limit' => array(
-                'limit' => $this->limit,
-                'offset' => $this->offset,
-            ),
-        );
-
-        if ($this->exportVariants) {
-            $postData['filter']['variants'] = $this->exportVariants;
-        }
-
-        $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
-
-        $dataFactory = $this->Plugin()->getDataFactory();
-
-        $dbAdapter = $dataFactory->createDbAdapter($profile->getType());
-        $dataSession = $dataFactory->loadSession($postData);
-
-        //create dataIO
-        $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession);
-
-        $colOpts = $dataFactory->createColOpts($postData['columnOptions']);
-        $limit = $dataFactory->createLimit($postData['limit']);
-        $filter = $dataFactory->createFilter($postData['filter']);
-        $maxRecordCount = $postData['max_record_count'];
-        $type = $postData['type'];
-        $format = $postData['format'];
-
-        $dataIO->initialize($colOpts, $limit, $filter, $type, $format, $maxRecordCount);
-
-        // we create the file writer that will write (partially) the result file
-        $fileFactory = $this->Plugin()->getFileIOFactory();
-        $fileHelper = $fileFactory->createFileHelper();
-        $fileWriter = $fileFactory->createFileWriter($postData, $fileHelper);
-
-        $dataTransformerChain = $this->Plugin()->getDataTransformerFactory()->createDataTransformerChain(
-                $profile, array('isTree' => $fileWriter->hasTreeStructure())
-        );
-
-        $dataWorkflow = new DataWorkflow($dataIO, $profile, $dataTransformerChain, $fileWriter);
-
-        $post = $dataWorkflow->export($postData);
-
-        return array('success' => true, 'data' => $post);
     }
 
     protected function Plugin()

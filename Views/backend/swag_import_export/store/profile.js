@@ -4,10 +4,7 @@ Ext.define('Shopware.apps.SwagImportExport.store.Profile', {
     defaultRootId: '/',
     root: {
         expanded: true,
-        text: "Root",
-        children: [
-            { text: "Root", leaf: false }
-        ]
+        text: "Root"
     },
     proxy: {
         type: 'ajax',

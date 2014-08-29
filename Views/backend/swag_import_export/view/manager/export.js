@@ -58,10 +58,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
         orderState:  '{s name=order_state}Order state{/s}',
         paymentState:  '{s name=payment_state}Payment state{/s}'
     },
-    /*
-     * profile store
-     */
-    profilesStore: Ext.create('Shopware.apps.SwagImportExport.store.ProfileList'),
+    
     initComponent: function() {
         var me = this;
 
