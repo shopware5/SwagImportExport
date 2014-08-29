@@ -33,7 +33,7 @@ class OrdersDbAdapter implements DataDbAdapter
         $manager = $this->getManager();
 
         $builder = $manager->createQueryBuilder();
-
+        
         $builder->select('details.id')
                 ->from('Shopware\Models\Order\Detail', 'details')
                 ->leftJoin('details.order', 'orders');
@@ -47,10 +47,10 @@ class OrdersDbAdapter implements DataDbAdapter
             $builder->andWhere('orders.cleared = :paymentstate');
             $builder->setParameter('paymentstate', $filter['paymentstate']);
         }
-
-        if (isset($filter['orderNumberFrom']) && is_numeric($filter['orderNumberFrom'])) {
+        
+        if (isset($filter['ordernumberFrom']) && is_numeric($filter['ordernumberFrom'])) {
             $builder->andWhere('orders.number > :orderNumberFrom');
-            $builder->setParameter('orderNumberFrom', $filter['paymentstate']);
+            $builder->setParameter('orderNumberFrom', $filter['ordernumberFrom']);
         }
 
         if (isset($filter['dateFrom']) && $filter['dateFrom']) {
