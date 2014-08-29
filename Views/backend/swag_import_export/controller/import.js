@@ -99,20 +99,20 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
         {
             Shopware.Notification.createGrowlMessage(
                     '{s name=swag_import_export/import/error_title}Swag import export{/s}',
-                    '{s name=swag_import_export/import/error_msg}Please select a profile{/s}'
+                    '{s name=swag_import_export/import/error_msg_profle}Please select a profile{/s}'
             );
             return;
         }
         
-        if (!Ext.isEmpty(values.importFile))
+        var localFile = Ext.getCmp('importSelectFile').getValue();
+
+        if (!Ext.isEmpty(values.importFile) && Ext.isEmpty(localFile))
         {
             me.parameters = values;
 
             me.onCreateImportWindow();
             return;
         }
-        
-        var localFile = Ext.getCmp('importSelectFile').getValue();
 
         if (!Ext.isEmpty(localFile)){
             
@@ -129,6 +129,12 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
                     console.log(response);
                 }
             });
+        } else {
+            Shopware.Notification.createGrowlMessage(
+                    '{s name=swag_import_export/import/error_title}Swag import export{/s}',
+                    '{s name=swag_import_export/import/error_msg_file}No file was selected{/s}'
+            );
+            return;
         }
     },
     /**
