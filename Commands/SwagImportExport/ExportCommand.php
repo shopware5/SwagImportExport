@@ -42,6 +42,8 @@ class ExportCommand extends ShopwareCommand
     {
         // Validation of user input
         $this->prepareExportInputValidation($input, $output);
+        
+        $this->registerErrorHandler($output);
 
         $output->writeln('<info>' . sprintf("Using profile: %s.", $this->profile) . '</info>');
         $output->writeln('<info>' . sprintf("Using format: %s.", $this->format) . '</info>');

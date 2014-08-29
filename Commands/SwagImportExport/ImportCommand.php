@@ -38,6 +38,8 @@ class ImportCommand extends ShopwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->prepareImportInputValidation($input, $output);
+        
+        $this->registerErrorHandler($output);
 
         $output->writeln('<info>' . sprintf("Using profile: %s.", $this->profile) . '</info>');
         $output->writeln('<info>' . sprintf("Using format: %s.", $this->format) . '</info>');
