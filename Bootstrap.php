@@ -115,6 +115,12 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
      */
     public function registerMyNamespace()
     {
+        // Register Doctrine RegExp extension
+        $config = $this->Application()->Models()->getConfiguration();
+        $classLoader = new \Doctrine\Common\ClassLoader('DoctrineExtensions', $this->Path() . 'Components/');
+        $classLoader->register();
+        $config->addCustomStringFunction('GroupConcat', 'DoctrineExtensions\Query\Mysql\GroupConcat');
+        
         $this->Application()->Loader()->registerNamespace(
                 'Shopware\Components', $this->Path() . 'Components/'
         );
@@ -206,8 +212,8 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
 
         $classes = array(
             $em->getClassMetadata('Shopware\CustomModels\ImportExport\Session'),
-            $em->getClassMetadata('Shopware\CustomModels\ImportExport\Profile'),
-            $em->getClassMetadata('Shopware\CustomModels\ImportExport\Expression')
+//            $em->getClassMetadata('Shopware\CustomModels\ImportExport\Profile'),
+//            $em->getClassMetadata('Shopware\CustomModels\ImportExport\Expression')
         );
 
         $tool->dropSchema($classes);
@@ -256,6 +262,7 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
      */
     public function getBackendController(Enlight_Event_EventArgs $args)
     {
+        
         $this->registerMyNamespace();
 
         $this->Application()->Snippets()->addConfigDir(
@@ -268,7 +275,7 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
 
         return $this->Path() . '/Controllers/Backend/SwagImportExport.php';
     }
-
+    
     public function injectBackendAceEditor(Enlight_Event_EventArgs $args)
     {
         $controller = $args->getSubject();
