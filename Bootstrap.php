@@ -335,6 +335,7 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
      */
     public function onRunImportCronJob(Shopware_Components_Cron_CronJob $job)
     {
+        $this->registerMyNamespace();
         $files = scandir(Shopware()->DocPath() . 'files/import_cron/', SCANDIR_SORT_ASCENDING);
         
         if ($files === false) {
@@ -345,7 +346,6 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
         
         $profileRepository = $manager->getRepository('Shopware\CustomModels\ImportExport\Profile');
         
-        
         foreach($files as $file) {
             $type = strtolower(pathinfo($file, PATHINFO_EXTENSION));
             if ($type == 'xml' || $type == 'csv') {
@@ -355,7 +355,7 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
                     throw new \Exception('No profile found!');
                 }
 
-                $commandHelper = \Shopware\Components\SwagImportExport\Utils\CommandHelper(array(
+                $commandHelper = new \Shopware\Components\SwagImportExport\Utils\CommandHelper(array(
                     'profileEntity' => $profile,
                     'filePath' => Shopware()->DocPath() . 'files/import_cron/' . $file,
                     'format' => $type,
@@ -365,14 +365,21 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
                     $return = $commandHelper->prepareImport();
                     $count = $return['count'];
 
-                    $return = $helper->importAction();
+                    $return = $commandHelper->importAction();
                     $position = $return['data']['position'];
 
                     while ($position < $count) {
-                        $return = $helper->importAction();
+                        $return = $commandHelper->importAction();
                         $position = $return['data']['position'];
                     }
+                    
+                    // move the file
+                    if (!rename(Shopware()->DocPath() . 'files/import_cron/' . $file, Shopware()->DocPath() . 'files/import_export/' . $file)) {
+                        throw new \Exception('File could not be moved');
+                    }
                 } catch (\Exception $e) {
+                    // move file as broken (no check)
+                    rename(Shopware()->DocPath() . 'files/import_cron/' . $file, Shopware()->DocPath() . 'files/import_export/broken-' . $file);
                     return $e->getMessage();
                 }
             }
