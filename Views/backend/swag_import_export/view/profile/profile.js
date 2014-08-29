@@ -322,12 +322,28 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
                     this.child('#adapter').hide();
                     this.child('#parentKey').hide();
 				} else if (node.get('type') === 'iteration') {
-                    this.child('#parentKey').getStore().load({ params: { profileId: me.profileId, adapter: node.get('adapter') } });
 					this.child('#swColumn').hide();
                     this.child('#adapter').show();
-                    this.child('#parentKey').show();
                     this.child('#adapter').setValue(node.get('adapter'));
-                    this.child('#parentKey').setValue(node.get('parentKey'));
+                    
+                    // check if it's the first iteration node
+                    var parentNode = node.parentNode;
+                    var isFirst = true;
+                    while (parentNode.get('id') !== 'root') {
+                        if (parentNode.get('type') === 'iteration') {
+                            isFirst = false;
+                        }
+                        parentNode = parentNode.parentNode;
+                    }
+                    // enable the parentKey only if the node is not the first one
+                    if (!isFirst) {
+                        this.child('#parentKey').getStore().load({ params: { profileId: me.profileId, adapter: node.get('adapter') } });
+                        this.child('#parentKey').setValue(node.get('parentKey'));
+                        this.child('#parentKey').show();
+                    } else {
+                        this.child('#parentKey').hide();
+                        this.child('#parentKey').setValue('');
+                    }
                 } else {
 					this.child('#swColumn').hide();
                     this.child('#adapter').hide();
