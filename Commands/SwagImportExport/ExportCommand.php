@@ -56,7 +56,7 @@ class ExportCommand extends ShopwareCommand
         $data = $this->exportAction($input, $output);
         $this->sessionId = $data['sessionId'];
         $position = $data['position'];
-        $output->writeln('<info>' . sprintf("Position: %d.", $position) . '</info>');
+        $output->writeln('<info>' . sprintf("Processed: %d.", $position) . '</info>');
 
         while ($position < $count) {
             $data = $this->exportAction($input, $output);

@@ -52,16 +52,10 @@ class ImportCommand extends ShopwareCommand
         $return = $this->importAction($input, $output);
         $this->sessionId = $return['data']['sessionId'];
         $position = $return['data']['position'];
-        $output->writeln('<info>' . sprintf("Position: %d.", $position) . '</info>');
+        $output->writeln('<info>' . sprintf("Processed: %d.", $position) . '</info>');
 
         while ($position < $count) {
-//            try {
             $return = $this->importAction($input, $output);
-//            } catch (\Exception $e) {
-//                echo $e->getTrace(), "\n";
-//                echo $e->getTraceAsString(), "\n";
-//                exit;
-//            }
             $position = $return['data']['position'];
             $output->writeln('<info>' . sprintf("Processed: %d.", $position) . '</info>');
         }
