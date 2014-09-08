@@ -248,7 +248,7 @@ class CustomerDbAdapter implements DataDbAdapter
         $manager = $this->getManager();
         $passwordManager = Shopware()->PasswordEncoder();
         $db = Shopware()->Db();
-        
+
         foreach ($records['default'] as $record) {
 
             if (!$record['email']) {
@@ -258,10 +258,10 @@ class CustomerDbAdapter implements DataDbAdapter
             }
 
             $customer = $this->getRepository()->findOneBy(array('email' => $record['email']));
-            
+
             if (isset($record['unhashedPassword']) && $record['unhashedPassword'] 
                 && (!isset($record['password']) || !$record['password'])) {
-                
+
                 if (!isset($record['encoder']) || !$record['encoder']) {
                     $record['encoder'] = $passwordManager->getDefaultPasswordEncoderName();
                 }
@@ -272,25 +272,32 @@ class CustomerDbAdapter implements DataDbAdapter
 
                 unset($record['unhashedPassword']);
             }
-            
+
             if (!$customer) {
                 $customer = new Customer();
+
+                if (!isset($record['customergroup'])) {
+                    /** @var $shop \Shopware\Models\Shop\Shop */
+                    $shop = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop')->getActiveDefault();
+                    $defaultGroupKey = $shop->getCustomerGroup()->getKey();
+                    $record['customergroup'] = $defaultGroupKey;
+                }
             }
 
             if (isset($record['password']) && !$record['password']) {
                 throw new \Exception('Password must be provided');
             }
-            
+
             if (isset($record['password']) && (!isset($record['encoder']) || !$record['encoder'])) {
                 throw new \Exception('Password encoder must be provided');
             }
-           
+
             $customerData = $this->prepareCustomer($record);
 
             $customerData['billing'] = $this->prepareBilling($record);
 
             $customerData['shipping'] = $this->prepareShipping($record);
-            
+
             $customer->fromArray($customerData);
 
             $violations = $this->getManager()->validate($customer);
@@ -298,13 +305,13 @@ class CustomerDbAdapter implements DataDbAdapter
             if ($violations->count() > 0) {
                 throw new \Exception($violations);
             }
-            
+
             $manager->persist($customer);
             $manager->flush();
-            
+
             if (isset($customerData['encoderName']) && $customerData['encoderName']) {
                 $customerId = $customer->getId();
-                
+
                 $data['encoder'] = lcfirst($customerData['encoderName']);
                 $whereUser = array('id=' . $customerId);
                 $db->update('s_user', $data, $whereUser);
@@ -329,6 +336,13 @@ class CustomerDbAdapter implements DataDbAdapter
             if (isset($this->customerMap[$key])) {
                 $customerData[$this->customerMap[$key]] = $value;
                 unset($record[$key]);
+            }
+        }
+        
+        if (isset($customerData['groupKey'])) {
+            $customerData['group'] = Shopware()->Models()->getRepository('Shopware\Models\Customer\Group')->findOneBy(array('key' => $customerData['groupKey']));
+            if (!$customerData['group']) {
+                throw new \Exception(sprintf("CustomerGroup by key %s not found", $customerData['groupKey']));
             }
         }
         

@@ -112,6 +112,7 @@ class OrdersDbAdapter implements DataDbAdapter
                 ->leftJoin('orders.orderStatus', 'orderStatus')
                 ->leftJoin('orders.dispatch', 'dispatch')
                 ->leftJoin('orders.customer', 'customer')
+                ->leftJoin('orders.attribute', 'attr')
                 ->where('details.id IN (:ids)')
                 ->setParameter('ids', $ids);
 
@@ -207,9 +208,24 @@ class OrdersDbAdapter implements DataDbAdapter
                 $orderDetailModel->setStatus($detailStatusModel);
             }
 
+            //prepares the attributes
+            foreach ($record as $key => $value) {
+                if (preg_match('/^attribute/', $key)) {
+                    $newKey = lcfirst(preg_replace('/^attribute/', '', $key));
+                    $orderData['attribute'][$newKey] = $value;
+                    unset($record[$key]);
+                }
+            }
+
+            if ($orderData) {
+                $orderModel->fromArray($orderData);
+            }
+
             $this->getManager()->persist($orderModel);
+
             unset($orderDetailModel);
             unset($orderModel);
+            unset($orderData);
         }
 
         $this->getManager()->flush();
@@ -242,7 +258,7 @@ class OrdersDbAdapter implements DataDbAdapter
     
     public function getDefaultColumns()
     {
-       return array(
+       $columns = array(
             'details.orderId as orderId',
             'details.id as orderDetailId',
             'details.articleId as articleId',
@@ -329,6 +345,40 @@ class OrdersDbAdapter implements DataDbAdapter
             'customer.newsletter as newsletter',
             'customer.affiliate as affiliate',
         );
+       
+        $attributesSelect = $this->getAttributes();
+
+        if ($attributesSelect && !empty($attributesSelect)) {
+            $columns = array_merge($columns, $attributesSelect);
+        }
+
+        return $columns;
+    }
+
+    public function getAttributes()
+    {
+        // Attributes
+        $stmt = Shopware()->Db()->query('SELECT * FROM s_order_attributes LIMIT 1');
+        $attributes = $stmt->fetch();
+
+        $attributesSelect = '';
+        if ($attributes) {
+            unset($attributes['id']);
+            unset($attributes['orderID']);
+            $attributes = array_keys($attributes);
+
+            $prefix = 'attr';
+            $attributesSelect = array();
+            foreach ($attributes as $attribute) {
+                //underscore to camel case
+                //exmaple: underscore_to_camel_case -> underscoreToCamelCase
+                $catAttr = preg_replace("/\_(.)/e", "strtoupper('\\1')", $attribute);
+
+                $attributesSelect[] = sprintf('%s.%s as attribute%s', $prefix, $catAttr, ucwords($catAttr));
+            }
+        }
+
+        return $attributesSelect;
     }
 
     /**
