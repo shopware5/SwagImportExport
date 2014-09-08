@@ -242,7 +242,7 @@ class OrdersDbAdapter implements DataDbAdapter
     
     public function getDefaultColumns()
     {
-       return array(
+       $columns = array(
             'details.orderId as orderId',
             'details.id as orderDetailId',
             'details.articleId as articleId',
@@ -329,6 +329,33 @@ class OrdersDbAdapter implements DataDbAdapter
             'customer.newsletter as newsletter',
             'customer.affiliate as affiliate',
         );
+
+        // Attributes
+        $stmt = Shopware()->Db()->query('SELECT * FROM s_order_attributes LIMIT 1');
+        $attributes = $stmt->fetch();
+
+        $attributesSelect = '';
+        if ($attributes) {
+            unset($attributes['id']);
+            unset($attributes['orderID']);
+            $attributes = array_keys($attributes);
+
+            $prefix = 'attr';
+            $attributesSelect = array();
+            foreach ($attributes as $attribute) {
+                //underscore to camel case
+                //exmaple: underscore_to_camel_case -> underscoreToCamelCase
+                $catAttr = preg_replace("/\_(.)/e", "strtoupper('\\1')", $attribute);
+
+                $attributesSelect[] = sprintf('%s.%s as attribute%s', $prefix, $catAttr, ucwords($catAttr));
+            }
+        }
+
+        if ($attributesSelect && !empty($attributesSelect)) {
+            $columns = array_merge($columns, $attributesSelect);
+        }
+
+        return $columns;
     }
 
     /**
