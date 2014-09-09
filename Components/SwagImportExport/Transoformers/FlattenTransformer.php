@@ -506,6 +506,16 @@ class FlattenTransformer implements DataTransformerAdapter
             //group name, group description and group id is skipped
             $this->createHeaderConfigurator($configuratorNodeMapper);
             
+        } elseif ($this->iterationParts[$path] == 'translation') {
+            $translationProfile = $this->getNodeFromProfile($this->getMainIterationPart(), 'translation');
+            $translationNodeMapper = $this->createMapperFromProfile($translationProfile);
+            
+            foreach ($this->getShops() as $shop) {
+                if ($shop->getId() != 1) {
+                    $this->createHeaderTranslation($translationNodeMapper, $shop->getId());
+                }
+            }
+            
         } else {
             foreach ($node as $key => $value) {
                 
@@ -615,6 +625,38 @@ class FlattenTransformer implements DataTransformerAdapter
     }
     
     /**
+     * Saves translation nodes and skips languageId
+     * 
+     * @param array $node
+     * @param int $shopId
+     * @param string $path
+     */
+    public function createHeaderTranslation($node, $shopId, $path = null)
+    {
+        foreach ($node as $key => $value) {
+
+            if (is_array($value)) {
+                $currentPath = $path . '/' . $key;
+                $this->createHeaderTranslation($value, $shopId, $currentPath);
+            } else {
+                
+                if ($value == 'languageId') {
+                    continue;
+                }
+                
+                if ($key == '_value') {
+                    $pathParts = explode('/', $path);
+                    $name = $pathParts[count($pathParts) - 1] . '_' . $shopId ;
+                    $this->saveTempData($name);
+                } else {
+                    $key .= '_' . $shopId;
+                    $this->saveTempData($key);
+                }
+            }
+        }
+    }
+    
+    /**
      * Collects record data
      * 
      * @param mixed $node
@@ -658,6 +700,16 @@ class FlattenTransformer implements DataTransformerAdapter
                 }
                 
                 unset($this->iterationTempData);
+                
+            } elseif ($this->iterationParts[$path] == 'translation') {
+                $translationProfile = $this->getNodeFromProfile($this->getMainIterationPart(), 'translation');
+                $translationTreeMapper = $this->createMapperFromProfile($translationProfile);
+                $translationFlatMapper = $this->treeToFlat($translationTreeMapper);
+                
+                foreach ($node as $key => $translation) {
+                    $this->collectTranslationData($translation, $translationFlatMapper);
+                }
+                
             } else {
                 //processing images, similars and propertyValues
                 foreach ($node as $value) {
@@ -670,6 +722,7 @@ class FlattenTransformer implements DataTransformerAdapter
                         $this->saveTempData($data);
                     }
                 }
+                
                 unset($this->iterationTempData);
             }
         } else {
@@ -889,7 +942,6 @@ class FlattenTransformer implements DataTransformerAdapter
     }
     
     /**
-     * 
      * @param array $node
      * @param array $mapper
      * @param string $path
@@ -922,6 +974,27 @@ class FlattenTransformer implements DataTransformerAdapter
                 } else {
                     $this->saveIterationTempData($currentPath, $value);
                 }
+            }
+        }
+    }
+    
+    /**
+     * @param type $node
+     * @param type $mapper
+     * @param type $path
+     */
+    public function collectTranslationData($node, $mapper, $path = null)
+    {
+        foreach ($node as $key => $value) {
+            $currentPath = $this->getMergedPath($path, $key);
+            if (is_array($value)) {
+                $this->collectTranslationData($value, $mapper, $currentPath);
+            } else {
+                if ($mapper[$currentPath] == 'languageId'){
+                    continue;
+                }
+                
+                $this->saveTempData($value);
             }
         }
     }
@@ -990,5 +1063,11 @@ class FlattenTransformer implements DataTransformerAdapter
         
         return $groups;
     }
-
+    
+    public function getShops()
+    {
+        $shops = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop')->findAll();
+        
+        return $shops;
+    }
 }

@@ -177,6 +177,22 @@ class ArticlesDbAdapter implements DataDbAdapter
                 ->groupBy('categories.id');
         $result['category'] = $categoriesBuilder->getQuery()->getResult();
         
+        //translations
+        $translationFields = implode(',',$columns['translation']);
+        $articleDetailIds = implode(',', $ids);
+        
+        $sql = "SELECT $translationFields FROM `s_articles_details` as articleDetails
+                INNER JOIN s_articles article
+                ON article.id = articleDetails.articleID
+                
+                LEFT JOIN s_articles_translations translation
+                ON article.id = translation.articleID
+
+                WHERE articleDetails.id IN ($articleDetailIds)
+                GROUP BY translation.id
+                ";
+        $result['translation'] = $stmt = Shopware()->Db()->query($sql)->fetchAll();
+        
         return $result;
     }
 
@@ -201,6 +217,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         $columns['similar'] = $this->getSimilarColumns();
         $columns['configurator'] = $this->getConfiguratorColumns();
         $columns['category'] = $this->getCategoryColumns();
+        $columns['translation'] = $this->getTranslationColumns();
         
         return $columns;
     }
@@ -317,6 +334,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             array('id' => 'similar', 'name' => 'similar'),
             array('id' => 'configurator', 'name' => 'configurator'),
             array('id' => 'category', 'name' => 'category'),
+            array('id' => 'translation', 'name' => 'translation'),
         );
     }
 
@@ -1069,6 +1087,10 @@ class ArticlesDbAdapter implements DataDbAdapter
                 return array(
                     'article.id as articleId',
                 );
+            case 'translation':
+                return array(
+                    'article.id as articleId',
+                );
         }
     }
 
@@ -1166,6 +1188,24 @@ class ArticlesDbAdapter implements DataDbAdapter
          return array(
             'categories.id as categoryId',
             'article.id as articleId',
+        );
+    }
+    
+    public function getTranslationColumns()
+    {
+         return array(
+            'article.id as articleId',
+            'translation.languageID as languageId',
+            'translation.name as name',
+            'translation.keywords as keywords',
+            'translation.description as description',
+            'translation.description_long as descriptionLong',
+            'translation.description_clear as descriptionClear',
+            'translation.attr1 as attr1',
+            'translation.attr2 as attr2',
+            'translation.attr3 as attr3',
+            'translation.attr4 as attr4',
+            'translation.attr5 as attr5',
         );
     }
     

@@ -2,6 +2,8 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
+use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
+
 class OrdersDbAdapter implements DataDbAdapter
 {
 
@@ -116,7 +118,11 @@ class OrdersDbAdapter implements DataDbAdapter
                 ->where('details.id IN (:ids)')
                 ->setParameter('ids', $ids);
 
-        $result['default'] = $builder->getQuery()->getResult();
+        $orders = $builder->getQuery()->getResult();
+        
+        $orders = DbAdapterHelper::decodeHtmlEntities($orders);
+        
+        $result['default'] = DbAdapterHelper::escapeNewLines($orders);
         
         return $result;
     }
@@ -282,7 +288,7 @@ class OrdersDbAdapter implements DataDbAdapter
             'orders.taxFree as taxFree',
             'orders.temporaryId as temporaryId',
             'orders.referer as referer',
-            'orders.clearedDate as clearedDate',
+            "DATE_FORMAT(orders.clearedDate, '%Y-%m-%d %H:%i:%s') as clearedDate",
             'orders.trackingCode as trackingCode',
             'orders.languageIso as languageIso',
             'orders.currency as currency',
@@ -305,7 +311,7 @@ class OrdersDbAdapter implements DataDbAdapter
             'details.price * details.quantity as invoice',
             'details.shipped as shipped',
             'details.shippedGroup as shippedGroup',
-            'details.releaseDate as releasedate',
+            "DATE_FORMAT(details.releaseDate, '%Y-%m-%d') as releasedate",
             'taxes.tax as tax',
             'details.esdArticle as esd',
             'details.config as config',
