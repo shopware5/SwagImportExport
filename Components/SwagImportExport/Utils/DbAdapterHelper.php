@@ -14,4 +14,15 @@ class DbAdapterHelper
         
         return $records;
     }
+    
+    static public function escapeNewLines($records)
+    {
+        foreach ($records as &$record) {
+            foreach ($record as &$value) {
+                $value = str_replace(array("\n", "\r", "\r\n", "\n\r"), ' ', $value);
+            }
+        }
+        
+        return $records;
+    }
 }

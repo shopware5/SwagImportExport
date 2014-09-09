@@ -2,6 +2,8 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
+use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
+
 class OrdersDbAdapter implements DataDbAdapter
 {
 
@@ -116,7 +118,11 @@ class OrdersDbAdapter implements DataDbAdapter
                 ->where('details.id IN (:ids)')
                 ->setParameter('ids', $ids);
 
-        $result['default'] = $builder->getQuery()->getResult();
+        $orders = $builder->getQuery()->getResult();
+        
+        $orders = DbAdapterHelper::decodeHtmlEntities($orders);
+        
+        $result['default'] = DbAdapterHelper::escapeNewLines($orders);
         
         return $result;
     }

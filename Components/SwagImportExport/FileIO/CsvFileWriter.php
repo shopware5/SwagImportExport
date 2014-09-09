@@ -42,11 +42,12 @@ class CsvFileWriter implements FileWriter
         $flatData = '';
         
         $convertor = new \Shopware_Components_Convert_Csv;
+//        $convertor->sSettings['newline'] = "\r\n";
         $keys = array_keys(current($data));
         foreach ($data as $line) {
             $flatData .= $convertor->_encode_line($line, $keys) . $convertor->sSettings['newline'];
         }
-
+        
         $this->getFileHelper()->writeStringToFile($fileName, $flatData, FILE_APPEND);
     }
 
