@@ -48,6 +48,10 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
             msg: '{s name=swag_import_export/profile/delete/msg}Are you sure you want to permanently delete the node?{/s}',
             failed: '{s name=swag_import_export/profile/delete/failed}Delete List Failed{/s}'
         },
+        'deleteProfile': {
+            title: '{s name=swag_import_export/profile/deleteProfile/title}Delete Profile?{/s}',
+            msg: '{s name=swag_import_export/profile/deleteProfile/msg}Are you sure you want to permanently delete the profile?{/s}',
+        },
         addAttribute: {
             failureTitle: '{s name=swag_import_export/profile/add_attribute/failure_title}Create Attribute Failed{/s}'
         },
@@ -63,7 +67,8 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
         articlesTranslations: '{s name=swag_import_export/profile/type/articlesTranslations}Articles Translations{/s}',
         orders: '{s name=swag_import_export/profile/type/orders}Orders{/s}',
         customers: '{s name=swag_import_export/profile/type/customers}Customers{/s}',
-        newsletter: '{s name=swag_import_export/profile/type/newsletter}Newsletter receiver{/s}'
+        newsletter: '{s name=swag_import_export/profile/type/newsletter}Newsletter receiver{/s}',
+        duplicate: '{s name=swag_import_export/profile/duplicater}Profile was duplicate successfully{/s}'
     },
     
     /**
@@ -290,11 +295,24 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
      * Duplicate the selected profile
      */
     duplicateSelectedProfile: function(combobox, store, id) {
-        var model = store.getById(id);
-        var copy = store.add({ type: model.get('type'), name: model.get('name') + ' (copy)', tree: model.get('tree') });
-        store.sync({
-            success: function() {
-                combobox.setValue(copy[0].get('id'));
+        var me = this;
+        Ext.Ajax.request({
+            url: '{url controller="SwagImportExport" action="duplicateProfile"}',
+            method: 'POST',
+            params: { profileId: id },
+            success: function(response) {
+                var result = Ext.decode(response.responseText);
+                store.reload();
+                Shopware.Notification.createGrowlMessage(
+                        me.snippets.save.title,
+                        me.snippets.duplicate
+                );
+            },
+            failure: function(response) {
+                Shopware.Msg.createStickyGrowlMessage({
+                    title: 'An error occured',
+                    text: "Profile was not created"
+                });
             }
         });
     },
@@ -303,9 +321,19 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
      * Deletes the selected profile
      */
     deleteSelectedProfile: function(combobox, store, id) {
-        combobox.reset();
-        store.remove(store.getById(id));
-        store.sync();
+        var me = this;
+        Ext.Msg.show({
+            title: me.snippets.deleteProfile.title,
+            msg: me.snippets.deleteProfile.msg,
+            buttons: Ext.Msg.YESNO,
+            fn: function(response) {
+                if (response === 'yes') {
+                    combobox.reset();
+                    store.remove(store.getById(id));
+                    store.sync();                    
+                }
+            }
+        });
     },
     
     /**
