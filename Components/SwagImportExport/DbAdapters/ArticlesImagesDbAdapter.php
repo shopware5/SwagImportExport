@@ -72,6 +72,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                 ->from('Shopware\Models\Article\Image', 'aimage')
                 ->innerJoin('aimage.article', 'article')
                 ->innerJoin('article.details', 'articleDetail')
+                ->leftJoin('Shopware\Models\Article\Detail', 'mv', \Doctrine\ORM\Query\Expr\Join::WITH, 'mv.articleId=article.id AND mv.kind=1')
                 ->leftJoin('aimage.mappings', 'im')
                 ->leftJoin('im.rules', 'mr')
                 ->leftJoin('mr.option', 'co')
@@ -124,7 +125,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
         $path = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() . '/media/image/';
 
         $columns = array(
-            'articleDetail.number as ordernumber',
+            'mv.number as ordernumber',
             "CONCAT('$path', aimage.path, '.', aimage.extension) as image",
             'aimage.main as main',
             'aimage.description as description',

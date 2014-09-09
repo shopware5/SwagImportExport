@@ -205,12 +205,49 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $data = $this->Request()->getParam('data', 1);
 
         try {
-            $newTree = TreeHelper::getDefaultTreeByProfileType($data['type']);
+            $newTree = TreeHelper::getDefaultTreeByProfileType($data['type']);                
             $profile = new \Shopware\CustomModels\ImportExport\Profile();
 
             $profile->setName($data['name']);
             $profile->setType($data['type']);
             $profile->setTree($newTree);
+
+            $this->getManager()->persist($profile);
+            $this->getManager()->flush();
+
+            $this->View()->assign(array(
+                'success' => true,
+                'data' => array(
+                    "id" => $profile->getId(),
+                    'name' => $profile->getName(),
+                    'type' => $profile->getType(),
+                    'tree' => $profile->getTree(),
+                )
+            ));
+        } catch (\Exception $e) {
+            $this->View()->assign(array('success' => false, 'msg' => $e->getMessage()));
+        }
+    }
+    
+     /**
+     * Returns the new profile
+     */
+    public function duplicateProfileAction()
+    {
+        $profileId = $this->Request()->getParam('profileId');
+        
+        try {
+            $loadedProfile = $this->getManager()->find('Shopware\CustomModels\ImportExport\Profile', (int) $profileId);
+            
+            if (!$loadedProfile) {
+                throw new \Exception(sprintf('Profile with id %s does NOT exists', $profileId));
+            }
+                     
+            $profile = new \Shopware\CustomModels\ImportExport\Profile();
+
+            $profile->setName($loadedProfile->getName() . ' (copy)');
+            $profile->setType($loadedProfile->getType());
+            $profile->setTree($loadedProfile->getTree());
 
             $this->getManager()->persist($profile);
             $this->getManager()->flush();
