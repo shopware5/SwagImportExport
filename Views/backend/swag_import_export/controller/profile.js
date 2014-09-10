@@ -59,6 +59,11 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
             failureTitle: '{s name="swag_import_export/profile/new_profile/failure_title"}Create New Profile Failed{/s}',
             notAllFieldsFilledError: '{s name="swag_import_export/profile/new_profile/not_all_fields_filled_error"}Not all fields are filled!{/s}'
         },
+        conversion: {
+            title: '{s name="swag_import_export/profile/conversion/title"}Import/Export conversion{/s}',
+            successMsg: '{s name="swag_import_export/profile/conversion/success_msg"}Conversion was save successfully{/s}',
+            failureMsg: '{s name="swag_import_export/profile/conversion/failure_msg"}Conversion saving failed{/s}'
+        },
         categories: '{s name=swag_import_export/profile/type/categories}Categories{/s}',
         articles: '{s name=swag_import_export/profile/type/articles}Articles{/s}',
         articlesInStock: '{s name=swag_import_export/profile/type/articlesInStock}Articles in stock{/s}',
@@ -116,8 +121,27 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
         editor.startEdit(conversion, 0);
     },
     
-    updateConversion: function(store) {
-        store.sync();
+    updateConversion: function(store, flag) {
+        var me = this;
+
+        if (flag === true){
+            store.sync({
+                success: function(){
+                    Shopware.Notification.createGrowlMessage(
+                        me.snippets.conversion.title,
+                        me.snippets.conversion.successMsg
+                    );
+                },
+                failure: function() {
+                    Shopware.Notification.createGrowlMessage(
+                        me.snippets.conversion.title,
+                        me.snippets.conversion.failureMsg
+                    );
+                }
+            });
+        } else {
+            store.sync();
+        }
     },
     
     deleteConversion: function(store, index) {
