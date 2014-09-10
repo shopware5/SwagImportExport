@@ -116,8 +116,8 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
         foreach ($records['default'] as $record) {
 
             // maybe this should be required field
-            if (empty($record['articleDetailsId'])) { 
-                continue;
+            if (!isset($record['orderNumber']) || empty($record['orderNumber'])) { 
+                throw new \Exception('Order number is required');
             }
 
             if (empty($record['priceGroup'])) {
@@ -126,12 +126,12 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
             
             $customerGroup = $this->getGroupRepository()->findOneBy(array("key" => $record['priceGroup']));
             if (!$customerGroup) {
-                continue;
+                throw new \Exception(sprintf('Price group %s was not found', $record['priceGroup']));
             }
             
-            $articleDetail = $this->getDetailRepository()->findOneBy(array("id" => $record['articleDetailsId']));
+            $articleDetail = $this->getDetailRepository()->findOneBy(array("number" => $record['orderNumber']));
             if (!$articleDetail) {
-                continue;
+                throw new \Exception(sprintf('Article with order number %s doen not exists', $record['orderNumber']));
             }
 
             if (isset($record['basePrice'])) {
