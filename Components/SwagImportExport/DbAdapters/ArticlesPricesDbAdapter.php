@@ -64,6 +64,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                 ->from('Shopware\Models\Article\Article', 'article')
                 ->leftJoin('article.details', 'detail')
                 ->leftJoin('article.tax', 'articleTax')
+                ->leftJoin('article.supplier', 'supplier')
                 ->leftJoin('detail.prices', 'price')
                 ->leftJoin('price.customerGroup', 'customerGroup')
                 ->where('price.id IN (:ids)')
@@ -84,6 +85,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
     public function getDefaultColumns()
     {
         return array(
+            'detail.number as orderNumber',
             'price.id',
             'price.articleId',
             'price.articleDetailsId',
@@ -94,6 +96,9 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
             'price.basePrice',
             'price.percent',
             'price.customerGroupKey as priceGroup',
+            'article.name as name',
+            'detail.additionalText as additionalText',
+            'supplier.name as supplierName',
 //            'articleTax.id as taxId',
 //            'articleTax.tax as tax',
         );
@@ -110,7 +115,8 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
         $manager = $this->getManager();
         foreach ($records['default'] as $record) {
 
-            if (empty($record['articleDetailsId'])) { // maybe this should be required field
+            // maybe this should be required field
+            if (empty($record['articleDetailsId'])) { 
                 continue;
             }
 
@@ -154,16 +160,27 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                 continue;
             }
 
-            $query = $manager->createQuery('DELETE FROM Shopware\Models\Article\Price price WHERE price.customerGroup = :customerGroup AND price.articleDetailsId = :detailId AND price.from >= :from');
+            $query = $manager->createQuery('
+                        DELETE FROM Shopware\Models\Article\Price price
+                        WHERE price.customerGroup = :customerGroup
+                        AND price.articleDetailsId = :detailId
+                        AND price.from >= :from');
+
             $query->setParameters(array(
                 'customerGroup' => $record['priceGroup'],
                 'detailId' => $articleDetail->getId(),
                 'from' => $record['from'],
             ));
             $query->execute();
-            
+
             if ($record['from'] != 1) {
-                $query = $manager->createQuery('UPDATE Shopware\Models\Article\Price price SET price.to = :to WHERE price.customerGroup = :customerGroup AND price.articleDetailsId = :detailId AND price.articleId = :articleId AND price.to LIKE \'beliebig\'');
+                $query = $manager->createQuery('
+                        UPDATE Shopware\Models\Article\Price price SET price.to = :to
+                        WHERE price.customerGroup = :customerGroup
+                        AND price.articleDetailsId = :detailId
+                        AND price.articleId = :articleId AND price.to
+                        LIKE \'beliebig\'');
+
                 $query->setParameters(array(
                     'to' => $record['from'] - 1,
                     'customerGroup' => $record['priceGroup'],
