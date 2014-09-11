@@ -157,10 +157,10 @@ class OrdersDbAdapter implements DataDbAdapter
             $orderModel = $orderDetailModel->getOrder();
 
             if (isset($record['paymentId']) && is_numeric($record['paymentId'])) {
-                $paymentStatusModel = $this->getManager()->find('\Shopware\Models\Order\Status', $record['paymentId']);
+                $paymentStatusModel = $this->getManager()->find('\Shopware\Models\Order\Status', $record['cleared']);
 
                 if (!$paymentStatusModel) {
-                    throw new \Exception(sprintf('Payment status id %s was not found', $record['paymentId']));
+                    throw new \Exception(sprintf('Payment status id %s was not found', $record['cleared']));
                 }
 
                 $orderModel->setPaymentStatus($paymentStatusModel);
