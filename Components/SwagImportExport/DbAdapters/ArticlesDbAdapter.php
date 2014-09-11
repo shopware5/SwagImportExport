@@ -843,6 +843,8 @@ class ArticlesDbAdapter implements DataDbAdapter
             return;
         }
         
+        $configuratorSet = $article->getConfiguratorSet();
+
         foreach ($configurators as $index => $configurator) {
             if ($configurator['parentIndexElement'] != $configuratorIndex) {
                 continue;
@@ -856,9 +858,10 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $articleNumber = $article->getMainDetail()->getNumber();
                 throw new \Exception(sprintf('A configurator set has to be defined on article %s', $articleNumber));
             }
-            
-            $availableGroups = $article->getConfiguratorSet()->getGroups();
-            
+
+            $setOptions = $configuratorSet->getOptions();
+            $availableGroups = $configuratorSet->getGroups();
+
             $availableGroup = $this->getAvailableGroup($availableGroups, array(
                 'id' => $configurator['configGroupId'],
                 'name' => $configurator['configGroupName']
@@ -892,7 +895,12 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $this->getManager()->persist($option);
             }
             
-            $optionData[] = $option;            
+            $optionData[] = $option;
+
+            //add option to configurator set if dont exists
+            if (!$this->isEntityExistsByName($setOptions, $option)){
+                $setOptions->add($option);
+            }
         }
 
         return $optionData;
@@ -936,6 +944,17 @@ class ArticlesDbAdapter implements DataDbAdapter
                 || ($availableOption->getId() == $optionData['id'] && $optionData['id'] !== null)) {
 
                 return $availableOption;
+            }
+        }
+
+        return false;
+    }
+    
+    public function isEntityExistsByName(ArrayCollection $models, $entity)
+    {
+        foreach ($models as $model) {
+            if ($model->getName() == $entity->getName()) {
+                return true;
             }
         }
 
