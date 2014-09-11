@@ -54,7 +54,7 @@ class FlattenTransformer implements DataTransformerAdapter
         foreach ($data as $row) {
             $tree[] = $this->transformToTree($mainNode, $row, $mainNode['name']);
         }
-        
+
         return $tree;
     }
 
@@ -305,6 +305,24 @@ class FlattenTransformer implements DataTransformerAdapter
                     }
                 }
                 return $configs;
+                
+            } else if ($node['adapter'] != $this->getMainAdapter()) {
+                
+                $mapper = $this->createMapperFromProfile($node);
+                
+                foreach ($mapper as $key => $value) {
+                    $collectedData[$key] = $this->getDataValue($data, $key);
+                }
+                
+                $newData = array();
+                foreach ($collectedData as $key => $groupValue) {
+                    $values = explode('|', $groupValue);
+                    foreach ($values as $index => $value) {
+                        $newData[$index][$key] = $value;
+                    }
+                }
+                
+                return $newData;
             }
         }
 
