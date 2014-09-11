@@ -76,18 +76,18 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
         foreach ($result['default'] as &$record) {
 
             if ($record['taxInput']) {
-                $record['price'] = str_replace('.',',',number_format($record['price'] * (100 + $record['tax']) / 100, 2));
-                $record['pseudoPrice'] = str_replace('.',',',number_format($record['pseudoPrice'] * (100 + $record['tax']) / 100, 2));
+                $record['price'] = str_replace('.',',',round($record['price'] * (100 + $record['tax']) / 100, 2));
+                $record['pseudoPrice'] = str_replace('.',',',round($record['pseudoPrice'] * (100 + $record['tax']) / 100, 2));
             } else {
-                $record['price'] = str_replace('.',',',number_format($record['price'], 2));
-                $record['pseudoPrice'] = str_replace('.',',',number_format($record['pseudoPrice'], 2));
+                $record['price'] = str_replace('.',',',round($record['price'], 2));
+                $record['pseudoPrice'] = str_replace('.',',',  round($record['pseudoPrice'], 2));
             }
 
             if ($record['basePrice']) {
-                $record['basePrice'] = str_replace('.',',',number_format($record['basePrice'], 2));
+                $record['basePrice'] = str_replace('.',',',round($record['basePrice'], 2));
             }
         }
-
+        
         return $result;
     }
 
@@ -142,6 +142,22 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
             if (!$articleDetail) {
                 throw new \Exception(sprintf('Article with order number %s doen not exists', $record['orderNumber']));
             }
+            
+            if (empty($record['price']) && empty($record['percent'])) {
+                 throw new \Exception('Price or percent value is missing');
+            }
+
+            if ($record['from'] <= 1 && empty($record['price'])) {
+                throw new \Exception('Price value is missing');
+            }
+
+            if (isset($record['price'])) {
+                $record['price'] = floatval(str_replace(",", ".", $record['price']));                
+            }
+
+            if (isset($record['pseudoPrice'])) {
+                $record['pseudoPrice'] = floatval(str_replace(",", ".", $record['pseudoPrice']));
+            }
 
             if (isset($record['basePrice'])) {
                 $record['basePrice'] = floatval(str_replace(",", ".", $record['basePrice']));
@@ -159,14 +175,6 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                 $record['from'] = 1;
             } else {
                 $record['from'] = intval($record['from']);
-            }
-
-            if (empty($record['price']) && empty($record['percent'])) {
-                continue;
-            }
-
-            if ($record['from'] <= 1 && empty($record['price'])) {
-                continue;
             }
 
             $query = $manager->createQuery('
