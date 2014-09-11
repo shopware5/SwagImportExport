@@ -283,27 +283,34 @@ class FlattenTransformer implements DataTransformerAdapter
                 if ($columnMapper['configGroupName'] === FALSE) {
                     throw new \Exception("configGroupName column not found");
                 }
-                if ($columnMapper['configSetName'] === FALSE) {
-                    throw new \Exception("configSetName column not found");
-                }
+                
+//                if ($columnMapper['configSetName'] === FALSE) {
+//                    throw new \Exception("configSetName column not found");
+//                }
                 
                 $configs = array();
                 
                 $values = explode(',', $this->getDataValue($data, $columnMapper['configOptionName']));
-                $setNames = explode(',', $this->getDataValue($data, $columnMapper['configSetName']));
-                
-                if (count($values) != count($setNames)) {
-                    throw new \Exception("Mismatch number of configOptionNames and configSetNames.");
-                } else {
-                    for ($i = 0; $i < count($values); $i++) {
-                        $value = explode(':', $values[$i]);
-                        $configs[] = $this->transformConfiguratorToTree($node, array(
-                            $columnMapper['configGroupName'] => $value[0],
-                            $columnMapper['configOptionName'] => $value[1],
-                            $columnMapper['configSetName'] => $setNames[$i]
-                        ));
-                    }
+
+                if ($columnMapper['configSetName'] !== false) {
+                    $setNames = explode(',', $this->getDataValue($data, $columnMapper['configSetName']));
                 }
+                
+                if (is_array($setNames)) {
+                    $setName = $setNames[0];
+                } else {
+                    $setName = $setNames;
+                }
+               
+                for ($i = 0; $i < count($values); $i++) {
+                    $value = explode(':', $values[$i]);
+                    $configs[] = $this->transformConfiguratorToTree($node, array(
+                        $columnMapper['configGroupName'] => $value[0],
+                        $columnMapper['configOptionName'] => $value[1],
+                        $columnMapper['configSetName'] => $setName
+                    ));
+                }
+                
                 return $configs;
                 
             } else if ($node['adapter'] != $this->getMainAdapter()) {

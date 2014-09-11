@@ -732,8 +732,8 @@ class ArticlesDbAdapter implements DataDbAdapter
                 continue;
             }
             
-            if (!isset($configurator['configSetName']) || empty($configurator['configSetName'])) {
-                continue;
+            if ((!isset($configurator['configSetName']) || empty($configurator['configSetName'])) && !$configuratorSet) {
+                 $configuratorSet = $this->createConfiguratorSet($configurator, $article);
             }
             
             if (!$configuratorSet) {
@@ -746,19 +746,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             }
             
             if (!$configuratorSet) {
-                $configuratorSet = new Configurator\Set();
-                $number = $article->getMainDetail()->getNumber();
-                
-                if (isset($configurator['configSetName'])) {
-                    $configuratorSet->setName($configurator['configSetName']);
-                } else {
-                    $configuratorSet->setName('Set-' . $number);
-                }
-                
-                if (isset($configurator['configSetType'])) {
-                    $configuratorSet->setType($configurator['configSetType']);
-                }
-                $configuratorSet->setPublic(false);
+                $configuratorSet = $this->createConfiguratorSet($configurator, $article);
             }
             
             //configurator group
@@ -904,6 +892,32 @@ class ArticlesDbAdapter implements DataDbAdapter
         }
 
         return $optionData;
+    }
+    
+    /**
+     * 
+     * @param array $data
+     * @param Shopware\Models\Article\Article $article
+     * @return \Shopware\Models\Article\Configurator\Set
+     */
+    public function createConfiguratorSet($data, $article)
+    {
+        $configuratorSet = new Configurator\Set();
+
+        if (isset($data['configSetName']) && !empty($data['configSetName'])) {
+            $configuratorSet->setName($data['configSetName']);
+        } else {
+            $number = $article->getMainDetail()->getNumber();
+            $configuratorSet->setName('Set-' . $number);
+        }
+
+        if (isset($data['configSetType'])) {
+            $configuratorSet->setType($data['configSetType']);
+        }
+        
+        $configuratorSet->setPublic(false);
+        
+        return $configuratorSet;
     }
     
     /**
