@@ -71,11 +71,20 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                 ->setParameter('ids', $ids);
 
         $result['default'] = $builder->getQuery()->getResult();
-        
+
         // add the tax if needed
         foreach ($result['default'] as &$record) {
+
             if ($record['taxInput']) {
-                $record['price'] = $record['price'] * (100 + $record['tax']) / 100;
+                $record['price'] = str_replace('.',',',number_format($record['price'] * (100 + $record['tax']) / 100, 2));
+                $record['pseudoPrice'] = str_replace('.',',',number_format($record['pseudoPrice'] * (100 + $record['tax']) / 100, 2));
+            } else {
+                $record['price'] = str_replace('.',',',number_format($record['price'], 2));
+                $record['pseudoPrice'] = str_replace('.',',',number_format($record['pseudoPrice'], 2));
+            }
+
+            if ($record['basePrice']) {
+                $record['basePrice'] = str_replace('.',',',number_format($record['basePrice'], 2));
             }
         }
 

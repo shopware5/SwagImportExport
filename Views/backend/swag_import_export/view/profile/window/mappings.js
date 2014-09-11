@@ -108,7 +108,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Mappings', {
                                 if (me.selectedItem !== null) {
                                     me.selectedItem.set('exportConversion', me.exportEditor.getValue());
                                     me.selectedItem.set('importConversion', me.importEditor.getValue());
-                                    me.fireEvent('updateConversion', me.conversionsGrid.getStore());
+                                    me.fireEvent('updateConversion', me.conversionsGrid.getStore(), true);
                                 }
                             }
                         }]
