@@ -26,6 +26,7 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     protected $repository;
     protected $variantRepository;
+    protected $priceRepository;
     protected $groupRepository;
     
     //mappers
@@ -111,7 +112,15 @@ class ArticlesDbAdapter implements DataDbAdapter
 
         foreach ($result['price'] as &$record) {
             if ($record['taxInput']) {
-                $record['price'] = $record['price'] * (100 + $record['tax']) / 100; 
+                $record['price'] = str_replace('.',',',round($record['price'] * (100 + $record['tax']) / 100, 2));
+                $record['pseudoPrice'] = str_replace('.',',',round($record['pseudoPrice'] * (100 + $record['tax']) / 100, 2));
+            } else {
+                $record['price'] = str_replace('.',',',round($record['price'], 2));
+                $record['pseudoPrice'] = str_replace('.',',',  round($record['pseudoPrice'], 2));
+            }
+
+            if ($record['basePrice']) {
+                $record['basePrice'] = str_replace('.',',',round($record['basePrice'], 2));
             }
         }
         
@@ -177,23 +186,58 @@ class ArticlesDbAdapter implements DataDbAdapter
                 ->groupBy('categories.id');
         $result['category'] = $categoriesBuilder->getQuery()->getResult();
         
-        //translations
-        $translationFields = implode(',',$columns['translation']);
-        $articleDetailIds = implode(',', $ids);
+        $result['translation']= $this->prepareTranslationExport($columns['translation'], $ids);
         
+        return $result;
+    }
+    
+    public function prepareTranslationExport($translationColumns, $ids)
+    {
+        //translations
+        $translationFields = implode(',', $translationColumns);
+        $articleDetailIds = implode(',', $ids);
+
         $sql = "SELECT $translationFields FROM `s_articles_details` as articleDetails
                 INNER JOIN s_articles article
                 ON article.id = articleDetails.articleID
                 
-                LEFT JOIN s_articles_translations translation
-                ON article.id = translation.articleID
+                LEFT JOIN s_core_translations translation
+                ON article.id = translation.objectkey
 
                 WHERE articleDetails.id IN ($articleDetailIds)
                 GROUP BY translation.id
                 ";
-        $result['translation'] = $stmt = Shopware()->Db()->query($sql)->fetchAll();
-        
-        return $result;
+
+        $translations = $stmt = Shopware()->Db()->query($sql)->fetchAll();
+
+        if (!empty($translations)) {
+
+            $translationFields = array(
+                "txtArtikel" => "name",
+                "txtzusatztxt" => "additionaltext",
+                "txtshortdescription" => "description",
+                "txtlangbeschreibung" => "descriptionLong",
+                "txtkeywords" => "keywords"
+            );
+
+            $row = array();
+            foreach ($translations as $index => $record) {
+                $row[$index]['articleId'] = $record['articleId'];
+                $row[$index]['languageId'] = $record['languageId'];
+
+                $objectdata = unserialize($record['objectdata']);
+
+                if (!empty($objectdata)) {
+                    foreach ($objectdata as $key => $value) {
+                        if (isset($translationFields[$key])) {
+                            $row[$index][$translationFields[$key]] = $value;
+                        }
+                    }
+                }
+            }
+        }
+
+        return $row;
     }
 
     /**
@@ -497,23 +541,41 @@ class ArticlesDbAdapter implements DataDbAdapter
                 if ($priceData['from'] <= 0) {
                     throw new \Exception(sprintf('Invalid Price "from" value'));
                 }
-
+                
+                $oldPrice = $this->getPriceRepository()->findOneBy(
+                        array('articleDetailsId' => $variant->getId(), 'customerGroupKey' => $priceData['priceGroup'])
+                );
+                
                 $priceData['price'] = floatval(str_replace(",", ".", $priceData['price']));
 
                 if (isset($priceData['basePrice'])) {
                     $priceData['basePrice'] = floatval(str_replace(",", ".", $priceData['basePrice']));
                 } else {
-                    $priceData['basePrice'] = 0.0;
+                    if ($oldPrice) {
+                        $priceData['basePrice'] = $oldPrice->getBasePrice();
+                    }
                 }
+
                 if (isset($priceData['pseudoPrice'])) {
                     $priceData['pseudoPrice'] = floatval(str_replace(",", ".", $priceData['pseudoPrice']));
                 } else {
-                    $priceData['pseudoPrice'] = 0.0;
+                    if ($oldPrice) {
+                        $priceData['pseudoPrice'] = $oldPrice->getPseudoPrice();
+                    } else {
+                        $priceData['pseudoPrice'] = 0;
+                    }
+
+                    if ($customerGroup->getTaxInput()) {
+                        $priceData['pseudoPrice'] = round($priceData['pseudoPrice'] * (100 + $tax->getTax()) / 100, 2);
+                    }
                 }
+
                 if (isset($priceData['percent'])) {
                     $priceData['percent'] = floatval(str_replace(",", ".", $priceData['percent']));
                 } else {
-                    $priceData['percent'] = 0.0;
+                     if ($oldPrice) {
+                        $priceData['percent'] = $oldPrice->getPercent();
+                     }
                 }
 
                 if ($customerGroup->getTaxInput()) {
@@ -529,6 +591,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $prices[] = $price;
 
                 unset($data[$index]);
+                unset($oldPrice);
             } 
         }
 
@@ -1228,17 +1291,19 @@ class ArticlesDbAdapter implements DataDbAdapter
     {
          return array(
             'article.id as articleId',
-            'translation.languageID as languageId',
-            'translation.name as name',
-            'translation.keywords as keywords',
-            'translation.description as description',
-            'translation.description_long as descriptionLong',
-            'translation.description_clear as descriptionClear',
-            'translation.attr1 as attr1',
-            'translation.attr2 as attr2',
-            'translation.attr3 as attr3',
-            'translation.attr4 as attr4',
-            'translation.attr5 as attr5',
+             'translation.objectdata',
+             'translation.objectlanguage as languageId'
+//            'translation.languageID as languageId',
+//            'translation.name as name',
+//            'translation.keywords as keywords',
+//            'translation.description as description',
+//            'translation.description_long as descriptionLong',
+//            'translation.description_clear as descriptionClear',
+//            'translation.attr1 as attr1',
+//            'translation.attr2 as attr2',
+//            'translation.attr3 as attr3',
+//            'translation.attr4 as attr4',
+//            'translation.attr5 as attr5',
         );
     }
     
@@ -1291,7 +1356,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * Returns deatil repositorys_core_shops
+     * Returns deatil repository
      * 
      * @return Shopware\Models\Article\Detail
      */
@@ -1302,6 +1367,20 @@ class ArticlesDbAdapter implements DataDbAdapter
         }
 
         return $this->variantRepository;
+    }
+
+    /**
+     * Returns price repository
+     *
+     * @return Shopware\Models\Article\Price
+     */
+    public function getPriceRepository()
+    {
+        if ($this->priceRepository === null) {
+            $this->priceRepository = $this->getManager()->getRepository('Shopware\Models\Article\Price');
+        }
+
+        return $this->priceRepository;
     }
 
     /**
