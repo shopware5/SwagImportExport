@@ -54,7 +54,7 @@ class FlattenTransformer implements DataTransformerAdapter
         foreach ($data as $row) {
             $tree[] = $this->transformToTree($mainNode, $row, $mainNode['name']);
         }
-        
+
         return $tree;
     }
 
@@ -283,28 +283,53 @@ class FlattenTransformer implements DataTransformerAdapter
                 if ($columnMapper['configGroupName'] === FALSE) {
                     throw new \Exception("configGroupName column not found");
                 }
-                if ($columnMapper['configSetName'] === FALSE) {
-                    throw new \Exception("configSetName column not found");
-                }
+                
+//                if ($columnMapper['configSetName'] === FALSE) {
+//                    throw new \Exception("configSetName column not found");
+//                }
                 
                 $configs = array();
                 
                 $values = explode(',', $this->getDataValue($data, $columnMapper['configOptionName']));
-                $setNames = explode(',', $this->getDataValue($data, $columnMapper['configSetName']));
+
+                if ($columnMapper['configSetName'] !== false) {
+                    $setNames = explode(',', $this->getDataValue($data, $columnMapper['configSetName']));
+                }
                 
-                if (count($values) != count($setNames)) {
-                    throw new \Exception("Mismatch number of configOptionNames and configSetNames.");
+                if (is_array($setNames)) {
+                    $setName = $setNames[0];
                 } else {
-                    for ($i = 0; $i < count($values); $i++) {
-                        $value = explode(':', $values[$i]);
-                        $configs[] = $this->transformConfiguratorToTree($node, array(
-                            $columnMapper['configGroupName'] => $value[0],
-                            $columnMapper['configOptionName'] => $value[1],
-                            $columnMapper['configSetName'] => $setNames[$i]
-                        ));
+                    $setName = $setNames;
+                }
+               
+                for ($i = 0; $i < count($values); $i++) {
+                    $value = explode(':', $values[$i]);
+                    $configs[] = $this->transformConfiguratorToTree($node, array(
+                        $columnMapper['configGroupName'] => $value[0],
+                        $columnMapper['configOptionName'] => $value[1],
+                        $columnMapper['configSetName'] => $setName
+                    ));
+                }
+                
+                return $configs;
+                
+            } else if ($node['adapter'] != $this->getMainAdapter()) {
+                
+                $mapper = $this->createMapperFromProfile($node);
+                
+                foreach ($mapper as $key => $value) {
+                    $collectedData[$key] = $this->getDataValue($data, $key);
+                }
+                
+                $newData = array();
+                foreach ($collectedData as $key => $groupValue) {
+                    $values = explode('|', $groupValue);
+                    foreach ($values as $index => $value) {
+                        $newData[$index][$key] = $value;
                     }
                 }
-                return $configs;
+                
+                return $newData;
             }
         }
 

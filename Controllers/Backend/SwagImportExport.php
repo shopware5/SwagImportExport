@@ -1072,4 +1072,14 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         return Shopware()->Plugins()->Backend()->SwagImportExport();
     }
 
+    public function getLogsAction()
+    {
+//        $sessionRepository = $this->getSessionRepository();
+//        
+//        $data = $sessionRepository->find();
+        
+        $this->View()->assign(array(
+            'success' => true, 'data' => $data, 'total' => count($data)
+        ));
+    }
 }

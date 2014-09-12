@@ -732,8 +732,8 @@ class ArticlesDbAdapter implements DataDbAdapter
                 continue;
             }
             
-            if (!isset($configurator['configSetName']) || empty($configurator['configSetName'])) {
-                continue;
+            if ((!isset($configurator['configSetName']) || empty($configurator['configSetName'])) && !$configuratorSet) {
+                 $configuratorSet = $this->createConfiguratorSet($configurator, $article);
             }
             
             if (!$configuratorSet) {
@@ -746,19 +746,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             }
             
             if (!$configuratorSet) {
-                $configuratorSet = new Configurator\Set();
-                $number = $article->getMainDetail()->getNumber();
-                
-                if (isset($configurator['configSetName'])) {
-                    $configuratorSet->setName($configurator['configSetName']);
-                } else {
-                    $configuratorSet->setName('Set-' . $number);
-                }
-                
-                if (isset($configurator['configSetType'])) {
-                    $configuratorSet->setType($configurator['configSetType']);
-                }
-                $configuratorSet->setPublic(false);
+                $configuratorSet = $this->createConfiguratorSet($configurator, $article);
             }
             
             //configurator group
@@ -843,6 +831,8 @@ class ArticlesDbAdapter implements DataDbAdapter
             return;
         }
         
+        $configuratorSet = $article->getConfiguratorSet();
+
         foreach ($configurators as $index => $configurator) {
             if ($configurator['parentIndexElement'] != $configuratorIndex) {
                 continue;
@@ -856,9 +846,10 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $articleNumber = $article->getMainDetail()->getNumber();
                 throw new \Exception(sprintf('A configurator set has to be defined on article %s', $articleNumber));
             }
-            
-            $availableGroups = $article->getConfiguratorSet()->getGroups();
-            
+
+            $setOptions = $configuratorSet->getOptions();
+            $availableGroups = $configuratorSet->getGroups();
+
             $availableGroup = $this->getAvailableGroup($availableGroups, array(
                 'id' => $configurator['configGroupId'],
                 'name' => $configurator['configGroupName']
@@ -892,10 +883,41 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $this->getManager()->persist($option);
             }
             
-            $optionData[] = $option;            
+            $optionData[] = $option;
+
+            //add option to configurator set if dont exists
+            if (!$this->isEntityExistsByName($setOptions, $option)){
+                $setOptions->add($option);
+            }
         }
 
         return $optionData;
+    }
+    
+    /**
+     * 
+     * @param array $data
+     * @param Shopware\Models\Article\Article $article
+     * @return \Shopware\Models\Article\Configurator\Set
+     */
+    public function createConfiguratorSet($data, $article)
+    {
+        $configuratorSet = new Configurator\Set();
+
+        if (isset($data['configSetName']) && !empty($data['configSetName'])) {
+            $configuratorSet->setName($data['configSetName']);
+        } else {
+            $number = $article->getMainDetail()->getNumber();
+            $configuratorSet->setName('Set-' . $number);
+        }
+
+        if (isset($data['configSetType'])) {
+            $configuratorSet->setType($data['configSetType']);
+        }
+        
+        $configuratorSet->setPublic(false);
+        
+        return $configuratorSet;
     }
     
     /**
@@ -936,6 +958,17 @@ class ArticlesDbAdapter implements DataDbAdapter
                 || ($availableOption->getId() == $optionData['id'] && $optionData['id'] !== null)) {
 
                 return $availableOption;
+            }
+        }
+
+        return false;
+    }
+    
+    public function isEntityExistsByName(ArrayCollection $models, $entity)
+    {
+        foreach ($models as $model) {
+            if ($model->getName() == $entity->getName()) {
+                return true;
             }
         }
 

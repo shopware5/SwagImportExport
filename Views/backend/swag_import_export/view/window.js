@@ -61,6 +61,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.Window', {
      * profile store
      */
     profilesStore: Ext.create('Shopware.apps.SwagImportExport.store.ProfileList').load(),
+    logStore: Ext.create('Shopware.apps.SwagImportExport.store.Log'),
     
     createTabPanel: function() {
         var me = this;
@@ -75,7 +76,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.Window', {
                     profilesStore: me.profilesStore
                 }),
                 Ext.create('Shopware.apps.SwagImportExport.view.log.Log', {
-                    
+                    logStore: me.logStore
                 })
             ]
         });

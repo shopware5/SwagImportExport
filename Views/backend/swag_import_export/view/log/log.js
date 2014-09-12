@@ -30,28 +30,95 @@
 //{namespace name=backend/swag_import_export/view/main}
 //{block name="backend/swag_import_export/view/manager/manager"}
 Ext.define('Shopware.apps.SwagImportExport.view.log.Log', {
-    extend: 'Ext.container.Container',
+    extend: 'Ext.grid.Panel',
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
     alias: 'widget.swag-import-export-log-log',
-    height: 450,
-    
+
     title: '{s name=swag_import_export/log/log/title}Logs{/s}',
-    layout: 'border',
-    style: {
-        background: '#fff'
-    },
     
-    bodyPadding: 10,
     autoScroll: true,
+    
+    /**
+     * Contains all snippets for the component
+     * @object
+     */
+    snippets: {
+        column: {
+            title: '{s name=swag_import_export/logs/title}Title{/s}',
+            message: '{s name=swag_import_export/logs/message}Message{/s}',
+            status: '{s name=swag_import_export/logs/status}Status{/s}',
+            date: '{s name=swag_import_export/logs/date}Date{/s}'
+        }
+    },
     
     initComponent: function() {
         var me = this;
 
+        me.columns = me.getColumns();
+        me.store = me.logStore;
+        me.dockedItems = [
+            me.getPagingbar()
+        ];
+        
         me.callParent(arguments);
     },
+    
+    listeners: {
+        activate: function(tab, opt){
+            var me = this;
+            me.logStore.reload();
+        }
+    },
+    
+    /**
+     * Creates the grid columns
+     *
+     * @return [array] grid columns
+     */
+    getColumns: function () {
+        var me = this;
+
+        var columns = [{
+                header: me.snippets.column.title,
+                dataIndex: 'title',
+                flex: 1
+            }, {
+                header: me.snippets.column.message,
+                dataIndex: 'message',
+                flex: 1
+            }, {
+                header: me.snippets.column.status,
+                dataIndex: 'state',
+                flex: 1
+            }, {
+                xtype : 'datecolumn',
+                header: me.snippets.column.date,
+                format: 'Y-m-d H:i:s',
+                dataIndex: 'logDate',
+                flex: 1
+            }];
+
+        return columns;
+    },
+    
+    /**
+     * Creates pagingbar shown at the bottom of the grid
+     *
+     * @return Ext.toolbar.Paging
+     */
+    getPagingbar: function () {
+        var me = this;
+        var pagingbar =  Ext.create('Ext.toolbar.Paging', {
+            store: me.store,
+            dock: 'bottom',
+            displayInfo: true
+        });
+
+        return pagingbar;
+    }
     
 });
 //{/block}

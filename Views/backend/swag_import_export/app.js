@@ -80,7 +80,8 @@ Ext.define('Shopware.apps.SwagImportExport', {
 		'manager.Import',
 		'manager.Operation',
 		'manager.window.Export',
-		'manager.window.Import'
+		'manager.window.Import',
+        'log.Log'
 //		'detail.Window',
 //		'detail.WrappingPaper'
     ],
@@ -89,13 +90,13 @@ Ext.define('Shopware.apps.SwagImportExport', {
      * Requires models for sub-application
      * @array
      */
-    models: ['Profile', 'ProfileList', 'SessionList', 'Conversion'],
+    models: ['Profile', 'ProfileList', 'SessionList', 'Conversion', 'Log'],
 
     /**
      * Requires stores for sub-application
      * @array
      */
-    stores: ['Profile', 'ProfileList', 'SessionList', 'Conversion'],
+    stores: ['Profile', 'ProfileList', 'SessionList', 'Conversion', 'Log'],
 
     /**
      * Returns the main application window for this is expected
