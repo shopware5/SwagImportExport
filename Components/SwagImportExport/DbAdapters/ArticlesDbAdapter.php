@@ -186,23 +186,58 @@ class ArticlesDbAdapter implements DataDbAdapter
                 ->groupBy('categories.id');
         $result['category'] = $categoriesBuilder->getQuery()->getResult();
         
-        //translations
-        $translationFields = implode(',',$columns['translation']);
-        $articleDetailIds = implode(',', $ids);
+        $result['translation']= $this->prepareTranslationExport($columns['translation'], $ids);
         
+        return $result;
+    }
+    
+    public function prepareTranslationExport($translationColumns, $ids)
+    {
+        //translations
+        $translationFields = implode(',', $translationColumns);
+        $articleDetailIds = implode(',', $ids);
+
         $sql = "SELECT $translationFields FROM `s_articles_details` as articleDetails
                 INNER JOIN s_articles article
                 ON article.id = articleDetails.articleID
                 
-                LEFT JOIN s_articles_translations translation
-                ON article.id = translation.articleID
+                LEFT JOIN s_core_translations translation
+                ON article.id = translation.objectkey
 
                 WHERE articleDetails.id IN ($articleDetailIds)
                 GROUP BY translation.id
                 ";
-        $result['translation'] = $stmt = Shopware()->Db()->query($sql)->fetchAll();
-        
-        return $result;
+
+        $translations = $stmt = Shopware()->Db()->query($sql)->fetchAll();
+
+        if (!empty($translations)) {
+
+            $translationFields = array(
+                "txtArtikel" => "name",
+                "txtzusatztxt" => "additionaltext",
+                "txtshortdescription" => "description",
+                "txtlangbeschreibung" => "descriptionLong",
+                "txtkeywords" => "keywords"
+            );
+
+            $row = array();
+            foreach ($translations as $index => $record) {
+                $row[$index]['articleId'] = $record['articleId'];
+                $row[$index]['languageId'] = $record['languageId'];
+
+                $objectdata = unserialize($record['objectdata']);
+
+                if (!empty($objectdata)) {
+                    foreach ($objectdata as $key => $value) {
+                        if (isset($translationFields[$key])) {
+                            $row[$index][$translationFields[$key]] = $value;
+                        }
+                    }
+                }
+            }
+        }
+
+        return $row;
     }
 
     /**
@@ -1254,17 +1289,19 @@ class ArticlesDbAdapter implements DataDbAdapter
     {
          return array(
             'article.id as articleId',
-            'translation.languageID as languageId',
-            'translation.name as name',
-            'translation.keywords as keywords',
-            'translation.description as description',
-            'translation.description_long as descriptionLong',
-            'translation.description_clear as descriptionClear',
-            'translation.attr1 as attr1',
-            'translation.attr2 as attr2',
-            'translation.attr3 as attr3',
-            'translation.attr4 as attr4',
-            'translation.attr5 as attr5',
+             'translation.objectdata',
+             'translation.objectlanguage as languageId'
+//            'translation.languageID as languageId',
+//            'translation.name as name',
+//            'translation.keywords as keywords',
+//            'translation.description as description',
+//            'translation.description_long as descriptionLong',
+//            'translation.description_clear as descriptionClear',
+//            'translation.attr1 as attr1',
+//            'translation.attr2 as attr2',
+//            'translation.attr3 as attr3',
+//            'translation.attr4 as attr4',
+//            'translation.attr5 as attr5',
         );
     }
     
