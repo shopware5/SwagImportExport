@@ -26,6 +26,7 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     protected $repository;
     protected $variantRepository;
+    protected $priceRepository;
     protected $groupRepository;
     
     //mappers
@@ -111,7 +112,15 @@ class ArticlesDbAdapter implements DataDbAdapter
 
         foreach ($result['price'] as &$record) {
             if ($record['taxInput']) {
-                $record['price'] = $record['price'] * (100 + $record['tax']) / 100; 
+                $record['price'] = str_replace('.',',',round($record['price'] * (100 + $record['tax']) / 100, 2));
+                $record['pseudoPrice'] = str_replace('.',',',round($record['pseudoPrice'] * (100 + $record['tax']) / 100, 2));
+            } else {
+                $record['price'] = str_replace('.',',',round($record['price'], 2));
+                $record['pseudoPrice'] = str_replace('.',',',  round($record['pseudoPrice'], 2));
+            }
+
+            if ($record['basePrice']) {
+                $record['basePrice'] = str_replace('.',',',round($record['basePrice'], 2));
             }
         }
         
@@ -497,23 +506,39 @@ class ArticlesDbAdapter implements DataDbAdapter
                 if ($priceData['from'] <= 0) {
                     throw new \Exception(sprintf('Invalid Price "from" value'));
                 }
-
+                
+                $oldPrice = $this->getPriceRepository()->findOneBy(
+                        array('articleDetailsId' => $variant->getId(), 'customerGroupKey' => $priceData['priceGroup'])
+                );
+                
                 $priceData['price'] = floatval(str_replace(",", ".", $priceData['price']));
 
                 if (isset($priceData['basePrice'])) {
                     $priceData['basePrice'] = floatval(str_replace(",", ".", $priceData['basePrice']));
                 } else {
-                    $priceData['basePrice'] = 0.0;
+                    if ($oldPrice) {
+                        $priceData['basePrice'] = $oldPrice->getBasePrice();
+                    }
                 }
+
                 if (isset($priceData['pseudoPrice'])) {
                     $priceData['pseudoPrice'] = floatval(str_replace(",", ".", $priceData['pseudoPrice']));
                 } else {
-                    $priceData['pseudoPrice'] = 0.0;
+                    if ($oldPrice) {
+                        $priceData['pseudoPrice'] = $oldPrice->getPseudoPrice();
+                    } else {
+                        $priceData['pseudoPrice'] = 0;
+                    }
+
+                    if ($customerGroup->getTaxInput()) {
+                        $priceData['pseudoPrice'] = round($priceData['pseudoPrice'] * (100 + $tax->getTax()) / 100, 2);
+                    }
                 }
+
                 if (isset($priceData['percent'])) {
                     $priceData['percent'] = floatval(str_replace(",", ".", $priceData['percent']));
                 } else {
-                    $priceData['percent'] = 0.0;
+                    $priceData['percent'] = $oldPrice->getPercent();
                 }
 
                 if ($customerGroup->getTaxInput()) {
@@ -529,6 +554,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $prices[] = $price;
 
                 unset($data[$index]);
+                unset($oldPrice);
             } 
         }
 
@@ -1291,7 +1317,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * Returns deatil repositorys_core_shops
+     * Returns deatil repository
      * 
      * @return Shopware\Models\Article\Detail
      */
@@ -1302,6 +1328,20 @@ class ArticlesDbAdapter implements DataDbAdapter
         }
 
         return $this->variantRepository;
+    }
+
+    /**
+     * Returns price repository
+     *
+     * @return Shopware\Models\Article\Price
+     */
+    public function getPriceRepository()
+    {
+        if ($this->priceRepository === null) {
+            $this->priceRepository = $this->getManager()->getRepository('Shopware\Models\Article\Price');
+        }
+
+        return $this->priceRepository;
     }
 
     /**
