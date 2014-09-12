@@ -573,7 +573,9 @@ class ArticlesDbAdapter implements DataDbAdapter
                 if (isset($priceData['percent'])) {
                     $priceData['percent'] = floatval(str_replace(",", ".", $priceData['percent']));
                 } else {
-                    $priceData['percent'] = $oldPrice->getPercent();
+                     if ($oldPrice) {
+                        $priceData['percent'] = $oldPrice->getPercent();
+                     }
                 }
 
                 if ($customerGroup->getTaxInput()) {
