@@ -10,6 +10,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
      */
     protected $manager;
     protected $detailRepository;
+    protected $priceRepository;
     protected $groupRepository;
 
     public function readRecordIds($start, $limit, $filter)
@@ -143,6 +144,12 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                 throw new \Exception(sprintf('Article with order number %s doen not exists', $record['orderNumber']));
             }
             
+            $oldPrice = $this->getPriceRepository()->findOneBy(
+                    array('articleDetailsId' => $articleDetail->getId(), 'customerGroupKey' => $record['priceGroup'])
+            );
+            
+            $tax = $articleDetail->getArticle()->getTax();
+
             if (empty($record['price']) && empty($record['percent'])) {
                  throw new \Exception('Price or percent value is missing');
             }
@@ -157,18 +164,32 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
 
             if (isset($record['pseudoPrice'])) {
                 $record['pseudoPrice'] = floatval(str_replace(",", ".", $record['pseudoPrice']));
+            } else {
+                if ($oldPrice) {
+                    $record['pseudoPrice'] = $oldPrice->getPseudoPrice();
+                } else {
+                    $record['pseudoPrice'] = 0;
+                }
+
+                if ($customerGroup->getTaxInput()) {
+                    $record['pseudoPrice'] = round($record['pseudoPrice'] * (100 + $tax->getTax()) / 100, 2);
+                }
             }
 
             if (isset($record['basePrice'])) {
                 $record['basePrice'] = floatval(str_replace(",", ".", $record['basePrice']));
             } else {
-                $record['basePrice'] = 0;
+                if ($oldPrice) {
+                    $record['basePrice'] = $oldPrice->getBasePrice();
+                }
             }
 
             if (isset($record['percent'])) {
                 $record['percent'] = floatval(str_replace(",", ".", $record['percent']));
             } else {
-                $record['percent'] = 0;
+                if ($oldPrice) {
+                    $record['percent'] = $oldPrice->getPercent();
+                }
             }
 
             if (empty($record['from'])) {
@@ -207,14 +228,10 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                 $query->execute();
             }
 
-            $tax = $articleDetail->getArticle()->getTax();
-
             // remove tax
             if ($customerGroup->getTaxInput()) {
                 $record['price'] = $record['price'] / (100 + $tax->getTax()) * 100;
-                if (isset($record['pseudoPrice'])) {
-                    $record['pseudoPrice'] = $record['pseudoPrice'] / (100 + $tax->getTax()) * 100;
-                }
+                $record['pseudoPrice'] = $record['pseudoPrice'] / (100 + $tax->getTax()) * 100;
             }
 
             $price = new \Shopware\Models\Article\Price();
@@ -287,6 +304,20 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
         }
 
         return $this->groupRepository;
+    }
+    
+    /**
+     * Returns price repository
+     *
+     * @return Shopware\Models\Article\Price
+     */
+    public function getPriceRepository()
+    {
+        if ($this->priceRepository === null) {
+            $this->priceRepository = $this->getManager()->getRepository('Shopware\Models\Article\Price');
+        }
+
+        return $this->priceRepository;
     }
 
     /*
