@@ -330,17 +330,24 @@ class CustomerDbAdapter implements DataDbAdapter
                 $this->customerMap[$map[0]] = $map[1];
             }
         }
-        
+
         $customerData = array();
+        
         foreach ($record as $key => $value) {
-            if (isset($this->customerMap[$key])) {
+            if (preg_match('/^attrCustomer/', $key)) {
+                $newKey = lcfirst(preg_replace('/^attrCustomer/', '', $key));
+                $customerData['attribute'][$newKey] = $value;
+                unset($record[$key]);
+            } else if (isset($this->customerMap[$key])) {
                 $customerData[$this->customerMap[$key]] = $value;
                 unset($record[$key]);
             }
         }
         
         if (isset($customerData['groupKey'])) {
-            $customerData['group'] = Shopware()->Models()->getRepository('Shopware\Models\Customer\Group')->findOneBy(array('key' => $customerData['groupKey']));
+            $customerData['group'] = Shopware()->Models()
+                    ->getRepository('Shopware\Models\Customer\Group')
+                    ->findOneBy(array('key' => $customerData['groupKey']));
             if (!$customerData['group']) {
                 throw new \Exception(sprintf("CustomerGroup by key %s not found", $customerData['groupKey']));
             }
@@ -365,8 +372,14 @@ class CustomerDbAdapter implements DataDbAdapter
         }
 
         $billingData = array();
+
         foreach ($record as $key => $value) {
-            if (isset($this->billingMap[$key])) {
+            //prepares the attributes
+            if (preg_match('/^attrBilling/', $key)) {
+                $newKey = lcfirst(preg_replace('/^attrBilling/', '', $key));
+                $billingData['attribute'][$newKey] = $value;
+                unset($record[$key]);
+            } else if (isset($this->billingMap[$key])) {
                 $billingData[$this->billingMap[$key]] = $value;
                 unset($record[$key]);
             }
@@ -388,8 +401,14 @@ class CustomerDbAdapter implements DataDbAdapter
         }
 
         $shippingData = array();
+
         foreach ($record as $key => $value) {
-            if (isset($this->shippingMap[$key])) {
+            //prepares the attributes
+            if (preg_match('/^attrShipping/', $key)) {
+                $newKey = lcfirst(preg_replace('/^attrShipping/', '', $key));
+                $shippingData['attribute'][$newKey] = $value;
+                unset($record[$key]);
+            } else if (isset($this->shippingMap[$key])) {
                 $shippingData[$this->shippingMap[$key]] = $value;
                 unset($record[$key]);
             }
