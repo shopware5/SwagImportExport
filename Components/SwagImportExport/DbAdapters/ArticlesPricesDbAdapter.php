@@ -23,6 +23,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                 ->from('Shopware\Models\Article\Article', 'article')
                 ->leftJoin('article.details', 'detail')
                 ->leftJoin('detail.prices', 'price')
+                ->andWhere('price.price > 0')
                 ->orderBy('price.id', 'ASC');
 
         if (!empty($filter)) {
@@ -143,11 +144,21 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
             if (!$articleDetail) {
                 throw new \Exception(sprintf('Article with order number %s doen not exists', $record['orderNumber']));
             }
-            
+
+            if (empty($record['from'])) {
+                $record['from'] = 1;
+            } else {
+                $record['from'] = intval($record['from']);
+            }
+
             $oldPrice = $this->getPriceRepository()->findOneBy(
-                    array('articleDetailsId' => $articleDetail->getId(), 'customerGroupKey' => $record['priceGroup'])
+                array(
+                    'articleDetailsId' => $articleDetail->getId(),
+                    'customerGroupKey' => $record['priceGroup'],
+                    'from' => $record['from']
+                )
             );
-            
+
             $tax = $articleDetail->getArticle()->getTax();
 
             if (empty($record['price']) && empty($record['percent'])) {
@@ -192,17 +203,11 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                 }
             }
 
-            if (empty($record['from'])) {
-                $record['from'] = 1;
-            } else {
-                $record['from'] = intval($record['from']);
-            }
-
             $query = $manager->createQuery('
                         DELETE FROM Shopware\Models\Article\Price price
                         WHERE price.customerGroup = :customerGroup
                         AND price.articleDetailsId = :detailId
-                        AND price.from >= :from');
+                        AND price.from = :from');
 
             $query->setParameters(array(
                 'customerGroup' => $record['priceGroup'],
