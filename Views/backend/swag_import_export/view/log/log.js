@@ -49,7 +49,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.log.Log', {
         column: {
             title: '{s name=swag_import_export/logs/title}Title{/s}',
             message: '{s name=swag_import_export/logs/message}Message{/s}',
-            status: '{s name=swag_import_export/logs/status}Status{/s}',
+            status: '{s name=swag_import_export/logs/error}Error{/s}',
             date: '{s name=swag_import_export/logs/date}Date{/s}'
         }
     },
