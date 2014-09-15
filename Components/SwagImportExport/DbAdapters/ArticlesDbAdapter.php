@@ -175,6 +175,18 @@ class ArticlesDbAdapter implements DataDbAdapter
                 ->setParameter('ids', $ids);
         $result['similar'] = $similarsBuilder->getQuery()->getResult();
         
+        //accessories
+        $accessoriesBuilder = $manager->createQueryBuilder();
+        $accessoriesBuilder->select($columns['accessory'])
+                ->from('Shopware\Models\Article\Detail', 'variant')
+                ->join('variant.article', 'article')
+                ->leftjoin('article.related', 'accessory')
+                ->where('variant.id IN (:ids)')
+                ->andWhere('variant.kind = 1')
+                ->andWhere('accessory.id IS NOT NULL')
+                ->setParameter('ids', $ids);
+        $result['accessory'] = $accessoriesBuilder->getQuery()->getResult();
+        
         //categories
         $categoriesBuilder = $manager->createQueryBuilder();
         $categoriesBuilder->select($columns['category'])
@@ -259,6 +271,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         $columns['image'] = $this->getImageColumns();
         $columns['propertyValues'] = $this->getPropertyValueColumns();
         $columns['similar'] = $this->getSimilarColumns();
+        $columns['accessory'] = $this->getAccessoryColumns();
         $columns['configurator'] = $this->getConfiguratorColumns();
         $columns['category'] = $this->getCategoryColumns();
         $columns['translation'] = $this->getTranslationColumns();
@@ -376,6 +389,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             array('id' => 'image', 'name' => 'image'),
             array('id' => 'propertyValue', 'name' => 'propertyValue'),
             array('id' => 'similar', 'name' => 'similar'),
+            array('id' => 'accessory', 'name' => 'accessory'),
             array('id' => 'configurator', 'name' => 'configurator'),
             array('id' => 'category', 'name' => 'category'),
             array('id' => 'translation', 'name' => 'translation'),
@@ -1171,6 +1185,10 @@ class ArticlesDbAdapter implements DataDbAdapter
                 return array(
                     'article.id as articleId',
                 );
+            case 'accessory':
+                return array(
+                    'article.id as articleId',
+                );
             case 'image':
                 return array(
                     'article.id as articleId',
@@ -1261,6 +1279,14 @@ class ArticlesDbAdapter implements DataDbAdapter
     {
          return array(
             'similar.id as similarId',
+            'article.id as articleId',
+        );
+    }
+    
+    public function getAccessoryColumns()
+    {
+         return array(
+            'accessory.id as accessoryId',
             'article.id as articleId',
         );
     }
