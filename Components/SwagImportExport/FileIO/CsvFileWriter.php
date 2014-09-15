@@ -32,7 +32,6 @@ class CsvFileWriter implements FileWriter
         }
 
         $columnNames .= implode(';', $headerData) . "\n";
-        $columnNames .= "\xEF\xBB\xBF";
 
         $this->getFileHelper()->writeStringToFile($fileName, $columnNames);
     }
