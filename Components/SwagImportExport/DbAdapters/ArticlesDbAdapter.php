@@ -198,15 +198,15 @@ class ArticlesDbAdapter implements DataDbAdapter
                 ->groupBy('categories.id');
         $result['category'] = $categoriesBuilder->getQuery()->getResult();
         
-        $result['translation']= $this->prepareTranslationExport($columns['translation'], $ids);
+        $result['translation']= $this->prepareTranslationExport($ids);
         
         return $result;
     }
     
-    public function prepareTranslationExport($translationColumns, $ids)
+    public function prepareTranslationExport($ids)
     {
         //translations
-        $translationFields = implode(',', $translationColumns);
+        $translationFields = 'article.id as articleId, translation.objectdata, translation.objectlanguage as languageId';
         $articleDetailIds = implode(',', $ids);
 
         $sql = "SELECT $translationFields FROM `s_articles_details` as articleDetails
@@ -248,7 +248,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 }
             }
         }
-
+        
         return $row;
     }
 
@@ -1361,13 +1361,13 @@ class ArticlesDbAdapter implements DataDbAdapter
     {
          return array(
             'article.id as articleId',
-             'translation.objectdata',
-             'translation.objectlanguage as languageId'
+//             'translation.objectdata',
+             'translation.objectlanguage as languageId',
 //            'translation.languageID as languageId',
-//            'translation.name as name',
-//            'translation.keywords as keywords',
-//            'translation.description as description',
-//            'translation.description_long as descriptionLong',
+            'translation.name as name',
+            'translation.keywords as keywords',
+            'translation.description as description',
+            'translation.description_long as descriptionLong',
 //            'translation.description_clear as descriptionClear',
 //            'translation.attr1 as attr1',
 //            'translation.attr2 as attr2',
