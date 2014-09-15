@@ -324,6 +324,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $articleData['images'] = $this->prepareImages($records['image'], $index, $articleModel);
                 $articleData['categories'] = $this->prepareCategories($records['category'], $index, $articleModel);
                 $articleData['similar'] = $this->prepareSimilars($records['similar'], $index, $articleModel);
+                $articleData['related'] = $this->prepareAccessories($records['accessory'], $index, $articleModel);
                 $articleData['configuratorSet'] = $this->prepareArticleConfigurators($records['configurator'], $index, $articleModel);
                 
                 $articleModel->fromArray($articleData);
@@ -347,6 +348,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                     $articleData = $this->prerpareArticle($record);
                     $articleData['images'] = $this->prepareImages($records['image'], $index, $articleModel);
                     $articleData['similar'] = $this->prepareSimilars($records['similar'], $index, $articleModel);
+                    $articleData['related'] = $this->prepareAccessories($records['accessory'], $index, $articleModel);
                     $articleData['categories'] = $this->prepareCategories($records['category'], $index, $articleModel);
                     
                     $articleModel->fromArray($articleData);
@@ -795,6 +797,37 @@ class ArticlesDbAdapter implements DataDbAdapter
         return $similarCollection;
     }
     
+    public function prepareAccessories(&$accessories, $accessoryIndex, $article)
+    {
+        if ($accessories == null) {
+            return;
+        }
+
+        $accessoriesCollection = array();
+
+        foreach ($accessories as $index => $accessory) {
+            if ($accessory['parentIndexElement'] != $accessoryIndex) {
+                continue;
+            }
+
+            if (!isset($accessory['accessoryId']) || !$accessory['accessoryId']) {
+                continue;
+            }
+
+            if ($this->isAccessoryArticleExists($article, $accessory['accessoryId'])) {
+                continue;
+            }
+
+            $accessoryModel = $this->getManager()->getReference('Shopware\Models\Article\Article', $accessory['accessoryId']);
+
+            $accessoriesCollection[] = $accessoryModel;
+
+            unset($accessories[$index]);
+        }
+
+        return $accessoriesCollection;
+    }
+
     public function prepareArticleConfigurators(&$configurators, $configuratorIndex, $article)
     {
         if ($configurators == null) {
@@ -1060,6 +1093,17 @@ class ArticlesDbAdapter implements DataDbAdapter
             }
         }
         
+        return false;
+    }
+
+    public function isAccessoryArticleExists($article, $accessoryId)
+    {
+        foreach ($article->getRelated() as $accessory) {
+            if ($accessory->getId == $accessoryId) {
+                return true;
+            }
+        }
+
         return false;
     }
 
