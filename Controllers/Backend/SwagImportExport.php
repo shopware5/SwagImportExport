@@ -57,6 +57,12 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
      */
     protected $expressionRepository;
 
+    /**
+     * 
+     * @var Shopware\CustomModels\ImportExport\Logger
+     */
+    protected $loggerRepository;
+    
     public function getProfileAction()
     {
         $profileId = $this->Request()->getParam('profileId', -1);
@@ -1067,6 +1073,19 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         return $this->expressionRepository;
     }
 
+    /**
+     * Helper Method to get access to the logger repository.
+     *
+     * @return Shopware\Models\Category\Repository
+     */
+    public function getLoggerRepository()
+    {
+        if ($this->loggerRepository === null) {
+            $this->loggerRepository = Shopware()->Models()->getRepository('Shopware\CustomModels\ImportExport\Logger');
+        }
+        return $this->loggerRepository;
+    }
+    
     public function Plugin()
     {
         return Shopware()->Plugins()->Backend()->SwagImportExport();
@@ -1074,12 +1093,32 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
     public function getLogsAction()
     {
-//        $sessionRepository = $this->getSessionRepository();
-//        
-//        $data = $sessionRepository->find();
+        $loggerRepository = $this->getLoggerRepository();
+
+        $query = $loggerRepository->getLogListQuery(
+                $this->Request()->getParam('filter', array()), $this->Request()->getParam('sort', array()), $this->Request()->getParam('limit', 25), $this->Request()->getParam('start', 0)
+        )->getQuery();
+
+        $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+
+        $paginator = $this->getManager()->createPaginator($query);
+
+        //returns the total count of the query
+        $total = $paginator->count();
+
+        //returns the customer data
+        $data = $paginator->getIterator()->getArrayCopy();
+
+        foreach($data as &$log) {
+            if ($log['state'] == 'false') {
+                $log['title'] = 'Successfull';
+            } else {
+                $log['title'] = 'Error';
+            }
+        }
         
         $this->View()->assign(array(
-            'success' => true, 'data' => $data, 'total' => count($data)
+            'success' => true, 'data' => $data, 'total' => $total
         ));
     }
 }

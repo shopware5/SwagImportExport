@@ -175,6 +175,18 @@ class ArticlesDbAdapter implements DataDbAdapter
                 ->setParameter('ids', $ids);
         $result['similar'] = $similarsBuilder->getQuery()->getResult();
         
+        //accessories
+        $accessoriesBuilder = $manager->createQueryBuilder();
+        $accessoriesBuilder->select($columns['accessory'])
+                ->from('Shopware\Models\Article\Detail', 'variant')
+                ->join('variant.article', 'article')
+                ->leftjoin('article.related', 'accessory')
+                ->where('variant.id IN (:ids)')
+                ->andWhere('variant.kind = 1')
+                ->andWhere('accessory.id IS NOT NULL')
+                ->setParameter('ids', $ids);
+        $result['accessory'] = $accessoriesBuilder->getQuery()->getResult();
+        
         //categories
         $categoriesBuilder = $manager->createQueryBuilder();
         $categoriesBuilder->select($columns['category'])
@@ -186,15 +198,15 @@ class ArticlesDbAdapter implements DataDbAdapter
                 ->groupBy('categories.id');
         $result['category'] = $categoriesBuilder->getQuery()->getResult();
         
-        $result['translation']= $this->prepareTranslationExport($columns['translation'], $ids);
+        $result['translation']= $this->prepareTranslationExport($ids);
         
         return $result;
     }
     
-    public function prepareTranslationExport($translationColumns, $ids)
+    public function prepareTranslationExport($ids)
     {
         //translations
-        $translationFields = implode(',', $translationColumns);
+        $translationFields = 'article.id as articleId, translation.objectdata, translation.objectlanguage as languageId';
         $articleDetailIds = implode(',', $ids);
 
         $sql = "SELECT $translationFields FROM `s_articles_details` as articleDetails
@@ -236,7 +248,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 }
             }
         }
-
+        
         return $row;
     }
 
@@ -259,6 +271,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         $columns['image'] = $this->getImageColumns();
         $columns['propertyValues'] = $this->getPropertyValueColumns();
         $columns['similar'] = $this->getSimilarColumns();
+        $columns['accessory'] = $this->getAccessoryColumns();
         $columns['configurator'] = $this->getConfiguratorColumns();
         $columns['category'] = $this->getCategoryColumns();
         $columns['translation'] = $this->getTranslationColumns();
@@ -311,6 +324,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $articleData['images'] = $this->prepareImages($records['image'], $index, $articleModel);
                 $articleData['categories'] = $this->prepareCategories($records['category'], $index, $articleModel);
                 $articleData['similar'] = $this->prepareSimilars($records['similar'], $index, $articleModel);
+                $articleData['related'] = $this->prepareAccessories($records['accessory'], $index, $articleModel);
                 $articleData['configuratorSet'] = $this->prepareArticleConfigurators($records['configurator'], $index, $articleModel);
                 
                 $articleModel->fromArray($articleData);
@@ -334,6 +348,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                     $articleData = $this->prerpareArticle($record);
                     $articleData['images'] = $this->prepareImages($records['image'], $index, $articleModel);
                     $articleData['similar'] = $this->prepareSimilars($records['similar'], $index, $articleModel);
+                    $articleData['related'] = $this->prepareAccessories($records['accessory'], $index, $articleModel);
                     $articleData['categories'] = $this->prepareCategories($records['category'], $index, $articleModel);
                     
                     $articleModel->fromArray($articleData);
@@ -376,6 +391,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             array('id' => 'image', 'name' => 'image'),
             array('id' => 'propertyValue', 'name' => 'propertyValue'),
             array('id' => 'similar', 'name' => 'similar'),
+            array('id' => 'accessory', 'name' => 'accessory'),
             array('id' => 'configurator', 'name' => 'configurator'),
             array('id' => 'category', 'name' => 'category'),
             array('id' => 'translation', 'name' => 'translation'),
@@ -781,6 +797,37 @@ class ArticlesDbAdapter implements DataDbAdapter
         return $similarCollection;
     }
     
+    public function prepareAccessories(&$accessories, $accessoryIndex, $article)
+    {
+        if ($accessories == null) {
+            return;
+        }
+
+        $accessoriesCollection = array();
+
+        foreach ($accessories as $index => $accessory) {
+            if ($accessory['parentIndexElement'] != $accessoryIndex) {
+                continue;
+            }
+
+            if (!isset($accessory['accessoryId']) || !$accessory['accessoryId']) {
+                continue;
+            }
+
+            if ($this->isAccessoryArticleExists($article, $accessory['accessoryId'])) {
+                continue;
+            }
+
+            $accessoryModel = $this->getManager()->getReference('Shopware\Models\Article\Article', $accessory['accessoryId']);
+
+            $accessoriesCollection[] = $accessoryModel;
+
+            unset($accessories[$index]);
+        }
+
+        return $accessoriesCollection;
+    }
+
     public function prepareArticleConfigurators(&$configurators, $configuratorIndex, $article)
     {
         if ($configurators == null) {
@@ -1049,6 +1096,17 @@ class ArticlesDbAdapter implements DataDbAdapter
         return false;
     }
 
+    public function isAccessoryArticleExists($article, $accessoryId)
+    {
+        foreach ($article->getRelated() as $accessory) {
+            if ($accessory->getId == $accessoryId) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**
      * @param ArrayCollection $collection
      * @param $property
@@ -1171,6 +1229,10 @@ class ArticlesDbAdapter implements DataDbAdapter
                 return array(
                     'article.id as articleId',
                 );
+            case 'accessory':
+                return array(
+                    'article.id as articleId',
+                );
             case 'image':
                 return array(
                     'article.id as articleId',
@@ -1265,6 +1327,14 @@ class ArticlesDbAdapter implements DataDbAdapter
         );
     }
     
+    public function getAccessoryColumns()
+    {
+         return array(
+            'accessory.id as accessoryId',
+            'article.id as articleId',
+        );
+    }
+    
     public function getConfiguratorColumns()
     {
         return array(
@@ -1291,13 +1361,13 @@ class ArticlesDbAdapter implements DataDbAdapter
     {
          return array(
             'article.id as articleId',
-             'translation.objectdata',
-             'translation.objectlanguage as languageId'
+//             'translation.objectdata',
+             'translation.objectlanguage as languageId',
 //            'translation.languageID as languageId',
-//            'translation.name as name',
-//            'translation.keywords as keywords',
-//            'translation.description as description',
-//            'translation.description_long as descriptionLong',
+            'translation.name as name',
+            'translation.keywords as keywords',
+            'translation.description as description',
+            'translation.description_long as descriptionLong',
 //            'translation.description_clear as descriptionClear',
 //            'translation.attr1 as attr1',
 //            'translation.attr2 as attr2',

@@ -154,4 +154,40 @@ class Repository extends ModelRepository
         return $builder;
     }
 
+    /**
+     * Returns a query builder object to get all logs.
+     *
+     * @param array $filterBy
+     * @param array $orderBy
+     * @param null $limit
+     * @param null $offset
+     * @return \Shopware\Components\Model\QueryBuilder
+     */
+    public function getLogListQuery(array $filterBy = array(), array $orderBy = array(), $limit = null, $offset = null)
+    {
+        $builder = $this->createQueryBuilder('l');
+       
+        $builder->select(array(
+            'l.id as id',
+            'l.message as message',
+            'l.state as state',
+            'l.createdAt as logDate'
+        ));
+        
+        if (!empty($filterBy)) {
+            $builder->addFilter($filterBy);
+        }
+
+        if (!empty($orderBy)) {
+            $builder->addOrderBy($orderBy);
+        }
+
+        if ($offset !== null && $limit !== null) {
+            $builder->setFirstResult($offset)
+                    ->setMaxResults($limit);
+        }
+        
+        return $builder;
+    }
+    
 }
