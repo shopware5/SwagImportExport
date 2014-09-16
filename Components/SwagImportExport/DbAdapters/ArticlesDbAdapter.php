@@ -864,7 +864,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         if ($similars == null) {
             return;
         }
-        
+
         $similarCollection = array();
 
         foreach ($similars as $index => $similar) {
@@ -872,8 +872,20 @@ class ArticlesDbAdapter implements DataDbAdapter
                 continue;
             }
 
-            if (!isset($similar['similarId']) || !$similar['similarId']) {
+            if ((!isset($similar['similarId']) || !$similar['similarId'])
+                && (!isset($similar['ordernumber']) || !$similar['ordernumber'])) {
                 continue;
+            }
+
+            if (isset($similar['ordernumber']) && $similar['ordernumber']) {
+                $similarDetails = $this->getVariantRepository()
+                        ->findOneBy(array('number' => $similar['ordernumber']));
+
+                if (!$similarDetails) {
+                    throw new \Exception(sprintf('Accessory with ordernumber %s does NOT exists', $similar['ordernumber']));
+                }
+
+                $similar['similarId'] = $similarDetails->getArticle()->getId();
             }
 
             if ($this->isSimilarArticleExists($article, $similar['similarId'])) {
@@ -903,8 +915,20 @@ class ArticlesDbAdapter implements DataDbAdapter
                 continue;
             }
 
-            if (!isset($accessory['accessoryId']) || !$accessory['accessoryId']) {
+            if ((!isset($accessory['accessoryId']) || !$accessory['accessoryId'])
+                && (!isset($accessory['ordernumber']) || !$accessory['ordernumber'])) {
                 continue;
+            }
+
+            if (isset($accessory['ordernumber']) && $accessory['ordernumber']) {
+                $accessoryDetails = $this->getVariantRepository()
+                        ->findOneBy(array('number' => $accessory['ordernumber']));
+
+                if (!$accessoryDetails) {
+                    throw new \Exception(sprintf('Accessory with ordernumber %s does NOT exists', $accessory['ordernumber']));
+                }
+
+                $accessory['accessoryId'] = $accessoryDetails->getArticle()->getId();
             }
 
             if ($this->isAccessoryArticleExists($article, $accessory['accessoryId'])) {
