@@ -207,7 +207,56 @@ class ArticlesDbAdapter implements DataDbAdapter
         return $result;
     }
     
-    public function prepareTranslationExport($ids)
+//    public function prepareTranslationExport($ids)
+//    {
+//        //translations
+//        $translationFields = 'article.id as articleId, translation.objectdata, translation.objectlanguage as languageId';
+//        $articleDetailIds = implode(',', $ids);
+//
+//        $sql = "SELECT $translationFields FROM `s_articles_details` as articleDetails
+//                INNER JOIN s_articles article
+//                ON article.id = articleDetails.articleID
+//                
+//                LEFT JOIN s_core_translations translation
+//                ON article.id = translation.objectkey
+//
+//                WHERE articleDetails.id IN ($articleDetailIds)
+//                GROUP BY translation.id
+//                ";
+//
+//        $translations = $stmt = Shopware()->Db()->query($sql)->fetchAll();
+//
+//        if (!empty($translations)) {
+//
+//            $translationFields = array(
+//                "txtArtikel" => "name",
+//                "txtzusatztxt" => "additionaltext",
+//                "txtshortdescription" => "description",
+//                "txtlangbeschreibung" => "descriptionLong",
+//                "txtkeywords" => "keywords"
+//            );
+//
+//            $row = array();
+//            foreach ($translations as $index => $record) {
+//                $row[$index]['articleId'] = $record['articleId'];
+//                $row[$index]['languageId'] = $record['languageId'];
+//
+//                $objectdata = unserialize($record['objectdata']);
+//
+//                if (!empty($objectdata)) {
+//                    foreach ($objectdata as $key => $value) {
+//                        if (isset($translationFields[$key])) {
+//                            $row[$index][$translationFields[$key]] = $value;
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        
+//        return $row;
+//    }
+    
+        public function prepareTranslationExport($ids)
     {
         //translations
         $translationFields = 'article.id as articleId, translation.objectdata, translation.objectlanguage as languageId';
@@ -226,6 +275,11 @@ class ArticlesDbAdapter implements DataDbAdapter
 
         $translations = $stmt = Shopware()->Db()->query($sql)->fetchAll();
 
+        $shops = $this->getShops();
+
+        //removes default language
+        unset($shops[0]);
+
         if (!empty($translations)) {
 
             $translationFields = array(
@@ -236,24 +290,59 @@ class ArticlesDbAdapter implements DataDbAdapter
                 "txtkeywords" => "keywords"
             );
 
-            $row = array();
+            $rows = array();
             foreach ($translations as $index => $record) {
-                $row[$index]['articleId'] = $record['articleId'];
-                $row[$index]['languageId'] = $record['languageId'];
+                $articleId = $record['articleId'];
+                $languageId = $record['languageId'];
+                $rows[$articleId][$languageId]['articleId'] = $articleId;
+                $rows[$articleId][$languageId]['languageId'] = $languageId;
+
 
                 $objectdata = unserialize($record['objectdata']);
 
                 if (!empty($objectdata)) {
                     foreach ($objectdata as $key => $value) {
                         if (isset($translationFields[$key])) {
-                            $row[$index][$translationFields[$key]] = $value;
+                            $rows[$articleId][$languageId][$translationFields[$key]] = $value;
                         }
                     }
                 }
             }
         }
+
+        $data = array();
+
+        foreach ($rows as $aId => $row) {
+            if (count($shops) !== count($row)) {
+                foreach ($shops as $shop) {
+                    $shopId = $shop->getId();
+                    if (isset($row[$shopId])) {
+                        $data[] = $row[$shopId];
+                    } else {
+                        $data[] = array(
+                            'articleId' => $aId,
+                            'languageId' => $shopId,
+                            'name' => '',
+                            'description' => '',
+                            'descriptionLong' => '',
+                        );
+                    }
+                }
+            } else {
+                foreach ($row as $value) {
+                    $data[] = $value;
+                }
+            }
+        }
+
+        return $data;
+    }
+    
+    public function getShops()
+    {
+        $shops = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop')->findAll();
         
-        return $row;
+        return $shops;
     }
 
     /**
