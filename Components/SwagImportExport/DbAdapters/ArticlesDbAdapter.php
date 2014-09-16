@@ -169,8 +169,10 @@ class ArticlesDbAdapter implements DataDbAdapter
                 ->from('Shopware\Models\Article\Detail', 'variant')
                 ->join('variant.article', 'article')
                 ->leftjoin('article.similar', 'similar')
+                ->leftjoin('similar.details', 'similarDetail')
                 ->where('variant.id IN (:ids)')
                 ->andWhere('variant.kind = 1')
+                ->andWhere('similarDetail.kind = 1')
                 ->andWhere('similar.id IS NOT NULL')
                 ->setParameter('ids', $ids);
         $result['similar'] = $similarsBuilder->getQuery()->getResult();
@@ -181,8 +183,10 @@ class ArticlesDbAdapter implements DataDbAdapter
                 ->from('Shopware\Models\Article\Detail', 'variant')
                 ->join('variant.article', 'article')
                 ->leftjoin('article.related', 'accessory')
+                ->leftjoin('accessory.details', 'accessoryDetail')
                 ->where('variant.id IN (:ids)')
                 ->andWhere('variant.kind = 1')
+                ->andWhere('accessoryDetail.kind = 1')
                 ->andWhere('accessory.id IS NOT NULL')
                 ->setParameter('ids', $ids);
         $result['accessory'] = $accessoriesBuilder->getQuery()->getResult();
@@ -1323,6 +1327,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     {
          return array(
             'similar.id as similarId',
+            'similarDetail.number as ordernumber',
             'article.id as articleId',
         );
     }
@@ -1331,6 +1336,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     {
          return array(
             'accessory.id as accessoryId',
+            'accessoryDetail.number as ordernumber',
             'article.id as articleId',
         );
     }
