@@ -736,7 +736,7 @@ class FlattenTransformer implements DataTransformerAdapter
                 }
                 
             } else {
-                //processing images, similars and propertyValues
+                //processing images, similars and accessories
                 foreach ($node as $value) {
                     $this->collectIterationData($value);
                 }

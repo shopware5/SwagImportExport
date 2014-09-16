@@ -169,8 +169,10 @@ class ArticlesDbAdapter implements DataDbAdapter
                 ->from('Shopware\Models\Article\Detail', 'variant')
                 ->join('variant.article', 'article')
                 ->leftjoin('article.similar', 'similar')
+                ->leftjoin('similar.details', 'similarDetail')
                 ->where('variant.id IN (:ids)')
                 ->andWhere('variant.kind = 1')
+                ->andWhere('similarDetail.kind = 1')
                 ->andWhere('similar.id IS NOT NULL')
                 ->setParameter('ids', $ids);
         $result['similar'] = $similarsBuilder->getQuery()->getResult();
@@ -181,8 +183,10 @@ class ArticlesDbAdapter implements DataDbAdapter
                 ->from('Shopware\Models\Article\Detail', 'variant')
                 ->join('variant.article', 'article')
                 ->leftjoin('article.related', 'accessory')
+                ->leftjoin('accessory.details', 'accessoryDetail')
                 ->where('variant.id IN (:ids)')
                 ->andWhere('variant.kind = 1')
+                ->andWhere('accessoryDetail.kind = 1')
                 ->andWhere('accessory.id IS NOT NULL')
                 ->setParameter('ids', $ids);
         $result['accessory'] = $accessoriesBuilder->getQuery()->getResult();
@@ -203,7 +207,56 @@ class ArticlesDbAdapter implements DataDbAdapter
         return $result;
     }
     
-    public function prepareTranslationExport($ids)
+//    public function prepareTranslationExport($ids)
+//    {
+//        //translations
+//        $translationFields = 'article.id as articleId, translation.objectdata, translation.objectlanguage as languageId';
+//        $articleDetailIds = implode(',', $ids);
+//
+//        $sql = "SELECT $translationFields FROM `s_articles_details` as articleDetails
+//                INNER JOIN s_articles article
+//                ON article.id = articleDetails.articleID
+//                
+//                LEFT JOIN s_core_translations translation
+//                ON article.id = translation.objectkey
+//
+//                WHERE articleDetails.id IN ($articleDetailIds)
+//                GROUP BY translation.id
+//                ";
+//
+//        $translations = $stmt = Shopware()->Db()->query($sql)->fetchAll();
+//
+//        if (!empty($translations)) {
+//
+//            $translationFields = array(
+//                "txtArtikel" => "name",
+//                "txtzusatztxt" => "additionaltext",
+//                "txtshortdescription" => "description",
+//                "txtlangbeschreibung" => "descriptionLong",
+//                "txtkeywords" => "keywords"
+//            );
+//
+//            $row = array();
+//            foreach ($translations as $index => $record) {
+//                $row[$index]['articleId'] = $record['articleId'];
+//                $row[$index]['languageId'] = $record['languageId'];
+//
+//                $objectdata = unserialize($record['objectdata']);
+//
+//                if (!empty($objectdata)) {
+//                    foreach ($objectdata as $key => $value) {
+//                        if (isset($translationFields[$key])) {
+//                            $row[$index][$translationFields[$key]] = $value;
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        
+//        return $row;
+//    }
+    
+        public function prepareTranslationExport($ids)
     {
         //translations
         $translationFields = 'article.id as articleId, translation.objectdata, translation.objectlanguage as languageId';
@@ -222,6 +275,11 @@ class ArticlesDbAdapter implements DataDbAdapter
 
         $translations = $stmt = Shopware()->Db()->query($sql)->fetchAll();
 
+        $shops = $this->getShops();
+
+        //removes default language
+        unset($shops[0]);
+
         if (!empty($translations)) {
 
             $translationFields = array(
@@ -232,24 +290,59 @@ class ArticlesDbAdapter implements DataDbAdapter
                 "txtkeywords" => "keywords"
             );
 
-            $row = array();
+            $rows = array();
             foreach ($translations as $index => $record) {
-                $row[$index]['articleId'] = $record['articleId'];
-                $row[$index]['languageId'] = $record['languageId'];
+                $articleId = $record['articleId'];
+                $languageId = $record['languageId'];
+                $rows[$articleId][$languageId]['articleId'] = $articleId;
+                $rows[$articleId][$languageId]['languageId'] = $languageId;
+
 
                 $objectdata = unserialize($record['objectdata']);
 
                 if (!empty($objectdata)) {
                     foreach ($objectdata as $key => $value) {
                         if (isset($translationFields[$key])) {
-                            $row[$index][$translationFields[$key]] = $value;
+                            $rows[$articleId][$languageId][$translationFields[$key]] = $value;
                         }
                     }
                 }
             }
         }
+
+        $data = array();
+
+        foreach ($rows as $aId => $row) {
+            if (count($shops) !== count($row)) {
+                foreach ($shops as $shop) {
+                    $shopId = $shop->getId();
+                    if (isset($row[$shopId])) {
+                        $data[] = $row[$shopId];
+                    } else {
+                        $data[] = array(
+                            'articleId' => $aId,
+                            'languageId' => $shopId,
+                            'name' => '',
+                            'description' => '',
+                            'descriptionLong' => '',
+                        );
+                    }
+                }
+            } else {
+                foreach ($row as $value) {
+                    $data[] = $value;
+                }
+            }
+        }
+
+        return $data;
+    }
+    
+    public function getShops()
+    {
+        $shops = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop')->findAll();
         
-        return $row;
+        return $shops;
     }
 
     /**
@@ -559,7 +652,11 @@ class ArticlesDbAdapter implements DataDbAdapter
                 }
                 
                 $oldPrice = $this->getPriceRepository()->findOneBy(
-                        array('articleDetailsId' => $variant->getId(), 'customerGroupKey' => $priceData['priceGroup'])
+                        array(
+                            'articleDetailsId' => $variant->getId(), 
+                            'customerGroupKey' => $priceData['priceGroup'],
+                            'from' => $priceData['from']
+                        )
                 );
                 
                 $priceData['price'] = floatval(str_replace(",", ".", $priceData['price']));
@@ -771,7 +868,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         if ($similars == null) {
             return;
         }
-        
+
         $similarCollection = array();
 
         foreach ($similars as $index => $similar) {
@@ -779,8 +876,20 @@ class ArticlesDbAdapter implements DataDbAdapter
                 continue;
             }
 
-            if (!isset($similar['similarId']) || !$similar['similarId']) {
+            if ((!isset($similar['similarId']) || !$similar['similarId'])
+                && (!isset($similar['ordernumber']) || !$similar['ordernumber'])) {
                 continue;
+            }
+
+            if (isset($similar['ordernumber']) && $similar['ordernumber']) {
+                $similarDetails = $this->getVariantRepository()
+                        ->findOneBy(array('number' => $similar['ordernumber']));
+
+                if (!$similarDetails) {
+                    throw new \Exception(sprintf('Accessory with ordernumber %s does NOT exists', $similar['ordernumber']));
+                }
+
+                $similar['similarId'] = $similarDetails->getArticle()->getId();
             }
 
             if ($this->isSimilarArticleExists($article, $similar['similarId'])) {
@@ -804,20 +913,32 @@ class ArticlesDbAdapter implements DataDbAdapter
         }
 
         $accessoriesCollection = array();
-
+        
         foreach ($accessories as $index => $accessory) {
             if ($accessory['parentIndexElement'] != $accessoryIndex) {
                 continue;
             }
 
-            if (!isset($accessory['accessoryId']) || !$accessory['accessoryId']) {
+            if ((!isset($accessory['accessoryId']) || !$accessory['accessoryId'])
+                && (!isset($accessory['ordernumber']) || !$accessory['ordernumber'])) {
                 continue;
+            }
+
+            if (isset($accessory['ordernumber']) && $accessory['ordernumber']) {
+                $accessoryDetails = $this->getVariantRepository()
+                        ->findOneBy(array('number' => $accessory['ordernumber']));
+
+                if (!$accessoryDetails) {
+                    throw new \Exception(sprintf('Accessory with ordernumber %s does NOT exists', $accessory['ordernumber']));
+                }
+
+                $accessory['accessoryId'] = $accessoryDetails->getArticle()->getId();
             }
 
             if ($this->isAccessoryArticleExists($article, $accessory['accessoryId'])) {
                 continue;
             }
-
+            
             $accessoryModel = $this->getManager()->getReference('Shopware\Models\Article\Article', $accessory['accessoryId']);
 
             $accessoriesCollection[] = $accessoryModel;
@@ -1088,7 +1209,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     public function isSimilarArticleExists($article, $similarId)
     {
         foreach ($article->getSimilar() as $similar){
-            if ($similar->getId == $similarId) {
+            if ($similar->getId() == $similarId) {
                 return true;
             }
         }
@@ -1099,7 +1220,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     public function isAccessoryArticleExists($article, $accessoryId)
     {
         foreach ($article->getRelated() as $accessory) {
-            if ($accessory->getId == $accessoryId) {
+            if ($accessory->getId() == $accessoryId) {
                 return true;
             }
         }
@@ -1323,6 +1444,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     {
          return array(
             'similar.id as similarId',
+            'similarDetail.number as ordernumber',
             'article.id as articleId',
         );
     }
@@ -1331,6 +1453,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     {
          return array(
             'accessory.id as accessoryId',
+            'accessoryDetail.number as ordernumber',
             'article.id as articleId',
         );
     }
