@@ -913,7 +913,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         }
 
         $accessoriesCollection = array();
-
+        
         foreach ($accessories as $index => $accessory) {
             if ($accessory['parentIndexElement'] != $accessoryIndex) {
                 continue;
@@ -938,7 +938,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             if ($this->isAccessoryArticleExists($article, $accessory['accessoryId'])) {
                 continue;
             }
-
+            
             $accessoryModel = $this->getManager()->getReference('Shopware\Models\Article\Article', $accessory['accessoryId']);
 
             $accessoriesCollection[] = $accessoryModel;
@@ -1209,7 +1209,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     public function isSimilarArticleExists($article, $similarId)
     {
         foreach ($article->getSimilar() as $similar){
-            if ($similar->getId == $similarId) {
+            if ($similar->getId() == $similarId) {
                 return true;
             }
         }
@@ -1220,7 +1220,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     public function isAccessoryArticleExists($article, $accessoryId)
     {
         foreach ($article->getRelated() as $accessory) {
-            if ($accessory->getId == $accessoryId) {
+            if ($accessory->getId() == $accessoryId) {
                 return true;
             }
         }
