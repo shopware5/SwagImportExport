@@ -652,7 +652,11 @@ class ArticlesDbAdapter implements DataDbAdapter
                 }
                 
                 $oldPrice = $this->getPriceRepository()->findOneBy(
-                        array('articleDetailsId' => $variant->getId(), 'customerGroupKey' => $priceData['priceGroup'])
+                        array(
+                            'articleDetailsId' => $variant->getId(), 
+                            'customerGroupKey' => $priceData['priceGroup'],
+                            'from' => $priceData['from']
+                        )
                 );
                 
                 $priceData['price'] = floatval(str_replace(",", ".", $priceData['price']));
