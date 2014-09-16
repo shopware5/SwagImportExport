@@ -58,18 +58,16 @@ class CustomerDbAdapter implements DataDbAdapter
         );
         
         // Attributes
-        $stmt = Shopware()->Db()->query('SELECT * FROM s_user_attributes LIMIT 1');
-        $attributes = $stmt->fetch();
+        $attributes = $this->getAttributesByTableName('s_user_attributes');
 
         $attributesSelect = '';
         if ($attributes) {
-            unset($attributes['id']);
-            unset($attributes['userID']);
-            $attributes = array_keys($attributes);
-
             $prefix = 'attribute';
             $attributesSelect = array();
             foreach ($attributes as $attribute) {
+                if ($attribute === 'userID') {
+                    continue;
+                }
                 //underscore to camel case
                 //exmaple: underscore_to_camel_case -> underscoreToCamelCase
                 $catAttr = preg_replace("/\_(.)/e", "strtoupper('\\1')", $attribute);
@@ -107,18 +105,16 @@ class CustomerDbAdapter implements DataDbAdapter
         );
         
         // Attributes
-        $stmt = Shopware()->Db()->query('SELECT * FROM s_user_billingaddress_attributes LIMIT 1');
-        $attributes = $stmt->fetch();
+        $attributes = $this->getAttributesByTableName('s_user_billingaddress_attributes');
 
         $attributesSelect = '';
         if ($attributes) {
-            unset($attributes['id']);
-            unset($attributes['billingID']);
-            $attributes = array_keys($attributes);
-
             $prefix = 'billingAttribute';
             $attributesSelect = array();
             foreach ($attributes as $attribute) {
+                if ($attribute === 'billingID') {
+                    continue;
+                }
                 //underscore to camel case
                 //exmaple: underscore_to_camel_case -> underscoreToCamelCase
                 $catAttr = preg_replace("/\_(.)/e", "strtoupper('\\1')", $attribute);
@@ -151,18 +147,17 @@ class CustomerDbAdapter implements DataDbAdapter
         );
         
         // Attributes
-        $stmt = Shopware()->Db()->query('SELECT * FROM s_user_shippingaddress_attributes LIMIT 1');
-        $attributes = $stmt->fetch();
+        $attributes = $this->getAttributesByTableName('s_user_shippingaddress_attributes');
 
         $attributesSelect = '';
         if ($attributes) {
-            unset($attributes['id']);
-            unset($attributes['shippingID']);
-            $attributes = array_keys($attributes);
-
             $prefix = 'shippingAttribute';
             $attributesSelect = array();
+            
             foreach ($attributes as $attribute) {
+                if ($attribute === 'shippingID') {
+                    continue;
+                }
                 //underscore to camel case
                 //exmaple: underscore_to_camel_case -> underscoreToCamelCase
                 $catAttr = preg_replace("/\_(.)/e", "strtoupper('\\1')", $attribute);
@@ -174,7 +169,7 @@ class CustomerDbAdapter implements DataDbAdapter
         if ($attributesSelect && !empty($attributesSelect)) {
             $columns = array_merge($columns, $attributesSelect);
         }
-
+        
         return $columns;
     }
 
@@ -189,7 +184,7 @@ class CustomerDbAdapter implements DataDbAdapter
                 unset($columns[$key]);
             }
         }
-                
+        
         $builder->select($columns)
                 ->from('\Shopware\Models\Customer\Customer', 'customer')
                 ->join('customer.billing', 'billing')
@@ -427,6 +422,21 @@ class CustomerDbAdapter implements DataDbAdapter
         );
     }
     
+    public function getAttributesByTableName($tableName)
+    {
+        $stmt = Shopware()->Db()->query("SHOW COLUMNS FROM $tableName");
+        $columns = $stmt->fetchAll();
+
+        $columnNames = array();
+        foreach ($columns as $column) {
+            if ($column['Field'] !== 'id') {
+                $columnNames[] = $column['Field'];
+            }
+        }
+
+        return $columnNames;
+    }
+
     /**
      * @param string $section
      * @return mix
