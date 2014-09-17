@@ -470,12 +470,48 @@ class ArticlesDbAdapter implements DataDbAdapter
             
             $this->getManager()->flush();
             
+            $this->writeTranslations($records['translation'], $index, $articleModel->getId());
+
             unset($articleModel);
             unset($variantModel);
         }
         
     }
     
+    /**
+     * @param integer $articleId
+     * @param array $translations
+     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     */
+    public function writeTranslations($translations, $translationIndex, $articleId)
+    {
+        if ($translations == null) {
+            return;
+        }
+
+        $whitelist = array(
+            'name',
+            'description',
+            'descriptionLong',
+            'keywords',
+            'packUnit'
+        );
+
+        $translationWriter = new \Shopware_Components_Translation();
+
+        foreach ($translations as $index => $translation) {
+            if ($translation['parentIndexElement'] === $translationIndex) {
+                $shop = $this->getManager()->find('Shopware\Models\Shop\Shop', $translation['languageId']);
+                if (!$shop) {
+                    throw new \Exception(sprintf("Shop by id %s not found", $translation['languageId']));
+                }
+                $data = array_intersect_key($translation, array_flip($whitelist));
+
+                $translationWriter->write($shop->getId(), 'article', $articleId, $data);
+            }
+        }
+    }
+
     public function getSections()
     {
         return array(
