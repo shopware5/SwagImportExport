@@ -1012,6 +1012,16 @@ class ArticlesDbAdapter implements DataDbAdapter
                 continue;
             }
             
+            if (!isset($configurator['configGroupName']) && empty($configurator['configGroupName'])
+               && !isset($configurator['configGroupId']) && empty($configurator['configGroupId'])){
+                continue;
+            }
+
+            if (!isset($configurator['configOptionName']) && empty($configurator['configOptionName'])
+               && !isset($configurator['configOptionId']) && empty($configurator['configOptionId'])){
+                continue;
+            }
+
             if ((!isset($configurator['configSetName']) || empty($configurator['configSetName'])) && !$configuratorSet) {
                  $configuratorSet = $this->createConfiguratorSet($configurator, $article);
             }
@@ -1101,7 +1111,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             $configuratorSet->setGroups($groups);
             $this->getManager()->persist($configuratorSet);
         }
-        
+
         return $configuratorSet;
     }
     
