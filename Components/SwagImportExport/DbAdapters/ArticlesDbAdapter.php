@@ -190,23 +190,31 @@ class ArticlesDbAdapter implements DataDbAdapter
                 ->andWhere('accessory.id IS NOT NULL')
                 ->setParameter('ids', $ids);
         $result['accessory'] = $accessoriesBuilder->getQuery()->getResult();
-        
+
         //categories
-        $categoriesBuilder = $manager->createQueryBuilder();
-        $categoriesBuilder->select($columns['category'])
+        $aritcleIds = $manager->createQueryBuilder()->select('article.id')
                 ->from('Shopware\Models\Article\Detail', 'variant')
                 ->join('variant.article', 'article')
-                ->leftjoin('article.categories', 'categories')
                 ->where('variant.id IN (:ids)')
                 ->setParameter('ids', $ids)
-                ->groupBy('categories.id');
+                ->groupBy('article.id');
+
+        $mappedArticleIds = array_map(function($item) { return $item['id'];}, $aritcleIds->getQuery()->getResult());
+        
+        $categoriesBuilder = $manager->createQueryBuilder();
+        $categoriesBuilder->select($columns['category'])
+                ->from('Shopware\Models\Article\Article', 'article')
+                ->leftjoin('article.categories', 'categories')
+                ->where('article.id IN (:ids)')
+                ->andWhere('categories.id IS NOT NULL')
+                ->setParameter('ids', $mappedArticleIds);
         $result['category'] = $categoriesBuilder->getQuery()->getResult();
-        
-        $result['translation']= $this->prepareTranslationExport($ids);
-        
+
+        $result['translation'] = $this->prepareTranslationExport($ids);
+
         return $result;
     }
-    
+
 //    public function prepareTranslationExport($ids)
 //    {
 //        //translations
@@ -470,12 +478,53 @@ class ArticlesDbAdapter implements DataDbAdapter
             
             $this->getManager()->flush();
             
+            $this->writeTranslations($records['translation'], $index, $articleModel->getId());
+
             unset($articleModel);
             unset($variantModel);
         }
         
     }
     
+    /**
+     * @param integer $articleId
+     * @param array $translations
+     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     */
+    public function writeTranslations($translations, $translationIndex, $articleId)
+    {
+        if ($translations == null) {
+            return;
+        }
+
+        $whitelist = array(
+            'name',
+            'description',
+            'descriptionLong',
+            'keywords',
+            'packUnit'
+        );
+
+        $translationWriter = new \Shopware_Components_Translation();
+
+        foreach ($translations as $index => $translation) {
+            if ($translation['parentIndexElement'] === $translationIndex) {
+
+                if (!isset($translation['languageId']) || empty($translation['languageId'])){
+                    continue;
+                }
+
+                $shop = $this->getManager()->find('Shopware\Models\Shop\Shop', $translation['languageId']);
+                if (!$shop) {
+                    throw new \Exception(sprintf("Shop by id %s not found", $translation['languageId']));
+                }
+                $data = array_intersect_key($translation, array_flip($whitelist));
+
+                $translationWriter->write($shop->getId(), 'article', $articleId, $data);
+            }
+        }
+    }
+
     public function getSections()
     {
         return array(
