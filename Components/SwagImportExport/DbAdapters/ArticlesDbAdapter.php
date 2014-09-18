@@ -447,11 +447,27 @@ class ArticlesDbAdapter implements DataDbAdapter
                 //updates the also the article
                 if ($record['mainNumber'] === $record['orderNumber'] || $updateFlag) {
                     $articleData = $this->prerpareArticle($record);
-                    $articleData['images'] = $this->prepareImages($records['image'], $index, $articleModel);
-                    $articleData['similar'] = $this->prepareSimilars($records['similar'], $index, $articleModel);
-                    $articleData['related'] = $this->prepareAccessories($records['accessory'], $index, $articleModel);
-                    $articleData['categories'] = $this->prepareCategories($records['category'], $index, $articleModel);
-                    
+
+                    $images = $this->prepareImages($records['image'], $index, $articleModel);
+                    if ($images) {
+                        $articleData['images'] = $images;
+                    }
+
+                    $similar = $this->prepareSimilars($records['similar'], $index, $articleModel);
+                    if ($similar) {
+                        $articleData['similar'] = $similar;
+                    }
+
+                    $accessories = $this->prepareAccessories($records['accessory'], $index, $articleModel);
+                    if ($accessories) {
+                        $articleData['related'] = $accessories;
+                    }
+
+                    $categories = $this->prepareCategories($records['category'], $index, $articleModel);
+                    if ($categories) {
+                        $articleData['categories'] = $categories;
+                    }
+
                     $articleModel->fromArray($articleData);
                 }
                 
@@ -460,30 +476,33 @@ class ArticlesDbAdapter implements DataDbAdapter
                 
                 if ($record['mainNumber'] || $updateFlag) {
                     $configuratorOptions = $this->prepareVariantConfigurators($records['configurator'], $index, $articleModel);
-                    $variantModel->setConfiguratorOptions($configuratorOptions);
+                    if ($configuratorOptions) {
+                        $variantModel->setConfiguratorOptions($configuratorOptions);
+                    }
                 }
                 
                 $prices = $this->preparePrices($records['price'], $index, $variantModel, $articleModel, $articleModel->getTax());
-
-                $variantModel->setPrices($prices);
+                if ($prices) {
+                    $variantModel->setPrices($prices);
+                }
 
                 $violations = $this->getManager()->validate($variantModel);
 
                 if ($violations->count() > 0) {
                     throw new \Exception('No valid detail entity');
                 }
-            
+
                 $this->getManager()->persist($variantModel);
             }
-            
+
             $this->getManager()->flush();
-            
+
             $this->writeTranslations($records['translation'], $index, $articleModel->getId());
 
             unset($articleModel);
             unset($variantModel);
         }
-        
+
     }
     
     /**
@@ -694,6 +713,10 @@ class ArticlesDbAdapter implements DataDbAdapter
                 // if the "to" value isn't numeric, set the place holder "beliebig"
                 if ($priceData['to'] <= 0) {
                     $priceData['to'] = 'beliebig';
+                }
+
+                if (!isset($priceData['price']) && empty($priceData['price'])) {
+                    throw new \Exception('Price value is incorrect for article with nubmer ' . $variant->getNumber());
                 }
 
                 if ($priceData['from'] <= 0) {
