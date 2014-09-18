@@ -1372,32 +1372,28 @@ class ArticlesDbAdapter implements DataDbAdapter
         );
 
         // Attributes
-        $stmt = Shopware()->Db()->query('SELECT * FROM s_articles_attributes LIMIT 1');
-        $attributes = $stmt->fetch();
-
-        $attributesSelect = '';
-        if ($attributes) {
-            unset($attributes['id']);
-            unset($attributes['articleID']);
-            unset($attributes['articledetailsID']);
-            $attributes = array_keys($attributes);
-
-            $prefix = 'attr';
-            $attributesSelect = array();
-            foreach ($attributes as $attribute) {
-                //underscore to camel case
-                //exmaple: underscore_to_camel_case -> underscoreToCamelCase
-                $catAttr = preg_replace("/\_(.)/e", "strtoupper('\\1')", $attribute);
-
-                $attributesSelect[] = sprintf('%s.%s as attribute%s', $prefix, $catAttr, ucwords($catAttr));
-            }
-        }
+        $attributesSelect = $this->getArticleAttributes();
         
         if ($attributesSelect && !empty($attributesSelect)) {
             $columns = array_merge($columns, $attributesSelect);
         }
         
         return $columns;
+    }
+    
+    public function getArticleAttributes()
+    {
+        $stmt = Shopware()->Db()->query("SHOW COLUMNS FROM `s_articles_attributes`");
+        $columns = $stmt->fetchAll();
+
+        $columnNames = array();
+        foreach ($columns as $column) {
+            if ($column['Field'] !== 'id' && $column['Field'] !== 'articleID' && $column['Field'] !== 'articledetailsID' ) {
+                $columnNames[] = $column['Field'];
+            }
+        }
+
+        return $columnNames;
     }
     
     public function getColumns($section)
