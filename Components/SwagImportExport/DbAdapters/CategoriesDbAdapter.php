@@ -112,15 +112,29 @@ class CategoriesDbAdapter implements DataDbAdapter
         );
 
         // Attributes
-        $stmt = Shopware()->Db()->query('SELECT * FROM s_categories_attributes LIMIT 1');
-        $attributes = $stmt->fetch();
+        $attributesSelect = $this->getAttributes();
+        
+        if ($attributesSelect && !empty($attributesSelect)) {
+            $columns = array_merge($columns, $attributesSelect);
+        }
+
+        return $columns;
+    }
+    
+    public function getAttributes()
+    {
+        $stmt = Shopware()->Db()->query("SHOW COLUMNS FROM s_categories_attributes");
+        $columns = $stmt->fetchAll();
+
+        $attributes = array();
+        foreach ($columns as $column) {
+            if ($column['Field'] !== 'id' && $column['Field'] !== 'categoryID') {
+                $attributes[] = $column['Field'];
+            }
+        }
 
         $attributesSelect = '';
         if ($attributes) {
-            unset($attributes['id']);
-            unset($attributes['categoryID']);
-            $attributes = array_keys($attributes);
-
             $prefix = 'attr';
             $attributesSelect = array();
             foreach ($attributes as $attribute) {
@@ -131,12 +145,8 @@ class CategoriesDbAdapter implements DataDbAdapter
                 $attributesSelect[] = sprintf('%s.%s as attribute%s', $prefix, $catAttr, ucwords($catAttr));
             }
         }
-        
-        if ($attributesSelect && !empty($attributesSelect)) {
-            $columns = array_merge($columns, $attributesSelect);
-        }
 
-        return $columns;
+        return $attributesSelect;
     }
 
     /**
