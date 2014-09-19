@@ -237,7 +237,7 @@ class FlattenTransformer implements DataTransformerAdapter
                 if ($priceColumnName === FALSE) {
                     throw new \Exception("Price column not found");
                 }
-
+                
                 $dataColumns = array_keys($data);
                 $isEkGroupMissing = false;
                 $prices = array();
@@ -313,7 +313,48 @@ class FlattenTransformer implements DataTransformerAdapter
                 
                 return $configs;
                 
-            } else if ($node['adapter'] != $this->getMainAdapter()) {
+            }else if($node['adapter'] === 'translation') {
+                $translationName = $this->findNodeByShopwareField($node, 'name');
+                $translationDescription = $this->findNodeByShopwareField($node, 'description');
+                $translationDescriptionLong = $this->findNodeByShopwareField($node, 'descriptionLong');
+                $translationKeywords = $this->findNodeByShopwareField($node, 'keywords');
+                $translationLang = $this->findNodeByShopwareField($node, 'languageId');
+
+                $dataColumns = array_keys($data);
+
+                $translationColumns = array();
+
+                $translations = array();
+
+                $translationNameColumns = preg_grep("/^" . $translationName . "_+(.*)/i", $dataColumns);
+                $translationDescriptionColumns = preg_grep("/^" . $translationDescription . "_+(.*)/i", $dataColumns);
+                $translationDescriptionLongColumns = preg_grep("/^" . $translationDescriptionLong . "_+(.*)/i", $dataColumns);
+                $translationKeywordsColumns = preg_grep("/^" . $translationKeywords . "_+(.*)/i", $dataColumns);
+
+                if ($translationNameColumns) {
+                    $translationColumns = array_merge($translationColumns, $translationNameColumns);
+                }
+                if ($translationDescriptionColumns) {
+                    $translationColumns = array_merge($translationColumns, $translationDescriptionColumns);
+                }
+                if ($translationDescriptionLongColumns) {
+                    $translationColumns = array_merge($translationColumns, $translationDescriptionLongColumns);
+                }
+                if ($translationKeywordsColumns) {
+                    $translationColumns = array_merge($translationColumns, $translationKeywordsColumns);
+                }
+
+                foreach ($translationColumns as $column) {
+                    preg_match("/(?P<column>.*)_+(?P<langId>.*)$/i", $column, $matches);
+                    $columnName = $matches['column'];
+                    $translations[$matches['langId']][$columnName] = $data[$column];
+                    if ($translationLang) {
+                        $translations[$matches['langId']][$translationLang] = $matches['langId'];
+                    }
+                }
+
+                return $translations;
+            }else if ($node['adapter'] != $this->getMainAdapter()) {
                 
                 $mapper = $this->createMapperFromProfile($node);
                 
@@ -736,7 +777,7 @@ class FlattenTransformer implements DataTransformerAdapter
                 }
                 
             } else {
-                //processing images, similars and propertyValues
+                //processing images, similars and accessories
                 foreach ($node as $value) {
                     $this->collectIterationData($value);
                 }
@@ -774,7 +815,7 @@ class FlattenTransformer implements DataTransformerAdapter
             }
         }
     }
-
+    
     /**
      * Returns price node by price group 
      * 
