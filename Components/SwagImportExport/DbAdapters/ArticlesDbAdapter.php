@@ -81,8 +81,8 @@ class ArticlesDbAdapter implements DataDbAdapter
         $articlesBuilder->select($columns['article'])
                 ->from('Shopware\Models\Article\Detail', 'variant')
                 ->join('variant.article', 'article')
-                ->leftJoin('variant.attribute', 'attr')
                 ->leftJoin('Shopware\Models\Article\Detail', 'mv', \Doctrine\ORM\Query\Expr\Join::WITH, 'mv.articleId=article.id AND mv.kind=1')
+                ->leftJoin('article.attribute', 'attribute')
                 ->leftJoin('article.tax', 'articleTax')
                 ->leftJoin('article.supplier', 'supplier')
                 ->leftJoin('article.propertyGroup', 'filterGroup')
@@ -447,11 +447,27 @@ class ArticlesDbAdapter implements DataDbAdapter
                 //updates the also the article
                 if ($record['mainNumber'] === $record['orderNumber'] || $updateFlag) {
                     $articleData = $this->prerpareArticle($record);
-                    $articleData['images'] = $this->prepareImages($records['image'], $index, $articleModel);
-                    $articleData['similar'] = $this->prepareSimilars($records['similar'], $index, $articleModel);
-                    $articleData['related'] = $this->prepareAccessories($records['accessory'], $index, $articleModel);
-                    $articleData['categories'] = $this->prepareCategories($records['category'], $index, $articleModel);
-                    
+
+                    $images = $this->prepareImages($records['image'], $index, $articleModel);
+                    if ($images) {
+                        $articleData['images'] = $images;
+                    }
+
+                    $similar = $this->prepareSimilars($records['similar'], $index, $articleModel);
+                    if ($similar) {
+                        $articleData['similar'] = $similar;
+                    }
+
+                    $accessories = $this->prepareAccessories($records['accessory'], $index, $articleModel);
+                    if ($accessories) {
+                        $articleData['related'] = $accessories;
+                    }
+
+                    $categories = $this->prepareCategories($records['category'], $index, $articleModel);
+                    if ($categories) {
+                        $articleData['categories'] = $categories;
+                    }
+
                     $articleModel->fromArray($articleData);
                 }
                 
@@ -460,30 +476,33 @@ class ArticlesDbAdapter implements DataDbAdapter
                 
                 if ($record['mainNumber'] || $updateFlag) {
                     $configuratorOptions = $this->prepareVariantConfigurators($records['configurator'], $index, $articleModel);
-                    $variantModel->setConfiguratorOptions($configuratorOptions);
+                    if ($configuratorOptions) {
+                        $variantModel->setConfiguratorOptions($configuratorOptions);
+                    }
                 }
                 
                 $prices = $this->preparePrices($records['price'], $index, $variantModel, $articleModel, $articleModel->getTax());
-
-                $variantModel->setPrices($prices);
+                if ($prices) {
+                    $variantModel->setPrices($prices);
+                }
 
                 $violations = $this->getManager()->validate($variantModel);
 
                 if ($violations->count() > 0) {
                     throw new \Exception('No valid detail entity');
                 }
-            
+
                 $this->getManager()->persist($variantModel);
             }
-            
+
             $this->getManager()->flush();
-            
+
             $this->writeTranslations($records['translation'], $index, $articleModel->getId());
 
             unset($articleModel);
             unset($variantModel);
         }
-        
+
     }
     
     /**
@@ -606,7 +625,11 @@ class ArticlesDbAdapter implements DataDbAdapter
         $articleMap = $this->getMap('articleVariant');
         
         foreach ($data as $key => $value) {
-            if (isset($articleMap[$key])) {
+            if (preg_match('/^attribute/', $key)) {
+                $newKey = lcfirst(preg_replace('/^attribute/', '', $key));
+                $article['attribute'][$newKey] = $value;
+                unset($data[$key]);
+            } else if (isset($articleMap[$key])) {
                 $article[$articleMap[$key]] = $value;
                 unset($data[$key]);
             }
@@ -694,6 +717,10 @@ class ArticlesDbAdapter implements DataDbAdapter
                 // if the "to" value isn't numeric, set the place holder "beliebig"
                 if ($priceData['to'] <= 0) {
                     $priceData['to'] = 'beliebig';
+                }
+
+                if (!isset($priceData['price']) && empty($priceData['price'])) {
+                    throw new \Exception('Price value is incorrect for article with nubmer ' . $variant->getNumber());
                 }
 
                 if ($priceData['from'] <= 0) {
@@ -1012,6 +1039,16 @@ class ArticlesDbAdapter implements DataDbAdapter
                 continue;
             }
             
+            if (!isset($configurator['configGroupName']) && empty($configurator['configGroupName'])
+               && !isset($configurator['configGroupId']) && empty($configurator['configGroupId'])){
+                continue;
+            }
+
+            if (!isset($configurator['configOptionName']) && empty($configurator['configOptionName'])
+               && !isset($configurator['configOptionId']) && empty($configurator['configOptionId'])){
+                continue;
+            }
+
             if ((!isset($configurator['configSetName']) || empty($configurator['configSetName'])) && !$configuratorSet) {
                  $configuratorSet = $this->createConfiguratorSet($configurator, $article);
             }
@@ -1101,7 +1138,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             $configuratorSet->setGroups($groups);
             $this->getManager()->persist($configuratorSet);
         }
-        
+
         return $configuratorSet;
     }
     
@@ -1339,32 +1376,41 @@ class ArticlesDbAdapter implements DataDbAdapter
         );
 
         // Attributes
-        $stmt = Shopware()->Db()->query('SELECT * FROM s_articles_attributes LIMIT 1');
-        $attributes = $stmt->fetch();
-
-        $attributesSelect = '';
-        if ($attributes) {
-            unset($attributes['id']);
-            unset($attributes['articleID']);
-            unset($attributes['articledetailsID']);
-            $attributes = array_keys($attributes);
-
-            $prefix = 'attr';
-            $attributesSelect = array();
-            foreach ($attributes as $attribute) {
-                //underscore to camel case
-                //exmaple: underscore_to_camel_case -> underscoreToCamelCase
-                $catAttr = preg_replace("/\_(.)/e", "strtoupper('\\1')", $attribute);
-
-                $attributesSelect[] = sprintf('%s.%s as attribute%s', $prefix, $catAttr, ucwords($catAttr));
-            }
-        }
+        $attributesSelect = $this->getArticleAttributes();
         
         if ($attributesSelect && !empty($attributesSelect)) {
             $columns = array_merge($columns, $attributesSelect);
         }
         
         return $columns;
+    }
+    
+    public function getArticleAttributes()
+    {
+        $stmt = Shopware()->Db()->query("SHOW COLUMNS FROM `s_articles_attributes`");
+        $columns = $stmt->fetchAll();
+
+        $attributes = array();
+        foreach ($columns as $column) {
+            if ($column['Field'] !== 'id' && $column['Field'] !== 'articleID' && $column['Field'] !== 'articledetailsID') {
+                $attributes[] = $column['Field'];
+            }
+        }
+
+        if ($attributes) {
+            $prefix = 'attribute';
+            $attributesSelect = array();
+            foreach ($attributes as $attribute) {
+                //underscore to camel case
+                //exmaple: underscore_to_camel_case -> underscoreToCamelCase
+
+                $attr = preg_replace("/\_(.)/e", "strtoupper('\\1')", $attribute);
+
+                $attributesSelect[] = sprintf('%s.%s as attribute%s', $prefix, $attr, ucwords($attr));
+            }
+        }
+
+        return $attributesSelect;
     }
     
     public function getColumns($section)
