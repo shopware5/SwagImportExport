@@ -536,7 +536,8 @@ class FlattenTransformer implements DataTransformerAdapter
     public function getDataValue($data, $key, $iteration = 0)
     {
         if (!isset($data[$key])){
-            throw new \Exception("Data does not match with CSV column name $key");
+            return;
+//            throw new \Exception("Data does not match with CSV column name $key");
         }
         
         if ($iteration > 1) { // if it is sub iteration node
