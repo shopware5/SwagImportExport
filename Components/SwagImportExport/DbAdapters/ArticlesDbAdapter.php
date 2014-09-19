@@ -397,14 +397,16 @@ class ArticlesDbAdapter implements DataDbAdapter
             
             if ($variantModel) {
                 $articleModel = $variantModel->getArticle();                    
-            } else if (isset($record['mainNumber']) && $record['mainNumber'] !== $record['orderNumber']) {
+            } else if (isset($record['mainNumber']) && !empty($record['mainNumber'])
+                    &&  $record['mainNumber'] !== $record['orderNumber']) {
                 $mainVariant = $this->getVariantRepository()->findOneBy(array('number' => $record['mainNumber']));
                 
                 if (!$mainVariant) {
                     throw new \Exception(sprintf('Variant with number %s does not exists', $record['mainNumber']));
                 }
                 $articleModel = $mainVariant->getArticle();
-//                unset($record['mainNumber']);
+            } else if (isset($record['mainNumber']) && empty($record['mainNumber'])){
+                $record['mainNumber'] = $record['orderNumber'];
             }
 
             if (!$articleModel) {
@@ -429,7 +431,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $articleData['configuratorSet'] = $this->prepareArticleConfigurators($records['configurator'], $index, $articleModel);
                 
                 $articleModel->fromArray($articleData);
-                
+
                 $violations = $this->getManager()->validate($articleModel);
 
                 if ($violations->count() > 0) {
