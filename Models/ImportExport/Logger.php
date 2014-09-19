@@ -12,7 +12,7 @@ use Shopware\Components\Model\ModelEntity,
  * @ORM\Entity(repositoryClass="Repository")
  * @ORM\HasLifecycleCallbacks
  */
-class Logger extends ModelEntity
+class Logger
 {
     /**
      * Primary Key - autoincrement value

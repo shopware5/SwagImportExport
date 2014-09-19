@@ -600,7 +600,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
         $dbAdapter = $dataFactory->createDbAdapter($profile->getType());
         $dataSession = $dataFactory->loadSession($postData);
-
+        
         //create dataIO
         $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession);
 
@@ -628,7 +628,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         try {
             $post = $dataWorkflow->export($postData);
 
-            $message = $post['position'] . ' ' . $profile->getName() . ' exported successfully';
+            $message = $post['position'] . ' ' . $profile->getType() . ' exported successfully';
             $logger->write($message, 'false');
 
             return $this->View()->assign(array('s' => $profile, 'success' => true, 'data' => $post));
