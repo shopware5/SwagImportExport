@@ -6,7 +6,7 @@ use Shopware\Components\Model\ModelEntity,
     Doctrine\ORM\Mapping AS ORM;
 
 /**
- * Session Model
+ * Logger Model
  *
  * @ORM\Table(name="s_import_export_log")
  * @ORM\Entity(repositoryClass="Repository")

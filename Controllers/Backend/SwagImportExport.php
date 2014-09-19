@@ -24,6 +24,7 @@
  */
 use Shopware\Components\SwagImportExport\DataWorkflow;
 use Shopware\Components\SwagImportExport\Utils\TreeHelper;
+use Shopware\Components\SwagImportExport\StatusLogger;
 
 /**
  * Shopware ImportExport Plugin
@@ -622,12 +623,18 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         );
 
         $dataWorkflow = new DataWorkflow($dataIO, $profile, $dataTransformerChain, $fileWriter);
-
+        $logger = new StatusLogger();
+            
         try {
             $post = $dataWorkflow->export($postData);
 
-            return $this->View()->assign(array('success' => true, 'data' => $post));
+            $message = $post['position'] . ' ' . $profile->getName() . ' exported successfully';
+            $logger->write($message, 'false');
+
+            return $this->View()->assign(array('s' => $profile, 'success' => true, 'data' => $post));
         } catch (Exception $e) {
+            $logger->write($e->getMessage(), 'true');
+
             return $this->View()->assign(array('success' => false, 'msg' => $e->getMessage()));
         }
     }
@@ -730,12 +737,20 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         );
 
         $dataWorkflow = new DataWorkflow($dataIO, $profile, $dataTransformerChain, $fileReader);
+        $logger = new StatusLogger();
 
         try {
             $post = $dataWorkflow->import($postData, $inputFile);
-
+            
+            if ($dataSession->getTotalCount() > 0 && ($dataSession->getTotalCount() == $post['position'])) {
+                $message = $post['position'] . ' ' . $post['adapter'] . ' imported successfully';
+                $logger->write($message, 'false');
+            }
+            
             return $this->View()->assign(array('success' => true, 'data' => $post));
         } catch (Exception $e) {
+            $logger->write($e->getMessage(), 'true');
+            
             return $this->View()->assign(array('success' => false, 'msg' => $e->getMessage()));
         }
     }
