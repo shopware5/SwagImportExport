@@ -81,8 +81,8 @@ class ArticlesDbAdapter implements DataDbAdapter
         $articlesBuilder->select($columns['article'])
                 ->from('Shopware\Models\Article\Detail', 'variant')
                 ->join('variant.article', 'article')
-                ->leftJoin('variant.attribute', 'attr')
                 ->leftJoin('Shopware\Models\Article\Detail', 'mv', \Doctrine\ORM\Query\Expr\Join::WITH, 'mv.articleId=article.id AND mv.kind=1')
+                ->leftJoin('article.attribute', 'attribute')
                 ->leftJoin('article.tax', 'articleTax')
                 ->leftJoin('article.supplier', 'supplier')
                 ->leftJoin('article.propertyGroup', 'filterGroup')
@@ -625,7 +625,11 @@ class ArticlesDbAdapter implements DataDbAdapter
         $articleMap = $this->getMap('articleVariant');
         
         foreach ($data as $key => $value) {
-            if (isset($articleMap[$key])) {
+            if (preg_match('/^attribute/', $key)) {
+                $newKey = lcfirst(preg_replace('/^attribute/', '', $key));
+                $article['attribute'][$newKey] = $value;
+                unset($data[$key]);
+            } else if (isset($articleMap[$key])) {
                 $article[$articleMap[$key]] = $value;
                 unset($data[$key]);
             }
@@ -1386,14 +1390,27 @@ class ArticlesDbAdapter implements DataDbAdapter
         $stmt = Shopware()->Db()->query("SHOW COLUMNS FROM `s_articles_attributes`");
         $columns = $stmt->fetchAll();
 
-        $columnNames = array();
+        $attributes = array();
         foreach ($columns as $column) {
-            if ($column['Field'] !== 'id' && $column['Field'] !== 'articleID' && $column['Field'] !== 'articledetailsID' ) {
-                $columnNames[] = $column['Field'];
+            if ($column['Field'] !== 'id' && $column['Field'] !== 'articleID' && $column['Field'] !== 'articledetailsID') {
+                $attributes[] = $column['Field'];
             }
         }
 
-        return $columnNames;
+        if ($attributes) {
+            $prefix = 'attribute';
+            $attributesSelect = array();
+            foreach ($attributes as $attribute) {
+                //underscore to camel case
+                //exmaple: underscore_to_camel_case -> underscoreToCamelCase
+
+                $attr = preg_replace("/\_(.)/e", "strtoupper('\\1')", $attribute);
+
+                $attributesSelect[] = sprintf('%s.%s as attribute%s', $prefix, $attr, ucwords($attr));
+            }
+        }
+
+        return $attributesSelect;
     }
     
     public function getColumns($section)
