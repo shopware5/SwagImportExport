@@ -82,7 +82,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 ->from('Shopware\Models\Article\Detail', 'variant')
                 ->join('variant.article', 'article')
                 ->leftJoin('Shopware\Models\Article\Detail', 'mv', \Doctrine\ORM\Query\Expr\Join::WITH, 'mv.articleId=article.id AND mv.kind=1')
-                ->leftJoin('article.attribute', 'attribute')
+                ->leftJoin('variant.attribute', 'attribute')
                 ->leftJoin('article.tax', 'articleTax')
                 ->leftJoin('article.supplier', 'supplier')
                 ->leftJoin('article.propertyGroup', 'filterGroup')
@@ -211,7 +211,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         $result['category'] = $categoriesBuilder->getQuery()->getResult();
 
         $result['translation'] = $this->prepareTranslationExport($ids);
-
+        
         return $result;
     }
 
@@ -1041,16 +1041,22 @@ class ArticlesDbAdapter implements DataDbAdapter
                 continue;
             }
             
-            if (!isset($configurator['configGroupName']) && empty($configurator['configGroupName'])
-               && !isset($configurator['configGroupId']) && empty($configurator['configGroupId'])){
+            if (!isset($configurator['configGroupName']) && !isset($configurator['configGroupId'])) {
                 continue;
             }
 
-            if (!isset($configurator['configOptionName']) && empty($configurator['configOptionName'])
-               && !isset($configurator['configOptionId']) && empty($configurator['configOptionId'])){
+            if (!isset($configurator['configOptionName']) && !isset($configurator['configOptionId'])) {
                 continue;
             }
-            
+
+            if (empty($configurator['configGroupName']) && empty($configurator['configGroupId'])) {
+                continue;
+            }
+
+            if (empty($configurator['configOptionName']) && empty($configurator['configOptionId'])) {
+                continue;
+            }
+
             if (isset($configurator['configSetId']) && !empty($configurator['configSetId']) && !$configuratorSet) {
                 $configuratorSet = $this->getManager()->getRepository('Shopware\Models\Article\Configurator\Set')
                         ->findOneBy(array('id' => $configurator['configSetId']));
@@ -1145,7 +1151,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             $configuratorSet->setGroups($groups);
             $this->getManager()->persist($configuratorSet);
         }
-
+        
         return $configuratorSet;
     }
     
