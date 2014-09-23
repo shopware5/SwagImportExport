@@ -1050,9 +1050,14 @@ class ArticlesDbAdapter implements DataDbAdapter
                && !isset($configurator['configOptionId']) && empty($configurator['configOptionId'])){
                 continue;
             }
+            
+            if (isset($configurator['configSetId']) && !empty($configurator['configSetId']) && !$configuratorSet) {
+                $configuratorSet = $this->getManager()->getRepository('Shopware\Models\Article\Configurator\Set')
+                        ->findOneBy(array('id' => $configurator['configSetId']));
+            }
 
             if ((!isset($configurator['configSetName']) || empty($configurator['configSetName'])) && !$configuratorSet) {
-                 $configuratorSet = $this->createConfiguratorSet($configurator, $article);
+                $configuratorSet = $this->createConfiguratorSet($configurator, $article);
             }
             
             if (!$configuratorSet) {
@@ -1564,6 +1569,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             'configuratorGroup.id as configGroupId',
             'configuratorGroup.name as configGroupName',
             'configuratorGroup.description as configGroupDescription',
+            'configuratorSet.id as configSetId',
             'configuratorSet.name as configSetName',
             'configuratorSet.type as configSetType',
         );
