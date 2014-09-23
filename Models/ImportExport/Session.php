@@ -42,7 +42,7 @@ use Shopware\Components\Model\ModelEntity,
  * @ORM\Entity(repositoryClass="Repository")
  * @ORM\HasLifecycleCallbacks
  */
-class Session
+class Session extends ModelEntity
 {
 
     /**
