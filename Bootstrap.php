@@ -215,8 +215,8 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
         $tool = new \Doctrine\ORM\Tools\SchemaTool($em);
 
         $classes = array(
-            $em->getClassMetadata('Shopware\CustomModels\ImportExport\Logger'),
             $em->getClassMetadata('Shopware\CustomModels\ImportExport\Session'),
+            $em->getClassMetadata('Shopware\CustomModels\ImportExport\Logger'),
             $em->getClassMetadata('Shopware\CustomModels\ImportExport\Profile'),
             $em->getClassMetadata('Shopware\CustomModels\ImportExport\Expression')
         );
