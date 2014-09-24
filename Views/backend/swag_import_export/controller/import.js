@@ -208,6 +208,8 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
                         title: 'Import Error',
                         text: result.msg
                     });
+                    var mask = Ext.get(Ext.getBody().query('.x-mask'));
+                    mask.hide();
                     return;
                 }
                 
