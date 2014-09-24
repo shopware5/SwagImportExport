@@ -200,6 +200,17 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
             success: function(response) {
                 var result = Ext.decode(response.responseText);
 
+                if(result.success === false){
+                    Shopware.Msg.createStickyGrowlMessage({
+                        title: 'Export Error',
+                        text: result.msg
+                    });
+
+                    win.closeButton.enable();
+                    win.cancelButton.disable();
+                    return;
+                }
+
                 me.batchConfig.params = result.data;
                 me.batchConfig.position = result.data.position;
 
