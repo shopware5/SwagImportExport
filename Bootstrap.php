@@ -347,7 +347,7 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
     public function onRunImportCronJob(Shopware_Components_Cron_CronJob $job)
     {
         $this->registerMyNamespace();
-        $files = scandir(Shopware()->DocPath() . 'files/import_cron/', SCANDIR_SORT_ASCENDING);
+        $files = scandir(Shopware()->DocPath() . 'files/import_cron/');
         
         if ($files === false) {
             return false;
@@ -356,57 +356,63 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
         $manager = Shopware()->Models();
         
         $profileRepository = $manager->getRepository('Shopware\CustomModels\ImportExport\Profile');
-        
         foreach($files as $file) {
             $type = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+                
             if ($type == 'xml' || $type == 'csv') {
-                $profile = \Shopware\Components\SwagImportExport\Utils\CommandHelper::findProfileByName($file, $profileRepository);
+                try {
+                    $profile = \Shopware\Components\SwagImportExport\Utils\CommandHelper::findProfileByName($file, $profileRepository);
 
-                if ($profile === FALSE) {
-                    throw new \Exception('No profile found!');
+                    if ($profile === FALSE) {
+                        throw new \Exception(sprintf('No profile found in file %s!', $file));
+                    }
+
+                    $albumRepo = Shopware()->Models()->getRepository('Shopware\Models\Media\Album');
+                    $album = $albumRepo->findOneBy(array('name' => 'ImportFiles'));
+
+                    $filePath = Shopware()->DocPath() . 'files/import_cron/' . $file;
+                    $fileObject = new \Symfony\Component\HttpFoundation\File\File($filePath);
+
+                    if (!$album) {
+                        $album = new Shopware\Models\Media\Album();
+                        $album->setName('ImportFiles');
+                        $album->setPosition(0);
+                        Shopware()->Models()->persist($album);
+                        Shopware()->Models()->flush($album);
+                    }
+
+                    $media = new \Shopware\Models\Media\Media();
+
+                    $media->setAlbum($album);
+                    $media->setDescription('');
+                    $media->setCreated(new DateTime());
+                    $media->setExtension($type);
+
+                    $identity = Shopware()->Auth()->getIdentity();
+                    if ($identity !== null) {
+                        $media->setUserId($identity->id);
+                    } else {
+                        $media->setUserId(0);
+                    }
+
+                    //set the upload file into the model. The model saves the file to the directory
+                    $media->setFile($fileObject);
+
+                    Shopware()->Models()->persist($media);
+                    Shopware()->Models()->flush();
+
+                    $mediaPath = $media->getPath();
+
+                    $commandHelper = new \Shopware\Components\SwagImportExport\Utils\CommandHelper(array(
+                        'profileEntity' => $profile,
+                        'filePath' => $mediaPath,
+                        'format' => $type,
+                    ));
+                
+                } catch (\Exception $e) {
+                    echo $e->getMessage() . "\n";
+                    return;
                 }
-
-                $albumRepo = Shopware()->Models()->getRepository('Shopware\Models\Media\Album');
-                $album = $albumRepo->findOneBy(array('name' => 'ImportFiles'));
-
-                $filePath = Shopware()->DocPath() . 'files/import_cron/' . $file;
-                $fileObject = new \Symfony\Component\HttpFoundation\File\File($filePath);
-
-                if (!$album) {
-                    $album = new Shopware\Models\Media\Album();
-                    $album->setName('ImportFiles');
-                    $album->setPosition(0);
-                    Shopware()->Models()->persist($album);
-                    Shopware()->Models()->flush($album);
-                }
-
-                $media = new \Shopware\Models\Media\Media();
-
-                $media->setAlbum($album);
-                $media->setDescription('');
-                $media->setCreated(new DateTime());
-                $media->setExtension($type);
-
-                $identity = Shopware()->Auth()->getIdentity();
-                if ($identity !== null) {
-                    $media->setUserId($identity->id);
-                } else {
-                    $media->setUserId(0);
-                }
-
-                //set the upload file into the model. The model saves the file to the directory
-                $media->setFile($fileObject);
-
-                Shopware()->Models()->persist($media);
-                Shopware()->Models()->flush();
-
-                $mediaPath = $media->getPath();
-
-                $commandHelper = new \Shopware\Components\SwagImportExport\Utils\CommandHelper(array(
-                    'profileEntity' => $profile,
-                    'filePath' => $mediaPath,
-                    'format' => $type,
-                ));
 
                 try {
                     $return = $commandHelper->prepareImport();
@@ -423,7 +429,8 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
                 } catch (\Exception $e) {
                     // copy file as broken
                     copy($mediaPath, Shopware()->DocPath() . 'files/import_export/broken-' . $file);
-                    return $e->getMessage();
+                    echo $e->getMessage() . "\n";
+                    return ;
                 }
             }
         }
