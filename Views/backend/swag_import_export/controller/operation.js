@@ -32,6 +32,12 @@
 Ext.define('Shopware.apps.SwagImportExport.controller.Operation', {
 	extend: 'Ext.app.Controller',
 	
+    snippets: {
+        failure: {
+            title: '{s name=swag_import_export/operation/failure_title}Import/Export download{/s}',
+            msg: '{s name=swag_import_export/operation/failure}File does not exists.{/s}'
+        }
+    },
 	/**
      * This method creates listener for events fired from the export 
      */
@@ -49,9 +55,24 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Operation', {
         me.callParent(arguments);
     },
     onDownloadFile: function(record) {
+        var me = this;
         var url = '{url action="downloadFile"}' + '/fileName/' + record.get('fileName');
-        window.open(url, '_blank');        
-        
+        var urlExists = me.urlExists(url);
+        if (urlExists !== true) {
+            Shopware.Msg.createStickyGrowlMessage({
+                title: me.snippets.failure.title,
+                text: me.snippets.failure.msg
+            });
+        } else {
+            window.open(url, '_blank');
+        }
+    },
+    urlExists: function(url)
+    {
+        var http = new XMLHttpRequest();
+        http.open('HEAD', url, false);
+        http.send();
+        return http.status!=404;
     },
     onDeleteSession: function(record, sessionStore) {
         var me = this,
