@@ -41,7 +41,8 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
         finished: '{s name=swag_import_export/import/finished}Importing finished successfully {/s}',
         process: '{s name=swag_import_export/import/process}Importing... {/s}',
         start: '{s name=swag_import_export/import/start}Start importing{/s}',
-        close: '{s name=swag_import_export/import/close}Close{/s}'
+        close: '{s name=swag_import_export/import/close}Close{/s}',
+        failure: '{s name=swag_import_export/import/failure-title}An error occured{/s}'
     },
     /**
      * This method creates listener for events fired from the import 
@@ -115,7 +116,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
         }
 
         if (!Ext.isEmpty(localFile)){
-            
+            var me = this;
             form.submit({
                 url: '{url module=backend controller="swagImportExport" action="uploadFile"}',
                 waitMsg: 'Uploading',
@@ -125,8 +126,12 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
                     me.onCreateImportWindow();
                 },
                 failure: function(fp, response) {
-                    //todo: handle the failure
-                    console.log(response);
+                    Shopware.Msg.createStickyGrowlMessage({
+                        title: me.snippets.failure,
+                        text: response.result.message
+                    });
+                    var mask = Ext.get(Ext.getBody().query('.x-mask'));
+                    mask.hide();
                 }
             });
         } else {
