@@ -234,7 +234,11 @@ class DataIO
         switch ($sessionData['type']) {
             case 'export':
                 $ids = $this->preloadRecordIds()->getRecordIds();
-                
+
+                if (empty($ids)) {
+                     throw new \Exception('There is nothing to export');
+                }
+
                 $sessionData['serializedIds'] = serialize($ids);
                 $sessionData['totalCountedIds'] = count($ids);
                 break;
