@@ -23,6 +23,7 @@
  * our trademarks remain entirely with us.
  */
 
+use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
 /**
  * Shopware SwagImportExport Plugin - Bootstrap
  *
@@ -363,8 +364,10 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
                 try {
                     $profile = \Shopware\Components\SwagImportExport\Utils\CommandHelper::findProfileByName($file, $profileRepository);
 
-                    if ($profile === FALSE) {
-                        throw new \Exception(sprintf('No profile found in file %s!', $file));
+                    if ($profile === false) {
+                        $message = SnippetsHelper::getNamespace()
+                            ->get('cronjob/no_profile', 'Failed to create directory %s');
+                        throw new \Exception(sprintf($message, $file));
                     }
 
                     $albumRepo = Shopware()->Models()->getRepository('Shopware\Models\Media\Album');

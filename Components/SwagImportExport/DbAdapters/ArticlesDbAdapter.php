@@ -12,6 +12,7 @@ use Shopware\Models\Article\Configurator;
 use Shopware\Models\Media\Media as MediaModel;
 use Shopware\Components\SwagImportExport\Utils\DataHelper as DataHelper;
 use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
+use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
 
 class ArticlesDbAdapter implements DataDbAdapter
 {
@@ -69,11 +70,15 @@ class ArticlesDbAdapter implements DataDbAdapter
     public function read($ids, $columns)
     {
         if (!$ids && empty($ids)) {
-            throw new \Exception('Can not read articles without ids.');
+            $message = SnippetsHelper::getNamespace()
+                        ->get('adapters/articles/no_ids', 'Can not read articles without ids.');
+            throw new \Exception($message);
         }
 
         if (!$columns && empty($columns)) {
-            throw new \Exception('Can not read articles without column names.');
+            $message = SnippetsHelper::getNamespace()
+                        ->get('adapters/articles/no_columns', 'Can not read articles without column names.');
+            throw new \Exception($message);
         }
         
         $manager = $this->getManager();
@@ -384,13 +389,17 @@ class ArticlesDbAdapter implements DataDbAdapter
     {
         //articles
         if (empty($records['article'])) {
-            throw new \Exception('No article records were found.');
+            $message = SnippetsHelper::getNamespace()
+                        ->get('adapters/articles/no_records', 'No article records were found.');
+            throw new \Exception($message);
         }
 
         foreach ($records['article'] as $index => $record) {
             
             if (!isset($record['orderNumber']) && empty($record['orderNumber'])) {
-                throw new \Exception('Order number is required.');
+                $message = SnippetsHelper::getNamespace()
+                        ->get('adapters/articles/ordernumber_required', 'Order number is required.');
+                throw new \Exception($message);
             } 
             
             $variantModel = $this->getVariantRepository()->findOneBy(array('number' => $record['orderNumber']));
@@ -402,7 +411,9 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $mainVariant = $this->getVariantRepository()->findOneBy(array('number' => $record['mainNumber']));
                 
                 if (!$mainVariant) {
-                    throw new \Exception(sprintf('Variant with number %s does not exists', $record['mainNumber']));
+                    $message = SnippetsHelper::getNamespace()
+                        ->get('adapters/articles/variant_existence', 'Variant with number %s does not exists.');
+                    throw new \Exception(sprintf($message, $record['mainNumber']));
                 }
                 $articleModel = $mainVariant->getArticle();
             } else if (isset($record['mainNumber']) && empty($record['mainNumber'])){
@@ -435,7 +446,9 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $violations = $this->getManager()->validate($articleModel);
 
                 if ($violations->count() > 0) {
-                    throw new \Exception('No valid article entity');
+                    $message = SnippetsHelper::getNamespace()
+                        ->get('adapters/articles/no_valid_article_entity', 'No valid article entity');
+                    throw new \Exception($message);
                 }
                 
                 $this->getManager()->persist($articleModel);
@@ -491,7 +504,9 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $violations = $this->getManager()->validate($variantModel);
 
                 if ($violations->count() > 0) {
-                    throw new \Exception('No valid detail entity');
+                    $message = SnippetsHelper::getNamespace()
+                        ->get('adapters/articles/no_valid_detail_entity', 'No valid detail entity');
+                    throw new \Exception($message);
                 }
 
                 $this->getManager()->persist($variantModel);
@@ -537,7 +552,9 @@ class ArticlesDbAdapter implements DataDbAdapter
 
                 $shop = $this->getManager()->find('Shopware\Models\Shop\Shop', $translation['languageId']);
                 if (!$shop) {
-                    throw new \Exception(sprintf("Shop by id %s not found", $translation['languageId']));
+                    $message = SnippetsHelper::getNamespace()
+                                ->get('adapters/articles/no_shop_id', 'Shop by id %s not found');
+                    throw new \Exception(sprintf($message, $translation['languageId']));
                 }
                 $data = array_intersect_key($translation, array_flip($whitelist));
 
@@ -570,12 +587,16 @@ class ArticlesDbAdapter implements DataDbAdapter
             $article['tax'] = $this->getManager()->find('Shopware\Models\Tax\Tax', $data['taxId']);
 
             if (empty($data['tax'])) {
-                throw new \Exception(sprintf("Tax by id %s not found", $data['taxId']));
+                $message = SnippetsHelper::getNamespace()
+                            ->get('adapters/articles/no_tax_id', 'Tax by id %s not found');
+                throw new \Exception(sprintf($message, $data['taxId']));
             }
         } elseif (!empty($data['tax'])) {
             $tax = $this->getManager()->getRepository('Shopware\Models\Tax\Tax')->findOneBy(array('tax' => $data['tax']));
             if (!$tax) {
-                throw new \Exception(sprintf("Tax by taxrate %s not found", $data['tax']));
+                $message = SnippetsHelper::getNamespace()
+                            ->get('adapters/articles/no_tax_found', 'Tax by taxrate %s not found');
+                throw new \Exception(sprintf($message, $data['tax']));
             }
             $article['tax'] = $tax;
         }
@@ -585,7 +606,9 @@ class ArticlesDbAdapter implements DataDbAdapter
         if (!empty($data['supplierId'])) {
             $article['supplier'] = $this->getManager()->find('Shopware\Models\Article\Supplier', $data['supplierId']);
             if (empty($article['supplier'])) {
-                throw new \Exception(sprintf("Supplier by id %s not found", $data['supplierId']));
+                $message = SnippetsHelper::getNamespace()
+                            ->get('adapters/articles/supplier_not_found', 'Supplier by id %s not found');
+                throw new \Exception(sprintf($message, $data['supplierId']));
             }
         } elseif (!empty($data['supplierName'])) {
             $supplier = $this->getManager()->getRepository('Shopware\Models\Article\Supplier')->findOneBy(array('name' => $data['supplierName']));
@@ -604,7 +627,9 @@ class ArticlesDbAdapter implements DataDbAdapter
             } else {
                 $article['priceGroup'] = $this->getManager()->find('Shopware\Models\Price\Group', $data['priceGroupId']);
                 if (empty($article['priceGroup'])) {
-                    throw new \Exception(sprintf("Pricegroup by id %s not found", $data['priceGroupId']));
+                    $message = SnippetsHelper::getNamespace()
+                            ->get('adapters/articles/pricegroup_not_found', 'Pricegroup by id %s not found');
+                    throw new \Exception(sprintf($message, $data['priceGroupId']));
                 }
             }
             unset($data['priceGroup']);
@@ -618,7 +643,9 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $article['propertyGroup'] = $this->getManager()->find('\Shopware\Models\Property\Group', $data['filterGroupId']);
 
                 if (empty($article['propertyGroup'])) {
-                    throw new \Exception(sprintf("PropertyGroup by id %s not found", $data['filterGroupId']));
+                    $message = SnippetsHelper::getNamespace()
+                            ->get('adapters/articles/propertyGroup_not_found', 'PropertyGroup by id %s not found');
+                    throw new \Exception(sprintf($message, $data['filterGroupId']));
                 }
             }
             unset($data['propertyGroupId']);
@@ -701,7 +728,9 @@ class ArticlesDbAdapter implements DataDbAdapter
 
                 /** @var CustomerGroup $customerGroup */
                 if (!$customerGroup instanceof CustomerGroup) {
-                    throw new \Exception(sprintf('Customer Group by key %s not found', $priceData['priceGroup']));
+                    $message = SnippetsHelper::getNamespace()
+                                ->get('adapters/articles/customerGroup_not_found', 'Customer Group by key %s not found');
+                    throw new \Exception(sprintf($message, $priceData['priceGroup']));
                 }
 
                 if (!isset($priceData['from'])) {
@@ -722,11 +751,15 @@ class ArticlesDbAdapter implements DataDbAdapter
                 }
 
                 if (!isset($priceData['price']) && empty($priceData['price'])) {
-                    throw new \Exception('Price value is incorrect for article with nubmer ' . $variant->getNumber());
+                    $message = SnippetsHelper::getNamespace()
+                                ->get('adapters/articles/incorrect_price', 'Price value is incorrect for article with nubmer %s');
+                    throw new \Exception($message . $variant->getNumber());
                 }
 
                 if ($priceData['from'] <= 0) {
-                    throw new \Exception(sprintf('Invalid Price "from" value'));
+                    $message = SnippetsHelper::getNamespace()
+                                ->get('adapters/articles/invalid_price', 'Invalid Price "from" value');
+                    throw new \Exception(sprintf($message));
                 }
                 
                 $oldPrice = $this->getPriceRepository()->findOneBy(
@@ -816,7 +849,9 @@ class ArticlesDbAdapter implements DataDbAdapter
                 );
 
                 if (!$categoryModel) {
-                    throw new \Exception(sprintf('Category with id %s could not be found.', $categoryData['categoryId']));
+                    $message = SnippetsHelper::getNamespace()
+                                ->get('adapters/articles/category_not_found', 'Category with id %s could not be found.');
+                    throw new \Exception(sprintf($message, $categoryData['categoryId']));
                 }
 
 
@@ -873,8 +908,8 @@ class ArticlesDbAdapter implements DataDbAdapter
 
                     if (!($media instanceof MediaModel)) {
                         continue;
-                        throw new \Exception(sprintf("Media by mediaId %s not found for article with number %s", 
-                                $imageData['mediaId'], $article->getMainDetail()->getNumber()));
+//                        throw new \Exception(sprintf("Media by mediaId %s not found for article with number %s", 
+//                                $imageData['mediaId'], $article->getMainDetail()->getNumber()));
                     }
                     
                     $imageModel = $this->createNewArticleImage($article, $media);
@@ -964,7 +999,9 @@ class ArticlesDbAdapter implements DataDbAdapter
                         ->findOneBy(array('number' => $similar['ordernumber']));
 
                 if (!$similarDetails) {
-                    throw new \Exception(sprintf('Accessory with ordernumber %s does NOT exists', $similar['ordernumber']));
+                    $message = SnippetsHelper::getNamespace()
+                                ->get('adapters/articles/similar_not_found', 'Similar with ordernumber %s does not exists');
+                    throw new \Exception(sprintf($message, $similar['ordernumber']));
                 }
 
                 $similar['similarId'] = $similarDetails->getArticle()->getId();
@@ -1007,7 +1044,9 @@ class ArticlesDbAdapter implements DataDbAdapter
                         ->findOneBy(array('number' => $accessory['ordernumber']));
 
                 if (!$accessoryDetails) {
-                    throw new \Exception(sprintf('Accessory with ordernumber %s does NOT exists', $accessory['ordernumber']));
+                    $message = SnippetsHelper::getNamespace()
+                                ->get('adapters/articles/accessory_not_found', 'Accessory with ordernumber %s does not exists');
+                    throw new \Exception(sprintf($message, $accessory['ordernumber']));
                 }
 
                 $accessory['accessoryId'] = $accessoryDetails->getArticle()->getId();
@@ -1086,7 +1125,9 @@ class ArticlesDbAdapter implements DataDbAdapter
                         ->getRepository('Shopware\Models\Article\Configurator\Group')
                         ->find($configurator['configGroupId']);
                 if (!$groupModel) {
-                    throw new \Exception(sprintf("ConfiguratorGroup by id %s not found", $configurator['configGroupId']));
+                    $message = SnippetsHelper::getNamespace()
+                                ->get('adapters/articles/configuratorGroup_not_found', 'ConfiguratorGroup by id %s not found');
+                    throw new \Exception(sprintf($message, $configurator['configGroupId']));
                 }
             } elseif (isset($configurator['configGroupName'])) {
                 $groupModel = $this->getManager()
@@ -1098,7 +1139,9 @@ class ArticlesDbAdapter implements DataDbAdapter
                     $groupModel->setPosition($groupPosition);
                 }
             } else {
-                throw new \Exception('At least the groupname is required');
+                $message = SnippetsHelper::getNamespace()
+                            ->get('adapters/articles/provide_groupname_groupid', 'Please provide groupname or groupId');
+                throw new \Exception($message);
             }
             
             //configurator option
@@ -1106,7 +1149,9 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $optionModel = $this->getManager()
                         ->find('Shopware\Models\Article\Configurator\Option', $configurator['configOptionId']);
                 if (!$optionModel) {
-                    throw new \Exception(sprintf("ConfiguratorOption by id %s not found", $configurator['configOptionId']));
+                    $message = SnippetsHelper::getNamespace()
+                                ->get('adapters/articles/config_option_not_found', 'ConfiguratorOption by id %s not found');
+                    throw new \Exception(sprintf($message, $configurator['configOptionId']));
                 }
             } else {
                 $optionModel = $this->getManager()
@@ -1174,7 +1219,9 @@ class ArticlesDbAdapter implements DataDbAdapter
 
             if (!$article->getConfiguratorSet()) {
                 $articleNumber = $article->getMainDetail()->getNumber();
-                throw new \Exception(sprintf('A configurator set has to be defined on article %s', $articleNumber));
+                $message = SnippetsHelper::getNamespace()
+                            ->get('adapters/articles/config_set_not_found', 'A configurator set has to be defined on article %s');
+                throw new \Exception(sprintf($message, $articleNumber));
             }
 
             $setOptions = $configuratorSet->getOptions();
@@ -1340,10 +1387,9 @@ class ArticlesDbAdapter implements DataDbAdapter
             $method = 'get' . ucfirst($property);
 
             if (!method_exists($entity, $method)) {
-                throw new \Exception(
-                    sprintf("Method %s not found on entity %s", $method, get_class($entity))
-                );
-                continue;
+                $message = SnippetsHelper::getNamespace()
+                            ->get('adapters/articles/method_not_found', 'Method %s not found on entity %s');
+                throw new \Exception(sprintf($message, $method, get_class($entity)));
             }
             if ($entity->$method() == $value) {
                 return $entity;
