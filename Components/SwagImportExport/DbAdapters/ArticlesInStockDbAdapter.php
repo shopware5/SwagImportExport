@@ -109,16 +109,16 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
         foreach ($records['default'] as $record) {
             
             if (empty($record['orderNumber'])) {
-                throw new \Exception('Order number is required');
-                //todo: log this result
-                continue;
+                $message = SnippetsHelper::getNamespace()
+                    ->get('adapters/articlesInStock/ordernumber_required', 'Order number is required');
+                throw new \Exception($message);
             }
             $articleDetail = $this->getRepository()->findOneBy(array("number" => $record['orderNumber']));
             
             if(!$articleDetail){
-                throw new \Exception(sprintf('Article with ordernumber: %s was not found', $record['orderNumber']));
-                //todo: log this result
-                continue;
+                $message = SnippetsHelper::getNamespace()
+                    ->get('adapters/articlesImages/article_not_found', 'Article with number %s does not exists.');
+                throw new \Exception(sprintf($message, $record['orderNumber']));
             }
             
             $inStock = (int) $record['inStock'];
