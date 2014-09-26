@@ -61,7 +61,7 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
      */
     public function getLabel()
     {
-        return 'Swag Import/Export';
+        return 'Shopware Import/Export';
     }
 
     /**
@@ -253,9 +253,9 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
     {
         $this->createMenuItem(
                 array(
-                    'label' => 'Swag Import Export',
+                    'label' => 'Import/Export',
                     'controller' => 'SwagImportExport',
-                    'class' => 'swag-import-export-icon',
+                    'class' => 'sprite-server--plus',
                     'action' => 'Index',
                     'active' => 1,
                     'parent' => $this->Menu()->findOneBy('label', 'Inhalte'),

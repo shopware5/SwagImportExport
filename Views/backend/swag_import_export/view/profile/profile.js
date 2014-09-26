@@ -217,28 +217,28 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
 					},
 					items: [{
 							itemId: 'createIteration',
-							text: 'New Iteration Node',
+							text: '{s name=newIterationNode}New iteration node{/s}',
                             disabled: true,
 							handler: function() {
                                 me.fireEvent('addNewIteration', me.treePanel, me.treeStore, me.selectedNodeId);
 							}
 						}, {
 							itemId: 'createChild',
-							text: 'New Node',
+							text: '{s name=newNode}New node{/s}',
                             disabled: true,
 							handler: function() {
                                 me.fireEvent('addNewNode', me.treePanel, me.treeStore, me.selectedNodeId);
 							}
 						}, {
 							itemId: 'createAttribute',
-							text: 'New Attribute',
+							text: '{s name=newAttribute}New attribute{/s}',
                             disabled: true,
 							handler: function() {
                                 me.fireEvent('addNewAttribute', me.treePanel, me.treeStore, me.selectedNodeId);
 							}
 						}, {
 							itemId: 'deleteSelected',
-							text: 'Delete',
+							text: '{s name=delete}delete{/s}',
                             disabled: true,
 							handler: function() {
 								me.fireEvent('deleteNode', me.treeStore, me.selectedNodeId, me.treePanel.getSelectionModel());
@@ -352,7 +352,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
 			},
 			items: [{
 					itemId: 'nodeName',
-					fieldLabel: 'Node Name',
+					fieldLabel: '{s name=nodeName}Node name{/s}',
 					hidden: true,
 					width: 400,
 					labelWidth: 150,
@@ -360,7 +360,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
 					allowBlank: false
 				}, {
 					itemId: 'swColumn',
-					fieldLabel: 'Shopware Column',
+					fieldLabel: '{s name=shopwareColumn}Shopware column{/s}',
 					hidden: true,
                     xtype: 'combobox',
                     editable: false,
@@ -375,11 +375,11 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
 					allowBlank: false
 				}, {
 					itemId: 'adapter',
-					fieldLabel: 'Adapter',
+					fieldLabel: '{s name=adapter}Adapter{/s}',
 					hidden: true,
                     xtype: 'combobox',
                     editable: false,
-                    emptyText: 'Select Column',
+                    emptyText: '{s name=selectColumn}Select column{/s}',
                     queryMode: 'local',
                     store: me.sectionStore,
                     valueField: 'id',
@@ -395,11 +395,11 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
                     }
 				}, {
 					itemId: 'parentKey',
-					fieldLabel: 'Parent Key',
+					fieldLabel: '{s name=parentKey}Parent key{/s}',
 					hidden: true,
                     xtype: 'combobox',
                     editable: false,
-                    emptyText: 'Select Column',
+                    emptyText: '{s name=selectColumn}Select column{/s}',
                     store: me.parentKeyStore,
                     valueField: 'id',
                     displayField: 'name',
@@ -417,7 +417,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
 						backgroundColor: '#F0F2F4'
 					},
 					items: ['->', {
-							text: 'Save',
+							text: '{s name=save}Save{/s}',
 							cls: 'primary',
 							action: 'swag-import-export-manager-profile-save',
 							handler: function() {
