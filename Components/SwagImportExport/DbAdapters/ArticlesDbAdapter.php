@@ -117,15 +117,15 @@ class ArticlesDbAdapter implements DataDbAdapter
 
         foreach ($result['price'] as &$record) {
             if ($record['taxInput']) {
-                $record['price'] = str_replace('.',',',round($record['price'] * (100 + $record['tax']) / 100, 2));
-                $record['pseudoPrice'] = str_replace('.',',',round($record['pseudoPrice'] * (100 + $record['tax']) / 100, 2));
+                $record['price'] = round($record['price'] * (100 + $record['tax']) / 100, 2);
+                $record['pseudoPrice'] = round($record['pseudoPrice'] * (100 + $record['tax']) / 100, 2);
             } else {
-                $record['price'] = str_replace('.',',',round($record['price'], 2));
-                $record['pseudoPrice'] = str_replace('.',',',  round($record['pseudoPrice'], 2));
+                $record['price'] = round($record['price'], 2);
+                $record['pseudoPrice'] = round($record['pseudoPrice'], 2);
             }
 
             if ($record['basePrice']) {
-                $record['basePrice'] = str_replace('.',',',round($record['basePrice'], 2));
+                $record['basePrice'] = round($record['basePrice'], 2);
             }
         }
         

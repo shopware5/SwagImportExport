@@ -77,7 +77,7 @@ class ValuesTransformer implements DataTransformerAdapter
         foreach ($this->config as $expression) {
             $conversions[$expression->getVariable()] = $expression->{$method}();
         }
-                
+
         if (!empty($conversions)) {
             foreach ($data as &$records) {
                 foreach ($records as &$record) {
@@ -85,7 +85,7 @@ class ValuesTransformer implements DataTransformerAdapter
                         if (isset($record[$variableName]) && !empty($conversion)) {  
                             $evalData = $this->evaluator->evaluate($conversion, $record);
                             if ($evalData) {
-                                $record[$variableName] = $this->evaluator->evaluate($conversion, $record);
+                                $record[$variableName] = $evalData;
                             }
                         }
                     }
