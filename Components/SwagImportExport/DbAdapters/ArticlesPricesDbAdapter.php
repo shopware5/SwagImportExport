@@ -151,7 +151,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
             $articleDetail = $this->getDetailRepository()->findOneBy(array("number" => $record['orderNumber']));
             if (!$articleDetail) {
                 $message = SnippetsHelper::getNamespace()
-                    ->get('adapters/articlesPrices/article_number_not_found', 'Article with order number %s doen not exists');
+                    ->get('adapters/article_number_not_found', 'Article with order number %s doen not exists');
                 throw new \Exception(sprintf($message, $record['orderNumber']));
             }
 

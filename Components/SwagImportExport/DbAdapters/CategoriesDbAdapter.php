@@ -63,11 +63,15 @@ class CategoriesDbAdapter implements DataDbAdapter
     public function read($ids, $columns)
     {
         if (!$ids && empty($ids)) {
-            throw new \Exception('Can not read categories without ids.');
+            $message = SnippetsHelper::getNamespace()
+                    ->get('adapters/categories/no_ids', 'Can not read categories without ids.');
+            throw new \Exception($message);
         }
 
         if (!$columns && empty($columns)) {
-            throw new \Exception('Can not read categories without column names.');
+            $message = SnippetsHelper::getNamespace()
+                    ->get('adapters/categories/no_column_names', 'Can not read categories without column names.');
+            throw new \Exception($message);
         }
 
         $manager = $this->getManager();
@@ -161,20 +165,22 @@ class CategoriesDbAdapter implements DataDbAdapter
         foreach ($records['default'] as $record) {
 
             if (!$record['parentId']) {
-                throw new \Exception('Parent id is required');
-                //todo: log this result
-                continue;
+                $message = SnippetsHelper::getNamespace()
+                    ->get('adapters/categories/parent_id_required', 'Parent category id is required');
+                throw new \Exception($message);
             }
 
             if (!$record['name']) {
-                throw new \Exception('Name is required');
-                //todo: log this result
-                continue;
+                $message = SnippetsHelper::getNamespace()
+                    ->get('adapters/categories/name_required', 'Category name is required');
+                throw new \Exception($message);
             }
             
             $parentCategory = $this->getRepository()->findOneBy(array('id' => $record['parentId']));
             if (!$parentCategory) {
-                throw new \Exception('Parent category does not exists.');
+                $message = SnippetsHelper::getNamespace()
+                    ->get('adapters/categories/parent_not_exists', 'Parent category does not exists.');
+                throw new \Exception($message);
             }
             
             $category = $this->getRepository()->findOneBy(array('id' => $record['id']));

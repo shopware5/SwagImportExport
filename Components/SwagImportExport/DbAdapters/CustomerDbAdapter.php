@@ -247,9 +247,9 @@ class CustomerDbAdapter implements DataDbAdapter
         foreach ($records['default'] as $record) {
 
             if (!$record['email']) {
-                throw new \Exception("User email is required field.");
-                //todo: log this result
-                continue;
+                $message = SnippetsHelper::getNamespace()
+                    ->get('adapters/customer/email_required', 'User email is required field.');
+                throw new \Exception($message);
             }
 
             $customer = $this->getRepository()->findOneBy(array('email' => $record['email']));
@@ -280,11 +280,15 @@ class CustomerDbAdapter implements DataDbAdapter
             }
 
             if (isset($record['password']) && !$record['password']) {
-                throw new \Exception('Password must be provided');
+                $message = SnippetsHelper::getNamespace()
+                    ->get('adapters/customer/password_required', 'Password must be provided');
+                throw new \Exception($message);
             }
 
             if (isset($record['password']) && (!isset($record['encoder']) || !$record['encoder'])) {
-                throw new \Exception('Password encoder must be provided');
+                $message = SnippetsHelper::getNamespace()
+                    ->get('adapters/customer/password_encoder_required', 'Password encoder must be provided');
+                throw new \Exception($message);
             }
 
             $customerData = $this->prepareCustomer($record);
@@ -344,7 +348,9 @@ class CustomerDbAdapter implements DataDbAdapter
                     ->getRepository('Shopware\Models\Customer\Group')
                     ->findOneBy(array('key' => $customerData['groupKey']));
             if (!$customerData['group']) {
-                throw new \Exception(sprintf("CustomerGroup by key %s not found", $customerData['groupKey']));
+                $message = SnippetsHelper::getNamespace()
+                    ->get('adapters/customerGroup_not_found', 'Customer Group by key %s not found');
+                throw new \Exception(sprintf($message, $customerData['groupKey']));
             }
         }
         

@@ -82,7 +82,9 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
         foreach ($records['default'] as $index => $record) {
 
             if (!isset($record['articleNumber'])) {
-                throw new \Exception('Article order number is required.');
+                $message = SnippetsHelper::getNamespace()
+                        ->get('adapters/ordernumber_required', 'Order number is required.');
+                throw new \Exception($message);
             }
             
             if (isset($record['languageId'])) {
@@ -90,13 +92,17 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
             }
             
             if (!$shop) {
-                throw new \Exception('Language does not exists');
+                $message = SnippetsHelper::getNamespace()
+                        ->get('adapters/articlesTranslations/lang_id_not_found', 'Language with id %s does not exists');
+                throw new \Exception($message);
             }
 
             $articleDetail = $this->getRepository()->findOneBy(array('number' => $record['articleNumber']));
 
             if (!$articleDetail) {
-                throw new \Exception('Article does not exists');
+                $message = SnippetsHelper::getNamespace()
+                    ->get('adapters/article_number_not_found', 'Article with order number %s doen not exists');
+                throw new \Exception(sprintf($message, $record['articleNumber']));
             }
 
             $articleId = (int) $articleDetail->getArticle()->getId();

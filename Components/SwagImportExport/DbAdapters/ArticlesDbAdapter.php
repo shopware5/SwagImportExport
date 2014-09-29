@@ -729,7 +729,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 /** @var CustomerGroup $customerGroup */
                 if (!$customerGroup instanceof CustomerGroup) {
                     $message = SnippetsHelper::getNamespace()
-                                ->get('adapters/articles/customerGroup_not_found', 'Customer Group by key %s not found');
+                                ->get('adapters/customerGroup_not_found', 'Customer Group by key %s not found');
                     throw new \Exception(sprintf($message, $priceData['priceGroup']));
                 }
 
