@@ -71,13 +71,13 @@ class ArticlesDbAdapter implements DataDbAdapter
     {
         if (!$ids && empty($ids)) {
             $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/articles/no_ids', 'Can not read articles without ids.');
+                        ->get('adapters/articles_no_ids', 'Can not read articles without ids.');
             throw new \Exception($message);
         }
 
         if (!$columns && empty($columns)) {
             $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/articles/no_columns', 'Can not read articles without column names.');
+                        ->get('adapters/articles_no_column_names', 'Can not read articles without column names.');
             throw new \Exception($message);
         }
         
@@ -398,7 +398,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             
             if (!isset($record['orderNumber']) && empty($record['orderNumber'])) {
                 $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/articles/ordernumber_required', 'Order number is required.');
+                        ->get('adapters/ordernumber_required', 'Order number is required.');
                 throw new \Exception($message);
             } 
             

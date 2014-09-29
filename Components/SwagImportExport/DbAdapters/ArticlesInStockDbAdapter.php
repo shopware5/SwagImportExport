@@ -110,7 +110,7 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
             
             if (empty($record['orderNumber'])) {
                 $message = SnippetsHelper::getNamespace()
-                    ->get('adapters/articlesInStock/ordernumber_required', 'Order number is required');
+                    ->get('adapters/ordernumber_required', 'Order number is required');
                 throw new \Exception($message);
             }
             $articleDetail = $this->getRepository()->findOneBy(array("number" => $record['orderNumber']));

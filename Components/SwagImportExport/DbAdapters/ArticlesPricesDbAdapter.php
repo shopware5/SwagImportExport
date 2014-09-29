@@ -48,11 +48,15 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
     public function read($ids, $columns)
     {
         if (!$ids && empty($ids)) {
-            throw new \Exception('Can not read articles without ids.');
+            $message = SnippetsHelper::getNamespace()
+                    ->get('adapters/articles_no_ids', 'Can not read articles without ids');
+            throw new \Exception($message);
         }
 
         if (!$columns && empty($columns)) {
-            throw new \Exception('Can not read articles without column names.');
+            $message = SnippetsHelper::getNamespace()
+                    ->get('adapters/articles_no_column_names', 'Can not read articles without column names.');
+            throw new \Exception($message);
         }
         
         $columns = array_merge(
@@ -127,8 +131,10 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
         foreach ($records['default'] as $record) {
 
             // maybe this should be required field
-            if (!isset($record['orderNumber']) || empty($record['orderNumber'])) { 
-                throw new \Exception('Order number is required');
+            if (!isset($record['orderNumber']) || empty($record['orderNumber'])) {
+                $message = SnippetsHelper::getNamespace()
+                    ->get('adapters/ordernumber_required', 'Can not read articles without column names.');
+                throw new \Exception($message);
             }
 
             if (empty($record['priceGroup'])) {
@@ -137,12 +143,16 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
             
             $customerGroup = $this->getGroupRepository()->findOneBy(array("key" => $record['priceGroup']));
             if (!$customerGroup) {
-                throw new \Exception(sprintf('Price group %s was not found', $record['priceGroup']));
+                $message = SnippetsHelper::getNamespace()
+                    ->get('adapters/articlesPrices/price_group_not_found', 'Price group %s was not found');
+                throw new \Exception(sprintf($message, $record['priceGroup']));
             }
             
             $articleDetail = $this->getDetailRepository()->findOneBy(array("number" => $record['orderNumber']));
             if (!$articleDetail) {
-                throw new \Exception(sprintf('Article with order number %s doen not exists', $record['orderNumber']));
+                $message = SnippetsHelper::getNamespace()
+                    ->get('adapters/articlesPrices/article_number_not_found', 'Article with order number %s doen not exists');
+                throw new \Exception(sprintf($message, $record['orderNumber']));
             }
 
             if (empty($record['from'])) {
@@ -162,11 +172,15 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
             $tax = $articleDetail->getArticle()->getTax();
 
             if (empty($record['price']) && empty($record['percent'])) {
-                 throw new \Exception('Price or percent value is missing');
+                $message = SnippetsHelper::getNamespace()
+                    ->get('adapters/articlesPrices/price_percent_val_missing', 'Price or percent value is missing');
+                throw new \Exception($message);
             }
 
             if ($record['from'] <= 1 && empty($record['price'])) {
-                throw new \Exception('Price value is missing');
+                $message = SnippetsHelper::getNamespace()
+                    ->get('adapters/articlesPrices/price_val_missing', 'Price value is missing');
+                throw new \Exception($message);
             }
 
             if (isset($record['price'])) {
