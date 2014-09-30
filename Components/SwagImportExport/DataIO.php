@@ -4,6 +4,7 @@ namespace Shopware\Components\SwagImportExport;
 
 use \Shopware\Components\SwagImportExport\Profile\Profile;
 use \Shopware\CustomModels\ImportExport\Profile as ProfileEntity;
+use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
 
 class DataIO
 {
@@ -211,7 +212,9 @@ class DataIO
     public function createDirectory($path)
     {
         if (!mkdir($path, 0777, true)) {
-            throw new \Exception("Failed to create directory $path");
+            $message = SnippetsHelper::getNamespace()
+                        ->get('dataio/no_profile', 'Failed to create directory %s');
+            throw new \Exception(sprintf($message, $path));
         }
     }
 
@@ -236,7 +239,9 @@ class DataIO
                 $ids = $this->preloadRecordIds()->getRecordIds();
 
                 if (empty($ids)) {
-                     throw new \Exception('There is nothing to export');
+                    $message = SnippetsHelper::getNamespace()
+                                ->get('dataio/no_export_records', 'No records found to be exported');
+                    throw new \Exception($message);
                 }
 
                 $sessionData['serializedIds'] = serialize($ids);
@@ -247,7 +252,9 @@ class DataIO
                 break;
 
             default:
-                throw new \Exception('Session type '. $sessionData['type'] . ' is not valid');
+                $message = SnippetsHelper::getNamespace()
+                                ->get('dataio/session_type_not_valid', 'Session type %s is not valid');
+                throw new \Exception(sprintf($message, $sessionData['type']));
         }
         
         $session->start($profile, $sessionData);
@@ -385,7 +392,9 @@ class DataIO
         $storedIds = $this->getRecordIds();
         
         if ($storedIds === null || empty($storedIds)) {
-            throw new \Exception('No loaded records ids');
+            $message = SnippetsHelper::getNamespace()
+                        ->get('dataio/no_loaded_records', 'No loaded record ids');
+            throw new \Exception($message);
         }
         
         $end = $start + $numberOfRecords;

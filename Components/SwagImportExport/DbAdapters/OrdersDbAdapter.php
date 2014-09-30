@@ -3,6 +3,7 @@
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
 use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
+use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
 
 class OrdersDbAdapter implements DataDbAdapter
 {
@@ -91,11 +92,15 @@ class OrdersDbAdapter implements DataDbAdapter
     public function read($ids, $columns)
     {
         if (!$ids && empty($ids)) {
-            throw new \Exception('Can not read categories without ids.');
+            $message = SnippetsHelper::getNamespace()
+                    ->get('adapters/orders/no_ids', 'Can not read orders without ids.');
+            throw new \Exception($message);
         }
 
         if (!$columns && empty($columns)) {
-            throw new \Exception('Can not read categories without column names.');
+            $message = SnippetsHelper::getNamespace()
+                    ->get('adapters/orders/no_column_names', 'Can not read orders without column names.');
+            throw new \Exception($message);
         }
         
         $manager = $this->getManager();
@@ -137,20 +142,26 @@ class OrdersDbAdapter implements DataDbAdapter
         foreach ($records['default'] as $index => $record) {
 
             if ((!isset($record['orderId']) || !$record['orderId']) && (!isset($record['number']) || !$record['number']) && (!isset($record['orderDetailId']) || !$record['orderDetailId'])) {
-                throw new \Exception('Order number or order detail id must be provided');
+                $message = SnippetsHelper::getNamespace()
+                    ->get('adapters/orders/ordernumber_order_details_requires', 'Order number or order detail id must be provided');
+                throw new \Exception($message);
             }
 
             if (isset($record['orderDetailId']) && $record['orderDetailId']) {
                 $orderDetailModel = $this->getDetailRepository()->find($record['orderDetailId']);
 
                 if (!$orderDetailModel) {
-                    throw new \Exception(sprintf('Order detail id %s was not found', $record['orderDetailId']));
+                    $message = SnippetsHelper::getNamespace()
+                        ->get('adapters/orders/order_detail_id_not_found', 'Order detail id %s was not found');
+                    throw new \Exception(sprintf($message, $record['orderDetailId']));
                 }
             } else {
                 $orderDetailModel = $this->getDetailRepository()->findOneBy(array('number' => $record['number']));
 
                 if (!$orderDetailModel) {
-                    throw new \Exception(sprintf('Order with number %s was not found', $record['number']));
+                    $message = SnippetsHelper::getNamespace()
+                        ->get('adapters/orders/order_detail_id_not_found', 'Order detail id %s was not found');
+                    throw new \Exception(sprintf($message, $record['orderDetailId']));
                 }
             }
 
@@ -160,7 +171,9 @@ class OrdersDbAdapter implements DataDbAdapter
                 $paymentStatusModel = $this->getManager()->find('\Shopware\Models\Order\Status', $record['cleared']);
 
                 if (!$paymentStatusModel) {
-                    throw new \Exception(sprintf('Payment status id %s was not found', $record['cleared']));
+                    $message = SnippetsHelper::getNamespace()
+                        ->get('adapters/orders/payment_status_id_not_found', 'Payment status id %s was not found');
+                    throw new \Exception(sprintf($message, $record['cleared']));
                 }
 
                 $orderModel->setPaymentStatus($paymentStatusModel);
@@ -170,7 +183,9 @@ class OrdersDbAdapter implements DataDbAdapter
                 $orderStatusModel = $this->getManager()->find('\Shopware\Models\Order\Status', $record['status']);
 
                 if (!$orderStatusModel) {
-                    throw new \Exception(sprintf('Status %s was not found', $record['status']));
+                    $message = SnippetsHelper::getNamespace()
+                        ->get('adapters/orders/status_not_found', 'Status %s was not found');
+                    throw new \Exception(sprintf($message, $record['status']));
                 }
 
                 $orderModel->setOrderStatus($orderStatusModel);
@@ -208,7 +223,9 @@ class OrdersDbAdapter implements DataDbAdapter
                 $detailStatusModel = $this->getManager()->find('\Shopware\Models\Order\DetailStatus', $record['statusId']);
 
                 if (!$detailStatusModel) {
-                    throw new \Exception(sprintf('Detail status with id %s was not found', $record['statusId']));
+                    $message = SnippetsHelper::getNamespace()
+                        ->get('adapters/orders/detail_status_not_found', 'Detail status with id %s was not found');
+                    throw new \Exception(sprintf($message, $record['statusId']));
                 }
 
                 $orderDetailModel->setStatus($detailStatusModel);

@@ -22,36 +22,40 @@ class CsvFileReader implements FileReader
     public function readRecords($fileName, $position, $step)
     {
         $handle = fopen($fileName, 'r');
-        
+
         if ($handle === false) {
             throw new \Exception("Can not open file $fileName");
         }
-        
+
         $columnNames = fgetcsv($handle, 0, ';');
-        
+
+        //removes UTF-8 BOM
+        foreach ($columnNames as $index => $name) {
+            $columnNames[$index] = str_replace("\xEF\xBB\xBF", '', $name);
+        }
+
         $readRows = array();
         $frame = $position + $step;
         $counter = 0;
-        
+
         while ($row = fgetcsv($handle, 0, ';')) {
 
-            if ($counter >= $position && $counter < $frame ) {
-                
+            if ($counter >= $position && $counter < $frame) {
                 foreach ($columnNames as $key => $name) {
                     $data[$name] = isset($row[$key]) ? $row[$key] : '';
                 }
                 $readRows[] = $data;
             }
-            
-            if($counter > $frame){
+
+            if ($counter > $frame) {
                 break;
             }
-            
+
             $counter++;
         }
-        
+
         fclose($handle);
-        
+
         return $readRows;
     }
 
@@ -73,12 +77,21 @@ class CsvFileReader implements FileReader
      */
     public function getTotalCount($fileName)
     {
-        $file = file($fileName);
-        
+        $handle = fopen($fileName, 'r');
+
+        if ($handle === false) {
+            throw new \Exception("Can not open file $fileName");
+        }
+        $counter = 0;
+
+        while ($row = fgetcsv($handle, 0, ';')) {
+            $counter++;
+        }
+
+        fclose($handle);
+
         //removing first row /column names/
-        $totalRecords = count($file) - 1;
-        
-        return $totalRecords;
+        return $counter - 1;
     }
 
 }

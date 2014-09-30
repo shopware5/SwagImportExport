@@ -1,6 +1,7 @@
 <?php
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
+use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
 
 class ArticlesImagesDbAdapter implements DataDbAdapter
 {
@@ -58,11 +59,15 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
     public function read($ids, $columns)
     {
         if (!$ids && empty($ids)) {
-            throw new \Exception('Can not read article images without ids.');
+            $message = SnippetsHelper::getNamespace()
+                        ->get('adapters/articlesImages/no_article_images_ids', 'Can not read article images without ids.');
+            throw new \Exception($message);
         }
 
         if (!$columns && empty($columns)) {
-            throw new \Exception('Can not read article images without column names.');
+            $message = SnippetsHelper::getNamespace()
+                        ->get('adapters/articlesImages/no_article_images_column', 'Can not read article images without column names.');
+            throw new \Exception($message);
         }
 
         $manager = $this->getManager();
@@ -150,13 +155,17 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
 
         foreach ($records['default'] as $record) {
             if (empty($record['ordernumber']) || empty($record['image'])) {
-                throw new \Exception('Ordernumber and image are required');
+                $message = SnippetsHelper::getNamespace()
+                            ->get('adapters/articlesImages/ordernumber_image_required', 'Ordernumber and image are required');
+                throw new \Exception($message);
             }
 
             /** @var \Shopware\Models\Article\Detail $articleDetailModel */
             $articleDetailModel = $this->getArticleDetailRepository()->findOneBy(array('number' => $record['ordernumber']));
             if (!$articleDetailModel) {
-                throw new \Exception(sprintf('Article with number %s does not exists', $record['ordernumber']));
+                $message = SnippetsHelper::getNamespace()
+                            ->get('adapters/articlesImages/article_not_found', 'Article with number %s does not exists');
+                throw new \Exception(sprintf($message, $record['ordernumber']));
             }
 
             if (isset($record['relations']) && !empty($record['relations'])) {
@@ -374,13 +383,13 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
         $destPath = realpath($destPath);
 
         if (!file_exists($destPath)) {
-            throw new \InvalidArgumentException(
-            sprintf("Destination directory '%s' does not exist.", $destPath)
-            );
+            $message = SnippetsHelper::getNamespace()
+                        ->get('adapters/articlesImages/directory_not_found', 'Destination directory %s does not exist.');
+            throw new \Exception(sprintf($message, $destPath));
         } elseif (!is_writable($destPath)) {
-            throw new \InvalidArgumentException(
-            sprintf("Destination directory '%s' does not have write permissions.", $destPath)
-            );
+            $message = SnippetsHelper::getNamespace()
+                        ->get('adapters/articlesImages/directory_permissions', 'Destination directory %s does not have write permissions.');
+            throw new \Exception(sprintf($message, $destPath));
         }
 
         $urlArray = parse_url($url);
@@ -407,11 +416,15 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                 }
 
                 if (!$put_handle = fopen("$destPath/$filename", "w+")) {
-                    throw new \Exception("Could not open $destPath/$filename for writing");
+                    $message = SnippetsHelper::getNamespace()
+                                ->get('adapters/articlesImages/could_open_dir_file', 'Could not open %s/%s for writing');
+                    throw new \Exception(sprintf($message), $destPath, $filename);
                 }
 
                 if (!$get_handle = fopen($url, "r")) {
-                    throw new \Exception("Could not open $url for reading");
+                    $message = SnippetsHelper::getNamespace()
+                        ->get('adapters/articlesImages/could_open_url', 'Could not open %s for reading');
+                    throw new \Exception($message, $url);
                 }
                 while (!feof($get_handle)) {
                     fwrite($put_handle, fgets($get_handle, 4096));
@@ -421,8 +434,10 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
 
                 return "$destPath/$filename";
         }
-        throw new \InvalidArgumentException(
-        sprintf("Unsupported schema '%s'.", $urlArray['scheme'])
+        $message = SnippetsHelper::getNamespace()
+                    ->get('adapters/articlesImages/unsupported_schema', 'Unsupported schema %s.');
+        throw new \Exception(
+            sprintf("Unsupported schema '%s'.", $urlArray['scheme'])
         );
     }
 

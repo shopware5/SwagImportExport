@@ -23,6 +23,7 @@
  * our trademarks remain entirely with us.
  */
 
+use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
 /**
  * Shopware SwagImportExport Plugin - Bootstrap
  *
@@ -30,7 +31,7 @@
  * @package   Shopware\Components\Console\Command
  * @copyright Copyright (c) 2014, shopware AG (http://www.shopware.de)
  */
-class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Components_Plugin_Bootstrap
+final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
 
     /**
@@ -60,7 +61,7 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
      */
     public function getLabel()
     {
-        return 'Swag Import/Export';
+        return 'Shopware Import/Export';
     }
 
     /**
@@ -91,6 +92,8 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
      */
     public function install()
     {
+        $this->checkLicense();
+
         $this->createDatabase();
         $this->createMenu();
         $this->registerEvents();
@@ -252,9 +255,9 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
     {
         $this->createMenuItem(
                 array(
-                    'label' => 'Swag Import Export',
+                    'label' => 'Import/Export',
                     'controller' => 'SwagImportExport',
-                    'class' => 'swag-import-export-icon',
+                    'class' => 'sprite-server--plus',
                     'action' => 'Index',
                     'active' => 1,
                     'parent' => $this->Menu()->findOneBy('label', 'Inhalte'),
@@ -288,6 +291,7 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
      */
     public function getBackendController(Enlight_Event_EventArgs $args)
     {
+        $this->checkLicense();
         $this->registerMyNamespace();
 
         $this->Application()->Snippets()->addConfigDir(
@@ -330,6 +334,8 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
      */
     public function onAddConsoleCommand(Enlight_Event_EventArgs $args)
     {
+        $this->checkLicense();
+
         $this->registerMyNamespace();
         return new Doctrine\Common\Collections\ArrayCollection(array(
             new \Shopware\Commands\SwagImportExport\ImportCommand(),
@@ -346,6 +352,8 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
      */
     public function onRunImportCronJob(Shopware_Components_Cron_CronJob $job)
     {
+        $this->checkLicense();
+
         $this->registerMyNamespace();
         $files = scandir(Shopware()->DocPath() . 'files/import_cron/');
         
@@ -363,8 +371,10 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
                 try {
                     $profile = \Shopware\Components\SwagImportExport\Utils\CommandHelper::findProfileByName($file, $profileRepository);
 
-                    if ($profile === FALSE) {
-                        throw new \Exception(sprintf('No profile found in file %s!', $file));
+                    if ($profile === false) {
+                        $message = SnippetsHelper::getNamespace()
+                            ->get('cronjob/no_profile', 'Failed to create directory %s');
+                        throw new \Exception(sprintf($message, $file));
                     }
 
                     $albumRepo = Shopware()->Models()->getRepository('Shopware\Models\Media\Album');
@@ -436,6 +446,78 @@ class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Compo
         }
         
         return true;
+    }
+
+    /**
+     * Check if a license for "core" or "MultiEdit" is available.
+     *
+     * @param bool $throwException
+     * @return bool
+     * @throws Exception
+     */
+    public function checkLicense($throwException = true)
+    {
+        $check1 = $this->checkLicenseCore(false);
+        $check2 = $this->checkLicenseImportExport(false);
+
+        if(!$check1 && !$check2 && $throwException) {
+            throw new Exception('License check for module "SwagImportExport" has failed.');
+        }
+
+        return $check1 || $check2;
+    }
+
+    public function checkLicenseImportExport($throwException = true)
+    {
+        try {
+            static $r, $m = 'SwagImportExport';
+            if(!isset($r)) {
+                $s = base64_decode('TMkkdQFC0KhFzejxL79Jc2fXZ5Q=');
+                $c = base64_decode('31wJZc+DkoCm4Hga/84/hwymQBE=');
+                $r = sha1(uniqid('', true), true);
+                /** @var $l Shopware_Components_License */
+                $l = $this->Application()->License();
+                $i = $l->getLicense($m, $r);
+                $t = $l->getCoreLicense();
+                $u = strlen($t) === 20 ? sha1($t . $s . $t, true) : 0;
+                $r = $i === sha1($c. $u . $r, true);
+            }
+            if(!$r && $throwException) {
+                throw new Exception('License check for module "' . $m . '" has failed.');
+            }
+            return $r;
+        } catch (Exception $e) {
+            if($throwException) {
+                throw new Exception('License check for module "' . $m . '" has failed.');
+            } else {
+                return false;
+            }
+        }
+    }
+
+    /**
+     * @param   bool $throwException
+     * @throws  Exception
+     * @return  bool
+     */
+    public function checkLicenseCore($throwException = true)
+    {
+        static $r, $m = 'SwagCommercial';
+        if(!isset($r)) {
+            $s = base64_decode('HxXzbjuwgns5D4TlHM+tV9K1svc=');
+            $c = base64_decode('IPF8Dvf0oWT0jMP4wlz1oZ9H+Lc=');
+            $r = sha1(uniqid('', true), true);
+            /** @var $l Shopware_Components_License */
+            $l = $this->Application()->License();
+            $i = $l->getLicense($m, $r);
+            $t = $l->getCoreLicense();
+            $u = strlen($t) === 20 ? sha1($t . $s . $t, true) : 0;
+            $r = $i === sha1($c. $u . $r, true);
+        }
+        if(!$r && $throwException) {
+            throw new Exception('License check for module "' . $m . '" has failed.');
+        }
+        return $r;
     }
 
 }

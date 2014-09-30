@@ -5,6 +5,7 @@ namespace Shopware\Components\SwagImportExport\DbAdapters;
 use Shopware\Models\Newsletter\Address;
 use Shopware\Models\Newsletter\Group;
 use Shopware\Models\Newsletter\ContactData;
+use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
 
 class NewsletterDbAdapter implements DataDbAdapter
 {
@@ -88,7 +89,9 @@ class NewsletterDbAdapter implements DataDbAdapter
         foreach ($records['default'] as $newsletterData) {
 
             if (empty($newsletterData['email'])) {
-                throw new \Exception('Email address is required');
+                $message = SnippetsHelper::getNamespace()
+                    ->get('adapters/newsletter/email_required', 'Email address is required');
+                throw new \Exception($message);
             }
 
 //            if (!$emailValidator->isValid($newsletterData['email'])) {
@@ -106,7 +109,9 @@ class NewsletterDbAdapter implements DataDbAdapter
             } elseif (!$group && $groupId = Shopware()->Config()->get("sNEWSLETTERDEFAULTGROUP")) {
                 $group = $this->getGroupRepository()->findOneBy($groupId);
             } elseif (!$group) {
-                throw new \Exception('Group is required');
+                $message = SnippetsHelper::getNamespace()
+                    ->get('adapters/newsletter/group_required', 'Group is required');
+                throw new \Exception($message);
             }
             
             // Create/Update the Address entry

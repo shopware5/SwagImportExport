@@ -41,7 +41,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
     bodyPadding: 10,
     autoScroll: true,
     snippets: {
-        configText: '{s name=wag_import_export/export/config_text}Depending on the data set you want to export, additional configuration options may needs to be set{/s}',
+        configText: '{s name=swag_import_export/export/config_text}Depending on the data set you want to export, additional configuration options may needs to be set{/s}',
         exportButton: '{s name=swag_import_export/export/export_button}Export{/s}',
         fieldsetMain: '{s name=swag_import_export/export/fieldset_main}Export configuration{/s}',
         fieldsetAdditional: '{s name=swag_import_export/export/fieldset_additional}Additional export configuration{/s}',
