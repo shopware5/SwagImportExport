@@ -25,54 +25,106 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
         return array(
             'd.ordernumber as articleNumber',
             't.languageID as languageId',
-            't.name as title',
+            't.name as name',
             't.keywords as keywords',
             't.description as description',
             't.description_long as descriptionLong',
-            't.description_clear as descriptionClear',
-            't.attr1 as attr1',
-            't.attr2 as attr2',
-            't.attr3 as attr3',
-            't.attr4 as attr4',
-            't.attr5 as attr5',
+            't.metaTitle',
         );
     }
 
     public function readRecordIds($start, $limit, $filter)
     {
-        $query = "SELECT id FROM s_articles_translations";
+        $manager = $this->getManager();
 
-        $stmt = $this->getDb()->query($query);
+        $builder = $manager->createQueryBuilder();
 
-        $records = $stmt->fetchAll();
+        $builder->select('t.id');
+        $builder->from('Shopware\Models\Translation\Translation', 't')
+                ->leftJoin('Shopware\Models\Article\Article', 'article', \Doctrine\ORM\Query\Expr\Join::WITH, 'article.id=t.key')
+                ->join('article.details', 'detail')
+                ->where("t.type = 'article'")
+                ->andWhere('detail.kind = 1');
 
-        $result = array();
-        if ($records) {
-            foreach ($records as $value) {
-                $result[] = $value['id'];
-            }
-        }
+        $builder->setFirstResult($start)
+                ->setMaxResults($limit);
+
+        $records = $builder->getQuery()->getResult();
+
+        $result = array_map(
+                function($item){
+                    return $item['id'];
+                }, $records
+        );
 
         return $result;
     }
 
     public function read($ids, $columns)
     {
-        $columns = implode(',', $columns);
-        $ids = implode(',', $ids);
+        if (!$ids && empty($ids)) {
+            $message = SnippetsHelper::getNamespace()
+                    ->get('adapters/translations/no_ids', 'Can not read translations without ids.');
+            throw new \Exception($message);
+        }
 
-        $query = "
-                SELECT $columns
-                FROM s_articles_translations as t
-                LEFT JOIN (s_articles as a) ON a.id = t.articleID
-                LEFT JOIN (s_articles_details as d) ON d.articleID = a.id
-                WHERE d.kind = 1 AND t.id IN ($ids)";
+        if (!$columns && empty($columns)) {
+            $message = SnippetsHelper::getNamespace()
+                    ->get('adapters/translations/no_column_names', 'Can not read translations without column names.');
+            throw new \Exception($message);
+        }
 
-        $stmt = $this->getDb()->query($query);
+        $manager = $this->getManager();
 
-        $result['default'] = $stmt->fetchAll();
+        $builder = $manager->createQueryBuilder();
+        $builder->select(array('detail.number as articleNumber', 't.data', 't.key as articleId ', 't.localeId as languageId'))
+                ->from('Shopware\Models\Translation\Translation', 't')
+                ->leftJoin('Shopware\Models\Article\Article', 'article', \Doctrine\ORM\Query\Expr\Join::WITH, 'article.id=t.key')
+                ->join('article.details', 'detail')
+                ->where('t.id IN (:ids)')
+                ->andWhere('detail.kind = 1')
+                ->setParameter('ids', $ids);
+
+        $translations = $builder->getQuery()->getResult();
+
+        $result['default'] = $this->prepareTranslations($translations);
 
         return $result;
+    }
+
+    /**
+     * Processing serialized object data 
+     *
+     * @param array $translations
+     * @return array
+     */
+    protected function prepareTranslations($translations)
+    {
+        $translationFields = array(
+            "txtArtikel" => "name",
+            "txtzusatztxt" => "additionaltext",
+            "txtshortdescription" => "description",
+            "txtlangbeschreibung" => "descriptionLong",
+            "txtkeywords" => "keywords",
+            "metaTitle" => "metaTitle"
+        );
+
+        if (!empty($translations)) {
+            foreach ($translations as $index => $translation) {
+                $objectdata = unserialize($translation['data']);
+
+                if (!empty($objectdata)) {
+                    foreach ($objectdata as $key => $value) {
+                        if (isset($translationFields[$key])) {
+                            $translations[$index][$translationFields[$key]] = $value;
+                        }
+                    }
+                    unset($translations[$index]['data']);
+                }
+            }
+        }
+
+        return $translations;
     }
 
     public function write($records)
@@ -133,7 +185,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
         
         $this->getDb()->query($query);
     }
-    
+
     protected function prepareValue($value)
     {
         $value = $value !== null ? ($value) : '';
@@ -195,7 +247,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
 
         return $this->manager;
     }
-    
+
     public function getDb()
     {
         if ($this->db === null) {

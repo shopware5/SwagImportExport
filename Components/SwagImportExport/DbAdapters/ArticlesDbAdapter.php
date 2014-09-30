@@ -269,7 +269,7 @@ class ArticlesDbAdapter implements DataDbAdapter
 //        return $row;
 //    }
     
-        public function prepareTranslationExport($ids)
+    public function prepareTranslationExport($ids)
     {
         //translations
         $translationFields = 'article.id as articleId, translation.objectdata, translation.objectlanguage as languageId';
