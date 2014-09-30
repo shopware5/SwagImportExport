@@ -5,6 +5,7 @@ namespace Shopware\Components\SwagImportExport\DbAdapters;
 use Shopware\Models\Customer\Customer;
 use Shopware\Components\SwagImportExport\Utils\DataHelper;
 use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
+use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
 
 class CustomerDbAdapter implements DataDbAdapter
 {

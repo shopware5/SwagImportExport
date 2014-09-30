@@ -5,6 +5,7 @@ namespace Shopware\Components\SwagImportExport\DbAdapters;
 use Shopware\Models\Newsletter\Address;
 use Shopware\Models\Newsletter\Group;
 use Shopware\Models\Newsletter\ContactData;
+use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
 
 class NewsletterDbAdapter implements DataDbAdapter
 {

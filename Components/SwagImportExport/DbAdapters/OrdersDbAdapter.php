@@ -3,6 +3,7 @@
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
 use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
+use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
 
 class OrdersDbAdapter implements DataDbAdapter
 {

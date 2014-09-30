@@ -4,6 +4,7 @@ namespace Shopware\Components\SwagImportExport\DbAdapters;
 
 use Shopware\Models\Category\Category;
 use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
+use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
 
 class CategoriesDbAdapter implements DataDbAdapter
 {

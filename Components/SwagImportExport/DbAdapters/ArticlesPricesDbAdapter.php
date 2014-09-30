@@ -1,6 +1,7 @@
 <?php
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
+use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
 
 class ArticlesPricesDbAdapter implements DataDbAdapter
 {
