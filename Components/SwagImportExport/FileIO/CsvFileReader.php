@@ -30,8 +30,8 @@ class CsvFileReader implements FileReader
         $columnNames = fgetcsv($handle, 0, ';');
 
         //removes UTF-8 BOM
-        foreach ($columnNames as &$name) {
-            $name = str_replace("\xEF\xBB\xBF", '', $name);
+        foreach ($columnNames as $index => $name) {
+            $columnNames[$index] = str_replace("\xEF\xBB\xBF", '', $name);
         }
 
         $readRows = array();
@@ -41,7 +41,6 @@ class CsvFileReader implements FileReader
         while ($row = fgetcsv($handle, 0, ';')) {
 
             if ($counter >= $position && $counter < $frame) {
-
                 foreach ($columnNames as $key => $name) {
                     $data[$name] = isset($row[$key]) ? $row[$key] : '';
                 }

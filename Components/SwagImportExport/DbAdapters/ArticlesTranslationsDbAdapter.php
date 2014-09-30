@@ -2,6 +2,8 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
+use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
+
 class ArticlesTranslationsDbAdapter implements DataDbAdapter
 {
 
@@ -14,11 +16,6 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
      * Shopware\Models\Article\Article
      */
     protected $repository;
-    
-    /**
-     * @return type
-     */
-    protected $db;
 
     public function getDefaultColumns()
     {
@@ -29,7 +26,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
             't.keywords as keywords',
             't.description as description',
             't.description_long as descriptionLong',
-            't.metaTitle',
+            't.metaTitle as metaTitle',
         );
     }
 
@@ -52,9 +49,9 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
         $records = $builder->getQuery()->getResult();
 
         $result = array_map(
-                function($item){
-                    return $item['id'];
-                }, $records
+            function($item) {
+                return $item['id'];
+            }, $records
         );
 
         return $result;
@@ -129,8 +126,21 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
 
     public function write($records)
     {
-        $queryValues = array();
-        
+        if ($records['default'] == null) {
+            return;
+        }
+
+        $whitelist = array(
+            'name',
+            'description',
+            'descriptionLong',
+            'keywords',
+            'metaTitle',
+            'packUnit'
+        );
+
+        $translationWriter = new \Shopware_Components_Translation();
+
         foreach ($records['default'] as $index => $record) {
 
             if (!isset($record['articleNumber'])) {
@@ -138,61 +148,31 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
                         ->get('adapters/ordernumber_required', 'Order number is required.');
                 throw new \Exception($message);
             }
-            
+
             if (isset($record['languageId'])) {
                 $shop = $this->getManager()->find('Shopware\Models\Shop\Shop', $record['languageId']);
             }
-            
+
             if (!$shop) {
                 $message = SnippetsHelper::getNamespace()
                         ->get('adapters/articlesTranslations/lang_id_not_found', 'Language with id %s does not exists');
-                throw new \Exception($message);
+                throw new \Exception(sprintf($message, $record['languageId']));
             }
 
             $articleDetail = $this->getRepository()->findOneBy(array('number' => $record['articleNumber']));
 
             if (!$articleDetail) {
                 $message = SnippetsHelper::getNamespace()
-                    ->get('adapters/article_number_not_found', 'Article with order number %s doen not exists');
+                        ->get('adapters/article_number_not_found', 'Article with order number %s doen not exists');
                 throw new \Exception(sprintf($message, $record['articleNumber']));
             }
 
+            $data = array_intersect_key($record, array_flip($whitelist));
+
             $articleId = (int) $articleDetail->getArticle()->getId();
-            $languageID = (int) $record['languageId'];
-            $name = $this->prepareValue($record['title']);
-            $description = $this->prepareValue($record['description']);
-            $descriptionLong = $this->prepareValue($record['descriptionLong']);
-            $keywords = $this->prepareValue($record['keywords']);
-            $descriptionClear = $this->prepareValue($record['descriptionClear']);
-            $attr1 = $this->prepareValue($record['attr1']);
-            $attr2 = $this->prepareValue($record['attr2']);
-            $attr3 = $this->prepareValue($record['attr3']);
-            $attr4 = $this->prepareValue($record['attr4']);
-            $attr5 = $this->prepareValue($record['attr5']);
-            
-            $value = "($articleId, $languageID, '$name', '$description', '$descriptionLong', '$keywords',
-                       '$descriptionClear', '$attr1', '$attr2', '$attr3', '$attr4', '$attr5' )";
-            $queryValues[] = $value;
 
-            unset($articleDetail);
+            $translationWriter->write($shop->getId(), 'article', $articleId, $data);
         }
-        
-        $queryValues = implode(',', $queryValues);
-        
-        $query = "REPLACE INTO s_articles_translations (articleID, languageID, name, description, description_long,
-                                                       keywords, description_clear, attr1, attr2, attr3, attr4, attr5) 
-                 VALUES $queryValues";
-        
-        $this->getDb()->query($query);
-    }
-
-    protected function prepareValue($value)
-    {
-        $value = $value !== null ? ($value) : '';
-        
-        $value = mysql_escape_string($value);
-        
-        return $value;
     }
 
     /**
@@ -246,15 +226,6 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
         }
 
         return $this->manager;
-    }
-
-    public function getDb()
-    {
-        if ($this->db === null) {
-            $this->db = Shopware()->Db();
-        }
-        
-        return $this->db;
     }
 
 }
