@@ -758,14 +758,23 @@ class FlattenTransformer implements DataTransformerAdapter
                 foreach ($node as $key => $configurator) {
                     $this->collectConfiguratorData($configurator, $configuratorFlatMapper, null, $configurator);
                 }
-                                
-                foreach ($this->getIterationTempData() as $tempData) {
+
+                $iterationTempData = $this->getIterationTempData();
+
+                foreach ($iterationTempData as $key => $tempData) {
                     if (is_array($tempData)) {
-                        $data = implode(',', $tempData);
-                        $this->saveTempData($data);
+                        if ($configuratorFlatMapper[$key] === 'configSetId'
+                            || $configuratorFlatMapper[$key] === 'configSetType'
+                            || $configuratorFlatMapper[$key] === 'configSetName'
+                        ) {
+                            $this->saveTempData($tempData[0]);
+                        } else {
+                            $data = implode(',', $tempData);
+                            $this->saveTempData($data);
+                        }
                     }
                 }
-                
+
                 unset($this->iterationTempData);
                 
             } elseif ($this->iterationParts[$path] == 'translation') {
