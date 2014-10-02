@@ -271,6 +271,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
             $this->getManager()->persist($price);
         }
         $this->getManager()->flush();
+        $this->getManager()->clear();
     }
     
     /**

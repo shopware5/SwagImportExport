@@ -258,7 +258,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                         )
                 );
             }
-
+            $this->getManager()->clear();
             unset($media);
             unset($image);
         }

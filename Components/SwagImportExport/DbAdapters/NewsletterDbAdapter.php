@@ -152,6 +152,7 @@ class NewsletterDbAdapter implements DataDbAdapter
         }
         
         $manager->flush();
+        $manager->clear();
     }
     
     /**

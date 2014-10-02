@@ -316,6 +316,8 @@ class CustomerDbAdapter implements DataDbAdapter
                 $whereUser = array('id=' . $customerId);
                 $db->update('s_user', $data, $whereUser);
             }
+
+            $manager->clear();
         }
     }
 

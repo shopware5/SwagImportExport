@@ -204,6 +204,7 @@ class CategoriesDbAdapter implements DataDbAdapter
             $metadata = $manager->getClassMetaData(get_class($category));
             $metadata->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);
             $manager->flush();
+            $manager->clear();
         }
     }
 
