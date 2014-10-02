@@ -23,7 +23,6 @@
  * our trademarks remain entirely with us.
  */
 
-use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
 /**
  * Shopware SwagImportExport Plugin - Bootstrap
  *
@@ -97,7 +96,6 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         $this->createDatabase();
         $this->createMenu();
         $this->registerEvents();
-        $this->registerCronJobs();
         $this->createDirectories();
 
         return true;
@@ -131,20 +129,6 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         );
         $this->Application()->Loader()->registerNamespace(
                 'Shopware\Commands', $this->Path() . 'Commands/'
-        );
-    }
-
-    /**
-     * Register cron jobs
-     */
-    private function registerCronJobs()
-    {
-        $this->createCronJob(
-                'ImportAction', 'ImportCron', 86400, true
-        );
-
-        $this->subscribeEvent(
-                'Shopware_CronJob_ImportCron', 'onRunImportCronJob'
         );
     }
     
@@ -281,6 +265,10 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         $this->subscribeEvent(
                 'Shopware_Console_Add_Command', 'onAddConsoleCommand'
         );
+        
+        $this->subscribeEvent(
+                'Enlight_Controller_Dispatcher_ControllerPath_Frontend_SwagImportExport', 'getFrontendController'
+        );
     }
 
     /**
@@ -304,7 +292,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
 
         return $this->Path() . '/Controllers/Backend/SwagImportExport.php';
     }
-
+    
     /**
      * Injects Ace Editor used in Conversions GUI
      * 
@@ -327,6 +315,20 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
     }
 
     /**
+     * Returns the path to the frontend controller.
+     *
+     * @param Enlight_Event_EventArgs $args
+     * @return string
+     */
+    public function getFrontendController(Enlight_Event_EventArgs $args)
+    {
+        $this->checkLicense();
+        $this->registerMyNamespace();
+
+        return $this->Path() . '/Controllers/Frontend/SwagImportExport.php';
+    }
+    
+    /**
      * Adds the console commands (sw:import and sw:export)
      * 
      * @param Enlight_Event_EventArgs $args
@@ -342,110 +344,6 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
             new \Shopware\Commands\SwagImportExport\ExportCommand(),
             new \Shopware\Commands\SwagImportExport\ProfilesCommand(),
         ));
-    }
-
-    /**
-     * Cronjob for import
-     * 
-     * @param Shopware_Components_Cron_CronJob $job
-     * @return boolean
-     */
-    public function onRunImportCronJob(Shopware_Components_Cron_CronJob $job)
-    {
-        $this->checkLicense();
-
-        $this->registerMyNamespace();
-        $files = scandir(Shopware()->DocPath() . 'files/import_cron/');
-        
-        if ($files === false) {
-            return false;
-        }
-        
-        $manager = Shopware()->Models();
-        
-        $profileRepository = $manager->getRepository('Shopware\CustomModels\ImportExport\Profile');
-        foreach($files as $file) {
-            $type = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-                
-            if ($type == 'xml' || $type == 'csv') {
-                try {
-                    $profile = \Shopware\Components\SwagImportExport\Utils\CommandHelper::findProfileByName($file, $profileRepository);
-
-                    if ($profile === false) {
-                        $message = SnippetsHelper::getNamespace()
-                            ->get('cronjob/no_profile', 'Failed to create directory %s');
-                        throw new \Exception(sprintf($message, $file));
-                    }
-
-                    $albumRepo = Shopware()->Models()->getRepository('Shopware\Models\Media\Album');
-                    $album = $albumRepo->findOneBy(array('name' => 'ImportFiles'));
-
-                    $filePath = Shopware()->DocPath() . 'files/import_cron/' . $file;
-                    $fileObject = new \Symfony\Component\HttpFoundation\File\File($filePath);
-
-                    if (!$album) {
-                        $album = new Shopware\Models\Media\Album();
-                        $album->setName('ImportFiles');
-                        $album->setPosition(0);
-                        Shopware()->Models()->persist($album);
-                        Shopware()->Models()->flush($album);
-                    }
-
-                    $media = new \Shopware\Models\Media\Media();
-
-                    $media->setAlbum($album);
-                    $media->setDescription('');
-                    $media->setCreated(new DateTime());
-                    $media->setExtension($type);
-
-                    $identity = Shopware()->Auth()->getIdentity();
-                    if ($identity !== null) {
-                        $media->setUserId($identity->id);
-                    } else {
-                        $media->setUserId(0);
-                    }
-
-                    //set the upload file into the model. The model saves the file to the directory
-                    $media->setFile($fileObject);
-
-                    Shopware()->Models()->persist($media);
-                    Shopware()->Models()->flush();
-
-                    $mediaPath = $media->getPath();
-
-                    $commandHelper = new \Shopware\Components\SwagImportExport\Utils\CommandHelper(array(
-                        'profileEntity' => $profile,
-                        'filePath' => $mediaPath,
-                        'format' => $type,
-                    ));
-                
-                } catch (\Exception $e) {
-                    echo $e->getMessage() . "\n";
-                    return;
-                }
-
-                try {
-                    $return = $commandHelper->prepareImport();
-                    $count = $return['count'];
-
-                    $return = $commandHelper->importAction();
-                    $position = $return['data']['position'];
-
-                    while ($position < $count) {
-                        $return = $commandHelper->importAction();
-                        $position = $return['data']['position'];
-                    }
-                    
-                } catch (\Exception $e) {
-                    // copy file as broken
-                    copy($mediaPath, Shopware()->DocPath() . 'files/import_export/broken-' . $file);
-                    echo $e->getMessage() . "\n";
-                    return ;
-                }
-            }
-        }
-        
-        return true;
     }
 
     /**
