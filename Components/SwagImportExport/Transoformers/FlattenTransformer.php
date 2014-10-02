@@ -290,10 +290,11 @@ class FlattenTransformer implements DataTransformerAdapter
                 
                 $configs = array();
                 
-                $values = explode(',', $this->getDataValue($data, $columnMapper['configOptionName']));
+                $separator = '|';
+                $values = explode($separator, $this->getDataValue($data, $columnMapper['configOptionName']));
 
                 if ($columnMapper['configSetName'] !== false) {
-                    $setNames = explode(',', $this->getDataValue($data, $columnMapper['configSetName']));
+                    $setNames = explode($separator, $this->getDataValue($data, $columnMapper['configSetName']));
                 }
                 
                 if (is_array($setNames)) {
@@ -769,7 +770,7 @@ class FlattenTransformer implements DataTransformerAdapter
                         ) {
                             $this->saveTempData($tempData[0]);
                         } else {
-                            $data = implode(',', $tempData);
+                            $data = implode('|', $tempData);
                             $this->saveTempData($data);
                         }
                     }
