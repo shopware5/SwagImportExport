@@ -45,6 +45,7 @@ class DbAdapterTest extends ImportExportTestHelper
 
         $rawData = $catDbAdapter->read($ids, $columns);
 
+        $rawData = $rawData['default'];
         foreach ($expected as $key1 => $value) {
             foreach ($value as $key2 => $val) {
                 $this->assertEquals($rawData[$key1][$key2], $val);
@@ -102,7 +103,7 @@ class DbAdapterTest extends ImportExportTestHelper
         $dataFactory = $this->Plugin()->getDataFactory();
 
         $catDbAdapter = $dataFactory->createDbAdapter($this->dbAdaptor);
-        $catDbAdapter->write(array($category));
+        $catDbAdapter->write($category);
 
         // Assert
         $queryTable = $this->getDatabaseTester()->getConnection()->createQueryTable(
@@ -135,7 +136,7 @@ class DbAdapterTest extends ImportExportTestHelper
         $dataFactory = $this->Plugin()->getDataFactory();
 
         $catDbAdapter = $dataFactory->createDbAdapter($this->dbAdaptor);
-        $catDbAdapter->write(array($category));
+        $catDbAdapter->write($category);
 
         // Assert
         $queryTable = $this->getDatabaseTester()->getConnection()->createQueryTable(
