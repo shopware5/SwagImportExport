@@ -82,6 +82,9 @@ class Session
             throw new \Exception('Invalid format.');
         }
         
+        //set username
+        $sessionEntity->setUserName($data['username']);
+        
         //set format
         $sessionEntity->setFormat($data['format']);
 
@@ -90,7 +93,7 @@ class Session
 
         //set profile
         $sessionEntity->setProfile($profile->getEntity());
-
+        
         $this->getManager()->persist($sessionEntity);
 
         $this->getManager()->flush();
@@ -155,12 +158,27 @@ class Session
     {
         $sessionEntity = $this->getEntity();
         $sessionEntity->setState('closed');
-
+        
         $this->getManager()->persist($sessionEntity);
 
         $this->getManager()->flush();
     }
 
+    /**
+     * Update session username
+     * 
+     * @param string $username
+     */
+    public function setUsername($username)
+    {
+        $sessionEntity = $this->getEntity();
+        
+        $sessionEntity->setUsername($username);
+        
+        $this->getManager()->persist($sessionEntity);
+        $this->getManager()->flush(); 
+    }
+    
     /**
      * Returns entity manager
      * 

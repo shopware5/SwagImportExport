@@ -71,7 +71,7 @@ class Shopware_Controllers_Frontend_SwagImportExport extends Enlight_Controller_
             $type = strtolower(pathinfo($file, PATHINFO_EXTENSION));
             if ($type == 'xml' || $type == 'csv') {
                 try {
-                    
+
                     $profile = \Shopware\Components\SwagImportExport\Utils\CommandHelper::findProfileByName($file, $profileRepository);
                     if ($profile === false) {
                         $message = SnippetsHelper::getNamespace()->get('cronjob/no_profile', 'Failed to create directory %s');
@@ -109,8 +109,9 @@ class Shopware_Controllers_Frontend_SwagImportExport extends Enlight_Controller_
                         'profileEntity' => $profile,
                         'filePath' => $mediaPath,
                         'format' => $type,
+                        'username' => 'Cron'
                     ));
-                
+
                 } catch (\Exception $e) {
                     echo $e->getMessage() . "\n";
                     return;

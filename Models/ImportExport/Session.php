@@ -91,6 +91,13 @@ class Session extends ModelEntity
     protected $totalCount;
 
     /**
+     * @var string $userName
+     *
+     * @ORM\Column(name="username", type="string", length=200, nullable=true)
+     */
+    protected $userName;
+    
+    /**
      * @var string $fileName
      *
      * @ORM\Column(name="file_name", type="string", length=200)
@@ -146,6 +153,11 @@ class Session extends ModelEntity
     public function getTotalCount()
     {
         return $this->totalCount;
+    }
+    
+    public function getUserName()
+    {
+        return $this->userName;
     }
 
     public function getFileName()
@@ -211,6 +223,11 @@ class Session extends ModelEntity
         $this->totalCount = $totalCount;
     }
 
+    public function setUserName($userName)
+    {
+        $this->userName = $userName;
+    }
+    
     public function setFileName($fileName)
     {
         $this->fileName = $fileName;

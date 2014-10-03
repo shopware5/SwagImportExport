@@ -47,6 +47,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Operation', {
         profile: '{s name=swag_import_export/column/profile}Profile{/s}',
         records: '{s name=swag_import_export/column/records}Records{/s}',
         totalCount: '{s name=swag_import_export/column/totalCount}Total count{/s}',
+        user: '{s name=swag_import_export/column/user}User{/s}',
         date: '{s name=swag_import_export/column/date}Date{/s}',
         status: '{s name=swag_import_export/column/status}Status{/s}',
         resume: '{s name=swag_import_export/action/resume}Resume operation{/s}',
@@ -122,6 +123,11 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Operation', {
                 header: me.snippets.totalCount,
                 dataIndex: 'totalCount',
                 flex: 1
+            },
+            {
+                header: me.snippets.user,
+                dataIndex: 'username',
+                flex: 2
             },
             {
                 xtype : 'datecolumn',

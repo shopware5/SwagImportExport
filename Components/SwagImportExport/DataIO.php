@@ -61,6 +61,13 @@ class DataIO
     private $fileName;
 
     /**
+     * Username made the action
+     * 
+     * @var string
+     */
+    private $username;
+    
+    /**
      * @var \Shopware\Components\SwagImportExport\Session\Session
      */
     private $dataSession;
@@ -246,9 +253,11 @@ class DataIO
 
                 $sessionData['serializedIds'] = serialize($ids);
                 $sessionData['totalCountedIds'] = count($ids);
+                $sessionData['username'] = $this->getUsername();
                 break;
             case 'import':
                 $sessionData['serializedIds'] = '';
+                $sessionData['username'] = $this->getUsername();
                 break;
 
             default:
@@ -280,6 +289,15 @@ class DataIO
         $this->getDataSession()->close();
     }
 
+    /**
+     * Change username for current session
+     */
+    public function usernameSession()
+    {
+        $username = $this->getUsername();
+        $this->getDataSession()->setUsername($username);
+    }
+    
     /**
      * Checks also the current position - if all the ids of the session are done, then the function does nothing.
      * Otherwise it sets the session state from "suspended" to "active", so that it is ready again for processing.
@@ -361,6 +379,16 @@ class DataIO
     public function setFileName($fileName)
     {
         $this->fileName = $fileName;
+    }
+    
+    public function getUsername()
+    {
+        return $this->username;
+    }
+    
+    public function setUsername($username)
+    {
+        $this->username = $username;
     }
     
     /**

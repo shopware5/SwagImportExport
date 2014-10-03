@@ -54,6 +54,7 @@ class ExportCommand extends ShopwareCommand
             'exportVariants' => $this->exportVariants,
             'limit' => $this->limit,
             'offset' => $this->offset,
+            'username' => 'Commandline'
         ));
 
         $output->writeln('<info>' . sprintf("Using profile: %s.", $this->profile) . '</info>');

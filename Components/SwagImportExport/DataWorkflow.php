@@ -157,7 +157,8 @@ class DataWorkflow
         if ($this->dataIO->getSessionState() == 'finished') {
             $this->dataIO->closeSession();
         }
-        
+        $this->dataIO->usernameSession();
+
         $postData['position'] = $this->dataIO->getSessionPosition();
 
         if (!$postData['sessionId']) {

@@ -16,6 +16,7 @@ class CommandHelper
     protected $exportVariants;
     protected $limit;
     protected $offset;
+    protected $username;
     
     //private
     protected $sessionId;
@@ -75,6 +76,9 @@ class CommandHelper
         if (isset($data['offset'])) {
             $this->offset = $data['offset'];
         }
+        if (isset($data['username'])) {
+            $this->username = $data['username'];
+        }
     }
     
     /**
@@ -118,7 +122,7 @@ class CommandHelper
         $format = $postData['format'];
 
         $dataIO->initialize($colOpts, $limit, $filter, $maxRecordCount, $type, $format);
-
+        
         $ids = $dataIO->preloadRecordIds()->getRecordIds();
 
         $position = $dataIO->getSessionPosition();
@@ -169,7 +173,8 @@ class CommandHelper
         $format = $postData['format'];
 
         $dataIO->initialize($colOpts, $limit, $filter, $type, $format, $maxRecordCount);
-
+        $dataIO->setUsername($this->username);
+        
         // we create the file writer that will write (partially) the result file
         $fileFactory = $this->Plugin()->getFileIOFactory();
         $fileHelper = $fileFactory->createFileHelper();
@@ -279,7 +284,8 @@ class CommandHelper
         $format = $postData['format'];
 
         $dataIO->initialize($colOpts, $limit, $filter, $type, $format, $maxRecordCount);
-
+        $dataIO->setUsername($this->username);
+        
         $dataTransformerChain = $this->Plugin()->getDataTransformerFactory()->createDataTransformerChain(
                 $profile, array('isTree' => $fileReader->hasTreeStructure())
         );
