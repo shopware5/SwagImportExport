@@ -130,6 +130,7 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
         }
         
         $manager->flush();
+        $manager->clear();
     }
     
     /**
