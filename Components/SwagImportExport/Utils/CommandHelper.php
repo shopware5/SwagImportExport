@@ -3,6 +3,7 @@
 namespace Shopware\Components\SwagImportExport\Utils;
 
 use Shopware\Components\SwagImportExport\DataWorkflow;
+use Shopware\Components\SwagImportExport\StatusLogger;
 
 class CommandHelper
 {
@@ -118,7 +119,7 @@ class CommandHelper
         $format = $postData['format'];
 
         $dataIO->initialize($colOpts, $limit, $filter, $maxRecordCount, $type, $format);
-
+        
         $ids = $dataIO->preloadRecordIds()->getRecordIds();
 
         $position = $dataIO->getSessionPosition();
@@ -169,7 +170,7 @@ class CommandHelper
         $format = $postData['format'];
 
         $dataIO->initialize($colOpts, $limit, $filter, $type, $format, $maxRecordCount);
-
+        
         // we create the file writer that will write (partially) the result file
         $fileFactory = $this->Plugin()->getFileIOFactory();
         $fileHelper = $fileFactory->createFileHelper();
@@ -279,20 +280,27 @@ class CommandHelper
         $format = $postData['format'];
 
         $dataIO->initialize($colOpts, $limit, $filter, $type, $format, $maxRecordCount);
-
+        
         $dataTransformerChain = $this->Plugin()->getDataTransformerFactory()->createDataTransformerChain(
                 $profile, array('isTree' => $fileReader->hasTreeStructure())
         );
 
         $dataWorkflow = new DataWorkflow($dataIO, $profile, $dataTransformerChain, $fileReader);
-
+        $logger = new StatusLogger();
+        
         try {
             $post = $dataWorkflow->import($postData, $inputFile);
             
             $this->sessionId = $post['sessionId'];
-
+            if ($dataSession->getTotalCount() > 0 && ($dataSession->getTotalCount() == $post['position'])) {
+                $message = $post['position'] . ' ' . $post['adapter'] . ' imported successfully';
+                $logger->write($message, 'false');
+            }
+            
             return array('success' => true, 'data' => $post);
         } catch (Exception $e) {
+            $logger->write($e->getMessage(), 'true');
+            
             return array('success' => false, 'msg' => $e->getMessage());
         }
     }
