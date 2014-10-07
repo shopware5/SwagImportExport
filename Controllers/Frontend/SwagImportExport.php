@@ -44,11 +44,9 @@ class Shopware_Controllers_Frontend_SwagImportExport extends Enlight_Controller_
      * Check for terminal call for cron action
      */
     public function preDispatch()
-    {
-        $server = $this->Request()->getServer();
-        
+    {       
         //Call cron only if request is not from browser
-        if ($this->Request()->getActionName() == 'cron' && !$server['HTTP_USER_AGENT']) {
+        if (php_sapi_name() == 'cli') {
             $this->cronAction();
         }
     }
