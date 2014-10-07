@@ -22,37 +22,7 @@ class CategoriesDbAdapterTest extends DbAdapterTest
                 dirname(__FILE__) . "/Database/categories.yml"
         );
     }
-
-//    public function testRawData()
-//    {
-//        $dataFactory = $this->Plugin()->getDataFactory();
-//        
-//        
-//        
-//        $profile = $this->Plugin()->getProfileFactory()->getProfileSerialized()->readProfile($params);
-//        $dataIO = $dataFactory->getDataIO($profile->getType(), $params);
-//        
-//        
-//                
-//        $dataIO->loadSession();
-//        
-//                
-//        $dataIO->read(100);
-//        $dataIO->read(50);
-//                
-//        
-//              
-//        
-//        
-//        
-//        
-//        $catergoriesDbAdapter = $dataFactory->createCategoriesDbAdapter();
-//        
-//        $rawData = $catergoriesDbAdapter->read(array(1,2,3));
-//
-//        $this->assertEquals(count($rawData), 62);
-//    }
-
+    
     /**
      * @dataProvider readProvider
      */

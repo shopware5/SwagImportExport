@@ -156,91 +156,97 @@ class ImportExportTest extends ImportExportTestHelper
     
     public function testXMLImportCycle()
     {
-        $expectedRecords = array(
-            array(
-                'id' => '3',
-                'name' => 'Deutsch',
-                'active' => '1',
-                'parentId' => '1',
-            ),
-            array(
-                'id' => '39',
-                'name' => 'English',
-                'active' => '1',
-                'parentId' => '1',
-            ),
-            array(
-                'id' => '9',
-                'name' => 'Freizeitwelten',
-                'active' => '1',
-                'parentId' => '3',
-            ),
-            array(
-                'id' => '8',
-                'name' => 'Wohnwelten',
-                'active' => '1',
-                'parentId' => '3',
-            ),
+        $expectedRecords = array( 
+            'default' =>array(
+                array(
+                    'id' => '3',
+                    'parentId' => '1',
+                    'name' => 'Deutsch',
+                    'metaKeywords' => 'Deutsch keywords',
+                    'metaDescription' => 'Deutsch metadescription',
+                    'active' => '1',
+                ),
+                array(
+                    'id' => '4',
+                    'parentId' => '1',
+                    'name' => 'English',
+                    'metaKeywords' => 'English keywords',
+                    'metaDescription' => 'English metadescription',
+                    'active' => '1',
+                ),
+                array(
+                    'id' => '5',
+                    'parentId' => '3',
+                    'name' => 'Beispiele',
+                    'metaKeywords' => 'Beispiele keywords',
+                    'metaDescription' => 'Beispiele metadescription',
+                    'active' => '0',
+                ),
+                array(
+                    'id' => '6',
+                    'parentId' => '4',
+                    'name' => 'News',
+                    'metaKeywords' => 'News keywords',
+                    'metaDescription' => 'News metadescription',
+                    'active' => '0',
+                )
+            )
         );
         
         $readData = array(
             array(
-                'Id' => '3',
-                'Description' => array(
-                    'Value' => 'Deutsch',
+                'categoryID' => '3',
+                'parentID' => '1',
+                'description' => array(
+                    '_value' => 'Deutsch',
                     '_attributes' => array(
-                        'Attribute2' => '1'
+                        'metakeywords' => 'Deutsch keywords'
                     )
                 ),
-                'Title' => 'Deutsch',
-                '_attributes' => array(
-                    'Attribute1' => '1'
-                )
+                'metadescription' => 'Deutsch metadescription',
+                'active' => '1',
             ),
             array(
-                'Id' => '39',
-                'Description' => array(
-                    'Value' => 'English',
+                'categoryID' => '4',
+                'parentID' => '1',
+                'description' => array(
+                    '_value' => 'English',
                     '_attributes' => array(
-                        'Attribute2' => '1'
+                        'metakeywords' => 'English keywords'
                     )
                 ),
-                'Title' => 'English',
-                '_attributes' => array(
-                    'Attribute1' => '1'
-                )
+                'metadescription' => 'English metadescription',
+                'active' => '1',
             ),
             array(
-                'Id' => '9',
-                'Description' => array(
-                    'Value' => 'Freizeitwelten',
+                'categoryID' => '5',
+                'parentID' => '3',
+                'description' => array(
+                    '_value' => 'Beispiele',
                     '_attributes' => array(
-                        'Attribute2' => '1'
+                        'metakeywords' => 'Beispiele keywords'
                     )
                 ),
-                'Title' => 'Freizeitwelten',
-                '_attributes' => array(
-                    'Attribute1' => '3'
-                )
+                'metadescription' => 'Beispiele metadescription',
+                'active' => '0',
             ),
             array(
-                'Id' => '8',
-                'Description' => array(
-                    'Value' => 'Wohnwelten',
+                'categoryID' => '6',
+                'parentID' => '4',
+                'description' => array(
+                    '_value' => 'News',
                     '_attributes' => array(
-                        'Attribute2' => '1'
+                        'metakeywords' => 'News keywords'
                     )
                 ),
-                'Title' => 'Wohnwelten',
-                '_attributes' => array(
-                    'Attribute1' => '3'
-                )
+                'metadescription' => 'News metadescription',
+                'active' => '0',
             ),
         );
         
         $profileData = array(
             array('exportConversion', 'TestExportConversion'),
-            array('tree', '{"name":"Root","children":[{"name":"Header","children":[{"name":"HeaderChild","shopwareField":""}]},{"name":"Categories","children":[{"name":"Category","type":"record","attributes":[{"name":"Attribute1","shopwareField":"parentId"}],"children":[{"name":"Id","shopwareField":"id"},{"name":"Description","shopwareField":"name","children":[{"name":"Value","shopwareField":"name"}],"attributes":[{"name":"Attribute2","shopwareField":"active"}]},{"name":"Title","shopwareField":"name"}]}]}],"id":"root"}')
+            array('tree', '{"id":"root","name":"Root","type":"node","children":[{"id":"537359399c80a","name":"Header","index":0,"type":"node","children":[{"id":"537385ed7c799","name":"HeaderChild","index":0,"type":"node","shopwareField":""}]},{"id":"537359399c8b7","name":"categories","index":1,"type":"node","children":[{"id":"537359399c90d","name":"category","index":0,"type":"iteration","adapter":"default","attributes":null,"children":[{"id":"53e9f539a997d","type":"leaf","index":0,"name":"categoryID","shopwareField":"id"},{"id":"53e0a853f1b98","type":"leaf","index":1,"name":"parentID","shopwareField":"parentId"},{"id":"53e0cf5cad595","type":"leaf","index":2,"name":"description","shopwareField":"name","attributes":[{"id":"542bc27379a9e","type":"attribute","index":0,"name":"metakeywords","shopwareField":"metaKeywords"}]},{"id":"53e0d17da1f06","type":"leaf","index":3,"name":"metadescription","shopwareField":"metaDescription"},{"id":"53e9f5f87c87a","type":"leaf","index":4,"name":"active","shopwareField":"active"}]}]}]}')
         );
 
         $params = array(

@@ -252,6 +252,7 @@ class OrdersDbAdapter implements DataDbAdapter
         }
 
         $this->getManager()->flush();
+        $this->getManager()->clear();
     }
 
     /**

@@ -514,7 +514,11 @@ class ArticlesDbAdapter implements DataDbAdapter
 
             $this->getManager()->flush();
 
-            $this->writeTranslations($records['translation'], $index, $articleModel->getId());
+            $articleId = $articleModel->getId();
+
+            $this->getManager()->clear();
+
+            $this->writeTranslations($records['translation'], $index, $articleId);
 
             unset($articleModel);
             unset($variantModel);
