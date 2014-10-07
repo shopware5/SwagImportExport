@@ -258,7 +258,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                         )
                 );
             }
-
+            $this->getManager()->clear();
             unset($media);
             unset($image);
         }
@@ -436,9 +436,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
         }
         $message = SnippetsHelper::getNamespace()
                     ->get('adapters/articlesImages/unsupported_schema', 'Unsupported schema %s.');
-        throw new \Exception(
-            sprintf("Unsupported schema '%s'.", $urlArray['scheme'])
-        );
+        throw new \Exception(sprintf($message, $urlArray['scheme']));
     }
 
 }

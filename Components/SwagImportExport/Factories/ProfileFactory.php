@@ -8,6 +8,8 @@ use Shopware\Components\SwagImportExport\Profile\ProfileSerializer;
 class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
 {
 
+    private $profileId;
+    private $profileEntity;
     private $profileRepository;
 
     public function loadProfile($params)
@@ -22,6 +24,8 @@ class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
             throw new \Exception('Profile does not exists');
         }
 
+        $this->profileId = $params['profileId'];
+
         return new Profile($profileEntity);
     }
 
@@ -33,6 +37,20 @@ class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
     public function createProfile()
     {
         
+    }
+
+    public function getProfileEntity()
+    {
+        if ($this->profileEntity == null) {
+            $this->profileEntity = $this->getProfileRepository()->findOneBy(array('id' => $this->getProfileId()));
+        }
+
+        return $this->profileEntity;
+    }
+
+    public function getProfileId()
+    {
+        return $this->profileId;
     }
 
     /**

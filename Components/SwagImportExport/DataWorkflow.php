@@ -88,9 +88,10 @@ class DataWorkflow
         }
         
         if ($this->dataIO->getSessionState() == 'active') {
+            $stepSize = 1000;
             // read a bunch of records into simple php array;
             // the count of records may be less than 100 if we are at the end of the read.
-            $data = $this->dataIO->read(1000);
+            $data = $this->dataIO->read($stepSize);
             
             // process that array with the full transformation chain
             $data = $this->transformerChain->transformForward($data);
@@ -100,7 +101,7 @@ class DataWorkflow
 
             // writing is successful, so we write the new position in the session;
             // if if the new position goes above the limits provided by the 
-            $this->dataIO->progressSession(1000);
+            $this->dataIO->progressSession($stepSize);
         }
         
         if ($this->dataIO->getSessionState() == 'finished') {
@@ -143,15 +144,17 @@ class DataWorkflow
 
         if ($this->dataIO->getSessionState() == 'active') {
             //get current session position
+            $stepSize = 50;
+
             $position = $this->dataIO->getSessionPosition();
 
-            $records = $this->fileIO->readRecords($inputFile, $position, 1);
+            $records = $this->fileIO->readRecords($inputFile, $position, $stepSize);
 
             $data = $this->transformerChain->transformBackward($records);
             
             $this->dataIO->write($data);
             
-            $this->dataIO->progressSession(1);
+            $this->dataIO->progressSession($stepSize);
         }
         
         if ($this->dataIO->getSessionState() == 'finished') {

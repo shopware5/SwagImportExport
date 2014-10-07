@@ -275,6 +275,8 @@ class FlattenTransformer implements DataTransformerAdapter
                     'configOptionName' => $this->findNodeByShopwareField($node, 'configOptionName'),
                     'configGroupName' => $this->findNodeByShopwareField($node, 'configGroupName'),
                     'configSetName' => $this->findNodeByShopwareField($node, 'configSetName'),
+                    'configSetId' => $this->findNodeByShopwareField($node, 'configSetId'),
+                    'configSetType' => $this->findNodeByShopwareField($node, 'configSetType'),
                 );
                 
                 if ($columnMapper['configOptionName'] === FALSE) {
@@ -290,23 +292,31 @@ class FlattenTransformer implements DataTransformerAdapter
                 
                 $configs = array();
                 
-                $values = explode(',', $this->getDataValue($data, $columnMapper['configOptionName']));
+                $separator = '|';
+                $values = explode($separator, $this->getDataValue($data, $columnMapper['configOptionName']));
+
+                if ($columnMapper['configSetId'] !== false) {
+                    $configSetId = explode($separator, $this->getDataValue($data, $columnMapper['configSetId']));
+                    $configSetId = $this->getFirstElement($configSetId);
+                }
+
+                if ($columnMapper['configSetType'] !== false) {
+                    $configSetType = explode($separator, $this->getDataValue($data, $columnMapper['configSetType']));
+                    $configSetType = $this->getFirstElement($configSetType);
+                }
 
                 if ($columnMapper['configSetName'] !== false) {
-                    $setNames = explode(',', $this->getDataValue($data, $columnMapper['configSetName']));
+                    $setNames = explode($separator, $this->getDataValue($data, $columnMapper['configSetName']));
+                    $setNames = $this->getFirstElement($setNames);
                 }
-                
-                if (is_array($setNames)) {
-                    $setName = $setNames[0];
-                } else {
-                    $setName = $setNames;
-                }
-               
+
                 for ($i = 0; $i < count($values); $i++) {
                     $value = explode(':', $values[$i]);
                     $configs[] = $this->transformConfiguratorToTree($node, array(
                         $columnMapper['configGroupName'] => $value[0],
                         $columnMapper['configOptionName'] => $value[1],
+                        $columnMapper['configSetId'] => $configSetId,
+                        $columnMapper['configSetType'] => $configSetType,
                         $columnMapper['configSetName'] => $setName
                     ));
                 }
@@ -398,6 +408,21 @@ class FlattenTransformer implements DataTransformerAdapter
         }
 
         return $currentNode;
+    }
+
+    /**
+     * Reurns first element of the array
+     * @param array $data
+     * @return string
+     */
+    public function getFirstElement($data)
+    {
+        if (is_array($data)) {
+            reset($data);
+            return current($data);
+        } else {
+            return $data;
+        }
     }
 
     /**
@@ -758,14 +783,23 @@ class FlattenTransformer implements DataTransformerAdapter
                 foreach ($node as $key => $configurator) {
                     $this->collectConfiguratorData($configurator, $configuratorFlatMapper, null, $configurator);
                 }
-                                
-                foreach ($this->getIterationTempData() as $tempData) {
+
+                $iterationTempData = $this->getIterationTempData();
+
+                foreach ($iterationTempData as $key => $tempData) {
                     if (is_array($tempData)) {
-                        $data = implode(',', $tempData);
-                        $this->saveTempData($data);
+                        if ($configuratorFlatMapper[$key] === 'configSetId'
+                            || $configuratorFlatMapper[$key] === 'configSetType'
+                            || $configuratorFlatMapper[$key] === 'configSetName'
+                        ) {
+                            $this->saveTempData($tempData[0]);
+                        } else {
+                            $data = implode('|', $tempData);
+                            $this->saveTempData($data);
+                        }
                     }
                 }
-                
+
                 unset($this->iterationTempData);
                 
             } elseif ($this->iterationParts[$path] == 'translation') {

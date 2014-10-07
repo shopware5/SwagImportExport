@@ -14,6 +14,10 @@ class Session
      */
     protected $sessionEntity;
 
+    protected $sessionRepository;
+
+    protected $sessionId;
+
     /**
      * @var \Shopware\Components\Model\ModelManager
      */
@@ -26,8 +30,9 @@ class Session
 
     public function __call($method, $arguments)
     {
-        if (method_exists($this->sessionEntity, $method)) {
-            return $this->sessionEntity->$method($arguments);
+        $sesion = $this->getEntity();
+        if (method_exists($sesion, $method)) {
+            return $sesion->$method($arguments);
         } else {
             throw new \Exception("Method $method does not exists.");
         }
@@ -40,7 +45,15 @@ class Session
      */
     public function getEntity()
     {
+        if ($this->sessionEntity === null) {
+            $this->getSessionRepository()->findOneBy(array('id' => $this->getSessionId()));
+        }
         return $this->sessionEntity;
+    }
+
+    public function getSesstionId()
+    {
+        return $this->sessionId;
     }
 
     /**
@@ -97,6 +110,8 @@ class Session
         $this->getManager()->persist($sessionEntity);
 
         $this->getManager()->flush();
+
+        $this->sessionId = $sessionEntity->getId();
     }
 
     /**
@@ -121,7 +136,7 @@ class Session
             $sessionEntity->setPosition($newPosition);
         }
 
-        $this->getManager()->persist($sessionEntity);
+        $this->getManager()->merge($sessionEntity);
 
         $this->getManager()->flush();
     }
@@ -158,8 +173,8 @@ class Session
     {
         $sessionEntity = $this->getEntity();
         $sessionEntity->setState('closed');
-        
-        $this->getManager()->persist($sessionEntity);
+
+        $this->getManager()->merge($sessionEntity);
 
         $this->getManager()->flush();
     }
@@ -195,7 +210,7 @@ class Session
 
     public function getSessionPosition()
     {
-        return $this->sessionEntity->getPosition();
+        return $this->getEntity()->getPosition();
     }
 
     /**
@@ -216,12 +231,25 @@ class Session
      */
     public function getState()
     {
-        return $this->sessionEntity->getState();
+        return $this->getEntity()->getState();
     }
 
     public function setTotalCount($totalCount)
     {
-        $this->sessionEntity->setTotalCount($totalCount);
+        $this->getEntity()->setTotalCount($totalCount);
+    }
+
+    /**
+     * Helper Method to get access to the session repository.
+     *
+     * @return Shopware\CustomModels\ImportExport\Session
+     */
+    public function getSessionRepository()
+    {
+        if ($this->sessionRepository === null) {
+            $this->sessionRepository = Shopware()->Models()->getRepository('Shopware\CustomModels\ImportExport\Session');
+        }
+        return $this->sessionRepository;
     }
 //    
 //    public function getFileName()

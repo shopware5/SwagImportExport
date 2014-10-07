@@ -184,16 +184,29 @@ class DataIO
         $profileName = $profile->getName();
         $profileName = str_replace(' ', '.', $profileName);
 
+        $hash = $this->generateRandomHash(8);
+
         $dateTime = new \DateTime('now');
 
         $fileName = $operationType . '.' . $adapterType . '.' .
-                $dateTime->format('Y.m.d.h.i.s') . '.' . $fileFormat;
+                $dateTime->format('Y.m.d.h.i.s') . '-'. $hash . '.' . $fileFormat;
 	  
         $this->setFileName($fileName);
 
         return $fileName;
     }
-    
+
+    /**
+     * Generates random hash depends on the lenght
+     *
+     * @param int $lenght
+     * @return string
+     */
+    public function generateRandomHash($lenght)
+    {
+        return substr(md5(uniqid()), 0, $lenght);
+    }
+
     /**
      * Returns directory of the import/export plugin
      * 

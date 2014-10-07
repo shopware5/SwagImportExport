@@ -745,7 +745,6 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
         try {
             $post = $dataWorkflow->import($postData, $inputFile);
-            
             if ($dataSession->getTotalCount() > 0 && ($dataSession->getTotalCount() == $post['position'])) {
                 $message = $post['position'] . ' ' . $post['adapter'] . ' imported successfully';
                 $logger->write($message, 'false');
