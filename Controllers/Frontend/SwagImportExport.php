@@ -41,30 +41,54 @@ class Shopware_Controllers_Frontend_SwagImportExport extends Enlight_Controller_
     }
     
     /**
+     * Check for terminal call for cron action
+     */
+    public function preDispatch()
+    {       
+        //Call cron only if request is not from browser
+        if (php_sapi_name() == 'cli') {
+            $this->cronAction();
+        }
+    }
+    
+    /**
      * Custom cronjob for import
      * 
      * @return boolean
      */
     public function cronAction()
-    {        
+    {
         $directory = Shopware()->DocPath() . 'files/import_cron/';
-        $files = scandir($directory);
-
+        $allFiles = scandir($directory);
+        $files = array_diff($allFiles, array('.', '..'));
+        
         $lockerFilename = '__running';
         $lockerFileLocation = $directory . $lockerFilename;
         
-        if ($files === false) {
-            return false;
+        if (in_array($lockerFilename, $files)) {
+            $file = fopen($lockerFileLocation, "r");
+            $fileContent = (int) fread($file, filesize($lockerFileLocation));
+            fclose($file);
+
+            if ($fileContent > time()) {
+                echo "There is runnig import at the moment\n";
+                return;
+            } else {
+                unlink($lockerFileLocation);
+            }
         }
         
-        if (in_array($lockerFilename, $files)) {
-            echo "There is runnig import at the moment";
+        if ($files === false || count($files) == 0) {
+            echo "No import files are found\n";
             return;
         }
         
         //Create empty file to flag cron as running
-        fopen($lockerFileLocation, "w");
-
+        $timeout = time() + 1800;
+        $file = fopen($lockerFileLocation, "w");
+        fwrite($file, $timeout);
+        fclose($file);
+        
         $manager = Shopware()->Models();
         $profileRepository = $manager->getRepository('Shopware\CustomModels\ImportExport\Profile');
         foreach($files as $file) {
@@ -114,6 +138,7 @@ class Shopware_Controllers_Frontend_SwagImportExport extends Enlight_Controller_
 
                 } catch (\Exception $e) {
                     echo $e->getMessage() . "\n";
+                    unlink($lockerFileLocation);
                     return;
                 }
 
@@ -129,11 +154,14 @@ class Shopware_Controllers_Frontend_SwagImportExport extends Enlight_Controller_
                         $position = $return['data']['position'];
                     }
                     
+                    $message = $return['data']['position'] . ' ' . $return['data']['adapter'] . ' imported successfully';
+                    echo $message;
                 } catch (\Exception $e) {
                     // copy file as broken
                     copy($mediaPath, Shopware()->DocPath() . 'files/import_export/broken-' . $file);
                     echo $e->getMessage() . "\n";
-                    return ;
+                    unlink($lockerFileLocation);
+                    return;
                 }
             }
         }

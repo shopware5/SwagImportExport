@@ -3,6 +3,7 @@
 namespace Shopware\Components\SwagImportExport\Utils;
 
 use Shopware\Components\SwagImportExport\DataWorkflow;
+use Shopware\Components\SwagImportExport\StatusLogger;
 
 class CommandHelper
 {
@@ -291,14 +292,21 @@ class CommandHelper
         );
 
         $dataWorkflow = new DataWorkflow($dataIO, $profile, $dataTransformerChain, $fileReader);
-
+        $logger = new StatusLogger();
+        
         try {
             $post = $dataWorkflow->import($postData, $inputFile);
             
             $this->sessionId = $post['sessionId'];
-
+            if ($dataSession->getTotalCount() > 0 && ($dataSession->getTotalCount() == $post['position'])) {
+                $message = $post['position'] . ' ' . $post['adapter'] . ' imported successfully';
+                $logger->write($message, 'false');
+            }
+            
             return array('success' => true, 'data' => $post);
         } catch (Exception $e) {
+            $logger->write($e->getMessage(), 'true');
+            
             return array('success' => false, 'msg' => $e->getMessage());
         }
     }
