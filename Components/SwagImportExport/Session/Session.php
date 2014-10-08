@@ -95,6 +95,9 @@ class Session
             throw new \Exception('Invalid format.');
         }
         
+        //set username
+        $sessionEntity->setUserName($data['username']);
+        
         //set format
         $sessionEntity->setFormat($data['format']);
 
@@ -103,7 +106,7 @@ class Session
 
         //set profile
         $sessionEntity->setProfile($profile->getEntity());
-
+        
         $this->getManager()->persist($sessionEntity);
 
         $this->getManager()->flush();
@@ -120,6 +123,7 @@ class Session
     public function progress($step)
     {
         $sessionEntity = $this->getEntity();
+
         $position = $sessionEntity->getPosition();
         $count = $sessionEntity->getTotalCount();
 
@@ -146,7 +150,7 @@ class Session
         $sessionEntity = $this->getEntity();
 
         $recordIds = $sessionEntity->getIds();
-
+        
         $sessionEntity->setState('active');
 
         $this->getManager()->persist($sessionEntity);
@@ -175,6 +179,21 @@ class Session
         $this->getManager()->flush();
     }
 
+    /**
+     * Update session username
+     * 
+     * @param string $username
+     */
+    public function setUsername($username)
+    {
+        $sessionEntity = $this->getEntity();
+        
+        $sessionEntity->setUsername($username);
+        
+        $this->getManager()->persist($sessionEntity);
+        $this->getManager()->flush(); 
+    }
+    
     /**
      * Returns entity manager
      * 

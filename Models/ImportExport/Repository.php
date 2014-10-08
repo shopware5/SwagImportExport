@@ -91,6 +91,7 @@ class Repository extends ModelRepository
             's.type as type',
             's.position as position',
             's.totalCount as totalCount',
+            's.userName as username',
             's.fileName as fileName',
             's.format as format',
             's.state as state',
@@ -111,7 +112,7 @@ class Repository extends ModelRepository
             $builder->setFirstResult($offset)
                     ->setMaxResults($limit);
         }
-        
+
         return $builder;
     }
     

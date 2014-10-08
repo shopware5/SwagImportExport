@@ -610,9 +610,11 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $maxRecordCount = $postData['max_record_count'];
         $type = $postData['type'];
         $format = $postData['format'];
-
+        $username = Shopware()->Auth()->getIdentity()->username;
+        
         $dataIO->initialize($colOpts, $limit, $filter, $type, $format, $maxRecordCount);
-
+        $dataIO->setUsername($username);
+        
         // we create the file writer that will write (partially) the result file
         $fileFactory = $this->Plugin()->getFileIOFactory();
         $fileHelper = $fileFactory->createFileHelper();
@@ -729,9 +731,11 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $maxRecordCount = $postData['max_record_count'];
         $type = $postData['type'];
         $format = $postData['format'];
-
+        $username = Shopware()->Auth()->getIdentity()->username;
+        
         $dataIO->initialize($colOpts, $limit, $filter, $type, $format, $maxRecordCount);
-
+        $dataIO->setUsername($username);
+        
         $dataTransformerChain = $this->Plugin()->getDataTransformerFactory()->createDataTransformerChain(
                 $profile, array('isTree' => $fileReader->hasTreeStructure())
         );

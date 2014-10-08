@@ -44,6 +44,7 @@ class ImportCommand extends ShopwareCommand
             'profileEntity' => $this->profileEntity,
             'filePath' => $this->filePath,
             'format' => $this->format,
+            'username' => 'Commandline'
         ));
 
         $output->writeln('<info>' . sprintf("Using profile: %s.", $this->profile) . '</info>');
