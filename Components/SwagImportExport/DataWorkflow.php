@@ -141,7 +141,7 @@ class DataWorkflow
             // session has already loaded ids and some position, so we simply activate it
             $this->dataIO->resumeSession();
         }
-
+        $this->dataIO->usernameSession();
         if ($this->dataIO->getSessionState() == 'active') {
             //get current session position
             $stepSize = 50;
@@ -160,7 +160,6 @@ class DataWorkflow
         if ($this->dataIO->getSessionState() == 'finished') {
             $this->dataIO->closeSession();
         }
-        $this->dataIO->usernameSession();
 
         $postData['position'] = $this->dataIO->getSessionPosition();
 
