@@ -103,14 +103,15 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                 $optionId = $split[1];
                 $name = $split[2];
                 $groupName = $split[3];
-
-                $out[$ruleId][] = "$groupName:$name";
+                if ($groupName && $name) {
+                    $out[$ruleId][] = "$groupName:$name";
+                }
             }
 
             $temp = array();
             foreach ($out as $group) {
                 $name = $group['name'];
-                $temp [] = "{" . implode(',', $group) . "}";
+                $temp [] = "{" . implode('|', $group) . "}";
             }
 
             $image['relations'] = implode('&', $temp);
@@ -173,11 +174,12 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                 $results = explode("&", $record['relations']);
 
                 $i = 0;
+
                 foreach ($results as $result) {
                     if ($result !== "") {
                         $result = preg_replace('/{|}/', '', $result);
 
-                        foreach (explode(',', $result) as $value) {
+                        foreach (explode('|', $result) as $value) {
                             list($group, $option) = explode(":", $value);
 
                             // Try to get given configurator group/option. Continue, if they don't exist
@@ -272,24 +274,72 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
      */
     protected function setImageMappings($relationGroups, $imageId)
     {
+        $query = $this->getArticleRepository()->getArticleImageDataQuery($imageId);
+        $image = $query->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
+        $imageData = $query->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+
         foreach ($relationGroups as $relationGroup) {
+            $optionCollection = array();
+
             foreach ($relationGroup as $relation) {
                 $optionModel = $relation['option'];
+                $optionCollection[] = $optionModel;
 
-                if (!$mappingID) {
-                    $this->getDb()->insert('s_article_img_mappings', array(
-                        'image_id' => $imageId
-                    ));
-                    $mappingID = $this->getDb()->lastInsertId();
+                if (!$mapping) {
+                    $mapping = new \Shopware\Models\Article\Image\Mapping();
                 }
 
-                $this->getDb()->insert('s_article_img_mapping_rules', array(
-                    'mapping_id' => $mappingID,
-                    'option_id' => $optionModel->getId()
-                ));
+                $rule = new \Shopware\Models\Article\Image\Rule();
+                $rule->setMapping($mapping);
+                $rule->setOption($optionModel);
+
+                $rules = $mapping->getRules()->add($rule);
+                $mapping->setRules($rules);
+                $mapping->setImage($image);
+
+                $this->getManager()->persist($mapping);
             }
-            unset($mappingID);
+
+            $this->createImagesForOptions($optionCollection, $imageData, $image);
+
+            unset($mapping);
         }
+    }
+
+    /**
+     * @param $options
+     * @param $imageData
+     * @param $parent \Shopware\Models\Article\Image
+     */
+    protected function createImagesForOptions($options, $imageData, $parent)
+    {
+        $articleId = $parent->getArticle()->getId();
+        $imageData['path'] = null;
+        $imageData['parent'] = $parent;
+
+        $join = '';
+        foreach ($options as $option) {
+            $alias = 'alias' . $option->getId();
+            $join = $join . ' INNER JOIN s_article_configurator_option_relations alias' . $option->getId() .
+                    ' ON ' . $alias . '.option_id = ' . $option->getId() .
+                    ' AND ' . $alias . '.article_id = d.id ';
+        }
+        $sql = "SELECT d.id
+                FROM s_articles_details d
+        " . $join . "
+        WHERE d.articleID = " . (int) $articleId;
+
+        $details = Shopware()->Db()->fetchCol($sql);
+
+        foreach ($details as $detailId) {
+            $detail = $this->getManager()->getReference('Shopware\Models\Article\Detail', $detailId);
+            $image = new \Shopware\Models\Article\Image();
+            $image->fromArray($imageData);
+            $image->setArticleDetail($detail);
+            $this->getManager()->persist($image);
+        }
+
+        $this->getManager()->flush();
     }
 
     /**
