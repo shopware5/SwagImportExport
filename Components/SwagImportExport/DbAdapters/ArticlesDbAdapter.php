@@ -1123,7 +1123,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             }
             
             //configurator group
-            $groupModel = $this->getConfiguratorGroup();
+            $groupModel = $this->getConfiguratorGroup($configurator);
             
             //configurator option
             if (isset($configurator['configOptionId'])) {
@@ -1299,6 +1299,22 @@ class ArticlesDbAdapter implements DataDbAdapter
                 || ($availableGroup->getId() == $groupData['id']) && $groupData['id'] !== null) {
 
                 return $availableGroup;
+            }
+        }
+
+        //Double check
+        //sometimes group name exist e.g. größe = grösse
+        if (isset($groupData['name'])) {
+            $groupModel = $this->getManager()
+                    ->getRepository('Shopware\Models\Article\Configurator\Group')
+                    ->findOneBy(array('name' => $groupData['name']));
+            if ($groupModel) {
+                $groupId = $groupModel->getId();
+                foreach ($availableGroups as $availableGroup) {
+                    if ($availableGroup->getId() == $groupId) {
+                        return $availableGroup;
+                    }
+                }
             }
         }
 
