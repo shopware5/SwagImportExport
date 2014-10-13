@@ -717,6 +717,9 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         //get profile type
         $postData['adapter'] = $profile->getType();
 
+        //setting up the batch size
+        $postData['batchSize'] = $profile->getType() === 'articlesImages' ? 1 : 50;
+
         $dataFactory = $this->Plugin()->getDataFactory();
 
         $dbAdapter = $dataFactory->createDbAdapter($profile->getType());

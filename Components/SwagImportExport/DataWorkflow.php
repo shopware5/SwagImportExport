@@ -144,17 +144,17 @@ class DataWorkflow
         $this->dataIO->usernameSession();
         if ($this->dataIO->getSessionState() == 'active') {
             //get current session position
-            $stepSize = 50;
+            $batchSize = (int) $postData['batchSize'];
 
             $position = $this->dataIO->getSessionPosition();
 
-            $records = $this->fileIO->readRecords($inputFile, $position, $stepSize);
+            $records = $this->fileIO->readRecords($inputFile, $position, $batchSize);
 
             $data = $this->transformerChain->transformBackward($records);
             
             $this->dataIO->write($data);
             
-            $this->dataIO->progressSession($stepSize);
+            $this->dataIO->progressSession($batchSize);
         }
         
         if ($this->dataIO->getSessionState() == 'finished') {
