@@ -115,4 +115,6 @@ Ext.define('Shopware.apps.SwagImportExport', {
         return this.getController('Main').mainWindow;
     }
 });
+    //{include file="backend/category/model/tree.js"}
+    //{include file="backend/category/store/tree.js"}
 //{/block}
