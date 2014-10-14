@@ -142,6 +142,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
                 format: me.parameters.format,
                 limit: me.parameters.limit,
                 offset: me.parameters.offset,
+                categories: me.parameters.category,
                 variants: me.parameters.variants,
                 ordernumberFrom: me.parameters.ordernumberFrom,
                 dateFrom: me.parameters.dateFrom,

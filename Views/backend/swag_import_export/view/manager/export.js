@@ -52,6 +52,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
         translations: '{s name=swag_import_export/export/translations}Include translations{/s}',
         limit: '{s name=swag_import_export/export/limit}Limit{/s}',
         offset: '{s name=swag_import_export/export/offset}Offset{/s}',
+        category: '{s name=swag_import_export/export/category}Category{/s}',
         orderNumberFrom:  '{s name=order_number_From}Ordernumber from{/s}',
         dateFrom:  '{s name=date_from}Date from{/s}',
         dateTo:  '{s name=date_to}Date to{/s}',
@@ -157,7 +158,8 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
                     items: [
                         me.createVariantsCheckbox(),
                         me.createLimit(),
-                        me.createOffset()
+                        me.createOffset(),
+                        me.createCategoryTreeCombo()
                     ]
                 }]
         });
@@ -300,6 +302,31 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
             name: 'format'
         });
     },
+
+    /**
+     * Returns category dropdown
+     * @returns [ Shopware.form.field.ComboTree ]
+     */
+    createCategoryTreeCombo: function () {
+        var me = this;
+
+        var treeStore = Ext.create('Shopware.apps.Category.store.Tree').load();
+
+        me.categoryTreeCombo = {
+            fieldLabel: me.snippets.category,
+            labelStyle: 'font-weight: 700; text-align: left;',
+            xtype: 'combotree',
+            allowBlank: true,
+            store: treeStore,
+            forceSelection: false,
+            width: me.configWidth,
+            labelWidth: me.configLabelWidth,
+            name: 'category'
+        };
+
+        return me.categoryTreeCombo;
+    },
+
     /*
      * Products variants checkbox
      * 

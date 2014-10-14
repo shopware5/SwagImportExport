@@ -479,7 +479,11 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         if ($variants) {
             $postData['filter']['variants'] = $variants;
         }
-        
+
+        if ($this->Request()->getParam('categories')) {
+            $postData['filter']['categories'] = array($this->Request()->getParam('categories'));
+        }
+
         //order filter
         if ($this->Request()->getParam('ordernumberFrom')) {
             $postData['filter']['ordernumberFrom'] = $this->Request()->getParam('ordernumberFrom');
@@ -566,7 +570,11 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         if ($variants) {
             $postData['filter']['variants'] = $variants;
         }
-        
+
+        if ($this->Request()->getParam('categories')) {
+            $postData['filter']['categories'] = array($this->Request()->getParam('categories'));
+        }
+
         //order filter
         if ($this->Request()->getParam('ordernumberFrom')) {
             $postData['filter']['ordernumberFrom'] = $this->Request()->getParam('ordernumberFrom');
