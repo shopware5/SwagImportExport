@@ -76,7 +76,6 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
         $builder->select($columns)
                 ->from('Shopware\Models\Article\Image', 'aimage')
                 ->innerJoin('aimage.article', 'article')
-                ->innerJoin('article.details', 'articleDetail')
                 ->leftJoin('Shopware\Models\Article\Detail', 'mv', \Doctrine\ORM\Query\Expr\Join::WITH, 'mv.articleId=article.id AND mv.kind=1')
                 ->leftJoin('aimage.mappings', 'im')
                 ->leftJoin('im.rules', 'mr')
@@ -93,7 +92,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                 continue;
             }
 
-            $relations = explode(',', $image['relations']);
+            $relations = explode(';', $image['relations']);
             $relations = array_unique($relations);
 
             $out = array();
@@ -138,7 +137,9 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
             'aimage.position as position',
             'aimage.width as width',
             'aimage.height as height',
-            "GroupConcat(im.id, '|', mr.optionId, '|' , co.name, '|', cg.name) as relations"
+            "GroupConcat( im.id, '|', mr.optionId, '|' , co.name, '|', cg.name
+            ORDER by im.id
+            SEPARATOR ';' ) AS relations"
         );
 
         return $columns;
@@ -420,7 +421,6 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
      * @param string $url URL of the resource that should be loaded (ftp, http, file)
      * @param string $baseFilename Optional: Instead of creating a hash, create a filename based on the given one
      * @return bool|string returns the absolute path of the downloaded file
-     * @throws \InvalidArgumentException
      * @throws \Exception
      */
     protected function load($url, $baseFilename = null)
@@ -473,8 +473,8 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
 
                 if (!$get_handle = fopen($url, "r")) {
                     $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/articlesImages/could_open_url', 'Could not open %s for reading');
-                    throw new \Exception($message, $url);
+                        ->get('adapters/articlesImages/could_not_open_url', 'Could not open %s for reading');
+                    throw new \Exception(sprintf($message, $url));
                 }
                 while (!feof($get_handle)) {
                     fwrite($put_handle, fgets($get_handle, 4096));
