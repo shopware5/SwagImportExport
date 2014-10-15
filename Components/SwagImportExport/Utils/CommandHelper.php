@@ -269,6 +269,9 @@ class CommandHelper
         //get profile type
         $postData['adapter'] = $profile->getType();
 
+        //setting up the batch size
+        $postData['batchSize'] = $profile->getType() === 'articlesImages' ? 1 : 50;
+        
         $dataFactory = $this->Plugin()->getDataFactory();
 
         $dbAdapter = $dataFactory->createDbAdapter($profile->getType());
