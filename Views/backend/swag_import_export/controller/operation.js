@@ -36,7 +36,15 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Operation', {
         failure: {
             title: '{s name=swag_import_export/operation/failure_title}Import/Export download{/s}',
             msg: '{s name=swag_import_export/operation/failure}File does not exists.{/s}'
+        },
+        messages: {
+            deleteOperationTitle: '{s name=swag_import_export/operation/delete_operations_tittle}Delete selected Operation(s)?{/s}',
+            deleteOperation: '{s name=swag_import_export/operation/delete_operations}Are you sure you want to delete the selected Operation(s)?{/s}',
+            successTitle: '{s name=swag_import_export/operation/success_title}Success{/s}',
+            deleteSuccess: '{s name=swag_import_export/operation/delete_success}The selected operation(s) have been removed{/s}',
+            growlMessage: '{s name=swag_import_export/operation/operation}Operation{/s}'
         }
+
     },
 	/**
      * This method creates listener for events fired from the export 
@@ -48,6 +56,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Operation', {
             // Export button
             'swag-import-export-manager-operation': {
                 deleteSession: me.onDeleteSession,
+                deleteMultipleSessions: me.onDeleteMultipleSessions,
                 downloadFile: me.onDownloadFile
             }
         });
@@ -95,6 +104,38 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Operation', {
                 }
             });
         });
+    },
+    /**
+     * @param records
+     */
+    onDeleteMultipleSessions: function (records, sessionStore) {
+        var me = this;
+
+        if (records.length > 0) {
+            //ask the user if he is sure.
+            Ext.MessageBox.confirm(
+                me.snippets.messages.deleteOperationTitle,
+                me.snippets.messages.deleteOperation,
+                function (response) {
+                    if (response !== 'yes') {
+                        return;
+                    }
+
+                    sessionStore.remove(records);
+                    sessionStore.sync({
+                        callback: function () {
+                            Shopware.Notification.createGrowlMessage(
+                                me.snippets.messages.successTitle,
+                                me.snippets.messages.deleteSuccess,
+                                me.snippets.growlMessage
+                            );
+                            //store.currentPage = 1;
+                            sessionStore.load();
+                        }
+                    });
+                }
+            );
+        }
     }
 });
 //{/block}

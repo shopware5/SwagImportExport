@@ -288,9 +288,9 @@ class DataIO
      * Updates the session position with the current position (stored in a member variable).
      *
      */
-    public function progressSession($step)
+    public function progressSession($step, $outputFileName)
     {
-        $this->getDataSession()->progress($step);        
+        $this->getDataSession()->progress($step, $outputFileName);
     }
 
     /**

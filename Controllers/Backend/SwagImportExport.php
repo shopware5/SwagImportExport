@@ -24,6 +24,7 @@
  */
 use Shopware\Components\SwagImportExport\DataWorkflow;
 use Shopware\Components\SwagImportExport\Utils\TreeHelper;
+use Shopware\Components\SwagImportExport\Utils\DataHelper;
 use Shopware\Components\SwagImportExport\StatusLogger;
 
 /**
@@ -774,8 +775,11 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $sessionRepository = $this->getSessionRepository();
 
         $query = $sessionRepository->getSessionsListQuery(
-                        $this->Request()->getParam('filter', array()), $this->Request()->getParam('sort', array()), $this->Request()->getParam('limit', 25), $this->Request()->getParam('start', 0)
-                )->getQuery();
+                $this->Request()->getParam('filter', array()),
+                $this->Request()->getParam('sort', array()),
+                $this->Request()->getParam('limit', 25),
+                $this->Request()->getParam('start', 0)
+        )->getQuery();
 
         $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
@@ -786,6 +790,10 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
         //returns the customer data
         $data = $paginator->getIterator()->getArrayCopy();
+
+        foreach ($data as $key => $row) {
+            $data[$key]['fileSize'] = DataHelper::formatFileSize($row['fileSize']);
+        }
 
         $this->View()->assign(array(
             'success' => true, 'data' => $data, 'total' => $total
@@ -799,19 +807,27 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
     public function deleteSessionAction()
     {
         try {
-            $sessionId = (int) $this->Request()->getParam('id');
+            $data = $this->Request()->getParam('data');
 
-            if (empty($sessionId) || !is_numeric($sessionId)) {
-                $this->View()->assign(array(
-                    'success' => false,
-                    'data' => $this->Request()->getParams(),
-                    'message' => 'No valid Id')
-                );
-                return;
+            if (is_array($data) && isset($data['id'])) {
+                $data = array($data);
             }
 
-            $entity = $this->getSessionRepository()->find($sessionId);
-            $this->getManager()->remove($entity);
+            foreach ($data as $record) {
+                $sessionId = $record['id'];
+
+                if (empty($sessionId) || !is_numeric($sessionId)) {
+                    $this->View()->assign(array(
+                        'success' => false,
+                        'data' => $this->Request()->getParams(),
+                        'message' => 'No valid Id')
+                    );
+                    return;
+                }
+
+                $entity = $this->getSessionRepository()->find($sessionId);
+                $this->getManager()->remove($entity);
+            }
 
             //Performs all of the collected actions.
             $this->getManager()->flush();

@@ -43,6 +43,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Operation', {
     },
     snippets: {
         file: '{s name=swag_import_export/column/file}File{/s}',
+        fileSize: '{s name=swag_import_export/column/file_size}File size{/s}',
         type: '{s name=swag_import_export/column/type}Type{/s}',
         profile: '{s name=swag_import_export/column/profile}Profile{/s}',
         records: '{s name=swag_import_export/column/records}Records{/s}',
@@ -52,7 +53,8 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Operation', {
         status: '{s name=swag_import_export/column/status}Status{/s}',
         resume: '{s name=swag_import_export/action/resume}Resume operation{/s}',
         download: '{s name=swag_import_export/action/download}Download file{/s}',
-        deleteFile: '{s name=swag_import_export/action/delete}Delete file{/s}'
+        deleteFile: '{s name=swag_import_export/action/delete}Delete file{/s}',
+        deleteOperations: '{s name=swag_import_export/action/delete_operation}Delete selected operation{/s}'
     },
     
     bodyPadding: 10,
@@ -73,12 +75,12 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Operation', {
      * Registers events in the event bus for firing events when needed
      */
     registerEvents: function() {
-        this.addEvents('deleteSession');
+        this.addEvents('deleteSession','deleteMultipleSessions');
     },
     createGrid: function() {
         var me = this;
 
-        return Ext.create('Ext.grid.Panel', {
+        me.sessionGrid =  Ext.create('Ext.grid.Panel', {
             title: me.snippets.panelTitle,
             id: 'operation-grid',
             store: me.sessionStore,
@@ -86,6 +88,8 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Operation', {
             viewConfig: {
                 enableTextSelection: true
             },
+            selModel: me.getGridSelModel(),
+            tbar: me.getToolbar(),
             columns: me.getColumns(),
             dockedItems: [me.getPagingBar()],
             features: [
@@ -94,7 +98,28 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Operation', {
                 }
             ]
         });
+
+        return me.sessionGrid;
     },
+
+    /**
+     * Creates the grid selection model for checkboxes
+     *
+     * @return [Ext.selection.CheckboxModel] grid selection model
+     */
+    getGridSelModel: function () {
+        var me = this;
+
+        return Ext.create('Ext.selection.CheckboxModel', {
+            listeners:{
+                // Unlocks the delete button if the user has checked at least one checkbox
+                selectionchange: function (sm, selections) {
+                    me.deleteButton.setDisabled(selections.length === 0);
+                }
+            }
+        });
+    },
+
     /**
      * Creates the grid columns
      *
@@ -107,12 +132,20 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Operation', {
             {
                 header: me.snippets.file,
                 dataIndex: 'fileName',
-                flex: 5
+                flex: 5,
+                renderer: function(value) {
+                    return '<a href={url action="downloadFile"}' + '/fileName/' + value + ' >' + value + '</a>';
+                }
             },
             {
                 header: me.snippets.type,
                 dataIndex: 'type',
                 flex: 1
+            },
+            {
+                header: me.snippets.profile,
+                dataIndex: 'profileName',
+                flex: 2
             },
             {
                 header: me.snippets.records,
@@ -123,6 +156,11 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Operation', {
                 header: me.snippets.totalCount,
                 dataIndex: 'totalCount',
                 flex: 1
+            },
+            {
+                header: me.snippets.fileSize,
+                dataIndex: 'fileSize',
+                flex: 2
             },
             {
                 header: me.snippets.user,
@@ -147,10 +185,10 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Operation', {
                  * clickable icons in each row
                  */
                 xtype: 'actioncolumn',
-                width: 90,
+                width: 60,
                 items: [
                     me.createResumeButton(),
-                    me.createDownloadFileButton(),
+//                    me.createDownloadFileButton(),
                     me.createDeleteSessionButton()
                 ],
                 renderer: function(value, appearance, record){
@@ -162,6 +200,36 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Operation', {
                 }
             }
         ];
+    },
+        /**
+     * Creates the grid toolbar
+     *
+     * @return [Ext.toolbar.Toolbar] grid toolbar
+     */
+    getToolbar: function() {
+        var me = this, buttons = [];
+
+        //creates the delete button to remove all selected esds in one request.
+        me.deleteButton = Ext.create('Ext.button.Button', {
+            iconCls:'sprite-minus-circle-frame',
+            text: me.snippets.deleteOperations,
+            disabled: true,
+            handler: function() {
+                var selectionModel = me.sessionGrid.getSelectionModel(),
+                    records = selectionModel.getSelection();
+
+                if (records.length > 0) {
+                    me.fireEvent('deleteMultipleSessions', records, me.sessionStore);
+                }
+            }
+        });
+
+        buttons.push(me.deleteButton);
+
+        return Ext.create('Ext.toolbar.Toolbar', {
+            ui: 'shopware-ui',
+            items: buttons
+        });
     },
     /**
      * Creates the paging toolbar for session grid and store paging. 
