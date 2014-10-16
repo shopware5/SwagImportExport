@@ -112,6 +112,13 @@ class Session extends ModelEntity
     protected $format;
 
     /**
+    * Filesize of the file in bytes
+    * @var integer $filesize
+    * @ORM\Column(name="file_size", type="integer", nullable=true)
+    */
+    protected $fileSize;
+
+    /**
      * @var boolean $state
      * 
      * @ORM\Column(name="state", type="string", length=100)
@@ -168,6 +175,11 @@ class Session extends ModelEntity
     public function getFormat()
     {
         $this->format;
+    }
+
+    public function getFileSize()
+    {
+        return $this->fileSize;
     }
 
     public function getState()
@@ -236,6 +248,11 @@ class Session extends ModelEntity
     public function setFormat($format)
     {
         $this->format = $format;
+    }
+
+    public function setFileSize($fileSize)
+    {
+        $this->fileSize = $fileSize;
     }
 
     public function setState($state)

@@ -88,12 +88,14 @@ class Repository extends ModelRepository
         $builder->select(array(
             's.id as id',
             'p.id as profileId',
+            'p.name as profileName',
             's.type as type',
             's.position as position',
             's.totalCount as totalCount',
             's.userName as username',
             's.fileName as fileName',
             's.format as format',
+            's.fileSize as fileSize',
             's.state as state',
             's.createdAt as createdAt',
         ));

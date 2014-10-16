@@ -101,7 +101,7 @@ class DataWorkflow
 
             // writing is successful, so we write the new position in the session;
             // if if the new position goes above the limits provided by the 
-            $this->dataIO->progressSession($stepSize);
+            $this->dataIO->progressSession($stepSize, $outputFileName);
         }
         
         if ($this->dataIO->getSessionState() == 'finished') {

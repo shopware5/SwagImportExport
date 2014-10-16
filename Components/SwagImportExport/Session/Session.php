@@ -118,9 +118,10 @@ class Session
      * Checks if the number of processed records has reached the current max records count.
      * If reached then the session state will be set to "stopped"
      * Updates the session position with the current position (stored in a member variable).
+     * Updates the file size of the output file
      *
      */
-    public function progress($step)
+    public function progress($step, $file = null)
     {
         $sessionEntity = $this->getEntity();
 
@@ -134,6 +135,11 @@ class Session
             $sessionEntity->setPosition($count);
         } else {
             $sessionEntity->setPosition($newPosition);
+        }
+
+        if ($file && file_exists($file)) {
+            $fileSize = sprintf('%u', filesize($file));
+            $sessionEntity->setFileSize($fileSize);
         }
 
         $this->getManager()->merge($sessionEntity);
