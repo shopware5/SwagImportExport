@@ -97,7 +97,8 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         $this->createMenu();
         $this->registerEvents();
         $this->createDirectories();
-
+        $this->createConfiguration();
+        
         return true;
     }
 
@@ -393,7 +394,31 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
             }
         }
     }
-
+    
+    /**
+     * Create plugin configuration
+     */
+    public function createConfiguration()
+    {
+        $form = $this->Form();
+        
+        $form->setElement(
+            'combo',
+            'SwagImportExportImageMode',
+            array(
+                'label' => 'Image import mode',
+                'store' => array(
+                    array(1, 'Re-use same article images'),
+                    array(2, 'Don\'t re-use article images')
+                ),
+                'required' => false,
+                'multiSelect' => false,
+                'value' => 2
+            )
+        );
+        
+    }
+    
     /**
      * @param   bool $throwException
      * @throws  Exception
@@ -418,5 +443,5 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         }
         return $r;
     }
-
+    
 }

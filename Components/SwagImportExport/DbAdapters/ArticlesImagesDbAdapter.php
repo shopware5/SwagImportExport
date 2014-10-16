@@ -152,6 +152,8 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
      */
     public function write($records)
     {
+        $imageImportMode = Shopware()->Config()->get('SwagImportExportImageMode');
+
         $configuratorGroupRepository = $this->getManager()->getRepository('Shopware\Models\Article\Configurator\Group');
         $configuratorOptionRepository = $this->getManager()->getRepository('Shopware\Models\Article\Configurator\Option');
 
@@ -209,34 +211,47 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
             $article = $articleDetailModel->getArticle();
 
             $name = pathinfo($record['image'], PATHINFO_FILENAME);
-            $path = $this->load($record['image'], $name);
-
-            $file = new \Symfony\Component\HttpFoundation\File\File($path);
-
-            $media = new \Shopware\Models\Media\Media();
-            $media->setAlbumId(-1);
-            $media->setAlbum($this->getManager()->find('Shopware\Models\Media\Album', -1));
-
-            $media->setFile($file);
-            $media->setName(pathinfo($record['image'], PATHINFO_FILENAME));
-            $media->setDescription('');
-            $media->setCreated(new \DateTime());
-            $media->setUserId(0);
-
-            $this->getManager()->persist($media);
-            $this->getManager()->flush();
-
-            if (empty($record['main'])) {
-                $record['main'] = 1;
+            $mediaExists = false;
+            
+            if ($imageImportMode == 1) {
+                $mediaRepo = $this->getManager()->getRepository('Shopware\Models\Media\Media');
+                $media = $mediaRepo->findOneBy(array('name' => $name));
+                if ($media) {
+                   $path = $media->getPath();
+                   $mediaExists = true;
+                }
             }
 
-            //generate thumbnails
-            if ($media->getType() == \Shopware\Models\Media\Media::TYPE_IMAGE) {
-                /*                 * @var $manager \Shopware\Components\Thumbnail\Manager */
-                $manager = Shopware()->Container()->get('thumbnail_manager');
-                $manager->createMediaThumbnail($media, array(), true);
-            }
+            if($imageImportMode == 2 || !$mediaExists) {
+                $path = $this->load($record['image'], $name);
 
+                $file = new \Symfony\Component\HttpFoundation\File\File($path);
+
+                $media = new \Shopware\Models\Media\Media();
+                $media->setAlbumId(-1);
+                $media->setAlbum($this->getManager()->find('Shopware\Models\Media\Album', -1));
+
+                $media->setFile($file);
+                $media->setName(pathinfo($record['image'], PATHINFO_FILENAME));
+                $media->setDescription('');
+                $media->setCreated(new \DateTime());
+                $media->setUserId(0);
+
+                $this->getManager()->persist($media);
+                $this->getManager()->flush();
+
+                if (empty($record['main'])) {
+                    $record['main'] = 1;
+                }
+
+                //generate thumbnails
+                if ($media->getType() == \Shopware\Models\Media\Media::TYPE_IMAGE) {
+                    /*                 * @var $manager \Shopware\Components\Thumbnail\Manager */
+                    $manager = Shopware()->Container()->get('thumbnail_manager');
+                    $manager->createMediaThumbnail($media, array(), true);
+                }
+            }
+            
             $image = new \Shopware\Models\Article\Image();
             $image->setArticle($article);
             $image->setDescription($record['description']);
@@ -449,20 +464,10 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
             case "http":
             case "https":
             case "file":
-                $counter = 1;
                 if ($baseFilename === null) {
                     $filename = md5(uniqid(rand(), true));
                 } else {
                     $filename = $baseFilename;
-                }
-
-                while (file_exists("$destPath/$filename")) {
-                    if ($baseFilename) {
-                        $filename = "$counter-$baseFilename";
-                        $counter++;
-                    } else {
-                        $filename = md5(uniqid(rand(), true));
-                    }
                 }
 
                 if (!$put_handle = fopen("$destPath/$filename", "w+")) {
