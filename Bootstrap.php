@@ -406,7 +406,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
             'combo',
             'SwagImportExportImageMode',
             array(
-                'label' => 'Voucher mode',
+                'label' => 'Image import mode',
                 'store' => array(
                     array(1, 'Re-use same article images'),
                     array(2, 'Don\'t re-use article images')
