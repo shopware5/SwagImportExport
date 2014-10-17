@@ -47,19 +47,23 @@ class ArticlesDbAdapter implements DataDbAdapter
                 ->orderBy('detail.kind', 'ASC');
         
         if ($filter['variants']) {
-            $builder->where('detail.kind <> 3');
+            $builder->andWhere('detail.kind <> 3');
         } else {
-            $builder->where('detail.kind = 1');
+            $builder->andWhere('detail.kind = 1');
         }
 
         if ($filter['categories']) {
+            $category = $this->getManager()->find('Shopware\Models\Category\Category', $filter['categories'][0]);
+
+            $this->collectCategoryIds($category);
+            $categories = $this->getCategoryIdCollection();
 
             $categoriesBuilder = $manager->createQueryBuilder();
             $categoriesBuilder->select('article.id')
                     ->from('Shopware\Models\Article\Article', 'article')
                     ->leftjoin('article.categories', 'categories')
                     ->where('categories.id IN (:cids)')
-                    ->setParameter('cids', $filter['categories'])
+                    ->setParameter('cids', $categories)
                     ->groupBy('article.id');
 
             $articleIds = array_map(function($item) {
@@ -67,7 +71,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             }, $categoriesBuilder->getQuery()->getResult());
 
             $builder->join('detail.article', 'article')
-                    ->where('article.id IN (:ids)')
+                    ->andWhere('article.id IN (:ids)')
                     ->setParameter('ids', $articleIds);
         }
 
@@ -1798,6 +1802,16 @@ class ArticlesDbAdapter implements DataDbAdapter
         return false;
     }
     
+    public function getCategoryIdCollection()
+    {
+        return $this->categoryIdCollection;
+    }
+
+    public function setCategoryIdCollection($categoryIdCollection)
+    {
+        $this->categoryIdCollection[] = $categoryIdCollection;
+    }
+
     /**
      * Returns article repository
      * 
@@ -1880,5 +1894,28 @@ class ArticlesDbAdapter implements DataDbAdapter
 
         return $this->manager;
     }
-    
+
+    /**
+     * Collects recursively category ids
+     *
+     * @param Shopware\Models\Category\Category $categoryModel
+     * @return
+     */
+    protected function collectCategoryIds($categoryModel)
+    {
+        $categoryId = $categoryModel->getId();
+        $this->setCategoryIdCollection($categoryId);
+        $categories = $categoryModel->getChildren();
+
+        if (!$categories) {
+            return;
+        }
+
+        foreach ($categories as $category) {
+            $this->collectCategoryIds($category);
+        }
+
+        return;
+    }
+
 }
