@@ -788,7 +788,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 if (!isset($priceData['price']) && empty($priceData['price'])) {
                     $message = SnippetsHelper::getNamespace()
                                 ->get('adapters/articles/incorrect_price', 'Price value is incorrect for article with nubmer %s');
-                    throw new \Exception($message . $variant->getNumber());
+                    throw new \Exception(sprintf($message . $variant->getNumber()));
                 }
 
                 if ($priceData['from'] <= 0) {
