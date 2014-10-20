@@ -519,7 +519,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                     }
                 }
                 
-                $prices = $this->preparePrices($records['price'], $index, $variantModel, $articleModel, $articleModel->getTax());
+                $prices = $this->preparePrices($records['price'], $index, $variantModel, $articleModel, $articleModel->getTax(), $updateFlag);
                 if ($prices) {
                     $variantModel->setPrices($prices);
                 }
@@ -738,8 +738,16 @@ class ArticlesDbAdapter implements DataDbAdapter
         return $variantModel;
     }
 
-    public function preparePrices(&$data, $variantIndex, $variant, ArticleModel $article, $tax)
+    public function preparePrices(&$data, $variantIndex, $variant, ArticleModel $article, $tax, $updateFlag = false)
     {
+        if ($data === null && $updateFlag){
+            return;
+        } else if ($data === null) {
+            $message = SnippetsHelper::getNamespace()
+                                ->get('adapters/articles/no_price_data', 'No price data found for article %s');
+            throw new \Exception(sprintf($message, $variant->getNumber()));
+        }
+
         $prices = array();
 
         foreach ($data as $index => $priceData) {
@@ -780,7 +788,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 if (!isset($priceData['price']) && empty($priceData['price'])) {
                     $message = SnippetsHelper::getNamespace()
                                 ->get('adapters/articles/incorrect_price', 'Price value is incorrect for article with nubmer %s');
-                    throw new \Exception($message . $variant->getNumber());
+                    throw new \Exception(sprintf($message . $variant->getNumber()));
                 }
 
                 if ($priceData['from'] <= 0) {
