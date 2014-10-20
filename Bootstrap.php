@@ -452,13 +452,13 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
     {
         $translations = array(
             'en_GB' => array(
-                'SwagCouponsPayments' => array(
+                'SwagImportExportImageMode' => array(
                     'label' => 'Image import mode'
                 )
             ),
             
             'de_DE' => array(
-                'SwagCouponsPayments' => array(
+                'SwagImportExportImageMode' => array(
                     'label' => 'Bildimport-Modus'
                 )
             ),
