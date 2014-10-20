@@ -393,7 +393,11 @@ class FlattenTransformer implements DataTransformerAdapter
 
             foreach ($node['children'] as $child) {
                 $currentPath = $nodePath . '/' .$child['name'];
-                $currentNode[$child['name']] = $this->transformToTree($child, $data, $currentPath);
+                $dataValue = $this->transformToTree($child, $data, $currentPath);
+
+                if ($dataValue !== null) {
+                    $currentNode[$child['name']] = $dataValue;
+                }
             }
         } else {
             if (isset($node['attributes'])) {
