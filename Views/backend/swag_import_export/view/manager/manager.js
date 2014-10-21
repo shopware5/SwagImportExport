@@ -62,13 +62,17 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Manager', {
         return Ext.create('Ext.tab.Panel', {
             name: 'manager-main-tab',
             items: [
+                /*{if {acl_is_allowed privilege=export}}*/
                 Ext.create('Shopware.apps.SwagImportExport.view.manager.Export', {
                     profilesStore: me.profilesStore,
                     sessionStore: me.sessionStore
                 }),
+                /*{/if}*/
+                /*{if {acl_is_allowed privilege=import}}*/
                 Ext.create('Shopware.apps.SwagImportExport.view.manager.Import', {
                     profilesStore: me.profilesStore
                 }),
+                /*{/if}*/
                 Ext.create('Shopware.apps.SwagImportExport.view.manager.Operation', {
                     sessionStore: me.sessionStore
                 })
