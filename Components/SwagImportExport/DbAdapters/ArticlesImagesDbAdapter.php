@@ -222,7 +222,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                 }
             }
 
-            if($imageImportMode == 2 || !$mediaExists) {
+            if($imageImportMode == 2 || $mediaExists == false) {
                 $path = $this->load($record['image'], $name);
 
                 $file = new \Symfony\Component\HttpFoundation\File\File($path);

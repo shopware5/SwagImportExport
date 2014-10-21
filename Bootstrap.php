@@ -419,6 +419,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
             )
         );
         
+        $this->createTranslations();
     }
     
     /**
@@ -446,6 +447,30 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         return $r;
     }
     
+    /**
+     * Translation for plugin configuration
+     */
+    public function createTranslations()
+    {
+        $translations = array(
+            'en_GB' => array(
+                'SwagImportExportImageMode' => array(
+                    'label' => 'Image import mode'
+                )
+            ),
+            
+            'de_DE' => array(
+                'SwagImportExportImageMode' => array(
+                    'label' => 'Bildimport-Modus'
+                )
+            ),
+        );
+
+        if ($this->assertMinimumVersion('4.2.2')) {
+            $this->addFormTranslations($translations);
+        }
+    }
+
     /**
      * add the acl resource
      */
