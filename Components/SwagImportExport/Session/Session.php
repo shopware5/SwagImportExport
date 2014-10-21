@@ -91,6 +91,10 @@ class Session
         //set fileName
         $sessionEntity->setFileName($data['fileName']);
 
+        if (isset($data['fileSize'])) {
+            $sessionEntity->setFileSize($data['fileSize']);
+        }
+
         if (!isset($data['format'])){
             throw new \Exception('Invalid format.');
         }

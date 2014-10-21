@@ -135,6 +135,7 @@ class DataWorkflow
         if ($this->dataIO->getSessionState() == 'new') {
             $totalCount = $this->fileIO->getTotalCount($inputFile);
             $this->dataIO->setFileName($postData['importFile']);
+            $this->dataIO->setFileSize(filesize($inputFile));
             $this->dataIO->getDataSession()->setTotalCount($totalCount);            
             $this->dataIO->startSession($this->profile);
         } else {
