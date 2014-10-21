@@ -98,6 +98,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         $this->registerEvents();
         $this->createDirectories();
         $this->createConfiguration();
+        $this->addACLResource();
         
         return true;
     }
@@ -110,7 +111,8 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
     public function uninstall()
     {
         $this->removeDatabaseTables();
-
+        $this->deleteACLResource();
+        
         return true;
     }
 
@@ -467,6 +469,29 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         if ($this->assertMinimumVersion('4.2.2')) {
             $this->addFormTranslations($translations);
         }
+    }
+
+    /**
+     * add the acl resource
+     */
+    protected function addACLResource() {
+        $sql = "
+            INSERT IGNORE INTO s_core_acl_resources (name) VALUES ('SwagImportExport');
+            INSERT IGNORE INTO s_core_acl_privileges (resourceID,name) VALUES ( (SELECT id FROM s_core_acl_resources WHERE name = 'SwagImportExport'), 'export');
+            INSERT IGNORE INTO s_core_acl_privileges (resourceID,name) VALUES ( (SELECT id FROM s_core_acl_resources WHERE name = 'SwagImportExport'), 'import');
+            UPDATE s_core_menu SET resourceID = (SELECT id FROM s_core_acl_resources WHERE name = 'SwagImportExport') WHERE name = 'SwagImportExport';
+        ";
+        Shopware()->Db()->query($sql, array());
+    }
+
+    /**
+     * deletes the acl resource
+     */
+    protected function deleteACLResource() {
+        $sql = "DELETE FROM s_core_acl_roles WHERE resourceID = (SELECT id FROM s_core_acl_resources WHERE name = 'SwagImportExport');
+                DELETE FROM s_core_acl_privileges WHERE resourceID = (SELECT id FROM s_core_acl_resources WHERE name = 'SwagImportExport');
+                DELETE FROM s_core_acl_resources WHERE name = 'SwagImportExport';";
+        Shopware()->Db()->query($sql, array());
     }
     
 }

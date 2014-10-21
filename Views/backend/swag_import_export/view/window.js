@@ -72,9 +72,11 @@ Ext.define('Shopware.apps.SwagImportExport.view.Window', {
                 Ext.create('Shopware.apps.SwagImportExport.view.manager.Manager', {
                     profilesStore: me.profilesStore
                 }),
+                /*{if {acl_is_allowed privilege=export}}*/
                 Ext.create('Shopware.apps.SwagImportExport.view.profile.Profile', {
                     profilesStore: me.profilesStore
                 }),
+                /*{/if}*/
                 Ext.create('Shopware.apps.SwagImportExport.view.log.Log', {
                     logStore: me.logStore
                 })
