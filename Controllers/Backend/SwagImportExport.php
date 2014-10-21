@@ -792,6 +792,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $data = $paginator->getIterator()->getArrayCopy();
 
         foreach ($data as $key => $row) {
+            $data[$key]['fileName'] = str_replace('media/unknown/', '', $row['fileName']);
             $data[$key]['fileSize'] = DataHelper::formatFileSize($row['fileSize']);
         }
 
@@ -888,10 +889,25 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
     public function downloadFileAction()
     {
         try {
-            $name = $this->Request()->getParam('fileName', null);
+            $fileName = $this->Request()->getParam('fileName', null);
+            $fileType = $this->Request()->getParam('type', null);
 
+            if ($fileName === null) {
+                throw new \Exception('File name must be provided');
+            }
 
-            $file = Shopware()->DocPath() . 'files/import_export/' . $name;
+            if ($fileType === null) {
+                throw new \Exception('File type must be provided');
+            }
+
+            //root directory
+            $root = Shopware()->DocPath();
+
+            if ($fileType === 'import') {
+                $file = $root . 'media/unknown/' . $fileName;
+            } else {
+                $file = $root . 'files/import_export/' . $fileName;
+            }
 
             //get file format
             $extension = pathinfo($file, PATHINFO_EXTENSION);
@@ -918,7 +934,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             $response = $this->Response();
             $response->setHeader('Cache-Control', 'public');
             $response->setHeader('Content-Description', 'File Transfer');
-            $response->setHeader('Content-disposition', 'attachment; filename=' . $name);
+            $response->setHeader('Content-disposition', 'attachment; filename=' . $fileName);
 
             $response->setHeader('Content-Type', $application);
             readfile($file);

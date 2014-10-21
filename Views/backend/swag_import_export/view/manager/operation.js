@@ -133,8 +133,8 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Operation', {
                 header: me.snippets.file,
                 dataIndex: 'fileName',
                 flex: 5,
-                renderer: function(value) {
-                    return '<a href={url action="downloadFile"}' + '/fileName/' + value + ' >' + value + '</a>';
+                renderer: function(value, view, record) {
+                    return '<a href={url action="downloadFile"}' + '/type/' + record.get('type') + '/fileName/' + value + ' >' + value + '</a>';
                 }
             },
             {
