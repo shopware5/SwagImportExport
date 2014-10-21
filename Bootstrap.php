@@ -476,10 +476,10 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
      */
     protected function addACLResource() {
         $sql = "
-            INSERT IGNORE INTO s_core_acl_resources (name) VALUES ('importexport');
-            INSERT IGNORE INTO s_core_acl_privileges (resourceID,name) VALUES ( (SELECT id FROM s_core_acl_resources WHERE name = 'importexport'), 'export');
-            INSERT IGNORE INTO s_core_acl_privileges (resourceID,name) VALUES ( (SELECT id FROM s_core_acl_resources WHERE name = 'importexport'), 'import');
-            UPDATE s_core_menu SET resourceID = (SELECT id FROM s_core_acl_resources WHERE name = 'importexport') WHERE name = 'importexport';
+            INSERT IGNORE INTO s_core_acl_resources (name) VALUES ('SwagImportExport');
+            INSERT IGNORE INTO s_core_acl_privileges (resourceID,name) VALUES ( (SELECT id FROM s_core_acl_resources WHERE name = 'SwagImportExport'), 'export');
+            INSERT IGNORE INTO s_core_acl_privileges (resourceID,name) VALUES ( (SELECT id FROM s_core_acl_resources WHERE name = 'SwagImportExport'), 'import');
+            UPDATE s_core_menu SET resourceID = (SELECT id FROM s_core_acl_resources WHERE name = 'SwagImportExport') WHERE name = 'SwagImportExport';
         ";
         Shopware()->Db()->query($sql, array());
     }
@@ -488,9 +488,9 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
      * deletes the acl resource
      */
     protected function deleteACLResource() {
-        $sql = "DELETE FROM s_core_acl_roles WHERE resourceID = (SELECT id FROM s_core_acl_resources WHERE name = 'importexport');
-                DELETE FROM s_core_acl_privileges WHERE resourceID = (SELECT id FROM s_core_acl_resources WHERE name = 'importexport');
-                DELETE FROM s_core_acl_resources WHERE name = 'importexport';";
+        $sql = "DELETE FROM s_core_acl_roles WHERE resourceID = (SELECT id FROM s_core_acl_resources WHERE name = 'SwagImportExport');
+                DELETE FROM s_core_acl_privileges WHERE resourceID = (SELECT id FROM s_core_acl_resources WHERE name = 'SwagImportExport');
+                DELETE FROM s_core_acl_resources WHERE name = 'SwagImportExport';";
         Shopware()->Db()->query($sql, array());
     }
     
