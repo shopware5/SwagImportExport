@@ -59,6 +59,10 @@ class DataIO
      * @var string
      */
     private $fileName;
+    /**
+     * @var string
+     */
+    private $fileSize;
 
     /**
      * Username made the action
@@ -271,6 +275,7 @@ class DataIO
             case 'import':
                 $sessionData['serializedIds'] = '';
                 $sessionData['username'] = $this->getUsername();
+                $sessionData['fileSize'] = $this->getFileSize();
                 break;
 
             default:
@@ -393,7 +398,17 @@ class DataIO
     {
         $this->fileName = $fileName;
     }
-    
+
+    public function getFileSize()
+    {
+        return $this->fileSize;
+    }
+
+    public function setFileSize($fileSize)
+    {
+        $this->fileSize = $fileSize;
+    }
+
     public function getUsername()
     {
         return $this->username;
