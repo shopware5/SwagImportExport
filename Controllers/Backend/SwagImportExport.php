@@ -731,7 +731,8 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         }
 
         // we create the file reader that will read the result file
-        $fileReader = $this->Plugin()->getFileIOFactory()->createFileReader($postData);
+        $fileFactory = $this->Plugin()->getFileIOFactory();
+        $fileReader = $fileFactory->createFileReader($postData);
 
         //load profile
         $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
@@ -765,22 +766,57 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                 $profile, array('isTree' => $fileReader->hasTreeStructure())
         );
 
+        $sessionState = $dataIO->getSessionState();
+
         $dataWorkflow = new DataWorkflow($dataIO, $profile, $dataTransformerChain, $fileReader);
         $logger = new StatusLogger();
 
         try {
             $post = $dataWorkflow->import($postData, $inputFile);
+
+            if (isset($post['unprocessedData']) && $post['unprocessedData']) {
+
+                $data = array(
+                    'data' => $post['unprocessedData'],
+                    'session' => array(
+                        'prevState' => $sessionState,
+                        'currentState' => $dataIO->getSessionState()
+                    )
+                );
+
+                $this->afterImport($data, $inputFile);
+            }
+
             if ($dataSession->getTotalCount() > 0 && ($dataSession->getTotalCount() == $post['position'])) {
                 $message = $post['position'] . ' ' . $post['adapter'] . ' imported successfully';
                 $logger->write($message, 'false');
             }
-            
+
             return $this->View()->assign(array('success' => true, 'data' => $post));
         } catch (Exception $e) {
             $logger->write($e->getMessage(), 'true');
             
             return $this->View()->assign(array('success' => false, 'msg' => $e->getMessage()));
         }
+    }
+
+    protected function afterImport($data, $inputFile)
+    {
+        $fileFactory = $this->Plugin()->getFileIOFactory();
+
+        //loads hidden profile for article
+        $type = 'articles';
+        $profile = $this->Plugin()->getProfileFactory()->loadHiddenProfile($type);
+
+        $fileHelper = $fileFactory->createFileHelper();
+        $fileWriter = $fileFactory->createFileWriter(array('format' => 'csv'), $fileHelper);
+
+        $dataTransformerChain = $this->Plugin()->getDataTransformerFactory()->createDataTransformerChain(
+                $profile, array('isTree' => $fileWriter->hasTreeStructure())
+        );
+
+        $dataWorkflow = new DataWorkflow($dataIO, $profile, $dataTransformerChain, $fileWriter);
+        $dataWorkflow->saveUnprocessedData($data, $inputFile);
     }
 
     public function getSessionsAction()

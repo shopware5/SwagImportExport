@@ -66,4 +66,15 @@ class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
         return $this->profileRepository;
     }
 
+    public function loadHiddenProfile($type)
+    {
+        $profileEntity = $this->getProfileRepository()->findOneBy(array('type' => $type, 'hidden' => 1));
+
+        if ($profileEntity) {
+            //todo: create profile if dont exists
+        }
+
+        return new Profile($profileEntity);
+    }
+
 }

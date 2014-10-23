@@ -34,6 +34,16 @@ class ArticlesDbAdapter implements DataDbAdapter
     protected $articleVariantMap;
     protected $variantMap;
 
+    /**
+     * @var array
+     */
+    protected $categoryIdCollection;
+
+    /**
+     * @var array
+     */
+    protected $unprocessedData;
+
     public function readRecordIds($start, $limit, $filter)
     {
         $manager = $this->getManager();
@@ -1034,8 +1044,18 @@ class ArticlesDbAdapter implements DataDbAdapter
                         ->findOneBy(array('number' => $similar['ordernumber']));
 
                 if (!$similarDetails) {
+                    $articleNumber = $article->getMainDetail()->getNumber();
+
+                    //sets similar data for export
+                    $similarData = array(
+                        'articleId' => $articleNumber,
+                        'ordernumber' => $similar['ordernumber'],
+                    );
+                    $this->saveUnprocessedData('similar', $articleNumber, $similarData);
+                    continue;
+
                     $message = SnippetsHelper::getNamespace()
-                                ->get('adapters/articles/similar_not_found', 'Similar with ordernumber %s does not exists');
+                            ->get('adapters/articles/similar_not_found', 'Similar with ordernumber %s does not exists');
                     throw new \Exception(sprintf($message, $similar['ordernumber']));
                 }
 
@@ -1079,8 +1099,17 @@ class ArticlesDbAdapter implements DataDbAdapter
                         ->findOneBy(array('number' => $accessory['ordernumber']));
 
                 if (!$accessoryDetails) {
+                    $articleNumber = $article->getMainDetail()->getNumber();
+
+                    $data = array(
+                        'articleId' => $articleNumber,
+                        'ordernumber' => $accessory['ordernumber'],
+                    );
+                    $this->saveUnprocessedData('accessory', $articleNumber, $data);
+                    continue;
+
                     $message = SnippetsHelper::getNamespace()
-                                ->get('adapters/articles/accessory_not_found', 'Accessory with ordernumber %s does not exists');
+                            ->get('adapters/articles/accessory_not_found', 'Accessory with ordernumber %s does not exists');
                     throw new \Exception(sprintf($message, $accessory['ordernumber']));
                 }
 
@@ -1818,6 +1847,31 @@ class ArticlesDbAdapter implements DataDbAdapter
     public function setCategoryIdCollection($categoryIdCollection)
     {
         $this->categoryIdCollection[] = $categoryIdCollection;
+    }
+
+    public function saveUnprocessedData($type, $articleNumber, $data)
+    {
+        $articleData = array(
+            'articleId' => $articleNumber,
+            'orderNumber' => $articleNumber,
+//            'mainNumber' => $articleNumber,
+            'processed' => 1
+        );
+
+        //sets almost hardcoded article data
+        $this->setUnprocessedData('article', $articleData);
+
+        $this->setUnprocessedData($type, $data);
+    }
+
+    public function getUnprocessedData()
+    {
+        return $this->unprocessedData;
+    }
+
+    public function setUnprocessedData($type, $data)
+    {
+        $this->unprocessedData[$type][] = $data;
     }
 
     /**
