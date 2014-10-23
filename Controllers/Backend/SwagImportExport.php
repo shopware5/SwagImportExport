@@ -910,7 +910,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             }
 
             if ($fileType === null) {
-                throw new \Exception('File type must be provided');
+//                throw new \Exception('Profile type must be provided');
             }
 
             //root directory
