@@ -64,20 +64,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
      * @var Shopware\CustomModels\ImportExport\Logger
      */
     protected $loggerRepository;
-    
-    /**
-     * Registers the different acl permission for the different controller actions.
-     */
-    protected function initAcl()
-    {
-        $this->addAclPermission('prepareImport', 'import', 'Insufficient Permissions');
-        $this->addAclPermission('import', 'import', 'Insufficient Permissions');
         
-        $this->addAclPermission('prepareExport', 'export', 'Insufficient Permissions');
-        $this->addAclPermission('downloadFile', 'export', 'Insufficient Permissions');
-        $this->addAclPermission('export', 'export', 'Insufficient Permissions');
-    }
-    
     public function getProfileAction()
     {
         $profileId = $this->Request()->getParam('profileId', -1);
