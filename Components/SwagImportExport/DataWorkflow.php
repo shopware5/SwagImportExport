@@ -173,18 +173,15 @@ class DataWorkflow
         return $postData;
     }
 
-    public function saveUnprocessedData($postData, $file)
+    public function saveUnprocessedData($postData, $outputFile)
     {
-        $pathInfo = pathinfo($file);
-        $outputFileName = Shopware()->DocPath() . 'files/import_export/' . $pathInfo['filename'] . '-tmp.' . $pathInfo['extension'];
-
         if ($postData['session']['prevState'] === 'new') {
             $header = $this->transformerChain->composeHeader();
-            $this->fileIO->writeHeader($outputFileName, $header);
+            $this->fileIO->writeHeader($outputFile, $header);
         }
 
         $data = $this->transformerChain->transformForward($postData['data']);
-        $this->fileIO->writeRecords($outputFileName, $data);
-    }
 
+        $this->fileIO->writeRecords($outputFile, $data);
+    }
 }

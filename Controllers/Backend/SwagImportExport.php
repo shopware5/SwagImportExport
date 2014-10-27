@@ -788,6 +788,15 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             }
 
             if ($dataSession->getTotalCount() > 0 && ($dataSession->getTotalCount() == $post['position'])) {
+
+                $postProcessedData = $this->processData($inputFile);
+
+                if ($postProcessedData) {
+                    unset($post['unprocessedData']);
+                    unset($post['sessionId']);
+                    $post = array_merge($post, $postProcessedData);
+                }
+
                 $message = $post['position'] . ' ' . $post['adapter'] . ' imported successfully';
                 $logger->write($message, 'false');
             }
@@ -800,6 +809,45 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         }
     }
 
+    /**
+     * Checks for unprocessed data
+     * Returns unprocessed data for import
+     * 
+     * @param string $inputFile
+     * @return mixed
+     */
+    protected function processData($inputFile)
+    {
+        $pathInfo = pathinfo($inputFile);
+        $outputFileName = 'media/unknown/' . $pathInfo['filename'] . '-swag.' . $pathInfo['extension'];
+        $outputFile = Shopware()->DocPath() . $outputFileName;
+
+        if (file_exists($outputFile)) {
+            $type = 'articles';
+            $profile = $this->Plugin()->getProfileFactory()->loadHiddenProfile($type);
+            $profileId = $profile->getId();
+
+            $fileReader = $this->Plugin()->getFileIOFactory()->createFileReader(array('format' => 'csv'));
+            $totalCount = $fileReader->getTotalCount($outputFile);
+
+            return array(
+                'importFile' => $outputFileName,
+                'profileId' => $profileId,
+                'count' => $totalCount,
+                'position' => 0,
+                'load' => true,
+            );
+        }
+
+        return false;
+    }
+
+    /**
+     * Saves unprocessed data to csv file
+     * 
+     * @param array $data
+     * @param string $inputFile
+     */
     protected function afterImport($data, $inputFile)
     {
         $fileFactory = $this->Plugin()->getFileIOFactory();
@@ -815,8 +863,12 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                 $profile, array('isTree' => $fileWriter->hasTreeStructure())
         );
 
+        $pathInfo = pathinfo($inputFile);
+        $outputFile = Shopware()->DocPath() . 'media/unknown/' . $pathInfo['filename'] . '-swag.' . $pathInfo['extension'];
+
         $dataWorkflow = new DataWorkflow($dataIO, $profile, $dataTransformerChain, $fileWriter);
-        $dataWorkflow->saveUnprocessedData($data, $inputFile);
+
+        $dataWorkflow->saveUnprocessedData($data, $outputFile);
     }
 
     public function getSessionsAction()
