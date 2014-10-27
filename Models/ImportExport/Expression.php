@@ -43,7 +43,7 @@ use Shopware\Components\Model\ModelEntity,
  * @ORM\Entity(repositoryClass="Repository")
  * @ORM\HasLifecycleCallbacks
  */
-class Expression
+class Expression extends ModelEntity
 {
 
     /**
