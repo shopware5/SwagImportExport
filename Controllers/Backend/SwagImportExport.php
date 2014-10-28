@@ -226,31 +226,24 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $data = $this->Request()->getParam('data', 1);
 
         try {
-            $newTree = TreeHelper::getDefaultTreeByProfileType($data['type']);                
-            $profile = new \Shopware\CustomModels\ImportExport\Profile();
 
-            $profile->setName($data['name']);
-            $profile->setType($data['type']);
-            $profile->setTree($newTree);
-
-            $this->getManager()->persist($profile);
-            $this->getManager()->flush();
+            $profileModel = $this->Plugin()->getProfileFactory()->createProfileModel($data);
 
             $this->View()->assign(array(
                 'success' => true,
                 'data' => array(
-                    "id" => $profile->getId(),
-                    'name' => $profile->getName(),
-                    'type' => $profile->getType(),
-                    'tree' => $profile->getTree(),
+                    "id" => $profileModel->getId(),
+                    'name' => $profileModel->getName(),
+                    'type' => $profileModel->getType(),
+                    'tree' => $profileModel->getTree(),
                 )
             ));
         } catch (\Exception $e) {
             $this->View()->assign(array('success' => false, 'msg' => $e->getMessage()));
         }
     }
-    
-     /**
+
+    /**
      * Returns the new profile
      */
     public function duplicateProfileAction()
@@ -329,8 +322,11 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $profileRepository = $this->getProfileRepository();
 
         $query = $profileRepository->getProfilesListQuery(
-                        $this->Request()->getParam('filter', array()), $this->Request()->getParam('sort', array()), $this->Request()->getParam('limit', null), $this->Request()->getParam('start')
-                )->getQuery();
+            $this->Request()->getParam('filter', array('hidden' => 0)),
+            $this->Request()->getParam('sort', array()),
+            $this->Request()->getParam('limit', null),
+            $this->Request()->getParam('start')
+        )->getQuery();
 
         $count = $this->getManager()->getQueryCount($query);
 
@@ -823,8 +819,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $outputFile = Shopware()->DocPath() . $outputFileName;
 
         if (file_exists($outputFile)) {
-            $type = 'articles';
-            $profile = $this->Plugin()->getProfileFactory()->loadHiddenProfile($type);
+            $profile = $this->Plugin()->getProfileFactory()->loadHiddenProfile('articles');
             $profileId = $profile->getId();
 
             $fileReader = $this->Plugin()->getFileIOFactory()->createFileReader(array('format' => 'csv'));
@@ -853,8 +848,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $fileFactory = $this->Plugin()->getFileIOFactory();
 
         //loads hidden profile for article
-        $type = 'articles';
-        $profile = $this->Plugin()->getProfileFactory()->loadHiddenProfile($type);
+        $profile = $this->Plugin()->getProfileFactory()->loadHiddenProfile('articles');
 
         $fileHelper = $fileFactory->createFileHelper();
         $fileWriter = $fileFactory->createFileWriter(array('format' => 'csv'), $fileHelper);
@@ -867,7 +861,6 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $outputFile = Shopware()->DocPath() . 'media/unknown/' . $pathInfo['filename'] . '-swag.' . $pathInfo['extension'];
 
         $dataWorkflow = new DataWorkflow($dataIO, $profile, $dataTransformerChain, $fileWriter);
-
         $dataWorkflow->saveUnprocessedData($data, $outputFile);
     }
 
