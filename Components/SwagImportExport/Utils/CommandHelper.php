@@ -294,12 +294,27 @@ class CommandHelper
                 $profile, array('isTree' => $fileReader->hasTreeStructure())
         );
 
+        $sessionState = $dataIO->getSessionState();
+
         $dataWorkflow = new DataWorkflow($dataIO, $profile, $dataTransformerChain, $fileReader);
         $logger = new StatusLogger();
         
         try {
             $post = $dataWorkflow->import($postData, $inputFile);
-            
+
+            if (isset($post['unprocessedData']) && $post['unprocessedData']) {
+
+                $data = array(
+                    'data' => $post['unprocessedData'],
+                    'session' => array(
+                        'prevState' => $sessionState,
+                        'currentState' => $dataIO->getSessionState()
+                    )
+                );
+
+                $this->afterImport($data, $inputFile);
+            }
+
             $this->sessionId = $post['sessionId'];
             if ($dataSession->getTotalCount() > 0 && ($dataSession->getTotalCount() == $post['position'])) {
                 $message = $post['position'] . ' ' . $post['adapter'] . ' imported successfully';
@@ -314,6 +329,33 @@ class CommandHelper
         }
     }
     
+    /**
+     * Saves unprocessed data to csv file
+     *
+     * @param array $data
+     * @param string $inputFile
+     */
+    protected function afterImport($data, $inputFile)
+    {
+        $fileFactory = $this->Plugin()->getFileIOFactory();
+
+        //loads hidden profile for article
+        $profile = $this->Plugin()->getProfileFactory()->loadHiddenProfile('articles');
+
+        $fileHelper = $fileFactory->createFileHelper();
+        $fileWriter = $fileFactory->createFileWriter(array('format' => 'csv'), $fileHelper);
+
+        $dataTransformerChain = $this->Plugin()->getDataTransformerFactory()->createDataTransformerChain(
+                $profile, array('isTree' => $fileWriter->hasTreeStructure())
+        );
+
+        $pathInfo = pathinfo($inputFile);
+        $outputFile = Shopware()->DocPath() . 'media/unknown/' . $pathInfo['filename'] . '-tmp.' . $pathInfo['extension'];
+
+        $dataWorkflow = new DataWorkflow($dataIO, $profile, $dataTransformerChain, $fileWriter);
+        $dataWorkflow->saveUnprocessedData($data, $outputFile);
+    }
+
     protected function Plugin()
     {
         return Shopware()->Plugins()->Backend()->SwagImportExport();

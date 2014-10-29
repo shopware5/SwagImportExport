@@ -815,10 +815,16 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
     protected function processData($inputFile)
     {
         $pathInfo = pathinfo($inputFile);
-        $outputFileName = 'media/unknown/' . $pathInfo['filename'] . '-swag.' . $pathInfo['extension'];
-        $outputFile = Shopware()->DocPath() . $outputFileName;
+        $fileName = 'media/unknown/' . $pathInfo['filename'] . '-tmp.' . $pathInfo['extension'];
+        $file = Shopware()->DocPath() . $fileName;
 
-        if (file_exists($outputFile)) {
+        if (file_exists($file)) {
+
+            //renames
+            $outputFileName = 'media/unknown/' . $pathInfo['filename'] . '-swag.' . $pathInfo['extension'];
+            $outputFile = Shopware()->DocPath() . $outputFileName;
+            rename($fileName, $outputFile);
+
             $profile = $this->Plugin()->getProfileFactory()->loadHiddenProfile('articles');
             $profileId = $profile->getId();
 
@@ -858,7 +864,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         );
 
         $pathInfo = pathinfo($inputFile);
-        $outputFile = Shopware()->DocPath() . 'media/unknown/' . $pathInfo['filename'] . '-swag.' . $pathInfo['extension'];
+        $outputFile = Shopware()->DocPath() . 'media/unknown/' . $pathInfo['filename'] . '-tmp.' . $pathInfo['extension'];
 
         $dataWorkflow = new DataWorkflow($dataIO, $profile, $dataTransformerChain, $fileWriter);
         $dataWorkflow->saveUnprocessedData($data, $outputFile);

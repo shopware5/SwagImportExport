@@ -37,19 +37,49 @@ class ImportCommand extends ShopwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->prepareImportInputValidation($input, $output);
-        
+
         $this->registerErrorHandler($output);
-        
+
+        $this->start($output, $this->profileEntity, $this->filePath, $this->format);
+
+        $pathInfo = pathinfo($this->filePath);
+        $tmpFileName = 'media/unknown/' . $pathInfo['filename'] . '-tmp.' . $pathInfo['extension'];
+        $tmpFile = Shopware()->DocPath() . $tmpFileName;
+
+        if (file_exists($tmpFile)) {
+
+            $output->writeln('<info>Start processing related data</info>');
+            //renames
+            $outputFileName = 'media/unknown/' . $pathInfo['filename'] . '-swag.' . $pathInfo['extension'];
+            $outputFile = Shopware()->DocPath() . $outputFileName;
+            rename($tmpFile, $outputFile);
+
+            $profile = $this->Plugin()->getProfileFactory()->loadHiddenProfile('articles');
+            $profileEntity = $profile->getEntity();
+
+            $this->start($output, $profileEntity, $outputFile, 'csv');
+        }
+    }
+
+    /**
+     *
+     * @param OutputInterface $output
+     * @param model $profileModel
+     * @param string $file
+     * @param string $format
+     */
+    protected function start(OutputInterface $output, $profileModel, $file, $format)
+    {
         $helper = new CommandHelper(array(
-            'profileEntity' => $this->profileEntity,
-            'filePath' => $this->filePath,
-            'format' => $this->format,
+            'profileEntity' => $profileModel,
+            'filePath' => $file,
+            'format' => $format,
             'username' => 'Commandline'
         ));
 
-        $output->writeln('<info>' . sprintf("Using profile: %s.", $this->profile) . '</info>');
-        $output->writeln('<info>' . sprintf("Using format: %s.", $this->format) . '</info>');
-        $output->writeln('<info>' . sprintf("Using file: %s.", $this->filePath) . '</info>');
+        $output->writeln('<info>' . sprintf("Using profile: %s.", $profileModel->getName()) . '</info>');
+        $output->writeln('<info>' . sprintf("Using format: %s.", $format) . '</info>');
+        $output->writeln('<info>' . sprintf("Using file: %s.", $file) . '</info>');
 
         $return = $helper->prepareImport();
         $count = $return['count'];
