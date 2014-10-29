@@ -47,7 +47,10 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Manager', {
     /*
      * session store
      */
+    /*{if {acl_is_allowed privilege=read}}*/
     sessionStore: Ext.create('Shopware.apps.SwagImportExport.store.SessionList'),
+    /*{/if}*/
+
     initComponent: function() {
         var me = this;
 
@@ -58,25 +61,30 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Manager', {
     
     createTabPanel: function() {
         var me = this;
-        
+        var aclItems = [];
+
+        /*{if {acl_is_allowed privilege=export}}*/
+        aclItems.push(Ext.create('Shopware.apps.SwagImportExport.view.manager.Export', {
+            profilesStore: me.profilesStore,
+            sessionStore: me.sessionStore
+        }));
+        /*{/if}*/
+
+        /*{if {acl_is_allowed privilege=import}}*/
+        aclItems.push(Ext.create('Shopware.apps.SwagImportExport.view.manager.Import', {
+            profilesStore: me.profilesStore
+        }));
+        /*{/if}*/
+
+        /*{if {acl_is_allowed privilege=export} OR {acl_is_allowed privilege=import}}*/
+        aclItems.push(Ext.create('Shopware.apps.SwagImportExport.view.manager.Operation', {
+            sessionStore: me.sessionStore
+        }));
+        /*{/if}*/
+
         return Ext.create('Ext.tab.Panel', {
             name: 'manager-main-tab',
-            items: [
-                /*{if {acl_is_allowed privilege=export}}*/
-                Ext.create('Shopware.apps.SwagImportExport.view.manager.Export', {
-                    profilesStore: me.profilesStore,
-                    sessionStore: me.sessionStore
-                }),
-                /*{/if}*/
-                /*{if {acl_is_allowed privilege=import}}*/
-                Ext.create('Shopware.apps.SwagImportExport.view.manager.Import', {
-                    profilesStore: me.profilesStore
-                }),
-                /*{/if}*/
-                Ext.create('Shopware.apps.SwagImportExport.view.manager.Operation', {
-                    sessionStore: me.sessionStore
-                })
-            ]
+            items: aclItems
         });
     }
 });
