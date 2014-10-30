@@ -101,10 +101,44 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
 
         $this->createDatabase();
         $this->createMenu();
+        $this->createAclResource();
         $this->registerEvents();
         $this->createDirectories();
         $this->createConfiguration();
-        
+
+        return true;
+    }
+
+    public function update($oldVersion)
+    {
+        $this->checkLicense();
+
+        $this->createMenu();
+        $this->createAclResource();
+        $this->registerEvents();
+        $this->createDirectories();
+        $this->createConfiguration();
+
+        if ($oldVersion == '1.0.0') {
+
+            //changing the name
+            Shopware()->Db()->update('s_core_menu', array('name' => 'Import/Export Advanced'), array("controller = 'SwagImportExport'"));
+
+            $sql = "SELECT id FROM `s_core_menu` WHERE controller = 'ImportExport'";
+            $menuItem = Shopware()->Db()->fetchOne($sql);
+            if (!$menuItem) {
+                //inserting old menu item
+                $sql = "INSERT INTO `s_core_menu`
+                        (`parent`, `hyperlink`, `name`, `onclick`, `style`, `class`, `position`, `active`, `pluginID`, `resourceID`, `controller`, `shortcut`, `action`)
+                        VALUES
+                        (7, '', 'Import/Export', '', NULL, 'sprite-arrow-circle-double-135', 3, 1, NULL, 34, 'ImportExport', NULL, 'Index')";
+                Shopware()->Db()->query($sql);
+            }
+
+            //removing snippets
+            Shopware()->Db()->delete('s_core_snippets', array("value = 'Import/Export'"));
+        }
+
         return true;
     }
 
@@ -141,11 +175,16 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
     
     private function createDirectories()
     {
-        $importCron = Shopware()->DocPath() . 'files/import_cron/';
-        mkdir($importCron, 0777, true);
+        $importCronPath = Shopware()->DocPath() . 'files/import_cron/';
+        if (!file_exists($importCronPath)) {
+            mkdir($importCronPath, 0777, true);
+        }
 
-        $importExport = Shopware()->DocPath() . 'files/import_export/';
-        mkdir($importExport, 0777, true);
+        $importExportPath = Shopware()->DocPath() . 'files/import_export/';
+        if (!file_exists($importExportPath)) {
+            mkdir($importExportPath, 0777, true);
+        }
+
     }
 
     /**
@@ -474,29 +513,42 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
             $this->addFormTranslations($translations);
         }
     }
-    
-    public function update($version)
+
+    private function createAclResource()
     {
-        if ($version == '1.0.0') {
+        // If exists: find existing SwagImportExport resource
+        $pluginId = Shopware()->Db()->fetchRow('SELECT pluginID FROM s_core_acl_resources WHERE name = ? ',
+            array("swagimportexport")
+        );
+        $pluginId = isset($pluginId['pluginID']) ? $pluginId['pluginID'] : NULL;
 
-            //changing the name
-            Shopware()->Db()->update('s_core_menu', array('name' => 'Import/Export Advanced'), array("controller = 'SwagImportExport'"));
-
-            $sql = "SELECT id FROM `s_core_menu` WHERE controller = 'ImportExport'";
-            $menuItem = Shopware()->Db()->fetchOne($sql);
-            if (!$menuItem) {
-                //inserting old menu item
-                $sql = "INSERT INTO `s_core_menu`
-                        (`parent`, `hyperlink`, `name`, `onclick`, `style`, `class`, `position`, `active`, `pluginID`, `resourceID`, `controller`, `shortcut`, `action`)
-                        VALUES
-                        (7, '', 'Import/Export', '', NULL, 'sprite-arrow-circle-double-135', 3, 1, NULL, 34, 'ImportExport', NULL, 'Index')";
-                Shopware()->Db()->query($sql);
-            }
-
-            //removing snippets
-            Shopware()->Db()->delete('s_core_snippets', array("value = 'Import/Export'"));
+        if($pluginId) {
+            // prevent creation of new acl resource
+            return;
         }
 
-        return true;
+        $resource = new \Shopware\Models\User\Resource();
+        $resource->setName('swagimportexport');
+        $resource->setPluginId($this->getId());
+
+        foreach (array('export', 'import', 'profile', 'read') as $action) {
+            $privilege = new \Shopware\Models\User\Privilege();
+            $privilege->setResource($resource);
+            $privilege->setName($action);
+
+            Shopware()->Models()->persist($privilege);
+        }
+
+        Shopware()->Models()->persist($resource);
+
+        Shopware()->Models()->flush();
+
+        Shopware()->Db()->query('UPDATE s_core_menu SET resourceID = ? WHERE controller = "SwagImportExport"',
+            array($resource->getId())
+        );
+
+
     }
+
+
 }

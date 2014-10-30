@@ -1182,4 +1182,38 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             'success' => true, 'data' => $data, 'total' => $total
         ));
     }
+
+    /**
+     * Registers acl permissions for controller actions
+     *
+     * @return void
+     */
+    public function initAcl()
+    {
+        $this->addAclPermission("getProfiles", "profile", "Insuficient Permissions (getProfiles)");
+        $this->addAclPermission("createProfiles", "profile", "Insuficient Permissions (createProfiles)");
+        $this->addAclPermission("updateProfiles", "profile", "Insuficient Permissions (updateProfiles)");
+        $this->addAclPermission("deleteProfiles", "profile", "Insuficient Permissions (deleteProfiles)");
+        $this->addAclPermission("getProfile", "profile", "Insuficient Permissions (getProfile)");
+        $this->addAclPermission("createNode", "export", "Insuficient Permissions (createNode)");
+        $this->addAclPermission("updateNode", "export", "Insuficient Permissions (updateNode)");
+        $this->addAclPermission("deleteNode", "export", "Insuficient Permissions (deleteNode)");
+        $this->addAclPermission("duplicateProfile", "export", "Insuficient Permissions (duplicateProfile)");
+        $this->addAclPermission("getConversions", "export", "Insuficient Permissions (getConversions)");
+        $this->addAclPermission("createConversion", "export", "Insuficient Permissions (createConversion)");
+        $this->addAclPermission("updateConversion", "export", "Insuficient Permissions (updateConversion)");
+        $this->addAclPermission("deleteConversion", "export", "Insuficient Permissions (deleteConversion)");
+        $this->addAclPermission("prepareExport", "export", "Insuficient Permissions (prepareExport)");
+        $this->addAclPermission("export", "export", "Insuficient Permissions (export)");
+        $this->addAclPermission("prepareImport", "import", "Insuficient Permissions (prepareImport)");
+        $this->addAclPermission("import", "import", "Insuficient Permissions (import)");
+        $this->addAclPermission("getSessions", "read", "Insuficient Permissions (getSessions)");
+        $this->addAclPermission("deleteSession", "export", "Insuficient Permissions (deleteSession)");
+        $this->addAclPermission("uploadFile", "import", "Insuficient Permissions (uploadFile)");
+        $this->addAclPermission("downloadFile", "export", "Insuficient Permissions (downloadFile)");
+        $this->addAclPermission("getSections", "export", "Insuficient Permissions (getSections)");
+        $this->addAclPermission("getColumns", "profile", "Insuficient Permissions (getColumns)");
+        $this->addAclPermission("getParentKeys", "profile", "Insuficient Permissions (getParentKeys)");
+    }
+
 }

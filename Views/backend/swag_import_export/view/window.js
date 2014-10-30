@@ -21,10 +21,10 @@
  * our trademarks remain entirely with us.
  */
 /**
- * Shopware SwagGiftPackaging Plugin
+ * Shopware SwagImportExport Plugin
  *
  * @category Shopware
- * @package Shopware\Plugins\SwagGiftPackaging
+ * @package Shopware\Plugins\SwagImportExport
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 //{namespace name=backend/swag_gift_packaging/view/main}
@@ -60,27 +60,36 @@ Ext.define('Shopware.apps.SwagImportExport.view.Window', {
     /*
      * profile store
      */
+
+    /*{if {acl_is_allowed privilege=profile}}*/
     profilesStore: Ext.create('Shopware.apps.SwagImportExport.store.ProfileList').load(),
+    /*{/if}*/
+
     logStore: Ext.create('Shopware.apps.SwagImportExport.store.Log'),
-    
+
     createTabPanel: function() {
         var me = this;
+        var aclItems = [];
+
+        /*{if {acl_is_allowed privilege=export} OR {acl_is_allowed privilege=import}}*/
+        aclItems.push(Ext.create('Shopware.apps.SwagImportExport.view.manager.Manager', {
+            profilesStore: me.profilesStore
+        }));
+        /*{/if}*/
+
+        /*{if {acl_is_allowed privilege=profile}}*/
+        aclItems.push(Ext.create('Shopware.apps.SwagImportExport.view.profile.Profile', {
+            profilesStore: me.profilesStore
+        }));
+        /*{/if}*/
+
+        aclItems.push(Ext.create('Shopware.apps.SwagImportExport.view.log.Log', {
+            logStore: me.logStore
+        }));
 
         return Ext.create('Ext.tab.Panel', {
             name: 'main-tab',
-            items: [
-                Ext.create('Shopware.apps.SwagImportExport.view.manager.Manager', {
-                    profilesStore: me.profilesStore
-                }),
-                /*{if {acl_is_allowed privilege=export}}*/
-                Ext.create('Shopware.apps.SwagImportExport.view.profile.Profile', {
-                    profilesStore: me.profilesStore
-                }),
-                /*{/if}*/
-                Ext.create('Shopware.apps.SwagImportExport.view.log.Log', {
-                    logStore: me.logStore
-                })
-            ]
+            items: aclItems
         });
     }
 });
