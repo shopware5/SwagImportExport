@@ -177,12 +177,12 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
     {
         $importCronPath = Shopware()->DocPath() . 'files/import_cron/';
         if (!file_exists($importCronPath)) {
-            mkdir($importCronPath, 0777, TRUE);
+            mkdir($importCronPath, 0777, true);
         }
 
         $importExportPath = Shopware()->DocPath() . 'files/import_export/';
         if (!file_exists($importExportPath)) {
-            mkdir($importExportPath, 0777, TRUE);
+            mkdir($importExportPath, 0777, true);
         }
 
     }

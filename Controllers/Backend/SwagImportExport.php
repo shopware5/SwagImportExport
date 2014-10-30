@@ -1214,14 +1214,6 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $this->addAclPermission("getSections", "export", "Insuficient Permissions (getSections)");
         $this->addAclPermission("getColumns", "profile", "Insuficient Permissions (getColumns)");
         $this->addAclPermission("getParentKeys", "profile", "Insuficient Permissions (getParentKeys)");
-
-        /*
-         * Actions without acl permissions
-         */
-        //$this->addAclPermission("getLogs", "XXXX", "Insuficient Permissions");
-
-
-
     }
 
 }

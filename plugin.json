@@ -8,16 +8,14 @@
     "link": "http://store.shopware.com",
     "author": "Shopware AG",
 
-    "currentVersion": "1.0.2",
+    "currentVersion": "1.0.1",
 
     "changelog": {
         "de": {
-            "1.0.2": "Weitere ACL-Zugangsberechtigungen hinzugefügt",
-            "1.0.1": "Problem mit verschwindendem Import/Export Menü-Eintrag behoben"
+            "1.0.1": "Problem mit verschwindendem Import/Export Menü-Eintrag behoben; Weitere ACL-Zugangsberechtigungen hinzugefügt"
         },
         "en": {
-            "1.0.2": "Added more ACL permissions",
-            "1.0.1": "Fixed disappearing of the old import/export item from the menu"
+            "1.0.1": "Fixed disappearing of the old import/export item from the menu; Added more ACL permissions"
         }
     },
 
