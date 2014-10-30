@@ -64,12 +64,18 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
     }
 
     /**
-     * Returns the current version of the plugin.
+     * Returns the version of the plugin as a string
+     *
      * @return string
      */
-    public function getVersion()
-    {
-        return "1.0.0";
+    public function getVersion() {
+        $info = json_decode(file_get_contents(__DIR__ . DIRECTORY_SEPARATOR .'plugin.json'), true);
+
+        if ($info) {
+            return $info['currentVersion'];
+        } else {
+            throw new Exception('The plugin has an invalid version file.');
+        }
     }
 
     /**
@@ -241,7 +247,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
     {
         $this->createMenuItem(
                 array(
-                    'label' => 'Import/Export',
+                    'label' => 'Import/Export Advanced',
                     'controller' => 'SwagImportExport',
                     'class' => 'sprite-server--plus',
                     'action' => 'Index',
@@ -465,8 +471,28 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         );
 
         if ($this->assertMinimumVersion('4.2.2')) {
-            $this->addFormTranslations($translations);
+//            $this->addFormTranslations($translations);
         }
     }
     
+    public function update($version)
+    {
+        if ($version == '1.0.0') {
+
+            //changing the name
+            Shopware()->Db()->update('s_core_menu', array('name' => 'Import/Export Advanced'), array("name = 'Import/Export'"));
+
+            //inserting old menu item
+            $sql = "INSERT INTO `s_core_menu`
+                    (`parent`, `hyperlink`, `name`, `onclick`, `style`, `class`, `position`, `active`, `pluginID`, `resourceID`, `controller`, `shortcut`, `action`)
+                    VALUES
+                    (7, '', 'Import/Export', '', NULL, 'sprite-arrow-circle-double-135', 3, 1, NULL, 34, 'ImportExport', NULL, 'Index')";
+            Shopware()->Db()->query($sql);
+
+            //removing snippets
+            Shopware()->Db()->delete('s_core_snippets', array("value = 'Import/Export'"));
+        }
+
+        return true;
+    }
 }
