@@ -480,14 +480,18 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         if ($version == '1.0.0') {
 
             //changing the name
-            Shopware()->Db()->update('s_core_menu', array('name' => 'Import/Export Advanced'), array("name = 'Import/Export'"));
+            Shopware()->Db()->update('s_core_menu', array('name' => 'Import/Export Advanced'), array("controller = 'SwagImportExport'"));
 
-            //inserting old menu item
-            $sql = "INSERT INTO `s_core_menu`
-                    (`parent`, `hyperlink`, `name`, `onclick`, `style`, `class`, `position`, `active`, `pluginID`, `resourceID`, `controller`, `shortcut`, `action`)
-                    VALUES
-                    (7, '', 'Import/Export', '', NULL, 'sprite-arrow-circle-double-135', 3, 1, NULL, 34, 'ImportExport', NULL, 'Index')";
-            Shopware()->Db()->query($sql);
+            $sql = "SELECT id FROM `s_core_menu` WHERE controller = 'ImportExport'";
+            $menuItem = Shopware()->Db()->fetchOne($sql);
+            if (!$menuItem) {
+                //inserting old menu item
+                $sql = "INSERT INTO `s_core_menu`
+                        (`parent`, `hyperlink`, `name`, `onclick`, `style`, `class`, `position`, `active`, `pluginID`, `resourceID`, `controller`, `shortcut`, `action`)
+                        VALUES
+                        (7, '', 'Import/Export', '', NULL, 'sprite-arrow-circle-double-135', 3, 1, NULL, 34, 'ImportExport', NULL, 'Index')";
+                Shopware()->Db()->query($sql);
+            }
 
             //removing snippets
             Shopware()->Db()->delete('s_core_snippets', array("value = 'Import/Export'"));
