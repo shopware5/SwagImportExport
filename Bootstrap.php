@@ -471,7 +471,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         );
 
         if ($this->assertMinimumVersion('4.2.2')) {
-//            $this->addFormTranslations($translations);
+            $this->addFormTranslations($translations);
         }
     }
     
