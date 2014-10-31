@@ -710,6 +710,9 @@ class ArticlesDbAdapter implements DataDbAdapter
         $variantData = array();
         $variantsMap = $this->getMap('variant');
         
+        //fixes date time mapping
+        $variantsMap['releaseDate'] = 'releaseDate';
+
         if ($article['active']) {
             $variantData['active'] = 1;
         }
