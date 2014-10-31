@@ -684,7 +684,11 @@ class ArticlesDbAdapter implements DataDbAdapter
         } 
 
         $articleMap = $this->getMap('articleVariant');
-        
+
+        //fixes date time mappings
+        $articleMap['date'] = 'added';
+        $articleMap['changeTime'] = 'changed';
+
         foreach ($data as $key => $value) {
             if (preg_match('/^attribute/', $key)) {
                 $newKey = lcfirst(preg_replace('/^attribute/', '', $key));
@@ -731,7 +735,10 @@ class ArticlesDbAdapter implements DataDbAdapter
         }
 
         $variantsMap = $this->getMap('variant');
-        
+
+        //fixes date time mapping
+        $variantsMap['releaseDate'] = 'releaseDate';
+
         foreach ($data as $key => $value) {
             if (isset($variantsMap[$key]) && $key != 'mainNumber') {
                 $variantData[$variantsMap[$key]] = $value;
@@ -1538,7 +1545,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             'article.name as name',
             'article.description as description',
             'article.descriptionLong as descriptionLong',
-            "DATE_FORMAT(article.added, '%Y-%m-%d %H:%i:%s') as date ",
+            "DATE_FORMAT(article.added, '%Y-%m-%d') as date",
 //            'article.active as active',
             'article.pseudoSales as pseudoSales',
             'article.highlight as topSeller',
@@ -1679,7 +1686,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             'variant.purchaseUnit as purchaseUnit',
             'variant.referenceUnit as referenceUnit',
             'variant.packUnit as packUnit',
-            'variant.packUnit as releaseDate',
+            "DATE_FORMAT(variant.releaseDate, '%Y-%m-%d') as releaseDate",
             'variant.shippingTime as shippingTime',
             'variant.shippingFree as shippingFree',
             'variant.supplierNumber as supplierNumber',

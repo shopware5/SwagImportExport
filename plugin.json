@@ -12,10 +12,10 @@
 
     "changelog": {
         "de": {
-            "1.0.1": "Problem mit verschwindendem Import/Export Menü-Eintrag behoben; Weitere ACL-Zugangsberechtigungen hinzugefügt"
+            "1.0.1": "Problem mit verschwindendem Import/Export Menü-Eintrag behoben; Weitere ACL-Zugangsberechtigungen hinzugefügt; Fixed article active flag behaviour; Fixed article attributes entries; Fixed date/time article import issues"
         },
         "en": {
-            "1.0.1": "Fixed disappearing of the old import/export item from the menu; Added more ACL permissions"
+            "1.0.1": "Fixed disappearing of the old import/export item from the menu; Added more ACL permissions; Fixed article active flag behaviour; Fixed article attributes entries; Fixed date/time article import issues"
         }
     },
 
