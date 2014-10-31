@@ -239,7 +239,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         $result['category'] = $categoriesBuilder->getQuery()->getResult();
 
         $result['translation'] = $this->prepareTranslationExport($ids);
-
+        
         return $result;
     }
 
@@ -463,7 +463,10 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $articleData['similar'] = $this->prepareSimilars($records['similar'], $index, $articleModel);
                 $articleData['related'] = $this->prepareAccessories($records['accessory'], $index, $articleModel);
                 $articleData['configuratorSet'] = $this->prepareArticleConfigurators($records['configurator'], $index, $articleModel);
-                
+
+                //sets article_active from article_details_active
+                $articleData['active'] = $variantModel->getActive();
+
                 $articleModel->fromArray($articleData);
 
                 $violations = $this->getManager()->validate($articleModel);
@@ -505,6 +508,8 @@ class ArticlesDbAdapter implements DataDbAdapter
                     if ($categories) {
                         $articleData['categories'] = $categories;
                     }
+
+                    $articleData['active'] = $variantModel->getActive();
 
                     $articleModel->fromArray($articleData);
                 }
@@ -1541,7 +1546,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             'article.description as description',
             'article.descriptionLong as descriptionLong',
             "DATE_FORMAT(article.added, '%Y-%m-%d') as date",
-            'article.active as active',
+//            'article.active as active',
             'article.pseudoSales as pseudoSales',
             'article.highlight as topSeller',
 //            'article.metaTitle as metaTitle',
@@ -1666,7 +1671,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             'variant.kind as kind',
             'variant.additionalText as additionalText',
             'variant.inStock as inStock',
-            'variant.active as variantActive',
+            'variant.active as active',
             'variant.stockMin as stockMin',
             'variant.weight as weight',
             'variant.position as position',
