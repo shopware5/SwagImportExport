@@ -449,7 +449,7 @@ class ArticlesDbAdapter implements DataDbAdapter
 
                 $articleData = $this->prerpareArticle($record, $articleModel);
                 
-                $mainDetailData = $this->prepareMainDetail($record, $articleData);
+                $mainDetailData = $this->prepareMainDetail($record, $articleData, $articleModel);
                 
                 $articleModel->setMainDetail($mainDetailData);
             
@@ -690,22 +690,22 @@ class ArticlesDbAdapter implements DataDbAdapter
         $articleMap['changeTime'] = 'changed';
 
         foreach ($data as $key => $value) {
-            if (preg_match('/^attribute/', $key)) {
-                $newKey = lcfirst(preg_replace('/^attribute/', '', $key));
-                $articleData['mainDetail']['attribute'][$newKey] = $value;
-                unset($data[$key]);
-            } else if (isset($articleMap[$key])) {
+            if (isset($articleMap[$key])) {
                 $articleData[$articleMap[$key]] = $value;
                 unset($data[$key]);
             }
         }
 
-        $articleData['mainDetail']['attribute']['article'] = $article;
-
         return $articleData;
     }
-    
-    public function prepareMainDetail($data, $article)
+
+    /**
+     * @param array $data
+     * @param array $articleData
+     * @param ArticleModel $article
+     * @return array
+     */
+    public function prepareMainDetail($data, $articleData, ArticleModel $article)
     {
         $variantData = array();
         $variantsMap = $this->getMap('variant');
@@ -713,18 +713,24 @@ class ArticlesDbAdapter implements DataDbAdapter
         //fixes date time mapping
         $variantsMap['releaseDate'] = 'releaseDate';
 
-        if ($article['active']) {
+        if ($articleData['active']) {
             $variantData['active'] = 1;
         }
-        
+
         foreach ($data as $key => $value) {
-            if (isset($variantsMap[$key])) {
+            if (preg_match('/^attribute/', $key)) {
+                $newKey = lcfirst(preg_replace('/^attribute/', '', $key));
+                $variantData['attribute'][$newKey] = $value;
+                unset($data[$key]);
+            } else if(isset($variantsMap[$key])) {
                 $variantData[$variantsMap[$key]] = $value;
             }
         }
-        
-        $variantData['article'] = $article;
-                
+
+        $variantData['attribute']['article'] = $article;
+
+        $variantData['article'] = $articleData;
+
         return $variantData;
     }
 
@@ -743,10 +749,18 @@ class ArticlesDbAdapter implements DataDbAdapter
         $variantsMap['releaseDate'] = 'releaseDate';
 
         foreach ($data as $key => $value) {
-            if (isset($variantsMap[$key]) && $key != 'mainNumber') {
+            if (preg_match('/^attribute/', $key)) {
+                $newKey = lcfirst(preg_replace('/^attribute/', '', $key));
+                $variantData['attribute'][$newKey] = $value;
+                unset($data[$key]);
+            } else if (isset($variantsMap[$key]) && $key != 'mainNumber') {
                 $variantData[$variantsMap[$key]] = $value;
                 unset($data[$key]);
             }
+        }
+
+        if (!$variantModel->getAttribute()) {
+            $variantData['attribute']['article'] = $article;
         }
 
         $variantModel->fromArray($variantData);
@@ -1543,7 +1557,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     
     public function getArticleVariantColumns()
     {
-        $columns = array(
+        return array(
             'article.id as articleId',
             'article.name as name',
             'article.description as description',
@@ -1571,15 +1585,6 @@ class ArticlesDbAdapter implements DataDbAdapter
             'filterGroup.id as filterGroupId',
             'filterGroup.name as filterGroupName',
         );
-
-        // Attributes
-        $attributesSelect = $this->getArticleAttributes();
-        
-        if ($attributesSelect && !empty($attributesSelect)) {
-            $columns = array_merge($columns, $attributesSelect);
-        }
-        
-        return $columns;
     }
     
     public function getArticleAttributes()
@@ -1667,7 +1672,7 @@ class ArticlesDbAdapter implements DataDbAdapter
 
     public function getVariantColumns()
     {
-        return array(
+        $columns = array(
             'variant.id as variantId',
             'variant.number as orderNumber',
             'mv.number as mainNumber',
@@ -1694,6 +1699,15 @@ class ArticlesDbAdapter implements DataDbAdapter
             'variant.shippingFree as shippingFree',
             'variant.supplierNumber as supplierNumber',
         );
+
+        // Attributes
+        $attributesSelect = $this->getArticleAttributes();
+
+        if ($attributesSelect && !empty($attributesSelect)) {
+            $columns = array_merge($columns, $attributesSelect);
+        }
+
+        return $columns;
     }
 
     public function getPriceColumns()
