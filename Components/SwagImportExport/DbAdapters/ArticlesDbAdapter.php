@@ -447,7 +447,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 //creates artitcle and main variant
                 $articleModel = new ArticleModel();
 
-                $articleData = $this->prerpareArticle($record);
+                $articleData = $this->prerpareArticle($record, $articleModel);
                 
                 $mainDetailData = $this->prepareMainDetail($record, $articleData);
                 
@@ -487,7 +487,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 //if it is main variant 
                 //updates the also the article
                 if ($record['mainNumber'] === $record['orderNumber'] || $updateFlag) {
-                    $articleData = $this->prerpareArticle($record);
+                    $articleData = $this->prerpareArticle($record, $articleModel);
 
                     $images = $this->prepareImages($records['image'], $index, $articleModel);
                     if ($images) {
@@ -610,13 +610,13 @@ class ArticlesDbAdapter implements DataDbAdapter
         );
     }
 
-    public function prerpareArticle(&$data)
+    public function prerpareArticle(&$data, $article)
     {
-        $article = array();
+        $articleData = array();
 
         //check if a tax id is passed and load the tax model or set the tax parameter to null.
         if (!empty($data['taxId'])) {
-            $article['tax'] = $this->getManager()->find('Shopware\Models\Tax\Tax', $data['taxId']);
+            $articleData['tax'] = $this->getManager()->find('Shopware\Models\Tax\Tax', $data['taxId']);
 
             if (empty($data['tax'])) {
                 $message = SnippetsHelper::getNamespace()
@@ -630,14 +630,14 @@ class ArticlesDbAdapter implements DataDbAdapter
                             ->get('adapters/articles/no_tax_found', 'Tax by taxrate %s not found');
                 throw new \Exception(sprintf($message, $data['tax']));
             }
-            $article['tax'] = $tax;
+            $articleData['tax'] = $tax;
         }
         unset($data['tax']);
 
         //check if a supplier id is passed and load the supplier model or set the supplier parameter to null.
         if (!empty($data['supplierId'])) {
-            $article['supplier'] = $this->getManager()->find('Shopware\Models\Article\Supplier', $data['supplierId']);
-            if (empty($article['supplier'])) {
+            $articleData['supplier'] = $this->getManager()->find('Shopware\Models\Article\Supplier', $data['supplierId']);
+            if (empty($articleData['supplier'])) {
                 $message = SnippetsHelper::getNamespace()
                             ->get('adapters/articles/supplier_not_found', 'Supplier by id %s not found');
                 throw new \Exception(sprintf($message, $data['supplierId']));
@@ -648,17 +648,17 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $supplier = new \Shopware\Models\Article\Supplier();
                 $supplier->setName($data['supplierName']);
             }
-            $article['supplier'] = $supplier;
+            $articleData['supplier'] = $supplier;
         }
         unset($data['supplierName']);
         
         //check if a priceGroup id is passed and load the priceGroup model or set the priceGroup parameter to null.
         if (isset($data['priceGroupId'])) {
             if (empty($data['priceGroupId'])) {
-                $article['priceGroupId'] = null;
+                $articleData['priceGroupId'] = null;
             } else {
-                $article['priceGroup'] = $this->getManager()->find('Shopware\Models\Price\Group', $data['priceGroupId']);
-                if (empty($article['priceGroup'])) {
+                $articleData['priceGroup'] = $this->getManager()->find('Shopware\Models\Price\Group', $data['priceGroupId']);
+                if (empty($articleData['priceGroup'])) {
                     $message = SnippetsHelper::getNamespace()
                             ->get('adapters/articles/pricegroup_not_found', 'Pricegroup by id %s not found');
                     throw new \Exception(sprintf($message, $data['priceGroupId']));
@@ -670,11 +670,11 @@ class ArticlesDbAdapter implements DataDbAdapter
         //check if a propertyGroup is passed and load the propertyGroup model or set the propertyGroup parameter to null.
         if (isset($data['propertyGroupId'])) {
             if (empty($data['propertyGroupId'])) {
-                $article['propertyGroup'] = null;
+                $articleData['propertyGroup'] = null;
             } else {
-                $article['propertyGroup'] = $this->getManager()->find('\Shopware\Models\Property\Group', $data['filterGroupId']);
+                $articleData['propertyGroup'] = $this->getManager()->find('\Shopware\Models\Property\Group', $data['filterGroupId']);
 
-                if (empty($article['propertyGroup'])) {
+                if (empty($articleData['propertyGroup'])) {
                     $message = SnippetsHelper::getNamespace()
                             ->get('adapters/articles/propertyGroup_not_found', 'PropertyGroup by id %s not found');
                     throw new \Exception(sprintf($message, $data['filterGroupId']));
@@ -688,15 +688,17 @@ class ArticlesDbAdapter implements DataDbAdapter
         foreach ($data as $key => $value) {
             if (preg_match('/^attribute/', $key)) {
                 $newKey = lcfirst(preg_replace('/^attribute/', '', $key));
-                $article['attribute'][$newKey] = $value;
+                $articleData['mainDetail']['attribute'][$newKey] = $value;
                 unset($data[$key]);
             } else if (isset($articleMap[$key])) {
-                $article[$articleMap[$key]] = $value;
+                $articleData[$articleMap[$key]] = $value;
                 unset($data[$key]);
             }
         }
 
-        return $article;
+        $articleData['mainDetail']['attribute']['article'] = $article;
+
+        return $articleData;
     }
     
     public function prepareMainDetail($data, $article)
