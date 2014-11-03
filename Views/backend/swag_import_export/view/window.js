@@ -57,10 +57,6 @@ Ext.define('Shopware.apps.SwagImportExport.view.Window', {
         me.callParent(arguments);
     },
     
-    /*
-     * profile store
-     */
-
     /*{if {acl_is_allowed privilege=profile}}*/
     profilesStore: Ext.create('Shopware.apps.SwagImportExport.store.ProfileList').load(),
     /*{/if}*/
