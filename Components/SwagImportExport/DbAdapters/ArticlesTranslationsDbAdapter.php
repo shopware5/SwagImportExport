@@ -17,6 +17,11 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
      */
     protected $repository;
 
+    /**
+     * @var array
+     */
+    protected $unprocessedData;
+
     public function getDefaultColumns()
     {
         return array(
@@ -28,6 +33,11 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
             't.description_long as descriptionLong',
             't.metaTitle as metaTitle',
         );
+    }
+
+    public function getUnprocessedData()
+    {
+        return $this->unprocessedData;
     }
 
     public function readRecordIds($start, $limit, $filter)

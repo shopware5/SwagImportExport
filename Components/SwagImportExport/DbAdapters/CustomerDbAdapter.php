@@ -17,6 +17,11 @@ class CustomerDbAdapter implements DataDbAdapter
     protected $repository;
     protected $billingMap;
 
+    /**
+     * @var array
+     */
+    protected $unprocessedData;
+
     public function getDefaultColumns()
     {
         $default = array();
@@ -82,6 +87,11 @@ class CustomerDbAdapter implements DataDbAdapter
         }
         
         return $columns;
+    }
+
+    public function getUnprocessedData()
+    {
+        return $this->unprocessedData;
     }
 
     public function getBillingColumns()

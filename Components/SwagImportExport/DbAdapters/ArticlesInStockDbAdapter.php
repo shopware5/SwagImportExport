@@ -10,7 +10,12 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
      * @var Shopware\Components\Model\ModelManager
      */
     protected $manager;
-    
+
+    /**
+     * @var array
+     */
+    protected $unprocessedData;
+
     /**
      * @var Shopware\Models\Article\Detail
      */
@@ -62,6 +67,11 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
         }
         
         return $result;
+    }
+
+    public function getUnprocessedData()
+    {
+        return $this->unprocessedData;
     }
 
     public function readRecordIds($start, $limit, $filter)
