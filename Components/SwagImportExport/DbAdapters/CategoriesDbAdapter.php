@@ -20,6 +20,11 @@ class CategoriesDbAdapter implements DataDbAdapter
     protected $repository;
 
     /**
+     * @var array
+     */
+    protected $unprocessedData;
+
+    /**
      * Returns record ids
      * 
      * @param int $start
@@ -125,7 +130,12 @@ class CategoriesDbAdapter implements DataDbAdapter
 
         return $columns;
     }
-    
+
+    public function getUnprocessedData()
+    {
+        return $this->unprocessedData;
+    }
+
     public function getAttributes()
     {
         $stmt = Shopware()->Db()->query("SHOW COLUMNS FROM s_categories_attributes");

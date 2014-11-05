@@ -38,11 +38,12 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
     extend: 'Ext.app.Controller',
     snippets: {
         window: '{s name=swag_import_export/import/window_title}Import window{/s}',
-        finished: '{s name=swag_import_export/import/finished}Importing finished successfully {/s}',
+        finished: '{s name=swag_import_export/import/finished}Importing finished successfully. {/s}',
         process: '{s name=swag_import_export/import/process}Importing... {/s}',
         start: '{s name=swag_import_export/import/start}Start importing{/s}',
         close: '{s name=swag_import_export/import/close}Close{/s}',
-        failure: '{s name=swag_import_export/import/failure-title}An error occured{/s}'
+        failure: '{s name=swag_import_export/import/failure-title}An error occured{/s}',
+        unprocess: '{s name=swag_import_export/import/unprocessed}Start importing unprocessed data{/s}'
     },
     /**
      * This method creates listener for events fired from the import 
@@ -275,18 +276,43 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
                 me.batchConfig.params = result.data;
                 me.batchConfig.position = result.data.position;
 
-                win.importProgress.updateProgress(
+                if (result.data.count) {
+                    me.batchConfig.totalCount = result.data.count;
+                }
+
+                if (result.data.load === true) {
+                    Shopware.Notification.createGrowlMessage(
+                        'Import',
+                        me.snippets.finished + me.snippets.unprocess
+                    );
+
+                    win.importProgress.updateProgress(
                         me.batchConfig.position / me.batchConfig.totalCount,
                         me.snippets.process + me.batchConfig.position + ' / ' + me.batchConfig.totalCount,
                         true
-                        );
+                    );
 
-                if (me.batchConfig.position === me.batchConfig.totalCount) {
-                    me.onProcessFinish(win);
+                    win.setLoading(true);
+
+                    //sets artificial delay of 2 secs
+                    setTimeout(function () {
+                        win.setLoading(false);
+                        me.runRequest(win);
+                    }, 2000);
+
                 } else {
-                    me.runRequest(win);
-                }
+                    win.importProgress.updateProgress(
+                        me.batchConfig.position / me.batchConfig.totalCount,
+                        me.snippets.process + me.batchConfig.position + ' / ' + me.batchConfig.totalCount,
+                        true
+                    );
 
+                    if (me.batchConfig.position === me.batchConfig.totalCount) {
+                        me.onProcessFinish(win);
+                    } else {
+                        me.runRequest(win);
+                    }
+                }
             },
             failure: function(response) {
                 Shopware.Msg.createStickyGrowlMessage({

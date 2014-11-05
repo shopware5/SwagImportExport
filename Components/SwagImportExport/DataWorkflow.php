@@ -152,12 +152,14 @@ class DataWorkflow
             $records = $this->fileIO->readRecords($inputFile, $position, $batchSize);
 
             $data = $this->transformerChain->transformBackward($records);
-            
+
             $this->dataIO->write($data);
-            
+
             $this->dataIO->progressSession($batchSize);
+
+            $postData['unprocessedData'] = $this->dataIO->getUnprocessedData();
         }
-        
+
         if ($this->dataIO->getSessionState() == 'finished') {
             $this->dataIO->closeSession();
         }
@@ -171,4 +173,15 @@ class DataWorkflow
         return $postData;
     }
 
+    public function saveUnprocessedData($postData, $outputFile)
+    {
+        if ($postData['session']['prevState'] === 'new') {
+            $header = $this->transformerChain->composeHeader();
+            $this->fileIO->writeHeader($outputFile, $header);
+        }
+
+        $data = $this->transformerChain->transformForward($postData['data']);
+
+        $this->fileIO->writeRecords($outputFile, $data);
+    }
 }

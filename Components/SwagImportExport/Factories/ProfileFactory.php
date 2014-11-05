@@ -2,6 +2,7 @@
 
 namespace Shopware\Components\SwagImportExport\Factories;
 
+use Shopware\Components\SwagImportExport\Utils\TreeHelper;
 use Shopware\Components\SwagImportExport\Profile\Profile;
 use Shopware\Components\SwagImportExport\Profile\ProfileSerializer;
 
@@ -34,9 +35,32 @@ class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
         
     }
 
-    public function createProfile()
+    public function createProfileModel($data)
     {
-        
+        $tree = TreeHelper::getTreeByHiddenProfileType($data['type']);
+
+        $profileModel = new \Shopware\CustomModels\ImportExport\Profile();
+
+        if (!isset($data['name'])) {
+            throw new \Exception('Profile name is required');
+        }
+        $profileModel->setName($data['name']);
+
+        if (!isset($data['type'])) {
+            throw new \Exception('Profile type is required');
+        }
+        $profileModel->setType($data['type']);
+
+        $profileModel->setTree($tree);
+
+        if (isset($data['hidden'])) {
+            $profileModel->setHidden($data['hidden']);
+        }
+
+        Shopware()->Models()->persist($profileModel);
+        Shopware()->Models()->flush();
+
+        return $profileModel;
     }
 
     public function getProfileEntity()
@@ -64,6 +88,22 @@ class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
             $this->profileRepository = Shopware()->Models()->getRepository('Shopware\CustomModels\ImportExport\Profile');
         }
         return $this->profileRepository;
+    }
+
+    public function loadHiddenProfile($type)
+    {
+        $profileModel = $this->getProfileRepository()->findOneBy(array('type' => $type, 'hidden' => 1));
+
+        if (!$profileModel) {
+            $data = array(
+                'name' => $type . 'Shopware',
+                'type' => $type,
+                'hidden' => 1
+            );
+            $profileModel = $this->createProfileModel($data);
+        }
+
+        return new Profile($profileModel);
     }
 
 }

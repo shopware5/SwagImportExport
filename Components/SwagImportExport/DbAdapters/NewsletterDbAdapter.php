@@ -15,6 +15,11 @@ class NewsletterDbAdapter implements DataDbAdapter
     protected $addressRepository;
     protected $contactDataRepository;
 
+    /**
+     * @var array
+     */
+    protected $unprocessedData;
+
     public function getDefaultColumns()
     {
         return array(
@@ -31,6 +36,11 @@ class NewsletterDbAdapter implements DataDbAdapter
             'na.lastReadId as lastRead',
             'c.id as userID',
         );
+    }
+
+    public function getUnprocessedData()
+    {
+        return $this->unprocessedData;
     }
 
     public function read($ids, $columns)

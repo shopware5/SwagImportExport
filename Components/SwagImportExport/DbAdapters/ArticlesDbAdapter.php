@@ -34,6 +34,20 @@ class ArticlesDbAdapter implements DataDbAdapter
     protected $articleVariantMap;
     protected $variantMap;
 
+    /**
+     * @var array
+     */
+    protected $categoryIdCollection;
+
+    /**
+     * @var array
+     */
+    protected $unprocessedData;
+    /**
+     * @var array
+     */
+    protected $tempData;
+
     public function readRecordIds($start, $limit, $filter)
     {
         $manager = $this->getManager();
@@ -484,6 +498,8 @@ class ArticlesDbAdapter implements DataDbAdapter
                     $updateFlag = true;
                 }
                 
+                $processedFlag = isset($record['processed']) && $record['processed'] == 1 ? true : false;
+
                 //if it is main variant 
                 //updates the also the article
                 if ($record['mainNumber'] === $record['orderNumber'] || $updateFlag) {
@@ -494,12 +510,12 @@ class ArticlesDbAdapter implements DataDbAdapter
                         $articleData['images'] = $images;
                     }
 
-                    $similar = $this->prepareSimilars($records['similar'], $index, $articleModel);
+                    $similar = $this->prepareSimilars($records['similar'], $index, $articleModel, $processedFlag);
                     if ($similar) {
                         $articleData['similar'] = $similar;
                     }
 
-                    $accessories = $this->prepareAccessories($records['accessory'], $index, $articleModel);
+                    $accessories = $this->prepareAccessories($records['accessory'], $index, $articleModel, $processedFlag);
                     if ($accessories) {
                         $articleData['related'] = $accessories;
                     }
@@ -1042,7 +1058,15 @@ class ArticlesDbAdapter implements DataDbAdapter
         return $image;
     }
     
-    public function prepareSimilars(&$similars, $similarIndex, $article)
+    /**
+     * @param array $similars
+     * @param int $similarIndex
+     * @param object $article
+     * @param int $processedFlag
+     * @return array
+     * @throws \Exception
+     */
+    public function prepareSimilars(&$similars, $similarIndex, $article, $processedFlag = false)
     {
         if ($similars == null) {
             return;
@@ -1064,10 +1088,22 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $similarDetails = $this->getVariantRepository()
                         ->findOneBy(array('number' => $similar['ordernumber']));
 
-                if (!$similarDetails) {
+                if (!$similarDetails && $processedFlag === true) {
                     $message = SnippetsHelper::getNamespace()
-                                ->get('adapters/articles/similar_not_found', 'Similar with ordernumber %s does not exists');
+                            ->get('adapters/articles/similar_not_found', 'Similar with ordernumber %s does not exists');
                     throw new \Exception(sprintf($message, $similar['ordernumber']));
+                }
+
+                if (!$similarDetails) {
+                    $articleNumber = $article->getMainDetail()->getNumber();
+
+                    //sets similar data for export
+                    $similarData = array(
+                        'articleId' => $articleNumber,
+                        'ordernumber' => $similar['ordernumber'],
+                    );
+                    $this->saveUnprocessedData('similar', $articleNumber, $similarData);
+                    continue;
                 }
 
                 $similar['similarId'] = $similarDetails->getArticle()->getId();
@@ -1087,7 +1123,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         return $similarCollection;
     }
     
-    public function prepareAccessories(&$accessories, $accessoryIndex, $article)
+    public function prepareAccessories(&$accessories, $accessoryIndex, $article, $processedFlag = false)
     {
         if ($accessories == null) {
             return;
@@ -1109,10 +1145,21 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $accessoryDetails = $this->getVariantRepository()
                         ->findOneBy(array('number' => $accessory['ordernumber']));
 
-                if (!$accessoryDetails) {
+                if (!$accessoryDetails && $processedFlag === true) {
                     $message = SnippetsHelper::getNamespace()
-                                ->get('adapters/articles/accessory_not_found', 'Accessory with ordernumber %s does not exists');
+                            ->get('adapters/articles/accessory_not_found', 'Accessory with ordernumber %s does not exists');
                     throw new \Exception(sprintf($message, $accessory['ordernumber']));
+                }
+
+                if (!$accessoryDetails) {
+                    $articleNumber = $article->getMainDetail()->getNumber();
+
+                    $data = array(
+                        'articleId' => $articleNumber,
+                        'ordernumber' => $accessory['ordernumber'],
+                    );
+                    $this->saveUnprocessedData('accessory', $articleNumber, $data);
+                    continue;
                 }
 
                 $accessory['accessoryId'] = $accessoryDetails->getArticle()->getId();
@@ -1849,6 +1896,53 @@ class ArticlesDbAdapter implements DataDbAdapter
     public function setCategoryIdCollection($categoryIdCollection)
     {
         $this->categoryIdCollection[] = $categoryIdCollection;
+    }
+
+    public function saveUnprocessedData($type, $articleNumber, $data)
+    {
+        $this->saveArticleData($articleNumber);
+
+        $this->setUnprocessedData($type, $data);
+    }
+
+    protected function saveArticleData($articleNumber)
+    {
+        $tempData = $this->getTempData();
+
+        if (isset($tempData[$articleNumber])) {
+            return;
+        }
+
+        $this->setTempData($articleNumber);
+
+        $articleData = array(
+            'articleId' => $articleNumber,
+            'orderNumber' => $articleNumber,
+//            'mainNumber' => $articleNumber,
+            'processed' => 1
+        );
+
+        $this->setUnprocessedData('article', $articleData);
+    }
+
+    public function getUnprocessedData()
+    {
+        return $this->unprocessedData;
+    }
+
+    public function setUnprocessedData($type, $data)
+    {
+        $this->unprocessedData[$type][] = $data;
+    }
+
+    public function getTempData()
+    {
+        return $this->tempData;
+    }
+
+    public function setTempData($tempData)
+    {
+        $this->tempData[$tempData] = $tempData;
     }
 
     /**

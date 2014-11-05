@@ -92,6 +92,13 @@ class Profile extends ModelEntity
      */
     protected $tree;
 
+    /**
+     * @var integer hidden
+     *
+     * @ORM\Column(name="hidden", type="integer")
+     */
+    protected $hidden = 0;
+
     public function getId()
     {
         return $this->id;
@@ -140,6 +147,16 @@ class Profile extends ModelEntity
     public function setName($name)
     {
         $this->name = $name;
+    }
+
+    public function getHidden()
+    {
+        return $this->hidden;
+    }
+
+    public function setHidden($hidden)
+    {
+        $this->hidden = $hidden;
     }
 
     /**

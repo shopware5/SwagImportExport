@@ -12,4 +12,6 @@ interface DataDbAdapter
     public function getDefaultColumns();
 
     public function write($records);
+
+    public function getUnprocessedData();
 }

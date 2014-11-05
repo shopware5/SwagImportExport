@@ -59,6 +59,7 @@ class DataIO
      * @var string
      */
     private $fileName;
+
     /**
      * @var string
      */
@@ -116,6 +117,13 @@ class DataIO
         $dbAdapter = $this->getDbAdapter();
         
         $dbAdapter->write($data);
+    }
+
+    public function getUnprocessedData()
+    {
+        $dbAdapter = $this->getDbAdapter();
+
+        return $dbAdapter->getUnprocessedData();
     }
 
     /**

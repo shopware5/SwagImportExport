@@ -18,6 +18,11 @@ class Profile
         $this->configNames = array('exportConversion', 'tree');
     }
 
+    public function getId()
+    {
+        return $this->profileEntity->getId();
+    }
+
     public function getType()
     {
         return $this->profileEntity->getType();

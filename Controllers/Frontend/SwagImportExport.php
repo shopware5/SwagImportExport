@@ -22,7 +22,8 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
+use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
+use \Shopware\Components\SwagImportExport\Utils\CommandHelper;
 
 /**
  * Shopware ImportExport Plugin
@@ -33,7 +34,12 @@ use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper
  */
 class Shopware_Controllers_Frontend_SwagImportExport extends Enlight_Controller_Action
 {
-    
+
+    /**
+     * Shopware\Components\Model\ModelManager
+     */
+    protected $manager;
+
     public function init()
     {
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
@@ -89,14 +95,13 @@ class Shopware_Controllers_Frontend_SwagImportExport extends Enlight_Controller_
         fwrite($file, $timeout);
         fclose($file);
         
-        $manager = Shopware()->Models();
-        $profileRepository = $manager->getRepository('Shopware\CustomModels\ImportExport\Profile');
+        $profileRepository = $this->getManager()->getRepository('Shopware\CustomModels\ImportExport\Profile');
         foreach($files as $file) {
-            $type = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-            if ($type == 'xml' || $type == 'csv') {
+            $fileExtension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+            if ($fileExtension == 'xml' || $fileExtension == 'csv') {
                 try {
 
-                    $profile = \Shopware\Components\SwagImportExport\Utils\CommandHelper::findProfileByName($file, $profileRepository);
+                    $profile = CommandHelper::findProfileByName($file, $profileRepository);
                     if ($profile === false) {
                         $message = SnippetsHelper::getNamespace()->get('cronjob/no_profile', 'Failed to create directory %s');
                         throw new \Exception(sprintf($message, $file));
@@ -105,14 +110,14 @@ class Shopware_Controllers_Frontend_SwagImportExport extends Enlight_Controller_
                     $filePath = Shopware()->DocPath() . 'files/import_cron/' . $file;
                     $fileObject = new \Symfony\Component\HttpFoundation\File\File($filePath);
 
-                    $album = $this->albumCreate();
+                    $album = $this->createAlbum();
                     
                     $media = new \Shopware\Models\Media\Media();
 
                     $media->setAlbum($album);
                     $media->setDescription('');
                     $media->setCreated(new DateTime());
-                    $media->setExtension($type);
+                    $media->setExtension($fileExtension);
 
                     $identity = Shopware()->Auth()->getIdentity();
                     if ($identity !== null) {
@@ -124,17 +129,10 @@ class Shopware_Controllers_Frontend_SwagImportExport extends Enlight_Controller_
                     //set the upload file into the model. The model saves the file to the directory
                     $media->setFile($fileObject);
 
-                    Shopware()->Models()->persist($media);
-                    Shopware()->Models()->flush();
+                    $this->getManager()->persist($media);
+                    $this->getManager()->flush();
 
                     $mediaPath = $media->getPath();
-
-                    $commandHelper = new \Shopware\Components\SwagImportExport\Utils\CommandHelper(array(
-                        'profileEntity' => $profile,
-                        'filePath' => $mediaPath,
-                        'format' => $type,
-                        'username' => 'Cron'
-                    ));
 
                 } catch (\Exception $e) {
                     echo $e->getMessage() . "\n";
@@ -143,18 +141,27 @@ class Shopware_Controllers_Frontend_SwagImportExport extends Enlight_Controller_
                 }
 
                 try {
-                    $return = $commandHelper->prepareImport();
-                    $count = $return['count'];
 
-                    $return = $commandHelper->importAction();
-                    $position = $return['data']['position'];
+                    $return = $this->start($profile, $mediaPath, $fileExtension);
 
-                    while ($position < $count) {
-                        $return = $commandHelper->importAction();
-                        $position = $return['data']['position'];
+                    $pathInfo = pathinfo($mediaPath);
+                    $tmpFileName = 'media/unknown/' . $pathInfo['filename'] . '-tmp.' . $pathInfo['extension'];
+                    $tmpFile = Shopware()->DocPath() . $tmpFileName;
+
+                    if (file_exists($tmpFile)) {
+
+                        //renames
+                        $outputFileName = 'media/unknown/' . $pathInfo['filename'] . '-swag.' . $pathInfo['extension'];
+                        $outputFile = Shopware()->DocPath() . $outputFileName;
+                        rename($tmpFile, $outputFile);
+
+                        $profile = $this->Plugin()->getProfileFactory()->loadHiddenProfile('articles');
+                        $profileEntity = $profile->getEntity();
+
+                        $this->start($profileEntity, $outputFile, 'csv');
                     }
-                    
-                    $message = $return['data']['position'] . ' ' . $return['data']['adapter'] . ' imported successfully';
+
+                    $message = $return['data']['position'] . ' ' . $return['data']['adapter'] . " imported successfully \n";
                     echo $message;
                 } catch (\Exception $e) {
                     // copy file as broken
@@ -170,24 +177,67 @@ class Shopware_Controllers_Frontend_SwagImportExport extends Enlight_Controller_
     }
     
     /**
-     * Create album in media manager for ImportFiles
-     * 
+     * @param \Shopware\CustomModels\ImportExport\Profile $profileModel
+     * @param string $inputFile
+     * @param string $format
+     * @return array
+     */
+    protected function start($profileModel, $inputFile, $format)
+    {
+        $commandHelper = new CommandHelper(array(
+            'profileEntity' => $profileModel,
+            'filePath' => $inputFile,
+            'format' => $format,
+            'username' => 'Cron'
+        ));
+
+        $return = $commandHelper->prepareImport();
+        $count = $return['count'];
+
+        $return = $commandHelper->importAction();
+        $position = $return['data']['position'];
+
+        while ($position < $count) {
+            $return = $commandHelper->importAction();
+            $position = $return['data']['position'];
+        }
+
+        return $return;
+    }
+
+    /**
+     * Creates album in media manager for ImportFiles
+     *
      * @return \Shopware\Models\Media\Album
      */
-    protected function albumCreate()
+    protected function createAlbum()
     {
         $albumRepo = Shopware()->Models()->getRepository('Shopware\Models\Media\Album');
         $album = $albumRepo->findOneBy(array('name' => 'ImportFiles'));
-        
+
         if (!$album) {
             $album = new Shopware\Models\Media\Album();
             $album->setName('ImportFiles');
             $album->setPosition(0);
-            Shopware()->Models()->persist($album);
-            Shopware()->Models()->flush($album);
+            $this->getManager()->persist($album);
+            $this->getManager()->flush($album);
         }
-        
+
         return $album;
     }
-    
+
+    protected function Plugin()
+    {
+        return Shopware()->Plugins()->Backend()->SwagImportExport();
+    }
+
+    public function getManager()
+    {
+        if ($this->manager === null) {
+            $this->manager = Shopware()->Models();
+        }
+
+        return $this->manager;
+    }
+
 }

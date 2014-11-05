@@ -14,6 +14,11 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
     protected $priceRepository;
     protected $groupRepository;
 
+    /**
+     * @var array
+     */
+    protected $unprocessedData;
+
     public function readRecordIds($start, $limit, $filter)
     {
         $manager = $this->getManager();
@@ -118,6 +123,11 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
 //            'articleTax.id as taxId',
 //            'articleTax.tax as tax',
         );
+    }
+
+    public function getUnprocessedData()
+    {
+        return $this->unprocessedData;
     }
 
     /**

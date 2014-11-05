@@ -15,6 +15,11 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
     protected $db;
 
     /**
+     * @var array
+     */
+    protected $unprocessedData;
+
+    /**
      * Returns record ids
      * 
      * @param int $start
@@ -143,6 +148,11 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
         );
 
         return $columns;
+    }
+
+    public function getUnprocessedData()
+    {
+        return $this->unprocessedData;
     }
 
     /**

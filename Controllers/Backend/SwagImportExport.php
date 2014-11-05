@@ -213,31 +213,24 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $data = $this->Request()->getParam('data', 1);
 
         try {
-            $newTree = TreeHelper::getDefaultTreeByProfileType($data['type']);                
-            $profile = new \Shopware\CustomModels\ImportExport\Profile();
 
-            $profile->setName($data['name']);
-            $profile->setType($data['type']);
-            $profile->setTree($newTree);
-
-            $this->getManager()->persist($profile);
-            $this->getManager()->flush();
+            $profileModel = $this->Plugin()->getProfileFactory()->createProfileModel($data);
 
             $this->View()->assign(array(
                 'success' => true,
                 'data' => array(
-                    "id" => $profile->getId(),
-                    'name' => $profile->getName(),
-                    'type' => $profile->getType(),
-                    'tree' => $profile->getTree(),
+                    "id" => $profileModel->getId(),
+                    'name' => $profileModel->getName(),
+                    'type' => $profileModel->getType(),
+                    'tree' => $profileModel->getTree(),
                 )
             ));
         } catch (\Exception $e) {
             $this->View()->assign(array('success' => false, 'msg' => $e->getMessage()));
         }
     }
-    
-     /**
+
+    /**
      * Returns the new profile
      */
     public function duplicateProfileAction()
@@ -316,8 +309,11 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $profileRepository = $this->getProfileRepository();
 
         $query = $profileRepository->getProfilesListQuery(
-                        $this->Request()->getParam('filter', array()), $this->Request()->getParam('sort', array()), $this->Request()->getParam('limit', null), $this->Request()->getParam('start')
-                )->getQuery();
+            $this->Request()->getParam('filter', array('hidden' => 0)),
+            $this->Request()->getParam('sort', array()),
+            $this->Request()->getParam('limit', null),
+            $this->Request()->getParam('start')
+        )->getQuery();
 
         $count = $this->getManager()->getQueryCount($query);
 
@@ -718,7 +714,8 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         }
 
         // we create the file reader that will read the result file
-        $fileReader = $this->Plugin()->getFileIOFactory()->createFileReader($postData);
+        $fileFactory = $this->Plugin()->getFileIOFactory();
+        $fileReader = $fileFactory->createFileReader($postData);
 
         //load profile
         $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
@@ -752,22 +749,112 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                 $profile, array('isTree' => $fileReader->hasTreeStructure())
         );
 
+        $sessionState = $dataIO->getSessionState();
+
         $dataWorkflow = new DataWorkflow($dataIO, $profile, $dataTransformerChain, $fileReader);
         $logger = new StatusLogger();
 
         try {
             $post = $dataWorkflow->import($postData, $inputFile);
+
+            if (isset($post['unprocessedData']) && $post['unprocessedData']) {
+
+                $data = array(
+                    'data' => $post['unprocessedData'],
+                    'session' => array(
+                        'prevState' => $sessionState,
+                        'currentState' => $dataIO->getSessionState()
+                    )
+                );
+
+                $this->afterImport($data, $inputFile);
+            }
+
             if ($dataSession->getTotalCount() > 0 && ($dataSession->getTotalCount() == $post['position'])) {
+
+                $postProcessedData = $this->processData($inputFile);
+
+                if ($postProcessedData) {
+                    unset($post['unprocessedData']);
+                    unset($post['sessionId']);
+                    $post = array_merge($post, $postProcessedData);
+                }
+
                 $message = $post['position'] . ' ' . $post['adapter'] . ' imported successfully';
                 $logger->write($message, 'false');
             }
-            
+
             return $this->View()->assign(array('success' => true, 'data' => $post));
         } catch (Exception $e) {
             $logger->write($e->getMessage(), 'true');
             
             return $this->View()->assign(array('success' => false, 'msg' => $e->getMessage()));
         }
+    }
+
+    /**
+     * Checks for unprocessed data
+     * Returns unprocessed data for import
+     * 
+     * @param string $inputFile
+     * @return mixed
+     */
+    protected function processData($inputFile)
+    {
+        $pathInfo = pathinfo($inputFile);
+        $fileName = 'media/unknown/' . $pathInfo['filename'] . '-tmp.' . $pathInfo['extension'];
+        $file = Shopware()->DocPath() . $fileName;
+
+        if (file_exists($file)) {
+
+            //renames
+            $outputFileName = 'media/unknown/' . $pathInfo['filename'] . '-swag.' . $pathInfo['extension'];
+            $outputFile = Shopware()->DocPath() . $outputFileName;
+            rename($fileName, $outputFile);
+
+            $profile = $this->Plugin()->getProfileFactory()->loadHiddenProfile('articles');
+            $profileId = $profile->getId();
+
+            $fileReader = $this->Plugin()->getFileIOFactory()->createFileReader(array('format' => 'csv'));
+            $totalCount = $fileReader->getTotalCount($outputFile);
+
+            return array(
+                'importFile' => $outputFileName,
+                'profileId' => $profileId,
+                'count' => $totalCount,
+                'position' => 0,
+                'load' => true,
+            );
+        }
+
+        return false;
+    }
+
+    /**
+     * Saves unprocessed data to csv file
+     * 
+     * @param array $data
+     * @param string $inputFile
+     */
+    protected function afterImport($data, $inputFile)
+    {
+        $fileFactory = $this->Plugin()->getFileIOFactory();
+
+        //loads hidden profile for article
+        $profile = $this->Plugin()->getProfileFactory()->loadHiddenProfile('articles');
+
+        $fileHelper = $fileFactory->createFileHelper();
+        $fileWriter = $fileFactory->createFileWriter(array('format' => 'csv'), $fileHelper);
+
+        $dataTransformerChain = $this->Plugin()->getDataTransformerFactory()->createDataTransformerChain(
+                $profile, array('isTree' => $fileWriter->hasTreeStructure())
+        );
+
+        $pathInfo = pathinfo($inputFile);
+        $outputFile = Shopware()->DocPath() . 'media/unknown/' . $pathInfo['filename'] . '-tmp.' . $pathInfo['extension'];
+
+        $dataWorkflow = new DataWorkflow($dataIO, $profile, $dataTransformerChain, $fileWriter);
+        $dataWorkflow->saveUnprocessedData($data, $outputFile);
     }
 
     public function getSessionsAction()

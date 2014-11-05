@@ -24,6 +24,11 @@ class OrdersDbAdapter implements DataDbAdapter
     protected $detailRepository;
 
     /**
+     * @var array
+     */
+    protected $unprocessedData;
+
+    /**
      * Returns record ids
      * 
      * @param int $start
@@ -130,6 +135,11 @@ class OrdersDbAdapter implements DataDbAdapter
         $result['default'] = DbAdapterHelper::escapeNewLines($orders);
         
         return $result;
+    }
+
+    public function getUnprocessedData()
+    {
+        return $this->unprocessedData;
     }
 
     /**

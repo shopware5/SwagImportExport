@@ -330,7 +330,7 @@ class TreeHelper
      * Note: The id of the root node MUST be 'root', but the name may be different.
      * 
      * @param string $profileType
-     * @return string|boolean
+     * @return string
      * @throws \Exception
      */
     static public function getDefaultTreeByProfileType($profileType)
@@ -357,8 +357,21 @@ class TreeHelper
             default :
                 throw new \Exception('The profile could not be created.');
         }
+    }
 
-        return false;
+    /**
+     * @param string $profileType
+     * @return string
+     * @throws \Exception
+     */
+    static public function getTreeByHiddenProfileType($profileType)
+    {
+        switch ($profileType) {
+            case 'articles':
+                return '{"id":"root","name":"Root","type":"node","children":[{"id":"4","name":"articles","index":0,"type":"","children":[{"id":"53e0d3148b0b2","name":"article","index":0,"type":"iteration","adapter":"article","parentKey":"","shopwareField":"","children":[{"id":"53e0d365881b7","type":"leaf","index":0,"name":"ordernumber","shopwareField":"orderNumber"},{"id":"53e0d329364c4","type":"leaf","index":1,"name":"mainnumber","shopwareField":"mainNumber"},{"id":"544f816b5eb00","name":"similars","index":2,"type":"iteration","adapter":"similar","parentKey":"articleId","shopwareField":"","children":[{"id":"544f818e656fd","type":"leaf","index":0,"name":"similar","shopwareField":"ordernumber"}]},{"id":"544f819b59b8b","name":"accessories","index":3,"type":"iteration","adapter":"accessory","parentKey":"articleId","shopwareField":"","children":[{"id":"544f81ac1b04e","type":"leaf","index":0,"name":"accessory","shopwareField":"ordernumber"}]},{"id":"544f83241f649","type":"leaf","index":4,"name":"processed","shopwareField":"processed"}],"attributes":null}],"shopwareField":""}]}';
+            default :
+                throw new \Exception('The profile type does not exists.');
+        }
     }
 
 }
