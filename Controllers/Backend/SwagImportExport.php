@@ -515,8 +515,9 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
             $dbAdapter = $dataFactory->createDbAdapter($profile->getType());
             $dataSession = $dataFactory->loadSession($postData);
+            $logger = $dataFactory->loadLogger($dataSession);
 
-            $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession);
+            $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession, $logger);
 
             $colOpts = $dataFactory->createColOpts($postData['columnOptions']);
             $limit = $dataFactory->createLimit($postData['limit']);            
@@ -605,9 +606,10 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
         $dbAdapter = $dataFactory->createDbAdapter($profile->getType());
         $dataSession = $dataFactory->loadSession($postData);
-        
+        $logger = $dataFactory->loadLogger($dataSession);
+
         //create dataIO
-        $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession);
+        $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession, $logger);
 
         $colOpts = $dataFactory->createColOpts($postData['columnOptions']);
         $limit = $dataFactory->createLimit($postData['limit']);
@@ -630,7 +632,6 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         );
 
         $dataWorkflow = new DataWorkflow($dataIO, $profile, $dataTransformerChain, $fileWriter);
-        $logger = new StatusLogger();
             
         try {
             $post = $dataWorkflow->export($postData);
@@ -686,9 +687,10 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
         $dbAdapter = $dataFactory->createDbAdapter($profile->getType());
         $dataSession = $dataFactory->loadSession($postData);
+        $logger = $dataFactory->loadLogger($dataSession);
 
         //create dataIO
-        $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession);
+        $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession, $logger);
 
         $position = $dataIO->getSessionPosition();
         $position = $position == null ? 0 : $position;
@@ -726,13 +728,18 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         //setting up the batch size
         $postData['batchSize'] = $profile->getType() === 'articlesImages' ? 1 : 50;
 
+        /* @var $dataFactory Shopware\Components\SwagImportExport\Factories\DataFactory */
         $dataFactory = $this->Plugin()->getDataFactory();
 
         $dbAdapter = $dataFactory->createDbAdapter($profile->getType());
+
         $dataSession = $dataFactory->loadSession($postData);
 
+        /* @var $logger Shopware\Components\SwagImportExport\Logger\Logger */
+        $logger = $dataFactory->loadLogger($dataSession);
+
         //create dataIO
-        $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession);
+        $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession, $logger);
 
         $colOpts = $dataFactory->createColOpts($postData['columnOptions']);
         $limit = $dataFactory->createLimit($postData['limit']);
@@ -752,7 +759,6 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $sessionState = $dataIO->getSessionState();
 
         $dataWorkflow = new DataWorkflow($dataIO, $profile, $dataTransformerChain, $fileReader);
-        $logger = new StatusLogger();
 
         try {
             $post = $dataWorkflow->import($postData, $inputFile);
@@ -780,14 +786,16 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                     $post = array_merge($post, $postProcessedData);
                 }
 
-                $message = $post['position'] . ' ' . $post['adapter'] . ' imported successfully';
-                $logger->write($message, 'false');
+                if ($logger->getMessage() === null) {
+                    $message = $post['position'] . ' ' . $post['adapter'] . ' imported successfully';
+                    $logger->write($message, 'false');
+                }
             }
 
             return $this->View()->assign(array('success' => true, 'data' => $post));
         } catch (Exception $e) {
-            $logger->write($e->getMessage(), 'true');
-            
+            $logger->write($e->getMessage(), 'critical error');
+
             return $this->View()->assign(array('success' => false, 'msg' => $e->getMessage()));
         }
     }

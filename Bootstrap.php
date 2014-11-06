@@ -449,6 +449,21 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         
         $form->setElement(
             'combo',
+            'SwagImportExportErrorMode',
+            array(
+                'label' => 'Continue import/export when error occurs during the process',
+                'store' => array(
+                    array(false, 'No'),
+                    array(true, 'Yes')
+                ),
+                'required' => false,
+                'multiSelect' => false,
+                'value' => false
+            )
+        );
+
+        $form->setElement(
+            'combo',
             'SwagImportExportImageMode',
             array(
                 'label' => 'Image import mode',
@@ -499,12 +514,18 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
             'en_GB' => array(
                 'SwagImportExportImageMode' => array(
                     'label' => 'Image import mode'
+                ),
+                'SwagImportExportErrorMode' => array(
+                    'label' => 'Continue import/export when error occurs during the process'
                 )
             ),
             
             'de_DE' => array(
                 'SwagImportExportImageMode' => array(
                     'label' => 'Bildimport-Modus'
+                ),
+                'SwagImportExportErrorMode' => array(
+                    'label' => 'Continue import/export when error occurs during the process'
                 )
             ),
         );

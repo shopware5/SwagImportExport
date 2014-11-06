@@ -14,6 +14,7 @@ use Shopware\Components\Model\ModelEntity,
  */
 class Logger extends ModelEntity
 {
+
     /**
      * Primary Key - autoincrement value
      *
@@ -24,18 +25,25 @@ class Logger extends ModelEntity
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $id;
-        
+
+    /**
+     * @var Sessions[] $session
+     *
+     * @ORM\OneToMany(targetEntity="Shopware\CustomModels\ImportExport\Session", mappedBy="logger")
+     */
+    protected $session;
+
     /**
      * @var string $message
      * 
-     * @ORM\Column(name="message", type="string", length=255)
+     * @ORM\Column(name="message", type="string", length=255, nullable=true)
      */
     protected $message;
-    
+
     /**
      * @var boolean $state
      * 
-     * @ORM\Column(name="state", type="string", length=100)
+     * @ORM\Column(name="state", type="string", length=100, nullable=true)
      */
     protected $state;
 
@@ -45,40 +53,55 @@ class Logger extends ModelEntity
      * @ORM\Column(name="created_at", type="datetime")
      */
     protected $createdAt;
-    
+
     public function getId()
     {
         return $this->id;
     }
-        
+
     public function getMessage()
     {
         return $this->message;
     }
-    
+
     public function setMessage($message)
     {
         $this->message = $message;
     }
-    
+
     public function getStatus()
     {
         return $this->state;
     }
-    
+
     public function setStatus($status)
     {
         $this->state = $status;
     }
-    
-    public function getCreateAt()
+
+    public function getCreatedAt()
     {
         return $this->createdAt;
     }
-    
-    public function setCreateAt($createAt)
+
+    /**
+     * Set date
+     *
+     * @param \DateTime|string $createdAt
+     */
+    public function setCreatedAt($createdAt = 'now')
     {
-        $this->createdAt = $createAt;
+        if (!($createdAt instanceof \DateTime)) {
+            $this->createdAt = new \DateTime($createdAt);
+        } else {
+            $this->createdAt = $createdAt;
+        }
+        return $this;
     }
-    
+
+    public function getSession()
+    {
+        return $this->session;
+    }
+
 }
