@@ -793,8 +793,8 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             }
 
             return $this->View()->assign(array('success' => true, 'data' => $post));
-        } catch (Exception $e) {
-            $logger->write($e->getMessage(), 'critical error');
+        } catch (\Exception $e) {
+            $logger->write($e->getMessage(), 'true');
 
             return $this->View()->assign(array('success' => false, 'msg' => $e->getMessage()));
         }

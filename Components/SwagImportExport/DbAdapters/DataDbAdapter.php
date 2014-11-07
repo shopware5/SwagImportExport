@@ -14,4 +14,6 @@ interface DataDbAdapter
     public function write($records);
 
     public function getUnprocessedData();
+
+    public function getLogMessages();
 }

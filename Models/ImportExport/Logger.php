@@ -36,7 +36,7 @@ class Logger extends ModelEntity
     /**
      * @var string $message
      * 
-     * @ORM\Column(name="message", type="string", length=255, nullable=true)
+     * @ORM\Column(name="message", type="text", nullable=true)
      */
     protected $message;
 

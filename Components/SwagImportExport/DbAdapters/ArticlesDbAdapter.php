@@ -503,7 +503,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                     if ($violations->count() > 0) {
                         $message = SnippetsHelper::getNamespace()
                                 ->get('adapters/articles/no_valid_article_entity', 'No valid detail entity for article %s');
-                        throw new AdaptrerException($message);
+                        throw new AdaptrerException(sprintf($message, $variantModel->getNumber()));
                     }
 
                     $this->getManager()->persist($articleModel);
@@ -621,7 +621,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 if (!$shop) {
                     $message = SnippetsHelper::getNamespace()
                                 ->get('adapters/articles/no_shop_id', 'Shop by id %s not found');
-                    throw new \Exception(sprintf($message, $translation['languageId']));
+                    throw new AdaptrerException(sprintf($message, $translation['languageId']));
                 }
                 $data = array_intersect_key($translation, array_flip($whitelist));
 
@@ -712,7 +712,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 if (empty($articleData['propertyGroup'])) {
                     $message = SnippetsHelper::getNamespace()
                             ->get('adapters/articles/propertyGroup_not_found', 'PropertyGroup by id %s not found for article %s');
-                    throw new \Exception(sprintf($message, $data['filterGroupId'], $data['orderNumber']));
+                    throw new AdaptrerException(sprintf($message, $data['filterGroupId'], $data['orderNumber']));
                 }
             }
             unset($data['propertyGroupId']);
@@ -952,7 +952,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 if (!$categoryModel) {
                     $message = SnippetsHelper::getNamespace()
                                 ->get('adapters/articles/category_not_found', 'Category with id %s could not be found.');
-                    throw new \Exception(sprintf($message, $categoryData['categoryId']));
+                    throw new AdaptrerException(sprintf($message, $categoryData['categoryId']));
                 }
 
 

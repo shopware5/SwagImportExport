@@ -62,7 +62,11 @@ class Logger
 
         $logger = $this->getLogger();
 
-        $appendMsg = implode(';', $messages);
+        if (is_array($messages)) {
+            $appendMsg = implode(';', $messages);
+        } else {
+            $appendMsg = $messages;
+        }
 
         $message = $logger->getMessage();
 
