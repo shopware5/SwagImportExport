@@ -37,7 +37,11 @@ class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
 
     public function createProfileModel($data)
     {
-        $tree = TreeHelper::getTreeByHiddenProfileType($data['type']);
+        if (isset($data['hidden']) && $data['hidden']) {
+            $tree = TreeHelper::getTreeByHiddenProfileType($data['type']);
+        } else {
+            $tree = TreeHelper::getDefaultTreeByProfileType($data['type']);
+        }
 
         $profileModel = new \Shopware\CustomModels\ImportExport\Profile();
 
