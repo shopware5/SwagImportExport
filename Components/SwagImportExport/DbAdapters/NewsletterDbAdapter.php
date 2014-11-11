@@ -6,7 +6,7 @@ use Shopware\Models\Newsletter\Address;
 use Shopware\Models\Newsletter\Group;
 use Shopware\Models\Newsletter\ContactData;
 use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
-use Shopware\Components\SwagImportExport\Exception\AdaptrerException;
+use Shopware\Components\SwagImportExport\Exception\AdapterException;
 
 class NewsletterDbAdapter implements DataDbAdapter
 {
@@ -108,13 +108,8 @@ class NewsletterDbAdapter implements DataDbAdapter
                 if (empty($newsletterData['email'])) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/newsletter/email_required', 'Email address is required');
-                    throw new AdaptrerException($message);
+                    throw new AdapterException($message);
                 }
-
-    //            if (!$emailValidator->isValid($newsletterData['email'])) {
-    //                 //todo: log this result
-    //                continue;
-    //            }
 
                 if ($newsletterData['groupName']) {
                     $group = $this->getGroupRepository()->findOneByName($newsletterData['groupName']);
@@ -128,7 +123,7 @@ class NewsletterDbAdapter implements DataDbAdapter
                 } elseif (!$group) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/newsletter/group_required', 'Group is required for email %s');
-                    throw new AdaptrerException(sprintf($message, $newsletterData['email']));
+                    throw new AdapterException(sprintf($message, $newsletterData['email']));
                 }
 
                 // Create/Update the Address entry
@@ -169,7 +164,7 @@ class NewsletterDbAdapter implements DataDbAdapter
 
                 $manager->flush();
                 $manager->clear();
-            } catch (AdaptrerException $e) {
+            } catch (AdapterException $e) {
                 $message = $e->getMessage();
                 $this->saveMessage($message);
             }

@@ -6,7 +6,7 @@ use Shopware\Models\Customer\Customer;
 use Shopware\Components\SwagImportExport\Utils\DataHelper;
 use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
 use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
-use Shopware\Components\SwagImportExport\Exception\AdaptrerException;
+use Shopware\Components\SwagImportExport\Exception\AdapterException;
 
 class CustomerDbAdapter implements DataDbAdapter
 {
@@ -267,7 +267,7 @@ class CustomerDbAdapter implements DataDbAdapter
                 if (!$record['email']) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/customer/email_required', 'User email is required field.');
-                    throw new AdaptrerException($message);
+                    throw new AdapterException($message);
                 }
 
                 $customer = $this->getRepository()->findOneBy(array('email' => $record['email']));
@@ -297,16 +297,16 @@ class CustomerDbAdapter implements DataDbAdapter
                     }
                 }
 
-                if (isset($record['password']) && !$record['password']) {
+                if (!isset($record['password']) && !$record['password']) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/customer/password_required', 'Password must be provided for email %s');
-                    throw new AdaptrerException(sprintf($message, $record['email']));
+                    throw new AdapterException(sprintf($message, $record['email']));
                 }
 
                 if (isset($record['password']) && (!isset($record['encoder']) || !$record['encoder'])) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/customer/password_encoder_required', 'Password encoder must be provided for email %s');
-                    throw new AdaptrerException(sprintf($message, $record['email']));
+                    throw new AdapterException(sprintf($message, $record['email']));
                 }
 
                 $customerData = $this->prepareCustomer($record);
@@ -322,7 +322,7 @@ class CustomerDbAdapter implements DataDbAdapter
                 if ($violations->count() > 0) {
                     $message = SnippetsHelper::getNamespace()
                                     ->get('adapters/customer/no_valid_customer_entity', 'No valid user entity for email %s');
-                    throw new AdaptrerException(sprintf($message, $record['email']));
+                    throw new AdapterException(sprintf($message, $record['email']));
                 }
 
                 $manager->persist($customer);
@@ -337,7 +337,7 @@ class CustomerDbAdapter implements DataDbAdapter
                 }
 
                 $manager->clear();
-            } catch (AdaptrerException $e) {
+            } catch (AdapterException $e) {
                 $message = $e->getMessage();
                 $this->saveMessage($message);
             }

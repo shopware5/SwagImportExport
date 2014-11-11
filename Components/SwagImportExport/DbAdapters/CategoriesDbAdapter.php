@@ -5,7 +5,7 @@ namespace Shopware\Components\SwagImportExport\DbAdapters;
 use Shopware\Models\Category\Category;
 use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
 use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
-use Shopware\Components\SwagImportExport\Exception\AdaptrerException;
+use Shopware\Components\SwagImportExport\Exception\AdapterException;
 
 class CategoriesDbAdapter implements DataDbAdapter
 {
@@ -184,20 +184,20 @@ class CategoriesDbAdapter implements DataDbAdapter
                 if (!$record['name']) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/categories/name_required', 'Category name is required');
-                    throw new AdaptrerException($message);
+                    throw new AdapterException($message);
                 }
 
                 if (!$record['parentId']) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/categories/parent_id_required', 'Parent category id is required for category %s');
-                    throw new AdaptrerException(sprintf($message, $record['name']));
+                    throw new AdapterException(sprintf($message, $record['name']));
                 }
 
                 $parentCategory = $this->getRepository()->findOneBy(array('id' => $record['parentId']));
                 if (!$parentCategory) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/categories/parent_not_exists', 'Parent category does not exists for category %s');
-                    throw new AdaptrerException(sprintf($message, $record['name']));
+                    throw new AdapterException(sprintf($message, $record['name']));
                 }
 
                 /* @var $category Shopware\Models\Category\Category */
@@ -216,7 +216,7 @@ class CategoriesDbAdapter implements DataDbAdapter
                 if ($violations->count() > 0) {
                     $message = SnippetsHelper::getNamespace()
                                     ->get('adapters/category/no_valid_category_entity', 'No valid category entity for category %s');
-                    throw new AdaptrerException(sprintf($message, $category->getName()));
+                    throw new AdapterException(sprintf($message, $category->getName()));
                 }
 
                 $manager->persist($category);
@@ -225,7 +225,7 @@ class CategoriesDbAdapter implements DataDbAdapter
                 $manager->flush();
                 $manager->clear();
             
-            } catch (AdaptrerException $e) {
+            } catch (AdapterException $e) {
                 $message = $e->getMessage();
                 $this->saveMessage($message);
             }

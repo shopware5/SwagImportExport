@@ -2,7 +2,7 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
-use Shopware\Components\SwagImportExport\Exception\AdaptrerException;
+use Shopware\Components\SwagImportExport\Exception\AdapterException;
 
 class ArticlesImagesDbAdapter implements DataDbAdapter
 {
@@ -178,7 +178,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                 if (empty($record['ordernumber']) || empty($record['image'])) {
                     $message = SnippetsHelper::getNamespace()
                                 ->get('adapters/articlesImages/ordernumber_image_required', 'Ordernumber and image are required');
-                    throw new AdaptrerException($message);
+                    throw new AdapterException($message);
                 }
 
                 /** @var \Shopware\Models\Article\Detail $articleDetailModel */
@@ -186,7 +186,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                 if (!$articleDetailModel) {
                     $message = SnippetsHelper::getNamespace()
                                 ->get('adapters/articlesImages/article_not_found', 'Article with number %s does not exists');
-                    throw new AdaptrerException(sprintf($message, $record['ordernumber']));
+                    throw new AdapterException(sprintf($message, $record['ordernumber']));
                 }
 
                 if (isset($record['relations']) && !empty($record['relations'])) {
@@ -297,7 +297,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                 unset($media);
                 unset($image);
 
-            } catch (AdaptrerException $e) {
+            } catch (AdapterException $e) {
                 $message = $e->getMessage();
                 $this->saveMessage($message);
             }

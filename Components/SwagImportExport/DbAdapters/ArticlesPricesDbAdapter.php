@@ -173,14 +173,6 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                     $record['from'] = intval($record['from']);
                 }
 
-    //            $oldPrice = $this->getPriceRepository()->findOneBy(
-    //                array(
-    //                    'articleDetailsId' => $articleDetail->getId(),
-    //                    'customerGroupKey' => $record['priceGroup'],
-    //                    'from' => $record['from']
-    //                )
-    //            );
-
                 $tax = $articleDetail->getArticle()->getTax();
 
                 if (empty($record['price']) && empty($record['percent'])) {
@@ -201,33 +193,15 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
 
                 if (isset($record['pseudoPrice'])) {
                     $record['pseudoPrice'] = floatval(str_replace(",", ".", $record['pseudoPrice']));
-                } else {
-    //                if ($oldPrice) {
-    //                    $record['pseudoPrice'] = $oldPrice->getPseudoPrice();
-    //                } else {
-    //                    $record['pseudoPrice'] = 0;
-    //                }
-    //
-    //                if ($customerGroup->getTaxInput()) {
-    //                    $record['pseudoPrice'] = round($record['pseudoPrice'] * (100 + $tax->getTax()) / 100, 2);
-    //                }
-                }
-
+                } 
+                
                 if (isset($record['basePrice'])) {
                     $record['basePrice'] = floatval(str_replace(",", ".", $record['basePrice']));
-                } else {
-    //                if ($oldPrice) {
-    //                    $record['basePrice'] = $oldPrice->getBasePrice();
-    //                }
                 }
 
                 if (isset($record['percent'])) {
                     $record['percent'] = floatval(str_replace(",", ".", $record['percent']));
-                } else {
-    //                if ($oldPrice) {
-    //                    $record['percent'] = $oldPrice->getPercent();
-    //                }
-                }
+                } 
 
                 $query = $manager->createQuery('
                             DELETE FROM Shopware\Models\Article\Price price

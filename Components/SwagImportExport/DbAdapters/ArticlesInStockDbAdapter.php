@@ -2,7 +2,7 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
-use Shopware\Components\SwagImportExport\Exception\AdaptrerException;
+use Shopware\Components\SwagImportExport\Exception\AdapterException;
 
 class ArticlesInStockDbAdapter implements DataDbAdapter
 {
@@ -130,14 +130,14 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
                 if (empty($record['orderNumber'])) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/ordernumber_required', 'Order number is required');
-                    throw new AdaptrerException($message);
+                    throw new AdapterException($message);
                 }
                 $articleDetail = $this->getRepository()->findOneBy(array("number" => $record['orderNumber']));
 
                 if(!$articleDetail){
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/articlesImages/article_not_found', 'Article with number %s does not exists.');
-                    throw new AdaptrerException(sprintf($message, $record['orderNumber']));
+                    throw new AdapterException(sprintf($message, $record['orderNumber']));
                 }
 
                 $inStock = (int) $record['inStock'];
@@ -146,7 +146,7 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
 
                 $manager->persist($articleDetail);
 
-            } catch (AdaptrerException $e) {
+            } catch (AdapterException $e) {
                 $message = $e->getMessage();
                 $this->saveMessage($message);
             }

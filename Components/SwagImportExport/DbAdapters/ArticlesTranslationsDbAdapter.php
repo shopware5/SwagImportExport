@@ -3,7 +3,7 @@
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
 use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
-use Shopware\Components\SwagImportExport\Exception\AdaptrerException;
+use Shopware\Components\SwagImportExport\Exception\AdapterException;
 
 class ArticlesTranslationsDbAdapter implements DataDbAdapter
 {
@@ -162,7 +162,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
                 if (!isset($record['articleNumber'])) {
                     $message = SnippetsHelper::getNamespace()
                             ->get('adapters/ordernumber_required', 'Order number is required.');
-                    throw new AdaptrerException($message);
+                    throw new AdapterException($message);
                 }
 
                 if (isset($record['languageId'])) {
@@ -172,7 +172,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
                 if (!$shop) {
                     $message = SnippetsHelper::getNamespace()
                             ->get('adapters/articlesTranslations/lang_id_not_found', 'Language with id %s does not exists for article %s');
-                    throw new \AdaptrerException(sprintf($message, $record['languageId'], $record['articleNumber']));
+                    throw new \AdapterException(sprintf($message, $record['languageId'], $record['articleNumber']));
                 }
 
                 $articleDetail = $this->getRepository()->findOneBy(array('number' => $record['articleNumber']));
@@ -180,7 +180,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
                 if (!$articleDetail) {
                     $message = SnippetsHelper::getNamespace()
                             ->get('adapters/article_number_not_found', 'Article with order number %s doen not exists');
-                    throw new AdaptrerException(sprintf($message, $record['articleNumber']));
+                    throw new AdapterException(sprintf($message, $record['articleNumber']));
                 }
 
                 $data = array_intersect_key($record, array_flip($whitelist));
@@ -188,7 +188,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
                 $articleId = (int) $articleDetail->getArticle()->getId();
 
                 $translationWriter->write($shop->getId(), 'article', $articleId, $data);
-            } catch (AdaptrerException $e) {
+            } catch (AdapterException $e) {
                 $message = $e->getMessage();
                 $this->saveMessage($message);
             }

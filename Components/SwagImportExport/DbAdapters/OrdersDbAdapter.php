@@ -4,7 +4,7 @@ namespace Shopware\Components\SwagImportExport\DbAdapters;
 
 use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
 use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
-use Shopware\Components\SwagImportExport\Exception\AdaptrerException;
+use Shopware\Components\SwagImportExport\Exception\AdapterException;
 
 class OrdersDbAdapter implements DataDbAdapter
 {
@@ -161,7 +161,7 @@ class OrdersDbAdapter implements DataDbAdapter
                 if ((!isset($record['orderId']) || !$record['orderId']) && (!isset($record['number']) || !$record['number']) && (!isset($record['orderDetailId']) || !$record['orderDetailId'])) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/orders/ordernumber_order_details_requires', 'Order number or order detail id must be provided');
-                    throw new AdaptrerException($message);
+                    throw new AdapterException($message);
                 }
 
                 if (isset($record['orderDetailId']) && $record['orderDetailId']) {
@@ -170,7 +170,7 @@ class OrdersDbAdapter implements DataDbAdapter
                     if (!$orderDetailModel) {
                         $message = SnippetsHelper::getNamespace()
                             ->get('adapters/orders/order_detail_id_not_found', 'Order detail id %s was not found');
-                        throw new AdaptrerException(sprintf($message, $record['orderDetailId']));
+                        throw new AdapterException(sprintf($message, $record['orderDetailId']));
                     }
                 } else {
                     $orderDetailModel = $this->getDetailRepository()->findOneBy(array('number' => $record['number']));
@@ -178,7 +178,7 @@ class OrdersDbAdapter implements DataDbAdapter
                     if (!$orderDetailModel) {
                         $message = SnippetsHelper::getNamespace()
                             ->get('adapters/orders/order_detail_id_not_found', 'Order detail id %s was not found');
-                        throw new AdaptrerException(sprintf($message, $record['orderDetailId']));
+                        throw new AdapterException(sprintf($message, $record['orderDetailId']));
                     }
                 }
 
@@ -190,7 +190,7 @@ class OrdersDbAdapter implements DataDbAdapter
                     if (!$paymentStatusModel) {
                         $message = SnippetsHelper::getNamespace()
                             ->get('adapters/orders/payment_status_id_not_found', 'Payment status id %s was not found for order %s');
-                        throw new AdaptrerException(sprintf($message, $record['cleared'], $orderModel->getNumber()));
+                        throw new AdapterException(sprintf($message, $record['cleared'], $orderModel->getNumber()));
                     }
 
                     $orderModel->setPaymentStatus($paymentStatusModel);
@@ -202,7 +202,7 @@ class OrdersDbAdapter implements DataDbAdapter
                     if (!$orderStatusModel) {
                         $message = SnippetsHelper::getNamespace()
                             ->get('adapters/orders/status_not_found', 'Status %s was not found for order %s');
-                        throw new AdaptrerException(sprintf($message, $record['status'], $orderModel->getNumber()));
+                        throw new AdapterException(sprintf($message, $record['status'], $orderModel->getNumber()));
                     }
 
                     $orderModel->setOrderStatus($orderStatusModel);
@@ -242,7 +242,7 @@ class OrdersDbAdapter implements DataDbAdapter
                     if (!$detailStatusModel) {
                         $message = SnippetsHelper::getNamespace()
                             ->get('adapters/orders/detail_status_not_found', 'Detail status with id %s was not found');
-                        throw new AdaptrerException(sprintf($message, $record['statusId']));
+                        throw new AdapterException(sprintf($message, $record['statusId']));
                     }
 
                     $orderDetailModel->setStatus($detailStatusModel);
@@ -266,7 +266,7 @@ class OrdersDbAdapter implements DataDbAdapter
                 unset($orderDetailModel);
                 unset($orderModel);
                 unset($orderData);
-            } catch (AdaptrerException $e) {
+            } catch (AdapterException $e) {
                 $message = $e->getMessage();
                 $this->saveMessage($message);
             }
