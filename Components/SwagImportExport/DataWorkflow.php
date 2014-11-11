@@ -153,11 +153,17 @@ class DataWorkflow
 
             $data = $this->transformerChain->transformBackward($records);
 
+            //inserts/update data into the datebase
             $this->dataIO->write($data);
+
+            //writes into the log table
+            $this->dataIO->writeLog();
 
             $this->dataIO->progressSession($batchSize);
 
+            //gets unprocessed data from the adapter
             $postData['unprocessedData'] = $this->dataIO->getUnprocessedData();
+
         }
 
         if ($this->dataIO->getSessionState() == 'finished') {

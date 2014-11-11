@@ -77,10 +77,16 @@ class DataIO
      */
     private $dataSession;
 
-    public function __construct($dbAdapter, $dataSession)
+    /**
+     * @var \Shopware\Components\SwagImportExport\Logger\Logger
+     */
+    private $logger;
+
+    public function __construct($dbAdapter, $dataSession, $logger)
     {
         $this->dbAdapter = $dbAdapter;
         $this->dataSession = $dataSession;
+        $this->logger = $logger;
     }
     
     public function initialize($colOpts, $limit, $filter, $type, $format, $maxRecordCount)
@@ -117,6 +123,15 @@ class DataIO
         $dbAdapter = $this->getDbAdapter();
         
         $dbAdapter->write($data);
+    }
+
+    public function writeLog()
+    {
+        $dbAdapter = $this->getDbAdapter();
+
+        $messages = $dbAdapter->getLogMessages();
+
+        $this->logger->write($messages, 'false');
     }
 
     public function getUnprocessedData()

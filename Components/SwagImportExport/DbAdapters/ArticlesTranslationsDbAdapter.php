@@ -3,6 +3,7 @@
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
 use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
+use Shopware\Components\SwagImportExport\Exception\AdapterException;
 
 class ArticlesTranslationsDbAdapter implements DataDbAdapter
 {
@@ -21,6 +22,11 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
      * @var array
      */
     protected $unprocessedData;
+
+    /**
+     * @var array
+     */
+    protected $logMessages;
 
     public function getDefaultColumns()
     {
@@ -152,38 +158,64 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
         $translationWriter = new \Shopware_Components_Translation();
 
         foreach ($records['default'] as $index => $record) {
+            try {
+                if (!isset($record['articleNumber'])) {
+                    $message = SnippetsHelper::getNamespace()
+                            ->get('adapters/ordernumber_required', 'Order number is required.');
+                    throw new AdapterException($message);
+                }
 
-            if (!isset($record['articleNumber'])) {
-                $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/ordernumber_required', 'Order number is required.');
-                throw new \Exception($message);
+                if (isset($record['languageId'])) {
+                    $shop = $this->getManager()->find('Shopware\Models\Shop\Shop', $record['languageId']);
+                }
+
+                if (!$shop) {
+                    $message = SnippetsHelper::getNamespace()
+                            ->get('adapters/articlesTranslations/lang_id_not_found', 'Language with id %s does not exists for article %s');
+                    throw new \AdapterException(sprintf($message, $record['languageId'], $record['articleNumber']));
+                }
+
+                $articleDetail = $this->getRepository()->findOneBy(array('number' => $record['articleNumber']));
+
+                if (!$articleDetail) {
+                    $message = SnippetsHelper::getNamespace()
+                            ->get('adapters/article_number_not_found', 'Article with order number %s doen not exists');
+                    throw new AdapterException(sprintf($message, $record['articleNumber']));
+                }
+
+                $data = array_intersect_key($record, array_flip($whitelist));
+
+                $articleId = (int) $articleDetail->getArticle()->getId();
+
+                $translationWriter->write($shop->getId(), 'article', $articleId, $data);
+            } catch (AdapterException $e) {
+                $message = $e->getMessage();
+                $this->saveMessage($message);
             }
-
-            if (isset($record['languageId'])) {
-                $shop = $this->getManager()->find('Shopware\Models\Shop\Shop', $record['languageId']);
-            }
-
-            if (!$shop) {
-                $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/articlesTranslations/lang_id_not_found', 'Language with id %s does not exists');
-                throw new \Exception(sprintf($message, $record['languageId']));
-            }
-
-            $articleDetail = $this->getRepository()->findOneBy(array('number' => $record['articleNumber']));
-
-            if (!$articleDetail) {
-                $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/article_number_not_found', 'Article with order number %s doen not exists');
-                throw new \Exception(sprintf($message, $record['articleNumber']));
-            }
-
-            $data = array_intersect_key($record, array_flip($whitelist));
-
-            $articleId = (int) $articleDetail->getArticle()->getId();
-
-            $translationWriter->write($shop->getId(), 'article', $articleId, $data);
         }
     }
+
+    public function saveMessage($message)
+    {
+        $errorMode = Shopware()->Config()->get('SwagImportExportErrorMode');
+
+        if ($errorMode === false) {
+            throw new \Exception($message);
+        }
+
+        $this->setLogMessages($message);
+    }
+
+    public function getLogMessages()
+    {
+        return $this->logMessages;
+    }
+
+    public function setLogMessages($logMessages)
+    {
+        $this->logMessages[] = $logMessages;
+    }
+
 
     /**
      * @return array

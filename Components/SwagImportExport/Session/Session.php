@@ -46,8 +46,9 @@ class Session
     public function getEntity()
     {
         if ($this->sessionEntity === null) {
-            $this->getSessionRepository()->findOneBy(array('id' => $this->getSessionId()));
+            $this->sessionEntity = $this->getSessionRepository()->findOneBy(array('id' => $this->getSessionId()));
         }
+
         return $this->sessionEntity;
     }
 

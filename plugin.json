@@ -13,11 +13,11 @@
     "changelog": {
         "de": {
             "1.0.1": "Problem mit verschwindendem Import/Export Menü-Eintrag behoben; Weitere ACL-Zugangsberechtigungen hinzugefügt; Korrektur: article.active Verhalten; Korrektur: Artikel-Attribute; Korrektur: Datums- und Zeitimporte",
-            "1.0.2": "Korrektur: Import von gegenseitig abhängigen Artikeln (ähnliche / related Artikel)"
+            "1.0.2": "Korrektur: Import von gegenseitig abhängigen Artikeln (ähnliche / related Artikel). Feature: Überpringen von Datensätzen."
         },
         "en": {
             "1.0.1": "Fixed disappearing of the old import/export item from the menu; Added more ACL permissions; Fixed article active flag behaviour; Fixed article attributes entries; Fixed date/time article import issues",
-            "1.0.2": "Added after import for the related articles - similar and accessories"
+            "1.0.2": "Added after import for the related articles - similar and accessories. Added new feature that skips corrupted record when importing."
         }
     },
 
