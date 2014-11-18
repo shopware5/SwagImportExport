@@ -55,24 +55,11 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
         addAttribute: {
             failureTitle: '{s name=swag_import_export/profile/add_attribute/failure_title}Create Attribute Failed{/s}'
         },
-        newProfile: {
-            failureTitle: '{s name="swag_import_export/profile/new_profile/failure_title"}Create New Profile Failed{/s}',
-            notAllFieldsFilledError: '{s name="swag_import_export/profile/new_profile/not_all_fields_filled_error"}Not all fields are filled!{/s}'
-        },
         conversion: {
             title: '{s name="swag_import_export/profile/conversion/title"}Import/Export conversion{/s}',
             successMsg: '{s name="swag_import_export/profile/conversion/success_msg"}Conversion was save successfully{/s}',
             failureMsg: '{s name="swag_import_export/profile/conversion/failure_msg"}Conversion saving failed{/s}'
         },
-        categories: '{s name=swag_import_export/profile/type/categories}Categories{/s}',
-        articles: '{s name=swag_import_export/profile/type/articles}Articles{/s}',
-        articlesInStock: '{s name=swag_import_export/profile/type/articlesInStock}Articles in stock{/s}',
-        articlesPrices: '{s name=swag_import_export/profile/type/articlesPrices}Articles Prices{/s}',
-        articlesImages: '{s name=swag_import_export/profile/type/articlesImages}Articles Images{/s}',
-        articlesTranslations: '{s name=swag_import_export/profile/type/articlesTranslations}Articles Translations{/s}',
-        orders: '{s name=swag_import_export/profile/type/orders}Orders{/s}',
-        customers: '{s name=swag_import_export/profile/type/customers}Customers{/s}',
-        newsletter: '{s name=swag_import_export/profile/type/newsletter}Newsletter receiver{/s}',
         duplicate: '{s name=swag_import_export/profile/duplicater}Profile was duplicate successfully{/s}'
     },
     
@@ -158,161 +145,14 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
      * Shows window with fields for the new profile and adds it
      */
     createOwnProfile: function(store, combo) {
-        var me = this,
-            profileTypeStore = new Ext.data.SimpleStore({
-            fields: ['type', 'label'],
-            data: [
-                ['categories', me.snippets.categories],
-                ['articles', me.snippets.articles],
-                ['articlesInStock', me.snippets.articlesInStock],
-                ['articlesPrices', me.snippets.articlesPrices],
-                ['articlesImages', me.snippets.articlesImages],
-                ['articlesTranslations', me.snippets.articlesTranslations],
-                ['orders', me.snippets.orders],
-                ['customers', me.snippets.customers],
-                ['newsletter', me.snippets.newsletter]
-            ]
-        });
-        
-        var myForm = Ext.create('Ext.form.Panel', {
-            width: 500,
-            height: 150,
-            bodyPadding: 12,
-            title: 'New Profile',
-            border: false,
-            bodyStyle: {
-                border: '0 !important'
-            },
-            floating: true,
-            closable: true,
-            modal: true,
-            items: [{
-                    xtype: 'textfield',
-                    itemId: 'profileName',
-                    fieldLabel: 'Profile Name',
-                    name: 'profileName',
-                    allowBlank: false
-                }, {
-                    xtype: 'combobox',
-                    itemId: 'type',
-                    fieldLabel: 'Type',
-                    emptyText: 'Select Type',
-                    store: profileTypeStore,
-                    name: 'type',
-                    valueField: 'type',
-                    displayField: 'label',
-                    allowBlank: false
-                }],
-            dockedItems: [{
-                    xtype: 'toolbar',
-                    dock: 'bottom',
-                    ui: 'shopware-ui',
-                    cls: 'shopware-toolbar',
-                    style: {
-                        backgroundColor: '#F0F2F4'
-                    },
-                    items: ['->', {
-                            text: 'Save',
-                            cls: 'primary',
-                            action: 'swag-import-export-manager-profile-save',
-                            handler: function() {
-                                if (myForm.getForm().isValid()) {
-                                    var model = combo.store.add({ type: myForm.child('#type').getValue(), name: myForm.child('#profileName').getValue(), tree: "" });
-                                    myForm.setLoading(true);
-                                    combo.store.sync({
-                                        success: function() {
-                                            combo.setValue(model[0].get('id'));
-                                            myForm.setLoading(false);
-                                            myForm.close();
-                                        },
-                                        failure: function() {
-                                            myForm.setLoading(false);
-                                            myForm.close();
-                                        }
-                                    });
-                                } else {
-                                    Ext.MessageBox.show({
-                                        title: me.snippets.newProfile.failureTitle,
-                                        msg: me.snippets.newProfile.notAllFieldsFilledError,
-                                        icon: Ext.Msg.ERROR,
-                                        buttons: Ext.Msg.OK
-                                    });
-                                }
-                            }
-                        }]
-                }]
-        });
-        myForm.show();
+        this.getView('profile.window.NewProfile').create({ combo: combo }).show();
     },
 
     /**
      * Renames the selected profile
      */
     renameSelectedProfile: function(store, id, combo) {
-        var me = this,
-            name = store.getById(id).get('name');
-        
-        var myForm = Ext.create('Ext.form.Panel', {
-            width: 300,
-            height: 110,
-            bodyPadding: 12,
-            title: 'New Profile',
-            border: false,
-            bodyStyle: {
-                border: '0 !important'
-            },
-            floating: true,
-            closable: true,
-            modal: true,
-            items: [{
-                    xtype: 'textfield',
-                    itemId: 'profileName',
-                    fieldLabel: 'Profile Name',
-                    name: 'profileName',
-                    value: name,
-                    allowBlank: false
-                }],
-            dockedItems: [{
-                    xtype: 'toolbar',
-                    dock: 'bottom',
-                    ui: 'shopware-ui',
-                    cls: 'shopware-toolbar',
-                    style: {
-                        backgroundColor: '#F0F2F4'
-                    },
-                    items: ['->', {
-                            text: 'Save',
-                            cls: 'primary',
-                            action: 'swag-import-export-manager-profile-save',
-                            handler: function() {
-                                if (myForm.getForm().isValid()) {
-                                    var model = store.getById(id);
-                                    model.set('name', myForm.child('#profileName').getValue());
-                                    myForm.setLoading(true);
-                                    store.sync({
-                                        success: function() {
-                                            combo.setValue(id);
-                                            myForm.setLoading(false);
-                                            myForm.close();
-                                        },
-                                        failure: function() {
-                                            myForm.setLoading(false);
-                                            myForm.close();
-                                        }
-                                    });
-                                } else {
-                                    Ext.MessageBox.show({
-                                        title: me.snippets.newProfile.failureTitle,
-                                        msg: me.snippets.newProfile.notAllFieldsFilledError,
-                                        icon: Ext.Msg.ERROR,
-                                        buttons: Ext.Msg.OK
-                                    });
-                                }
-                            }
-                        }]
-                }]
-        });
-        myForm.show();
+        this.getView('profile.window.RenameProfile').create({ store: store, profileId: id, combo: combo }).show();
     },
     
     /**
