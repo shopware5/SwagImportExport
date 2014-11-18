@@ -117,40 +117,22 @@ class ArticlesDbAdapter implements DataDbAdapter
                         ->get('adapters/articles_no_column_names', 'Can not read articles without column names.');
             throw new \Exception($message);
         }
-        
-        $manager = $this->getManager();
-        $articlesBuilder = $manager->createQueryBuilder();
-        $articlesBuilder->select($columns['article'])
-                ->from('Shopware\Models\Article\Detail', 'variant')
-                ->join('variant.article', 'article')
-                ->leftJoin('Shopware\Models\Article\Detail', 'mv', \Doctrine\ORM\Query\Expr\Join::WITH, 'mv.articleId=article.id AND mv.kind=1')
-                ->leftJoin('variant.attribute', 'attribute')
-                ->leftJoin('article.tax', 'articleTax')
-                ->leftJoin('article.supplier', 'supplier')
-                ->leftJoin('article.propertyGroup', 'filterGroup')
-                ->leftJoin('article.esds', 'articleEsd')
-                ->leftJoin('variant.unit', 'variantsUnit')
-                ->where('variant.id IN (:ids)')
-                ->setParameter('ids', $ids)
-                ->orderBy("variant.kind");
 
-        $articles = $articlesBuilder->getQuery()->getResult();
+        //articles
+        $articleBuilder = $this->getArticleBuilder($columns['article'], $ids);
+
+        $articles = $articleBuilder->getQuery()->getResult();
+
         $result['article'] = DbAdapterHelper::decodeHtmlEntities($articles);
-        
+
         //prices
         $columns['price'] = array_merge(
                 $columns['price'], array('customerGroup.taxInput as taxInput', 'articleTax.tax as tax')
         );
-        $pricesBuilder = $manager->createQueryBuilder();
-        $pricesBuilder->select($columns['price'])
-                ->from('Shopware\Models\Article\Detail', 'variant')
-                ->join('variant.article', 'article')
-                ->leftJoin('variant.prices', 'prices')
-                ->leftJoin('prices.customerGroup', 'customerGroup')
-                ->leftJoin('article.tax', 'articleTax')
-                ->where('variant.id IN (:ids)')
-                ->setParameter('ids', $ids);
-        $result['price'] = $pricesBuilder->getQuery()->getResult();
+
+        $priceBuilder = $this->getPriceBuilder($columns['price'], $ids);
+
+        $result['price'] = $priceBuilder->getQuery()->getResult();
 
         foreach ($result['price'] as &$record) {
             if ($record['taxInput']) {
@@ -165,146 +147,48 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $record['basePrice'] = round($record['basePrice'], 2);
             }
         }
-        
+
         //images
-        $imagesBuilder = $manager->createQueryBuilder();
-        $imagesBuilder->select($columns['image'])
-                ->from('Shopware\Models\Article\Detail', 'variant')
-                ->join('variant.article', 'article')
-                ->leftjoin('article.images', 'images')
-                ->where('variant.id IN (:ids)')
-                ->andWhere('variant.kind = 1')
-                ->andWhere('images.id IS NOT NULL')
-                ->setParameter('ids', $ids);
-        $result['image'] = $imagesBuilder->getQuery()->getResult();
-        
+        $imageBuilder = $this->getImageBuilder($columns['image'], $ids);
+        $result['image'] = $imageBuilder->getQuery()->getResult();
+
         //filter values
-        $propertyValuesBuilder = $manager->createQueryBuilder();
-        $propertyValuesBuilder->select($columns['propertyValues'])
-                ->from('Shopware\Models\Article\Detail', 'variant')
-                ->join('variant.article', 'article')
-                ->leftjoin('article.propertyValues', 'propertyValues')
-                ->where('variant.id IN (:ids)')
-                ->andWhere('variant.kind = 1')
-                ->andWhere('propertyValues.id IS NOT NULL')
-                ->setParameter('ids', $ids);
+        $propertyValuesBuilder = $this->getPropertyValueBuilder($columns['propertyValues'], $ids);
         $result['propertyValue'] = $propertyValuesBuilder->getQuery()->getResult();
-        
+
         //configurator
-        $configBuilder = $manager->createQueryBuilder();
-        $configBuilder->select($columns['configurator'])
-                ->from('Shopware\Models\Article\Detail', 'variant')
-                ->join('variant.article', 'article')
-                ->leftjoin('variant.configuratorOptions', 'configuratorOptions')
-                ->leftjoin('configuratorOptions.group', 'configuratorGroup')
-                ->leftjoin('article.configuratorSet', 'configuratorSet')
-                ->where('variant.id IN (:ids)')
-                ->andWhere('configuratorOptions.id IS NOT NULL')
-                ->andWhere('configuratorGroup.id IS NOT NULL')
-                ->andWhere('configuratorSet.id IS NOT NULL')
-                ->setParameter('ids', $ids);
+        $configBuilder = $this->getConfiguratorBuilder($columns['configurator'], $ids);
         $result['configurator'] = $configBuilder->getQuery()->getResult();
-        
+
         //similar 
-        $similarsBuilder = $manager->createQueryBuilder();
-        $similarsBuilder->select($columns['similar'])
-                ->from('Shopware\Models\Article\Detail', 'variant')
-                ->join('variant.article', 'article')
-                ->leftjoin('article.similar', 'similar')
-                ->leftjoin('similar.details', 'similarDetail')
-                ->where('variant.id IN (:ids)')
-                ->andWhere('variant.kind = 1')
-                ->andWhere('similarDetail.kind = 1')
-                ->andWhere('similar.id IS NOT NULL')
-                ->setParameter('ids', $ids);
+        $similarsBuilder = $this->getSimilarBuilder($columns['similar'], $ids);
         $result['similar'] = $similarsBuilder->getQuery()->getResult();
-        
+
         //accessories
-        $accessoriesBuilder = $manager->createQueryBuilder();
-        $accessoriesBuilder->select($columns['accessory'])
-                ->from('Shopware\Models\Article\Detail', 'variant')
-                ->join('variant.article', 'article')
-                ->leftjoin('article.related', 'accessory')
-                ->leftjoin('accessory.details', 'accessoryDetail')
-                ->where('variant.id IN (:ids)')
-                ->andWhere('variant.kind = 1')
-                ->andWhere('accessoryDetail.kind = 1')
-                ->andWhere('accessory.id IS NOT NULL')
-                ->setParameter('ids', $ids);
-        $result['accessory'] = $accessoriesBuilder->getQuery()->getResult();
+        $accessoryBuilder = $this->getAccessoryBuilder($columns['accessory'], $ids);
+        $result['accessory'] = $accessoryBuilder->getQuery()->getResult();
 
         //categories
-        $aritcleIds = $manager->createQueryBuilder()->select('article.id')
+        $aritcleIds = $this->getManager()->createQueryBuilder()
+                ->select('article.id')
                 ->from('Shopware\Models\Article\Detail', 'variant')
                 ->join('variant.article', 'article')
                 ->where('variant.id IN (:ids)')
                 ->setParameter('ids', $ids)
                 ->groupBy('article.id');
 
-        $mappedArticleIds = array_map(function($item) { return $item['id'];}, $aritcleIds->getQuery()->getResult());
-        
-        $categoriesBuilder = $manager->createQueryBuilder();
-        $categoriesBuilder->select($columns['category'])
-                ->from('Shopware\Models\Article\Article', 'article')
-                ->leftjoin('article.categories', 'categories')
-                ->where('article.id IN (:ids)')
-                ->andWhere('categories.id IS NOT NULL')
-                ->setParameter('ids', $mappedArticleIds);
-        $result['category'] = $categoriesBuilder->getQuery()->getResult();
+        $mappedArticleIds = array_map(function($item) {
+            return $item['id'];
+        }, $aritcleIds->getQuery()->getResult());
+
+        $categoryBuilder = $this->getCategoryBuilder($columns['category'], $mappedArticleIds);
+
+        $result['category'] = $categoryBuilder->getQuery()->getResult();
 
         $result['translation'] = $this->prepareTranslationExport($ids);
-        
+
         return $result;
     }
-
-//    public function prepareTranslationExport($ids)
-//    {
-//        //translations
-//        $translationFields = 'article.id as articleId, translation.objectdata, translation.objectlanguage as languageId';
-//        $articleDetailIds = implode(',', $ids);
-//
-//        $sql = "SELECT $translationFields FROM `s_articles_details` as articleDetails
-//                INNER JOIN s_articles article
-//                ON article.id = articleDetails.articleID
-//                
-//                LEFT JOIN s_core_translations translation
-//                ON article.id = translation.objectkey
-//
-//                WHERE articleDetails.id IN ($articleDetailIds)
-//                GROUP BY translation.id
-//                ";
-//
-//        $translations = $stmt = Shopware()->Db()->query($sql)->fetchAll();
-//
-//        if (!empty($translations)) {
-//
-//            $translationFields = array(
-//                "txtArtikel" => "name",
-//                "txtzusatztxt" => "additionaltext",
-//                "txtshortdescription" => "description",
-//                "txtlangbeschreibung" => "descriptionLong",
-//                "txtkeywords" => "keywords"
-//            );
-//
-//            $row = array();
-//            foreach ($translations as $index => $record) {
-//                $row[$index]['articleId'] = $record['articleId'];
-//                $row[$index]['languageId'] = $record['languageId'];
-//
-//                $objectdata = unserialize($record['objectdata']);
-//
-//                if (!empty($objectdata)) {
-//                    foreach ($objectdata as $key => $value) {
-//                        if (isset($translationFields[$key])) {
-//                            $row[$index][$translationFields[$key]] = $value;
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        
-//        return $row;
-//    }
     
     public function prepareTranslationExport($ids)
     {
@@ -430,6 +314,12 @@ class ArticlesDbAdapter implements DataDbAdapter
                         ->get('adapters/articles/no_records', 'No article records were found.');
             throw new \Exception($message);
         }
+
+        $records = Shopware()->Events()->filter(
+                'Shopware_Components_SwagImportExport_DbAdapters_ArticlesDbAdapter_Write',
+                $records,
+                array('subject' => $this)
+        );
 
         foreach ($records['article'] as $index => $record) {
             
@@ -2015,7 +1905,6 @@ class ArticlesDbAdapter implements DataDbAdapter
         return $this->mediaRepository;
     }
 
-
     /*
      * @return Shopware\Components\Model\ModelManager
      */
@@ -2049,6 +1938,136 @@ class ArticlesDbAdapter implements DataDbAdapter
         }
 
         return;
+    }
+
+    public function getArticleBuilder($columns, $ids)
+    {
+        $articleBuilder = $this->getManager()->createQueryBuilder();
+        $articleBuilder->select($columns)
+                ->from('Shopware\Models\Article\Detail', 'variant')
+                ->join('variant.article', 'article')
+                ->leftJoin('Shopware\Models\Article\Detail', 'mv', \Doctrine\ORM\Query\Expr\Join::WITH, 'mv.articleId=article.id AND mv.kind=1')
+                ->leftJoin('variant.attribute', 'attribute')
+                ->leftJoin('article.tax', 'articleTax')
+                ->leftJoin('article.supplier', 'supplier')
+                ->leftJoin('article.propertyGroup', 'filterGroup')
+                ->leftJoin('article.esds', 'articleEsd')
+                ->leftJoin('variant.unit', 'variantsUnit')
+                ->where('variant.id IN (:ids)')
+                ->setParameter('ids', $ids)
+                ->orderBy("variant.kind");
+
+        return $articleBuilder;
+    }
+
+    public function getPriceBuilder($columns, $ids)
+    {
+        $priceBuilder = $this->getManager()->createQueryBuilder();
+        $priceBuilder->select($columns)
+                ->from('Shopware\Models\Article\Detail', 'variant')
+                ->join('variant.article', 'article')
+                ->leftJoin('variant.prices', 'prices')
+                ->leftJoin('prices.customerGroup', 'customerGroup')
+                ->leftJoin('article.tax', 'articleTax')
+                ->where('variant.id IN (:ids)')
+                ->setParameter('ids', $ids);
+
+        return $priceBuilder;
+    }
+
+    public function getImageBuilder($columns, $ids)
+    {
+        $imageBuilder = $this->getManager()->createQueryBuilder();
+        $imageBuilder->select($columns)
+                ->from('Shopware\Models\Article\Detail', 'variant')
+                ->join('variant.article', 'article')
+                ->leftjoin('article.images', 'images')
+                ->where('variant.id IN (:ids)')
+                ->andWhere('variant.kind = 1')
+                ->andWhere('images.id IS NOT NULL')
+                ->setParameter('ids', $ids);
+
+        return $imageBuilder;
+    }
+
+    public function getPropertyValueBuilder($columns, $ids)
+    {
+        $propertyValueBuilder = $this->getManager()->createQueryBuilder();
+        $propertyValueBuilder->select($columns)
+                ->from('Shopware\Models\Article\Detail', 'variant')
+                ->join('variant.article', 'article')
+                ->leftjoin('article.propertyValues', 'propertyValues')
+                ->where('variant.id IN (:ids)')
+                ->andWhere('variant.kind = 1')
+                ->andWhere('propertyValues.id IS NOT NULL')
+                ->setParameter('ids', $ids);
+
+        return $propertyValueBuilder;
+    }
+
+    public function getConfiguratorBuilder($columns, $ids)
+    {
+        $configBuilder = $this->getManager()->createQueryBuilder();
+        $configBuilder->select($columns)
+                ->from('Shopware\Models\Article\Detail', 'variant')
+                ->join('variant.article', 'article')
+                ->leftjoin('variant.configuratorOptions', 'configuratorOptions')
+                ->leftjoin('configuratorOptions.group', 'configuratorGroup')
+                ->leftjoin('article.configuratorSet', 'configuratorSet')
+                ->where('variant.id IN (:ids)')
+                ->andWhere('configuratorOptions.id IS NOT NULL')
+                ->andWhere('configuratorGroup.id IS NOT NULL')
+                ->andWhere('configuratorSet.id IS NOT NULL')
+                ->setParameter('ids', $ids);
+
+        return $configBuilder;
+    }
+
+    public function getSimilarBuilder($columns, $ids)
+    {
+        $similarBuilder = $this->getManager()->createQueryBuilder();
+        $similarBuilder->select($columns)
+                ->from('Shopware\Models\Article\Detail', 'variant')
+                ->join('variant.article', 'article')
+                ->leftjoin('article.similar', 'similar')
+                ->leftjoin('similar.details', 'similarDetail')
+                ->where('variant.id IN (:ids)')
+                ->andWhere('variant.kind = 1')
+                ->andWhere('similarDetail.kind = 1')
+                ->andWhere('similar.id IS NOT NULL')
+                ->setParameter('ids', $ids);
+
+        return $similarBuilder;
+    }
+
+    public function getAccessoryBuilder($columns, $ids)
+    {
+        $accessoryBuilder = $this->getManager()->createQueryBuilder();
+        $accessoryBuilder->select($columns)
+                ->from('Shopware\Models\Article\Detail', 'variant')
+                ->join('variant.article', 'article')
+                ->leftjoin('article.related', 'accessory')
+                ->leftjoin('accessory.details', 'accessoryDetail')
+                ->where('variant.id IN (:ids)')
+                ->andWhere('variant.kind = 1')
+                ->andWhere('accessoryDetail.kind = 1')
+                ->andWhere('accessory.id IS NOT NULL')
+                ->setParameter('ids', $ids);
+
+        return $accessoryBuilder;
+    }
+
+    public function getCategoryBuilder($columns, $ids)
+    {
+        $categoryBuilder = $this->getManager()->createQueryBuilder();
+        $categoryBuilder->select($columns)
+                ->from('Shopware\Models\Article\Article', 'article')
+                ->leftjoin('article.categories', 'categories')
+                ->where('article.id IN (:ids)')
+                ->andWhere('categories.id IS NOT NULL')
+                ->setParameter('ids', $ids);
+
+        return $categoryBuilder;
     }
 
 }

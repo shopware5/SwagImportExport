@@ -69,18 +69,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                 $columns, array('customerGroup.taxInput as taxInput', 'articleTax.tax as tax')
         );
 
-        $manager = $this->getManager();
-
-        $builder = $manager->createQueryBuilder();
-        $builder->select($columns)
-                ->from('Shopware\Models\Article\Article', 'article')
-                ->leftJoin('article.details', 'detail')
-                ->leftJoin('article.tax', 'articleTax')
-                ->leftJoin('article.supplier', 'supplier')
-                ->leftJoin('detail.prices', 'price')
-                ->leftJoin('price.customerGroup', 'customerGroup')
-                ->where('price.id IN (:ids)')
-                ->setParameter('ids', $ids);
+        $builder = $this->getBuilder($columns, $ids);
 
         $result['default'] = $builder->getQuery()->getResult();
 
@@ -363,4 +352,19 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
         return $this->manager;
     }
 
+    public function getBuilder($columns, $ids)
+    {
+        $builder = $this->getManager()->createQueryBuilder();
+        $builder->select($columns)
+                ->from('Shopware\Models\Article\Article', 'article')
+                ->leftJoin('article.details', 'detail')
+                ->leftJoin('article.tax', 'articleTax')
+                ->leftJoin('article.supplier', 'supplier')
+                ->leftJoin('detail.prices', 'price')
+                ->leftJoin('price.customerGroup', 'customerGroup')
+                ->where('price.id IN (:ids)')
+                ->setParameter('ids', $ids);
+
+        return $builder;
+    }
 }

@@ -11,6 +11,10 @@ interface DataDbAdapter
 
     public function getDefaultColumns();
 
+    public function getSections();
+
+    public function getColumns($colums);
+
     public function write($records);
 
     public function getUnprocessedData();

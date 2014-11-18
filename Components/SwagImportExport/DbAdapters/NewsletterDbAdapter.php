@@ -45,17 +45,7 @@ class NewsletterDbAdapter implements DataDbAdapter
 
     public function read($ids, $columns)
     {
-        $manager = $this->getManager();
-
-        $builder = $manager->createQueryBuilder();
-        $builder->select($columns)
-                ->from('Shopware\Models\Newsletter\Address', 'na')
-                ->leftJoin('na.newsletterGroup', 'ng')
-                ->leftJoin('Shopware\Models\Newsletter\ContactData', 'cd', \Doctrine\ORM\Query\Expr\Join::WITH, 'na.email = cd.email')
-                ->leftJoin('na.customer', 'c')
-                ->leftJoin('c.billing', 'cb')
-                ->where('na.id IN (:ids)')
-                ->setParameter('ids', $ids);
+        $builder = $this->getBuilder($columns, $ids);
 
         $result['default'] = $builder->getQuery()->getResult();
 
@@ -202,6 +192,22 @@ class NewsletterDbAdapter implements DataDbAdapter
         }
 
         return $this->manager;
+    }
+
+    public function getBuilder($columns, $ids)
+    {
+        $builder = $this->getManager()->createQueryBuilder();
+
+        $builder->select($columns)
+                ->from('Shopware\Models\Newsletter\Address', 'na')
+                ->leftJoin('na.newsletterGroup', 'ng')
+                ->leftJoin('Shopware\Models\Newsletter\ContactData', 'cd', \Doctrine\ORM\Query\Expr\Join::WITH, 'na.email = cd.email')
+                ->leftJoin('na.customer', 'c')
+                ->leftJoin('c.billing', 'cb')
+                ->where('na.id IN (:ids)')
+                ->setParameter('ids', $ids);
+
+        return $builder;
     }
 
     /**

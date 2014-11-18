@@ -75,20 +75,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
             throw new \Exception($message);
         }
 
-        $manager = $this->getManager();
-
-        $builder = $manager->createQueryBuilder();
-        $builder->select($columns)
-                ->from('Shopware\Models\Article\Image', 'aimage')
-                ->innerJoin('aimage.article', 'article')
-                ->leftJoin('Shopware\Models\Article\Detail', 'mv', \Doctrine\ORM\Query\Expr\Join::WITH, 'mv.articleId=article.id AND mv.kind=1')
-                ->leftJoin('aimage.mappings', 'im')
-                ->leftJoin('im.rules', 'mr')
-                ->leftJoin('mr.option', 'co')
-                ->leftJoin('co.group', 'cg')
-                ->where('aimage.id IN (:ids)')
-                ->groupBy('aimage.id')
-                ->setParameter('ids', $ids);
+        $builder = $this->getBuilder($columns, $ids);
 
         $result['default'] = $builder->getQuery()->getResult();
 
@@ -502,6 +489,24 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
         $message = SnippetsHelper::getNamespace()
                     ->get('adapters/articlesImages/unsupported_schema', 'Unsupported schema %s.');
         throw new \Exception(sprintf($message, $urlArray['scheme']));
+    }
+
+    public function getBuilder($columns, $ids)
+    {
+        $builder = $this->getManager()->createQueryBuilder();
+        $builder->select($columns)
+                ->from('Shopware\Models\Article\Image', 'aimage')
+                ->innerJoin('aimage.article', 'article')
+                ->leftJoin('Shopware\Models\Article\Detail', 'mv', \Doctrine\ORM\Query\Expr\Join::WITH, 'mv.articleId=article.id AND mv.kind=1')
+                ->leftJoin('aimage.mappings', 'im')
+                ->leftJoin('im.rules', 'mr')
+                ->leftJoin('mr.option', 'co')
+                ->leftJoin('co.group', 'cg')
+                ->where('aimage.id IN (:ids)')
+                ->groupBy('aimage.id')
+                ->setParameter('ids', $ids);
+
+        return $builder;
     }
 
 }
