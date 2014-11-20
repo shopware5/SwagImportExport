@@ -149,6 +149,12 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
      */
     public function write($records)
     {
+        $records = Shopware()->Events()->filter(
+                'Shopware_Components_SwagImportExport_DbAdapters_ArticlesImagesDbAdapter_Write',
+                $records,
+                array('subject' => $this)
+        );
+
         $imageImportMode = Shopware()->Config()->get('SwagImportExportImageMode');
 
         $configuratorGroupRepository = $this->getManager()->getRepository('Shopware\Models\Article\Configurator\Group');

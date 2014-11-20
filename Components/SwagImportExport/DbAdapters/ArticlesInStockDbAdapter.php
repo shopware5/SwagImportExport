@@ -106,6 +106,12 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
 
     public function write($records)
     {
+        $records = Shopware()->Events()->filter(
+                'Shopware_Components_SwagImportExport_DbAdapters_ArticlesInStockDbAdapter_Write',
+                $records,
+                array('subject' => $this)
+        );
+
         $manager = $this->getManager();
 
         foreach ($records['default'] as $record) {

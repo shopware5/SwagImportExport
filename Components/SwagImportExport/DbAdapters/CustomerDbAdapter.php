@@ -238,6 +238,12 @@ class CustomerDbAdapter implements DataDbAdapter
 
     public function write($records)
     {
+        $records = Shopware()->Events()->filter(
+                'Shopware_Components_SwagImportExport_DbAdapters_CustomerDbAdapter_Write',
+                $records,
+                array('subject' => $this)
+        );
+
         $manager = $this->getManager();
         $passwordManager = Shopware()->PasswordEncoder();
         $db = Shopware()->Db();

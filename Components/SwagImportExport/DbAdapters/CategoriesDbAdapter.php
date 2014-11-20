@@ -164,6 +164,12 @@ class CategoriesDbAdapter implements DataDbAdapter
      */
     public function write($records)
     {
+        $records = Shopware()->Events()->filter(
+                'Shopware_Components_SwagImportExport_DbAdapters_CategoriesDbAdapter_Write',
+                $records,
+                array('subject' => $this)
+        );
+
         $manager = $this->getManager();
         
         foreach ($records['default'] as $record) {

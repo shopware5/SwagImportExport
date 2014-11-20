@@ -131,6 +131,12 @@ class OrdersDbAdapter implements DataDbAdapter
      */
     public function write($records)
     {
+        $records = Shopware()->Events()->filter(
+                'Shopware_Components_SwagImportExport_DbAdapters_OrdersDbAdapter_Write',
+                $records,
+                array('subject' => $this)
+        );
+
         foreach ($records['default'] as $index => $record) {
 
             if ((!isset($record['orderId']) || !$record['orderId']) && (!isset($record['number']) || !$record['number']) && (!isset($record['orderDetailId']) || !$record['orderDetailId'])) {

@@ -127,6 +127,12 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
      */
     public function write($records)
     {
+        $records = Shopware()->Events()->filter(
+                'Shopware_Components_SwagImportExport_DbAdapters_ArticlesPricesDbAdapter_Write',
+                $records,
+                array('subject' => $this)
+        );
+
         $manager = $this->getManager();
         foreach ($records['default'] as $record) {
 

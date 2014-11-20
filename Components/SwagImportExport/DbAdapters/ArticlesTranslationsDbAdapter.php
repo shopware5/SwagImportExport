@@ -131,6 +131,12 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
             return;
         }
 
+        $records = Shopware()->Events()->filter(
+                'Shopware_Components_SwagImportExport_DbAdapters_ArticlesTranslationsDbAdapter_Write',
+                $records,
+                array('subject' => $this)
+        );
+
         $whitelist = array(
             'name',
             'description',
