@@ -58,17 +58,28 @@ class TreeTransformer implements DataTransformerAdapter
         }
         
         //creates iteration array
-        $treeBody = array($iterationPart['name'] => $transformData);
-        
-        return $treeBody;
-        
+        $tree = array($iterationPart['name'] => $transformData);
+
+        $tree = Shopware()->Events()->filter(
+                'Shopware_Components_SwagImportExport_Transoformers_TreeTransformer_TransformForward',
+                $tree,
+                array('subject' => $this)
+        );
+
+        return $tree;
     }
-    
+
     /**
      * Transforms a list of nodes containing children and attributes into flat array.
      */
     public function transformBackward($data)
     {
+        $data = Shopware()->Events()->filter(
+                'Shopware_Components_SwagImportExport_Transoformers_TreeTransformer_TransformBackward',
+                $data,
+                array('subject' => $this)
+        );
+
         //gets iteration nodes
         $this->getIterationNodes();
         

@@ -39,7 +39,13 @@ class FlattenTransformer implements DataTransformerAdapter
             $this->collectData($record, $nodeName);
             $flatData[] = $this->getTempData();
         }
-        
+
+        $flatData = Shopware()->Events()->filter(
+                'Shopware_Components_SwagImportExport_Transoformers_FlattenTransformer_TransformForward',
+                $flatData,
+                array('subject' => $this)
+        );
+
         return $flatData;
     }
 
@@ -48,6 +54,12 @@ class FlattenTransformer implements DataTransformerAdapter
      */
     public function transformBackward($data)
     {
+        $flatData = Shopware()->Events()->filter(
+                'Shopware_Components_SwagImportExport_Transoformers_FlattenTransformer_TransformBackward',
+                $flatData,
+                array('subject' => $this)
+        );
+
         $mainNode = $this->getMainIterationPart();
         $this->processIterationParts($mainNode);
         
