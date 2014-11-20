@@ -26,7 +26,7 @@ class Logger
     /**
      * Returns entity manager
      * 
-     * @return Shopware\Components\Model\ModelManager
+     * @return \Shopware\Components\Model\ModelManager
      */
     public function getManager()
     {
@@ -50,9 +50,8 @@ class Logger
     }
 
     /**
-     * Create log on complete or failure import/export
-     * 
-     * @param string $messages
+     * @param $messages
+     * @param $status
      */
     public function write($messages, $status)
     {
@@ -90,7 +89,7 @@ class Logger
     /**
      * Helper Method to get access to the session repository.
      *
-     * @return Shopware\CustomModels\ImportExport\Session
+     * @return \Shopware\CustomModels\ImportExport\Session
      */
     public function getLoggerRepository()
     {

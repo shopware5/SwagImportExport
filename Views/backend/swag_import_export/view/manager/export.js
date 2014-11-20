@@ -57,7 +57,13 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
         dateFrom:  '{s name=date_from}Date from{/s}',
         dateTo:  '{s name=date_to}Date to{/s}',
         orderState:  '{s name=order_state}Order state{/s}',
-        paymentState:  '{s name=payment_state}Payment state{/s}'
+        paymentState:  '{s name=payment_state}Payment state{/s}',
+        all: '{s name=swag_import_export/profile/filter/alle}all{/s}',
+        inStock: '{s name=swag_import_export/profile/filter/inStock}in stock{/s}',
+        notInStock : '{s name=swag_import_export/profile/filter/notInStock}not in stock{/s}',
+        inStockOnSale: '{s name=swag_import_export/profile/filter/inStockOnSale}in Stock top selling{/s}',
+        notInStockOnSale: '{s name=swag_import_export/profile/filter/notInStockOnSale}not in stock top selling{/s}',
+        filter: '{s name=swag_import_export/profile/filter/filter}Filter{/s}'
     },
     
     initComponent: function() {
@@ -145,6 +151,22 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
     additionalFields: function() {
         var me = this;
 
+        me.stockField = Ext.create('Ext.form.FieldSet',{
+            title: me.snippets.fieldsetAdditional,
+            padding: 12,
+            hidden: true,
+            defaults: {
+                labelStyle: 'font-weight: 700; text-align: right;'
+            },
+            items: [{
+                xtype: 'container',
+                padding: '0 0 8',
+                items: [
+                    me.createStockFilterComboBox()
+                ]
+            }]
+        });
+
         me.articleFields = Ext.create('Ext.form.FieldSet', {
             title: me.snippets.fieldsetAdditional,
             padding: 12,
@@ -170,7 +192,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
             padding: 12,
             hidden: true,
             defaults: {
-                labelStyle: 'font-weight: 700; text-align: right;',
+                labelStyle: 'font-weight: 700; text-align: right;'
             },
             items: [{
                     xtype: 'container',
@@ -229,7 +251,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
                 }]
         });
         
-        return [me.articleFields, me.orderFields];
+        return [me.articleFields, me.orderFields, me.stockField];
     },
     /*
      * Profile drop down
@@ -255,16 +277,23 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
                 change: function(value) {
                     var record = me.profilesStore.getById(value.getValue());
                     var type = record.get('type');
-                    
+
                     if (type === 'articles') {
                         me.articleFields.show();
                         me.orderFields.hide();
+                        me.stockField.hide();
                     } else if (type === 'orders') {
                         me.orderFields.show();
                         me.articleFields.hide();
+                        me.stockField.hide();
+                    }else if(type === 'articlesInStock') {
+                        me.articleFields.hide();
+                        me.orderFields.hide();
+                        me.stockField.show();
                     } else {
                         me.articleFields.hide();
                         me.orderFields.hide();
+                        me.stockField.hide();
                     }
                 }
             }
@@ -288,6 +317,8 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
                     "name": 'CSV'
                 }]
         });
+
+
 
         return Ext.create('Ext.form.field.ComboBox', {
             allowBlank: false,
@@ -325,6 +356,37 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
         };
 
         return me.categoryTreeCombo;
+    },
+
+
+    createStockFilterComboBox:function(){
+        var me = this;
+
+        var stockFilter = Ext.create('Ext.data.Store', {
+            fields: ['value', 'name'],
+            data: [
+                { "value": "all", "name": me.snippets.all },
+                { "value": "inStock", "name": me.snippets.inStock },
+                { "value": "notInStock", "name": me.snippets.notInStock },
+                { "value": "inStockOnSale", "name": me.snippets.inStockOnSale },
+                { "value": "notInStockOnSale", "name": me.snippets.notInStockOnSale }
+            ]
+        });
+
+        me.stockFilterComboBox = {
+            fieldLabel: me.snippets.filter,
+            labelStyle: 'font-weight: 700; text-align: left;',
+            xtype: 'combobox',
+            allowBlank: true,
+            store: stockFilter,
+            width: me.configWidth,
+            labelWidth: me.configLabelWidth,
+            valueField: 'value',
+            displayField: 'name',
+            name: 'stockFilter'
+        };
+
+        return me.stockFilterComboBox;
     },
 
     /*

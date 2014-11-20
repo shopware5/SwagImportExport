@@ -438,7 +438,7 @@ class OrdersDbAdapter implements DataDbAdapter
     /**
      * Returns order repository
      * 
-     * @return Shopware\Models\Order\Order
+     * @return \Shopware\Models\Order\Order
      */
     public function getRepository()
     {
@@ -451,7 +451,7 @@ class OrdersDbAdapter implements DataDbAdapter
     /**
      * Returns order detail repository
      * 
-     * @return Shopware\Models\Order\Detail
+     * @return \Shopware\Models\Order\Detail
      */
     public function getDetailRepository()
     {
@@ -464,7 +464,7 @@ class OrdersDbAdapter implements DataDbAdapter
     /**
      * Returns entity manager
      * 
-     * @return Shopware\Components\Model\ModelManager
+     * @return \Shopware\Components\Model\ModelManager
      */
     public function getManager()
     {

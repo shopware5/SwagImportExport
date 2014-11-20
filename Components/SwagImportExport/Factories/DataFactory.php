@@ -5,16 +5,6 @@ namespace Shopware\Components\SwagImportExport\Factories;
 use Shopware\Components\SwagImportExport\DataIO;
 use Shopware\Components\SwagImportExport\Session\Session;
 use Shopware\Components\SwagImportExport\Logger\Logger;
-use Shopware\Components\SwagImportExport\DbAdapters\DataDbAdapter;
-use Shopware\Components\SwagImportExport\DbAdapters\CategoriesDbAdapter;
-use Shopware\Components\SwagImportExport\DbAdapters\ArticlesDbAdapter;
-use Shopware\Components\SwagImportExport\DbAdapters\ArticlesPricesDbAdapter;
-use Shopware\Components\SwagImportExport\DbAdapters\ArticlesImagesDbAdapter;
-use Shopware\Components\SwagImportExport\DbAdapters\ArticlesInStockDbAdapter;
-use Shopware\Components\SwagImportExport\DbAdapters\ArticlesTranslationsDbAdapter;
-use Shopware\Components\SwagImportExport\DbAdapters\CustomerDbAdapter;
-use Shopware\Components\SwagImportExport\DbAdapters\OrdersDbAdapter;
-use Shopware\Components\SwagImportExport\DbAdapters\NewsletterDbAdapter;
 use Shopware\Components\SwagImportExport\Utils\DataColumnOptions;
 use Shopware\Components\SwagImportExport\Utils\DataLimit;
 use Shopware\Components\SwagImportExport\Utils\DataFilter;
@@ -31,7 +21,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     /**
      * @param string $adapterType
      * @param array $postData
-     * @return Shopware\Components\SwagImportExport\DataIO
+     * @return \Shopware\Components\SwagImportExport\DataIO
      */
     public function getAdapter($adapterType,$postData)
     {
@@ -45,8 +35,10 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     }
 
     /**
-     * @param array $params
-     * @return \Shopware\Components\SwagImportExport\DataIO
+     * @param $dbAdapter
+     * @param $dataSession
+     * @param $logger
+     * @return DataIO
      */
     public function createDataIO($dbAdapter, $dataSession, $logger)
     {
@@ -159,7 +151,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     /**
      * Helper Method to get access to the session repository.
      *
-     * @return Shopware\CustomModels\ImportExport\Session
+     * @return \Shopware\CustomModels\ImportExport\Session
      */
     public function getSessionRepository()
     {
