@@ -1293,7 +1293,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $this->addAclPermission("createNode", "export", "Insuficient Permissions (createNode)");
         $this->addAclPermission("updateNode", "export", "Insuficient Permissions (updateNode)");
         $this->addAclPermission("deleteNode", "export", "Insuficient Permissions (deleteNode)");
-        $this->addAclPermission("duplicateProfile", "export", "Insuficient Permissions (duplicateProfile)");
+        $this->addAclPermission("duplicateProfile", "profile", "Insuficient Permissions (duplicateProfile)");
         $this->addAclPermission("getConversions", "export", "Insuficient Permissions (getConversions)");
         $this->addAclPermission("createConversion", "export", "Insuficient Permissions (createConversion)");
         $this->addAclPermission("updateConversion", "export", "Insuficient Permissions (updateConversion)");
@@ -1306,7 +1306,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $this->addAclPermission("deleteSession", "export", "Insuficient Permissions (deleteSession)");
         $this->addAclPermission("uploadFile", "import", "Insuficient Permissions (uploadFile)");
         $this->addAclPermission("downloadFile", "export", "Insuficient Permissions (downloadFile)");
-        $this->addAclPermission("getSections", "export", "Insuficient Permissions (getSections)");
+        $this->addAclPermission("getSections", "profile", "Insuficient Permissions (getSections)");
         $this->addAclPermission("getColumns", "profile", "Insuficient Permissions (getColumns)");
         $this->addAclPermission("getParentKeys", "profile", "Insuficient Permissions (getParentKeys)");
     }
