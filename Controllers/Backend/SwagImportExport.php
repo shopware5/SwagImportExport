@@ -515,8 +515,9 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
             $dbAdapter = $dataFactory->createDbAdapter($profile->getType());
             $dataSession = $dataFactory->loadSession($postData);
+            $logger = $dataFactory->loadLogger($dataSession);
 
-            $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession);
+            $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession, $logger);
 
             $colOpts = $dataFactory->createColOpts($postData['columnOptions']);
             $limit = $dataFactory->createLimit($postData['limit']);            
@@ -605,9 +606,10 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
         $dbAdapter = $dataFactory->createDbAdapter($profile->getType());
         $dataSession = $dataFactory->loadSession($postData);
-        
+        $logger = $dataFactory->loadLogger($dataSession);
+
         //create dataIO
-        $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession);
+        $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession, $logger);
 
         $colOpts = $dataFactory->createColOpts($postData['columnOptions']);
         $limit = $dataFactory->createLimit($postData['limit']);
@@ -630,7 +632,6 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         );
 
         $dataWorkflow = new DataWorkflow($dataIO, $profile, $dataTransformerChain, $fileWriter);
-        $logger = new StatusLogger();
             
         try {
             $post = $dataWorkflow->export($postData);
@@ -686,9 +687,10 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
         $dbAdapter = $dataFactory->createDbAdapter($profile->getType());
         $dataSession = $dataFactory->loadSession($postData);
+        $logger = $dataFactory->loadLogger($dataSession);
 
         //create dataIO
-        $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession);
+        $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession, $logger);
 
         $position = $dataIO->getSessionPosition();
         $position = $position == null ? 0 : $position;
@@ -726,13 +728,18 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         //setting up the batch size
         $postData['batchSize'] = $profile->getType() === 'articlesImages' ? 1 : 50;
 
+        /* @var $dataFactory Shopware\Components\SwagImportExport\Factories\DataFactory */
         $dataFactory = $this->Plugin()->getDataFactory();
 
         $dbAdapter = $dataFactory->createDbAdapter($profile->getType());
+
         $dataSession = $dataFactory->loadSession($postData);
 
+        /* @var $logger Shopware\Components\SwagImportExport\Logger\Logger */
+        $logger = $dataFactory->loadLogger($dataSession);
+
         //create dataIO
-        $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession);
+        $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession, $logger);
 
         $colOpts = $dataFactory->createColOpts($postData['columnOptions']);
         $limit = $dataFactory->createLimit($postData['limit']);
@@ -752,7 +759,6 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $sessionState = $dataIO->getSessionState();
 
         $dataWorkflow = new DataWorkflow($dataIO, $profile, $dataTransformerChain, $fileReader);
-        $logger = new StatusLogger();
 
         try {
             $post = $dataWorkflow->import($postData, $inputFile);
@@ -780,14 +786,16 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                     $post = array_merge($post, $postProcessedData);
                 }
 
-                $message = $post['position'] . ' ' . $post['adapter'] . ' imported successfully';
-                $logger->write($message, 'false');
+                if ($logger->getMessage() === null) {
+                    $message = $post['position'] . ' ' . $post['adapter'] . ' imported successfully';
+                    $logger->write($message, 'false');
+                }
             }
 
             return $this->View()->assign(array('success' => true, 'data' => $post));
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $logger->write($e->getMessage(), 'true');
-            
+
             return $this->View()->assign(array('success' => false, 'msg' => $e->getMessage()));
         }
     }
@@ -1292,7 +1300,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $this->addAclPermission("createNode", "export", "Insuficient Permissions (createNode)");
         $this->addAclPermission("updateNode", "export", "Insuficient Permissions (updateNode)");
         $this->addAclPermission("deleteNode", "export", "Insuficient Permissions (deleteNode)");
-        $this->addAclPermission("duplicateProfile", "export", "Insuficient Permissions (duplicateProfile)");
+        $this->addAclPermission("duplicateProfile", "profile", "Insuficient Permissions (duplicateProfile)");
         $this->addAclPermission("getConversions", "export", "Insuficient Permissions (getConversions)");
         $this->addAclPermission("createConversion", "export", "Insuficient Permissions (createConversion)");
         $this->addAclPermission("updateConversion", "export", "Insuficient Permissions (updateConversion)");
@@ -1305,7 +1313,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $this->addAclPermission("deleteSession", "export", "Insuficient Permissions (deleteSession)");
         $this->addAclPermission("uploadFile", "import", "Insuficient Permissions (uploadFile)");
         $this->addAclPermission("downloadFile", "export", "Insuficient Permissions (downloadFile)");
-        $this->addAclPermission("getSections", "export", "Insuficient Permissions (getSections)");
+        $this->addAclPermission("getSections", "profile", "Insuficient Permissions (getSections)");
         $this->addAclPermission("getColumns", "profile", "Insuficient Permissions (getColumns)");
         $this->addAclPermission("getParentKeys", "profile", "Insuficient Permissions (getParentKeys)");
     }

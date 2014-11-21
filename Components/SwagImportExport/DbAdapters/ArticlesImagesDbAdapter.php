@@ -2,6 +2,7 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
+use Shopware\Components\SwagImportExport\Exception\AdapterException;
 
 class ArticlesImagesDbAdapter implements DataDbAdapter
 {
@@ -18,6 +19,11 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
      * @var array
      */
     protected $unprocessedData;
+
+    /**
+     * @var array
+     */
+    protected $logMessages;
 
     /**
      * Returns record ids
@@ -161,127 +167,133 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
         $configuratorOptionRepository = $this->getManager()->getRepository('Shopware\Models\Article\Configurator\Option');
 
         foreach ($records['default'] as $record) {
-            if (empty($record['ordernumber']) || empty($record['image'])) {
-                $message = SnippetsHelper::getNamespace()
-                            ->get('adapters/articlesImages/ordernumber_image_required', 'Ordernumber and image are required');
-                throw new \Exception($message);
-            }
+            try {
+                if (empty($record['ordernumber']) || empty($record['image'])) {
+                    $message = SnippetsHelper::getNamespace()
+                                ->get('adapters/articlesImages/ordernumber_image_required', 'Ordernumber and image are required');
+                    throw new AdapterException($message);
+                }
 
-            /** @var \Shopware\Models\Article\Detail $articleDetailModel */
-            $articleDetailModel = $this->getArticleDetailRepository()->findOneBy(array('number' => $record['ordernumber']));
-            if (!$articleDetailModel) {
-                $message = SnippetsHelper::getNamespace()
-                            ->get('adapters/articlesImages/article_not_found', 'Article with number %s does not exists');
-                throw new \Exception(sprintf($message, $record['ordernumber']));
-            }
+                /** @var \Shopware\Models\Article\Detail $articleDetailModel */
+                $articleDetailModel = $this->getArticleDetailRepository()->findOneBy(array('number' => $record['ordernumber']));
+                if (!$articleDetailModel) {
+                    $message = SnippetsHelper::getNamespace()
+                                ->get('adapters/articlesImages/article_not_found', 'Article with number %s does not exists');
+                    throw new AdapterException(sprintf($message, $record['ordernumber']));
+                }
 
-            if (isset($record['relations']) && !empty($record['relations'])) {
-                $relations = array();
-                $results = explode("&", $record['relations']);
+                if (isset($record['relations']) && !empty($record['relations'])) {
+                    $relations = array();
+                    $results = explode("&", $record['relations']);
 
-                $i = 0;
+                    $i = 0;
 
-                foreach ($results as $result) {
-                    if ($result !== "") {
-                        $result = preg_replace('/{|}/', '', $result);
+                    foreach ($results as $result) {
+                        if ($result !== "") {
+                            $result = preg_replace('/{|}/', '', $result);
 
-                        foreach (explode('|', $result) as $value) {
-                            list($group, $option) = explode(":", $value);
+                            foreach (explode('|', $result) as $value) {
+                                list($group, $option) = explode(":", $value);
 
-                            // Try to get given configurator group/option. Continue, if they don't exist
-                            $cGroupModel = $configuratorGroupRepository->findOneBy(array('name' => $group));
-                            if ($cGroupModel === null) {
-                                continue;
+                                // Try to get given configurator group/option. Continue, if they don't exist
+                                $cGroupModel = $configuratorGroupRepository->findOneBy(array('name' => $group));
+                                if ($cGroupModel === null) {
+                                    continue;
+                                }
+                                $cOptionModel = $configuratorOptionRepository->findOneBy(
+                                        array('name' => $option,
+                                            'groupId' => $cGroupModel->getId()
+                                        )
+                                );
+                                if ($cOptionModel === null) {
+                                    continue;
+                                }
+                                $relations[$i][] = array("group" => $cGroupModel, "option" => $cOptionModel);
+                                unset($cGroupModel);
+                                unset($cOptionModel);
                             }
-                            $cOptionModel = $configuratorOptionRepository->findOneBy(
-                                    array('name' => $option,
-                                        'groupId' => $cGroupModel->getId()
-                                    )
-                            );
-                            if ($cOptionModel === null) {
-                                continue;
-                            }
-                            $relations[$i][] = array("group" => $cGroupModel, "option" => $cOptionModel);
-                            unset($cGroupModel);
-                            unset($cOptionModel);
+                            $i++;
                         }
-                        $i++;
                     }
                 }
-            }
 
-            /** @var \Shopware\Models\Article\Article $article */
-            $article = $articleDetailModel->getArticle();
+                /** @var \Shopware\Models\Article\Article $article */
+                $article = $articleDetailModel->getArticle();
 
-            $name = pathinfo($record['image'], PATHINFO_FILENAME);
-            $mediaExists = false;
-            
-            if ($imageImportMode == 1) {
-                $mediaRepo = $this->getManager()->getRepository('Shopware\Models\Media\Media');
-                $media = $mediaRepo->findOneBy(array('name' => $name));
-                if ($media) {
-                   $path = $media->getPath();
-                   $mediaExists = true;
-                }
-            }
+                $name = pathinfo($record['image'], PATHINFO_FILENAME);
+                $mediaExists = false;
 
-            if($imageImportMode == 2 || $mediaExists == false) {
-                $path = $this->load($record['image'], $name);
-
-                $file = new \Symfony\Component\HttpFoundation\File\File($path);
-
-                $media = new \Shopware\Models\Media\Media();
-                $media->setAlbumId(-1);
-                $media->setAlbum($this->getManager()->find('Shopware\Models\Media\Album', -1));
-
-                $media->setFile($file);
-                $media->setName(pathinfo($record['image'], PATHINFO_FILENAME));
-                $media->setDescription('');
-                $media->setCreated(new \DateTime());
-                $media->setUserId(0);
-
-                $this->getManager()->persist($media);
-                $this->getManager()->flush();
-
-                if (empty($record['main'])) {
-                    $record['main'] = 1;
+                if ($imageImportMode == 1) {
+                    $mediaRepo = $this->getManager()->getRepository('Shopware\Models\Media\Media');
+                    $media = $mediaRepo->findOneBy(array('name' => $name));
+                    if ($media) {
+                       $path = $media->getPath();
+                       $mediaExists = true;
+                    }
                 }
 
-                //generate thumbnails
-                if ($media->getType() == \Shopware\Models\Media\Media::TYPE_IMAGE) {
-                    /*                 * @var $manager \Shopware\Components\Thumbnail\Manager */
-                    $manager = Shopware()->Container()->get('thumbnail_manager');
-                    $manager->createMediaThumbnail($media, array(), true);
+                if($imageImportMode == 2 || $mediaExists == false) {
+                    $path = $this->load($record['image'], $name);
+
+                    $file = new \Symfony\Component\HttpFoundation\File\File($path);
+
+                    $media = new \Shopware\Models\Media\Media();
+                    $media->setAlbumId(-1);
+                    $media->setAlbum($this->getManager()->find('Shopware\Models\Media\Album', -1));
+
+                    $media->setFile($file);
+                    $media->setName(pathinfo($record['image'], PATHINFO_FILENAME));
+                    $media->setDescription('');
+                    $media->setCreated(new \DateTime());
+                    $media->setUserId(0);
+
+                    $this->getManager()->persist($media);
+                    $this->getManager()->flush();
+
+                    if (empty($record['main'])) {
+                        $record['main'] = 1;
+                    }
+
+                    //generate thumbnails
+                    if ($media->getType() == \Shopware\Models\Media\Media::TYPE_IMAGE) {
+                        /*                 * @var $manager \Shopware\Components\Thumbnail\Manager */
+                        $manager = Shopware()->Container()->get('thumbnail_manager');
+                        $manager->createMediaThumbnail($media, array(), true);
+                    }
                 }
-            }
-            
-            $image = new \Shopware\Models\Article\Image();
-            $image->setArticle($article);
-            $image->setDescription($record['description']);
-            $image->setPosition($record['position']);
-            $image->setPath($media->getName());
-            $image->setExtension($media->getExtension());
-            $image->setMedia($media);
-            $image->setMain($record['main']);
 
-            $this->getManager()->persist($image);
-            $this->getManager()->flush($image);
+                $image = new \Shopware\Models\Article\Image();
+                $image->setArticle($article);
+                $image->setDescription($record['description']);
+                $image->setPosition($record['position']);
+                $image->setPath($media->getName());
+                $image->setExtension($media->getExtension());
+                $image->setMedia($media);
+                $image->setMain($record['main']);
 
-            if ($relations && !empty($relations)) {
-                $this->setImageMappings($relations, $image->getId());
-            }
+                $this->getManager()->persist($image);
+                $this->getManager()->flush($image);
 
-            // Prevent multiple images from being a preview
-            if ((int) $record['main'] === 1) {
-                $this->getDb()->update('s_articles_img', array('main' => 2), array(
-                    'articleID = ?' => $article->getId(),
-                    'id <> ?' => $image->getId()
-                        )
-                );
+                if ($relations && !empty($relations)) {
+                    $this->setImageMappings($relations, $image->getId());
+                }
+
+                // Prevent multiple images from being a preview
+                if ((int) $record['main'] === 1) {
+                    $this->getDb()->update('s_articles_img', array('main' => 2), array(
+                        'articleID = ?' => $article->getId(),
+                        'id <> ?' => $image->getId()
+                            )
+                    );
+                }
+                $this->getManager()->clear();
+                unset($media);
+                unset($image);
+
+            } catch (AdapterException $e) {
+                $message = $e->getMessage();
+                $this->saveMessage($message);
             }
-            $this->getManager()->clear();
-            unset($media);
-            unset($image);
         }
     }
 
@@ -497,7 +509,28 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
         throw new \Exception(sprintf($message, $urlArray['scheme']));
     }
 
-    public function getBuilder($columns, $ids)
+    public function saveMessage($message)
+    {
+        $errorMode = Shopware()->Config()->get('SwagImportExportErrorMode');
+
+        if ($errorMode === false) {
+            throw new \Exception($message);
+        }
+
+        $this->setLogMessages($message);
+    }
+
+    public function getLogMessages()
+    {
+        return $this->logMessages;
+    }
+
+    public function setLogMessages($logMessages)
+    {
+        $this->logMessages[] = $logMessages;
+    }
+
+public function getBuilder($columns, $ids)
     {
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select($columns)

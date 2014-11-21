@@ -63,6 +63,12 @@ class Session extends ModelEntity
     protected $profile;
 
     /**
+     * @ORM\OneToOne(targetEntity="Shopware\CustomModels\ImportExport\Logger", cascade={"persist", "refresh"})
+     * @ORM\JoinColumn(name="logger_id", referencedColumnName="id")
+     */
+    protected $logger;
+
+    /**
      * @var string $type
      *
      * @ORM\Column(name="type", type="string", length=200)
@@ -142,6 +148,11 @@ class Session extends ModelEntity
         return $this->profile;
     }
 
+    public function getLogger()
+    {
+        return $this->logger;
+    }
+
     public function getType()
     {
         return $this->type;
@@ -211,6 +222,13 @@ class Session extends ModelEntity
     public function setProfile(\Shopware\CustomModels\ImportExport\Profile $profile = null)
     {
         $this->profile = $profile;
+
+        return $this;
+    }
+
+    public function setLogger(\Shopware\CustomModels\ImportExport\Logger $logger = null)
+    {
+        $this->logger = $logger;
 
         return $this;
     }

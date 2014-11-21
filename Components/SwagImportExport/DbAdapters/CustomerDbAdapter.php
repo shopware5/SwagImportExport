@@ -6,6 +6,7 @@ use Shopware\Models\Customer\Customer;
 use Shopware\Components\SwagImportExport\Utils\DataHelper;
 use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
 use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
+use Shopware\Components\SwagImportExport\Exception\AdapterException;
 
 class CustomerDbAdapter implements DataDbAdapter
 {
@@ -21,6 +22,11 @@ class CustomerDbAdapter implements DataDbAdapter
      * @var array
      */
     protected $unprocessedData;
+
+    /**
+     * @var array
+     */
+    protected $logMessages;
 
     public function getDefaultColumns()
     {
@@ -249,78 +255,85 @@ class CustomerDbAdapter implements DataDbAdapter
         $db = Shopware()->Db();
 
         foreach ($records['default'] as $record) {
+            try {
 
-            if (!$record['email']) {
-                $message = SnippetsHelper::getNamespace()
-                    ->get('adapters/customer/email_required', 'User email is required field.');
-                throw new \Exception($message);
-            }
-
-            $customer = $this->getRepository()->findOneBy(array('email' => $record['email']));
-
-            if (isset($record['unhashedPassword']) && $record['unhashedPassword'] 
-                && (!isset($record['password']) || !$record['password'])) {
-
-                if (!isset($record['encoder']) || !$record['encoder']) {
-                    $record['encoder'] = $passwordManager->getDefaultPasswordEncoderName();
+                if (!$record['email']) {
+                    $message = SnippetsHelper::getNamespace()
+                        ->get('adapters/customer/email_required', 'User email is required field.');
+                    throw new AdapterException($message);
                 }
 
-                $encoder = $passwordManager->getEncoderByName($record['encoder']);
+                $customer = $this->getRepository()->findOneBy(array('email' => $record['email']));
 
-                $record['password'] = $encoder->encodePassword($record['unhashedPassword']);
+                if (isset($record['unhashedPassword']) && $record['unhashedPassword']
+                    && (!isset($record['password']) || !$record['password'])) {
 
-                unset($record['unhashedPassword']);
-            }
+                    if (!isset($record['encoder']) || !$record['encoder']) {
+                        $record['encoder'] = $passwordManager->getDefaultPasswordEncoderName();
+                    }
 
-            if (!$customer) {
-                $customer = new Customer();
+                    $encoder = $passwordManager->getEncoderByName($record['encoder']);
 
-                if (!isset($record['customergroup'])) {
-                    /** @var $shop \Shopware\Models\Shop\Shop */
-                    $shop = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop')->getActiveDefault();
-                    $defaultGroupKey = $shop->getCustomerGroup()->getKey();
-                    $record['customergroup'] = $defaultGroupKey;
+                    $record['password'] = $encoder->encodePassword($record['unhashedPassword']);
+
+                    unset($record['unhashedPassword']);
                 }
+
+                if (!$customer) {
+                    $customer = new Customer();
+
+                    if (!isset($record['customergroup'])) {
+                        /** @var $shop \Shopware\Models\Shop\Shop */
+                        $shop = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop')->getActiveDefault();
+                        $defaultGroupKey = $shop->getCustomerGroup()->getKey();
+                        $record['customergroup'] = $defaultGroupKey;
+                    }
+                }
+
+                if (!isset($record['password']) && !$record['password']) {
+                    $message = SnippetsHelper::getNamespace()
+                        ->get('adapters/customer/password_required', 'Password must be provided for email %s');
+                    throw new AdapterException(sprintf($message, $record['email']));
+                }
+
+                if (isset($record['password']) && (!isset($record['encoder']) || !$record['encoder'])) {
+                    $message = SnippetsHelper::getNamespace()
+                        ->get('adapters/customer/password_encoder_required', 'Password encoder must be provided for email %s');
+                    throw new AdapterException(sprintf($message, $record['email']));
+                }
+
+                $customerData = $this->prepareCustomer($record);
+
+                $customerData['billing'] = $this->prepareBilling($record);
+
+                $customerData['shipping'] = $this->prepareShipping($record);
+
+                $customer->fromArray($customerData);
+
+                $violations = $this->getManager()->validate($customer);
+
+                if ($violations->count() > 0) {
+                    $message = SnippetsHelper::getNamespace()
+                                    ->get('adapters/customer/no_valid_customer_entity', 'No valid user entity for email %s');
+                    throw new AdapterException(sprintf($message, $record['email']));
+                }
+
+                $manager->persist($customer);
+                $manager->flush();
+
+                if (isset($customerData['encoderName']) && $customerData['encoderName']) {
+                    $customerId = $customer->getId();
+
+                    $data['encoder'] = lcfirst($customerData['encoderName']);
+                    $whereUser = array('id=' . $customerId);
+                    $db->update('s_user', $data, $whereUser);
+                }
+
+                $manager->clear();
+            } catch (AdapterException $e) {
+                $message = $e->getMessage();
+                $this->saveMessage($message);
             }
-
-            if (isset($record['password']) && !$record['password']) {
-                $message = SnippetsHelper::getNamespace()
-                    ->get('adapters/customer/password_required', 'Password must be provided');
-                throw new \Exception($message);
-            }
-
-            if (isset($record['password']) && (!isset($record['encoder']) || !$record['encoder'])) {
-                $message = SnippetsHelper::getNamespace()
-                    ->get('adapters/customer/password_encoder_required', 'Password encoder must be provided');
-                throw new \Exception($message);
-            }
-
-            $customerData = $this->prepareCustomer($record);
-
-            $customerData['billing'] = $this->prepareBilling($record);
-
-            $customerData['shipping'] = $this->prepareShipping($record);
-
-            $customer->fromArray($customerData);
-
-            $violations = $this->getManager()->validate($customer);
-
-            if ($violations->count() > 0) {
-                throw new \Exception($violations);
-            }
-
-            $manager->persist($customer);
-            $manager->flush();
-
-            if (isset($customerData['encoderName']) && $customerData['encoderName']) {
-                $customerId = $customer->getId();
-
-                $data['encoder'] = lcfirst($customerData['encoderName']);
-                $whereUser = array('id=' . $customerId);
-                $db->update('s_user', $data, $whereUser);
-            }
-
-            $manager->clear();
         }
     }
 
@@ -422,6 +435,27 @@ class CustomerDbAdapter implements DataDbAdapter
         }
 
         return $shippingData;
+    }
+
+    public function saveMessage($message)
+    {
+        $errorMode = Shopware()->Config()->get('SwagImportExportErrorMode');
+
+        if ($errorMode === false) {
+            throw new \Exception($message);
+        }
+
+        $this->setLogMessages($message);
+    }
+
+    public function getLogMessages()
+    {
+        return $this->logMessages;
+    }
+
+    public function setLogMessages($logMessages)
+    {
+        $this->logMessages[] = $logMessages;
     }
     
     /**

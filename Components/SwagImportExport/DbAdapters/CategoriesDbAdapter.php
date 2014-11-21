@@ -5,6 +5,7 @@ namespace Shopware\Components\SwagImportExport\DbAdapters;
 use Shopware\Models\Category\Category;
 use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
 use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
+use Shopware\Components\SwagImportExport\Exception\AdapterException;
 
 class CategoriesDbAdapter implements DataDbAdapter
 {
@@ -23,6 +24,11 @@ class CategoriesDbAdapter implements DataDbAdapter
      * @var array
      */
     protected $unprocessedData;
+
+    /**
+     * @var array
+     */
+    protected $logMessages;
 
     /**
      * Returns record ids
@@ -173,47 +179,55 @@ class CategoriesDbAdapter implements DataDbAdapter
         $manager = $this->getManager();
         
         foreach ($records['default'] as $record) {
+            try{
+                if (!$record['name']) {
+                    $message = SnippetsHelper::getNamespace()
+                        ->get('adapters/categories/name_required', 'Category name is required');
+                    throw new AdapterException($message);
+                }
 
-            if (!$record['parentId']) {
-                $message = SnippetsHelper::getNamespace()
-                    ->get('adapters/categories/parent_id_required', 'Parent category id is required');
-                throw new \Exception($message);
-            }
+                if (!$record['parentId']) {
+                    $message = SnippetsHelper::getNamespace()
+                        ->get('adapters/categories/parent_id_required', 'Parent category id is required for category %s');
+                    throw new AdapterException(sprintf($message, $record['name']));
+                }
 
-            if (!$record['name']) {
-                $message = SnippetsHelper::getNamespace()
-                    ->get('adapters/categories/name_required', 'Category name is required');
-                throw new \Exception($message);
-            }
+                $parentCategory = $this->getRepository()->findOneBy(array('id' => $record['parentId']));
+                if (!$parentCategory) {
+                    $message = SnippetsHelper::getNamespace()
+                        ->get('adapters/categories/parent_not_exists', 'Parent category does not exists for category %s');
+                    throw new AdapterException(sprintf($message, $record['name']));
+                }
+
+                /* @var $category Shopware\Models\Category\Category */
+                $category = $this->getRepository()->findOneBy(array('id' => $record['id']));
+
+                if (!$category) {
+                    $category = new Category();
+                }
+
+                $record = $this->prepareData($record);
+
+                $category->fromArray($record);
+
+                $violations = $manager->validate($category);
+
+                if ($violations->count() > 0) {
+                    $message = SnippetsHelper::getNamespace()
+                                    ->get('adapters/category/no_valid_category_entity', 'No valid category entity for category %s');
+                    throw new AdapterException(sprintf($message, $category->getName()));
+                }
+
+                $manager->persist($category);
+                $metadata = $manager->getClassMetaData(get_class($category));
+                $metadata->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);
+                $manager->flush();
+                $manager->clear();
             
-            $parentCategory = $this->getRepository()->findOneBy(array('id' => $record['parentId']));
-            if (!$parentCategory) {
-                $message = SnippetsHelper::getNamespace()
-                    ->get('adapters/categories/parent_not_exists', 'Parent category does not exists.');
-                throw new \Exception($message);
+            } catch (AdapterException $e) {
+                $message = $e->getMessage();
+                $this->saveMessage($message);
             }
-            
-            $category = $this->getRepository()->findOneBy(array('id' => $record['id']));
-
-            if (!$category) {
-                $category = new Category();
-            }
-
-            $record = $this->prepareData($record);
-
-            $category->fromArray($record);
-
-            $violations = $manager->validate($category);
-
-            if ($violations->count() > 0) {
-                throw new \Exception($violations);
-            }
-
-            $manager->persist($category);
-            $metadata = $manager->getClassMetaData(get_class($category));
-            $metadata->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);
-            $manager->flush();
-            $manager->clear();
         }
     }
 
@@ -261,6 +275,27 @@ class CategoriesDbAdapter implements DataDbAdapter
         }
 
         return false;
+    }
+
+    public function saveMessage($message)
+    {
+        $errorMode = Shopware()->Config()->get('SwagImportExportErrorMode');
+
+        if ($errorMode === false) {
+            throw new \Exception($message);
+        }
+
+        $this->setLogMessages($message);
+    }
+
+    public function getLogMessages()
+    {
+        return $this->logMessages;
+    }
+
+    public function setLogMessages($logMessages)
+    {
+        $this->logMessages[] = $logMessages;
     }
 
     /**

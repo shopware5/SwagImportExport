@@ -277,8 +277,11 @@ class CommandHelper
         $dbAdapter = $dataFactory->createDbAdapter($profile->getType());
         $dataSession = $dataFactory->loadSession($postData);
 
+        /* @var $logger Shopware\Components\SwagImportExport\Logger\Logger */
+        $logger = $dataFactory->loadLogger($dataSession);
+
         //create dataIO
-        $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession);
+        $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession, $logger);
 
         $colOpts = $dataFactory->createColOpts($postData['columnOptions']);
         $limit = $dataFactory->createLimit($postData['limit']);
@@ -297,7 +300,6 @@ class CommandHelper
         $sessionState = $dataIO->getSessionState();
 
         $dataWorkflow = new DataWorkflow($dataIO, $profile, $dataTransformerChain, $fileReader);
-        $logger = new StatusLogger();
         
         try {
             $post = $dataWorkflow->import($postData, $inputFile);
@@ -316,7 +318,10 @@ class CommandHelper
             }
 
             $this->sessionId = $post['sessionId'];
-            if ($dataSession->getTotalCount() > 0 && ($dataSession->getTotalCount() == $post['position'])) {
+
+            if ($dataSession->getTotalCount() > 0 && ($dataSession->getTotalCount() == $post['position'])
+                    && $logger->getMessage() === null) {
+
                 $message = $post['position'] . ' ' . $post['adapter'] . ' imported successfully';
                 $logger->write($message, 'false');
             }

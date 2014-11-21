@@ -6,6 +6,7 @@ use Shopware\Models\Newsletter\Address;
 use Shopware\Models\Newsletter\Group;
 use Shopware\Models\Newsletter\ContactData;
 use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
+use Shopware\Components\SwagImportExport\Exception\AdapterException;
 
 class NewsletterDbAdapter implements DataDbAdapter
 {
@@ -19,6 +20,11 @@ class NewsletterDbAdapter implements DataDbAdapter
      * @var array
      */
     protected $unprocessedData;
+
+    /**
+     * @var array
+     */
+    protected $logMessages;
 
     public function getDefaultColumns()
     {
@@ -92,76 +98,97 @@ class NewsletterDbAdapter implements DataDbAdapter
         );
 
         $manager = $this->getManager();
-        
+
         foreach ($records['default'] as $newsletterData) {
+            try {
+ 
+                if (empty($newsletterData['email'])) {
+                    $message = SnippetsHelper::getNamespace()
+                        ->get('adapters/newsletter/email_required', 'Email address is required');
+                    throw new AdapterException($message);
+                }
 
-            if (empty($newsletterData['email'])) {
-                $message = SnippetsHelper::getNamespace()
-                    ->get('adapters/newsletter/email_required', 'Email address is required');
-                throw new \Exception($message);
-            }
+                if ($newsletterData['groupName']) {
+                    $group = $this->getGroupRepository()->findOneByName($newsletterData['groupName']);
+                }
+                if (!$group && $newsletterData['groupName']) {
+                    $group = new Group();
+                    $group->setName($newsletterData['groupName']);
+                    $manager->persist($group);
+                } elseif (!$group && $groupId = Shopware()->Config()->get("sNEWSLETTERDEFAULTGROUP")) {
+                    $group = $this->getGroupRepository()->findOneBy($groupId);
+                } elseif (!$group) {
+                    $message = SnippetsHelper::getNamespace()
+                        ->get('adapters/newsletter/group_required', 'Group is required for email %s');
+                    throw new AdapterException(sprintf($message, $newsletterData['email']));
+                }
 
-//            if (!$emailValidator->isValid($newsletterData['email'])) {
-//                 //todo: log this result
-//                continue;
-//            }
+                // Create/Update the Address entry
+                $recipient = $this->getAddressRepository()->findOneByEmail($newsletterData['email']);
 
-            if ($newsletterData['groupName']) {
-                $group = $this->getGroupRepository()->findOneByName($newsletterData['groupName']);
-            }
-            if (!$group && $newsletterData['groupName']) {
-                $group = new Group();
-                $group->setName($newsletterData['groupName']);
-                $manager->persist($group);
-            } elseif (!$group && $groupId = Shopware()->Config()->get("sNEWSLETTERDEFAULTGROUP")) {
-                $group = $this->getGroupRepository()->findOneBy($groupId);
-            } elseif (!$group) {
-                $message = SnippetsHelper::getNamespace()
-                    ->get('adapters/newsletter/group_required', 'Group is required');
-                throw new \Exception($message);
-            }
-            
-            // Create/Update the Address entry
-            $recipient = $this->getAddressRepository()->findOneByEmail($newsletterData['email']);
+                if (!$recipient) {
+                    $recipient = new Address();
+                }
 
-            if (!$recipient) {
-                $recipient = new Address();
-            }
+                $recipient->setEmail($newsletterData['email']);
+                $recipient->setIsCustomer(!empty($newsletterData['userID']));
 
-            $recipient->setEmail($newsletterData['email']);
-            $recipient->setIsCustomer(!empty($newsletterData['userID']));
+                //Only set the group if it was explicitly provided or it's a new entry
+                if ($group && ($newsletterData['groupName'] || !$recipient->getId())) {
+                    $recipient->setNewsletterGroup($group);
+                }
+                $manager->persist($recipient);
 
-            //Only set the group if it was explicitly provided or it's a new entry
-            if ($group && ($newsletterData['groupName'] || !$recipient->getId())) {
-                $recipient->setNewsletterGroup($group);
-            }
-            $manager->persist($recipient);
+                //Create/Update the ContactData entry
+                $contactData = $this->getContactDataRepository()->findOneByEmail($newsletterData['email']);
 
-            //Create/Update the ContactData entry
-            $contactData = $this->getContactDataRepository()->findOneByEmail($newsletterData['email']);
-            
-            if (!$contactData) {
-                $contactData = new ContactData();
-            }
-            
-            $contactData->fromArray($newsletterData);
-            
-            //Only set the group if it was explicitly provided or it's a new entry
-            if ($group && ($newsletterData['groupName'] || !$contactData->getId())) {
-                $manager->persist($group);
+                if (!$contactData) {
+                    $contactData = new ContactData();
+                }
+
+                $contactData->fromArray($newsletterData);
+
+                //Only set the group if it was explicitly provided or it's a new entry
+                if ($group && ($newsletterData['groupName'] || !$contactData->getId())) {
+                    $manager->persist($group);
+                    $manager->flush();
+
+                    $contactData->setGroupId($group->getId());
+                }
+                $contactData->setAdded(new \DateTime());
+
+                $manager->persist($contactData);
+
                 $manager->flush();
-                
-                $contactData->setGroupId($group->getId());
+                $manager->clear();
+            } catch (AdapterException $e) {
+                $message = $e->getMessage();
+                $this->saveMessage($message);
             }
-            $contactData->setAdded(new \DateTime());
-
-            $manager->persist($contactData);
         }
-        
-        $manager->flush();
-        $manager->clear();
     }
-    
+
+    public function saveMessage($message)
+    {
+        $errorMode = Shopware()->Config()->get('SwagImportExportErrorMode');
+
+        if ($errorMode === false) {
+            throw new \Exception($message);
+        }
+
+        $this->setLogMessages($message);
+    }
+
+    public function getLogMessages()
+    {
+        return $this->logMessages;
+    }
+
+    public function setLogMessages($logMessages)
+    {
+        $this->logMessages[] = $logMessages;
+    }
+
     /**
      * @return array
      */

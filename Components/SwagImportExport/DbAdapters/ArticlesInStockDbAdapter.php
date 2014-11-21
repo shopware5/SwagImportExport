@@ -2,6 +2,7 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
+use Shopware\Components\SwagImportExport\Exception\AdapterException;
 
 class ArticlesInStockDbAdapter implements DataDbAdapter
 {
@@ -15,6 +16,11 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
      * @var array
      */
     protected $unprocessedData;
+
+    /**
+     * @var array
+     */
+    protected $logMessages;
 
     /**
      * @var Shopware\Models\Article\Detail
@@ -115,27 +121,34 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
         $manager = $this->getManager();
 
         foreach ($records['default'] as $record) {
-            
-            if (empty($record['orderNumber'])) {
-                $message = SnippetsHelper::getNamespace()
-                    ->get('adapters/ordernumber_required', 'Order number is required');
-                throw new \Exception($message);
+
+            try{
+                
+                if (empty($record['orderNumber'])) {
+                    $message = SnippetsHelper::getNamespace()
+                        ->get('adapters/ordernumber_required', 'Order number is required');
+                    throw new AdapterException($message);
+                }
+                $articleDetail = $this->getRepository()->findOneBy(array("number" => $record['orderNumber']));
+
+                if(!$articleDetail){
+                    $message = SnippetsHelper::getNamespace()
+                        ->get('adapters/articlesImages/article_not_found', 'Article with number %s does not exists.');
+                    throw new AdapterException(sprintf($message, $record['orderNumber']));
+                }
+
+                $inStock = (int) $record['inStock'];
+
+                $articleDetail->setInStock($inStock);
+
+                $manager->persist($articleDetail);
+
+            } catch (AdapterException $e) {
+                $message = $e->getMessage();
+                $this->saveMessage($message);
             }
-            $articleDetail = $this->getRepository()->findOneBy(array("number" => $record['orderNumber']));
-            
-            if(!$articleDetail){
-                $message = SnippetsHelper::getNamespace()
-                    ->get('adapters/articlesImages/article_not_found', 'Article with number %s does not exists.');
-                throw new \Exception(sprintf($message, $record['orderNumber']));
-            }
-            
-            $inStock = (int) $record['inStock'];
-            
-            $articleDetail->setInStock($inStock);
-            
-            $manager->persist($articleDetail);
         }
-        
+
         $manager->flush();
         $manager->clear();
     }
@@ -193,7 +206,28 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
         return $this->manager;
     }
 
-    public function getBuilder($columns, $ids)
+    public function saveMessage($message)
+    {
+        $errorMode = Shopware()->Config()->get('SwagImportExportErrorMode');
+
+        if ($errorMode === false) {
+            throw new \Exception($message);
+        }
+
+        $this->setLogMessages($message);
+    }
+
+    public function getLogMessages()
+    {
+        return $this->logMessages;
+    }
+
+    public function setLogMessages($logMessages)
+    {
+        $this->logMessages[] = $logMessages;
+    }
+
+	public function getBuilder($columns, $ids)
     {
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select($columns)
@@ -208,5 +242,4 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
 
         return $builder;
     }
-
 }

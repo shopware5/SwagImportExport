@@ -4,6 +4,7 @@ namespace Shopware\Components\SwagImportExport\DbAdapters;
 
 use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
 use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
+use Shopware\Components\SwagImportExport\Exception\AdapterException;
 
 class OrdersDbAdapter implements DataDbAdapter
 {
@@ -27,6 +28,11 @@ class OrdersDbAdapter implements DataDbAdapter
      * @var array
      */
     protected $unprocessedData;
+
+    /**
+     * @var array
+     */
+    protected $logMessages;
 
     /**
      * Returns record ids
@@ -138,119 +144,145 @@ class OrdersDbAdapter implements DataDbAdapter
         );
 
         foreach ($records['default'] as $index => $record) {
+            try {
 
-            if ((!isset($record['orderId']) || !$record['orderId']) && (!isset($record['number']) || !$record['number']) && (!isset($record['orderDetailId']) || !$record['orderDetailId'])) {
-                $message = SnippetsHelper::getNamespace()
-                    ->get('adapters/orders/ordernumber_order_details_requires', 'Order number or order detail id must be provided');
-                throw new \Exception($message);
-            }
-
-            if (isset($record['orderDetailId']) && $record['orderDetailId']) {
-                $orderDetailModel = $this->getDetailRepository()->find($record['orderDetailId']);
-
-                if (!$orderDetailModel) {
+                if ((!isset($record['orderId']) || !$record['orderId']) && (!isset($record['number']) || !$record['number']) && (!isset($record['orderDetailId']) || !$record['orderDetailId'])) {
                     $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/orders/order_detail_id_not_found', 'Order detail id %s was not found');
-                    throw new \Exception(sprintf($message, $record['orderDetailId']));
-                }
-            } else {
-                $orderDetailModel = $this->getDetailRepository()->findOneBy(array('number' => $record['number']));
-
-                if (!$orderDetailModel) {
-                    $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/orders/order_detail_id_not_found', 'Order detail id %s was not found');
-                    throw new \Exception(sprintf($message, $record['orderDetailId']));
-                }
-            }
-
-            $orderModel = $orderDetailModel->getOrder();
-
-            if (isset($record['paymentId']) && is_numeric($record['paymentId'])) {
-                $paymentStatusModel = $this->getManager()->find('\Shopware\Models\Order\Status', $record['cleared']);
-
-                if (!$paymentStatusModel) {
-                    $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/orders/payment_status_id_not_found', 'Payment status id %s was not found');
-                    throw new \Exception(sprintf($message, $record['cleared']));
+                        ->get('adapters/orders/ordernumber_order_details_requires', 'Order number or order detail id must be provided');
+                    throw new AdapterException($message);
                 }
 
-                $orderModel->setPaymentStatus($paymentStatusModel);
-            }
+                if (isset($record['orderDetailId']) && $record['orderDetailId']) {
+                    $orderDetailModel = $this->getDetailRepository()->find($record['orderDetailId']);
 
-            if (isset($record['status']) && is_numeric($record['status'])) {
-                $orderStatusModel = $this->getManager()->find('\Shopware\Models\Order\Status', $record['status']);
+                    if (!$orderDetailModel) {
+                        $message = SnippetsHelper::getNamespace()
+                            ->get('adapters/orders/order_detail_id_not_found', 'Order detail id %s was not found');
+                        throw new AdapterException(sprintf($message, $record['orderDetailId']));
+                    }
+                } else {
+                    $orderDetailModel = $this->getDetailRepository()->findOneBy(array('number' => $record['number']));
 
-                if (!$orderStatusModel) {
-                    $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/orders/status_not_found', 'Status %s was not found');
-                    throw new \Exception(sprintf($message, $record['status']));
+                    if (!$orderDetailModel) {
+                        $message = SnippetsHelper::getNamespace()
+                            ->get('adapters/orders/order_detail_id_not_found', 'Order detail id %s was not found');
+                        throw new AdapterException(sprintf($message, $record['orderDetailId']));
+                    }
                 }
 
-                $orderModel->setOrderStatus($orderStatusModel);
-            }
+                $orderModel = $orderDetailModel->getOrder();
 
-            if (isset($record['trackingCode'])) {
-                $orderModel->setTrackingCode($record['trackingCode']);
-            }
+                if (isset($record['paymentId']) && is_numeric($record['paymentId'])) {
+                    $paymentStatusModel = $this->getManager()->find('\Shopware\Models\Order\Status', $record['cleared']);
 
-            if (isset($record['comment'])) {
-                $orderModel->setComment($record['comment']);
-            }
+                    if (!$paymentStatusModel) {
+                        $message = SnippetsHelper::getNamespace()
+                            ->get('adapters/orders/payment_status_id_not_found', 'Payment status id %s was not found for order %s');
+                        throw new AdapterException(sprintf($message, $record['cleared'], $orderModel->getNumber()));
+                    }
 
-            if (isset($record['customerComment'])) {
-                $orderModel->setCustomerComment($record['customerComment']);
-            }
-
-            if (isset($record['internalComment'])) {
-                $orderModel->setInternalComment($record['internalComment']);
-            }
-
-            if (isset($record['transactionId'])) {
-                $orderModel->setTransactionId($record['transactionId']);
-            }
-
-            if (isset($record['clearedDate'])) {
-                $orderModel->setClearedDate($record['clearedDate']);
-            }
-
-            if (isset($record['shipped'])) {
-                $orderDetailModel->setShipped($record['shipped']);
-            }
-
-            if (isset($record['statusId']) && is_numeric($record['statusId'])) {
-                $detailStatusModel = $this->getManager()->find('\Shopware\Models\Order\DetailStatus', $record['statusId']);
-
-                if (!$detailStatusModel) {
-                    $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/orders/detail_status_not_found', 'Detail status with id %s was not found');
-                    throw new \Exception(sprintf($message, $record['statusId']));
+                    $orderModel->setPaymentStatus($paymentStatusModel);
                 }
 
-                $orderDetailModel->setStatus($detailStatusModel);
-            }
+                if (isset($record['status']) && is_numeric($record['status'])) {
+                    $orderStatusModel = $this->getManager()->find('\Shopware\Models\Order\Status', $record['status']);
 
-            //prepares the attributes
-            foreach ($record as $key => $value) {
-                if (preg_match('/^attribute/', $key)) {
-                    $newKey = lcfirst(preg_replace('/^attribute/', '', $key));
-                    $orderData['attribute'][$newKey] = $value;
-                    unset($record[$key]);
+                    if (!$orderStatusModel) {
+                        $message = SnippetsHelper::getNamespace()
+                            ->get('adapters/orders/status_not_found', 'Status %s was not found for order %s');
+                        throw new AdapterException(sprintf($message, $record['status'], $orderModel->getNumber()));
+                    }
+
+                    $orderModel->setOrderStatus($orderStatusModel);
                 }
+
+                if (isset($record['trackingCode'])) {
+                    $orderModel->setTrackingCode($record['trackingCode']);
+                }
+
+                if (isset($record['comment'])) {
+                    $orderModel->setComment($record['comment']);
+                }
+
+                if (isset($record['customerComment'])) {
+                    $orderModel->setCustomerComment($record['customerComment']);
+                }
+
+                if (isset($record['internalComment'])) {
+                    $orderModel->setInternalComment($record['internalComment']);
+                }
+
+                if (isset($record['transactionId'])) {
+                    $orderModel->setTransactionId($record['transactionId']);
+                }
+
+                if (isset($record['clearedDate'])) {
+                    $orderModel->setClearedDate($record['clearedDate']);
+                }
+
+                if (isset($record['shipped'])) {
+                    $orderDetailModel->setShipped($record['shipped']);
+                }
+
+                if (isset($record['statusId']) && is_numeric($record['statusId'])) {
+                    $detailStatusModel = $this->getManager()->find('\Shopware\Models\Order\DetailStatus', $record['statusId']);
+
+                    if (!$detailStatusModel) {
+                        $message = SnippetsHelper::getNamespace()
+                            ->get('adapters/orders/detail_status_not_found', 'Detail status with id %s was not found');
+                        throw new AdapterException(sprintf($message, $record['statusId']));
+                    }
+
+                    $orderDetailModel->setStatus($detailStatusModel);
+                }
+
+                //prepares the attributes
+                foreach ($record as $key => $value) {
+                    if (preg_match('/^attribute/', $key)) {
+                        $newKey = lcfirst(preg_replace('/^attribute/', '', $key));
+                        $orderData['attribute'][$newKey] = $value;
+                        unset($record[$key]);
+                    }
+                }
+
+                if ($orderData) {
+                    $orderModel->fromArray($orderData);
+                }
+
+                $this->getManager()->persist($orderModel);
+
+                unset($orderDetailModel);
+                unset($orderModel);
+                unset($orderData);
+            } catch (AdapterException $e) {
+                $message = $e->getMessage();
+                $this->saveMessage($message);
             }
-
-            if ($orderData) {
-                $orderModel->fromArray($orderData);
-            }
-
-            $this->getManager()->persist($orderModel);
-
-            unset($orderDetailModel);
-            unset($orderModel);
-            unset($orderData);
         }
 
         $this->getManager()->flush();
         $this->getManager()->clear();
+    }
+
+    public function saveMessage($message)
+    {
+        $errorMode = Shopware()->Config()->get('SwagImportExportErrorMode');
+
+        if ($errorMode === false) {
+            throw new \Exception($message);
+        }
+
+        $this->setLogMessages($message);
+    }
+
+    public function getLogMessages()
+    {
+        return $this->logMessages;
+    }
+
+    public function setLogMessages($logMessages)
+    {
+        $this->logMessages[] = $logMessages;
     }
 
     /**

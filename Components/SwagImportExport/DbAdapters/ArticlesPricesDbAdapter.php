@@ -2,6 +2,7 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
+use Shopware\Components\SwagImportExport\Exception\AdaptrerException;
 
 class ArticlesPricesDbAdapter implements DataDbAdapter
 {
@@ -135,145 +136,123 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
 
         $manager = $this->getManager();
         foreach ($records['default'] as $record) {
+            try{
+                // maybe this should be required field
+                if (!isset($record['orderNumber']) || empty($record['orderNumber'])) {
+                    $message = SnippetsHelper::getNamespace()
+                        ->get('adapters/ordernumber_required', 'Order number is required.');
+                    throw new AdaptrerException($message);
+                }
 
-            // maybe this should be required field
-            if (!isset($record['orderNumber']) || empty($record['orderNumber'])) {
-                $message = SnippetsHelper::getNamespace()
-                    ->get('adapters/ordernumber_required', 'Can not read articles without column names.');
-                throw new \Exception($message);
-            }
+                if (empty($record['priceGroup'])) {
+                    $record['priceGroup'] = 'EK';
+                }
 
-            if (empty($record['priceGroup'])) {
-                $record['priceGroup'] = 'EK';
-            }
-            
-            $customerGroup = $this->getGroupRepository()->findOneBy(array("key" => $record['priceGroup']));
-            if (!$customerGroup) {
-                $message = SnippetsHelper::getNamespace()
-                    ->get('adapters/articlesPrices/price_group_not_found', 'Price group %s was not found');
-                throw new \Exception(sprintf($message, $record['priceGroup']));
-            }
-            
-            $articleDetail = $this->getDetailRepository()->findOneBy(array("number" => $record['orderNumber']));
-            if (!$articleDetail) {
-                $message = SnippetsHelper::getNamespace()
-                    ->get('adapters/article_number_not_found', 'Article with order number %s doen not exists');
-                throw new \Exception(sprintf($message, $record['orderNumber']));
-            }
+                $customerGroup = $this->getGroupRepository()->findOneBy(array("key" => $record['priceGroup']));
+                if (!$customerGroup) {
+                    $message = SnippetsHelper::getNamespace()
+                        ->get('adapters/articlesPrices/price_group_not_found', 'Price group %s was not found');
+                    throw new AdaptrerException(sprintf($message, $record['priceGroup']));
+                }
 
-            if (empty($record['from'])) {
-                $record['from'] = 1;
-            } else {
-                $record['from'] = intval($record['from']);
-            }
+                $articleDetail = $this->getDetailRepository()->findOneBy(array("number" => $record['orderNumber']));
+                if (!$articleDetail) {
+                    $message = SnippetsHelper::getNamespace()
+                        ->get('adapters/article_number_not_found', 'Article with order number %s doen not exists');
+                    throw new AdaptrerException(sprintf($message, $record['orderNumber']));
+                }
 
-//            $oldPrice = $this->getPriceRepository()->findOneBy(
-//                array(
-//                    'articleDetailsId' => $articleDetail->getId(),
-//                    'customerGroupKey' => $record['priceGroup'],
-//                    'from' => $record['from']
-//                )
-//            );
+                if (empty($record['from'])) {
+                    $record['from'] = 1;
+                } else {
+                    $record['from'] = intval($record['from']);
+                }
 
-            $tax = $articleDetail->getArticle()->getTax();
+                $tax = $articleDetail->getArticle()->getTax();
 
-            if (empty($record['price']) && empty($record['percent'])) {
-                $message = SnippetsHelper::getNamespace()
-                    ->get('adapters/articlesPrices/price_percent_val_missing', 'Price or percent value is missing');
-                throw new \Exception($message);
-            }
+                if (empty($record['price']) && empty($record['percent'])) {
+                    $message = SnippetsHelper::getNamespace()
+                        ->get('adapters/articlesPrices/price_percent_val_missing', 'Price or percent value is missing');
+                    throw new AdaptrerException($message);
+                }
 
-            if ($record['from'] <= 1 && empty($record['price'])) {
-                $message = SnippetsHelper::getNamespace()
-                    ->get('adapters/articlesPrices/price_val_missing', 'Price value is missing');
-                throw new \Exception($message);
-            }
+                if ($record['from'] <= 1 && empty($record['price'])) {
+                    $message = SnippetsHelper::getNamespace()
+                        ->get('adapters/articlesPrices/price_val_missing', 'Price value is missing');
+                    throw new AdaptrerException($message);
+                }
 
-            if (isset($record['price'])) {
-                $record['price'] = floatval(str_replace(",", ".", $record['price']));                
-            }
+                if (isset($record['price'])) {
+                    $record['price'] = floatval(str_replace(",", ".", $record['price']));
+                }
 
-            if (isset($record['pseudoPrice'])) {
-                $record['pseudoPrice'] = floatval(str_replace(",", ".", $record['pseudoPrice']));
-            } else {
-//                if ($oldPrice) {
-//                    $record['pseudoPrice'] = $oldPrice->getPseudoPrice();
-//                } else {
-//                    $record['pseudoPrice'] = 0;
-//                }
-//
-//                if ($customerGroup->getTaxInput()) {
-//                    $record['pseudoPrice'] = round($record['pseudoPrice'] * (100 + $tax->getTax()) / 100, 2);
-//                }
-            }
+                if (isset($record['pseudoPrice'])) {
+                    $record['pseudoPrice'] = floatval(str_replace(",", ".", $record['pseudoPrice']));
+                } 
+                
+                if (isset($record['basePrice'])) {
+                    $record['basePrice'] = floatval(str_replace(",", ".", $record['basePrice']));
+                }
 
-            if (isset($record['basePrice'])) {
-                $record['basePrice'] = floatval(str_replace(",", ".", $record['basePrice']));
-            } else {
-//                if ($oldPrice) {
-//                    $record['basePrice'] = $oldPrice->getBasePrice();
-//                }
-            }
+                if (isset($record['percent'])) {
+                    $record['percent'] = floatval(str_replace(",", ".", $record['percent']));
+                } 
 
-            if (isset($record['percent'])) {
-                $record['percent'] = floatval(str_replace(",", ".", $record['percent']));
-            } else {
-//                if ($oldPrice) {
-//                    $record['percent'] = $oldPrice->getPercent();
-//                }
-            }
-
-            $query = $manager->createQuery('
-                        DELETE FROM Shopware\Models\Article\Price price
-                        WHERE price.customerGroup = :customerGroup
-                        AND price.articleDetailsId = :detailId
-                        AND price.from = :from');
-
-            $query->setParameters(array(
-                'customerGroup' => $record['priceGroup'],
-                'detailId' => $articleDetail->getId(),
-                'from' => $record['from'],
-            ));
-            $query->execute();
-
-            if ($record['from'] != 1) {
                 $query = $manager->createQuery('
-                        UPDATE Shopware\Models\Article\Price price SET price.to = :to
-                        WHERE price.customerGroup = :customerGroup
-                        AND price.articleDetailsId = :detailId
-                        AND price.articleId = :articleId AND price.to
-                        LIKE \'beliebig\'');
+                            DELETE FROM Shopware\Models\Article\Price price
+                            WHERE price.customerGroup = :customerGroup
+                            AND price.articleDetailsId = :detailId
+                            AND price.from = :from');
 
                 $query->setParameters(array(
-                    'to' => $record['from'] - 1,
                     'customerGroup' => $record['priceGroup'],
                     'detailId' => $articleDetail->getId(),
-                    'articleId' => $articleDetail->getArticle()->getId(),
+                    'from' => $record['from'],
                 ));
                 $query->execute();
+
+                if ($record['from'] != 1) {
+                    $query = $manager->createQuery('
+                            UPDATE Shopware\Models\Article\Price price SET price.to = :to
+                            WHERE price.customerGroup = :customerGroup
+                            AND price.articleDetailsId = :detailId
+                            AND price.articleId = :articleId AND price.to
+                            LIKE \'beliebig\'');
+
+                    $query->setParameters(array(
+                        'to' => $record['from'] - 1,
+                        'customerGroup' => $record['priceGroup'],
+                        'detailId' => $articleDetail->getId(),
+                        'articleId' => $articleDetail->getArticle()->getId(),
+                    ));
+                    $query->execute();
+                }
+
+                // remove tax
+                if ($customerGroup->getTaxInput()) {
+                    $record['price'] = $record['price'] / (100 + $tax->getTax()) * 100;
+                    $record['pseudoPrice'] = $record['pseudoPrice'] / (100 + $tax->getTax()) * 100;
+                }
+
+                $price = new \Shopware\Models\Article\Price();
+                $price->setArticle($articleDetail->getArticle());
+                $price->setDetail($articleDetail);
+                $price->setCustomerGroup($customerGroup);
+                $price->setFrom($record['from']);
+                $price->setTo('beliebig');
+                $price->setPrice($record['price']);
+                if (isset($record['pseudoPrice'])) {
+                    $price->setPseudoPrice($record['pseudoPrice']);
+                }
+                $price->setBasePrice($record['basePrice']);
+                $price->setPercent($record['percent']);
+
+
+                $this->getManager()->persist($price);
+            } catch (AdaptrerException $e) {
+                $message = $e->getMessage();
+                $this->saveMessage($message);
             }
-
-            // remove tax
-            if ($customerGroup->getTaxInput()) {
-                $record['price'] = $record['price'] / (100 + $tax->getTax()) * 100;
-                $record['pseudoPrice'] = $record['pseudoPrice'] / (100 + $tax->getTax()) * 100;
-            }
-
-            $price = new \Shopware\Models\Article\Price();
-            $price->setArticle($articleDetail->getArticle());
-            $price->setDetail($articleDetail);
-            $price->setCustomerGroup($customerGroup);
-            $price->setFrom($record['from']);
-            $price->setTo('beliebig');
-            $price->setPrice($record['price']);
-            if (isset($record['pseudoPrice'])) {
-                $price->setPseudoPrice($record['pseudoPrice']);
-            }
-            $price->setBasePrice($record['basePrice']);
-            $price->setPercent($record['percent']);
-
-
-            $this->getManager()->persist($price);
         }
         $this->getManager()->flush();
         $this->getManager()->clear();
@@ -358,7 +337,28 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
         return $this->manager;
     }
 
-    public function getBuilder($columns, $ids)
+    public function saveMessage($message)
+    {
+        $errorMode = Shopware()->Config()->get('SwagImportExportErrorMode');
+
+        if ($errorMode === false) {
+            throw new \Exception($message);
+        }
+
+        $this->setLogMessages($message);
+    }
+
+    public function getLogMessages()
+    {
+        return $this->logMessages;
+    }
+
+    public function setLogMessages($logMessages)
+    {
+        $this->logMessages[] = $logMessages;
+    }
+
+	public function getBuilder($columns, $ids)
     {
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select($columns)
@@ -373,4 +373,5 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
 
         return $builder;
     }
+
 }

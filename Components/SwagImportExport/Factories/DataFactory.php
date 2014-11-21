@@ -4,6 +4,7 @@ namespace Shopware\Components\SwagImportExport\Factories;
 
 use Shopware\Components\SwagImportExport\DataIO;
 use Shopware\Components\SwagImportExport\Session\Session;
+use Shopware\Components\SwagImportExport\Logger\Logger;
 use Shopware\Components\SwagImportExport\DbAdapters\DataDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\CategoriesDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\ArticlesDbAdapter;
@@ -18,6 +19,7 @@ use Shopware\Components\SwagImportExport\Utils\DataColumnOptions;
 use Shopware\Components\SwagImportExport\Utils\DataLimit;
 use Shopware\Components\SwagImportExport\Utils\DataFilter;
 use Shopware\CustomModels\ImportExport\Session as SessionEntity;
+use Shopware\CustomModels\ImportExport\Logger as LoggerEntity;
 
 class DataFactory extends \Enlight_Class implements \Enlight_Hook
 {
@@ -46,9 +48,9 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
      * @param array $params
      * @return \Shopware\Components\SwagImportExport\DataIO
      */
-    public function createDataIO($dbAdapter, $dataSession)
+    public function createDataIO($dbAdapter, $dataSession, $logger)
     {
-        return new DataIO($dbAdapter, $dataSession);
+        return new DataIO($dbAdapter, $dataSession, $logger);
     }
 
     /**
@@ -92,7 +94,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
             default: throw new \Exception('Db adapter type is not valid');
         }
     }
-
+    
     public function loadSession($data)
     {   
         $sessionId = $data['sessionId'];
@@ -101,13 +103,26 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
 
         if (!$sessionEntity) {
             $sessionEntity = new SessionEntity();
+            $loggerEntity = new LoggerEntity();
+            $loggerEntity->setCreatedAt();
+
+            $sessionEntity->setLogger($loggerEntity);
         }
-        
+
         $session = $this->createSession($sessionEntity);
 
         return $session;
     }
-    
+
+    public function loadLogger(Session $session)
+    {
+        $loggerEntity = $session->getLogger();
+
+        $logger = $this->createLogger($loggerEntity);
+
+        return $logger;
+    }
+
     /**
      * Returns columnOptions adapter
      * 
@@ -140,7 +155,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     {
         return new DataFilter($filter);
     }
-
+    
     /**
      * Helper Method to get access to the session repository.
      *
@@ -153,10 +168,15 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
         }
         return $this->sessionRepository;
     }
-
+    
     protected function createSession(SessionEntity $sessionEntity)
     {
         return new Session($sessionEntity);
+    }
+
+    protected function createLogger(LoggerEntity $loggerEntity)
+    {
+        return new Logger($loggerEntity);
     }
 
     /**

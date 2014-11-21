@@ -10,6 +10,7 @@ use Shopware\Models\Article\Image as Image;
 use Shopware\Models\Customer\Group as CustomerGroup;
 use Shopware\Models\Article\Configurator;
 use Shopware\Models\Media\Media as MediaModel;
+use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\DataHelper as DataHelper;
 use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
 use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
@@ -43,6 +44,12 @@ class ArticlesDbAdapter implements DataDbAdapter
      * @var array
      */
     protected $unprocessedData;
+
+    /**
+     * @var array
+     */
+    protected $logMessages;
+
     /**
      * @var array
      */
@@ -306,6 +313,13 @@ class ArticlesDbAdapter implements DataDbAdapter
         return $columns;
     }
 
+    /**
+     * Writes articles into the database
+     *
+     * @param array $records
+     * @throws \Exception
+     * @throws AdapterException
+     */
     public function write($records)
     {
         //articles
@@ -323,141 +337,146 @@ class ArticlesDbAdapter implements DataDbAdapter
 
         foreach ($records['article'] as $index => $record) {
             
-            if (!isset($record['orderNumber']) && empty($record['orderNumber'])) {
-                $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/ordernumber_required', 'Order number is required.');
-                throw new \Exception($message);
-            } 
-            
-            $variantModel = $this->getVariantRepository()->findOneBy(array('number' => $record['orderNumber']));
-            
-            if ($variantModel) {
-                $articleModel = $variantModel->getArticle();                    
-            } else if (isset($record['mainNumber']) && !empty($record['mainNumber'])
-                    &&  $record['mainNumber'] !== $record['orderNumber']) {
-                $mainVariant = $this->getVariantRepository()->findOneBy(array('number' => $record['mainNumber']));
-                
-                if (!$mainVariant) {
+            try {
+
+                if (!isset($record['orderNumber']) && empty($record['orderNumber'])) {
                     $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/articles/variant_existence', 'Variant with number %s does not exists.');
-                    throw new \Exception(sprintf($message, $record['mainNumber']));
+                            ->get('adapters/ordernumber_required', 'Order number is required.');
+                    throw new AdapterException($message);
                 }
-                $articleModel = $mainVariant->getArticle();
-            } else if (isset($record['mainNumber']) && empty($record['mainNumber'])){
-                $record['mainNumber'] = $record['orderNumber'];
-            }
 
-            if (!$articleModel) {
-                //creates artitcle and main variant
-                $articleModel = new ArticleModel();
+                $variantModel = $this->getVariantRepository()->findOneBy(array('number' => $record['orderNumber']));
 
-                $articleData = $this->prerpareArticle($record, $articleModel);
-                
-                $mainDetailData = $this->prepareMainDetail($record, $articleData, $articleModel);
-                
-                $articleModel->setMainDetail($mainDetailData);
-            
-                $variantModel = $articleModel->getMainDetail();
-                
-                $prices = $this->preparePrices($records['price'], $index, $variantModel, $articleModel, $articleData['tax']);
-                $variantModel->setPrices($prices);
-                
-                $articleData['images'] = $this->prepareImages($records['image'], $index, $articleModel);
-                $articleData['categories'] = $this->prepareCategories($records['category'], $index, $articleModel);
-                $articleData['similar'] = $this->prepareSimilars($records['similar'], $index, $articleModel);
-                $articleData['related'] = $this->prepareAccessories($records['accessory'], $index, $articleModel);
-                $articleData['configuratorSet'] = $this->prepareArticleConfigurators($records['configurator'], $index, $articleModel);
-
-                //sets article_active from article_details_active
-                $articleData['active'] = $variantModel->getActive();
-
-                $articleModel->fromArray($articleData);
-
-                $violations = $this->getManager()->validate($articleModel);
-
-                if ($violations->count() > 0) {
-                    $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/articles/no_valid_article_entity', 'No valid article entity');
-                    throw new \Exception($message);
-                }
-                
-                $this->getManager()->persist($articleModel);
-            } else {
-                
                 if ($variantModel) {
-                    $updateFlag = true;
-                }
-                
-                $processedFlag = isset($record['processed']) && $record['processed'] == 1 ? true : false;
+                    $articleModel = $variantModel->getArticle();
+                } else if (isset($record['mainNumber']) && !empty($record['mainNumber']) && $record['mainNumber'] !== $record['orderNumber']) {
+                    $mainVariant = $this->getVariantRepository()->findOneBy(array('number' => $record['mainNumber']));
 
-                //if it is main variant 
-                //updates the also the article
-                if ($record['mainNumber'] === $record['orderNumber'] || $updateFlag) {
+                    if (!$mainVariant) {
+                        $message = SnippetsHelper::getNamespace()
+                                ->get('adapters/articles/variant_existence', 'Variant with number %s does not exists.');
+                        throw new AdapterException(sprintf($message, $record['mainNumber']));
+                    }
+                    $articleModel = $mainVariant->getArticle();
+                } else if (isset($record['mainNumber']) && empty($record['mainNumber'])) {
+                    $record['mainNumber'] = $record['orderNumber'];
+                }
+
+                if (!$articleModel) {
+                    //creates artitcle and main variant
+                    $articleModel = new ArticleModel();
+
                     $articleData = $this->prerpareArticle($record, $articleModel);
 
-                    $images = $this->prepareImages($records['image'], $index, $articleModel);
-                    if ($images) {
-                        $articleData['images'] = $images;
-                    }
+                    $mainDetailData = $this->prepareMainDetail($record, $articleData, $articleModel);
 
-                    $similar = $this->prepareSimilars($records['similar'], $index, $articleModel, $processedFlag);
-                    if ($similar) {
-                        $articleData['similar'] = $similar;
-                    }
+                    $articleModel->setMainDetail($mainDetailData);
 
-                    $accessories = $this->prepareAccessories($records['accessory'], $index, $articleModel, $processedFlag);
-                    if ($accessories) {
-                        $articleData['related'] = $accessories;
-                    }
+                    $variantModel = $articleModel->getMainDetail();
 
-                    $categories = $this->prepareCategories($records['category'], $index, $articleModel);
-                    if ($categories) {
-                        $articleData['categories'] = $categories;
-                    }
+                    $prices = $this->preparePrices($records['price'], $index, $variantModel, $articleModel, $articleData['tax']);
+                    $variantModel->setPrices($prices);
 
+                    $articleData['images'] = $this->prepareImages($records['image'], $index, $articleModel);
+                    $articleData['categories'] = $this->prepareCategories($records['category'], $index, $articleModel);
+                    $articleData['similar'] = $this->prepareSimilars($records['similar'], $index, $articleModel);
+                    $articleData['related'] = $this->prepareAccessories($records['accessory'], $index, $articleModel);
+                    $articleData['configuratorSet'] = $this->prepareArticleConfigurators($records['configurator'], $index, $articleModel);
+
+                    //sets article_active from article_details_active
                     $articleData['active'] = $variantModel->getActive();
 
                     $articleModel->fromArray($articleData);
-                }
-                
-                //Variants
-                $variantModel = $this->prerpareVariant($record, $articleModel, $variantModel);
-                
-                if ($record['mainNumber'] || $updateFlag) {
-                    $configuratorOptions = $this->prepareVariantConfigurators($records['configurator'], $index, $articleModel);
-                    if ($configuratorOptions) {
-                        $variantModel->setConfiguratorOptions($configuratorOptions);
+
+                    $violations = $this->getManager()->validate($articleModel);
+
+                    if ($violations->count() > 0) {
+                        $message = SnippetsHelper::getNamespace()
+                                ->get('adapters/articles/no_valid_article_entity', 'No valid detail entity for article %s');
+                        throw new AdapterException(sprintf($message, $variantModel->getNumber()));
                     }
-                }
-                
-                $prices = $this->preparePrices($records['price'], $index, $variantModel, $articleModel, $articleModel->getTax(), $updateFlag);
-                if ($prices) {
-                    $variantModel->setPrices($prices);
+
+                    $this->getManager()->persist($articleModel);
+                } else {
+
+                    if ($variantModel) {
+                        $updateFlag = true;
+                    }
+
+                    $processedFlag = isset($record['processed']) && $record['processed'] == 1 ? true : false;
+
+                    //if it is main variant
+                    //updates the also the article
+                    if ($record['mainNumber'] === $record['orderNumber'] || $updateFlag) {
+                        $articleData = $this->prerpareArticle($record, $articleModel);
+
+                        $images = $this->prepareImages($records['image'], $index, $articleModel);
+                        if ($images) {
+                            $articleData['images'] = $images;
+                        }
+
+                        $similar = $this->prepareSimilars($records['similar'], $index, $articleModel, $processedFlag);
+                        if ($similar) {
+                            $articleData['similar'] = $similar;
+                        }
+
+                        $accessories = $this->prepareAccessories($records['accessory'], $index, $articleModel, $processedFlag);
+                        if ($accessories) {
+                            $articleData['related'] = $accessories;
+                        }
+
+                        $categories = $this->prepareCategories($records['category'], $index, $articleModel);
+                        if ($categories) {
+                            $articleData['categories'] = $categories;
+                        }
+
+                        $articleData['active'] = $variantModel->getActive();
+
+                        $articleModel->fromArray($articleData);
+                    }
+
+                    //Variants
+                    $variantModel = $this->prerpareVariant($record, $articleModel, $variantModel);
+
+                    if ($record['mainNumber'] || $updateFlag) {
+                        $configuratorOptions = $this->prepareVariantConfigurators($records['configurator'], $index, $articleModel);
+                        if ($configuratorOptions) {
+                            $variantModel->setConfiguratorOptions($configuratorOptions);
+                        }
+                    }
+
+                    $prices = $this->preparePrices($records['price'], $index, $variantModel, $articleModel, $articleModel->getTax(), $updateFlag);
+                    if ($prices) {
+                        $variantModel->setPrices($prices);
+                    }
+
+                    $violations = $this->getManager()->validate($variantModel);
+
+                    if ($violations->count() > 0) {
+                        $message = SnippetsHelper::getNamespace()
+                                ->get('adapters/articles/no_valid_detail_entity', 'No valid detail entity for article %s');
+                        throw new AdapterException(sprintf($message, $variantModel->getNumber()));
+                    }
+
+                    $this->getManager()->persist($variantModel);
                 }
 
-                $violations = $this->getManager()->validate($variantModel);
+                $this->getManager()->flush();
 
-                if ($violations->count() > 0) {
-                    $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/articles/no_valid_detail_entity', 'No valid detail entity');
-                    throw new \Exception($message);
-                }
+                $articleId = $articleModel->getId();
 
-                $this->getManager()->persist($variantModel);
+                $this->getManager()->clear();
+
+                $this->writeTranslations($records['translation'], $index, $articleId);
+
+                unset($articleModel);
+                unset($variantModel);
+
+            } catch (AdapterException $e) {
+                $message = $e->getMessage();
+                $this->saveMessage($message);
             }
-
-            $this->getManager()->flush();
-
-            $articleId = $articleModel->getId();
-
-            $this->getManager()->clear();
-
-            $this->writeTranslations($records['translation'], $index, $articleId);
-
-            unset($articleModel);
-            unset($variantModel);
         }
-
     }
     
     /**
@@ -492,7 +511,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 if (!$shop) {
                     $message = SnippetsHelper::getNamespace()
                                 ->get('adapters/articles/no_shop_id', 'Shop by id %s not found');
-                    throw new \Exception(sprintf($message, $translation['languageId']));
+                    throw new AdapterException(sprintf($message, $translation['languageId']));
                 }
                 $data = array_intersect_key($translation, array_flip($whitelist));
 
@@ -526,15 +545,15 @@ class ArticlesDbAdapter implements DataDbAdapter
 
             if (empty($data['tax'])) {
                 $message = SnippetsHelper::getNamespace()
-                            ->get('adapters/articles/no_tax_id', 'Tax by id %s not found');
-                throw new \Exception(sprintf($message, $data['taxId']));
+                            ->get('adapters/articles/no_tax_id', 'Tax by id %s not found for article %s');
+                throw new AdapterException(sprintf($message, $data['taxId'], $data['orderNumber']));
             }
         } elseif (!empty($data['tax'])) {
             $tax = $this->getManager()->getRepository('Shopware\Models\Tax\Tax')->findOneBy(array('tax' => $data['tax']));
             if (!$tax) {
                 $message = SnippetsHelper::getNamespace()
-                            ->get('adapters/articles/no_tax_found', 'Tax by taxrate %s not found');
-                throw new \Exception(sprintf($message, $data['tax']));
+                            ->get('adapters/articles/no_tax_found', 'Tax by taxrate %s not found for article %s');
+                throw new AdapterException(sprintf($message, $data['tax'], $data['orderNumber']));
             }
             $articleData['tax'] = $tax;
         }
@@ -545,8 +564,8 @@ class ArticlesDbAdapter implements DataDbAdapter
             $articleData['supplier'] = $this->getManager()->find('Shopware\Models\Article\Supplier', $data['supplierId']);
             if (empty($articleData['supplier'])) {
                 $message = SnippetsHelper::getNamespace()
-                            ->get('adapters/articles/supplier_not_found', 'Supplier by id %s not found');
-                throw new \Exception(sprintf($message, $data['supplierId']));
+                            ->get('adapters/articles/supplier_not_found', 'Supplier by id %s not found for article %s');
+                throw new AdapterException(sprintf($message, $data['supplierId'], $data['orderNumber']));
             }
         } elseif (!empty($data['supplierName'])) {
             $supplier = $this->getManager()->getRepository('Shopware\Models\Article\Supplier')->findOneBy(array('name' => $data['supplierName']));
@@ -566,8 +585,8 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $articleData['priceGroup'] = $this->getManager()->find('Shopware\Models\Price\Group', $data['priceGroupId']);
                 if (empty($articleData['priceGroup'])) {
                     $message = SnippetsHelper::getNamespace()
-                            ->get('adapters/articles/pricegroup_not_found', 'Pricegroup by id %s not found');
-                    throw new \Exception(sprintf($message, $data['priceGroupId']));
+                            ->get('adapters/articles/pricegroup_not_found', 'Pricegroup by id %s not found for article %s');
+                    throw new AdapterException(sprintf($message, $data['priceGroupId'], $data['orderNumber']));
                 }
             }
             unset($data['priceGroup']);
@@ -582,8 +601,8 @@ class ArticlesDbAdapter implements DataDbAdapter
 
                 if (empty($articleData['propertyGroup'])) {
                     $message = SnippetsHelper::getNamespace()
-                            ->get('adapters/articles/propertyGroup_not_found', 'PropertyGroup by id %s not found');
-                    throw new \Exception(sprintf($message, $data['filterGroupId']));
+                            ->get('adapters/articles/propertyGroup_not_found', 'PropertyGroup by id %s not found for article %s');
+                    throw new AdapterException(sprintf($message, $data['filterGroupId'], $data['orderNumber']));
                 }
             }
             unset($data['propertyGroupId']);
@@ -682,7 +701,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         } else if ($data === null) {
             $message = SnippetsHelper::getNamespace()
                                 ->get('adapters/articles/no_price_data', 'No price data found for article %s');
-            throw new \Exception(sprintf($message, $variant->getNumber()));
+            throw new AdapterException(sprintf($message, $variant->getNumber()));
         }
 
         $prices = array();
@@ -701,8 +720,8 @@ class ArticlesDbAdapter implements DataDbAdapter
                 /** @var CustomerGroup $customerGroup */
                 if (!$customerGroup instanceof CustomerGroup) {
                     $message = SnippetsHelper::getNamespace()
-                                ->get('adapters/customerGroup_not_found', 'Customer Group by key %s not found');
-                    throw new \Exception(sprintf($message, $priceData['priceGroup']));
+                                ->get('adapters/customerGroup_not_found', 'Customer Group by key %s not found for article %s');
+                    throw new AdapterException(sprintf($message, $priceData['priceGroup'], $variant->getNumber()));
                 }
 
                 if (!isset($priceData['from'])) {
@@ -725,13 +744,13 @@ class ArticlesDbAdapter implements DataDbAdapter
                 if (!isset($priceData['price']) && empty($priceData['price'])) {
                     $message = SnippetsHelper::getNamespace()
                                 ->get('adapters/articles/incorrect_price', 'Price value is incorrect for article with nubmer %s');
-                    throw new \Exception(sprintf($message . $variant->getNumber()));
+                    throw new AdapterException(sprintf($message . $variant->getNumber()));
                 }
 
                 if ($priceData['from'] <= 0) {
                     $message = SnippetsHelper::getNamespace()
-                                ->get('adapters/articles/invalid_price', 'Invalid Price "from" value');
-                    throw new \Exception(sprintf($message));
+                                ->get('adapters/articles/invalid_price', 'Invalid Price "from" value for article %s');
+                    throw new AdapterException(sprintf($message, $variant->getNumber()));
                 }
                 
                 $oldPrice = $this->getPriceRepository()->findOneBy(
@@ -823,7 +842,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 if (!$categoryModel) {
                     $message = SnippetsHelper::getNamespace()
                                 ->get('adapters/articles/category_not_found', 'Category with id %s could not be found.');
-                    throw new \Exception(sprintf($message, $categoryData['categoryId']));
+                    throw new AdapterException(sprintf($message, $categoryData['categoryId']));
                 }
 
 
@@ -981,7 +1000,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 if (!$similarDetails && $processedFlag === true) {
                     $message = SnippetsHelper::getNamespace()
                             ->get('adapters/articles/similar_not_found', 'Similar with ordernumber %s does not exists');
-                    throw new \Exception(sprintf($message, $similar['ordernumber']));
+                    throw new AdapterException(sprintf($message, $similar['ordernumber']));
                 }
 
                 if (!$similarDetails) {
@@ -1038,7 +1057,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 if (!$accessoryDetails && $processedFlag === true) {
                     $message = SnippetsHelper::getNamespace()
                             ->get('adapters/articles/accessory_not_found', 'Accessory with ordernumber %s does not exists');
-                    throw new \Exception(sprintf($message, $accessory['ordernumber']));
+                    throw new AdapterException(sprintf($message, $accessory['ordernumber']));
                 }
 
                 if (!$accessoryDetails) {
@@ -1743,7 +1762,28 @@ class ArticlesDbAdapter implements DataDbAdapter
 //            'translation.attr5 as attr5',
         );
     }
-    
+
+    public function saveMessage($message)
+    {
+        $errorMode = Shopware()->Config()->get('SwagImportExportErrorMode');
+
+        if ($errorMode === false) {
+            throw new \Exception($message);
+        }
+
+        $this->setLogMessages($message);
+    }
+
+    public function getLogMessages()
+    {
+        return $this->logMessages;
+    }
+
+    public function setLogMessages($logMessages)
+    {
+        $this->logMessages[] = $logMessages;
+    }
+
     /**
      * Returns/Creates mapper depend on the key
      * Exmaple: articles, variants, prices ...
