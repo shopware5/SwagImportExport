@@ -301,7 +301,15 @@ class CustomerDbAdapter implements DataDbAdapter
                         ->get('adapters/customer/password_encoder_required', 'Password encoder must be provided for email %s');
                     throw new AdapterException(sprintf($message, $record['email']));
                 }
-
+                
+                if (!isset($record['active']) || $record['active'] === '') {
+                    $record['active'] = 1;
+                }
+                
+                if (!isset($record['paymentID']) || !$record['paymentID'] === '') {
+                    $record['paymentID'] = Shopware()->Config()->get('sDEFAULTPAYMENT');
+                }
+                
                 $customerData = $this->prepareCustomer($record);
 
                 $customerData['billing'] = $this->prepareBilling($record);
