@@ -84,8 +84,6 @@ Ext.define('Shopware.apps.SwagImportExport', {
 		'manager.window.Export',
 		'manager.window.Import',
         'log.Log'
-//		'detail.Window',
-//		'detail.WrappingPaper'
     ],
 
     /**

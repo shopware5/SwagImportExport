@@ -123,7 +123,6 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
         foreach ($records['default'] as $record) {
 
             try{
-                
                 if (empty($record['orderNumber'])) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/ordernumber_required', 'Order number is required');
@@ -242,4 +241,5 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
 
         return $builder;
     }
+
 }

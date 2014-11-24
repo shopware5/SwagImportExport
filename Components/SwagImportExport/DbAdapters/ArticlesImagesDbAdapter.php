@@ -530,7 +530,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
         $this->logMessages[] = $logMessages;
     }
 
-public function getBuilder($columns, $ids)
+    public function getBuilder($columns, $ids)
     {
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select($columns)
