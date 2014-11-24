@@ -5,6 +5,7 @@ namespace Shopware\Components\SwagImportExport\Factories;
 use Shopware\Components\SwagImportExport\DataIO;
 use Shopware\Components\SwagImportExport\Session\Session;
 use Shopware\Components\SwagImportExport\Logger\Logger;
+use Shopware\Components\SwagImportExport\DbAdapters\DataDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\CategoriesDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\ArticlesDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\ArticlesPricesDbAdapter;
@@ -61,6 +62,16 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
      */
     public function createDbAdapter($adapterType)
     {
+        $event = Shopware()->Events()->notifyUntil(
+                'Shopware_Components_SwagImportExport_Factories_CreateDbAdapter',
+                array('subject' => $this, 'adapterType' => $adapterType)
+        );
+
+        if ($event && $event instanceof \Enlight_Event_EventArgs
+                && $event->getReturn() instanceof DataDbAdapter){
+            return $event->getReturn();
+        }
+
         switch ($adapterType) {
             case 'categories':
                 return $this->createCategoriesDbAdapter();
@@ -169,13 +180,15 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     }
 
     /**
-     * This method can be hooked
+     * This method can be hookable
      * 
      * @return \Shopware\Components\SwagImportExport\DbAdapters\CategoriesDbAdapter
      */    
     protected function createCategoriesDbAdapter()
     {
-        return new CategoriesDbAdapter();
+        $proxyAdapter = Shopware()->Hooks()
+                ->getProxy('Shopware\Components\SwagImportExport\DbAdapters\CategoriesDbAdapter');
+        return new $proxyAdapter;
     }
 
     /**
@@ -184,25 +197,31 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
      */
     protected function createArticlesDbAdapter()
     {
-        return new ArticlesDbAdapter();
+        $proxyAdapter = Shopware()->Hooks()
+                ->getProxy('Shopware\Components\SwagImportExport\DbAdapters\ArticlesDbAdapter');
+        return new $proxyAdapter;
     }
-    
+
     /**
      * 
      * @return \Shopware\Components\SwagImportExport\DbAdapters\ArticlesInStockDbAdapter
      */
     protected function createArticlesInStockDbAdapter()
     {
-        return new ArticlesInStockDbAdapter();
+        $proxyAdapter = Shopware()->Hooks()
+                ->getProxy('Shopware\Components\SwagImportExport\DbAdapters\ArticlesInStockDbAdapter');
+        return new $proxyAdapter;
     }
-    
+
     /**
      * 
      * @return \Shopware\Components\SwagImportExport\DbAdapters\ArticlesTranslationsDbAdapter
      */
     protected function createArticlesTranslationsDbAdapter()
     {
-        return new ArticlesTranslationsDbAdapter();
+        $proxyAdapter = Shopware()->Hooks()
+                ->getProxy('Shopware\Components\SwagImportExport\DbAdapters\ArticlesTranslationsDbAdapter');
+        return new $proxyAdapter;
     }
 
     /**
@@ -212,8 +231,11 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
      */    
     protected function createArticlesPricesDbAdapter()
     {
-        return new ArticlesPricesDbAdapter();
+        $proxyAdapter = Shopware()->Hooks()
+                ->getProxy('Shopware\Components\SwagImportExport\DbAdapters\ArticlesPricesDbAdapter');
+        return new $proxyAdapter;
     }
+
     /**
      * This method can be hookable
      * 
@@ -221,7 +243,9 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
      */    
     protected function createArticlesImagesDbAdapter()
     {
-        return new ArticlesImagesDbAdapter();
+        $proxyAdapter = Shopware()->Hooks()
+                ->getProxy('Shopware\Components\SwagImportExport\DbAdapters\ArticlesImagesDbAdapter');
+        return new $proxyAdapter;
     }
 
     /**
@@ -230,27 +254,31 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
      */
     protected function createCustomerDbAdapter()
     {
-        return new CustomerDbAdapter();
+        $proxyAdapter = Shopware()->Hooks()
+                ->getProxy('Shopware\Components\SwagImportExport\DbAdapters\CustomerDbAdapter');
+        return new $proxyAdapter;
     }
-    
+
     /**
      * 
      * @return \Shopware\Components\SwagImportExport\DbAdapters\OrdersDbAdapter
      */
     protected function createOrdersDbAdapter()
     {
-        return new OrdersDbAdapter();
+        $proxyAdapter = Shopware()->Hooks()
+                ->getProxy('Shopware\Components\SwagImportExport\DbAdapters\OrdersDbAdapter');
+        return new $proxyAdapter;
     }
-    
+
     /**
      * 
      * @return \Shopware\Components\SwagImportExport\DbAdapters\NewsletterDbAdapter
      */
     protected function createNewsletterDbAdapter()
     {
-        return new NewsletterDbAdapter();
+        $proxyAdapter = Shopware()->Hooks()
+                ->getProxy('Shopware\Components\SwagImportExport\DbAdapters\NewsletterDbAdapter');
+        return new $proxyAdapter;
     }
-    
-    
 
 }

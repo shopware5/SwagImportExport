@@ -43,22 +43,13 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
     {
         $manager = $this->getManager();
 
-        $builder = $manager->createQueryBuilder();
-        
         //prices
         $columns = array_merge(
                 $columns, array('customerGroup.taxInput as taxInput', 'articleTax.tax as tax')
         );
-        $builder->select($columns)
-                ->from('Shopware\Models\Article\Detail', 'variant')
-                ->leftJoin('variant.article', 'article')
-                ->leftJoin('article.supplier', 'articleSupplier')
-                ->leftJoin('variant.prices', 'prices')
-                ->leftJoin('prices.customerGroup', 'customerGroup')
-                ->leftJoin('article.tax', 'articleTax')
-                ->where('variant.id IN (:ids)')
-                ->setParameter('ids', $ids);
-        
+
+        $builder = $this->getBuilder($columns, $ids);
+
         $query = $builder->getQuery();
         $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
@@ -121,12 +112,17 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
 
     public function write($records)
     {
+        $records = Shopware()->Events()->filter(
+                'Shopware_Components_SwagImportExport_DbAdapters_ArticlesInStockDbAdapter_Write',
+                $records,
+                array('subject' => $this)
+        );
+
         $manager = $this->getManager();
 
         foreach ($records['default'] as $record) {
 
             try{
-                
                 if (empty($record['orderNumber'])) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/ordernumber_required', 'Order number is required');
@@ -229,4 +225,21 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
     {
         $this->logMessages[] = $logMessages;
     }
+
+	public function getBuilder($columns, $ids)
+    {
+        $builder = $this->getManager()->createQueryBuilder();
+        $builder->select($columns)
+                ->from('Shopware\Models\Article\Detail', 'variant')
+                ->leftJoin('variant.article', 'article')
+                ->leftJoin('article.supplier', 'articleSupplier')
+                ->leftJoin('variant.prices', 'prices')
+                ->leftJoin('prices.customerGroup', 'customerGroup')
+                ->leftJoin('article.tax', 'articleTax')
+                ->where('variant.id IN (:ids)')
+                ->setParameter('ids', $ids);
+
+        return $builder;
+    }
+
 }

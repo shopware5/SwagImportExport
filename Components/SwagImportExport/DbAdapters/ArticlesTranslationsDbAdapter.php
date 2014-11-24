@@ -87,16 +87,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
             throw new \Exception($message);
         }
 
-        $manager = $this->getManager();
-
-        $builder = $manager->createQueryBuilder();
-        $builder->select(array('detail.number as articleNumber', 't.data', 't.key as articleId ', 't.localeId as languageId'))
-                ->from('Shopware\Models\Translation\Translation', 't')
-                ->leftJoin('Shopware\Models\Article\Article', 'article', \Doctrine\ORM\Query\Expr\Join::WITH, 'article.id=t.key')
-                ->join('article.details', 'detail')
-                ->where('t.id IN (:ids)')
-                ->andWhere('detail.kind = 1')
-                ->setParameter('ids', $ids);
+        $builder = $this->getBuilder($ids);
 
         $translations = $builder->getQuery()->getResult();
 
@@ -145,6 +136,12 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
         if ($records['default'] == null) {
             return;
         }
+
+        $records = Shopware()->Events()->filter(
+                'Shopware_Components_SwagImportExport_DbAdapters_ArticlesTranslationsDbAdapter_Write',
+                $records,
+                array('subject' => $this)
+        );
 
         $whitelist = array(
             'name',
@@ -268,6 +265,20 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
         }
 
         return $this->manager;
+    }
+
+    public function getBuilder($ids)
+    {
+        $builder = $this->getManager()->createQueryBuilder();
+        $builder->select(array('detail.number as articleNumber', 't.data', 't.key as articleId ', 't.localeId as languageId'))
+                ->from('Shopware\Models\Translation\Translation', 't')
+                ->leftJoin('Shopware\Models\Article\Article', 'article', \Doctrine\ORM\Query\Expr\Join::WITH, 'article.id=t.key')
+                ->join('article.details', 'detail')
+                ->where('t.id IN (:ids)')
+                ->andWhere('detail.kind = 1')
+                ->setParameter('ids', $ids);
+
+        return $builder;
     }
 
 }

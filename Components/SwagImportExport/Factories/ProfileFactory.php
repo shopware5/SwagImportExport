@@ -5,6 +5,7 @@ namespace Shopware\Components\SwagImportExport\Factories;
 use Shopware\Components\SwagImportExport\Utils\TreeHelper;
 use Shopware\Components\SwagImportExport\Profile\Profile;
 use Shopware\Components\SwagImportExport\Profile\ProfileSerializer;
+use Shopware\CustomModels\ImportExport\Profile as ProfileEntity;
 
 class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
 {
@@ -37,13 +38,23 @@ class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
 
     public function createProfileModel($data)
     {
+        $event = Shopware()->Events()->notifyUntil(
+            'Shopware_Components_SwagImportExport_Factories_CreateProfileModel',
+            array('subject' => $this, 'data' => $data)
+        );
+
+        if ($event && $event instanceof \Enlight_Event_EventArgs
+                && $event->getReturn() instanceof ProfileEntity){
+            return $event->getReturn();
+        }
+
         if (isset($data['hidden']) && $data['hidden']) {
             $tree = TreeHelper::getTreeByHiddenProfileType($data['type']);
         } else {
             $tree = TreeHelper::getDefaultTreeByProfileType($data['type']);
         }
 
-        $profileModel = new \Shopware\CustomModels\ImportExport\Profile();
+        $profileModel = new ProfileEntity();
 
         if (!isset($data['name'])) {
             throw new \Exception('Profile name is required');

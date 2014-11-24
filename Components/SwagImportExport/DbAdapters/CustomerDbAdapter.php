@@ -193,8 +193,6 @@ class CustomerDbAdapter implements DataDbAdapter
     public function read($ids, $columns)
     {
         $manager = $this->getManager();
-
-        $builder = $manager->createQueryBuilder();
         
         foreach ($columns as $key => $value) {
             if ($value == 'unhashedPassword') {
@@ -202,18 +200,7 @@ class CustomerDbAdapter implements DataDbAdapter
             }
         }
         
-        $builder->select($columns)
-                ->from('\Shopware\Models\Customer\Customer', 'customer')
-                ->join('customer.billing', 'billing')
-                ->leftJoin('customer.shipping', 'shipping')
-                ->leftJoin('customer.orders', 'orders', 'WITH', 'orders.status <> -1 AND orders.status <> 4')
-                ->leftJoin('billing.attribute', 'billingAttribute')
-                ->leftJoin('shipping.attribute', 'shippingAttribute')
-                ->leftJoin('customer.attribute', 'attribute')
-                ->groupBy('customer.id')
-                ->where('customer.id IN (:ids)')
-                ->setParameter('ids', $ids);
-
+        $builder = $this->getBuilder($columns, $ids);
         $query = $builder->getQuery();
 
         $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
@@ -257,6 +244,12 @@ class CustomerDbAdapter implements DataDbAdapter
 
     public function write($records)
     {
+        $records = Shopware()->Events()->filter(
+                'Shopware_Components_SwagImportExport_DbAdapters_CustomerDbAdapter_Write',
+                $records,
+                array('subject' => $this)
+        );
+
         $manager = $this->getManager();
         $passwordManager = Shopware()->PasswordEncoder();
         $db = Shopware()->Db();
@@ -530,6 +523,24 @@ class CustomerDbAdapter implements DataDbAdapter
         }
 
         return $this->manager;
+    }
+
+    public function getBuilder($columns, $ids)
+    {
+        $builder = $this->getManager()->createQueryBuilder();
+        $builder->select($columns)
+                ->from('\Shopware\Models\Customer\Customer', 'customer')
+                ->join('customer.billing', 'billing')
+                ->leftJoin('customer.shipping', 'shipping')
+                ->leftJoin('customer.orders', 'orders', 'WITH', 'orders.status <> -1 AND orders.status <> 4')
+                ->leftJoin('billing.attribute', 'billingAttribute')
+                ->leftJoin('shipping.attribute', 'shippingAttribute')
+                ->leftJoin('customer.attribute', 'attribute')
+                ->groupBy('customer.id')
+                ->where('customer.id IN (:ids)')
+                ->setParameter('ids', $ids);
+
+        return $builder;
     }
 
 }

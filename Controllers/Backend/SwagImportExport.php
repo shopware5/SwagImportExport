@@ -1137,15 +1137,15 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
         $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
         $type = $profile->getType();
-        
-        if (!in_array($type, array('articles'))) {
+
+        $dbAdapter = $this->Plugin()->getDataFactory()->createDbAdapter($type);
+
+        if (!method_exists($dbAdapter, 'getParentKeys')) {
             $this->View()->assign(array(
                 'success' => true, 'data' => array(), 'total' => 0
             ));
             return;
         }
-
-        $dbAdapter = $this->Plugin()->getDataFactory()->createDbAdapter($type);
 
         $columns = $dbAdapter->getParentKeys($section);
 

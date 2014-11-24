@@ -113,31 +113,13 @@ class OrdersDbAdapter implements DataDbAdapter
                     ->get('adapters/orders/no_column_names', 'Can not read orders without column names.');
             throw new \Exception($message);
         }
-        
-        $manager = $this->getManager();
-        $builder = $manager->createQueryBuilder();
-        
-        $builder->select($columns)
-                ->from('Shopware\Models\Order\Detail', 'details')
-                ->leftJoin('details.order', 'orders')
-                ->leftJoin('details.tax', 'taxes')
-                ->leftJoin('orders.billing', 'billing')
-                ->leftJoin('billing.country', 'billingCountry')
-                ->leftJoin('orders.shipping', 'shipping')
-                ->leftJoin('shipping.country', 'shippingCountry')
-                ->leftJoin('orders.payment', 'payment')
-                ->leftJoin('orders.paymentStatus', 'paymentStatus')
-                ->leftJoin('orders.orderStatus', 'orderStatus')
-                ->leftJoin('orders.dispatch', 'dispatch')
-                ->leftJoin('orders.customer', 'customer')
-                ->leftJoin('orders.attribute', 'attr')
-                ->where('details.id IN (:ids)')
-                ->setParameter('ids', $ids);
+
+        $builder = $this->getBuilder($columns, $ids);
 
         $orders = $builder->getQuery()->getResult();
-        
+
         $orders = DbAdapterHelper::decodeHtmlEntities($orders);
-        
+
         $result['default'] = DbAdapterHelper::escapeNewLines($orders);
         
         return $result;
@@ -155,6 +137,12 @@ class OrdersDbAdapter implements DataDbAdapter
      */
     public function write($records)
     {
+        $records = Shopware()->Events()->filter(
+                'Shopware_Components_SwagImportExport_DbAdapters_OrdersDbAdapter_Write',
+                $records,
+                array('subject' => $this)
+        );
+
         foreach ($records['default'] as $index => $record) {
             try {
 
@@ -485,6 +473,30 @@ class OrdersDbAdapter implements DataDbAdapter
         }
 
         return $this->manager;
+    }
+
+    public function getBuilder($columns, $ids)
+    {
+        $builder = $this->getManager()->createQueryBuilder();
+
+        $builder->select($columns)
+                ->from('Shopware\Models\Order\Detail', 'details')
+                ->leftJoin('details.order', 'orders')
+                ->leftJoin('details.tax', 'taxes')
+                ->leftJoin('orders.billing', 'billing')
+                ->leftJoin('billing.country', 'billingCountry')
+                ->leftJoin('orders.shipping', 'shipping')
+                ->leftJoin('shipping.country', 'shippingCountry')
+                ->leftJoin('orders.payment', 'payment')
+                ->leftJoin('orders.paymentStatus', 'paymentStatus')
+                ->leftJoin('orders.orderStatus', 'orderStatus')
+                ->leftJoin('orders.dispatch', 'dispatch')
+                ->leftJoin('orders.customer', 'customer')
+                ->leftJoin('orders.attribute', 'attr')
+                ->where('details.id IN (:ids)')
+                ->setParameter('ids', $ids);
+
+        return $builder;
     }
 
 }

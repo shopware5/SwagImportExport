@@ -86,19 +86,12 @@ class CategoriesDbAdapter implements DataDbAdapter
             throw new \Exception($message);
         }
 
-        $manager = $this->getManager();
-
-        $builder = $manager->createQueryBuilder();
-        $builder->select($columns)
-                ->from('Shopware\Models\Category\Category', 'c')
-                ->leftJoin('c.attribute', 'attr')
-                ->where('c.id IN (:ids)')
-                ->setParameter('ids', $ids);
+        $builder = $this->getBuilder($columns, $ids);
 
         $categories = $builder->getQuery()->getResult();
-        
+
         $result['default'] = DbAdapterHelper::decodeHtmlEntities($categories);
-        
+
         return $result;
     }
 
@@ -177,6 +170,12 @@ class CategoriesDbAdapter implements DataDbAdapter
      */
     public function write($records)
     {
+        $records = Shopware()->Events()->filter(
+                'Shopware_Components_SwagImportExport_DbAdapters_CategoriesDbAdapter_Write',
+                $records,
+                array('subject' => $this)
+        );
+
         $manager = $this->getManager();
         
         foreach ($records['default'] as $record) {
@@ -324,6 +323,18 @@ class CategoriesDbAdapter implements DataDbAdapter
         }
 
         return $this->manager;
+    }
+
+    public function getBuilder($columns, $ids)
+    {
+        $builder = $this->getManager()->createQueryBuilder();
+        $builder->select($columns)
+                ->from('Shopware\Models\Category\Category', 'c')
+                ->leftJoin('c.attribute', 'attr')
+                ->where('c.id IN (:ids)')
+                ->setParameter('ids', $ids);
+
+        return $builder;
     }
 
 }
