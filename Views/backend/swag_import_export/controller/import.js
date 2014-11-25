@@ -158,7 +158,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
         me.parameters = {
             sessionId: record.get('id'),
             profile: record.get('profileId'),
-            importFile: record.get('fileName'),
+            importFile: 'media/unknown/' + record.get('fileName'),
             format: record.get('format')
         };
         
