@@ -8,9 +8,8 @@ use Shopware\Components\SwagImportExport\DataIO as DataIO;
 
 class Session
 {
-
     /**
-     * @var Shopware\CustomModels\ImportExport\Session
+     * @var \Shopware\CustomModels\ImportExport\Session
      */
     protected $sessionEntity;
 
@@ -40,8 +39,8 @@ class Session
 
     /**
      * Returns session entity
-     * 
-     * @return Shopware\CustomModels\ImportExport\Session
+     *
+     * @return \Shopware\CustomModels\ImportExport\Session
      */
     public function getEntity()
     {
@@ -208,7 +207,7 @@ class Session
     /**
      * Returns entity manager
      * 
-     * @return Shopware\Components\Model\ModelManager
+     * @return \Shopware\Components\Model\ModelManager
      */
     public function getManager()
     {
@@ -253,7 +252,7 @@ class Session
     /**
      * Helper Method to get access to the session repository.
      *
-     * @return Shopware\CustomModels\ImportExport\Session
+     * @return \Shopware\CustomModels\ImportExport\Session
      */
     public function getSessionRepository()
     {

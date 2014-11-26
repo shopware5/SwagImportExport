@@ -6,9 +6,8 @@ use Shopware\Components\SwagImportExport\Exception\AdapterException;
 
 class ArticlesInStockDbAdapter implements DataDbAdapter
 {
-
     /**
-     * @var Shopware\Components\Model\ModelManager
+     * @var \Shopware\Components\Model\ModelManager
      */
     protected $manager;
 
@@ -23,7 +22,7 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
     protected $logMessages;
 
     /**
-     * @var Shopware\Models\Article\Detail
+     * @var \Shopware\Models\Article\Detail
      */
     protected $repository;
 
@@ -73,19 +72,51 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
 
     public function readRecordIds($start, $limit, $filter)
     {
+
+        $stockFilter = $filter['stockFilter'];
         $manager = $this->getManager();
 
         $builder = $manager->createQueryBuilder();
         
         $builder->select('d.id')
                 ->from('Shopware\Models\Article\Detail', 'd')
-                ->leftJoin('d.prices', 'p')
-                ->where('d.inStock > 0')
-                ->andWhere("p.customerGroupKey = 'EK'")
+                ->leftJoin('d.prices', 'p');
+
+
+        switch($stockFilter)
+        {
+            case 'all':
+                $builder->where('d.id > 0');
+                break;
+            case 'inStock':
+                $builder->where('d.inStock > 0');
+                break;
+            case 'notInStock':
+                $builder->where('d.inStock <= 0');
+                break;
+            case 'inStockOnSale':
+                $builder->leftJoin('d.article', 'a')
+                    ->where('d.inStock > 0')
+                    ->andWhere('a.lastStock = 1');
+                break;
+            case 'notInStockOnSale':
+                $builder->leftJoin('d.article', 'a')
+                        ->where('d.inStock = 0')
+                        ->andWhere('a.lastStock = 0');
+                break;
+            default:
+                throw new \Exception('Cannot match StockFilter 116');
+        }
+
+        $builder->andWhere("p.customerGroupKey = 'EK'")
                 ->andWhere("p.from = 1")
                 ->orderBy('d.id', 'ASC');
 
+        if(isset($filter['stockFilter']))
+            unset($filter['stockFilter']);
+
         if (!empty($filter)) {
+
             $builder->addFilter($filter);
         }
         
@@ -180,7 +211,7 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
     /**
      * Returns article detail repository
      * 
-     * @return Shopware\Models\Article\Detail
+     * @return \Shopware\Models\Article\Detail
      */
     public function getRepository()
     {
@@ -194,7 +225,7 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
     /**
      * Returns entity manager
      * 
-     * @return Shopware\Components\Model\ModelManager
+     * @return \Shopware\Components\Model\ModelManager
      */
     public function getManager()
     {

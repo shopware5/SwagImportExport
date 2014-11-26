@@ -452,13 +452,17 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
     public function prepareExportAction()
     {
         $variants = $this->Request()->getParam('variants') ? true : false;
-        
+
         if ($this->Request()->getParam('limit')) {
             $limit = $this->Request()->getParam('limit');
         }
         
         if ($this->Request()->getParam('offset')) {
             $offset = $this->Request()->getParam('offset');
+        }
+
+        if ($this->Request()->getParam('stockFilter')) {
+            $stockFilter = $this->Request()->getParam('stockFilter');
         }
         
         $postData = array(
@@ -475,6 +479,10 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         
         if ($variants) {
             $postData['filter']['variants'] = $variants;
+        }
+
+        if ($stockFilter) {
+            $postData['filter']['stockFilter'] = $stockFilter;
         }
 
         if ($this->Request()->getParam('categories')) {
@@ -551,7 +559,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         if ($this->Request()->getParam('offset')) {
             $offset = $this->Request()->getParam('offset');
         }
-        
+
         $postData = array(
             'profileId' => (int) $this->Request()->getParam('profileId'),
             'type' => 'export',
@@ -598,6 +606,10 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         
         if ($this->Request()->getParam('paymentstate')) {
             $postData['filter']['paymentstate'] = $this->Request()->getParam('paymentstate');
+        }
+
+        if ($this->Request()->getParam('stockFilter')) {
+            $postData['filter']['stockFilter'] = $this->Request()->getParam('stockFilter');
         }
 
         $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
@@ -1241,7 +1253,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         }
         return $this->loggerRepository;
     }
-    
+
     public function Plugin()
     {
         return Shopware()->Plugins()->Backend()->SwagImportExport();

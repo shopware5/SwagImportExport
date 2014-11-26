@@ -95,7 +95,7 @@ class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
     /**
      * Helper Method to get access to the profile repository.
      *
-     * @return Shopware\CustomModels\ImportExport\Profile
+     * @return \Shopware\CustomModels\ImportExport\Profile
      */
     public function getProfileRepository()
     {
