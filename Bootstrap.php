@@ -137,6 +137,8 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
 
             //removing snippets
             Shopware()->Db()->delete('s_core_snippets', array("value = 'Import/Export'"));
+
+            Shopware()->Db()->exec('ALTER TABLE `s_import_export_profile` ADD `hidden` INT NOT NULL');
         }
 
         return true;
