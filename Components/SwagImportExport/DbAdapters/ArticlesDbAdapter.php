@@ -336,8 +336,11 @@ class ArticlesDbAdapter implements DataDbAdapter
         );
 
         foreach ($records['article'] as $index => $record) {
-            
+
             try {
+                unset($articleModel);
+                unset($variantModel);
+                unset($updateFlag);
 
                 if (!isset($record['orderNumber']) && empty($record['orderNumber'])) {
                     $message = SnippetsHelper::getNamespace()
@@ -468,9 +471,6 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $this->getManager()->clear();
 
                 $this->writeTranslations($records['translation'], $index, $articleId);
-
-                unset($articleModel);
-                unset($variantModel);
 
             } catch (AdapterException $e) {
                 $message = $e->getMessage();
@@ -967,7 +967,7 @@ class ArticlesDbAdapter implements DataDbAdapter
 
         return $image;
     }
-    
+
     /**
      * @param array $similars
      * @param int $similarIndex
@@ -982,7 +982,12 @@ class ArticlesDbAdapter implements DataDbAdapter
             return;
         }
 
-        $similarCollection = array();
+        //merged existing similar with the unprocessed data
+        if ($processedFlag) {
+            $similarCollection = $article->getSimilar();
+        } else {
+            $similarCollection = array();
+        }
 
         foreach ($similars as $index => $similar) {
             if ($similar['parentIndexElement'] != $similarIndex) {
@@ -1039,8 +1044,13 @@ class ArticlesDbAdapter implements DataDbAdapter
             return;
         }
 
-        $accessoriesCollection = array();
-        
+        //merged existing accessories with the unprocessed data
+        if ($processedFlag) {
+            $accessoriesCollection = $article->getRelated();
+        } else {
+            $accessoriesCollection = array();
+        }
+
         foreach ($accessories as $index => $accessory) {
             if ($accessory['parentIndexElement'] != $accessoryIndex) {
                 continue;
@@ -1523,7 +1533,7 @@ class ArticlesDbAdapter implements DataDbAdapter
 //            'article.active as active',
             'article.pseudoSales as pseudoSales',
             'article.highlight as topSeller',
-//            'article.metaTitle as metaTitle',
+            'article.metaTitle as metaTitle',
             'article.keywords as keywords',
             "DATE_FORMAT(article.changed, '%Y-%m-%d %H:%i:%s') as changeTime",
             'article.priceGroupId as priceGroupId',

@@ -301,7 +301,16 @@ class CustomerDbAdapter implements DataDbAdapter
                         ->get('adapters/customer/password_encoder_required', 'Password encoder must be provided for email %s');
                     throw new AdapterException(sprintf($message, $record['email']));
                 }
-
+                
+                if (!isset($record['active']) || $record['active'] === '') {
+                    $record['active'] = 1;
+                }
+                
+                if (!isset($record['paymentID']) || $record['paymentID'] === '') {
+                    $paymentId = $this->preparePayment($record['subshopID']);
+                    $record['paymentID'] = $paymentId;
+                }
+                
                 $customerData = $this->prepareCustomer($record);
 
                 $customerData['billing'] = $this->prepareBilling($record);
@@ -435,6 +444,49 @@ class CustomerDbAdapter implements DataDbAdapter
         }
 
         return $shippingData;
+    }
+    
+    protected function preparePayment($subShopID)
+    {
+        //on missing shopId return defaultPaymentId
+        if (!isset($subShopID) || $subShopID === '') {
+            return Shopware()->Config()->get('sDEFAULTPAYMENT');
+        }
+        
+        //get defaultPaymentId for subShiopId = $subShopID
+        $defaultPaymentId = $this->getSubShopDefaultPaymentId($subShopID);
+        if ($defaultPaymentId) {
+            return unserialize($defaultPaymentId['value']);
+        }
+        
+        //get defaultPaymentId for mainShiopId
+        $defaultPaymentId = $this->getMainShopDefaultPaymentId($subShopID);
+        if ($defaultPaymentId) {
+            return unserialize($defaultPaymentId['value']);
+        }
+        return Shopware()->Config()->get('sDEFAULTPAYMENT');
+    }
+    
+    protected function getSubShopDefaultPaymentId($subShopID)
+    {
+        $query =  "SELECT value.value
+                   FROM s_core_config_elements AS element
+                   JOIN s_core_config_values AS value ON value.element_id = element.id
+                   WHERE value.shop_id = ?
+                         AND element.name = ?";
+        
+        return Shopware()->Db()->fetchRow($query, array($subShopID, 'defaultpayment'));
+    }
+    
+    protected function getMainShopDefaultPaymentId($subShopID)
+    {
+        $query =  "SELECT value.value
+                   FROM s_core_config_elements AS element
+                   JOIN s_core_config_values AS value ON value.element_id = element.id
+                   WHERE value.shop_id = (SELECT main_id FROM s_core_shops WHERE id = ?)
+                         AND element.name = ?";
+        
+        return Shopware()->Db()->fetchRow($query, array($subShopID, 'defaultpayment'));
     }
 
     public function saveMessage($message)
