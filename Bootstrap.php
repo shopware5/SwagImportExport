@@ -67,6 +67,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
      * Returns the version of the plugin as a string
      *
      * @return string
+     * @throws Exception
      */
     public function getVersion() {
         $info = json_decode(file_get_contents(__DIR__ . DIRECTORY_SEPARATOR .'plugin.json'), true);
@@ -404,6 +405,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
      */
     public function checkLicense($throwException = true)
     {
+
         $check1 = $this->checkLicenseCore(false);
         $check2 = $this->checkLicenseImportExport(false);
 

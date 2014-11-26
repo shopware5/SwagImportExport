@@ -8,7 +8,7 @@ class DataWorkflow
 {
 
     /**
-     * @var Shopware\Components\SwagImportExport\DataIO
+     * @var \Shopware\Components\SwagImportExport\DataIO
      */
     protected $dataIO;
 
@@ -18,7 +18,7 @@ class DataWorkflow
     protected $profile;
 
     /**
-     * @var Shopware\Components\SwagImportExport\Transoformers\DataTransformerChain 
+     * @var \Shopware\Components\SwagImportExport\Transoformers\DataTransformerChain
      */
     protected $transformerChain;
 
@@ -28,7 +28,7 @@ class DataWorkflow
     protected $fileIO;
 
     /**
-     * @var Shopware\Components\SwagImportExport\Session\Session 
+     * @var \Shopware\Components\SwagImportExport\Session\Session
      */
     protected $dataSession;
 

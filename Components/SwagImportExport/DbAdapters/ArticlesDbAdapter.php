@@ -478,11 +478,12 @@ class ArticlesDbAdapter implements DataDbAdapter
             }
         }
     }
-    
+
     /**
-     * @param integer $articleId
-     * @param array $translations
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @param $translations
+     * @param $translationIndex
+     * @param $articleId
+     * @throws \Shopware\Components\SwagImportExport\Exception\AdapterException
      */
     public function writeTranslations($translations, $translationIndex, $articleId)
     {
@@ -1288,7 +1289,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     /**
      * 
      * @param array $data
-     * @param Shopware\Models\Article\Article $article
+     * @param \Shopware\Models\Article\Article $article
      * @return \Shopware\Models\Article\Configurator\Set
      */
     public function createConfiguratorSet($data, $article)
@@ -1888,7 +1889,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     /**
      * Returns article repository
      * 
-     * @return Shopware\Models\Article\Article
+     * @return \Shopware\Models\Article\Article
      */
     public function getRepository()
     {
@@ -1902,7 +1903,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     /**
      * Returns deatil repository
      * 
-     * @return Shopware\Models\Article\Detail
+     * @return \Shopware\Models\Article\Detail
      */
     public function getVariantRepository()
     {
@@ -1916,7 +1917,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     /**
      * Returns price repository
      *
-     * @return Shopware\Models\Article\Price
+     * @return \Shopware\Models\Article\Price
      */
     public function getPriceRepository()
     {
@@ -1930,7 +1931,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     /**
      * Returns group repository
      * 
-     * @return Shopware\Models\Customer\Group
+     * @return \Shopware\Models\Customer\Group
      */
     public function getGroupRepository()
     {
@@ -1944,7 +1945,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     /**
      * Returns media repository
      * 
-     * @return Shopware\Models\Media\Media
+     * @return \Shopware\Models\Media\Media
      */
     public function getMediaRepository()
     {
@@ -1970,7 +1971,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     /**
      * Collects recursively category ids
      *
-     * @param Shopware\Models\Category\Category $categoryModel
+     * @param \Shopware\Models\Category\Category $categoryModel
      * @return
      */
     protected function collectCategoryIds($categoryModel)

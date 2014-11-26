@@ -68,7 +68,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
         var me = this,
                 form = btn.up('form'),
                 values = form.getValues();
-
+      
         if (Ext.isEmpty(values.profile) || Ext.isEmpty(values.format))
         {
             Shopware.Notification.createGrowlMessage(
@@ -148,7 +148,8 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
                 dateFrom: me.parameters.dateFrom,
                 dateTo: me.parameters.dateTo,
                 orderstate: me.parameters.orderstate,
-                paymentstate: me.parameters.paymentstate
+                paymentstate: me.parameters.paymentstate,
+                stockFilter: me.parameters.stockFilter
             }
         };
 
@@ -191,7 +192,6 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
             win.closeButton.enable();
             return;
         }
-        
 
         Ext.Ajax.request({
             url: config.requestUrl,
