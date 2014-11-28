@@ -64,7 +64,7 @@ class Session extends ModelEntity
 
     /**
      * @ORM\OneToOne(targetEntity="Shopware\CustomModels\ImportExport\Logger", cascade={"persist", "refresh"})
-     * @ORM\JoinColumn(name="logger_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="log_id", referencedColumnName="id")
      */
     protected $logger;
 
