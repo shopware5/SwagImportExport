@@ -2,7 +2,7 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
-use Shopware\Components\SwagImportExport\Exception\AdaptrerException;
+use \Shopware\Components\SwagImportExport\Exception\AdapterException;
 
 class ArticlesPricesDbAdapter implements DataDbAdapter
 {
@@ -141,7 +141,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                 if (!isset($record['orderNumber']) || empty($record['orderNumber'])) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/ordernumber_required', 'Order number is required.');
-                    throw new AdaptrerException($message);
+                    throw new AdapterException($message);
                 }
 
                 if (empty($record['priceGroup'])) {
@@ -152,14 +152,14 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                 if (!$customerGroup) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/articlesPrices/price_group_not_found', 'Price group %s was not found');
-                    throw new AdaptrerException(sprintf($message, $record['priceGroup']));
+                    throw new AdapterException(sprintf($message, $record['priceGroup']));
                 }
 
                 $articleDetail = $this->getDetailRepository()->findOneBy(array("number" => $record['orderNumber']));
                 if (!$articleDetail) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/article_number_not_found', 'Article with order number %s doen not exists');
-                    throw new AdaptrerException(sprintf($message, $record['orderNumber']));
+                    throw new AdapterException(sprintf($message, $record['orderNumber']));
                 }
 
                 if (empty($record['from'])) {
@@ -173,13 +173,13 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                 if (empty($record['price']) && empty($record['percent'])) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/articlesPrices/price_percent_val_missing', 'Price or percent value is missing');
-                    throw new AdaptrerException($message);
+                    throw new AdapterException($message);
                 }
 
                 if ($record['from'] <= 1 && empty($record['price'])) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/articlesPrices/price_val_missing', 'Price value is missing');
-                    throw new AdaptrerException($message);
+                    throw new AdapterException($message);
                 }
 
                 if (isset($record['price'])) {
@@ -247,15 +247,16 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                 $price->setBasePrice($record['basePrice']);
                 $price->setPercent($record['percent']);
 
-
                 $this->getManager()->persist($price);
-            } catch (AdaptrerException $e) {
+                
+                $this->getManager()->flush();
+                $this->getManager()->clear();
+                
+            } catch (AdapterException $e) {
                 $message = $e->getMessage();
                 $this->saveMessage($message);
             }
         }
-        $this->getManager()->flush();
-        $this->getManager()->clear();
     }
     
     /**
