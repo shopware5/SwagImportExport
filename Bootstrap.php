@@ -114,7 +114,6 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
     {
         $this->checkLicense();
 
-        $this->createMenu();
         $this->createAclResource();
         $this->registerEvents();
         $this->createDirectories();
