@@ -55,13 +55,19 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
         $paginator = $manager->createPaginator($query);
 
         $result['default'] = $paginator->getIterator()->getArrayCopy();
-        
+
         foreach ($result['default'] as &$record) {
             if ($record['taxInput']) {
                 $record['price'] = $record['price'] * (100 + $record['tax']) / 100; 
             }
+
+            //Not necessary. Later the "/var/www/master/engine/Shopware/Components/Convert/Csv.php" clear it again
+//            if(!isset($record['inStock']))
+//            {
+//                $record['inStock'] = '0';
+//            }
         }
-        
+
         return $result;
     }
 
@@ -86,7 +92,7 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
         switch($stockFilter)
         {
             case 'all':
-                $builder->where('d.id > 0');
+                $builder->where($builder->expr()->isNotNull('d.id'));
                 break;
             case 'inStock':
                 $builder->where('d.inStock > 0');
@@ -101,8 +107,8 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
                 break;
             case 'notInStockOnSale':
                 $builder->leftJoin('d.article', 'a')
-                        ->where('d.inStock = 0')
-                        ->andWhere('a.lastStock = 0');
+                        ->where('d.inStock <= 0')
+                        ->andWhere('a.lastStock = 1');
                 break;
             default:
                 throw new \Exception('Cannot match StockFilter 116');
