@@ -30,8 +30,7 @@ class CsvFileWriter implements FileWriter
         if (!is_array($headerData)) {
             throw new \Exception('Header data is not valid');
         }
-
-        $columnNames .= implode(';', $headerData) . "\n";
+        $columnNames = implode(';', $headerData) . "\n";
 
         $this->getFileHelper()->writeStringToFile($fileName, $columnNames);
     }
@@ -41,18 +40,22 @@ class CsvFileWriter implements FileWriter
         $flatData = '';
         
         $convertor = new \Shopware_Components_Convert_Csv;
-//        $convertor->sSettings['newline'] = "\r\n";
         $keys = array_keys(current($data));
         foreach ($data as $line) {
-            $flatData .= $convertor->_encode_line($line, $keys) . $convertor->sSettings['newline'];
+            $convertedLine = $convertor->_encode_line($line, $keys) . $convertor->sSettings['newline'];
+            $tmpArray = explode(';', $convertedLine);
+
+            if(empty($tmpArray[1]))
+                $tmpArray[1] = '0';
+
+            $flatData .= implode(';', $tmpArray);
         }
-        
         $this->getFileHelper()->writeStringToFile($fileName, $flatData, FILE_APPEND);
     }
 
     public function writeFooter($fileName, $footerData)
     {
-        
+
     }
 
     public function hasTreeStructure()
@@ -64,5 +67,4 @@ class CsvFileWriter implements FileWriter
     {
         return $this->fileHelper;
     }
-
 }
