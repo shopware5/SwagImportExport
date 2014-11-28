@@ -22,6 +22,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Components\SwagImportExport\DataWorkflow;
 use Shopware\Components\SwagImportExport\Utils\TreeHelper;
 use Shopware\Components\SwagImportExport\Utils\DataHelper;
