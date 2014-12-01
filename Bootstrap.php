@@ -135,12 +135,18 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
                 Shopware()->Db()->query($sql);
             }
 
+            $db = Shopware()->Db();
             //removing snippets
-            Shopware()->Db()->delete('s_core_snippets', array("value = 'Import/Export'"));
+            $db->delete('s_core_snippets', array("value = 'Import/Export'"));
 
-            Shopware()->Db()->exec('ALTER TABLE `s_import_export_profile` ADD `hidden` INT NOT NULL');
-            
-            Shopware()->Db()->exec('ALTER TABLE `s_import_export_session` ADD COLUMN `log_id` INT NULL AFTER `profile_id`, ADD CONSTRAINT FK_SWAG_IE_LOG_ID UNIQUE (`log_id`), ADD FOREIGN KEY (`log_id`) REFERENCES `s_import_export_log` (`id`)');
+            $db->exec('ALTER TABLE `s_import_export_profile` ADD `hidden` INT NOT NULL');
+            $db->exec('ALTER TABLE `s_import_export_log` CHANGE `message` `message` TEXT NULL');
+            $db->exec('ALTER TABLE `s_import_export_log` CHANGE `state` `state` VARCHAR(100) NULL');
+
+            $db->exec('ALTER TABLE `s_import_export_session`
+                    ADD COLUMN `log_id` INT NULL AFTER `profile_id`,
+                    ADD CONSTRAINT FK_SWAG_IE_LOG_ID UNIQUE (`log_id`),
+                    ADD FOREIGN KEY (`log_id`) REFERENCES `s_import_export_log` (`id`)');
 
             $this->get('shopware.cache_manager')->clearProxyCache();
         }
