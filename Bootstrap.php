@@ -141,6 +141,8 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
             Shopware()->Db()->exec('ALTER TABLE `s_import_export_profile` ADD `hidden` INT NOT NULL');
             
             Shopware()->Db()->exec('ALTER TABLE `s_import_export_session` ADD COLUMN `log_id` INT NULL AFTER `profile_id`, ADD CONSTRAINT FK_SWAG_IE_LOG_ID UNIQUE (`log_id`), ADD FOREIGN KEY (`log_id`) REFERENCES `s_import_export_log` (`id`)');
+
+            $this->get('shopware.cache_manager')->clearProxyCache();
         }
 
         return true;
@@ -406,7 +408,6 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
      */
     public function checkLicense($throwException = true)
     {
-
         $check1 = $this->checkLicenseCore(false);
         $check2 = $this->checkLicenseImportExport(false);
 
