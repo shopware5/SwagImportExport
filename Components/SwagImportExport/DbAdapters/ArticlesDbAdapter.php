@@ -557,6 +557,12 @@ class ArticlesDbAdapter implements DataDbAdapter
                 throw new AdapterException(sprintf($message, $data['tax'], $data['orderNumber']));
             }
             $articleData['tax'] = $tax;
+        } else {
+            if (!$article->getTax()) {
+                $message = SnippetsHelper::getNamespace()
+                            ->get('adapters/articles/no_tax_provided', 'Tax not provided for article %s');
+                throw new AdapterException(sprintf($message, $data['orderNumber']));
+            }
         }
         unset($data['tax']);
 
@@ -575,9 +581,15 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $supplier->setName($data['supplierName']);
             }
             $articleData['supplier'] = $supplier;
+        } else {
+            if (!$article->getSupplier()) {
+               $message = SnippetsHelper::getNamespace()
+                            ->get('adapters/articles/supplier_not_provided', 'Supplier not provided for article %s');
+                throw new AdapterException(sprintf($message, $data['orderNumber']));
+            }
         }
         unset($data['supplierName']);
-        
+
         //check if a priceGroup id is passed and load the priceGroup model or set the priceGroup parameter to null.
         if (isset($data['priceGroupId'])) {
             if (empty($data['priceGroupId'])) {
