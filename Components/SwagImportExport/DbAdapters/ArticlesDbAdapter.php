@@ -386,6 +386,12 @@ class ArticlesDbAdapter implements DataDbAdapter
                     $articleData['related'] = $this->prepareAccessories($records['accessory'], $index, $articleModel);
                     $articleData['configuratorSet'] = $this->prepareArticleConfigurators($records['configurator'], $index, $articleModel);
 
+                    $propertyValue = $this->preparePropertyValues($records['propertyValue'], $index, $articleModel);
+                    if ($propertyValue) {
+                        $articleData['propertyGroup'] = $propertyValue['group'];
+                        $articleData['propertyValues'] = $propertyValue['values'];
+                    }
+
                     //sets article_active from article_details_active
                     $articleData['active'] = $variantModel->getActive();
 
@@ -431,6 +437,12 @@ class ArticlesDbAdapter implements DataDbAdapter
                         $categories = $this->prepareCategories($records['category'], $index, $articleModel);
                         if ($categories) {
                             $articleData['categories'] = $categories;
+                        }
+
+                        $propertyValue = $this->preparePropertyValues($records['propertyValue'], $index, $articleModel);
+                        if ($propertyValue) {
+                            $articleData['propertyGroup'] = $propertyValue['group'];
+                            $articleData['propertyValues'] = $propertyValue['values'];
                         }
 
                         $articleData['active'] = $variantModel->getActive();
@@ -978,6 +990,129 @@ class ArticlesDbAdapter implements DataDbAdapter
         $image->setDescription($media->getDescription());
 
         return $image;
+    }
+
+    /**
+     * @param array $properyValues
+     * @param int $properyValueIndex
+     * @param ArticleModel $article
+     */
+    public function preparePropertyValues(&$properyValues, $properyValueIndex, ArticleModel $article)
+    {
+        if ($properyValues == null) {
+            return;
+        }
+
+        $propertyRepository = $this->getManager()->getRepository('Shopware\Models\Property\Group');
+
+        $hydrateObject = 1;
+        $values = array();
+
+        foreach ($properyValues as $index => $valueData) {
+            if ($valueData['parentIndexElement'] != $properyValueIndex) {
+                continue;
+            }
+
+            /**
+             *  Get group - this is required.
+             */
+            if (isset($valueData['propertyGroupName'])) {
+                $propertyGroup = $propertyRepository->findOneBy(array('name' => $valueData['propertyGroupName']));
+            } else {
+                $propertyGroup = $article->getPropertyGroup();
+            }
+
+            if (!$propertyGroup instanceof \Shopware\Models\Property\Group) {
+                $message = SnippetsHelper::getNamespace()
+                        ->get('adapters/articles/property_group_name_not_found', 'There is no propertyGroupName specified for article %s');
+                throw new AdapterException(sprintf($message, $article->getMainDetail()->getNumber()));
+            }
+
+            $value = null;
+            /** @var \Shopware\Models\Property\Option $option */
+            $option = null;
+
+            if (isset($valueData['propertyGroupId'])) {
+                $value = $this->getManager()->getRepository('\Shopware\Models\Property\Value')->find($valueData['propertyGroupId']);
+                if (!$value) {
+                    $message = SnippetsHelper::getNamespace()
+                            ->get('adapters/articles/property_id_not_found', 'Property value by id %s not found for article %s');
+                    throw new AdapterException(sprintf($message, $valueData['propertyGroupId'], $article->getMainDetail()->getNumber()));
+                }
+            } elseif (isset($valueData['value'])) {
+                if (isset($valueData['optionId'])) {
+                    $option = $this->getManager()->getRepository('\Shopware\Models\Property\Option')->find($valueData['optionId']);
+                    if (!$option) {
+                        throw new AdapterException(sprintf("Property option by id %s not found", $valueData['optionId']));
+                    }
+
+                    $filters = array(
+                        array('property' => "options.id", 'expression' => '=', 'value' => $option->getId()),
+                        array('property' => "groups.id", 'expression' => '=', 'value' => $propertyGroup->getId()),
+                    );
+
+                    $query = $propertyRepository->getPropertyRelationQuery($filters, null, 1, 0);
+                    /** @var \Shopware\Models\Property\Relation $relation */
+                    $relation = $query->getOneOrNullResult($hydrateObject);
+
+                    if (!$relation) {
+                        $propertyGroup->addOption($option);
+                    }
+                } elseif (isset($valueData['optionName'])) {
+                    // if a name is passed and there is a matching option/group relation, get this option
+                    // if only a name is passed, create a new option
+                    $filters = array(
+                        array('property' => "options.name", 'expression' => '=', 'value' => $valueData['optionName']),
+                        array('property' => "groups.name", 'expression' => '=', 'value' => $propertyGroup->getName()),
+                    );
+                    $query = $propertyRepository->getPropertyRelationQuery($filters, null, 1, 0);
+                    /** @var \Shopware\Models\Property\Relation $relation */
+                    $relation = $query->getOneOrNullResult($hydrateObject);
+                    if (!$relation) {
+                        $option = new \Shopware\Models\Property\Option();
+                        $propertyGroup->addOption($option);
+                    } else {
+                        $option = $relation->getOption();
+                    }
+                } else {
+                    $message = SnippetsHelper::getNamespace()
+                            ->get('adapters/articles/property_option_required', 'A property option need to be given for each property value for article %s');
+                    throw new AdapterException(sprintf($message, $article->getMainDetail()->getNumber()));
+                }
+
+                $option->fromArray($valueData['option']);
+                if ($option->isFilterable() === null) {
+                    $option->setFilterable(false);
+                }
+
+                // create the value
+                // If there is a filter value with matching name and option, load this value, else create a new one
+                $value = $this->getManager()->getRepository('\Shopware\Models\Property\Value')->findOneBy(array(
+                    'value' => $valueData['value'],
+                    'optionId' => $option->getId()
+                ));
+                if (!$value) {
+                    $value = new \Shopware\Models\Property\Value($option, $valueData['value']);
+                }
+                if (isset($valueData['position'])) {
+                    $value->setPosition($valueData['position']);
+                }
+                $this->getManager()->persist($value);
+            } else {
+                $message = SnippetsHelper::getNamespace()
+                        ->get('adapters/articles/property_id_or_name_required', 'Article %s requires name or id for property value');
+                throw new AdapterException(sprintf($message, $article->getMainDetail()->getNumber()));
+            }
+
+            $values[] = $value;
+
+            unset($properyValues[$index]);
+        }
+
+        return array(
+            'group' => $propertyGroup,
+            'values' => $values
+        );
     }
 
     /**
@@ -1712,19 +1847,21 @@ class ArticlesDbAdapter implements DataDbAdapter
             'images.mediaId as mediaId',
         );
     }
-    
+
     public function getPropertyValueColumns()
     {
         return array(
-            'propertyValues.id as propertyGroupId',
             'article.id as articleId',
+            'propertyGroup.name as propertyGroupName',
+            'propertyValues.id as propertyValueId',
             'propertyValues.value as value',
             'propertyValues.position as position',
-            'propertyValues.optionId as optionId',
             'propertyValues.valueNumeric as valueNumeric',
+            'propertyOptions.id as optionId',
+            'propertyOptions.name as optionName',
         );
     }
-    
+
     public function getSimilarColumns()
     {
          return array(
@@ -1733,7 +1870,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             'article.id as articleId',
         );
     }
-    
+
     public function getAccessoryColumns()
     {
          return array(
@@ -1742,7 +1879,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             'article.id as articleId',
         );
     }
-    
+
     public function getConfiguratorColumns()
     {
         return array(
@@ -2059,7 +2196,9 @@ class ArticlesDbAdapter implements DataDbAdapter
         $propertyValueBuilder->select($columns)
                 ->from('Shopware\Models\Article\Detail', 'variant')
                 ->join('variant.article', 'article')
+                ->leftjoin('article.propertyGroup', 'propertyGroup')
                 ->leftjoin('article.propertyValues', 'propertyValues')
+                ->leftjoin('propertyValues.option', 'propertyOptions')
                 ->where('variant.id IN (:ids)')
                 ->andWhere('variant.kind = 1')
                 ->andWhere('propertyValues.id IS NOT NULL')
