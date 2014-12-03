@@ -1105,6 +1105,8 @@ class ArticlesDbAdapter implements DataDbAdapter
             }
 
             $values[] = $value;
+
+            unset($properyValues[$index]);
         }
 
         return array(
