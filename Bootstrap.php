@@ -119,7 +119,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         $this->createDirectories();
         $this->createConfiguration();
 
-        if ($oldVersion == '1.0.0') {
+        if ($oldVersion == '1.0.0' || $oldVersion == '1.0.1') {
 
             //changing the name
             Shopware()->Db()->update('s_core_menu', array('name' => 'Import/Export Advanced'), array("controller = 'SwagImportExport'"));
