@@ -3,6 +3,7 @@
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Shopware\Components\SwagImportExport\DbAdapters\Articles\Write;
 use Shopware\Models\Article\Article as ArticleModel;
 use Shopware\Models\Article\Detail as DetailModel;
 use Shopware\Models\Article\Price as Price;
@@ -322,6 +323,8 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     public function write($records)
     {
+        error_log(print_r($records, true)."\n", 3, Shopware()->DocPath().'/../error.log');
+        
         //articles
         if (empty($records['article'])) {
             $message = SnippetsHelper::getNamespace()
@@ -334,19 +337,18 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $records,
                 array('subject' => $this)
         );
+//
+        $write = new Write();
+        $write->write($records['article']);
+        return;
 
         foreach ($records['article'] as $index => $record) {
+
 
             try {
                 unset($articleModel);
                 unset($variantModel);
                 unset($updateFlag);
-
-                if (!isset($record['orderNumber']) && empty($record['orderNumber'])) {
-                    $message = SnippetsHelper::getNamespace()
-                            ->get('adapters/ordernumber_required', 'Order number is required.');
-                    throw new AdapterException($message);
-                }
 
                 $variantModel = $this->getVariantRepository()->findOneBy(array('number' => $record['orderNumber']));
 
