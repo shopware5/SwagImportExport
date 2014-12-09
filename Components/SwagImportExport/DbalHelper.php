@@ -2,8 +2,8 @@
 
 namespace Shopware\Components\SwagImportExport;
 
-use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Shopware\Components\SwagImportExport\QueryBuilder\QueryBuilder;
 
 class DbalHelper
 {
