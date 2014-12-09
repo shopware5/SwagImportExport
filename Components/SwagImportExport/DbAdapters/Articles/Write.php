@@ -2,6 +2,7 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters\Articles;
 
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\QueryBuilder\QueryBuilder;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
@@ -131,7 +132,7 @@ class Write
     }
 
 
-    protected function getNamedParameter($value, $key, $metaData, QueryBuilder $builder)
+    protected function getNamedParameter($value, $key, ClassMetadata $metaData, QueryBuilder $builder)
     {
         if (!array_key_exists($key, $metaData->fieldMappings)) {
             return false;
@@ -164,7 +165,7 @@ class Write
 
         return $builder->createNamedParameter(
             $value,
-            $pdoTypeMapping[]
+            $pdoTypeMapping[$type]
         );
     }
 }
