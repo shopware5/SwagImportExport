@@ -3,6 +3,8 @@
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Shopware\Components\SwagImportExport\DbAdapters\Articles\ArticleWriter;
+use Shopware\Components\SwagImportExport\DbAdapters\Articles\PriceWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\Write;
 use Shopware\Models\Article\Article as ArticleModel;
 use Shopware\Models\Article\Detail as DetailModel;
@@ -31,7 +33,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     protected $variantRepository;
     protected $priceRepository;
     protected $groupRepository;
-    
+
     //mappers
     protected $articleVariantMap;
     protected $variantMap;
@@ -64,10 +66,11 @@ class ArticlesDbAdapter implements DataDbAdapter
 
         $builder->select('detail.id');
 
-        $builder->from('Shopware\Models\Article\Detail', 'detail')
-                ->orderBy('detail.articleId', 'ASC')
-                ->orderBy('detail.kind', 'ASC');
-        
+        $builder->from('Shopware\Models\Article\Detail', 'detail')->orderBy('detail.articleId', 'ASC')->orderBy(
+                'detail.kind',
+                'ASC'
+            );
+
         if ($filter['variants']) {
             $builder->andWhere('detail.kind <> 3');
         } else {
@@ -81,48 +84,53 @@ class ArticlesDbAdapter implements DataDbAdapter
             $categories = $this->getCategoryIdCollection();
 
             $categoriesBuilder = $manager->createQueryBuilder();
-            $categoriesBuilder->select('article.id')
-                    ->from('Shopware\Models\Article\Article', 'article')
-                    ->leftjoin('article.categories', 'categories')
-                    ->where('categories.id IN (:cids)')
-                    ->setParameter('cids', $categories)
-                    ->groupBy('article.id');
+            $categoriesBuilder->select('article.id')->from('Shopware\Models\Article\Article', 'article')->leftjoin(
+                    'article.categories',
+                    'categories'
+                )->where('categories.id IN (:cids)')->setParameter('cids', $categories)->groupBy('article.id');
 
-            $articleIds = array_map(function($item) {
-                return $item['id'];
-            }, $categoriesBuilder->getQuery()->getResult());
+            $articleIds = array_map(
+                function ($item) {
+                    return $item['id'];
+                },
+                $categoriesBuilder->getQuery()->getResult()
+            );
 
-            $builder->join('detail.article', 'article')
-                    ->andWhere('article.id IN (:ids)')
-                    ->setParameter('ids', $articleIds);
+            $builder->join('detail.article', 'article')->andWhere('article.id IN (:ids)')->setParameter(
+                    'ids',
+                    $articleIds
+                );
         }
 
-        $builder->setFirstResult($start)
-                ->setMaxResults($limit);
+        $builder->setFirstResult($start)->setMaxResults($limit);
 
         $records = $builder->getQuery()->getResult();
-        
+
         $result = array();
         if ($records) {
             foreach ($records as $value) {
                 $result[] = $value['id'];
             }
         }
-        
+
         return $result;
     }
 
     public function read($ids, $columns)
     {
         if (!$ids && empty($ids)) {
-            $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/articles_no_ids', 'Can not read articles without ids.');
+            $message = SnippetsHelper::getNamespace()->get(
+                    'adapters/articles_no_ids',
+                    'Can not read articles without ids.'
+                );
             throw new \Exception($message);
         }
 
         if (!$columns && empty($columns)) {
-            $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/articles_no_column_names', 'Can not read articles without column names.');
+            $message = SnippetsHelper::getNamespace()->get(
+                    'adapters/articles_no_column_names',
+                    'Can not read articles without column names.'
+                );
             throw new \Exception($message);
         }
 
@@ -135,7 +143,8 @@ class ArticlesDbAdapter implements DataDbAdapter
 
         //prices
         $columns['price'] = array_merge(
-                $columns['price'], array('customerGroup.taxInput as taxInput', 'articleTax.tax as tax')
+            $columns['price'],
+            array('customerGroup.taxInput as taxInput', 'articleTax.tax as tax')
         );
 
         $priceBuilder = $this->getPriceBuilder($columns['price'], $ids);
@@ -177,17 +186,19 @@ class ArticlesDbAdapter implements DataDbAdapter
         $result['accessory'] = $accessoryBuilder->getQuery()->getResult();
 
         //categories
-        $aritcleIds = $this->getManager()->createQueryBuilder()
-                ->select('article.id')
-                ->from('Shopware\Models\Article\Detail', 'variant')
-                ->join('variant.article', 'article')
-                ->where('variant.id IN (:ids)')
-                ->setParameter('ids', $ids)
-                ->groupBy('article.id');
+        $aritcleIds = $this->getManager()->createQueryBuilder()->select('article.id')->from(
+                'Shopware\Models\Article\Detail',
+                'variant'
+            )->join('variant.article', 'article')->where('variant.id IN (:ids)')->setParameter('ids', $ids)->groupBy(
+                'article.id'
+            );
 
-        $mappedArticleIds = array_map(function($item) {
-            return $item['id'];
-        }, $aritcleIds->getQuery()->getResult());
+        $mappedArticleIds = array_map(
+            function ($item) {
+                return $item['id'];
+            },
+            $aritcleIds->getQuery()->getResult()
+        );
 
         $categoryBuilder = $this->getCategoryBuilder($columns['category'], $mappedArticleIds);
 
@@ -197,7 +208,7 @@ class ArticlesDbAdapter implements DataDbAdapter
 
         return $result;
     }
-    
+
     public function prepareTranslationExport($ids)
     {
         //translations
@@ -239,7 +250,6 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $rows[$articleId][$languageId]['articleId'] = $articleId;
                 $rows[$articleId][$languageId]['languageId'] = $languageId;
 
-
                 $objectdata = unserialize($record['objectdata']);
 
                 if (!empty($objectdata)) {
@@ -279,11 +289,11 @@ class ArticlesDbAdapter implements DataDbAdapter
 
         return $data;
     }
-    
+
     public function getShops()
     {
         $shops = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop')->findAll();
-        
+
         return $shops;
     }
 
@@ -299,7 +309,8 @@ class ArticlesDbAdapter implements DataDbAdapter
         );
 
         $columns['article'] = array_merge(
-                $this->getArticleColumns(), $otherColumns
+            $this->getArticleColumns(),
+            $otherColumns
         );
 
         $columns['price'] = $this->getPriceColumns();
@@ -310,7 +321,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         $columns['configurator'] = $this->getConfiguratorColumns();
         $columns['category'] = $this->getCategoryColumns();
         $columns['translation'] = $this->getTranslationColumns();
-        
+
         return $columns;
     }
 
@@ -323,27 +334,40 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     public function write($records)
     {
-        error_log(print_r($records, true)."\n", 3, Shopware()->DocPath().'/../error.log');
-        
+        error_log(print_r($records, true) . "\n", 3, Shopware()->DocPath() . '/../error.log');
+
         //articles
         if (empty($records['article'])) {
-            $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/articles/no_records', 'No article records were found.');
+            $message = SnippetsHelper::getNamespace()->get(
+                    'adapters/articles/no_records',
+                    'No article records were found.'
+                );
             throw new \Exception($message);
         }
 
         $records = Shopware()->Events()->filter(
-                'Shopware_Components_SwagImportExport_DbAdapters_ArticlesDbAdapter_Write',
-                $records,
-                array('subject' => $this)
+            'Shopware_Components_SwagImportExport_DbAdapters_ArticlesDbAdapter_Write',
+            $records,
+            array('subject' => $this)
         );
 //
-        $write = new Write();
-        $write->write($records['article']);
+        $articleWriter = new ArticleWriter();
+        $pricesWriter = new PriceWriter();
+        foreach ($records['article'] as $index => $article) {
+            list($articleId, $articleDetailId, $mainDetailId) = $articleWriter->write($article);
+            $pricesWriter->write($articleId, $articleDetailId,
+                array_filter(
+                    $records['price'],
+                    function ($price) use ($index) {
+                        return $price['parentIndexElement'] == $index;
+                    }
+                )
+            );
+        }
+
         return;
 
         foreach ($records['article'] as $index => $record) {
-
 
             try {
                 unset($articleModel);
@@ -358,13 +382,17 @@ class ArticlesDbAdapter implements DataDbAdapter
                     $mainVariant = $this->getVariantRepository()->findOneBy(array('number' => $record['mainNumber']));
 
                     if (!$mainVariant) {
-                        $message = SnippetsHelper::getNamespace()
-                                ->get('adapters/articles/variant_existence', 'Variant with number %s does not exists.');
+                        $message = SnippetsHelper::getNamespace()->get(
+                                'adapters/articles/variant_existence',
+                                'Variant with number %s does not exists.'
+                            );
                         throw new AdapterException(sprintf($message, $record['mainNumber']));
                     }
                     $articleModel = $mainVariant->getArticle();
-                } else if (isset($record['mainNumber']) && empty($record['mainNumber'])) {
-                    $record['mainNumber'] = $record['orderNumber'];
+                } else {
+                    if (isset($record['mainNumber']) && empty($record['mainNumber'])) {
+                        $record['mainNumber'] = $record['orderNumber'];
+                    }
                 }
 
                 if (!$articleModel) {
@@ -379,14 +407,24 @@ class ArticlesDbAdapter implements DataDbAdapter
 
                     $variantModel = $articleModel->getMainDetail();
 
-                    $prices = $this->preparePrices($records['price'], $index, $variantModel, $articleModel, $articleData['tax']);
+                    $prices = $this->preparePrices(
+                        $records['price'],
+                        $index,
+                        $variantModel,
+                        $articleModel,
+                        $articleData['tax']
+                    );
                     $variantModel->setPrices($prices);
 
                     $articleData['images'] = $this->prepareImages($records['image'], $index, $articleModel);
                     $articleData['categories'] = $this->prepareCategories($records['category'], $index, $articleModel);
                     $articleData['similar'] = $this->prepareSimilars($records['similar'], $index, $articleModel);
                     $articleData['related'] = $this->prepareAccessories($records['accessory'], $index, $articleModel);
-                    $articleData['configuratorSet'] = $this->prepareArticleConfigurators($records['configurator'], $index, $articleModel);
+                    $articleData['configuratorSet'] = $this->prepareArticleConfigurators(
+                        $records['configurator'],
+                        $index,
+                        $articleModel
+                    );
 
                     //sets article_active from article_details_active
                     $articleData['active'] = $variantModel->getActive();
@@ -396,8 +434,10 @@ class ArticlesDbAdapter implements DataDbAdapter
                     $violations = $this->getManager()->validate($articleModel);
 
                     if ($violations->count() > 0) {
-                        $message = SnippetsHelper::getNamespace()
-                                ->get('adapters/articles/no_valid_article_entity', 'No valid detail entity for article %s');
+                        $message = SnippetsHelper::getNamespace()->get(
+                                'adapters/articles/no_valid_article_entity',
+                                'No valid detail entity for article %s'
+                            );
                         throw new AdapterException(sprintf($message, $variantModel->getNumber()));
                     }
 
@@ -425,7 +465,12 @@ class ArticlesDbAdapter implements DataDbAdapter
                             $articleData['similar'] = $similar;
                         }
 
-                        $accessories = $this->prepareAccessories($records['accessory'], $index, $articleModel, $processedFlag);
+                        $accessories = $this->prepareAccessories(
+                            $records['accessory'],
+                            $index,
+                            $articleModel,
+                            $processedFlag
+                        );
                         if ($accessories) {
                             $articleData['related'] = $accessories;
                         }
@@ -444,13 +489,24 @@ class ArticlesDbAdapter implements DataDbAdapter
                     $variantModel = $this->prerpareVariant($record, $articleModel, $variantModel);
 
                     if ($record['mainNumber'] || $updateFlag) {
-                        $configuratorOptions = $this->prepareVariantConfigurators($records['configurator'], $index, $articleModel);
+                        $configuratorOptions = $this->prepareVariantConfigurators(
+                            $records['configurator'],
+                            $index,
+                            $articleModel
+                        );
                         if ($configuratorOptions) {
                             $variantModel->setConfiguratorOptions($configuratorOptions);
                         }
                     }
 
-                    $prices = $this->preparePrices($records['price'], $index, $variantModel, $articleModel, $articleModel->getTax(), $updateFlag);
+                    $prices = $this->preparePrices(
+                        $records['price'],
+                        $index,
+                        $variantModel,
+                        $articleModel,
+                        $articleModel->getTax(),
+                        $updateFlag
+                    );
                     if ($prices) {
                         $variantModel->setPrices($prices);
                     }
@@ -458,8 +514,10 @@ class ArticlesDbAdapter implements DataDbAdapter
                     $violations = $this->getManager()->validate($variantModel);
 
                     if ($violations->count() > 0) {
-                        $message = SnippetsHelper::getNamespace()
-                                ->get('adapters/articles/no_valid_detail_entity', 'No valid detail entity for article %s');
+                        $message = SnippetsHelper::getNamespace()->get(
+                                'adapters/articles/no_valid_detail_entity',
+                                'No valid detail entity for article %s'
+                            );
                         throw new AdapterException(sprintf($message, $variantModel->getNumber()));
                     }
 
@@ -473,8 +531,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $this->getManager()->clear();
 
                 $this->writeTranslations($records['translation'], $index, $articleId);
-
-            } catch (AdapterException $e) {
+            } catch(AdapterException $e) {
                 $message = $e->getMessage();
                 $this->saveMessage($message);
             }
@@ -506,14 +563,16 @@ class ArticlesDbAdapter implements DataDbAdapter
         foreach ($translations as $index => $translation) {
             if ($translation['parentIndexElement'] === $translationIndex) {
 
-                if (!isset($translation['languageId']) || empty($translation['languageId'])){
+                if (!isset($translation['languageId']) || empty($translation['languageId'])) {
                     continue;
                 }
 
                 $shop = $this->getManager()->find('Shopware\Models\Shop\Shop', $translation['languageId']);
                 if (!$shop) {
-                    $message = SnippetsHelper::getNamespace()
-                                ->get('adapters/articles/no_shop_id', 'Shop by id %s not found');
+                    $message = SnippetsHelper::getNamespace()->get(
+                            'adapters/articles/no_shop_id',
+                            'Shop by id %s not found'
+                        );
                     throw new AdapterException(sprintf($message, $translation['languageId']));
                 }
                 $data = array_intersect_key($translation, array_flip($whitelist));
@@ -547,15 +606,21 @@ class ArticlesDbAdapter implements DataDbAdapter
             $articleData['tax'] = $this->getManager()->find('Shopware\Models\Tax\Tax', $data['taxId']);
 
             if (empty($data['tax'])) {
-                $message = SnippetsHelper::getNamespace()
-                            ->get('adapters/articles/no_tax_id', 'Tax by id %s not found for article %s');
+                $message = SnippetsHelper::getNamespace()->get(
+                        'adapters/articles/no_tax_id',
+                        'Tax by id %s not found for article %s'
+                    );
                 throw new AdapterException(sprintf($message, $data['taxId'], $data['orderNumber']));
             }
         } elseif (!empty($data['tax'])) {
-            $tax = $this->getManager()->getRepository('Shopware\Models\Tax\Tax')->findOneBy(array('tax' => $data['tax']));
+            $tax = $this->getManager()->getRepository('Shopware\Models\Tax\Tax')->findOneBy(
+                array('tax' => $data['tax'])
+            );
             if (!$tax) {
-                $message = SnippetsHelper::getNamespace()
-                            ->get('adapters/articles/no_tax_found', 'Tax by taxrate %s not found for article %s');
+                $message = SnippetsHelper::getNamespace()->get(
+                        'adapters/articles/no_tax_found',
+                        'Tax by taxrate %s not found for article %s'
+                    );
                 throw new AdapterException(sprintf($message, $data['tax'], $data['orderNumber']));
             }
             $articleData['tax'] = $tax;
@@ -564,14 +629,21 @@ class ArticlesDbAdapter implements DataDbAdapter
 
         //check if a supplier id is passed and load the supplier model or set the supplier parameter to null.
         if (!empty($data['supplierId'])) {
-            $articleData['supplier'] = $this->getManager()->find('Shopware\Models\Article\Supplier', $data['supplierId']);
+            $articleData['supplier'] = $this->getManager()->find(
+                'Shopware\Models\Article\Supplier',
+                $data['supplierId']
+            );
             if (empty($articleData['supplier'])) {
-                $message = SnippetsHelper::getNamespace()
-                            ->get('adapters/articles/supplier_not_found', 'Supplier by id %s not found for article %s');
+                $message = SnippetsHelper::getNamespace()->get(
+                        'adapters/articles/supplier_not_found',
+                        'Supplier by id %s not found for article %s'
+                    );
                 throw new AdapterException(sprintf($message, $data['supplierId'], $data['orderNumber']));
             }
         } elseif (!empty($data['supplierName'])) {
-            $supplier = $this->getManager()->getRepository('Shopware\Models\Article\Supplier')->findOneBy(array('name' => $data['supplierName']));
+            $supplier = $this->getManager()->getRepository('Shopware\Models\Article\Supplier')->findOneBy(
+                array('name' => $data['supplierName'])
+            );
             if (!$supplier) {
                 $supplier = new \Shopware\Models\Article\Supplier();
                 $supplier->setName($data['supplierName']);
@@ -579,16 +651,21 @@ class ArticlesDbAdapter implements DataDbAdapter
             $articleData['supplier'] = $supplier;
         }
         unset($data['supplierName']);
-        
+
         //check if a priceGroup id is passed and load the priceGroup model or set the priceGroup parameter to null.
         if (isset($data['priceGroupId'])) {
             if (empty($data['priceGroupId'])) {
                 $articleData['priceGroupId'] = null;
             } else {
-                $articleData['priceGroup'] = $this->getManager()->find('Shopware\Models\Price\Group', $data['priceGroupId']);
+                $articleData['priceGroup'] = $this->getManager()->find(
+                    'Shopware\Models\Price\Group',
+                    $data['priceGroupId']
+                );
                 if (empty($articleData['priceGroup'])) {
-                    $message = SnippetsHelper::getNamespace()
-                            ->get('adapters/articles/pricegroup_not_found', 'Pricegroup by id %s not found for article %s');
+                    $message = SnippetsHelper::getNamespace()->get(
+                            'adapters/articles/pricegroup_not_found',
+                            'Pricegroup by id %s not found for article %s'
+                        );
                     throw new AdapterException(sprintf($message, $data['priceGroupId'], $data['orderNumber']));
                 }
             }
@@ -600,16 +677,21 @@ class ArticlesDbAdapter implements DataDbAdapter
             if (empty($data['propertyGroupId'])) {
                 $articleData['propertyGroup'] = null;
             } else {
-                $articleData['propertyGroup'] = $this->getManager()->find('\Shopware\Models\Property\Group', $data['filterGroupId']);
+                $articleData['propertyGroup'] = $this->getManager()->find(
+                    '\Shopware\Models\Property\Group',
+                    $data['filterGroupId']
+                );
 
                 if (empty($articleData['propertyGroup'])) {
-                    $message = SnippetsHelper::getNamespace()
-                            ->get('adapters/articles/propertyGroup_not_found', 'PropertyGroup by id %s not found for article %s');
+                    $message = SnippetsHelper::getNamespace()->get(
+                            'adapters/articles/propertyGroup_not_found',
+                            'PropertyGroup by id %s not found for article %s'
+                        );
                     throw new AdapterException(sprintf($message, $data['filterGroupId'], $data['orderNumber']));
                 }
             }
             unset($data['propertyGroupId']);
-        } 
+        }
 
         $articleMap = $this->getMap('articleVariant');
 
@@ -637,7 +719,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     {
         $variantData = array();
         $variantsMap = $this->getMap('variant');
-        
+
         //fixes date time mapping
         $variantsMap['releaseDate'] = 'releaseDate';
 
@@ -650,7 +732,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $newKey = lcfirst(preg_replace('/^attribute/', '', $key));
                 $variantData['attribute'][$newKey] = $value;
                 unset($data[$key]);
-            } else if(isset($variantsMap[$key])) {
+            } else if (isset($variantsMap[$key])) {
                 $variantData[$variantsMap[$key]] = $value;
             }
         }
@@ -699,11 +781,13 @@ class ArticlesDbAdapter implements DataDbAdapter
 
     public function preparePrices(&$data, $variantIndex, $variant, ArticleModel $article, $tax, $updateFlag = false)
     {
-        if ($data === null && $updateFlag){
+        if ($data === null && $updateFlag) {
             return;
         } else if ($data === null) {
-            $message = SnippetsHelper::getNamespace()
-                                ->get('adapters/articles/no_price_data', 'No price data found for article %s');
+            $message = SnippetsHelper::getNamespace()->get(
+                    'adapters/articles/no_price_data',
+                    'No price data found for article %s'
+                );
             throw new AdapterException(sprintf($message, $variant->getNumber()));
         }
 
@@ -722,8 +806,10 @@ class ArticlesDbAdapter implements DataDbAdapter
 
                 /** @var CustomerGroup $customerGroup */
                 if (!$customerGroup instanceof CustomerGroup) {
-                    $message = SnippetsHelper::getNamespace()
-                                ->get('adapters/customerGroup_not_found', 'Customer Group by key %s not found for article %s');
+                    $message = SnippetsHelper::getNamespace()->get(
+                            'adapters/customerGroup_not_found',
+                            'Customer Group by key %s not found for article %s'
+                        );
                     throw new AdapterException(sprintf($message, $priceData['priceGroup'], $variant->getNumber()));
                 }
 
@@ -745,25 +831,29 @@ class ArticlesDbAdapter implements DataDbAdapter
                 }
 
                 if (!isset($priceData['price']) && empty($priceData['price'])) {
-                    $message = SnippetsHelper::getNamespace()
-                                ->get('adapters/articles/incorrect_price', 'Price value is incorrect for article with nubmer %s');
+                    $message = SnippetsHelper::getNamespace()->get(
+                            'adapters/articles/incorrect_price',
+                            'Price value is incorrect for article with nubmer %s'
+                        );
                     throw new AdapterException(sprintf($message . $variant->getNumber()));
                 }
 
                 if ($priceData['from'] <= 0) {
-                    $message = SnippetsHelper::getNamespace()
-                                ->get('adapters/articles/invalid_price', 'Invalid Price "from" value for article %s');
+                    $message = SnippetsHelper::getNamespace()->get(
+                            'adapters/articles/invalid_price',
+                            'Invalid Price "from" value for article %s'
+                        );
                     throw new AdapterException(sprintf($message, $variant->getNumber()));
                 }
-                
+
                 $oldPrice = $this->getPriceRepository()->findOneBy(
-                        array(
-                            'articleDetailsId' => $variant->getId(), 
-                            'customerGroupKey' => $priceData['priceGroup'],
-                            'from' => $priceData['from']
-                        )
+                    array(
+                        'articleDetailsId' => $variant->getId(),
+                        'customerGroupKey' => $priceData['priceGroup'],
+                        'from' => $priceData['from']
+                    )
                 );
-                
+
                 $priceData['price'] = floatval(str_replace(",", ".", $priceData['price']));
 
                 if (isset($priceData['basePrice'])) {
@@ -791,9 +881,9 @@ class ArticlesDbAdapter implements DataDbAdapter
                 if (isset($priceData['percent'])) {
                     $priceData['percent'] = floatval(str_replace(",", ".", $priceData['percent']));
                 } else {
-                     if ($oldPrice) {
+                    if ($oldPrice) {
                         $priceData['percent'] = $oldPrice->getPercent();
-                     }
+                    }
                 }
 
                 if ($customerGroup->getTaxInput()) {
@@ -810,12 +900,12 @@ class ArticlesDbAdapter implements DataDbAdapter
 
                 unset($data[$index]);
                 unset($oldPrice);
-            } 
+            }
         }
 
         return $prices;
     }
-    
+
     public function prepareCategories(&$data, $variantIndex, ArticleModel $article)
     {
         if ($data == null) {
@@ -833,21 +923,23 @@ class ArticlesDbAdapter implements DataDbAdapter
                 }
 
                 foreach ($articleCategories as $articleCategory) {
-                    if ($articleCategory->getId() == (int) $categoryData['categoryId']) {
+                    if ($articleCategory->getId() == (int)$categoryData['categoryId']) {
                         continue;
                     }
                 }
 
                 $categoryModel = $this->getManager()->find(
-                        'Shopware\Models\Category\Category', (int) $categoryData['categoryId']
+                    'Shopware\Models\Category\Category',
+                    (int)$categoryData['categoryId']
                 );
 
                 if (!$categoryModel) {
-                    $message = SnippetsHelper::getNamespace()
-                                ->get('adapters/articles/category_not_found', 'Category with id %s could not be found.');
+                    $message = SnippetsHelper::getNamespace()->get(
+                            'adapters/articles/category_not_found',
+                            'Category with id %s could not be found.'
+                        );
                     throw new AdapterException(sprintf($message, $categoryData['categoryId']));
                 }
-
 
                 $categories[] = $categoryModel;
                 unset($categoryModel);
@@ -867,19 +959,20 @@ class ArticlesDbAdapter implements DataDbAdapter
         if ($data == null) {
             return;
         }
-        
+
         foreach ($data as $key => $imageData) {
-            
+
             if ($imageData['parentIndexElement'] === $variantIndex) {
-                
+
                 //if imageData has only index element
-                if (count($imageData) < 2 ) {
+                if (count($imageData) < 2) {
                     continue;
                 }
-                                
+
                 if (isset($imageData['id'])) {
                     $imageModel = $this->getManager()->find(
-                            'Shopware\Models\Article\Image', (int) $imageData['id']
+                        'Shopware\Models\Article\Image',
+                        (int)$imageData['id']
                     );
                     unset($imageData['id']);
                 } elseif ($article->getImages() && $imageData['path']) {
@@ -890,13 +983,14 @@ class ArticlesDbAdapter implements DataDbAdapter
                         }
                     }
                 }
-                
+
                 if (!$imageModel) {
                     if (isset($imageData['mediaId']) && !empty($imageData['mediaId'])) {
                         $media = $this->getManager()->find(
-                                'Shopware\Models\Media\Media', (int) $imageData['mediaId']
+                            'Shopware\Models\Media\Media',
+                            (int)$imageData['mediaId']
                         );
-                    } elseif (isset($imageData['path']) && !empty($imageData['path'])){
+                    } elseif (isset($imageData['path']) && !empty($imageData['path'])) {
                         $media = $this->getMediaRepository()->findOneBy(array('name' => $imageData['path']));
                     }
 
@@ -905,32 +999,32 @@ class ArticlesDbAdapter implements DataDbAdapter
 //                        throw new \Exception(sprintf("Media by mediaId %s not found for article with number %s", 
 //                                $imageData['mediaId'], $article->getMainDetail()->getNumber()));
                     }
-                    
+
                     $imageModel = $this->createNewArticleImage($article, $media);
                 }
-                
+
                 $imageModel->fromArray($imageData);
-                
+
                 $images[] = $imageModel;
                 unset($imageModel);
                 unset($data[$key]);
             }
         }
-        
+
         if ($images === null) {
             return;
         }
-        
+
         $hasMain = $this->getCollectionElementByProperty($images, 'main', 1);
-        
+
         if (!$hasMain) {
             $image = $images[0];
             $image->setMain(1);
         }
-        
-        return $images;        
+
+        return $images;
     }
-    
+
     /**
      * Helper function which creates a new article image with the passed media object.
      * @param ArticleModel $article
@@ -947,6 +1041,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         );
         $this->getManager()->persist($image);
         $article->getImages()->add($image);
+
         return $image;
     }
 
@@ -996,18 +1091,18 @@ class ArticlesDbAdapter implements DataDbAdapter
                 continue;
             }
 
-            if ((!isset($similar['similarId']) || !$similar['similarId'])
-                && (!isset($similar['ordernumber']) || !$similar['ordernumber'])) {
+            if ((!isset($similar['similarId']) || !$similar['similarId']) && (!isset($similar['ordernumber']) || !$similar['ordernumber'])) {
                 continue;
             }
 
             if (isset($similar['ordernumber']) && $similar['ordernumber']) {
-                $similarDetails = $this->getVariantRepository()
-                        ->findOneBy(array('number' => $similar['ordernumber']));
+                $similarDetails = $this->getVariantRepository()->findOneBy(array('number' => $similar['ordernumber']));
 
                 if (!$similarDetails && $processedFlag === true) {
-                    $message = SnippetsHelper::getNamespace()
-                            ->get('adapters/articles/similar_not_found', 'Similar with ordernumber %s does not exists');
+                    $message = SnippetsHelper::getNamespace()->get(
+                            'adapters/articles/similar_not_found',
+                            'Similar with ordernumber %s does not exists'
+                        );
                     throw new AdapterException(sprintf($message, $similar['ordernumber']));
                 }
 
@@ -1039,7 +1134,7 @@ class ArticlesDbAdapter implements DataDbAdapter
 
         return $similarCollection;
     }
-    
+
     public function prepareAccessories(&$accessories, $accessoryIndex, $article, $processedFlag = false)
     {
         if ($accessories == null) {
@@ -1058,18 +1153,20 @@ class ArticlesDbAdapter implements DataDbAdapter
                 continue;
             }
 
-            if ((!isset($accessory['accessoryId']) || !$accessory['accessoryId'])
-                && (!isset($accessory['ordernumber']) || !$accessory['ordernumber'])) {
+            if ((!isset($accessory['accessoryId']) || !$accessory['accessoryId']) && (!isset($accessory['ordernumber']) || !$accessory['ordernumber'])) {
                 continue;
             }
 
             if (isset($accessory['ordernumber']) && $accessory['ordernumber']) {
-                $accessoryDetails = $this->getVariantRepository()
-                        ->findOneBy(array('number' => $accessory['ordernumber']));
+                $accessoryDetails = $this->getVariantRepository()->findOneBy(
+                        array('number' => $accessory['ordernumber'])
+                    );
 
                 if (!$accessoryDetails && $processedFlag === true) {
-                    $message = SnippetsHelper::getNamespace()
-                            ->get('adapters/articles/accessory_not_found', 'Accessory with ordernumber %s does not exists');
+                    $message = SnippetsHelper::getNamespace()->get(
+                            'adapters/articles/accessory_not_found',
+                            'Accessory with ordernumber %s does not exists'
+                        );
                     throw new AdapterException(sprintf($message, $accessory['ordernumber']));
                 }
 
@@ -1090,8 +1187,11 @@ class ArticlesDbAdapter implements DataDbAdapter
             if ($this->isAccessoryArticleExists($article, $accessory['accessoryId'])) {
                 continue;
             }
-            
-            $accessoryModel = $this->getManager()->getReference('Shopware\Models\Article\Article', $accessory['accessoryId']);
+
+            $accessoryModel = $this->getManager()->getReference(
+                'Shopware\Models\Article\Article',
+                $accessory['accessoryId']
+            );
 
             $accessoriesCollection[] = $accessoryModel;
 
@@ -1106,15 +1206,15 @@ class ArticlesDbAdapter implements DataDbAdapter
         if ($configurators == null) {
             return;
         }
-        
+
         $configuratorSet = null;
         $optionPosition = 0;
-        
+
         foreach ($configurators as $index => $configurator) {
             if ($configurator['parentIndexElement'] != $configuratorIndex) {
                 continue;
             }
-            
+
             if (!isset($configurator['configGroupName']) && !isset($configurator['configGroupId'])) {
                 continue;
             }
@@ -1132,92 +1232,101 @@ class ArticlesDbAdapter implements DataDbAdapter
             }
 
             if (isset($configurator['configSetId']) && !empty($configurator['configSetId']) && !$configuratorSet) {
-                $configuratorSet = $this->getManager()->getRepository('Shopware\Models\Article\Configurator\Set')
-                        ->findOneBy(array('id' => $configurator['configSetId']));
+                $configuratorSet = $this->getManager()->getRepository(
+                    'Shopware\Models\Article\Configurator\Set'
+                )->findOneBy(array('id' => $configurator['configSetId']));
             }
 
             if ((!isset($configurator['configSetName']) || empty($configurator['configSetName'])) && !$configuratorSet) {
                 $configuratorSet = $this->createConfiguratorSet($configurator, $article);
             }
-            
+
             if (!$configuratorSet) {
-                $configuratorSet = $this->getManager()->getRepository('Shopware\Models\Article\Configurator\Set')
-                        ->findOneBy(array('name' => $configurator['configSetName']));
+                $configuratorSet = $this->getManager()->getRepository(
+                    'Shopware\Models\Article\Configurator\Set'
+                )->findOneBy(array('name' => $configurator['configSetName']));
             }
 
             if (!$configuratorSet) {
                 $configuratorSet = $article->getConfiguratorSet();
             }
-            
+
             if (!$configuratorSet) {
                 $configuratorSet = $this->createConfiguratorSet($configurator, $article);
             }
-            
+
             //configurator group
             $groupModel = $this->getConfiguratorGroup($configurator);
-            
+
             //configurator option
             if (isset($configurator['configOptionId'])) {
-                $optionModel = $this->getManager()
-                        ->find('Shopware\Models\Article\Configurator\Option', $configurator['configOptionId']);
+                $optionModel = $this->getManager()->find(
+                        'Shopware\Models\Article\Configurator\Option',
+                        $configurator['configOptionId']
+                    );
                 if (!$optionModel) {
-                    $message = SnippetsHelper::getNamespace()
-                                ->get('adapters/articles/config_option_not_found', 'ConfiguratorOption by id %s not found');
+                    $message = SnippetsHelper::getNamespace()->get(
+                            'adapters/articles/config_option_not_found',
+                            'ConfiguratorOption by id %s not found'
+                        );
                     throw new \Exception(sprintf($message, $configurator['configOptionId']));
                 }
             } else {
-                $optionModel = $this->getManager()
-                        ->getRepository('Shopware\Models\Article\Configurator\Option')->findOneBy(array(
+                $optionModel = $this->getManager()->getRepository(
+                        'Shopware\Models\Article\Configurator\Option'
+                    )->findOneBy(
+                        array(
                             'name' => $configurator['configOptionName'],
                             'groupId' => $groupModel->getId()
-                        ));
+                        )
+                    );
             }
-            
+
             $optionData = array(
                 'id' => $configurator['configOptionId'],
                 'name' => $configurator['configOptionName'],
             );
-            
+
             if (!$optionModel) {
                 $optionModel = new Configurator\Option();
             }
-            
+
             $optionModel->fromArray($optionData);
             $optionModel->setGroup($groupModel);
             $optionModel->setPosition($optionPosition++);
-            
+
             $groupData = array(
-                'id' => $configurator['configGroupId'],                
-                'name' => $configurator['configGroupName'],                
-                'options' => array($optionModel)                
+                'id' => $configurator['configGroupId'],
+                'name' => $configurator['configGroupName'],
+                'options' => array($optionModel)
             );
-            
+
             $groupModel->fromArray($groupData);
-            
+
             $options[] = $optionModel;
             $groups[] = $groupModel;
-            
+
             unset($optionModel);
             unset($groupModel);
             unset($configurators[$index]);
         }
-        
+
         if ($configuratorSet && $groups && $options) {
             $article->getMainDetail()->setConfiguratorOptions($options);
             $configuratorSet->setOptions($options);
             $configuratorSet->setGroups($groups);
             $this->getManager()->persist($configuratorSet);
         }
-        
+
         return $configuratorSet;
     }
-    
+
     public function prepareVariantConfigurators(&$configurators, $configuratorIndex, $article)
     {
         if ($configurators == null) {
             return;
         }
-        
+
         $configuratorSet = $article->getConfiguratorSet();
         $configSetflag = false;
 
@@ -1225,7 +1334,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             if ($configurator['parentIndexElement'] != $configuratorIndex) {
                 continue;
             }
-            
+
             if (!isset($configurator['configOptionName']) || empty($configurator['configOptionName'])) {
                 continue;
             }
@@ -1237,7 +1346,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $this->getManager()->flush();
                 $configSetflag = true;
             }
-            
+
             if ($configSetflag) {
                 $this->createConfiguratorGroupsAndOptionsFromVariant($configurator, $configuratorSet);
             }
@@ -1245,28 +1354,35 @@ class ArticlesDbAdapter implements DataDbAdapter
             $setOptions = $configuratorSet->getOptions();
             $availableGroups = $configuratorSet->getGroups();
 
-            $availableGroup = $this->getAvailableGroup($availableGroups, array(
-                'id' => $configurator['configGroupId'],
-                'name' => $configurator['configGroupName']
-            ));
-            
+            $availableGroup = $this->getAvailableGroup(
+                $availableGroups,
+                array(
+                    'id' => $configurator['configGroupId'],
+                    'name' => $configurator['configGroupName']
+                )
+            );
+
             //group is in the article configurator set configured?
             if (!$availableGroup) {
                 continue;
             }
-            
+
             //check if the option is available in the configured article configurator set.
-            $option = $this->getAvailableOption($availableGroup->getOptions(), array(
-                'id'   => $configurator['configOptionId'],
-                'name' => $configurator['configOptionName']
-            ));
-            
+            $option = $this->getAvailableOption(
+                $availableGroup->getOptions(),
+                array(
+                    'id' => $configurator['configOptionId'],
+                    'name' => $configurator['configOptionName']
+                )
+            );
+
             if (!$option) {
-                $option = $this->getManager()
-                        ->getRepository('Shopware\Models\Article\Configurator\Option')->findOneBy(array(
+                $option = $this->getManager()->getRepository('Shopware\Models\Article\Configurator\Option')->findOneBy(
+                        array(
                             'name' => $configurator['configOptionName'],
                             'groupId' => $availableGroup->getId()
-                        ));
+                        )
+                    );
             }
 
             if (!$option) {
@@ -1276,20 +1392,20 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $option->setGroup($availableGroup);
                 $this->getManager()->persist($option);
             }
-            
+
             $optionData[] = $option;
 
             //add option to configurator set if dont exists
-            if (!$this->isEntityExistsByName($setOptions, $option)){
+            if (!$this->isEntityExistsByName($setOptions, $option)) {
                 $setOptions->add($option);
             }
         }
 
         return $optionData;
     }
-    
+
     /**
-     * 
+     *
      * @param array $data
      * @param \Shopware\Models\Article\Article $article
      * @return \Shopware\Models\Article\Configurator\Set
@@ -1308,12 +1424,12 @@ class ArticlesDbAdapter implements DataDbAdapter
         if (isset($data['configSetType'])) {
             $configuratorSet->setType($data['configSetType']);
         }
-        
+
         $configuratorSet->setPublic(false);
-        
+
         return $configuratorSet;
     }
-    
+
     /**
      * Checks if the passed group data is already existing in the passed array collection.
      * The group data are checked for "id" and "name".
@@ -1326,8 +1442,10 @@ class ArticlesDbAdapter implements DataDbAdapter
     {
         /**@var $availableGroup Option */
         foreach ($availableGroups as $availableGroup) {
-            if ( ($availableGroup->getName() == $groupData['name'] && $groupData['name'] !== null)
-                || ($availableGroup->getId() == $groupData['id']) && $groupData['id'] !== null) {
+            if (($availableGroup->getName(
+                    ) == $groupData['name'] && $groupData['name'] !== null) || ($availableGroup->getId(
+                    ) == $groupData['id']) && $groupData['id'] !== null
+            ) {
 
                 return $availableGroup;
             }
@@ -1336,9 +1454,9 @@ class ArticlesDbAdapter implements DataDbAdapter
         //Double check
         //sometimes group name exist e.g. größe = grösse
         if (isset($groupData['name'])) {
-            $groupModel = $this->getManager()
-                    ->getRepository('Shopware\Models\Article\Configurator\Group')
-                    ->findOneBy(array('name' => $groupData['name']));
+            $groupModel = $this->getManager()->getRepository('Shopware\Models\Article\Configurator\Group')->findOneBy(
+                    array('name' => $groupData['name'])
+                );
             if ($groupModel) {
                 $groupId = $groupModel->getId();
                 foreach ($availableGroups as $availableGroup) {
@@ -1364,8 +1482,10 @@ class ArticlesDbAdapter implements DataDbAdapter
     {
         /**@var $availableOption Option */
         foreach ($availableOptions as $availableOption) {
-            if ( ($availableOption->getName() == $optionData['name'] && $optionData['name'] !== null)
-                || ($availableOption->getId() == $optionData['id'] && $optionData['id'] !== null)) {
+            if (($availableOption->getName(
+                    ) == $optionData['name'] && $optionData['name'] !== null) || ($availableOption->getId(
+                    ) == $optionData['id'] && $optionData['id'] !== null)
+            ) {
 
                 return $availableOption;
             }
@@ -1373,7 +1493,7 @@ class ArticlesDbAdapter implements DataDbAdapter
 
         return false;
     }
-    
+
     public function isEntityExistsByName(ArrayCollection $models, $entity)
     {
         foreach ($models as $model) {
@@ -1384,7 +1504,7 @@ class ArticlesDbAdapter implements DataDbAdapter
 
         return false;
     }
-    
+
     /**
      * @param array $configurator
      * @param array $configuratorSet
@@ -1392,38 +1512,39 @@ class ArticlesDbAdapter implements DataDbAdapter
     public function createConfiguratorGroupsAndOptionsFromVariant($configurator, $configuratorSet)
     {
         $groupModel = $this->getConfiguratorGroup($configurator);
-        
+
         if (!$groupModel->getName()) {
             $groupModel->setName($configurator['configGroupName']);
         }
-        
+
         $groups = $configuratorSet->getGroups();
         $groups->add($groupModel);
         $configuratorSet->setGroups($groups);
 
         if ($groupModel->getId()) {
-            $optionModel = $this->getManager()
-                            ->getRepository('Shopware\Models\Article\Configurator\Option')->findOneBy(array(
-                'name' => $configurator['configOptionName'],
-                'groupId' => $groupModel->getId()
-            ));
+            $optionModel = $this->getManager()->getRepository('Shopware\Models\Article\Configurator\Option')->findOneBy(
+                    array(
+                        'name' => $configurator['configOptionName'],
+                        'groupId' => $groupModel->getId()
+                    )
+                );
         }
 
         if (!$optionModel) {
             $optionModel = $this->createConfiguratorOption($configurator, $groupModel);
         }
-        
+
         $options = $configuratorSet->getOptions();
         $options->add($optionModel);
         $configuratorSet->setOptions($options);
-        
+
         $this->getManager()->persist($configuratorSet);
         $this->getManager()->flush();
     }
 
     /**
      * Returns configurator group
-     * 
+     *
      * @param array $data
      * @return \Shopware\Models\Article\Configurator\Group
      * @throws \Exception
@@ -1432,34 +1553,38 @@ class ArticlesDbAdapter implements DataDbAdapter
     {
         $groupPosition = 0;
         if (isset($data['configGroupId'])) {
-            $groupModel = $this->getManager()
-                    ->getRepository('Shopware\Models\Article\Configurator\Group')
-                    ->find($data['configGroupId']);
+            $groupModel = $this->getManager()->getRepository('Shopware\Models\Article\Configurator\Group')->find(
+                    $data['configGroupId']
+                );
             if (!$groupModel) {
-                $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/articles/configuratorGroup_not_found', 'ConfiguratorGroup by id %s not found');
+                $message = SnippetsHelper::getNamespace()->get(
+                        'adapters/articles/configuratorGroup_not_found',
+                        'ConfiguratorGroup by id %s not found'
+                    );
                 throw new \Exception(sprintf($message, $data['configGroupId']));
             }
         } elseif (isset($data['configGroupName'])) {
-            $groupModel = $this->getManager()
-                    ->getRepository('Shopware\Models\Article\Configurator\Group')
-                    ->findOneBy(array('name' => $data['configGroupName']));
+            $groupModel = $this->getManager()->getRepository('Shopware\Models\Article\Configurator\Group')->findOneBy(
+                    array('name' => $data['configGroupName'])
+                );
 
             if (!$groupModel) {
                 $groupModel = new Configurator\Group();
                 $groupModel->setPosition($groupPosition);
             }
         } else {
-            $message = SnippetsHelper::getNamespace()
-                    ->get('adapters/articles/provide_groupname_groupid', 'Please provide groupname or groupId');
+            $message = SnippetsHelper::getNamespace()->get(
+                    'adapters/articles/provide_groupname_groupid',
+                    'Please provide groupname or groupId'
+                );
             throw new \Exception($message);
         }
 
         return $groupModel;
     }
-    
+
     /**
-     * 
+     *
      * @param array $data
      * @param Shopware\Models\Article\Configurato\Group
      */
@@ -1469,18 +1594,18 @@ class ArticlesDbAdapter implements DataDbAdapter
         $option->setPosition(0);
         $option->setName($data['configOptionName']);
         $option->setGroup($group);
-        
+
         return $option;
     }
 
     public function isSimilarArticleExists($article, $similarId)
     {
-        foreach ($article->getSimilar() as $similar){
+        foreach ($article->getSimilar() as $similar) {
             if ($similar->getId() == $similarId) {
                 return true;
             }
         }
-        
+
         return false;
     }
 
@@ -1508,14 +1633,17 @@ class ArticlesDbAdapter implements DataDbAdapter
             $method = 'get' . ucfirst($property);
 
             if (!method_exists($entity, $method)) {
-                $message = SnippetsHelper::getNamespace()
-                            ->get('adapters/articles/method_not_found', 'Method %s not found on entity %s');
+                $message = SnippetsHelper::getNamespace()->get(
+                        'adapters/articles/method_not_found',
+                        'Method %s not found on entity %s'
+                    );
                 throw new \Exception(sprintf($message, $method, get_class($entity)));
             }
             if ($entity->$method() == $value) {
                 return $entity;
             }
         }
+
         return null;
     }
 
@@ -1523,7 +1651,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     {
         return array_merge($this->getArticleVariantColumns(), $this->getVariantColumns());
     }
-    
+
     public function getArticleVariantColumns()
     {
         return array(
@@ -1555,7 +1683,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             'filterGroup.name as filterGroupName',
         );
     }
-    
+
     public function getArticleAttributes()
     {
         $stmt = Shopware()->Db()->query("SHOW COLUMNS FROM `s_articles_attributes`");
@@ -1583,11 +1711,11 @@ class ArticlesDbAdapter implements DataDbAdapter
 
         return $attributesSelect;
     }
-    
+
     public function getColumns($section)
     {
         $method = 'get' . ucfirst($section) . 'Columns';
-        
+
         if (method_exists($this, $method)) {
             return $this->{$method}();
         }
@@ -1690,7 +1818,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             'prices.customerGroupKey as priceGroup',
         );
     }
-    
+
     public function getImageColumns()
     {
         return array(
@@ -1702,7 +1830,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             'images.mediaId as mediaId',
         );
     }
-    
+
     public function getPropertyValueColumns()
     {
         return array(
@@ -1714,25 +1842,25 @@ class ArticlesDbAdapter implements DataDbAdapter
             'propertyValues.valueNumeric as valueNumeric',
         );
     }
-    
+
     public function getSimilarColumns()
     {
-         return array(
+        return array(
             'similar.id as similarId',
             'similarDetail.number as ordernumber',
             'article.id as articleId',
         );
     }
-    
+
     public function getAccessoryColumns()
     {
-         return array(
+        return array(
             'accessory.id as accessoryId',
             'accessoryDetail.number as ordernumber',
             'article.id as articleId',
         );
     }
-    
+
     public function getConfiguratorColumns()
     {
         return array(
@@ -1750,18 +1878,18 @@ class ArticlesDbAdapter implements DataDbAdapter
 
     public function getCategoryColumns()
     {
-         return array(
+        return array(
             'categories.id as categoryId',
             'article.id as articleId',
         );
     }
-    
+
     public function getTranslationColumns()
     {
-         return array(
+        return array(
             'article.id as articleId',
 //             'translation.objectdata',
-             'translation.objectlanguage as languageId',
+            'translation.objectlanguage as languageId',
 //            'translation.languageID as languageId',
             'translation.name as name',
             'translation.keywords as keywords',
@@ -1800,7 +1928,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     /**
      * Returns/Creates mapper depend on the key
      * Exmaple: articles, variants, prices ...
-     * 
+     *
      * @param string $key
      * @return array
      */
@@ -1830,7 +1958,7 @@ class ArticlesDbAdapter implements DataDbAdapter
 
         return false;
     }
-    
+
     public function getCategoryIdCollection()
     {
         return $this->categoryIdCollection;
@@ -1890,7 +2018,7 @@ class ArticlesDbAdapter implements DataDbAdapter
 
     /**
      * Returns article repository
-     * 
+     *
      * @return \Shopware\Models\Article\Article
      */
     public function getRepository()
@@ -1904,7 +2032,7 @@ class ArticlesDbAdapter implements DataDbAdapter
 
     /**
      * Returns deatil repository
-     * 
+     *
      * @return \Shopware\Models\Article\Detail
      */
     public function getVariantRepository()
@@ -1932,7 +2060,7 @@ class ArticlesDbAdapter implements DataDbAdapter
 
     /**
      * Returns group repository
-     * 
+     *
      * @return \Shopware\Models\Customer\Group
      */
     public function getGroupRepository()
@@ -1943,10 +2071,10 @@ class ArticlesDbAdapter implements DataDbAdapter
 
         return $this->groupRepository;
     }
-    
+
     /**
      * Returns media repository
-     * 
+     *
      * @return \Shopware\Models\Media\Media
      */
     public function getMediaRepository()
@@ -1996,19 +2124,21 @@ class ArticlesDbAdapter implements DataDbAdapter
     public function getArticleBuilder($columns, $ids)
     {
         $articleBuilder = $this->getManager()->createQueryBuilder();
-        $articleBuilder->select($columns)
-                ->from('Shopware\Models\Article\Detail', 'variant')
-                ->join('variant.article', 'article')
-                ->leftJoin('Shopware\Models\Article\Detail', 'mv', \Doctrine\ORM\Query\Expr\Join::WITH, 'mv.articleId=article.id AND mv.kind=1')
-                ->leftJoin('variant.attribute', 'attribute')
-                ->leftJoin('article.tax', 'articleTax')
-                ->leftJoin('article.supplier', 'supplier')
-                ->leftJoin('article.propertyGroup', 'filterGroup')
-                ->leftJoin('article.esds', 'articleEsd')
-                ->leftJoin('variant.unit', 'variantsUnit')
-                ->where('variant.id IN (:ids)')
-                ->setParameter('ids', $ids)
-                ->orderBy("variant.kind");
+        $articleBuilder->select($columns)->from('Shopware\Models\Article\Detail', 'variant')->join(
+                'variant.article',
+                'article'
+            )->leftJoin(
+                'Shopware\Models\Article\Detail',
+                'mv',
+                \Doctrine\ORM\Query\Expr\Join::WITH,
+                'mv.articleId=article.id AND mv.kind=1'
+            )->leftJoin('variant.attribute', 'attribute')->leftJoin('article.tax', 'articleTax')->leftJoin(
+                'article.supplier',
+                'supplier'
+            )->leftJoin('article.propertyGroup', 'filterGroup')->leftJoin('article.esds', 'articleEsd')->leftJoin(
+                'variant.unit',
+                'variantsUnit'
+            )->where('variant.id IN (:ids)')->setParameter('ids', $ids)->orderBy("variant.kind");
 
         return $articleBuilder;
     }
@@ -2016,14 +2146,13 @@ class ArticlesDbAdapter implements DataDbAdapter
     public function getPriceBuilder($columns, $ids)
     {
         $priceBuilder = $this->getManager()->createQueryBuilder();
-        $priceBuilder->select($columns)
-                ->from('Shopware\Models\Article\Detail', 'variant')
-                ->join('variant.article', 'article')
-                ->leftJoin('variant.prices', 'prices')
-                ->leftJoin('prices.customerGroup', 'customerGroup')
-                ->leftJoin('article.tax', 'articleTax')
-                ->where('variant.id IN (:ids)')
-                ->setParameter('ids', $ids);
+        $priceBuilder->select($columns)->from('Shopware\Models\Article\Detail', 'variant')->join(
+                'variant.article',
+                'article'
+            )->leftJoin('variant.prices', 'prices')->leftJoin('prices.customerGroup', 'customerGroup')->leftJoin(
+                'article.tax',
+                'articleTax'
+            )->where('variant.id IN (:ids)')->setParameter('ids', $ids);
 
         return $priceBuilder;
     }
@@ -2031,14 +2160,12 @@ class ArticlesDbAdapter implements DataDbAdapter
     public function getImageBuilder($columns, $ids)
     {
         $imageBuilder = $this->getManager()->createQueryBuilder();
-        $imageBuilder->select($columns)
-                ->from('Shopware\Models\Article\Detail', 'variant')
-                ->join('variant.article', 'article')
-                ->leftjoin('article.images', 'images')
-                ->where('variant.id IN (:ids)')
-                ->andWhere('variant.kind = 1')
-                ->andWhere('images.id IS NOT NULL')
-                ->setParameter('ids', $ids);
+        $imageBuilder->select($columns)->from('Shopware\Models\Article\Detail', 'variant')->join(
+                'variant.article',
+                'article'
+            )->leftjoin('article.images', 'images')->where('variant.id IN (:ids)')->andWhere(
+                'variant.kind = 1'
+            )->andWhere('images.id IS NOT NULL')->setParameter('ids', $ids);
 
         return $imageBuilder;
     }
@@ -2046,14 +2173,12 @@ class ArticlesDbAdapter implements DataDbAdapter
     public function getPropertyValueBuilder($columns, $ids)
     {
         $propertyValueBuilder = $this->getManager()->createQueryBuilder();
-        $propertyValueBuilder->select($columns)
-                ->from('Shopware\Models\Article\Detail', 'variant')
-                ->join('variant.article', 'article')
-                ->leftjoin('article.propertyValues', 'propertyValues')
-                ->where('variant.id IN (:ids)')
-                ->andWhere('variant.kind = 1')
-                ->andWhere('propertyValues.id IS NOT NULL')
-                ->setParameter('ids', $ids);
+        $propertyValueBuilder->select($columns)->from('Shopware\Models\Article\Detail', 'variant')->join(
+                'variant.article',
+                'article'
+            )->leftjoin('article.propertyValues', 'propertyValues')->where('variant.id IN (:ids)')->andWhere(
+                'variant.kind = 1'
+            )->andWhere('propertyValues.id IS NOT NULL')->setParameter('ids', $ids);
 
         return $propertyValueBuilder;
     }
@@ -2061,17 +2186,18 @@ class ArticlesDbAdapter implements DataDbAdapter
     public function getConfiguratorBuilder($columns, $ids)
     {
         $configBuilder = $this->getManager()->createQueryBuilder();
-        $configBuilder->select($columns)
-                ->from('Shopware\Models\Article\Detail', 'variant')
-                ->join('variant.article', 'article')
-                ->leftjoin('variant.configuratorOptions', 'configuratorOptions')
-                ->leftjoin('configuratorOptions.group', 'configuratorGroup')
-                ->leftjoin('article.configuratorSet', 'configuratorSet')
-                ->where('variant.id IN (:ids)')
-                ->andWhere('configuratorOptions.id IS NOT NULL')
-                ->andWhere('configuratorGroup.id IS NOT NULL')
-                ->andWhere('configuratorSet.id IS NOT NULL')
-                ->setParameter('ids', $ids);
+        $configBuilder->select($columns)->from('Shopware\Models\Article\Detail', 'variant')->join(
+                'variant.article',
+                'article'
+            )->leftjoin('variant.configuratorOptions', 'configuratorOptions')->leftjoin(
+                'configuratorOptions.group',
+                'configuratorGroup'
+            )->leftjoin('article.configuratorSet', 'configuratorSet')->where('variant.id IN (:ids)')->andWhere(
+                'configuratorOptions.id IS NOT NULL'
+            )->andWhere('configuratorGroup.id IS NOT NULL')->andWhere('configuratorSet.id IS NOT NULL')->setParameter(
+                'ids',
+                $ids
+            );
 
         return $configBuilder;
     }
@@ -2079,16 +2205,14 @@ class ArticlesDbAdapter implements DataDbAdapter
     public function getSimilarBuilder($columns, $ids)
     {
         $similarBuilder = $this->getManager()->createQueryBuilder();
-        $similarBuilder->select($columns)
-                ->from('Shopware\Models\Article\Detail', 'variant')
-                ->join('variant.article', 'article')
-                ->leftjoin('article.similar', 'similar')
-                ->leftjoin('similar.details', 'similarDetail')
-                ->where('variant.id IN (:ids)')
-                ->andWhere('variant.kind = 1')
-                ->andWhere('similarDetail.kind = 1')
-                ->andWhere('similar.id IS NOT NULL')
-                ->setParameter('ids', $ids);
+        $similarBuilder->select($columns)->from('Shopware\Models\Article\Detail', 'variant')->join(
+                'variant.article',
+                'article'
+            )->leftjoin('article.similar', 'similar')->leftjoin('similar.details', 'similarDetail')->where(
+                'variant.id IN (:ids)'
+            )->andWhere('variant.kind = 1')->andWhere('similarDetail.kind = 1')->andWhere(
+                'similar.id IS NOT NULL'
+            )->setParameter('ids', $ids);
 
         return $similarBuilder;
     }
@@ -2096,16 +2220,14 @@ class ArticlesDbAdapter implements DataDbAdapter
     public function getAccessoryBuilder($columns, $ids)
     {
         $accessoryBuilder = $this->getManager()->createQueryBuilder();
-        $accessoryBuilder->select($columns)
-                ->from('Shopware\Models\Article\Detail', 'variant')
-                ->join('variant.article', 'article')
-                ->leftjoin('article.related', 'accessory')
-                ->leftjoin('accessory.details', 'accessoryDetail')
-                ->where('variant.id IN (:ids)')
-                ->andWhere('variant.kind = 1')
-                ->andWhere('accessoryDetail.kind = 1')
-                ->andWhere('accessory.id IS NOT NULL')
-                ->setParameter('ids', $ids);
+        $accessoryBuilder->select($columns)->from('Shopware\Models\Article\Detail', 'variant')->join(
+                'variant.article',
+                'article'
+            )->leftjoin('article.related', 'accessory')->leftjoin('accessory.details', 'accessoryDetail')->where(
+                'variant.id IN (:ids)'
+            )->andWhere('variant.kind = 1')->andWhere('accessoryDetail.kind = 1')->andWhere(
+                'accessory.id IS NOT NULL'
+            )->setParameter('ids', $ids);
 
         return $accessoryBuilder;
     }
@@ -2113,14 +2235,11 @@ class ArticlesDbAdapter implements DataDbAdapter
     public function getCategoryBuilder($columns, $ids)
     {
         $categoryBuilder = $this->getManager()->createQueryBuilder();
-        $categoryBuilder->select($columns)
-                ->from('Shopware\Models\Article\Article', 'article')
-                ->leftjoin('article.categories', 'categories')
-                ->where('article.id IN (:ids)')
-                ->andWhere('categories.id IS NOT NULL')
-                ->setParameter('ids', $ids);
+        $categoryBuilder->select($columns)->from('Shopware\Models\Article\Article', 'article')->leftjoin(
+                'article.categories',
+                'categories'
+            )->where('article.id IN (:ids)')->andWhere('categories.id IS NOT NULL')->setParameter('ids', $ids);
 
         return $categoryBuilder;
     }
-
 }
