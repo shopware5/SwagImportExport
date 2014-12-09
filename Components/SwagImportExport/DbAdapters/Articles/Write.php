@@ -79,17 +79,16 @@ class Write
             $createArticle = true;
         }
 
-        $builder = $this->getArticleBuilder($article, $createArticle ? $articleId : false);
+        $builder = $this->getQueryBuilderForEntity($article, $createArticle ? $articleId : false, 'Shopware\Models\Article\Article');
         $builder->execute();
         $articleId = $this->db->lastInsertId();
 
         $article['number'] = $article['orderNumber'];
         $article['articleId'] = $articleId;
         $article['kind'] = $createArticle ? 1 : 2;
-        $builder = $this->getArticleDetailBuilder($article, $articleId, $detailId);
+        $builder = $this->getQueryBuilderForEntity($article, $detailId, 'Shopware\Models\Article\Detail');
         $builder->execute();
-        error_log(print_r($builder->getSQL(), true) . "\n", 3, Shopware()->DocPath() . '/../error.log');
-        error_log(print_r($builder->getParameters(), true) . "\n", 3, Shopware()->DocPath() . '/../error.log');
+
         if (!$detailId) {
             $detailId = $this->db->lastInsertId();
         }
@@ -99,29 +98,29 @@ class Write
         }
     }
 
-    protected function getArticleDetailBuilder($article, $articleId, $detailId)
+    protected function getQueryBuilderForEntity($data, $entity, $primaryId)
     {
+        $metaData = Shopware()->Models()->getClassMetadata($entity);
+        $table = $metaData->table['name'];
+
         $builder = $this->getQueryBuilder();
 
-        if ($detailId) {
-            $builder->update('s_articles_details');
-            $builder->where('id = ' . $builder->createNamedParameter($detailId, \PDO::PARAM_INT));
+        if ($primaryId) {
+            $builder->update($table);
+            $builder->where('id = ' . $builder->createNamedParameter($primaryId, \PDO::PARAM_INT));
         } else {
-            $builder->insert('s_articles_details');
+            $builder->insert($table);
         }
 
-        foreach ($article as $field => $value) {
-            $key = $this->mapFieldName($field, 'Shopware\Models\Article\Detail');
-            if (!$key) {
+        foreach ($data as $field => $value) {
+            if (!array_key_exists($field, $metaData->fieldMappings)) {
                 continue;
             }
 
-            $type = $this->guessType($value, $field, 'Shopware\Models\Article\Article');
-                $value = $builder->createNamedParameter(
-                    empty($value) && $type == \PDO::PARAM_NULL ? "NULL" : $value,
-                    $type
-                );
-            if ($detailId) {
+            $key = $metaData->fieldMappings[$field]['columnName'];
+
+            $value = $this->getNamedParameter($value, $key, $metaData, $builder);
+            if ($primaryId) {
                 $builder->set($key, $value);
             } else {
                 $builder->setValue($key, $value);
@@ -131,41 +130,9 @@ class Write
         return $builder;
     }
 
-    protected function getArticleBuilder($article, $articleId = null)
+
+    protected function getNamedParameter($value, $key, $metaData, QueryBuilder $builder)
     {
-        $builder = $this->getQueryBuilder();
-
-        if ($articleId) {
-            $builder->update('s_articles');
-            $builder->where('id = ' . $builder->createNamedParameter($articleId, \PDO::PARAM_INT));
-        } else {
-            $builder->insert('s_articles');
-        }
-
-        foreach ($article as $field => $value) {
-            $key = $this->mapFieldName($field, 'Shopware\Models\Article\Article');
-            if (!$key) {
-                continue;
-            }
-
-            $type = $this->guessType($value, $field, 'Shopware\Models\Article\Article');
-            $value = $builder->createNamedParameter(
-                empty($value) && $type == \PDO::PARAM_NULL ? "NULL" : $value,
-                $type
-            );
-            if ($articleId) {
-                $builder->set($key, $value);
-            } else {
-                $builder->setValue($key, $value);
-            }
-        }
-
-        return $builder;
-    }
-
-    protected function guessType($value, $key, $class)
-    {
-        $metaData = Shopware()->Models()->getClassMetadata($class);
         if (!array_key_exists($key, $metaData->fieldMappings)) {
             return false;
         }
@@ -180,26 +147,24 @@ class Write
             'decimal' => \PDO::PARAM_INT,
         );
 
-        $nullable = $metaData->fieldMappings[$key]['nullable'];
+        $nullAble = $metaData->fieldMappings[$key]['nullable'];
 
-        if (empty($value) && $nullable) {
-            return \PDO::PARAM_NULL;
+        // Check if nullable
+        if (empty($value) && $nullAble) {
+            return $builder->createNamedParameter(
+                "NULL",
+                \PDO::PARAM_NULL
+            );
         }
 
-        if (!array_key_exists($metaData->fieldMappings[$key]['type'], $pdoTypeMapping)) {
-            throw new \RuntimeException("Type {$metaData->fieldMappings[$key]['type']} not found");
+        $type = $metaData->fieldMappings[$key]['type'];
+        if (!array_key_exists($type, $pdoTypeMapping)) {
+            throw new \RuntimeException("Type {$type} not found");
         }
 
-        return $pdoTypeMapping[$metaData->fieldMappings[$key]['type']];
-    }
-
-    protected function mapFieldName($key, $entity)
-    {
-        $metaData = Shopware()->Models()->getClassMetadata($entity);
-        if (!array_key_exists($key, $metaData->fieldMappings)) {
-            return false;
-        }
-
-        return $metaData->fieldMappings[$key]['columnName'];
+        return $builder->createNamedParameter(
+            $value,
+            $pdoTypeMapping[]
+        );
     }
 }
