@@ -54,9 +54,9 @@ class FlattenTransformer implements DataTransformerAdapter
      */
     public function transformBackward($data)
     {
-        $flatData = Shopware()->Events()->filter(
+        $data = Shopware()->Events()->filter(
                 'Shopware_Components_SwagImportExport_Transoformers_FlattenTransformer_TransformBackward',
-                $flatData,
+                $data,
                 array('subject' => $this)
         );
 
@@ -334,8 +334,35 @@ class FlattenTransformer implements DataTransformerAdapter
                 }
                 
                 return $configs;
+
+            } else if ($node['adapter'] == 'propertyValue') {
+                $mapper = $this->createMapperFromProfile($node);
+
+                foreach ($mapper as $key => $value) {
+                    $collectedData[$key] = $this->getDataValue($data, $key);
+                }
+
+                $newData = array();
+                foreach ($collectedData as $key => $groupValue) {
+                    if ($mapper[$key] == 'propertyGroupName') {
+                        $propertyGroupNameKey = $key;
+                        $propertyGroupName = $groupValue;
+                    } else {
+                        $values = explode('|', $groupValue);
+                        foreach ($values as $index => $value) {
+                            $newData[$index][$key] = $value;
+                        }
+                    }
+                }
+
+                foreach ($newData as $key => $value) {
+                    $newData[$key][$propertyGroupNameKey] = $propertyGroupName;
+                }
+
+                unset($propertyGroupName);
                 
-            }else if($node['adapter'] === 'translation') {
+                return $newData;
+            } else if ($node['adapter'] === 'translation') {
                 $translationName = $this->findNodeByShopwareField($node, 'name');
                 $translationDescription = $this->findNodeByShopwareField($node, 'description');
                 $translationDescriptionLong = $this->findNodeByShopwareField($node, 'descriptionLong');
@@ -817,7 +844,30 @@ class FlattenTransformer implements DataTransformerAdapter
                 }
 
                 unset($this->iterationTempData);
-                
+            } elseif ($this->iterationParts[$path] == 'propertyValue') {
+                $propertyValueProfile = $this->getNodeFromProfile($this->getMainIterationPart(), 'propertyValue');
+                $propertyValueTreeMapper = $this->createMapperFromProfile($propertyValueProfile);
+                $propertyValueFlatMapper = $this->treeToFlat($propertyValueTreeMapper);
+
+                $tempCollection = array();
+                foreach ($node as $propertyValue) {
+                    foreach ($propertyValue as $key => $value) {
+                        if ($propertyValueFlatMapper[$key] === 'propertyGroupName') {
+                            $tempCollection[$key] = $value;
+                        } else {
+                            $tempCollection[$key][] = $value;
+                        }
+                    }
+                }
+
+                foreach ($tempCollection as $collection) {
+                    if (is_array($collection)) {
+                        $collection = implode('|', $collection);
+                    }
+                    $this->saveTempData($collection);
+                }
+
+                unset($tempCollection);
             } elseif ($this->iterationParts[$path] == 'translation') {
                 $translationProfile = $this->getNodeFromProfile($this->getMainIterationPart(), 'translation');
                 $translationTreeMapper = $this->createMapperFromProfile($translationProfile);
