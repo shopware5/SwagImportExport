@@ -21,6 +21,8 @@ class ArticleWriter
         $this->connection = Shopware()->Models()->getConnection();
         $this->db = Shopware()->Db();
         $this->dbalHelper = new DbalHelper();
+
+        $this->taxRates = $this->getTaxRates();
     }
 
     public function write($article)
@@ -32,6 +34,7 @@ class ArticleWriter
             );
             throw new AdapterException($message);
         }
+
         return $this->insertOrUpdateArticle($article);
     }
 
@@ -56,6 +59,8 @@ class ArticleWriter
             $createArticle = true;
         }
 
+        $article = $this->setDefaultValues($article, $createArticle);
+
         // insert article
         $builder = $this->dbalHelper->getQueryBuilderForEntity(
             $article,
@@ -63,7 +68,9 @@ class ArticleWriter
             $createArticle ? false : $articleId
         );
         $builder->execute();
-        $articleId = $this->db->lastInsertId();
+        if ($createArticle) {
+            $articleId = $this->connection->lastInsertId();
+        }
 
         // insert detail
         $article['number'] = $article['orderNumber'];
@@ -73,7 +80,7 @@ class ArticleWriter
         $builder->execute();
 
         if (!$detailId) {
-            $detailId = $this->db->lastInsertId();
+            $detailId = $this->connection->lastInsertId();
         }
 
         // set reference
@@ -117,5 +124,28 @@ class ArticleWriter
         }
 
         return array($mainDetailId, $articleId, $detailId);
+    }
+
+    protected function setDefaultValues($article, $create)
+    {
+        if ($create && empty($article['taxId']) && empty($article['tax'])) {
+            // todo: read default tax rate from config
+            $article['taxId'] = $this->taxRates[0];
+        }
+        if (isset($article['tax'])) {
+            $article['taxId'] = $this->taxRates[$article['tax']];
+        }
+
+        return $article;
+    }
+
+    protected function getTaxRates()
+    {
+        $tax = array();
+        $result = $this->connection->fetchAll('SELECT id, tax FROM s_core_tax');
+        foreach ($result as $row) {
+            $tax[$row['tax']] = $row['id'];
+        }
+        return $tax;
     }
 }

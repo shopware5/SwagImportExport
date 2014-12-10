@@ -23,39 +23,38 @@ class PriceWriter
 
     public function write($articleId, $articleDetailId, $prices)
     {
-        $result = $this->connection->fetchAssoc('SELECT taxID from s_articles WHERE id = ?', array($articleId));
-        if (empty($result)) {
-            throw new AdapterException("Tax for article $articleId not found");
-        }
-        $tax = $result['tax'];
-
+        $tax = $this->getArticleTaxRate($articleId);
 
         foreach ($prices as $price) {
             $price = $this->setDefaultValues($price);
             $this->checkRequirements($price);
 
+            // skip empty prices for non-default customer groups
+            if ((!isset($price['price']) || empty($price['price'])) && $price['priceGroup'] != 'EK') {
+                continue;
+            }
+
+
             $priceId = null;
-            $result = $this->connection->fetchColumn('
-                SELECT id
-                FROM s_articles_prices
-                WHERE articleID = ? AND pricegroup = ? AND `from` = ?
-            ', array($articleId, $price['priceGroup'], $price['from']));
+            $result = $this->connection->fetchColumn(
+                '
+                    SELECT id
+                    FROM s_articles_prices
+                    WHERE articleID = ? AND pricegroup = ? AND `from` = ?
+                ',
+                array($articleId, $price['priceGroup'], $price['from'])
+            );
             if (!empty($result)) {
                 $priceId = $result['id'];
             }
 
             $newPrice = $priceId == 0;
+            $price['articleId'] = $articleId;
+            $price['articleDetailsId'] = $articleDetailId;
+            $price['customerGroupKey'] = $price['priceGroup'];
             $price = $this->calculatePrice($price, $newPrice, $tax);
-
             $builder = $this->dbalHelper->getQueryBuilderForEntity($price, 'Shopware\Models\Article\Price', $priceId);
             $builder->execute();
-
-
-
-
-
-
-
         }
     }
 
@@ -91,13 +90,11 @@ class PriceWriter
         }
 
         return $price;
-
-
     }
 
     protected function checkRequirements($price)
     {
-        if (!in_array($price['priceGroup'], $this->customerGroups)) {
+        if (!array_key_exists($price['priceGroup'], $this->customerGroups)) {
             $message = SnippetsHelper::getNamespace()->get(
                 'adapters/customerGroup_not_found',
                 'Customer Group by key %s not found for article %s'
@@ -105,14 +102,13 @@ class PriceWriter
             throw new AdapterException(sprintf($message, $price['priceGroup'], ''));
         }
 
-        if (!isset($price['price']) && empty($price['price'])) {
+        if ((!isset($price['price']) || empty($price['price'])) && $price['priceGroup'] == 'EK') {
             $message = SnippetsHelper::getNamespace()->get(
                 'adapters/articles/incorrect_price',
                 'Price value is incorrect for article with nubmer %s'
             );
             throw new AdapterException(sprintf($message, ''));
         }
-
 
         if ($price['from'] <= 0) {
             $message = SnippetsHelper::getNamespace()->get(
@@ -155,13 +151,29 @@ class PriceWriter
     private function getCustomerGroup()
     {
         $groups = array();
-        $result = $this->connection->fetchAssoc(
+        $result = $this->connection->fetchAll(
             'SELECT groupkey, taxinput FROM s_core_customergroups'
         );
 
         foreach ($result as $row) {
             $groups[$row['groupkey']] = $row['taxinput'];
         }
+
         return $groups;
+    }
+
+    /**
+     * @param $articleId
+     * @return array
+     * @throws \Shopware\Components\SwagImportExport\Exception\AdapterException
+     */
+    protected function getArticleTaxRate($articleId)
+    {
+        $result = $this->connection->fetchColumn('SELECT taxID from s_articles WHERE id = ?', array($articleId));
+        if (empty($result)) {
+            throw new AdapterException("Tax for article $articleId not found");
+        }
+
+        return (int)$result['tax'];
     }
 }

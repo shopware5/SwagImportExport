@@ -8,8 +8,11 @@ use Shopware\Components\SwagImportExport\QueryBuilder\QueryBuilder;
 class DbalHelper
 {
 
-    /** @var \Doctrine\DBAL\Connection  */
+    /** @var \Doctrine\DBAL\Connection */
     protected $connection;
+
+    /** @var \Doctrine\DBAL\Driver\Statement[]  */
+    protected $statements = array();
 
     public function __construct()
     {
@@ -20,6 +23,25 @@ class DbalHelper
     {
         return new QueryBuilder($this->connection);
     }
+
+//    public function execute(QueryBuilder $builder)
+//    {
+//        $builder->execute();return;
+//        $hash = md5(serialize($builder->getQueryParts()));
+//
+//        if ($this->statements[$hash]) {
+//            $stmt = $this->statements[$hash];
+//        } else {
+//            $stmt = $this->connection->prepare($builder->getSql());
+//            $this->statements[$hash] =  $stmt;
+//        }
+//
+////        error_log(print_r($builder->getSQL(), true) . "\n", 3, Shopware()->DocPath() . '/../error.log');
+////        error_log(print_r($builder->getParameters(), true) . "\n", 3, Shopware()->DocPath() . '/../error.log');
+//
+//        $stmt->execute($builder->getParameters());
+//
+//    }
 
     public function getQueryBuilderForEntity($data, $entity, $primaryId)
     {
@@ -39,7 +61,7 @@ class DbalHelper
                 continue;
             }
 
-            $key = $metaData->fieldMappings[$field]['columnName'];
+            $key = $this->connection->quoteIdentifier($metaData->fieldMappings[$field]['columnName']);
 
             $value = $this->getNamedParameter($value, $field, $metaData, $builder);
             if ($primaryId) {
@@ -48,8 +70,6 @@ class DbalHelper
                 $builder->setValue($key, $value);
             }
         }
-
-        error_log(print_r($builder->getSQL(), true)."\n", 3, Shopware()->DocPath().'/../error.log');
 
         return $builder;
     }
@@ -63,7 +83,8 @@ class DbalHelper
             'datetime' => \PDO::PARAM_STR,
             'boolean' => \PDO::PARAM_INT,
             'integer' => \PDO::PARAM_INT,
-            'decimal' => \PDO::PARAM_INT,
+            'decimal' => \PDO::PARAM_STR,
+            'float' => \PDO::PARAM_STR,
         );
 
         $nullAble = $metaData->fieldMappings[$key]['nullable'];
