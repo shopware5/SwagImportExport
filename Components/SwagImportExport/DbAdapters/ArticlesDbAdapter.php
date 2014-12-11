@@ -1041,6 +1041,10 @@ class ArticlesDbAdapter implements DataDbAdapter
                             ->get('adapters/articles/property_id_not_found', 'Property value by id %s not found for article %s');
                     throw new AdapterException(sprintf($message, $valueData['propertyGroupId'], $article->getMainDetail()->getNumber()));
                 }
+            } elseif (isset($valueData['propertyValueId'])) {
+                $value = $this->getManager()->getRepository('\Shopware\Models\Property\Value')->findOneBy(array(
+                        'id' => $valueData['propertyValueId']
+                ));
             } elseif (isset($valueData['value'])) {
                 if (isset($valueData['optionId'])) {
                     $option = $this->getManager()->getRepository('\Shopware\Models\Property\Option')->find($valueData['optionId']);
@@ -1087,13 +1091,13 @@ class ArticlesDbAdapter implements DataDbAdapter
                     $option->setFilterable(false);
                 }
 
-                // create the value
                 // If there is a filter value with matching name and option, load this value, else create a new one
                 $value = $this->getManager()->getRepository('\Shopware\Models\Property\Value')->findOneBy(array(
                     'value' => $valueData['value'],
                     'optionId' => $option->getId()
                 ));
                 if (!$value) {
+                    // create the value
                     $value = new \Shopware\Models\Property\Value($option, $valueData['value']);
                 }
                 if (isset($valueData['position'])) {
