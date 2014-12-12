@@ -40,7 +40,7 @@ class CsvFileWriter implements FileWriter
     {
         $flatData = '';
         
-        $convertor = new CsvEncoder;
+        $convertor = new CsvEncoder();
         $keys = array_keys(current($data));
         foreach ($data as $line) {
             $flatData .= $convertor->_encode_line($line, $keys) . $convertor->sSettings['newline'];
