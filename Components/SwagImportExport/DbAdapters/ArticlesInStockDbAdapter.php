@@ -61,11 +61,9 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
                 $record['price'] = $record['price'] * (100 + $record['tax']) / 100; 
             }
 
-            //Not necessary. Later the "/var/www/master/engine/Shopware/Components/Convert/Csv.php" clear it again
-//            if(!isset($record['inStock']))
-//            {
-//                $record['inStock'] = '0';
-//            }
+            if (!$record['inStock']) {
+                $record['inStock'] = '0';
+            }
         }
 
         return $result;

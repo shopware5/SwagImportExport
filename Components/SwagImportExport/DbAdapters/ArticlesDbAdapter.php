@@ -153,6 +153,10 @@ class ArticlesDbAdapter implements DataDbAdapter
             if ($record['basePrice']) {
                 $record['basePrice'] = round($record['basePrice'], 2);
             }
+
+            if (!$record['inStock']) {
+                $record['inStock'] = '0';
+            }
         }
 
         //images
@@ -1016,7 +1020,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             /**
              *  Get group - this is required.
              */
-            if (isset($valueData['propertyGroupName']) && empty($valueData['propertyGroupName'])){
+            if (isset($valueData['propertyGroupName']) || empty($valueData['propertyGroupName'])){
                 continue;
             } else if (isset($valueData['propertyGroupName'])) {
                 $propertyGroup = $propertyRepository->findOneBy(array('name' => $valueData['propertyGroupName']));
