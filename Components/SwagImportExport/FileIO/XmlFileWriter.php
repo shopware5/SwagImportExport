@@ -3,6 +3,7 @@
 namespace Shopware\Components\SwagImportExport\FileIO;
 
 use Shopware\Components\SwagImportExport\Utils\FileHelper;
+use Shopware\Components\SwagImportExport\FileIO\Encoders\XmlEncoder;
 
 /**
  * This class is responsible to generate XML file or portions of an XML file on the hard disk.
@@ -104,7 +105,7 @@ class XmlFileWriter implements FileWriter
     protected function getXmlConvertor()
     {
         if ($this->xmlConvertor === null) {
-            $this->xmlConvertor = new \Shopware_Components_Convert_Xml();
+            $this->xmlConvertor = new XmlEncoder();
         }
 
         return $this->xmlConvertor;

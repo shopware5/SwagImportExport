@@ -3,6 +3,7 @@
 namespace Shopware\Components\SwagImportExport\FileIO;
 
 use Shopware\Components\SwagImportExport\Utils\FileHelper;
+use Shopware\Components\SwagImportExport\FileIO\Encoders\CsvEncoder;
 
 class CsvFileWriter implements FileWriter
 {
@@ -39,16 +40,10 @@ class CsvFileWriter implements FileWriter
     {
         $flatData = '';
         
-        $convertor = new \Shopware_Components_Convert_Csv;
+        $convertor = new CsvEncoder();
         $keys = array_keys(current($data));
         foreach ($data as $line) {
-            $convertedLine = $convertor->_encode_line($line, $keys) . $convertor->sSettings['newline'];
-            $tmpArray = explode(';', $convertedLine);
-
-            if(empty($tmpArray[1]))
-                $tmpArray[1] = '0';
-
-            $flatData .= implode(';', $tmpArray);
+            $flatData .= $convertor->_encode_line($line, $keys) . $convertor->sSettings['newline'];
         }
         $this->getFileHelper()->writeStringToFile($fileName, $flatData, FILE_APPEND);
     }
