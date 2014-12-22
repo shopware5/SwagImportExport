@@ -30,7 +30,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
 
     public function getDefaultColumns()
     {
-        return array(
+        $translation = array(
             'd.ordernumber as articleNumber',
             't.languageID as languageId',
             't.name as name',
@@ -39,6 +39,21 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
             't.description_long as descriptionLong',
             't.metaTitle as metaTitle',
         );
+
+        $elementBuilder = $this->getElementBuilder();
+
+        $elements = $elementBuilder->getQuery()->getArrayResult();
+
+        if ($elements) {
+            $elementsCollection = array();
+            foreach ($elements as $element){
+                $elementsCollection[] = 't.' . $element['name'];
+            }
+
+            $translation = array_merge($translation, $elementsCollection);
+        }
+
+        return $translation;
     }
 
     public function getUnprocessedData()
@@ -104,6 +119,8 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
      */
     protected function prepareTranslations($translations)
     {
+        $elements = $this->getElements();
+
         $translationFields = array(
             "txtArtikel" => "name",
             "txtzusatztxt" => "additionaltext",
@@ -112,6 +129,10 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
             "txtkeywords" => "keywords",
             "metaTitle" => "metaTitle"
         );
+
+        if (!empty($elements)) {
+            $translationFields = array_merge($translationFields, $elements);
+        }
 
         if (!empty($translations)) {
             foreach ($translations as $index => $translation) {
@@ -151,6 +172,16 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
             'metaTitle',
             'packUnit'
         );
+
+        $elementBuilder = $this->getElementBuilder();
+
+        $elements = array_map(function($item) {
+            return $item['name'];
+        }, $elementBuilder->getQuery()->getArrayResult());
+
+        if ($elements) {
+            $whitelist = array_merge($whitelist, $elements);
+        }
 
         $translationWriter = new \Shopware_Components_Translation();
 
@@ -279,6 +310,33 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
                 ->setParameter('ids', $ids);
 
         return $builder;
+    }
+
+    public function getElementBuilder()
+    {
+        $repository = $this->getManager()->getRepository('Shopware\Models\Article\Element');
+
+        $builder = $repository->createQueryBuilder('attribute');
+        $builder->andWhere('attribute.translatable = 1');
+        $builder->orderBy('attribute.position');
+
+        return $builder;
+    }
+
+    public function getElements()
+    {
+        $elementBuilder = $this->getElementBuilder();
+
+        $elements = $elementBuilder->getQuery()->getArrayResult();
+
+        $elementsCollection = array();
+
+        foreach ($elements as $element) {
+            $name = $element['name'];
+            $elementsCollection[$name] = $name;
+        }
+
+        return $elementsCollection;
     }
 
 }
