@@ -70,7 +70,7 @@ class Logger
         $message = $logger->getMessage();
 
         if ($message) {
-            $newMessage = $message . '; ' . $appendMsg;
+            $newMessage = $message . "\n" . $appendMsg;
         } else {
             $newMessage = $appendMsg;
         }

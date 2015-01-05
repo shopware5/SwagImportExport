@@ -488,13 +488,13 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                 if (!$put_handle = fopen("$destPath/$filename", "w+")) {
                     $message = SnippetsHelper::getNamespace()
                                 ->get('adapters/articlesImages/could_open_dir_file', 'Could not open %s/%s for writing');
-                    throw new \Exception(sprintf($message), $destPath, $filename);
+                    throw new AdapterException(sprintf($message), $destPath, $filename);
                 }
 
                 if (!$get_handle = fopen($url, "r")) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/articlesImages/could_not_open_url', 'Could not open %s for reading');
-                    throw new \Exception(sprintf($message, $url));
+                    throw new AdapterException(sprintf($message, $url));
                 }
                 while (!feof($get_handle)) {
                     fwrite($put_handle, fgets($get_handle, 4096));
@@ -506,7 +506,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
         }
         $message = SnippetsHelper::getNamespace()
                     ->get('adapters/articlesImages/unsupported_schema', 'Unsupported schema %s.');
-        throw new \Exception(sprintf($message, $urlArray['scheme']));
+        throw new AdapterException(sprintf($message, $urlArray['scheme']));
     }
 
     public function saveMessage($message)
