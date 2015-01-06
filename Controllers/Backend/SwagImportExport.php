@@ -619,7 +619,14 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
         $dbAdapter = $dataFactory->createDbAdapter($profile->getType());
         $dataSession = $dataFactory->loadSession($postData);
-        $logger = $dataFactory->loadLogger($dataSession);
+
+        // we create the file writer that will write (partially) the result file
+        $fileFactory = $this->Plugin()->getFileIOFactory();
+        $fileHelper = $fileFactory->createFileHelper();
+        $fileWriter = $fileFactory->createFileWriter($postData, $fileHelper);
+
+        $fileLogWriter = $fileFactory->createFileWriter(array('format' => 'csv'), $fileHelper);
+        $logger = $dataFactory->loadLogger($dataSession, $fileLogWriter);
 
         //create dataIO
         $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession, $logger);
@@ -634,11 +641,6 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         
         $dataIO->initialize($colOpts, $limit, $filter, $type, $format, $maxRecordCount);
         $dataIO->setUsername($username);
-        
-        // we create the file writer that will write (partially) the result file
-        $fileFactory = $this->Plugin()->getFileIOFactory();
-        $fileHelper = $fileFactory->createFileHelper();
-        $fileWriter = $fileFactory->createFileWriter($postData, $fileHelper);
 
         $dataTransformerChain = $this->Plugin()->getDataTransformerFactory()->createDataTransformerChain(
                 $profile, array('isTree' => $fileWriter->hasTreeStructure())
@@ -650,11 +652,32 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             $post = $dataWorkflow->export($postData);
 
             $message = $post['position'] . ' ' . $profile->getType() . ' exported successfully';
+
             $logger->write($message, 'false');
+
+            $logData = array(
+                date("Y-m-d H:i:s"),
+                $post['fileName'],
+                $profile->getName(),
+                $message,
+                'true'
+            );
+
+            $logger->writeToFile($logData);
 
             return $this->View()->assign(array('s' => $profile, 'success' => true, 'data' => $post));
         } catch (Exception $e) {
             $logger->write($e->getMessage(), 'true');
+
+            $logData = array(
+                date("Y-m-d H:i:s"),
+                $postData['fileName'],
+                $profile->getName(),
+                $e->getMessage(),
+                'false'
+            );
+
+            $logger->writeToFile($logData);
 
             return $this->View()->assign(array('success' => false, 'msg' => $e->getMessage()));
         }
@@ -730,7 +753,8 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
         // we create the file reader that will read the result file
         $fileFactory = $this->Plugin()->getFileIOFactory();
-        $fileReader = $fileFactory->createFileReader($postData);
+        $fileHelper = $fileFactory->createFileHelper();
+        $fileReader = $fileFactory->createFileReader($postData, $fileHelper);
 
         //load profile
         $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
@@ -749,7 +773,8 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $dataSession = $dataFactory->loadSession($postData);
 
         /* @var $logger Shopware\Components\SwagImportExport\Logger\Logger */
-        $logger = $dataFactory->loadLogger($dataSession);
+        $fileLogWriter = $fileFactory->createFileWriter(array('format' => 'csv'), $fileHelper);
+        $logger = $dataFactory->loadLogger($dataSession, $fileLogWriter);
 
         //create dataIO
         $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession, $logger);
@@ -802,12 +827,32 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                 if ($logger->getMessage() === null) {
                     $message = $post['position'] . ' ' . $post['adapter'] . ' imported successfully';
                     $logger->write($message, 'false');
+
+                    $logData = array(
+                        date("Y-m-d H:i:s"),
+                        $inputFile,
+                        $profile->getName(),
+                        $message,
+                        'true'
+                    );
+
+                    $logger->writeToFile($logData);
                 }
             }
 
             return $this->View()->assign(array('success' => true, 'data' => $post));
         } catch (\Exception $e) {
             $logger->write($e->getMessage(), 'true');
+
+            $logData = array(
+                date("Y-m-d H:i:s"),
+                $inputFile,
+                $profile->getName(),
+                $e->getMessage(),
+                'false'
+            );
+
+            $logger->writeToFile($logData);
 
             return $this->View()->assign(array('success' => false, 'msg' => $e->getMessage()));
         }
