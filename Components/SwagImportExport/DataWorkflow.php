@@ -39,11 +39,9 @@ class DataWorkflow
 
     /**
      * @param DataIO $dataIO
-     * @param type $profile
+     * @param Profile $profile
      * @param type $transformerChain
      * @param type $fileIO
-     * @param type $dataSession
-     * @param type $dbAdapter
      */
     public function __construct($dataIO, $profile, $transformerChain, $fileIO)
     {
@@ -105,7 +103,7 @@ class DataWorkflow
         }
         
         if ($this->dataIO->getSessionState() == 'finished') {
-            // Session finished means we have exported all the ids in the sesssion.
+            // Session finished means we have exported all the ids in the session.
             // Therefore we can close the file with a footer and mark the session as done.
             $footer = $this->transformerChain->composeFooter();
             $this->fileIO->writeFooter($outputFileName, $footer);
@@ -153,11 +151,12 @@ class DataWorkflow
 
             $data = $this->transformerChain->transformBackward($records);
 
-            //inserts/update data into the datebase
+            //inserts/update data into the database
             $this->dataIO->write($data);
 
-            //writes into the log table
-            $this->dataIO->writeLog();
+            //writes into database log table
+            $profileName = $this->profile->getName();
+            $this->dataIO->writeLog($inputFile, $profileName);
 
             $this->dataIO->progressSession($batchSize);
 

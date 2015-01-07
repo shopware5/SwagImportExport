@@ -17,10 +17,12 @@ class Logger
      * @var LoggerEntity $logger
      */
     protected $logger;
+    protected $fileWriter;
 
-    public function __construct(LoggerEntity $logger)
+    public function __construct(LoggerEntity $logger, $fileWriter)
     {
         $this->logger = $logger;
+        $this->fileWriter = $fileWriter;
     }
 
     /**
@@ -40,6 +42,11 @@ class Logger
     public function getLogger()
     {
         return $this->logger;
+    }
+
+    public function getFileWriter()
+    {
+        return $this->fileWriter;
     }
 
     public function getMessage()
@@ -84,6 +91,25 @@ class Logger
 
         $this->getManager()->merge($logger);
         $this->getManager()->flush();
+    }
+
+    public function writeToFile($data)
+    {
+        $file = $this->getLogFile();
+
+        $this->getFileWriter()->writeRecords($file, array($data));
+    }
+
+    public function getLogFile()
+    {
+        $file = Shopware()->DocPath() . 'logs/importexport.log';
+        if (!file_exists($file)) {
+            $columns = array('date/time', 'file', 'profile', 'message', 'successFlag');
+
+            $this->getFileWriter()->writeHeader($file, $columns);
+        }
+
+        return $file;
     }
 
     /**

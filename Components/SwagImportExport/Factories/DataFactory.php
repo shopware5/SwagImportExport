@@ -106,11 +106,11 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
         return $session;
     }
 
-    public function loadLogger(Session $session)
+    public function loadLogger(Session $session, $fileWriter)
     {
         $loggerEntity = $session->getLogger();
 
-        $logger = $this->createLogger($loggerEntity);
+        $logger = $this->createLogger($loggerEntity, $fileWriter);
 
         return $logger;
     }
@@ -166,9 +166,9 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
         return new Session($sessionEntity);
     }
 
-    protected function createLogger(LoggerEntity $loggerEntity)
+    protected function createLogger(LoggerEntity $loggerEntity, $fileWriter)
     {
-        return new Logger($loggerEntity);
+        return new Logger($loggerEntity, $fileWriter);
     }
 
     /**
