@@ -181,6 +181,9 @@ class CommandHelper
         $fileHelper = $fileFactory->createFileHelper();
         $fileWriter = $fileFactory->createFileWriter($postData, $fileHelper);
 
+        $fileLogWriter = $fileFactory->createFileWriter(array('format' => 'csv'), $fileHelper);
+        $logger = $dataFactory->loadLogger($dataSession, $fileLogWriter);
+
         $dataTransformerChain = $this->Plugin()->getDataTransformerFactory()->createDataTransformerChain(
                 $profile, array('isTree' => $fileWriter->hasTreeStructure())
         );
@@ -188,6 +191,20 @@ class CommandHelper
         $dataWorkflow = new DataWorkflow($dataIO, $profile, $dataTransformerChain, $fileWriter);
 
         $post = $dataWorkflow->export($postData, $this->filePath);
+
+        $message = $post['position'] . ' ' . $profile->getType() . ' exported successfully';
+
+        $logger->write($message, 'false');
+
+        $logData = array(
+            date("Y-m-d H:i:s"),
+            $post['fileName'],
+            $profile->getName(),
+            $message,
+            'true'
+        );
+
+        $logger->writeToFile($logData);
 
         $this->sessionId = $post['sessionId'];
         return $post;
@@ -261,7 +278,9 @@ class CommandHelper
         $inputFile = $postData['importFile'];
 
         // we create the file reader that will read the result file
-        $fileReader = $this->Plugin()->getFileIOFactory()->createFileReader($postData, null);
+        $fileFactory = $this->Plugin()->getFileIOFactory();
+        $fileHelper = $fileFactory->createFileHelper();
+        $fileReader = $fileFactory->createFileReader($postData, null);
 
         //load profile
         $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
@@ -277,8 +296,8 @@ class CommandHelper
         $dbAdapter = $dataFactory->createDbAdapter($profile->getType());
         $dataSession = $dataFactory->loadSession($postData);
 
-        /* @var $logger Shopware\Components\SwagImportExport\Logger\Logger */
-        $logger = $dataFactory->loadLogger($dataSession);
+        $fileLogWriter = $fileFactory->createFileWriter(array('format' => 'csv'), $fileHelper);
+        $logger = $dataFactory->loadLogger($dataSession, $fileLogWriter);
 
         //create dataIO
         $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession, $logger);
@@ -324,11 +343,31 @@ class CommandHelper
 
                 $message = $post['position'] . ' ' . $post['adapter'] . ' imported successfully';
                 $logger->write($message, 'false');
+
+                $logData = array(
+                    date("Y-m-d H:i:s"),
+                    $inputFile,
+                    $profile->getName(),
+                    $message,
+                    'true'
+                );
+
+                $logger->writeToFile($logData);
             }
             
             return array('success' => true, 'data' => $post);
         } catch (Exception $e) {
             $logger->write($e->getMessage(), 'true');
+
+            $logData = array(
+                date("Y-m-d H:i:s"),
+                $inputFile,
+                $profile->getName(),
+                $e->getMessage(),
+                'false'
+            );
+
+            $logger->writeToFile($logData);
             
             return array('success' => false, 'msg' => $e->getMessage());
         }
