@@ -90,7 +90,7 @@ class Logger
         }
 
         $this->getManager()->merge($logger);
-        $this->getManager()->flush();
+        $this->getManager()->flush($logger);
     }
 
     public function writeToFile($data)
