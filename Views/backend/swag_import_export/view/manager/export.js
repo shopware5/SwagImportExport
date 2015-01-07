@@ -278,22 +278,14 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
                     var record = me.profilesStore.getById(value.getValue());
                     var type = record.get('type');
 
+                    me.hideFields();
+
                     if (type === 'articles') {
                         me.articleFields.show();
-                        me.orderFields.hide();
-                        me.stockField.hide();
                     } else if (type === 'orders') {
                         me.orderFields.show();
-                        me.articleFields.hide();
-                        me.stockField.hide();
                     }else if(type === 'articlesInStock') {
-                        me.articleFields.hide();
-                        me.orderFields.hide();
                         me.stockField.show();
-                    } else {
-                        me.articleFields.hide();
-                        me.orderFields.hide();
-                        me.stockField.hide();
                     }
                 }
             }
@@ -383,6 +375,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
             labelWidth: me.configLabelWidth,
             valueField: 'value',
             displayField: 'name',
+            value: stockFilter.getAt(0),
             name: 'stockFilter'
         };
 
@@ -465,6 +458,18 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
             width: me.configWidth,
             labelWidth: me.configLabelWidth
         });
+    },
+
+    /*
+     * Hides all additional fields
+     */
+    hideFields: function() {
+        var me = this;
+
+        me.articleFields.hide();
+        me.orderFields.hide();
+        me.stockField.hide();
     }
+
 });
 //{/block}
