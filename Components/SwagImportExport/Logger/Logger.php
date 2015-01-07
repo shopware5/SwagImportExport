@@ -62,10 +62,6 @@ class Logger
      */
     public function write($messages, $status)
     {
-        if (!$messages) {
-            return;
-        }
-
         $logger = $this->getLogger();
 
         if (is_array($messages)) {

@@ -136,6 +136,10 @@ class DataIO
         $messages = $dbAdapter->getLogMessages();
         $status = 'false';
 
+        if (!$messages) {
+            return;
+        }
+
         $this->logger->write($messages, $status);
 
         $logData = array(
