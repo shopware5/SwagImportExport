@@ -829,7 +829,10 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
                 if ($logger->getMessage() === null) {
                     $message = $post['position'] . ' ' . $post['adapter'] . ' imported successfully';
-                    $logger->write($message, 'false');
+                    $status = SnippetsHelper::getNamespace()
+                        ->get('controller/log_status_success', 'No errors');
+
+                    $logger->write($message, $status);
 
                     $logData = array(
                         date("Y-m-d H:i:s"),
