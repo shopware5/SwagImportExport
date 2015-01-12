@@ -4,6 +4,7 @@ namespace Shopware\Components\SwagImportExport\Utils;
 
 use Shopware\Components\SwagImportExport\DataWorkflow;
 use Shopware\Components\SwagImportExport\StatusLogger;
+use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 
 class CommandHelper
 {
@@ -193,8 +194,10 @@ class CommandHelper
         $post = $dataWorkflow->export($postData, $this->filePath);
 
         $message = $post['position'] . ' ' . $profile->getType() . ' exported successfully';
+        $status = SnippetsHelper::getNamespace()
+            ->get('controller/log_status_success', 'No errors');
 
-        $logger->write($message, 'false');
+        $logger->write($message, $status);
 
         $logData = array(
             date("Y-m-d H:i:s"),
@@ -342,7 +345,10 @@ class CommandHelper
                     && $logger->getMessage() === null) {
 
                 $message = $post['position'] . ' ' . $post['adapter'] . ' imported successfully';
-                $logger->write($message, 'false');
+                $status = SnippetsHelper::getNamespace()
+                    ->get('controller/log_status_success', 'No errors');
+
+                $logger->write($message, $status);
 
                 $logData = array(
                     date("Y-m-d H:i:s"),
