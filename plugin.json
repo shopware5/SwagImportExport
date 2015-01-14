@@ -8,14 +8,16 @@
     "link": "http://store.shopware.com",
     "author": "Shopware AG",
 
-    "currentVersion": "1.0.2",
+    "currentVersion": "1.0.3",
 
     "changelog": {
         "de": {
+            "1.0.3": "PT-2643 Fixed filter bug",
             "1.0.2": "Korrektur: Import von gegenseitig abhängigen Artikeln (ähnliche / related Artikel). Feature: Überpringen von Datensätzen; Feature: Events für Erweiterung des Moduls.; Feature: Setze Standard-Werte beim Benutzer-Import (active-flag, default payment);Instock-Filter für Exporte hinzugefügt.;Korrektur des DB-Schema-Updates;Korrektur: Import von Preisstaffeln; Import/Export von eigenen Attributen im Übersetzungsadapter hinzugefügt;PT-2532 Saving messages into a log file",
             "1.0.1": "Problem mit verschwindendem Import/Export Menü-Eintrag behoben; Weitere ACL-Zugangsberechtigungen hinzugefügt; Korrektur: article.active Verhalten; Korrektur: Artikel-Attribute; Korrektur: Datums- und Zeitimporte"
         },
         "en": {
+            "1.0.3": "PT-2643 Fixed filter bug",
             "1.0.2": "Added after import for the related articles - similar and accessories. Added new feature that skips corrupted record when importing; Added filter and notify events.;Sets default values on user import, for active state and default payment columns.;Added instock filter for exports;Changed db scheme on update from 1.0.0|1.0.1 to 1.0.2;Fixed bug on import price: 'to' had a wrong value.; Added import/export of custom attributes in translation adapter;PT-2532 Saving messages into a log file",
             "1.0.1": "Fixed disappearing of the old import/export item from the menu; Added more ACL permissions; Fixed article active flag behaviour; Fixed article attributes entries; Fixed date/time article import issues"
         }

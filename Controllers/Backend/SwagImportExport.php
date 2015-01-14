@@ -453,8 +453,6 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
     public function prepareExportAction()
     {
-        $variants = $this->Request()->getParam('variants') ? true : false;
-
         if ($this->Request()->getParam('limit')) {
             $limit = $this->Request()->getParam('limit');
         }
@@ -463,10 +461,6 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             $offset = $this->Request()->getParam('offset');
         }
 
-        if ($this->Request()->getParam('stockFilter')) {
-            $stockFilter = $this->Request()->getParam('stockFilter');
-        }
-        
         $postData = array(
             'sessionId' => $this->Request()->getParam('sessionId'),
             'profileId' => (int) $this->Request()->getParam('profileId'),
@@ -478,48 +472,10 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                 'offset' => $offset,
             ),
         );
-        
-        if ($variants) {
-            $postData['filter']['variants'] = $variants;
-        }
 
-        if ($stockFilter) {
-            $postData['filter']['stockFilter'] = $stockFilter;
-        }
-
-        if ($this->Request()->getParam('categories')) {
-            $postData['filter']['categories'] = array($this->Request()->getParam('categories'));
-        }
-
-        //order filter
-        if ($this->Request()->getParam('ordernumberFrom')) {
-            $postData['filter']['ordernumberFrom'] = $this->Request()->getParam('ordernumberFrom');
-        }
-        
-        if ($this->Request()->getParam('dateFrom')) {
-            $dateFrom = $this->Request()->getParam('dateFrom');
-            $postData['filter']['dateFrom'] = new \DateTime($dateFrom);
-        }
-        
-        if ($this->Request()->getParam('dateTo')) {
-            $dateTo = $this->Request()->getParam('dateTo');
-            $dateTo = new Zend_Date($dateTo);
-            $dateTo->setHour('23');
-            $dateTo->setMinute('59');
-            $dateTo->setSecond('59');
-            $postData['filter']['dateTo'] = $dateTo;
-        }
-        
-        if ($this->Request()->getParam('orderstate')) {
-            $postData['filter']['orderstate'] = $this->Request()->getParam('orderstate');
-        }
-        
-        if ($this->Request()->getParam('paymentstate')) {
-            $postData['filter']['paymentstate'] = $this->Request()->getParam('paymentstate');
-        }
-        
         try {
             $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
+            $postData['filter'] = $this->prepareFilter($this->Request(), $profile->getType());
 
             $dataFactory = $this->Plugin()->getDataFactory();
 
@@ -551,9 +507,6 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
     public function exportAction()
     {
-        //article filter
-        $variants = $this->Request()->getParam('variants') ? true : false;
-
         if ($this->Request()->getParam('limit')) {
             $limit = $this->Request()->getParam('limit');
         }
@@ -574,47 +527,9 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                 'offset' => $offset,
             ),
         );
-        
-        if ($variants) {
-            $postData['filter']['variants'] = $variants;
-        }
-
-        if ($this->Request()->getParam('categories')) {
-            $postData['filter']['categories'] = array($this->Request()->getParam('categories'));
-        }
-
-        //order filter
-        if ($this->Request()->getParam('ordernumberFrom')) {
-            $postData['filter']['ordernumberFrom'] = $this->Request()->getParam('ordernumberFrom');
-        }
-        
-        if ($this->Request()->getParam('dateFrom')) {
-            $dateFrom = $this->Request()->getParam('dateFrom');
-            $postData['filter']['dateFrom'] = new \DateTime($dateFrom);
-        }
-        
-        if ($this->Request()->getParam('dateTo')) {
-            $dateTo = $this->Request()->getParam('dateTo');
-            $dateTo = new Zend_Date($dateTo);
-            $dateTo->setHour('23');
-            $dateTo->setMinute('59');
-            $dateTo->setSecond('59');
-            $postData['filter']['dateTo'] = $dateTo;
-        }
-        
-        if ($this->Request()->getParam('orderstate')) {
-            $postData['filter']['orderstate'] = $this->Request()->getParam('orderstate');
-        }
-        
-        if ($this->Request()->getParam('paymentstate')) {
-            $postData['filter']['paymentstate'] = $this->Request()->getParam('paymentstate');
-        }
-
-        if ($this->Request()->getParam('stockFilter')) {
-            $postData['filter']['stockFilter'] = $this->Request()->getParam('stockFilter');
-        }
 
         $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
+        $postData['filter'] = $this->prepareFilter($this->Request(), $profile->getType());
 
         $dataFactory = $this->Plugin()->getDataFactory();
 
@@ -1373,6 +1288,59 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $this->addAclPermission("getSections", "profile", "Insuficient Permissions (getSections)");
         $this->addAclPermission("getColumns", "profile", "Insuficient Permissions (getColumns)");
         $this->addAclPermission("getParentKeys", "profile", "Insuficient Permissions (getParentKeys)");
+    }
+
+    /**
+     * Prepares filter array for export
+     *
+     * @param $request
+     * @param $adapterType
+     * @return array
+     */
+    protected function prepareFilter($request, $adapterType)
+    {
+        $data = array();
+
+        if ($adapterType === 'articles'){
+            $data['variants'] = $request->getParam('variants') ? true : false;
+        }
+
+        if ($request->getParam('categories') && $adapterType === 'articles') {
+            $data['categories'] = array($request->getParam('categories'));
+        }
+
+        if ($request->getParam('stockFilter') && $adapterType === 'articlesInStock') {
+            $data['stockFilter'] = $request->getParam('stockFilter');
+        }
+
+        //order filter
+        if ($request->getParam('ordernumberFrom') && $adapterType === 'orders') {
+            $data['ordernumberFrom'] = $request->getParam('ordernumberFrom');
+        }
+
+        if ($request->getParam('dateFrom') && $adapterType === 'orders') {
+            $dateFrom = $request->getParam('dateFrom');
+            $data['dateFrom'] = new \DateTime($dateFrom);
+        }
+
+        if ($request->getParam('dateTo') && $adapterType === 'orders') {
+            $dateTo = $request->getParam('dateTo');
+            $dateTo = new Zend_Date($dateTo);
+            $dateTo->setHour('23');
+            $dateTo->setMinute('59');
+            $dateTo->setSecond('59');
+            $data['dateTo'] = $dateTo;
+        }
+
+        if ($request->getParam('orderstate') && $adapterType === 'orders') {
+            $data['orderstate'] = $request->getParam('orderstate');
+        }
+
+        if ($request->getParam('paymentstate') && $adapterType === 'orders') {
+            $data['paymentstate'] = $request->getParam('paymentstate');
+        }
+
+        return $data;
     }
 
 }
