@@ -568,10 +568,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             $post = $dataWorkflow->export($postData);
 
             $message = $post['position'] . ' ' . $profile->getType() . ' exported successfully';
-            $status = SnippetsHelper::getNamespace()
-                ->get('controller/log_status_success', 'No errors');
-
-            $logger->write($message, $status);
+            $logger->write($message, 'false');
 
             $logData = array(
                 date("Y-m-d H:i:s"),
@@ -744,10 +741,8 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
                 if ($logger->getMessage() === null) {
                     $message = $post['position'] . ' ' . $post['adapter'] . ' imported successfully';
-                    $status = SnippetsHelper::getNamespace()
-                        ->get('controller/log_status_success', 'No errors');
 
-                    $logger->write($message, $status);
+                    $logger->write($message, 'false');
 
                     $logData = array(
                         date("Y-m-d H:i:s"),
@@ -1244,8 +1239,13 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         //returns the customer data
         $data = $paginator->getIterator()->getArrayCopy();
 
+        $successStatus = SnippetsHelper::getNamespace()
+            ->get('controller/log_status_success', 'No errors');
+
+
         foreach($data as &$log) {
             if ($log['state'] == 'false') {
+                $log['state'] = $successStatus;
                 $log['title'] = 'Successfull';
             } else {
                 $log['title'] = 'Error';
