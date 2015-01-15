@@ -136,7 +136,7 @@ class DataIO
         $messages = $dbAdapter->getLogMessages();
         $status = 'false';
 
-        if (!$messages) {
+        if (!$messages || empty($messages)) {
             return;
         }
 
