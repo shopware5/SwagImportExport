@@ -86,6 +86,7 @@ class Logger
         }
 
         $this->getManager()->merge($logger);
+        $this->getManager()->persist($logger);
         $this->getManager()->flush($logger);
     }
 
