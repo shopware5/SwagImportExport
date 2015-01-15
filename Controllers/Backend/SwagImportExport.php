@@ -1246,7 +1246,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         foreach($data as &$log) {
             if ($log['state'] == 'false') {
                 $log['state'] = $successStatus;
-                $log['title'] = 'Successfull';
+                $log['title'] = 'Success';
             } else {
                 $log['title'] = 'Error';
             }
