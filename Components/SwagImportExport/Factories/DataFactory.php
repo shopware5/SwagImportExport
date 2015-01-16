@@ -108,9 +108,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
 
     public function loadLogger(Session $session, $fileWriter)
     {
-        $loggerEntity = $session->getLogger();
-
-        $logger = $this->createLogger($loggerEntity, $fileWriter);
+        $logger = $this->createLogger($session, $fileWriter);
 
         return $logger;
     }
@@ -166,9 +164,9 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
         return new Session($sessionEntity);
     }
 
-    protected function createLogger(LoggerEntity $loggerEntity, $fileWriter)
+    protected function createLogger($session, $fileWriter)
     {
-        return new Logger($loggerEntity, $fileWriter);
+        return new Logger($session, $fileWriter);
     }
 
     /**

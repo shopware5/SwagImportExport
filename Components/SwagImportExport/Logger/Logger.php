@@ -3,6 +3,7 @@
 namespace Shopware\Components\SwagImportExport\Logger;
 
 use \Shopware\CustomModels\ImportExport\Logger as LoggerEntity;
+use Shopware\Components\SwagImportExport\Session\Session;
 
 class Logger
 {
@@ -14,14 +15,18 @@ class Logger
     protected $loggerRepository;
 
     /**
-     * @var LoggerEntity $logger
+     * @var LoggerEntity $loggerEntity
      */
-    protected $logger;
+    protected $loggerEntity;
+    /**
+     * @var Session
+     */
+    protected $session;
     protected $fileWriter;
 
-    public function __construct(LoggerEntity $logger, $fileWriter)
+    public function __construct(Session $session, $fileWriter)
     {
-        $this->logger = $logger;
+        $this->session = $session;
         $this->fileWriter = $fileWriter;
     }
 
@@ -39,9 +44,15 @@ class Logger
         return $this->manager;
     }
 
-    public function getLogger()
+    public function getLoggerEntity()
     {
-        return $this->logger;
+        if ($this->loggerEntity === null){
+            //fixes doctrine clear bug
+            $loggerId = $this->session->getLogger()->getId();
+            $this->loggerEntity = $this->getLoggerRepository()->find($loggerId);
+        }
+
+        return $this->loggerEntity;
     }
 
     public function getFileWriter()
@@ -51,7 +62,7 @@ class Logger
 
     public function getMessage()
     {
-        $logger = $this->getLogger();
+        $logger = $this->getLoggerEntity();
 
         return $logger->getMessage();
     }
@@ -62,7 +73,7 @@ class Logger
      */
     public function write($messages, $status)
     {
-        $logger = $this->getLogger();
+        $logger = $this->getLoggerEntity();
 
         if (is_array($messages)) {
             $appendMsg = implode(';', $messages);
@@ -85,9 +96,8 @@ class Logger
             $logger->setStatus($status);
         }
 
-        $this->getManager()->merge($logger);
         $this->getManager()->persist($logger);
-        $this->getManager()->flush($logger);
+        $this->getManager()->flush();
     }
 
     public function writeToFile($data)
