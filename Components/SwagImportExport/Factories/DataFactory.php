@@ -140,7 +140,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     /**
      * Returns filter adapter
      * 
-     * @param type $filter
+     * @param $filter
      * @return \Shopware\Components\SwagImportExport\Utils\DataFilter
      */
     public function createFilter($filter)

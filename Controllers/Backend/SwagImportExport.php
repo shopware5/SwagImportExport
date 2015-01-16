@@ -486,7 +486,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession, $logger);
 
             $colOpts = $dataFactory->createColOpts($postData['columnOptions']);
-            $limit = $dataFactory->createLimit($postData['limit']);            
+            $limit = $dataFactory->createLimit($postData['limit']);
             $filter = $dataFactory->createFilter($postData['filter']);
             $maxRecordCount = $postData['max_record_count'];
             $type = $postData['type'];
@@ -1311,6 +1311,10 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
         if ($request->getParam('stockFilter') && $adapterType === 'articlesInStock') {
             $data['stockFilter'] = $request->getParam('stockFilter');
+            if($data['stockFilter'] == 'custom') {
+                $data['direction'] = $request->getParam('customFilterDirection');
+                $data['value'] = $request->getParam('customFilterValue');
+            }
         }
 
         //order filter

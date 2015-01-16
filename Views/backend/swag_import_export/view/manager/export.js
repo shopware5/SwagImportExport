@@ -63,7 +63,13 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
         notInStock : '{s name=swag_import_export/profile/filter/notInStock}not in stock{/s}',
         inStockOnSale: '{s name=swag_import_export/profile/filter/inStockOnSale}in Stock top selling{/s}',
         notInStockOnSale: '{s name=swag_import_export/profile/filter/notInStockOnSale}not in stock top selling{/s}',
-        filter: '{s name=swag_import_export/profile/filter/filter}Filter{/s}'
+        filter: '{s name=swag_import_export/profile/filter/filter}Filter{/s}',
+        lessOrEqualsMinStock: '{s name=swag_import_export/profile/filter/notInStockMinStock}less than or equal than min stock{/s}',
+        customFilterLabel: '{s name=swag_import_export/profile/filter/custom}Custom filter{/s}',
+        customFilterGreaterThan: '{s name=swag_import_export/profile/filter/greaterThan}Greater than{/s}',
+        customFilterLessThan: '{s name=swag_import_export/profile/filter/lessThan}Less than{/s}',
+        customFilterThanValuePlaceholder: '{s name=swag_import_export/profile/filter/thanValuePlaceholder}value{/s}',
+        customFilterThanValueLabel: '{s name=swag_import_export/profile/filter/thanValueLabel}The filter value{/s}'
     },
     
     initComponent: function() {
@@ -150,6 +156,20 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
      */
     additionalFields: function() {
         var me = this;
+
+        me.customFilterFields = Ext.create('Ext.form.FieldSet', {
+            title: me.snippets.customFilterLabel,
+            padding: 12,
+            hidden: true,
+            defaults: {
+                labelStyle: 'font-weight: 700; text-align: right;'
+            },
+            items: [{
+                xtype: 'container',
+                padding: '0 0 8',
+                items: me.createCustomFilterItems()
+            }]
+        });
 
         me.stockField = Ext.create('Ext.form.FieldSet',{
             title: me.snippets.fieldsetAdditional,
@@ -250,8 +270,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
                     ]
                 }]
         });
-        
-        return [me.articleFields, me.orderFields, me.stockField];
+        return [me.articleFields, me.orderFields, me.stockField,  me.customFilterFields];
     },
     /*
      * Profile drop down
@@ -310,8 +329,6 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
                 }]
         });
 
-
-
         return Ext.create('Ext.form.field.ComboBox', {
             allowBlank: false,
             fieldLabel: me.snippets.selectFormat,
@@ -361,7 +378,9 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
                 { "value": "inStock", "name": me.snippets.inStock },
                 { "value": "notInStock", "name": me.snippets.notInStock },
                 { "value": "inStockOnSale", "name": me.snippets.inStockOnSale },
-                { "value": "notInStockOnSale", "name": me.snippets.notInStockOnSale }
+                { "value": "notInStockOnSale", "name": me.snippets.notInStockOnSale },
+                { "value": "notInStockMinStock", "name": me.snippets.lessOrEqualsMinStock },
+                { "value": "custom", "name": me.snippets.customFilterLabel}
             ]
         });
 
@@ -376,11 +395,61 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
             valueField: 'value',
             displayField: 'name',
             value: stockFilter.getAt(0),
-            name: 'stockFilter'
+            name: 'stockFilter',
+            listeners: {
+                change: function(combo, newValue, oldValue, eOpts) {
+                    if (newValue === 'custom') {
+                        me.customFilterFields.show();
+                    } else {
+                        me.customFilterFields.hide();
+                    }
+                }
+            }
         };
 
         return me.stockFilterComboBox;
     },
+
+    createCustomFilterItems: function() {
+        var me = this;
+
+        var greaterLessFilter = Ext.create('Ext.data.Store', {
+            fields: ['value', 'name'],
+            data: [
+                { "value": "greaterThan", "name": me.snippets.customFilterGreaterThan },
+                { "value": "lessThan", "name": me.snippets.customFilterLessThan },
+            ]
+        });
+
+        me.customFilterCombo = {
+            fieldLabel: me.snippets.filter,
+            labelStyle: 'font-weight: 700; text-align: left;',
+            xtype: 'combobox',
+            allowBlank: false,
+            store: greaterLessFilter,
+            width: me.configWidth,
+            labelWidth: me.configLabelWidth,
+            valueField: 'value',
+            displayField: 'name',
+            value: greaterLessFilter.getAt(0),
+            name: 'customFilterCombo'
+        };
+
+
+        me.filterThanValue = Ext.create('Ext.form.Text', {
+            xtype: 'textfield',
+            name: 'filterThanValue',
+            emptyText: me.snippets.customFilterThanValuePlaceholder,
+            fieldLabel: me.snippets.customFilterThanValueLabel,
+            allowBlank: false,
+            width: me.configWidth,
+            labelWidth: me.configLabelWidth,
+            margin: '0'
+        });
+
+        return [me.customFilterCombo, me.filterThanValue];
+    },
+
 
     /*
      * Products variants checkbox
