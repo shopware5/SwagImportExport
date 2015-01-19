@@ -1,6 +1,7 @@
 <?php
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
+use Doctrine\ORM\QueryBuilder;
 use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 
@@ -76,7 +77,6 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
 
     public function readRecordIds($start, $limit, $filter)
     {
-
         $stockFilter = $filter['stockFilter'];
         $manager = $this->getManager();
 
@@ -85,7 +85,6 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
         $builder->select('d.id')
                 ->from('Shopware\Models\Article\Detail', 'd')
                 ->leftJoin('d.prices', 'p');
-
 
         switch($stockFilter)
         {
@@ -105,43 +104,62 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
                 break;
             case 'notInStockOnSale':
                 $builder->leftJoin('d.article', 'a')
-                        ->where('d.inStock <= 0')
-                        ->andWhere('a.lastStock = 1');
+                    ->where('d.inStock <= 0')
+                    ->andWhere('a.lastStock = 1');
+                break;
+            case 'notInStockMinStock':
+                    $builder->where('d.stockMin >= d.inStock')
+                    ->andWhere('d.stockMin > 0');
+                break;
+            case 'custom':
+                switch($filter['direction']) {
+                    case 'greaterThan':
+                        $builder->where('d.inStock >= :filterValue');
+                        break;
+                    case 'lessThan':
+                        $builder->where('d.inStock <= :filterValue');
+                        break;
+                }
+                $builder->setParameter('filterValue', (int)$filter['value']);
+
+                // unset filterValues for prevent query errors
+                if(isset($filter['direction'])) {
+                    unset($filter['direction']);
+                }
+                if(isset($filter['value'])) {
+                    unset($filter['value']);
+                }
+
                 break;
             default:
-                throw new \Exception('Cannot match StockFilter 116');
+                throw new \Exception('Cannot match StockFilter - File:ArticlesInStockAdapter Line:136');
+        }
+
+        if(isset($filter['stockFilter'])) {
+            unset($filter['stockFilter']);
         }
 
         $builder->andWhere("p.customerGroupKey = 'EK'")
                 ->andWhere("p.from = 1")
                 ->orderBy('d.id', 'ASC');
 
-        if(isset($filter['stockFilter']))
-            unset($filter['stockFilter']);
-
         if (!empty($filter)) {
-
             $builder->addFilter($filter);
         }
-        
+
         $builder->setFirstResult($start)
                 ->setMaxResults($limit);
-        
         $query = $builder->getQuery();
-        
         $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-        
         $paginator = $manager->createPaginator($query);
 
         $records = $paginator->getIterator()->getArrayCopy();
-        
         $result = array();
         if ($records) {
             foreach ($records as $value) {
                 $result[] = $value['id'];
             }
         }
-        
         return $result;
     }
 
@@ -276,5 +294,4 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
 
         return $builder;
     }
-
 }

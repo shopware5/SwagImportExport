@@ -149,7 +149,9 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
                 dateTo: me.parameters.dateTo,
                 orderstate: me.parameters.orderstate,
                 paymentstate: me.parameters.paymentstate,
-                stockFilter: me.parameters.stockFilter
+                stockFilter: me.parameters.stockFilter,
+                customFilterDirection: me.parameters.customFilterCombo,
+                customFilterValue: me.parameters.filterThanValue
             }
         };
 

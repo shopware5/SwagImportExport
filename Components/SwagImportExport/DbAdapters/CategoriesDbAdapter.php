@@ -66,11 +66,13 @@ class CategoriesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * Returns categories 
-     * 
-     * @param array $ids
-     * @param array $columns
-     * @return array
+     * Returns categories
+     *
+     * @param $ids
+     * @param $columns
+     * @return mixed
+     *
+     * @throws \Exception
      */
     public function read($ids, $columns)
     {
@@ -199,7 +201,7 @@ class CategoriesDbAdapter implements DataDbAdapter
                     throw new AdapterException(sprintf($message, $record['name']));
                 }
 
-                /* @var $category Shopware\Models\Category\Category */
+                /* @var $category \Shopware\Models\Category\Category */
                 $category = $this->getRepository()->findOneBy(array('id' => $record['id']));
 
                 if (!$category) {
@@ -301,7 +303,7 @@ class CategoriesDbAdapter implements DataDbAdapter
     /**
      * Returns category repository
      * 
-     * @return Shopware\Models\Category\Category
+     * @return \Shopware\Models\Category\Category
      */
     public function getRepository()
     {
@@ -314,7 +316,7 @@ class CategoriesDbAdapter implements DataDbAdapter
     /**
      * Returns entity manager
      * 
-     * @return Shopware\Components\Model\ModelManager
+     * @return \Shopware\Components\Model\ModelManager
      */
     public function getManager()
     {
