@@ -667,6 +667,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         }
 
         // we create the file reader that will read the result file
+        /** @var \Shopware\Components\SwagImportExport\Factories\FileIOFactory $fileFactory */
         $fileFactory = $this->Plugin()->getFileIOFactory();
         $fileHelper = $fileFactory->createFileHelper();
         $fileReader = $fileFactory->createFileReader($postData, $fileHelper);
@@ -687,8 +688,8 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
         $dataSession = $dataFactory->loadSession($postData);
 
-        /* @var $logger Shopware\Components\SwagImportExport\Logger\Logger */
         $fileLogWriter = $fileFactory->createFileWriter(array('format' => 'csv'), $fileHelper);
+        /* @var $logger Shopware\Components\SwagImportExport\Logger\Logger */
         $logger = $dataFactory->loadLogger($dataSession, $fileLogWriter);
 
         //create dataIO

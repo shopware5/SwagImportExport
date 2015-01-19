@@ -88,6 +88,10 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
      */
     configLabelWidth: 150,
     /**
+     * current FilterValue
+     */
+    filterValue: 'all',
+    /**
      * Creates the main form panel for the component which
      * features all neccessary form elements
      *
@@ -305,6 +309,9 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
                         me.orderFields.show();
                     }else if(type === 'articlesInStock') {
                         me.stockField.show();
+                        if(me.filterValue === 'custom'){
+                            me.customFilterFields.show();
+                        }
                     }
                 }
             }
@@ -371,7 +378,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
     createStockFilterComboBox:function(){
         var me = this;
 
-        var stockFilter = Ext.create('Ext.data.Store', {
+        me.stockFilter = Ext.create('Ext.data.Store', {
             fields: ['value', 'name'],
             data: [
                 { "value": "all", "name": me.snippets.all },
@@ -389,12 +396,12 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
             labelStyle: 'font-weight: 700; text-align: left;',
             xtype: 'combobox',
             allowBlank: true,
-            store: stockFilter,
+            store: me.stockFilter,
             width: me.configWidth,
             labelWidth: me.configLabelWidth,
             valueField: 'value',
             displayField: 'name',
-            value: stockFilter.getAt(0),
+            value: me.stockFilter.getAt(0),
             name: 'stockFilter',
             listeners: {
                 change: function(combo, newValue, oldValue, eOpts) {
@@ -403,6 +410,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
                     } else {
                         me.customFilterFields.hide();
                     }
+                    me.filterValue = newValue;
                 }
             }
         };
@@ -538,7 +546,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
         me.articleFields.hide();
         me.orderFields.hide();
         me.stockField.hide();
+        me.customFilterFields.hide();
     }
-
 });
 //{/block}
