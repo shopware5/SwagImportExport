@@ -161,6 +161,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                 array('subject' => $this)
         );
 
+
         $imageImportMode = Shopware()->Config()->get('SwagImportExportImageMode');
 
         $configuratorGroupRepository = $this->getManager()->getRepository('Shopware\Models\Article\Configurator\Group');
@@ -231,7 +232,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                        $mediaExists = true;
                     }
                 }
-
+	            
                 if($imageImportMode == 2 || $mediaExists == false) {
                     $path = $this->load($record['image'], $name);
 
@@ -264,8 +265,29 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
 
                 $image = new \Shopware\Models\Article\Image();
                 $image->setArticle($article);
-                $image->setDescription($record['description']);
-                $image->setPosition($record['position']);
+
+	            //If the user has provided a description, use this one. Otherwise set it to string-empty by default.
+                $image->setDescription($record['description'] || "");
+
+	            //if the position equals null, it can not be imported to the database, because the column does not allow a null value. Therefore,
+	            //the next if clause will calculate a new postion of the current image. If this fails, too it will set the default position to 0.
+	            if(!$record['position'])
+	            {
+		            //Get the latest position and add 1 to increase it.
+		            $imagePosition = ($this->getDefaultImagePosition($image->getArticle()->getMainDetail()->getNumber()) + 1);
+
+		            //If it worked, set the calculated position
+		            if($imagePosition) {
+			            $image->setPosition($imagePosition);
+		            }
+		            else { //Did not work either...
+			            $image->setPosition(0);
+		            }
+	            }
+				else {
+					$image->setPosition($record['position']);
+				}
+
                 $image->setPath($media->getName());
                 $image->setExtension($media->getExtension());
                 $image->setMedia($media);
@@ -296,6 +318,20 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
             }
         }
     }
+
+	/**
+	 * Gets the latest image position from a specific article.
+	 * @param $orderNumber
+	 * @return int
+	 */
+	private function getDefaultImagePosition($orderNumber){
+		$sql = "SELECT MAX(I.position) FROM s_articles AS A
+				JOIN s_articles_img I ON A.id=I.articleID
+				JOIN s_articles_details D ON A.id=D.articleID
+				WHERE D.orderNumber=':orderNumber:'";
+
+		return (int)Shopware()->Db()->fetchOne($sql, $orderNumber);
+	}
 
     /**
      * Sets image mapping for variants
