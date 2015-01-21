@@ -266,33 +266,15 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                 $image = new \Shopware\Models\Article\Image();
                 $image->setArticle($article);
 
-	            //If the user has provided a description, use this one. Otherwise set it to string-empty by default.
-                $image->setDescription($record['description'] || "");
+	            $description = isset($record["description"]) ? $record["description"] : "";
+	            $imagePosition = isset($record['position']) ? $record['position'] : $this->getDefaultImagePosition($image->getArticle()->getId());
 
-	            //if the position equals null, it can not be imported to the database, because the column does not allow a null value. Therefore,
-	            //the next if clause will calculate a new postion of the current image. If this fails, too it will set the default position to 0.
-	            if(!$record['position'])
-	            {
-		            //Get the latest position and add 1 to increase it.
-		            $imagePosition = ($this->getDefaultImagePosition($image->getArticle()->getMainDetail()->getNumber()) + 1);
-
-		            //If it worked, set the calculated position
-		            if($imagePosition) {
-			            $image->setPosition($imagePosition);
-		            }
-		            else { //Did not work either...
-			            $image->setPosition(0);
-		            }
-	            }
-				else {
-					$image->setPosition($record['position']);
-				}
-
+	            $image->setPosition($imagePosition);
                 $image->setPath($media->getName());
                 $image->setExtension($media->getExtension());
                 $image->setMedia($media);
                 $image->setMain($record['main']);
-
+	            $image->setDescription($description);
                 $this->getManager()->persist($image);
                 $this->getManager()->flush($image);
 
@@ -321,16 +303,15 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
 
 	/**
 	 * Gets the latest image position from a specific article.
-	 * @param $orderNumber
+	 * @param $articleId
 	 * @return int
 	 */
-	private function getDefaultImagePosition($orderNumber){
-		$sql = "SELECT MAX(I.position) FROM s_articles AS A
-				JOIN s_articles_img I ON A.id=I.articleID
-				JOIN s_articles_details D ON A.id=D.articleID
-				WHERE D.orderNumber=':orderNumber:'";
+	private function getDefaultImagePosition($articleId){
+		$sql = "SELECT MAX(position) FROM s_articles_img WHERE articleID=?;";
+		$result = Shopware()->Db()->fetchOne($sql, $articleId);
 
-		return (int)Shopware()->Db()->fetchOne($sql, $orderNumber);
+
+		return isset($result) ? ((int)$result +1) : 0;
 	}
 
     /**
