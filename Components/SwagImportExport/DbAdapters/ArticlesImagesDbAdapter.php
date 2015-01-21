@@ -161,7 +161,6 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                 array('subject' => $this)
         );
 
-
         $imageImportMode = Shopware()->Config()->get('SwagImportExportImageMode');
 
         $configuratorGroupRepository = $this->getManager()->getRepository('Shopware\Models\Article\Configurator\Group');
@@ -232,8 +231,8 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                        $mediaExists = true;
                     }
                 }
-	            
-                if($imageImportMode == 2 || $mediaExists == false) {
+
+	            if($imageImportMode == 2 || $mediaExists == false) {
                     $path = $this->load($record['image'], $name);
 
                     $file = new \Symfony\Component\HttpFoundation\File\File($path);
@@ -309,7 +308,6 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
 	private function getDefaultImagePosition($articleId){
 		$sql = "SELECT MAX(position) FROM s_articles_img WHERE articleID=?;";
 		$result = Shopware()->Db()->fetchOne($sql, $articleId);
-
 
 		return isset($result) ? ((int)$result +1) : 0;
 	}
