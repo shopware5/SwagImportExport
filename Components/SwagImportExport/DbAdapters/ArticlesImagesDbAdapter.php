@@ -232,7 +232,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                     }
                 }
 
-                if($imageImportMode == 2 || $mediaExists == false) {
+	            if($imageImportMode == 2 || $mediaExists == false) {
                     $path = $this->load($record['image'], $name);
 
                     $file = new \Symfony\Component\HttpFoundation\File\File($path);
@@ -264,13 +264,16 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
 
                 $image = new \Shopware\Models\Article\Image();
                 $image->setArticle($article);
-                $image->setDescription($record['description']);
-                $image->setPosition($record['position']);
+
+	            $description = isset($record["description"]) ? $record["description"] : "";
+	            $imagePosition = isset($record['position']) ? $record['position'] : $this->getDefaultImagePosition($image->getArticle()->getId());
+
+	            $image->setPosition($imagePosition);
                 $image->setPath($media->getName());
                 $image->setExtension($media->getExtension());
                 $image->setMedia($media);
                 $image->setMain($record['main']);
-
+	            $image->setDescription($description);
                 $this->getManager()->persist($image);
                 $this->getManager()->flush($image);
 
@@ -296,6 +299,18 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
             }
         }
     }
+
+	/**
+	 * Gets the latest image position from a specific article.
+	 * @param $articleId
+	 * @return int
+	 */
+	private function getDefaultImagePosition($articleId){
+		$sql = "SELECT MAX(position) FROM s_articles_img WHERE articleID=?;";
+		$result = Shopware()->Db()->fetchOne($sql, $articleId);
+
+		return isset($result) ? ((int)$result +1) : 0;
+	}
 
     /**
      * Sets image mapping for variants
