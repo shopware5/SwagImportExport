@@ -1269,21 +1269,20 @@ class ArticlesDbAdapter implements DataDbAdapter
             if ($configurator['parentIndexElement'] != $configuratorIndex) {
                 continue;
             }
-            
-            if (!isset($configurator['configGroupName']) && !isset($configurator['configGroupId'])) {
-                continue;
-            }
 
-            if (!isset($configurator['configOptionName']) && !isset($configurator['configOptionId'])) {
-                continue;
-            }
+            if (!isset($configurator['configOptionId']) && empty($configurator['configOptionId'])){
 
-            if (empty($configurator['configGroupName']) && empty($configurator['configGroupId'])) {
-                continue;
-            }
+                if (!isset($configurator['configGroupName']) && !isset($configurator['configGroupId'])) {
+                    continue;
+                }
 
-            if (empty($configurator['configOptionName']) && empty($configurator['configOptionId'])) {
-                continue;
+                if (empty($configurator['configGroupName']) && empty($configurator['configGroupId'])) {
+                    continue;
+                }
+
+                if (!isset($configurator['configOptionName']) && empty($configurator['configOptionName'])) {
+                    continue;
+                }
             }
 
             if (isset($configurator['configSetId']) && !empty($configurator['configSetId']) && !$configuratorSet) {
@@ -1308,13 +1307,16 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $configuratorSet = $this->createConfiguratorSet($configurator, $article);
             }
 
-            //configurator group
-            $groupModel = $this->getConfiguratorGroup($configurator);
-
             //configurator option
-            if (isset($configurator['configOptionId'])) {
+            if (isset($configurator['configOptionId']) && !empty($configurator['configOptionId'])) {
                 $optionModel = $this->getManager()
                         ->find('Shopware\Models\Article\Configurator\Option', $configurator['configOptionId']);
+                $groupModel = $optionModel->getGroup();
+                $groupName = $groupModel->getName();
+            } else {
+                //configurator group
+                $groupModel = $this->getConfiguratorGroup($configurator);
+                $groupName = $configurator['configGroupName'];
             }
 
             if (isset($configurator['configOptionName']) && !$optionModel){
@@ -1336,11 +1338,11 @@ class ArticlesDbAdapter implements DataDbAdapter
 
             $optionModel->setGroup($groupModel);
             $optionModel->setPosition($optionPosition++);
-            
+
             $groupData = array(
-                'id' => $configurator['configGroupId'],                
-                'name' => $configurator['configGroupName'],                
-                'options' => array($optionModel)                
+                'id' => $configurator['configGroupId'],
+                'name' => $groupName,
+                'options' => array($optionModel)
             );
 
             $groupModel->fromArray($groupData);
@@ -1377,8 +1379,8 @@ class ArticlesDbAdapter implements DataDbAdapter
                 continue;
             }
 
-            if ((!isset($configurator['configOptionName']) && !isset($configurator['configOptionId']))
-                || (empty($configurator['configOptionName']) && empty($configurator['configOptionId']))
+            if (!isset($configurator['configOptionName']) && empty($configurator['configOptionName'])
+                && !isset($configurator['configOptionId']) && empty($configurator['configOptionId'])
             ) {
                 continue;
             }
@@ -1396,44 +1398,56 @@ class ArticlesDbAdapter implements DataDbAdapter
             }
 
             $setOptions = $configuratorSet->getOptions();
-            $availableGroups = $configuratorSet->getGroups();
 
-            $availableGroup = $this->getAvailableGroup($availableGroups, array(
-                'id' => $configurator['configGroupId'],
-                'name' => $configurator['configGroupName']
-            ));
-
-            //group is in the article configurator set configured?
-            if (!$availableGroup) {
-                continue;
-            }
-            
-            //check if the option is available in the configured article configurator set.
-            $option = $this->getAvailableOption($availableGroup->getOptions(), array(
-                'id'   => $configurator['configOptionId'],
-                'name' => $configurator['configOptionName']
-            ));
-            
-            if (!$option) {
+            if (isset($configurator['configOptionId']) && !empty($configurator['configOptionId'])){
                 $option = $this->getManager()
+                    ->find('Shopware\Models\Article\Configurator\Option', $configurator['configOptionId']);
+
+                if(!$option){
+                    //todo: throw exception
+                }
+
+            } else {
+
+                $availableGroups = $configuratorSet->getGroups();
+
+                $availableGroup = $this->getAvailableGroup($availableGroups, array(
+                    'id' => $configurator['configGroupId'],
+                    'name' => $configurator['configGroupName']
+                ));
+
+                //group is in the article configurator set configured?
+                if (!$availableGroup) {
+                    continue;
+                }
+
+                //check if the option is available in the configured article configurator set.
+                $option = $this->getAvailableOption($availableGroup->getOptions(), array(
+                    'id' => $configurator['configOptionId'],
+                    'name' => $configurator['configOptionName']
+                ));
+
+                if (!$option) {
+                    $option = $this->getManager()
                         ->getRepository('Shopware\Models\Article\Configurator\Option')->findOneBy(array(
                             'name' => $configurator['configOptionName'],
                             'groupId' => $availableGroup->getId()
                         ));
+                }
+
+                if (!$option) {
+                    $option = new Configurator\Option();
+                    $option->setPosition(0);
+                    $option->setName($configurator['configOptionName']);
+                    $option->setGroup($availableGroup);
+                    $this->getManager()->persist($option);
+                }
             }
 
-            if (!$option) {
-                $option = new Configurator\Option();
-                $option->setPosition(0);
-                $option->setName($configurator['configOptionName']);
-                $option->setGroup($availableGroup);
-                $this->getManager()->persist($option);
-            }
-            
             $optionData[] = $option;
 
             //add option to configurator set if dont exists
-            if (!$this->isEntityExistsByName($setOptions, $option)){
+            if (!$this->isEntityExistsByName($setOptions, $option)) {
                 $setOptions->add($option);
             }
         }
