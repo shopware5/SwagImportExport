@@ -2,6 +2,8 @@
 
 namespace Shopware\Components\SwagImportExport\Transoformers;
 
+use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
+
 /**
  * The responsibility of this class is to restructure the flat array to tree and vise versa
  */
@@ -323,7 +325,15 @@ class FlattenTransformer implements DataTransformerAdapter
                 }
 
                 for ($i = 0; $i < count($values); $i++) {
+
+                    if (strstr($values[$i], '::')) {
+                        $message = SnippetsHelper::getNamespace()
+                            ->get('transformers/used_colon', "In the group name, is used a colon ':'. Please delete it and try again.");
+                        throw new \Exception($message);
+                    }
+
                     $value = explode(':', $values[$i]);
+
                     $configs[] = $this->transformConfiguratorToTree($node, array(
                         $columnMapper['configGroupName'] => $value[0],
                         $columnMapper['configOptionName'] => $value[1],
@@ -332,7 +342,7 @@ class FlattenTransformer implements DataTransformerAdapter
                         $columnMapper['configSetName'] => $setName
                     ));
                 }
-                
+
                 return $configs;
 
             } else if ($node['adapter'] == 'propertyValue') {
