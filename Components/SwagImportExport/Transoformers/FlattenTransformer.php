@@ -285,28 +285,23 @@ class FlattenTransformer implements DataTransformerAdapter
                 // find fields
                 $columnMapper = array(
                     'configOptionName' => $this->findNodeByShopwareField($node, 'configOptionName'),
+                    'configOptionId' => $this->findNodeByShopwareField($node, 'configOptionId'),
                     'configGroupName' => $this->findNodeByShopwareField($node, 'configGroupName'),
                     'configSetName' => $this->findNodeByShopwareField($node, 'configSetName'),
                     'configSetId' => $this->findNodeByShopwareField($node, 'configSetId'),
                     'configSetType' => $this->findNodeByShopwareField($node, 'configSetType'),
                 );
-                
-                if ($columnMapper['configOptionName'] === FALSE) {
-                    throw new \Exception("configOptionName column not found");
-                }
-                if ($columnMapper['configGroupName'] === FALSE) {
-                    throw new \Exception("configGroupName column not found");
-                }
-                
-//                if ($columnMapper['configSetName'] === FALSE) {
-//                    throw new \Exception("configSetName column not found");
-//                }
-                
-                $configs = array();
-                
-                $separator = '|';
-                $values = explode($separator, $this->getDataValue($data, $columnMapper['configOptionName']));
 
+                if ($columnMapper['configOptionId'] === false) {
+                    if ($columnMapper['configOptionName'] === false) {
+                        throw new \Exception("configOptionName column not found");
+                    }
+                    if ($columnMapper['configGroupName'] === false) {
+                        throw new \Exception("configGroupName column not found");
+                    }
+                }
+
+                $separator = '|';
                 if ($columnMapper['configSetId'] !== false) {
                     $configSetId = explode($separator, $this->getDataValue($data, $columnMapper['configSetId']));
                     $configSetId = $this->getFirstElement($configSetId);
@@ -322,17 +317,25 @@ class FlattenTransformer implements DataTransformerAdapter
                     $setNames = $this->getFirstElement($setNames);
                 }
 
-                for ($i = 0; $i < count($values); $i++) {
+                $configs = array();
+                $values = explode($separator, $this->getDataValue($data, $columnMapper['configOptionName']));
+                $optionIds = explode($separator, $this->getDataValue($data, $columnMapper['configOptionId']));
+
+                //creates configOptionId to have more priority than configOptionName
+                $counter = $columnMapper['configOptionId'] !== false ? count($optionIds) : count($values);
+
+                for ($i = 0; $i < $counter; $i++) {
                     $value = explode(':', $values[$i]);
                     $configs[] = $this->transformConfiguratorToTree($node, array(
                         $columnMapper['configGroupName'] => $value[0],
                         $columnMapper['configOptionName'] => $value[1],
+                        $columnMapper['configOptionId'] => $optionIds[$i],
                         $columnMapper['configSetId'] => $configSetId,
                         $columnMapper['configSetType'] => $configSetType,
-                        $columnMapper['configSetName'] => $setName
+                        $columnMapper['configSetName'] => $setNames
                     ));
                 }
-                
+
                 return $configs;
 
             } else if ($node['adapter'] == 'propertyValue') {
