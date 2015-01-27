@@ -14,6 +14,7 @@ use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\DataHelper as DataHelper;
 use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
 use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
+use Shopware\Models\Property;
 
 class ArticlesDbAdapter implements DataDbAdapter
 {
@@ -1024,11 +1025,16 @@ class ArticlesDbAdapter implements DataDbAdapter
                 continue;
             } else if (isset($valueData['propertyGroupName'])) {
                 $propertyGroup = $propertyRepository->findOneBy(array('name' => $valueData['propertyGroupName']));
+
+                if (!$propertyGroup){
+                    //creates property group
+                    $propertyGroup = $this->createPropertyGroup($valueData);
+                }
             } else {
                 $propertyGroup = $article->getPropertyGroup();
             }
 
-            if (!$propertyGroup instanceof \Shopware\Models\Property\Group) {
+            if (!$propertyGroup instanceof Property\Group) {
                 $message = SnippetsHelper::getNamespace()
                         ->get('adapters/articles/property_group_name_not_found', 'There is no propertyGroupName specified for article %s');
                 throw new AdapterException(sprintf($message, $article->getMainDetail()->getNumber()));
@@ -1078,8 +1084,9 @@ class ArticlesDbAdapter implements DataDbAdapter
                     $query = $propertyRepository->getPropertyRelationQuery($filters, null, 1, 0);
                     /** @var \Shopware\Models\Property\Relation $relation */
                     $relation = $query->getOneOrNullResult($hydrateObject);
+
                     if (!$relation) {
-                        $option = new \Shopware\Models\Property\Option();
+                        $option = $this->createPropertyOption($valueData);
                         $propertyGroup->addOption($option);
                     } else {
                         $option = $relation->getOption();
@@ -1090,7 +1097,6 @@ class ArticlesDbAdapter implements DataDbAdapter
                     throw new AdapterException(sprintf($message, $article->getMainDetail()->getNumber()));
                 }
 
-                $option->fromArray($valueData['option']);
                 if ($option->isFilterable() === null) {
                     $option->setFilterable(false);
                 }
@@ -1102,12 +1108,15 @@ class ArticlesDbAdapter implements DataDbAdapter
                 ));
                 if (!$value) {
                     // create the value
-                    $value = new \Shopware\Models\Property\Value($option, $valueData['value']);
+                    $value = new Property\Value($option, $valueData['value']);
                 }
+
                 if (isset($valueData['position'])) {
                     $value->setPosition($valueData['position']);
                 }
+
                 $this->getManager()->persist($value);
+                $this->getManager()->flush();
             } else {
                 $message = SnippetsHelper::getNamespace()
                         ->get('adapters/articles/property_id_or_name_required', 'Article %s requires name or id for property value');
@@ -1123,6 +1132,41 @@ class ArticlesDbAdapter implements DataDbAdapter
             'group' => $propertyGroup,
             'values' => $values
         );
+    }
+
+    /**
+     * @param array $data
+     * @return Property\Group
+     */
+    public function createPropertyGroup($data)
+    {
+        $propertyGroup = new Property\Group();
+
+        //todo: remove hardcode data
+        $groupData = array(
+            'name' => $data['propertyGroupName'],
+            'comparable' => 0,
+            'position' => 1,
+            'sortMode' => 1,
+        );
+        $propertyGroup->fromArray($groupData);
+        $this->getManager()->persist($propertyGroup);
+
+        return $propertyGroup;
+    }
+
+    /**
+     * @param $data
+     * @return Property\Option
+     */
+    public function createPropertyOption($data)
+    {
+        $option = new Property\Option();
+        $option->setName($data['optionName']);
+        $option->setFilterable(false);
+        $this->getManager()->persist($option);
+
+        return $option;
     }
 
     /**
