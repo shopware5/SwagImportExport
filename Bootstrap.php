@@ -317,7 +317,9 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         $this->subscribeEvent(
                 'Enlight_Controller_Dispatcher_ControllerPath_Backend_SwagImportExport', 'getBackendController'
         );
-
+        $this->subscribeEvent(
+                'Enlight_Controller_Dispatcher_ControllerPath_Backend_CronJob', 'getCronjobController'
+        );
         $this->subscribeEvent(
                 'Enlight_Controller_Action_PostDispatch_Backend_Index', 'injectBackendAceEditor'
         );
@@ -351,7 +353,25 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
 
         return $this->Path() . '/Controllers/Backend/SwagImportExport.php';
     }
-    
+    /**
+     * Returns the path to the CronJob controller.
+     *
+     * @param Enlight_Event_EventArgs $args
+     * @return string
+     */
+    public function getCronjobController(Enlight_Event_EventArgs $args)
+    {
+        $this->checkLicense();
+        $this->registerMyNamespace();
+        $this->Application()->Snippets()->addConfigDir(
+                $this->Path() . 'Snippets/'
+        );
+        $this->Application()->Template()->addTemplateDir(
+                $this->Path() . 'Views/'
+        );
+        return $this->Path() . '/Controllers/Backend/CronJob.php';
+    }
+
     /**
      * Injects Ace Editor used in Conversions GUI
      * 
