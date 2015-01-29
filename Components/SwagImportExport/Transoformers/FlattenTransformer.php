@@ -350,29 +350,54 @@ class FlattenTransformer implements DataTransformerAdapter
             } else if ($node['adapter'] == 'propertyValue') {
                 $mapper = $this->createMapperFromProfile($node);
 
-                foreach ($mapper as $key => $value) {
-                    $collectedData[$key] = $this->getDataValue($data, $key);
+                $columnMapper = array(
+                    'propertyValueId' => $this->findNodeByShopwareField($node, 'propertyValueId'),
+                    'propertyValueName' => $this->findNodeByShopwareField($node, 'propertyValueName'),
+                    'propertyOptionName' => $this->findNodeByShopwareField($node, 'propertyOptionName'),
+                    'propertyGroupName' => $this->findNodeByShopwareField($node, 'propertyGroupName'),
+                );
+
+                if ($columnMapper['propertyValueId'] === false) {
+                    if ($columnMapper['propertyValueName'] === false) {
+                        throw new \Exception("propertyValueName column not found");
+                    }
+                    if ($columnMapper['propertyOptionName'] === false) {
+                        throw new \Exception("propertyOptionName column not found");
+                    }
                 }
 
-                $newData = array();
-                foreach ($collectedData as $key => $groupValue) {
+                foreach ($mapper as $key => $value) {
                     if ($mapper[$key] == 'propertyGroupName') {
-                        $propertyGroupNameKey = $key;
-                        $propertyGroupName = $groupValue;
+                        $propertyGroupName = $this->getDataValue($data, $key);
+                    } elseif ($mapper[$key] == 'propertyGroupId') {
+                        $propertyGroupId = $this->getDataValue($data, $key);
                     } else {
-                        $values = explode('|', $groupValue);
-                        foreach ($values as $index => $value) {
-                            $newData[$index][$key] = $value;
+                        $collectedData[$key] = explode('|',$this->getDataValue($data, $key));
+                    }
+                }
+
+                unset($collectedData[$columnMapper['propertyOptionName']]);
+
+                $newData = array();
+                if ($columnMapper['propertyValueId'] !== false) {
+                    $counter = count($collectedData[$columnMapper['propertyValueId']]);
+                } else {
+                    $counter = count($collectedData[$columnMapper['propertyValueName']]);
+                }
+
+                foreach ($collectedData as $key => $values) {
+                    for ($i = 0; $i < $counter; $i++) {
+                        if ($mapper[$key] == 'propertyValueName'){
+                            $value =  explode(':', $values[$i]);
+                            $newData[$i][$columnMapper['propertyOptionName']] = $value[0];
+                            $newData[$i][$key] = $value[1];
+                        } else {
+                            $newData[$i][$columnMapper['propertyGroupName']] = $propertyGroupName;
+                            $newData[$i][$key] = $values[$i];
                         }
                     }
                 }
 
-                foreach ($newData as $key => $value) {
-                    $newData[$key][$propertyGroupNameKey] = $propertyGroupName;
-                }
-
-                unset($propertyGroupName);
-                
                 return $newData;
             } else if ($node['adapter'] === 'translation') {
                 $translationName = $this->findNodeByShopwareField($node, 'name');
@@ -651,8 +676,17 @@ class FlattenTransformer implements DataTransformerAdapter
             $configuratorNodeMapper = $this->createMapperFromProfile($configuratorProfile);
             
             //group name, group description and group id is skipped
-            $this->createHeaderConfigurator($configuratorNodeMapper);
+            $skipList = array('configGroupId', 'configGroupName', 'configGroupDescription');
+            $this->createHeaderValues($configuratorNodeMapper, $skipList);
             
+        } elseif ($this->iterationParts[$path] == 'propertyValue') {
+            $propertyProfile = $this->getNodeFromProfile($this->getMainIterationPart(), 'propertyValue');
+            $propertyProfileNodeMapper = $this->createMapperFromProfile($propertyProfile);
+
+            //group name, group description and group id is skipped
+            $skipList = array('propertyOptionName');
+            $this->createHeaderValues($propertyProfileNodeMapper, $skipList);
+
         } elseif ($this->iterationParts[$path] == 'translation') {
             $translationProfile = $this->getNodeFromProfile($this->getMainIterationPart(), 'translation');
             $translationNodeMapper = $this->createMapperFromProfile($translationProfile);
@@ -746,17 +780,18 @@ class FlattenTransformer implements DataTransformerAdapter
      * configGroupId, configGroupName and configGroupDescription
      * 
      * @param array $node
+     * @param array $skipList
      * @param string $path
      */
-    public function createHeaderConfigurator($node, $path = null)
+    public function createHeaderValues($node, $skipList, $path = null)
     {
         foreach ($node as $key => $value) {
 
             if (is_array($value)) {
                 $currentPath = $path . '/' . $key;
-                $this->createHeaderConfigurator($value, $currentPath);
+                $this->createHeaderValues($value, $skipList, $currentPath);
             } else {
-                if ($value == 'configGroupId' || $value == 'configGroupName' || $value == 'configGroupDescription') {
+                if (in_array($value, $skipList)) {
                     continue;
                 }
                 
@@ -861,25 +896,25 @@ class FlattenTransformer implements DataTransformerAdapter
                 $propertyValueTreeMapper = $this->createMapperFromProfile($propertyValueProfile);
                 $propertyValueFlatMapper = $this->treeToFlat($propertyValueTreeMapper);
 
-                $tempCollection = array();
-                foreach ($node as $propertyValue) {
-                    foreach ($propertyValue as $key => $value) {
+                foreach ($node as $key => $property) {
+                    $this->collectPropertyData($property, $propertyValueFlatMapper, null, $property);
+                }
+
+                $iterationTempData = $this->getIterationTempData();
+
+                foreach ($iterationTempData as $key => $tempData) {
+                    if (is_array($tempData)) {
                         if ($propertyValueFlatMapper[$key] === 'propertyGroupName') {
-                            $tempCollection[$key] = $value;
+                            $this->saveTempData($tempData[0]);
                         } else {
-                            $tempCollection[$key][] = $value;
+                            $data = implode('|', $tempData);
+                            $this->saveTempData($data);
                         }
+
                     }
                 }
 
-                foreach ($tempCollection as $collection) {
-                    if (is_array($collection)) {
-                        $collection = implode('|', $collection);
-                    }
-                    $this->saveTempData($collection);
-                }
-
-                unset($tempCollection);
+                unset($this->iterationTempData);
             } elseif ($this->iterationParts[$path] == 'translation') {
                 $translationProfile = $this->getNodeFromProfile($this->getMainIterationPart(), 'translation');
                 $translationTreeMapper = $this->createMapperFromProfile($translationProfile);
@@ -990,7 +1025,7 @@ class FlattenTransformer implements DataTransformerAdapter
    public function treeToFlat($node)
     {
         $this->resetTempMapper();
-        $this->convertToFlat($node);
+        $this->convertToFlat($node, null);
 
         return $this->getTempMapper();
     }
@@ -1119,6 +1154,26 @@ class FlattenTransformer implements DataTransformerAdapter
             }
         } 
     }
+
+    public function findPropertyOptionName($node, $mapper, $path = null)
+    {
+        foreach ($node as $key => $value) {
+            $currentPath = $this->getMergedPath($path, $key);
+
+            if (is_array($value)) {
+                $result = $this->findPropertyOptionName($value, $mapper, $currentPath);
+
+                if ($result) {
+                    return $result;
+                }
+
+            } else {
+                 if ($mapper[$currentPath] == 'propertyOptionName'){
+                     return $value;
+                 }
+            }
+        }
+    }
     
     /**
      * @param array $node
@@ -1129,9 +1184,9 @@ class FlattenTransformer implements DataTransformerAdapter
     public function collectConfiguratorData($node, $mapper, $path = null, $originalNode = null)
     {
         foreach ($node as $key => $value) {
-            
+
             $currentPath = $this->getMergedPath($path, $key);
-            
+
             if (is_array($value)) {
                 $this->collectConfiguratorData($value, $mapper, $currentPath, $node);
             } else {
@@ -1140,14 +1195,50 @@ class FlattenTransformer implements DataTransformerAdapter
                     || $mapper[$currentPath] == 'configGroupId') {
                     continue;
                 }
-                
+
                 if ($mapper[$currentPath] == 'configOptionName'){
                     $group = $this->findConfigurationGroupValue($originalNode, $mapper);
-                    
+
                     if ($value && $group) {
-                        $mixedValue = $group . ':' . $value;                        
+                        $mixedValue = $group . ':' . $value;
                     }
-                                        
+
+                    $this->saveIterationTempData($currentPath, $mixedValue);
+                    unset($mixedValue);
+                } else {
+                    $this->saveIterationTempData($currentPath, $value);
+                }
+            }
+        }
+    }
+
+    /**
+     * @param array $node
+     * @param array $mapper
+     * @param string $path
+     * @param array $originalNode
+     */
+    public function collectPropertyData($node, $mapper, $path = null, $originalNode = null)
+    {
+        foreach ($node as $key => $value) {
+
+            $currentPath = $this->getMergedPath($path, $key);
+
+            if (is_array($value)) {
+                $this->collectPropertyData($value, $mapper, $currentPath, $node);
+            } else {
+                if ($mapper[$currentPath] == 'propertyOptionName') {
+                    continue;
+                }
+
+                if ($mapper[$currentPath] == 'propertyValueName'){
+
+                    $option = $this->findPropertyOptionName($originalNode, $mapper);
+
+                    if ($value && $option) {
+                        $mixedValue = $option . ':' . $value;
+                    }
+
                     $this->saveIterationTempData($currentPath, $mixedValue);
                     unset($mixedValue);
                 } else {

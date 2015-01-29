@@ -14,6 +14,7 @@ use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\DataHelper as DataHelper;
 use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
 use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
+use Shopware\Models\Property;
 
 class ArticlesDbAdapter implements DataDbAdapter
 {
@@ -997,13 +998,13 @@ class ArticlesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param array $properyValues
-     * @param int $properyValueIndex
+     * @param array $propertyValues
+     * @param int $propertyValueIndex
      * @param ArticleModel $article
      */
-    public function preparePropertyValues(&$properyValues, $properyValueIndex, ArticleModel $article)
+    public function preparePropertyValues(&$propertyValues, $propertyValueIndex, ArticleModel $article)
     {
-        if ($properyValues == null) {
+        if ($propertyValues == null) {
             return;
         }
 
@@ -1012,23 +1013,25 @@ class ArticlesDbAdapter implements DataDbAdapter
         $hydrateObject = 1;
         $values = array();
 
-        foreach ($properyValues as $index => $valueData) {
-            if ($valueData['parentIndexElement'] != $properyValueIndex) {
+        foreach ($propertyValues as $index => $valueData) {
+            if ($valueData['parentIndexElement'] != $propertyValueIndex) {
                 continue;
             }
 
-            /**
-             *  Get group - this is required.
-             */
-            if (!isset($valueData['propertyGroupName']) || empty($valueData['propertyGroupName'])){
+            $propertyGroup = $article->getPropertyGroup();
+
+            if (!isset($valueData['propertyGroupName']) && empty($valueData['propertyGroupName']) && !$propertyGroup){
                 continue;
-            } else if (isset($valueData['propertyGroupName'])) {
+            } else if (isset($valueData['propertyGroupName']) && !$propertyGroup) {
                 $propertyGroup = $propertyRepository->findOneBy(array('name' => $valueData['propertyGroupName']));
-            } else {
-                $propertyGroup = $article->getPropertyGroup();
+
+                if (!$propertyGroup){
+                    //creates property group
+                    $propertyGroup = $this->createPropertyGroup($valueData);
+                }
             }
 
-            if (!$propertyGroup instanceof \Shopware\Models\Property\Group) {
+            if (!$propertyGroup instanceof Property\Group) {
                 $message = SnippetsHelper::getNamespace()
                         ->get('adapters/articles/property_group_name_not_found', 'There is no propertyGroupName specified for article %s');
                 throw new AdapterException(sprintf($message, $article->getMainDetail()->getNumber()));
@@ -1049,11 +1052,16 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $value = $this->getManager()->getRepository('\Shopware\Models\Property\Value')->findOneBy(array(
                         'id' => $valueData['propertyValueId']
                 ));
-            } elseif (isset($valueData['value'])) {
-                if (isset($valueData['optionId'])) {
-                    $option = $this->getManager()->getRepository('\Shopware\Models\Property\Option')->find($valueData['optionId']);
+                if (!$value) {
+                    $message = SnippetsHelper::getNamespace()
+                        ->get('adapters/articles/property_id_not_found', 'Property value by id %s not found for article %s');
+                    throw new AdapterException(sprintf($message, $valueData['propertyGroupId'], $article->getMainDetail()->getNumber()));
+                }
+            } elseif (isset($valueData['propertyValueName'])) {
+                if (isset($valueData['propertyOptionId'])) {
+                    $option = $this->getManager()->getRepository('\Shopware\Models\Property\Option')->find($valueData['propertyOptionId']);
                     if (!$option) {
-                        throw new AdapterException(sprintf("Property option by id %s not found", $valueData['optionId']));
+                        throw new AdapterException(sprintf("Property option by id %s not found", $valueData['propertyOptionId']));
                     }
 
                     $filters = array(
@@ -1068,18 +1076,19 @@ class ArticlesDbAdapter implements DataDbAdapter
                     if (!$relation) {
                         $propertyGroup->addOption($option);
                     }
-                } elseif (isset($valueData['optionName'])) {
+                } elseif (isset($valueData['propertyOptionName'])) {
                     // if a name is passed and there is a matching option/group relation, get this option
                     // if only a name is passed, create a new option
                     $filters = array(
-                        array('property' => "options.name", 'expression' => '=', 'value' => $valueData['optionName']),
+                        array('property' => "options.name", 'expression' => '=', 'value' => $valueData['propertyOptionName']),
                         array('property' => "groups.name", 'expression' => '=', 'value' => $propertyGroup->getName()),
                     );
                     $query = $propertyRepository->getPropertyRelationQuery($filters, null, 1, 0);
                     /** @var \Shopware\Models\Property\Relation $relation */
                     $relation = $query->getOneOrNullResult($hydrateObject);
+
                     if (!$relation) {
-                        $option = new \Shopware\Models\Property\Option();
+                        $option = $this->createPropertyOption($valueData);
                         $propertyGroup->addOption($option);
                     } else {
                         $option = $relation->getOption();
@@ -1090,24 +1099,26 @@ class ArticlesDbAdapter implements DataDbAdapter
                     throw new AdapterException(sprintf($message, $article->getMainDetail()->getNumber()));
                 }
 
-                $option->fromArray($valueData['option']);
                 if ($option->isFilterable() === null) {
                     $option->setFilterable(false);
                 }
 
                 // If there is a filter value with matching name and option, load this value, else create a new one
                 $value = $this->getManager()->getRepository('\Shopware\Models\Property\Value')->findOneBy(array(
-                    'value' => $valueData['value'],
+                    'value' => $valueData['propertyValueName'],
                     'optionId' => $option->getId()
                 ));
                 if (!$value) {
                     // create the value
-                    $value = new \Shopware\Models\Property\Value($option, $valueData['value']);
+                    $value = new Property\Value($option, $valueData['propertyValueName']);
                 }
-                if (isset($valueData['position'])) {
-                    $value->setPosition($valueData['position']);
+
+                if (isset($valueData['propertyValuePosition'])) {
+                    $value->setPosition($valueData['propertyValuePosition']);
                 }
+
                 $this->getManager()->persist($value);
+                $this->getManager()->flush();
             } else {
                 $message = SnippetsHelper::getNamespace()
                         ->get('adapters/articles/property_id_or_name_required', 'Article %s requires name or id for property value');
@@ -1116,13 +1127,48 @@ class ArticlesDbAdapter implements DataDbAdapter
 
             $values[] = $value;
 
-            unset($properyValues[$index]);
+            unset($propertyValues[$index]);
         }
 
         return array(
             'group' => $propertyGroup,
             'values' => $values
         );
+    }
+
+    /**
+     * @param array $data
+     * @return Property\Group
+     */
+    public function createPropertyGroup($data)
+    {
+        $propertyGroup = new Property\Group();
+
+        //todo: remove hardcode data
+        $groupData = array(
+            'name' => $data['propertyGroupName'],
+            'comparable' => 0,
+            'position' => 1,
+            'sortMode' => 1,
+        );
+        $propertyGroup->fromArray($groupData);
+        $this->getManager()->persist($propertyGroup);
+
+        return $propertyGroup;
+    }
+
+    /**
+     * @param $data
+     * @return Property\Option
+     */
+    public function createPropertyOption($data)
+    {
+        $option = new Property\Option();
+        $option->setName($data['propertyOptionName']);
+        $option->setFilterable(false);
+        $this->getManager()->persist($option);
+
+        return $option;
     }
 
     /**
@@ -1875,11 +1921,10 @@ class ArticlesDbAdapter implements DataDbAdapter
             'article.id as articleId',
             'propertyGroup.name as propertyGroupName',
             'propertyValues.id as propertyValueId',
-            'propertyValues.value as value',
-            'propertyValues.position as position',
-            'propertyValues.valueNumeric as valueNumeric',
-            'propertyOptions.id as optionId',
-            'propertyOptions.name as optionName',
+            'propertyValues.value as propertyValueName',
+            'propertyValues.position as propertyValuePosition',
+            'propertyValues.valueNumeric as propertyValueNumeric',
+            'propertyOptions.name as propertyOptionName',
         );
     }
 
