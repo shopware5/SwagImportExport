@@ -32,7 +32,7 @@ use Shopware\Components\SwagImportExport\Utils\CommandHelper;
  * @category Shopware
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Shopware_Controllers_Backend_CronJob extends Shopware_Controllers_Backend_ExtJs
+class Shopware_Controllers_Backend_SwagImportExportCron extends Shopware_Controllers_Backend_ExtJs
 {
 
 	/**
@@ -47,7 +47,7 @@ class Shopware_Controllers_Backend_CronJob extends Shopware_Controllers_Backend_
 	}
 
 	/**
-	 * Check for terminal call for cron action
+	 * Check for terminal call on cron action
 	 */
 	public function preDispatch()
 	{
