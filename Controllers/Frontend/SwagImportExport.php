@@ -64,6 +64,6 @@ class Shopware_Controllers_Frontend_SwagImportExport extends Enlight_Controller_
      */
     public function cronAction()
     {
-        return $this->forward('cron', 'CronJob', 'backend');
+        return $this->forward('cron', 'SwagImportExportCron', 'backend');
     }
 }

@@ -318,7 +318,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
                 'Enlight_Controller_Dispatcher_ControllerPath_Backend_SwagImportExport', 'getBackendController'
         );
         $this->subscribeEvent(
-                'Enlight_Controller_Dispatcher_ControllerPath_Backend_CronJob', 'getCronjobController'
+                'Enlight_Controller_Dispatcher_ControllerPath_Backend_SwagImportExportCron', 'getCronjobController'
         );
         $this->subscribeEvent(
                 'Enlight_Controller_Action_PostDispatch_Backend_Index', 'injectBackendAceEditor'
@@ -369,7 +369,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         $this->Application()->Template()->addTemplateDir(
                 $this->Path() . 'Views/'
         );
-        return $this->Path() . '/Controllers/Backend/CronJob.php';
+        return $this->Path() . '/Controllers/Backend/SwagImportExportCron.php';
     }
 
     /**
