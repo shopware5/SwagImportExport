@@ -2,10 +2,13 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Models\Category\Category;
 use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
 use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
+use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 class CategoriesDbAdapter implements DataDbAdapter
 {
@@ -14,6 +17,9 @@ class CategoriesDbAdapter implements DataDbAdapter
      * Shopware\Components\Model\ModelManager
      */
     protected $manager;
+
+    /** @var $db  */
+    protected $db;
 
     /**
      * Shopware\Models\Category\Category
@@ -90,11 +96,31 @@ class CategoriesDbAdapter implements DataDbAdapter
 
         $builder = $this->getBuilder($columns, $ids);
 
-        $categories = $builder->getQuery()->getResult();
+        $categories = $builder->getQuery()->getArrayResult();
+        $categories = $this->prepareCategoriesForMultipleCustomerGroups($categories);
 
         $result['default'] = DbAdapterHelper::decodeHtmlEntities($categories);
 
         return $result;
+    }
+
+    private function prepareCategoriesForMultipleCustomerGroups($categories)
+    {
+        $returnValue = array();
+        $all = $categories;
+        foreach($all as $categorie) {
+            if(empty($categorie['customerGroups'])) {
+                $returnValue[] = $categorie;
+            } else {
+                foreach($categorie['customerGroups'] as $customerGroup) {
+                    $newCategorie = $categorie;
+                    unset($newCategorie['customerGroups']);
+                    $newCategorie['customerGroups'] = $customerGroup['id'];
+                    $returnValue[] = $newCategorie;
+                }
+            }
+        }
+        return $returnValue;
     }
 
     /**
@@ -119,17 +145,36 @@ class CategoriesDbAdapter implements DataDbAdapter
             'c.blog',
             'c.showFilterGroups',
             'c.external',
-            'c.hideFilter'
+            'c.hideFilter',
+            'c.customerGroups',
         );
 
         // Attributes
         $attributesSelect = $this->getAttributes();
-        
+
         if ($attributesSelect && !empty($attributesSelect)) {
             $columns = array_merge($columns, $attributesSelect);
         }
 
         return $columns;
+    }
+
+    /**
+     * @param $columns
+     * @param $ids
+     * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
+     */
+    public function getBuilder($columns, $ids)
+    {
+        $builder = $this->getManager()->createQueryBuilder();
+        $builder->select('c,attr, customerGroups')
+            ->from('Shopware\Models\Category\Category', 'c')
+            ->leftJoin('c.attribute', 'attr')
+            ->leftJoin('c.customerGroups', 'customerGroups')
+            ->Where('c.id IN (:ids)')
+            ->setParameter('ids', $ids);
+
+        return $builder;
     }
 
     public function getUnprocessedData()
@@ -139,15 +184,10 @@ class CategoriesDbAdapter implements DataDbAdapter
 
     public function getAttributes()
     {
-        $stmt = Shopware()->Db()->query("SHOW COLUMNS FROM s_categories_attributes");
+        $db = Shopware()->Db();
+        $stmt = $db->query("SHOW COLUMNS FROM s_categories_attributes");
         $columns = $stmt->fetchAll();
-
-        $attributes = array();
-        foreach ($columns as $column) {
-            if ($column['Field'] !== 'id' && $column['Field'] !== 'categoryID') {
-                $attributes[] = $column['Field'];
-            }
-        }
+        $attributes = $this->getFieldNames($columns);
 
         $attributesSelect = '';
         if ($attributes) {
@@ -166,6 +206,23 @@ class CategoriesDbAdapter implements DataDbAdapter
     }
 
     /**
+     * Helper method: Filtered the field names and return them
+     *
+     * @param $columns
+     * @return array
+     */
+    private function getFieldNames($columns)
+    {
+        $attributes = array();
+        foreach ($columns as $column) {
+            if ($column['Field'] !== 'id' && $column['Field'] !== 'categoryID') {
+                $attributes[] = $column['Field'];
+            }
+        }
+        return $attributes;
+    }
+
+    /**
      * Insert/Update data into db
      * 
      * @param array $records
@@ -179,7 +236,7 @@ class CategoriesDbAdapter implements DataDbAdapter
         );
 
         $manager = $this->getManager();
-        
+
         foreach ($records['default'] as $record) {
             try{
                 if (!$record['name']) {
@@ -201,16 +258,9 @@ class CategoriesDbAdapter implements DataDbAdapter
                     throw new AdapterException(sprintf($message, $record['name']));
                 }
 
-                /* @var $category \Shopware\Models\Category\Category */
-                $category = $this->getRepository()->findOneBy(array('id' => $record['id']));
-
-                if (!$category) {
-                    $category = new Category();
-                }
-
                 $record = $this->prepareData($record);
 
-                $category->fromArray($record);
+                $category = $this->createCategory($record, $parentCategory);
 
                 $violations = $manager->validate($category);
 
@@ -221,16 +271,105 @@ class CategoriesDbAdapter implements DataDbAdapter
                 }
 
                 $manager->persist($category);
+
                 $metadata = $manager->getClassMetaData(get_class($category));
                 $metadata->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);
+
                 $manager->flush();
                 $manager->clear();
-            
             } catch (AdapterException $e) {
                 $message = $e->getMessage();
                 $this->saveMessage($message);
             }
         }
+    }
+
+    /**
+     * Create the Category by hand. The method ->fromArray do not work
+     *
+     * @param array $record
+     * @param Category $parent
+     * @return Category
+     */
+    private function createCategory($record, Category $parent)
+    {
+        $recordAttribute = $record['attribute'];
+
+        // create the Category
+        /* @var $category Category */
+        $category = $this->getManager()->getRepository('\Shopware\Models\Category\Category')->find($record['id']);
+
+        if (!$category instanceof Category ) {
+            $category = new Category();
+            $category->setId($record['id']);
+        }
+
+        $category->setName($record['name']);
+        $category->setPosition($record['position']);
+        $category->setChanged(new \DateTime("now"));
+        $category->setMetaKeywords($record['metaKeywords']);
+        $category->setMetaDescription($record['metaDescription']);
+        $category->setCmsHeadline($record['cmsHeadline']);
+        $category->setCmsText($record['cmsText']);
+        $category->setTemplate($record['template']);
+        $category->setActive($record['active']);
+        $category->setBlog($record['blog']);
+        $category->setShowFilterGroups($record['showFilterGroups']);
+        $category->setExternal($record['external']);
+        $category->setHideFilter($record['hideFilter']);
+
+        $category->setParent($parent);
+
+        // create the categoryAttributes
+        $attributes = $this->getAttributeByCategoryId($record['id']);
+
+        if(!$attributes instanceof \Shopware\Models\Attribute\Category) {
+            $attributes = new \Shopware\Models\Attribute\Category();
+            $attributes->setCategoryId($record['id']);
+        }
+
+        $attributes->setAttribute1($recordAttribute['attribute1']);
+        $attributes->setAttribute2($recordAttribute['attribute2']);
+        $attributes->setAttribute3($recordAttribute['attribute3']);
+        $attributes->setAttribute4($recordAttribute['attribute4']);
+        $attributes->setAttribute5($recordAttribute['attribute5']);
+        $attributes->setAttribute6($recordAttribute['attribute6']);
+        $attributes->setCategory($category);
+
+        $category->setAttribute($attributes);
+
+        // get avoided customerGroups
+        $customerGroup = (int)$record['customerGroup'];
+
+        if($customerGroup){
+            $newCustomerGroup = $this->getCustomerGroupById($customerGroup);
+            if($newCustomerGroup){
+                $category->getCustomerGroups()->add($newCustomerGroup);
+            }
+        }
+
+        return $category;
+    }
+
+    /**
+     * @param int $id
+     * @return null|\Shopware\Models\Customer\Group
+     */
+    private function getCustomerGroupById($id)
+    {
+        /** @var \Shopware\Models\Customer\Group $group */
+        $group = $this->getManager()->getRepository('Shopware\Models\Customer\Group')->find($id);
+        return $group;
+    }
+
+    /**
+     * @param int $categoryId
+     * @return null|\Shopware\Models\Attribute\Category
+     */
+    private function getAttributeByCategoryId($categoryId)
+    {
+        $category = $this->getManager()->getRepository('\Shopware\Models\Attribute\Category')->findOneBy(array('categoryId' =>$categoryId));
+        return $category;
     }
 
     /**
@@ -271,7 +410,6 @@ class CategoriesDbAdapter implements DataDbAdapter
     public function getColumns($section)
     {
         $method = 'get' . ucfirst($section) . 'Columns';
-        
         if (method_exists($this, $method)) {
             return $this->{$method}();
         }
@@ -327,16 +465,12 @@ class CategoriesDbAdapter implements DataDbAdapter
         return $this->manager;
     }
 
-    public function getBuilder($columns, $ids)
+    public function getDb()
     {
-        $builder = $this->getManager()->createQueryBuilder();
-        $builder->select($columns)
-                ->from('Shopware\Models\Category\Category', 'c')
-                ->leftJoin('c.attribute', 'attr')
-                ->where('c.id IN (:ids)')
-                ->setParameter('ids', $ids);
-
-        return $builder;
+        if($this->db === null) {
+            $this->db = Shopware()->Db();
+        }
+        return $this->db;
     }
 
 }

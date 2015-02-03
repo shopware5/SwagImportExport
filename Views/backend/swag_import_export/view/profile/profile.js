@@ -126,7 +126,8 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
                         }
                     }
                 },
-                '-', {
+                '-',
+                {
                     text: me.snippets.toolbar.createProfile,
                     handler: function() {
                         me.fireEvent('createOwnProfile', me.profilesStore, me.toolbar.child('#profilesCombo'));
@@ -254,31 +255,52 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
                         var toolbar = this.dockedItems.get('toolbar');
 
                         if (record.get('type') === 'attribute') {
+                            // TODO: REMOVE AFTER DBUG
+                            console.info('attribute');
+                            // TODO: END
                             toolbar.items.get('createIteration').setDisabled(true);
                             toolbar.items.get('createAttribute').setDisabled(true);
                             toolbar.items.get('createChild').setDisabled(true);
                             toolbar.items.get('deleteSelected').setDisabled(false);
                         } else if (record.get('type') === 'leaf') {
+                            // TODO: REMOVE AFTER DBUG
+                            console.info('leaf');
+                            // TODO: END
                             toolbar.items.get('createIteration').setDisabled(false);
                             toolbar.items.get('createAttribute').setDisabled(false);
                             toolbar.items.get('createChild').setDisabled(false);
                             toolbar.items.get('deleteSelected').setDisabled(false);
                         } else if (record.get('type') === 'iteration') {
+                            // TODO: REMOVE AFTER DBUG
+                            console.info('iteration');
+                            // TODO: END
                             toolbar.items.get('createIteration').setDisabled(false);
                             toolbar.items.get('createAttribute').setDisabled(false);
                             toolbar.items.get('createChild').setDisabled(false);
                             toolbar.items.get('deleteSelected').setDisabled(false);
                         } else {
                             if (record.get('inIteration') === true) {
+                                // TODO: REMOVE AFTER DBUG
+                                console.info('iteration = True');
+                                // TODO: END
                                 toolbar.items.get('createAttribute').setDisabled(false);
                             } else {
+                                // TODO: REMOVE AFTER DBUG
+                                console.info('iteration = False');
+                                // TODO: END
                                 toolbar.items.get('createAttribute').setDisabled(true);
                             }
                             toolbar.items.get('createIteration').setDisabled(false);
                             toolbar.items.get('createChild').setDisabled(false);
                             if (record.getId() === 'root') {
+                                // TODO: REMOVE AFTER DBUG
+                                console.info('IS ROOT');
+                                // TODO: END
                                 toolbar.items.get('deleteSelected').setDisabled(true);
                             } else {
+                                // TODO: REMOVE AFTER DBUG
+                                console.info('IS NOT ROOT');
+                                // TODO: END
                                 toolbar.items.get('deleteSelected').setDisabled(false);
                             }
                         }

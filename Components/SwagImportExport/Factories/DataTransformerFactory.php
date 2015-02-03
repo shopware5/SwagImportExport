@@ -27,7 +27,7 @@ class DataTransformerFactory extends \Enlight_Class implements \Enlight_Hook
 
         // for every config we create a transformer and add it to the chain
         $names = $profile->getConfigNames();
-        
+
         foreach ($names as $name) {
             $config = $profile->getConfig($name);
             $transformer = $this->createDataTransformer($name, $config);

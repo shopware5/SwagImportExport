@@ -2,6 +2,7 @@
 
 namespace Shopware\Components\SwagImportExport;
 
+use Shopware\Components\SwagImportExport\FileIO\FileWriter;
 use \Shopware\Components\SwagImportExport\Profile\Profile;
 
 class DataWorkflow
@@ -23,7 +24,7 @@ class DataWorkflow
     protected $transformerChain;
 
     /**
-     * @var $fileIO 
+     * @var FileWriter $fileIO
      */
     protected $fileIO;
 
@@ -90,7 +91,6 @@ class DataWorkflow
             // read a bunch of records into simple php array;
             // the count of records may be less than 100 if we are at the end of the read.
             $data = $this->dataIO->read($stepSize);
-            
             // process that array with the full transformation chain
             $data = $this->transformerChain->transformForward($data);
             

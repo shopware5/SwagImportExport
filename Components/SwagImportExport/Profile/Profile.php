@@ -4,7 +4,7 @@ namespace Shopware\Components\SwagImportExport\Profile;
 
 class Profile
 {
-
+    /** @var  $profilEntity \Shopware\CustomModels\ImportExport\Profile */
     private $profileEntity;
     
     /**

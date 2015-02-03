@@ -7,7 +7,7 @@ class ProfileSerializer
 
     private $profile;
 
-    public function __construct(Shopware\Components\SwagImportExport\Profile\Profile $profile)
+    public function __construct(Profile $profile)
     {
         $this->profile = $profile;
     }

@@ -147,14 +147,14 @@ class TreeTransformer implements DataTransformerAdapter
      */
     public function buildRawData($data, $type, $nodePath = null)
     {
-        //creates import mapper 
+        //creates import mapper
         //["Prices_Price_groupName"]=> "pricegroup"
         $importMapper = $this->getImportMapper();
         
         foreach ($data as $record) {
             $this->transformFromTree($record, $importMapper, $type, $nodePath);
             $bufferData = $this->getBufferData($type);
-            
+
             if ($this->getMainType() !== $type) {
                 $rawData = $this->getRawData();
                 if (isset($rawData[$this->getMainType()])) {
@@ -253,18 +253,17 @@ class TreeTransformer implements DataTransformerAdapter
                 $currentNode = $mapper[$node['shopwareField']];
             }
         }
-        
+
         return $currentNode;
     }
-    
+
     /**
      * Transforms read it data into raw data
-     * 
-     * @param array $node
-     * @param array $importMapper
-     * @param string $adapter
-     * @param string $nodePath
-     * @return
+     *
+     * @param $node
+     * @param $importMapper
+     * @param $adapter
+     * @param null $nodePath
      */
     public function transformFromTree($node, $importMapper, $adapter, $nodePath = null)
     {
@@ -278,20 +277,20 @@ class TreeTransformer implements DataTransformerAdapter
             $this->buildRawData($node, $this->iterationNodes[$nodePath], $nodePath, true);
             return;
         }
-        
+
         if (is_array($node) && isset($node['_value'])) {
             if (isset($importMapper[$nodePath])) {
                 $this->saveBufferData($adapter, $importMapper[$nodePath], $node['_value']);
             }
 
             if (isset($node['_attributes'])) {
-                
                 $this->transformFromTree($node['_attributes'], $importMapper, $adapter, $nodePath);
             }
+
         } else if (is_array($node)) {
             foreach ($node as $key => $child) {
                 if($key !== '_attributes'){
-                    $currentNode = $nodePath . $separator . $key;                    
+                    $currentNode = $nodePath . $separator . $key;
                 } else {
                     $currentNode = $nodePath;
                 }

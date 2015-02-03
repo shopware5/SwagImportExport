@@ -1217,6 +1217,9 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         return $this->loggerRepository;
     }
 
+    /**
+     * @return Shopware_Plugins_Backend_SwagImportExport_Bootstrap
+     */
     public function Plugin()
     {
         return Shopware()->Plugins()->Backend()->SwagImportExport();
