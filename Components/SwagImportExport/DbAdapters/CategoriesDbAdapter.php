@@ -184,7 +184,7 @@ class CategoriesDbAdapter implements DataDbAdapter
 
     public function getAttributes()
     {
-        $db = Shopware()->Db();
+        $db = $this->getDb();
         $stmt = $db->query("SHOW COLUMNS FROM s_categories_attributes");
         $columns = $stmt->fetchAll();
         $attributes = $this->getFieldNames($columns);
@@ -301,22 +301,8 @@ class CategoriesDbAdapter implements DataDbAdapter
 
         if (!$category instanceof Category ) {
             $category = new Category();
-            $category->setId($record['id']);
+            $category->fromArray($record);
         }
-
-        $category->setName($record['name']);
-        $category->setPosition($record['position']);
-        $category->setChanged(new \DateTime("now"));
-        $category->setMetaKeywords($record['metaKeywords']);
-        $category->setMetaDescription($record['metaDescription']);
-        $category->setCmsHeadline($record['cmsHeadline']);
-        $category->setCmsText($record['cmsText']);
-        $category->setTemplate($record['template']);
-        $category->setActive($record['active']);
-        $category->setBlog($record['blog']);
-        $category->setShowFilterGroups($record['showFilterGroups']);
-        $category->setExternal($record['external']);
-        $category->setHideFilter($record['hideFilter']);
 
         $category->setParent($parent);
 
@@ -325,31 +311,51 @@ class CategoriesDbAdapter implements DataDbAdapter
 
         if(!$attributes instanceof \Shopware\Models\Attribute\Category) {
             $attributes = new \Shopware\Models\Attribute\Category();
+            $attributes->fromArray($record);
             $attributes->setCategoryId($record['id']);
         }
 
-        $attributes->setAttribute1($recordAttribute['attribute1']);
-        $attributes->setAttribute2($recordAttribute['attribute2']);
-        $attributes->setAttribute3($recordAttribute['attribute3']);
-        $attributes->setAttribute4($recordAttribute['attribute4']);
-        $attributes->setAttribute5($recordAttribute['attribute5']);
-        $attributes->setAttribute6($recordAttribute['attribute6']);
         $attributes->setCategory($category);
 
         $category->setAttribute($attributes);
 
         // get avoided customerGroups
-        $customerGroup = (int)$record['customerGroup'];
+        $customerGroupId = (int)$record['customerGroups'];
 
-        if($customerGroup){
-            $newCustomerGroup = $this->getCustomerGroupById($customerGroup);
-            if($newCustomerGroup){
-                $category->getCustomerGroups()->add($newCustomerGroup);
+        if ($customerGroupId) {
+            $customerGroup = $this->getCustomerGroupById($customerGroupId);
+            if ($customerGroup) {
+                if (!$this->checkIfRelationExists($category->getId(), $customerGroup->getId())) {
+                    $category->getCustomerGroups()->add($customerGroup);
+                }
+            }
+        }
+        return $category;
+    }
+
+    private $categoryAvoidCustomerGroups = null;
+
+    private function checkIfRelationExists($categoryId, $customerGroupId)
+    {
+        if ($this->categoryAvoidCustomerGroups === null) {
+            $this->setCategoryAvoidCustomerGroups();
+        }
+
+        foreach ($this->categoryAvoidCustomerGroups as $relation) {
+            if ($relation['categoryID'] == $categoryId && $relation['customergroupID'] == $customerGroupId) {
+                return true;
             }
         }
 
-        return $category;
+        return false;
     }
+
+    private function setCategoryAvoidCustomerGroups()
+    {
+        $sql = "SELECT categoryID, customergroupID FROM s_categories_avoid_customergroups";
+        $this->categoryAvoidCustomerGroups = $this->getDb()->fetchAll($sql);
+    }
+
 
     /**
      * @param int $id
