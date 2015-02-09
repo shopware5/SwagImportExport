@@ -287,6 +287,7 @@ class FlattenTransformer implements DataTransformerAdapter
                 // find fields
                 $columnMapper = array(
                     'configOptionName' => $this->findNodeByShopwareField($node, 'configOptionName'),
+                    'configOptionPosition' => $this->findNodeByShopwareField($node, 'configOptionPosition'),
                     'configOptionId' => $this->findNodeByShopwareField($node, 'configOptionId'),
                     'configGroupName' => $this->findNodeByShopwareField($node, 'configGroupName'),
                     'configSetName' => $this->findNodeByShopwareField($node, 'configSetName'),
@@ -319,6 +320,10 @@ class FlattenTransformer implements DataTransformerAdapter
                     $setNames = $this->getFirstElement($setNames);
                 }
 
+                if ($columnMapper['configOptionPosition'] !== false) {
+                    $positions = explode($separator, $this->getDataValue($data, $columnMapper['configOptionPosition']));
+                }
+
                 $configs = array();
                 $values = explode($separator, $this->getDataValue($data, $columnMapper['configOptionName']));
                 $optionIds = explode($separator, $this->getDataValue($data, $columnMapper['configOptionId']));
@@ -338,6 +343,7 @@ class FlattenTransformer implements DataTransformerAdapter
                     $configs[] = $this->transformConfiguratorToTree($node, array(
                         $columnMapper['configGroupName'] => $value[0],
                         $columnMapper['configOptionName'] => $value[1],
+                        $columnMapper['configOptionPosition'] => $positions[$i],
                         $columnMapper['configOptionId'] => $optionIds[$i],
                         $columnMapper['configSetId'] => $configSetId,
                         $columnMapper['configSetType'] => $configSetType,

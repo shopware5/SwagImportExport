@@ -1307,7 +1307,6 @@ class ArticlesDbAdapter implements DataDbAdapter
         }
 
         $configuratorSet = null;
-        $optionPosition = 0;
 
         foreach ($configurators as $index => $configurator) {
             if ($configurator['parentIndexElement'] != $configuratorIndex) {
@@ -1378,16 +1377,22 @@ class ArticlesDbAdapter implements DataDbAdapter
             }
 
             if (!$optionModel) {
+                if (isset($configurator['configOptionPosition']) && !empty($configurator['configOptionPosition'])){
+                    $position = $configurator['configOptionPosition'];
+                } else {
+                    $position = 1;
+                }
+
                 $optionModel = new Configurator\Option();
                 $optionData = array(
                     'id' => $configurator['configOptionId'],
                     'name' => $configurator['configOptionName'],
+                    'position' => $position,
                 );
                 $optionModel->fromArray($optionData);
             }
 
             $optionModel->setGroup($groupModel);
-            $optionModel->setPosition($optionPosition++);
 
             $groupData = array(
                 'id' => $configurator['configGroupId'],
@@ -1423,6 +1428,7 @@ class ArticlesDbAdapter implements DataDbAdapter
 
         $configuratorSet = $article->getConfiguratorSet();
         $configSetFlag = false;
+        $optionPosition = 1;
 
         foreach ($configurators as $index => $configurator) {
             if ($configurator['parentIndexElement'] != $configuratorIndex) {
@@ -1497,9 +1503,17 @@ class ArticlesDbAdapter implements DataDbAdapter
                 }
 
                 if (!$option) {
+                    if (isset($configurator['configOptionPosition']) && !empty($configurator['configOptionPosition'])){
+                        $position = $configurator['configOptionPosition'];
+                    } else {
+                        $optionPosition++;
+                        $position = $optionPosition;
+                    }
+
+                    //creates configuration option
                     $option = new Configurator\Option();
-                    $option->setPosition(0);
                     $option->setName($configurator['configOptionName']);
+                    $option->setPosition($position);
                     $option->setGroup($availableGroup);
                     $this->getManager()->persist($option);
                 }
@@ -1982,6 +1996,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             'variant.id as variantId',
             'configuratorOptions.id as configOptionId',
             'configuratorOptions.name as configOptionName',
+            'configuratorOptions.position as configOptionPosition',
             'configuratorGroup.id as configGroupId',
             'configuratorGroup.name as configGroupName',
             'configuratorGroup.description as configGroupDescription',
