@@ -93,7 +93,7 @@ class DataWorkflow
             $data = $this->dataIO->read($stepSize);
             // process that array with the full transformation chain
             $data = $this->transformerChain->transformForward($data);
-            
+
             // now the array should be a tree and we write it to the file
             $this->fileIO->writeRecords($outputFileName, $data);
 
