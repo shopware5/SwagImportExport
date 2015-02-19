@@ -13,11 +13,12 @@ class CsvFileReader implements FileReader
 
     /**
      * Reads csv records
-     * 
-     * @param string $fileName
-     * @param int $position
-     * @param int $step
-     * @return \array
+     *
+     * @param $fileName
+     * @param $position
+     * @param $step
+     * @return array
+     * @throws \Exception
      */
     public function readRecords($fileName, $position, $step)
     {
@@ -68,12 +69,13 @@ class CsvFileReader implements FileReader
     {
         return $this->treeStructure;
     }
-    
+
     /**
      * Counts total rows of the entire CSV file
-     * 
-     * @param string $fileName
+     *
+     * @param $fileName
      * @return int
+     * @throws \Exception
      */
     public function getTotalCount($fileName)
     {

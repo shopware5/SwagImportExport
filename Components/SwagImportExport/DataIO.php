@@ -114,7 +114,7 @@ class DataIO
         $dbAdapter = $this->getDbAdapter();
         
         $rawData = $dbAdapter->read($ids, $columns);
-        
+
         return $rawData;
     }
 

@@ -8,7 +8,8 @@ class DbAdapterHelper
     {
         foreach ($records as &$record) {
             foreach ($record as &$value) {
-                $value = html_entity_decode($value, ENT_COMPAT | ENT_HTML401, "UTF-8");
+                if(!is_array($value))
+                    $value = html_entity_decode($value, ENT_COMPAT | ENT_HTML401, "UTF-8");
             }
         }
         
