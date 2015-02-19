@@ -99,36 +99,7 @@ class CategoriesDbAdapter implements DataDbAdapter
         $categories = $builder->getQuery()->getResult();
         $result['default'] = DbAdapterHelper::decodeHtmlEntities($categories);
         $result['customerGroups'] = $this->getBuilder($this->getCustomerGroupsColumns(), $ids)->getQuery()->getResult();
-        $result = $this->dehydrate($result);
         return $result;
-    }
-
-    /**
-     * Remove duplicated entries
-     *
-     * @param array $result
-     * @return array
-     */
-    private function dehydrate($result)
-    {
-        $resultDefault = array();
-        foreach($result['default'] as $row) {
-            if(!in_array($row,$resultDefault)) {
-                $resultDefault[] = $row;
-            }
-        }
-
-        $resultCustomerGroups = array();
-        foreach($result['customerGroups'] as $row) {
-            if(!in_array($row,$resultCustomerGroups)) {
-                $resultCustomerGroups[] = $row;
-            }
-        }
-
-        $newResult['default'] = $resultDefault;
-        $newResult['customerGroups'] = $resultCustomerGroups;
-
-        return $newResult;
     }
 
     /**
@@ -144,7 +115,8 @@ class CategoriesDbAdapter implements DataDbAdapter
             ->leftJoin('c.attribute', 'attr')
             ->leftJoin('c.customerGroups', 'customerGroups')
             ->Where('c.id IN (:ids)')
-            ->setParameter('ids', $ids);
+            ->setParameter('ids', $ids)
+            ->distinct();
 
         return $builder;
     }
