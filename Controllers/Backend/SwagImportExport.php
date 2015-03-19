@@ -828,7 +828,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
                 unset($unprocessedData[$index]);
 
-                return array(
+                $postData = array(
                     'importFile' => $outputFileName,
                     'profileId' => $profileId,
                     'count' => $totalCount,
@@ -836,6 +836,12 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                     'format' => 'csv',
                     'load' => true,
                 );
+
+                if ($data['profileName'] === 'articlesImages'){
+                    $postData['batchSize'] = 1;
+                }
+
+                return $postData;
             }
         }
 

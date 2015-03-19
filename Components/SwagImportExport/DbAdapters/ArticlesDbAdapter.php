@@ -932,7 +932,8 @@ class ArticlesDbAdapter implements DataDbAdapter
                         if (!$media){
                             $modifyData = array(
                                 'ordernumber' => $article->getMainDetail()->getNumber(),
-                                'image' => $imageData['imageUrl']
+                                'image' => $imageData['imageUrl'],
+                                'thumbnail' => $imageData['thumbnail']
                             );
 
                             $this->setUnprocessedData('articlesImages', 'default', $modifyData);
@@ -1996,6 +1997,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             "CONCAT('$path', images.path, '.', images.extension) as imageUrl",
             'images.main as main',
             'images.mediaId as mediaId',
+            ' \'1\' as thumbnail'
         );
     }
 
