@@ -385,10 +385,10 @@ class ArticlesDbAdapter implements DataDbAdapter
                     $prices = $this->preparePrices($records['price'], $index, $variantModel, $articleModel, $articleData['tax']);
                     $variantModel->setPrices($prices);
 
-                    $articleData['images'] = $this->prepareImages($records['image'], $index, $articleModel);
-                    $articleData['categories'] = $this->prepareCategories($records['category'], $index, $articleModel);
                     $articleData['similar'] = $this->prepareSimilars($records['similar'], $index, $articleModel);
                     $articleData['related'] = $this->prepareAccessories($records['accessory'], $index, $articleModel);
+                    $articleData['categories'] = $this->prepareCategories($records['category'], $index, $articleModel);
+                    $articleData['images'] = $this->prepareImages($records['image'], $index, $articleModel);
                     $articleData['configuratorSet'] = $this->prepareArticleConfigurators($records['configurator'], $index, $articleModel);
 
                     $propertyValue = $this->preparePropertyValues($records['propertyValue'], $index, $articleModel);
@@ -424,11 +424,6 @@ class ArticlesDbAdapter implements DataDbAdapter
                     if ($record['mainNumber'] === $record['orderNumber'] || $updateFlag) {
                         $articleData = $this->prerpareArticle($record, $articleModel);
 
-                        $images = $this->prepareImages($records['image'], $index, $articleModel);
-                        if ($images) {
-                            $articleData['images'] = $images;
-                        }
-
                         $similar = $this->prepareSimilars($records['similar'], $index, $articleModel, $processedFlag);
                         if ($similar) {
                             $articleData['similar'] = $similar;
@@ -442,6 +437,11 @@ class ArticlesDbAdapter implements DataDbAdapter
                         $categories = $this->prepareCategories($records['category'], $index, $articleModel);
                         if ($categories) {
                             $articleData['categories'] = $categories;
+                        }
+
+                        $images = $this->prepareImages($records['image'], $index, $articleModel);
+                        if ($images) {
+                            $articleData['images'] = $images;
                         }
 
                         $propertyValue = $this->preparePropertyValues($records['propertyValue'], $index, $articleModel);
@@ -925,9 +925,25 @@ class ArticlesDbAdapter implements DataDbAdapter
                         );
                     } elseif (isset($imageData['path']) && !empty($imageData['path'])){
                         $media = $this->getMediaRepository()->findOneBy(array('name' => $imageData['path']));
+                    } elseif (isset($imageData['imageUrl']) && !empty($imageData['imageUrl'])){
+                        $name = pathinfo($imageData['imageUrl'], PATHINFO_FILENAME);
+
+                        $media = $this->getMediaRepository()->findOneBy(array('name' => $name));
+                        if (!$media){
+                            $modifyData = array(
+                                'ordernumber' => $article->getMainDetail()->getNumber(),
+                                'image' => $imageData['imageUrl']
+                            );
+
+                            $this->setUnprocessedData('articlesImages', 'default', $modifyData);
+                        }
                     }
 
                     if (!($media instanceof MediaModel)) {
+                        continue;
+                    }
+
+                    if ($this->isImageExists($article->getImages(), $media)){
                         continue;
                     }
 
@@ -936,13 +952,14 @@ class ArticlesDbAdapter implements DataDbAdapter
 
                 $imageModel->fromArray($imageData);
 
-                $images[] = $imageModel;
                 unset($imageModel);
                 unset($data[$key]);
             }
         }
 
-        if ($images === null) {
+        $images = $article->getImages();
+
+        if (!count($images)) {
             return;
         }
 
@@ -954,6 +971,25 @@ class ArticlesDbAdapter implements DataDbAdapter
         }
 
         return $images;
+    }
+
+    /**
+     * Checks is image already exists in article
+     *
+     * @param $imageCollection
+     * @param $media
+     * @return bool
+     */
+    public function isImageExists($imageCollection, $media)
+    {
+        $mediaName = $media->getName();
+        foreach ($imageCollection as $image){
+            if ($image->getPath() === $mediaName){
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -1218,7 +1254,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                         'articleId' => $articleNumber,
                         'ordernumber' => $similar['ordernumber'],
                     );
-                    $this->saveUnprocessedData('similar', $articleNumber, $similarData);
+                    $this->saveUnprocessedData('articles', 'similar', $articleNumber, $similarData);
                     continue;
                 }
 
@@ -1279,7 +1315,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                         'articleId' => $articleNumber,
                         'ordernumber' => $accessory['ordernumber'],
                     );
-                    $this->saveUnprocessedData('accessory', $articleNumber, $data);
+                    $this->saveUnprocessedData('articles', 'accessory', $articleNumber, $data);
                     continue;
                 }
 
@@ -1949,11 +1985,15 @@ class ArticlesDbAdapter implements DataDbAdapter
 
     public function getImageColumns()
     {
+        $request = Shopware()->Front()->Request();
+        $path = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() . '/media/image/';
+
         return array(
             'images.id as id',
             'images.articleId as articleId',
             'images.articleDetailId as variantId',
             'images.path as path',
+            "CONCAT('$path', images.path, '.', images.extension) as imageUrl",
             'images.main as main',
             'images.mediaId as mediaId',
         );
@@ -2099,13 +2139,18 @@ class ArticlesDbAdapter implements DataDbAdapter
         $this->categoryIdCollection[] = $categoryIdCollection;
     }
 
-    public function saveUnprocessedData($type, $articleNumber, $data)
+    public function saveUnprocessedData($profileName, $type, $articleNumber, $data)
     {
         $this->saveArticleData($articleNumber);
 
-        $this->setUnprocessedData($type, $data);
+        $this->setUnprocessedData($profileName, $type, $data);
     }
 
+    /**
+     * This data is for matching similars and accessories
+     *
+     * @param $articleNumber
+     */
     protected function saveArticleData($articleNumber)
     {
         $tempData = $this->getTempData();
@@ -2123,7 +2168,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             'processed' => 1
         );
 
-        $this->setUnprocessedData('article', $articleData);
+        $this->setUnprocessedData('articles', 'article', $articleData);
     }
 
     public function getUnprocessedData()
@@ -2131,9 +2176,9 @@ class ArticlesDbAdapter implements DataDbAdapter
         return $this->unprocessedData;
     }
 
-    public function setUnprocessedData($type, $data)
+    public function setUnprocessedData($profileName, $type, $data)
     {
-        $this->unprocessedData[$type][] = $data;
+        $this->unprocessedData[$profileName][$type][] = $data;
     }
 
     public function getTempData()

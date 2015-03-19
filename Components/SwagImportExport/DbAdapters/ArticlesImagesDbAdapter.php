@@ -137,7 +137,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
             'aimage.height as height',
             "GroupConcat( im.id, '|', mr.optionId, '|' , co.name, '|', cg.name
             ORDER by im.id
-            SEPARATOR ';' ) AS relations"
+            SEPARATOR ';' ) as relations"
         );
 
         return $columns;
