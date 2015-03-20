@@ -479,11 +479,11 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
 
         if (!file_exists($destPath)) {
             $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/articlesImages/directory_not_found', 'Destination directory %s does not exist.');
+                ->get('adapters/articlesImages/directory_not_found', 'Destination directory %s does not exist.');
             throw new \Exception(sprintf($message, $destPath));
         } elseif (!is_writable($destPath)) {
             $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/articlesImages/directory_permissions', 'Destination directory %s does not have write permissions.');
+                ->get('adapters/articlesImages/directory_permissions', 'Destination directory %s does not have write permissions.');
             throw new \Exception(sprintf($message, $destPath));
         }
 
@@ -502,9 +502,12 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
 
                 if (!$put_handle = fopen("$destPath/$filename", "w+")) {
                     $message = SnippetsHelper::getNamespace()
-                                ->get('adapters/articlesImages/could_open_dir_file', 'Could not open %s/%s for writing');
+                        ->get('adapters/articlesImages/could_open_dir_file', 'Could not open %s/%s for writing');
                     throw new AdapterException(sprintf($message), $destPath, $filename);
                 }
+
+                //replace empty spaces
+                $url = str_replace(' ', '%20', $url);
 
                 if (!$get_handle = fopen($url, "r")) {
                     $message = SnippetsHelper::getNamespace()
@@ -520,7 +523,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                 return "$destPath/$filename";
         }
         $message = SnippetsHelper::getNamespace()
-                    ->get('adapters/articlesImages/unsupported_schema', 'Unsupported schema %s.');
+            ->get('adapters/articlesImages/unsupported_schema', 'Unsupported schema %s.');
         throw new AdapterException(sprintf($message, $urlArray['scheme']));
     }
 
