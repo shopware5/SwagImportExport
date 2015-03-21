@@ -257,13 +257,19 @@ class CustomerDbAdapter implements DataDbAdapter
         foreach ($records['default'] as $record) {
             try {
 
-                if (!$record['email']) {
-                    $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/customer/email_required', 'User email is required field.');
-                    throw new AdapterException($message);
+                if (isset($record['id']) && !empty($record['id'])){
+                    $customer = $this->getRepository()->findOneBy(array('id' => $record['id']));
                 }
 
-                $customer = $this->getRepository()->findOneBy(array('email' => $record['email']));
+                if (!$customer){
+                    if (!isset($record['email']) && !$record['email']) {
+                        $message = SnippetsHelper::getNamespace()
+                            ->get('adapters/customer/email_required', 'User email is required field.');
+                        throw new AdapterException($message);
+                    }
+
+                    $customer = $this->getRepository()->findOneBy(array('email' => $record['email']));
+                }
 
                 if (isset($record['unhashedPassword']) && $record['unhashedPassword']
                     && (!isset($record['password']) || !$record['password'])) {
