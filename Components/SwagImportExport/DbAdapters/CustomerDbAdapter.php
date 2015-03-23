@@ -279,6 +279,27 @@ class CustomerDbAdapter implements DataDbAdapter
                     unset($record['unhashedPassword']);
                 }
 
+                if ($customer) {
+                    //if password is provided the encoder also must be set
+                    if (($record['password'] && !$record['encoder']) || (!$record['password'] && $record['encoder'])){
+                        $message = SnippetsHelper::getNamespace()
+                            ->get('adapters/customer/password_and_encoder_required', 'Password and encoder must be provided for email %s');
+                        throw new AdapterException(sprintf($message, $record['email']));
+                    }
+                } else {
+                    if (!isset($record['password']) && !$record['password']) {
+                        $message = SnippetsHelper::getNamespace()
+                            ->get('adapters/customer/password_required', 'Password must be provided for email %s');
+                        throw new AdapterException(sprintf($message, $record['email']));
+                    }
+
+                    if (!isset($record['encoder']) && !$record['encoder']) {
+                        $message = SnippetsHelper::getNamespace()
+                            ->get('adapters/customer/password_encoder_required', 'Password encoder must be provided for email %s');
+                        throw new AdapterException(sprintf($message, $record['email']));
+                    }
+                }
+
                 if (!$customer) {
                     $customer = new Customer();
 
@@ -290,18 +311,6 @@ class CustomerDbAdapter implements DataDbAdapter
                     }
                 }
 
-                if (!isset($record['password']) && !$record['password']) {
-                    $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/customer/password_required', 'Password must be provided for email %s');
-                    throw new AdapterException(sprintf($message, $record['email']));
-                }
-
-                if (isset($record['password']) && (!isset($record['encoder']) || !$record['encoder'])) {
-                    $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/customer/password_encoder_required', 'Password encoder must be provided for email %s');
-                    throw new AdapterException(sprintf($message, $record['email']));
-                }
-                
                 if (!isset($record['active']) || $record['active'] === '') {
                     $record['active'] = 1;
                 }
