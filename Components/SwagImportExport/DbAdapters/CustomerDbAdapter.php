@@ -257,13 +257,36 @@ class CustomerDbAdapter implements DataDbAdapter
         foreach ($records['default'] as $record) {
             try {
 
-                if (!$record['email']) {
-                    $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/customer/email_required', 'User email is required field.');
-                    throw new AdapterException($message);
+                $customer = null;
+
+                if (isset($record['id']) && !empty($record['id'])){
+                    $customer = $this->getRepository()->findOneBy(array('id' => $record['id']));
                 }
 
-                $customer = $this->getRepository()->findOneBy(array('email' => $record['email']));
+                if (!$customer){
+                    if (!isset($record['email']) && !$record['email']) {
+                        $message = SnippetsHelper::getNamespace()
+                            ->get('adapters/customer/email_required', 'User email is required field.');
+                        throw new AdapterException($message);
+                    }
+
+                    $filter = array('email' => $record['email'], 'accountMode' => 0);
+
+                    if (isset($record['subshopID']) && !empty($record['subshopID'])){
+                        $filter['shopId'] = $record['subshopID'];
+                    }
+
+                    $customer = $this->getRepository()->findBy($filter);
+
+                    //checks for multiple email address
+                    if (count($customer) > 1) {
+                        $message = SnippetsHelper::getNamespace()
+                            ->get('adapters/customer/multiple_email', 'There are existing email address/es with %s. Please provide subshopID');
+                        throw new AdapterException(sprintf($message, $record['email']));
+                    }
+
+                    $customer = $customer[0];
+                }
 
                 if (isset($record['unhashedPassword']) && $record['unhashedPassword']
                     && (!isset($record['password']) || !$record['password'])) {
@@ -368,7 +391,18 @@ class CustomerDbAdapter implements DataDbAdapter
         }
 
         $customerData = array();
-        
+
+        $shopId = isset($record['subshopID']) && !empty($record['subshopID']) ? $record['subshopID'] : 1;
+        $shop = $this->getManager()->find('Shopware\Models\Shop\Shop', $shopId);
+
+        if(!$shop){
+            $message = SnippetsHelper::getNamespace()
+                ->get('adapters/shop_not_found', 'Shop with id %s was not found');
+            throw new AdapterException(sprintf($message, $shopId));
+        }
+
+        $customerData['shop'] = $shop;
+
         foreach ($record as $key => $value) {
             if (preg_match('/^attrCustomer/', $key)) {
                 $newKey = lcfirst(preg_replace('/^attrCustomer/', '', $key));
@@ -379,7 +413,7 @@ class CustomerDbAdapter implements DataDbAdapter
                 unset($record[$key]);
             }
         }
-        
+
         if (isset($customerData['groupKey'])) {
             $customerData['group'] = Shopware()->Models()
                     ->getRepository('Shopware\Models\Customer\Group')
@@ -390,7 +424,7 @@ class CustomerDbAdapter implements DataDbAdapter
                 throw new \Exception(sprintf($message, $customerData['groupKey']));
             }
         }
-        
+
         $customerData['rawPassword'] = $customerData['hashPassword'];
         unset($record['hashPassword']);
 

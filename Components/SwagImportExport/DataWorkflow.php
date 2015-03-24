@@ -178,14 +178,14 @@ class DataWorkflow
         return $postData;
     }
 
-    public function saveUnprocessedData($postData, $outputFile)
+    public function saveUnprocessedData($postData, $profileName, $outputFile)
     {
         if ($postData['session']['prevState'] === 'new') {
             $header = $this->transformerChain->composeHeader();
             $this->fileIO->writeHeader($outputFile, $header);
         }
 
-        $data = $this->transformerChain->transformForward($postData['data']);
+        $data = $this->transformerChain->transformForward($postData['data'][$profileName]);
 
         $this->fileIO->writeRecords($outputFile, $data);
     }

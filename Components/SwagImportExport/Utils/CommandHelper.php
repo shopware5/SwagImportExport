@@ -322,7 +322,7 @@ class CommandHelper
         $sessionState = $dataIO->getSessionState();
 
         $dataWorkflow = new DataWorkflow($dataIO, $profile, $dataTransformerChain, $fileReader);
-        
+
         try {
             $post = $dataWorkflow->import($postData, $inputFile);
 
@@ -336,7 +336,16 @@ class CommandHelper
                     )
                 );
 
-                $this->afterImport($data, $inputFile);
+                $pathInfo = pathinfo($inputFile);
+
+                foreach ($data['data'] as $key => $value){
+                    $outputFile = 'media/unknown/' . $pathInfo['filename'] . '-' . $key .'-tmp.csv';
+                    $post['unprocessed'][] = array(
+                        'profileName' => $key,
+                        'fileName' => $outputFile
+                    );
+                    $this->afterImport($data, $key, $outputFile);
+                }
             }
 
             $this->sessionId = $post['sessionId'];
@@ -383,27 +392,25 @@ class CommandHelper
      * Saves unprocessed data to csv file
      *
      * @param array $data
-     * @param string $inputFile
+     * @param string $profileName
+     * @param string $outputFile
      */
-    protected function afterImport($data, $inputFile)
+    protected function afterImport($data, $profileName, $outputFile)
     {
         $fileFactory = $this->Plugin()->getFileIOFactory();
 
         //loads hidden profile for article
-        $profile = $this->Plugin()->getProfileFactory()->loadHiddenProfile('articles');
+        $profile = $this->Plugin()->getProfileFactory()->loadHiddenProfile($profileName);
 
         $fileHelper = $fileFactory->createFileHelper();
         $fileWriter = $fileFactory->createFileWriter(array('format' => 'csv'), $fileHelper);
 
         $dataTransformerChain = $this->Plugin()->getDataTransformerFactory()->createDataTransformerChain(
-                $profile, array('isTree' => $fileWriter->hasTreeStructure())
+            $profile, array('isTree' => $fileWriter->hasTreeStructure())
         );
 
-        $pathInfo = pathinfo($inputFile);
-        $outputFile = Shopware()->DocPath() . 'media/unknown/' . $pathInfo['filename'] . '-tmp.' . $pathInfo['extension'];
-
-        $dataWorkflow = new DataWorkflow($dataIO, $profile, $dataTransformerChain, $fileWriter);
-        $dataWorkflow->saveUnprocessedData($data, $outputFile);
+        $dataWorkflow = new DataWorkflow(null, $profile, $dataTransformerChain, $fileWriter);
+        $dataWorkflow->saveUnprocessedData($data, $profileName, Shopware()->DocPath() . $outputFile);
     }
 
     protected function Plugin()
