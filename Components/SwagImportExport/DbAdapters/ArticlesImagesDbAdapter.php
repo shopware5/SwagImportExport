@@ -137,7 +137,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
             'aimage.height as height',
             "GroupConcat( im.id, '|', mr.optionId, '|' , co.name, '|', cg.name
             ORDER by im.id
-            SEPARATOR ';' ) AS relations"
+            SEPARATOR ';' ) as relations"
         );
 
         return $columns;
@@ -250,12 +250,15 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                     $this->getManager()->persist($media);
                     $this->getManager()->flush();
 
+                    //thumbnail flag
+                    $thumbnail = $record['thumbnail'] == 0 ? false : true;
+
                     if (empty($record['main'])) {
                         $record['main'] = 1;
                     }
 
                     //generate thumbnails
-                    if ($media->getType() == \Shopware\Models\Media\Media::TYPE_IMAGE) {
+                    if ($media->getType() == \Shopware\Models\Media\Media::TYPE_IMAGE && $thumbnail) {
                         /*                 * @var $manager \Shopware\Components\Thumbnail\Manager */
                         $manager = Shopware()->Container()->get('thumbnail_manager');
                         $manager->createMediaThumbnail($media, array(), true);

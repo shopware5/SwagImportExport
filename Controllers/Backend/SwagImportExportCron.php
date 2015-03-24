@@ -96,70 +96,74 @@ class Shopware_Controllers_Backend_SwagImportExportCron extends Shopware_Control
 		fclose($file);
 
 		$profileRepository = $this->getManager()->getRepository('Shopware\CustomModels\ImportExport\Profile');
-		foreach($files as $file) {
-			$fileExtension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-			if ($fileExtension == 'xml' || $fileExtension == 'csv') {
-				try {
+        foreach ($files as $file) {
+            $fileExtension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+            $fileName = strtolower(pathinfo($file, PATHINFO_FILENAME));
 
-					$profile = CommandHelper::findProfileByName($file, $profileRepository);
-					if ($profile === false) {
-						$message = SnippetsHelper::getNamespace()->get('cronjob/no_profile', 'Failed to create directory %s');
-						throw new \Exception(sprintf($message, $file));
-					}
+            if ($fileExtension == 'xml' || $fileExtension == 'csv') {
+                try {
 
-					$filePath = Shopware()->DocPath() . 'files/import_cron/' . $file;
-					$fileObject = new \Symfony\Component\HttpFoundation\File\File($filePath);
+                    $profile = CommandHelper::findProfileByName($file, $profileRepository);
+                    if ($profile === false) {
+                        $message = SnippetsHelper::getNamespace()->get('cronjob/no_profile', 'No profile found %s');
+                        throw new \Exception(sprintf($message, $fileName));
+                    }
 
-					$album = $this->createAlbum();
+                    $filePath = Shopware()->DocPath() . 'files/import_cron/' . $file;
+                    $fileObject = new \Symfony\Component\HttpFoundation\File\File($filePath);
 
-					$media = new \Shopware\Models\Media\Media();
+                    $album = $this->createAlbum();
 
-					$media->setAlbum($album);
-					$media->setDescription('');
-					$media->setCreated(new DateTime());
-					$media->setExtension($fileExtension);
+                    $media = new \Shopware\Models\Media\Media();
 
-					$identity = Shopware()->Auth()->getIdentity();
-					if ($identity !== null) {
-						$media->setUserId($identity->id);
-					} else {
-						$media->setUserId(0);
-					}
+                    $media->setAlbum($album);
+                    $media->setDescription('');
+                    $media->setCreated(new DateTime());
+                    $media->setExtension($fileExtension);
 
-					//set the upload file into the model. The model saves the file to the directory
-					$media->setFile($fileObject);
+                    $identity = Shopware()->Auth()->getIdentity();
+                    if ($identity !== null) {
+                        $media->setUserId($identity->id);
+                    } else {
+                        $media->setUserId(0);
+                    }
 
-					$this->getManager()->persist($media);
-					$this->getManager()->flush();
+                    //set the upload file into the model. The model saves the file to the directory
+                    $media->setFile($fileObject);
 
-					$mediaPath = $media->getPath();
+                    $this->getManager()->persist($media);
+                    $this->getManager()->flush();
 
-				} catch (\Exception $e) {
-					echo $e->getMessage() . "\n";
-					unlink($lockerFileLocation);
-					return;
-				}
+                    $mediaPath = $media->getPath();
 
-				try {
+                } catch (\Exception $e) {
+                    echo $e->getMessage() . "\n";
+                    unlink($lockerFileLocation);
+                    return;
+                }
 
-					$return = $this->start($profile, $mediaPath, $fileExtension);
+                try {
 
-					$pathInfo = pathinfo($mediaPath);
-					$tmpFileName = 'media/unknown/' . $pathInfo['filename'] . '-tmp.' . $pathInfo['extension'];
-					$tmpFile = Shopware()->DocPath() . $tmpFileName;
+                    $return = $this->start($profile, $mediaPath, $fileExtension);
 
-					if (file_exists($tmpFile)) {
+                    $profilesMapper = array('articles', 'articlesImages');
 
-						//renames
-						$outputFileName = 'media/unknown/' . $pathInfo['filename'] . '-swag.' . $pathInfo['extension'];
-						$outputFile = Shopware()->DocPath() . $outputFileName;
-						rename($tmpFile, $outputFile);
+                    //loops the unprocessed data
+                    $pathInfo = pathinfo($mediaPath);
+                    foreach ($profilesMapper as $profileName) {
+                        $tmpFileName = 'media/unknown/' . $pathInfo['filename'] . '-' . $profileName . '-tmp.csv';
+                        $tmpFile = Shopware()->DocPath() . $tmpFileName;
 
-						$profile = $this->Plugin()->getProfileFactory()->loadHiddenProfile('articles');
-						$profileEntity = $profile->getEntity();
+                        if (file_exists($tmpFile)) {
+                            $outputFile = str_replace('-tmp', '-swag', $tmpFile);
+                            rename($tmpFile, $outputFile);
 
-						$this->start($profileEntity, $outputFile, 'csv');
-					}
+                            $profile = $this->Plugin()->getProfileFactory()->loadHiddenProfile($profileName);
+                            $profileEntity = $profile->getEntity();
+
+                            $this->start($profileEntity, $outputFile, 'csv');
+                        }
+                    }
 
 					$message = $return['data']['position'] . ' ' . $return['data']['adapter'] . " imported successfully \n";
 					echo $message;
