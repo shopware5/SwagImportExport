@@ -270,7 +270,9 @@ class CustomerDbAdapter implements DataDbAdapter
                         throw new AdapterException($message);
                     }
 
-                    $filter = array('email' => $record['email'], 'accountMode' => 0);
+                    $accountMode = (int) (isset($record['accountMode']) ? $record['accountMode'] : 1);
+
+                    $filter = array('email' => $record['email'], 'accountMode' => $accountMode);
 
                     if (isset($record['subshopID']) && !empty($record['subshopID'])){
                         $filter['shopId'] = $record['subshopID'];
