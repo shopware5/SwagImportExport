@@ -251,7 +251,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                     $this->getManager()->flush();
 
                     //thumbnail flag
-                    $thumbnail = $record['thumbnail'] == 0 ? false : true;
+                    $thumbnail = $record['thumbnail'] === 0 ? false : true;
 
                     if (empty($record['main'])) {
                         $record['main'] = 1;
