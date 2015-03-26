@@ -427,7 +427,10 @@ class CustomerDbAdapter implements DataDbAdapter
             }
         }
 
-        $customerData['rawPassword'] = $customerData['hashPassword'];
+        if (isset($customerData['hashPassword']) && !empty($customerData['hashPassword'])){
+            $customerData['rawPassword'] = $customerData['hashPassword'];
+        }
+
         unset($record['hashPassword']);
 
         return $customerData;
