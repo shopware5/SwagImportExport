@@ -61,11 +61,12 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * Returns article images 
-     * 
+     * Returns article images
+     *
      * @param array $ids
      * @param array $columns
      * @return array
+     * @throws
      */
     public function read($ids, $columns)
     {
@@ -118,8 +119,8 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * Returns default image columns name 
-     * 
+     * Returns default image columns name
+     *
      * @return array
      */
     public function getDefaultColumns()
@@ -137,7 +138,8 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
             'aimage.height as height',
             "GroupConcat( im.id, '|', mr.optionId, '|' , co.name, '|', cg.name
             ORDER by im.id
-            SEPARATOR ';' ) as relations"
+            SEPARATOR ';' ) as relations",
+            ' \'1\' as thumbnail'
         );
 
         return $columns;
@@ -251,7 +253,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                     $this->getManager()->flush();
 
                     //thumbnail flag
-                    $thumbnail = $record['thumbnail'] === 0 ? false : true;
+                    $thumbnail = isset($record['thumbnail']) && $record['thumbnail'] == 0 ? false : true;
 
                     if (empty($record['main'])) {
                         $record['main'] = 1;
