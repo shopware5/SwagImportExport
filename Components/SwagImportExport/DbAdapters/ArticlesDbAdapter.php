@@ -930,10 +930,11 @@ class ArticlesDbAdapter implements DataDbAdapter
 
                         $media = $this->getMediaRepository()->findOneBy(array('name' => $name));
                         if (!$media){
+                            $thumbnail = isset($record['thumbnail']) && $record['thumbnail'] == 0 ? 0 : 1;
                             $modifyData = array(
                                 'ordernumber' => $article->getMainDetail()->getNumber(),
                                 'image' => $imageData['imageUrl'],
-                                'thumbnail' => $imageData['thumbnail']
+                                'thumbnail' => $thumbnail
                             );
 
                             $this->setUnprocessedData('articlesImages', 'default', $modifyData);
