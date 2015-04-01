@@ -24,6 +24,8 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     protected $manager;
 
+    protected $db;
+
     /**
      * Shopware\Models\Article\Article
      */
@@ -31,6 +33,10 @@ class ArticlesDbAdapter implements DataDbAdapter
     protected $variantRepository;
     protected $priceRepository;
     protected $groupRepository;
+
+    //configurator
+    protected $configGroupRepository;
+    protected $configOptionRepository;
 
     //mappers
     protected $articleVariantMap;
@@ -198,6 +204,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         $result['category'] = $categoryBuilder->getQuery()->getResult();
 
         $result['translation'] = $this->prepareTranslationExport($ids);
+        $result['translationConfigurator'] = $this->prepareTranslationConfiguratorExport($ids);
 
         return $result;
     }
@@ -219,7 +226,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 GROUP BY translation.id
                 ";
 
-        $translations = $stmt = Shopware()->Db()->query($sql)->fetchAll();
+        $translations = $this->getDb()->query($sql)->fetchAll();
 
         $shops = $this->getShops();
 
@@ -297,6 +304,83 @@ class ArticlesDbAdapter implements DataDbAdapter
         $shops = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop')->findAll();
 
         return $shops;
+    }
+
+    public function prepareTranslationConfiguratorExport($ids)
+    {
+        $articleDetailIds = implode(',', $ids);
+
+        $sql = "SELECT articleDetails.id as articleId,
+                ao.group_id as groupId, ag.name as groupBaseName,
+                ct2.objectdata as groupObjectData, ct2.objectlanguage as languageId
+                FROM s_articles_details as articleDetails
+
+                LEFT JOIN s_article_configurator_option_relations AS aor
+                ON aor.article_id = articleDetails.id
+
+                LEFT JOIN s_core_translations AS ct
+                ON ct.objectkey = aor.option_id
+
+                LEFT JOIN s_article_configurator_options AS ao
+                ON ao.id = aor.option_id
+
+                LEFT JOIN s_article_configurator_groups AS ag
+                ON ag.id = ao.group_id
+
+                LEFT JOIN s_core_translations AS ct2
+                ON ct2.objectkey = ao.group_id
+
+                WHERE articleDetails.id IN ($articleDetailIds) AND ct2.objecttype = 'configuratorgroup'
+                GROUP BY ct2.id
+                ";
+
+        $configGroups = $this->getDb()->query($sql)->fetchAll();
+
+        $sql = "SELECT articleDetails.id as variantId,
+                ao.name as optionBaseName, ao.group_id as groupId,
+                aor.option_id as optionId, ct.objectdata, ct.objectlanguage as languageId
+                FROM s_articles_details as articleDetails
+
+                LEFT JOIN s_article_configurator_option_relations AS aor
+                ON aor.article_id = articleDetails.id
+
+                LEFT JOIN s_core_translations AS ct
+                ON ct.objectkey = aor.option_id
+
+                LEFT JOIN s_article_configurator_options AS ao
+                ON ao.id = aor.option_id
+
+                WHERE articleDetails.id IN ($articleDetailIds) AND ct.objecttype = 'configuratoroption'
+                ";
+
+        $configOptions = $this->getDb()->query($sql)->fetchAll();
+
+        foreach($configOptions as $index => $option){
+            $hasGroupTranslation = false;
+
+            $optionData = unserialize($option['objectdata']);
+            $configOptions[$index]['optionName'] = $optionData['name'];
+
+            foreach($configGroups as $group){
+                if($option['groupId'] === $group['groupId'] && $option['languageId'] === $group['languageId']){
+                    $groupData = unserialize($group['groupObjectData']);
+                    $configOptions[$index]['groupBaseName'] = $group['groupBaseName'];
+                    $configOptions[$index]['groupName'] = $groupData['name'];
+                    $configOptions[$index]['groupDescription'] = $groupData['description'];
+                    $hasGroupTranslation = true;
+                    break;
+                }
+            }
+
+            //writes empty values
+            if (!$hasGroupTranslation){
+                $configOptions[$index]['groupBaseName'] = '';
+                $configOptions[$index]['groupName'] = '';
+                $configOptions[$index]['groupDescription'] = '';
+            }
+        }
+
+        return $configOptions;
     }
 
     /**
@@ -496,6 +580,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $this->getManager()->clear();
 
                 $this->writeTranslations($records['translation'], $index, $articleId);
+                $this->writeTranslationConfigurations($records['translationConfigurator'], $index);
 
             } catch (AdapterException $e) {
                 $message = $e->getMessage();
@@ -556,6 +641,81 @@ class ArticlesDbAdapter implements DataDbAdapter
         }
     }
 
+    public function writeTranslationConfigurations($translations, $translationIndex)
+    {
+        if ($translations == null) {
+            return;
+        }
+
+        $translationWriter = new \Shopware_Components_Translation();
+
+        foreach ($translations as $index => $translation) {
+            $group = null;
+            $option = null;
+
+            if ($translation['parentIndexElement'] === $translationIndex) {
+
+                if (!isset($translation['languageId']) || empty($translation['languageId'])){
+                    continue;
+                }
+
+                $shop = $this->getManager()->find('Shopware\Models\Shop\Shop', $translation['languageId']);
+                if (!$shop) {
+                    $message = SnippetsHelper::getNamespace()
+                        ->get('adapters/articles/no_shop_id', 'Shop by id %s not found');
+                    throw new AdapterException(sprintf($message, $translation['languageId']));
+                }
+
+                //configuration group
+                if (isset($translation['groupId']) && !empty($translation['groupId'])){
+                    $group = $this->getManager()->find('Shopware\Models\Article\Configurator\Group', $translation['groupId']);
+
+                    if(!$group){
+                        $message = SnippetsHelper::getNamespace()
+                            ->get('adapters/articles/no_group_id', 'Group with id %s not found');
+                        throw new AdapterException(sprintf($message, $translation['groupId']));
+                    }
+                } elseif (isset($translation['groupBaseName']) && !empty($translation['groupBaseName'])){
+                    $group = $this->getConfigGroupRepository()->findOneBy(array('name' => $translation['groupBaseName']));
+                }
+
+                if ($group){
+                    $translationWriter->write(
+                        $shop->getId(),
+                        'configuratorgroup',
+                        $group->getId(),
+                        array(
+                            'name' => $translation['groupName'],
+                            'description' => $translation['groupDescription']
+                        )
+                    );
+                }
+
+                //configuration option
+                if (isset($translation['optionId']) && !empty($translation['optionId'])){
+                    $option = $this->getManager()->find('Shopware\Models\Article\Configurator\Option', $translation['optionId']);
+
+                    if(!$option){
+                        $message = SnippetsHelper::getNamespace()
+                            ->get('adapters/articles/no_option_id', 'Option with id %s not found');
+                        throw new AdapterException(sprintf($message, $translation['optionId']));
+                    }
+                } elseif (isset($translation['optionBaseName']) && !empty($translation['optionBaseName'])){
+                    $option = $this->getConfigOptionRepository()->findOneBy(array('name' => $translation['optionBaseName']));
+                }
+
+                if ($option){
+                    $translationWriter->write(
+                        $shop->getId(),
+                        'configuratoroption',
+                        $option->getId(),
+                        array('name' => $translation['optionName'])
+                    );
+                }
+            }
+        }
+    }
+
     public function getSections()
     {
         return array(
@@ -568,6 +728,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             array('id' => 'configurator', 'name' => 'configurator'),
             array('id' => 'category', 'name' => 'category'),
             array('id' => 'translation', 'name' => 'translation'),
+            array('id' => 'translationConfigurator', 'name' => 'translationConfigurator'),
         );
     }
 
@@ -1869,7 +2030,7 @@ class ArticlesDbAdapter implements DataDbAdapter
 
     public function getArticleAttributes()
     {
-        $stmt = Shopware()->Db()->query("SHOW COLUMNS FROM `s_articles_attributes`");
+        $stmt = $this->getDb()->query("SHOW COLUMNS FROM `s_articles_attributes`");
         $columns = $stmt->fetchAll();
 
         $attributes = array();
@@ -1946,6 +2107,10 @@ class ArticlesDbAdapter implements DataDbAdapter
             case 'translation':
                 return array(
                     'article.id as articleId',
+                );
+            case 'translationConfigurator':
+                return array(
+                    'variant.id as variantId',
                 );
         }
     }
@@ -2094,6 +2259,21 @@ class ArticlesDbAdapter implements DataDbAdapter
         }
 
         return $columns;
+    }
+
+    public function getTranslationConfiguratorColumns()
+    {
+        return array(
+            'variant.id as variantId',
+            'translation.optionId as optionId',
+            'translation.optionBaseName as optionBaseName',
+            'translation.optionName as optionName',
+            'translation.groupId as groupId',
+            'translation.groupBaseName as groupBaseName',
+            'translation.groupName as groupName',
+            'translation.groupDescription as groupDescription',
+            'translation.objectlanguage as languageId',
+        );
     }
 
     public function getTranslationAttr()
@@ -2290,6 +2470,28 @@ class ArticlesDbAdapter implements DataDbAdapter
         return $this->mediaRepository;
     }
 
+    /**
+     * @return Shopware\Models\Article\Configurator\Group
+     */
+    public function getConfigGroupRepository(){
+        if ($this->configGroupRepository === null){
+            $this->configGroupRepository = $this->getManager()->getRepository('Shopware\Models\Article\Configurator\Group');
+        }
+
+        return $this->configGroupRepository;
+    }
+
+    /**
+     * @return Shopware\Models\Article\Configurator\Option
+     */
+    public function getConfigOptionRepository(){
+        if ($this->configOptionRepository === null){
+            $this->configOptionRepository = $this->getManager()->getRepository('Shopware\Models\Article\Configurator\Option');
+        }
+
+        return $this->configOptionRepository;
+    }
+
     /*
      * @return Shopware\Components\Model\ModelManager
      */
@@ -2300,6 +2502,15 @@ class ArticlesDbAdapter implements DataDbAdapter
         }
 
         return $this->manager;
+    }
+
+    public function getDb()
+    {
+        if ($this->db === null){
+            $this->db = Shopware()->Db();
+        }
+
+        return $this->db;
     }
 
     /**
