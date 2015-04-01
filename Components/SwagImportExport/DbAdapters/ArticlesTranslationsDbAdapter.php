@@ -45,12 +45,9 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
         $elements = $elementBuilder->getQuery()->getArrayResult();
 
         if ($elements) {
-            $elementsCollection = array();
             foreach ($elements as $element){
-                $elementsCollection[] = 't.' . $element['name'];
+                $translation[] = 't.' . $element['name'];
             }
-
-            $translation = array_merge($translation, $elementsCollection);
         }
 
         return $translation;

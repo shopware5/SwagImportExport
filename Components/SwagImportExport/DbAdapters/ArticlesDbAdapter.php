@@ -236,13 +236,21 @@ class ArticlesDbAdapter implements DataDbAdapter
                 "txtkeywords" => "keywords"
             );
 
+            //attributes
+            $attributes =  $this->getTranslationAttr();
+
+            if ($attributes){
+                foreach ($attributes as $attr){
+                    $translationFields[$attr['name']] = $attr['name'];
+                }
+            }
+
             $rows = array();
             foreach ($translations as $index => $record) {
                 $articleId = $record['articleId'];
                 $languageId = $record['languageId'];
                 $rows[$articleId][$languageId]['articleId'] = $articleId;
                 $rows[$articleId][$languageId]['languageId'] = $languageId;
-
 
                 $objectdata = unserialize($record['objectdata']);
 
@@ -516,7 +524,17 @@ class ArticlesDbAdapter implements DataDbAdapter
             'packUnit'
         );
 
+        //attributes
+        $attributes =  $this->getTranslationAttr();
+
+        if ($attributes){
+            foreach ($attributes as $attr){
+                $whitelist[] = $attr['name'];
+            }
+        }
+
         $translationWriter = new \Shopware_Components_Translation();
+
 
         foreach ($translations as $index => $translation) {
             if ($translation['parentIndexElement'] === $translationIndex) {
@@ -2058,22 +2076,31 @@ class ArticlesDbAdapter implements DataDbAdapter
 
     public function getTranslationColumns()
     {
-         return array(
+        $columns = array(
             'article.id as articleId',
-//             'translation.objectdata',
-             'translation.objectlanguage as languageId',
-//            'translation.languageID as languageId',
+            'translation.objectlanguage as languageId',
             'translation.name as name',
             'translation.keywords as keywords',
             'translation.description as description',
             'translation.description_long as descriptionLong',
-//            'translation.description_clear as descriptionClear',
-//            'translation.attr1 as attr1',
-//            'translation.attr2 as attr2',
-//            'translation.attr3 as attr3',
-//            'translation.attr4 as attr4',
-//            'translation.attr5 as attr5',
         );
+
+        $attributes = $this->getTranslationAttr();
+
+        if($attributes){
+            foreach ($attributes as $attr){
+                $columns[] = $attr['name'];
+            }
+        }
+
+        return $columns;
+    }
+
+    public function getTranslationAttr()
+    {
+        $elementBuilder = $this->getElementBuilder();
+
+        return $elementBuilder->getQuery()->getArrayResult();
     }
 
     public function saveMessage($message)
@@ -2428,6 +2455,17 @@ class ArticlesDbAdapter implements DataDbAdapter
                 ->setParameter('ids', $ids);
 
         return $categoryBuilder;
+    }
+
+    public function getElementBuilder()
+    {
+        $repository = $this->getManager()->getRepository('Shopware\Models\Article\Element');
+
+        $builder = $repository->createQueryBuilder('attribute');
+        $builder->andWhere('attribute.translatable = 1');
+        $builder->orderBy('attribute.position');
+
+        return $builder;
     }
 
 }
