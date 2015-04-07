@@ -365,13 +365,15 @@ class OrdersDbAdapter implements DataDbAdapter
             'details.config as config',
             'details.mode as mode',
             
+        );
+
+        $billingColumns = array(
             'billing.company as billingCompany',
             'billing.department as billingDepartment',
             'billing.salutation as billingSalutation',
             'billing.firstName as billingFirstname',
             'billing.lastName as billingLastname',
             'billing.street as billingStreet',
-            'billing.streetNumber as billingStreetnumber',
             'billing.zipCode as billingZipcode',
             'billing.city as billingCity',
             'billing.vatId as billingVatId',
@@ -380,25 +382,51 @@ class OrdersDbAdapter implements DataDbAdapter
             'billingCountry.name as billingCountryName',
             'billingCountry.isoName as billingCountryen',
             'billingCountry.iso as billingCountryIso',
-            
+        );
+
+        //shopware 5 additional columns
+        if ($this->isAdditionalBillingAddressExists()){
+            $billingColumns[] = 'billing.additionalAddressLine1 as billingAdditionalAddressLine1';
+            $billingColumns[] = 'billing.additionalAddressLine2 as billingAdditionalAddressLine2';
+        } else {
+            $billingColumns[] =  'billing.streetNumber as billingStreetnumber';
+        }
+
+        $columns = array_merge($columns, $billingColumns);
+
+        $shippingColumns = array(
             'shipping.company as shippingCompany',
             'shipping.department as shippingDepartment',
             'shipping.salutation as shippingSalutation',
             'shipping.firstName as shippingFirstname',
             'shipping.lastName as shippingLastname',
             'shipping.street as shippingStreet',
-            'shipping.streetNumber as shippingStreetnumber',
             'shipping.zipCode as shippingZipcode',
             'shipping.city as shippingCity',
             'shippingCountry.name as shippingCountryName',
             'shippingCountry.isoName as shippingCountryIsoName',
             'shippingCountry.iso as shippingCountryIso',
-            
+
+        );
+
+        //shopware 5 additional columns
+        if ($this->isAdditionalShippingAddressExists()){
+            $columns[] = 'shipping.additionalAddressLine1 as shippingAdditionalAddressLine1';
+            $columns[] = 'shipping.additionalAddressLine2 as shippingAdditionalAddressLine2';
+        } else {
+            $columns[] = 'shipping.streetNumber as shippingStreetnumber';
+        }
+
+        $columns = array_merge($columns, $shippingColumns);
+
+        $customerColumns = array(
             'customer.email as email',
             'customer.groupKey as customergroup',
             'customer.newsletter as newsletter',
             'customer.affiliate as affiliate',
         );
+
+        $columns = array_merge($columns, $customerColumns);
        
         $attributesSelect = $this->getAttributes();
 
@@ -497,6 +525,26 @@ class OrdersDbAdapter implements DataDbAdapter
                 ->setParameter('ids', $ids);
 
         return $builder;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAdditionalBillingAddressExists()
+    {
+        $sql = "SHOW COLUMNS FROM `s_user_billingaddress` LIKE 'additional_address_line1'";
+        $result = Shopware()->Db()->fetchRow($sql);
+        return $result ? true : false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAdditionalShippingAddressExists()
+    {
+        $sql = "SHOW COLUMNS FROM `s_user_shippingaddress` LIKE 'additional_address_line1'";
+        $result = Shopware()->Db()->fetchRow($sql);
+        return $result ? true : false;
     }
 
 }

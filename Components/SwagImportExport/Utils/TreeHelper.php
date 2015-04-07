@@ -25,7 +25,7 @@ class TreeHelper
 
             $icon = 'sprite-blue-folders-stack';
         } else if ($node['type'] == 'leaf') {
-            $icon = 'sprite-icon_taskbar_top_inhalte_active';
+            $icon = 'sprite-blue-document-text';
         } else { // $node['type'] == 'node' 
             $icon = '';
         }

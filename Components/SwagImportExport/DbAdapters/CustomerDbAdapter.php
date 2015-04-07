@@ -110,7 +110,6 @@ class CustomerDbAdapter implements DataDbAdapter
             'billing.firstName as billingFirstname',
             'billing.lastName as billingLastname',
             'billing.street as billingStreet',
-            'billing.streetNumber as billingStreetnumber',
             'billing.zipCode as billingZipcode',
             'billing.city as billingCity',
             'billing.phone as billingPhone',
@@ -120,7 +119,15 @@ class CustomerDbAdapter implements DataDbAdapter
             'billing.vatId as ustid',
             'billing.birthday as birthday',
         );
-        
+
+        //shopware 5 additional columns
+        if ($this->isAdditionalBillingAddressExists()){
+            $columns[] = 'billing.additionalAddressLine1 as billingAdditionalAddressLine1';
+            $columns[] = 'billing.additionalAddressLine2 as billingAdditionalAddressLine2';
+        } else {
+            $columns[] = 'billing.streetNumber as billingStreetnumber';
+        }
+
         // Attributes
         $attributes = $this->getAttributesByTableName('s_user_billingaddress_attributes');
 
@@ -156,13 +163,20 @@ class CustomerDbAdapter implements DataDbAdapter
             'shipping.firstName as shippingFirstname',
             'shipping.lastName as shippingLastname',
             'shipping.street as shippingStreet',
-            'shipping.streetNumber as shippingStreetnumber',
             'shipping.zipCode as shippingZipcode',
             'shipping.city as shippingCity',
             'shipping.countryId as shippingCountryID',
             'shipping.stateId as shippingStateID',
         );
-        
+
+        //shopware 5 additional columns
+        if ($this->isAdditionalShippingAddressExists()){
+            $columns[] = 'shipping.additionalAddressLine1 as shippingAdditionalAddressLine1';
+            $columns[] = 'shipping.additionalAddressLine2 as shippingAdditionalAddressLine2';
+        } else {
+            $columns[] = 'shipping.streetNumber as shippingStreetnumber';
+        }
+
         // Attributes
         $attributes = $this->getAttributesByTableName('s_user_shippingaddress_attributes');
 
@@ -210,7 +224,7 @@ class CustomerDbAdapter implements DataDbAdapter
         $customers = $paginator->getIterator()->getArrayCopy();
         
         $result['default'] = DbAdapterHelper::decodeHtmlEntities($customers);
-        
+
         return $result;
     }
 
@@ -238,7 +252,7 @@ class CustomerDbAdapter implements DataDbAdapter
                 $result[] = $value['id'];
             }
         }
-        
+
         return $result;
     }
 
@@ -535,6 +549,26 @@ class CustomerDbAdapter implements DataDbAdapter
                          AND element.name = ?";
         
         return Shopware()->Db()->fetchRow($query, array($subShopID, 'defaultpayment'));
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAdditionalBillingAddressExists()
+    {
+        $sql = "SHOW COLUMNS FROM `s_user_billingaddress` LIKE 'additional_address_line1'";
+        $result = Shopware()->Db()->fetchRow($sql);
+        return $result ? true : false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAdditionalShippingAddressExists()
+    {
+        $sql = "SHOW COLUMNS FROM `s_user_shippingaddress` LIKE 'additional_address_line1'";
+        $result = Shopware()->Db()->fetchRow($sql);
+        return $result ? true : false;
     }
 
     public function saveMessage($message)
