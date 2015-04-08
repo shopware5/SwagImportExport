@@ -418,10 +418,10 @@ class FlattenTransformer implements DataTransformerAdapter
 
                 $translations = array();
 
-                $translationNameColumns = preg_grep("/^" . $translationName . "_+(.*)/i", $dataColumns);
-                $translationDescriptionColumns = preg_grep("/^" . $translationDescription . "_+(.*)/i", $dataColumns);
-                $translationDescriptionLongColumns = preg_grep("/^" . $translationDescriptionLong . "_+(.*)/i", $dataColumns);
-                $translationKeywordsColumns = preg_grep("/^" . $translationKeywords . "_+(.*)/i", $dataColumns);
+                $translationNameColumns = preg_grep('/^' . $translationName . '_\d+$/i', $dataColumns);
+                $translationDescriptionColumns = preg_grep('/^' . $translationDescription . '_\d+$/i', $dataColumns);
+                $translationDescriptionLongColumns = preg_grep('/^' . $translationDescriptionLong . '_\d+$/i', $dataColumns);
+                $translationKeywordsColumns = preg_grep('/^' . $translationKeywords . '_\d+$/i', $dataColumns);
 
                 if ($translationNameColumns) {
                     $translationColumns = array_merge($translationColumns, $translationNameColumns);
@@ -925,11 +925,32 @@ class FlattenTransformer implements DataTransformerAdapter
                 $translationProfile = $this->getNodeFromProfile($this->getMainIterationPart(), 'translation');
                 $translationTreeMapper = $this->createMapperFromProfile($translationProfile);
                 $translationFlatMapper = $this->treeToFlat($translationTreeMapper);
-                
+
                 foreach ($node as $key => $translation) {
                     $this->collectTranslationData($translation, $translationFlatMapper);
                 }
-                
+
+            } elseif ($this->iterationParts[$path] == 'translationProperty') {
+                $translationPProfile = $this->getNodeFromProfile($this->getMainIterationPart(), 'translationProperty');
+                $translationPTreeMapper = $this->createMapperFromProfile($translationPProfile);
+                $translationPFlatMapper = $this->treeToFlat($translationPTreeMapper);
+
+
+                foreach ($node as $value) {
+                    $this->collectIterationData($value);
+                }
+
+                foreach ($this->getIterationTempData() as $nodeName => $tempData) {
+                    if($translationPFlatMapper[$nodeName] == 'propertyGroupBaseName'
+                     || $translationPFlatMapper[$nodeName] == 'propertyGroupName'
+                     || $translationPFlatMapper[$nodeName] == 'propertyGroupId'){
+                        $this->saveTempData($tempData[0]);
+                    } else if (is_array($tempData)) {
+                        $data = implode('|', $tempData);
+                        $this->saveTempData($data);
+                    }
+                }
+                unset($this->iterationTempData);
             } else {
                 //processing images, similars and accessories
                 foreach ($node as $value) {
