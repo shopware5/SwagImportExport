@@ -320,9 +320,9 @@ class ArticlesDbAdapter implements DataDbAdapter
         $propertyOptions = $this->getTranslationPropertyOption($articleDetailIds);
 
         $sql = "SELECT article.id as  articleId,
-                ct.objectkey as valueId, ct.objectdata, ct.objectlanguage as languageId,
-                fr.groupID as groupId,
-                fv.value as valueBaseName ,fv.optionID as optionId
+                ct.objectkey as valueId, ct.objectdata, ct.objectlanguage as propertyLanguageId,
+                fr.groupID as propertyGroupId,
+                fv.value as propertyValueBaseName ,fv.optionID as propertyOptionId
                 FROM s_articles_details AS articleDetails
 
                 INNER JOIN s_articles AS article
@@ -350,14 +350,14 @@ class ArticlesDbAdapter implements DataDbAdapter
             $hasOptionTranslation = false;
 
             $valueData = unserialize($value['objectdata']);
-            $propertyValues[$index]['valueName'] = $valueData['optionValue'];
+            $propertyValues[$index]['propertyValueName'] = $valueData['optionValue'];
 
             //maps hte groups
             foreach($propertyGroups as $group){
-                if($value['groupId'] === $group['objectkey'] && $value['languageId'] === $group['languageId']){
+                if($value['propertyGroupId'] === $group['objectkey'] && $value['propertyLanguageId'] === $group['propertyLanguageId']){
                     $groupData = unserialize($group['objectdata']);
-                    $propertyValues[$index]['groupBaseName'] = $group['baseName'];
-                    $propertyValues[$index]['groupName'] = $groupData['groupName'];
+                    $propertyValues[$index]['propertyGroupBaseName'] = $group['baseName'];
+                    $propertyValues[$index]['propertyGroupName'] = $groupData['groupName'];
                     $hasGroupTranslation = true;
                     break;
                 }
@@ -365,10 +365,10 @@ class ArticlesDbAdapter implements DataDbAdapter
 
             //maps the options
             foreach($propertyOptions as $option){
-                if($value['optionId'] === $option['objectkey'] && $value['languageId'] === $option['languageId']){
+                if($value['propertyOptionId'] === $option['objectkey'] && $value['propertyLanguageId'] === $option['propertyLanguageId']){
                     $groupData = unserialize($option['objectdata']);
-                    $propertyValues[$index]['optionBaseName'] = $option['baseName'];
-                    $propertyValues[$index]['optionName'] = $groupData['optionName'];
+                    $propertyValues[$index]['propertyOptionBaseName'] = $option['baseName'];
+                    $propertyValues[$index]['propertyOptionName'] = $groupData['optionName'];
                     $hasOptionTranslation = true;
                     break;
                 }
@@ -376,13 +376,13 @@ class ArticlesDbAdapter implements DataDbAdapter
 
             //writes empty values
             if (!$hasGroupTranslation){
-                $propertyValues[$index]['groupBaseName'] = '';
-                $propertyValues[$index]['groupName'] = '';
+                $propertyValues[$index]['propertyGroupBaseName'] = '';
+                $propertyValues[$index]['propertyGroupName'] = '';
             }
-
+//            propertyValueBaseName
             if (!$hasOptionTranslation){
-                $propertyValues[$index]['optionBaseName'] = '';
-                $propertyValues[$index]['optionName'] = '';
+                $propertyValues[$index]['propertyOptionBaseName'] = '';
+                $propertyValues[$index]['propertyOptionName'] = '';
             }
         }
 
@@ -394,8 +394,8 @@ class ArticlesDbAdapter implements DataDbAdapter
         $articleDetailIds = implode(',', $ids);
 
         $sql = "SELECT articleDetails.id as articleId,
-                ao.group_id as groupId, ag.name as groupBaseName,
-                ct.objectdata as groupObjectData, ct.objectlanguage as languageId
+                ao.group_id as configuratorGroupId, ag.name as groupBaseName,
+                ct.objectdata as groupObjectData, ct.objectlanguage as configuratorLanguageId
                 FROM s_articles_details as articleDetails
 
                 LEFT JOIN s_article_configurator_option_relations AS aor
@@ -417,8 +417,8 @@ class ArticlesDbAdapter implements DataDbAdapter
         $configGroups = $this->getDb()->query($sql)->fetchAll();
 
         $sql = "SELECT articleDetails.id as variantId,
-                ao.name as optionBaseName, ao.group_id as groupId,
-                aor.option_id as optionId, ct.objectdata, ct.objectlanguage as languageId
+                ao.name as configuratorOptionBaseName, ao.group_id as configuratorGroupId,
+                aor.option_id as optionId, ct.objectdata, ct.objectlanguage as configuratorLanguageId
                 FROM s_articles_details as articleDetails
 
                 LEFT JOIN s_article_configurator_option_relations AS aor
@@ -439,14 +439,14 @@ class ArticlesDbAdapter implements DataDbAdapter
             $hasGroupTranslation = false;
 
             $optionData = unserialize($option['objectdata']);
-            $configOptions[$index]['optionName'] = $optionData['name'];
+            $configOptions[$index]['configuratorOptionName'] = $optionData['name'];
 
             foreach($configGroups as $group){
-                if($option['groupId'] === $group['groupId'] && $option['languageId'] === $group['languageId']){
+                if($option['configuratorGroupId'] === $group['configuratorGroupId'] && $option['configuratorLanguageId'] === $group['configuratorLanguageId']){
                     $groupData = unserialize($group['groupObjectData']);
-                    $configOptions[$index]['groupBaseName'] = $group['groupBaseName'];
-                    $configOptions[$index]['groupName'] = $groupData['name'];
-                    $configOptions[$index]['groupDescription'] = $groupData['description'];
+                    $configOptions[$index]['configuratorGroupBaseName'] = $group['groupBaseName'];
+                    $configOptions[$index]['configuratorGroupName'] = $groupData['name'];
+                    $configOptions[$index]['configuratorGroupDescription'] = $groupData['description'];
                     $hasGroupTranslation = true;
                     break;
                 }
@@ -454,9 +454,9 @@ class ArticlesDbAdapter implements DataDbAdapter
 
             //writes empty values
             if (!$hasGroupTranslation){
-                $configOptions[$index]['groupBaseName'] = '';
-                $configOptions[$index]['groupName'] = '';
-                $configOptions[$index]['groupDescription'] = '';
+                $configOptions[$index]['configuratorGroupBaseName'] = '';
+                $configOptions[$index]['configuratorGroupName'] = '';
+                $configOptions[$index]['configuratorGroupDescription'] = '';
             }
         }
 
@@ -735,23 +735,23 @@ class ArticlesDbAdapter implements DataDbAdapter
 
             if ($translation['parentIndexElement'] === $translationIndex) {
 
-                if (!isset($translation['languageId']) || empty($translation['languageId'])){
+                if (!isset($translation['configuratorLanguageId']) || empty($translation['configuratorLanguageId'])){
                     continue;
                 }
 
-                $shop = $this->getShop($translation['languageId']);
+                $shop = $this->getShop($translation['configuratorLanguageId']);
 
                 //configuration group
-                if (isset($translation['groupId']) && !empty($translation['groupId'])){
-                    $group = $this->getManager()->find('Shopware\Models\Article\Configurator\Group', $translation['groupId']);
+                if (isset($translation['configuratorGroupId']) && !empty($translation['configuratorGroupId'])){
+                    $group = $this->getManager()->find('Shopware\Models\Article\Configurator\Group', $translation['configuratorGroupId']);
 
                     if(!$group){
                         $message = SnippetsHelper::getNamespace()
                             ->get('adapters/articles/no_group_id', 'Group with id %s not found');
-                        throw new AdapterException(sprintf($message, $translation['groupId']));
+                        throw new AdapterException(sprintf($message, $translation['configuratorGroupId']));
                     }
-                } elseif (isset($translation['groupBaseName']) && !empty($translation['groupBaseName'])){
-                    $group = $this->getConfigGroupRepository()->findOneBy(array('name' => $translation['groupBaseName']));
+                } elseif (isset($translation['configuratorGroupBaseName']) && !empty($translation['configuratorGroupBaseName'])){
+                    $group = $this->getConfigGroupRepository()->findOneBy(array('name' => $translation['configuratorGroupBaseName']));
                 }
 
                 if ($group){
@@ -760,23 +760,23 @@ class ArticlesDbAdapter implements DataDbAdapter
                         'configuratorgroup',
                         $group->getId(),
                         array(
-                            'name' => $translation['groupName'],
-                            'description' => $translation['groupDescription']
+                            'name' => $translation['configuratorGroupName'],
+                            'description' => $translation['configuratorGroupDescription']
                         )
                     );
                 }
 
                 //configuration option
-                if (isset($translation['optionId']) && !empty($translation['optionId'])){
-                    $option = $this->getManager()->find('Shopware\Models\Article\Configurator\Option', $translation['optionId']);
+                if (isset($translation['configuratorOptionId']) && !empty($translation['configuratorOptionId'])){
+                    $option = $this->getManager()->find('Shopware\Models\Article\Configurator\Option', $translation['configuratorOptionId']);
 
                     if(!$option){
                         $message = SnippetsHelper::getNamespace()
                             ->get('adapters/articles/no_option_id', 'Option with id %s not found');
-                        throw new AdapterException(sprintf($message, $translation['optionId']));
+                        throw new AdapterException(sprintf($message, $translation['configuratorOptionId']));
                     }
-                } elseif (isset($translation['optionBaseName']) && !empty($translation['optionBaseName'])){
-                    $option = $this->getConfigOptionRepository()->findOneBy(array('name' => $translation['optionBaseName']));
+                } elseif (isset($translation['configuratorOptionBaseName']) && !empty($translation['configuratorOptionBaseName'])){
+                    $option = $this->getConfigOptionRepository()->findOneBy(array('name' => $translation['configuratorOptionBaseName']));
                 }
 
                 if ($option){
@@ -784,7 +784,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                         $shop->getId(),
                         'configuratoroption',
                         $option->getId(),
-                        array('name' => $translation['optionName'])
+                        array('name' => $translation['configuratorOptionName'])
                     );
                 }
             }
@@ -805,24 +805,23 @@ class ArticlesDbAdapter implements DataDbAdapter
             $value = null;
 
             if ($translation['parentIndexElement'] === $translationIndex) {
-                if (!isset($translation['languageId']) || empty($translation['languageId'])){
+                if (!isset($translation['propertyLanguageId']) || empty($translation['propertyLanguageId'])){
                     continue;
                 }
 
-                $shop = $this->getShop($translation['languageId']);
+                $shop = $this->getShop($translation['propertyLanguageId']);
 
                 //configuration group
-                if (isset($translation['groupId']) && !empty($translation['groupId'])){
-                    $group = $this->getManager()->find('Shopware\Models\Property\Group', $translation['groupId']);
+                if (isset($translation['propertyGroupId']) && !empty($translation['propertyGroupId'])){
+                    $group = $this->getManager()->find('Shopware\Models\Property\Group', $translation['propertyGroupId']);
 
                     if(!$group){
                         $message = SnippetsHelper::getNamespace()
                             ->get('adapters/articles/no_property_group_id', 'Property group with id %s not found');
-                        throw new AdapterException(sprintf($message, $translation['groupId']));
+                        throw new AdapterException(sprintf($message, $translation['propertyGroupId']));
                     }
-                } elseif (isset($translation['groupBaseName']) && !empty($translation['groupBaseName'])){
-                    var_dump($translation['groupBaseName']);
-                    $group = $this->getPropertyGroupRepository()->findOneBy(array('name' => $translation['groupBaseName']));
+                } elseif (isset($translation['propertyGroupBaseName']) && !empty($translation['propertyGroupBaseName'])){
+                    $group = $this->getPropertyGroupRepository()->findOneBy(array('name' => $translation['propertyGroupBaseName']));
                 }
 
                 if ($group){
@@ -831,22 +830,22 @@ class ArticlesDbAdapter implements DataDbAdapter
                         'propertygroup',
                         $group->getId(),
                         array(
-                            'groupName' => $translation['groupName'],
+                            'groupName' => $translation['propertyGroupName'],
                         )
                     );
                 }
 
                 //configuration option
-                if (isset($translation['optionId']) && !empty($translation['optionId'])){
-                    $option = $this->getManager()->find('Shopware\Models\Property\Option', $translation['optionId']);
+                if (isset($translation['propertyOptionId']) && !empty($translation['propertyOptionId'])){
+                    $option = $this->getManager()->find('Shopware\Models\Property\Option', $translation['propertyOptionId']);
 
                     if(!$option){
                         $message = SnippetsHelper::getNamespace()
                             ->get('adapters/articles/no_property_option_id', 'Property option with id %s not found');
-                        throw new AdapterException(sprintf($message, $translation['optionId']));
+                        throw new AdapterException(sprintf($message, $translation['propertyOptionId']));
                     }
-                } elseif (isset($translation['optionBaseName']) && !empty($translation['optionBaseName'])){
-                    $option = $this->getPropertyOptionRepository()->findOneBy(array('name' => $translation['optionBaseName']));
+                } elseif (isset($translation['propertyOptionBaseName']) && !empty($translation['propertyOptionBaseName'])){
+                    $option = $this->getPropertyOptionRepository()->findOneBy(array('name' => $translation['propertyOptionBaseName']));
                 }
 
                 if ($option){
@@ -854,21 +853,21 @@ class ArticlesDbAdapter implements DataDbAdapter
                         $shop->getId(),
                         'propertyoption',
                         $option->getId(),
-                        array('optionName' => $translation['optionName'])
+                        array('optionName' => $translation['propertyOptionName'])
                     );
                 }
 
                 //configuration value
-                if (isset($translation['valueId']) && !empty($translation['valueId'])){
-                    $value = $this->getManager()->find('Shopware\Models\Property\Value', $translation['valueId']);
+                if (isset($translation['propertyValueId']) && !empty($translation['propertyValueId'])){
+                    $value = $this->getManager()->find('Shopware\Models\Property\Value', $translation['propertyValueId']);
 
                     if(!$value){
                         $message = SnippetsHelper::getNamespace()
                             ->get('adapters/articles/no_property_value_id', 'Property value with id %s not found');
-                        throw new AdapterException(sprintf($message, $translation['valueId']));
+                        throw new AdapterException(sprintf($message, $translation['propertyValueId']));
                     }
-                } elseif (isset($translation['valueBaseName']) && !empty($translation['valueBaseName'])){
-                    $value = $this->getPropertyValueRepository()->findOneBy(array('name' => $translation['valueBaseName']));
+                } elseif (isset($translation['propertyValueBaseName']) && !empty($translation['propertyValueBaseName'])){
+                    $value = $this->getPropertyValueRepository()->findOneBy(array('value' => $translation['propertyValueBaseName']));
                 }
 
                 if ($value){
@@ -876,7 +875,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                         $shop->getId(),
                         'propertyvalue',
                         $value->getId(),
-                        array('optionValue' => $translation['valueName'])
+                        array('optionValue' => $translation['propertyValueName'])
                     );
                 }
             }
@@ -2450,14 +2449,14 @@ class ArticlesDbAdapter implements DataDbAdapter
     {
         return array(
             'variant.id as variantId',
-            'translation.optionId as optionId',
-            'translation.optionBaseName as optionBaseName',
-            'translation.optionName as optionName',
-            'translation.groupId as groupId',
-            'translation.groupBaseName as groupBaseName',
-            'translation.groupName as groupName',
-            'translation.groupDescription as groupDescription',
-            'translation.objectlanguage as languageId',
+            'translation.optionId as configuratorOptionId',
+            'translation.optionBaseName as configuratorOptionBaseName',
+            'translation.optionName as configuratorOptionName',
+            'translation.groupId as configuratorGroupId',
+            'translation.groupBaseName as configuratorGroupBaseName',
+            'translation.groupName as configuratorGroupName',
+            'translation.groupDescription as configuratorGroupDescription',
+            'translation.objectlanguage as configuratorLanguageId',
         );
     }
 
@@ -2466,15 +2465,15 @@ class ArticlesDbAdapter implements DataDbAdapter
         return array(
             'article.id as articleId',
             'translation.valueId as valueId',
-            'translation.valueBaseName as valueBaseName',
-            'translation.valueName as valueName',
-            'translation.optionId as optionId',
-            'translation.optionBaseName as optionBaseName',
-            'translation.optionName as optionName',
-            'translation.groupId as groupId',
-            'translation.groupBaseName as groupBaseName',
-            'translation.groupName as groupName',
-            'translation.objectlanguage as languageId',
+            'translation.valueBaseName as propertyValueBaseName',
+            'translation.valueName as propertyValueName',
+            'translation.optionId as propertyOptionId',
+            'translation.optionBaseName as propertyOptionBaseName',
+            'translation.optionName as propertyOptionName',
+            'translation.groupId as propertyGroupId',
+            'translation.groupBaseName as propertyGroupBaseName',
+            'translation.groupName as propertyGroupName',
+            'translation.objectlanguage as propertyLanguageId',
         );
     }
 
@@ -2751,7 +2750,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     public function getTranslationPropertyGroup($articleDetailIds)
     {
         $sql = "SELECT filter.name as baseName,
-                ct.objectkey, ct.objectdata, ct.objectlanguage as languageId
+                ct.objectkey, ct.objectdata, ct.objectlanguage as propertyLanguageId
                 FROM s_articles_details AS articleDetails
 
                 INNER JOIN s_articles AS article
@@ -2782,7 +2781,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     public function getTranslationPropertyOption($articleDetailIds)
     {
         $sql = "SELECT fo.name as baseName,
-                ct.objectkey, ct.objectdata, ct.objectlanguage as languageId
+                ct.objectkey, ct.objectdata, ct.objectlanguage as propertyLanguageId
                 FROM s_articles_details AS articleDetails
 
                 INNER JOIN s_articles AS article
