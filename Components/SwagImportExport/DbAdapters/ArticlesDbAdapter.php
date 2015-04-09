@@ -391,7 +391,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 ON ct.objectkey = fa.valueID
 
                 WHERE articleDetails.id IN ($articleDetailIds) AND ct.objecttype = 'propertyvalue'
-                GROUP BY valueId";
+                GROUP BY ct.id";
 
         $propertyValues = $this->getDb()->query($sql)->fetchAll();
 
@@ -2829,7 +2829,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             $this->propertyOptionRepository = $this->getManager()->getRepository('Shopware\Models\Property\Option');
         }
 
-        return $this->propertyGroupRepository;
+        return $this->propertyOptionRepository;
     }
 
     /**
