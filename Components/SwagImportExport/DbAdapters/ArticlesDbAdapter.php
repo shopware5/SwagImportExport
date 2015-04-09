@@ -136,6 +136,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             throw new \Exception($message);
         }
 
+
         //articles
         $articleBuilder = $this->getArticleBuilder($columns['article'], $ids);
 
@@ -208,6 +209,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         $result['category'] = $categoryBuilder->getQuery()->getResult();
 
         $result['translation'] = $this->prepareTranslationExport($ids);
+        $result['translationVariant'] = $this->prepareTranslationVariantExport($ids);
         $result['translationConfigurator'] = $this->prepareTranslationConfiguratorExport($ids);
         $result['translationProperty'] = $this->prepareTranslationPropertyExport($ids);
 
@@ -243,9 +245,11 @@ class ArticlesDbAdapter implements DataDbAdapter
             $translationFields = array(
                 "txtArtikel" => "name",
                 "txtzusatztxt" => "additionaltext",
+                "metaTitle" => "metaTitle",
                 "txtshortdescription" => "description",
                 "txtlangbeschreibung" => "descriptionLong",
-                "txtkeywords" => "keywords"
+                "txtkeywords" => "keywords",
+                "txtpackunit" => "packingUnit"
             );
 
             //attributes
@@ -302,6 +306,52 @@ class ArticlesDbAdapter implements DataDbAdapter
         }
 
         return $data;
+    }
+
+    public function prepareTranslationVariantExport($ids)
+    {
+        $articleDetailIds = implode(',', $ids);
+
+        $translationFields = 'articleDetails.id as variantId, ct.objectdata, ct.objectlanguage as languageId';
+
+        $sql = "SELECT $translationFields FROM `s_articles_details` as articleDetails
+                INNER JOIN s_articles article
+                ON article.id = articleDetails.articleID
+
+                LEFT JOIN s_core_translations ct
+                ON articleDetails.id = ct.objectkey
+
+                WHERE articleDetails.id IN ($articleDetailIds) AND ct.objecttype = 'variant'
+                GROUP BY ct.id
+                ";
+
+        $variants = $this->getDb()->query($sql)->fetchAll();
+
+        $translations = array();
+
+        $translationFields = array(
+            "txtzusatztxt" => "variantAdditionalText",
+            "txtpackunit" => "variantPackingUnit"
+        );
+
+        foreach($variants as $index => $variant){
+            $translations[$index]['variantId'] = $variant['variantId'];
+            $translations[$index]['variantLanguageId'] = $variant['languageId'];
+            $transData = unserialize($variant['objectdata']);
+
+            if($transData){
+                foreach ($transData as $key => $data){
+                    if(isset($translationFields[$key])){
+                        $name = $translationFields[$key];
+                        $translations[$index][$name] = $data;
+                    } else {
+                        $translations[$index][$key] = $data;
+                    }
+                }
+            }
+        }
+
+        return $translations;
     }
 
     public function getShops()
@@ -656,10 +706,12 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $this->getManager()->flush();
 
                 $articleId = $articleModel->getId();
+                $variantId = $variantModel->getId();
 
                 $this->getManager()->clear();
 
                 $this->writeTranslations($records['translation'], $index, $articleId);
+                $this->writeTranslationsVariants($records['translationVariant'], $index, $variantId);
                 $this->writeTranslationConfigurations($records['translationConfigurator'], $index);
                 $this->writeTranslationProperties($records['translationProperty'], $index);
 
@@ -686,6 +738,8 @@ class ArticlesDbAdapter implements DataDbAdapter
             'name',
             'description',
             'descriptionLong',
+            'additionalText',
+            'metaTitle',
             'keywords',
             'packUnit'
         );
@@ -717,6 +771,42 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $data = array_intersect_key($translation, array_flip($whitelist));
 
                 $translationWriter->write($shop->getId(), 'article', $articleId, $data);
+            }
+        }
+    }
+
+    public function writeTranslationsVariants($translations, $translationIndex, $variantId)
+    {
+        if ($translations == null) {
+            return;
+        }
+
+        $translationWriter = new \Shopware_Components_Translation();
+
+        foreach ($translations as $index => $translation) {
+
+            if ($translation['parentIndexElement'] === $translationIndex) {
+
+                if (!isset($translation['variantLanguageId']) || empty($translation['variantLanguageId'])){
+                    continue;
+                }
+
+                $shop = $this->getManager()->find('Shopware\Models\Shop\Shop', $translation['variantLanguageId']);
+                if (!$shop) {
+                    $message = SnippetsHelper::getNamespace()
+                        ->get('adapters/articles/no_shop_id', 'Shop by id %s not found');
+                    throw new AdapterException(sprintf($message, $translation['variantLanguageId']));
+                }
+
+                if (isset($translation['variantAdditionalText'])){
+                    $translation['additionalText'] = $translation['variantAdditionalText'];
+                }
+
+                if (isset($translation['variantPackingUnit'])){
+                    $translation['packUnit'] = $translation['variantPackingUnit'];
+                }
+
+                $translationWriter->write($shop->getId(), 'variant', $variantId, $translation);
             }
         }
     }
@@ -906,6 +996,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             array('id' => 'configurator', 'name' => 'configurator'),
             array('id' => 'category', 'name' => 'category'),
             array('id' => 'translation', 'name' => 'translation'),
+            array('id' => 'translationVariant', 'name' => 'translationVariant'),
             array('id' => 'translationConfigurator', 'name' => 'translationConfigurator'),
             array('id' => 'translationProperty', 'name' => 'translationProperty'),
         );
@@ -2288,6 +2379,10 @@ class ArticlesDbAdapter implements DataDbAdapter
                 return array(
                     'article.id as articleId',
                 );
+            case 'translationVariant':
+                return array(
+                    'variant.id as variantId',
+                );
             case 'translationConfigurator':
                 return array(
                     'variant.id as variantId',
@@ -2430,8 +2525,30 @@ class ArticlesDbAdapter implements DataDbAdapter
             'translation.objectlanguage as languageId',
             'translation.name as name',
             'translation.keywords as keywords',
+            'translation.metaTitle as metaTitle',
             'translation.description as description',
             'translation.description_long as descriptionLong',
+            'translation.packingUnit as packingUnit',
+        );
+
+        $attributes = $this->getTranslationAttr();
+
+        if($attributes){
+            foreach ($attributes as $attr){
+                $columns[] = $attr['name'];
+            }
+        }
+
+        return $columns;
+    }
+
+    public function getTranslationVariantColumns()
+    {
+        $columns = array(
+            'article.id as articleId',
+            'translation.objectlanguage as variantLanguageId',
+            'translation.additionalText as variantAdditionalText',
+            'translation.packingUnit as variantPackingUnit',
         );
 
         $attributes = $this->getTranslationAttr();
