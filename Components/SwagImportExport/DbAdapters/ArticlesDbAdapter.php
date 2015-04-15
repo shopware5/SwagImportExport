@@ -244,7 +244,7 @@ class ArticlesDbAdapter implements DataDbAdapter
 
             $translationFields = array(
                 "txtArtikel" => "name",
-                "txtzusatztxt" => "additionaltext",
+                "txtzusatztxt" => "additionalText",
                 "metaTitle" => "metaTitle",
                 "txtshortdescription" => "description",
                 "txtlangbeschreibung" => "descriptionLong",
@@ -709,13 +709,15 @@ class ArticlesDbAdapter implements DataDbAdapter
 
                 $this->getManager()->flush();
 
-                $articleId = $articleModel->getId();
-                $variantId = $variantModel->getId();
+                $articleTranslationData = array(
+                    'articleId' => $articleModel->getId(),
+                    'variantId' => $variantModel->getId(),
+                    'kind' => $variantModel->getKind()
+                );
 
                 $this->getManager()->clear();
 
-                $this->writeTranslations($records['translation'], $index, $articleId);
-                $this->writeTranslationsVariants($records['translationVariant'], $index, $variantId);
+                $this->writeTranslations($records['translation'], $index, $articleTranslationData);
                 $this->writeTranslationConfigurations($records['translationConfigurator'], $index);
                 $this->writeTranslationProperties($records['translationProperty'], $index);
 
@@ -729,23 +731,26 @@ class ArticlesDbAdapter implements DataDbAdapter
     /**
      * @param $translations
      * @param $translationIndex
-     * @param $articleId
+     * @param $articleData
      * @throws \Shopware\Components\SwagImportExport\Exception\AdapterException
      */
-    public function writeTranslations($translations, $translationIndex, $articleId)
+    public function writeTranslations($translations, $translationIndex, $articleData)
     {
         if ($translations == null) {
             return;
         }
 
-        $whitelist = array(
+        $whiteList = array(
             'name',
             'description',
             'descriptionLong',
-            'additionalText',
             'metaTitle',
             'keywords',
             'packUnit'
+        );
+
+        $variantWhiteList = array(
+            'additionalText',
         );
 
         //attributes
@@ -753,13 +758,14 @@ class ArticlesDbAdapter implements DataDbAdapter
 
         if ($attributes){
             foreach ($attributes as $attr){
-                $whitelist[] = $attr['name'];
+                $whiteList[] = $attr['name'];
+                $variantWhiteList[] = $attr['name'];
             }
         }
 
         $translationWriter = new \Shopware_Components_Translation();
 
-        foreach ($translations as $index => $translation) {
+        foreach ($translations as $i => $translation) {
             if ($translation['parentIndexElement'] === $translationIndex) {
 
                 if (!isset($translation['languageId']) || empty($translation['languageId'])){
@@ -772,45 +778,29 @@ class ArticlesDbAdapter implements DataDbAdapter
                                 ->get('adapters/articles/no_shop_id', 'Shop by id %s not found');
                     throw new AdapterException(sprintf($message, $translation['languageId']));
                 }
-                $data = array_intersect_key($translation, array_flip($whitelist));
 
-                $translationWriter->write($shop->getId(), 'article', $articleId, $data);
-            }
-        }
-    }
+                if ($articleData['kind'] === 1){
+                    $data = array_intersect_key($translation, array_flip($whiteList));
+                    $translationWriter->write($shop->getId(), 'article', $articleData['articleId'], $data);
+                } else {
+                    $data = array_intersect_key($translation, array_flip($variantWhiteList));
 
-    public function writeTranslationsVariants($translations, $translationIndex, $variantId)
-    {
-        if ($translations == null) {
-            return;
-        }
+                    //checks for empty translations
+                    if (!empty($data)){
+                        foreach($data as $index => $rows){
+                            //removes empty rows
+                            if(empty($rows)){
+                                unset($data[$index]);
+                            }
+                        }
+                    }
 
-        $translationWriter = new \Shopware_Components_Translation();
-
-        foreach ($translations as $index => $translation) {
-
-            if ($translation['parentIndexElement'] === $translationIndex) {
-
-                if (!isset($translation['variantLanguageId']) || empty($translation['variantLanguageId'])){
-                    continue;
+                    //saves if there is available data
+                    if (!empty($data)){
+                        $translationWriter->write($shop->getId(), 'variant', $articleData['variantId'], $data);
+                    }
                 }
 
-                $shop = $this->getManager()->find('Shopware\Models\Shop\Shop', $translation['variantLanguageId']);
-                if (!$shop) {
-                    $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/articles/no_shop_id', 'Shop by id %s not found');
-                    throw new AdapterException(sprintf($message, $translation['variantLanguageId']));
-                }
-
-                if (isset($translation['variantAdditionalText'])){
-                    $translation['additionalText'] = $translation['variantAdditionalText'];
-                }
-
-                if (isset($translation['variantPackingUnit'])){
-                    $translation['packUnit'] = $translation['variantPackingUnit'];
-                }
-
-                $translationWriter->write($shop->getId(), 'variant', $variantId, $translation);
             }
         }
     }
@@ -2528,27 +2518,8 @@ class ArticlesDbAdapter implements DataDbAdapter
             'translation.metaTitle as metaTitle',
             'translation.description as description',
             'translation.description_long as descriptionLong',
+            'translation.additionalText as additionalText',
             'translation.packingUnit as packingUnit',
-        );
-
-        $attributes = $this->getTranslationAttr();
-
-        if($attributes){
-            foreach ($attributes as $attr){
-                $columns[] = $attr['name'];
-            }
-        }
-
-        return $columns;
-    }
-
-    public function getTranslationVariantColumns()
-    {
-        $columns = array(
-            'article.id as articleId',
-            'translation.objectlanguage as variantLanguageId',
-            'translation.additionalText as variantAdditionalText',
-            'translation.packingUnit as variantPackingUnit',
         );
 
         $attributes = $this->getTranslationAttr();
