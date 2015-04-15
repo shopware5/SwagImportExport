@@ -209,7 +209,6 @@ class ArticlesDbAdapter implements DataDbAdapter
         $result['category'] = $categoryBuilder->getQuery()->getResult();
 
         $result['translation'] = $this->prepareTranslationExport($ids);
-        $result['translationVariant'] = $this->prepareTranslationVariantExport($ids);
         $result['translationConfigurator'] = $this->prepareTranslationConfiguratorExport($ids);
         $result['translationProperty'] = $this->prepareTranslationPropertyExport($ids);
 
@@ -219,18 +218,19 @@ class ArticlesDbAdapter implements DataDbAdapter
     public function prepareTranslationExport($ids)
     {
         //translations
-        $translationFields = 'article.id as articleId, translation.objectdata, translation.objectlanguage as languageId';
+        $translationVariantColumns = 'article.id as articleId, variant.id as variantId, variant.kind, ct.objectdata, ct.objectlanguage as languageId';
         $articleDetailIds = implode(',', $ids);
 
-        $sql = "SELECT $translationFields FROM `s_articles_details` as articleDetails
-                INNER JOIN s_articles article
-                ON article.id = articleDetails.articleID
+        $sql = "SELECT $translationVariantColumns FROM `s_articles_details` AS variant
 
-                LEFT JOIN s_core_translations translation
-                ON article.id = translation.objectkey
+                LEFT JOIN s_articles AS article
+                ON article.id = variant.articleID
 
-                WHERE articleDetails.id IN ($articleDetailIds)
-                GROUP BY translation.id
+                LEFT JOIN s_core_translations AS ct
+                ON variant.id = ct.objectkey AND objecttype = 'variant'
+
+                WHERE variant.id IN ($articleDetailIds)
+                ORDER BY languageId ASC
                 ";
 
         $translations = $this->getDb()->query($sql)->fetchAll();
@@ -264,94 +264,98 @@ class ArticlesDbAdapter implements DataDbAdapter
             $rows = array();
             foreach ($translations as $index => $record) {
                 $articleId = $record['articleId'];
+                $variantId = $record['variantId'];
                 $languageId = $record['languageId'];
-                $rows[$articleId][$languageId]['articleId'] = $articleId;
-                $rows[$articleId][$languageId]['languageId'] = $languageId;
+                $kind = $record['kind'];
+                $rows[$variantId]['helper']['articleId'] = $articleId;
+                $rows[$variantId]['helper']['variantKind'] = $kind;
+                $rows[$variantId][$languageId]['articleId'] = $articleId;
+                $rows[$variantId][$languageId]['variantId'] = $variantId;
+                $rows[$variantId][$languageId]['languageId'] = $languageId;
+                $rows[$variantId][$languageId]['variantKind'] = $kind;
 
                 $objectdata = unserialize($record['objectdata']);
 
                 if (!empty($objectdata)) {
                     foreach ($objectdata as $key => $value) {
                         if (isset($translationFields[$key])) {
-                            $rows[$articleId][$languageId][$translationFields[$key]] = $value;
+                            $rows[$variantId][$languageId][$translationFields[$key]] = $value;
                         }
                     }
                 }
             }
         }
 
-        $data = array();
+        $result = array();
 
-        foreach ($rows as $aId => $row) {
-            if (count($shops) !== count($row)) {
+        foreach ($rows as $vId => $row) {
+            $count = count($row) -1;
+            if (count($shops) !== $count) {
                 foreach ($shops as $shop) {
                     $shopId = $shop->getId();
                     if (isset($row[$shopId])) {
-                        $data[] = $row[$shopId];
+                        $result[] = $row[$shopId];
                     } else {
-                        $data[] = array(
-                            'articleId' => $aId,
-                            'languageId' => $shopId,
-                            'name' => '',
-                            'description' => '',
-                            'descriptionLong' => '',
+                        $result[] = array(
+                            'articleId' => $row['helper']['articleId'],
+                            'variantId' => $vId,
+                            'languageId' => (string) $shopId,
+                            'variantKind' => $row['helper']['variantKind'],
                         );
+                        $index = count($result) - 1;
+                        foreach($translationFields as $field){
+                            $result[$index][$field] = '';
+                        }
                     }
                 }
             } else {
+                unset($row['helper']);
                 foreach ($row as $value) {
-                    $data[] = $value;
+                    $result[] = $value;
                 }
             }
         }
 
-        return $data;
-    }
+        $translationArticleColumns = 'article.id as articleId, ct.objectdata, ct.objectlanguage as languageId';
 
-    public function prepareTranslationVariantExport($ids)
-    {
-        $articleDetailIds = implode(',', $ids);
+        $sql = "SELECT $translationArticleColumns FROM `s_articles_details` AS variant
 
-        $translationFields = 'articleDetails.id as variantId, ct.objectdata, ct.objectlanguage as languageId';
+                INNER JOIN s_articles AS article
+                ON article.id = variant.articleID
 
-        $sql = "SELECT $translationFields FROM `s_articles_details` as articleDetails
-                INNER JOIN s_articles article
-                ON article.id = articleDetails.articleID
+                LEFT JOIN s_core_translations AS ct
+                ON variant.id = ct.objectkey
 
-                LEFT JOIN s_core_translations ct
-                ON articleDetails.id = ct.objectkey
-
-                WHERE articleDetails.id IN ($articleDetailIds) AND ct.objecttype = 'variant'
+                WHERE variant.id IN ($articleDetailIds) AND objecttype = 'article'
                 GROUP BY ct.id
                 ";
+        $articles = $this->getDb()->query($sql)->fetchAll();
 
-        $variants = $this->getDb()->query($sql)->fetchAll();
 
-        $translations = array();
+        foreach ($result as $index => $translation){
+            foreach($articles as $article){
+                //the translation for the main variant is coming
+                //from article translations
+                if ($translation['variantKind'] == 1
+                    && $translation['articleId'] === $article['articleId']
+                    && $translation['languageId'] === $article['languageId']){
 
-        $translationFields = array(
-            "txtzusatztxt" => "variantAdditionalText",
-            "txtpackunit" => "variantPackingUnit"
-        );
-
-        foreach($variants as $index => $variant){
-            $translations[$index]['variantId'] = $variant['variantId'];
-            $translations[$index]['variantLanguageId'] = $variant['languageId'];
-            $transData = unserialize($variant['objectdata']);
-
-            if($transData){
-                foreach ($transData as $key => $data){
-                    if(isset($translationFields[$key])){
-                        $name = $translationFields[$key];
-                        $translations[$index][$name] = $data;
-                    } else {
-                        $translations[$index][$key] = $data;
+                    $serializeData = unserialize($article['objectdata']);
+                    foreach($translationFields as $key => $field){
+                        $result[$index][$field] = $serializeData[$key];
                     }
+                } else if($translation['articleId'] === $article['articleId'] && $translation['languageId'] === $article['languageId']){
+                    $data = unserialize($article['objectdata']);
+                    $result[$index]['name'] = $data['txtArtikel'];
+                    $result[$index]['description'] = $data['txtshortdescription'];
+                    $result[$index]['descriptionLong'] = $data['txtlangbeschreibung'];
+                    $result[$index]['metaTitle'] = $data['metaTitle'];
+                    $result[$index]['keywords'] = $data['txtkeywords'];
                 }
             }
         }
 
-        return $translations;
+        return $result;
     }
 
     public function getShops()
@@ -996,7 +1000,6 @@ class ArticlesDbAdapter implements DataDbAdapter
             array('id' => 'configurator', 'name' => 'configurator'),
             array('id' => 'category', 'name' => 'category'),
             array('id' => 'translation', 'name' => 'translation'),
-            array('id' => 'translationVariant', 'name' => 'translationVariant'),
             array('id' => 'translationConfigurator', 'name' => 'translationConfigurator'),
             array('id' => 'translationProperty', 'name' => 'translationProperty'),
         );
@@ -2377,10 +2380,6 @@ class ArticlesDbAdapter implements DataDbAdapter
                 );
             case 'translation':
                 return array(
-                    'article.id as articleId',
-                );
-            case 'translationVariant':
-                return array(
                     'variant.id as variantId',
                 );
             case 'translationConfigurator':
@@ -2522,6 +2521,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     {
         $columns = array(
             'article.id as articleId',
+            'variant.id as variantId',
             'translation.objectlanguage as languageId',
             'translation.name as name',
             'translation.keywords as keywords',
