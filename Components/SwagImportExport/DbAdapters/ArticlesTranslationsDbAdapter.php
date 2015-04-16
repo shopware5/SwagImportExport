@@ -37,6 +37,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
             't.keywords as keywords',
             't.description as description',
             't.description_long as descriptionLong',
+            't.additional_text as additionalText',
             't.metaTitle as metaTitle',
         );
 
@@ -66,10 +67,8 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
 
         $builder->select('t.id');
         $builder->from('Shopware\Models\Translation\Translation', 't')
-                ->leftJoin('Shopware\Models\Article\Article', 'article', \Doctrine\ORM\Query\Expr\Join::WITH, 'article.id=t.key')
-                ->join('article.details', 'detail')
-                ->where("t.type = 'article'")
-                ->andWhere('detail.kind = 1');
+                ->where("t.type = 'variant'")
+                ->orWhere("t.type = 'article'");
 
         $builder->setFirstResult($start)
                 ->setMaxResults($limit);
@@ -99,9 +98,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
             throw new \Exception($message);
         }
 
-        $builder = $this->getBuilder($ids);
-
-        $translations = $builder->getQuery()->getResult();
+        $translations = $this->getTranslations($ids);
 
         $result['default'] = $this->prepareTranslations($translations);
 
@@ -109,40 +106,48 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
     }
 
     /**
-     * Processing serialized object data 
+     * Processing serialized object data
      *
      * @param array $translations
      * @return array
      */
     protected function prepareTranslations($translations)
     {
-        $elements = $this->getElements();
+        $translationAttr = $this->getElements();
 
-        $translationFields = array(
+        $articleMapper = array(
             "txtArtikel" => "name",
-            "txtzusatztxt" => "additionaltext",
             "txtshortdescription" => "description",
             "txtlangbeschreibung" => "descriptionLong",
             "txtkeywords" => "keywords",
             "metaTitle" => "metaTitle"
         );
 
-        if (!empty($elements)) {
-            $translationFields = array_merge($translationFields, $elements);
-        }
+        $translationAttr['txtzusatztxt'] = 'additionalText';
 
         if (!empty($translations)) {
             foreach ($translations as $index => $translation) {
-                $objectdata = unserialize($translation['data']);
+                $variantData = unserialize($translation['variantData']);
+                $articleData = unserialize($translation['articleData']);
 
-                if (!empty($objectdata)) {
-                    foreach ($objectdata as $key => $value) {
-                        if (isset($translationFields[$key])) {
-                            $translations[$index][$translationFields[$key]] = $value;
+                if (!empty($articleData)) {
+                    foreach ($articleData as $articleKey => $value) {
+                        if (isset($articleMapper[$articleKey])) {
+                            $translations[$index][$articleMapper[$articleKey]] = $value;
                         }
                     }
-                    unset($translations[$index]['data']);
                 }
+
+                if (!empty($variantData)) {
+                    foreach ($variantData as $variantKey => $value) {
+                        if (isset($translationAttr[$variantKey])) {
+                            $translations[$index][$translationAttr[$variantKey]] = $value;
+                        }
+                    }
+                }
+
+                unset($translations[$index]['articleData']);
+                unset($translations[$index]['variantData']);
             }
         }
 
@@ -161,23 +166,27 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
                 array('subject' => $this)
         );
 
-        $whitelist = array(
+        $whiteList = array(
             'name',
             'description',
             'descriptionLong',
-            'keywords',
             'metaTitle',
+            'keywords',
             'packUnit'
         );
 
+        $variantWhiteList = array(
+            'additionalText',
+        );
+
         $elementBuilder = $this->getElementBuilder();
+        $attributes = $elementBuilder->getQuery()->getArrayResult();
 
-        $elements = array_map(function($item) {
-            return $item['name'];
-        }, $elementBuilder->getQuery()->getArrayResult());
-
-        if ($elements) {
-            $whitelist = array_merge($whitelist, $elements);
+        if ($attributes){
+            foreach ($attributes as $attr){
+                $whiteList[] = $attr['name'];
+                $variantWhiteList[] = $attr['name'];
+            }
         }
 
         $translationWriter = new \Shopware_Components_Translation();
@@ -208,11 +217,29 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
                     throw new AdapterException(sprintf($message, $record['articleNumber']));
                 }
 
-                $data = array_intersect_key($record, array_flip($whitelist));
-
                 $articleId = (int) $articleDetail->getArticle()->getId();
 
-                $translationWriter->write($shop->getId(), 'article', $articleId, $data);
+                if ($articleDetail->getKind() === 1){
+                    $data = array_intersect_key($record, array_flip($whiteList));
+                    $translationWriter->write($shop->getId(), 'article', $articleId, $data);
+                } else {
+                    $data = array_intersect_key($record, array_flip($variantWhiteList));
+
+                    //checks for empty translations
+                    if (!empty($data)){
+                        foreach($data as $index => $rows){
+                            //removes empty rows
+                            if(empty($rows)){
+                                unset($data[$index]);
+                            }
+                        }
+                    }
+
+                    //saves if there is available data
+                    if (!empty($data)){
+                        $translationWriter->write($shop->getId(), 'variant', $articleDetail->getId(), $data);
+                    }
+                }
             } catch (AdapterException $e) {
                 $message = $e->getMessage();
                 $this->saveMessage($message);
@@ -269,7 +296,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
 
     /**
      * Returns article detail repository
-     * 
+     *
      * @return Shopware\Models\Article\Detail
      */
     public function getRepository()
@@ -283,7 +310,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
 
     /**
      * Returns entity manager
-     * 
+     *
      * @return Shopware\Components\Model\ModelManager
      */
     public function getManager()
@@ -303,7 +330,6 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
                 ->leftJoin('Shopware\Models\Article\Article', 'article', \Doctrine\ORM\Query\Expr\Join::WITH, 'article.id=t.key')
                 ->join('article.details', 'detail')
                 ->where('t.id IN (:ids)')
-                ->andWhere('detail.kind = 1')
                 ->setParameter('ids', $ids);
 
         return $builder;
@@ -334,6 +360,52 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
         }
 
         return $elementsCollection;
+    }
+
+    /**
+     * @param $ids
+     * @return array
+     * @throws \Zend_Db_Statement_Exception
+     */
+    public function getTranslations($ids)
+    {
+        $articleDetailIds = implode(',', $ids);
+
+        $translationColumns = 'variant.id as id, variant.ordernumber as articleNumber, variant.kind as kind,
+        ct.objectdata as variantData, ct2.objectdata as articleData, ct.objectlanguage as languageId';
+
+        $sql = "(SELECT $translationColumns
+                FROM `s_core_translations` AS ct
+
+                LEFT JOIN s_articles AS article
+                ON article.id = ct.objectkey
+
+                LEFT JOIN s_articles_details AS variant
+                ON variant.articleID = article.id
+
+                LEFT JOIN `s_core_translations` AS ct2
+                ON ct2.objectkey = variant.articleID AND ct2.objecttype = 'article' AND ct2.objectlanguage = ct.objectlanguage
+
+                WHERE ct.id IN ($articleDetailIds) AND ct.objecttype = 'article'
+                GROUP BY article.id, languageId)
+
+                UNION
+
+                (SELECT $translationColumns
+                FROM `s_core_translations` AS ct
+
+                LEFT JOIN s_articles_details AS variant
+                ON variant.id = ct.objectkey
+
+                LEFT JOIN `s_core_translations` AS ct2
+                ON ct2.objectkey = variant.articleID AND ct2.objecttype = 'article' AND ct2.objectlanguage = ct.objectlanguage
+
+                WHERE ct.id IN ($articleDetailIds) AND ct.objecttype = 'variant')
+
+                ORDER BY languageId ASC
+                ";
+
+        return Shopware()->Db()->query($sql)->fetchAll();
     }
 
 }

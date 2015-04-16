@@ -17,6 +17,7 @@ class FlattenTransformer implements DataTransformerAdapter
     protected $iterationTempData;
     protected $tempData = array();
     protected $tempMapper;
+    protected $translationColumns;
 
     /**
      * Sets the config that has the tree structure
@@ -406,35 +407,24 @@ class FlattenTransformer implements DataTransformerAdapter
 
                 return $newData;
             } else if ($node['adapter'] === 'translation') {
-                $translationName = $this->findNodeByShopwareField($node, 'name');
-                $translationDescription = $this->findNodeByShopwareField($node, 'description');
-                $translationDescriptionLong = $this->findNodeByShopwareField($node, 'descriptionLong');
-                $translationKeywords = $this->findNodeByShopwareField($node, 'keywords');
-                $translationLang = $this->findNodeByShopwareField($node, 'languageId');
 
+                $tempData = array();
+                $translationColumns = array();
                 $dataColumns = array_keys($data);
 
-                $translationColumns = array();
+                $columns = $this->getAllTranslationColumns();
+                foreach ($columns as $column){
+                    $tempData[$column] = $this->findNodeByShopwareField($node, $column);
 
-                $translations = array();
+                    if ($tempData[$column]){
+                        $greps = preg_grep('/^' . $tempData[$column] . '_\d+$/i', $dataColumns);
+                        $translationColumns = array_merge($translationColumns, $greps);
+                    }
+                }
 
-                $translationNameColumns = preg_grep('/^' . $translationName . '_\d+$/i', $dataColumns);
-                $translationDescriptionColumns = preg_grep('/^' . $translationDescription . '_\d+$/i', $dataColumns);
-                $translationDescriptionLongColumns = preg_grep('/^' . $translationDescriptionLong . '_\d+$/i', $dataColumns);
-                $translationKeywordsColumns = preg_grep('/^' . $translationKeywords . '_\d+$/i', $dataColumns);
+                unset($tempData);
 
-                if ($translationNameColumns) {
-                    $translationColumns = array_merge($translationColumns, $translationNameColumns);
-                }
-                if ($translationDescriptionColumns) {
-                    $translationColumns = array_merge($translationColumns, $translationDescriptionColumns);
-                }
-                if ($translationDescriptionLongColumns) {
-                    $translationColumns = array_merge($translationColumns, $translationDescriptionLongColumns);
-                }
-                if ($translationKeywordsColumns) {
-                    $translationColumns = array_merge($translationColumns, $translationKeywordsColumns);
-                }
+                $translationLang = $this->findNodeByShopwareField($node, 'languageId');
 
                 foreach ($translationColumns as $column) {
                     preg_match("/(?P<column>.*)_+(?P<langId>.*)$/i", $column, $matches);
@@ -1366,5 +1356,34 @@ class FlattenTransformer implements DataTransformerAdapter
         $shops = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop')->findAll();
         
         return $shops;
+    }
+
+    public function getAllTranslationColumns()
+    {
+        if ($this->translationColumns === null){
+            $translationFields = array(
+                'name', 'additionalText', 'metaTitle', 'description',
+                'descriptionLong', 'keywords', 'packingUnit'
+            );
+
+            $attributes = array_map(function($item) {
+                return $item['name'];
+            }, $this->getTranslationAttr());
+
+            $this->translationColumns = array_merge($translationFields, $attributes);
+        }
+
+        return $this->translationColumns;
+    }
+
+    public function getTranslationAttr()
+    {
+        $repository = Shopware()->Models()->getRepository('Shopware\Models\Article\Element');
+
+        $builder = $repository->createQueryBuilder('attribute');
+        $builder->andWhere('attribute.translatable = 1');
+        $builder->orderBy('attribute.position');
+
+        return $builder->getQuery()->getArrayResult();
     }
 }
