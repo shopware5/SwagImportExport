@@ -54,7 +54,8 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.NewProfile', {
         articlesTranslations: '{s name=swag_import_export/profile/type/articlesTranslations}Articles Translations{/s}',
         orders: '{s name=swag_import_export/profile/type/orders}Orders{/s}',
         customers: '{s name=swag_import_export/profile/type/customers}Customers{/s}',
-        newsletter: '{s name=swag_import_export/profile/type/newsletter}Newsletter receiver{/s}'
+        newsletter: '{s name=swag_import_export/profile/type/newsletter}Newsletter receiver{/s}',
+        translations: '{s name=swag_import_export/profile/type/translations}Translations{/s}'
     },
 
     width: 500,
@@ -109,7 +110,8 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.NewProfile', {
                 ['articlesTranslations', me.snippets.articlesTranslations],
                 ['orders', me.snippets.orders],
                 ['customers', me.snippets.customers],
-                ['newsletter', me.snippets.newsletter]
+                ['newsletter', me.snippets.newsletter],
+                ['translations', me.snippets.translations]
             ];
     },
     
