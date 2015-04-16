@@ -209,8 +209,6 @@ class ArticlesDbAdapter implements DataDbAdapter
         $result['category'] = $categoryBuilder->getQuery()->getResult();
 
         $result['translation'] = $this->prepareTranslationExport($ids);
-        $result['translationConfigurator'] = $this->prepareTranslationConfiguratorExport($ids);
-        $result['translationProperty'] = $this->prepareTranslationPropertyExport($ids);
 
         return $result;
     }
@@ -363,158 +361,6 @@ class ArticlesDbAdapter implements DataDbAdapter
         $shops = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop')->findAll();
 
         return $shops;
-    }
-
-    public function prepareTranslationPropertyExport($ids)
-    {
-        $articleDetailIds = implode(',', $ids);
-
-        //translation property
-        $propertyGroups = $this->getTranslationPropertyGroup($articleDetailIds);
-        $propertyOptions = $this->getTranslationPropertyOption($articleDetailIds);
-
-        $sql = "SELECT article.id as  articleId,
-                ct.objectkey as valueId, ct.objectdata, ct.objectlanguage as propertyLanguageId,
-                fr.groupID as propertyGroupId,
-                fv.value as propertyValueBaseName ,fv.optionID as propertyOptionId
-                FROM s_articles_details AS articleDetails
-
-                INNER JOIN s_articles AS article
-                ON article.id = articleDetails.articleID
-
-                LEFT JOIN s_filter_articles AS fa
-                ON fa.articleID = article.id
-
-                LEFT JOIN s_filter_values AS fv
-                ON fv.id = fa.valueID
-
-                LEFT JOIN s_filter_relations AS fr
-                ON fr.optionID = fv.optionID
-
-                LEFT JOIN s_core_translations AS ct
-                ON ct.objectkey = fa.valueID
-
-                WHERE articleDetails.id IN ($articleDetailIds) AND ct.objecttype = 'propertyvalue'
-                GROUP BY ct.id";
-
-        $propertyValues = $this->getDb()->query($sql)->fetchAll();
-
-        foreach($propertyValues as $index => $value){
-            $hasGroupTranslation = false;
-            $hasOptionTranslation = false;
-
-            $valueData = unserialize($value['objectdata']);
-            $propertyValues[$index]['propertyValueName'] = $valueData['optionValue'];
-
-            //maps hte groups
-            foreach($propertyGroups as $group){
-                if($value['propertyGroupId'] === $group['objectkey'] && $value['propertyLanguageId'] === $group['propertyLanguageId']){
-                    $groupData = unserialize($group['objectdata']);
-                    $propertyValues[$index]['propertyGroupBaseName'] = $group['baseName'];
-                    $propertyValues[$index]['propertyGroupName'] = $groupData['groupName'];
-                    $hasGroupTranslation = true;
-                    break;
-                }
-            }
-
-            //maps the options
-            foreach($propertyOptions as $option){
-                if($value['propertyOptionId'] === $option['objectkey'] && $value['propertyLanguageId'] === $option['propertyLanguageId']){
-                    $groupData = unserialize($option['objectdata']);
-                    $propertyValues[$index]['propertyOptionBaseName'] = $option['baseName'];
-                    $propertyValues[$index]['propertyOptionName'] = $groupData['optionName'];
-                    $hasOptionTranslation = true;
-                    break;
-                }
-            }
-
-            //writes empty values
-            if (!$hasGroupTranslation){
-                $propertyValues[$index]['propertyGroupBaseName'] = '';
-                $propertyValues[$index]['propertyGroupName'] = '';
-            }
-//            propertyValueBaseName
-            if (!$hasOptionTranslation){
-                $propertyValues[$index]['propertyOptionBaseName'] = '';
-                $propertyValues[$index]['propertyOptionName'] = '';
-            }
-        }
-
-        return $propertyValues;
-    }
-
-    public function prepareTranslationConfiguratorExport($ids)
-    {
-        $articleDetailIds = implode(',', $ids);
-
-        $sql = "SELECT articleDetails.id as articleId,
-                ao.group_id as configuratorGroupId, ag.name as groupBaseName,
-                ct.objectdata as groupObjectData, ct.objectlanguage as configuratorLanguageId
-                FROM s_articles_details as articleDetails
-
-                LEFT JOIN s_article_configurator_option_relations AS aor
-                ON aor.article_id = articleDetails.id
-
-                LEFT JOIN s_article_configurator_options AS ao
-                ON ao.id = aor.option_id
-
-                LEFT JOIN s_article_configurator_groups AS ag
-                ON ag.id = ao.group_id
-
-                LEFT JOIN s_core_translations AS ct
-                ON ct.objectkey = ao.group_id
-
-                WHERE articleDetails.id IN ($articleDetailIds) AND ct.objecttype = 'configuratorgroup'
-                GROUP BY ct.id
-                ";
-
-        $configGroups = $this->getDb()->query($sql)->fetchAll();
-
-        $sql = "SELECT articleDetails.id as variantId,
-                ao.name as configuratorOptionBaseName, ao.group_id as configuratorGroupId,
-                aor.option_id as optionId, ct.objectdata, ct.objectlanguage as configuratorLanguageId
-                FROM s_articles_details as articleDetails
-
-                LEFT JOIN s_article_configurator_option_relations AS aor
-                ON aor.article_id = articleDetails.id
-
-                LEFT JOIN s_core_translations AS ct
-                ON ct.objectkey = aor.option_id
-
-                LEFT JOIN s_article_configurator_options AS ao
-                ON ao.id = aor.option_id
-
-                WHERE articleDetails.id IN ($articleDetailIds) AND ct.objecttype = 'configuratoroption'
-                ";
-
-        $configOptions = $this->getDb()->query($sql)->fetchAll();
-
-        foreach($configOptions as $index => $option){
-            $hasGroupTranslation = false;
-
-            $optionData = unserialize($option['objectdata']);
-            $configOptions[$index]['configuratorOptionName'] = $optionData['name'];
-
-            foreach($configGroups as $group){
-                if($option['configuratorGroupId'] === $group['configuratorGroupId'] && $option['configuratorLanguageId'] === $group['configuratorLanguageId']){
-                    $groupData = unserialize($group['groupObjectData']);
-                    $configOptions[$index]['configuratorGroupBaseName'] = $group['groupBaseName'];
-                    $configOptions[$index]['configuratorGroupName'] = $groupData['name'];
-                    $configOptions[$index]['configuratorGroupDescription'] = $groupData['description'];
-                    $hasGroupTranslation = true;
-                    break;
-                }
-            }
-
-            //writes empty values
-            if (!$hasGroupTranslation){
-                $configOptions[$index]['configuratorGroupBaseName'] = '';
-                $configOptions[$index]['configuratorGroupName'] = '';
-                $configOptions[$index]['configuratorGroupDescription'] = '';
-            }
-        }
-
-        return $configOptions;
     }
 
     /**
@@ -989,9 +835,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             array('id' => 'accessory', 'name' => 'accessory'),
             array('id' => 'configurator', 'name' => 'configurator'),
             array('id' => 'category', 'name' => 'category'),
-            array('id' => 'translation', 'name' => 'translation'),
-            array('id' => 'translationConfigurator', 'name' => 'translationConfigurator'),
-            array('id' => 'translationProperty', 'name' => 'translationProperty'),
+            array('id' => 'translation', 'name' => 'translation')
         );
     }
 
@@ -2372,14 +2216,6 @@ class ArticlesDbAdapter implements DataDbAdapter
                 return array(
                     'variant.id as variantId',
                 );
-            case 'translationConfigurator':
-                return array(
-                    'variant.id as variantId',
-                );
-            case 'translationProperty':
-                return array(
-                    'article.id as articleId',
-                );
         }
     }
 
@@ -2531,38 +2367,6 @@ class ArticlesDbAdapter implements DataDbAdapter
         }
 
         return $columns;
-    }
-
-    public function getTranslationConfiguratorColumns()
-    {
-        return array(
-            'variant.id as variantId',
-            'translation.optionId as configuratorOptionId',
-            'translation.optionBaseName as configuratorOptionBaseName',
-            'translation.optionName as configuratorOptionName',
-            'translation.groupId as configuratorGroupId',
-            'translation.groupBaseName as configuratorGroupBaseName',
-            'translation.groupName as configuratorGroupName',
-            'translation.groupDescription as configuratorGroupDescription',
-            'translation.objectlanguage as configuratorLanguageId',
-        );
-    }
-
-    public function getTranslationPropertyColumns()
-    {
-        return array(
-            'article.id as articleId',
-            'translation.valueId as valueId',
-            'translation.valueBaseName as propertyValueBaseName',
-            'translation.valueName as propertyValueName',
-            'translation.optionId as propertyOptionId',
-            'translation.optionBaseName as propertyOptionBaseName',
-            'translation.optionName as propertyOptionName',
-            'translation.groupId as propertyGroupId',
-            'translation.groupBaseName as propertyGroupBaseName',
-            'translation.groupName as propertyGroupName',
-            'translation.objectlanguage as propertyLanguageId',
-        );
     }
 
     public function getTranslationAttr()
