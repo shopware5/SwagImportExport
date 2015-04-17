@@ -247,7 +247,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 "txtshortdescription" => "description",
                 "txtlangbeschreibung" => "descriptionLong",
                 "txtkeywords" => "keywords",
-                "txtpackunit" => "packingUnit"
+                "txtpackunit" => "packUnit"
             );
 
             //attributes
@@ -564,8 +564,6 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $this->getManager()->clear();
 
                 $this->writeTranslations($records['translation'], $index, $articleTranslationData);
-                $this->writeTranslationConfigurations($records['translationConfigurator'], $index);
-                $this->writeTranslationProperties($records['translationProperty'], $index);
 
             } catch (AdapterException $e) {
                 $message = $e->getMessage();
@@ -592,12 +590,14 @@ class ArticlesDbAdapter implements DataDbAdapter
             'descriptionLong',
             'metaTitle',
             'keywords',
-            'packUnit'
         );
 
         $variantWhiteList = array(
             'additionalText',
+            'packUnit',
         );
+
+        $whiteList = array_merge($whiteList, $variantWhiteList);
 
         //attributes
         $attributes =  $this->getTranslationAttr();
@@ -647,167 +647,6 @@ class ArticlesDbAdapter implements DataDbAdapter
                     }
                 }
 
-            }
-        }
-    }
-
-    public function writeTranslationConfigurations($translations, $translationIndex)
-    {
-        if ($translations == null) {
-            return;
-        }
-
-        $translationWriter = new \Shopware_Components_Translation();
-
-        foreach ($translations as $index => $translation) {
-            $group = null;
-            $option = null;
-
-            if ($translation['parentIndexElement'] === $translationIndex) {
-
-                if (!isset($translation['configuratorLanguageId']) || empty($translation['configuratorLanguageId'])){
-                    continue;
-                }
-
-                $shop = $this->getShop($translation['configuratorLanguageId']);
-
-                //configuration group
-                if (isset($translation['configuratorGroupId']) && !empty($translation['configuratorGroupId'])){
-                    $group = $this->getManager()->find('Shopware\Models\Article\Configurator\Group', $translation['configuratorGroupId']);
-
-                    if(!$group){
-                        $message = SnippetsHelper::getNamespace()
-                            ->get('adapters/articles/no_group_id', 'Group with id %s not found');
-                        throw new AdapterException(sprintf($message, $translation['configuratorGroupId']));
-                    }
-                } elseif (isset($translation['configuratorGroupBaseName']) && !empty($translation['configuratorGroupBaseName'])){
-                    $group = $this->getConfigGroupRepository()->findOneBy(array('name' => $translation['configuratorGroupBaseName']));
-                }
-
-                if ($group){
-                    $translationWriter->write(
-                        $shop->getId(),
-                        'configuratorgroup',
-                        $group->getId(),
-                        array(
-                            'name' => $translation['configuratorGroupName'],
-                            'description' => $translation['configuratorGroupDescription']
-                        )
-                    );
-                }
-
-                //configuration option
-                if (isset($translation['configuratorOptionId']) && !empty($translation['configuratorOptionId'])){
-                    $option = $this->getManager()->find('Shopware\Models\Article\Configurator\Option', $translation['configuratorOptionId']);
-
-                    if(!$option){
-                        $message = SnippetsHelper::getNamespace()
-                            ->get('adapters/articles/no_option_id', 'Option with id %s not found');
-                        throw new AdapterException(sprintf($message, $translation['configuratorOptionId']));
-                    }
-                } elseif (isset($translation['configuratorOptionBaseName']) && !empty($translation['configuratorOptionBaseName'])){
-                    $option = $this->getConfigOptionRepository()->findOneBy(array('name' => $translation['configuratorOptionBaseName']));
-                }
-
-                if ($option){
-                    $translationWriter->write(
-                        $shop->getId(),
-                        'configuratoroption',
-                        $option->getId(),
-                        array('name' => $translation['configuratorOptionName'])
-                    );
-                }
-            }
-        }
-    }
-
-    public function writeTranslationProperties($translations, $translationIndex)
-    {
-        if ($translations == null) {
-            return;
-        }
-
-        $translationWriter = new \Shopware_Components_Translation();
-
-        foreach ($translations as $index => $translation) {
-            $group = null;
-            $option = null;
-            $value = null;
-
-            if ($translation['parentIndexElement'] === $translationIndex) {
-                if (!isset($translation['propertyLanguageId']) || empty($translation['propertyLanguageId'])){
-                    continue;
-                }
-
-                $shop = $this->getShop($translation['propertyLanguageId']);
-
-                //configuration group
-                if (isset($translation['propertyGroupId']) && !empty($translation['propertyGroupId'])){
-                    $group = $this->getManager()->find('Shopware\Models\Property\Group', $translation['propertyGroupId']);
-
-                    if(!$group){
-                        $message = SnippetsHelper::getNamespace()
-                            ->get('adapters/articles/no_property_group_id', 'Property group with id %s not found');
-                        throw new AdapterException(sprintf($message, $translation['propertyGroupId']));
-                    }
-                } elseif (isset($translation['propertyGroupBaseName']) && !empty($translation['propertyGroupBaseName'])){
-                    $group = $this->getPropertyGroupRepository()->findOneBy(array('name' => $translation['propertyGroupBaseName']));
-                }
-
-                if ($group){
-                    $translationWriter->write(
-                        $shop->getId(),
-                        'propertygroup',
-                        $group->getId(),
-                        array(
-                            'groupName' => $translation['propertyGroupName'],
-                        )
-                    );
-                }
-
-                //configuration option
-                if (isset($translation['propertyOptionId']) && !empty($translation['propertyOptionId'])){
-                    $option = $this->getManager()->find('Shopware\Models\Property\Option', $translation['propertyOptionId']);
-
-                    if(!$option){
-                        $message = SnippetsHelper::getNamespace()
-                            ->get('adapters/articles/no_property_option_id', 'Property option with id %s not found');
-                        throw new AdapterException(sprintf($message, $translation['propertyOptionId']));
-                    }
-                } elseif (isset($translation['propertyOptionBaseName']) && !empty($translation['propertyOptionBaseName'])){
-                    $option = $this->getPropertyOptionRepository()->findOneBy(array('name' => $translation['propertyOptionBaseName']));
-                }
-
-                if ($option){
-                    $translationWriter->write(
-                        $shop->getId(),
-                        'propertyoption',
-                        $option->getId(),
-                        array('optionName' => $translation['propertyOptionName'])
-                    );
-                }
-
-                //configuration value
-                if (isset($translation['propertyValueId']) && !empty($translation['propertyValueId'])){
-                    $value = $this->getManager()->find('Shopware\Models\Property\Value', $translation['propertyValueId']);
-
-                    if(!$value){
-                        $message = SnippetsHelper::getNamespace()
-                            ->get('adapters/articles/no_property_value_id', 'Property value with id %s not found');
-                        throw new AdapterException(sprintf($message, $translation['propertyValueId']));
-                    }
-                } elseif (isset($translation['propertyValueBaseName']) && !empty($translation['propertyValueBaseName'])){
-                    $value = $this->getPropertyValueRepository()->findOneBy(array('value' => $translation['propertyValueBaseName']));
-                }
-
-                if ($value){
-                    $translationWriter->write(
-                        $shop->getId(),
-                        'propertyvalue',
-                        $value->getId(),
-                        array('optionValue' => $translation['propertyValueName'])
-                    );
-                }
             }
         }
     }
@@ -2355,7 +2194,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             'translation.description as description',
             'translation.description_long as descriptionLong',
             'translation.additionalText as additionalText',
-            'translation.packingUnit as packingUnit',
+            'translation.packUnit as packUnit',
         );
 
         $attributes = $this->getTranslationAttr();

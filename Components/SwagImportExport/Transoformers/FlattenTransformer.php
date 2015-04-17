@@ -1363,7 +1363,7 @@ class FlattenTransformer implements DataTransformerAdapter
         if ($this->translationColumns === null){
             $translationFields = array(
                 'name', 'additionalText', 'metaTitle', 'description',
-                'descriptionLong', 'keywords', 'packingUnit'
+                'descriptionLong', 'keywords', 'packUnit'
             );
 
             $attributes = array_map(function($item) {
