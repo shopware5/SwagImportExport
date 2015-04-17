@@ -39,6 +39,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
             't.description_long as descriptionLong',
             't.additional_text as additionalText',
             't.metaTitle as metaTitle',
+            't.packUnit as packUnit',
         );
 
         $elementBuilder = $this->getElementBuilder();
@@ -124,6 +125,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
         );
 
         $translationAttr['txtzusatztxt'] = 'additionalText';
+        $translationAttr['txtpackunit'] = 'packUnit';
 
         if (!empty($translations)) {
             foreach ($translations as $index => $translation) {
@@ -172,12 +174,14 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
             'descriptionLong',
             'metaTitle',
             'keywords',
-            'packUnit'
         );
 
         $variantWhiteList = array(
             'additionalText',
+            'packUnit',
         );
+
+        $whiteList = array_merge($whiteList, $variantWhiteList);
 
         $elementBuilder = $this->getElementBuilder();
         $attributes = $elementBuilder->getQuery()->getArrayResult();
