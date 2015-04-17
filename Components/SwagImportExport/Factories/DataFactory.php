@@ -83,6 +83,8 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
                 return $this->createCustomerDbAdapter();
             case 'newsletter':
                 return $this->createNewsletterDbAdapter();
+            case 'translations':
+                return $this->createTranslationsDbAdapter();
             default: throw new \Exception('Db adapter type is not valid');
         }
     }
@@ -268,6 +270,16 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     {
         $proxyAdapter = Shopware()->Hooks()
                 ->getProxy('Shopware\Components\SwagImportExport\DbAdapters\NewsletterDbAdapter');
+        return new $proxyAdapter;
+    }
+    /**
+     *
+     * @return \Shopware\Components\SwagImportExport\DbAdapters\TranslationsDbAdapter
+     */
+    protected function createTranslationsDbAdapter()
+    {
+        $proxyAdapter = Shopware()->Hooks()
+            ->getProxy('Shopware\Components\SwagImportExport\DbAdapters\TranslationsDbAdapter');
         return new $proxyAdapter;
     }
 
