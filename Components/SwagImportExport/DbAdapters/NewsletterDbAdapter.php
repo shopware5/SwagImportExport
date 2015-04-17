@@ -28,21 +28,38 @@ class NewsletterDbAdapter implements DataDbAdapter
 
     public function getDefaultColumns()
     {
-        return array(
+        $columns = array(
             'na.email as email',
             'ng.name as groupName',
             'CASE WHEN (cb.salutation IS NULL) THEN cd.salutation ELSE cb.salutation END as salutation',
             'CASE WHEN (cb.firstName IS NULL) THEN cd.firstName ELSE cb.firstName END as firstName',
             'CASE WHEN (cb.lastName IS NULL) THEN cd.lastName ELSE cb.lastName END as lastName',
             'CASE WHEN (cb.street IS NULL) THEN cd.street ELSE cb.street END as street',
-            'CASE WHEN (cb.streetNumber IS NULL) THEN cd.streetNumber ELSE cb.streetNumber END as streetNumber',
             'CASE WHEN (cb.city IS NULL) THEN cd.city ELSE cb.city END as city',
             'CASE WHEN (cb.zipCode IS NULL) THEN cd.zipCode ELSE cb.zipCode END as zipCode',
             'na.lastNewsletterId as lastNewsletter',
             'na.lastReadId as lastRead',
             'c.id as userID',
         );
+
+        //removes street number for shopware 5
+        if (!$this->isAdditionalShippingAddressExists()){
+            $columns[] = 'CASE WHEN (cb.streetNumber IS NULL) THEN cd.streetNumber ELSE cb.streetNumber END as streetNumber';
+        }
+
+        return $columns;
     }
+
+    /**
+     * @return bool
+     */
+    public function isAdditionalShippingAddressExists()
+    {
+        $sql = "SHOW COLUMNS FROM `s_user_shippingaddress` LIKE 'additional_address_line1'";
+        $result = Shopware()->Db()->fetchRow($sql);
+        return $result ? true : false;
+    }
+
 
     public function getUnprocessedData()
     {
@@ -217,7 +234,7 @@ class NewsletterDbAdapter implements DataDbAdapter
     /**
      * Returns entity manager
      * 
-     * @return Shopware\Components\Model\ModelManager
+     * @return \Shopware\Components\Model\ModelManager
      */
     public function getManager()
     {
@@ -246,7 +263,7 @@ class NewsletterDbAdapter implements DataDbAdapter
 
     /**
      * Helper function to get access to the Group repository.
-     * @return Shopware\Models\Newsletter\Repository
+     * @return \Shopware\Models\Newsletter\Repository
      */
     protected function getGroupRepository()
     {
@@ -258,7 +275,7 @@ class NewsletterDbAdapter implements DataDbAdapter
 
     /**
      * Helper function to get access to the Address repository.
-     * @return Shopware\Models\Newsletter\Repository
+     * @return \Shopware\Models\Newsletter\Repository
      */
     protected function getAddressRepository()
     {
@@ -270,7 +287,7 @@ class NewsletterDbAdapter implements DataDbAdapter
 
     /**
      * Helper function to get access to the ContactData repository.
-     * @return Shopware\Components\Model\ModelRepository
+     * @return \Shopware\Components\Model\ModelRepository
      */
     protected function getContactDataRepository()
     {
