@@ -374,7 +374,6 @@ class ArticlesDbAdapter implements DataDbAdapter
                 )
             );
 
-
             $configuratorWriter->write(
                 $articleId,
                 $articleDetailId,
@@ -388,7 +387,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         }
 
         $end = microtime(true);
-        error_log(print_r($end - $start, true)."\n", 3, Shopware()->DocPath().'/../error.log');
+        error_log(print_r($end - $start, true)."\n", 3, Shopware()->DocPath().'/error.log');
     }
 
     /**
@@ -691,7 +690,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             );
             if (empty($articleData['supplier'])) {
                 $message = SnippetsHelper::getNamespace()->get(
-                    'adapters/articles/supplier_not_found',
+                    'adapters/articles/supplier_id_not_found',
                     'Supplier by id %s not found for article %s'
                 );
                 throw new AdapterException(sprintf($message, $data['supplierId'], $data['orderNumber']));

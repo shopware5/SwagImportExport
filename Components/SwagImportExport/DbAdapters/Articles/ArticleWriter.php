@@ -23,6 +23,7 @@ class ArticleWriter
         $this->dbalHelper = new DbalHelper();
 
         $this->taxRates = $this->getTaxRates();
+        $this->suppliers = $this->getSuppliers();
     }
 
     public function write($article)
@@ -128,12 +129,25 @@ class ArticleWriter
 
     protected function setDefaultValues($article, $create)
     {
+        $orderNumber = $article['orderNumber'];
         if ($create && empty($article['taxId']) && empty($article['tax'])) {
             // todo: read default tax rate from config
             $article['taxId'] = $this->taxRates[0];
         }
         if (isset($article['tax'])) {
-            $article['taxId'] = $this->taxRates[$article['tax']];
+            $article['taxId'] = $this->getTax($article['tax'], $orderNumber);
+        }
+
+        if (!isset($article['supplierId']) && isset($article['supplierName'])){
+            $article['supplierId'] = $this->getSupplier($article['supplierName'], $orderNumber);
+        }
+
+        if (empty($article['supplierId'])){
+            $message = SnippetsHelper::getNamespace()->get(
+                'adapters/articles/supplier_not_found',
+                "Supplier not found for article %s."
+            );
+            throw new AdapterException(sprintf($message, $orderNumber));
         }
 
         return $article;
@@ -148,4 +162,64 @@ class ArticleWriter
         }
         return $tax;
     }
+
+    protected function getSuppliers()
+    {
+        $suppliers = array();
+        $result = $this->connection->fetchAll('SELECT `id`, `name` FROM s_articles_supplier');
+
+        foreach ($result as $row) {
+            $suppliers[$row['name']] = $row['id'];
+        }
+
+        return $suppliers;
+    }
+
+    /**
+     * Returns the taxes rate ID
+     *
+     * @param $taxRate
+     * @param $orderNumber
+     * @return int
+     * @throws AdapterException
+     */
+    public function getTax($taxRate, $orderNumber)
+    {
+        $taxId = $this->taxRates[$taxRate];
+
+        if (!$taxId){
+            $message = SnippetsHelper::getNamespace()->get(
+                'adapters/articles/no_tax_found',
+                "Tax by tax rate %s not found for article %s."
+            );
+            throw new AdapterException(sprintf($message, $taxRate, $orderNumber));
+        }
+
+        return $taxId;
+    }
+
+    /**
+     * Returns the supplier ID
+     *
+     * @param $name
+     * @param $orderNumber
+     * @return int
+     * @throws AdapterException
+     */
+    public function getSupplier($name, $orderNumber){
+
+        $supplierId = $this->suppliers[$name];
+
+        if (!$supplierId){
+            $message = SnippetsHelper::getNamespace()->get(
+                'adapters/articles/supplier_name_not_found',
+                'Supplier with name %s not found for article %s'
+            );
+            throw new AdapterException(sprintf($message, $name, $orderNumber));
+        }
+
+        return $supplierId;
+    }
+
+
 }
