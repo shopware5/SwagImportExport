@@ -92,7 +92,7 @@ class DbalHelper
         // Check if nullable
         if (empty($value) && $nullAble) {
             return $builder->createNamedParameter(
-                "NULL",
+                NULL,
                 \PDO::PARAM_NULL
             );
         }

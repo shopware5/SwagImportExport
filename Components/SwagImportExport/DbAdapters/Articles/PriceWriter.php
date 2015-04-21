@@ -34,7 +34,6 @@ class PriceWriter
                 continue;
             }
 
-
             $priceId = null;
             $result = $this->connection->fetchColumn(
                 '
@@ -60,7 +59,7 @@ class PriceWriter
 
     protected function calculatePrice($price, $newPrice, $tax)
     {
-        $taxInput = $this->customerGroups[$price['customerGroup']];
+        $taxInput = $this->customerGroups[$price['priceGroup']];
 
         $price['price'] = floatval(str_replace(",", ".", $price['price']));
 
@@ -169,11 +168,17 @@ class PriceWriter
      */
     protected function getArticleTaxRate($articleId)
     {
-        $result = $this->connection->fetchColumn('SELECT taxID from s_articles WHERE id = ?', array($articleId));
+        $result = $this->connection->fetchAssoc(
+            'SELECT coretax.tax FROM s_core_tax AS coretax
+              LEFT JOIN s_articles AS article
+              ON article.taxID = coretax.id
+              WHERE article.id = ?'
+            , array($articleId));
+
         if (empty($result)) {
             throw new AdapterException("Tax for article $articleId not found");
         }
 
-        return (int)$result['tax'];
+        return floatval($result['tax']);
     }
 }
