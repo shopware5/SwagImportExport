@@ -442,7 +442,6 @@ class ArticlesDbAdapter implements DataDbAdapter
 
         $this->run($records);
 
-
         return;
         foreach ($records['article'] as $index => $record) {
             try {
