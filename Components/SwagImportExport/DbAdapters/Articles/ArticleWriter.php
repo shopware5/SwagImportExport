@@ -206,16 +206,21 @@ class ArticleWriter
      * @return int
      * @throws AdapterException
      */
-    public function getSupplier($name, $orderNumber){
+    public function getSupplier($name){
 
         $supplierId = $this->suppliers[$name];
 
+        //creates supplier if does not exists
         if (!$supplierId){
-            $message = SnippetsHelper::getNamespace()->get(
-                'adapters/articles/supplier_name_not_found',
-                'Supplier with name %s not found for article %s'
+            $data = array('name' => $name);
+            $builder =  $this->dbalHelper->getQueryBuilderForEntity(
+                $data,
+                'Shopware\Models\Article\Supplier',
+                false
             );
-            throw new AdapterException(sprintf($message, $name, $orderNumber));
+            $builder->execute();
+            $supplierId = $this->connection->lastInsertId();
+            $this->suppliers[$name] = $supplierId;
         }
 
         return $supplierId;
