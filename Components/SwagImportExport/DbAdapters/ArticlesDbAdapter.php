@@ -380,7 +380,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 array_filter(
                     $records['configurator'],
                     function ($configurator) use ($index) {
-                        return $configurator['parentIndexElement'] == $index && $configurator['configOptionName'];
+                        return $configurator['parentIndexElement'] == $index;
                     }
                 )
             );
@@ -401,6 +401,13 @@ class ArticlesDbAdapter implements DataDbAdapter
     {
         error_log(print_r($records, true) . "\n", 3, Shopware()->DocPath() . '/../error.log');
 
+        $variantModel = $this->getVariantRepository()->findOneBy(array('number' => 'SW10001'));
+
+        echo '<pre>';
+        \Doctrine\Common\Util\Debug::dump($variantModel->getPrices());
+        echo '</pre>';
+        exit;
+
         //articles
         if (empty($records['article'])) {
             $message = SnippetsHelper::getNamespace()->get(
@@ -419,6 +426,12 @@ class ArticlesDbAdapter implements DataDbAdapter
         $this->run($records);
 
         return;
+
+
+
+
+
+
         foreach ($records['article'] as $index => $record) {
             try {
                 unset($articleModel);

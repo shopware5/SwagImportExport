@@ -39,9 +39,9 @@ class PriceWriter
                 '
                     SELECT id
                     FROM s_articles_prices
-                    WHERE articleID = ? AND pricegroup = ? AND `from` = ?
+                    WHERE articleID = ? AND articledetailsID = ? AND pricegroup = ? AND `from` = ?
                 ',
-                array($articleId, $price['priceGroup'], $price['from'])
+                array($articleId, $articleDetailId, $price['priceGroup'], $price['from'])
             );
             if (!empty($result)) {
                 $priceId = $result['id'];
