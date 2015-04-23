@@ -7,6 +7,7 @@ use Shopware\Components\SwagImportExport\DbAdapters\Articles\ArticleWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\CategoryWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\ConfiguratorWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\PriceWriter;
+use Shopware\Components\SwagImportExport\DbAdapters\Articles\RelationWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\Write;
 use Shopware\Models\Article\Article as ArticleModel;
 use Shopware\Models\Article\Detail as DetailModel;
@@ -349,6 +350,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         $pricesWriter = new PriceWriter();
         $categoryWriter = new CategoryWriter();
         $configuratorWriter = new ConfiguratorWriter();
+        $relationWriter = new RelationWriter();
 
         foreach ($records['article'] as $index => $article) {
             list($articleId, $articleDetailId, $mainDetailId) = $articleWriter->write($article);
@@ -384,6 +386,28 @@ class ArticlesDbAdapter implements DataDbAdapter
                     }
                 )
             );
+
+            $relationWriter->write(
+                $articleId,
+                array_filter(
+                    $records['accessory'],
+                    function ($accessory) use ($index) {
+                        return $accessory['parentIndexElement'] == $index;
+                    }
+                ),
+                'accessory'
+            );
+
+            $relationWriter->write(
+                $articleId,
+                array_filter(
+                    $records['similar'],
+                    function ($similar) use ($index) {
+                        return $similar['parentIndexElement'] == $index;
+                    }
+                ),
+                'similar'
+            );
         }
 
         $end = microtime(true);
@@ -417,6 +441,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         );
 
         $this->run($records);
+
 
         return;
         foreach ($records['article'] as $index => $record) {
