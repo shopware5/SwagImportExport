@@ -211,7 +211,6 @@ class RelationWriter
         );
 
         $insert = "INSERT INTO {$this->table} (articleID, relatedarticle) VALUES {$values}";
-        var_dump($insert);
         $this->connection->exec($insert);
     }
 }

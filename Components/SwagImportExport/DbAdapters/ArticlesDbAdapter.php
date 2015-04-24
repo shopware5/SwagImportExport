@@ -425,13 +425,6 @@ class ArticlesDbAdapter implements DataDbAdapter
     {
         error_log(print_r($records, true) . "\n", 3, Shopware()->DocPath() . '/../error.log');
 
-        $variantModel = $this->getVariantRepository()->findOneBy(array('number' => 'SW10001'));
-
-        echo '<pre>';
-        \Doctrine\Common\Util\Debug::dump($variantModel->getPrices());
-        echo '</pre>';
-        exit;
-
         //articles
         if (empty($records['article'])) {
             $message = SnippetsHelper::getNamespace()->get(
@@ -2312,14 +2305,15 @@ class ArticlesDbAdapter implements DataDbAdapter
     public function getAccessoryBuilder($columns, $ids)
     {
         $accessoryBuilder = $this->getManager()->createQueryBuilder();
-        $accessoryBuilder->select($columns)->from('Shopware\Models\Article\Detail', 'variant')->join(
-            'variant.article',
-            'article'
-        )->leftjoin('article.related', 'accessory')->leftjoin('accessory.details', 'accessoryDetail')->where(
-                'variant.id IN (:ids)'
-            )->andWhere('variant.kind = 1')->andWhere('accessoryDetail.kind = 1')->andWhere(
-                'accessory.id IS NOT NULL'
-            )->setParameter('ids', $ids);
+        $accessoryBuilder->select($columns)->from('Shopware\Models\Article\Detail', 'variant')
+            ->join('variant.article', 'article')
+            ->leftjoin('article.related', 'accessory')
+            ->leftjoin('accessory.details', 'accessoryDetail')
+            ->where('variant.id IN (:ids)')
+            ->andWhere('variant.kind = 1')
+            ->andWhere('accessoryDetail.kind = 1')
+            ->andWhere('accessory.id IS NOT NULL')
+            ->setParameter('ids', $ids);
 
         return $accessoryBuilder;
     }
