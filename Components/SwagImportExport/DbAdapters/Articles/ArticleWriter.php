@@ -76,7 +76,7 @@ class ArticleWriter
         // insert detail
         $article['number'] = $article['orderNumber'];
         $article['articleId'] = $articleId;
-        $article['kind'] = $createArticle ? 1 : 2;
+        $article['kind'] = $mainDetailId == $detailId ? 1 : 2;
         $builder = $this->dbalHelper->getQueryBuilderForEntity($article, 'Shopware\Models\Article\Detail', $detailId);
         $builder->execute();
 

@@ -2290,14 +2290,16 @@ class ArticlesDbAdapter implements DataDbAdapter
     public function getSimilarBuilder($columns, $ids)
     {
         $similarBuilder = $this->getManager()->createQueryBuilder();
-        $similarBuilder->select($columns)->from('Shopware\Models\Article\Detail', 'variant')->join(
-            'variant.article',
-            'article'
-        )->leftjoin('article.similar', 'similar')->leftjoin('similar.details', 'similarDetail')->where(
-                'variant.id IN (:ids)'
-            )->andWhere('variant.kind = 1')->andWhere('similarDetail.kind = 1')->andWhere(
-                'similar.id IS NOT NULL'
-            )->setParameter('ids', $ids);
+        $similarBuilder->select($columns)
+            ->from('Shopware\Models\Article\Detail', 'variant')
+            ->join('variant.article', 'article')
+            ->leftjoin('article.similar', 'similar')
+            ->leftjoin('similar.details', 'similarDetail')
+            ->where('variant.id IN (:ids)')
+            ->andWhere('variant.kind = 1')
+            ->andWhere('similarDetail.kind = 1')
+            ->andWhere('similar.id IS NOT NULL')
+            ->setParameter('ids', $ids);
 
         return $similarBuilder;
     }
