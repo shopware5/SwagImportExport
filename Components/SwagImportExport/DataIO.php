@@ -114,7 +114,7 @@ class DataIO
         $dbAdapter = $this->getDbAdapter();
         
         $rawData = $dbAdapter->read($ids, $columns);
-        
+
         return $rawData;
     }
 
@@ -125,13 +125,32 @@ class DataIO
         $dbAdapter->write($data);
     }
 
-    public function writeLog()
+    /**
+     * @param string $fileName
+     * @param string $profileName
+     */
+    public function writeLog($fileName, $profileName)
     {
         $dbAdapter = $this->getDbAdapter();
 
         $messages = $dbAdapter->getLogMessages();
+        $status = 'false';
 
-        $this->logger->write($messages, 'false');
+        if (!$messages || empty($messages)) {
+            return;
+        }
+
+        $this->logger->write($messages, $status);
+
+        $logData = array(
+            date("Y-m-d H:i:s"),
+            $fileName,
+            $profileName,
+            implode("\n", $messages),
+            $status
+        );
+
+        $this->logger->writeToFile($logData);
     }
 
     public function getUnprocessedData()
@@ -316,7 +335,7 @@ class DataIO
      * Updates the session position with the current position (stored in a member variable).
      *
      */
-    public function progressSession($step, $outputFileName)
+    public function progressSession($step, $outputFileName = null)
     {
         $this->getDataSession()->progress($step, $outputFileName);
     }

@@ -1,6 +1,7 @@
 <?php
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
+use Doctrine\ORM\QueryBuilder;
 use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 
@@ -55,13 +56,17 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
         $paginator = $manager->createPaginator($query);
 
         $result['default'] = $paginator->getIterator()->getArrayCopy();
-        
+
         foreach ($result['default'] as &$record) {
             if ($record['taxInput']) {
                 $record['price'] = $record['price'] * (100 + $record['tax']) / 100; 
             }
+
+            if (!$record['inStock']) {
+                $record['inStock'] = '0';
+            }
         }
-        
+
         return $result;
     }
 
@@ -72,7 +77,6 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
 
     public function readRecordIds($start, $limit, $filter)
     {
-
         $stockFilter = $filter['stockFilter'];
         $manager = $this->getManager();
 
@@ -82,11 +86,10 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
                 ->from('Shopware\Models\Article\Detail', 'd')
                 ->leftJoin('d.prices', 'p');
 
-
         switch($stockFilter)
         {
             case 'all':
-                $builder->where('d.id > 0');
+                $builder->where($builder->expr()->isNotNull('d.id'));
                 break;
             case 'inStock':
                 $builder->where('d.inStock > 0');
@@ -101,43 +104,62 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
                 break;
             case 'notInStockOnSale':
                 $builder->leftJoin('d.article', 'a')
-                        ->where('d.inStock = 0')
-                        ->andWhere('a.lastStock = 0');
+                    ->where('d.inStock <= 0')
+                    ->andWhere('a.lastStock = 1');
+                break;
+            case 'notInStockMinStock':
+                    $builder->where('d.stockMin >= d.inStock')
+                    ->andWhere('d.stockMin > 0');
+                break;
+            case 'custom':
+                switch($filter['direction']) {
+                    case 'greaterThan':
+                        $builder->where('d.inStock >= :filterValue');
+                        break;
+                    case 'lessThan':
+                        $builder->where('d.inStock <= :filterValue');
+                        break;
+                }
+                $builder->setParameter('filterValue', (int)$filter['value']);
+
+                // unset filterValues for prevent query errors
+                if(isset($filter['direction'])) {
+                    unset($filter['direction']);
+                }
+                if(isset($filter['value'])) {
+                    unset($filter['value']);
+                }
+
                 break;
             default:
-                throw new \Exception('Cannot match StockFilter 116');
+                throw new \Exception('Cannot match StockFilter - File:ArticlesInStockAdapter Line:136');
+        }
+
+        if(isset($filter['stockFilter'])) {
+            unset($filter['stockFilter']);
         }
 
         $builder->andWhere("p.customerGroupKey = 'EK'")
                 ->andWhere("p.from = 1")
                 ->orderBy('d.id', 'ASC');
 
-        if(isset($filter['stockFilter']))
-            unset($filter['stockFilter']);
-
         if (!empty($filter)) {
-
             $builder->addFilter($filter);
         }
-        
+
         $builder->setFirstResult($start)
                 ->setMaxResults($limit);
-        
         $query = $builder->getQuery();
-        
         $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-        
         $paginator = $manager->createPaginator($query);
 
         $records = $paginator->getIterator()->getArrayCopy();
-        
         $result = array();
         if ($records) {
             foreach ($records as $value) {
                 $result[] = $value['id'];
             }
         }
-        
         return $result;
     }
 
@@ -272,5 +294,4 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
 
         return $builder;
     }
-
 }

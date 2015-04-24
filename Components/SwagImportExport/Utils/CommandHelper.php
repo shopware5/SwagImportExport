@@ -4,6 +4,7 @@ namespace Shopware\Components\SwagImportExport\Utils;
 
 use Shopware\Components\SwagImportExport\DataWorkflow;
 use Shopware\Components\SwagImportExport\StatusLogger;
+use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 
 class CommandHelper
 {
@@ -181,6 +182,9 @@ class CommandHelper
         $fileHelper = $fileFactory->createFileHelper();
         $fileWriter = $fileFactory->createFileWriter($postData, $fileHelper);
 
+        $fileLogWriter = $fileFactory->createFileWriter(array('format' => 'csv'), $fileHelper);
+        $logger = $dataFactory->loadLogger($dataSession, $fileLogWriter);
+
         $dataTransformerChain = $this->Plugin()->getDataTransformerFactory()->createDataTransformerChain(
                 $profile, array('isTree' => $fileWriter->hasTreeStructure())
         );
@@ -188,6 +192,22 @@ class CommandHelper
         $dataWorkflow = new DataWorkflow($dataIO, $profile, $dataTransformerChain, $fileWriter);
 
         $post = $dataWorkflow->export($postData, $this->filePath);
+
+        $message = $post['position'] . ' ' . $profile->getType() . ' exported successfully';
+        $status = SnippetsHelper::getNamespace()
+            ->get('controller/log_status_success', 'No errors');
+
+        $logger->write($message, $status);
+
+        $logData = array(
+            date("Y-m-d H:i:s"),
+            $post['fileName'],
+            $profile->getName(),
+            $message,
+            'true'
+        );
+
+        $logger->writeToFile($logData);
 
         $this->sessionId = $post['sessionId'];
         return $post;
@@ -261,7 +281,9 @@ class CommandHelper
         $inputFile = $postData['importFile'];
 
         // we create the file reader that will read the result file
-        $fileReader = $this->Plugin()->getFileIOFactory()->createFileReader($postData, null);
+        $fileFactory = $this->Plugin()->getFileIOFactory();
+        $fileHelper = $fileFactory->createFileHelper();
+        $fileReader = $fileFactory->createFileReader($postData, null);
 
         //load profile
         $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
@@ -277,8 +299,8 @@ class CommandHelper
         $dbAdapter = $dataFactory->createDbAdapter($profile->getType());
         $dataSession = $dataFactory->loadSession($postData);
 
-        /* @var $logger Shopware\Components\SwagImportExport\Logger\Logger */
-        $logger = $dataFactory->loadLogger($dataSession);
+        $fileLogWriter = $fileFactory->createFileWriter(array('format' => 'csv'), $fileHelper);
+        $logger = $dataFactory->loadLogger($dataSession, $fileLogWriter);
 
         //create dataIO
         $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession, $logger);
@@ -300,7 +322,7 @@ class CommandHelper
         $sessionState = $dataIO->getSessionState();
 
         $dataWorkflow = new DataWorkflow($dataIO, $profile, $dataTransformerChain, $fileReader);
-        
+
         try {
             $post = $dataWorkflow->import($postData, $inputFile);
 
@@ -314,7 +336,16 @@ class CommandHelper
                     )
                 );
 
-                $this->afterImport($data, $inputFile);
+                $pathInfo = pathinfo($inputFile);
+
+                foreach ($data['data'] as $key => $value){
+                    $outputFile = 'media/unknown/' . $pathInfo['filename'] . '-' . $key .'-tmp.csv';
+                    $post['unprocessed'][] = array(
+                        'profileName' => $key,
+                        'fileName' => $outputFile
+                    );
+                    $this->afterImport($data, $key, $outputFile);
+                }
             }
 
             $this->sessionId = $post['sessionId'];
@@ -323,12 +354,35 @@ class CommandHelper
                     && $logger->getMessage() === null) {
 
                 $message = $post['position'] . ' ' . $post['adapter'] . ' imported successfully';
-                $logger->write($message, 'false');
+                $status = SnippetsHelper::getNamespace()
+                    ->get('controller/log_status_success', 'No errors');
+
+                $logger->write($message, $status);
+
+                $logData = array(
+                    date("Y-m-d H:i:s"),
+                    $inputFile,
+                    $profile->getName(),
+                    $message,
+                    'true'
+                );
+
+                $logger->writeToFile($logData);
             }
             
             return array('success' => true, 'data' => $post);
         } catch (Exception $e) {
             $logger->write($e->getMessage(), 'true');
+
+            $logData = array(
+                date("Y-m-d H:i:s"),
+                $inputFile,
+                $profile->getName(),
+                $e->getMessage(),
+                'false'
+            );
+
+            $logger->writeToFile($logData);
             
             return array('success' => false, 'msg' => $e->getMessage());
         }
@@ -338,27 +392,25 @@ class CommandHelper
      * Saves unprocessed data to csv file
      *
      * @param array $data
-     * @param string $inputFile
+     * @param string $profileName
+     * @param string $outputFile
      */
-    protected function afterImport($data, $inputFile)
+    protected function afterImport($data, $profileName, $outputFile)
     {
         $fileFactory = $this->Plugin()->getFileIOFactory();
 
         //loads hidden profile for article
-        $profile = $this->Plugin()->getProfileFactory()->loadHiddenProfile('articles');
+        $profile = $this->Plugin()->getProfileFactory()->loadHiddenProfile($profileName);
 
         $fileHelper = $fileFactory->createFileHelper();
         $fileWriter = $fileFactory->createFileWriter(array('format' => 'csv'), $fileHelper);
 
         $dataTransformerChain = $this->Plugin()->getDataTransformerFactory()->createDataTransformerChain(
-                $profile, array('isTree' => $fileWriter->hasTreeStructure())
+            $profile, array('isTree' => $fileWriter->hasTreeStructure())
         );
 
-        $pathInfo = pathinfo($inputFile);
-        $outputFile = Shopware()->DocPath() . 'media/unknown/' . $pathInfo['filename'] . '-tmp.' . $pathInfo['extension'];
-
-        $dataWorkflow = new DataWorkflow($dataIO, $profile, $dataTransformerChain, $fileWriter);
-        $dataWorkflow->saveUnprocessedData($data, $outputFile);
+        $dataWorkflow = new DataWorkflow(null, $profile, $dataTransformerChain, $fileWriter);
+        $dataWorkflow->saveUnprocessedData($data, $profileName, Shopware()->DocPath() . $outputFile);
     }
 
     protected function Plugin()

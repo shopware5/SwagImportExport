@@ -2,6 +2,7 @@
 
 namespace Shopware\Components\SwagImportExport;
 
+use Shopware\Components\SwagImportExport\FileIO\FileWriter;
 use \Shopware\Components\SwagImportExport\Profile\Profile;
 
 class DataWorkflow
@@ -23,7 +24,7 @@ class DataWorkflow
     protected $transformerChain;
 
     /**
-     * @var $fileIO 
+     * @var FileWriter $fileIO
      */
     protected $fileIO;
 
@@ -39,11 +40,9 @@ class DataWorkflow
 
     /**
      * @param DataIO $dataIO
-     * @param type $profile
+     * @param Profile $profile
      * @param type $transformerChain
      * @param type $fileIO
-     * @param type $dataSession
-     * @param type $dbAdapter
      */
     public function __construct($dataIO, $profile, $transformerChain, $fileIO)
     {
@@ -92,10 +91,9 @@ class DataWorkflow
             // read a bunch of records into simple php array;
             // the count of records may be less than 100 if we are at the end of the read.
             $data = $this->dataIO->read($stepSize);
-            
             // process that array with the full transformation chain
             $data = $this->transformerChain->transformForward($data);
-            
+
             // now the array should be a tree and we write it to the file
             $this->fileIO->writeRecords($outputFileName, $data);
 
@@ -105,7 +103,7 @@ class DataWorkflow
         }
         
         if ($this->dataIO->getSessionState() == 'finished') {
-            // Session finished means we have exported all the ids in the sesssion.
+            // Session finished means we have exported all the ids in the session.
             // Therefore we can close the file with a footer and mark the session as done.
             $footer = $this->transformerChain->composeFooter();
             $this->fileIO->writeFooter($outputFileName, $footer);
@@ -153,11 +151,12 @@ class DataWorkflow
 
             $data = $this->transformerChain->transformBackward($records);
 
-            //inserts/update data into the datebase
+            //inserts/update data into the database
             $this->dataIO->write($data);
 
-            //writes into the log table
-            $this->dataIO->writeLog();
+            //writes into database log table
+            $profileName = $this->profile->getName();
+            $this->dataIO->writeLog($inputFile, $profileName);
 
             $this->dataIO->progressSession($batchSize);
 
@@ -179,14 +178,14 @@ class DataWorkflow
         return $postData;
     }
 
-    public function saveUnprocessedData($postData, $outputFile)
+    public function saveUnprocessedData($postData, $profileName, $outputFile)
     {
         if ($postData['session']['prevState'] === 'new') {
             $header = $this->transformerChain->composeHeader();
             $this->fileIO->writeHeader($outputFile, $header);
         }
 
-        $data = $this->transformerChain->transformForward($postData['data']);
+        $data = $this->transformerChain->transformForward($postData['data'][$profileName]);
 
         $this->fileIO->writeRecords($outputFile, $data);
     }

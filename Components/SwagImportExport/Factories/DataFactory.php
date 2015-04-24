@@ -83,6 +83,8 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
                 return $this->createCustomerDbAdapter();
             case 'newsletter':
                 return $this->createNewsletterDbAdapter();
+            case 'translations':
+                return $this->createTranslationsDbAdapter();
             default: throw new \Exception('Db adapter type is not valid');
         }
     }
@@ -106,11 +108,9 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
         return $session;
     }
 
-    public function loadLogger(Session $session)
+    public function loadLogger(Session $session, $fileWriter)
     {
-        $loggerEntity = $session->getLogger();
-
-        $logger = $this->createLogger($loggerEntity);
+        $logger = $this->createLogger($session, $fileWriter);
 
         return $logger;
     }
@@ -140,7 +140,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     /**
      * Returns filter adapter
      * 
-     * @param type $filter
+     * @param $filter
      * @return \Shopware\Components\SwagImportExport\Utils\DataFilter
      */
     public function createFilter($filter)
@@ -166,9 +166,9 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
         return new Session($sessionEntity);
     }
 
-    protected function createLogger(LoggerEntity $loggerEntity)
+    protected function createLogger($session, $fileWriter)
     {
-        return new Logger($loggerEntity);
+        return new Logger($session, $fileWriter);
     }
 
     /**
@@ -270,6 +270,16 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     {
         $proxyAdapter = Shopware()->Hooks()
                 ->getProxy('Shopware\Components\SwagImportExport\DbAdapters\NewsletterDbAdapter');
+        return new $proxyAdapter;
+    }
+    /**
+     *
+     * @return \Shopware\Components\SwagImportExport\DbAdapters\TranslationsDbAdapter
+     */
+    protected function createTranslationsDbAdapter()
+    {
+        $proxyAdapter = Shopware()->Hooks()
+            ->getProxy('Shopware\Components\SwagImportExport\DbAdapters\TranslationsDbAdapter');
         return new $proxyAdapter;
     }
 

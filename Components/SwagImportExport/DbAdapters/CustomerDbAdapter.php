@@ -110,7 +110,6 @@ class CustomerDbAdapter implements DataDbAdapter
             'billing.firstName as billingFirstname',
             'billing.lastName as billingLastname',
             'billing.street as billingStreet',
-            'billing.streetNumber as billingStreetnumber',
             'billing.zipCode as billingZipcode',
             'billing.city as billingCity',
             'billing.phone as billingPhone',
@@ -120,7 +119,15 @@ class CustomerDbAdapter implements DataDbAdapter
             'billing.vatId as ustid',
             'billing.birthday as birthday',
         );
-        
+
+        //shopware 5 additional columns
+        if ($this->isAdditionalBillingAddressExists()){
+            $columns[] = 'billing.additionalAddressLine1 as billingAdditionalAddressLine1';
+            $columns[] = 'billing.additionalAddressLine2 as billingAdditionalAddressLine2';
+        } else {
+            $columns[] = 'billing.streetNumber as billingStreetnumber';
+        }
+
         // Attributes
         $attributes = $this->getAttributesByTableName('s_user_billingaddress_attributes');
 
@@ -156,13 +163,20 @@ class CustomerDbAdapter implements DataDbAdapter
             'shipping.firstName as shippingFirstname',
             'shipping.lastName as shippingLastname',
             'shipping.street as shippingStreet',
-            'shipping.streetNumber as shippingStreetnumber',
             'shipping.zipCode as shippingZipcode',
             'shipping.city as shippingCity',
             'shipping.countryId as shippingCountryID',
             'shipping.stateId as shippingStateID',
         );
-        
+
+        //shopware 5 additional columns
+        if ($this->isAdditionalShippingAddressExists()){
+            $columns[] = 'shipping.additionalAddressLine1 as shippingAdditionalAddressLine1';
+            $columns[] = 'shipping.additionalAddressLine2 as shippingAdditionalAddressLine2';
+        } else {
+            $columns[] = 'shipping.streetNumber as shippingStreetnumber';
+        }
+
         // Attributes
         $attributes = $this->getAttributesByTableName('s_user_shippingaddress_attributes');
 
@@ -210,7 +224,7 @@ class CustomerDbAdapter implements DataDbAdapter
         $customers = $paginator->getIterator()->getArrayCopy();
         
         $result['default'] = DbAdapterHelper::decodeHtmlEntities($customers);
-        
+
         return $result;
     }
 
@@ -238,7 +252,7 @@ class CustomerDbAdapter implements DataDbAdapter
                 $result[] = $value['id'];
             }
         }
-        
+
         return $result;
     }
 
@@ -257,13 +271,38 @@ class CustomerDbAdapter implements DataDbAdapter
         foreach ($records['default'] as $record) {
             try {
 
-                if (!$record['email']) {
-                    $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/customer/email_required', 'User email is required field.');
-                    throw new AdapterException($message);
+                $customer = null;
+
+                if (isset($record['id']) && !empty($record['id'])){
+                    $customer = $this->getRepository()->findOneBy(array('id' => $record['id']));
                 }
 
-                $customer = $this->getRepository()->findOneBy(array('email' => $record['email']));
+                if (!$customer){
+                    if (!isset($record['email']) && !$record['email']) {
+                        $message = SnippetsHelper::getNamespace()
+                            ->get('adapters/customer/email_required', 'User email is required field.');
+                        throw new AdapterException($message);
+                    }
+
+                    $accountMode = (int) (isset($record['accountMode']) ? $record['accountMode'] : 1);
+
+                    $filter = array('email' => $record['email'], 'accountMode' => $accountMode);
+
+                    if (isset($record['subshopID']) && !empty($record['subshopID'])){
+                        $filter['shopId'] = $record['subshopID'];
+                    }
+
+                    $customer = $this->getRepository()->findBy($filter);
+
+                    //checks for multiple email address
+                    if (count($customer) > 1) {
+                        $message = SnippetsHelper::getNamespace()
+                            ->get('adapters/customer/multiple_email', 'There are existing email address/es with %s. Please provide subshopID');
+                        throw new AdapterException(sprintf($message, $record['email']));
+                    }
+
+                    $customer = $customer[0];
+                }
 
                 if (isset($record['unhashedPassword']) && $record['unhashedPassword']
                     && (!isset($record['password']) || !$record['password'])) {
@@ -279,6 +318,27 @@ class CustomerDbAdapter implements DataDbAdapter
                     unset($record['unhashedPassword']);
                 }
 
+                if ($customer) {
+                    //if password is provided the encoder also must be set
+                    if (($record['password'] && !$record['encoder']) || (!$record['password'] && $record['encoder'])){
+                        $message = SnippetsHelper::getNamespace()
+                            ->get('adapters/customer/password_and_encoder_required', 'Password and encoder must be provided for email %s');
+                        throw new AdapterException(sprintf($message, $record['email']));
+                    }
+                } else {
+                    if (!isset($record['password']) && !$record['password']) {
+                        $message = SnippetsHelper::getNamespace()
+                            ->get('adapters/customer/password_required', 'Password must be provided for email %s');
+                        throw new AdapterException(sprintf($message, $record['email']));
+                    }
+
+                    if (!isset($record['encoder']) && !$record['encoder']) {
+                        $message = SnippetsHelper::getNamespace()
+                            ->get('adapters/customer/password_encoder_required', 'Password encoder must be provided for email %s');
+                        throw new AdapterException(sprintf($message, $record['email']));
+                    }
+                }
+
                 if (!$customer) {
                     $customer = new Customer();
 
@@ -290,18 +350,6 @@ class CustomerDbAdapter implements DataDbAdapter
                     }
                 }
 
-                if (!isset($record['password']) && !$record['password']) {
-                    $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/customer/password_required', 'Password must be provided for email %s');
-                    throw new AdapterException(sprintf($message, $record['email']));
-                }
-
-                if (isset($record['password']) && (!isset($record['encoder']) || !$record['encoder'])) {
-                    $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/customer/password_encoder_required', 'Password encoder must be provided for email %s');
-                    throw new AdapterException(sprintf($message, $record['email']));
-                }
-                
                 if (!isset($record['active']) || $record['active'] === '') {
                     $record['active'] = 1;
                 }
@@ -359,7 +407,18 @@ class CustomerDbAdapter implements DataDbAdapter
         }
 
         $customerData = array();
-        
+
+        $shopId = isset($record['subshopID']) && !empty($record['subshopID']) ? $record['subshopID'] : 1;
+        $shop = $this->getManager()->find('Shopware\Models\Shop\Shop', $shopId);
+
+        if(!$shop){
+            $message = SnippetsHelper::getNamespace()
+                ->get('adapters/shop_not_found', 'Shop with id %s was not found');
+            throw new AdapterException(sprintf($message, $shopId));
+        }
+
+        $customerData['shop'] = $shop;
+
         foreach ($record as $key => $value) {
             if (preg_match('/^attrCustomer/', $key)) {
                 $newKey = lcfirst(preg_replace('/^attrCustomer/', '', $key));
@@ -370,7 +429,7 @@ class CustomerDbAdapter implements DataDbAdapter
                 unset($record[$key]);
             }
         }
-        
+
         if (isset($customerData['groupKey'])) {
             $customerData['group'] = Shopware()->Models()
                     ->getRepository('Shopware\Models\Customer\Group')
@@ -381,8 +440,11 @@ class CustomerDbAdapter implements DataDbAdapter
                 throw new \Exception(sprintf($message, $customerData['groupKey']));
             }
         }
-        
-        $customerData['rawPassword'] = $customerData['hashPassword'];
+
+        if (isset($customerData['hashPassword']) && !empty($customerData['hashPassword'])){
+            $customerData['rawPassword'] = $customerData['hashPassword'];
+        }
+
         unset($record['hashPassword']);
 
         return $customerData;
@@ -487,6 +549,26 @@ class CustomerDbAdapter implements DataDbAdapter
                          AND element.name = ?";
         
         return Shopware()->Db()->fetchRow($query, array($subShopID, 'defaultpayment'));
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAdditionalBillingAddressExists()
+    {
+        $sql = "SHOW COLUMNS FROM `s_user_billingaddress` LIKE 'additional_address_line1'";
+        $result = Shopware()->Db()->fetchRow($sql);
+        return $result ? true : false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAdditionalShippingAddressExists()
+    {
+        $sql = "SHOW COLUMNS FROM `s_user_shippingaddress` LIKE 'additional_address_line1'";
+        $result = Shopware()->Db()->fetchRow($sql);
+        return $result ? true : false;
     }
 
     public function saveMessage($message)

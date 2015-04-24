@@ -3,6 +3,7 @@
 namespace Shopware\Components\SwagImportExport\Logger;
 
 use \Shopware\CustomModels\ImportExport\Logger as LoggerEntity;
+use Shopware\Components\SwagImportExport\Session\Session;
 
 class Logger
 {
@@ -14,13 +15,19 @@ class Logger
     protected $loggerRepository;
 
     /**
-     * @var LoggerEntity $logger
+     * @var LoggerEntity $loggerEntity
      */
-    protected $logger;
+    protected $loggerEntity;
+    /**
+     * @var Session
+     */
+    protected $session;
+    protected $fileWriter;
 
-    public function __construct(LoggerEntity $logger)
+    public function __construct(Session $session, $fileWriter)
     {
-        $this->logger = $logger;
+        $this->session = $session;
+        $this->fileWriter = $fileWriter;
     }
 
     /**
@@ -37,14 +44,25 @@ class Logger
         return $this->manager;
     }
 
-    public function getLogger()
+    public function getLoggerEntity()
     {
-        return $this->logger;
+        if ($this->loggerEntity === null){
+            //fixes doctrine clear bug
+            $loggerId = $this->session->getLogger()->getId();
+            $this->loggerEntity = $this->getLoggerRepository()->find($loggerId);
+        }
+
+        return $this->loggerEntity;
+    }
+
+    public function getFileWriter()
+    {
+        return $this->fileWriter;
     }
 
     public function getMessage()
     {
-        $logger = $this->getLogger();
+        $logger = $this->getLoggerEntity();
 
         return $logger->getMessage();
     }
@@ -55,11 +73,7 @@ class Logger
      */
     public function write($messages, $status)
     {
-        if (!$messages) {
-            return;
-        }
-
-        $logger = $this->getLogger();
+        $logger = $this->getLoggerEntity();
 
         if (is_array($messages)) {
             $appendMsg = implode(';', $messages);
@@ -70,7 +84,7 @@ class Logger
         $message = $logger->getMessage();
 
         if ($message) {
-            $newMessage = $message . '; ' . $appendMsg;
+            $newMessage = $message . "\n" . $appendMsg;
         } else {
             $newMessage = $appendMsg;
         }
@@ -82,8 +96,27 @@ class Logger
             $logger->setStatus($status);
         }
 
-        $this->getManager()->merge($logger);
+        $this->getManager()->persist($logger);
         $this->getManager()->flush();
+    }
+
+    public function writeToFile($data)
+    {
+        $file = $this->getLogFile();
+
+        $this->getFileWriter()->writeRecords($file, array($data));
+    }
+
+    public function getLogFile()
+    {
+        $file = Shopware()->DocPath() . 'logs/importexport.log';
+        if (!file_exists($file)) {
+            $columns = array('date/time', 'file', 'profile', 'message', 'successFlag');
+
+            $this->getFileWriter()->writeHeader($file, $columns);
+        }
+
+        return $file;
     }
 
     /**

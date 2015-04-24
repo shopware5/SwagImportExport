@@ -2,6 +2,8 @@
 
 namespace Shopware\Components\SwagImportExport\Transoformers;
 
+use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
+
 /**
  * The responsibility of this class is to restructure the flat array to tree and vise versa
  */
@@ -15,6 +17,7 @@ class FlattenTransformer implements DataTransformerAdapter
     protected $iterationTempData;
     protected $tempData = array();
     protected $tempMapper;
+    protected $translationColumns;
 
     /**
      * Sets the config that has the tree structure
@@ -54,9 +57,9 @@ class FlattenTransformer implements DataTransformerAdapter
      */
     public function transformBackward($data)
     {
-        $flatData = Shopware()->Events()->filter(
+        $data = Shopware()->Events()->filter(
                 'Shopware_Components_SwagImportExport_Transoformers_FlattenTransformer_TransformBackward',
-                $flatData,
+                $data,
                 array('subject' => $this)
         );
 
@@ -285,28 +288,24 @@ class FlattenTransformer implements DataTransformerAdapter
                 // find fields
                 $columnMapper = array(
                     'configOptionName' => $this->findNodeByShopwareField($node, 'configOptionName'),
+                    'configOptionPosition' => $this->findNodeByShopwareField($node, 'configOptionPosition'),
+                    'configOptionId' => $this->findNodeByShopwareField($node, 'configOptionId'),
                     'configGroupName' => $this->findNodeByShopwareField($node, 'configGroupName'),
                     'configSetName' => $this->findNodeByShopwareField($node, 'configSetName'),
                     'configSetId' => $this->findNodeByShopwareField($node, 'configSetId'),
                     'configSetType' => $this->findNodeByShopwareField($node, 'configSetType'),
                 );
-                
-                if ($columnMapper['configOptionName'] === FALSE) {
-                    throw new \Exception("configOptionName column not found");
-                }
-                if ($columnMapper['configGroupName'] === FALSE) {
-                    throw new \Exception("configGroupName column not found");
-                }
-                
-//                if ($columnMapper['configSetName'] === FALSE) {
-//                    throw new \Exception("configSetName column not found");
-//                }
-                
-                $configs = array();
-                
-                $separator = '|';
-                $values = explode($separator, $this->getDataValue($data, $columnMapper['configOptionName']));
 
+                if ($columnMapper['configOptionId'] === false) {
+                    if ($columnMapper['configOptionName'] === false) {
+                        throw new \Exception("configOptionName column not found");
+                    }
+                    if ($columnMapper['configGroupName'] === false) {
+                        throw new \Exception("configGroupName column not found");
+                    }
+                }
+
+                $separator = '|';
                 if ($columnMapper['configSetId'] !== false) {
                     $configSetId = explode($separator, $this->getDataValue($data, $columnMapper['configSetId']));
                     $configSetId = $this->getFirstElement($configSetId);
@@ -322,49 +321,110 @@ class FlattenTransformer implements DataTransformerAdapter
                     $setNames = $this->getFirstElement($setNames);
                 }
 
-                for ($i = 0; $i < count($values); $i++) {
+                if ($columnMapper['configOptionPosition'] !== false) {
+                    $positions = explode($separator, $this->getDataValue($data, $columnMapper['configOptionPosition']));
+                }
+
+                $configs = array();
+                $values = explode($separator, $this->getDataValue($data, $columnMapper['configOptionName']));
+                $optionIds = explode($separator, $this->getDataValue($data, $columnMapper['configOptionId']));
+
+                //creates configOptionId to have more priority than configOptionName
+                $counter = $columnMapper['configOptionId'] !== false ? count($optionIds) : count($values);
+
+                for ($i = 0; $i < $counter; $i++) {
+
+                    if (strstr($values[$i], '::')) {
+                        $message = SnippetsHelper::getNamespace()
+                            ->get('transformers/used_colon', "In the group name, is used a colon ':'. Please delete it and try again.");
+                        throw new \Exception($message);
+                    }
+
                     $value = explode(':', $values[$i]);
                     $configs[] = $this->transformConfiguratorToTree($node, array(
                         $columnMapper['configGroupName'] => $value[0],
                         $columnMapper['configOptionName'] => $value[1],
+                        $columnMapper['configOptionPosition'] => $positions[$i],
+                        $columnMapper['configOptionId'] => $optionIds[$i],
                         $columnMapper['configSetId'] => $configSetId,
                         $columnMapper['configSetType'] => $configSetType,
-                        $columnMapper['configSetName'] => $setName
+                        $columnMapper['configSetName'] => $setNames
                     ));
                 }
-                
-                return $configs;
-                
-            }else if($node['adapter'] === 'translation') {
-                $translationName = $this->findNodeByShopwareField($node, 'name');
-                $translationDescription = $this->findNodeByShopwareField($node, 'description');
-                $translationDescriptionLong = $this->findNodeByShopwareField($node, 'descriptionLong');
-                $translationKeywords = $this->findNodeByShopwareField($node, 'keywords');
-                $translationLang = $this->findNodeByShopwareField($node, 'languageId');
 
+                return $configs;
+
+            } else if ($node['adapter'] == 'propertyValue') {
+                $mapper = $this->createMapperFromProfile($node);
+
+                $columnMapper = array(
+                    'propertyValueId' => $this->findNodeByShopwareField($node, 'propertyValueId'),
+                    'propertyValueName' => $this->findNodeByShopwareField($node, 'propertyValueName'),
+                    'propertyOptionName' => $this->findNodeByShopwareField($node, 'propertyOptionName'),
+                    'propertyGroupName' => $this->findNodeByShopwareField($node, 'propertyGroupName'),
+                );
+
+                if ($columnMapper['propertyValueId'] === false) {
+                    if ($columnMapper['propertyValueName'] === false) {
+                        throw new \Exception("propertyValueName column not found");
+                    }
+                    if ($columnMapper['propertyOptionName'] === false) {
+                        throw new \Exception("propertyOptionName column not found");
+                    }
+                }
+
+                foreach ($mapper as $key => $value) {
+                    if ($mapper[$key] == 'propertyGroupName') {
+                        $propertyGroupName = $this->getDataValue($data, $key);
+                    } elseif ($mapper[$key] == 'propertyGroupId') {
+                        $propertyGroupId = $this->getDataValue($data, $key);
+                    } else {
+                        $collectedData[$key] = explode('|',$this->getDataValue($data, $key));
+                    }
+                }
+
+                unset($collectedData[$columnMapper['propertyOptionName']]);
+
+                $newData = array();
+                if ($columnMapper['propertyValueId'] !== false) {
+                    $counter = count($collectedData[$columnMapper['propertyValueId']]);
+                } else {
+                    $counter = count($collectedData[$columnMapper['propertyValueName']]);
+                }
+
+                foreach ($collectedData as $key => $values) {
+                    for ($i = 0; $i < $counter; $i++) {
+                        if ($mapper[$key] == 'propertyValueName'){
+                            $value =  explode(':', $values[$i]);
+                            $newData[$i][$columnMapper['propertyOptionName']] = $value[0];
+                            $newData[$i][$key] = $value[1];
+                        } else {
+                            $newData[$i][$columnMapper['propertyGroupName']] = $propertyGroupName;
+                            $newData[$i][$key] = $values[$i];
+                        }
+                    }
+                }
+
+                return $newData;
+            } else if ($node['adapter'] === 'translation') {
+
+                $tempData = array();
+                $translationColumns = array();
                 $dataColumns = array_keys($data);
 
-                $translationColumns = array();
+                $columns = $this->getAllTranslationColumns();
+                foreach ($columns as $column){
+                    $tempData[$column] = $this->findNodeByShopwareField($node, $column);
 
-                $translations = array();
+                    if ($tempData[$column]){
+                        $greps = preg_grep('/^' . $tempData[$column] . '_\d+$/i', $dataColumns);
+                        $translationColumns = array_merge($translationColumns, $greps);
+                    }
+                }
 
-                $translationNameColumns = preg_grep("/^" . $translationName . "_+(.*)/i", $dataColumns);
-                $translationDescriptionColumns = preg_grep("/^" . $translationDescription . "_+(.*)/i", $dataColumns);
-                $translationDescriptionLongColumns = preg_grep("/^" . $translationDescriptionLong . "_+(.*)/i", $dataColumns);
-                $translationKeywordsColumns = preg_grep("/^" . $translationKeywords . "_+(.*)/i", $dataColumns);
+                unset($tempData);
 
-                if ($translationNameColumns) {
-                    $translationColumns = array_merge($translationColumns, $translationNameColumns);
-                }
-                if ($translationDescriptionColumns) {
-                    $translationColumns = array_merge($translationColumns, $translationDescriptionColumns);
-                }
-                if ($translationDescriptionLongColumns) {
-                    $translationColumns = array_merge($translationColumns, $translationDescriptionLongColumns);
-                }
-                if ($translationKeywordsColumns) {
-                    $translationColumns = array_merge($translationColumns, $translationKeywordsColumns);
-                }
+                $translationLang = $this->findNodeByShopwareField($node, 'languageId');
 
                 foreach ($translationColumns as $column) {
                     preg_match("/(?P<column>.*)_+(?P<langId>.*)$/i", $column, $matches);
@@ -612,8 +672,17 @@ class FlattenTransformer implements DataTransformerAdapter
             $configuratorNodeMapper = $this->createMapperFromProfile($configuratorProfile);
             
             //group name, group description and group id is skipped
-            $this->createHeaderConfigurator($configuratorNodeMapper);
+            $skipList = array('configGroupId', 'configGroupName', 'configGroupDescription');
+            $this->createHeaderValues($configuratorNodeMapper, $skipList);
             
+        } elseif ($this->iterationParts[$path] == 'propertyValue') {
+            $propertyProfile = $this->getNodeFromProfile($this->getMainIterationPart(), 'propertyValue');
+            $propertyProfileNodeMapper = $this->createMapperFromProfile($propertyProfile);
+
+            //group name, group description and group id is skipped
+            $skipList = array('propertyOptionName');
+            $this->createHeaderValues($propertyProfileNodeMapper, $skipList);
+
         } elseif ($this->iterationParts[$path] == 'translation') {
             $translationProfile = $this->getNodeFromProfile($this->getMainIterationPart(), 'translation');
             $translationNodeMapper = $this->createMapperFromProfile($translationProfile);
@@ -707,17 +776,18 @@ class FlattenTransformer implements DataTransformerAdapter
      * configGroupId, configGroupName and configGroupDescription
      * 
      * @param array $node
+     * @param array $skipList
      * @param string $path
      */
-    public function createHeaderConfigurator($node, $path = null)
+    public function createHeaderValues($node, $skipList, $path = null)
     {
         foreach ($node as $key => $value) {
 
             if (is_array($value)) {
                 $currentPath = $path . '/' . $key;
-                $this->createHeaderConfigurator($value, $currentPath);
+                $this->createHeaderValues($value, $skipList, $currentPath);
             } else {
-                if ($value == 'configGroupId' || $value == 'configGroupName' || $value == 'configGroupDescription') {
+                if (in_array($value, $skipList)) {
                     continue;
                 }
                 
@@ -817,16 +887,60 @@ class FlattenTransformer implements DataTransformerAdapter
                 }
 
                 unset($this->iterationTempData);
-                
+            } elseif ($this->iterationParts[$path] == 'propertyValue') {
+                $propertyValueProfile = $this->getNodeFromProfile($this->getMainIterationPart(), 'propertyValue');
+                $propertyValueTreeMapper = $this->createMapperFromProfile($propertyValueProfile);
+                $propertyValueFlatMapper = $this->treeToFlat($propertyValueTreeMapper);
+
+                foreach ($node as $key => $property) {
+                    $this->collectPropertyData($property, $propertyValueFlatMapper, null, $property);
+                }
+
+                $iterationTempData = $this->getIterationTempData();
+
+                foreach ($iterationTempData as $key => $tempData) {
+                    if (is_array($tempData)) {
+                        if ($propertyValueFlatMapper[$key] === 'propertyGroupName') {
+                            $this->saveTempData($tempData[0]);
+                        } else {
+                            $data = implode('|', $tempData);
+                            $this->saveTempData($data);
+                        }
+
+                    }
+                }
+
+                unset($this->iterationTempData);
             } elseif ($this->iterationParts[$path] == 'translation') {
                 $translationProfile = $this->getNodeFromProfile($this->getMainIterationPart(), 'translation');
                 $translationTreeMapper = $this->createMapperFromProfile($translationProfile);
                 $translationFlatMapper = $this->treeToFlat($translationTreeMapper);
-                
+
                 foreach ($node as $key => $translation) {
                     $this->collectTranslationData($translation, $translationFlatMapper);
                 }
-                
+
+            } elseif ($this->iterationParts[$path] == 'translationProperty') {
+                $translationPProfile = $this->getNodeFromProfile($this->getMainIterationPart(), 'translationProperty');
+                $translationPTreeMapper = $this->createMapperFromProfile($translationPProfile);
+                $translationPFlatMapper = $this->treeToFlat($translationPTreeMapper);
+
+
+                foreach ($node as $value) {
+                    $this->collectIterationData($value);
+                }
+
+                foreach ($this->getIterationTempData() as $nodeName => $tempData) {
+                    if($translationPFlatMapper[$nodeName] == 'propertyGroupBaseName'
+                     || $translationPFlatMapper[$nodeName] == 'propertyGroupName'
+                     || $translationPFlatMapper[$nodeName] == 'propertyGroupId'){
+                        $this->saveTempData($tempData[0]);
+                    } else if (is_array($tempData)) {
+                        $data = implode('|', $tempData);
+                        $this->saveTempData($data);
+                    }
+                }
+                unset($this->iterationTempData);
             } else {
                 //processing images, similars and accessories
                 foreach ($node as $value) {
@@ -928,7 +1042,7 @@ class FlattenTransformer implements DataTransformerAdapter
    public function treeToFlat($node)
     {
         $this->resetTempMapper();
-        $this->convertToFlat($node);
+        $this->convertToFlat($node, null);
 
         return $this->getTempMapper();
     }
@@ -1057,6 +1171,26 @@ class FlattenTransformer implements DataTransformerAdapter
             }
         } 
     }
+
+    public function findPropertyOptionName($node, $mapper, $path = null)
+    {
+        foreach ($node as $key => $value) {
+            $currentPath = $this->getMergedPath($path, $key);
+
+            if (is_array($value)) {
+                $result = $this->findPropertyOptionName($value, $mapper, $currentPath);
+
+                if ($result) {
+                    return $result;
+                }
+
+            } else {
+                 if ($mapper[$currentPath] == 'propertyOptionName'){
+                     return $value;
+                 }
+            }
+        }
+    }
     
     /**
      * @param array $node
@@ -1067,9 +1201,9 @@ class FlattenTransformer implements DataTransformerAdapter
     public function collectConfiguratorData($node, $mapper, $path = null, $originalNode = null)
     {
         foreach ($node as $key => $value) {
-            
+
             $currentPath = $this->getMergedPath($path, $key);
-            
+
             if (is_array($value)) {
                 $this->collectConfiguratorData($value, $mapper, $currentPath, $node);
             } else {
@@ -1078,14 +1212,50 @@ class FlattenTransformer implements DataTransformerAdapter
                     || $mapper[$currentPath] == 'configGroupId') {
                     continue;
                 }
-                
+
                 if ($mapper[$currentPath] == 'configOptionName'){
                     $group = $this->findConfigurationGroupValue($originalNode, $mapper);
-                    
+
                     if ($value && $group) {
-                        $mixedValue = $group . ':' . $value;                        
+                        $mixedValue = $group . ':' . $value;
                     }
-                                        
+
+                    $this->saveIterationTempData($currentPath, $mixedValue);
+                    unset($mixedValue);
+                } else {
+                    $this->saveIterationTempData($currentPath, $value);
+                }
+            }
+        }
+    }
+
+    /**
+     * @param array $node
+     * @param array $mapper
+     * @param string $path
+     * @param array $originalNode
+     */
+    public function collectPropertyData($node, $mapper, $path = null, $originalNode = null)
+    {
+        foreach ($node as $key => $value) {
+
+            $currentPath = $this->getMergedPath($path, $key);
+
+            if (is_array($value)) {
+                $this->collectPropertyData($value, $mapper, $currentPath, $node);
+            } else {
+                if ($mapper[$currentPath] == 'propertyOptionName') {
+                    continue;
+                }
+
+                if ($mapper[$currentPath] == 'propertyValueName'){
+
+                    $option = $this->findPropertyOptionName($originalNode, $mapper);
+
+                    if ($value && $option) {
+                        $mixedValue = $option . ':' . $value;
+                    }
+
                     $this->saveIterationTempData($currentPath, $mixedValue);
                     unset($mixedValue);
                 } else {
@@ -1186,5 +1356,34 @@ class FlattenTransformer implements DataTransformerAdapter
         $shops = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop')->findAll();
         
         return $shops;
+    }
+
+    public function getAllTranslationColumns()
+    {
+        if ($this->translationColumns === null){
+            $translationFields = array(
+                'name', 'additionalText', 'metaTitle', 'description',
+                'descriptionLong', 'keywords', 'packUnit'
+            );
+
+            $attributes = array_map(function($item) {
+                return $item['name'];
+            }, $this->getTranslationAttr());
+
+            $this->translationColumns = array_merge($translationFields, $attributes);
+        }
+
+        return $this->translationColumns;
+    }
+
+    public function getTranslationAttr()
+    {
+        $repository = Shopware()->Models()->getRepository('Shopware\Models\Article\Element');
+
+        $builder = $repository->createQueryBuilder('attribute');
+        $builder->andWhere('attribute.translatable = 1');
+        $builder->orderBy('attribute.position');
+
+        return $builder->getQuery()->getArrayResult();
     }
 }

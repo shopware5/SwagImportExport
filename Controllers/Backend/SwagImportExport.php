@@ -22,10 +22,12 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Components\SwagImportExport\DataWorkflow;
 use Shopware\Components\SwagImportExport\Utils\TreeHelper;
 use Shopware\Components\SwagImportExport\Utils\DataHelper;
 use Shopware\Components\SwagImportExport\StatusLogger;
+use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 
 /**
  * Shopware ImportExport Plugin
@@ -451,8 +453,6 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
     public function prepareExportAction()
     {
-        $variants = $this->Request()->getParam('variants') ? true : false;
-
         if ($this->Request()->getParam('limit')) {
             $limit = $this->Request()->getParam('limit');
         }
@@ -461,10 +461,6 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             $offset = $this->Request()->getParam('offset');
         }
 
-        if ($this->Request()->getParam('stockFilter')) {
-            $stockFilter = $this->Request()->getParam('stockFilter');
-        }
-        
         $postData = array(
             'sessionId' => $this->Request()->getParam('sessionId'),
             'profileId' => (int) $this->Request()->getParam('profileId'),
@@ -476,48 +472,10 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                 'offset' => $offset,
             ),
         );
-        
-        if ($variants) {
-            $postData['filter']['variants'] = $variants;
-        }
 
-        if ($stockFilter) {
-            $postData['filter']['stockFilter'] = $stockFilter;
-        }
-
-        if ($this->Request()->getParam('categories')) {
-            $postData['filter']['categories'] = array($this->Request()->getParam('categories'));
-        }
-
-        //order filter
-        if ($this->Request()->getParam('ordernumberFrom')) {
-            $postData['filter']['ordernumberFrom'] = $this->Request()->getParam('ordernumberFrom');
-        }
-        
-        if ($this->Request()->getParam('dateFrom')) {
-            $dateFrom = $this->Request()->getParam('dateFrom');
-            $postData['filter']['dateFrom'] = new \DateTime($dateFrom);
-        }
-        
-        if ($this->Request()->getParam('dateTo')) {
-            $dateTo = $this->Request()->getParam('dateTo');
-            $dateTo = new Zend_Date($dateTo);
-            $dateTo->setHour('23');
-            $dateTo->setMinute('59');
-            $dateTo->setSecond('59');
-            $postData['filter']['dateTo'] = $dateTo;
-        }
-        
-        if ($this->Request()->getParam('orderstate')) {
-            $postData['filter']['orderstate'] = $this->Request()->getParam('orderstate');
-        }
-        
-        if ($this->Request()->getParam('paymentstate')) {
-            $postData['filter']['paymentstate'] = $this->Request()->getParam('paymentstate');
-        }
-        
         try {
             $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
+            $postData['filter'] = $this->prepareFilter($this->Request(), $profile->getType());
 
             $dataFactory = $this->Plugin()->getDataFactory();
 
@@ -528,7 +486,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession, $logger);
 
             $colOpts = $dataFactory->createColOpts($postData['columnOptions']);
-            $limit = $dataFactory->createLimit($postData['limit']);            
+            $limit = $dataFactory->createLimit($postData['limit']);
             $filter = $dataFactory->createFilter($postData['filter']);
             $maxRecordCount = $postData['max_record_count'];
             $type = $postData['type'];
@@ -549,9 +507,6 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
     public function exportAction()
     {
-        //article filter
-        $variants = $this->Request()->getParam('variants') ? true : false;
-
         if ($this->Request()->getParam('limit')) {
             $limit = $this->Request()->getParam('limit');
         }
@@ -572,53 +527,22 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                 'offset' => $offset,
             ),
         );
-        
-        if ($variants) {
-            $postData['filter']['variants'] = $variants;
-        }
-
-        if ($this->Request()->getParam('categories')) {
-            $postData['filter']['categories'] = array($this->Request()->getParam('categories'));
-        }
-
-        //order filter
-        if ($this->Request()->getParam('ordernumberFrom')) {
-            $postData['filter']['ordernumberFrom'] = $this->Request()->getParam('ordernumberFrom');
-        }
-        
-        if ($this->Request()->getParam('dateFrom')) {
-            $dateFrom = $this->Request()->getParam('dateFrom');
-            $postData['filter']['dateFrom'] = new \DateTime($dateFrom);
-        }
-        
-        if ($this->Request()->getParam('dateTo')) {
-            $dateTo = $this->Request()->getParam('dateTo');
-            $dateTo = new Zend_Date($dateTo);
-            $dateTo->setHour('23');
-            $dateTo->setMinute('59');
-            $dateTo->setSecond('59');
-            $postData['filter']['dateTo'] = $dateTo;
-        }
-        
-        if ($this->Request()->getParam('orderstate')) {
-            $postData['filter']['orderstate'] = $this->Request()->getParam('orderstate');
-        }
-        
-        if ($this->Request()->getParam('paymentstate')) {
-            $postData['filter']['paymentstate'] = $this->Request()->getParam('paymentstate');
-        }
-
-        if ($this->Request()->getParam('stockFilter')) {
-            $postData['filter']['stockFilter'] = $this->Request()->getParam('stockFilter');
-        }
 
         $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
+        $postData['filter'] = $this->prepareFilter($this->Request(), $profile->getType());
 
         $dataFactory = $this->Plugin()->getDataFactory();
 
         $dbAdapter = $dataFactory->createDbAdapter($profile->getType());
         $dataSession = $dataFactory->loadSession($postData);
-        $logger = $dataFactory->loadLogger($dataSession);
+
+        // we create the file writer that will write (partially) the result file
+        $fileFactory = $this->Plugin()->getFileIOFactory();
+        $fileHelper = $fileFactory->createFileHelper();
+        $fileWriter = $fileFactory->createFileWriter($postData, $fileHelper);
+
+        $fileLogWriter = $fileFactory->createFileWriter(array('format' => 'csv'), $fileHelper);
+        $logger = $dataFactory->loadLogger($dataSession, $fileLogWriter);
 
         //create dataIO
         $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession, $logger);
@@ -633,11 +557,6 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         
         $dataIO->initialize($colOpts, $limit, $filter, $type, $format, $maxRecordCount);
         $dataIO->setUsername($username);
-        
-        // we create the file writer that will write (partially) the result file
-        $fileFactory = $this->Plugin()->getFileIOFactory();
-        $fileHelper = $fileFactory->createFileHelper();
-        $fileWriter = $fileFactory->createFileWriter($postData, $fileHelper);
 
         $dataTransformerChain = $this->Plugin()->getDataTransformerFactory()->createDataTransformerChain(
                 $profile, array('isTree' => $fileWriter->hasTreeStructure())
@@ -651,9 +570,29 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             $message = $post['position'] . ' ' . $profile->getType() . ' exported successfully';
             $logger->write($message, 'false');
 
+            $logData = array(
+                date("Y-m-d H:i:s"),
+                $post['fileName'],
+                $profile->getName(),
+                $message,
+                'true'
+            );
+
+            $logger->writeToFile($logData);
+
             return $this->View()->assign(array('s' => $profile, 'success' => true, 'data' => $post));
         } catch (Exception $e) {
             $logger->write($e->getMessage(), 'true');
+
+            $logData = array(
+                date("Y-m-d H:i:s"),
+                $postData['fileName'],
+                $profile->getName(),
+                $e->getMessage(),
+                'false'
+            );
+
+            $logger->writeToFile($logData);
 
             return $this->View()->assign(array('success' => false, 'msg' => $e->getMessage()));
         }
@@ -688,7 +627,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $postData['adapter'] = $profile->getType();
 
         // we create the file reader that will read the result file
-        $fileReader = $this->Plugin()->getFileIOFactory()->createFileReader($postData);
+        $fileReader = $this->Plugin()->getFileIOFactory()->createFileReader($postData, null);
 
         if ($extension === 'xml') {
             $tree = json_decode($profile->getConfig("tree"), true);
@@ -721,6 +660,10 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             'sessionId' => $this->Request()->getParam('sessionId')
         );
 
+        if($this->Request()->getParam('unprocessed')){
+            $unprocessed = json_decode($this->Request()->getParam('unprocessed'), true);
+        }
+
         $inputFile = Shopware()->DocPath() . $postData['importFile'];
         if (!isset($postData['format'])) {
             //get file format
@@ -728,8 +671,10 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         }
 
         // we create the file reader that will read the result file
+        /** @var \Shopware\Components\SwagImportExport\Factories\FileIOFactory $fileFactory */
         $fileFactory = $this->Plugin()->getFileIOFactory();
-        $fileReader = $fileFactory->createFileReader($postData);
+        $fileHelper = $fileFactory->createFileHelper();
+        $fileReader = $fileFactory->createFileReader($postData, $fileHelper);
 
         //load profile
         $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
@@ -747,8 +692,9 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
         $dataSession = $dataFactory->loadSession($postData);
 
+        $fileLogWriter = $fileFactory->createFileWriter(array('format' => 'csv'), $fileHelper);
         /* @var $logger Shopware\Components\SwagImportExport\Logger\Logger */
-        $logger = $dataFactory->loadLogger($dataSession);
+        $logger = $dataFactory->loadLogger($dataSession, $fileLogWriter);
 
         //create dataIO
         $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession, $logger);
@@ -775,6 +721,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         try {
             $post = $dataWorkflow->import($postData, $inputFile);
 
+            //unprocessed data
             if (isset($post['unprocessedData']) && $post['unprocessedData']) {
 
                 $data = array(
@@ -785,22 +732,53 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                     )
                 );
 
-                $this->afterImport($data, $inputFile);
+                $pathInfo = pathinfo($inputFile);
+
+                foreach ($data['data'] as $key => $value){
+                    $outputFile = 'media/unknown/' . $pathInfo['filename'] . '-' . $key .'-tmp.csv';
+                    $post['unprocessed'][] = array(
+                        'profileName' => $key,
+                        'fileName' => $outputFile
+                    );
+                    $this->afterImport($data, $key, $outputFile);
+                }
             }
 
             if ($dataSession->getTotalCount() > 0 && ($dataSession->getTotalCount() == $post['position'])) {
 
-                $postProcessedData = $this->processData($inputFile);
+                //unprocessed files
+                if (isset($post['unprocessed']) || $unprocessed){
+                    $unprocessedFileNames = $unprocessed ? $unprocessed : $post['unprocessed'];
+                    $postProcessedData = $this->processData($unprocessedFileNames);
+                }
 
                 if ($postProcessedData) {
                     unset($post['unprocessedData']);
                     unset($post['sessionId']);
+                    unset($post['adapter']);
+
+                    //sends the unprocessed files
+                    if (!empty($post['unprocessed'])){
+                        $post['unprocessed'] = json_encode($post['unprocessed']);
+                    }
+
                     $post = array_merge($post, $postProcessedData);
                 }
 
                 if ($logger->getMessage() === null) {
                     $message = $post['position'] . ' ' . $post['adapter'] . ' imported successfully';
+
                     $logger->write($message, 'false');
+
+                    $logData = array(
+                        date("Y-m-d H:i:s"),
+                        $inputFile,
+                        $profile->getName(),
+                        $message,
+                        'true'
+                    );
+
+                    $logger->writeToFile($logData);
                 }
             }
 
@@ -808,43 +786,63 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         } catch (\Exception $e) {
             $logger->write($e->getMessage(), 'true');
 
+            $logData = array(
+                date("Y-m-d H:i:s"),
+                $inputFile,
+                $profile->getName(),
+                $e->getMessage(),
+                'false'
+            );
+
+            $logger->writeToFile($logData);
+
             return $this->View()->assign(array('success' => false, 'msg' => $e->getMessage()));
         }
     }
 
     /**
      * Checks for unprocessed data
-     * Returns unprocessed data for import
+     * Returns unprocessed file for import
      * 
-     * @param string $inputFile
-     * @return mixed
+     * @param array $unprocessedData
+     * @return array
      */
-    protected function processData($inputFile)
+    protected function processData(&$unprocessedData)
     {
-        $pathInfo = pathinfo($inputFile);
-        $fileName = 'media/unknown/' . $pathInfo['filename'] . '-tmp.' . $pathInfo['extension'];
-        $file = Shopware()->DocPath() . $fileName;
+        foreach ($unprocessedData as $index => $data){
+            $inputFile = $data['fileName'];
+            $file = Shopware()->DocPath() . $inputFile;
 
-        if (file_exists($file)) {
+            if (file_exists($file)) {
 
-            //renames
-            $outputFileName = 'media/unknown/' . $pathInfo['filename'] . '-swag.' . $pathInfo['extension'];
-            $outputFile = Shopware()->DocPath() . $outputFileName;
-            rename($fileName, $outputFile);
+                //renames
+                $outputFileName = str_replace('-tmp', '-swag', $inputFile);
+                $outputFile = Shopware()->DocPath() . $outputFileName;
+                rename($inputFile, $outputFile);
 
-            $profile = $this->Plugin()->getProfileFactory()->loadHiddenProfile('articles');
-            $profileId = $profile->getId();
+                $profile = $this->Plugin()->getProfileFactory()->loadHiddenProfile($data['profileName']);
+                $profileId = $profile->getId();
 
-            $fileReader = $this->Plugin()->getFileIOFactory()->createFileReader(array('format' => 'csv'));
-            $totalCount = $fileReader->getTotalCount($outputFile);
+                $fileReader = $this->Plugin()->getFileIOFactory()->createFileReader(array('format' => 'csv'), null);
+                $totalCount = $fileReader->getTotalCount($outputFile);
 
-            return array(
-                'importFile' => $outputFileName,
-                'profileId' => $profileId,
-                'count' => $totalCount,
-                'position' => 0,
-                'load' => true,
-            );
+                unset($unprocessedData[$index]);
+
+                $postData = array(
+                    'importFile' => $outputFileName,
+                    'profileId' => $profileId,
+                    'count' => $totalCount,
+                    'position' => 0,
+                    'format' => 'csv',
+                    'load' => true,
+                );
+
+                if ($data['profileName'] === 'articlesImages'){
+                    $postData['batchSize'] = 1;
+                }
+
+                return $postData;
+            }
         }
 
         return false;
@@ -854,14 +852,15 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
      * Saves unprocessed data to csv file
      * 
      * @param array $data
-     * @param string $inputFile
+     * @param string $profileName
+     * @param string $outputFile
      */
-    protected function afterImport($data, $inputFile)
+    protected function afterImport($data, $profileName, $outputFile)
     {
         $fileFactory = $this->Plugin()->getFileIOFactory();
 
         //loads hidden profile for article
-        $profile = $this->Plugin()->getProfileFactory()->loadHiddenProfile('articles');
+        $profile = $this->Plugin()->getProfileFactory()->loadHiddenProfile($profileName);
 
         $fileHelper = $fileFactory->createFileHelper();
         $fileWriter = $fileFactory->createFileWriter(array('format' => 'csv'), $fileHelper);
@@ -870,11 +869,8 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                 $profile, array('isTree' => $fileWriter->hasTreeStructure())
         );
 
-        $pathInfo = pathinfo($inputFile);
-        $outputFile = Shopware()->DocPath() . 'media/unknown/' . $pathInfo['filename'] . '-tmp.' . $pathInfo['extension'];
-
-        $dataWorkflow = new DataWorkflow($dataIO, $profile, $dataTransformerChain, $fileWriter);
-        $dataWorkflow->saveUnprocessedData($data, $outputFile);
+        $dataWorkflow = new DataWorkflow(null, $profile, $dataTransformerChain, $fileWriter);
+        $dataWorkflow->saveUnprocessedData($data, $profileName, Shopware()->DocPath() . $outputFile);
     }
 
     public function getSessionsAction()
@@ -1098,7 +1094,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $dbAdapter = $this->Plugin()->getDataFactory()->createDbAdapter($type);
         
         $columns = $dbAdapter->getColumns($section);
-        
+
         if (!$columns || empty($columns)) {
             $this->View()->assign(array(
                 'success' => false, 'msg' => 'No colums found.'
@@ -1254,6 +1250,9 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         return $this->loggerRepository;
     }
 
+    /**
+     * @return Shopware_Plugins_Backend_SwagImportExport_Bootstrap
+     */
     public function Plugin()
     {
         return Shopware()->Plugins()->Backend()->SwagImportExport();
@@ -1277,9 +1276,14 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         //returns the customer data
         $data = $paginator->getIterator()->getArrayCopy();
 
+        $successStatus = SnippetsHelper::getNamespace()
+            ->get('controller/log_status_success', 'No errors');
+
+
         foreach($data as &$log) {
             if ($log['state'] == 'false') {
-                $log['title'] = 'Successfull';
+                $log['state'] = $successStatus;
+                $log['title'] = 'Success';
             } else {
                 $log['title'] = 'Error';
             }
@@ -1321,6 +1325,63 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $this->addAclPermission("getSections", "profile", "Insuficient Permissions (getSections)");
         $this->addAclPermission("getColumns", "profile", "Insuficient Permissions (getColumns)");
         $this->addAclPermission("getParentKeys", "profile", "Insuficient Permissions (getParentKeys)");
+    }
+
+    /**
+     * Prepares filter array for export
+     *
+     * @param $request
+     * @param $adapterType
+     * @return array
+     */
+    protected function prepareFilter($request, $adapterType)
+    {
+        $data = array();
+
+        if ($adapterType === 'articles'){
+            $data['variants'] = $request->getParam('variants') ? true : false;
+        }
+
+        if ($request->getParam('categories') && $adapterType === 'articles') {
+            $data['categories'] = array($request->getParam('categories'));
+        }
+
+        if ($request->getParam('stockFilter') && $adapterType === 'articlesInStock') {
+            $data['stockFilter'] = $request->getParam('stockFilter');
+            if($data['stockFilter'] == 'custom') {
+                $data['direction'] = $request->getParam('customFilterDirection');
+                $data['value'] = $request->getParam('customFilterValue');
+            }
+        }
+
+        //order filter
+        if ($request->getParam('ordernumberFrom') && $adapterType === 'orders') {
+            $data['ordernumberFrom'] = $request->getParam('ordernumberFrom');
+        }
+
+        if ($request->getParam('dateFrom') && $adapterType === 'orders') {
+            $dateFrom = $request->getParam('dateFrom');
+            $data['dateFrom'] = new \DateTime($dateFrom);
+        }
+
+        if ($request->getParam('dateTo') && $adapterType === 'orders') {
+            $dateTo = $request->getParam('dateTo');
+            $dateTo = new Zend_Date($dateTo);
+            $dateTo->setHour('23');
+            $dateTo->setMinute('59');
+            $dateTo->setSecond('59');
+            $data['dateTo'] = $dateTo;
+        }
+
+        if ($request->getParam('orderstate') && $adapterType === 'orders') {
+            $data['orderstate'] = $request->getParam('orderstate');
+        }
+
+        if ($request->getParam('paymentstate') && $adapterType === 'orders') {
+            $data['paymentstate'] = $request->getParam('paymentstate');
+        }
+
+        return $data;
     }
 
 }

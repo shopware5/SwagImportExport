@@ -42,22 +42,23 @@ class ImportCommand extends ShopwareCommand
 
         $this->start($output, $this->profileEntity, $this->filePath, $this->format);
 
+        $profilesMapper = array('articles', 'articlesImages');
+
+        //loops the unprocessed data
         $pathInfo = pathinfo($this->filePath);
-        $tmpFileName = 'media/unknown/' . $pathInfo['filename'] . '-tmp.' . $pathInfo['extension'];
-        $tmpFile = Shopware()->DocPath() . $tmpFileName;
+        foreach ($profilesMapper as $profileName){
+            $tmpFileName = 'media/unknown/' . $pathInfo['filename'] . '-' . $profileName .'-tmp.csv';
+            $tmpFile = Shopware()->DocPath() . $tmpFileName;
 
-        if (file_exists($tmpFile)) {
+            if (file_exists($tmpFile)) {
+                $outputFile = str_replace('-tmp', '-swag', $tmpFile);
+                rename($tmpFile, $outputFile);
 
-            $output->writeln('<info>Start processing related data</info>');
-            //renames
-            $outputFileName = 'media/unknown/' . $pathInfo['filename'] . '-swag.' . $pathInfo['extension'];
-            $outputFile = Shopware()->DocPath() . $outputFileName;
-            rename($tmpFile, $outputFile);
+                $profile = $this->Plugin()->getProfileFactory()->loadHiddenProfile($profileName);
+                $profileEntity = $profile->getEntity();
 
-            $profile = $this->Plugin()->getProfileFactory()->loadHiddenProfile('articles');
-            $profileEntity = $profile->getEntity();
-
-            $this->start($output, $profileEntity, $outputFile, 'csv');
+                $this->start($output, $profileEntity, $outputFile, 'csv');
+            }
         }
     }
 

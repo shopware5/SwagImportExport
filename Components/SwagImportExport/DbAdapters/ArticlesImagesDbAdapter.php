@@ -61,11 +61,12 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * Returns article images 
-     * 
+     * Returns article images
+     *
      * @param array $ids
      * @param array $columns
      * @return array
+     * @throws
      */
     public function read($ids, $columns)
     {
@@ -118,8 +119,8 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * Returns default image columns name 
-     * 
+     * Returns default image columns name
+     *
      * @return array
      */
     public function getDefaultColumns()
@@ -137,7 +138,8 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
             'aimage.height as height',
             "GroupConcat( im.id, '|', mr.optionId, '|' , co.name, '|', cg.name
             ORDER by im.id
-            SEPARATOR ';' ) AS relations"
+            SEPARATOR ';' ) as relations",
+            ' \'1\' as thumbnail'
         );
 
         return $columns;
@@ -232,7 +234,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                     }
                 }
 
-                if($imageImportMode == 2 || $mediaExists == false) {
+	            if($imageImportMode == 2 || $mediaExists == false) {
                     $path = $this->load($record['image'], $name);
 
                     $file = new \Symfony\Component\HttpFoundation\File\File($path);
@@ -250,12 +252,15 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                     $this->getManager()->persist($media);
                     $this->getManager()->flush();
 
+                    //thumbnail flag
+                    $thumbnail = isset($record['thumbnail']) && $record['thumbnail'] == 0 ? false : true;
+
                     if (empty($record['main'])) {
                         $record['main'] = 1;
                     }
 
                     //generate thumbnails
-                    if ($media->getType() == \Shopware\Models\Media\Media::TYPE_IMAGE) {
+                    if ($media->getType() == \Shopware\Models\Media\Media::TYPE_IMAGE && $thumbnail) {
                         /*                 * @var $manager \Shopware\Components\Thumbnail\Manager */
                         $manager = Shopware()->Container()->get('thumbnail_manager');
                         $manager->createMediaThumbnail($media, array(), true);
@@ -264,13 +269,16 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
 
                 $image = new \Shopware\Models\Article\Image();
                 $image->setArticle($article);
-                $image->setDescription($record['description']);
-                $image->setPosition($record['position']);
+
+	            $description = isset($record["description"]) ? $record["description"] : "";
+	            $imagePosition = isset($record['position']) ? $record['position'] : $this->getDefaultImagePosition($image->getArticle()->getId());
+
+	            $image->setPosition($imagePosition);
                 $image->setPath($media->getName());
                 $image->setExtension($media->getExtension());
                 $image->setMedia($media);
                 $image->setMain($record['main']);
-
+	            $image->setDescription($description);
                 $this->getManager()->persist($image);
                 $this->getManager()->flush($image);
 
@@ -296,6 +304,18 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
             }
         }
     }
+
+	/**
+	 * Gets the latest image position from a specific article.
+	 * @param $articleId
+	 * @return int
+	 */
+	private function getDefaultImagePosition($articleId){
+		$sql = "SELECT MAX(position) FROM s_articles_img WHERE articleID=?;";
+		$result = Shopware()->Db()->fetchOne($sql, $articleId);
+
+		return isset($result) ? ((int)$result +1) : 0;
+	}
 
     /**
      * Sets image mapping for variants
@@ -464,11 +484,11 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
 
         if (!file_exists($destPath)) {
             $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/articlesImages/directory_not_found', 'Destination directory %s does not exist.');
+                ->get('adapters/articlesImages/directory_not_found', 'Destination directory %s does not exist.');
             throw new \Exception(sprintf($message, $destPath));
         } elseif (!is_writable($destPath)) {
             $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/articlesImages/directory_permissions', 'Destination directory %s does not have write permissions.');
+                ->get('adapters/articlesImages/directory_permissions', 'Destination directory %s does not have write permissions.');
             throw new \Exception(sprintf($message, $destPath));
         }
 
@@ -487,14 +507,17 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
 
                 if (!$put_handle = fopen("$destPath/$filename", "w+")) {
                     $message = SnippetsHelper::getNamespace()
-                                ->get('adapters/articlesImages/could_open_dir_file', 'Could not open %s/%s for writing');
-                    throw new \Exception(sprintf($message), $destPath, $filename);
+                        ->get('adapters/articlesImages/could_open_dir_file', 'Could not open %s/%s for writing');
+                    throw new AdapterException(sprintf($message), $destPath, $filename);
                 }
+
+                //replace empty spaces
+                $url = str_replace(' ', '%20', $url);
 
                 if (!$get_handle = fopen($url, "r")) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/articlesImages/could_not_open_url', 'Could not open %s for reading');
-                    throw new \Exception(sprintf($message, $url));
+                    throw new AdapterException(sprintf($message, $url));
                 }
                 while (!feof($get_handle)) {
                     fwrite($put_handle, fgets($get_handle, 4096));
@@ -505,8 +528,8 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                 return "$destPath/$filename";
         }
         $message = SnippetsHelper::getNamespace()
-                    ->get('adapters/articlesImages/unsupported_schema', 'Unsupported schema %s.');
-        throw new \Exception(sprintf($message, $urlArray['scheme']));
+            ->get('adapters/articlesImages/unsupported_schema', 'Unsupported schema %s.');
+        throw new AdapterException(sprintf($message, $urlArray['scheme']));
     }
 
     public function saveMessage($message)

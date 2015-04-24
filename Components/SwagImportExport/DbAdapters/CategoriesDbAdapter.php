@@ -2,10 +2,13 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Models\Category\Category;
 use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
 use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
+use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 class CategoriesDbAdapter implements DataDbAdapter
 {
@@ -14,6 +17,9 @@ class CategoriesDbAdapter implements DataDbAdapter
      * Shopware\Components\Model\ModelManager
      */
     protected $manager;
+
+    /** @var $db  */
+    protected $db;
 
     /**
      * Shopware\Models\Category\Category
@@ -66,11 +72,13 @@ class CategoriesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * Returns categories 
-     * 
-     * @param array $ids
-     * @param array $columns
-     * @return array
+     * Returns categories
+     *
+     * @param $ids
+     * @param $columns
+     * @return mixed
+     *
+     * @throws \Exception
      */
     public function read($ids, $columns)
     {
@@ -86,48 +94,31 @@ class CategoriesDbAdapter implements DataDbAdapter
             throw new \Exception($message);
         }
 
-        $builder = $this->getBuilder($columns, $ids);
+        $builder = $this->getBuilder($columns['default'], $ids);
 
         $categories = $builder->getQuery()->getResult();
-
         $result['default'] = DbAdapterHelper::decodeHtmlEntities($categories);
-
+        $result['customerGroups'] = $this->getBuilder($this->getCustomerGroupsColumns(), $ids)->getQuery()->getResult();
         return $result;
     }
 
     /**
-     * Returns default categories columns name 
-     * and category attributes
-     * 
-     * @return array
+     * @param $columns
+     * @param $ids
+     * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
      */
-    public function getDefaultColumns()
+    public function getBuilder($columns, $ids)
     {
-        $columns = array(
-            'c.id',
-            'c.parentId',
-            'c.name',
-            'c.position',
-            'c.metaKeywords',
-            'c.metaDescription',
-            'c.cmsHeadline',
-            'c.cmsText',
-            'c.template',
-            'c.active',
-            'c.blog',
-            'c.showFilterGroups',
-            'c.external',
-            'c.hideFilter'
-        );
+        $builder = $this->getManager()->createQueryBuilder();
+        $builder->select($columns)
+            ->from('Shopware\Models\Category\Category', 'c')
+            ->leftJoin('c.attribute', 'attr')
+            ->leftJoin('c.customerGroups', 'customerGroups')
+            ->Where('c.id IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->distinct();
 
-        // Attributes
-        $attributesSelect = $this->getAttributes();
-        
-        if ($attributesSelect && !empty($attributesSelect)) {
-            $columns = array_merge($columns, $attributesSelect);
-        }
-
-        return $columns;
+        return $builder;
     }
 
     public function getUnprocessedData()
@@ -137,15 +128,10 @@ class CategoriesDbAdapter implements DataDbAdapter
 
     public function getAttributes()
     {
-        $stmt = Shopware()->Db()->query("SHOW COLUMNS FROM s_categories_attributes");
+        $db = $this->getDb();
+        $stmt = $db->query("SHOW COLUMNS FROM s_categories_attributes");
         $columns = $stmt->fetchAll();
-
-        $attributes = array();
-        foreach ($columns as $column) {
-            if ($column['Field'] !== 'id' && $column['Field'] !== 'categoryID') {
-                $attributes[] = $column['Field'];
-            }
-        }
+        $attributes = $this->getFieldNames($columns);
 
         $attributesSelect = '';
         if ($attributes) {
@@ -164,6 +150,23 @@ class CategoriesDbAdapter implements DataDbAdapter
     }
 
     /**
+     * Helper method: Filtered the field names and return them
+     *
+     * @param $columns
+     * @return array
+     */
+    private function getFieldNames($columns)
+    {
+        $attributes = array();
+        foreach ($columns as $column) {
+            if ($column['Field'] !== 'id' && $column['Field'] !== 'categoryID') {
+                $attributes[] = $column['Field'];
+            }
+        }
+        return $attributes;
+    }
+
+    /**
      * Insert/Update data into db
      * 
      * @param array $records
@@ -177,8 +180,8 @@ class CategoriesDbAdapter implements DataDbAdapter
         );
 
         $manager = $this->getManager();
-        
-        foreach ($records['default'] as $record) {
+
+        foreach ($records['default'] as $index => $record) {
             try{
                 if (!$record['name']) {
                     $message = SnippetsHelper::getNamespace()
@@ -199,16 +202,9 @@ class CategoriesDbAdapter implements DataDbAdapter
                     throw new AdapterException(sprintf($message, $record['name']));
                 }
 
-                /* @var $category Shopware\Models\Category\Category */
-                $category = $this->getRepository()->findOneBy(array('id' => $record['id']));
-
-                if (!$category) {
-                    $category = new Category();
-                }
-
                 $record = $this->prepareData($record);
 
-                $category->fromArray($record);
+                $category = $this->createCategory($record, $parentCategory, $records['customerGroups'], $index);
 
                 $violations = $manager->validate($category);
 
@@ -219,16 +215,132 @@ class CategoriesDbAdapter implements DataDbAdapter
                 }
 
                 $manager->persist($category);
+
                 $metadata = $manager->getClassMetaData(get_class($category));
                 $metadata->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);
+
                 $manager->flush();
                 $manager->clear();
-            
             } catch (AdapterException $e) {
                 $message = $e->getMessage();
                 $this->saveMessage($message);
             }
         }
+    }
+
+    /**
+     * @param array $array
+     * @param int $currentIndex
+     * @return array
+     */
+    private function getCustomerGroupIdsFromIndex(array $array, $currentIndex)
+    {
+        $returnArray = array();
+        foreach($array as $customerGroupEntry) {
+            if($customerGroupEntry['parentIndexElement'] == $currentIndex) {
+                $returnArray[] = $customerGroupEntry['customerGroupId'];
+            }
+        }
+        return $returnArray;
+    }
+
+    /**
+     * Create the Category by hand. The method ->fromArray do not work
+     *
+     * @param $record
+     * @param Category $parent
+     * @param array $customerGroupArray
+     * @param int $index
+     * @return Category
+     */
+    private function createCategory($record, Category $parent, array $customerGroupArray, $index)
+    {
+        $customerGroupIds = $this->getCustomerGroupIdsFromIndex($customerGroupArray, $index);
+        $recordAttribute = $record['attribute'];
+
+        // create the Category
+        /* @var $category Category */
+        $category = $this->getManager()->getRepository('\Shopware\Models\Category\Category')->find($record['categoryId']);
+
+        if (!$category instanceof Category ) {
+            $category = new Category();
+            $category->fromArray($record);
+        }
+
+        $category->setParent($parent);
+
+        // create the categoryAttributes
+        $attributes = $this->getAttributeByCategoryId($record['categoryId']);
+
+        if(!$attributes instanceof \Shopware\Models\Attribute\Category) {
+            $attributes = new \Shopware\Models\Attribute\Category();
+            $attributes->fromArray($record);
+            $attributes->setCategoryId($record['categoryId']);
+        }
+
+        $attributes->setCategory($category);
+
+        $category->setAttribute($attributes);
+
+        // get avoided customerGroups
+        if ($customerGroupIds) {
+            foreach($customerGroupIds as $customerGroupID) {
+                $customerGroup = $this->getCustomerGroupById($customerGroupID);
+                if ($customerGroup) {
+                    if (!$this->checkIfRelationExists($category->getId(), $customerGroup->getId())) {
+                        $category->getCustomerGroups()->add($customerGroup);
+                    }
+                }
+            }
+
+
+        }
+        return $category;
+    }
+
+    private $categoryAvoidCustomerGroups = null;
+
+    private function checkIfRelationExists($categoryId, $customerGroupId)
+    {
+        if ($this->categoryAvoidCustomerGroups === null) {
+            $this->setCategoryAvoidCustomerGroups();
+        }
+
+        foreach ($this->categoryAvoidCustomerGroups as $relation) {
+            if ($relation['categoryID'] == $categoryId && $relation['customergroupID'] == $customerGroupId) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function setCategoryAvoidCustomerGroups()
+    {
+        $sql = "SELECT categoryID, customergroupID FROM s_categories_avoid_customergroups";
+        $this->categoryAvoidCustomerGroups = $this->getDb()->fetchAll($sql);
+    }
+
+
+    /**
+     * @param int $id
+     * @return null|\Shopware\Models\Customer\Group
+     */
+    private function getCustomerGroupById($id)
+    {
+        /** @var \Shopware\Models\Customer\Group $group */
+        $group = $this->getManager()->getRepository('Shopware\Models\Customer\Group')->find($id);
+        return $group;
+    }
+
+    /**
+     * @param int $categoryId
+     * @return null|\Shopware\Models\Attribute\Category
+     */
+    private function getAttributeByCategoryId($categoryId)
+    {
+        $category = $this->getManager()->getRepository('\Shopware\Models\Attribute\Category')->findOneBy(array('categoryId' =>$categoryId));
+        return $category;
     }
 
     /**
@@ -258,8 +370,19 @@ class CategoriesDbAdapter implements DataDbAdapter
     public function getSections()
     {
         return array(
-            array('id' => 'default', 'name' => 'default')
+            array('id' => 'default', 'name' => 'default'),
+            array('id' => 'customerGroups', 'name' => 'CustomerGroups'),
         );
+    }
+
+    public function getParentKeys($section)
+    {
+        switch ($section) {
+            case 'customerGroups':
+                return array(
+                    'c.id as categoryId',
+                );
+        }
     }
     
     /**
@@ -269,12 +392,54 @@ class CategoriesDbAdapter implements DataDbAdapter
     public function getColumns($section)
     {
         $method = 'get' . ucfirst($section) . 'Columns';
-        
         if (method_exists($this, $method)) {
             return $this->{$method}();
         }
 
         return false;
+    }
+
+    public function getCustomerGroupsColumns()
+    {
+        return array(
+            'c.id as categoryId',
+            'customerGroups.id as customerGroupId',
+        );
+    }
+
+    /**
+     * Returns default categories columns name
+     * and category attributes
+     *
+     * @return array
+     */
+    public function getDefaultColumns()
+    {
+        $columns['default'] = array(
+            'c.id as categoryId',
+            'c.parentId as parentId',
+            'c.name as name',
+            'c.position as position',
+            'c.metaKeywords as metaKeywords',
+            'c.metaDescription as metaDescription',
+            'c.cmsHeadline as cmsHeadline',
+            'c.cmsText as cmsText',
+            'c.template as template',
+            'c.active as active',
+            'c.blog as blog',
+            'c.showFilterGroups as showFilterGroups',
+            'c.external as external',
+            'c.hideFilter as hideFilter',
+        );
+
+        // Attributes
+        $attributesSelect = $this->getAttributes();
+
+        if ($attributesSelect && !empty($attributesSelect)) {
+            $columns['default'] = array_merge($columns['default'], $attributesSelect);
+        }
+
+        return $columns;
     }
 
     public function saveMessage($message)
@@ -301,7 +466,7 @@ class CategoriesDbAdapter implements DataDbAdapter
     /**
      * Returns category repository
      * 
-     * @return Shopware\Models\Category\Category
+     * @return \Shopware\Models\Category\Category
      */
     public function getRepository()
     {
@@ -314,7 +479,7 @@ class CategoriesDbAdapter implements DataDbAdapter
     /**
      * Returns entity manager
      * 
-     * @return Shopware\Components\Model\ModelManager
+     * @return \Shopware\Components\Model\ModelManager
      */
     public function getManager()
     {
@@ -325,16 +490,13 @@ class CategoriesDbAdapter implements DataDbAdapter
         return $this->manager;
     }
 
-    public function getBuilder($columns, $ids)
+    public function getDb()
     {
-        $builder = $this->getManager()->createQueryBuilder();
-        $builder->select($columns)
-                ->from('Shopware\Models\Category\Category', 'c')
-                ->leftJoin('c.attribute', 'attr')
-                ->where('c.id IN (:ids)')
-                ->setParameter('ids', $ids);
-
-        return $builder;
+        if($this->db === null) {
+            $this->db = Shopware()->Db();
+        }
+        return $this->db;
     }
+
 
 }

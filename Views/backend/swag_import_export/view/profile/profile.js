@@ -126,7 +126,8 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
                         }
                     }
                 },
-                '-', {
+                '-',
+                {
                     text: me.snippets.toolbar.createProfile,
                     handler: function() {
                         me.fireEvent('createOwnProfile', me.profilesStore, me.toolbar.child('#profilesCombo'));
