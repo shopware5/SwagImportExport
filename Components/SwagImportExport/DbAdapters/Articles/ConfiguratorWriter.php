@@ -15,7 +15,7 @@ class ConfiguratorWriter
         $this->groups = $this->getGroups();
     }
 
-    public function write($articleId, $articleDetailId, $configuratorData)
+    public function write($articleId, $articleDetailId, $mainDetailId, $configuratorData)
     {
         $configuratorSetId = null;
 
@@ -56,8 +56,10 @@ class ConfiguratorWriter
                 $this->sets[$dataSet['name']] = $configuratorSetId;
             }
 
-            //update article sets
-            $this->updateArticleSetsRelation($articleId, $configuratorSetId);
+            if ($mainDetailId != $articleDetailId){
+                //update article sets
+                $this->updateArticleSetsRelation($articleId, $configuratorSetId);
+            }
 
             /**
              * configurator option
@@ -74,10 +76,11 @@ class ConfiguratorWriter
                     throw new AdapterException(sprintf($message, $configurator['configOptionId']));
                 }
             } else {
-                //configurator group
+                //gets or creates configurator group
                 $groupId = $this->getConfiguratorGroup($configurator);
-                $this->updateGroupsRelation($configuratorSetId, $groupId);
             }
+
+            $this->updateGroupsRelation($configuratorSetId, $groupId);
 
             if (isset($configurator['configOptionName']) && !$optionId){
                 $optionId = $this->getOption($configurator['configOptionName']);

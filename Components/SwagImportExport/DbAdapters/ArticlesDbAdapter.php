@@ -445,6 +445,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             $configuratorWriter->write(
                 $articleId,
                 $articleDetailId,
+                $mainDetailId,
                 array_filter(
                     $records['configurator'],
                     function ($configurator) use ($index) {
