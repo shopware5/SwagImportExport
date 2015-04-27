@@ -416,64 +416,77 @@ class ArticlesDbAdapter implements DataDbAdapter
         $pricesWriter = new PriceWriter();
         $categoryWriter = new CategoryWriter();
         $configuratorWriter = new ConfiguratorWriter();
-        $relationWriter = new RelationWriter();
+        $relationWriter = new RelationWriter($this);
 
         foreach ($records['article'] as $index => $article) {
-            list($articleId, $articleDetailId, $mainDetailId) = $articleWriter->write($article);
+            try {
+                $processedFlag = isset($article['processed']) && $article['processed'] == 1 ? true : false;
+                if (!$processedFlag) {
 
-            $pricesWriter->write(
-                $articleId,
-                $articleDetailId,
-                array_filter(
-                    $records['price'],
-                    function ($price) use ($index) {
-                        return $price['parentIndexElement'] == $index;
-                    }
-                )
-            );
+                    list($articleId, $articleDetailId, $mainDetailId) = $articleWriter->write($article);
 
-            $categoryWriter->write(
-                $articleId,
-                array_filter(
-                    $records['category'],
-                    function ($category) use ($index) {
-                        return $category['parentIndexElement'] == $index && $category['categoryId'];
-                    }
-                )
-            );
+                    $pricesWriter->write(
+                        $articleId,
+                        $articleDetailId,
+                        array_filter(
+                            $records['price'],
+                            function ($price) use ($index) {
+                                return $price['parentIndexElement'] == $index;
+                            }
+                        )
+                    );
 
-            $configuratorWriter->write(
-                $articleId,
-                $articleDetailId,
-                array_filter(
-                    $records['configurator'],
-                    function ($configurator) use ($index) {
-                        return $configurator['parentIndexElement'] == $index;
-                    }
-                )
-            );
+                    $categoryWriter->write(
+                        $articleId,
+                        array_filter(
+                            $records['category'],
+                            function ($category) use ($index) {
+                                return $category['parentIndexElement'] == $index && $category['categoryId'];
+                            }
+                        )
+                    );
 
-            $relationWriter->write(
-                $articleId,
-                array_filter(
-                    $records['accessory'],
-                    function ($accessory) use ($index) {
-                        return $accessory['parentIndexElement'] == $index;
-                    }
-                ),
-                'accessory'
-            );
+                    $configuratorWriter->write(
+                        $articleId,
+                        $articleDetailId,
+                        array_filter(
+                            $records['configurator'],
+                            function ($configurator) use ($index) {
+                                return $configurator['parentIndexElement'] == $index;
+                            }
+                        )
+                    );
+                }
 
-            $relationWriter->write(
-                $articleId,
-                array_filter(
-                    $records['similar'],
-                    function ($similar) use ($index) {
-                        return $similar['parentIndexElement'] == $index;
-                    }
-                ),
-                'similar'
-            );
+                $relationWriter->write(
+                    $articleId,
+                    $article['mainNumber'],
+                    array_filter(
+                        $records['accessory'],
+                        function ($accessory) use ($index) {
+                            return $accessory['parentIndexElement'] == $index;
+                        }
+                    ),
+                    'accessory',
+                    $processedFlag
+                );
+
+                $relationWriter->write(
+                    $articleId,
+                    $article['mainNumber'],
+                    array_filter(
+                        $records['similar'],
+                        function ($similar) use ($index) {
+                            return $similar['parentIndexElement'] == $index;
+                        }
+                    ),
+                    'similar',
+                    $processedFlag
+                );
+            } catch (AdapterException $e) {
+                $message = $e->getMessage();
+                $this->saveMessage($message);
+            }
         }
 
         $end = microtime(true);

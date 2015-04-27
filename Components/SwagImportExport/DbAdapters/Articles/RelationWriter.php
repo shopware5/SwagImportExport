@@ -2,6 +2,7 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters\Articles;
 
+use Shopware\Components\SwagImportExport\DbAdapters\ArticlesDbAdapter;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 
@@ -14,6 +15,9 @@ use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
  */
 class RelationWriter
 {
+    /** @var ArticlesDbAdapter */
+    protected $articlesDbAdapter = null;
+
     protected $relationTypes = array('similar', 'accessory');
 
     protected $relationTables = array(
@@ -25,19 +29,29 @@ class RelationWriter
 
     protected $idKey = null;
 
+    protected $snippetName = null;
+
+    protected $defaultSnippetMessage = null;
+
     /** @var \Enlight_Components_Db_Adapter_Pdo_Mysql */
     protected $db;
 
     /** @var \Doctrine\DBAL\Connection */
     protected $connection;
 
-    public function __construct()
+    public function __construct(ArticlesDbAdapter $articlesDbAdapter)
     {
+        $this->articlesDbAdapter = $articlesDbAdapter;
         $this->db = Shopware()->Db();
         $this->connection = Shopware()->Models()->getConnection();
     }
 
-    public function write($articleId, $relations, $relationType)
+    public function getArticlesDbAdapter()
+    {
+        return $this->articlesDbAdapter;
+    }
+
+    public function write($articleId, $mainOrderNumber, $relations, $relationType, $processedFlag)
     {
         $this->initializeRelationData($relationType);
 
@@ -49,13 +63,28 @@ class RelationWriter
                 $this->deleteAllRelations($articleId);
             }
 
-            //if relationId is missing, find it by orderNumber
-            if (!isset($relation[$this->idKey]) || !$relation[$this->idKey]) {
+            if (isset($relation['ordernumber']) && $relation['ordernumber']) {
                 $relationId = $this->getRelationIdByOrderNumber($relation['ordernumber'], $articleId);
+
+                if (!$relationId && $processedFlag === true) {
+                    $message = SnippetsHelper::getNamespace()
+                        ->get($this->snippetName, $this->defaultSnippetMessage);
+                    throw new AdapterException(sprintf($message, $relation['ordernumber']));
+                }
+
+                if (!$relationId) {
+                    $data = array(
+                        'articleId' => $mainOrderNumber,
+                        'ordernumber' => $relation['ordernumber'],
+                    );
+
+                    $this->getArticlesDbAdapter()->saveUnprocessedData('articles', strtolower($relationType), $mainOrderNumber, $data);
+                    continue;
+                }
+
                 $relation[$this->idKey] = $relationId;
             }
 
-            //TODO: check whether the given id exists, if not check for unprocessed data
             if (!$this->isRelationIdExists($relation[$this->idKey])) {
                 continue;
             }
@@ -86,20 +115,22 @@ class RelationWriter
         $this->checkRelation($relationType);
 
         $this->table = $this->relationTables[$relationType];
-        $this->idKey = $relationType . 'Id';
+        $this->idKey = strtolower($relationType) . 'Id';
+        $this->snippetName = 'adapters/articles/' . strtolower($relationType) . '_not_found';
+        $this->defaultSnippetMessage = ucfirst($relationType) . ' with ordernumber %s does not exists';
     }
 
     /**
      * Checks whether the relation type exists.
      *
      * @param string $relationType
-     * @throws AdapterException
+     * @throws \Exception
      */
     protected function checkRelation($relationType)
     {
         if (!in_array($relationType, $this->relationTypes)) {
             $message = "Wrong relation type is used! Allowed types are: 'accessory' or 'similar'";
-            throw new AdapterException($message);
+            throw new \Exception($message);
         }
     }
 
@@ -118,6 +149,16 @@ class RelationWriter
 
         return $relationId;
     }
+
+//    protected function getMainDetailArticleOrderNumber($articleId)
+//    {
+//        $relationId = $this->db->fetchOne(
+//            'SELECT articleID FROM s_articles_details WHERE ordernumber = ?',
+//            array($orderNumber)
+//        );
+//
+//        return $relationId;
+//    }
 
     /**
      * Checks whether this article exists.
