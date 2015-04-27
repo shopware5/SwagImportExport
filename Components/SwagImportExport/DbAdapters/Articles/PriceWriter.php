@@ -34,8 +34,7 @@ class PriceWriter
                 continue;
             }
 
-            $priceId = null;
-            $result = $this->connection->fetchColumn(
+            $priceId = $this->connection->fetchColumn(
                 '
                     SELECT id
                     FROM s_articles_prices
@@ -43,9 +42,6 @@ class PriceWriter
                 ',
                 array($articleId, $articleDetailId, $price['priceGroup'], $price['from'])
             );
-            if (!empty($result)) {
-                $priceId = $result['id'];
-            }
 
             $newPrice = $priceId == 0;
             $price['articleId'] = $articleId;
