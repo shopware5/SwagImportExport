@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\ArticleWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\CategoryWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\ConfiguratorWriter;
+use Shopware\Components\SwagImportExport\DbAdapters\Articles\PropertyWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\PriceWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\RelationWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\Write;
@@ -416,6 +417,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         $pricesWriter = new PriceWriter();
         $categoryWriter = new CategoryWriter();
         $configuratorWriter = new ConfiguratorWriter();
+        $propertyWriter = new PropertyWriter();
         $relationWriter = new RelationWriter($this);
 
         foreach ($records['article'] as $index => $article) {
@@ -452,6 +454,17 @@ class ArticlesDbAdapter implements DataDbAdapter
                         $mainDetailId,
                         array_filter(
                             $records['configurator'],
+                            function ($configurator) use ($index) {
+                                return $configurator['parentIndexElement'] == $index;
+                            }
+                        )
+                    );
+
+                    $propertyWriter->write(
+                        $articleId,
+                        $article['orderNumber'],
+                        array_filter(
+                            $records['propertyValue'],
                             function ($configurator) use ($index) {
                                 return $configurator['parentIndexElement'] == $index;
                             }
