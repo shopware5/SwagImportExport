@@ -51,9 +51,15 @@ class PropertyWriter
             }
 
             if (isset($propertyData['propertyValueId']) && !empty($propertyData['propertyValueId'])){
-                
-                //todo find value by Id
 
+                $valueId = $propertyData['propertyValueId'];
+                $optionId = $this->getOptionByValueId($valueId);
+
+                if (!$optionId){
+                    $message = SnippetsHelper::getNamespace()
+                        ->get('adapters/articles/property_id_not_found', 'Property value by id %s not found for article %s');
+                    throw new AdapterException(sprintf($message, $valueId, $orderNumber));
+                }
             } else if (isset($propertyData['propertyValueName']) && !empty($propertyData['propertyValueName'])){
                 if (isset($propertyData['propertyOptionId']) && !empty($propertyData['propertyOptionId'])) {
                     //todo: check  propertyOptionId existence
@@ -72,7 +78,6 @@ class PropertyWriter
 
                         //updates property group mapper
                         $this->options[$optionName] = $optionId;
-                        $optionRelations[] = "($optionId, $groupId)";
                     }
                 } else {
                     $message = SnippetsHelper::getNamespace()
@@ -103,6 +108,7 @@ class PropertyWriter
                 throw new AdapterException(sprintf($message, $orderNumber));
             }
 
+            $optionRelations[] = "($optionId, $groupId)";
             $valueRelations[] = "($valueId, $articleId)";
         }
 
@@ -242,6 +248,11 @@ class PropertyWriter
              WHERE id = ?",
             array($articleId)
         );
+    }
+
+    public function getOptionByValueId($id)
+    {
+        return $this->connection->fetchColumn('SELECT `optionID`, `value` FROM s_filter_values WHERE id = ?', array($id));
     }
 
 
