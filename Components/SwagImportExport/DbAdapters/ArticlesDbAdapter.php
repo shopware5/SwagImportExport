@@ -8,6 +8,7 @@ use Shopware\Components\SwagImportExport\DbAdapters\Articles\CategoryWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\ConfiguratorWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\PriceWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\RelationWriter;
+use Shopware\Components\SwagImportExport\DbAdapters\Articles\ImageWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\Write;
 use Shopware\Models\Article\Article as ArticleModel;
 use Shopware\Models\Article\Detail as DetailModel;
@@ -417,6 +418,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         $categoryWriter = new CategoryWriter();
         $configuratorWriter = new ConfiguratorWriter();
         $relationWriter = new RelationWriter($this);
+        $imageWriter = new ImageWriter($this);
 
         foreach ($records['article'] as $index => $article) {
             try {
@@ -458,6 +460,16 @@ class ArticlesDbAdapter implements DataDbAdapter
                         )
                     );
 
+                    $imageWriter->write(
+                        $articleId,
+                        $article['mainNumber'],
+                        array_filter(
+                            $records['image'],
+                            function ($image) use ($index) {
+                                return $image['parentIndexElement'] == $index;
+                            }
+                        )
+                    );
                 }
 
                 $relationWriter->write(

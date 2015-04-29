@@ -58,9 +58,17 @@ class RelationWriter
         $newRelations = array();
         $allRelations = array();
         foreach ($relations as $relation) {
+
+            //if relation data has only 'parentIndexElement' element
+            if (count($relation) < 2 ) {
+                break;
+            }
+
+            //TODO: check whether we need this
             if ((!isset($relation[$this->idKey]) || !$relation[$this->idKey]) &&
                 (!isset($relation['ordernumber']) || !$relation['ordernumber'])) {
                 $this->deleteAllRelations($articleId);
+                continue;
             }
 
             if (isset($relation['ordernumber']) && $relation['ordernumber']) {
@@ -98,6 +106,9 @@ class RelationWriter
 
         if ($allRelations) {
             $this->deleteRelations($allRelations, $articleId); //delete the relations that don't exist in the csv file, but exist in the db"
+        }
+
+        if ($newRelations) {
             $this->insertRelations($newRelations, $articleId); //insert only new relations
         }
     }
@@ -149,16 +160,6 @@ class RelationWriter
 
         return $relationId;
     }
-
-//    protected function getMainDetailArticleOrderNumber($articleId)
-//    {
-//        $relationId = $this->db->fetchOne(
-//            'SELECT articleID FROM s_articles_details WHERE ordernumber = ?',
-//            array($orderNumber)
-//        );
-//
-//        return $relationId;
-//    }
 
     /**
      * Checks whether this article exists.
@@ -217,7 +218,7 @@ class RelationWriter
         $relatedIds = implode(
             ', ',
             array_map(
-                function ($relation) use ($articleId) {
+                function ($relation) {
                     return $relation[$this->idKey];
                 },
                 $relations
@@ -237,10 +238,6 @@ class RelationWriter
      */
     private function insertRelations($relations, $articleId)
     {
-        if (!$relations) {
-            return;
-        }
-
         $values = implode(
             ', ',
             array_map(
