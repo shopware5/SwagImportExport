@@ -3,6 +3,8 @@
 namespace Shopware\Components\SwagImportExport\DbAdapters\Articles;
 
 use Shopware\Components\SwagImportExport\DbalHelper;
+use Shopware\Components\SwagImportExport\Exception\AdapterException;
+use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 
 class ConfiguratorWriter
 {

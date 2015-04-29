@@ -6,6 +6,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\ArticleWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\CategoryWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\ConfiguratorWriter;
+use Shopware\Components\SwagImportExport\DbAdapters\Articles\PropertyWriter;
+use Shopware\Components\SwagImportExport\DbAdapters\Articles\TranslationWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\PriceWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\RelationWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\ImageWriter;
@@ -417,6 +419,8 @@ class ArticlesDbAdapter implements DataDbAdapter
         $pricesWriter = new PriceWriter();
         $categoryWriter = new CategoryWriter();
         $configuratorWriter = new ConfiguratorWriter();
+        $translationWriter = new TranslationWriter();
+        $propertyWriter = new PropertyWriter();
         $relationWriter = new RelationWriter($this);
         $imageWriter = new ImageWriter($this);
 
@@ -456,6 +460,29 @@ class ArticlesDbAdapter implements DataDbAdapter
                             $records['configurator'],
                             function ($configurator) use ($index) {
                                 return $configurator['parentIndexElement'] == $index;
+                            }
+                        )
+                    );
+
+                    $propertyWriter->write(
+                        $articleId,
+                        $article['orderNumber'],
+                        array_filter(
+                            $records['propertyValue'],
+                            function ($property) use ($index) {
+                                return $property['parentIndexElement'] == $index;
+                            }
+                        )
+                    );
+
+                    $translationWriter->write(
+                        $articleId,
+                        $articleDetailId,
+                        $mainDetailId,
+                        array_filter(
+                            $records['translation'],
+                            function ($translation) use ($index) {
+                                return $translation['parentIndexElement'] == $index;
                             }
                         )
                     );
