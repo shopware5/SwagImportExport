@@ -7,6 +7,7 @@ use Shopware\Components\SwagImportExport\DbAdapters\Articles\ArticleWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\CategoryWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\ConfiguratorWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\PropertyWriter;
+use Shopware\Components\SwagImportExport\DbAdapters\Articles\TranslationWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\PriceWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\RelationWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\Write;
@@ -417,6 +418,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         $pricesWriter = new PriceWriter();
         $categoryWriter = new CategoryWriter();
         $configuratorWriter = new ConfiguratorWriter();
+        $translationWriter = new TranslationWriter();
         $propertyWriter = new PropertyWriter();
         $relationWriter = new RelationWriter($this);
 
@@ -465,12 +467,23 @@ class ArticlesDbAdapter implements DataDbAdapter
                         $article['orderNumber'],
                         array_filter(
                             $records['propertyValue'],
-                            function ($configurator) use ($index) {
-                                return $configurator['parentIndexElement'] == $index;
+                            function ($property) use ($index) {
+                                return $property['parentIndexElement'] == $index;
                             }
                         )
                     );
 
+                    $translationWriter->write(
+                        $articleId,
+                        $articleDetailId,
+                        $mainDetailId,
+                        array_filter(
+                            $records['translation'],
+                            function ($translation) use ($index) {
+                                return $translation['parentIndexElement'] == $index;
+                            }
+                        )
+                    );
                 }
 
                 $relationWriter->write(

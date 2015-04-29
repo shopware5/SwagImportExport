@@ -142,7 +142,7 @@ class ArticleWriter
             $article['supplierId'] = $this->getSupplier($article['supplierName'], $orderNumber);
         }
 
-        if (empty($article['supplierId'])){
+        if ($create && empty($article['supplierId'])){
             $message = SnippetsHelper::getNamespace()->get(
                 'adapters/articles/supplier_not_found',
                 "Supplier not found for article %s."
@@ -202,7 +202,6 @@ class ArticleWriter
      * Returns the supplier ID
      *
      * @param $name
-     * @param $orderNumber
      * @return int
      * @throws AdapterException
      */
