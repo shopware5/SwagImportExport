@@ -134,7 +134,7 @@ class ImageWriter
         $medias = $data['medias'];
         $images = $data['images'];
 
-        $imageData = $this->prepareImageData($medias, $images);
+        list($imageData, $mediaId) = $this->prepareImageData($medias, $images);
 
         $values = implode(
             ', ',
@@ -152,10 +152,13 @@ class ImageWriter
 
         $insert = "INSERT INTO s_articles_img (articleID, img, main, description, extension, article_detail_id, media_id) VALUES {$values}";
         $this->connection->exec($insert);
+
+        $this->setMainImage($articleId, $mediaId);
     }
 
     protected function prepareImageData($medias, $images)
     {
+        $mediaId = null;
         $imageData = array();
         foreach($images as $key => $image) {
             $imageData[$key]['name'] = $image['path'];
@@ -164,8 +167,50 @@ class ImageWriter
             $imageData[$key]['extension'] = $medias[$key]['extension'];
             $imageData[$key]['variantId'] = $image[$key]['variantId'];
             $imageData[$key]['id'] = $medias[$key]['id'];
+
+            if ($imageData[$key]['main'] == 1) {
+                $mediaId = $medias[$key]['id'];
+            }
         }
 
-        return $imageData;
+        return array($imageData, $mediaId);
+    }
+
+    protected function setMainImage($articleId, $mediaId)
+    {
+        $count = $this->countOfMainImages($articleId);
+        if ($count == 1) {
+            return;
+        }
+
+        if (!$count) {
+            $this->setFirstImageAsMain($articleId);
+        } elseif ($mediaId !== null) {
+            $this->updateMain($articleId, $mediaId);
+        }
+    }
+
+    protected function countOfMainImages($articleId)
+    {
+        $count = $this->db->fetchOne(
+            'SELECT COUNT(main)
+             FROM s_articles_img
+             WHERE main = 1 AND articleID = ?',
+            array($articleId)
+        );
+
+        return $count;
+    }
+
+    protected function setFirstImageAsMain($articleId)
+    {
+        $update = "UPDATE s_articles_img SET main = 1 WHERE articleID = {$articleId} ORDER BY id ASC LIMIT 1";
+        $this->connection->exec($update);
+    }
+
+    protected function updateMain($articleId, $mediaId)
+    {
+        $update = "UPDATE s_articles_img SET main = 2 WHERE articleID = {$articleId} AND media_id != {$mediaId}";
+        $this->connection->exec($update);
     }
 }
