@@ -447,7 +447,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                         array_filter(
                             $records['category'],
                             function ($category) use ($index) {
-                                return $category['parentIndexElement'] == $index && $category['categoryId'];
+                                return $category['parentIndexElement'] == $index && ($category['categoryId'] || $category['categoryPath']);
                             }
                         )
                     );
@@ -2343,6 +2343,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     {
         return array(
             'categories.id as categoryId',
+            'categories.path as categoryPath',
             'article.id as articleId',
         );
     }
