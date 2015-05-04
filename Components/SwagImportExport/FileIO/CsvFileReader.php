@@ -22,40 +22,33 @@ class CsvFileReader implements FileReader
      */
     public function readRecords($fileName, $position, $step)
     {
-        $handle = fopen($fileName, 'r');
+        $delimiter = ';';
 
-        if ($handle === false) {
-            throw new \Exception("Can not open file $fileName");
-        }
+        $file = new \SplFileObject($fileName);
 
-        $columnNames = fgetcsv($handle, 0, ';');
 
-        //removes UTF-8 BOM
-        foreach ($columnNames as $index => $name) {
-            $columnNames[$index] = str_replace("\xEF\xBB\xBF", '', $name);
-        }
+        $columnNames = $this->getColumnNames($file, $delimiter);
 
-        $readRows = array();
-        $frame = $position + $step;
-        $counter = 0;
+        for ($i = 1; $i <= $step; $i++){
+            $offset = $position + $i;
 
-        while ($row = fgetcsv($handle, 0, ';')) {
+            //moves the file pointer to a certain line
+            $file->seek($offset);
 
-            if ($counter >= $position && $counter < $frame) {
-                foreach ($columnNames as $key => $name) {
-                    $data[$name] = isset($row[$key]) ? $row[$key] : '';
-                }
-                $readRows[] = $data;
-            }
-
-            if ($counter > $frame) {
+            if (!$file->valid()){
                 break;
             }
 
-            $counter++;
-        }
+            $current = trim($file->current());
 
-        fclose($handle);
+            $row = explode($delimiter, $current);
+
+            foreach ($columnNames as $key => $name) {
+                $data[$name] = isset($row[$key]) ? $row[$key] : '';
+            }
+
+            $readRows[] = $data;
+        }
 
         return $readRows;
     }
@@ -94,6 +87,27 @@ class CsvFileReader implements FileReader
 
         //removing first row /column names/
         return $counter - 1;
+    }
+
+    /**
+     * Returns column names of the given CSV file
+     * @param \SplFileObject $file
+     * @param $delimiter
+     * @return array
+     */
+    private function getColumnNames(\SplFileObject $file, $delimiter)
+    {
+        $file->seek(0);
+        $current = trim($file->current());
+
+        $columnNames = explode($delimiter, $current);
+
+        //removes UTF-8 BOM
+        foreach ($columnNames as $index => $name) {
+            $columnNames[$index] = str_replace("\xEF\xBB\xBF", '', $name);
+        }
+
+        return $columnNames;
     }
 
 }
