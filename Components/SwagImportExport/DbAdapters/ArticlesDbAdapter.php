@@ -10,6 +10,7 @@ use Shopware\Components\SwagImportExport\DbAdapters\Articles\PropertyWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\TranslationWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\PriceWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\RelationWriter;
+use Shopware\Components\SwagImportExport\DbAdapters\Articles\ImageWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\Write;
 use Shopware\Models\Article\Article as ArticleModel;
 use Shopware\Models\Article\Detail as DetailModel;
@@ -421,6 +422,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         $translationWriter = new TranslationWriter();
         $propertyWriter = new PropertyWriter();
         $relationWriter = new RelationWriter($this);
+        $imageWriter = new ImageWriter($this);
 
         foreach ($records['article'] as $index => $article) {
             try {
@@ -481,6 +483,17 @@ class ArticlesDbAdapter implements DataDbAdapter
                             $records['translation'],
                             function ($translation) use ($index) {
                                 return $translation['parentIndexElement'] == $index;
+                            }
+                        )
+                    );
+
+                    $imageWriter->write(
+                        $articleId,
+                        $article['mainNumber'],
+                        array_filter(
+                            $records['image'],
+                            function ($image) use ($index) {
+                                return $image['parentIndexElement'] == $index;
                             }
                         )
                     );
