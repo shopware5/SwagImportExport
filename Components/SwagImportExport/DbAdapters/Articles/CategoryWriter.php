@@ -48,12 +48,17 @@ class CategoryWriter
                         $isCategoryExists = $this->isCategoryExists($category['categoryId']);
                         if (!$isCategoryExists) {
                             $message = SnippetsHelper::getNamespace()
-                                ->get('adapters/articles/category_not_found', "Category with id '%s' does not exist");
+                                ->get('adapters/articles/category_not_found', "Category with id %s could not be found.");
                             throw new AdapterException(sprintf($message, $category['categoryId']));
                         }
                     } elseif (!empty($category['categoryPath']) ) {
-                        //TODO: check if the category is leaf
                         $category['categoryId'] = $this->getCategoryId($category['categoryPath']);
+                        $isNotLeaf = $this->isNotLeaf($category['categoryId']);
+                        if ($isNotLeaf) {
+                            $message = SnippetsHelper::getNamespace()
+                                ->get('adapters/articles/category_not_leaf', "Category with id '%s' is not a leaf");
+                            throw new AdapterException(sprintf($message, $category['categoryId']));
+                        }
                     }
 
                     $this->categoryIds[$category['categoryId']] = (int) $category['categoryId'];
@@ -137,6 +142,16 @@ class CategoryWriter
 
         $insertedId = $this->connection->lastInsertId();
         return $insertedId;
+    }
+
+    protected function isNotLeaf($categoryId)
+    {
+        $isLeaf = $this->db->fetchOne(
+            "SELECT id FROM s_categories WHERE parent = ?",
+            array($categoryId)
+        );
+
+        return is_numeric($isLeaf);
     }
 
     protected function updateArticlesCategoriesRO($articleId)
