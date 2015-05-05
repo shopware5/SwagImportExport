@@ -22,12 +22,11 @@ class CsvFileReader implements FileReader
      */
     public function readRecords($fileName, $position, $step)
     {
-        $delimiter = ';';
-
         $file = new \SplFileObject($fileName);
+        $file->setCsvControl(";", '"');
+        $file->setFlags(\SplFileObject::READ_CSV);
 
-
-        $columnNames = $this->getColumnNames($file, $delimiter);
+        $columnNames = $this->getColumnNames($file);
 
         for ($i = 1; $i <= $step; $i++){
             $offset = $position + $i;
@@ -39,9 +38,7 @@ class CsvFileReader implements FileReader
                 break;
             }
 
-            $current = trim($file->current());
-
-            $row = explode($delimiter, $current);
+            $row = $file->current();
 
             foreach ($columnNames as $key => $name) {
                 $data[$name] = isset($row[$key]) ? $row[$key] : '';
@@ -92,15 +89,13 @@ class CsvFileReader implements FileReader
     /**
      * Returns column names of the given CSV file
      * @param \SplFileObject $file
-     * @param $delimiter
      * @return array
      */
-    private function getColumnNames(\SplFileObject $file, $delimiter)
+    private function getColumnNames(\SplFileObject $file)
     {
-        $file->seek(0);
-        $current = trim($file->current());
-
-        $columnNames = explode($delimiter, $current);
+        //Rewinds to first line
+        $file->rewind();
+        $columnNames = $file->current();
 
         //removes UTF-8 BOM
         foreach ($columnNames as $index => $name) {
