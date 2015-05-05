@@ -2,6 +2,9 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters\Articles;
 
+use Shopware\Components\SwagImportExport\Exception\AdapterException;
+use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
+
 class CategoryWriter
 {
     /** @var \Enlight_Components_Db_Adapter_Pdo_Mysql */
@@ -44,9 +47,12 @@ class CategoryWriter
                     if (!empty($category['categoryId'])) {
                         $isCategoryExists = $this->isCategoryExists($category['categoryId']);
                         if (!$isCategoryExists) {
-                            //TODO: throw an exception
+                            $message = SnippetsHelper::getNamespace()
+                                ->get('adapters/articles/category_not_found', "Category with id '%s' does not exist");
+                            throw new AdapterException(sprintf($message, $category['categoryId']));
                         }
                     } elseif (!empty($category['categoryPath']) ) {
+                        //TODO: check if the category is leaf
                         $category['categoryId'] = $this->getCategoryId($category['categoryPath']);
                     }
 
@@ -72,42 +78,65 @@ class CategoryWriter
 
     protected function getCategoryId($categoryPath)
     {
-        //TODO: check for new categories
+        $id = null;
+        $path = '|';
         $data = array();
         $descriptions = explode('->', $categoryPath);
         $count = count($descriptions);
 
         for ($i = 0; $i < $count; $i++) {
-            $id = $this->getParentId($descriptions[$i]);
-            $data[] = $id;
-
-            $id = $this->getChildId($id, $descriptions[++$i]);
-            $data[] = $id;
+            $id = $this->getId($descriptions[$i], $id, $path);
+            $path = '|' . $id . $path;
+            $data[$id] = $descriptions[$i];
         }
 
-        return end($data);
+        return end(array_keys($data));
     }
 
-    protected function getParentId($description)
+    protected function getId($description, $id, $path)
     {
-        $parentId = $this->db->fetchOne(
-            "SELECT id FROM s_categories WHERE description = ?",
-            array($description)
-        );
+        if ($id === null) {
+            $sql = "SELECT id FROM s_categories WHERE description = ?";
+            $params = array($description);
+        } else {
+            $sql = "SELECT id FROM s_categories WHERE description = ? AND parent = ?";
+            $params = array($description, $id);
+        }
 
-        //TODO: check if exists
+        $parentId = $this->db->fetchOne($sql, $params);
+
+        //check whether we have more than one category on the same level with the same name
+        $count = $this->db->fetchCol($sql, $params);
+        if (count($count) > 1) {
+            $message = SnippetsHelper::getNamespace()
+                ->get('adapters/articles/category_duplicated', "Category with name '%s' is duplicated");
+            throw new AdapterException(sprintf($message, $description));
+        }
+
+        //check whether the category should be created
+        if (!is_numeric($parentId)) {
+            $parentId = $this->insertCategory($description, $id, $path);
+        }
+
         return $parentId;
     }
 
-    protected function getChildId($parentId, $description)
+    protected function insertCategory($description, $id, $path)
     {
-        $childId = $this->db->fetchOne(
-            "SELECT id FROM s_categories WHERE description = ? AND parent = ?",
-            array($description, $parentId)
-        );
+        if ($id === null) {
+            $values = "(1, NULL, NOW(), NOW(), '{$description}', 1, 1)";
+        } else {
+            $values = "({$id}, '{$path}', NOW(), NOW(), '{$description}', 1, 1)";
+        }
 
-        //TODO: check if exists
-        return $childId;
+        $sql = "
+            INSERT INTO s_categories (parent, path, added, changed, description, active, showfiltergroups)
+            VALUES {$values}
+        ";
+        $this->connection->exec($sql);
+
+        $insertedId = $this->connection->lastInsertId();
+        return $insertedId;
     }
 
     protected function updateArticlesCategoriesRO($articleId)
