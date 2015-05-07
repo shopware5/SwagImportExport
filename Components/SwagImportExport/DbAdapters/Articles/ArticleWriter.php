@@ -28,7 +28,7 @@ class ArticleWriter
 
     public function write($article)
     {
-        if (!isset($article['orderNumber']) && empty($article['orderNumber'])) {
+        if (!isset($article['orderNumber']) || empty($article['orderNumber'])) {
             $message = SnippetsHelper::getNamespace()->get(
                 'adapters/ordernumber_required',
                 'Order number is required.'

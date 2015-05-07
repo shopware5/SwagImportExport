@@ -53,6 +53,10 @@ class RelationWriter
 
     public function write($articleId, $mainOrderNumber, $relations, $relationType, $processedFlag)
     {
+        if (!is_numeric($articleId)) {
+            return;
+        }
+
         $this->initializeRelationData($relationType);
 
         $newRelations = array();
