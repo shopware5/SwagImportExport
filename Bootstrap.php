@@ -434,7 +434,6 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
      */
     public function checkLicense($throwException = true)
     {
-        return true;
         $check1 = $this->checkLicenseCore(false);
         $check2 = $this->checkLicenseImportExport(false);
 

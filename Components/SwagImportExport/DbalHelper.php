@@ -24,25 +24,6 @@ class DbalHelper
         return new QueryBuilder($this->connection);
     }
 
-//    public function execute(QueryBuilder $builder)
-//    {
-//        $builder->execute();return;
-//        $hash = md5(serialize($builder->getQueryParts()));
-//
-//        if ($this->statements[$hash]) {
-//            $stmt = $this->statements[$hash];
-//        } else {
-//            $stmt = $this->connection->prepare($builder->getSql());
-//            $this->statements[$hash] =  $stmt;
-//        }
-//
-////        error_log(print_r($builder->getSQL(), true) . "\n", 3, Shopware()->DocPath() . '/../error.log');
-////        error_log(print_r($builder->getParameters(), true) . "\n", 3, Shopware()->DocPath() . '/../error.log');
-//
-//        $stmt->execute($builder->getParameters());
-//
-//    }
-
     public function getQueryBuilderForEntity($data, $entity, $primaryId)
     {
         $metaData = Shopware()->Models()->getClassMetadata($entity);

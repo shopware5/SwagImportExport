@@ -68,7 +68,6 @@ class RelationWriter
                 break;
             }
 
-            //TODO: check whether we need this
             if ((!isset($relation[$this->idKey]) || !$relation[$this->idKey]) &&
                 (!isset($relation['ordernumber']) || !$relation['ordernumber'])) {
                 $this->deleteAllRelations($articleId);

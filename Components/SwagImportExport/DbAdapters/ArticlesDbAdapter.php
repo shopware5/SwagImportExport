@@ -414,7 +414,6 @@ class ArticlesDbAdapter implements DataDbAdapter
 
     private function performImport($records)
     {
-        $start = microtime(true);
         $articleWriter = new ArticleWriter();
         $pricesWriter = new PriceWriter();
         $categoryWriter = new CategoryWriter();
@@ -529,9 +528,6 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $this->saveMessage($message);
             }
         }
-
-        $end = microtime(true);
-        error_log(print_r($end - $start, true)."\n", 3, Shopware()->DocPath().'/error.log');
     }
 
     /**
@@ -543,8 +539,6 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     public function write($records)
     {
-        error_log(print_r($records, true) . "\n", 3, Shopware()->DocPath() . '/../error.log');
-
         //articles
         if (empty($records['article'])) {
             $message = SnippetsHelper::getNamespace()->get(
@@ -564,6 +558,7 @@ class ArticlesDbAdapter implements DataDbAdapter
 
         return;
 
+        //Old doctrine import logic
         //articles
         if (empty($records['article'])) {
             $message = SnippetsHelper::getNamespace()
@@ -1904,7 +1899,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         }
 
         //Double check
-        //sometimes group name exist e.g. grÃ¶ÃŸe = grÃ¶sse
+        //sometimes group name exist e.g. größe = grösse
         if (isset($groupData['name'])) {
             $groupModel = $this->getManager()
                 ->getRepository('Shopware\Models\Article\Configurator\Group')
