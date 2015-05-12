@@ -14,7 +14,6 @@ class ConfiguratorWriter
         $this->connection = Shopware()->Models()->getConnection();
         $this->db = Shopware()->Db();
         $this->sets = $this->getSets();
-        $this->groups = $this->getGroups();
     }
 
     public function write($articleId, $articleDetailId, $mainDetailId, $configuratorData)
@@ -180,18 +179,6 @@ class ConfiguratorWriter
         return $sets;
     }
 
-    protected function getGroups()
-    {
-        $sets = array();
-        $result = $this->connection->fetchAll('SELECT `id`, `name` FROM s_article_configurator_groups');
-
-        foreach ($result as $row) {
-            $sets[$row['name']] = $row['id'];
-        }
-
-        return $sets;
-    }
-
     protected function getSetByArticleId($articleId)
     {
         $result = $this->db->fetchRow(
@@ -262,9 +249,12 @@ class ConfiguratorWriter
 
     public function getGroup($name)
     {
-        $groupId = $this->groups[$name];
+        $result = $this->connection->fetchColumn(
+            "SELECT `id` FROM s_article_configurator_group WHERE `name` = ?",
+            array($name)
+        );
 
-        return $groupId;
+        return $result;
     }
 
     public function getOption($name)
