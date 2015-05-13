@@ -33,8 +33,19 @@
 //{block name="backend/swag_import_export/controller/profile"}
 Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
     extend: 'Ext.app.Controller',
+
+    okIcon: 'sprite-tick',
+
+    failIcon: 'sprite-cross',
+
+    validationUrl: '{url controller="SwagImportExport" action="validateProfile"}',
     
     snippets: {
+        profileValidation: {
+            workingUpdate: '{s name=swag_import_export/profile/validation/workingUpdate}will work for updates{/s}',
+            workingCreate: '{s name=swag_import_export/profile/validation/workingCreate}will work for creates{/s}',
+            notWorkingCreates: '{s name=swag_import_export/profile/validation/notWorkingCreates}will not work for creates, as these columns are missing: {/s}'
+        },
         addChild: {
             failureTitle: '{s name=swag_import_export/profile/add_child/failure_title}Create Child Node Failed{/s}'
         },
@@ -80,7 +91,8 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                 addNewNode: me.addNewNode,
                 saveNode: me.saveNode,
                 deleteNode: me.deleteNode,
-                addNewAttribute: me.addNewAttribute
+                addNewAttribute: me.addNewAttribute,
+                profileSelectChange: me.onProfileSelectChange
             },
             'swag-import-export-window': {
                 addConversion: me.addConversion,
@@ -91,6 +103,52 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
         });
 
         me.callParent(arguments);
+    },
+
+    onProfileSelectChange: function (value, panel, firstLabel, secondLabel) {
+        var me = this, error = false;
+
+        Ext.Ajax.request({
+            url: me.validationUrl,
+            params: {
+                profileId: value.value
+            },
+            success: function(response)
+            {
+                var returnValue = Ext.decode(response.responseText);
+                if(returnValue.success){
+                    firstLabel.setText(me.snippets.profileValidation.workingUpdate);
+                    me.setButtonIcon(secondLabel, me.okIcon);
+                    secondLabel.setText(me.snippets.profileValidation.workingCreate);
+                } else {
+                    var additionalText = me.createAdditionalText(returnValue.missingFields);
+                    firstLabel.setText(me.snippets.profileValidation.workingUpdate);
+                    me.setButtonIcon(secondLabel, me.failIcon);
+                    secondLabel.setText(me.snippets.profileValidation.notWorkingCreates + additionalText);
+                }
+            }
+        });
+        panel.show();
+    },
+
+    createAdditionalText: function (missingFields) {
+        var additionalText = '',
+            length = missingFields.length,
+            currentCounter = 1;
+
+        Ext.each(missingFields, function (value) {
+            if(currentCounter == length) {
+                additionalText = additionalText + value;
+            } else {
+                additionalText = additionalText + value + ', ';
+            }
+            currentCounter++;
+        });
+        return additionalText;
+    },
+    
+    setButtonIcon: function (button, icon) {
+        button.setIconCls(icon);
     },
     
     addConversion: function(grid, editor) {
