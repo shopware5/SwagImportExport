@@ -24,6 +24,7 @@
  */
 
 use Shopware\Components\SwagImportExport\DataWorkflow;
+use Shopware\Components\SwagImportExport\Utils\ProfileComparator;
 use Shopware\Components\SwagImportExport\Utils\TreeHelper;
 use Shopware\Components\SwagImportExport\Utils\DataHelper;
 use Shopware\Components\SwagImportExport\StatusLogger;
@@ -1382,6 +1383,36 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         }
 
         return $data;
+    }
+
+    /**
+     * This method is ajaxCalled and return the missing ShopwareFields(Database fields) of the selected Profile
+     *
+     * @return Enlight_View|Enlight_View_Default
+     */
+    public function validateProfileAction()
+    {
+        $profileId = (int)$this->request()->get('profileId');
+        $profileRepository = $this->getProfileRepository();
+        $profileEntity = $profileRepository->findOneBy(array('id' => $profileId));
+        $returnValue = array('hidePanel' => false);
+
+        if(!isset($profileEntity)) {
+            $returnValue['hidePanel'] = true;
+            return $this->View()->assign(
+                $returnValue
+            );
+        }
+
+        $profileComparator = new ProfileComparator();
+        $returnValue = array_merge(
+            $returnValue,
+            $profileComparator->compareProfile($profileEntity)
+        );
+
+        return $this->View()->assign(
+            $returnValue
+        );
     }
 
 }
