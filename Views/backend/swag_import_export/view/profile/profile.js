@@ -49,7 +49,8 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
             duplicateProfile: '{s name=swag_import_export/profile/profile/toolbar/duplicate_profile}Duplicate Selected Profile{/s}',
             renameProfile: '{s name=swag_import_export/profile/profile/toolbar/rename_profile}Rename Selected Profile{/s}',
             showConversions: '{s name=swag_import_export/profile/profile/toolbar/show_conversions}Show Conversions{/s}'
-        }
+        },
+        validationPanelTitle: '{s name=swag_import_export/profile/profileValidation/title}Your current profile:{/s}'
     },
     
     layout: 'border',
@@ -97,11 +98,44 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
         me.sectionStore = Ext.create('Shopware.apps.SwagImportExport.store.Section');
 
         me.title = me.snippets.title;
-        me.items = [me.createToolbar(), me.createTreeItem(), me.createFormPanel()];
+        me.items = [me.createToolbar(), me.createValidationPanel().hide(), me.createTreeItem(), me.createFormPanel()];
 		
 		me.treePanel.getView().setDisabled(true);
 		me.callParent(arguments);
 	},
+
+    createValidationPanel: function () {
+        var me = this;
+        me.firstValidationLabel = me.createLableSign();
+        me.secondValidationLabel = me.createLableSign();
+        me.validationPanel = Ext.create('Ext.panel.Panel', {
+            region: 'north',
+            title: me.snippets.validationPanelTitle,
+            items: [{
+                xtype: 'panel',
+                bodyPadding: 2,
+                border: false,
+                items:[me.firstValidationLabel]
+            }, {
+                xtype: 'panel',
+                bodyPadding: 2,
+                border: false,
+                items:[me.secondValidationLabel]
+            }]
+        });
+        return me.validationPanel;
+    },
+    
+    createLableSign: function () {
+        return Ext.create('Ext.Button', {
+            iconCls: 'sprite-tick',
+            border: false,
+            style: {
+                background: 'none',
+                cursor: 'text'
+            }
+        });
+    },
 
     createToolbar: function() {
         var me = this;
@@ -123,6 +157,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
                     listeners: {
                         change: function(combo, value) {
                             me.loadNew(value);
+                            me.fireEvent('profileSelectChange', combo, me.validationPanel, me.firstValidationLabel, me.secondValidationLabel);
                         }
                     }
                 },
