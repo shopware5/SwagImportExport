@@ -29,7 +29,6 @@ s_articles_details:
       suppliernumber: ''
       kind: 1
       additionaltext: ''
-      impressions: 0
       sales: 0
       active: 1
       instock: 0

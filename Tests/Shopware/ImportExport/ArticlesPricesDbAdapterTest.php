@@ -50,29 +50,28 @@ class ArticlesPricesDbAdapterTest extends DbAdapterTest
         return static::getDataProvider('testReadRecordIds');
     }
 
-    public function testDefaultColumns()
-    {
-        $this->defaultColumns();
-    }
-
-    /**
-     * @dataProvider writeProvider
-     */
-    public function testWrite($data, $expectedInsertedRows)
-    {
-        $this->write($data, $expectedInsertedRows);
-
-        $queryTable = $this->getDatabaseTester()->getConnection()->createQueryTable(
-                $this->dbTable, 'SELECT * FROM ' . $this->dbTable
-        );
-//        echo $queryTable->__toString();
-    }
-
-    public function writeProvider()
-    {
-        return static::getDataProvider('testWrite');
-    }
-
+//    public function testDefaultColumns()
+//    {
+//        $this->defaultColumns();
+//    }
+//
+//    /**
+//     * @dataProvider writeProvider
+//     */
+//    public function testWrite($data, $expectedInsertedRows)
+//    {
+//        $this->write($data, $expectedInsertedRows);
+//
+//        $queryTable = $this->getDatabaseTester()->getConnection()->createQueryTable(
+//                $this->dbTable, 'SELECT * FROM ' . $this->dbTable
+//        );
+//    }
+//
+//    public function writeProvider()
+//    {
+//        return static::getDataProvider('testWrite');
+//    }
+//
 //    /**
 //     * @dataProvider insertOneProvider
 //     */

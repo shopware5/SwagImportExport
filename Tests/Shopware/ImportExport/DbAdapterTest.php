@@ -25,7 +25,7 @@ class DbAdapterTest extends ImportExportTestHelper
         if (static::$dataProvider == NULL) {
             static::$dataProvider = static::parseYaml(dirname(__FILE__) . '/' . static::$yamlFile);
         }
-        
+
         return static::$dataProvider[$testCase];
     }
 
@@ -40,12 +40,12 @@ class DbAdapterTest extends ImportExportTestHelper
     public function read($columns, $ids, $expected, $expectedCount)
     {
         $dataFactory = $this->Plugin()->getDataFactory();
+        $dbAdapter = $dataFactory->createDbAdapter($this->dbAdaptor);
 
-        $catDbAdapter = $dataFactory->createDbAdapter($this->dbAdaptor);
-
-        $rawData = $catDbAdapter->read($ids, $columns);
+        $rawData = $dbAdapter->read($ids, $columns);
 
         $rawData = $rawData['default'];
+
         foreach ($expected as $key1 => $value) {
             foreach ($value as $key2 => $val) {
                 $this->assertEquals($rawData[$key1][$key2], $val);

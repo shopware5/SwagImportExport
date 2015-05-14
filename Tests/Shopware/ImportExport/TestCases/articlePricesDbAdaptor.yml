@@ -1,10 +1,10 @@
 testRead:
     test1:
-        columns: 'price.id, price.price'
+        columns: [price.id, price.price]
         ids: [1, 2, 3, 4, 5]
         expected:
-            1:
-                price: 59.874
+            0:
+                price: 75
         expectedCount: 5
 testReadRecordIds:
     test1:
