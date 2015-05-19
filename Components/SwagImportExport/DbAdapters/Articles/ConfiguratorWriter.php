@@ -250,7 +250,7 @@ class ConfiguratorWriter
     public function getGroup($name)
     {
         $result = $this->connection->fetchColumn(
-            "SELECT `id` FROM s_article_configurator_group WHERE `name` = ?",
+            "SELECT `id` FROM s_article_configurator_groups WHERE `name` = ?",
             array($name)
         );
 
