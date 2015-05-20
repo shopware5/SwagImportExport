@@ -749,7 +749,11 @@ class ArticlesDbAdapter implements DataDbAdapter
     public function getImageColumns()
     {
         $request = Shopware()->Front()->Request();
-        $path = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() . '/media/image/';
+        if ($request) {
+            $path = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() . '/media/image/';
+        } else {
+            $path = $this->getPath();
+        }
 
         return array(
             'images.id as id',
@@ -1234,4 +1238,18 @@ class ArticlesDbAdapter implements DataDbAdapter
         return $builder;
     }
 
+    protected function getPath()
+    {
+        $builder = $this->getManager()->createQueryBuilder();
+        $shopData = $builder->select('shop.host, shop.secure')
+            ->from('Shopware\Models\Shop\Shop', 'shop')
+            ->where('shop.host IS NOT NULL')
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        $scheme = $shopData['secure'] ? 'https://' : 'http://';
+        $httpHost = $shopData['host'];
+
+        return $scheme . $httpHost . '/media/image/';
+    }
 }
