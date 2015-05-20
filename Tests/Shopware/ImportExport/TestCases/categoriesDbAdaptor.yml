@@ -51,7 +51,7 @@ testWrite:
         data:
             default:
                 0:
-                    id: 15
+                    categoryId: 15
                     parentId: 3
                     name: 'Test'
         expectedInsertedRows: 1
@@ -59,11 +59,11 @@ testWrite:
         data:
             default:
                 0:
-                    id: 15
+                    categoryId: 15
                     parentId: 3
                     name: 'Test'
                 1:
-                    id: 19
+                    categoryId: 19
                     parentId: 15
                     name: 'Test 2'
         expectedInsertedRows: 2
@@ -72,7 +72,7 @@ testInsertOne:
         data:
             default:
                 0:
-                    id: 15
+                    categoryId: 15
                     parentId: 3
                     name: 'Test'
         expectedRow:
@@ -83,7 +83,7 @@ testInsertOne:
         data:
             default:
                 0:
-                    id: 16
+                    categoryId: 16
                     parentId: 8
                     name: 'Test123'
         expectedRow:
@@ -95,7 +95,7 @@ testUpdateOne:
         category:
           default:
             0:
-              id: 8
+              categoryId: 8
               parentId: 5
               name: 'Test'
         expectedRow:
@@ -107,7 +107,7 @@ testUpdateOne:
         category:
           default:
             0:
-              id: 6
+              categoryId: 6
               parentId: 5
               name: 'Test'
         expectedRow:

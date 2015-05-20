@@ -96,9 +96,11 @@ class CategoriesDbAdapter implements DataDbAdapter
 
         $builder = $this->getBuilder($columns['default'], $ids);
 
-        $categories = $builder->getQuery()->getResult();
+        $categories = $builder->getQuery()->getArrayResult();
+
         $result['default'] = DbAdapterHelper::decodeHtmlEntities($categories);
         $result['customerGroups'] = $this->getBuilder($this->getCustomerGroupsColumns(), $ids)->getQuery()->getResult();
+
         return $result;
     }
 
@@ -264,8 +266,13 @@ class CategoriesDbAdapter implements DataDbAdapter
 
         if (!$category instanceof Category ) {
             $category = new Category();
-            $category->fromArray($record);
+
+            if (isset($record['categoryId']) && !empty($record['categoryId'])){
+                $category->setId($record['categoryId']);
+            }
         }
+
+        $category->fromArray($record);
 
         $category->setParent($parent);
 

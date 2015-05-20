@@ -48,13 +48,6 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
     },
     
     snippets: {
-        profileValidation: {
-            workingUpdate: '{s name=swag_import_export/profile/validation/workingUpdate}will work for updates{/s}',
-            notWorkingUpdate: '{s name=swag_import_export/profile/validation/notWorkingUpdate}will not work for updates, as these columns are missing: {/s}',
-            workingCreate: '{s name=swag_import_export/profile/validation/workingCreate}will work for creates{/s}',
-            notWorkingCreates: '{s name=swag_import_export/profile/validation/notWorkingCreates}will not work for creates, as these columns are missing: {/s}',
-            notForCreates: '{s name=swag_import_export/profile/validation/notForCreates}Profile is not suitable for creating{/s}'
-        },
         addChild: {
             failureTitle: '{s name=swag_import_export/profile/add_child/failure_title}Create Child Node Failed{/s}'
         },

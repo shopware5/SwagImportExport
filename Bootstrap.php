@@ -162,7 +162,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
     public function uninstall()
     {
         $this->removeDatabaseTables();
-        
+
         return true;
     }
 
@@ -176,15 +176,15 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         $classLoader = new \Doctrine\Common\ClassLoader('DoctrineExtensions', $this->Path() . 'Components/');
         $classLoader->register();
         $config->addCustomStringFunction('GroupConcat', 'DoctrineExtensions\Query\Mysql\GroupConcat');
-        
+
         $this->Application()->Loader()->registerNamespace(
-                'Shopware\Components', $this->Path() . 'Components/'
+            'Shopware\Components', $this->Path() . 'Components/'
         );
         $this->Application()->Loader()->registerNamespace(
-                'Shopware\Commands', $this->Path() . 'Commands/'
+            'Shopware\Commands', $this->Path() . 'Commands/'
         );
     }
-    
+
     private function createDirectories()
     {
         $importCronPath = Shopware()->DocPath() . 'files/import_cron/';
@@ -269,7 +269,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         try {
             $tool->createSchema($classes);
         } catch (\Doctrine\ORM\Tools\ToolsException $e) {
-            
+
         }
     }
 
@@ -297,15 +297,15 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
     public function createMenu()
     {
         $this->createMenuItem(
-                array(
-                    'label' => 'Import/Export Advanced',
-                    'controller' => 'SwagImportExport',
-                    'class' => 'sprite-server--plus',
-                    'action' => 'Index',
-                    'active' => 1,
-                    'parent' => $this->Menu()->findOneBy('label', 'Inhalte'),
-                    'position' => 6,
-                )
+            array(
+                'label' => 'Import/Export Advanced',
+                'controller' => 'SwagImportExport',
+                'class' => 'sprite-server--plus',
+                'action' => 'Index',
+                'active' => 1,
+                'parent' => $this->Menu()->findOneBy('label', 'Inhalte'),
+                'position' => 6,
+            )
         );
     }
 
@@ -315,20 +315,20 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
     protected function registerEvents()
     {
         $this->subscribeEvent(
-                'Enlight_Controller_Dispatcher_ControllerPath_Backend_SwagImportExport', 'getBackendController'
+            'Enlight_Controller_Dispatcher_ControllerPath_Backend_SwagImportExport', 'getBackendController'
         );
         $this->subscribeEvent(
-                'Enlight_Controller_Dispatcher_ControllerPath_Backend_SwagImportExportCron', 'getCronjobController'
+            'Enlight_Controller_Dispatcher_ControllerPath_Backend_SwagImportExportCron', 'getCronjobController'
         );
         $this->subscribeEvent(
-                'Enlight_Controller_Action_PostDispatch_Backend_Index', 'injectBackendAceEditor'
+            'Enlight_Controller_Action_PostDispatch_Backend_Index', 'injectBackendAceEditor'
         );
         $this->subscribeEvent(
-                'Shopware_Console_Add_Command', 'onAddConsoleCommand'
+            'Shopware_Console_Add_Command', 'onAddConsoleCommand'
         );
-        
+
         $this->subscribeEvent(
-                'Enlight_Controller_Dispatcher_ControllerPath_Frontend_SwagImportExport', 'getFrontendController'
+            'Enlight_Controller_Dispatcher_ControllerPath_Frontend_SwagImportExport', 'getFrontendController'
         );
     }
 
@@ -344,11 +344,11 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         $this->registerMyNamespace();
 
         $this->Application()->Snippets()->addConfigDir(
-                $this->Path() . 'Snippets/'
+            $this->Path() . 'Snippets/'
         );
 
         $this->Application()->Template()->addTemplateDir(
-                $this->Path() . 'Views/'
+            $this->Path() . 'Views/'
         );
 
         return $this->Path() . '/Controllers/Backend/SwagImportExport.php';
@@ -364,17 +364,17 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         $this->checkLicense();
         $this->registerMyNamespace();
         $this->Application()->Snippets()->addConfigDir(
-                $this->Path() . 'Snippets/'
+            $this->Path() . 'Snippets/'
         );
         $this->Application()->Template()->addTemplateDir(
-                $this->Path() . 'Views/'
+            $this->Path() . 'Views/'
         );
         return $this->Path() . '/Controllers/Backend/SwagImportExportCron.php';
     }
 
     /**
      * Injects Ace Editor used in Conversions GUI
-     * 
+     *
      * @param Enlight_Event_EventArgs $args
      */
     public function injectBackendAceEditor(Enlight_Event_EventArgs $args)
@@ -406,10 +406,10 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
 
         return $this->Path() . '/Controllers/Frontend/SwagImportExport.php';
     }
-    
+
     /**
      * Adds the console commands (sw:import and sw:export)
-     * 
+     *
      * @param Enlight_Event_EventArgs $args
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
@@ -471,14 +471,14 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
             }
         }
     }
-    
+
     /**
      * Create plugin configuration
      */
     public function createConfiguration()
     {
         $form = $this->Form();
-        
+
         $form->setElement(
             'combo',
             'SwagImportExportErrorMode',
@@ -508,10 +508,10 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
                 'value' => 2
             )
         );
-        
+
         $this->createTranslations();
     }
-    
+
     /**
      * @param   bool $throwException
      * @throws  Exception
@@ -536,7 +536,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         }
         return $r;
     }
-    
+
     /**
      * Translation for plugin configuration
      */
@@ -551,7 +551,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
                     'label' => 'Continue import/export if an error occurs during the process'
                 )
             ),
-            
+
             'de_DE' => array(
                 'SwagImportExportImageMode' => array(
                     'label' => 'Bildimport-Modus'
