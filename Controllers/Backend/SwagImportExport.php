@@ -511,7 +511,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         if ($this->Request()->getParam('limit')) {
             $limit = $this->Request()->getParam('limit');
         }
-        
+
         if ($this->Request()->getParam('offset')) {
             $offset = $this->Request()->getParam('offset');
         }
@@ -555,7 +555,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $type = $postData['type'];
         $format = $postData['format'];
         $username = Shopware()->Auth()->getIdentity()->username;
-        
+
         $dataIO->initialize($colOpts, $limit, $filter, $type, $format, $maxRecordCount);
         $dataIO->setUsername($username);
 
@@ -564,7 +564,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         );
 
         $dataWorkflow = new DataWorkflow($dataIO, $profile, $dataTransformerChain, $fileWriter);
-            
+
         try {
             $post = $dataWorkflow->export($postData);
 
@@ -581,6 +581,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
             $logger->writeToFile($logData);
 
+            unset($post['filter']);
             return $this->View()->assign(array('s' => $profile, 'success' => true, 'data' => $post));
         } catch (Exception $e) {
             $logger->write($e->getMessage(), 'true');
