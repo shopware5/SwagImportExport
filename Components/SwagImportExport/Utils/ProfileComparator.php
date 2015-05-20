@@ -17,19 +17,18 @@ class ProfileComparator
     /**
      * Compare the Arrays and returns an array that contains the missing fields
      *
-     * @param $defaultProfile
-     * @param $currentProfile
+     * @param $defaultProfile array
+     * @param $currentProfile array
      * @return array
      */
     private function compareArrays($defaultProfile, $currentProfile)
     {
-        $returnValue = array();
-        foreach ($defaultProfile as $value) {
-            if(!in_array($value, $currentProfile)){
-                $returnValue[] = $value;
-            }
-        }
-        return $returnValue;
+        return array_values(
+            array_diff(
+                $defaultProfile,
+                $currentProfile
+            )
+        );
     }
 
     /**
@@ -83,9 +82,15 @@ class ProfileComparator
      */
     public function compareProfile($profileEntity)
     {
+        $returnValue = array();
+
         $defaultProfile = $this->getRequiredValues($this->objectToArray(json_decode($this->getDefaultProfileByType($profileEntity->getType()))));
         $currentProfile = $this->getRequiredValues($this->objectToArray(json_decode($profileEntity->getTree())));
-
-        return $this->compareArrays($defaultProfile, $currentProfile);
+        $returnValue['create'] = $this->compareArrays($defaultProfile, $currentProfile);
+        
+        $defaultProfile = ProfileComparatorHelper::getRequiredUpdateNodesByName($profileEntity->getType());
+        $returnValue['update'] = $this->compareArrays($defaultProfile, $currentProfile);
+        
+        return $returnValue;
     }
 }

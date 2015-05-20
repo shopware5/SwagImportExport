@@ -1395,19 +1395,24 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $profileId = (int)$this->request()->get('profileId');
         $profileRepository = $this->getProfileRepository();
         $profileEntity = $profileRepository->findOneBy(array('id' => $profileId));
+        $returnValue = array('hidePanel' => false);
 
-        $profileComparator = new ProfileComparator();
-        $requiredFields = $profileComparator->compareProfile($profileEntity);
-
-        if(count($requiredFields) > 0){
-            return $this->View()->assign(array(
-                'success' => false, 'missingFields' => $requiredFields
-            ));
+        if(!isset($profileEntity)) {
+            $returnValue['hidePanel'] = true;
+            return $this->View()->assign(
+                $returnValue
+            );
         }
 
-        return $this->View()->assign(array(
-            'success' => true
-        ));
+        $profileComparator = new ProfileComparator();
+        $returnValue = array_merge(
+            $returnValue,
+            $profileComparator->compareProfile($profileEntity)
+        );
+
+        return $this->View()->assign(
+            $returnValue
+        );
     }
 
 }
