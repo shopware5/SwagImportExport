@@ -134,8 +134,10 @@ class ArticleWriter
             // todo: read default tax rate from config
             $article['taxId'] = $this->taxRates[0];
         }
+
         if (isset($article['tax'])) {
-            $article['taxId'] = $this->getTax($article['tax'], $orderNumber);
+            $tax = number_format($article['tax'], 2);
+            $article['taxId'] = $this->getTax($tax, $orderNumber);
         }
 
         if (!isset($article['supplierId']) && isset($article['supplierName'])){

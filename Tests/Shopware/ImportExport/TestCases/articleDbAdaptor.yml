@@ -1,0 +1,70 @@
+testRead:
+    test1:
+        columns:
+          article:
+            [article.id as articleId, article.name as name, variant.number as orderNumber]
+          price:
+            [prices.price as price]
+          image:
+            [images.path as path]
+          propertyValues:
+            [propertyGroup.name as propertyGroupName, propertyOptions.name as propertyOptionName, propertyValues.value as propertyValueName]
+          configurator:
+            [configuratorSet.name as configSetName, configuratorGroup.name as configGroupName, configuratorOptions.name as configOptionName]
+          similar:
+            [similarDetail.number as ordernumber]
+          accessory:
+            [accessoryDetail.number as ordernumber]
+          category:
+            [categories.id as categoryId]
+        ids: [1, 2]
+        expected:
+          article:
+            0:
+              name: Test1
+              orderNumber: SW10001
+            1:
+              name: Test2
+              orderNumber: SW10002
+        expectedCount: 2
+testReadRecordIds:
+    test1:
+        start: 0
+        limit: 6
+        expectedCount: 2
+testWrite:
+    test1:
+        data:
+          article:
+            0:
+              mainNumber: 'SW10004'
+              orderNumber: 'SW10004'
+              name: 'shopware-test1'
+              supplierName: 'Testhersteller'
+              tax: "19.00"
+              active: 1
+              description: 'Short description'
+              descriptionLong: 'Long description'
+          price:
+            0:
+              priceGroup: 'EK'
+              price: 100
+              parentIndexElement: 0
+            1:
+              priceGroup: 'H'
+              price: 50
+              parentIndexElement: 0
+        expectedRows:
+            s_articles:
+              0:
+                name: 'shopware-test1'
+            s_articles_details:
+              0:
+                orderNumber: 'SW10004'
+            s_articles_prices:
+              0:
+                priceGroup: 'EK'
+                price: 84.033613445378
+              1:
+                priceGroup: 'H'
+                price: 50
