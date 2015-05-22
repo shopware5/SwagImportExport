@@ -13,7 +13,7 @@ class DbAdapterTest extends ImportExportTestHelper
     protected static $yamlFile;
     protected static $dataProvider;
 
-    public static function assertTablesEqual(PHPUnit_Extensions_Database_DataSet_ITable $expected, PHPUnit_Extensions_Database_DataSet_ITable $actual, $message = '')
+    public static function assertTablesEqual(\PHPUnit_Extensions_Database_DataSet_DefaultTable $expected, PHPUnit_Extensions_Database_DataSet_ITable $actual, $message = '')
     {
         $constraint = new \PHPUnit_Extensions_Database_Constraint_TableIsEqual($expected);
 
@@ -79,8 +79,8 @@ class DbAdapterTest extends ImportExportTestHelper
 
         $dataFactory = $this->Plugin()->getDataFactory();
 
-        $catDbAdapter = $dataFactory->createDbAdapter($this->dbAdaptor);
-        $catDbAdapter->write($data);
+        $dbAdapter = $dataFactory->createDbAdapter($this->dbAdaptor);
+        $dbAdapter->write($data);
 
         $afterTestCount = $this->getDatabaseTester()->getConnection()->getRowCount($this->dbTable);
 

@@ -1,8 +1,8 @@
 s_articles:
     -
-      id: 277
+      id: 1
       supplierID: 14
-      name: Test
+      name: Test1
       description: ''
       description_long: ''
       datum: 2014-06-11
@@ -21,11 +21,33 @@ s_articles:
       template: ''
       mode: 0
       main_detail_id: 834
+    -
+      id: 2
+      supplierID: 14
+      name: Test2
+      description: ''
+      description_long: ''
+      datum: 2014-06-11
+      active: 1
+      taxID: 1
+      pseudosales: 0
+      topseller: 0
+      metaTitle: ''
+      keywords: ''
+      changetime: 2014-06-12 16:39:38
+      pricegroupID: 1
+      pricegroupActive: 0
+      laststock: 0
+      crossbundlelook: 0
+      notification: 0
+      template: ''
+      mode: 0
+      main_detail_id: 1101
 s_articles_details:
     -
-      id: 834
-      articleID: 277
-      ordernumber: SW10006
+      id: 1
+      articleID: 1
+      ordernumber: SW10001
       suppliernumber: ''
       kind: 1
       additionaltext: ''
@@ -39,14 +61,31 @@ s_articles_details:
       packunit: ''
       shippingfree: 0
       shippingtime: ''
+    -
+      id: 2
+      articleID: 2
+      ordernumber: SW10002
+      suppliernumber: ''
+      kind: 1
+      additionaltext: ''
+      sales: 0
+      active: 1
+      instock: 12
+      stockmin: 0
+      weight: 0.000
+      position: 0
+      ean: ''
+      packunit: ''
+      shippingfree: 0
+      shippingtime: ''
 s_articles_prices:
     -
       id: 1
       pricegroup: EK
       from: 1
       to: 3
-      articleID: 277
-      articledetailsID: 834
+      articleID: 1
+      articledetailsID: 1
       price: 63.025
       pseudoprice: 0
       baseprice: 0
@@ -56,8 +95,8 @@ s_articles_prices:
       pricegroup: EK
       from: 4
       to: 7
-      articleID: 277
-      articledetailsID: 834
+      articleID: 1
+      articledetailsID: 1
       price: 59.874
       pseudoprice: 0
       baseprice: 0
@@ -67,8 +106,8 @@ s_articles_prices:
       pricegroup: EK
       from: 8
       to: 11
-      articleID: 277
-      articledetailsID: 834
+      articleID: 1
+      articledetailsID: 1
       price: 59.244
       pseudoprice: 0
       baseprice: 0
@@ -78,8 +117,8 @@ s_articles_prices:
       pricegroup: EK
       from: 12
       to: 15
-      articleID: 277
-      articledetailsID: 834
+      articleID: 1
+      articledetailsID: 1
       price: 58.613
       pseudoprice: 0
       baseprice: 0
@@ -89,9 +128,20 @@ s_articles_prices:
       pricegroup: EK
       from: 16
       to: beliebig
-      articleID: 277
-      articledetailsID: 834
+      articleID: 1
+      articledetailsID: 1
       price: 57.983
+      pseudoprice: 0
+      baseprice: 0
+      percent: 8.00
+    -
+      id: 6
+      pricegroup: EK
+      from: 1
+      to: beliebig
+      articleID: 2
+      articledetailsID: 2
+      price: 100
       pseudoprice: 0
       baseprice: 0
       percent: 8.00
