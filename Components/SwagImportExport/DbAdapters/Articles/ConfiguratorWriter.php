@@ -106,6 +106,9 @@ class ConfiguratorWriter
 
             $this->updateOptionRelation($articleDetailId, $optionId);
             $this->updateSetOptionRelation($configuratorSetId, $optionId);
+
+            unset($groupId);
+            unset($optionId);
         }
     }
 

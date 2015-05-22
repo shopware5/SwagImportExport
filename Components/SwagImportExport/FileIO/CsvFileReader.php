@@ -34,11 +34,11 @@ class CsvFileReader implements FileReader
 
         for ($i = 1; $i <= $step; $i++) {
 
+            $row = $file->current();
+
             if (!$file->valid()) {
                 break;
             }
-
-            $row = $file->current();
 
             foreach ($columnNames as $key => $name) {
                 $data[$name] = isset($row[$key]) ? $row[$key] : '';
