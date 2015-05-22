@@ -28,13 +28,13 @@ class CsvFileReader implements FileReader
 
         $columnNames = $this->getColumnNames($file);
 
-        for ($i = 1; $i <= $step; $i++){
-            $offset = $position + $i;
+        //moves the file pointer to a certain line
+        // +1 to ignore the first line of the file
+        $file->seek($position + 1);
 
-            //moves the file pointer to a certain line
-            $file->seek($offset);
+        for ($i = 1; $i <= $step; $i++) {
 
-            if (!$file->valid()){
+            if (!$file->valid()) {
                 break;
             }
 
@@ -45,6 +45,9 @@ class CsvFileReader implements FileReader
             }
 
             $readRows[] = $data;
+
+            // Move the pointer to the next line
+            $file->next();
         }
 
         return $readRows;
