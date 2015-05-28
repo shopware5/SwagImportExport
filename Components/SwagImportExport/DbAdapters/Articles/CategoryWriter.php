@@ -46,15 +46,18 @@ class CategoryWriter
                 function ($category) use ($articleId) {
                     if (!empty($category['categoryId'])) {
                         $isCategoryExists = $this->isCategoryExists($category['categoryId']);
-                        if (!$isCategoryExists) {
+                    }
+
+                    if (!empty($category['categoryId']) && !$isCategoryExists && !empty($category['categoryPath']) ||
+                        empty($category['categoryId']) &&  !empty($category['categoryPath'])
+                    ) {
+                        $category['categoryId'] = $this->getCategoryId($category['categoryPath']);
+                        $isNotLeaf = $this->isNotLeaf($category['categoryId']);
+                        if ($isNotLeaf && !$isCategoryExists) {
                             $message = SnippetsHelper::getNamespace()
                                 ->get('adapters/articles/category_not_found', "Category with id %s could not be found.");
                             throw new AdapterException(sprintf($message, $category['categoryId']));
-                        }
-                    } elseif (!empty($category['categoryPath']) ) {
-                        $category['categoryId'] = $this->getCategoryId($category['categoryPath']);
-                        $isNotLeaf = $this->isNotLeaf($category['categoryId']);
-                        if ($isNotLeaf) {
+                        } elseif ($isNotLeaf) {
                             $message = SnippetsHelper::getNamespace()
                                 ->get('adapters/articles/category_not_leaf', "Category with id '%s' is not a leaf");
                             throw new AdapterException(sprintf($message, $category['categoryId']));
@@ -138,9 +141,10 @@ class CategoryWriter
             INSERT INTO s_categories (parent, path, added, changed, description, active, showfiltergroups)
             VALUES {$values}
         ";
-        $this->connection->exec($sql);
 
-        $insertedId = $this->connection->lastInsertId();
+        $this->db->exec($sql);
+        $insertedId = $this->db->lastInsertId();
+
         return $insertedId;
     }
 

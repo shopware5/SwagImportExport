@@ -191,25 +191,119 @@ class ArticlesDbAdapter implements DataDbAdapter
         $result['accessory'] = $accessoryBuilder->getQuery()->getResult();
 
         //categories
-        $aritcleIds = $this->getManager()->createQueryBuilder()
-            ->select('article.id')
-            ->from('Shopware\Models\Article\Detail', 'variant')
-            ->join('variant.article', 'article')
-            ->where('variant.id IN (:ids)')
-            ->setParameter('ids', $ids)
-            ->groupBy('article.id');
-
-        $mappedArticleIds = array_map(function($item) {
-            return $item['id'];
-        }, $aritcleIds->getQuery()->getResult());
-
-        $categoryBuilder = $this->getCategoryBuilder($columns['category'], $mappedArticleIds);
-
-        $result['category'] = $categoryBuilder->getQuery()->getResult();
+        $result['category'] = $this->prepareCategoryExport($ids, $columns['category']);
 
         $result['translation'] = $this->prepareTranslationExport($ids);
 
         return $result;
+    }
+
+    public function prepareCategoryExport($ids, $categoryColumns)
+    {
+        $mappedArticleIds = $this->getArticleIdsByDetailIds($ids);
+
+        $categoryBuilder = $this->getCategoryBuilder($categoryColumns, $mappedArticleIds);
+        $articleCategories = $categoryBuilder->getQuery()->getResult();
+
+        $categoryMapper = $this->getAssignedCategoryNames($articleCategories);
+
+        //convert path
+        foreach($articleCategories as &$pathIds) {
+            $pathIds['categoryPath'] = $this->generatePath($pathIds, $categoryMapper);
+        }
+
+        return $articleCategories;
+    }
+
+    /**
+     * Returns article ids
+     * @param $detailIds
+     * @return array
+     */
+    protected function getArticleIdsByDetailIds($detailIds)
+    {
+        $articleIds = $this->getManager()->createQueryBuilder()
+            ->select('article.id')
+            ->from('Shopware\Models\Article\Detail', 'variant')
+            ->join('variant.article', 'article')
+            ->where('variant.id IN (:ids)')
+            ->setParameter('ids', $detailIds)
+            ->groupBy('article.id');
+
+        $mappedArticleIds = array_map(
+            function($item) {
+                return $item['id'];
+            },
+            $articleIds->getQuery()->getResult()
+        );
+
+        return $mappedArticleIds;
+    }
+
+    /**
+     * Collects and creates a helper mapper for category path
+     *
+     * @param array $categories
+     * @return array
+     */
+    protected function getAssignedCategoryNames($categories)
+    {
+        $categoryIds = array();
+        foreach($categories as $category) {
+            if (!empty($category['categoryId'])) {
+                $categoryIds[] = (string) $category['categoryId'];
+            }
+
+            if (!empty($category['categoryPath'])) {
+                $catPath = explode('|', $category['categoryPath']);
+                $categoryIds = array_merge($categoryIds, $catPath);
+            }
+        }
+
+        //only unique ids
+        $categoryIds = array_unique($categoryIds);
+
+        //removes empty value
+        $categoryIds = array_filter($categoryIds);
+
+        $categoriesNames = $this->getManager()->createQueryBuilder()
+            ->select(array('category.id, category.name'))
+            ->from('Shopware\Models\Category\Category', 'category')
+            ->where('category.id IN (:ids)')
+            ->setParameter('ids', $categoryIds)
+            ->getQuery()->getResult();
+
+        $names = array();
+        foreach($categoriesNames as $name) {
+            $names[$name['id']] = $name['name'];
+        }
+
+        return $names;
+    }
+
+    /**
+     * @param array $category contains category data
+     * @param array $mapper contains categories' names
+     * @return string converted path
+     */
+    protected function generatePath($category, $mapper)
+    {
+        $ids = array();
+        if (!empty($category['categoryPath'])) {
+            foreach(explode('|', $category['categoryPath']) as $id) {
+                $ids[] = $mapper[$id];
+            }
+        }
+
+        if (!empty($category['categoryId'])) {
+            $ids[] = $mapper[$category['categoryId']];
+        }
+
+        $ids = array_filter($ids);
+
+        $path = implode('->', $ids);
+
+        return $path;
     }
 
     public function prepareTranslationExport($ids)
