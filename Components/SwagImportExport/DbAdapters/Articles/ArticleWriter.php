@@ -89,6 +89,17 @@ class ArticleWriter
             $this->db->query('UPDATE s_articles SET main_detail_id = ? WHERE id = ?', array($detailId, $articleId));
         }
 
+        // insert attributes
+        $attributes = $this->mapArticleAttributes($article);
+        $attributes['articleId'] = $articleId;
+        $attributes['articleDetailId'] = $detailId;
+        $builder = $this->dbalHelper->getQueryBuilderForEntity(
+            $attributes,
+            'Shopware\Models\Attribute\Article',
+            $createArticle ? false : $this->getAttrId($detailId)
+        );
+        $builder->execute();
+
         return array($articleId, $detailId, $mainDetailId ? : $detailId);
     }
 
@@ -227,5 +238,27 @@ class ArticleWriter
         return $supplierId;
     }
 
+    protected function mapArticleAttributes($article)
+    {
+        $attributes = array();
+        foreach($article as $key => $value) {
+            $position = strpos($key, 'attribute');
+            if ($position === false || $position !== 0) {
+                continue;
+            }
 
+            $attrKey = lcfirst(str_replace('attribute', '', $key));
+            $attributes[$attrKey] = $value;
+        }
+
+        return $attributes;
+    }
+
+    protected function getAttrId($detailId)
+    {
+        $sql = "SELECT id FROM s_articles_attributes WHERE articledetailsID = ?";
+        $attrId = $this->connection->fetchColumn($sql, array($detailId));
+
+        return $attrId;
+    }
 }
