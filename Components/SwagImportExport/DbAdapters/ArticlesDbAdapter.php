@@ -294,6 +294,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $ids[] = $mapper[$id];
             }
         }
+        krsort($ids);
 
         if (!empty($category['categoryId'])) {
             $ids[] = $mapper[$category['categoryId']];
