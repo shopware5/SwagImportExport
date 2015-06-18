@@ -29,7 +29,9 @@ class ConfiguratorWriter
              * configurator set
              */
             if (!$configuratorSetId && isset($configurator['configSetId']) && !empty($configurator['configSetId'])) {
-                if ($this->checkExistence('s_article_configurator_sets', $configurator['configSetId'])){
+                $setExists = $this->checkExistence('s_article_configurator_sets', $configurator['configSetId']);
+                $match = $this->compareSetIdByName($articleId, $configurator['configSetId']);
+                if ($setExists && $match){
                     $configuratorSetId = $configurator['configSetId'];
                 }
             }
@@ -53,8 +55,12 @@ class ConfiguratorWriter
 
                 $dataSet['public'] = false;
 
-                $configuratorSetId = $this->createSet($dataSet);
-                $this->sets[$dataSet['name']] = $configuratorSetId;
+                if (array_key_exists($dataSet['name'], $this->sets)) {
+                    $configuratorSetId = $this->sets[$dataSet['name']];
+                } else {
+                    $configuratorSetId = $this->createSet($dataSet);
+                    $this->sets[$dataSet['name']] = $configuratorSetId;
+                }
             }
 
             if ($mainDetailId != $articleDetailId){
@@ -92,7 +98,7 @@ class ConfiguratorWriter
                 if (isset($configurator['configOptionPosition']) && !empty($configurator['configOptionPosition'])){
                     $position = $configurator['configOptionPosition'];
                 } else {
-                    $position = 1;
+                    $position = $this->getNextOptionPosition($groupId);
                 }
 
                 $dataOption = array(
@@ -291,8 +297,6 @@ class ConfiguratorWriter
 
     public function getConfiguratorGroup($data)
     {
-        $groupPosition = 0;
-
         if (isset($data['configGroupId'])) {
             if ($this->checkExistence('s_article_configurator_groups', $data['configGroupId'])){
                 $groupId = $data['configGroupId'];
@@ -303,9 +307,10 @@ class ConfiguratorWriter
             $groupId = $this->getGroup($data['configGroupName']);
 
             if (!$groupId) {
+                $groupPosition = $this->getNextGroupPosition();
                 $groupData = array(
                     'name' => $data['configGroupName'],
-                    'option' => $groupPosition
+                    'position' => $groupPosition
                 );
 
                 $groupId = $this->createGroup($groupData);
@@ -320,5 +325,38 @@ class ConfiguratorWriter
         }
 
         return $groupId;
+    }
+
+    protected function getNextGroupPosition()
+    {
+        $position = $this->db->fetchOne("SELECT `position` FROM `s_article_configurator_groups` ORDER BY `position` DESC LIMIT 1");
+        $position = $position ? ++$position : 1;
+
+        return $position;
+    }
+
+    protected function getNextOptionPosition($groupId)
+    {
+        $position = $this->db->fetchOne(
+            "SELECT `position` FROM `s_article_configurator_options` WHERE `group_id` = ? ORDER BY `position` DESC LIMIT 1",
+            $groupId
+        );
+        $position = $position ? ++$position : 1;
+
+        return $position;
+    }
+
+    /**
+     * Compares the given setId from the import file by name
+     *
+     * @param $articleId
+     * @param $setId
+     * @return bool
+     */
+    protected function compareSetIdByName($articleId, $setId)
+    {
+        $setName = 'Set-' . $this->getOrderNumber($articleId);
+
+        return $this->sets[$setName] == $setId;
     }
 }
