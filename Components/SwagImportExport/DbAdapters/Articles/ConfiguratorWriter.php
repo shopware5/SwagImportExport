@@ -90,7 +90,7 @@ class ConfiguratorWriter
             $this->updateGroupsRelation($configuratorSetId, $groupId);
 
             if (isset($configurator['configOptionName']) && !$optionId){
-                $optionId = $this->getOption($configurator['configOptionName']);
+                $optionId = $this->getOptionId($configurator['configOptionName'], $groupId);
             }
 
             //creates option
@@ -266,14 +266,14 @@ class ConfiguratorWriter
         return $result;
     }
 
-    public function getOption($name)
+    public function getOptionId($optionName, $groupId)
     {
-        $result = $this->db->fetchRow(
-            'SELECT `id` FROM s_article_configurator_options WHERE `name` = ?',
-            array($name)
+        $optionId = $this->db->fetchOne(
+            'SELECT `id` FROM s_article_configurator_options WHERE `name` = ? AND `group_id` = ?',
+            array($optionName, $groupId)
         );
 
-        return $result['id'];
+        return $optionId;
     }
 
     public function getOptionRow($id)
