@@ -399,9 +399,9 @@ class FlattenTransformer implements DataTransformerAdapter
                             $newData[$i][$columnMapper['propertyOptionName']] = $value[0];
                             $newData[$i][$key] = $value[1];
                         } else {
-                            $newData[$i][$columnMapper['propertyGroupName']] = $propertyGroupName;
                             $newData[$i][$key] = $values[$i];
                         }
+                        $newData[$i][$columnMapper['propertyGroupName']] = $propertyGroupName;
                     }
                 }
 

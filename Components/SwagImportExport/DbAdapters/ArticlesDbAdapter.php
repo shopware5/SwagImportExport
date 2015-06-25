@@ -553,8 +553,8 @@ class ArticlesDbAdapter implements DataDbAdapter
                         $article['orderNumber'],
                         array_filter(
                             $records['propertyValue'],
-                            function ($property) use ($index) {
-                                return $property['parentIndexElement'] == $index;
+                            function ($property) use ($index, $mainDetailId, $articleDetailId) {
+                                return $property['parentIndexElement'] == $index && $mainDetailId == $articleDetailId;
                             }
                         )
                     );

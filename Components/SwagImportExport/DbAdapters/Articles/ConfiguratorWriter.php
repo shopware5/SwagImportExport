@@ -357,6 +357,6 @@ class ConfiguratorWriter
     {
         $setName = 'Set-' . $this->getOrderNumber($articleId);
 
-        return $this->sets[$setName] == $setId;
+        return $this->getSet($setName) == $setId;
     }
 }
