@@ -107,7 +107,7 @@ class RelationWriter
             $allRelations[] = $relation;
         }
 
-        if ($allRelations) {
+        if ($allRelations && !$processedFlag) {
             $this->deleteRelations($allRelations, $articleId); //delete the relations that don't exist in the csv file, but exist in the db"
         }
 

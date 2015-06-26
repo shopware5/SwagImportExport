@@ -744,6 +744,8 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                     );
                     $this->afterImport($data, $key, $outputFile);
                 }
+            } elseif ($unprocessed) {
+                $post['unprocessed'] = $unprocessed;
             }
 
             if ($dataSession->getTotalCount() > 0 && ($dataSession->getTotalCount() == $post['position'])) {
@@ -782,6 +784,8 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
                     $logger->writeToFile($logData);
                 }
+            } elseif (!empty($post['unprocessed'])) {
+                $post['unprocessed'] = json_encode($post['unprocessed']);
             }
 
             return $this->View()->assign(array('success' => true, 'data' => $post));

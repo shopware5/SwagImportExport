@@ -510,11 +510,15 @@ class ArticlesDbAdapter implements DataDbAdapter
 
         foreach ($records['article'] as $index => $article) {
             try {
-                $processedFlag = isset($article['processed']) && $article['processed'] == 1 ? true : false;
+
+                list($articleId, $articleDetailId, $mainDetailId) = $articleWriter->write($article);
+
+                $processedFlag = isset($article['processed']) && $article['processed'] == 1;
+
+                /**
+                 * Only processed data will be imported
+                 */
                 if (!$processedFlag) {
-
-                    list($articleId, $articleDetailId, $mainDetailId) = $articleWriter->write($article);
-
                     $pricesWriter->write(
                         $articleId,
                         $articleDetailId,
@@ -583,13 +587,20 @@ class ArticlesDbAdapter implements DataDbAdapter
                     );
                 }
 
+                /**
+                 * Processed and unprocessed data will be imported
+                 */
+                if ($processedFlag) {
+                    $article['mainNumber'] = $article['orderNumber'];
+                }
+
                 $relationWriter->write(
                     $articleId,
                     $article['mainNumber'],
                     array_filter(
                         $records['accessory'],
-                        function ($accessory) use ($index) {
-                            return $accessory['parentIndexElement'] == $index;
+                        function ($accessory) use ($index, $mainDetailId, $articleDetailId) {
+                            return $accessory['parentIndexElement'] == $index && $mainDetailId == $articleDetailId;
                         }
                     ),
                     'accessory',
@@ -601,8 +612,8 @@ class ArticlesDbAdapter implements DataDbAdapter
                     $article['mainNumber'],
                     array_filter(
                         $records['similar'],
-                        function ($similar) use ($index) {
-                            return $similar['parentIndexElement'] == $index;
+                        function ($similar) use ($index, $mainDetailId, $articleDetailId) {
+                            return $similar['parentIndexElement'] == $index && $mainDetailId == $articleDetailId;
                         }
                     ),
                     'similar',
@@ -1032,7 +1043,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         $articleData = array(
             'articleId' => $articleNumber,
             'orderNumber' => $articleNumber,
-//            'mainNumber' => $articleNumber,
+//            'mainNumber' => $articleNumber, //TODO: check if this could be used
             'processed' => 1
         );
 
