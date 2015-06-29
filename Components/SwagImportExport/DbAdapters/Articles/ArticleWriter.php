@@ -43,6 +43,10 @@ class ArticleWriter
     {
         list($mainDetailId, $articleId, $detailId) = $this->findExistingEntries($article);
 
+        if ($article['processed']) {
+            return array($articleId, $detailId, $mainDetailId ? : $detailId);
+        }
+
         $createDetail = $detailId == 0;
 
         // if detail needs to be created and the (different) mainDetail does not exist: error

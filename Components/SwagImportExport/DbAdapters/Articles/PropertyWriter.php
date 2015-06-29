@@ -19,6 +19,10 @@ class PropertyWriter
 
     public function write($articleId, $orderNumber, $propertiesData)
     {
+        if (!$propertiesData) {
+            return;
+        }
+
         foreach ($propertiesData as $index => $propertyData) {
 
             if (!$this->isValid($propertyData)) {
@@ -28,6 +32,9 @@ class PropertyWriter
             //gets group id from article
             $groupId = $this->getGroupFromArticle($articleId);
 
+            /**
+             * property set (group)
+             */
             if (!$groupId && $propertyData['propertyGroupName']){
                 $groupName = $propertyData['propertyGroupName'];
                 $groupId = $this->getGroup($groupName);
@@ -39,9 +46,9 @@ class PropertyWriter
                     );
                     $groupId = $this->createElement('Shopware\Models\Property\Group', $groupData);
                     $this->groups[$groupName] = $groupId;
-
-                    $this->updateGroupsRelation($groupId, $articleId);
                 }
+
+                $this->updateGroupsRelation($groupId, $articleId);
             }
 
             if (!$groupId) {
@@ -50,6 +57,9 @@ class PropertyWriter
                 throw new AdapterException(sprintf($message, $orderNumber));
             }
 
+            /**
+             * property option and value
+             */
             if (isset($propertyData['propertyValueId']) && !empty($propertyData['propertyValueId'])){
 
                 $valueId = $propertyData['propertyValueId'];
@@ -72,7 +82,7 @@ class PropertyWriter
                         //creates option
                         $optionData = array(
                             'name' => $optionName,
-                            'filterable' => !empty($valueData['propertyOptionFilterable']) ? 1 : 0
+                            'filterable' => !empty($propertyData['propertyOptionFilterable']) ? 1 : 0
                         );
                         $optionId = $this->createElement('Shopware\Models\Property\Option', $optionData);
 
@@ -196,12 +206,7 @@ class PropertyWriter
 
     public function getGroups()
     {
-        $groups = array();
-        $result = $this->connection->fetchAll('SELECT `id`, `name` FROM s_filter');
-
-        foreach ($result as $row) {
-            $groups[$row['name']] = $row['id'];
-        }
+        $groups = $this->db->fetchPairs('SELECT `name`, `id` FROM s_filter');
 
         return $groups;
     }
@@ -215,12 +220,7 @@ class PropertyWriter
 
     public function getOptions()
     {
-        $options = array();
-        $result = $this->connection->fetchAll('SELECT `id`, `name` FROM s_filter_options');
-
-        foreach ($result as $row) {
-            $options[$row['name']] = $row['id'];
-        }
+        $options = $this->db->fetchPairs('SELECT `name`, `id` FROM s_filter_options');
 
         return $options;
     }
@@ -250,11 +250,8 @@ class PropertyWriter
         );
     }
 
-    public function getOptionByValueId($id)
+    public function getOptionByValueId($valueId)
     {
-        return $this->connection->fetchColumn('SELECT `optionID`, `value` FROM s_filter_values WHERE id = ?', array($id));
+        return $this->connection->fetchColumn('SELECT `optionID` FROM s_filter_values WHERE id = ?', array($valueId));
     }
-
-
-
 }

@@ -655,6 +655,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
     public function importAction()
     {
+        $unprocessedFiles = array();
         $postData = array(
             'type' => 'import',
             'profileId' => (int) $this->Request()->getParam('profileId'),
@@ -662,8 +663,8 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             'sessionId' => $this->Request()->getParam('sessionId')
         );
 
-        if($this->Request()->getParam('unprocessed')){
-            $unprocessed = json_decode($this->Request()->getParam('unprocessed'), true);
+        if ($this->Request()->getParam('unprocessedFiles')) {
+            $unprocessedFiles = json_decode($this->Request()->getParam('unprocessedFiles'), true);
         }
 
         $inputFile = Shopware()->DocPath() . $postData['importFile'];
@@ -738,31 +739,21 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
                 foreach ($data['data'] as $key => $value){
                     $outputFile = 'media/unknown/' . $pathInfo['filename'] . '-' . $key .'-tmp.csv';
-                    $post['unprocessed'][] = array(
-                        'profileName' => $key,
-                        'fileName' => $outputFile
-                    );
                     $this->afterImport($data, $key, $outputFile);
+                    $unprocessedFiles[$key] = $outputFile;
                 }
             }
 
             if ($dataSession->getTotalCount() > 0 && ($dataSession->getTotalCount() == $post['position'])) {
 
                 //unprocessed files
-                if (isset($post['unprocessed']) || $unprocessed){
-                    $unprocessedFileNames = $unprocessed ? $unprocessed : $post['unprocessed'];
-                    $postProcessedData = $this->processData($unprocessedFileNames);
+                if ($unprocessedFiles) {
+                    $postProcessedData = $this->processData($unprocessedFiles);
                 }
 
                 if ($postProcessedData) {
-                    unset($post['unprocessedData']);
                     unset($post['sessionId']);
                     unset($post['adapter']);
-
-                    //sends the unprocessed files
-                    if (!empty($post['unprocessed'])){
-                        $post['unprocessed'] = json_encode($post['unprocessed']);
-                    }
 
                     $post = array_merge($post, $postProcessedData);
                 }
@@ -783,6 +774,9 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                     $logger->writeToFile($logData);
                 }
             }
+
+            unset($post['unprocessedData']);
+            $post['unprocessedFiles'] = json_encode($unprocessedFiles);
 
             return $this->View()->assign(array('success' => true, 'data' => $post));
         } catch (\Exception $e) {
@@ -811,8 +805,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
      */
     protected function processData(&$unprocessedData)
     {
-        foreach ($unprocessedData as $index => $data){
-            $inputFile = $data['fileName'];
+        foreach ($unprocessedData as $hiddenProfile => $inputFile) {
             $file = Shopware()->DocPath() . $inputFile;
 
             if (file_exists($file)) {
@@ -822,13 +815,13 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                 $outputFile = Shopware()->DocPath() . $outputFileName;
                 rename($inputFile, $outputFile);
 
-                $profile = $this->Plugin()->getProfileFactory()->loadHiddenProfile($data['profileName']);
+                $profile = $this->Plugin()->getProfileFactory()->loadHiddenProfile($hiddenProfile);
                 $profileId = $profile->getId();
 
                 $fileReader = $this->Plugin()->getFileIOFactory()->createFileReader(array('format' => 'csv'), null);
                 $totalCount = $fileReader->getTotalCount($outputFile);
 
-                unset($unprocessedData[$index]);
+                unset($unprocessedData[$hiddenProfile]);
 
                 $postData = array(
                     'importFile' => $outputFileName,
@@ -839,7 +832,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                     'load' => true,
                 );
 
-                if ($data['profileName'] === 'articlesImages'){
+                if ($hiddenProfile === 'articlesImages'){
                     $postData['batchSize'] = 1;
                 }
 
