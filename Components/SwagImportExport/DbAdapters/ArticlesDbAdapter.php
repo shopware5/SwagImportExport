@@ -574,17 +574,6 @@ class ArticlesDbAdapter implements DataDbAdapter
                             }
                         )
                     );
-
-                    $imageWriter->write(
-                        $articleId,
-                        $article['mainNumber'],
-                        array_filter(
-                            $records['image'],
-                            function ($image) use ($index) {
-                                return $image['parentIndexElement'] == $index;
-                            }
-                        )
-                    );
                 }
 
                 /**
@@ -618,6 +607,17 @@ class ArticlesDbAdapter implements DataDbAdapter
                     ),
                     'similar',
                     $processedFlag
+                );
+
+                $imageWriter->write(
+                    $articleId,
+                    $article['mainNumber'],
+                    array_filter(
+                        $records['image'],
+                        function ($image) use ($index) {
+                            return $image['parentIndexElement'] == $index;
+                        }
+                    )
                 );
             } catch (AdapterException $e) {
                 $message = $e->getMessage();
