@@ -34,19 +34,6 @@
 Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
     extend: 'Ext.app.Controller',
 
-    okIcon: 'sprite-tick',
-
-    failIcon: 'sprite-cross',
-
-    validationUrl: '{url controller="SwagImportExport" action="validateProfile"}',
-
-    currentProfile: {
-        value: null,
-        panel: null,
-        firstLabel: null,
-        secondLabel: null
-    },
-
     snippets: {
         addChild: {
             failureTitle: '{s name=swag_import_export/profile/add_child/failure_title}Create Child Node Failed{/s}'
@@ -73,12 +60,6 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
             successMsg: '{s name="swag_import_export/profile/conversion/success_msg"}Conversion was save successfully{/s}',
             failureMsg: '{s name="swag_import_export/profile/conversion/failure_msg"}Conversion saving failed{/s}'
         },
-        profileValidation: {
-            notWorkingUpdate: '{s name="swag_import_export/profile/validation/notWorkingUpdate"}will not work for updates , as these columns are missing: {/s}',
-            workingUpdate: '{s name="wag_import_export/profile/validation/workingUpdate"}will work for updates{/s}',
-            notWorkingCreates: '{s name="swag_import_export/profile/validation/notWorkingCreates"}will not work for creates, as these columns are missing: {/s}',
-            workingCreate: '{s name="swag_import_export/profile/validation/workingCreate"}will work for creates{/s}'
-        },
         duplicate: '{s name=swag_import_export/profile/duplicater}Profile was duplicate successfully{/s}'
     },
 
@@ -99,8 +80,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                 addNewNode: me.addNewNode,
                 saveNode: me.saveNode,
                 deleteNode: me.deleteNode,
-                addNewAttribute: me.addNewAttribute,
-                profileSelectChange: me.onProfileSelectChange
+                addNewAttribute: me.addNewAttribute
             },
             'swag-import-export-window': {
                 addConversion: me.addConversion,
@@ -111,75 +91,6 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
         });
 
         me.callParent(arguments);
-    },
-
-    onProfileSelectChange: function (value, panel, firstLabel, secondLabel) {
-        var me = this;
-        panel.setLoading(true);
-
-        me.currentProfile.value = value;
-        me.currentProfile.panel = panel;
-        me.currentProfile.firstLabel = firstLabel;
-        me.currentProfile.secondLabel = secondLabel;
-
-        Ext.Ajax.request({
-            url: me.validationUrl,
-            params: {
-                profileId: value.value
-            },
-            success: function(response)
-            {
-                var returnedData = Ext.decode(response.responseText);
-                if(returnedData.hidePanel){
-                    panel.setLoading(false);
-                    panel.hide();
-                    return;
-                }
-                var additionalText = '';
-                if(returnedData.update && returnedData.update.length > 0) {
-                    additionalText = me.createAdditionalText(returnedData.update);
-                    me.updateLabel(firstLabel, me.failIcon, me.snippets.profileValidation.notWorkingUpdate + additionalText);
-                } else {
-                    me.updateLabel(firstLabel,me.okIcon, me.snippets.profileValidation.workingUpdate);
-                }
-
-                if(returnedData.create && returnedData.create.length > 0) {
-                    additionalText = me.createAdditionalText(returnedData.create);
-                    me.updateLabel(secondLabel, me.failIcon, me.snippets.profileValidation.notWorkingCreates + additionalText);
-                } else {
-                    me.updateLabel(secondLabel, me.okIcon, me.snippets.profileValidation.workingCreate);
-                }
-
-                panel.setLoading(false);
-            }
-        });
-        panel.show();
-    },
-
-    updateLabel: function (label, icon, text) {
-        var me = this;
-        me.setButtonIcon(label, icon);
-        label.setText(text);
-    },
-
-    createAdditionalText: function (missingFields) {
-        var additionalText = '',
-            length = missingFields.length,
-            currentCounter = 1;
-
-        Ext.each(missingFields, function (value) {
-            if(currentCounter == length) {
-                additionalText = additionalText + value;
-            } else {
-                additionalText = additionalText + value + ', ';
-            }
-            currentCounter++;
-        });
-        return additionalText;
-    },
-
-    setButtonIcon: function (button, icon) {
-        button.setIconCls(icon);
     },
 
     addConversion: function(grid, editor) {
@@ -372,12 +283,10 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                     icon: Ext.Msg.ERROR,
                     buttons: Ext.Msg.OK
                 });
-                me.onProfileSelectChange(me.currentProfile.value, me.currentProfile.panel, me.currentProfile.firstLabel, me.currentProfile.secondLabel);
             },
             success: function() {
                 treePanel.expand();
                 treePanel.getSelectionModel().select(treeStore.getById(newNode.data.id));
-                me.onProfileSelectChange(me.currentProfile.value, me.currentProfile.panel, me.currentProfile.firstLabel, me.currentProfile.secondLabel);
             }
         });
     },
@@ -417,7 +326,6 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                 treePanel.getSelectionModel().deselectAll(true);
                 treePanel.expand();
                 treePanel.getSelectionModel().select(treeStore.getById(node.get('id')));
-                me.onProfileSelectChange(me.currentProfile.value, me.currentProfile.panel, me.currentProfile.firstLabel, me.currentProfile.secondLabel);
             },
             failure: function(batch, options) {
                 var error = batch.exceptions[0].getError(),
@@ -429,7 +337,6 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                     icon: Ext.Msg.ERROR,
                     buttons: Ext.Msg.OK
                 });
-                me.onProfileSelectChange(me.currentProfile.value, me.currentProfile.panel, me.currentProfile.firstLabel, me.currentProfile.secondLabel);
             }
         });
     },
@@ -470,7 +377,6 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                         success: function() {
                             selModel.deselectAll();
                             selModel.select(parentNode);
-                            me.onProfileSelectChange(me.currentProfile.value, me.currentProfile.panel, me.currentProfile.firstLabel, me.currentProfile.secondLabel);
                         },
                         failure: function(batch, options) {
                             var error = batch.exceptions[0].getError(),
@@ -482,7 +388,6 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                                 icon: Ext.Msg.ERROR,
                                 buttons: Ext.Msg.OK
                             });
-                            me.onProfileSelectChange(me.currentProfile.value, me.currentProfile.panel, me.currentProfile.firstLabel, me.currentProfile.secondLabel);
                         }
                     });
                 }
