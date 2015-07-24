@@ -53,7 +53,7 @@ class XmlFileReader implements FileReader
                 $record["_value"] = $node->nodeValue;
             }
         } else if (!$hasChildren) {
-            $record = $node->nodeValue;
+            $record = trim($node->nodeValue);
         }
 
         return $record;
