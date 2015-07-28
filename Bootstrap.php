@@ -415,14 +415,16 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
      */
     public function onAddConsoleCommand(Enlight_Event_EventArgs $args)
     {
-        $this->checkLicense();
+        if($this->checkLicense(false) == false) {
+	        return null;
+        }
 
-        $this->registerMyNamespace();
-        return new Doctrine\Common\Collections\ArrayCollection(array(
-            new \Shopware\Commands\SwagImportExport\ImportCommand(),
-            new \Shopware\Commands\SwagImportExport\ExportCommand(),
-            new \Shopware\Commands\SwagImportExport\ProfilesCommand(),
-        ));
+	    $this->registerMyNamespace();
+	    return new Doctrine\Common\Collections\ArrayCollection(array(
+			    new \Shopware\Commands\SwagImportExport\ImportCommand(),
+			    new \Shopware\Commands\SwagImportExport\ExportCommand(),
+			    new \Shopware\Commands\SwagImportExport\ProfilesCommand()
+	    ));
     }
 
     /**
