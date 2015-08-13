@@ -642,81 +642,26 @@ class CustomerDbAdapter implements DataDbAdapter
 
     protected function checkRequiredFields($record)
     {
-        //password validation
-        if (!isset($record['password']) || empty($record['password'])) {
-            $message = SnippetsHelper::getNamespace()
-                ->get('adapters/customer/password_required', 'Password must be provided for email %s');
-            throw new AdapterException(sprintf($message, $record['email']));
-        }
+        $requiredFields = array(
+            'password' => 'Password must be provided for email %s',
+            'encoder' => 'To create a new user with email: %s, unhashedPassword must be provided and password must be empty.',
+            'customergroup' => 'Customer group must be provided for user with email: %s.',
+            'billingSalutation' => 'Billing salutation must be provided for user with email: %s.',
+            'billingFirstname' => 'Billing first name must be provided for user with email: %s.',
+            'billingLastname' => 'Billing last name must be provided for user with email: %s.',
+            'billingStreet' => 'Billing street must be provided for user with email: %s.',
+            'billingStreetnumber' => 'Billing street number must be provided for user with email: %s.',
+            'billingZipcode' => 'Billing zip code must be provided for user with email: %s.',
+            'billingCity' => 'Billing city must be provided for user with email: %s.',
+            'billingCountryID' => 'Billing countryId must be provided for user with email: %s.'
+        );
 
-        //encoder validation
-        if (!isset($record['encoder']) || empty($record['encoder'])) {
-            $message = SnippetsHelper::getNamespace()
-                ->get('adapters/customer/new_password_encoder_required', 'To create a new user with email: %s, unhashedPassword must be provided and password must be empty.');
-            throw new AdapterException(sprintf($message, $record['email']));
-        }
-
-        //customer group validation
-        if (!isset($record['customergroup']) || empty($record['customergroup'])) {
-            $message = SnippetsHelper::getNamespace()
-                ->get('adapters/customer/customergroup_required', 'Customer group must be provided for user with email: %s.');
-            throw new AdapterException(sprintf($message, $record['email']));
-        }
-
-        //billing salutation validation
-        if (!isset($record['billingSalutation']) || empty($record['billingSalutation'])) {
-            $message = SnippetsHelper::getNamespace()
-                ->get('adapters/customer/salutation_required', 'Billing salutation must be provided for user with email: %s.');
-            throw new AdapterException(sprintf($message, $record['email']));
-        }
-
-        //billing first name validation
-        if (!isset($record['billingFirstname']) || empty($record['billingFirstname'])) {
-            $message = SnippetsHelper::getNamespace()
-                ->get('adapters/customer/fname_required', 'Billing first name must be provided for user with email: %s.');
-            throw new AdapterException(sprintf($message, $record['email']));
-        }
-
-        //billing last name validation
-        if (!isset($record['billingLastname']) || empty($record['billingLastname'])) {
-            $message = SnippetsHelper::getNamespace()
-                ->get('adapters/customer/lname_required', 'Billing last name must be provided for user with email: %s.');
-            throw new AdapterException(sprintf($message, $record['email']));
-        }
-
-        //billing street validation
-        if (!isset($record['billingStreet']) || empty($record['billingStreet'])) {
-            $message = SnippetsHelper::getNamespace()
-                ->get('adapters/customer/street_required', 'Billing street must be provided for user with email: %s.');
-            throw new AdapterException(sprintf($message, $record['email']));
-        }
-
-        //billing street number validation
-        if (!isset($record['billingStreetnumber']) || empty($record['billingStreetnumber'])) {
-            $message = SnippetsHelper::getNamespace()
-                ->get('adapters/customer/street_number_required', 'Billing street number must be provided for user with email: %s.');
-            throw new AdapterException(sprintf($message, $record['email']));
-        }
-
-        //billing zip code validation
-        if (!isset($record['billingZipcode']) || empty($record['billingZipcode'])) {
-            $message = SnippetsHelper::getNamespace()
-                ->get('adapters/customer/zip_code_required', 'Billing zip code must be provided for user with email: %s.');
-            throw new AdapterException(sprintf($message, $record['email']));
-        }
-
-        //billing city validation
-        if (!isset($record['billingCity']) || empty($record['billingCity'])) {
-            $message = SnippetsHelper::getNamespace()
-                ->get('adapters/customer/city_required', 'Billing city must be provided for user with email: %s.');
-            throw new AdapterException(sprintf($message, $record['email']));
-        }
-
-        //billing country validation
-        if (!isset($record['billingCountryID']) || empty($record['billingCountryID'])) {
-            $message = SnippetsHelper::getNamespace()
-                ->get('adapters/customer/country_required', 'Billing countryId must be provided for user with email: %s.');
-            throw new AdapterException(sprintf($message, $record['email']));
+        foreach ($requiredFields as $requiredField => $snippet) {
+            if (!isset($record[$requiredField]) || empty($record[$requiredField])) {
+                $message = SnippetsHelper::getNamespace()
+                    ->get("adapters/customer/{$requiredField}_required", $snippet);
+                throw new AdapterException(sprintf($message, $record['email']));
+            }
         }
     }
 }
