@@ -16,7 +16,9 @@ class CustomerDbAdapter implements DataDbAdapter
      */
     protected $manager;
     protected $repository;
+    protected $customerMap;
     protected $billingMap;
+    protected $shippingMap;
 
     /**
      * @var array
@@ -261,12 +263,12 @@ class CustomerDbAdapter implements DataDbAdapter
 
                 $customer = null;
 
-                if (isset($record['id']) && !empty($record['id'])){
+                if (isset($record['id']) && !empty($record['id'])) {
                     $customer = $this->getRepository()->findOneBy(array('id' => $record['id']));
                 }
 
-                if (!$customer){
-                    if (!isset($record['email']) && !$record['email']) {
+                if (!$customer) {
+                    if (!isset($record['email']) || empty($record['email'])) {
                         $message = SnippetsHelper::getNamespace()
                             ->get('adapters/customer/email_required', 'User email is required field.');
                         throw new AdapterException($message);
@@ -292,10 +294,11 @@ class CustomerDbAdapter implements DataDbAdapter
                     $customer = $customer[0];
                 }
 
-                if (isset($record['unhashedPassword']) && $record['unhashedPassword']
-                    && (!isset($record['password']) || !$record['password'])) {
+                //set new password
+                if (isset($record['unhashedPassword']) && !empty($record['unhashedPassword'])
+                    && (!isset($record['password']) || empty($record['password']))) {
 
-                    if (!isset($record['encoder']) || !$record['encoder']) {
+                    if (!isset($record['encoder']) || empty($record['encoder'])) {
                         $record['encoder'] = $passwordManager->getDefaultPasswordEncoderName();
                     }
 
@@ -314,44 +317,24 @@ class CustomerDbAdapter implements DataDbAdapter
                         throw new AdapterException(sprintf($message, $record['email']));
                     }
                 } else {
-                    if (!isset($record['password']) && !$record['password']) {
-                        $message = SnippetsHelper::getNamespace()
-                            ->get('adapters/customer/password_required', 'Password must be provided for email %s');
-                        throw new AdapterException(sprintf($message, $record['email']));
-                    }
-
-                    if (!isset($record['encoder']) && !$record['encoder']) {
-                        $message = SnippetsHelper::getNamespace()
-                            ->get('adapters/customer/password_encoder_required', 'Password encoder must be provided for email %s');
-                        throw new AdapterException(sprintf($message, $record['email']));
-                    }
-                }
-
-                if (!$customer) {
+                    $this->checkRequiredFields($record);
                     $customer = new Customer();
-
-                    if (!isset($record['customergroup'])) {
-                        /** @var $shop \Shopware\Models\Shop\Shop */
-                        $shop = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop')->getActiveDefault();
-                        $defaultGroupKey = $shop->getCustomerGroup()->getKey();
-                        $record['customergroup'] = $defaultGroupKey;
-                    }
                 }
 
                 if (!isset($record['active']) || $record['active'] === '') {
                     $record['active'] = 1;
                 }
-                
+
                 if (!isset($record['paymentID']) || $record['paymentID'] === '') {
                     $paymentId = $this->preparePayment($record['subshopID']);
                     $record['paymentID'] = $paymentId;
                 }
-                
+
                 $customerData = $this->prepareCustomer($record);
 
                 $customerData['billing'] = $this->prepareBilling($record);
 
-                $customerData['shipping'] = $this->prepareShipping($record);
+                $customerData['shipping'] = $this->prepareShipping($record, $customer->getId(), $customerData['billing']);
 
                 $customer->fromArray($customerData);
 
@@ -418,7 +401,7 @@ class CustomerDbAdapter implements DataDbAdapter
             }
         }
 
-        if (isset($customerData['groupKey'])) {
+        if (isset($customerData['groupKey']) && !empty($customerData['groupKey'])) {
             $customerData['group'] = Shopware()->Models()
                     ->getRepository('Shopware\Models\Customer\Group')
                     ->findOneBy(array('key' => $customerData['groupKey']));
@@ -467,7 +450,7 @@ class CustomerDbAdapter implements DataDbAdapter
         return $billingData;
     }
 
-    protected function prepareShipping(&$record)
+    protected function prepareShipping(&$record, $customerId, $billing)
     {
         if ($this->shippingMap === null) {
             $columns = $this->getShippingColumns();
@@ -480,6 +463,18 @@ class CustomerDbAdapter implements DataDbAdapter
         }
 
         $shippingData = array();
+
+        //use shipping as billing
+        if (empty($customerId) && empty($record['shippingFirstname']) && empty($params['shippingLastname'])) {
+            foreach ($this->shippingMap as $mapKey => $addressKey) {
+                if (isset($record[$mapKey])) {
+                    $shippingData[$addressKey] = $billing[$addressKey];
+                    unset($record[$mapKey]);
+                }
+            }
+
+            return $shippingData;
+        }
 
         foreach ($record as $key => $value) {
             //prepares the attributes
@@ -645,4 +640,83 @@ class CustomerDbAdapter implements DataDbAdapter
         return $builder;
     }
 
+    protected function checkRequiredFields($record)
+    {
+        //password validation
+        if (!isset($record['password']) || empty($record['password'])) {
+            $message = SnippetsHelper::getNamespace()
+                ->get('adapters/customer/password_required', 'Password must be provided for email %s');
+            throw new AdapterException(sprintf($message, $record['email']));
+        }
+
+        //encoder validation
+        if (!isset($record['encoder']) || empty($record['encoder'])) {
+            $message = SnippetsHelper::getNamespace()
+                ->get('adapters/customer/new_password_encoder_required', 'To create a new user with email: %s, unhashedPassword must be provided and password must be empty.');
+            throw new AdapterException(sprintf($message, $record['email']));
+        }
+
+        //customer group validation
+        if (!isset($record['customergroup']) || empty($record['customergroup'])) {
+            $message = SnippetsHelper::getNamespace()
+                ->get('adapters/customer/customergroup_required', 'Customer group must be provided for user with email: %s.');
+            throw new AdapterException(sprintf($message, $record['email']));
+        }
+
+        //billing salutation validation
+        if (!isset($record['billingSalutation']) || empty($record['billingSalutation'])) {
+            $message = SnippetsHelper::getNamespace()
+                ->get('adapters/customer/salutation_required', 'Billing salutation must be provided for user with email: %s.');
+            throw new AdapterException(sprintf($message, $record['email']));
+        }
+
+        //billing first name validation
+        if (!isset($record['billingFirstname']) || empty($record['billingFirstname'])) {
+            $message = SnippetsHelper::getNamespace()
+                ->get('adapters/customer/fname_required', 'Billing first name must be provided for user with email: %s.');
+            throw new AdapterException(sprintf($message, $record['email']));
+        }
+
+        //billing last name validation
+        if (!isset($record['billingLastname']) || empty($record['billingLastname'])) {
+            $message = SnippetsHelper::getNamespace()
+                ->get('adapters/customer/lname_required', 'Billing last name must be provided for user with email: %s.');
+            throw new AdapterException(sprintf($message, $record['email']));
+        }
+
+        //billing street validation
+        if (!isset($record['billingStreet']) || empty($record['billingStreet'])) {
+            $message = SnippetsHelper::getNamespace()
+                ->get('adapters/customer/street_required', 'Billing street must be provided for user with email: %s.');
+            throw new AdapterException(sprintf($message, $record['email']));
+        }
+
+        //billing street number validation
+        if (!isset($record['billingStreetnumber']) || empty($record['billingStreetnumber'])) {
+            $message = SnippetsHelper::getNamespace()
+                ->get('adapters/customer/street_number_required', 'Billing street number must be provided for user with email: %s.');
+            throw new AdapterException(sprintf($message, $record['email']));
+        }
+
+        //billing zip code validation
+        if (!isset($record['billingZipcode']) || empty($record['billingZipcode'])) {
+            $message = SnippetsHelper::getNamespace()
+                ->get('adapters/customer/zip_code_required', 'Billing zip code must be provided for user with email: %s.');
+            throw new AdapterException(sprintf($message, $record['email']));
+        }
+
+        //billing city validation
+        if (!isset($record['billingCity']) || empty($record['billingCity'])) {
+            $message = SnippetsHelper::getNamespace()
+                ->get('adapters/customer/city_required', 'Billing city must be provided for user with email: %s.');
+            throw new AdapterException(sprintf($message, $record['email']));
+        }
+
+        //billing country validation
+        if (!isset($record['billingCountryID']) || empty($record['billingCountryID'])) {
+            $message = SnippetsHelper::getNamespace()
+                ->get('adapters/customer/country_required', 'Billing countryId must be provided for user with email: %s.');
+            throw new AdapterException(sprintf($message, $record['email']));
+        }
+    }
 }
