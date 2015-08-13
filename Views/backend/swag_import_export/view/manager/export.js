@@ -209,7 +209,6 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
                     ]
                 }]
         });
-        var orderStatusStore = Ext.create('Shopware.store.OrderStatus');
         
         me.orderFields = Ext.create('Ext.form.FieldSet', {
             title: me.snippets.fieldsetAdditional,
@@ -297,17 +296,19 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
             name: 'profile',
             listeners: {
                 scope: me,
-                change: function(value) {
-                    var record = me.profilesStore.getById(value.getValue());
+                change: function(cb, newValue, oldValue) {
+                    var record = me.profilesStore.getById(newValue);
                     var type = record.get('type');
 
                     me.hideFields();
+
+                    me.resetAdditionalFields(oldValue);
 
                     if (type === 'articles') {
                         me.articleFields.show();
                     } else if (type === 'orders') {
                         me.orderFields.show();
-                    }else if(type === 'articlesInStock') {
+                    } else if (type === 'articlesInStock') {
                         me.stockField.show();
                         if(me.filterValue === 'custom'){
                             me.customFilterFields.show();
@@ -547,6 +548,35 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
         me.orderFields.hide();
         me.stockField.hide();
         me.customFilterFields.hide();
+    },
+
+    resetAdditionalFields: function(oldValue) {
+        var me = this, fieldSet = null;
+
+        if (oldValue === undefined) {
+            return;
+        }
+
+        var record = me.profilesStore.getById(oldValue);
+        var oldType = record.get('type');
+
+        switch (oldType) {
+            case 'articles':
+                fieldSet = me.articleFields;
+                break;
+            case 'articlesInStock':
+                fieldSet = me.orderFields;
+                break;
+            case 'orders':
+                fieldSet = me.customFilterFields;
+                break;
+            default:
+                return;
+        }
+
+        Ext.each(fieldSet.query('field'), function(field) {
+            field.reset();
+        });
     }
 });
 //{/block}
