@@ -205,9 +205,9 @@ class ArticleWriter
      */
     public function getTax($taxRate, $orderNumber)
     {
-        $taxId = $this->taxRates[$taxRate];
+        $taxId = array_search($taxRate, $this->taxRates);
 
-        if (!$taxId){
+        if (!$taxId) {
             $message = SnippetsHelper::getNamespace()->get(
                 'adapters/articles/no_tax_found',
                 "Tax by tax rate %s not found for article %s."
