@@ -147,10 +147,12 @@ class ArticleWriter
         $orderNumber = $article['orderNumber'];
         if ($create && empty($article['taxId']) && empty($article['tax'])) {
             // todo: read default tax rate from config
-            $article['taxId'] = $this->taxRates[0];
+            $article['taxId'] = array_shift(array_keys($this->taxRates));
         }
 
-        if (isset($article['tax'])) {
+        if (isset($article['taxId']) && $article['taxId'] !== '') {
+            $article['tax'] = $this->taxRates[$article['taxId']];
+        } else if (isset($article['tax']) && $article['tax'] !== '') {
             $tax = number_format($article['tax'], 2);
             $article['taxId'] = $this->getTax($tax, $orderNumber);
         }
@@ -172,11 +174,12 @@ class ArticleWriter
 
     protected function getTaxRates()
     {
-        $tax = array();
-        $result = $this->connection->fetchAll('SELECT id, tax FROM s_core_tax');
-        foreach ($result as $row) {
-            $tax[$row['tax']] = $row['id'];
+        $tax = $this->db->fetchPairs('SELECT id, tax FROM s_core_tax');
+        if (!is_array($tax)) {
+            return array();
         }
+        ksort($tax);
+
         return $tax;
     }
 
@@ -202,9 +205,9 @@ class ArticleWriter
      */
     public function getTax($taxRate, $orderNumber)
     {
-        $taxId = $this->taxRates[$taxRate];
+        $taxId = array_search($taxRate, $this->taxRates);
 
-        if (!$taxId){
+        if (!$taxId) {
             $message = SnippetsHelper::getNamespace()->get(
                 'adapters/articles/no_tax_found',
                 "Tax by tax rate %s not found for article %s."
