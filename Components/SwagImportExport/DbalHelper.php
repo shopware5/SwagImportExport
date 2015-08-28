@@ -31,8 +31,11 @@ class DbalHelper
 
         $builder = $this->getQueryBuilder();
         if ($primaryId) {
+            $id = $builder->createNamedParameter($primaryId, \PDO::PARAM_INT);
             $builder->update($table);
-            $builder->where('id = ' . $builder->createNamedParameter($primaryId, \PDO::PARAM_INT));
+            //update article id in case we don't have any field for update
+            $builder->set('id', $id);
+            $builder->where('id = ' . $id);
         } else {
             $builder->insert($table);
         }
