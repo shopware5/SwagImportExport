@@ -2,23 +2,22 @@
 
 namespace Shopware\Components\SwagImportExport\Factories;
 
-use Shopware\Components\SwagImportExport\Transoformers\PhpExpressionEvaluator;
-use Shopware\Components\SwagImportExport\Transoformers\SmartyExpressionEvaluator;
-use Shopware\Components\SwagImportExport\Transoformers\DataTransformerChain;
-use Shopware\Components\SwagImportExport\Transoformers\TreeTransformer;
-use Shopware\Components\SwagImportExport\Transoformers\FlattenTransformer;
-use Shopware\Components\SwagImportExport\Transoformers\ValuesTransformer;
+use Shopware\Components\SwagImportExport\Transformers\PhpExpressionEvaluator;
+use Shopware\Components\SwagImportExport\Transformers\SmartyExpressionEvaluator;
+use Shopware\Components\SwagImportExport\Transformers\DataTransformerChain;
+use Shopware\Components\SwagImportExport\Transformers\TreeTransformer;
+use Shopware\Components\SwagImportExport\Transformers\FlattenTransformer;
+use Shopware\Components\SwagImportExport\Transformers\ValuesTransformer;
 
 class DataTransformerFactory extends \Enlight_Class implements \Enlight_Hook
 {
-
     /**
      * Creates a data transformer chain by consuming data found a profile.
      * The $dataUserOptions is an object that will return info for the output file structure - tree or flat.
-     * 
+     *
      * @param \Shopware\Components\SwagImportExport\Profile\Profile $profile
      * @param array $dataUserOptions
-     * @return \Shopware\Components\SwagImportExport\Transoformers\DataTransformerChain
+     * @return \Shopware\Components\SwagImportExport\Transformers\DataTransformerChain
      */
     public function createDataTransformerChain($profile, $dataUserOptions)
     {
@@ -45,6 +44,11 @@ class DataTransformerFactory extends \Enlight_Class implements \Enlight_Hook
 
     /**
      * Creates a concrete data transformer due to the given type - "values", "tree", "flatten"
+     *
+     * @param $transformerType
+     * @param $config
+     * @return FlattenTransformer|TreeTransformer|ValuesTransformer
+     * @throws \Exception
      */
     public function createDataTransformer($transformerType, $config)
     {
@@ -66,12 +70,17 @@ class DataTransformerFactory extends \Enlight_Class implements \Enlight_Hook
             default:
                 throw new \Exception("Transformer $transformerType is not valid");
         }
-        
+
         $transformer->initialize($config);
-        
+
         return $transformer;
     }
 
+    /**
+     * @param $convertorType
+     * @return PhpExpressionEvaluator|SmartyExpressionEvaluator
+     * @throws \Exception
+     */
     public function createValueConvertor($convertorType)
     {
         switch ($convertorType) {
@@ -83,5 +92,4 @@ class DataTransformerFactory extends \Enlight_Class implements \Enlight_Hook
                 throw new \Exception("Transformer $convertorType is not valid");
         }
     }
-
 }

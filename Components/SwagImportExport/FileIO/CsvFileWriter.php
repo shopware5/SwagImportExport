@@ -7,14 +7,16 @@ use Shopware\Components\SwagImportExport\FileIO\Encoders\CsvEncoder;
 
 class CsvFileWriter implements FileWriter
 {
-
     protected $treeStructure = false;
 
     /**
-     * @var $fileHelper 
+     * @var FileHelper $fileHelper
      */
     protected $fileHelper;
 
+    /**
+     * @param FileHelper $fileHelper
+     */
     public function __construct(FileHelper $fileHelper)
     {
         $this->fileHelper = $fileHelper;
@@ -36,10 +38,15 @@ class CsvFileWriter implements FileWriter
         $this->getFileHelper()->writeStringToFile($fileName, $columnNames);
     }
 
+    /**
+     * @param $fileName
+     * @param $data
+     * @throws \Exception
+     */
     public function writeRecords($fileName, $data)
     {
         $flatData = '';
-        
+
         $convertor = new CsvEncoder();
         $keys = array_keys(current($data));
         foreach ($data as $line) {
@@ -48,16 +55,25 @@ class CsvFileWriter implements FileWriter
         $this->getFileHelper()->writeStringToFile($fileName, $flatData, FILE_APPEND);
     }
 
+    /**
+     * @param $fileName
+     * @param $footerData
+     */
     public function writeFooter($fileName, $footerData)
     {
-
     }
 
+    /**
+     * @return bool
+     */
     public function hasTreeStructure()
     {
         return $this->treeStructure;
     }
 
+    /**
+     * @return FileHelper
+     */
     public function getFileHelper()
     {
         return $this->fileHelper;

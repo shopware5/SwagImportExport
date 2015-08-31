@@ -2,35 +2,52 @@
 
 namespace Shopware\Components\SwagImportExport\FileIO;
 
+use Shopware\Components\SwagImportExport\Utils\FileHelper;
+
 class XmlFileReader implements FileReader
 {
-
     protected $tree;
     protected $iterationPath = array();
     protected $iterationTag = array();
-    /*
-     * @var boolen
+
+    /**
+     * @var bool $treeStructure
      */
     protected $treeStructure = true;
+
+    /**
+     * @var FileHelper $fileHelper
+     */
     protected $fileHelper;
 
-    public function __construct($fileHelper)
+    /**
+     * @param FileHelper $fileHelper
+     */
+    public function __construct(FileHelper $fileHelper)
     {
         $this->fileHelper = $fileHelper;
     }
 
+    /**
+     * @param $tree
+     */
     public function setTree($tree)
     {
         $this->tree = $tree;
         $this->findIterationNode($tree, array());
     }
 
+    /**
+     * @param \DOMElement $node
+     * @param $path
+     * @return array|string
+     */
     protected function toArrayTree(\DOMElement $node, $path)
     {
         $hasChildren = false;
         $record = array();
         $currentPath = $path . '/' . $node->nodeName;
-        
+
         if ($node->hasChildNodes()) {
             foreach ($node->childNodes as $child) {
                 if ($child instanceof \DOMElement) {
@@ -52,18 +69,26 @@ class XmlFileReader implements FileReader
             if (!$hasChildren) {
                 $record["_value"] = $node->nodeValue;
             }
-        } else if (!$hasChildren) {
+        } elseif (!$hasChildren) {
             $record = trim($node->nodeValue);
         }
 
         return $record;
     }
 
+    /**
+     * @param $fileName
+     */
     public function readHeader($fileName)
     {
-        
     }
 
+    /**
+     * @param $fileName
+     * @param $position
+     * @param $count
+     * @return array
+     */
     public function readRecords($fileName, $position, $count)
     {
         //todo: add string argument
@@ -93,16 +118,25 @@ class XmlFileReader implements FileReader
         return $records;
     }
 
+    /**
+     * @param $fileName
+     */
     public function readFooter($fileName)
     {
-        
     }
 
+    /**
+     * @return bool
+     */
     public function hasTreeStructure()
     {
         return $this->treeStructure;
     }
 
+    /**
+     * @param $node
+     * @param array $path
+     */
     protected function findIterationNode($node, array $path)
     {
         $path[] = $node["name"];
@@ -118,6 +152,10 @@ class XmlFileReader implements FileReader
         }
     }
 
+    /**
+     * @param $fileName
+     * @return int
+     */
     public function getTotalCount($fileName)
     {
         $z = new \XMLReader();
@@ -135,5 +173,4 @@ class XmlFileReader implements FileReader
 
         return $count;
     }
-
 }

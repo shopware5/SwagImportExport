@@ -34,7 +34,6 @@ use \Shopware\Components\SwagImportExport\Utils\CommandHelper;
  */
 class Shopware_Controllers_Frontend_SwagImportExport extends Enlight_Controller_Action
 {
-
     /**
      * Shopware\Components\Model\ModelManager
      */
@@ -45,22 +44,22 @@ class Shopware_Controllers_Frontend_SwagImportExport extends Enlight_Controller_
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         Shopware()->Plugins()->Controller()->ViewRenderer()->setNoRender();
     }
-    
+
     /**
      * Check for terminal call for cron action
      */
     public function preDispatch()
-    {       
+    {
         //Call cron only if request is not from browser
         if (php_sapi_name() == 'cli') {
             $this->cronAction();
         }
     }
-    
+
     /**
      * Custom cronjob for import (forward request)
-     * 
-     * @return boolean
+     *
+     * @return bool
      */
     public function cronAction()
     {

@@ -25,13 +25,11 @@ class TreeHelper
             $parentKey = $node['parentKey'];
 
             $icon = 'sprite-blue-folders-stack';
+        } elseif ($node['type'] == 'leaf') {
+            $icon = 'sprite-blue-document-text';
         } else {
-            if ($node['type'] == 'leaf') {
-                $icon = 'sprite-blue-document-text';
-            } else {
-                // $node['type'] == 'node'
-                $icon = '';
-            }
+            // $node['type'] == 'node'
+            $icon = '';
         }
 
         // Get the attributes
@@ -95,34 +93,30 @@ class TreeHelper
                     'name' => $child['text'],
                     'shopwareField' => $child['swColumn'],
                 );
+            } elseif ($child['type'] == 'node') {
+                $node['children'][] = array(
+                    'id' => $child['id'],
+                    'index' => $child['index'],
+                    'type' => $child['type'],
+                    'name' => $child['text'],
+                    'shopwareField' => $child['swColumn'],
+                );
+            } elseif ($child['type'] == 'iteration') {
+                $node['children'][] = array(
+                    'id' => $child['id'],
+                    'name' => $child['text'],
+                    'index' => $child['index'],
+                    'type' => $child['type'],
+                    'adapter' => $child['adapter'],
+                    'parentKey' => $child['parentKey'],
+                );
             } else {
-                if ($child['type'] == 'node') {
-                    $node['children'][] = array(
-                        'id' => $child['id'],
-                        'index' => $child['index'],
-                        'type' => $child['type'],
-                        'name' => $child['text'],
-                        'shopwareField' => $child['swColumn'],
-                    );
-                } else {
-                    if ($child['type'] == 'iteration') {
-                        $node['children'][] = array(
-                            'id' => $child['id'],
-                            'name' => $child['text'],
-                            'index' => $child['index'],
-                            'type' => $child['type'],
-                            'adapter' => $child['adapter'],
-                            'parentKey' => $child['parentKey'],
-                        );
-                    } else {
-                        $node['children'][] = array(
-                            'id' => $child['id'],
-                            'type' => $child['type'],
-                            'index' => $child['index'],
-                            'name' => $child['text'],
-                        );
-                    }
-                }
+                $node['children'][] = array(
+                    'id' => $child['id'],
+                    'type' => $child['type'],
+                    'index' => $child['index'],
+                    'name' => $child['text'],
+                );
             }
 
             return true;
@@ -188,14 +182,12 @@ class TreeHelper
             if ($child['type'] == 'attribute') {
                 unset($child['parentId']);
                 $node['attributes'][] = $child;
+            } elseif ($child['type'] == 'node') {
+                unset($child['parentId']);
+                $node['children'][] = $child;
             } else {
-                if ($child['type'] == 'node') {
-                    unset($child['parentId']);
-                    $node['children'][] = $child;
-                } else {
-                    unset($child['parentId']);
-                    $node['children'][] = $child;
-                }
+                unset($child['parentId']);
+                $node['children'][] = $child;
             }
 
             return true;
@@ -293,10 +285,8 @@ class TreeHelper
                     }
 
                     return true;
-                } else {
-                    if (static::deleteNode($child, $childNode)) {
-                        return true;
-                    }
+                } elseif (static::deleteNode($child, $childNode)) {
+                    return true;
                 }
             }
         }
@@ -339,7 +329,6 @@ class TreeHelper
                         $reorderdNode[$key][$innerValue['index']] = $value3;
                     }
                     ksort($reorderdNode[$key]);
-
                 } else {
                     $reorderdNode[$key] = $value;
                 }

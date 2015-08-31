@@ -2,59 +2,63 @@
 
 namespace Shopware\Components\SwagImportExport;
 
+use Shopware\Components\SwagImportExport\DbAdapters\DataDbAdapter;
+use Shopware\Components\SwagImportExport\Logger\Logger;
 use \Shopware\Components\SwagImportExport\Profile\Profile;
-use \Shopware\CustomModels\ImportExport\Profile as ProfileEntity;
+use Shopware\Components\SwagImportExport\Session\Session;
+use Shopware\Components\SwagImportExport\Utils\DataColumnOptions;
+use Shopware\Components\SwagImportExport\Utils\DataFilter;
+use Shopware\Components\SwagImportExport\Utils\DataLimit;
 use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
 
 class DataIO
 {
-
     /**
-     * @var \Shopware\Components\DbAdapters
+     * @var DataDbAdapter
      */
     private $dbAdapter;
 
     /**
-     * @var \Shopware\Components\SwagImportExport\Utils\DataColumnOptions
+     * @var DataColumnOptions
      */
     private $columnOptions;
 
     /**
-     * @var \Shopware\Components\SwagImportExport\Utils\DataLimit
+     * @var DataLimit
      */
     private $limit;
 
     /**
-     * @var \Shopware\Components\SwagImportExport\Utils\DataFilter
+     * @var DataFilter
      */
     private $filter;
 
     /**
      * Array of records ids
-     * 
+     *
      * @var array
      */
     private $recordIds;
 
     /**
      * Type of the dataIO - export/import
-     * 
+     *
      * @var string
      */
     private $type;
 
     /**
      * Format of the doc - csv, xml
-     * 
+     *
      * @var string
      */
     private $format;
 
     /**
-     * @var int 
+     * @var int
      */
     private $maxRecordCount;
-    
+
     /**
      * @var string
      */
@@ -67,28 +71,41 @@ class DataIO
 
     /**
      * Username made the action
-     * 
+     *
      * @var string
      */
     private $username;
-    
+
     /**
-     * @var \Shopware\Components\SwagImportExport\Session\Session
+     * @var Session
      */
     private $dataSession;
 
     /**
-     * @var \Shopware\Components\SwagImportExport\Logger\Logger
+     * @var Logger
      */
     private $logger;
 
+    /**
+     * @param DataDbAdapter $dbAdapter
+     * @param Session $dataSession
+     * @param Logger $logger
+     */
     public function __construct($dbAdapter, $dataSession, $logger)
     {
         $this->dbAdapter = $dbAdapter;
         $this->dataSession = $dataSession;
         $this->logger = $logger;
     }
-    
+
+    /**
+     * @param $colOpts
+     * @param $limit
+     * @param $filter
+     * @param $type
+     * @param $format
+     * @param $maxRecordCount
+     */
     public function initialize($colOpts, $limit, $filter, $type, $format, $maxRecordCount)
     {
         $this->columnOptions = $colOpts;
@@ -100,19 +117,19 @@ class DataIO
     }
 
     /**
-     * 
-     * @param int $numberOfRecords
+     * @param integer $numberOfRecords
+     * @return mixed
      */
     public function read($numberOfRecords)
     {
         $start = $this->getSessionPosition();
-        
+
         $ids = $this->loadIds($start, $numberOfRecords);
 
         $columns = $this->getColumns();
-        
+
         $dbAdapter = $this->getDbAdapter();
-        
+
         $rawData = $dbAdapter->read($ids, $columns);
 
         return $rawData;
@@ -126,6 +143,7 @@ class DataIO
         if ($defaults) {
             $dbAdapter->setDefaultValues($defaults);
         }
+
         $dbAdapter->write($data);
     }
 
@@ -166,14 +184,14 @@ class DataIO
 
     /**
      * Loads the record ids
-     * 
+     *
      * @return \Shopware\Components\SwagImportExport\DataIO
      */
     public function preloadRecordIds()
     {
         $session = $this->dataSession;
         $storedIds = $session->getIds();
-        
+
         if ($storedIds) {
             $ids = unserialize($storedIds);
         } else {
@@ -182,29 +200,31 @@ class DataIO
             $filterAdapter = $this->getFilterAdapter();
 
             $ids = $dbAdapter->readRecordIds(
-                $limitAdapter->getOffset(), $limitAdapter->getLimit(), $filterAdapter->getFilter()
+                $limitAdapter->getOffset(),
+                $limitAdapter->getLimit(),
+                $filterAdapter->getFilter()
             );
         }
-        
+
         $this->setRecordIds($ids);
 
         return $this;
     }
 
     /**
-     * Returns the state of the session. 
-     * active: 
+     * Returns the state of the session.
+     * active:
      *     Session is running and we can read/write records.
-     * stopped: 
+     * stopped:
      *     Session is stopped because we have reached the max number of records per operation.
-     * new: 
-     *     Session is brand new and still has no records ids. 
-     * finished: 
-     *     Session is finished but the output file is still not finished (in case of export) 
-     *     or the final db save is yet not performed (in case of import). 
-     * closed: 
+     * new:
+     *     Session is brand new and still has no records ids.
+     * finished:
+     *     Session is finished but the output file is still not finished (in case of export)
+     *     or the final db save is yet not performed (in case of import).
+     * closed:
      *     Session is closed, file is fully exported/imported
-     * 
+     *
      * @return string
      */
     public function getSessionState()
@@ -212,16 +232,19 @@ class DataIO
         return $this->dataSession->getState();
     }
 
+    /**
+     * @return int
+     */
     public function getSessionPosition()
     {
         $position = $this->dataSession->getPosition();
-        
+
         return $position == null ? 0 : $position;
     }
 
     /**
      * Generates file name
-     * 
+     *
      * @param \Shopware\Components\SwagImportExport\Profile\Profile $profile
      * @return string
      */
@@ -236,28 +259,29 @@ class DataIO
 
         $dateTime = new \DateTime('now');
 
-        $fileName = $operationType . '.' . $adapterType . '.' .
-                $dateTime->format('Y.m.d.h.i.s') . '-'. $hash . '.' . $fileFormat;
-	  
+        $fileName = $operationType . '.'
+            . $adapterType . '.' . $dateTime->format('Y.m.d.h.i.s')
+            . '-' . $hash . '.' . $fileFormat;
+
         $this->setFileName($fileName);
 
         return $fileName;
     }
 
     /**
-     * Generates random hash depends on the lenght
+     * Generates random hash depends on the length
      *
-     * @param int $lenght
+     * @param int $length
      * @return string
      */
-    public function generateRandomHash($lenght)
+    public function generateRandomHash($length)
     {
-        return substr(md5(uniqid()), 0, $lenght);
+        return substr(md5(uniqid()), 0, $length);
     }
 
     /**
      * Returns directory of the import/export plugin
-     * 
+     *
      * @return string
      */
     public function getDirectory()
@@ -267,21 +291,20 @@ class DataIO
         if (!file_exists($directory)) {
             $this->createDirectory($directory);
         }
-        
+
         return $directory;
     }
-    
+
     /**
      * Creates directory
-     * 
+     *
      * @param string $path
      * @throws \Exception
      */
     public function createDirectory($path)
     {
         if (!mkdir($path, 0777, true)) {
-            $message = SnippetsHelper::getNamespace()
-                        ->get('dataio/no_profile', 'Failed to create directory %s');
+            $message = SnippetsHelper::getNamespace()->get('dataio/no_profile', 'Failed to create directory %s');
             throw new \Exception(sprintf($message, $path));
         }
     }
@@ -291,6 +314,9 @@ class DataIO
      * If the session has no ids, then the db adapter must be used to retrieve them.
      * Then writes these ids to the session and sets the session state to "active".
      * For now we will write the ids as a serialized array.
+     *
+     * @param Profile $profile
+     * @throws \Exception
      */
     public function startSession(Profile $profile)
     {
@@ -308,7 +334,7 @@ class DataIO
 
                 if (empty($ids)) {
                     $message = SnippetsHelper::getNamespace()
-                                ->get('dataio/no_export_records', 'No records found to be exported');
+                        ->get('dataio/no_export_records', 'No records found to be exported');
                     throw new \Exception($message);
                 }
 
@@ -324,10 +350,10 @@ class DataIO
 
             default:
                 $message = SnippetsHelper::getNamespace()
-                                ->get('dataio/session_type_not_valid', 'Session type %s is not valid');
+                    ->get('dataio/session_type_not_valid', 'Session type %s is not valid');
                 throw new \Exception(sprintf($message, $sessionData['type']));
         }
-        
+
         $session->start($profile, $sessionData);
     }
 
@@ -336,6 +362,8 @@ class DataIO
      * If reached then the session state will be set to "stopped"
      * Updates the session position with the current position (stored in a member variable).
      *
+     * @param $step
+     * @param null $outputFileName
      */
     public function progressSession($step, $outputFileName = null)
     {
@@ -359,7 +387,7 @@ class DataIO
         $username = $this->getUsername();
         $this->getDataSession()->setUsername($username);
     }
-    
+
     /**
      * Checks also the current position - if all the ids of the session are done, then the function does nothing.
      * Otherwise it sets the session state from "suspended" to "active", so that it is ready again for processing.
@@ -367,12 +395,15 @@ class DataIO
     public function resumeSession()
     {
         $sessionData = $this->getDataSession()->resume();
-        
+
         $this->setRecordIds($sessionData['recordIds']);
-        
+
         $this->setFileName($sessionData['fileName']);
     }
 
+    /**
+     * @return mixed
+     */
     public function getSessionId()
     {
         $session = $this->getDataSession();
@@ -388,84 +419,129 @@ class DataIO
         return $this->maxRecordCount;
     }
 
+    /**
+     * @return DataDbAdapter
+     */
     public function getDbAdapter()
     {
         return $this->dbAdapter;
     }
 
+    /**
+     * @return DataColumnOptions
+     */
     public function getColumnOptionsAdapter()
     {
         return $this->columnOptions;
     }
 
+    /**
+     * @return DataLimit
+     */
     public function getLimitAdapter()
     {
         return $this->limit;
     }
 
+    /**
+     * @return DataFilter
+     */
     public function getFilterAdapter()
     {
         return $this->filter;
     }
 
+    /**
+     * @return array
+     */
     public function getRecordIds()
     {
         return $this->recordIds;
     }
 
+    /**
+     * @param $recordIds
+     */
     public function setRecordIds($recordIds)
     {
         $this->recordIds = $recordIds;
     }
 
+    /**
+     * @return Session
+     */
     public function getDataSession()
     {
         return $this->dataSession;
     }
 
+    /**
+     * @return string
+     */
     public function getType()
     {
         return $this->type;
     }
 
+    /**
+     * @return string
+     */
     public function getFormat()
     {
         return $this->format;
     }
-    
+
+    /**
+     * @return string
+     */
     public function getFileName()
     {
         return $this->fileName;
     }
-    
+
+    /**
+     * @param $fileName
+     */
     public function setFileName($fileName)
     {
         $this->fileName = $fileName;
     }
 
+    /**
+     * @return string
+     */
     public function getFileSize()
     {
         return $this->fileSize;
     }
 
+    /**
+     * @param $fileSize
+     */
     public function setFileSize($fileSize)
     {
         $this->fileSize = $fileSize;
     }
 
+    /**
+     * @return string
+     */
     public function getUsername()
     {
         return $this->username;
     }
-    
+
+    /**
+     * @param $username
+     */
     public function setUsername($username)
     {
         $this->username = $username;
     }
-    
+
     /**
      * Returns db columns
-     * 
+     *
      * @return string
      */
     public function getColumns()
@@ -481,7 +557,7 @@ class DataIO
 
     /**
      * Returns number of ids
-     * 
+     *
      * @param int $start
      * @param int $numberOfRecords
      * @return array
@@ -490,15 +566,15 @@ class DataIO
     private function loadIds($start, $numberOfRecords)
     {
         $storedIds = $this->getRecordIds();
-        
+
         if ($storedIds === null || empty($storedIds)) {
-            $message = SnippetsHelper::getNamespace()
-                        ->get('dataio/no_loaded_records', 'No loaded record ids');
+            $message = SnippetsHelper::getNamespace()->get('dataio/no_loaded_records', 'No loaded record ids');
             throw new \Exception($message);
         }
-        
+
         $end = $start + $numberOfRecords;
-        
+        $filterIds = array();
+
         for ($index = $start; $index < $end; $index++) {
             if (isset($storedIds[$index])) {
                 $filterIds[] = $storedIds[$index];
@@ -507,5 +583,4 @@ class DataIO
 
         return $filterIds;
     }
-
 }

@@ -2,6 +2,8 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters\Articles;
 
+use Doctrine\DBAL\Connection;
+use Enlight_Components_Db_Adapter_Pdo_Mysql as PDOConnection;
 use Shopware\Components\SwagImportExport\DataType\ArticleDataType;
 use Shopware\Components\SwagImportExport\DbalHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
@@ -11,20 +13,35 @@ use Shopware\Components\SwagImportExport\DataManagers\Articles\ArticleDataManage
 
 class ArticleWriter
 {
-    /** @var \Enlight_Components_Db_Adapter_Pdo_Mysql */
+    /**
+     * @var PDOConnection $db
+     */
     protected $db;
 
-    protected $dbalHelper;
 
-    /** @var \Doctrine\DBAL\Connection */
+    /**
+     * @var DbalHelper $dbalHelper
+     */
+    private $dbalHelper;
+
+    /**
+     * @var Connection $connection
+     */
     protected $connection;
 
-    /** @var ArticleValidator */
+    /**
+     * @var ArticleValidator
+     */
     protected $validator;
 
-    /** @var ArticleDataManager */
+    /**
+     * @var ArticleDataManager
+     */
     protected $dataManager;
 
+    /**
+     * initialises the class properties
+     */
     public function __construct()
     {
         $this->connection = Shopware()->Models()->getConnection();
@@ -35,6 +52,12 @@ class ArticleWriter
         $this->dataManager = new ArticleDataManager($this->db, $this->dbalHelper);
     }
 
+    /**
+     * @param array $article
+     * @param array $defaultValues
+     * @return array
+     * @throws AdapterException
+     */
     public function write($article, $defaultValues)
     {
         $article = $this->validator->prepareInitialData($article);
@@ -43,22 +66,26 @@ class ArticleWriter
         return $this->insertOrUpdateArticle($article, $defaultValues);
     }
 
+    /**
+     * @param array $article
+     * @param array $defaultValues
+     * @return array
+     * @throws AdapterException
+     */
     protected function insertOrUpdateArticle($article, $defaultValues)
     {
         list($mainDetailId, $articleId, $detailId) = $this->findExistingEntries($article);
 
         if ($article['processed']) {
-            return array($articleId, $detailId, $mainDetailId ? : $detailId);
+            return array($articleId, $detailId, $mainDetailId ?: $detailId);
         }
 
         $createDetail = $detailId == 0;
 
         // if detail needs to be created and the (different) mainDetail does not exist: error
         if ($createDetail && !$mainDetailId && $article['mainNumber'] != $article['orderNumber']) {
-            $message = SnippetsHelper::getNamespace()->get(
-                'adapters/articles/variant_existence',
-                'Variant with number %s does not exists.'
-            );
+            $message = SnippetsHelper::getNamespace()
+                ->get('adapters/articles/variant_existence', 'Variant with number %s does not exists.');
             throw new AdapterException(sprintf($message, $article['mainNumber']));
         }
 
@@ -111,11 +138,11 @@ class ArticleWriter
         );
         $builder->execute();
 
-        return array($articleId, $detailId, $mainDetailId ? : $detailId);
+        return array($articleId, $detailId, $mainDetailId ?: $detailId);
     }
 
     /**
-     * @param $article
+     * @param array $article
      * @return array
      */
     protected function findExistingEntries($article)
@@ -149,10 +176,14 @@ class ArticleWriter
         return array($mainDetailId, $articleId, $detailId);
     }
 
+    /**
+     * @param array $article
+     * @return array
+     */
     protected function mapArticleAttributes($article)
     {
         $attributes = array();
-        foreach($article as $key => $value) {
+        foreach ($article as $key => $value) {
             $position = strpos($key, 'attribute');
             if ($position === false || $position !== 0) {
                 continue;
@@ -165,6 +196,10 @@ class ArticleWriter
         return $attributes;
     }
 
+    /**
+     * @param int $detailId
+     * @return string|bool
+     */
     protected function getAttrId($detailId)
     {
         $sql = "SELECT id FROM s_articles_attributes WHERE articledetailsID = ?";

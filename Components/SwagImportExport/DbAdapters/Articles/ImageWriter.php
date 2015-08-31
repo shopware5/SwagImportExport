@@ -2,21 +2,32 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters\Articles;
 
+use Doctrine\DBAL\Connection;
+use Enlight_Components_Db_Adapter_Pdo_Mysql as PDOConnection;
 use Shopware\Components\SwagImportExport\DbAdapters\ArticlesDbAdapter;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 
 class ImageWriter
 {
-    /** @var ArticlesDbAdapter */
+    /**
+     * @var ArticlesDbAdapter $articlesDbAdapter
+     */
     protected $articlesDbAdapter = null;
 
-    /** @var \Enlight_Components_Db_Adapter_Pdo_Mysql */
+    /**
+     * @var PDOConnection $db
+     */
     protected $db;
 
-    /** @var \Doctrine\DBAL\Connection */
+    /**
+     * @var Connection
+     */
     protected $connection;
 
+    /**
+     * @param ArticlesDbAdapter $articlesDbAdapter
+     */
     public function __construct(ArticlesDbAdapter $articlesDbAdapter)
     {
         $this->articlesDbAdapter = $articlesDbAdapter;
@@ -24,18 +35,26 @@ class ImageWriter
         $this->connection = Shopware()->Models()->getConnection();
     }
 
+    /**
+     * @return ArticlesDbAdapter
+     */
     public function getArticlesDbAdapter()
     {
         return $this->articlesDbAdapter;
     }
 
+    /**
+     * @param $articleId
+     * @param $mainDetailOrderNumber
+     * @param $images
+     * @throws AdapterException
+     */
     public function write($articleId, $mainDetailOrderNumber, $images)
     {
         $newImages = array();
         foreach ($images as $image) {
-
             //if image data has only 'parentIndexElement' element
-            if (count($image) < 2 ) {
+            if (count($image) < 2) {
                 break;
             }
 
@@ -89,6 +108,10 @@ class ImageWriter
         }
     }
 
+    /**
+     * @param $mediaId
+     * @return mixed
+     */
     protected function getMediaById($mediaId)
     {
         $media = $this->db->fetchRow(
@@ -99,6 +122,10 @@ class ImageWriter
         return $media;
     }
 
+    /**
+     * @param $name
+     * @return mixed
+     */
     protected function getMediaByName($name)
     {
         $media = $this->db->fetchRow(
@@ -109,6 +136,11 @@ class ImageWriter
         return $media;
     }
 
+    /**
+     * @param $articleId
+     * @param $mediaId
+     * @return bool
+     */
     protected function isImageExists($articleId, $mediaId)
     {
         $isImageExists = $this->db->fetchOne(
@@ -119,6 +151,11 @@ class ImageWriter
         return is_numeric($isImageExists);
     }
 
+    /**
+     * @param $mediaId
+     * @param $imageName
+     * @return bool
+     */
     protected function isImageNameCorrect($mediaId, $imageName)
     {
         $isImageNameCorrect = $this->db->fetchOne(
@@ -129,6 +166,11 @@ class ImageWriter
         return is_numeric($isImageNameCorrect);
     }
 
+    /**
+     * @param $data
+     * @param $articleId
+     * @throws \Doctrine\DBAL\DBALException
+     */
     protected function insertImages($data, $articleId)
     {
         $medias = $data['medias'];
@@ -156,13 +198,18 @@ class ImageWriter
         $this->setMainImage($articleId, $mediaId);
     }
 
+    /**
+     * @param $medias
+     * @param $images
+     * @return array
+     */
     protected function prepareImageData($medias, $images)
     {
         $mediaId = null;
         $imageData = array();
-        foreach($images as $key => $image) {
+        foreach ($images as $key => $image) {
             $imageData[$key]['name'] = $image['path'];
-            $imageData[$key]['main'] = $image['main'] ? : 2;
+            $imageData[$key]['main'] = $image['main'] ?: 2;
             $imageData[$key]['description'] = $medias[$key]['description'];
             $imageData[$key]['extension'] = $medias[$key]['extension'];
             $imageData[$key]['variantId'] = $image[$key]['variantId'];
@@ -176,6 +223,10 @@ class ImageWriter
         return array($imageData, $mediaId);
     }
 
+    /**
+     * @param $articleId
+     * @param $mediaId
+     */
     protected function setMainImage($articleId, $mediaId)
     {
         $count = $this->countOfMainImages($articleId);
@@ -190,6 +241,10 @@ class ImageWriter
         }
     }
 
+    /**
+     * @param $articleId
+     * @return string
+     */
     protected function countOfMainImages($articleId)
     {
         $count = $this->db->fetchOne(
@@ -202,12 +257,21 @@ class ImageWriter
         return $count;
     }
 
+    /**
+     * @param $articleId
+     * @throws \Doctrine\DBAL\DBALException
+     */
     protected function setFirstImageAsMain($articleId)
     {
         $update = "UPDATE s_articles_img SET main = 1 WHERE articleID = {$articleId} ORDER BY id ASC LIMIT 1";
         $this->connection->exec($update);
     }
 
+    /**
+     * @param $articleId
+     * @param $mediaId
+     * @throws \Doctrine\DBAL\DBALException
+     */
     protected function updateMain($articleId, $mediaId)
     {
         $update = "UPDATE s_articles_img SET main = 2 WHERE articleID = {$articleId} AND media_id != {$mediaId}";

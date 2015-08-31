@@ -6,15 +6,24 @@ use Shopware\Components\SwagImportExport\DataType\CustomerDataType;
 
 class CustomerDataManager extends DataManager
 {
-    /** @var \Shopware_Components_Config */
+    /**
+     * @var \Shopware_Components_Config
+     */
     private $config = null;
 
-    /** @var \Enlight_Components_Db_Adapter_Pdo_Mysql */
+    /**
+     * @var \Enlight_Components_Db_Adapter_Pdo_Mysql
+     */
     private $db = null;
 
-    /** @var \Shopware\Components\Password\Manager */
+    /**
+     * @var \Shopware\Components\Password\Manager
+     */
     private $passwordManager = null;
 
+    /**
+     * initialises the class properties
+     */
     public function __construct()
     {
         $this->db = Shopware()->Db();
@@ -22,6 +31,9 @@ class CustomerDataManager extends DataManager
         $this->passwordManager = Shopware()->PasswordEncoder();
     }
 
+    /**
+     * @return array
+     */
     public function getDefaultFields()
     {
         return CustomerDataType::$defaultFieldsForCreate;
@@ -109,10 +121,10 @@ class CustomerDataManager extends DataManager
      */
     private function getSubShopDefaultPaymentId($subShopId)
     {
-        $query = "SELECT value.value
+        $query = "SELECT `value`.value
                   FROM s_core_config_elements AS element
-                  JOIN s_core_config_values AS value ON value.element_id = element.id
-                  WHERE value.shop_id = ? AND element.name = 'defaultpayment'";
+                  JOIN s_core_config_values AS `value` ON `value`.element_id = element.id
+                  WHERE `value`.shop_id = ? AND element.name = 'defaultpayment'";
 
         return $this->db->fetchOne($query, array($subShopId));
     }
@@ -123,11 +135,11 @@ class CustomerDataManager extends DataManager
      */
     private function getMainShopDefaultPaymentId($subShopId)
     {
-        $query =  "SELECT value.value
-                   FROM s_core_config_elements AS element
-                   JOIN s_core_config_values AS value ON value.element_id = element.id
-                   WHERE value.shop_id = (SELECT main_id FROM s_core_shops WHERE id = ?)
-                         AND element.name = 'defaultpayment'";
+        $query = "SELECT `value`.value
+                  FROM s_core_config_elements AS element
+                  JOIN s_core_config_values AS `value` ON `value`.element_id = element.id
+                  WHERE `value`.shop_id = (SELECT main_id FROM s_core_shops WHERE id = ?)
+                    AND element.name = 'defaultpayment'";
 
         return $this->db->fetchOne($query, array($subShopId));
     }

@@ -2,6 +2,7 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters\Articles;
 
+use Doctrine\DBAL\DBALException;
 use Shopware\Components\SwagImportExport\DbalHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
@@ -9,9 +10,14 @@ use Shopware\Components\SwagImportExport\Validators\Articles\ConfiguratorValidat
 
 class ConfiguratorWriter
 {
-    /** @var ConfiguratorValidator */
+    /**
+     * @var ConfiguratorValidator
+     */
     protected $validator = null;
 
+    /**
+     * initialises the class properties
+     */
     public function __construct()
     {
         $this->dbalHelper = new DbalHelper();
@@ -21,6 +27,13 @@ class ConfiguratorWriter
         $this->validator = new ConfiguratorValidator();
     }
 
+    /**
+     * @param int $articleId
+     * @param int $articleDetailId
+     * @param int $mainDetailId
+     * @param array $configuratorData
+     * @throws AdapterException
+     */
     public function write($articleId, $articleDetailId, $mainDetailId, $configuratorData)
     {
         $configuratorSetId = null;
@@ -38,12 +51,15 @@ class ConfiguratorWriter
             if (!$configuratorSetId && isset($configurator['configSetId']) && !empty($configurator['configSetId'])) {
                 $setExists = $this->checkExistence('s_article_configurator_sets', $configurator['configSetId']);
                 $match = $this->compareSetIdByName($articleId, $configurator['configSetId']);
-                if ($setExists && $match){
+                if ($setExists && $match) {
                     $configuratorSetId = $configurator['configSetId'];
                 }
             }
 
-            if (!$configuratorSetId && isset($configurator['configSetName']) && !empty($configurator['configSetName'])){
+            if (!$configuratorSetId
+                && isset($configurator['configSetName'])
+                && !empty($configurator['configSetName'])
+            ) {
                 $this->getSet($configurator['configSetName']);
             }
 
@@ -52,10 +68,9 @@ class ConfiguratorWriter
             }
 
             if (!$configuratorSetId) {
-                if (empty($configurator['configSetName'])){
+                if (empty($configurator['configSetName'])) {
                     $orderNumber = $this->getOrderNumber($articleId);
                     $dataSet['name'] = 'Set-' . $orderNumber;
-
                 } else {
                     $dataSet['name'] = $configurator['configSetName'];
                 }
@@ -70,7 +85,7 @@ class ConfiguratorWriter
                 }
             }
 
-            if ($mainDetailId != $articleDetailId){
+            if ($mainDetailId != $articleDetailId) {
                 //update article sets
                 $this->updateArticleSetsRelation($articleId, $configuratorSetId);
             }
@@ -96,13 +111,13 @@ class ConfiguratorWriter
 
             $this->updateGroupsRelation($configuratorSetId, $groupId);
 
-            if (isset($configurator['configOptionName']) && !$optionId){
+            if (isset($configurator['configOptionName']) && !$optionId) {
                 $optionId = $this->getOptionId($configurator['configOptionName'], $groupId);
             }
 
             //creates option
             if (!$optionId) {
-                if (isset($configurator['configOptionPosition']) && !empty($configurator['configOptionPosition'])){
+                if (isset($configurator['configOptionPosition']) && !empty($configurator['configOptionPosition'])) {
                     $position = $configurator['configOptionPosition'];
                 } else {
                     $position = $this->getNextOptionPosition($groupId);
@@ -125,10 +140,13 @@ class ConfiguratorWriter
         }
     }
 
+    /**
+     * @param array $configurator
+     * @return bool
+     */
     private function isValid($configurator)
     {
-        if (!isset($configurator['configOptionId']) || empty($configurator['configOptionId'])){
-
+        if (!isset($configurator['configOptionId']) || empty($configurator['configOptionId'])) {
             if (!isset($configurator['configGroupName']) && !isset($configurator['configGroupId'])) {
                 return false;
             }
@@ -145,44 +163,60 @@ class ConfiguratorWriter
         return true;
     }
 
+    /**
+     * @param $articleId
+     * @param $setId
+     */
     protected function updateArticleSetsRelation($articleId, $setId)
     {
         $this->db->query('UPDATE s_articles SET configurator_set_id = ? WHERE id = ?', array($setId, $articleId));
     }
 
+    /**
+     * @param $setId
+     * @param $groupId
+     * @throws DBALException
+     */
     protected function updateGroupsRelation($setId, $groupId)
     {
-        $sql = "
-            INSERT INTO s_article_configurator_set_group_relations (set_id, group_id)
-            VALUES ($setId, $groupId)
-            ON DUPLICATE KEY UPDATE set_id=VALUES(set_id), group_id=VALUES(group_id)
-        ";
+        $sql = "INSERT INTO s_article_configurator_set_group_relations (set_id, group_id)
+                VALUES ($setId, $groupId)
+                ON DUPLICATE KEY UPDATE set_id=VALUES(set_id), group_id=VALUES(group_id)";
 
         $this->connection->exec($sql);
     }
 
+    /**
+     * @param $articleDetailId
+     * @param $optionId
+     * @throws DBALException
+     */
     protected function updateOptionRelation($articleDetailId, $optionId)
     {
-        $sql = "
-            INSERT INTO s_article_configurator_option_relations (article_id, option_id)
-            VALUES ($articleDetailId, $optionId)
-            ON DUPLICATE KEY UPDATE article_id=VALUES(article_id), option_id=VALUES(option_id)
-        ";
+        $sql = "INSERT INTO s_article_configurator_option_relations (article_id, option_id)
+                VALUES ($articleDetailId, $optionId)
+                ON DUPLICATE KEY UPDATE article_id=VALUES(article_id), option_id=VALUES(option_id)";
 
         $this->connection->exec($sql);
     }
 
+    /**
+     * @param $setId
+     * @param $optionId
+     * @throws DBALException
+     */
     protected function updateSetOptionRelation($setId, $optionId)
     {
-        $sql = "
-            INSERT INTO s_article_configurator_set_option_relations (set_id, option_id)
-            VALUES ($setId, $optionId)
-            ON DUPLICATE KEY UPDATE set_id=VALUES(set_id), option_id=VALUES(option_id)
-        ";
+        $sql = "INSERT INTO s_article_configurator_set_option_relations (set_id, option_id)
+                VALUES ($setId, $optionId)
+                ON DUPLICATE KEY UPDATE set_id=VALUES(set_id), option_id=VALUES(option_id)";
 
         $this->connection->exec($sql);
     }
 
+    /**
+     * @return array
+     */
     protected function getSets()
     {
         $sets = array();
@@ -195,59 +229,67 @@ class ConfiguratorWriter
         return $sets;
     }
 
+    /**
+     * @param $articleId
+     * @return mixed
+     */
     protected function getSetByArticleId($articleId)
     {
-        $result = $this->db->fetchRow(
-            'SELECT configurator_set_id FROM s_articles WHERE id = ?',
-            array($articleId)
-        );
+        $result = $this->db->fetchRow('SELECT configurator_set_id FROM s_articles WHERE id = ?', array($articleId));
 
         return $result['configurator_set_id'];
     }
 
+    /**
+     * @param $data
+     * @return string
+     */
     protected function createSet($data)
     {
-        $builder =  $this->dbalHelper->getQueryBuilderForEntity(
-            $data,
-            'Shopware\Models\Article\Configurator\Set',
-            false
-        );
+        $builder = $this->dbalHelper
+            ->getQueryBuilderForEntity($data, 'Shopware\Models\Article\Configurator\Set', false);
         $builder->execute();
 
         return $this->connection->lastInsertId();
     }
 
+    /**
+     * @param $data
+     * @return string
+     */
     protected function createGroup($data)
     {
-        $builder =  $this->dbalHelper->getQueryBuilderForEntity(
-            $data,
-            'Shopware\Models\Article\Configurator\Group',
-            false
-        );
+        $builder = $this->dbalHelper
+            ->getQueryBuilderForEntity($data, 'Shopware\Models\Article\Configurator\Group', false);
         $builder->execute();
 
         return $this->connection->lastInsertId();
     }
 
+    /**
+     * @param $data
+     * @return string
+     */
     protected function createOption($data)
     {
-        $builder =  $this->dbalHelper->getQueryBuilderForEntity(
-            $data,
-            'Shopware\Models\Article\Configurator\Option',
-            false
-        );
+        $builder = $this->dbalHelper
+            ->getQueryBuilderForEntity($data, 'Shopware\Models\Article\Configurator\Option', false);
         $builder->execute();
 
         return $this->connection->lastInsertId();
     }
 
+    /**
+     * @param $articleId
+     * @return mixed
+     */
     protected function getOrderNumber($articleId)
     {
-        return $this->connection->fetchColumn(
-            "SELECT `ordernumber` FROM s_articles_details
-             WHERE kind = 1 AND articleID = ?",
-            array($articleId)
-        );
+        $sql = "SELECT `ordernumber`
+                FROM s_articles_details
+                WHERE kind = 1 AND articleID = ?";
+
+        return $this->connection->fetchColumn($sql, array($articleId));
     }
 
     /**
@@ -263,49 +305,68 @@ class ConfiguratorWriter
         return $setId;
     }
 
+    /**
+     * @param $name
+     * @return mixed
+     */
     public function getGroup($name)
     {
-        $result = $this->connection->fetchColumn(
-            "SELECT `id` FROM s_article_configurator_groups WHERE `name` = ?",
-            array($name)
-        );
+        $sql = "SELECT `id`
+                FROM s_article_configurator_groups
+                WHERE `name` = ?";
 
-        return $result;
+        return $this->connection->fetchColumn($sql, array($name));
     }
 
+    /**
+     * @param $optionName
+     * @param $groupId
+     * @return string
+     */
     public function getOptionId($optionName, $groupId)
     {
-        $optionId = $this->db->fetchOne(
-            'SELECT `id` FROM s_article_configurator_options WHERE `name` = ? AND `group_id` = ?',
-            array($optionName, $groupId)
-        );
+        $sql = 'SELECT `id`
+                FROM s_article_configurator_options
+                WHERE `name` = ? AND `group_id` = ?';
 
-        return $optionId;
+        return $this->db->fetchOne($sql, array($optionName, $groupId));
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function getOptionRow($id)
     {
-        return $this->db->fetchRow(
-            'SELECT `id`, `group_id`, `name`, `position` FROM s_article_configurator_options WHERE `id` = ?',
-            array($id)
-        );
+        $sql = 'SELECT `id`, `group_id`, `name`, `position`
+                FROM s_article_configurator_options
+                WHERE `id` = ?';
+
+        return $this->db->fetchRow($sql, array($id));
     }
 
+    /**
+     * @param $table
+     * @param $id
+     * @return bool
+     */
     public function checkExistence($table, $id)
     {
-        $result = $this->connection->fetchColumn(
-            "SELECT `id` FROM $table WHERE id = ?",
-            array($id)
-        );
+        $sql = "SELECT `id` FROM $table WHERE id = ?";
+        $result = $this->connection->fetchColumn($sql, array($id));
 
         return $result ? true : false;
     }
 
-
+    /**
+     * @param $data
+     * @return mixed|string
+     * @throws AdapterException
+     */
     public function getConfiguratorGroup($data)
     {
         if (isset($data['configGroupId'])) {
-            if ($this->checkExistence('s_article_configurator_groups', $data['configGroupId'])){
+            if ($this->checkExistence('s_article_configurator_groups', $data['configGroupId'])) {
                 $groupId = $data['configGroupId'];
             }
         }
@@ -334,20 +395,31 @@ class ConfiguratorWriter
         return $groupId;
     }
 
+    /**
+     * @return int|string
+     */
     protected function getNextGroupPosition()
     {
-        $position = $this->db->fetchOne("SELECT `position` FROM `s_article_configurator_groups` ORDER BY `position` DESC LIMIT 1");
+        $sql = "SELECT `position`
+                FROM `s_article_configurator_groups`
+                ORDER BY `position` DESC LIMIT 1";
+        $position = $this->db->fetchOne($sql);
         $position = $position ? ++$position : 1;
 
         return $position;
     }
 
+    /**
+     * @param $groupId
+     * @return int|string
+     */
     protected function getNextOptionPosition($groupId)
     {
-        $position = $this->db->fetchOne(
-            "SELECT `position` FROM `s_article_configurator_options` WHERE `group_id` = ? ORDER BY `position` DESC LIMIT 1",
-            $groupId
-        );
+        $sql = "SELECT `position`
+                FROM `s_article_configurator_options`
+                WHERE `group_id` = ?
+                ORDER BY `position` DESC LIMIT 1";
+        $position = $this->db->fetchOne($sql, $groupId);
         $position = $position ? ++$position : 1;
 
         return $position;

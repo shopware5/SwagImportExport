@@ -2,6 +2,7 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Shopware\Components\SwagImportExport\DataManagers\CategoriesDataManager;
 use Shopware\Components\SwagImportExport\DataType\CategoryDataType;
 use Shopware\Models\Category\Category;
@@ -12,7 +13,6 @@ use Shopware\Components\SwagImportExport\Validators\CategoryValidator;
 
 class CategoriesDbAdapter implements DataDbAdapter
 {
-
     /**
      * Shopware\Components\Model\ModelManager
      */
@@ -47,12 +47,14 @@ class CategoriesDbAdapter implements DataDbAdapter
      */
     protected $defaultValues;
 
+    private $categoryAvoidCustomerGroups = null;
+
     /**
      * Returns record ids
-     * 
+     *
      * @param int $start
      * @param int $limit
-     * @param type $filter
+     * @param $filter
      * @return array
      */
     public function readRecordIds($start = null, $limit = null, $filter = null)
@@ -118,7 +120,7 @@ class CategoriesDbAdapter implements DataDbAdapter
     /**
      * @param $columns
      * @param $ids
-     * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
+     * @return \Shopware\Components\Model\QueryBuilder
      */
     public function getBuilder($columns, $ids)
     {
@@ -134,11 +136,18 @@ class CategoriesDbAdapter implements DataDbAdapter
         return $builder;
     }
 
+    /**
+     * @return array
+     */
     public function getUnprocessedData()
     {
         return $this->unprocessedData;
     }
 
+    /**
+     * @return array|string
+     * @throws \Zend_Db_Statement_Exception
+     */
     public function getAttributes()
     {
         $db = $this->getDb();
@@ -181,7 +190,7 @@ class CategoriesDbAdapter implements DataDbAdapter
 
     /**
      * Insert/Update data into db
-     * 
+     *
      * @param array $records
      * @throws \Enlight_Event_Exception
      * @throws \Exception
@@ -189,10 +198,8 @@ class CategoriesDbAdapter implements DataDbAdapter
     public function write($records)
     {
         if (empty($records['default'])) {
-            $message = SnippetsHelper::getNamespace()->get(
-                'adapters/categories/no_records',
-                'No category records were found.'
-            );
+            $message = SnippetsHelper::getNamespace()
+                ->get('adapters/categories/no_records', 'No category records were found.');
             throw new \Exception($message);
         }
 
@@ -231,21 +238,21 @@ class CategoriesDbAdapter implements DataDbAdapter
                     throw new AdapterException(sprintf($message, $record['name']));
                 }
 
-               $record = $this->prepareData($record, $index, $category->getId(), $records['customerGroups']);
+                $record = $this->prepareData($record, $index, $category->getId(), $records['customerGroups']);
 
                 $category->fromArray($record);
 
                 $violations = $manager->validate($category);
                 if ($violations->count() > 0) {
                     $message = SnippetsHelper::getNamespace()
-                                    ->get('adapters/category/no_valid_category_entity', 'No valid category entity for category %s');
+                        ->get('adapters/category/no_valid_category_entity', 'No valid category entity for category %s');
                     throw new AdapterException(sprintf($message, $category->getName()));
                 }
 
                 $manager->persist($category);
 
                 $metadata = $manager->getClassMetaData(get_class($category));
-                $metadata->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);
+                $metadata->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_NONE);
 
                 $manager->flush();
                 $manager->clear();
@@ -289,8 +296,11 @@ class CategoriesDbAdapter implements DataDbAdapter
         return $category;
     }
 
-    private $categoryAvoidCustomerGroups = null;
-
+    /**
+     * @param $categoryId
+     * @param $customerGroupId
+     * @return bool
+     */
     private function checkIfRelationExists($categoryId, $customerGroupId)
     {
         if ($this->categoryAvoidCustomerGroups === null) {
@@ -306,6 +316,9 @@ class CategoriesDbAdapter implements DataDbAdapter
         return false;
     }
 
+    /**
+     *
+     */
     private function setCategoryAvoidCustomerGroups()
     {
         $sql = "SELECT categoryID, customergroupID FROM s_categories_avoid_customergroups";
@@ -345,7 +358,7 @@ class CategoriesDbAdapter implements DataDbAdapter
         //prepares customer groups associated data
         $customerGroups = array();
         $customerGroupIds = $this->getCustomerGroupIdsFromIndex($groups, $index);
-        foreach($customerGroupIds as $customerGroupID) {
+        foreach ($customerGroupIds as $customerGroupID) {
             $customerGroup = $this->getCustomerGroupById($customerGroupID);
             if ($customerGroup && !$this->checkIfRelationExists($categoryId, $customerGroup->getId())) {
                 $customerGroups[] = $customerGroup;
@@ -393,6 +406,9 @@ class CategoriesDbAdapter implements DataDbAdapter
         return false;
     }
 
+    /**
+     * @return array
+     */
     public function getCustomerGroupsColumns()
     {
         return array(
@@ -457,6 +473,10 @@ class CategoriesDbAdapter implements DataDbAdapter
         $this->defaultValues = $values;
     }
 
+    /**
+     * @param $message
+     * @throws \Exception
+     */
     public function saveMessage($message)
     {
         $errorMode = Shopware()->Config()->get('SwagImportExportErrorMode');
@@ -468,11 +488,17 @@ class CategoriesDbAdapter implements DataDbAdapter
         $this->setLogMessages($message);
     }
 
+    /**
+     * @return array
+     */
     public function getLogMessages()
     {
         return $this->logMessages;
     }
 
+    /**
+     * @param $logMessages
+     */
     public function setLogMessages($logMessages)
     {
         $this->logMessages[] = $logMessages;
@@ -480,8 +506,8 @@ class CategoriesDbAdapter implements DataDbAdapter
 
     /**
      * Returns category repository
-     * 
-     * @return \Shopware\Models\Category\Category
+     *
+     * @return \Shopware\Models\Category\Repository
      */
     public function getRepository()
     {
@@ -493,7 +519,7 @@ class CategoriesDbAdapter implements DataDbAdapter
 
     /**
      * Returns entity manager
-     * 
+     *
      * @return \Shopware\Components\Model\ModelManager
      */
     public function getManager()
@@ -505,14 +531,20 @@ class CategoriesDbAdapter implements DataDbAdapter
         return $this->manager;
     }
 
+    /**
+     * @return \Enlight_Components_Db_Adapter_Pdo_Mysql
+     */
     public function getDb()
     {
-        if($this->db === null) {
+        if ($this->db === null) {
             $this->db = Shopware()->Db();
         }
         return $this->db;
     }
 
+    /**
+     * @return CategoryValidator
+     */
     public function getValidator()
     {
         if ($this->validator === null) {
@@ -522,6 +554,9 @@ class CategoriesDbAdapter implements DataDbAdapter
         return $this->validator;
     }
 
+    /**
+     * @return CategoriesDataManager
+     */
     public function getDataManager()
     {
         if ($this->dataManager === null) {

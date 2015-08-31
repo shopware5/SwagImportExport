@@ -2,12 +2,10 @@
 
 namespace Tests\Shopware\ImportExport;
 
-use Tests\Shopware\ImportExport\ImportExportTestHelper;
 use Shopware\Components\SwagImportExport\DataWorkflow;
 
 class ImportExportTest extends ImportExportTestHelper
 {
-
     public $test = false;
     
     public function removeWhiteSpaces($string)
@@ -17,7 +15,6 @@ class ImportExportTest extends ImportExportTestHelper
     
     public function testXMLExportCycle()
     {
-        
         $expectedHeader = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
                             <Root>
                                 <Header>
@@ -94,7 +91,7 @@ class ImportExportTest extends ImportExportTestHelper
         $dataSession->expects($this->any())->method('getType')->will($this->returnValue('export'));
         $dataSession->expects($this->any())->method('start')->will($this->returnValue());
 
-        //Mocks profile 
+        //Mocks profile
         $profile = $this->getMock('Shopware\Components\SwagImportExport\Profile\Profile');
         $profile->expects($this->any())->method('getType')->will($this->returnValue('categories'));
         $profile->expects($this->any())->method('getName')->will($this->returnValue('shopware categories'));
@@ -109,7 +106,7 @@ class ImportExportTest extends ImportExportTestHelper
         //Testing the header content of the XML
         $fileHelper->expects($this->at(0))
                 ->method('writeStringToFile')
-                ->will($this->returnCallback(function($file, $actualXML)use($expectedHeader) {
+                ->will($this->returnCallback(function ($file, $actualXML) use ($expectedHeader) {
                             $actualXML = $this->removeWhiteSpaces($actualXML);
                             $expectedHeader = $this->removeWhiteSpaces($expectedHeader);
                             $this->assertEquals($expectedHeader, $actualXML);
@@ -118,7 +115,7 @@ class ImportExportTest extends ImportExportTestHelper
         //Testing the body content of the XML
         $fileHelper->expects($this->at(1))
                 ->method('writeStringToFile')
-                ->will($this->returnCallback(function($file, $actualXML)use($expectedBody) {
+                ->will($this->returnCallback(function ($file, $actualXML) use ($expectedBody) {
                             $actualXML = $this->removeWhiteSpaces($actualXML);
                             $expectedBody = $this->removeWhiteSpaces($expectedBody);
                             $this->assertEquals($expectedBody, $actualXML);
@@ -127,7 +124,7 @@ class ImportExportTest extends ImportExportTestHelper
         //Testing the footer content of the XML
         $fileHelper->expects($this->at(2))
                 ->method('writeStringToFile')
-                ->will($this->returnCallback(function($file, $actualXML)use($expectedFooter) {
+                ->will($this->returnCallback(function ($file, $actualXML) use ($expectedFooter) {
                             $actualXML = $this->removeWhiteSpaces($actualXML);
                             $expectedFooter = $this->removeWhiteSpaces($expectedFooter);
                             $this->assertEquals($expectedFooter, $actualXML);
@@ -151,12 +148,12 @@ class ImportExportTest extends ImportExportTestHelper
 
         $postData = array();
 
-        $dataWorkflow->export($postData);        
+        $dataWorkflow->export($postData);
     }
     
     public function testXMLImportCycle()
     {
-        $expectedRecords = array( 
+        $expectedRecords = array(
             'default' =>array(
                 array(
                     'id' => '3',
@@ -256,16 +253,16 @@ class ImportExportTest extends ImportExportTestHelper
 
         $dataFactory = $this->Plugin()->getDataFactory();
 
-        //Mocks db adapter 
+        //Mocks db adapter
         $dbAdapter = $this->getMock('Shopware\Components\SwagImportExport\DbAdapters\CategoriesDbAdapter');
         $dbAdapter->expects(
                 $this->any())
                 ->method('write')
-                ->will($this->returnCallback(function($records)use($expectedRecords) {
+                ->will($this->returnCallback(function ($records) use ($expectedRecords) {
                         $this->assertEquals($expectedRecords, $records);
                 }));
         
-        //Mocks profile 
+        //Mocks profile
         $profile = $this->getMock('Shopware\Components\SwagImportExport\Profile\Profile');
         $profile->expects($this->any())->method('getType')->will($this->returnValue('categories'));
         $profile->expects($this->any())->method('getName')->will($this->returnValue('shopware categories'));
@@ -304,5 +301,4 @@ class ImportExportTest extends ImportExportTestHelper
         
         $dataWorkflow->import($params, $inputFile);
     }
-
 }

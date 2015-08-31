@@ -11,19 +11,18 @@ use Shopware\Components\SwagImportExport\FileIO\Encoders\XmlEncoder;
  */
 class XmlFileWriter implements FileWriter
 {
-
     /**
      * @var boolean
      */
     protected $treeStructure = true;
 
     /**
-     * @var Shopware_Components_Convert_Xml
+     * @var XmlEncoder
      */
     protected $xmlConvertor;
     
     /**
-     * @var $fileHelper 
+     * @var FileHelper $fileHelper
      */
     protected $fileHelper;
     
@@ -33,7 +32,11 @@ class XmlFileWriter implements FileWriter
     }
 
     /**
-     * Writes the header data in the file. The header data should be in a tree-like structure. 
+     * Writes the header data in the file. The header data should be in a tree-like structure.
+     *
+     * @param $fileName
+     * @param $headerData
+     * @throws \Exception
      */
     public function writeHeader($fileName, $headerData)
     {
@@ -45,6 +48,10 @@ class XmlFileWriter implements FileWriter
      * Writes records in the file. The data must be a tree-like structure.
      * The header of the file must be already written on the harddisk,
      * otherwise the xml fill have an invalid format.
+     *
+     * @param $fileName
+     * @param $data
+     * @throws \Exception
      */
     public function writeRecords($fileName, $data)
     {
@@ -56,8 +63,12 @@ class XmlFileWriter implements FileWriter
     }
 
     /**
-     * Writes the footer data in the file. These are usually some closing tags - 
+     * Writes the footer data in the file. These are usually some closing tags -
      * they should be in a tree-like structure.
+     *
+     * @param $fileName
+     * @param $footerData
+     * @throws \Exception
      */
     public function writeFooter($fileName, $footerData)
     {
@@ -68,26 +79,32 @@ class XmlFileWriter implements FileWriter
         $this->getFileHelper()->writeStringToFile($fileName, $data, FILE_APPEND);
     }
 
+    /**
+     * @return bool
+     */
     public function hasTreeStructure()
     {
         return $this->treeStructure;
     }
-    
+
+    /**
+     * @return FileHelper
+     */
     public function getFileHelper()
     {
         return $this->fileHelper;
     }
 
     /**
-     * Spliting the tree into two parts
-     * 
+     * Splitting the tree into two parts
+     *
      * @param array $data
      * @return string
      * @throws \Exception
      */
     protected function splitHeaderFooter($data)
     {
-        //converting the whole template tree without the interation part
+        //converting the whole template tree without the iteration part
         $convertor = $this->getXmlConvertor();
         $data = $convertor->encode($data);
 
@@ -98,9 +115,9 @@ class XmlFileWriter implements FileWriter
     }
 
     /**
-     * Returns Shopware_Components_Convert_Xml
-     * 
-     * @return object
+     * Returns XmlEncoder
+     *
+     * @return XmlEncoder
      */
     protected function getXmlConvertor()
     {
@@ -110,5 +127,4 @@ class XmlFileWriter implements FileWriter
 
         return $this->xmlConvertor;
     }
-    
 }

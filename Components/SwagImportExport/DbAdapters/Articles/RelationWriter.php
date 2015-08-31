@@ -2,27 +2,37 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters\Articles;
 
+use Doctrine\DBAL\Connection;
+use Enlight_Components_Db_Adapter_Pdo_Mysql as PDOConnection;
 use Shopware\Components\SwagImportExport\DbAdapters\ArticlesDbAdapter;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 
-
 /**
  * Class RelationWriter
+ *
  * @package Shopware\Components\SwagImportExport\DbAdapters\Articles
  *
  * This writer is used to import 'similar' or 'accessory' articles.
  */
 class RelationWriter
 {
-    /** @var ArticlesDbAdapter */
+    /**
+     * @var ArticlesDbAdapter $articlesDbAdapter
+     */
     protected $articlesDbAdapter = null;
 
+    /**
+     * @var array $relationTypes
+     */
     protected $relationTypes = array('similar', 'accessory');
 
+    /**
+     * @var array $relationTables
+     */
     protected $relationTables = array(
         'accessory' => 's_articles_relationships',
-        'similar'   => 's_articles_similar'
+        'similar' => 's_articles_similar'
     );
 
     protected $table = null;
@@ -33,12 +43,19 @@ class RelationWriter
 
     protected $defaultSnippetMessage = null;
 
-    /** @var \Enlight_Components_Db_Adapter_Pdo_Mysql */
+    /**
+     * @var PDOConnection $db
+     */
     protected $db;
 
-    /** @var \Doctrine\DBAL\Connection */
+    /**
+     * @var Connection $connection
+     */
     protected $connection;
 
+    /**
+     * @param ArticlesDbAdapter $articlesDbAdapter
+     */
     public function __construct(ArticlesDbAdapter $articlesDbAdapter)
     {
         $this->articlesDbAdapter = $articlesDbAdapter;
@@ -46,11 +63,22 @@ class RelationWriter
         $this->connection = Shopware()->Models()->getConnection();
     }
 
+    /**
+     * @return ArticlesDbAdapter
+     */
     public function getArticlesDbAdapter()
     {
         return $this->articlesDbAdapter;
     }
 
+    /**
+     * @param $articleId
+     * @param $mainOrderNumber
+     * @param $relations
+     * @param $relationType
+     * @param $processedFlag
+     * @throws AdapterException
+     */
     public function write($articleId, $mainOrderNumber, $relations, $relationType, $processedFlag)
     {
         if (!is_numeric($articleId)) {
@@ -62,24 +90,23 @@ class RelationWriter
         $newRelations = array();
         $allRelations = array();
         foreach ($relations as $relation) {
-
             //if relation data has only 'parentIndexElement' element
-            if (count($relation) < 2 ) {
+            if (count($relation) < 2) {
                 break;
             }
 
-            if ((!isset($relation[$this->idKey]) || !$relation[$this->idKey]) &&
-                (!isset($relation['ordernumber']) || !$relation['ordernumber'])) {
+            if ((!isset($relation[$this->idKey]) || !$relation[$this->idKey])
+                && (!isset($relation['ordernumber']) || !$relation['ordernumber'])
+            ) {
                 $this->deleteAllRelations($articleId);
                 continue;
             }
 
             if (isset($relation['ordernumber']) && $relation['ordernumber']) {
-                $relationId = $this->getRelationIdByOrderNumber($relation['ordernumber'], $articleId);
+                $relationId = $this->getRelationIdByOrderNumber($relation['ordernumber']);
 
                 if (!$relationId && $processedFlag === true) {
-                    $message = SnippetsHelper::getNamespace()
-                        ->get($this->snippetName, $this->defaultSnippetMessage);
+                    $message = SnippetsHelper::getNamespace()->get($this->snippetName, $this->defaultSnippetMessage);
                     throw new AdapterException(sprintf($message, $relation['ordernumber']));
                 }
 
@@ -89,7 +116,12 @@ class RelationWriter
                         'ordernumber' => $relation['ordernumber'],
                     );
 
-                    $this->getArticlesDbAdapter()->saveUnprocessedData('articles', strtolower($relationType), $mainOrderNumber, $data);
+                    $this->getArticlesDbAdapter()->saveUnprocessedData(
+                        'articles',
+                        strtolower($relationType),
+                        $mainOrderNumber,
+                        $data
+                    );
                     continue;
                 }
 
@@ -108,7 +140,8 @@ class RelationWriter
         }
 
         if ($allRelations && !$processedFlag) {
-            $this->deleteRelations($allRelations, $articleId); //delete the relations that don't exist in the csv file, but exist in the db"
+            //delete the relations that don't exist in the csv file, but exist in the db"
+            $this->deleteRelations($allRelations, $articleId);
         }
 
         if ($newRelations) {
@@ -119,7 +152,8 @@ class RelationWriter
     /**
      * Checks whether the relation type exists.
      * Sets the table name.
-     * Sets the idKey used to access relation's id. Example: accessory - $relation['accessoryId'], similar - $relation['similarId']
+     * Sets the idKey used to access relation's id. Example: accessory - $relation['accessoryId'],
+     * similar - $relation['similarId']
      *
      * @param string $relationType
      * @throws AdapterException

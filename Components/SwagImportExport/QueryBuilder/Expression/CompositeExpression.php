@@ -37,7 +37,7 @@ class CompositeExpression implements \Countable
     /**
      * Constant that represents an OR composite expression.
      */
-    const TYPE_OR  = 'OR';
+    const TYPE_OR = 'OR';
 
     /**
      * The instance type of composite expression.
@@ -56,8 +56,8 @@ class CompositeExpression implements \Countable
     /**
      * Constructor.
      *
-     * @param string $type  Instance type of composite expression.
-     * @param array  $parts Composition of expressions to be joined on composite expression.
+     * @param string $type Instance type of composite expression.
+     * @param array $parts Composition of expressions to be joined on composite expression.
      */
     public function __construct($type, array $parts = array())
     {
@@ -91,7 +91,7 @@ class CompositeExpression implements \Countable
      */
     public function add($part)
     {
-        if ( ! empty($part) || ($part instanceof self && $part->count() > 0)) {
+        if (!empty($part) || ($part instanceof self && $part->count() > 0)) {
             $this->parts[] = $part;
         }
 

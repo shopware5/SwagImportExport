@@ -2,6 +2,7 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters\Articles;
 
+use Enlight_Components_Db_Adapter_Pdo_Mysql as PDOConnection;
 use Shopware\Components\SwagImportExport\DbalHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
@@ -10,17 +11,29 @@ use Shopware\Components\SwagImportExport\DataManagers\Articles\PriceDataManager;
 
 class PriceWriter
 {
-    /** @var \Enlight_Components_Db_Adapter_Pdo_Mysql */
+    /**
+     * @var PDOConnection $db
+     */
     protected $db;
 
+    /**
+     * @var array $customerGroups
+     */
     protected $customerGroups;
 
-    /** @var PriceValidator */
+    /**
+     * @var PriceValidator $validator
+     */
     protected $validator;
 
-    /** @var PriceDataManager */
+    /**
+     * @var PriceDataManager $dataManager
+     */
     protected $dataManager;
 
+    /**
+     * initialises the class properties
+     */
     public function __construct()
     {
         $this->db = Shopware()->Db();
@@ -31,6 +44,12 @@ class PriceWriter
         $this->customerGroups = $this->getCustomerGroup();
     }
 
+    /**
+     * @param $articleId
+     * @param $articleDetailId
+     * @param $prices
+     * @throws AdapterException
+     */
     public function write($articleId, $articleDetailId, $prices)
     {
         $tax = $this->getArticleTaxRate($articleId);
@@ -68,6 +87,12 @@ class PriceWriter
         }
     }
 
+    /**
+     * @param $price
+     * @param $newPrice
+     * @param $tax
+     * @return mixed
+     */
     protected function calculatePrice($price, $newPrice, $tax)
     {
         $taxInput = $this->customerGroups[$price['priceGroup']];
@@ -121,11 +146,12 @@ class PriceWriter
         }
     }
 
+    /**
+     * @return array
+     */
     private function getCustomerGroup()
     {
-        $groups = $this->db->fetchPairs(
-            'SELECT groupkey, taxinput FROM s_core_customergroups'
-        );
+        $groups = $this->db->fetchPairs('SELECT groupkey, taxinput FROM s_core_customergroups');
 
         return $groups;
     }

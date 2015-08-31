@@ -28,14 +28,16 @@ class QueryException extends DBALException
 {
     /**
      * @param string $alias
-     * @param array  $registeredAliases
+     * @param array $registeredAliases
      *
      * @return \Doctrine\DBAL\Query\QueryException
      */
-    static public function unknownAlias($alias, $registeredAliases)
+    public static function unknownAlias($alias, $registeredAliases)
     {
-        return new self("The given alias '" . $alias . "' is not part of " .
-            "any FROM or JOIN clause table. The currently registered " .
-            "aliases are: " . implode(", ", $registeredAliases) . ".");
+        return new self(
+            "The given alias '" . $alias . "' is not part of "
+            . "any FROM or JOIN clause table. The currently registered "
+            . "aliases are: " . implode(", ", $registeredAliases) . "."
+        );
     }
 }

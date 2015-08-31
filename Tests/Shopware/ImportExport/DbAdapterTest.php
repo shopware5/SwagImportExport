@@ -26,7 +26,7 @@ class DbAdapterTest extends ImportExportTestHelper
 
     public static function getDataProvider($testCase)
     {
-        if (static::$dataProvider == NULL) {
+        if (static::$dataProvider == null) {
             static::$dataProvider = static::parseYaml(dirname(__FILE__) . '/' . static::$yamlFile);
         }
 
@@ -35,7 +35,7 @@ class DbAdapterTest extends ImportExportTestHelper
 
     public static function parseYaml($yamlFile)
     {
-        if (static::$parser == NULL) {
+        if (static::$parser == null) {
             static::$parser = new \PHPUnit_Extensions_Database_DataSet_SymfonyYamlParser();
         }
         return static::$parser->parseYaml($yamlFile);
@@ -162,5 +162,4 @@ class DbAdapterTest extends ImportExportTestHelper
 
         $this->assertTablesEqual($expectedTable, $queryTable);
     }
-
 }

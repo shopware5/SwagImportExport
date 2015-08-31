@@ -2,24 +2,26 @@
 
 namespace Shopware\Components\SwagImportExport;
 
+use Shopware\Components\SwagImportExport\FileIO\FileReader;
 use Shopware\Components\SwagImportExport\FileIO\FileWriter;
-use \Shopware\Components\SwagImportExport\Profile\Profile;
+use Shopware\Components\SwagImportExport\Profile\Profile;
+use Shopware\Components\SwagImportExport\Session\Session;
+use Shopware\Components\SwagImportExport\Transformers\DataTransformerChain;
 
 class DataWorkflow
 {
-
     /**
-     * @var \Shopware\Components\SwagImportExport\DataIO
+     * @var DataIO
      */
     protected $dataIO;
 
     /**
-     * @var \Shopware\Components\SwagImportExport\Profile\Profile 
+     * @var Profile
      */
     protected $profile;
 
     /**
-     * @var \Shopware\Components\SwagImportExport\Transoformers\DataTransformerChain
+     * @var DataTransformerChain
      */
     protected $transformerChain;
 
@@ -29,20 +31,20 @@ class DataWorkflow
     protected $fileIO;
 
     /**
-     * @var \Shopware\Components\SwagImportExport\Session\Session
+     * @var Session
      */
     protected $dataSession;
 
     /**
-     * @var $dbAdapter 
+     * @var $dbAdapter
      */
     protected $dbAdapter;
 
     /**
      * @param DataIO $dataIO
      * @param Profile $profile
-     * @param type $transformerChain
-     * @param type $fileIO
+     * @param DataTransformerChain $transformerChain
+     * @param FileWriter|FileReader $fileIO
      */
     public function __construct($dataIO, $profile, $transformerChain, $fileIO)
     {
@@ -52,6 +54,12 @@ class DataWorkflow
         $this->fileIO = $fileIO;
     }
 
+    /**
+     * @param $postData
+     * @param string $outputFileName
+     * @return mixed
+     * @throws \Exception
+     */
     public function export($postData, $outputFileName = '')
     {
         if ($this->dataIO->getSessionState() == 'closed') {
@@ -66,7 +74,7 @@ class DataWorkflow
             if ($outputFileName === '') {
                 $fileName = $this->dataIO->generateFileName($this->profile);
                 $directory = $this->dataIO->getDirectory();
-            
+
                 $outputFileName = $directory . $fileName;
             } else {
                 $fileName = basename($outputFileName);
@@ -85,7 +93,7 @@ class DataWorkflow
                 $outputFileName = Shopware()->DocPath() . 'files/import_export/' . $this->dataIO->getFileName();
             }
         }
-        
+
         if ($this->dataIO->getSessionState() == 'active') {
             $stepSize = 1000;
             // read a bunch of records into simple php array;
@@ -98,10 +106,10 @@ class DataWorkflow
             $this->fileIO->writeRecords($outputFileName, $data);
 
             // writing is successful, so we write the new position in the session;
-            // if if the new position goes above the limits provided by the 
+            // if if the new position goes above the limits provided by the
             $this->dataIO->progressSession($stepSize, $outputFileName);
         }
-        
+
         if ($this->dataIO->getSessionState() == 'finished') {
             // Session finished means we have exported all the ids in the session.
             // Therefore we can close the file with a footer and mark the session as done.
@@ -123,6 +131,12 @@ class DataWorkflow
         return $postData;
     }
 
+    /**
+     * @param $postData
+     * @param $inputFile
+     * @return mixed
+     * @throws \Exception
+     */
     public function import($postData, $inputFile)
     {
         $tree = json_decode($this->profile->getConfig("tree"), true);
@@ -134,7 +148,7 @@ class DataWorkflow
             $totalCount = $this->fileIO->getTotalCount($inputFile);
             $this->dataIO->setFileName($postData['importFile']);
             $this->dataIO->setFileSize(filesize($inputFile));
-            $this->dataIO->getDataSession()->setTotalCount($totalCount);            
+            $this->dataIO->getDataSession()->setTotalCount($totalCount);
             $this->dataIO->startSession($this->profile);
         } else {
             // session has already loaded ids and some position, so we simply activate it
@@ -164,7 +178,6 @@ class DataWorkflow
 
             //gets unprocessed data from the adapter
             $postData['unprocessedData'] = $this->dataIO->getUnprocessedData();
-
         }
 
         if ($this->dataIO->getSessionState() == 'finished') {
@@ -176,10 +189,15 @@ class DataWorkflow
         if (!$postData['sessionId']) {
             $postData['sessionId'] = $this->dataIO->getDataSession()->getId();
         }
-        
+
         return $postData;
     }
 
+    /**
+     * @param $postData
+     * @param $profileName
+     * @param $outputFile
+     */
     public function saveUnprocessedData($postData, $profileName, $outputFile)
     {
         if ($postData['session']['prevState'] === 'new') {

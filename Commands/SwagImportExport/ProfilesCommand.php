@@ -3,6 +3,7 @@
 namespace Shopware\Commands\SwagImportExport;
 
 use Shopware\Commands\ShopwareCommand;
+use Shopware\CustomModels\ImportExport\Repository;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
@@ -10,15 +11,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ProfilesCommand extends ShopwareCommand
 {
-
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
         $this->setName('sw:importexport:profiles')
-                ->setDescription('Show all profiles.')
-                ->setHelp("The <info>%command.name%</info> shows all Import/Export profiles.");
+            ->setDescription('Show all profiles.')
+            ->setHelp("The <info>%command.name%</info> shows all Import/Export profiles.");
     }
 
     /**
@@ -29,6 +29,7 @@ class ProfilesCommand extends ShopwareCommand
         $this->registerErrorHandler($output);
         
         $em = $this->container->get('models');
+        /** @var Repository $profileRepository */
         $profileRepository = $em->getRepository('Shopware\CustomModels\ImportExport\Profile');
         
         $query = $profileRepository->getProfilesListQuery()->getQuery();
@@ -42,10 +43,4 @@ class ProfilesCommand extends ShopwareCommand
             $output->writeln('<info>' . sprintf("\tProfile %d: '%s', type: %s", $profile['id'], $profile['name'], $profile['type']) . '</info>');
         }
     }
-
-    protected function Plugin()
-    {
-        return Shopware()->Plugins()->Backend()->SwagImportExport();
-    }
-
 }

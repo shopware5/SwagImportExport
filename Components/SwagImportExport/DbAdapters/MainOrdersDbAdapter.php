@@ -162,6 +162,9 @@ class MainOrdersDbAdapter implements DataDbAdapter
         return $columns;
     }
 
+    /**
+     * @return array
+     */
     public function getTaxRateSumColumns()
     {
         return array('taxRateSums', 'taxRate');

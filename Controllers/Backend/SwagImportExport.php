@@ -38,7 +38,6 @@ use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
  */
 class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers_Backend_ExtJs
 {
-
     /**
      * Contains the shopware model manager
      *
@@ -160,7 +159,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                 if (!TreeHelper::deleteNode($node, $tree)) {
                     $errors = true;
                     break;
-                } else if (!TreeHelper::moveNode($changedNode, $tree)) {
+                } elseif (!TreeHelper::moveNode($changedNode, $tree)) {
                     $errors = true;
                     break;
                 }
@@ -221,7 +220,6 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $data = $this->Request()->getParam('data', 1);
 
         try {
-
             $profileModel = $this->Plugin()->getProfileFactory()->createProfileModel($data);
 
             $this->View()->assign(array(
@@ -735,7 +733,6 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
             //unprocessed data
             if (isset($post['unprocessedData']) && $post['unprocessedData']) {
-
                 $data = array(
                     'data' => $post['unprocessedData'],
                     'session' => array(
@@ -746,7 +743,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
                 $pathInfo = pathinfo($inputFile);
 
-                foreach ($data['data'] as $key => $value){
+                foreach ($data['data'] as $key => $value) {
                     $outputFile = 'media/unknown/' . $pathInfo['filename'] . '-' . $key .'-tmp.csv';
                     $this->afterImport($data, $key, $outputFile);
                     $unprocessedFiles[$key] = $outputFile;
@@ -1076,8 +1073,8 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $sections = $dbAdapter->getSections();
         
         $this->View()->assign(array(
-            'success' => true, 
-            'data' => $sections, 
+            'success' => true,
+            'data' => $sections,
             'total' => count($sections)
         ));
     }
@@ -1113,7 +1110,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         
         // merge all sections
         if ($section == 'default' && count($dbAdapter->getSections()) > 1) {
-            $columns = array_reduce($columns, function($carry, $item) {
+            $columns = array_reduce($columns, function ($carry, $item) {
                 return array_merge($carry, $item);
             }, array());
         }
@@ -1297,7 +1294,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             ->get('controller/log_status_success', 'No errors');
 
 
-        foreach($data as &$log) {
+        foreach ($data as &$log) {
             if ($log['state'] == 'false') {
                 $log['state'] = $successStatus;
                 $log['title'] = 'Success';

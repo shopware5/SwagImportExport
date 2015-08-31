@@ -12,7 +12,12 @@ use Shopware\Components\SwagImportExport\Utils\FileHelper;
 
 class FileIOFactory extends \Enlight_Class implements \Enlight_Hook
 {
-
+    /**
+     * @param $params
+     * @param $fileHelper
+     * @return CsvFileReader|ExcelFileReader|XmlFileReader
+     * @throws \Exception
+     */
     public function createFileReader($params, $fileHelper)
     {
         switch ($params['format']) {
@@ -23,10 +28,16 @@ class FileIOFactory extends \Enlight_Class implements \Enlight_Hook
             case 'excel':
                 return new ExcelFileReader($fileHelper);
             default:
-                throw new \Exception('File reader '. $params['format'] . ' does not exists.');
+                throw new \Exception('File reader ' . $params['format'] . ' does not exists.');
         }
     }
 
+    /**
+     * @param $params
+     * @param $fileHelper
+     * @return CsvFileWriter|ExcelFileWriter|XmlFileWriter
+     * @throws \Exception
+     */
     public function createFileWriter($params, $fileHelper)
     {
         switch ($params['format']) {
@@ -40,10 +51,12 @@ class FileIOFactory extends \Enlight_Class implements \Enlight_Hook
                 throw new \Exception('File writer' . $params['format'] . ' does not exists.');
         }
     }
-    
+
+    /**
+     * @return FileHelper
+     */
     public function createFileHelper()
     {
         return new FileHelper();
     }
-
 }

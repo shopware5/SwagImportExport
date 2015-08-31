@@ -13,8 +13,8 @@ class DataManager
     public function getFields($defaultFields)
     {
         $defaultValues = array();
-        foreach($defaultFields as $type => $fields) {
-            foreach($fields as $field) {
+        foreach ($defaultFields as $type => $fields) {
+            foreach ($fields as $field) {
                 $defaultValues[] = $field;
             }
         }
@@ -31,7 +31,7 @@ class DataManager
      */
     public static function getFieldType($record, $mapper)
     {
-        foreach($mapper as $type => $fields) {
+        foreach ($mapper as $type => $fields) {
             if (in_array($record, $fields)) {
                 return $type;
             }

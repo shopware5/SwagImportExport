@@ -1,15 +1,20 @@
 <?php
 
-namespace Shopware\Components\SwagImportExport\Transoformers;
+namespace Shopware\Components\SwagImportExport\Transformers;
 
 class SmartyExpressionEvaluator implements ExpressionEvaluator
 {
-
     /**
      * Shopware_Components_StringCompiler
      */
     protected $compiler;
 
+    /**
+     * @param $expression
+     * @param $variables
+     * @return string
+     * @throws \Exception
+     */
     public function evaluate($expression, $variables)
     {
         if (empty($expression)) {
@@ -31,8 +36,8 @@ class SmartyExpressionEvaluator implements ExpressionEvaluator
 
     /**
      * Returns compiler
-     * 
-     * @return Shopware_Components_StringCompiler
+     *
+     * @return \Shopware_Components_StringCompiler
      */
     protected function getCompiler()
     {
@@ -59,5 +64,4 @@ class SmartyExpressionEvaluator implements ExpressionEvaluator
             $variables['pseudoPrice'] = (float) str_replace(',', '.', $variables['pseudoPrice']);
         }
     }
-
 }

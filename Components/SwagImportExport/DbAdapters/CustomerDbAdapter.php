@@ -2,6 +2,8 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
+use Doctrine\ORM\AbstractQuery;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\DataType\CustomerDataType;
 use Shopware\Models\Customer\Customer;
 use Shopware\Components\SwagImportExport\Utils\DataHelper;
@@ -13,7 +15,6 @@ use Shopware\Components\SwagImportExport\DataManagers\CustomerDataManager;
 
 class CustomerDbAdapter implements DataDbAdapter
 {
-
     /**
      * Shopware\Components\Model\ModelManager
      */
@@ -46,6 +47,9 @@ class CustomerDbAdapter implements DataDbAdapter
      */
     protected $defaultValues = array();
 
+    /**
+     * @return array
+     */
     public function getDefaultColumns()
     {
         $default = array();
@@ -133,11 +137,17 @@ class CustomerDbAdapter implements DataDbAdapter
         return $columns;
     }
 
+    /**
+     * @return array
+     */
     public function getUnprocessedData()
     {
         return $this->unprocessedData;
     }
 
+    /**
+     * @return array
+     */
     public function getBillingColumns()
     {
         $columns = array(
@@ -186,6 +196,9 @@ class CustomerDbAdapter implements DataDbAdapter
         return $columns;
     }
 
+    /**
+     * @return array
+     */
     public function getShippingColumns()
     {
         $columns = array(
@@ -230,6 +243,11 @@ class CustomerDbAdapter implements DataDbAdapter
         return $columns;
     }
 
+    /**
+     * @param $ids
+     * @param $columns
+     * @return mixed
+     */
     public function read($ids, $columns)
     {
         $manager = $this->getManager();
@@ -243,7 +261,7 @@ class CustomerDbAdapter implements DataDbAdapter
         $builder = $this->getBuilder($columns, $ids);
         $query = $builder->getQuery();
 
-        $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $query->setHydrationMode(AbstractQuery::HYDRATE_ARRAY);
 
         $paginator = $manager->createPaginator($query);
 
@@ -254,6 +272,12 @@ class CustomerDbAdapter implements DataDbAdapter
         return $result;
     }
 
+    /**
+     * @param $start
+     * @param $limit
+     * @param $filter
+     * @return array
+     */
     public function readRecordIds($start, $limit, $filter)
     {
         $manager = $this->getManager();
@@ -282,13 +306,17 @@ class CustomerDbAdapter implements DataDbAdapter
         return $result;
     }
 
+    /**
+     * @param $records
+     * @throws \Enlight_Event_Exception
+     * @throws \Exception
+     * @throws \Zend_Db_Adapter_Exception
+     */
     public function write($records)
     {
         if (empty($records)) {
-            $message = SnippetsHelper::getNamespace()->get(
-                'adapters/customer/no_records',
-                'No customer records were found.'
-            );
+            $message = SnippetsHelper::getNamespace()
+                ->get('adapters/customer/no_records', 'No customer records were found.');
             throw new \Exception($message);
         }
 
@@ -346,7 +374,6 @@ class CustomerDbAdapter implements DataDbAdapter
                 }
 
                 $manager->clear();
-
             } catch (AdapterException $e) {
                 $message = $e->getMessage();
                 $this->saveMessage($message);
@@ -354,6 +381,11 @@ class CustomerDbAdapter implements DataDbAdapter
         }
     }
 
+    /**
+     * @param $record
+     * @return array|null|object
+     * @throws AdapterException
+     */
     protected function findExistingEntries($record)
     {
         if (isset($record['id'])) {
@@ -361,7 +393,6 @@ class CustomerDbAdapter implements DataDbAdapter
         }
 
         if (!$customer instanceof Customer) {
-
             $accountMode = isset($record['accountMode']) ? (int) $record['accountMode'] : 0;
             $filter = array('email' => $record['email'], 'accountMode' => $accountMode);
             if (isset($record['subshopID'])) {
@@ -383,11 +414,15 @@ class CustomerDbAdapter implements DataDbAdapter
         return $customer;
     }
 
+    /**
+     * @param $record
+     * @throws AdapterException
+     * @throws \Exception
+     */
     protected function preparePassword(&$record)
     {
         $passwordManager = $this->getPasswordManager();
         if (isset($record['unhashedPassword']) && !isset($record['password'])) {
-
             if (!isset($record['encoder'])) {
                 $record['encoder'] = $passwordManager->getDefaultPasswordEncoderName();
             }
@@ -408,13 +443,21 @@ class CustomerDbAdapter implements DataDbAdapter
         }
     }
 
+    /**
+     * @param $record
+     * @return array
+     * @throws AdapterException
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     * @throws \Exception
+     */
     protected function prepareCustomer(&$record)
     {
         if ($this->customerMap === null) {
             $columns = $this->getCustomerColumns();
 
             foreach ($columns as $column) {
-
                 $map = DataHelper::generateMappingFromColumns($column);
                 $this->customerMap[$map[0]] = $map[1];
             }
@@ -426,7 +469,7 @@ class CustomerDbAdapter implements DataDbAdapter
         if (isset($record['subshopID'])) {
             $shop = $this->getManager()->find('Shopware\Models\Shop\Shop', $record['subshopID']);
 
-            if(!$shop) {
+            if (!$shop) {
                 $message = SnippetsHelper::getNamespace()
                     ->get('adapters/shop_not_found', 'Shop with id %s was not found');
                 throw new AdapterException(sprintf($message, $record['subshopID']));
@@ -440,7 +483,7 @@ class CustomerDbAdapter implements DataDbAdapter
                 $newKey = lcfirst(preg_replace('/^attrCustomer/', '', $key));
                 $customerData['attribute'][$newKey] = $value;
                 unset($record[$key]);
-            } else if (isset($this->customerMap[$key])) {
+            } elseif (isset($this->customerMap[$key])) {
                 $customerData[$this->customerMap[$key]] = $value;
                 unset($record[$key]);
             }
@@ -467,13 +510,16 @@ class CustomerDbAdapter implements DataDbAdapter
         return $customerData;
     }
 
+    /**
+     * @param $record
+     * @return array
+     */
     protected function prepareBilling(&$record)
     {
         if ($this->billingMap === null) {
             $columns = $this->getBillingColumns();
 
             foreach ($columns as $column) {
-
                 $map = DataHelper::generateMappingFromColumns($column);
                 $this->billingMap[$map[0]] = $map[1];
             }
@@ -487,7 +533,7 @@ class CustomerDbAdapter implements DataDbAdapter
                 $newKey = lcfirst(preg_replace('/^attrBilling/', '', $key));
                 $billingData['attribute'][$newKey] = $value;
                 unset($record[$key]);
-            } else if (isset($this->billingMap[$key])) {
+            } elseif (isset($this->billingMap[$key])) {
                 $billingData[$this->billingMap[$key]] = $value;
                 unset($record[$key]);
             }
@@ -496,13 +542,18 @@ class CustomerDbAdapter implements DataDbAdapter
         return $billingData;
     }
 
+    /**
+     * @param $record
+     * @param $customerId
+     * @param $billing
+     * @return array
+     */
     protected function prepareShipping(&$record, $customerId, $billing)
     {
         if ($this->shippingMap === null) {
             $columns = $this->getShippingColumns();
 
             foreach ($columns as $column) {
-
                 $map = DataHelper::generateMappingFromColumns($column);
                 $this->shippingMap[$map[0]] = $map[1];
             }
@@ -528,7 +579,7 @@ class CustomerDbAdapter implements DataDbAdapter
                 $newKey = lcfirst(preg_replace('/^attrShipping/', '', $key));
                 $shippingData['attribute'][$newKey] = $value;
                 unset($record[$key]);
-            } else if (isset($this->shippingMap[$key])) {
+            } elseif (isset($this->shippingMap[$key])) {
                 $shippingData[$this->shippingMap[$key]] = $value;
                 unset($record[$key]);
             }
@@ -536,7 +587,11 @@ class CustomerDbAdapter implements DataDbAdapter
 
         return $shippingData;
     }
-    
+
+    /**
+     * @param $subShopID
+     * @return mixed|null
+     */
     protected function preparePayment($subShopID)
     {
         //on missing shopId return defaultPaymentId
@@ -557,29 +612,41 @@ class CustomerDbAdapter implements DataDbAdapter
         }
         return Shopware()->Config()->get('sDEFAULTPAYMENT');
     }
-    
+
+    /**
+     * @param $subShopID
+     * @return mixed
+     */
     protected function getSubShopDefaultPaymentId($subShopID)
     {
-        $query =  "SELECT value.value
+        $query =  "SELECT `value`.value
                    FROM s_core_config_elements AS element
-                   JOIN s_core_config_values AS value ON value.element_id = element.id
-                   WHERE value.shop_id = ?
-                         AND element.name = ?";
-        
-        return Shopware()->Db()->fetchRow($query, array($subShopID, 'defaultpayment'));
-    }
-    
-    protected function getMainShopDefaultPaymentId($subShopID)
-    {
-        $query =  "SELECT value.value
-                   FROM s_core_config_elements AS element
-                   JOIN s_core_config_values AS value ON value.element_id = element.id
-                   WHERE value.shop_id = (SELECT main_id FROM s_core_shops WHERE id = ?)
+                   JOIN s_core_config_values AS `value` ON `value`.element_id = element.id
+                   WHERE `value`.shop_id = ?
                          AND element.name = ?";
         
         return Shopware()->Db()->fetchRow($query, array($subShopID, 'defaultpayment'));
     }
 
+    /**
+     * @param $subShopID
+     * @return mixed
+     */
+    protected function getMainShopDefaultPaymentId($subShopID)
+    {
+        $query =  "SELECT `value`.value
+                   FROM s_core_config_elements AS element
+                   JOIN s_core_config_values AS `value` ON `value`.element_id = element.id
+                   WHERE `value`.shop_id = (SELECT main_id FROM s_core_shops WHERE id = ?)
+                         AND element.name = ?";
+        
+        return Shopware()->Db()->fetchRow($query, array($subShopID, 'defaultpayment'));
+    }
+
+    /**
+     * @param $message
+     * @throws \Exception
+     */
     public function saveMessage($message)
     {
         $errorMode = Shopware()->Config()->get('SwagImportExportErrorMode');
@@ -591,11 +658,17 @@ class CustomerDbAdapter implements DataDbAdapter
         $this->setLogMessages($message);
     }
 
+    /**
+     * @return array
+     */
     public function getLogMessages()
     {
         return $this->logMessages;
     }
 
+    /**
+     * @param $logMessages
+     */
     public function setLogMessages($logMessages)
     {
         $this->logMessages[] = $logMessages;
@@ -610,7 +683,12 @@ class CustomerDbAdapter implements DataDbAdapter
             array('id' => 'default', 'name' => 'default ')
         );
     }
-    
+
+    /**
+     * @param $tableName
+     * @return array
+     * @throws \Zend_Db_Statement_Exception
+     */
     public function getAttributesByTableName($tableName)
     {
         $stmt = $this->getDb()->query("SHOW COLUMNS FROM $tableName");
@@ -628,7 +706,7 @@ class CustomerDbAdapter implements DataDbAdapter
 
     /**
      * @param string $section
-     * @return mix
+     * @return bool|mixed
      */
     public function getColumns($section)
     {
@@ -643,8 +721,8 @@ class CustomerDbAdapter implements DataDbAdapter
 
     /**
      * Returns category repository
-     * 
-     * @return Shopware\Models\Customer\Customer
+     *
+     * @return \Shopware\Models\Customer\Repository
      */
     public function getRepository()
     {
@@ -656,8 +734,8 @@ class CustomerDbAdapter implements DataDbAdapter
 
     /**
      * Returns entity manager
-     * 
-     * @return Shopware\Components\Model\ModelManager
+     *
+     * @return ModelManager
      */
     public function getManager()
     {
@@ -668,6 +746,9 @@ class CustomerDbAdapter implements DataDbAdapter
         return $this->manager;
     }
 
+    /**
+     * @return \Enlight_Components_Db_Adapter_Pdo_Mysql
+     */
     public function getDb()
     {
         if ($this->db === null) {
@@ -677,6 +758,9 @@ class CustomerDbAdapter implements DataDbAdapter
         return $this->db;
     }
 
+    /**
+     * @return CustomerValidator
+     */
     public function getValidator()
     {
         if ($this->validator === null) {
@@ -686,6 +770,9 @@ class CustomerDbAdapter implements DataDbAdapter
         return $this->validator;
     }
 
+    /**
+     * @return CustomerDataManager
+     */
     public function getDataManager()
     {
         if ($this->dataManager === null) {
@@ -695,6 +782,9 @@ class CustomerDbAdapter implements DataDbAdapter
         return $this->dataManager;
     }
 
+    /**
+     * @return \Shopware\Components\Password\Manager
+     */
     public function getPasswordManager()
     {
         if ($this->passwordManager === null) {
@@ -704,6 +794,11 @@ class CustomerDbAdapter implements DataDbAdapter
         return $this->passwordManager;
     }
 
+    /**
+     * @param $columns
+     * @param $ids
+     * @return \Shopware\Components\Model\QueryBuilder
+     */
     public function getBuilder($columns, $ids)
     {
         $builder = $this->getManager()->createQueryBuilder();

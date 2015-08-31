@@ -135,7 +135,7 @@ s_campaigns_maildata:
       id: 5
       email: 23546789@shopware.de
       groupID: 2
-      salutation: 
+      salutation:
       firstname: Test Test
       lastname: PL
       street:

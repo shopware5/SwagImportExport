@@ -7,11 +7,10 @@ use Shopware\Components\SwagImportExport\QueryBuilder\QueryBuilder;
 
 class DbalHelper
 {
-
     /** @var \Doctrine\DBAL\Connection */
     protected $connection;
 
-    /** @var \Doctrine\DBAL\Driver\Statement[]  */
+    /** @var \Doctrine\DBAL\Driver\Statement[] */
     protected $statements = array();
 
     public function __construct()
@@ -19,11 +18,20 @@ class DbalHelper
         $this->connection = Shopware()->Models()->getConnection();
     }
 
+    /**
+     * @return QueryBuilder
+     */
     protected function getQueryBuilder()
     {
         return new QueryBuilder($this->connection);
     }
 
+    /**
+     * @param $data
+     * @param $entity
+     * @param $primaryId
+     * @return QueryBuilder
+     */
     public function getQueryBuilderForEntity($data, $entity, $primaryId)
     {
         $metaData = Shopware()->Models()->getClassMetadata($entity);
@@ -58,6 +66,13 @@ class DbalHelper
         return $builder;
     }
 
+    /**
+     * @param $value
+     * @param $key
+     * @param ClassMetadata $metaData
+     * @param QueryBuilder $builder
+     * @return string
+     */
     protected function getNamedParameter($value, $key, ClassMetadata $metaData, QueryBuilder $builder)
     {
         $pdoTypeMapping = array(
@@ -76,7 +91,7 @@ class DbalHelper
         // Check if nullable
         if (empty($value) && $nullAble) {
             return $builder->createNamedParameter(
-                NULL,
+                null,
                 \PDO::PARAM_NULL
             );
         }

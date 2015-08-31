@@ -2,18 +2,25 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
+use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Model\QueryBuilder;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Validators\ArticlePriceValidator;
 use Shopware\Components\SwagImportExport\DataManagers\ArticlePriceDataManager;
+use Shopware\Models\Article\Detail as ArticleDetail;
+use Shopware\Models\Article\Price as ArticlePrice;
+use Shopware\Models\Article\Repository as ArticleRepository;
+use Shopware\Models\Customer\Group as CustomerGroup;
+use Shopware\Models\Customer\Repository as CustomerRepository;
 
 class ArticlesPricesDbAdapter implements DataDbAdapter
 {
-
     /**
-     * Shopware\Components\Model\ModelManager
+     * @var ModelManager
      */
     protected $manager;
+
     protected $detailRepository;
     protected $priceRepository;
     protected $groupRepository;
@@ -21,14 +28,29 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
     /**
      * @var array
      */
+    protected $logMessages;
+
+    /**
+     * @var array
+     */
     protected $unprocessedData;
 
-    /** @var ArticlePriceValidator */
+    /**
+     * @var ArticlePriceValidator
+     */
     protected $validator;
 
-    /** @var ArticlePriceDataManager */
+    /**
+     * @var ArticlePriceDataManager
+     */
     protected $dataManager;
 
+    /**
+     * @param $start
+     * @param $limit
+     * @param $filter
+     * @return array
+     */
     public function readRecordIds($start, $limit, $filter)
     {
         $manager = $this->getManager();
@@ -36,18 +58,18 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
         $builder = $manager->createQueryBuilder();
 
         $builder->select('price.id')
-                ->from('Shopware\Models\Article\Article', 'article')
-                ->leftJoin('article.details', 'detail')
-                ->leftJoin('detail.prices', 'price')
-                ->andWhere('price.price > 0')
-                ->orderBy('price.id', 'ASC');
+            ->from('Shopware\Models\Article\Article', 'article')
+            ->leftJoin('article.details', 'detail')
+            ->leftJoin('detail.prices', 'price')
+            ->andWhere('price.price > 0')
+            ->orderBy('price.id', 'ASC');
 
         if (!empty($filter)) {
             $builder->addFilter($filter);
         }
 
         $builder->setFirstResult($start)
-                ->setMaxResults($limit);
+            ->setMaxResults($limit);
 
         $records = $builder->getQuery()->getResult();
 
@@ -61,23 +83,27 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
         return $result;
     }
 
+    /**
+     * @param $ids
+     * @param $columns
+     * @return mixed
+     * @throws \Exception
+     */
     public function read($ids, $columns)
     {
         if (!$ids && empty($ids)) {
             $message = SnippetsHelper::getNamespace()
-                    ->get('adapters/articles_no_ids', 'Can not read articles without ids');
+                ->get('adapters/articles_no_ids', 'Can not read articles without ids');
             throw new \Exception($message);
         }
 
         if (!$columns && empty($columns)) {
             $message = SnippetsHelper::getNamespace()
-                    ->get('adapters/articles_no_column_names', 'Can not read articles without column names.');
+                ->get('adapters/articles_no_column_names', 'Can not read articles without column names.');
             throw new \Exception($message);
         }
-        
-        $columns = array_merge(
-                $columns, array('customerGroup.taxInput as taxInput', 'articleTax.tax as tax')
-        );
+
+        $columns = array_merge($columns, array('customerGroup.taxInput as taxInput', 'articleTax.tax as tax'));
 
         $builder = $this->getBuilder($columns, $ids);
 
@@ -85,23 +111,25 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
 
         // add the tax if needed
         foreach ($result['default'] as &$record) {
-
             if ($record['taxInput']) {
-                $record['price'] = str_replace('.',',',round($record['price'] * (100 + $record['tax']) / 100, 2));
-                $record['pseudoPrice'] = str_replace('.',',',round($record['pseudoPrice'] * (100 + $record['tax']) / 100, 2));
+                $record['price'] = str_replace('.', ',', round($record['price'] * (100 + $record['tax']) / 100, 2));
+                $record['pseudoPrice'] = str_replace('.', ',', round($record['pseudoPrice'] * (100 + $record['tax']) / 100, 2));
             } else {
-                $record['price'] = str_replace('.',',',round($record['price'], 2));
-                $record['pseudoPrice'] = str_replace('.',',',  round($record['pseudoPrice'], 2));
+                $record['price'] = str_replace('.', ',', round($record['price'], 2));
+                $record['pseudoPrice'] = str_replace('.', ',', round($record['pseudoPrice'], 2));
             }
 
             if ($record['basePrice']) {
-                $record['basePrice'] = str_replace('.',',',round($record['basePrice'], 2));
+                $record['basePrice'] = str_replace('.', ',', round($record['basePrice'], 2));
             }
         }
-        
+
         return $result;
     }
 
+    /**
+     * @return array
+     */
     public function getDefaultColumns()
     {
         return array(
@@ -124,6 +152,9 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
         );
     }
 
+    /**
+     * @return array
+     */
     public function getUnprocessedData()
     {
         return $this->unprocessedData;
@@ -132,7 +163,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
     /**
      * Imports the records. <br/>
      * <b>Note:</b> The logic is copied from the old Import/Export Module
-     * 
+     *
      * @param array $records
      * @throws \Enlight_Event_Exception
      * @throws \Exception
@@ -164,6 +195,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                 $record = $dataManager->setDefaultFields($record);
                 $validator->validate($record, ArticlePriceValidator::$mapper);
 
+                /** @var CustomerGroup $customerGroup */
                 $customerGroup = $this->getGroupRepository()->findOneBy(array("key" => $record['priceGroup']));
                 if (!$customerGroup) {
                     $message = SnippetsHelper::getNamespace()
@@ -171,6 +203,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                     throw new AdapterException(sprintf($message, $record['priceGroup']));
                 }
 
+                /** @var ArticleDetail $articleDetail */
                 $articleDetail = $this->getDetailRepository()->findOneBy(array("number" => $record['orderNumber']));
                 if (!$articleDetail) {
                     $message = SnippetsHelper::getNamespace()
@@ -183,14 +216,18 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                 }
 
                 if (empty($record['price']) && empty($record['percent'])) {
-                    $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/articlesPrices/price_percent_val_missing', 'Price or percent value is missing');
+                    $message = SnippetsHelper::getNamespace()->get(
+                        'adapters/articlesPrices/price_percent_val_missing',
+                        'Price or percent value is missing'
+                    );
                     throw new AdapterException($message);
                 }
 
                 if ($record['from'] <= 1 && empty($record['price'])) {
-                    $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/articlesPrices/price_val_missing', 'Price value is missing');
+                    $message = SnippetsHelper::getNamespace()->get(
+                        'adapters/articlesPrices/price_val_missing',
+                        'Price value is missing'
+                    );
                     throw new AdapterException($message);
                 }
 
@@ -210,33 +247,38 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                     $record['percent'] = floatval(str_replace(",", ".", $record['percent']));
                 }
 
-                $query = $manager->createQuery('
-                            DELETE FROM Shopware\Models\Article\Price price
-                            WHERE price.customerGroup = :customerGroup
+                $dql = 'DELETE FROM Shopware\Models\Article\Price price
+                        WHERE price.customerGroup = :customerGroup
                             AND price.articleDetailsId = :detailId
-                            AND price.from = :from');
+                            AND price.from = :from';
 
-                $query->setParameters(array(
-                    'customerGroup' => $record['priceGroup'],
-                    'detailId' => $articleDetail->getId(),
-                    'from' => $record['from'],
-                ));
+                $query = $manager->createQuery($dql);
+
+                $query->setParameters(
+                    array(
+                        'customerGroup' => $record['priceGroup'],
+                        'detailId' => $articleDetail->getId(),
+                        'from' => $record['from'],
+                    )
+                );
                 $query->execute();
 
                 if ($record['from'] != 1) {
-                    $query = $manager->createQuery('
-                            UPDATE Shopware\Models\Article\Price price SET price.to = :to
+                    $dql = 'UPDATE Shopware\Models\Article\Price price SET price.to = :TO
                             WHERE price.customerGroup = :customerGroup
                             AND price.articleDetailsId = :detailId
                             AND price.articleId = :articleId AND price.to
-                            LIKE \'beliebig\'');
+                            LIKE \'beliebig\'';
+                    $query = $manager->createQuery($dql);
 
-                    $query->setParameters(array(
-                        'to' => $record['from'] - 1,
-                        'customerGroup' => $record['priceGroup'],
-                        'detailId' => $articleDetail->getId(),
-                        'articleId' => $articleDetail->getArticle()->getId(),
-                    ));
+                    $query->setParameters(
+                        array(
+                            'to' => $record['from'] - 1,
+                            'customerGroup' => $record['priceGroup'],
+                            'detailId' => $articleDetail->getId(),
+                            'articleId' => $articleDetail->getArticle()->getId(),
+                        )
+                    );
                     $query->execute();
                 }
 
@@ -247,7 +289,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                     $record['pseudoPrice'] = $record['pseudoPrice'] / (100 + $tax->getTax()) * 100;
                 }
 
-                $price = new \Shopware\Models\Article\Price();
+                $price = new ArticlePrice();
                 $price->setArticle($articleDetail->getArticle());
                 $price->setDetail($articleDetail);
                 $price->setCustomerGroup($customerGroup);
@@ -261,17 +303,16 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                 $price->setPercent($record['percent']);
 
                 $this->getManager()->persist($price);
-                
+
                 $this->getManager()->flush();
                 $this->getManager()->clear();
-                
             } catch (AdapterException $e) {
                 $message = $e->getMessage();
                 $this->saveMessage($message);
             }
         }
     }
-    
+
     /**
      * @return array
      */
@@ -281,15 +322,15 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
             array('id' => 'default', 'name' => 'default ')
         );
     }
-    
+
     /**
      * @param string $section
-     * @return mix
+     * @return bool|mixed
      */
     public function getColumns($section)
     {
         $method = 'get' . ucfirst($section) . 'Columns';
-        
+
         if (method_exists($this, $method)) {
             return $this->{$method}();
         }
@@ -299,8 +340,8 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
 
     /**
      * Returns article detail repository
-     * 
-     * @return Shopware\Models\Article\Detail
+     *
+     * @return ArticleRepository
      */
     public function getDetailRepository()
     {
@@ -313,8 +354,8 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
 
     /**
      * Returns article detail repository
-     * 
-     * @return Shopware\Models\Customer\Group
+     *
+     * @return CustomerRepository
      */
     public function getGroupRepository()
     {
@@ -324,23 +365,9 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
 
         return $this->groupRepository;
     }
-    
+
     /**
-     * Returns price repository
-     *
-     * @return Shopware\Models\Article\Price
-     */
-    public function getPriceRepository()
-    {
-        if ($this->priceRepository === null) {
-            $this->priceRepository = $this->getManager()->getRepository('Shopware\Models\Article\Price');
-        }
-
-        return $this->priceRepository;
-    }
-
-    /*
-     * @return Shopware\Components\Model\ModelManager
+     * @return ModelManager
      */
     public function getManager()
     {
@@ -351,6 +378,10 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
         return $this->manager;
     }
 
+    /**
+     * @param $message
+     * @throws \Exception
+     */
     public function saveMessage($message)
     {
         $errorMode = Shopware()->Config()->get('SwagImportExportErrorMode');
@@ -362,32 +393,46 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
         $this->setLogMessages($message);
     }
 
+    /**
+     * @return array
+     */
     public function getLogMessages()
     {
         return $this->logMessages;
     }
 
+    /**
+     * @param $logMessages
+     */
     public function setLogMessages($logMessages)
     {
         $this->logMessages[] = $logMessages;
     }
 
-	public function getBuilder($columns, $ids)
+    /**
+     * @param $columns
+     * @param $ids
+     * @return QueryBuilder
+     */
+    public function getBuilder($columns, $ids)
     {
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select($columns)
-                ->from('Shopware\Models\Article\Article', 'article')
-                ->leftJoin('article.details', 'detail')
-                ->leftJoin('article.tax', 'articleTax')
-                ->leftJoin('article.supplier', 'supplier')
-                ->leftJoin('detail.prices', 'price')
-                ->leftJoin('price.customerGroup', 'customerGroup')
-                ->where('price.id IN (:ids)')
-                ->setParameter('ids', $ids);
+            ->from('Shopware\Models\Article\Article', 'article')
+            ->leftJoin('article.details', 'detail')
+            ->leftJoin('article.tax', 'articleTax')
+            ->leftJoin('article.supplier', 'supplier')
+            ->leftJoin('detail.prices', 'price')
+            ->leftJoin('price.customerGroup', 'customerGroup')
+            ->where('price.id IN (:ids)')
+            ->setParameter('ids', $ids);
 
         return $builder;
     }
 
+    /**
+     * @return ArticlePriceValidator
+     */
     public function getValidator()
     {
         if ($this->validator === null) {
@@ -397,6 +442,9 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
         return $this->validator;
     }
 
+    /**
+     * @return ArticlePriceDataManager
+     */
     public function getDataManager()
     {
         if ($this->dataManager === null) {

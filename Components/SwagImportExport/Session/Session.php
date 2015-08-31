@@ -4,7 +4,6 @@ namespace Shopware\Components\SwagImportExport\Session;
 
 use Shopware\CustomModels\ImportExport\Session as SessionEntity;
 use Shopware\Components\SwagImportExport\Profile\Profile as Profile;
-use Shopware\Components\SwagImportExport\DataIO as DataIO;
 
 class Session
 {
@@ -15,6 +14,9 @@ class Session
 
     protected $sessionRepository;
 
+    /**
+     * @var integer $sessionId
+     */
     protected $sessionId;
 
     /**
@@ -27,11 +29,17 @@ class Session
         $this->sessionEntity = $session;
     }
 
+    /**
+     * @param $method
+     * @param $arguments
+     * @return mixed
+     * @throws \Exception
+     */
     public function __call($method, $arguments)
     {
-        $sesion = $this->getEntity();
-        if (method_exists($sesion, $method)) {
-            return $sesion->$method($arguments);
+        $session = $this->getEntity();
+        if (method_exists($session, $method)) {
+            return $session->$method($arguments);
         } else {
             throw new \Exception("Method $method does not exists.");
         }
@@ -51,7 +59,10 @@ class Session
         return $this->sessionEntity;
     }
 
-    public function getSesstionId()
+    /**
+     * @return integer
+     */
+    public function getSessionId()
     {
         return $this->sessionId;
     }
@@ -61,21 +72,25 @@ class Session
      * If the session has no ids, then the db adapter must be used to retrieve them.
      * Then writes these ids to the session and sets the session state to "active".
      * For now we will write the ids as a serialized array.
+     *
+     * @param Profile $profile
+     * @param array $data
+     * @throws \Exception
      */
     public function start(Profile $profile, array $data)
     {
         $sessionEntity = $this->getEntity();
-        
+
         if (isset($data['totalCountedIds']) && $data['totalCountedIds'] > 0) {
-                //set count
-                $sessionEntity->setTotalCount($data['totalCountedIds']);            
+            //set count
+            $sessionEntity->setTotalCount($data['totalCountedIds']);
         }
         //set ids
         $sessionEntity->setIds($data['serializedIds']);
 
         //set type
         $sessionEntity->setType($data['type']);
-        
+
         //set position
         $sessionEntity->setPosition(0);
 
@@ -84,10 +99,10 @@ class Session
         //set date/time
         $sessionEntity->setCreatedAt($dateTime);
 
-        if (!isset($data['fileName'])){
+        if (!isset($data['fileName'])) {
             throw new \Exception('Invalid file name.');
         }
-        
+
         //set fileName
         $sessionEntity->setFileName($data['fileName']);
 
@@ -95,13 +110,13 @@ class Session
             $sessionEntity->setFileSize($data['fileSize']);
         }
 
-        if (!isset($data['format'])){
+        if (!isset($data['format'])) {
             throw new \Exception('Invalid format.');
         }
-        
+
         //set username
         $sessionEntity->setUserName($data['username']);
-        
+
         //set format
         $sessionEntity->setFormat($data['format']);
 
@@ -110,7 +125,7 @@ class Session
 
         //set profile
         $sessionEntity->setProfile($profile->getEntity());
-        
+
         $this->getManager()->persist($sessionEntity);
 
         $this->getManager()->flush();
@@ -124,6 +139,8 @@ class Session
      * Updates the session position with the current position (stored in a member variable).
      * Updates the file size of the output file
      *
+     * @param integer $step
+     * @param null $file
      */
     public function progress($step, $file = null)
     {
@@ -154,24 +171,26 @@ class Session
     /**
      * Checks also the current position - if all the ids of the session are done, then the function does nothing.
      * Otherwise it sets the session state from "suspended" to "active", so that it is ready again for processing.
+     *
+     * @return array
      */
     public function resume()
     {
         $sessionEntity = $this->getEntity();
 
         $recordIds = $sessionEntity->getIds();
-        
+
         $sessionEntity->setState('active');
 
         $this->getManager()->persist($sessionEntity);
 
         $this->getManager()->flush();
-        
+
         $data = array(
             'recordIds' => unserialize($recordIds),
             'fileName' => $sessionEntity->getFileName(),
         );
-        
+
         return $data;
     }
 
@@ -191,22 +210,22 @@ class Session
 
     /**
      * Update session username
-     * 
+     *
      * @param string $username
      */
     public function setUsername($username)
     {
         $sessionEntity = $this->getEntity();
-        
+
         $sessionEntity->setUsername($username);
-        
+
         $this->getManager()->persist($sessionEntity);
-        $this->getManager()->flush(); 
+        $this->getManager()->flush();
     }
-    
+
     /**
      * Returns entity manager
-     * 
+     *
      * @return \Shopware\Components\Model\ModelManager
      */
     public function getManager()
@@ -218,25 +237,28 @@ class Session
         return $this->manager;
     }
 
+    /**
+     * @return int
+     */
     public function getSessionPosition()
     {
         return $this->getEntity()->getPosition();
     }
 
     /**
-     * Returns the state of the session. 
-     * active: 
+     * Returns the state of the session.
+     * active:
      *     Session is running and we can read/write records.
-     * stopped: 
+     * stopped:
      *     Session is stopped because we have reached the max number of records per operation.
-     * new: 
-     *     Session is brand new and still has no records ids. 
-     * finished: 
-     *     Session is finished but the output file is still not finished (in case of export) 
-     *     or the final db save is yet not performed (in case of import). 
-     * closed: 
+     * new:
+     *     Session is brand new and still has no records ids.
+     * finished:
+     *     Session is finished but the output file is still not finished (in case of export)
+     *     or the final db save is yet not performed (in case of import).
+     * closed:
      *     Session is closed, file is fully exported/imported
-     * 
+     *
      * @return string
      */
     public function getState()
@@ -244,6 +266,9 @@ class Session
         return $this->getEntity()->getState();
     }
 
+    /**
+     * @param $totalCount
+     */
     public function setTotalCount($totalCount)
     {
         $this->getEntity()->setTotalCount($totalCount);
@@ -252,18 +277,14 @@ class Session
     /**
      * Helper Method to get access to the session repository.
      *
-     * @return \Shopware\CustomModels\ImportExport\Session
+     * @return \Shopware\CustomModels\ImportExport\Repository
      */
     public function getSessionRepository()
     {
         if ($this->sessionRepository === null) {
             $this->sessionRepository = Shopware()->Models()->getRepository('Shopware\CustomModels\ImportExport\Session');
         }
+
         return $this->sessionRepository;
     }
-//    
-//    public function getFileName()
-//    {
-//        return $this->sessionEntity->getFileName();
-//    }
 }

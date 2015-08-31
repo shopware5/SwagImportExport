@@ -49,7 +49,7 @@ class Profile
             case 'exportConversion':
                 return $this->profileEntity->getExpressions();
             case 'tree':
-                return $this->profileEntity->getTree();    
+                return $this->profileEntity->getTree();
             default:
                 throw new \Exception('Config does not exists');
         }

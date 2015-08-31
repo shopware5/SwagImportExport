@@ -2,14 +2,10 @@
 
 namespace Tests\Shopware\ImportExport;
 
-use Tests\Shopware\ImportExport\ImportExportTestHelper;
-
 class ExpressionEvaluatorTest extends ImportExportTestHelper
 {
-
     public function testPhpEvaluator()
     {
-
         $variables = array(
             'title' => 'Product',
             'active' => true,
@@ -51,5 +47,4 @@ class ExpressionEvaluatorTest extends ImportExportTestHelper
         $this->assertEquals($evalVariable1, 'false');
         $this->assertEquals($evalVariable2, 'Product-Test');
     }
-
 }

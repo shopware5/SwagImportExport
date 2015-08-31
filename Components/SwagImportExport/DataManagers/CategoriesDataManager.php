@@ -5,6 +5,9 @@ use Shopware\Components\SwagImportExport\DataType\CategoryDataType;
 
 class CategoriesDataManager extends DataManager
 {
+    /**
+     * @return array
+     */
     public function getDefaultFields()
     {
         return CategoryDataType::$defaultFieldsForCreate;

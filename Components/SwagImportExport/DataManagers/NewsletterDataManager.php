@@ -9,24 +9,39 @@ use Shopware\Components\SwagImportExport\Exception\AdapterException;
 
 class NewsletterDataManager extends DataManager
 {
-    /** @var \Shopware_Components_Config */
+    /**
+     * @var \Shopware_Components_Config
+     */
     private $config = null;
 
+    /**
+     * @var \Shopware\Models\Newsletter\Repository
+     */
     private $groupRepository = null;
 
-    /** Define which field should be set by default */
+    /**
+     * Define which field should be set by default
+     *
+     * @var array
+     */
     private static $defaultFieldsForCreate = array(
         'string' => array(
             'groupName'
         )
     );
 
+    /**
+     * initialises the class properties
+     */
     public function __construct()
     {
         $this->config = Shopware()->Config();
         $this->groupRepository = Shopware()->Models()->getRepository('Shopware\Models\Newsletter\Group');
     }
 
+    /**
+     * @return array
+     */
     public function getDefaultFields()
     {
         return NewsletterDataType::$defaultFieldsForCreate;

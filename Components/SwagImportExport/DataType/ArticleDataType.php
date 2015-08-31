@@ -4,6 +4,9 @@ namespace Shopware\Components\SwagImportExport\DataType;
 
 class ArticleDataType
 {
+    /**
+     * @var array
+     */
     public static $mapper = array(
         'string' => array(
             'orderNumber',
@@ -50,6 +53,9 @@ class ArticleDataType
         ),
     );
 
+    /**
+     * @var array
+     */
     public static $defaultFieldsForCreate = array(
         'date' => array(
             'availableFrom',
