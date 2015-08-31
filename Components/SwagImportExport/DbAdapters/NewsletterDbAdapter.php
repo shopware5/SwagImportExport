@@ -5,8 +5,10 @@ namespace Shopware\Components\SwagImportExport\DbAdapters;
 use Shopware\Models\Newsletter\Address;
 use Shopware\Models\Newsletter\Group;
 use Shopware\Models\Newsletter\ContactData;
-use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
+use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
+use Shopware\Components\SwagImportExport\Validators\NewsletterValidator;
+use Shopware\Components\SwagImportExport\DataManagers\NewsletterDataManager;
 
 class NewsletterDbAdapter implements DataDbAdapter
 {
@@ -25,6 +27,12 @@ class NewsletterDbAdapter implements DataDbAdapter
      * @var array
      */
     protected $logMessages;
+
+    /** @var NewsletterValidator */
+    protected $validator;
+
+    /**  @var NewsletterDataManager */
+    protected $dataManager;
 
     public function getDefaultColumns()
     {
@@ -106,75 +114,65 @@ class NewsletterDbAdapter implements DataDbAdapter
 
     public function write($records)
     {
-//        $emailValidator = new \Zend_Validate_EmailAddress();
+        if (empty($records['default'])) {
+            $message = SnippetsHelper::getNamespace()->get(
+                'adapters/newsletter/no_records',
+                'No newsletter records were found.'
+            );
+            throw new \Exception($message);
+        }
 
         $records = Shopware()->Events()->filter(
-                'Shopware_Components_SwagImportExport_DbAdapters_CategoriesDbAdapter_Write',
-                $records,
-                array('subject' => $this)
+            'Shopware_Components_SwagImportExport_DbAdapters_CategoriesDbAdapter_Write',
+            $records,
+            array('subject' => $this)
         );
 
         $manager = $this->getManager();
+        $validator = $this->getValidator();
+        $dataManager = $this->getDataManager();
 
         foreach ($records['default'] as $newsletterData) {
             try {
- 
-                if (empty($newsletterData['email'])) {
-                    $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/newsletter/email_required', 'Email address is required');
-                    throw new AdapterException($message);
+                $newsletterData = $this->prepareInitialData($newsletterData);
+
+                $validator->checkRequiredFields($newsletterData);
+
+                $recipient = $this->getAddressRepository()->findOneByEmail($newsletterData['email']);
+                if (!$recipient instanceof Address) {
+                    $newsletterData = $dataManager->setDefaultFields($newsletterData);
+                    $recipient = new Address();
                 }
 
                 if ($newsletterData['groupName']) {
                     $group = $this->getGroupRepository()->findOneByName($newsletterData['groupName']);
-                }
-                if (!$group && $newsletterData['groupName']) {
-                    $group = new Group();
-                    $group->setName($newsletterData['groupName']);
-                    $manager->persist($group);
-                } elseif (!$group && $groupId = Shopware()->Config()->get("sNEWSLETTERDEFAULTGROUP")) {
-                    $group = $this->getGroupRepository()->findOneBy($groupId);
-                } elseif (!$group) {
-                    $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/newsletter/group_required', 'Group is required for email %s');
-                    throw new AdapterException(sprintf($message, $newsletterData['email']));
+
+                    if (!$group instanceof Group) {
+                        $group = new Group();
+                        $group->setName($newsletterData['groupName']);
+                        $manager->persist($group);
+                        $manager->flush();
+                    }
+
+                    $newsletterData['groupId'] = $group->getId();
                 }
 
-                // Create/Update the Address entry
-                $recipient = $this->getAddressRepository()->findOneByEmail($newsletterData['email']);
 
-                if (!$recipient) {
-                    $recipient = new Address();
-                }
-
-                $recipient->setEmail($newsletterData['email']);
-                $recipient->setIsCustomer(!empty($newsletterData['userID']));
-
-                //Only set the group if it was explicitly provided or it's a new entry
-                if ($group && ($newsletterData['groupName'] || !$recipient->getId())) {
-                    $recipient->setNewsletterGroup($group);
-                }
+                // save newsletter address
+                $newsletterAddress = $this->prepareNewsletterAddress($newsletterData);
+                $recipient->fromArray($newsletterAddress);
                 $manager->persist($recipient);
 
-                //Create/Update the ContactData entry
+
+                // save mail data
                 $contactData = $this->getContactDataRepository()->findOneByEmail($newsletterData['email']);
-
-                if (!$contactData) {
+                if (!$contactData instanceof ContactData) {
                     $contactData = new ContactData();
+                    $contactData->setAdded(new \DateTime());
                 }
-
                 $contactData->fromArray($newsletterData);
-
-                //Only set the group if it was explicitly provided or it's a new entry
-                if ($group && ($newsletterData['groupName'] || !$contactData->getId())) {
-                    $manager->persist($group);
-                    $manager->flush();
-
-                    $contactData->setGroupId($group->getId());
-                }
-                $contactData->setAdded(new \DateTime());
-
                 $manager->persist($contactData);
+
 
                 $manager->flush();
                 $manager->clear();
@@ -183,6 +181,40 @@ class NewsletterDbAdapter implements DataDbAdapter
                 $this->saveMessage($message);
             }
         }
+    }
+
+    protected function prepareInitialData($record)
+    {
+        $record = array_filter(
+            $record,
+            function($value) {
+                return $value !== '';
+            }
+        );
+
+        return $record;
+    }
+
+    protected function prepareNewsletterAddress($record)
+    {
+        $keys = array(
+            'email' => 'email',
+            'userID' => 'isCustomer',
+            'groupId' => 'groupId',
+            'lastRead' => 'lastReadId',
+            'lastNewsletter' => 'lastMailingId',
+        );
+
+        $newsletterAddress = array();
+        foreach ($keys as $oldKey => $newKey) {
+            if (isset($record[$oldKey])) {
+                $newsletterAddress[$newKey] = $record[$oldKey];
+            }
+        }
+
+        $newsletterAddress['isCustomer'] = isset($record['userID']); //TODO: validate userID
+
+        return $newsletterAddress;
     }
 
     public function saveMessage($message)
@@ -297,4 +329,21 @@ class NewsletterDbAdapter implements DataDbAdapter
         return $this->contactDataRepository;
     }
 
+    public function getValidator()
+    {
+        if ($this->validator === null) {
+            $this->validator = new NewsletterValidator();
+        }
+
+        return $this->validator;
+    }
+
+    public function getDataManager()
+    {
+        if ($this->dataManager === null) {
+            $this->dataManager = new NewsletterDataManager();
+        }
+
+        return $this->dataManager;
+    }
 }
