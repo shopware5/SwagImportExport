@@ -2,8 +2,9 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
-use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
+use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
+use Shopware\Components\SwagImportExport\Validators\ArticleTranslationValidator;
 
 class ArticlesTranslationsDbAdapter implements DataDbAdapter
 {
@@ -27,6 +28,9 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
      * @var array
      */
     protected $logMessages;
+
+    /** @var ArticleTranslationValidator */
+    protected $validator;
 
     public function getDefaultColumns()
     {
@@ -158,14 +162,18 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
 
     public function write($records)
     {
-        if ($records['default'] == null) {
-            return;
+        if (empty($records['default'])) {
+            $message = SnippetsHelper::getNamespace()->get(
+                'adapters/articlesTranslations/no_records',
+                'No article translation records were found.'
+            );
+            throw new \Exception($message);
         }
 
         $records = Shopware()->Events()->filter(
-                'Shopware_Components_SwagImportExport_DbAdapters_ArticlesTranslationsDbAdapter_Write',
-                $records,
-                array('subject' => $this)
+            'Shopware_Components_SwagImportExport_DbAdapters_ArticlesTranslationsDbAdapter_Write',
+            $records,
+            array('subject' => $this)
         );
 
         $whiteList = array(
@@ -186,22 +194,22 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
         $elementBuilder = $this->getElementBuilder();
         $attributes = $elementBuilder->getQuery()->getArrayResult();
 
-        if ($attributes){
+        if ($attributes) {
             foreach ($attributes as $attr){
                 $whiteList[] = $attr['name'];
                 $variantWhiteList[] = $attr['name'];
             }
         }
 
+        $validator = $this->getValidator();
         $translationWriter = new \Shopware_Components_Translation();
 
         foreach ($records['default'] as $index => $record) {
             try {
-                if (!isset($record['articleNumber'])) {
-                    $message = SnippetsHelper::getNamespace()
-                            ->get('adapters/ordernumber_required', 'Order number is required.');
-                    throw new AdapterException($message);
-                }
+
+                $record = $this->prepareInitialData($record);
+
+                $validator->checkRequiredFields($record);
 
                 if (isset($record['languageId'])) {
                     $shop = $this->getManager()->find('Shopware\Models\Shop\Shop', $record['languageId']);
@@ -249,6 +257,18 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
                 $this->saveMessage($message);
             }
         }
+    }
+
+    protected function prepareInitialData($record)
+    {
+        $record = array_filter(
+            $record,
+            function($value) {
+                return $value !== '';
+            }
+        );
+
+        return $record;
     }
 
     public function saveMessage($message)
@@ -412,4 +432,12 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
         return Shopware()->Db()->query($sql)->fetchAll();
     }
 
+    public function getValidator()
+    {
+        if ($this->validator === null) {
+            $this->validator = new ArticleTranslationValidator();
+        }
+
+        return $this->validator;
+    }
 }
