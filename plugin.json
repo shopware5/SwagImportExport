@@ -8,10 +8,11 @@
     "link": "http://store.shopware.com",
     "author": "Shopware AG",
 
-    "currentVersion": "1.0.7",
+    "currentVersion": "1.1.0",
 
     "changelog": {
         "de": {
+            "1.1.0": "PT-3671 - Import/Export ist nun OpenSource;",
 			"1.0.7": "PT-2899, PT-3060 - Verbesserung: Starke Verbesserung der Performance; PT-3007 - Feature: Kategorien über den Pfad zuweisen; PT-3025 - Bugfix: Artikel Lagerbestand Export-Fehler behoben; PT-3117 - Bugfix: Import/Export über die Konsole repariert; PT-3422 - Bugfix: Ungebrauchte Snippets entfernt",
 			"1.0.6": "PT-2785 - Verbesserung: Erlaube Bilder-Uploads im Artikel-Profil;PT-2810 - Bugfix: Bilder mit Leerzeichen; PT-2818 - Verbesserung: Kunden-Referenz über die ID; PT-2819 - Verbesserung: Kunden-Updates ohne Password; PT-2850 - Verbesserung: Übersetzung von Varianten, Konfiguratoren und Eigenschaften; PT-2815 - SW5 Kompatiblität",
             "1.0.5": "PT-2514 Feature: Artikel-Lagerbestand-Filter; PT-2530 Feature: Eigenschaften-Import hinzugefügt;PT-2531 Feature: Konfiguratior-Optionen über IDs ansprechen; PT-2533 Feature: Aktualisierung von Bezahlstati; PT-2536 Fix: Optionale Spalten beim Bildimport;PT-2538 Fix: Konfiguratorgruppen mit Doppelpunkten;PT-2618 Feature: Kategorie-Kundengruppen-Ausschlüsse;PT-2642 Fix: Kompatiblität mit BusinessEssentials;PT-2650 Fix: Logeinträge beim Kundenimport;PT-2662 Fix: Konfigurator-Positionen;",
@@ -21,7 +22,8 @@
             "1.0.1": "Problem mit verschwindendem Import/Export Menü-Eintrag behoben; Weitere ACL-Zugangsberechtigungen hinzugefügt; Korrektur: article.active Verhalten; Korrektur: Artikel-Attribute; Korrektur: Datums- und Zeitimporte"
         },
         "en": {
-			"1.0.7": "PT-2899, PT-3060 - Improvement: Highly improved the performance; PT-3007 - Feature: Assign categories to articles by path; PT-3025 - Bugfix: Importing/exporting article stock works properly now; PT-3117 - Bugfix: Fixed the import/export when using the console; PT-3422 - Bugfix: Removed unnecessary snippets",
+            "1.1.0": "PT-3671 - Import/Export is open source now;",
+            "1.0.7": "PT-2899, PT-3060 - Improvement: Highly improved the performance; PT-3007 - Feature: Assign categories to articles by path; PT-3025 - Bugfix: Importing/exporting article stock works properly now; PT-3117 - Bugfix: Fixed the import/export when using the console; PT-3422 - Bugfix: Removed unnecessary snippets",
 			"1.0.6": "PT-2785 - Improvement: Image uploads from within the article profile;PT-2810 - Bugfix: Images with whitespaces; PT-2818 - Improvement: Reference customers via ID; PT-2819 - Improvemend: Customer updates without passwords; PT-2850 - Improvement: Translate variants, configuratos and properties; PT-2815 - SW5 compatibility",
             "1.0.5": "PT-2514 Feature: Article instock filter; PT-2530 Feature: Added import of properties;PT-2531 Feature: Reference configurator options by ID; PT-2533 Feature: Update payment states; PT-2536 Fix: Optional columns for image import;PT-2538 Fix: Colons in configurator group names;PT-2618 Feature: exclude for customer groups on categories;PT-2642 Fix: BusinessEssentials compatibility;PT-2650 Fix: log entry for customer group imports;PT-2662 Fix: configurator positions;",
             "1.0.4": "PT-2650 Fixed creating of empty log record for some profiles; PT-2653 Fixed importing of articles properties;PT-2514 Add: Two new in stock filter",
