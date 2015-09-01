@@ -134,7 +134,7 @@ class NewsletterDbAdapter implements DataDbAdapter
 
         foreach ($records['default'] as $newsletterData) {
             try {
-                $newsletterData = $this->prepareInitialData($newsletterData);
+                $newsletterData = $validator->prepareInitialData($newsletterData);
 
                 $validator->checkRequiredFields($newsletterData);
 
@@ -181,18 +181,6 @@ class NewsletterDbAdapter implements DataDbAdapter
                 $this->saveMessage($message);
             }
         }
-    }
-
-    protected function prepareInitialData($record)
-    {
-        $record = array_filter(
-            $record,
-            function($value) {
-                return $value !== '';
-            }
-        );
-
-        return $record;
     }
 
     protected function prepareNewsletterAddress($record)

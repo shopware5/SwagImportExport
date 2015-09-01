@@ -279,7 +279,7 @@ class CustomerDbAdapter implements DataDbAdapter
 
         foreach ($records['default'] as $record) {
             try {
-                $record = $this->prepareInitialData($record);
+                $record = $validator->prepareInitialData($record);
 
                 $validator->checkRequiredFields($record);
 
@@ -324,24 +324,6 @@ class CustomerDbAdapter implements DataDbAdapter
                 $this->saveMessage($message);
             }
         }
-    }
-
-    /**
-     * Remove all fields which contains empty strings
-     *
-     * @param array $record
-     * @return array
-     */
-    protected function prepareInitialData($record)
-    {
-        $record = array_filter(
-            $record,
-            function($value) {
-                return $value !== '';
-            }
-        );
-
-        return $record;
     }
 
     protected function findExistingEntries($record)

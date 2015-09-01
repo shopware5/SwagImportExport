@@ -5,16 +5,16 @@ namespace Shopware\Components\SwagImportExport\Validators;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 
-class NewsletterValidator extends Validator
+class ArticlePriceValidator extends Validator
 {
     private $requiredFields = array(
-        'email',
+        'orderNumber',
     );
 
     private $snippetData = array(
-        'email' => array(
-            'adapters/newsletter/email_required',
-            'Email address is required field.'
+        'orderNumber' => array(
+            'adapters/ordernumber_required',
+            'Order number is required.'
         ),
     );
 

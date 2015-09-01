@@ -5,7 +5,7 @@ namespace Shopware\Components\SwagImportExport\Validators;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 
-class ArticleTranslationValidator
+class ArticleTranslationValidator extends Validator
 {
     private $requiredFields = array(
         'articleNumber',

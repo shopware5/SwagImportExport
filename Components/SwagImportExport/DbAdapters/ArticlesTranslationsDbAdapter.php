@@ -207,7 +207,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
         foreach ($records['default'] as $index => $record) {
             try {
 
-                $record = $this->prepareInitialData($record);
+                $record = $validator->prepareInitialData($record);
 
                 $validator->checkRequiredFields($record);
 
@@ -257,18 +257,6 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
                 $this->saveMessage($message);
             }
         }
-    }
-
-    protected function prepareInitialData($record)
-    {
-        $record = array_filter(
-            $record,
-            function($value) {
-                return $value !== '';
-            }
-        );
-
-        return $record;
     }
 
     public function saveMessage($message)
