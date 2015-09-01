@@ -1,8 +1,11 @@
 <?php
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
-use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
+
+use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
+use Shopware\Components\SwagImportExport\Validators\ArticleImageValidator;
+use Shopware\Components\SwagImportExport\DataManagers\ArticleImageDataManager;
 
 class ArticlesImagesDbAdapter implements DataDbAdapter
 {
@@ -24,6 +27,12 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
      * @var array
      */
     protected $logMessages;
+
+    /** @var ArticleImageValidator */
+    protected $validator;
+
+    /** @var ArticleImageDataManager */
+    protected $dataManager;
 
     /**
      * Returns record ids
@@ -158,27 +167,36 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
      * Insert/Update data into db
      * 
      * @param array $records
+     * @throws \Enlight_Event_Exception
+     * @throws \Exception
+     * @throws \Zend_Db_Adapter_Exception
      */
     public function write($records)
     {
+        if (empty($records['default'])) {
+            $message = SnippetsHelper::getNamespace()->get(
+                'adapters/articlesImages/no_records',
+                'No article image records were found.'
+            );
+            throw new \Exception($message);
+        }
+
         $records = Shopware()->Events()->filter(
-                'Shopware_Components_SwagImportExport_DbAdapters_ArticlesImagesDbAdapter_Write',
-                $records,
-                array('subject' => $this)
+            'Shopware_Components_SwagImportExport_DbAdapters_ArticlesImagesDbAdapter_Write',
+            $records,
+            array('subject' => $this)
         );
 
+        $validator = $this->getValidator();
+        $dataManager = $this->getDataManager();
         $imageImportMode = Shopware()->Config()->get('SwagImportExportImageMode');
-
         $configuratorGroupRepository = $this->getManager()->getRepository('Shopware\Models\Article\Configurator\Group');
         $configuratorOptionRepository = $this->getManager()->getRepository('Shopware\Models\Article\Configurator\Option');
 
         foreach ($records['default'] as $record) {
             try {
-                if (empty($record['ordernumber']) || empty($record['image'])) {
-                    $message = SnippetsHelper::getNamespace()
-                                ->get('adapters/articlesImages/ordernumber_image_required', 'Ordernumber and image are required');
-                    throw new AdapterException($message);
-                }
+                $record = $validator->prepareInitialData($record);
+                $validator->checkRequiredFields($record);
 
                 /** @var \Shopware\Models\Article\Detail $articleDetailModel */
                 $articleDetailModel = $this->getArticleDetailRepository()->findOneBy(array('number' => $record['ordernumber']));
@@ -188,37 +206,36 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                     throw new AdapterException(sprintf($message, $record['ordernumber']));
                 }
 
-                if (isset($record['relations']) && !empty($record['relations'])) {
+                $record = $dataManager->setDefaultFields($record, $articleDetailModel->getArticle()->getId());
+
+                if (isset($record['relations'])) {
                     $relations = array();
-                    $results = explode("&", $record['relations']);
+                    $oldRelations = explode("&", $record['relations']);
 
-                    $i = 0;
+                    foreach ($oldRelations as $key => $relation) {
+                        if ($relation === "") {
+                            continue;
+                        }
 
-                    foreach ($results as $result) {
-                        if ($result !== "") {
-                            $result = preg_replace('/{|}/', '', $result);
+                        $variantConfiguration = explode('|', preg_replace('/{|}/', '', $relation));
+                        foreach ($variantConfiguration as $configuration) {
+                            list($group, $option) = explode(":", $configuration);
 
-                            foreach (explode('|', $result) as $value) {
-                                list($group, $option) = explode(":", $value);
-
-                                // Try to get given configurator group/option. Continue, if they don't exist
-                                $cGroupModel = $configuratorGroupRepository->findOneBy(array('name' => $group));
-                                if ($cGroupModel === null) {
-                                    continue;
-                                }
-                                $cOptionModel = $configuratorOptionRepository->findOneBy(
-                                        array('name' => $option,
-                                            'groupId' => $cGroupModel->getId()
-                                        )
-                                );
-                                if ($cOptionModel === null) {
-                                    continue;
-                                }
-                                $relations[$i][] = array("group" => $cGroupModel, "option" => $cOptionModel);
-                                unset($cGroupModel);
-                                unset($cOptionModel);
+                            //Get configurator group
+                            $cGroupModel = $configuratorGroupRepository->findOneBy(array('name' => $group));
+                            if ($cGroupModel === null) {
+                                continue;
                             }
-                            $i++;
+
+                            //Get configurator option
+                            $cOptionModel = $configuratorOptionRepository->findOneBy(array('name' => $option, 'groupId' => $cGroupModel->getId()));
+                            if ($cOptionModel === null) {
+                                continue;
+                            }
+
+                            $relations[$key][] = array("group" => $cGroupModel, "option" => $cOptionModel);
+                            unset($cGroupModel);
+                            unset($cOptionModel);
                         }
                     }
                 }
@@ -233,14 +250,13 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                     $mediaRepo = $this->getManager()->getRepository('Shopware\Models\Media\Media');
                     $media = $mediaRepo->findOneBy(array('name' => $name));
                     if ($media) {
-                       $path = $media->getPath();
                        $mediaExists = true;
                     }
                 }
 
-	            if($imageImportMode == 2 || $mediaExists == false) {
+                //create new media
+	            if ($imageImportMode == 2 || $mediaExists == false) {
                     $path = $this->load($record['image'], $name);
-
                     $file = new \Symfony\Component\HttpFoundation\File\File($path);
 
                     $media = new \Shopware\Models\Media\Media();
@@ -257,11 +273,8 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                     $this->getManager()->flush();
 
                     //thumbnail flag
-                    $thumbnail = isset($record['thumbnail']) && $record['thumbnail'] == 0 ? false : true;
-
-                    if (empty($record['main'])) {
-                        $record['main'] = 1;
-                    }
+                    //TODO: validate thumbnail
+                    $thumbnail = (bool) $record['thumbnail'];
 
                     //generate thumbnails
                     if ($media->getType() == \Shopware\Models\Media\Media::TYPE_IMAGE && $thumbnail) {
@@ -273,16 +286,12 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
 
                 $image = new \Shopware\Models\Article\Image();
                 $image->setArticle($article);
-
-	            $description = isset($record["description"]) ? $record["description"] : "";
-	            $imagePosition = isset($record['position']) ? $record['position'] : $this->getDefaultImagePosition($image->getArticle()->getId());
-
-	            $image->setPosition($imagePosition);
+	            $image->setPosition($record['position']);
                 $image->setPath($media->getName());
                 $image->setExtension($media->getExtension());
                 $image->setMedia($media);
                 $image->setMain($record['main']);
-	            $image->setDescription($description);
+	            $image->setDescription($record['description']);
                 $this->getManager()->persist($image);
                 $this->getManager()->flush($image);
 
@@ -292,10 +301,13 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
 
                 // Prevent multiple images from being a preview
                 if ((int) $record['main'] === 1) {
-                    $this->getDb()->update('s_articles_img', array('main' => 2), array(
-                        'articleID = ?' => $article->getId(),
-                        'id <> ?' => $image->getId()
-                            )
+                    $this->getDb()->update(
+                        's_articles_img',
+                        array('main' => 2),
+                        array(
+                            'articleID = ?' => $article->getId(),
+                            'id <> ?' => $image->getId()
+                        )
                     );
                 }
                 $this->getManager()->clear();
@@ -308,18 +320,6 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
             }
         }
     }
-
-	/**
-	 * Gets the latest image position from a specific article.
-	 * @param $articleId
-	 * @return int
-	 */
-	private function getDefaultImagePosition($articleId){
-		$sql = "SELECT MAX(position) FROM s_articles_img WHERE articleID=?;";
-		$result = Shopware()->Db()->fetchOne($sql, $articleId);
-
-		return isset($result) ? ((int)$result +1) : 0;
-	}
 
     /**
      * Sets image mapping for variants
@@ -575,4 +575,21 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
         return $builder;
     }
 
+    public function getValidator()
+    {
+        if ($this->validator === null) {
+            $this->validator = new ArticleImageValidator();
+        }
+
+        return $this->validator;
+    }
+
+    public function getDataManager()
+    {
+        if ($this->dataManager === null) {
+            $this->dataManager = new ArticleImageDataManager();
+        }
+
+        return $this->dataManager;
+    }
 }
