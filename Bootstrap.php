@@ -1,8 +1,7 @@
 <?php
-
 /**
- * Shopware 4.2
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,39 +22,62 @@
  * our trademarks remain entirely with us.
  */
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Configuration;
+use Doctrine\ORM\Tools\SchemaTool;
+use Doctrine\ORM\Tools\ToolsException;
+use Shopware\Commands\SwagImportExport\ExportCommand;
+use Shopware\Commands\SwagImportExport\ImportCommand;
+use Shopware\Commands\SwagImportExport\ProfilesCommand;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Components\SwagImportExport\Factories\DataFactory;
+use Shopware\Components\SwagImportExport\Factories\DataTransformerFactory;
+use Shopware\Components\SwagImportExport\Factories\FileIOFactory;
+use Shopware\Components\SwagImportExport\Factories\ProfileFactory;
+
 /**
  * Shopware SwagImportExport Plugin - Bootstrap
  *
  * @category  Shopware
- * @package   Shopware\Components\Console\Command
- * @copyright Copyright (c) 2014, shopware AG (http://www.shopware.de)
+ * @package   Shopware\Plugins\Backend\SwagImportExport
+ * @copyright  Copyright (c) shopware AG (http://www.shopware.com)
  */
 final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
-
     /**
-     * @var Shopware\Components\SwagImportExport\Factories\DataFactory
+     * @var DataFactory $dataFactory
      */
     private $dataFactory;
 
     /**
-     * @var Shopware\Components\SwagImportExport\Factories\ProfileFactory
+     * @var ProfileFactory $profileFactory
      */
     private $profileFactory;
 
     /**
-     * @var Shopware\Components\SwagImportExport\Factories\FileIOFactory
+     * @var FileIOFactory $fileIOFactory
      */
     private $fileIOFactory;
 
     /**
-     * @var Shopware\Components\SwagImportExport\Factories\DataTransformerFactory
+     * @var DataTransformerFactory $dataTransformerFactory
      */
     private $dataTransformerFactory;
 
     /**
+     * @var Enlight_Components_Db_Adapter_Pdo_Mysql $db
+     */
+    private $db;
+
+    /**
+     * @var ModelManager $em
+     */
+    private $em;
+
+    /**
      * Returns the plugin label which is displayed in the plugin information and
      * in the Plugin Manager.
+     *
      * @return string
      */
     public function getLabel()
@@ -69,8 +91,9 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
      * @return string
      * @throws Exception
      */
-    public function getVersion() {
-        $info = json_decode(file_get_contents(__DIR__ . DIRECTORY_SEPARATOR .'plugin.json'), true);
+    public function getVersion()
+    {
+        $info = json_decode(file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . 'plugin.json'), true);
 
         if ($info) {
             return $info['currentVersion'];
@@ -86,7 +109,12 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
      */
     public function afterInit()
     {
+        $this->db = $this->get('db');
+        $this->em = $this->get('models');
+
         $this->registerCustomModels();
+
+        parent::afterInit();
     }
 
     /**
@@ -98,8 +126,6 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
      */
     public function install()
     {
-        $this->checkLicense();
-
         $this->createDatabase();
         $this->createMenu();
         $this->createAclResource();
@@ -112,8 +138,6 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
 
     public function update($oldVersion)
     {
-        $this->checkLicense();
-
         $this->createAclResource();
         $this->registerEvents();
         $this->createDirectories();
@@ -122,31 +146,36 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         if ($oldVersion == '1.0.0' || $oldVersion == '1.0.1') {
 
             //changing the name
-            Shopware()->Db()->update('s_core_menu', array('name' => 'Import/Export Advanced'), array("controller = 'SwagImportExport'"));
+            $this->db->update(
+                's_core_menu',
+                array('name' => 'Import/Export Advanced'),
+                array("controller = 'SwagImportExport'")
+            );
 
             $sql = "SELECT id FROM `s_core_menu` WHERE controller = 'ImportExport'";
-            $menuItem = Shopware()->Db()->fetchOne($sql);
+            $menuItem = $this->db->fetchOne($sql);
             if (!$menuItem) {
                 //inserting old menu item
                 $sql = "INSERT INTO `s_core_menu`
                         (`parent`, `hyperlink`, `name`, `onclick`, `style`, `class`, `position`, `active`, `pluginID`, `resourceID`, `controller`, `shortcut`, `action`)
                         VALUES
                         (7, '', 'Import/Export', '', NULL, 'sprite-arrow-circle-double-135', 3, 1, NULL, 34, 'ImportExport', NULL, 'Index')";
-                Shopware()->Db()->query($sql);
+                $this->db->query($sql);
             }
 
-            $db = Shopware()->Db();
             //removing snippets
-            $db->delete('s_core_snippets', array("value = 'Import/Export'"));
+            $this->db->delete('s_core_snippets', array("value = 'Import/Export'"));
 
-            $db->exec('ALTER TABLE `s_import_export_profile` ADD `hidden` INT NOT NULL');
-            $db->exec('ALTER TABLE `s_import_export_log` CHANGE `message` `message` TEXT NULL');
-            $db->exec('ALTER TABLE `s_import_export_log` CHANGE `state` `state` VARCHAR(100) NULL');
+            $this->db->exec('ALTER TABLE `s_import_export_profile` ADD `hidden` INT NOT NULL');
+            $this->db->exec('ALTER TABLE `s_import_export_log` CHANGE `message` `message` TEXT NULL');
+            $this->db->exec('ALTER TABLE `s_import_export_log` CHANGE `state` `state` VARCHAR(100) NULL');
 
-            $db->exec('ALTER TABLE `s_import_export_session`
+            $this->db->exec(
+                'ALTER TABLE `s_import_export_session`
                     ADD COLUMN `log_id` INT NULL AFTER `profile_id`,
                     ADD CONSTRAINT FK_SWAG_IE_LOG_ID UNIQUE (`log_id`),
-                    ADD FOREIGN KEY (`log_id`) REFERENCES `s_import_export_log` (`id`)');
+                    ADD FOREIGN KEY (`log_id`) REFERENCES `s_import_export_log` (`id`)'
+            );
 
             $this->get('shopware.cache_manager')->clearProxyCache();
         }
@@ -157,6 +186,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
     /**
      * Uninstall function of the plugin.
      * Fired from the plugin manager.
+     *
      * @return bool
      */
     public function uninstall()
@@ -172,17 +202,14 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
     public function registerMyNamespace()
     {
         // Register Doctrine RegExp extension
-        $config = $this->Application()->Models()->getConfiguration();
+        /** @var Configuration $config */
+        $config = $this->em->getConfiguration();
         $classLoader = new \Doctrine\Common\ClassLoader('DoctrineExtensions', $this->Path() . 'Components/');
         $classLoader->register();
         $config->addCustomStringFunction('GroupConcat', 'DoctrineExtensions\Query\Mysql\GroupConcat');
 
-        $this->Application()->Loader()->registerNamespace(
-            'Shopware\Components', $this->Path() . 'Components/'
-        );
-        $this->Application()->Loader()->registerNamespace(
-            'Shopware\Commands', $this->Path() . 'Commands/'
-        );
+        $this->Application()->Loader()->registerNamespace('Shopware\Components', $this->Path() . 'Components/');
+        $this->Application()->Loader()->registerNamespace('Shopware\Commands', $this->Path() . 'Commands/');
     }
 
     private function createDirectories()
@@ -196,11 +223,10 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         if (!file_exists($importExportPath)) {
             mkdir($importExportPath, 0777, true);
         }
-
     }
 
     /**
-     * Returns DataFactory
+     * @return DataFactory
      */
     public function getDataFactory()
     {
@@ -213,7 +239,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
     }
 
     /**
-     * Returns ProfileFactory
+     * @return ProfileFactory
      */
     public function getProfileFactory()
     {
@@ -226,7 +252,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
     }
 
     /**
-     * Returns FileIOFactory
+     * @return FileIOFactory
      */
     public function getFileIOFactory()
     {
@@ -239,7 +265,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
     }
 
     /**
-     * Returns DataTransformerFactory
+     * @return DataTransformerFactory
      */
     public function getDataTransformerFactory()
     {
@@ -252,24 +278,31 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
     }
 
     /**
+     * @param string $version
+     * @return bool
+     */
+    public function checkMinVersion($version)
+    {
+        return $this->assertMinimumVersion($version);
+    }
+
+    /**
      * Creates the plugin database table over the doctrine schema tool.
      */
     private function createDatabase()
     {
-        $em = $this->Application()->Models();
-        $tool = new \Doctrine\ORM\Tools\SchemaTool($em);
+        $tool = new SchemaTool($this->em);
 
         $classes = array(
-            $em->getClassMetadata('Shopware\CustomModels\ImportExport\Session'),
-            $em->getClassMetadata('Shopware\CustomModels\ImportExport\Logger'),
-            $em->getClassMetadata('Shopware\CustomModels\ImportExport\Profile'),
-            $em->getClassMetadata('Shopware\CustomModels\ImportExport\Expression')
+            $this->em->getClassMetadata('Shopware\CustomModels\ImportExport\Session'),
+            $this->em->getClassMetadata('Shopware\CustomModels\ImportExport\Logger'),
+            $this->em->getClassMetadata('Shopware\CustomModels\ImportExport\Profile'),
+            $this->em->getClassMetadata('Shopware\CustomModels\ImportExport\Expression')
         );
 
         try {
             $tool->createSchema($classes);
-        } catch (\Doctrine\ORM\Tools\ToolsException $e) {
-
+        } catch (ToolsException $e) {
         }
     }
 
@@ -278,14 +311,11 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
      */
     private function removeDatabaseTables()
     {
-        $em = $this->Application()->Models();
-        $tool = new \Doctrine\ORM\Tools\SchemaTool($em);
+        $tool = new SchemaTool($this->em);
 
         $classes = array(
-            $em->getClassMetadata('Shopware\CustomModels\ImportExport\Session'),
-            $em->getClassMetadata('Shopware\CustomModels\ImportExport\Logger'),
-//            $em->getClassMetadata('Shopware\CustomModels\ImportExport\Profile'),
-//            $em->getClassMetadata('Shopware\CustomModels\ImportExport\Expression')
+            $this->em->getClassMetadata('Shopware\CustomModels\ImportExport\Session'),
+            $this->em->getClassMetadata('Shopware\CustomModels\ImportExport\Logger')
         );
 
         $tool->dropSchema($classes);
@@ -303,7 +333,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
                 'class' => 'sprite-server--plus',
                 'action' => 'Index',
                 'active' => 1,
-                'parent' => $this->Menu()->findOneBy('label', 'Inhalte'),
+                'parent' => $this->Menu()->findOneBy(array('label' => 'Inhalte')),
                 'position' => 6,
             )
         );
@@ -315,60 +345,51 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
     protected function registerEvents()
     {
         $this->subscribeEvent(
-            'Enlight_Controller_Dispatcher_ControllerPath_Backend_SwagImportExport', 'getBackendController'
+            'Enlight_Controller_Dispatcher_ControllerPath_Backend_SwagImportExport',
+            'getBackendController'
         );
         $this->subscribeEvent(
-            'Enlight_Controller_Dispatcher_ControllerPath_Backend_SwagImportExportCron', 'getCronjobController'
+            'Enlight_Controller_Dispatcher_ControllerPath_Backend_SwagImportExportCron',
+            'getCronjobController'
         );
         $this->subscribeEvent(
-            'Enlight_Controller_Action_PostDispatch_Backend_Index', 'injectBackendAceEditor'
+            'Enlight_Controller_Action_PostDispatch_Backend_Index',
+            'injectBackendAceEditor'
         );
         $this->subscribeEvent(
-            'Shopware_Console_Add_Command', 'onAddConsoleCommand'
+            'Shopware_Console_Add_Command',
+            'onAddConsoleCommand'
         );
 
         $this->subscribeEvent(
-            'Enlight_Controller_Dispatcher_ControllerPath_Frontend_SwagImportExport', 'getFrontendController'
+            'Enlight_Controller_Dispatcher_ControllerPath_Frontend_SwagImportExport',
+            'getFrontendController'
         );
     }
 
     /**
      * Returns the path to the backend controller.
      *
-     * @param Enlight_Event_EventArgs $args
      * @return string
      */
-    public function getBackendController(Enlight_Event_EventArgs $args)
+    public function getBackendController()
     {
-        $this->checkLicense();
         $this->registerMyNamespace();
-
-        $this->Application()->Snippets()->addConfigDir(
-            $this->Path() . 'Snippets/'
-        );
-
-        $this->Application()->Template()->addTemplateDir(
-            $this->Path() . 'Views/'
-        );
+        $this->addConfigDirs();
 
         return $this->Path() . '/Controllers/Backend/SwagImportExport.php';
     }
+
     /**
      * Returns the path to the CronJob controller.
      *
-     * @param Enlight_Event_EventArgs $args
      * @return string
      */
-    public function getCronjobController(Enlight_Event_EventArgs $args)
+    public function getCronjobController()
     {
-        $this->checkLicense();
         $this->registerMyNamespace();
-        $this->Application()->Snippets()->addConfigDir(
-            $this->Path() . 'Snippets/'
-        );
-        $this->Application()->Template()->addTemplateDir(
-            $this->Path() . 'Views/'
-        );
+        $this->addConfigDirs();
+
         return $this->Path() . '/Controllers/Backend/SwagImportExportCron.php';
     }
 
@@ -379,13 +400,13 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
      */
     public function injectBackendAceEditor(Enlight_Event_EventArgs $args)
     {
+        /** @var Shopware_Controllers_Backend_Index $controller */
         $controller = $args->getSubject();
         $request = $controller->Request();
         $response = $controller->Response();
         $view = $controller->View();
 
-        if (!$request->isDispatched() || $response->isException() || !$view->hasTemplate()
-        ) {
+        if (!$request->isDispatched() || $response->isException() || !$view->hasTemplate()) {
             return;
         }
 
@@ -396,12 +417,10 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
     /**
      * Returns the path to the frontend controller.
      *
-     * @param Enlight_Event_EventArgs $args
      * @return string
      */
-    public function getFrontendController(Enlight_Event_EventArgs $args)
+    public function getFrontendController()
     {
-        $this->checkLicense();
         $this->registerMyNamespace();
 
         return $this->Path() . '/Controllers/Frontend/SwagImportExport.php';
@@ -410,68 +429,19 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
     /**
      * Adds the console commands (sw:import and sw:export)
      *
-     * @param Enlight_Event_EventArgs $args
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection
      */
-    public function onAddConsoleCommand(Enlight_Event_EventArgs $args)
+    public function onAddConsoleCommand()
     {
-        if($this->checkLicense(false) == false) {
-	        return null;
-        }
+        $this->registerMyNamespace();
 
-	    $this->registerMyNamespace();
-	    return new Doctrine\Common\Collections\ArrayCollection(array(
-			    new \Shopware\Commands\SwagImportExport\ImportCommand(),
-			    new \Shopware\Commands\SwagImportExport\ExportCommand(),
-			    new \Shopware\Commands\SwagImportExport\ProfilesCommand()
-	    ));
-    }
-
-    /**
-     * Check if a license for "core" or "MultiEdit" is available.
-     *
-     * @param bool $throwException
-     * @return bool
-     * @throws Exception
-     */
-    public function checkLicense($throwException = true)
-    {
-        $check1 = $this->checkLicenseCore(false);
-        $check2 = $this->checkLicenseImportExport(false);
-
-        if(!$check1 && !$check2 && $throwException) {
-            throw new Exception('License check for module "SwagImportExport" has failed.');
-        }
-
-        return $check1 || $check2;
-    }
-
-    public function checkLicenseImportExport($throwException = true)
-    {
-        try {
-            static $r, $m = 'SwagImportExport';
-            if(!isset($r)) {
-                $s = base64_decode('TMkkdQFC0KhFzejxL79Jc2fXZ5Q=');
-                $c = base64_decode('31wJZc+DkoCm4Hga/84/hwymQBE=');
-                $r = sha1(uniqid('', true), true);
-                /** @var $l Shopware_Components_License */
-                $l = $this->Application()->License();
-                $i = $l->getLicense($m, $r);
-                $t = $l->getCoreLicense();
-                $u = strlen($t) === 20 ? sha1($t . $s . $t, true) : 0;
-                $r = $i === sha1($c. $u . $r, true);
-            }
-            if(!$r && $throwException) {
-                throw new Exception('License check for module "' . $m . '" has failed.');
-            }
-            return $r;
-        } catch (Exception $e) {
-            if($throwException) {
-                throw new Exception('License check for module "' . $m . '" has failed.');
-            } else {
-                return false;
-            }
-        }
+        return new ArrayCollection(
+            array(
+                new ImportCommand(),
+                new ExportCommand(),
+                new ProfilesCommand()
+            )
+        );
     }
 
     /**
@@ -515,31 +485,6 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
     }
 
     /**
-     * @param   bool $throwException
-     * @throws  Exception
-     * @return  bool
-     */
-    public function checkLicenseCore($throwException = true)
-    {
-        static $r, $m = 'SwagCommercial';
-        if(!isset($r)) {
-            $s = base64_decode('HxXzbjuwgns5D4TlHM+tV9K1svc=');
-            $c = base64_decode('IPF8Dvf0oWT0jMP4wlz1oZ9H+Lc=');
-            $r = sha1(uniqid('', true), true);
-            /** @var $l Shopware_Components_License */
-            $l = $this->Application()->License();
-            $i = $l->getLicense($m, $r);
-            $t = $l->getCoreLicense();
-            $u = strlen($t) === 20 ? sha1($t . $s . $t, true) : 0;
-            $r = $i === sha1($c. $u . $r, true);
-        }
-        if(!$r && $throwException) {
-            throw new Exception('License check for module "' . $m . '" has failed.');
-        }
-        return $r;
-    }
-
-    /**
      * Translation for plugin configuration
      */
     public function createTranslations()
@@ -553,7 +498,6 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
                     'label' => 'Continue import/export if an error occurs during the process'
                 )
             ),
-
             'de_DE' => array(
                 'SwagImportExportImageMode' => array(
                     'label' => 'Bildimport-Modus'
@@ -572,12 +516,13 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
     private function createAclResource()
     {
         // If exists: find existing SwagImportExport resource
-        $pluginId = Shopware()->Db()->fetchRow('SELECT pluginID FROM s_core_acl_resources WHERE name = ? ',
+        $pluginId = $this->db->fetchRow(
+            'SELECT pluginID FROM s_core_acl_resources WHERE name = ? ',
             array("swagimportexport")
         );
-        $pluginId = isset($pluginId['pluginID']) ? $pluginId['pluginID'] : NULL;
+        $pluginId = isset($pluginId['pluginID']) ? $pluginId['pluginID'] : null;
 
-        if($pluginId) {
+        if ($pluginId) {
             // prevent creation of new acl resource
             return;
         }
@@ -591,19 +536,27 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
             $privilege->setResource($resource);
             $privilege->setName($action);
 
-            Shopware()->Models()->persist($privilege);
+            $this->em->persist($privilege);
         }
 
-        Shopware()->Models()->persist($resource);
+        $this->em->persist($resource);
 
-        Shopware()->Models()->flush();
+        $this->em->flush();
 
-        Shopware()->Db()->query('UPDATE s_core_menu SET resourceID = ? WHERE controller = "SwagImportExport"',
+        $this->db->query(
+            'UPDATE s_core_menu SET resourceID = ? WHERE controller = "SwagImportExport"',
             array($resource->getId())
         );
-
-
     }
 
+    private function addConfigDirs()
+    {
+        /** @var Shopware_Components_Snippet_Manager $snippetManager */
+        $snippetManager = $this->get('snippets');
+        $snippetManager->addConfigDir($this->Path() . 'Snippets/');
 
+        /** @var Enlight_Template_Manager $templateManager */
+        $templateManager = $this->get('template');
+        $templateManager->addTemplateDir($this->Path() . 'Views/');
+    }
 }
