@@ -8,10 +8,11 @@
     "link": "http://store.shopware.com",
     "author": "Shopware AG",
 
-    "currentVersion": "1.1.0",
+    "currentVersion": "1.1.1",
 
     "changelog": {
         "de": {
+            "1.1.1": "PT-3800 - Bugfix: Shopware 5.1 Kompatibilität;",
             "1.1.0": "PT-3671 - Import/Export ist nun kostenlos verfügbar;",
 			"1.0.7": "PT-2899, PT-3060 - Verbesserung: Starke Verbesserung der Performance; PT-3007 - Feature: Kategorien über den Pfad zuweisen; PT-3025 - Bugfix: Artikel Lagerbestand Export-Fehler behoben; PT-3117 - Bugfix: Import/Export über die Konsole repariert; PT-3422 - Bugfix: Ungebrauchte Snippets entfernt",
 			"1.0.6": "PT-2785 - Verbesserung: Erlaube Bilder-Uploads im Artikel-Profil;PT-2810 - Bugfix: Bilder mit Leerzeichen; PT-2818 - Verbesserung: Kunden-Referenz über die ID; PT-2819 - Verbesserung: Kunden-Updates ohne Password; PT-2850 - Verbesserung: Übersetzung von Varianten, Konfiguratoren und Eigenschaften; PT-2815 - SW5 Kompatiblität",
@@ -22,6 +23,7 @@
             "1.0.1": "Problem mit verschwindendem Import/Export Menü-Eintrag behoben; Weitere ACL-Zugangsberechtigungen hinzugefügt; Korrektur: article.active Verhalten; Korrektur: Artikel-Attribute; Korrektur: Datums- und Zeitimporte"
         },
         "en": {
+            "1.1.1": "PT-3800 - Bugfix: Shopware 5.1 compatibility;",
             "1.1.0": "PT-3671 - Import/Export is now available for free;",
             "1.0.7": "PT-2899, PT-3060 - Improvement: Highly improved the performance; PT-3007 - Feature: Assign categories to articles by path; PT-3025 - Bugfix: Importing/exporting article stock works properly now; PT-3117 - Bugfix: Fixed the import/export when using the console; PT-3422 - Bugfix: Removed unnecessary snippets",
 			"1.0.6": "PT-2785 - Improvement: Image uploads from within the article profile;PT-2810 - Bugfix: Images with whitespaces; PT-2818 - Improvement: Reference customers via ID; PT-2819 - Improvemend: Customer updates without passwords; PT-2850 - Improvement: Translate variants, configuratos and properties; PT-2815 - SW5 compatibility",

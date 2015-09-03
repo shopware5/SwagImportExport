@@ -52,6 +52,7 @@ Ext.define('Shopware.apps.SwagImportExport.model.SessionList', {
         { name: 'totalCount', type: 'string' },
         { name: 'username', type: 'string' },
         { name: 'fileName', type: 'string' },
+        { name: 'fileUrl', type: 'string' },
         { name: 'format', type: 'string' },
         { name: 'fileSize', type: 'string' },
         { name: 'state', type: 'string' },

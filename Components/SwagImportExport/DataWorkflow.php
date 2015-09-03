@@ -129,7 +129,7 @@ class DataWorkflow
             $tree = json_decode($this->profile->getConfig("tree"), true);
             $this->fileIO->setTree($tree);
         }
-        
+
         if ($this->dataIO->getSessionState() == 'new') {
             $totalCount = $this->fileIO->getTotalCount($inputFile);
             $this->dataIO->setFileName($postData['importFile']);

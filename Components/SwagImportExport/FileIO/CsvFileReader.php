@@ -22,7 +22,11 @@ class CsvFileReader implements FileReader
      */
     public function readRecords($fileName, $position, $step)
     {
-        $file = new \SplFileObject($fileName);
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $tempFileName = Shopware()->DocPath() . 'media/temp/'. md5(microtime()) .'.csv';
+        file_put_contents($tempFileName, $mediaService->read($fileName));
+
+        $file = new \SplFileObject($tempFileName);
         $file->setCsvControl(";", '"');
         $file->setFlags(\SplFileObject::READ_CSV);
 
@@ -49,6 +53,8 @@ class CsvFileReader implements FileReader
             // Move the pointer to the next line
             $file->next();
         }
+
+        unlink($tempFileName);
 
         return $readRows;
     }
