@@ -172,7 +172,11 @@ class ArticlesDbAdapter implements DataDbAdapter
 
         //images
         $imageBuilder = $this->getImageBuilder($columns['image'], $ids);
-        $result['image'] = $imageBuilder->getQuery()->getResult();
+        $tempImageResult = $imageBuilder->getQuery()->getResult();
+        foreach ($tempImageResult as &$tempImage) {
+            $tempImage['imageUrl'] = Shopware()->Container()->get('shopware_media.media_service')->getUrl($tempImage['imageUrl']);
+        }
+        $result['image'] = $tempImageResult;
 
         //filter values
         $propertyValuesBuilder = $this->getPropertyValueBuilder($columns['propertyValues'], $ids);
@@ -854,19 +858,12 @@ class ArticlesDbAdapter implements DataDbAdapter
 
     public function getImageColumns()
     {
-        $request = Shopware()->Front()->Request();
-        if ($request) {
-            $path = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() . '/media/image/';
-        } else {
-            $path = $this->getPath();
-        }
-
         return array(
             'images.id as id',
             'images.articleId as articleId',
             'images.articleDetailId as variantId',
             'images.path as path',
-            "CONCAT('$path', images.path, '.', images.extension) as imageUrl",
+            "CONCAT('media/image/', images.path, '.', images.extension) as imageUrl",
             'images.main as main',
             'images.mediaId as mediaId',
             ' \'1\' as thumbnail'
@@ -1342,20 +1339,5 @@ class ArticlesDbAdapter implements DataDbAdapter
         $builder->orderBy('attribute.position');
 
         return $builder;
-    }
-
-    protected function getPath()
-    {
-        $builder = $this->getManager()->createQueryBuilder();
-        $shopData = $builder->select('shop.host, shop.secure')
-            ->from('Shopware\Models\Shop\Shop', 'shop')
-            ->where('shop.host IS NOT NULL')
-            ->getQuery()
-            ->getOneOrNullResult();
-
-        $scheme = $shopData['secure'] ? 'https://' : 'http://';
-        $httpHost = $shopData['host'];
-
-        return $scheme . $httpHost . '/media/image/';
     }
 }

@@ -70,6 +70,8 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
      */
     public function read($ids, $columns)
     {
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+
         if (!$ids && empty($ids)) {
             $message = SnippetsHelper::getNamespace()
                         ->get('adapters/articlesImages/no_article_images_ids', 'Can not read article images without ids.');
@@ -87,6 +89,8 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
         $result['default'] = $builder->getQuery()->getResult();
 
         foreach ($result['default'] as &$image) {
+            $image['image'] = $mediaService->getUrl($image['image']);
+
             if (empty($image['relations'])) {
                 continue;
             }
