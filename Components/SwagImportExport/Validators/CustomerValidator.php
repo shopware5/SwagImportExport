@@ -12,7 +12,6 @@ class CustomerValidator extends Validator
     );
 
     private $requiredFieldsForCreate = array(
-        'email',
         'unhashedPassword',
         'encoder',
         'customergroup',

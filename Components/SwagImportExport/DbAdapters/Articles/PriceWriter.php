@@ -4,19 +4,28 @@ namespace Shopware\Components\SwagImportExport\DbAdapters\Articles;
 
 use Shopware\Components\SwagImportExport\DbalHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
-use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
+use Shopware\Components\SwagImportExport\Validators\Articles\PriceValidator;
+use Shopware\Components\SwagImportExport\DataManagers\Articles\PriceDataManager;
 
 class PriceWriter
 {
-    /** @var \Doctrine\DBAL\Connection */
-    protected $connection;
+    /** @var \Enlight_Components_Db_Adapter_Pdo_Mysql */
+    protected $db;
 
     protected $customerGroups;
 
+    /** @var PriceValidator */
+    Protected $validator;
+
+    /** @var PriceDataManager */
+    protected $dataManager;
+
     public function __construct()
     {
+        $this->db = Shopware()->Db();
         $this->dbalHelper = new DbalHelper();
-        $this->connection = Shopware()->Models()->getConnection();
+        $this->validator = new PriceValidator();
+        $this->dataManager = new PriceDataManager();
 
         $this->customerGroups = $this->getCustomerGroup();
     }
@@ -26,15 +35,18 @@ class PriceWriter
         $tax = $this->getArticleTaxRate($articleId);
 
         foreach ($prices as $price) {
-            $price = $this->setDefaultValues($price);
-            $this->checkRequirements($price);
+            $this->validator->setDetailId($articleDetailId);
+            $price = $this->dataManager->setDefaultFields($price);
+
+            $this->validator->checkRequiredFields($price);
+            $this->validator->validate($price, $this->customerGroups);
 
             // skip empty prices for non-default customer groups
-            if ((!isset($price['price']) || empty($price['price'])) && $price['priceGroup'] != 'EK') {
+            if (empty($price['price']) && $price['priceGroup'] !== 'EK') {
                 continue;
             }
 
-            $priceId = $this->connection->fetchColumn(
+            $priceId = $this->db->fetchOne(
                 '
                     SELECT id
                     FROM s_articles_prices
@@ -87,94 +99,33 @@ class PriceWriter
         return $price;
     }
 
-    protected function checkRequirements($price)
-    {
-        if (!array_key_exists($price['priceGroup'], $this->customerGroups)) {
-            $message = SnippetsHelper::getNamespace()->get(
-                'adapters/customerGroup_not_found',
-                'Customer Group by key %s not found for article %s'
-            );
-            throw new AdapterException(sprintf($message, $price['priceGroup'], ''));
-        }
-
-        if ((!isset($price['price']) || empty($price['price'])) && $price['priceGroup'] == 'EK') {
-            $message = SnippetsHelper::getNamespace()->get(
-                'adapters/articles/incorrect_price',
-                'Price value is incorrect for article with nubmer %s'
-            );
-            throw new AdapterException(sprintf($message, ''));
-        }
-
-        if ($price['from'] <= 0) {
-            $message = SnippetsHelper::getNamespace()->get(
-                'adapters/articles/invalid_price',
-                'Invalid Price "from" value for article %s'
-            );
-            throw new AdapterException(sprintf($message, ''));
-        }
-    }
-
-    /**
-     * @param $price
-     */
-    protected function setDefaultValues($price)
-    {
-        if (empty($price['priceGroup'])) {
-            $price['priceGroup'] = 'EK';
-        }
-
-        if (!isset($price['from'])) {
-            $price['from'] = 1;
-        }
-
-        $price['from'] = intval($price['from']);
-
-        if (isset($price['to'])) {
-            $price['to'] = intval($price['to']);
-        } else {
-            $price['to'] = 0;
-        }
-
-        // if the "to" value isn't numeric, set the place holder "beliebig"
-        if ($price['to'] <= 0) {
-            $price['to'] = 'beliebig';
-        }
-
-        return $price;
-    }
-
     private function getCustomerGroup()
     {
-        $groups = array();
-        $result = $this->connection->fetchAll(
+        $groups = $this->db->fetchPairs(
             'SELECT groupkey, taxinput FROM s_core_customergroups'
         );
-
-        foreach ($result as $row) {
-            $groups[$row['groupkey']] = $row['taxinput'];
-        }
 
         return $groups;
     }
 
     /**
      * @param $articleId
-     * @return array
-     * @throws \Shopware\Components\SwagImportExport\Exception\AdapterException
+     * @return float
+     * @throws AdapterException
      */
     protected function getArticleTaxRate($articleId)
     {
-        $result = $this->connection->fetchAssoc(
+        $tax = $this->db->fetchOne(
             'SELECT coretax.tax FROM s_core_tax AS coretax
               LEFT JOIN s_articles AS article
               ON article.taxID = coretax.id
               WHERE article.id = ?'
             , array($articleId));
 
-        if (empty($result)) {
+        if (empty($tax)) {
             throw new AdapterException("Tax for article $articleId not found");
         }
 
-        return floatval($result['tax']);
+        return floatval($tax);
     }
 }
