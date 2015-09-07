@@ -28,6 +28,12 @@ class CustomerDataManager
         $this->passwordManager = Shopware()->PasswordEncoder();
     }
 
+    /**
+     * Sets fields which are empty by default.
+     *
+     * @param $record
+     * @return mixed
+     */
     public function setDefaultFields($record)
     {
         foreach ($this->defaultFields as $key) {
@@ -37,16 +43,16 @@ class CustomerDataManager
 
             switch ($key) {
                 case 'active':
-                    $record['active'] = $this->getActive();
+                    $record[$key] = 1;
                     break;
                 case 'paymentID':
-                    $record['paymentID'] = $this->getPayment($record);
+                    $record[$key] = $this->getPayment($record);
                     break;
                 case 'encoder':
-                    $record['encoder'] = $this->getEncoder();
+                    $record[$key] = $this->getEncoder();
                     break;
                 case 'subshopID':
-                    $record['subshopID'] = $this->getSubShopId();
+                    $record[$key] = 1;
                     break;
             }
         }
@@ -54,11 +60,10 @@ class CustomerDataManager
         return $record;
     }
 
-    private function getActive()
-    {
-        return 1;
-    }
-
+    /**
+     * @param array $record
+     * @return mixed
+     */
     private function getPayment($record)
     {
         if (!isset($record['subshopID'])) {
@@ -82,6 +87,10 @@ class CustomerDataManager
         return $this->config->get('sDEFAULTPAYMENT');
     }
 
+    /**
+     * @param int $subShopId
+     * @return string
+     */
     private function getSubShopDefaultPaymentId($subShopId)
     {
         $query = "SELECT value.value
@@ -92,6 +101,10 @@ class CustomerDataManager
         return $this->db->fetchOne($query, array($subShopId));
     }
 
+    /**
+     * @param int $subShopId
+     * @return string
+     */
     private function getMainShopDefaultPaymentId($subShopId)
     {
         $query =  "SELECT value.value
@@ -103,13 +116,11 @@ class CustomerDataManager
         return $this->db->fetchOne($query, array($subShopId));
     }
 
+    /**
+     * @return string
+     */
     private function getEncoder()
     {
         return $this->passwordManager->getDefaultPasswordEncoderName();
-    }
-
-    private function getSubShopId()
-    {
-        return 1;
     }
 }

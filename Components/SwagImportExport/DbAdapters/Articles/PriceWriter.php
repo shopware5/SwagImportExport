@@ -35,11 +35,12 @@ class PriceWriter
         $tax = $this->getArticleTaxRate($articleId);
 
         foreach ($prices as $price) {
-            $this->validator->setDetailId($articleDetailId);
+            $price = $this->validator->prepareInitialData($price);
             $price = $this->dataManager->setDefaultFields($price);
-
             $this->validator->checkRequiredFields($price);
-            $this->validator->validate($price, $this->customerGroups);
+            $this->validator->validate($price, PriceValidator::$mapper);
+
+            $this->checkRequirements($price);
 
             // skip empty prices for non-default customer groups
             if (empty($price['price']) && $price['priceGroup'] !== 'EK') {
@@ -97,6 +98,25 @@ class PriceWriter
         }
 
         return $price;
+    }
+
+    protected function checkRequirements($price)
+    {
+        if (!array_key_exists($price['priceGroup'], $this->customerGroups)) {
+            $message = SnippetsHelper::getNamespace()->get(
+                'adapters/customerGroup_not_found',
+                'Customer Group by key %s not found for article %s'
+            );
+            throw new AdapterException(sprintf($message, $price['priceGroup'], ''));
+        }
+
+        if ($price['from'] <= 0) {
+            $message = SnippetsHelper::getNamespace()->get(
+                'adapters/articles/invalid_price',
+                'Invalid Price "from" value for article %s'
+            );
+            throw new AdapterException(sprintf($message, ''));
+        }
     }
 
     private function getCustomerGroup()

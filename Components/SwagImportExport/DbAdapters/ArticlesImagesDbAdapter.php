@@ -207,6 +207,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                 }
 
                 $record = $dataManager->setDefaultFields($record, $articleDetailModel->getArticle()->getId());
+                $validator->validate($record, ArticleImageValidator::$mapper);
 
                 if (isset($record['relations'])) {
                     $relations = array();

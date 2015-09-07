@@ -20,6 +20,13 @@ class ArticleImageDataManager
         $this->db = Shopware()->Db();
     }
 
+    /**
+     * Sets fields which are empty by default.
+     *
+     * @param array $record
+     * @param int $articleId
+     * @return mixed
+     */
     public function setDefaultFields($record, $articleId)
     {
         foreach ($this->defaultFields as $key) {
@@ -46,6 +53,10 @@ class ArticleImageDataManager
         return $record;
     }
 
+    /**
+     * @param int $articleId
+     * @return int
+     */
     private function getPosition($articleId)
     {
         $sql = "SELECT MAX(position) FROM s_articles_img WHERE articleID = ?;";

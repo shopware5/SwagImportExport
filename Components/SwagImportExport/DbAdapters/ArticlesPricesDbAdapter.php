@@ -159,12 +159,10 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
 
         foreach ($records['default'] as $record) {
             try {
-
                 $record = $validator->prepareInitialData($record);
-
                 $validator->checkRequiredFields($record);
-
                 $record = $dataManager->setDefaultFields($record);
+                $validator->validate($record, ArticlePriceValidator::$mapper);
 
                 $customerGroup = $this->getGroupRepository()->findOneBy(array("key" => $record['priceGroup']));
                 if (!$customerGroup) {

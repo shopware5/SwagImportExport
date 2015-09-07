@@ -7,6 +7,18 @@ use Shopware\Components\SwagImportExport\Exception\AdapterException;
 
 class ArticleTranslationValidator extends Validator
 {
+    public static $mapper = array(
+        'string' => array( //TODO: maybe we don't need to check fields which contains string?
+            'articleNumber',
+            'name',
+            'description',
+            'descriptionLong',
+            'keywords',
+            'metaTitle'
+        ),
+        'int' => array('languageId'),
+    );
+
     private $requiredFields = array(
         'articleNumber',
     );
@@ -18,6 +30,12 @@ class ArticleTranslationValidator extends Validator
         ),
     );
 
+    /**
+     * Checks whether required fields are filled-in
+     *
+     * @param array $record
+     * @throws AdapterException
+     */
     public function checkRequiredFields($record)
     {
         foreach ($this->requiredFields as $key) {

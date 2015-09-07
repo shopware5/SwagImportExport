@@ -70,6 +70,7 @@ class ArticleWriter
         }
 
         $article = $this->dataManager->setDefaultFields($article);
+        $this->validator->validate($article, ArticleValidator::$mapper);
 
         // insert article
         $builder = $this->dbalHelper->getQueryBuilderForEntity(

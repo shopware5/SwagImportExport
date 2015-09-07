@@ -8,6 +8,52 @@ use Shopware\Components\SwagImportExport\Exception\AdapterException;
 
 class ArticleValidator extends Validator
 {
+    public static $mapper = array(
+        'string' => array( //TODO: maybe we don't need to check fields which contains string?
+            'orderNumber',
+            'mainNumber',
+            'name',
+            'additionalText',
+            'supplierName',
+            'description',
+            'descriptionLong',
+            'shippingTime',
+            'metaTitle',
+            'keywords',
+            'packUnit',
+            'supplierNumber',
+            'ean',
+        ),
+        'float' => array(
+            'tax',
+            'purchaseUnit',
+            'referenceUnit',
+            'weight',
+            'width',
+            'height',
+            'length',
+        ),
+        'int' => array(
+            'active',
+            'inStock',
+            'stockMin',
+            'shippingFree',
+            'topSeller',
+            'minPurchase',
+            'purchaseSteps',
+            'maxPurchase',
+            'unitId',
+            'priceGroupId',
+            'priceGroupActive',
+            'lastStock',
+        ),
+        'dateTime' => array(
+            'date',
+            'changeTime',
+            'releaseDate',
+        ),
+    );
+
     private $requiredFields = array(
         'orderNumber',
     );
@@ -32,6 +78,12 @@ class ArticleValidator extends Validator
         ),
     );
 
+    /**
+     * Checks whether required fields are filled-in
+     *
+     * @param array $record
+     * @throws AdapterException
+     */
     public function checkRequiredFields($record)
     {
         foreach ($this->requiredFields as $key) {
@@ -46,6 +98,12 @@ class ArticleValidator extends Validator
         }
     }
 
+    /**
+     * Checks whether required fields for create are filled-in
+     *
+     * @param array $record
+     * @throws AdapterException
+     */
     public function checkRequiredFieldsForCreate($record)
     {
         foreach ($this->requiredFieldsForCreate as $key) {

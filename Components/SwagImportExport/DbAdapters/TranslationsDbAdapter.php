@@ -2,7 +2,7 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
-use Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
+use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Validators\TranslationValidator;
 
@@ -166,10 +166,9 @@ class TranslationsDbAdapter implements DataDbAdapter
 
         foreach ($records['default'] as $index => $record) {
             try {
-
                 $record = $validator->prepareInitialData($record);
-
                 $validator->checkRequiredFields($record);
+                $validator->validate($record, TranslationValidator::$mapper);
 
                 if (isset($record['languageId'])) {
                     $shop = $this->getManager()->find('Shopware\Models\Shop\Shop', $record['languageId']);

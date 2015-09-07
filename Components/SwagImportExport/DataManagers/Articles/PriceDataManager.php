@@ -11,6 +11,12 @@ class PriceDataManager
         'to',
     );
 
+    /**
+     * Sets fields which are empty by default.
+     *
+     * @param array $record
+     * @return mixed
+     */
     public function setDefaultFields($record)
     {
         foreach ($this->defaultFields as $key) {
@@ -30,6 +36,10 @@ class PriceDataManager
         return $record;
     }
 
+    /**
+     * @param $to
+     * @return int|string
+     */
     private function getTo($to)
     {
         $to = !empty($to) ? intval($to) : 0;

@@ -190,6 +190,7 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
             try {
                 $record = $validator->prepareInitialData($record);
                 $validator->checkRequiredFields($record);
+                $validator->validate($record, ArticleInStockValidator::$mapper);
 
                 $articleDetail = $this->getRepository()->findOneBy(array("number" => $record['orderNumber']));
                 if (!$articleDetail) {

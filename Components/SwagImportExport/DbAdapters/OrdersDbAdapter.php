@@ -159,8 +159,8 @@ class OrdersDbAdapter implements DataDbAdapter
         foreach ($records['default'] as $index => $record) {
             try {
                 $record = $validator->prepareInitialData($record);
-
                 $validator->checkRequiredFields($record);
+                $validator->validate($record, OrderValidator::$mapper);
 
                 if (isset($record['orderDetailId']) && $record['orderDetailId']) {
                     $orderDetailModel = $this->getDetailRepository()->find($record['orderDetailId']);

@@ -206,10 +206,9 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
 
         foreach ($records['default'] as $index => $record) {
             try {
-
                 $record = $validator->prepareInitialData($record);
-
                 $validator->checkRequiredFields($record);
+                $validator->validate($record, ArticleTranslationValidator::$mapper);
 
                 if (isset($record['languageId'])) {
                     $shop = $this->getManager()->find('Shopware\Models\Shop\Shop', $record['languageId']);

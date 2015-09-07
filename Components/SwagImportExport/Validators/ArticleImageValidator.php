@@ -7,6 +7,21 @@ use Shopware\Components\SwagImportExport\Exception\AdapterException;
 
 class ArticleImageValidator extends Validator
 {
+    public static $mapper = array(
+        'string' => array( //TODO: maybe we don't need to check fields which contains string?
+            'ordernumber',
+            'image',
+            'description',
+            'relations',
+        ),
+        'int' => array(
+            'main',
+            'position',
+            'width',
+            'height',
+        ),
+    );
+
     private $requiredFields = array(
         'ordernumber',
         'image',
@@ -23,6 +38,12 @@ class ArticleImageValidator extends Validator
         ),
     );
 
+    /**
+     * Checks whether required fields are filled-in
+     *
+     * @param array $record
+     * @throws AdapterException
+     */
     public function checkRequiredFields($record)
     {
         foreach ($this->requiredFields as $key) {

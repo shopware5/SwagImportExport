@@ -10,6 +10,12 @@ class ArticlePriceDataManager
         'from',
     );
 
+    /**
+     * Sets fields which are empty by default.
+     *
+     * @param array $record
+     * @return mixed
+     */
     public function setDefaultFields($record)
     {
         foreach ($this->defaultFields as $key) {
@@ -19,24 +25,14 @@ class ArticlePriceDataManager
 
             switch ($key) {
                 case 'priceGroup':
-                    $record['priceGroup'] = $this->getPriceGroup();
+                    $record[$key] = 'EK';
                     break;
                 case 'from':
-                    $record['from'] = $this->getFrom();
+                    $record[$key] = 1;
                     break;
             }
         }
 
         return $record;
-    }
-
-    private function getPriceGroup()
-    {
-        return 'EK';
-    }
-
-    private function getFrom()
-    {
-        return 1;
     }
 }

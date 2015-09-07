@@ -37,6 +37,11 @@ class ArticleDataManager
         $this->suppliers = $this->getSuppliers();
     }
 
+    /**
+     * Returns available taxes.
+     *
+     * @return array
+     */
     private function getTaxRates()
     {
         $taxes = $this->db->fetchPairs('SELECT id, tax FROM s_core_tax');
@@ -48,6 +53,11 @@ class ArticleDataManager
         return $taxes;
     }
 
+    /**
+     * Returns available suppliers.
+     *
+     * @return array
+     */
     private function getSuppliers()
     {
         $suppliers = $this->db->fetchPairs('SELECT name, id FROM s_articles_supplier');
@@ -58,6 +68,12 @@ class ArticleDataManager
         return $suppliers;
     }
 
+    /**
+     * Sets fields which are empty, but we need them to create new entry.
+     *
+     * @param array $record
+     * @return mixed
+     */
     public function setDefaultFieldsForCreate($record)
     {
         foreach ($this->defaultFieldsForCreate as $key) {
@@ -80,6 +96,11 @@ class ArticleDataManager
         return $record;
     }
 
+    /**
+     * @param array $record
+     * @return mixed
+     * @throws AdapterException
+     */
     private function getTaxId($record)
     {
         $taxId = isset($record['tax']) ? $this->getTaxByTaxRate($record['tax'], $record['orderNumber']) : $this->getTaxByDefault();
@@ -87,6 +108,12 @@ class ArticleDataManager
         return $taxId;
     }
 
+    /**
+     * @param float $taxRate
+     * @param string $orderNumber
+     * @return mixed
+     * @throws AdapterException
+     */
     private function getTaxByTaxRate($taxRate, $orderNumber)
     {
         $taxRate = number_format($taxRate, 2);
@@ -104,12 +131,19 @@ class ArticleDataManager
         return $taxId;
     }
 
+    /**
+     * @return mixed
+     */
     private function getTaxByDefault()
     {
         // todo: read default tax rate from config
         return array_shift(array_keys($this->taxRates));
     }
 
+    /**
+     * @param array $record
+     * @return string
+     */
     private function getSupplierId($record)
     {
         $name = $record['supplierName'];
@@ -131,6 +165,13 @@ class ArticleDataManager
         return $supplierId;
     }
 
+    /**
+     * Sets fields which are empty by default.
+     *
+     * @param array $record
+     * @return mixed
+     * @throws AdapterException
+     */
     public function setDefaultFields($record)
     {
         foreach ($this->defaultFields as $key) {

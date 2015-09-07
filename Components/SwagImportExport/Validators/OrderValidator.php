@@ -7,6 +7,56 @@ use Shopware\Components\SwagImportExport\Exception\AdapterException;
 
 class OrderValidator extends Validator
 {
+    public static $mapper = array(
+        'int' => array(
+            'orderId',
+            'customerId',
+            'status',
+            'cleared',
+            'paymentId',
+            'dispatchId',
+            'shopId',
+            'net',
+            'taxFree',
+            'orderDetailId',
+            'articleId',
+            'taxId',
+            'statusId',
+            'quantity',
+            'shipped',
+            'shippedGroup',
+            'mode',
+            'esd'
+        ),
+        'string' => array( //TODO: maybe we don't need to check fields which contains string?
+            'number',
+            'comment',
+            'transactionId',
+            'partnerId',
+            'customerComment',
+            'internalComment',
+            'temporaryId',
+            'referer',
+            'trackingCode',
+            'languageIso',
+            'currency',
+            'remoteAddress',
+            'articleNumber',
+            'articleName',
+            'config'
+        ),
+        'float' => array(
+            'invoiceAmount',
+            'invoiceAmountNet',
+            'invoiceShipping',
+            'invoiceShippingNet',
+            'currencyFactor',
+            'taxRate',
+            'price'
+        ),
+        'dateTime' => array('orderTime', 'clearedDate', 'releasedate'),
+    );
+
     //TODO: check which other fields are required
     private $requiredFields = array(
         array('orderId', 'number', 'orderDetailId'), //one of these fields must be set
@@ -19,6 +69,12 @@ class OrderValidator extends Validator
         ),
     );
 
+    /**
+     * Checks whether required fields are filled-in
+     *
+     * @param array $record
+     * @throws AdapterException
+     */
     public function checkRequiredFields($record)
     {
         foreach ($this->requiredFields as $key) {

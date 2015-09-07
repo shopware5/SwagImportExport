@@ -24,6 +24,13 @@ class NewsletterDataManager
         $this->groupRepository = Shopware()->Models()->getRepository('Shopware\Models\Newsletter\Group');
     }
 
+    /**
+     * Sets fields which are empty by default.
+     *
+     * @param array $record
+     * @return mixed
+     * @throws AdapterException
+     */
     public function setDefaultFields($record)
     {
         foreach ($this->defaultFields as $key) {
@@ -33,7 +40,7 @@ class NewsletterDataManager
 
             switch ($key) {
                 case 'groupName':
-                    $record['groupName'] = $this->getGroupName($record['email']);
+                    $record[$key] = $this->getGroupName($record['email']);
                     break;
             }
         }
@@ -41,6 +48,13 @@ class NewsletterDataManager
         return $record;
     }
 
+    /**
+     * Returns newsletter default group name.
+     *
+     * @param string $email
+     * @return string
+     * @throws AdapterException
+     */
     private function getGroupName($email)
     {
         $groupId = $this->config->get("sNEWSLETTERDEFAULTGROUP");

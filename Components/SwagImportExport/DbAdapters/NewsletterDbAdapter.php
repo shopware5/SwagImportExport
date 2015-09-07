@@ -135,7 +135,6 @@ class NewsletterDbAdapter implements DataDbAdapter
         foreach ($records['default'] as $newsletterData) {
             try {
                 $newsletterData = $validator->prepareInitialData($newsletterData);
-
                 $validator->checkRequiredFields($newsletterData);
 
                 $recipient = $this->getAddressRepository()->findOneByEmail($newsletterData['email']);
@@ -143,6 +142,8 @@ class NewsletterDbAdapter implements DataDbAdapter
                     $newsletterData = $dataManager->setDefaultFields($newsletterData);
                     $recipient = new Address();
                 }
+
+                $validator->validate($newsletterData, NewsletterValidator::$mapper);
 
                 if ($newsletterData['groupName']) {
                     $group = $this->getGroupRepository()->findOneByName($newsletterData['groupName']);
@@ -200,7 +201,7 @@ class NewsletterDbAdapter implements DataDbAdapter
             }
         }
 
-        $newsletterAddress['isCustomer'] = isset($record['userID']); //TODO: validate userID
+        $newsletterAddress['isCustomer'] = isset($record['userID']);
 
         return $newsletterAddress;
     }

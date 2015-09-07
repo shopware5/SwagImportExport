@@ -5,15 +5,20 @@ namespace Shopware\Components\SwagImportExport\DbAdapters\Articles;
 use Shopware\Components\SwagImportExport\DbalHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
+use Shopware\Components\SwagImportExport\Validators\Articles\ConfiguratorValidator;
 
 class ConfiguratorWriter
 {
+    /** @var ConfiguratorValidator */
+    protected $validator = null;
+
     public function __construct()
     {
         $this->dbalHelper = new DbalHelper();
         $this->connection = Shopware()->Models()->getConnection();
         $this->db = Shopware()->Db();
         $this->sets = $this->getSets();
+        $this->validator = new ConfiguratorValidator();
     }
 
     public function write($articleId, $articleDetailId, $mainDetailId, $configuratorData)
@@ -24,6 +29,8 @@ class ConfiguratorWriter
             if (!$this->isValid($configurator)) {
                 continue;
             }
+            $configurator = $this->validator->prepareInitialData($configurator);
+            $this->validator->validate($configurator, ConfiguratorValidator::$mapper);
 
             /**
              * configurator set

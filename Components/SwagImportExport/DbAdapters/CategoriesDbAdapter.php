@@ -197,10 +197,9 @@ class CategoriesDbAdapter implements DataDbAdapter
 
         foreach ($records['default'] as $index => $record) {
             try {
-
                 $record = $validator->prepareInitialData($record);
-
                 $validator->checkRequiredFields($record);
+                $validator->validate($record, CategoryValidator::$mapper);
 
                 $record['parent'] = $this->getRepository()->findOneBy(array('id' => $record['parentId']));
                 if (!$record['parent'] instanceof Category) {
@@ -211,7 +210,7 @@ class CategoriesDbAdapter implements DataDbAdapter
 
                 $category = $this->findExistingEntries($record);
 
-                $record = $this->prepareData($record, $index, $category->getId());
+                $record = $this->prepareData($record, $index, $category->getId(), $records['customerGroups']);
 
                 $category->fromArray($record);
 
@@ -316,9 +315,10 @@ class CategoriesDbAdapter implements DataDbAdapter
      * @param array $data
      * @param $index
      * @param $categoryId
+     * @param $groups
      * @return array
      */
-    protected function prepareData(array $data, $index, $categoryId)
+    protected function prepareData(array $data, $index, $categoryId, $groups)
     {
         //prepares attribute associated data
         foreach ($data as $key => $value) {
@@ -331,7 +331,7 @@ class CategoriesDbAdapter implements DataDbAdapter
 
         //prepares customer groups associated data
         $customerGroups = array();
-        $customerGroupIds = $this->getCustomerGroupIdsFromIndex($data['customerGroups'], $index);
+        $customerGroupIds = $this->getCustomerGroupIdsFromIndex($groups, $index);
         foreach($customerGroupIds as $customerGroupID) {
             $customerGroup = $this->getCustomerGroupById($customerGroupID);
             if ($customerGroup && !$this->checkIfRelationExists($categoryId, $customerGroup->getId())) {
