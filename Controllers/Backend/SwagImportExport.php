@@ -599,11 +599,13 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
     public function prepareImportAction()
     {
+        $request = $this->Request();
+        $shopUrl = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() . '/';
         $postData = array(
-            'sessionId' => $this->Request()->getParam('sessionId'),
-            'profileId' => (int) $this->Request()->getParam('profileId'),
+            'sessionId' => $request->getParam('sessionId'),
+            'profileId' => (int) $request->getParam('profileId'),
             'type' => 'import',
-            'file' => $this->Request()->getParam('importFile')
+            'file' => $request->getParam('importFile')
         );
 
         if (empty($postData['file'])) {
@@ -611,7 +613,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         }
 
         //get file format
-        $inputFileName = $postData['file'];
+        $inputFileName = str_replace($shopUrl, '', $postData['file']);
         $extension = pathinfo($inputFileName, PATHINFO_EXTENSION);
 
         if (!$this->isFormatValid($extension)) {
@@ -652,19 +654,23 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
     public function importAction()
     {
+        $request = $this->Request();
+        $shopUrl = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() . '/';
+
+        $inputFile = str_replace($shopUrl, '', $request->getParam('importFile'));
+
         $unprocessedFiles = array();
         $postData = array(
             'type' => 'import',
-            'profileId' => (int) $this->Request()->getParam('profileId'),
-            'importFile' => $this->Request()->getParam('importFile'),
-            'sessionId' => $this->Request()->getParam('sessionId')
+            'profileId' => (int) $request->getParam('profileId'),
+            'importFile' => $inputFile,
+            'sessionId' => $request->getParam('sessionId')
         );
 
-        if ($this->Request()->getParam('unprocessedFiles')) {
-            $unprocessedFiles = json_decode($this->Request()->getParam('unprocessedFiles'), true);
+        if ($request->getParam('unprocessedFiles')) {
+            $unprocessedFiles = json_decode($request->getParam('unprocessedFiles'), true);
         }
 
-        $inputFile = $postData['importFile'];
         if (!isset($postData['format'])) {
             //get file format
             $postData['format'] = pathinfo($inputFile, PATHINFO_EXTENSION);
