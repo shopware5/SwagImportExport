@@ -886,11 +886,11 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
         //returns the customer data
         $data = $paginator->getIterator()->getArrayCopy();
-        $pathNormalizer = Shopware()->Container()->get('shopware_media.path_normalizer');
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
         foreach ($data as $key => $row) {
             $data[$key]['fileUrl'] = $row['fileName'];
-            $data[$key]['fileName'] = str_replace('media/unknown/', '', $pathNormalizer->get($row['fileName']));
+            $data[$key]['fileName'] = str_replace('media/unknown/', '', $mediaService->normalize($row['fileName']));
             $data[$key]['fileSize'] = DataHelper::formatFileSize($row['fileSize']);
         }
 
