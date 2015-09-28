@@ -172,7 +172,7 @@ class TranslationsDbAdapter implements DataDbAdapter
                 if (!$shop) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/translations/lang_id_not_found', 'Language with id %s does not exists');
-                    throw new \AdapterException(sprintf($message, $record['languageId']));
+                    throw new AdapterException(sprintf($message, $record['languageId']));
                 }
 
                 $repository = $this->getRepository($record['objectType']);
