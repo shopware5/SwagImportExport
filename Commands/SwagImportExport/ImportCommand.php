@@ -36,7 +36,7 @@ class ImportCommand extends ShopwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->prepareImportInputValidation($input, $output);
+        $this->prepareImportInputValidation($input);
 
         $this->registerErrorHandler($output);
 
@@ -97,14 +97,13 @@ class ImportCommand extends ShopwareCommand
         }
     }
 
-    protected function prepareImportInputValidation(InputInterface $input, OutputInterface $output)
+    protected function prepareImportInputValidation(InputInterface $input)
     {
         $this->profile = $input->getOption('profile');
         $this->format = $input->getOption('format');
         $this->filePath = $input->getArgument('filepath');
 
         $parts = explode('.', $this->filePath);
-        $count = count($parts);
 
         // get some service from container (formerly Shopware()->Bootstrap()->getResource())
         $em = $this->container->get('models');
