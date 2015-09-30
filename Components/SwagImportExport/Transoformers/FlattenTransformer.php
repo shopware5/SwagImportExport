@@ -865,7 +865,7 @@ class FlattenTransformer implements DataTransformerAdapter
                 $configuratorProfile = $this->getNodeFromProfile($this->getMainIterationPart(), 'configurator');
                 $configuratorTreeMapper = $this->createMapperFromProfile($configuratorProfile);
                 $configuratorFlatMapper = $this->treeToFlat($configuratorTreeMapper);
-                
+
                 foreach ($node as $key => $configurator) {
                     $this->collectConfiguratorData($configurator, $configuratorFlatMapper, null, $configurator);
                 }
@@ -1216,7 +1216,8 @@ class FlattenTransformer implements DataTransformerAdapter
                 if ($mapper[$currentPath] == 'configOptionName'){
                     $group = $this->findConfigurationGroupValue($originalNode, $mapper);
 
-                    if ($value && $group) {
+                    //check if configuration group and value are not empty or string 0
+                    if ((!empty($value) || $value == '0') && !empty($group)) {
                         $mixedValue = $group . ':' . $value;
                     }
 
