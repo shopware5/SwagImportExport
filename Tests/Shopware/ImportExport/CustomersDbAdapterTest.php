@@ -2,29 +2,31 @@
 
 namespace Tests\Shopware\ImportExport;
 
-use Tests\Shopware\ImportExport\DbAdapterTest;
-
-class ArticlesPricesDbAdapterTest extends DbAdapterTest
+class CustomersDbAdapterTest extends DbAdapterTest
 {
-
-    protected static $yamlFile = "TestCases/customersDbAdaptor.yml";
+    protected static $yamlFile = "TestCases/customersDbAdapter.yml";
 
     public function setUp()
     {
         parent::setUp();
 
-        $this->dbAdaptor = 'customers';
+        $this->dbAdapter = 'customers';
         $this->dbTable = 's_user';
     }
 
     protected function getDataSet()
     {
         return new \PHPUnit_Extensions_Database_DataSet_YamlDataSet(
-                dirname(__FILE__) . "/Database/customers.yml"
+            dirname(__FILE__) . '/Database/customers.yml'
         );
     }
 
     /**
+     * @param $columns
+     * @param $ids
+     * @param $expected
+     * @param $expectedCount
+     *
      * @dataProvider readProvider
      */
     public function testRead($columns, $ids, $expected, $expectedCount)
@@ -38,11 +40,16 @@ class ArticlesPricesDbAdapterTest extends DbAdapterTest
     }
 
     /**
+     * @param $start
+     * @param $limit
+     * @param $expectedIds
+     * @param $expectedCount
+     *
      * @dataProvider readRecordIdsProvider
      */
-    public function testReadRecordIds($start, $limit, $expectedCount)
+    public function testReadRecordIds($start, $limit, $expectedIds, $expectedCount)
     {
-        $this->readRecordIds($start, $limit, $expectedCount);
+        $this->readRecordIds($start, $limit, $expectedIds, $expectedCount);
     }
 
     public function readRecordIdsProvider()
@@ -50,28 +57,39 @@ class ArticlesPricesDbAdapterTest extends DbAdapterTest
         return static::getDataProvider('testReadRecordIds');
     }
 
-    public function testDefaultColumns()
-    {
-        $this->defaultColumns();
-    }
-
     /**
-     * @dataProvider writeProvider
+     * @param $expectedColumns
+     * @param $expectedCount
+     *
+     * @dataProvider defaultColumnsProvider
      */
-    public function testWrite($data, $expectedInsertedRows)
+    public function testDefaultColumns($expectedColumns, $expectedCount)
     {
-        $this->write($data, $expectedInsertedRows);
-
-        $queryTable = $this->getDatabaseTester()->getConnection()->createQueryTable(
-                $this->dbTable, 'SELECT * FROM ' . $this->dbTable
-        );
-//        echo $queryTable->__toString();
+        $this->defaultColumns($expectedColumns, $expectedCount);
     }
 
-    public function writeProvider()
+    public function defaultColumnsProvider()
     {
-        return static::getDataProvider('testWrite');
+        return static::getDataProvider('testDefaultColumns');
     }
+
+//    /**
+//     * @dataProvider writeProvider
+//     */
+//    public function testWrite($data, $expectedInsertedRows)
+//    {
+//        $this->write($data, $expectedInsertedRows);
+//
+//        $queryTable = $this->getDatabaseTester()->getConnection()->createQueryTable(
+//                $this->dbTable, 'SELECT * FROM ' . $this->dbTable
+//        );
+////        echo $queryTable->__toString();
+//    }
+//
+//    public function writeProvider()
+//    {
+//        return static::getDataProvider('testWrite');
+//    }
 
 //    /**
 //     * @dataProvider insertOneProvider

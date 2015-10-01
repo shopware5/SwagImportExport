@@ -37,8 +37,7 @@ s_user_billingaddress:
         customernumber: 20001
         firstname: Max
         lastname: Mustermann
-        street: Musterstr
-        streetnumber: 55
+        street: Musterstr 55
         zipcode: 55555
         city: Musterhausen
         phone: 05555 / 555555
@@ -56,8 +55,7 @@ s_user_billingaddress:
         customernumber: 20002
         firstname: Max2
         lastname: Mustermann2
-        street: Musterstr2
-        streetnumber: 552
+        street: Musterstr2 552
         zipcode: 555552
         city: Musterhausen2
         phone: 05555 / 555555
@@ -75,8 +73,7 @@ s_user_billingaddress:
         customernumber: 20003
         firstname: Demo
         lastname: Demo
-        street: demo
-        streetnumber: 666
+        street: demo 666
         zipcode: 66666
         city: Demo
         phone: 0666 / 666666
@@ -94,8 +91,7 @@ s_user_billingaddress:
         customernumber: 20004
         firstname: ShopwareDemo
         lastname: ShopwareDemo
-        street: shopware
-        streetnumber: 777
+        street: shopware 777
         zipcode: 777777
         city: Schöppingen
         phone: 0777 / 777777
@@ -112,8 +108,7 @@ s_user_shippingaddress:
         salutation: mr
         firstname: MaxShipping
         lastname: Mustermann
-        street: Mustermannstraße
-        streetnumber: 92
+        street: Mustermannstraße 92
         zipcode: 48624
         city: Munich
         countryID: 2
@@ -125,8 +120,7 @@ s_user_shippingaddress:
         salutation: mr
         firstname: Max2
         lastname: Mustermann2
-        street: Mustermannstraße2
-        streetnumber: 922
+        street: Mustermannstraße2 922
         zipcode: 486242
         city: Munich2
         countryID: 2
@@ -138,8 +132,7 @@ s_user_shippingaddress:
         salutation: mr
         firstname: DemoShipping
         lastname: DemoShipping
-        street: MustermannstraßeShipping
-        streetnumber: 922
+        street: MustermannstraßeShipping 922
         zipcode: 987654
         city: MunichShipping
         countryID: 2
@@ -151,8 +144,7 @@ s_user_shippingaddress:
         salutation: mr
         firstname: ShopwareDemoShipping
         lastname: ShopwareDemoShipping
-        street: ShopwareDemostraßeShipping
-        streetnumber: 01
+        street: ShopwareDemostraßeShipping 01
         zipcode: 22201
         city: Schöppingen
         countryID: 2

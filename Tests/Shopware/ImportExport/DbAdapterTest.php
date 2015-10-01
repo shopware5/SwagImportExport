@@ -2,13 +2,17 @@
 
 namespace Tests\Shopware\ImportExport;
 
-use Tests\Shopware\ImportExport\ImportExportTestHelper;
+use \Shopware\Components\SwagImportExport\Factories\DataFactory;
 
 class DbAdapterTest extends ImportExportTestHelper
 {
+    /* @var string $dbAdapter */
+    protected $dbAdapter;
 
-    protected $dbAdaptor;
+    /* @var string $dbTable */
     protected $dbTable;
+
+    /* @var \PHPUnit_Extensions_Database_DataSet_SymfonyYamlParser $parser */
     protected static $parser;
     protected static $yamlFile;
     protected static $dataProvider;
@@ -37,40 +41,46 @@ class DbAdapterTest extends ImportExportTestHelper
         return static::$parser->parseYaml($yamlFile);
     }
 
-    public function read($columns, $ids, $expected, $expectedCount)
+    public function read($columns, $ids, $expectedResults, $expectedCount)
     {
+        /* @var DataFactory $dataFactory */
         $dataFactory = $this->Plugin()->getDataFactory();
-        $dbAdapter = $dataFactory->createDbAdapter($this->dbAdaptor);
+        $dbAdapter = $dataFactory->createDbAdapter($this->dbAdapter);
 
         $rawData = $dbAdapter->read($ids, $columns);
-
         $rawData = $rawData['default'];
 
-        foreach ($expected as $key1 => $value) {
-            foreach ($value as $key2 => $val) {
-                $this->assertEquals($rawData[$key1][$key2], $val);
+        foreach ($expectedResults as $index => $expectedResult) {
+            foreach ($expectedResult as $column => $value) {
+                $this->assertSame($rawData[$index][$column], $value, "The value of `$column` field does not match!");
             }
         }
         $this->assertEquals(count($rawData), $expectedCount);
     }
 
-    public function readRecordIds($start, $limit, $expectedCount)
+    public function readRecordIds($start, $limit, $expectedIds, $expectedCount)
     {
+        /* @var DataFactory $dataFactory */
         $dataFactory = $this->Plugin()->getDataFactory();
-        $catDbAdapter = $dataFactory->createDbAdapter($this->dbAdaptor);
+        $dbAdapter = $dataFactory->createDbAdapter($this->dbAdapter);
 
-        $ids = $catDbAdapter->readRecordIds($start, $limit);
+        $ids = $dbAdapter->readRecordIds($start, $limit);
+
+        $this->assertEquals($expectedIds, $ids);
         $this->assertEquals($expectedCount, count($ids));
     }
 
-    public function defaultColumns()
+    public function defaultColumns($expectedColumns, $expectedCount)
     {
+        /* @var DataFactory $dataFactory */
         $dataFactory = $this->Plugin()->getDataFactory();
-        $catDbAdapter = $dataFactory->createDbAdapter($this->dbAdaptor);
+        $dbAdapter = $dataFactory->createDbAdapter($this->dbAdapter);
 
-        $columns = $catDbAdapter->getDefaultColumns();
+        $columns = $dbAdapter->getDefaultColumns();
 
         $this->assertTrue(is_array($columns));
+        $this->assertEquals($expectedColumns, $columns);
+        $this->assertEquals($expectedCount, count($columns));
     }
 
     public function write($data, $expectedInsertedRows)
@@ -79,7 +89,7 @@ class DbAdapterTest extends ImportExportTestHelper
 
         $dataFactory = $this->Plugin()->getDataFactory();
 
-        $dbAdapter = $dataFactory->createDbAdapter($this->dbAdaptor);
+        $dbAdapter = $dataFactory->createDbAdapter($this->dbAdapter);
         $dbAdapter->write($data);
 
         $afterTestCount = $this->getDatabaseTester()->getConnection()->getRowCount($this->dbTable);
@@ -102,7 +112,7 @@ class DbAdapterTest extends ImportExportTestHelper
         // Start the action
         $dataFactory = $this->Plugin()->getDataFactory();
 
-        $catDbAdapter = $dataFactory->createDbAdapter($this->dbAdaptor);
+        $catDbAdapter = $dataFactory->createDbAdapter($this->dbAdapter);
         $catDbAdapter->write($category);
 
         // Assert
@@ -135,7 +145,7 @@ class DbAdapterTest extends ImportExportTestHelper
         // Start the action
         $dataFactory = $this->Plugin()->getDataFactory();
 
-        $catDbAdapter = $dataFactory->createDbAdapter($this->dbAdaptor);
+        $catDbAdapter = $dataFactory->createDbAdapter($this->dbAdapter);
         $catDbAdapter->write($category);
 
         // Assert

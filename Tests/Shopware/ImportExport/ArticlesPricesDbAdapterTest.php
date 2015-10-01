@@ -2,18 +2,16 @@
 
 namespace Tests\Shopware\ImportExport;
 
-use Tests\Shopware\ImportExport\DbAdapterTest;
-
 class ArticlesPricesDbAdapterTest extends DbAdapterTest
 {
 
-    protected static $yamlFile = "TestCases/articlePricesDbAdaptor.yml";
+    protected static $yamlFile = "TestCases/articlePricesDbAdapter.yml";
 
     public function setUp()
     {
         parent::setUp();
 
-        $this->dbAdaptor = 'articlesPrices';
+        $this->dbAdapter = 'articlesPrices';
         $this->dbTable = 's_articles_prices';
     }
 

@@ -2,17 +2,15 @@
 
 namespace Tests\Shopware\ImportExport;
 
-use Tests\Shopware\ImportExport\DbAdapterTest;
-
 class NewsletterDbAdapterTest extends DbAdapterTest
 {
-    protected static $yamlFile = "TestCases/newslettersDbAdaptor.yml";
+    protected static $yamlFile = "TestCases/newslettersDbAdapter.yml";
     
     public function setUp()
     {
         parent::setUp();
         
-        $this->dbAdaptor = 'newsletter';
+        $this->dbAdapter = 'newsletter';
         $this->dbTable = 's_campaigns_mailaddresses';
     }
 
