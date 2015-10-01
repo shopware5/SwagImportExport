@@ -1,0 +1,156 @@
+s_order:
+    -
+        id: 1
+        ordernumber: 20001
+        userID: 1
+        invoice_amount: 26.89
+        invoice_amount_net: 22.6
+        invoice_shipping: 3.9
+        invoice_shipping_net: 3.28
+        ordertime: '2015-10-01 00:00:00'
+        status: 0
+        cleared: 17
+        paymentID: 5
+        transactionID: ''
+        comment: ''
+        customercomment: ''
+        internalcomment: ''
+        net: 0
+        taxfree: 0
+        partnerID: ''
+        temporaryID: ''
+        referer: ''
+        cleareddate: ''
+        trackingcode: ''
+        language: 1
+        dispatchID: 9
+        currency: EUR
+        currencyFactor: 1
+        subshopID: 1
+        remote_addr: 192.168.56.1
+        deviceType: desktop
+    -
+        id: 2
+        ordernumber: 20002
+        userID: 1
+        invoice_amount: 37.85
+        invoice_amount_net: 31.81
+        invoice_shipping: 3.9
+        invoice_shipping_net: 3.28
+        ordertime: '2015-10-02 00:00:00'
+        status: 2
+        cleared: 17
+        paymentID: 5
+        transactionID: ''
+        comment: ''
+        customercomment: ''
+        internalcomment: ''
+        net: 0
+        taxfree: 0
+        partnerID: ''
+        temporaryID: ''
+        referer: ''
+        cleareddate: ''
+        trackingcode: ''
+        language: 1
+        dispatchID: 9
+        currency: EUR
+        currencyFactor: 1
+        subshopID: 1
+        remote_addr: 192.168.56.1
+        deviceType: desktop
+s_order_attributes:
+    -
+        id: 1
+        orderID: 1
+    -
+        id: 2
+        orderID: 2
+s_order_billingaddress:
+   -
+       id: 1
+       userID: 1
+       orderID: 1
+       company: ''
+       department: ''
+       salutation: 'mrs'
+       customernumber: 20001
+       firstname: 'Max'
+       lastname: 'Mustermann'
+       street: 'Eggeroder str.'
+       zipcode: 48624
+       city: 'Schöppingen'
+       phone: ''
+       fax: ''
+       countryID: 2
+       stateId: 0
+       ustid: ''
+       additional_address_line1: ''
+       additional_address_line2: ''
+   -
+       id: 2
+       userID: 1
+       orderID: 2
+       company: ''
+       department: ''
+       salutation: 'mrs'
+       customernumber: 20001
+       firstname: 'Max'
+       lastname: 'Mustermann'
+       street: 'Eggeroder str.'
+       zipcode: 48624
+       city: 'Schöppingen'
+       phone: ''
+       fax: ''
+       countryID: 2
+       stateId: 0
+       ustid: ''
+       additional_address_line1: ''
+       additional_address_line2: ''
+s_order_billingaddress_attributes:
+   -
+       id: 1
+       billingID: 1
+   -
+       id: 2
+       billingID: 2
+s_order_shippingaddress:
+   -
+       id: 1
+       userID: 1
+       orderID: 1
+       company: ''
+       department: ''
+       salutation: 'mrs'
+       firstname: 'Max'
+       lastname: 'Mustermann'
+       street: 'Eggeroder str.'
+       zipcode: 48624
+       city: 'Schöppingen'
+       countryID: 2
+       stateId: 0
+       additional_address_line1: ''
+       additional_address_line2: ''
+   -
+       id: 2
+       userID: 1
+       orderID: 2
+       company: ''
+       department: ''
+       salutation: 'mrs'
+       firstname: 'Max'
+       lastname: 'Mustermann'
+       street: 'Eggeroder str.'
+       zipcode: 48624
+       city: 'Schöppingen'
+       countryID: 2
+       stateId: 0
+       additional_address_line1: ''
+       additional_address_line2: ''
+s_order_shippingaddress_attributes:
+   -
+       id: 1
+       shippingID: 1
+   -
+       id: 2
+       shippingID: 2

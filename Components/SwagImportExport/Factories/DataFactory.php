@@ -79,6 +79,8 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
                 return $this->createArticlesImagesDbAdapter();
             case 'orders':
                 return $this->createOrdersDbAdapter();
+            case 'mainOrders':
+                return $this->createMainOrdersDbAdapter();
             case 'customers':
                 return $this->createCustomerDbAdapter();
             case 'newsletter':
@@ -279,6 +281,16 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     {
         $proxyAdapter = Shopware()->Hooks()
                 ->getProxy('Shopware\Components\SwagImportExport\DbAdapters\OrdersDbAdapter');
+        return new $proxyAdapter;
+    }
+
+    /**
+     * @return \Shopware\Components\SwagImportExport\DbAdapters\MainOrdersDbAdapter
+     */
+    protected function createMainOrdersDbAdapter()
+    {
+        $proxyAdapter = Shopware()->Hooks()
+            ->getProxy('Shopware\Components\SwagImportExport\DbAdapters\MainOrdersDbAdapter');
         return new $proxyAdapter;
     }
 

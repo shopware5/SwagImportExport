@@ -58,15 +58,24 @@ class DbAdapterTest extends ImportExportTestHelper
         $this->assertEquals(count($rawData), $expectedCount);
     }
 
-    public function readRecordIds($start, $limit, $expectedIds, $expectedCount)
+    public function readRecordIds($start, $limit, $filter, $expectedIds, $expectedCount)
     {
         /* @var DataFactory $dataFactory */
         $dataFactory = $this->Plugin()->getDataFactory();
         $dbAdapter = $dataFactory->createDbAdapter($this->dbAdapter);
 
-        $ids = $dbAdapter->readRecordIds($start, $limit);
+        $ids = $dbAdapter->readRecordIds($start, $limit, $filter);
 
-        $this->assertEquals($expectedIds, $ids);
+        foreach ($ids as $index => $id) {
+            $this->assertSame($expectedIds[$index], $id, 'Expected id = ' . $expectedIds[$index] . ' does not match with actual id = ' . $id);
+        }
+
+        // no records found check
+        if ($ids === array()) {
+            $this->assertEmpty($ids);
+            $this->assertEmpty($expectedIds, 'There are no actual ids, but we received expected ids.');
+        }
+
         $this->assertEquals($expectedCount, count($ids));
     }
 

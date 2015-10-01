@@ -1,0 +1,185 @@
+testReadRecordIds:
+# TODO: test payment Status
+    0:
+        start: 0
+        limit: 100
+        filter:
+        expectedIds:
+            0: '1'
+            1: '2'
+        expectedCount: 2
+    1:
+        start: 1
+        limit: 100
+        filter:
+        expectedIds:
+            0: '2'
+        expectedCount: 1
+    2:
+        start: 100
+        limit: 100
+        filter:
+        expectedIds:
+        expectedCount: 0
+    3:
+        start: 0
+        limit: 100
+        filter:
+            orderstate: 0
+        expectedIds:
+            0: '1'
+        expectedCount: 1
+    4:
+        start: 0
+        limit: 100
+        filter:
+            orderstate: 1
+        expectedIds:
+        expectedCount: 0
+    5:
+        start: 0
+        limit: 100
+        filter:
+            orderstate: 2
+        expectedIds: '2'
+        expectedCount: 1
+    6:
+        start: 0
+        limit: 100
+        filter:
+            orderstate: 2
+            ordernumberFrom: 20001
+        expectedIds: '2'
+        expectedCount: 1
+    7:
+        start: 0
+        limit: 100
+        filter:
+            orderstate: 2
+            ordernumberFrom: 20001
+            dateFrom: '2015-10-05 00:00:00'
+        expectedIds:
+        expectedCount: 0
+    8:
+        start: 0
+        limit: 100
+        filter:
+            orderstate: 2
+            ordernumberFrom: 20001
+            dateFrom: '2015-10-01 00:00:00'
+        expectedIds: '2'
+        expectedCount: 1
+    9:
+        start: 0
+        limit: 100
+        filter:
+            orderstate:
+            ordernumberFrom: 20000
+            dateFrom: '2015-10-01 00:00:00'
+        expectedIds:
+            0: '1'
+            1: '2'
+        expectedCount: 2
+testRead:
+    0:
+        columns: 'orders.id as orderId, orders.number as orderNumber, orders.invoiceAmount, orders.invoiceAmountNet, orders.invoiceShipping, orders.invoiceShippingNet, orders.taxFree, orders.currency, orders.currencyFactor, payment.description as paymentName, orders.transactionId, orders.trackingCode, orders.orderTime, customer.email, billing.number as customerNumber, billing.firstName as bFirstName, billing.lastName as bLastName, shippingCountry.name as countryName, customerGroup.name as customerGroupName, paymentStatus.description as paymentState, orderStatus.description as orderState'
+        ids: [1,2]
+        expected:
+            0:
+                orderId: 1
+                orderNumber: 20001
+                invoiceAmount: 26.89
+                invoiceAmountNet: 22.6
+                invoiceShipping: 3.9
+                invoiceShippingNet: 3.28
+                taxFree: 0
+                currency: EUR
+                currencyFactor: 1
+                paymentName: 'Vorkasse'
+                transactionId: ''
+                trackingCode: ''
+                orderTime: ''
+                email: 'test@example.com'
+                customerNumber: 20001
+                bFirstName: 'Max'
+                bLastName: 'Mustermann'
+                countryName: 'Deutschland'
+                customerGroupName: 'Shopkunden'
+                paymentState: 'Offen'
+                orderState: 'Offen'
+            1:
+                orderId: 2
+                orderNumber: 20002
+                invoiceAmount: 37.85
+                invoiceAmountNet: 31.81
+                invoiceShipping: 3.9
+                invoiceShippingNet: 3.28
+                taxFree: 0
+                currency: EUR
+                currencyFactor: 1
+                paymentName: 'Vorkasse'
+                transactionId: ''
+                trackingCode: ''
+                orderTime: ''
+                email: 'test@example.com'
+                customerNumber: 20001
+                bFirstName: 'Max'
+                bLastName: 'Mustermann'
+                countryName: 'Deutschland'
+                customerGroupName: 'Shopkunden'
+                paymentState: 'Offen'
+                orderState: 'Komplett abgeschlossen'
+        expectedCount: 2
+testReadColumnsException:
+    0:
+        columns:
+        ids: [1]
+testReadIdsException:
+    0:
+        columns: 'orders.id, orders.number'
+        ids:
+testDefaultColumns:
+    0:
+        expectedColumns:
+            0: 'orders.id as orderId'
+            1: 'orders.number as orderNumber'
+            2: 'orders.invoiceAmount'
+            3: 'orders.invoiceAmountNet'
+            4: 'orders.invoiceShipping'
+            5: 'orders.invoiceShippingNet'
+            6: 'orders.taxFree'
+            7: 'orders.currency'
+            8: 'orders.currencyFactor'
+            9: 'payment.description as paymentName'
+            10: 'orders.transactionId'
+            11: 'orders.trackingCode'
+            12: 'DATE_FORMAT(orders.orderTime, "%Y-%m-%d %H:%i:%s") as orderTime'
+            13: 'customer.email'
+            14: 'billing.number as customerNumber'
+            15: 'billing.firstName as bFirstName'
+            16: 'billing.lastName as bLastName'
+            17: 'shippingCountry.name as countryName'
+            18: 'customerGroup.name as customerGroupName'
+            19: 'paymentStatus.description as paymentState'
+            20: 'orderStatus.description as orderState'
+            21: 'attr.attribute1 as attributeAttribute1'
+            22: 'attr.attribute2 as attributeAttribute2'
+            23: 'attr.attribute3 as attributeAttribute3'
+            24: 'attr.attribute4 as attributeAttribute4'
+            25: 'attr.attribute5 as attributeAttribute5'
+            26: 'attr.attribute6 as attributeAttribute6'
+        expectedCount: 27
+testWrite:
+    0:
+        records:
+            order0:
+                  orderId: 1
+                  orderNumber: 20001
+                  paymentStatus: 'Reserviert'
+                  orderSrtatus: 'Storniert / Abgelehnt'
+            order1:
+                  orderId: 2
+                  orderNumber: 20002
+                  paymentStatus: 'Inkasso'
+                  orderSrtatus: 'Komplett abgeschlossen'
+        expectedInsertedRows: 2
