@@ -400,7 +400,6 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
     public function updateConversionAction()
     {
-        $profileId = $this->Request()->getParam('profileId', 1);
         $data = $this->Request()->getParam('data', 1);
 
         if (isset($data['id'])) {
@@ -428,7 +427,6 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
     public function deleteConversionAction()
     {
-        $profileId = $this->Request()->getParam('profileId', 1);
         $data = $this->Request()->getParam('data', 1);
 
         if (isset($data['id'])) {
@@ -810,8 +808,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             if ($mediaService->has($inputFile)) {
 
                 //renames
-                $outputFileName = str_replace('-tmp', '-swag', $inputFile);
-                $outputFile = $outputFileName;
+                $outputFile = str_replace('-tmp', '-swag', $inputFile);
                 $mediaService->rename($inputFile, $outputFile);
 
                 $profile = $this->Plugin()->getProfileFactory()->loadHiddenProfile($hiddenProfile);
@@ -823,7 +820,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                 unset($unprocessedData[$hiddenProfile]);
 
                 $postData = array(
-                    'importFile' => $outputFileName,
+                    'importFile' => $mediaService->getUrl($outputFile),
                     'profileId' => $profileId,
                     'count' => $totalCount,
                     'position' => 0,
@@ -886,11 +883,11 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
         //returns the customer data
         $data = $paginator->getIterator()->getArrayCopy();
-        $pathNormalizer = Shopware()->Container()->get('shopware_media.path_normalizer');
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
         foreach ($data as $key => $row) {
             $data[$key]['fileUrl'] = $row['fileName'];
-            $data[$key]['fileName'] = str_replace('media/unknown/', '', $pathNormalizer->get($row['fileName']));
+            $data[$key]['fileName'] = str_replace('media/unknown/', '', $mediaService->normalize($row['fileName']));
             $data[$key]['fileSize'] = DataHelper::formatFileSize($row['fileSize']);
         }
 
@@ -995,10 +992,6 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
             if ($fileName === null) {
                 throw new \Exception('File name must be provided');
-            }
-
-            if ($fileType === null) {
-//                throw new \Exception('Profile type must be provided');
             }
 
             if ($fileType === 'import') {
