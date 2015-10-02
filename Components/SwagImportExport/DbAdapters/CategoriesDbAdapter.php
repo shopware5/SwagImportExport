@@ -427,6 +427,7 @@ class CategoriesDbAdapter implements DataDbAdapter
             'c.parentId as parentId',
             'c.name as name',
             'c.position as position',
+            'c.metaTitle as metaTitle',
             'c.metaKeywords as metaKeywords',
             'c.metaDescription as metaDescription',
             'c.cmsHeadline as cmsHeadline',
