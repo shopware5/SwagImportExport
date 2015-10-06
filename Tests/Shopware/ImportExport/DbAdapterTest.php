@@ -83,18 +83,17 @@ class DbAdapterTest extends ImportExportTestHelper
         $this->assertEquals($expectedCount, count($columns));
     }
 
-    public function write($data, $expectedInsertedRows)
+    public function write($records, $expectedInsertedRows)
     {
-        $beforeTestCount = $this->getDatabaseTester()->getConnection()->getRowCount($this->dbTable);
+        $recordsCountBeforeImport = $this->getDatabaseTester()->getConnection()->getRowCount($this->dbTable);
 
         $dataFactory = $this->Plugin()->getDataFactory();
-
         $dbAdapter = $dataFactory->createDbAdapter($this->dbAdapter);
-        $dbAdapter->write($data);
+        $dbAdapter->write($records);
 
-        $afterTestCount = $this->getDatabaseTester()->getConnection()->getRowCount($this->dbTable);
+        $recordsCountAfterImport = $this->getDatabaseTester()->getConnection()->getRowCount($this->dbTable);
 
-        $this->assertEquals($expectedInsertedRows, $afterTestCount - $beforeTestCount);
+        $this->assertEquals($expectedInsertedRows, $recordsCountAfterImport - $recordsCountBeforeImport);
     }
 
     public function insertOne($category, $expectedRow)

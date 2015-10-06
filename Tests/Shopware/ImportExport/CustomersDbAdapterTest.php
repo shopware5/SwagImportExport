@@ -73,47 +73,37 @@ class CustomersDbAdapterTest extends DbAdapterTest
         return static::getDataProvider('testDefaultColumns');
     }
 
+    //TODO: uncomment after merging PT-2436
 //    /**
-//     * @dataProvider writeProvider
+//     * @param $records
+//     * @param $expectedInsertedRows
+//     *
+//     * @dataProvider writeWithEmptyFile
+//     * @expectedException \Exception
 //     */
-//    public function testWrite($data, $expectedInsertedRows)
+//    public function testWriteWithEmptyFile($records, $expectedInsertedRows)
 //    {
-//        $this->write($data, $expectedInsertedRows);
-//
-//        $queryTable = $this->getDatabaseTester()->getConnection()->createQueryTable(
-//                $this->dbTable, 'SELECT * FROM ' . $this->dbTable
-//        );
-////        echo $queryTable->__toString();
+//        $this->write($records, $expectedInsertedRows);
 //    }
 //
-//    public function writeProvider()
+//    public function writeWithEmptyFile()
 //    {
-//        return static::getDataProvider('testWrite');
+//        return static::getDataProvider('testWriteWithEmptyFile');
 //    }
 
-//    /**
-//     * @dataProvider insertOneProvider
-//     */
-//    public function testInsertOne($category, $expectedRow)
-//    {
-//        $this->insertOne($category, $expectedRow);
-//    }
-//
-//    public function insertOneProvider()
-//    {
-//        return static::getDataProvider('testInsertOne');
-//    }
-//
-//    /**
-//     * @dataProvider updateOneProvider
-//     */
-//    public function testUpdateOne($category, $expectedRow)
-//    {
-//        $this->updateOne($category, $expectedRow);
-//    }
-//
-//    public function updateOneProvider()
-//    {
-//        return static::getDataProvider('testUpdateOne');
-//    }
+    /**
+     * @param $records
+     * @param $expectedInsertedRows
+     *
+     * @dataProvider writeProvider
+     */
+    public function testWrite($records, $expectedInsertedRows)
+    {
+        $this->write($records, $expectedInsertedRows);
+    }
+
+    public function writeProvider()
+    {
+        return static::getDataProvider('testWrite');
+    }
 }

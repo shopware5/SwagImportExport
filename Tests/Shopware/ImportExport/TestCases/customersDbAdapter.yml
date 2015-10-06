@@ -1,5 +1,5 @@
 testRead:
-    0:
+    testCase0:
         columns: 'customer.id, customer.email, billing.firstName as b_firstName, shipping.firstName as s_firstName'
         ids: [1,2,3,4]
         expected:
@@ -24,7 +24,7 @@ testRead:
                 b_firstName: 'ShopwareDemo'
                 s_firstName: 'ShopwareDemoShipping'
         expectedCount: 4
-    1:
+    testCase1:
         columns: 'customer.id, customer.hashPassword as password, customer.encoderName, customer.email, customer.active, customer.accountMode, customer.confirmationKey, customer.paymentId, customer.firstLogin, customer.lastLogin, customer.sessionId, customer.newsletter, customer.validation, customer.affiliate, customer.groupKey, customer.paymentPreset, customer.languageId, customer.shopId, customer.referer, customer.priceGroupId, customer.internalComment, customer.failedLogins, customer.lockedUntil'
         ids: [1]
         expected:
@@ -53,7 +53,7 @@ testRead:
                 failedLogins: '0'
                 lockedUntil: ''
         expectedCount: 1
-    2:
+    testCase2:
         columns: 'billing.id, billing.customerId, billing.company, billing.department, billing.salutation, billing.number, billing.firstName, billing.lastName, billing.street, billing.zipCode, billing.city, billing.phone, billing.fax, billing.countryId, billing.stateId, billing.vatId, billing.birthday, billing.additionalAddressLine1, billing.additionalAddressLine2'
         ids: [2]
         expected:
@@ -78,7 +78,7 @@ testRead:
                 additionalAddressLine1: ''
                 additionalAddressLine2: ''
         expectedCount: 1
-    3:
+    testCase3:
         columns: 'shipping.id, shipping.customerId, shipping.company, shipping.department, shipping.salutation, shipping.firstName, shipping.lastName, shipping.street, shipping.zipCode, shipping.city, shipping.countryId, shipping.stateId, shipping.additionalAddressLine1, shipping.additionalAddressLine2'
         ids: [3]
         expected:
@@ -99,7 +99,7 @@ testRead:
                 additionalAddressLine2: ''
         expectedCount: 1
 testReadRecordIds:
-    0:
+    testCase0:
         start: 0
         limit: 100
         expectedIds:
@@ -108,7 +108,7 @@ testReadRecordIds:
             2: 3
             3: 4
         expectedCount: 4
-    1:
+    testCase1:
         start: 2
         limit: 105
         expectedIds:
@@ -116,7 +116,7 @@ testReadRecordIds:
             1: 4
         expectedCount: 2
 testDefaultColumns:
-    0:
+    testCase0:
         expectedColumns:
             0: 'customer.id as id'
             1: 'customer.hashPassword as password'
@@ -183,22 +183,30 @@ testDefaultColumns:
             62: 'shippingAttribute.text5 as attrShippingText5'
             63: 'shippingAttribute.text6 as attrShippingText6'
         expectedCount: 64
-#testWrite:
-#    test1:
-#        data:
-#            record1:
-#                  email: test@test.com
-#                  password: pass
-#                  active: 1
-#                  customergroup: EK
-#            record2:
-#                  email: test2@test.com
-#                  password: pass2
-#                  active: 1
-#                  customergroup: EK
-#            record3:
-#                  email: test3@test.com
-#                  password: pass3
-#                  active: 1
-#                  customergroup: EK
-#        expectedInsertedRows: 3
+writeWithEmptyFile:
+    testCase0:
+        records:
+        expectedInsertedRows: 0
+testWrite:
+    testCase0:
+        records:
+            default:
+                0:
+                    email: test@test.com
+                    unhashedPassword: pass
+                    encoder: md5
+                    active: 1
+                    customergroup: EK
+                1:
+                    email: test2@test.com
+                    unhashedPassword: pass2
+                    encoder: md5
+                    active: 1
+                    customergroup: EK
+                2:
+                    email: test3@test.com
+                    unhashedPassword: pass3
+                    encoder: md5
+                    active: 1
+                    customergroup: EK
+        expectedInsertedRows: 3
