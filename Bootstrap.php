@@ -123,9 +123,15 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
      * Registers all necessary components and dependencies.
      *
      * @return bool
+     * @throws Exception
      */
     public function install()
     {
+        // Check if Shopware version matches
+        if (!$this->assertMinimumVersion('5.1.0')) {
+            throw new Exception("This plugin requires Shopware 5.1.0 or a later version");
+        }
+
         $this->createDatabase();
         $this->createMenu();
         $this->createAclResource();
@@ -136,15 +142,25 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         return true;
     }
 
+    /**
+     * @param string $oldVersion
+     * @return bool
+     * @throws Exception
+     * @throws Zend_Db_Adapter_Exception
+     */
     public function update($oldVersion)
     {
+        // Check if Shopware version matches
+        if (!$this->assertMinimumVersion('5.1.0')) {
+            throw new Exception("This plugin requires Shopware 5.1.0 or a later version");
+        }
+
         $this->createAclResource();
         $this->registerEvents();
         $this->createDirectories();
         $this->createConfiguration();
 
         if ($oldVersion == '1.0.0' || $oldVersion == '1.0.1') {
-
             //changing the name
             $this->db->update(
                 's_core_menu',

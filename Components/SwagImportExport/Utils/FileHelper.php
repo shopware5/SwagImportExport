@@ -14,6 +14,8 @@ class FileHelper
      */
     public function writeStringToFile($file, $content, $flag = null)
     {
+        $file = str_replace(Shopware()->DocPath(), '', $file);
+        
         /** @var MediaService $mediaService */
         $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 

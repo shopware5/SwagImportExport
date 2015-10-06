@@ -188,6 +188,9 @@ class Shopware_Controllers_Backend_SwagImportExportCron extends Shopware_Control
 	 */
 	protected function start($profileModel, $inputFile, $format)
 	{
+		$mediaService = $this->container->get('shopware_media.media_service');
+		$inputFile = $mediaService->getUrl($inputFile);
+
 		$commandHelper = new CommandHelper(array(
 				'profileEntity' => $profileModel,
 				'filePath' => $inputFile,

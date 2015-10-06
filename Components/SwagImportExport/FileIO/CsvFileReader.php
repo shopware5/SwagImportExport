@@ -36,6 +36,7 @@ class CsvFileReader implements FileReader
         // +1 to ignore the first line of the file
         $file->seek($position + 1);
 
+        $readRows = array();
         for ($i = 1; $i <= $step; $i++) {
 
             $row = $file->current();
@@ -55,6 +56,8 @@ class CsvFileReader implements FileReader
         }
 
         unlink($tempFileName);
+
+        $readRows = $this->toUtf8($readRows);
 
         return $readRows;
     }
@@ -114,4 +117,25 @@ class CsvFileReader implements FileReader
         return $columnNames;
     }
 
+    /**
+     * @param array $rows
+     * @return array
+     */
+    protected function toUtf8(array $rows)
+    {
+        // detect whether the input is UTF-8 or ISO-8859-1
+        array_walk_recursive($rows, function (&$value) {
+            // will fail, if special chars are encoded to latin-1
+            // $isUtf8 = (utf8_encode(utf8_decode($value)) == $value);
+
+            // might have issues with encodings other than utf-8 and latin-1
+            $isUtf8 = (mb_detect_encoding($value, 'UTF-8', true) !== false);
+            if (!$isUtf8) {
+                $value = utf8_encode($value);
+            }
+            return $value;
+        });
+
+        return $rows;
+    }
 }
