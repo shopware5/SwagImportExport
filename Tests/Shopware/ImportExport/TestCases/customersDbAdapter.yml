@@ -1,0 +1,212 @@
+testRead:
+    testCase0:
+        columns: 'customer.id, customer.email, billing.firstName as b_firstName, shipping.firstName as s_firstName'
+        ids: [1,2,3,4]
+        expected:
+            0:
+                id: '1'
+                email: 'test@example.com'
+                b_firstName: 'Max'
+                s_firstName: 'MaxShipping'
+            1:
+                id: '2'
+                email: 'mustermann@b2b.de'
+                b_firstName: 'Max2'
+                s_firstName: 'Max2'
+            2:
+                id: '3'
+                email: 'demo@demo.com'
+                b_firstName: 'Demo'
+                s_firstName: 'DemoShipping'
+            3:
+                id: '4'
+                email: 'demo@shopware.com'
+                b_firstName: 'ShopwareDemo'
+                s_firstName: 'ShopwareDemoShipping'
+        expectedCount: 4
+    testCase1:
+        columns: 'customer.id, customer.hashPassword as password, customer.encoderName, customer.email, customer.active, customer.accountMode, customer.confirmationKey, customer.paymentId, customer.firstLogin, customer.lastLogin, customer.sessionId, customer.newsletter, customer.validation, customer.affiliate, customer.groupKey, customer.paymentPreset, customer.languageId, customer.shopId, customer.referer, customer.priceGroupId, customer.internalComment, customer.failedLogins, customer.lockedUntil'
+        ids: [1]
+        expected:
+            0:
+                id: '1'
+                password: 1a79a4d60de6718e8e5b326e338ae533
+                encoderName: md5
+                email: test@example.com
+                active: '1'
+                accountMode: '0'
+                confirmationKey: ''
+                paymentId: '0'
+                firstLogin: null
+                lastLogin: null
+                sessionId: ''
+                newsletter: '0'
+                validation: '0'
+                affiliate: '0'
+                groupKey: 'EK'
+                paymentPreset: '0'
+                languageId: ''
+                shopId: '0'
+                referer: ''
+                priceGroupId: ''
+                internalComment: ''
+                failedLogins: '0'
+                lockedUntil: ''
+        expectedCount: 1
+    testCase2:
+        columns: 'billing.id, billing.customerId, billing.company, billing.department, billing.salutation, billing.number, billing.firstName, billing.lastName, billing.street, billing.zipCode, billing.city, billing.phone, billing.fax, billing.countryId, billing.stateId, billing.vatId, billing.birthday, billing.additionalAddressLine1, billing.additionalAddressLine2'
+        ids: [2]
+        expected:
+            0:
+                id: '2'
+                customerId: '2'
+                company: 'Muster2 GmbH'
+                department: ''
+                salutation: 'mr'
+                number: '20002'
+                firstName: 'Max2'
+                lastName: 'Mustermann2'
+                street: 'Musterstr2 552'
+                zipCode: '555552'
+                city: 'Musterhausen2'
+                phone: '05555 / 555555'
+                fax: ''
+                countryId: '2'
+                stateId: '3'
+                vatId: ''
+                birthday: null
+                additionalAddressLine1: ''
+                additionalAddressLine2: ''
+        expectedCount: 1
+    testCase3:
+        columns: 'shipping.id, shipping.customerId, shipping.company, shipping.department, shipping.salutation, shipping.firstName, shipping.lastName, shipping.street, shipping.zipCode, shipping.city, shipping.countryId, shipping.stateId, shipping.additionalAddressLine1, shipping.additionalAddressLine2'
+        ids: [3]
+        expected:
+            0:
+                id: '3'
+                customerId: '3'
+                company: 'Demo AG'
+                department: ''
+                salutation: 'mr'
+                firstName: 'DemoShipping'
+                lastName: 'DemoShipping'
+                street: 'MustermannstraßeShipping 922'
+                zipCode: '987654'
+                city: 'MunichShipping'
+                countryId: '2'
+                stateId: '3'
+                additionalAddressLine1: ''
+                additionalAddressLine2: ''
+        expectedCount: 1
+testReadRecordIds:
+    testCase0:
+        start: 0
+        limit: 100
+        expectedIds:
+            0: 1
+            1: 2
+            2: 3
+            3: 4
+        expectedCount: 4
+    testCase1:
+        start: 2
+        limit: 105
+        expectedIds:
+            0: 3
+            1: 4
+        expectedCount: 2
+testDefaultColumns:
+    testCase0:
+        expectedColumns:
+            0: 'customer.id as id'
+            1: 'customer.hashPassword as password'
+            2: 'unhashedPassword'
+            3: 'customer.encoderName as encoder'
+            4: 'customer.email as email'
+            5: 'customer.active as active'
+            6: 'customer.accountMode as accountMode'
+            7: 'customer.paymentId as paymentID'
+            8: 'customer.firstLogin as firstLogin'
+            9: 'customer.lastLogin as lastLogin'
+            10: 'customer.sessionId as sessionId'
+            11: 'customer.newsletter as newsletter'
+            12: 'customer.validation as validation'
+            13: 'customer.affiliate as affiliate'
+            14: 'customer.groupKey as customergroup'
+            15: 'customer.paymentPreset as paymentPreset'
+            16: 'customer.languageId as language'
+            17: 'customer.shopId as subshopID'
+            18: 'customer.referer as referer'
+            19: 'customer.priceGroupId as priceGroupId'
+            20: 'customer.internalComment as internalComment'
+            21: 'customer.failedLogins as failedLogins'
+            22: 'customer.lockedUntil as lockedUntil'
+            23: 'billing.company as billingCompany'
+            24: 'billing.department as billingDepartment'
+            25: 'billing.salutation as billingSalutation'
+            26: 'billing.number as customerNumber'
+            27: 'billing.firstName as billingFirstname'
+            28: 'billing.lastName as billingLastname'
+            29: 'billing.street as billingStreet'
+            30: 'billing.zipCode as billingZipcode'
+            31: 'billing.city as billingCity'
+            32: 'billing.phone as billingPhone'
+            33: 'billing.fax as billingFax'
+            34: 'billing.countryId as billingCountryID'
+            35: 'billing.stateId as billingStateID'
+            36: 'billing.vatId as ustid'
+            37: 'billing.birthday as birthday'
+            38: 'billing.additionalAddressLine1 as billingAdditionalAddressLine1'
+            39: 'billing.additionalAddressLine2 as billingAdditionalAddressLine2'
+            40: 'billingAttribute.text1 as attrBillingText1'
+            41: 'billingAttribute.text2 as attrBillingText2'
+            42: 'billingAttribute.text3 as attrBillingText3'
+            43: 'billingAttribute.text4 as attrBillingText4'
+            44: 'billingAttribute.text5 as attrBillingText5'
+            45: 'billingAttribute.text6 as attrBillingText6'
+            46: 'shipping.company as shippingCompany'
+            47: 'shipping.department as shippingDepartment'
+            48: 'shipping.salutation as shippingSalutation'
+            49: 'shipping.firstName as shippingFirstname'
+            50: 'shipping.lastName as shippingLastname'
+            51: 'shipping.street as shippingStreet'
+            52: 'shipping.zipCode as shippingZipcode'
+            53: 'shipping.city as shippingCity'
+            54: 'shipping.countryId as shippingCountryID'
+            55: 'shipping.stateId as shippingStateID'
+            56: 'shipping.additionalAddressLine1 as shippingAdditionalAddressLine1'
+            57: 'shipping.additionalAddressLine2 as shippingAdditionalAddressLine2'
+            58: 'shippingAttribute.text1 as attrShippingText1'
+            59: 'shippingAttribute.text2 as attrShippingText2'
+            60: 'shippingAttribute.text3 as attrShippingText3'
+            61: 'shippingAttribute.text4 as attrShippingText4'
+            62: 'shippingAttribute.text5 as attrShippingText5'
+            63: 'shippingAttribute.text6 as attrShippingText6'
+        expectedCount: 64
+writeWithEmptyFile:
+    testCase0:
+        records:
+        expectedInsertedRows: 0
+testWrite:
+    testCase0:
+        records:
+            default:
+                0:
+                    email: test@test.com
+                    unhashedPassword: pass
+                    encoder: md5
+                    active: 1
+                    customergroup: EK
+                1:
+                    email: test2@test.com
+                    unhashedPassword: pass2
+                    encoder: md5
+                    active: 1
+                    customergroup: EK
+                2:
+                    email: test3@test.com
+                    unhashedPassword: pass3
+                    encoder: md5
+                    active: 1
+                    customergroup: EK
+        expectedInsertedRows: 3

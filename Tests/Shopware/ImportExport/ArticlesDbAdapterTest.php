@@ -2,18 +2,16 @@
 
 namespace Tests\Shopware\ImportExport;
 
-use Tests\Shopware\ImportExport\DbAdapterTest;
-
 class ArticlesDbAdapterTest extends DbAdapterTest
 {
 
-    protected static $yamlFile = "TestCases/articleDbAdaptor.yml";
+    protected static $yamlFile = "TestCases/articleDbAdapter.yml";
 
     public function setUp()
     {
         parent::setUp();
 
-        $this->dbAdaptor = 'articles';
+        $this->dbAdapter = 'articles';
         $this->dbTable = 's_articles';
     }
 
@@ -30,7 +28,7 @@ class ArticlesDbAdapterTest extends DbAdapterTest
     public function testRead($columns, $ids, $expected, $expectedCount)
     {
         $dataFactory = $this->Plugin()->getDataFactory();
-        $dbAdapter = $dataFactory->createDbAdapter($this->dbAdaptor);
+        $dbAdapter = $dataFactory->createDbAdapter($this->dbAdapter);
 
         $rawData = $dbAdapter->read($ids, $columns);
 
@@ -68,7 +66,7 @@ class ArticlesDbAdapterTest extends DbAdapterTest
         // Start the action
         $dataFactory = $this->Plugin()->getDataFactory();
 
-        $dbAdapter = $dataFactory->createDbAdapter($this->dbAdaptor);
+        $dbAdapter = $dataFactory->createDbAdapter($this->dbAdapter);
         $dbAdapter->write($data);
 
         foreach ($tableNames as $tableName){

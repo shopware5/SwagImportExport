@@ -94,8 +94,7 @@ s_campaigns_maildata:
       salutation: mr
       firstname: Bito
       lastname: Bee
-      street: Eggeroder Straße
-      streetnumber: 6
+      street: Eggeroder Straße 6
       zipcode: 4431
       city: Schöppingen
       added: 2014-06-09 15:00:06
@@ -106,8 +105,7 @@ s_campaigns_maildata:
       salutation: mr
       firstname: Peter
       lastname: Silie
-      street: Emsiger Weg
-      streetnumber: 15
+      street: Emsiger Weg 15
       zipcode: 48624
       city: Schöppingen
       added: 2014-06-09 15:00:06
@@ -118,8 +116,7 @@ s_campaigns_maildata:
       salutation: mr
       firstname: Max
       lastname: Mustermann
-      street: Mustermannstraße
-      streetnumber: 92
+      street: Mustermannstraße 92
       zipcode: 48624
       city: Schöppingen
       added: 2014-06-09 15:00:06
@@ -130,8 +127,7 @@ s_campaigns_maildata:
       salutation: company
       firstname: Com
       lastname: Pany
-      street: Musterweg
-      streetnumber: 1
+      street: Musterweg 1
       zipcode: 00000
       city: Musterstadt
       added: 2014-06-09 15:00:06
@@ -142,8 +138,7 @@ s_campaigns_maildata:
       salutation: 
       firstname: Test Test
       lastname: PL
-      street: 
-      streetnumber: 
+      street:
       zipcode: 
       city: 
       added: 2014-06-09 15:00:06
@@ -154,8 +149,7 @@ s_campaigns_maildata:
       salutation: mr
       firstname: Retro
       lastname: Schwyzer
-      street: Bergstraße
-      streetnumber: 111
+      street: Bergstraße 111
       zipcode: 12345
       city: Matterhorn
       added: 2014-06-09 15:00:06
@@ -166,8 +160,7 @@ s_campaigns_maildata:
       salutation: mr
       firstname: Schnaps
       lastname: Nase
-      street: Am Bierbaum
-      streetnumber: 4
+      street: Am Bierbaum 4
       zipcode: 00012
       city: Musterstadt
       added: 2014-06-09 15:00:06
@@ -178,8 +171,7 @@ s_campaigns_maildata:
       salutation: mr
       firstname: Eins
       lastname: Ahr
-      street: Rheinallee
-      streetnumber: 111
+      street: Rheinallee 111
       zipcode: 4431
       city: Schöppingen
       added: 2014-06-09 15:00:06
@@ -190,8 +182,7 @@ s_campaigns_maildata:
       salutation: mr
       firstname: Jos
       lastname: Deich
-      street: Dykstraat
-      streetnumber: 1
+      street: Dykstraat 1
       zipcode: 50114
       city: Holland
       added: 2014-06-09 15:00:06

@@ -2,17 +2,15 @@
 
 namespace Tests\Shopware\ImportExport;
 
-use Tests\Shopware\ImportExport\DbAdapterTest;
-
 class CategoriesDbAdapterTest extends DbAdapterTest
 {
-    protected static $yamlFile = "TestCases/categoriesDbAdaptor.yml";
+    protected static $yamlFile = "TestCases/categoriesDbAdapter.yml";
 
     public function setUp()
     {
         parent::setUp();
 
-        $this->dbAdaptor = 'categories';
+        $this->dbAdapter = 'categories';
         $this->dbTable = 's_categories';
     }
 
