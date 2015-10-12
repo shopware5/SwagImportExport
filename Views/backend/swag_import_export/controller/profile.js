@@ -299,7 +299,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
      * @param { string } nodeName
      * @param { string } swColumn
      */
-    saveNode: function(treePanel, treeStore, selectedNodeId, nodeName, swColumn, adapter, parentKey) {
+    saveNode: function(treePanel, treeStore, selectedNodeId, nodeName, swColumn, defaultValue, adapter, parentKey) {
         var me = this;
 
         var node = treeStore.getById(selectedNodeId);
@@ -310,6 +310,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
 
         node.set('text', nodeName);
         node.set('swColumn', swColumn);
+        node.set('defaultValue', defaultValue);
 
         // change only when in iteration (because otherwise adapter will be empty)
         if (node.get('type') === 'iteration') {

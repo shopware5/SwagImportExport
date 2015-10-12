@@ -34,6 +34,11 @@ class NewsletterDbAdapter implements DataDbAdapter
     /**  @var NewsletterDataManager */
     protected $dataManager;
 
+    /**
+     * @var array
+     */
+    protected $defaultValues = array();
+
     public function getDefaultColumns()
     {
         $columns = array(
@@ -56,6 +61,26 @@ class NewsletterDbAdapter implements DataDbAdapter
         }
 
         return $columns;
+    }
+
+    /**
+     * Return list with default values for fields which are empty or don't exists
+     *
+     * @return array
+     */
+    private function getDefaultValues()
+    {
+        return $this->defaultValues;
+    }
+
+    /**
+     * Set default values for fields which are empty or don't exists
+     *
+     * @param array $values default values for nodes
+     */
+    public function setDefaultValues($values)
+    {
+        $this->defaultValues = $values;
     }
 
     /**
@@ -132,6 +157,8 @@ class NewsletterDbAdapter implements DataDbAdapter
         $validator = $this->getValidator();
         $dataManager = $this->getDataManager();
 
+        $defaultValues = $this->getDefaultValues();
+
         foreach ($records['default'] as $newsletterData) {
             try {
                 $newsletterData = $validator->prepareInitialData($newsletterData);
@@ -139,7 +166,7 @@ class NewsletterDbAdapter implements DataDbAdapter
 
                 $recipient = $this->getAddressRepository()->findOneByEmail($newsletterData['email']);
                 if (!$recipient instanceof Address) {
-                    $newsletterData = $dataManager->setDefaultFields($newsletterData);
+                    $newsletterData = $dataManager->setDefaultFields($newsletterData, $defaultValues);
                     $recipient = new Address();
                 }
 

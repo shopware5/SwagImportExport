@@ -14,7 +14,7 @@ class NewsletterDataManager
     private $groupRepository = null;
 
     /** Define which field should be set by default */
-    private $defaultFields = array(
+    private static $defaultFields = array(
         'groupName',
     );
 
@@ -25,17 +25,32 @@ class NewsletterDataManager
     }
 
     /**
+     * Return fields which should be set by default
+     *
+     * @return array
+     */
+    public function getDefaultFields()
+    {
+        return self::$defaultFields;
+    }
+
+    /**
      * Sets fields which are empty by default.
      *
      * @param array $record
      * @return mixed
      * @throws AdapterException
      */
-    public function setDefaultFields($record)
+    public function setDefaultFields($record, $defaultValues)
     {
-        foreach ($this->defaultFields as $key) {
+        $getDefaultFields = $this->getDefaultFields();
+        foreach ($getDefaultFields as $key) {
             if (isset($record[$key])) {
                 continue;
+            }
+
+            if (isset($defaultValues[$key])) {
+                $record[$key] = $defaultValues[$key];
             }
 
             switch ($key) {

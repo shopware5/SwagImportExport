@@ -34,15 +34,15 @@ class ArticleWriter
         $this->dataManager = new ArticleDataManager($this->db, $this->dbalHelper);
     }
 
-    public function write($article)
+    public function write($article, $defaultValues)
     {
         $article = $this->validator->prepareInitialData($article);
         $this->validator->checkRequiredFields($article);
 
-        return $this->insertOrUpdateArticle($article);
+        return $this->insertOrUpdateArticle($article, $defaultValues);
     }
 
-    protected function insertOrUpdateArticle($article)
+    protected function insertOrUpdateArticle($article, $defaultValues)
     {
         list($mainDetailId, $articleId, $detailId) = $this->findExistingEntries($article);
 
@@ -65,7 +65,7 @@ class ArticleWriter
         $createArticle = false;
         if ($createDetail && $article['mainNumber'] == $article['orderNumber']) {
             $createArticle = true;
-            $article = $this->dataManager->setDefaultFieldsForCreate($article);
+            $article = $this->dataManager->setDefaultFieldsForCreate($article, $defaultValues);
             $this->validator->checkRequiredFieldsForCreate($article);
         }
 

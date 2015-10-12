@@ -14,7 +14,7 @@ class CustomerDataManager
     private $passwordManager = null;
 
     /** Define which field should be set by default */
-    private $defaultFields = array(
+    private static $defaultFields = array(
         'active',
         'paymentID',
         'encoder',
@@ -29,30 +29,49 @@ class CustomerDataManager
     }
 
     /**
+     * Return fields which should be set by default
+     *
+     * @return array
+     */
+    public function getDefaultFields()
+    {
+        return self::$defaultFields;
+    }
+
+    /**
      * Sets fields which are empty by default.
      *
      * @param $record
+     * @param array $defaultValues
      * @return mixed
      */
-    public function setDefaultFields($record)
+    public function setDefaultFields($record, $defaultValues)
     {
-        foreach ($this->defaultFields as $key) {
+        $getDefaultFields = $this->getDefaultFields();
+        foreach ($getDefaultFields as $key) {
             if (isset($record[$key])) {
                 continue;
             }
 
+            if (isset($defaultValues[$key])) {
+                $record[$key] = $defaultValues[$key];
+            }
+
             switch ($key) {
-                case 'active':
-                    $record[$key] = 1;
-                    break;
                 case 'paymentID':
-                    $record[$key] = $this->getPayment($record);
+                    if (!$record[$key]) {
+                        $record[$key] = $this->getPayment($record);
+                    }
                     break;
                 case 'encoder':
-                    $record[$key] = $this->getEncoder();
+                    if (!$record[$key]) {
+                        $record[$key] = $this->getEncoder();
+                    }
                     break;
                 case 'subshopID':
-                    $record[$key] = 1;
+                    if (!$record[$key]) {
+                        $record[$key] = 1;
+                    }
                     break;
             }
         }

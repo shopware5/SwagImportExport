@@ -2,6 +2,7 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
+use Shopware\Components\SwagImportExport\DataManagers\CategoriesDataManager;
 use Shopware\Models\Category\Category;
 use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
@@ -36,6 +37,14 @@ class CategoriesDbAdapter implements DataDbAdapter
 
     /** @var CategoryValidator */
     protected $validator;
+
+    /** @var CategoriesDataManager */
+    protected $dataManager;
+
+    /**
+     * @var array
+     */
+    protected $defaultValues;
 
     /**
      * Returns record ids
@@ -194,6 +203,9 @@ class CategoriesDbAdapter implements DataDbAdapter
 
         $manager = $this->getManager();
         $validator = $this->getValidator();
+        $dataManager = $this->getDataManager();
+
+        $defaultValues = $this->getDefaultValues();
 
         foreach ($records['default'] as $index => $record) {
             try {
@@ -209,6 +221,13 @@ class CategoriesDbAdapter implements DataDbAdapter
                 }
 
                 $category = $this->findExistingEntries($record);
+                if (!$category instanceof Category) {
+                    $record = $dataManager->setDefaultFields($record, $defaultValues);
+                    $category = new Category();
+                    if (isset($record['categoryId'])) {
+                        $category->setId($record['categoryId']);
+                    }
+                }
 
                 $record = $this->prepareData($record, $index, $category->getId(), $records['customerGroups']);
 
@@ -263,14 +282,6 @@ class CategoriesDbAdapter implements DataDbAdapter
         /* @var $category Category */
         if (isset($record['categoryId'])) {
             $category = $this->getRepository()->find($record['categoryId']);
-        }
-
-        if (!$category instanceof Category) {
-            $category = new Category();
-
-            if (isset($record['categoryId'])) {
-                $category->setId($record['categoryId']);
-            }
         }
 
         return $category;
@@ -424,6 +435,26 @@ class CategoriesDbAdapter implements DataDbAdapter
         return $columns;
     }
 
+    /**
+     * Return list with default values for fields which are empty or don't exists
+     *
+     * @return array
+     */
+    private function getDefaultValues()
+    {
+        return $this->defaultValues;
+    }
+
+    /**
+     * Set default values for fields which are empty or don't exists
+     *
+     * @param array $values default values for nodes
+     */
+    public function setDefaultValues($values)
+    {
+        $this->defaultValues = $values;
+    }
+
     public function saveMessage($message)
     {
         $errorMode = Shopware()->Config()->get('SwagImportExportErrorMode');
@@ -487,5 +518,14 @@ class CategoriesDbAdapter implements DataDbAdapter
         }
 
         return $this->validator;
+    }
+
+    public function getDataManager()
+    {
+        if ($this->dataManager === null) {
+            $this->dataManager = new CategoriesDataManager();
+        }
+
+        return $this->dataManager;
     }
 }

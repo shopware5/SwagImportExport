@@ -14,9 +14,9 @@ class ArticleDataManager
     /** @var DbalHelper */
     private $dbalHelper = null;
 
-    private $taxRates = array();
+    private $taxRates = null;
 
-    private $suppliers = array();
+    private $suppliers = null;
 
     /** Define which field should be set by default */
     private $defaultFields = array(
@@ -24,17 +24,55 @@ class ArticleDataManager
         'supplierId',
     );
 
-    private $defaultFieldsForCreate = array(
+    /** Define which field should be set by default on article create */
+    private static $defaultFieldsForCreate = array(
         'taxId',
         'supplierId',
+        'availableFrom',
+        'availableTo',
+        'supplierName',
+        'tax',
+        'inStock',
+        'active',
+        'stockMin',
+        'shippingTime',
+        'shippingFree',
+        'attributeAttr1',
+        'attributeAttr2',
+        'attributeAttr3',
+        'attributeAttr4',
+        'attributeAttr5',
+        'attributeAttr6',
+        'attributeAttr7',
+        'attributeAttr8',
+        'attributeAttr9',
+        'attributeAttr10',
+        'attributeAttr11',
+        'attributeAttr12',
+        'attributeAttr13',
+        'attributeAttr14',
+        'attributeAttr15',
+        'attributeAttr16',
+        'attributeAttr17',
+        'attributeAttr18',
+        'attributeAttr19',
+        'attributeAttr20',
     );
 
     public function __construct(\Enlight_Components_Db_Adapter_Pdo_Mysql $db, DbalHelper $dbalHelper)
     {
         $this->db = $db;
         $this->dbalHelper = $dbalHelper;
-        $this->taxRates = $this->getTaxRates();
-        $this->suppliers = $this->getSuppliers();
+    }
+
+    /**
+     * Return fields which should be set by default
+     *
+     * @return array
+     */
+    public function getDefaultFields()
+    {
+        return self::$defaultFieldsForCreate;
     }
 
     /**
@@ -43,6 +81,20 @@ class ArticleDataManager
      * @return array
      */
     private function getTaxRates()
+    {
+        if ($this->taxRates === null) {
+            $this->taxRates = $this->prepareTaxRates();
+        }
+
+        return $this->taxRates;
+    }
+
+    /**
+     * Return list with all shop taxes
+     *
+     * @return array
+     */
+    private function prepareTaxRates()
     {
         $taxes = $this->db->fetchPairs('SELECT id, tax FROM s_core_tax');
         if (!is_array($taxes)) {
@@ -60,6 +112,20 @@ class ArticleDataManager
      */
     private function getSuppliers()
     {
+        if ($this->suppliers === null) {
+            $this->suppliers = $this->prepareSuppliers();
+        }
+
+        return $this->suppliers;
+    }
+
+    /**
+     * Return list with suppliers
+     *
+     * @return array
+     */
+    private function prepareSuppliers()
+    {
         $suppliers = $this->db->fetchPairs('SELECT name, id FROM s_articles_supplier');
         if (!is_array($suppliers)) {
             return array();
@@ -72,13 +138,19 @@ class ArticleDataManager
      * Sets fields which are empty, but we need them to create new entry.
      *
      * @param array $record
+     * @param array $defaultValues
      * @return mixed
      */
-    public function setDefaultFieldsForCreate($record)
+    public function setDefaultFieldsForCreate($record, $defaultValues)
     {
-        foreach ($this->defaultFieldsForCreate as $key) {
+        $getDefaultFields = $this->getDefaultFields();
+        foreach ($getDefaultFields as $key) {
             if (isset($record[$key])) {
                 continue;
+            }
+
+            if (isset($defaultValues[$key])) {
+                $record[$key] = $defaultValues[$key];
             }
 
             switch ($key) {
@@ -118,7 +190,8 @@ class ArticleDataManager
     {
         $taxRate = number_format($taxRate, 2);
 
-        $taxId = array_search($taxRate, $this->taxRates);
+        $taxRates = $this->getTaxRates();
+        $taxId = array_search($taxRate, $taxRates);
 
         if (!$taxId) {
             $message = SnippetsHelper::getNamespace()->get(
@@ -137,7 +210,8 @@ class ArticleDataManager
     private function getTaxByDefault()
     {
         // todo: read default tax rate from config
-        return array_shift(array_keys($this->taxRates));
+        $taxRates = $this->getTaxRates();
+        return array_shift(array_keys($taxRates));
     }
 
     /**
@@ -146,6 +220,7 @@ class ArticleDataManager
      */
     private function getSupplierId($record)
     {
+        $this->suppliers = $this->getSuppliers();
         $name = $record['supplierName'];
         $supplierId = $this->suppliers[$name];
 

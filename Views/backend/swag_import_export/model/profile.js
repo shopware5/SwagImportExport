@@ -11,6 +11,7 @@ Ext.define('Shopware.apps.SwagImportExport.model.Profile', {
 		{ name: 'parentKey', type: 'string', mapping: 'parentKey' },
 		{ name: 'type', type: 'string', mapping: 'type' },
 		{ name: 'swColumn', type: 'string', mapping: 'swColumn' },
+		{ name: 'defaultValue', type: 'string', mapping: 'defaultValue' },
 		{ name: 'inIteration', type: 'boolean', mapping: 'inIteration' }
 	]
 });

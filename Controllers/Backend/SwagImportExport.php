@@ -1091,7 +1091,11 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $type = $profile->getType();
 
         $dbAdapter = $this->Plugin()->getDataFactory()->createDbAdapter($type);
-        
+        $dataManager = $this->Plugin()->getDataFactory()->createDataManager($type);
+        if ($dataManager) {
+            $defaultFields = $dataManager->getDefaultFields();
+        }
+
         $columns = $dbAdapter->getColumns($section);
 
         if (!$columns || empty($columns)) {
@@ -1124,6 +1128,12 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             }
 
             $column = array('id' => $column, 'name' => $column);
+
+            if ($defaultFields) {
+                if (in_array($column['name'], $defaultFields)) {
+                    $column['default'] = true;
+                }
+            }
         }
 
         $this->View()->assign(array(

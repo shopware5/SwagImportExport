@@ -125,8 +125,8 @@ class DataWorkflow
 
     public function import($postData, $inputFile)
     {
+        $tree = json_decode($this->profile->getConfig("tree"), true);
         if ($postData['format'] === 'xml') {
-            $tree = json_decode($this->profile->getConfig("tree"), true);
             $this->fileIO->setTree($tree);
         }
 
@@ -151,8 +151,10 @@ class DataWorkflow
 
             $data = $this->transformerChain->transformBackward($records);
 
+            $defaultValues = $this->profile->getDefaultValues($tree);
+
             //inserts/update data into the database
-            $this->dataIO->write($data);
+            $this->dataIO->write($data, $defaultValues);
 
             //writes into database log table
             $profileName = $this->profile->getName();

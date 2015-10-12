@@ -67,6 +67,7 @@ class TreeHelper
             'expanded' => true,
             'iconCls' => $icon,
             'swColumn' => $node['shopwareField'],
+            'defaultValue' => $node['defaultValue'],
             'inIteration' => $isInIteration,
             'children' => $children
         );
@@ -217,6 +218,12 @@ class TreeHelper
                 $node['shopwareField'] = $child['swColumn'];
             } else {
                 unset($node['shopwareField']);
+            }
+
+            if (isset($child['defaultValue'])) {
+                $node['defaultValue'] = $child['defaultValue'];
+            } else {
+                unset($node['defaultValue']);
             }
 
             if ($child['type'] == 'iteration') {

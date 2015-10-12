@@ -40,6 +40,11 @@ class CustomerDbAdapter implements DataDbAdapter
 
     protected $passwordManager;
 
+    /**
+     * @var array
+     */
+    protected $defaultValues = array();
+
     public function getDefaultColumns()
     {
         $default = array();
@@ -51,6 +56,26 @@ class CustomerDbAdapter implements DataDbAdapter
         $default = array_merge($default, $this->getShippingColumns());
         
         return $default;
+    }
+
+    /**
+     * Return list with default values for fields which are empty or don't exists
+     *
+     * @return array
+     */
+    private function getDefaultValues()
+    {
+        return $this->defaultValues;
+    }
+
+    /**
+     * Set default values for fields which are empty or don't exists
+     *
+     * @param array $values default values for nodes
+     */
+    public function setDefaultValues($values)
+    {
+        $this->defaultValues = $values;
     }
 
     public function getCustomerColumns()
@@ -277,6 +302,8 @@ class CustomerDbAdapter implements DataDbAdapter
         $validator = $this->getValidator();
         $dataManager = $this->getDataManager();
 
+        $defaultValues = $this->getDefaultValues();
+
         foreach ($records['default'] as $record) {
             try {
                 $record = $validator->prepareInitialData($record);
@@ -285,7 +312,7 @@ class CustomerDbAdapter implements DataDbAdapter
                 $customer = $this->findExistingEntries($record);
 
                 if (!$customer instanceof Customer) {
-                    $record = $dataManager->setDefaultFields($record);
+                    $record = $dataManager->setDefaultFields($record, $defaultValues);
                     $validator->checkRequiredFieldsForCreate($record);
                     $customer = new Customer();
                 }
