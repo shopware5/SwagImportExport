@@ -130,7 +130,7 @@ class ConfiguratorWriter
                 return false;
             }
 
-            if (!isset($configurator['configOptionName']) || empty($configurator['configOptionName'])) {
+            if (!isset($configurator['configOptionName'])) {
                 return false;
             }
         }
