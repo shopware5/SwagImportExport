@@ -1007,31 +1007,6 @@ class ArticlesDbAdapter implements DataDbAdapter
         $this->logMessages[] = $logMessages;
     }
 
-    /**
-     * Returns/Creates mapper depend on the key
-     * Exmaple: articles, variants, prices ...
-     *
-     * @param string $key
-     * @return array
-     */
-    public function getMap($key)
-    {
-        $property = $key . 'Map';
-        if ($this->{$property} === null) {
-            $method = 'get' . ucfirst($key) . 'Columns';
-            if (method_exists($this, $method)) {
-                $columns = $this->{$method}();
-
-                foreach ($columns as $column) {
-                    $map = DataHelper::generateMappingFromColumns($column);
-                    $this->{$property}[$map[0]] = $map[1];
-                }
-            }
-        }
-
-        return $this->{$property};
-    }
-
     public function getCategoryIdCollection()
     {
         return $this->categoryIdCollection;

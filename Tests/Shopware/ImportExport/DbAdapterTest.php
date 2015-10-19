@@ -41,21 +41,20 @@ class DbAdapterTest extends ImportExportTestHelper
         return static::$parser->parseYaml($yamlFile);
     }
 
-    public function read($columns, $ids, $expectedResults, $expectedCount)
+    public function read($columns, $ids, $expectedResults, $expectedCount,  $section = 'default')
     {
         /* @var DataFactory $dataFactory */
         $dataFactory = $this->Plugin()->getDataFactory();
         $dbAdapter = $dataFactory->createDbAdapter($this->dbAdapter);
 
         $rawData = $dbAdapter->read($ids, $columns);
-        $rawData = $rawData['default'];
 
         foreach ($expectedResults as $index => $expectedResult) {
             foreach ($expectedResult as $column => $value) {
-                $this->assertSame($rawData[$index][$column], $value, "The value of `$column` field does not match!");
+                $this->assertSame($rawData[$section][$index][$column], $value, "The value of `$column` field does not match!");
             }
         }
-        $this->assertEquals(count($rawData), $expectedCount);
+        $this->assertEquals(count($rawData[$section]), $expectedCount);
     }
 
     public function readRecordIds($start, $limit, $filter, $expectedIds, $expectedCount)

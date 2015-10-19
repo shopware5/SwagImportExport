@@ -1,13 +1,155 @@
+s_user:
+    -
+        id: 1
+        password: '$2y$10$unsiWh8Xlh8s1RIWiabDSeanbZ.QhPOOGiFT5DVg8nnpVKMIfaMMq'
+        encoder: 'bcrypt'
+        email: 'test_ek@test.com'
+        active: 1
+        accountmode: 0
+        confirmationkey: ''
+        paymentID: 5
+        firstlogin: '2015-10-15'
+        lastlogin: '2015-10-15 09:36:02'
+        sessionID: 'bjvcm3smv043lra3tffjvb0807'
+        newsletter: 0
+        validation: ''
+        affiliate: 0
+        customergroup: 'EK'
+        paymentpreset: 0
+        language: 1
+        subshopID: 1
+        referer: ''
+        pricegroupID: ''
+        internalcomment: ''
+        failedlogins: 0
+        lockeduntil: ''
+    -
+        id: 2
+        password: '$2y$10$1TOuHls9vuStihhZbxsnz.OFBFldbUInvhW.nfFS/V/0YAduB.A0u'
+        encoder: 'bcrypt'
+        email: 'test_h@test.com'
+        active: 1
+        accountmode: 0
+        confirmationkey: ''
+        paymentID: 5
+        firstlogin: '2015-10-15'
+        lastlogin: '2015-10-15 08:35:00'
+        sessionID: 'bjvcm3smv043lra3tffjvb0807'
+        newsletter: 0
+        validation: 0
+        affiliate: 0
+        customergroup: 'H'
+        paymentpreset: 0
+        language: 1
+        subshopID: 1
+        referer: ''
+        pricegroupID: ''
+        internalcomment: ''
+        failedlogins: 0
+        lockeduntil: ''
+s_user_attributes:
+    -
+        id: 1
+        userID: 1
+    -
+        id: 2
+        userID: 2
+s_user_billingaddress:
+    -
+        id: 1
+        userID: 1
+        company: ''
+        department: ''
+        salutation: 'ms'
+        customernumber: 20009
+        firstname: 'Test EK'
+        lastname: 'Test EK'
+        street: 'Strasse 12'
+        zipcode: 'PLZ'
+        city: 'Ort'
+        phone: ''
+        fax: ''
+        countryID: 2
+        stateID: 7
+        ustid: ''
+        birthday: '0000-00-00'
+        additional_address_line1: ''
+        additional_address_line2: ''
+    -
+        id: 2
+        userID: 2
+        company: 'Company'
+        department: 'Abteilung'
+        salutation: 'mr'
+        customernumber: 20010
+        firstname: 'Test H'
+        lastname: 'Test H'
+        street: 'Strasse 12'
+        zipcode: 'PLZ'
+        city: 'Ort'
+        phone: ''
+        fax: ''
+        countryID: 2
+        stateID: 6
+        ustid: 'DE261679493'
+        birthday: ''
+        additional_address_line1: ''
+        additional_address_line2: ''
+s_user_billingaddress_attributes:
+    -
+        id: 1
+        billingID: 1
+        text1: ''
+        text2: ''
+        text3: ''
+        text4: ''
+        text5: ''
+        text6: ''
+    -
+        id: 2
+        billingID: 2
+        text1: ''
+        text2: ''
+        text3: ''
+        text4: ''
+        text5: ''
+        text6: ''
+s_user_shippingaddress:
+    -
+        id: 1
+        userID: 2
+        company: 'Company'
+        department: 'Abteilung'
+        salutation: 'mr'
+        firstname: 'Test EK'
+        lastname: 'Test EK'
+        street: 'Strasse'
+        zipcode: 'PLZ'
+        city: 'Ort'
+        countryID: 2
+        stateID: 6
+        additional_address_line1: ''
+        additional_address_line2: ''
+s_user_shippingaddress_attributes:
+    -
+        id: 1
+        shippingID: 1
+        text1: ''
+        text2: ''
+        text3: ''
+        text4: ''
+        text5: ''
+        text6: ''
 s_order:
     -
         id: 1
-        ordernumber: 20001
+        ordernumber: 20010
         userID: 1
-        invoice_amount: 26.89
-        invoice_amount_net: 22.6
+        invoice_amount: 51.9
+        invoice_amount_net: 45.27
         invoice_shipping: 3.9
-        invoice_shipping_net: 3.28
-        ordertime: '2015-10-01 00:00:00'
+        invoice_shipping_net: 3.25
+        ordertime: '2015-10-15 09:14:19'
         status: 0
         cleared: 17
         paymentID: 5
@@ -31,14 +173,14 @@ s_order:
         deviceType: desktop
     -
         id: 2
-        ordernumber: 20002
+        ordernumber: 20011
         userID: 1
-        invoice_amount: 37.85
-        invoice_amount_net: 31.81
+        invoice_amount: 21.9
+        invoice_amount_net: 18.41
         invoice_shipping: 3.9
         invoice_shipping_net: 3.28
-        ordertime: '2015-10-02 00:00:00'
-        status: 2
+        ordertime: '2015-10-15 09:14:19'
+        status: 0
         cleared: 17
         paymentID: 5
         transactionID: ''
@@ -59,98 +201,893 @@ s_order:
         subshopID: 1
         remote_addr: 192.168.56.1
         deviceType: desktop
+    -
+        id: 3
+        ordernumber: 20012
+        userID: 1
+        invoice_amount: 51.53
+        invoice_amount_net: 44.25
+        invoice_shipping: 3.9
+        invoice_shipping_net: 3.28
+        ordertime: '2015-10-15 09:14:19'
+        status: 0
+        cleared: 17
+        paymentID: 5
+        transactionID: ''
+        comment: ''
+        customercomment: ''
+        internalcomment: ''
+        net: 1
+        taxfree: 0
+        partnerID: ''
+        temporaryID: ''
+        referer: ''
+        cleareddate: ''
+        trackingcode: ''
+        language: 1
+        dispatchID: 9
+        currency: EUR
+        currencyFactor: 1
+        subshopID: 1
+        remote_addr: 192.168.56.1
+        deviceType: desktop
+    -
+        id: 4
+        ordernumber: 20013
+        userID: 2
+        invoice_amount: 46.25
+        invoice_amount_net: 46.25
+        invoice_shipping: 3.25
+        invoice_shipping_net: 3.25
+        ordertime: '2015-10-15 09:14:19'
+        status: 0
+        cleared: 17
+        paymentID: 5
+        transactionID: ''
+        comment: ''
+        customercomment: ''
+        internalcomment: ''
+        net: 1
+        taxfree: 1
+        partnerID: ''
+        temporaryID: ''
+        referer: ''
+        cleareddate: ''
+        trackingcode: ''
+        language: 1
+        dispatchID: 9
+        currency: EUR
+        currencyFactor: 1
+        subshopID: 1
+        remote_addr: 192.168.56.1
+        deviceType: desktop
+    -
+        id: 5
+        ordernumber: 20014
+        userID: 2
+        invoice_amount: 54.7
+        invoice_amount_net: 46.25
+        invoice_shipping: 3.9
+        invoice_shipping_net: 3.25
+        ordertime: '2015-10-15 09:14:19'
+        status: 0
+        cleared: 17
+        paymentID: 5
+        transactionID: ''
+        comment: ''
+        customercomment: ''
+        internalcomment: ''
+        net: 1
+        taxfree: 0
+        partnerID: ''
+        temporaryID: ''
+        referer: ''
+        cleareddate: ''
+        trackingcode: ''
+        language: 1
+        dispatchID: 9
+        currency: EUR
+        currencyFactor: 1
+        subshopID: 1
+        remote_addr: 192.168.56.1
+        deviceType: desktop
 s_order_attributes:
     -
         id: 1
         orderID: 1
+        attribute1: ''
+        attribute2: ''
+        attribute3: ''
+        attribute4: ''
+        attribute5: ''
+        attribute6: ''
     -
         id: 2
         orderID: 2
+        attribute1: ''
+        attribute2: ''
+        attribute3: ''
+        attribute4: ''
+        attribute5: ''
+        attribute6: ''
+    -
+        id: 3
+        orderID: 3
+        attribute1: ''
+        attribute2: ''
+        attribute3: ''
+        attribute4: ''
+        attribute5: ''
+        attribute6: ''
+    -
+        id: 4
+        orderID: 4
+        attribute1: ''
+        attribute2: ''
+        attribute3: ''
+        attribute4: ''
+        attribute5: ''
+        attribute6: ''
+    -
+        id: 5
+        orderID: 5
+        attribute1: ''
+        attribute2: ''
+        attribute3: ''
+        attribute4: ''
+        attribute5: ''
+        attribute6: ''
+s_order_details:
+    -
+        id: 1
+        orderID: 1
+        ordernumber: 20010
+        articleID: 5
+        articleordernumber: 'SW10004'
+        price: 10
+        quantity: 2
+        name: 'Test 7'
+        status: 0
+        shipped: 0
+        releasedate: '0000-00-00'
+        modus: 0
+        esdarticle: 0
+        taxID: 4
+        tax_rate: 7
+        config: ''
+        ean: ''
+        unit: ''
+        pack_unit: ''
+    -
+        id: 2
+        orderID: 1
+        ordernumber: 20010
+        articleID: 7
+        articleordernumber: 'SW10006'
+        price: 30
+        quantity: 1
+        name: 'Test 20'
+        status: 0
+        shipped: 0
+        releasedate: '0000-00-00'
+        modus: 0
+        esdarticle: 0
+        taxID: 5
+        tax_rate: 20
+        config: ''
+        ean: ''
+        unit: ''
+        pack_unit: ''
+    -
+        id: 3
+        orderID: 1
+        ordernumber: 20010
+        articleID: 0
+        articleordernumber: 'SHIPPINGDISCOUNT'
+        price: -2
+        quantity: 1
+        name: 'Warenkorbrabatt'
+        status: 0
+        shipped: 0
+        releasedate: '0000-00-00'
+        modus: 4
+        esdarticle: 0
+        taxID: 0
+        tax_rate: 20
+        config: ''
+        ean: ''
+        unit: ''
+        pack_unit: ''
+    -
+        id: 4
+        orderID: 2
+        ordernumber: 20011
+        articleID: 6
+        articleordernumber: 'SW10005'
+        price: 20
+        quantity: 1
+        name: 'Test 19'
+        status: 0
+        shipped: 0
+        releasedate: '0000-00-00'
+        modus: 0
+        esdarticle: 0
+        taxID: 1
+        tax_rate: 19
+        config: ''
+        ean: ''
+        unit: ''
+        pack_unit: ''
+    -
+        id: 5
+        orderID: 2
+        ordernumber: 20011
+        articleID: 0
+        articleordernumber: 'SHIPPINGDISCOUNT'
+        price: -2
+        quantity: 1
+        name: 'Warenkorbrabatt'
+        status: 0
+        shipped: 0
+        releasedate: '0000-00-00'
+        modus: 4
+        esdarticle: 0
+        taxID: 0
+        tax_rate: 19
+        config: ''
+        ean: ''
+        unit: ''
+        pack_unit: ''
+    -
+        id: 6
+        orderID: 3
+        ordernumber: 20012
+        articleID: 5
+        articleordernumber: 'SW10004'
+        price: 9.346
+        quantity: 1
+        name: 'Test 7'
+        status: 0
+        shipped: 0
+        releasedate: '0000-00-00'
+        modus: 0
+        esdarticle: 0
+        taxID: 4
+        tax_rate: 7
+        config: ''
+        ean: ''
+        unit: ''
+        pack_unit: ''
+    -
+        id: 7
+        orderID: 3
+        ordernumber: 20012
+        articleID: 6
+        articleordernumber: 'SW10005'
+        price: 16.807
+        quantity: 2
+        name: 'Test 19'
+        status: 0
+        shipped: 0
+        releasedate: '0000-00-00'
+        modus: 0
+        esdarticle: 0
+        taxID: 1
+        tax_rate: 19
+        config: ''
+        ean: ''
+        unit: ''
+        pack_unit: ''
+    -
+        id: 8
+        orderID: 3
+        ordernumber: 20012
+        articleID: 0
+        articleordernumber: 'SHIPPINGDISCOUNT'
+        price: -2
+        quantity: 1
+        name: 'Warenkorbrabatt'
+        status: 0
+        shipped: 0
+        releasedate: '0000-00-00'
+        modus: 4
+        esdarticle: 0
+        taxID: 0
+        tax_rate: 19
+        config: ''
+        ean: ''
+        unit: ''
+        pack_unit: ''
+    -
+        id: 9
+        orderID: 4
+        ordernumber: 20013
+        articleID: 7
+        articleordernumber: 'SW10006'
+        price: 25
+        quantity: 1
+        name: 'Test 20'
+        status: 0
+        shipped: 0
+        releasedate: '0000-00-00'
+        modus: 0
+        esdarticle: 0
+        taxID: 0
+        tax_rate: 20
+        config: ''
+        ean: ''
+        unit: ''
+        pack_unit: ''
+    -
+        id: 10
+        orderID: 4
+        ordernumber: 20013
+        articleID: 5
+        articleordernumber: 'SW10004'
+        price: 5
+        quantity: 1
+        name: 'Test 7'
+        status: 0
+        shipped: 0
+        releasedate: '0000-00-00'
+        modus: 0
+        esdarticle: 0
+        taxID: 0
+        tax_rate: 7
+        config: ''
+        ean: ''
+        unit: ''
+        pack_unit: ''
+    -
+        id: 11
+        orderID: 4
+        ordernumber: 20013
+        articleID: 6
+        articleordernumber: 'SW10005'
+        price: 15
+        quantity: 1
+        name: 'Test 19'
+        status: 0
+        shipped: 0
+        releasedate: '0000-00-00'
+        modus: 0
+        esdarticle: 0
+        taxID: 0
+        tax_rate: 19
+        config: ''
+        ean: ''
+        unit: ''
+        pack_unit: ''
+    -
+        id: 12
+        orderID: 4
+        ordernumber: 20013
+        articleID: 0
+        articleordernumber: 'SHIPPINGDISCOUNT'
+        price: -2
+        quantity: 1
+        name: 'Warenkorbrabatt'
+        status: 0
+        shipped: 0
+        releasedate: '0000-00-00'
+        modus: 4
+        esdarticle: 0
+        taxID: 0
+        tax_rate: 20
+        config: ''
+        ean: ''
+        unit: ''
+        pack_unit: ''
+    -
+        id: 13
+        orderID: 5
+        ordernumber: 20014
+        articleID: 5
+        articleordernumber: 'SW10004'
+        price: 5
+        quantity: 1
+        name: 'Test 7'
+        status: 0
+        shipped: 0
+        releasedate: '0000-00-00'
+        modus: 0
+        esdarticle: 0
+        taxID: 4
+        tax_rate: 7
+        config: ''
+        ean: ''
+        unit: ''
+        pack_unit: ''
+    -
+        id: 14
+        orderID: 5
+        ordernumber: 20014
+        articleID: 6
+        articleordernumber: 'SW10005'
+        price: 15
+        quantity: 1
+        name: 'Test 19'
+        status: 0
+        shipped: 0
+        releasedate: '0000-00-00'
+        modus: 0
+        esdarticle: 0
+        taxID: 1
+        tax_rate: 19
+        config: ''
+        ean: ''
+        unit: ''
+        pack_unit: ''
+    -
+        id: 15
+        orderID: 5
+        ordernumber: 20014
+        articleID: 7
+        articleordernumber: 'SW10006'
+        price: 25
+        quantity: 1
+        name: 'Test 20'
+        status: 0
+        shipped: 0
+        releasedate: '0000-00-00'
+        modus: 0
+        esdarticle: 0
+        taxID: 5
+        tax_rate: 20
+        config: ''
+        ean: ''
+        unit: ''
+        pack_unit: ''
+    -
+        id: 16
+        orderID: 5
+        ordernumber: 20014
+        articleID: 0
+        articleordernumber: 'SHIPPINGDISCOUNT'
+        price: -2
+        quantity: 1
+        name: 'Warenkorbrabatt'
+        status: 0
+        shipped: 0
+        releasedate: '0000-00-00'
+        modus: 4
+        esdarticle: 0
+        taxID: 0
+        tax_rate: 20
+        config: ''
+        ean: ''
+        unit: ''
+        pack_unit: ''
+s_order_details_attributes:
+    -
+        id: 1
+        detailID: 1
+        attribute1: ''
+        attribute2: ''
+        attribute3: ''
+        attribute4: ''
+        attribute5: ''
+        attribute6: ''
+    -
+        id: 2
+        detailID: 2
+        attribute1: ''
+        attribute2: ''
+        attribute3: ''
+        attribute4: ''
+        attribute5: ''
+        attribute6: ''
+    -
+        id: 3
+        detailID: 3
+        attribute1: ''
+        attribute2: ''
+        attribute3: ''
+        attribute4: ''
+        attribute5: ''
+        attribute6: ''
+    -
+        id: 4
+        detailID: 4
+        attribute1: ''
+        attribute2: ''
+        attribute3: ''
+        attribute4: ''
+        attribute5: ''
+        attribute6: ''
+    -
+        id: 5
+        detailID: 5
+        attribute1: ''
+        attribute2: ''
+        attribute3: ''
+        attribute4: ''
+        attribute5: ''
+        attribute6: ''
+    -
+        id: 6
+        detailID: 6
+        attribute1: ''
+        attribute2: ''
+        attribute3: ''
+        attribute4: ''
+        attribute5: ''
+        attribute6: ''
+    -
+        id: 7
+        detailID: 7
+        attribute1: ''
+        attribute2: ''
+        attribute3: ''
+        attribute4: ''
+        attribute5: ''
+        attribute6: ''
+    -
+        id: 8
+        detailID: 8
+        attribute1: ''
+        attribute2: ''
+        attribute3: ''
+        attribute4: ''
+        attribute5: ''
+        attribute6: ''
+    -
+        id: 9
+        detailID: 9
+        attribute1: ''
+        attribute2: ''
+        attribute3: ''
+        attribute4: ''
+        attribute5: ''
+        attribute6: ''
+    -
+        id: 10
+        detailID: 10
+        attribute1: ''
+        attribute2: ''
+        attribute3: ''
+        attribute4: ''
+        attribute5: ''
+        attribute6: ''
+    -
+        id: 11
+        detailID: 11
+        attribute1: ''
+        attribute2: ''
+        attribute3: ''
+        attribute4: ''
+        attribute5: ''
+        attribute6: ''
+    -
+        id: 12
+        detailID: 12
+        attribute1: ''
+        attribute2: ''
+        attribute3: ''
+        attribute4: ''
+        attribute5: ''
+        attribute6: ''
+    -
+        id: 13
+        detailID: 13
+        attribute1: ''
+        attribute2: ''
+        attribute3: ''
+        attribute4: ''
+        attribute5: ''
+        attribute6: ''
+    -
+        id: 14
+        detailID: 14
+        attribute1: ''
+        attribute2: ''
+        attribute3: ''
+        attribute4: ''
+        attribute5: ''
+        attribute6: ''
+    -
+        id: 15
+        detailID: 15
+        attribute1: ''
+        attribute2: ''
+        attribute3: ''
+        attribute4: ''
+        attribute5: ''
+        attribute6: ''
+    -
+        id: 16
+        detailID: 16
+        attribute1: ''
+        attribute2: ''
+        attribute3: ''
+        attribute4: ''
+        attribute5: ''
+        attribute6: ''
 s_order_billingaddress:
-   -
-       id: 1
-       userID: 1
-       orderID: 1
-       company: ''
-       department: ''
-       salutation: 'mrs'
-       customernumber: 20001
-       firstname: 'Max'
-       lastname: 'Mustermann'
-       street: 'Eggeroder str.'
-       zipcode: 48624
-       city: 'Schöppingen'
-       phone: ''
-       fax: ''
-       countryID: 2
-       stateId: 0
-       ustid: ''
-       additional_address_line1: ''
-       additional_address_line2: ''
-   -
-       id: 2
-       userID: 1
-       orderID: 2
-       company: ''
-       department: ''
-       salutation: 'mrs'
-       customernumber: 20001
-       firstname: 'Max'
-       lastname: 'Mustermann'
-       street: 'Eggeroder str.'
-       zipcode: 48624
-       city: 'Schöppingen'
-       phone: ''
-       fax: ''
-       countryID: 2
-       stateId: 0
-       ustid: ''
-       additional_address_line1: ''
-       additional_address_line2: ''
+    -
+        id: 1
+        userID: 1
+        orderID: 1
+        company: ''
+        department: ''
+        salutation: 'ms'
+        customernumber: 20009
+        firstname: 'Test EK'
+        lastname: 'Test EK'
+        street: 'Strasse 12'
+        zipcode: 'PLZ'
+        city: 'Ort'
+        phone: ''
+        fax: ''
+        countryID: 2
+        stateId: 7
+        ustid: ''
+        additional_address_line1: ''
+        additional_address_line2: ''
+    -
+        id: 2
+        userID: 1
+        orderID: 2
+        company: ''
+        department: ''
+        salutation: 'ms'
+        customernumber: 20009
+        firstname: 'Test EK'
+        lastname: 'Test EK'
+        street: 'Strasse 12'
+        zipcode: 'PLZ'
+        city: 'Ort'
+        phone: ''
+        fax: ''
+        countryID: 2
+        stateId: 7
+        ustid: ''
+        additional_address_line1: ''
+        additional_address_line2: ''
+    -
+        id: 3
+        userID: 1
+        orderID: 3
+        company: ''
+        department: ''
+        salutation: 'ms'
+        customernumber: 20009
+        firstname: 'Test EK'
+        lastname: 'Test EK'
+        street: 'Strasse 12'
+        zipcode: 'PLZ'
+        city: 'Ort'
+        phone: ''
+        fax: ''
+        countryID: 2
+        stateId: 7
+        ustid: ''
+        additional_address_line1: ''
+        additional_address_line2: ''
+    -
+        id: 4
+        userID: 2
+        orderID: 4
+        company: 'Company'
+        department: 'Abteilung'
+        salutation: 'mr'
+        customernumber: 20010
+        firstname: 'Test H'
+        lastname: 'Test H'
+        street: 'Strasse 12'
+        zipcode: 'PLZ'
+        city: 'Ort'
+        phone: ''
+        fax: ''
+        countryID: 2
+        stateId: 6
+        ustid: 'DE261679493'
+        additional_address_line1: ''
+        additional_address_line2: ''
+    -
+        id: 5
+        userID: 2
+        orderID: 5
+        company: 'Company'
+        department: 'Abteilung'
+        salutation: 'mr'
+        customernumber: 20010
+        firstname: 'Test H'
+        lastname: 'Test H'
+        street: 'Strasse 12'
+        zipcode: 'PLZ'
+        city: 'Ort'
+        phone: ''
+        fax: ''
+        countryID: 2
+        stateId: 6
+        ustid: 'DE261679493'
+        additional_address_line1: ''
+        additional_address_line2: ''
 s_order_billingaddress_attributes:
-   -
-       id: 1
-       billingID: 1
-   -
-       id: 2
-       billingID: 2
+    -
+        id: 1
+        billingID: 1
+        text1: ''
+        text2: ''
+        text3: ''
+        text4: ''
+        text5: ''
+        text6: ''
+    -
+        id: 2
+        billingID: 2
+        text1: ''
+        text2: ''
+        text3: ''
+        text4: ''
+        text5: ''
+        text6: ''
+    -
+        id: 3
+        billingID: 3
+        text1: ''
+        text2: ''
+        text3: ''
+        text4: ''
+        text5: ''
+        text6: ''
+    -
+        id: 4
+        billingID: 4
+        text1: ''
+        text2: ''
+        text3: ''
+        text4: ''
+        text5: ''
+        text6: ''
+    -
+        id: 5
+        billingID: 5
+        text1: ''
+        text2: ''
+        text3: ''
+        text4: ''
+        text5: ''
+        text6: ''
 s_order_shippingaddress:
-   -
-       id: 1
-       userID: 1
-       orderID: 1
-       company: ''
-       department: ''
-       salutation: 'mrs'
-       firstname: 'Max'
-       lastname: 'Mustermann'
-       street: 'Eggeroder str.'
-       zipcode: 48624
-       city: 'Schöppingen'
-       countryID: 2
-       stateId: 0
-       additional_address_line1: ''
-       additional_address_line2: ''
-   -
-       id: 2
-       userID: 1
-       orderID: 2
-       company: ''
-       department: ''
-       salutation: 'mrs'
-       firstname: 'Max'
-       lastname: 'Mustermann'
-       street: 'Eggeroder str.'
-       zipcode: 48624
-       city: 'Schöppingen'
-       countryID: 2
-       stateId: 0
-       additional_address_line1: ''
-       additional_address_line2: ''
+    -
+        id: 1
+        userID: 1
+        orderID: 1
+        company: ''
+        department: ''
+        salutation: 'ms'
+        firstname: 'Test EK'
+        lastname: 'Test EK'
+        street: 'Strasse 12'
+        zipcode: 'PLZ'
+        city: 'Ort'
+        countryID: 2
+        stateId: 7
+        additional_address_line1: ''
+        additional_address_line2: ''
+    -
+        id: 2
+        userID: 1
+        orderID: 2
+        company: ''
+        department: ''
+        salutation: 'ms'
+        firstname: 'Test EK'
+        lastname: 'Test EK'
+        street: 'Strasse 12'
+        zipcode: 'PLZ'
+        city: 'Ort'
+        countryID: 2
+        stateId: 7
+        additional_address_line1: ''
+        additional_address_line2: ''
+    -
+        id: 3
+        userID: 1
+        orderID: 3
+        company: ''
+        department: ''
+        salutation: 'ms'
+        firstname: 'Test EK'
+        lastname: 'Test EK'
+        street: 'Strasse 12'
+        zipcode: 'PLZ'
+        city: 'Ort'
+        countryID: 2
+        stateId: 7
+        additional_address_line1: ''
+        additional_address_line2: ''
+    -
+        id: 4
+        userID: 2
+        orderID: 4
+        company: 'Company'
+        department: 'Abteilung'
+        salutation: 'mr'
+        firstname: 'Test H'
+        lastname: 'Test H'
+        street: 'Strasse 12'
+        zipcode: 'PLZ'
+        city: 'Ort'
+        countryID: 2
+        stateId: 6
+        additional_address_line1: ''
+        additional_address_line2: ''
+    -
+        id: 5
+        userID: 2
+        orderID: 5
+        company: 'Company'
+        department: 'Abteilung'
+        salutation: 'mr'
+        firstname: 'Test H'
+        lastname: 'Test H'
+        street: 'Strasse 12'
+        zipcode: 'PLZ'
+        city: 'Ort'
+        countryID: 2
+        stateId: 6
+        additional_address_line1: ''
+        additional_address_line2: ''
 s_order_shippingaddress_attributes:
-   -
-       id: 1
-       shippingID: 1
-   -
-       id: 2
-       shippingID: 2
+    -
+        id: 1
+        shippingID: 1
+        text1: ''
+        text2: ''
+        text3: ''
+        text4: ''
+        text5: ''
+        text6: ''
+    -
+        id: 2
+        shippingID: 2
+        text1: ''
+        text2: ''
+        text3: ''
+        text4: ''
+        text5: ''
+        text6: ''
+    -
+        id: 3
+        shippingID: 3
+        text1: ''
+        text2: ''
+        text3: ''
+        text4: ''
+        text5: ''
+        text6: ''
+    -
+        id: 4
+        shippingID: 4
+        text1: ''
+        text2: ''
+        text3: ''
+        text4: ''
+        text5: ''
+        text6: ''
+    -
+        id: 5
+        shippingID: 5
+        text1: ''
+        text2: ''
+        text3: ''
+        text4: ''
+        text5: ''
+        text6: ''
+s_order_documents:
+    -
+        ID: 1
+        date: '2015-10-15'
+        type: 1
+        userID: 2
+        orderID: 5
+        amount: 54.7
+        docID: '20002'
+        hash: '5f2beebd0ab260287fbafde08b91410b'
+s_order_documents_attributes:
+    -
+        id: 1
+        documentID: 1

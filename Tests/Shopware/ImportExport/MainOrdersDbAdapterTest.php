@@ -54,12 +54,13 @@ class MainOrdersDbAdapterTest extends DbAdapterTest
      * @param $ids
      * @param $expected
      * @param $expectedCount
+     * @param $section
      *
      * @dataProvider readProvider
      */
-    public function testRead($columns, $ids, $expected, $expectedCount)
+    public function testRead($columns, $ids, $expected, $expectedCount, $section)
     {
-        $this->read($columns, $ids, $expected, $expectedCount);
+        $this->read($columns, $ids, $expected, $expectedCount, $section);
     }
 
     /**

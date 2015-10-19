@@ -67,7 +67,7 @@ class MainOrdersDbAdapter implements DataDbAdapter
         /* @var \Doctrine\DBAL\Query\QueryBuilder */
         $builder = $connection->createQueryBuilder();
         $builder->select('id')
-            ->from('s_order');
+                ->from('s_order');
 
         if (isset($filter['orderstate']) && is_numeric($filter['orderstate'])) {
             $builder->andWhere('status = :orderstate');
@@ -96,7 +96,7 @@ class MainOrdersDbAdapter implements DataDbAdapter
         }
 
         $builder->setFirstResult($start)
-            ->setMaxResults($limit);
+                ->setMaxResults($limit);
 
         $ids = $builder->execute()->fetchAll(\PDO::FETCH_COLUMN);
 
@@ -129,55 +129,97 @@ class MainOrdersDbAdapter implements DataDbAdapter
             throw new \Exception($message);
         }
 
-        $builder = $this->getManager()->createQueryBuilder();
-        $builder->select($columns)
-            ->from('Shopware\Models\Order\Order', 'orders')
-            ->leftJoin('orders.attribute', 'attr')
-            ->leftJoin('orders.payment', 'payment')
-            ->leftJoin('orders.customer', 'customer')
-            ->leftJoin('orders.billing', 'billing')
-            ->leftJoin('orders.shipping', 'shipping')
-            ->leftJoin('shipping.country', 'shippingCountry')
-            ->leftJoin('customer.group', 'customerGroup')
-            ->leftJoin('orders.paymentStatus', 'paymentStatus')
-            ->leftJoin('orders.orderStatus', 'orderStatus')
-            ->where('orders.id IN (:ids)')
-            ->setParameter('ids', $ids);
+        $result = array();
 
-        $orders = $builder->getQuery()->getResult();
-        $orders = DbAdapterHelper::decodeHtmlEntities($orders);
-        $orders = DbAdapterHelper::escapeNewLines($orders);
+        // orders
+        if (!empty($columns['order'])) {
+            $orderBuilder = $this->getOrderBuilder($columns['order'], $ids);
+            $orders = $orderBuilder->getQuery()->getResult();
+            $orders = DbAdapterHelper::decodeHtmlEntities($orders);
+            $orders = DbAdapterHelper::escapeNewLines($orders);
+            $result = array('order' => $orders);
+        }
 
-        return array('default' => $orders);
+        if (!empty($columns['taxRate'])) {
+            $taxRates = $this->getTaxRates($ids);
+            $result['taxRate'] = $taxRates;
+        }
+
+        if (!empty($columns['taxRateSum'])) {
+            $taxRateSums = $this->getTaxSums($ids);
+            $result['taxRateSum'] = $taxRateSums;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Returns default columns
+     *
+     * @return array
+     */
+    public function getDefaultColumns()
+    {
+        $columns['order'] = $this->getOrderColumns();
+        $columns['taxRate'] = array('taxRates');
+        $columns['taxRateSum'] = array('taxRateSums');
+
+        return $columns;
     }
 
     /**
      * @return array
      */
-    public function getDefaultColumns()
+    public function getOrderColumns()
     {
         $columns = array(
             'orders.id as orderId',
             'orders.number as orderNumber',
+            'documents.documentId as invoiceNumber',
             'orders.invoiceAmount',
             'orders.invoiceAmountNet',
             'orders.invoiceShipping',
             'orders.invoiceShippingNet',
+            'SUM(orders.invoiceShipping - orders.invoiceShippingNet) as taxSumShipping',
+            'orders.net',
             'orders.taxFree',
+            'payment.description as paymentName',
+            'paymentStatus.description as paymentState',
+            'orderStatus.description as orderState',
             'orders.currency',
             'orders.currencyFactor',
-            'payment.description as paymentName',
             'orders.transactionId',
             'orders.trackingCode',
             "DATE_FORMAT(orders.orderTime, '%Y-%m-%d %H:%i:%s') as orderTime",
             'customer.email',
             'billing.number as customerNumber',
-            'billing.firstName as bFirstName',
-            'billing.lastName as bLastName',
-            'shippingCountry.name as countryName',
             'customerGroup.name as customerGroupName',
-            'paymentStatus.description as paymentState',
-            'orderStatus.description as orderState'
+            'billing.salutation as billingSalutation',
+            'billing.firstName as billingFirstName',
+            'billing.lastName as billingLastName',
+            'billing.company as billingCompany',
+            'billing.department as billingDepartment',
+            'billing.street as billingStreet',
+            'billing.zipCode as billingZipCode',
+            'billing.city as billingCity',
+            'billing.phone as billingPhone',
+            'billing.fax as billingFax',
+            'billing.additionalAddressLine1 as billingAdditionalAddressLine1',
+            'billing.additionalAddressLine2 as billingAdditionalAddressLine2',
+            'bState.name as billingState',
+            'bCountry.name as billingCountry',
+            'shipping.salutation as shippingSalutation',
+            'shipping.firstName as shippingFirstName',
+            'shipping.lastName as shippingLastName',
+            'shipping.company as shippingCompany',
+            'shipping.department as shippingDepartment',
+            'shipping.street as shippingStreet',
+            'shipping.zipCode as shippingZipCode',
+            'shipping.city as shippingCity',
+            'shipping.additionalAddressLine1 as shippingAdditionalAddressLine1',
+            'shipping.additionalAddressLine2 as shippingAdditionalAddressLine2',
+            'sState.name as shippingState',
+            'sCountry.name as shippingCountry'
         );
 
         $attributesSelect = $this->getAttributes();
@@ -274,8 +316,18 @@ class MainOrdersDbAdapter implements DataDbAdapter
     public function getSections()
     {
         return array(
-            array('id' => 'default', 'name' => 'default')
+            array('id' => 'order', 'name' => 'order'),
+            array('id' => 'taxRate', 'name' => 'taxRate'),
+            array('id' => 'taxRateSum', 'name' => 'taxRateSum')
         );
+    }
+
+    /**
+     * @return array
+     */
+    public function getParentKeys()
+    {
+        return array('orders.id as orderId');
     }
 
     /**
@@ -290,5 +342,141 @@ class MainOrdersDbAdapter implements DataDbAdapter
         }
 
         return false;
+    }
+
+    /**
+     * @param array $columns
+     * @param array $ids
+     * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
+     */
+    public function getOrderBuilder($columns, $ids)
+    {
+        $builder = $this->getManager()->createQueryBuilder();
+        $builder->select($columns)
+            ->from('Shopware\Models\Order\Order', 'orders')
+            ->leftJoin('orders.attribute', 'attr')
+            ->leftJoin('orders.payment', 'payment')
+            ->leftJoin('orders.customer', 'customer')
+            ->leftJoin('orders.billing', 'billing')
+            ->leftJoin('orders.documents', 'documents', 'WITH', 'documents.typeId = 1')
+            ->leftJoin('billing.state', 'bState')
+            ->leftJoin('billing.country', 'bCountry')
+            ->leftJoin('orders.shipping', 'shipping')
+            ->leftJoin('shipping.state', 'sState')
+            ->leftJoin('shipping.country', 'sCountry')
+            ->leftJoin('customer.group', 'customerGroup')
+            ->leftJoin('orders.paymentStatus', 'paymentStatus')
+            ->leftJoin('orders.orderStatus', 'orderStatus')
+            ->where('orders.id IN (:ids)')
+            ->groupBy('orders.id')
+            ->setParameter('ids', $ids);
+
+        return $builder;
+    }
+
+    /**
+     * @param array $ids
+     * @return array
+     */
+    private function getTaxRates($ids)
+    {
+        $taxRateBuilder = $this->getTaxRateBuilder($ids);
+        $taxRates = $taxRateBuilder->getQuery()->getResult();
+
+        $taxRates = array_filter($taxRates, function($rate) {
+            return (bool) $rate['taxRates'];
+        });
+
+        return $taxRates;
+    }
+
+    /**
+     * @param array $ids
+     * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
+     */
+    public function getTaxRateBuilder($ids)
+    {
+        $builder = $this->getManager()->createQueryBuilder();
+        $builder->select(array('details.orderId, taxes.tax as taxRates'))
+            ->from('Shopware\Models\Order\Order', 'orders')
+            ->leftJoin('orders.details', 'details')
+            ->leftJoin('details.tax', 'taxes', 'WITH', 'details.taxRate = taxes.tax')
+            ->where('details.orderId IN (:ids)')
+            ->andWhere('orders.taxFree = 0')
+            ->setParameter('ids', $ids);
+
+        return $builder;
+    }
+
+    /**
+     * @param array $ids
+     * @return array
+     */
+    private function getTaxSums($ids)
+    {
+        $sum = array();
+        $taxSumBuilder = $this->getTaxSumBuilder($ids);
+        $taxData = $taxSumBuilder->getQuery()->getResult();
+        foreach ($ids as $orderId) {
+            foreach ($taxData as $data) {
+                if ($data['orderId'] != $orderId) {
+                    continue;
+                }
+
+                $sum[$orderId]['taxRateSums'][(string) $data['taxRate']] += $this->calculateTaxSum($data);
+            }
+        }
+
+        $result = array();
+        foreach ($sum as $orderId => $taxSum) {
+            foreach ($taxSum['taxRateSums'] as $taxRate => $vat) {
+                $result[] = array(
+                    'orderId' => $orderId,
+                    'taxRateSums' => $vat
+                );
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param array $ids
+     * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
+     */
+    public function getTaxSumBuilder($ids)
+    {
+        $builder = $this->getManager()->createQueryBuilder();
+        $builder->select(array('details.orderId, orders.invoiceAmount, orders.invoiceAmountNet, orders.invoiceShipping, orders.invoiceShippingNet, orders.net, details.price, details.quantity, details.taxId, details.taxRate'))
+            ->from('Shopware\Models\Order\Order', 'orders')
+            ->leftJoin('orders.details', 'details')
+            ->where('details.orderId IN (:ids)')
+            ->andWhere('orders.taxFree = 0')
+            ->setParameter('ids', $ids);
+
+        return $builder;
+    }
+
+    /**
+     * @param array $taxData
+     * @return float
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     */
+    private function calculateTaxSum($taxData)
+    {
+        $taxModel = $this->getManager()->find('Shopware\Models\Tax\Tax', $taxData['taxId']);
+        $taxValue = $taxData['taxRate'];
+        if ($taxModel && $taxModel->getId() !== 0 && $taxModel->getId() !== null && $taxModel->getTax() !== null) {
+            $taxValue = $taxModel->getTax();
+        }
+
+        $price = $taxData['price'] * $taxData['quantity'];
+        if ($taxData['net']) {
+            return round(($taxValue / 100) * $price, 2);
+        } else {
+            return round($price * ($taxValue / (100 + $taxValue)), 2);
+        }
     }
 }

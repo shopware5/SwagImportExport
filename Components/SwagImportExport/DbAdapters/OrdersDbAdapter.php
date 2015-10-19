@@ -97,11 +97,12 @@ class OrdersDbAdapter implements DataDbAdapter
     }
 
     /**
-     * Returns categories 
-     * 
+     * Returns categories
+     *
      * @param array $ids
      * @param array $columns
      * @return array
+     * @throws \Exception
      */
     public function read($ids, $columns)
     {
@@ -316,7 +317,7 @@ class OrdersDbAdapter implements DataDbAdapter
     
     public function getDefaultColumns()
     {
-       $columns = array(
+        $columns = array(
             'details.orderId as orderId',
             'details.id as orderDetailId',
             'details.articleId as articleId',
@@ -386,15 +387,9 @@ class OrdersDbAdapter implements DataDbAdapter
             'billingCountry.name as billingCountryName',
             'billingCountry.isoName as billingCountryen',
             'billingCountry.iso as billingCountryIso',
+            'billing.additionalAddressLine1 as billingAdditionalAddressLine1',
+            'billing.additionalAddressLine2 as billingAdditionalAddressLine2'
         );
-
-        //shopware 5 additional columns
-        if ($this->isAdditionalBillingAddressExists()){
-            $billingColumns[] = 'billing.additionalAddressLine1 as billingAdditionalAddressLine1';
-            $billingColumns[] = 'billing.additionalAddressLine2 as billingAdditionalAddressLine2';
-        } else {
-            $billingColumns[] =  'billing.streetNumber as billingStreetnumber';
-        }
 
         $columns = array_merge($columns, $billingColumns);
 
@@ -410,16 +405,9 @@ class OrdersDbAdapter implements DataDbAdapter
             'shippingCountry.name as shippingCountryName',
             'shippingCountry.isoName as shippingCountryIsoName',
             'shippingCountry.iso as shippingCountryIso',
-
+            'shipping.additionalAddressLine1 as shippingAdditionalAddressLine1',
+            'shipping.additionalAddressLine2 as shippingAdditionalAddressLine2'
         );
-
-        //shopware 5 additional columns
-        if ($this->isAdditionalShippingAddressExists()){
-            $columns[] = 'shipping.additionalAddressLine1 as shippingAdditionalAddressLine1';
-            $columns[] = 'shipping.additionalAddressLine2 as shippingAdditionalAddressLine2';
-        } else {
-            $columns[] = 'shipping.streetNumber as shippingStreetnumber';
-        }
 
         $columns = array_merge($columns, $shippingColumns);
 
@@ -532,25 +520,8 @@ class OrdersDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @return bool
+     * @return OrderValidator
      */
-    public function isAdditionalBillingAddressExists()
-    {
-        $sql = "SHOW COLUMNS FROM `s_user_billingaddress` LIKE 'additional_address_line1'";
-        $result = Shopware()->Db()->fetchRow($sql);
-        return $result ? true : false;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isAdditionalShippingAddressExists()
-    {
-        $sql = "SHOW COLUMNS FROM `s_user_shippingaddress` LIKE 'additional_address_line1'";
-        $result = Shopware()->Db()->fetchRow($sql);
-        return $result ? true : false;
-    }
-
     public function getValidator()
     {
         if ($this->validator === null) {
