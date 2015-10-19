@@ -342,26 +342,6 @@ s_order_details:
         id: 1
         orderID: 1
         ordernumber: 20010
-        articleID: 5
-        articleordernumber: 'SW10004'
-        price: 10
-        quantity: 2
-        name: 'Test 7'
-        status: 0
-        shipped: 0
-        releasedate: '0000-00-00'
-        modus: 0
-        esdarticle: 0
-        taxID: 4
-        tax_rate: 7
-        config: ''
-        ean: ''
-        unit: ''
-        pack_unit: ''
-    -
-        id: 2
-        orderID: 1
-        ordernumber: 20010
         articleID: 7
         articleordernumber: 'SW10006'
         price: 30
@@ -374,6 +354,26 @@ s_order_details:
         esdarticle: 0
         taxID: 5
         tax_rate: 20
+        config: ''
+        ean: ''
+        unit: ''
+        pack_unit: ''
+    -
+        id: 2
+        orderID: 1
+        ordernumber: 20010
+        articleID: 5
+        articleordernumber: 'SW10004'
+        price: 10
+        quantity: 2
+        name: 'Test 7'
+        status: 0
+        shipped: 0
+        releasedate: '0000-00-00'
+        modus: 0
+        esdarticle: 0
+        taxID: 4
+        tax_rate: 7
         config: ''
         ean: ''
         unit: ''

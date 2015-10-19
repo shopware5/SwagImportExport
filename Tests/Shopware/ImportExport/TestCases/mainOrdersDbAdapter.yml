@@ -1,5 +1,5 @@
 testReadRecordIds:
-    0:
+    readRecordIdsTest1:
         start: 0
         limit: 100
         filter:
@@ -10,7 +10,7 @@ testReadRecordIds:
             3: '4'
             4: '5'
         expectedCount: 5
-    1:
+    readRecordIdsTest2:
         start: 1
         limit: 100
         filter:
@@ -20,13 +20,13 @@ testReadRecordIds:
             2: '4'
             3: '5'
         expectedCount: 4
-    2:
+    readRecordIdsTest3:
         start: 100
         limit: 100
         filter:
         expectedIds:
         expectedCount: 0
-    3:
+    readRecordIdsTest4:
         start: 0
         limit: 100
         filter:
@@ -38,21 +38,21 @@ testReadRecordIds:
             3: '4'
             4: '5'
         expectedCount: 5
-    4:
+    readRecordIdsTest5:
         start: 0
         limit: 100
         filter:
             orderstate: 1
         expectedIds:
         expectedCount: 0
-    5:
+    readRecordIdsTest6:
         start: 0
         limit: 100
         filter:
             orderstate: 2
         expectedIds:
         expectedCount: 0
-    6:
+    readRecordIdsTest7:
         start: 0
         limit: 100
         filter:
@@ -60,7 +60,7 @@ testReadRecordIds:
             ordernumberFrom: 20001
         expectedIds:
         expectedCount: 0
-    7:
+    readRecordIdsTest8:
         start: 0
         limit: 100
         filter:
@@ -69,7 +69,7 @@ testReadRecordIds:
             dateFrom: '2015-10-05 00:00:00'
         expectedIds:
         expectedCount: 0
-    8:
+    readRecordIdsTest9:
         start: 0
         limit: 100
         filter:
@@ -78,7 +78,7 @@ testReadRecordIds:
             dateFrom: '2015-10-01 00:00:00'
         expectedIds:
         expectedCount: 0
-    9:
+    readRecordIdsTest10:
         start: 0
         limit: 100
         filter:
@@ -93,7 +93,7 @@ testReadRecordIds:
             4: '5'
         expectedCount: 5
 testRead:
-    0:
+    readTest1:
         columns:
             order: "orders.id as orderId, orders.number as orderNumber, documents.documentId as invoiceNumber, orders.invoiceAmount, orders.invoiceAmountNet, orders.invoiceShipping, orders.invoiceShippingNet, SUM(orders.invoiceShipping - orders.invoiceShippingNet) as taxSumShipping, orders.net, orders.taxFree, payment.description as paymentName, paymentStatus.description as paymentState, orderStatus.description as orderState, orders.currency, orders.currencyFactor, orders.transactionId, orders.trackingCode, DATE_FORMAT(orders.orderTime, '%Y-%m-%d %H:%i:%s') as orderTime, customer.email, billing.number as customerNumber, customerGroup.name as customerGroupName, billing.salutation as billingSalutation, billing.firstName as billingFirstName, billing.lastName as billingLastName, billing.company as billingCompany, billing.department as billingDepartment, billing.street as billingStreet, billing.zipCode as billingZipCode, billing.city as billingCity, billing.phone as billingPhone, billing.fax as billingFax, billing.additionalAddressLine1 as billingAdditionalAddressLine1, billing.additionalAddressLine2 as billingAdditionalAddressLine2, bState.name as billingState, bCountry.name as billingCountry, shipping.salutation as shippingSalutation, shipping.firstName as shippingFirstName, shipping.lastName as shippingLastName, shipping.company as shippingCompany, shipping.department as shippingDepartment, shipping.street as shippingStreet, shipping.zipCode as shippingZipCode, shipping.city as shippingCity, shipping.additionalAddressLine1 as shippingAdditionalAddressLine1, shipping.additionalAddressLine2 as shippingAdditionalAddressLine2, sState.name as shippingState, sCountry.name as shippingCountry"
         ids: [1]
@@ -148,38 +148,7 @@ testRead:
                 shippingCountry: 'Deutschland'
         expectedCount: 1
         section: 'order'
-    1:
-        columns:
-            taxRate: 'taxRates'
-        ids: [1,2,3,4,5]
-        expected:
-            0:
-                orderId: 1
-                taxRates: '7.00'
-            1:
-                orderId: 1
-                taxRates: '20.00'
-            3:
-                orderId: 2
-                taxRates: '19.00'
-            5:
-                orderId: 3
-                taxRates: '7.00'
-            6:
-                orderId: 3
-                taxRates: '19.00'
-            8:
-                orderId: 5
-                taxRates: '7.00'
-            9:
-                orderId: 5
-                taxRates: '19.00'
-            10:
-                orderId: 5
-                taxRates: '20.00'
-        expectedCount: 8
-        section: 'taxRate'
-    2:
+    readTest2:
         columns:
             taxRateSum: 'taxRateSums'
         ids: [1,2,3,4,5]
@@ -187,39 +156,47 @@ testRead:
             0:
                 orderId: 1
                 taxRateSums: 1.31
+                taxRate: 7
             1:
                 orderId: 1
                 taxRateSums: 4.67
+                taxRate: 20
             2:
                 orderId: 2
                 taxRateSums: 2.87
+                taxRate: 19
             3:
                 orderId: 3
                 taxRateSums: 0.65
+                taxRate: 7
             4:
                 orderId: 3
                 taxRateSums: 6.01
+                taxRate: 19
             5:
                 orderId: 5
                 taxRateSums: 0.35
+                taxRate: 7
             6:
                 orderId: 5
                 taxRateSums: 2.85
+                taxRate: 19
             7:
                 orderId: 5
                 taxRateSums: 4.6
+                taxRate: 20
         expectedCount: 8
         section: 'taxRateSum'
 testReadColumnsException:
-    0:
+    readColumnsExceptionTest1:
         columns:
         ids: [1]
 testReadIdsException:
-    0:
+    readIdsExceptionTest1:
         columns: 'orders.id, orders.number'
         ids:
 testDefaultColumns:
-    0:
+    defaultColumnsTest1:
         expectedColumns:
             order:
                 0: "orders.id as orderId"
@@ -275,13 +252,12 @@ testDefaultColumns:
                 50: "attr.attribute4 as attributeAttribute4"
                 51: "attr.attribute5 as attributeAttribute5"
                 52: "attr.attribute6 as attributeAttribute6"
-            taxRate:
-                0: "taxRates"
             taxRateSum:
                 0: "taxRateSums"
-        expectedCount: 3
+                1: "taxRate"
+        expectedCount: 2
 testWrite:
-    0:
+    writeTest1:
         records:
             order0:
                   orderId: 1

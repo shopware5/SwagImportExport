@@ -140,11 +140,6 @@ class MainOrdersDbAdapter implements DataDbAdapter
             $result = array('order' => $orders);
         }
 
-        if (!empty($columns['taxRate'])) {
-            $taxRates = $this->getTaxRates($ids);
-            $result['taxRate'] = $taxRates;
-        }
-
         if (!empty($columns['taxRateSum'])) {
             $taxRateSums = $this->getTaxSums($ids);
             $result['taxRateSum'] = $taxRateSums;
@@ -161,10 +156,14 @@ class MainOrdersDbAdapter implements DataDbAdapter
     public function getDefaultColumns()
     {
         $columns['order'] = $this->getOrderColumns();
-        $columns['taxRate'] = array('taxRates');
-        $columns['taxRateSum'] = array('taxRateSums');
+        $columns['taxRateSum'] = array('taxRateSums', 'taxRate');
 
         return $columns;
+    }
+
+    public function getTaxRateSumColumns()
+    {
+        return array('taxRateSums', 'taxRate');
     }
 
     /**
@@ -317,7 +316,6 @@ class MainOrdersDbAdapter implements DataDbAdapter
     {
         return array(
             array('id' => 'order', 'name' => 'order'),
-            array('id' => 'taxRate', 'name' => 'taxRate'),
             array('id' => 'taxRateSum', 'name' => 'taxRateSum')
         );
     }
@@ -378,40 +376,6 @@ class MainOrdersDbAdapter implements DataDbAdapter
      * @param array $ids
      * @return array
      */
-    private function getTaxRates($ids)
-    {
-        $taxRateBuilder = $this->getTaxRateBuilder($ids);
-        $taxRates = $taxRateBuilder->getQuery()->getResult();
-
-        $taxRates = array_filter($taxRates, function($rate) {
-            return (bool) $rate['taxRates'];
-        });
-
-        return $taxRates;
-    }
-
-    /**
-     * @param array $ids
-     * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
-     */
-    public function getTaxRateBuilder($ids)
-    {
-        $builder = $this->getManager()->createQueryBuilder();
-        $builder->select(array('details.orderId, taxes.tax as taxRates'))
-            ->from('Shopware\Models\Order\Order', 'orders')
-            ->leftJoin('orders.details', 'details')
-            ->leftJoin('details.tax', 'taxes', 'WITH', 'details.taxRate = taxes.tax')
-            ->where('details.orderId IN (:ids)')
-            ->andWhere('orders.taxFree = 0')
-            ->setParameter('ids', $ids);
-
-        return $builder;
-    }
-
-    /**
-     * @param array $ids
-     * @return array
-     */
     private function getTaxSums($ids)
     {
         $sum = array();
@@ -432,7 +396,8 @@ class MainOrdersDbAdapter implements DataDbAdapter
             foreach ($taxSum['taxRateSums'] as $taxRate => $vat) {
                 $result[] = array(
                     'orderId' => $orderId,
-                    'taxRateSums' => $vat
+                    'taxRateSums' => $vat,
+                    'taxRate' => $taxRate
                 );
             }
         }
@@ -452,7 +417,8 @@ class MainOrdersDbAdapter implements DataDbAdapter
             ->leftJoin('orders.details', 'details')
             ->where('details.orderId IN (:ids)')
             ->andWhere('orders.taxFree = 0')
-            ->setParameter('ids', $ids);
+            ->setParameter('ids', $ids)
+            ->orderBy('details.orderId, details.taxRate', 'ASC');
 
         return $builder;
     }
