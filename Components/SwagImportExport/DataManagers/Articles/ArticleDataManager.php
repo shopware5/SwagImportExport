@@ -5,8 +5,10 @@ namespace Shopware\Components\SwagImportExport\DataManagers\Articles;
 use Shopware\Components\SwagImportExport\DbalHelper;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
+use Shopware\Components\SwagImportExport\DataManagers\DataManager;
+use Shopware\Components\SwagImportExport\DataType\ArticleDataType;
 
-class ArticleDataManager
+class ArticleDataManager extends DataManager
 {
     /** @var \Enlight_Components_Db_Adapter_Pdo_Mysql */
     private $db = null;
@@ -18,51 +20,15 @@ class ArticleDataManager
 
     private $suppliers = null;
 
-    /** Define which field should be set by default */
-    private $defaultFields = array(
-        'taxId',
-        'supplierId',
-    );
-
-    /** Define which field should be set by default on article create */
-    private static $defaultFieldsForCreate = array(
-        'taxId',
-        'supplierId',
-        'availableFrom',
-        'availableTo',
-        'supplierName',
-        'tax',
-        'inStock',
-        'active',
-        'stockMin',
-        'shippingTime',
-        'shippingFree',
-        'attributeAttr1',
-        'attributeAttr2',
-        'attributeAttr3',
-        'attributeAttr4',
-        'attributeAttr5',
-        'attributeAttr6',
-        'attributeAttr7',
-        'attributeAttr8',
-        'attributeAttr9',
-        'attributeAttr10',
-        'attributeAttr11',
-        'attributeAttr12',
-        'attributeAttr13',
-        'attributeAttr14',
-        'attributeAttr15',
-        'attributeAttr16',
-        'attributeAttr17',
-        'attributeAttr18',
-        'attributeAttr19',
-        'attributeAttr20',
-    );
-
     public function __construct(\Enlight_Components_Db_Adapter_Pdo_Mysql $db, DbalHelper $dbalHelper)
     {
         $this->db = $db;
         $this->dbalHelper = $dbalHelper;
+    }
+
+    public function getDefaultFields()
+    {
+        return ArticleDataType::$defaultFieldsForCreate;
     }
 
     /**
@@ -70,9 +36,12 @@ class ArticleDataManager
      *
      * @return array
      */
-    public function getDefaultFields()
+    public function getDefaultFieldsName()
     {
-        return self::$defaultFieldsForCreate;
+        $defaultFieldsForCreate = $this->getDefaultFields();
+        $defaultFields = $this->getFields($defaultFieldsForCreate);
+
+        return $defaultFields;
     }
 
     /**
@@ -143,7 +112,7 @@ class ArticleDataManager
      */
     public function setDefaultFieldsForCreate($record, $defaultValues)
     {
-        $getDefaultFields = $this->getDefaultFields();
+        $getDefaultFields = $this->getDefaultFieldsName();
         foreach ($getDefaultFields as $key) {
             if (isset($record[$key])) {
                 continue;
@@ -165,32 +134,45 @@ class ArticleDataManager
             }
         }
 
+        $record['taxId'] = $this->getTaxId($record);
+
         return $record;
     }
 
     /**
+     * Get valid tax id depending on tax id or tax rate field.
+     *
      * @param array $record
      * @return mixed
      * @throws AdapterException
      */
     private function getTaxId($record)
     {
-        $taxId = isset($record['tax']) ? $this->getTaxByTaxRate($record['tax'], $record['orderNumber']) : $this->getTaxByDefault();
+        $taxes = $this->getTaxRates();
 
-        return $taxId;
+        $taxIds = array_keys($taxes);
+
+        if (isset($record['taxId']) && in_array($record['taxId'], $taxIds)) {
+            return $record['taxId'];
+        } else if(isset($record['tax'])) {
+            $taxId = $this->getTaxByTaxRate($record['tax'], $taxes, $record['orderNumber']);
+            return $taxId;
+        }
+
+        return;
     }
 
     /**
      * @param float $taxRate
+     * @param array $taxRates
      * @param string $orderNumber
      * @return mixed
      * @throws AdapterException
      */
-    private function getTaxByTaxRate($taxRate, $orderNumber)
+    private function getTaxByTaxRate($taxRate, $taxRates, $orderNumber)
     {
         $taxRate = number_format($taxRate, 2);
 
-        $taxRates = $this->getTaxRates();
         $taxId = array_search($taxRate, $taxRates);
 
         if (!$taxId) {
@@ -202,16 +184,6 @@ class ArticleDataManager
         }
 
         return $taxId;
-    }
-
-    /**
-     * @return mixed
-     */
-    private function getTaxByDefault()
-    {
-        // todo: read default tax rate from config
-        $taxRates = $this->getTaxRates();
-        return array_shift(array_keys($taxRates));
     }
 
     /**
@@ -249,7 +221,8 @@ class ArticleDataManager
      */
     public function setDefaultFields($record)
     {
-        foreach ($this->defaultFields as $key) {
+        $getDefaultFields = $this->getDefaultFieldsName();
+        foreach ($getDefaultFields as $key) {
             if (isset($record[$key])) {
                 continue;
             }

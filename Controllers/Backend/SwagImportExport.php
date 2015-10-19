@@ -125,6 +125,12 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $data = $this->Request()->getParam('data', 1);
         $profileRepository = $this->getProfileRepository();
         $profileEntity = $profileRepository->findOneBy(array('id' => $profileId));
+        $profileType = $profileEntity->getType();
+
+        $dataManager = $this->Plugin()->getDataFactory()->createDataManager($profileType);
+        if ($dataManager) {
+            $defaultFields = $dataManager->getDefaultFields();
+        }
 
         $tree = json_decode($profileEntity->getTree(), 1);
 
@@ -135,7 +141,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $errors = false;
         
         foreach ($data as &$node) {
-            if (!TreeHelper::changeNode($node, $tree)) {
+            if (!TreeHelper::changeNode($node, $tree, $defaultFields)) {
                 $errors = true;
                 break;
             }
@@ -1094,6 +1100,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $dataManager = $this->Plugin()->getDataFactory()->createDataManager($type);
         if ($dataManager) {
             $defaultFields = $dataManager->getDefaultFields();
+            $defaultFieldsName = $dataManager->getDefaultFieldsName();
         }
 
         $columns = $dbAdapter->getColumns($section);
@@ -1129,9 +1136,10 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
             $column = array('id' => $column, 'name' => $column);
 
-            if ($defaultFields) {
-                if (in_array($column['name'], $defaultFields)) {
+            if ($defaultFieldsName) {
+                if (in_array($column['name'], $defaultFieldsName)) {
                     $column['default'] = true;
+                    $column['type'] = $dataManager->getFieldType($column['name'], $defaultFields);
                 }
             }
         }

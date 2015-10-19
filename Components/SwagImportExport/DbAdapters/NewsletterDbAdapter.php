@@ -2,6 +2,7 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
+use Shopware\Components\SwagImportExport\DataType\NewsletterDataType;
 use Shopware\Models\Newsletter\Address;
 use Shopware\Models\Newsletter\Group;
 use Shopware\Models\Newsletter\ContactData;
@@ -166,11 +167,11 @@ class NewsletterDbAdapter implements DataDbAdapter
 
                 $recipient = $this->getAddressRepository()->findOneByEmail($newsletterData['email']);
                 if (!$recipient instanceof Address) {
-                    $newsletterData = $dataManager->setDefaultFields($newsletterData, $defaultValues);
+                    $newsletterData = $dataManager->setDefaultFieldsForCreate($newsletterData, $defaultValues);
                     $recipient = new Address();
                 }
 
-                $validator->validate($newsletterData, NewsletterValidator::$mapper);
+                $validator->validate($newsletterData, NewsletterDataType::$mapper);
 
                 if ($newsletterData['groupName']) {
                     $group = $this->getGroupRepository()->findOneByName($newsletterData['groupName']);

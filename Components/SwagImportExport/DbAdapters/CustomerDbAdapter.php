@@ -2,6 +2,7 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
+use Shopware\Components\SwagImportExport\DataType\CustomerDataType;
 use Shopware\Models\Customer\Customer;
 use Shopware\Components\SwagImportExport\Utils\DataHelper;
 use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
@@ -312,12 +313,12 @@ class CustomerDbAdapter implements DataDbAdapter
                 $customer = $this->findExistingEntries($record);
 
                 if (!$customer instanceof Customer) {
-                    $record = $dataManager->setDefaultFields($record, $defaultValues);
+                    $record = $dataManager->setDefaultFieldsForCreate($record, $defaultValues);
                     $validator->checkRequiredFieldsForCreate($record);
                     $customer = new Customer();
                 }
 
-                $validator->validate($record, CustomerValidator::$mapper);
+                $validator->validate($record, CustomerDataType::$mapper);
 
                 $this->preparePassword($record);
 

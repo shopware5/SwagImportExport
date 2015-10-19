@@ -7,47 +7,6 @@ use Shopware\Components\SwagImportExport\Exception\AdapterException;
 
 class CustomerValidator extends Validator
 {
-    public static $mapper = array(
-        'string' => array( //TODO: maybe we don't need to check fields which contains string?
-            'customerNumber',
-            'password',
-            'encoder',
-            'billingCompany',
-            'billingDepartment',
-            'billingSalutation',
-            'billingFirstname',
-            'billingLastname',
-            'billingStreet',
-            'billingStreetnumber',
-            'billingZipcode',
-            'billingCity',
-            'billingPhone',
-            'billingFax',
-            'ustid',
-            'shippingCompany',
-            'shippingDepartment',
-            'shippingSalutation',
-            'shippingFirstname',
-            'shippingLastname',
-            'shippingStreet',
-            'shippingStreetnumber',
-            'shippingZipcode',
-            'customergroup',
-            'language',
-            'active',
-        ),
-        'email' => array('email'),
-        'int' => array(
-            'billingCountryID',
-            'billingStateID',
-            'shippingCountryID',
-            'paymentID',
-            'newsletter',
-            'accountMode',
-            'subshopID',
-        ),
-    );
-
     private $requiredFields = array(
         'email'
     );

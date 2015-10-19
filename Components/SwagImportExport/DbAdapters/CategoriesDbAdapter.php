@@ -3,6 +3,7 @@
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
 use Shopware\Components\SwagImportExport\DataManagers\CategoriesDataManager;
+use Shopware\Components\SwagImportExport\DataType\CategoryDataType;
 use Shopware\Models\Category\Category;
 use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
@@ -210,8 +211,18 @@ class CategoriesDbAdapter implements DataDbAdapter
         foreach ($records['default'] as $index => $record) {
             try {
                 $record = $validator->prepareInitialData($record);
+
+                $category = $this->findExistingEntries($record);
+                if (!$category instanceof Category) {
+                    $record = $dataManager->setDefaultFieldsForCreate($record, $defaultValues);
+                    $category = new Category();
+                    if (isset($record['categoryId'])) {
+                        $category->setId($record['categoryId']);
+                    }
+                }
+
                 $validator->checkRequiredFields($record);
-                $validator->validate($record, CategoryValidator::$mapper);
+                $validator->validate($record, CategoryDataType::$mapper);
 
                 $record['parent'] = $this->getRepository()->findOneBy(array('id' => $record['parentId']));
                 if (!$record['parent'] instanceof Category) {
@@ -220,16 +231,7 @@ class CategoriesDbAdapter implements DataDbAdapter
                     throw new AdapterException(sprintf($message, $record['name']));
                 }
 
-                $category = $this->findExistingEntries($record);
-                if (!$category instanceof Category) {
-                    $record = $dataManager->setDefaultFields($record, $defaultValues);
-                    $category = new Category();
-                    if (isset($record['categoryId'])) {
-                        $category->setId($record['categoryId']);
-                    }
-                }
-
-                $record = $this->prepareData($record, $index, $category->getId(), $records['customerGroups']);
+               $record = $this->prepareData($record, $index, $category->getId(), $records['customerGroups']);
 
                 $category->fromArray($record);
 

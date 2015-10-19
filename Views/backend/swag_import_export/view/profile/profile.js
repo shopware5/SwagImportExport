@@ -305,6 +305,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
 			hideFields: function() {
 				this.child('#nodeName').hide();
 				this.child('#swColumn').hide();
+				this.child('#defaultValue').hide();
 			},
 			fillForm: function() {
 				var node = me.treeStore.getById(me.selectedNodeId);
@@ -350,6 +351,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
 					this.child('#swColumn').hide();
                     this.child('#adapter').hide();
                     this.child('#parentKey').hide();
+                    this.child('#defaultValue').hide();
 				}
 			},
 			items: [{
@@ -385,13 +387,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
 					allowBlank: false,
                     listeners: {
                         change: function(field, newValue) {
-                            me.formPanel.child('#defaultValue').hide();
-                            var record = me.columnStore.getById(newValue);
-                            if (record) {
-                                if (record.get('default')) {
-                                    me.formPanel.child('#defaultValue').show();
-                                }
-                            }
+                            me.fireEvent('changeColumn', me.columnStore, newValue);
                         }
                     }
 				}, {
@@ -447,7 +443,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
 						}]
 				}]
 		});
-		
+
 		return me.formPanel;
 	}
 });

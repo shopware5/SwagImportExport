@@ -7,21 +7,6 @@ use Shopware\Components\SwagImportExport\Exception\AdapterException;
 
 class NewsletterValidator extends Validator
 {
-    public static $mapper = array(
-        'email' => array('email'),
-        'string' => array( //TODO: maybe we don't need to check fields which contains string?
-            'groupName',
-            'salutation',
-            'firstName',
-            'lastName',
-            'street',
-            'streetNumber',
-            'zipCode',
-            'city',
-        ),
-        'int' => array('lastNewsletter', 'lastRead', 'userID'),
-    );
-
     private $requiredFields = array(
         'email',
     );

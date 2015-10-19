@@ -2,6 +2,7 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters\Articles;
 
+use Shopware\Components\SwagImportExport\DataType\ArticleDataType;
 use Shopware\Components\SwagImportExport\DbalHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
@@ -70,7 +71,7 @@ class ArticleWriter
         }
 
         $article = $this->dataManager->setDefaultFields($article);
-        $this->validator->validate($article, ArticleValidator::$mapper);
+        $this->validator->validate($article, ArticleDataType::$mapper);
 
         // insert article
         $builder = $this->dbalHelper->getQueryBuilderForEntity(

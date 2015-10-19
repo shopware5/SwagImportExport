@@ -102,14 +102,10 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
                 return $this->getCategoryDataManager();
             case 'articles':
                 return $this->getArticleDataManager();
-            case 'orders':
-                return $this->getOrderDataManager();
             case 'customers':
                 return $this->getCustomerDataManager();
             case 'newsletter':
                 return $this->getNewsletterDataManager();
-            case 'translations':
-                return $this->getTranslationDataManager();
         }
     }
 
@@ -328,16 +324,6 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     }
 
     /**
-     * @return \Shopware\Components\SwagImportExport\DataManagers\OrderDataManager
-     */
-    protected function getOrderDataManager()
-    {
-        $proxyAdapter = Shopware()->Hooks()
-            ->getProxy('Shopware\Components\SwagImportExport\DataManagers\OrderDataManager');
-        return new $proxyAdapter;
-    }
-
-    /**
      * @return \Shopware\Components\SwagImportExport\DataManagers\CustomerDataManager
      */
     protected function getCustomerDataManager()
@@ -354,16 +340,6 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     {
         $proxyAdapter = Shopware()->Hooks()
             ->getProxy('Shopware\Components\SwagImportExport\DataManagers\NewsletterDataManager');
-        return new $proxyAdapter;
-    }
-
-    /**
-     * @return \Shopware\Components\SwagImportExport\DataManagers\TranslationsDataManager
-     */
-    protected function getTranslationDataManager()
-    {
-        $proxyAdapter = Shopware()->Hooks()
-            ->getProxy('Shopware\Components\SwagImportExport\DataManagers\TranslationsDataManager');
         return new $proxyAdapter;
     }
 }

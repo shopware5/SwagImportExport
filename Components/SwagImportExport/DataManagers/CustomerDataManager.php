@@ -2,7 +2,9 @@
 
 namespace Shopware\Components\SwagImportExport\DataManagers;
 
-class CustomerDataManager
+use Shopware\Components\SwagImportExport\DataType\CustomerDataType;
+
+class CustomerDataManager extends DataManager
 {
     /** @var \Shopware_Components_Config */
     private $config = null;
@@ -13,14 +15,6 @@ class CustomerDataManager
     /** @var \Shopware\Components\Password\Manager */
     private $passwordManager = null;
 
-    /** Define which field should be set by default */
-    private static $defaultFields = array(
-        'active',
-        'paymentID',
-        'encoder',
-        'subshopID',
-    );
-
     public function __construct()
     {
         $this->db = Shopware()->Db();
@@ -28,14 +22,22 @@ class CustomerDataManager
         $this->passwordManager = Shopware()->PasswordEncoder();
     }
 
+    public function getDefaultFields()
+    {
+        return CustomerDataType::$defaultFieldsForCreate;
+    }
+
     /**
      * Return fields which should be set by default
      *
      * @return array
      */
-    public function getDefaultFields()
+    public function getDefaultFieldsName()
     {
-        return self::$defaultFields;
+        $defaultFieldsForCreate = $this->getDefaultFields();
+        $defaultFields = $this->getFields($defaultFieldsForCreate);
+
+        return $defaultFields;
     }
 
     /**
@@ -45,9 +47,9 @@ class CustomerDataManager
      * @param array $defaultValues
      * @return mixed
      */
-    public function setDefaultFields($record, $defaultValues)
+    public function setDefaultFieldsForCreate($record, $defaultValues)
     {
-        $getDefaultFields = $this->getDefaultFields();
+        $getDefaultFields = $this->getDefaultFieldsName();
         foreach ($getDefaultFields as $key) {
             if (isset($record[$key])) {
                 continue;
@@ -66,11 +68,6 @@ class CustomerDataManager
                 case 'encoder':
                     if (!$record[$key]) {
                         $record[$key] = $this->getEncoder();
-                    }
-                    break;
-                case 'subshopID':
-                    if (!$record[$key]) {
-                        $record[$key] = 1;
                     }
                     break;
             }

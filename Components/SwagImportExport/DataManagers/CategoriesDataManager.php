@@ -1,30 +1,26 @@
 <?php
 namespace Shopware\Components\SwagImportExport\DataManagers;
 
-class CategoriesDataManager
+use Shopware\Components\SwagImportExport\DataType\CategoryDataType;
+
+class CategoriesDataManager extends DataManager
 {
-    /** Define which field should be set by default */
-    private static $defaultFields = array(
-        'parentId',
-        'template',
-        'active',
-        'showFilterGroups',
-        'attributeAttribute1',
-        'attributeAttribute2',
-        'attributeAttribute3',
-        'attributeAttribute4',
-        'attributeAttribute5',
-        'attributeAttribute6'
-    );
+    public function getDefaultFields()
+    {
+        return CategoryDataType::$defaultFieldsForCreate;
+    }
 
     /**
      * Return fields which should be set by default
      *
      * @return array
      */
-    public function getDefaultFields()
+    public function getDefaultFieldsName()
     {
-        return self::$defaultFields;
+        $defaultFieldsForCreate = $this->getDefaultFields();
+        $defaultFields = $this->getFields($defaultFieldsForCreate);
+
+        return $defaultFields;
     }
 
     /**
@@ -34,9 +30,9 @@ class CategoriesDataManager
      * @param array $defaultValues
      * @return mixed
      */
-    public function setDefaultFields($record, $defaultValues)
+    public function setDefaultFieldsForCreate($record, $defaultValues)
     {
-        $getDefaultFields = $this->getDefaultFields();
+        $getDefaultFields = $this->getDefaultFieldsName();
         foreach ($getDefaultFields as $key) {
             if (isset($record[$key])) {
                 continue;

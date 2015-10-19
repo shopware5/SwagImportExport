@@ -46,7 +46,8 @@ Ext.define('Shopware.apps.SwagImportExport.model.Column', {
         // {block name="backend/swag_import_export/model/column/fields"}{/block}
         { name: 'id', type: 'string' },
         { name: 'name', type: 'string' },
-        { name: 'default', type: 'string' }
+        { name: 'default', type: 'string' },
+        { name: 'type', type: 'string' }
     ]
 });
 //{/block}

@@ -63,6 +63,13 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
         duplicate: '{s name=swag_import_export/profile/duplicater}Profile was duplicate successfully{/s}'
     },
 
+    refs: [
+        {
+            ref: 'profileForm',
+            selector: 'swag-import-export-profile-profile'
+        }
+    ],
+
     /**
      * This method creates listener for events fired from the export
      */
@@ -80,7 +87,8 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                 addNewNode: me.addNewNode,
                 saveNode: me.saveNode,
                 deleteNode: me.deleteNode,
-                addNewAttribute: me.addNewAttribute
+                addNewAttribute: me.addNewAttribute,
+                changeColumn: me.changeColumn
             },
             'swag-import-export-window': {
                 addConversion: me.addConversion,
@@ -430,6 +438,104 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                 treePanel.getSelectionModel().select(treeStore.getById(newNode.getId()));
             }
         });
+    },
+
+    /**
+     * Helper function which add and remove default value field
+     * depending on selected shopware column
+     *
+     * @param [Ext.data.Store] store - Column store
+     * @param [integer] value - id of selected shopware column
+     */
+    changeColumn: function(store, value) {
+        var me = this,
+            profileForm = me.getProfileForm(),
+            formPanel = profileForm.formPanel;
+
+        formPanel.remove('defaultValue');
+
+        //Create default value field
+        var fieldType = 'hidden';
+        var settings = {
+            id: 'defaultValue',
+            itemId: 'defaultValue',
+            fieldLabel: '{s namespace=backend/swag_import_export/view/profile name=defaultValue}Default value{/s}',
+            width: 400,
+            labelWidth: 150,
+            name: 'defaultValue',
+            allowBlank: true
+        };
+
+        //Set new field type if selected column have default flag
+        var record = store.getById(value);
+        if (record) {
+            if (record.get('default')) {
+                fieldType = record.get('type');
+            }
+        }
+
+        //Merge component settings depending on field type
+        settings = Ext.apply({ }, settings, me.getDefaultValueType(fieldType));
+
+        //Add default field to grid
+        formPanel.insert(1, settings);
+    },
+
+    /**
+     * Helper method which returns xtype for current field
+     *
+     * @param column
+     * @returns Object|boolean
+     */
+    getDefaultValueType: function(column) {
+
+        if (!column) {
+            return false;
+        }
+
+        switch (column) {
+            case 'id':
+                return { xtype: 'numberfield', minValue: 1 };
+                break;
+            case 'integer':
+            case 'decimal':
+            case 'float':
+                var precision = 0;
+                if (column.precision) {
+                    precision = column.precision
+                } else if (column.type == 'float') {
+                    precision = 3;
+                } else if (column.type == 'decimal') {
+                    precision = 3;
+                }
+                return { xtype: 'numberfield', decimalPrecision: precision };
+                break;
+            case 'string':
+            case 'text':
+                return 'textfield';
+                break;
+            case 'boolean':
+                return {
+                    xtype: 'checkbox',
+                    inputValue: 1,
+                    uncheckedValue: 0
+                };
+                break;
+            case 'date':
+            case 'dateTime':
+                return {
+                    xtype: 'datefield',
+                    format: 'Y-m-d',
+                    submitFormat: 'Y-m-d'
+                };
+                break;
+            default:
+                return {
+                    hidden: true
+                };
+                break;
+        }
+
     }
 });
 //{/block}
