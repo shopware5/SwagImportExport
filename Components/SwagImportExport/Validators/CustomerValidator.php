@@ -109,6 +109,14 @@ class CustomerValidator extends Validator
                 continue;
             }
 
+            switch ($key) {
+                case 'unhashedPassword':
+                    if ((isset($record['password']) && isset($record['encoder']))) {
+                        continue 2;
+                    }
+                    break;
+            }
+
             list($snippetName, $snippetMessage) = $this->snippetData[$key];
 
             $message = SnippetsHelper::getNamespace()->get($snippetName, $snippetMessage);

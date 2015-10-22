@@ -52,12 +52,12 @@ class ArticleDataType
 
     public static $defaultFieldsForCreate = array(
         'id' => array(
-            'supplierId'
+            'supplierId',
+            'shippingTime'
         ),
         'date' => array(
             'availableFrom',
-            'availableTo',
-            'shippingTime',
+            'availableTo'
         ),
         'integer' => array(
             'inStock',

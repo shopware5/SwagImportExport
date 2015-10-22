@@ -448,6 +448,19 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
      * @param [integer] value - id of selected shopware column
      */
     changeColumn: function(store, value) {
+        var me = this;
+
+        //Add default field
+        me.createDefaultValueField(store, value);
+
+        //Add default field when store load is done
+        store.on('load', function () {
+            me.createDefaultValueField(store, value);
+        }, me, { single: true });
+
+    },
+
+    createDefaultValueField: function(store, value) {
         var me = this,
             profileForm = me.getProfileForm(),
             formPanel = profileForm.formPanel;
