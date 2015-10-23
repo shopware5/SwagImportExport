@@ -305,14 +305,12 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
 			hideFields: function() {
 				this.child('#nodeName').hide();
 				this.child('#swColumn').hide();
-				this.child('#defaultValue').hide();
 			},
 			fillForm: function() {
 				var node = me.treeStore.getById(me.selectedNodeId);
 				this.child('#nodeName').show();
 				this.child('#nodeName').setValue(node.get('text'));
 				this.child('#swColumn').setValue(node.get('swColumn'));
-                this.child('#defaultValue').setValue(node.get('defaultValue'));
 
 				if (node.get('type') === 'attribute') {
                     this.child('#swColumn').getStore().load({ params: { profileId: me.profileId, adapter: node.get('adapter') } });
@@ -387,7 +385,8 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
 					allowBlank: false,
                     listeners: {
                         change: function(field, newValue) {
-                            me.fireEvent('changeColumn', me.columnStore, newValue);
+                            var defaultValue = me.treeStore.getById(me.selectedNodeId).get('defaultValue');
+                            me.fireEvent('changeColumn', me.columnStore, newValue, defaultValue);
                         }
                     }
 				}, {

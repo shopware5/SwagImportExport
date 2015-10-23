@@ -19,7 +19,6 @@ class CustomerValidator extends Validator
         'billingFirstname',
         'billingLastname',
         'billingStreet',
-        'billingStreetnumber',
         'billingZipcode',
         'billingCity',
         'billingCountryID'
@@ -57,10 +56,6 @@ class CustomerValidator extends Validator
         'billingStreet' => array(
             'adapters/customer/billingStreet_required',
             'Billing street must be provided for user with email: %s.'
-        ),
-        'billingStreetnumber' => array(
-            'adapters/customer/billingStreetnumber_required',
-            'Billing street number must be provided for user with email: %s.'
         ),
         'billingZipcode' => array(
             'adapters/customer/billingZipcode_required',

@@ -15,7 +15,6 @@ class CustomerDataType
             'billingFirstname',
             'billingLastname',
             'billingStreet',
-            'billingStreetnumber',
             'billingZipcode',
             'billingCity',
             'billingPhone',
@@ -27,16 +26,15 @@ class CustomerDataType
             'shippingFirstname',
             'shippingLastname',
             'shippingStreet',
-            'shippingStreetnumber',
             'shippingZipcode',
             'customergroup',
-            'language',
-            'active',
+            'language'
         ),
         'email' => array(
             'email'
         ),
         'int' => array(
+            'active',
             'billingCountryID',
             'billingStateID',
             'shippingCountryID',

@@ -308,8 +308,6 @@ class CustomerDbAdapter implements DataDbAdapter
         foreach ($records['default'] as $record) {
             try {
                 $record = $validator->prepareInitialData($record);
-                $this->preparePassword($record);
-                $validator->checkRequiredFields($record);
 
                 $customer = $this->findExistingEntries($record);
 
@@ -319,6 +317,8 @@ class CustomerDbAdapter implements DataDbAdapter
                     $customer = new Customer();
                 }
 
+                $this->preparePassword($record);
+                $validator->checkRequiredFields($record);
                 $validator->validate($record, CustomerDataType::$mapper);
 
                 $customerData = $this->prepareCustomer($record);

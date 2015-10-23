@@ -51,10 +51,6 @@ class ArticleDataType
     );
 
     public static $defaultFieldsForCreate = array(
-        'id' => array(
-            'supplierId',
-            'shippingTime'
-        ),
         'date' => array(
             'availableFrom',
             'availableTo'
@@ -64,6 +60,7 @@ class ArticleDataType
             'tax',
         ),
         'string' => array(
+            'shippingTime',
             'supplierName',
             'attributeAttr1',
             'attributeAttr2',
@@ -85,6 +82,9 @@ class ArticleDataType
             'attributeAttr18',
             'attributeAttr19',
             'attributeAttr20'
+        ),
+        'id' => array(
+            'supplierId'
         ),
         'boolean' => array(
             'active',

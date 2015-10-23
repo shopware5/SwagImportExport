@@ -446,21 +446,19 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
      *
      * @param [Ext.data.Store] store - Column store
      * @param [integer] value - id of selected shopware column
+     * @param [integer] nodeValue - default value saved in profile
      */
-    changeColumn: function(store, value) {
+    changeColumn: function(store, value, nodeValue) {
         var me = this;
-
-        //Add default field
-        me.createDefaultValueField(store, value);
 
         //Add default field when store load is done
         store.on('load', function () {
-            me.createDefaultValueField(store, value);
+            me.createDefaultValueField(store, value, nodeValue);
         }, me, { single: true });
 
     },
 
-    createDefaultValueField: function(store, value) {
+    createDefaultValueField: function(store, value, nodeValue) {
         var me = this,
             profileForm = me.getProfileForm(),
             formPanel = profileForm.formPanel;
@@ -492,6 +490,8 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
 
         //Add default field to grid
         formPanel.insert(1, settings);
+
+        formPanel.child('#defaultValue').setValue(nodeValue);
     },
 
     /**
