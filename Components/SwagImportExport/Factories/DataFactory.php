@@ -88,7 +88,27 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
             default: throw new \Exception('Db adapter type is not valid');
         }
     }
-    
+
+    /**
+     * Return necessary data manager
+     *
+     * @param string $managerType
+     * @return object dbAdapter
+     */
+    public function createDataManager($managerType)
+    {
+        switch ($managerType) {
+            case 'categories':
+                return $this->getCategoryDataManager();
+            case 'articles':
+                return $this->getArticleDataManager();
+            case 'customers':
+                return $this->getCustomerDataManager();
+            case 'newsletter':
+                return $this->getNewsletterDataManager();
+        }
+    }
+
     public function loadSession($data)
     {   
         $sessionId = $data['sessionId'];
@@ -283,4 +303,43 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
         return new $proxyAdapter;
     }
 
+    /**
+     * @return \Shopware\Components\SwagImportExport\DataManagers\CategoriesDataManager
+     */
+    protected function getCategoryDataManager()
+    {
+        $proxyAdapter = Shopware()->Hooks()
+            ->getProxy('Shopware\Components\SwagImportExport\DataManagers\CategoriesDataManager');
+        return new $proxyAdapter;
+    }
+
+    /**
+     * @return \Shopware\Components\SwagImportExport\DataManagers\Articles\ArticleDataManager
+     */
+    protected function getArticleDataManager()
+    {
+        $proxyAdapter = Shopware()->Hooks()
+            ->getProxy('Shopware\Components\SwagImportExport\DataManagers\Articles\ArticleDataManager');
+        return new $proxyAdapter;
+    }
+
+    /**
+     * @return \Shopware\Components\SwagImportExport\DataManagers\CustomerDataManager
+     */
+    protected function getCustomerDataManager()
+    {
+        $proxyAdapter = Shopware()->Hooks()
+            ->getProxy('Shopware\Components\SwagImportExport\DataManagers\CustomerDataManager');
+        return new $proxyAdapter;
+    }
+
+    /**
+     * @return \Shopware\Components\SwagImportExport\DataManagers\NewsletterDataManager
+     */
+    protected function getNewsletterDataManager()
+    {
+        $proxyAdapter = Shopware()->Hooks()
+            ->getProxy('Shopware\Components\SwagImportExport\DataManagers\NewsletterDataManager');
+        return new $proxyAdapter;
+    }
 }

@@ -118,10 +118,14 @@ class DataIO
         return $rawData;
     }
 
-    public function write($data)
+    public function write($data, $defaults)
     {
         $dbAdapter = $this->getDbAdapter();
-        
+
+        //Pass default values to adapter for further use
+        if ($defaults) {
+            $dbAdapter->setDefaultValues($defaults);
+        }
         $dbAdapter->write($data);
     }
 

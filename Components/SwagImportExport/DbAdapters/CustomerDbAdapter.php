@@ -2,11 +2,14 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
+use Shopware\Components\SwagImportExport\DataType\CustomerDataType;
 use Shopware\Models\Customer\Customer;
 use Shopware\Components\SwagImportExport\Utils\DataHelper;
 use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
-use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
+use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
+use Shopware\Components\SwagImportExport\Validators\CustomerValidator;
+use Shopware\Components\SwagImportExport\DataManagers\CustomerDataManager;
 
 class CustomerDbAdapter implements DataDbAdapter
 {
@@ -16,7 +19,9 @@ class CustomerDbAdapter implements DataDbAdapter
      */
     protected $manager;
     protected $repository;
+    protected $customerMap;
     protected $billingMap;
+    protected $shippingMap;
 
     /**
      * @var array
@@ -27,6 +32,19 @@ class CustomerDbAdapter implements DataDbAdapter
      * @var array
      */
     protected $logMessages;
+
+    protected $db;
+
+    protected $validator;
+
+    protected $dataManager;
+
+    protected $passwordManager;
+
+    /**
+     * @var array
+     */
+    protected $defaultValues = array();
 
     public function getDefaultColumns()
     {
@@ -39,6 +57,26 @@ class CustomerDbAdapter implements DataDbAdapter
         $default = array_merge($default, $this->getShippingColumns());
         
         return $default;
+    }
+
+    /**
+     * Return list with default values for fields which are empty or don't exists
+     *
+     * @return array
+     */
+    private function getDefaultValues()
+    {
+        return $this->defaultValues;
+    }
+
+    /**
+     * Set default values for fields which are empty or don't exists
+     *
+     * @param array $values default values for nodes
+     */
+    public function setDefaultValues($values)
+    {
+        $this->defaultValues = $values;
     }
 
     public function getCustomerColumns()
@@ -246,120 +284,53 @@ class CustomerDbAdapter implements DataDbAdapter
 
     public function write($records)
     {
+        if (empty($records)) {
+            $message = SnippetsHelper::getNamespace()->get(
+                'adapters/customer/no_records',
+                'No customer records were found.'
+            );
+            throw new \Exception($message);
+        }
+
         $records = Shopware()->Events()->filter(
-                'Shopware_Components_SwagImportExport_DbAdapters_CustomerDbAdapter_Write',
-                $records,
-                array('subject' => $this)
+            'Shopware_Components_SwagImportExport_DbAdapters_CustomerDbAdapter_Write',
+            $records,
+            array('subject' => $this)
         );
 
+        $db = $this->getDb();
         $manager = $this->getManager();
-        $passwordManager = Shopware()->PasswordEncoder();
-        $db = Shopware()->Db();
+        $validator = $this->getValidator();
+        $dataManager = $this->getDataManager();
+
+        $defaultValues = $this->getDefaultValues();
 
         foreach ($records['default'] as $record) {
             try {
+                $record = $validator->prepareInitialData($record);
 
-                $customer = null;
+                $customer = $this->findExistingEntries($record);
 
-                if (isset($record['id']) && !empty($record['id'])){
-                    $customer = $this->getRepository()->findOneBy(array('id' => $record['id']));
-                }
-
-                if (!$customer){
-                    if (!isset($record['email']) && !$record['email']) {
-                        $message = SnippetsHelper::getNamespace()
-                            ->get('adapters/customer/email_required', 'User email is required field.');
-                        throw new AdapterException($message);
-                    }
-
-                    $accountMode = (int) (isset($record['accountMode']) ? $record['accountMode'] : 1);
-
-                    $filter = array('email' => $record['email'], 'accountMode' => $accountMode);
-
-                    if (isset($record['subshopID']) && !empty($record['subshopID'])){
-                        $filter['shopId'] = $record['subshopID'];
-                    }
-
-                    $customer = $this->getRepository()->findBy($filter);
-
-                    //checks for multiple email address
-                    if (count($customer) > 1) {
-                        $message = SnippetsHelper::getNamespace()
-                            ->get('adapters/customer/multiple_email', 'There are existing email address/es with %s. Please provide subshopID');
-                        throw new AdapterException(sprintf($message, $record['email']));
-                    }
-
-                    $customer = $customer[0];
-                }
-
-                if (isset($record['unhashedPassword']) && $record['unhashedPassword']
-                    && (!isset($record['password']) || !$record['password'])) {
-
-                    if (!isset($record['encoder']) || !$record['encoder']) {
-                        $record['encoder'] = $passwordManager->getDefaultPasswordEncoderName();
-                    }
-
-                    $encoder = $passwordManager->getEncoderByName($record['encoder']);
-
-                    $record['password'] = $encoder->encodePassword($record['unhashedPassword']);
-
-                    unset($record['unhashedPassword']);
-                }
-
-                if ($customer) {
-                    //if password is provided the encoder also must be set
-                    if (($record['password'] && !$record['encoder']) || (!$record['password'] && $record['encoder'])){
-                        $message = SnippetsHelper::getNamespace()
-                            ->get('adapters/customer/password_and_encoder_required', 'Password and encoder must be provided for email %s');
-                        throw new AdapterException(sprintf($message, $record['email']));
-                    }
-                } else {
-                    if (!isset($record['password']) && !$record['password']) {
-                        $message = SnippetsHelper::getNamespace()
-                            ->get('adapters/customer/password_required', 'Password must be provided for email %s');
-                        throw new AdapterException(sprintf($message, $record['email']));
-                    }
-
-                    if (!isset($record['encoder']) && !$record['encoder']) {
-                        $message = SnippetsHelper::getNamespace()
-                            ->get('adapters/customer/password_encoder_required', 'Password encoder must be provided for email %s');
-                        throw new AdapterException(sprintf($message, $record['email']));
-                    }
-                }
-
-                if (!$customer) {
+                if (!$customer instanceof Customer) {
+                    $record = $dataManager->setDefaultFieldsForCreate($record, $defaultValues);
+                    $validator->checkRequiredFieldsForCreate($record);
                     $customer = new Customer();
-
-                    if (!isset($record['customergroup'])) {
-                        /** @var $shop \Shopware\Models\Shop\Shop */
-                        $shop = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop')->getActiveDefault();
-                        $defaultGroupKey = $shop->getCustomerGroup()->getKey();
-                        $record['customergroup'] = $defaultGroupKey;
-                    }
                 }
 
-                if (!isset($record['active']) || $record['active'] === '') {
-                    $record['active'] = 1;
-                }
-                
-                if (!isset($record['paymentID']) || $record['paymentID'] === '') {
-                    $paymentId = $this->preparePayment($record['subshopID']);
-                    $record['paymentID'] = $paymentId;
-                }
-                
+                $this->preparePassword($record);
+                $validator->checkRequiredFields($record);
+                $validator->validate($record, CustomerDataType::$mapper);
+
                 $customerData = $this->prepareCustomer($record);
-
                 $customerData['billing'] = $this->prepareBilling($record);
-
-                $customerData['shipping'] = $this->prepareShipping($record);
+                $customerData['shipping'] = $this->prepareShipping($record, $customer->getId(), $customerData['billing']);
 
                 $customer->fromArray($customerData);
 
                 $violations = $this->getManager()->validate($customer);
-
                 if ($violations->count() > 0) {
                     $message = SnippetsHelper::getNamespace()
-                                    ->get('adapters/customer/no_valid_customer_entity', 'No valid user entity for email %s');
+                        ->get('adapters/customer/no_valid_customer_entity', 'No valid user entity for email %s');
                     throw new AdapterException(sprintf($message, $record['email']));
                 }
 
@@ -375,10 +346,65 @@ class CustomerDbAdapter implements DataDbAdapter
                 }
 
                 $manager->clear();
+
             } catch (AdapterException $e) {
                 $message = $e->getMessage();
                 $this->saveMessage($message);
             }
+        }
+    }
+
+    protected function findExistingEntries($record)
+    {
+        if (isset($record['id'])) {
+            $customer = $this->getRepository()->findOneBy(array('id' => $record['id']));
+        }
+
+        if (!$customer instanceof Customer) {
+
+            $accountMode = isset($record['accountMode']) ? (int) $record['accountMode'] : 0;
+            $filter = array('email' => $record['email'], 'accountMode' => $accountMode);
+            if (isset($record['subshopID'])) {
+                $filter['shopId'] = $record['subshopID'];
+            }
+
+            $customer = $this->getRepository()->findBy($filter);
+
+            //checks for multiple email address
+            if (count($customer) > 1) {
+                $message = SnippetsHelper::getNamespace()
+                    ->get('adapters/customer/multiple_email', 'There are existing email address/es with %s. Please provide subshopID');
+                throw new AdapterException(sprintf($message, $record['email']));
+            }
+
+            $customer = $customer[0];
+        }
+
+        return $customer;
+    }
+
+    protected function preparePassword(&$record)
+    {
+        $passwordManager = $this->getPasswordManager();
+        if (isset($record['unhashedPassword']) && !isset($record['password'])) {
+
+            if (!isset($record['encoder'])) {
+                $record['encoder'] = $passwordManager->getDefaultPasswordEncoderName();
+            }
+
+            $encoder = $passwordManager->getEncoderByName($record['encoder']);
+
+            $record['password'] = $encoder->encodePassword($record['unhashedPassword']);
+
+            unset($record['unhashedPassword']);
+        }
+
+        if ((isset($record['password']) && !isset($record['encoder'])) ||
+            (!isset($record['password']) && isset($record['encoder']))
+        ) {
+            $message = SnippetsHelper::getNamespace()
+                ->get('adapters/customer/password_and_encoder_required', 'Password and encoder must be provided for email %s');
+            throw new AdapterException(sprintf($message, $record['email']));
         }
     }
 
@@ -396,16 +422,18 @@ class CustomerDbAdapter implements DataDbAdapter
 
         $customerData = array();
 
-        $shopId = isset($record['subshopID']) && !empty($record['subshopID']) ? $record['subshopID'] : 1;
-        $shop = $this->getManager()->find('Shopware\Models\Shop\Shop', $shopId);
+        //TODO: use validator
+        if (isset($record['subshopID'])) {
+            $shop = $this->getManager()->find('Shopware\Models\Shop\Shop', $record['subshopID']);
 
-        if(!$shop){
-            $message = SnippetsHelper::getNamespace()
-                ->get('adapters/shop_not_found', 'Shop with id %s was not found');
-            throw new AdapterException(sprintf($message, $shopId));
+            if(!$shop) {
+                $message = SnippetsHelper::getNamespace()
+                    ->get('adapters/shop_not_found', 'Shop with id %s was not found');
+                throw new AdapterException(sprintf($message, $record['subshopID']));
+            }
+
+            $customerData['shop'] = $shop;
         }
-
-        $customerData['shop'] = $shop;
 
         foreach ($record as $key => $value) {
             if (preg_match('/^attrCustomer/', $key)) {
@@ -418,6 +446,7 @@ class CustomerDbAdapter implements DataDbAdapter
             }
         }
 
+        //TODO: use validator
         if (isset($customerData['groupKey'])) {
             $customerData['group'] = Shopware()->Models()
                     ->getRepository('Shopware\Models\Customer\Group')
@@ -429,7 +458,7 @@ class CustomerDbAdapter implements DataDbAdapter
             }
         }
 
-        if (isset($customerData['hashPassword']) && !empty($customerData['hashPassword'])){
+        if (isset($customerData['hashPassword']) && !empty($customerData['hashPassword'])) {
             $customerData['rawPassword'] = $customerData['hashPassword'];
         }
 
@@ -467,7 +496,7 @@ class CustomerDbAdapter implements DataDbAdapter
         return $billingData;
     }
 
-    protected function prepareShipping(&$record)
+    protected function prepareShipping(&$record, $customerId, $billing)
     {
         if ($this->shippingMap === null) {
             $columns = $this->getShippingColumns();
@@ -480,6 +509,18 @@ class CustomerDbAdapter implements DataDbAdapter
         }
 
         $shippingData = array();
+
+        //use shipping as billing
+        if (empty($customerId) && empty($record['shippingFirstname']) && empty($params['shippingLastname'])) {
+            foreach ($this->shippingMap as $mapKey => $addressKey) {
+                if (isset($record[$mapKey])) {
+                    $shippingData[$addressKey] = $billing[$addressKey];
+                    unset($record[$mapKey]);
+                }
+            }
+
+            return $shippingData;
+        }
 
         foreach ($record as $key => $value) {
             //prepares the attributes
@@ -572,7 +613,7 @@ class CustomerDbAdapter implements DataDbAdapter
     
     public function getAttributesByTableName($tableName)
     {
-        $stmt = Shopware()->Db()->query("SHOW COLUMNS FROM $tableName");
+        $stmt = $this->getDb()->query("SHOW COLUMNS FROM $tableName");
         $columns = $stmt->fetchAll();
 
         $columnNames = array();
@@ -627,6 +668,42 @@ class CustomerDbAdapter implements DataDbAdapter
         return $this->manager;
     }
 
+    public function getDb()
+    {
+        if ($this->db === null) {
+            $this->db = Shopware()->Db();
+        }
+
+        return $this->db;
+    }
+
+    public function getValidator()
+    {
+        if ($this->validator === null) {
+            $this->validator = new CustomerValidator();
+        }
+
+        return $this->validator;
+    }
+
+    public function getDataManager()
+    {
+        if ($this->dataManager === null) {
+            $this->dataManager = new CustomerDataManager();
+        }
+
+        return $this->dataManager;
+    }
+
+    public function getPasswordManager()
+    {
+        if ($this->passwordManager === null) {
+            $this->passwordManager = Shopware()->PasswordEncoder();
+        }
+
+        return $this->passwordManager;
+    }
+
     public function getBuilder($columns, $ids)
     {
         $builder = $this->getManager()->createQueryBuilder();
@@ -644,5 +721,4 @@ class CustomerDbAdapter implements DataDbAdapter
 
         return $builder;
     }
-
 }

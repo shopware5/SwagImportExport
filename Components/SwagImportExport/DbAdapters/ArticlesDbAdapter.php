@@ -65,6 +65,11 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     protected $tempData;
 
+    /**
+     * @var array
+     */
+    protected $defaultValues = array();
+
     public function readRecordIds($start, $limit, $filter)
     {
         $manager = $this->getManager();
@@ -488,6 +493,26 @@ class ArticlesDbAdapter implements DataDbAdapter
         return $columns;
     }
 
+    /**
+     * Return list with default values for fields which are empty or don't exists
+     *
+     * @return array
+     */
+    private function getDefaultValues()
+    {
+        return $this->defaultValues;
+    }
+
+    /**
+     * Set default values for fields which are empty or don't exists
+     *
+     * @param array $values default values for nodes
+     */
+    public function setDefaultValues($values)
+    {
+        $this->defaultValues = $values;
+    }
+
     private function run($records)
     {
         Shopware()->Models()->getConnection()->beginTransaction();
@@ -512,10 +537,12 @@ class ArticlesDbAdapter implements DataDbAdapter
         $relationWriter = new RelationWriter($this);
         $imageWriter = new ImageWriter($this);
 
+        $defaultValues = $this->getDefaultValues();
+
         foreach ($records['article'] as $index => $article) {
             try {
 
-                list($articleId, $articleDetailId, $mainDetailId) = $articleWriter->write($article);
+                list($articleId, $articleDetailId, $mainDetailId) = $articleWriter->write($article, $defaultValues);
 
                 $processedFlag = isset($article['processed']) && $article['processed'] == 1;
 

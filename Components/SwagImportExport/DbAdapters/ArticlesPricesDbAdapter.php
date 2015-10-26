@@ -1,8 +1,11 @@
 <?php
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
-use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
-use \Shopware\Components\SwagImportExport\Exception\AdapterException;
+
+use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
+use Shopware\Components\SwagImportExport\Exception\AdapterException;
+use Shopware\Components\SwagImportExport\Validators\ArticlePriceValidator;
+use Shopware\Components\SwagImportExport\DataManagers\ArticlePriceDataManager;
 
 class ArticlesPricesDbAdapter implements DataDbAdapter
 {
@@ -19,6 +22,12 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
      * @var array
      */
     protected $unprocessedData;
+
+    /** @var ArticlePriceValidator */
+    protected $validator;
+
+    /** @var ArticlePriceDataManager */
+    protected $dataManager;
 
     public function readRecordIds($start, $limit, $filter)
     {
@@ -125,28 +134,35 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
      * <b>Note:</b> The logic is copied from the old Import/Export Module
      * 
      * @param array $records
+     * @throws \Enlight_Event_Exception
+     * @throws \Exception
      */
     public function write($records)
     {
+        if (empty($records['default'])) {
+            $message = SnippetsHelper::getNamespace()->get(
+                'adapters/articlesPrices/no_records',
+                'No article price records were found.'
+            );
+            throw new \Exception($message);
+        }
+
         $records = Shopware()->Events()->filter(
-                'Shopware_Components_SwagImportExport_DbAdapters_ArticlesPricesDbAdapter_Write',
-                $records,
-                array('subject' => $this)
+            'Shopware_Components_SwagImportExport_DbAdapters_ArticlesPricesDbAdapter_Write',
+            $records,
+            array('subject' => $this)
         );
 
         $manager = $this->getManager();
-        foreach ($records['default'] as $record) {
-            try{
-                // maybe this should be required field
-                if (!isset($record['orderNumber']) || empty($record['orderNumber'])) {
-                    $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/ordernumber_required', 'Order number is required.');
-                    throw new AdapterException($message);
-                }
+        $validator = $this->getValidator();
+        $dataManager = $this->getDataManager();
 
-                if (empty($record['priceGroup'])) {
-                    $record['priceGroup'] = 'EK';
-                }
+        foreach ($records['default'] as $record) {
+            try {
+                $record = $validator->prepareInitialData($record);
+                $validator->checkRequiredFields($record);
+                $record = $dataManager->setDefaultFields($record);
+                $validator->validate($record, ArticlePriceValidator::$mapper);
 
                 $customerGroup = $this->getGroupRepository()->findOneBy(array("key" => $record['priceGroup']));
                 if (!$customerGroup) {
@@ -158,17 +174,13 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                 $articleDetail = $this->getDetailRepository()->findOneBy(array("number" => $record['orderNumber']));
                 if (!$articleDetail) {
                     $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/article_number_not_found', 'Article with order number %s doen not exists');
+                        ->get('adapters/article_number_not_found', 'Article with order number %s does not exists');
                     throw new AdapterException(sprintf($message, $record['orderNumber']));
                 }
 
-                if (empty($record['from'])) {
-                    $record['from'] = 1;
-                } else {
+                if (isset($record['from'])) {
                     $record['from'] = intval($record['from']);
                 }
-
-                $tax = $articleDetail->getArticle()->getTax();
 
                 if (empty($record['price']) && empty($record['percent'])) {
                     $message = SnippetsHelper::getNamespace()
@@ -188,7 +200,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
 
                 if (isset($record['pseudoPrice'])) {
                     $record['pseudoPrice'] = floatval(str_replace(",", ".", $record['pseudoPrice']));
-                } 
+                }
                 
                 if (isset($record['basePrice'])) {
                     $record['basePrice'] = floatval(str_replace(",", ".", $record['basePrice']));
@@ -196,7 +208,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
 
                 if (isset($record['percent'])) {
                     $record['percent'] = floatval(str_replace(",", ".", $record['percent']));
-                } 
+                }
 
                 $query = $manager->createQuery('
                             DELETE FROM Shopware\Models\Article\Price price
@@ -230,6 +242,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
 
                 // remove tax
                 if ($customerGroup->getTaxInput()) {
+                    $tax = $articleDetail->getArticle()->getTax();
                     $record['price'] = $record['price'] / (100 + $tax->getTax()) * 100;
                     $record['pseudoPrice'] = $record['pseudoPrice'] / (100 + $tax->getTax()) * 100;
                 }
@@ -375,4 +388,21 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
         return $builder;
     }
 
+    public function getValidator()
+    {
+        if ($this->validator === null) {
+            $this->validator = new ArticlePriceValidator();
+        }
+
+        return $this->validator;
+    }
+
+    public function getDataManager()
+    {
+        if ($this->dataManager === null) {
+            $this->dataManager = new ArticlePriceDataManager();
+        }
+
+        return $this->dataManager;
+    }
 }

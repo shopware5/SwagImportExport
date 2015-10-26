@@ -3,8 +3,9 @@
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
 use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
-use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
+use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
+use Shopware\Components\SwagImportExport\Validators\OrderValidator;
 
 class OrdersDbAdapter implements DataDbAdapter
 {
@@ -33,6 +34,8 @@ class OrdersDbAdapter implements DataDbAdapter
      * @var array
      */
     protected $logMessages;
+
+    protected $validator;
 
     /**
      * Returns record ids
@@ -138,36 +141,37 @@ class OrdersDbAdapter implements DataDbAdapter
     public function write($records)
     {
         $records = Shopware()->Events()->filter(
-                'Shopware_Components_SwagImportExport_DbAdapters_OrdersDbAdapter_Write',
-                $records,
-                array('subject' => $this)
+            'Shopware_Components_SwagImportExport_DbAdapters_OrdersDbAdapter_Write',
+            $records,
+            array('subject' => $this)
         );
+
+        if (empty($records['default'])) {
+            $message = SnippetsHelper::getNamespace()->get(
+                'adapters/orders/no_records',
+                'No order records were found.'
+            );
+            throw new \Exception($message);
+        }
+
+        $validator = $this->getValidator();
 
         foreach ($records['default'] as $index => $record) {
             try {
-
-                if ((!isset($record['orderId']) || !$record['orderId']) && (!isset($record['number']) || !$record['number']) && (!isset($record['orderDetailId']) || !$record['orderDetailId'])) {
-                    $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/orders/ordernumber_order_details_requires', 'Order number or order detail id must be provided');
-                    throw new AdapterException($message);
-                }
+                $record = $validator->prepareInitialData($record);
+                $validator->checkRequiredFields($record);
+                $validator->validate($record, OrderValidator::$mapper);
 
                 if (isset($record['orderDetailId']) && $record['orderDetailId']) {
                     $orderDetailModel = $this->getDetailRepository()->find($record['orderDetailId']);
-
-                    if (!$orderDetailModel) {
-                        $message = SnippetsHelper::getNamespace()
-                            ->get('adapters/orders/order_detail_id_not_found', 'Order detail id %s was not found');
-                        throw new AdapterException(sprintf($message, $record['orderDetailId']));
-                    }
                 } else {
                     $orderDetailModel = $this->getDetailRepository()->findOneBy(array('number' => $record['number']));
+                }
 
-                    if (!$orderDetailModel) {
-                        $message = SnippetsHelper::getNamespace()
-                            ->get('adapters/orders/order_detail_id_not_found', 'Order detail id %s was not found');
-                        throw new AdapterException(sprintf($message, $record['orderDetailId']));
-                    }
+                if (!$orderDetailModel) {
+                    $message = SnippetsHelper::getNamespace()
+                        ->get('adapters/orders/order_detail_id_not_found', 'Order detail id %s was not found');
+                    throw new AdapterException(sprintf($message, $record['orderDetailId']));
                 }
 
                 $orderModel = $orderDetailModel->getOrder();
@@ -547,4 +551,12 @@ class OrdersDbAdapter implements DataDbAdapter
         return $result ? true : false;
     }
 
+    public function getValidator()
+    {
+        if ($this->validator === null) {
+            $this->validator = new OrderValidator();
+        }
+
+        return $this->validator;
+    }
 }

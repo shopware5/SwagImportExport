@@ -1,9 +1,10 @@
 <?php
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
-use Doctrine\ORM\QueryBuilder;
-use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
+
+use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
+use Shopware\Components\SwagImportExport\Validators\ArticleInStockValidator;
 
 class ArticlesInStockDbAdapter implements DataDbAdapter
 {
@@ -26,6 +27,9 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
      * @var \Shopware\Models\Article\Detail
      */
     protected $repository;
+
+    /** @var ArticleInStockValidator */
+    protected $validator;
 
     public function getDefaultColumns()
     {
@@ -165,25 +169,31 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
 
     public function write($records)
     {
+        if (empty($records['default'])) {
+            $message = SnippetsHelper::getNamespace()->get(
+                'adapters/articlesInStock/no_records',
+                'No article stock records were found.'
+            );
+            throw new \Exception($message);
+        }
+
         $records = Shopware()->Events()->filter(
-                'Shopware_Components_SwagImportExport_DbAdapters_ArticlesInStockDbAdapter_Write',
-                $records,
-                array('subject' => $this)
+            'Shopware_Components_SwagImportExport_DbAdapters_ArticlesInStockDbAdapter_Write',
+            $records,
+            array('subject' => $this)
         );
 
         $manager = $this->getManager();
+        $validator = $this->getValidator();
 
         foreach ($records['default'] as $record) {
+            try {
+                $record = $validator->prepareInitialData($record);
+                $validator->checkRequiredFields($record);
+                $validator->validate($record, ArticleInStockValidator::$mapper);
 
-            try{
-                if (empty($record['orderNumber'])) {
-                    $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/ordernumber_required', 'Order number is required');
-                    throw new AdapterException($message);
-                }
                 $articleDetail = $this->getRepository()->findOneBy(array("number" => $record['orderNumber']));
-
-                if(!$articleDetail){
+                if (!$articleDetail) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/articlesImages/article_not_found', 'Article with number %s does not exists.');
                     throw new AdapterException(sprintf($message, $record['orderNumber']));
@@ -293,5 +303,14 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
                 ->setParameter('ids', $ids);
 
         return $builder;
+    }
+
+    public function getValidator()
+    {
+        if ($this->validator === null) {
+            $this->validator = new ArticleInStockValidator();
+        }
+
+        return $this->validator;
     }
 }

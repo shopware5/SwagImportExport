@@ -2,6 +2,8 @@
 
 namespace Shopware\Components\SwagImportExport\Utils;
 
+use Shopware\Components\SwagImportExport\DataManagers\DataManager;
+
 class TreeHelper
 {
 
@@ -67,6 +69,7 @@ class TreeHelper
             'expanded' => true,
             'iconCls' => $icon,
             'swColumn' => $node['shopwareField'],
+            'defaultValue' => $node['defaultValue'],
             'inIteration' => $isInIteration,
             'children' => $children
         );
@@ -205,9 +208,10 @@ class TreeHelper
      * 
      * @param array $child
      * @param array $node
+     * @param array $defaultFields
      * @return boolean
      */
-    static public function changeNode(array $child, array &$node)
+    static public function changeNode(array $child, array &$node, $defaultFields = array())
     {
         if ($node['id'] == $child['id']) { // the node is found
             $node['name'] = $child['text'];
@@ -217,6 +221,15 @@ class TreeHelper
                 $node['shopwareField'] = $child['swColumn'];
             } else {
                 unset($node['shopwareField']);
+            }
+
+            if (isset($child['defaultValue'])) {
+                $type = DataManager::getFieldType($child['swColumn'], $defaultFields);
+                $defaultValue = DataManager::castDefaultValue($child['defaultValue'], $type);
+
+                $node['defaultValue'] = $defaultValue;
+            } else {
+                unset($node['defaultValue']);
             }
 
             if ($child['type'] == 'iteration') {
@@ -236,14 +249,14 @@ class TreeHelper
         } else {
             if (isset($node['children'])) {
                 foreach ($node['children'] as &$childNode) {
-                    if (static::changeNode($child, $childNode)) {
+                    if (static::changeNode($child, $childNode, $defaultFields)) {
                         return true;
                     }
                 }
             }
             if (isset($node['attributes'])) {
                 foreach ($node['attributes'] as &$childNode) {
-                    if (static::changeNode($child, $childNode)) {
+                    if (static::changeNode($child, $childNode, $defaultFields)) {
                         return true;
                     }
                 }

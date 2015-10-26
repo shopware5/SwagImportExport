@@ -2,19 +2,28 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters\Articles;
 
-use Doctrine\ORM\Mapping\ClassMetadata;
+use Shopware\Components\SwagImportExport\DataType\ArticleDataType;
 use Shopware\Components\SwagImportExport\DbalHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
-use Shopware\Components\SwagImportExport\QueryBuilder\QueryBuilder;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
+use Shopware\Components\SwagImportExport\Validators\Articles\ArticleValidator;
+use Shopware\Components\SwagImportExport\DataManagers\Articles\ArticleDataManager;
 
 class ArticleWriter
 {
     /** @var \Enlight_Components_Db_Adapter_Pdo_Mysql */
     protected $db;
 
+    protected $dbalHelper;
+
     /** @var \Doctrine\DBAL\Connection */
     protected $connection;
+
+    /** @var ArticleValidator */
+    protected $validator;
+
+    /** @var ArticleDataManager */
+    protected $dataManager;
 
     public function __construct()
     {
@@ -22,24 +31,19 @@ class ArticleWriter
         $this->db = Shopware()->Db();
         $this->dbalHelper = new DbalHelper();
 
-        $this->taxRates = $this->getTaxRates();
-        $this->suppliers = $this->getSuppliers();
+        $this->validator = new ArticleValidator();
+        $this->dataManager = new ArticleDataManager($this->db, $this->dbalHelper);
     }
 
-    public function write($article)
+    public function write($article, $defaultValues)
     {
-        if (!isset($article['orderNumber']) || empty($article['orderNumber'])) {
-            $message = SnippetsHelper::getNamespace()->get(
-                'adapters/ordernumber_required',
-                'Order number is required.'
-            );
-            throw new AdapterException($message);
-        }
+        $article = $this->validator->prepareInitialData($article);
+        $this->validator->checkRequiredFields($article);
 
-        return $this->insertOrUpdateArticle($article);
+        return $this->insertOrUpdateArticle($article, $defaultValues);
     }
 
-    protected function insertOrUpdateArticle($article)
+    protected function insertOrUpdateArticle($article, $defaultValues)
     {
         list($mainDetailId, $articleId, $detailId) = $this->findExistingEntries($article);
 
@@ -62,9 +66,12 @@ class ArticleWriter
         $createArticle = false;
         if ($createDetail && $article['mainNumber'] == $article['orderNumber']) {
             $createArticle = true;
+            $article = $this->dataManager->setDefaultFieldsForCreate($article, $defaultValues);
+            $this->validator->checkRequiredFieldsForCreate($article);
         }
 
-        $article = $this->setDefaultValues($article, $createArticle);
+        $article = $this->dataManager->setDefaultFields($article);
+        $this->validator->validate($article, ArticleDataType::$mapper);
 
         // insert article
         $builder = $this->dbalHelper->getQueryBuilderForEntity(
@@ -140,109 +147,6 @@ class ArticleWriter
         }
 
         return array($mainDetailId, $articleId, $detailId);
-    }
-
-    protected function setDefaultValues($article, $create)
-    {
-        $orderNumber = $article['orderNumber'];
-        if ($create && empty($article['taxId']) && empty($article['tax'])) {
-            // todo: read default tax rate from config
-            $article['taxId'] = array_shift(array_keys($this->taxRates));
-        }
-
-        if (isset($article['taxId']) && $article['taxId'] !== '') {
-            $article['tax'] = $this->taxRates[$article['taxId']];
-        } else if (isset($article['tax']) && $article['tax'] !== '') {
-            $tax = number_format($article['tax'], 2);
-            $article['taxId'] = $this->getTax($tax, $orderNumber);
-        }
-
-        if (!isset($article['supplierId']) && isset($article['supplierName'])){
-            $article['supplierId'] = $this->getSupplier($article['supplierName'], $orderNumber);
-        }
-
-        if ($create && empty($article['supplierId'])){
-            $message = SnippetsHelper::getNamespace()->get(
-                'adapters/articles/supplier_not_found',
-                "Supplier not found for article %s."
-            );
-            throw new AdapterException(sprintf($message, $orderNumber));
-        }
-
-        return $article;
-    }
-
-    protected function getTaxRates()
-    {
-        $tax = $this->db->fetchPairs('SELECT id, tax FROM s_core_tax');
-        if (!is_array($tax)) {
-            return array();
-        }
-        ksort($tax);
-
-        return $tax;
-    }
-
-    protected function getSuppliers()
-    {
-        $suppliers = array();
-        $result = $this->connection->fetchAll('SELECT `id`, `name` FROM s_articles_supplier');
-
-        foreach ($result as $row) {
-            $suppliers[$row['name']] = $row['id'];
-        }
-
-        return $suppliers;
-    }
-
-    /**
-     * Returns the taxes rate ID
-     *
-     * @param $taxRate
-     * @param $orderNumber
-     * @return int
-     * @throws AdapterException
-     */
-    public function getTax($taxRate, $orderNumber)
-    {
-        $taxId = array_search($taxRate, $this->taxRates);
-
-        if (!$taxId) {
-            $message = SnippetsHelper::getNamespace()->get(
-                'adapters/articles/no_tax_found',
-                "Tax by tax rate %s not found for article %s."
-            );
-            throw new AdapterException(sprintf($message, $taxRate, $orderNumber));
-        }
-
-        return $taxId;
-    }
-
-    /**
-     * Returns the supplier ID
-     *
-     * @param $name
-     * @return int
-     * @throws AdapterException
-     */
-    public function getSupplier($name){
-
-        $supplierId = $this->suppliers[$name];
-
-        //creates supplier if does not exists
-        if (!$supplierId){
-            $data = array('name' => $name);
-            $builder =  $this->dbalHelper->getQueryBuilderForEntity(
-                $data,
-                'Shopware\Models\Article\Supplier',
-                false
-            );
-            $builder->execute();
-            $supplierId = $this->connection->lastInsertId();
-            $this->suppliers[$name] = $supplierId;
-        }
-
-        return $supplierId;
     }
 
     protected function mapArticleAttributes($article)

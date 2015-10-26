@@ -13,7 +13,7 @@ interface DataDbAdapter
 
     public function getSections();
 
-    public function getColumns($colums);
+    public function getColumns($columns);
 
     public function write($records);
 

@@ -2,13 +2,13 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
-use Doctrine\Common\Collections\ArrayCollection;
+use Shopware\Components\SwagImportExport\DataManagers\CategoriesDataManager;
+use Shopware\Components\SwagImportExport\DataType\CategoryDataType;
 use Shopware\Models\Category\Category;
 use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
-use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
+use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
-use Symfony\Component\Config\Definition\Exception\Exception;
-use Symfony\Component\Validator\Constraints\DateTime;
+use Shopware\Components\SwagImportExport\Validators\CategoryValidator;
 
 class CategoriesDbAdapter implements DataDbAdapter
 {
@@ -35,6 +35,17 @@ class CategoriesDbAdapter implements DataDbAdapter
      * @var array
      */
     protected $logMessages;
+
+    /** @var CategoryValidator */
+    protected $validator;
+
+    /** @var CategoriesDataManager */
+    protected $dataManager;
+
+    /**
+     * @var array
+     */
+    protected $defaultValues;
 
     /**
      * Returns record ids
@@ -172,44 +183,59 @@ class CategoriesDbAdapter implements DataDbAdapter
      * Insert/Update data into db
      * 
      * @param array $records
+     * @throws \Enlight_Event_Exception
+     * @throws \Exception
      */
     public function write($records)
     {
+        if (empty($records['default'])) {
+            $message = SnippetsHelper::getNamespace()->get(
+                'adapters/categories/no_records',
+                'No category records were found.'
+            );
+            throw new \Exception($message);
+        }
+
         $records = Shopware()->Events()->filter(
-                'Shopware_Components_SwagImportExport_DbAdapters_CategoriesDbAdapter_Write',
-                $records,
-                array('subject' => $this)
+            'Shopware_Components_SwagImportExport_DbAdapters_CategoriesDbAdapter_Write',
+            $records,
+            array('subject' => $this)
         );
 
         $manager = $this->getManager();
+        $validator = $this->getValidator();
+        $dataManager = $this->getDataManager();
+
+        $defaultValues = $this->getDefaultValues();
 
         foreach ($records['default'] as $index => $record) {
-            try{
-                if (!$record['name']) {
-                    $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/categories/name_required', 'Category name is required');
-                    throw new AdapterException($message);
+            try {
+                $record = $validator->prepareInitialData($record);
+
+                $category = $this->findExistingEntries($record);
+                if (!$category instanceof Category) {
+                    $record = $dataManager->setDefaultFieldsForCreate($record, $defaultValues);
+                    $category = new Category();
+                    if (isset($record['categoryId'])) {
+                        $category->setId($record['categoryId']);
+                    }
                 }
 
-                if (!$record['parentId']) {
-                    $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/categories/parent_id_required', 'Parent category id is required for category %s');
-                    throw new AdapterException(sprintf($message, $record['name']));
-                }
+                $validator->checkRequiredFields($record);
+                $validator->validate($record, CategoryDataType::$mapper);
 
-                $parentCategory = $this->getRepository()->findOneBy(array('id' => $record['parentId']));
-                if (!$parentCategory) {
+                $record['parent'] = $this->getRepository()->findOneBy(array('id' => $record['parentId']));
+                if (!$record['parent'] instanceof Category) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/categories/parent_not_exists', 'Parent category does not exists for category %s');
                     throw new AdapterException(sprintf($message, $record['name']));
                 }
 
-                $record = $this->prepareData($record);
+               $record = $this->prepareData($record, $index, $category->getId(), $records['customerGroups']);
 
-                $category = $this->createCategory($record, $parentCategory, $records['customerGroups'], $index);
+                $category->fromArray($record);
 
                 $violations = $manager->validate($category);
-
                 if ($violations->count() > 0) {
                     $message = SnippetsHelper::getNamespace()
                                     ->get('adapters/category/no_valid_category_entity', 'No valid category entity for category %s');
@@ -238,11 +264,12 @@ class CategoriesDbAdapter implements DataDbAdapter
     private function getCustomerGroupIdsFromIndex(array $array, $currentIndex)
     {
         $returnArray = array();
-        foreach($array as $customerGroupEntry) {
-            if($customerGroupEntry['parentIndexElement'] == $currentIndex) {
+        foreach ($array as $customerGroupEntry) {
+            if ($customerGroupEntry['parentIndexElement'] == $currentIndex) {
                 $returnArray[] = $customerGroupEntry['customerGroupId'];
             }
         }
+
         return $returnArray;
     }
 
@@ -250,58 +277,15 @@ class CategoriesDbAdapter implements DataDbAdapter
      * Create the Category by hand. The method ->fromArray do not work
      *
      * @param $record
-     * @param Category $parent
-     * @param array $customerGroupArray
-     * @param int $index
      * @return Category
      */
-    private function createCategory($record, Category $parent, array $customerGroupArray, $index)
+    private function findExistingEntries($record)
     {
-        $customerGroupIds = $this->getCustomerGroupIdsFromIndex($customerGroupArray, $index);
-        $recordAttribute = $record['attribute'];
-
-        // create the Category
         /* @var $category Category */
-        $category = $this->getManager()->getRepository('\Shopware\Models\Category\Category')->find($record['categoryId']);
-
-        if (!$category instanceof Category ) {
-            $category = new Category();
-
-            if (isset($record['categoryId']) && !empty($record['categoryId'])){
-                $category->setId($record['categoryId']);
-            }
+        if (isset($record['categoryId'])) {
+            $category = $this->getRepository()->find($record['categoryId']);
         }
 
-        $category->fromArray($record);
-
-        $category->setParent($parent);
-
-        // create the categoryAttributes
-        $attributes = $this->getAttributeByCategoryId($record['categoryId']);
-
-        if(!$attributes instanceof \Shopware\Models\Attribute\Category) {
-            $attributes = new \Shopware\Models\Attribute\Category();
-            $attributes->fromArray($record);
-            $attributes->setCategoryId($record['categoryId']);
-        }
-
-        $attributes->setCategory($category);
-
-        $category->setAttribute($attributes);
-
-        // get avoided customerGroups
-        if ($customerGroupIds) {
-            foreach($customerGroupIds as $customerGroupID) {
-                $customerGroup = $this->getCustomerGroupById($customerGroupID);
-                if ($customerGroup) {
-                    if (!$this->checkIfRelationExists($category->getId(), $customerGroup->getId())) {
-                        $category->getCustomerGroups()->add($customerGroup);
-                    }
-                }
-            }
-
-
-        }
         return $category;
     }
 
@@ -341,25 +325,15 @@ class CategoriesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param int $categoryId
-     * @return null|\Shopware\Models\Attribute\Category
-     */
-    private function getAttributeByCategoryId($categoryId)
-    {
-        $category = $this->getManager()->getRepository('\Shopware\Models\Attribute\Category')->findOneBy(array('categoryId' =>$categoryId));
-        return $category;
-    }
-
-    /**
      * @param array $data
+     * @param $index
+     * @param $categoryId
+     * @param $groups
      * @return array
      */
-    protected function prepareData(array $data)
+    protected function prepareData(array $data, $index, $categoryId, $groups)
     {
-        //prepares the parent category
-        $data['parent'] = $this->getRepository()->findOneBy(array('id' => $data['parentId']));
-
-        //prepares the attributes
+        //prepares attribute associated data
         foreach ($data as $key => $value) {
             if (preg_match('/^attribute/', $key)) {
                 $newKey = lcfirst(preg_replace('/^attribute/', '', $key));
@@ -367,6 +341,19 @@ class CategoriesDbAdapter implements DataDbAdapter
                 unset($data[$key]);
             }
         }
+
+        //prepares customer groups associated data
+        $customerGroups = array();
+        $customerGroupIds = $this->getCustomerGroupIdsFromIndex($groups, $index);
+        foreach($customerGroupIds as $customerGroupID) {
+            $customerGroup = $this->getCustomerGroupById($customerGroupID);
+            if ($customerGroup && !$this->checkIfRelationExists($categoryId, $customerGroup->getId())) {
+                $customerGroups[] = $customerGroup;
+            }
+        }
+        $data['customerGroups'] = $customerGroups;
+
+        unset($data['parentId']);
 
         return $data;
     }
@@ -450,6 +437,26 @@ class CategoriesDbAdapter implements DataDbAdapter
         return $columns;
     }
 
+    /**
+     * Return list with default values for fields which are empty or don't exists
+     *
+     * @return array
+     */
+    private function getDefaultValues()
+    {
+        return $this->defaultValues;
+    }
+
+    /**
+     * Set default values for fields which are empty or don't exists
+     *
+     * @param array $values default values for nodes
+     */
+    public function setDefaultValues($values)
+    {
+        $this->defaultValues = $values;
+    }
+
     public function saveMessage($message)
     {
         $errorMode = Shopware()->Config()->get('SwagImportExportErrorMode');
@@ -506,5 +513,21 @@ class CategoriesDbAdapter implements DataDbAdapter
         return $this->db;
     }
 
+    public function getValidator()
+    {
+        if ($this->validator === null) {
+            $this->validator = new CategoryValidator();
+        }
 
+        return $this->validator;
+    }
+
+    public function getDataManager()
+    {
+        if ($this->dataManager === null) {
+            $this->dataManager = new CategoriesDataManager();
+        }
+
+        return $this->dataManager;
+    }
 }

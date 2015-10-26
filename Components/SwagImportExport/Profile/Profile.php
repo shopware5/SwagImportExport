@@ -12,6 +12,11 @@ class Profile
      */
     private $configNames;
 
+    /**
+     * @var array
+     */
+    private $defaultValues = array();
+
     public function __construct($profile)
     {
         $this->profileEntity = $profile;
@@ -71,4 +76,37 @@ class Profile
         Shopware()->Models()->persist($this->profileEntity);
     }
 
+    /**
+     * Check if current node have default value
+     *
+     * @param array $node
+     * @return array
+     */
+    private function getDefaultFields($node)
+    {
+        if ($node) {
+            foreach ($node['children'] as $key => $leaf) {
+                if ($leaf['children']) {
+                    $this->getDefaultFields($leaf);
+                }
+
+                if (isset($leaf['defaultValue'])) {
+                    $this->defaultValues[$leaf['shopwareField']] = $leaf['defaultValue'];
+                }
+            }
+        }
+
+        return $this->defaultValues;
+    }
+
+    /**
+     * Return list with default fields and values for current profile
+     *
+     * @param array $tree profile tree
+     * @return array
+     */
+    public function getDefaultValues($tree)
+    {
+        return $this->getDefaultFields($tree);
+    }
 }

@@ -71,7 +71,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
             me.toolbar.items.get('conversionsMenu').setDisabled(false);
             me.treeStore.getProxy().setExtraParam('profileId', profileId);
             me.treeStore.load({ params: { profileId: profileId } });
-//            me.columnStore.load({ params: { profileId: profileId } });
+            me.columnStore.load({ params: { profileId: profileId } });
             me.sectionStore.load({ params: { profileId: profileId } });
             me.formPanel.hideFields();
             me.treePanel.getView().setDisabled(false);
@@ -311,7 +311,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
 				this.child('#nodeName').show();
 				this.child('#nodeName').setValue(node.get('text'));
 				this.child('#swColumn').setValue(node.get('swColumn'));
-				
+
 				if (node.get('type') === 'attribute') {
                     this.child('#swColumn').getStore().load({ params: { profileId: me.profileId, adapter: node.get('adapter') } });
 					this.child('#swColumn').show();
@@ -349,6 +349,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
 					this.child('#swColumn').hide();
                     this.child('#adapter').hide();
                     this.child('#parentKey').hide();
+                    this.child('#defaultValue').hide();
 				}
 			},
 			items: [{
@@ -360,6 +361,14 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
 					name: 'nodeName',
 					allowBlank: false
 				}, {
+                    itemId: 'defaultValue',
+                    fieldLabel: '{s name=defaultValue}Default value{/s}',
+                    hidden: true,
+                    width: 400,
+                    labelWidth: 150,
+                    name: 'defaultValue',
+                    allowBlank: true
+                }, {
 					itemId: 'swColumn',
 					fieldLabel: '{s name=shopwareColumn}Shopware column{/s}',
 					hidden: true,
@@ -373,7 +382,13 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
                     width: 400,
                     labelWidth: 150,
                     name: 'swColumn',
-					allowBlank: false
+					allowBlank: false,
+                    listeners: {
+                        change: function(field, newValue) {
+                            var defaultValue = me.treeStore.getById(me.selectedNodeId).get('defaultValue');
+                            me.fireEvent('changeColumn', me.columnStore, newValue, defaultValue);
+                        }
+                    }
 				}, {
 					itemId: 'adapter',
 					fieldLabel: '{s name=adapter}Adapter{/s}',
@@ -422,12 +437,12 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
 							cls: 'primary',
 							action: 'swag-import-export-manager-profile-save',
 							handler: function() {
-								me.fireEvent('saveNode', me.treePanel, me.treeStore, me.selectedNodeId, me.formPanel.child('#nodeName').getValue(), me.formPanel.child('#swColumn').getValue(), me.formPanel.child('#adapter').getValue(), me.formPanel.child('#parentKey').getValue());
+								me.fireEvent('saveNode', me.treePanel, me.treeStore, me.selectedNodeId, me.formPanel.child('#nodeName').getValue(), me.formPanel.child('#swColumn').getValue(), me.formPanel.child('#defaultValue').getValue(), me.formPanel.child('#adapter').getValue(), me.formPanel.child('#parentKey').getValue());
 							}
 						}]
 				}]
 		});
-		
+
 		return me.formPanel;
 	}
 });

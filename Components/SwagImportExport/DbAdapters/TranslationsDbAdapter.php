@@ -2,8 +2,9 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
-use Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
+use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
+use Shopware\Components\SwagImportExport\Validators\TranslationValidator;
 
 class TranslationsDbAdapter implements DataDbAdapter
 {
@@ -18,6 +19,9 @@ class TranslationsDbAdapter implements DataDbAdapter
     protected $propertyValueRepo;
 
     protected $logMessages;
+
+    /**  @var TranslationValidator */
+    protected $validator;
 
     /**
      * @param $start
@@ -142,8 +146,12 @@ class TranslationsDbAdapter implements DataDbAdapter
 
     public function write($records)
     {
-        if ($records['default'] == null) {
-            return;
+        if (empty($records['default'])) {
+            $message = SnippetsHelper::getNamespace()->get(
+                'adapters/translations/no_records',
+                'No translation records were found.'
+            );
+            throw new \Exception($message);
         }
 
         $records = Shopware()->Events()->filter(
@@ -152,18 +160,15 @@ class TranslationsDbAdapter implements DataDbAdapter
             array('subject' => $this)
         );
 
+        $validator = $this->getValidator();
         $importMapper = $this->getElemenetMapper();
-
         $translationWriter = new \Shopware_Components_Translation();
 
         foreach ($records['default'] as $index => $record) {
             try {
-
-                if (!isset($record['objectType']) || empty($record['objectType'])) {
-                    $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/translations/object_type_not_found', 'Object type is required.');
-                    throw new AdapterException($message);
-                }
+                $record = $validator->prepareInitialData($record);
+                $validator->checkRequiredFields($record);
+                $validator->validate($record, TranslationValidator::$mapper);
 
                 if (isset($record['languageId'])) {
                     $shop = $this->getManager()->find('Shopware\Models\Shop\Shop', $record['languageId']);
@@ -177,34 +182,28 @@ class TranslationsDbAdapter implements DataDbAdapter
 
                 $repository = $this->getRepository($record['objectType']);
 
-                if (!isset($record['objectKey']) && !empty($record['objectKey'])){
+                if (isset($record['objectKey'])) {
                     $element = $repository->findOneBy(array('id' => (int) $record['objectKey']));
 
-                    if(!$element){
+                    if (!$element) {
                         $message = SnippetsHelper::getNamespace()
                             ->get('adapters/translations/element_id_not_found', '%s element not found with ID %s');
                         throw new AdapterException(sprintf($message, $record['objectType'], $record['objectKey']));
                     }
-                } else if (isset($record['baseName']) && !empty($record['baseName'])){
+                } else if (isset($record['baseName'])) {
                     $findKey = $record['objectType'] === 'propertyvalue' ? 'value': 'name';
                     $element = $repository->findOneBy(array($findKey => $record['baseName']));
 
-                    if(!$element){
+                    if (!$element) {
                         $message = SnippetsHelper::getNamespace()
                             ->get('adapters/translations/element_baseName_not_found', '%s element not found with name %s');
                         throw new AdapterException(sprintf($message, $record['objectType'], $record['baseName']));
                     }
                 }
 
-                if (!$element){
+                if (!$element) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/translations/element_objectKey_baseName_not_found', 'Please provide objectKey or baseName');
-                    throw new AdapterException(sprintf($message));
-                }
-
-                if (!isset($record['name'])){
-                    $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/translations/element_name_not_found', 'Please provide name');
                     throw new AdapterException(sprintf($message));
                 }
 
@@ -442,5 +441,14 @@ class TranslationsDbAdapter implements DataDbAdapter
         }
 
         return $this->propertyValueRepo;
+    }
+
+    public function getValidator()
+    {
+        if ($this->validator === null) {
+            $this->validator = new TranslationValidator();
+        }
+
+        return $this->validator;
     }
 }
