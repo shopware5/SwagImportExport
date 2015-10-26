@@ -132,6 +132,7 @@ class MainOrdersDbAdapter implements DataDbAdapter
         $result = array();
 
         // orders
+        $orders = array();
         if (!empty($columns['order'])) {
             $orderBuilder = $this->getOrderBuilder($columns['order'], $ids);
             $orders = $orderBuilder->getQuery()->getResult();
@@ -141,7 +142,7 @@ class MainOrdersDbAdapter implements DataDbAdapter
         }
 
         if (!empty($columns['taxRateSum'])) {
-            $taxRateSums = $this->getTaxSums($ids);
+            $taxRateSums = $this->getTaxSums($ids, $orders);
             $result['taxRateSum'] = $taxRateSums;
         }
 
@@ -374,9 +375,10 @@ class MainOrdersDbAdapter implements DataDbAdapter
 
     /**
      * @param array $ids
+     * @param array $orders
      * @return array
      */
-    private function getTaxSums($ids)
+    private function getTaxSums($ids, $orders)
     {
         $sum = array();
         $taxSumBuilder = $this->getTaxSumBuilder($ids);
@@ -392,17 +394,42 @@ class MainOrdersDbAdapter implements DataDbAdapter
         }
 
         $result = array();
+        $i = 0;
         foreach ($sum as $orderId => $taxSum) {
             foreach ($taxSum['taxRateSums'] as $taxRate => $vat) {
+                $shippingTaxRate = $this->getShippingRate(
+                    $orders[$i]['invoiceShipping'],
+                    $orders[$i]['invoiceShippingNet']
+                );
+                if ($taxRate == $shippingTaxRate) {
+                    $vat += $orders[$i]['taxSumShipping'];
+                }
+
                 $result[] = array(
                     'orderId' => $orderId,
                     'taxRateSums' => $vat,
                     'taxRate' => $taxRate
                 );
             }
+
+            $i++;
         }
 
         return $result;
+    }
+
+    /**
+     * Get shipping tax rate
+     *
+     * @param float $amount
+     * @param float $amountNet
+     * @return float
+     */
+    private function getShippingRate($amount, $amountNet)
+    {
+        $percent = abs((1 - $amount / $amountNet) * 100);
+
+        return round($percent);
     }
 
     /**
