@@ -10,10 +10,12 @@ class ArticleValidator extends Validator
 {
     private $requiredFields = array(
         'orderNumber',
+        'mainNumber'
     );
 
     private $requiredFieldsForCreate = array(
         'name',
+        'mainNumber',
         array('supplierName', 'supplierId'),
     );
 
@@ -21,6 +23,10 @@ class ArticleValidator extends Validator
         'orderNumber' => array(
             'adapters/ordernumber_required',
             'Order number is required.'
+        ),
+        'mainNumber' => array(
+            'adapters/mainnumber_required',
+            'Main number is required for article %s.'
         ),
         'supplierName' => array(
             'adapters/articles/supplier_not_found',
@@ -48,7 +54,7 @@ class ArticleValidator extends Validator
             list($snippetName, $snippetMessage) = $this->snippetData[$key];
 
             $message = SnippetsHelper::getNamespace()->get($snippetName, $snippetMessage);
-            throw new AdapterException($message);
+            throw new AdapterException(sprintf($message, $record['orderNumber']));
         }
     }
 
