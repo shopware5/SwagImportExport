@@ -2,26 +2,24 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
+use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Model\QueryBuilder;
 use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Validators\OrderValidator;
+use Shopware\Models\Order\Detail;
+use Shopware\Models\Order\Repository;
 
 class OrdersDbAdapter implements DataDbAdapter
 {
-
     /**
-     * Shopware\Components\Model\ModelManager
+     * @var ModelManager
      */
     protected $manager;
 
     /**
-     * Shopware\Models\Order\Order
-     */
-    protected $repository;
-    
-    /**
-     * Shopware\Models\Order\Detail
+     * @var Repository
      */
     protected $detailRepository;
 
@@ -35,14 +33,17 @@ class OrdersDbAdapter implements DataDbAdapter
      */
     protected $logMessages;
 
+    /**
+     * @var OrderValidator
+     */
     protected $validator;
 
     /**
      * Returns record ids
-     * 
+     *
      * @param int $start
      * @param int $limit
-     * @param type $filter
+     * @param array $filter
      * @return array
      */
     public function readRecordIds($start = null, $limit = null, $filter = null)
@@ -50,11 +51,11 @@ class OrdersDbAdapter implements DataDbAdapter
         $manager = $this->getManager();
 
         $builder = $manager->createQueryBuilder();
-        
+
         $builder->select('details.id')
-                ->from('Shopware\Models\Order\Detail', 'details')
-                ->leftJoin('details.order', 'orders');
-                        
+            ->from('Shopware\Models\Order\Detail', 'details')
+            ->leftJoin('details.order', 'orders');
+
         if (isset($filter['orderstate']) && is_numeric($filter['orderstate'])) {
             $builder->andWhere('orders.status = :orderstate');
             $builder->setParameter('orderstate', $filter['orderstate']);
@@ -64,7 +65,7 @@ class OrdersDbAdapter implements DataDbAdapter
             $builder->andWhere('orders.cleared = :paymentstate');
             $builder->setParameter('paymentstate', $filter['paymentstate']);
         }
-        
+
         if (isset($filter['ordernumberFrom']) && is_numeric($filter['ordernumberFrom'])) {
             $builder->andWhere('orders.number > :orderNumberFrom');
             $builder->setParameter('orderNumberFrom', $filter['ordernumberFrom']);
@@ -80,12 +81,12 @@ class OrdersDbAdapter implements DataDbAdapter
             $builder->andWhere('orders.orderTime <= :dateTo');
             $builder->setParameter('dateTo', $dateTo->get('yyyy-MM-dd HH:mm:ss'));
         }
-        
+
         $builder->setFirstResult($start)
-                ->setMaxResults($limit);
-        
+            ->setMaxResults($limit);
+
         $records = $builder->getQuery()->getResult();
-        
+
         $result = array();
         if ($records) {
             foreach ($records as $value) {
@@ -108,13 +109,13 @@ class OrdersDbAdapter implements DataDbAdapter
     {
         if (!$ids && empty($ids)) {
             $message = SnippetsHelper::getNamespace()
-                    ->get('adapters/orders/no_ids', 'Can not read orders without ids.');
+                ->get('adapters/orders/no_ids', 'Can not read orders without ids.');
             throw new \Exception($message);
         }
 
         if (!$columns && empty($columns)) {
             $message = SnippetsHelper::getNamespace()
-                    ->get('adapters/orders/no_column_names', 'Can not read orders without column names.');
+                ->get('adapters/orders/no_column_names', 'Can not read orders without column names.');
             throw new \Exception($message);
         }
 
@@ -125,10 +126,13 @@ class OrdersDbAdapter implements DataDbAdapter
         $orders = DbAdapterHelper::decodeHtmlEntities($orders);
 
         $result['default'] = DbAdapterHelper::escapeNewLines($orders);
-        
+
         return $result;
     }
 
+    /**
+     * @return array
+     */
     public function getUnprocessedData()
     {
         return $this->unprocessedData;
@@ -136,7 +140,7 @@ class OrdersDbAdapter implements DataDbAdapter
 
     /**
      * Update order
-     * 
+     *
      * @param array $records
      * @throws \Exception
      */
@@ -165,6 +169,7 @@ class OrdersDbAdapter implements DataDbAdapter
                 $validator->validate($record, OrderValidator::$mapper);
 
                 if (isset($record['orderDetailId']) && $record['orderDetailId']) {
+                    /** @var \Shopware\Models\Order\Detail $orderDetailModel */
                     $orderDetailModel = $this->getDetailRepository()->find($record['orderDetailId']);
                 } else {
                     $orderDetailModel = $this->getDetailRepository()->findOneBy(array('number' => $record['number']));
@@ -179,7 +184,8 @@ class OrdersDbAdapter implements DataDbAdapter
                 $orderModel = $orderDetailModel->getOrder();
 
                 if (isset($record['paymentId']) && is_numeric($record['paymentId'])) {
-                    $paymentStatusModel = $this->getManager()->find('\Shopware\Models\Order\Status', $record['cleared']);
+                    $paymentStatusModel = $this->getManager()
+                        ->find('\Shopware\Models\Order\Status', $record['cleared']);
 
                     if (!$paymentStatusModel) {
                         $message = SnippetsHelper::getNamespace()
@@ -231,7 +237,8 @@ class OrdersDbAdapter implements DataDbAdapter
                 }
 
                 if (isset($record['statusId']) && is_numeric($record['statusId'])) {
-                    $detailStatusModel = $this->getManager()->find('\Shopware\Models\Order\DetailStatus', $record['statusId']);
+                    $detailStatusModel = $this->getManager()
+                        ->find('\Shopware\Models\Order\DetailStatus', $record['statusId']);
 
                     if (!$detailStatusModel) {
                         $message = SnippetsHelper::getNamespace()
@@ -270,6 +277,10 @@ class OrdersDbAdapter implements DataDbAdapter
         $this->getManager()->clear();
     }
 
+    /**
+     * @param $message
+     * @throws \Exception
+     */
     public function saveMessage($message)
     {
         $errorMode = Shopware()->Config()->get('SwagImportExportErrorMode');
@@ -281,11 +292,17 @@ class OrdersDbAdapter implements DataDbAdapter
         $this->setLogMessages($message);
     }
 
+    /**
+     * @return array
+     */
     public function getLogMessages()
     {
         return $this->logMessages;
     }
 
+    /**
+     * @param $logMessages
+     */
     public function setLogMessages($logMessages)
     {
         $this->logMessages[] = $logMessages;
@@ -300,22 +317,25 @@ class OrdersDbAdapter implements DataDbAdapter
             array('id' => 'default', 'name' => 'default')
         );
     }
-    
+
     /**
      * @param string $section
-     * @return mix
+     * @return bool|mixed
      */
     public function getColumns($section)
     {
         $method = 'get' . ucfirst($section) . 'Columns';
-        
+
         if (method_exists($this, $method)) {
             return $this->{$method}();
         }
 
         return false;
     }
-    
+
+    /**
+     * @return array
+     */
     public function getDefaultColumns()
     {
         $columns = array(
@@ -323,7 +343,7 @@ class OrdersDbAdapter implements DataDbAdapter
             'details.id as orderDetailId',
             'details.articleId as articleId',
             'details.number as number',
-           
+
             'orders.customerId as customerId',
             'orders.status as status',
             'orders.cleared as cleared',
@@ -354,7 +374,7 @@ class OrdersDbAdapter implements DataDbAdapter
             'paymentStatus.description as paymentStatusDescription',
             'dispatch.id as dispatchId',
             'dispatch.description as dispatchDescription',
-           
+
             'details.taxId as taxId',
             'details.taxRate as taxRate',
             'details.statusId as statusId',
@@ -370,7 +390,7 @@ class OrdersDbAdapter implements DataDbAdapter
             'details.esdArticle as esd',
             'details.config as config',
             'details.mode as mode',
-            
+
         );
 
         $billingColumns = array(
@@ -420,7 +440,7 @@ class OrdersDbAdapter implements DataDbAdapter
         );
 
         $columns = array_merge($columns, $customerColumns);
-       
+
         $attributesSelect = $this->getAttributes();
 
         if ($attributesSelect && !empty($attributesSelect)) {
@@ -430,7 +450,11 @@ class OrdersDbAdapter implements DataDbAdapter
         return $columns;
     }
 
-    public function getAttributes()
+    /**
+     * @return array|string
+     * @throws \Zend_Db_Statement_Exception
+     */
+    private function getAttributes()
     {
         // Attributes
         $stmt = Shopware()->Db()->query('SELECT * FROM s_order_attributes LIMIT 1');
@@ -457,37 +481,25 @@ class OrdersDbAdapter implements DataDbAdapter
     }
 
     /**
-     * Returns order repository
-     * 
-     * @return \Shopware\Models\Order\Order
-     */
-    public function getRepository()
-    {
-        if ($this->repository === null) {
-            $this->repository = $this->getManager()->getRepository('Shopware\Models\Order\Order');
-        }
-        return $this->repository;
-    }
-    
-    /**
      * Returns order detail repository
-     * 
-     * @return \Shopware\Models\Order\Detail
+     *
+     * @return Repository
      */
-    public function getDetailRepository()
+    private function getDetailRepository()
     {
         if ($this->detailRepository === null) {
             $this->detailRepository = $this->getManager()->getRepository('Shopware\Models\Order\Detail');
         }
+
         return $this->detailRepository;
     }
 
     /**
      * Returns entity manager
-     * 
-     * @return \Shopware\Components\Model\ModelManager
+     *
+     * @return ModelManager
      */
-    public function getManager()
+    private function getManager()
     {
         if ($this->manager === null) {
             $this->manager = Shopware()->Models();
@@ -496,51 +508,39 @@ class OrdersDbAdapter implements DataDbAdapter
         return $this->manager;
     }
 
-    public function getBuilder($columns, $ids)
+    /**
+     * @param $columns
+     * @param $ids
+     * @return QueryBuilder
+     */
+    private function getBuilder($columns, $ids)
     {
         $builder = $this->getManager()->createQueryBuilder();
 
         $builder->select($columns)
-                ->from('Shopware\Models\Order\Detail', 'details')
-                ->leftJoin('details.order', 'orders')
-                ->leftJoin('details.tax', 'taxes')
-                ->leftJoin('orders.billing', 'billing')
-                ->leftJoin('billing.country', 'billingCountry')
-                ->leftJoin('orders.shipping', 'shipping')
-                ->leftJoin('shipping.country', 'shippingCountry')
-                ->leftJoin('orders.payment', 'payment')
-                ->leftJoin('orders.paymentStatus', 'paymentStatus')
-                ->leftJoin('orders.orderStatus', 'orderStatus')
-                ->leftJoin('orders.dispatch', 'dispatch')
-                ->leftJoin('orders.customer', 'customer')
-                ->leftJoin('orders.attribute', 'attr')
-                ->where('details.id IN (:ids)')
-                ->setParameter('ids', $ids);
+            ->from('Shopware\Models\Order\Detail', 'details')
+            ->leftJoin('details.order', 'orders')
+            ->leftJoin('details.tax', 'taxes')
+            ->leftJoin('orders.billing', 'billing')
+            ->leftJoin('billing.country', 'billingCountry')
+            ->leftJoin('orders.shipping', 'shipping')
+            ->leftJoin('shipping.country', 'shippingCountry')
+            ->leftJoin('orders.payment', 'payment')
+            ->leftJoin('orders.paymentStatus', 'paymentStatus')
+            ->leftJoin('orders.orderStatus', 'orderStatus')
+            ->leftJoin('orders.dispatch', 'dispatch')
+            ->leftJoin('orders.customer', 'customer')
+            ->leftJoin('orders.attribute', 'attr')
+            ->where('details.id IN (:ids)')
+            ->setParameter('ids', $ids);
 
         return $builder;
     }
 
     /**
-     * @return bool
+     * @return OrderValidator
      */
-    public function isAdditionalBillingAddressExists()
-    {
-        $sql = "SHOW COLUMNS FROM `s_user_billingaddress` LIKE 'additional_address_line1'";
-        $result = Shopware()->Db()->fetchRow($sql);
-        return $result ? true : false;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isAdditionalShippingAddressExists()
-    {
-        $sql = "SHOW COLUMNS FROM `s_user_shippingaddress` LIKE 'additional_address_line1'";
-        $result = Shopware()->Db()->fetchRow($sql);
-        return $result ? true : false;
-    }
-
-    public function getValidator()
+    private function getValidator()
     {
         if ($this->validator === null) {
             $this->validator = new OrderValidator();
