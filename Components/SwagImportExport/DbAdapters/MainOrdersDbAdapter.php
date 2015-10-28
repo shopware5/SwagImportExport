@@ -460,7 +460,6 @@ class MainOrdersDbAdapter implements DataDbAdapter
     private function calculateTaxSum($taxData)
     {
         if (empty($taxData['taxRate'])) {
-            $taxValue = $taxData['taxRate'];
             $taxModel = $this->getManager()->find('Shopware\Models\Tax\Tax', $taxData['taxId']);
             if ($taxModel && $taxModel->getId() !== 0 && $taxModel->getId() !== null && $taxModel->getTax() !== null) {
                 $taxValue = $taxModel->getTax();
