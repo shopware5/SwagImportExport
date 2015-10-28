@@ -36,12 +36,13 @@ class PriceWriter
         $tax = $this->getArticleTaxRate($articleId);
 
         foreach ($prices as $price) {
+            $orderNumber = $this->getArticleOrderNumber($articleDetailId);
             $price = $this->validator->prepareInitialData($price);
             $price = $this->dataManager->setDefaultFields($price);
-            $this->validator->checkRequiredFields($price);
+            $this->validator->checkRequiredFields($price, $orderNumber);
             $this->validator->validate($price, PriceValidator::$mapper);
 
-            $this->checkRequirements($price, $articleDetailId);
+            $this->checkRequirements($price, $orderNumber);
 
             // skip empty prices for non-default customer groups
             if (empty($price['price']) && $price['priceGroup'] !== 'EK') {
@@ -101,10 +102,9 @@ class PriceWriter
         return $price;
     }
 
-    protected function checkRequirements($price, $articleDetailId)
+    protected function checkRequirements($price, $orderNumber)
     {
         if (!array_key_exists($price['priceGroup'], $this->customerGroups)) {
-            $orderNumber = $this->getArticleOrderNumber($articleDetailId);
             $message = SnippetsHelper::getNamespace()->get(
                 'adapters/customerGroup_not_found',
                 'Customer Group by key %s not found for article %s'
@@ -112,16 +112,7 @@ class PriceWriter
             throw new AdapterException(sprintf($message, $price['priceGroup'], $orderNumber));
         }
 
-        if ((!isset($price['price']) || empty($price['price'])) && $price['priceGroup'] == 'EK') {
-            $message = SnippetsHelper::getNamespace()->get(
-                'adapters/articles/incorrect_price',
-                'Price value is incorrect for article with nubmer %s'
-            );
-            throw new AdapterException(sprintf($message, ''));
-        }
-
         if ($price['from'] <= 0) {
-            $orderNumber = $this->getArticleOrderNumber($articleDetailId);
             $message = SnippetsHelper::getNamespace()->get(
                 'adapters/articles/invalid_price',
                 'Invalid Price "from" value for article %s'

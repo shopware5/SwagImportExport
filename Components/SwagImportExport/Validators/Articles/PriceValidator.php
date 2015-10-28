@@ -34,9 +34,10 @@ class PriceValidator extends Validator
      * Checks whether required fields are filled-in
      *
      * @param array $record
+     * @param string $orderNumber
      * @throws AdapterException
      */
-    public function checkRequiredFields($record)
+    public function checkRequiredFields($record, $orderNumber)
     {
         foreach ($this->requiredFields as $key) {
             list($price, $priceGroup) = $key;
@@ -49,7 +50,7 @@ class PriceValidator extends Validator
             list($snippetName, $snippetMessage) = $this->snippetData[$key];
 
             $message = SnippetsHelper::getNamespace()->get($snippetName, $snippetMessage);
-            throw new AdapterException(sprintf($message, ''));
+            throw new AdapterException(sprintf($message, $orderNumber));
         }
     }
 }
