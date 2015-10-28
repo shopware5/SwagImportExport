@@ -306,7 +306,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
 
                     if (type === 'articles') {
                         me.articleFields.show();
-                    } else if (type === 'orders') {
+                    } else if (type === 'orders' || type == 'mainOrders') {
                         me.orderFields.show();
                     } else if (type === 'articlesInStock') {
                         me.stockField.show();
@@ -475,38 +475,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
             labelWidth: me.configLabelWidth
         });
     },
-    /*
-     * Customer group checkbox
-     * 
-     * @return [object] generated Ext.form.field.Checkbox
-     */
-    createCustomerGroupCheckbox: function() {
-        var me = this;
 
-        return Ext.create('Ext.form.field.Checkbox', {
-            name: 'customerGroup',
-            fieldLabel: me.snippets.customerGroup,
-            width: me.configWidth,
-            labelWidth: me.configLabelWidth
-        });
-    },
-    /*
-     * Translation checkbox
-     * 
-     * @return [object] generated Ext.form.field.Checkbox
-     */
-    createTranslationCheckbox: function() {
-        var me = this;
-
-        return Ext.create('Ext.form.field.Checkbox', {
-            name: 'translation',
-            fieldLabel: me.snippets.translations,
-            width: me.configWidth,
-            inputValue: '1',
-            uncheckedValue: '0',
-            labelWidth: me.configLabelWidth
-        });
-    },
     /*
      * Limit input field
      * 

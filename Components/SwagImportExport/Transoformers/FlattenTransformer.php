@@ -80,7 +80,7 @@ class FlattenTransformer implements DataTransformerAdapter
     {
         $mainNode = $this->getMainIterationPart();
         $this->processIterationParts($mainNode);
-        
+
         $transformData = $this->transform($mainNode);
         $this->collectHeader($transformData, $mainNode['name']);
 
@@ -686,13 +686,20 @@ class FlattenTransformer implements DataTransformerAdapter
         } elseif ($this->iterationParts[$path] == 'translation') {
             $translationProfile = $this->getNodeFromProfile($this->getMainIterationPart(), 'translation');
             $translationNodeMapper = $this->createMapperFromProfile($translationProfile);
-            
+
             foreach ($this->getShops() as $shop) {
                 if ($shop->getId() != 1) {
                     $this->createHeaderTranslation($translationNodeMapper, $shop->getId());
                 }
             }
-            
+        } elseif ($this->iterationParts[$path] == 'taxRateSum') {
+            $taxSumProfile = $this->getNodeFromProfile($this->getMainIterationPart(), 'taxRateSum');
+            $taxSumNodeMapper = $this->createMapperFromProfile($taxSumProfile);
+
+            $taxRates = $this->getTaxRates();
+            foreach ($taxRates as $taxRate) {
+                $this->createHeaderTaxSumNodes($taxSumNodeMapper, $taxRate['taxRate']);
+            }
         } else {
             foreach ($node as $key => $value) {
                 
@@ -735,6 +742,36 @@ class FlattenTransformer implements DataTransformerAdapter
                     $this->saveTempData($name);
                 } else {
                     $key .= '_' . $groupKey;
+                    $this->saveTempData($key);
+                }
+            }
+        }
+    }
+
+    /**
+     * Saves tax rate sum nodes as column names
+     *
+     * @param array $node
+     * @param string $taxRate
+     * @param string $path
+     */
+    public function createHeaderTaxSumNodes($node, $taxRate, $path = null)
+    {
+        foreach ($node as $key => $value) {
+
+            if (is_array($value)) {
+                $currentPath = $this->getMergedPath($path, $key);
+                $this->createHeaderTaxSumNodes($value, $taxRate, $currentPath);
+            } else {
+                if ($value == 'taxRate') {
+                    continue;
+                }
+                if ($key == '_value') {
+                    $pathParts = explode('/', $path);
+                    $name = $pathParts[count($pathParts) - 1] . '_' . $taxRate ;
+                    $this->saveTempData($name);
+                } else {
+                    $key .= '_' . $taxRate;
                     $this->saveTempData($key);
                 }
             }
@@ -941,6 +978,21 @@ class FlattenTransformer implements DataTransformerAdapter
                     }
                 }
                 unset($this->iterationTempData);
+            } elseif ($this->iterationParts[$path] == 'taxRateSum') {
+                $taxSumProfile = $this->getNodeFromProfile($this->getMainIterationPart(), 'taxRateSum');
+                $taxSumTreeMapper = $this->createMapperFromProfile($taxSumProfile);
+                $taxSumFlatMapper = $this->treeToFlat($taxSumTreeMapper);
+
+                $taxRates = $this->getTaxRates();
+                foreach ($taxRates as $taxRate) {
+                    $taxRateNode = $this->findNodeByTaxRate($node, $taxRate['taxRate'], $taxSumFlatMapper);
+                    if ($taxRateNode) {
+                        $this->collectTaxRateData($taxRateNode, $taxSumFlatMapper);
+                    } else {
+                        $this->collectTaxRateData($taxSumTreeMapper, $taxSumFlatMapper, null, true);
+                    }
+                    unset($taxRateNode);
+                }
             } else {
                 //processing images, similars and accessories
                 foreach ($node as $value) {
@@ -1386,5 +1438,84 @@ class FlattenTransformer implements DataTransformerAdapter
         $builder->orderBy('attribute.position');
 
         return $builder->getQuery()->getArrayResult();
+    }
+
+    /**
+     * @return array
+     * @throws \Zend_Db_Statement_Exception
+     */
+    public function getTaxRates()
+    {
+        $sql = '(SELECT tax as taxRate FROM s_core_tax)
+                UNION
+                (SELECT tax_rate as taxRate FROM s_order_details)
+                UNION
+                (SELECT tax as taxRate FROM s_core_tax_rules)
+                ORDER BY taxRate ASC';
+
+        return Shopware()->Db()->query($sql)->fetchAll();
+    }
+
+    /**
+     * Returns price node by price group
+     *
+     * @param array $node
+     * @param string $taxRate
+     * @param array $mapper
+     * @return array
+     */
+    public function findNodeByTaxRate($node, $taxRate, $mapper)
+    {
+        foreach ($node as $value) {
+            $rate = $this->getTaxRateFromNode($value, $mapper);
+            if ($rate == $taxRate) {
+                return $value;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param $node
+     * @param $mapper
+     * @param null $path
+     * @return mixed
+     */
+    public function getTaxRateFromNode($node, $mapper, $path = null)
+    {
+        foreach ($node as $key => $value) {
+            $currentPath = $this->getMergedPath($path, $key);
+            if (is_array($value)) {
+                $result = $this->getTaxRateFromNode($value, $mapper, $currentPath);
+
+                if ($result) {
+                    return $result;
+                }
+            }
+
+            if ($mapper[$currentPath] == 'taxRate') {
+                return $value;
+            }
+        }
+    }
+
+    /**
+     * @param $node
+     * @param $mapper
+     * @param null $path
+     * @param bool $emptyResult
+     */
+    public function collectTaxRateData($node, $mapper, $path = null, $emptyResult = false)
+    {
+        foreach ($node as $key => $value) {
+            $currentPath = $this->getMergedPath($path, $key);
+            if (is_array($value)) {
+                $this->collectTaxRateData($value, $mapper, $currentPath, $emptyResult);
+            } elseif ($mapper[$currentPath] === 'taxRateSums') {
+                $tempData = ($emptyResult === true) ? null : $value;
+                $this->saveTempData($tempData);
+            }
+        }
     }
 }

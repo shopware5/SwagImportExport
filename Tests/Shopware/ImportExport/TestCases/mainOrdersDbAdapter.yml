@@ -1,0 +1,272 @@
+testReadRecordIds:
+    readRecordIdsTest1:
+        start: 0
+        limit: 100
+        filter:
+        expectedIds:
+            0: '1'
+            1: '2'
+            2: '3'
+            3: '4'
+            4: '5'
+        expectedCount: 5
+    readRecordIdsTest2:
+        start: 1
+        limit: 100
+        filter:
+        expectedIds:
+            0: '2'
+            1: '3'
+            2: '4'
+            3: '5'
+        expectedCount: 4
+    readRecordIdsTest3:
+        start: 100
+        limit: 100
+        filter:
+        expectedIds:
+        expectedCount: 0
+    readRecordIdsTest4:
+        start: 0
+        limit: 100
+        filter:
+            orderstate: 0
+        expectedIds:
+            0: '1'
+            1: '2'
+            2: '3'
+            3: '4'
+            4: '5'
+        expectedCount: 5
+    readRecordIdsTest5:
+        start: 0
+        limit: 100
+        filter:
+            orderstate: 1
+        expectedIds:
+        expectedCount: 0
+    readRecordIdsTest6:
+        start: 0
+        limit: 100
+        filter:
+            orderstate: 2
+        expectedIds:
+        expectedCount: 0
+    readRecordIdsTest7:
+        start: 0
+        limit: 100
+        filter:
+            orderstate: 2
+            ordernumberFrom: 20001
+        expectedIds:
+        expectedCount: 0
+    readRecordIdsTest8:
+        start: 0
+        limit: 100
+        filter:
+            orderstate: 2
+            ordernumberFrom: 20001
+            dateFrom: '2015-10-05 00:00:00'
+        expectedIds:
+        expectedCount: 0
+    readRecordIdsTest9:
+        start: 0
+        limit: 100
+        filter:
+            orderstate: 2
+            ordernumberFrom: 20001
+            dateFrom: '2015-10-01 00:00:00'
+        expectedIds:
+        expectedCount: 0
+    readRecordIdsTest10:
+        start: 0
+        limit: 100
+        filter:
+            orderstate:
+            ordernumberFrom: 20000
+            dateFrom: '2015-10-01 00:00:00'
+        expectedIds:
+            0: '1'
+            1: '2'
+            2: '3'
+            3: '4'
+            4: '5'
+        expectedCount: 5
+testRead:
+    readTest1:
+        columns:
+            order: "orders.id as orderId, orders.number as orderNumber, documents.documentId as invoiceNumber, orders.invoiceAmount, orders.invoiceAmountNet, orders.invoiceShipping, orders.invoiceShippingNet, SUM(orders.invoiceShipping - orders.invoiceShippingNet) as taxSumShipping, orders.net, orders.taxFree, payment.description as paymentName, paymentStatus.description as paymentState, orderStatus.description as orderState, orders.currency, orders.currencyFactor, orders.transactionId, orders.trackingCode, DATE_FORMAT(orders.orderTime, '%Y-%m-%d %H:%i:%s') as orderTime, customer.email, billing.number as customerNumber, customerGroup.name as customerGroupName, billing.salutation as billingSalutation, billing.firstName as billingFirstName, billing.lastName as billingLastName, billing.company as billingCompany, billing.department as billingDepartment, billing.street as billingStreet, billing.zipCode as billingZipCode, billing.city as billingCity, billing.phone as billingPhone, billing.fax as billingFax, billing.additionalAddressLine1 as billingAdditionalAddressLine1, billing.additionalAddressLine2 as billingAdditionalAddressLine2, bState.name as billingState, bCountry.name as billingCountry, shipping.salutation as shippingSalutation, shipping.firstName as shippingFirstName, shipping.lastName as shippingLastName, shipping.company as shippingCompany, shipping.department as shippingDepartment, shipping.street as shippingStreet, shipping.zipCode as shippingZipCode, shipping.city as shippingCity, shipping.additionalAddressLine1 as shippingAdditionalAddressLine1, shipping.additionalAddressLine2 as shippingAdditionalAddressLine2, sState.name as shippingState, sCountry.name as shippingCountry"
+        ids: [1]
+        expected:
+            0:
+                orderId: '1'
+                orderNumber: '20010'
+                invoiceNumber: ''
+                invoiceAmount: '51.9'
+                invoiceAmountNet: '45.27'
+                invoiceShipping: '3.9'
+                invoiceShippingNet: '3.25'
+                taxSumShipping: '0.65'
+                net: '0'
+                taxFree: '0'
+                paymentName: 'Vorkasse'
+                paymentState: 'Offen'
+                orderState: 'Offen'
+                currency: 'EUR'
+                currencyFactor: '1'
+                transactionId: ''
+                trackingCode: ''
+                orderTime: '2015-10-15 09:14:19'
+                email: 'test_ek@test.com'
+                customerNumber: '20009'
+                customerGroupName: 'Shopkunden'
+                billingSalutation: 'ms'
+                billingFirstName: 'Test EK'
+                billingLastName: 'Test EK'
+                billingCompany: ''
+                billingDepartment: ''
+                billingStreet: 'Strasse 12'
+                billingZipCode: 'PLZ'
+                billingCity: 'Ort'
+                billingPhone: ''
+                billingFax: ''
+                billingAdditionalAddressLine1: ''
+                billingAdditionalAddressLine2: ''
+                billingState: 'Berlin'
+                billingCountry: 'Deutschland'
+                shippingSalutation: 'ms'
+                shippingFirstName: 'Test EK'
+                shippingLastName: 'Test EK'
+                shippingCompany: ''
+                shippingDepartment: ''
+                shippingStreet: 'Strasse 12'
+                shippingZipCode: 'PLZ'
+                shippingCity: 'Ort'
+                shippingAdditionalAddressLine1: ''
+                shippingAdditionalAddressLine2: ''
+                shippingState: 'Berlin'
+                shippingCountry: 'Deutschland'
+        expectedCount: 1
+        section: 'order'
+    readTest2:
+        columns:
+            taxRateSum: 'taxRateSums'
+        ids: [1,2,3,4,5]
+        expected:
+            0:
+                orderId: 1
+                taxRateSums: 1.31
+                taxRate: 7
+            1:
+                orderId: 1
+                taxRateSums: 4.67
+                taxRate: 20
+            2:
+                orderId: 2
+                taxRateSums: 2.87
+                taxRate: 19
+            3:
+                orderId: 3
+                taxRateSums: 0.65
+                taxRate: 7
+            4:
+                orderId: 3
+                taxRateSums: 6.01
+                taxRate: 19
+            5:
+                orderId: 5
+                taxRateSums: 0.35
+                taxRate: 7
+            6:
+                orderId: 5
+                taxRateSums: 2.85
+                taxRate: 19
+            7:
+                orderId: 5
+                taxRateSums: 4.6
+                taxRate: 20
+        expectedCount: 8
+        section: 'taxRateSum'
+testReadColumnsException:
+    readColumnsExceptionTest1:
+        columns:
+        ids: [1]
+testReadIdsException:
+    readIdsExceptionTest1:
+        columns: 'orders.id, orders.number'
+        ids:
+testDefaultColumns:
+    defaultColumnsTest1:
+        expectedColumns:
+            order:
+                0: "orders.id as orderId"
+                1: "orders.number as orderNumber"
+                2: "documents.documentId as invoiceNumber"
+                3: "orders.invoiceAmount"
+                4: "orders.invoiceAmountNet"
+                5: "orders.invoiceShipping"
+                6: "orders.invoiceShippingNet"
+                7: "SUM(orders.invoiceShipping - orders.invoiceShippingNet) as taxSumShipping"
+                8: "orders.net"
+                9: "orders.taxFree"
+                10: "payment.description as paymentName"
+                11: "paymentStatus.description as paymentState"
+                12: "orderStatus.description as orderState"
+                13: "orders.currency"
+                14: "orders.currencyFactor"
+                15: "orders.transactionId"
+                16: "orders.trackingCode"
+                17: "DATE_FORMAT(orders.orderTime, '%Y-%m-%d %H:%i:%s') as orderTime"
+                18: "customer.email"
+                19: "billing.number as customerNumber"
+                20: "customerGroup.name as customerGroupName"
+                21: "billing.salutation as billingSalutation"
+                22: "billing.firstName as billingFirstName"
+                23: "billing.lastName as billingLastName"
+                24: "billing.company as billingCompany"
+                25: "billing.department as billingDepartment"
+                26: "billing.street as billingStreet"
+                27: "billing.zipCode as billingZipCode"
+                28: "billing.city as billingCity"
+                29: "billing.phone as billingPhone"
+                30: "billing.fax as billingFax"
+                31: "billing.additionalAddressLine1 as billingAdditionalAddressLine1"
+                32: "billing.additionalAddressLine2 as billingAdditionalAddressLine2"
+                33: "bState.name as billingState"
+                34: "bCountry.name as billingCountry"
+                35: "shipping.salutation as shippingSalutation"
+                36: "shipping.firstName as shippingFirstName"
+                37: "shipping.lastName as shippingLastName"
+                38: "shipping.company as shippingCompany"
+                39: "shipping.department as shippingDepartment"
+                40: "shipping.street as shippingStreet"
+                41: "shipping.zipCode as shippingZipCode"
+                42: "shipping.city as shippingCity"
+                43: "shipping.additionalAddressLine1 as shippingAdditionalAddressLine1"
+                44: "shipping.additionalAddressLine2 as shippingAdditionalAddressLine2"
+                45: "sState.name as shippingState"
+                46: "sCountry.name as shippingCountry"
+                47: "attr.attribute1 as attributeAttribute1"
+                48: "attr.attribute2 as attributeAttribute2"
+                49: "attr.attribute3 as attributeAttribute3"
+                50: "attr.attribute4 as attributeAttribute4"
+                51: "attr.attribute5 as attributeAttribute5"
+                52: "attr.attribute6 as attributeAttribute6"
+            taxRateSum:
+                0: "taxRateSums"
+                1: "taxRate"
+        expectedCount: 2
+testWrite:
+    writeTest1:
+        records:
+            order0:
+                  orderId: 1
+                  orderNumber: 20001
+                  paymentStatus: 'Reserviert'
+                  orderSrtatus: 'Storniert / Abgelehnt'
+            order1:
+                  orderId: 2
+                  orderNumber: 20002
+                  paymentStatus: 'Inkasso'
+                  orderSrtatus: 'Komplett abgeschlossen'
+        expectedInsertedRows: 2

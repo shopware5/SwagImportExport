@@ -1355,47 +1355,50 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
     {
         $data = array();
 
-        if ($adapterType === 'articles'){
+        //articles filter
+        if ($adapterType === 'articles') {
             $data['variants'] = $request->getParam('variants') ? true : false;
+            if ($request->getParam('categories')) {
+                $data['categories'] = array($request->getParam('categories'));
+            }
         }
 
-        if ($request->getParam('categories') && $adapterType === 'articles') {
-            $data['categories'] = array($request->getParam('categories'));
-        }
-
+        //articlesInStock filter
         if ($request->getParam('stockFilter') && $adapterType === 'articlesInStock') {
             $data['stockFilter'] = $request->getParam('stockFilter');
-            if($data['stockFilter'] == 'custom') {
+            if ($data['stockFilter'] == 'custom') {
                 $data['direction'] = $request->getParam('customFilterDirection');
                 $data['value'] = $request->getParam('customFilterValue');
             }
         }
 
-        //order filter
-        if ($request->getParam('ordernumberFrom') && $adapterType === 'orders') {
-            $data['ordernumberFrom'] = $request->getParam('ordernumberFrom');
-        }
+        //orders and mainOrders filter
+        if (in_array($adapterType, array('orders', 'mainOrders'), true)) {
+            if ($request->getParam('ordernumberFrom')) {
+                $data['ordernumberFrom'] = $request->getParam('ordernumberFrom');
+            }
 
-        if ($request->getParam('dateFrom') && $adapterType === 'orders') {
-            $dateFrom = $request->getParam('dateFrom');
-            $data['dateFrom'] = new \DateTime($dateFrom);
-        }
+            if ($request->getParam('dateFrom')) {
+                $dateFrom = $request->getParam('dateFrom');
+                $data['dateFrom'] = new \DateTime($dateFrom);
+            }
 
-        if ($request->getParam('dateTo') && $adapterType === 'orders') {
-            $dateTo = $request->getParam('dateTo');
-            $dateTo = new Zend_Date($dateTo);
-            $dateTo->setHour('23');
-            $dateTo->setMinute('59');
-            $dateTo->setSecond('59');
-            $data['dateTo'] = $dateTo;
-        }
+            if ($request->getParam('dateTo')) {
+                $dateTo = $request->getParam('dateTo');
+                $dateTo = new Zend_Date($dateTo);
+                $dateTo->setHour('23');
+                $dateTo->setMinute('59');
+                $dateTo->setSecond('59');
+                $data['dateTo'] = $dateTo;
+            }
 
-        if ($request->getParam('orderstate') && $adapterType === 'orders') {
-            $data['orderstate'] = $request->getParam('orderstate');
-        }
+            if ($request->getParam('orderstate')) {
+                $data['orderstate'] = $request->getParam('orderstate');
+            }
 
-        if ($request->getParam('paymentstate') && $adapterType === 'orders') {
-            $data['paymentstate'] = $request->getParam('paymentstate');
+            if ($request->getParam('paymentstate')) {
+                $data['paymentstate'] = $request->getParam('paymentstate');
+            }
         }
 
         return $data;

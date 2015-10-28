@@ -172,17 +172,17 @@ class DataIO
     public function preloadRecordIds()
     {
         $session = $this->dataSession;
-        $sotredIds = $session->getIds();
+        $storedIds = $session->getIds();
         
-        if ($sotredIds) {
-            $ids = unserialize($sotredIds);
+        if ($storedIds) {
+            $ids = unserialize($storedIds);
         } else {
             $dbAdapter = $this->getDbAdapter();
-            $limitAdapater = $this->getLimitAdapter();
+            $limitAdapter = $this->getLimitAdapter();
             $filterAdapter = $this->getFilterAdapter();
 
             $ids = $dbAdapter->readRecordIds(
-                    $limitAdapater->getOffset(), $limitAdapater->getLimit(), $filterAdapter->getFilter()
+                $limitAdapter->getOffset(), $limitAdapter->getLimit(), $filterAdapter->getFilter()
             );
         }
         
@@ -231,8 +231,6 @@ class DataIO
         $fileFormat = $this->getFormat();
 
         $adapterType = $profile->getType();
-        $profileName = $profile->getName();
-        $profileName = str_replace(' ', '.', $profileName);
 
         $hash = $this->generateRandomHash(8);
 
@@ -303,7 +301,7 @@ class DataIO
         );
 
         $session = $this->getDataSession();
-        
+
         switch ($sessionData['type']) {
             case 'export':
                 $ids = $this->preloadRecordIds()->getRecordIds();
