@@ -58,7 +58,7 @@ class ImportCommand extends ShopwareCommand
                 rename($tmpFile, $outputFile);
 
                 /** @var Profile $profile */
-                $profile = $this->Plugin()->getProfileFactory()->loadHiddenProfile($profileName);
+                $profile = $this->getPlugin()->getProfileFactory()->loadHiddenProfile($profileName);
                 /** @var ProfileEntity $profileEntity */
                 $profileEntity = $profile->getEntity();
 
@@ -163,7 +163,7 @@ class ImportCommand extends ShopwareCommand
     /**
      * @return SwagImportExport_Bootstrap
      */
-    protected function Plugin()
+    private function getPlugin()
     {
         return Shopware()->Plugins()->Backend()->SwagImportExport();
     }

@@ -40,7 +40,11 @@ class ProfilesCommand extends ShopwareCommand
 
         $data = $query->getArrayResult();
         foreach ($data as $profile) {
-            $output->writeln('<info>' . sprintf("\tProfile %d: '%s', type: %s", $profile['id'], $profile['name'], $profile['type']) . '</info>');
+            $output->writeln(
+                '<info>'
+                . sprintf("\tProfile %d: '%s', type: %s", $profile['id'], $profile['name'], $profile['type'])
+                . '</info>'
+            );
         }
     }
 }
