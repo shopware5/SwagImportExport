@@ -7,8 +7,6 @@ use Shopware\Components\SwagImportExport\Exception\AdapterException;
 
 abstract class Validator
 {
-    abstract public function checkRequiredFields($record);
-
     /**
      * Removes fields which contain empty string.
      *

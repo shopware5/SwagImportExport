@@ -4,6 +4,7 @@ namespace Shopware\Components\SwagImportExport\DbAdapters\Articles;
 
 use Shopware\Components\SwagImportExport\DbalHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
+use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Validators\Articles\PriceValidator;
 use Shopware\Components\SwagImportExport\DataManagers\Articles\PriceDataManager;
 
@@ -15,7 +16,7 @@ class PriceWriter
     protected $customerGroups;
 
     /** @var PriceValidator */
-    Protected $validator;
+    protected $validator;
 
     /** @var PriceDataManager */
     protected $dataManager;
@@ -35,12 +36,13 @@ class PriceWriter
         $tax = $this->getArticleTaxRate($articleId);
 
         foreach ($prices as $price) {
+            $orderNumber = $this->getArticleOrderNumber($articleDetailId);
             $price = $this->validator->prepareInitialData($price);
             $price = $this->dataManager->setDefaultFields($price);
-            $this->validator->checkRequiredFields($price);
+            $this->validator->checkRequiredFields($price, $orderNumber);
             $this->validator->validate($price, PriceValidator::$mapper);
 
-            $this->checkRequirements($price);
+            $this->checkRequirements($price, $orderNumber);
 
             // skip empty prices for non-default customer groups
             if (empty($price['price']) && $price['priceGroup'] !== 'EK') {
@@ -100,14 +102,14 @@ class PriceWriter
         return $price;
     }
 
-    protected function checkRequirements($price)
+    protected function checkRequirements($price, $orderNumber)
     {
         if (!array_key_exists($price['priceGroup'], $this->customerGroups)) {
             $message = SnippetsHelper::getNamespace()->get(
                 'adapters/customerGroup_not_found',
                 'Customer Group by key %s not found for article %s'
             );
-            throw new AdapterException(sprintf($message, $price['priceGroup'], ''));
+            throw new AdapterException(sprintf($message, $price['priceGroup'], $orderNumber));
         }
 
         if ($price['from'] <= 0) {
@@ -115,7 +117,7 @@ class PriceWriter
                 'adapters/articles/invalid_price',
                 'Invalid Price "from" value for article %s'
             );
-            throw new AdapterException(sprintf($message, ''));
+            throw new AdapterException(sprintf($message, $orderNumber));
         }
     }
 
@@ -135,17 +137,27 @@ class PriceWriter
      */
     protected function getArticleTaxRate($articleId)
     {
-        $tax = $this->db->fetchOne(
-            'SELECT coretax.tax FROM s_core_tax AS coretax
-              LEFT JOIN s_articles AS article
-              ON article.taxID = coretax.id
-              WHERE article.id = ?'
-            , array($articleId));
+        $sql = 'SELECT coretax.tax FROM s_core_tax AS coretax
+                LEFT JOIN s_articles AS article ON article.taxID = coretax.id
+                WHERE article.id = ?';
+        $tax = $this->db->fetchOne($sql, array($articleId));
 
         if (empty($tax)) {
             throw new AdapterException("Tax for article $articleId not found");
         }
 
         return floatval($tax);
+    }
+
+    /**
+     * @param int $articleDetailId
+     * @return string
+     */
+    protected function getArticleOrderNumber($articleDetailId)
+    {
+        $sql = 'SELECT ordernumber FROM s_articles_details WHERE id = ?';
+        $orderNumber = $this->db->fetchOne($sql, array($articleDetailId));
+
+        return $orderNumber;
     }
 }

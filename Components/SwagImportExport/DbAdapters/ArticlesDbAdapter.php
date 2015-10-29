@@ -528,6 +528,7 @@ class ArticlesDbAdapter implements DataDbAdapter
 
     private function performImport($records)
     {
+        $manager = $this->getManager();
         $articleWriter = new ArticleWriter();
         $pricesWriter = new PriceWriter();
         $categoryWriter = new CategoryWriter();
@@ -541,6 +542,7 @@ class ArticlesDbAdapter implements DataDbAdapter
 
         foreach ($records['article'] as $index => $article) {
             try {
+                $manager->getConnection()->beginTransaction();
 
                 list($articleId, $articleDetailId, $mainDetailId) = $articleWriter->write($article, $defaultValues);
 
@@ -650,7 +652,10 @@ class ArticlesDbAdapter implements DataDbAdapter
                         }
                     )
                 );
+
+                $manager->getConnection()->commit();
             } catch (AdapterException $e) {
+                $manager->getConnection()->rollBack();
                 $message = $e->getMessage();
                 $this->saveMessage($message);
             }
@@ -681,7 +686,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             array('subject' => $this)
         );
 
-        $this->run($records);
+        $this->performImport($records);
     }
 
     public function getShop($id)

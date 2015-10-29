@@ -23,10 +23,13 @@ class CsvFileReader implements FileReader
     public function readRecords($fileName, $position, $step)
     {
         $mediaService = Shopware()->Container()->get('shopware_media.media_service');
-        $tempFileName = Shopware()->DocPath() . 'media/temp/'. md5(microtime()) .'.csv';
-        file_put_contents($tempFileName, $mediaService->read($fileName));
+        if ($mediaService->has($fileName)) {
+            $tempFileName = Shopware()->DocPath() . 'media/temp/' . md5(microtime()) . '.csv';
+            file_put_contents($tempFileName, $mediaService->read($fileName));
+            $fileName = $tempFileName;
+        }
 
-        $file = new \SplFileObject($tempFileName);
+        $file = new \SplFileObject($fileName);
         $file->setCsvControl(";", '"');
         $file->setFlags(\SplFileObject::READ_CSV);
 

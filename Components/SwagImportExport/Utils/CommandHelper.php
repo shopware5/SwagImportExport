@@ -366,7 +366,7 @@ class CommandHelper
             }
             
             return array('success' => true, 'data' => $post);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $logger->write($e->getMessage(), 'true');
 
             $logData = array(
@@ -378,8 +378,8 @@ class CommandHelper
             );
 
             $logger->writeToFile($logData);
-            
-            return array('success' => false, 'msg' => $e->getMessage());
+
+            throw $e;
         }
     }
     
