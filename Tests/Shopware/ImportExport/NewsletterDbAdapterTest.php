@@ -90,5 +90,4 @@ class NewsletterDbAdapterTest extends DbAdapterTest
     {
         return $this->getDataProvider('testUpdateOne');
     }
-
 }

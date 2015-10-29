@@ -4,7 +4,6 @@ namespace Tests\Shopware\ImportExport;
 
 class ArticlesDbAdapterTest extends DbAdapterTest
 {
-
     protected static $yamlFile = "TestCases/articleDbAdapter.yml";
 
     public function setUp()
@@ -18,7 +17,7 @@ class ArticlesDbAdapterTest extends DbAdapterTest
     protected function getDataSet()
     {
         return new \PHPUnit_Extensions_Database_DataSet_YamlDataSet(
-                dirname(__FILE__) . "/Database/articles.yml"
+            dirname(__FILE__) . "/Database/articles.yml"
         );
     }
 
@@ -32,8 +31,8 @@ class ArticlesDbAdapterTest extends DbAdapterTest
 
         $rawData = $dbAdapter->read($ids, $columns);
 
-        foreach ($expected as $key1 => $elements){
-            foreach ($elements as $key2 => $element){
+        foreach ($expected as $key1 => $elements) {
+            foreach ($elements as $key2 => $element) {
                 foreach ($element as $key3 => $val) {
                     $this->assertEquals($rawData[$key1][$key2][$key3], $val);
                 }
@@ -53,13 +52,12 @@ class ArticlesDbAdapterTest extends DbAdapterTest
      */
     public function testWrite($data, $expectedInsertedRows)
     {
-
         $tableNames = array_keys($expectedInsertedRows);
 
         $expectedTables = array();
         $insertedTables = array();
 
-        foreach ($tableNames as $tableName){
+        foreach ($tableNames as $tableName) {
             $expectedTables[$tableName] = $this->getExpectedData($tableName, $expectedInsertedRows);
         }
 
@@ -69,7 +67,7 @@ class ArticlesDbAdapterTest extends DbAdapterTest
         $dbAdapter = $dataFactory->createDbAdapter($this->dbAdapter);
         $dbAdapter->write($data);
 
-        foreach ($tableNames as $tableName){
+        foreach ($tableNames as $tableName) {
             $insertedTable = $this->getInsertedDataTable($expectedTables[$tableName]['columns'], $tableName);
             $this->assertTablesEqual($expectedTables[$tableName]['table'], $insertedTable);
         }
@@ -80,7 +78,7 @@ class ArticlesDbAdapterTest extends DbAdapterTest
         return static::getDataProvider('testWrite');
     }
 
-    private  function getExpectedData($table, $expectedInsertedRows)
+    private function getExpectedData($table, $expectedInsertedRows)
     {
         $articlesRows = $expectedInsertedRows[$table];
 
@@ -107,5 +105,4 @@ class ArticlesDbAdapterTest extends DbAdapterTest
             $table, 'SELECT ' . $columns . ' FROM ' . $table . ' ORDER BY id'
         );
     }
-
 }

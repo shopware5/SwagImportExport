@@ -4,6 +4,9 @@ namespace Shopware\Components\SwagImportExport\DataType;
 
 class NewsletterDataType
 {
+    /**
+     * @var array
+     */
     public static $mapper = array(
         'email' => array(
             'email'
@@ -25,6 +28,9 @@ class NewsletterDataType
         ),
     );
 
+    /**
+     * @var array
+     */
     public static $defaultFieldsForCreate = array(
         'string' => array(
             'groupName'

@@ -85,7 +85,7 @@ class OrderValidator extends Validator
                     continue;
                 }
                 $key = $orderId;
-            } else if (isset($record[$key])) {
+            } elseif (isset($record[$key])) {
                 continue;
             }
 

@@ -1,13 +1,12 @@
 <?php
 
-namespace Shopware\Components\SwagImportExport\Transoformers;
+namespace Shopware\Components\SwagImportExport\Transformers;
 
 /**
  * The responsibility of this class is to restructure the flat array to tree and vise versa
  */
 class TreeTransformer implements DataTransformerAdapter
 {
-
     protected $config;
 
     /**
@@ -19,20 +18,24 @@ class TreeTransformer implements DataTransformerAdapter
      * @var array
      */
     protected $headerFooterData;
-    
+
     //import properties
     protected $mainType;
     protected $rawData;
     protected $bufferData;
     protected $importMapper;
-    
+
     //export properties
     protected $data;
     protected $currentRecord;
     protected $preparedData;
 
+    protected $iterationNodes = array();
+
     /**
      * Sets the config that has the tree structure
+     *
+     * @param $config
      */
     public function initialize($config)
     {
@@ -41,29 +44,33 @@ class TreeTransformer implements DataTransformerAdapter
 
     /**
      * Transforms the flat array into tree with list of nodes containing children and attributes.
+     *
+     * @param $data
+     * @return array|mixed
+     * @throws \Enlight_Event_Exception
      */
     public function transformForward($data)
     {
         $this->setData($data);
         $transformData = array();
-               
+
         $iterationPart = $this->getIterationPart();
-        
+
         $adapter = $iterationPart['adapter'];
-        
+
         foreach ($data[$adapter] as $record) {
             $this->currentRecord = $record;
             $transformData[] = $this->transformToTree($iterationPart, $record, $adapter);
             unset($this->currentRecord);
         }
-        
+
         //creates iteration array
         $tree = array($iterationPart['name'] => $transformData);
 
         $tree = Shopware()->Events()->filter(
-                'Shopware_Components_SwagImportExport_Transoformers_TreeTransformer_TransformForward',
-                $tree,
-                array('subject' => $this)
+            'Shopware_Components_SwagImportExport_Transformers_TreeTransformer_TransformForward',
+            $tree,
+            array('subject' => $this)
         );
 
         return $tree;
@@ -71,29 +78,32 @@ class TreeTransformer implements DataTransformerAdapter
 
     /**
      * Transforms a list of nodes containing children and attributes into flat array.
+     *
+     * @param $data
+     * @return mixed
      */
     public function transformBackward($data)
     {
         $data = Shopware()->Events()->filter(
-                'Shopware_Components_SwagImportExport_Transoformers_TreeTransformer_TransformBackward',
-                $data,
-                array('subject' => $this)
+            'Shopware_Components_SwagImportExport_Transformers_TreeTransformer_TransformBackward',
+            $data,
+            array('subject' => $this)
         );
 
         //gets iteration nodes
         $this->getIterationNodes();
-        
+
         $iterationPart = $this->getIterationPart();
         $this->mainType = $iterationPart['adapter'];
-        
+
         $this->buildRawData($data, $iterationPart['adapter']);
-        
+
         return $this->getRawData();
     }
-    
+
     /**
      * Helper method which creates iteration nodes array structure
-     * 
+     *
      * @param array $node
      * @return array
      * @throws \Exception
@@ -101,46 +111,45 @@ class TreeTransformer implements DataTransformerAdapter
     public function buildIterationNode($node)
     {
         $transformData = array();
-        
+
         if ($this->currentRecord === null) {
             throw new \Exception('Current record was not found');
         }
-        
+
         if (!isset($node['adapter'])) {
-            throw new \Exception('Adapter was not found');            
+            throw new \Exception('Adapter was not found');
         }
-        
+
         if (!isset($node['parentKey'])) {
-            throw new \Exception('Parent key was not found');            
+            throw new \Exception('Parent key was not found');
         }
-        
+
         $type = $node['adapter'];
         $parentKey = $node['parentKey'];
-        
-        //gets connections between interation nodes
+
+        //gets connections between iteration nodes
         $recordLink = $this->currentRecord[$parentKey];
-        
+
         //prepares raw data
         $data = $this->getPreparedData($type, $parentKey);
-        
+
         //gets records for the current iteration node
         $records = $data[$recordLink];
-        
+
         if (!$records) {
             $transformData[] = $this->transformToTree($node, null, $type);
         } else {
             foreach ($records as $record) {
                 $transformData[] = $this->transformToTree($node, $record, $type);
-            }            
+            }
         }
 
-                
         return $transformData;
     }
-    
+
     /**
      * Helper method which creates rawData from array structure
-     * 
+     *
      * @param array $data
      * @param string $type
      * @param string $nodePath
@@ -150,7 +159,7 @@ class TreeTransformer implements DataTransformerAdapter
         //creates import mapper
         //["Prices_Price_groupName"]=> "pricegroup"
         $importMapper = $this->getImportMapper();
-        
+
         foreach ($data as $record) {
             $this->transformFromTree($record, $importMapper, $type, $nodePath);
             $bufferData = $this->getBufferData($type);
@@ -158,30 +167,32 @@ class TreeTransformer implements DataTransformerAdapter
             if ($this->getMainType() !== $type) {
                 $rawData = $this->getRawData();
                 if (isset($rawData[$this->getMainType()])) {
-                    $partentElement = count($rawData[$this->getMainType()]);
+                    $parentElement = count($rawData[$this->getMainType()]);
                 } else {
-                    $partentElement = 0;
+                    $parentElement = 0;
                 }
-                $bufferData['parentIndexElement'] = $partentElement;                
+                $bufferData['parentIndexElement'] = $parentElement;
             }
-            
+
             $this->setRawData($type, $bufferData);
             $this->unsetBufferData($type);
         }
     }
-    
+
     /**
      * Get iteration nodes from profile
      */
     public function getIterationNodes()
     {
         $iterationPart = $this->getIterationPart();
-        
+
         $this->createIterationNodeMapper($iterationPart);
     }
-    
+
     /**
      * Composes a tree header based on config
+     *
+     * @return array
      */
     public function composeHeader()
     {
@@ -192,6 +203,8 @@ class TreeTransformer implements DataTransformerAdapter
 
     /**
      * Composes a tree footer based on config
+     *
+     * @return array
      */
     public function composeFooter()
     {
@@ -202,36 +215,41 @@ class TreeTransformer implements DataTransformerAdapter
 
     /**
      * Parses a tree header based on config
+     *
+     * @param $data
      */
     public function parseHeader($data)
     {
-        
     }
 
     /**
      * Parses a tree footer based on config
+     *
+     * @param $data
      */
     public function parseFooter($data)
     {
-        
     }
 
     /**
      * Preparing/Modifying nodes to converting into xml
      * and puts db data into this formated array
-     * 
+     *
      * @param array $node
      * @param array $mapper
+     * @param null $adapterType
      * @return array
      */
     public function transformToTree($node, $mapper = null, $adapterType = null)
     {
         if (isset($node['adapter']) && is_array($node) && $node['adapter'] != $adapterType) {
             $currentNode = $this->buildIterationNode($node);
-            
+
             return $currentNode;
         }
-        
+
+        $currentNode = array();
+
         if (isset($node['children']) && is_array($node) && count($node['children']) > 0) {
             if (isset($node['attributes'])) {
                 foreach ($node['attributes'] as $attribute) {
@@ -268,13 +286,14 @@ class TreeTransformer implements DataTransformerAdapter
     public function transformFromTree($node, $importMapper, $adapter, $nodePath = null)
     {
         $separator = null;
-        
+
         if ($nodePath) {
             $separator = '_';
         }
-        
-        if(isset($this->iterationNodes[$nodePath]) && $adapter !== $this->iterationNodes[$nodePath]){
-            $this->buildRawData($node, $this->iterationNodes[$nodePath], $nodePath, true);
+
+        if (isset($this->iterationNodes[$nodePath]) && $adapter !== $this->iterationNodes[$nodePath]) {
+            $this->buildRawData($node, $this->iterationNodes[$nodePath], $nodePath);
+
             return;
         }
 
@@ -286,27 +305,26 @@ class TreeTransformer implements DataTransformerAdapter
             if (isset($node['_attributes'])) {
                 $this->transformFromTree($node['_attributes'], $importMapper, $adapter, $nodePath);
             }
-
-        } else if (is_array($node)) {
+        } elseif (is_array($node)) {
             foreach ($node as $key => $child) {
-                if($key !== '_attributes'){
+                if ($key !== '_attributes') {
                     $currentNode = $nodePath . $separator . $key;
                 } else {
                     $currentNode = $nodePath;
                 }
-                
+
                 $this->transformFromTree($child, $importMapper, $adapter, $currentNode);
             }
         } else {
             if (isset($importMapper[$nodePath])) {
-                $this->saveBufferData($adapter, $importMapper[$nodePath], $node);                
+                $this->saveBufferData($adapter, $importMapper[$nodePath], $node);
             }
         }
     }
-    
+
     /**
      * Search the iteration part of the tree template
-     * 
+     *
      * @param array $tree
      */
     public function findIterationPart(array $tree)
@@ -314,9 +332,10 @@ class TreeTransformer implements DataTransformerAdapter
         foreach ($tree as $key => $value) {
             if ($key === 'adapter') {
                 $this->iterationPart = $tree;
+
                 return;
             }
-            
+
             if (is_array($value)) {
                 $this->findIterationPart($value);
             }
@@ -327,7 +346,7 @@ class TreeTransformer implements DataTransformerAdapter
 
     /**
      * Returns the iteration part of the tree
-     * 
+     *
      * @return array
      */
     public function getIterationPart()
@@ -344,24 +363,24 @@ class TreeTransformer implements DataTransformerAdapter
     {
         if ($this->headerFooterData === null) {
             $tree = json_decode($this->config, true);
-            //replaceing iteration part with custom marker
+            //replacing iteration part with custom marker
             $this->removeIterationPart($tree);
-            
+
             $modifiedTree = $this->transformToTree($tree);
-            
+
             if (!isset($tree['name'])) {
                 throw new \Exception('Root category in the tree does not exists');
             }
-            
+
             $this->headerFooterData = array($tree['name'] => $modifiedTree);
         }
-        
+
         return $this->headerFooterData;
     }
 
     /**
      * Returns import mapper
-     * 
+     *
      * @return array
      */
     public function getImportMapper()
@@ -385,25 +404,36 @@ class TreeTransformer implements DataTransformerAdapter
     }
 
     /**
+     * @param $adapter
      * @param string $key
      * @param string $value
-     * @throws \Exception
      */
     public function saveBufferData($adapter, $key, $value)
     {
         $this->bufferData[$adapter][$key] = $value;
     }
-    
+
+    /**
+     * @return mixed
+     */
     public function getRawData()
     {
         return $this->rawData;
     }
 
+    /**
+     * @param $type
+     * @param $rawData
+     */
     public function setRawData($type, $rawData)
     {
         $this->rawData[$type][] = $rawData;
     }
-    
+
+    /**
+     * @param $type
+     * @return null
+     */
     public function getBufferData($type)
     {
         if (isset($this->bufferData[$type])) {
@@ -413,55 +443,77 @@ class TreeTransformer implements DataTransformerAdapter
         }
     }
 
+    /**
+     * @param $bufferData
+     */
     public function setBufferData($bufferData)
     {
         $this->bufferData = $bufferData;
     }
-    
+
+    /**
+     * @param $type
+     */
     public function unsetBufferData($type)
     {
         unset($this->bufferData[$type]);
     }
-        
+
+    /**
+     * @return mixed
+     */
     public function getData()
     {
         return $this->data;
     }
 
+    /**
+     * @param $data
+     */
     public function setData($data)
     {
         $this->data = $data;
     }
-    
+
+    /**
+     * @return mixed
+     */
     public function getMainType()
     {
         return $this->mainType;
     }
 
+    /**
+     * @param $mainType
+     */
     public function setMainType($mainType)
     {
         $this->mainType = $mainType;
     }
 
-        
+    /**
+     * @param $type
+     * @param $recordLink
+     * @return mixed
+     */
     public function getPreparedData($type, $recordLink)
     {
         if ($this->preparedData[$type] === null) {
-                        
             $data = $this->getData();
 
             foreach ($data[$type] as $record) {
                 $this->preparedData[$type][$record[$recordLink]][] = $record;
-            }           
+            }
         }
-        
+
         return $this->preparedData[$type];
     }
-    
+
     /**
      * Create iteration node mapper for import
-     * 
+     *
      * @param mixed $node
+     * @param null $nodePath
      */
     protected function createIterationNodeMapper($node, $nodePath = null)
     {
@@ -469,60 +521,59 @@ class TreeTransformer implements DataTransformerAdapter
         if (isset($node['adapter']) && $nodePath) {
             $this->iterationNodes[$nodePath] = $node['adapter'];
         }
-        
-        if (isset($node['children'])) {
 
+        if (isset($node['children'])) {
             foreach ($node['children'] as $child) {
                 if ($nodePath) {
                     $separator = '_';
-                } 
-                $currentPath = $nodePath . $separator .$child['name'];
+                }
+                $currentPath = $nodePath . $separator . $child['name'];
                 $this->createIterationNodeMapper($child, $currentPath);
             }
         }
     }
-        
+
     /**
      * Generates import mapper from the js tree
-     * 
+     *
      * @param mixed $node
+     * @param null $nodePath
      */
     protected function generateMapper($node, $nodePath = null)
     {
         $separator = null;
-        
+
         if ($nodePath) {
             $separator = '_';
-        }       
-        
-        if (isset($node['children'])) {
+        }
 
+        if (isset($node['children'])) {
             if (isset($node['attributes'])) {
                 foreach ($node['attributes'] as $attr) {
-                    $currentPath = $nodePath . $separator .$attr['name'];
+                    $currentPath = $nodePath . $separator . $attr['name'];
                     $this->saveMapper($currentPath, $attr['shopwareField']);
                 }
             }
 
             foreach ($node['children'] as $child) {
-                $currentPath = $nodePath . $separator .$child['name'];
+                $currentPath = $nodePath . $separator . $child['name'];
                 $this->generateMapper($child, $currentPath);
             }
         } else {
             if (isset($node['attributes'])) {
                 foreach ($node['attributes'] as $attr) {
-                    $currentPath = $nodePath . $separator .$attr['name'];
+                    $currentPath = $nodePath . $separator . $attr['name'];
                     $this->saveMapper($currentPath, $attr['shopwareField']);
                 }
             }
-            
+
             $this->saveMapper($nodePath, $node['shopwareField']);
         }
     }
 
     /**
      * Replace the iteration part with custom tag "_currentMarker"
-     * 
+     *
      * @param mixed $node
      */
     protected function removeIterationPart(&$node)
@@ -537,5 +588,4 @@ class TreeTransformer implements DataTransformerAdapter
             }
         }
     }
-
 }

@@ -2,6 +2,9 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
+use Doctrine\ORM\Query\Expr\Join;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Model\QueryBuilder;
 use Shopware\Components\SwagImportExport\DataType\NewsletterDataType;
 use Shopware\Models\Newsletter\Address;
 use Shopware\Models\Newsletter\Group;
@@ -13,7 +16,6 @@ use Shopware\Components\SwagImportExport\DataManagers\NewsletterDataManager;
 
 class NewsletterDbAdapter implements DataDbAdapter
 {
-
     protected $manager;
     protected $groupRepository;
     protected $addressRepository;
@@ -57,7 +59,7 @@ class NewsletterDbAdapter implements DataDbAdapter
         );
 
         //removes street number for shopware 5
-        if (!$this->isAdditionalShippingAddressExists()){
+        if (!$this->isAdditionalShippingAddressExists()) {
             $columns[] = 'CASE WHEN (cb.streetNumber IS NULL) THEN cd.streetNumber ELSE cb.streetNumber END as streetNumber';
         }
 
@@ -94,12 +96,19 @@ class NewsletterDbAdapter implements DataDbAdapter
         return $result ? true : false;
     }
 
-
+    /**
+     * @return array
+     */
     public function getUnprocessedData()
     {
         return $this->unprocessedData;
     }
 
+    /**
+     * @param $ids
+     * @param $columns
+     * @return mixed
+     */
     public function read($ids, $columns)
     {
         $builder = $this->getBuilder($columns, $ids);
@@ -109,6 +118,12 @@ class NewsletterDbAdapter implements DataDbAdapter
         return $result;
     }
 
+    /**
+     * @param $start
+     * @param $limit
+     * @param $filter
+     * @return array
+     */
     public function readRecordIds($start, $limit, $filter)
     {
         $manager = $this->getManager();
@@ -138,6 +153,11 @@ class NewsletterDbAdapter implements DataDbAdapter
         return $result;
     }
 
+    /**
+     * @param $records
+     * @throws \Enlight_Event_Exception
+     * @throws \Exception
+     */
     public function write($records)
     {
         if (empty($records['default'])) {
@@ -212,6 +232,10 @@ class NewsletterDbAdapter implements DataDbAdapter
         }
     }
 
+    /**
+     * @param $record
+     * @return array
+     */
     protected function prepareNewsletterAddress($record)
     {
         $keys = array(
@@ -234,6 +258,10 @@ class NewsletterDbAdapter implements DataDbAdapter
         return $newsletterAddress;
     }
 
+    /**
+     * @param $message
+     * @throws \Exception
+     */
     public function saveMessage($message)
     {
         $errorMode = Shopware()->Config()->get('SwagImportExportErrorMode');
@@ -245,11 +273,17 @@ class NewsletterDbAdapter implements DataDbAdapter
         $this->setLogMessages($message);
     }
 
+    /**
+     * @return array
+     */
     public function getLogMessages()
     {
         return $this->logMessages;
     }
 
+    /**
+     * @param $logMessages
+     */
     public function setLogMessages($logMessages)
     {
         $this->logMessages[] = $logMessages;
@@ -282,8 +316,8 @@ class NewsletterDbAdapter implements DataDbAdapter
 
     /**
      * Returns entity manager
-     * 
-     * @return \Shopware\Components\Model\ModelManager
+     *
+     * @return ModelManager
      */
     public function getManager()
     {
@@ -294,6 +328,11 @@ class NewsletterDbAdapter implements DataDbAdapter
         return $this->manager;
     }
 
+    /**
+     * @param $columns
+     * @param $ids
+     * @return QueryBuilder
+     */
     public function getBuilder($columns, $ids)
     {
         $builder = $this->getManager()->createQueryBuilder();
@@ -301,7 +340,7 @@ class NewsletterDbAdapter implements DataDbAdapter
         $builder->select($columns)
                 ->from('Shopware\Models\Newsletter\Address', 'na')
                 ->leftJoin('na.newsletterGroup', 'ng')
-                ->leftJoin('Shopware\Models\Newsletter\ContactData', 'cd', \Doctrine\ORM\Query\Expr\Join::WITH, 'na.email = cd.email')
+                ->leftJoin('Shopware\Models\Newsletter\ContactData', 'cd', Join::WITH, 'na.email = cd.email')
                 ->leftJoin('na.customer', 'c')
                 ->leftJoin('c.billing', 'cb')
                 ->where('na.id IN (:ids)')
@@ -346,6 +385,9 @@ class NewsletterDbAdapter implements DataDbAdapter
         return $this->contactDataRepository;
     }
 
+    /**
+     * @return NewsletterValidator
+     */
     public function getValidator()
     {
         if ($this->validator === null) {
@@ -355,6 +397,9 @@ class NewsletterDbAdapter implements DataDbAdapter
         return $this->validator;
     }
 
+    /**
+     * @return NewsletterDataManager
+     */
     public function getDataManager()
     {
         if ($this->dataManager === null) {

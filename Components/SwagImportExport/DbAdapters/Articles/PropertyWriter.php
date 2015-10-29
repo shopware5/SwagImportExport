@@ -2,12 +2,42 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters\Articles;
 
+use Doctrine\DBAL\Connection;
+use Enlight_Components_Db_Adapter_Pdo_Mysql as PDOConnection;
 use Shopware\Components\SwagImportExport\DbalHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 
 class PropertyWriter
 {
+    /**
+     * @var DbalHelper $dbalHelper
+     */
+    private $dbalHelper;
+
+    /**
+     * @var Connection $connection
+     */
+    private $connection;
+
+    /**
+     * @var PDOConnection $db
+     */
+    private $db;
+
+    /**
+     * @var array $groups
+     */
+    private $groups;
+
+    /**
+     * @var array $options
+     */
+    private $options;
+
+    /**
+     * initialises the class properties
+     */
     public function __construct()
     {
         $this->dbalHelper = new DbalHelper();
@@ -17,6 +47,12 @@ class PropertyWriter
         $this->options = $this->getOptions();
     }
 
+    /**
+     * @param $articleId
+     * @param $orderNumber
+     * @param $propertiesData
+     * @throws AdapterException
+     */
     public function write($articleId, $orderNumber, $propertiesData)
     {
         if (!$propertiesData) {
@@ -24,7 +60,6 @@ class PropertyWriter
         }
 
         foreach ($propertiesData as $index => $propertyData) {
-
             if (!$this->isValid($propertyData)) {
                 continue;
             }
@@ -35,11 +70,11 @@ class PropertyWriter
             /**
              * property set (group)
              */
-            if (!$groupId && $propertyData['propertyGroupName']){
+            if (!$groupId && $propertyData['propertyGroupName']) {
                 $groupName = $propertyData['propertyGroupName'];
                 $groupId = $this->getGroup($groupName);
 
-                if (!$groupId){
+                if (!$groupId) {
                     //creates groups
                     $groupData = array(
                         'name' => $groupName
@@ -60,17 +95,16 @@ class PropertyWriter
             /**
              * property option and value
              */
-            if (isset($propertyData['propertyValueId']) && !empty($propertyData['propertyValueId'])){
-
+            if (isset($propertyData['propertyValueId']) && !empty($propertyData['propertyValueId'])) {
                 $valueId = $propertyData['propertyValueId'];
                 $optionId = $this->getOptionByValueId($valueId);
 
-                if (!$optionId){
+                if (!$optionId) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/articles/property_id_not_found', 'Property value by id %s not found for article %s');
                     throw new AdapterException(sprintf($message, $valueId, $orderNumber));
                 }
-            } else if (isset($propertyData['propertyValueName']) && !empty($propertyData['propertyValueName'])){
+            } elseif (isset($propertyData['propertyValueName']) && !empty($propertyData['propertyValueName'])) {
                 if (isset($propertyData['propertyOptionId']) && !empty($propertyData['propertyOptionId'])) {
                     //todo: check  propertyOptionId existence
                     $optionId = $propertyData['propertyOptionId'];
@@ -78,7 +112,7 @@ class PropertyWriter
                     $optionName = $propertyData['propertyOptionName'];
                     $optionId = $this->getOption($optionName);
 
-                    if (!$optionId){
+                    if (!$optionId) {
                         //creates option
                         $optionData = array(
                             'name' => $optionName,
@@ -98,7 +132,7 @@ class PropertyWriter
                 $valueName = $propertyData['propertyValueName'];
                 $valueId = $this->getValue($valueName, $optionId);
 
-                if (!$valueId){
+                if (!$valueId) {
                     $position = !empty($propertyData['propertyValuePosition']) ? $propertyData['propertyValuePosition'] : 0;
                     $numeric = !empty($propertyData['propertyValueNumeric']) ? $propertyData['propertyValueNumeric'] : 0;
 
@@ -111,7 +145,6 @@ class PropertyWriter
 
                     $valueId = $this->createElement('Shopware\Models\Property\Value', $valueData);
                 }
-
             } else {
                 $message = SnippetsHelper::getNamespace()
                     ->get('adapters/articles/property_id_or_name_required', 'Article %s requires name or id for property value');
@@ -122,11 +155,11 @@ class PropertyWriter
             $valueRelations[] = "($valueId, $articleId)";
         }
 
-        if($optionRelations){
+        if ($optionRelations) {
             $this->optionsRelation($optionRelations);
         }
 
-        if($valueRelations){
+        if ($valueRelations) {
             $this->valuesRelation($valueRelations);
         }
     }
@@ -137,20 +170,25 @@ class PropertyWriter
      */
     private function isValid($data)
     {
-        if (!isset($data['propertyGroupName']) && empty($data['propertyGroupName'])){
+        if (!isset($data['propertyGroupName']) && empty($data['propertyGroupName'])) {
             return false;
         }
 
-        if (empty($data['propertyValueName']) && empty($data['propertyValueId'])){
+        if (empty($data['propertyValueName']) && empty($data['propertyValueId'])) {
             return false;
         }
 
         return true;
     }
 
+    /**
+     * @param $entityName
+     * @param $data
+     * @return string
+     */
     private function createElement($entityName, $data)
     {
-        $builder =  $this->dbalHelper->getQueryBuilderForEntity(
+        $builder = $this->dbalHelper->getQueryBuilderForEntity(
             $data,
             $entityName,
             false
@@ -162,6 +200,7 @@ class PropertyWriter
 
     /**
      * Updates/Creates relation between property group and property option
+     *
      * @param array $relations
      */
     private function optionsRelation(array $relations)
@@ -179,6 +218,7 @@ class PropertyWriter
 
     /**
      * Updates/Creates relation between articles and property values
+     *
      * @param array $relations
      */
     private function valuesRelation(array $relations)
@@ -196,6 +236,7 @@ class PropertyWriter
 
     /**
      * Updates/Creates relation between articles and property groups
+     *
      * @param $groupId
      * @param $articleId
      */
@@ -204,6 +245,9 @@ class PropertyWriter
         $this->db->query('UPDATE s_articles SET filtergroupID = ? WHERE id = ?', array($groupId, $articleId));
     }
 
+    /**
+     * @return array
+     */
     public function getGroups()
     {
         $groups = $this->db->fetchPairs('SELECT `name`, `id` FROM s_filter');
@@ -211,6 +255,10 @@ class PropertyWriter
         return $groups;
     }
 
+    /**
+     * @param $name
+     * @return mixed
+     */
     public function getGroup($name)
     {
         $groupId = $this->groups[$name];
@@ -218,6 +266,9 @@ class PropertyWriter
         return $groupId;
     }
 
+    /**
+     * @return array
+     */
     public function getOptions()
     {
         $options = $this->db->fetchPairs('SELECT `name`, `id` FROM s_filter_options');
@@ -225,6 +276,10 @@ class PropertyWriter
         return $options;
     }
 
+    /**
+     * @param $name
+     * @return mixed
+     */
     public function getOption($name)
     {
         $optionId = $this->options[$name];
@@ -232,6 +287,11 @@ class PropertyWriter
         return $optionId;
     }
 
+    /**
+     * @param $name
+     * @param $groupId
+     * @return mixed
+     */
     public function getValue($name, $groupId)
     {
         return $this->connection->fetchColumn(
@@ -241,6 +301,10 @@ class PropertyWriter
         );
     }
 
+    /**
+     * @param $articleId
+     * @return mixed
+     */
     public function getGroupFromArticle($articleId)
     {
         return $this->connection->fetchColumn(
@@ -250,6 +314,10 @@ class PropertyWriter
         );
     }
 
+    /**
+     * @param $valueId
+     * @return mixed
+     */
     public function getOptionByValueId($valueId)
     {
         return $this->connection->fetchColumn('SELECT `optionID` FROM s_filter_values WHERE id = ?', array($valueId));

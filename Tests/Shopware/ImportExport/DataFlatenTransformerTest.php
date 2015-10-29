@@ -2,55 +2,52 @@
 
 namespace Tests\Shopware\ImportExport;
 
-use Tests\Shopware\ImportExport\ImportExportTestHelper;
-
-class DataTreeTransformerTest extends ImportExportTestHelper
+class DataFlatenTransformerTest extends ImportExportTestHelper
 {
-
     public function getJsonTree()
     {
-        $jsonTree = '{ 
-                        "name": "Root", 
-                        "children": [{ 
-                            "name": "Header", 
-                            "children": [{ 
-                                "name": "HeaderChild" 
-                            }] 
+        $jsonTree = '{
+                        "name": "Root",
+                        "children": [{
+                            "name": "Header",
+                            "children": [{
+                                "name": "HeaderChild"
+                            }]
                         },{
-                            "name": "Categories", 
-                            "children": [{ 
+                            "name": "Categories",
+                            "children": [{
                                 "name": "Category",
                                 "type": "record",
-                                "attributes": [{ 
+                                "attributes": [{
                                     "name": "Attribute1",
                                     "shopwareField": "id"
-                                },{ 
+                                },{
                                     "name": "Attribute2",
                                     "shopwareField": "parentid"
                                 }],
-                                "children": [{ 
+                                "children": [{
                                     "name": "Id",
                                     "shopwareField": "id"
-                                },{ 
+                                },{
                                     "name": "Title",
                                     "shopwareField": "name",
-                                    "attributes": [{ 
+                                    "attributes": [{
                                         "name": "Attribute3",
                                         "shopwareField": "lang"
                                     }]
                                 },{
                                     "name": "Description",
-                                    "children": [{ 
+                                    "children": [{
                                         "name": "Value",
                                         "shopwareField": "description",
-                                        "attributes": [{ 
+                                        "attributes": [{
                                             "name": "Attribute4",
                                             "shopwareField": "lang"
                                         }]
                                     }]
                                 }]
                             }]
-                        }] 
+                        }]
                     }';
 
         return $jsonTree;
@@ -99,5 +96,4 @@ class DataTreeTransformerTest extends ImportExportTestHelper
         
         $this->assertEquals($testData, $data);
     }
-    
 }

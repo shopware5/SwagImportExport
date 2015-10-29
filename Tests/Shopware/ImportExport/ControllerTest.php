@@ -2,63 +2,60 @@
 
 namespace Tests\Shopware\ImportExport;
 
-use Tests\Shopware\ImportExport\ImportExportTestHelper;
-
 class ControllerTest extends ImportExportTestHelper
 {
-
     public function testExportLifeCycle()
     {
-//        $name = 'magento';
+        //        $name = 'magento';
 //        $type = 'categories';
-//        $jsonTree = '{ 
-//                        "name": "Root", 
-//                        "children": [{ 
-//                            "name": "Header", 
-//                            "children": [{ 
-//                                "name": "HeaderChild" 
-//                            }] 
+//        $jsonTree = '{
+//                        "name": "Root",
+//                        "children": [{
+//                            "name": "Header",
+//                            "children": [{
+//                                "name": "HeaderChild"
+//                            }]
 //                        },{
-//                            "name": "Categories", 
-//                            "children": [{ 
+//                            "name": "Categories",
+//                            "children": [{
 //                                "name": "Category",
 //                                "type": "record",
-//                                "attributes": [{ 
+//                                "attributes": [{
 //                                    "name": "Attribute1",
 //                                    "shopwareField": "id"
-//                                },{ 
+//                                },{
 //                                    "name": "Attribute2",
 //                                    "shopwareField": "parentid"
 //                                }],
-//                                "children": [{ 
+//                                "children": [{
 //                                    "name": "Id",
 //                                    "shopwareField": "id"
-//                                },{ 
+//                                },{
 //                                    "name": "Title",
 //                                    "shopwareField": "name",
-//                                    "attributes": [{ 
+//                                    "attributes": [{
 //                                        "name": "Attribute3",
 //                                        "shopwareField": "lang"
 //                                    }]
 //                                },{
 //                                    "name": "Description",
-//                                    "children": [{ 
+//                                    "children": [{
 //                                        "name": "Value",
 //                                        "shopwareField": "description",
-//                                        "attributes": [{ 
+//                                        "attributes": [{
 //                                            "name": "Attribute4",
 //                                            "shopwareField": "lang"
 //                                        }]
 //                                    }]
 //                                }]
 //                            }]
-//                        }] 
+//                        }]
 //                    }';
 //
 //
 //        $exportConversion = '{if $active} false {else} true {/if}';
 //
-//        
+//
         $postData = array(
             'profileId' => 1,
             'sessionId' => 70,
@@ -106,7 +103,6 @@ class ControllerTest extends ImportExportTestHelper
         $dataIO->preloadRecordIds();
 
         while ($dataIO->getSessionState() == 'active') {
-
             try {
 
                 // read a bunch of records into simple php array;
@@ -120,7 +116,7 @@ class ControllerTest extends ImportExportTestHelper
                 $fileWriter->writeRecords($outputFileName, $data);
 
                 // writing is successful, so we write the new position in the session;
-                // if if the new position goes above the limits provided by the 
+                // if if the new position goes above the limits provided by the
                 $dataIO->progressSession(100);
             } catch (Exception $e) {
                 // we need to analyze the exception somehow and decide whether to break the while loop;
@@ -175,7 +171,6 @@ class ControllerTest extends ImportExportTestHelper
         );
 
         if ($dataIO->getSessionState() == 'new') {
-
             $totalCount = $fileReader->getTotalCount($inputFileName);
 
             $dataIO->getDataSession()->setFileName($inputFileName);
@@ -189,7 +184,6 @@ class ControllerTest extends ImportExportTestHelper
         }
 
         while ($dataIO->getSessionState() == 'active') {
-
             try {
 
                 //get current session position
@@ -216,22 +210,21 @@ class ControllerTest extends ImportExportTestHelper
 
     public function testAPI()
     {
-//        
-//        $query = Shopware()->Models()->createQuery(
+        //        $query = Shopware()->Models()->createQuery(
 //                'SELECT c.id as id, c.active as active, c.name as name, c.position as position, c.parentId as parentId, (SELECT COUNT(c2.id)
 //                FROM Shopware\Models\Category\Category c2
-//                WHERE c2.parentId = c.id) as childrenCount, COUNT(articles) as articleCount 
-//                FROM Shopware\Models\Category\Category c LEFT JOIN c.allArticles articles 
+//                WHERE c2.parentId = c.id) as childrenCount, COUNT(articles) as articleCount
+//                FROM Shopware\Models\Category\Category c LEFT JOIN c.allArticles articles
 //                WHERE c.id IN :id GROUP BY c.id ORDER BY c.parentId ASC, c.position ASC'
 //        );
 //        $query->setParameter('id', '(3,5)');
 //        $categories = $query->getArrayResult();
-//        
+//
 //        echo '<pre>';
 //        var_dump($categories);
 //        echo '</pre>';
 //        exit;
-        
+
         //categories
         $limit = $this->Request()->getParam('limit', 10);
         $offset = $this->Request()->getParam('start', 0);
@@ -258,7 +251,7 @@ class ControllerTest extends ImportExportTestHelper
         var_dump($time);
         echo '</pre>';
         exit;
-//        
+
 //        //products
 //        $limit = $this->Request()->getParam('limit', 10);
 //        $offset = $this->Request()->getParam('start', 0);
@@ -266,9 +259,9 @@ class ControllerTest extends ImportExportTestHelper
 //        $sort = $this->Request()->getParam('sort', array());
 //
 //        $resource = \Shopware\Components\Api\Manager::getResource('article');
-//        
+//
 //        $records = $resource->getList($offset, $limit, $filter, $sort);
-//        
+//
 //        echo '<pre>';
 //        \Doctrine\Common\Util\Debug::dump($records['data'][0]);
 //        echo '</pre>';
@@ -282,11 +275,11 @@ class ControllerTest extends ImportExportTestHelper
 //            $fakeCategories .=",(3,'FakeCategory-$index',1)";
 //        }
 //        $fakeCategories[0] = ' ';
-//                
+//
 //        $query = "REPLACE INTO `s_categories` (`parent`,`description`,`active`) VALUES $fakeCategories";
-//        
+//
 //        Shopware()->Db()->query($query);
-//        
+//
 //        echo 'Fake categories were added';
 //        exit;
 //    }
@@ -369,12 +362,12 @@ class ControllerTest extends ImportExportTestHelper
 //        $articlesDetailRepo = Shopware()->Models()->getRepository('Shopware\Models\Article\Detail');
 
 //        $articles = \Shopware\Components\Api\Manager::getResource('article');
-//        
+//
 //        $startA = microtime(true);
 //        $result = $articles->getList(null, null);
-//        
+//
 //        echo microtime(true) - $startA;
-//        
+//
 //        echo '<pre>';
 //        var_dump($result['total']);
 //        echo '</pre>';
@@ -397,7 +390,7 @@ class ControllerTest extends ImportExportTestHelper
 //            'autoNumber' => "90064",
 //            'attribute' => array(
 //                array(
-//                    
+//
 //                )
 //            ),
 //            'mainPrices' => array(
@@ -537,7 +530,7 @@ class ControllerTest extends ImportExportTestHelper
 //                )
 //            )
 //        );
-//        
+//
 //        $start = microtime(true);
 //        for ($index = 0; $index < 10000; $index++) {
 //            $minimalTestArticle = array(
@@ -557,10 +550,10 @@ class ControllerTest extends ImportExportTestHelper
 //            );
 //            $articles->create($minimalTestArticle);
 //        }
-//        
+//
 //        $end = microtime(true);
 //        //10000 articles for 1 min
-//        
+//
 //        echo $end - $start;
     }
 
@@ -592,7 +585,6 @@ class ControllerTest extends ImportExportTestHelper
         $fileReader->setTree($tree);
 
         if ($dataIO->getSessionState() == 'new') {
-
             $totalCount = $fileReader->getTotalCount($inputFileName);
 
             $dataIO->getDataSession()->setTotalCount($totalCount);
@@ -614,7 +606,7 @@ class ControllerTest extends ImportExportTestHelper
                 echo "aaaa";
 //                $data = $dataIO->read(100);
                 // writing is successful, so we write the new position in the session;
-                // if if the new position goes above the limits provided by the 
+                // if if the new position goes above the limits provided by the
                 $dataIO->progressSession(10);
             } catch (\Exception $e) {
                 echo $e->getMessage(), "\n";
@@ -626,5 +618,4 @@ class ControllerTest extends ImportExportTestHelper
 
         exit;
     }
-
 }

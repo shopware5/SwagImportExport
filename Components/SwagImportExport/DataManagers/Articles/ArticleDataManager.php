@@ -10,22 +10,33 @@ use Shopware\Components\SwagImportExport\DataType\ArticleDataType;
 
 class ArticleDataManager extends DataManager
 {
-    /** @var \Enlight_Components_Db_Adapter_Pdo_Mysql */
+    /**
+     * @var \Enlight_Components_Db_Adapter_Pdo_Mysql
+     */
     private $db = null;
 
-    /** @var DbalHelper */
+    /**
+     * @var DbalHelper
+     */
     private $dbalHelper = null;
 
     private $taxRates = null;
 
     private $suppliers = null;
 
+    /**
+     * @param \Enlight_Components_Db_Adapter_Pdo_Mysql $db
+     * @param DbalHelper $dbalHelper
+     */
     public function __construct(\Enlight_Components_Db_Adapter_Pdo_Mysql $db, DbalHelper $dbalHelper)
     {
         $this->db = $db;
         $this->dbalHelper = $dbalHelper;
     }
 
+    /**
+     * @return array
+     */
     public function getDefaultFields()
     {
         return ArticleDataType::$defaultFieldsForCreate;
@@ -143,7 +154,7 @@ class ArticleDataManager extends DataManager
      * Get valid tax id depending on tax id or tax rate field.
      *
      * @param array $record
-     * @return mixed
+     * @return bool|mixed
      * @throws AdapterException
      */
     private function getTaxId($record)
@@ -154,26 +165,26 @@ class ArticleDataManager extends DataManager
 
         if (isset($record['taxId']) && in_array($record['taxId'], $taxIds)) {
             return $record['taxId'];
-        } else if(isset($record['tax'])) {
-            $taxId = $this->getTaxByTaxRate($record['tax'], $taxes, $record['orderNumber']);
+        } elseif (isset($record['tax'])) {
+            $taxId = $this->getTaxByTaxRate($record['tax'], $record['orderNumber']);
+
             return $taxId;
         }
 
-        return;
+        return false;
     }
 
     /**
      * @param float $taxRate
-     * @param array $taxRates
      * @param string $orderNumber
      * @return mixed
      * @throws AdapterException
      */
-    private function getTaxByTaxRate($taxRate, $taxRates, $orderNumber)
+    private function getTaxByTaxRate($taxRate, $orderNumber)
     {
         $taxRate = number_format($taxRate, 2);
 
-        $taxId = array_search($taxRate, $taxRates);
+        $taxId = array_search($taxRate, $this->getTaxRates());
 
         if (!$taxId) {
             $message = SnippetsHelper::getNamespace()->get(
@@ -199,7 +210,7 @@ class ArticleDataManager extends DataManager
         //creates supplier if does not exists
         if (!$supplierId) {
             $data = array('name' => $name);
-            $builder =  $this->dbalHelper->getQueryBuilderForEntity(
+            $builder = $this->dbalHelper->getQueryBuilderForEntity(
                 $data,
                 'Shopware\Models\Article\Supplier',
                 false

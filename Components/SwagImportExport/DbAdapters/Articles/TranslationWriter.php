@@ -2,20 +2,52 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters\Articles;
 
-use Shopware\Components\SwagImportExport\DbalHelper;
+use Doctrine\DBAL\Connection;
+use Enlight_Components_Db_Adapter_Pdo_Mysql as PDOConnection;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
+use Shopware_Components_Translation as TranslationComponent;
 
 class TranslationWriter
 {
+    /**
+     * @var Connection $connection
+     */
+    private $connection;
+
+    /**
+     * @var PDOConnection $db
+     */
+    private $db;
+
+    /**
+     * @var TranslationComponent $writer
+     */
+    private $writer;
+
+    /**
+     * @var array
+     */
+    private $shops;
+
+    /**
+     * initialises the class properties
+     */
     public function __construct()
     {
         $this->connection = Shopware()->Models()->getConnection();
         $this->db = Shopware()->Db();
-        $this->writer = new \Shopware_Components_Translation();
+        $this->writer = new TranslationComponent();
         $this->shops = $this->getShops();
     }
 
+    /**
+     * @param $articleId
+     * @param $articleDetailId
+     * @param $mainDetailId
+     * @param $translations
+     * @throws AdapterException
+     */
     public function write($articleId, $articleDetailId, $mainDetailId, $translations)
     {
         $whiteList = array(
@@ -34,18 +66,17 @@ class TranslationWriter
         $whiteList = array_merge($whiteList, $variantWhiteList);
 
         //attributes
-        $attributes =  $this->getTranslationAttr();
+        $attributes = $this->getTranslationAttr();
 
-        if ($attributes){
-            foreach ($attributes as $attr){
+        if ($attributes) {
+            foreach ($attributes as $attr) {
                 $whiteList[] = $attr['name'];
                 $variantWhiteList[] = $attr['name'];
             }
         }
 
-        foreach ($translations as $translation){
-
-            if(!$this->isValid($translation)){
+        foreach ($translations as $translation) {
+            if (!$this->isValid($translation)) {
                 continue;
             }
 
@@ -57,24 +88,24 @@ class TranslationWriter
                 throw new AdapterException(sprintf($message, $languageId));
             }
 
-            if ($articleDetailId === $mainDetailId){
+            if ($articleDetailId === $mainDetailId) {
                 $data = array_intersect_key($translation, array_flip($whiteList));
                 $this->writer->write($languageId, 'article', $articleId, $data);
             } else {
                 $data = array_intersect_key($translation, array_flip($variantWhiteList));
 
                 //checks for empty translations
-                if (!empty($data)){
-                    foreach($data as $index => $rows){
+                if (!empty($data)) {
+                    foreach ($data as $index => $rows) {
                         //removes empty rows
-                        if(empty($rows)){
+                        if (empty($rows)) {
                             unset($data[$index]);
                         }
                     }
                 }
 
                 //saves if there is available data
-                if (!empty($data)){
+                if (!empty($data)) {
                     $this->writer->write($languageId, 'variant', $articleDetailId, $data);
                 }
             }
@@ -87,7 +118,7 @@ class TranslationWriter
      */
     private function isValid($translation)
     {
-        if (!isset($translation['languageId']) || empty($translation['languageId'])){
+        if (!isset($translation['languageId']) || empty($translation['languageId'])) {
             return false;
         }
 
@@ -96,6 +127,7 @@ class TranslationWriter
 
     /**
      * Returns all shops
+     *
      * @return array
      */
     public function getShops()
@@ -120,6 +152,7 @@ class TranslationWriter
 
     /**
      * Returns translation attributes
+     *
      * @return mixed
      */
     public function getTranslationAttr()

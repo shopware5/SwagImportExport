@@ -7,7 +7,12 @@ namespace Shopware\Components\SwagImportExport\FileIO\Encoders;
  */
 class XmlEncoder extends \Shopware_Components_Convert_Xml
 {
-
+    /**
+     * @param $array
+     * @param int $pos
+     * @param string $ekey
+     * @return string
+     */
     public function _encode($array, $pos = 0, $ekey = "")
     {
         $ret = "";
@@ -37,9 +42,9 @@ class XmlEncoder extends \Shopware_Components_Convert_Xml
                 if (is_numeric(key($item))) {
                     $ret .= $this->_encode($item, $pos, $key);
                 } else {
-                    $ret .= "$pad<$key$attributes>{$this->sSettings['newline']}" . $this->_encode(
-                                    $item, $pos + 1
-                            ) . "$pad</$key>{$this->sSettings['newline']}";
+                    $ret .= "$pad<$key$attributes>{$this->sSettings['newline']}"
+                        . $this->_encode($item, $pos + 1)
+                        . "$pad</$key>{$this->sSettings['newline']}";
                 }
             } else {
                 if (preg_match("#<|>|&(?<!amp;)#", $item)) {
@@ -51,7 +56,7 @@ class XmlEncoder extends \Shopware_Components_Convert_Xml
                 }
             }
         }
+
         return $ret;
     }
-
 }

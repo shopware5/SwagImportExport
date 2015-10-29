@@ -17,7 +17,7 @@ class CategoriesDbAdapterTest extends DbAdapterTest
     protected function getDataSet()
     {
         return new \PHPUnit_Extensions_Database_DataSet_YamlDataSet(
-                dirname(__FILE__) . "/Database/categories.yml"
+            dirname(__FILE__) . "/Database/categories.yml"
         );
     }
     
@@ -90,5 +90,4 @@ class CategoriesDbAdapterTest extends DbAdapterTest
     {
         return static::getDataProvider('testUpdateOne');
     }
-
 }

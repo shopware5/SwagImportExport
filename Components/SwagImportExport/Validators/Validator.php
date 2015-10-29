@@ -17,7 +17,7 @@ abstract class Validator
     {
         $record = array_filter(
             $record,
-            function($value) {
+            function ($value) {
                 return $value !== '';
             }
         );

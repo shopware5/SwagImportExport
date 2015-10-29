@@ -4,7 +4,6 @@ namespace Tests\Shopware\ImportExport;
 
 class ArticlesPricesDbAdapterTest extends DbAdapterTest
 {
-
     protected static $yamlFile = "TestCases/articlePricesDbAdapter.yml";
 
     public function setUp()
@@ -18,7 +17,7 @@ class ArticlesPricesDbAdapterTest extends DbAdapterTest
     protected function getDataSet()
     {
         return new \PHPUnit_Extensions_Database_DataSet_YamlDataSet(
-                dirname(__FILE__) . "/Database/articles.yml"
+            dirname(__FILE__) . "/Database/articles.yml"
         );
     }
 

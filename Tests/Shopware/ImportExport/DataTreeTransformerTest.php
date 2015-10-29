@@ -2,55 +2,52 @@
 
 namespace Tests\Shopware\ImportExport;
 
-use Tests\Shopware\ImportExport\ImportExportTestHelper;
-
-class DataFlatenTransformerTest extends ImportExportTestHelper
+class DataTreeTransformerTest extends ImportExportTestHelper
 {
-
     public function getJsonTree()
     {
-        $jsonTree = '{ 
-                        "name": "Root", 
-                        "children": [{ 
-                            "name": "Header", 
-                            "children": [{ 
-                                "name": "HeaderChild" 
-                            }] 
+        $jsonTree = '{
+                        "name": "Root",
+                        "children": [{
+                            "name": "Header",
+                            "children": [{
+                                "name": "HeaderChild"
+                            }]
                         },{
-                            "name": "Categories", 
-                            "children": [{ 
+                            "name": "Categories",
+                            "children": [{
                                 "name": "Category",
                                 "type": "record",
-                                "attributes": [{ 
+                                "attributes": [{
                                     "name": "Attribute1",
                                     "shopwareField": "id"
-                                },{ 
+                                },{
                                     "name": "Attribute2",
                                     "shopwareField": "parentid"
                                 }],
-                                "children": [{ 
+                                "children": [{
                                     "name": "Id",
                                     "shopwareField": "id"
-                                },{ 
+                                },{
                                     "name": "Title",
                                     "shopwareField": "name",
-                                    "attributes": [{ 
+                                    "attributes": [{
                                         "name": "Attribute3",
                                         "shopwareField": "lang"
                                     }]
                                 },{
                                     "name": "Description",
-                                    "children": [{ 
+                                    "children": [{
                                         "name": "Value",
                                         "shopwareField": "description",
-                                        "attributes": [{ 
+                                        "attributes": [{
                                             "name": "Attribute4",
                                             "shopwareField": "lang"
                                         }]
                                     }]
                                 }]
                             }]
-                        }] 
+                        }]
                     }';
 
         return $jsonTree;
@@ -58,7 +55,7 @@ class DataFlatenTransformerTest extends ImportExportTestHelper
 
     public function testTreeTransformer()
     {
-        $providedData = array('Category' => array( 
+        $providedData = array('Category' => array(
             array(
                 '_attributes' => array('Attribute1' => '14', 'Attribute2' => '0'),
                 'Id' => '14',
@@ -168,15 +165,15 @@ class DataFlatenTransformerTest extends ImportExportTestHelper
 //        $xml->open($inputFileName);
 //
 //        $countElements = 0;
-//        
+//
 //        $mStart = microtime(true);
-//        
+//
 //        while ($xml->read()) {
 //            if ($xml->nodeType == \XMLReader::END_ELEMENT && $xml->name == 'Category') {
 //                $countElements++;
 //            }
 //        }
-//        
+//
 //        $mStop = microtime(true);
 //
 //
@@ -184,5 +181,4 @@ class DataFlatenTransformerTest extends ImportExportTestHelper
 //
 //        $data = $treeTransformer->transformBackward($dataArray);
 //    }
-
 }

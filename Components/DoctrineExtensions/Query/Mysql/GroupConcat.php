@@ -19,8 +19,12 @@
 
 namespace DoctrineExtensions\Query\Mysql;
 
-use Doctrine\ORM\Query\AST\Functions\FunctionNode,
-    Doctrine\ORM\Query\Lexer;
+use Doctrine\ORM\Query\AST\Functions\FunctionNode;
+use Doctrine\ORM\Query\AST\OrderByClause;
+use Doctrine\ORM\Query\AST\PathExpression;
+use Doctrine\ORM\Query\Lexer;
+use Doctrine\ORM\Query\Parser;
+use Doctrine\ORM\Query\SqlWalker;
 
 /**
  * Full support for:
@@ -33,12 +37,28 @@ use Doctrine\ORM\Query\AST\Functions\FunctionNode,
  */
 class GroupConcat extends FunctionNode
 {
+    /**
+     * @var bool $isDistinct
+     */
     public $isDistinct = false;
+
+    /**
+     * @var PathExpression[] $pathExp
+     */
     public $pathExp = null;
+
     public $separator = null;
+
+    /**
+     * @var OrderByClause $orderBy
+     */
     public $orderBy = null;
 
-    public function parse(\Doctrine\ORM\Query\Parser $parser)
+    /**
+     * @param Parser $parser
+     * @throws \Doctrine\ORM\Query\QueryException
+     */
+    public function parse(Parser $parser)
     {
         $parser->match(Lexer::T_IDENTIFIER);
         $parser->match(Lexer::T_OPEN_PARENTHESIS);
@@ -75,11 +95,17 @@ class GroupConcat extends FunctionNode
         $parser->match(Lexer::T_CLOSE_PARENTHESIS);
     }
 
-    public function getSql(\Doctrine\ORM\Query\SqlWalker $sqlWalker)
+    /**
+     * @param SqlWalker $sqlWalker
+     * @return string
+     */
+    public function getSql(SqlWalker $sqlWalker)
     {
         $result = 'GROUP_CONCAT(' . ($this->isDistinct ? 'DISTINCT ' : '');
 
         $fields = array();
+
+        /** @var PathExpression $pathExp */
         foreach ($this->pathExp as $pathExp) {
             $fields[] = $pathExp->dispatch($sqlWalker);
         }
@@ -98,5 +124,4 @@ class GroupConcat extends FunctionNode
 
         return $result;
     }
-
 }

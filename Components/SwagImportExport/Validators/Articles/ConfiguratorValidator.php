@@ -6,7 +6,7 @@ use Shopware\Components\SwagImportExport\Validators\Validator;
 
 class ConfiguratorValidator extends Validator
 {
-    public static  $mapper = array(
+    public static $mapper = array(
         'int' => array(
             'configSetId',
             'configSetType',
@@ -17,8 +17,7 @@ class ConfiguratorValidator extends Validator
         ),
     );
 
-    public function  checkRequiredFields($record)
+    public function checkRequiredFields($record)
     {
-
     }
 }

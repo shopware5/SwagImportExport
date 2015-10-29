@@ -4,11 +4,9 @@ namespace Tests\Shopware\ImportExport;
 
 use Shopware\Components\SwagImportExport\Profile;
 use Shopware\Components\SwagImportExport\DataWorkflow;
-use Tests\Shopware\ImportExport\ImportExportTestHelper;
 
 class DataWorkflowTest extends ImportExportTestHelper
 {
-
     protected function getDataSet()
     {
         return new \PHPUnit_Extensions_Database_DataSet_YamlDataSet(
@@ -78,7 +76,5 @@ class DataWorkflowTest extends ImportExportTestHelper
 
     public function testImportLifeCycle()
     {
-        
     }
-
 }

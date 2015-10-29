@@ -2,14 +2,19 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
+use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\Query\Expr\Join;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Validators\ArticleImageValidator;
 use Shopware\Components\SwagImportExport\DataManagers\ArticleImageDataManager;
+use Shopware\Models\Article\Image;
+use Shopware\Models\Media\Media;
+use Symfony\Component\HttpFoundation\File\File;
 
 class ArticlesImagesDbAdapter implements DataDbAdapter
 {
-
     /**
      * Shopware\Components\Model\ModelManager
      */
@@ -36,10 +41,10 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
 
     /**
      * Returns record ids
-     * 
+     *
      * @param int $start
      * @param int $limit
-     * @param type $filter
+     * @param $filter
      * @return array
      */
     public function readRecordIds($start = null, $limit = null, $filter = null)
@@ -83,13 +88,13 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
 
         if (!$ids && empty($ids)) {
             $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/articlesImages/no_article_images_ids', 'Can not read article images without ids.');
+                ->get('adapters/articlesImages/no_article_images_ids', 'Can not read article images without ids.');
             throw new \Exception($message);
         }
 
         if (!$columns && empty($columns)) {
             $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/articlesImages/no_article_images_column', 'Can not read article images without column names.');
+                ->get('adapters/articlesImages/no_article_images_column', 'Can not read article images without column names.');
             throw new \Exception($message);
         }
 
@@ -165,7 +170,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
 
     /**
      * Insert/Update data into db
-     * 
+     *
      * @param array $records
      * @throws \Enlight_Event_Exception
      * @throws \Exception
@@ -202,15 +207,15 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                 $articleDetailModel = $this->getArticleDetailRepository()->findOneBy(array('number' => $record['ordernumber']));
                 if (!$articleDetailModel) {
                     $message = SnippetsHelper::getNamespace()
-                                ->get('adapters/articlesImages/article_not_found', 'Article with number %s does not exists');
+                        ->get('adapters/articlesImages/article_not_found', 'Article with number %s does not exists');
                     throw new AdapterException(sprintf($message, $record['ordernumber']));
                 }
 
                 $record = $dataManager->setDefaultFields($record, $articleDetailModel->getArticle()->getId());
                 $validator->validate($record, ArticleImageValidator::$mapper);
 
+                $relations = array();
                 if (isset($record['relations'])) {
-                    $relations = array();
                     $oldRelations = explode("&", $record['relations']);
 
                     foreach ($oldRelations as $key => $relation) {
@@ -251,16 +256,16 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                     $mediaRepo = $this->getManager()->getRepository('Shopware\Models\Media\Media');
                     $media = $mediaRepo->findOneBy(array('name' => $name));
                     if ($media) {
-                       $mediaExists = true;
+                        $mediaExists = true;
                     }
                 }
 
                 //create new media
-	            if ($imageImportMode == 2 || $mediaExists == false) {
+                if ($imageImportMode == 2 || $mediaExists == false) {
                     $path = $this->load($record['image'], $name);
-                    $file = new \Symfony\Component\HttpFoundation\File\File($path);
+                    $file = new File($path);
 
-                    $media = new \Shopware\Models\Media\Media();
+                    $media = new Media();
                     $media->setAlbumId(-1);
                     $media->setAlbum($this->getManager()->find('Shopware\Models\Media\Album', -1));
 
@@ -278,21 +283,21 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                     $thumbnail = (bool) $record['thumbnail'];
 
                     //generate thumbnails
-                    if ($media->getType() == \Shopware\Models\Media\Media::TYPE_IMAGE && $thumbnail) {
-                        /*                 * @var $manager \Shopware\Components\Thumbnail\Manager */
+                    if ($media->getType() == Media::TYPE_IMAGE && $thumbnail) {
+                        /** @var \Shopware\Components\Thumbnail\Manager $manager */
                         $manager = Shopware()->Container()->get('thumbnail_manager');
                         $manager->createMediaThumbnail($media, array(), true);
                     }
                 }
 
-                $image = new \Shopware\Models\Article\Image();
+                $image = new Image();
                 $image->setArticle($article);
-	            $image->setPosition($record['position']);
+                $image->setPosition($record['position']);
                 $image->setPath($media->getName());
                 $image->setExtension($media->getExtension());
                 $image->setMedia($media);
                 $image->setMain($record['main']);
-	            $image->setDescription($record['description']);
+                $image->setDescription($record['description']);
                 $this->getManager()->persist($image);
                 $this->getManager()->flush($image);
 
@@ -314,7 +319,6 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                 $this->getManager()->clear();
                 unset($media);
                 unset($image);
-
             } catch (AdapterException $e) {
                 $message = $e->getMessage();
                 $this->saveMessage($message);
@@ -324,15 +328,15 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
 
     /**
      * Sets image mapping for variants
-     * 
+     *
      * @param array $relationGroups
      * @param int $imageId
      */
     protected function setImageMappings($relationGroups, $imageId)
     {
         $query = $this->getArticleRepository()->getArticleImageDataQuery($imageId);
-        $image = $query->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
-        $imageData = $query->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $image = $query->getOneOrNullResult(AbstractQuery::HYDRATE_OBJECT);
+        $imageData = $query->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
 
         foreach ($relationGroups as $relationGroup) {
             $optionCollection = array();
@@ -340,12 +344,9 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
             foreach ($relationGroup as $relation) {
                 $optionModel = $relation['option'];
                 $optionCollection[] = $optionModel;
+                $mapping = new Image\Mapping();
 
-                if (!$mapping) {
-                    $mapping = new \Shopware\Models\Article\Image\Mapping();
-                }
-
-                $rule = new \Shopware\Models\Article\Image\Rule();
+                $rule = new Image\Rule();
                 $rule->setMapping($mapping);
                 $rule->setOption($optionModel);
 
@@ -365,7 +366,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
     /**
      * @param $options
      * @param $imageData
-     * @param $parent \Shopware\Models\Article\Image
+     * @param $parent Image
      */
     protected function createImagesForOptions($options, $imageData, $parent)
     {
@@ -389,7 +390,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
 
         foreach ($details as $detailId) {
             $detail = $this->getManager()->getReference('Shopware\Models\Article\Detail', $detailId);
-            $image = new \Shopware\Models\Article\Image();
+            $image = new Image();
             $image->fromArray($imageData);
             $image->setArticleDetail($detail);
             $this->getManager()->persist($image);
@@ -410,7 +411,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
 
     /**
      * @param string $section
-     * @return mix
+     * @return bool|mixed
      */
     public function getColumns($section)
     {
@@ -425,8 +426,8 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
 
     /**
      * Returns entity manager
-     * 
-     * @return Shopware\Components\Model\ModelManager
+     *
+     * @return ModelManager
      */
     public function getManager()
     {
@@ -439,6 +440,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
 
     /**
      * Helper function to get access to the articleDetail repository.
+     *
      * @return \Shopware\Components\Model\ModelRepository
      */
     public function getArticleDetailRepository()
@@ -446,29 +448,33 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
         if ($this->articleDetailRepository === null) {
             $this->articleDetailRepository = $this->getManager()->getRepository('Shopware\Models\Article\Detail');
         }
+
         return $this->articleDetailRepository;
     }
 
     /**
      * Helper function to get access to the article repository.
-     * @return Shopware\Models\Article\Repository
+     *
+     * @return \Shopware\Models\Article\Repository
      */
     public function getArticleRepository()
     {
         if ($this->articleRepository === null) {
             $this->articleRepository = $this->getManager()->getRepository('Shopware\Models\Article\Article');
         }
+
         return $this->articleRepository;
     }
 
     /**
-     * Helper function to get access to the datebase.
+     * Helper function to get access to the database.
      */
     public function getDb()
     {
         if ($this->db === null) {
             $this->db = Shopware()->Db();
         }
+
         return $this->db;
     }
 
@@ -562,20 +568,23 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
     {
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select($columns)
-                ->from('Shopware\Models\Article\Image', 'aimage')
-                ->innerJoin('aimage.article', 'article')
-                ->leftJoin('Shopware\Models\Article\Detail', 'mv', \Doctrine\ORM\Query\Expr\Join::WITH, 'mv.articleId=article.id AND mv.kind=1')
-                ->leftJoin('aimage.mappings', 'im')
-                ->leftJoin('im.rules', 'mr')
-                ->leftJoin('mr.option', 'co')
-                ->leftJoin('co.group', 'cg')
-                ->where('aimage.id IN (:ids)')
-                ->groupBy('aimage.id')
-                ->setParameter('ids', $ids);
+            ->from('Shopware\Models\Article\Image', 'aimage')
+            ->innerJoin('aimage.article', 'article')
+            ->leftJoin('Shopware\Models\Article\Detail', 'mv', Join::WITH, 'mv.articleId=article.id AND mv.kind=1')
+            ->leftJoin('aimage.mappings', 'im')
+            ->leftJoin('im.rules', 'mr')
+            ->leftJoin('mr.option', 'co')
+            ->leftJoin('co.group', 'cg')
+            ->where('aimage.id IN (:ids)')
+            ->groupBy('aimage.id')
+            ->setParameter('ids', $ids);
 
         return $builder;
     }
 
+    /**
+     * @return ArticleImageValidator
+     */
     public function getValidator()
     {
         if ($this->validator === null) {
@@ -585,6 +594,9 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
         return $this->validator;
     }
 
+    /**
+     * @return ArticleImageDataManager
+     */
     public function getDataManager()
     {
         if ($this->dataManager === null) {

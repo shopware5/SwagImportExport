@@ -2,13 +2,15 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
+use Doctrine\ORM\Query\Expr\Join;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Model\QueryBuilder;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Validators\ArticleTranslationValidator;
 
 class ArticlesTranslationsDbAdapter implements DataDbAdapter
 {
-
     /**
      * Shopware\Components\Model\ModelManager
      */
@@ -29,9 +31,14 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
      */
     protected $logMessages;
 
-    /** @var ArticleTranslationValidator */
+    /**
+     * @var ArticleTranslationValidator
+     */
     protected $validator;
 
+    /**
+     * @return array
+     */
     public function getDefaultColumns()
     {
         $translation = array(
@@ -51,7 +58,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
         $elements = $elementBuilder->getQuery()->getArrayResult();
 
         if ($elements) {
-            foreach ($elements as $element){
+            foreach ($elements as $element) {
                 $translation[] = 't.' . $element['name'];
             }
         }
@@ -59,11 +66,20 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
         return $translation;
     }
 
+    /**
+     * @return array
+     */
     public function getUnprocessedData()
     {
         return $this->unprocessedData;
     }
 
+    /**
+     * @param $start
+     * @param $limit
+     * @param $filter
+     * @return array
+     */
     public function readRecordIds($start, $limit, $filter)
     {
         $manager = $this->getManager();
@@ -72,18 +88,19 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
 
         $builder->select('t.id');
         $builder->from('Shopware\Models\Translation\Translation', 't')
-                ->where("t.type = 'variant'")
-                ->orWhere("t.type = 'article'");
+            ->where("t.type = 'variant'")
+            ->orWhere("t.type = 'article'");
 
         $builder->setFirstResult($start)
-                ->setMaxResults($limit);
+            ->setMaxResults($limit);
 
         $records = $builder->getQuery()->getResult();
 
         $result = array_map(
-            function($item) {
+            function ($item) {
                 return $item['id'];
-            }, $records
+            },
+            $records
         );
 
         return $result;
@@ -93,13 +110,13 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
     {
         if (!$ids && empty($ids)) {
             $message = SnippetsHelper::getNamespace()
-                    ->get('adapters/translations/no_ids', 'Can not read translations without ids.');
+                ->get('adapters/translations/no_ids', 'Can not read translations without ids.');
             throw new \Exception($message);
         }
 
         if (!$columns && empty($columns)) {
             $message = SnippetsHelper::getNamespace()
-                    ->get('adapters/translations/no_column_names', 'Can not read translations without column names.');
+                ->get('adapters/translations/no_column_names', 'Can not read translations without column names.');
             throw new \Exception($message);
         }
 
@@ -160,13 +177,20 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
         return $translations;
     }
 
+    /**
+     * @param $records
+     * @throws AdapterException
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     * @throws \Enlight_Event_Exception
+     * @throws \Exception
+     */
     public function write($records)
     {
         if (empty($records['default'])) {
-            $message = SnippetsHelper::getNamespace()->get(
-                'adapters/articlesTranslations/no_records',
-                'No article translation records were found.'
-            );
+            $message = SnippetsHelper::getNamespace()
+                ->get('adapters/articlesTranslations/no_records', 'No article translation records were found.');
             throw new \Exception($message);
         }
 
@@ -195,7 +219,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
         $attributes = $elementBuilder->getQuery()->getArrayResult();
 
         if ($attributes) {
-            foreach ($attributes as $attr){
+            foreach ($attributes as $attr) {
                 $whiteList[] = $attr['name'];
                 $variantWhiteList[] = $attr['name'];
             }
@@ -216,38 +240,38 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
 
                 if (!$shop) {
                     $message = SnippetsHelper::getNamespace()
-                            ->get('adapters/articlesTranslations/lang_id_not_found', 'Language with id %s does not exists for article %s');
-                    throw new \AdapterException(sprintf($message, $record['languageId'], $record['articleNumber']));
+                        ->get('adapters/articlesTranslations/lang_id_not_found', 'Language with id %s does not exists for article %s');
+                    throw new AdapterException(sprintf($message, $record['languageId'], $record['articleNumber']));
                 }
 
                 $articleDetail = $this->getRepository()->findOneBy(array('number' => $record['articleNumber']));
 
                 if (!$articleDetail) {
                     $message = SnippetsHelper::getNamespace()
-                            ->get('adapters/article_number_not_found', 'Article with order number %s doen not exists');
+                        ->get('adapters/article_number_not_found', 'Article with order number %s doen not exists');
                     throw new AdapterException(sprintf($message, $record['articleNumber']));
                 }
 
                 $articleId = (int) $articleDetail->getArticle()->getId();
 
-                if ($articleDetail->getKind() === 1){
+                if ($articleDetail->getKind() === 1) {
                     $data = array_intersect_key($record, array_flip($whiteList));
                     $translationWriter->write($shop->getId(), 'article', $articleId, $data);
                 } else {
                     $data = array_intersect_key($record, array_flip($variantWhiteList));
 
                     //checks for empty translations
-                    if (!empty($data)){
-                        foreach($data as $index => $rows){
+                    if (!empty($data)) {
+                        foreach ($data as $index => $rows) {
                             //removes empty rows
-                            if(empty($rows)){
+                            if (empty($rows)) {
                                 unset($data[$index]);
                             }
                         }
                     }
 
                     //saves if there is available data
-                    if (!empty($data)){
+                    if (!empty($data)) {
                         $translationWriter->write($shop->getId(), 'variant', $articleDetail->getId(), $data);
                     }
                 }
@@ -258,6 +282,10 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
         }
     }
 
+    /**
+     * @param $message
+     * @throws \Exception
+     */
     public function saveMessage($message)
     {
         $errorMode = Shopware()->Config()->get('SwagImportExportErrorMode');
@@ -269,16 +297,21 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
         $this->setLogMessages($message);
     }
 
+    /**
+     * @return array
+     */
     public function getLogMessages()
     {
         return $this->logMessages;
     }
 
+    /**
+     * @param $logMessages
+     */
     public function setLogMessages($logMessages)
     {
         $this->logMessages[] = $logMessages;
     }
-
 
     /**
      * @return array
@@ -292,7 +325,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
 
     /**
      * @param string $section
-     * @return mix
+     * @return bool|mixed
      */
     public function getColumns($section)
     {
@@ -308,7 +341,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
     /**
      * Returns article detail repository
      *
-     * @return Shopware\Models\Article\Detail
+     * @return \Shopware\Models\Article\Repository
      */
     public function getRepository()
     {
@@ -322,7 +355,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
     /**
      * Returns entity manager
      *
-     * @return Shopware\Components\Model\ModelManager
+     * @return ModelManager
      */
     public function getManager()
     {
@@ -333,19 +366,26 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
         return $this->manager;
     }
 
+    /**
+     * @param $ids
+     * @return QueryBuilder
+     */
     public function getBuilder($ids)
     {
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select(array('detail.number as articleNumber', 't.data', 't.key as articleId ', 't.localeId as languageId'))
-                ->from('Shopware\Models\Translation\Translation', 't')
-                ->leftJoin('Shopware\Models\Article\Article', 'article', \Doctrine\ORM\Query\Expr\Join::WITH, 'article.id=t.key')
-                ->join('article.details', 'detail')
-                ->where('t.id IN (:ids)')
-                ->setParameter('ids', $ids);
+            ->from('Shopware\Models\Translation\Translation', 't')
+            ->leftJoin('Shopware\Models\Article\Article', 'article', Join::WITH, 'article.id=t.key')
+            ->join('article.details', 'detail')
+            ->where('t.id IN (:ids)')
+            ->setParameter('ids', $ids);
 
         return $builder;
     }
 
+    /**
+     * @return QueryBuilder
+     */
     public function getElementBuilder()
     {
         $repository = $this->getManager()->getRepository('Shopware\Models\Article\Element');
@@ -357,6 +397,9 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
         return $builder;
     }
 
+    /**
+     * @return array
+     */
     public function getElements()
     {
         $elementBuilder = $this->getElementBuilder();
@@ -419,6 +462,9 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
         return Shopware()->Db()->query($sql)->fetchAll();
     }
 
+    /**
+     * @return ArticleTranslationValidator
+     */
     public function getValidator()
     {
         if ($this->validator === null) {

@@ -4,16 +4,26 @@ namespace Shopware\Components\SwagImportExport\Factories;
 
 use Shopware\Components\SwagImportExport\Utils\TreeHelper;
 use Shopware\Components\SwagImportExport\Profile\Profile;
-use Shopware\Components\SwagImportExport\Profile\ProfileSerializer;
 use Shopware\CustomModels\ImportExport\Profile as ProfileEntity;
 
 class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
 {
-
     private $profileId;
+    /**
+     * @var ProfileEntity $profileEntity
+     */
     private $profileEntity;
+
+    /**
+     * @var \Shopware\CustomModels\ImportExport\Repository
+     */
     private $profileRepository;
 
+    /**
+     * @param $params
+     * @return Profile
+     * @throws \Exception
+     */
     public function loadProfile($params)
     {
         if (!isset($params['profileId'])) {
@@ -21,7 +31,7 @@ class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
         }
 
         $profileEntity = $this->getProfileRepository()->findOneBy(array('id' => $params['profileId']));
-        
+
         if (!$profileEntity) {
             throw new \Exception('Profile does not exists');
         }
@@ -31,11 +41,12 @@ class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
         return new Profile($profileEntity);
     }
 
-    public function createProfileSerializer()
-    {
-        
-    }
-
+    /**
+     * @param $data
+     * @return mixed|ProfileEntity
+     * @throws \Enlight_Exception
+     * @throws \Exception
+     */
     public function createProfileModel($data)
     {
         $event = Shopware()->Events()->notifyUntil(
@@ -43,8 +54,7 @@ class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
             array('subject' => $this, 'data' => $data)
         );
 
-        if ($event && $event instanceof \Enlight_Event_EventArgs
-                && $event->getReturn() instanceof ProfileEntity){
+        if ($event && $event instanceof \Enlight_Event_EventArgs && $event->getReturn() instanceof ProfileEntity) {
             return $event->getReturn();
         }
 
@@ -78,6 +88,9 @@ class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
         return $profileModel;
     }
 
+    /**
+     * @return ProfileEntity
+     */
     public function getProfileEntity()
     {
         if ($this->profileEntity == null) {
@@ -95,16 +108,22 @@ class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
     /**
      * Helper Method to get access to the profile repository.
      *
-     * @return \Shopware\CustomModels\ImportExport\Profile
+     * @return \Shopware\CustomModels\ImportExport\Repository
      */
     public function getProfileRepository()
     {
         if ($this->profileRepository === null) {
             $this->profileRepository = Shopware()->Models()->getRepository('Shopware\CustomModels\ImportExport\Profile');
         }
+
         return $this->profileRepository;
     }
 
+    /**
+     * @param $type
+     * @return Profile
+     * @throws \Exception
+     */
     public function loadHiddenProfile($type)
     {
         $profileModel = $this->getProfileRepository()->findOneBy(array('type' => $type, 'hidden' => 1));
@@ -120,5 +139,4 @@ class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
 
         return new Profile($profileModel);
     }
-
 }

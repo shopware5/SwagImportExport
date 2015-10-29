@@ -4,7 +4,10 @@ namespace Shopware\Components\SwagImportExport\Utils;
 
 class DataHelper
 {
-
+    /**
+     * @param $column
+     * @return array
+     */
     public static function generateMappingFromColumns($column)
     {
         preg_match('/(?<=as ).*/', $column, $alias);
@@ -16,6 +19,10 @@ class DataHelper
         return array($alias, $name);
     }
 
+    /**
+     * @param $bytes
+     * @return string
+     */
     public static function formatFileSize($bytes)
     {
         if ($bytes > 0) {
@@ -30,5 +37,4 @@ class DataHelper
 
         return $bytes;
     }
-
 }

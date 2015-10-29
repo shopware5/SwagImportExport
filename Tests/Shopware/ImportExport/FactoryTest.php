@@ -2,7 +2,6 @@
 
 namespace Tests\Shopware\ImportExport;
 
-use Tests\Shopware\ImportExport\ImportExportTestHelper;
 use Shopware\Components\SwagImportExport\DataIO;
 use Shopware\Components\SwagImportExport\Factories\DataFactory;
 use Shopware\Components\SwagImportExport\Factories\FileIOFactory;
@@ -18,9 +17,8 @@ use Shopware\Components\SwagImportExport\FileIO\CsvFileReader;
 use Shopware\Components\SwagImportExport\FileIO\XmlFileReader;
 use Shopware\Components\SwagImportExport\FileIO\ExcelFileReader;
 
-class DataFactoryTest extends ImportExportTestHelper
+class FactoryTest extends ImportExportTestHelper
 {
-
     public function getPostData()
     {
         $postData = array(
@@ -102,5 +100,4 @@ class DataFactoryTest extends ImportExportTestHelper
         $excelFileReader = $fileIOFactory->createFileReader('excel');
         $this->assertTrue($excelFileReader instanceof ExcelFileReader, 'Is not a instance of ExcelFileReader');
     }
-
 }

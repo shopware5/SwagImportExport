@@ -4,6 +4,9 @@ namespace Shopware\Components\SwagImportExport\DataType;
 
 class CustomerDataType
 {
+    /**
+     * @var array
+     */
     public static $mapper = array(
         'string' => array(
             'customerNumber',
@@ -45,6 +48,9 @@ class CustomerDataType
         ),
     );
 
+    /**
+     * @var array
+     */
     public static $defaultFieldsForCreate = array(
         'boolean' => array(
             'active',

@@ -33,8 +33,8 @@
 
 namespace Shopware\CustomModels\ImportExport;
 
-use Shopware\Components\Model\ModelEntity,
-    Doctrine\ORM\Mapping AS ORM;
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Session Model
@@ -45,11 +45,10 @@ use Shopware\Components\Model\ModelEntity,
  */
 class Profile extends ModelEntity
 {
-
     /**
      * Primary Key - autoincrement value
      *
-     * @var integer $id
+     * @var int $id
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -58,7 +57,7 @@ class Profile extends ModelEntity
     protected $id;
 
     /**
-     * @var Expressions[] $expressions
+     * @var Expression[] $expressions
      *
      * @ORM\OneToMany(targetEntity="Shopware\CustomModels\ImportExport\Expression", mappedBy="profile")
      */
@@ -79,81 +78,117 @@ class Profile extends ModelEntity
     protected $type;
 
     /**
-     * @var text $name
+     * @var string $name
      *
-     * @ORM\Column(name="name", type="string", length=200) 
+     * @ORM\Column(name="name", type="string", length=200)
      */
     protected $name;
 
     /**
-     * @var text $format
+     * @var string $format
      *
-     * @ORM\Column(name="tree", type="text") 
+     * @ORM\Column(name="tree", type="text")
      */
     protected $tree;
 
     /**
-     * @var integer hidden
+     * @var int hidden
      *
      * @ORM\Column(name="hidden", type="integer")
      */
     protected $hidden = 0;
 
+    /**
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
     }
 
+    /**
+     * @return string
+     */
     public function getType()
     {
         return $this->type;
     }
 
+    /**
+     * @return string
+     */
     public function getTree()
     {
         return $this->tree;
     }
 
+    /**
+     * @return Expression[]
+     */
     public function getExpressions()
     {
         return $this->expressions;
     }
 
+    /**
+     * @return Session[]
+     */
     public function getSessions()
     {
         return $this->sessions;
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
     }
 
+    /**
+     * @param int $id
+     */
     public function setId($id)
     {
         $this->id = $id;
     }
 
+    /**
+     * @param string $type
+     */
     public function setType($type)
     {
         $this->type = $type;
     }
 
+    /**
+     * @param string $tree
+     */
     public function setTree($tree)
     {
         $this->tree = $tree;
     }
 
+    /**
+     * @param string $name
+     */
     public function setName($name)
     {
         $this->name = $name;
     }
 
+    /**
+     * @return int
+     */
     public function getHidden()
     {
         return $this->hidden;
     }
 
+    /**
+     * @param int $hidden
+     */
     public function setHidden($hidden)
     {
         $this->hidden = $hidden;
@@ -162,7 +197,7 @@ class Profile extends ModelEntity
     /**
      * Adds an expression to the profile.
      *
-     * @param Expressions $expression
+     * @param Expression $expression
      *
      * @return $this
      */
@@ -170,13 +205,14 @@ class Profile extends ModelEntity
     {
         $this->expressions[] = $expression;
         $expression->setProfile($this);
+
         return $this;
     }
 
     /**
      * Adds an session to the profile.
      *
-     * @param $session
+     * @param Session $session
      *
      * @return $this
      */
@@ -184,7 +220,7 @@ class Profile extends ModelEntity
     {
         $this->sessions[] = $session;
         $session->setProfile($this);
+
         return $this;
     }
-
 }

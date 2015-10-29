@@ -7,5 +7,4 @@ namespace Shopware\Components\SwagImportExport\Exception;
  */
 class AdapterException extends \Enlight_Exception
 {
-    
 }

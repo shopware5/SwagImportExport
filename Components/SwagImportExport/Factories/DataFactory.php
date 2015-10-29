@@ -13,7 +13,6 @@ use Shopware\CustomModels\ImportExport\Logger as LoggerEntity;
 
 class DataFactory extends \Enlight_Class implements \Enlight_Hook
 {
-
     private $cache;
     
     private $sessionRepository;
@@ -23,7 +22,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
      * @param array $postData
      * @return \Shopware\Components\SwagImportExport\DataIO
      */
-    public function getAdapter($adapterType,$postData)
+    public function getAdapter($adapterType, $postData)
     {
         $adapter = $this->cache[$adapterType];
 
@@ -60,7 +59,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
         );
 
         if ($event && $event instanceof \Enlight_Event_EventArgs
-                && $event->getReturn() instanceof DataDbAdapter){
+                && $event->getReturn() instanceof DataDbAdapter) {
             return $event->getReturn();
         }
 
@@ -112,7 +111,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     }
 
     public function loadSession($data)
-    {   
+    {
         $sessionId = $data['sessionId'];
 
         $sessionEntity = $this->getSessionRepository()->findOneBy(array('id' => $sessionId));
@@ -197,7 +196,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
      * This method can be hookable
      * 
      * @return \Shopware\Components\SwagImportExport\DbAdapters\CategoriesDbAdapter
-     */    
+     */
     protected function createCategoriesDbAdapter()
     {
         $proxyAdapter = Shopware()->Hooks()
@@ -242,7 +241,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
      * This method can be hookable
      * 
      * @return \Shopware\Components\SwagImportExport\DbAdapters\ArticlesPricesDbAdapter
-     */    
+     */
     protected function createArticlesPricesDbAdapter()
     {
         $proxyAdapter = Shopware()->Hooks()
@@ -254,7 +253,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
      * This method can be hookable
      * 
      * @return \Shopware\Components\SwagImportExport\DbAdapters\ArticlesImagesDbAdapter
-     */    
+     */
     protected function createArticlesImagesDbAdapter()
     {
         $proxyAdapter = Shopware()->Hooks()

@@ -2,13 +2,13 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
+use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Validators\TranslationValidator;
 
 class TranslationsDbAdapter implements DataDbAdapter
 {
-
     protected $manager;
 
     protected $configuratorGroupRepo;
@@ -50,14 +50,21 @@ class TranslationsDbAdapter implements DataDbAdapter
         $records = $builder->getQuery()->getResult();
 
         $result = array_map(
-            function($item) {
+            function ($item) {
                 return $item['id'];
-            }, $records
+            },
+            $records
         );
 
         return $result;
     }
 
+    /**
+     * @param $ids
+     * @param $columns
+     * @return mixed
+     * @throws \Exception
+     */
     public function read($ids, $columns)
     {
         if (!$ids && empty($ids)) {
@@ -79,13 +86,16 @@ class TranslationsDbAdapter implements DataDbAdapter
         return $result;
     }
 
+    /**
+     * @param $translations
+     * @return array
+     */
     public function prepareTranslations($translations)
     {
-        $mapper = $this->getElemenetMapper();
+        $mapper = $this->getElementMapper();
 
         $result = array();
-        foreach ($translations as $index => $translation){
-
+        foreach ($translations as $index => $translation) {
             $data = unserialize($translation['objectdata']);
 
             //key for different translation types
@@ -105,6 +115,9 @@ class TranslationsDbAdapter implements DataDbAdapter
         return $result;
     }
 
+    /**
+     * @return array
+     */
     public function getDefaultColumns()
     {
         $translation = array(
@@ -131,7 +144,7 @@ class TranslationsDbAdapter implements DataDbAdapter
 
     /**
      * @param string $section
-     * @return mix
+     * @return bool|mixed
      */
     public function getColumns($section)
     {
@@ -144,13 +157,19 @@ class TranslationsDbAdapter implements DataDbAdapter
         return false;
     }
 
+    /**
+     * @param $records
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     * @throws \Enlight_Event_Exception
+     * @throws \Exception
+     */
     public function write($records)
     {
         if (empty($records['default'])) {
-            $message = SnippetsHelper::getNamespace()->get(
-                'adapters/translations/no_records',
-                'No translation records were found.'
-            );
+            $message = SnippetsHelper::getNamespace()
+                ->get('adapters/translations/no_records', 'No translation records were found.');
             throw new \Exception($message);
         }
 
@@ -161,7 +180,7 @@ class TranslationsDbAdapter implements DataDbAdapter
         );
 
         $validator = $this->getValidator();
-        $importMapper = $this->getElemenetMapper();
+        $importMapper = $this->getElementMapper();
         $translationWriter = new \Shopware_Components_Translation();
 
         foreach ($records['default'] as $index => $record) {
@@ -190,7 +209,7 @@ class TranslationsDbAdapter implements DataDbAdapter
                             ->get('adapters/translations/element_id_not_found', '%s element not found with ID %s');
                         throw new AdapterException(sprintf($message, $record['objectType'], $record['objectKey']));
                     }
-                } else if (isset($record['baseName'])) {
+                } elseif (isset($record['baseName'])) {
                     $findKey = $record['objectType'] === 'propertyvalue' ? 'value': 'name';
                     $element = $repository->findOneBy(array($findKey => $record['baseName']));
 
@@ -210,7 +229,7 @@ class TranslationsDbAdapter implements DataDbAdapter
                 $key = $importMapper[$record['objectType']];
                 $data[$key] = $record['name'];
 
-                if($record['objectType'] == 'configuratorgroup'){
+                if ($record['objectType'] == 'configuratorgroup') {
                     $data['description'] = $record['description'];
                 }
 
@@ -219,7 +238,6 @@ class TranslationsDbAdapter implements DataDbAdapter
                 unset($shop);
                 unset($element);
                 unset($data);
-
             } catch (AdapterException $e) {
                 $message = $e->getMessage();
                 $this->saveMessage($message);
@@ -227,11 +245,17 @@ class TranslationsDbAdapter implements DataDbAdapter
         }
     }
 
+    /**
+     *
+     */
     public function getUnprocessedData()
     {
-
     }
 
+    /**
+     * @param $message
+     * @throws \Exception
+     */
     public function saveMessage($message)
     {
         $errorMode = Shopware()->Config()->get('SwagImportExportErrorMode');
@@ -243,11 +267,17 @@ class TranslationsDbAdapter implements DataDbAdapter
         $this->setLogMessages($message);
     }
 
+    /**
+     * @return array
+     */
     public function getLogMessages()
     {
         return $this->logMessages;
     }
 
+    /**
+     * @param $logMessages
+     */
     public function setLogMessages($logMessages)
     {
         $this->logMessages[] = $logMessages;
@@ -256,7 +286,7 @@ class TranslationsDbAdapter implements DataDbAdapter
     /**
      * Returns entity manager
      *
-     * @return \Shopware\Components\Model\ModelManager
+     * @return ModelManager
      */
     public function getManager()
     {
@@ -267,6 +297,10 @@ class TranslationsDbAdapter implements DataDbAdapter
         return $this->manager;
     }
 
+    /**
+     * @param $ids
+     * @return \Shopware\Components\Model\QueryBuilder
+     */
     public function getBuilder($ids)
     {
         $builder = $this->getManager()->createQueryBuilder();
@@ -278,7 +312,10 @@ class TranslationsDbAdapter implements DataDbAdapter
         return $builder;
     }
 
-    protected function getElemenetMapper()
+    /**
+     * @return array
+     */
+    protected function getElementMapper()
     {
         return array(
             'configuratorgroup' => 'name',
@@ -352,6 +389,11 @@ class TranslationsDbAdapter implements DataDbAdapter
         return Shopware()->Db()->query($sql)->fetchAll();
     }
 
+    /**
+     * @param $type
+     * @return \Shopware\Components\Model\ModelRepository
+     * @throws AdapterException
+     */
     protected function getRepository($type)
     {
         switch ($type) {
@@ -375,8 +417,6 @@ class TranslationsDbAdapter implements DataDbAdapter
 
     /**
      * Returns configurator group repository
-     *
-     * @return \Shopware\Models\Article\Configurator\Group
      */
     public function getConfiguratorGroupRepository()
     {
@@ -389,8 +429,6 @@ class TranslationsDbAdapter implements DataDbAdapter
 
     /**
      * Returns configurator option repository
-     *
-     * @return \Shopware\Models\Article\Configurator\Option
      */
     public function getConfiguratorOptionRepository()
     {
@@ -404,7 +442,7 @@ class TranslationsDbAdapter implements DataDbAdapter
     /**
      * Returns property group repository
      *
-     * @return \Shopware\Models\Property\Group
+     * @return \Shopware\Models\Property\Repository
      */
     public function getPropertyGroupRepository()
     {
@@ -418,7 +456,7 @@ class TranslationsDbAdapter implements DataDbAdapter
     /**
      * Returns property option repository
      *
-     * @return \Shopware\Models\Property\Option
+     * @return \Shopware\Models\Property\Repository
      */
     public function getPropertyOptionRepository()
     {
@@ -432,7 +470,7 @@ class TranslationsDbAdapter implements DataDbAdapter
     /**
      * Returns property value repository
      *
-     * @return \Shopware\Models\Property\Value
+     * @return \Shopware\Models\Property\Repository
      */
     public function getPropertyValueRepository()
     {
@@ -443,6 +481,9 @@ class TranslationsDbAdapter implements DataDbAdapter
         return $this->propertyValueRepo;
     }
 
+    /**
+     * @return TranslationValidator
+     */
     public function getValidator()
     {
         if ($this->validator === null) {

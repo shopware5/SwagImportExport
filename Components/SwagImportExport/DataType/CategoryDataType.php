@@ -4,6 +4,9 @@ namespace Shopware\Components\SwagImportExport\DataType;
 
 class CategoryDataType
 {
+    /**
+     * @var array
+     */
     public static $mapper = array(
         'int' => array(
             'categoryId',
@@ -31,6 +34,9 @@ class CategoryDataType
         ),
     );
 
+    /**
+     * @var array
+     */
     public static $defaultFieldsForCreate = array(
         'id' => array(
             'parentId'

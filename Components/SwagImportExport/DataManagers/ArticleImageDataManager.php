@@ -2,12 +2,20 @@
 
 namespace Shopware\Components\SwagImportExport\DataManagers;
 
+use Enlight_Components_Db_Adapter_Pdo_Mysql as PDOConnection;
+
 class ArticleImageDataManager
 {
-    /** @var \Enlight_Components_Db_Adapter_Pdo_Mysql */
+    /**
+     * @var PDOConnection $db
+     */
     private $db = null;
 
-    /** Define which field should be set by default */
+    /**
+     * Define which field should be set by default
+     *
+     * @var array
+     */
     private $defaultFields = array(
         'main',
         'position',
@@ -15,6 +23,9 @@ class ArticleImageDataManager
         'description',
     );
 
+    /**
+     * initialises the class properties
+     */
     public function __construct()
     {
         $this->db = Shopware()->Db();

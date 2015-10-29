@@ -2,25 +2,44 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters\Articles;
 
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DBALException;
+use Enlight_Components_Db_Adapter_Pdo_Mysql as PDOConnection;
+use Shopware\Components\Model\CategorySubscriber;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 
 class CategoryWriter
 {
-    /** @var \Enlight_Components_Db_Adapter_Pdo_Mysql */
+    /**
+     * @var PDOConnection $db
+     */
     protected $db;
 
-    /** @var \Doctrine\DBAL\Connection */
+    /**
+     * @var Connection $connection
+     */
     protected $connection;
 
+    /**
+     * @var array $categoryIds
+     */
     protected $categoryIds;
 
+    /**
+     * initialises the class properties
+     */
     public function __construct()
     {
         $this->db = Shopware()->Db();
         $this->connection = Shopware()->Models()->getConnection();
     }
 
+    /**
+     * @param string $articleId
+     * @param array $categories
+     * @throws DBALException
+     */
     public function write($articleId, $categories)
     {
         if (!$categories) {
@@ -39,12 +58,19 @@ class CategoryWriter
         $this->updateArticlesCategoriesRO($articleId);
     }
 
-    protected function prepareValues($categories, $articleId) {
+    /**
+     * @param array $categories
+     * @param string $articleId
+     * @return string
+     */
+    private function prepareValues($categories, $articleId)
+    {
         $this->categoryIds = array();
         $values = implode(
             ', ',
             array_map(
                 function ($category) use ($articleId) {
+                    $isCategoryExists = false;
                     if (!empty($category['categoryId'])) {
                         $isCategoryExists = $this->isCategoryExists($category['categoryId']);
                     }
@@ -52,6 +78,7 @@ class CategoryWriter
                     //if categoryId exists, the article will be assigned to it, no matter of the categoryPath
                     if (true === $isCategoryExists) {
                         $this->categoryIds[$category['categoryId']] = (int) $category['categoryId'];
+
                         return "({$articleId}, {$category['categoryId']})";
                     }
 
@@ -63,8 +90,7 @@ class CategoryWriter
                     }
 
                     //if categoryPath exists, the article will be assign based on the path
-                    if (!empty($category['categoryPath']))
-                    {
+                    if (!empty($category['categoryPath'])) {
                         //get categoryId by given path: 'English->Cars->Mazda'
                         $category['categoryId'] = $this->getCategoryId($category['categoryPath']);
 
@@ -77,6 +103,7 @@ class CategoryWriter
                         }
 
                         $this->categoryIds[$category['categoryId']] = (int) $category['categoryId'];
+
                         return "({$articleId}, {$category['categoryId']})";
                     }
                 },
@@ -175,7 +202,7 @@ class CategoryWriter
      * @param $id - id of the parent category
      * @param $path - category path
      *
-     * @return created category id
+     * @return int created category id
      */
     protected function insertCategory($description, $id, $path)
     {
@@ -186,10 +213,8 @@ class CategoryWriter
             $values = "({$id}, '{$path}', NOW(), NOW(), '{$description}', 1, 1)";
         }
 
-        $sql = "
-            INSERT INTO s_categories (parent, path, added, changed, description, active, showfiltergroups)
-            VALUES {$values}
-        ";
+        $sql = "INSERT INTO s_categories (parent, path, added, changed, description, active, showfiltergroups)
+                VALUES {$values}";
 
         $this->db->exec($sql);
         $insertedId = $this->db->lastInsertId();
@@ -197,16 +222,17 @@ class CategoryWriter
         return $insertedId;
     }
 
+    /**
+     * @throws \Exception
+     */
     protected function isRootExists()
     {
         $sql = "SELECT id FROM s_categories WHERE id = 1";
         $rootId = $this->db->fetchOne($sql);
 
         if (false === $rootId) {
-            $message = SnippetsHelper::getNamespace()->get(
-                'adapters/articles/root_category_does_not_exist',
-                'Root category does not exist'
-            );
+            $message = SnippetsHelper::getNamespace()
+                ->get('adapters/articles/root_category_does_not_exist', 'Root category does not exist');
             throw new \Exception($message);
         }
     }
@@ -214,7 +240,7 @@ class CategoryWriter
     /**
      * Creates categories' attributes
      *
-     * @param $categoryId
+     * @param int $categoryId
      */
     protected function insertCategoryAttributes($categoryId)
     {
@@ -225,7 +251,7 @@ class CategoryWriter
     /**
      * Checks whether the category is a leaf
      *
-     * @param $categoryId
+     * @param int $categoryId
      * @return bool
      */
     protected function isNotLeaf($categoryId)
@@ -241,12 +267,14 @@ class CategoryWriter
     /**
      * Updates s_articles_categories_ro table
      *
-     * @param $articleId
+     * @param string $articleId
      */
     protected function updateArticlesCategoriesRO($articleId)
     {
+        /** @var CategorySubscriber $categorySubscriber */
+        $categorySubscriber = Shopware()->CategorySubscriber();
         foreach ($this->categoryIds as $categoryId) {
-            Shopware()->CategorySubscriber()->backlogAddAssignment($articleId, $categoryId);
+            $categorySubscriber->backlogAddAssignment($articleId, $categoryId);
         }
     }
 }

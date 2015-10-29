@@ -1,25 +1,26 @@
 <?php
 
-namespace Shopware\Components\SwagImportExport\Transoformers;
+namespace Shopware\Components\SwagImportExport\Transformers;
 
 /**
  * The responsibilty of this class is to modify the values of the data values due to given user small scripts.
  */
 class ValuesTransformer implements DataTransformerAdapter
 {
-
     /**
-     * @var Shopware\CustomModels\ImportExport\Expression
+     * @var \Shopware\CustomModels\ImportExport\Expression[]
      */
     private $config;
 
     /**
-     * @var object 
+     * @var object
      */
     private $evaluator;
 
     /**
-     * The $config must contain the smarty or php transormation of values.
+     * The $config must contain the smarty or php transformation of values.
+     *
+     * @param $config
      */
     public function initialize($config)
     {
@@ -29,30 +30,30 @@ class ValuesTransformer implements DataTransformerAdapter
 
     /**
      * Maps the values by using the config export smarty fields and returns the new array
-     * 
+     *
      * @param array $data
      * @return array
      */
     public function transformForward($data)
     {
         $data = $this->transform('export', $data);
-        
+
         return $data;
     }
 
     /**
      * Changes and returns the new values, before importing
-     * 
+     *
      * @param array $data
      * @return array
      */
     public function transformBackward($data)
     {
         $data = $this->transform('import', $data);
-        
+
         return $data;
     }
-    
+
     /**
      * @param string $type
      * @param array $data
@@ -73,7 +74,7 @@ class ValuesTransformer implements DataTransformerAdapter
             default:
                 throw new \Exception("Convert type $type does not exists.");
         }
-        
+
         foreach ($this->config as $expression) {
             $conversions[$expression->getVariable()] = $expression->{$method}();
         }
@@ -82,7 +83,7 @@ class ValuesTransformer implements DataTransformerAdapter
             foreach ($data as &$records) {
                 foreach ($records as &$record) {
                     foreach ($conversions as $variableName => $conversion) {
-                        if (isset($record[$variableName]) && !empty($conversion)) {  
+                        if (isset($record[$variableName]) && !empty($conversion)) {
                             $evalData = $this->evaluator->evaluate($conversion, $record);
                             if ($evalData) {
                                 $record[$variableName] = $evalData;
@@ -95,7 +96,7 @@ class ValuesTransformer implements DataTransformerAdapter
 
         return $data;
     }
-    
+
 //    if we dont now the array dept we need to make it recurcive
 //    the function below is will do the job, but check the speed before commiting
 //    public function evaluateData(&$data, $conversions)
@@ -108,10 +109,10 @@ class ValuesTransformer implements DataTransformerAdapter
 //                    if ($key === $variableName) {
 //                        $evalData = $this->evaluator->evaluate($conversion, $data);
 //                        if ($evalData) {
-//                            $data[$variableName] = $evalData;                            
+//                            $data[$variableName] = $evalData;
 //                        }
 //                    }
-//                }                
+//                }
 //            }
 //        }
 //    }
@@ -121,7 +122,6 @@ class ValuesTransformer implements DataTransformerAdapter
      */
     public function composeHeader()
     {
-        
     }
 
     /**
@@ -129,23 +129,23 @@ class ValuesTransformer implements DataTransformerAdapter
      */
     public function composeFooter()
     {
-        
     }
 
     /**
      * Does nothing in this class
+     *
+     * @param $data
      */
     public function parseHeader($data)
     {
-        
     }
 
     /**
      * Does nothing in this class
+     *
+     * @param $data
      */
     public function parseFooter($data)
     {
-        
     }
-
 }

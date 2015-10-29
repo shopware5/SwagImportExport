@@ -4,9 +4,8 @@ namespace Tests\Shopware\ImportExport;
 
 class ImportExportTestHelper extends \Enlight_Components_Test_Plugin_TestCase
 {
-
     /**
-     * @var Shopware_Plugins_Backend_SwagImportExport_Bootstrap
+     * @var \Shopware_Plugins_Backend_SwagImportExport_Bootstrap
      */
     protected $plugin;
 
@@ -23,11 +22,10 @@ class ImportExportTestHelper extends \Enlight_Components_Test_Plugin_TestCase
     /**
      * Retrieve plugin instance
      *
-     * @return Shopware_Plugins_Frontend_Statistics_Bootstrap
+     * @return \Shopware_Plugins_Backend_SwagImportExport_Bootstrap
      */
     public function Plugin()
     {
         return $this->plugin;
     }
-
 }

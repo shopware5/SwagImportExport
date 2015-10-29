@@ -4,7 +4,11 @@ namespace Shopware\Components\SwagImportExport\DataManagers\Articles;
 
 class PriceDataManager
 {
-    /** Define which field should be set by default */
+    /**
+     * Define which field should be set by default
+     *
+     * @var array
+     */
     private $defaultFields = array(
         'priceGroup',
         'from',
@@ -22,7 +26,7 @@ class PriceDataManager
         foreach ($this->defaultFields as $key) {
             switch ($key) {
                 case 'priceGroup':
-                        $record[$key] = empty($record[$key]) ? 'EK' : $record[$key];
+                    $record[$key] = empty($record[$key]) ? 'EK' : $record[$key];
                     break;
                 case 'from':
                     $record[$key] = empty($record[$key]) ? 1 : intval($record[$key]);

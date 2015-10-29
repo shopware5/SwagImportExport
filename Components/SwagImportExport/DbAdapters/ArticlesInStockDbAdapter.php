@@ -2,6 +2,9 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
+use Doctrine\ORM\AbstractQuery;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Model\QueryBuilder;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Validators\ArticleInStockValidator;
@@ -9,7 +12,7 @@ use Shopware\Components\SwagImportExport\Validators\ArticleInStockValidator;
 class ArticlesInStockDbAdapter implements DataDbAdapter
 {
     /**
-     * @var \Shopware\Components\Model\ModelManager
+     * @var ModelManager
      */
     protected $manager;
 
@@ -24,13 +27,18 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
     protected $logMessages;
 
     /**
-     * @var \Shopware\Models\Article\Detail
+     * @var \Shopware\Models\Article\Repository
      */
     protected $repository;
 
-    /** @var ArticleInStockValidator */
+    /**
+     * @var ArticleInStockValidator
+     */
     protected $validator;
 
+    /**
+     * @return array
+     */
     public function getDefaultColumns()
     {
         return array(
@@ -43,19 +51,25 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
         );
     }
 
+    /**
+     * @param $ids
+     * @param $columns
+     * @return mixed
+     */
     public function read($ids, $columns)
     {
         $manager = $this->getManager();
 
         //prices
         $columns = array_merge(
-                $columns, array('customerGroup.taxInput as taxInput', 'articleTax.tax as tax')
+            $columns,
+            array('customerGroup.taxInput as taxInput', 'articleTax.tax as tax')
         );
 
         $builder = $this->getBuilder($columns, $ids);
 
         $query = $builder->getQuery();
-        $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $query->setHydrationMode(AbstractQuery::HYDRATE_ARRAY);
 
         $paginator = $manager->createPaginator($query);
 
@@ -63,7 +77,7 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
 
         foreach ($result['default'] as &$record) {
             if ($record['taxInput']) {
-                $record['price'] = $record['price'] * (100 + $record['tax']) / 100; 
+                $record['price'] = $record['price'] * (100 + $record['tax']) / 100;
             }
 
             if (!$record['inStock']) {
@@ -74,24 +88,33 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
         return $result;
     }
 
+    /**
+     * @return array
+     */
     public function getUnprocessedData()
     {
         return $this->unprocessedData;
     }
 
+    /**
+     * @param $start
+     * @param $limit
+     * @param $filter
+     * @return array
+     * @throws \Exception
+     */
     public function readRecordIds($start, $limit, $filter)
     {
         $stockFilter = $filter['stockFilter'];
         $manager = $this->getManager();
 
         $builder = $manager->createQueryBuilder();
-        
-        $builder->select('d.id')
-                ->from('Shopware\Models\Article\Detail', 'd')
-                ->leftJoin('d.prices', 'p');
 
-        switch($stockFilter)
-        {
+        $builder->select('d.id')
+            ->from('Shopware\Models\Article\Detail', 'd')
+            ->leftJoin('d.prices', 'p');
+
+        switch ($stockFilter) {
             case 'all':
                 $builder->where($builder->expr()->isNotNull('d.id'));
                 break;
@@ -112,11 +135,11 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
                     ->andWhere('a.lastStock = 1');
                 break;
             case 'notInStockMinStock':
-                    $builder->where('d.stockMin >= d.inStock')
+                $builder->where('d.stockMin >= d.inStock')
                     ->andWhere('d.stockMin > 0');
                 break;
             case 'custom':
-                switch($filter['direction']) {
+                switch ($filter['direction']) {
                     case 'greaterThan':
                         $builder->where('d.inStock >= :filterValue');
                         break;
@@ -124,13 +147,13 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
                         $builder->where('d.inStock <= :filterValue');
                         break;
                 }
-                $builder->setParameter('filterValue', (int)$filter['value']);
+                $builder->setParameter('filterValue', (int) $filter['value']);
 
                 // unset filterValues for prevent query errors
-                if(isset($filter['direction'])) {
+                if (isset($filter['direction'])) {
                     unset($filter['direction']);
                 }
-                if(isset($filter['value'])) {
+                if (isset($filter['value'])) {
                     unset($filter['value']);
                 }
 
@@ -139,22 +162,22 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
                 throw new \Exception('Cannot match StockFilter - File:ArticlesInStockAdapter Line:136');
         }
 
-        if(isset($filter['stockFilter'])) {
+        if (isset($filter['stockFilter'])) {
             unset($filter['stockFilter']);
         }
 
         $builder->andWhere("p.customerGroupKey = 'EK'")
-                ->andWhere("p.from = 1")
-                ->orderBy('d.id', 'ASC');
+            ->andWhere("p.from = 1")
+            ->orderBy('d.id', 'ASC');
 
         if (!empty($filter)) {
             $builder->addFilter($filter);
         }
 
         $builder->setFirstResult($start)
-                ->setMaxResults($limit);
+            ->setMaxResults($limit);
         $query = $builder->getQuery();
-        $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $query->setHydrationMode(AbstractQuery::HYDRATE_ARRAY);
         $paginator = $manager->createPaginator($query);
 
         $records = $paginator->getIterator()->getArrayCopy();
@@ -164,16 +187,20 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
                 $result[] = $value['id'];
             }
         }
+
         return $result;
     }
 
+    /**
+     * @param $records
+     * @throws \Enlight_Event_Exception
+     * @throws \Exception
+     */
     public function write($records)
     {
         if (empty($records['default'])) {
-            $message = SnippetsHelper::getNamespace()->get(
-                'adapters/articlesInStock/no_records',
-                'No article stock records were found.'
-            );
+            $message = SnippetsHelper::getNamespace()
+                ->get('adapters/articlesInStock/no_records', 'No article stock records were found.');
             throw new \Exception($message);
         }
 
@@ -204,7 +231,6 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
                 $articleDetail->setInStock($inStock);
 
                 $manager->persist($articleDetail);
-
             } catch (AdapterException $e) {
                 $message = $e->getMessage();
                 $this->saveMessage($message);
@@ -214,7 +240,7 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
         $manager->flush();
         $manager->clear();
     }
-    
+
     /**
      * @return array
      */
@@ -224,26 +250,26 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
             array('id' => 'default', 'name' => 'default ')
         );
     }
-    
+
     /**
      * @param string $section
-     * @return mix
+     * @return bool|mixed
      */
     public function getColumns($section)
     {
         $method = 'get' . ucfirst($section) . 'Columns';
-        
+
         if (method_exists($this, $method)) {
             return $this->{$method}();
         }
 
         return false;
     }
-    
+
     /**
      * Returns article detail repository
-     * 
-     * @return \Shopware\Models\Article\Detail
+     *
+     * @return \Shopware\Models\Article\Repository
      */
     public function getRepository()
     {
@@ -256,8 +282,8 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
 
     /**
      * Returns entity manager
-     * 
-     * @return \Shopware\Components\Model\ModelManager
+     *
+     * @return ModelManager
      */
     public function getManager()
     {
@@ -268,6 +294,10 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
         return $this->manager;
     }
 
+    /**
+     * @param $message
+     * @throws \Exception
+     */
     public function saveMessage($message)
     {
         $errorMode = Shopware()->Config()->get('SwagImportExportErrorMode');
@@ -279,32 +309,46 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
         $this->setLogMessages($message);
     }
 
+    /**
+     * @return array
+     */
     public function getLogMessages()
     {
         return $this->logMessages;
     }
 
+    /**
+     * @param $logMessages
+     */
     public function setLogMessages($logMessages)
     {
         $this->logMessages[] = $logMessages;
     }
 
-	public function getBuilder($columns, $ids)
+    /**
+     * @param $columns
+     * @param $ids
+     * @return QueryBuilder
+     */
+    public function getBuilder($columns, $ids)
     {
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select($columns)
-                ->from('Shopware\Models\Article\Detail', 'variant')
-                ->leftJoin('variant.article', 'article')
-                ->leftJoin('article.supplier', 'articleSupplier')
-                ->leftJoin('variant.prices', 'prices')
-                ->leftJoin('prices.customerGroup', 'customerGroup')
-                ->leftJoin('article.tax', 'articleTax')
-                ->where('variant.id IN (:ids)')
-                ->setParameter('ids', $ids);
+            ->from('Shopware\Models\Article\Detail', 'variant')
+            ->leftJoin('variant.article', 'article')
+            ->leftJoin('article.supplier', 'articleSupplier')
+            ->leftJoin('variant.prices', 'prices')
+            ->leftJoin('prices.customerGroup', 'customerGroup')
+            ->leftJoin('article.tax', 'articleTax')
+            ->where('variant.id IN (:ids)')
+            ->setParameter('ids', $ids);
 
         return $builder;
     }
 
+    /**
+     * @return ArticleInStockValidator
+     */
     public function getValidator()
     {
         if ($this->validator === null) {

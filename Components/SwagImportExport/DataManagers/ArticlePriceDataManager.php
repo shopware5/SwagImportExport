@@ -4,7 +4,11 @@ namespace Shopware\Components\SwagImportExport\DataManagers;
 
 class ArticlePriceDataManager
 {
-    /** Define which field should be set by default */
+    /**
+     * Define which field should be set by default
+     *
+     * @var array
+     */
     private $defaultFields = array(
         'priceGroup',
         'from',

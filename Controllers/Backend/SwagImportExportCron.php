@@ -23,8 +23,11 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Utils\CommandHelper;
+use Shopware\CustomModels\ImportExport\Profile;
+use Shopware\Models\Media\Album;
 
 /**
  * Shopware ImportExport Plugin
@@ -34,75 +37,73 @@ use Shopware\Components\SwagImportExport\Utils\CommandHelper;
  */
 class Shopware_Controllers_Backend_SwagImportExportCron extends Shopware_Controllers_Backend_ExtJs
 {
+    /**
+     * @var ModelManager
+     */
+    protected $manager;
 
-	/**
-	 * Shopware\Components\Model\ModelManager
-	 */
-	protected $manager;
+    public function init()
+    {
+        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+        Shopware()->Plugins()->Controller()->ViewRenderer()->setNoRender();
+    }
 
-	public function init()
-	{
-		Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
-		Shopware()->Plugins()->Controller()->ViewRenderer()->setNoRender();
-	}
+    /**
+     * Check for terminal call on cron action
+     */
+    public function preDispatch()
+    {
+        //Call cron only if request is not from browser
+        if (php_sapi_name() == 'cli') {
+            $this->cronAction();
+        }
+    }
 
-	/**
-	 * Check for terminal call on cron action
-	 */
-	public function preDispatch()
-	{
-		//Call cron only if request is not from browser
-		if (php_sapi_name() == 'cli') {
-			$this->cronAction();
-		}
-	}
+    /**
+     * Custom cronjob for import
+     */
+    public function cronAction()
+    {
+        $directory = Shopware()->DocPath() . 'files/import_cron/';
+        $allFiles = scandir($directory);
+        $files = array_diff($allFiles, array('.', '..'));
 
-	/**
-	 * Custom cronjob for import
-	 *
-	 * @return boolean
-	 */
-	public function cronAction()
-	{
-		$directory = Shopware()->DocPath() . 'files/import_cron/';
-		$allFiles = scandir($directory);
-		$files = array_diff($allFiles, array('.', '..'));
+        $lockerFilename = '__running';
+        $lockerFileLocation = $directory . $lockerFilename;
 
-		$lockerFilename = '__running';
-		$lockerFileLocation = $directory . $lockerFilename;
+        if (in_array($lockerFilename, $files)) {
+            $file = fopen($lockerFileLocation, "r");
+            $fileContent = (int) fread($file, filesize($lockerFileLocation));
+            fclose($file);
 
-		if (in_array($lockerFilename, $files)) {
-			$file = fopen($lockerFileLocation, "r");
-			$fileContent = (int) fread($file, filesize($lockerFileLocation));
-			fclose($file);
+            if ($fileContent > time()) {
+                echo "There is already an import in progress.\n";
 
-			if ($fileContent > time()) {
-				echo "There is already an import in progess.\n";
-				return;
-			} else {
-				unlink($lockerFileLocation);
-			}
-		}
+                return;
+            } else {
+                unlink($lockerFileLocation);
+            }
+        }
 
-		if ($files === false || count($files) == 0) {
-			echo "No import files are found\n";
-			return;
-		}
+        if ($files === false || count($files) == 0) {
+            echo "No import files are found\n";
 
-		//Create empty file to flag cron as running
-		$timeout = time() + 1800;
-		$file = fopen($lockerFileLocation, "w");
-		fwrite($file, $timeout);
-		fclose($file);
+            return;
+        }
 
-		$profileRepository = $this->getManager()->getRepository('Shopware\CustomModels\ImportExport\Profile');
+        //Create empty file to flag cron as running
+        $timeout = time() + 1800;
+        $file = fopen($lockerFileLocation, "w");
+        fwrite($file, $timeout);
+        fclose($file);
+
+        $profileRepository = $this->getManager()->getRepository('Shopware\CustomModels\ImportExport\Profile');
         foreach ($files as $file) {
             $fileExtension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
             $fileName = strtolower(pathinfo($file, PATHINFO_FILENAME));
 
             if ($fileExtension == 'xml' || $fileExtension == 'csv') {
                 try {
-
                     $profile = CommandHelper::findProfileByName($file, $profileRepository);
                     if ($profile === false) {
                         $message = SnippetsHelper::getNamespace()->get('cronjob/no_profile', 'No profile found %s');
@@ -135,15 +136,14 @@ class Shopware_Controllers_Backend_SwagImportExportCron extends Shopware_Control
                     $this->getManager()->flush();
 
                     $mediaPath = $media->getPath();
-
                 } catch (\Exception $e) {
                     echo $e->getMessage() . "\n";
                     unlink($lockerFileLocation);
+
                     return;
                 }
 
                 try {
-
                     $return = $this->start($profile, $mediaPath, $fileExtension);
 
                     $profilesMapper = array('articles', 'articlesImages');
@@ -158,93 +158,101 @@ class Shopware_Controllers_Backend_SwagImportExportCron extends Shopware_Control
                             $outputFile = str_replace('-tmp', '-swag', $tmpFile);
                             rename($tmpFile, $outputFile);
 
-                            $profile = $this->Plugin()->getProfileFactory()->loadHiddenProfile($profileName);
+                            $profile = $this->getPlugin()->getProfileFactory()->loadHiddenProfile($profileName);
                             $profileEntity = $profile->getEntity();
 
                             $this->start($profileEntity, $outputFile, 'csv');
                         }
                     }
 
-					$message = $return['data']['position'] . ' ' . $return['data']['adapter'] . " imported successfully \n";
-					echo $message;
-				} catch (\Exception $e) {
-					// copy file as broken
-					copy($mediaPath, Shopware()->DocPath() . 'files/import_export/broken-' . $file);
-					echo $e->getMessage() . "\n";
-					unlink($lockerFileLocation);
-					return;
-				}
-			}
-		}
+                    $message = $return['data']['position'] . ' ' . $return['data']['adapter'] . " imported successfully \n";
+                    echo $message;
+                } catch (\Exception $e) {
+                    // copy file as broken
+                    copy($mediaPath, Shopware()->DocPath() . 'files/import_export/broken-' . $file);
+                    echo $e->getMessage() . "\n";
+                    unlink($lockerFileLocation);
 
-		unlink($lockerFileLocation);
-	}
+                    return;
+                }
+            }
+        }
 
-	/**
-	 * @param \Shopware\CustomModels\ImportExport\Profile $profileModel
-	 * @param string $inputFile
-	 * @param string $format
-	 * @return array
-	 */
-	protected function start($profileModel, $inputFile, $format)
-	{
-		$mediaService = $this->container->get('shopware_media.media_service');
-		$inputFile = $mediaService->getUrl($inputFile);
+        unlink($lockerFileLocation);
+    }
 
-		$commandHelper = new CommandHelper(array(
-				'profileEntity' => $profileModel,
-				'filePath' => $inputFile,
-				'format' => $format,
-				'username' => 'Cron'
-		));
+    /**
+     * @param bool|Profile $profileModel
+     * @param string $inputFile
+     * @param string $format
+     * @return array
+     */
+    protected function start($profileModel, $inputFile, $format)
+    {
+        $mediaService = $this->container->get('shopware_media.media_service');
+        $inputFile = $mediaService->getUrl($inputFile);
 
-		$return = $commandHelper->prepareImport();
-		$count = $return['count'];
+        $commandHelper = new CommandHelper(
+            array(
+                'profileEntity' => $profileModel,
+                'filePath' => $inputFile,
+                'format' => $format,
+                'username' => 'Cron'
+            )
+        );
 
-		$return = $commandHelper->importAction();
-		$position = $return['data']['position'];
+        $return = $commandHelper->prepareImport();
+        $count = $return['count'];
 
-		while ($position < $count) {
-			$return = $commandHelper->importAction();
-			$position = $return['data']['position'];
-		}
+        $return = $commandHelper->importAction();
+        $position = $return['data']['position'];
 
-		return $return;
-	}
+        while ($position < $count) {
+            $return = $commandHelper->importAction();
+            $position = $return['data']['position'];
+        }
 
-	/**
-	 * Creates album in media manager for ImportFiles
-	 *
-	 * @return \Shopware\Models\Media\Album
-	 */
-	protected function createAlbum()
-	{
-		$albumRepo = Shopware()->Models()->getRepository('Shopware\Models\Media\Album');
-		$album = $albumRepo->findOneBy(array('name' => 'ImportFiles'));
+        return $return;
+    }
 
-		if (!$album) {
-			$album = new Shopware\Models\Media\Album();
-			$album->setName('ImportFiles');
-			$album->setPosition(0);
-			$this->getManager()->persist($album);
-			$this->getManager()->flush($album);
-		}
+    /**
+     * Creates album in media manager for ImportFiles
+     *
+     * @return Album
+     */
+    protected function createAlbum()
+    {
+        $albumRepo = Shopware()->Models()->getRepository('Shopware\Models\Media\Album');
+        $album = $albumRepo->findOneBy(array('name' => 'ImportFiles'));
 
-		return $album;
-	}
+        if (!$album) {
+            $album = new Album();
+            $album->setName('ImportFiles');
+            $album->setPosition(0);
+            $this->getManager()->persist($album);
+            $this->getManager()->flush($album);
+        }
 
-	protected function Plugin()
-	{
-		return Shopware()->Plugins()->Backend()->SwagImportExport();
-	}
+        return $album;
+    }
 
-	public function getManager()
-	{
-		if ($this->manager === null) {
-			$this->manager = Shopware()->Models();
-		}
+    /**
+     * @return Shopware_Plugins_Backend_SwagImportExport_Bootstrap
+     */
+    protected function getPlugin()
+    {
+        return Shopware()->Plugins()->Backend()->SwagImportExport();
+    }
 
-		return $this->manager;
-	}
+    /**
+     * @return ModelManager
+     */
+    public function getManager()
+    {
+        if ($this->manager === null) {
+            $this->manager = Shopware()->Models();
+        }
 
+        return $this->manager;
+    }
 }
