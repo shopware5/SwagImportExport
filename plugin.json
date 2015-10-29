@@ -8,10 +8,11 @@
     "link": "http://store.shopware.com",
     "author": "Shopware AG",
 
-    "currentVersion": "1.1.1",
+    "currentVersion": "1.1.5",
 
     "changelog": {
         "de": {
+            "1.1.5": "PT-2436 - Feature: Möglichkeit Standardwerte zu hinterlegen; PT-3313 - Bugfix: Falscher Titel bei Import über Cronjob; PT-3417 - Bugfix: Import fortsetzen über Konsole; PT-3448 - Feature: Neuer Export - Bestellübersicht; PT-3513 - Bugfix: Problem mit Umlauten; PT-3530 - Bugfix: Kategorie Metatitel hinzugefügt; PT-3752 - Bugfix: Import Variantenoption 0 / null; PT-3814 - Bugfix: Shop URL von importierter Datei entfernt; PT-3833 - Bugfix: Shopware 5.1 Kompatibilität; PT-3920 - Bugfix: Fehlende Klasse; PT-3980 - Bugfix: PHPUnit Tests korrigiert;",
             "1.1.1": "PT-3800 - Bugfix: Shopware 5.1 Kompatibilität;",
             "1.1.0": "PT-3246 - Bugfix: Probleme mit Lizenzcheck und Konsolenkommandos; PT-3270 - Bugfix: Export Metatitel von Bildern; PT-3520 - Bugfix: Import von Steuersätzen; PT-3561 - Bugfix: Import von Zubehörartikeln; PT-3671 - Import/Export ist nun kostenlos verfügbar;",
 			"1.0.7": "PT-2899, PT-3060 - Verbesserung: Starke Verbesserung der Performance; PT-3007 - Feature: Kategorien über den Pfad zuweisen; PT-3025 - Bugfix: Artikel Lagerbestand Export-Fehler behoben; PT-3117 - Bugfix: Import/Export über die Konsole repariert; PT-3422 - Bugfix: Ungebrauchte Snippets entfernt",
@@ -23,6 +24,7 @@
             "1.0.1": "Problem mit verschwindendem Import/Export Menü-Eintrag behoben; Weitere ACL-Zugangsberechtigungen hinzugefügt; Korrektur: article.active Verhalten; Korrektur: Artikel-Attribute; Korrektur: Datums- und Zeitimporte"
         },
         "en": {
+            "1.1.5": "PT-2436 - Feature: Possibility to define default values; PT-3313 - Bugfix: Wrong title for import via Cronjob; PT-3417 - Bugfix: Continue import via console; PT-3448 - Feature: New export - order overview; PT-3513 - Bugfix: Problem with umlauts; PT-3530 - Bugfix: Added category meta title; PT-3752 - Bugfix: Import variant option 0 / null; PT-3814 - Bugfix: Remove shop url from imported file; PT-3833 - Bugfix: Shopware 5.1 Compatibility; PT-3920 - Bugfix: Missing class; PT-3980 - Bugfix: PHPUnit tests fixed;",
             "1.1.1": "PT-3800 - Bugfix: Shopware 5.1 compatibility;",
             "1.1.0": "PT-3246 - Bugfix: Problems with license check and console commands; PT-3270 - Bugfix: Export meta title of images; PT-3520 - Bugfix: Import of taxes; PT-3561 - Bugfix: Import of accessory products; PT-3671 - Import/Export is now available for free;",
             "1.0.7": "PT-2899, PT-3060 - Improvement: Highly improved the performance; PT-3007 - Feature: Assign categories to articles by path; PT-3025 - Bugfix: Importing/exporting article stock works properly now; PT-3117 - Bugfix: Fixed the import/export when using the console; PT-3422 - Bugfix: Removed unnecessary snippets",
