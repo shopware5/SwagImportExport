@@ -143,4 +143,21 @@ class ArticleDataType
             'weight'
         )
     );
+
+    /**
+     * @var array
+     */
+    public static $articleFieldsMapping = array(
+        'added' => 'date',
+        'changed' => 'changeTime',
+        'highlight' => 'topSeller'
+    );
+
+    /**
+     * @var array
+     */
+    public static $articleVariantFieldsMapping = array(
+        'number' => 'orderNumber',
+        'len' => 'length',
+    );
 }
