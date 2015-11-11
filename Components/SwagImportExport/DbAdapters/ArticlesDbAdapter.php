@@ -442,15 +442,12 @@ class ArticlesDbAdapter implements DataDbAdapter
             }
         }
 
-        $translationArticleColumns = 'article.id as articleId, ct.objectdata, ct.objectlanguage as languageId';
+        $translationArticleColumns = 'variant.articleID as articleId, ct.objectdata, ct.objectlanguage as languageId';
 
         $sql = "SELECT $translationArticleColumns FROM `s_articles_details` AS variant
 
-                INNER JOIN s_articles AS article
-                ON article.id = variant.articleID
-
                 LEFT JOIN s_core_translations AS ct
-                ON variant.id = ct.objectkey
+                ON variant.articleID = ct.objectkey
 
                 WHERE variant.id IN ($articleDetailIds) AND objecttype = 'article'
                 GROUP BY ct.id
