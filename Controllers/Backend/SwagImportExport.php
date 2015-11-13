@@ -1394,8 +1394,8 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                 $data['orderstate'] = $orderState;
             }
 
-            $paymentState =$request->getParam('paymentstate');
-            if ($paymentState) {
+            $paymentState = $request->getParam('paymentstate');
+            if (isset($paymentState)) {
                 $data['paymentstate'] = $paymentState;
             }
         }
