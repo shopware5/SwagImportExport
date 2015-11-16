@@ -43,7 +43,6 @@ Ext.define('Shopware.apps.SwagImportExport.model.Log', {
         // {block name="backend/swag_import_export/model/session_list/fields"}{/block}
         { name: 'title', type: 'string' },
         { name: 'message', type: 'string' },
-        { name: 'state', type: 'string' },
         { name: 'logDate', type: 'date', format: 'timestamp' }
     ],
     

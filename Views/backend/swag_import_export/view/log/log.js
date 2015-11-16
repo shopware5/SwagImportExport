@@ -89,11 +89,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.log.Log', {
                 header: me.snippets.column.message,
                 dataIndex: 'message',
                 renderer:function(v) { return v.replace(/\n/g,'<br>') },
-                flex: 1
-            }, {
-                header: me.snippets.column.status,
-                dataIndex: 'state',
-                flex: 1
+                flex: 2
             }, {
                 xtype : 'datecolumn',
                 header: me.snippets.column.date,

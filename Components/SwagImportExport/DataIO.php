@@ -156,7 +156,8 @@ class DataIO
         $dbAdapter = $this->getDbAdapter();
 
         $messages = $dbAdapter->getLogMessages();
-        $status = 'false';
+        $state = $dbAdapter->getLogState();
+        $status = isset($state) ? $state : 'false';
 
         if (!$messages || empty($messages)) {
             return;

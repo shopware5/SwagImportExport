@@ -33,6 +33,11 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
      */
     protected $logMessages;
 
+    /**
+     * @var string
+     */
+    protected $logState;
+
     /** @var ArticleImageValidator */
     protected $validator;
 
@@ -552,6 +557,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
         }
 
         $this->setLogMessages($message);
+        $this->setLogState('true');
     }
 
     public function getLogMessages()
@@ -562,6 +568,22 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
     public function setLogMessages($logMessages)
     {
         $this->logMessages[] = $logMessages;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLogState()
+    {
+        return $this->logState;
+    }
+
+    /**
+     * @param $logState
+     */
+    public function setLogState($logState)
+    {
+        $this->logState = $logState;
     }
 
     public function getBuilder($columns, $ids)
