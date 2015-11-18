@@ -76,6 +76,10 @@ class ConfiguratorWriter
                 }
 
                 $dataSet['public'] = false;
+                $dataSet['id'] = $configurator['configSetId'];
+                if ($configurator['configSetType']) {
+                    $dataSet['type'] = $configurator['configSetType'];
+                }
 
                 if (array_key_exists($dataSet['name'], $this->sets)) {
                     $configuratorSetId = $this->sets[$dataSet['name']];
