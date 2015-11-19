@@ -89,7 +89,7 @@ class DbalHelper
         $nullAble = $metaData->fieldMappings[$key]['nullable'];
 
         // Check if nullable
-        if (empty($value) && $nullAble) {
+        if (!isset($value) && $nullAble) {
             return $builder->createNamedParameter(
                 null,
                 \PDO::PARAM_NULL

@@ -62,4 +62,36 @@ class DataManager
                 break;
         }
     }
+
+    /**
+     * Return proper values for fields which have values NULL
+     *
+     * @param array $records
+     * @param array $fieldsValues
+     * @return array
+     */
+    public function fixFieldsValues($records, $fieldsValues)
+    {
+        foreach ($fieldsValues as $type => $fields) {
+            foreach ($fields as $field) {
+                if (empty($records[$field])) {
+                    switch ($type) {
+                        case 'string';
+                            $records[$field] = '';
+                            break;
+                        case 'int':
+                            $records[$field] = '0';
+                            break;
+                        case 'float':
+                            $records[$field] = '0.0';
+                            break;
+                        case 'date':
+                            $records[$field] = date('Y-m-d', time());
+                    }
+                }
+            }
+        }
+
+        return $records;
+    }
 }
