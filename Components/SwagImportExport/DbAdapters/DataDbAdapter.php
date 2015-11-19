@@ -19,4 +19,6 @@ interface DataDbAdapter
     public function getUnprocessedData();
 
     public function getLogMessages();
+
+    public function getLogState();
 }

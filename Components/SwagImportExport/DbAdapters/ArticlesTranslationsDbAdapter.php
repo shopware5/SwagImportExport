@@ -32,6 +32,11 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
     protected $logMessages;
 
     /**
+     * @var string
+     */
+    protected $logState;
+
+    /**
      * @var ArticleTranslationValidator
      */
     protected $validator;
@@ -295,6 +300,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
         }
 
         $this->setLogMessages($message);
+        $this->setLogState('true');
     }
 
     /**
@@ -311,6 +317,22 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
     public function setLogMessages($logMessages)
     {
         $this->logMessages[] = $logMessages;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLogState()
+    {
+        return $this->logState;
+    }
+
+    /**
+     * @param $logState
+     */
+    public function setLogState($logState)
+    {
+        $this->logState = $logState;
     }
 
     /**

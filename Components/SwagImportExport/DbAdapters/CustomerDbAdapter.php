@@ -34,6 +34,11 @@ class CustomerDbAdapter implements DataDbAdapter
      */
     protected $logMessages;
 
+    /**
+     * @var string
+     */
+    protected $logState;
+
     protected $db;
 
     protected $validator;
@@ -656,6 +661,7 @@ class CustomerDbAdapter implements DataDbAdapter
         }
 
         $this->setLogMessages($message);
+        $this->setLogState('true');
     }
 
     /**
@@ -673,7 +679,23 @@ class CustomerDbAdapter implements DataDbAdapter
     {
         $this->logMessages[] = $logMessages;
     }
-    
+
+    /**
+     * @return string
+     */
+    public function getLogState()
+    {
+        return $this->logState;
+    }
+
+    /**
+     * @param $logState
+     */
+    public function setLogState($logState)
+    {
+        $this->logState = $logState;
+    }
+
     /**
      * @return array
      */
