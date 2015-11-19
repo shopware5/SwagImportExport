@@ -90,7 +90,7 @@ class Profile
                     $this->getDefaultFields($leaf);
                 }
 
-                if (isset($leaf['defaultValue'])) {
+                if (isset($leaf['defaultValue']) && $leaf['defaultValue'] != '') {
                     $this->defaultValues[$leaf['shopwareField']] = $leaf['defaultValue'];
                 }
             }

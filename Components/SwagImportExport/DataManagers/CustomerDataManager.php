@@ -85,6 +85,8 @@ class CustomerDataManager extends DataManager
             }
         }
 
+        $record = $this->fixDefaultValues($record);
+
         return $record;
     }
 
@@ -150,5 +152,19 @@ class CustomerDataManager extends DataManager
     private function getEncoder()
     {
         return $this->passwordManager->getDefaultPasswordEncoderName();
+    }
+
+    /**
+     * Return proper values for customer fields which have values NULL
+     *
+     * @param array $records
+     * @return array
+     */
+    public function fixDefaultValues($records)
+    {
+        $defaultFieldsValues = CustomerDataType::$defaultFieldsValues;
+        $records = $this->fixFieldsValues($records, $defaultFieldsValues);
+
+        return $records;
     }
 }

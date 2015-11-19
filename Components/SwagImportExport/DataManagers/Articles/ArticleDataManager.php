@@ -147,6 +147,8 @@ class ArticleDataManager extends DataManager
 
         $record['taxId'] = $this->getTaxId($record);
 
+        $record = $this->fixDefaultValues($record);
+
         return $record;
     }
 
@@ -253,5 +255,19 @@ class ArticleDataManager extends DataManager
         }
 
         return $record;
+    }
+
+    /**
+     * Return proper values for article fields which have values NULL
+     *
+     * @param array $records
+     * @return array
+     */
+    public function fixDefaultValues($records)
+    {
+        $defaultFieldsValues = ArticleDataType::$defaultFieldsValues;
+        $records = $this->fixFieldsValues($records, $defaultFieldsValues);
+
+        return $records;
     }
 }

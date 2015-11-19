@@ -77,6 +77,10 @@ class PriceWriter
                 array($articleId, $articleDetailId, $price['priceGroup'], $price['from'])
             );
 
+            if (!$priceId) {
+                $price = $this->dataManager->fixDefaultValues($price);
+            }
+
             $newPrice = $priceId == 0;
             $price['articleId'] = $articleId;
             $price['articleDetailsId'] = $articleDetailId;

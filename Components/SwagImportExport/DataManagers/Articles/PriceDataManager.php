@@ -2,7 +2,10 @@
 
 namespace Shopware\Components\SwagImportExport\DataManagers\Articles;
 
-class PriceDataManager
+use Shopware\Components\SwagImportExport\DataType\ArticlePriceDataType;
+use Shopware\Components\SwagImportExport\DataManagers\DataManager;
+
+class PriceDataManager extends DataManager
 {
     /**
      * Define which field should be set by default
@@ -54,5 +57,19 @@ class PriceDataManager
         }
 
         return $to;
+    }
+
+    /**
+     * Return proper values for article price fields which have values NULL
+     *
+     * @param array $records
+     * @return array
+     */
+    public function fixDefaultValues($records)
+    {
+        $defaultFieldsValues = ArticlePriceDataType::$defaultFieldsValues;
+        $records = $this->fixFieldsValues($records, $defaultFieldsValues);
+
+        return $records;
     }
 }

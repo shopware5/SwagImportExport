@@ -97,4 +97,50 @@ class ArticleDataType
             'shippingFree',
         )
     );
+
+    /**
+     * @var array
+     */
+    public static $defaultFieldsValues = array (
+        'string' => array(
+            'description',
+            'descriptionLong',
+            'metaTitle',
+            'keywords',
+            'supplierNumber',
+            'additionalText',
+            'ean',
+            'packUnit',
+            'attributeAttr1',
+            'attributeAttr2',
+            'attributeAttr3',
+            'attributeAttr4',
+            'attributeAttr5',
+            'attributeAttr6',
+            'attributeAttr7',
+            'attributeAttr8',
+            'attributeAttr9',
+            'attributeAttr10',
+            'attributeAttr11',
+            'attributeAttr12',
+            'attributeAttr13',
+            'attributeAttr14',
+            'attributeAttr15',
+            'attributeAttr16',
+            'attributeAttr17',
+            'attributeAttr18',
+            'attributeAttr19',
+            'attributeAttr20'
+        ),
+        'date' => array(
+            'added'
+        ),
+        'int' => array(
+            'inStock',
+            'stockMin',
+        ),
+        'float' => array(
+            'weight'
+        )
+    );
 }
