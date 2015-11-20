@@ -99,9 +99,7 @@ class ArticleWriter
 
         $article = $this->dataManager->setDefaultFields($article);
         $this->validator->validate($article, ArticleDataType::$mapper);
-
-        $detail = $article;
-        $this->setActiveForArticlesTable($article, $articleId);
+        $article = $this->dataManager->setArticleData($article, ArticleDataType::$articleFieldsMapping);
 
         // insert/update article
         $builder = $this->dbalHelper->getQueryBuilderForEntity(
@@ -115,10 +113,11 @@ class ArticleWriter
         }
 
         // insert/update detail
-        $detail['number'] = $article['orderNumber'];
-        $detail['articleId'] = $articleId;
-        $detail['kind'] = $mainDetailId == $detailId ? 1 : 2;
-        $builder = $this->dbalHelper->getQueryBuilderForEntity($detail, 'Shopware\Models\Article\Detail', $detailId);
+        $article = $this->dataManager->setArticleVariantData($article, ArticleDataType::$articleVariantFieldsMapping);
+        $article['articleId'] = $articleId;
+        $article['kind'] = $mainDetailId == $detailId ? 1 : 2;
+
+        $builder = $this->dbalHelper->getQueryBuilderForEntity($article, 'Shopware\Models\Article\Detail', $detailId);
         $builder->execute();
 
         if (!$detailId) {
@@ -128,6 +127,12 @@ class ArticleWriter
         // set reference
         if ($createArticle) {
             $this->db->query('UPDATE s_articles SET main_detail_id = ? WHERE id = ?', array($detailId, $articleId));
+        }
+
+        // set value to active column in s_articles table
+        $active = $this->getActiveForArticlesTable($article, $articleId);
+        if ($createArticle === false && $active !== null) {
+            $this->db->query('UPDATE s_articles SET active = ? WHERE id = ?', array($active, $articleId));
         }
 
         // insert attributes
@@ -182,19 +187,15 @@ class ArticleWriter
     /**
      * Returns the value for `active` column needed for `s_articles` table.
      *
-     * @param array $article
      * @param int $articleId
+     * @param array $article
+     * @return int|null
      */
-    protected function setActiveForArticlesTable(&$article, $articleId)
+    protected function getActiveForArticlesTable($article, $articleId)
     {
-        // if this product does not exist - continue
-        if (!isset($articleId)) {
-            return;
-        }
-
         // if active data is missing from the profile tree or is not set in the file - continue
-        if (!isset($article['active']) || $article['active'] === '') {
-            return;
+        if ($article['active'] === null || $article['active'] === '') {
+            return null;
         }
 
         // if there is at least one detail which is active, set active column as 1 for s_articles table
@@ -203,7 +204,7 @@ class ArticleWriter
                 WHERE articleID = ?
                 ORDER BY active DESC LIMIT 1';
 
-        $article['active'] = (int) $this->db->fetchOne($sql, $articleId);
+        return (int) $this->db->fetchOne($sql, $articleId);
     }
 
     /**
