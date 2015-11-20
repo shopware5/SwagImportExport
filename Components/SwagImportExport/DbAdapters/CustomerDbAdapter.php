@@ -262,7 +262,7 @@ class CustomerDbAdapter implements DataDbAdapter
                 unset($columns[$key]);
             }
         }
-        
+
         $builder = $this->getBuilder($columns, $ids);
         $query = $builder->getQuery();
 
@@ -271,7 +271,7 @@ class CustomerDbAdapter implements DataDbAdapter
         $paginator = $manager->createPaginator($query);
 
         $customers = $paginator->getIterator()->getArrayCopy();
-        
+
         $result['default'] = DbAdapterHelper::decodeHtmlEntities($customers);
 
         return $result;
@@ -344,7 +344,9 @@ class CustomerDbAdapter implements DataDbAdapter
 
                 $customer = $this->findExistingEntries($record);
 
+                $createNewCustomer = false;
                 if (!$customer instanceof Customer) {
+                    $createNewCustomer = true;
                     $record = $dataManager->setDefaultFieldsForCreate($record, $defaultValues);
                     $validator->checkRequiredFieldsForCreate($record);
                     $customer = new Customer();
@@ -356,7 +358,7 @@ class CustomerDbAdapter implements DataDbAdapter
 
                 $customerData = $this->prepareCustomer($record);
                 $customerData['billing'] = $this->prepareBilling($record);
-                $customerData['shipping'] = $this->prepareShipping($record, $customer->getId(), $customerData['billing']);
+                $customerData['shipping'] = $this->prepareShipping($record, $createNewCustomer, $customerData['billing']);
 
                 $customer->fromArray($customerData);
 
@@ -377,6 +379,8 @@ class CustomerDbAdapter implements DataDbAdapter
                     $whereUser = array('id=' . $customerId);
                     $db->update('s_user', $data, $whereUser);
                 }
+
+                $this->insertCustomerAttributes($customerData, $customer->getId(), $createNewCustomer);
 
                 $manager->clear();
             } catch (AdapterException $e) {
@@ -549,11 +553,11 @@ class CustomerDbAdapter implements DataDbAdapter
 
     /**
      * @param $record
-     * @param $customerId
+     * @param bool $newCustomer
      * @param $billing
      * @return array
      */
-    protected function prepareShipping(&$record, $customerId, $billing)
+    protected function prepareShipping(&$record, $newCustomer, $billing)
     {
         if ($this->shippingMap === null) {
             $columns = $this->getShippingColumns();
@@ -567,7 +571,7 @@ class CustomerDbAdapter implements DataDbAdapter
         $shippingData = array();
 
         //use shipping as billing
-        if (empty($customerId) && empty($record['shippingFirstname']) && empty($params['shippingLastname'])) {
+        if ($newCustomer && empty($record['shippingFirstname']) && empty($params['shippingLastname'])) {
             foreach ($this->shippingMap as $mapKey => $addressKey) {
                 if (!isset($record[$mapKey])) {
                     $shippingData[$addressKey] = $billing[$addressKey];
@@ -591,6 +595,20 @@ class CustomerDbAdapter implements DataDbAdapter
         }
 
         return $shippingData;
+    }
+
+    protected function insertCustomerAttributes($customerData, $customerId, $newCustomer)
+    {
+        if ($newCustomer === false) {
+            return;
+        }
+
+        if (isset($customerData['attribute'])) {
+            return;
+        }
+
+        $sql = "INSERT INTO s_user_attributes (userID) VALUES ({$customerId})";
+        $this->db->exec($sql);
     }
 
     /**
