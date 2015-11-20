@@ -101,7 +101,7 @@ class ArticleWriter
         $this->validator->validate($article, ArticleDataType::$mapper);
         $article = $this->dataManager->setArticleData($article, ArticleDataType::$articleFieldsMapping);
 
-        // insert article
+        // insert/update article
         $builder = $this->dbalHelper->getQueryBuilderForEntity(
             $article,
             'Shopware\Models\Article\Article',
@@ -112,7 +112,7 @@ class ArticleWriter
             $articleId = $this->connection->lastInsertId();
         }
 
-        // insert detail
+        // insert/update detail
         $article = $this->dataManager->setArticleVariantData($article, ArticleDataType::$articleVariantFieldsMapping);
         $article['articleId'] = $articleId;
         $article['kind'] = $mainDetailId == $detailId ? 1 : 2;
@@ -127,6 +127,12 @@ class ArticleWriter
         // set reference
         if ($createArticle) {
             $this->db->query('UPDATE s_articles SET main_detail_id = ? WHERE id = ?', array($detailId, $articleId));
+        }
+
+        // set value to active column in s_articles table
+        $active = $this->getActiveForArticlesTable($article, $articleId);
+        if ($createArticle === false && $active !== null) {
+            $this->db->query('UPDATE s_articles SET active = ? WHERE id = ?', array($active, $articleId));
         }
 
         // insert attributes
@@ -176,6 +182,29 @@ class ArticleWriter
         }
 
         return array($mainDetailId, $articleId, $detailId);
+    }
+
+    /**
+     * Returns the value for `active` column needed for `s_articles` table.
+     *
+     * @param int $articleId
+     * @param array $article
+     * @return int|null
+     */
+    protected function getActiveForArticlesTable($article, $articleId)
+    {
+        // if active data is missing from the profile tree or is not set in the file - continue
+        if ($article['active'] === null || $article['active'] === '') {
+            return null;
+        }
+
+        // if there is at least one detail which is active, set active column as 1 for s_articles table
+        $sql = 'SELECT active
+                FROM s_articles_details
+                WHERE articleID = ?
+                ORDER BY active DESC LIMIT 1';
+
+        return (int) $this->db->fetchOne($sql, $articleId);
     }
 
     /**
