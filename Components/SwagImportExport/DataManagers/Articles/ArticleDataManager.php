@@ -270,4 +270,35 @@ class ArticleDataManager extends DataManager
 
         return $records;
     }
+
+    /**
+     * Update article records which are missing because
+     * doctrine property and database mismatch
+     *
+     * @param array $record
+     * @param array $mapping
+     * @return array
+     */
+    public function setArticleData($record, $mapping)
+    {
+        $record = $this->mapFields($record, $mapping);
+
+        return $record;
+    }
+
+    /**
+     * Update article variant records which are missing because
+     * doctrine property and database name mismatch
+     *
+     * @param array $record
+     * @param array $mapping
+     * @return array
+     */
+    public function setArticleVariantData($record, $mapping)
+    {
+        $record = $this->mapFields($record, $mapping);
+
+        return $record;
+    }
+
 }

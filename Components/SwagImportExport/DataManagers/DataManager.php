@@ -94,4 +94,23 @@ class DataManager
 
         return $records;
     }
+
+    /**
+     * Add columns which are missing because
+     * doctrine property and database mismatch
+     *
+     * @param array $records
+     * @param array $adapterFields
+     * @return array
+     */
+    public function mapFields($records, $adapterFields)
+    {
+        foreach ($adapterFields as $tableField => $adapterField) {
+            if (isset($records[$adapterField])) {
+                $records[$tableField] = $records[$adapterField];
+            }
+        }
+
+        return $records;
+    }
 }
