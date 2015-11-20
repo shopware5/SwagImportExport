@@ -90,8 +90,10 @@ class MainOrdersDbAdapter implements DataDbAdapter
         }
 
         if (isset($filter['dateFrom']) && $filter['dateFrom']) {
+            $dateFrom = $filter['dateFrom'];
+            $dateFrom->setTime(0, 0, 0);
             $builder->andWhere('ordertime >= :dateFrom');
-            $builder->setParameter('dateFrom', $filter['dateFrom']);
+            $builder->setParameter('dateFrom', $dateFrom->format('Y-m-d H:i:s'));
         }
 
         if (isset($filter['dateTo']) && $filter['dateTo']) {
