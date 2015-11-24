@@ -569,7 +569,7 @@ class CustomerDbAdapter implements DataDbAdapter
         //use shipping as billing
         if (empty($customerId) && empty($record['shippingFirstname']) && empty($params['shippingLastname'])) {
             foreach ($this->shippingMap as $mapKey => $addressKey) {
-                if (!isset($record[$mapKey])) {
+                if (!isset($record[$mapKey]) && isset($billing[$addressKey])) {
                     $shippingData[$addressKey] = $billing[$addressKey];
                     unset($record[$mapKey]);
                 }
