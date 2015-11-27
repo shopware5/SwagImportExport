@@ -135,7 +135,7 @@ class PriceWriter
     {
         if (!array_key_exists($price['priceGroup'], $this->customerGroups)) {
             $message = SnippetsHelper::getNamespace()->get(
-                'adapters/customerGroup_not_found',
+                'adapters/article_customerGroup_not_found',
                 'Customer Group by key %s not found for article %s'
             );
             throw new AdapterException(sprintf($message, $price['priceGroup'], $orderNumber));
