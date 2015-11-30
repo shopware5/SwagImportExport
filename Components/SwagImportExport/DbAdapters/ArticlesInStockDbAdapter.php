@@ -111,6 +111,9 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
     public function readRecordIds($start, $limit, $filter)
     {
         $stockFilter = $filter['stockFilter'];
+        if ($stockFilter === null) {
+            $stockFilter = 'all';
+        }
         $manager = $this->getManager();
 
         $builder = $manager->createQueryBuilder();
