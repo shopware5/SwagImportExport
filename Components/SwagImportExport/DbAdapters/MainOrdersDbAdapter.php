@@ -407,6 +407,11 @@ class MainOrdersDbAdapter implements DataDbAdapter
      */
     private function getTaxSums($ids, $orders)
     {
+        $orderRecords = array();
+        foreach ($orders as $order) {
+            $orderRecords[$order['orderId']] = $order;
+        }
+
         $sum = array();
         $taxSumBuilder = $this->getTaxSumBuilder($ids);
         $taxData = $taxSumBuilder->getQuery()->getResult();
@@ -421,15 +426,14 @@ class MainOrdersDbAdapter implements DataDbAdapter
         }
 
         $result = array();
-        $i = 0;
         foreach ($sum as $orderId => $taxSum) {
             foreach ($taxSum['taxRateSums'] as $taxRate => $vat) {
                 $shippingTaxRate = $this->getShippingRate(
-                    $orders[$i]['invoiceShipping'],
-                    $orders[$i]['invoiceShippingNet']
+                    $orderRecords[$orderId]['invoiceShipping'],
+                    $orderRecords[$orderId]['invoiceShippingNet']
                 );
                 if ($taxRate == $shippingTaxRate) {
-                    $vat += $orders[$i]['taxSumShipping'];
+                    $vat += $orderRecords[$orderId]['taxSumShipping'];
                 }
 
                 $result[] = array(
@@ -438,8 +442,6 @@ class MainOrdersDbAdapter implements DataDbAdapter
                     'taxRate' => $taxRate
                 );
             }
-
-            $i++;
         }
 
         return $result;
