@@ -67,6 +67,12 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
         {
             ref: 'profileForm',
             selector: 'swag-import-export-profile-profile'
+        }, {
+            ref: 'importForm',
+            selector: 'swag-import-export-manager-import'
+        }, {
+            ref: 'exportForm',
+            selector: 'swag-import-export-manager-export'
         }
     ],
 
@@ -203,9 +209,39 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                     combobox.reset();
                     store.remove(store.getById(id));
                     store.sync();
+                    me.checkProfileSelection(store);
                 }
             }
         });
+    },
+
+    /**
+     * Remove selected profile in import and export tabs if
+     * profile id is not found in store records
+     *
+     * @param @param [Ext.data.Store] store - profiles
+     */
+    checkProfileSelection: function(store) {
+        var me = this,
+            importForm = me.getImportForm(),
+            exportForm = me.getExportForm(),
+            importFormPanel = importForm.formPanel.getForm(),
+            exportFormPanel = exportForm.formPanel.getForm(),
+            importValues = importFormPanel.getValues(),
+            exportValues = exportFormPanel.getValues();
+
+        var importProfileId = importValues.profile;
+        var exportProfileId = exportValues.profile;
+
+        //remove selection of profile for import
+        if (!store.getById(importProfileId)) {
+            importFormPanel.setValues({ 'profile': '' });
+        }
+
+        //remove selection of profile for export
+        if (!store.getById(exportProfileId)) {
+            exportFormPanel.setValues({ 'profile': '' });
+        }
     },
 
     /**

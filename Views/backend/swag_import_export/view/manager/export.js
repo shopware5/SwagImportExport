@@ -297,6 +297,10 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
             listeners: {
                 scope: me,
                 change: function(cb, newValue, oldValue) {
+                    if (!newValue) {
+                        return;
+                    }
+
                     var record = me.profilesStore.getById(newValue);
                     var type = record.get('type');
 
