@@ -102,7 +102,8 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.window.Export', {
         start: '{s name=swag_import_export/manager/window/export/start}Start exporting{/s}',
         cancel: '{s name=swag_import_export/manager/window/export/cancel}Cancel{/s}',
         close: '{s name=swag_import_export/manager/window/export/close}Close{/s}',
-        download: '{s name=swag_import_export/manager/window/export/download}Download{/s}'
+        download: '{s name=swag_import_export/manager/window/export/download}Download{/s}',
+        noData: '{s name=swag_import_export/manager/window/export/noData}No data available{/s}'
     },
     /**
      * Constructor for the generation window
@@ -113,6 +114,13 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.window.Export', {
         me.registerEvents();
         me.items = me.createItems();
         me.callParent(arguments);
+
+        //No data available for export.
+        if (me.batchConfig.totalCount === 0) {
+            me.startButton.hide();
+            me.exportProgress.text = me.snippets.noData;
+            me.exportProgress.value = 1;
+        }
     },
     /**
      * Helper function to create the window items.
@@ -123,7 +131,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.window.Export', {
         if (Ext.isEmpty(me.batchConfig.progress)){
             me.batchConfig.progress = 0;
         }
-        
+
         me.exportProgress = me.createProgressBar('exporting', me.batchConfig.snippet, me.batchConfig.progress);
 
         return [

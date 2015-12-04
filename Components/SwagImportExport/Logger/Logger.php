@@ -60,13 +60,18 @@ class Logger
     }
 
     /**
-     * @return LoggerEntity
+     * @return LoggerEntity|null
      */
     public function getLoggerEntity()
     {
         if ($this->loggerEntity === null) {
             //fixes doctrine clear bug
             $loggerId = $this->session->getLogger()->getId();
+
+            if (!$loggerId) {
+                return null;
+            }
+
             $this->loggerEntity = $this->getLoggerRepository()->find($loggerId);
         }
 
@@ -98,6 +103,10 @@ class Logger
     public function write($messages, $status)
     {
         $logger = $this->getLoggerEntity();
+
+        if(!$logger) {
+            return;
+        }
 
         if (is_array($messages)) {
             $appendMsg = implode(';', $messages);
