@@ -476,7 +476,6 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         );
 
         try {
-
             $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
             $postData['filter'] = $this->prepareFilter($this->Request(), $profile->getType());
 
@@ -485,6 +484,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             $dbAdapter = $dataFactory->createDbAdapter($profile->getType());
             $dataSession = $dataFactory->loadSession($postData);
             $logger = $dataFactory->loadLogger($dataSession);
+
             $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession, $logger);
 
             $colOpts = $dataFactory->createColOpts($postData['columnOptions']);
@@ -493,6 +493,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             $maxRecordCount = $postData['max_record_count'];
             $type = $postData['type'];
             $format = $postData['format'];
+
             $dataIO->initialize($colOpts, $limit, $filter, $maxRecordCount, $type, $format);
 
             $ids = $dataIO->preloadRecordIds()->getRecordIds();
@@ -505,6 +506,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
             $position = $dataIO->getSessionPosition();
             $position = $position == null ? 0 : $position;
+
             $this->View()->assign(array('success' => true, 'position' => $position, 'count' => count($ids)));
         } catch (Exception $e) {
             $this->View()->assign(array('success' => false, 'msg' => $e->getMessage()));
