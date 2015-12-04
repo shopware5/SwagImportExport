@@ -497,6 +497,12 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             $dataIO->initialize($colOpts, $limit, $filter, $maxRecordCount, $type, $format);
 
             $ids = $dataIO->preloadRecordIds()->getRecordIds();
+            $idAmount = count($ids);
+
+            if($idAmount == 0) {
+                $this->View()->assign(array('success' => false, 'msg' => 'No data to export', 'position' => 0, 'count' => 0));
+                return;
+            }
 
             $position = $dataIO->getSessionPosition();
             $position = $position == null ? 0 : $position;
