@@ -124,7 +124,6 @@ class ArticleDataManager extends DataManager
     public function setDefaultFieldsForCreate($record, $defaultValues)
     {
         $getDefaultFields = $this->getDefaultFieldsName();
-
         foreach ($getDefaultFields as $key) {
             if (isset($record[$key])) {
                 continue;
@@ -447,10 +446,6 @@ class ArticleDataManager extends DataManager
             }
         }
 
-        echo "<pre>";
-        print_r(\Doctrine\Common\Util\Debug::dump($record));
-        echo "</pre>";
-        exit();
         return $record;
     }
 
