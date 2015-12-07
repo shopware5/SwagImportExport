@@ -59,11 +59,16 @@ class ArticleDataType
     public static $defaultFieldsForCreate = array(
         'date' => array(
             'availableFrom',
-            'availableTo'
+            'availableTo',
+            'added'
         ),
         'integer' => array(
             'inStock',
             'tax',
+            'stockMin'
+        ),
+        'float' => array(
+            'weight',
         ),
         'string' => array(
             'shippingTime',
