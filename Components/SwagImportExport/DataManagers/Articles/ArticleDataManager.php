@@ -226,9 +226,6 @@ class ArticleDataManager extends DataManager
                 case 'attributeAttr16':
                     $record[$key] = '';
                     break;
-                case 'attributeAttr17':
-                    $record[$key] = '';
-                    break;
                 case 'attributeAttr18':
                     $record[$key] = '';
                     break;
