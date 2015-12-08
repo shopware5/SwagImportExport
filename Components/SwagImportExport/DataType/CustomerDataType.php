@@ -60,7 +60,19 @@ class CustomerDataType
             'paymentID',
         ),
         'string' => array(
-            'encoder'
+            'encoder',
+            'attrBillingText1',
+            'attrBillingText2',
+            'attrBillingText3',
+            'attrBillingText4',
+            'attrBillingText5',
+            'attrBillingText6',
+            'attrShippingText1',
+            'attrShippingText2',
+            'attrShippingText3',
+            'attrShippingText4',
+            'attrShippingText5',
+            'attrShippingText6'
         )
     );
 

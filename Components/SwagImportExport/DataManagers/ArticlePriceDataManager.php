@@ -12,6 +12,8 @@ class ArticlePriceDataManager
     private $defaultFields = array(
         'priceGroup',
         'from',
+        'basePrice',
+        'percent'
     );
 
     /**
@@ -33,6 +35,12 @@ class ArticlePriceDataManager
                     break;
                 case 'from':
                     $record[$key] = 1;
+                    break;
+                case 'basePrice':
+                    $record[$key] = 0.0;
+                    break;
+                case 'percent':
+                    $record[$key] = 0.0;
                     break;
             }
         }

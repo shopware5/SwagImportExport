@@ -82,6 +82,42 @@ class CustomerDataManager extends DataManager
                         $record[$key] = $this->getEncoder();
                     }
                     break;
+                case 'attrBillingText1':
+                    $record[$key] = '';
+                    break;
+                case 'attrBillingText2':
+                    $record[$key] = '';
+                    break;
+                case 'attrBillingText3':
+                    $record[$key] = '';
+                    break;
+                case 'attrBillingText4':
+                    $record[$key] = '';
+                    break;
+                case 'attrBillingText5':
+                    $record[$key] = '';
+                    break;
+                case 'attrBillingText6':
+                    $record[$key] = '';
+                    break;
+                case 'attrShippingText1':
+                    $record[$key] = '';
+                    break;
+                case 'attrShippingText2':
+                    $record[$key] = '';
+                    break;
+                case 'attrShippingText3':
+                    $record[$key] = '';
+                    break;
+                case 'attrShippingText4':
+                    $record[$key] = '';
+                    break;
+                case 'attrShippingText5':
+                    $record[$key] = '';
+                    break;
+                case 'attrShippingText6':
+                    $record[$key] = '';
+                    break;
             }
         }
 
