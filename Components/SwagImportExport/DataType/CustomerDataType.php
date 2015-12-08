@@ -72,7 +72,7 @@ class CustomerDataType
             'attrShippingText3',
             'attrShippingText4',
             'attrShippingText5',
-            'attrShippingText6',
+            'attrShippingText6'
         )
     );
 

@@ -68,7 +68,7 @@ class ArticleDataType
             'stockMin'
         ),
         'float' => array(
-            'weight',
+            'weight'
         ),
         'string' => array(
             'shippingTime',
