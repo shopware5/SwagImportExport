@@ -2,8 +2,6 @@
 
 namespace Shopware\Components\SwagImportExport\Utils;
 
-use Shopware\Bundle\MediaBundle\MediaService;
-
 class FileHelper
 {
     /**
@@ -14,19 +12,9 @@ class FileHelper
      */
     public function writeStringToFile($file, $content, $flag = null)
     {
-        $file = str_replace(Shopware()->DocPath(), '', $file);
-        
-        /** @var MediaService $mediaService */
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
-
-        if ($flag === null) {
-            $str = $mediaService->write($file, $content);
-        } else {
-            $content = $mediaService->read($file) . $content;
-            $str = $mediaService->write($file, $content);
-        }
-
-        if ($str === false) {
+        try {
+            file_put_contents($file, $content, $flag);
+        } catch (\Exception $e) {
             throw new \Exception("Cannot write in '$file'");
         }
     }
