@@ -51,7 +51,7 @@ class ExportCommand extends ShopwareCommand
         $helper = new CommandHelper(
             array(
                 'profileEntity' => $this->profileEntity,
-                'filePath' => $this->filePath,
+                'filePath' => Shopware()->DocPath() . $this->filePath,
                 'format' => $this->format,
                 'exportVariants' => $this->exportVariants,
                 'limit' => $this->limit,
