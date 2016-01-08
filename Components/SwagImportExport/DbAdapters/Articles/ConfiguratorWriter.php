@@ -28,23 +28,6 @@ class ConfiguratorWriter
     }
 
     /**
-     * This function updates a specific database record for a configurator set.
-     * @param $data
-     */
-    private function updateConfiguratorSet($data)
-    {
-        if (!$data) {
-            return;
-        }
-
-        $sql = "UPDATE s_article_configurator_sets SET
-                type=:setType
-                WHERE id=:id";
-
-        $this->db->executeQuery($sql, array("setType" => $data['configSetType'], "id" => $data["configSetId"]));
-    }
-
-    /**
      * @param int $articleId
      * @param int $articleDetailId
      * @param int $mainDetailId
@@ -160,6 +143,23 @@ class ConfiguratorWriter
             unset($groupId);
             unset($optionId);
         }
+    }
+
+    /**
+     * This function updates a specific database record for a configurator set.
+     * @param $data
+     */
+    private function updateConfiguratorSet($data)
+    {
+        if (!$data) {
+            return;
+        }
+
+        $sql = "UPDATE s_article_configurator_sets SET
+                type=:setType
+                WHERE id=:id";
+
+        $this->db->executeQuery($sql, array("setType" => $data['configSetType'], "id" => $data["configSetId"]));
     }
 
     /**
