@@ -157,6 +157,9 @@ class ArticleDataManager extends DataManager
                 case 'keywords':
                     $record[$key] = '';
                     break;
+                case 'shippingTime':
+                    $record[$key] = '';
+                    break;
                 case 'supplierNumber':
                     $record[$key] = '';
                     break;

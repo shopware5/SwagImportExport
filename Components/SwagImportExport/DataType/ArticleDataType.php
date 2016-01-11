@@ -49,7 +49,7 @@ class ArticleDataType
         'dateTime' => array(
             'date',
             'changeTime',
-            'releaseDate',
+            'releaseDate'
         ),
     );
 

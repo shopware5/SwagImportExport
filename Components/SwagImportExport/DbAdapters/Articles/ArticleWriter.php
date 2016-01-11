@@ -117,6 +117,10 @@ class ArticleWriter
         $article['articleId'] = $articleId;
         $article['kind'] = $mainDetailId == $detailId ? 1 : 2;
 
+        if ($createDetail) {
+            $article = $this->dataManager->setDefaultFieldsForCreate($article, $defaultValues);
+        }
+
         $builder = $this->dbalHelper->getQueryBuilderForEntity($article, 'Shopware\Models\Article\Detail', $detailId);
         $builder->execute();
 
