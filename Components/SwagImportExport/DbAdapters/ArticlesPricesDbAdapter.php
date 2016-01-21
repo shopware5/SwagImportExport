@@ -255,7 +255,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                 $dql = 'DELETE FROM Shopware\Models\Article\Price price
                         WHERE price.customerGroup = :customerGroup
                             AND price.articleDetailsId = :detailId
-                            AND price.from = :from';
+                            AND price.from = :fromValue';
 
                 $query = $manager->createQuery($dql);
 
@@ -263,13 +263,13 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                     array(
                         'customerGroup' => $record['priceGroup'],
                         'detailId' => $articleDetail->getId(),
-                        'from' => $record['from'],
+                        'fromValue' => $record['from'],
                     )
                 );
                 $query->execute();
 
                 if ($record['from'] != 1) {
-                    $dql = 'UPDATE Shopware\Models\Article\Price price SET price.to = :TO
+                    $dql = 'UPDATE Shopware\Models\Article\Price price SET price.to = :toValue
                             WHERE price.customerGroup = :customerGroup
                             AND price.articleDetailsId = :detailId
                             AND price.articleId = :articleId AND price.to
@@ -278,7 +278,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
 
                     $query->setParameters(
                         array(
-                            'to' => $record['from'] - 1,
+                            'toValue' => $record['from'] - 1,
                             'customerGroup' => $record['priceGroup'],
                             'detailId' => $articleDetail->getId(),
                             'articleId' => $articleDetail->getArticle()->getId(),
