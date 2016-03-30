@@ -229,8 +229,6 @@ class ControllerTest extends ImportExportTestHelper
         $limit = $this->Request()->getParam('limit', 10);
         $offset = $this->Request()->getParam('start', 0);
         $sort = $this->Request()->getParam('sort', array());
-
-        $start = microtime(true);
         $resource = \Shopware\Components\Api\Manager::getResource('category');
 
         $filter = array(
@@ -242,15 +240,6 @@ class ControllerTest extends ImportExportTestHelper
         );
 
         $result = $resource->getList($offset, $limit, $filter, $sort);
-        echo '<pre>';
-        var_dump($result);
-        echo '</pre>';
-        exit;
-        $time = microtime(true) - $start;
-        echo '<pre>';
-        var_dump($time);
-        echo '</pre>';
-        exit;
 
 //        //products
 //        $limit = $this->Request()->getParam('limit', 10);
@@ -339,8 +328,6 @@ class ControllerTest extends ImportExportTestHelper
                 ->setFirstResult(100)
                 ->setMaxResults(5);
         
-        $startA = microtime(true);
-        
         $query = $builder->getQuery();
         $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
         
@@ -351,13 +338,6 @@ class ControllerTest extends ImportExportTestHelper
 
         //returns the category data
         $articles = $paginator->getIterator()->getArrayCopy();
-        
-        echo microtime(true) - $startA;
-        echo '<pre>';
-        \Doctrine\Common\Util\Debug::dump(($articles));
-        echo '</pre>';
-        exit;
-        
 
 //        $articlesDetailRepo = Shopware()->Models()->getRepository('Shopware\Models\Article\Detail');
 

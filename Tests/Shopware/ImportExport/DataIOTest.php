@@ -16,16 +16,16 @@ class DataIOTest extends ImportExportTestHelper
             'profileId' => 1,
         );
     }
-    
-    
+
     public function testPreloadRecordIds()
     {
         $postData = $this->getPostData();
         $postData['limit'] = array();
-        
-        $dataFactory = $this->Plugin()->getDataFactory();
 
-        $dataIO = $dataFactory->createDataIO($postData);
+        $dataFactory = $this->Plugin()->getDataFactory();
+        $dataSession = $dataFactory->loadSession($postData);
+
+        $dataIO = $dataFactory->createDataIO($postData, $dataSession);
 
         $dataIO->preloadRecordIds();
 
@@ -80,16 +80,17 @@ class DataIOTest extends ImportExportTestHelper
         $postData = $this->getPostData();
 
         $dataFactory = $this->Plugin()->getDataFactory();
-        
-        $dataIO = $dataFactory->createDataIO($postData);
-        
+        $dataSession = $dataFactory->loadSession($postData);
+
+        $dataIO = $dataFactory->createDataIO($postData, $dataSession);
+
         $directory = $dataIO->getDirectory();
-                
+
         $expectedCategory = '/var/www/files/import_export/';
-        
+
         $this->assertEquals($directory, $expectedCategory);
     }
-    
+
 //    public function testArticlesRead()
 //    {
 //        $postData = array(
