@@ -65,7 +65,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
      * @var Shopware\CustomModels\ImportExport\Logger
      */
     protected $loggerRepository;
-        
+
     public function getProfileAction()
     {
         $profileId = $this->Request()->getParam('profileId', -1);
@@ -1039,6 +1039,9 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                 );
             }
 
+            $this->Front()->Plugins()->ViewRenderer()->setNoRender();
+            $this->Front()->Plugins()->Json()->setRenderer(false);
+
             $response = $this->Response();
             $response->setHeader('Cache-Control', 'public');
             $response->setHeader('Content-Description', 'File Transfer');
@@ -1057,8 +1060,6 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
             return;
         }
-
-        Enlight_Application::Instance()->Events()->removeListener(new Enlight_Event_EventHandler('Enlight_Controller_Action_PostDispatch', ''));
     }
 
     public function getSectionsAction()
