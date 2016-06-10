@@ -123,10 +123,6 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                 $record['price'] = str_replace('.', ',', round($record['price'], 2));
                 $record['pseudoPrice'] = str_replace('.', ',', round($record['pseudoPrice'], 2));
             }
-
-            if ($record['basePrice']) {
-                $record['basePrice'] = str_replace('.', ',', round($record['basePrice'], 2));
-            }
         }
 
         return $result;
@@ -146,7 +142,6 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
             'price.to',
             'price.price',
             'price.pseudoPrice',
-            'price.basePrice',
             'price.percent',
             'price.customerGroupKey as priceGroup',
             'article.name as name',
@@ -243,10 +238,6 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                 if (isset($record['pseudoPrice'])) {
                     $record['pseudoPrice'] = floatval(str_replace(",", ".", $record['pseudoPrice']));
                 }
-                
-                if (isset($record['basePrice'])) {
-                    $record['basePrice'] = floatval(str_replace(",", ".", $record['basePrice']));
-                }
 
                 if (isset($record['percent'])) {
                     $record['percent'] = floatval(str_replace(",", ".", $record['percent']));
@@ -304,7 +295,6 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                 if (isset($record['pseudoPrice'])) {
                     $price->setPseudoPrice($record['pseudoPrice']);
                 }
-                $price->setBasePrice($record['basePrice']);
                 $price->setPercent($record['percent']);
 
                 $this->getManager()->persist($price);

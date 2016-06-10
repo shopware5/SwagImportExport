@@ -14,8 +14,7 @@ class PriceValidator extends Validator
         ),
         'float' => array(
             'price',
-            'pseudoPrice',
-            'basePrice',
+            'pseudoPrice'
         ),
     );
 

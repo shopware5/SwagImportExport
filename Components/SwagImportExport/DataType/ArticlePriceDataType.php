@@ -8,7 +8,6 @@ class ArticlePriceDataType
      */
     public static $defaultFieldsValues = array (
         'float' => array(
-            'basePrice',
             'percent'
         )
     );

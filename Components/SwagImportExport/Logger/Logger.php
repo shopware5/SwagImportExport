@@ -6,7 +6,7 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\FileIO\FileWriter;
 use Shopware\CustomModels\ImportExport\Logger as LoggerEntity;
 use Shopware\CustomModels\ImportExport\Repository;
-use Shopware\CustomModels\ImportExport\Session;
+use Shopware\Components\SwagImportExport\Session\Session;
 
 class Logger
 {

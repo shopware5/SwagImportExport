@@ -232,7 +232,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
             failure: function(response) {
                 Shopware.Msg.createStickyGrowlMessage({
                     title: 'An error occured',
-                    text: "The server could not handle the request."
+                    text: response.responseText
                 });
             }
         });
@@ -317,7 +317,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
             failure: function(response) {
                 Shopware.Msg.createStickyGrowlMessage({
                     title: 'An error occured',
-                    text: "The server could not handle the request."
+                    text: response.responseText
                 });
 
                 me.onProcessFinish(win);

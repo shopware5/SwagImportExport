@@ -177,10 +177,6 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $record['pseudoPrice'] = round($record['pseudoPrice'], 2);
             }
 
-            if ($record['basePrice']) {
-                $record['basePrice'] = round($record['basePrice'], 2);
-            }
-
             if (!$record['inStock']) {
                 $record['inStock'] = '0';
             }
@@ -802,7 +798,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 //underscore to camel case
                 //exmaple: underscore_to_camel_case -> underscoreToCamelCase
 
-                $attr = preg_replace("/\_(.)/e", "strtoupper('\\1')", $attribute);
+                $attr = lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $attribute))));
 
                 $attributesSelect[] = sprintf('%s.%s as attribute%s', $prefix, $attr, ucwords($attr));
             }
@@ -927,7 +923,6 @@ class ArticlesDbAdapter implements DataDbAdapter
             'prices.articleId as articleId',
             'prices.price as price',
             'prices.pseudoPrice as pseudoPrice',
-            'prices.basePrice as basePrice',
             'prices.customerGroupKey as priceGroup',
         );
     }
@@ -960,7 +955,6 @@ class ArticlesDbAdapter implements DataDbAdapter
             'propertyValues.id as propertyValueId',
             'propertyValues.value as propertyValueName',
             'propertyValues.position as propertyValuePosition',
-            'propertyValues.valueNumeric as propertyValueNumeric',
             'propertyOptions.name as propertyOptionName',
         );
     }

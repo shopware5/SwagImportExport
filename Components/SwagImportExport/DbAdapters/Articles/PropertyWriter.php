@@ -134,13 +134,11 @@ class PropertyWriter
 
                 if (!$valueId) {
                     $position = !empty($propertyData['propertyValuePosition']) ? $propertyData['propertyValuePosition'] : 0;
-                    $numeric = !empty($propertyData['propertyValueNumeric']) ? $propertyData['propertyValueNumeric'] : 0;
 
                     $valueData = array(
                         'value' => $valueName,
                         'optionId' => $optionId,
                         'position' => $position,
-                        'valueNumeric' => $numeric
                     );
 
                     $valueId = $this->createElement('Shopware\Models\Property\Value', $valueData);

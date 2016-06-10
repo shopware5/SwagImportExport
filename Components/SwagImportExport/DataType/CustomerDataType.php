@@ -21,7 +21,6 @@ class CustomerDataType
             'billingZipcode',
             'billingCity',
             'billingPhone',
-            'billingFax',
             'ustid',
             'shippingCompany',
             'shippingDepartment',

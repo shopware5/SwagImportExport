@@ -213,7 +213,6 @@ class MainOrdersDbAdapter implements DataDbAdapter
             'billing.zipCode as billingZipCode',
             'billing.city as billingCity',
             'billing.phone as billingPhone',
-            'billing.fax as billingFax',
             'billing.additionalAddressLine1 as billingAdditionalAddressLine1',
             'billing.additionalAddressLine2 as billingAdditionalAddressLine2',
             'bState.name as billingState',
@@ -263,7 +262,7 @@ class MainOrdersDbAdapter implements DataDbAdapter
         foreach ($attributes as $attribute) {
             //underscore to camel case
             //exmaple: underscore_to_camel_case -> underscoreToCamelCase
-            $catAttr = preg_replace("/\_(.)/e", "strtoupper('\\1')", $attribute);
+            $catAttr = lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $attribute))));
 
             $attributesSelect[] = sprintf('%s.%s as attribute%s', $prefix, $catAttr, ucwords($catAttr));
         }

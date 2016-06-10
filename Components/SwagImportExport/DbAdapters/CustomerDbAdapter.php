@@ -114,28 +114,13 @@ class CustomerDbAdapter implements DataDbAdapter
             'customer.internalComment as internalComment',
             'customer.failedLogins as failedLogins',
             'customer.lockedUntil as lockedUntil',
+            'customer.number as customerNumber',
+            'customer.birthday as birthday',
         );
-        
-        // Attributes
-        $attributes = $this->getAttributesByTableName('s_user_attributes');
 
-        $attributesSelect = '';
-        if ($attributes) {
-            $prefix = 'attribute';
-            $attributesSelect = array();
-            foreach ($attributes as $attribute) {
-                if ($attribute === 'userID') {
-                    continue;
-                }
-                //underscore to camel case
-                //exmaple: underscore_to_camel_case -> underscoreToCamelCase
-                $catAttr = preg_replace("/\_(.)/e", "strtoupper('\\1')", $attribute);
+        $attributesSelect = $this->getAttributesFieldsByTableName('s_user_attributes', 'userID', 'attribute', 'attrCustomer');
 
-                $attributesSelect[] = sprintf('%s.%s as attrCustomer%s', $prefix, $catAttr, ucwords($catAttr));
-            }
-        }
-        
-        if ($attributesSelect && !empty($attributesSelect)) {
+        if (!empty($attributesSelect)) {
             $columns = array_merge($columns, $attributesSelect);
         }
         
@@ -159,42 +144,22 @@ class CustomerDbAdapter implements DataDbAdapter
             'billing.company as billingCompany',
             'billing.department as billingDepartment',
             'billing.salutation as billingSalutation',
-            'billing.number as customerNumber',
             'billing.firstName as billingFirstname',
             'billing.lastName as billingLastname',
             'billing.street as billingStreet',
             'billing.zipCode as billingZipcode',
             'billing.city as billingCity',
             'billing.phone as billingPhone',
-            'billing.fax as billingFax',
             'billing.countryId as billingCountryID',
             'billing.stateId as billingStateID',
             'billing.vatId as ustid',
-            'billing.birthday as birthday',
             'billing.additionalAddressLine1 as billingAdditionalAddressLine1',
             'billing.additionalAddressLine2 as billingAdditionalAddressLine2',
         );
 
-        // Attributes
-        $attributes = $this->getAttributesByTableName('s_user_billingaddress_attributes');
-
-        $attributesSelect = '';
-        if ($attributes) {
-            $prefix = 'billingAttribute';
-            $attributesSelect = array();
-            foreach ($attributes as $attribute) {
-                if ($attribute === 'billingID') {
-                    continue;
-                }
-                //underscore to camel case
-                //exmaple: underscore_to_camel_case -> underscoreToCamelCase
-                $catAttr = preg_replace("/\_(.)/e", "strtoupper('\\1')", $attribute);
-
-                $attributesSelect[] = sprintf('%s.%s as attrBilling%s', $prefix, $catAttr, ucwords($catAttr));
-            }
-        }
+        $attributesSelect = $this->getAttributesFieldsByTableName('s_user_billingaddress_attributes', 'billingID', 'billingAttribute', 'attrBilling');
         
-        if ($attributesSelect && !empty($attributesSelect)) {
+        if (!empty($attributesSelect)) {
             $columns = array_merge($columns, $attributesSelect);
         }
 
@@ -221,27 +186,9 @@ class CustomerDbAdapter implements DataDbAdapter
             'shipping.additionalAddressLine2 as shippingAdditionalAddressLine2',
         );
 
-        // Attributes
-        $attributes = $this->getAttributesByTableName('s_user_shippingaddress_attributes');
+        $attributesSelect = $this->getAttributesFieldsByTableName('s_user_shippingaddress_attributes', 'shippingID', 'shippingAttribute', 'attrShipping');
 
-        $attributesSelect = '';
-        if ($attributes) {
-            $prefix = 'shippingAttribute';
-            $attributesSelect = array();
-            
-            foreach ($attributes as $attribute) {
-                if ($attribute === 'shippingID') {
-                    continue;
-                }
-                //underscore to camel case
-                //exmaple: underscore_to_camel_case -> underscoreToCamelCase
-                $catAttr = preg_replace("/\_(.)/e", "strtoupper('\\1')", $attribute);
-
-                $attributesSelect[] = sprintf('%s.%s as attrShipping%s', $prefix, $catAttr, ucwords($catAttr));
-            }
-        }
-
-        if ($attributesSelect && !empty($attributesSelect)) {
+        if (!empty($attributesSelect)) {
             $columns = array_merge($columns, $attributesSelect);
         }
         
@@ -335,7 +282,6 @@ class CustomerDbAdapter implements DataDbAdapter
         $manager = $this->getManager();
         $validator = $this->getValidator();
         $dataManager = $this->getDataManager();
-
         $defaultValues = $this->getDefaultValues();
 
         foreach ($records['default'] as $record) {
@@ -361,6 +307,12 @@ class CustomerDbAdapter implements DataDbAdapter
                 $customerData['shipping'] = $this->prepareShipping($record, $createNewCustomer, $customerData['billing']);
 
                 $customer->fromArray($customerData);
+
+                $billing = $customer->getDefaultBillingAddress();
+                $billing->fromArray($customerData['billing']);
+
+                $shipping = $customer->getDefaultShippingAddress();
+                $shipping->fromArray($customerData['shipping']);
 
                 $violations = $this->getManager()->validate($customer);
                 if ($violations->count() > 0) {
@@ -401,7 +353,7 @@ class CustomerDbAdapter implements DataDbAdapter
             $customer = $this->getRepository()->findOneBy(array('id' => $record['id']));
         }
 
-        if (!$customer instanceof Customer) {
+        if (!isset($customer)) {
             $accountMode = isset($record['accountMode']) ? (int) $record['accountMode'] : 0;
             $filter = array('email' => $record['email'], 'accountMode' => $accountMode);
             if (isset($record['subshopID'])) {
@@ -726,22 +678,32 @@ class CustomerDbAdapter implements DataDbAdapter
 
     /**
      * @param $tableName
+     * @param $columnName
+     * @param $prefixField
+     * @param $prefixSelect
      * @return array
-     * @throws \Zend_Db_Statement_Exception
      */
-    public function getAttributesByTableName($tableName)
+    public function getAttributesFieldsByTableName($tableName, $columnName, $prefixField, $prefixSelect)
     {
         $stmt = $this->getDb()->query("SHOW COLUMNS FROM $tableName");
         $columns = $stmt->fetchAll();
 
         $columnNames = array();
         foreach ($columns as $column) {
-            if ($column['Field'] !== 'id') {
+            if ($column['Field'] !== 'id' && $column['Field'] != $columnName) {
                 $columnNames[] = $column['Field'];
             }
         }
 
-        return $columnNames;
+        $attributesSelect = array();
+        foreach ($columnNames as $attribute) {
+            //underscore to camel case
+            //exmaple: underscore_to_camel_case -> underscoreToCamelCase
+            $attribute = str_replace(' ', '', ucwords(str_replace('_', ' ', $attribute)));
+            $attributesSelect[] = sprintf('%s.%s as %s%s', $prefixField, lcfirst($attribute), $prefixSelect, $attribute);
+        }
+
+        return $attributesSelect;
     }
 
     /**

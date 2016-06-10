@@ -331,7 +331,9 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     {
         $proxyAdapter = Shopware()->Hooks()
             ->getProxy('Shopware\Components\SwagImportExport\DataManagers\Articles\ArticleDataManager');
-        return new $proxyAdapter;
+        $db = Shopware()->Db();
+        $dbalHelper = new \Shopware\Components\SwagImportExport\DbalHelper();
+        return new $proxyAdapter($db, $dbalHelper);
     }
 
     /**

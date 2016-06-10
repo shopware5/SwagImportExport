@@ -57,9 +57,6 @@ class SmartyExpressionEvaluator implements ExpressionEvaluator
         if (isset($variables['price'])) {
             $variables['price'] = (float) str_replace(',', '.', $variables['price']);
         }
-        if (isset($variables['basePrice'])) {
-            $variables['basePrice'] = (float) str_replace(',', '.', $variables['basePrice']);
-        }
         if (isset($variables['pseudoPrice'])) {
             $variables['pseudoPrice'] = (float) str_replace(',', '.', $variables['pseudoPrice']);
         }

@@ -426,7 +426,6 @@ class OrdersDbAdapter implements DataDbAdapter
             'billing.city as billingCity',
             'billing.vatId as billingVatId',
             'billing.phone as billingPhone',
-            'billing.fax as billingFax',
             'billingCountry.name as billingCountryName',
             'billingCountry.isoName as billingCountryen',
             'billingCountry.iso as billingCountryIso',
@@ -493,7 +492,7 @@ class OrdersDbAdapter implements DataDbAdapter
             foreach ($attributes as $attribute) {
                 //underscore to camel case
                 //exmaple: underscore_to_camel_case -> underscoreToCamelCase
-                $catAttr = preg_replace("/\_(.)/e", "strtoupper('\\1')", $attribute);
+                $catAttr = lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $attribute))));
 
                 $attributesSelect[] = sprintf('%s.%s as attribute%s', $prefix, $catAttr, ucwords($catAttr));
             }

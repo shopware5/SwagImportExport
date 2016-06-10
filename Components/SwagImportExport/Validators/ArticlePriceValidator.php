@@ -18,7 +18,6 @@ class ArticlePriceValidator extends Validator
         'float' => array(
             'price',
             'pseudoPrice',
-            'basePrice',
         ),
         'int' => array('from'),
     );

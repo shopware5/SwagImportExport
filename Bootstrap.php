@@ -128,7 +128,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
     public function install()
     {
         // Check if Shopware version matches
-        if (!$this->assertMinimumVersion('5.1.0')) {
+        if (!$this->assertMinimumVersion('5.2.0')) {
             throw new Exception("This plugin requires Shopware 5.1.0 or a later version");
         }
 
@@ -151,7 +151,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
     public function update($oldVersion)
     {
         // Check if Shopware version matches
-        if (!$this->assertMinimumVersion('5.1.0')) {
+        if (!$this->assertMinimumVersion('5.2.0')) {
             throw new Exception("This plugin requires Shopware 5.1.0 or a later version");
         }
 
@@ -173,9 +173,9 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
             if (!$menuItem) {
                 //inserting old menu item
                 $sql = "INSERT INTO `s_core_menu`
-                        (`parent`, `hyperlink`, `name`, `onclick`, `style`, `class`, `position`, `active`, `pluginID`, `resourceID`, `controller`, `shortcut`, `action`)
+                        (`parent`, `name`, `onclick`, `class`, `position`, `active`, `pluginID`, `controller`, `shortcut`, `action`)
                         VALUES
-                        (7, '', 'Import/Export', '', NULL, 'sprite-arrow-circle-double-135', 3, 1, NULL, 34, 'ImportExport', NULL, 'Index')";
+                        (7, 'Import/Export', '', 'sprite-arrow-circle-double-135', 3, 1, NULL, 'ImportExport', NULL, 'Index')";
                 $this->db->query($sql);
             }
 
@@ -558,11 +558,6 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         $this->em->persist($resource);
 
         $this->em->flush();
-
-        $this->db->query(
-            'UPDATE s_core_menu SET resourceID = ? WHERE controller = "SwagImportExport"',
-            array($resource->getId())
-        );
     }
 
     private function addConfigDirs()

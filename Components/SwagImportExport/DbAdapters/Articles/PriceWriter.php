@@ -103,10 +103,6 @@ class PriceWriter
 
         $price['price'] = floatval(str_replace(",", ".", $price['price']));
 
-        if (isset($price['basePrice'])) {
-            $price['basePrice'] = floatval(str_replace(",", ".", $price['basePrice']));
-        }
-
         if (isset($price['pseudoPrice'])) {
             $price['pseudoPrice'] = floatval(str_replace(",", ".", $price['pseudoPrice']));
         } else {
