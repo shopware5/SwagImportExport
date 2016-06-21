@@ -101,6 +101,10 @@ class ArticleWriter
         $this->validator->validate($article, ArticleDataType::$mapper);
         $article = $this->dataManager->setArticleData($article, ArticleDataType::$articleFieldsMapping);
 
+        Shopware()->Events()->notify('Shopware_Plugins_SwagImportExport_UpdateArticle', new \Enlight_Event_EventArgs(array(
+            'article' => $article
+        )));
+
         // insert/update article
         $builder = $this->dbalHelper->getQueryBuilderForEntity(
             $article,
