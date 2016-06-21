@@ -208,12 +208,12 @@ class CategoryWriter
     {
         if ($id === null) {
             $this->isRootExists();
-            $values = "(1, NULL, NOW(), NOW(), '{$description}', 1, 1)";
+            $values = "(1, NULL, NOW(), NOW(), '{$description}', 1)";
         } else {
-            $values = "({$id}, '{$path}', NOW(), NOW(), '{$description}', 1, 1)";
+            $values = "({$id}, '{$path}', NOW(), NOW(), '{$description}', 1)";
         }
 
-        $sql = "INSERT INTO s_categories (parent, path, added, changed, description, active, showfiltergroups)
+        $sql = "INSERT INTO s_categories (parent, path, added, changed, description, active)
                 VALUES {$values}";
 
         $this->db->exec($sql);

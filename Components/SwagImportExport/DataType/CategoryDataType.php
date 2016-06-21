@@ -14,7 +14,6 @@ class CategoryDataType
             'position',
             'active',
             'blog',
-            'showFilterGroups',
             'hideFilter'
         ),
         'string' => array(
@@ -43,7 +42,6 @@ class CategoryDataType
         ),
         'boolean' => array(
             'active',
-            'showFilterGroups'
         ),
         'string' => array(
             'template',

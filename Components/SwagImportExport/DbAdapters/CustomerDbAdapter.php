@@ -6,6 +6,7 @@ use Doctrine\ORM\AbstractQuery;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\DataType\CustomerDataType;
 use Shopware\Models\Customer\Customer;
+use Shopware\Models\Customer\Address;
 use Shopware\Components\SwagImportExport\Utils\DataHelper;
 use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
@@ -278,7 +279,6 @@ class CustomerDbAdapter implements DataDbAdapter
             array('subject' => $this)
         );
 
-        $db = $this->getDb();
         $manager = $this->getManager();
         $validator = $this->getValidator();
         $dataManager = $this->getDataManager();
@@ -309,28 +309,56 @@ class CustomerDbAdapter implements DataDbAdapter
                 $customer->fromArray($customerData);
 
                 $billing = $customer->getDefaultBillingAddress();
+                if (!$billing instanceof Address) {
+                    $billing = new Address();
+                    $billing->setCustomer($customer);
+                }
+                if (isset($customerData['billing']['countryId'])) {
+                    $customerData['billing']['country'] = $manager->find('\Shopware\Models\Country\Country', $customerData['billing']['countryId']);
+                }
+                if (isset($customerData['billing']['stateId'])) {
+                    $customerData['billing']['state'] = $manager->find('\Shopware\Models\Country\State', $customerData['billing']['stateId']);
+                }
                 $billing->fromArray($customerData['billing']);
 
                 $shipping = $customer->getDefaultShippingAddress();
+                if (!$shipping instanceof Address) {
+                    $shipping = new Address();
+                    $shipping->setCustomer($customer);
+                }
+                if (isset($customerData['shipping']['countryId'])) {
+                    $customerData['shipping']['country'] = $manager->find('\Shopware\Models\Country\Country', $customerData['shipping']['countryId']);
+                }
+                if (isset($customerData['shipping']['stateId'])) {
+                    $customerData['shipping']['state'] = $manager->find('\Shopware\Models\Country\State', $customerData['shipping']['stateId']);
+                }
                 $shipping->fromArray($customerData['shipping']);
+
+                $customer->setFirstname($billing->getFirstname());
+                $customer->setLastname($billing->getLastname());
+                $customer->setSalutation($billing->getSalutation());
+                $customer->setTitle($billing->getTitle());
 
                 $violations = $this->getManager()->validate($customer);
                 if ($violations->count() > 0) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/customer/no_valid_customer_entity', 'No valid user entity for email %s');
-                    throw new AdapterException(sprintf($message, $record['email']));
+                    $message = sprintf($message, $customer->getEmail());
+                    foreach ($violations as $violation) {
+                        $message .= "\n" . $violation->getPropertyPath() . ': ' . $violation->getMessage();
+                    }
+                    throw new AdapterException($message);
                 }
 
                 $manager->persist($customer);
                 $manager->flush();
 
-                if (isset($customerData['encoderName']) && $customerData['encoderName']) {
-                    $customerId = $customer->getId();
+                $customer->setDefaultBillingAddress($billing);
+                $manager->persist($billing);
+                $customer->setDefaultShippingAddress($shipping);
+                $manager->persist($shipping);
 
-                    $data['encoder'] = lcfirst($customerData['encoderName']);
-                    $whereUser = array('id=' . $customerId);
-                    $db->update('s_user', $data, $whereUser);
-                }
+                $manager->flush();
 
                 $this->insertCustomerAttributes($customerData, $customer->getId(), $createNewCustomer);
 

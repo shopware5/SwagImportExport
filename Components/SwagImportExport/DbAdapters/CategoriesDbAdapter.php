@@ -443,7 +443,6 @@ class CategoriesDbAdapter implements DataDbAdapter
             'c.template as template',
             'c.active as active',
             'c.blog as blog',
-            'c.showFilterGroups as showFilterGroups',
             'c.external as external',
             'c.hideFilter as hideFilter',
         );

@@ -23,7 +23,7 @@ class XmlFileReader implements FileReader
     /**
      * @param FileHelper $fileHelper
      */
-    public function __construct(FileHelper $fileHelper)
+    public function __construct(FileHelper $fileHelper = null)
     {
         $this->fileHelper = $fileHelper;
     }
