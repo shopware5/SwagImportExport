@@ -12,6 +12,7 @@
 
     "changelog": {
         "de": {
+            "1.2.0": "PT-5674 - Feature: Shopware 5.2 Kompatibilität;",
             "1.1.8": "PT-5547 - Bugfix: Download XML Exporte;",
             "1.1.7": "PT-4288 - Bugfix: Import Staffelpreise repariert;",
             "1.1.6": "PT-3447 - Bugfix: Import Konfiguratorfelder; PT-3929 - Bugfix: Artikelübersetzungen; PT-4099 - Bugfix: Fehlerhafter Import einiger Felder, wie 'Länge' und 'Erstellt'; PT-4123 - Bugfix: Aktivkennzeichung bei Artikelimport; PT-4133 - Bugfix: Kundenimport; PT-4225 - Bugfix: Errorlog; PT-4232 - Bugfix: Export offene Bestellungen; PT-4243 - Bugfix: Datumsfilter Bestellübersichtsexport; PT-4245 - Bugfix: Zuordnung PLZ und Stadt; PT-4423 - Bugfix: Standardwerte für Felder, die nicht NULL sein dürfen; PT-4424 - Bugfix: Import Kundenattribute; PT-4549 - Bugfix: Fehler ohne Nachricht beim Kundenimport; PT-4550 - Bugfix: Steuerberechnung Bestellübersichtsexport; PT-4552 - Bugfix: Löschen und Erstellen eines Profils; PT-4557 - Bugfix: Artikel Lagerbestand Export per CLI; PT-4615 - Bugfix: Falscher Pfad beim Export; PT-3447 - Bugfix: Konfigurator Typ wird nun korrekt importiert;",
@@ -27,6 +28,7 @@
             "1.0.1": "Problem mit verschwindendem Import/Export Menü-Eintrag behoben; Weitere ACL-Zugangsberechtigungen hinzugefügt; Korrektur: article.active Verhalten; Korrektur: Artikel-Attribute; Korrektur: Datums- und Zeitimporte"
         },
         "en": {
+            "1.2.0": "PT-5674 - Feature: Shopware 5.2 compatibility;",
             "1.1.8": "PT-5547 - Bugfix: Download XML exports;",
             "1.1.7": "PT-4288 - Bugfix: Fixed import of scale-prices;",
             "1.1.6": "PT-3447 - Bugfix: Import configurator fields; PT-3929 - Bugfix: Product translations; PT-4099 - Bugfix: Faulty import of some fields, like 'length' and 'created'; PT-4123 - Bugfix: Active flag on product import; PT-4133 - Bugfix: Customer import; PT-4225 - Bugfix: Error log; PT-4232 - Bugfix: Export open orders; PT-4243 - Bugfix: Date filter order overview export; PT-4245 - Bugfix: Mapping zip and city; PT-4423 - Bugfix: Default values for fields, which are not allowed to be NULL; PT-4424 - Bugfix: Import customer attributes; PT-4549 - Bugfix: Error without message on customer import; PT-4550 - Bugfix: Tax calculation order overview export; PT-4552 - Bugfix: Deleting and creating of a profile; PT-4557 - Bugfix: Product stock export via CLI; PT-4615 - Bugfix: Wrong path at export;PT-3447 - Bugfix: Configurator type is now properly imported;",
