@@ -8,10 +8,11 @@
     "link": "http://store.shopware.com",
     "author": "Shopware AG",
 
-    "currentVersion": "1.2.0",
+    "currentVersion": "1.2.1",
 
     "changelog": {
         "de": {
+            "1.2.1": "PT-6190 - Bugfix: Import über Cron;",
             "1.2.0": "PT-5674 - Feature: Shopware 5.2 Kompatibilität;",
             "1.1.8": "PT-5547 - Bugfix: Download XML Exporte;",
             "1.1.7": "PT-4288 - Bugfix: Import Staffelpreise repariert;",
@@ -28,6 +29,7 @@
             "1.0.1": "Problem mit verschwindendem Import/Export Menü-Eintrag behoben; Weitere ACL-Zugangsberechtigungen hinzugefügt; Korrektur: article.active Verhalten; Korrektur: Artikel-Attribute; Korrektur: Datums- und Zeitimporte"
         },
         "en": {
+            "1.2.1": "PT-6190 - Bugfix: Import via cron;",
             "1.2.0": "PT-5674 - Feature: Shopware 5.2 compatibility;",
             "1.1.8": "PT-5547 - Bugfix: Download XML exports;",
             "1.1.7": "PT-4288 - Bugfix: Fixed import of scale-prices;",
