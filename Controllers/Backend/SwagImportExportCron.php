@@ -28,6 +28,7 @@ use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Utils\CommandHelper;
 use Shopware\CustomModels\ImportExport\Profile;
 use Shopware\Models\Media\Album;
+use \Shopware\Components\CSRFWhitelistAware;
 
 /**
  * Shopware ImportExport Plugin
@@ -35,12 +36,22 @@ use Shopware\Models\Media\Album;
  * @category Shopware
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Shopware_Controllers_Backend_SwagImportExportCron extends Shopware_Controllers_Backend_ExtJs
+class Shopware_Controllers_Backend_SwagImportExportCron extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
     /**
      * @var ModelManager
      */
     protected $manager;
+
+    /**
+     * @inheritdoc
+     */
+    public function getWhitelistedCSRFActions()
+    {
+        return [
+            'cron'
+        ];
+    }
 
     public function init()
     {
