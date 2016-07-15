@@ -3,6 +3,7 @@
 namespace Shopware\Components\SwagImportExport\Factories;
 
 use Shopware\Components\SwagImportExport\DataIO;
+use Shopware\Components\SwagImportExport\DbAdapters\DataDbAdapter;
 use Shopware\Components\SwagImportExport\Session\Session;
 use Shopware\Components\SwagImportExport\Logger\Logger;
 use Shopware\Components\SwagImportExport\Utils\DataColumnOptions;
