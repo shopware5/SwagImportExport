@@ -20,6 +20,7 @@ class ExportCommand extends ShopwareCommand
     protected $offset;
     protected $format;
     protected $filePath;
+    protected $category;
     protected $sessionId;
 
     /**
@@ -35,6 +36,7 @@ class ExportCommand extends ShopwareCommand
             ->addOption('exportVariants', 'x', InputOption::VALUE_NONE, 'Should the variants be exported?', null)
             ->addOption('offset', 'o', InputOption::VALUE_REQUIRED, 'What is the offset?', null)
             ->addOption('limit', 'l', InputOption::VALUE_REQUIRED, 'What is the limit?', null)
+            ->addOption('category', 'c', InputOption::VALUE_REQUIRED, 'Category ID', null)
             ->setHelp("The <info>%command.name%</info> imports data from a file.");
     }
 
@@ -56,13 +58,17 @@ class ExportCommand extends ShopwareCommand
                 'exportVariants' => $this->exportVariants,
                 'limit' => $this->limit,
                 'offset' => $this->offset,
-                'username' => 'Commandline'
+                'username' => 'Commandline',
+                'category' => array( $this->category )
             )
         );
 
         $output->writeln('<info>' . sprintf("Using profile: %s.", $this->profile) . '</info>');
         $output->writeln('<info>' . sprintf("Using format: %s.", $this->format) . '</info>');
         $output->writeln('<info>' . sprintf("Using file: %s.", $this->filePath) . '</info>');
+        if( $this->category ) {
+          	$output->writeln('<info>' . sprintf("Using category as filter: %s.", $this->category) . '</info>');
+        }
 
         $return = $helper->prepareExport();
         $count = $return['count'];
@@ -91,6 +97,7 @@ class ExportCommand extends ShopwareCommand
         $this->offset = $input->getOption('offset');
         $this->limit = $input->getOption('limit');
         $this->filePath = $input->getArgument('filepath');
+        $this->category = $input->getOption('category');
 
         $parts = explode('.', $this->filePath);
 
