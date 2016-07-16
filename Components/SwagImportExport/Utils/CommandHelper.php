@@ -34,6 +34,7 @@ class CommandHelper
     protected $limit;
     protected $offset;
     protected $username;
+    protected $category;
 
     //private
     protected $sessionId;
@@ -97,6 +98,9 @@ class CommandHelper
         if (isset($data['username'])) {
             $this->username = $data['username'];
         }
+        if (isset($data['category'])) {
+            $this->category = $data['category'];
+        }
     }
 
     /**
@@ -121,6 +125,9 @@ class CommandHelper
 
         if ($this->exportVariants) {
             $postData['filter']['variants'] = $this->exportVariants;
+        }
+        if ($this->category) {
+            $postData['filter']['categories'] = $this->category;
         }
 
         /** @var Profile $profile */
@@ -175,6 +182,9 @@ class CommandHelper
 
         if ($this->exportVariants) {
             $postData['filter']['variants'] = $this->exportVariants;
+        }
+        if ($this->category) {
+            $postData['filter']['categories'] = $this->category;
         }
 
         /** @var Profile $profile */
