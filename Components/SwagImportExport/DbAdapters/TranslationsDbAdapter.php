@@ -1,4 +1,10 @@
 <?php
+/**
+ * (c) shopware AG <info@shopware.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
@@ -6,6 +12,7 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Validators\TranslationValidator;
+use Shopware\Models\Shop\Shop;
 
 class TranslationsDbAdapter implements DataDbAdapter
 {
@@ -195,7 +202,7 @@ class TranslationsDbAdapter implements DataDbAdapter
                 $validator->validate($record, TranslationValidator::$mapper);
 
                 if (isset($record['languageId'])) {
-                    $shop = $this->getManager()->find('Shopware\Models\Shop\Shop', $record['languageId']);
+                    $shop = $this->getManager()->find(Shop::class, $record['languageId']);
                 }
 
                 if (!$shop) {
