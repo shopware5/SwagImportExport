@@ -1,9 +1,18 @@
 <?php
 
+/**
+ * (c) shopware AG <info@shopware.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Shopware\Components\SwagImportExport\Transformers;
 
 /**
- * The responsibilty of this class is to modify the values of the data values due to given user small scripts.
+ * The responsibility of this class is to modify the values of the data values due to given user small scripts.
+ *
+ * @package Shopware\Components\SwagImportExport\Transformers
  */
 class ValuesTransformer implements DataTransformerAdapter
 {
@@ -72,7 +81,7 @@ class ValuesTransformer implements DataTransformerAdapter
                 $method = 'getImportConversion';
                 break;
             default:
-                throw new \Exception("Convert type $type does not exists.");
+                throw new \Exception("Convert type $type does not exist.");
         }
 
         foreach ($this->config as $expression) {
@@ -95,57 +104,5 @@ class ValuesTransformer implements DataTransformerAdapter
         }
 
         return $data;
-    }
-
-//    if we dont now the array dept we need to make it recurcive
-//    the function below is will do the job, but check the speed before commiting
-//    public function evaluateData(&$data, $conversions)
-//    {
-//        foreach ($data as $key => &$record) {
-//            if (is_array($record)) {
-//                $this->evaluateData($record, $conversions);
-//            } else {
-//                foreach ($conversions as $variableName => $conversion) {
-//                    if ($key === $variableName) {
-//                        $evalData = $this->evaluator->evaluate($conversion, $data);
-//                        if ($evalData) {
-//                            $data[$variableName] = $evalData;
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
-
-    /**
-     * Does nothing in this class
-     */
-    public function composeHeader()
-    {
-    }
-
-    /**
-     * Does nothing in this class
-     */
-    public function composeFooter()
-    {
-    }
-
-    /**
-     * Does nothing in this class
-     *
-     * @param $data
-     */
-    public function parseHeader($data)
-    {
-    }
-
-    /**
-     * Does nothing in this class
-     *
-     * @param $data
-     */
-    public function parseFooter($data)
-    {
     }
 }

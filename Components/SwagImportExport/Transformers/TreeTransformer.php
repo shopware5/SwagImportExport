@@ -1,11 +1,20 @@
 <?php
 
+/**
+ * (c) shopware AG <info@shopware.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Shopware\Components\SwagImportExport\Transformers;
 
 /**
  * The responsibility of this class is to restructure the flat array to tree and vise versa
+ *
+ * @package Shopware\Components\SwagImportExport\Transformers
  */
-class TreeTransformer implements DataTransformerAdapter
+class TreeTransformer implements DataTransformerAdapter, ComposerInterface
 {
     protected $config;
 

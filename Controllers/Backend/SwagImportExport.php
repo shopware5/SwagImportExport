@@ -1,26 +1,10 @@
 <?php
 
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * (c) shopware AG <info@shopware.com>
  *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
- *
- * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * "Shopware" is a registered trademark of shopware AG.
- * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 use Shopware\Components\SwagImportExport\DataWorkflow;
@@ -61,7 +45,6 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
     protected $expressionRepository;
 
     /**
-     * 
      * @var Shopware\CustomModels\ImportExport\Logger
      */
     protected $loggerRepository;
@@ -137,8 +120,9 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $profileRepository = $this->getProfileRepository();
         $profileEntity = $profileRepository->findOneBy(array('id' => $profileId));
         $profileType = $profileEntity->getType();
+        $defaultFields = array();
 
-        $dataManager = $this->Plugin()->getDataFactory()->createDataManager($profileType);
+        $dataManager = $this->getPlugin()->getDataFactory()->createDataManager($profileType);
         if ($dataManager) {
             $defaultFields = $dataManager->getDefaultFields();
         }
@@ -232,7 +216,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $data = $this->Request()->getParam('data', 1);
 
         try {
-            $profileModel = $this->Plugin()->getProfileFactory()->createProfileModel($data);
+            $profileModel = $this->getPlugin()->getProfileFactory()->createProfileModel($data);
 
             $this->View()->assign(array(
                 'success' => true,
@@ -316,6 +300,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
      */
     public function getProfilesAction()
     {
+        /** @var \Shopware\CustomModels\ImportExport\Repository $profileRepository */
         $profileRepository = $this->getProfileRepository();
 
         $query = $profileRepository->getProfilesListQuery(
@@ -360,13 +345,17 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $profileId = $this->Request()->getParam('profileId');
         $filter = $this->Request()->getParam('filter', array());
 
+        /** @var \Shopware\CustomModels\ImportExport\Repository $expressionRepository */
         $expressionRepository = $this->getExpressionRepository();
 
         $filter = array_merge(array('p.id' => $profileId), $filter);
 
         $query = $expressionRepository->getExpressionsListQuery(
-                        $filter, $this->Request()->getParam('sort', array()), $this->Request()->getParam('limit', null), $this->Request()->getParam('start')
-                )->getQuery();
+            $filter,
+            $this->Request()->getParam('sort', array()),
+            $this->Request()->getParam('limit', null),
+            $this->Request()->getParam('start')
+        )->getQuery();
 
         $count = Shopware()->Models()->getQueryCount($query);
 
@@ -459,10 +448,12 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
     public function prepareExportAction()
     {
+        $limit = null;
         if ($this->Request()->getParam('limit')) {
             $limit = $this->Request()->getParam('limit');
         }
-        
+
+        $offset = null;
         if ($this->Request()->getParam('offset')) {
             $offset = $this->Request()->getParam('offset');
         }
@@ -479,10 +470,10 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             ),
         );
 
-        $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
+        $profile = $this->getPlugin()->getProfileFactory()->loadProfile($postData);
         $postData['filter'] = $this->prepareFilter($this->Request(), $profile->getType());
 
-        $dataFactory = $this->Plugin()->getDataFactory();
+        $dataFactory = $this->getPlugin()->getDataFactory();
 
         $dbAdapter = $dataFactory->createDbAdapter($profile->getType());
         $dataSession = $dataFactory->loadSession($postData);
@@ -502,7 +493,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $ids = $dataIO->preloadRecordIds()->getRecordIds();
         $idAmount = count($ids);
 
-        if($idAmount == 0) {
+        if ($idAmount == 0) {
             $this->View()->assign(array('success' => false, 'msg' => 'No data to export', 'position' => 0, 'count' => 0));
             return;
         }
@@ -515,10 +506,12 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
     public function exportAction()
     {
+        $limit = null;
         if ($this->Request()->getParam('limit')) {
             $limit = $this->Request()->getParam('limit');
         }
 
+        $offset = null;
         if ($this->Request()->getParam('offset')) {
             $offset = $this->Request()->getParam('offset');
         }
@@ -536,16 +529,16 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             ),
         );
 
-        $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
+        $profile = $this->getPlugin()->getProfileFactory()->loadProfile($postData);
         $postData['filter'] = $this->prepareFilter($this->Request(), $profile->getType());
 
-        $dataFactory = $this->Plugin()->getDataFactory();
+        $dataFactory = $this->getPlugin()->getDataFactory();
 
         $dbAdapter = $dataFactory->createDbAdapter($profile->getType());
         $dataSession = $dataFactory->loadSession($postData);
 
         // we create the file writer that will write (partially) the result file
-        $fileFactory = $this->Plugin()->getFileIOFactory();
+        $fileFactory = $this->getPlugin()->getFileIOFactory();
         $fileHelper = $fileFactory->createFileHelper();
         $fileWriter = $fileFactory->createFileWriter($postData, $fileHelper);
 
@@ -566,8 +559,9 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $dataIO->initialize($colOpts, $limit, $filter, $type, $format, $maxRecordCount);
         $dataIO->setUsername($username);
 
-        $dataTransformerChain = $this->Plugin()->getDataTransformerFactory()->createDataTransformerChain(
-                $profile, array('isTree' => $fileWriter->hasTreeStructure())
+        $dataTransformerChain = $this->getPlugin()->getDataTransformerFactory()->createDataTransformerChain(
+            $profile,
+            array('isTree' => $fileWriter->hasTreeStructure())
         );
 
         $dataWorkflow = new DataWorkflow($dataIO, $profile, $dataTransformerChain, $fileWriter);
@@ -589,7 +583,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             $logger->writeToFile($logData);
 
             unset($post['filter']);
-            return $this->View()->assign(array('s' => $profile, 'success' => true, 'data' => $post));
+            $this->View()->assign(array('s' => $profile, 'success' => true, 'data' => $post));
         } catch (Exception $e) {
             $logger->write($e->getMessage(), 'true');
 
@@ -619,39 +613,41 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         );
 
         if (empty($postData['file'])) {
-            return $this->View()->assign(array('success' => false, 'msg' => 'Not valid file'));
+            $this->View()->assign(array('success' => false, 'msg' => 'Not valid file'));
+            return;
         }
 
-        //get file format
+        // get file format
         $inputFileName = str_replace($shopUrl, '', $postData['file']);
         $extension = pathinfo($inputFileName, PATHINFO_EXTENSION);
 
         if (!$this->isFormatValid($extension)) {
-            return $this->View()->assign(array('success' => false, 'msg' => 'Not valid file format'));
+            $this->View()->assign(array('success' => false, 'msg' => 'Not valid file format'));
+            return;
         }
 
         $postData['format'] = $extension;
 
-        $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
+        $profile = $this->getPlugin()->getProfileFactory()->loadProfile($postData);
 
         //get profile type
         $postData['adapter'] = $profile->getType();
 
         // we create the file reader that will read the result file
-        $fileReader = $this->Plugin()->getFileIOFactory()->createFileReader($postData, null);
+        $fileReader = $this->getPlugin()->getFileIOFactory()->createFileReader($postData, null);
 
         if ($extension === 'xml') {
             $tree = json_decode($profile->getConfig("tree"), true);
             $fileReader->setTree($tree);
         }
 
-        $dataFactory = $this->Plugin()->getDataFactory();
+        $dataFactory = $this->getPlugin()->getDataFactory();
 
         $dbAdapter = $dataFactory->createDbAdapter($profile->getType());
         $dataSession = $dataFactory->loadSession($postData);
         $logger = $dataFactory->loadLogger($dataSession);
 
-        //create dataIO
+        // create dataIO
         $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession, $logger);
 
         $position = $dataIO->getSessionPosition();
@@ -659,7 +655,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
         $totalCount = $fileReader->getTotalCount($inputFileName);
 
-        return $this->View()->assign(array('success' => true, 'position' => $position, 'count' => $totalCount));
+        $this->View()->assign(array('success' => true, 'position' => $position, 'count' => $totalCount));
     }
 
     public function importAction()
@@ -683,27 +679,27 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         }
 
         if (!isset($postData['format'])) {
-            //get file format
+            // get file format
             $postData['format'] = pathinfo($inputFile, PATHINFO_EXTENSION);
         }
 
         // we create the file reader that will read the result file
         /** @var \Shopware\Components\SwagImportExport\Factories\FileIOFactory $fileFactory */
-        $fileFactory = $this->Plugin()->getFileIOFactory();
+        $fileFactory = $this->getPlugin()->getFileIOFactory();
         $fileHelper = $fileFactory->createFileHelper();
         $fileReader = $fileFactory->createFileReader($postData, $fileHelper);
 
-        //load profile
-        $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
+        // load profile
+        $profile = $this->getPlugin()->getProfileFactory()->loadProfile($postData);
 
-        //get profile type
+        // get profile type
         $postData['adapter'] = $profile->getType();
 
-        //setting up the batch size
+        // setting up the batch size
         $postData['batchSize'] = $profile->getType() === 'articlesImages' ? 1 : 50;
 
         /* @var $dataFactory Shopware\Components\SwagImportExport\Factories\DataFactory */
-        $dataFactory = $this->Plugin()->getDataFactory();
+        $dataFactory = $this->getPlugin()->getDataFactory();
 
         $dbAdapter = $dataFactory->createDbAdapter($profile->getType());
 
@@ -713,7 +709,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         /* @var $logger Shopware\Components\SwagImportExport\Logger\Logger */
         $logger = $dataFactory->loadLogger($dataSession, $fileLogWriter);
 
-        //create dataIO
+        // create dataIO
         $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession, $logger);
 
         $colOpts = $dataFactory->createColOpts($postData['columnOptions']);
@@ -727,8 +723,9 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $dataIO->initialize($colOpts, $limit, $filter, $type, $format, $maxRecordCount);
         $dataIO->setUsername($username);
         
-        $dataTransformerChain = $this->Plugin()->getDataTransformerFactory()->createDataTransformerChain(
-                $profile, array('isTree' => $fileReader->hasTreeStructure())
+        $dataTransformerChain = $this->getPlugin()->getDataTransformerFactory()->createDataTransformerChain(
+            $profile,
+            array('isTree' => $fileReader->hasTreeStructure())
         );
 
         $sessionState = $dataIO->getSessionState();
@@ -738,7 +735,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         try {
             $post = $dataWorkflow->import($postData, $inputFile);
 
-            //unprocessed data
+            // unprocessed data
             if (isset($post['unprocessedData']) && $post['unprocessedData']) {
                 $data = array(
                     'data' => $post['unprocessedData'],
@@ -758,8 +755,8 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             }
 
             if ($dataSession->getTotalCount() > 0 && ($dataSession->getTotalCount() == $post['position'])) {
-
-                //unprocessed files
+                // unprocessed files
+                $postProcessedData = null;
                 if ($unprocessedFiles) {
                     $postProcessedData = $this->processData($unprocessedFiles);
                 }
@@ -791,7 +788,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             unset($post['unprocessedData']);
             $post['unprocessedFiles'] = json_encode($unprocessedFiles);
 
-            return $this->View()->assign(array('success' => true, 'data' => $post));
+            $this->View()->assign(array('success' => true, 'data' => $post));
         } catch (\Exception $e) {
             $logger->write($e->getMessage(), 'true');
 
@@ -805,7 +802,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
             $logger->writeToFile($logData);
 
-            return $this->View()->assign(array('success' => false, 'msg' => $e->getMessage()));
+            $this->View()->assign(array('success' => false, 'msg' => $e->getMessage()));
         }
     }
 
@@ -822,15 +819,14 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
         foreach ($unprocessedData as $hiddenProfile => $inputFile) {
             if ($mediaService->has($inputFile)) {
-
-                //renames
+                // renames
                 $outputFile = str_replace('-tmp', '-swag', $inputFile);
                 $mediaService->rename($inputFile, $outputFile);
 
-                $profile = $this->Plugin()->getProfileFactory()->loadHiddenProfile($hiddenProfile);
+                $profile = $this->getPlugin()->getProfileFactory()->loadHiddenProfile($hiddenProfile);
                 $profileId = $profile->getId();
 
-                $fileReader = $this->Plugin()->getFileIOFactory()->createFileReader(array('format' => 'csv'), null);
+                $fileReader = $this->getPlugin()->getFileIOFactory()->createFileReader(array('format' => 'csv'), null);
                 $totalCount = $fileReader->getTotalCount($mediaService->getUrl($outputFile));
 
                 unset($unprocessedData[$hiddenProfile]);
@@ -864,15 +860,15 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
      */
     protected function afterImport($data, $profileName, $outputFile)
     {
-        $fileFactory = $this->Plugin()->getFileIOFactory();
+        $fileFactory = $this->getPlugin()->getFileIOFactory();
 
         //loads hidden profile for article
-        $profile = $this->Plugin()->getProfileFactory()->loadHiddenProfile($profileName);
+        $profile = $this->getPlugin()->getProfileFactory()->loadHiddenProfile($profileName);
 
         $fileHelper = $fileFactory->createFileHelper();
         $fileWriter = $fileFactory->createFileWriter(array('format' => 'csv'), $fileHelper);
 
-        $dataTransformerChain = $this->Plugin()->getDataTransformerFactory()
+        $dataTransformerChain = $this->getPlugin()->getDataTransformerFactory()
             ->createDataTransformerChain($profile, array('isTree' => $fileWriter->hasTreeStructure()));
 
         $dataWorkflow = new DataWorkflow(null, $profile, $dataTransformerChain, $fileWriter);
@@ -881,13 +877,14 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
     public function getSessionsAction()
     {
+        /** @var \Shopware\CustomModels\ImportExport\Repository $sessionRepository */
         $sessionRepository = $this->getSessionRepository();
 
         $query = $sessionRepository->getSessionsListQuery(
-                $this->Request()->getParam('filter', array()),
-                $this->Request()->getParam('sort', array()),
-                $this->Request()->getParam('limit', 25),
-                $this->Request()->getParam('start', 0)
+            $this->Request()->getParam('filter', array()),
+            $this->Request()->getParam('sort', array()),
+            $this->Request()->getParam('limit', 25),
+            $this->Request()->getParam('start', 0)
         )->getQuery();
 
         $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
@@ -932,8 +929,8 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                     $this->View()->assign(array(
                         'success' => false,
                         'data' => $this->Request()->getParams(),
-                        'message' => 'No valid Id')
-                    );
+                        'message' => 'No valid Id'
+                    ));
                     return;
                 }
 
@@ -946,14 +943,14 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
             $this->View()->assign(array(
                 'success' => true,
-                'data' => $this->Request()->getParams())
-            );
+                'data' => $this->Request()->getParams()
+            ));
         } catch (Exception $e) {
             $this->View()->assign(array(
                 'success' => false,
                 'data' => $this->Request()->getParams(),
-                'message' => $e->getMessage())
-            );
+                'message' => $e->getMessage()
+            ));
         }
     }
 
@@ -1068,15 +1065,16 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $postData['profileId'] = $this->Request()->getParam('profileId');
 
         if (!$postData['profileId']) {
-            return $this->View()->assign(array(
-                        'success' => false, 'message' => 'No profile Id'
+            $this->View()->assign(array(
+                'success' => false, 'message' => 'No profile Id'
             ));
+            return;
         }
 
-        $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
+        $profile = $this->getPlugin()->getProfileFactory()->loadProfile($postData);
         $type = $profile->getType();
 
-        $dbAdapter = $this->Plugin()->getDataFactory()->createDbAdapter($type);
+        $dbAdapter = $this->getPlugin()->getDataFactory()->createDbAdapter($type);
         
         $sections = $dbAdapter->getSections();
         
@@ -1093,16 +1091,20 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $section = $this->Request()->getParam('adapter', 'default');
 
         if (!$postData['profileId']) {
-            return $this->View()->assign(array(
-                        'success' => false, 'message' => 'No profile Id'
+            $this->View()->assign(array(
+                'success' => false, 'message' => 'No profile Id'
             ));
+            return;
         }
 
-        $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
+        $profile = $this->getPlugin()->getProfileFactory()->loadProfile($postData);
         $type = $profile->getType();
 
-        $dbAdapter = $this->Plugin()->getDataFactory()->createDbAdapter($type);
-        $dataManager = $this->Plugin()->getDataFactory()->createDataManager($type);
+        $dbAdapter = $this->getPlugin()->getDataFactory()->createDbAdapter($type);
+        $dataManager = $this->getPlugin()->getDataFactory()->createDataManager($type);
+
+        $defaultFieldsName = null;
+        $defaultFields = array();
         if ($dataManager) {
             $defaultFields = $dataManager->getDefaultFields();
             $defaultFieldsName = $dataManager->getDefaultFieldsName();
@@ -1160,15 +1162,16 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $section = $this->Request()->getParam('adapter', 'default');
 
         if (!$postData['profileId']) {
-            return $this->View()->assign(array(
-                        'success' => false, 'message' => 'No profile Id'
+            $this->View()->assign(array(
+                'success' => false, 'message' => 'No profile Id'
             ));
+            return;
         }
 
-        $profile = $this->Plugin()->getProfileFactory()->loadProfile($postData);
+        $profile = $this->getPlugin()->getProfileFactory()->loadProfile($postData);
         $type = $profile->getType();
 
-        $dbAdapter = $this->Plugin()->getDataFactory()->createDbAdapter($type);
+        $dbAdapter = $this->getPlugin()->getDataFactory()->createDbAdapter($type);
 
         if (!method_exists($dbAdapter, 'getParentKeys')) {
             $this->View()->assign(array(
@@ -1205,7 +1208,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
     /**
      * Check is file format valid
-     * 
+     *
      * @param string $extension
      * @return boolean
      */
@@ -1275,17 +1278,21 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
     /**
      * @return Shopware_Plugins_Backend_SwagImportExport_Bootstrap
      */
-    public function Plugin()
+    public function getPlugin()
     {
         return Shopware()->Plugins()->Backend()->SwagImportExport();
     }
 
     public function getLogsAction()
     {
+        /** @var \Shopware\CustomModels\ImportExport\Repository $loggerRepository */
         $loggerRepository = $this->getLoggerRepository();
 
         $query = $loggerRepository->getLogListQuery(
-                $this->Request()->getParam('filter', array()), $this->Request()->getParam('sort', array()), $this->Request()->getParam('limit', 25), $this->Request()->getParam('start', 0)
+            $this->Request()->getParam('filter', array()),
+            $this->Request()->getParam('sort', array()),
+            $this->Request()->getParam('limit', 25),
+            $this->Request()->getParam('start', 0)
         )->getQuery();
 
         $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
@@ -1352,7 +1359,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
     /**
      * Prepares filter array for export
      *
-     * @param $request
+     * @param Enlight_Controller_Request_Request $request
      * @param $adapterType
      * @return array
      */

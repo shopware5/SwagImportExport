@@ -1,7 +1,15 @@
 <?php
 
+/**
+ * (c) shopware AG <info@shopware.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Shopware\Components\SwagImportExport\Factories;
 
+use Shopware\Components\SwagImportExport\Transformers\DecimalTransformer;
 use Shopware\Components\SwagImportExport\Transformers\PhpExpressionEvaluator;
 use Shopware\Components\SwagImportExport\Transformers\SmartyExpressionEvaluator;
 use Shopware\Components\SwagImportExport\Transformers\DataTransformerChain;
@@ -9,6 +17,11 @@ use Shopware\Components\SwagImportExport\Transformers\TreeTransformer;
 use Shopware\Components\SwagImportExport\Transformers\FlattenTransformer;
 use Shopware\Components\SwagImportExport\Transformers\ValuesTransformer;
 
+/**
+ * Class DataTransformerFactory
+ *
+ * @package Shopware\Components\SwagImportExport\Factories
+ */
 class DataTransformerFactory extends \Enlight_Class implements \Enlight_Hook
 {
     /**
@@ -66,6 +79,9 @@ class DataTransformerFactory extends \Enlight_Class implements \Enlight_Hook
                 break;
             case 'flatten':
                 $transformer = new FlattenTransformer();
+                break;
+            case 'decimals':
+                $transformer = new DecimalTransformer();
                 break;
             default:
                 throw new \Exception("Transformer $transformerType is not valid");

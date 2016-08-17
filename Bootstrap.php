@@ -1,25 +1,10 @@
 <?php
+
 /**
- * Shopware 5
- * Copyright (c) shopware AG
+ * (c) shopware AG <info@shopware.com>
  *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
- *
- * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * "Shopware" is a registered trademark of shopware AG.
- * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -118,19 +103,6 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
     }
 
     /**
-     * @inheritdoc
-     */
-    public function getCapabilities()
-    {
-        return [
-            'install' => true,
-            'update' => true,
-            'enable' => true,
-            'secureUninstall' => true
-        ];
-    }
-
-    /**
      * Install function of the plugin bootstrap.
      *
      * Registers all necessary components and dependencies.
@@ -157,7 +129,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
 
     /**
      * @param string $oldVersion
-     * @return array
+     * @return bool
      * @throws Exception
      * @throws Zend_Db_Adapter_Exception
      */
@@ -209,62 +181,20 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
             $this->get('shopware.cache_manager')->clearProxyCache();
         }
 
-        return [
-            'success' => true,
-            'invalidateCache' => $this->getInvalidateCacheArray()
-        ];
+        return true;
     }
 
     /**
      * Uninstall function of the plugin.
      * Fired from the plugin manager.
      *
-     * @return array
+     * @return bool
      */
     public function uninstall()
     {
-        $this->secureUninstall();
-
         $this->removeDatabaseTables();
-        $this->removeAclResource();
 
-        return [
-            'success' => true,
-            'invalidateCache' => $this->getInvalidateCacheArray()
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function secureUninstall()
-    {
-        return [
-            'success' => true,
-            'invalidateCache' => $this->getInvalidateCacheArray()
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function enable()
-    {
-        return [
-            'success' => true,
-            'invalidateCache' => $this->getInvalidateCacheArray()
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function disable()
-    {
-        return [
-            'success' => true,
-            'invalidateCache' => $this->getInvalidateCacheArray()
-        ];
+        return true;
     }
 
     /**
@@ -552,6 +482,15 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
             ]
         );
 
+        $form->setElement(
+            'checkbox',
+            'useCommaDecimal',
+            [
+                'label' => 'Use comma as decimal separator',
+                'value' => false
+            ]
+        );
+
         $this->createTranslations();
     }
 
@@ -567,6 +506,9 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
                 ],
                 'SwagImportExportErrorMode' => [
                     'label' => 'Continue import/export if an error occurs during the process'
+                ],
+                'useCommaDecimal' => [
+                    'label' => 'Use comma as decimal separator'
                 ]
             ],
             'de_DE' => [
@@ -575,8 +517,11 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
                 ],
                 'SwagImportExportErrorMode' => [
                     'label' => 'Mit Import/Export fortfahren, wenn ein Fehler auftritt.'
+                ],
+                'useCommaDecimal' => [
+                    'label' => 'Komma als Dezimal-Trennzeichen nutzen'
                 ]
-            ],
+            ]
         ];
 
         if ($this->assertMinimumVersion('4.2.2')) {
@@ -615,26 +560,6 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         $this->em->flush();
     }
 
-    private function removeAclResource()
-    {
-        $sql = "SELECT id FROM s_core_acl_resources
-                WHERE pluginID = ?;";
-
-        $resourceId = $this->db->fetchOne($sql, [$this->getId()]);
-
-        if (!$resourceId) {
-            return;
-        }
-
-        $resource = $this->em->getRepository(\Shopware\Models\User\Resource::class)->find($resourceId);
-        foreach ($resource->getPrivileges() as $privilege) {
-            $this->em->remove($privilege);
-        }
-
-        $this->em->remove($resource);
-        $this->em->flush();
-    }
-
     private function addConfigDirs()
     {
         /** @var Shopware_Components_Snippet_Manager $snippetManager */
@@ -644,16 +569,5 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         /** @var Enlight_Template_Manager $templateManager */
         $templateManager = $this->get('template');
         $templateManager->addTemplateDir($this->Path() . 'Views/');
-    }
-
-    /**
-     * Helper method to return all the caches, that need to be cleared after
-     * updating / uninstalling / enabling / disabling a plugin
-     *
-     * @return array
-     */
-    private function getInvalidateCacheArray()
-    {
-        return ['config', 'backend', 'proxy'];
     }
 }

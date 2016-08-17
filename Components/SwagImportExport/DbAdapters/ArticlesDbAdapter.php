@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * (c) shopware AG <info@shopware.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
 use Doctrine\ORM\Query\Expr\Join;
@@ -20,6 +27,11 @@ use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
 use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
 use Shopware\Models\Property;
 
+/**
+ * Class ArticlesDbAdapter
+ *
+ * @package Shopware\Components\SwagImportExport\DbAdapters
+ */
 class ArticlesDbAdapter implements DataDbAdapter
 {
     /**
@@ -115,8 +127,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 ->setParameter('ids', $articleIds);
         }
 
-        $builder->setFirstResult($start)
-            ->setMaxResults($limit);
+        $builder->setFirstResult($start)->setMaxResults($limit);
 
         $records = $builder->getQuery()->getResult();
 
@@ -149,7 +160,6 @@ class ArticlesDbAdapter implements DataDbAdapter
                 ->get('adapters/articles_no_column_names', 'Can not read articles without column names.');
             throw new \Exception($message);
         }
-
 
         //articles
         $articleBuilder = $this->getArticleBuilder($columns['article'], $ids);
@@ -388,7 +398,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                     $result[] = array(
                         'articleId' => $row['helper']['articleId'],
                         'variantId' => $vId,
-                        'languageId' => (string)$shopId,
+                        'languageId' => (string) $shopId,
                         'variantKind' => $row['helper']['variantKind'],
                     );
                 }
@@ -748,7 +758,6 @@ class ArticlesDbAdapter implements DataDbAdapter
             'article.description as description',
             'article.descriptionLong as descriptionLong',
             "DATE_FORMAT(article.added, '%Y-%m-%d') as date",
-//            'article.active as active',
             'article.pseudoSales as pseudoSales',
             'article.highlight as topSeller',
             'article.metaTitle as metaTitle',
@@ -1148,7 +1157,6 @@ class ArticlesDbAdapter implements DataDbAdapter
         $articleData = array(
             'articleId' => $articleNumber,
             'orderNumber' => $articleNumber,
-//            'mainNumber' => $articleNumber, //TODO: check if this could be used
             'processed' => 1
         );
 

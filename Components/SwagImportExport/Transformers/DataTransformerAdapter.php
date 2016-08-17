@@ -1,11 +1,19 @@
 <?php
 
+/**
+ * (c) shopware AG <info@shopware.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Shopware\Components\SwagImportExport\Transformers;
 
 /**
  * This interface defines the way the transformers must work.
  * Each of them must be able to compose headers and footers, and to transform the data in both directions.
  *
+ * @package Shopware\Components\SwagImportExport\Transformers
  */
 interface DataTransformerAdapter
 {
@@ -29,31 +37,4 @@ interface DataTransformerAdapter
      * @param $data
      */
     public function transformBackward($data);
-
-    /**
-     * Composes the header of the formatted output file.
-     */
-    public function composeHeader();
-
-
-    /**
-     * Composes the footer of the formatted output file.
-     */
-    public function composeFooter();
-
-
-    /**
-     * Parses the header of the formatted input file data.
-     *
-     * @param $data
-     */
-    public function parseHeader($data);
-
-
-    /**
-     * Parses the footer of the formatted input file data.
-     *
-     * @param $data
-     */
-    public function parseFooter($data);
 }
