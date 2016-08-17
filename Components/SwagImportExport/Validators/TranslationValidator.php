@@ -1,4 +1,10 @@
 <?php
+/**
+ * (c) shopware AG <info@shopware.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Shopware\Components\SwagImportExport\Validators;
 
@@ -12,22 +18,18 @@ class TranslationValidator extends Validator
         'int' => array('objectKey', 'languageId'),
     );
 
-    //TODO: check which other fields are required
-    private $requiredFields = array(
-        'objectType',
-        'name',
-    );
-
-    private $snippetData = array(
-        'objectType' => array(
-            'adapters/translations/object_type_not_found',
-            'Object type is required.'
-        ),
-        'name' => array(
-            'adapters/translations/element_name_not_found',
-            'Please provide name'
-        ),
-    );
+    /**
+     * Indexed by field name
+     * Value: snippet name
+     *
+     * @var array
+     */
+    private $requiredFields = [
+        'objectType' => 'adapters/translations/object_type_not_found',
+        'objectKey' => 'adapters/translations/object_key_not_found',
+        'name' => 'adapters/translations/element_name_not_found',
+        'languageId' => 'adapters/translations/language_not_found',
+    ];
 
     /**
      * Checks whether required fields are filled-in
@@ -37,14 +39,12 @@ class TranslationValidator extends Validator
      */
     public function checkRequiredFields($record)
     {
-        foreach ($this->requiredFields as $key) {
-            if (isset($record[$key])) {
+        foreach ($this->requiredFields as $field => $snippet) {
+            if (isset($record[$field])) {
                 continue;
             }
 
-            list($snippetName, $snippetMessage) = $this->snippetData[$key];
-
-            $message = SnippetsHelper::getNamespace()->get($snippetName, $snippetMessage);
+            $message = SnippetsHelper::getNamespace()->get($snippet);
             throw new AdapterException($message);
         }
     }
