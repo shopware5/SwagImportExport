@@ -122,7 +122,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      *
      * @param $data
      */
-    public function parseHeader($data)
+    public function parseHeader(array $data)
     {
     }
 
@@ -131,7 +131,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      *
      * @param $data
      */
-    public function parseFooter($data)
+    public function parseFooter(array $data)
     {
     }
 

@@ -103,6 +103,19 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
     }
 
     /**
+     * @inheritdoc
+     */
+    public function getCapabilities()
+    {
+        return [
+            'install' => true,
+            'update' => true,
+            'enable' => true,
+            'secureUninstall' => true
+        ];
+    }
+
+    /**
      * Install function of the plugin bootstrap.
      *
      * Registers all necessary components and dependencies.
@@ -129,7 +142,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
 
     /**
      * @param string $oldVersion
-     * @return bool
+     * @return array
      * @throws Exception
      * @throws Zend_Db_Adapter_Exception
      */
@@ -181,20 +194,62 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
             $this->get('shopware.cache_manager')->clearProxyCache();
         }
 
-        return true;
+        return [
+            'success' => true,
+            'invalidateCache' => $this->getInvalidateCacheArray()
+        ];
     }
 
     /**
      * Uninstall function of the plugin.
      * Fired from the plugin manager.
      *
-     * @return bool
+     * @return array
      */
     public function uninstall()
     {
-        $this->removeDatabaseTables();
+        $this->secureUninstall();
 
-        return true;
+        $this->removeDatabaseTables();
+        $this->removeAclResource();
+
+        return [
+            'success' => true,
+            'invalidateCache' => $this->getInvalidateCacheArray()
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function secureUninstall()
+    {
+        return [
+            'success' => true,
+            'invalidateCache' => $this->getInvalidateCacheArray()
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function enable()
+    {
+        return [
+            'success' => true,
+            'invalidateCache' => $this->getInvalidateCacheArray()
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function disable()
+    {
+        return [
+            'success' => true,
+            'invalidateCache' => $this->getInvalidateCacheArray()
+        ];
     }
 
     /**
@@ -294,12 +349,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
     {
         $tool = new SchemaTool($this->em);
 
-        $classes = [
-            $this->em->getClassMetadata('Shopware\CustomModels\ImportExport\Session'),
-            $this->em->getClassMetadata('Shopware\CustomModels\ImportExport\Logger'),
-            $this->em->getClassMetadata('Shopware\CustomModels\ImportExport\Profile'),
-            $this->em->getClassMetadata('Shopware\CustomModels\ImportExport\Expression')
-        ];
+        $classes = $this->getDoctrineModels();
 
         try {
             $tool->createSchema($classes);
@@ -314,10 +364,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
     {
         $tool = new SchemaTool($this->em);
 
-        $classes = [
-            $this->em->getClassMetadata('Shopware\CustomModels\ImportExport\Session'),
-            $this->em->getClassMetadata('Shopware\CustomModels\ImportExport\Logger')
-        ];
+        $classes = $this->getDoctrineModels();
 
         $tool->dropSchema($classes);
     }
@@ -506,6 +553,10 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
                 ],
                 'SwagImportExportErrorMode' => [
                     'label' => 'Continue import/export if an error occurs during the process'
+                ]
+            ],
+            'de_DE' => [
+                'SwagImportExportImageMode' => [
                 ],
                 'useCommaDecimal' => [
                     'label' => 'Use comma as decimal separator'
@@ -560,6 +611,26 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         $this->em->flush();
     }
 
+    private function removeAclResource()
+    {
+        $sql = "SELECT id FROM s_core_acl_resources
+                WHERE pluginID = ?;";
+
+        $resourceId = $this->db->fetchOne($sql, [$this->getId()]);
+
+        if (!$resourceId) {
+            return;
+        }
+
+        $resource = $this->em->getRepository(\Shopware\Models\User\Resource::class)->find($resourceId);
+        foreach ($resource->getPrivileges() as $privilege) {
+            $this->em->remove($privilege);
+        }
+
+        $this->em->remove($resource);
+        $this->em->flush();
+    }
+
     private function addConfigDirs()
     {
         /** @var Shopware_Components_Snippet_Manager $snippetManager */
@@ -569,5 +640,29 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         /** @var Enlight_Template_Manager $templateManager */
         $templateManager = $this->get('template');
         $templateManager->addTemplateDir($this->Path() . 'Views/');
+    }
+
+    /**
+     * Helper method to return all the caches, that need to be cleared after
+     * updating / uninstalling / enabling / disabling a plugin
+     *
+     * @return array
+     */
+    private function getInvalidateCacheArray()
+    {
+        return ['config', 'backend', 'proxy'];
+    }
+
+    /**
+     * @return array
+     */
+    private function getDoctrineModels()
+    {
+        return [
+            $this->em->getClassMetadata('Shopware\CustomModels\ImportExport\Session'),
+            $this->em->getClassMetadata('Shopware\CustomModels\ImportExport\Logger'),
+            $this->em->getClassMetadata('Shopware\CustomModels\ImportExport\Profile'),
+            $this->em->getClassMetadata('Shopware\CustomModels\ImportExport\Expression')
+        ];
     }
 }
