@@ -1,9 +1,21 @@
 <?php
 
+/**
+ * (c) shopware AG <info@shopware.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Shopware\Components\SwagImportExport\Utils;
 
 use Shopware\Components\SwagImportExport\DataManagers\DataManager;
 
+/**
+ * Class TreeHelper
+ *
+ * @package Shopware\Components\SwagImportExport\Utils
+ */
 class TreeHelper
 {
     /**
@@ -139,7 +151,7 @@ class TreeHelper
      * @param string $id
      * @param array $node
      * @param string $parentId
-     * @return boolean
+     * @return boolean|array
      */
     public static function getNodeById($id, array $node, $parentId = 'root')
     {

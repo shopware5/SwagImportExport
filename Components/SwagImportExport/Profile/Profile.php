@@ -1,15 +1,25 @@
 <?php
 
+/**
+ * (c) shopware AG <info@shopware.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Shopware\Components\SwagImportExport\Profile;
 
+/**
+ * Class Profile
+ *
+ * @package Shopware\Components\SwagImportExport\Profile
+ */
 class Profile
 {
-    /** @var  $profilEntity \Shopware\CustomModels\ImportExport\Profile */
+    /** @var  $profileEntity \Shopware\CustomModels\ImportExport\Profile */
     private $profileEntity;
     
-    /**
-     * @var array 
-     */
+    /** @var array $configNames */
     private $configNames;
 
     /**
@@ -17,10 +27,10 @@ class Profile
      */
     private $defaultValues = array();
 
-    public function __construct($profile)
+    public function __construct($profile, array $configNames = array())
     {
         $this->profileEntity = $profile;
-        $this->configNames = array('exportConversion', 'tree');
+        $this->configNames = $configNames ?: array('exportConversion', 'tree', 'decimals');
     }
 
     public function getId()
@@ -50,6 +60,8 @@ class Profile
                 return $this->profileEntity->getExpressions();
             case 'tree':
                 return $this->profileEntity->getTree();
+            case 'decimals':
+                return [Shopware()->Plugins()->Backend()->SwagImportExport()->Config(), $this];
             default:
                 throw new \Exception('Config does not exists');
         }

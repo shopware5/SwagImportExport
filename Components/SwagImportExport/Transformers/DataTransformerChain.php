@@ -1,10 +1,19 @@
 <?php
 
+/**
+ * (c) shopware AG <info@shopware.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Shopware\Components\SwagImportExport\Transformers;
 
 /**
  * The responsibility of this class is to execute all the transformers in a predefined order
  * and to pass the output of one as input to the next.
+ *
+ * @package Shopware\Components\SwagImportExport\Transformers
  */
 class DataTransformerChain
 {
@@ -59,11 +68,11 @@ class DataTransformerChain
      * Compose the headers by using the last transformer in the chain.
      * (Always last because that is the closest transformer to the export/import physical file)
      *
-     * @return mixed
+     * @return array
      */
     public function composeHeader()
     {
-        $transformer = end($this->chain);
+        $transformer = $this->getLastComposerTransformer($this->chain);
 
         return $transformer->composeHeader();
     }
@@ -72,11 +81,11 @@ class DataTransformerChain
      * Compose the footers by using the last transformer in the chain.
      * (Always last because that is the closest transformer to the export/import physical file)
      *
-     * @return mixed
+     * @return array
      */
     public function composeFooter()
     {
-        $transformer = end($this->chain);
+        $transformer = $this->getLastComposerTransformer($this->chain);
 
         return $transformer->composeFooter();
     }
@@ -85,12 +94,12 @@ class DataTransformerChain
      * Parse the header data by using the last transformer in the chain.
      * (Always last because that is the closest transformer to the export/import physical file)
      *
-     * @param $data
-     * @return mixed
+     * @param array $data
+     * @return array
      */
     public function parseHeader($data)
     {
-        $transformer = end($this->chain);
+        $transformer = $this->getLastComposerTransformer($this->chain);
 
         return $transformer->parseHeader($data);
     }
@@ -99,13 +108,32 @@ class DataTransformerChain
      * Parse the footer data by using the last transformer in the chain.
      * (Always last because that is the closest transformer to the export/import physical file)
      *
-     * @param $data
-     * @return mixed
+     * @param array $data
+     * @return array
      */
     public function parseFooter($data)
     {
-        $transformer = end($this->chain);
+        $transformer = $this->getLastComposerTransformer($this->chain);
 
         return $transformer->parseFooter($data);
+    }
+
+    /**
+     * Returns the last transformer implementing the composer-interface.
+     *
+     * @param array $transformers
+     * @return ComposerInterface
+     * @throws \Exception
+     */
+    private function getLastComposerTransformer($transformers)
+    {
+        $transformers = array_reverse($transformers);
+        foreach ($transformers as $transformer) {
+            if ($transformer instanceof ComposerInterface) {
+                return $transformer;
+            }
+        }
+
+        throw new \Exception('No composer transformer found.');
     }
 }

@@ -1,13 +1,22 @@
 <?php
 
+/**
+ * (c) shopware AG <info@shopware.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Shopware\Components\SwagImportExport\Transformers;
 
 use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 
 /**
- * The responsibility of this class is to restructure the flat array to tree and vise versa
+ * The responsibility of this class is to restructure the flat array to tree and vise ver
+ *
+ * @package Shopware\Components\SwagImportExport\Transformers
  */
-class FlattenTransformer implements DataTransformerAdapter
+class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
 {
     protected $config;
     protected $mainIterationPart;
@@ -1026,6 +1035,10 @@ class FlattenTransformer implements DataTransformerAdapter
         }
     }
 
+    /**
+     * @param array $node
+     * @param string|null $path
+     */
     public function collectIterationData($node, $path = null)
     {
         foreach ($node as $key => $value) {
