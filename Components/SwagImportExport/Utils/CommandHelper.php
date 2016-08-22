@@ -1,4 +1,10 @@
 <?php
+/**
+ * (c) shopware AG <info@shopware.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Shopware\Components\SwagImportExport\Utils;
 
@@ -7,6 +13,8 @@ use Shopware\Components\SwagImportExport\Factories\DataFactory;
 use Shopware\Components\SwagImportExport\Factories\FileIOFactory;
 use Shopware\Components\SwagImportExport\FileIO\FileReader;
 use Shopware\Components\SwagImportExport\FileIO\FileWriter;
+use Shopware\Components\SwagImportExport\Logger\LogDataStruct;
+use Shopware\Components\SwagImportExport\Logger\Logger;
 use Shopware\Components\SwagImportExport\Profile\Profile;
 use Shopware\Components\SwagImportExport\Transformers\DataTransformerChain;
 use Shopware\Components\SwagImportExport\StatusLogger;
@@ -124,7 +132,7 @@ class CommandHelper
         $dbAdapter = $dataFactory->createDbAdapter($profile->getType());
         $dataSession = $dataFactory->loadSession($postData);
 
-        $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession);
+        $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession, $this->getLogger());
 
         $colOpts = $dataFactory->createColOpts($postData['columnOptions']);
         $limit = $dataFactory->createLimit($postData['limit']);
@@ -150,6 +158,8 @@ class CommandHelper
      */
     public function exportAction()
     {
+        $logger = $this->getLogger();
+
         $postData = array(
             'profileId' => (int) $this->profileEntity->getId(),
             'type' => 'export',
@@ -177,7 +187,7 @@ class CommandHelper
         $dataSession = $dataFactory->loadSession($postData);
 
         //create dataIO
-        $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession);
+        $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession, $logger);
 
         $colOpts = $dataFactory->createColOpts($postData['columnOptions']);
         $limit = $dataFactory->createLimit($postData['limit']);
@@ -196,9 +206,6 @@ class CommandHelper
         /** @var FileWriter $fileWriter */
         $fileWriter = $fileFactory->createFileWriter($postData, $fileHelper);
 
-        $fileLogWriter = $fileFactory->createFileWriter(array('format' => 'csv'), $fileHelper);
-        $logger = $dataFactory->loadLogger($dataSession, $fileLogWriter);
-
         /** @var DataTransformerChain $dataTransformerChain */
         $dataTransformerChain = $this->Plugin()->getDataTransformerFactory()
             ->createDataTransformerChain($profile, array('isTree' => $fileWriter->hasTreeStructure()));
@@ -211,7 +218,7 @@ class CommandHelper
 
         $logger->write($message, 'false');
 
-        $logData = array(
+        $logData = new LogDataStruct(
             date("Y-m-d H:i:s"),
             $post['fileName'],
             $profile->getName(),
@@ -264,7 +271,7 @@ class CommandHelper
         $dataSession = $dataFactory->loadSession($postData);
 
         //create dataIO
-        $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession);
+        $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession, $this->getLogger());
 
         $position = $dataIO->getSessionPosition();
         $position = $position == null ? 0 : $position;
@@ -295,10 +302,11 @@ class CommandHelper
 
         $inputFile = $postData['importFile'];
 
+        $logger = $this->getLogger();
+
         // we create the file reader that will read the result file
         /** @var FileIOFactory $fileFactory */
         $fileFactory = $this->Plugin()->getFileIOFactory();
-        $fileHelper = $fileFactory->createFileHelper();
         $fileReader = $fileFactory->createFileReader($postData, null);
 
         //load profile
@@ -316,9 +324,6 @@ class CommandHelper
 
         $dbAdapter = $dataFactory->createDbAdapter($profile->getType());
         $dataSession = $dataFactory->loadSession($postData);
-
-        $fileLogWriter = $fileFactory->createFileWriter(array('format' => 'csv'), $fileHelper);
-        $logger = $dataFactory->loadLogger($dataSession, $fileLogWriter);
 
         //create dataIO
         $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession, $logger);
@@ -367,7 +372,8 @@ class CommandHelper
 
             $this->sessionId = $post['sessionId'];
 
-            if ($dataSession->getTotalCount() > 0
+            if (
+                $dataSession->getTotalCount() > 0
                 && ($dataSession->getTotalCount() == $post['position'])
                 && $logger->getMessage() === null
             ) {
@@ -375,22 +381,22 @@ class CommandHelper
 
                 $logger->write($message, 'false');
 
-                $logData = array(
+                $logDataStruct = new LogDataStruct(
                     date("Y-m-d H:i:s"),
                     $inputFile,
                     $profile->getName(),
                     $message,
-                    'true'
+                    'false'
                 );
 
-                $logger->writeToFile($logData);
+                $logger->writeToFile($logDataStruct);
             }
 
             return array('success' => true, 'data' => $post);
         } catch (\Exception $e) {
             $logger->write($e->getMessage(), 'true');
 
-            $logData = array(
+            $logDataStruct = new LogDataStruct(
                 date("Y-m-d H:i:s"),
                 $inputFile,
                 $profile->getName(),
@@ -398,7 +404,7 @@ class CommandHelper
                 'false'
             );
 
-            $logger->writeToFile($logData);
+            $logger->writeToFile($logDataStruct);
 
             throw $e;
         }
@@ -437,5 +443,13 @@ class CommandHelper
     protected function Plugin()
     {
         return Shopware()->Plugins()->Backend()->SwagImportExport();
+    }
+
+    /**
+     * @return Logger
+     */
+    private function getLogger()
+    {
+        return Logger::createLogger(Shopware()->Container()->get('models'));
     }
 }

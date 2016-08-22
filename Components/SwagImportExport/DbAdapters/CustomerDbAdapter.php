@@ -1,4 +1,10 @@
 <?php
+/**
+ * (c) shopware AG <info@shopware.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
@@ -361,8 +367,6 @@ class CustomerDbAdapter implements DataDbAdapter
                 $manager->flush();
 
                 $this->insertCustomerAttributes($customerData, $customer->getId(), $createNewCustomer);
-
-                $manager->clear();
             } catch (AdapterException $e) {
                 $message = $e->getMessage();
                 $this->saveMessage($message);

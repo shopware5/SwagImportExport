@@ -1,4 +1,10 @@
 <?php
+/**
+ * (c) shopware AG <info@shopware.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Tests\Shopware\ImportExport;
 
@@ -51,16 +57,6 @@ class FactoryTest extends ImportExportTestHelper
         //tests articles data adapter
         $articlesDbAdapter = $dataFactory->createDbAdapter('articles');
         $this->assertTrue($articlesDbAdapter instanceof ArticlesDbAdapter, 'Is not a instance of ArticlesDbAdapter');
-    }
-
-    public function testDataIO()
-    {
-        $type = 'categories';
-        $postData = $this->getPostData();
-
-        $dataFactory = $this->Plugin()->getDataFactory();
-        $dataIO = $dataFactory->getAdapter($type, $postData);
-        $this->assertTrue($dataIO instanceof DataIO, 'Is not a instance of ArticlesDbAdapter');
     }
 
     public function testUtils()

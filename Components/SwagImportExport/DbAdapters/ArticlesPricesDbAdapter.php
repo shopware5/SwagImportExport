@@ -1,4 +1,10 @@
 <?php
+/**
+ * (c) shopware AG <info@shopware.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
@@ -300,7 +306,6 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                 $this->getManager()->persist($price);
 
                 $this->getManager()->flush();
-                $this->getManager()->clear();
             } catch (AdapterException $e) {
                 $message = $e->getMessage();
                 $this->saveMessage($message);

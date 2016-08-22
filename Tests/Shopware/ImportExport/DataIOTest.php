@@ -1,6 +1,14 @@
 <?php
+/**
+ * (c) shopware AG <info@shopware.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Tests\Shopware\ImportExport;
+
+use Shopware\Components\SwagImportExport\Logger\Logger;
 
 class DataIOTest extends ImportExportTestHelper
 {
@@ -25,7 +33,7 @@ class DataIOTest extends ImportExportTestHelper
         $dataFactory = $this->Plugin()->getDataFactory();
         $dataSession = $dataFactory->loadSession($postData);
 
-        $dataIO = $dataFactory->createDataIO($postData, $dataSession);
+        $dataIO = $dataFactory->createDataIO($postData, $dataSession, $this->getLogger());
 
         $dataIO->preloadRecordIds();
 
@@ -34,47 +42,6 @@ class DataIOTest extends ImportExportTestHelper
         $this->assertEquals(count($allIds), 62);
     }
 
-//    public function testCategoriesRead()
-//    {
-//        $postData = $this->getPostData();
-//
-//        $dataFactory = $this->Plugin()->getDataFactory();
-//
-//        $dataIO = $dataFactory->createDataIO($postData);
-//
-//        $dataIO->preloadRecordIds();
-//
-//        $rawData1 = $dataIO->read(11);
-//        $rawData2 = $dataIO->read(21);
-//        $rawData3 = $dataIO->read(255);
-//
-//        $this->assertEquals(count($rawData1), 11);
-//        $this->assertEquals(count($rawData2), 21);
-//        $this->assertEquals(count($rawData3), 40);
-//    }
-//
-//    public function testSessionState()
-//    {
-//        $postData = $this->getPostData();
-//
-//        $dataFactory = $this->Plugin()->getDataFactory();
-//
-//        $dataIO = $dataFactory->createDataIO($postData);
-//
-//        $this->assertEquals($dataIO->getSessionState(), 'new');
-//    }
-//
-//    public function testStartSession()
-//    {
-//        $postData = $this->getPostData();
-//
-//        $dataFactory = $this->Plugin()->getDataFactory();
-//
-//        $dataIO = $dataFactory->createDataIO($postData);
-//
-//        $dataIO->startSession();
-//    }
-
     public function testGenerateDirectorty()
     {
         $postData = $this->getPostData();
@@ -82,7 +49,7 @@ class DataIOTest extends ImportExportTestHelper
         $dataFactory = $this->Plugin()->getDataFactory();
         $dataSession = $dataFactory->loadSession($postData);
 
-        $dataIO = $dataFactory->createDataIO($postData, $dataSession);
+        $dataIO = $dataFactory->createDataIO($postData, $dataSession, $this->getLogger());
 
         $directory = $dataIO->getDirectory();
 
@@ -91,25 +58,11 @@ class DataIOTest extends ImportExportTestHelper
         $this->assertEquals($directory, $expectedCategory);
     }
 
-//    public function testArticlesRead()
-//    {
-//        $postData = array(
-//            'filter' => '',
-//            'limit' => array('limit' => 140, 'offset' => 0)
-//        );
-//
-//        $dataFactory = $this->Plugin()->getDataFactory();
-//
-//        $dataIO = $dataFactory->getAdapter('articles', $postData);
-//
-//        $dataIO->preloadRecordIds();
-//
-//        $rawData1 = $dataIO->read(11);
-//        $rawData2 = $dataIO->read(21);
-//        $rawData3 = $dataIO->read(255);
-//
-//        $this->assertEquals(count($rawData1), 11);
-//        $this->assertEquals(count($rawData2), 21);
-//        $this->assertEquals(count($rawData3), 140);
-//    }
+    /**
+     * @return Logger
+     */
+    private function getLogger()
+    {
+        return Logger::createLogger(Shopware()->Container()->get('models'));
+    }
 }
