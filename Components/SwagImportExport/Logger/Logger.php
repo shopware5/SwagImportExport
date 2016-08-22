@@ -1,19 +1,29 @@
 <?php
+/**
+ * (c) shopware AG <info@shopware.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Shopware\Components\SwagImportExport\Logger;
 
 use Shopware\Components\Model\ModelManager;
+use Shopware\Components\SwagImportExport\Factories\FileIOFactory;
+use Shopware\Components\SwagImportExport\FileIO\CsvFileWriter;
 use Shopware\Components\SwagImportExport\FileIO\FileWriter;
+use Shopware\Components\SwagImportExport\Utils\FileHelper;
 use Shopware\CustomModels\ImportExport\Logger as LoggerEntity;
 use Shopware\CustomModels\ImportExport\Repository;
-use Shopware\Components\SwagImportExport\Session\Session;
 
-class Logger
+class Logger implements LoggerInterface
 {
+    const WRITER_FORMAT = 'csv';
+
     /**
-     * @var ModelManager $manager
+     * @var ModelManager $modelManager
      */
-    protected $manager;
+    protected $modelManager;
 
     /**
      * @var Repository $loggerRepository
@@ -26,74 +36,43 @@ class Logger
     protected $loggerEntity;
 
     /**
-     * @var Session $session
-     */
-    protected $session;
-
-    /**
      * @var FileWriter $fileWriter
      */
     protected $fileWriter;
 
     /**
-     * @param Session $session
      * @param FileWriter $fileWriter
+     * @param ModelManager $modelManager
      */
-    public function __construct(Session $session, $fileWriter)
+    public function __construct(FileWriter $fileWriter, ModelManager $modelManager)
     {
-        $this->session = $session;
         $this->fileWriter = $fileWriter;
+        $this->modelManager = $modelManager;
+        $this->loggerRepository = $this->modelManager->getRepository(LoggerEntity::class);
     }
 
     /**
-     * Returns entity manager
-     *
-     * @return ModelManager
+     * @param ModelManager $modelManager
+     * @return Logger
      */
-    public function getManager()
+    public static function createLogger(ModelManager $modelManager)
     {
-        if ($this->manager === null) {
-            $this->manager = Shopware()->Models();
-        }
-
-        return $this->manager;
+        return new Logger(
+            self::createCsvFileWriter(),
+            $modelManager
+        );
     }
 
     /**
-     * @return LoggerEntity|null
-     */
-    public function getLoggerEntity()
-    {
-        if ($this->loggerEntity === null) {
-            //fixes doctrine clear bug
-            $loggerId = $this->session->getLogger()->getId();
-
-            if (!$loggerId) {
-                return null;
-            }
-
-            $this->loggerEntity = $this->getLoggerRepository()->find($loggerId);
-        }
-
-        return $this->loggerEntity;
-    }
-
-    /**
-     * @return FileWriter
-     */
-    public function getFileWriter()
-    {
-        return $this->fileWriter;
-    }
-
-    /**
-     * @return string
+     * @return string|null
      */
     public function getMessage()
     {
-        $logger = $this->getLoggerEntity();
+        if (!$this->loggerEntity) {
+            return null;
+        }
 
-        return $logger->getMessage();
+        return $this->loggerEntity->getMessage();
     }
 
     /**
@@ -102,86 +81,62 @@ class Logger
      */
     public function write($messages, $status)
     {
-        $logger = $this->getLoggerEntity();
+        $loggerModel = new LoggerEntity();
 
-        if(!$logger) {
-            return;
+        if (!is_array($messages)) {
+            $messages = [ $messages ];
         }
 
-        if (is_array($messages)) {
-            $appendMsg = implode(';', $messages);
-        } else {
-            $appendMsg = $messages;
-        }
+        $messages = implode(';', $messages);
+        $loggerModel->setMessage($messages);
+        $loggerModel->setCreatedAt('now');
+        $loggerModel->setStatus($status);
 
-        $message = $logger->getMessage();
-
-        if ($message) {
-            $newMessage = $message . "\n" . $appendMsg;
-        } else {
-            $newMessage = $appendMsg;
-        }
-
-        $logger->setMessage($newMessage);
-        $logger->setCreatedAt('now');
-
-        if ($status !== null) {
-            $logger->setStatus($status);
-        }
-
-        $this->getManager()->persist($logger);
-        $this->getManager()->flush();
+        $this->modelManager->persist($loggerModel);
+        $this->modelManager->flush();
     }
 
     /**
-     * @param $data
+     * @param LogDataStruct $logDataStruct
      */
-    public function writeToFile($data)
+    public function writeToFile(LogDataStruct $logDataStruct)
     {
         $file = $this->getLogFile();
-
-        $this->getFileWriter()->writeRecords($file, array($data));
+        $this->fileWriter->writeRecords($file, array($logDataStruct->toArray()));
     }
 
     /**
      * @return string
      */
-    public function getLogFile()
+    private function getLogFile()
     {
-        if ($this->getPluginBootstrap()->checkMinVersion('5.1.0')) {
-            $file = Shopware()->DocPath() . 'var/log/importexport.log';
-        } else {
-            $file = Shopware()->DocPath() . 'logs/importexport.log';
+        $filePath = Shopware()->DocPath() . 'var/log/importexport.log';
+
+        if (!file_exists($filePath)) {
+            $this->createLogFile($filePath);
         }
 
-        if (!file_exists($file)) {
-            $columns = array('date/time', 'file', 'profile', 'message', 'successFlag');
-
-            $this->getFileWriter()->writeHeader($file, $columns);
-        }
-
-        return $file;
+        return $filePath;
     }
 
     /**
-     * Helper Method to get access to the session repository.
-     *
-     * @return Repository
+     * @param string $filePath
      */
-    public function getLoggerRepository()
+    private function createLogFile($filePath)
     {
-        if ($this->loggerRepository === null) {
-            $this->loggerRepository = Shopware()->Models()->getRepository('Shopware\CustomModels\ImportExport\Logger');
-        }
-
-        return $this->loggerRepository;
+        $columns = array('date/time', 'file', 'profile', 'message', 'successFlag');
+        $this->fileWriter->writeHeader($filePath, $columns);
     }
 
     /**
-     * @return \Shopware_Plugins_Backend_SwagImportExport_Bootstrap
+     * @return CsvFileWriter
      */
-    private function getPluginBootstrap()
+    private static function createCsvFileWriter()
     {
-        return Shopware()->Plugins()->Backend()->SwagImportExport();
+        /** @var FileIOFactory $fileIOFactory */
+        $fileIOFactory = FileIOFactory::Instance();
+        $fileHelper = new FileHelper();
+
+        return $fileIOFactory->createFileWriter([ 'format' => self::WRITER_FORMAT ], $fileHelper);
     }
 }

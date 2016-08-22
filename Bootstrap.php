@@ -8,6 +8,8 @@
  */
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\DBAL\Schema\AbstractSchemaManager;
+use Doctrine\DBAL\Schema\Index;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Tools\ToolsException;
@@ -127,7 +129,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
     {
         // Check if Shopware version matches
         if (!$this->assertMinimumVersion('5.2.0')) {
-            throw new Exception("This plugin requires Shopware 5.1.0 or a later version");
+            throw new Exception("This plugin requires Shopware 5.2.0 or a later version");
         }
 
         $this->createDatabase();
@@ -150,7 +152,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
     {
         // Check if Shopware version matches
         if (!$this->assertMinimumVersion('5.2.0')) {
-            throw new Exception("This plugin requires Shopware 5.1.0 or a later version");
+            throw new Exception("This plugin requires Shopware 5.2.0 or a later version");
         }
 
         $this->createAclResource();
@@ -192,6 +194,15 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
             );
 
             $this->get('shopware.cache_manager')->clearProxyCache();
+        }
+
+        if (version_compare($oldVersion, '1.2.2', '<')) {
+            try {
+                $constraint = $this->getForeignKeyConstraint('s_import_export_session', 'log_id');
+                $this->db->exec('ALTER TABLE s_import_export_session DROP FOREIGN KEY ' . $constraint);
+            } catch (Exception $e) {
+            }
+            $this->db->exec('ALTER TABLE s_import_export_session DROP COLUMN log_id');
         }
 
         return [
@@ -348,12 +359,15 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
     private function createDatabase()
     {
         $tool = new SchemaTool($this->em);
-
         $classes = $this->getDoctrineModels();
 
-        try {
+        $tableNames = $this->removeTablePrefix($tool, $classes);
+
+        /** @var ModelManager $modelManger */
+        $modelManger = $this->get('models');
+        $schemaManager = $modelManger->getConnection()->getSchemaManager();
+        if (!$schemaManager->tablesExist($tableNames)) {
             $tool->createSchema($classes);
-        } catch (ToolsException $e) {
         }
     }
 
@@ -363,9 +377,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
     private function removeDatabaseTables()
     {
         $tool = new SchemaTool($this->em);
-
         $classes = $this->getDoctrineModels();
-
         $tool->dropSchema($classes);
     }
 
@@ -553,10 +565,6 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
                 ],
                 'SwagImportExportErrorMode' => [
                     'label' => 'Continue import/export if an error occurs during the process'
-                ]
-            ],
-            'de_DE' => [
-                'SwagImportExportImageMode' => [
                 ],
                 'useCommaDecimal' => [
                     'label' => 'Use comma as decimal separator'
@@ -664,5 +672,40 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
             $this->em->getClassMetadata('Shopware\CustomModels\ImportExport\Profile'),
             $this->em->getClassMetadata('Shopware\CustomModels\ImportExport\Expression')
         ];
+    }
+
+    /**
+     * @param SchemaTool $tool
+     * @param array $classes
+     * @return array
+     */
+    private function removeTablePrefix(SchemaTool $tool, array $classes)
+    {
+        $schema = $tool->getSchemaFromMetadata($classes);
+        $tableNames = [];
+        foreach ($schema->getTableNames() as $tableName) {
+            $tableNames[] = explode('.', $tableName)[1];
+        }
+        return $tableNames;
+    }
+
+    /**
+     * @param string $table
+     * @param string $column
+     * @return string
+     * @throws Exception
+     */
+    private function getForeignKeyConstraint($table, $column)
+    {
+        $schemaManager = $this->get('dbal_connection')->getSchemaManager();
+        /** @var \Doctrine\DBAL\Schema\ForeignKeyConstraint[] $keys */
+        $keys = $schemaManager->listTableForeignKeys($table);
+
+        foreach ($keys as $key) {
+            if (in_array($column, $key->getLocalColumns())) {
+                return $key->getName();
+            }
+        }
+        throw new \Exception("Foreign key constraint not found.");
     }
 }

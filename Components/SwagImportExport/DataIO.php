@@ -1,8 +1,15 @@
 <?php
+/**
+ * (c) shopware AG <info@shopware.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Shopware\Components\SwagImportExport;
 
 use Shopware\Components\SwagImportExport\DbAdapters\DataDbAdapter;
+use Shopware\Components\SwagImportExport\Logger\LogDataStruct;
 use Shopware\Components\SwagImportExport\Logger\Logger;
 use \Shopware\Components\SwagImportExport\Profile\Profile;
 use Shopware\Components\SwagImportExport\Session\Session;
@@ -165,7 +172,7 @@ class DataIO
 
         $this->logger->write($messages, $status);
 
-        $logData = array(
+        $logDataStruct = new LogDataStruct(
             date("Y-m-d H:i:s"),
             $fileName,
             $profileName,
@@ -173,7 +180,7 @@ class DataIO
             $status
         );
 
-        $this->logger->writeToFile($logData);
+        $this->logger->writeToFile($logDataStruct);
     }
 
     public function getUnprocessedData()

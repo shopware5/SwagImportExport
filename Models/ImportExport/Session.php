@@ -1,33 +1,9 @@
 <?php
-
 /**
- * Shopware 4.2
- * Copyright © shopware AG
+ * (c) shopware AG <info@shopware.com>
  *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
- *
- * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * "Shopware" is a registered trademark of shopware AG.
- * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
- */
-/**
- * Shopware ImportExport Plugin
- *
- * @category  Shopware
- * @package   Shopware\Components\Console\Command
- * @copyright Copyright (c) 2014, shopware AG (http://www.shopware.de)
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace Shopware\CustomModels\ImportExport;
@@ -62,14 +38,6 @@ class Session extends ModelEntity
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $profile;
-
-    /**
-     * @var Logger $logger
-     *
-     * @ORM\OneToOne(targetEntity="Shopware\CustomModels\ImportExport\Logger", cascade={"persist", "refresh"})
-     * @ORM\JoinColumn(name="log_id", referencedColumnName="id")
-     */
-    protected $logger;
 
     /**
      * @var string $type
@@ -157,14 +125,6 @@ class Session extends ModelEntity
     public function getProfile()
     {
         return $this->profile;
-    }
-
-    /**
-     * @return Logger
-     */
-    public function getLogger()
-    {
-        return $this->logger;
     }
 
     /**
@@ -266,17 +226,6 @@ class Session extends ModelEntity
     public function setProfile(Profile $profile = null)
     {
         $this->profile = $profile;
-
-        return $this;
-    }
-
-    /**
-     * @param Logger $logger
-     * @return Session
-     */
-    public function setLogger(Logger $logger = null)
-    {
-        $this->logger = $logger;
 
         return $this;
     }

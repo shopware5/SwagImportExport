@@ -1,4 +1,10 @@
 <?php
+/**
+ * (c) shopware AG <info@shopware.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Shopware\Components\SwagImportExport\Factories;
 
@@ -10,37 +16,18 @@ use Shopware\Components\SwagImportExport\Utils\DataColumnOptions;
 use Shopware\Components\SwagImportExport\Utils\DataLimit;
 use Shopware\Components\SwagImportExport\Utils\DataFilter;
 use Shopware\CustomModels\ImportExport\Session as SessionEntity;
-use Shopware\CustomModels\ImportExport\Logger as LoggerEntity;
 
 class DataFactory extends \Enlight_Class implements \Enlight_Hook
 {
-    private $cache;
-    
     private $sessionRepository;
-
-    /**
-     * @param string $adapterType
-     * @param array $postData
-     * @return \Shopware\Components\SwagImportExport\DataIO
-     */
-    public function getAdapter($adapterType, $postData)
-    {
-        $adapter = $this->cache[$adapterType];
-
-        if ($adapter === null) {
-            $adapter = $this->createDataIO($adapterType, $postData);
-        }
-        
-        return $adapter;
-    }
 
     /**
      * @param $dbAdapter
      * @param $dataSession
-     * @param $logger
+     * @param Logger $logger
      * @return DataIO
      */
-    public function createDataIO($dbAdapter, $dataSession, $logger)
+    public function createDataIO($dbAdapter, $dataSession, Logger $logger)
     {
         return new DataIO($dbAdapter, $dataSession, $logger);
     }
@@ -111,6 +98,10 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
         }
     }
 
+    /**
+     * @param array $data
+     * @return Session
+     */
     public function loadSession($data)
     {
         $sessionId = $data['sessionId'];
@@ -119,22 +110,9 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
 
         if (!$sessionEntity) {
             $sessionEntity = new SessionEntity();
-            $loggerEntity = new LoggerEntity();
-            $loggerEntity->setCreatedAt();
-
-            $sessionEntity->setLogger($loggerEntity);
         }
 
-        $session = $this->createSession($sessionEntity);
-
-        return $session;
-    }
-
-    public function loadLogger(Session $session, $fileWriter)
-    {
-        $logger = $this->createLogger($session, $fileWriter);
-
-        return $logger;
+        return $this->createSession($sessionEntity);
     }
 
     /**
@@ -186,11 +164,6 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     protected function createSession(SessionEntity $sessionEntity)
     {
         return new Session($sessionEntity);
-    }
-
-    protected function createLogger($session, $fileWriter)
-    {
-        return new Logger($session, $fileWriter);
     }
 
     /**

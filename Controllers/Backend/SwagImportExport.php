@@ -8,6 +8,8 @@
  */
 
 use Shopware\Components\SwagImportExport\DataWorkflow;
+use Shopware\Components\SwagImportExport\Logger\LogDataStruct;
+use Shopware\Components\SwagImportExport\Logger\Logger;
 use Shopware\Components\SwagImportExport\Utils\TreeHelper;
 use Shopware\Components\SwagImportExport\Utils\DataHelper;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
@@ -477,7 +479,8 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
         $dbAdapter = $dataFactory->createDbAdapter($profile->getType());
         $dataSession = $dataFactory->loadSession($postData);
-        $logger = $dataFactory->loadLogger($dataSession);
+
+        $logger = $this->getLogger($postData);
 
         $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession, $logger);
 
@@ -542,8 +545,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $fileHelper = $fileFactory->createFileHelper();
         $fileWriter = $fileFactory->createFileWriter($postData, $fileHelper);
 
-        $fileLogWriter = $fileFactory->createFileWriter(array('format' => 'csv'), $fileHelper);
-        $logger = $dataFactory->loadLogger($dataSession, $fileLogWriter);
+        $logger = $this->getLogger($postData);
 
         //create dataIO
         $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession, $logger);
@@ -572,7 +574,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             $message = $post['position'] . ' ' . $profile->getType() . ' exported successfully';
             $logger->write($message, 'false');
 
-            $logData = array(
+            $logDataStruct = new LogDataStruct(
                 date("Y-m-d H:i:s"),
                 $post['fileName'],
                 $profile->getName(),
@@ -580,14 +582,14 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                 'true'
             );
 
-            $logger->writeToFile($logData);
+            $logger->writeToFile($logDataStruct);
 
             unset($post['filter']);
             $this->View()->assign(array('s' => $profile, 'success' => true, 'data' => $post));
         } catch (Exception $e) {
             $logger->write($e->getMessage(), 'true');
 
-            $logData = array(
+            $logDataStruct = new LogDataStruct(
                 date("Y-m-d H:i:s"),
                 $postData['fileName'],
                 $profile->getName(),
@@ -595,7 +597,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                 'false'
             );
 
-            $logger->writeToFile($logData);
+            $logger->writeToFile($logDataStruct);
 
             throw $e;
         }
@@ -645,7 +647,8 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
         $dbAdapter = $dataFactory->createDbAdapter($profile->getType());
         $dataSession = $dataFactory->loadSession($postData);
-        $logger = $dataFactory->loadLogger($dataSession);
+
+        $logger = $this->getLogger($postData);
 
         // create dataIO
         $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession, $logger);
@@ -705,9 +708,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
         $dataSession = $dataFactory->loadSession($postData);
 
-        $fileLogWriter = $fileFactory->createFileWriter(array('format' => 'csv'), $fileHelper);
-        /* @var $logger Shopware\Components\SwagImportExport\Logger\Logger */
-        $logger = $dataFactory->loadLogger($dataSession, $fileLogWriter);
+        $logger = $this->getLogger($postData);
 
         // create dataIO
         $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession, $logger);
@@ -773,7 +774,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
                     $logger->write($message, 'false');
 
-                    $logData = array(
+                    $logDataStruct = new LogDataStruct(
                         date("Y-m-d H:i:s"),
                         $inputFile,
                         $profile->getName(),
@@ -781,7 +782,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                         'true'
                     );
 
-                    $logger->writeToFile($logData);
+                    $logger->writeToFile($logDataStruct);
                 }
             }
 
@@ -792,7 +793,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         } catch (\Exception $e) {
             $logger->write($e->getMessage(), 'true');
 
-            $logData = array(
+            $logDataStruct = new LogDataStruct(
                 date("Y-m-d H:i:s"),
                 $inputFile,
                 $profile->getName(),
@@ -800,7 +801,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                 'false'
             );
 
-            $logger->writeToFile($logData);
+            $logger->writeToFile($logDataStruct);
 
             $this->View()->assign(array('success' => false, 'msg' => $e->getMessage()));
         }
@@ -1416,5 +1417,13 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         }
 
         return $data;
+    }
+
+    /**
+     * @return Logger
+     */
+    private function getLogger()
+    {
+        return Logger::createLogger($this->get('models'));
     }
 }
