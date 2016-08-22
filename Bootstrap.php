@@ -21,6 +21,7 @@ use Shopware\Components\SwagImportExport\Factories\DataFactory;
 use Shopware\Components\SwagImportExport\Factories\DataTransformerFactory;
 use Shopware\Components\SwagImportExport\Factories\FileIOFactory;
 use Shopware\Components\SwagImportExport\Factories\ProfileFactory;
+use Shopware\Subscriber\DIContainer;
 
 /**
  * Shopware SwagImportExport Plugin - Bootstrap
@@ -275,8 +276,9 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         $classLoader->register();
         $config->addCustomStringFunction('GroupConcat', 'DoctrineExtensions\Query\Mysql\GroupConcat');
 
-        $this->Application()->Loader()->registerNamespace('Shopware\Components', $this->Path() . 'Components/');
-        $this->Application()->Loader()->registerNamespace('Shopware\Commands', $this->Path() . 'Commands/');
+        $this->get('loader')->registerNamespace('Shopware\Components', $this->Path() . 'Components/');
+        $this->get('loader')->registerNamespace('Shopware\Commands', $this->Path() . 'Commands/');
+        $this->get('loader')->registerNamespace('Shopware\Subscriber', $this->Path() . 'Subscriber/');
     }
 
     private function createDirectories()
@@ -405,17 +407,25 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
     protected function registerEvents()
     {
         $this->subscribeEvent(
+            'Enlight_Controller_Front_StartDispatch',
+            'onStartDispatch'
+        );
+
+        $this->subscribeEvent(
             'Enlight_Controller_Dispatcher_ControllerPath_Backend_SwagImportExport',
             'getBackendController'
         );
+
         $this->subscribeEvent(
             'Enlight_Controller_Dispatcher_ControllerPath_Backend_SwagImportExportCron',
             'getCronjobController'
         );
+
         $this->subscribeEvent(
             'Enlight_Controller_Action_PostDispatch_Backend_Index',
             'injectBackendAceEditor'
         );
+
         $this->subscribeEvent(
             'Shopware_Console_Add_Command',
             'onAddConsoleCommand'
@@ -425,6 +435,23 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
             'Enlight_Controller_Dispatcher_ControllerPath_Frontend_SwagImportExport',
             'getFrontendController'
         );
+    }
+
+    /**
+     * Subscriber registration
+     */
+    public function onStartDispatch()
+    {
+        $this->registerMyNamespace();
+        $container = $this->get('service_container');
+
+        $subscribers = [
+            new DIContainer($container)
+        ];
+
+        foreach ($subscribers as $subscriber) {
+            $this->get('events')->addSubscriber($subscriber);
+        }
     }
 
     /**
