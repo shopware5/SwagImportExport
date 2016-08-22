@@ -1424,6 +1424,6 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
      */
     private function getLogger()
     {
-        return Logger::createLogger($this->get('models'));
+        return Shopware()->Container()->get('swag_import_export.logger');
     }
 }

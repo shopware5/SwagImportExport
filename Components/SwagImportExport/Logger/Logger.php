@@ -9,17 +9,12 @@
 namespace Shopware\Components\SwagImportExport\Logger;
 
 use Shopware\Components\Model\ModelManager;
-use Shopware\Components\SwagImportExport\Factories\FileIOFactory;
-use Shopware\Components\SwagImportExport\FileIO\CsvFileWriter;
 use Shopware\Components\SwagImportExport\FileIO\FileWriter;
-use Shopware\Components\SwagImportExport\Utils\FileHelper;
 use Shopware\CustomModels\ImportExport\Logger as LoggerEntity;
 use Shopware\CustomModels\ImportExport\Repository;
 
 class Logger implements LoggerInterface
 {
-    const WRITER_FORMAT = 'csv';
-
     /**
      * @var ModelManager $modelManager
      */
@@ -49,18 +44,6 @@ class Logger implements LoggerInterface
         $this->fileWriter = $fileWriter;
         $this->modelManager = $modelManager;
         $this->loggerRepository = $this->modelManager->getRepository(LoggerEntity::class);
-    }
-
-    /**
-     * @param ModelManager $modelManager
-     * @return Logger
-     */
-    public static function createLogger(ModelManager $modelManager)
-    {
-        return new Logger(
-            self::createCsvFileWriter(),
-            $modelManager
-        );
     }
 
     /**
@@ -126,17 +109,5 @@ class Logger implements LoggerInterface
     {
         $columns = array('date/time', 'file', 'profile', 'message', 'successFlag');
         $this->fileWriter->writeHeader($filePath, $columns);
-    }
-
-    /**
-     * @return CsvFileWriter
-     */
-    private static function createCsvFileWriter()
-    {
-        /** @var FileIOFactory $fileIOFactory */
-        $fileIOFactory = FileIOFactory::Instance();
-        $fileHelper = new FileHelper();
-
-        return $fileIOFactory->createFileWriter([ 'format' => self::WRITER_FORMAT ], $fileHelper);
     }
 }

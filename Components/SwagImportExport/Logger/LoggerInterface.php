@@ -8,8 +8,6 @@
 
 namespace Shopware\Components\SwagImportExport\Logger;
 
-use Shopware\Components\Model\ModelManager;
-
 interface LoggerInterface
 {
     /**
@@ -33,12 +31,4 @@ interface LoggerInterface
      * @param LogDataStruct $logDataStruct
      */
     public function writeToFile(LogDataStruct $logDataStruct);
-
-    /**
-     * Creates an instance of the logger.
-     *
-     * @param ModelManager $modelManager
-     * @return LoggerInterface
-     */
-    public static function createLogger(ModelManager $modelManager);
 }
