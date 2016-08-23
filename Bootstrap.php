@@ -711,7 +711,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         $schema = $tool->getSchemaFromMetadata($classes);
         $tableNames = [];
         foreach ($schema->getTableNames() as $tableName) {
-            $tableNames[] = explode('.', $tableName)[1];
+            $tableNames[] = array_pop(explode('.', $tableName));
         }
         return $tableNames;
     }
@@ -724,6 +724,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
      */
     private function getForeignKeyConstraint($table, $column)
     {
+        /** @var \Doctrine\DBAL\Schema\AbstractSchemaManager $schemaManager */
         $schemaManager = $this->get('dbal_connection')->getSchemaManager();
         /** @var \Doctrine\DBAL\Schema\ForeignKeyConstraint[] $keys */
         $keys = $schemaManager->listTableForeignKeys($table);
