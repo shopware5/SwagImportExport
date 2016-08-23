@@ -10,8 +10,10 @@ namespace Shopware\Subscriber;
 
 use Enlight\Event\SubscriberInterface;
 use Shopware\Components\DependencyInjection\Container;
+use Shopware\Components\SwagImportExport\FileIO\CsvFileReader;
 use Shopware\Components\SwagImportExport\FileIO\CsvFileWriter;
 use Shopware\Components\SwagImportExport\Logger\Logger;
+use Shopware\Components\SwagImportExport\UploadPathProvider;
 use Shopware\Components\SwagImportExport\Utils\FileHelper;
 
 class DIContainer implements SubscriberInterface
@@ -35,34 +37,10 @@ class DIContainer implements SubscriberInterface
 
         self::$containerExtension = [
             'swag_import_export.csv_file_writer' => $this->getCsvFileWriter(),
-            'swag_import_export.logger' => $this->getLogger($this->container)
+            'swag_import_export.csv_file_reader' => $this->getCsvFileReader(),
+            'swag_import_export.logger' => $this->getLogger($this->container),
+            'swag_import_export.upload_path_provider' => $this->getUploadPathProvider()
         ];
-    }
-
-    /**
-     * @return \Closure
-     */
-    private function getCsvFileWriter()
-    {
-        return function () {
-            return new CsvFileWriter(
-                new FileHelper()
-            );
-        };
-    }
-
-    /**
-     * @param Container $container
-     * @return \Closure
-     */
-    private function getLogger(Container $container)
-    {
-        return function (Container $container) {
-            return new Logger(
-                $container->get('swag_import_export.csv_file_writer'),
-                $container->get('models')
-            );
-        };
     }
 
     /**
@@ -94,5 +72,53 @@ class DIContainer implements SubscriberInterface
         // call anonymous function in order to register service
         $method = self::$containerExtension[$name];
         return $method($this->container);
+    }
+
+    /**
+     * @return \Closure
+     */
+    private function getCsvFileWriter()
+    {
+        return function () {
+            return new CsvFileWriter(
+                new FileHelper()
+            );
+        };
+    }
+
+    /**
+     * @param Container $container
+     * @return \Closure
+     */
+    private function getLogger(Container $container)
+    {
+        return function (Container $container) {
+            return new Logger(
+                $container->get('swag_import_export.csv_file_writer'),
+                $container->get('models')
+            );
+        };
+    }
+
+    /**
+     * @return \Closure
+     */
+    private function getUploadPathProvider()
+    {
+        return function () {
+            return new UploadPathProvider(Shopware()->DocPath());
+        };
+    }
+
+    /**
+     * @return \Closure
+     */
+    private function getCsvFileReader()
+    {
+        return function (Container $container) {
+            return new CsvFileReader(
+                $container->get('swag_import_export.upload_path_provider')
+            );
+        };
     }
 }

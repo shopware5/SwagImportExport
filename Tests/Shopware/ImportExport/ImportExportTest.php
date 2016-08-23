@@ -1,4 +1,10 @@
 <?php
+/**
+ * (c) shopware AG <info@shopware.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Tests\Shopware\ImportExport;
 
@@ -131,7 +137,7 @@ class ImportExportTest extends ImportExportTestHelper
                         }));
 
         $fileFacory = $this->Plugin()->getFileIOFactory();
-        $fileWriter = $fileFacory->createFileWriter($params, $fileHelper);
+        $fileWriter = $fileFacory->createFileWriter($params['format']);
         
         $dataTransformerChain = $this->Plugin()->getDataTransformerFactory()->createDataTransformerChain(
                 $profile, array('isTree' => $fileWriter->hasTreeStructure())

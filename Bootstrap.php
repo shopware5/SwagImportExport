@@ -21,6 +21,7 @@ use Shopware\Components\SwagImportExport\Factories\DataFactory;
 use Shopware\Components\SwagImportExport\Factories\DataTransformerFactory;
 use Shopware\Components\SwagImportExport\Factories\FileIOFactory;
 use Shopware\Components\SwagImportExport\Factories\ProfileFactory;
+use Shopware\Models\Media\Album;
 use Shopware\Subscriber\DIContainer;
 
 /**
@@ -204,6 +205,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
             } catch (Exception $e) {
             }
             $this->db->exec('ALTER TABLE s_import_export_session DROP COLUMN log_id');
+            $this->removeImportFilesAlbum();
         }
 
         return [
@@ -735,5 +737,20 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
             }
         }
         throw new \Exception("Foreign key constraint not found.");
+    }
+
+    /**
+     * Removes the import files on update to version 1.2.2
+     */
+    private function removeImportFilesAlbum()
+    {
+        /** @var ModelManager $modelManager */
+        $modelManager = $this->get('models');
+        $repo = $modelManager->getRepository(Album::class);
+        $album = $repo->findOneBy(['name' => 'ImportFiles']);
+        if ($album) {
+            $modelManager->remove($album);
+            $modelManager->flush();
+        }
     }
 }

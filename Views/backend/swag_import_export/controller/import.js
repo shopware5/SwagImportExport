@@ -1,36 +1,3 @@
-/**
- * Shopware 4
- * Copyright © shopware AG
- *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
- *
- * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * "Shopware" is a registered trademark of shopware AG.
- * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
- */
-
-/**
- * Shopware UI - Media Manager Thumbnail Controller
- *
- * The thumbnail controller handles the thumbnail main window,
- * its elements and the batch calls for the thumbnail generation.
- *
- * @category    Shopware
- * @package     MediaManager
- * @copyright   Copyright (c) shopware AG (http://www.shopware.de)
- */
 
 //{namespace name="backend/swag_import_export/view/main"}
 //{block name="backend/swag_import_export/controller/import"}
@@ -76,53 +43,49 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
      * @param [object] target
      */
     onReload: function(target){
-        var me = this,
+        var me = this, name,
             response = Ext.decode(target.responseText);
         
         if (response.success === false) {
             return;
         }
         
-        var path = response.data.path;
-    
-        me.setFilePath(path);
+        name = response.data.fileName;
+        me.setFilePath(name);
     },
+
     /**
      * 
-     * @param object btn
-     * @param object Ext.button.Button btn
+     * @param { Ext.button.Button } btn
      */
     onImport: function(btn) {
         var me = this,
-                form = btn.up('form').getForm(),
-                values = form.getValues();
+            form = btn.up('form').getForm(),
+            values = form.getValues();
         
-        if (Ext.isEmpty(values.profile))
-        {
+        if (Ext.isEmpty(values.profile)) {
             Shopware.Notification.createGrowlMessage(
-                    '{s name=swag_import_export/import/error_title}Swag import export{/s}',
-                    '{s name=swag_import_export/import/error_msg_profle}Please select a profile{/s}'
+                '{s name=swag_import_export/import/error_title}Swag import export{/s}',
+                '{s name=swag_import_export/import/error_msg_profle}Please select a profile{/s}'
             );
             return;
         }
         
         var localFile = Ext.getCmp('importSelectFile').getValue();
 
-        if (!Ext.isEmpty(values.importFile) && Ext.isEmpty(localFile))
-        {
+        if (!Ext.isEmpty(values.importFile) && Ext.isEmpty(localFile)) {
             me.parameters = values;
-
             me.onCreateImportWindow();
             return;
         }
 
-        if (!Ext.isEmpty(localFile)){
-            var me = this;
+        if (!Ext.isEmpty(localFile)) {
+            me = this;
             form.submit({
                 url: '{url module=backend controller="swagImportExport" action="uploadFile"}',
                 waitMsg: 'Uploading',
                 success: function(fp, response) {
-                    me.setFilePath(response.result.data.path);
+                    me.setFilePath(response.result.data.fileName);
                     me.parameters = btn.up('form').getForm().getValues();
                     me.onCreateImportWindow();
                 },
@@ -137,12 +100,13 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
             });
         } else {
             Shopware.Notification.createGrowlMessage(
-                    '{s name=swag_import_export/import/error_title}Swag import export{/s}',
-                    '{s name=swag_import_export/import/error_msg_file}No file was selected{/s}'
+                '{s name=swag_import_export/import/error_title}Swag import export{/s}',
+                '{s name=swag_import_export/import/error_msg_file}No file was selected{/s}'
             );
             return;
         }
     },
+
     /**
      * Creates batch configuration
      */
@@ -152,6 +116,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
         me.getBatchConfig = me.getConfig();
 
     },
+
     onResume: function(record, sessionStore) {
         var me = this;
 
@@ -167,6 +132,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
         me.getConfig();
         
     },
+
     /**
      * Triggers if the start exporting button was pressed
      * in the export window.
@@ -185,6 +151,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
         win.cancelButton.show();
 //        win.closeButton.disable();
     },
+
     /**
      * Returns the needed configuration for the next batch call
      */
@@ -237,10 +204,12 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
             }
         });
     },
+
     setFilePath: function(path){
         var fileField = Ext.getCmp('swag-import-export-file');
         fileField.setValue(path);
     },
+
     /**
      * This function sends a request to export data
      *

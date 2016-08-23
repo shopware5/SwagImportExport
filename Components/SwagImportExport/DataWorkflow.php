@@ -160,6 +160,7 @@ class DataWorkflow
             // session has already loaded ids and some position, so we simply activate it
             $this->dataIO->resumeSession();
         }
+
         $this->dataIO->usernameSession();
         if ($this->dataIO->getSessionState() == 'active') {
             //get current session position

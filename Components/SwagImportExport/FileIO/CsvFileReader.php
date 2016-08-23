@@ -8,6 +8,8 @@
 
 namespace Shopware\Components\SwagImportExport\FileIO;
 
+use Shopware\Components\SwagImportExport\UploadPathProvider;
+
 class CsvFileReader implements FileReader
 {
     /**
@@ -16,7 +18,20 @@ class CsvFileReader implements FileReader
     protected $treeStructure = false;
 
     /**
-     * @param $fileName
+     * @var UploadPathProvider
+     */
+    private $uploadPathProvider;
+
+    /**
+     * @param UploadPathProvider $uploadPathProvider
+     */
+    public function __construct(UploadPathProvider $uploadPathProvider)
+    {
+        $this->uploadPathProvider = $uploadPathProvider;
+    }
+
+    /**
+     * @param string $fileName
      */
     public function readHeader($fileName)
     {
@@ -25,18 +40,18 @@ class CsvFileReader implements FileReader
     /**
      * Reads csv records
      *
-     * @param $fileName
-     * @param $position
-     * @param $step
+     * @param string $fileName
+     * @param int $position
+     * @param int $step
      * @return array
      * @throws \Exception
      */
     public function readRecords($fileName, $position, $step)
     {
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
-        if ($mediaService->has($fileName)) {
-            $tempFileName = Shopware()->DocPath() . 'media/temp/' . md5(microtime()) . '.csv';
-            file_put_contents($tempFileName, $mediaService->read($fileName));
+        $tempFileName = '';
+        if (file_exists($fileName)) {
+            $tempFileName = $this->uploadPathProvider->getRealPath(md5(microtime() . '.csv'));
+            file_put_contents($tempFileName, file_get_contents($fileName));
             $fileName = $tempFileName;
         }
 
@@ -50,7 +65,8 @@ class CsvFileReader implements FileReader
         // +1 to ignore the first line of the file
         $file->seek($position + 1);
 
-        $readRows = array();
+        $readRows = [];
+        $data = [];
         for ($i = 1; $i <= $step; $i++) {
             $row = $file->current();
 
@@ -69,10 +85,7 @@ class CsvFileReader implements FileReader
         }
 
         unlink($tempFileName);
-
-        $readRows = $this->toUtf8($readRows);
-
-        return $readRows;
+        return $this->toUtf8($readRows);
     }
 
     /**

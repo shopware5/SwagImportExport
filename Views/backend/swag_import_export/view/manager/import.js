@@ -1,10 +1,4 @@
-/**
- * Shopware SwagImportExport Plugin
- *
- * @category Shopware
- * @package Shopware\Plugins\SwagImportExport
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
+
 //{namespace name=backend/swag_import_export/view/main}
 //{block name="backend/swag_import_export/view/manager/export"}
 Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
@@ -42,9 +36,9 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
     },
     /**
      * Creates the main form panel for the component which
-     * features all neccessary form elements
+     * features all necessary form elements
      *
-     * @return [object] me.formPnl - generated Ext.form.Panel
+     * @return { Ext.form.Panel }
      */
     createFormPanel: function() {
         var me = this;
@@ -79,7 +73,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
      * Creates a new upload drop zone which uploads the dropped files
      * to the server and adds them to the active album
      *
-     * @return [object] this.dropZone - created Shopware.app.FileUpload
+     * @return { Ext.form.FieldSet }
      */
     createDropZone: function() {
         var me = this;
@@ -87,9 +81,10 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
         me.dropZone = Ext.create('Shopware.app.FileUpload', {
             requestURL: '{url controller="swagImportExport" action="uploadFile"}',
             hideOnLegacy: true,
+            maxAmount: 1,
             showInput: false,
             checkType: false,
-            checkAmount: false,
+            checkAmount: true,
             enablePreviewImage: false,
             dropZoneText: me.snippets.dragAndDropFile,
             height: 100,
@@ -110,6 +105,10 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
         });
 
     },
+
+    /**
+     * @returns { Ext.form.FieldSet }
+     */
     createConfigurationFieldset: function() {
         var me = this;
 
@@ -130,7 +129,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
     /**
      * Returns hidden file field
      * 
-     * @returns Ext.form.TextField
+     * @returns { Ext.form.TextField }
      */
     createFileInput: function(){
         var me = this;
@@ -163,6 +162,10 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
             }
         };
     },
+
+    /**
+     * @returns { Ext.form.field.File }
+     */
     createSelectFile: function() {
         var me = this;
 
@@ -174,7 +177,6 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
             width: 450,
             labelWidth: 150,
             fieldLabel: me.snippets.selectFile,
-//            allowBlank: false,
             listeners: {
                 change: function(element, value, eOpts) {
                     me.findProfile(value);
@@ -184,6 +186,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
         
         return me.addBtn;
     },
+
     /**
      * Returns profile combo box
      * 
@@ -206,38 +209,11 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
         
         return me.profileCombo;
     },
+
     /**
-     * Creates the container with the both upload fields.
-     * @return Ext.container.Container
-     */
-    createUploadField: function() {
-        var me = this;
-
-        // Media selection field
-        me.mediaSelection = Ext.create('Shopware.MediaManager.MediaSelection', {
-            name: 'importFile',
-            fieldLabel: me.snippets.selectFile,
-            multiSelect: false,
-            anchor: '100%',
-            validTypes: me.getImportAllowedExtensions(),
-            allowBlank: false,
-            buttonOnly: false,
-            width: 515,
-            labelWidth: 150
-        });
-
-        return Ext.create('Ext.container.Container', {
-            margin: '0 0 5 0',
-            layout: 'column',
-            items: [
-                me.mediaSelection
-            ]
-        });
-    },
-        /**
      * Finds profile and preselect if exists
      * 
-     * @param [string] value
+     * @param { string } value
      */
     findProfile: function(value) {
         var me = this;

@@ -18,6 +18,7 @@ use Shopware\Components\SwagImportExport\Logger\Logger;
 use Shopware\Components\SwagImportExport\Profile\Profile;
 use Shopware\Components\SwagImportExport\Transformers\DataTransformerChain;
 use Shopware\Components\SwagImportExport\StatusLogger;
+use Shopware\Components\SwagImportExport\UploadPathProvider;
 
 class CommandHelper
 {
@@ -212,9 +213,9 @@ class CommandHelper
         // we create the file writer that will write (partially) the result file
         /** @var FileIOFactory $fileFactory */
         $fileFactory = $this->Plugin()->getFileIOFactory();
-        $fileHelper = $fileFactory->createFileHelper();
+
         /** @var FileWriter $fileWriter */
-        $fileWriter = $fileFactory->createFileWriter($postData, $fileHelper);
+        $fileWriter = $fileFactory->createFileWriter($postData['format']);
 
         /** @var DataTransformerChain $dataTransformerChain */
         $dataTransformerChain = $this->Plugin()->getDataTransformerFactory()
@@ -267,7 +268,7 @@ class CommandHelper
 
         // we create the file reader that will read the result file
         /** @var FileReader $fileReader */
-        $fileReader = $this->Plugin()->getFileIOFactory()->createFileReader($postData, null);
+        $fileReader = $this->Plugin()->getFileIOFactory()->createFileReader($postData['format']);
 
         if ($this->format === 'xml') {
             $tree = json_decode($this->profileEntity->getTree(), true);
@@ -298,6 +299,9 @@ class CommandHelper
      */
     public function importAction()
     {
+        /** @var UploadPathProvider $uploadPathProvider */
+        $uploadPathProvider = Shopware()->Container()->get('swag_import_export.upload_path_provider');
+
         $postData = array(
             'type' => 'import',
             'profileId' => (int) $this->profileEntity->getId(),
@@ -317,7 +321,7 @@ class CommandHelper
         // we create the file reader that will read the result file
         /** @var FileIOFactory $fileFactory */
         $fileFactory = $this->Plugin()->getFileIOFactory();
-        $fileReader = $fileFactory->createFileReader($postData, null);
+        $fileReader = $fileFactory->createFileReader($postData['format']);
 
         //load profile
         /** @var Profile $profile */
@@ -371,7 +375,11 @@ class CommandHelper
                 $pathInfo = pathinfo($inputFile);
 
                 foreach ($data['data'] as $key => $value) {
-                    $outputFile = 'media/unknown/' . $pathInfo['filename'] . '-' . $key . '-tmp.csv';
+                    $outputFile = $uploadPathProvider->getRealPath(
+                        $pathInfo['filename'] . '-' . $key . '-tmp.csv',
+                        UploadPathProvider::DIR
+                    );
+
                     $post['unprocessed'][] = array(
                         'profileName' => $key,
                         'fileName' => $outputFile
@@ -436,8 +444,7 @@ class CommandHelper
         /** @var Profile $profile */
         $profile = $this->Plugin()->getProfileFactory()->loadHiddenProfile($profileName);
 
-        $fileHelper = $fileFactory->createFileHelper();
-        $fileWriter = $fileFactory->createFileWriter(array('format' => 'csv'), $fileHelper);
+        $fileWriter = $fileFactory->createFileWriter('csv');
 
         /** @var DataTransformerChain $dataTransformerChain */
         $dataTransformerChain = $this->Plugin()->getDataTransformerFactory()
