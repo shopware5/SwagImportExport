@@ -1,4 +1,10 @@
 <?php
+/**
+ * (c) shopware AG <info@shopware.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Shopware\Components\SwagImportExport\DbAdapters\Articles;
 
@@ -102,6 +108,10 @@ class PriceWriter
         $taxInput = $this->customerGroups[$price['priceGroup']];
 
         $price['price'] = floatval(str_replace(",", ".", $price['price']));
+
+        if (isset($price['purchasePrice'])) {
+            $price['purchasePrice'] = floatval(str_replace(",", ".", $price['purchasePrice']));
+        }
 
         if (isset($price['pseudoPrice'])) {
             $price['pseudoPrice'] = floatval(str_replace(",", ".", $price['pseudoPrice']));

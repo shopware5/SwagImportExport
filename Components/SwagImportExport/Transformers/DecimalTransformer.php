@@ -29,6 +29,7 @@ class DecimalTransformer implements DataTransformerAdapter
         'referenceUnit',
         'price',
         'pseudoPrice',
+        'purchasePrice',
         'invoiceAmount',
         'invoiceAmountNet'
     ];

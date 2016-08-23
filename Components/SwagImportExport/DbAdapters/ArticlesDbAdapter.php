@@ -178,6 +178,10 @@ class ArticlesDbAdapter implements DataDbAdapter
 
         $result['price'] = $priceBuilder->getQuery()->getResult();
 
+        if ($result['purchasePrice']) {
+            $result['purchasePrice'] = round($result['purchasePrice'], 2);
+        }
+
         foreach ($result['price'] as &$record) {
             if ($record['taxInput']) {
                 $record['price'] = round($record['price'] * (100 + $record['tax']) / 100, 2);
@@ -910,6 +914,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             'variant.shippingTime as shippingTime',
             'variant.shippingFree as shippingFree',
             'variant.supplierNumber as supplierNumber',
+            'variant.purchasePrice as purchasePrice'
         );
 
         // Attributes
