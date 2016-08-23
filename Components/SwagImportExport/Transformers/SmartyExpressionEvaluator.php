@@ -1,4 +1,10 @@
 <?php
+/**
+ * (c) shopware AG <info@shopware.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Shopware\Components\SwagImportExport\Transformers;
 
@@ -59,6 +65,9 @@ class SmartyExpressionEvaluator implements ExpressionEvaluator
         }
         if (isset($variables['pseudoPrice'])) {
             $variables['pseudoPrice'] = (float) str_replace(',', '.', $variables['pseudoPrice']);
+        }
+        if (isset($variables['purchasePrice'])) {
+            $variables['purchasePrice'] = (float) str_replace(',', '.', $variables['purchasePrice']);
         }
     }
 }

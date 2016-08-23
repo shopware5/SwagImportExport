@@ -129,6 +129,10 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                 $record['price'] = str_replace('.', ',', round($record['price'], 2));
                 $record['pseudoPrice'] = str_replace('.', ',', round($record['pseudoPrice'], 2));
             }
+
+            if ($record['purchasePrice']) {
+                $record['purchasePrice'] = str_replace('.', ',', round($record['purchasePrice'], 2));
+            }
         }
 
         return $result;
@@ -152,6 +156,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
             'price.customerGroupKey as priceGroup',
             'article.name as name',
             'detail.additionalText as additionalText',
+            'detail.purchasePrice as purchasePrice',
             'supplier.name as supplierName',
 //            'articleTax.id as taxId',
 //            'articleTax.tax as tax',
