@@ -10,59 +10,47 @@ namespace Shopware\Components\SwagImportExport\Factories;
 
 use Shopware\Components\SwagImportExport\FileIO\CsvFileWriter;
 use Shopware\Components\SwagImportExport\FileIO\XmlFileWriter;
-use Shopware\Components\SwagImportExport\FileIO\ExcelFileWriter;
 use Shopware\Components\SwagImportExport\FileIO\CsvFileReader;
 use Shopware\Components\SwagImportExport\FileIO\XmlFileReader;
-use Shopware\Components\SwagImportExport\FileIO\ExcelFileReader;
 use Shopware\Components\SwagImportExport\Utils\FileHelper;
 
 class FileIOFactory extends \Enlight_Class implements \Enlight_Hook
 {
     /**
-     * @param $params
-     * @param $fileHelper
-     * @return CsvFileReader|ExcelFileReader|XmlFileReader
+     * @param string $format
+     * @return CsvFileReader|XmlFileReader
      * @throws \Exception
      */
-    public function createFileReader($params, $fileHelper)
+    public function createFileReader($format)
     {
-        switch ($params['format']) {
+        $fileHelper = new FileHelper();
+
+        switch ($format) {
             case 'csv':
-                return new CsvFileReader($fileHelper);
+                return Shopware()->Container()->get('swag_import_export.csv_file_reader');
             case 'xml':
                 return new XmlFileReader($fileHelper);
-            case 'excel':
-                return new ExcelFileReader($fileHelper);
             default:
-                throw new \Exception('File reader ' . $params['format'] . ' does not exists.');
+                throw new \Exception('File reader ' . $format . ' does not exists.');
         }
     }
 
     /**
-     * @param $params
-     * @param $fileHelper
-     * @return CsvFileWriter|ExcelFileWriter|XmlFileWriter
+     * @param string $format
+     * @return CsvFileWriter|XmlFileWriter
      * @throws \Exception
      */
-    public function createFileWriter($params, $fileHelper)
+    public function createFileWriter($format)
     {
-        switch ($params['format']) {
+        $fileHelper = new FileHelper();
+
+        switch ($format) {
             case 'csv':
-                return new CsvFileWriter($fileHelper);
+                return Shopware()->Container()->get('swag_import_export.csv_file_writer');
             case 'xml':
                 return new XmlFileWriter($fileHelper);
-            case 'excel':
-                return new ExcelFileWriter($fileHelper);
             default:
-                throw new \Exception('File writer' . $params['format'] . ' does not exists.');
+                throw new \Exception('File writer' . $format . ' does not exists.');
         }
-    }
-
-    /**
-     * @return FileHelper
-     */
-    public function createFileHelper()
-    {
-        return new FileHelper();
     }
 }

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -8,6 +7,7 @@
  */
 
 use Shopware\Components\Model\ModelManager;
+use Shopware\Components\SwagImportExport\UploadPathProvider;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Utils\CommandHelper;
 use Shopware\CustomModels\ImportExport\Profile;
@@ -15,10 +15,8 @@ use Shopware\Models\Media\Album;
 use \Shopware\Components\CSRFWhitelistAware;
 
 /**
- * Shopware ImportExport Plugin
- *
- * @category Shopware
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ * This is a controller and not a correct implementation of a Shopware cron job. By implementing the cron job as
+ * a controller the execution of other cron jobs will not be triggered.
  */
 class Shopware_Controllers_Backend_SwagImportExportCron extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
@@ -59,7 +57,10 @@ class Shopware_Controllers_Backend_SwagImportExportCron extends Shopware_Control
      */
     public function cronAction()
     {
-        $directory = Shopware()->DocPath() . 'files/import_cron/';
+        /** @var UploadPathProvider $uploadPathProvider */
+        $uploadPathProvider = Shopware()->Container()->get('swag_import_export.upload_path_provider');
+        $directory = $uploadPathProvider->getPath(UploadPathProvider::CRON_DIR);
+
         $allFiles = scandir($directory);
         $files = array_diff($allFiles, array('.', '..'));
 
@@ -92,7 +93,7 @@ class Shopware_Controllers_Backend_SwagImportExportCron extends Shopware_Control
         fwrite($file, $timeout);
         fclose($file);
 
-        $profileRepository = $this->getManager()->getRepository('Shopware\CustomModels\ImportExport\Profile');
+        $profileRepository = $this->getManager()->getRepository(Profile::class);
         foreach ($files as $file) {
             $fileExtension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
             $fileName = strtolower(pathinfo($file, PATHINFO_FILENAME));
@@ -105,32 +106,7 @@ class Shopware_Controllers_Backend_SwagImportExportCron extends Shopware_Control
                         throw new \Exception(sprintf($message, $fileName));
                     }
 
-                    $filePath = Shopware()->DocPath() . 'files/import_cron/' . $file;
-                    $fileObject = new \Symfony\Component\HttpFoundation\File\File($filePath);
-
-                    $album = $this->createAlbum();
-
-                    $media = new \Shopware\Models\Media\Media();
-
-                    $media->setAlbum($album);
-                    $media->setDescription('');
-                    $media->setCreated(new DateTime());
-                    $media->setExtension($fileExtension);
-
-                    $identity = Shopware()->Auth()->getIdentity();
-                    if ($identity !== null) {
-                        $media->setUserId($identity->id);
-                    } else {
-                        $media->setUserId(0);
-                    }
-
-                    //set the upload file into the model. The model saves the file to the directory
-                    $media->setFile($fileObject);
-
-                    $this->getManager()->persist($media);
-                    $this->getManager()->flush();
-
-                    $mediaPath = $media->getPath();
+                    $mediaPath = $uploadPathProvider->getRealPath($file, UploadPathProvider::CRON_DIR);
                 } catch (\Exception $e) {
                     echo $e->getMessage() . "\n";
                     unlink($lockerFileLocation);
@@ -146,8 +122,10 @@ class Shopware_Controllers_Backend_SwagImportExportCron extends Shopware_Control
                     //loops the unprocessed data
                     $pathInfo = pathinfo($mediaPath);
                     foreach ($profilesMapper as $profileName) {
-                        $tmpFileName = 'media/unknown/' . $pathInfo['filename'] . '-' . $profileName . '-tmp.csv';
-                        $tmpFile = Shopware()->DocPath() . $tmpFileName;
+                        $tmpFile = $uploadPathProvider->getRealPath(
+                            $pathInfo['filename'] . '-' . $profileName . '-tmp.csv',
+                            UploadPathProvider::CRON_DIR
+                        );
 
                         if (file_exists($tmpFile)) {
                             $outputFile = str_replace('-tmp', '-swag', $tmpFile);
@@ -162,12 +140,14 @@ class Shopware_Controllers_Backend_SwagImportExportCron extends Shopware_Control
 
                     $message = $return['data']['position'] . ' ' . $return['data']['adapter'] . " imported successfully \n";
                     echo $message;
+                    unlink($mediaPath);
                 } catch (\Exception $e) {
                     // copy file as broken
-                    copy($mediaPath, Shopware()->DocPath() . 'files/import_export/broken-' . $file);
+                    $brokenFilePath = $uploadPathProvider->getRealPath('broken-' . $file, UploadPathProvider::DIR);
+                    copy($mediaPath, $brokenFilePath);
+
                     echo $e->getMessage() . "\n";
                     unlink($lockerFileLocation);
-
                     return;
                 }
             }
@@ -184,9 +164,6 @@ class Shopware_Controllers_Backend_SwagImportExportCron extends Shopware_Control
      */
     protected function start($profileModel, $inputFile, $format)
     {
-        $mediaService = $this->container->get('shopware_media.media_service');
-        $inputFile = $mediaService->getUrl($inputFile);
-
         $commandHelper = new CommandHelper(
             array(
                 'profileEntity' => $profileModel,
@@ -208,27 +185,6 @@ class Shopware_Controllers_Backend_SwagImportExportCron extends Shopware_Control
         }
 
         return $return;
-    }
-
-    /**
-     * Creates album in media manager for ImportFiles
-     *
-     * @return Album
-     */
-    protected function createAlbum()
-    {
-        $albumRepo = Shopware()->Models()->getRepository('Shopware\Models\Media\Album');
-        $album = $albumRepo->findOneBy(array('name' => 'ImportFiles'));
-
-        if (!$album) {
-            $album = new Album();
-            $album->setName('ImportFiles');
-            $album->setPosition(0);
-            $this->getManager()->persist($album);
-            $this->getManager()->flush($album);
-        }
-
-        return $album;
     }
 
     /**
