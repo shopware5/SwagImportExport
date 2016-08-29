@@ -28,6 +28,8 @@ class PluginTestKernel extends TestKernel
         Shopware()->Loader()->registerNamespace('Tests\Helper', __DIR__ . '/../../Helper/');
         Shopware()->Loader()->registerNamespace('Tests\Shopware\ImportExport', __DIR__ . '/');
         Shopware()->Loader()->registerNamespace('Shopware\Subscriber', __DIR__ . '/../../../Subscriber/');
+        Shopware()->Loader()->registerNamespace('Shopware\Components', __DIR__ . '/../../../Components/');
+        Shopware()->Loader()->registerNamespace('Shopware\CustomModels', __DIR__ . '/../../../Models/');
 
         self::registerResources();
     }
@@ -37,19 +39,23 @@ class PluginTestKernel extends TestKernel
      */
     private static function registerResources()
     {
-        Shopware()->Container()->set('swag_import_export.logger',
+        Shopware()->Container()->set(
+            'swag_import_export.logger',
             new Logger(new CsvFileWriter(new FileHelper()), Shopware()->Models())
         );
 
-        Shopware()->Container()->set('swag_import_export.upload_path_provider',
+        Shopware()->Container()->set(
+            'swag_import_export.upload_path_provider',
             new UploadPathProvider(Shopware()->DocPath())
         );
 
-        Shopware()->Container()->set('swag_import_export.csv_file_writer',
+        Shopware()->Container()->set(
+            'swag_import_export.csv_file_writer',
             new CsvFileWriter(new FileHelper())
         );
 
-        Shopware()->Container()->set('swag_import_export.csv_file_reader',
+        Shopware()->Container()->set(
+            'swag_import_export.csv_file_reader',
             new CsvFileReader(
                 Shopware()->Container()->get('swag_import_export.upload_path_provider')
             )
@@ -63,7 +69,8 @@ class PluginTestKernel extends TestKernel
     private static function assertPlugin($name)
     {
         $sql = 'SELECT 1 FROM s_core_plugins WHERE name = ? AND active = 1';
-        return (boolean) Shopware()->Container()->get('dbal_connection')->fetchColumn($sql, [ $name ]);
+
+        return (boolean) Shopware()->Container()->get('dbal_connection')->fetchColumn($sql, [$name]);
     }
 }
 
