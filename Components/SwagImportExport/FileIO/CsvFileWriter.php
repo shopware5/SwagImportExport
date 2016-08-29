@@ -40,7 +40,6 @@ class CsvFileWriter implements FileWriter
             throw new \Exception('Header data is not valid');
         }
         $columnNames = implode(';', $headerData) . "\n";
-
         $this->getFileHelper()->writeStringToFile($fileName, $columnNames);
     }
 

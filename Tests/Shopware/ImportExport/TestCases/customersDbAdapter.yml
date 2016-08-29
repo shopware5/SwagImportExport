@@ -1,52 +1,42 @@
 testRead:
     testCase0:
         columns: 'customer.id, customer.email, billing.firstName as b_firstName, shipping.firstName as s_firstName'
-        ids: [1,2,3,4]
+        ids: [ 1, 2 ]
         expected:
             0:
                 id: '1'
                 email: 'test@example.com'
                 b_firstName: 'Max'
-                s_firstName: 'MaxShipping'
+                s_firstName: 'Max'
             1:
                 id: '2'
                 email: 'mustermann@b2b.de'
-                b_firstName: 'Max2'
-                s_firstName: 'Max2'
-            2:
-                id: '3'
-                email: 'demo@demo.com'
-                b_firstName: 'Demo'
-                s_firstName: 'DemoShipping'
-            3:
-                id: '4'
-                email: 'demo@shopware.com'
-                b_firstName: 'ShopwareDemo'
-                s_firstName: 'ShopwareDemoShipping'
-        expectedCount: 4
+                b_firstName: 'Händler'
+                s_firstName: 'Händler'
+        expectedCount: 2
     testCase1:
         columns: 'customer.id, customer.hashPassword as password, customer.encoderName, customer.email, customer.active, customer.accountMode, customer.confirmationKey, customer.paymentId, customer.firstLogin, customer.lastLogin, customer.sessionId, customer.newsletter, customer.validation, customer.affiliate, customer.groupKey, customer.paymentPreset, customer.languageId, customer.shopId, customer.referer, customer.priceGroupId, customer.internalComment, customer.failedLogins, customer.lockedUntil'
         ids: [1]
         expected:
             0:
                 id: '1'
-                password: 1a79a4d60de6718e8e5b326e338ae533
+                password: a256a310bc1e5db755fd392c524028a8
                 encoderName: md5
                 email: test@example.com
                 active: '1'
                 accountMode: '0'
                 confirmationKey: ''
-                paymentId: '0'
+                paymentId: '5'
                 firstLogin: null
                 lastLogin: null
-                sessionId: ''
+                sessionId: 'uiorqd755gaar8dn89ukp178c7'
                 newsletter: '0'
-                validation: '0'
+                validation: ''
                 affiliate: '0'
                 groupKey: 'EK'
                 paymentPreset: '0'
-                languageId: ''
-                shopId: '0'
+                languageId: '1'
+                shopId: '1'
                 referer: ''
                 priceGroupId: ''
                 internalComment: ''
@@ -54,47 +44,24 @@ testRead:
                 lockedUntil: ''
         expectedCount: 1
     testCase2:
-        columns: 'billing.id, billing.customerId, billing.company, billing.department, billing.salutation, billing.number, billing.firstName, billing.lastName, billing.street, billing.zipCode, billing.city, billing.phone, billing.fax, billing.countryId, billing.stateId, billing.vatId, billing.birthday, billing.additionalAddressLine1, billing.additionalAddressLine2'
+        columns: 'billing.id, billing.customerId, billing.company, billing.department, billing.salutation, billing.firstName, billing.lastName, billing.street, billing.zipCode, billing.city, billing.phone, billing.countryId, billing.stateId, billing.vatId, billing.additionalAddressLine1, billing.additionalAddressLine2'
         ids: [2]
         expected:
             0:
                 id: '2'
                 customerId: '2'
-                company: 'Muster2 GmbH'
-                department: ''
+                company: 'B2B'
+                department: 'Einkauf'
                 salutation: 'mr'
-                number: '20002'
-                firstName: 'Max2'
-                lastName: 'Mustermann2'
-                street: 'Musterstr2 552'
-                zipCode: '555552'
-                city: 'Musterhausen2'
-                phone: '05555 / 555555'
-                fax: ''
+                firstName: 'Händler'
+                lastName: 'Kundengruppe-Netto'
+                street: 'Musterweg 1'
+                zipCode: '55555'
+                city: 'Musterstadt'
+                phone: '012345 / 6789'
                 countryId: '2'
                 stateId: '3'
                 vatId: ''
-                birthday: null
-                additionalAddressLine1: ''
-                additionalAddressLine2: ''
-        expectedCount: 1
-    testCase3:
-        columns: 'shipping.id, shipping.customerId, shipping.company, shipping.department, shipping.salutation, shipping.firstName, shipping.lastName, shipping.street, shipping.zipCode, shipping.city, shipping.countryId, shipping.stateId, shipping.additionalAddressLine1, shipping.additionalAddressLine2'
-        ids: [3]
-        expected:
-            0:
-                id: '3'
-                customerId: '3'
-                company: 'Demo AG'
-                department: ''
-                salutation: 'mr'
-                firstName: 'DemoShipping'
-                lastName: 'DemoShipping'
-                street: 'MustermannstraßeShipping 922'
-                zipCode: '987654'
-                city: 'MunichShipping'
-                countryId: '2'
-                stateId: '3'
                 additionalAddressLine1: ''
                 additionalAddressLine2: ''
         expectedCount: 1
@@ -105,15 +72,6 @@ testReadRecordIds:
         expectedIds:
             0: 1
             1: 2
-            2: 3
-            3: 4
-        expectedCount: 4
-    testCase1:
-        start: 2
-        limit: 105
-        expectedIds:
-            0: 3
-            1: 4
         expectedCount: 2
 testDefaultColumns:
     testCase0:
@@ -144,7 +102,7 @@ testDefaultColumns:
             23: 'billing.company as billingCompany'
             24: 'billing.department as billingDepartment'
             25: 'billing.salutation as billingSalutation'
-            26: 'billing.number as customerNumber'
+            26: 'customer.number as customerNumber'
             27: 'billing.firstName as billingFirstname'
             28: 'billing.lastName as billingLastname'
             29: 'billing.street as billingStreet'
@@ -155,7 +113,7 @@ testDefaultColumns:
             34: 'billing.countryId as billingCountryID'
             35: 'billing.stateId as billingStateID'
             36: 'billing.vatId as ustid'
-            37: 'billing.birthday as birthday'
+            37: 'customer.birthday as birthday'
             38: 'billing.additionalAddressLine1 as billingAdditionalAddressLine1'
             39: 'billing.additionalAddressLine2 as billingAdditionalAddressLine2'
             40: 'billingAttribute.text1 as attrBillingText1'
@@ -197,16 +155,37 @@ testWrite:
                     encoder: md5
                     active: 1
                     customergroup: EK
+                    billingSalutation: mr
+                    billingFirstname: Muster
+                    billingLastname: Mann
+                    billingStreet: Teststr 321
+                    billingCity: New York
+                    billingCountryID: 2
+                    billingZipcode: '48565'
                 1:
                     email: test2@test.com
                     unhashedPassword: pass2
                     encoder: md5
                     active: 1
                     customergroup: EK
+                    billingSalutation: ms
+                    billingFirstname: Muster
+                    billingLastname: Frau
+                    billingStreet: MyStreet 123
+                    billingCity: L.A.
+                    billingCountryID: 2
+                    billingZipcode: '48565'
                 2:
                     email: test3@test.com
                     unhashedPassword: pass3
                     encoder: md5
                     active: 1
                     customergroup: EK
+                    billingSalutation: mr
+                    billingFirstname: Green
+                    billingLastname: Blue
+                    billingStreet: Langestr 22
+                    billingCity: New York
+                    billingCountryID: 2
+                    billingZipcode: '10112'
         expectedInsertedRows: 3

@@ -9,6 +9,7 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
+use Doctrine\DBAL\Connection;
 use Doctrine\ORM\Query\Expr\Join;
 use Enlight_Components_Db_Adapter_Pdo_Mysql;
 use Shopware\Components\Model\ModelManager;
@@ -1319,7 +1320,7 @@ class ArticlesDbAdapter implements DataDbAdapter
 
     /**
      * @param $columns
-     * @param $ids
+     * @param $ids - s_articles_details.id
      * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
      */
     public function getArticleBuilder($columns, $ids)
@@ -1336,7 +1337,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             ->leftJoin('article.esds', 'articleEsd')
             ->leftJoin('variant.unit', 'variantsUnit')
             ->where('variant.id IN (:ids)')
-            ->setParameter('ids', $ids)
+            ->setParameter('ids', $ids, Connection::PARAM_INT_ARRAY)
             ->orderBy("variant.kind");
 
         return $articleBuilder;

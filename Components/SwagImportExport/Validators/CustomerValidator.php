@@ -105,12 +105,12 @@ class CustomerValidator extends Validator
      */
     public function checkRequiredFieldsForCreate($record)
     {
-        foreach ($this->requiredFieldsForCreate as $key) {
-            if (isset($record[$key])) {
+        foreach ($this->requiredFieldsForCreate as $columnName) {
+            if (isset($record[$columnName])) {
                 continue;
             }
 
-            switch ($key) {
+            switch ($columnName) {
                 case 'unhashedPassword':
                     if ((isset($record['password']) && isset($record['encoder']))) {
                         continue 2;
@@ -118,7 +118,7 @@ class CustomerValidator extends Validator
                     break;
             }
 
-            list($snippetName, $snippetMessage) = $this->snippetData[$key];
+            list($snippetName, $snippetMessage) = $this->snippetData[$columnName];
 
             $message = SnippetsHelper::getNamespace()->get($snippetName, $snippetMessage);
             throw new AdapterException(sprintf($message, $record['email']));

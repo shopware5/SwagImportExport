@@ -266,7 +266,7 @@ class CustomerDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $records
+     * @param array $records
      * @throws \Enlight_Event_Exception
      * @throws \Exception
      * @throws \Zend_Db_Adapter_Exception
@@ -504,7 +504,7 @@ class CustomerDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $record
+     * @param array $record
      * @return array
      */
     protected function prepareBilling(&$record)

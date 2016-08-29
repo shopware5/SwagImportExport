@@ -79,9 +79,8 @@ class DataWorkflow
             //todo: create file here ?
             if ($outputFileName === '') {
                 $fileName = $this->dataIO->generateFileName($this->profile);
-                $directory = $this->dataIO->getDirectory();
-
-                $outputFileName = $directory . $fileName;
+                $this->dataIO->getDirectory();
+                $outputFileName = $this->getUploadPathProvider()->getRealPath($fileName);
             } else {
                 $fileName = basename($outputFileName);
                 $this->dataIO->setFileName($fileName);
@@ -96,7 +95,8 @@ class DataWorkflow
             $this->dataIO->resumeSession();
 
             if ($outputFileName === '') {
-                $outputFileName = Shopware()->DocPath() . 'files/import_export/' . $this->dataIO->getFileName();
+                $uploadPathProvider = $this->getUploadPathProvider();
+                $outputFileName = $uploadPathProvider->getRealPath($this->dataIO->getFileName());
             }
         }
 
@@ -215,5 +215,14 @@ class DataWorkflow
         $data = $this->transformerChain->transformForward($postData['data'][$profileName]);
 
         $this->fileIO->writeRecords($outputFile, $data);
+    }
+
+    /**
+     * @return UploadPathProvider
+     */
+    private function getUploadPathProvider()
+    {
+        /** @var UploadPathProvider $uploadPathProvider */
+        return Shopware()->Container()->get('swag_import_export.upload_path_provider');
     }
 }

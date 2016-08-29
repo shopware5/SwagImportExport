@@ -9,53 +9,60 @@
 namespace Tests\Shopware\ImportExport;
 
 use Shopware\Components\SwagImportExport\Logger\Logger;
+use Tests\Helper\ImportExportTestHelper;
 
 class DataIOTest extends ImportExportTestHelper
 {
+    /**
+     * @return array
+     */
     public function getPostData()
     {
-        return array(
+        return [
             'adapter' => 'categories',
             'filter' => '',
             'type' => 'export',
-            'limit' => array('limit' => 40, 'offset' => 0),
+            'limit' => [ 'limit' => 40, 'offset' => 0 ],
             'max_record_count' => 100,
             'format' => 'csv',
             'profileId' => 1,
-        );
+        ];
     }
 
     public function testPreloadRecordIds()
     {
         $postData = $this->getPostData();
-        $postData['limit'] = array();
+        $postData['limit'] = [];
 
         $dataFactory = $this->Plugin()->getDataFactory();
         $dataSession = $dataFactory->loadSession($postData);
 
-        $dataIO = $dataFactory->createDataIO($postData, $dataSession, $this->getLogger());
+        $dbAdapter = $dataFactory->createDbAdapter($postData['adapter']);
+
+        $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession, $this->getLogger());
+        $limit = $dataFactory->createLimit($postData['limit']);
+        $filter = $dataFactory->createFilter($postData['filter']);
+        $dataIO->initialize([], $limit, $filter, 'import', 'csv', $postData['max_record_count']);
 
         $dataIO->preloadRecordIds();
 
         $allIds = $dataIO->getRecordIds();
 
-        $this->assertEquals(count($allIds), 62);
+        $this->assertEquals(62, count($allIds));
     }
 
-    public function testGenerateDirectorty()
+    public function testGenerateDirectory()
     {
         $postData = $this->getPostData();
 
         $dataFactory = $this->Plugin()->getDataFactory();
+        $dbAdapter = $dataFactory->createDbAdapter($postData['adapter']);
         $dataSession = $dataFactory->loadSession($postData);
 
-        $dataIO = $dataFactory->createDataIO($postData, $dataSession, $this->getLogger());
+        $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession, $this->getLogger());
 
         $directory = $dataIO->getDirectory();
-
-        $expectedCategory = '/var/www/files/import_export/';
-
-        $this->assertEquals($directory, $expectedCategory);
+        $this->assertTrue(is_dir($directory));
     }
 
     /**

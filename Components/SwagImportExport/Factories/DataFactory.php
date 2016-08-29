@@ -22,12 +22,12 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     private $sessionRepository;
 
     /**
-     * @param $dbAdapter
+     * @param DataDbAdapter $dbAdapter
      * @param $dataSession
      * @param Logger $logger
      * @return DataIO
      */
-    public function createDataIO($dbAdapter, $dataSession, Logger $logger)
+    public function createDataIO(DataDbAdapter $dbAdapter, $dataSession, Logger $logger)
     {
         return new DataIO($dbAdapter, $dataSession, $logger);
     }
@@ -36,7 +36,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
      * Returns the necessary adapter
      * 
      * @param string $adapterType
-     * @return object dbAdapter
+     * @return DataDbAdapter dbAdapter
      * @throws \Exception
      */
     public function createDbAdapter($adapterType)
