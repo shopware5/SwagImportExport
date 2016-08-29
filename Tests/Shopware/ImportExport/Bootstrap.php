@@ -14,7 +14,7 @@ use Shopware\Components\SwagImportExport\Utils\FileHelper;
 
 include_once __DIR__ . '/../../../../../../../../../tests/Functional/bootstrap.php';
 
-class PluginTestKernel extends TestKernel
+class ImportExportTestKernel extends TestKernel
 {
     public static function start()
     {
@@ -74,4 +74,4 @@ class PluginTestKernel extends TestKernel
     }
 }
 
-PluginTestKernel::start();
+ImportExportTestKernel::start();
