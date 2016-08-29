@@ -128,7 +128,11 @@ class DbAdapterTest extends ImportExportTestHelper
         $columns = $dbAdapter->getDefaultColumns();
 
         $this->assertTrue(is_array($columns));
-        $this->assertEquals(0, count(array_diff($columns['default'], $expectedColumns)));
+        $this->assertEquals(
+            0,
+            count(array_diff($columns['default'], $expectedColumns)),
+            "Different columns: " . explode(', ', array_diff($columns['default'], $expectedColumns))
+        );
     }
 
     /**
