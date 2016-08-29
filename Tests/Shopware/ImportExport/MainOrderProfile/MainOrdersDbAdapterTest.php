@@ -2,29 +2,23 @@
 
 namespace Tests\Shopware\ImportExport;
 
+use Tests\Helper\DbAdapterTest;
+
 class MainOrdersDbAdapterTest extends DbAdapterTest
 {
     /**
      * @var string
      */
-    protected static $yamlFile = "TestCases/mainOrdersDbAdapter.yml";
+    protected $yamlFile = "TestCases/mainOrdersDbAdapter.yml";
 
     public function setUp()
     {
+        $this->markTestIncomplete('Needs to be completely revised.');
+
         parent::setUp();
 
         $this->dbAdapter = 'mainOrders';
         $this->dbTable = 's_order';
-    }
-
-    /**
-     * @return \PHPUnit_Extensions_Database_DataSet_YamlDataSet
-     */
-    protected function getDataSet()
-    {
-        return new \PHPUnit_Extensions_Database_DataSet_YamlDataSet(
-            dirname(__FILE__) . "/Database/mainOrders.yml"
-        );
     }
 
     /**
@@ -46,7 +40,7 @@ class MainOrdersDbAdapterTest extends DbAdapterTest
      */
     public function readRecordIdsProvider()
     {
-        return static::getDataProvider('testReadRecordIds');
+        return $this->getDataProvider('testReadRecordIds');
     }
 
     /**
@@ -68,7 +62,7 @@ class MainOrdersDbAdapterTest extends DbAdapterTest
      */
     public function readProvider()
     {
-        return static::getDataProvider('testRead');
+        return $this->getDataProvider('testRead');
     }
 
     /**
@@ -90,7 +84,7 @@ class MainOrdersDbAdapterTest extends DbAdapterTest
      */
     public function readColumnsExceptionProvider()
     {
-        return static::getDataProvider('testReadColumnsException');
+        return $this->getDataProvider('testReadColumnsException');
     }
 
     /**
@@ -112,7 +106,7 @@ class MainOrdersDbAdapterTest extends DbAdapterTest
      */
     public function readIdsExceptionProvider()
     {
-        return static::getDataProvider('testReadIdsException');
+        return $this->getDataProvider('testReadIdsException');
     }
 
     /**
@@ -131,7 +125,7 @@ class MainOrdersDbAdapterTest extends DbAdapterTest
      */
     public function defaultColumnsProvider()
     {
-        return static::getDataProvider('testDefaultColumns');
+        return $this->getDataProvider('testDefaultColumns');
     }
 
     /**
@@ -151,6 +145,6 @@ class MainOrdersDbAdapterTest extends DbAdapterTest
      */
     public function writeProvider()
     {
-        return static::getDataProvider('testWrite');
+        return $this->getDataProvider('testWrite');
     }
 }

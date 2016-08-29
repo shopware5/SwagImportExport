@@ -21,14 +21,7 @@ abstract class Validator
      */
     public function prepareInitialData($record)
     {
-        $record = array_filter(
-            $record,
-            function ($value) {
-                return $value !== '';
-            }
-        );
-
-        return $record;
+        return array_filter($record);
     }
 
     /**

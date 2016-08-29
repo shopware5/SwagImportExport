@@ -1,10 +1,18 @@
 <?php
+/**
+ * (c) shopware AG <info@shopware.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Tests\Shopware\ImportExport;
 
+use Tests\Helper\DbAdapterTest;
+
 class CustomersDbAdapterTest extends DbAdapterTest
 {
-    protected static $yamlFile = "TestCases/customersDbAdapter.yml";
+    protected $yamlFile = "TestCases/customersDbAdapter.yml";
 
     public function setUp()
     {
@@ -14,18 +22,11 @@ class CustomersDbAdapterTest extends DbAdapterTest
         $this->dbTable = 's_user';
     }
 
-    protected function getDataSet()
-    {
-        return new \PHPUnit_Extensions_Database_DataSet_YamlDataSet(
-            dirname(__FILE__) . '/Database/customers.yml'
-        );
-    }
-
     /**
-     * @param $columns
-     * @param $ids
-     * @param $expected
-     * @param $expectedCount
+     * @param string $columns
+     * @param int[] $ids
+     * @param array $expected
+     * @param int $expectedCount
      *
      * @dataProvider readProvider
      */
@@ -36,25 +37,25 @@ class CustomersDbAdapterTest extends DbAdapterTest
 
     public function readProvider()
     {
-        return static::getDataProvider('testRead');
+        return $this->getDataProvider('testRead');
     }
 
     /**
-     * @param $start
-     * @param $limit
-     * @param $expectedIds
-     * @param $expectedCount
+     * @param int $start
+     * @param array $limit
+     * @param int[] $expectedIds
+     * @param int $expectedCount
      *
      * @dataProvider readRecordIdsProvider
      */
     public function testReadRecordIds($start, $limit, $expectedIds, $expectedCount)
     {
-        $this->readRecordIds($start, $limit, $expectedIds, $expectedCount);
+        $this->readRecordIds($start, $limit, [], $expectedIds, $expectedCount);
     }
 
     public function readRecordIdsProvider()
     {
-        return static::getDataProvider('testReadRecordIds');
+        return $this->getDataProvider('testReadRecordIds');
     }
 
     /**
@@ -70,30 +71,29 @@ class CustomersDbAdapterTest extends DbAdapterTest
 
     public function defaultColumnsProvider()
     {
-        return static::getDataProvider('testDefaultColumns');
+        return $this->getDataProvider('testDefaultColumns');
     }
-
-    //TODO: uncomment after merging PT-2436
-//    /**
-//     * @param $records
-//     * @param $expectedInsertedRows
-//     *
-//     * @dataProvider writeWithEmptyFile
-//     * @expectedException \Exception
-//     */
-//    public function testWriteWithEmptyFile($records, $expectedInsertedRows)
-//    {
-//        $this->write($records, $expectedInsertedRows);
-//    }
-//
-//    public function writeWithEmptyFile()
-//    {
-//        return static::getDataProvider('testWriteWithEmptyFile');
-//    }
 
     /**
      * @param $records
      * @param $expectedInsertedRows
+     *
+     * @dataProvider writeWithEmptyFile
+     * @expectedException \Exception
+     */
+    public function testWriteWithEmptyFile($records, $expectedInsertedRows)
+    {
+        $this->write($records, $expectedInsertedRows);
+    }
+
+    public function writeWithEmptyFile()
+    {
+        return $this->getDataProvider('testWriteWithEmptyFile');
+    }
+
+    /**
+     * @param array $records
+     * @param int $expectedInsertedRows
      *
      * @dataProvider writeProvider
      */
@@ -104,6 +104,6 @@ class CustomersDbAdapterTest extends DbAdapterTest
 
     public function writeProvider()
     {
-        return static::getDataProvider('testWrite');
+        return $this->getDataProvider('testWrite');
     }
 }

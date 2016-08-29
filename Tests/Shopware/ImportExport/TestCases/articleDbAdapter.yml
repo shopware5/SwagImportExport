@@ -17,16 +17,15 @@ testRead:
             [accessoryDetail.number as ordernumber]
           category:
             [categories.id as categoryId]
-        ids: [1, 2]
+        ids: [3, 123]
         expected:
           article:
             0:
-              name: Test1
-              orderNumber: SW10001
+              name: 'Münsterländer Lagerkorn 32%'
+              orderNumber: 'SW10002.1'
             1:
-              name: Test2
-              orderNumber: SW10002
-        expectedCount: 2
+              name: 'Münsterländer Aperitif 16%'
+              orderNumber: 'SW10003'
 testReadRecordIds:
     test1:
         start: 0
@@ -37,8 +36,8 @@ testWrite:
         data:
           article:
             0:
-              mainNumber: 'SW10004'
-              orderNumber: 'SW10004'
+              mainNumber: 'test9999'
+              orderNumber: 'test9999'
               name: 'shopware-test1'
               supplierName: 'Testhersteller'
               tax: "19.00"
@@ -54,17 +53,3 @@ testWrite:
               priceGroup: 'H'
               price: 50
               parentIndexElement: 0
-        expectedRows:
-            s_articles:
-              0:
-                name: 'shopware-test1'
-            s_articles_details:
-              0:
-                orderNumber: 'SW10004'
-            s_articles_prices:
-              0:
-                priceGroup: 'EK'
-                price: 84.033613445378
-              1:
-                priceGroup: 'H'
-                price: 50

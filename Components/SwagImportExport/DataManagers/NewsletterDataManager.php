@@ -112,7 +112,7 @@ class NewsletterDataManager extends DataManager
         }
 
         $groupId = $this->config->get("sNEWSLETTERDEFAULTGROUP");
-        $group = $this->groupRepository->findOneBy($groupId);
+        $group = $this->groupRepository->find($groupId);
 
         if (!$group instanceof Group) {
             $message = SnippetsHelper::getNamespace()

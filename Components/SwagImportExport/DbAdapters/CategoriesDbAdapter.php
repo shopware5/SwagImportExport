@@ -8,6 +8,7 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
+use Doctrine\DBAL\Connection;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Shopware\Components\SwagImportExport\DataManagers\CategoriesDataManager;
 use Shopware\Components\SwagImportExport\DataType\CategoryDataType;
@@ -137,11 +138,11 @@ class CategoriesDbAdapter implements DataDbAdapter
     {
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select($columns)
-            ->from('Shopware\Models\Category\Category', 'c')
+            ->from(Category::class, 'c')
             ->leftJoin('c.attribute', 'attr')
             ->leftJoin('c.customerGroups', 'customerGroups')
-            ->Where('c.id IN (:ids)')
-            ->setParameter('ids', $ids)
+            ->where('c.id IN (:ids)')
+            ->setParameter('ids', $ids, Connection::PARAM_INT_ARRAY)
             ->distinct();
 
         return $builder;
@@ -262,7 +263,7 @@ class CategoriesDbAdapter implements DataDbAdapter
 
                 $manager->persist($category);
 
-                $metadata = $manager->getClassMetaData(get_class($category));
+                $metadata = $manager->getClassMetadata(get_class($category));
                 $metadata->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_NONE);
 
                 $manager->flush();
@@ -278,7 +279,7 @@ class CategoriesDbAdapter implements DataDbAdapter
      * @param int $currentIndex
      * @return array
      */
-    private function getCustomerGroupIdsFromIndex(array $array, $currentIndex)
+    private function getCustomerGroupIdsFromIndex($array, $currentIndex)
     {
         $returnArray = array();
         foreach ($array as $customerGroupEntry) {
@@ -357,11 +358,11 @@ class CategoriesDbAdapter implements DataDbAdapter
     protected function prepareData(array $data, $index, $categoryId, $groups)
     {
         //prepares attribute associated data
-        foreach ($data as $key => $value) {
-            if (preg_match('/^attribute/', $key)) {
-                $newKey = lcfirst(preg_replace('/^attribute/', '', $key));
+        foreach ($data as $column => $value) {
+            if (preg_match('/^attribute/', $column)) {
+                $newKey = lcfirst(preg_replace('/^attribute/', '', $column));
                 $data['attribute'][$newKey] = $value;
-                unset($data[$key]);
+                unset($data[$column]);
             }
         }
 
@@ -377,7 +378,6 @@ class CategoriesDbAdapter implements DataDbAdapter
         $data['customerGroups'] = $customerGroups;
 
         unset($data['parentId']);
-
         return $data;
     }
     
@@ -404,7 +404,7 @@ class CategoriesDbAdapter implements DataDbAdapter
     
     /**
      * @param string $section
-     * @return mix
+     * @return mixed
      */
     public function getColumns($section)
     {

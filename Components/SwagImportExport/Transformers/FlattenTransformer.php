@@ -40,7 +40,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
     /**
      * Transforms the flat array into tree with list of nodes containing children and attributes.
      *
-     * @param $data
+     * @param array $data
      * @return array
      * @throws \Enlight_Event_Exception
      */
@@ -63,7 +63,6 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
             $flatData,
             array('subject' => $this)
         );
-
         return $flatData;
     }
 

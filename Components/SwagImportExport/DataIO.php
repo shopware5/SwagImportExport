@@ -98,7 +98,7 @@ class DataIO
      * @param Session $dataSession
      * @param Logger $logger
      */
-    public function __construct($dbAdapter, $dataSession, $logger)
+    public function __construct(DataDbAdapter $dbAdapter, $dataSession, $logger)
     {
         $this->dbAdapter = $dbAdapter;
         $this->dataSession = $dataSession;
@@ -215,7 +215,6 @@ class DataIO
         }
 
         $this->setRecordIds($ids);
-
         return $this;
     }
 
@@ -294,7 +293,9 @@ class DataIO
      */
     public function getDirectory()
     {
-        $directory = Shopware()->DocPath() . 'files/import_export/';
+        /** @var UploadPathProvider $uploadedPathProvider */
+        $uploadedPathProvider = Shopware()->Container()->get('swag_import_export.upload_path_provider');
+        $directory = $uploadedPathProvider->getPath();
 
         if (!file_exists($directory)) {
             $this->createDirectory($directory);

@@ -2,9 +2,14 @@
 
 namespace Tests\Shopware\ImportExport;
 
+use Doctrine\DBAL\Connection;
+use Shopware\Components\SwagImportExport\DbAdapters\ArticlesDbAdapter;
+use Shopware\Components\SwagImportExport\Factories\DataFactory;
+use Tests\Helper\DbAdapterTest;
+
 class ArticlesDbAdapterTest extends DbAdapterTest
 {
-    protected static $yamlFile = "TestCases/articleDbAdapter.yml";
+    protected $yamlFile = "TestCases/articleDbAdapter.yml";
 
     public function setUp()
     {
@@ -14,32 +19,26 @@ class ArticlesDbAdapterTest extends DbAdapterTest
         $this->dbTable = 's_articles';
     }
 
-    protected function getDataSet()
-    {
-        return new \PHPUnit_Extensions_Database_DataSet_YamlDataSet(
-            dirname(__FILE__) . "/Database/articles.yml"
-        );
-    }
-
     /**
+     * @param array $columns
+     * @param int[] $ids
+     * @param array $expected
+     *
      * @dataProvider readProvider
      */
-    public function testRead($columns, $ids, $expected, $expectedCount)
+    public function testRead($columns, $ids, $expected)
     {
-        $dataFactory = $this->Plugin()->getDataFactory();
-        $dbAdapter = $dataFactory->createDbAdapter($this->dbAdapter);
+        $dbAdapter = $this->createArticlesDbAdapter();
 
         $rawData = $dbAdapter->read($ids, $columns);
 
-        foreach ($expected as $key1 => $elements) {
-            foreach ($elements as $key2 => $element) {
-                foreach ($element as $key3 => $val) {
-                    $this->assertEquals($rawData[$key1][$key2][$key3], $val);
-                }
-            }
+        foreach ($rawData['article'] as &$item) {
+            unset($item['articleId']);
         }
 
-        $this->assertEquals(count($rawData['article']), $expectedCount);
+        $this->assertTrue(in_array($rawData['article'][0], $expected['article']));
+        $this->assertTrue(in_array($rawData['article'][1], $expected['article']));
+        $this->assertEquals(count($rawData['article']), count($expected['article']));
     }
 
     public function readProvider()
@@ -48,61 +47,87 @@ class ArticlesDbAdapterTest extends DbAdapterTest
     }
 
     /**
+     * @param array $data
+     *
      * @dataProvider writeProvider
      */
-    public function testWrite($data, $expectedInsertedRows)
+    public function testWrite($data)
     {
-        $tableNames = array_keys($expectedInsertedRows);
+        $expectedOrderNumber = 'test9999';
 
-        $expectedTables = array();
-        $insertedTables = array();
-
-        foreach ($tableNames as $tableName) {
-            $expectedTables[$tableName] = $this->getExpectedData($tableName, $expectedInsertedRows);
-        }
-
-        // Start the action
-        $dataFactory = $this->Plugin()->getDataFactory();
-
-        $dbAdapter = $dataFactory->createDbAdapter($this->dbAdapter);
+        /** @var ArticlesDbAdapter $dbAdapter */
+        $dbAdapter = $this->createArticlesDbAdapter();
         $dbAdapter->write($data);
 
-        foreach ($tableNames as $tableName) {
-            $insertedTable = $this->getInsertedDataTable($expectedTables[$tableName]['columns'], $tableName);
-            $this->assertTablesEqual($expectedTables[$tableName]['table'], $insertedTable);
-        }
+        $product = $this->getProductDataResult($expectedOrderNumber);
+        $prices = $this->getProductPriceResult($expectedOrderNumber);
+
+        $this->assertEquals('test9999', $product[0]['ordernumber']);
+        $this->assertEquals('shopware-test1', $product[0]['name']);
+
+        $this->assertEquals('EK', $prices[0]['pricegroup']);
+        $this->assertEquals(84.033613445378, $prices[0]['price']);
+
+        $this->assertEquals('H', $prices[1]['pricegroup']);
+        $this->assertEquals(50, $prices[1]['price']);
     }
 
     public function writeProvider()
     {
-        return static::getDataProvider('testWrite');
+        return $this->getDataProvider('testWrite');
     }
 
-    private function getExpectedData($table, $expectedInsertedRows)
+    /**
+     * @return ArticlesDbAdapter
+     */
+    private function createArticlesDbAdapter()
     {
-        $articlesRows = $expectedInsertedRows[$table];
-
-        $columnsSelect = implode(', ', array_keys($articlesRows[0]));
-
-        $articleTableBefore = $this->getDatabaseTester()->getConnection()->createQueryTable(
-            $table, 'SELECT ' . $columnsSelect . ' FROM ' . $table . ' ORDER BY id'
-        );
-
-        $expectedArticleTable = new \PHPUnit_Extensions_Database_DataSet_DefaultTable($articleTableBefore->getTableMetaData());
-
-        $expectedArticleTable->addTableRows($articleTableBefore);
-
-        foreach ($articlesRows as $articlesRow) {
-            $expectedArticleTable->addRow($articlesRow);
-        }
-
-        return array('columns' => $columnsSelect, 'table' => $expectedArticleTable);
+        $dataFactory = $this->Plugin()->getDataFactory();
+        return $dataFactory->createDbAdapter($this->dbAdapter);
     }
 
-    private function getInsertedDataTable($columns, $table)
+    /**
+     * @param string $number
+     * @return array
+     */
+    private function getProductDataResult($number)
     {
-        return $this->getDatabaseTester()->getConnection()->createQueryTable(
-            $table, 'SELECT ' . $columns . ' FROM ' . $table . ' ORDER BY id'
-        );
+        $builder = $this->getQueryBuilder();
+
+        $builder->select(['details.ordernumber', 'articles.name', 'prices.price']);
+        $builder->from('s_articles', 'articles');
+        $builder->leftJoin('articles', 's_articles_details', 'details', 'details.articleID = articles.id');
+        $builder->leftJoin('details', 's_articles_prices', 'prices', 'prices.articledetailsID = details.id');
+        $builder->where('details.ordernumber = :number');
+        $builder->setParameter('number', $number);
+
+        return $builder->execute()->fetchAll();
+    }
+
+    /**
+     * @param string $number
+     * @return array
+     */
+    private function getProductPriceResult($number)
+    {
+        $builder = $this->getQueryBuilder();
+
+        $builder->select('prices.pricegroup', 'prices.price');
+        $builder->from('s_articles_prices', 'prices');
+        $builder->leftJoin('prices', 's_articles_details', 'details', 'details.id = prices.articledetailsID');
+        $builder->where('details.ordernumber = :number');
+        $builder->setParameter('number', $number);
+
+        return $builder->execute()->fetchAll();
+    }
+
+    /**
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    private function getQueryBuilder()
+    {
+        /** @var Connection $connection */
+        $connection = Shopware()->Container()->get('dbal_connection');
+        return $connection->createQueryBuilder();
     }
 }

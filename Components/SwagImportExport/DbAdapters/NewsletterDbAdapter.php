@@ -165,7 +165,7 @@ class NewsletterDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $records
+     * @param array $records
      * @throws \Enlight_Event_Exception
      * @throws \Exception
      */

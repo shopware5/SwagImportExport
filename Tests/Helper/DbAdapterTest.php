@@ -1,8 +1,18 @@
 <?php
+/**
+ * (c) shopware AG <info@shopware.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
-namespace Tests\Shopware\ImportExport;
+namespace Tests\Helper;
 
+use Doctrine\DBAL\Connection;
+use Shopware\Components\SwagImportExport\DbAdapters\CategoriesDbAdapter;
+use Shopware\Components\SwagImportExport\DbAdapters\CustomerDbAdapter;
 use \Shopware\Components\SwagImportExport\Factories\DataFactory;
+use Tests\Helper\ImportExportTestHelper;
 
 class DbAdapterTest extends ImportExportTestHelper
 {
@@ -12,35 +22,55 @@ class DbAdapterTest extends ImportExportTestHelper
     /* @var string $dbTable */
     protected $dbTable;
 
-    /* @var \PHPUnit_Extensions_Database_DataSet_SymfonyYamlParser $parser */
-    protected static $parser;
-    protected static $yamlFile;
-    protected static $dataProvider;
+    /**
+     * @var \PHPUnit_Extensions_Database_DataSet_SymfonyYamlParser $parser
+     */
+    protected $parser;
+    protected $yamlFile;
+    protected $dataProvider;
 
-    public static function assertTablesEqual(\PHPUnit_Extensions_Database_DataSet_DefaultTable $expected, PHPUnit_Extensions_Database_DataSet_ITable $actual, $message = '')
-    {
+    /**
+     * @param \PHPUnit_Extensions_Database_DataSet_DefaultTable $expected
+     * @param \PHPUnit_Extensions_Database_DataSet_ITable $actual
+     * @param string $message
+     */
+    public function assertTablesEqual(
+        \PHPUnit_Extensions_Database_DataSet_DefaultTable $expected,
+        \PHPUnit_Extensions_Database_DataSet_ITable $actual,
+        $message = ''
+    ) {
         $constraint = new \PHPUnit_Extensions_Database_Constraint_TableIsEqual($expected);
-
-        self::assertThat($actual, $constraint, $message);
+        $this->assertThat($actual, $constraint, $message);
     }
 
-    public static function getDataProvider($testCase)
+    public function getDataProvider($testCase)
     {
-        if (static::$dataProvider == null) {
-            static::$dataProvider = static::parseYaml(dirname(__FILE__) . '/' . static::$yamlFile);
+        if ($this->dataProvider == null) {
+            $this->dataProvider = $this->parseYaml($this->getYamlFile($this->yamlFile));
         }
 
-        return static::$dataProvider[$testCase];
+        return $this->dataProvider[$testCase];
     }
 
-    public static function parseYaml($yamlFile)
+    /**
+     * @param string $yamlFile
+     * @return array
+     */
+    public function parseYaml($yamlFile)
     {
-        if (static::$parser == null) {
-            static::$parser = new \PHPUnit_Extensions_Database_DataSet_SymfonyYamlParser();
+        if ($this->parser == null) {
+            $this->parser = new \PHPUnit_Extensions_Database_DataSet_SymfonyYamlParser();
         }
-        return static::$parser->parseYaml($yamlFile);
+        return $this->parser->parseYaml($yamlFile);
     }
 
+    /**
+     * @param array $columns
+     * @param int[] $ids
+     * @param array $expectedResults
+     * @param int $expectedCount
+     * @param string $section
+     */
     public function read($columns, $ids, $expectedResults, $expectedCount,  $section = 'default')
     {
         /* @var DataFactory $dataFactory */
@@ -48,15 +78,22 @@ class DbAdapterTest extends ImportExportTestHelper
         $dbAdapter = $dataFactory->createDbAdapter($this->dbAdapter);
 
         $rawData = $dbAdapter->read($ids, $columns);
-
         foreach ($expectedResults as $index => $expectedResult) {
             foreach ($expectedResult as $column => $value) {
-                $this->assertSame($rawData[$section][$index][$column], $value, "The value of `$column` field does not match!");
+                $this->assertEquals($value, $rawData[$section][$index][$column], "The value of `$column` field does not match!");
             }
         }
-        $this->assertEquals(count($rawData[$section]), $expectedCount);
+
+        $this->assertEquals($expectedCount, count($rawData[$section]));
     }
 
+    /**
+     * @param int $start
+     * @param array $limit
+     * @param array $filter
+     * @param array $expectedIds
+     * @param int $expectedCount
+     */
     public function readRecordIds($start, $limit, $filter, $expectedIds, $expectedCount)
     {
         /* @var DataFactory $dataFactory */
@@ -78,6 +115,10 @@ class DbAdapterTest extends ImportExportTestHelper
         $this->assertEquals($expectedCount, count($ids));
     }
 
+    /**
+     * @param array $expectedColumns
+     * @param int $expectedCount
+     */
     public function defaultColumns($expectedColumns, $expectedCount)
     {
         /* @var DataFactory $dataFactory */
@@ -87,15 +128,18 @@ class DbAdapterTest extends ImportExportTestHelper
         $columns = $dbAdapter->getDefaultColumns();
 
         $this->assertTrue(is_array($columns));
-        $this->assertEquals($expectedColumns, $columns);
-        $this->assertEquals($expectedCount, count($columns));
+        $this->assertEquals(0, count(array_diff($columns['default'], $expectedColumns)));
     }
 
+    /**
+     * @param array $records
+     * @param int $expectedInsertedRows
+     */
     public function write($records, $expectedInsertedRows)
     {
         $recordsCountBeforeImport = $this->getDatabaseTester()->getConnection()->getRowCount($this->dbTable);
-
         $dataFactory = $this->Plugin()->getDataFactory();
+
         $dbAdapter = $dataFactory->createDbAdapter($this->dbAdapter);
         $dbAdapter->write($records);
 
@@ -104,12 +148,16 @@ class DbAdapterTest extends ImportExportTestHelper
         $this->assertEquals($expectedInsertedRows, $recordsCountAfterImport - $recordsCountBeforeImport);
     }
 
-    public function insertOne($category, $expectedRow)
+    /**
+     * @param array $data
+     * @param array $expectedRow
+     */
+    public function insertOne($data, $expectedRow)
     {
         // Prepare expected data
         $columnsSelect = implode(', ', array_keys($expectedRow));
         $queryTableBefore = $this->getDatabaseTester()->getConnection()->createQueryTable(
-                $this->dbTable, 'SELECT ' . $columnsSelect . ' FROM ' . $this->dbTable
+            $this->dbTable, 'SELECT ' . $columnsSelect . ' FROM ' . $this->dbTable
         );
 
         $expectedTable = new \PHPUnit_Extensions_Database_DataSet_DefaultTable($queryTableBefore->getTableMetaData());
@@ -118,18 +166,21 @@ class DbAdapterTest extends ImportExportTestHelper
 
         // Start the action
         $dataFactory = $this->Plugin()->getDataFactory();
-
-        $catDbAdapter = $dataFactory->createDbAdapter($this->dbAdapter);
-        $catDbAdapter->write($category);
+        $dbAdapter = $dataFactory->createDbAdapter($this->dbAdapter);
+        $dbAdapter->write($data);
 
         // Assert
-        $queryTable = $this->getDatabaseTester()->getConnection()->createQueryTable(
-                $this->dbTable, 'SELECT ' . $columnsSelect . ' FROM ' . $this->dbTable
+        $resultTable = $this->getDatabaseTester()->getConnection()->createQueryTable(
+            $this->dbTable, 'SELECT ' . $columnsSelect . ' FROM ' . $this->dbTable
         );
 
-        $this->assertTablesEqual($expectedTable, $queryTable);
+        $this->assertTablesEqual($expectedTable, $resultTable);
     }
 
+    /**
+     * @param array $category
+     * @param array $expectedRow
+     */
     public function updateOne($category, $expectedRow)
     {
         // Prepare expected data
@@ -140,12 +191,12 @@ class DbAdapterTest extends ImportExportTestHelper
         $rowCount = $queryTableBefore->getRowCount();
         $expectedTable = new \PHPUnit_Extensions_Database_DataSet_DefaultTable($queryTableBefore->getTableMetaData());
 
-        for ($i = 0; $i < $rowCount; $i++) {
-            $row = $queryTableBefore->getRow($i);
-            if ($row['id'] == $expectedRow['id']) {
+        for ($row = 0; $row < $rowCount; $row++) {
+            $currentRow = $queryTableBefore->getRow($row);
+            if ($currentRow['id'] == $expectedRow['id']) {
                 $expectedTable->addRow($expectedRow);
             } else {
-                $expectedTable->addRow($row);
+                $expectedTable->addRow($currentRow);
             }
         }
 
@@ -157,9 +208,18 @@ class DbAdapterTest extends ImportExportTestHelper
 
         // Assert
         $queryTable = $this->getDatabaseTester()->getConnection()->createQueryTable(
-                $this->dbTable, 'SELECT ' . $columnsSelect . ' FROM ' . $this->dbTable
+            $this->dbTable, 'SELECT ' . $columnsSelect . ' FROM ' . $this->dbTable
         );
 
         $this->assertTablesEqual($expectedTable, $queryTable);
+    }
+
+    /**
+     * @param string $fileName
+     * @return string
+     */
+    protected function getYamlFile($fileName)
+    {
+        return dirname(__FILE__) . '/../Shopware/ImportExport/' . $fileName;
     }
 }

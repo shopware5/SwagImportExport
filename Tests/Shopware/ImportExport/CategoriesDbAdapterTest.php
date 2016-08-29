@@ -2,9 +2,11 @@
 
 namespace Tests\Shopware\ImportExport;
 
+use Tests\Helper\DbAdapterTest;
+
 class CategoriesDbAdapterTest extends DbAdapterTest
 {
-    protected static $yamlFile = "TestCases/categoriesDbAdapter.yml";
+    protected $yamlFile = "TestCases/categoriesDbAdapter.yml";
 
     public function setUp()
     {
@@ -14,14 +16,12 @@ class CategoriesDbAdapterTest extends DbAdapterTest
         $this->dbTable = 's_categories';
     }
 
-    protected function getDataSet()
-    {
-        return new \PHPUnit_Extensions_Database_DataSet_YamlDataSet(
-            dirname(__FILE__) . "/Database/categories.yml"
-        );
-    }
-    
     /**
+     * @param array $columns
+     * @param int[] $ids
+     * @param array $expected
+     * @param int $expectedCount
+     *
      * @dataProvider readProvider
      */
     public function testRead($columns, $ids, $expected, $expectedCount)
@@ -31,28 +31,46 @@ class CategoriesDbAdapterTest extends DbAdapterTest
 
     public function readProvider()
     {
-        return static::getDataProvider('testRead');
+        return $this->getDataProvider('testRead');
     }
 
     /**
+     * @param $start
+     * @param $limit
+     * @param $expected
+     * @param $expectedCount
+     *
      * @dataProvider readRecordIdsProvider
      */
-    public function testReadRecordIds($start, $limit, $expectedCount)
+    public function testReadRecordIds($start, $limit, $expected, $expectedCount)
     {
-        $this->readRecordIds($start, $limit, $expectedCount);
+        $this->readRecordIds($start, $limit, [], $expected, $expectedCount);
     }
 
     public function readRecordIdsProvider()
     {
-        return static::getDataProvider('testReadRecordIds');
-    }
-
-    public function testDefaultColumns()
-    {
-        $this->defaultColumns();
+        return $this->getDataProvider('testReadRecordIds');
     }
 
     /**
+     * @param $expectedColumns
+     *
+     * @dataProvider defaultColumnProvider
+     */
+    public function testDefaultColumns($expectedColumns)
+    {
+        $this->defaultColumns($expectedColumns, count($expectedColumns));
+    }
+
+    public function defaultColumnProvider()
+    {
+        return $this->getDataProvider('testDefaultColumns');
+    }
+
+    /**
+     * @param array $data
+     * @param int $expectedInsertedRows
+     *
      * @dataProvider writeProvider
      */
     public function testWrite($data, $expectedInsertedRows)
@@ -62,10 +80,13 @@ class CategoriesDbAdapterTest extends DbAdapterTest
 
     public function writeProvider()
     {
-        return static::getDataProvider('testWrite');
+        return $this->getDataProvider('testWrite');
     }
 
     /**
+     * @param array $category
+     * @param array $expectedRow
+     *
      * @dataProvider insertOneProvider
      */
     public function testInsertOne($category, $expectedRow)
@@ -75,7 +96,7 @@ class CategoriesDbAdapterTest extends DbAdapterTest
 
     public function insertOneProvider()
     {
-        return static::getDataProvider('testInsertOne');
+        return $this->getDataProvider('testInsertOne');
     }
 
     /**
@@ -88,6 +109,6 @@ class CategoriesDbAdapterTest extends DbAdapterTest
 
     public function updateOneProvider()
     {
-        return static::getDataProvider('testUpdateOne');
+        return $this->getDataProvider('testUpdateOne');
     }
 }

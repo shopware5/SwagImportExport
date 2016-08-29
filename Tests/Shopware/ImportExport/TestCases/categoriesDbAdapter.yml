@@ -3,9 +3,18 @@ testRead:
         columns: 'c.id, c.parentId, c.name, c.active'
         ids: [3, 5, 6, 8, 15]
         expected:
+            0:
+                  name: 'Deutsch'
+            1:
+                  name: 'Genusswelten'
             2:
                   name: 'Sommerwelten'
-        expectedCount: 4
+            3:
+                  name: 'Wohnwelten'
+            4:
+                  name: 'Köstlichkeiten'
+
+        expectedCount: 5
     test2:
         columns: 'c.id, c.parentId, c.name, c.active'
         ids: [6, 8]
@@ -21,7 +30,10 @@ testRead:
         expected:
             0:
                 id: 3
-        expectedCount: 1
+            1:
+                id: 15
+
+        expectedCount: 2
     test3:
         columns: 'c.id, c.active'
         ids: [3, 8]
@@ -37,33 +49,16 @@ testReadRecordIds:
     test1:
         start: 0
         limit: 6
-        expectedCount: 4
-    test2:
-        start: 1
-        limit: 2
-        expectedCount: 2
-    test3:
-        start: 0
-        limit: 3
-        expectedCount: 3
+        expectedIds: [3, 39, 5, 6, 8, 9]
+        expectedCount: 6
 testWrite:
     test1:
         data:
             default:
                 0:
-                    categoryId: 15
-                    parentId: 3
-                    name: 'Test'
-        expectedInsertedRows: 1
-    test2:
-        data:
-            default:
-                0:
-                    categoryId: 15
                     parentId: 3
                     name: 'Test'
                 1:
-                    categoryId: 19
                     parentId: 15
                     name: 'Test 2'
         expectedInsertedRows: 2
@@ -72,46 +67,24 @@ testInsertOne:
         data:
             default:
                 0:
-                    categoryId: 15
                     parentId: 3
-                    name: 'Test'
+                    name: 'Test category'
         expectedRow:
-            id: 15
             parent: 3
-            description: 'Test'
-    test2:
-        data:
-            default:
-                0:
-                    categoryId: 16
-                    parentId: 8
-                    name: 'Test123'
-        expectedRow:
-            id: 16
-            parent: 8
-            description: 'Test123'
+            description: 'Test category'
 testUpdateOne:
     test1:
         category:
           default:
             0:
-              categoryId: 8
-              parentId: 5
-              name: 'Test'
+              categoryId: 31
+              parentId: 9
+              name: 'Test update'
         expectedRow:
-            id: 8
-            parent: 5
-            path: '|5|3|'
-            description: 'Test'
-    test2:
-        category:
-          default:
-            0:
-              categoryId: 6
-              parentId: 5
-              name: 'Test'
-        expectedRow:
-            id: 6
-            parent: 5
-            path: '|5|3|'
-            description: 'Test'
+            id: 31
+            parent: 9
+            path: '|9|3|'
+            description: 'Test update'
+testDefaultColumns:
+    test1:
+        expectedColumns: [ 'c.id as categoryId', 'c.parentId as parentId', 'c.name as name', 'c.position as position', 'c.metaTitle as metaTitle', 'c.metaKeywords as metaKeywords', 'c.metaDescription as metaDescription', 'c.cmsHeadline as cmsHeadline', 'c.cmsText as cmsText', 'c.template as template', 'c.active as active', 'c.blog as blog', 'c.external as external', 'c.hideFilter as hideFilter', 'attr.attribute1 as attributeAttribute1', 'attr.attribute2 as attributeAttribute2', 'attr.attribute3 as attributeAttribute3', 'attr.attribute4 as attributeAttribute4', 'attr.attribute5 as attributeAttribute5', 'attr.attribute6 as attributeAttribute6' ]

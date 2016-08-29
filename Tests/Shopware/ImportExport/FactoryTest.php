@@ -19,6 +19,7 @@ use Shopware\Components\SwagImportExport\FileIO\CsvFileWriter;
 use Shopware\Components\SwagImportExport\FileIO\XmlFileWriter;
 use Shopware\Components\SwagImportExport\FileIO\CsvFileReader;
 use Shopware\Components\SwagImportExport\FileIO\XmlFileReader;
+use Tests\Helper\ImportExportTestHelper;
 
 class FactoryTest extends ImportExportTestHelper
 {

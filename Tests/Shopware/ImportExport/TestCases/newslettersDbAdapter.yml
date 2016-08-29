@@ -1,14 +1,14 @@
 testRead:
     test1:
         columns: 'na.email, ng.name'
-        ids: [1, 2, 3, 4]
+        ids: [9999, 10000]
         expected:
             2:
                 name: 'Newsletter-Empf'
-        expectedCount: 4
+        expectedCount: 2
     test2:
         columns: 'na.email, cd.firstName, cd.lastName'
-        ids: [1, 3, 4]
+        ids: [9999, 10000, 10001]
         expected:
             0:
                 email: 'info@shopware.de'
@@ -26,88 +26,32 @@ testRead:
 testReadRecordIds:
     test1:
         start: 0
-        limit: 9
-        expectedCount: 9
-    test2:
-        start: 1
         limit: 2
         expectedCount: 2
-    test3:
-        start: 7
-        limit: 5
-        expectedCount: 2
-    test4:
-        start: 9
-        limit: 5
-        expectedCount: 0
 testWrite:
     test1:
         data:
-            address1:
-                email: test1@shopware.de
-        expectedInsertedRows: 1
-    test2:
-        data:
-            address1:
-                email: test1@shopware.de
-            address2:
-                email: test2@shopware.de
-            address3:
-                email: test3@shopware.de
+            default:
+                0:
+                    id: 9999
+                    email: test1@shopware.de
+                1:
+                    id: 10000
+                    email: test2@shopware.de
+                2:
+                    id: 10001
+                    email: test3@shopware.de
         expectedInsertedRows: 3
-    test3:
-        data:
-            address1:
-                email: test1@shopware.de
-            address2:
-                email: test2@shopware.de
-            address3:
-                # The same as the previous address
-                email: test2@shopware.de
-        expectedInsertedRows: 2
-testInsertOne:
-    test1:
-        address:
-            id: 10
-            email: info1@shopware.de
-        expectedRow:
-            id: 10
-            customer: 0
-            groupID: 1
-            email: info1@shopware.de
-            lastmailing: 0
-            lastread: 0
-    test2:
-        address:
-            email: info2@shopware.de
-            userID: 2
-        expectedRow:
-            id: 10
-            customer: 1
-            groupID: 1
-            email: info2@shopware.de
-            lastmailing: 0
-            lastread: 0
 testUpdateOne:
     test1:
-        address:
-            email: info@shopware.de
-            lastread: 2
+        data:
+            default:
+                0:
+                    email: test1@shopware.de
+                    lastread: 2
         expectedRow:
-            id: 1
             customer: 0
-            groupID: 2
-            email: info@shopware.de
+            groupID: 1
+            email: test1@shopware.de
             lastmailing: 0
-            lastread: 0
-    test2:
-        address:
-            email: info@shopware.de
-            userID: 2
-        expectedRow:
-            id: 1
-            customer: 1
-            groupID: 2
-            email: info@shopware.de
-            lastmailing: 0
-            lastread: 0
+            lastread: 2
