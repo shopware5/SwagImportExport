@@ -121,6 +121,8 @@ class DbAdapterTest extends ImportExportTestHelper
      */
     public function defaultColumns($expectedColumns, $expectedCount)
     {
+        $this->markTestIncomplete('This test does not support plugins.');
+
         /* @var DataFactory $dataFactory */
         $dataFactory = $this->Plugin()->getDataFactory();
         $dbAdapter = $dataFactory->createDbAdapter($this->dbAdapter);
