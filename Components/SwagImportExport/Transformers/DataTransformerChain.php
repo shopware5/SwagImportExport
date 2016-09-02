@@ -73,7 +73,6 @@ class DataTransformerChain
     public function composeHeader()
     {
         $transformer = $this->getLastComposerTransformer($this->chain);
-
         return $transformer->composeHeader();
     }
 
