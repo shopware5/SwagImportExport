@@ -402,5 +402,4 @@ class ArticleDataManager extends DataManager
 
         return $record;
     }
-
 }

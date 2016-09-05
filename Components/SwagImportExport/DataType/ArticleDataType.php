@@ -112,7 +112,7 @@ class ArticleDataType
     /**
      * @var array
      */
-    public static $defaultFieldsValues = array (
+    public static $defaultFieldsValues = array(
         'string' => array(
             'description',
             'descriptionLong',
