@@ -21,7 +21,7 @@ abstract class Validator
      */
     public function prepareInitialData($record)
     {
-        return array_filter($record);
+        return array_filter($record, 'strlen');
     }
 
     /**
