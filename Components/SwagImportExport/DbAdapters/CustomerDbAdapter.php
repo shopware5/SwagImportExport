@@ -246,8 +246,13 @@ class CustomerDbAdapter implements DataDbAdapter
         $builder->select('customer.id')
                 ->from('\Shopware\Models\Customer\Customer', 'customer');
 
-        $builder->setFirstResult($start)
-                ->setMaxResults($limit);
+        if ($start) {
+            $builder->setFirstResult($start);
+        }
+
+        if ($limit) {
+            $builder->setMaxResults($limit);
+        }
 
         if (!empty($filter)) {
             $builder->addFilter($filter);

@@ -111,7 +111,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             $categoriesBuilder = $manager->createQueryBuilder();
             $categoriesBuilder->select('article.id')
                 ->from('Shopware\Models\Article\Article', 'article')
-                ->leftjoin('article.categories', 'categories')
+                ->leftJoin('article.categories', 'categories')
                 ->where('categories.id IN (:cids)')
                 ->setParameter('cids', $categories)
                 ->groupBy('article.id');
@@ -128,7 +128,13 @@ class ArticlesDbAdapter implements DataDbAdapter
                 ->setParameter('ids', $articleIds);
         }
 
-        $builder->setFirstResult($start)->setMaxResults($limit);
+        if ($start) {
+            $builder->setFirstResult($start);
+        }
+
+        if ($limit) {
+            $builder->setMaxResults($limit);
+        }
 
         $records = $builder->getQuery()->getResult();
 

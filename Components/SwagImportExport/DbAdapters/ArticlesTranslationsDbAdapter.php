@@ -102,8 +102,13 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
             ->where("t.type = 'variant'")
             ->orWhere("t.type = 'article'");
 
-        $builder->setFirstResult($start)
-            ->setMaxResults($limit);
+        if ($start) {
+            $builder->setFirstResult($start);
+        }
+
+        if ($limit) {
+            $builder->setMaxResults($limit);
+        }
 
         $records = $builder->getQuery()->getResult();
 

@@ -108,8 +108,13 @@ class MainOrdersDbAdapter implements DataDbAdapter
             $builder->setParameter('dateTo', $dateTo->get('yyyy-MM-dd HH:mm:ss'));
         }
 
-        $builder->setFirstResult($start)
-                ->setMaxResults($limit);
+        if ($start) {
+            $builder->setFirstResult($start);
+        }
+
+        if ($limit) {
+            $builder->setMaxResults($limit);
+        }
 
         $ids = $builder->execute()->fetchAll(\PDO::FETCH_COLUMN);
 

@@ -56,8 +56,12 @@ class TranslationsDbAdapter implements DataDbAdapter
             ->orWhere("t.type = 'configuratoroption'")
             ->orWhere("t.type = 'configuratorgroup'");
 
-        $builder->setFirstResult($start)
-            ->setMaxResults($limit);
+        if ($start) {
+            $builder->setFirstResult($start);
+        }
+        if ($limit) {
+            $builder->setMaxResults($limit);
+        }
 
         $records = $builder->getQuery()->getResult();
 

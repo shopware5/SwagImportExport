@@ -21,8 +21,12 @@ use Shopware\Components\SwagImportExport\Factories\DataFactory;
 use Shopware\Components\SwagImportExport\Factories\DataTransformerFactory;
 use Shopware\Components\SwagImportExport\Factories\FileIOFactory;
 use Shopware\Components\SwagImportExport\Factories\ProfileFactory;
+use Shopware\Components\SwagImportExport\FileIO\CsvFileReader;
+use Shopware\Components\SwagImportExport\FileIO\CsvFileWriter;
+use Shopware\Components\SwagImportExport\Logger\Logger;
+use Shopware\Components\SwagImportExport\UploadPathProvider;
+use Shopware\Components\SwagImportExport\Utils\FileHelper;
 use Shopware\Models\Media\Album;
-use Shopware\Subscriber\DIContainer;
 
 /**
  * Shopware SwagImportExport Plugin - Bootstrap
@@ -409,6 +413,26 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
     protected function registerEvents()
     {
         $this->subscribeEvent(
+            'Enlight_Bootstrap_InitResource_swag_import_export.csv_file_writer',
+            'registerCsvFileWriter'
+        );
+
+        $this->subscribeEvent(
+            'Enlight_Bootstrap_InitResource_swag_import_export.csv_file_reader',
+            'registerCsvFileReader'
+        );
+
+        $this->subscribeEvent(
+            'Enlight_Bootstrap_InitResource_swag_import_export.logger',
+            'registerLogger'
+        );
+
+        $this->subscribeEvent(
+            'Enlight_Bootstrap_InitResource_swag_import_export.upload_path_provider',
+            'registerUploadPathProvider'
+        );
+
+        $this->subscribeEvent(
             'Enlight_Controller_Front_StartDispatch',
             'onStartDispatch'
         );
@@ -440,20 +464,54 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
     }
 
     /**
+     * @param Enlight_Event_EventArgs $args
+     * @return UploadPathProvider
+     */
+    public function registerUploadPathProvider(Enlight_Event_EventArgs $args)
+    {
+        return new UploadPathProvider(Shopware()->DocPath());
+    }
+
+    /**
+     * @param Enlight_Event_EventArgs $args
+     * @return Logger
+     */
+    public function registerLogger(Enlight_Event_EventArgs $args)
+    {
+        return new Logger(
+            $this->get('swag_import_export.csv_file_writer'),
+            $this->get('models')
+        );
+    }
+
+    /**
+     * @param Enlight_Event_EventArgs $args
+     * @return CsvFileReader
+     */
+    public function registerCsvFileReader(Enlight_Event_EventArgs $args)
+    {
+        return new CsvFileReader(
+            $this->get('swag_import_export.upload_path_provider')
+        );
+    }
+
+    /**
+     * @param Enlight_Event_EventArgs $args
+     * @return CsvFileWriter
+     */
+    public function registerCsvFileWriter(Enlight_Event_EventArgs $args)
+    {
+        return new CsvFileWriter(
+            new FileHelper()
+        );
+    }
+
+    /**
      * Subscriber registration
      */
     public function onStartDispatch()
     {
         $this->registerMyNamespace();
-        $container = $this->get('service_container');
-
-        $subscribers = [
-            new DIContainer($container)
-        ];
-
-        foreach ($subscribers as $subscriber) {
-            $this->get('events')->addSubscriber($subscriber);
-        }
     }
 
     /**

@@ -17,7 +17,6 @@ use Shopware\Components\SwagImportExport\Logger\LogDataStruct;
 use Shopware\Components\SwagImportExport\Logger\Logger;
 use Shopware\Components\SwagImportExport\Profile\Profile;
 use Shopware\Components\SwagImportExport\Transformers\DataTransformerChain;
-use Shopware\Components\SwagImportExport\StatusLogger;
 use Shopware\Components\SwagImportExport\UploadPathProvider;
 
 class CommandHelper
@@ -75,10 +74,10 @@ class CommandHelper
         } else {
             throw new \Exception("No profile given!");
         }
-        if (isset($data['filePath'])) {
+        if (isset($data['filePath']) && is_dir(dirname($data['filePath']))) {
             $this->filePath = $data['filePath'];
         } else {
-            throw new \Exception("No filePath given!");
+            throw new \Exception("Invalid file path " . $data['filePath']);
         }
         if (isset($data['format'])) {
             $this->format = $data['format'];
@@ -99,7 +98,8 @@ class CommandHelper
         if (isset($data['username'])) {
             $this->username = $data['username'];
         }
-        if (isset($data['category'])) {
+
+        if (!empty($data['category'])) {
             $this->category = $data['category'];
         }
     }
@@ -127,6 +127,7 @@ class CommandHelper
         if ($this->exportVariants) {
             $postData['filter']['variants'] = $this->exportVariants;
         }
+
         if ($this->category) {
             $postData['filter']['categories'] = $this->category;
         }
