@@ -24,6 +24,11 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
         $this->commandTestHelper->setUp();
     }
 
+    protected function tearDown()
+    {
+        $this->commandTestHelper->tearDown();
+    }
+
     /**
      * @covers ExportCommand::execute()
      */
@@ -33,6 +38,7 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
         $profileName = CommandTestHelper::ARTICLE_PROFILE_NAME;
 
         $fileName = uniqid('test_') . 'article.csv';
+        $this->commandTestHelper->addFile($fileName);
 
         $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:export -p {$profileName} {$fileName}");
         $consoleOutput = $this->convertOutputToArrayByLineBreak($consoleOutput);
@@ -43,8 +49,6 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
         $this->assertEquals('Using format: csv.', $consoleOutput[1]);
         $this->assertEquals('Total count: 225.', $consoleOutput[3]);
         $this->assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
-
-        $this->commandTestHelper->deleteFile($fileName);
     }
 
     /**
@@ -56,6 +60,7 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
         $profileName = CommandTestHelper::ARTICLE_PROFILE_NAME;
 
         $fileName = uniqid('test_') . 'variants.csv';
+        $this->commandTestHelper->addFile($fileName);
 
         $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:export -p {$profileName} -x {$fileName}");
         $consoleOutput = $this->convertOutputToArrayByLineBreak($consoleOutput);
@@ -66,8 +71,6 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
         $this->assertEquals('Using format: csv.', $consoleOutput[1]);
         $this->assertEquals('Total count: 400.', $consoleOutput[3]);
         $this->assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
-
-        $this->commandTestHelper->deleteFile($fileName);
     }
 
     /**
@@ -79,6 +82,7 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
         $profileName = CommandTestHelper::CUSTOMER_PROFILE_NAME;
 
         $fileName = uniqid('test_') . 'customer.xml';
+        $this->commandTestHelper->addFile($fileName);
 
         $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:export -p {$profileName} {$fileName}");
         $consoleOutput = $this->convertOutputToArrayByLineBreak($consoleOutput);
@@ -89,8 +93,6 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
         $this->assertEquals('Using format: xml.', $consoleOutput[1]);
         $this->assertEquals('Total count: 2.', $consoleOutput[3]);
         $this->assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
-
-        $this->commandTestHelper->deleteFile($fileName);
     }
 
     /**
@@ -102,6 +104,7 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
         $profileName = CommandTestHelper::CATEGORY_PROFILE_NAME;
 
         $fileName = uniqid('test_') . 'categories.csv';
+        $this->commandTestHelper->addFile($fileName);
 
         $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:export -p {$profileName} {$fileName}");
         $consoleOutput = $this->convertOutputToArrayByLineBreak($consoleOutput);
@@ -112,8 +115,6 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
         $this->assertEquals('Using format: csv.', $consoleOutput[1]);
         $this->assertEquals('Total count: 62.', $consoleOutput[3]);
         $this->assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
-
-        $this->commandTestHelper->deleteFile($fileName);
     }
 
     /**
@@ -125,6 +126,7 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
         $profileName = CommandTestHelper::ARTICLES_INSTOCK_PROFILE_NAME;
 
         $fileName = uniqid('test_') . 'articlesinstock.csv';
+        $this->commandTestHelper->addFile($fileName);
 
         $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:export -p {$profileName} {$fileName}");
         $consoleOutput = $this->convertOutputToArrayByLineBreak($consoleOutput);
@@ -135,8 +137,6 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
         $this->assertEquals('Using format: csv.', $consoleOutput[1]);
         $this->assertEquals('Total count: 400.', $consoleOutput[3]);
         $this->assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
-
-        $this->commandTestHelper->deleteFile($fileName);
     }
 
     /**
@@ -148,6 +148,7 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
         $profileName = CommandTestHelper::ARTICLES_PRICES_PROFILE_NAME;
 
         $fileName = uniqid('test_') . 'articlesprices.csv';
+        $this->commandTestHelper->addFile($fileName);
 
         $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:export -p {$profileName} {$fileName}");
         $consoleOutput = $this->convertOutputToArrayByLineBreak($consoleOutput);
@@ -158,8 +159,6 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
         $this->assertEquals('Using format: csv.', $consoleOutput[1]);
         $this->assertEquals('Total count: 405.', $consoleOutput[3]);
         $this->assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
-
-        $this->commandTestHelper->deleteFile($fileName);
     }
 
     /**
@@ -185,6 +184,7 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
         $profileName = CommandTestHelper::ARTICLES_TRANSLATIONS_PROFILE_NAME;
 
         $fileName = uniqid('test_') . 'articlestranslation.csv';
+        $this->commandTestHelper->addFile($fileName);
 
         $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:export -p {$profileName} {$fileName}");
         $consoleOutput = $this->convertOutputToArrayByLineBreak($consoleOutput);
@@ -195,8 +195,6 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
         $this->assertEquals('Using format: csv.', $consoleOutput[1]);
         $this->assertEquals('Total count: 103.', $consoleOutput[3]);
         $this->assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
-
-        $this->commandTestHelper->deleteFile($fileName);
     }
 
     /**
@@ -208,6 +206,7 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
         $profileName = CommandTestHelper::ORDERS_PROFILE_NAME;
 
         $fileName = uniqid('test_') . 'order.csv';
+        $this->commandTestHelper->addFile($fileName);
 
         $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:export -p {$profileName} {$fileName}");
         $consoleOutput = $this->convertOutputToArrayByLineBreak($consoleOutput);
@@ -218,8 +217,6 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
         $this->assertEquals('Using format: csv.', $consoleOutput[1]);
         $this->assertEquals('Total count: 17.', $consoleOutput[3]);
         $this->assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
-
-        $this->commandTestHelper->deleteFile($fileName);
     }
 
     /**
@@ -231,6 +228,7 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
         $profileName = CommandTestHelper::MAIN_ORDERS_PROFILE_NAME;
 
         $fileName = uniqid('test_') . 'mainorder.csv';
+        $this->commandTestHelper->addFile($fileName);
 
         $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:export -p {$profileName} {$fileName}");
         $consoleOutput = $this->convertOutputToArrayByLineBreak($consoleOutput);
@@ -241,8 +239,6 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
         $this->assertEquals('Using format: csv.', $consoleOutput[1]);
         $this->assertEquals('Total count: 4.', $consoleOutput[3]);
         $this->assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
-
-        $this->commandTestHelper->deleteFile($fileName);
     }
 
     /**
@@ -254,6 +250,7 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
         $profileName = CommandTestHelper::TRANSLATIONS_PROFILE_NAME;
 
         $fileName = uniqid('test_') . 'translation.csv';
+        $this->commandTestHelper->addFile($fileName);
 
         $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:export -p {$profileName} {$fileName}");
         $consoleOutput = $this->convertOutputToArrayByLineBreak($consoleOutput);
@@ -264,8 +261,6 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
         $this->assertEquals('Using format: csv.', $consoleOutput[1]);
         $this->assertEquals('Total count: 15.', $consoleOutput[3]);
         $this->assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
-
-        $this->commandTestHelper->deleteFile($fileName);
     }
 
     /**
@@ -279,6 +274,7 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
         $profileName = CommandTestHelper::NEWSLETTER_PROFILE_NAME;
 
         $fileName = uniqid('test_') . 'newsletter.csv';
+        $this->commandTestHelper->addFile($fileName);
 
         $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:export -p {$profileName} {$fileName}");
         $consoleOutput = $this->convertOutputToArrayByLineBreak($consoleOutput);
@@ -289,13 +285,6 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
         $this->assertEquals('Using format: csv.', $consoleOutput[1]);
         $this->assertEquals('Total count: 25.', $consoleOutput[3]);
         $this->assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
-
-        $this->commandTestHelper->deleteFile($fileName);
-    }
-
-    protected function tearDown()
-    {
-        $this->commandTestHelper->tearDown();
     }
 
     /**

@@ -19,6 +19,11 @@ use Symfony\Component\Console\Output\StreamOutput;
 
 class CommandTestHelper
 {
+    /**
+     * @var array
+     */
+    private $createdFiles = [];
+
     const ARTICLE_PROFILE = 'articles';
     const ARTICLE_PROFILE_NAME = 'article_profile';
 
@@ -70,6 +75,10 @@ class CommandTestHelper
 
     public function tearDown()
     {
+        foreach ($this->createdFiles as $path) {
+            unlink($path);
+        }
+
         $this->modelManager->rollback();
     }
 
@@ -93,19 +102,19 @@ class CommandTestHelper
 
     /**
      * @param string $fileName
-     */
-    public function deleteFile($fileName)
-    {
-        unlink($this->getFilePath($fileName));
-    }
-
-    /**
-     * @param string $fileName
      * @return string
      */
     public function getFilePath($fileName)
     {
         return Shopware()->DocPath() . $fileName;
+    }
+
+    /**
+     * @param string $fileName
+     */
+    public function addFile($fileName)
+    {
+        $this->createdFiles[] = $this->getFilePath($fileName);
     }
 
     public function createNewsletterDemoData()
