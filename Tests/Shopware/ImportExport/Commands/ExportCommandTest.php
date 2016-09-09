@@ -293,6 +293,6 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
      */
     private function convertOutputToArrayByLineBreak($consoleOutput)
     {
-        return preg_split('/\R/', $consoleOutput);
+        return explode(PHP_EOL, $consoleOutput);
     }
 }

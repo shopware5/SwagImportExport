@@ -6,11 +6,6 @@
  * file that was distributed with this source code.
  */
 
-use Shopware\Components\SwagImportExport\FileIO\CsvFileReader;
-use Shopware\Components\SwagImportExport\FileIO\CsvFileWriter;
-use Shopware\Components\SwagImportExport\Logger\Logger;
-use Shopware\Components\SwagImportExport\UploadPathProvider;
-use Shopware\Components\SwagImportExport\Utils\FileHelper;
 use Tests\Helper\CommandTestHelper;
 
 include_once __DIR__ . '/../../../../../../../../../tests/Functional/bootstrap.php';
