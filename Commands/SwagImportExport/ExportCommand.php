@@ -1,9 +1,16 @@
 <?php
+/**
+ * (c) shopware AG <info@shopware.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Shopware\Commands\SwagImportExport;
 
 use Exception;
 use Shopware\Commands\ShopwareCommand;
+use Shopware\CustomModels\ImportExport\Profile;
 use Shopware\CustomModels\ImportExport\Repository;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
@@ -14,6 +21,10 @@ use Shopware\Components\SwagImportExport\Utils\CommandHelper;
 class ExportCommand extends ShopwareCommand
 {
     protected $profile;
+
+    /**
+     * @var Profile
+     */
     protected $profileEntity;
     protected $exportVariants;
     protected $limit;
@@ -31,12 +42,12 @@ class ExportCommand extends ShopwareCommand
         $this->setName('sw:importexport:export')
             ->setDescription('Export data to files.')
             ->addArgument('filepath', InputArgument::REQUIRED, 'Path to file to read from.')
-            ->addOption('profile', 'p', InputOption::VALUE_REQUIRED, 'Which profile will be used?', null)
-            ->addOption('format', 'f', InputOption::VALUE_REQUIRED, 'What is the format of the imported file - XML or CSV?', null)
-            ->addOption('exportVariants', 'x', InputOption::VALUE_NONE, 'Should the variants be exported?', null)
-            ->addOption('offset', 'o', InputOption::VALUE_REQUIRED, 'What is the offset?', null)
-            ->addOption('limit', 'l', InputOption::VALUE_REQUIRED, 'What is the limit?', null)
-            ->addOption('category', 'c', InputOption::VALUE_REQUIRED, 'Category ID', null)
+            ->addOption('profile', 'p', InputOption::VALUE_REQUIRED, 'Which profile will be used?')
+            ->addOption('format', 'f', InputOption::VALUE_OPTIONAL, 'What is the format of the imported file - XML or CSV?')
+            ->addOption('exportVariants', 'x', InputOption::VALUE_NONE, 'Should the variants be exported?')
+            ->addOption('offset', 'o', InputOption::VALUE_OPTIONAL, 'What is the offset?')
+            ->addOption('limit', 'l', InputOption::VALUE_OPTIONAL, 'What is the limit?')
+            ->addOption('category', 'c', InputOption::VALUE_OPTIONAL, 'Provide a category ID')
             ->setHelp("The <info>%command.name%</info> imports data from a file.");
     }
 
@@ -59,7 +70,7 @@ class ExportCommand extends ShopwareCommand
                 'limit' => $this->limit,
                 'offset' => $this->offset,
                 'username' => 'Commandline',
-                'category' => array( $this->category )
+                'category' => $this->category ? array( $this->category ) : null
             )
         );
 
@@ -99,6 +110,10 @@ class ExportCommand extends ShopwareCommand
         $this->filePath = $input->getArgument('filepath');
         $this->category = $input->getOption('category');
 
+        if (!$this->filePath) {
+            throw new \Exception("File path is required.");
+        }
+
         $parts = explode('.', $this->filePath);
 
         // get some service from container (formerly Shopware()->Bootstrap()->getResource())
@@ -119,11 +134,7 @@ class ExportCommand extends ShopwareCommand
             }
         } else {
             $this->profileEntity = $profileRepository->findOneBy(array('name' => $this->profile));
-        }
-
-        // validate profile
-        if (!$this->profileEntity) {
-            throw new Exception(sprintf('Invalid profile: \'%s\'!', $this->profile));
+            $this->validateProfiles($input);
         }
 
         // if no format is specified try to find it from the filename
@@ -137,6 +148,24 @@ class ExportCommand extends ShopwareCommand
         // validate type
         if (!in_array($this->format, array('csv', 'xml'))) {
             throw new Exception(sprintf('Invalid format: \'%s\'! Valid formats are: CSV and XML.', $this->format));
+        }
+    }
+
+    /**
+     * @param InputInterface $input
+     */
+    protected function validateProfiles(InputInterface $input)
+    {
+        if (!$this->profileEntity) {
+            throw new Exception(sprintf('Invalid profile: \'%s\'!', $this->profile));
+        }
+
+        if ($this->profileEntity->getType() != 'articles' && $input->getOption('exportVariants')) {
+            throw new \InvalidArgumentException('You can only export variants when exporting the articles profile type.');
+        }
+
+        if ($this->profileEntity->getType() == 'articlesImages') {
+            throw new \InvalidArgumentException("articlesImages profile type is not supported at the moment.");
         }
     }
 }

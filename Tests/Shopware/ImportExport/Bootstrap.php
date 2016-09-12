@@ -6,11 +6,7 @@
  * file that was distributed with this source code.
  */
 
-use Shopware\Components\SwagImportExport\FileIO\CsvFileReader;
-use Shopware\Components\SwagImportExport\FileIO\CsvFileWriter;
-use Shopware\Components\SwagImportExport\Logger\Logger;
-use Shopware\Components\SwagImportExport\UploadPathProvider;
-use Shopware\Components\SwagImportExport\Utils\FileHelper;
+use Tests\Helper\CommandTestHelper;
 
 include_once __DIR__ . '/../../../../../../../../../tests/Functional/bootstrap.php';
 
@@ -40,25 +36,8 @@ class ImportExportTestKernel extends TestKernel
     private static function registerResources()
     {
         Shopware()->Container()->set(
-            'swag_import_export.logger',
-            new Logger(new CsvFileWriter(new FileHelper()), Shopware()->Models())
-        );
-
-        Shopware()->Container()->set(
-            'swag_import_export.upload_path_provider',
-            new UploadPathProvider(Shopware()->DocPath())
-        );
-
-        Shopware()->Container()->set(
-            'swag_import_export.csv_file_writer',
-            new CsvFileWriter(new FileHelper())
-        );
-
-        Shopware()->Container()->set(
-            'swag_import_export.csv_file_reader',
-            new CsvFileReader(
-                Shopware()->Container()->get('swag_import_export.upload_path_provider')
-            )
+            'swag_import_export.tests.command_test_helper',
+            new CommandTestHelper(Shopware()->Container()->get('models'))
         );
     }
 

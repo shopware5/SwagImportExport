@@ -187,8 +187,14 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
             $builder->addFilter($filter);
         }
 
-        $builder->setFirstResult($start)
-            ->setMaxResults($limit);
+        if ($start) {
+            $builder->setFirstResult($start);
+        }
+
+        if ($limit) {
+            $builder->setMaxResults($limit);
+        }
+
         $query = $builder->getQuery();
         $query->setHydrationMode(AbstractQuery::HYDRATE_ARRAY);
         $paginator = $manager->createPaginator($query);

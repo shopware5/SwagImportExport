@@ -70,8 +70,13 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                 ->where('image.articleDetailId IS NULL')
                 ->andWhere('image.parentId IS NULL');
 
-        $builder->setFirstResult($start)
-                ->setMaxResults($limit);
+        if ($start) {
+            $builder->setFirstResult($start);
+        }
+
+        if ($limit) {
+            $builder->setMaxResults($limit);
+        }
 
         $records = $builder->getQuery()->getResult();
 

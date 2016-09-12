@@ -149,8 +149,13 @@ class NewsletterDbAdapter implements DataDbAdapter
             $builder->addFilter($filter);
         }
 
-        $builder->setFirstResult($start)
-                ->setMaxResults($limit);
+        if ($start) {
+            $builder->setFirstResult($start);
+        }
+
+        if ($limit) {
+            $builder->setMaxResults($limit);
+        }
 
         $records = $builder->getQuery()->getResult();
 
