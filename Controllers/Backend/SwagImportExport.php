@@ -884,11 +884,10 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
         //returns the customer data
         $data = $paginator->getIterator()->getArrayCopy();
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
         foreach ($data as $key => $row) {
-            $data[$key]['fileUrl'] = $row['fileName'];
-            $data[$key]['fileName'] = str_replace('media/unknown/', '', $mediaService->normalize($row['fileName']));
+            $data[$key]['fileUrl'] = urlencode($row['fileName']);
+            $data[$key]['fileName'] = $row['fileName'];
             $data[$key]['fileSize'] = DataHelper::formatFileSize($row['fileSize']);
         }
 
@@ -984,23 +983,19 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
      */
     public function downloadFileAction()
     {
+        /** @var UploadPathProvider $uploadPathProvider */
+        $uploadPathProvider = $this->get('swag_import_export.upload_path_provider');
+
         try {
             $fileName = $this->Request()->getParam('fileName', null);
-            $fileType = $this->Request()->getParam('type', null);
 
             if ($fileName === null) {
                 throw new \Exception('File name must be provided');
             }
 
-            if ($fileType === 'import') {
-                $file = 'media/unknown/' . $fileName;
-            } else {
-                $file = 'files/import_export/' . $fileName;
-            }
+            $filePath = $uploadPathProvider->getRealPath($fileName);
 
-            //get file format
-            $extension = pathinfo($file, PATHINFO_EXTENSION);
-
+            $extension = $uploadPathProvider->getFileExtension($fileName);
             switch ($extension) {
                 case 'csv':
                     $application = 'text/csv';
@@ -1012,7 +1007,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                     throw new \Exception('File extension is not valid');
             }
 
-            if (file_exists($file)) {
+            if (file_exists($filePath)) {
                 $this->View()->assign(
                     array(
                         'success' => false,
@@ -1032,8 +1027,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
             $response->setHeader('Content-Type', $application);
 
-            print file_get_contents($file);
-            unlink($file);
+            print file_get_contents($filePath);
         } catch (\Exception $e) {
             $this->View()->assign(
                 array(
@@ -1042,10 +1036,6 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                     'message' => $e->getMessage()
                 )
             );
-
-            if (file_exists($file)) {
-                unlink($file);
-            }
             return;
         }
     }
