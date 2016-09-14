@@ -1,12 +1,13 @@
 <?xml version="1.0"?>
-<phpunit bootstrap="./Tests/Shopware/ImportExport/Bootstrap.php"
+<phpunit bootstrap="./Tests/Functional/Bootstrap.php"
          colors="true"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/5.3/phpunit.xsd"
 >
     <testsuites>
         <testsuite name="Shopware ImportExport Plugin">
-            <directory>Tests/Shopware/ImportExport</directory>
+            <directory>./Tests/Functional</directory>
+            <directory>./Tests/Shopware</directory>
         </testsuite>
     </testsuites>
 

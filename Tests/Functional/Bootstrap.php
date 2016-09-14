@@ -8,7 +8,7 @@
 
 use Tests\Helper\CommandTestHelper;
 
-include_once __DIR__ . '/../../../../../../../../../tests/Functional/bootstrap.php';
+include_once __DIR__ . '/../../../../../../../../tests/Functional/bootstrap.php';
 
 class ImportExportTestKernel extends TestKernel
 {
@@ -21,11 +21,12 @@ class ImportExportTestKernel extends TestKernel
             exit();
         }
 
-        Shopware()->Loader()->registerNamespace('Tests\Helper', __DIR__ . '/../../Helper/');
-        Shopware()->Loader()->registerNamespace('Tests\Shopware\ImportExport', __DIR__ . '/');
-        Shopware()->Loader()->registerNamespace('Shopware\Subscriber', __DIR__ . '/../../../Subscriber/');
-        Shopware()->Loader()->registerNamespace('Shopware\Components', __DIR__ . '/../../../Components/');
-        Shopware()->Loader()->registerNamespace('Shopware\CustomModels', __DIR__ . '/../../../Models/');
+        Shopware()->Loader()->registerNamespace('SwagImportExport\Tests', __DIR__ . '/../');
+
+        Shopware()->Loader()->registerNamespace('Tests\Helper', __DIR__ . '/../Helper/');
+        Shopware()->Loader()->registerNamespace('Tests\Shopware\ImportExport', __DIR__ . '/../Shopware/ImportExport');
+        Shopware()->Loader()->registerNamespace('Shopware\Components', __DIR__ . '/../../Components/');
+        Shopware()->Loader()->registerNamespace('Shopware\CustomModels', __DIR__ . '/../../Models/');
 
         self::registerResources();
     }
