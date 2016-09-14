@@ -6,9 +6,8 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Shopware\ImportExport;
+namespace SwagImportExport\Test\Functional\Commands;
 
-use Behat\Testwork\Cli\Command;
 use Doctrine\DBAL\Connection;
 use Tests\Helper\CommandTestHelper;
 
