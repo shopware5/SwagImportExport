@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Root>
+	<Header>
+		<HeaderChild></HeaderChild>
+	</Header>
+	<Prices>
+		<Price>
+	<ordernumber>SW10002.1</ordernumber>
+	<price>59,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Münsterländer Lagerkorn 32%</_name>
+	<_additionaltext>1,5 Liter</_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10002.2</ordernumber>
+	<price>199</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Münsterländer Lagerkorn 32%</_name>
+	<_additionaltext>5 Liter</_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10002.3</ordernumber>
+	<price>19,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Münsterländer Lagerkorn 32%</_name>
+	<_additionaltext>0,5 Liter</_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10003</ordernumber>
+	<price>14,95</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Münsterländer Aperitif 16%</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10004</ordernumber>
+	<price>7,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Latte Macchiato 17%</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10005.1</ordernumber>
+	<price>10,95</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Emmelkamp Holunder Likör 18%</_name>
+	<_additionaltext>0,2 Liter</_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10005.2</ordernumber>
+	<price>10,95</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Emmelkamp Holunder Likör 18%</_name>
+	<_additionaltext>0,7 Liter</_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10005.3</ordernumber>
+	<price>14,95</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Emmelkamp Holunder Likör 18%</_name>
+	<_additionaltext>1,0 Liter</_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10005.4</ordernumber>
+	<price>22,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Emmelkamp Holunder Likör 18%</_name>
+	<_additionaltext>1,5 Liter</_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10006</ordernumber>
+	<price>35,95</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Cigar Special 40%</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10007.1</ordernumber>
+	<price>2,49</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Wacholder Premium extra mild 32%</_name>
+	<_additionaltext>0,2 Liter</_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10007.2</ordernumber>
+	<price>8,49</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Wacholder Premium extra mild 32%</_name>
+	<_additionaltext>0,7 Liter</_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10007.3</ordernumber>
+	<price>11,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Wacholder Premium extra mild 32%</_name>
+	<_additionaltext>1,0 Liter</_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10008</ordernumber>
+	<price>49,95</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>T.S. Privat 41,5 %</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10009</ordernumber>
+	<price>24,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Special Finish Lagerkorn X.O. 32%</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10010</ordernumber>
+	<price>5,95</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Aperitif-Glas Demi Sec</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10011</ordernumber>
+	<price>19,95</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Münsterländer Aperitif Präsent Box</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10012</ordernumber>
+	<price>9,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Kobra Vodka 37,5%</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10013</ordernumber>
+	<price>2,5</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Pai Mu Tan Tee weiss</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10014</ordernumber>
+	<price>3,8</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Silver Yin Zhen Tee weiss</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10015</ordernumber>
+	<price>2,4</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>LUNG CHING grüner Tee</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10016</ordernumber>
+	<price>1,9</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Mao Feng grüner Tee</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10017</ordernumber>
+	<price>2,2</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Pi Lo Chun grüner Tee</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10018</ordernumber>
+	<price>1,75</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Oriental Jasmine Tee</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10019</ordernumber>
+	<price>2,85</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Jasmine Phoenix Tee</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10020</ordernumber>
+	<price>2,95</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Jasmine Lotus Tee</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10021</ordernumber>
+	<price>13</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Glas -Teetasse 0,25l</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+	</Prices>
+</Root>

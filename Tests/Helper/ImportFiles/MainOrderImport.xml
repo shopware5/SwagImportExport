@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Root>
+	<mainOrders>
+		<mainOrder>
+	<orderId>15</orderId>
+	<orderNumber>20001</orderNumber>
+	<invoiceNumber></invoiceNumber>
+	<invoiceAmount>998.56</invoiceAmount>
+	<invoiceAmountNet>839.13</invoiceAmountNet>
+	<invoiceShipping>0</invoiceShipping>
+	<invoiceShippingNet>0</invoiceShippingNet>
+	<taxRateSums>
+		<taxRateSum>
+			<taxRateSums>159.44</taxRateSums>
+			<taxRate>19</taxRate>
+		</taxRateSum>
+	</taxRateSums>
+	<net>1</net>
+	<taxFree>0</taxFree>
+	<paymentName>Rechnung</paymentName>
+	<paymentStatus>Offen</paymentStatus>
+	<orderStatus>Offen</orderStatus>
+	<currency>EUR</currency>
+	<currencyFactor>1</currencyFactor>
+	<transactionId></transactionId>
+	<trackingCode></trackingCode>
+	<orderTime>2012-08-30 10:15:54</orderTime>
+	<email>mustermann@b2b.de</email>
+	<customerNumber></customerNumber>
+	<customerGroup>B2B / Händler netto</customerGroup>
+	<billingSalutation>mr</billingSalutation>
+	<billingFirstName>Händler</billingFirstName>
+	<billingLastName>Kundengruppe-Netto</billingLastName>
+	<billingCompany>B2B</billingCompany>
+	<billingDepartment>Einkauf</billingDepartment>
+	<billingStreet>Musterweg 1</billingStreet>
+	<billingZipCode>00000</billingZipCode>
+	<billingCity>Musterstadt</billingCity>
+	<billingPhone>012345 / 6789</billingPhone>
+	<billingAdditionalAddressLine1></billingAdditionalAddressLine1>
+	<billingAdditionalAddressLine2></billingAdditionalAddressLine2>
+	<billingState>Nordrhein-Westfalen</billingState>
+	<billingCountry>Deutschland</billingCountry>
+	<shippingSalutation>mr</shippingSalutation>
+	<shippingFirstName>Händler</shippingFirstName>
+	<shippingLastName>Kundengruppe-Netto</shippingLastName>
+	<shippingCompany>B2B</shippingCompany>
+	<shippingDepartment>Einkauf</shippingDepartment>
+	<shippingStreet>Musterweg 1</shippingStreet>
+	<shippingZipCode>00000</shippingZipCode>
+	<shippingCity>Musterstadt</shippingCity>
+	<shippingAdditionalAddressLine1></shippingAdditionalAddressLine1>
+	<shippingState>Nordrhein-Westfalen</shippingState>
+	<shippingCountry>Deutschland</shippingCountry>
+</mainOrder>
+<mainOrder>
+	<orderId>52</orderId>
+	<orderNumber>0</orderNumber>
+	<invoiceNumber></invoiceNumber>
+	<invoiceAmount>1700.93</invoiceAmount>
+	<invoiceAmountNet>1429.36</invoiceAmountNet>
+	<invoiceShipping>75</invoiceShipping>
+	<invoiceShippingNet>63.03</invoiceShippingNet>
+	<taxRateSums>
+		<taxRateSum>
+			<taxRateSums>271.58</taxRateSums>
+			<taxRate>19</taxRate>
+		</taxRateSum>
+	</taxRateSums>
+	<net>0</net>
+	<taxFree>0</taxFree>
+	<paymentName>Lastschrift</paymentName>
+	<paymentStatus>Offen</paymentStatus>
+	<orderStatus>Abgebrochen</orderStatus>
+	<currency>EUR</currency>
+	<currencyFactor>1</currencyFactor>
+	<transactionId></transactionId>
+	<trackingCode></trackingCode>
+	<orderTime>2012-08-30 15:16:55</orderTime>
+	<email>test@example.com</email>
+	<customerNumber></customerNumber>
+	<customerGroup>Shopkunden</customerGroup>
+	<billingSalutation></billingSalutation>
+	<billingFirstName></billingFirstName>
+	<billingLastName></billingLastName>
+	<billingCompany></billingCompany>
+	<billingDepartment></billingDepartment>
+	<billingStreet></billingStreet>
+	<billingZipCode></billingZipCode>
+	<billingCity></billingCity>
+	<billingPhone></billingPhone>
+	<billingAdditionalAddressLine1></billingAdditionalAddressLine1>
+	<billingAdditionalAddressLine2></billingAdditionalAddressLine2>
+	<billingState></billingState>
+	<billingCountry></billingCountry>
+	<shippingSalutation></shippingSalutation>
+	<shippingFirstName></shippingFirstName>
+	<shippingLastName></shippingLastName>
+	<shippingCompany></shippingCompany>
+	<shippingDepartment></shippingDepartment>
+	<shippingStreet></shippingStreet>
+	<shippingZipCode></shippingZipCode>
+	<shippingCity></shippingCity>
+	<shippingAdditionalAddressLine1></shippingAdditionalAddressLine1>
+	<shippingState></shippingState>
+	<shippingCountry></shippingCountry>
+</mainOrder>
+<mainOrder>
+	<orderId>54</orderId>
+	<orderNumber>0</orderNumber>
+	<invoiceNumber></invoiceNumber>
+	<invoiceAmount>42.6</invoiceAmount>
+	<invoiceAmountNet>35.8</invoiceAmountNet>
+	<invoiceShipping>3.9</invoiceShipping>
+	<invoiceShippingNet>3.28</invoiceShippingNet>
+	<taxRateSums>
+		<taxRateSum>
+			<taxRateSums>6.79</taxRateSums>
+			<taxRate>19</taxRate>
+		</taxRateSum>
+	</taxRateSums>
+	<net>0</net>
+	<taxFree>0</taxFree>
+	<paymentName>Lastschrift</paymentName>
+	<paymentStatus>Offen</paymentStatus>
+	<orderStatus>Abgebrochen</orderStatus>
+	<currency>EUR</currency>
+	<currencyFactor>1</currencyFactor>
+	<transactionId></transactionId>
+	<trackingCode></trackingCode>
+	<orderTime>2012-08-30 17:30:02</orderTime>
+	<email>test@example.com</email>
+	<customerNumber></customerNumber>
+	<customerGroup>Shopkunden</customerGroup>
+	<billingSalutation></billingSalutation>
+	<billingFirstName></billingFirstName>
+	<billingLastName></billingLastName>
+	<billingCompany></billingCompany>
+	<billingDepartment></billingDepartment>
+	<billingStreet></billingStreet>
+	<billingZipCode></billingZipCode>
+	<billingCity></billingCity>
+	<billingPhone></billingPhone>
+	<billingAdditionalAddressLine1></billingAdditionalAddressLine1>
+	<billingAdditionalAddressLine2></billingAdditionalAddressLine2>
+	<billingState></billingState>
+	<billingCountry></billingCountry>
+	<shippingSalutation></shippingSalutation>
+	<shippingFirstName></shippingFirstName>
+	<shippingLastName></shippingLastName>
+	<shippingCompany></shippingCompany>
+	<shippingDepartment></shippingDepartment>
+	<shippingStreet></shippingStreet>
+	<shippingZipCode></shippingZipCode>
+	<shippingCity></shippingCity>
+	<shippingAdditionalAddressLine1></shippingAdditionalAddressLine1>
+	<shippingState></shippingState>
+	<shippingCountry></shippingCountry>
+</mainOrder>
+<mainOrder>
+	<orderId>57</orderId>
+	<orderNumber>20002</orderNumber>
+	<invoiceNumber></invoiceNumber>
+	<invoiceAmount>201.86</invoiceAmount>
+	<invoiceAmountNet>169.63</invoiceAmountNet>
+	<invoiceShipping>0</invoiceShipping>
+	<invoiceShippingNet>0</invoiceShippingNet>
+	<taxRateSums>
+		<taxRateSum>
+			<taxRateSums>32.24</taxRateSums>
+			<taxRate>19</taxRate>
+		</taxRateSum>
+	</taxRateSums>
+	<net>0</net>
+	<taxFree>0</taxFree>
+	<paymentName>Rechnung</paymentName>
+	<paymentStatus>Offen</paymentStatus>
+	<orderStatus>Offen</orderStatus>
+	<currency>EUR</currency>
+	<currencyFactor>1</currencyFactor>
+	<transactionId></transactionId>
+	<trackingCode></trackingCode>
+	<orderTime>2012-08-31 08:51:46</orderTime>
+	<email>test@example.com</email>
+	<customerNumber></customerNumber>
+	<customerGroup>Shopkunden</customerGroup>
+	<billingSalutation>mr</billingSalutation>
+	<billingFirstName>Max</billingFirstName>
+	<billingLastName>Mustermann</billingLastName>
+	<billingCompany>shopware AG</billingCompany>
+	<billingDepartment></billingDepartment>
+	<billingStreet>Mustermannstraße 92</billingStreet>
+	<billingZipCode>48624</billingZipCode>
+	<billingCity>Schöppingen</billingCity>
+	<billingPhone></billingPhone>
+	<billingAdditionalAddressLine1></billingAdditionalAddressLine1>
+	<billingAdditionalAddressLine2></billingAdditionalAddressLine2>
+	<billingState>Nordrhein-Westfalen</billingState>
+	<billingCountry>Deutschland</billingCountry>
+	<shippingSalutation>mr</shippingSalutation>
+	<shippingFirstName>Max</shippingFirstName>
+	<shippingLastName>Mustermann</shippingLastName>
+	<shippingCompany>shopware AG</shippingCompany>
+	<shippingDepartment></shippingDepartment>
+	<shippingStreet>Mustermannstraße 92</shippingStreet>
+	<shippingZipCode>48624</shippingZipCode>
+	<shippingCity>Schöppingen</shippingCity>
+	<shippingAdditionalAddressLine1></shippingAdditionalAddressLine1>
+	<shippingState></shippingState>
+	<shippingCountry>Deutschland</shippingCountry>
+</mainOrder>
+	</mainOrders>
+</Root>

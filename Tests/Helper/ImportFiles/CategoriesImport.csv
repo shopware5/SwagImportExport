@@ -1,0 +1,17 @@
+categoryId;parentID;description;position;metatitle;metakeywords;metadescription;cmsheadline;cmstext;template;active;blog;external;hidefilter;attribute_attribute1;attribute_attribute2;attribute_attribute3;attribute_attribute4;attribute_attribute5;attribute_attribute6;CustomerGroup
+3;1;Deutsch;0;;;;;;;1;;;;;;;;;;
+5;3;Category1;;;;;;;;1;;;;;;;;;;
+6;3;Category2;;;;;;;;1;;;;;;;;;;
+7;3;Category3;;;;;;;;1;;;;;;;;;;
+8;5;Sub-Category1;;;;;;;;1;;;;;;;;;;
+9;5;SubCategory2;;;;;;;;1;;;;;;;;;;
+10;5;Sub-Category3;;;;;;;;1;;;;;;;;;;
+11;6;Sub-Category2.1;;;;;;;;1;;;;;;;;;;
+12;1;English;1;;;;;;;1;;;;;;;;;;
+13;12;Category1;1;;;;;;;1;;;;;;;;;;
+14;12;Category2;2;;;;;;;1;;;;;;;;;;
+15;12;Category3;3;;;;;;;1;;;;;;;;;;
+16;13;Sub-Category1;1;;;;;;;1;;;;;;;;;;
+17;13;SubCategory2;2;;;;;;;1;;;;;;;;;;
+18;13;Sub-Category3;3;;;;;;;1;;;;;;;;;;
+19;14;Sub-Category2.1;1;;;;;;;1;;;;;;;;;;

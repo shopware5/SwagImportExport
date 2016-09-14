@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Root>
+	<Users>
+		<user>
+	<email>test@example.com</email>
+	<group>Newsletter-Empfänger</group>
+	<salutation></salutation>
+	<firstname></firstname>
+	<lastname></lastname>
+	<street></street>
+	<zipcode></zipcode>
+	<city></city>
+	<lastmailing></lastmailing>
+	<lastread></lastread>
+	<userID></userID>
+</user>
+<user>
+	<email>test2@example.com</email>
+	<group>Newsletter-Empfänger</group>
+	<salutation></salutation>
+	<firstname></firstname>
+	<lastname></lastname>
+	<street></street>
+	<zipcode></zipcode>
+	<city></city>
+	<lastmailing></lastmailing>
+	<lastread></lastread>
+	<userID></userID>
+</user>
+<user>
+	<email>test3@example.com</email>
+	<group>Newsletter-Empfänger</group>
+	<salutation></salutation>
+	<firstname></firstname>
+	<lastname></lastname>
+	<street></street>
+	<zipcode></zipcode>
+	<city></city>
+	<lastmailing></lastmailing>
+	<lastread></lastread>
+	<userID></userID>
+</user>
+<user>
+	<email>test4@exmaple.com</email>
+	<group>Newsletter-Empfänger</group>
+	<salutation></salutation>
+	<firstname></firstname>
+	<lastname></lastname>
+	<street></street>
+	<zipcode></zipcode>
+	<city></city>
+	<lastmailing></lastmailing>
+	<lastread></lastread>
+	<userID></userID>
+</user>
+<user>
+	<email>another_group@example.com</email>
+	<group>Test_Group</group>
+	<salutation></salutation>
+	<firstname></firstname>
+	<lastname></lastname>
+	<street></street>
+	<zipcode></zipcode>
+	<city></city>
+	<lastmailing></lastmailing>
+	<lastread></lastread>
+	<userID></userID>
+</user>
+<user>
+	<email>another_group1@example.com</email>
+	<group>Test_Group</group>
+	<salutation></salutation>
+	<firstname></firstname>
+	<lastname></lastname>
+	<street></street>
+	<zipcode></zipcode>
+	<city></city>
+	<lastmailing></lastmailing>
+	<lastread></lastread>
+	<userID></userID>
+</user>
+	</Users>
+</Root>

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Root>
+	<Header>
+		<HeaderChild></HeaderChild>
+	</Header>
+	<customers>
+		<customer>
+	<customernumber>120005</customernumber>
+	<email>test12345@example.com</email>
+	<password>$2y$10$NKkGdvYGkDg1RbvEWqVZe.6MeAG74uJMv9Uk9RO2Gmt9ZgovFpznq</password>
+	<encoder>bcrypt</encoder>
+	<active>1</active>
+	<billing_company>Test</billing_company>
+	<billing_department></billing_department>
+	<billing_salutation>mr</billing_salutation>
+	<billing_firstname>Test</billing_firstname>
+	<billing_lastname>Test</billing_lastname>
+	<billing_street>Teststr 43</billing_street>
+	<billing_zipcode>55555</billing_zipcode>
+	<billing_city>Berlin</billing_city>
+	<phone></phone>
+	<billing_countryID>2</billing_countryID>
+	<billing_stateID>7</billing_stateID>
+	<ustid></ustid>
+	<shipping_company>Test</shipping_company>
+	<shipping_department></shipping_department>
+	<shipping_salutation>mr</shipping_salutation>
+	<shipping_firstname>Test</shipping_firstname>
+	<shipping_lastname>Test</shipping_lastname>
+	<shipping_street>Teststr 43</shipping_street>
+	<shipping_zipcode>55555</shipping_zipcode>
+	<shipping_city>Berlin</shipping_city>
+	<shipping_countryID>2</shipping_countryID>
+	<paymentID>3</paymentID>
+	<newsletter>0</newsletter>
+	<accountmode>0</accountmode>
+	<customergroup>EK</customergroup>
+	<language>1</language>
+	<subshopID>1</subshopID>
+</customer>
+<customer>
+	<customernumber>120006</customernumber>
+	<email>test123456@example.com</email>
+	<password>$2y$10$TK5lWW/5kSMUXg.yZpkmr.RQf1rs/BJIeOzYFwWoPslSOxSKjZpru</password>
+	<encoder>bcrypt</encoder>
+	<active>1</active>
+	<billing_company></billing_company>
+	<billing_department></billing_department>
+	<billing_salutation>mr</billing_salutation>
+	<billing_firstname>Max</billing_firstname>
+	<billing_lastname>Mustermann</billing_lastname>
+	<billing_street>Musterstr 432</billing_street>
+	<billing_zipcode>55555</billing_zipcode>
+	<billing_city>Examplecity</billing_city>
+	<phone></phone>
+	<billing_countryID>2</billing_countryID>
+	<billing_stateID></billing_stateID>
+	<ustid></ustid>
+	<shipping_company></shipping_company>
+	<shipping_department></shipping_department>
+	<shipping_salutation>mr</shipping_salutation>
+	<shipping_firstname>Max</shipping_firstname>
+	<shipping_lastname>Mustermann</shipping_lastname>
+	<shipping_street>Musterstr 432</shipping_street>
+	<shipping_zipcode>55555</shipping_zipcode>
+	<shipping_city>Examplecity</shipping_city>
+	<shipping_countryID>2</shipping_countryID>
+	<paymentID>3</paymentID>
+	<newsletter>0</newsletter>
+	<accountmode>0</accountmode>
+	<customergroup>EK</customergroup>
+	<language>1</language>
+	<subshopID>1</subshopID>
+</customer>
+<customer>
+	<customernumber>120007</customernumber>
+	<email>testsha@example.com</email>
+	<password>100000:dAHbKOCR2BItLHcElIlje0:1620f1ca0825ce2fd908bd902e5370da2dca359c346d6aa2a1d25bada0c129e1</password>
+	<encoder>sha256</encoder>
+	<active>1</active>
+	<billing_company></billing_company>
+	<billing_department></billing_department>
+	<billing_salutation>mr</billing_salutation>
+	<billing_firstname>Sha256</billing_firstname>
+	<billing_lastname>Sha256 last name</billing_lastname>
+	<billing_street>Street 123</billing_street>
+	<billing_zipcode>12345</billing_zipcode>
+	<billing_city>Testcity</billing_city>
+	<phone></phone>
+	<billing_countryID>4</billing_countryID>
+	<billing_stateID></billing_stateID>
+	<ustid></ustid>
+	<shipping_company></shipping_company>
+	<shipping_department></shipping_department>
+	<shipping_salutation>mr</shipping_salutation>
+	<shipping_firstname>Sha256</shipping_firstname>
+	<shipping_lastname>Sha256 last name</shipping_lastname>
+	<shipping_street>Street 123</shipping_street>
+	<shipping_zipcode>12345</shipping_zipcode>
+	<shipping_city>Testcity</shipping_city>
+	<shipping_countryID>4</shipping_countryID>
+	<paymentID>3</paymentID>
+	<newsletter>0</newsletter>
+	<accountmode>0</accountmode>
+	<customergroup>EK</customergroup>
+	<language>1</language>
+	<subshopID>1</subshopID>
+</customer>
+<customer>
+	<customernumber>120008</customernumber>
+	<email>md5@test.org</email>
+	<password>202cb962ac59075b964b07152d234b70</password>
+	<encoder>md5</encoder>
+	<active>1</active>
+	<billing_company></billing_company>
+	<billing_department></billing_department>
+	<billing_salutation>mr</billing_salutation>
+	<billing_firstname>mf5 Password</billing_firstname>
+	<billing_lastname>md5 Password Lastname</billing_lastname>
+	<billing_street>Teststr 312</billing_street>
+	<billing_zipcode>44444</billing_zipcode>
+	<billing_city>Steinfurt</billing_city>
+	<phone></phone>
+	<billing_countryID>7</billing_countryID>
+	<billing_stateID></billing_stateID>
+	<ustid></ustid>
+	<shipping_company></shipping_company>
+	<shipping_department></shipping_department>
+	<shipping_salutation>mr</shipping_salutation>
+	<shipping_firstname>mf5 Password</shipping_firstname>
+	<shipping_lastname>md5 Password Lastname</shipping_lastname>
+	<shipping_street>Teststr 312</shipping_street>
+	<shipping_zipcode>44444</shipping_zipcode>
+	<shipping_city>Steinfurt</shipping_city>
+	<shipping_countryID>7</shipping_countryID>
+	<paymentID>3</paymentID>
+	<newsletter>0</newsletter>
+	<accountmode>0</accountmode>
+	<customergroup>EK</customergroup>
+	<language>1</language>
+	<subshopID>1</subshopID>
+</customer>
+	</customers>
+</Root>

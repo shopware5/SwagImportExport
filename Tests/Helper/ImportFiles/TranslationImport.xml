@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Root>
+	<Header>
+		<HeaderChild></HeaderChild>
+	</Header>
+	<Translations>
+		<Translation>
+	<objectKey>1</objectKey>
+	<objectType>propertygroup</objectType>
+	<baseName>Edelbrände</baseName>
+	<name>Brandy</name>
+	<description></description>
+	<languageId>2</languageId>
+</Translation>
+<Translation>
+	<objectKey>1</objectKey>
+	<objectType>propertyoption</objectType>
+	<baseName>Alkoholgehalt</baseName>
+	<name>Alcohol in %</name>
+	<description></description>
+	<languageId>2</languageId>
+</Translation>
+<Translation>
+	<objectKey>2</objectKey>
+	<objectType>propertyoption</objectType>
+	<baseName>Flaschengröße</baseName>
+	<name>Capacity</name>
+	<description></description>
+	<languageId>2</languageId>
+</Translation>
+<Translation>
+	<objectKey>4</objectKey>
+	<objectType>propertyoption</objectType>
+	<baseName>Farbe</baseName>
+	<name>Color</name>
+	<description></description>
+	<languageId>2</languageId>
+</Translation>
+<Translation>
+	<objectKey>6</objectKey>
+	<objectType>propertyoption</objectType>
+	<baseName>Geschmack</baseName>
+	<name>Taste</name>
+	<description></description>
+	<languageId>2</languageId>
+</Translation>
+<Translation>
+	<objectKey>7</objectKey>
+	<objectType>propertyoption</objectType>
+	<baseName>Trinktemperatur</baseName>
+	<name>Serve at</name>
+	<description></description>
+	<languageId>2</languageId>
+</Translation>
+<Translation>
+	<objectKey>28</objectKey>
+	<objectType>propertyvalue</objectType>
+	<baseName>rot</baseName>
+	<name>red</name>
+	<description></description>
+	<languageId>2</languageId>
+</Translation>
+<Translation>
+	<objectKey>29</objectKey>
+	<objectType>propertyvalue</objectType>
+	<baseName>klar</baseName>
+	<name>transparent</name>
+	<description></description>
+	<languageId>2</languageId>
+</Translation>
+<Translation>
+	<objectKey>31</objectKey>
+	<objectType>propertyvalue</objectType>
+	<baseName>goldig</baseName>
+	<name>gold</name>
+	<description></description>
+	<languageId>2</languageId>
+</Translation>
+<Translation>
+	<objectKey>32</objectKey>
+	<objectType>propertyvalue</objectType>
+	<baseName>herb</baseName>
+	<name>tart</name>
+	<description></description>
+	<languageId>2</languageId>
+</Translation>
+<Translation>
+	<objectKey>33</objectKey>
+	<objectType>propertyvalue</objectType>
+	<baseName>mild</baseName>
+	<name>mild</name>
+	<description></description>
+	<languageId>2</languageId>
+</Translation>
+<Translation>
+	<objectKey>34</objectKey>
+	<objectType>propertyvalue</objectType>
+	<baseName>fruchtig</baseName>
+	<name>fruity</name>
+	<description></description>
+	<languageId>2</languageId>
+</Translation>
+<Translation>
+	<objectKey>35</objectKey>
+	<objectType>propertyvalue</objectType>
+	<baseName>Gekühlt</baseName>
+	<name>cooled</name>
+	<description></description>
+	<languageId>2</languageId>
+</Translation>
+<Translation>
+	<objectKey>36</objectKey>
+	<objectType>propertyvalue</objectType>
+	<baseName>Zimmertemperatur</baseName>
+	<name>room temperature</name>
+	<description></description>
+	<languageId>2</languageId>
+</Translation>
+<Translation>
+	<objectKey>41</objectKey>
+	<objectType>propertyvalue</objectType>
+	<baseName>schokobraun</baseName>
+	<name>chocolate brown</name>
+	<description></description>
+	<languageId>2</languageId>
+</Translation>
+	</Translations>
+</Root>

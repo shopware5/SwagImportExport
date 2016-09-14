@@ -1,0 +1,99 @@
+ordernumber;price;pricegroup;from;pseudoprice;_name;_additionaltext;_supplier;purchaseprice
+SW10002.1;59,99;EK;1;0;Münsterländer Lagerkorn 32%;1,5 Liter;Feinbrennerei Sasse;0
+SW10002.2;199;EK;1;0;Münsterländer Lagerkorn 32%;5 Liter;Feinbrennerei Sasse;0
+SW10002.3;19,99;EK;1;0;Münsterländer Lagerkorn 32%;0,5 Liter;Feinbrennerei Sasse;0
+SW10003;14,95;EK;1;0;Münsterländer Aperitif 16%;;Feinbrennerei Sasse;0
+SW10004;7,99;EK;1;0;Latte Macchiato 17%;;Feinbrennerei Sasse;0
+SW10005.1;10,95;EK;1;0;Emmelkamp Holunder Likör 18%;0,2 Liter;Feinbrennerei Sasse;0
+SW10005.2;10,95;EK;1;0;Emmelkamp Holunder Likör 18%;0,7 Liter;Feinbrennerei Sasse;0
+SW10005.3;14,95;EK;1;0;Emmelkamp Holunder Likör 18%;1,0 Liter;Feinbrennerei Sasse;0
+SW10005.4;22,99;EK;1;0;Emmelkamp Holunder Likör 18%;1,5 Liter;Feinbrennerei Sasse;0
+SW10006;35,95;EK;1;0;Cigar Special 40%;;Feinbrennerei Sasse;0
+SW10007.1;2,49;EK;1;0;Wacholder Premium extra mild 32%;0,2 Liter;Feinbrennerei Sasse;0
+SW10007.2;8,49;EK;1;0;Wacholder Premium extra mild 32%;0,7 Liter;Feinbrennerei Sasse;0
+SW10007.3;11,99;EK;1;0;Wacholder Premium extra mild 32%;1,0 Liter;Feinbrennerei Sasse;0
+SW10008;49,95;EK;1;0;T.S. Privat 41,5 %;;Feinbrennerei Sasse;0
+SW10009;24,99;EK;1;0;Special Finish Lagerkorn X.O. 32%;;Feinbrennerei Sasse;0
+SW10010;5,95;EK;1;0;Aperitif-Glas Demi Sec;;Feinbrennerei Sasse;0
+SW10011;19,95;EK;1;0;Münsterländer Aperitif Präsent Box;;Feinbrennerei Sasse;0
+SW10012;9,99;EK;1;0;Kobra Vodka 37,5%;;Feinbrennerei Sasse;0
+SW10013;2,5;EK;1;0;Pai Mu Tan Tee weiss;;Teapavilion;0
+SW10014;3,8;EK;1;0;Silver Yin Zhen Tee weiss;;Teapavilion;0
+SW10015;2,4;EK;1;0;LUNG CHING grüner Tee;;Teapavilion;0
+SW10016;1,9;EK;1;0;Mao Feng grüner Tee;;Teapavilion;0
+SW10017;2,2;EK;1;0;Pi Lo Chun grüner Tee;;Teapavilion;0
+SW10018;1,75;EK;1;0;Oriental Jasmine Tee;;Teapavilion;0
+SW10019;2,85;EK;1;0;Jasmine Phoenix Tee;;Teapavilion;0
+SW10020;2,95;EK;1;0;Jasmine Lotus Tee;;Teapavilion;0
+SW10021;13;EK;1;0;Glas -Teetasse 0,25l;;Teapavilion;0
+SW10022;7,5;EK;1;0;Glasbecher;;Teapavilion;0
+SW10023;35;EK;1;0;Glas-Teekännchen;;Teapavilion;0
+SW10024;41;EK;1;0;Glas-Teekanne;;Teapavilion;0
+SW10025;21;EK;1;0;Glas Teezubereiter;;Teapavilion;0
+SW10026;27,5;EK;1;0;Facil Teezubereiter;;Teapavilion;0
+SW10027;32;EK;1;0;Deluxe Eisteezubereiter;;Teapavilion;0
+SW10028;27;EK;1;0;Porzellan Teeservice;;Teapavilion;0
+SW10029;31,5;EK;1;0;Porzellan Tee-Set in Geschenkbox;;Teapavilion;0
+SW10030;29,99;EK;1;0;Grüner Tee Geschenkset;;Teapavilion;0
+SW10031;29,99;EK;1;0;Jasmine Tee Geschenk Set;;Teapavilion;0
+SW10032;29,99;EK;1;0;Oolong Tee Geschenkset;;Teapavilion;0
+SW10033;29,99;EK;1;0;Pu Erh Tee Geschenkset;;Teapavilion;0
+SW10034;29,99;EK;1;0;Schwarzer Tee Geschenkset;;Teapavilion;0
+SW10035;24,99;EK;1;29,99;Weißer Tee Geschenkset;;Teapavilion;0
+SW10036;23,99;EK;1;29,99;Esslack;;The Deli Garage;0
+SW10037;19,99;EK;1;20,99;Kraftstoff;;The Deli Garage;0
+SW10038;14,99;EK;1;16,99;Mehrzwecknudeln;;The Deli Garage;0
+SW10039;9,99;EK;1;0;Schokoleim;;The Deli Garage;0
+SW10040;8,99;EK;1;0;Traubenbatterie;;The Deli Garage;0
+SW10041;7,99;EK;1;0;Tubenhonig;;The Deli Garage;0
+SW10042;34,99;EK;1;0;Ölwechsel;;The Deli Garage;0
+SW10043;4,99;EK;1;0;Bienenkleber;;The Deli Garage;0
+SW10062;69,99;EK;1;0;Beistelltisch;;Das blaue Haus;0
+SW10063;37,99;EK;1;0;Briefkasten;;Das blaue Haus;0
+SW10064;129,99;EK;1;0;Fensterspiegel;;Das blaue Haus;0
+SW10065;79,99;EK;1;0;Garderobe;;Das blaue Haus;0
+SW10066;199,99;EK;1;0;antike Kommode;;Das blaue Haus;0
+SW10067;319,99;EK;1;0;Kommode Shabby Chic;;Das blaue Haus;0
+SW10070;119,99;EK;1;0;Wandregal;;Das blaue Haus;0
+SW10071;109,99;EK;1;0;Regal groß;;Das blaue Haus;0
+SW10072;69,99;EK;1;79,99;Schlüsselkasten;;Das blaue Haus;0
+SW10073;59;EK;1;0;Schmuckkästchen;;Das blaue Haus;0
+SW10074;49,99;EK;1;0;Spiegelregal;;Das blaue Haus;0
+SW10075;74,99;EK;1;0;Stuhl;;Das blaue Haus;0
+SW10076;249,99;EK;1;0;Esstisch;;Das blaue Haus;0
+SW10077;349,99;EK;1;0;Couchtisch rund braun;;Das blaue Haus;0
+SW10078;329,99;EK;1;0;Couchtisch eckig weiß;;Das blaue Haus;0
+SW10079;99,99;EK;1;119,99;Uhr antik;;Das blaue Haus;0
+SW10080;84,99;EK;1;0;Spiegel rund;;Das blaue Haus;0
+SW10081;7,99;EK;1;9,98;Backform gelb;;Das blaue Haus;0
+SW10082;7,99;EK;1;9,98;Backform pink;;Das blaue Haus;0
+SW10083;7,99;EK;1;0;Pralinen-Backform;;Das blaue Haus;0
+SW10084;14,99;EK;1;0;Back-Set 3 teilig;;Das blaue Haus;0
+SW10085;13,99;EK;1;0;Löffel-Set;;Das blaue Haus;0
+SW10086;0,99;EK;1;0;Schneebesen;;Das blaue Haus;0
+SW10087;24,99;EK;1;0;Schüssel Style Vögel;;Das blaue Haus;0
+SW10088;24,99;EK;1;29,99;Schüssel Style Blumen;;Das blaue Haus;0
+SW10089;29,99;EK;1;0;Schüssel Style Ringe rot und weiß;;Das blaue Haus;0
+SW10090.1;1,99;EK;1;0;Teigschaber;grün;Das blaue Haus;0
+SW10090.2;1,99;EK;1;0;Teigschaber;pink;Das blaue Haus;0
+SW10091;12,99;EK;1;0;Teller Style Hühner;;Das blaue Haus;0
+SW10092;13,99;EK;1;0;Teller Style Vögel und Blumen;;Das blaue Haus;0
+SW10093;11,99;EK;1;0;Teller Style Rot und Pink;;Das blaue Haus;0
+SW10095;14,99;EK;1;0;Blumenarrangement mit Keramiktopf;;Das blaue Haus;0
+SW10096;24,99;EK;1;0;Blütenarrangement mit Rattan;;Das blaue Haus;0
+SW10097;24,99;EK;1;0;Blütenarrangement mit Rattan;;Das blaue Haus;0
+SW10098;24,99;EK;1;0;Strandbag;;Das blaue Haus;0
+SW10099;8,99;EK;1;9,98;Eisförmchen;;Das blaue Haus;0
+SW10101;0,79;EK;1;0;Fliegenklatsche grün;;Das blaue Haus;0
+SW10102;0,49;EK;1;0;Fliegenklatsche lila;;Das blaue Haus;0
+SW10100;0,49;EK;1;0;Fliegenklatsche gelb;;Das blaue Haus;0
+SW10103;39,99;EK;1;54,99;iPadtasche mit Stiftmappe;;Das blaue Haus;0
+SW10104;99,99;EK;1;119,99;Reisekoffer groß;;Das blaue Haus;0
+SW10105;69,99;EK;1;89,99;Reisekoffer klein;;Das blaue Haus;0
+SW10107;17,99;EK;1;0;Kosmetiktasche;;Das blaue Haus;0
+SW10108;17,99;EK;1;0;Kosmetiktasche;;Das blaue Haus;0
+SW10106;17,99;EK;1;0;Kosmetiktasche;;Das blaue Haus;0
+SW10109;28,99;EK;1;0;Strandbag;;Das blaue Haus;0
+SW10110;29,99;EK;1;0;Strandbag Fantasy;;Das blaue Haus;0
+SW10113;20,99;EK;1;0;Tasche Feed Me;;Das blaue Haus;0
+SW10112;20,99;EK;1;0;Tasche Remember Me;;Das blaue Haus;0

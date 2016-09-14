@@ -1,0 +1,7 @@
+email;group;salutation;firstname;lastname;street;zipcode;city;lastmailing;lastread;userID
+test@example.com;Newsletter-Empfänger;;;;;;;;;
+test2@example.com;Newsletter-Empfänger;;;;;;;;;
+test3@example.com;Newsletter-Empfänger;;;;;;;;;
+test4@exmaple.com;Newsletter-Empfänger;;;;;;;;;
+another_group@example.com;Test_Group;;;;;;;;;
+another_group1@example.com;Test_Group;;;;;;;;;
