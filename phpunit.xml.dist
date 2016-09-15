@@ -8,6 +8,15 @@
         <testsuite name="Shopware ImportExport Plugin">
             <directory>./Tests/Functional</directory>
             <directory>./Tests/Shopware</directory>
+            <directory>./Tests/Unit</directory>
+        </testsuite>
+
+        <testsuite name="unit">
+            <directory>./Tests/Unit</directory>
+        </testsuite>
+
+        <testsuite name="functional">
+            <directory>./Tests/Functional</directory>
         </testsuite>
     </testsuites>
 

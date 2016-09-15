@@ -6,7 +6,7 @@
  * file that was distributed with this source code.
  */
 
-namespace SwagImportExport\Test\Functional\Commands;
+namespace SwagImportExport\Tests\Functional\Commands;
 
 use Doctrine\DBAL\Connection;
 use Tests\Helper\CommandTestHelper;
