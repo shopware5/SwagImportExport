@@ -82,12 +82,12 @@ abstract class Validator
     /**
      * Validates fields with float type.
      *
-     * @param $value
+     * @param string $value
      * @return int
      */
     public function validateFloat($value)
     {
-        return preg_match('/^\d+((\.|,){0,1}\d+)*$/', $value);
+        return preg_match('/^-?\d+((\.|,){0,1}\d+)*$/', $value);
     }
 
     /**

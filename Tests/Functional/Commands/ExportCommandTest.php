@@ -6,7 +6,7 @@
  * file that was distributed with this source code.
  */
 
-namespace SwagImportExport\Test\Functional\Commands;
+namespace SwagImportExport\Tests\Functional\Commands;
 
 use Shopware\Commands\SwagImportExport\ExportCommand;
 use Tests\Helper\CommandTestHelper;
