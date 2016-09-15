@@ -206,7 +206,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
 
         foreach ($records['default'] as $record) {
             try {
-                $record = $validator->prepareInitialData($record);
+                $record = $validator->filterEmptyString($record);
                 $validator->checkRequiredFields($record);
                 $record = $dataManager->setDefaultFields($record);
                 $validator->validate($record, ArticlePriceValidator::$mapper);

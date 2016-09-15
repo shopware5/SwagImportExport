@@ -297,7 +297,7 @@ class CustomerDbAdapter implements DataDbAdapter
 
         foreach ($records['default'] as $record) {
             try {
-                $record = $validator->prepareInitialData($record);
+                $record = $validator->filterEmptyString($record);
 
                 $customer = $this->findExistingEntries($record);
 

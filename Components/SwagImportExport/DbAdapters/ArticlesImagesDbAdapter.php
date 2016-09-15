@@ -216,7 +216,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
 
         foreach ($records['default'] as $record) {
             try {
-                $record = $validator->prepareInitialData($record);
+                $record = $validator->filterEmptyString($record);
                 $validator->checkRequiredFields($record);
 
                 /** @var \Shopware\Models\Article\Detail $articleDetailModel */

@@ -62,7 +62,7 @@ class PriceWriter
 
         foreach ($prices as $price) {
             $orderNumber = $this->getArticleOrderNumber($articleDetailId);
-            $price = $this->validator->prepareInitialData($price);
+            $price = $this->validator->filterEmptyString($price);
             $price = $this->dataManager->setDefaultFields($price);
             $this->validator->checkRequiredFields($price, $orderNumber);
             $this->validator->validate($price, PriceValidator::$mapper);

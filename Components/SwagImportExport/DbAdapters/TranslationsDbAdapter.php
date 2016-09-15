@@ -201,7 +201,7 @@ class TranslationsDbAdapter implements DataDbAdapter
 
         foreach ($records['default'] as $index => $record) {
             try {
-                $record = $validator->prepareInitialData($record);
+                $record = $validator->filterEmptyString($record);
                 $validator->checkRequiredFields($record);
                 $validator->validate($record, TranslationValidator::$mapper);
 
