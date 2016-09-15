@@ -234,7 +234,7 @@ class CategoriesDbAdapter implements DataDbAdapter
 
         foreach ($records['default'] as $index => $record) {
             try {
-                $record = $validator->prepareInitialData($record);
+                $record = $validator->filterEmptyString($record);
 
                 $category = $this->findExistingEntries($record);
                 if (!$category instanceof Category) {

@@ -198,7 +198,7 @@ class NewsletterDbAdapter implements DataDbAdapter
 
         foreach ($records['default'] as $newsletterData) {
             try {
-                $newsletterData = $validator->prepareInitialData($newsletterData);
+                $newsletterData = $validator->filterEmptyString($newsletterData);
                 $validator->checkRequiredFields($newsletterData);
 
                 $recipient = $this->getAddressRepository()->findOneByEmail($newsletterData['email']);

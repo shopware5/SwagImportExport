@@ -19,7 +19,7 @@ abstract class Validator
      * @param array $record
      * @return array
      */
-    public function prepareInitialData($record)
+    public function filterEmptyString($record)
     {
         return array_filter($record, 'strlen');
     }

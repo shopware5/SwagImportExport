@@ -66,7 +66,7 @@ class ArticleWriter
      */
     public function write($article, $defaultValues)
     {
-        $article = $this->validator->prepareInitialData($article);
+        $article = $this->validator->filterEmptyString($article);
         $this->validator->checkRequiredFields($article);
 
         return $this->insertOrUpdateArticle($article, $defaultValues);

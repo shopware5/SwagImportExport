@@ -48,7 +48,7 @@ class ConfiguratorWriter
             if (!$this->isValid($configurator)) {
                 continue;
             }
-            $configurator = $this->validator->prepareInitialData($configurator);
+            $configurator = $this->validator->filterEmptyString($configurator);
             $this->validator->validate($configurator, ConfiguratorValidator::$mapper);
 
             /**

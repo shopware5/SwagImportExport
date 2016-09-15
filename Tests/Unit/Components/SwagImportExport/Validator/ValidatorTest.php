@@ -97,4 +97,39 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(self::INVALID_TYPE_RESULT, $result);
     }
+
+    public function test_filter_empty_string_should_filter_empty_string()
+    {
+        $result = $this->SUT->filterEmptyString($this->getDemoRecordForFilterEmptyStringTest());
+
+        $this->assertEmpty($result['filteredEmptyString']);
+    }
+
+    public function test_filter_empty_string_should_not_filter_other_data_types()
+    {
+        $expectedFilteredData = [
+            'integer' => 1,
+            'float' => 1.5,
+            'string' => 'This is a string.',
+            'boolean' => true
+        ];
+
+        $result = $this->SUT->filterEmptyString($this->getDemoRecordForFilterEmptyStringTest());
+
+        $this->assertEquals($expectedFilteredData, $result);
+    }
+
+    /**
+     * @return array
+     */
+    private function getDemoRecordForFilterEmptyStringTest()
+    {
+        return [
+            'integer' => 1,
+            'float' => 1.5,
+            'string' => 'This is a string.',
+            'filteredEmptyString' => '',
+            'boolean' => true,
+        ];
+    }
 }
