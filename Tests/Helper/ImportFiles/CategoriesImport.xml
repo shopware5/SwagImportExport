@@ -5,9 +5,9 @@
 	</Header>
 	<categories>
 		<category>
-	<categoryId>3</categoryId>
+	<categoryId>1003</categoryId>
 	<parentID>1</parentID>
-	<description>Deutsch</description>
+	<description>test_Deutsch</description>
 	<position>0</position>
 	<metatitle></metatitle>
 	<metakeywords></metakeywords>
@@ -30,8 +30,8 @@
 	</CustomerGroups>
 </category>
 <category>
-	<categoryId>5</categoryId>
-	<parentID>3</parentID>
+	<categoryId>1005</categoryId>
+	<parentID>1003</parentID>
 	<description>Category1</description>
 	<position></position>
 	<metatitle></metatitle>
@@ -55,8 +55,8 @@
 	</CustomerGroups>
 </category>
 <category>
-	<categoryId>6</categoryId>
-	<parentID>3</parentID>
+	<categoryId>1006</categoryId>
+	<parentID>1003</parentID>
 	<description>Category2</description>
 	<position></position>
 	<metatitle></metatitle>
@@ -80,8 +80,8 @@
 	</CustomerGroups>
 </category>
 <category>
-	<categoryId>7</categoryId>
-	<parentID>3</parentID>
+	<categoryId>1007</categoryId>
+	<parentID>1003</parentID>
 	<description>Category3</description>
 	<position></position>
 	<metatitle></metatitle>
@@ -105,8 +105,8 @@
 	</CustomerGroups>
 </category>
 <category>
-	<categoryId>8</categoryId>
-	<parentID>5</parentID>
+	<categoryId>1008</categoryId>
+	<parentID>1005</parentID>
 	<description>Sub-Category1</description>
 	<position></position>
 	<metatitle></metatitle>
@@ -130,8 +130,8 @@
 	</CustomerGroups>
 </category>
 <category>
-	<categoryId>9</categoryId>
-	<parentID>5</parentID>
+	<categoryId>1009</categoryId>
+	<parentID>1005</parentID>
 	<description>SubCategory2</description>
 	<position></position>
 	<metatitle></metatitle>
@@ -155,8 +155,8 @@
 	</CustomerGroups>
 </category>
 <category>
-	<categoryId>10</categoryId>
-	<parentID>5</parentID>
+	<categoryId>1010</categoryId>
+	<parentID>1005</parentID>
 	<description>Sub-Category3</description>
 	<position></position>
 	<metatitle></metatitle>
@@ -180,8 +180,8 @@
 	</CustomerGroups>
 </category>
 <category>
-	<categoryId>11</categoryId>
-	<parentID>6</parentID>
+	<categoryId>1011</categoryId>
+	<parentID>1006</parentID>
 	<description>Sub-Category2.1</description>
 	<position></position>
 	<metatitle></metatitle>
@@ -205,9 +205,9 @@
 	</CustomerGroups>
 </category>
 <category>
-	<categoryId>12</categoryId>
+	<categoryId>1012</categoryId>
 	<parentID>1</parentID>
-	<description>English</description>
+	<description>test_English</description>
 	<position>1</position>
 	<metatitle></metatitle>
 	<metakeywords></metakeywords>
@@ -230,8 +230,8 @@
 	</CustomerGroups>
 </category>
 <category>
-	<categoryId>13</categoryId>
-	<parentID>12</parentID>
+	<categoryId>1013</categoryId>
+	<parentID>1012</parentID>
 	<description>Category1</description>
 	<position>1</position>
 	<metatitle></metatitle>
@@ -255,8 +255,8 @@
 	</CustomerGroups>
 </category>
 <category>
-	<categoryId>14</categoryId>
-	<parentID>12</parentID>
+	<categoryId>1014</categoryId>
+	<parentID>1012</parentID>
 	<description>Category2</description>
 	<position>2</position>
 	<metatitle></metatitle>
@@ -280,8 +280,8 @@
 	</CustomerGroups>
 </category>
 <category>
-	<categoryId>15</categoryId>
-	<parentID>12</parentID>
+	<categoryId>1015</categoryId>
+	<parentID>1012</parentID>
 	<description>Category3</description>
 	<position>3</position>
 	<metatitle></metatitle>
@@ -305,8 +305,8 @@
 	</CustomerGroups>
 </category>
 <category>
-	<categoryId>16</categoryId>
-	<parentID>13</parentID>
+	<categoryId>1016</categoryId>
+	<parentID>1013</parentID>
 	<description>Sub-Category1</description>
 	<position>1</position>
 	<metatitle></metatitle>
@@ -330,8 +330,8 @@
 	</CustomerGroups>
 </category>
 <category>
-	<categoryId>17</categoryId>
-	<parentID>13</parentID>
+	<categoryId>1017</categoryId>
+	<parentID>1013</parentID>
 	<description>SubCategory2</description>
 	<position>2</position>
 	<metatitle></metatitle>
@@ -355,8 +355,8 @@
 	</CustomerGroups>
 </category>
 <category>
-	<categoryId>18</categoryId>
-	<parentID>13</parentID>
+	<categoryId>1018</categoryId>
+	<parentID>1013</parentID>
 	<description>Sub-Category3</description>
 	<position>3</position>
 	<metatitle></metatitle>
@@ -380,8 +380,8 @@
 	</CustomerGroups>
 </category>
 <category>
-	<categoryId>19</categoryId>
-	<parentID>14</parentID>
+	<categoryId>1019</categoryId>
+	<parentID>1014</parentID>
 	<description>Sub-Category2.1</description>
 	<position>1</position>
 	<metatitle></metatitle>
