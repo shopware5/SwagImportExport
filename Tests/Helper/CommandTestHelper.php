@@ -56,6 +56,7 @@ class CommandTestHelper
 
     const ORDERS_PROFILE_TYPE = 'orders';
     const ORDERS_PROFILE_NAME = 'order_profile';
+    const ORDER_TABLE = "s_order";
 
     const MAIN_ORDERS_PROFILE_TYPE = 'mainOrders';
     const MAIN_ORDERS_PROFILE_NAME = 'main_order_profile';

@@ -75,8 +75,6 @@ class ImportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
 
     public function testCategoryXmlImport()
     {
-        $this->markTestSkipped('Fix category import over cli commands');
-
         $actualLineAmount = $this->getRowCountForTable(CommandTestHelper::CATEGORY_TABLE);
         $categoryProfileName = CommandTestHelper::CATEGORY_PROFILE_NAME;
         $importFilePath = CommandTestHelper::IMPORT_FILES_DIR . 'CategoriesImport.xml';
@@ -96,8 +94,6 @@ class ImportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
 
     public function testCategoryCsvImport()
     {
-        $this->markTestSkipped('Fix category import over cli commands');
-
         $actualLineAmount = $this->getRowCountForTable(CommandTestHelper::CATEGORY_TABLE);
         $profile = CommandTestHelper::CATEGORY_PROFILE_NAME;
         $filePath = CommandTestHelper::IMPORT_FILES_DIR . 'CategoriesImport.csv';
@@ -309,62 +305,60 @@ class ImportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
 
     public function testOrderXmlImport()
     {
-        $this->markTestSkipped('Fix order import.');
-
         $profile = CommandTestHelper::ORDERS_PROFILE_NAME;
         $filePath = CommandTestHelper::IMPORT_FILES_DIR . 'OrderImport.xml';
+        $actualLineAmount = $this->getRowCountForTable(CommandTestHelper::ORDER_TABLE);
+        $expectedImportedOrders = 0;
 
         $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:import -p {$profile} {$filePath}");
         $consoleOutput = $this->convertOutputToArrayByLineBreak($consoleOutput);
+        $resultLineAmount = $this->getRowCountForTable(CommandTestHelper::ORDER_TABLE);
+        $importedOrdersAmount = $resultLineAmount - $actualLineAmount;
 
+        $this->assertEquals($expectedImportedOrders, $importedOrdersAmount);
         $this->assertEquals('Using profile: order_profile.', $consoleOutput[0]);
         $this->assertEquals('Using format: xml.', $consoleOutput[1]);
-        $this->assertEquals('Total count: 2.', $consoleOutput[3]);
+        $this->assertEquals('Total count: 17.', $consoleOutput[3]);
     }
 
     public function testOrderCsvImport()
     {
-        $this->markTestSkipped('Fix order import.');
-
         $profile = CommandTestHelper::ORDERS_PROFILE_NAME;
         $filePath = CommandTestHelper::IMPORT_FILES_DIR . 'OrderImport.csv';
+        $actualLineAmount = $this->getRowCountForTable(CommandTestHelper::ORDER_TABLE);
+        $expectedImportedOrders = 0;
 
         $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:import -p {$profile} {$filePath}");
         $consoleOutput = $this->convertOutputToArrayByLineBreak($consoleOutput);
+        $resultLineAmount = $this->getRowCountForTable(CommandTestHelper::ORDER_TABLE);
+        $importedOrdersAmount = $resultLineAmount - $actualLineAmount;
 
+        $this->assertEquals($expectedImportedOrders, $importedOrdersAmount);
         $this->assertEquals('Using profile: order_profile.', $consoleOutput[0]);
         $this->assertEquals('Using format: csv.', $consoleOutput[1]);
-        $this->assertEquals('Total count: 2.', $consoleOutput[3]);
+        $this->assertEquals('Total count: 17.', $consoleOutput[3]);
     }
 
+    /**
+     * @expectedException \Exception
+     */
     public function testMainOrderXmlImport()
     {
-        $this->markTestSkipped('Fix main order import.');
-
         $profile = CommandTestHelper::IMPORT_MAIN_ORDER_PROFILE_NAME;
         $filePath = CommandTestHelper::IMPORT_FILES_DIR . 'MainOrderImport.xml';
 
-        $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:import -p {$profile} {$filePath}");
-        $consoleOutput = $this->convertOutputToArrayByLineBreak($consoleOutput);
-
-        $this->assertEquals('Using profile: main_order_profile.', $consoleOutput[0]);
-        $this->assertEquals('Using format: xml.', $consoleOutput[1]);
-        $this->assertEquals('Total count: 2.', $consoleOutput[3]);
+        $this->commandTestHelper->runCommand("sw:importexport:import -p {$profile} {$filePath}");
     }
 
+    /**
+     * @expectedException \Exception
+     */
     public function testMainOrderCsvImport()
     {
-        $this->markTestSkipped('Fix main order import.');
-        
         $profile = CommandTestHelper::IMPORT_MAIN_ORDER_PROFILE_NAME;
         $filePath = CommandTestHelper::IMPORT_FILES_DIR . 'MainOrderImport.csv';
 
-        $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:import -p {$profile} {$filePath}");
-        $consoleOutput = $this->convertOutputToArrayByLineBreak($consoleOutput);
-
-        $this->assertEquals('Using profile: main_order_profile.', $consoleOutput[0]);
-        $this->assertEquals('Using format: csv.', $consoleOutput[1]);
-        $this->assertEquals('Total count: 2.', $consoleOutput[3]);
+        $this->commandTestHelper->runCommand("sw:importexport:import -p {$profile} {$filePath}");
     }
 
     public function testTranslationXmlImport()
