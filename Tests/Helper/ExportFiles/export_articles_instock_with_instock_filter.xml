@@ -1,0 +1,2402 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Root>
+	<Header>
+		<HeaderChild></HeaderChild>
+	</Header>
+	<articlesInStock>
+		<article>
+	<ordernumber>SW10003</ordernumber>
+	<instock>25</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<_price>14.95</_price>
+</article>
+<article>
+	<ordernumber>SW10004</ordernumber>
+	<instock>5</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<_price>7.99</_price>
+</article>
+<article>
+	<ordernumber>SW10006</ordernumber>
+	<instock>20</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<_price>35.949999999999</_price>
+</article>
+<article>
+	<ordernumber>SW10008</ordernumber>
+	<instock>7</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<_price>49.95</_price>
+</article>
+<article>
+	<ordernumber>SW10009</ordernumber>
+	<instock>12</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<_price>24.99</_price>
+</article>
+<article>
+	<ordernumber>SW10010</ordernumber>
+	<instock>23</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<_price>5.95</_price>
+</article>
+<article>
+	<ordernumber>SW10011</ordernumber>
+	<instock>55</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<_price>19.95</_price>
+</article>
+<article>
+	<ordernumber>SW10012</ordernumber>
+	<instock>60</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<_price>9.99</_price>
+</article>
+<article>
+	<ordernumber>SW10013</ordernumber>
+	<instock>122</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<_price>2.5000000000001</_price>
+</article>
+<article>
+	<ordernumber>SW10014</ordernumber>
+	<instock>178</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<_price>3.8</_price>
+</article>
+<article>
+	<ordernumber>SW10015</ordernumber>
+	<instock>15</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<_price>2.4</_price>
+</article>
+<article>
+	<ordernumber>SW10016</ordernumber>
+	<instock>80</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<_price>1.9</_price>
+</article>
+<article>
+	<ordernumber>SW10017</ordernumber>
+	<instock>33</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<_price>2.2</_price>
+</article>
+<article>
+	<ordernumber>SW10018</ordernumber>
+	<instock>88</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<_price>1.75</_price>
+</article>
+<article>
+	<ordernumber>SW10019</ordernumber>
+	<instock>168</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<_price>2.85</_price>
+</article>
+<article>
+	<ordernumber>SW10020</ordernumber>
+	<instock>88</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<_price>2.9500000000001</_price>
+</article>
+<article>
+	<ordernumber>SW10021</ordernumber>
+	<instock>3445</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<_price>13</_price>
+</article>
+<article>
+	<ordernumber>SW10022</ordernumber>
+	<instock>999</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<_price>7.5</_price>
+</article>
+<article>
+	<ordernumber>SW10024</ordernumber>
+	<instock>544</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<_price>41</_price>
+</article>
+<article>
+	<ordernumber>SW10025</ordernumber>
+	<instock>888</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<_price>21</_price>
+</article>
+<article>
+	<ordernumber>SW10026</ordernumber>
+	<instock>333</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<_price>27.5</_price>
+</article>
+<article>
+	<ordernumber>SW10027</ordernumber>
+	<instock>99</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<_price>32</_price>
+</article>
+<article>
+	<ordernumber>SW10028</ordernumber>
+	<instock>148</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<_price>27</_price>
+</article>
+<article>
+	<ordernumber>SW10029</ordernumber>
+	<instock>344</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<_price>31.5</_price>
+</article>
+<article>
+	<ordernumber>SW10030</ordernumber>
+	<instock>38</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<_price>29.99</_price>
+</article>
+<article>
+	<ordernumber>SW10031</ordernumber>
+	<instock>85</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<_price>29.99</_price>
+</article>
+<article>
+	<ordernumber>SW10032</ordernumber>
+	<instock>111</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<_price>29.99</_price>
+</article>
+<article>
+	<ordernumber>SW10033</ordernumber>
+	<instock>45</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<_price>29.99</_price>
+</article>
+<article>
+	<ordernumber>SW10034</ordernumber>
+	<instock>3</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<_price>29.99</_price>
+</article>
+<article>
+	<ordernumber>SW10035</ordernumber>
+	<instock>63</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<_price>24.99</_price>
+</article>
+<article>
+	<ordernumber>SW10036</ordernumber>
+	<instock>12</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>The Deli Garage</_supplier>
+	<_price>23.99</_price>
+</article>
+<article>
+	<ordernumber>SW10037</ordernumber>
+	<instock>73</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>The Deli Garage</_supplier>
+	<_price>19.99</_price>
+</article>
+<article>
+	<ordernumber>SW10038</ordernumber>
+	<instock>56</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>The Deli Garage</_supplier>
+	<_price>14.99</_price>
+</article>
+<article>
+	<ordernumber>SW10039</ordernumber>
+	<instock>50</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>The Deli Garage</_supplier>
+	<_price>9.99</_price>
+</article>
+<article>
+	<ordernumber>SW10042</ordernumber>
+	<instock>93</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>The Deli Garage</_supplier>
+	<_price>34.99</_price>
+</article>
+<article>
+	<ordernumber>SW10043</ordernumber>
+	<instock>8</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>The Deli Garage</_supplier>
+	<_price>4.99</_price>
+</article>
+<article>
+	<ordernumber>SW10002.1</ordernumber>
+	<instock>15</instock>
+	<_additionaltext>1,5 Liter</_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<_price>59.99</_price>
+</article>
+<article>
+	<ordernumber>SW10002.2</ordernumber>
+	<instock>15</instock>
+	<_additionaltext>5 Liter</_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<_price>199</_price>
+</article>
+<article>
+	<ordernumber>SW10002.3</ordernumber>
+	<instock>15</instock>
+	<_additionaltext>0,5 Liter</_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<_price>19.99</_price>
+</article>
+<article>
+	<ordernumber>SW10062</ordernumber>
+	<instock>12</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>69.99</_price>
+</article>
+<article>
+	<ordernumber>SW10063</ordernumber>
+	<instock>68</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>37.99</_price>
+</article>
+<article>
+	<ordernumber>SW10064</ordernumber>
+	<instock>28</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>129.99</_price>
+</article>
+<article>
+	<ordernumber>SW10065</ordernumber>
+	<instock>52</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>79.99</_price>
+</article>
+<article>
+	<ordernumber>SW10066</ordernumber>
+	<instock>9</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>199.99</_price>
+</article>
+<article>
+	<ordernumber>SW10067</ordernumber>
+	<instock>63</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>319.99000000001</_price>
+</article>
+<article>
+	<ordernumber>SW10070</ordernumber>
+	<instock>58</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>119.99</_price>
+</article>
+<article>
+	<ordernumber>SW10071</ordernumber>
+	<instock>46</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>109.99</_price>
+</article>
+<article>
+	<ordernumber>SW10072</ordernumber>
+	<instock>85</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>69.99</_price>
+</article>
+<article>
+	<ordernumber>SW10073</ordernumber>
+	<instock>25</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>59</_price>
+</article>
+<article>
+	<ordernumber>SW10075</ordernumber>
+	<instock>39</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>74.99</_price>
+</article>
+<article>
+	<ordernumber>SW10076</ordernumber>
+	<instock>23</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>249.99</_price>
+</article>
+<article>
+	<ordernumber>SW10077</ordernumber>
+	<instock>12</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>349.99</_price>
+</article>
+<article>
+	<ordernumber>SW10078</ordernumber>
+	<instock>5</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>329.99</_price>
+</article>
+<article>
+	<ordernumber>SW10079</ordernumber>
+	<instock>13</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>99.99</_price>
+</article>
+<article>
+	<ordernumber>SW10080</ordernumber>
+	<instock>23</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>84.99</_price>
+</article>
+<article>
+	<ordernumber>SW10081</ordernumber>
+	<instock>45</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>7.99</_price>
+</article>
+<article>
+	<ordernumber>SW10082</ordernumber>
+	<instock>5</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>7.99</_price>
+</article>
+<article>
+	<ordernumber>SW10083</ordernumber>
+	<instock>584</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>7.99</_price>
+</article>
+<article>
+	<ordernumber>SW10084</ordernumber>
+	<instock>4100</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>14.99</_price>
+</article>
+<article>
+	<ordernumber>SW10085</ordernumber>
+	<instock>23</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>13.99</_price>
+</article>
+<article>
+	<ordernumber>SW10086</ordernumber>
+	<instock>2</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>0.99</_price>
+</article>
+<article>
+	<ordernumber>SW10087</ordernumber>
+	<instock>58</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>24.99</_price>
+</article>
+<article>
+	<ordernumber>SW10088</ordernumber>
+	<instock>5</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>24.99</_price>
+</article>
+<article>
+	<ordernumber>SW10089</ordernumber>
+	<instock>88</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>29.99</_price>
+</article>
+<article>
+	<ordernumber>SW10090.1</ordernumber>
+	<instock>67</instock>
+	<_additionaltext>grün</_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>1.99</_price>
+</article>
+<article>
+	<ordernumber>SW10090.2</ordernumber>
+	<instock>67</instock>
+	<_additionaltext>pink</_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>1.99</_price>
+</article>
+<article>
+	<ordernumber>SW10091</ordernumber>
+	<instock>99</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>12.99</_price>
+</article>
+<article>
+	<ordernumber>SW10092</ordernumber>
+	<instock>16</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>13.99</_price>
+</article>
+<article>
+	<ordernumber>SW10093</ordernumber>
+	<instock>26</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>11.99</_price>
+</article>
+<article>
+	<ordernumber>SW10095</ordernumber>
+	<instock>12</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>14.99</_price>
+</article>
+<article>
+	<ordernumber>SW10096</ordernumber>
+	<instock>46</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>24.99</_price>
+</article>
+<article>
+	<ordernumber>SW10097</ordernumber>
+	<instock>37</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>24.99</_price>
+</article>
+<article>
+	<ordernumber>SW10098</ordernumber>
+	<instock>65</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>24.99</_price>
+</article>
+<article>
+	<ordernumber>SW10099</ordernumber>
+	<instock>45</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>8.99</_price>
+</article>
+<article>
+	<ordernumber>SW10102</ordernumber>
+	<instock>34</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>0.49</_price>
+</article>
+<article>
+	<ordernumber>SW10100</ordernumber>
+	<instock>234</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>0.49</_price>
+</article>
+<article>
+	<ordernumber>SW10103</ordernumber>
+	<instock>12</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>39.99</_price>
+</article>
+<article>
+	<ordernumber>SW10104</ordernumber>
+	<instock>45</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>99.99</_price>
+</article>
+<article>
+	<ordernumber>SW10105</ordernumber>
+	<instock>54</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>69.99</_price>
+</article>
+<article>
+	<ordernumber>SW10106</ordernumber>
+	<instock>456</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>17.990000000001</_price>
+</article>
+<article>
+	<ordernumber>SW10109</ordernumber>
+	<instock>123</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>28.99</_price>
+</article>
+<article>
+	<ordernumber>SW10110</ordernumber>
+	<instock>67</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>29.99</_price>
+</article>
+<article>
+	<ordernumber>SW10113</ordernumber>
+	<instock>34</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>20.99</_price>
+</article>
+<article>
+	<ordernumber>SW10112</ordernumber>
+	<instock>38</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>20.99</_price>
+</article>
+<article>
+	<ordernumber>SW10114</ordernumber>
+	<instock>22</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<_price>599.00000000001</_price>
+</article>
+<article>
+	<ordernumber>SW10115.1</ordernumber>
+	<instock>9</instock>
+	<_additionaltext>weiss</_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<_price>749</_price>
+</article>
+<article>
+	<ordernumber>SW10115.2</ordernumber>
+	<instock>9</instock>
+	<_additionaltext>schwarz</_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<_price>749</_price>
+</article>
+<article>
+	<ordernumber>SW10115.3</ordernumber>
+	<instock>9</instock>
+	<_additionaltext>blau</_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<_price>749</_price>
+</article>
+<article>
+	<ordernumber>SW10115.4</ordernumber>
+	<instock>9</instock>
+	<_additionaltext>grün</_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<_price>749</_price>
+</article>
+<article>
+	<ordernumber>SW10115.5</ordernumber>
+	<instock>9</instock>
+	<_additionaltext>gelb</_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<_price>749</_price>
+</article>
+<article>
+	<ordernumber>SW10116</ordernumber>
+	<instock>14</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<_price>699</_price>
+</article>
+<article>
+	<ordernumber>SW10117</ordernumber>
+	<instock>1000</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<_price>999</_price>
+</article>
+<article>
+	<ordernumber>SW10118.1</ordernumber>
+	<instock>99</instock>
+	<_additionaltext>weiss</_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<_price>29.99</_price>
+</article>
+<article>
+	<ordernumber>SW10119</ordernumber>
+	<instock>45</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<_price>9.99</_price>
+</article>
+<article>
+	<ordernumber>SW10120</ordernumber>
+	<instock>199</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<_price>5.9900000000001</_price>
+</article>
+<article>
+	<ordernumber>SW10121</ordernumber>
+	<instock>98</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<_price>4.99</_price>
+</article>
+<article>
+	<ordernumber>SW10122</ordernumber>
+	<instock>48</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<_price>14.99</_price>
+</article>
+<article>
+	<ordernumber>SW10111</ordernumber>
+	<instock>5</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<_price>1499</_price>
+</article>
+<article>
+	<ordernumber>SW10007.1</ordernumber>
+	<instock>8</instock>
+	<_additionaltext>0,2 Liter</_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<_price>2.49</_price>
+</article>
+<article>
+	<ordernumber>SW10007.2</ordernumber>
+	<instock>8</instock>
+	<_additionaltext>0,7 Liter</_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<_price>8.49</_price>
+</article>
+<article>
+	<ordernumber>SW10007.3</ordernumber>
+	<instock>8</instock>
+	<_additionaltext>1,0 Liter</_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<_price>11.99</_price>
+</article>
+<article>
+	<ordernumber>SW10005.1</ordernumber>
+	<instock>3</instock>
+	<_additionaltext>0,2 Liter</_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<_price>10.95</_price>
+</article>
+<article>
+	<ordernumber>SW10005.2</ordernumber>
+	<instock>3</instock>
+	<_additionaltext>0,7 Liter</_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<_price>10.95</_price>
+</article>
+<article>
+	<ordernumber>SW10005.3</ordernumber>
+	<instock>3</instock>
+	<_additionaltext>1,0 Liter</_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<_price>14.95</_price>
+</article>
+<article>
+	<ordernumber>SW10005.4</ordernumber>
+	<instock>3</instock>
+	<_additionaltext>1,5 Liter</_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<_price>22.989999999999</_price>
+</article>
+<article>
+	<ordernumber>SW10123.1</ordernumber>
+	<instock>78</instock>
+	<_additionaltext>0,2 Liter</_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<_price>2.99</_price>
+</article>
+<article>
+	<ordernumber>SW10123.2</ordernumber>
+	<instock>78</instock>
+	<_additionaltext>0,7 Liter</_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<_price>7.99</_price>
+</article>
+<article>
+	<ordernumber>SW10123.3</ordernumber>
+	<instock>78</instock>
+	<_additionaltext>1,0 Liter</_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<_price>12.99</_price>
+</article>
+<article>
+	<ordernumber>SW10123.4</ordernumber>
+	<instock>78</instock>
+	<_additionaltext>1,5 Liter</_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<_price>17.990000000001</_price>
+</article>
+<article>
+	<ordernumber>SW10128</ordernumber>
+	<instock>15</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Sonnenschirm Versand</_supplier>
+	<_price>99</_price>
+</article>
+<article>
+	<ordernumber>SW10129</ordernumber>
+	<instock>37</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Sonnenschirm Versand</_supplier>
+	<_price>99</_price>
+</article>
+<article>
+	<ordernumber>SW10130</ordernumber>
+	<instock>45</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Sonnenschirm Versand</_supplier>
+	<_price>1495</_price>
+</article>
+<article>
+	<ordernumber>SW10131</ordernumber>
+	<instock>4</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Sonnenschirm Versand</_supplier>
+	<_price>995</_price>
+</article>
+<article>
+	<ordernumber>SW10132</ordernumber>
+	<instock>17</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Sonnenschirm Versand</_supplier>
+	<_price>599.00000000001</_price>
+</article>
+<article>
+	<ordernumber>SW10134</ordernumber>
+	<instock>34</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Vintage Driver</_supplier>
+	<_price>49.990000000001</_price>
+</article>
+<article>
+	<ordernumber>SW10135</ordernumber>
+	<instock>45</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Vintage Driver</_supplier>
+	<_price>29.99</_price>
+</article>
+<article>
+	<ordernumber>SW10136</ordernumber>
+	<instock>23</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Vintage Driver</_supplier>
+	<_price>34.99</_price>
+</article>
+<article>
+	<ordernumber>SW10137</ordernumber>
+	<instock>56</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Vintage Driver</_supplier>
+	<_price>59.99</_price>
+</article>
+<article>
+	<ordernumber>SW10141</ordernumber>
+	<instock>77</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Vintage Driver</_supplier>
+	<_price>69.99</_price>
+</article>
+<article>
+	<ordernumber>SW10142</ordernumber>
+	<instock>45</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Vintage Driver</_supplier>
+	<_price>44.99</_price>
+</article>
+<article>
+	<ordernumber>SW10143</ordernumber>
+	<instock>45</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Vintage Driver</_supplier>
+	<_price>84.99</_price>
+</article>
+<article>
+	<ordernumber>SW10144</ordernumber>
+	<instock>45</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Vintage Driver</_supplier>
+	<_price>84.99</_price>
+</article>
+<article>
+	<ordernumber>SW10145</ordernumber>
+	<instock>397</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Vintage Driver</_supplier>
+	<_price>17.990000000001</_price>
+</article>
+<article>
+	<ordernumber>SW10148</ordernumber>
+	<instock>44</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Vintage Driver</_supplier>
+	<_price>149.99</_price>
+</article>
+<article>
+	<ordernumber>SW10150</ordernumber>
+	<instock>45</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>9.99</_price>
+</article>
+<article>
+	<ordernumber>SW10151</ordernumber>
+	<instock>46</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>12.99</_price>
+</article>
+<article>
+	<ordernumber>SW10152</ordernumber>
+	<instock>45</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>11.99</_price>
+</article>
+<article>
+	<ordernumber>SW10153.1</ordernumber>
+	<instock>67</instock>
+	<_additionaltext>blau / 39/40</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>6.99</_price>
+</article>
+<article>
+	<ordernumber>SW10153.2</ordernumber>
+	<instock>67</instock>
+	<_additionaltext>blau / 41/42</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>6.99</_price>
+</article>
+<article>
+	<ordernumber>SW10153.3</ordernumber>
+	<instock>67</instock>
+	<_additionaltext>blau / 43/44</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>6.99</_price>
+</article>
+<article>
+	<ordernumber>SW10153.4</ordernumber>
+	<instock>67</instock>
+	<_additionaltext>blau / 44/45</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>6.99</_price>
+</article>
+<article>
+	<ordernumber>SW10153.5</ordernumber>
+	<instock>67</instock>
+	<_additionaltext>blau / 46/47</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>6.99</_price>
+</article>
+<article>
+	<ordernumber>SW10153.6</ordernumber>
+	<instock>67</instock>
+	<_additionaltext>blau / 48/49</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>6.99</_price>
+</article>
+<article>
+	<ordernumber>SW10153.7</ordernumber>
+	<instock>67</instock>
+	<_additionaltext>blau / 37/38</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>6.99</_price>
+</article>
+<article>
+	<ordernumber>SW10153.8</ordernumber>
+	<instock>67</instock>
+	<_additionaltext>grün / 39/40</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>6.99</_price>
+</article>
+<article>
+	<ordernumber>SW10153.9</ordernumber>
+	<instock>67</instock>
+	<_additionaltext>grün / 41/42</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>6.99</_price>
+</article>
+<article>
+	<ordernumber>SW10153.10</ordernumber>
+	<instock>67</instock>
+	<_additionaltext>grün / 43/44</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>6.99</_price>
+</article>
+<article>
+	<ordernumber>SW10153.11</ordernumber>
+	<instock>67</instock>
+	<_additionaltext>grün / 44/45</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>6.99</_price>
+</article>
+<article>
+	<ordernumber>SW10153.12</ordernumber>
+	<instock>67</instock>
+	<_additionaltext>grün / 46/47</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>6.99</_price>
+</article>
+<article>
+	<ordernumber>SW10153.13</ordernumber>
+	<instock>67</instock>
+	<_additionaltext>grün / 48/49</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>6.99</_price>
+</article>
+<article>
+	<ordernumber>SW10153.14</ordernumber>
+	<instock>67</instock>
+	<_additionaltext>grün / 37/38</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>6.99</_price>
+</article>
+<article>
+	<ordernumber>SW10153.15</ordernumber>
+	<instock>67</instock>
+	<_additionaltext>orange / 39/40</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>6.99</_price>
+</article>
+<article>
+	<ordernumber>SW10153.16</ordernumber>
+	<instock>67</instock>
+	<_additionaltext>orange / 41/42</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>6.99</_price>
+</article>
+<article>
+	<ordernumber>SW10153.17</ordernumber>
+	<instock>67</instock>
+	<_additionaltext>orange / 43/44</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>6.99</_price>
+</article>
+<article>
+	<ordernumber>SW10153.18</ordernumber>
+	<instock>67</instock>
+	<_additionaltext>orange / 44/45</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>6.99</_price>
+</article>
+<article>
+	<ordernumber>SW10153.19</ordernumber>
+	<instock>67</instock>
+	<_additionaltext>orange / 46/47</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>6.99</_price>
+</article>
+<article>
+	<ordernumber>SW10153.20</ordernumber>
+	<instock>67</instock>
+	<_additionaltext>orange / 48/49</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>6.99</_price>
+</article>
+<article>
+	<ordernumber>SW10153.21</ordernumber>
+	<instock>67</instock>
+	<_additionaltext>orange / 37/38</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>6.99</_price>
+</article>
+<article>
+	<ordernumber>SW10154</ordernumber>
+	<instock>39</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>9.99</_price>
+</article>
+<article>
+	<ordernumber>SW10156.1</ordernumber>
+	<instock>22</instock>
+	<_additionaltext>39/40</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>6.99</_price>
+</article>
+<article>
+	<ordernumber>SW10156.2</ordernumber>
+	<instock>22</instock>
+	<_additionaltext>41/42</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>6.99</_price>
+</article>
+<article>
+	<ordernumber>SW10156.3</ordernumber>
+	<instock>22</instock>
+	<_additionaltext>43/44</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>6.99</_price>
+</article>
+<article>
+	<ordernumber>SW10156.4</ordernumber>
+	<instock>22</instock>
+	<_additionaltext>44/45</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>6.99</_price>
+</article>
+<article>
+	<ordernumber>SW10156.5</ordernumber>
+	<instock>22</instock>
+	<_additionaltext>46/47</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>6.99</_price>
+</article>
+<article>
+	<ordernumber>SW10156.6</ordernumber>
+	<instock>22</instock>
+	<_additionaltext>48/49</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>6.99</_price>
+</article>
+<article>
+	<ordernumber>SW10156.7</ordernumber>
+	<instock>22</instock>
+	<_additionaltext>37/38</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>6.99</_price>
+</article>
+<article>
+	<ordernumber>SW10155.1</ordernumber>
+	<instock>66</instock>
+	<_additionaltext>39/40</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>4.99</_price>
+</article>
+<article>
+	<ordernumber>SW10155.2</ordernumber>
+	<instock>66</instock>
+	<_additionaltext>41/42</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>4.99</_price>
+</article>
+<article>
+	<ordernumber>SW10155.3</ordernumber>
+	<instock>66</instock>
+	<_additionaltext>43/44</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>4.99</_price>
+</article>
+<article>
+	<ordernumber>SW10155.4</ordernumber>
+	<instock>66</instock>
+	<_additionaltext>44/45</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>4.99</_price>
+</article>
+<article>
+	<ordernumber>SW10155.5</ordernumber>
+	<instock>66</instock>
+	<_additionaltext>46/47</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>4.99</_price>
+</article>
+<article>
+	<ordernumber>SW10155.6</ordernumber>
+	<instock>66</instock>
+	<_additionaltext>48/49</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>4.99</_price>
+</article>
+<article>
+	<ordernumber>SW10155.7</ordernumber>
+	<instock>66</instock>
+	<_additionaltext>37/38</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>4.99</_price>
+</article>
+<article>
+	<ordernumber>SW10157</ordernumber>
+	<instock>34</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Sun Smile and Protect</_supplier>
+	<_price>17.990000000001</_price>
+</article>
+<article>
+	<ordernumber>SW10158</ordernumber>
+	<instock>22</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Sun Smile and Protect</_supplier>
+	<_price>23.99</_price>
+</article>
+<article>
+	<ordernumber>SW10159</ordernumber>
+	<instock>16</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Sun Smile and Protect</_supplier>
+	<_price>22.989999999999</_price>
+</article>
+<article>
+	<ordernumber>SW10160.1</ordernumber>
+	<instock>19</instock>
+	<_additionaltext>36</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>29.99</_price>
+</article>
+<article>
+	<ordernumber>SW10160.2</ordernumber>
+	<instock>19</instock>
+	<_additionaltext>37</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>29.99</_price>
+</article>
+<article>
+	<ordernumber>SW10160.3</ordernumber>
+	<instock>19</instock>
+	<_additionaltext>38</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>29.99</_price>
+</article>
+<article>
+	<ordernumber>SW10160.4</ordernumber>
+	<instock>19</instock>
+	<_additionaltext>39</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>29.99</_price>
+</article>
+<article>
+	<ordernumber>SW10160.5</ordernumber>
+	<instock>19</instock>
+	<_additionaltext>40</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>29.99</_price>
+</article>
+<article>
+	<ordernumber>SW10160.6</ordernumber>
+	<instock>19</instock>
+	<_additionaltext>41</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>29.99</_price>
+</article>
+<article>
+	<ordernumber>SW10160.7</ordernumber>
+	<instock>19</instock>
+	<_additionaltext>42</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>29.99</_price>
+</article>
+<article>
+	<ordernumber>SW10161.1</ordernumber>
+	<instock>25</instock>
+	<_additionaltext>36</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>34.99</_price>
+</article>
+<article>
+	<ordernumber>SW10161.2</ordernumber>
+	<instock>25</instock>
+	<_additionaltext>37</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>34.99</_price>
+</article>
+<article>
+	<ordernumber>SW10161.3</ordernumber>
+	<instock>25</instock>
+	<_additionaltext>38</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>34.99</_price>
+</article>
+<article>
+	<ordernumber>SW10161.4</ordernumber>
+	<instock>25</instock>
+	<_additionaltext>39</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>34.99</_price>
+</article>
+<article>
+	<ordernumber>SW10161.5</ordernumber>
+	<instock>25</instock>
+	<_additionaltext>40</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>34.99</_price>
+</article>
+<article>
+	<ordernumber>SW10161.6</ordernumber>
+	<instock>25</instock>
+	<_additionaltext>41</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>34.99</_price>
+</article>
+<article>
+	<ordernumber>SW10161.7</ordernumber>
+	<instock>25</instock>
+	<_additionaltext>42</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>34.99</_price>
+</article>
+<article>
+	<ordernumber>SW10162.1</ordernumber>
+	<instock>7</instock>
+	<_additionaltext>36</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>23.99</_price>
+</article>
+<article>
+	<ordernumber>SW10162.2</ordernumber>
+	<instock>7</instock>
+	<_additionaltext>37</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>23.99</_price>
+</article>
+<article>
+	<ordernumber>SW10162.3</ordernumber>
+	<instock>7</instock>
+	<_additionaltext>38</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>23.99</_price>
+</article>
+<article>
+	<ordernumber>SW10162.4</ordernumber>
+	<instock>7</instock>
+	<_additionaltext>39</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>23.99</_price>
+</article>
+<article>
+	<ordernumber>SW10162.5</ordernumber>
+	<instock>7</instock>
+	<_additionaltext>40</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>23.99</_price>
+</article>
+<article>
+	<ordernumber>SW10162.6</ordernumber>
+	<instock>7</instock>
+	<_additionaltext>41</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>23.99</_price>
+</article>
+<article>
+	<ordernumber>SW10162.7</ordernumber>
+	<instock>7</instock>
+	<_additionaltext>42</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>23.99</_price>
+</article>
+<article>
+	<ordernumber>SW10163</ordernumber>
+	<instock>45</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>6.99</_price>
+</article>
+<article>
+	<ordernumber>SW10164</ordernumber>
+	<instock>4</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>7.99</_price>
+</article>
+<article>
+	<ordernumber>SW10165</ordernumber>
+	<instock>21</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>19.99</_price>
+</article>
+<article>
+	<ordernumber>SW10166</ordernumber>
+	<instock>323</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Sun Smile and Protect</_supplier>
+	<_price>9.99</_price>
+</article>
+<article>
+	<ordernumber>SW10167</ordernumber>
+	<instock>54</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Sun Smile and Protect</_supplier>
+	<_price>13.490000000001</_price>
+</article>
+<article>
+	<ordernumber>SW10168</ordernumber>
+	<instock>76</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Sun Smile and Protect</_supplier>
+	<_price>2.49</_price>
+</article>
+<article>
+	<ordernumber>SW10169</ordernumber>
+	<instock>98</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Sun Smile and Protect</_supplier>
+	<_price>17.49</_price>
+</article>
+<article>
+	<ordernumber>SW10170</ordernumber>
+	<instock>78</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Sun Smile and Protect</_supplier>
+	<_price>39.950000000001</_price>
+</article>
+<article>
+	<ordernumber>SW10171.1</ordernumber>
+	<instock>99</instock>
+	<_additionaltext>10</_additionaltext>
+	<_supplier>Sun Smile and Protect</_supplier>
+	<_price>2.99</_price>
+</article>
+<article>
+	<ordernumber>SW10171.2</ordernumber>
+	<instock>99</instock>
+	<_additionaltext>15</_additionaltext>
+	<_supplier>Sun Smile and Protect</_supplier>
+	<_price>4.99</_price>
+</article>
+<article>
+	<ordernumber>SW10171.3</ordernumber>
+	<instock>99</instock>
+	<_additionaltext>20</_additionaltext>
+	<_supplier>Sun Smile and Protect</_supplier>
+	<_price>5.9900000000001</_price>
+</article>
+<article>
+	<ordernumber>SW10171.4</ordernumber>
+	<instock>99</instock>
+	<_additionaltext>30</_additionaltext>
+	<_supplier>Sun Smile and Protect</_supplier>
+	<_price>7.99</_price>
+</article>
+<article>
+	<ordernumber>SW10172</ordernumber>
+	<instock>23</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Sun Smile and Protect</_supplier>
+	<_price>9.99</_price>
+</article>
+<article>
+	<ordernumber>SW10173</ordernumber>
+	<instock>55</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>39.99</_price>
+</article>
+<article>
+	<ordernumber>SW10174</ordernumber>
+	<instock>66</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>38.99</_price>
+</article>
+<article>
+	<ordernumber>SW10175</ordernumber>
+	<instock>336</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>59.99</_price>
+</article>
+<article>
+	<ordernumber>SW10176</ordernumber>
+	<instock>54</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>49.990000000001</_price>
+</article>
+<article>
+	<ordernumber>SW10177</ordernumber>
+	<instock>32</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>34.99</_price>
+</article>
+<article>
+	<ordernumber>SW10178</ordernumber>
+	<instock>84</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>19.95</_price>
+</article>
+<article>
+	<ordernumber>SW10179.1</ordernumber>
+	<instock>91</instock>
+	<_additionaltext>blau</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>44.99</_price>
+</article>
+<article>
+	<ordernumber>SW10179.2</ordernumber>
+	<instock>91</instock>
+	<_additionaltext>rot</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>44.99</_price>
+</article>
+<article>
+	<ordernumber>SW10179.3</ordernumber>
+	<instock>91</instock>
+	<_additionaltext>grün</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>44.99</_price>
+</article>
+<article>
+	<ordernumber>SW10179.4</ordernumber>
+	<instock>91</instock>
+	<_additionaltext>pink</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>44.99</_price>
+</article>
+<article>
+	<ordernumber>SW10179.5</ordernumber>
+	<instock>91</instock>
+	<_additionaltext>gelb</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>44.99</_price>
+</article>
+<article>
+	<ordernumber>SW10179.6</ordernumber>
+	<instock>91</instock>
+	<_additionaltext>orange</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>44.99</_price>
+</article>
+<article>
+	<ordernumber>SW10179.7</ordernumber>
+	<instock>91</instock>
+	<_additionaltext>lila</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>44.99</_price>
+</article>
+<article>
+	<ordernumber>SW10180.1</ordernumber>
+	<instock>124</instock>
+	<_additionaltext>blau</_additionaltext>
+	<_supplier>Access Oires Sisters</_supplier>
+	<_price>89.99</_price>
+</article>
+<article>
+	<ordernumber>SW10180.2</ordernumber>
+	<instock>124</instock>
+	<_additionaltext>rot</_additionaltext>
+	<_supplier>Access Oires Sisters</_supplier>
+	<_price>89.99</_price>
+</article>
+<article>
+	<ordernumber>SW10180.3</ordernumber>
+	<instock>124</instock>
+	<_additionaltext>grün</_additionaltext>
+	<_supplier>Access Oires Sisters</_supplier>
+	<_price>89.99</_price>
+</article>
+<article>
+	<ordernumber>SW10180.4</ordernumber>
+	<instock>124</instock>
+	<_additionaltext>gelb</_additionaltext>
+	<_supplier>Access Oires Sisters</_supplier>
+	<_price>89.99</_price>
+</article>
+<article>
+	<ordernumber>SW10181</ordernumber>
+	<instock>467</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Access Oires Sisters</_supplier>
+	<_price>139.98999999999</_price>
+</article>
+<article>
+	<ordernumber>SW10193</ordernumber>
+	<instock>345</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>100</_price>
+</article>
+<article>
+	<ordernumber>SW10194</ordernumber>
+	<instock>83</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<_price>9.99</_price>
+</article>
+<article>
+	<ordernumber>SW10195</ordernumber>
+	<instock>344</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>119</_price>
+</article>
+<article>
+	<ordernumber>SW10196</ordernumber>
+	<instock>1</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>34.99</_price>
+</article>
+<article>
+	<ordernumber>SW10197</ordernumber>
+	<instock>34</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>10000</_price>
+</article>
+<article>
+	<ordernumber>SW10201.2</ordernumber>
+	<instock>4</instock>
+	<_additionaltext>blau / 37</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>20.99</_price>
+</article>
+<article>
+	<ordernumber>SW10201.3</ordernumber>
+	<instock>4</instock>
+	<_additionaltext>blau / 38</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>20.99</_price>
+</article>
+<article>
+	<ordernumber>SW10201.4</ordernumber>
+	<instock>4</instock>
+	<_additionaltext>blau / 39</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>20.99</_price>
+</article>
+<article>
+	<ordernumber>SW10201.5</ordernumber>
+	<instock>4</instock>
+	<_additionaltext>blau / 40</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>20.99</_price>
+</article>
+<article>
+	<ordernumber>SW10201.6</ordernumber>
+	<instock>4</instock>
+	<_additionaltext>blau / 41</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>20.99</_price>
+</article>
+<article>
+	<ordernumber>SW10201.7</ordernumber>
+	<instock>4</instock>
+	<_additionaltext>blau / 42</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>20.99</_price>
+</article>
+<article>
+	<ordernumber>SW10201.8</ordernumber>
+	<instock>4</instock>
+	<_additionaltext>rot / 36</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>20.99</_price>
+</article>
+<article>
+	<ordernumber>SW10201.9</ordernumber>
+	<instock>4</instock>
+	<_additionaltext>rot / 37</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>20.99</_price>
+</article>
+<article>
+	<ordernumber>SW10201.10</ordernumber>
+	<instock>4</instock>
+	<_additionaltext>rot / 38</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>20.99</_price>
+</article>
+<article>
+	<ordernumber>SW10201.11</ordernumber>
+	<instock>4</instock>
+	<_additionaltext>rot / 39</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>20.99</_price>
+</article>
+<article>
+	<ordernumber>SW10201.12</ordernumber>
+	<instock>4</instock>
+	<_additionaltext>rot / 40</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>20.99</_price>
+</article>
+<article>
+	<ordernumber>SW10201.13</ordernumber>
+	<instock>4</instock>
+	<_additionaltext>rot / 41</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>20.99</_price>
+</article>
+<article>
+	<ordernumber>SW10201.14</ordernumber>
+	<instock>4</instock>
+	<_additionaltext>rot / 42</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>20.99</_price>
+</article>
+<article>
+	<ordernumber>SW10201.15</ordernumber>
+	<instock>4</instock>
+	<_additionaltext>pink / 36</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>20.99</_price>
+</article>
+<article>
+	<ordernumber>SW10201.16</ordernumber>
+	<instock>4</instock>
+	<_additionaltext>pink / 37</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>20.99</_price>
+</article>
+<article>
+	<ordernumber>SW10201.17</ordernumber>
+	<instock>4</instock>
+	<_additionaltext>pink / 38</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>20.99</_price>
+</article>
+<article>
+	<ordernumber>SW10201.18</ordernumber>
+	<instock>4</instock>
+	<_additionaltext>pink / 39</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>20.99</_price>
+</article>
+<article>
+	<ordernumber>SW10201.19</ordernumber>
+	<instock>4</instock>
+	<_additionaltext>pink / 40</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>20.99</_price>
+</article>
+<article>
+	<ordernumber>SW10201.20</ordernumber>
+	<instock>4</instock>
+	<_additionaltext>pink / 41</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>20.99</_price>
+</article>
+<article>
+	<ordernumber>SW10201.21</ordernumber>
+	<instock>4</instock>
+	<_additionaltext>pink / 42</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>20.99</_price>
+</article>
+<article>
+	<ordernumber>SW10202.1</ordernumber>
+	<instock>3</instock>
+	<_additionaltext>blau / 39/40</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>89.000000000001</_price>
+</article>
+<article>
+	<ordernumber>SW10202.3</ordernumber>
+	<instock>3</instock>
+	<_additionaltext>blau / 43/44</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>89.000000000001</_price>
+</article>
+<article>
+	<ordernumber>SW10202.4</ordernumber>
+	<instock>3</instock>
+	<_additionaltext>blau / 44/45</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>89.000000000001</_price>
+</article>
+<article>
+	<ordernumber>SW10202.5</ordernumber>
+	<instock>3</instock>
+	<_additionaltext>blau / 46/47</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>89.000000000001</_price>
+</article>
+<article>
+	<ordernumber>SW10202.6</ordernumber>
+	<instock>3</instock>
+	<_additionaltext>blau / 48/49</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>89.000000000001</_price>
+</article>
+<article>
+	<ordernumber>SW10202.7</ordernumber>
+	<instock>3</instock>
+	<_additionaltext>blau / 37/38</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>89.000000000001</_price>
+</article>
+<article>
+	<ordernumber>SW10202.8</ordernumber>
+	<instock>3</instock>
+	<_additionaltext>grün / 39/40</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>89.000000000001</_price>
+</article>
+<article>
+	<ordernumber>SW10202.9</ordernumber>
+	<instock>3</instock>
+	<_additionaltext>grün / 41/42</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>89.000000000001</_price>
+</article>
+<article>
+	<ordernumber>SW10202.10</ordernumber>
+	<instock>3</instock>
+	<_additionaltext>grün / 43/44</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>89.000000000001</_price>
+</article>
+<article>
+	<ordernumber>SW10202.11</ordernumber>
+	<instock>3</instock>
+	<_additionaltext>grün / 44/45</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>89.000000000001</_price>
+</article>
+<article>
+	<ordernumber>SW10202.12</ordernumber>
+	<instock>3</instock>
+	<_additionaltext>grün / 46/47</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>89.000000000001</_price>
+</article>
+<article>
+	<ordernumber>SW10202.13</ordernumber>
+	<instock>3</instock>
+	<_additionaltext>grün / 48/49</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>89.000000000001</_price>
+</article>
+<article>
+	<ordernumber>SW10202.14</ordernumber>
+	<instock>3</instock>
+	<_additionaltext>grün / 37/38</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>89.000000000001</_price>
+</article>
+<article>
+	<ordernumber>SW10202.15</ordernumber>
+	<instock>3</instock>
+	<_additionaltext>orange / 39/40</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>89.000000000001</_price>
+</article>
+<article>
+	<ordernumber>SW10202.16</ordernumber>
+	<instock>3</instock>
+	<_additionaltext>orange / 41/42</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>89.000000000001</_price>
+</article>
+<article>
+	<ordernumber>SW10202.17</ordernumber>
+	<instock>3</instock>
+	<_additionaltext>orange / 43/44</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>89.000000000001</_price>
+</article>
+<article>
+	<ordernumber>SW10202.18</ordernumber>
+	<instock>3</instock>
+	<_additionaltext>orange / 44/45</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>89.000000000001</_price>
+</article>
+<article>
+	<ordernumber>SW10202.19</ordernumber>
+	<instock>3</instock>
+	<_additionaltext>orange / 46/47</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>89.000000000001</_price>
+</article>
+<article>
+	<ordernumber>SW10202.20</ordernumber>
+	<instock>3</instock>
+	<_additionaltext>orange / 48/49</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>89.000000000001</_price>
+</article>
+<article>
+	<ordernumber>SW10203.1</ordernumber>
+	<instock>2</instock>
+	<_additionaltext>blau / S</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>15</_price>
+</article>
+<article>
+	<ordernumber>SW10203.3</ordernumber>
+	<instock>2</instock>
+	<_additionaltext>blau / L</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>15</_price>
+</article>
+<article>
+	<ordernumber>SW10203.4</ordernumber>
+	<instock>2</instock>
+	<_additionaltext>blau / XL</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>15</_price>
+</article>
+<article>
+	<ordernumber>SW10203.5</ordernumber>
+	<instock>2</instock>
+	<_additionaltext>blau / XXL</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>15</_price>
+</article>
+<article>
+	<ordernumber>SW10203.6</ordernumber>
+	<instock>2</instock>
+	<_additionaltext>grün / S</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>15</_price>
+</article>
+<article>
+	<ordernumber>SW10203.7</ordernumber>
+	<instock>2</instock>
+	<_additionaltext>grün / M</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>15</_price>
+</article>
+<article>
+	<ordernumber>SW10203.8</ordernumber>
+	<instock>2</instock>
+	<_additionaltext>grün / L</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>15</_price>
+</article>
+<article>
+	<ordernumber>SW10203.9</ordernumber>
+	<instock>2</instock>
+	<_additionaltext>grün / XL</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>15</_price>
+</article>
+<article>
+	<ordernumber>SW10203.10</ordernumber>
+	<instock>2</instock>
+	<_additionaltext>grün / XXL</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>15</_price>
+</article>
+<article>
+	<ordernumber>SW10203.11</ordernumber>
+	<instock>2</instock>
+	<_additionaltext>pink / S</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>15</_price>
+</article>
+<article>
+	<ordernumber>SW10203.12</ordernumber>
+	<instock>2</instock>
+	<_additionaltext>pink / M</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>15</_price>
+</article>
+<article>
+	<ordernumber>SW10203.13</ordernumber>
+	<instock>2</instock>
+	<_additionaltext>pink / L</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>15</_price>
+</article>
+<article>
+	<ordernumber>SW10203.14</ordernumber>
+	<instock>2</instock>
+	<_additionaltext>pink / XL</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>15</_price>
+</article>
+<article>
+	<ordernumber>SW10203.15</ordernumber>
+	<instock>2</instock>
+	<_additionaltext>pink / XXL</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>15</_price>
+</article>
+<article>
+	<ordernumber>SW10203.16</ordernumber>
+	<instock>2</instock>
+	<_additionaltext>gelb / S</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>15</_price>
+</article>
+<article>
+	<ordernumber>SW10203.17</ordernumber>
+	<instock>2</instock>
+	<_additionaltext>gelb / M</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>15</_price>
+</article>
+<article>
+	<ordernumber>SW10203.18</ordernumber>
+	<instock>2</instock>
+	<_additionaltext>gelb / L</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>15</_price>
+</article>
+<article>
+	<ordernumber>SW10203.19</ordernumber>
+	<instock>2</instock>
+	<_additionaltext>gelb / XL</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>15</_price>
+</article>
+<article>
+	<ordernumber>SW10203.20</ordernumber>
+	<instock>2</instock>
+	<_additionaltext>gelb / XXL</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>15</_price>
+</article>
+<article>
+	<ordernumber>SW10204.1</ordernumber>
+	<instock>45</instock>
+	<_additionaltext>ohne / 24 Monate</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>178.5</_price>
+</article>
+<article>
+	<ordernumber>SW10204.2</ordernumber>
+	<instock>45</instock>
+	<_additionaltext>mit Figuren / 24 Monate</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>208.25</_price>
+</article>
+<article>
+	<ordernumber>SW10204.3</ordernumber>
+	<instock>45</instock>
+	<_additionaltext>mit Figuren und Ball-Set / 24 Monate</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>220.15</_price>
+</article>
+<article>
+	<ordernumber>SW10204.4</ordernumber>
+	<instock>45</instock>
+	<_additionaltext>mit Figuren, Ball-Set und Service Box / 24 Monate</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>232.05</_price>
+</article>
+<article>
+	<ordernumber>SW10204.5</ordernumber>
+	<instock>45</instock>
+	<_additionaltext>ohne / 36 Monate</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>238</_price>
+</article>
+<article>
+	<ordernumber>SW10204.6</ordernumber>
+	<instock>45</instock>
+	<_additionaltext>mit Figuren / 36 Monate</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>267.75</_price>
+</article>
+<article>
+	<ordernumber>SW10204.7</ordernumber>
+	<instock>45</instock>
+	<_additionaltext>mit Figuren und Ball-Set / 36 Monate</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>279.65</_price>
+</article>
+<article>
+	<ordernumber>SW10204.8</ordernumber>
+	<instock>45</instock>
+	<_additionaltext>mit Figuren, Ball-Set und Service Box / 36 Monate</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>291.55</_price>
+</article>
+<article>
+	<ordernumber>SW10204.9</ordernumber>
+	<instock>45</instock>
+	<_additionaltext>ohne / ohne</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>119</_price>
+</article>
+<article>
+	<ordernumber>SW10204.10</ordernumber>
+	<instock>45</instock>
+	<_additionaltext>mit Figuren / ohne</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>148.75</_price>
+</article>
+<article>
+	<ordernumber>SW10204.11</ordernumber>
+	<instock>45</instock>
+	<_additionaltext>mit Figuren und Ball-Set / ohne</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>160.65</_price>
+</article>
+<article>
+	<ordernumber>SW10204.12</ordernumber>
+	<instock>45</instock>
+	<_additionaltext>mit Figuren, Ball-Set und Service Box / ohne</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>172.55</_price>
+</article>
+<article>
+	<ordernumber>SW10205.1</ordernumber>
+	<instock>64</instock>
+	<_additionaltext>1,5 Liter</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>130</_price>
+</article>
+<article>
+	<ordernumber>SW10205.2</ordernumber>
+	<instock>64</instock>
+	<_additionaltext>5 Liter</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>400</_price>
+</article>
+<article>
+	<ordernumber>SW10205.3</ordernumber>
+	<instock>64</instock>
+	<_additionaltext>0,5 Liter</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>50</_price>
+</article>
+<article>
+	<ordernumber>SW10206</ordernumber>
+	<instock>98</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>200</_price>
+</article>
+<article>
+	<ordernumber>SW10207</ordernumber>
+	<instock>7</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>500</_price>
+</article>
+<article>
+	<ordernumber>SW10208</ordernumber>
+	<instock>529</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>1</_price>
+</article>
+<article>
+	<ordernumber>SW10208</ordernumber>
+	<instock>529</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>0.9</_price>
+</article>
+<article>
+	<ordernumber>SW10208</ordernumber>
+	<instock>529</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>0.80000000000001</_price>
+</article>
+<article>
+	<ordernumber>SW10208</ordernumber>
+	<instock>529</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>0.75</_price>
+</article>
+<article>
+	<ordernumber>SW10208</ordernumber>
+	<instock>529</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>0.7</_price>
+</article>
+<article>
+	<ordernumber>SW10209</ordernumber>
+	<instock>99</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>7.99</_price>
+</article>
+<article>
+	<ordernumber>SW10221</ordernumber>
+	<instock>100</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>50</_price>
+</article>
+<article>
+	<ordernumber>SW10211</ordernumber>
+	<instock>6</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<_price>39.950000000001</_price>
+</article>
+<article>
+	<ordernumber>SW10212.1</ordernumber>
+	<instock>100</instock>
+	<_additionaltext>200ml</_additionaltext>
+	<_supplier>stop the water while using me</_supplier>
+	<_price>17.9</_price>
+</article>
+<article>
+	<ordernumber>SW10212.2</ordernumber>
+	<instock>100</instock>
+	<_additionaltext>500ml</_additionaltext>
+	<_supplier>stop the water while using me</_supplier>
+	<_price>29.9</_price>
+</article>
+<article>
+	<ordernumber>SW10212.3</ordernumber>
+	<instock>100</instock>
+	<_additionaltext>5l</_additionaltext>
+	<_supplier>stop the water while using me</_supplier>
+	<_price>270</_price>
+</article>
+<article>
+	<ordernumber>SW10213.1</ordernumber>
+	<instock>55</instock>
+	<_additionaltext>200ml</_additionaltext>
+	<_supplier>stop the water while using me</_supplier>
+	<_price>12.8</_price>
+</article>
+<article>
+	<ordernumber>SW10213.2</ordernumber>
+	<instock>55</instock>
+	<_additionaltext>500ml</_additionaltext>
+	<_supplier>stop the water while using me</_supplier>
+	<_price>24.9</_price>
+</article>
+<article>
+	<ordernumber>SW10213.3</ordernumber>
+	<instock>55</instock>
+	<_additionaltext>5l</_additionaltext>
+	<_supplier>stop the water while using me</_supplier>
+	<_price>190</_price>
+</article>
+<article>
+	<ordernumber>SW10214.1</ordernumber>
+	<instock>66</instock>
+	<_additionaltext>200ml</_additionaltext>
+	<_supplier>stop the water while using me</_supplier>
+	<_price>21.4</_price>
+</article>
+<article>
+	<ordernumber>SW10214.2</ordernumber>
+	<instock>66</instock>
+	<_additionaltext>500ml</_additionaltext>
+	<_supplier>stop the water while using me</_supplier>
+	<_price>21.4</_price>
+</article>
+<article>
+	<ordernumber>SW10214.3</ordernumber>
+	<instock>66</instock>
+	<_additionaltext>5l</_additionaltext>
+	<_supplier>stop the water while using me</_supplier>
+	<_price>290</_price>
+</article>
+<article>
+	<ordernumber>SW10215.1</ordernumber>
+	<instock>77</instock>
+	<_additionaltext>200ml</_additionaltext>
+	<_supplier>stop the water while using me</_supplier>
+	<_price>12.8</_price>
+</article>
+<article>
+	<ordernumber>SW10215.2</ordernumber>
+	<instock>77</instock>
+	<_additionaltext>500ml</_additionaltext>
+	<_supplier>stop the water while using me</_supplier>
+	<_price>24.9</_price>
+</article>
+<article>
+	<ordernumber>SW10215.3</ordernumber>
+	<instock>77</instock>
+	<_additionaltext>5l</_additionaltext>
+	<_supplier>stop the water while using me</_supplier>
+	<_price>190</_price>
+</article>
+<article>
+	<ordernumber>SW10216.1</ordernumber>
+	<instock>88</instock>
+	<_additionaltext>200ml</_additionaltext>
+	<_supplier>stop the water while using me</_supplier>
+	<_price>11.4</_price>
+</article>
+<article>
+	<ordernumber>SW10216.2</ordernumber>
+	<instock>88</instock>
+	<_additionaltext>500ml</_additionaltext>
+	<_supplier>stop the water while using me</_supplier>
+	<_price>18.899999999999</_price>
+</article>
+<article>
+	<ordernumber>SW10216.3</ordernumber>
+	<instock>88</instock>
+	<_additionaltext>5l</_additionaltext>
+	<_supplier>stop the water while using me</_supplier>
+	<_price>11.4</_price>
+</article>
+<article>
+	<ordernumber>SW10185</ordernumber>
+	<instock>4</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>54.9</_price>
+</article>
+<article>
+	<ordernumber>SW10217</ordernumber>
+	<instock>28</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>9.99</_price>
+</article>
+<article>
+	<ordernumber>SW10218</ordernumber>
+	<instock>56</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>12.99</_price>
+</article>
+<article>
+	<ordernumber>SW10219</ordernumber>
+	<instock>24</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>11.99</_price>
+</article>
+<article>
+	<ordernumber>SW10220</ordernumber>
+	<instock>150</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>3.99</_price>
+</article>
+<article>
+	<ordernumber>SW10222</ordernumber>
+	<instock>74</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>3.99</_price>
+</article>
+<article>
+	<ordernumber>SW10223</ordernumber>
+	<instock>56</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>2.49</_price>
+</article>
+<article>
+	<ordernumber>SW10224</ordernumber>
+	<instock>56</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>2.49</_price>
+</article>
+<article>
+	<ordernumber>SW10225</ordernumber>
+	<instock>56</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>2.49</_price>
+</article>
+<article>
+	<ordernumber>SW10226</ordernumber>
+	<instock>32</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>6.4899999999999</_price>
+</article>
+<article>
+	<ordernumber>SW10227</ordernumber>
+	<instock>45</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>3.49</_price>
+</article>
+<article>
+	<ordernumber>SW10228</ordernumber>
+	<instock>43</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>17.990000000001</_price>
+</article>
+<article>
+	<ordernumber>SW10229</ordernumber>
+	<instock>456</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>38.95</_price>
+</article>
+<article>
+	<ordernumber>SW10230</ordernumber>
+	<instock>5</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<_price>2499</_price>
+</article>
+<article>
+	<ordernumber>SW10231</ordernumber>
+	<instock>42</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<_price>49.990000000001</_price>
+</article>
+<article>
+	<ordernumber>SW10232</ordernumber>
+	<instock>34</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<_price>14.99</_price>
+</article>
+<article>
+	<ordernumber>SW10233</ordernumber>
+	<instock>3445</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<_price>13.99</_price>
+</article>
+<article>
+	<ordernumber>SW10236</ordernumber>
+	<instock>99</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<_price>20</_price>
+</article>
+<article>
+	<ordernumber>SW10237</ordernumber>
+	<instock>100</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>69.99</_price>
+</article>
+<article>
+	<ordernumber>SW10238</ordernumber>
+	<instock>99</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>20</_price>
+</article>
+<article>
+	<ordernumber>SW100755036993</ordernumber>
+	<instock>39</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>74.99</_price>
+</article>
+	</articlesInStock>
+</Root>

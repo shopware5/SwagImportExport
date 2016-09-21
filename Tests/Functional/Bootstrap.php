@@ -6,6 +6,9 @@
  * file that was distributed with this source code.
  */
 
+use SwagImportExport\Tests\Helper\DataProvider\NewsletterDataProvider;
+use SwagImportExport\Tests\Helper\DataProvider\ProfileDataProvider;
+use Tests\Helper\BackendControllerTestHelper;
 use Tests\Helper\CommandTestHelper;
 
 include_once __DIR__ . '/../../../../../../../../tests/Functional/bootstrap.php';
@@ -36,8 +39,36 @@ class ImportExportTestKernel extends TestKernel
     private static function registerResources()
     {
         Shopware()->Container()->set(
+            'swag_import_export.tests.profile_data_provider',
+            new ProfileDataProvider(
+                Shopware()->Container()->get('models')
+            )
+        );
+
+        Shopware()->Container()->set(
+            'swag_import_export.tests.newsletter_data_provider',
+            new NewsletterDataProvider(
+                Shopware()->Container()->get('models')
+            )
+        );
+
+        Shopware()->Container()->set(
             'swag_import_export.tests.command_test_helper',
-            new CommandTestHelper(Shopware()->Container()->get('models'))
+            new CommandTestHelper(
+                Shopware()->Container()->get('models'),
+                Shopware()->Container()->get('swag_import_export.tests.profile_data_provider'),
+                Shopware()->Container()->get('swag_import_export.tests.newsletter_data_provider')
+            )
+        );
+
+        Shopware()->Container()->set(
+            'swag_import_export.tests.backend_controller_test_helper',
+            new BackendControllerTestHelper(
+                Shopware()->Container()->get('swag_import_export.upload_path_provider'),
+                Shopware()->Container()->get('models'),
+                Shopware()->Container()->get('swag_import_export.tests.profile_data_provider'),
+                Shopware()->Container()->get('swag_import_export.tests.newsletter_data_provider')
+            )
         );
     }
 

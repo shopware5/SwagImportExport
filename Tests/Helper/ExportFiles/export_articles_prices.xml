@@ -1,0 +1,4463 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Root>
+	<Header>
+		<HeaderChild></HeaderChild>
+	</Header>
+	<Prices>
+		<Price>
+	<ordernumber>SW10002.1</ordernumber>
+	<price>59,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Münsterländer Lagerkorn 32%</_name>
+	<_additionaltext>1,5 Liter</_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10002.2</ordernumber>
+	<price>199</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Münsterländer Lagerkorn 32%</_name>
+	<_additionaltext>5 Liter</_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10002.3</ordernumber>
+	<price>19,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Münsterländer Lagerkorn 32%</_name>
+	<_additionaltext>0,5 Liter</_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10003</ordernumber>
+	<price>14,95</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Münsterländer Aperitif 16%</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10004</ordernumber>
+	<price>7,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Latte Macchiato 17%</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10005.1</ordernumber>
+	<price>10,95</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Emmelkamp Holunder Likör 18%</_name>
+	<_additionaltext>0,2 Liter</_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10005.2</ordernumber>
+	<price>10,95</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Emmelkamp Holunder Likör 18%</_name>
+	<_additionaltext>0,7 Liter</_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10005.3</ordernumber>
+	<price>14,95</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Emmelkamp Holunder Likör 18%</_name>
+	<_additionaltext>1,0 Liter</_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10005.4</ordernumber>
+	<price>22,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Emmelkamp Holunder Likör 18%</_name>
+	<_additionaltext>1,5 Liter</_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10006</ordernumber>
+	<price>35,95</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Cigar Special 40%</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10007.1</ordernumber>
+	<price>2,49</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Wacholder Premium extra mild 32%</_name>
+	<_additionaltext>0,2 Liter</_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10007.2</ordernumber>
+	<price>8,49</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Wacholder Premium extra mild 32%</_name>
+	<_additionaltext>0,7 Liter</_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10007.3</ordernumber>
+	<price>11,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Wacholder Premium extra mild 32%</_name>
+	<_additionaltext>1,0 Liter</_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10008</ordernumber>
+	<price>49,95</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>T.S. Privat 41,5 %</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10009</ordernumber>
+	<price>24,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Special Finish Lagerkorn X.O. 32%</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10010</ordernumber>
+	<price>5,95</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Aperitif-Glas Demi Sec</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10011</ordernumber>
+	<price>19,95</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Münsterländer Aperitif Präsent Box</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10012</ordernumber>
+	<price>9,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Kobra Vodka 37,5%</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10013</ordernumber>
+	<price>2,5</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Pai Mu Tan Tee weiss</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10014</ordernumber>
+	<price>3,8</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Silver Yin Zhen Tee weiss</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10015</ordernumber>
+	<price>2,4</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>LUNG CHING grüner Tee</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10016</ordernumber>
+	<price>1,9</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Mao Feng grüner Tee</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10017</ordernumber>
+	<price>2,2</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Pi Lo Chun grüner Tee</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10018</ordernumber>
+	<price>1,75</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Oriental Jasmine Tee</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10019</ordernumber>
+	<price>2,85</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Jasmine Phoenix Tee</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10020</ordernumber>
+	<price>2,95</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Jasmine Lotus Tee</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10021</ordernumber>
+	<price>13</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Glas -Teetasse 0,25l</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10022</ordernumber>
+	<price>7,5</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Glasbecher</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10023</ordernumber>
+	<price>35</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Glas-Teekännchen</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10024</ordernumber>
+	<price>41</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Glas-Teekanne</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10025</ordernumber>
+	<price>21</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Glas Teezubereiter</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10026</ordernumber>
+	<price>27,5</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Facil Teezubereiter</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10027</ordernumber>
+	<price>32</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Deluxe Eisteezubereiter</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10028</ordernumber>
+	<price>27</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Porzellan Teeservice</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10029</ordernumber>
+	<price>31,5</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Porzellan Tee-Set in Geschenkbox</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10030</ordernumber>
+	<price>29,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Grüner Tee Geschenkset</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10031</ordernumber>
+	<price>29,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Jasmine Tee Geschenk Set</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10032</ordernumber>
+	<price>29,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Oolong Tee Geschenkset</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10033</ordernumber>
+	<price>29,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Pu Erh Tee Geschenkset</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10034</ordernumber>
+	<price>29,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Schwarzer Tee Geschenkset</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10035</ordernumber>
+	<price>24,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>29,99</pseudoprice>
+	<_name>Weißer Tee Geschenkset</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10036</ordernumber>
+	<price>23,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>29,99</pseudoprice>
+	<_name>Esslack</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>The Deli Garage</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10037</ordernumber>
+	<price>19,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>20,99</pseudoprice>
+	<_name>Kraftstoff</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>The Deli Garage</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10038</ordernumber>
+	<price>14,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>16,99</pseudoprice>
+	<_name>Mehrzwecknudeln</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>The Deli Garage</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10039</ordernumber>
+	<price>9,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Schokoleim</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>The Deli Garage</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10040</ordernumber>
+	<price>8,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Traubenbatterie</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>The Deli Garage</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10041</ordernumber>
+	<price>7,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Tubenhonig</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>The Deli Garage</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10042</ordernumber>
+	<price>34,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Ölwechsel</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>The Deli Garage</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10043</ordernumber>
+	<price>4,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Bienenkleber</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>The Deli Garage</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10062</ordernumber>
+	<price>69,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Beistelltisch</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10063</ordernumber>
+	<price>37,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Briefkasten</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10064</ordernumber>
+	<price>129,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Fensterspiegel</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10065</ordernumber>
+	<price>79,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Garderobe</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10066</ordernumber>
+	<price>199,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>antike Kommode</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10067</ordernumber>
+	<price>319,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Kommode Shabby Chic</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10070</ordernumber>
+	<price>119,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Wandregal</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10071</ordernumber>
+	<price>109,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Regal groß</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10072</ordernumber>
+	<price>69,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>79,99</pseudoprice>
+	<_name>Schlüsselkasten</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10073</ordernumber>
+	<price>59</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Schmuckkästchen</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10074</ordernumber>
+	<price>49,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Spiegelregal</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10075</ordernumber>
+	<price>74,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Stuhl</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10076</ordernumber>
+	<price>249,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Esstisch</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10077</ordernumber>
+	<price>349,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Couchtisch rund braun</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10078</ordernumber>
+	<price>329,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Couchtisch eckig weiß</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10079</ordernumber>
+	<price>99,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>119,99</pseudoprice>
+	<_name>Uhr antik</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10080</ordernumber>
+	<price>84,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Spiegel rund</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10081</ordernumber>
+	<price>7,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>9,98</pseudoprice>
+	<_name>Backform gelb</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10082</ordernumber>
+	<price>7,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>9,98</pseudoprice>
+	<_name>Backform pink</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10083</ordernumber>
+	<price>7,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Pralinen-Backform</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10084</ordernumber>
+	<price>14,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Back-Set 3 teilig</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10085</ordernumber>
+	<price>13,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Löffel-Set</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10086</ordernumber>
+	<price>0,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Schneebesen</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10087</ordernumber>
+	<price>24,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Schüssel Style Vögel</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10088</ordernumber>
+	<price>24,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>29,99</pseudoprice>
+	<_name>Schüssel Style Blumen</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10089</ordernumber>
+	<price>29,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Schüssel Style Ringe rot und weiß</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10090.1</ordernumber>
+	<price>1,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Teigschaber</_name>
+	<_additionaltext>grün</_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10090.2</ordernumber>
+	<price>1,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Teigschaber</_name>
+	<_additionaltext>pink</_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10091</ordernumber>
+	<price>12,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Teller Style Hühner</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10092</ordernumber>
+	<price>13,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Teller Style Vögel und Blumen</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10093</ordernumber>
+	<price>11,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Teller Style Rot und Pink</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10095</ordernumber>
+	<price>14,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Blumenarrangement mit Keramiktopf</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10096</ordernumber>
+	<price>24,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Blütenarrangement mit Rattan</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10097</ordernumber>
+	<price>24,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Blütenarrangement mit Rattan</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10098</ordernumber>
+	<price>24,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Strandbag</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10099</ordernumber>
+	<price>8,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>9,98</pseudoprice>
+	<_name>Eisförmchen</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10101</ordernumber>
+	<price>0,79</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Fliegenklatsche grün</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10102</ordernumber>
+	<price>0,49</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Fliegenklatsche lila</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10100</ordernumber>
+	<price>0,49</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Fliegenklatsche gelb</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10103</ordernumber>
+	<price>39,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>54,99</pseudoprice>
+	<_name>iPadtasche mit Stiftmappe</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10104</ordernumber>
+	<price>99,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>119,99</pseudoprice>
+	<_name>Reisekoffer groß</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10105</ordernumber>
+	<price>69,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>89,99</pseudoprice>
+	<_name>Reisekoffer klein</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10107</ordernumber>
+	<price>17,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Kosmetiktasche</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10108</ordernumber>
+	<price>17,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Kosmetiktasche</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10106</ordernumber>
+	<price>17,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Kosmetiktasche</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10109</ordernumber>
+	<price>28,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Strandbag</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10110</ordernumber>
+	<price>29,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Strandbag Fantasy</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10113</ordernumber>
+	<price>20,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Tasche Feed Me</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10112</ordernumber>
+	<price>20,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Tasche Remember Me</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10114</ordernumber>
+	<price>599</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>698,99</pseudoprice>
+	<_name>Kicker Champ Elite</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10115.1</ordernumber>
+	<price>749</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Kicker Champ Elite Pro (in vielen Farben)</_name>
+	<_additionaltext>weiss</_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10115.2</ordernumber>
+	<price>749</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Kicker Champ Elite Pro (in vielen Farben)</_name>
+	<_additionaltext>schwarz</_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10115.3</ordernumber>
+	<price>749</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Kicker Champ Elite Pro (in vielen Farben)</_name>
+	<_additionaltext>blau</_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10115.4</ordernumber>
+	<price>749</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Kicker Champ Elite Pro (in vielen Farben)</_name>
+	<_additionaltext>grün</_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10115.5</ordernumber>
+	<price>749</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Kicker Champ Elite Pro (in vielen Farben)</_name>
+	<_additionaltext>gelb</_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10116</ordernumber>
+	<price>699</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Kicker Champ Family platzsparend</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10117</ordernumber>
+	<price>999</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Kicker Champ, individuell gestaltbar</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10118.1</ordernumber>
+	<price>29,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Kicker Figuren Set, große Auswahl</_name>
+	<_additionaltext>weiss</_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10118.2</ordernumber>
+	<price>29,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Kicker Figuren Set, große Auswahl</_name>
+	<_additionaltext>schwarz</_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10118.3</ordernumber>
+	<price>29,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Kicker Figuren Set, große Auswahl</_name>
+	<_additionaltext>blau</_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10118.4</ordernumber>
+	<price>29,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Kicker Figuren Set, große Auswahl</_name>
+	<_additionaltext>rot</_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10118.5</ordernumber>
+	<price>29,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Kicker Figuren Set, große Auswahl</_name>
+	<_additionaltext>grün</_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10118.6</ordernumber>
+	<price>29,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Kicker Figuren Set, große Auswahl</_name>
+	<_additionaltext>pink</_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10118.7</ordernumber>
+	<price>29,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Kicker Figuren Set, große Auswahl</_name>
+	<_additionaltext>gelb</_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10118.8</ordernumber>
+	<price>29,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Kicker Figuren Set, große Auswahl</_name>
+	<_additionaltext>Signalrot</_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10118.9</ordernumber>
+	<price>29,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Kicker Figuren Set, große Auswahl</_name>
+	<_additionaltext>Blau-Weiss</_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10118.10</ordernumber>
+	<price>29,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Kicker Figuren Set, große Auswahl</_name>
+	<_additionaltext>Rot-Weiss</_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10118.11</ordernumber>
+	<price>29,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Kicker Figuren Set, große Auswahl</_name>
+	<_additionaltext>Gelb-Schwarz</_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10118.12</ordernumber>
+	<price>29,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Kicker Figuren Set, große Auswahl</_name>
+	<_additionaltext>Rot-Blau</_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10118.13</ordernumber>
+	<price>29,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Kicker Figuren Set, große Auswahl</_name>
+	<_additionaltext>Grün-Schwarz</_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10118.14</ordernumber>
+	<price>29,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Kicker Figuren Set, große Auswahl</_name>
+	<_additionaltext>Rot-Schwarz</_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10118.15</ordernumber>
+	<price>29,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Kicker Figuren Set, große Auswahl</_name>
+	<_additionaltext>braun</_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10118.16</ordernumber>
+	<price>29,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Kicker Figuren Set, große Auswahl</_name>
+	<_additionaltext>Orange</_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10119</ordernumber>
+	<price>9,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Kicker Torzähler</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10120</ordernumber>
+	<price>5,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Kickerball Standard</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10121</ordernumber>
+	<price>4,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Kickerball Kork</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10122</ordernumber>
+	<price>14,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>19,99</pseudoprice>
+	<_name>Kickerball Probierset</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10123.1</ordernumber>
+	<price>2,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Sasse Korn 32%</_name>
+	<_additionaltext>0,2 Liter</_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10123.2</ordernumber>
+	<price>7,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Sasse Korn 32%</_name>
+	<_additionaltext>0,7 Liter</_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10123.3</ordernumber>
+	<price>12,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Sasse Korn 32%</_name>
+	<_additionaltext>1,0 Liter</_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10123.4</ordernumber>
+	<price>17,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Sasse Korn 32%</_name>
+	<_additionaltext>1,5 Liter</_additionaltext>
+	<_supplier>Feinbrennerei Sasse</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10111</ordernumber>
+	<price>1499</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Kicker XXL Champ Elite Pro</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10128</ordernumber>
+	<price>99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Sonnenschirm Alu-Style, 270cm</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Sonnenschirm Versand</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10129</ordernumber>
+	<price>99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>119,99</pseudoprice>
+	<_name>Sonnenschirm Fortino, 270cm</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Sonnenschirm Versand</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10130</ordernumber>
+	<price>1495</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Sonnenschirm Pendalex V+, 280cm</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Sonnenschirm Versand</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10131</ordernumber>
+	<price>995</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Sonnenschirm Sombrano, 350cm</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Sonnenschirm Versand</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10132</ordernumber>
+	<price>599</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Sonnenschirm Sunwing C+, 260cm</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Sonnenschirm Versand</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10134</ordernumber>
+	<price>49,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Balmoral Flatcap Tweed</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Vintage Driver</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10135</ordernumber>
+	<price>29,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Damenhandschuh, halbfinger aus Peccary Leder</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Vintage Driver</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10136</ordernumber>
+	<price>34,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Damenhandschuh aus Peccary Leder zweifarbig</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Vintage Driver</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10137</ordernumber>
+	<price>59,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Fahrerbrille Chronos</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Vintage Driver</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10141</ordernumber>
+	<price>69,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Fahrerhandschuh aus Peccary Leder</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Vintage Driver</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10142</ordernumber>
+	<price>44,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Herrenhandschuh,halbfinger aus Peccary Leder</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Vintage Driver</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10143</ordernumber>
+	<price>84,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Navigator Lederhaube braun</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Vintage Driver</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10144</ordernumber>
+	<price>84,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Navigator Lederhaube schwarz</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Vintage Driver</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10145</ordernumber>
+	<price>17,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>19,99</pseudoprice>
+	<_name>Mütze Vintage Driver</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Vintage Driver</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10148</ordernumber>
+	<price>149,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Reisetasche Gladstone Wildleder</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Vintage Driver</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10150</ordernumber>
+	<price>9,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>12,99</pseudoprice>
+	<_name>Bikini Ocean Blue</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10151</ordernumber>
+	<price>12,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Bikini Stripes</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10152</ordernumber>
+	<price>11,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Bikini Sunshine Yellow</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10153.1</ordernumber>
+	<price>6,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Flip Flops, in mehreren Farben verfügbar</_name>
+	<_additionaltext>blau / 39/40</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10153.2</ordernumber>
+	<price>6,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Flip Flops, in mehreren Farben verfügbar</_name>
+	<_additionaltext>blau / 41/42</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10153.3</ordernumber>
+	<price>6,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Flip Flops, in mehreren Farben verfügbar</_name>
+	<_additionaltext>blau / 43/44</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10153.4</ordernumber>
+	<price>6,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Flip Flops, in mehreren Farben verfügbar</_name>
+	<_additionaltext>blau / 44/45</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10153.5</ordernumber>
+	<price>6,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Flip Flops, in mehreren Farben verfügbar</_name>
+	<_additionaltext>blau / 46/47</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10153.6</ordernumber>
+	<price>6,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Flip Flops, in mehreren Farben verfügbar</_name>
+	<_additionaltext>blau / 48/49</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10153.7</ordernumber>
+	<price>6,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Flip Flops, in mehreren Farben verfügbar</_name>
+	<_additionaltext>blau / 37/38</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10153.8</ordernumber>
+	<price>6,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Flip Flops, in mehreren Farben verfügbar</_name>
+	<_additionaltext>grün / 39/40</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10153.9</ordernumber>
+	<price>6,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Flip Flops, in mehreren Farben verfügbar</_name>
+	<_additionaltext>grün / 41/42</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10153.10</ordernumber>
+	<price>6,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Flip Flops, in mehreren Farben verfügbar</_name>
+	<_additionaltext>grün / 43/44</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10153.11</ordernumber>
+	<price>6,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Flip Flops, in mehreren Farben verfügbar</_name>
+	<_additionaltext>grün / 44/45</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10153.12</ordernumber>
+	<price>6,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Flip Flops, in mehreren Farben verfügbar</_name>
+	<_additionaltext>grün / 46/47</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10153.13</ordernumber>
+	<price>6,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Flip Flops, in mehreren Farben verfügbar</_name>
+	<_additionaltext>grün / 48/49</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10153.14</ordernumber>
+	<price>6,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Flip Flops, in mehreren Farben verfügbar</_name>
+	<_additionaltext>grün / 37/38</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10153.15</ordernumber>
+	<price>6,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Flip Flops, in mehreren Farben verfügbar</_name>
+	<_additionaltext>orange / 39/40</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10153.16</ordernumber>
+	<price>6,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Flip Flops, in mehreren Farben verfügbar</_name>
+	<_additionaltext>orange / 41/42</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10153.17</ordernumber>
+	<price>6,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Flip Flops, in mehreren Farben verfügbar</_name>
+	<_additionaltext>orange / 43/44</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10153.18</ordernumber>
+	<price>6,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Flip Flops, in mehreren Farben verfügbar</_name>
+	<_additionaltext>orange / 44/45</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10153.19</ordernumber>
+	<price>6,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Flip Flops, in mehreren Farben verfügbar</_name>
+	<_additionaltext>orange / 46/47</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10153.20</ordernumber>
+	<price>6,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Flip Flops, in mehreren Farben verfügbar</_name>
+	<_additionaltext>orange / 48/49</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10153.21</ordernumber>
+	<price>6,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Flip Flops, in mehreren Farben verfügbar</_name>
+	<_additionaltext>orange / 37/38</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10154</ordernumber>
+	<price>9,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Bikini Rainbow</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10155.1</ordernumber>
+	<price>4,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Flip Flop Sunshine Yellow</_name>
+	<_additionaltext>39/40</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10155.2</ordernumber>
+	<price>4,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Flip Flop Sunshine Yellow</_name>
+	<_additionaltext>41/42</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10155.3</ordernumber>
+	<price>4,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Flip Flop Sunshine Yellow</_name>
+	<_additionaltext>43/44</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10155.4</ordernumber>
+	<price>4,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Flip Flop Sunshine Yellow</_name>
+	<_additionaltext>44/45</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10155.5</ordernumber>
+	<price>4,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Flip Flop Sunshine Yellow</_name>
+	<_additionaltext>46/47</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10155.6</ordernumber>
+	<price>4,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Flip Flop Sunshine Yellow</_name>
+	<_additionaltext>48/49</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10155.7</ordernumber>
+	<price>4,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Flip Flop Sunshine Yellow</_name>
+	<_additionaltext>37/38</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10156.1</ordernumber>
+	<price>6,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Flip Flops Deep Red</_name>
+	<_additionaltext>39/40</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10156.2</ordernumber>
+	<price>6,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Flip Flops Deep Red</_name>
+	<_additionaltext>41/42</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10156.3</ordernumber>
+	<price>6,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Flip Flops Deep Red</_name>
+	<_additionaltext>43/44</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10156.4</ordernumber>
+	<price>6,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Flip Flops Deep Red</_name>
+	<_additionaltext>44/45</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10156.5</ordernumber>
+	<price>6,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Flip Flops Deep Red</_name>
+	<_additionaltext>46/47</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10156.6</ordernumber>
+	<price>6,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Flip Flops Deep Red</_name>
+	<_additionaltext>48/49</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10156.7</ordernumber>
+	<price>6,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Flip Flops Deep Red</_name>
+	<_additionaltext>37/38</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10157</ordernumber>
+	<price>17,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Panama Hut mit UV Schutz</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Sun Smile and Protect</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10158</ordernumber>
+	<price>23,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>25,99</pseudoprice>
+	<_name>Strohhut mit UV Schutz</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Sun Smile and Protect</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10159</ordernumber>
+	<price>22,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>24,99</pseudoprice>
+	<_name>Strohhut Women mit UV Schutz</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Sun Smile and Protect</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10160.1</ordernumber>
+	<price>29,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Sommer Sandale Ocean Blue</_name>
+	<_additionaltext>36</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10160.2</ordernumber>
+	<price>29,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Sommer Sandale Ocean Blue</_name>
+	<_additionaltext>37</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10160.3</ordernumber>
+	<price>29,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Sommer Sandale Ocean Blue</_name>
+	<_additionaltext>38</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10160.4</ordernumber>
+	<price>29,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Sommer Sandale Ocean Blue</_name>
+	<_additionaltext>39</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10160.5</ordernumber>
+	<price>29,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Sommer Sandale Ocean Blue</_name>
+	<_additionaltext>40</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10160.6</ordernumber>
+	<price>29,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Sommer Sandale Ocean Blue</_name>
+	<_additionaltext>41</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10160.7</ordernumber>
+	<price>29,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Sommer Sandale Ocean Blue</_name>
+	<_additionaltext>42</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10161.1</ordernumber>
+	<price>34,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Sommer-Sandale Leder Rot-Braun</_name>
+	<_additionaltext>36</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10161.2</ordernumber>
+	<price>34,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Sommer-Sandale Leder Rot-Braun</_name>
+	<_additionaltext>37</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10161.3</ordernumber>
+	<price>34,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Sommer-Sandale Leder Rot-Braun</_name>
+	<_additionaltext>38</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10161.4</ordernumber>
+	<price>34,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Sommer-Sandale Leder Rot-Braun</_name>
+	<_additionaltext>39</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10161.5</ordernumber>
+	<price>34,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Sommer-Sandale Leder Rot-Braun</_name>
+	<_additionaltext>40</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10161.6</ordernumber>
+	<price>34,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Sommer-Sandale Leder Rot-Braun</_name>
+	<_additionaltext>41</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10161.7</ordernumber>
+	<price>34,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Sommer-Sandale Leder Rot-Braun</_name>
+	<_additionaltext>42</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10162.1</ordernumber>
+	<price>23,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Sommer-Sandale Pink</_name>
+	<_additionaltext>36</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10162.2</ordernumber>
+	<price>23,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Sommer-Sandale Pink</_name>
+	<_additionaltext>37</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10162.3</ordernumber>
+	<price>23,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Sommer-Sandale Pink</_name>
+	<_additionaltext>38</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10162.4</ordernumber>
+	<price>23,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Sommer-Sandale Pink</_name>
+	<_additionaltext>39</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10162.5</ordernumber>
+	<price>23,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Sommer-Sandale Pink</_name>
+	<_additionaltext>40</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10162.6</ordernumber>
+	<price>23,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Sommer-Sandale Pink</_name>
+	<_additionaltext>41</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10162.7</ordernumber>
+	<price>23,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Sommer-Sandale Pink</_name>
+	<_additionaltext>42</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10163</ordernumber>
+	<price>6,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Sommerschal Flower Power</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10164</ordernumber>
+	<price>7,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Sommerschal Fresh Green</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10165</ordernumber>
+	<price>19,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Sommerschal Light Red aus Seide</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10166</ordernumber>
+	<price>9,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Sonnenbrille Big Eyes</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Sun Smile and Protect</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10167</ordernumber>
+	<price>13,49</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>13,99</pseudoprice>
+	<_name>Sonnenbrille Speed Eyes</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Sun Smile and Protect</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10168</ordernumber>
+	<price>2,49</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Pilotenbrille Sunset Red</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Sun Smile and Protect</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10169</ordernumber>
+	<price>17,49</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Pilotenbrille Silver Sky</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Sun Smile and Protect</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10170</ordernumber>
+	<price>39,95</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Sonnenbrille "Red"</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Sun Smile and Protect</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10171.1</ordernumber>
+	<price>2,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Sonnencreme ab  LSF 10</_name>
+	<_additionaltext>10</_additionaltext>
+	<_supplier>Sun Smile and Protect</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10171.2</ordernumber>
+	<price>4,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Sonnencreme ab  LSF 10</_name>
+	<_additionaltext>15</_additionaltext>
+	<_supplier>Sun Smile and Protect</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10171.3</ordernumber>
+	<price>5,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Sonnencreme ab  LSF 10</_name>
+	<_additionaltext>20</_additionaltext>
+	<_supplier>Sun Smile and Protect</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10171.4</ordernumber>
+	<price>7,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Sonnencreme ab  LSF 10</_name>
+	<_additionaltext>30</_additionaltext>
+	<_supplier>Sun Smile and Protect</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10172</ordernumber>
+	<price>9,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Sonnencreme Sunblocker LSF 50</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Sun Smile and Protect</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10173</ordernumber>
+	<price>39,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Strandkleid Flower Power</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10174</ordernumber>
+	<price>38,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Strandkleid Short Red</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10175</ordernumber>
+	<price>59,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Strandtuch Sunny</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10176</ordernumber>
+	<price>49,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Strandtuch Gras-Green</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10177</ordernumber>
+	<price>34,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>40</pseudoprice>
+	<_name>Strandtuch Stripes für Kinder</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10178</ordernumber>
+	<price>19,95</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Strandtuch "Ibiza"</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10179.1</ordernumber>
+	<price>44,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Strandtuch in mehreren Farben</_name>
+	<_additionaltext>blau</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10179.2</ordernumber>
+	<price>44,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Strandtuch in mehreren Farben</_name>
+	<_additionaltext>rot</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10179.3</ordernumber>
+	<price>44,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Strandtuch in mehreren Farben</_name>
+	<_additionaltext>grün</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10179.4</ordernumber>
+	<price>44,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Strandtuch in mehreren Farben</_name>
+	<_additionaltext>pink</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10179.5</ordernumber>
+	<price>44,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Strandtuch in mehreren Farben</_name>
+	<_additionaltext>gelb</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10179.6</ordernumber>
+	<price>44,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Strandtuch in mehreren Farben</_name>
+	<_additionaltext>orange</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10179.7</ordernumber>
+	<price>44,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Strandtuch in mehreren Farben</_name>
+	<_additionaltext>lila</_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10180.1</ordernumber>
+	<price>89,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>100</pseudoprice>
+	<_name>Reisekoffer, in mehreren Farben</_name>
+	<_additionaltext>blau</_additionaltext>
+	<_supplier>Access Oires Sisters</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10180.2</ordernumber>
+	<price>89,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>100</pseudoprice>
+	<_name>Reisekoffer, in mehreren Farben</_name>
+	<_additionaltext>rot</_additionaltext>
+	<_supplier>Access Oires Sisters</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10180.3</ordernumber>
+	<price>89,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>100</pseudoprice>
+	<_name>Reisekoffer, in mehreren Farben</_name>
+	<_additionaltext>grün</_additionaltext>
+	<_supplier>Access Oires Sisters</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10180.4</ordernumber>
+	<price>89,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>100</pseudoprice>
+	<_name>Reisekoffer, in mehreren Farben</_name>
+	<_additionaltext>gelb</_additionaltext>
+	<_supplier>Access Oires Sisters</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10181</ordernumber>
+	<price>139,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Reisekoffer Set</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Access Oires Sisters</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10193</ordernumber>
+	<price>100</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Zubehör</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10194</ordernumber>
+	<price>9,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Kicker Service Box</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10195</ordernumber>
+	<price>119</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit ähnlichen Produkten</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10196</ordernumber>
+	<price>34,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>ESD Download Artikel</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10197</ordernumber>
+	<price>10000</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Bewertung</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10198</ordernumber>
+	<price>238</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Abverkauf</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10199</ordernumber>
+	<price>23,8</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikelkennzeichnung NEU</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10200</ordernumber>
+	<price>99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Hervorgehobene Darstellung</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10201.1</ordernumber>
+	<price>20,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Standardkonfigurator</_name>
+	<_additionaltext>blau / 36</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10201.2</ordernumber>
+	<price>20,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Standardkonfigurator</_name>
+	<_additionaltext>blau / 37</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10201.3</ordernumber>
+	<price>20,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Standardkonfigurator</_name>
+	<_additionaltext>blau / 38</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10201.4</ordernumber>
+	<price>20,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Standardkonfigurator</_name>
+	<_additionaltext>blau / 39</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10201.5</ordernumber>
+	<price>20,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Standardkonfigurator</_name>
+	<_additionaltext>blau / 40</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10201.6</ordernumber>
+	<price>20,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Standardkonfigurator</_name>
+	<_additionaltext>blau / 41</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10201.7</ordernumber>
+	<price>20,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Standardkonfigurator</_name>
+	<_additionaltext>blau / 42</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10201.8</ordernumber>
+	<price>20,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Standardkonfigurator</_name>
+	<_additionaltext>rot / 36</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10201.9</ordernumber>
+	<price>20,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Standardkonfigurator</_name>
+	<_additionaltext>rot / 37</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10201.10</ordernumber>
+	<price>20,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Standardkonfigurator</_name>
+	<_additionaltext>rot / 38</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10201.11</ordernumber>
+	<price>20,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Standardkonfigurator</_name>
+	<_additionaltext>rot / 39</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10201.12</ordernumber>
+	<price>20,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Standardkonfigurator</_name>
+	<_additionaltext>rot / 40</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10201.13</ordernumber>
+	<price>20,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Standardkonfigurator</_name>
+	<_additionaltext>rot / 41</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10201.14</ordernumber>
+	<price>20,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Standardkonfigurator</_name>
+	<_additionaltext>rot / 42</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10201.15</ordernumber>
+	<price>20,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Standardkonfigurator</_name>
+	<_additionaltext>pink / 36</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10201.16</ordernumber>
+	<price>20,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Standardkonfigurator</_name>
+	<_additionaltext>pink / 37</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10201.17</ordernumber>
+	<price>20,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Standardkonfigurator</_name>
+	<_additionaltext>pink / 38</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10201.18</ordernumber>
+	<price>20,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Standardkonfigurator</_name>
+	<_additionaltext>pink / 39</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10201.19</ordernumber>
+	<price>20,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Standardkonfigurator</_name>
+	<_additionaltext>pink / 40</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10201.20</ordernumber>
+	<price>20,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Standardkonfigurator</_name>
+	<_additionaltext>pink / 41</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10201.21</ordernumber>
+	<price>20,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Standardkonfigurator</_name>
+	<_additionaltext>pink / 42</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10202.1</ordernumber>
+	<price>89</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Auswahlkonfigurator</_name>
+	<_additionaltext>blau / 39/40</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10202.2</ordernumber>
+	<price>89</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Auswahlkonfigurator</_name>
+	<_additionaltext>blau / 41/42</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10202.3</ordernumber>
+	<price>89</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Auswahlkonfigurator</_name>
+	<_additionaltext>blau / 43/44</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10202.4</ordernumber>
+	<price>89</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Auswahlkonfigurator</_name>
+	<_additionaltext>blau / 44/45</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10202.5</ordernumber>
+	<price>89</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Auswahlkonfigurator</_name>
+	<_additionaltext>blau / 46/47</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10202.6</ordernumber>
+	<price>89</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Auswahlkonfigurator</_name>
+	<_additionaltext>blau / 48/49</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10202.7</ordernumber>
+	<price>89</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Auswahlkonfigurator</_name>
+	<_additionaltext>blau / 37/38</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10202.8</ordernumber>
+	<price>89</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Auswahlkonfigurator</_name>
+	<_additionaltext>grün / 39/40</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10202.9</ordernumber>
+	<price>89</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Auswahlkonfigurator</_name>
+	<_additionaltext>grün / 41/42</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10202.10</ordernumber>
+	<price>89</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Auswahlkonfigurator</_name>
+	<_additionaltext>grün / 43/44</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10202.11</ordernumber>
+	<price>89</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Auswahlkonfigurator</_name>
+	<_additionaltext>grün / 44/45</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10202.12</ordernumber>
+	<price>89</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Auswahlkonfigurator</_name>
+	<_additionaltext>grün / 46/47</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10202.13</ordernumber>
+	<price>89</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Auswahlkonfigurator</_name>
+	<_additionaltext>grün / 48/49</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10202.14</ordernumber>
+	<price>89</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Auswahlkonfigurator</_name>
+	<_additionaltext>grün / 37/38</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10202.15</ordernumber>
+	<price>89</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Auswahlkonfigurator</_name>
+	<_additionaltext>orange / 39/40</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10202.16</ordernumber>
+	<price>89</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Auswahlkonfigurator</_name>
+	<_additionaltext>orange / 41/42</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10202.17</ordernumber>
+	<price>89</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Auswahlkonfigurator</_name>
+	<_additionaltext>orange / 43/44</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10202.18</ordernumber>
+	<price>89</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Auswahlkonfigurator</_name>
+	<_additionaltext>orange / 44/45</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10202.19</ordernumber>
+	<price>89</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Auswahlkonfigurator</_name>
+	<_additionaltext>orange / 46/47</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10202.20</ordernumber>
+	<price>89</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Auswahlkonfigurator</_name>
+	<_additionaltext>orange / 48/49</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10202.21</ordernumber>
+	<price>89</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Auswahlkonfigurator</_name>
+	<_additionaltext>orange / 37/38</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10203.1</ordernumber>
+	<price>15</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Tabellenkonfigurator</_name>
+	<_additionaltext>blau / S</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10203.2</ordernumber>
+	<price>15</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Tabellenkonfigurator</_name>
+	<_additionaltext>blau / M</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10203.3</ordernumber>
+	<price>15</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Tabellenkonfigurator</_name>
+	<_additionaltext>blau / L</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10203.4</ordernumber>
+	<price>15</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Tabellenkonfigurator</_name>
+	<_additionaltext>blau / XL</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10203.5</ordernumber>
+	<price>15</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Tabellenkonfigurator</_name>
+	<_additionaltext>blau / XXL</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10203.6</ordernumber>
+	<price>15</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Tabellenkonfigurator</_name>
+	<_additionaltext>grün / S</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10203.7</ordernumber>
+	<price>15</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Tabellenkonfigurator</_name>
+	<_additionaltext>grün / M</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10203.8</ordernumber>
+	<price>15</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Tabellenkonfigurator</_name>
+	<_additionaltext>grün / L</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10203.9</ordernumber>
+	<price>15</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Tabellenkonfigurator</_name>
+	<_additionaltext>grün / XL</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10203.10</ordernumber>
+	<price>15</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Tabellenkonfigurator</_name>
+	<_additionaltext>grün / XXL</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10203.11</ordernumber>
+	<price>15</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Tabellenkonfigurator</_name>
+	<_additionaltext>pink / S</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10203.12</ordernumber>
+	<price>15</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Tabellenkonfigurator</_name>
+	<_additionaltext>pink / M</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10203.13</ordernumber>
+	<price>15</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Tabellenkonfigurator</_name>
+	<_additionaltext>pink / L</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10203.14</ordernumber>
+	<price>15</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Tabellenkonfigurator</_name>
+	<_additionaltext>pink / XL</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10203.15</ordernumber>
+	<price>15</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Tabellenkonfigurator</_name>
+	<_additionaltext>pink / XXL</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10203.16</ordernumber>
+	<price>15</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Tabellenkonfigurator</_name>
+	<_additionaltext>gelb / S</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10203.17</ordernumber>
+	<price>15</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Tabellenkonfigurator</_name>
+	<_additionaltext>gelb / M</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10203.18</ordernumber>
+	<price>15</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Tabellenkonfigurator</_name>
+	<_additionaltext>gelb / L</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10203.19</ordernumber>
+	<price>15</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Tabellenkonfigurator</_name>
+	<_additionaltext>gelb / XL</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10203.20</ordernumber>
+	<price>15</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Tabellenkonfigurator</_name>
+	<_additionaltext>gelb / XXL</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10204.1</ordernumber>
+	<price>178,5</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Aufpreiskonfigurator</_name>
+	<_additionaltext>ohne / 24 Monate</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10204.2</ordernumber>
+	<price>208,25</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Aufpreiskonfigurator</_name>
+	<_additionaltext>mit Figuren / 24 Monate</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10204.3</ordernumber>
+	<price>220,15</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Aufpreiskonfigurator</_name>
+	<_additionaltext>mit Figuren und Ball-Set / 24 Monate</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10204.4</ordernumber>
+	<price>232,05</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Aufpreiskonfigurator</_name>
+	<_additionaltext>mit Figuren, Ball-Set und Service Box / 24 Monate</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10204.5</ordernumber>
+	<price>238</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Aufpreiskonfigurator</_name>
+	<_additionaltext>ohne / 36 Monate</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10204.6</ordernumber>
+	<price>267,75</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Aufpreiskonfigurator</_name>
+	<_additionaltext>mit Figuren / 36 Monate</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10204.7</ordernumber>
+	<price>279,65</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Aufpreiskonfigurator</_name>
+	<_additionaltext>mit Figuren und Ball-Set / 36 Monate</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10204.8</ordernumber>
+	<price>291,55</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Aufpreiskonfigurator</_name>
+	<_additionaltext>mit Figuren, Ball-Set und Service Box / 36 Monate</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10204.9</ordernumber>
+	<price>119</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Aufpreiskonfigurator</_name>
+	<_additionaltext>ohne / ohne</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10204.10</ordernumber>
+	<price>148,75</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Aufpreiskonfigurator</_name>
+	<_additionaltext>mit Figuren / ohne</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10204.11</ordernumber>
+	<price>160,65</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Aufpreiskonfigurator</_name>
+	<_additionaltext>mit Figuren und Ball-Set / ohne</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10204.12</ordernumber>
+	<price>172,55</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Aufpreiskonfigurator</_name>
+	<_additionaltext>mit Figuren, Ball-Set und Service Box / ohne</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10205.1</ordernumber>
+	<price>130</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Grundpreisberechnung</_name>
+	<_additionaltext>1,5 Liter</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10205.2</ordernumber>
+	<price>400</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Grundpreisberechnung</_name>
+	<_additionaltext>5 Liter</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10205.3</ordernumber>
+	<price>50</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Grundpreisberechnung</_name>
+	<_additionaltext>0,5 Liter</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10206</ordernumber>
+	<price>200</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Staffelung, Mindest- / Maximalabnahme</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10207</ordernumber>
+	<price>500</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>1000</pseudoprice>
+	<_name>Pseudopreis</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10208</ordernumber>
+	<price>1</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Staffelpreise</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10208</ordernumber>
+	<price>0,9</price>
+	<pricegroup>EK</pricegroup>
+	<from>11</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Staffelpreise</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10208</ordernumber>
+	<price>0,8</price>
+	<pricegroup>EK</pricegroup>
+	<from>21</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Staffelpreise</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10208</ordernumber>
+	<price>0,75</price>
+	<pricegroup>EK</pricegroup>
+	<from>31</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Staffelpreise</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10208</ordernumber>
+	<price>0,7</price>
+	<pricegroup>EK</pricegroup>
+	<from>41</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Staffelpreise</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10209</ordernumber>
+	<price>7,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Prämienartikel ab 50 Euro Warenkorb Wert</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10221</ordernumber>
+	<price>50</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Prämienartikel ab 250 Euro Warenkorb Wert</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10211</ordernumber>
+	<price>39,95</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Surfbrett</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Beachdreams Clothes</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10212.1</ordernumber>
+	<price>17,9</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>All Natural - Rosemary Grapefruit Conditioner</_name>
+	<_additionaltext>200ml</_additionaltext>
+	<_supplier>stop the water while using me</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10212.2</ordernumber>
+	<price>29,9</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>All Natural - Rosemary Grapefruit Conditioner</_name>
+	<_additionaltext>500ml</_additionaltext>
+	<_supplier>stop the water while using me</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10212.3</ordernumber>
+	<price>270</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>All Natural - Rosemary Grapefruit Conditioner</_name>
+	<_additionaltext>5l</_additionaltext>
+	<_supplier>stop the water while using me</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10213.1</ordernumber>
+	<price>12,8</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>All Natural - Rosemary Grapefruit Shampoo</_name>
+	<_additionaltext>200ml</_additionaltext>
+	<_supplier>stop the water while using me</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10213.2</ordernumber>
+	<price>24,9</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>All Natural - Rosemary Grapefruit Shampoo</_name>
+	<_additionaltext>500ml</_additionaltext>
+	<_supplier>stop the water while using me</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10213.3</ordernumber>
+	<price>190</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>All Natural - Rosemary Grapefruit Shampoo</_name>
+	<_additionaltext>5l</_additionaltext>
+	<_supplier>stop the water while using me</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10214.1</ordernumber>
+	<price>21,4</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>All Natural - Sesame Sage Bodylotion</_name>
+	<_additionaltext>200ml</_additionaltext>
+	<_supplier>stop the water while using me</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10214.2</ordernumber>
+	<price>21,4</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>All Natural - Sesame Sage Bodylotion</_name>
+	<_additionaltext>500ml</_additionaltext>
+	<_supplier>stop the water while using me</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10214.3</ordernumber>
+	<price>290</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>All Natural - Sesame Sage Bodylotion</_name>
+	<_additionaltext>5l</_additionaltext>
+	<_supplier>stop the water while using me</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10215.1</ordernumber>
+	<price>12,8</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>All Natural - Orange Wild Herbs Shower Gel</_name>
+	<_additionaltext>200ml</_additionaltext>
+	<_supplier>stop the water while using me</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10215.2</ordernumber>
+	<price>24,9</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>All Natural - Orange Wild Herbs Shower Gel</_name>
+	<_additionaltext>500ml</_additionaltext>
+	<_supplier>stop the water while using me</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10215.3</ordernumber>
+	<price>190</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>All Natural - Orange Wild Herbs Shower Gel</_name>
+	<_additionaltext>5l</_additionaltext>
+	<_supplier>stop the water while using me</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10216.1</ordernumber>
+	<price>11,4</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>All Natural - Lemon Honey Soap</_name>
+	<_additionaltext>200ml</_additionaltext>
+	<_supplier>stop the water while using me</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10216.2</ordernumber>
+	<price>18,9</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>All Natural - Lemon Honey Soap</_name>
+	<_additionaltext>500ml</_additionaltext>
+	<_supplier>stop the water while using me</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10216.3</ordernumber>
+	<price>11,4</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>All Natural - Lemon Honey Soap</_name>
+	<_additionaltext>5l</_additionaltext>
+	<_supplier>stop the water while using me</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10185</ordernumber>
+	<price>54,9</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Express Versand</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10001</ordernumber>
+	<price>35,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Versandkostenfreier Artikel</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW1000299</ordernumber>
+	<price>79,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Versandkosten Optionen</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10217</ordernumber>
+	<price>9,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Dekokissen Blume</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW100718.1</ordernumber>
+	<price>49,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Ausweichversandkosten</_name>
+	<_additionaltext>weiss</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW100718.2</ordernumber>
+	<price>49,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Ausweichversandkosten</_name>
+	<_additionaltext>gelb</_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10218</ordernumber>
+	<price>12,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Dekokissen Bus</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10219</ordernumber>
+	<price>11,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>14,99</pseudoprice>
+	<_name>Dekokissen Vogel</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10220</ordernumber>
+	<price>3,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Magnete ABC</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10002841</ordernumber>
+	<price>35,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Aufschlag bei Zahlungsarten</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW100025211</ordernumber>
+	<price>119,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name><![CDATA[Zahlungsarten & Riskmanagement]]></_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10222</ordernumber>
+	<price>3,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Magnete London</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10002694</ordernumber>
+	<price>47,9</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Abschlag bei Zahlungsarten</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10223</ordernumber>
+	<price>2,49</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Notizbuch New York</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10224</ordernumber>
+	<price>2,49</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Notizbuch London</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10225</ordernumber>
+	<price>2,49</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Notizbuch Paris</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10226</ordernumber>
+	<price>6,49</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Deko Topf</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10227</ordernumber>
+	<price>3,49</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Servietten</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10228</ordernumber>
+	<price>17,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Stoffherz kariert</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10229</ordernumber>
+	<price>38,95</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Strandbag Sailor</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10230</ordernumber>
+	<price>2499</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>2799</pseudoprice>
+	<_name>Dart Automat Standgerät</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10231</ordernumber>
+	<price>49,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Dartscheibe Circle</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10232</ordernumber>
+	<price>14,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>17,99</pseudoprice>
+	<_name>Dartpfeil Steel Atomic</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10233</ordernumber>
+	<price>13,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Dartpfeil Steel Smiley 745</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10234</ordernumber>
+	<price>119</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Artikel mit Emailbenachrichtigung</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10235</ordernumber>
+	<price>119</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Kundengruppen Brutto / Nettopreise</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10236</ordernumber>
+	<price>20</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Bumerang</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10237</ordernumber>
+	<price>69,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Dart-Set</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10238</ordernumber>
+	<price>20</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Prämienartikel ab 100 Euro Warenkorbwert</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW100755036993</ordernumber>
+	<price>74,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Versandkosten nach Gewicht</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>TS100629_500_30_GBP</ordernumber>
+	<price>0,98</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Käuferschutz</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Trusted Shops</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>TS080501_500_30_USD</ordernumber>
+	<price>0,98</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Käuferschutz</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Trusted Shops</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>TS080501_500_30_EUR</ordernumber>
+	<price>0,98</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Käuferschutz</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Trusted Shops</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>TS100809_1500_30_PLN</ordernumber>
+	<price>2,89</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Käuferschutz</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Trusted Shops</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>TS100629_1500_30_GBP</ordernumber>
+	<price>2,94</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Käuferschutz</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Trusted Shops</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>TS100629_1500_30_USD</ordernumber>
+	<price>2,94</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Käuferschutz</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Trusted Shops</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>TS080501_1500_30_EUR</ordernumber>
+	<price>2,94</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Käuferschutz</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Trusted Shops</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>TS100809_2500_30_PLN</ordernumber>
+	<price>4,83</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Käuferschutz</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Trusted Shops</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>TS080501_2500_30_EUR</ordernumber>
+	<price>4,9</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Käuferschutz</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Trusted Shops</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>TS100629_2500_30_USD</ordernumber>
+	<price>4,9</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Käuferschutz</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Trusted Shops</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>TS100629_2500_30_GBP</ordernumber>
+	<price>4,9</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Käuferschutz</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Trusted Shops</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>TS100809_5000_30_PLN</ordernumber>
+	<price>9,66</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Käuferschutz</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Trusted Shops</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>TS080501_5000_30_EUR</ordernumber>
+	<price>9,8</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Käuferschutz</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Trusted Shops</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>TS100629_10000_30_USD</ordernumber>
+	<price>9,81</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Käuferschutz</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Trusted Shops</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>TS100629_5000_30_USD</ordernumber>
+	<price>9,81</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Käuferschutz</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Trusted Shops</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>TS100629_5000_30_GBP</ordernumber>
+	<price>9,81</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Käuferschutz</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Trusted Shops</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>TS100809_10000_30_PLN</ordernumber>
+	<price>19,34</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Käuferschutz</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Trusted Shops</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>TS100629_10000_30_GBP</ordernumber>
+	<price>19,6</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Käuferschutz</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Trusted Shops</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>TS080501_10000_30_EUR</ordernumber>
+	<price>19,6</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Käuferschutz</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Trusted Shops</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>TS100816_20000_30_PLN</ordernumber>
+	<price>38,69</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Käuferschutz</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Trusted Shops</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>TS100629_20000_30_USD</ordernumber>
+	<price>39,2</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Käuferschutz</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Trusted Shops</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>TS100629_20000_30_GBP</ordernumber>
+	<price>39,2</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Käuferschutz</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Trusted Shops</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>TS080501_20000_30_EUR</ordernumber>
+	<price>39,2</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Käuferschutz</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Trusted Shops</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10239</ordernumber>
+	<price>18,99</price>
+	<pricegroup>EK</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Spachtelmasse</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>The Deli Garage</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+<Price>
+	<ordernumber>SW10235</ordernumber>
+	<price>100</price>
+	<pricegroup>B2B</pricegroup>
+	<from>1</from>
+	<pseudoprice>0</pseudoprice>
+	<_name>Kundengruppen Brutto / Nettopreise</_name>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<purchaseprice>0</purchaseprice>
+</Price>
+	</Prices>
+</Root>

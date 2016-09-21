@@ -9,6 +9,7 @@
 namespace SwagImportExport\Tests\Functional\Commands;
 
 use Doctrine\DBAL\Connection;
+use SwagImportExport\Tests\Helper\DataProvider\ProfileDataProvider;
 use Tests\Helper\CommandTestHelper;
 
 class ImportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
@@ -37,15 +38,15 @@ class ImportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
 
     public function testCustomerXmlImport()
     {
-        $actualLineAmount = $this->getRowCountForTable(CommandTestHelper::CUSTOMER_TABLE);
-        $customerProfileName = CommandTestHelper::CUSTOMER_PROFILE_NAME;
+        $actualLineAmount = $this->getRowCountForTable(ProfileDataProvider::CUSTOMER_TABLE);
+        $customerProfileName = ProfileDataProvider::CUSTOMER_PROFILE_NAME;
         $importFilePath = CommandTestHelper::IMPORT_FILES_DIR . 'CustomerImport.xml';
         $expectedImportedCustomersAmount = 4;
 
         $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:import -p {$customerProfileName} {$importFilePath}");
         $consoleOutput = $this->convertOutputToArrayByLineBreak($consoleOutput);
 
-        $resultLineAmount = $this->getRowCountForTable(CommandTestHelper::CUSTOMER_TABLE);
+        $resultLineAmount = $this->getRowCountForTable(ProfileDataProvider::CUSTOMER_TABLE);
         $importedCustomersAmount = $resultLineAmount - $actualLineAmount;
 
         $this->assertEquals('Using profile: customer_profile.', $consoleOutput[0]);
@@ -56,15 +57,15 @@ class ImportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
 
     public function testCustomerCsvImport()
     {
-        $actualLineAmount = $this->getRowCountForTable(CommandTestHelper::CUSTOMER_TABLE);
-        $customerProfileName = CommandTestHelper::CUSTOMER_PROFILE_NAME;
+        $actualLineAmount = $this->getRowCountForTable(ProfileDataProvider::CUSTOMER_TABLE);
+        $customerProfileName = ProfileDataProvider::CUSTOMER_PROFILE_NAME;
         $importFilePath = CommandTestHelper::IMPORT_FILES_DIR . 'CustomerImport.csv';
         $expectedImportedCustomersAmount = 4;
 
         $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:import -p {$customerProfileName} {$importFilePath}");
         $consoleOutput = $this->convertOutputToArrayByLineBreak($consoleOutput);
 
-        $resultLineAmount = $this->getRowCountForTable(CommandTestHelper::CUSTOMER_TABLE);
+        $resultLineAmount = $this->getRowCountForTable(ProfileDataProvider::CUSTOMER_TABLE);
         $importedCustomersAmount = $resultLineAmount - $actualLineAmount;
 
         $this->assertEquals('Using profile: customer_profile.', $consoleOutput[0]);
@@ -75,15 +76,15 @@ class ImportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
 
     public function testCategoryXmlImport()
     {
-        $actualLineAmount = $this->getRowCountForTable(CommandTestHelper::CATEGORY_TABLE);
-        $categoryProfileName = CommandTestHelper::CATEGORY_PROFILE_NAME;
+        $actualLineAmount = $this->getRowCountForTable(ProfileDataProvider::CATEGORY_TABLE);
+        $categoryProfileName = ProfileDataProvider::CATEGORY_PROFILE_NAME;
         $importFilePath = CommandTestHelper::IMPORT_FILES_DIR . 'CategoriesImport.xml';
         $expectedImportedCategories = 16;
 
         $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:import -p {$categoryProfileName} {$importFilePath}");
         $consoleOutput = $this->convertOutputToArrayByLineBreak($consoleOutput);
 
-        $resultLineAmount = $this->getRowCountForTable(CommandTestHelper::CATEGORY_TABLE);
+        $resultLineAmount = $this->getRowCountForTable(ProfileDataProvider::CATEGORY_TABLE);
         $importedCategoriesAmount = $resultLineAmount - $actualLineAmount;
 
         $this->assertEquals('Using profile: category_profile.', $consoleOutput[0]);
@@ -94,15 +95,15 @@ class ImportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
 
     public function testCategoryCsvImport()
     {
-        $actualLineAmount = $this->getRowCountForTable(CommandTestHelper::CATEGORY_TABLE);
-        $profile = CommandTestHelper::CATEGORY_PROFILE_NAME;
+        $actualLineAmount = $this->getRowCountForTable(ProfileDataProvider::CATEGORY_TABLE);
+        $profile = ProfileDataProvider::CATEGORY_PROFILE_NAME;
         $filePath = CommandTestHelper::IMPORT_FILES_DIR . 'CategoriesImport.csv';
         $expectedImportedCategories = 16;
 
         $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:import -p {$profile} {$filePath}");
         $consoleOutput = $this->convertOutputToArrayByLineBreak($consoleOutput);
 
-        $resultLineAmount = $this->getRowCountForTable(CommandTestHelper::CATEGORY_TABLE);
+        $resultLineAmount = $this->getRowCountForTable(ProfileDataProvider::CATEGORY_TABLE);
         $importedCategoriesAmount = $resultLineAmount - $actualLineAmount;
 
         $this->assertEquals('Using profile: category_profile.', $consoleOutput[0]);
@@ -113,15 +114,15 @@ class ImportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
 
     public function testNewsletterRecipientXmlImport()
     {
-        $actualLineAmount = $this->getRowCountForTable(CommandTestHelper::NEWSLETTER_TABLE);
-        $profile = CommandTestHelper::NEWSLETTER_PROFILE_NAME;
+        $actualLineAmount = $this->getRowCountForTable(ProfileDataProvider::NEWSLETTER_TABLE);
+        $profile = ProfileDataProvider::NEWSLETTER_PROFILE_NAME;
         $filePath = CommandTestHelper::IMPORT_FILES_DIR . 'NewsletterRecipientImport.xml';
         $expectedImportedNewsletterRecipients = 6;
 
         $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:import -p {$profile} {$filePath}");
         $consoleOutput = $this->convertOutputToArrayByLineBreak($consoleOutput);
 
-        $resultLineAmount = $this->getRowCountForTable(CommandTestHelper::NEWSLETTER_TABLE);
+        $resultLineAmount = $this->getRowCountForTable(ProfileDataProvider::NEWSLETTER_TABLE);
         $importedNewsletterAmount = $resultLineAmount - $actualLineAmount;
 
         $this->assertEquals('Using profile: newsletter_profile.', $consoleOutput[0]);
@@ -132,15 +133,15 @@ class ImportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
 
     public function testNewsletterRecipientCsvImport()
     {
-        $actualLineAmount = $this->getRowCountForTable(CommandTestHelper::NEWSLETTER_TABLE);
-        $profile = CommandTestHelper::NEWSLETTER_PROFILE_NAME;
+        $actualLineAmount = $this->getRowCountForTable(ProfileDataProvider::NEWSLETTER_TABLE);
+        $profile = ProfileDataProvider::NEWSLETTER_PROFILE_NAME;
         $filePath = CommandTestHelper::IMPORT_FILES_DIR . 'NewsletterRecipientImport.csv';
         $expectedImportedNewsletterRecipients = 6;
 
         $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:import -p {$profile} {$filePath}");
         $consoleOutput = $this->convertOutputToArrayByLineBreak($consoleOutput);
 
-        $resultLineAmount = $this->getRowCountForTable(CommandTestHelper::NEWSLETTER_TABLE);
+        $resultLineAmount = $this->getRowCountForTable(ProfileDataProvider::NEWSLETTER_TABLE);
         $importedNewsletterAmount = $resultLineAmount - $actualLineAmount;
 
         $this->assertEquals('Using profile: newsletter_profile.', $consoleOutput[0]);
@@ -151,15 +152,15 @@ class ImportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
 
     public function testArticleXmlImport()
     {
-        $actualLineAmount = $this->getRowCountForTable(CommandTestHelper::ARTICLE_TABLE);
-        $profile = CommandTestHelper::ARTICLE_PROFILE_NAME;
+        $actualLineAmount = $this->getRowCountForTable(ProfileDataProvider::ARTICLE_TABLE);
+        $profile = ProfileDataProvider::ARTICLE_PROFILE_NAME;
         $filePath = CommandTestHelper::IMPORT_FILES_DIR . 'ArticleImport.xml';
         $expectedImportedArticles = 2;
 
         $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:import -p {$profile} {$filePath}");
         $consoleOutput = $this->convertOutputToArrayByLineBreak($consoleOutput);
 
-        $resultLineAmount = $this->getRowCountForTable(CommandTestHelper::ARTICLE_TABLE);
+        $resultLineAmount = $this->getRowCountForTable(ProfileDataProvider::ARTICLE_TABLE);
         $importedArticlesAmount = $resultLineAmount - $actualLineAmount;
 
         $this->assertEquals('Using profile: article_profile.', $consoleOutput[0]);
@@ -170,15 +171,15 @@ class ImportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
 
     public function testArticleCsvImport()
     {
-        $actualLineAmount = $this->getRowCountForTable(CommandTestHelper::ARTICLE_TABLE);
-        $profile = CommandTestHelper::ARTICLE_PROFILE_NAME;
+        $actualLineAmount = $this->getRowCountForTable(ProfileDataProvider::ARTICLE_TABLE);
+        $profile = ProfileDataProvider::ARTICLE_PROFILE_NAME;
         $filePath = CommandTestHelper::IMPORT_FILES_DIR . 'ArticleImport.csv';
         $expectedImportedArticles = 2;
 
         $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:import -p {$profile} {$filePath}");
         $consoleOutput = $this->convertOutputToArrayByLineBreak($consoleOutput);
 
-        $resultLineAmount = $this->getRowCountForTable(CommandTestHelper::ARTICLE_TABLE);
+        $resultLineAmount = $this->getRowCountForTable(ProfileDataProvider::ARTICLE_TABLE);
         $importedArticlesAmount = $resultLineAmount - $actualLineAmount;
 
         $this->assertEquals('Using profile: article_profile.', $consoleOutput[0]);
@@ -189,15 +190,15 @@ class ImportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
 
     public function testVariantXmlImport()
     {
-        $actualLineAmount = $this->getRowCountForTable(CommandTestHelper::VARIANT_TABLE);
-        $profile = CommandTestHelper::VARIANT_PROFILE_NAME;
+        $actualLineAmount = $this->getRowCountForTable(ProfileDataProvider::VARIANT_TABLE);
+        $profile = ProfileDataProvider::VARIANT_PROFILE_NAME;
         $filePath = CommandTestHelper::IMPORT_FILES_DIR . 'VariantsImport.xml';
         $expectedImportedVariants = 5;
 
         $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:import -p {$profile} {$filePath}");
         $consoleOutput = $this->convertOutputToArrayByLineBreak($consoleOutput);
 
-        $resultLineAmount = $this->getRowCountForTable(CommandTestHelper::VARIANT_TABLE);
+        $resultLineAmount = $this->getRowCountForTable(ProfileDataProvider::VARIANT_TABLE);
         $importedVariantsAmount = $resultLineAmount - $actualLineAmount;
 
         $this->assertEquals('Using profile: variant_profile.', $consoleOutput[0]);
@@ -208,15 +209,15 @@ class ImportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
 
     public function testVariantCsvImport()
     {
-        $actualLineAmount = $this->getRowCountForTable(CommandTestHelper::VARIANT_TABLE);
-        $profile = CommandTestHelper::VARIANT_PROFILE_NAME;
+        $actualLineAmount = $this->getRowCountForTable(ProfileDataProvider::VARIANT_TABLE);
+        $profile = ProfileDataProvider::VARIANT_PROFILE_NAME;
         $filePath = CommandTestHelper::IMPORT_FILES_DIR . 'VariantsImport.csv';
         $expectedImportedVariants = 5;
 
         $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:import -p {$profile} {$filePath}");
         $consoleOutput = $this->convertOutputToArrayByLineBreak($consoleOutput);
 
-        $resultLineAmount = $this->getRowCountForTable(CommandTestHelper::VARIANT_TABLE);
+        $resultLineAmount = $this->getRowCountForTable(ProfileDataProvider::VARIANT_TABLE);
         $importedVariantsAmount = $resultLineAmount - $actualLineAmount;
 
         $this->assertEquals('Using profile: variant_profile.', $consoleOutput[0]);
@@ -227,7 +228,7 @@ class ImportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
 
     public function testArticleInStockXmlImport()
     {
-        $profile = CommandTestHelper::ARTICLES_INSTOCK_PROFILE_NAME;
+        $profile = ProfileDataProvider::ARTICLES_INSTOCK_PROFILE_NAME;
         $filePath = CommandTestHelper::IMPORT_FILES_DIR . 'ArticleInStockImport.xml';
 
         $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:import -p {$profile} {$filePath}");
@@ -240,7 +241,7 @@ class ImportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
 
     public function testArticleInStockCsvImport()
     {
-        $profile = CommandTestHelper::ARTICLES_INSTOCK_PROFILE_NAME;
+        $profile = ProfileDataProvider::ARTICLES_INSTOCK_PROFILE_NAME;
         $filePath = CommandTestHelper::IMPORT_FILES_DIR . 'ArticleInStockImport.csv';
 
         $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:import -p {$profile} {$filePath}");
@@ -253,7 +254,7 @@ class ImportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
 
     public function testArticlePriceXmlImport()
     {
-        $profile = CommandTestHelper::ARTICLES_PRICES_PROFILE_NAME;
+        $profile = ProfileDataProvider::ARTICLES_PRICES_PROFILE_NAME;
         $filePath = CommandTestHelper::IMPORT_FILES_DIR . 'ArticlePricesImport.xml';
 
         $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:import -p {$profile} {$filePath}");
@@ -266,7 +267,7 @@ class ImportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
 
     public function testArticlePriceCsvImport()
     {
-        $profile = CommandTestHelper::ARTICLES_PRICES_PROFILE_NAME;
+        $profile = ProfileDataProvider::ARTICLES_PRICES_PROFILE_NAME;
         $filePath = CommandTestHelper::IMPORT_FILES_DIR . 'ArticlePricesImport.csv';
 
         $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:import -p {$profile} {$filePath}");
@@ -279,7 +280,7 @@ class ImportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
 
     public function testArticleTranslationXmlImport()
     {
-        $profile = CommandTestHelper::ARTICLES_TRANSLATIONS_PROFILE_NAME;
+        $profile = ProfileDataProvider::ARTICLES_TRANSLATIONS_PROFILE_NAME;
         $filePath = CommandTestHelper::IMPORT_FILES_DIR . 'ArticleTranslationImport.xml';
 
         $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:import -p {$profile} {$filePath}");
@@ -292,7 +293,7 @@ class ImportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
 
     public function testArticleTranslationCsvImport()
     {
-        $profile = CommandTestHelper::ARTICLES_TRANSLATIONS_PROFILE_NAME;
+        $profile = ProfileDataProvider::ARTICLES_TRANSLATIONS_PROFILE_NAME;
         $filePath = CommandTestHelper::IMPORT_FILES_DIR . 'ArticleTranslationImport.csv';
 
         $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:import -p {$profile} {$filePath}");
@@ -305,14 +306,14 @@ class ImportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
 
     public function testOrderXmlImport()
     {
-        $profile = CommandTestHelper::ORDERS_PROFILE_NAME;
+        $profile = ProfileDataProvider::ORDERS_PROFILE_NAME;
         $filePath = CommandTestHelper::IMPORT_FILES_DIR . 'OrderImport.xml';
-        $actualLineAmount = $this->getRowCountForTable(CommandTestHelper::ORDER_TABLE);
+        $actualLineAmount = $this->getRowCountForTable(ProfileDataProvider::ORDER_TABLE);
         $expectedImportedOrders = 0;
 
         $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:import -p {$profile} {$filePath}");
         $consoleOutput = $this->convertOutputToArrayByLineBreak($consoleOutput);
-        $resultLineAmount = $this->getRowCountForTable(CommandTestHelper::ORDER_TABLE);
+        $resultLineAmount = $this->getRowCountForTable(ProfileDataProvider::ORDER_TABLE);
         $importedOrdersAmount = $resultLineAmount - $actualLineAmount;
 
         $this->assertEquals($expectedImportedOrders, $importedOrdersAmount);
@@ -323,14 +324,14 @@ class ImportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
 
     public function testOrderCsvImport()
     {
-        $profile = CommandTestHelper::ORDERS_PROFILE_NAME;
+        $profile = ProfileDataProvider::ORDERS_PROFILE_NAME;
         $filePath = CommandTestHelper::IMPORT_FILES_DIR . 'OrderImport.csv';
-        $actualLineAmount = $this->getRowCountForTable(CommandTestHelper::ORDER_TABLE);
+        $actualLineAmount = $this->getRowCountForTable(ProfileDataProvider::ORDER_TABLE);
         $expectedImportedOrders = 0;
 
         $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:import -p {$profile} {$filePath}");
         $consoleOutput = $this->convertOutputToArrayByLineBreak($consoleOutput);
-        $resultLineAmount = $this->getRowCountForTable(CommandTestHelper::ORDER_TABLE);
+        $resultLineAmount = $this->getRowCountForTable(ProfileDataProvider::ORDER_TABLE);
         $importedOrdersAmount = $resultLineAmount - $actualLineAmount;
 
         $this->assertEquals($expectedImportedOrders, $importedOrdersAmount);
@@ -344,7 +345,7 @@ class ImportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
      */
     public function testMainOrderXmlImport()
     {
-        $profile = CommandTestHelper::IMPORT_MAIN_ORDER_PROFILE_NAME;
+        $profile = ProfileDataProvider::IMPORT_MAIN_ORDER_PROFILE_NAME;
         $filePath = CommandTestHelper::IMPORT_FILES_DIR . 'MainOrderImport.xml';
 
         $this->commandTestHelper->runCommand("sw:importexport:import -p {$profile} {$filePath}");
@@ -355,15 +356,15 @@ class ImportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
      */
     public function testMainOrderCsvImport()
     {
-        $profile = CommandTestHelper::IMPORT_MAIN_ORDER_PROFILE_NAME;
+        $profile = ProfileDataProvider::IMPORT_MAIN_ORDER_PROFILE_NAME;
         $filePath = CommandTestHelper::IMPORT_FILES_DIR . 'MainOrderImport.csv';
 
-        $this->commandTestHelper->runCommand("sw:importexport:import -p {$profile} {$filePath}");
+        $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:import -p {$profile} {$filePath}");
     }
 
     public function testTranslationXmlImport()
     {
-        $profile = CommandTestHelper::TRANSLATIONS_PROFILE_NAME;
+        $profile = ProfileDataProvider::TRANSLATIONS_PROFILE_NAME;
         $filePath = CommandTestHelper::IMPORT_FILES_DIR . 'TranslationImport.xml';
 
         $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:import -p {$profile} {$filePath}");
@@ -376,7 +377,7 @@ class ImportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
 
     public function testTranslationCsvImport()
     {
-        $profile = CommandTestHelper::TRANSLATIONS_PROFILE_NAME;
+        $profile = ProfileDataProvider::TRANSLATIONS_PROFILE_NAME;
         $filePath = CommandTestHelper::IMPORT_FILES_DIR . 'TranslationImport.csv';
 
         $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:import -p {$profile} {$filePath}");
