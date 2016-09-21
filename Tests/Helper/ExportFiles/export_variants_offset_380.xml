@@ -1,0 +1,1293 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Root>
+	<articles>
+		<article>
+	<ordernumber>SW10201.1</ordernumber>
+	<mainnumber>SW10201.2</mainnumber>
+	<name>Artikel mit Standardkonfigurator</name>
+	<additionalText>blau / 36</additionalText>
+	<supplier>Example</supplier>
+	<tax>19.00</tax>
+	<prices>
+		<price>
+			<group>EK</group>
+			<price>20.99</price>
+			<pseudoprice></pseudoprice>
+		</price>
+	</prices>
+	<active>1</active>
+	<instock>0</instock>
+	<stockmin>0</stockmin>
+	<description>Der Standard-Konfigurator bietet die Möglichkeit, die gewünschte Konstellation direkt auszuwählen, ohne nach einer bestimmten Reihenfolge vorzugehen. Alle Gruppen mit den zugehörigen Optionen sind direkt vom Kunden auswählbar.</description>
+	<description_long><![CDATA[<p><strong>Sie sehen hier den Konfigurator "Standard"</strong></p>
+<p>Der Standard-Konfigurator bietet die Möglichkeit, die gewünschte Konstellation direkt auszuwählen, ohne nach einer bestimmten Reihenfolge vorzugehen. Alle Gruppen mit den zugehörigen Optionen sind direkt vom Kunden auswählbar.</p>
+<p>Wird bei diesem Artikel mit Lagerbeständen gearbeitet, so wird der Warenkorb-Button bei einer nicht mehr verfügbaren Konfiguration ausgeblendet.<br /><br /><strong>Hinweis:<br /></strong>Bei diesem Konfigurator-Typ werden generell alle Konstellationen in der Storefront dargestellt. Hierbei spielt es keine Rolle, ob der Artikel aktiv/inaktiv ist. Ebenfalls wird der Artikel angezeigt, wenn der Lagerbestand "0" ist, allerdings natürlich mit der eingestellten erhöhten  Lieferzeit. Um diesen Artikel nicht zum Verkauf anzubieten, muss der Haken in den Stammdaten des Artikel bei "Abverkauf - <em>Lagerbestand beachten"</em> gesetzt werden. Hier in diesem Beispiel haben wir dies bei der Kombination Farbe "blau" und Größe "36" dargestellt.<br /> Wenn Sie dieses Verhalten verhindern möchten, arbeiten Sie je nach Bedarf mit den Typen des Konfigurators <em>Auswahl</em> oder <em>Tabelle</em>.</p>]]></description_long>
+	<shippingtime></shippingtime>
+	<added>2012-07-16</added>
+	<changed>2012-08-30 16:15:54</changed>
+	<releasedate></releasedate>
+	<shippingfree></shippingfree>
+	<topseller></topseller>
+	<metatitle></metatitle>
+	<keywords></keywords>
+	<minpurchase>1</minpurchase>
+	<purchasesteps></purchasesteps>
+	<maxpurchase></maxpurchase>
+	<purchaseunit></purchaseunit>
+	<referenceunit></referenceunit>
+	<packunit></packunit>
+	<unitID></unitID>
+	<pricegroupID></pricegroupID>
+	<pricegroupActive></pricegroupActive>
+	<laststock>1</laststock>
+	<suppliernumber></suppliernumber>
+	<purchaseprice>0</purchaseprice>
+	<weight>0.000</weight>
+	<width></width>
+	<height></height>
+	<length></length>
+	<ean></ean>
+	<configurators>
+		<configurator>
+			<configuratorsetID>25</configuratorsetID>
+			<configuratortype></configuratortype>
+			<configuratorGroup>Farbe</configuratorGroup>
+			<configuratorOptions>blau</configuratorOptions>
+			<configSetName>Set-SW10201</configSetName>
+		</configurator>
+		<configurator>
+			<configuratorsetID>25</configuratorsetID>
+			<configuratortype></configuratortype>
+			<configuratorGroup>Größe</configuratorGroup>
+			<configuratorOptions>36</configuratorOptions>
+			<configSetName>Set-SW10201</configSetName>
+		</configurator>
+	</configurators>
+	<category>
+		<categories>22</categories>
+	</category>
+	<category>
+		<categories>65</categories>
+	</category>
+	<similars>
+		<similar></similar>
+	</similars>
+</article>
+<article>
+	<ordernumber>SW10202.2</ordernumber>
+	<mainnumber>SW10202.1</mainnumber>
+	<name>Artikel mit Auswahlkonfigurator</name>
+	<additionalText>blau / 41/42</additionalText>
+	<supplier>Example</supplier>
+	<tax>19.00</tax>
+	<prices>
+		<price>
+			<group>EK</group>
+			<price>89</price>
+			<pseudoprice></pseudoprice>
+		</price>
+	</prices>
+	<active>1</active>
+	<instock>0</instock>
+	<stockmin>0</stockmin>
+	<description>Anders als beim Standard-Konfigurator muss beim Auswahl-Konfigurator die Reihenfolge Step by Step durchgeführt werden. Sobald man die erste Auswahl getroffen hat, wird die zweite Auswahlbox aktiv geschaltet. Erst wenn der Kunde seine letzte Auswahl getroffen hat, wird der Warenkorb-Button sichtbar.</description>
+	<description_long><![CDATA[<p><strong>Sie sehen hier den "Auswahlkonfigurator"</strong><br />Anders als beim Standard-Konfigurator muss beim Auswahl-Konfigurator die Reihenfolge Step by Step durchgeführt werden. Sobald man die erste Auswahl getroffen hat, wird die zweite Auswahlbox aktiv geschaltet. Erst wenn der Kunde seine letzte Auswahl getroffen hat, wird der Warenkorb-Button sichtbar.</p>
+<p><strong>Hinweis:</strong><br />Ebenfalls wird der Artikel angezeigt, wenn der Lagerbestand "0" ist, allerdings natürlich mit der eingestellten erhöhten Lieferzeit.Wird bei diesem Artikel mit der Abverkaufsfunktion gearbeitet, so kann die Variante mit dem Lagerbestand "0" nicht mehr ausgewählt werden. Hier in diesem Beispiel haben wir dies bei der Kombination Farbe "blau" und Größe "41/42" dargestellt.</p>]]></description_long>
+	<shippingtime></shippingtime>
+	<added>2012-06-22</added>
+	<changed>2012-08-30 16:12:44</changed>
+	<releasedate></releasedate>
+	<shippingfree></shippingfree>
+	<topseller></topseller>
+	<metatitle></metatitle>
+	<keywords></keywords>
+	<minpurchase>1</minpurchase>
+	<purchasesteps></purchasesteps>
+	<maxpurchase></maxpurchase>
+	<purchaseunit></purchaseunit>
+	<referenceunit></referenceunit>
+	<packunit></packunit>
+	<unitID></unitID>
+	<pricegroupID></pricegroupID>
+	<pricegroupActive></pricegroupActive>
+	<laststock>1</laststock>
+	<suppliernumber></suppliernumber>
+	<purchaseprice>0</purchaseprice>
+	<weight>0.000</weight>
+	<width></width>
+	<height></height>
+	<length></length>
+	<ean></ean>
+	<configurators>
+		<configurator>
+			<configuratorsetID>26</configuratorsetID>
+			<configuratortype>1</configuratortype>
+			<configuratorGroup>Farbe</configuratorGroup>
+			<configuratorOptions>blau</configuratorOptions>
+			<configSetName>Set-SW10202</configSetName>
+		</configurator>
+		<configurator>
+			<configuratorsetID>26</configuratorsetID>
+			<configuratortype>1</configuratortype>
+			<configuratorGroup>Größe</configuratorGroup>
+			<configuratorOptions>41/42</configuratorOptions>
+			<configSetName>Set-SW10202</configSetName>
+		</configurator>
+	</configurators>
+	<category>
+		<categories>22</categories>
+	</category>
+	<category>
+		<categories>65</categories>
+	</category>
+	<similars>
+		<similar></similar>
+	</similars>
+</article>
+<article>
+	<ordernumber>SW10203.2</ordernumber>
+	<mainnumber>SW10203.1</mainnumber>
+	<name>Artikel mit Tabellenkonfigurator</name>
+	<additionalText>blau / M</additionalText>
+	<supplier>Example</supplier>
+	<tax>19.00</tax>
+	<prices>
+		<price>
+			<group>EK</group>
+			<price>15</price>
+			<pseudoprice></pseudoprice>
+		</price>
+	</prices>
+	<active>1</active>
+	<instock>0</instock>
+	<stockmin>0</stockmin>
+	<description>Mit dieser Konfigurator-Art bekommt der Kunde Ihre Auswahlmöglichkeiten in einer Tabellenform dargestellt. Der Kunde sieht auf einem Blick welche Optionen wählbar sind und welche Option wieviel kostet.</description>
+	<description_long><![CDATA[<p><strong>Sie sehen hier die Konfigurator-Art "Tabelle"</strong><br />Mit dieser Konfigurator-Art bekommt der Kunde Ihre Auswahlmöglichkeiten in einer Tabellenform dargestellt. Der Kunde sieht auf einem Blick welche Optionen wählbar sind und welche Option wieviel kostet.<br /><strong>Hinweis:</strong> Die Tabellendarstellung funktioniert nur mit genau 2 angelegten Konfigurator-Gruppen(Tabelle: X- und Y-Achse). Wenn Sie mit Preisgruppen arbeiten und Staffelpreise definiert haben, so werden die Staffelpreise nicht wie bei den anderen Konfigurator-Arten oben als Tabelle angezeigt. Die Seite wird bei der Auswahl von einer Option nicht automatisch aktualisiert. Wir empfehlen bei solchen Fällen mit einer anderen Konfigurator-Art zu arbeiten.<br /><br /><strong>Hinweis:</strong> Wenn Sie die Einstellung "Lagerbestände beachten" aktiviert haben, wird die betroffene Option, wo der Lagerbestand den Wert "0" erreicht hat, einfach nicht mehr auswählbar. In diesem Beispiel bei der Farbe "blau" und der Größe "M"</p>]]></description_long>
+	<shippingtime></shippingtime>
+	<added>2012-07-16</added>
+	<changed>2012-08-30 16:08:58</changed>
+	<releasedate></releasedate>
+	<shippingfree></shippingfree>
+	<topseller></topseller>
+	<metatitle></metatitle>
+	<keywords></keywords>
+	<minpurchase>1</minpurchase>
+	<purchasesteps></purchasesteps>
+	<maxpurchase></maxpurchase>
+	<purchaseunit></purchaseunit>
+	<referenceunit></referenceunit>
+	<packunit></packunit>
+	<unitID></unitID>
+	<pricegroupID></pricegroupID>
+	<pricegroupActive></pricegroupActive>
+	<laststock>1</laststock>
+	<suppliernumber></suppliernumber>
+	<purchaseprice>0</purchaseprice>
+	<weight>0.000</weight>
+	<width></width>
+	<height></height>
+	<length></length>
+	<ean></ean>
+	<configurators>
+		<configurator>
+			<configuratorsetID>27</configuratorsetID>
+			<configuratortype>2</configuratortype>
+			<configuratorGroup>Farbe</configuratorGroup>
+			<configuratorOptions>blau</configuratorOptions>
+			<configSetName>Set-SW10203</configSetName>
+		</configurator>
+		<configurator>
+			<configuratorsetID>27</configuratorsetID>
+			<configuratortype>2</configuratortype>
+			<configuratorGroup>Größe</configuratorGroup>
+			<configuratorOptions>M</configuratorOptions>
+			<configSetName>Set-SW10203</configSetName>
+		</configurator>
+	</configurators>
+	<category>
+		<categories>22</categories>
+	</category>
+	<category>
+		<categories>65</categories>
+	</category>
+	<similars>
+		<similar></similar>
+	</similars>
+</article>
+<article>
+	<ordernumber>SW10204.9</ordernumber>
+	<mainnumber>SW10204.1</mainnumber>
+	<name>Artikel mit Aufpreiskonfigurator</name>
+	<additionalText>ohne / ohne</additionalText>
+	<supplier>Example</supplier>
+	<tax>19.00</tax>
+	<prices>
+		<price>
+			<group>EK</group>
+			<price>119</price>
+			<pseudoprice></pseudoprice>
+		</price>
+	</prices>
+	<active>1</active>
+	<instock>45</instock>
+	<stockmin>0</stockmin>
+	<description>Die Verbindung von Konfigurator und Zubehörfunktion eröffnet Ihnen neue Möglichkeiten. Jetzt können Ihre Kunden sich nicht nur ein Produkt nach eigenen Wünschen zusammen stellen, sie können es auch noch direkt um weiteres Zubehör ergänzen und die gesamte Auswahl mit einem einzigen Mausklick in den Warenkorb legen.</description>
+	<description_long><![CDATA[<p>Die Verbindung von Konfigurator und Zubehörfunktion eröffnet Ihnen neue Möglichkeiten. Jetzt können Ihre Kunden sich nicht nur ein Produkt nach eigenen Wünschen zusammen stellen, sie können es auch noch direkt um weiteres Zubehör ergänzen und die gesamte Auswahl mit einem einzigen Mausklick in den Warenkorb legen.</p>]]></description_long>
+	<shippingtime></shippingtime>
+	<added>2012-06-22</added>
+	<changed>2012-08-22 14:48:11</changed>
+	<releasedate></releasedate>
+	<shippingfree></shippingfree>
+	<topseller></topseller>
+	<metatitle></metatitle>
+	<keywords></keywords>
+	<minpurchase>1</minpurchase>
+	<purchasesteps></purchasesteps>
+	<maxpurchase></maxpurchase>
+	<purchaseunit></purchaseunit>
+	<referenceunit></referenceunit>
+	<packunit></packunit>
+	<unitID></unitID>
+	<pricegroupID></pricegroupID>
+	<pricegroupActive></pricegroupActive>
+	<laststock></laststock>
+	<suppliernumber></suppliernumber>
+	<purchaseprice>0</purchaseprice>
+	<weight>0.000</weight>
+	<width></width>
+	<height></height>
+	<length></length>
+	<ean></ean>
+	<configurators>
+		<configurator>
+			<configuratorsetID>28</configuratorsetID>
+			<configuratortype></configuratortype>
+			<configuratorGroup>mit Ersatzteilen</configuratorGroup>
+			<configuratorOptions>ohne</configuratorOptions>
+			<configSetName>Set-SW10204</configSetName>
+		</configurator>
+		<configurator>
+			<configuratorsetID>28</configuratorsetID>
+			<configuratortype></configuratortype>
+			<configuratorGroup>Garantieverlängerung</configuratorGroup>
+			<configuratorOptions>ohne</configuratorOptions>
+			<configSetName>Set-SW10204</configSetName>
+		</configurator>
+	</configurators>
+	<category>
+		<categories>22</categories>
+	</category>
+	<category>
+		<categories>65</categories>
+	</category>
+	<similars>
+		<similar></similar>
+	</similars>
+</article>
+<article>
+	<ordernumber>SW10204.10</ordernumber>
+	<mainnumber>SW10204.1</mainnumber>
+	<name>Artikel mit Aufpreiskonfigurator</name>
+	<additionalText>mit Figuren / ohne</additionalText>
+	<supplier>Example</supplier>
+	<tax>19.00</tax>
+	<prices>
+		<price>
+			<group>EK</group>
+			<price>148.75</price>
+			<pseudoprice></pseudoprice>
+		</price>
+	</prices>
+	<active>1</active>
+	<instock>45</instock>
+	<stockmin>0</stockmin>
+	<description>Die Verbindung von Konfigurator und Zubehörfunktion eröffnet Ihnen neue Möglichkeiten. Jetzt können Ihre Kunden sich nicht nur ein Produkt nach eigenen Wünschen zusammen stellen, sie können es auch noch direkt um weiteres Zubehör ergänzen und die gesamte Auswahl mit einem einzigen Mausklick in den Warenkorb legen.</description>
+	<description_long><![CDATA[<p>Die Verbindung von Konfigurator und Zubehörfunktion eröffnet Ihnen neue Möglichkeiten. Jetzt können Ihre Kunden sich nicht nur ein Produkt nach eigenen Wünschen zusammen stellen, sie können es auch noch direkt um weiteres Zubehör ergänzen und die gesamte Auswahl mit einem einzigen Mausklick in den Warenkorb legen.</p>]]></description_long>
+	<shippingtime></shippingtime>
+	<added>2012-06-22</added>
+	<changed>2012-08-22 14:48:11</changed>
+	<releasedate></releasedate>
+	<shippingfree></shippingfree>
+	<topseller></topseller>
+	<metatitle></metatitle>
+	<keywords></keywords>
+	<minpurchase>1</minpurchase>
+	<purchasesteps></purchasesteps>
+	<maxpurchase></maxpurchase>
+	<purchaseunit></purchaseunit>
+	<referenceunit></referenceunit>
+	<packunit></packunit>
+	<unitID></unitID>
+	<pricegroupID></pricegroupID>
+	<pricegroupActive></pricegroupActive>
+	<laststock></laststock>
+	<suppliernumber></suppliernumber>
+	<purchaseprice>0</purchaseprice>
+	<weight>0.000</weight>
+	<width></width>
+	<height></height>
+	<length></length>
+	<ean></ean>
+	<configurators>
+		<configurator>
+			<configuratorsetID>28</configuratorsetID>
+			<configuratortype></configuratortype>
+			<configuratorGroup>mit Ersatzteilen</configuratorGroup>
+			<configuratorOptions>mit Figuren</configuratorOptions>
+			<configSetName>Set-SW10204</configSetName>
+		</configurator>
+		<configurator>
+			<configuratorsetID>28</configuratorsetID>
+			<configuratortype></configuratortype>
+			<configuratorGroup>Garantieverlängerung</configuratorGroup>
+			<configuratorOptions>ohne</configuratorOptions>
+			<configSetName>Set-SW10204</configSetName>
+		</configurator>
+	</configurators>
+	<category>
+		<categories>22</categories>
+	</category>
+	<category>
+		<categories>65</categories>
+	</category>
+	<similars>
+		<similar></similar>
+	</similars>
+</article>
+<article>
+	<ordernumber>SW10204.11</ordernumber>
+	<mainnumber>SW10204.1</mainnumber>
+	<name>Artikel mit Aufpreiskonfigurator</name>
+	<additionalText>mit Figuren und Ball-Set / ohne</additionalText>
+	<supplier>Example</supplier>
+	<tax>19.00</tax>
+	<prices>
+		<price>
+			<group>EK</group>
+			<price>160.65</price>
+			<pseudoprice></pseudoprice>
+		</price>
+	</prices>
+	<active>1</active>
+	<instock>45</instock>
+	<stockmin>0</stockmin>
+	<description>Die Verbindung von Konfigurator und Zubehörfunktion eröffnet Ihnen neue Möglichkeiten. Jetzt können Ihre Kunden sich nicht nur ein Produkt nach eigenen Wünschen zusammen stellen, sie können es auch noch direkt um weiteres Zubehör ergänzen und die gesamte Auswahl mit einem einzigen Mausklick in den Warenkorb legen.</description>
+	<description_long><![CDATA[<p>Die Verbindung von Konfigurator und Zubehörfunktion eröffnet Ihnen neue Möglichkeiten. Jetzt können Ihre Kunden sich nicht nur ein Produkt nach eigenen Wünschen zusammen stellen, sie können es auch noch direkt um weiteres Zubehör ergänzen und die gesamte Auswahl mit einem einzigen Mausklick in den Warenkorb legen.</p>]]></description_long>
+	<shippingtime></shippingtime>
+	<added>2012-06-22</added>
+	<changed>2012-08-22 14:48:11</changed>
+	<releasedate></releasedate>
+	<shippingfree></shippingfree>
+	<topseller></topseller>
+	<metatitle></metatitle>
+	<keywords></keywords>
+	<minpurchase>1</minpurchase>
+	<purchasesteps></purchasesteps>
+	<maxpurchase></maxpurchase>
+	<purchaseunit></purchaseunit>
+	<referenceunit></referenceunit>
+	<packunit></packunit>
+	<unitID></unitID>
+	<pricegroupID></pricegroupID>
+	<pricegroupActive></pricegroupActive>
+	<laststock></laststock>
+	<suppliernumber></suppliernumber>
+	<purchaseprice>0</purchaseprice>
+	<weight>0.000</weight>
+	<width></width>
+	<height></height>
+	<length></length>
+	<ean></ean>
+	<configurators>
+		<configurator>
+			<configuratorsetID>28</configuratorsetID>
+			<configuratortype></configuratortype>
+			<configuratorGroup>mit Ersatzteilen</configuratorGroup>
+			<configuratorOptions>mit Figuren und Ball-Set</configuratorOptions>
+			<configSetName>Set-SW10204</configSetName>
+		</configurator>
+		<configurator>
+			<configuratorsetID>28</configuratorsetID>
+			<configuratortype></configuratortype>
+			<configuratorGroup>Garantieverlängerung</configuratorGroup>
+			<configuratorOptions>ohne</configuratorOptions>
+			<configSetName>Set-SW10204</configSetName>
+		</configurator>
+	</configurators>
+	<category>
+		<categories>22</categories>
+	</category>
+	<category>
+		<categories>65</categories>
+	</category>
+	<similars>
+		<similar></similar>
+	</similars>
+</article>
+<article>
+	<ordernumber>SW10204.12</ordernumber>
+	<mainnumber>SW10204.1</mainnumber>
+	<name>Artikel mit Aufpreiskonfigurator</name>
+	<additionalText>mit Figuren, Ball-Set und Service Box / ohne</additionalText>
+	<supplier>Example</supplier>
+	<tax>19.00</tax>
+	<prices>
+		<price>
+			<group>EK</group>
+			<price>172.55</price>
+			<pseudoprice></pseudoprice>
+		</price>
+	</prices>
+	<active>1</active>
+	<instock>45</instock>
+	<stockmin>0</stockmin>
+	<description>Die Verbindung von Konfigurator und Zubehörfunktion eröffnet Ihnen neue Möglichkeiten. Jetzt können Ihre Kunden sich nicht nur ein Produkt nach eigenen Wünschen zusammen stellen, sie können es auch noch direkt um weiteres Zubehör ergänzen und die gesamte Auswahl mit einem einzigen Mausklick in den Warenkorb legen.</description>
+	<description_long><![CDATA[<p>Die Verbindung von Konfigurator und Zubehörfunktion eröffnet Ihnen neue Möglichkeiten. Jetzt können Ihre Kunden sich nicht nur ein Produkt nach eigenen Wünschen zusammen stellen, sie können es auch noch direkt um weiteres Zubehör ergänzen und die gesamte Auswahl mit einem einzigen Mausklick in den Warenkorb legen.</p>]]></description_long>
+	<shippingtime></shippingtime>
+	<added>2012-06-22</added>
+	<changed>2012-08-22 14:48:11</changed>
+	<releasedate></releasedate>
+	<shippingfree></shippingfree>
+	<topseller></topseller>
+	<metatitle></metatitle>
+	<keywords></keywords>
+	<minpurchase>1</minpurchase>
+	<purchasesteps></purchasesteps>
+	<maxpurchase></maxpurchase>
+	<purchaseunit></purchaseunit>
+	<referenceunit></referenceunit>
+	<packunit></packunit>
+	<unitID></unitID>
+	<pricegroupID></pricegroupID>
+	<pricegroupActive></pricegroupActive>
+	<laststock></laststock>
+	<suppliernumber></suppliernumber>
+	<purchaseprice>0</purchaseprice>
+	<weight>0.000</weight>
+	<width></width>
+	<height></height>
+	<length></length>
+	<ean></ean>
+	<configurators>
+		<configurator>
+			<configuratorsetID>28</configuratorsetID>
+			<configuratortype></configuratortype>
+			<configuratorGroup>mit Ersatzteilen</configuratorGroup>
+			<configuratorOptions>mit Figuren, Ball-Set und Service Box</configuratorOptions>
+			<configSetName>Set-SW10204</configSetName>
+		</configurator>
+		<configurator>
+			<configuratorsetID>28</configuratorsetID>
+			<configuratortype></configuratortype>
+			<configuratorGroup>Garantieverlängerung</configuratorGroup>
+			<configuratorOptions>ohne</configuratorOptions>
+			<configSetName>Set-SW10204</configSetName>
+		</configurator>
+	</configurators>
+	<category>
+		<categories>22</categories>
+	</category>
+	<category>
+		<categories>65</categories>
+	</category>
+	<similars>
+		<similar></similar>
+	</similars>
+</article>
+<article>
+	<ordernumber>SW10205.1</ordernumber>
+	<mainnumber>SW10205.3</mainnumber>
+	<name>Artikel mit Grundpreisberechnung</name>
+	<additionalText>1,5 Liter</additionalText>
+	<supplier>Example</supplier>
+	<tax>19.00</tax>
+	<prices>
+		<price>
+			<group>EK</group>
+			<price>130</price>
+			<pseudoprice></pseudoprice>
+		</price>
+	</prices>
+	<active>1</active>
+	<instock>64</instock>
+	<stockmin>0</stockmin>
+	<description>In diesem Beispiel zeigen wir einen Artikel mit Bezugspreisen. Sie können schon im Standard jedem Artikel auch Bezugspreise zuordnen. So wird z.B. für eine Flasche  automatisch der Grundpreis für 1 Liter ausgewiesen. Die Verpackungseinheit kann bspw. als Flasche angegeben werden. Diese Grundpreisberechnung kann für jede Variante beliebig hinterlegt werden.</description>
+	<description_long><![CDATA[<p>In diesem Beispiel zeigen wir einen Artikel mit Bezugspreisen. Sie können schon im Standard jedem Artikel auch Bezugspreise zuordnen. So wird z.B. für eine Flasche  automatisch der Grundpreis für 1 Liter ausgewiesen. Die Verpackungseinheit kann bspw. als Flasche angegeben werden. Diese Grundpreisberechnung kann für jede Variante beliebig hinterlegt werden.</p>]]></description_long>
+	<shippingtime></shippingtime>
+	<added>2012-07-16</added>
+	<changed>2012-08-22 15:15:44</changed>
+	<releasedate></releasedate>
+	<shippingfree></shippingfree>
+	<topseller></topseller>
+	<metatitle></metatitle>
+	<keywords></keywords>
+	<minpurchase>1</minpurchase>
+	<purchasesteps></purchasesteps>
+	<maxpurchase></maxpurchase>
+	<purchaseunit>1.5000</purchaseunit>
+	<referenceunit>1.000</referenceunit>
+	<packunit>Flaschen(n)</packunit>
+	<unitID>1</unitID>
+	<pricegroupID></pricegroupID>
+	<pricegroupActive></pricegroupActive>
+	<laststock></laststock>
+	<suppliernumber></suppliernumber>
+	<purchaseprice>0</purchaseprice>
+	<weight>0.000</weight>
+	<width></width>
+	<height></height>
+	<length></length>
+	<ean></ean>
+	<configurators>
+		<configurator>
+			<configuratorsetID>29</configuratorsetID>
+			<configuratortype></configuratortype>
+			<configuratorGroup>Flascheninhalt</configuratorGroup>
+			<configuratorOptions>1,5 Liter</configuratorOptions>
+			<configSetName>Set-SW10205</configSetName>
+		</configurator>
+	</configurators>
+	<category>
+		<categories>23</categories>
+	</category>
+	<category>
+		<categories>73</categories>
+	</category>
+	<similars>
+		<similar></similar>
+	</similars>
+</article>
+<article>
+	<ordernumber>SW10205.2</ordernumber>
+	<mainnumber>SW10205.3</mainnumber>
+	<name>Artikel mit Grundpreisberechnung</name>
+	<additionalText>5 Liter</additionalText>
+	<supplier>Example</supplier>
+	<tax>19.00</tax>
+	<prices>
+		<price>
+			<group>EK</group>
+			<price>400</price>
+			<pseudoprice></pseudoprice>
+		</price>
+	</prices>
+	<active>1</active>
+	<instock>64</instock>
+	<stockmin>0</stockmin>
+	<description>In diesem Beispiel zeigen wir einen Artikel mit Bezugspreisen. Sie können schon im Standard jedem Artikel auch Bezugspreise zuordnen. So wird z.B. für eine Flasche  automatisch der Grundpreis für 1 Liter ausgewiesen. Die Verpackungseinheit kann bspw. als Flasche angegeben werden. Diese Grundpreisberechnung kann für jede Variante beliebig hinterlegt werden.</description>
+	<description_long><![CDATA[<p>In diesem Beispiel zeigen wir einen Artikel mit Bezugspreisen. Sie können schon im Standard jedem Artikel auch Bezugspreise zuordnen. So wird z.B. für eine Flasche  automatisch der Grundpreis für 1 Liter ausgewiesen. Die Verpackungseinheit kann bspw. als Flasche angegeben werden. Diese Grundpreisberechnung kann für jede Variante beliebig hinterlegt werden.</p>]]></description_long>
+	<shippingtime></shippingtime>
+	<added>2012-07-16</added>
+	<changed>2012-08-22 15:15:44</changed>
+	<releasedate></releasedate>
+	<shippingfree></shippingfree>
+	<topseller></topseller>
+	<metatitle></metatitle>
+	<keywords></keywords>
+	<minpurchase>1</minpurchase>
+	<purchasesteps></purchasesteps>
+	<maxpurchase></maxpurchase>
+	<purchaseunit>5.0000</purchaseunit>
+	<referenceunit>1.000</referenceunit>
+	<packunit>Flaschen(n)</packunit>
+	<unitID>1</unitID>
+	<pricegroupID></pricegroupID>
+	<pricegroupActive></pricegroupActive>
+	<laststock></laststock>
+	<suppliernumber></suppliernumber>
+	<purchaseprice>0</purchaseprice>
+	<weight>0.000</weight>
+	<width></width>
+	<height></height>
+	<length></length>
+	<ean></ean>
+	<configurators>
+		<configurator>
+			<configuratorsetID>29</configuratorsetID>
+			<configuratortype></configuratortype>
+			<configuratorGroup>Flascheninhalt</configuratorGroup>
+			<configuratorOptions>5 Liter</configuratorOptions>
+			<configSetName>Set-SW10205</configSetName>
+		</configurator>
+	</configurators>
+	<category>
+		<categories>23</categories>
+	</category>
+	<category>
+		<categories>73</categories>
+	</category>
+	<similars>
+		<similar></similar>
+	</similars>
+</article>
+<article>
+	<ordernumber>SW10212.2</ordernumber>
+	<mainnumber>SW10212.1</mainnumber>
+	<name>All Natural - Rosemary Grapefruit Conditioner</name>
+	<additionalText>500ml</additionalText>
+	<supplier>stop the water while using me</supplier>
+	<tax>19.00</tax>
+	<prices>
+		<price>
+			<group>EK</group>
+			<price>29.9</price>
+			<pseudoprice></pseudoprice>
+		</price>
+	</prices>
+	<active>1</active>
+	<instock>100</instock>
+	<stockmin>0</stockmin>
+	<description>Recolo Primum scutum Permoveo. Hoc erumpo Munimen, qui excedo retrogradior.Sem flagro Porro amor Falx hoc Mic.</description>
+	<description_long><![CDATA[<p>R Lamnia multimodus ludicrum effero alea, tutela Plumbeus sive edo res Ferocitas ira, vis esca pluma liber mel Erga sis Traba subcriptio lumen In nixus sto Commodum nam Proterus Ferocia hoc Volatilis Laudator, minuo jugulo Litigo fartor Cariosus, mos ivi Tractus, his ita eia Causa semino, recolo Primum scutum Permoveo. Hoc erumpo Munimen, qui excedo retrogradior.Sem flagro Porro amor Falx hoc Mic.</p>]]></description_long>
+	<shippingtime></shippingtime>
+	<added>2012-08-29</added>
+	<changed>2012-08-29 15:44:22</changed>
+	<releasedate></releasedate>
+	<shippingfree></shippingfree>
+	<topseller></topseller>
+	<metatitle></metatitle>
+	<keywords></keywords>
+	<minpurchase>1</minpurchase>
+	<purchasesteps></purchasesteps>
+	<maxpurchase></maxpurchase>
+	<purchaseunit>500.0000</purchaseunit>
+	<referenceunit>100.000</referenceunit>
+	<packunit></packunit>
+	<unitID>10</unitID>
+	<pricegroupID></pricegroupID>
+	<pricegroupActive></pricegroupActive>
+	<laststock></laststock>
+	<suppliernumber></suppliernumber>
+	<purchaseprice>0</purchaseprice>
+	<weight>0.000</weight>
+	<width></width>
+	<height></height>
+	<length></length>
+	<ean></ean>
+	<configurators>
+		<configurator>
+			<configuratorsetID>30</configuratorsetID>
+			<configuratortype></configuratortype>
+			<configuratorGroup>Inhalt</configuratorGroup>
+			<configuratorOptions>500ml</configuratorOptions>
+			<configSetName>stop the water</configSetName>
+		</configurator>
+	</configurators>
+	<category>
+		<categories>35</categories>
+	</category>
+	<similars>
+		<similar></similar>
+	</similars>
+</article>
+<article>
+	<ordernumber>SW10212.3</ordernumber>
+	<mainnumber>SW10212.1</mainnumber>
+	<name>All Natural - Rosemary Grapefruit Conditioner</name>
+	<additionalText>5l</additionalText>
+	<supplier>stop the water while using me</supplier>
+	<tax>19.00</tax>
+	<prices>
+		<price>
+			<group>EK</group>
+			<price>270</price>
+			<pseudoprice></pseudoprice>
+		</price>
+	</prices>
+	<active>1</active>
+	<instock>100</instock>
+	<stockmin>0</stockmin>
+	<description>Recolo Primum scutum Permoveo. Hoc erumpo Munimen, qui excedo retrogradior.Sem flagro Porro amor Falx hoc Mic.</description>
+	<description_long><![CDATA[<p>R Lamnia multimodus ludicrum effero alea, tutela Plumbeus sive edo res Ferocitas ira, vis esca pluma liber mel Erga sis Traba subcriptio lumen In nixus sto Commodum nam Proterus Ferocia hoc Volatilis Laudator, minuo jugulo Litigo fartor Cariosus, mos ivi Tractus, his ita eia Causa semino, recolo Primum scutum Permoveo. Hoc erumpo Munimen, qui excedo retrogradior.Sem flagro Porro amor Falx hoc Mic.</p>]]></description_long>
+	<shippingtime></shippingtime>
+	<added>2012-08-29</added>
+	<changed>2012-08-29 15:44:22</changed>
+	<releasedate></releasedate>
+	<shippingfree></shippingfree>
+	<topseller></topseller>
+	<metatitle></metatitle>
+	<keywords></keywords>
+	<minpurchase>1</minpurchase>
+	<purchasesteps></purchasesteps>
+	<maxpurchase></maxpurchase>
+	<purchaseunit>5.0000</purchaseunit>
+	<referenceunit>1.000</referenceunit>
+	<packunit></packunit>
+	<unitID>1</unitID>
+	<pricegroupID></pricegroupID>
+	<pricegroupActive></pricegroupActive>
+	<laststock></laststock>
+	<suppliernumber></suppliernumber>
+	<purchaseprice>0</purchaseprice>
+	<weight>0.000</weight>
+	<width></width>
+	<height></height>
+	<length></length>
+	<ean></ean>
+	<configurators>
+		<configurator>
+			<configuratorsetID>30</configuratorsetID>
+			<configuratortype></configuratortype>
+			<configuratorGroup>Inhalt</configuratorGroup>
+			<configuratorOptions>5l</configuratorOptions>
+			<configSetName>stop the water</configSetName>
+		</configurator>
+	</configurators>
+	<category>
+		<categories>35</categories>
+	</category>
+	<similars>
+		<similar></similar>
+	</similars>
+</article>
+<article>
+	<ordernumber>SW10213.2</ordernumber>
+	<mainnumber>SW10213.1</mainnumber>
+	<name>All Natural - Rosemary Grapefruit Shampoo</name>
+	<additionalText>500ml</additionalText>
+	<supplier>stop the water while using me</supplier>
+	<tax>19.00</tax>
+	<prices>
+		<price>
+			<group>EK</group>
+			<price>24.9</price>
+			<pseudoprice></pseudoprice>
+		</price>
+	</prices>
+	<active>1</active>
+	<instock>55</instock>
+	<stockmin>0</stockmin>
+	<description>Te ipse hae pestilencia bonus par Res ala Recessus to Per Gemo to laboriosus nos rixa no ius quin. Ut ymo pax compacta sociu.</description>
+	<description_long><![CDATA[<p>Dicatio grate. Quia sal loco Pareo in Jacio capulatio si inhalo laus aut faveo Obscoena Sublime quartus pax sollicito Regina, item spera si candeo. Inflo honor saepe audeo poena Honesto, vere ager alius hic Hic, non Ico se rego eia Tornacense res Relucesco cum Piper vacuus. Te ipse hae pestilencia bonus par Res ala Recessus to Per Gemo to laboriosus nos rixa no ius quin. Ut ymo pax compacta sociu.</p>]]></description_long>
+	<shippingtime></shippingtime>
+	<added>2012-08-29</added>
+	<changed>2012-08-29 15:47:13</changed>
+	<releasedate></releasedate>
+	<shippingfree></shippingfree>
+	<topseller></topseller>
+	<metatitle></metatitle>
+	<keywords></keywords>
+	<minpurchase>1</minpurchase>
+	<purchasesteps></purchasesteps>
+	<maxpurchase></maxpurchase>
+	<purchaseunit>500.0000</purchaseunit>
+	<referenceunit>100.000</referenceunit>
+	<packunit></packunit>
+	<unitID>10</unitID>
+	<pricegroupID></pricegroupID>
+	<pricegroupActive></pricegroupActive>
+	<laststock></laststock>
+	<suppliernumber></suppliernumber>
+	<purchaseprice>0</purchaseprice>
+	<weight>0.000</weight>
+	<width></width>
+	<height></height>
+	<length></length>
+	<ean></ean>
+	<configurators>
+		<configurator>
+			<configuratorsetID>31</configuratorsetID>
+			<configuratortype></configuratortype>
+			<configuratorGroup>Inhalt</configuratorGroup>
+			<configuratorOptions>500ml</configuratorOptions>
+			<configSetName>Set-SW10213</configSetName>
+		</configurator>
+	</configurators>
+	<category>
+		<categories>35</categories>
+	</category>
+	<similars>
+		<similar></similar>
+	</similars>
+</article>
+<article>
+	<ordernumber>SW10213.3</ordernumber>
+	<mainnumber>SW10213.1</mainnumber>
+	<name>All Natural - Rosemary Grapefruit Shampoo</name>
+	<additionalText>5l</additionalText>
+	<supplier>stop the water while using me</supplier>
+	<tax>19.00</tax>
+	<prices>
+		<price>
+			<group>EK</group>
+			<price>190</price>
+			<pseudoprice></pseudoprice>
+		</price>
+	</prices>
+	<active>1</active>
+	<instock>55</instock>
+	<stockmin>0</stockmin>
+	<description>Te ipse hae pestilencia bonus par Res ala Recessus to Per Gemo to laboriosus nos rixa no ius quin. Ut ymo pax compacta sociu.</description>
+	<description_long><![CDATA[<p>Dicatio grate. Quia sal loco Pareo in Jacio capulatio si inhalo laus aut faveo Obscoena Sublime quartus pax sollicito Regina, item spera si candeo. Inflo honor saepe audeo poena Honesto, vere ager alius hic Hic, non Ico se rego eia Tornacense res Relucesco cum Piper vacuus. Te ipse hae pestilencia bonus par Res ala Recessus to Per Gemo to laboriosus nos rixa no ius quin. Ut ymo pax compacta sociu.</p>]]></description_long>
+	<shippingtime></shippingtime>
+	<added>2012-08-29</added>
+	<changed>2012-08-29 15:47:13</changed>
+	<releasedate></releasedate>
+	<shippingfree></shippingfree>
+	<topseller></topseller>
+	<metatitle></metatitle>
+	<keywords></keywords>
+	<minpurchase>1</minpurchase>
+	<purchasesteps></purchasesteps>
+	<maxpurchase></maxpurchase>
+	<purchaseunit>5.0000</purchaseunit>
+	<referenceunit>1.000</referenceunit>
+	<packunit></packunit>
+	<unitID>1</unitID>
+	<pricegroupID></pricegroupID>
+	<pricegroupActive></pricegroupActive>
+	<laststock></laststock>
+	<suppliernumber></suppliernumber>
+	<purchaseprice>0</purchaseprice>
+	<weight>0.000</weight>
+	<width></width>
+	<height></height>
+	<length></length>
+	<ean></ean>
+	<configurators>
+		<configurator>
+			<configuratorsetID>31</configuratorsetID>
+			<configuratortype></configuratortype>
+			<configuratorGroup>Inhalt</configuratorGroup>
+			<configuratorOptions>5l</configuratorOptions>
+			<configSetName>Set-SW10213</configSetName>
+		</configurator>
+	</configurators>
+	<category>
+		<categories>35</categories>
+	</category>
+	<similars>
+		<similar></similar>
+	</similars>
+</article>
+<article>
+	<ordernumber>SW10214.2</ordernumber>
+	<mainnumber>SW10214.1</mainnumber>
+	<name>All Natural - Sesame Sage Bodylotion</name>
+	<additionalText>500ml</additionalText>
+	<supplier>stop the water while using me</supplier>
+	<tax>19.00</tax>
+	<prices>
+		<price>
+			<group>EK</group>
+			<price>21.4</price>
+			<pseudoprice></pseudoprice>
+		</price>
+	</prices>
+	<active>1</active>
+	<instock>66</instock>
+	<stockmin>0</stockmin>
+	<description> fuga Ingens res Ut no facultas, res post flagitiosa perspicuus in eveho lacrimabilis Namucense.</description>
+	<description_long><![CDATA[<p>subringor voco ara recolo, labia boo volutarie avus expio ergo via Daci, in for nec fortis, se primoris. Frux eo veho dolosa Crispus erga lambo, sic ars ut Probus dux Una extendo vas instigatus inhumanitas, iam Charybdis appositus qualiscumque. Nos pars arx Alternis, dux Subnoto eniteo sano industrius, fuga Ingens res Ut no facultas, res post flagitiosa perspicuus in eveho lacrimabilis Namucense.</p>]]></description_long>
+	<shippingtime></shippingtime>
+	<added>2012-08-29</added>
+	<changed>2012-08-29 15:44:59</changed>
+	<releasedate></releasedate>
+	<shippingfree></shippingfree>
+	<topseller></topseller>
+	<metatitle></metatitle>
+	<keywords></keywords>
+	<minpurchase>1</minpurchase>
+	<purchasesteps></purchasesteps>
+	<maxpurchase></maxpurchase>
+	<purchaseunit>500.0000</purchaseunit>
+	<referenceunit>100.000</referenceunit>
+	<packunit></packunit>
+	<unitID>10</unitID>
+	<pricegroupID></pricegroupID>
+	<pricegroupActive></pricegroupActive>
+	<laststock></laststock>
+	<suppliernumber></suppliernumber>
+	<purchaseprice>0</purchaseprice>
+	<weight>0.000</weight>
+	<width></width>
+	<height></height>
+	<length></length>
+	<ean></ean>
+	<configurators>
+		<configurator>
+			<configuratorsetID>32</configuratorsetID>
+			<configuratortype></configuratortype>
+			<configuratorGroup>Inhalt</configuratorGroup>
+			<configuratorOptions>500ml</configuratorOptions>
+			<configSetName>Set-SW10214</configSetName>
+		</configurator>
+	</configurators>
+	<category>
+		<categories>35</categories>
+	</category>
+	<similars>
+		<similar></similar>
+	</similars>
+</article>
+<article>
+	<ordernumber>SW10214.3</ordernumber>
+	<mainnumber>SW10214.1</mainnumber>
+	<name>All Natural - Sesame Sage Bodylotion</name>
+	<additionalText>5l</additionalText>
+	<supplier>stop the water while using me</supplier>
+	<tax>19.00</tax>
+	<prices>
+		<price>
+			<group>EK</group>
+			<price>290</price>
+			<pseudoprice></pseudoprice>
+		</price>
+	</prices>
+	<active>1</active>
+	<instock>66</instock>
+	<stockmin>0</stockmin>
+	<description> fuga Ingens res Ut no facultas, res post flagitiosa perspicuus in eveho lacrimabilis Namucense.</description>
+	<description_long><![CDATA[<p>subringor voco ara recolo, labia boo volutarie avus expio ergo via Daci, in for nec fortis, se primoris. Frux eo veho dolosa Crispus erga lambo, sic ars ut Probus dux Una extendo vas instigatus inhumanitas, iam Charybdis appositus qualiscumque. Nos pars arx Alternis, dux Subnoto eniteo sano industrius, fuga Ingens res Ut no facultas, res post flagitiosa perspicuus in eveho lacrimabilis Namucense.</p>]]></description_long>
+	<shippingtime></shippingtime>
+	<added>2012-08-29</added>
+	<changed>2012-08-29 15:44:59</changed>
+	<releasedate></releasedate>
+	<shippingfree></shippingfree>
+	<topseller></topseller>
+	<metatitle></metatitle>
+	<keywords></keywords>
+	<minpurchase>1</minpurchase>
+	<purchasesteps></purchasesteps>
+	<maxpurchase></maxpurchase>
+	<purchaseunit>5.0000</purchaseunit>
+	<referenceunit>1.000</referenceunit>
+	<packunit></packunit>
+	<unitID>1</unitID>
+	<pricegroupID></pricegroupID>
+	<pricegroupActive></pricegroupActive>
+	<laststock></laststock>
+	<suppliernumber></suppliernumber>
+	<purchaseprice>0</purchaseprice>
+	<weight>0.000</weight>
+	<width></width>
+	<height></height>
+	<length></length>
+	<ean></ean>
+	<configurators>
+		<configurator>
+			<configuratorsetID>32</configuratorsetID>
+			<configuratortype></configuratortype>
+			<configuratorGroup>Inhalt</configuratorGroup>
+			<configuratorOptions>5l</configuratorOptions>
+			<configSetName>Set-SW10214</configSetName>
+		</configurator>
+	</configurators>
+	<category>
+		<categories>35</categories>
+	</category>
+	<similars>
+		<similar></similar>
+	</similars>
+</article>
+<article>
+	<ordernumber>SW10215.2</ordernumber>
+	<mainnumber>SW10215.1</mainnumber>
+	<name>All Natural - Orange Wild Herbs Shower Gel</name>
+	<additionalText>500ml</additionalText>
+	<supplier>stop the water while using me</supplier>
+	<tax>19.00</tax>
+	<prices>
+		<price>
+			<group>EK</group>
+			<price>24.9</price>
+			<pseudoprice></pseudoprice>
+		</price>
+	</prices>
+	<active>1</active>
+	<instock>77</instock>
+	<stockmin>0</stockmin>
+	<description>Pax per duco eo illacrimo cura latet effor. Misellus asper far quassatio ut ter opulentia Vindex, pius tibi femina insig.</description>
+	<description_long><![CDATA[<p>Ilis ala comitatus oro labia, tergus aro saeta ius nomen. Vox Tractare nos premo quinquagesimus recedo excello tot ambiguus Provideo ait Dum dis colluctatio Infamo vas cur per duo for Iustus via inhoneste. Fera horum noxa mirifice penetralis Turpitudo seu pax quo Lamenta do quo Pax per duco eo illacrimo cura latet effor. Misellus asper far quassatio ut ter opulentia Vindex, pius tibi femina insig.</p>]]></description_long>
+	<shippingtime></shippingtime>
+	<added>2012-07-16</added>
+	<changed>2012-08-29 15:45:25</changed>
+	<releasedate></releasedate>
+	<shippingfree></shippingfree>
+	<topseller></topseller>
+	<metatitle></metatitle>
+	<keywords></keywords>
+	<minpurchase>1</minpurchase>
+	<purchasesteps></purchasesteps>
+	<maxpurchase></maxpurchase>
+	<purchaseunit>500.0000</purchaseunit>
+	<referenceunit>100.000</referenceunit>
+	<packunit></packunit>
+	<unitID>10</unitID>
+	<pricegroupID></pricegroupID>
+	<pricegroupActive></pricegroupActive>
+	<laststock></laststock>
+	<suppliernumber></suppliernumber>
+	<purchaseprice>0</purchaseprice>
+	<weight>0.000</weight>
+	<width></width>
+	<height></height>
+	<length></length>
+	<ean></ean>
+	<configurators>
+		<configurator>
+			<configuratorsetID>33</configuratorsetID>
+			<configuratortype></configuratortype>
+			<configuratorGroup>Inhalt</configuratorGroup>
+			<configuratorOptions>500ml</configuratorOptions>
+			<configSetName>Set-SW10215</configSetName>
+		</configurator>
+	</configurators>
+	<category>
+		<categories>35</categories>
+	</category>
+	<similars>
+		<similar></similar>
+	</similars>
+</article>
+<article>
+	<ordernumber>SW10215.3</ordernumber>
+	<mainnumber>SW10215.1</mainnumber>
+	<name>All Natural - Orange Wild Herbs Shower Gel</name>
+	<additionalText>5l</additionalText>
+	<supplier>stop the water while using me</supplier>
+	<tax>19.00</tax>
+	<prices>
+		<price>
+			<group>EK</group>
+			<price>190</price>
+			<pseudoprice></pseudoprice>
+		</price>
+	</prices>
+	<active>1</active>
+	<instock>77</instock>
+	<stockmin>0</stockmin>
+	<description>Pax per duco eo illacrimo cura latet effor. Misellus asper far quassatio ut ter opulentia Vindex, pius tibi femina insig.</description>
+	<description_long><![CDATA[<p>Ilis ala comitatus oro labia, tergus aro saeta ius nomen. Vox Tractare nos premo quinquagesimus recedo excello tot ambiguus Provideo ait Dum dis colluctatio Infamo vas cur per duo for Iustus via inhoneste. Fera horum noxa mirifice penetralis Turpitudo seu pax quo Lamenta do quo Pax per duco eo illacrimo cura latet effor. Misellus asper far quassatio ut ter opulentia Vindex, pius tibi femina insig.</p>]]></description_long>
+	<shippingtime></shippingtime>
+	<added>2012-07-16</added>
+	<changed>2012-08-29 15:45:25</changed>
+	<releasedate></releasedate>
+	<shippingfree></shippingfree>
+	<topseller></topseller>
+	<metatitle></metatitle>
+	<keywords></keywords>
+	<minpurchase>1</minpurchase>
+	<purchasesteps></purchasesteps>
+	<maxpurchase></maxpurchase>
+	<purchaseunit>5.0000</purchaseunit>
+	<referenceunit>1.000</referenceunit>
+	<packunit></packunit>
+	<unitID>1</unitID>
+	<pricegroupID></pricegroupID>
+	<pricegroupActive></pricegroupActive>
+	<laststock></laststock>
+	<suppliernumber></suppliernumber>
+	<purchaseprice>0</purchaseprice>
+	<weight>0.000</weight>
+	<width></width>
+	<height></height>
+	<length></length>
+	<ean></ean>
+	<configurators>
+		<configurator>
+			<configuratorsetID>33</configuratorsetID>
+			<configuratortype></configuratortype>
+			<configuratorGroup>Inhalt</configuratorGroup>
+			<configuratorOptions>5l</configuratorOptions>
+			<configSetName>Set-SW10215</configSetName>
+		</configurator>
+	</configurators>
+	<category>
+		<categories>35</categories>
+	</category>
+	<similars>
+		<similar></similar>
+	</similars>
+</article>
+<article>
+	<ordernumber>SW10216.2</ordernumber>
+	<mainnumber>SW10216.1</mainnumber>
+	<name>All Natural - Lemon Honey Soap</name>
+	<additionalText>500ml</additionalText>
+	<supplier>stop the water while using me</supplier>
+	<tax>19.00</tax>
+	<prices>
+		<price>
+			<group>EK</group>
+			<price>18.9</price>
+			<pseudoprice></pseudoprice>
+		</price>
+	</prices>
+	<active>1</active>
+	<instock>88</instock>
+	<stockmin>0</stockmin>
+	<description>Species alimentum os incunabula. vis do aliger, oblittero livor Libet dis cruciamentum vaco nec re horrendus res diu item incrementab.</description>
+	<description_long><![CDATA[<p>Ichilominus Fultus ordior, ora Sterilis qua Se sum cum Conspicio sed Eo at ver oportet, filia cedo comprehendo baccatus. Sub Exortus mihi crastinus, per has frequentatio ivi vindico Salveo nutrimens seco Daci prepositus. Ne ora pax Bravium converto Translato, inter Species alimentum os incunabula. vis do aliger, oblittero livor Libet dis cruciamentum vaco nec re horrendus res diu item incrementab.</p>]]></description_long>
+	<shippingtime></shippingtime>
+	<added>2012-08-29</added>
+	<changed>2012-08-30 15:37:24</changed>
+	<releasedate></releasedate>
+	<shippingfree></shippingfree>
+	<topseller></topseller>
+	<metatitle></metatitle>
+	<keywords></keywords>
+	<minpurchase>1</minpurchase>
+	<purchasesteps></purchasesteps>
+	<maxpurchase></maxpurchase>
+	<purchaseunit>500.0000</purchaseunit>
+	<referenceunit>100.000</referenceunit>
+	<packunit></packunit>
+	<unitID>10</unitID>
+	<pricegroupID></pricegroupID>
+	<pricegroupActive></pricegroupActive>
+	<laststock></laststock>
+	<suppliernumber></suppliernumber>
+	<purchaseprice>0</purchaseprice>
+	<weight>0.000</weight>
+	<width></width>
+	<height></height>
+	<length></length>
+	<ean></ean>
+	<configurators>
+		<configurator>
+			<configuratorsetID>34</configuratorsetID>
+			<configuratortype></configuratortype>
+			<configuratorGroup>Inhalt</configuratorGroup>
+			<configuratorOptions>500ml</configuratorOptions>
+			<configSetName>Set-SW10216</configSetName>
+		</configurator>
+	</configurators>
+	<category>
+		<categories>35</categories>
+	</category>
+	<category>
+		<categories>58</categories>
+	</category>
+	<similars>
+		<similar></similar>
+	</similars>
+</article>
+<article>
+	<ordernumber>SW10216.3</ordernumber>
+	<mainnumber>SW10216.1</mainnumber>
+	<name>All Natural - Lemon Honey Soap</name>
+	<additionalText>5l</additionalText>
+	<supplier>stop the water while using me</supplier>
+	<tax>19.00</tax>
+	<prices>
+		<price>
+			<group>EK</group>
+			<price>11.4</price>
+			<pseudoprice></pseudoprice>
+		</price>
+	</prices>
+	<active>1</active>
+	<instock>88</instock>
+	<stockmin>0</stockmin>
+	<description>Species alimentum os incunabula. vis do aliger, oblittero livor Libet dis cruciamentum vaco nec re horrendus res diu item incrementab.</description>
+	<description_long><![CDATA[<p>Ichilominus Fultus ordior, ora Sterilis qua Se sum cum Conspicio sed Eo at ver oportet, filia cedo comprehendo baccatus. Sub Exortus mihi crastinus, per has frequentatio ivi vindico Salveo nutrimens seco Daci prepositus. Ne ora pax Bravium converto Translato, inter Species alimentum os incunabula. vis do aliger, oblittero livor Libet dis cruciamentum vaco nec re horrendus res diu item incrementab.</p>]]></description_long>
+	<shippingtime></shippingtime>
+	<added>2012-08-29</added>
+	<changed>2012-08-30 15:37:24</changed>
+	<releasedate></releasedate>
+	<shippingfree></shippingfree>
+	<topseller></topseller>
+	<metatitle></metatitle>
+	<keywords></keywords>
+	<minpurchase>1</minpurchase>
+	<purchasesteps></purchasesteps>
+	<maxpurchase></maxpurchase>
+	<purchaseunit>5.0000</purchaseunit>
+	<referenceunit>1.000</referenceunit>
+	<packunit></packunit>
+	<unitID>1</unitID>
+	<pricegroupID></pricegroupID>
+	<pricegroupActive></pricegroupActive>
+	<laststock></laststock>
+	<suppliernumber></suppliernumber>
+	<purchaseprice>0</purchaseprice>
+	<weight>0.000</weight>
+	<width></width>
+	<height></height>
+	<length></length>
+	<ean></ean>
+	<configurators>
+		<configurator>
+			<configuratorsetID>34</configuratorsetID>
+			<configuratortype></configuratortype>
+			<configuratorGroup>Inhalt</configuratorGroup>
+			<configuratorOptions>5l</configuratorOptions>
+			<configSetName>Set-SW10216</configSetName>
+		</configurator>
+	</configurators>
+	<category>
+		<categories>35</categories>
+	</category>
+	<category>
+		<categories>58</categories>
+	</category>
+	<similars>
+		<similar></similar>
+	</similars>
+</article>
+<article>
+	<ordernumber>SW100718.2</ordernumber>
+	<mainnumber>SW100718.1</mainnumber>
+	<name>Ausweichversandkosten</name>
+	<additionalText>gelb</additionalText>
+	<supplier>Example</supplier>
+	<tax>19.00</tax>
+	<prices>
+		<price>
+			<group>EK</group>
+			<price>49.99</price>
+			<pseudoprice></pseudoprice>
+		</price>
+	</prices>
+	<active>1</active>
+	<instock>0</instock>
+	<stockmin>0</stockmin>
+	<description>Diese Versandart greift als Ausweich-Versandart grundsätzlich immer dann wenn die Standard-Versandart für die Warenkorb-Konstellation nicht zur Verfügung steht.</description>
+	<description_long><![CDATA[<p>Diese Versandart greift als Ausweich-Versandart grundsätzlich immer dann wenn die Standard-Versandart für die Warenkorb-Konstellation nicht zur Verfügung steht. Wenn Sie z. Bsp. die Standard Versandkosten für einen Warenkorbwert nur bis 49€ definiert haben, ist es möglich eine Ausweichversandart anzulegen, die ab 50€ automatisch greift und so verhindert, dass keine Versandkosten berechnet werden.</p>]]></description_long>
+	<shippingtime></shippingtime>
+	<added>2012-08-29</added>
+	<changed>2012-08-30 15:27:05</changed>
+	<releasedate></releasedate>
+	<shippingfree></shippingfree>
+	<topseller></topseller>
+	<metatitle></metatitle>
+	<keywords></keywords>
+	<minpurchase>1</minpurchase>
+	<purchasesteps></purchasesteps>
+	<maxpurchase></maxpurchase>
+	<purchaseunit></purchaseunit>
+	<referenceunit></referenceunit>
+	<packunit></packunit>
+	<unitID></unitID>
+	<pricegroupID></pricegroupID>
+	<pricegroupActive></pricegroupActive>
+	<laststock></laststock>
+	<suppliernumber></suppliernumber>
+	<purchaseprice>0</purchaseprice>
+	<weight>0.000</weight>
+	<width></width>
+	<height></height>
+	<length></length>
+	<ean></ean>
+	<configurators>
+		<configurator>
+			<configuratorsetID>35</configuratorsetID>
+			<configuratortype></configuratortype>
+			<configuratorGroup>Farbe</configuratorGroup>
+			<configuratorOptions>gelb</configuratorOptions>
+			<configSetName>Set-SW100718</configSetName>
+		</configurator>
+	</configurators>
+	<category>
+		<categories>24</categories>
+	</category>
+	<category>
+		<categories>72</categories>
+	</category>
+	<similars>
+		<similar></similar>
+	</similars>
+</article>
+	</articles>
+</Root>

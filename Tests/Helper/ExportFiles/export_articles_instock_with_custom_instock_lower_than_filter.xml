@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Root>
+	<Header>
+		<HeaderChild></HeaderChild>
+	</Header>
+	<articlesInStock>
+		<article>
+	<ordernumber>SW10023</ordernumber>
+	<instock>0</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Teapavilion</_supplier>
+	<_price>35</_price>
+</article>
+<article>
+	<ordernumber>SW10040</ordernumber>
+	<instock>0</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>The Deli Garage</_supplier>
+	<_price>8.99</_price>
+</article>
+<article>
+	<ordernumber>SW10041</ordernumber>
+	<instock>0</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>The Deli Garage</_supplier>
+	<_price>7.99</_price>
+</article>
+<article>
+	<ordernumber>SW10074</ordernumber>
+	<instock>0</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>49.990000000001</_price>
+</article>
+<article>
+	<ordernumber>SW10086</ordernumber>
+	<instock>2</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>0.99</_price>
+</article>
+<article>
+	<ordernumber>SW10101</ordernumber>
+	<instock>0</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>0.79</_price>
+</article>
+<article>
+	<ordernumber>SW10107</ordernumber>
+	<instock>0</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>17.990000000001</_price>
+</article>
+<article>
+	<ordernumber>SW10108</ordernumber>
+	<instock>0</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Das blaue Haus</_supplier>
+	<_price>17.990000000001</_price>
+</article>
+<article>
+	<ordernumber>SW10118.2</ordernumber>
+	<instock>0</instock>
+	<_additionaltext>schwarz</_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<_price>29.99</_price>
+</article>
+<article>
+	<ordernumber>SW10118.3</ordernumber>
+	<instock>0</instock>
+	<_additionaltext>blau</_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<_price>29.99</_price>
+</article>
+<article>
+	<ordernumber>SW10118.4</ordernumber>
+	<instock>0</instock>
+	<_additionaltext>rot</_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<_price>29.99</_price>
+</article>
+<article>
+	<ordernumber>SW10118.5</ordernumber>
+	<instock>0</instock>
+	<_additionaltext>grün</_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<_price>29.99</_price>
+</article>
+<article>
+	<ordernumber>SW10118.6</ordernumber>
+	<instock>0</instock>
+	<_additionaltext>pink</_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<_price>29.99</_price>
+</article>
+<article>
+	<ordernumber>SW10118.7</ordernumber>
+	<instock>0</instock>
+	<_additionaltext>gelb</_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<_price>29.99</_price>
+</article>
+<article>
+	<ordernumber>SW10118.8</ordernumber>
+	<instock>0</instock>
+	<_additionaltext>Signalrot</_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<_price>29.99</_price>
+</article>
+<article>
+	<ordernumber>SW10118.9</ordernumber>
+	<instock>0</instock>
+	<_additionaltext>Blau-Weiss</_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<_price>29.99</_price>
+</article>
+<article>
+	<ordernumber>SW10118.10</ordernumber>
+	<instock>0</instock>
+	<_additionaltext>Rot-Weiss</_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<_price>29.99</_price>
+</article>
+<article>
+	<ordernumber>SW10118.11</ordernumber>
+	<instock>0</instock>
+	<_additionaltext>Gelb-Schwarz</_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<_price>29.99</_price>
+</article>
+<article>
+	<ordernumber>SW10118.12</ordernumber>
+	<instock>0</instock>
+	<_additionaltext>Rot-Blau</_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<_price>29.99</_price>
+</article>
+<article>
+	<ordernumber>SW10118.13</ordernumber>
+	<instock>0</instock>
+	<_additionaltext>Grün-Schwarz</_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<_price>29.99</_price>
+</article>
+<article>
+	<ordernumber>SW10118.14</ordernumber>
+	<instock>0</instock>
+	<_additionaltext>Rot-Schwarz</_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<_price>29.99</_price>
+</article>
+<article>
+	<ordernumber>SW10118.15</ordernumber>
+	<instock>0</instock>
+	<_additionaltext>braun</_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<_price>29.99</_price>
+</article>
+<article>
+	<ordernumber>SW10118.16</ordernumber>
+	<instock>0</instock>
+	<_additionaltext>Orange</_additionaltext>
+	<_supplier>Heiku</_supplier>
+	<_price>29.99</_price>
+</article>
+<article>
+	<ordernumber>SW10196</ordernumber>
+	<instock>1</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>34.99</_price>
+</article>
+<article>
+	<ordernumber>SW10198</ordernumber>
+	<instock>0</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>238</_price>
+</article>
+<article>
+	<ordernumber>SW10199</ordernumber>
+	<instock>0</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>23.8</_price>
+</article>
+<article>
+	<ordernumber>SW10200</ordernumber>
+	<instock>0</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>99</_price>
+</article>
+<article>
+	<ordernumber>SW10201.1</ordernumber>
+	<instock>0</instock>
+	<_additionaltext>blau / 36</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>20.99</_price>
+</article>
+<article>
+	<ordernumber>SW10202.2</ordernumber>
+	<instock>0</instock>
+	<_additionaltext>blau / 41/42</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>89.000000000001</_price>
+</article>
+<article>
+	<ordernumber>SW10202.21</ordernumber>
+	<instock>0</instock>
+	<_additionaltext>orange / 37/38</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>89.000000000001</_price>
+</article>
+<article>
+	<ordernumber>SW10203.1</ordernumber>
+	<instock>2</instock>
+	<_additionaltext>blau / S</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>15</_price>
+</article>
+<article>
+	<ordernumber>SW10203.2</ordernumber>
+	<instock>0</instock>
+	<_additionaltext>blau / M</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>15</_price>
+</article>
+<article>
+	<ordernumber>SW10203.3</ordernumber>
+	<instock>2</instock>
+	<_additionaltext>blau / L</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>15</_price>
+</article>
+<article>
+	<ordernumber>SW10203.4</ordernumber>
+	<instock>2</instock>
+	<_additionaltext>blau / XL</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>15</_price>
+</article>
+<article>
+	<ordernumber>SW10203.5</ordernumber>
+	<instock>2</instock>
+	<_additionaltext>blau / XXL</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>15</_price>
+</article>
+<article>
+	<ordernumber>SW10203.6</ordernumber>
+	<instock>2</instock>
+	<_additionaltext>grün / S</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>15</_price>
+</article>
+<article>
+	<ordernumber>SW10203.7</ordernumber>
+	<instock>2</instock>
+	<_additionaltext>grün / M</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>15</_price>
+</article>
+<article>
+	<ordernumber>SW10203.8</ordernumber>
+	<instock>2</instock>
+	<_additionaltext>grün / L</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>15</_price>
+</article>
+<article>
+	<ordernumber>SW10203.9</ordernumber>
+	<instock>2</instock>
+	<_additionaltext>grün / XL</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>15</_price>
+</article>
+<article>
+	<ordernumber>SW10203.10</ordernumber>
+	<instock>2</instock>
+	<_additionaltext>grün / XXL</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>15</_price>
+</article>
+<article>
+	<ordernumber>SW10203.11</ordernumber>
+	<instock>2</instock>
+	<_additionaltext>pink / S</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>15</_price>
+</article>
+<article>
+	<ordernumber>SW10203.12</ordernumber>
+	<instock>2</instock>
+	<_additionaltext>pink / M</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>15</_price>
+</article>
+<article>
+	<ordernumber>SW10203.13</ordernumber>
+	<instock>2</instock>
+	<_additionaltext>pink / L</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>15</_price>
+</article>
+<article>
+	<ordernumber>SW10203.14</ordernumber>
+	<instock>2</instock>
+	<_additionaltext>pink / XL</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>15</_price>
+</article>
+<article>
+	<ordernumber>SW10203.15</ordernumber>
+	<instock>2</instock>
+	<_additionaltext>pink / XXL</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>15</_price>
+</article>
+<article>
+	<ordernumber>SW10203.16</ordernumber>
+	<instock>2</instock>
+	<_additionaltext>gelb / S</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>15</_price>
+</article>
+<article>
+	<ordernumber>SW10203.17</ordernumber>
+	<instock>2</instock>
+	<_additionaltext>gelb / M</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>15</_price>
+</article>
+<article>
+	<ordernumber>SW10203.18</ordernumber>
+	<instock>2</instock>
+	<_additionaltext>gelb / L</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>15</_price>
+</article>
+<article>
+	<ordernumber>SW10203.19</ordernumber>
+	<instock>2</instock>
+	<_additionaltext>gelb / XL</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>15</_price>
+</article>
+<article>
+	<ordernumber>SW10203.20</ordernumber>
+	<instock>2</instock>
+	<_additionaltext>gelb / XXL</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>15</_price>
+</article>
+<article>
+	<ordernumber>SW10001</ordernumber>
+	<instock>-1</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>35.99</_price>
+</article>
+<article>
+	<ordernumber>SW1000299</ordernumber>
+	<instock>0</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>79.99</_price>
+</article>
+<article>
+	<ordernumber>SW100718.1</ordernumber>
+	<instock>0</instock>
+	<_additionaltext>weiss</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>49.990000000001</_price>
+</article>
+<article>
+	<ordernumber>SW100718.2</ordernumber>
+	<instock>0</instock>
+	<_additionaltext>gelb</_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>49.990000000001</_price>
+</article>
+<article>
+	<ordernumber>SW10002841</ordernumber>
+	<instock>-1</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>35.99</_price>
+</article>
+<article>
+	<ordernumber>SW100025211</ordernumber>
+	<instock>0</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>119.99</_price>
+</article>
+<article>
+	<ordernumber>SW10002694</ordernumber>
+	<instock>0</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>47.9</_price>
+</article>
+<article>
+	<ordernumber>SW10234</ordernumber>
+	<instock>0</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>119</_price>
+</article>
+<article>
+	<ordernumber>SW10235</ordernumber>
+	<instock>0</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>119</_price>
+</article>
+<article>
+	<ordernumber>SW10239</ordernumber>
+	<instock>0</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>The Deli Garage</_supplier>
+	<_price>18.99</_price>
+</article>
+<article>
+	<ordernumber>SW10235</ordernumber>
+	<instock>0</instock>
+	<_additionaltext></_additionaltext>
+	<_supplier>Example</_supplier>
+	<_price>100</_price>
+</article>
+	</articlesInStock>
+</Root>

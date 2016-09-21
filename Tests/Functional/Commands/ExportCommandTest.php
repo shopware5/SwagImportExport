@@ -9,6 +9,7 @@
 namespace SwagImportExport\Tests\Functional\Commands;
 
 use Shopware\Commands\SwagImportExport\ExportCommand;
+use SwagImportExport\Tests\Helper\DataProvider\ProfileDataProvider;
 use Tests\Helper\CommandTestHelper;
 
 class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
@@ -35,7 +36,7 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
     public function testArticlesCsvExportCommand()
     {
         $expectedLineAmount = 290;
-        $profileName = CommandTestHelper::ARTICLE_PROFILE_NAME;
+        $profileName = ProfileDataProvider::ARTICLE_PROFILE_NAME;
 
         $fileName = uniqid('test_') . 'article.csv';
         $this->commandTestHelper->addFile($fileName);
@@ -57,7 +58,7 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
     public function testVariantsCsvExportCommand()
     {
         $expectedLineAmount = 525;
-        $profileName = CommandTestHelper::ARTICLE_PROFILE_NAME;
+        $profileName = ProfileDataProvider::ARTICLE_PROFILE_NAME;
 
         $fileName = uniqid('test_') . 'variants.csv';
         $this->commandTestHelper->addFile($fileName);
@@ -79,7 +80,7 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
     public function testCustomerCsvExportCommand()
     {
         $expectedLineAmount = 3;
-        $profileName = CommandTestHelper::CUSTOMER_PROFILE_NAME;
+        $profileName = ProfileDataProvider::CUSTOMER_PROFILE_NAME;
 
         $fileName = uniqid('test_') . 'customer.csv';
         $this->commandTestHelper->addFile($fileName);
@@ -101,7 +102,7 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
     public function testCategoriesCsvExportCommand()
     {
         $expectedLineAmount = 65;
-        $profileName = CommandTestHelper::CATEGORY_PROFILE_NAME;
+        $profileName = ProfileDataProvider::CATEGORY_PROFILE_NAME;
 
         $fileName = uniqid('test_') . 'categories.csv';
         $this->commandTestHelper->addFile($fileName);
@@ -123,7 +124,7 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
     public function testArticlesInStockCsvExportCommand()
     {
         $expectedLineAmount = 406;
-        $profileName = CommandTestHelper::ARTICLES_INSTOCK_PROFILE_NAME;
+        $profileName = ProfileDataProvider::ARTICLES_INSTOCK_PROFILE_NAME;
 
         $fileName = uniqid('test_') . 'articlesinstock.csv';
         $this->commandTestHelper->addFile($fileName);
@@ -145,7 +146,7 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
     public function testArticlesPricesCsvExportCommand()
     {
         $expectedLineAmount = 406;
-        $profileName = CommandTestHelper::ARTICLES_PRICES_PROFILE_NAME;
+        $profileName = ProfileDataProvider::ARTICLES_PRICES_PROFILE_NAME;
 
         $fileName = uniqid('test_') . 'articlesprices.csv';
         $this->commandTestHelper->addFile($fileName);
@@ -167,7 +168,7 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
      */
     public function testArticlesImagesCsvExportCommand()
     {
-        $profileName = CommandTestHelper::ARTICLES_IMAGE_PROFILE_NAME;
+        $profileName = ProfileDataProvider::ARTICLES_IMAGE_PROFILE_NAME;
 
         $fileName = uniqid('test_') . 'articlesimage.csv';
 
@@ -180,7 +181,7 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
     public function testArticlesTranslationsCsvExportCommand()
     {
         $expectedLineAmount = 111;
-        $profileName = CommandTestHelper::ARTICLES_TRANSLATIONS_PROFILE_NAME;
+        $profileName = ProfileDataProvider::ARTICLES_TRANSLATIONS_PROFILE_NAME;
 
         $fileName = uniqid('test_') . 'articlestranslation.csv';
         $this->commandTestHelper->addFile($fileName);
@@ -202,7 +203,7 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
     public function testOrderCsvExportCommand()
     {
         $expectedLineAmount = 18;
-        $profileName = CommandTestHelper::ORDERS_PROFILE_NAME;
+        $profileName = ProfileDataProvider::ORDERS_PROFILE_NAME;
 
         $fileName = uniqid('test_') . 'order.csv';
         $this->commandTestHelper->addFile($fileName);
@@ -224,7 +225,7 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
     public function testMainOrderCsvExportCommand()
     {
         $expectedLineAmount = 5;
-        $profileName = CommandTestHelper::MAIN_ORDERS_PROFILE_NAME;
+        $profileName = ProfileDataProvider::MAIN_ORDERS_PROFILE_NAME;
 
         $fileName = uniqid('test_') . 'mainorder.csv';
         $this->commandTestHelper->addFile($fileName);
@@ -246,7 +247,7 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
     public function testTranslationsCsvExportCommand()
     {
         $expectedLineAmount = 16;
-        $profileName = CommandTestHelper::TRANSLATIONS_PROFILE_NAME;
+        $profileName = ProfileDataProvider::TRANSLATIONS_PROFILE_NAME;
 
         $fileName = uniqid('test_') . 'translation.csv';
         $this->commandTestHelper->addFile($fileName);
@@ -270,7 +271,7 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
         $this->commandTestHelper->createNewsletterDemoData();
 
         $expectedLineAmount = 26;
-        $profileName = CommandTestHelper::NEWSLETTER_PROFILE_NAME;
+        $profileName = ProfileDataProvider::NEWSLETTER_PROFILE_NAME;
 
         $fileName = uniqid('test_') . 'newsletter.csv';
         $this->commandTestHelper->addFile($fileName);
@@ -292,7 +293,7 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
     public function testArticlesXmlExportCommandWithLimit()
     {
         $expectedLineAmount = 6362;
-        $profileName = CommandTestHelper::ARTICLE_PROFILE_NAME;
+        $profileName = ProfileDataProvider::ARTICLE_PROFILE_NAME;
 
         $fileName = uniqid('test_') . 'article.xml';
         $this->commandTestHelper->addFile($fileName);
@@ -314,7 +315,7 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
     public function testVariantsXmlExportCommandWithLimit()
     {
         $expectedLineAmount = 6362;
-        $profileName = CommandTestHelper::ARTICLE_PROFILE_NAME;
+        $profileName = ProfileDataProvider::ARTICLE_PROFILE_NAME;
 
         $fileName = uniqid('test_') . 'variants.xml';
         $this->commandTestHelper->addFile($fileName);
@@ -336,7 +337,7 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
     public function testCustomerXmlExportCommandWithLimit()
     {
         $expectedLineAmount = 42;
-        $profileName = CommandTestHelper::CUSTOMER_PROFILE_NAME;
+        $profileName = ProfileDataProvider::CUSTOMER_PROFILE_NAME;
 
         $fileName = uniqid('test_') . 'customer.xml';
         $this->commandTestHelper->addFile($fileName);
@@ -358,7 +359,7 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
     public function testCategoriesXmlExportCommandWithLimit()
     {
         $expectedLineAmount = 1010;
-        $profileName = CommandTestHelper::CATEGORY_PROFILE_NAME;
+        $profileName = ProfileDataProvider::CATEGORY_PROFILE_NAME;
 
         $fileName = uniqid('test_') . 'categories.xml';
         $this->commandTestHelper->addFile($fileName);
@@ -380,7 +381,7 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
     public function testArticlesInStockXmlExportCommandWithLimit()
     {
         $expectedLineAmount = 1408;
-        $profileName = CommandTestHelper::ARTICLES_INSTOCK_PROFILE_NAME;
+        $profileName = ProfileDataProvider::ARTICLES_INSTOCK_PROFILE_NAME;
 
         $fileName = uniqid('test_') . 'articlesinstock.xml';
         $this->commandTestHelper->addFile($fileName);
@@ -402,7 +403,7 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
     public function testArticlesPricesXmlExportCommandWithLimit()
     {
         $expectedLineAmount = 1108;
-        $profileName = CommandTestHelper::ARTICLES_PRICES_PROFILE_NAME;
+        $profileName = ProfileDataProvider::ARTICLES_PRICES_PROFILE_NAME;
 
         $fileName = uniqid('test_') . 'articlesprices.xml';
         $this->commandTestHelper->addFile($fileName);
@@ -424,7 +425,7 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
      */
     public function testArticlesImagesXmlExportCommandWithLimit()
     {
-        $profileName = CommandTestHelper::ARTICLES_IMAGE_PROFILE_NAME;
+        $profileName = ProfileDataProvider::ARTICLES_IMAGE_PROFILE_NAME;
 
         $fileName = uniqid('test_') . 'articlesimage.xml';
 
@@ -437,7 +438,7 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
     public function testArticlesTranslationsXmlExportCommandWithLimit()
     {
         $expectedLineAmount = 942;
-        $profileName = CommandTestHelper::ARTICLES_TRANSLATIONS_PROFILE_NAME;
+        $profileName = ProfileDataProvider::ARTICLES_TRANSLATIONS_PROFILE_NAME;
 
         $fileName = uniqid('test_') . 'articlestranslation.xml';
         $this->commandTestHelper->addFile($fileName);
@@ -459,7 +460,7 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
     public function testMainOrderXmlExportCommandWithLimit()
     {
         $expectedLineAmount = 109;
-        $profileName = CommandTestHelper::MAIN_ORDERS_PROFILE_NAME;
+        $profileName = ProfileDataProvider::MAIN_ORDERS_PROFILE_NAME;
 
         $fileName = uniqid('test_') . 'mainorder.xml';
         $this->commandTestHelper->addFile($fileName);
@@ -481,7 +482,7 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
     public function testTranslationsXmlExportCommandWithLimit()
     {
         $expectedLineAmount = 88;
-        $profileName = CommandTestHelper::TRANSLATIONS_PROFILE_NAME;
+        $profileName = ProfileDataProvider::TRANSLATIONS_PROFILE_NAME;
 
         $fileName = uniqid('test_') . 'translation.xml';
         $this->commandTestHelper->addFile($fileName);
@@ -505,7 +506,7 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
         $this->commandTestHelper->createNewsletterDemoData();
 
         $expectedLineAmount = 200;
-        $profileName = CommandTestHelper::NEWSLETTER_PROFILE_NAME;
+        $profileName = ProfileDataProvider::NEWSLETTER_PROFILE_NAME;
 
         $fileName = uniqid('test_') . 'newsletter.xml';
         $this->commandTestHelper->addFile($fileName);

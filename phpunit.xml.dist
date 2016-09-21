@@ -25,4 +25,10 @@
             <group>disable</group>
         </exclude>
     </groups>
+
+    <filter>
+        <whitelist>
+            <directory suffix=".php">./</directory>
+        </whitelist>
+    </filter>
 </phpunit>
