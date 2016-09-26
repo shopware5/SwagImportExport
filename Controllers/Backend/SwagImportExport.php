@@ -598,7 +598,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
     {
         $request = $this->Request();
         /** @var UploadPathProvider $uploadPathProvider */
-        $uploadPathProvider = Shopware()->Container()->get('swag_import_export.upload_path_provider');
+        $uploadPathProvider = $this->get('swag_import_export.upload_path_provider');
 
         $postData = array(
             'sessionId' => $request->getParam('sessionId'),
@@ -658,7 +658,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
     {
         $request = $this->Request();
         /** @var UploadPathProvider $uploadPathProvider */
-        $uploadPathProvider = Shopware()->Container()->get('swag_import_export.upload_path_provider');
+        $uploadPathProvider = $this->get('swag_import_export.upload_path_provider');
         $inputFile = $uploadPathProvider->getRealPath($request->getParam('importFile'));
 
         $unprocessedFiles = [];
@@ -707,7 +707,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
         list($colOpts, $limit, $filter, $maxRecordCount, $type, $format) = $this->getRequestData($dataFactory, $postData);
         $username = Shopware()->Auth()->getIdentity()->username;
-        
+
         $dataIO->initialize($colOpts, $limit, $filter, $type, $format, $maxRecordCount);
         $dataIO->setUsername($username);
         

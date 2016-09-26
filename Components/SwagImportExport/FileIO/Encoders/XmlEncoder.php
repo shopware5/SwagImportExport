@@ -42,7 +42,7 @@ class XmlEncoder extends \Shopware_Components_Convert_Xml
                     unset($item['_attributes'], $item['_value']);
                 }
             }
-            if (empty($item) && $item !== '0') {
+            if ($this->isEmpty($item)) {
                 $ret .= "$pad<$key$attributes></$key>{$this->sSettings['newline']}";
             } elseif (is_array($item)) {
                 if (is_numeric(key($item))) {
@@ -53,16 +53,39 @@ class XmlEncoder extends \Shopware_Components_Convert_Xml
                         . "$pad</$key>{$this->sSettings['newline']}";
                 }
             } else {
-                if (preg_match("#<|>|&(?<!amp;)#", $item)) {
-                    //$item = str_replace("<![CDATA[", "&lt;![CDATA[", $item);
+                if ($this->hasSpecialCharacters($item)) {
                     $item = str_replace("]]>", "]]]]><![CDATA[>", $item);
                     $ret .= "$pad<$key$attributes><![CDATA[" . $item . "]]></$key>{$this->sSettings['newline']}";
                 } else {
+                    if ($item === false) {
+                        $item = 0;
+                    }
+
                     $ret .= "$pad<$key$attributes>" . $item . "</$key>{$this->sSettings['newline']}";
                 }
             }
         }
 
         return $ret;
+    }
+
+    /**
+     * @param $item
+     * @return bool
+     */
+    private function isEmpty($item)
+    {
+        return (empty($item) && $item !== '0' && $item !== false && $item !== 0);
+    }
+
+    /**
+     * Checks if special xml characters were used.
+     *
+     * @param $item
+     * @return int
+     */
+    private function hasSpecialCharacters($item)
+    {
+        return preg_match("#<|>|&(?<!amp;)#", $item);
     }
 }

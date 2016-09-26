@@ -359,7 +359,7 @@ class ImportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
         $profile = ProfileDataProvider::IMPORT_MAIN_ORDER_PROFILE_NAME;
         $filePath = CommandTestHelper::IMPORT_FILES_DIR . 'MainOrderImport.csv';
 
-        $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:import -p {$profile} {$filePath}");
+        $this->commandTestHelper->runCommand("sw:importexport:import -p {$profile} {$filePath}");
     }
 
     public function testTranslationXmlImport()

@@ -43,7 +43,7 @@ class PriceWriter
     public function __construct()
     {
         $this->db = Shopware()->Db();
-        $this->dbalHelper = new DbalHelper();
+        $this->dbalHelper = DbalHelper::create();
         $this->validator = new PriceValidator();
         $this->dataManager = new PriceDataManager();
 

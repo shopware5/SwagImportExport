@@ -46,7 +46,7 @@ class PropertyWriter
      */
     public function __construct()
     {
-        $this->dbalHelper = new DbalHelper();
+        $this->dbalHelper = DbalHelper::create();
         $this->connection = Shopware()->Models()->getConnection();
         $this->db = Shopware()->Db();
         $this->groups = $this->getGroups();

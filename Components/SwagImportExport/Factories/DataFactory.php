@@ -10,6 +10,7 @@ namespace Shopware\Components\SwagImportExport\Factories;
 
 use Shopware\Components\SwagImportExport\DataIO;
 use Shopware\Components\SwagImportExport\DbAdapters\DataDbAdapter;
+use Shopware\Components\SwagImportExport\DbalHelper;
 use Shopware\Components\SwagImportExport\Session\Session;
 use Shopware\Components\SwagImportExport\Logger\Logger;
 use Shopware\Components\SwagImportExport\Utils\DataColumnOptions;
@@ -29,7 +30,8 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
      */
     public function createDataIO(DataDbAdapter $dbAdapter, $dataSession, Logger $logger)
     {
-        return new DataIO($dbAdapter, $dataSession, $logger);
+        $uploadPathProvider =  Shopware()->Container()->get('swag_import_export.upload_path_provider');
+        return new DataIO($dbAdapter, $dataSession, $logger, $uploadPathProvider);
     }
 
     /**
@@ -306,7 +308,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
         $proxyAdapter = Shopware()->Hooks()
             ->getProxy('Shopware\Components\SwagImportExport\DataManagers\Articles\ArticleDataManager');
         $db = Shopware()->Db();
-        $dbalHelper = new \Shopware\Components\SwagImportExport\DbalHelper();
+        $dbalHelper = DbalHelper::create();
         return new $proxyAdapter($db, $dbalHelper);
     }
 

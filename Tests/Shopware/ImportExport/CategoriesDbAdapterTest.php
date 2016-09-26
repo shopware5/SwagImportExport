@@ -53,21 +53,6 @@ class CategoriesDbAdapterTest extends DbAdapterTest
     }
 
     /**
-     * @param $expectedColumns
-     *
-     * @dataProvider defaultColumnProvider
-     */
-    public function testDefaultColumns($expectedColumns)
-    {
-        $this->defaultColumns($expectedColumns, count($expectedColumns));
-    }
-
-    public function defaultColumnProvider()
-    {
-        return $this->getDataProvider('testDefaultColumns');
-    }
-
-    /**
      * @param array $data
      * @param int $expectedInsertedRows
      *

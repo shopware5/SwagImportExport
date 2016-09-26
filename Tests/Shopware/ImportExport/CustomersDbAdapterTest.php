@@ -59,22 +59,6 @@ class CustomersDbAdapterTest extends DbAdapterTest
     }
 
     /**
-     * @param $expectedColumns
-     * @param $expectedCount
-     *
-     * @dataProvider defaultColumnsProvider
-     */
-    public function testDefaultColumns($expectedColumns, $expectedCount)
-    {
-        $this->defaultColumns($expectedColumns, $expectedCount);
-    }
-
-    public function defaultColumnsProvider()
-    {
-        return $this->getDataProvider('testDefaultColumns');
-    }
-
-    /**
      * @param $records
      * @param $expectedInsertedRows
      *

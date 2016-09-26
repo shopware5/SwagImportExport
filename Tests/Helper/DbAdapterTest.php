@@ -116,28 +116,6 @@ class DbAdapterTest extends ImportExportTestHelper
     }
 
     /**
-     * @param array $expectedColumns
-     * @param int $expectedCount
-     */
-    public function defaultColumns($expectedColumns, $expectedCount)
-    {
-        $this->markTestIncomplete('This test does not support plugins.');
-
-        /* @var DataFactory $dataFactory */
-        $dataFactory = $this->Plugin()->getDataFactory();
-        $dbAdapter = $dataFactory->createDbAdapter($this->dbAdapter);
-
-        $columns = $dbAdapter->getDefaultColumns();
-
-        $this->assertTrue(is_array($columns));
-        $this->assertEquals(
-            0,
-            count(array_diff($columns['default'], $expectedColumns)),
-            "Different columns: " . implode(', ', array_diff($columns['default'], $expectedColumns))
-        );
-    }
-
-    /**
      * @param array $records
      * @param int $expectedInsertedRows
      */

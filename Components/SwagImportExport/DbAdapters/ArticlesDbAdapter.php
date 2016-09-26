@@ -12,6 +12,8 @@ namespace Shopware\Components\SwagImportExport\DbAdapters;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\Query\Expr\Join;
 use Enlight_Components_Db_Adapter_Pdo_Mysql;
+use Shopware\Bundle\MediaBundle\MediaServiceInterface;
+use Shopware\Components\ContainerAwareEventManager;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\ArticleWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\CategoryWriter;
@@ -36,9 +38,9 @@ use Shopware\Models\Property;
 class ArticlesDbAdapter implements DataDbAdapter
 {
     /**
-     * @var ModelManager $manager
+     * @var ModelManager $modelManager
      */
-    protected $manager;
+    protected $modelManager;
 
     /**
      * @var Enlight_Components_Db_Adapter_Pdo_Mysql $db
@@ -71,9 +73,45 @@ class ArticlesDbAdapter implements DataDbAdapter
     protected $tempData;
 
     /**
+     * @var MediaServiceInterface
+     */
+    private $mediaService;
+
+    /**
      * @var array
      */
     protected $defaultValues = array();
+
+    /**
+     * @var \Shopware_Components_Config
+     */
+    private $config;
+
+    /**
+     * @var ContainerAwareEventManager
+     */
+    private $eventManager;
+
+    /**
+     * @var SnippetsHelper
+     */
+    private $snippetHelper;
+
+    /**
+     * @var DbAdapterHelper
+     */
+    private $dbAdapterHelper;
+
+    public function __construct()
+    {
+        $this->db = Shopware()->Container()->get('db');
+        $this->modelManager = Shopware()->Container()->get('models');
+        $this->mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $this->config = Shopware()->Container()->get('config');
+        $this->eventManager = Shopware()->Container()->get('events');
+        $this->snippetHelper = new SnippetsHelper();
+        $this->dbAdapterHelper = new DbAdapterHelper();
+    }
 
     /**
      * @param $start
@@ -86,9 +124,7 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     public function readRecordIds($start, $limit, $filter)
     {
-        $manager = $this->getManager();
-
-        $builder = $manager->createQueryBuilder();
+        $builder = $this->modelManager->createQueryBuilder();
 
         $builder->select('detail.id');
 
@@ -103,12 +139,12 @@ class ArticlesDbAdapter implements DataDbAdapter
         }
 
         if ($filter['categories']) {
-            $category = $this->getManager()->find('Shopware\Models\Category\Category', $filter['categories'][0]);
+            $category = $this->modelManager->find('Shopware\Models\Category\Category', $filter['categories'][0]);
 
             $this->collectCategoryIds($category);
             $categories = $this->getCategoryIdCollection();
 
-            $categoriesBuilder = $manager->createQueryBuilder();
+            $categoriesBuilder = $this->modelManager->createQueryBuilder();
             $categoriesBuilder->select('article.id')
                 ->from('Shopware\Models\Article\Article', 'article')
                 ->leftJoin('article.categories', 'categories')
@@ -157,13 +193,13 @@ class ArticlesDbAdapter implements DataDbAdapter
     public function read($ids, $columns)
     {
         if (!$ids && empty($ids)) {
-            $message = SnippetsHelper::getNamespace()
+            $message = $this->snippetHelper->getNamespace()
                 ->get('adapters/articles_no_ids', 'Can not read articles without ids.');
             throw new \Exception($message);
         }
 
         if (!$columns && empty($columns)) {
-            $message = SnippetsHelper::getNamespace()
+            $message = $this->snippetHelper->getNamespace()
                 ->get('adapters/articles_no_column_names', 'Can not read articles without column names.');
             throw new \Exception($message);
         }
@@ -173,7 +209,7 @@ class ArticlesDbAdapter implements DataDbAdapter
 
         $articles = $articleBuilder->getQuery()->getResult();
 
-        $result['article'] = DbAdapterHelper::decodeHtmlEntities($articles);
+        $result['article'] = $this->dbAdapterHelper->decodeHtmlEntities($articles);
 
         //prices
         $columns['price'] = array_merge(
@@ -207,9 +243,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         $imageBuilder = $this->getImageBuilder($columns['image'], $ids);
         $tempImageResult = $imageBuilder->getQuery()->getResult();
         foreach ($tempImageResult as &$tempImage) {
-            /** @var \Shopware\Bundle\MediaBundle\MediaService $mediaService */
-            $mediaService = Shopware()->Container()->get('shopware_media.media_service');
-            $tempImage['imageUrl'] = $mediaService->getUrl($tempImage['imageUrl']);
+            $tempImage['imageUrl'] = $this->mediaService->getUrl($tempImage['imageUrl']);
         }
         $result['image'] = $tempImageResult;
 
@@ -267,7 +301,7 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     protected function getArticleIdsByDetailIds($detailIds)
     {
-        $articleIds = $this->getManager()->createQueryBuilder()
+        $articleIds = $this->modelManager->createQueryBuilder()
             ->select('article.id')
             ->from('Shopware\Models\Article\Detail', 'variant')
             ->join('variant.article', 'article')
@@ -311,7 +345,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         //removes empty value
         $categoryIds = array_filter($categoryIds);
 
-        $categoriesNames = $this->getManager()->createQueryBuilder()
+        $categoriesNames = $this->modelManager->createQueryBuilder()
             ->select(array('category.id, category.name'))
             ->from('Shopware\Models\Category\Category', 'category')
             ->where('category.id IN (:ids)')
@@ -369,7 +403,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 WHERE variant.id IN ($articleDetailIds)
                 ORDER BY languageId ASC
                 ";
-        $translations = $this->getDb()->query($sql)->fetchAll();
+        $translations = $this->db->query($sql)->fetchAll();
 
         //all translation fields that can be translated for an article
         $translationFields = $this->getTranslationFields();
@@ -432,7 +466,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 WHERE variant.id IN ($articleDetailIds) AND objecttype = 'article'
                 GROUP BY ct.id
                 ";
-        $articles = $this->getDb()->query($sql)->fetchAll();
+        $articles = $this->db->query($sql)->fetchAll();
 
         foreach ($result as $index => $translation) {
             foreach ($articles as $article) {
@@ -492,9 +526,7 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     public function getShops()
     {
-        $shops = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop')->findAll();
-
-        return $shops;
+        return $this->modelManager->getRepository('Shopware\Models\Shop\Shop')->findAll();
     }
 
     /**
@@ -552,7 +584,6 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     private function performImport($records)
     {
-        $manager = $this->getManager();
         $articleWriter = new ArticleWriter();
         $pricesWriter = new PriceWriter();
         $categoryWriter = new CategoryWriter();
@@ -566,7 +597,7 @@ class ArticlesDbAdapter implements DataDbAdapter
 
         foreach ($records['article'] as $index => $article) {
             try {
-                $manager->getConnection()->beginTransaction();
+                $this->modelManager->getConnection()->beginTransaction();
 
                 list($articleId, $articleDetailId, $mainDetailId) = $articleWriter->write($article, $defaultValues);
 
@@ -677,9 +708,9 @@ class ArticlesDbAdapter implements DataDbAdapter
                     )
                 );
 
-                $manager->getConnection()->commit();
+                $this->modelManager->getConnection()->commit();
             } catch (AdapterException $e) {
-                $manager->getConnection()->rollBack();
+                $this->modelManager->getConnection()->rollBack();
                 $message = $e->getMessage();
                 $this->saveMessage($message);
             }
@@ -697,14 +728,14 @@ class ArticlesDbAdapter implements DataDbAdapter
     {
         //articles
         if (empty($records['article'])) {
-            $message = SnippetsHelper::getNamespace()->get(
+            $message = $this->snippetHelper->getNamespace()->get(
                 'adapters/articles/no_records',
                 'No article records were found.'
             );
             throw new \Exception($message);
         }
 
-        $records = Shopware()->Events()->filter(
+        $records = $this->eventManager->filter(
             'Shopware_Components_SwagImportExport_DbAdapters_ArticlesDbAdapter_Write',
             $records,
             array('subject' => $this)
@@ -723,9 +754,9 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     public function getShop($id)
     {
-        $shop = $this->getManager()->find('Shopware\Models\Shop\Shop', $id);
+        $shop = $this->modelManager->find('Shopware\Models\Shop\Shop', $id);
         if (!$shop) {
-            $message = SnippetsHelper::getNamespace()->get('adapters/articles/no_shop_id', 'Shop by id %s not found');
+            $message = $this->snippetHelper->getNamespace()->get('adapters/articles/no_shop_id', 'Shop by id %s not found');
             throw new AdapterException(sprintf($message, $id));
         }
 
@@ -798,7 +829,7 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     public function getArticleAttributes()
     {
-        $stmt = $this->getDb()->query("SHOW COLUMNS FROM `s_articles_attributes`");
+        $stmt = $this->db->query("SHOW COLUMNS FROM `s_articles_attributes`");
         $columns = $stmt->fetchAll();
 
         $attributes = array();
@@ -1080,7 +1111,7 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     public function saveMessage($message)
     {
-        $errorMode = Shopware()->Config()->get('SwagImportExportErrorMode');
+        $errorMode = $this->config->get('SwagImportExportErrorMode');
 
         if ($errorMode === false) {
             throw new \Exception($message);
@@ -1210,30 +1241,6 @@ class ArticlesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @return ModelManager
-     */
-    public function getManager()
-    {
-        if ($this->manager === null) {
-            $this->manager = Shopware()->Models();
-        }
-
-        return $this->manager;
-    }
-
-    /**
-     * @return Enlight_Components_Db_Adapter_Pdo_Mysql
-     */
-    public function getDb()
-    {
-        if ($this->db === null) {
-            $this->db = Shopware()->Db();
-        }
-
-        return $this->db;
-    }
-
-    /**
      * @param $articleDetailIds
      * @return array
      * @throws \Zend_Db_Statement_Exception
@@ -1266,7 +1273,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 GROUP BY ct.id
                 ";
 
-        return $this->getDb()->query($sql)->fetchAll();
+        return $this->db->query($sql)->fetchAll();
     }
 
     /**
@@ -1299,7 +1306,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 GROUP BY ct.id
                 ";
 
-        return $this->getDb()->query($sql)->fetchAll();
+        return $this->db->query($sql)->fetchAll();
     }
 
     /**
@@ -1331,7 +1338,7 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     public function getArticleBuilder($columns, $ids)
     {
-        $articleBuilder = $this->getManager()->createQueryBuilder();
+        $articleBuilder = $this->modelManager->createQueryBuilder();
         $articleBuilder->select($columns)
             ->from('Shopware\Models\Article\Detail', 'variant')
             ->join('variant.article', 'article')
@@ -1356,7 +1363,7 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     public function getPriceBuilder($columns, $ids)
     {
-        $priceBuilder = $this->getManager()->createQueryBuilder();
+        $priceBuilder = $this->modelManager->createQueryBuilder();
         $priceBuilder->select($columns)
             ->from('Shopware\Models\Article\Detail', 'variant')
             ->join('variant.article', 'article')
@@ -1376,11 +1383,11 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     public function getImageBuilder($columns, $ids)
     {
-        $imageBuilder = $this->getManager()->createQueryBuilder();
+        $imageBuilder = $this->modelManager->createQueryBuilder();
         $imageBuilder->select($columns)
             ->from('Shopware\Models\Article\Detail', 'variant')
             ->join('variant.article', 'article')
-            ->leftjoin('article.images', 'images')
+            ->leftJoin('article.images', 'images')
             ->where('variant.id IN (:ids)')
             ->andWhere('variant.kind = 1')
             ->andWhere('images.id IS NOT NULL')
@@ -1396,13 +1403,13 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     public function getPropertyValueBuilder($columns, $ids)
     {
-        $propertyValueBuilder = $this->getManager()->createQueryBuilder();
+        $propertyValueBuilder = $this->modelManager->createQueryBuilder();
         $propertyValueBuilder->select($columns)
             ->from('Shopware\Models\Article\Detail', 'variant')
             ->join('variant.article', 'article')
-            ->leftjoin('article.propertyGroup', 'propertyGroup')
-            ->leftjoin('article.propertyValues', 'propertyValues')
-            ->leftjoin('propertyValues.option', 'propertyOptions')
+            ->leftJoin('article.propertyGroup', 'propertyGroup')
+            ->leftJoin('article.propertyValues', 'propertyValues')
+            ->leftJoin('propertyValues.option', 'propertyOptions')
             ->where('variant.id IN (:ids)')
             ->andWhere('variant.kind = 1')
             ->andWhere('propertyValues.id IS NOT NULL')
@@ -1418,7 +1425,7 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     public function getConfiguratorBuilder($columns, $ids)
     {
-        $configBuilder = $this->getManager()->createQueryBuilder();
+        $configBuilder = $this->modelManager->createQueryBuilder();
         $configBuilder->select($columns)
             ->from('Shopware\Models\Article\Detail', 'variant')
             ->join('variant.article', 'article')
@@ -1441,12 +1448,12 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     public function getSimilarBuilder($columns, $ids)
     {
-        $similarBuilder = $this->getManager()->createQueryBuilder();
+        $similarBuilder = $this->modelManager->createQueryBuilder();
         $similarBuilder->select($columns)
             ->from('Shopware\Models\Article\Detail', 'variant')
             ->join('variant.article', 'article')
-            ->leftjoin('article.similar', 'similar')
-            ->leftjoin('similar.details', 'similarDetail')
+            ->leftJoin('article.similar', 'similar')
+            ->leftJoin('similar.details', 'similarDetail')
             ->where('variant.id IN (:ids)')
             ->andWhere('variant.kind = 1')
             ->andWhere('similarDetail.kind = 1')
@@ -1463,12 +1470,12 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     public function getAccessoryBuilder($columns, $ids)
     {
-        $accessoryBuilder = $this->getManager()->createQueryBuilder();
+        $accessoryBuilder = $this->modelManager->createQueryBuilder();
         $accessoryBuilder->select($columns)
             ->from('Shopware\Models\Article\Detail', 'variant')
             ->join('variant.article', 'article')
-            ->leftjoin('article.related', 'accessory')
-            ->leftjoin('accessory.details', 'accessoryDetail')
+            ->leftJoin('article.related', 'accessory')
+            ->leftJoin('accessory.details', 'accessoryDetail')
             ->where('variant.id IN (:ids)')
             ->andWhere('variant.kind = 1')
             ->andWhere('accessoryDetail.kind = 1')
@@ -1485,10 +1492,10 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     public function getCategoryBuilder($columns, $ids)
     {
-        $categoryBuilder = $this->getManager()->createQueryBuilder();
+        $categoryBuilder = $this->modelManager->createQueryBuilder();
         $categoryBuilder->select($columns)
             ->from('Shopware\Models\Article\Article', 'article')
-            ->leftjoin('article.categories', 'categories')
+            ->leftJoin('article.categories', 'categories')
             ->where('article.id IN (:ids)')
             ->andWhere('categories.id IS NOT NULL')
             ->setParameter('ids', $ids);
@@ -1501,7 +1508,7 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     public function getElementBuilder()
     {
-        $repository = $this->getManager()->getRepository('Shopware\Models\Article\Element');
+        $repository = $this->modelManager->getRepository('Shopware\Models\Article\Element');
 
         $builder = $repository->createQueryBuilder('attribute');
         $builder->andWhere('attribute.translatable = 1');
