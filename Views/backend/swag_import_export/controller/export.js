@@ -276,7 +276,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
     },
     onDownloadFile: function() {
         var me = this,
-            url = '{url action="downloadFile"}' + '/fileName/' + me.fileName;
+            url = '{url action="downloadFile"}' + '?fileName=' + me.fileName;
     
         window.open(url, '_blank');        
     }
