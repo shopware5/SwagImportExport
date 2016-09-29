@@ -9,7 +9,6 @@
 namespace SwagImportExport\Tests\Functional\Controllers\SwagImportExport;
 
 use Shopware\Components\SwagImportExport\UploadPathProvider;
-use SwagBackendOrder\Subscriber\BackendController;
 use SwagImportExport\Tests\Helper\DataProvider\ProfileDataProvider;
 use Tests\Helper\BackendControllerTestHelper;
 use Tests\Helper\CommandTestHelper;

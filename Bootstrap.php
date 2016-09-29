@@ -8,11 +8,8 @@
  */
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\DBAL\Schema\AbstractSchemaManager;
-use Doctrine\DBAL\Schema\Index;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\Tools\SchemaTool;
-use Doctrine\ORM\Tools\ToolsException;
 use Shopware\Commands\SwagImportExport\ExportCommand;
 use Shopware\Commands\SwagImportExport\ImportCommand;
 use Shopware\Commands\SwagImportExport\ProfilesCommand;
@@ -27,6 +24,7 @@ use Shopware\Components\SwagImportExport\Logger\Logger;
 use Shopware\Components\SwagImportExport\UploadPathProvider;
 use Shopware\Components\SwagImportExport\Utils\FileHelper;
 use Shopware\Models\Media\Album;
+use Shopware\Setup\SwagImportExport\MainMenuItemHandler;
 
 /**
  * Shopware SwagImportExport Plugin - Bootstrap
@@ -106,8 +104,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         $this->em = $this->get('models');
 
         $this->registerCustomModels();
-
-        parent::afterInit();
+        $this->registerMyNamespace();
     }
 
     /**
@@ -138,8 +135,14 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
             throw new Exception("This plugin requires Shopware 5.2.0 or a later version");
         }
 
+        if ($this->assertMinimumVersion(MainMenuItemHandler::SHOPWARE_MIN_VERSION_530)) {
+            $replaceTeaserMenu = new MainMenuItemHandler($this->get('models'));
+            $replaceTeaserMenu->handleMenuItem();
+        } else {
+            $this->createMenu();
+        }
+
         $this->createDatabase();
-        $this->createMenu();
         $this->createAclResource();
         $this->registerEvents();
         $this->createDirectories();
@@ -210,6 +213,11 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
             }
             $this->db->exec('ALTER TABLE s_import_export_session DROP COLUMN log_id');
             $this->removeImportFilesAlbum();
+        }
+
+        if ($this->assertMinimumVersion(MainMenuItemHandler::SHOPWARE_MIN_VERSION_530)) {
+            $replaceTeaserMenu = new MainMenuItemHandler($this->get('models'));
+            $replaceTeaserMenu->handleMenuItem();
         }
 
         return [
@@ -285,6 +293,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         $this->get('loader')->registerNamespace('Shopware\Components', $this->Path() . 'Components/');
         $this->get('loader')->registerNamespace('Shopware\Commands', $this->Path() . 'Commands/');
         $this->get('loader')->registerNamespace('Shopware\Subscriber', $this->Path() . 'Subscriber/');
+        $this->get('loader')->registerNamespace('Shopware\Setup', $this->Path() . 'Setup/');
     }
 
     private function createDirectories()
@@ -306,7 +315,6 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
     public function getDataFactory()
     {
         if ($this->dataFactory === null) {
-            $this->registerMyNamespace();
             $this->dataFactory = Enlight_Class::Instance('Shopware\Components\SwagImportExport\Factories\DataFactory');
         }
 
@@ -319,7 +327,6 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
     public function getProfileFactory()
     {
         if ($this->profileFactory === null) {
-            $this->registerMyNamespace();
             $this->profileFactory = Enlight_Class::Instance('Shopware\Components\SwagImportExport\Factories\ProfileFactory');
         }
 
@@ -332,7 +339,6 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
     public function getFileIOFactory()
     {
         if ($this->fileIOFactory === null) {
-            $this->registerMyNamespace();
             $this->fileIOFactory = Enlight_Class::Instance('Shopware\Components\SwagImportExport\Factories\FileIOFactory');
         }
 
@@ -345,7 +351,6 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
     public function getDataTransformerFactory()
     {
         if ($this->dataTransformerFactory === null) {
-            $this->registerMyNamespace();
             $this->dataTransformerFactory = Enlight_Class::Instance('Shopware\Components\SwagImportExport\Factories\DataTransformerFactory');
         }
 
@@ -433,11 +438,6 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         );
 
         $this->subscribeEvent(
-            'Enlight_Controller_Front_StartDispatch',
-            'onStartDispatch'
-        );
-
-        $this->subscribeEvent(
             'Enlight_Controller_Dispatcher_ControllerPath_Backend_SwagImportExport',
             'getBackendController'
         );
@@ -507,21 +507,12 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
     }
 
     /**
-     * Subscriber registration
-     */
-    public function onStartDispatch()
-    {
-        $this->registerMyNamespace();
-    }
-
-    /**
      * Returns the path to the backend controller.
      *
      * @return string
      */
     public function getBackendController()
     {
-        $this->registerMyNamespace();
         $this->addConfigDirs();
 
         return $this->Path() . '/Controllers/Backend/SwagImportExport.php';
@@ -534,7 +525,6 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
      */
     public function getCronjobController()
     {
-        $this->registerMyNamespace();
         $this->addConfigDirs();
 
         return $this->Path() . '/Controllers/Backend/SwagImportExportCron.php';
@@ -568,8 +558,6 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
      */
     public function getFrontendController()
     {
-        $this->registerMyNamespace();
-
         return $this->Path() . '/Controllers/Frontend/SwagImportExport.php';
     }
 
@@ -580,8 +568,6 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
      */
     public function onAddConsoleCommand()
     {
-        $this->registerMyNamespace();
-
         return new ArrayCollection(
             [
                 new ImportCommand(),
