@@ -8,7 +8,11 @@
 
 namespace Shopware\Components\SwagImportExport;
 
+use Doctrine\DBAL\Connection;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\Mapping\ClassMetadataFactory;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\QueryBuilder\QueryBuilder;
 
 class DbalHelper
@@ -19,9 +23,27 @@ class DbalHelper
     /** @var \Doctrine\DBAL\Driver\Statement[] */
     protected $statements = array();
 
-    public function __construct()
+    /**
+     * @var ModelManager
+     */
+    private $modelManager;
+
+    public static function create()
     {
-        $this->connection = Shopware()->Models()->getConnection();
+        return new DbalHelper(
+            Shopware()->Container()->get('dbal_connection'),
+            Shopware()->Container()->get('models')
+        );
+    }
+
+    /**
+     * @param Connection $connection
+     * @param ModelManager $modelManager
+     */
+    public function __construct(Connection $connection, ModelManager $modelManager)
+    {
+        $this->connection = $connection;
+        $this->modelManager = $modelManager;
     }
 
     /**
@@ -40,7 +62,7 @@ class DbalHelper
      */
     public function getQueryBuilderForEntity($data, $entity, $primaryId)
     {
-        $metaData = Shopware()->Models()->getClassMetadata($entity);
+        $metaData = $this->modelManager->getClassMetadata($entity);
         $table = $metaData->table['name'];
 
         $builder = $this->getQueryBuilder();

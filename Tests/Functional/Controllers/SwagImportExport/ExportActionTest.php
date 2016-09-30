@@ -9,10 +9,8 @@
 namespace SwagImportExport\Tests\Functional\Controllers\SwagImportExport;
 
 use Shopware\Components\SwagImportExport\UploadPathProvider;
-use SwagBackendOrder\Subscriber\BackendController;
 use SwagImportExport\Tests\Helper\DataProvider\ProfileDataProvider;
 use Tests\Helper\BackendControllerTestHelper;
-use Tests\Helper\CommandTestHelper;
 
 class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
 {
@@ -35,9 +33,12 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
 
     public function setUp()
     {
-        parent::setUp();
-        $this->markTestSkipped('Bamboo test suite needs to be fixed to run this tests correctly.');
+        if ($this->executedOnBamboo()) {
+            $this->markTestSkipped("Test does not work on bamboo.");
+        }
         
+        parent::setUp();
+
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
 
@@ -1286,5 +1287,13 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
     private function getLineAmount($file)
     {
         return count(file($file));
+    }
+
+    /**
+     * @return bool|int
+     */
+    private function executedOnBamboo()
+    {
+        return (strpos(__DIR__, 'bamboo-agent-home') !== false);
     }
 }

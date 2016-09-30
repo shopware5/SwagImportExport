@@ -18,6 +18,8 @@ class DbAdapterHelper
     {
         foreach ($records as &$record) {
             foreach ($record as &$value) {
+                $value = self::convertBooleanFalseToString($value);
+
                 if (!is_array($value)) {
                     $value = html_entity_decode($value, ENT_COMPAT | ENT_HTML401, "UTF-8");
                 }
@@ -40,5 +42,19 @@ class DbAdapterHelper
         }
 
         return $records;
+    }
+
+    /**
+     * html_entity_encode would return an empty string if boolean false is passed.
+     *
+     * @param mixed $value
+     * @return mixed|string
+     */
+    private static function convertBooleanFalseToString($value)
+    {
+        if (false === $value) {
+            return "0";
+        }
+        return $value;
     }
 }

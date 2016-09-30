@@ -24,8 +24,8 @@
 	<added>2012-07-16</added>
 	<changed>2012-08-30 16:13:21</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords></keywords>
 	<minpurchase>1</minpurchase>
@@ -36,7 +36,7 @@
 	<packunit></packunit>
 	<unitID></unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
+	<pricegroupActive>0</pricegroupActive>
 	<laststock>1</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
@@ -84,8 +84,8 @@
 	<added>2012-07-16</added>
 	<changed>2012-08-30 16:14:22</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords></keywords>
 	<minpurchase>1</minpurchase>
@@ -96,8 +96,8 @@
 	<packunit>Paar</packunit>
 	<unitID></unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
+	<pricegroupActive>0</pricegroupActive>
+	<laststock>0</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
 	<weight>0.000</weight>
@@ -144,8 +144,8 @@
 	<added>2012-07-16</added>
 	<changed>2012-08-30 16:20:43</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords></keywords>
 	<minpurchase>1</minpurchase>
@@ -156,8 +156,8 @@
 	<packunit>Paar</packunit>
 	<unitID></unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
+	<pricegroupActive>0</pricegroupActive>
+	<laststock>0</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
 	<weight>0.000</weight>
@@ -204,8 +204,8 @@
 	<added>2012-07-16</added>
 	<changed>2012-08-30 16:21:35</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords></keywords>
 	<minpurchase>1</minpurchase>
@@ -216,8 +216,8 @@
 	<packunit></packunit>
 	<unitID></unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
+	<pricegroupActive>0</pricegroupActive>
+	<laststock>0</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
 	<weight>0.000</weight>
@@ -264,7 +264,7 @@
 	<added>2012-07-16</added>
 	<changed>2012-08-30 16:24:59</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
+	<shippingfree>0</shippingfree>
 	<topseller>1</topseller>
 	<metatitle></metatitle>
 	<keywords></keywords>
@@ -276,7 +276,7 @@
 	<packunit></packunit>
 	<unitID></unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
+	<pricegroupActive>0</pricegroupActive>
 	<laststock>1</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
@@ -324,8 +324,8 @@
 	<added>2012-07-16</added>
 	<changed>2012-08-20 17:42:35</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords></keywords>
 	<minpurchase>1</minpurchase>
@@ -336,8 +336,8 @@
 	<packunit></packunit>
 	<unitID></unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
+	<pricegroupActive>0</pricegroupActive>
+	<laststock>0</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
 	<weight>0.000</weight>
@@ -387,8 +387,8 @@
 	<added>2012-07-16</added>
 	<changed>2012-08-30 16:12:03</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords></keywords>
 	<minpurchase>1</minpurchase>
@@ -399,8 +399,8 @@
 	<packunit></packunit>
 	<unitID></unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
+	<pricegroupActive>0</pricegroupActive>
+	<laststock>0</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
 	<weight>0.000</weight>
@@ -450,8 +450,8 @@
 	<added>2012-07-16</added>
 	<changed>2012-08-20 17:48:00</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords></keywords>
 	<minpurchase>1</minpurchase>
@@ -462,8 +462,8 @@
 	<packunit></packunit>
 	<unitID></unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
+	<pricegroupActive>0</pricegroupActive>
+	<laststock>0</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
 	<weight>0.000</weight>
@@ -513,8 +513,8 @@
 	<added>2012-08-20</added>
 	<changed>2012-08-30 16:10:18</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords></keywords>
 	<minpurchase>1</minpurchase>
@@ -525,8 +525,8 @@
 	<packunit></packunit>
 	<unitID></unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
+	<pricegroupActive>0</pricegroupActive>
+	<laststock>0</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
 	<weight>0.000</weight>
@@ -576,8 +576,8 @@
 	<added>2012-07-16</added>
 	<changed>2012-08-30 16:24:13</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords></keywords>
 	<minpurchase>1</minpurchase>
@@ -588,8 +588,8 @@
 	<packunit></packunit>
 	<unitID></unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
+	<pricegroupActive>0</pricegroupActive>
+	<laststock>0</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
 	<weight>0.000</weight>

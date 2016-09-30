@@ -94,15 +94,21 @@ class DataIO
     private $logger;
 
     /**
+     * @var UploadPathProvider
+     */
+    private $uploadPathProvider;
+
+    /**
      * @param DataDbAdapter $dbAdapter
      * @param Session $dataSession
      * @param Logger $logger
      */
-    public function __construct(DataDbAdapter $dbAdapter, $dataSession, $logger)
+    public function __construct(DataDbAdapter $dbAdapter, $dataSession, $logger, UploadPathProvider $uploadPathProvider)
     {
         $this->dbAdapter = $dbAdapter;
         $this->dataSession = $dataSession;
         $this->logger = $logger;
+        $this->uploadPathProvider = $uploadPathProvider;
     }
 
     /**
@@ -293,9 +299,7 @@ class DataIO
      */
     public function getDirectory()
     {
-        /** @var UploadPathProvider $uploadedPathProvider */
-        $uploadedPathProvider = Shopware()->Container()->get('swag_import_export.upload_path_provider');
-        $directory = $uploadedPathProvider->getPath();
+        $directory = $this->uploadPathProvider->getPath();
 
         if (!file_exists($directory)) {
             $this->createDirectory($directory);

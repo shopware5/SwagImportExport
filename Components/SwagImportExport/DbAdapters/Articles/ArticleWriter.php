@@ -9,7 +9,7 @@
 namespace Shopware\Components\SwagImportExport\DbAdapters\Articles;
 
 use Doctrine\DBAL\Connection;
-use Enlight_Components_Db_Adapter_Pdo_Mysql as PDOConnection;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\DataType\ArticleDataType;
 use Shopware\Components\SwagImportExport\DbalHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
@@ -20,10 +20,9 @@ use Shopware\Components\SwagImportExport\DataManagers\Articles\ArticleDataManage
 class ArticleWriter
 {
     /**
-     * @var PDOConnection $db
+     * @var \Enlight_Components_Db_Adapter_Pdo_Mysql $db
      */
     protected $db;
-
 
     /**
      * @var DbalHelper $dbalHelper
@@ -46,13 +45,19 @@ class ArticleWriter
     protected $dataManager;
 
     /**
+     * @var ModelManager
+     */
+    private $modelManager;
+
+    /**
      * initialises the class properties
      */
     public function __construct()
     {
-        $this->connection = Shopware()->Models()->getConnection();
-        $this->db = Shopware()->Db();
-        $this->dbalHelper = new DbalHelper();
+        $this->connection = Shopware()->Container()->get('dbal_connection');
+        $this->db = Shopware()->Container()->get('db');
+        $this->dbalHelper = DbalHelper::create();
+        $this->modelManager = Shopware()->Container()->get('models');
 
         $this->validator = new ArticleValidator();
         $this->dataManager = new ArticleDataManager($this->db, $this->dbalHelper);
@@ -89,7 +94,7 @@ class ArticleWriter
         $createDetail = $detailId == 0;
 
         // if detail needs to be created and the (different) mainDetail does not exist: error
-        if ($createDetail && !$mainDetailId && $article['mainNumber'] != $article['orderNumber']) {
+        if ($createDetail && !$mainDetailId && !$this->isMainDetail($article)) {
             $message = SnippetsHelper::getNamespace()
                 ->get('adapters/articles/variant_existence', 'Variant with number %s does not exists.');
             throw new AdapterException(sprintf($message, $article['mainNumber']));
@@ -97,7 +102,7 @@ class ArticleWriter
 
         // Set create flag
         $createArticle = false;
-        if ($createDetail && $article['mainNumber'] == $article['orderNumber']) {
+        if ($createDetail && $this->isMainDetail($article)) {
             $createArticle = true;
             $article = $this->dataManager->setDefaultFieldsForCreate($article, $defaultValues);
             $this->validator->checkRequiredFieldsForCreate($article);
@@ -107,13 +112,16 @@ class ArticleWriter
         $this->validator->validate($article, ArticleDataType::$mapper);
         $article = $this->dataManager->setArticleData($article, ArticleDataType::$articleFieldsMapping);
 
-        // insert/update article
-        $builder = $this->dbalHelper->getQueryBuilderForEntity(
-            $article,
-            'Shopware\Models\Article\Article',
-            $createArticle ? false : $articleId
-        );
-        $builder->execute();
+        // insert/update main detail article
+        if ($this->isMainDetail($article)) {
+            $builder = $this->dbalHelper->getQueryBuilderForEntity(
+                $article,
+                'Shopware\Models\Article\Article',
+                $createArticle ? false : $articleId
+            );
+            $builder->execute();
+        }
+
         if ($createArticle) {
             $articleId = $this->connection->lastInsertId();
         }
@@ -137,12 +145,6 @@ class ArticleWriter
         // set reference
         if ($createArticle) {
             $this->db->query('UPDATE s_articles SET main_detail_id = ? WHERE id = ?', array($detailId, $articleId));
-        }
-
-        // set value to active column in s_articles table
-        $active = $this->getActiveForArticlesTable($article, $articleId);
-        if ($createArticle === false && $active !== null) {
-            $this->db->query('UPDATE s_articles SET active = ? WHERE id = ?', array($active, $articleId));
         }
 
         // insert attributes
@@ -195,29 +197,6 @@ class ArticleWriter
     }
 
     /**
-     * Returns the value for `active` column needed for `s_articles` table.
-     *
-     * @param int $articleId
-     * @param array $article
-     * @return int|null
-     */
-    protected function getActiveForArticlesTable($article, $articleId)
-    {
-        // if active data is missing from the profile tree or is not set in the file - continue
-        if ($article['active'] === null || $article['active'] === '') {
-            return null;
-        }
-
-        // if there is at least one detail which is active, set active column as 1 for s_articles table
-        $sql = 'SELECT active
-                FROM s_articles_details
-                WHERE articleID = ?
-                ORDER BY active DESC LIMIT 1';
-
-        return (int) $this->db->fetchOne($sql, $articleId);
-    }
-
-    /**
      * @param array $article
      * @return array
      */
@@ -247,5 +226,14 @@ class ArticleWriter
         $attrId = $this->connection->fetchColumn($sql, array($detailId));
 
         return $attrId;
+    }
+
+    /**
+     * @param array $article
+     * @return bool
+     */
+    private function isMainDetail(array $article)
+    {
+        return $article['mainNumber'] == $article['orderNumber'];
     }
 }

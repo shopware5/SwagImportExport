@@ -26,8 +26,8 @@
 	<added>2012-07-16</added>
 	<changed>2012-08-30 16:15:54</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords></keywords>
 	<minpurchase>1</minpurchase>
@@ -38,7 +38,7 @@
 	<packunit></packunit>
 	<unitID></unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
+	<pricegroupActive>0</pricegroupActive>
 	<laststock>1</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
@@ -50,14 +50,14 @@
 	<configurators>
 		<configurator>
 			<configuratorsetID>25</configuratorsetID>
-			<configuratortype></configuratortype>
+			<configuratortype>0</configuratortype>
 			<configuratorGroup>Farbe</configuratorGroup>
 			<configuratorOptions>blau</configuratorOptions>
 			<configSetName>Set-SW10201</configSetName>
 		</configurator>
 		<configurator>
 			<configuratorsetID>25</configuratorsetID>
-			<configuratortype></configuratortype>
+			<configuratortype>0</configuratortype>
 			<configuratorGroup>Größe</configuratorGroup>
 			<configuratorOptions>36</configuratorOptions>
 			<configSetName>Set-SW10201</configSetName>
@@ -97,8 +97,8 @@
 	<added>2012-06-22</added>
 	<changed>2012-08-30 16:12:44</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords></keywords>
 	<minpurchase>1</minpurchase>
@@ -109,7 +109,7 @@
 	<packunit></packunit>
 	<unitID></unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
+	<pricegroupActive>0</pricegroupActive>
 	<laststock>1</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
@@ -167,8 +167,8 @@
 	<added>2012-07-16</added>
 	<changed>2012-08-30 16:08:58</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords></keywords>
 	<minpurchase>1</minpurchase>
@@ -179,7 +179,7 @@
 	<packunit></packunit>
 	<unitID></unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
+	<pricegroupActive>0</pricegroupActive>
 	<laststock>1</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
@@ -237,8 +237,8 @@
 	<added>2012-06-22</added>
 	<changed>2012-08-22 14:48:11</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords></keywords>
 	<minpurchase>1</minpurchase>
@@ -249,8 +249,8 @@
 	<packunit></packunit>
 	<unitID></unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
+	<pricegroupActive>0</pricegroupActive>
+	<laststock>0</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
 	<weight>0.000</weight>
@@ -261,14 +261,14 @@
 	<configurators>
 		<configurator>
 			<configuratorsetID>28</configuratorsetID>
-			<configuratortype></configuratortype>
+			<configuratortype>0</configuratortype>
 			<configuratorGroup>mit Ersatzteilen</configuratorGroup>
 			<configuratorOptions>ohne</configuratorOptions>
 			<configSetName>Set-SW10204</configSetName>
 		</configurator>
 		<configurator>
 			<configuratorsetID>28</configuratorsetID>
-			<configuratortype></configuratortype>
+			<configuratortype>0</configuratortype>
 			<configuratorGroup>Garantieverlängerung</configuratorGroup>
 			<configuratorOptions>ohne</configuratorOptions>
 			<configSetName>Set-SW10204</configSetName>
@@ -307,8 +307,8 @@
 	<added>2012-06-22</added>
 	<changed>2012-08-22 14:48:11</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords></keywords>
 	<minpurchase>1</minpurchase>
@@ -319,8 +319,8 @@
 	<packunit></packunit>
 	<unitID></unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
+	<pricegroupActive>0</pricegroupActive>
+	<laststock>0</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
 	<weight>0.000</weight>
@@ -331,14 +331,14 @@
 	<configurators>
 		<configurator>
 			<configuratorsetID>28</configuratorsetID>
-			<configuratortype></configuratortype>
+			<configuratortype>0</configuratortype>
 			<configuratorGroup>mit Ersatzteilen</configuratorGroup>
 			<configuratorOptions>mit Figuren</configuratorOptions>
 			<configSetName>Set-SW10204</configSetName>
 		</configurator>
 		<configurator>
 			<configuratorsetID>28</configuratorsetID>
-			<configuratortype></configuratortype>
+			<configuratortype>0</configuratortype>
 			<configuratorGroup>Garantieverlängerung</configuratorGroup>
 			<configuratorOptions>ohne</configuratorOptions>
 			<configSetName>Set-SW10204</configSetName>
@@ -377,8 +377,8 @@
 	<added>2012-06-22</added>
 	<changed>2012-08-22 14:48:11</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords></keywords>
 	<minpurchase>1</minpurchase>
@@ -389,8 +389,8 @@
 	<packunit></packunit>
 	<unitID></unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
+	<pricegroupActive>0</pricegroupActive>
+	<laststock>0</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
 	<weight>0.000</weight>
@@ -401,14 +401,14 @@
 	<configurators>
 		<configurator>
 			<configuratorsetID>28</configuratorsetID>
-			<configuratortype></configuratortype>
+			<configuratortype>0</configuratortype>
 			<configuratorGroup>mit Ersatzteilen</configuratorGroup>
 			<configuratorOptions>mit Figuren und Ball-Set</configuratorOptions>
 			<configSetName>Set-SW10204</configSetName>
 		</configurator>
 		<configurator>
 			<configuratorsetID>28</configuratorsetID>
-			<configuratortype></configuratortype>
+			<configuratortype>0</configuratortype>
 			<configuratorGroup>Garantieverlängerung</configuratorGroup>
 			<configuratorOptions>ohne</configuratorOptions>
 			<configSetName>Set-SW10204</configSetName>
@@ -447,8 +447,8 @@
 	<added>2012-06-22</added>
 	<changed>2012-08-22 14:48:11</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords></keywords>
 	<minpurchase>1</minpurchase>
@@ -459,8 +459,8 @@
 	<packunit></packunit>
 	<unitID></unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
+	<pricegroupActive>0</pricegroupActive>
+	<laststock>0</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
 	<weight>0.000</weight>
@@ -471,14 +471,14 @@
 	<configurators>
 		<configurator>
 			<configuratorsetID>28</configuratorsetID>
-			<configuratortype></configuratortype>
+			<configuratortype>0</configuratortype>
 			<configuratorGroup>mit Ersatzteilen</configuratorGroup>
 			<configuratorOptions>mit Figuren, Ball-Set und Service Box</configuratorOptions>
 			<configSetName>Set-SW10204</configSetName>
 		</configurator>
 		<configurator>
 			<configuratorsetID>28</configuratorsetID>
-			<configuratortype></configuratortype>
+			<configuratortype>0</configuratortype>
 			<configuratorGroup>Garantieverlängerung</configuratorGroup>
 			<configuratorOptions>ohne</configuratorOptions>
 			<configSetName>Set-SW10204</configSetName>
@@ -517,8 +517,8 @@
 	<added>2012-07-16</added>
 	<changed>2012-08-22 15:15:44</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords></keywords>
 	<minpurchase>1</minpurchase>
@@ -529,8 +529,8 @@
 	<packunit>Flaschen(n)</packunit>
 	<unitID>1</unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
+	<pricegroupActive>0</pricegroupActive>
+	<laststock>0</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
 	<weight>0.000</weight>
@@ -541,7 +541,7 @@
 	<configurators>
 		<configurator>
 			<configuratorsetID>29</configuratorsetID>
-			<configuratortype></configuratortype>
+			<configuratortype>0</configuratortype>
 			<configuratorGroup>Flascheninhalt</configuratorGroup>
 			<configuratorOptions>1,5 Liter</configuratorOptions>
 			<configSetName>Set-SW10205</configSetName>
@@ -580,8 +580,8 @@
 	<added>2012-07-16</added>
 	<changed>2012-08-22 15:15:44</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords></keywords>
 	<minpurchase>1</minpurchase>
@@ -592,8 +592,8 @@
 	<packunit>Flaschen(n)</packunit>
 	<unitID>1</unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
+	<pricegroupActive>0</pricegroupActive>
+	<laststock>0</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
 	<weight>0.000</weight>
@@ -604,7 +604,7 @@
 	<configurators>
 		<configurator>
 			<configuratorsetID>29</configuratorsetID>
-			<configuratortype></configuratortype>
+			<configuratortype>0</configuratortype>
 			<configuratorGroup>Flascheninhalt</configuratorGroup>
 			<configuratorOptions>5 Liter</configuratorOptions>
 			<configSetName>Set-SW10205</configSetName>
@@ -643,8 +643,8 @@
 	<added>2012-08-29</added>
 	<changed>2012-08-29 15:44:22</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords></keywords>
 	<minpurchase>1</minpurchase>
@@ -655,8 +655,8 @@
 	<packunit></packunit>
 	<unitID>10</unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
+	<pricegroupActive>0</pricegroupActive>
+	<laststock>0</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
 	<weight>0.000</weight>
@@ -667,7 +667,7 @@
 	<configurators>
 		<configurator>
 			<configuratorsetID>30</configuratorsetID>
-			<configuratortype></configuratortype>
+			<configuratortype>0</configuratortype>
 			<configuratorGroup>Inhalt</configuratorGroup>
 			<configuratorOptions>500ml</configuratorOptions>
 			<configSetName>stop the water</configSetName>
@@ -703,8 +703,8 @@
 	<added>2012-08-29</added>
 	<changed>2012-08-29 15:44:22</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords></keywords>
 	<minpurchase>1</minpurchase>
@@ -715,8 +715,8 @@
 	<packunit></packunit>
 	<unitID>1</unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
+	<pricegroupActive>0</pricegroupActive>
+	<laststock>0</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
 	<weight>0.000</weight>
@@ -727,7 +727,7 @@
 	<configurators>
 		<configurator>
 			<configuratorsetID>30</configuratorsetID>
-			<configuratortype></configuratortype>
+			<configuratortype>0</configuratortype>
 			<configuratorGroup>Inhalt</configuratorGroup>
 			<configuratorOptions>5l</configuratorOptions>
 			<configSetName>stop the water</configSetName>
@@ -763,8 +763,8 @@
 	<added>2012-08-29</added>
 	<changed>2012-08-29 15:47:13</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords></keywords>
 	<minpurchase>1</minpurchase>
@@ -775,8 +775,8 @@
 	<packunit></packunit>
 	<unitID>10</unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
+	<pricegroupActive>0</pricegroupActive>
+	<laststock>0</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
 	<weight>0.000</weight>
@@ -787,7 +787,7 @@
 	<configurators>
 		<configurator>
 			<configuratorsetID>31</configuratorsetID>
-			<configuratortype></configuratortype>
+			<configuratortype>0</configuratortype>
 			<configuratorGroup>Inhalt</configuratorGroup>
 			<configuratorOptions>500ml</configuratorOptions>
 			<configSetName>Set-SW10213</configSetName>
@@ -823,8 +823,8 @@
 	<added>2012-08-29</added>
 	<changed>2012-08-29 15:47:13</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords></keywords>
 	<minpurchase>1</minpurchase>
@@ -835,8 +835,8 @@
 	<packunit></packunit>
 	<unitID>1</unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
+	<pricegroupActive>0</pricegroupActive>
+	<laststock>0</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
 	<weight>0.000</weight>
@@ -847,7 +847,7 @@
 	<configurators>
 		<configurator>
 			<configuratorsetID>31</configuratorsetID>
-			<configuratortype></configuratortype>
+			<configuratortype>0</configuratortype>
 			<configuratorGroup>Inhalt</configuratorGroup>
 			<configuratorOptions>5l</configuratorOptions>
 			<configSetName>Set-SW10213</configSetName>
@@ -883,8 +883,8 @@
 	<added>2012-08-29</added>
 	<changed>2012-08-29 15:44:59</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords></keywords>
 	<minpurchase>1</minpurchase>
@@ -895,8 +895,8 @@
 	<packunit></packunit>
 	<unitID>10</unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
+	<pricegroupActive>0</pricegroupActive>
+	<laststock>0</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
 	<weight>0.000</weight>
@@ -907,7 +907,7 @@
 	<configurators>
 		<configurator>
 			<configuratorsetID>32</configuratorsetID>
-			<configuratortype></configuratortype>
+			<configuratortype>0</configuratortype>
 			<configuratorGroup>Inhalt</configuratorGroup>
 			<configuratorOptions>500ml</configuratorOptions>
 			<configSetName>Set-SW10214</configSetName>
@@ -943,8 +943,8 @@
 	<added>2012-08-29</added>
 	<changed>2012-08-29 15:44:59</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords></keywords>
 	<minpurchase>1</minpurchase>
@@ -955,8 +955,8 @@
 	<packunit></packunit>
 	<unitID>1</unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
+	<pricegroupActive>0</pricegroupActive>
+	<laststock>0</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
 	<weight>0.000</weight>
@@ -967,7 +967,7 @@
 	<configurators>
 		<configurator>
 			<configuratorsetID>32</configuratorsetID>
-			<configuratortype></configuratortype>
+			<configuratortype>0</configuratortype>
 			<configuratorGroup>Inhalt</configuratorGroup>
 			<configuratorOptions>5l</configuratorOptions>
 			<configSetName>Set-SW10214</configSetName>
@@ -1003,8 +1003,8 @@
 	<added>2012-07-16</added>
 	<changed>2012-08-29 15:45:25</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords></keywords>
 	<minpurchase>1</minpurchase>
@@ -1015,8 +1015,8 @@
 	<packunit></packunit>
 	<unitID>10</unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
+	<pricegroupActive>0</pricegroupActive>
+	<laststock>0</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
 	<weight>0.000</weight>
@@ -1027,7 +1027,7 @@
 	<configurators>
 		<configurator>
 			<configuratorsetID>33</configuratorsetID>
-			<configuratortype></configuratortype>
+			<configuratortype>0</configuratortype>
 			<configuratorGroup>Inhalt</configuratorGroup>
 			<configuratorOptions>500ml</configuratorOptions>
 			<configSetName>Set-SW10215</configSetName>
@@ -1063,8 +1063,8 @@
 	<added>2012-07-16</added>
 	<changed>2012-08-29 15:45:25</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords></keywords>
 	<minpurchase>1</minpurchase>
@@ -1075,8 +1075,8 @@
 	<packunit></packunit>
 	<unitID>1</unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
+	<pricegroupActive>0</pricegroupActive>
+	<laststock>0</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
 	<weight>0.000</weight>
@@ -1087,7 +1087,7 @@
 	<configurators>
 		<configurator>
 			<configuratorsetID>33</configuratorsetID>
-			<configuratortype></configuratortype>
+			<configuratortype>0</configuratortype>
 			<configuratorGroup>Inhalt</configuratorGroup>
 			<configuratorOptions>5l</configuratorOptions>
 			<configSetName>Set-SW10215</configSetName>
@@ -1123,8 +1123,8 @@
 	<added>2012-08-29</added>
 	<changed>2012-08-30 15:37:24</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords></keywords>
 	<minpurchase>1</minpurchase>
@@ -1135,8 +1135,8 @@
 	<packunit></packunit>
 	<unitID>10</unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
+	<pricegroupActive>0</pricegroupActive>
+	<laststock>0</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
 	<weight>0.000</weight>
@@ -1147,7 +1147,7 @@
 	<configurators>
 		<configurator>
 			<configuratorsetID>34</configuratorsetID>
-			<configuratortype></configuratortype>
+			<configuratortype>0</configuratortype>
 			<configuratorGroup>Inhalt</configuratorGroup>
 			<configuratorOptions>500ml</configuratorOptions>
 			<configSetName>Set-SW10216</configSetName>
@@ -1186,8 +1186,8 @@
 	<added>2012-08-29</added>
 	<changed>2012-08-30 15:37:24</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords></keywords>
 	<minpurchase>1</minpurchase>
@@ -1198,8 +1198,8 @@
 	<packunit></packunit>
 	<unitID>1</unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
+	<pricegroupActive>0</pricegroupActive>
+	<laststock>0</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
 	<weight>0.000</weight>
@@ -1210,7 +1210,7 @@
 	<configurators>
 		<configurator>
 			<configuratorsetID>34</configuratorsetID>
-			<configuratortype></configuratortype>
+			<configuratortype>0</configuratortype>
 			<configuratorGroup>Inhalt</configuratorGroup>
 			<configuratorOptions>5l</configuratorOptions>
 			<configSetName>Set-SW10216</configSetName>
@@ -1249,8 +1249,8 @@
 	<added>2012-08-29</added>
 	<changed>2012-08-30 15:27:05</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords></keywords>
 	<minpurchase>1</minpurchase>
@@ -1261,8 +1261,8 @@
 	<packunit></packunit>
 	<unitID></unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
+	<pricegroupActive>0</pricegroupActive>
+	<laststock>0</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
 	<weight>0.000</weight>
@@ -1273,7 +1273,7 @@
 	<configurators>
 		<configurator>
 			<configuratorsetID>35</configuratorsetID>
-			<configuratortype></configuratortype>
+			<configuratortype>0</configuratortype>
 			<configuratorGroup>Farbe</configuratorGroup>
 			<configuratorOptions>gelb</configuratorOptions>
 			<configSetName>Set-SW100718</configSetName>

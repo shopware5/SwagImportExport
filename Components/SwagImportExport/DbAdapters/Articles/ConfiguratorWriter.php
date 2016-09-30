@@ -26,7 +26,7 @@ class ConfiguratorWriter
      */
     public function __construct()
     {
-        $this->dbalHelper = new DbalHelper();
+        $this->dbalHelper = DbalHelper::create();
         $this->connection = Shopware()->Models()->getConnection();
         $this->db = Shopware()->Db();
         $this->sets = $this->getSets();

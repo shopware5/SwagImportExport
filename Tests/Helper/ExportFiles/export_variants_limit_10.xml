@@ -24,8 +24,8 @@
 	<added>2012-08-15</added>
 	<changed>2012-08-20 15:16:45</changed>
 	<releasedate>2012-06-13</releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords></keywords>
 	<minpurchase>1</minpurchase>
@@ -36,8 +36,8 @@
 	<packunit>Flasche(n)</packunit>
 	<unitID>1</unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
+	<pricegroupActive>0</pricegroupActive>
+	<laststock>0</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
 	<weight>0.000</weight>
@@ -99,7 +99,7 @@
 	<added>2012-06-13</added>
 	<changed>2012-08-20 15:20:08</changed>
 	<releasedate>2012-05-07</releasedate>
-	<shippingfree></shippingfree>
+	<shippingfree>0</shippingfree>
 	<topseller>1</topseller>
 	<metatitle></metatitle>
 	<keywords></keywords>
@@ -111,8 +111,8 @@
 	<packunit>Flasche(n)</packunit>
 	<unitID>1</unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
+	<pricegroupActive>0</pricegroupActive>
+	<laststock>0</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
 	<weight>0.000</weight>
@@ -180,8 +180,8 @@
 	<added>2012-08-15</added>
 	<changed>2012-08-20 15:24:42</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords></keywords>
 	<minpurchase>1</minpurchase>
@@ -192,8 +192,8 @@
 	<packunit>Flasche(n)</packunit>
 	<unitID>1</unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
+	<pricegroupActive>0</pricegroupActive>
+	<laststock>0</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
 	<weight>0.000</weight>
@@ -261,8 +261,8 @@
 	<added>2012-07-02</added>
 	<changed>2012-08-20 15:54:16</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords></keywords>
 	<minpurchase>1</minpurchase>
@@ -273,8 +273,8 @@
 	<packunit>Flaschen(n)</packunit>
 	<unitID>1</unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
+	<pricegroupActive>0</pricegroupActive>
+	<laststock>0</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
 	<weight>0.000</weight>
@@ -333,8 +333,8 @@
 	<added>2012-08-16</added>
 	<changed>2012-08-20 15:43:54</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords></keywords>
 	<minpurchase>1</minpurchase>
@@ -345,8 +345,8 @@
 	<packunit>Flaschen(n)</packunit>
 	<unitID>1</unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
+	<pricegroupActive>0</pricegroupActive>
+	<laststock>0</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
 	<weight>0.000</weight>
@@ -405,8 +405,8 @@
 	<added>2012-08-01</added>
 	<changed>2012-08-31 08:20:18</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords></keywords>
 	<minpurchase>1</minpurchase>
@@ -417,8 +417,8 @@
 	<packunit>Flaschen(n)</packunit>
 	<unitID>1</unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
+	<pricegroupActive>0</pricegroupActive>
+	<laststock>0</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
 	<weight>0.000</weight>
@@ -474,8 +474,8 @@
 	<added>2012-07-09</added>
 	<changed>2012-08-16 11:39:23</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords></keywords>
 	<minpurchase>1</minpurchase>
@@ -486,8 +486,8 @@
 	<packunit></packunit>
 	<unitID></unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
+	<pricegroupActive>0</pricegroupActive>
+	<laststock>0</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
 	<weight>0.000</weight>
@@ -537,8 +537,8 @@
 	<added>2012-07-31</added>
 	<changed>2012-08-21 08:16:49</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords></keywords>
 	<minpurchase>1</minpurchase>
@@ -549,8 +549,8 @@
 	<packunit></packunit>
 	<unitID>1</unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
+	<pricegroupActive>0</pricegroupActive>
+	<laststock>0</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
 	<weight>0.000</weight>
@@ -600,8 +600,8 @@
 	<added>2012-08-07</added>
 	<changed>2012-08-16 18:54:40</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords></keywords>
 	<minpurchase>1</minpurchase>
@@ -612,8 +612,8 @@
 	<packunit>Aromabeutel</packunit>
 	<unitID>2</unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
+	<pricegroupActive>0</pricegroupActive>
+	<laststock>0</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
 	<weight>0.000</weight>
@@ -675,8 +675,8 @@
 	<added>2012-07-31</added>
 	<changed>2012-08-16 19:02:56</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords></keywords>
 	<minpurchase>1</minpurchase>
@@ -687,8 +687,8 @@
 	<packunit>Aromabeutel</packunit>
 	<unitID>2</unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
+	<pricegroupActive>0</pricegroupActive>
+	<laststock>0</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
 	<weight>0.000</weight>

@@ -24,8 +24,8 @@
 	<added>2012-07-16</added>
 	<changed>2012-08-30 16:27:18</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords></keywords>
 	<minpurchase>1</minpurchase>
@@ -36,8 +36,8 @@
 	<packunit></packunit>
 	<unitID></unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
+	<pricegroupActive>0</pricegroupActive>
+	<laststock>0</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
 	<weight>0.000</weight>
@@ -87,8 +87,8 @@
 	<added>2012-07-16</added>
 	<changed>2012-08-20 10:43:03</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords></keywords>
 	<minpurchase>1</minpurchase>
@@ -99,8 +99,8 @@
 	<packunit></packunit>
 	<unitID></unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
+	<pricegroupActive>0</pricegroupActive>
+	<laststock>0</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
 	<weight>0.000</weight>
@@ -147,7 +147,7 @@
 	<added>2012-08-21</added>
 	<changed>2012-08-21 14:42:17</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
+	<shippingfree>0</shippingfree>
 	<topseller>1</topseller>
 	<metatitle></metatitle>
 	<keywords></keywords>
@@ -159,7 +159,7 @@
 	<packunit></packunit>
 	<unitID></unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
+	<pricegroupActive>0</pricegroupActive>
 	<laststock>1</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
@@ -227,8 +227,8 @@
 	<added>2012-07-16</added>
 	<changed>2012-08-22 15:36:02</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords></keywords>
 	<minpurchase>1</minpurchase>
@@ -239,8 +239,8 @@
 	<packunit></packunit>
 	<unitID></unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
+	<pricegroupActive>0</pricegroupActive>
+	<laststock>0</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
 	<weight>0.000</weight>
@@ -290,8 +290,8 @@
 	<added>2012-07-16</added>
 	<changed>2012-08-30 13:06:37</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords></keywords>
 	<minpurchase>1</minpurchase>
@@ -302,8 +302,8 @@
 	<packunit></packunit>
 	<unitID></unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
+	<pricegroupActive>0</pricegroupActive>
+	<laststock>0</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
 	<weight>0.000</weight>
@@ -353,8 +353,8 @@
 	<added>2012-06-12</added>
 	<changed>2012-08-30 15:36:37</changed>
 	<releasedate>2012-07-16</releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords></keywords>
 	<minpurchase>1</minpurchase>
@@ -365,7 +365,7 @@
 	<packunit></packunit>
 	<unitID></unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
+	<pricegroupActive>0</pricegroupActive>
 	<laststock>1</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
@@ -419,7 +419,7 @@ Legen Sie diesen Artikel in den Warenkorb und sehen sich das Ergebnis an.</descr
 	<changed>2012-08-30 15:33:54</changed>
 	<releasedate></releasedate>
 	<shippingfree>1</shippingfree>
-	<topseller></topseller>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords>Versandkostenfreier Artikel, Free Shipping,</keywords>
 	<minpurchase>1</minpurchase>
@@ -430,8 +430,8 @@ Legen Sie diesen Artikel in den Warenkorb und sehen sich das Ergebnis an.</descr
 	<packunit></packunit>
 	<unitID></unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
+	<pricegroupActive>0</pricegroupActive>
+	<laststock>0</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
 	<weight>0.000</weight>
@@ -484,8 +484,8 @@ Bei jeder Bestellung wird Ihnen nun der Zuschlag für die Zahlungsart berechnet.
 	<added>2012-08-29</added>
 	<changed>2012-08-30 15:18:49</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords></keywords>
 	<minpurchase>1</minpurchase>
@@ -496,8 +496,8 @@ Bei jeder Bestellung wird Ihnen nun der Zuschlag für die Zahlungsart berechnet.
 	<packunit></packunit>
 	<unitID></unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
+	<pricegroupActive>0</pricegroupActive>
+	<laststock>0</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
 	<weight>0.000</weight>
@@ -538,7 +538,7 @@ Bei jeder Bestellung wird Ihnen nun der Zuschlag für die Zahlungsart berechnet.
 			<pseudoprice></pseudoprice>
 		</price>
 	</prices>
-	<active></active>
+	<active>0</active>
 	<instock></instock>
 	<stockmin></stockmin>
 	<description></description>
@@ -547,8 +547,8 @@ Bei jeder Bestellung wird Ihnen nun der Zuschlag für die Zahlungsart berechnet.
 	<added>2012-08-30</added>
 	<changed>2012-08-30 16:06:10</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords>1</keywords>
 	<minpurchase>1</minpurchase>
@@ -559,8 +559,8 @@ Bei jeder Bestellung wird Ihnen nun der Zuschlag für die Zahlungsart berechnet.
 	<packunit></packunit>
 	<unitID></unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
+	<pricegroupActive>0</pricegroupActive>
+	<laststock>0</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
 	<weight></weight>
@@ -598,7 +598,7 @@ Bei jeder Bestellung wird Ihnen nun der Zuschlag für die Zahlungsart berechnet.
 			<pseudoprice></pseudoprice>
 		</price>
 	</prices>
-	<active></active>
+	<active>0</active>
 	<instock></instock>
 	<stockmin></stockmin>
 	<description></description>
@@ -607,8 +607,8 @@ Bei jeder Bestellung wird Ihnen nun der Zuschlag für die Zahlungsart berechnet.
 	<added>2012-08-30</added>
 	<changed>2012-08-30 16:06:10</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords>1</keywords>
 	<minpurchase>1</minpurchase>
@@ -619,8 +619,8 @@ Bei jeder Bestellung wird Ihnen nun der Zuschlag für die Zahlungsart berechnet.
 	<packunit></packunit>
 	<unitID></unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
+	<pricegroupActive>0</pricegroupActive>
+	<laststock>0</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
 	<weight></weight>
@@ -658,7 +658,7 @@ Bei jeder Bestellung wird Ihnen nun der Zuschlag für die Zahlungsart berechnet.
 			<pseudoprice></pseudoprice>
 		</price>
 	</prices>
-	<active></active>
+	<active>0</active>
 	<instock></instock>
 	<stockmin></stockmin>
 	<description></description>
@@ -667,8 +667,8 @@ Bei jeder Bestellung wird Ihnen nun der Zuschlag für die Zahlungsart berechnet.
 	<added>2012-08-30</added>
 	<changed>2012-08-30 16:06:10</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords>1</keywords>
 	<minpurchase>1</minpurchase>
@@ -679,8 +679,8 @@ Bei jeder Bestellung wird Ihnen nun der Zuschlag für die Zahlungsart berechnet.
 	<packunit></packunit>
 	<unitID></unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
+	<pricegroupActive>0</pricegroupActive>
+	<laststock>0</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
 	<weight></weight>
@@ -718,7 +718,7 @@ Bei jeder Bestellung wird Ihnen nun der Zuschlag für die Zahlungsart berechnet.
 			<pseudoprice></pseudoprice>
 		</price>
 	</prices>
-	<active></active>
+	<active>0</active>
 	<instock></instock>
 	<stockmin></stockmin>
 	<description></description>
@@ -727,8 +727,8 @@ Bei jeder Bestellung wird Ihnen nun der Zuschlag für die Zahlungsart berechnet.
 	<added>2012-08-30</added>
 	<changed>2012-08-30 16:06:10</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords>1</keywords>
 	<minpurchase>1</minpurchase>
@@ -739,8 +739,8 @@ Bei jeder Bestellung wird Ihnen nun der Zuschlag für die Zahlungsart berechnet.
 	<packunit></packunit>
 	<unitID></unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
+	<pricegroupActive>0</pricegroupActive>
+	<laststock>0</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
 	<weight></weight>
@@ -778,7 +778,7 @@ Bei jeder Bestellung wird Ihnen nun der Zuschlag für die Zahlungsart berechnet.
 			<pseudoprice></pseudoprice>
 		</price>
 	</prices>
-	<active></active>
+	<active>0</active>
 	<instock></instock>
 	<stockmin></stockmin>
 	<description></description>
@@ -787,8 +787,8 @@ Bei jeder Bestellung wird Ihnen nun der Zuschlag für die Zahlungsart berechnet.
 	<added>2012-08-30</added>
 	<changed>2012-08-30 16:06:10</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords>1</keywords>
 	<minpurchase>1</minpurchase>
@@ -799,8 +799,8 @@ Bei jeder Bestellung wird Ihnen nun der Zuschlag für die Zahlungsart berechnet.
 	<packunit></packunit>
 	<unitID></unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
+	<pricegroupActive>0</pricegroupActive>
+	<laststock>0</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
 	<weight></weight>
@@ -838,7 +838,7 @@ Bei jeder Bestellung wird Ihnen nun der Zuschlag für die Zahlungsart berechnet.
 			<pseudoprice></pseudoprice>
 		</price>
 	</prices>
-	<active></active>
+	<active>0</active>
 	<instock></instock>
 	<stockmin></stockmin>
 	<description></description>
@@ -847,8 +847,8 @@ Bei jeder Bestellung wird Ihnen nun der Zuschlag für die Zahlungsart berechnet.
 	<added>2012-08-30</added>
 	<changed>2012-08-30 16:06:10</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords>1</keywords>
 	<minpurchase>1</minpurchase>
@@ -859,8 +859,8 @@ Bei jeder Bestellung wird Ihnen nun der Zuschlag für die Zahlungsart berechnet.
 	<packunit></packunit>
 	<unitID></unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
+	<pricegroupActive>0</pricegroupActive>
+	<laststock>0</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
 	<weight></weight>
@@ -907,8 +907,8 @@ Bei jeder Bestellung wird Ihnen nun der Zuschlag für die Zahlungsart berechnet.
 	<added>2012-08-31</added>
 	<changed>2012-08-31 10:51:24</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords></keywords>
 	<minpurchase>1</minpurchase>
@@ -919,8 +919,8 @@ Bei jeder Bestellung wird Ihnen nun der Zuschlag für die Zahlungsart berechnet.
 	<packunit></packunit>
 	<unitID></unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
+	<pricegroupActive>0</pricegroupActive>
+	<laststock>0</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
 	<weight>0.000</weight>
