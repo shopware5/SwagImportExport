@@ -27,6 +27,7 @@ class ImportExportTestKernel extends TestKernel
         Shopware()->Loader()->registerNamespace('SwagImportExport\Tests', __DIR__ . '/../');
         Shopware()->Loader()->registerNamespace('Tests\Helper', __DIR__ . '/../Helper/');
         Shopware()->Loader()->registerNamespace('Tests\Shopware\ImportExport', __DIR__ . '/../Shopware/ImportExport');
+        Shopware()->Loader()->registerNamespace('Shopware\Setup\SwagImportExport', __DIR__ . '/../../Setup/');
         Shopware()->Loader()->registerNamespace('Shopware\Components', __DIR__ . '/../../Components/');
         Shopware()->Loader()->registerNamespace('Shopware\CustomModels', __DIR__ . '/../../Models/');
 
