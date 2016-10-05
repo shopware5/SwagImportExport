@@ -65,7 +65,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Operation', {
     },
     onDownloadFile: function(record) {
         var me = this;
-        var url = '{url action="downloadFile"}' + '/fileName/' + record.get('fileName');
+        var url = '{url action="downloadFile"}' + '?fileName=' + record.get('fileName');
         var urlExists = me.urlExists(url);
         if (urlExists !== true) {
             Shopware.Msg.createStickyGrowlMessage({
