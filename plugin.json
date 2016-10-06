@@ -8,10 +8,11 @@
     "link": "http://store.shopware.com",
     "author": "Shopware AG",
 
-    "currentVersion": "1.2.2",
+    "currentVersion": "1.2.3",
 
     "changelog": {
         "de": {
+            "1.2.3": "PT-6788 - Bugfix: URL generierung für XML downloads für NGINX-Systeme angepasst; PT-6736 - Aktive Hauptvarianten aktivieren auch den gesamten Aritkel - Boolische Werte werden nun korrekt exportiert; PT-6729 - 0 Werte können wieder importiert werden; PT-6711 - Bestellimport gefixed und automatisierte Tests hinzugefügt; PT-6710 - Exportierte und Importierte Dateien können wieder heruntergeladen werden; PT-6685 - Tests für CLI-Kommandos hinzugefügt; PT-6700 - CLI-Import tests hinzugefügt; PT-6701 - Automatisierte Tests hinzugefügt;",
             "1.2.2": "PT-4457 - Bugfix: SecureUninstall Implementierung; PT-4564 - Bugfix: Konfiguratorset zum Artikel hinzugefügt; PT-5218 - Bugfix: PHPUnit Tests; PT-5741 - Bugfix: Unnötige CDN Integration entfernt; PT-5754 - Feature: Konfiguration für Dezimal-Trennzeichen; PT-5810 - Bugfix: Einkaufspreis; PT-6100 - Bugfix: Pflichtfeldprüfung für Übersetzungen; PT-6365 - Feature: Kategoriefilter für das Export Kommando; PT-6371 - Bugfix: Refaktorierung Logger; PT-6392 - Bugfix: Paginierung im Profil-Dropdown;",
             "1.2.1": "PT-6190 - Bugfix: Import über Cron;",
             "1.2.0": "PT-5674 - Feature: Shopware 5.2 Kompatibilität;",
@@ -30,6 +31,7 @@
             "1.0.1": "Problem mit verschwindendem Import/Export Menü-Eintrag behoben; Weitere ACL-Zugangsberechtigungen hinzugefügt; Korrektur: article.active Verhalten; Korrektur: Artikel-Attribute; Korrektur: Datums- und Zeitimporte"
         },
         "en": {
+            "1.2.3": "PT-6788 - Bugfix: Fix URL generation for XML downloads under NGINX systems; PT-6736 - Active main variants activate the complete article - Boolean values will be exported correctly; PT-6729 - 0 values can be imported again; PT-6711 - Fixed order import and added automated tests; PT-6710 - Fixed download of exported and imported files; PT-6685 - Added CLI commands tests; PT-6700 - Added CLI import tests; PT-6701 - Added automated tests;",
             "1.2.2": "PT-4457 - Bugfix: Implement SecureUninstall; PT-4564 - Bugfix: Add configurator set to article; PT-5218 - Bugfix: PHPUnit tests; PT-5741 - Bugfix: Remove unnecessary CDN Integration; PT-5754 - Feature: Configuration for decimal delimiter; PT-5810 - Bugfix: Purchase price; PT-6100 - Bugfix: Check for required fields for translations; PT-6365 - Feature: Category filter for export command; PT-6371 - Bugfix: Refactoring logger; PT-6392 - Bugfix: Pagination of profile dropdown;",
             "1.2.1": "PT-6190 - Bugfix: Import via cron;",
             "1.2.0": "PT-5674 - Feature: Shopware 5.2 compatibility;",
