@@ -19,58 +19,78 @@ use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Validators\CustomerValidator;
 use Shopware\Components\SwagImportExport\DataManagers\CustomerDataManager;
+use Shopware\Models\Customer\Group;
 
 class CustomerDbAdapter implements DataDbAdapter
 {
-    /**
-     * Shopware\Components\Model\ModelManager
-     */
+    /** @var ModelManager */
     protected $manager;
-    protected $repository;
+
+    /** @var array */
     protected $customerMap;
+
+    /** @var array */
     protected $billingMap;
+
+    /** @var array */
     protected $shippingMap;
 
-    /**
-     * @var array
-     */
+    /** @var mixed */
     protected $unprocessedData;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $logMessages;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $logState;
 
+    /** @var \Enlight_Components_Db_Adapter_Pdo_Mysql */
     protected $db;
 
+    /** @var CustomerValidator */
     protected $validator;
 
+    /** @var CustomerDataManager */
     protected $dataManager;
 
+    /** @var \Shopware\Components\Password\Manager */
     protected $passwordManager;
+
+    /** @var \Shopware_Components_Config */
+    protected $config;
+
+    /** @var \Enlight_Event_EventManager */
+    protected $eventManager;
 
     /**
      * @var array
      */
-    protected $defaultValues = array();
+    protected $defaultValues = [];
+
+    public function __construct()
+    {
+        $this->manager = Shopware()->Models();
+        $this->db = Shopware()->Db();
+        $this->validator = new CustomerValidator();
+        $this->dataManager = new CustomerDataManager();
+        $this->passwordManager = Shopware()->PasswordEncoder();
+        $this->config = Shopware()->Config();
+        $this->eventManager = Shopware()->Events();
+    }
 
     /**
      * @return array
      */
     public function getDefaultColumns()
     {
-        $default = array();
+        $default = [];
 
-        $default = array_merge($default, $this->getCustomerColumns());
-        
-        $default = array_merge($default, $this->getBillingColumns());
-
-        $default = array_merge($default, $this->getShippingColumns());
+        $default = array_merge(
+            $default,
+            $this->getCustomerColumns(),
+            $this->getBillingColumns(),
+            $this->getShippingColumns()
+        );
         
         return $default;
     }
@@ -97,7 +117,7 @@ class CustomerDbAdapter implements DataDbAdapter
 
     public function getCustomerColumns()
     {
-        $columns = array(
+        $columns = [
             'customer.id as id',
             'customer.hashPassword as password',
             'unhashedPassword',
@@ -122,8 +142,8 @@ class CustomerDbAdapter implements DataDbAdapter
             'customer.failedLogins as failedLogins',
             'customer.lockedUntil as lockedUntil',
             'customer.number as customerNumber',
-            'customer.birthday as birthday',
-        );
+            "DATE_FORMAT(customer.birthday, '%Y-%m-%d') as birthday",
+        ];
 
         $attributesSelect = $this->getAttributesFieldsByTableName('s_user_attributes', 'userID', 'attribute', 'attrCustomer');
 
@@ -135,7 +155,7 @@ class CustomerDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @return array
+     * @inheritdoc
      */
     public function getUnprocessedData()
     {
@@ -147,7 +167,7 @@ class CustomerDbAdapter implements DataDbAdapter
      */
     public function getBillingColumns()
     {
-        $columns = array(
+        $columns = [
             'billing.company as billingCompany',
             'billing.department as billingDepartment',
             'billing.salutation as billingSalutation',
@@ -162,7 +182,7 @@ class CustomerDbAdapter implements DataDbAdapter
             'billing.vatId as ustid',
             'billing.additionalAddressLine1 as billingAdditionalAddressLine1',
             'billing.additionalAddressLine2 as billingAdditionalAddressLine2',
-        );
+        ];
 
         $attributesSelect = $this->getAttributesFieldsByTableName('s_user_billingaddress_attributes', 'billingID', 'billingAttribute', 'attrBilling');
         
@@ -178,7 +198,7 @@ class CustomerDbAdapter implements DataDbAdapter
      */
     public function getShippingColumns()
     {
-        $columns = array(
+        $columns = [
             'shipping.company as shippingCompany',
             'shipping.department as shippingDepartment',
             'shipping.salutation as shippingSalutation',
@@ -191,7 +211,7 @@ class CustomerDbAdapter implements DataDbAdapter
             'shipping.stateId as shippingStateID',
             'shipping.additionalAddressLine1 as shippingAdditionalAddressLine1',
             'shipping.additionalAddressLine2 as shippingAdditionalAddressLine2',
-        );
+        ];
 
         $attributesSelect = $this->getAttributesFieldsByTableName('s_user_shippingaddress_attributes', 'shippingID', 'shippingAttribute', 'attrShipping');
 
@@ -209,7 +229,7 @@ class CustomerDbAdapter implements DataDbAdapter
      */
     public function read($ids, $columns)
     {
-        $manager = $this->getManager();
+        $manager = $this->manager;
         
         foreach ($columns as $key => $value) {
             if ($value == 'unhashedPassword') {
@@ -219,11 +239,9 @@ class CustomerDbAdapter implements DataDbAdapter
 
         $builder = $this->getBuilder($columns, $ids);
         $query = $builder->getQuery();
-
         $query->setHydrationMode(AbstractQuery::HYDRATE_ARRAY);
 
         $paginator = $manager->createPaginator($query);
-
         $customers = $paginator->getIterator()->getArrayCopy();
 
         $result['default'] = DbAdapterHelper::decodeHtmlEntities($customers);
@@ -239,10 +257,9 @@ class CustomerDbAdapter implements DataDbAdapter
      */
     public function readRecordIds($start, $limit, $filter)
     {
-        $manager = $this->getManager();
+        $manager = $this->manager;
 
         $builder = $manager->createQueryBuilder();
-
         $builder->select('customer.id')
                 ->from('\Shopware\Models\Customer\Customer', 'customer');
 
@@ -259,13 +276,7 @@ class CustomerDbAdapter implements DataDbAdapter
         }
 
         $records = $builder->getQuery()->getResult();
-
-        $result = array();
-        if ($records) {
-            foreach ($records as $value) {
-                $result[] = $value['id'];
-            }
-        }
+        $result = array_column($records, 'id');
 
         return $result;
     }
@@ -284,15 +295,15 @@ class CustomerDbAdapter implements DataDbAdapter
             throw new \Exception($message);
         }
 
-        $records = Shopware()->Events()->filter(
+        $records = $this->eventManager->filter(
             'Shopware_Components_SwagImportExport_DbAdapters_CustomerDbAdapter_Write',
             $records,
-            array('subject' => $this)
+            ['subject' => $this]
         );
 
-        $manager = $this->getManager();
-        $validator = $this->getValidator();
-        $dataManager = $this->getDataManager();
+        $manager = $this->manager;
+        $validator = $this->validator;
+        $dataManager = $this->dataManager;
         $defaultValues = $this->getDefaultValues();
 
         foreach ($records['default'] as $record) {
@@ -350,7 +361,7 @@ class CustomerDbAdapter implements DataDbAdapter
                 $customer->setSalutation($billing->getSalutation());
                 $customer->setTitle($billing->getTitle());
 
-                $violations = $this->getManager()->validate($customer);
+                $violations = $this->manager->validate($customer);
                 if ($violations->count() > 0) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/customer/no_valid_customer_entity', 'No valid user entity for email %s');
@@ -387,17 +398,17 @@ class CustomerDbAdapter implements DataDbAdapter
     protected function findExistingEntries($record)
     {
         if (isset($record['id'])) {
-            $customer = $this->getRepository()->findOneBy(array('id' => $record['id']));
+            $customer = $this->manager->getRepository(Customer::class)->findOneBy(['id' => $record['id']]);
         }
 
         if (!isset($customer)) {
             $accountMode = isset($record['accountMode']) ? (int) $record['accountMode'] : 0;
-            $filter = array('email' => $record['email'], 'accountMode' => $accountMode);
+            $filter = ['email' => $record['email'], 'accountMode' => $accountMode];
             if (isset($record['subshopID'])) {
                 $filter['shopId'] = $record['subshopID'];
             }
 
-            $customer = $this->getRepository()->findBy($filter);
+            $customer = $this->manager->getRepository(Customer::class)->findBy($filter);
 
             //checks for multiple email address
             if (count($customer) > 1) {
@@ -419,7 +430,7 @@ class CustomerDbAdapter implements DataDbAdapter
      */
     protected function preparePassword(&$record)
     {
-        $passwordManager = $this->getPasswordManager();
+        $passwordManager = $this->passwordManager;
         if (isset($record['unhashedPassword']) && !isset($record['password'])) {
             if (!isset($record['encoder'])) {
                 $record['encoder'] = $passwordManager->getDefaultPasswordEncoderName();
@@ -461,11 +472,11 @@ class CustomerDbAdapter implements DataDbAdapter
             }
         }
 
-        $customerData = array();
+        $customerData = [];
 
         //TODO: use validator
         if (isset($record['subshopID'])) {
-            $shop = $this->getManager()->find('Shopware\Models\Shop\Shop', $record['subshopID']);
+            $shop = $this->manager->find('Shopware\Models\Shop\Shop', $record['subshopID']);
 
             if (!$shop) {
                 $message = SnippetsHelper::getNamespace()
@@ -489,9 +500,9 @@ class CustomerDbAdapter implements DataDbAdapter
 
         //TODO: use validator
         if (isset($customerData['groupKey'])) {
-            $customerData['group'] = Shopware()->Models()
-                    ->getRepository('Shopware\Models\Customer\Group')
-                    ->findOneBy(array('key' => $customerData['groupKey']));
+            $customerData['group'] = $this->manager
+                    ->getRepository(Group::class)
+                    ->findOneBy(['key' => $customerData['groupKey']]);
             if (!$customerData['group']) {
                 $message = SnippetsHelper::getNamespace()
                     ->get('adapters/customerGroup_not_found', 'Customer Group by key %s not found');
@@ -523,7 +534,7 @@ class CustomerDbAdapter implements DataDbAdapter
             }
         }
 
-        $billingData = array();
+        $billingData = [];
 
         foreach ($record as $key => $value) {
             //prepares the attributes
@@ -544,7 +555,6 @@ class CustomerDbAdapter implements DataDbAdapter
      * @param $record
      * @param bool $newCustomer
      * @param $billing
-     * @return array
      */
     protected function prepareShipping(&$record, $newCustomer, $billing)
     {
@@ -557,7 +567,7 @@ class CustomerDbAdapter implements DataDbAdapter
             }
         }
 
-        $shippingData = array();
+        $shippingData = [];
 
         //use shipping as billing
         if ($newCustomer && empty($record['shippingFirstname']) && empty($params['shippingLastname'])) {
@@ -608,7 +618,7 @@ class CustomerDbAdapter implements DataDbAdapter
     {
         //on missing shopId return defaultPaymentId
         if (!isset($subShopID) || $subShopID === '') {
-            return Shopware()->Config()->get('sDEFAULTPAYMENT');
+            return $this->config->get('sDEFAULTPAYMENT');
         }
         
         //get defaultPaymentId for subShiopId = $subShopID
@@ -622,7 +632,7 @@ class CustomerDbAdapter implements DataDbAdapter
         if ($defaultPaymentId) {
             return unserialize($defaultPaymentId['value']);
         }
-        return Shopware()->Config()->get('sDEFAULTPAYMENT');
+        return $this->config->get('sDEFAULTPAYMENT');
     }
 
     /**
@@ -637,7 +647,7 @@ class CustomerDbAdapter implements DataDbAdapter
                    WHERE `value`.shop_id = ?
                          AND element.name = ?";
         
-        return Shopware()->Db()->fetchRow($query, array($subShopID, 'defaultpayment'));
+        return $this->db->fetchRow($query, [$subShopID, 'defaultpayment']);
     }
 
     /**
@@ -652,7 +662,7 @@ class CustomerDbAdapter implements DataDbAdapter
                    WHERE `value`.shop_id = (SELECT main_id FROM s_core_shops WHERE id = ?)
                          AND element.name = ?";
         
-        return Shopware()->Db()->fetchRow($query, array($subShopID, 'defaultpayment'));
+        return $this->db->fetchRow($query, [$subShopID, 'defaultpayment']);
     }
 
     /**
@@ -661,7 +671,7 @@ class CustomerDbAdapter implements DataDbAdapter
      */
     public function saveMessage($message)
     {
-        $errorMode = Shopware()->Config()->get('SwagImportExportErrorMode');
+        $errorMode = $this->config->get('SwagImportExportErrorMode');
 
         if ($errorMode === false) {
             throw new \Exception($message);
@@ -708,9 +718,9 @@ class CustomerDbAdapter implements DataDbAdapter
      */
     public function getSections()
     {
-        return array(
-            array('id' => 'default', 'name' => 'default ')
-        );
+        return [
+            ['id' => 'default', 'name' => 'default ']
+        ];
     }
 
     /**
@@ -722,17 +732,17 @@ class CustomerDbAdapter implements DataDbAdapter
      */
     public function getAttributesFieldsByTableName($tableName, $columnName, $prefixField, $prefixSelect)
     {
-        $stmt = $this->getDb()->query("SHOW COLUMNS FROM $tableName");
+        $stmt = $this->db->query("SHOW COLUMNS FROM $tableName");
         $columns = $stmt->fetchAll();
 
-        $columnNames = array();
+        $columnNames = [];
         foreach ($columns as $column) {
             if ($column['Field'] !== 'id' && $column['Field'] != $columnName) {
                 $columnNames[] = $column['Field'];
             }
         }
 
-        $attributesSelect = array();
+        $attributesSelect = [];
         foreach ($columnNames as $attribute) {
             //underscore to camel case
             //exmaple: underscore_to_camel_case -> underscoreToCamelCase
@@ -759,88 +769,13 @@ class CustomerDbAdapter implements DataDbAdapter
     }
 
     /**
-     * Returns category repository
-     *
-     * @return \Shopware\Models\Customer\Repository
-     */
-    public function getRepository()
-    {
-        if ($this->repository === null) {
-            $this->repository = $this->getManager()->getRepository('Shopware\Models\Customer\Customer');
-        }
-        return $this->repository;
-    }
-
-    /**
-     * Returns entity manager
-     *
-     * @return ModelManager
-     */
-    public function getManager()
-    {
-        if ($this->manager === null) {
-            $this->manager = Shopware()->Models();
-        }
-
-        return $this->manager;
-    }
-
-    /**
-     * @return \Enlight_Components_Db_Adapter_Pdo_Mysql
-     */
-    public function getDb()
-    {
-        if ($this->db === null) {
-            $this->db = Shopware()->Db();
-        }
-
-        return $this->db;
-    }
-
-    /**
-     * @return CustomerValidator
-     */
-    public function getValidator()
-    {
-        if ($this->validator === null) {
-            $this->validator = new CustomerValidator();
-        }
-
-        return $this->validator;
-    }
-
-    /**
-     * @return CustomerDataManager
-     */
-    public function getDataManager()
-    {
-        if ($this->dataManager === null) {
-            $this->dataManager = new CustomerDataManager();
-        }
-
-        return $this->dataManager;
-    }
-
-    /**
-     * @return \Shopware\Components\Password\Manager
-     */
-    public function getPasswordManager()
-    {
-        if ($this->passwordManager === null) {
-            $this->passwordManager = Shopware()->PasswordEncoder();
-        }
-
-        return $this->passwordManager;
-    }
-
-    /**
      * @param $columns
      * @param $ids
      * @return \Shopware\Components\Model\QueryBuilder
      */
     public function getBuilder($columns, $ids)
     {
-        $builder = $this->getManager()->createQueryBuilder();
+        $builder = $this->manager->createQueryBuilder();
         $builder->select($columns)
                 ->from('\Shopware\Models\Customer\Customer', 'customer')
                 ->join('customer.billing', 'billing')
