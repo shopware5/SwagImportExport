@@ -9,11 +9,9 @@
 namespace Shopware\Components\SwagImportExport;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Doctrine\ORM\Mapping\ClassMetadataFactory;
 use Shopware\Components\Model\ModelManager;
-use Shopware\Components\SwagImportExport\QueryBuilder\QueryBuilder;
+use Doctrine\DBAL\Query\QueryBuilder;
 
 class DbalHelper
 {
@@ -21,7 +19,7 @@ class DbalHelper
     protected $connection;
 
     /** @var \Doctrine\DBAL\Driver\Statement[] */
-    protected $statements = array();
+    protected $statements = [];
 
     /**
      * @var ModelManager
@@ -103,7 +101,7 @@ class DbalHelper
      */
     protected function getNamedParameter($value, $key, ClassMetadata $metaData, QueryBuilder $builder)
     {
-        $pdoTypeMapping = array(
+        $pdoTypeMapping = [
             'string' => \PDO::PARAM_STR,
             'text' => \PDO::PARAM_STR,
             'date' => \PDO::PARAM_STR,
@@ -112,7 +110,7 @@ class DbalHelper
             'integer' => \PDO::PARAM_INT,
             'decimal' => \PDO::PARAM_STR,
             'float' => \PDO::PARAM_STR,
-        );
+        ];
 
         $nullAble = $metaData->fieldMappings[$key]['nullable'];
 
