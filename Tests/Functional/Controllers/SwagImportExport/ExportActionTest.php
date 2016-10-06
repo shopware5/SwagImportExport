@@ -33,10 +33,6 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
 
     public function setUp()
     {
-        if ($this->executedOnBamboo()) {
-            $this->markTestSkipped("Test does not work on bamboo.");
-        }
-        
         parent::setUp();
 
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
@@ -1287,13 +1283,5 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
     private function getLineAmount($file)
     {
         return count(file($file));
-    }
-
-    /**
-     * @return bool|int
-     */
-    private function executedOnBamboo()
-    {
-        return (strpos(__DIR__, 'bamboo-agent-home') !== false);
     }
 }
