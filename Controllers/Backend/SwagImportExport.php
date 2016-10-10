@@ -649,7 +649,11 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $position = $dataIO->getSessionPosition();
         $position = $position == null ? 0 : $position;
 
-        $totalCount = $fileReader->getTotalCount($uploadPathProvider->getRealPath($inputFileName));
+        try {
+            $totalCount = $fileReader->getTotalCount($uploadPathProvider->getRealPath($inputFileName));
+        } catch (\Exception $e) {
+            return $this->View()->assign(['success' => false, 'msg' => $e->getMessage()]);
+        }
 
         $this->View()->assign(array('success' => true, 'position' => $position, 'count' => $totalCount));
     }
@@ -830,6 +834,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                 );
 
                 if ($hiddenProfile === 'articlesImages') {
+                    // set to one because of thumbnail generation memory cost
                     $postData['batchSize'] = 1;
                 }
 
