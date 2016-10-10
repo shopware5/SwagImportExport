@@ -20,6 +20,7 @@ use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Validators\CustomerValidator;
 use Shopware\Components\SwagImportExport\DataManagers\CustomerDataManager;
 use Shopware\Models\Customer\Group;
+use Shopware\Models\Shop\Shop;
 
 class CustomerDbAdapter implements DataDbAdapter
 {
@@ -330,6 +331,30 @@ class CustomerDbAdapter implements DataDbAdapter
 
                 $customer->fromArray($customerData);
 
+                if (isset($customerData['subshopID'])) {
+                    $shop = $this->manager->getRepository(Shop::class)->find($customerData['subshopID']);
+
+                    if (!$shop) {
+                        $message = SnippetsHelper::getNamespace()
+                            ->get('adapters/shop_not_found', 'Shop with id %s was not found');
+                        throw new AdapterException(sprintf($message, $customerData['subshopID']));
+                    }
+
+                    $customer->setShop($shop);
+                }
+
+                if (isset($customerData['languageId'])) {
+                    $languageSubShop = $this->manager->getRepository(Shop::class)->find($customerData['languageId']);
+
+                    if (!$languageSubShop) {
+                        $message = SnippetsHelper::getNamespace()
+                            ->get('adapters/shop_not_found', 'Language-Shop with id %s was not found');
+                        throw new AdapterException(sprintf($message, $customerData['languageId']));
+                    }
+
+                    $customer->setLanguageSubShop($languageSubShop);
+                }
+
                 $billing = $customer->getDefaultBillingAddress();
                 if (!$billing instanceof Address) {
                     $billing = new Address();
@@ -474,19 +499,6 @@ class CustomerDbAdapter implements DataDbAdapter
 
         $customerData = [];
 
-        //TODO: use validator
-        if (isset($record['subshopID'])) {
-            $shop = $this->manager->find('Shopware\Models\Shop\Shop', $record['subshopID']);
-
-            if (!$shop) {
-                $message = SnippetsHelper::getNamespace()
-                    ->get('adapters/shop_not_found', 'Shop with id %s was not found');
-                throw new AdapterException(sprintf($message, $record['subshopID']));
-            }
-
-            $customerData['shop'] = $shop;
-        }
-
         foreach ($record as $key => $value) {
             if (preg_match('/^attrCustomer/', $key)) {
                 $newKey = lcfirst(preg_replace('/^attrCustomer/', '', $key));
@@ -498,7 +510,6 @@ class CustomerDbAdapter implements DataDbAdapter
             }
         }
 
-        //TODO: use validator
         if (isset($customerData['groupKey'])) {
             $customerData['group'] = $this->manager
                     ->getRepository(Group::class)
