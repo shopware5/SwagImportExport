@@ -8,7 +8,9 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters\Articles;
 
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
+use Shopware\Components\SwagImportExport\DbAdapters\Results\ArticleWriterResult;
 use Shopware\Components\SwagImportExport\DbalHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
@@ -19,28 +21,66 @@ class ConfiguratorWriter
     /**
      * @var ConfiguratorValidator
      */
-    protected $validator = null;
+    protected $configuratorValidator = null;
 
     /**
-     * initialises the class properties
+     * @var DbalHelper
      */
-    public function __construct()
+    private $dbalHelper;
+
+    /**
+     * @var Connection
+     */
+    private $connection;
+
+    /**
+     * @var \Enlight_Components_Db_Adapter_Pdo_Mysql
+     */
+    private $db;
+
+    /**
+     * @var array
+     */
+    private $sets;
+
+    /**
+     * @return ConfiguratorWriter
+     */
+    public static function createFromGlobalSingleton()
     {
-        $this->dbalHelper = DbalHelper::create();
-        $this->connection = Shopware()->Models()->getConnection();
-        $this->db = Shopware()->Db();
-        $this->sets = $this->getSets();
-        $this->validator = new ConfiguratorValidator();
+        return new ConfiguratorWriter(
+            DbalHelper::create(),
+            Shopware()->Container()->get('dbal_connection'),
+            Shopware()->Container()->get('db'),
+            new ConfiguratorValidator()
+        );
     }
 
     /**
-     * @param int $articleId
-     * @param int $articleDetailId
-     * @param int $mainDetailId
+     * @param DbalHelper $dbalHelper
+     * @param Connection $connection
+     * @param \Enlight_Components_Db_Adapter_Pdo_Mysql $db
+     * @param ConfiguratorValidator $configuratorValidator
+     */
+    public function __construct(
+        DbalHelper $dbalHelper,
+        Connection $connection,
+        \Enlight_Components_Db_Adapter_Pdo_Mysql $db,
+        ConfiguratorValidator $configuratorValidator
+    ) {
+        $this->dbalHelper = $dbalHelper;
+        $this->connection = $connection;
+        $this->sets = $this->getSets();
+        $this->db = $db;
+        $this->configuratorValidator = $configuratorValidator;
+    }
+
+    /**
+     * @param ArticleWriterResult $articleWriterResult
      * @param array $configuratorData
      * @throws AdapterException
      */
-    public function write($articleId, $articleDetailId, $mainDetailId, $configuratorData)
+    public function writeOrUpdateConfiguratorSet(ArticleWriterResult $articleWriterResult, $configuratorData)
     {
         $configuratorSetId = null;
 
@@ -48,35 +88,21 @@ class ConfiguratorWriter
             if (!$this->isValid($configurator)) {
                 continue;
             }
-            $configurator = $this->validator->filterEmptyString($configurator);
-            $this->validator->validate($configurator, ConfiguratorValidator::$mapper);
+            $configurator = $this->configuratorValidator->filterEmptyString($configurator);
+            $this->configuratorValidator->validate($configurator, ConfiguratorValidator::$mapper);
 
             /**
-             * configurator set
+             * Updates the type of a configurator set
              */
-            if (!$configuratorSetId && isset($configurator['configSetId']) && !empty($configurator['configSetId'])) {
-                $setExists = $this->checkExistence('s_article_configurator_sets', $configurator['configSetId']);
-                $match = $this->compareSetIdByName($articleId, $configurator['configSetId']);
-                if ($setExists && $match) {
-                    $configuratorSetId = $configurator['configSetId'];
-                    $this->updateConfiguratorSet($configurator);
-                }
-            }
-
-            if (!$configuratorSetId
-                && isset($configurator['configSetName'])
-                && !empty($configurator['configSetName'])
-            ) {
-                $this->getSet($configurator['configSetName']);
-            }
+            $configuratorSetId = $this->updateConfiguratorSetTypeIfConfigSetIdIsNotEmptyAndSetDoesExistAndMatchSetName($articleWriterResult->getArticleId(), $configuratorSetId, $configurator);
 
             if (!$configuratorSetId) {
-                $configuratorSetId = $this->getSetByArticleId($articleId);
+                $configuratorSetId = $this->getConfiguratorSetIdByArticleId($articleWriterResult->getArticleId());
             }
 
             if (!$configuratorSetId) {
                 if (empty($configurator['configSetName'])) {
-                    $orderNumber = $this->getOrderNumber($articleId);
+                    $orderNumber = $this->getOrderNumber($articleWriterResult->getArticleId());
                     $dataSet['name'] = 'Set-' . $orderNumber;
                 } else {
                     $dataSet['name'] = $configurator['configSetName'];
@@ -96,9 +122,8 @@ class ConfiguratorWriter
                 }
             }
 
-            if ($mainDetailId != $articleDetailId) {
-                //update article sets
-                $this->updateArticleSetsRelation($articleId, $configuratorSetId);
+            if ($articleWriterResult->getMainDetailId() != $articleWriterResult->getDetailId()) {
+                $this->updateArticleSetsRelation($articleWriterResult->getArticleId(), $configuratorSetId);
             }
 
             /**
@@ -123,7 +148,7 @@ class ConfiguratorWriter
             $this->updateGroupsRelation($configuratorSetId, $groupId);
 
             if (isset($configurator['configOptionName']) && !$optionId) {
-                $optionId = $this->getOptionId($configurator['configOptionName'], $groupId);
+                $optionId = $this->getOptionIdByOptionNameAndGroupId($configurator['configOptionName'], $groupId);
             }
 
             //creates option
@@ -143,7 +168,7 @@ class ConfiguratorWriter
                 $optionId = $this->createOption($dataOption);
             }
 
-            $this->updateOptionRelation($articleDetailId, $optionId);
+            $this->updateOptionRelation($articleWriterResult->getDetailId(), $optionId);
             $this->updateSetOptionRelation($configuratorSetId, $optionId);
 
             unset($groupId);
@@ -153,19 +178,15 @@ class ConfiguratorWriter
 
     /**
      * This function updates a specific database record for a configurator set.
-     * @param $data
+     * @param array $configurator
      */
-    private function updateConfiguratorSet($data)
+    private function updateConfiguratorSet($configurator)
     {
-        if (!$data) {
-            return;
-        }
-
         $sql = "UPDATE s_article_configurator_sets SET
                 type=:setType
                 WHERE id=:id";
 
-        $this->db->executeQuery($sql, array("setType" => $data['configSetType'], "id" => $data["configSetId"]));
+        $this->db->executeQuery($sql, array("setType" => $configurator['configSetType'], "id" => $configurator["configSetId"]));
     }
 
     /**
@@ -192,8 +213,8 @@ class ConfiguratorWriter
     }
 
     /**
-     * @param $articleId
-     * @param $setId
+     * @param int $articleId
+     * @param int $setId
      */
     protected function updateArticleSetsRelation($articleId, $setId)
     {
@@ -201,8 +222,8 @@ class ConfiguratorWriter
     }
 
     /**
-     * @param $setId
-     * @param $groupId
+     * @param int $setId
+     * @param int $groupId
      * @throws DBALException
      */
     protected function updateGroupsRelation($setId, $groupId)
@@ -215,8 +236,8 @@ class ConfiguratorWriter
     }
 
     /**
-     * @param $articleDetailId
-     * @param $optionId
+     * @param int $articleDetailId
+     * @param int $optionId
      * @throws DBALException
      */
     protected function updateOptionRelation($articleDetailId, $optionId)
@@ -229,8 +250,8 @@ class ConfiguratorWriter
     }
 
     /**
-     * @param $setId
-     * @param $optionId
+     * @param int $setId
+     * @param int $optionId
      * @throws DBALException
      */
     protected function updateSetOptionRelation($setId, $optionId)
@@ -258,10 +279,10 @@ class ConfiguratorWriter
     }
 
     /**
-     * @param $articleId
+     * @param int $articleId
      * @return mixed
      */
-    protected function getSetByArticleId($articleId)
+    protected function getConfiguratorSetIdByArticleId($articleId)
     {
         $result = $this->db->fetchRow('SELECT configurator_set_id FROM s_articles WHERE id = ?', array($articleId));
 
@@ -269,11 +290,14 @@ class ConfiguratorWriter
     }
 
     /**
-     * @param $data
+     * @param array $data
      * @return string
      */
     protected function createSet($data)
     {
+        //Delete id to avoid unique constraint violations
+        unset($data['id']);
+
         $builder = $this->dbalHelper
             ->getQueryBuilderForEntity($data, 'Shopware\Models\Article\Configurator\Set', false);
         $builder->execute();
@@ -282,7 +306,7 @@ class ConfiguratorWriter
     }
 
     /**
-     * @param $data
+     * @param array $data
      * @return string
      */
     protected function createGroup($data)
@@ -295,7 +319,7 @@ class ConfiguratorWriter
     }
 
     /**
-     * @param $data
+     * @param array $data
      * @return string
      */
     protected function createOption($data)
@@ -308,7 +332,7 @@ class ConfiguratorWriter
     }
 
     /**
-     * @param $articleId
+     * @param int $articleId
      * @return mixed
      */
     protected function getOrderNumber($articleId)
@@ -321,23 +345,19 @@ class ConfiguratorWriter
     }
 
     /**
-     * Returns the supplier ID
-     *
-     * @param $name
+     * @param string $name
      * @return int
      */
-    public function getSet($name)
+    public function getSetIdBySetName($name)
     {
-        $setId = $this->sets[$name];
-
-        return $setId;
+        return $this->sets[$name];
     }
 
     /**
-     * @param $name
-     * @return mixed
+     * @param string $name
+     * @return string|boolean
      */
-    public function getGroup($name)
+    public function getGroupIdByGroupName($name)
     {
         $sql = "SELECT `id`
                 FROM s_article_configurator_groups
@@ -347,11 +367,11 @@ class ConfiguratorWriter
     }
 
     /**
-     * @param $optionName
-     * @param $groupId
+     * @param string $optionName
+     * @param int $groupId
      * @return string
      */
-    public function getOptionId($optionName, $groupId)
+    public function getOptionIdByOptionNameAndGroupId($optionName, $groupId)
     {
         $sql = 'SELECT `id`
                 FROM s_article_configurator_options
@@ -374,11 +394,11 @@ class ConfiguratorWriter
     }
 
     /**
-     * @param $table
-     * @param $id
+     * @param string $table
+     * @param int $id
      * @return bool
      */
-    public function checkExistence($table, $id)
+    private function checkExistence($table, $id)
     {
         $sql = "SELECT `id` FROM $table WHERE id = ?";
         $result = $this->connection->fetchColumn($sql, array($id));
@@ -387,11 +407,11 @@ class ConfiguratorWriter
     }
 
     /**
-     * @param $data
+     * @param array $data
      * @return mixed|string
      * @throws AdapterException
      */
-    public function getConfiguratorGroup($data)
+    private function getConfiguratorGroup($data)
     {
         if (isset($data['configGroupId'])) {
             if ($this->checkExistence('s_article_configurator_groups', $data['configGroupId'])) {
@@ -400,7 +420,7 @@ class ConfiguratorWriter
         }
 
         if (isset($data['configGroupName']) && !$groupId) {
-            $groupId = $this->getGroup($data['configGroupName']);
+            $groupId = $this->getGroupIdByGroupName($data['configGroupName']);
 
             if (!$groupId) {
                 $groupPosition = $this->getNextGroupPosition();
@@ -424,9 +444,9 @@ class ConfiguratorWriter
     }
 
     /**
-     * @return int|string
+     * @return int
      */
-    protected function getNextGroupPosition()
+    private function getNextGroupPosition()
     {
         $sql = "SELECT `position`
                 FROM `s_article_configurator_groups`
@@ -439,9 +459,9 @@ class ConfiguratorWriter
 
     /**
      * @param $groupId
-     * @return int|string
+     * @return int
      */
-    protected function getNextOptionPosition($groupId)
+    private function getNextOptionPosition($groupId)
     {
         $sql = "SELECT `position`
                 FROM `s_article_configurator_options`
@@ -460,10 +480,30 @@ class ConfiguratorWriter
      * @param $setId
      * @return bool
      */
-    protected function compareSetIdByName($articleId, $setId)
+    private function compareSetIdByName($articleId, $setId)
     {
         $setName = 'Set-' . $this->getOrderNumber($articleId);
 
-        return $this->getSet($setName) == $setId;
+        return $this->getSetIdBySetName($setName) == $setId;
+    }
+
+    /**
+     * @param int $articleId
+     * @param int $configuratorSetId
+     * @param array $configurator
+     * @return int
+     */
+    private function updateConfiguratorSetTypeIfConfigSetIdIsNotEmptyAndSetDoesExistAndMatchSetName($articleId, $configuratorSetId, $configurator)
+    {
+        if (!$configuratorSetId && isset($configurator['configSetId']) && !empty($configurator['configSetId'])) {
+            $setExists = $this->checkExistence('s_article_configurator_sets', $configurator['configSetId']);
+            $match = $this->compareSetIdByName($articleId, $configurator['configSetId']);
+            if ($setExists && $match) {
+                $configuratorSetId = $configurator['configSetId'];
+                $this->updateConfiguratorSet($configurator);
+            }
+        }
+
+        return $configuratorSetId;
     }
 }

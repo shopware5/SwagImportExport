@@ -11,6 +11,7 @@ namespace Shopware\Components\SwagImportExport\DbAdapters\Articles;
 use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\DataType\ArticleDataType;
+use Shopware\Components\SwagImportExport\DbAdapters\Results\ArticleWriterResult;
 use Shopware\Components\SwagImportExport\DbalHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
@@ -66,7 +67,7 @@ class ArticleWriter
     /**
      * @param array $article
      * @param array $defaultValues
-     * @return array
+     * @return ArticleWriterResult
      * @throws AdapterException
      */
     public function write($article, $defaultValues)
@@ -80,15 +81,20 @@ class ArticleWriter
     /**
      * @param array $article
      * @param array $defaultValues
-     * @return array
+     * @return ArticleWriterResult
      * @throws AdapterException
      */
     protected function insertOrUpdateArticle($article, $defaultValues)
     {
+        $shouldCreateMainArticle = false;
         list($mainDetailId, $articleId, $detailId) = $this->findExistingEntries($article);
 
         if ($article['processed']) {
-            return array($articleId, $detailId, $mainDetailId ?: $detailId);
+            if (!$mainDetailId) {
+                $mainDetailId = $detailId;
+            }
+
+            return new ArticleWriterResult($articleId, $detailId, $mainDetailId);
         }
 
         $createDetail = $detailId == 0;
@@ -101,9 +107,8 @@ class ArticleWriter
         }
 
         // Set create flag
-        $createArticle = false;
         if ($createDetail && $this->isMainDetail($article)) {
-            $createArticle = true;
+            $shouldCreateMainArticle = true;
             $article = $this->dataManager->setDefaultFieldsForCreate($article, $defaultValues);
             $this->validator->checkRequiredFieldsForCreate($article);
         }
@@ -114,51 +119,26 @@ class ArticleWriter
 
         // insert/update main detail article
         if ($this->isMainDetail($article)) {
-            $builder = $this->dbalHelper->getQueryBuilderForEntity(
-                $article,
-                'Shopware\Models\Article\Article',
-                $createArticle ? false : $articleId
-            );
-            $builder->execute();
+            $articleId = $this->createOrUpdateMainDetail($article, $shouldCreateMainArticle, $articleId);
         }
 
-        if ($createArticle) {
-            $articleId = $this->connection->lastInsertId();
-        }
-
-        // insert/update detail
-        $article = $this->dataManager->setArticleVariantData($article, ArticleDataType::$articleVariantFieldsMapping);
         $article['articleId'] = $articleId;
         $article['kind'] = $mainDetailId == $detailId ? 1 : 2;
-
-        if ($createDetail) {
-            $article = $this->dataManager->setDefaultFieldsForCreate($article, $defaultValues);
-        }
-
-        $builder = $this->dbalHelper->getQueryBuilderForEntity($article, 'Shopware\Models\Article\Detail', $detailId);
-        $builder->execute();
-
-        if (!$detailId) {
-            $detailId = $this->connection->lastInsertId();
-        }
+        list($article, $detailId) = $this->createOrUpdateArticleDetail($article, $defaultValues, $detailId, $createDetail);
 
         // set reference
-        if ($createArticle) {
+        if ($shouldCreateMainArticle) {
             $this->db->query('UPDATE s_articles SET main_detail_id = ? WHERE id = ?', array($detailId, $articleId));
         }
 
         // insert attributes
-        $attributes = $this->mapArticleAttributes($article);
-        $attributes['articleId'] = $articleId;
-        $attributes['articleDetailId'] = $detailId;
-        $builder = $this->dbalHelper->getQueryBuilderForEntity(
-            $attributes,
-            'Shopware\Models\Attribute\Article',
-            $createArticle ? false : $this->getAttrId($detailId)
-        );
-        $builder->execute();
+        $this->createArticleAttributes($article, $articleId, $detailId, $shouldCreateMainArticle);
 
-        return array($articleId, $detailId, $mainDetailId ?: $detailId);
+        if (!$mainDetailId) {
+            $mainDetailId = $detailId;
+        }
+
+        return new ArticleWriterResult($articleId, $mainDetailId, $detailId);
     }
 
     /**
@@ -235,5 +215,71 @@ class ArticleWriter
     private function isMainDetail(array $article)
     {
         return $article['mainNumber'] == $article['orderNumber'];
+    }
+
+    /**
+     * @param array $article
+     * @param boolean $shouldCreateMainArticle
+     * @param int $articleId
+     * @return int
+     */
+    private function createOrUpdateMainDetail($article, $shouldCreateMainArticle, $articleId)
+    {
+        $builder = $this->dbalHelper->getQueryBuilderForEntity(
+            $article,
+            'Shopware\Models\Article\Article',
+            $shouldCreateMainArticle ? false : $articleId
+        );
+        $builder->execute();
+
+        if ($shouldCreateMainArticle) {
+            return $this->connection->lastInsertId();
+        }
+        return $articleId;
+    }
+
+    /**
+     * @param array $article
+     * @param int $articleId
+     * @param int $detailId
+     * @param boolean $createArticle
+     */
+    private function createArticleAttributes($article, $articleId, $detailId, $createArticle)
+    {
+        $attributes = $this->mapArticleAttributes($article);
+        $attributes['articleId'] = $articleId;
+        $attributes['articleDetailId'] = $detailId;
+
+        $builder = $this->dbalHelper->getQueryBuilderForEntity(
+            $attributes,
+            'Shopware\Models\Attribute\Article',
+            $createArticle ? false : $this->getAttrId($detailId)
+        );
+        $builder->execute();
+    }
+
+    /**
+     * @param array $article
+     * @param array $defaultValues
+     * @param int $detailId
+     * @param boolean $createDetail
+     * @return array
+     */
+    private function createOrUpdateArticleDetail($article, $defaultValues, $detailId, $createDetail)
+    {
+        $article = $this->dataManager->setArticleVariantData($article, ArticleDataType::$articleVariantFieldsMapping);
+
+        if ($createDetail) {
+            $article = $this->dataManager->setDefaultFieldsForCreate($article, $defaultValues);
+        }
+
+        $builder = $this->dbalHelper->getQueryBuilderForEntity($article, 'Shopware\Models\Article\Detail', $detailId);
+        $builder->execute();
+
+        if (!$detailId) {
+            $detailId = $this->connection->lastInsertId();
+        }
+
+        return array($article, $detailId);
     }
 }
