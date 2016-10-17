@@ -383,9 +383,7 @@ class ArticleDataManager extends DataManager
      */
     public function setArticleData($record, $mapping)
     {
-        $record = $this->mapFields($record, $mapping);
-
-        return $record;
+        return $this->mapFields($record, $mapping);
     }
 
     /**
@@ -398,8 +396,6 @@ class ArticleDataManager extends DataManager
      */
     public function setArticleVariantData($record, $mapping)
     {
-        $record = $this->mapFields($record, $mapping);
-
-        return $record;
+        return $this->mapFields($record, $mapping);
     }
 }

@@ -4,88 +4,28 @@
 		<article>
 	<ordernumber>test_SW10001</ordernumber>
 	<mainnumber>test_SW10001</mainnumber>
-	<name>MyArticle_1</name>
+	<name>Test-Variant</name>
 	<additionalText></additionalText>
-	<supplier>Test Supplier</supplier>
+	<supplier>Supplier</supplier>
 	<tax>19.00</tax>
 	<prices>
 		<price>
 			<group>EK</group>
-			<price>1599</price>
+			<price>19.99</price>
 			<pseudoprice></pseudoprice>
 		</price>
 	</prices>
 	<active>1</active>
-	<instock>15</instock>
+	<instock>0</instock>
 	<stockmin>0</stockmin>
 	<description></description>
 	<description_long></description_long>
 	<shippingtime></shippingtime>
-	<added>2016-09-14</added>
-	<changed>2016-09-14 08:14:36</changed>
+	<added>2016-10-06</added>
+	<changed>2016-10-06 12:58:35</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
-	<metatitle></metatitle>
-	<keywords></keywords>
-	<minpurchase>1</minpurchase>
-	<purchasesteps></purchasesteps>
-	<maxpurchase></maxpurchase>
-	<purchaseunit></purchaseunit>
-	<referenceunit></referenceunit>
-	<packunit></packunit>
-	<unitID></unitID>
-	<pricegroupID>1</pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
-	<suppliernumber></suppliernumber>
-	<purchaseprice>0</purchaseprice>
-	<weight>0.000</weight>
-	<width></width>
-	<height></height>
-	<length></length>
-	<ean></ean>
-	<configurators>
-		<configurator>
-			<configuratorsetID></configuratorsetID>
-			<configuratortype></configuratortype>
-			<configuratorGroup></configuratorGroup>
-			<configuratorOptions></configuratorOptions>
-			<configSetName></configSetName>
-		</configurator>
-	</configurators>
-	<category>
-		<categories></categories>
-	</category>
-	<similars>
-		<similar></similar>
-	</similars>
-</article>
-<article>
-	<ordernumber>test_SW10002</ordernumber>
-	<mainnumber>test_SW10002</mainnumber>
-	<name>My_Article_With_Variants</name>
-	<additionalText></additionalText>
-	<supplier>Test Supplier</supplier>
-	<tax>19.00</tax>
-	<prices>
-		<price>
-			<group>EK</group>
-			<price>299.99</price>
-			<pseudoprice></pseudoprice>
-		</price>
-	</prices>
-	<active>1</active>
-	<instock>1</instock>
-	<stockmin>0</stockmin>
-	<description></description>
-	<description_long></description_long>
-	<shippingtime></shippingtime>
-	<added>2016-09-14</added>
-	<changed>2016-09-14 08:17:39</changed>
-	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords></keywords>
 	<minpurchase>1</minpurchase>
@@ -96,8 +36,8 @@
 	<packunit></packunit>
 	<unitID></unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
+	<pricegroupActive>0</pricegroupActive>
+	<laststock>0</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
 	<weight>0.000</weight>
@@ -107,11 +47,11 @@
 	<ean></ean>
 	<configurators>
 		<configurator>
-			<configuratorsetID>999</configuratorsetID>
-			<configuratortype></configuratortype>
+			<configuratorsetID>3</configuratorsetID>
+			<configuratortype>0</configuratortype>
 			<configuratorGroup>Color</configuratorGroup>
 			<configuratorOptions>Yellow</configuratorOptions>
-			<configSetName>Set-SW10002</configSetName>
+			<configSetName>Set-SW10001</configSetName>
 		</configurator>
 	</configurators>
 	<category>
@@ -122,30 +62,30 @@
 	</similars>
 </article>
 <article>
-	<ordernumber>test_SW10002.1</ordernumber>
-	<mainnumber>test_SW10002</mainnumber>
-	<name>My_Article_With_Variants</name>
+	<ordernumber>test_SW10001.1</ordernumber>
+	<mainnumber>test_SW10001</mainnumber>
+	<name>Test-Variant</name>
 	<additionalText></additionalText>
-	<supplier>Test Supplier</supplier>
+	<supplier>Supplier</supplier>
 	<tax>19.00</tax>
 	<prices>
 		<price>
 			<group>EK</group>
-			<price>299.99</price>
+			<price>19.99</price>
 			<pseudoprice></pseudoprice>
 		</price>
 	</prices>
 	<active>1</active>
-	<instock>1</instock>
+	<instock>0</instock>
 	<stockmin>0</stockmin>
 	<description></description>
 	<description_long></description_long>
 	<shippingtime></shippingtime>
-	<added>2016-09-14</added>
-	<changed>2016-09-14 08:17:39</changed>
+	<added>2016-10-06</added>
+	<changed>2016-10-06 12:58:35</changed>
 	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
+	<shippingfree>0</shippingfree>
+	<topseller>0</topseller>
 	<metatitle></metatitle>
 	<keywords></keywords>
 	<minpurchase>1</minpurchase>
@@ -156,8 +96,8 @@
 	<packunit></packunit>
 	<unitID></unitID>
 	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
+	<pricegroupActive>0</pricegroupActive>
+	<laststock>0</laststock>
 	<suppliernumber></suppliernumber>
 	<purchaseprice>0</purchaseprice>
 	<weight>0.000</weight>
@@ -167,131 +107,11 @@
 	<ean></ean>
 	<configurators>
 		<configurator>
-			<configuratorsetID>999</configuratorsetID>
-			<configuratortype></configuratortype>
+			<configuratorsetID>3</configuratorsetID>
+			<configuratortype>0</configuratortype>
 			<configuratorGroup>Color</configuratorGroup>
-			<configuratorOptions>Blue</configuratorOptions>
-			<configSetName>Set-SW10002</configSetName>
-		</configurator>
-	</configurators>
-	<category>
-		<categories></categories>
-	</category>
-	<similars>
-		<similar></similar>
-	</similars>
-</article>
-<article>
-	<ordernumber>test_SW10002.2</ordernumber>
-	<mainnumber>test_SW10002</mainnumber>
-	<name>My_Article_With_Variants</name>
-	<additionalText></additionalText>
-	<supplier>Test Supplier</supplier>
-	<tax>19.00</tax>
-	<prices>
-		<price>
-			<group>EK</group>
-			<price>299.99</price>
-			<pseudoprice></pseudoprice>
-		</price>
-	</prices>
-	<active>1</active>
-	<instock>1</instock>
-	<stockmin>0</stockmin>
-	<description></description>
-	<description_long></description_long>
-	<shippingtime></shippingtime>
-	<added>2016-09-14</added>
-	<changed>2016-09-14 08:17:39</changed>
-	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
-	<metatitle></metatitle>
-	<keywords></keywords>
-	<minpurchase>1</minpurchase>
-	<purchasesteps></purchasesteps>
-	<maxpurchase></maxpurchase>
-	<purchaseunit></purchaseunit>
-	<referenceunit></referenceunit>
-	<packunit></packunit>
-	<unitID></unitID>
-	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
-	<suppliernumber></suppliernumber>
-	<purchaseprice>0</purchaseprice>
-	<weight>0.000</weight>
-	<width></width>
-	<height></height>
-	<length></length>
-	<ean></ean>
-	<configurators>
-		<configurator>
-			<configuratorsetID>999</configuratorsetID>
-			<configuratortype></configuratortype>
-			<configuratorGroup>Color</configuratorGroup>
-			<configuratorOptions>Black</configuratorOptions>
-			<configSetName>Set-SW10002</configSetName>
-		</configurator>
-	</configurators>
-	<category>
-		<categories></categories>
-	</category>
-	<similars>
-		<similar></similar>
-	</similars>
-</article>
-<article>
-	<ordernumber>test_SW10002.3</ordernumber>
-	<mainnumber>test_SW10002</mainnumber>
-	<name>My_Article_With_Variants</name>
-	<additionalText></additionalText>
-	<supplier>Test Supplier</supplier>
-	<tax>19.00</tax>
-	<prices>
-		<price>
-			<group>EK</group>
-			<price>299.99</price>
-			<pseudoprice></pseudoprice>
-		</price>
-	</prices>
-	<active>1</active>
-	<instock>1</instock>
-	<stockmin>0</stockmin>
-	<description></description>
-	<description_long></description_long>
-	<shippingtime></shippingtime>
-	<added>2016-09-14</added>
-	<changed>2016-09-14 08:17:39</changed>
-	<releasedate></releasedate>
-	<shippingfree></shippingfree>
-	<topseller></topseller>
-	<metatitle></metatitle>
-	<keywords></keywords>
-	<minpurchase>1</minpurchase>
-	<purchasesteps></purchasesteps>
-	<maxpurchase></maxpurchase>
-	<purchaseunit></purchaseunit>
-	<referenceunit></referenceunit>
-	<packunit></packunit>
-	<unitID></unitID>
-	<pricegroupID></pricegroupID>
-	<pricegroupActive></pricegroupActive>
-	<laststock></laststock>
-	<suppliernumber></suppliernumber>
-	<purchaseprice>0</purchaseprice>
-	<weight>0.000</weight>
-	<width></width>
-	<height></height>
-	<length></length>
-	<ean></ean>
-	<configurators>
-		<configurator>
-			<configuratorsetID>999</configuratorsetID>
-			<configuratortype></configuratortype>
-			<configuratorGroup>Color</configuratorGroup>
-			<configuratorOptions>Red</configuratorOptions>
-			<configSetName>Set-SW10002</configSetName>
+			<configuratorOptions>Green</configuratorOptions>
+			<configSetName>Set-SW10001</configSetName>
 		</configurator>
 	</configurators>
 	<category>

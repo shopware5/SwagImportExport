@@ -13,7 +13,13 @@ use Enlight_Components_Db_Adapter_Pdo_Mysql as PDOConnection;
 use Shopware\Components\SwagImportExport\DbalHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
+use Shopware\Models\Property\Group;
+use Shopware\Models\Property\Option;
+use Shopware\Models\Property\Value;
 
+/**
+ * Writer for the s_filter table and all relations.
+ */
 class PropertyWriter
 {
     /**
@@ -40,154 +46,111 @@ class PropertyWriter
      * @var array $options
      */
     private $options;
+    /**
+     * @var SnippetsHelper
+     */
+    private $snippetsHelper;
 
     /**
-     * initialises the class properties
+     * @return PropertyWriter
      */
-    public function __construct()
+    public static function createFromGlobalSingleton()
     {
-        $this->dbalHelper = DbalHelper::create();
-        $this->connection = Shopware()->Models()->getConnection();
-        $this->db = Shopware()->Db();
-        $this->groups = $this->getGroups();
+        return new PropertyWriter(
+            DbalHelper::create(),
+            Shopware()->Container()->get('dbal_connection'),
+            Shopware()->Container()->get('db'),
+            new SnippetsHelper()
+        );
+    }
+
+    /**
+     * @param DbalHelper $dbalHelper
+     * @param Connection $connection
+     * @param PDOConnection $db
+     * @param SnippetsHelper $snippetsHelper
+     */
+    public function __construct(
+        DbalHelper $dbalHelper,
+        Connection $connection,
+        \Enlight_Components_Db_Adapter_Pdo_Mysql $db,
+        SnippetsHelper $snippetsHelper
+    ) {
+        $this->dbalHelper = $dbalHelper;
+        $this->connection = $connection;
+        $this->db = $db;
+        $this->snippetsHelper = $snippetsHelper;
+
+        $this->groups = $this->getFilterGroups();
         $this->options = $this->getOptions();
     }
 
     /**
-     * @param $articleId
-     * @param $orderNumber
-     * @param $propertiesData
+     * @param int $articleId
+     * @param string $orderNumber
+     * @param array $propertiesData
      * @throws AdapterException
      */
-    public function write($articleId, $orderNumber, $propertiesData)
+    public function writeUpdateCreatePropertyGroupsFilterAndValues($articleId, $orderNumber, $propertiesData)
     {
         if (!$propertiesData) {
             return;
         }
+        $optionRelationInsertStatements = [];
+        $valueRelationInsertStatements = [];
 
-        foreach ($propertiesData as $index => $propertyData) {
-            if (!$this->isValid($propertyData)) {
+        foreach ($propertiesData as $propertyData) {
+            $filterGroupId = $this->findCreateOrUpdateGroup($articleId, $propertyData);
+            if (!$filterGroupId) {
                 continue;
             }
 
-            //gets group id from article
-            $groupId = $this->getGroupFromArticle($articleId);
-
             /**
-             * property set (group)
-             */
-            if (!$groupId && $propertyData['propertyGroupName']) {
-                $groupName = $propertyData['propertyGroupName'];
-                $groupId = $this->getGroup($groupName);
-
-                if (!$groupId) {
-                    //creates groups
-                    $groupData = array(
-                        'name' => $groupName
-                    );
-                    $groupId = $this->createElement('Shopware\Models\Property\Group', $groupData);
-                    $this->groups[$groupName] = $groupId;
-                }
-
-                $this->updateGroupsRelation($groupId, $articleId);
-            }
-
-            if (!$groupId) {
-                $message = SnippetsHelper::getNamespace()
-                    ->get('adapters/articles/property_group_name_not_found', 'There is no propertyGroupName specified for article %s');
-                throw new AdapterException(sprintf($message, $orderNumber));
-            }
-
-            /**
-             * property option and value
+             * Only update relations if value and option id were passed.
              */
             if (isset($propertyData['propertyValueId']) && !empty($propertyData['propertyValueId'])) {
                 $valueId = $propertyData['propertyValueId'];
                 $optionId = $this->getOptionByValueId($valueId);
 
                 if (!$optionId) {
-                    $message = SnippetsHelper::getNamespace()
+                    $message = $this->snippetsHelper->getNamespace()
                         ->get('adapters/articles/property_id_not_found', 'Property value by id %s not found for article %s');
                     throw new AdapterException(sprintf($message, $valueId, $orderNumber));
                 }
-            } elseif (isset($propertyData['propertyValueName']) && !empty($propertyData['propertyValueName'])) {
-                if (isset($propertyData['propertyOptionId']) && !empty($propertyData['propertyOptionId'])) {
-                    //todo: check  propertyOptionId existence
-                    $optionId = $propertyData['propertyOptionId'];
-                } elseif (isset($propertyData['propertyOptionName']) && !empty($propertyData['propertyOptionName'])) {
-                    $optionName = $propertyData['propertyOptionName'];
-                    $optionId = $this->getOption($optionName);
 
-                    if (!$optionId) {
-                        //creates option
-                        $optionData = array(
-                            'name' => $optionName,
-                            'filterable' => !empty($propertyData['propertyOptionFilterable']) ? 1 : 0
-                        );
-                        $optionId = $this->createElement('Shopware\Models\Property\Option', $optionData);
+                $optionRelationInsertStatements[] = "($optionId, $filterGroupId)";
+                $valueRelationInsertStatements[] = "($valueId, $articleId)";
+                continue;
+            }
 
-                        //updates property group mapper
-                        $this->options[$optionName] = $optionId;
-                    }
-                } else {
-                    $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/articles/property_option_required', 'A property option need to be given for each property value for article %s');
-                    throw new AdapterException(sprintf($message, $orderNumber));
-                }
+            /**
+             * Update or create options by value name
+             */
+            if (isset($propertyData['propertyValueName']) && !empty($propertyData['propertyValueName'])) {
+                list($optionId, $valueId) = $this->updateOrCreateOptionAndValuesByValueName($orderNumber, $propertyData);
 
-                $valueName = $propertyData['propertyValueName'];
-                $valueId = $this->getValue($valueName, $optionId);
-
-                if (!$valueId) {
-                    $position = !empty($propertyData['propertyValuePosition']) ? $propertyData['propertyValuePosition'] : 0;
-
-                    $valueData = array(
-                        'value' => $valueName,
-                        'optionId' => $optionId,
-                        'position' => $position,
-                    );
-
-                    $valueId = $this->createElement('Shopware\Models\Property\Value', $valueData);
-                }
+                $optionRelationInsertStatements[] = "($optionId, $filterGroupId)";
+                $valueRelationInsertStatements[] = "($valueId, $articleId)";
+                continue;
             } else {
-                $message = SnippetsHelper::getNamespace()
+                $message = $this->snippetsHelper->getNamespace()
                     ->get('adapters/articles/property_id_or_name_required', 'Article %s requires name or id for property value');
                 throw new AdapterException(sprintf($message, $orderNumber));
             }
-
-            $optionRelations[] = "($optionId, $groupId)";
-            $valueRelations[] = "($valueId, $articleId)";
         }
 
-        if ($optionRelations) {
-            $this->optionsRelation($optionRelations);
+        if ($optionRelationInsertStatements) {
+            $this->insertOrUpdateOptionRelations($optionRelationInsertStatements);
         }
 
-        if ($valueRelations) {
-            $this->valuesRelation($valueRelations);
+        if ($valueRelationInsertStatements) {
+            $this->insertOrUpdateValueRelations($valueRelationInsertStatements);
         }
     }
 
     /**
-     * @param $data
-     * @return bool
-     */
-    private function isValid($data)
-    {
-        if (!isset($data['propertyGroupName']) && empty($data['propertyGroupName'])) {
-            return false;
-        }
-
-        if (empty($data['propertyValueName']) && empty($data['propertyValueId'])) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * @param $entityName
-     * @param $data
+     * @param string $entityName
+     * @param array $data
      * @return string
      */
     private function createElement($entityName, $data)
@@ -207,7 +170,7 @@ class PropertyWriter
      *
      * @param array $relations
      */
-    private function optionsRelation(array $relations)
+    private function insertOrUpdateOptionRelations(array $relations)
     {
         $values = implode(',', $relations);
 
@@ -225,7 +188,7 @@ class PropertyWriter
      *
      * @param array $relations
      */
-    private function valuesRelation(array $relations)
+    private function insertOrUpdateValueRelations(array $relations)
     {
         $values = implode(',', $relations);
 
@@ -241,89 +204,193 @@ class PropertyWriter
     /**
      * Updates/Creates relation between articles and property groups
      *
-     * @param $groupId
-     * @param $articleId
+     * @param int|string $filterGroupId
+     * @param int|string $articleId
      */
-    private function updateGroupsRelation($groupId, $articleId)
+    private function updateGroupsRelation($filterGroupId, $articleId)
     {
-        $this->db->query('UPDATE s_articles SET filtergroupID = ? WHERE id = ?', array($groupId, $articleId));
+        $this->db->query('UPDATE s_articles SET filtergroupID = ? WHERE id = ?', [$filterGroupId, $articleId]);
     }
 
     /**
      * @return array
      */
-    public function getGroups()
+    private function getFilterGroups()
     {
-        $groups = $this->db->fetchPairs('SELECT `name`, `id` FROM s_filter');
-
-        return $groups;
+        return $this->db->fetchPairs('SELECT `name`, `id` FROM s_filter');
     }
 
     /**
-     * @param $name
-     * @return mixed
+     * @param string $name
+     * @return int
      */
-    public function getGroup($name)
+    private function getFilterGroupIdByNameFromCacheProperty($name)
     {
-        $groupId = $this->groups[$name];
+        return $this->groups[$name];
+    }
+
+    /**
+     * @return array
+     */
+    private function getOptions()
+    {
+        return $this->db->fetchPairs('SELECT `name`, `id` FROM s_filter_options');
+    }
+
+    /**
+     * Returns the id of an option
+     *
+     * @param string $name
+     * @return int
+     */
+    private function getOptionByName($name)
+    {
+        return $this->options[$name];
+    }
+
+    /**
+     * @param string $name
+     * @param int $filterGroupId
+     * @return string|boolean
+     */
+    private function getValue($name, $filterGroupId)
+    {
+        return $this->connection->fetchColumn(
+            "SELECT `id` FROM s_filter_values
+             WHERE `optionID` = ? AND `value` = ?",
+            [$filterGroupId, $name]
+        );
+    }
+
+    /**
+     * @param string|int $articleId
+     * @return string|boolean
+     */
+    private function getGroupFromArticle($articleId)
+    {
+        return $this->connection->fetchColumn(
+            "SELECT `filtergroupID` FROM s_articles
+             INNER JOIN s_filter ON s_articles.filtergroupID = s_filter.id
+             WHERE s_articles.id = ?",
+            [$articleId]
+        );
+    }
+
+    /**
+     * @param string|int $valueId
+     * @return string|boolean
+     */
+    private function getOptionByValueId($valueId)
+    {
+        return $this->connection->fetchColumn('SELECT `optionID` FROM s_filter_values WHERE id = ?', [$valueId]);
+    }
+
+    /**
+     * @param string $optionName
+     * @param array $propertyData
+     * @return int
+     */
+    private function createOption($optionName, $propertyData)
+    {
+        $optionData = [
+            'name' => $optionName,
+            'filterable' => !empty($propertyData['propertyOptionFilterable']) ? 1 : 0
+        ];
+
+        $this->options[$optionName] = $this->createElement(Option::class, $optionData);
+        return $this->options[$optionName];
+    }
+
+    /**
+     * @param string $propertyData
+     * @param string $valueName
+     * @param int $optionId
+     * @return string
+     */
+    private function createValue($propertyData, $valueName, $optionId)
+    {
+        $position = !empty($propertyData['propertyValuePosition']) ? $propertyData['propertyValuePosition'] : 0;
+
+        $valueData = [
+            'value' => $valueName,
+            'optionId' => $optionId,
+            'position' => $position,
+        ];
+
+        return $this->createElement(Value::class, $valueData);
+    }
+
+    /**
+     * @param string $groupName
+     * @return string
+     */
+    private function createGroup($groupName)
+    {
+        $groupData = [
+            'name' => $groupName
+        ];
+
+        $groupId = $this->createElement(Group::class, $groupData);
+        $this->groups[$groupName] = $groupId;
 
         return $groupId;
     }
 
     /**
+     * @param int $articleId
+     * @param array $propertyData
+     * @return string|null
+     * @throws AdapterException
+     */
+    private function findCreateOrUpdateGroup($articleId, $propertyData)
+    {
+        $filterGroupId = $this->getGroupFromArticle($articleId);
+
+        if (!$filterGroupId && $propertyData['propertyGroupName']) {
+            $fitlerGroupName = $propertyData['propertyGroupName'];
+            $filterGroupId = $this->getFilterGroupIdByNameFromCacheProperty($fitlerGroupName);
+
+            if (!$filterGroupId) {
+                $filterGroupId = $this->createGroup($fitlerGroupName);
+            }
+
+            $this->updateGroupsRelation($filterGroupId, $articleId);
+        }
+
+
+        return $filterGroupId;
+    }
+
+    /**
+     * @param string $orderNumber
+     * @param string $propertyData
      * @return array
+     * @throws AdapterException
      */
-    public function getOptions()
+    private function updateOrCreateOptionAndValuesByValueName($orderNumber, $propertyData)
     {
-        $options = $this->db->fetchPairs('SELECT `name`, `id` FROM s_filter_options');
+        if (isset($propertyData['propertyOptionId']) && !empty($propertyData['propertyOptionId'])) {
+            //todo: check  propertyOptionId existence
+            $optionId = $propertyData['propertyOptionId'];
+        } elseif (isset($propertyData['propertyOptionName']) && !empty($propertyData['propertyOptionName'])) {
+            $optionName = $propertyData['propertyOptionName'];
+            $optionId = $this->getOptionByName($optionName);
 
-        return $options;
-    }
+            if (!$optionId) {
+                $optionId = $this->createOption($optionName, $propertyData);
+            }
+        } else {
+            $message = $this->snippetsHelper->getNamespace()
+                ->get('adapters/articles/property_option_required', '');
+            throw new AdapterException(sprintf($message, $orderNumber));
+        }
 
-    /**
-     * @param $name
-     * @return mixed
-     */
-    public function getOption($name)
-    {
-        $optionId = $this->options[$name];
+        $valueName = $propertyData['propertyValueName'];
+        $valueId = $this->getValue($valueName, $optionId);
 
-        return $optionId;
-    }
-
-    /**
-     * @param $name
-     * @param $groupId
-     * @return mixed
-     */
-    public function getValue($name, $groupId)
-    {
-        return $this->connection->fetchColumn(
-            "SELECT `id` FROM s_filter_values
-             WHERE `optionID` = ? AND `value` = ?",
-            array($groupId, $name)
-        );
-    }
-
-    /**
-     * @param $articleId
-     * @return mixed
-     */
-    public function getGroupFromArticle($articleId)
-    {
-        return $this->connection->fetchColumn(
-            "SELECT `filtergroupID` FROM s_articles
-             WHERE id = ?",
-            array($articleId)
-        );
-    }
-
-    /**
-     * @param $valueId
-     * @return mixed
-     */
-    public function getOptionByValueId($valueId)
-    {
-        return $this->connection->fetchColumn('SELECT `optionID` FROM s_filter_values WHERE id = ?', array($valueId));
+        if (!$valueId) {
+            $valueId = $this->createValue($propertyData, $valueName, $optionId);
+        }
+        return [ $optionId, $valueId ];
     }
 }

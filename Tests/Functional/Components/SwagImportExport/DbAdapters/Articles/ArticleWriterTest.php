@@ -18,7 +18,7 @@ class ArticleWriterTest extends \PHPUnit_Framework_TestCase
     /**
      * @var ArticleWriter
      */
-    private $SUT;
+    private $articleWriter;
 
     /**
      * @var ModelManager
@@ -31,7 +31,7 @@ class ArticleWriterTest extends \PHPUnit_Framework_TestCase
         $this->modelManager = Shopware()->Container()->get('models');
         $this->modelManager->beginTransaction();
 
-        $this->SUT = new ArticleWriter();
+        $this->articleWriter = new ArticleWriter();
     }
 
     protected function tearDown()
@@ -60,14 +60,11 @@ class ArticleWriterTest extends \PHPUnit_Framework_TestCase
             'unitId' => 1
         ];
 
-        $ids = $this->SUT->write($demoArticle, []);
-        $articleId = $ids[0];
-        $detailId = $ids[1];
-        $mainDetailId = $ids[2];
+        $articleWriterResult = $this->articleWriter->write($demoArticle, []);
 
-        $this->assertEquals($expectedArticleId, $articleId, "Expected articleId does not match the obtained articleId.");
-        $this->assertEquals($expectedDetailId, $detailId, "Expected detailId does not match the obtained detailId.");
-        $this->assertEquals($expectedMainDetailId, $mainDetailId, "Expected mainDetailId id does not match the obtained detailId.");
+        $this->assertEquals($expectedArticleId, $articleWriterResult->getArticleId(), "Expected articleId does not match the obtained articleId.");
+        $this->assertEquals($expectedDetailId, $articleWriterResult->getDetailId(), "Expected detailId does not match the obtained detailId.");
+        $this->assertEquals($expectedMainDetailId, $articleWriterResult->getMainDetailId(), "Expected mainDetailId id does not match the obtained detailId.");
     }
 
     public function test_write_should_insert_a_new_article()
@@ -87,11 +84,10 @@ class ArticleWriterTest extends \PHPUnit_Framework_TestCase
             'unitId' => '1'
         ];
 
-        $ids = $this->SUT->write($expectedNewArticle, []);
-        $articleId = $ids[0];
+        $articleWriterResult = $this->articleWriter->write($expectedNewArticle, []);
 
         /** @var Article $insertedArticle */
-        $insertedArticle = $this->modelManager->find(Article::class, $articleId);
+        $insertedArticle = $this->modelManager->find(Article::class, $articleWriterResult->getArticleId());
 
         $this->assertNotNull($insertedArticle, "Could not insert article");
         $this->assertEquals($expectedNewArticle['orderNumber'], $insertedArticle->getMainDetail()->getNumber(), "Could not insert field ordernumber.");
@@ -120,11 +116,10 @@ class ArticleWriterTest extends \PHPUnit_Framework_TestCase
             'unitId' => '1'
         ];
 
-        $ids = $this->SUT->write($expectedModifiedArticle, []);
-        $articleId = $ids[0];
+        $articleWriterResult = $this->articleWriter->write($expectedModifiedArticle, []);
 
         /** @var Article $updatedArticle */
-        $updatedArticle = $this->modelManager->find(Article::class, $articleId);
+        $updatedArticle = $this->modelManager->find(Article::class, $articleWriterResult->getArticleId());
 
         $this->assertNotNull($updatedArticle, "Could not find updated article");
         $this->assertEquals($expectedModifiedArticle['orderNumber'], $updatedArticle->getMainDetail()->getNumber(), "Could not update field ordernumber.");
@@ -136,7 +131,7 @@ class ArticleWriterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedModifiedArticle['supplierName'], $updatedArticle->getSupplier()->getName(), "Could not update field supplier name.");
     }
 
-    public function test_write_with_processed_article()
+    public function test_write_with_processed_article($detailId)
     {
         $expectedId = 3;
         $expectedDetailId = 3;
@@ -148,14 +143,11 @@ class ArticleWriterTest extends \PHPUnit_Framework_TestCase
             'processed' => '1'
         ];
 
-        $ids = $this->SUT->write($expectedModifiedArticle, []);
-        $articleId = $ids[0];
-        $detailId = $ids[1];
-        $mainDetailId = $ids[2];
+        $articleWriterResult = $this->articleWriter->write($expectedModifiedArticle, []);
 
-        $this->assertEquals($articleId, $expectedId, "The expected article id do not match");
-        $this->assertEquals($detailId, $expectedDetailId, "The expected article detail id do not match");
-        $this->assertEquals($mainDetailId, $expectedMainDetailId, "The expected article main detail id do not match");
+        $this->assertEquals($articleWriterResult->getArticleId(), $expectedId, "The expected article id do not match");
+        $this->assertEquals($articleWriterResult->getDetailId(), $expectedDetailId, "The expected article detail id do not match");
+        $this->assertEquals($articleWriterResult->getMainDetailId(), $expectedMainDetailId, "The expected article main detail id do not match");
     }
 
     public function test_write_detail_with_not_existing_main_detail_should_throw_exception()
@@ -166,7 +158,7 @@ class ArticleWriterTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->expectException(AdapterException::class);
-        $this->SUT->write($expectedModifiedArticle, []);
+        $this->articleWriter->write($expectedModifiedArticle, []);
     }
 
     public function test_write_should_update_article_active_flag_if_main_detail_active_flag_is_given()
@@ -177,13 +169,11 @@ class ArticleWriterTest extends \PHPUnit_Framework_TestCase
             'active' => '0'
         ];
 
-        $ids = $this->SUT->write($expectedModifiedArticle, []);
-        $articleId = $ids[0];
-        $detailId = $ids[1];
+        $articleWriterResult = $this->articleWriter->write($expectedModifiedArticle, []);
 
         /** @var Article $article */
-        $isMainArticleActive = $this->getArticlesActiveFlag($articleId);
-        $isMainDetailActive = $this->getArticleDetailActiveFlag($detailId);
+        $isMainArticleActive = $this->getArticlesActiveFlag($articleWriterResult->getArticleId());
+        $isMainDetailActive = $this->getArticleDetailActiveFlag($articleWriterResult->getDetailId());
 
         $this->assertEquals(0, $isMainDetailActive, 'Could not update active flag for article main detail.');
         $this->assertEquals(0, $isMainArticleActive, 'Could not update active flag for s_articles if main detail active flag is given.');
@@ -197,12 +187,10 @@ class ArticleWriterTest extends \PHPUnit_Framework_TestCase
             'active' => '0'
         ];
 
-        $ids = $this->SUT->write($expectedModifiedArticle, []);
-        $articleId = $ids[0];
-        $detailId = $ids[1];
+        $articleWriterResult = $this->articleWriter->write($expectedModifiedArticle, []);
 
-        $isMainArticleActive = $this->getArticlesActiveFlag($articleId);
-        $isDetailActive = $this->getArticleDetailActiveFlag($detailId);
+        $isMainArticleActive = $this->getArticlesActiveFlag($articleWriterResult->getArticleId());
+        $isDetailActive = $this->getArticleDetailActiveFlag($articleWriterResult->getDetailId());
 
         $this->assertEquals(0, $isDetailActive, 'Could not update article detail active flag.');
         $this->assertEquals(1, $isMainArticleActive, 'Article active flag was updated, but only article detail should be updated.');

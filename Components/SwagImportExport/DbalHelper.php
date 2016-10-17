@@ -26,6 +26,9 @@ class DbalHelper
      */
     private $modelManager;
 
+    /**
+     * @return DbalHelper
+     */
     public static function create()
     {
         return new DbalHelper(

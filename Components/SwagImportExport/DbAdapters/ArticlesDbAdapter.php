@@ -23,12 +23,10 @@ use Shopware\Components\SwagImportExport\DbAdapters\Articles\TranslationWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\PriceWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\RelationWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\ImageWriter;
-use Shopware\Models\Article\Image as Image;
-use Shopware\Models\Article\Configurator;
+use Shopware\Components\SwagImportExport\DbAdapters\Results\ArticleWriterResult;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
 use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
-use Shopware\Models\Property;
 
 /**
  * Class ArticlesDbAdapter
@@ -176,9 +174,7 @@ class ArticlesDbAdapter implements DataDbAdapter
 
         $result = array();
         if ($records) {
-            foreach ($records as $value) {
-                $result[] = $value['id'];
-            }
+            $result = array_column($records, 'id');
         }
 
         return $result;
@@ -579,7 +575,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $records
+     * @param array $records
      * @throws \Exception
      */
     private function performImport($records)
@@ -587,9 +583,9 @@ class ArticlesDbAdapter implements DataDbAdapter
         $articleWriter = new ArticleWriter();
         $pricesWriter = new PriceWriter();
         $categoryWriter = new CategoryWriter();
-        $configuratorWriter = new ConfiguratorWriter();
+        $configuratorWriter = ConfiguratorWriter::createFromGlobalSingleton();
         $translationWriter = new TranslationWriter();
-        $propertyWriter = new PropertyWriter();
+        $propertyWriter = PropertyWriter::createFromGlobalSingleton();
         $relationWriter = new RelationWriter($this);
         $imageWriter = new ImageWriter($this);
 
@@ -599,7 +595,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             try {
                 $this->modelManager->getConnection()->beginTransaction();
 
-                list($articleId, $articleDetailId, $mainDetailId) = $articleWriter->write($article, $defaultValues);
+                $articleWriterResult = $articleWriter->write($article, $defaultValues);
 
                 $processedFlag = isset($article['processed']) && $article['processed'] == 1;
 
@@ -608,8 +604,8 @@ class ArticlesDbAdapter implements DataDbAdapter
                  */
                 if (!$processedFlag) {
                     $pricesWriter->write(
-                        $articleId,
-                        $articleDetailId,
+                        $articleWriterResult->getArticleId(),
+                        $articleWriterResult->getDetailId(),
                         array_filter(
                             $records['price'],
                             function ($price) use ($index) {
@@ -619,7 +615,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                     );
 
                     $categoryWriter->write(
-                        $articleId,
+                        $articleWriterResult->getArticleId(),
                         array_filter(
                             $records['category'],
                             function ($category) use ($index) {
@@ -628,10 +624,8 @@ class ArticlesDbAdapter implements DataDbAdapter
                         )
                     );
 
-                    $configuratorWriter->write(
-                        $articleId,
-                        $articleDetailId,
-                        $mainDetailId,
+                    $configuratorWriter->writeOrUpdateConfiguratorSet(
+                        $articleWriterResult,
                         array_filter(
                             $records['configurator'],
                             function ($configurator) use ($index) {
@@ -640,21 +634,16 @@ class ArticlesDbAdapter implements DataDbAdapter
                         )
                     );
 
-                    $propertyWriter->write(
-                        $articleId,
+                    $propertyWriter->writeUpdateCreatePropertyGroupsFilterAndValues(
+                        $articleWriterResult->getArticleId(),
                         $article['orderNumber'],
-                        array_filter(
-                            $records['propertyValue'],
-                            function ($property) use ($index, $mainDetailId, $articleDetailId) {
-                                return $property['parentIndexElement'] == $index && $mainDetailId == $articleDetailId;
-                            }
-                        )
+                        $this->filterPropertyValues($records, $index, $articleWriterResult)
                     );
 
                     $translationWriter->write(
-                        $articleId,
-                        $articleDetailId,
-                        $mainDetailId,
+                        $articleWriterResult->getArticleId(),
+                        $articleWriterResult->getDetailId(),
+                        $articleWriterResult->getMainDetailId(),
                         array_filter(
                             $records['translation'],
                             function ($translation) use ($index) {
@@ -672,12 +661,12 @@ class ArticlesDbAdapter implements DataDbAdapter
                 }
 
                 $relationWriter->write(
-                    $articleId,
+                    $articleWriterResult->getArticleId(),
                     $article['mainNumber'],
                     array_filter(
                         $records['accessory'],
-                        function ($accessory) use ($index, $mainDetailId, $articleDetailId) {
-                            return $accessory['parentIndexElement'] == $index && $mainDetailId == $articleDetailId;
+                        function ($accessory) use ($index, $articleWriterResult) {
+                            return $accessory['parentIndexElement'] == $index && $articleWriterResult->getMainDetailId() == $articleWriterResult->getDetailId();
                         }
                     ),
                     'accessory',
@@ -685,12 +674,12 @@ class ArticlesDbAdapter implements DataDbAdapter
                 );
 
                 $relationWriter->write(
-                    $articleId,
+                    $articleWriterResult->getArticleId(),
                     $article['mainNumber'],
                     array_filter(
                         $records['similar'],
-                        function ($similar) use ($index, $mainDetailId, $articleDetailId) {
-                            return $similar['parentIndexElement'] == $index && $mainDetailId == $articleDetailId;
+                        function ($similar) use ($index, $articleWriterResult) {
+                            return $similar['parentIndexElement'] == $index && $articleWriterResult->getMainDetailId() == $articleWriterResult->getDetailId();
                         }
                     ),
                     'similar',
@@ -698,7 +687,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 );
 
                 $imageWriter->write(
-                    $articleId,
+                    $articleWriterResult->getArticleId(),
                     $article['mainNumber'],
                     array_filter(
                         $records['image'],
@@ -846,10 +835,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         if ($attributes) {
             $prefix = 'attribute';
             foreach ($attributes as $attribute) {
-                //underscore to camel case
-                //exmaple: underscore_to_camel_case -> underscoreToCamelCase
-
-                $attr = lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $attribute))));
+                $attr = $this->underscoreToCamelCase($attribute);
 
                 $attributesSelect[] = sprintf('%s.%s as attribute%s', $prefix, $attr, ucwords($attr));
             }
@@ -1515,5 +1501,32 @@ class ArticlesDbAdapter implements DataDbAdapter
         $builder->orderBy('attribute.position');
 
         return $builder;
+    }
+
+    /**
+     * @param array $records
+     * @param int $index
+     * @param ArticleWriterResult $articleWriterResult
+     * @return array
+     */
+    private function filterPropertyValues($records, $index, ArticleWriterResult $articleWriterResult)
+    {
+        return array_filter(
+            $records['propertyValue'],
+            function ($property) use ($index, $articleWriterResult) {
+                return $property['parentIndexElement'] == $index && $articleWriterResult->getMainDetailId() == $articleWriterResult->getDetailId();
+            }
+        );
+    }
+
+    /**
+     * @example: underscore_string will result in underscoreString
+     *
+     * @param string $underscoreString
+     * @return string
+     */
+    private function underscoreToCamelCase($underscoreString)
+    {
+        return lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $underscoreString))));
     }
 }
