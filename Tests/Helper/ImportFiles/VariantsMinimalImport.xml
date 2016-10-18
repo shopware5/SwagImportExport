@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Root>
+<articles>
+    <article>
+        <orderNumber>SW10153.1</orderNumber>
+        <mainNumber>SW10153.1</mainNumber>
+        <name>Flip Flops, in mehreren Farben verfügbar</name>
+        <supplierName>Beachdreams Clothes</supplierName>
+        <tax>19.00</tax>
+        <kind>1</kind>
+        <price>
+            <price>6.99</price>
+            <priceGroup>EK</priceGroup>
+        </price>
+        <active>1</active>
+        <category>
+            <categoryId>34</categoryId>
+        </category>
+        <category>
+            <categoryId>57</categoryId>
+        </category>
+        <configurator>
+            <configGroupName>Farbe</configGroupName>
+            <configOptionName>blau</configOptionName>
+        </configurator>
+        <configurator>
+            <configGroupName>Größe</configGroupName>
+            <configOptionName>37/38</configOptionName>
+        </configurator>
+    </article>
+    <article>
+        <orderNumber>SW10005</orderNumber>
+        <mainNumber>SW10005</mainNumber>
+        <name>Test Produktexport</name>
+        <supplierName>Access Oires Sisters</supplierName>
+        <tax>19.00</tax>
+        <kind>2</kind>
+        <price>
+            <price>25</price>
+            <priceGroup>EK</priceGroup>
+        </price>
+        <active>1</active>
+        <category>
+            <categoryId>34</categoryId>
+        </category>
+        <configurator>
+            <configGroupName>Farbe</configGroupName>
+            <configOptionName>weiss</configOptionName>
+        </configurator>
+        <configurator>
+            <configGroupName>Größe</configGroupName>
+            <configOptionName>S</configOptionName>
+        </configurator>
+    </article>
+    <article>
+        <orderNumber>SW10156.1</orderNumber>
+        <mainNumber>SW10156.1</mainNumber>
+        <name>Flip Flops Deep Red</name>
+        <supplierName>Beachdreams Clothes</supplierName>
+        <tax>19.00</tax>
+        <kind>2</kind>
+        <price>
+            <price>6.99</price>
+            <priceGroup>EK</priceGroup>
+        </price>
+        <active>1</active>
+        <category>
+            <categoryId>34</categoryId>
+        </category>
+        <configurator>
+            <configGroupName>Größe</configGroupName>
+            <configOptionName>39/40</configOptionName>
+        </configurator>
+    </article>
+</articles>
+</Root>
