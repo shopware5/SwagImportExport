@@ -23,13 +23,11 @@ class FileIOFactory extends \Enlight_Class implements \Enlight_Hook
      */
     public function createFileReader($format)
     {
-        $fileHelper = new FileHelper();
-
         switch ($format) {
             case 'csv':
                 return Shopware()->Container()->get('swag_import_export.csv_file_reader');
             case 'xml':
-                return new XmlFileReader($fileHelper);
+                return new XmlFileReader();
             default:
                 throw new \Exception('File reader ' . $format . ' does not exists.');
         }

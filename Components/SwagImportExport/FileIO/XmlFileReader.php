@@ -8,13 +8,11 @@
 
 namespace Shopware\Components\SwagImportExport\FileIO;
 
-use Shopware\Components\SwagImportExport\Utils\FileHelper;
-
 class XmlFileReader implements FileReader
 {
     protected $tree;
-    protected $iterationPath = array();
-    protected $iterationTag = array();
+    protected $iterationPath = [];
+    protected $iterationTag = [];
 
     /**
      * @var bool $treeStructure
@@ -22,25 +20,12 @@ class XmlFileReader implements FileReader
     protected $treeStructure = true;
 
     /**
-     * @var FileHelper $fileHelper
-     */
-    protected $fileHelper;
-
-    /**
-     * @param FileHelper $fileHelper
-     */
-    public function __construct(FileHelper $fileHelper = null)
-    {
-        $this->fileHelper = $fileHelper;
-    }
-
-    /**
      * @param $tree
      */
     public function setTree($tree)
     {
         $this->tree = $tree;
-        $this->findIterationNode($tree, array());
+        $this->findIterationNode($tree, []);
     }
 
     /**
@@ -51,7 +36,7 @@ class XmlFileReader implements FileReader
     protected function toArrayTree(\DOMElement $node, $path)
     {
         $hasChildren = false;
-        $record = array();
+        $record = [];
         $currentPath = $path . '/' . $node->nodeName;
 
         if ($node->hasChildNodes()) {
@@ -68,7 +53,7 @@ class XmlFileReader implements FileReader
         }
 
         if ($node->hasAttributes()) {
-            $record["_attributes"] = array();
+            $record["_attributes"] = [];
             foreach ($node->attributes as $attr) {
                 $record["_attributes"][$attr->name] = $attr->value;
             }
@@ -114,7 +99,7 @@ class XmlFileReader implements FileReader
         }
 
         $j = 0;
-        $records = array();
+        $records = [];
         while ($j < $count && $reader->next($this->iterationTag[0])) {
             $node = $reader->expand();
             $records[] = $this->toArrayTree($node, $this->iterationPath[0]);
