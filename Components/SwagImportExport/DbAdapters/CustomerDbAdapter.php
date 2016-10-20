@@ -493,6 +493,9 @@ class CustomerDbAdapter implements DataDbAdapter
 
             foreach ($columns as $column) {
                 $map = DataHelper::generateMappingFromColumns($column);
+                if (empty($map)) {
+                    continue;
+                }
                 $this->customerMap[$map[0]] = $map[1];
             }
         }
@@ -541,6 +544,9 @@ class CustomerDbAdapter implements DataDbAdapter
 
             foreach ($columns as $column) {
                 $map = DataHelper::generateMappingFromColumns($column);
+                if (empty($map)) {
+                    continue;
+                }
                 $this->billingMap[$map[0]] = $map[1];
             }
         }
@@ -574,6 +580,9 @@ class CustomerDbAdapter implements DataDbAdapter
 
             foreach ($columns as $column) {
                 $map = DataHelper::generateMappingFromColumns($column);
+                if (empty($map)) {
+                    continue;
+                }
                 $this->shippingMap[$map[0]] = $map[1];
             }
         }
