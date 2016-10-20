@@ -11,15 +11,23 @@ namespace Shopware\Components\SwagImportExport\Utils;
 class DataHelper
 {
     /**
+     * This function strips sql commands from the
+     * string like "as" to get a "cleaned" value for the column
+     * and the in the query used alias.
+     *
+     * example: 'customer.number as customerNumber' results in ['customerNumber', 'number']
+     *
      * @param $column
      * @return array
      */
     public static function generateMappingFromColumns($column)
     {
-        preg_match('/(?<=as ).*/', $column, $alias);
+        if (!preg_match('/(?<=as ).*/', $column, $alias)) {
+            return [];
+        }
         $alias = trim($alias[0]);
 
-        preg_match("/(?<=\.).*?(?= as)/", $column, $name);
+        preg_match("/(?<=\.).*?(?= as|\W)/", $column, $name);
         $name = trim($name[0]);
 
         return array($alias, $name);
