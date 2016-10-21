@@ -92,7 +92,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
         if (!Ext.isEmpty(localFile)) {
             me = this;
             form.submit({
-                url: '{url module=backend controller="swagImportExport" action="uploadFile"}',
+                url: '{url module=backend controller="SwagImportExport" action="uploadFile"}',
                 waitMsg: 'Uploading',
                 scope: me,
                 success: function(fp, response) {
@@ -168,7 +168,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
         var me = this;
 
         me.batchConfig = {
-            requestUrl: '{url controller="SwagImportExport" action="import"}',
+            requestUrl: '{url controller="SwagImportExportImport" action="import"}',
             action: 'close-window-import',
             params: {
                 profileId: me.parameters.profile,
@@ -179,7 +179,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
         };
 
         Ext.Ajax.request({
-            url: '{url controller="SwagImportExport" action="prepareImport"}',
+            url: '{url controller="SwagImportExportImport" action="prepareImport"}',
             method: 'POST',
             params: me.batchConfig.params,
             success: function(response) {

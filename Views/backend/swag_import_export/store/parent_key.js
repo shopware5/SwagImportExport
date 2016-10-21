@@ -49,7 +49,7 @@ Ext.define('Shopware.apps.SwagImportExport.store.ParentKey', {
     proxy: {
         type: 'ajax',
         api: {
-            read: '{url controller="SwagImportExport" action="getParentKeys"}'
+            read: '{url controller="SwagImportExportProfile" action="getParentKeys"}'
         },
         actionMethods: 'POST',
         reader: {

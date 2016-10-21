@@ -15,4 +15,9 @@ interface FileWriter
     public function writeRecords($fileName, $treeData);
 
     public function writeFooter($fileName, $footerData);
+
+    /**
+     * @return boolean
+     */
+    public function hasTreeStructure();
 }

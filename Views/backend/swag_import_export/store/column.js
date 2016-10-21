@@ -49,7 +49,7 @@ Ext.define('Shopware.apps.SwagImportExport.store.Column', {
     proxy: {
         type: 'ajax',
         api: {
-            read: '{url controller="SwagImportExport" action="getColumns"}'
+            read: '{url controller="SwagImportExportProfile" action="getColumns"}'
         },
         actionMethods: 'POST',
         reader: {

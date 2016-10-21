@@ -21,6 +21,8 @@ use Shopware\Components\SwagImportExport\Factories\ProfileFactory;
 use Shopware\Components\SwagImportExport\FileIO\CsvFileReader;
 use Shopware\Components\SwagImportExport\FileIO\CsvFileWriter;
 use Shopware\Components\SwagImportExport\Logger\Logger;
+use Shopware\Components\SwagImportExport\Service\ExportService;
+use Shopware\Components\SwagImportExport\Service\ImportService;
 use Shopware\Components\SwagImportExport\UploadPathProvider;
 use Shopware\Components\SwagImportExport\Utils\FileHelper;
 use Shopware\Setup\SwagImportExport\Exception\MinVersionException;
@@ -155,6 +157,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
 
         $this->createDatabase();
         $this->createAclResource();
+        $this->registerControllers();
         $this->registerEvents();
         $this->createDirectories();
         $this->createConfiguration();
@@ -407,18 +410,18 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         );
 
         $this->subscribeEvent(
+            'Enlight_Bootstrap_InitResource_swag_import_export.import_service',
+            'registerImportService'
+        );
+
+        $this->subscribeEvent(
+            'Enlight_Bootstrap_InitResource_swag_import_export.export_service',
+            'registerExportService'
+        );
+
+        $this->subscribeEvent(
             'Enlight_Bootstrap_InitResource_swag_import_export.upload_path_provider',
             'registerUploadPathProvider'
-        );
-
-        $this->subscribeEvent(
-            'Enlight_Controller_Dispatcher_ControllerPath_Backend_SwagImportExport',
-            'getBackendController'
-        );
-
-        $this->subscribeEvent(
-            'Enlight_Controller_Dispatcher_ControllerPath_Backend_SwagImportExportCron',
-            'getCronjobController'
         );
 
         $this->subscribeEvent(
@@ -430,27 +433,39 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
             'Shopware_Console_Add_Command',
             'onAddConsoleCommand'
         );
+    }
 
-        $this->subscribeEvent(
-            'Enlight_Controller_Dispatcher_ControllerPath_Frontend_SwagImportExport',
-            'getFrontendController'
-        );
+    protected function registerControllers()
+    {
+        $backendControllers = [
+            'SwagImportExport',
+            'SwagImportExportImport',
+            'SwagImportExportExport',
+            'SwagImportExportProfile',
+            'SwagImportExportConversion',
+            'SwagImportExportSession',
+            'SwagImportExportCron'
+        ];
+
+        foreach ($backendControllers as $ctrl) {
+            $this->registerController('Backend', $ctrl);
+        }
+
+        $this->registerController('Frontend', 'SwagImportExport');
     }
 
     /**
-     * @param Enlight_Event_EventArgs $args
      * @return UploadPathProvider
      */
-    public function registerUploadPathProvider(Enlight_Event_EventArgs $args)
+    public function registerUploadPathProvider()
     {
         return new UploadPathProvider(Shopware()->DocPath());
     }
 
     /**
-     * @param Enlight_Event_EventArgs $args
      * @return Logger
      */
-    public function registerLogger(Enlight_Event_EventArgs $args)
+    public function registerLogger()
     {
         return new Logger(
             $this->get('swag_import_export.csv_file_writer'),
@@ -459,10 +474,43 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
     }
 
     /**
-     * @param Enlight_Event_EventArgs $args
+     * @return ImportService
+     */
+    public function registerImportService()
+    {
+        return new ImportService(
+            $this->getProfileFactory(),
+            $this->getFileIOFactory(),
+            $this->getDataFactory(),
+            $this->getDataTransformerFactory(),
+            $this->get('swag_import_export.logger'),
+            $this->get('swag_import_export.upload_path_provider'),
+            Shopware()->Auth(),
+            $this->get('shopware_media.media_service')
+        );
+    }
+
+    /**
+     * @return ExportService
+     */
+    public function registerExportService()
+    {
+        return new ExportService(
+            $this->getProfileFactory(),
+            $this->getFileIOFactory(),
+            $this->getDataFactory(),
+            $this->getDataTransformerFactory(),
+            $this->get('swag_import_export.logger'),
+            $this->get('swag_import_export.upload_path_provider'),
+            Shopware()->Auth(),
+            $this->get('shopware_media.media_service')
+        );
+    }
+
+    /**
      * @return CsvFileReader
      */
-    public function registerCsvFileReader(Enlight_Event_EventArgs $args)
+    public function registerCsvFileReader()
     {
         return new CsvFileReader(
             $this->get('swag_import_export.upload_path_provider')
@@ -470,38 +518,13 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
     }
 
     /**
-     * @param Enlight_Event_EventArgs $args
      * @return CsvFileWriter
      */
-    public function registerCsvFileWriter(Enlight_Event_EventArgs $args)
+    public function registerCsvFileWriter()
     {
         return new CsvFileWriter(
             new FileHelper()
         );
-    }
-
-    /**
-     * Returns the path to the backend controller.
-     *
-     * @return string
-     */
-    public function getBackendController()
-    {
-        $this->addConfigDirs();
-
-        return $this->Path() . '/Controllers/Backend/SwagImportExport.php';
-    }
-
-    /**
-     * Returns the path to the CronJob controller.
-     *
-     * @return string
-     */
-    public function getCronjobController()
-    {
-        $this->addConfigDirs();
-
-        return $this->Path() . '/Controllers/Backend/SwagImportExportCron.php';
     }
 
     /**
@@ -523,16 +546,6 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
 
         $view->addTemplateDir($this->Path() . 'Views/');
         $view->extendsTemplate('backend/swag_import_export/menu_entry.tpl');
-    }
-
-    /**
-     * Returns the path to the frontend controller.
-     *
-     * @return string
-     */
-    public function getFrontendController()
-    {
-        return $this->Path() . '/Controllers/Frontend/SwagImportExport.php';
     }
 
     /**
@@ -684,17 +697,6 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
 
         $this->em->remove($resource);
         $this->em->flush();
-    }
-
-    private function addConfigDirs()
-    {
-        /** @var Shopware_Components_Snippet_Manager $snippetManager */
-        $snippetManager = $this->get('snippets');
-        $snippetManager->addConfigDir($this->Path() . 'Snippets/');
-
-        /** @var Enlight_Template_Manager $templateManager */
-        $templateManager = $this->get('template');
-        $templateManager->addTemplateDir($this->Path() . 'Views/');
     }
 
     /**

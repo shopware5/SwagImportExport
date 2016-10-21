@@ -323,7 +323,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
             ),
             listeners: {
                 scope: me,
-                change: function(cb, newValue, oldValue) {
+                change: function(cb, newValue) {
                     if (!newValue) {
                         return;
                     }
@@ -331,9 +331,9 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
                     var record = me.profilesStore.getById(newValue);
                     var type = record.get('type');
 
-                    me.hideFields();
+                    me.resetAdditionalFields();
 
-                    me.resetAdditionalFields(oldValue);
+                    me.hideFields();
 
                     if (type === 'articles') {
                         me.articleFields.show();
@@ -550,35 +550,15 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
         me.customFilterFields.hide();
     },
 
-    resetAdditionalFields: function(oldValue) {
+    resetAdditionalFields: function() {
         var me = this,
-            fieldSet = null,
-            record, oldType;
+            activeFieldset = me.mainFieldset.nextSibling('fieldset{ isVisible() }');
 
-        if (Ext.isEmpty(oldValue)) {
-            return;
+        if (activeFieldset) {
+            Ext.each(activeFieldset.query('field'), function(field) {
+                 field.reset();
+            });
         }
-
-        record = me.profilesStore.getById(oldValue);
-        oldType = record.get('type');
-
-        switch (oldType) {
-            case 'articles':
-                fieldSet = me.articleFields;
-                break;
-            case 'articlesInStock':
-                fieldSet = me.orderFields;
-                break;
-            case 'orders':
-                fieldSet = me.customFilterFields;
-                break;
-            default:
-                return;
-        }
-
-        Ext.each(fieldSet.query('field'), function(field) {
-            field.reset();
-        });
     }
 });
 //{/block}

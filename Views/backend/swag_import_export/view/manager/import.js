@@ -150,7 +150,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
             dropZoneText: me.snippets.dragAndDropFile,
             height: 100,
             generatedId: id,
-            html: '<div id="'+ id +'" class="x-hidden"></div>'
+            html: '<div id="'+ id +'" style="display: none;"></div>'
         });
 
         return me.dropZone;

@@ -29,7 +29,7 @@ class XmlFileReader implements FileReader
     }
 
     /**
-     * @param \DOMElement $node
+     * @param \DOMNode $node
      * @param $path
      * @return array|string
      */
@@ -69,13 +69,6 @@ class XmlFileReader implements FileReader
 
     /**
      * @param $fileName
-     */
-    public function readHeader($fileName)
-    {
-    }
-
-    /**
-     * @param $fileName
      * @param $position
      * @param $count
      * @return array
@@ -107,13 +100,6 @@ class XmlFileReader implements FileReader
         }
 
         return $records;
-    }
-
-    /**
-     * @param $fileName
-     */
-    public function readFooter($fileName)
-    {
     }
 
     /**
