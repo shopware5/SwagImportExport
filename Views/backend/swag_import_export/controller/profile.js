@@ -497,14 +497,16 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
     createDefaultValueField: function(store, value, nodeValue) {
         var me = this,
             profileForm = me.getProfileForm(),
-            formPanel = profileForm.formPanel;
+            formPanel = profileForm.formPanel,
+            fieldType,
+            settings,
+            record;
 
-        formPanel.remove('defaultValue');
+        formPanel.down('#defaultValue').destroy();
 
         //Create default value field
-        var fieldType = 'hidden';
-        var settings = {
-            id: 'defaultValue',
+        fieldType = 'hidden';
+        settings = {
             itemId: 'defaultValue',
             fieldLabel: '{s namespace=backend/swag_import_export/view/profile name=defaultValue}Default value{/s}',
             width: 400,
@@ -514,7 +516,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
         };
 
         //Set new field type if selected column have default flag
-        var record = store.getById(value);
+        record = store.getById(value);
         if (record) {
             if (record.get('default')) {
                 fieldType = record.get('type');

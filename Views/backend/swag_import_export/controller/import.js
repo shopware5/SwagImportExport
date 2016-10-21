@@ -12,6 +12,14 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
         failure: '{s name=swag_import_export/import/failure-title}An error occured{/s}',
         unprocess: '{s name=swag_import_export/import/unprocessed}Start importing unprocessed data{/s}'
     },
+
+    refs: [
+        {
+            ref: 'importManager',
+            selector: 'swag-import-export-manager-import'
+        }
+    ],
+
     /**
      * This method creates listener for events fired from the import 
      */
@@ -43,7 +51,8 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
      * @param [object] target
      */
     onReload: function(target){
-        var me = this, name,
+        var me = this,
+            name,
             response = Ext.decode(target.responseText);
         
         if (response.success === false) {
@@ -61,7 +70,8 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
     onImport: function(btn) {
         var me = this,
             form = btn.up('form').getForm(),
-            values = form.getValues();
+            values = form.getValues(),
+            localFile;
         
         if (Ext.isEmpty(values.profile)) {
             Shopware.Notification.createGrowlMessage(
@@ -71,7 +81,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
             return;
         }
         
-        var localFile = Ext.getCmp('importSelectFile').getValue();
+        localFile = btn.up('form').down('#importSelectFile').getValue();
 
         if (!Ext.isEmpty(values.importFile) && Ext.isEmpty(localFile)) {
             me.parameters = values;
@@ -84,6 +94,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
             form.submit({
                 url: '{url module=backend controller="swagImportExport" action="uploadFile"}',
                 waitMsg: 'Uploading',
+                scope: me,
                 success: function(fp, response) {
                     me.setFilePath(response.result.data.fileName);
                     me.parameters = btn.up('form').getForm().getValues();
@@ -103,7 +114,6 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
                 '{s name=swag_import_export/import/error_title}Swag import export{/s}',
                 '{s name=swag_import_export/import/error_msg_file}No file was selected{/s}'
             );
-            return;
         }
     },
 
@@ -149,7 +159,6 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
 
         btn.hide();
         win.cancelButton.show();
-//        win.closeButton.disable();
     },
 
     /**
@@ -206,7 +215,9 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
     },
 
     setFilePath: function(path){
-        var fileField = Ext.getCmp('swag-import-export-file');
+        var me = this,
+            fileField = me.getImportManager().down('#swag-import-export-file');
+
         fileField.setValue(path);
     },
 

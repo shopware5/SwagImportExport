@@ -69,6 +69,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.log.Log', {
     listeners: {
         activate: function(tab, opt){
             var me = this;
+            
             me.logStore.reload();
         }
     },
@@ -81,24 +82,24 @@ Ext.define('Shopware.apps.SwagImportExport.view.log.Log', {
     getColumns: function () {
         var me = this;
 
-        var columns = [{
-                header: me.snippets.column.title,
-                dataIndex: 'title',
-                flex: 1
-            }, {
-                header: me.snippets.column.message,
-                dataIndex: 'message',
-                renderer:function(v) { return v.replace(/\n/g,'<br>') },
-                flex: 2
-            }, {
-                xtype : 'datecolumn',
-                header: me.snippets.column.date,
-                format: 'Y-m-d H:i:s',
-                dataIndex: 'logDate',
-                flex: 1
-            }];
-
-        return columns;
+        return [{
+            header: me.snippets.column.title,
+            dataIndex: 'title',
+            flex: 1
+        }, {
+            header: me.snippets.column.message,
+            dataIndex: 'message',
+            renderer: function(v) {
+                return v.replace(/\n/g,'<br>')
+            },
+            flex: 2
+        }, {
+            xtype : 'datecolumn',
+            header: me.snippets.column.date,
+            format: 'Y-m-d H:i:s',
+            dataIndex: 'logDate',
+            flex: 1
+        }];
     },
     
     /**
@@ -107,15 +108,11 @@ Ext.define('Shopware.apps.SwagImportExport.view.log.Log', {
      * @return Ext.toolbar.Paging
      */
     getPagingbar: function () {
-        var me = this;
-        var pagingbar =  Ext.create('Ext.toolbar.Paging', {
+        return Ext.create('Ext.toolbar.Paging', {
             store: me.store,
             dock: 'bottom',
             displayInfo: true
         });
-
-        return pagingbar;
     }
-    
 });
 //{/block}
