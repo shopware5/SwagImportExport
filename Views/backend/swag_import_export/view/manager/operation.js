@@ -82,7 +82,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Operation', {
 
         me.sessionGrid =  Ext.create('Ext.grid.Panel', {
             title: me.snippets.panelTitle,
-            id: 'operation-grid',
+            itemId: 'operation-grid',
             store: me.sessionStore,
             multiSelect: true,
             viewConfig: {
