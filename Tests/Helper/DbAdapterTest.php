@@ -8,9 +8,6 @@
 
 namespace Tests\Helper;
 
-use Doctrine\DBAL\Connection;
-use Shopware\Components\SwagImportExport\DbAdapters\CategoriesDbAdapter;
-use Shopware\Components\SwagImportExport\DbAdapters\CustomerDbAdapter;
 use \Shopware\Components\SwagImportExport\Factories\DataFactory;
 use Tests\Helper\ImportExportTestHelper;
 
