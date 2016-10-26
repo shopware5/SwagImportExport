@@ -31,6 +31,7 @@
 //{block name="backend/swag_import_export/view/manager/manager"}
 Ext.define('Shopware.apps.SwagImportExport.view.manager.Manager', {
     extend: 'Ext.container.Container',
+
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
@@ -41,9 +42,9 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Manager', {
     title: '{s name=swag_import_export/manager/manager/title}Import / Export manager{/s}',
     layout: 'fit',
     style: {
-        background: '#fff'
+        background: '#F0F2F4;'
     },
-    autoScroll: true,
+
     /*
      * session store
      */
@@ -54,7 +55,9 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Manager', {
     initComponent: function() {
         var me = this;
 
-        me.items = [me.createTabPanel()];
+        me.items = [
+            me.createTabPanel()
+        ];
 
         me.callParent(arguments);
     },
@@ -65,18 +68,21 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Manager', {
      * @returns Ext.tab.Panel
      */
     createTabPanel: function() {
-        var me = this;
-        var aclItems = [];
+        var me = this,
+            aclItems = [];
 
         /* {if {acl_is_allowed privilege=export}} */
         aclItems.push(Ext.create('Shopware.apps.SwagImportExport.view.manager.Export', {
             profilesStore: me.profilesStore,
+            itemId: 'exportmanager',
+            border: false,
             sessionStore: me.sessionStore
         }));
         /* {/if} */
 
         /* {if {acl_is_allowed privilege=import}} */
         aclItems.push(Ext.create('Shopware.apps.SwagImportExport.view.manager.Import', {
+            itemId: 'importManager',
             profilesStore: me.profilesStore
         }));
         /* {/if} */
