@@ -16,6 +16,7 @@ use Shopware\Components\SwagImportExport\Utils\TreeHelper;
 use Shopware\Components\SwagImportExport\Utils\DataHelper;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\CSRFWhitelistAware;
+use Shopware\CustomModels\ImportExport\Profile;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\FileBag;
 
@@ -77,6 +78,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         }
         
         $profileRepository = $this->getProfileRepository();
+        /** @var Profile $profileEntity */
         $profileEntity = $profileRepository->findOneBy(array('id' => $profileId));
 
         $tree = $profileEntity->getTree();
@@ -90,8 +92,9 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $profileId = $this->Request()->getParam('profileId', 1);
         $data = $this->Request()->getParam('data', 1);
         $profileRepository = $this->getProfileRepository();
-        $profileEntity = $profileRepository->findOneBy(array('id' => $profileId));
 
+        /** @var Profile $profileEntity */
+        $profileEntity = $profileRepository->findOneBy(array('id' => $profileId));
         $tree = json_decode($profileEntity->getTree(), 1);
 
         if (isset($data['parentId'])) {
@@ -226,12 +229,13 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
             $this->View()->assign(array(
                 'success' => true,
-                'data' => array(
-                    "id" => $profileModel->getId(),
+                'data' => [
+                    'id' => $profileModel->getId(),
                     'name' => $profileModel->getName(),
                     'type' => $profileModel->getType(),
                     'tree' => $profileModel->getTree(),
-                )
+                    'default' => $profileModel->getDefault()
+                ]
             ));
         } catch (\Exception $e) {
             $this->View()->assign(array('success' => false, 'msg' => $e->getMessage()));
@@ -263,10 +267,11 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $this->View()->assign(array(
             'success' => true,
             'data' => array(
-                "id" => $profile->getId(),
+                'id' => $profile->getId(),
                 'name' => $profile->getName(),
                 'type' => $profile->getType(),
                 'tree' => $profile->getTree(),
+                'default' => $profile->getDefault()
             )
         ));
     }
@@ -279,6 +284,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $data = $this->Request()->getParam('data', 1);
         
         $profileRepository = $this->getProfileRepository();
+        /** @var Profile $profileEntity */
         $profileEntity = $profileRepository->findOneBy(array('id' => $data['id']));
 
         if (!$profileEntity) {
@@ -297,6 +303,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                 'name' => $profileEntity->getName(),
                 'type' => $profileEntity->getType(),
                 'tree' => $profileEntity->getTree(),
+                'default' => $profileEntity->getDefault()
             )
         ));
     }
@@ -310,8 +317,8 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $profileRepository = $this->getProfileRepository();
 
         $query = $profileRepository->getProfilesListQuery(
-            $this->Request()->getParam('filter', array('hidden' => 0)),
-            $this->Request()->getParam('sort', array()),
+            $this->Request()->getParam('filter', ['hidden' => 0]),
+            $this->Request()->getParam('sort', []),
             $this->Request()->getParam('limit', null),
             $this->Request()->getParam('start')
         )->getQuery();
@@ -320,9 +327,16 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
         $data = $query->getArrayResult();
 
-        $this->View()->assign(array(
+        foreach ($data as &$profile) {
+            if (true === $profile['default']) {
+                $translatedProfileName = $this->get('snippets')->getNamespace('backend/swag_import_export/view/main')->get($profile['name']);
+                $profile['translation'] = $translatedProfileName;
+            }
+        }
+
+        $this->View()->assign([
             'success' => true, 'data' => $data, 'total' => $count
-        ));
+        ]);
     }
 
     public function deleteProfilesAction()

@@ -60,15 +60,18 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
     /*
      * Input elements width
      */
-    configWidth: 400,
+    configWidth: 500,
+
     /*
      * Label of the input elements width
      */
     configLabelWidth: 150,
+
     /**
      * current FilterValue
      */
     filterValue: 'all',
+    
     /**
      * Creates the main form panel for the component which
      * features all neccessary form elements
@@ -261,7 +264,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
     createProfileCombo: function() {
         var me = this;
 
-        return Ext.create('Shopware.form.field.PagingComboBox', {
+        return Ext.create('Ext.form.field.ComboBox', {
             allowBlank: false,
             fieldLabel: me.snippets.selectProfile,
             store: me.profilesStore,
@@ -272,6 +275,16 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
             displayField: 'name',
             editable: false,
             name: 'profile',
+            pageSize: 15,
+            listConfig: {
+                getInnerTpl: function (value) {
+                    return Ext.XTemplate(
+                        '{literal}'  +
+                        '<tpl if="translation">{ translation } <i>({ name })</i>' +
+                        '<tpl else>{ name }</tpl>' +
+                        '{/literal}');
+                }
+            },
             listeners: {
                 scope: me,
                 change: function(cb, newValue, oldValue) {

@@ -23,8 +23,16 @@ use Shopware\Components\SwagImportExport\FileIO\CsvFileWriter;
 use Shopware\Components\SwagImportExport\Logger\Logger;
 use Shopware\Components\SwagImportExport\UploadPathProvider;
 use Shopware\Components\SwagImportExport\Utils\FileHelper;
-use Shopware\Models\Media\Album;
-use Shopware\Setup\SwagImportExport\MainMenuItemHandler;
+use Shopware\Setup\SwagImportExport\Exception\MinVersionException;
+use Shopware\Setup\SwagImportExport\Install\DefaultProfileInstaller;
+use Shopware\Setup\SwagImportExport\Install\InstallerInterface;
+use Shopware\Setup\SwagImportExport\Install\MainMenuItemInstaller;
+use Shopware\Setup\SwagImportExport\Install\OldAdvancedMenuInstaller;
+use Shopware\Setup\SwagImportExport\SetupContext;
+use Shopware\Setup\SwagImportExport\Update\Update01MainMenuItem;
+use Shopware\Setup\SwagImportExport\Update\Update02RemoveForeignKeyConstraint;
+use Shopware\Setup\SwagImportExport\Update\Update03DefaultProfileSupport;
+use Shopware\Setup\SwagImportExport\Update\UpdaterInterface;
 
 /**
  * Shopware SwagImportExport Plugin - Bootstrap
@@ -130,17 +138,20 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
      */
     public function install()
     {
-        // Check if Shopware version matches
         if (!$this->assertMinimumVersion('5.2.0')) {
-            throw new Exception("This plugin requires Shopware 5.2.0 or a later version");
+            throw new MinVersionException('This plugin requires Shopware 5.2.0 or a later version');
         }
 
-        if ($this->assertMinimumVersion(MainMenuItemHandler::SHOPWARE_MIN_VERSION_530)) {
-            $replaceTeaserMenu = new MainMenuItemHandler($this->get('models'));
-            $replaceTeaserMenu->handleMenuItem();
-        } else {
-            $this->createMenu();
-        }
+        $setupContext = new SetupContext(
+            $this->get('config')->get('version'),
+            $this->getVersion(),
+            SetupContext::NO_PREVIOUS_VERSION
+        );
+
+        $installers = [];
+        $installers[] = new DefaultProfileInstaller($setupContext, $this->get('dbal_connection'));
+        $installers[] = new MainMenuItemInstaller($setupContext, $this->get('models'));
+        $installers[] = new OldAdvancedMenuInstaller($setupContext, $this->get('models'));
 
         $this->createDatabase();
         $this->createAclResource();
@@ -148,76 +159,57 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         $this->createDirectories();
         $this->createConfiguration();
 
+        /** @var InstallerInterface $installer */
+        foreach ($installers as $installer) {
+            if (!$installer->isCompatible()) {
+                continue;
+            }
+            $installer->install();
+        }
         return true;
     }
 
     /**
      * @param string $oldVersion
      * @return array
+     * @throws MinVersionException
      * @throws Exception
      * @throws Zend_Db_Adapter_Exception
      */
     public function update($oldVersion)
     {
-        // Check if Shopware version matches
         if (!$this->assertMinimumVersion('5.2.0')) {
-            throw new Exception("This plugin requires Shopware 5.2.0 or a later version");
+            throw new MinVersionException('This plugin requires Shopware 5.2.0 or a later version');
         }
+
+        $setupContext = new SetupContext(
+            $this->get('config')->get('version'),
+            $this->getVersion(),
+            $oldVersion
+        );
+
+        $updaters = [];
+        $updaters[] = new Update01MainMenuItem($setupContext, $this->get('models'));
+        $updaters[] = new Update02RemoveForeignKeyConstraint(
+            $setupContext,
+            $this->get('dbal_connection'),
+            $this->get('models'),
+            $this->get('dbal_connection')->getSchemaManager()
+        );
+        $updaters[] = new Update03DefaultProfileSupport($setupContext, $this->get('dbal_connection'), $this->get('snippets'));
+
 
         $this->createAclResource();
         $this->registerEvents();
         $this->createDirectories();
         $this->createConfiguration();
 
-        if ($oldVersion == '1.0.0' || $oldVersion == '1.0.1') {
-            //changing the name
-            $this->db->update(
-                's_core_menu',
-                ['name' => 'Import/Export Advanced'],
-                ["controller = 'SwagImportExport'"]
-            );
-
-            $sql = "SELECT id FROM `s_core_menu` WHERE controller = 'ImportExport'";
-            $menuItem = $this->db->fetchOne($sql);
-            if (!$menuItem) {
-                //inserting old menu item
-                $sql = "INSERT INTO `s_core_menu`
-                        (`parent`, `name`, `onclick`, `class`, `position`, `active`, `pluginID`, `controller`, `shortcut`, `action`)
-                        VALUES
-                        (7, 'Import/Export', '', 'sprite-arrow-circle-double-135', 3, 1, NULL, 'ImportExport', NULL, 'Index')";
-                $this->db->query($sql);
+        /** @var UpdaterInterface $updater */
+        foreach ($updaters as $updater) {
+            if (!$updater->isCompatible()) {
+                continue;
             }
-
-            //removing snippets
-            $this->db->delete('s_core_snippets', ["value = 'Import/Export'"]);
-
-            $this->db->exec('ALTER TABLE `s_import_export_profile` ADD `hidden` INT NOT NULL');
-            $this->db->exec('ALTER TABLE `s_import_export_log` CHANGE `message` `message` TEXT NULL');
-            $this->db->exec('ALTER TABLE `s_import_export_log` CHANGE `state` `state` VARCHAR(100) NULL');
-
-            $this->db->exec(
-                'ALTER TABLE `s_import_export_session`
-                    ADD COLUMN `log_id` INT NULL AFTER `profile_id`,
-                    ADD CONSTRAINT FK_SWAG_IE_LOG_ID UNIQUE (`log_id`),
-                    ADD FOREIGN KEY (`log_id`) REFERENCES `s_import_export_log` (`id`)'
-            );
-
-            $this->get('shopware.cache_manager')->clearProxyCache();
-        }
-
-        if (version_compare($oldVersion, '1.2.2', '<')) {
-            try {
-                $constraint = $this->getForeignKeyConstraint('s_import_export_session', 'log_id');
-                $this->db->exec('ALTER TABLE s_import_export_session DROP FOREIGN KEY ' . $constraint);
-            } catch (Exception $e) {
-            }
-            $this->db->exec('ALTER TABLE s_import_export_session DROP COLUMN log_id');
-            $this->removeImportFilesAlbum();
-        }
-
-        if ($this->assertMinimumVersion(MainMenuItemHandler::SHOPWARE_MIN_VERSION_530)) {
-            $replaceTeaserMenu = new MainMenuItemHandler($this->get('models'));
-            $replaceTeaserMenu->handleMenuItem();
+            $updater->update();
         }
 
         return [
@@ -392,24 +384,6 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         $tool = new SchemaTool($this->em);
         $classes = $this->getDoctrineModels();
         $tool->dropSchema($classes);
-    }
-
-    /**
-     * Creates the Swag Import Export backend menu item.
-     */
-    public function createMenu()
-    {
-        $this->createMenuItem(
-            [
-                'label' => 'Import/Export Advanced',
-                'controller' => 'SwagImportExport',
-                'class' => 'sprite-server--plus',
-                'action' => 'Index',
-                'active' => 1,
-                'parent' => $this->Menu()->findOneBy(['label' => 'Inhalte']),
-                'position' => 6,
-            ]
-        );
     }
 
     /**
@@ -760,41 +734,5 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
             $tableNames[] = array_pop(explode('.', $tableName));
         }
         return $tableNames;
-    }
-
-    /**
-     * @param string $table
-     * @param string $column
-     * @return string
-     * @throws Exception
-     */
-    private function getForeignKeyConstraint($table, $column)
-    {
-        /** @var \Doctrine\DBAL\Schema\AbstractSchemaManager $schemaManager */
-        $schemaManager = $this->get('dbal_connection')->getSchemaManager();
-        /** @var \Doctrine\DBAL\Schema\ForeignKeyConstraint[] $keys */
-        $keys = $schemaManager->listTableForeignKeys($table);
-
-        foreach ($keys as $key) {
-            if (in_array($column, $key->getLocalColumns())) {
-                return $key->getName();
-            }
-        }
-        throw new \Exception("Foreign key constraint not found.");
-    }
-
-    /**
-     * Removes the import files on update to version 1.2.2
-     */
-    private function removeImportFilesAlbum()
-    {
-        /** @var ModelManager $modelManager */
-        $modelManager = $this->get('models');
-        $repo = $modelManager->getRepository(Album::class);
-        $album = $repo->findOneBy(['name' => 'ImportFiles']);
-        if ($album) {
-            $modelManager->remove($album);
-            $modelManager->flush();
-        }
     }
 }

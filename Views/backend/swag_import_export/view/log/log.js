@@ -109,7 +109,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.log.Log', {
      */
     getPagingbar: function () {
         var me = this;
-        
+
         return Ext.create('Ext.toolbar.Paging', {
             store: me.store,
             dock: 'bottom',

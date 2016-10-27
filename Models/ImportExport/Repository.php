@@ -41,6 +41,7 @@ class Repository extends ModelRepository
                 'p.type as type',
                 'p.name as name',
                 'p.tree as tree',
+                'p.default as default'
             )
         );
 

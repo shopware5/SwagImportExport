@@ -64,7 +64,7 @@ class Profile extends ModelEntity
     /**
      * @var string $name
      *
-     * @ORM\Column(name="name", type="string", length=200)
+     * @ORM\Column(name="name", type="string", length=200, unique=true)
      */
     protected $name;
 
@@ -81,6 +81,12 @@ class Profile extends ModelEntity
      * @ORM\Column(name="hidden", type="integer")
      */
     protected $hidden = 0;
+
+    /**
+     * @var boolean
+     * @ORM\Column(name="is_default", type="boolean")
+     */
+    protected $default = false;
 
     /**
      * @return int
@@ -206,5 +212,21 @@ class Profile extends ModelEntity
         $session->setProfile($this);
 
         return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getDefault()
+    {
+        return $this->default;
+    }
+
+    /**
+     * @param boolean $default
+     */
+    public function setDefault($default)
+    {
+        $this->default = $default;
     }
 }

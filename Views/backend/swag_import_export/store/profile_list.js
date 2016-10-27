@@ -46,6 +46,8 @@ Ext.define('Shopware.apps.SwagImportExport.store.ProfileList', {
      * Define the used model for this store
      * @string
      */
-    model : 'Shopware.apps.SwagImportExport.model.ProfileList'
+    model : 'Shopware.apps.SwagImportExport.model.ProfileList',
+
+    pageSize: 15
 });
 //{/block}

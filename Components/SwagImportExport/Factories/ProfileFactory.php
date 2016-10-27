@@ -64,6 +64,13 @@ class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
             return $event->getReturn();
         }
 
+        if (!isset($data['name'])) {
+            throw new \Exception('Profile name is required');
+        }
+        if (!isset($data['type'])) {
+            throw new \Exception('Profile type is required');
+        }
+
         if (isset($data['hidden']) && $data['hidden']) {
             $tree = TreeHelper::getTreeByHiddenProfileType($data['type']);
         } else {
@@ -71,17 +78,8 @@ class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
         }
 
         $profileModel = new ProfileEntity();
-
-        if (!isset($data['name'])) {
-            throw new \Exception('Profile name is required');
-        }
         $profileModel->setName($data['name']);
-
-        if (!isset($data['type'])) {
-            throw new \Exception('Profile type is required');
-        }
         $profileModel->setType($data['type']);
-
         $profileModel->setTree($tree);
 
         if (isset($data['hidden'])) {

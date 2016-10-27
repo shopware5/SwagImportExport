@@ -6,15 +6,19 @@
  * file that was distributed with this source code.
  */
 
-namespace Shopware\Setup\SwagImportExport;
+namespace Shopware\Setup\SwagImportExport\Install;
 
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Menu\Menu;
 use Shopware\Models\Plugin\Plugin;
+use Shopware\Setup\SwagImportExport\SetupContext;
 
-class MainMenuItemHandler
+/**
+ * Adds or replaces the new menu item with the old import/export menu item.
+ */
+class MainMenuItemInstaller implements InstallerInterface
 {
-    const SHOPWARE_MIN_VERSION_530 = '5.3.0';
+    const SHOPWARE_MIN_VERSION = '5.3.0';
 
     const SWAG_IMPORT_EXPORT_CONTROLLER = 'SwagImportExport';
     const SWAG_IMPORT_EXPORT_ACTION = 'index';
@@ -29,24 +33,31 @@ class MainMenuItemHandler
     private $modelManager;
 
     /**
+     * @var SetupContext
+     */
+    private $setupContext;
+
+    /**
+     * @param SetupContext $setupContext
      * @param ModelManager $modelManager
      */
-    public function __construct(ModelManager $modelManager)
+    public function __construct(SetupContext $setupContext, ModelManager $modelManager)
     {
         $this->modelManager = $modelManager;
+        $this->setupContext = $setupContext;
     }
 
     /**
      * Updates the teaser menu, creates a new menu item and removes the old menu item.
      */
-    public function handleMenuItem()
+    public function install()
     {
         $this->removeImportExportAdvancedMenuItem();
 
         $currentMenuItem = $this->findMenuItemByLabel(self::CURRENT_MENU_LABEL);
 
         $pluginRepository = $this->modelManager->getRepository(Plugin::class);
-        $plugin = $pluginRepository->findOneBy( [ 'name' => 'SwagImportExport' ] );
+        $plugin = $pluginRepository->findOneBy([ 'name' => 'SwagImportExport' ]);
 
         if ($this->menuItemExists($currentMenuItem)) {
             $this->updateImportExportMenuItem($currentMenuItem, $plugin);
@@ -54,6 +65,14 @@ class MainMenuItemHandler
         }
 
         $this->createMenuItem($plugin);
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isCompatible()
+    {
+        return $this->setupContext->assertMinimumShopwareVersion(self::SHOPWARE_MIN_VERSION);
     }
 
     /**
@@ -113,6 +132,7 @@ class MainMenuItemHandler
     }
 
     /**
+     * @param string $label
      * @return null|Menu
      */
     private function findMenuItemByLabel($label)

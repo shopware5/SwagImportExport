@@ -186,7 +186,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
             buttonText: me.snippets.chooseButton,
             name: 'fileId',
             itemId: 'importSelectFile',
-            width: 450,
+            width: 550,
             labelWidth: 150,
             fieldLabel: me.snippets.selectFile,
             listeners: {
@@ -207,16 +207,26 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
     createProfileCombo: function() {
         var me = this;
 
-        me.profileCombo = Ext.create('Shopware.form.field.PagingComboBox', {
+        me.profileCombo = Ext.create('Ext.form.field.ComboBox', {
             fieldLabel: me.snippets.selectProfile,
             store: me.profilesStore,
             labelStyle: 'font-weight: 700; text-align: left;',
-            width: 400,
+            width: 500,
             labelWidth: 150,
             valueField: 'id',
             displayField: 'name',
             editable: false,
-            name: 'profile'
+            name: 'profile',
+            pageSize: 15,
+            listConfig: {
+                getInnerTpl: function (value) {
+                    return Ext.XTemplate(
+                        '{literal}'  +
+                        '<tpl if="translation">{ translation } <i>({ name })</i>' +
+                        '<tpl else>{ name }</tpl>' +
+                        '{/literal}');
+                }
+            }
         });
         
         return me.profileCombo;

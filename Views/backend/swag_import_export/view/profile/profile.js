@@ -80,18 +80,33 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
         me.callParent(arguments);
     },
 
+    /**
+     * @returns { Ext.toolbar.Toolbar }
+     */
     createToolbar: function () {
         var me = this;
 
         me.toolbar = Ext.create('Ext.toolbar.Toolbar', {
             region: 'north',
             items: [{
-                xtype: 'pagingcombobox',
+                xtype: 'combo',
+                pageSize: 15,
                 itemId: 'profilesCombo',
                 allowBlank: false,
                 store: me.profilesStore,
                 labelStyle: 'font-weight: 700; text-align: left;',
                 width: 150,
+                matchFieldWidth: false,
+                listConfig: {
+                    getInnerTpl: function () {
+                        return Ext.XTemplate(
+                        '{literal}'  +
+                            '<tpl if="translation">{ translation } <i>({ name })</i>' +
+                            '<tpl else>{ name }</tpl>' +
+                        '{/literal}');
+                    },
+                    width: 305
+                },
                 valueField: 'id',
                 displayField: 'name',
                 editable: false,
@@ -99,6 +114,16 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
                 emptyText: me.snippets.toolbar.emptyText,
                 listeners: {
                     change: function (combo, value) {
+                        var profile = combo.store.findRecord('id', value),
+                            toolbar = me.treePanel.dockedItems.get('toolbar');
+
+                        if (profile.get('default') == 1) {
+                            me.formPanel.setDisabled(true);
+                            toolbar.setDisabled(true);
+                        } else {
+                            me.formPanel.setDisabled(false);
+                            toolbar.setDisabled(false);
+                        }
                         me.loadNew(value);
                     },
                     focus: Ext.bind(me.onFocusProfileComboBox, me)
@@ -151,6 +176,9 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
         return me.toolbar;
     },
 
+    /**
+     * @returns { Ext.tree.Panel }
+     */
     createTreeItem: function () {
         var me = this;
 
