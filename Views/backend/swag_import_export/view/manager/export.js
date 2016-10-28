@@ -17,10 +17,10 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
     alias: 'widget.swag-import-export-manager-export',
     title: '{s name=swag_import_export/manager/export/title}Export{/s}',
     layout: 'fit',
-    bodyPadding: 10,
     autoScroll: true,
 
     snippets: {
+        choose:  '{s name=swag_import_export/manager/import/choose}Please choose{/s}',
         exportInfoText: '{s name=swag_import_export/export/export_info}With file export, you can save information from the database in profiles, either in CSV or XML format. These profiles contain information about which data was exported along with its structure. The default profiles can be individually extended and modified with custom profiles in the configuration.{/s}',
         exportButton: '{s name=swag_import_export/export/export_button}Export{/s}',
         fieldsetAdditional: '{s name=swag_import_export/export/fieldset_additional}Additional export configuration{/s}',
@@ -89,7 +89,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
         
         // Form panel which holds off all options
         me.formPanel = Ext.create('Ext.form.Panel', {
-            bodyPadding: 10,
+            bodyPadding: 15,
             border: 0,
             autoScroll: true,
             defaults: {
@@ -294,6 +294,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
             displayField: 'name',
             editable: false,
             name: 'profile',
+            emptyText: me.snippets.choose,
             pageSize: 15,
             listConfig: {
                 getInnerTpl: function (value) {
@@ -378,7 +379,8 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
             valueField: 'value',
             displayField: 'name',
             editable: false,
-            name: 'format'
+            name: 'format',
+            emptyText: me.snippets.choose
         });
     },
 

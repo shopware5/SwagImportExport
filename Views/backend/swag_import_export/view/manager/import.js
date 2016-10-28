@@ -3,6 +3,7 @@
 //{block name="backend/swag_import_export/view/manager/export"}
 Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
     extend: 'Ext.container.Container',
+
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
@@ -10,11 +11,8 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
     alias: 'widget.swag-import-export-manager-import',
     title: '{s name=swag_import_export/manager/import/title}Import{/s}',
     layout: 'fit',
-    style: {
-        background: '#fff'
-    },
-    bodyPadding: 10,
     autoScroll: true,
+
     snippets: {
         configText: '{s name=swag_import_export/manager/import/config_import_text}New imports should always be tested in advance in a test environment. Before importing any file in your \n\
                     productive environment, carry out a complete backup of your datebase, so that in the event of a failing import, it can be reinstalled easily. \n\
@@ -25,16 +23,33 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
         dragAndDropFile: "{s name=swag_import_export/manager/import/drag_and_drop}SELECT FILE USING DRAG + DROP{/s}",
         selectFile: "{s name=swag_import_export/manager/import/select_file}Select file{/s}",
         choose:  '{s name=swag_import_export/manager/import/choose}Please choose{/s}',
-        chooseButton:  '{s name=swag_import_export/manager/import/choose_button}Choose{/s}'
+        chooseButton:  '{s name=swag_import_export/manager/import/choose_button}Choose{/s}',
+        importButton: '{s name=swag_import_export/manager/import/import_button}Start import{/s}',
+        importDescription: '{s name=swag_import_export/manager/import/import_description}With file import, you are able to extract information from CSV and XML documents and save it in your database using profiles. These profiles contain information about which data is imported along with its structure. The default profiles can be individually extended and modified with custom profiles in the configuration.{/s}',
+        importNotice: '{s name=swag_import_export/manager/import/import_notice}Warning: Importing can permanently overwrite existing data and database structures!{/s}',
+        profileHelpText: '{s name=swag_import_export/export/profile_help}The default profiles can be individually extended and modified with custom profiles in the configuration.{/s}'
     },
     
     initComponent: function() {
         var me = this;
 
-        me.items = [me.createFormPanel()];
+        me.items = [
+            me.createFormPanel()
+        ];
 
         me.callParent(arguments);
     },
+
+    /*
+     * Input elements width
+     */
+    configWidth: 500,
+
+    /*
+     * Label of the input elements width
+     */
+    configLabelWidth: 150,
+
     /**
      * Creates the main form panel for the component which
      * features all necessary form elements
@@ -46,15 +61,14 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
 
         // Form panel which holds off all options
         me.formPanel = Ext.create('Ext.form.Panel', {
-            bodyPadding: 20,
+            bodyPadding: 15,
             border: 0,
             autoScroll: true,
             defaults: {
                 labelStyle: 'font-weight: 700; text-align: right;'
             },
             items: [
-                me.createDropZone(),
-                me.createConfigurationFieldset()
+                me.createMainFieldset()
             ],
             dockedItems: [{
                 xtype: 'toolbar',
@@ -62,7 +76,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
                 ui: 'shopware-ui',
                 cls: 'shopware-toolbar',
                 items: ['->', {
-                    text: 'Import',
+                    text: me.snippets.importButton,
                     cls: 'primary',
                     action: 'swag-import-export-manager-import-button'
                 }]
@@ -71,6 +85,49 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
 
         return me.formPanel;
     },
+
+    createMainFieldset: function() {
+        var me = this;
+
+        me.mainFieldset = Ext.create('Ext.form.FieldSet', {
+            padding: 12,
+            border: false,
+            defaults: {
+                anchor: '100%',
+                labelStyle: 'font-weight: 700; text-align: right;'
+            },
+            items: [{
+                xtype: 'container',
+                padding: '0 0 8',
+                items: [
+                    me.createInfoText(),
+                    me.createInfoBox(),
+                    me.createDropZone(),
+                    me.createFileInput(),
+                    me.createSelectFile(),
+                    me.createProfileCombo()
+                ]
+            }]
+        });
+
+        return me.mainFieldset;
+    },
+
+    createInfoText: function() {
+        var me = this;
+
+        return Ext.create('Ext.container.Container', {
+            margin: '0 0 20 0',
+            html: '<i style="color: grey" >' + me.snippets.importDescription + '</i>'
+        });
+    },
+
+    createInfoBox: function() {
+        var me = this;
+
+        return Shopware.Notification.createBlockMessage(me.snippets.importNotice, 'notice')
+    },
+
     /**
      * Creates a new upload drop zone which uploads the dropped files
      * to the server and adds them to the active album
@@ -82,6 +139,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
             id = Ext.id();
 
         me.dropZone = Ext.create('Shopware.app.FileUpload', {
+            padding: '10 0 0 0',
             requestURL: '{url controller="swagImportExport" action="uploadFile"}',
             hideOnLegacy: true,
             maxAmount: 1,
@@ -92,50 +150,12 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
             dropZoneText: me.snippets.dragAndDropFile,
             height: 100,
             generatedId: id,
-            html: '<div id="'+ id +'" style="margin-top: 10px; display: none;"></div>'
+            html: '<div id="'+ id +'" class="x-hidden"></div>'
         });
 
-        return Ext.create('Ext.form.FieldSet', {
-            title: me.snippets.dragAndDrop,
-            padding: 12,
-            defaults: {
-                labelStyle: 'font-weight: 700; text-align: right;'
-            },
-            items: [{
-                xtype: 'container',
-                padding: '0 0 8',
-                items: [
-                    me.dropZone
-                ]
-            }]
-        });
-
+        return me.dropZone;
     },
 
-    /**
-     * @returns { Ext.form.FieldSet }
-     */
-    createConfigurationFieldset: function() {
-        var me = this;
-
-        return Ext.create('Ext.form.FieldSet', {
-            title: me.snippets.configTitle,
-            padding: 12,
-            defaults: {
-                labelStyle: 'font-weight: 700; text-align: right;'
-            },
-            html: '<i style="color: grey" >' + me.snippets.configText + '</i>',
-            items: [{
-                xtype: 'container',
-                padding: '0 0 8',
-                items: [
-                    me.createFileInput(),
-                    me.createSelectFile(),
-                    me.createProfileCombo()
-                ]
-            }]
-        });
-    },
     /**
      * Returns hidden file field
      * 
@@ -183,11 +203,15 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
 
         me.addBtn = Ext.create('Ext.form.field.File', {
             emptyText: me.snippets.choose,
+            margin: '5 0 0 0',
             buttonText: me.snippets.chooseButton,
+            buttonConfig: {
+                cls: Ext.baseCSSPrefix + 'form-mediamanager-btn small secondary'
+            },
             name: 'fileId',
             itemId: 'importSelectFile',
-            width: 550,
-            labelWidth: 150,
+            width: me.configWidth,
+            labelWidth: me.configLabelWidth,
             fieldLabel: me.snippets.selectFile,
             listeners: {
                 change: function(element, value, eOpts) {
@@ -208,16 +232,19 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
         var me = this;
 
         me.profileCombo = Ext.create('Ext.form.field.ComboBox', {
+            margin: '5 0 0 0',
             fieldLabel: me.snippets.selectProfile,
             store: me.profilesStore,
             labelStyle: 'font-weight: 700; text-align: left;',
-            width: 500,
-            labelWidth: 150,
+            width: me.configWidth,
+            labelWidth: me.configLabelWidth,
+            helpText: me.snippets.profileHelpText,
             valueField: 'id',
             displayField: 'name',
             editable: false,
             name: 'profile',
             pageSize: 15,
+            emptyText: me.snippets.choose,
             displayTpl: new Ext.XTemplate(
                 '<tpl for=".">' +
                 '{literal}'  +
