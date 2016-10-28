@@ -41,7 +41,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Mappings', {
 	 * List of short aliases for class names. Most useful for defining xtypes for widgets.
 	 * @string
 	 */
-	alias: 'widget.swag-import-export-window',
+	alias: 'widget.swag-import-export-mapping-window',
 	
     width: 500,
     height: 400,
@@ -51,7 +51,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Mappings', {
         align: 'stretch'
     },
     
-    title: '{s name=conversion}Conversions{/s}',
+    title: '{s name=swag_import_export/profile/window/conversion}Conversions{/s}',
 
     initComponent:function () {
         var me = this;
@@ -72,14 +72,14 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Mappings', {
         me.exportEditor = Ext.create('Ext.ux.aceeditor.Panel', {
             flex: 2,
             disabled: true,
-            title: '{s name=exportConversion}Export conversion{/s}',
+            title: '{s name=swag_import_export/profile/window/export_conversion}Export conversion{/s}',
             sourceCode: '',
             parser: 'smarty'
         });
         me.importEditor = Ext.create('Ext.ux.aceeditor.Panel', {
             flex: 2,
             disabled: true,
-            title: '{s name=importConversion}Import conversion{/s}',
+            title: '{s name=swag_import_export/profile/window/import_conversion}Import conversion{/s}',
             sourceCode: '',
             parser: 'smarty'
         });
@@ -101,7 +101,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Mappings', {
                         backgroundColor: '#F0F2F4'
                     },
                     items: ['->', {
-                            text: '{s name=save}Save{/s}',
+                            text: '{s name=swag_import_export/profile/window/save}Save{/s}',
                             cls: 'primary',
                             action: 'swag-import-export-manager-profile-save',
                             handler: function() {
@@ -117,27 +117,31 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Mappings', {
     },
     
     createGridPanel: function() {
-        var me = this;
+        var me = this,
+            store = Ext.create('Shopware.apps.SwagImportExport.store.Conversion');
 
-        var store = Ext.create('Shopware.apps.SwagImportExport.store.Conversion');
-        store.load({
-            params: {
-                profileId: me.profileId
-            }
-        });
-        
         store.getProxy().setExtraParam('profileId', me.profileId);
+        store.load();
 
         me.rowEditor = Ext.create('Ext.grid.plugin.RowEditing', {
             clicksToMoveEditor: 2,
-            autoCancel: true
+            autoCancel: true,
+            listeners: {
+                canceledit: function(editor, e) {
+                    if (Ext.isEmpty(e.record.get('id'))) {
+                        e.store.remove(e.record);
+                    }
+                }
+            }
         });
 
         // create the Grid
         me.conversionsGrid = Ext.create('Ext.grid.Panel', {
             flex: 2,
             store: store,
-            plugins: [me.rowEditor],
+            plugins: [
+                me.rowEditor
+            ],
             listeners: {
                 edit: function(editor, e) {
                     me.fireEvent('updateConversion', me.conversionsGrid.getStore());
@@ -153,14 +157,14 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Mappings', {
             tbar: me.createGridToolbar(),
             selModel: me.getGridSelModel(),
             columns: [{
-                    text: '{s name=shopwareField}Shopware field{/s}',
+                    text: '{s name=swag_import_export/profile/window/shopware_field}Shopware field{/s}',
                     flex: 1,
                     sortable: true,
                     dataIndex: 'variable',
                     editor: {
                         xtype: 'combobox',
                         editable: false,
-                        emptyText: '{s name=selectColumn}Spalte wählen{/s}',
+                        emptyText: '{s name=swag_import_export/profile/window/select_column}Select column{/s}',
                         queryMode: 'local',
                         store: Ext.create('Shopware.apps.SwagImportExport.store.Column').load({ params: { profileId: me.profileId, adapter: 'default' } }),
                         valueField: 'id',
@@ -177,7 +181,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Mappings', {
                         {
                             iconCls: 'sprite-minus-circle-frame',
                             action: 'deleteConversion',
-                            tooltip: '{s name=deleteMapping}Delete conversion{/s}',
+                            tooltip: '{s name=swag_import_export/profile/window/delete_mapping}Delete conversion{/s}',
                             handler: function(view, rowIndex, colIndex, item) {
                                 me.fireEvent("deleteConversion", me.conversionsGrid.getStore(), rowIndex);
                             }
@@ -232,7 +236,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Mappings', {
 
         me.deleteConversionsButton = Ext.create('Ext.button.Button', {
             iconCls: 'sprite-minus-circle-frame',
-            text: '{s name=deleteSelected}Delete selected{/s}',
+            text: '{s name=swag_import_export/profile/window/delete_selected}Delete selected{/s}',
             disabled: true,
             action: 'deleteConversion',
             handler: function() {
@@ -242,7 +246,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Mappings', {
 
         me.addConversionButton = Ext.create('Ext.button.Button', {
             iconCls:'sprite-plus-circle-frame',
-            text: 'Add New',
+            text: '{s name=swag_import_export/profile/window/add_new}Add new{/s}',
             action:'addConversion',
             handler: function() {
                 me.fireEvent('addConversion', me.conversionsGrid, me.rowEditor);

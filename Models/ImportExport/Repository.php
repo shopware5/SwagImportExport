@@ -41,9 +41,12 @@ class Repository extends ModelRepository
                 'p.type as type',
                 'p.name as name',
                 'p.tree as tree',
-                'p.default as default'
+                'p.default as default',
+                'p.baseProfile as baseProfile'
             )
         );
+
+        $builder->addFilter(['hidden' => 0]);
 
         if (!empty($filterBy)) {
             $builder->addFilter($filterBy);

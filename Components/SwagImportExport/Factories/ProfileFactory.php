@@ -79,6 +79,7 @@ class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
 
         $profileModel = new ProfileEntity();
         $profileModel->setName($data['name']);
+        $profileModel->setBaseProfile($data['baseProfile']);
         $profileModel->setType($data['type']);
         $profileModel->setTree($tree);
 

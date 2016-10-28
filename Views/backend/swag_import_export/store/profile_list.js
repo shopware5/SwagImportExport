@@ -42,6 +42,10 @@ Ext.define('Shopware.apps.SwagImportExport.store.ProfileList', {
     
     autoLoad: false,
 
+    remoteSort: true,
+
+    remoteFilter: true,
+
     /**
      * Define the used model for this store
      * @string
