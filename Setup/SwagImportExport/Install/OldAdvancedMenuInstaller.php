@@ -71,7 +71,7 @@ class OldAdvancedMenuInstaller implements InstallerInterface
      */
     public function isCompatible()
     {
-        return version_compare($this->setupContext->getShopwareVersion(), self::SHOPWARE_MAX_VERSION, '<');
+        return $this->setupContext->assertMaximumShopwareVersion(self::SHOPWARE_MAX_VERSION);
     }
 
     /**

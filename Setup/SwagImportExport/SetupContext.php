@@ -8,8 +8,6 @@
 
 namespace Shopware\Setup\SwagImportExport;
 
-use Shopware\Components\Model\ModelManager;
-
 class SetupContext
 {
     const NO_PREVIOUS_VERSION = '0';
@@ -62,7 +60,7 @@ class SetupContext
         if ($this->shopwareVersion === '___VERSION___') {
             return false;
         }
-        return version_compare($this->shopwareVersion, $maxVersion, '<=');
+        return version_compare($this->shopwareVersion, $maxVersion, '<');
     }
 
     /**
@@ -80,7 +78,7 @@ class SetupContext
      */
     public function assertMaximumPluginVersion($maxVersion)
     {
-        return version_compare($this->pluginVersion, $maxVersion, '<=');
+        return version_compare($this->pluginVersion, $maxVersion, '<');
     }
 
     /**
