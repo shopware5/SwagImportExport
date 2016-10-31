@@ -81,7 +81,7 @@ class Update03DefaultProfileSupport implements UpdaterInterface
     {
         return (
             version_compare($this->setupContext->getPreviousPluginVersion(), self::MIN_PLUGIN_VERSION, '<')
-            && $this->setupContext->assertMinimumPluginVersion(self::MIN_PLUGIN_VERSION)
+            && $this->setupContext->assertPluginVersionLowerThan(self::MIN_PLUGIN_VERSION)
         );
     }
 

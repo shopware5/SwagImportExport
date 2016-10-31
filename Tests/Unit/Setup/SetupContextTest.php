@@ -15,43 +15,43 @@ class SetupContextTest extends \PHPUnit_Framework_TestCase
     const DEV_VERSION = '___VERSION___';
     const CURRENT_SHOPWARE_VERSION = '5.3.0';
 
-    public function test_assertMinimumShopwareVersion_should_return_true_if_dev_version_is_used()
+    public function test_assertShopwareVersionLowerThan_should_return_true_if_dev_version_is_used()
     {
         $setupContext = new SetupContext(self::DEV_VERSION, '', '');
-        $isCompatible = $setupContext->assertMinimumShopwareVersion('');
+        $isCompatible = $setupContext->assertShopwareVersionLowerThan('');
 
         $this->assertTrue($isCompatible);
     }
 
-    public function test_assertMinimumShopwareVersion_should_return_false()
+    public function test_assertShopwareVersionLowerThan_should_return_false()
     {
         $currentShopwareVersion = '5.3.0';
         $minVersion = '5.4.0';
 
         $setupContext = new SetupContext($currentShopwareVersion, '', '');
-        $isCompatible = $setupContext->assertMinimumShopwareVersion($minVersion);
+        $isCompatible = $setupContext->assertShopwareVersionLowerThan($minVersion);
 
         $this->assertFalse($isCompatible);
     }
 
-    public function test_assertMinimumShopwareVersion_should_return_true()
+    public function test_assertShopwareVersionLowerThan_should_return_true()
     {
         $currentShopwareVersion = '5.3.0';
         $minVersion = '5.2.0';
 
         $setupContext = new SetupContext($currentShopwareVersion, '', '');
-        $isCompatible = $setupContext->assertMinimumShopwareVersion($minVersion);
+        $isCompatible = $setupContext->assertShopwareVersionLowerThan($minVersion);
 
         $this->assertTrue($isCompatible);
     }
 
-    public function test_assertMinimumShopwareVersion_should_return_true_if_same_versions_were_given()
+    public function test_assertShopwareVersionLowerThan_should_return_true_if_same_versions_were_given()
     {
         $currentShopwareVersion = '5.3.0';
         $minVersion = '5.3.0';
 
         $setupContext = new SetupContext($currentShopwareVersion, '', '');
-        $isCompatible = $setupContext->assertMinimumShopwareVersion($minVersion);
+        $isCompatible = $setupContext->assertShopwareVersionLowerThan($minVersion);
 
         $this->assertTrue($isCompatible);
     }
@@ -89,35 +89,35 @@ class SetupContextTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($isCompatible);
     }
 
-    public function test_assertMinimumPluginVersion_should_return_false()
+    public function test_assertPluginVersionLowerThan_should_return_false()
     {
         $currentPluginVersion = '1.0.0';
         $minVersion = '1.1.0';
 
         $setupContext = new SetupContext('', $currentPluginVersion, '');
-        $isCompatible = $setupContext->assertMinimumPluginVersion($minVersion);
+        $isCompatible = $setupContext->assertPluginVersionLowerThan($minVersion);
 
         $this->assertFalse($isCompatible);
     }
 
-    public function test_assertMinimumPluginVersion_should_return_true()
+    public function test_assertPluginVersionLowerThan_should_return_true()
     {
         $currentPluginVersion = '1.0.0';
         $minVersion = '0.9.0';
 
         $setupContext = new SetupContext('', $currentPluginVersion, '');
-        $isCompatible = $setupContext->assertMinimumPluginVersion($minVersion);
+        $isCompatible = $setupContext->assertPluginVersionLowerThan($minVersion);
 
         $this->assertTrue($isCompatible);
     }
 
-    public function test_assertMinimumPluginVersion_should_return_true_if_same_versions_were_given()
+    public function test_assertPluginVersionLowerThan_should_return_true_if_same_versions_were_given()
     {
         $currentPluginVersion = '1.0.0';
         $minVersion = '1.0.0';
 
         $setupContext = new SetupContext('', $currentPluginVersion, '');
-        $isCompatible = $setupContext->assertMinimumPluginVersion($minVersion);
+        $isCompatible = $setupContext->assertPluginVersionLowerThan($minVersion);
 
         $this->assertTrue($isCompatible);
     }
