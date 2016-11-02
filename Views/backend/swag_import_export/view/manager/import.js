@@ -218,6 +218,22 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
             editable: false,
             name: 'profile',
             pageSize: 15,
+            displayTpl: new Ext.XTemplate(
+                '<tpl for=".">' +
+                '{literal}'  +
+                '{[typeof values === "string" ? values : this.getFormattedName(values)]}' +
+                '<tpl if="xindex < xcount">' + me.delimiter + '</tpl>' +
+                '{/literal}' +
+                '</tpl>',
+                {
+                    getFormattedName: function(values) {
+                        if (values.translation) {
+                            return Ext.String.format('[0] ([1])', values.translation, values.name);
+                        }
+                        return values.name;
+                    }
+                }
+            ),
             listConfig: {
                 getInnerTpl: function (value) {
                     return Ext.XTemplate(

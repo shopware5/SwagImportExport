@@ -95,36 +95,53 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
                 allowBlank: false,
                 store: me.profilesStore,
                 labelStyle: 'font-weight: 700; text-align: left;',
-                width: 150,
+                width: 305,
                 matchFieldWidth: false,
                 listConfig: {
                     getInnerTpl: function () {
                         return Ext.XTemplate(
-                        '{literal}'  +
-                            '<tpl if="translation">{ translation } <i>({ name })</i>' +
-                            '<tpl else>{ name }</tpl>' +
-                        '{/literal}');
+                            '{literal}'  +
+                                '<tpl if="translation">{ translation } <i>({ name })</i>' +
+                                '<tpl else>{ name }</tpl>' +
+                            '{/literal}'
+                        );
                     },
                     width: 305
                 },
                 valueField: 'id',
                 displayField: 'name',
+                displayTpl: new Ext.XTemplate(
+                    '<tpl for=".">' +
+                    '{literal}'  +
+                        '{[typeof values === "string" ? values : this.getFormattedName(values)]}' +
+                        '<tpl if="xindex < xcount">' + me.delimiter + '</tpl>' +
+                    '{/literal}' +
+                    '</tpl>',
+                    {
+                        getFormattedName: function(values) {
+                            if (values.translation) {
+                                return Ext.String.format('[0] ([1])', values.translation, values.name);
+                            }
+                            return values.name;
+                        }
+                    }
+                ),
                 editable: false,
                 name: 'profile',
                 emptyText: me.snippets.toolbar.emptyText,
                 listeners: {
                     change: function (combo, value) {
-                        var profile = combo.store.findRecord('id', value),
-                            toolbar = me.treePanel.dockedItems.get('toolbar');
-
-                        if (profile.get('default') == 1) {
-                            me.formPanel.setDisabled(true);
-                            toolbar.setDisabled(true);
-                        } else {
-                            me.formPanel.setDisabled(false);
-                            toolbar.setDisabled(false);
-                        }
                         me.loadNew(value);
+                        if (value) {
+                            var profile = combo.store.findRecord('id', value),
+                                toolbar = me.treePanel.dockedItems.get('toolbar'),
+                                disable = profile.get('default') == 1;
+
+                            me.formPanel.setDisabled(disable);
+                            toolbar.setDisabled(disable);
+                            me.toolbar.down('#renameSelectedProfile').setDisabled(disable);
+                            me.toolbar.down('#deleteSelectedProfile').setDisabled(disable);
+                        }
                     },
                     focus: Ext.bind(me.onFocusProfileComboBox, me)
                 }

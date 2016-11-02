@@ -329,7 +329,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
         foreach ($data as &$profile) {
             if (true === $profile['default']) {
-                $translatedProfileName = $this->get('snippets')->getNamespace('backend/swag_import_export/view/main')->get($profile['name']);
+                $translatedProfileName = $this->get('snippets')->getNamespace('backend/swag_import_export/default_profiles')->get($profile['name']);
                 $profile['translation'] = $translatedProfileName;
             }
         }
