@@ -5,7 +5,7 @@
 	</Header>
 	<Translations>
 		<Translation>
-	<articlenumber>SW10002.1</articlenumber>
+	<articlenumber>SW10002.3</articlenumber>
 	<languageId>2</languageId>
 	<name>Munsterland Lagerkorn 32%</name>
 	<description></description>
@@ -636,7 +636,7 @@
 	<metatitle></metatitle>
 </Translation>
 <Translation>
-	<articlenumber>SW10201.1</articlenumber>
+	<articlenumber>SW10201.2</articlenumber>
 	<languageId>2</languageId>
 	<name>Article with standard configurator</name>
 	<description>The standard configurator offers the opportunity, to selct the desired constellation, without following a certain order. All groups can be selected by customers with the corresponding options.</description>
@@ -672,7 +672,7 @@
 	<metatitle></metatitle>
 </Translation>
 <Translation>
-	<articlenumber>SW10205.1</articlenumber>
+	<articlenumber>SW10205.3</articlenumber>
 	<languageId>2</languageId>
 	<name>Article with basic price calculation</name>
 	<description>You can define the basic article price for every article and everey category.</description>

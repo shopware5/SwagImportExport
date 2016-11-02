@@ -107,10 +107,8 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
 
         $builder->select('t.id')
             ->from(Translation::class, 't')
-            ->leftJoin(Detail::class, 'ad', 'WITH', 'ad.id = t.key')
-            ->where('t.type = :articleType')
-            ->orWhere('t.type = :variantType AND ad.kind != :kind')
-            ->setParameters(['articleType' => 'article', 'variantType' => 'variant', 'kind' => 1])
+            ->where('t.type IN (:types)')
+            ->setParameter('types', ['article', 'variant'])
         ;
 
         if ($start) {
@@ -417,39 +415,24 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
     {
         $translationIds = implode(',', $ids);
 
-        $translationColumns = 'variant.id as id, variant.ordernumber as articleNumber, variant.kind as kind,
-        ct.objectdata as variantData, ct2.objectdata as articleData, ct.objectlanguage as languageId';
-
-        $sql = "(SELECT $translationColumns
-                FROM `s_core_translations` AS ct
-
-                LEFT JOIN s_articles AS article
-                ON article.id = ct.objectkey
-
-                LEFT JOIN s_articles_details AS variant
-                ON variant.articleID = article.id
-
-                LEFT JOIN `s_core_translations` AS ct2
-                ON ct2.objectkey = variant.articleID AND ct2.objecttype = 'article' AND ct2.objectlanguage = ct.objectlanguage
-
-                WHERE ct.id IN ($translationIds) AND ct.objecttype = 'article'
-                GROUP BY article.id, languageId)
-
-                UNION
-
-                (SELECT $translationColumns
-                FROM `s_core_translations` AS ct
-
-                LEFT JOIN s_articles_details AS variant
-                ON variant.id = ct.objectkey
-
-                LEFT JOIN `s_core_translations` AS ct2
-                ON ct2.objectkey = variant.articleID AND ct2.objecttype = 'article' AND ct2.objectlanguage = ct.objectlanguage
-
-                WHERE ct.id IN ($translationIds) AND ct.objecttype = 'variant')
-
-                ORDER BY languageId ASC
-                ";
+        $sql = "
+            (SELECT ad.id as id, ad.ordernumber as articleNumber, ad.kind as kind,
+                    t.objectdata as articleData, t.objectdata as variantData, t.objectlanguage as languageId
+            FROM s_core_translations t
+            LEFT JOIN s_articles a ON (t.objectkey = a.id)
+            LEFT JOIN s_articles_details ad ON (ad.articleID = a.id AND ad.kind = 1)
+            WHERE t.id IN ($translationIds) AND t.objecttype = 'article')            
+            
+            UNION
+            
+            (SELECT  ad.id as id, ad.ordernumber as articleNumber, ad.kind as kind,
+                    t.objectdata as articleData, t.objectdata as variantData, t.objectlanguage as languageId
+            FROM s_core_translations t
+            LEFT JOIN s_articles_details ad ON (t.objectkey = ad.id)
+            WHERE t.id IN ($translationIds) AND t.objecttype = 'variant')
+            
+            ORDER BY languageId ASC
+        ";
 
         return $this->db->query($sql)->fetchAll();
     }
