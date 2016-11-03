@@ -67,8 +67,8 @@ Ext.define('Shopware.apps.SwagImportExport.model.SessionList', {
          * @object
          */
         api: {
-            read:'{url controller="SwagImportExport" action="getSessions"}',
-            destroy:'{url controller="SwagImportExport" action="deleteSession"}'
+            read:'{url controller="SwagImportExportSession" action="getSessions"}',
+            destroy:'{url controller="SwagImportExportSession" action="deleteSession"}'
         },
         /**
          * Configure the data reader

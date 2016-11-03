@@ -6,12 +6,11 @@
  * file that was distributed with this source code.
  */
 
-use Shopware\Components\Model\ModelManager;
+use Shopware\Components\SwagImportExport\Factories\ProfileFactory;
 use Shopware\Components\SwagImportExport\UploadPathProvider;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Utils\CommandHelper;
 use Shopware\CustomModels\ImportExport\Profile;
-use Shopware\Models\Media\Album;
 use \Shopware\Components\CSRFWhitelistAware;
 
 /**
@@ -20,10 +19,19 @@ use \Shopware\Components\CSRFWhitelistAware;
  */
 class Shopware_Controllers_Backend_SwagImportExportCron extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
+    /** @var ProfileFactory */
+    protected $profileFactory;
+
     /**
-     * @var ModelManager
+     * @param Enlight_Controller_Request_Request $request
+     * @param Enlight_Controller_Response_Response $response
      */
-    protected $manager;
+    public function __construct(Enlight_Controller_Request_Request $request, Enlight_Controller_Response_Response $response)
+    {
+        parent::__construct($request, $response);
+
+        $this->profileFactory = Shopware()->Plugins()->Backend()->SwagImportExport()->getProfileFactory();
+    }
 
     /**
      * @inheritdoc
@@ -57,12 +65,11 @@ class Shopware_Controllers_Backend_SwagImportExportCron extends Shopware_Control
      */
     public function cronAction()
     {
-        /** @var UploadPathProvider $uploadPathProvider */
-        $uploadPathProvider = Shopware()->Container()->get('swag_import_export.upload_path_provider');
+        $uploadPathProvider = $this->get('swag_import_export.upload_path_provider');
         $directory = $uploadPathProvider->getPath(UploadPathProvider::CRON_DIR);
 
         $allFiles = scandir($directory);
-        $files = array_diff($allFiles, array('.', '..'));
+        $files = array_diff($allFiles, ['.', '..']);
 
         $lockerFilename = '__running';
         $lockerFileLocation = $directory . $lockerFilename;
@@ -93,7 +100,8 @@ class Shopware_Controllers_Backend_SwagImportExportCron extends Shopware_Control
         fwrite($file, $timeout);
         fclose($file);
 
-        $profileRepository = $this->getManager()->getRepository(Profile::class);
+        $manager = $this->getModelManager();
+        $profileRepository = $manager->getRepository(Profile::class);
         foreach ($files as $file) {
             $fileExtension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
             $fileName = strtolower(pathinfo($file, PATHINFO_FILENAME));
@@ -103,10 +111,11 @@ class Shopware_Controllers_Backend_SwagImportExportCron extends Shopware_Control
                     $profile = CommandHelper::findProfileByName($file, $profileRepository);
                     if ($profile === false) {
                         $message = SnippetsHelper::getNamespace()->get('cronjob/no_profile', 'No profile found %s');
+
                         throw new \Exception(sprintf($message, $fileName));
                     }
 
-                    $mediaPath = $uploadPathProvider->getRealPath($file, UploadPathProvider::CRON_DIR);
+                    $mediaPath = $this->uploadPathProvider->getRealPath($file, UploadPathProvider::CRON_DIR);
                 } catch (\Exception $e) {
                     echo $e->getMessage() . "\n";
                     unlink($lockerFileLocation);
@@ -117,12 +126,12 @@ class Shopware_Controllers_Backend_SwagImportExportCron extends Shopware_Control
                 try {
                     $return = $this->start($profile, $mediaPath, $fileExtension);
 
-                    $profilesMapper = array('articles', 'articlesImages');
+                    $profilesMapper = ['articles', 'articlesImages'];
 
                     //loops the unprocessed data
                     $pathInfo = pathinfo($mediaPath);
                     foreach ($profilesMapper as $profileName) {
-                        $tmpFile = $uploadPathProvider->getRealPath(
+                        $tmpFile = $this->uploadPathProvider->getRealPath(
                             $pathInfo['filename'] . '-' . $profileName . '-tmp.csv',
                             UploadPathProvider::CRON_DIR
                         );
@@ -131,7 +140,7 @@ class Shopware_Controllers_Backend_SwagImportExportCron extends Shopware_Control
                             $outputFile = str_replace('-tmp', '-swag', $tmpFile);
                             rename($tmpFile, $outputFile);
 
-                            $profile = $this->getPlugin()->getProfileFactory()->loadHiddenProfile($profileName);
+                            $profile = $this->profileFactory->loadHiddenProfile($profileName);
                             $profileEntity = $profile->getEntity();
 
                             $this->start($profileEntity, $outputFile, 'csv');
@@ -143,7 +152,7 @@ class Shopware_Controllers_Backend_SwagImportExportCron extends Shopware_Control
                     unlink($mediaPath);
                 } catch (\Exception $e) {
                     // copy file as broken
-                    $brokenFilePath = $uploadPathProvider->getRealPath('broken-' . $file, UploadPathProvider::DIR);
+                    $brokenFilePath = $this->uploadPathProvider->getRealPath('broken-' . $file, UploadPathProvider::DIR);
                     copy($mediaPath, $brokenFilePath);
 
                     echo $e->getMessage() . "\n";
@@ -165,12 +174,12 @@ class Shopware_Controllers_Backend_SwagImportExportCron extends Shopware_Control
     protected function start($profileModel, $inputFile, $format)
     {
         $commandHelper = new CommandHelper(
-            array(
+            [
                 'profileEntity' => $profileModel,
                 'filePath' => $inputFile,
                 'format' => $format,
                 'username' => 'Cron'
-            )
+            ]
         );
 
         $return = $commandHelper->prepareImport();
@@ -185,25 +194,5 @@ class Shopware_Controllers_Backend_SwagImportExportCron extends Shopware_Control
         }
 
         return $return;
-    }
-
-    /**
-     * @return Shopware_Plugins_Backend_SwagImportExport_Bootstrap
-     */
-    protected function getPlugin()
-    {
-        return Shopware()->Plugins()->Backend()->SwagImportExport();
-    }
-
-    /**
-     * @return ModelManager
-     */
-    public function getManager()
-    {
-        if ($this->manager === null) {
-            $this->manager = Shopware()->Models();
-        }
-
-        return $this->manager;
     }
 }

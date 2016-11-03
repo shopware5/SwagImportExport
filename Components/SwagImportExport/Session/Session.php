@@ -12,6 +12,11 @@ use Shopware\Components\SwagImportExport\UploadPathProvider;
 use Shopware\CustomModels\ImportExport\Session as SessionEntity;
 use Shopware\Components\SwagImportExport\Profile\Profile as Profile;
 
+/**
+ * Class Session
+ * @package Shopware\Components\SwagImportExport\Session
+ * @method int getTotalCount
+ */
 class Session
 {
     /**

@@ -175,7 +175,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
     duplicateSelectedProfile: function(combobox, store, id) {
         var me = this;
         Ext.Ajax.request({
-            url: '{url controller="SwagImportExport" action="duplicateProfile"}',
+            url: '{url controller="SwagImportExportProfile" action="duplicateProfile"}',
             method: 'POST',
             params: { profileId: id },
             success: function(response) {

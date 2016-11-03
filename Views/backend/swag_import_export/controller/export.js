@@ -135,7 +135,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
         var me = this;
 
         me.batchConfig = {
-            requestUrl: '{url controller="SwagImportExport" action="export"}',
+            requestUrl: '{url controller="SwagImportExportExport" action="export"}',
             params: {
                 profileId: me.parameters.profile,
                 sessionId: me.parameters.sessionId,
@@ -156,7 +156,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
         };
 
         Ext.Ajax.request({
-            url: '{url controller="SwagImportExport" action="prepareExport"}',
+            url: '{url controller="SwagImportExportExport" action="prepareExport"}',
             method: 'POST',
             params: me.batchConfig.params,
             success: function(response) {

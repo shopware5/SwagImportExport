@@ -31,13 +31,6 @@ class CsvFileReader implements FileReader
     }
 
     /**
-     * @param string $fileName
-     */
-    public function readHeader($fileName)
-    {
-    }
-
-    /**
      * Reads csv records
      *
      * @param string $fileName
@@ -89,18 +82,19 @@ class CsvFileReader implements FileReader
     }
 
     /**
-     * @param $fileName
-     */
-    public function readFooter($fileName)
-    {
-    }
-
-    /**
      * @return bool
      */
     public function hasTreeStructure()
     {
         return $this->treeStructure;
+    }
+
+    /**
+     * @param array $tree
+     */
+    public function setTree($tree)
+    {
+
     }
 
     /**

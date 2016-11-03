@@ -59,7 +59,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['format'] = self::FORMAT_XML;
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -81,7 +81,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['format'] = self::FORMAT_CSV;
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -105,7 +105,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['limit'] = $limit;
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -128,7 +128,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['limit'] = $limit;
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -151,7 +151,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['offset'] = $offset;
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -174,7 +174,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['offset'] = $offset;
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -197,7 +197,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['categories'] = $categoryId;
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -220,7 +220,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['categories'] = $categoryId;
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -243,7 +243,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['variants'] = $exportVariants;
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -266,7 +266,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['variants'] = $exportVariants;
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -291,7 +291,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['limit'] = $limit;
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -316,7 +316,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['limit'] = $limit;
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -341,7 +341,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['offset'] = $offset;
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -366,7 +366,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['offset'] = $offset;
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -391,7 +391,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['categories'] = $categoryId;
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -416,7 +416,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['categories'] = $categoryId;
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -437,7 +437,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['format'] = self::FORMAT_XML;
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -458,7 +458,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['format'] = self::FORMAT_CSV;
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -479,7 +479,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['format'] = self::FORMAT_XML;
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -500,7 +500,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['format'] = self::FORMAT_CSV;
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -521,7 +521,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['format'] = self::FORMAT_XML;
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -542,7 +542,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['format'] = self::FORMAT_CSV;
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -564,7 +564,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['stockFilter'] = 'inStock';
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -586,7 +586,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['stockFilter'] = 'inStock';
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -608,7 +608,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['stockFilter'] = 'notInStock';
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -630,7 +630,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['stockFilter'] = 'notInStock';
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -652,7 +652,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['stockFilter'] = 'inStockOnSale';
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -674,7 +674,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['stockFilter'] = 'inStockOnSale';
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -696,7 +696,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['stockFilter'] = 'notInStockOnSale';
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -718,7 +718,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['stockFilter'] = 'notInStockOnSale';
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -740,7 +740,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['stockFilter'] = 'notInStockMinStock';
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -762,7 +762,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['stockFilter'] = 'notInStockMinStock';
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -786,7 +786,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['customFilterDirection'] = 'greaterThan';
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -810,7 +810,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['customFilterDirection'] = 'greaterThan';
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -834,7 +834,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['customFilterDirection'] = 'lessThan';
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -858,7 +858,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['customFilterDirection'] = 'lessThan';
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -879,7 +879,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['format'] = self::FORMAT_XML;
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -900,7 +900,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['format'] = self::FORMAT_CSV;
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -921,7 +921,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['format'] = self::FORMAT_XML;
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -942,7 +942,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['format'] = self::FORMAT_CSV;
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -963,7 +963,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['format'] = self::FORMAT_XML;
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -984,7 +984,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['format'] = self::FORMAT_CSV;
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -1006,7 +1006,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['ordernumberFrom'] = '20001';
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -1028,7 +1028,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['ordernumberFrom'] = '20001';
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -1050,7 +1050,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['dateFrom'] = '31.08.2012';
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -1072,7 +1072,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['dateFrom'] = '31.08.2012';
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -1094,7 +1094,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['dateTo'] = '30.08.2012';
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -1116,7 +1116,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['dateTo'] = '30.08.2012';
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -1138,7 +1138,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['orderstate'] = self::ORDER_STATE_OPEN;
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -1160,7 +1160,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['orderstate'] = self::ORDER_STATE_OPEN;
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -1182,7 +1182,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['paymentstate'] = self::PAYMENT_STATE_OPEN;
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -1204,7 +1204,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['paymentstate'] = self::PAYMENT_STATE_OPEN;
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -1225,7 +1225,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['format'] = self::FORMAT_CSV;
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];
@@ -1244,7 +1244,7 @@ class ExportActionTest extends \Enlight_Components_Test_Controller_TestCase
         $params['format'] = self::FORMAT_XML;
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExport/export');
+        $this->dispatch('backend/SwagImportExportExport/export');
         $assigned = $this->View()->getAssign('data');
 
         $fileName = $assigned['fileName'];

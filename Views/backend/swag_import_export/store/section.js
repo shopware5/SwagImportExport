@@ -49,7 +49,7 @@ Ext.define('Shopware.apps.SwagImportExport.store.Section', {
     proxy: {
         type: 'ajax',
         api: {
-            read: '{url controller="SwagImportExport" action="getSections"}'
+            read: '{url controller="SwagImportExportProfile" action="getSections"}'
         },
         actionMethods: 'POST',
         reader: {
