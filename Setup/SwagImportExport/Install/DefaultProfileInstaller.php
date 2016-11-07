@@ -69,7 +69,7 @@ VALUES
      */
     public function isCompatible()
     {
-        return $this->setupContext->assertPluginVersionLowerThan(self::MIN_PLUGIN_VERSION);
+        return $this->setupContext->assertMinimumPluginVersion(self::MIN_PLUGIN_VERSION);
     }
 
     /**

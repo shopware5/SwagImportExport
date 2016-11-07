@@ -15,14 +15,9 @@ use Shopware\Setup\SwagImportExport\SetupContext;
 class Update01MainMenuItem implements UpdaterInterface
 {
     /**
-     * @var ModelManager
+     * @var MainMenuItemInstaller
      */
-    private $modelManager;
-
-    /**
-     * @var SetupContext
-     */
-    private $setupContext;
+    private $mainMenuItemInstaller;
 
     /**
      * @param SetupContext $setupContext
@@ -30,8 +25,7 @@ class Update01MainMenuItem implements UpdaterInterface
      */
     public function __construct(SetupContext $setupContext, ModelManager $modelManager)
     {
-        $this->modelManager = $modelManager;
-        $this->setupContext = $setupContext;
+        $this->mainMenuItemInstaller = new MainMenuItemInstaller($setupContext, $modelManager);
     }
 
     /**
@@ -39,8 +33,7 @@ class Update01MainMenuItem implements UpdaterInterface
      */
     public function update()
     {
-        $mainMenuInstaller = new MainMenuItemInstaller($this->setupContext, $this->modelManager);
-        $mainMenuInstaller->install();
+        $this->mainMenuItemInstaller->install();
     }
 
     /**
@@ -48,6 +41,6 @@ class Update01MainMenuItem implements UpdaterInterface
      */
     public function isCompatible()
     {
-        return true;
+        return $this->mainMenuItemInstaller->isCompatible();
     }
 }

@@ -72,7 +72,7 @@ class MainMenuItemInstaller implements InstallerInterface
      */
     public function isCompatible()
     {
-        return $this->setupContext->assertShopwareVersionLowerThan(self::SHOPWARE_MIN_VERSION);
+        return $this->setupContext->assertMinimumShopwareVersion(self::SHOPWARE_MIN_VERSION);
     }
 
     /**

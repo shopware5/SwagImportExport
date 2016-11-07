@@ -43,7 +43,7 @@ class SetupContext
      * @param string $minVersion
      * @return bool
      */
-    public function assertShopwareVersionLowerThan($minVersion)
+    public function assertMinimumShopwareVersion($minVersion)
     {
         if ($this->shopwareVersion === '___VERSION___') {
             return true;
@@ -67,7 +67,7 @@ class SetupContext
      * @param string $minVersion
      * @return bool
      */
-    public function assertPluginVersionLowerThan($minVersion)
+    public function assertMinimumPluginVersion($minVersion)
     {
         return version_compare($this->pluginVersion, $minVersion, '>=');
     }
