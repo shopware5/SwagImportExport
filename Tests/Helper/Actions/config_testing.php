@@ -1,29 +1,29 @@
 <?php
 
 return [
-    'front' => array(
+    'front' => [
         'throwExceptions' => true,
-    ),
+    ],
 
     // Backend-Cache
-    'cache' => array(
+    'cache' => [
         'backend' => 'Black-Hole',
-        'backendOptions' => array(),
-        'frontendOptions' => array(
+        'backendOptions' => [],
+        'frontendOptions' => [
             'write_control' => false
-        ),
-    ),
+        ],
+    ],
 
     // Model-Cache
-    'model' => array(
+    'model' => [
         'cacheProvider' => 'Array' // supports Apc, Array, Wincache and Xcache
-    ),
+    ],
 
     // Http-Cache
-    'httpCache' => array(
+    'httpCache' => [
         'enabled' => true, // true or false
         'debug' => true,
-    ),
+    ],
 
     'phpsettings' => [
         'display_errors' => 1,
@@ -34,11 +34,12 @@ return [
         'frontend' => false,
         'backend' => false
     ],
-    'db' => array(
+    
+    'db' => [
         'username' => 'root',
         'password' => 'root',
         'dbname' => 'importexport_test',
         'host' => 'localhost',
         'port' => '3306'
-    )
+    ]
 ];

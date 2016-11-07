@@ -21,7 +21,6 @@ class ImportExportTestKernel extends TestKernel
         return __DIR__ . '/../../../../../../../config_testing.php';
     }
 
-
     public static function start()
     {
         $kernel = new \Shopware\Kernel('testing', true);
