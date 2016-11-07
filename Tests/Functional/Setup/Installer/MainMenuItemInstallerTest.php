@@ -86,6 +86,39 @@ class MainMenuItemInstallerTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($removedMenuItem, 'Old menu item for SwagImportExport advanced should be removed on update or installation to 5.3.');
     }
 
+    public function test_it_should_be_compatible()
+    {
+        $setupContext = new SetupContext('5.3.0', '', '');
+        $modelManagerMock = $this->createMock(ModelManager::class);
+
+        $mainMenuItemInstaller = new MainMenuItemInstaller($setupContext, $modelManagerMock);
+        $isCompatible = $mainMenuItemInstaller->isCompatible();
+
+        $this->assertTrue($isCompatible);
+    }
+
+    public function test_it_should_be_compatible_with_greater_version()
+    {
+        $setupContext = new SetupContext('5.3.5', '', '');
+        $modelManagerMock = $this->createMock(ModelManager::class);
+
+        $mainMenuItemInstaller = new MainMenuItemInstaller($setupContext, $modelManagerMock);
+        $isCompatible = $mainMenuItemInstaller->isCompatible();
+
+        $this->assertTrue($isCompatible);
+    }
+
+    public function test_it_should_be_incompatible()
+    {
+        $setupContext = new SetupContext('5.2.0', '', '');
+        $modelManagerMock = $this->createMock(ModelManager::class);
+
+        $mainMenuItemInstaller = new MainMenuItemInstaller($setupContext, $modelManagerMock);
+        $isCompatible = $mainMenuItemInstaller->isCompatible();
+
+        $this->assertFalse($isCompatible);
+    }
+
     /**
      * @param EntityRepository $menuRepository
      */

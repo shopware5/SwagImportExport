@@ -16,7 +16,7 @@ use Shopware\Setup\SwagImportExport\SetupContext;
 
 class Update03DefaultProfileSupport implements UpdaterInterface
 {
-    const MIN_PLUGIN_VERSION = '1.3.0';
+    const MIN_PLUGIN_VERSION = '2.0.0';
 
     /**
      * @var Connection
@@ -79,10 +79,7 @@ class Update03DefaultProfileSupport implements UpdaterInterface
      */
     public function isCompatible()
     {
-        return (
-            version_compare($this->setupContext->getPreviousPluginVersion(), self::MIN_PLUGIN_VERSION, '<')
-            && $this->setupContext->assertPluginVersionLowerThan(self::MIN_PLUGIN_VERSION)
-        );
+        return version_compare($this->setupContext->getPreviousPluginVersion(), self::MIN_PLUGIN_VERSION, '<');
     }
 
     /**
