@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+# Setup test environment
 INCLUDE: ./Tests/Helper/Actions/setup.sh
-INCLUDE: ./Tests/Helper/Actions/run.sh
+
+# Execute unit tests
+SHOPWARE_ENV=__ENV__ phpunit
+
+# Cleanup test environment
 INCLUDE: ./Tests/Helper/Actions/cleanup.sh
