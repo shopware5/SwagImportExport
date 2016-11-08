@@ -9,10 +9,25 @@
 namespace SwagImportExport\Tests\Unit\Setup\DefaultProfiles;
 
 use Shopware\Setup\SwagImportExport\DefaultProfiles\MinimalCategoryProfile;
+use Shopware\Setup\SwagImportExport\DefaultProfiles\ProfileMetaData;
 
 class MinimalCategoryProfileTest extends \PHPUnit_Framework_TestCase
 {
     use DefaultProfileTestCaseTrait;
+
+    private function createMinimalCategoryProfile()
+    {
+        return new MinimalCategoryProfile();
+    }
+
+    public function test_it_can_be_created()
+    {
+        $categoryMinimalProfile = $this->createMinimalCategoryProfile();
+
+        $this->assertInstanceOf(MinimalCategoryProfile::class, $categoryMinimalProfile);
+        $this->assertInstanceOf(\JsonSerializable::class, $categoryMinimalProfile);
+        $this->assertInstanceOf(ProfileMetaData::class, $categoryMinimalProfile);
+    }
 
     public function test_it_should_return_valid_profile_tree()
     {

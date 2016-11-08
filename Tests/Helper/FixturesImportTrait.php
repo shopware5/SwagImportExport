@@ -37,7 +37,7 @@ trait FixturesImportTrait
 
         for ($addressAmount = 0; $addressAmount < 25; $addressAmount++) {
             $address = new Address();
-            $address->setEmail(uniqid('test_') . '@example.com');
+            $address->setEmail('test_' . $addressAmount . '@example.com');
             $address->setAdded(new \DateTime());
             $address->setNewsletterGroup($newsletterGroup);
             $address->setIsCustomer(false);

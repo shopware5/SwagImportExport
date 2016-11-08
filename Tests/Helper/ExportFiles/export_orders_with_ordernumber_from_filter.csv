@@ -1,6 +1,0 @@
-orderId;number;customerId;orderStatusID;cleared;paymentID;dispatchId;partnerId;shopId;invoiceAmount;invoiceAmountNet;invoiceShipping;invoiceShippingNet;orderTime;transactionId;comment;customerComment;internalComment;net;taxFree;temporaryId;referer;clearedDate;trackingCode;languageIso;currency;currencyFactor;remoteAddress;orderDetailId;articleId;taxId;taxRate;statusId;number;articleNumber;price;quantity;articleName;shipped;shippedGroup;releaseDate;mode;esdArticle;config
-57;20002;1;0;17;4;9;;1;201.86;169.63;0;0;2012-08-31 08:51:46;;;;;0;0;;;;;1;EUR;1;217.86.205.141;201;220;1;19;0;20002;SW10001;35.99;1;Versandkostenfreier Artikel;0;0;0000-00-00;0;0;
-57;20002;1;0;17;4;9;;1;201.86;169.63;0;0;2012-08-31 08:51:46;;;;;0;0;;;;;1;EUR;1;217.86.205.141;202;227;1;19;0;20002;SW10002841;35.99;1;Aufschlag bei Zahlungsarten;0;0;0000-00-00;0;0;
-57;20002;1;0;17;4;9;;1;201.86;169.63;0;0;2012-08-31 08:51:46;;;;;0;0;;;;;1;EUR;1;217.86.205.141;203;219;1;19;0;20002;SW10185;54.9;1;Express Versand;0;0;0000-00-00;0;0;
-57;20002;1;0;17;4;9;;1;201.86;169.63;0;0;2012-08-31 08:51:46;;;;;0;0;;;;;1;EUR;1;217.86.205.141;204;197;1;19;0;20002;SW10196;34.99;2;ESD Download Artikel;0;0;0000-00-00;0;1;
-57;20002;1;0;17;4;9;;1;201.86;169.63;0;0;2012-08-31 08:51:46;;;;;0;0;;;;;1;EUR;1;217.86.205.141;205;0;0;19;0;20002;sw-payment-absolute;5;1;Zuschlag für Zahlungsart;0;0;0000-00-00;4;0;
