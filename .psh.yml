@@ -1,0 +1,12 @@
+paths:
+  - Tests/Helper/Actions
+
+const:
+  PLUGIN: SwagImportExport
+  DB_USER: "root"
+  DB_PASSWORD: "root"
+  DB_HOST: "localhost"
+  DB_DATABASE: "importexport_test"
+  ENV: "testing"
+  CONFIG_FILE_PATH: ./Tests/Helper/Actions/
+  SHOPWARE_ROOT: ../../../../../../

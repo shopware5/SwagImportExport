@@ -8,10 +8,13 @@
 
 namespace Tests\Shopware\ImportExport;
 
-use Tests\Helper\ImportExportTestHelper;
+use Shopware\Components\SwagImportExport\Transformers\FlattenTransformer;
+use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 
-class DataFlattenTransformerTest extends ImportExportTestHelper
+class DataFlattenTransformerTest extends \PHPUnit_Framework_TestCase
 {
+    use DatabaseTestCaseTrait;
+
     /**
      * @return string
      */
@@ -48,7 +51,8 @@ class DataFlattenTransformerTest extends ImportExportTestHelper
             'CustomerGroup',
         ];
 
-        $flattenTransformer = $this->Plugin()->getDataTransformerFactory()->createDataTransformer('flatten', $jsonTree);
+        $flattenTransformer = new FlattenTransformer();
+        $flattenTransformer->initialize($jsonTree);
 
         $data = $flattenTransformer->composeHeader();
         $this->assertEquals($expectedData, $data);

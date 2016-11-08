@@ -8,43 +8,28 @@
 
 namespace SwagImportExport\Tests\Functional\Commands;
 
-use Shopware\Commands\SwagImportExport\ExportCommand;
+use SwagImportExport\Tests\Helper\CommandTestCaseTrait;
+use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use SwagImportExport\Tests\Helper\DataProvider\ProfileDataProvider;
-use Tests\Helper\CommandTestHelper;
+use SwagImportExport\Tests\Helper\FixturesImportTrait;
 
-class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
+class ExportCommandTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var CommandTestHelper
-     */
-    private $commandTestHelper;
+    use DatabaseTestCaseTrait;
+    use CommandTestCaseTrait;
+    use FixturesImportTrait;
 
-    public function setUp()
-    {
-        $this->commandTestHelper = Shopware()->Container()->get('swag_import_export.tests.command_test_helper');
-        $this->commandTestHelper->setUp();
-    }
-
-    protected function tearDown()
-    {
-        $this->commandTestHelper->tearDown();
-    }
-
-    /**
-     * @covers ExportCommand::execute()
-     */
     public function testArticlesCsvExportCommand()
     {
         $expectedLineAmount = 290;
         $profileName = ProfileDataProvider::ARTICLE_PROFILE_NAME;
 
-        $fileName = uniqid('test_') . 'article.csv';
-        $this->commandTestHelper->addFile($fileName);
+        $fileName = 'article.csv';
+        $this->addCreatedExportFile($fileName);
 
-        $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:export -p {$profileName} {$fileName}");
-        $consoleOutput = $this->convertOutputToArrayByLineBreak($consoleOutput);
+        $consoleOutput = $this->runCommand("sw:importexport:export -p {$profileName} {$fileName}");
 
-        $fp = file($this->commandTestHelper->getFilePath($fileName));
+        $fp = file($this->getFilePath($fileName));
         $lineAmount = count($fp);
 
         $this->assertEquals('Using format: csv.', $consoleOutput[1]);
@@ -52,21 +37,17 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
         $this->assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
     }
 
-    /**
-     * @covers ExportCommand::execute()
-     */
     public function testVariantsCsvExportCommand()
     {
         $expectedLineAmount = 525;
         $profileName = ProfileDataProvider::ARTICLE_PROFILE_NAME;
 
-        $fileName = uniqid('test_') . 'variants.csv';
-        $this->commandTestHelper->addFile($fileName);
+        $fileName = 'variants.csv';
+        $this->addCreatedExportFile($fileName);
 
-        $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:export -p {$profileName} -x {$fileName}");
-        $consoleOutput = $this->convertOutputToArrayByLineBreak($consoleOutput);
+        $consoleOutput = $this->runCommand("sw:importexport:export -p {$profileName} -x {$fileName}");
 
-        $fp = file($this->commandTestHelper->getFilePath($fileName));
+        $fp = file($this->getFilePath($fileName));
         $lineAmount = count($fp);
 
         $this->assertEquals('Using format: csv.', $consoleOutput[1]);
@@ -74,21 +55,17 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
         $this->assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
     }
 
-    /**
-     * @covers ExportCommand::execute()
-     */
     public function testCustomerCsvExportCommand()
     {
         $expectedLineAmount = 3;
         $profileName = ProfileDataProvider::CUSTOMER_PROFILE_NAME;
 
-        $fileName = uniqid('test_') . 'customer.csv';
-        $this->commandTestHelper->addFile($fileName);
+        $fileName = 'customer.csv';
+        $this->addCreatedExportFile($fileName);
 
-        $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:export -p {$profileName} {$fileName}");
-        $consoleOutput = $this->convertOutputToArrayByLineBreak($consoleOutput);
+        $consoleOutput = $this->runCommand("sw:importexport:export -p {$profileName} {$fileName}");
 
-        $fp = file($this->commandTestHelper->getFilePath($fileName));
+        $fp = file($this->getFilePath($fileName));
         $lineAmount = count($fp);
 
         $this->assertEquals('Using format: csv.', $consoleOutput[1]);
@@ -96,21 +73,17 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
         $this->assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
     }
 
-    /**
-     * @covers ExportCommand::execute()
-     */
     public function testCategoriesCsvExportCommand()
     {
         $expectedLineAmount = 65;
         $profileName = ProfileDataProvider::CATEGORY_PROFILE_NAME;
 
-        $fileName = uniqid('test_') . 'categories.csv';
-        $this->commandTestHelper->addFile($fileName);
+        $fileName = 'categories.csv';
+        $this->addCreatedExportFile($fileName);
 
-        $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:export -p {$profileName} {$fileName}");
-        $consoleOutput = $this->convertOutputToArrayByLineBreak($consoleOutput);
+        $consoleOutput = $this->runCommand("sw:importexport:export -p {$profileName} {$fileName}");
 
-        $fp = file($this->commandTestHelper->getFilePath($fileName));
+        $fp = file($this->getFilePath($fileName));
         $lineAmount = count($fp);
 
         $this->assertEquals('Using format: csv.', $consoleOutput[1]);
@@ -118,21 +91,17 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
         $this->assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
     }
 
-    /**
-     * @covers ExportCommand::execute()
-     */
     public function testArticlesInStockCsvExportCommand()
     {
         $expectedLineAmount = 406;
         $profileName = ProfileDataProvider::ARTICLES_INSTOCK_PROFILE_NAME;
 
-        $fileName = uniqid('test_') . 'articlesinstock.csv';
-        $this->commandTestHelper->addFile($fileName);
+        $fileName = 'articlesinstock.csv';
+        $this->addCreatedExportFile($fileName);
 
-        $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:export -p {$profileName} {$fileName}");
-        $consoleOutput = $this->convertOutputToArrayByLineBreak($consoleOutput);
+        $consoleOutput = $this->runCommand("sw:importexport:export -p {$profileName} {$fileName}");
 
-        $fp = file($this->commandTestHelper->getFilePath($fileName));
+        $fp = file($this->getFilePath($fileName));
         $lineAmount = count($fp);
 
         $this->assertEquals('Using format: csv.', $consoleOutput[1]);
@@ -140,21 +109,17 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
         $this->assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
     }
 
-    /**
-     * @covers ExportCommand::execute()
-     */
     public function testArticlesPricesCsvExportCommand()
     {
         $expectedLineAmount = 406;
         $profileName = ProfileDataProvider::ARTICLES_PRICES_PROFILE_NAME;
 
-        $fileName = uniqid('test_') . 'articlesprices.csv';
-        $this->commandTestHelper->addFile($fileName);
+        $fileName = 'articlesprices.csv';
+        $this->addCreatedExportFile($fileName);
 
-        $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:export -p {$profileName} {$fileName}");
-        $consoleOutput = $this->convertOutputToArrayByLineBreak($consoleOutput);
+        $consoleOutput = $this->runCommand("sw:importexport:export -p {$profileName} {$fileName}");
 
-        $fp = file($this->commandTestHelper->getFilePath($fileName));
+        $fp = file($this->getFilePath($fileName));
         $lineAmount = count($fp);
 
         $this->assertEquals('Using format: csv.', $consoleOutput[1]);
@@ -162,34 +127,27 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
         $this->assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
     }
 
-    /**
-     * @covers ExportCommand::execute()
-     * @expectedException \InvalidArgumentException
-     */
     public function testArticlesImagesCsvExportCommand()
     {
         $profileName = ProfileDataProvider::ARTICLES_IMAGE_PROFILE_NAME;
 
-        $fileName = uniqid('test_') . 'articlesimage.csv';
+        $fileName = 'articlesimage.csv';
 
-        $this->commandTestHelper->runCommand("sw:importexport:export -p {$profileName} {$fileName}");
+        $this->expectException(\InvalidArgumentException::class);
+        $this->runCommand("sw:importexport:export -p {$profileName} {$fileName}");
     }
 
-    /**
-     * @covers ExportCommand::execute()
-     */
     public function testArticlesTranslationsCsvExportCommand()
     {
         $expectedLineAmount = 111;
         $profileName = ProfileDataProvider::ARTICLES_TRANSLATIONS_PROFILE_NAME;
 
-        $fileName = uniqid('test_') . 'articlestranslation.csv';
-        $this->commandTestHelper->addFile($fileName);
+        $fileName = 'articlestranslation.csv';
+        $this->addCreatedExportFile($fileName);
 
-        $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:export -p {$profileName} {$fileName}");
-        $consoleOutput = $this->convertOutputToArrayByLineBreak($consoleOutput);
+        $consoleOutput = $this->runCommand("sw:importexport:export -p {$profileName} {$fileName}");
 
-        $fp = file($this->commandTestHelper->getFilePath($fileName));
+        $fp = file($this->getFilePath($fileName));
         $lineAmount = count($fp);
 
         $this->assertEquals('Using format: csv.', $consoleOutput[1]);
@@ -197,21 +155,17 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
         $this->assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
     }
 
-    /**
-     * @covers ExportCommand::execute()
-     */
     public function testOrderCsvExportCommand()
     {
         $expectedLineAmount = 18;
         $profileName = ProfileDataProvider::ORDERS_PROFILE_NAME;
 
-        $fileName = uniqid('test_') . 'order.csv';
-        $this->commandTestHelper->addFile($fileName);
+        $fileName = 'order.csv';
+        $this->addCreatedExportFile($fileName);
 
-        $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:export -p {$profileName} {$fileName}");
-        $consoleOutput = $this->convertOutputToArrayByLineBreak($consoleOutput);
+        $consoleOutput = $this->runCommand("sw:importexport:export -p {$profileName} {$fileName}");
 
-        $fp = file($this->commandTestHelper->getFilePath($fileName));
+        $fp = file($this->getFilePath($fileName));
         $lineAmount = count($fp);
 
         $this->assertEquals('Using format: csv.', $consoleOutput[1]);
@@ -219,21 +173,17 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
         $this->assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
     }
 
-    /**
-     * @covers ExportCommand::execute()
-     */
     public function testMainOrderCsvExportCommand()
     {
         $expectedLineAmount = 5;
         $profileName = ProfileDataProvider::MAIN_ORDERS_PROFILE_NAME;
 
-        $fileName = uniqid('test_') . 'mainorder.csv';
-        $this->commandTestHelper->addFile($fileName);
+        $fileName = 'mainorder.csv';
+        $this->addCreatedExportFile($fileName);
 
-        $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:export -p {$profileName} {$fileName}");
-        $consoleOutput = $this->convertOutputToArrayByLineBreak($consoleOutput);
+        $consoleOutput = $this->runCommand("sw:importexport:export -p {$profileName} {$fileName}");
 
-        $fp = file($this->commandTestHelper->getFilePath($fileName));
+        $fp = file($this->getFilePath($fileName));
         $lineAmount = count($fp);
 
         $this->assertEquals('Using format: csv.', $consoleOutput[1]);
@@ -241,21 +191,17 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
         $this->assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
     }
 
-    /**
-     * @covers ExportCommand::execute()
-     */
     public function testTranslationsCsvExportCommand()
     {
         $expectedLineAmount = 16;
         $profileName = ProfileDataProvider::TRANSLATIONS_PROFILE_NAME;
 
-        $fileName = uniqid('test_') . 'translation.csv';
-        $this->commandTestHelper->addFile($fileName);
+        $fileName = 'translation.csv';
+        $this->addCreatedExportFile($fileName);
 
-        $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:export -p {$profileName} {$fileName}");
-        $consoleOutput = $this->convertOutputToArrayByLineBreak($consoleOutput);
+        $consoleOutput = $this->runCommand("sw:importexport:export -p {$profileName} {$fileName}");
 
-        $fp = file($this->commandTestHelper->getFilePath($fileName));
+        $fp = file($this->getFilePath($fileName));
         $lineAmount = count($fp);
 
         $this->assertEquals('Using format: csv.', $consoleOutput[1]);
@@ -263,23 +209,19 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
         $this->assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
     }
 
-    /**
-     * @covers ExportCommand::execute()
-     */
     public function testNewsletterCsvExportCommand()
     {
-        $this->commandTestHelper->createNewsletterDemoData();
+        $this->importNewsletterDemoData();
 
         $expectedLineAmount = 26;
         $profileName = ProfileDataProvider::NEWSLETTER_PROFILE_NAME;
 
-        $fileName = uniqid('test_') . 'newsletter.csv';
-        $this->commandTestHelper->addFile($fileName);
+        $fileName = 'newsletter.csv';
+        $this->addCreatedExportFile($fileName);
 
-        $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:export -p {$profileName} {$fileName}");
-        $consoleOutput = $this->convertOutputToArrayByLineBreak($consoleOutput);
+        $consoleOutput = $this->runCommand("sw:importexport:export -p {$profileName} {$fileName}");
 
-        $fp = file($this->commandTestHelper->getFilePath($fileName));
+        $fp = file($this->getFilePath($fileName));
         $lineAmount = count($fp);
 
         $this->assertEquals('Using format: csv.', $consoleOutput[1]);
@@ -287,21 +229,17 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
         $this->assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
     }
 
-    /**
-     * @covers ExportCommand::execute()
-     */
     public function testArticlesXmlExportCommandWithLimit()
     {
         $expectedLineAmount = 6362;
         $profileName = ProfileDataProvider::ARTICLE_PROFILE_NAME;
 
-        $fileName = uniqid('test_') . 'article.xml';
-        $this->commandTestHelper->addFile($fileName);
+        $fileName = 'article.xml';
+        $this->addCreatedExportFile($fileName);
 
-        $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:export -p {$profileName} -l 100 {$fileName}");
-        $consoleOutput = $this->convertOutputToArrayByLineBreak($consoleOutput);
+        $consoleOutput = $this->runCommand("sw:importexport:export -p {$profileName} -l 100 {$fileName}");
 
-        $fp = file($this->commandTestHelper->getFilePath($fileName));
+        $fp = file($this->getFilePath($fileName));
         $lineAmount = count($fp);
 
         $this->assertEquals('Using format: xml.', $consoleOutput[1]);
@@ -309,21 +247,17 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
         $this->assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
     }
 
-    /**
-     * @covers ExportCommand::execute()
-     */
     public function testVariantsXmlExportCommandWithLimit()
     {
         $expectedLineAmount = 6362;
         $profileName = ProfileDataProvider::ARTICLE_PROFILE_NAME;
 
-        $fileName = uniqid('test_') . 'variants.xml';
-        $this->commandTestHelper->addFile($fileName);
+        $fileName = 'variants.xml';
+        $this->addCreatedExportFile($fileName);
 
-        $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:export -p {$profileName} -l 100 -x {$fileName}");
-        $consoleOutput = $this->convertOutputToArrayByLineBreak($consoleOutput);
+        $consoleOutput = $this->runCommand("sw:importexport:export -p {$profileName} -l 100 -x {$fileName}");
 
-        $fp = file($this->commandTestHelper->getFilePath($fileName));
+        $fp = file($this->getFilePath($fileName));
         $lineAmount = count($fp);
 
         $this->assertEquals('Using format: xml.', $consoleOutput[1]);
@@ -331,21 +265,17 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
         $this->assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
     }
 
-    /**
-     * @covers ExportCommand::execute()
-     */
     public function testCustomerXmlExportCommandWithLimit()
     {
         $expectedLineAmount = 42;
         $profileName = ProfileDataProvider::CUSTOMER_PROFILE_NAME;
 
-        $fileName = uniqid('test_') . 'customer.xml';
-        $this->commandTestHelper->addFile($fileName);
+        $fileName = 'customer.xml';
+        $this->addCreatedExportFile($fileName);
 
-        $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:export -p {$profileName} -l 1 {$fileName}");
-        $consoleOutput = $this->convertOutputToArrayByLineBreak($consoleOutput);
+        $consoleOutput = $this->runCommand("sw:importexport:export -p {$profileName} -l 1 {$fileName}");
 
-        $fp = file($this->commandTestHelper->getFilePath($fileName));
+        $fp = file($this->getFilePath($fileName));
         $lineAmount = count($fp);
 
         $this->assertEquals('Using format: xml.', $consoleOutput[1]);
@@ -353,21 +283,17 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
         $this->assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
     }
 
-    /**
-     * @covers ExportCommand::execute()
-     */
     public function testCategoriesXmlExportCommandWithLimit()
     {
         $expectedLineAmount = 1010;
         $profileName = ProfileDataProvider::CATEGORY_PROFILE_NAME;
 
-        $fileName = uniqid('test_') . 'categories.xml';
-        $this->commandTestHelper->addFile($fileName);
+        $fileName = 'categories.xml';
+        $this->addCreatedExportFile($fileName);
 
-        $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:export -p {$profileName} -l 40 {$fileName}");
-        $consoleOutput = $this->convertOutputToArrayByLineBreak($consoleOutput);
+        $consoleOutput = $this->runCommand("sw:importexport:export -p {$profileName} -l 40 {$fileName}");
 
-        $fp = file($this->commandTestHelper->getFilePath($fileName));
+        $fp = file($this->getFilePath($fileName));
         $lineAmount = count($fp);
 
         $this->assertEquals('Using format: xml.', $consoleOutput[1]);
@@ -375,21 +301,17 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
         $this->assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
     }
 
-    /**
-     * @covers ExportCommand::execute()
-     */
     public function testArticlesInStockXmlExportCommandWithLimit()
     {
         $expectedLineAmount = 1408;
         $profileName = ProfileDataProvider::ARTICLES_INSTOCK_PROFILE_NAME;
 
-        $fileName = uniqid('test_') . 'articlesinstock.xml';
-        $this->commandTestHelper->addFile($fileName);
+        $fileName = 'articlesinstock.xml';
+        $this->addCreatedExportFile($fileName);
 
-        $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:export -p {$profileName} -l 200 {$fileName}");
-        $consoleOutput = $this->convertOutputToArrayByLineBreak($consoleOutput);
+        $consoleOutput = $this->runCommand("sw:importexport:export -p {$profileName} -l 200 {$fileName}");
 
-        $fp = file($this->commandTestHelper->getFilePath($fileName));
+        $fp = file($this->getFilePath($fileName));
         $lineAmount = count($fp);
 
         $this->assertEquals('Using format: xml.', $consoleOutput[1]);
@@ -397,21 +319,17 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
         $this->assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
     }
 
-    /**
-     * @covers ExportCommand::execute()
-     */
     public function testArticlesPricesXmlExportCommandWithLimit()
     {
         $expectedLineAmount = 1108;
         $profileName = ProfileDataProvider::ARTICLES_PRICES_PROFILE_NAME;
 
-        $fileName = uniqid('test_') . 'articlesprices.xml';
-        $this->commandTestHelper->addFile($fileName);
+        $fileName = 'articlesprices.xml';
+        $this->addCreatedExportFile($fileName);
 
-        $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:export -p {$profileName} -l 100 {$fileName}");
-        $consoleOutput = $this->convertOutputToArrayByLineBreak($consoleOutput);
+        $consoleOutput = $this->runCommand("sw:importexport:export -p {$profileName} -l 100 {$fileName}");
 
-        $fp = file($this->commandTestHelper->getFilePath($fileName));
+        $fp = file($this->getFilePath($fileName));
         $lineAmount = count($fp);
 
         $this->assertEquals('Using format: xml.', $consoleOutput[1]);
@@ -419,34 +337,27 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
         $this->assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
     }
 
-    /**
-     * @covers ExportCommand::execute()
-     * @expectedException \InvalidArgumentException
-     */
     public function testArticlesImagesXmlExportCommandWithLimit()
     {
         $profileName = ProfileDataProvider::ARTICLES_IMAGE_PROFILE_NAME;
 
-        $fileName = uniqid('test_') . 'articlesimage.xml';
+        $fileName = 'articlesimage.xml';
 
-        $this->commandTestHelper->runCommand("sw:importexport:export -p {$profileName} -l 50 {$fileName}");
+        $this->expectException(\InvalidArgumentException::class);
+        $this->runCommand("sw:importexport:export -p {$profileName} -l 50 {$fileName}");
     }
 
-    /**
-     * @covers ExportCommand::execute()
-     */
     public function testArticlesTranslationsXmlExportCommandWithLimit()
     {
         $expectedLineAmount = 942;
         $profileName = ProfileDataProvider::ARTICLES_TRANSLATIONS_PROFILE_NAME;
 
-        $fileName = uniqid('test_') . 'articlestranslation.xml';
-        $this->commandTestHelper->addFile($fileName);
+        $fileName = 'articlestranslation.xml';
+        $this->addCreatedExportFile($fileName);
 
-        $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:export -p {$profileName} {$fileName}");
-        $consoleOutput = $this->convertOutputToArrayByLineBreak($consoleOutput);
+        $consoleOutput = $this->runCommand("sw:importexport:export -p {$profileName} {$fileName}");
 
-        $fp = file($this->commandTestHelper->getFilePath($fileName));
+        $fp = file($this->getFilePath($fileName));
         $lineAmount = count($fp);
 
         $this->assertEquals('Using format: xml.', $consoleOutput[1]);
@@ -454,21 +365,17 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
         $this->assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
     }
 
-    /**
-     * @covers ExportCommand::execute()
-     */
     public function testMainOrderXmlExportCommandWithLimit()
     {
         $expectedLineAmount = 109;
         $profileName = ProfileDataProvider::MAIN_ORDERS_PROFILE_NAME;
 
-        $fileName = uniqid('test_') . 'mainorder.xml';
-        $this->commandTestHelper->addFile($fileName);
+        $fileName = 'mainorder.xml';
+        $this->addCreatedExportFile($fileName);
 
-        $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:export -p {$profileName} -l 2 {$fileName}");
-        $consoleOutput = $this->convertOutputToArrayByLineBreak($consoleOutput);
+        $consoleOutput = $this->runCommand("sw:importexport:export -p {$profileName} -l 2 {$fileName}");
 
-        $fp = file($this->commandTestHelper->getFilePath($fileName));
+        $fp = file($this->getFilePath($fileName));
         $lineAmount = count($fp);
 
         $this->assertEquals('Using format: xml.', $consoleOutput[1]);
@@ -476,21 +383,17 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
         $this->assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
     }
 
-    /**
-     * @covers ExportCommand::execute()
-     */
     public function testTranslationsXmlExportCommandWithLimit()
     {
         $expectedLineAmount = 88;
         $profileName = ProfileDataProvider::TRANSLATIONS_PROFILE_NAME;
 
-        $fileName = uniqid('test_') . 'translation.xml';
-        $this->commandTestHelper->addFile($fileName);
+        $fileName = 'translation.xml';
+        $this->addCreatedExportFile($fileName);
 
-        $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:export -p {$profileName} -l 10 {$fileName}");
-        $consoleOutput = $this->convertOutputToArrayByLineBreak($consoleOutput);
+        $consoleOutput = $this->runCommand("sw:importexport:export -p {$profileName} -l 10 {$fileName}");
 
-        $fp = file($this->commandTestHelper->getFilePath($fileName));
+        $fp = file($this->getFilePath($fileName));
         $lineAmount = count($fp);
 
         $this->assertEquals('Using format: xml.', $consoleOutput[1]);
@@ -498,36 +401,23 @@ class ExportCommandTest extends \Enlight_Components_Test_Plugin_TestCase
         $this->assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
     }
 
-    /**
-     * @covers ExportCommand::execute()
-     */
     public function testNewsletterXmlExportCommandWithLimit()
     {
-        $this->commandTestHelper->createNewsletterDemoData();
+        $this->importNewsletterDemoData();
 
         $expectedLineAmount = 200;
         $profileName = ProfileDataProvider::NEWSLETTER_PROFILE_NAME;
 
-        $fileName = uniqid('test_') . 'newsletter.xml';
-        $this->commandTestHelper->addFile($fileName);
+        $fileName = 'newsletter.xml';
+        $this->addCreatedExportFile($fileName);
 
-        $consoleOutput = $this->commandTestHelper->runCommand("sw:importexport:export -p {$profileName} -l 15 {$fileName}");
-        $consoleOutput = $this->convertOutputToArrayByLineBreak($consoleOutput);
+        $consoleOutput = $this->runCommand("sw:importexport:export -p {$profileName} -l 15 {$fileName}");
 
-        $fp = file($this->commandTestHelper->getFilePath($fileName));
+        $fp = file($this->getFilePath($fileName));
         $lineAmount = count($fp);
 
         $this->assertEquals('Using format: xml.', $consoleOutput[1]);
         $this->assertEquals('Total count: 15.', $consoleOutput[3]);
         $this->assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
-    }
-
-    /**
-     * @param string $consoleOutput
-     * @return array
-     */
-    private function convertOutputToArrayByLineBreak($consoleOutput)
-    {
-        return explode(PHP_EOL, $consoleOutput);
     }
 }
