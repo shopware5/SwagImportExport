@@ -13,6 +13,10 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Grid', {
         me.columns = me.buildColumns();
         me.selModel = me.buildSelectionModel();
 
+        me.on('selectionchange', function(selModel, selected) {
+            me.down('#deletebutton').setDisabled(selected.length === 0);
+        });
+
         me.callParent(arguments);
     },
 
@@ -106,6 +110,8 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Grid', {
                 xtype: 'button',
                 text: '{s name=swag_import_export/profile/grid/button_delete_profile}Delete selected profile{/s}',
                 iconCls: 'sprite-minus-circle-frame',
+                itemId: 'deletebutton',
+                disabled: true,
                 handler: function() {
                     me.fireEvent('deleteProfile', me, me.getSelectionModel().getSelection());
                 }

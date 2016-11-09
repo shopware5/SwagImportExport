@@ -13,6 +13,7 @@ use Shopware\Components\SwagImportExport\DataWorkflow;
 use Shopware\Components\SwagImportExport\DbAdapters\DataDbAdapter;
 use Shopware\Components\SwagImportExport\Logger\LogDataStruct;
 use Shopware\Components\SwagImportExport\Service\Struct\PreparationResultStruct;
+use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 
 class ImportService extends AbstractImportExportService implements ImportServiceInterface
 {
@@ -92,8 +93,14 @@ class ImportService extends AbstractImportExportService implements ImportService
                 }
 
                 if ($this->logger->getMessage() === null) {
-                    $message = $resultData['position'] . ' ' . $resultData['adapter'] . ' imported successfully';
-                    $this->logProcessing('false', $inputFile, $serviceHelpers->getProfile()->getName(), $message, 'true');
+                    $message = sprintf(
+                        '%s %s %s',
+                        $resultData['position'],
+                        SnippetsHelper::getNamespace('backend/swag_import_export/default_profiles')->get($resultData['adapter']),
+                        SnippetsHelper::getNamespace('backend/swag_import_export/log')->get('import/success')
+                    );
+                    $session = $serviceHelpers->getSession()->getEntity();
+                    $this->logProcessing('false', $inputFile, $serviceHelpers->getProfile()->getName(), $message, 'true', $session);
                 }
             }
 
@@ -103,7 +110,8 @@ class ImportService extends AbstractImportExportService implements ImportService
 
             return $resultData;
         } catch (\Exception $e) {
-            $this->logProcessing('true', $inputFile, $serviceHelpers->getProfile()->getName(), $e->getMessage(), 'false');
+            $session = $serviceHelpers->getSession()->getEntity();
+            $this->logProcessing('true', $inputFile, $serviceHelpers->getProfile()->getName(), $e->getMessage(), 'false', $session);
 
             throw $e;
         }

@@ -1,3 +1,4 @@
+//{block name="backend/swag_import_export/store/conversion"}
 Ext.define('Shopware.apps.SwagImportExport.store.Conversion', {
     extend: 'Ext.data.Store',
     model: 'Shopware.apps.SwagImportExport.model.Conversion',
@@ -20,3 +21,4 @@ Ext.define('Shopware.apps.SwagImportExport.store.Conversion', {
         }
     }
 });
+//{/block}

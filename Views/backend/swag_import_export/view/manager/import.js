@@ -1,4 +1,3 @@
-
 //{namespace name=backend/swag_import_export/view/main}
 //{block name="backend/swag_import_export/view/manager/export"}
 Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {

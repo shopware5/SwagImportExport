@@ -12,6 +12,7 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\FileIO\FileWriter;
 use Shopware\CustomModels\ImportExport\Logger as LoggerEntity;
 use Shopware\CustomModels\ImportExport\Repository;
+use Shopware\CustomModels\ImportExport\Session;
 
 class Logger implements LoggerInterface
 {
@@ -59,10 +60,9 @@ class Logger implements LoggerInterface
     }
 
     /**
-     * @param array|string $messages
-     * @param string $status
+     * @inheritdoc
      */
-    public function write($messages, $status)
+    public function write($messages, $status, Session $session)
     {
         $loggerModel = new LoggerEntity();
 
@@ -71,6 +71,7 @@ class Logger implements LoggerInterface
         }
 
         $messages = implode(';', $messages);
+        $loggerModel->setSession($session);
         $loggerModel->setMessage($messages);
         $loggerModel->setCreatedAt('now');
         $loggerModel->setStatus($status);

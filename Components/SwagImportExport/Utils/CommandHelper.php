@@ -226,9 +226,14 @@ class CommandHelper
 
         $post = $dataWorkflow->export($postData, $this->filePath);
 
-        $message = $post['position'] . ' ' . $profile->getType() . ' exported successfully';
+        $message = sprintf(
+            '%s %s %s',
+            $post['position'],
+            SnippetsHelper::getNamespace('backend/swag_import_export/default_profiles')->get('type/' . $profile->getType()),
+            SnippetsHelper::getNamespace('backend/swag_import_export/log')->get('export/success')
+        );
 
-        $logger->write($message, 'false');
+        $logger->write($message, 'false', $dataSession->getEntity());
 
         $logData = new LogDataStruct(
             date("Y-m-d H:i:s"),
@@ -396,9 +401,14 @@ class CommandHelper
                 && ($dataSession->getTotalCount() == $post['position'])
                 && $logger->getMessage() === null
             ) {
-                $message = $post['position'] . ' ' . $post['adapter'] . ' imported successfully';
+                $message = sprintf(
+                    '%s %s %s',
+                    $post['position'],
+                    SnippetsHelper::getNamespace('backend/swag_import_export/default_profiles')->get($post['adapter']),
+                    SnippetsHelper::getNamespace('backend/swag_import_export/log')->get('import/success')
+                );
 
-                $logger->write($message, 'false');
+                $logger->write($message, 'false', $dataSession->getEntity());
 
                 $logDataStruct = new LogDataStruct(
                     date("Y-m-d H:i:s"),
@@ -413,7 +423,7 @@ class CommandHelper
 
             return array('success' => true, 'data' => $post);
         } catch (\Exception $e) {
-            $logger->write($e->getMessage(), 'true');
+            $logger->write($e->getMessage(), 'true', $dataSession->getEntity());
 
             $logDataStruct = new LogDataStruct(
                 date("Y-m-d H:i:s"),

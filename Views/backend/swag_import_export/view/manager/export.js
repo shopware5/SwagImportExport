@@ -1,10 +1,3 @@
-/**
- * Shopware SwagImportExport Plugin
- *
- * @category Shopware
- * @package Shopware\Plugins\SwagImportExport
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 //{namespace name=backend/swag_import_export/view/main}
 //{block name="backend/swag_import_export/view/manager/export"}
 Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
@@ -75,7 +68,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
                     cls: 'primary',
                     action: 'swag-import-export-manager-export-button',
                     handler: function(view) {
-                        me.fireEvent('export', view, me.sessionStore);
+                        me.fireEvent('export', view);
                     }
                 }]
             }]

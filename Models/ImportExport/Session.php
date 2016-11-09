@@ -8,6 +8,7 @@
 
 namespace Shopware\CustomModels\ImportExport;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -110,6 +111,18 @@ class Session extends ModelEntity
      * @ORM\Column(name="created_at", type="datetime")
      */
     protected $createdAt;
+
+    /**
+     * @var ArrayCollection $logs
+     *
+     * @ORM\OneToMany(targetEntity="Shopware\CustomModels\ImportExport\Logger", mappedBy="session")
+     */
+    protected $logs;
+
+
+    public function __construct() {
+        $this->logs = new ArrayCollection();
+    }
 
     /**
      * @return int

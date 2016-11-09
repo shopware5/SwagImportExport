@@ -1,11 +1,3 @@
-/**
- * Shopware SwagImportExport Plugin
- *
- * @category Shopware
- * @package Shopware\Plugins\SwagImportExport
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
-
 //{namespace name=backend/swag_import_export/view/profile}
 //{block name="backend/swag_import_export/view/profile/profile"}
 Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {

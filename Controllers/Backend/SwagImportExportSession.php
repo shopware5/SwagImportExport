@@ -26,6 +26,40 @@ class Shopware_Controllers_Backend_SwagImportExportSession extends Shopware_Cont
         $this->addAclPermission("deleteSession", "export", "Insuficient Permissions (deleteSession)");
     }
 
+    public function getSessionDetailsAction()
+    {
+        $manager = $this->getModelManager();
+        $sessionId = $this->Request()->getParam('sessionId', null);
+
+        if (null === $sessionId) {
+            $this->View()->assign(['success' => false, 'message' => 'No session found']);
+        }
+        /** @var Repository $sessionRepository */
+        $sessionRepository = $manager->getRepository(Session::class);
+        /** @var Session $sessionModel */
+        $sessionModel = $sessionRepository->find($sessionId);
+
+        if (empty($sessionModel)) {
+            $this->View()->assign(['success' => false, 'message' => 'No session found']);
+        }
+
+        $dataSet = [
+            'fileName'  => $sessionModel->getFileName(),
+            'type'      => $sessionModel->getType(),
+            'profile'   => $sessionModel->getProfile()->getName(),
+            'dataset'   => $sessionModel->getTotalCount(),
+            'position'  => $sessionModel->getPosition(),
+            'fileSize'  => DataHelper::formatFileSize($sessionModel->getFileSize()),
+            'userName'  => $sessionModel->getUserName(),
+            'date'      => $sessionModel->getCreatedAt()->format('d.m.Y H:i'),
+            'status'    => $sessionModel->getState()
+        ];
+
+        $result = $this->translateDataSet($dataSet);
+
+        $this->View()->assign(['success' => true, 'data' => $result]);
+    }
+
     public function getSessionsAction()
     {
         $manager = $this->getModelManager();
@@ -105,5 +139,23 @@ class Shopware_Controllers_Backend_SwagImportExportSession extends Shopware_Cont
                 'message' => $e->getMessage()
             ]);
         }
+    }
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    private function translateDataSet(array $data)
+    {
+        /** @var Shopware_Components_Snippet_Manager $snippetManager */
+        $snippetManager = $this->get('snippets');
+        $namespace = $snippetManager->getNamespace('backend/swag_import_export/session_data');
+        $result = [];
+
+        foreach ($data as $key => $value) {
+            $result[$namespace->get($key, $key)] = $namespace->get($value, $value);
+        }
+
+        return $result;
     }
 }
