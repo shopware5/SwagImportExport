@@ -7,6 +7,7 @@
  * file that was distributed with this source code.
  */
 
+use Doctrine\DBAL\DBALException;
 use Shopware\CustomModels\ImportExport\Profile;
 use Shopware\Components\SwagImportExport\Utils\TreeHelper;
 use Shopware\CustomModels\ImportExport\Repository;
@@ -62,7 +63,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         $profileRepository = $manager->getRepository(Profile::class);
 
         $query = $profileRepository->getProfilesListQuery(
-            $this->Request()->getParam('filter', ['hidden' => 0]),
+            $this->Request()->getParam('filter', []),
             $this->Request()->getParam('sort', []),
             $this->Request()->getParam('limit', null),
             $this->Request()->getParam('start')
@@ -85,7 +86,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
     }
 
     /**
-     * Returns the new profile
+     * @return Enlight_View|Enlight_View_Default
      */
     public function createProfilesAction()
     {
@@ -94,18 +95,24 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         try {
             $profileModel = $this->plugin->getProfileFactory()->createProfileModel($data);
 
-            $this->View()->assign([
+            return $this->View()->assign([
                 'success' => true,
                 'data' => [
                     'id' => $profileModel->getId(),
                     'name' => $profileModel->getName(),
                     'type' => $profileModel->getType(),
+                    'baseProfile' => $profileModel->getBaseProfile(),
                     'tree' => $profileModel->getTree(),
                     'default' => $profileModel->getDefault()
                 ]
             ]);
+        } catch (DBALException $e) {
+            return $this->View()->assign([
+                'success' => false,
+                'message' => $this->get('snippets')->getNamespace('backend/swag_import_export/controller')->get('swag_import_export/profile/duplicate_unique_error_msg')
+            ]);
         } catch (\Exception $e) {
-            $this->View()->assign(['success' => false, 'msg' => $e->getMessage()]);
+            return $this->View()->assign(['success' => false, 'msg' => $e->getMessage()]);
         }
     }
 
@@ -133,7 +140,8 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
     }
 
     /**
-     * Returns the new profile
+     * @return Enlight_View|Enlight_View_Default
+     * @throws Exception
      */
     public function updateProfilesAction()
     {
@@ -150,14 +158,27 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         $profileEntity->setName($data['name']);
 
         $manager->persist($profileEntity);
-        $manager->flush();
+        try {
+            $manager->flush();
+        } catch (DBALException $e) {
+            return $this->View()->assign([
+                'success' => false,
+                'message' => $this->get('snippets')->getNamespace('backend/swag_import_export/controller')->get('swag_import_export/profile/duplicate_unique_error_msg')
+            ]);
+        } catch (\Exception $e) {
+            return $this->View()->assign([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
 
-        $this->View()->assign([
+        return $this->View()->assign([
             'success' => true,
             'data' => [
                 'id' => $profileEntity->getId(),
                 'name' => $profileEntity->getName(),
                 'type' => $profileEntity->getType(),
+                'baseProfile' => $profileEntity->getBaseProfile(),
                 'tree' => $profileEntity->getTree(),
                 'default' => $profileEntity->getDefault()
             ]
@@ -184,11 +205,13 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
     }
 
     /**
-     * Returns the new profile
+     * @return Enlight_View|Enlight_View_Default
+     * @throws Exception
      */
     public function duplicateProfileAction()
     {
         $manager = $this->getModelManager();
+        $snippetManager = $this->get('snippets');
         $profileId = (int) $this->Request()->getParam('profileId');
 
         $loadedProfile = $manager->find(Profile::class, $profileId);
@@ -199,19 +222,33 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
 
         $profile = new Profile();
 
-        $profile->setName($loadedProfile->getName() . ' (copy)');
+        $profile->setBaseProfile($loadedProfile->getId());
+        $profile->setName($loadedProfile->getName() . ' (' . $snippetManager->getNamespace('backend/swag_import_export/controller')->get('swag_import_export/profile/copy') . ')');
         $profile->setType($loadedProfile->getType());
         $profile->setTree($loadedProfile->getTree());
 
         $manager->persist($profile);
-        $manager->flush();
+        try {
+            $manager->flush();
+        } catch (DBALException $e) {
+            return $this->View()->assign([
+                'success' => false,
+                'message' => $snippetManager->getNamespace('backend/swag_import_export/controller')->get('swag_import_export/profile/duplicate_unique_error_msg')
+            ]);
+        } catch (\Exception $e) {
+            return $this->View()->assign([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
 
-        $this->View()->assign([
+        return $this->View()->assign([
             'success' => true,
             'data' => [
                 'id' => $profile->getId(),
                 'name' => $profile->getName(),
                 'type' => $profile->getType(),
+                'baseProfile' => $profile->getBaseProfile(),
                 'tree' => $profile->getTree(),
                 'default' => $profile->getDefault()
             ]

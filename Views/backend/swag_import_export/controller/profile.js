@@ -34,35 +34,6 @@
 Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
     extend: 'Ext.app.Controller',
 
-    snippets: {
-        addChild: {
-            failureTitle: '{s name=swag_import_export/profile/add_child/failure_title}Create Child Node Failed{/s}'
-        },
-        save: {
-            title: '{s name=swag_import_export/profile/save/title}Swag import export{/s}',
-            success: '{s name=swag_import_export/profile/save/success}Successfully updated.{/s}',
-            failureTitle: '{s name=swag_import_export/profile/save/failure_title}Save Failed{/s}'
-        },
-        'delete': {
-            title: '{s name=swag_import_export/profile/delete/title}Delete Node?{/s}',
-            msg: '{s name=swag_import_export/profile/delete/msg}Are you sure you want to permanently delete the node?{/s}',
-            failed: '{s name=swag_import_export/profile/delete/failed}Delete List Failed{/s}'
-        },
-        'deleteProfile': {
-            title: '{s name=swag_import_export/profile/deleteProfile/title}Delete Profile?{/s}',
-            msg: '{s name=swag_import_export/profile/deleteProfile/msg}Are you sure you want to permanently delete the profile?{/s}'
-        },
-        addAttribute: {
-            failureTitle: '{s name=swag_import_export/profile/add_attribute/failure_title}Create Attribute Failed{/s}'
-        },
-        conversion: {
-            title: '{s name="swag_import_export/profile/conversion/title"}Import/Export conversion{/s}',
-            successMsg: '{s name="swag_import_export/profile/conversion/success_msg"}Conversion was save successfully{/s}',
-            failureMsg: '{s name="swag_import_export/profile/conversion/failure_msg"}Conversion saving failed{/s}'
-        },
-        duplicate: '{s name=swag_import_export/profile/duplicater}Profile was duplicate successfully{/s}'
-    },
-
     refs: [
         {
             ref: 'profileForm',
@@ -73,6 +44,9 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
         }, {
             ref: 'exportForm',
             selector: 'swag-import-export-manager-export'
+        }, {
+            ref: 'grid',
+            selector: 'swag-import-export-profile-grid{ isVisible(true) }'
         }
     ],
 
@@ -83,20 +57,28 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
         var me = this;
 
         me.control({
-            'swag-import-export-profile-profile': {
-                createOwnProfile: me.createOwnProfile,
-                deleteSelectedProfile: me.deleteSelectedProfile,
-                renameSelectedProfile: me.renameSelectedProfile,
-                duplicateSelectedProfile: me.duplicateSelectedProfile,
+            'swag-import-export-profile-grid{ isVisible(true) }': {
+                addProfile: me.onAddProfile,
+                showProfile: me.onShowProfile,
+                editProfile: me.onEditProfile,
+                deleteProfile: me.onDeleteProfile,
+                duplicateProfile: me.onDuplicateProfile,
+                checkboxfilterchange: me.onFilterDefaultProfiles,
+                searchfilterchange: me.onSearchProfile
+            },
+            'swag-import-export-profile-window{ isVisible(true) }': {
+                saveProfile: me.onSaveProfile,
+                saveNode: me.saveNode
+            },
+            'swag-import-export-profile-profile{ isVisible(true) }': {
                 showMappings: me.showMappings,
                 addNewIteration: me.addNewIteration,
                 addNewNode: me.addNewNode,
-                saveNode: me.saveNode,
                 deleteNode: me.deleteNode,
                 addNewAttribute: me.addNewAttribute,
                 changeColumn: me.changeColumn
             },
-            'swag-import-export-window': {
+            'swag-import-export-mapping-window{ isVisible(true) }': {
                 addConversion: me.addConversion,
                 updateConversion: me.updateConversion,
                 deleteConversion: me.deleteConversion,
@@ -107,332 +89,134 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
         me.callParent(arguments);
     },
 
-    addConversion: function(grid, editor) {
-        var me = this;
+    onSearchProfile: function(field, newValue) {
+        var searchString = Ext.String.trim(newValue),
+            checkboxFilter = field.previousSibling('#defaultprofilefilter'),
+            store = field.up('grid').getStore();
 
-        editor.cancelEdit();
-        var conversion = Ext.create('Shopware.apps.SwagImportExport.model.Conversion', {
-            profileId: 1,
-            variable: '',
-            exportConversion: '',
-            importConversion: ''
-        });
+        //scroll the store to first page
+        store.currentPage = 1;
 
-        grid.getStore().add(conversion);
-        editor.startEdit(conversion, 0);
+        //If the search-value is empty, reset the filter
+        if ( searchString.length === 0 ) {
+            store.filters.removeAtKey('search');
+            store.load();
+        } else {
+            //Loads the store with a special filter
+            store.filter([
+                { id: 'search', property: 'name', value: '%' + searchString + '%', expression: 'LIKE' }
+            ]);
+        }
     },
 
-    updateConversion: function(store, flag) {
-        var me = this;
+    onFilterDefaultProfiles: function(checkbox, value) {
+        var searchfilter = checkbox.nextSibling('#searchfield'),
+            searchString = Ext.String.trim(searchfilter.getValue()),
+            store = checkbox.up('grid').getStore();
 
-        if (flag === true){
-            store.sync({
-                success: function(){
-                    Shopware.Notification.createGrowlMessage(
-                        me.snippets.conversion.title,
-                        me.snippets.conversion.successMsg
-                    );
-                },
-                failure: function() {
-                    Shopware.Notification.createGrowlMessage(
-                        me.snippets.conversion.title,
-                        me.snippets.conversion.failureMsg
-                    );
+        //scroll the store to first page
+        store.currentPage = 1;
+
+        if (value) {
+            store.filter([
+                { id: 'default', property: 'default', value: 0 }
+            ]);
+        } else {
+            store.filters.removeAtKey('default');
+            store.load();
+        }
+    },
+
+    onAddProfile: function() {
+        var record = Ext.create('Shopware.apps.SwagImportExport.model.ProfileList');
+
+        Ext.create('Shopware.apps.SwagImportExport.view.profile.Window').show(null, function() {
+            this.down('#profilebaseform').loadRecord(record);
+        });
+    },
+
+    onEditProfile: function(grid, record) {
+        Ext.create('Shopware.apps.SwagImportExport.view.profile.Window').show(null, function() {
+            this.down('#profilebaseform').loadRecord(record);
+            this.setProfileId(record.get('id'));
+        });
+    },
+
+    onShowProfile: function(grid, record) {
+        Ext.create('Shopware.apps.SwagImportExport.view.profile.Window', {
+            readOnly: true
+        }).show(null, function() {
+            this.down('#profilebaseform').loadRecord(record);
+            this.setProfileId(record.get('id'));
+        });
+    },
+
+    onSaveProfile: function(window) {
+        var me = this,
+            store = window.profileStore,
+            form = window.down('#profilebaseform'),
+            record = form.getRecord();
+
+        if (form.getForm().isValid()) {
+            form.getForm().updateRecord(record);
+            record.join(store);
+
+            window.setLoading(true);
+
+            record.save({
+                callback: function(record, operation, success) {
+                    var result = operation.request.scope.reader.jsonData;
+                    window.setLoading(false);
+                    if (result.success) {
+                        window.down('#profilebaseform').loadRecord(record);
+                        window.setProfileId(record.get('id'));
+                        me.getGrid().getStore().load();
+                        Shopware.Notification.createGrowlMessage(
+                            '{s name=swag_import_export/profile/save/title}Swag import export{/s}',
+                            '{s name=swag_import_export/profile/save/success}Successfully updated.{/s}'
+                        );
+                    } else {
+                        Shopware.Notification.createGrowlMessage(
+                            '{s name=swag_import_export/profile/save/title}Swag import export{/s}',
+                            result.message
+                        );
+                    }
                 }
             });
         } else {
-            store.sync();
+            Ext.MessageBox.show({
+                title: '{s name="swag_import_export/profile/new_profile/failure_title"}Create New Profile Failed{/s}',
+                msg:  '{s name="swag_import_export/profile/new_profile/not_all_fields_filled_error"}Not all fields are filled!{/s}',
+                icon: Ext.Msg.ERROR,
+                buttons: Ext.Msg.OK
+            });
         }
     },
 
-    deleteConversion: function(store, index) {
-        store.removeAt(index);
-        store.sync();
-    },
-
-    deleteMultipleConversions: function(store, selectionModel) {
-        store.remove(selectionModel.getSelection());
-        store.sync();
-    },
-
-    /**
-     * Shows window with fields for the new profile and adds it
-     */
-    createOwnProfile: function(store, combo) {
-        this.getView('profile.window.NewProfile').create({ combo: combo }).show();
-    },
-
-    /**
-     * Renames the selected profile
-     */
-    renameSelectedProfile: function(store, id, combo) {
-        this.getView('profile.window.RenameProfile').create({ store: store, profileId: id, combo: combo }).show();
-    },
-
-    /**
-     * Duplicate the selected profile
-     */
-    duplicateSelectedProfile: function(combobox, store, id) {
-        var me = this;
-        Ext.Ajax.request({
-            url: '{url controller="SwagImportExportProfile" action="duplicateProfile"}',
-            method: 'POST',
-            params: { profileId: id },
-            success: function(response) {
-                var result = Ext.decode(response.responseText);
-                store.reload();
-                Shopware.Notification.createGrowlMessage(
-                    me.snippets.save.title,
-                    me.snippets.duplicate
-                );
-            },
-            failure: function(response) {
-                Shopware.Msg.createStickyGrowlMessage({
-                    title: 'An error occured',
-                    text: "Profile was not created"
-                });
-            }
-        });
-    },
-
-    /**
-     * Deletes the selected profile
-     */
-    deleteSelectedProfile: function(combobox, store, id) {
-        var me = this;
-        Ext.Msg.show({
-            title: me.snippets.deleteProfile.title,
-            msg: me.snippets.deleteProfile.msg,
-            buttons: Ext.Msg.YESNO,
-            fn: function(response) {
-                if (response === 'yes') {
-                    combobox.reset();
-                    store.remove(store.getById(id));
-                    store.sync();
-                    me.checkProfileSelection(store);
-                }
-            }
-        });
-    },
-
-    /**
-     * Remove selected profile in import and export tabs if
-     * profile id is not found in store records
-     *
-     * @param @param [Ext.data.Store] store - profiles
-     */
-    checkProfileSelection: function(store) {
+    onDeleteProfile: function(grid, selection) {
         var me = this,
-            importForm = me.getImportForm(),
-            exportForm = me.getExportForm(),
-            importFormPanel = importForm.formPanel.getForm(),
-            exportFormPanel = exportForm.formPanel.getForm(),
-            importValues = importFormPanel.getValues(),
-            exportValues = exportFormPanel.getValues();
+            record = selection[0];
 
-        var importProfileId = importValues.profile;
-        var exportProfileId = exportValues.profile;
-
-        //remove selection of profile for import
-        if (!store.getById(importProfileId)) {
-            importFormPanel.setValues({ 'profile': '' });
-        }
-
-        //remove selection of profile for export
-        if (!store.getById(exportProfileId)) {
-            exportFormPanel.setValues({ 'profile': '' });
-        }
-    },
-
-    /**
-     * Shows the window with the conversions for the current profile
-     *
-     * @param { Ext.tree.Panel } treeStore
-     */
-    showMappings: function(profileId) {
-        var me = this;
-
-        me.mainWindow = me.getView('profile.window.Mappings').create({ profileId: profileId }).show();
-    },
-
-    /**
-     * Adds new node to the tree as a child of the selected node
-     *
-     * @param { Ext.tree.Panel } treePanel
-     * @param { Ext.data.TreeStore } treeStore
-     * @param { int } selectedNodeId
-     */
-    addNewIteration: function(treePanel, treeStore, selectedNodeId) {
-        var me = this;
-
-        var node = treeStore.getById(selectedNodeId);
-        if (node.get('type') !== 'iteration') {
-            node.set('type', '');
-            node.set('iconCls', '');
-        }
-
-        var data = { text: "New Iteration Node", adapter:'none', expanded: true, type: 'iteration', iconCls: 'sprite-blue-folders-stack', inIteration: true };
-
-        var newNode = node.appendChild(data);
-        treeStore.sync({
-            failure: function(batch, options) {
-                var error = batch.exceptions[0].getError(),
-                    msg = Ext.isObject(error) ? error.status + ' ' + error.statusText : error;
-
-                Ext.MessageBox.show({
-                    title: me.snippets.addChild.failureTitle,
-                    msg: msg,
-                    icon: Ext.Msg.ERROR,
-                    buttons: Ext.Msg.OK
-                });
-            },
-            success: function() {
-                treePanel.expand();
-                treePanel.getSelectionModel().select(treeStore.getById(newNode.data.id));
-            }
-        });
-    },
-
-    /**
-     * Adds new node to the tree as a child of the selected node
-     *
-     * @param { Ext.tree.Panel } treePanel
-     * @param { Ext.data.TreeStore } treeStore
-     * @param { int } selectedNodeId
-     */
-    addNewNode: function(treePanel, treeStore, selectedNodeId) {
-        var me = this;
-
-        var node = treeStore.getById(selectedNodeId);
-        if (node.get('type') !== 'iteration') {
-            node.set('type', '');
-            node.set('iconCls', '');
-        }
-
-        var data = { };
-        if (node.get('inIteration') === true) {
-            data = { text: "New Node", expanded: true, type: 'leaf', iconCls: 'sprite-blue-document-text', inIteration: true, adapter: node.get('adapter') };
-        } else {
-            data = { text: "New Node", expanded: true };
-        }
-        var newNode = node.appendChild(data);
-        treeStore.sync({
-            failure: function(batch, options) {
-                var error = batch.exceptions[0].getError(),
-                    msg = Ext.isObject(error) ? error.status + ' ' + error.statusText : error;
-
-                Ext.MessageBox.show({
-                    title: me.snippets.addChild.failureTitle,
-                    msg: msg,
-                    icon: Ext.Msg.ERROR,
-                    buttons: Ext.Msg.OK
-                });
-            },
-            success: function() {
-                treePanel.expand();
-                treePanel.getSelectionModel().select(treeStore.getById(newNode.data.id));
-            }
-        });
-    },
-
-    /**
-     * Saves the changes of the currently selected node
-     *
-     * @param { Ext.data.TreeStore } treeStore
-     * @param { int } selectedNodeId
-     * @param { string } nodeName
-     * @param { string } swColumn
-     */
-    saveNode: function(treePanel, treeStore, selectedNodeId, nodeName, swColumn, defaultValue, adapter, parentKey) {
-        var me = this;
-
-        var node = treeStore.getById(selectedNodeId);
-
-        if(!node) {
+        if (record.get('default') === true) {
+            Shopware.Notification.createGrowlMessage(
+                '{s name=swag_import_export/profile/delete_profile}Delete profile{/s}',
+                '{s name=swag_import_export/profile/delete_default_msg}Default profiles can not be removed.{/s}'
+            );
             return;
         }
-
-        node.set('text', nodeName);
-        node.set('swColumn', swColumn);
-        node.set('defaultValue', defaultValue);
-
-        // change only when in iteration (because otherwise adapter will be empty)
-        if (node.get('type') === 'iteration') {
-            node.set('adapter', adapter);
-            node.set('parentKey', parentKey);
-        }
-
-        treeStore.sync({
-            success: function() {
-                Shopware.Notification.createGrowlMessage(
-                    me.snippets.save.title,
-                    me.snippets.save.success
-                );
-                treePanel.getSelectionModel().deselectAll(true);
-                treePanel.expand();
-                treePanel.getSelectionModel().select(treeStore.getById(node.get('id')));
-            },
-            failure: function(batch, options) {
-                var error = batch.exceptions[0].getError(),
-                    msg = Ext.isObject(error) ? error.status + ' ' + error.statusText : error;
-
-                Ext.MessageBox.show({
-                    title: me.snippets.save.failureTitle,
-                    msg: msg,
-                    icon: Ext.Msg.ERROR,
-                    buttons: Ext.Msg.OK
-                });
-            }
-        });
-    },
-
-    /**
-     * Deletes the selected node
-     */
-    deleteNode: function(treeStore, selectedNodeId, selModel) {
-        var me = this;
         Ext.Msg.show({
-            title: me.snippets.delete.title,
-            msg: me.snippets.delete.msg,
+            title: '{s name=swag_import_export/profile/deleteProfile/title}Delete Profile?{/s}',
+            msg: '{s name=swag_import_export/profile/deleteProfile/msg}Are you sure you want to permanently delete the profile?{/s}',
             buttons: Ext.Msg.YESNO,
             fn: function(response) {
                 if (response === 'yes') {
-                    var node = treeStore.getById(selectedNodeId);
-                    var parentNode = node.parentNode;
-                    parentNode.removeChild(node);
-
-                    if (parentNode.get('type') !== 'iteration' && parentNode.get('inIteration') === true) {
-                        var bChildNodes = false;
-
-                        // check if there is at least one leaf, iteration or node
-                        for (var i = 0; i < parentNode.childNodes.length; i++) {
-                            if (parentNode.childNodes[i].get('type') !== 'attribute') {
-                                bChildNodes = true;
-                                break;
-                            }
-                        }
-
-                        if (!bChildNodes) {
-                            parentNode.set('type', 'leaf');
-                            parentNode.set('iconCls', 'sprite-icon_taskbar_top_inhalte_active');
-                        }
-                    }
-
-                    treeStore.sync({
-                        success: function() {
-                            selModel.deselectAll();
-                            selModel.select(parentNode);
-                        },
-                        failure: function(batch, options) {
-                            var error = batch.exceptions[0].getError(),
-                                msg = Ext.isObject(error) ? error.status + ' ' + error.statusText : error;
-
-                            Ext.MessageBox.show({
-                                title: me.snippets.delete.failed,
-                                msg: msg,
-                                icon: Ext.Msg.ERROR,
-                                buttons: Ext.Msg.OK
-                            });
+                    record.destroy({
+                        callback: function() {
+                            Shopware.Notification.createGrowlMessage(
+                                '{s name=swag_import_export/profile/save/title}Swag import export{/s}',
+                                '{s name=swag_import_export/profile/save/success}Successfully updated.{/s}'
+                            );
+                            grid.getStore().load();
                         }
                     });
                 }
@@ -440,38 +224,33 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
         });
     },
 
-    /**
-     * Adds new attribute for the selected node
-     *
-     * @param { Ext.tree.Panel } treePanel
-     * @param { Ext.data.TreeStore } treeStore
-     * @param { int } selectedNodeId
-     */
-    addNewAttribute: function(treePanel, treeStore, selectedNodeId) {
+    onDuplicateProfile: function(grid, record) {
         var me = this;
-        var node = treeStore.getById(selectedNodeId);
-        node.set('leaf', false);
-        node.set('expanded', true);
 
-        var children = node.childNodes;
-        var data = { text: "New Attribute", leaf: true, type: 'attribute', iconCls: 'sprite-sticky-notes-pin', inIteration: true, adapter: node.get('adapter') };
-        var newNode = node.appendChild(data);
-
-        treeStore.sync({
-            failure: function(batch, options) {
-                var error = batch.exceptions[0].getError(),
-                    msg = Ext.isObject(error) ? error.status + ' ' + error.statusText : error;
-
-                Ext.MessageBox.show({
-                    title: me.snippets.addAtrribute.failureTitle,
-                    msg: msg,
-                    icon: Ext.Msg.ERROR,
-                    buttons: Ext.Msg.OK
-                });
+        Ext.Ajax.request({
+            url: '{url controller="SwagImportExportProfile" action="duplicateProfile"}',
+            method: 'POST',
+            params: { profileId: record.get('id') },
+            success: function(response) {
+                var result = Ext.JSON.decode(response.responseText);
+                if (result.success) {
+                    grid.getStore().load();
+                    Shopware.Notification.createGrowlMessage(
+                        '{s name=swag_import_export/profile/save/title}Swag import export{/s}',
+                        '{s name=swag_import_export/profile/duplicater}Profile was duplicate successfully{/s}'
+                    );
+                } else {
+                    Shopware.Notification.createGrowlMessage(
+                        '{s name=swag_import_export/profile/save/title}Swag import export{/s}',
+                        result.message
+                    );
+                }
             },
-            success: function() {
-                treePanel.expand();
-                treePanel.getSelectionModel().select(treeStore.getById(newNode.getId()));
+            failure: function(response) {
+                Shopware.Msg.createStickyGrowlMessage({
+                    title: 'An error occured',
+                    text: "Profile was not created"
+                });
             }
         });
     },
@@ -522,7 +301,6 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                 fieldType = record.get('type');
             }
         }
-
         //Merge component settings depending on field type
         settings = Ext.apply({ }, settings, me.getDefaultValueType(fieldType));
 
@@ -539,7 +317,6 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
      * @returns Object|boolean
      */
     getDefaultValueType: function(column) {
-
         if (!column) {
             return false;
         }
@@ -586,7 +363,290 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                 };
                 break;
         }
+    },
 
+    /**
+     * Profile configuration handling
+     */
+
+    /**
+     * Shows the window with the conversions for the current profile
+     *
+     * @param { Ext.tree.Panel } treeStore
+     */
+    showMappings: function(profileId) {
+        var me = this;
+
+        Ext.create('Shopware.apps.SwagImportExport.view.profile.window.Mappings', { profileId: profileId }).show();
+    },
+
+    /**
+     * Adds new node to the tree as a child of the selected node
+     *
+     * @param { Ext.tree.Panel } treePanel
+     * @param { Ext.data.TreeStore } treeStore
+     * @param { int } selectedNodeId
+     */
+    addNewIteration: function(treePanel, treeStore, selectedNodeId) {
+        var me = this;
+
+        var node = treeStore.getById(selectedNodeId);
+        if (node.get('type') !== 'iteration') {
+            node.set('type', '');
+            node.set('iconCls', '');
+        }
+
+        var data = { text: "New Iteration Node", adapter:'none', expanded: true, type: 'iteration', iconCls: 'sprite-blue-folders-stack', inIteration: true };
+
+        var newNode = node.appendChild(data);
+        treeStore.sync({
+            failure: function(batch, options) {
+                var error = batch.exceptions[0].getError(),
+                    msg = Ext.isObject(error) ? error.status + ' ' + error.statusText : error;
+
+                Ext.MessageBox.show({
+                    title: '{s name=swag_import_export/profile/add_child/failure_title}Create Child Node Failed{/s}',
+                    msg: msg,
+                    icon: Ext.Msg.ERROR,
+                    buttons: Ext.Msg.OK
+                });
+            },
+            success: function() {
+                treePanel.expand();
+                treePanel.getSelectionModel().select(treeStore.getById(newNode.data.id));
+            }
+        });
+    },
+
+    /**
+     * Adds new node to the tree as a child of the selected node
+     *
+     * @param { Ext.tree.Panel } treePanel
+     * @param { Ext.data.TreeStore } treeStore
+     * @param { int } selectedNodeId
+     */
+    addNewNode: function(treePanel, treeStore, selectedNodeId) {
+        var me = this;
+
+        var node = treeStore.getById(selectedNodeId);
+        if (node.get('type') !== 'iteration') {
+            node.set('type', '');
+            node.set('iconCls', '');
+        }
+
+        var data = { };
+        if (node.get('inIteration') === true) {
+            data = { text: "New Node", expanded: true, type: 'leaf', iconCls: 'sprite-blue-document-text', inIteration: true, adapter: node.get('adapter') };
+        } else {
+            data = { text: "New Node", expanded: true };
+        }
+        var newNode = node.appendChild(data);
+        treeStore.sync({
+            failure: function(batch, options) {
+                var error = batch.exceptions[0].getError(),
+                    msg = Ext.isObject(error) ? error.status + ' ' + error.statusText : error;
+
+                Ext.MessageBox.show({
+                    title: '{s name=swag_import_export/profile/add_child/failure_title}Create Child Node Failed{/s}',
+                    msg: msg,
+                    icon: Ext.Msg.ERROR,
+                    buttons: Ext.Msg.OK
+                });
+            },
+            success: function() {
+                treePanel.expand();
+                treePanel.getSelectionModel().select(treeStore.getById(newNode.data.id));
+            }
+        });
+    },
+
+    /**
+     * Saves the changes of the currently selected node
+     *
+     * @param { Ext.data.TreeStore } treeStore
+     * @param { int } selectedNodeId
+     * @param { string } nodeName
+     * @param { string } swColumn
+     */
+    saveNode: function(treePanel, treeStore, selectedNodeId, nodeName, swColumn, defaultValue, adapter, parentKey) {
+        var me = this;
+
+        var node = treeStore.getById(selectedNodeId);
+
+        if(!node) {
+            return;
+        }
+
+        node.set('text', nodeName);
+        node.set('swColumn', swColumn);
+        node.set('defaultValue', defaultValue);
+
+        // change only when in iteration (because otherwise adapter will be empty)
+        if (node.get('type') === 'iteration') {
+            node.set('adapter', adapter);
+            node.set('parentKey', parentKey);
+        }
+
+        treeStore.sync({
+            success: function() {
+                treePanel.getSelectionModel().deselectAll(true);
+                treePanel.expand();
+                treePanel.getSelectionModel().select(treeStore.getById(node.get('id')));
+            },
+            failure: function(batch, options) {
+                var error = batch.exceptions[0].getError(),
+                    msg = Ext.isObject(error) ? error.status + ' ' + error.statusText : error;
+
+                Ext.MessageBox.show({
+                    title: '{s name=swag_import_export/profile/save/failure_title}Save Failed{/s}',
+                    msg: msg,
+                    icon: Ext.Msg.ERROR,
+                    buttons: Ext.Msg.OK
+                });
+            }
+        });
+    },
+
+    /**
+     * Deletes the selected node
+     */
+    deleteNode: function(treeStore, selectedNodeId, selModel) {
+        var me = this;
+        Ext.Msg.show({
+            title: '{s name=swag_import_export/profile/delete/title}Delete Node?{/s}',
+            msg: '{s name=swag_import_export/profile/delete/msg}Are you sure you want to permanently delete the node?{/s}',
+            buttons: Ext.Msg.YESNO,
+            fn: function(response) {
+                if (response === 'yes') {
+                    var node = treeStore.getById(selectedNodeId);
+                    var parentNode = node.parentNode;
+                    parentNode.removeChild(node);
+
+                    if (parentNode.get('type') !== 'iteration' && parentNode.get('inIteration') === true) {
+                        var bChildNodes = false;
+
+                        // check if there is at least one leaf, iteration or node
+                        for (var i = 0; i < parentNode.childNodes.length; i++) {
+                            if (parentNode.childNodes[i].get('type') !== 'attribute') {
+                                bChildNodes = true;
+                                break;
+                            }
+                        }
+
+                        if (!bChildNodes) {
+                            parentNode.set('type', 'leaf');
+                            parentNode.set('iconCls', 'sprite-icon_taskbar_top_inhalte_active');
+                        }
+                    }
+
+                    treeStore.sync({
+                        success: function() {
+                            selModel.deselectAll();
+                            selModel.select(parentNode);
+                        },
+                        failure: function(batch, options) {
+                            var error = batch.exceptions[0].getError(),
+                                msg = Ext.isObject(error) ? error.status + ' ' + error.statusText : error;
+
+                            Ext.MessageBox.show({
+                                title: '{s name=swag_import_export/profile/delete/failed}Delete List Failed{/s}',
+                                msg: msg,
+                                icon: Ext.Msg.ERROR,
+                                buttons: Ext.Msg.OK
+                            });
+                        }
+                    });
+                }
+            }
+        });
+    },
+
+    /**
+     * Adds new attribute for the selected node
+     *
+     * @param { Ext.tree.Panel } treePanel
+     * @param { Ext.data.TreeStore } treeStore
+     * @param { int } selectedNodeId
+     */
+    addNewAttribute: function(treePanel, treeStore, selectedNodeId) {
+        var me = this;
+        var node = treeStore.getById(selectedNodeId);
+        node.set('leaf', false);
+        node.set('expanded', true);
+
+        var children = node.childNodes;
+        var data = { text: "New Attribute", leaf: true, type: 'attribute', iconCls: 'sprite-sticky-notes-pin', inIteration: true, adapter: node.get('adapter') };
+        var newNode = node.appendChild(data);
+
+        treeStore.sync({
+            failure: function(batch, options) {
+                var error = batch.exceptions[0].getError(),
+                    msg = Ext.isObject(error) ? error.status + ' ' + error.statusText : error;
+
+                Ext.MessageBox.show({
+                    title: '{s name=swag_import_export/profile/add_attribute/failure_title}Create Attribute Failed{/s}',
+                    msg: msg,
+                    icon: Ext.Msg.ERROR,
+                    buttons: Ext.Msg.OK
+                });
+            },
+            success: function() {
+                treePanel.expand();
+                treePanel.getSelectionModel().select(treeStore.getById(newNode.getId()));
+            }
+        });
+    },
+
+    /**
+     * Conversion handling
+     */
+
+    addConversion: function(grid, editor) {
+        var me = this;
+
+        editor.cancelEdit();
+        var conversion = Ext.create('Shopware.apps.SwagImportExport.model.Conversion', {
+            profileId: 1,
+            variable: '',
+            exportConversion: '',
+            importConversion: ''
+        });
+
+        grid.getStore().add(conversion);
+        editor.startEdit(conversion, 0);
+    },
+
+    updateConversion: function(store, flag) {
+        var me = this;
+
+        if (flag === true){
+            store.sync({
+                success: function(){
+                    Shopware.Notification.createGrowlMessage(
+                        '{s name="swag_import_export/profile/conversion/title"}Import/Export conversion{/s}',
+                        '{s name="swag_import_export/profile/conversion/success_msg"}Conversion was save successfully{/s}'
+                    );
+                },
+                failure: function() {
+                    Shopware.Notification.createGrowlMessage(
+                        '{s name="swag_import_export/profile/conversion/title"}Import/Export conversion{/s}',
+                        '{s name="swag_import_export/profile/conversion/failure_msg"}Conversion saving failed{/s}'
+                    );
+                }
+            });
+        } else {
+            store.sync();
+        }
+    },
+
+    deleteConversion: function(store, index) {
+        store.removeAt(index);
+        store.sync();
+    },
+
+    deleteMultipleConversions: function(store, selectionModel) {
+        store.remove(selectionModel.getSelection());
+        store.sync();
     }
 });
 //{/block}

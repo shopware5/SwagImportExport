@@ -58,10 +58,6 @@ Ext.define('Shopware.apps.SwagImportExport.view.Window', {
         me.callParent(arguments);
     },
     
-    /*{if {acl_is_allowed privilege=profile}}*/
-    profilesStore: Ext.create('Shopware.apps.SwagImportExport.store.ProfileList').load(),
-    /*{/if}*/
-
     logStore: Ext.create('Shopware.apps.SwagImportExport.store.Log'),
 
     createTabPanel: function() {
@@ -69,20 +65,20 @@ Ext.define('Shopware.apps.SwagImportExport.view.Window', {
         var aclItems = [];
 
         /*{if {acl_is_allowed privilege=export} OR {acl_is_allowed privilege=import}}*/
-        aclItems.push(Ext.create('Shopware.apps.SwagImportExport.view.manager.Manager', {
-            profilesStore: me.profilesStore
-        }));
+        aclItems.push(Ext.create('Shopware.apps.SwagImportExport.view.manager.Manager'));
         /*{/if}*/
 
         /*{if {acl_is_allowed privilege=profile}}*/
-        aclItems.push(Ext.create('Shopware.apps.SwagImportExport.view.profile.Profile', {
-            profilesStore: me.profilesStore
+        aclItems.push(Ext.create('Shopware.apps.SwagImportExport.view.profile.Grid', {
+            // using new instance here because grid uses filtering
+            store: Ext.create('Shopware.apps.SwagImportExport.store.ProfileList'),
+            listeners: {
+                activate: function(grid) {
+                    grid.getStore().load();
+                }
+            }
         }));
         /*{/if}*/
-
-        aclItems.push(Ext.create('Shopware.apps.SwagImportExport.view.log.Log', {
-            logStore: me.logStore
-        }));
 
         return Ext.create('Ext.tab.Panel', {
             name: 'main-tab',

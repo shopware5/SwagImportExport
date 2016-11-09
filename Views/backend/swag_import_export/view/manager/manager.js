@@ -60,6 +60,10 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Manager', {
         ];
 
         me.callParent(arguments);
+
+        me.on('activate', function() {
+            me.tabPanel.getActiveTab().fireEvent('activate', me.tabPanel.getActiveTab());
+        });
     },
 
     /**
@@ -73,17 +77,46 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Manager', {
 
         /* {if {acl_is_allowed privilege=export}} */
         aclItems.push(Ext.create('Shopware.apps.SwagImportExport.view.manager.Export', {
-            profilesStore: me.profilesStore,
             itemId: 'exportmanager',
             border: false,
-            sessionStore: me.sessionStore
+            sessionStore: me.sessionStore,
+            listeners: {
+                activate: {
+                    buffer: 150,
+                    fn: function(container) {
+                        var combo = container.profileCombo,
+                            store = combo.getStore();
+
+                        store.load({
+                            callback: function() {
+                                if (combo.isDirty() && !store.getById(combo.getValue())) {
+                                    combo.clearValue();
+                                }
+                            }
+                        });
+                    }
+                }
+            }
         }));
         /* {/if} */
 
         /* {if {acl_is_allowed privilege=import}} */
         aclItems.push(Ext.create('Shopware.apps.SwagImportExport.view.manager.Import', {
             itemId: 'importManager',
-            profilesStore: me.profilesStore
+            listeners: {
+                activate: function(container) {
+                    var combo = container.profileCombo,
+                        store = combo.getStore();
+
+                    store.load({
+                        callback: function() {
+                            if (combo.isDirty() && !store.getById(combo.getValue())) {
+                                combo.clearValue();
+                            }
+                        }
+                    });
+                }
+            }
         }));
         /* {/if} */
 
@@ -93,10 +126,12 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Manager', {
         }));
         /* {/if} */
 
-        return Ext.create('Ext.tab.Panel', {
+        me.tabPanel = Ext.create('Ext.tab.Panel', {
             name: 'manager-main-tab',
             items: aclItems
         });
+
+        return me.tabPanel;
     }
 });
 //{/block}

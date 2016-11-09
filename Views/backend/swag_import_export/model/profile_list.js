@@ -44,8 +44,9 @@ Ext.define('Shopware.apps.SwagImportExport.model.ProfileList', {
      */
     fields: [
         // {block name="backend/swag_import_export/model/profile_list/fields"}{/block}
-        { name: 'id', type: 'string' },
+        { name: 'id', type: 'int', useNull: true },
         { name: 'type', type: 'string' },
+        { name: 'baseProfile', type: 'int', useNull: true },
         { name: 'name', type: 'string' },
         { name: 'translation', persist: false },
         { name: 'default', type: 'boolean', persist: false },
