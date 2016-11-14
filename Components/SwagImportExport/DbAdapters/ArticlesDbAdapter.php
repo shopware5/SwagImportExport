@@ -78,7 +78,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     /**
      * @var array
      */
-    protected $defaultValues = array();
+    protected $defaultValues = [];
 
     /**
      * @var \Shopware_Components_Config
@@ -172,7 +172,7 @@ class ArticlesDbAdapter implements DataDbAdapter
 
         $records = $builder->getQuery()->getResult();
 
-        $result = array();
+        $result = [];
         if ($records) {
             $result = array_column($records, 'id');
         }
@@ -210,7 +210,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         //prices
         $columns['price'] = array_merge(
             $columns['price'],
-            array('customerGroup.taxInput as taxInput', 'articleTax.tax as tax')
+            ['customerGroup.taxInput as taxInput', 'articleTax.tax as tax']
         );
 
         $priceBuilder = $this->getPriceBuilder($columns['price'], $ids);
@@ -323,7 +323,7 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     protected function getAssignedCategoryNames($categories)
     {
-        $categoryIds = array();
+        $categoryIds = [];
         foreach ($categories as $category) {
             if (!empty($category['categoryId'])) {
                 $categoryIds[] = (string) $category['categoryId'];
@@ -342,13 +342,13 @@ class ArticlesDbAdapter implements DataDbAdapter
         $categoryIds = array_filter($categoryIds);
 
         $categoriesNames = $this->modelManager->createQueryBuilder()
-            ->select(array('category.id, category.name'))
+            ->select(['category.id, category.name'])
             ->from('Shopware\Models\Category\Category', 'category')
             ->where('category.id IN (:ids)')
             ->setParameter('ids', $categoryIds)
             ->getQuery()->getResult();
 
-        $names = array();
+        $names = [];
         foreach ($categoriesNames as $name) {
             $names[$name['id']] = $name['name'];
         }
@@ -363,7 +363,7 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     protected function generatePath($category, $mapper)
     {
-        $ids = array();
+        $ids = [];
         if (!empty($category['categoryPath'])) {
             foreach (explode('|', $category['categoryPath']) as $id) {
                 $ids[] = $mapper[$id];
@@ -403,7 +403,7 @@ class ArticlesDbAdapter implements DataDbAdapter
 
         //all translation fields that can be translated for an article
         $translationFields = $this->getTranslationFields();
-        $rows = array();
+        $rows = [];
         foreach ($translations as $index => $record) {
             $articleId = $record['articleId'];
             $variantId = $record['variantId'];
@@ -429,19 +429,19 @@ class ArticlesDbAdapter implements DataDbAdapter
         $shops = $this->getShops();
         unset($shops[0]); //removes default language
 
-        $result = array();
+        $result = [];
         foreach ($rows as $vId => $row) {
             foreach ($shops as $shop) {
                 $shopId = $shop->getId();
                 if (isset($row[$shopId])) {
                     $result[] = $row[$shopId];
                 } else {
-                    $result[] = array(
+                    $result[] = [
                         'articleId' => $row['helper']['articleId'],
                         'variantId' => $vId,
                         'languageId' => (string) $shopId,
                         'variantKind' => $row['helper']['variantKind'],
-                    );
+                    ];
                 }
             }
         }
@@ -499,7 +499,7 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     private function getTranslationFields()
     {
-        $translationFields = array(
+        $translationFields = [
             'metaTitle' => 'metaTitle',
             'txtArtikel' => 'name',
             'txtkeywords' => 'keywords',
@@ -507,7 +507,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             'txtzusatztxt' => 'additionalText',
             'txtshortdescription' => 'description',
             'txtlangbeschreibung' => 'descriptionLong'
-        );
+        ];
 
         $attributes = $this->getTranslationAttr();
         foreach ($attributes as $attr) {
@@ -532,10 +532,10 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     public function getDefaultColumns()
     {
-        $otherColumns = array(
+        $otherColumns = [
             'variantsUnit.unit as unit',
             'articleEsd.file as esd',
-        );
+        ];
 
         $columns['article'] = array_merge(
             $this->getArticleColumns(),
@@ -727,7 +727,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         $records = $this->eventManager->filter(
             'Shopware_Components_SwagImportExport_DbAdapters_ArticlesDbAdapter_Write',
             $records,
-            array('subject' => $this)
+            ['subject' => $this]
         );
 
         $this->performImport($records);
@@ -757,17 +757,17 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     public function getSections()
     {
-        return array(
-            array('id' => 'article', 'name' => 'article'),
-            array('id' => 'price', 'name' => 'price'),
-            array('id' => 'image', 'name' => 'image'),
-            array('id' => 'propertyValue', 'name' => 'propertyValue'),
-            array('id' => 'similar', 'name' => 'similar'),
-            array('id' => 'accessory', 'name' => 'accessory'),
-            array('id' => 'configurator', 'name' => 'configurator'),
-            array('id' => 'category', 'name' => 'category'),
-            array('id' => 'translation', 'name' => 'translation')
-        );
+        return [
+            ['id' => 'article', 'name' => 'article'],
+            ['id' => 'price', 'name' => 'price'],
+            ['id' => 'image', 'name' => 'image'],
+            ['id' => 'propertyValue', 'name' => 'propertyValue'],
+            ['id' => 'similar', 'name' => 'similar'],
+            ['id' => 'accessory', 'name' => 'accessory'],
+            ['id' => 'configurator', 'name' => 'configurator'],
+            ['id' => 'category', 'name' => 'category'],
+            ['id' => 'translation', 'name' => 'translation']
+        ];
     }
 
     /**
@@ -783,7 +783,7 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     public function getArticleVariantColumns()
     {
-        return array(
+        return [
             'article.id as articleId',
             'article.name as name',
             'article.description as description',
@@ -809,7 +809,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             'articleTax.tax as tax',
             'filterGroup.id as filterGroupId',
             'filterGroup.name as filterGroupName',
-        );
+        ];
     }
 
     /**
@@ -821,7 +821,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         $stmt = $this->db->query("SHOW COLUMNS FROM `s_articles_attributes`");
         $columns = $stmt->fetchAll();
 
-        $attributes = array();
+        $attributes = [];
         foreach ($columns as $column) {
             if ($column['Field'] !== 'id'
                 && $column['Field'] !== 'articleID'
@@ -831,7 +831,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             }
         }
 
-        $attributesSelect = array();
+        $attributesSelect = [];
         if ($attributes) {
             $prefix = 'attribute';
             foreach ($attributes as $attribute) {
@@ -867,43 +867,43 @@ class ArticlesDbAdapter implements DataDbAdapter
     {
         switch ($section) {
             case 'article':
-                return array(
+                return [
                     'article.id as articleId',
                     'variant.id as variantId',
                     'variant.number as orderNumber',
-                );
+                ];
             case 'price':
-                return array(
+                return [
                     'prices.articleDetailsId as variantId',
-                );
+                ];
             case 'propertyValue':
-                return array(
+                return [
                     'article.id as articleId',
-                );
+                ];
             case 'similar':
-                return array(
+                return [
                     'article.id as articleId',
-                );
+                ];
             case 'accessory':
-                return array(
+                return [
                     'article.id as articleId',
-                );
+                ];
             case 'image':
-                return array(
+                return [
                     'article.id as articleId',
-                );
+                ];
             case 'configurator':
-                return array(
+                return [
                     'variant.id as variantId',
-                );
+                ];
             case 'category':
-                return array(
+                return [
                     'article.id as articleId',
-                );
+                ];
             case 'translation':
-                return array(
+                return [
                     'variant.id as variantId',
-                );
+                ];
         }
     }
 
@@ -912,7 +912,7 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     public function getVariantColumns()
     {
-        $columns = array(
+        $columns = [
             'variant.id as variantId',
             'variant.number as orderNumber',
             'mv.number as mainNumber',
@@ -939,7 +939,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             'variant.shippingFree as shippingFree',
             'variant.supplierNumber as supplierNumber',
             'variant.purchasePrice as purchasePrice'
-        );
+        ];
 
         // Attributes
         $attributesSelect = $this->getArticleAttributes();
@@ -956,13 +956,13 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     public function getPriceColumns()
     {
-        return array(
+        return [
             'prices.articleDetailsId as variantId',
             'prices.articleId as articleId',
             'prices.price as price',
             'prices.pseudoPrice as pseudoPrice',
             'prices.customerGroupKey as priceGroup',
-        );
+        ];
     }
 
     /**
@@ -970,7 +970,7 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     public function getImageColumns()
     {
-        return array(
+        return [
             'images.id as id',
             'images.articleId as articleId',
             'images.articleDetailId as variantId',
@@ -979,7 +979,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             'images.main as main',
             'images.mediaId as mediaId',
             ' \'1\' as thumbnail'
-        );
+        ];
     }
 
     /**
@@ -987,14 +987,14 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     public function getPropertyValueColumns()
     {
-        return array(
+        return [
             'article.id as articleId',
             'propertyGroup.name as propertyGroupName',
             'propertyValues.id as propertyValueId',
             'propertyValues.value as propertyValueName',
             'propertyValues.position as propertyValuePosition',
             'propertyOptions.name as propertyOptionName',
-        );
+        ];
     }
 
     /**
@@ -1002,11 +1002,11 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     public function getSimilarColumns()
     {
-        return array(
+        return [
             'similar.id as similarId',
             'similarDetail.number as ordernumber',
             'article.id as articleId',
-        );
+        ];
     }
 
     /**
@@ -1014,11 +1014,11 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     public function getAccessoryColumns()
     {
-        return array(
+        return [
             'accessory.id as accessoryId',
             'accessoryDetail.number as ordernumber',
             'article.id as articleId',
-        );
+        ];
     }
 
     /**
@@ -1026,7 +1026,7 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     public function getConfiguratorColumns()
     {
-        return array(
+        return [
             'variant.id as variantId',
             'configuratorOptions.id as configOptionId',
             'configuratorOptions.name as configOptionName',
@@ -1037,7 +1037,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             'configuratorSet.id as configSetId',
             'configuratorSet.name as configSetName',
             'configuratorSet.type as configSetType',
-        );
+        ];
     }
 
     /**
@@ -1045,11 +1045,11 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     public function getCategoryColumns()
     {
-        return array(
+        return [
             'categories.id as categoryId',
             'categories.path as categoryPath',
             'article.id as articleId',
-        );
+        ];
     }
 
     /**
@@ -1057,7 +1057,7 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     public function getTranslationColumns()
     {
-        $columns = array(
+        $columns = [
             'article.id as articleId',
             'variant.id as variantId',
             'translation.objectlanguage as languageId',
@@ -1068,7 +1068,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             'translation.description_long as descriptionLong',
             'translation.additionalText as additionalText',
             'translation.packUnit as packUnit',
-        );
+        ];
 
         $attributes = $this->getTranslationAttr();
 
@@ -1183,11 +1183,11 @@ class ArticlesDbAdapter implements DataDbAdapter
 
         $this->setTempData($articleNumber);
 
-        $articleData = array(
+        $articleData = [
             'articleId' => $articleNumber,
             'orderNumber' => $articleNumber,
             'processed' => 1
-        );
+        ];
 
         $this->setUnprocessedData('articles', 'article', $articleData);
     }
