@@ -9,14 +9,29 @@
 namespace SwagImportExport\Tests\Unit\Setup\DefaultProfiles;
 
 use Shopware\Setup\SwagImportExport\DefaultProfiles\CategoryProfile;
+use Shopware\Setup\SwagImportExport\DefaultProfiles\ProfileMetaData;
 
 class CategoryProfileTest extends \PHPUnit_Framework_TestCase
 {
     use DefaultProfileTestCaseTrait;
 
+    private function createCategoryProfile()
+    {
+        return new CategoryProfile();
+    }
+
+    public function test_it_can_be_created()
+    {
+        $categoryProfile = $this->createCategoryProfile();
+
+        $this->assertInstanceOf(CategoryProfile::class, $categoryProfile);
+        $this->assertInstanceOf(\JsonSerializable::class, $categoryProfile);
+        $this->assertInstanceOf(ProfileMetaData::class, $categoryProfile);
+    }
+
     public function test_it_should_return_valid_profile_tree()
     {
-        $categoryProfile = new CategoryProfile();
+        $categoryProfile = $this->createCategoryProfile();
 
         $profileTree = $categoryProfile->jsonSerialize();
         $this->walkRecursive($profileTree, function ($node) {

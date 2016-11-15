@@ -13,22 +13,28 @@ use Shopware\Components\SwagImportExport\Exception\AdapterException;
 
 class CategoryValidator extends Validator
 {
-    private $requiredFields = array(
+    private $requiredFields = [
         'name',
         'parentId',
-    );
+        'categoryId'
+    ];
 
-    private $snippetData = array(
-        'name' => array(
+    private $snippetData = [
+        'name' => [
             'adapters/categories/name_required',
             'Category name is required'
-        ),
-        'parentId' => array(
+        ],
+        'parentId' => [
             'adapters/categories/parent_id_required',
             'Parent category id is required for category %s',
             'name'
-        ),
-    );
+        ],
+        'categoryId' => [
+            'adpaters/categories/id_required',
+            'Category id is required. If you don\'t import an id, child- and father categories could not get referenced to each other.',
+            'id'
+        ]
+    ];
 
     /**
      * Checks whether required fields are filled-in

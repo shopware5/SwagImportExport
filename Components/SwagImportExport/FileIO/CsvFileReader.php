@@ -63,7 +63,7 @@ class CsvFileReader implements FileReader
         for ($i = 1; $i <= $step; $i++) {
             $row = $file->current();
 
-            if (!$file->valid()) {
+            if ($this->isInvalidRecord($row)) {
                 break;
             }
 
@@ -94,7 +94,6 @@ class CsvFileReader implements FileReader
      */
     public function setTree($tree)
     {
-
     }
 
     /**
@@ -167,5 +166,14 @@ class CsvFileReader implements FileReader
         );
 
         return $rows;
+    }
+
+    /**
+     * @param array $row
+     * @return bool
+     */
+    private function isInvalidRecord($row)
+    {
+        return null === $row[0];
     }
 }

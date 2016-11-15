@@ -1,0 +1,27 @@
+<?php
+/**
+ * (c) shopware AG <info@shopware.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace SwagImportExport\Tests\Unit\Components\SwagImportExport\Validator;
+
+use Shopware\Components\SwagImportExport\Exception\AdapterException;
+use Shopware\Components\SwagImportExport\Validators\CategoryValidator;
+
+class CategoryValidatorTest extends \PHPUnit_Framework_TestCase
+{
+    public function test_it_should_throw_exception()
+    {
+        $categoryValidator = new CategoryValidator();
+
+        $record = [
+            'parentId' => ''
+        ];
+
+        $this->expectException(AdapterException::class);
+        $categoryValidator->checkRequiredFields($record);
+    }
+}

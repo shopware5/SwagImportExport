@@ -25,3 +25,21 @@ A well-organized overview allows you to review, download or repeat all past impo
 
 ## License
 The MIT License (MIT). Please see [License File](https://github.com/shopwareLabs/SwagImportExport/blob/master/LICENSE "License File") for more information.
+
+## Run tests in a different environment
+
+We are using [psh](https://github.com/shopwareLabs/psh) to run unit tests it in its own environment.
+
+Run `./psh.phar`:
+
+```
+- cleanup: Removes all files which was created for the tests
+- init: Initilizaes the test environment, i.e. creating database, moving config file
+- reinstall: Reinstalls the plugin in the test environment
+- unit: Runs all scripts together, you don't need to worry about removing fixtures etc
+```
+
+Example execution:
+`$ ./psh.phar -unit`
+
+Further all tests which are executed with the `phpunit` cli command will be executed in the environment you configured.
