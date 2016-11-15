@@ -1,3 +1,4 @@
+//{block name="backend/swag_import_export/store/profile"}
 Ext.define('Shopware.apps.SwagImportExport.store.Profile', {
     extend: 'Ext.data.TreeStore',
     model: 'Shopware.apps.SwagImportExport.model.Profile',
@@ -24,3 +25,4 @@ Ext.define('Shopware.apps.SwagImportExport.store.Profile', {
         }
     }
 });
+//{/block}

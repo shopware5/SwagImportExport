@@ -13,8 +13,8 @@ class SnippetsHelper
     /**
      * @return \Enlight_Components_Snippet_Namespace
      */
-    public static function getNamespace()
+    public static function getNamespace($namespace = 'backend/swag_importexport/main')
     {
-        return Shopware()->Snippets()->getNamespace('backend/swag_importexport/main');
+        return Shopware()->Snippets()->getNamespace($namespace);
     }
 }

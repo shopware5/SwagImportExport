@@ -90,11 +90,11 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
             if (file_exists($filePath)) {
                 $this->View()->assign(
-                    array(
+                    [
                         'success' => false,
                         'data' => $this->Request()->getParams(),
                         'message' => 'File not exist'
-                    )
+                    ]
                 );
             }
 
@@ -111,11 +111,11 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             print file_get_contents($filePath);
         } catch (\Exception $e) {
             $this->View()->assign(
-                array(
+                [
                     'success' => false,
                     'data' => $this->Request()->getParams(),
                     'message' => $e->getMessage()
-                )
+                ]
             );
             return;
         }
@@ -127,8 +127,8 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $loggerRepository = $this->getModelManager()->getRepository(Logger::class);
 
         $query = $loggerRepository->getLogListQuery(
-            $this->Request()->getParam('filter', array()),
-            $this->Request()->getParam('sort', array()),
+            $this->Request()->getParam('filter', []),
+            $this->Request()->getParam('sort', []),
             $this->Request()->getParam('limit', 25),
             $this->Request()->getParam('start', 0)
         )->getQuery();
@@ -143,22 +143,9 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         //returns the customer data
         $data = $paginator->getIterator()->getArrayCopy();
 
-        $successStatus = SnippetsHelper::getNamespace()
-            ->get('controller/log_status_success', 'No errors');
-
-
-        foreach ($data as &$log) {
-            if ($log['state'] == 'false') {
-                $log['state'] = $successStatus;
-                $log['title'] = 'Success';
-            } else {
-                $log['title'] = 'Error';
-            }
-        }
-
-        $this->View()->assign(array(
+        $this->View()->assign([
             'success' => true, 'data' => $data, 'total' => $total
-        ));
+        ]);
     }
 
     /**

@@ -12,6 +12,7 @@ namespace Shopware\Components\SwagImportExport\Service;
 use Shopware\Components\SwagImportExport\DataWorkflow;
 use Shopware\Components\SwagImportExport\DbAdapters\DataDbAdapter;
 use Shopware\Components\SwagImportExport\Service\Struct\PreparationResultStruct;
+use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 
 /**
  * @package Shopware\Components\SwagImportExport\Service
@@ -62,16 +63,23 @@ class ExportService extends AbstractImportExportService implements ExportService
             $serviceHelpers->getFileWriter()
         );
 
+        $session = $serviceHelpers->getSession()->getEntity();
+
         try {
             $resultData = $dataWorkflow->export($requestData);
-            $message = $resultData['position'] . ' ' . $serviceHelpers->getProfile()->getType() . ' exported successfully';
+            $message = sprintf(
+                '%s %s %s',
+                $resultData['position'],
+                SnippetsHelper::getNamespace('backend/swag_import_export/default_profiles')->get('type/' . $serviceHelpers->getProfile()->getType()),
+                SnippetsHelper::getNamespace('backend/swag_import_export/log')->get('export/success')
+            );
 
-            $this->logProcessing('false', $resultData['fileName'], $serviceHelpers->getProfile()->getName(), $message, 'true');
+            $this->logProcessing('false', $resultData['fileName'], $serviceHelpers->getProfile()->getName(), $message, 'true', $session);
             unset($resultData['filter']);
 
             return $resultData;
         } catch (\Exception $e) {
-            $this->logProcessing('true', $requestData['fileName'], $serviceHelpers->getProfile()->getName(),  $e->getMessage(), 'false');
+            $this->logProcessing('true', $requestData['fileName'], $serviceHelpers->getProfile()->getName(),  $e->getMessage(), 'false', $session);
 
             throw $e;
         }

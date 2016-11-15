@@ -11,7 +11,6 @@ namespace Shopware\Components\SwagImportExport\Service;
 
 use Shopware\Bundle\MediaBundle\MediaService;
 use Shopware\Components\SwagImportExport\DataIO;
-use Shopware\Components\SwagImportExport\DbAdapters\DataDbAdapter;
 use Shopware\Components\SwagImportExport\Factories\DataFactory;
 use Shopware\Components\SwagImportExport\Factories\DataTransformerFactory;
 use Shopware\Components\SwagImportExport\Factories\FileIOFactory;
@@ -21,7 +20,7 @@ use Shopware\Components\SwagImportExport\Logger\LogDataStruct;
 use Shopware\Components\SwagImportExport\Logger\Logger;
 use Shopware\Components\SwagImportExport\Profile\Profile;
 use Shopware\Components\SwagImportExport\Service\Struct\ServiceHelperStruct;
-use Shopware\Components\SwagImportExport\Session\Session;
+use Shopware\CustomModels\ImportExport\Session;
 use Shopware\Components\SwagImportExport\Transformers\DataTransformerChain;
 use Shopware\Components\SwagImportExport\UploadPathProvider;
 
@@ -146,10 +145,11 @@ abstract class AbstractImportExportService
      * @param string $profileName
      * @param string $logMessage
      * @param string $status
+     * @param Session $session
      */
-    protected function logProcessing($writeStatus, $filename, $profileName, $logMessage, $status)
+    protected function logProcessing($writeStatus, $filename, $profileName, $logMessage, $status, Session $session)
     {
-        $this->logger->write($logMessage, $writeStatus);
+        $this->logger->write($logMessage, $writeStatus, $session);
 
         $logDataStruct = new LogDataStruct(
             date("Y-m-d H:i:s"),
