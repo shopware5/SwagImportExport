@@ -493,7 +493,8 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
 
                     if (!selectNode) {
                         selectNode = node.nextSibling;
-                    } else if (!selectNode) {
+                    }
+                    if (!selectNode) {
                         selectNode = node.parentNode;
                     }
 

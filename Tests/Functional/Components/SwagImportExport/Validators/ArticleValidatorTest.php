@@ -13,6 +13,14 @@ use Shopware\Components\SwagImportExport\Validators\Articles\ArticleValidator;
 
 class ArticleValidatorTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @return ArticleValidator
+     */
+    private function createArticleValidator()
+    {
+        return new ArticleValidator();
+    }
+
     public function test_validate_article_without_name_should_throw_exception()
     {
         $articleValidator = $this->createArticleValidator();
@@ -39,26 +47,33 @@ class ArticleValidatorTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->expectException(AdapterException::class);
-        $this->expectExceptionMessage('Steuersatz für Artikel SW-99999 nicht angegeben.');
+        $this->expectExceptionMessage('Steuersatz für Artikel SW-99999 nicht unterstützt');
         $articleValidator->checkRequiredFieldsForCreate($record);
     }
 
-    public function test_validate_article_should_not_throw_exception()
+    public function test_validate_article_without_ordernumber_throws_exception()
     {
         $articleValidator = $this->createArticleValidator();
         $record = [
-            'name' => 'Testartikel',
-            'mainNumber' => 'SW-99999',
-            'supplierId' => 2,
-            'supplierName' => 'Feinbrennerei Sasse',
-            'taxId' => 1
+            'orderNumber' => '',
+            'mainNumber' => ''
         ];
 
-        $this->assertNull($articleValidator->checkRequiredFieldsForCreate($record));
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Bestellnummer erforderlich.');
+        $articleValidator->checkRequiredFields($record);
     }
 
-    private function createArticleValidator()
+    public function test_validate_article_without_mainnumber_throws_exception()
     {
-        return new ArticleValidator();
+        $articleValidator = $this->createArticleValidator();
+        $record = [
+            'orderNumber' => 'ordernumber1',
+            'mainNumber' => ''
+        ];
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Hauptbestellnummer für Artikel ordernumber1 erforderlich.');
+        $articleValidator->checkRequiredFields($record);
     }
 }

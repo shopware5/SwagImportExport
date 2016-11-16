@@ -16,6 +16,14 @@ class ArticlesDbAdapterTest extends \PHPUnit_Framework_TestCase
 {
     use DatabaseTestCaseTrait;
 
+    /**
+     * @return ArticlesDbAdapter
+     */
+    private function createArticleDbAdapter()
+    {
+        return new ArticlesDbAdapter();
+    }
+
     public function test_write_should_throw_exception_if_records_are_empty()
     {
         $articlesDbAdapter = $this->createArticleDbAdapter();
@@ -123,10 +131,5 @@ class ArticlesDbAdapterTest extends \PHPUnit_Framework_TestCase
                 "article.id as articleId"
             ]
         ];
-    }
-
-    private function createArticleDbAdapter()
-    {
-        return new ArticlesDbAdapter();
     }
 }
