@@ -487,8 +487,17 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
             buttons: Ext.Msg.YESNO,
             fn: function(response) {
                 if (response === 'yes') {
-                    var node = treeStore.getById(selectedNodeId);
-                    var parentNode = node.parentNode;
+                    var node = treeStore.getById(selectedNodeId),
+                        parentNode = node.parentNode,
+                        selectNode = node.previousSibling;
+
+                    if (!selectNode) {
+                        selectNode = node.nextSibling;
+                    }
+                    if (!selectNode) {
+                        selectNode = node.parentNode;
+                    }
+
                     parentNode.removeChild(node);
 
                     if (parentNode.get('type') !== 'iteration' && parentNode.get('inIteration') === true) {
@@ -511,7 +520,9 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                     treeStore.sync({
                         success: function() {
                             selModel.deselectAll();
-                            selModel.select(parentNode);
+                            if (selectNode) {
+                                selModel.select(selectNode);
+                            }
                         },
                         failure: function(batch, options) {
                             var error = batch.exceptions[0].getError(),

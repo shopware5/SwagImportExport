@@ -8,42 +8,63 @@
 
 namespace Functional\Components\SwagImportExport\DbAdapters;
 
-use Shopware\Components\Model\ModelManager;
+use Doctrine\DBAL\Connection;
 use Shopware\Components\SwagImportExport\DbAdapters\ArticlesDbAdapter;
+use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 
 class ArticlesDbAdapterTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var ModelManager
-     */
-    private $modelManager;
+    use DatabaseTestCaseTrait;
 
     /**
-     * @var ArticlesDbAdapter
+     * @return ArticlesDbAdapter
      */
-    private $SUT;
-
-    protected function setUp()
+    private function createArticleDbAdapter()
     {
-        parent::setUp();
-
-        /** @var ModelManager $modelManager */
-        $this->modelManager = Shopware()->Container()->get('models');
-        $this->modelManager->getConnection()->beginTransaction();
-
-        $this->SUT = new ArticlesDbAdapter();
+        return new ArticlesDbAdapter();
     }
 
-    protected function tearDown()
+    public function test_write_should_throw_exception_if_records_are_empty()
     {
-        parent::tearDown();
-        $this->modelManager->getConnection()->rollBack();
+        $articlesDbAdapter = $this->createArticleDbAdapter();
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Keine Artikel gefunden.');
+        $articlesDbAdapter->write([]);
+    }
+
+    public function test_new_article_should_be_written_to_database()
+    {
+        $articlesDbAdapter = $this->createArticleDbAdapter();
+        $records = [
+            'article' => [
+                0 => [
+                    'name' => 'Testartikel',
+                    'orderNumber' => 'SW-99999',
+                    'mainNumber' => 'SW-99999',
+                    'supplierId' => 2,
+                    'supplierName' => 'Feinbrennerei Sasse',
+                    'taxId' => 1
+                ]
+            ]
+        ];
+        $articlesDbAdapter->write($records);
+
+        /** @var Connection $dbalConnection */
+        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $createdArticleDetail = $dbalConnection->executeQuery('SELECT * FROM s_articles_details WHERE orderNumber="SW-99999"')->fetchAll();
+        $createdArticle = $dbalConnection->executeQuery('SELECT a.* FROM s_articles as a JOIN s_articles_details as d ON d.articleID = a.id WHERE d.orderNumber="SW-99999"')->fetchAll();
+
+        $this->assertEquals($records['article'][0]['name'], $createdArticle[0]['name']);
+        $this->assertEquals($records['article'][0]['taxId'], $createdArticle[0]['taxID']);
+        $this->assertEquals($records['article'][0]['orderNumber'], $createdArticleDetail[0]['ordernumber']);
     }
 
     public function test_read()
     {
+        $articlesDbAdapter = $this->createArticleDbAdapter();
         $ids = [ 3 ];
-        $result = $this->SUT->read($ids, $this->getColumns());
+        $result = $articlesDbAdapter->read($ids, $this->getColumns());
 
         $this->assertArrayHasKey('article', $result, "Could not fetch articles.");
         $this->assertArrayHasKey('price', $result, "Could not fetch article prices.");
@@ -58,20 +79,22 @@ class ArticlesDbAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function test_read_should_throw_exception_if_ids_are_empty()
     {
+        $articlesDbAdapter = $this->createArticleDbAdapter();
         $columns = [ 'article' => 'article.id as articleId' ];
         $ids = [];
 
         $this->expectException(\Exception::class);
-        $this->SUT->read($ids, $columns);
+        $articlesDbAdapter->read($ids, $columns);
     }
 
     public function test_read_should_throw_exception_if_columns_are_empty()
     {
+        $articlesDbAdapter = $this->createArticleDbAdapter();
         $columns = [];
         $ids = [ 1, 2, 3 ];
 
         $this->expectException(\Exception::class);
-        $this->SUT->read($ids, $columns);
+        $articlesDbAdapter->read($ids, $columns);
     }
 
     /**
