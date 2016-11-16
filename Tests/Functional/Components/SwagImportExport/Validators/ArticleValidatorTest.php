@@ -47,7 +47,7 @@ class ArticleValidatorTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->expectException(AdapterException::class);
-        $this->expectExceptionMessage('Steuersatz für Artikel SW-99999 nicht unterstützt');
+        $this->expectExceptionMessage('Steuersatz für Artikel SW-99999 nicht angegeben.');
         $articleValidator->checkRequiredFieldsForCreate($record);
     }
 
