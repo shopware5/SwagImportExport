@@ -25,10 +25,10 @@ trait DefaultProfileImportTestCaseTrait
      * @param string $sql
      * @return mixed
      */
-    private function executeQuery($sql)
+    private function executeQuery($sql, $fetchMode = \PDO::FETCH_BOTH)
     {
         /** @var Statement $stmt */
         $stmt = Shopware()->Container()->get('dbal_connection')->executeQuery($sql);
-        return $stmt->fetchAll();
+        return $stmt->fetchAll($fetchMode);
     }
 }

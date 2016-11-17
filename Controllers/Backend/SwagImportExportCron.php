@@ -65,6 +65,7 @@ class Shopware_Controllers_Backend_SwagImportExportCron extends Shopware_Control
      */
     public function cronAction()
     {
+        /** @var UploadPathProvider $uploadPathProvider */
         $uploadPathProvider = $this->get('swag_import_export.upload_path_provider');
         $directory = $uploadPathProvider->getPath(UploadPathProvider::CRON_DIR);
 
@@ -115,7 +116,7 @@ class Shopware_Controllers_Backend_SwagImportExportCron extends Shopware_Control
                         throw new \Exception(sprintf($message, $fileName));
                     }
 
-                    $mediaPath = $this->uploadPathProvider->getRealPath($file, UploadPathProvider::CRON_DIR);
+                    $mediaPath = $uploadPathProvider->getRealPath($file, UploadPathProvider::CRON_DIR);
                 } catch (\Exception $e) {
                     echo $e->getMessage() . "\n";
                     unlink($lockerFileLocation);
@@ -131,7 +132,7 @@ class Shopware_Controllers_Backend_SwagImportExportCron extends Shopware_Control
                     //loops the unprocessed data
                     $pathInfo = pathinfo($mediaPath);
                     foreach ($profilesMapper as $profileName) {
-                        $tmpFile = $this->uploadPathProvider->getRealPath(
+                        $tmpFile = $uploadPathProvider->getRealPath(
                             $pathInfo['filename'] . '-' . $profileName . '-tmp.csv',
                             UploadPathProvider::CRON_DIR
                         );
@@ -152,7 +153,7 @@ class Shopware_Controllers_Backend_SwagImportExportCron extends Shopware_Control
                     unlink($mediaPath);
                 } catch (\Exception $e) {
                     // copy file as broken
-                    $brokenFilePath = $this->uploadPathProvider->getRealPath('broken-' . $file, UploadPathProvider::DIR);
+                    $brokenFilePath = $uploadPathProvider->getRealPath('broken-' . $file, UploadPathProvider::DIR);
                     copy($mediaPath, $brokenFilePath);
 
                     echo $e->getMessage() . "\n";

@@ -4,6 +4,7 @@ namespace Shopware\Commands\SwagImportExport;
 
 use Shopware\Commands\ShopwareCommand;
 use Shopware\Components\SwagImportExport\Profile\Profile;
+use Shopware\Components\SwagImportExport\UploadPathProvider;
 use Shopware\CustomModels\ImportExport\Profile as ProfileEntity;
 use Shopware\CustomModels\ImportExport\Repository;
 use Shopware_Plugins_Backend_SwagImportExport_Bootstrap as SwagImportExport_Bootstrap;
@@ -47,12 +48,14 @@ class ImportCommand extends ShopwareCommand
 
         $profilesMapper = array('articles', 'articlesImages');
 
+        $uploadPathProvider = new UploadPathProvider(Shopware()->DocPath());
+
         //loops the unprocessed data
         $pathInfo = pathinfo($this->filePath);
         foreach ($profilesMapper as $profileName) {
-            $tmpFileName = 'media/unknown/' . $pathInfo['filename'] . '-' . $profileName . '-tmp.csv';
-            $tmpFile = Shopware()->DocPath() . $tmpFileName;
-
+            $tmpFile = $uploadPathProvider->getRealPath(
+                $pathInfo['filename'] . '-' . $profileName . '-tmp.csv'
+            );
             if (file_exists($tmpFile)) {
                 $outputFile = str_replace('-tmp', '-swag', $tmpFile);
                 rename($tmpFile, $outputFile);

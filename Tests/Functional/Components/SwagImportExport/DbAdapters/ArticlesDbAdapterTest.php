@@ -102,6 +102,63 @@ class ArticlesDbAdapterTest extends \PHPUnit_Framework_TestCase
         $articlesDbAdapter->write($articleWithoutSupplier);
     }
 
+    public function test_new_image_should_fill_unprocessed_data_array()
+    {
+        $articlesDbAdapter = $this->createArticleDbAdapter();
+        $records = [
+            'article' => [
+                0 => [
+                    'orderNumber' => 'SW10006',
+                    'mainNumber' => 'SW10006'
+                ]
+            ],
+            'image' => [
+                0 => [
+                    'imageUrl' => 'file://' . realpath(dirname(__FILE__)) . '/../../../../Helper/ImportFiles/sw-icon_blue128.png',
+                    'parentIndexElement' => 0
+                ]
+            ]
+        ];
+        $articlesDbAdapter->write($records);
+        $unprocessedData = $articlesDbAdapter->getUnprocessedData();
+
+        $this->assertTrue(!empty($unprocessedData));
+        $this->assertEquals($records['article'][0]['orderNumber'], $unprocessedData['articlesImages']['default'][0]['ordernumber']);
+        $this->assertEquals($records['image'][0]['imageUrl'], $unprocessedData['articlesImages']['default'][0]['image']);
+    }
+
+    public function test_existing_image_should_be_added_to_article()
+    {
+        $articlesDbAdapter = $this->createArticleDbAdapter();
+        $records = [
+            'article' => [
+                0 => [
+                    'orderNumber' => 'SW10006',
+                    'mainNumber' => 'SW10006'
+                ]
+            ],
+            'image' => [
+                0 => [
+                    'mediaId' => 6,
+                    'path' => 'Muensterlaender_Lagerkorn',
+                    'description' => 'testimport1',
+                    'parentIndexElement' => 0
+                ]
+            ]
+        ];
+        $articlesDbAdapter->write($records);
+
+        /** @var Connection $dbalConnection */
+        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $articleId = $dbalConnection->executeQuery('SELECT articleID FROM s_articles_details WHERE orderNumber="SW10006"')->fetch(\PDO::FETCH_COLUMN);
+        $image = $dbalConnection->executeQuery('SELECT * FROM s_articles_img WHERE img = "Muensterlaender_Lagerkorn" AND articleID = ?', [$articleId])->fetch(\PDO::FETCH_ASSOC);
+
+        $this->assertEquals($articleId, $image['articleID']);
+        $this->assertEquals($records['image'][0]['mediaId'], $image['media_id']);
+        $this->assertEquals($records['image'][0]['description'], $image['description']);
+        $this->assertEquals('jpg', $image['extension']);
+    }
+
     public function test_read()
     {
         $articlesDbAdapter = $this->createArticleDbAdapter();
