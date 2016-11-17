@@ -36,9 +36,9 @@ class ArticlesDbAdapterTest extends \PHPUnit_Framework_TestCase
     public function test_new_article_should_be_written_to_database()
     {
         $articlesDbAdapter = $this->createArticleDbAdapter();
-        $records = [
+        $newArticleRecord = [
             'article' => [
-                0 => [
+                [
                     'name' => 'Testartikel',
                     'orderNumber' => 'SW-99999',
                     'mainNumber' => 'SW-99999',
@@ -48,16 +48,58 @@ class ArticlesDbAdapterTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         ];
-        $articlesDbAdapter->write($records);
+        $articlesDbAdapter->write($newArticleRecord);
 
         /** @var Connection $dbalConnection */
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
         $createdArticleDetail = $dbalConnection->executeQuery('SELECT * FROM s_articles_details WHERE orderNumber="SW-99999"')->fetchAll();
         $createdArticle = $dbalConnection->executeQuery('SELECT a.* FROM s_articles as a JOIN s_articles_details as d ON d.articleID = a.id WHERE d.orderNumber="SW-99999"')->fetchAll();
 
-        $this->assertEquals($records['article'][0]['name'], $createdArticle[0]['name']);
-        $this->assertEquals($records['article'][0]['taxId'], $createdArticle[0]['taxID']);
-        $this->assertEquals($records['article'][0]['orderNumber'], $createdArticleDetail[0]['ordernumber']);
+        $this->assertEquals($newArticleRecord['article'][0]['name'], $createdArticle[0]['name']);
+        $this->assertEquals($newArticleRecord['article'][0]['taxId'], $createdArticle[0]['taxID']);
+        $this->assertEquals($newArticleRecord['article'][0]['orderNumber'], $createdArticleDetail[0]['ordernumber']);
+    }
+
+    public function test_write_should_add_supplier_if_it_not_exists()
+    {
+        $articlesDbAdapter = $this->createArticleDbAdapter();
+
+        $articleRecordWithNewSupplier = [
+            'article' => [
+                [
+                    'name' => 'Testartikel',
+                    'orderNumber' => 'SW-99999',
+                    'mainNumber' => 'SW-99999',
+                    'supplierName' => 'Test Supplier',
+                    'taxId' => 1
+                ]
+            ]
+        ];
+        $articlesDbAdapter->write($articleRecordWithNewSupplier);
+
+        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $createdArticleSupplier = $dbalConnection->executeQuery("SELECT * FROM s_articles_supplier WHERE name='Test Supplier'")->fetchAll();
+
+        $this->assertEquals($articleRecordWithNewSupplier['article']['supplerName'], $createdArticleSupplier[0]['supplierName']);
+    }
+
+    public function test_write_article_without_supplier_throws_exception()
+    {
+        $articlesDbAdapter = $this->createArticleDbAdapter();
+        $articleWithoutSupplier = [
+            'article' => [
+                [
+                    'name' => 'Testartikel',
+                    'orderNumber' => 'SW-99999',
+                    'mainNumber' => 'SW-99999',
+                    'taxId' => 1
+                ]
+            ]
+        ];
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Hersteller für den Artikel SW-99999 nicht gefunden.');
+        $articlesDbAdapter->write($articleWithoutSupplier);
     }
 
     public function test_read()

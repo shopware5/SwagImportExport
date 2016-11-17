@@ -11,6 +11,7 @@ namespace Shopware\Setup\SwagImportExport\Install;
 use Doctrine\DBAL\Connection;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\CategoryProfile;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\ArticleProfile;
+use Shopware\Setup\SwagImportExport\DefaultProfiles\MinimalArticleProfile;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\MinimalCategoryProfile;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\NewsletterRecipientProfile;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\ProfileMetaData;
@@ -84,7 +85,7 @@ VALUES
             new CategoryProfile(),
             new ArticleProfile(),
             new NewsletterRecipientProfile(),
-            new CategoryProfile()
+            new MinimalArticleProfile()
         ];
     }
 }
