@@ -12,7 +12,7 @@ use SwagImportExport\Tests\Helper\CommandTestCaseTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use SwagImportExport\Tests\Integration\DefaultProfiles\DefaultProfileImportTestCaseTrait;
 
-class ArticleStandardProfileTest extends \PHPUnit_Framework_TestCase
+class ArticleDefaultProfileTest extends \PHPUnit_Framework_TestCase
 {
     use DatabaseTestCaseTrait;
     use CommandTestCaseTrait;

@@ -8,6 +8,7 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\QueryBuilder;
@@ -22,9 +23,24 @@ use Shopware\Components\SwagImportExport\DataManagers\NewsletterDataManager;
 
 class NewsletterDbAdapter implements DataDbAdapter
 {
+    /**
+     * @var ModelManager
+     */
     protected $manager;
+
+    /**
+     * @var EntityRepository
+     */
     protected $groupRepository;
+
+    /**
+     * @var EntityRepository
+     */
     protected $addressRepository;
+    
+    /**
+     * @var EntityRepository
+     */
     protected $contactDataRepository;
 
     /**
@@ -42,10 +58,14 @@ class NewsletterDbAdapter implements DataDbAdapter
      */
     protected $logState;
 
-    /** @var NewsletterValidator */
+    /**
+     * @var NewsletterValidator
+     */
     protected $validator;
 
-    /**  @var NewsletterDataManager */
+    /**
+     * @var NewsletterDataManager
+     */
     protected $dataManager;
 
     /**
@@ -53,9 +73,22 @@ class NewsletterDbAdapter implements DataDbAdapter
      */
     protected $defaultValues = array();
 
+    public function __construct()
+    {
+        $this->manager = Shopware()->Container()->get('models');
+        $this->validator = new NewsletterValidator();
+        $this->dataManager = new NewsletterDataManager();
+        $this->groupRepository = $this->manager->getRepository('Shopware\Models\Newsletter\Group');
+        $this->addressRepository = $this->manager->getRepository('Shopware\Models\Newsletter\Address');
+        $this->contactDataRepository = $this->manager->getRepository('Shopware\Models\Newsletter\ContactData');
+    }
+
+    /**
+     * @return array
+     */
     public function getDefaultColumns()
     {
-        $columns = array(
+        $columns = [
             'na.email as email',
             'ng.name as groupName',
             'CASE WHEN (cb.salutation IS NULL) THEN cd.salutation ELSE cb.salutation END as salutation',
@@ -67,7 +100,7 @@ class NewsletterDbAdapter implements DataDbAdapter
             'na.lastNewsletterId as lastNewsletter',
             'na.lastReadId as lastRead',
             'c.id as userID',
-        );
+        ];
 
         //removes street number for shopware 5
         if (!$this->isAdditionalShippingAddressExists()) {
@@ -137,9 +170,7 @@ class NewsletterDbAdapter implements DataDbAdapter
      */
     public function readRecordIds($start, $limit, $filter)
     {
-        $manager = $this->getManager();
-
-        $builder = $manager->createQueryBuilder();
+        $builder = $this->manager->createQueryBuilder();
 
         $builder->select('na.id')
                 ->from('Shopware\Models\Newsletter\Address', 'na')
@@ -190,56 +221,51 @@ class NewsletterDbAdapter implements DataDbAdapter
             array('subject' => $this)
         );
 
-        $manager = $this->getManager();
-        $validator = $this->getValidator();
-        $dataManager = $this->getDataManager();
-
         $defaultValues = $this->getDefaultValues();
 
         foreach ($records['default'] as $newsletterData) {
             try {
-                $newsletterData = $validator->filterEmptyString($newsletterData);
-                $validator->checkRequiredFields($newsletterData);
+                $newsletterData = $this->validator->filterEmptyString($newsletterData);
+                $this->validator->checkRequiredFields($newsletterData);
 
-                $recipient = $this->getAddressRepository()->findOneByEmail($newsletterData['email']);
+                $recipient = $this->addressRepository->findOneByEmail($newsletterData['email']);
                 if (!$recipient instanceof Address) {
-                    $newsletterData = $dataManager->setDefaultFieldsForCreate($newsletterData, $defaultValues);
+                    $newsletterData = $this->dataManager->setDefaultFieldsForCreate($newsletterData, $defaultValues);
                     $recipient = new Address();
                 }
 
-                $validator->validate($newsletterData, NewsletterDataType::$mapper);
+                $this->validator->validate($newsletterData, NewsletterDataType::$mapper);
 
                 if ($newsletterData['groupName']) {
-                    $group = $this->getGroupRepository()->findOneByName($newsletterData['groupName']);
+                    /** @var Group $group */
+                    $group = $this->groupRepository->findOneByName($newsletterData['groupName']);
 
                     if (!$group instanceof Group) {
                         $group = new Group();
                         $group->setName($newsletterData['groupName']);
-                        $manager->persist($group);
-                        $manager->flush();
+                        $this->manager->persist($group);
+                        $this->manager->flush();
                     }
 
                     $newsletterData['groupId'] = $group->getId();
                 }
 
-
                 // save newsletter address
                 $newsletterAddress = $this->prepareNewsletterAddress($newsletterData);
                 $recipient->fromArray($newsletterAddress);
-                $manager->persist($recipient);
-
+                $this->manager->persist($recipient);
 
                 // save mail data
-                $contactData = $this->getContactDataRepository()->findOneByEmail($newsletterData['email']);
+                $contactData = $this->contactDataRepository->findOneByEmail($newsletterData['email']);
                 if (!$contactData instanceof ContactData) {
                     $contactData = new ContactData();
                     $contactData->setAdded(new \DateTime());
                 }
                 $contactData->fromArray($newsletterData);
-                $manager->persist($contactData);
+                $this->manager->persist($contactData);
 
 
-                $manager->flush();
+                $this->manager->flush();
             } catch (AdapterException $e) {
                 $message = $e->getMessage();
                 $this->saveMessage($message);
@@ -347,27 +373,13 @@ class NewsletterDbAdapter implements DataDbAdapter
     }
 
     /**
-     * Returns entity manager
-     *
-     * @return ModelManager
-     */
-    public function getManager()
-    {
-        if ($this->manager === null) {
-            $this->manager = Shopware()->Models();
-        }
-
-        return $this->manager;
-    }
-
-    /**
      * @param $columns
      * @param $ids
      * @return QueryBuilder
      */
     public function getBuilder($columns, $ids)
     {
-        $builder = $this->getManager()->createQueryBuilder();
+        $builder = $this->manager->createQueryBuilder();
 
         $builder->select($columns)
                 ->from('Shopware\Models\Newsletter\Address', 'na')
@@ -379,65 +391,5 @@ class NewsletterDbAdapter implements DataDbAdapter
                 ->setParameter('ids', $ids);
 
         return $builder;
-    }
-
-    /**
-     * Helper function to get access to the Group repository.
-     * @return \Shopware\Models\Newsletter\Repository
-     */
-    protected function getGroupRepository()
-    {
-        if ($this->groupRepository === null) {
-            $this->groupRepository = $this->getManager()->getRepository('Shopware\Models\Newsletter\Group');
-        }
-        return $this->groupRepository;
-    }
-
-    /**
-     * Helper function to get access to the Address repository.
-     * @return \Shopware\Models\Newsletter\Repository
-     */
-    protected function getAddressRepository()
-    {
-        if ($this->addressRepository === null) {
-            $this->addressRepository = $this->getManager()->getRepository('Shopware\Models\Newsletter\Address');
-        }
-        return $this->addressRepository;
-    }
-
-    /**
-     * Helper function to get access to the ContactData repository.
-     * @return \Shopware\Components\Model\ModelRepository
-     */
-    protected function getContactDataRepository()
-    {
-        if ($this->contactDataRepository === null) {
-            $this->contactDataRepository = $this->getManager()->getRepository('Shopware\Models\Newsletter\ContactData');
-        }
-        return $this->contactDataRepository;
-    }
-
-    /**
-     * @return NewsletterValidator
-     */
-    public function getValidator()
-    {
-        if ($this->validator === null) {
-            $this->validator = new NewsletterValidator();
-        }
-
-        return $this->validator;
-    }
-
-    /**
-     * @return NewsletterDataManager
-     */
-    public function getDataManager()
-    {
-        if ($this->dataManager === null) {
-            $this->dataManager = new NewsletterDataManager();
-        }
-
-        return $this->dataManager;
     }
 }

@@ -1,0 +1,4 @@
+email;group;salutation;firstname;lastname;street;zipcode;city;lastmailing;lastread;userID
+mustermann@b2b.de;;mr;Händler;Kundengruppe-Netto;Musterweg 1;55555;Musterstadt;;;2
+email_should_be_created@example.org;Newsletter-Empfänger;;;;;;;;;
+custom_group_should_be_created@example.org;Custom_Group;;;;;;;;;
