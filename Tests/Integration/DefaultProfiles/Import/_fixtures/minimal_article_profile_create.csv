@@ -1,0 +1,2 @@
+ordernumber;mainnumber;name;supplier;tax;price_EK;pseudoprice_EK;baseprice_EK;price_H;pseudoprice_H;baseprice_H;active;categories
+ordernumber;ordernumber;Test Article;New Supplier;19.00;9.95;;;;;;1;5
