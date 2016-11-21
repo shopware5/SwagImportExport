@@ -382,8 +382,7 @@ class CommandHelper
 
                 foreach ($data['data'] as $key => $value) {
                     $outputFile = $uploadPathProvider->getRealPath(
-                        $pathInfo['filename'] . '-' . $key . '-tmp.csv',
-                        UploadPathProvider::DIR
+                        $pathInfo['filename'] . '-' . $key . '-tmp.csv'
                     );
 
                     $post['unprocessed'][] = array(
@@ -462,7 +461,7 @@ class CommandHelper
             ->createDataTransformerChain($profile, array('isTree' => $fileWriter->hasTreeStructure()));
 
         $dataWorkflow = new DataWorkflow(null, $profile, $dataTransformerChain, $fileWriter);
-        $dataWorkflow->saveUnprocessedData($data, $profileName, Shopware()->DocPath() . $outputFile);
+        $dataWorkflow->saveUnprocessedData($data, $profileName, $outputFile);
     }
 
     /**

@@ -77,7 +77,7 @@ class ImageWriter
                 $name = pathinfo($image['imageUrl'], PATHINFO_FILENAME);
                 $media = $this->getMediaByName($name);
                 $image['path'] = $name;
-
+                // if data comes from article adapter prepare data for hidden profile
                 if (!$media) {
                     $thumbnail = isset($image['thumbnail']) && $image['thumbnail'] == 0 ? 0 : 1;
                     $data = array(
@@ -85,7 +85,7 @@ class ImageWriter
                         'image' => $image['imageUrl'],
                         'thumbnail' => $thumbnail
                     );
-
+                    // set unprocessed data to use hidden profile for articleImages
                     $this->getArticlesDbAdapter()->setUnprocessedData('articlesImages', 'default', $data);
                 }
             }
@@ -197,7 +197,6 @@ class ImageWriter
                 $imageData
             )
         );
-
         $insert = "INSERT INTO s_articles_img (articleID, img, main, description, extension, article_detail_id, media_id) VALUES {$values}";
         $this->connection->exec($insert);
 
@@ -216,7 +215,7 @@ class ImageWriter
         foreach ($images as $key => $image) {
             $imageData[$key]['name'] = $image['path'];
             $imageData[$key]['main'] = $image['main'] ?: 2;
-            $imageData[$key]['description'] = $medias[$key]['description'];
+            $imageData[$key]['description'] = !empty($image['description']) ? $image['description'] : $medias[$key]['description'];
             $imageData[$key]['extension'] = $medias[$key]['extension'];
             $imageData[$key]['variantId'] = $image[$key]['variantId'];
             $imageData[$key]['id'] = $medias[$key]['id'];

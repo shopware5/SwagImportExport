@@ -11,7 +11,6 @@ namespace Shopware\Components\SwagImportExport\Service;
 
 use Shopware\Components\SwagImportExport\DataWorkflow;
 use Shopware\Components\SwagImportExport\DbAdapters\DataDbAdapter;
-use Shopware\Components\SwagImportExport\Logger\LogDataStruct;
 use Shopware\Components\SwagImportExport\Service\Struct\PreparationResultStruct;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 
@@ -69,12 +68,12 @@ class ImportService extends AbstractImportExportService implements ImportService
                     ]
                 ];
 
-                foreach ($unprocessedData['data'] as $key => $value) {
+                foreach ($unprocessedData['data'] as $profileName => $value) {
                     $outputFile = $this->uploadPathProvider->getRealPath(
-                        $this->uploadPathProvider->getFileNameFromPath($inputFile) . '-' . $key .'-tmp'
+                        $this->uploadPathProvider->getFileNameFromPath($inputFile) . '-' . $profileName .'-tmp.csv'
                     );
-                    $this->afterImport($unprocessedData, $key, $outputFile);
-                    $unprocessedFiles[$key] = $outputFile;
+                    $this->afterImport($unprocessedData, $profileName, $outputFile);
+                    $unprocessedFiles[$profileName] = $outputFile;
                 }
             }
 
@@ -148,21 +147,21 @@ class ImportService extends AbstractImportExportService implements ImportService
     protected function processData(&$unprocessedFiles)
     {
         foreach ($unprocessedFiles as $hiddenProfile => $inputFile) {
-            if ($this->mediaService->has($inputFile)) {
+            if (is_readable($inputFile)) {
                 // renames
                 $outputFile = str_replace('-tmp', '-swag', $inputFile);
-                $this->mediaService->rename($inputFile, $outputFile);
+                rename($inputFile, $outputFile);
 
                 $profile = $this->profileFactory->loadHiddenProfile($hiddenProfile);
                 $profileId = $profile->getId();
 
                 $fileReader = $this->fileIOFactory->createFileReader('csv');
-                $totalCount = $fileReader->getTotalCount($this->mediaService->getUrl($outputFile));
+                $totalCount = $fileReader->getTotalCount($outputFile);
 
                 unset($unprocessedFiles[$hiddenProfile]);
 
                 $postData = [
-                    'importFile' => $this->mediaService->getUrl($outputFile),
+                    'importFile' => $outputFile,
                     'profileId' => $profileId,
                     'count' => $totalCount,
                     'position' => 0,

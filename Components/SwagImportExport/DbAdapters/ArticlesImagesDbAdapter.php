@@ -222,7 +222,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
         if (empty($records['default'])) {
             $message = SnippetsHelper::getNamespace()->get(
                 'adapters/articlesImages/no_records',
-                'No article image records were found.'
+                'No new article image records were found.'
             );
             throw new \Exception($message);
         }
