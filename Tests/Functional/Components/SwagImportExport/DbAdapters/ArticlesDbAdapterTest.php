@@ -159,6 +159,59 @@ class ArticlesDbAdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('jpg', $image['extension']);
     }
 
+    public function test_write_article_variant_should_be_written_to_database()
+    {
+        $articlesDbAdapter = $this->createArticleDbAdapter();
+        $newArticleWithVariantRecord = [
+            'article' => [
+                [
+                    'name' => 'Test Artikel',
+                    'orderNumber' => 'ordernumber.1',
+                    'mainNumber' => 'ordernumber.1',
+                    'supplierName' => 'shopware AG',
+                    'taxId' => 1
+                ],
+                [
+                    'name' => 'Test Artikel',
+                    'orderNumber' => 'ordernumber.2',
+                    'mainNumber' => 'ordernumber.1',
+                    'supplierName' => 'shopware AG',
+                    'taxId' => 1
+                ]
+            ]
+        ];
+        $articlesDbAdapter->write($newArticleWithVariantRecord);
+
+        /** @var Connection $dbalConnection */
+        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $createdArticleVariantDetail = $dbalConnection->executeQuery('SELECT * FROM s_articles_details WHERE orderNumber="ordernumber.2"')->fetchAll();
+        $createdArticleVariant = $dbalConnection->executeQuery("SELECT * FROM s_articles WHERE id='{$createdArticleVariantDetail[0]["articleID"]}'")->fetchAll();
+
+        $this->assertEquals($newArticleWithVariantRecord['article'][1]['name'], $createdArticleVariant[0]['name']);
+        $this->assertEquals($newArticleWithVariantRecord['article'][1]['taxId'], $createdArticleVariant[0]['taxID']);
+        $this->assertEquals($newArticleWithVariantRecord['article'][1]['orderNumber'], $createdArticleVariantDetail[0]['ordernumber']);
+    }
+
+    public function test_write_article_variant_with_not_existing_main_number_throws_exception()
+    {
+        $articlesDbAdapter = $this->createArticleDbAdapter();
+        $articleWithoutExistingMainNumber = [
+            'article' => [
+                [
+                    'name' => 'Test Artikel',
+                    'orderNumber' => 'ordernumber.2',
+                    'mainNumber' => 'not-existing-main-number',
+                    'supplierName' => 'shopware AG',
+                    'taxId' => 1
+                ]
+            ]
+        ];
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Variante/Artikel mit Nummer not-existing-main-number nicht gefunden.');
+        $articlesDbAdapter->write($articleWithoutExistingMainNumber);
+    }
+
     public function test_read()
     {
         $articlesDbAdapter = $this->createArticleDbAdapter();

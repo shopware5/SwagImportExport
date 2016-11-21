@@ -1,0 +1,7 @@
+ordernumber;mainnumber;name;supplier;tax;kind;price_EK;pseudoprice_EK;baseprice_EK;price_H;pseudoprice_H;baseprice_H;active;categories;configOptionName
+SW10002.3;SW10002.3;Münsterländer Lagerkorn 32%;Feinbrennerei Sasse;19.00;1;27.35;125.95;;;;;1;14|21|50|67;Flascheninhalt:0,5 Liter
+SW10002.1;SW10002.3;Münsterländer Lagerkorn 32%;Feinbrennerei Sasse;19.00;2;19.46;12.95;;;;;1;14|21|50|67;Flascheninhalt:1,5 Liter
+SW10002.2;SW10002.3;Münsterländer Lagerkorn 32%;Feinbrennerei Sasse;19.00;2;23.25;;;;;;1;14|21|50|67;Flascheninhalt:5 Liter
+SW10002.4;SW10002.3;Münsterländer Lagerkorn 32%;Feinbrennerei Sasse;19.00;2;45.25;;;;;;1;14|21|50|67;Flascheninhalt:7,5 Liter
+ordernumber.1;ordernumber.1;Test Artikel;shopware AG;19.00;2;45.25;;;;;;1;14|21|50|67;Flascheninhalt:0,5 Liter
+ordernumber.2;ordernumber.1;Test Artikel;shopware AG;19.00;2;65.25;;;;;;1;14|21|50|67;Flascheninhalt:1,5 Liter
