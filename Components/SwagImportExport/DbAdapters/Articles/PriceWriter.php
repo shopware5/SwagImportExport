@@ -80,7 +80,7 @@ class PriceWriter
                     FROM s_articles_prices
                     WHERE articleID = ? AND articledetailsID = ? AND pricegroup = ? AND `from` = ?
                 ',
-                array($articleId, $articleDetailId, $price['priceGroup'], $price['from'])
+                [$articleId, $articleDetailId, $price['priceGroup'], $price['from']]
             );
 
             if (!$priceId) {
@@ -107,14 +107,14 @@ class PriceWriter
     {
         $taxInput = $this->customerGroups[$price['priceGroup']];
 
-        $price['price'] = floatval(str_replace(",", ".", $price['price']));
+        $price['price'] = $this->formatToFloatValue($price['price']);
 
         if (isset($price['purchasePrice'])) {
-            $price['purchasePrice'] = floatval(str_replace(",", ".", $price['purchasePrice']));
+            $price['purchasePrice'] = $this->formatToFloatValue($price['purchasePrice']);
         }
 
         if (isset($price['pseudoPrice'])) {
-            $price['pseudoPrice'] = floatval(str_replace(",", ".", $price['pseudoPrice']));
+            $price['pseudoPrice'] = $this->formatToFloatValue($price['pseudoPrice']);
         } else {
             if ($newPrice) {
                 $price['pseudoPrice'] = 0;
@@ -126,7 +126,7 @@ class PriceWriter
         }
 
         if (isset($price['percent'])) {
-            $price['percent'] = floatval(str_replace(",", ".", $price['percent']));
+            $price['percent'] = $this->formatToFloatValue($price['percent']);
         }
 
         if ($taxInput) {
@@ -167,6 +167,15 @@ class PriceWriter
     }
 
     /**
+     * @param string $price
+     * @return float
+     */
+    private function formatToFloatValue($price)
+    {
+        return floatval(str_replace(",", ".", $price));
+    }
+
+    /**
      * @param $articleId
      * @return float
      * @throws AdapterException
@@ -176,7 +185,7 @@ class PriceWriter
         $sql = 'SELECT coretax.tax FROM s_core_tax AS coretax
                 LEFT JOIN s_articles AS article ON article.taxID = coretax.id
                 WHERE article.id = ?';
-        $tax = $this->db->fetchOne($sql, array($articleId));
+        $tax = $this->db->fetchOne($sql, [$articleId]);
 
         if (empty($tax)) {
             throw new AdapterException("Tax for article $articleId not found");
@@ -192,7 +201,7 @@ class PriceWriter
     protected function getArticleOrderNumber($articleDetailId)
     {
         $sql = 'SELECT ordernumber FROM s_articles_details WHERE id = ?';
-        $orderNumber = $this->db->fetchOne($sql, array($articleDetailId));
+        $orderNumber = $this->db->fetchOne($sql, [$articleDetailId]);
 
         return $orderNumber;
     }

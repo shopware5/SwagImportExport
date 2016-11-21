@@ -14,27 +14,24 @@ use Shopware\Components\SwagImportExport\Exception\AdapterException;
 
 class PriceValidator extends Validator
 {
-    public static $mapper = array(
-        'string' => array( //TODO: maybe we don't need to check fields which contains string?
-            'priceGroup',
-        ),
-        'float' => array(
+    public static $mapper = [
+        'float' => [
             'price',
             'purchasePrice',
             'pseudoPrice'
-        ),
-    );
+        ],
+    ];
 
-    private $requiredFields = array(
-        array('price', 'priceGroup'),
-    );
+    private $requiredFields = [
+        ['price', 'priceGroup']
+    ];
 
-    private $snippetData = array(
-        'price' => array(
+    private $snippetData = [
+        'price' => [
             'adapters/articles/incorrect_price',
-            'Price value is incorrect for article with number %s',
-        ),
-    );
+            'Price value is incorrect for article with number %s'
+        ]
+    ];
 
     /**
      * Checks whether required fields are filled-in
