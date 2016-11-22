@@ -14,13 +14,13 @@ class ArticleImageUrlProfileTest extends \PHPUnit_Framework_TestCase
 
     public function test_import_should_add_new_image_to_article()
     {
-        $imagePath = 'file://' . realpath(dirname(__FILE__)) . '/../../../Helper/ImportFiles/sw-icon_blue128.png';
+        $imagePath = 'file://' . realpath(__DIR__) . '/../../../Helper/ImportFiles/sw-icon_blue128.png';
         $importFile = $this->getImportFile('article_image_url_create.csv');
 
         // writes importdata with actual imagePath to csv to use internal file for import test
         file_put_contents(
             $importFile,
-            "\r\n" . implode(';', ['SW10001','SW10001',$imagePath]),
+            "\r\n" . implode(';', ['SW10001', 'SW10001', $imagePath]),
             FILE_APPEND
         );
 
@@ -36,7 +36,7 @@ class ArticleImageUrlProfileTest extends \PHPUnit_Framework_TestCase
         // removes generated import line and resets csv to initial state
         file_put_contents(
             $importFile,
-            implode(';', ['ordernumber','mainnumber', 'imageUrl'])
+            implode(';', ['ordernumber', 'mainnumber', 'imageUrl'])
         );
     }
 }

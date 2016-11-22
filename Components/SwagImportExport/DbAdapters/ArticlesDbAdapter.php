@@ -1185,6 +1185,7 @@ class ArticlesDbAdapter implements DataDbAdapter
 
         $articleData = [
             'articleId' => $articleNumber,
+            'mainNumber' => $articleNumber,
             'orderNumber' => $articleNumber,
             'processed' => 1
         ];
