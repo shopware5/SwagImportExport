@@ -48,10 +48,10 @@ class TranslationWriter
     }
 
     /**
-     * @param $articleId
-     * @param $articleDetailId
-     * @param $mainDetailId
-     * @param $translations
+     * @param int $articleId
+     * @param int $articleDetailId
+     * @param int $mainDetailId
+     * @param array $translations
      * @throws AdapterException
      */
     public function write($articleId, $articleDetailId, $mainDetailId, $translations)
@@ -95,10 +95,10 @@ class TranslationWriter
             }
 
             if ($articleDetailId === $mainDetailId) {
-                $data = array_intersect_key($translation, array_flip($whiteList));
+                $data = $this->filterWhitelistedFields($translation, $whiteList);
                 $this->writer->write($languageId, 'article', $articleId, $data);
             } else {
-                $data = array_intersect_key($translation, array_flip($variantWhiteList));
+                $data = $this->filterWhitelistedFields($translation, $variantWhiteList);
 
                 //checks for empty translations
                 if (!empty($data)) {
@@ -164,5 +164,15 @@ class TranslationWriter
     public function getTranslationAttr()
     {
         return $this->connection->fetchAll('SELECT `name` FROM s_core_engine_elements WHERE `translatable` = 1');
+    }
+
+    /**
+     * @param array $translation
+     * @param array $whiteList
+     * @return array
+     */
+    private function filterWhitelistedFields($translation, $whiteList)
+    {
+        return array_intersect_key($translation, array_flip($whiteList));
     }
 }
