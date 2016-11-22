@@ -16,6 +16,7 @@ use Shopware\Setup\SwagImportExport\DefaultProfiles\MinimalArticleProfile;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\MinimalArticleVariantsProfile;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\MinimalCategoryProfile;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\NewsletterRecipientProfile;
+use Shopware\Setup\SwagImportExport\DefaultProfiles\ArticleCategoriesProfile;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\ArticlePriceProfile;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\ArticleImageUrlProfile;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\ArticleTranslationUpdateProfile;
@@ -95,7 +96,8 @@ VALUES
             new ArticlePriceProfile(),
             new ArticleImageUrlProfile(),
             new MinimalArticleVariantsProfile(),
-            new ArticleTranslationUpdateProfile()
+            new ArticleTranslationUpdateProfile(),
+            new ArticleCategoriesProfile()
         ];
     }
 }
