@@ -60,6 +60,34 @@ class ArticlesDbAdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($newArticleRecord['article'][0]['orderNumber'], $createdArticleDetail[0]['ordernumber']);
     }
 
+    public function test_write_should_assign_new_similar_articles()
+    {
+        $articlesDbAdapter = $this->createArticleDbAdapter();
+
+        $articleRecordWithNewSimilars = [
+            'article' => [
+                [
+                    'name' => 'Münsterländer Aperitif 16%',
+                    'orderNumber' => 'SW10003',
+                    'mainNumber' => 'SW10003',
+                    'supplierName' => 'Feinbrennerei Sasse',
+                    'taxId' => 1
+                ]
+            ],
+            'similar' => $this->getSimilarArticles()
+        ];
+
+        $articlesDbAdapter->write($articleRecordWithNewSimilars);
+        $unprocessedData = $articlesDbAdapter->getUnprocessedData();
+
+        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $articleId = $dbalConnection->executeQuery('SELECT articleID FROM s_articles_details WHERE orderNumber="SW10003"')->fetch(\PDO::FETCH_COLUMN);
+        $createdArticleSimilars = $dbalConnection->executeQuery('SELECT * FROM s_articles_similar WHERE articleID = ?', [$articleId])->fetchAll();
+
+        $this->assertTrue(empty($unprocessedData));
+        $this->assertEquals(7, $createdArticleSimilars[4]["relatedarticle"]);
+    }
+
     public function test_write_should_add_supplier_if_it_not_exists()
     {
         $articlesDbAdapter = $this->createArticleDbAdapter();
@@ -281,6 +309,35 @@ class ArticlesDbAdapterTest extends \PHPUnit_Framework_TestCase
             ],
             'translation' => [
                 "article.id as articleId"
+            ]
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    private function getSimilarArticles()
+    {
+        return [
+            [
+                'similarId' => '4',
+                'parentIndexElement' => 0
+            ],
+            [
+                'similarId' => '2',
+                'parentIndexElement' => 0
+            ],
+            [
+                'similarId' => '5',
+                'parentIndexElement' => 0
+            ],
+            [
+                'similarId' => '6',
+                'parentIndexElement' => 0
+            ],
+            [
+                'similarId' => '7',
+                'parentIndexElement' => 0
             ]
         ];
     }
