@@ -22,6 +22,7 @@ use Shopware\Setup\SwagImportExport\DefaultProfiles\ArticleImageUrlProfile;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\ArticleSimilarsProfile;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\ArticleTranslationUpdateProfile;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\ProfileMetaData;
+use Shopware\Setup\SwagImportExport\DefaultProfiles\ArticleAccessoryProfile;
 use Shopware\Setup\SwagImportExport\SetupContext;
 
 class DefaultProfileInstaller implements InstallerInterface
@@ -99,7 +100,8 @@ VALUES
             new MinimalArticleVariantsProfile(),
             new ArticleTranslationUpdateProfile(),
             new ArticleCategoriesProfile(),
-            new ArticleSimilarsProfile()
+            new ArticleSimilarsProfile(),
+            new ArticleAccessoryProfile()
         ];
     }
 }

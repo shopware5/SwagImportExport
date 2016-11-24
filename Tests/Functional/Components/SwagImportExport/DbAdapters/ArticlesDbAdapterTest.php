@@ -131,6 +131,43 @@ class ArticlesDbAdapterTest extends \PHPUnit_Framework_TestCase
         $articlesDbAdapter->write($articleWithoutSupplier);
     }
 
+    public function test_write_should_assign_new_accessory_articles()
+    {
+        $articlesDbAdapter = $this->createArticleDbAdapter();
+
+        $articleRecordWithNewSimilars = [
+            'article' => [
+                [
+                    'name' => 'Münsterländer Aperitif 16%',
+                    'orderNumber' => 'SW10003',
+                    'mainNumber' => 'SW10003',
+                    'supplierName' => 'Feinbrennerei Sasse',
+                    'taxId' => 1
+                ]
+            ],
+            'accessory' => [
+                [
+                    'accessoryId' => '4',
+                    'parentIndexElement' => 0
+                ],
+                [
+                    'accessoryId' => '10',
+                    'parentIndexElement' => 0
+                ]
+            ]
+        ];
+
+        $articlesDbAdapter->write($articleRecordWithNewSimilars);
+        $unprocessedData = $articlesDbAdapter->getUnprocessedData();
+
+        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $articleId = $dbalConnection->executeQuery('SELECT articleID FROM s_articles_details WHERE orderNumber="SW10003"')->fetch(\PDO::FETCH_COLUMN);
+        $createdArticleSimilars = $dbalConnection->executeQuery('SELECT * FROM s_articles_relationships WHERE articleID = ?', [$articleId])->fetchAll();
+
+        $this->assertTrue(empty($unprocessedData));
+        $this->assertEquals(4, $createdArticleSimilars[1]["relatedarticle"]);
+    }
+
     public function test_new_image_should_fill_unprocessed_data_array()
     {
         $articlesDbAdapter = $this->createArticleDbAdapter();
