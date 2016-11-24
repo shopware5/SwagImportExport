@@ -20,6 +20,7 @@ use Shopware\Setup\SwagImportExport\DefaultProfiles\ArticleCategoriesProfile;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\ArticlePriceProfile;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\ArticleImageUrlProfile;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\ArticleSimilarsProfile;
+use Shopware\Setup\SwagImportExport\DefaultProfiles\ArticleInStockProfile;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\ArticleTranslationUpdateProfile;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\ProfileMetaData;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\ArticleAccessoryProfile;
@@ -58,10 +59,10 @@ class DefaultProfileInstaller implements InstallerInterface
             $serializedTree = json_encode($profile);
 
             $sql = '
-INSERT IGNORE INTO s_import_export_profile 
-(`type`, `name`, `tree`, `hidden`, `is_default`) 
-VALUES 
-(:type, :name, :tree, :hidden, :is_default)';
+                INSERT IGNORE INTO s_import_export_profile
+                (`type`, `name`, `tree`, `hidden`, `is_default`)
+                VALUES
+                (:type, :name, :tree, :hidden, :is_default)';
 
             $params = [
                 'type' => $profile->getAdapter(),
@@ -101,7 +102,8 @@ VALUES
             new ArticleTranslationUpdateProfile(),
             new ArticleCategoriesProfile(),
             new ArticleSimilarsProfile(),
-            new ArticleAccessoryProfile()
+            new ArticleAccessoryProfile(),
+            new ArticleInStockProfile()
         ];
     }
 }
