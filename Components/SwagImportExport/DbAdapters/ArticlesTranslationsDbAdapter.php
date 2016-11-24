@@ -12,9 +12,11 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\QueryBuilder;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
+use Shopware\Components\SwagImportExport\Utils\SwagVersionHelper;
 use Shopware\Components\SwagImportExport\Validators\ArticleTranslationValidator;
 use Shopware\Models\Article\Detail;
 use Shopware\Models\Article\Element;
+use Shopware\Models\Attribute\Configuration;
 use Shopware\Models\Shop\Shop;
 use Shopware\Models\Translation\Translation;
 
@@ -74,13 +76,21 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
             't.packUnit as packUnit'
         ];
 
-        $elementBuilder = $this->getElementBuilder();
+        if (!SwagVersionHelper::isDeprecated('5.3.0')) {
+            $elements = $this->getElements();
 
-        $elements = $elementBuilder->getQuery()->getArrayResult();
+            if ($elements) {
+                foreach ($elements as $element) {
+                    $translation[] = 't.' . $element;
+                }
+            }
+        }
 
-        if ($elements) {
-            foreach ($elements as $element) {
-                $translation[] = 't.' . $element['name'];
+        $attributes = $this->getAttributes();
+
+        if ($attributes) {
+            foreach ($attributes as $attribute) {
+                $translation[] = 't.' . $attribute['columnName'];
             }
         }
 
@@ -160,7 +170,15 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
      */
     protected function prepareTranslations($translations)
     {
-        $translationAttr = $this->getElements();
+        $translationAttr = [];
+        if (!SwagVersionHelper::isDeprecated('5.3.0')) {
+            $translationAttr = $this->getElements();
+        }
+
+        $attributes = [];
+        foreach ($this->getAttributes() as $attribute) {
+            $attributes['__attribute_' . $attribute['columnName']] = $attribute['columnName'];
+        }
 
         $articleMapper = [
             "txtArtikel" => "name",
@@ -172,6 +190,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
 
         $translationAttr['txtzusatztxt'] = 'additionalText';
         $translationAttr['txtpackunit'] = 'packUnit';
+        $translationAttr = array_merge($translationAttr, $attributes);
 
         if (!empty($translations)) {
             foreach ($translations as $index => $translation) {
@@ -240,13 +259,24 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
 
         $whiteList = array_merge($whiteList, $variantWhiteList);
 
-        $elementBuilder = $this->getElementBuilder();
-        $attributes = $elementBuilder->getQuery()->getArrayResult();
+        if (!SwagVersionHelper::isDeprecated('5.3.0')) {
+            $elementBuilder = $this->getElementBuilder();
+            $legacyAttributes = $elementBuilder->getQuery()->getArrayResult();
+
+            if ($legacyAttributes) {
+                foreach ($legacyAttributes as $attr) {
+                    $whiteList[] = $attr['name'];
+                    $variantWhiteList[] = $attr['name'];
+                }
+            }
+        }
+
+        $attributes = $this->getAttributes();
 
         if ($attributes) {
-            foreach ($attributes as $attr) {
-                $whiteList[] = $attr['name'];
-                $variantWhiteList[] = $attr['name'];
+            foreach ($attributes as $attribute) {
+                $whiteList[] = $attribute['columnName'];
+                $variantWhiteList[] = $attribute['columnName'];
             }
         }
 
@@ -289,8 +319,9 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
                     $type = 'variant';
                     $objectKey = $articleDetail->getId();
                 }
-
                 if (!empty($data)) {
+                    $data = $this->prepareAttributePrefix($data, $attributes);
+
                     $this->translationComponent->write($shop->getId(), $type, $objectKey, $data);
                 }
             } catch (AdapterException $e) {
@@ -372,7 +403,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @deprecated Element will be removed in shopware 5.3. Should be changed then.
+     * @deprecated Element will be removed in shopware 5.3. Beware of backwards compatibility
      *
      * @return QueryBuilder
      */
@@ -388,6 +419,8 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
     }
 
     /**
+     * @deprecated Element will be removed in shopware 5.3. Beware of backwards compatibility
+     *
      * @return array
      */
     public function getElements()
@@ -404,6 +437,23 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
         }
 
         return $elementsCollection;
+    }
+
+    /**
+     * @return array
+     */
+    private function getAttributes()
+    {
+        $repository = $this->manager->getRepository(Configuration::class);
+
+        return $repository->createQueryBuilder('configuration')
+            ->select('configuration.columnName')
+            ->where('configuration.tableName = :tablename')
+            ->andWhere('configuration.translatable = 1')
+            ->setParameter('tablename', 's_articles_attributes')
+            ->getQuery()
+            ->getArrayResult()
+        ;
     }
 
     /**
@@ -435,5 +485,28 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
         ";
 
         return $this->db->query($sql)->fetchAll();
+    }
+
+    /**
+     * Prefix attributes before writing to database
+     *
+     * @param array $data
+     * @param array $attributes
+     * @return array
+     */
+    private function prepareAttributePrefix($data, $attributes)
+    {
+        $result = [];
+        $attributes = array_column($attributes, 'columnName');
+
+        foreach ($data as $field => $translation) {
+            if (in_array($field, $attributes)) {
+                $result['__attribute_' . $field] = $translation;
+                continue;
+            }
+            $result[$field] = $translation;
+        }
+
+        return $result;
     }
 }

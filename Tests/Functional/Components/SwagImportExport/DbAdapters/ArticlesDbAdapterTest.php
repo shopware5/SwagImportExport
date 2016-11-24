@@ -9,6 +9,7 @@
 namespace Functional\Components\SwagImportExport\DbAdapters;
 
 use Doctrine\DBAL\Connection;
+use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Components\SwagImportExport\DbAdapters\ArticlesDbAdapter;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 
@@ -238,6 +239,45 @@ class ArticlesDbAdapterTest extends \PHPUnit_Framework_TestCase
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Variante/Artikel mit Nummer not-existing-main-number nicht gefunden.');
         $articlesDbAdapter->write($articleWithoutExistingMainNumber);
+    }
+
+    public function test_write_article_with_attribute_translation_should_be_written_to_database()
+    {
+        $attributeService = Shopware()->Container()->get('shopware_attribute.crud_service');
+        /** @var CrudService $attributeService */
+        $attributeService->update('s_articles_attributes', 'mycustomfield', 'string', ['translatable' => true]);
+
+        $articlesDbAdapter = $this->createArticleDbAdapter();
+        $records = [
+            'article' => [
+                0 => [
+                    'orderNumber' => 'SW10006',
+                    'mainNumber' => 'SW10006'
+                ]
+            ],
+            'translation' => [
+                0 => [
+                    'languageId' => 2,
+                    'mycustomfield' => 'my custom translation',
+                    'parentIndexElement' => 0
+                ]
+            ]
+        ];
+        $articlesDbAdapter->write($records);
+
+        $attributeService->delete('s_articles_attributes', 'mycustomfield');
+
+        /** @var Connection $dbalConnection */
+        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $articleId = $dbalConnection->executeQuery('SELECT articleID FROM s_articles_details WHERE orderNumber="SW10006"')->fetch(\PDO::FETCH_COLUMN);
+        $result = Shopware()->Container()->get('dbal_connection')->executeQuery("SELECT * FROM s_core_translations WHERE objecttype='article' AND objectkey={$articleId}")->fetchAll();
+        $importedTranslation = unserialize($result[0]['objectdata']);
+
+        // trait rollback not working - so we rollback manually
+        $dbalConnection->executeQuery("DELETE FROM s_core_translations WHERE objecttype='article' AND objectkey={$articleId}");
+        $dbalConnection->executeQuery("DELETE FROM s_articles_translations WHERE articleID={$articleId}");
+
+        $this->assertEquals($records['translation'][0]['mycustomfield'], $importedTranslation['__attribute_mycustomfield']);
     }
 
     public function test_read()
