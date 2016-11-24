@@ -31,15 +31,18 @@ class RelationWriter
     /**
      * @var array $relationTypes
      */
-    protected $relationTypes = array('similar', 'accessory');
+    protected $relationTypes = [
+        'similar',
+        'accessory'
+    ];
 
     /**
      * @var array $relationTables
      */
-    protected $relationTables = array(
+    protected $relationTables = [
         'accessory' => 's_articles_relationships',
         'similar' => 's_articles_similar'
-    );
+    ];
 
     protected $table = null;
 
@@ -78,11 +81,11 @@ class RelationWriter
     }
 
     /**
-     * @param $articleId
-     * @param $mainOrderNumber
-     * @param $relations
-     * @param $relationType
-     * @param $processedFlag
+     * @param integer $articleId
+     * @param string $mainOrderNumber
+     * @param array $relations
+     * @param string $relationType
+     * @param integer $processedFlag
      * @throws AdapterException
      */
     public function write($articleId, $mainOrderNumber, $relations, $relationType, $processedFlag)
@@ -93,8 +96,8 @@ class RelationWriter
 
         $this->initializeRelationData($relationType);
 
-        $newRelations = array();
-        $allRelations = array();
+        $newRelations = [];
+        $allRelations = [];
         foreach ($relations as $relation) {
             //if relation data has only 'parentIndexElement' element
             if (count($relation) < 2) {
@@ -117,10 +120,10 @@ class RelationWriter
                 }
 
                 if (!$relationId) {
-                    $data = array(
+                    $data = [
                         'articleId' => $mainOrderNumber,
-                        'ordernumber' => $relation['ordernumber'],
-                    );
+                        'ordernumber' => $relation['ordernumber']
+                    ];
 
                     $this->getArticlesDbAdapter()->saveUnprocessedData(
                         'articles',
@@ -198,7 +201,7 @@ class RelationWriter
     {
         $relationId = $this->db->fetchOne(
             'SELECT articleID FROM s_articles_details WHERE ordernumber = ?',
-            array($orderNumber)
+            [$orderNumber]
         );
 
         return $relationId;
@@ -214,7 +217,7 @@ class RelationWriter
     {
         $articleId = $this->db->fetchOne(
             'SELECT articleID FROM s_articles_details WHERE articleID = ?',
-            array($relationId)
+            [$relationId]
         );
 
         return is_numeric($articleId);
@@ -231,7 +234,7 @@ class RelationWriter
     {
         $isRelationExists = $this->db->fetchOne(
             "SELECT id FROM {$this->table} WHERE relatedarticle = ? AND articleID = ?",
-            array($relationId, $articleId)
+            [$relationId, $articleId]
         );
 
         return is_numeric($isRelationExists);

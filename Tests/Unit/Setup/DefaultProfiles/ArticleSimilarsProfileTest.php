@@ -8,35 +8,35 @@
 
 namespace SwagImportExport\Tests\Unit\Setup\DefaultProfiles;
 
-use Shopware\Setup\SwagImportExport\DefaultProfiles\ArticleProfile;
+use Shopware\Setup\SwagImportExport\DefaultProfiles\ArticleSimilarsProfile;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\ProfileMetaData;
 
-class ArticleProfileTest extends \PHPUnit_Framework_TestCase
+class ArticleSimilarsProfileTest extends \PHPUnit_Framework_TestCase
 {
     use DefaultProfileTestCaseTrait;
 
     /**
-     * @return ArticleProfile
+     * @return ArticleSimilarsProfile
      */
-    private function createArticleProfile()
+    private function createArticlSimilarsProfile()
     {
-        return new ArticleProfile();
+        return new ArticleSimilarsProfile();
     }
 
     public function test_it_can_be_created()
     {
-        $articleProfile = $this->createArticleProfile();
+        $articleSimilarsProfile = $this->createArticlSimilarsProfile();
 
-        $this->assertInstanceOf(ArticleProfile::class, $articleProfile);
-        $this->assertInstanceOf(ProfileMetaData::class, $articleProfile);
-        $this->assertInstanceOf(\JsonSerializable::class, $articleProfile);
+        $this->assertInstanceOf(ArticleSimilarsProfile::class, $articleSimilarsProfile);
+        $this->assertInstanceOf(ProfileMetaData::class, $articleSimilarsProfile);
+        $this->assertInstanceOf(\JsonSerializable::class, $articleSimilarsProfile);
     }
 
     public function test_it_should_return_valid_profile_tree()
     {
-        $articleProfile = $this->createArticleProfile();
+        $articleSimilarsProfile = $this->createArticlSimilarsProfile();
 
-        $this->walkRecursive($articleProfile->jsonSerialize(), function ($node) {
+        $this->walkRecursive($articleSimilarsProfile->jsonSerialize(), function ($node) {
             $this->assertArrayHasKey('id', $node, 'Current array: ' . print_r($node, true));
             $this->assertArrayHasKey('name', $node, 'Current array: ' . print_r($node, true));
             $this->assertArrayHasKey('type', $node, 'Current array: ' . print_r($node, true));
