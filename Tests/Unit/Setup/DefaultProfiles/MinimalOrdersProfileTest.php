@@ -8,39 +8,39 @@
 
 namespace SwagImportExport\Tests\Unit\Setup\DefaultProfiles;
 
-use Shopware\Setup\SwagImportExport\DefaultProfiles\MinimalCategoryProfile;
+use Shopware\Setup\SwagImportExport\DefaultProfiles\MinimalOrdersProfile;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\ProfileMetaData;
 
-class MinimalCategoryProfileTest extends \PHPUnit_Framework_TestCase
+class MinimalOrdersProfileTest extends \PHPUnit_Framework_TestCase
 {
     use DefaultProfileTestCaseTrait;
 
-    private function createMinimalCategoryProfile()
+    /**
+     * @return MinimalOrdersProfile
+     */
+    private function createMinimalOrdersProfile()
     {
-        return new MinimalCategoryProfile();
+        return new MinimalOrdersProfile();
     }
 
     public function test_it_can_be_created()
     {
-        $categoryMinimalProfile = $this->createMinimalCategoryProfile();
+        $minimalOrdersProfile = $this->createMinimalOrdersProfile();
 
-        $this->assertInstanceOf(MinimalCategoryProfile::class, $categoryMinimalProfile);
-        $this->assertInstanceOf(\JsonSerializable::class, $categoryMinimalProfile);
-        $this->assertInstanceOf(ProfileMetaData::class, $categoryMinimalProfile);
+        $this->assertInstanceOf(MinimalOrdersProfile::class, $minimalOrdersProfile);
+        $this->assertInstanceOf(\JsonSerializable::class, $minimalOrdersProfile);
+        $this->assertInstanceOf(ProfileMetaData::class, $minimalOrdersProfile);
     }
 
     public function test_it_should_return_valid_profile_tree()
     {
-        $minimalCategoryProfile = $this->createMinimalCategoryProfile();
+        $minimalOrdersProfile = $this->createMinimalOrdersProfile();
 
-        $profileTree = $minimalCategoryProfile->jsonSerialize();
+        $profileTree = $minimalOrdersProfile->jsonSerialize();
         $this->walkRecursive($profileTree, function ($node) {
             $this->assertArrayHasKey('id', $node, "Current array: " . print_r($node, true));
             $this->assertArrayHasKey('type', $node, "Current array: " . print_r($node, true));
             $this->assertArrayHasKey('name', $node, "Current array: " . print_r($node, true));
         });
-
-        $profileJson = json_encode($minimalCategoryProfile->jsonSerialize());
-        $this->assertJson($profileJson);
     }
 }
