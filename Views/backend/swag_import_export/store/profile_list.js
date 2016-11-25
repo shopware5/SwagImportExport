@@ -17,6 +17,6 @@ Ext.define('Shopware.apps.SwagImportExport.store.ProfileList', {
      */
     model : 'Shopware.apps.SwagImportExport.model.ProfileList',
 
-    pageSize: 15
+    pageSize: 50
 });
 //{/block}

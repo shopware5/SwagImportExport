@@ -78,7 +78,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
                 borderBottom: '1px solid #A4B5C0'
             },
             items: [{
-                text: '{s name=swag_import_export/profile/profile/add_column}Add column{/s}',
+                text: '{s name=newIterationNode}Add column{/s}',
                 iconCls: 'sprite-plus-circle-frame',
                 itemId: 'createIteration',
                 disabled: true,
@@ -86,7 +86,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
                     me.fireEvent('addNewIteration', me.treePanel, me.treeStore, me.selectedNodeId);
                 }
             }, {
-                text:  '{s name=swag_import_export/profile/profile/add_entry}Add entry{/s}',
+                text:  '{s name=newNode}Add entry{/s}',
                 iconCls: 'sprite-plus-circle-frame',
                 itemId: 'createChild',
                 disabled: true,
@@ -94,7 +94,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
                     me.fireEvent('addNewNode', me.treePanel, me.treeStore, me.selectedNodeId);
                 }
             }, {
-                text: '{s name=swag_import_export/profile/profile/add_attribute}Add attribute{/s}',
+                text: '{s name=newAttribute}Add attribute{/s}',
                 iconCls: 'sprite-plus-circle-frame',
                 itemId: 'createAttribute',
                 disabled: true,
@@ -137,6 +137,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
             viewConfig: {
                 plugins: {
                     ptype: 'customtreeviewdragdrop',
+                    pluginId: 'customtreeviewdragdrop',
                     enableDrag: !me.readOnly
                 },
                 listeners: {
@@ -318,7 +319,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
         view.getSelectionModel().select(record);
 
         e.stopEvent();
-        if (me.readOnly) {
+        if (me.readOnly || Ext.isEmpty(me.getProfileId())) {
             return;
         }
 
@@ -443,6 +444,19 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
             form.child('#parentKey').hide();
             form.child('#defaultValue').hide();
         }
+    },
+
+    /**
+     * @param { boolean } readOnly
+     */
+    changeFieldReadOnlyMode: function(readOnly) {
+        var me = this,
+            form = me.formPanel,
+            fields = form.getForm().getFields();
+
+        fields.each(function(field) {
+            field.setReadOnly(readOnly);
+        });
     }
 });
 //{/block}

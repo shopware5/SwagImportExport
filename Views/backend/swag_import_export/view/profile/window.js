@@ -35,15 +35,17 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Window', {
             me.down('#baseProfile').setReadOnly(true);
             treeStore.getProxy().setExtraParam('profileId', newValue);
             treeStore.load();
-            columnStore.getProxy().setExtraParam('profileId', newValue),
+            columnStore.getProxy().setExtraParam('profileId', newValue);
             columnStore.load();
-            selectionStore.getProxy().setExtraParam('profileId', newValue),
+            selectionStore.getProxy().setExtraParam('profileId', newValue);
             selectionStore.load();
             if (!me.readOnly) {
                 me.down('#savebutton').enable();
             }
+            me.profileConfigurator.down('toolbar[dock=top]').enable();
+            me.profileConfigurator.changeFieldReadOnlyMode(false);
             me.profileConfigurator.hideFormFields();
-            me.profileConfigurator.enable();
+            me.profileConfigurator.treePanel.getView().getPlugin('customtreeviewdragdrop').dragZone.unlock();
         }
     },
 
@@ -156,6 +158,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Window', {
                                 typefield = combo.previousSibling('hidden[name=type]');
 
                             typefield.setValue(selection.get('type'))
+                            me.fireEvent('baseprofileselected', me, selection);
                         }
                     }
                 }]
