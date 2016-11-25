@@ -42,9 +42,20 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
     protected $repository;
 
     /**
+     * @var SnippetsHelper
+     */
+    private $snippetHelper;
+
+    /**
      * @var ArticleInStockValidator
      */
     protected $validator;
+
+    public function __construct()
+    {
+        $this->validator = new ArticleInStockValidator();
+        $this->snippetHelper = new SnippetsHelper();
+    }
 
     /**
      * @return array
@@ -62,18 +73,25 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $ids
-     * @param $columns
-     * @return mixed
+     * @param array $ids
+     * @param array $columns
+     * @return array
+     * @throws \Exception
      */
     public function read($ids, $columns)
     {
+        if (empty($ids)) {
+            $message = $this->snippetHelper->getNamespace()
+                ->get('adapters/articles_no_ids', 'Can not read articles without ids.');
+            throw new \Exception($message);
+        }
+
         $manager = $this->getManager();
 
         //prices
         $columns = array_merge(
             $columns,
-            array('customerGroup.taxInput as taxInput', 'articleTax.tax as tax')
+            ['customerGroup.taxInput as taxInput', 'articleTax.tax as tax']
         );
 
         $builder = $this->getBuilder($columns, $ids);
@@ -200,7 +218,7 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
         $paginator = $manager->createPaginator($query);
 
         $records = $paginator->getIterator()->getArrayCopy();
-        $result = array();
+        $result = [];
         if ($records) {
             foreach ($records as $value) {
                 $result[] = $value['id'];
@@ -226,19 +244,18 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
         $records = Shopware()->Events()->filter(
             'Shopware_Components_SwagImportExport_DbAdapters_ArticlesInStockDbAdapter_Write',
             $records,
-            array('subject' => $this)
+            ['subject' => $this]
         );
 
         $manager = $this->getManager();
-        $validator = $this->getValidator();
 
         foreach ($records['default'] as $record) {
             try {
-                $record = $validator->filterEmptyString($record);
-                $validator->checkRequiredFields($record);
-                $validator->validate($record, ArticleInStockValidator::$mapper);
+                $record = $this->validator->filterEmptyString($record);
+                $this->validator->checkRequiredFields($record);
+                $this->validator->validate($record, ArticleInStockValidator::$mapper);
 
-                $articleDetail = $this->getRepository()->findOneBy(array("number" => $record['orderNumber']));
+                $articleDetail = $this->getRepository()->findOneBy(["number" => $record['orderNumber']]);
                 if (!$articleDetail) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/articlesImages/article_not_found', 'Article with number %s does not exists.');
@@ -264,7 +281,10 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
     public function getSections()
     {
         return array(
-            array('id' => 'default', 'name' => 'default ')
+            [
+                'id' => 'default',
+                'name' => 'default '
+            ]
         );
     }
 
@@ -378,17 +398,5 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
             ->setParameter('ids', $ids);
 
         return $builder;
-    }
-
-    /**
-     * @return ArticleInStockValidator
-     */
-    public function getValidator()
-    {
-        if ($this->validator === null) {
-            $this->validator = new ArticleInStockValidator();
-        }
-
-        return $this->validator;
     }
 }
