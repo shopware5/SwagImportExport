@@ -10,95 +10,107 @@ namespace SwagImportExport\Tests\Functional\Components\SwagImportExport\DbAdapte
 
 use Doctrine\DBAL\Connection;
 use Shopware\Components\SwagImportExport\DbAdapters\OrdersDbAdapter;
+use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 
 class OrderDbAdapterTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var OrdersDbAdapter
-     */
-    private $SUT;
+    use DatabaseTestCaseTrait;
 
     /**
-     * @var Connection
+     * @return OrdersDbAdapter
      */
-    private $connection;
-
-    protected function setUp()
+    private function createOrdersDbAdapter()
     {
-        $this->SUT = new OrdersDbAdapter();
-        $this->connection = Shopware()->Container()->get('dbal_connection');
-        $this->connection->beginTransaction();
-    }
-
-    protected function tearDown()
-    {
-        $this->connection->rollBack();
+        return new OrdersDbAdapter();
     }
 
     public function test_write_should_be_valid()
     {
-        $this->SUT->write($this->getValidDemoRecordsForWriteTest());
+        $ordersDbAdapter = $this->createOrdersDbAdapter();
+        $validOrderRecords = $this->getValidDemoRecordsForWriteTest();
+
+        $ordersDbAdapter->write($validOrderRecords);
     }
 
-    /**
-     * @expectedException \Exception
-     */
     public function test_write_should_throw_exception_with_invalid_array()
     {
+        $ordersDbAdapter = $this->createOrdersDbAdapter();
+
         $invalidRecords = [
             'defaults' => []
         ];
 
-        $this->SUT->write($invalidRecords);
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Es wurden keine Bestellungen gefunden.');
+        $ordersDbAdapter->write($invalidRecords);
     }
 
     public function test_write_without_orderDetailId_should_use_number_instead()
     {
+        $ordersDbAdapter = $this->createOrdersDbAdapter();
+
         $records = $this->getValidDemoRecordsForWriteTest();
         unset($records['default'][0]['orderDetailId']);
 
-        $this->SUT->write($records);
+        $ordersDbAdapter->write($records);
     }
 
-    /**
-     * @expectedException \Exception
-     */
     public function test_write_with_not_existing_orderDetailId_should_throw_an_exception()
     {
+        $ordersDbAdapter = $this->createOrdersDbAdapter();
+
         $records = $this->getValidDemoRecordsForWriteTest();
         $records['default'][0]['orderDetailId'] = 999999;
 
-        $this->SUT->write($records);
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Bestellposition mit ID 999999 nicht gefunden');
+        $ordersDbAdapter->write($records);
     }
 
-    /**
-     * @expectedException \Exception
-     */
     public function test_write_with_not_existing_status_id_should_throw_an_exception()
     {
+        $ordersDbAdapter = $this->createOrdersDbAdapter();
+
         $records = $this->getValidDemoRecordsForWriteTest();
         $records['default'][0]['status'] = 123;
 
-        $this->SUT->write($records);
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Status 123 was not found for order 20001.');
+        $ordersDbAdapter->write($records);
     }
 
-    /**
-     * @expectedException \Exception
-     */
+    public function test_write_with_invalid_status_id_should_throw_an_exception()
+    {
+        $ordersDbAdapter = $this->createOrdersDbAdapter();
+
+        $records = $this->getValidDemoRecordsForWriteTest();
+        $records['default'][0]['status'] = 'abc';
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('status Feld muss int sein!');
+        $ordersDbAdapter->write($records);
+    }
+
     public function test_write_with_invalid_payment_status_should_throw_an_exception()
     {
+        $ordersDbAdapter = $this->createOrdersDbAdapter();
+
         $records = $this->getValidDemoRecordsForWriteTest();
         $records['default'][0]['cleared'] = null;
 
-        $this->SUT->write($records);
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The identifier id is missing for a query of Shopware\Models\Order\Status');
+        $ordersDbAdapter->write($records);
     }
 
     public function test_write_with_empty_status_should_be_valid()
     {
+        $ordersDbAdapter = $this->createOrdersDbAdapter();
+
         $records = $this->getValidDemoRecordsForWriteTest();
         $records['default'][0]['status'] = null;
 
-        $this->SUT->write($records);
+        $ordersDbAdapter->write($records);
     }
 
     /**
