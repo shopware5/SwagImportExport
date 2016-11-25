@@ -27,6 +27,9 @@ use Shopware\Components\SwagImportExport\DbAdapters\Results\ArticleWriterResult;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
 use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
+use Shopware\Components\SwagImportExport\Utils\SwagVersionHelper;
+use Shopware\Models\Article\Element;
+use Shopware\Models\Attribute\Configuration;
 
 /**
  * Class ArticlesDbAdapter
@@ -389,11 +392,9 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     public function prepareTranslationExport($ids)
     {
-        //translations
-        $translationVariantColumns = 'variant.articleID as articleId, variant.id as variantId, variant.kind, ct.objectdata, ct.objectlanguage as languageId';
         $articleDetailIds = implode(',', $ids);
 
-        $sql = "SELECT $translationVariantColumns
+        $sql = "SELECT variant.articleID as articleId, variant.id as variantId, variant.kind, ct.objectdata, ct.objectlanguage as languageId
                 FROM s_articles_details AS variant
                 LEFT JOIN s_core_translations AS ct ON variant.id = ct.objectkey AND objecttype = 'variant'
                 WHERE variant.id IN ($articleDetailIds)
@@ -455,8 +456,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             }
         }
 
-        $translationArticleColumns = 'variant.articleID as articleId, ct.objectdata, ct.objectlanguage as languageId';
-        $sql = "SELECT $translationArticleColumns
+        $sql = "SELECT variant.articleID as articleId, ct.objectdata, ct.objectlanguage as languageId
                 FROM s_articles_details AS variant
                 LEFT JOIN s_core_translations AS ct ON variant.articleID = ct.objectkey
                 WHERE variant.id IN ($articleDetailIds) AND objecttype = 'article'
@@ -509,9 +509,16 @@ class ArticlesDbAdapter implements DataDbAdapter
             'txtlangbeschreibung' => 'descriptionLong'
         ];
 
-        $attributes = $this->getTranslationAttr();
-        foreach ($attributes as $attr) {
-            $translationFields[$attr['name']] = $attr['name'];
+        if (!SwagVersionHelper::isDeprecated('5.3.0')) {
+            $legacyAttributes = $this->getLegacyTranslationAttr();
+            foreach ($legacyAttributes as $attr) {
+                $translationFields[$attr['name']] = $attr['name'];
+            }
+        }
+
+        $attributes = $this->getTranslatableAttributes();
+        foreach ($attributes as $attribute) {
+            $translationFields['__attribute_' . $attribute['columnName']] = $attribute['columnName'];
         }
 
         return $translationFields;
@@ -1070,11 +1077,21 @@ class ArticlesDbAdapter implements DataDbAdapter
             'translation.packUnit as packUnit',
         ];
 
-        $attributes = $this->getTranslationAttr();
+        if (!SwagVersionHelper::isDeprecated('5.3.0')) {
+            $legacyAttributes = $this->getLegacyTranslationAttr();
+
+            if ($legacyAttributes) {
+                foreach ($legacyAttributes as $attr) {
+                    $columns[] = $attr['name'];
+                }
+            }
+        }
+
+        $attributes = $this->getTranslatableAttributes();
 
         if ($attributes) {
-            foreach ($attributes as $attr) {
-                $columns[] = $attr['name'];
+            foreach ($attributes as $attribute) {
+                $columns[] = $attribute['columnName'];
             }
         }
 
@@ -1084,11 +1101,28 @@ class ArticlesDbAdapter implements DataDbAdapter
     /**
      * @return mixed
      */
-    public function getTranslationAttr()
+    public function getLegacyTranslationAttr()
     {
         $elementBuilder = $this->getElementBuilder();
 
         return $elementBuilder->getQuery()->getArrayResult();
+    }
+
+    /**
+     * @return array
+     */
+    private function getTranslatableAttributes()
+    {
+        $repository = $this->modelManager->getRepository(Configuration::class);
+
+        return $repository->createQueryBuilder('configuration')
+            ->select('configuration.columnName')
+            ->where('configuration.tableName = :tablename')
+            ->andWhere('configuration.translatable = 1')
+            ->setParameter('tablename', 's_articles_attributes')
+            ->getQuery()
+            ->getArrayResult()
+        ;
     }
 
     /**
@@ -1495,7 +1529,7 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     public function getElementBuilder()
     {
-        $repository = $this->modelManager->getRepository('Shopware\Models\Article\Element');
+        $repository = $this->modelManager->getRepository(Element::class);
 
         $builder = $repository->createQueryBuilder('attribute');
         $builder->andWhere('attribute.translatable = 1');

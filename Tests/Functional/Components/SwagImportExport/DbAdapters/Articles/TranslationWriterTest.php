@@ -8,6 +8,7 @@
 
 namespace SwagImportExport\Tests\Functional\Components\SwagImportExport\DbAdapters\Articles;
 
+use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\TranslationWriter;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
@@ -66,6 +67,38 @@ class TranslationWriterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($translations[0]['description'], $importedTranslation['txtshortdescription']);
         $this->assertEquals($translations[0]['additionalText'], $importedTranslation['txtzusatztxt']);
         $this->assertEquals($translations[0]['packUnit'], $importedTranslation['txtpackunit']);
+    }
+
+    public function test_write_should_create_attribute_translations()
+    {
+        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        /** @var CrudService $attributeService */
+        $attributeService = Shopware()->Container()->get('shopware_attribute.crud_service');
+        $attributeService->update('s_articles_attributes', 'mycustomfield', 'string', ['translatable' => true]);
+
+        $articleId = 272;
+        $variantId = 827;
+        $mainDetailId = 827;
+        $translations = [
+            [
+                'mycustomfield' => 'my custom translation',
+                'languageId' => '2'
+            ]
+        ];
+
+        $translationsWriter = $this->createTranslationWriter();
+        $translationsWriter->write($articleId, $variantId, $mainDetailId, $translations);
+
+        $attributeService->delete('s_articles_attributes', 'mycustomfield');
+
+        $result = $dbalConnection->executeQuery('SELECT * FROM s_core_translations WHERE objecttype="article" AND objectkey=272')->fetchAll();
+        $importedTranslation = unserialize($result[0]['objectdata']);
+
+        // trait rollback not working - so we rollback manually
+        $dbalConnection->executeQuery('DELETE FROM s_core_translations WHERE objecttype="article" AND objectkey=272');
+        $dbalConnection->executeQuery('DELETE FROM s_articles_translations WHERE articleID=272');
+
+        $this->assertEquals($translations[0]['mycustomfield'], $importedTranslation['__attribute_mycustomfield']);
     }
 
     public function test_write_should_create_variant_translation()
