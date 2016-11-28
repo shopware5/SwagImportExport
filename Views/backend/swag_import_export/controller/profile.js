@@ -36,6 +36,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                 searchfilterchange: me.onSearchProfile
             },
             'swag-import-export-profile-window{ isVisible(true) }': {
+                baseprofileselected: me.onBaseProfileSelected,
                 saveProfile: me.onSaveProfile,
                 saveNode: me.saveNode
             },
@@ -120,6 +121,31 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
         });
     },
 
+    /**
+     * @param { Ext.Window } window
+     * @param { Ext.data.Model } selectedProfile
+     */
+    onBaseProfileSelected: function(window, selectedProfile) {
+        var configurator = window.profileConfigurator,
+            treeStore = configurator.treeStore;
+
+        configurator.hideFormFields();
+
+        // use standard load with params here because
+        // we dont want proxy set to existing profile id
+        // and just load data for preview
+        treeStore.load({
+            params: {
+                profileId: selectedProfile.get('id')
+            }
+        });
+
+        configurator.enable();
+        configurator.changeFieldReadOnlyMode(true);
+        configurator.down('toolbar[dock=top]').disable();
+        configurator.treePanel.getView().getPlugin('customtreeviewdragdrop').dragZone.lock();
+    },
+
     onSaveProfile: function(window) {
         var me = this,
             store = window.profileStore,
@@ -185,7 +211,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                                 '{s name=swag_import_export/profile/save/title}Swag import export{/s}',
                                 '{s name=swag_import_export/profile/save/success}Successfully updated.{/s}'
                             );
-                            grid.getStore().load();
+                            grid.getStore().loadPage(1);
                         }
                     });
                 }

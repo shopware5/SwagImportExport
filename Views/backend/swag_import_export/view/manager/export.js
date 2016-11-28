@@ -199,7 +199,6 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
                     fieldLabel: '{s name=order_state}Order state{/s}',
                     emptyText: '{s name=swag_import_export/manager/import/choose}Please choose{/s}',
                     store: Ext.create('Shopware.store.OrderStatus'),
-                    editable: false,
                     displayField: 'description',
                     valueField: 'id',
                     labelWidth: me.configLabelWidth,
@@ -210,7 +209,6 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
                     fieldLabel: '{s name=payment_state}Payment state{/s}',
                     emptyText: '{s name=swag_import_export/manager/import/choose}Please choose{/s}',
                     store: Ext.create('Shopware.store.PaymentStatus'),
-                    editable: false,
                     displayField: 'description',
                     valueField: 'id',
                     labelWidth: me.configLabelWidth,
@@ -246,7 +244,10 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
         me.profileCombo = Ext.create('Ext.form.field.ComboBox', {
             allowBlank: false,
             fieldLabel: '{s name=swag_import_export/export/select_profile}Select profile{/s}',
-            store: Ext.create('Shopware.apps.SwagImportExport.store.ProfileList'),
+            store: Ext.create('Shopware.apps.SwagImportExport.store.ProfileList', {
+                remoteSort: false,
+                remoteFilter: false
+            }),
             labelStyle: 'font-weight: 700; text-align: left;',
             width: me.configWidth,
             labelWidth: me.configLabelWidth,
@@ -254,10 +255,10 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
             margin: '5 0 0 0',
             valueField: 'id',
             displayField: 'name',
-            editable: false,
+            queryMode: 'local',
+            forceSelection: true,
             name: 'profile',
             emptyText: '{s name=swag_import_export/manager/import/choose}Please choose{/s}',
-            pageSize: 15,
             listConfig: {
                 getInnerTpl: function (value) {
                     return Ext.XTemplate(
@@ -285,13 +286,17 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
             ),
             listeners: {
                 scope: me,
-                change: function(cb, newValue) {
-                    if (!newValue) {
+                beforequery: function(record){
+                    record.query = new RegExp(record.query, 'i');
+                    record.forceAll = true;
+                },
+                select: function(cb, selection) {
+                    if (Ext.isEmpty(selection)) {
                         return;
                     }
 
-                    var record = cb.getStore().getById(newValue);
-                    var type = record.get('type');
+                    var record = selection[0],
+                        type = record.get('type');
 
                     me.resetAdditionalFields();
 

@@ -217,16 +217,19 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
         me.profileCombo = Ext.create('Ext.form.field.ComboBox', {
             margin: '5 0 0 0',
             fieldLabel: '{s name=swag_import_export/manager/import/select_profile}Select profile{/s}',
-            store: Ext.create('Shopware.apps.SwagImportExport.store.ProfileList'),
+            store: Ext.create('Shopware.apps.SwagImportExport.store.ProfileList', {
+                remoteSort: false,
+                remoteFilter: false
+            }),
             labelStyle: 'font-weight: 700; text-align: left;',
             width: me.configWidth,
             labelWidth: me.configLabelWidth,
             helpText: '{s name=swag_import_export/export/profile_help}The default profiles can be individually extended and modified with custom profiles in the configuration.{/s}',
             valueField: 'id',
             displayField: 'name',
-            editable: false,
             name: 'profile',
-            pageSize: 15,
+            queryMode: 'local',
+            forceSelection: true,
             emptyText: '{s name=swag_import_export/manager/import/choose}Please choose{/s}',
             displayTpl: new Ext.XTemplate(
                 '<tpl for=".">' +
@@ -251,6 +254,12 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
                         '<tpl if="translation">{ translation } <i>({ name })</i>' +
                         '<tpl else>{ name }</tpl>' +
                         '{/literal}');
+                }
+            },
+            listeners   : {
+                beforequery: function(record){
+                    record.query = new RegExp(record.query, 'i');
+                    record.forceAll = true;
                 }
             }
         });
