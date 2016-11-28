@@ -42,6 +42,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Window', {
             if (!me.readOnly) {
                 me.down('#savebutton').enable();
             }
+            me.profileConfigurator.enable();
             me.profileConfigurator.down('toolbar[dock=top]').enable();
             me.profileConfigurator.changeFieldReadOnlyMode(false);
             me.profileConfigurator.hideFormFields();
