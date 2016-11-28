@@ -10,6 +10,7 @@ namespace Shopware\Setup\SwagImportExport\Install;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\ArticleCompleteProfile;
+use Shopware\Setup\SwagImportExport\DefaultProfiles\ArticleTranslationProfile;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\CategoryProfile;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\ArticleProfile;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\MinimalArticleProfile;
@@ -28,6 +29,10 @@ use Shopware\Setup\SwagImportExport\DefaultProfiles\ProfileMetaData;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\ArticleAccessoryProfile;
 use Shopware\Setup\SwagImportExport\SetupContext;
 
+/**
+ * Class DefaultProfileInstaller
+ * @package Shopware\Setup\SwagImportExport\Install
+ */
 class DefaultProfileInstaller implements InstallerInterface
 {
     const MIN_PLUGIN_VERSION = '2.0.0';
@@ -101,6 +106,7 @@ class DefaultProfileInstaller implements InstallerInterface
             new ArticlePriceProfile(),
             new ArticleImageUrlProfile(),
             new MinimalArticleVariantsProfile(),
+            new ArticleTranslationProfile(),
             new ArticleTranslationUpdateProfile(),
             new ArticleCategoriesProfile(),
             new ArticleSimilarsProfile(),

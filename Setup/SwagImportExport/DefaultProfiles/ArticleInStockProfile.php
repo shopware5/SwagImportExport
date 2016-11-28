@@ -8,6 +8,8 @@
 
 namespace Shopware\Setup\SwagImportExport\DefaultProfiles;
 
+use Shopware\Components\SwagImportExport\DbAdapters\DataDbAdapter;
+
 class ArticleInStockProfile implements \JsonSerializable, ProfileMetaData
 {
     /**
@@ -15,7 +17,7 @@ class ArticleInStockProfile implements \JsonSerializable, ProfileMetaData
      */
     public function getAdapter()
     {
-        return "articlesInStock";
+        return DataDbAdapter::ARTICLE_INSTOCK_ADAPTER;
     }
 
     /**
