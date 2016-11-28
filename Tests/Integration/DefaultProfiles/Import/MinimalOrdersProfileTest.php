@@ -30,13 +30,4 @@ class MinimalOrdersProfileTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($expectedOrderStatus, $updatedOrder[0]["status"]);
     }
-
-    /*public function test_write_with_invalid_order_status_throws_exception()
-    {
-        $filePath = __DIR__ . "/_fixtures/minimal_orders_profile.csv";
-
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage("status Feld muss int sein!");
-        $this->runCommand("sw:import:import -p default_orders_minimal {$filePath}");
-    }*/
 }

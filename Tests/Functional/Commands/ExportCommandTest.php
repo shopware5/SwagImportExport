@@ -93,7 +93,7 @@ class ExportCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testArticlesInStockCsvExportCommand()
     {
-        $expectedLineAmount = 406;
+        $expectedLineAmount = 405;
         $profileName = ProfileDataProvider::ARTICLES_INSTOCK_PROFILE_NAME;
 
         $fileName = 'articlesinstock.csv';

@@ -8,33 +8,33 @@
 
 namespace SwagImportExport\Tests\Unit\Setup\DefaultProfiles;
 
-use Shopware\Setup\SwagImportExport\DefaultProfiles\CategoryProfile;
+use Shopware\Setup\SwagImportExport\DefaultProfiles\CustomerProfile;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\ProfileMetaData;
 
-class CategoryProfileTest extends \PHPUnit_Framework_TestCase
+class CustomerProfileTest extends \PHPUnit_Framework_TestCase
 {
     use DefaultProfileTestCaseTrait;
 
     /**
-     * @return CategoryProfile
+     * @return CustomerProfile
      */
-    private function createCategoryProfile()
+    private function createCustomerProfile()
     {
-        return new CategoryProfile();
+        return new CustomerProfile();
     }
 
     public function test_it_can_be_created()
     {
-        $categoryProfile = $this->createCategoryProfile();
+        $categoryProfile = $this->createCustomerProfile();
 
-        $this->assertInstanceOf(CategoryProfile::class, $categoryProfile);
+        $this->assertInstanceOf(CustomerProfile::class, $categoryProfile);
         $this->assertInstanceOf(\JsonSerializable::class, $categoryProfile);
         $this->assertInstanceOf(ProfileMetaData::class, $categoryProfile);
     }
 
     public function test_it_should_return_valid_profile_tree()
     {
-        $categoryProfile = $this->createCategoryProfile();
+        $categoryProfile = $this->createCustomerProfile();
 
         $profileTree = $categoryProfile->jsonSerialize();
         $this->walkRecursive($profileTree, function ($node) {

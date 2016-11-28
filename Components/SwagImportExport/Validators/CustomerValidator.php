@@ -13,11 +13,11 @@ use Shopware\Components\SwagImportExport\Exception\AdapterException;
 
 class CustomerValidator extends Validator
 {
-    private $requiredFields = array(
+    private $requiredFields = [
         'email'
-    );
+    ];
 
-    private $requiredFieldsForCreate = array(
+    private $requiredFieldsForCreate = [
         'unhashedPassword',
         'encoder',
         'customergroup',
@@ -28,54 +28,54 @@ class CustomerValidator extends Validator
         'billingZipcode',
         'billingCity',
         'billingCountryID'
-    );
+    ];
 
-    private $snippetData = array(
-        'email' => array(
+    private $snippetData = [
+        'email' => [
             'adapters/customer/email_required',
             'User email is required field.'
-        ),
-        'unhashedPassword' => array(
+        ],
+        'unhashedPassword' => [
             'adapters/customer/unhashedPassword_required',
             'Unhashed password must be provided for email %s.'
-        ),
-        'encoder' => array(
+        ],
+        'encoder' => [
             'adapters/customer/encoder_required',
             'To create a new user with email: %s, unhashedPassword must be provided and password must be empty.'
-        ),
-        'customergroup' => array(
+        ],
+        'customergroup' => [
             'adapters/customer/customergroup_required',
             'Customer group must be provided for user with email: %s.'
-        ),
-        'billingSalutation' => array(
+        ],
+        'billingSalutation' => [
             'adapters/customer/billingSalutation_required',
             'Billing salutation must be provided for user with email: %s.'
-        ),
-        'billingFirstname' => array(
+        ],
+        'billingFirstname' => [
             'adapters/customer/billingFirstname_required',
             'Billing first name must be provided for user with email: %s.'
-        ),
-        'billingLastname' => array(
+        ],
+        'billingLastname' => [
             'adapters/customer/billingLastname_required',
             'Billing last name must be provided for user with email: %s.'
-        ),
-        'billingStreet' => array(
+        ],
+        'billingStreet' => [
             'adapters/customer/billingStreet_required',
             'Billing street must be provided for user with email: %s.'
-        ),
-        'billingZipcode' => array(
+        ],
+        'billingZipcode' => [
             'adapters/customer/billingZipcode_required',
             'Billing zip code must be provided for user with email: %s.'
-        ),
-        'billingCity' => array(
+        ],
+        'billingCity' => [
             'adapters/customer/billingCity_required',
             'Billing city must be provided for user with email: %s.'
-        ),
-        'billingCountryID' => array(
+        ],
+        'billingCountryID' => [
             'adapters/customer/billingCountryID_required',
             'Billing countryId must be provided for user with email: %s.'
-        ),
-    );
+        ]
+    ];
 
     /**
      * Checks whether required fields are filled-in
