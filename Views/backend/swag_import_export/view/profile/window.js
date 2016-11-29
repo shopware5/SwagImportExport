@@ -46,7 +46,9 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Window', {
             me.profileConfigurator.down('toolbar[dock=top]').enable();
             me.profileConfigurator.changeFieldReadOnlyMode(false);
             me.profileConfigurator.hideFormFields();
-            me.profileConfigurator.treePanel.getView().getPlugin('customtreeviewdragdrop').dragZone.unlock();
+            if (Ext.isDefined(me.profileConfigurator.treePanel.getView().getPlugin('customtreeviewdragdrop').dragZone)) {
+                me.profileConfigurator.treePanel.getView().getPlugin('customtreeviewdragdrop').dragZone.unlock();
+            }
         }
     },
 

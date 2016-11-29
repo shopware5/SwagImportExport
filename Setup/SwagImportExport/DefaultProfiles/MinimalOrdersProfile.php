@@ -8,6 +8,8 @@
 
 namespace Shopware\Setup\SwagImportExport\DefaultProfiles;
 
+use Shopware\Components\SwagImportExport\DbAdapters\DataDbAdapter;
+
 class MinimalOrdersProfile implements \JsonSerializable, ProfileMetaData
 {
     /**
@@ -15,7 +17,7 @@ class MinimalOrdersProfile implements \JsonSerializable, ProfileMetaData
      */
     public function getAdapter()
     {
-        return "orders";
+        return DataDbAdapter::ORDER_ADAPTER;
     }
 
     /**

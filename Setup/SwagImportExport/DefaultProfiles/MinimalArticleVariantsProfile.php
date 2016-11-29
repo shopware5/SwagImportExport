@@ -8,6 +8,8 @@
 
 namespace Shopware\Setup\SwagImportExport\DefaultProfiles;
 
+use Shopware\Components\SwagImportExport\DbAdapters\DataDbAdapter;
+
 class MinimalArticleVariantsProfile implements \JsonSerializable, ProfileMetaData
 {
     /**
@@ -15,7 +17,7 @@ class MinimalArticleVariantsProfile implements \JsonSerializable, ProfileMetaDat
      */
     public function getAdapter()
     {
-        return 'articles';
+        return DataDbAdapter::ARTICLE_ADAPTER;
     }
 
     /**

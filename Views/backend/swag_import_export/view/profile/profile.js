@@ -78,7 +78,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
                 borderBottom: '1px solid #A4B5C0'
             },
             items: [{
-                text: '{s name=newIterationNode}Add column{/s}',
+                text: '{s name=newIterationNode}New iteration node{/s}',
                 iconCls: 'sprite-plus-circle-frame',
                 itemId: 'createIteration',
                 disabled: true,
@@ -86,7 +86,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
                     me.fireEvent('addNewIteration', me.treePanel, me.treeStore, me.selectedNodeId);
                 }
             }, {
-                text:  '{s name=newNode}Add entry{/s}',
+                text:  '{s name=newNode}New node{/s}',
                 iconCls: 'sprite-plus-circle-frame',
                 itemId: 'createChild',
                 disabled: true,
@@ -94,7 +94,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
                     me.fireEvent('addNewNode', me.treePanel, me.treeStore, me.selectedNodeId);
                 }
             }, {
-                text: '{s name=newAttribute}Add attribute{/s}',
+                text: '{s name=newAttribute}New attribute{/s}',
                 iconCls: 'sprite-plus-circle-frame',
                 itemId: 'createAttribute',
                 disabled: true,
@@ -324,19 +324,19 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
         }
 
         menuItems = [{
-            text: '{s name=swag_import_export/profile/profile/add_column}Add column{/s}',
+            text: '{s name=newIterationNode}New iteration Node{/s}',
             iconCls: 'sprite-plus-circle-frame',
             handler: function () {
                 me.fireEvent('addNewIteration', me.treePanel, me.treeStore, record.get('id'));
             }
         }, {
-            text:  '{s name=swag_import_export/profile/profile/add_entry}Add entry{/s}',
+            text:  '{s name=newNode}New entry{/s}',
             iconCls: 'sprite-plus-circle-frame',
             handler: function () {
                 me.fireEvent('addNewNode', me.treePanel, me.treeStore, record.get('id'));
             }
         }, {
-            text: '{s name=swag_import_export/profile/profile/add_attribute}Add attribute{/s}',
+            text: '{s name=newAttribute}New attribute{/s}',
             iconCls: 'sprite-plus-circle-frame',
             handler: function () {
                 me.fireEvent('addNewAttribute', me.treePanel, me.treeStore, record.get('id'));
