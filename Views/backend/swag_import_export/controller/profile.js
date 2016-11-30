@@ -32,6 +32,8 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                 editProfile: me.onEditProfile,
                 deleteProfile: me.onDeleteProfile,
                 duplicateProfile: me.onDuplicateProfile,
+                exportProfile: me.onExportProfile,
+                onImportFileSelected: me.startImport,
                 checkboxfilterchange: me.onFilterDefaultProfiles,
                 searchfilterchange: me.onSearchProfile
             },
@@ -55,6 +57,10 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                 deleteMultipleConversions: me.deleteMultipleConversions
             }
         });
+
+        // set base url for profile export download
+        me.baseUrl = '{url controller="SwagImportExportProfile" action="exportProfile"}';
+        me.importUrl = '{url controller="SwagImportExportProfile" action="importProfile"}';
 
         me.callParent(arguments);
     },
@@ -206,12 +212,19 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
             fn: function(response) {
                 if (response === 'yes') {
                     record.destroy({
-                        callback: function() {
-                            Shopware.Notification.createGrowlMessage(
-                                '{s name=swag_import_export/profile/save/title}Swag import export{/s}',
-                                '{s name=swag_import_export/profile/save/success}Successfully updated.{/s}'
-                            );
-                            grid.getStore().loadPage(1);
+                        callback: function(records, operation, success) {
+                            if (operation.success) {
+                                Shopware.Notification.createGrowlMessage(
+                                    '{s name=swag_import_export/profile/save/title}Swag import export{/s}',
+                                    '{s name=swag_import_export/profile/save/delete_success}Successfully deleted.{/s}'
+                                );
+                                grid.getStore().loadPage(1);
+                            } else {
+                                Shopware.Notification.createGrowlMessage(
+                                    '{s name=swag_import_export/profile/save/failure}Failure{/s}',
+                                    '{s name=swag_import_export/profile/deletion_error_msg}Unexpected error while deleting profile.{/s}'
+                                );
+                            }
                         }
                     });
                 }
@@ -246,6 +259,44 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                     title: 'An error occured',
                     text: "Profile was not created"
                 });
+            }
+        });
+    },
+
+    /**
+     * @param { Ext.grid.Panel } grid
+     * @param { Ext.data.Model } record
+     */
+    onExportProfile: function(grid, record) {
+        var me = this,
+            exportUrl = Ext.String.format('[0]?profileId=[1]', me.baseUrl, record.get('id'));
+
+        window.open(exportUrl, 'Download');
+    },
+
+    /**
+     * @param { Ext.grid.Panel } grid
+     * @param { Ext.form.field.File } uploadfield
+     * @param { string } newValue
+     */
+    startImport: function(grid, uploadfield, newValue) {
+        var me = this,
+            form = uploadfield.up('form');
+
+        form.submit({
+            url: me.importUrl,
+            success: function() {
+                Shopware.Notification.createGrowlMessage(
+                    '{s name=swag_import_export/profile/save/title}Swag import export{/s}',
+                    '{s name=swag_import_export/profile/save/success}Successfully updated.{/s}'
+                );
+                grid.getStore().load();
+            },
+            failure: function(form, action) {
+                Shopware.Notification.createGrowlMessage(
+                    '{s name=swag_import_export/profile/save/title}Swag import export{/s}',
+                    action.result.message
+                );
             }
         });
     },
