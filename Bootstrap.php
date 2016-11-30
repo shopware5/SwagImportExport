@@ -23,6 +23,7 @@ use Shopware\Components\SwagImportExport\FileIO\CsvFileWriter;
 use Shopware\Components\SwagImportExport\Logger\Logger;
 use Shopware\Components\SwagImportExport\Service\ExportService;
 use Shopware\Components\SwagImportExport\Service\ImportService;
+use Shopware\Components\SwagImportExport\Service\ProfileService;
 use Shopware\Components\SwagImportExport\UploadPathProvider;
 use Shopware\Components\SwagImportExport\Utils\FileHelper;
 use Shopware\Setup\SwagImportExport\Exception\MinVersionException;
@@ -420,6 +421,11 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         );
 
         $this->subscribeEvent(
+            'Enlight_Bootstrap_InitResource_swag_import_export.profile_service',
+            'registerProfileService'
+        );
+
+        $this->subscribeEvent(
             'Enlight_Bootstrap_InitResource_swag_import_export.upload_path_provider',
             'registerUploadPathProvider'
         );
@@ -504,6 +510,15 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
             $this->get('swag_import_export.upload_path_provider'),
             Shopware()->Auth(),
             $this->get('shopware_media.media_service')
+        );
+    }
+
+    public function registerProfileService()
+    {
+        return new ProfileService(
+            $this->get('models'),
+            new Symfony\Component\Filesystem\Filesystem(),
+            $this->get('snippets')
         );
     }
 

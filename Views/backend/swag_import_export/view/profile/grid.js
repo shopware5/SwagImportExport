@@ -5,6 +5,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Grid', {
     alias: 'widget.swag-import-export-profile-grid',
 
     title: '{s name=swag_import_export/profile/grid/title}Configuration{/s}',
+    cls: 'x-media-manager-window',
 
     initComponent: function() {
         var me = this;
@@ -78,6 +79,16 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Grid', {
                     handler: function (view, rowIndex, colIndex, item, opts, record) {
                         me.fireEvent('duplicateProfile', view, record);
                     }
+                }, {
+                    iconCls: 'sprite-drive-download',
+                    handler: function (view, rowIndex, colIndex, item, opts, record) {
+                        me.fireEvent('exportProfile', view, record);
+                    },
+                    getClass: function(value, meta, record) {
+                        if (record.get('default')) {
+                            return 'x-hide-display';
+                        }
+                    }
                 }]
             }]
         };
@@ -94,6 +105,20 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Grid', {
 
     buildMenuBar: function() {
         var me = this;
+
+        me.filefield = Ext.create('Ext.form.field.File', {
+            name: 'profilefile',
+            buttonOnly: true,
+            buttonConfig : {
+                iconCls: 'sprite-plus-circle-frame'
+            },
+            buttonText: '{s name=swag_import_export/profile/grid/button_import_profile}Import profile{/s}',
+            listeners: {
+                change: function(field, newValue) {
+                    me.fireEvent('onImportFileSelected', me, field, newValue);
+                }
+            }
+        });
 
         return {
             xtype: 'toolbar',
@@ -115,6 +140,13 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Grid', {
                 handler: function() {
                     me.fireEvent('deleteProfile', me, me.getSelectionModel().getSelection());
                 }
+            }, {
+                xtype: 'form',
+                bodyStyle: 'background-color: #ebedef; padding: 5px 0 0 0;',
+                border: false,
+                items: [
+                    me.filefield
+                ]
             }, {
                 xtype: 'checkbox',
                 itemId: 'defaultprofilefilter',

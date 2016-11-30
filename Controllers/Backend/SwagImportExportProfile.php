@@ -1,5 +1,4 @@
 <?php
-
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -8,9 +7,11 @@
  */
 
 use Doctrine\DBAL\DBALException;
+use Shopware\Components\SwagImportExport\Service\ProfileService;
 use Shopware\CustomModels\ImportExport\Profile;
 use Shopware\Components\SwagImportExport\Utils\TreeHelper;
 use Shopware\CustomModels\ImportExport\Repository;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Shopware ImportExport Plugin
@@ -45,6 +46,8 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         $this->addAclPermission("deleteProfiles", "profile", "Insuficient Permissions (deleteProfiles)");
         $this->addAclPermission("getProfile", "profile", "Insuficient Permissions (getProfile)");
         $this->addAclPermission("duplicateProfile", "profile", "Insuficient Permissions (duplicateProfile)");
+        $this->addAclPermission("exportProfile", "profile", "Insuficient Permissions (exportProfile)");
+        $this->addAclPermission("importProfile", "profile", "Insuficient Permissions (importProfile)");
         $this->addAclPermission("createNode", "export", "Insuficient Permissions (createNode)");
         $this->addAclPermission("updateNode", "export", "Insuficient Permissions (updateNode)");
         $this->addAclPermission("deleteNode", "export", "Insuficient Permissions (deleteNode)");
@@ -93,17 +96,17 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         $data = $this->Request()->getParam('data', 1);
 
         try {
-            $profileModel = $this->plugin->getProfileFactory()->createProfileModel($data);
+            $profileEntity = $this->plugin->getProfileFactory()->createProfileModel($data);
 
             return $this->View()->assign([
                 'success' => true,
                 'data' => [
-                    'id' => $profileModel->getId(),
-                    'name' => $profileModel->getName(),
-                    'type' => $profileModel->getType(),
-                    'baseProfile' => $profileModel->getBaseProfile(),
-                    'tree' => $profileModel->getTree(),
-                    'default' => $profileModel->getDefault()
+                    'id' => $profileEntity->getId(),
+                    'name' => $profileEntity->getName(),
+                    'type' => $profileEntity->getType(),
+                    'baseProfile' => $profileEntity->getBaseProfile(),
+                    'tree' => $profileEntity->getTree(),
+                    'default' => $profileEntity->getDefault()
                 ]
             ]);
         } catch (DBALException $e) {
@@ -112,11 +115,15 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
                 'message' => $this->get('snippets')->getNamespace('backend/swag_import_export/controller')->get('swag_import_export/profile/duplicate_unique_error_msg')
             ]);
         } catch (\Exception $e) {
-            return $this->View()->assign(['success' => false, 'msg' => $e->getMessage()]);
+            return $this->View()->assign(
+                ['success' => false, 'msg' => $e->getMessage()]
+            );
         }
     }
 
-
+    /**
+     * @return Enlight_View|Enlight_View_Default
+     */
     public function deleteProfilesAction()
     {
         $manager = $this->getModelManager();
@@ -134,9 +141,11 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
             }
             $manager->flush();
         } catch (\Exception $e) {
-            $this->View()->assign(['success' => false, 'msg' => 'Unexpected error. The profile could not be deleted.', 'children' => $data]);
+            return $this->View()->assign([
+                'success' => false
+            ]);
         }
-        $this->View()->assign(['success' => true]);
+        return $this->View()->assign(['success' => true]);
     }
 
     /**
@@ -185,14 +194,16 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         ]);
     }
 
+    /**
+     * @return Enlight_View|Enlight_View_Default
+     */
     public function getProfileAction()
     {
         $manager = $this->getModelManager();
         $profileId = $this->Request()->getParam('profileId', -1);
 
         if ($profileId === -1) {
-            $this->View()->assign(['success' => false, 'children' => []]);
-            return;
+            return $this->View()->assign(['success' => false, 'children' => []]);
         }
 
         $profileRepository = $manager->getRepository(Profile::class);
@@ -201,7 +212,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         $tree = $profileEntity->getTree();
         $root = TreeHelper::convertToExtJSTree(json_decode($tree, 1));
 
-        $this->View()->assign(['success' => true, 'children' => $root]);
+        return $this->View()->assign(['success' => true, 'children' => $root]);
     }
 
     /**
@@ -217,7 +228,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         $loadedProfile = $manager->find(Profile::class, $profileId);
 
         if (!$loadedProfile) {
-            throw new \Exception(sprintf('Profile with id %s does NOT exists', $profileId));
+            throw new \Exception(sprintf('Profile with id %s does NOT exist', $profileId));
         }
 
         $profile = new Profile();
@@ -252,6 +263,60 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
                 'tree' => $profile->getTree(),
                 'default' => $profile->getDefault()
             ]
+        ]);
+    }
+
+    public function exportProfileAction()
+    {
+        $profileId = $this->Request()->get('profileId', null);
+
+        if (empty($profileId)) {
+            $this->View()->assign([
+                'success' => false
+            ]);
+            return;
+        }
+
+        /** @var ProfileService $service */
+        $service = $this->get('swag_import_export.profile_service');
+
+        try {
+            $exportDataStruct = $service->exportProfile($profileId);
+        } catch (\Exception $e) {
+            $this->View()->assign([
+                'success' => false
+            ]);
+            return;
+        }
+        $this->Front()->Plugins()->Json()->setRenderer(false);
+        header('Content-disposition: attachment; filename=' . $exportDataStruct->getName() . '.json');
+        header('Content-type: application/json');
+
+        echo $exportDataStruct->getExportData();
+    }
+
+    /**
+     * @return Enlight_View|Enlight_View_Default
+     */
+    public function importProfileAction()
+    {
+        /**@var $file UploadedFile */
+        $file = Symfony\Component\HttpFoundation\Request::createFromGlobals()->files->get('profilefile');
+
+        /** @var ProfileService $service */
+        $service = $this->get('swag_import_export.profile_service');
+
+        try {
+            $service->importProfile($file);
+        } catch (\Exception $e) {
+            return $this->View()->assign([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
+
+        return $this->View()->assign([
+            'success' => true
         ]);
     }
 

@@ -1,0 +1,118 @@
+<?php
+/**
+ * (c) shopware AG <info@shopware.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace SwagImportExport\Tests\Functional\Service;
+
+use Doctrine\DBAL\Connection;
+use Shopware\Components\SwagImportExport\Service\ProfileService;
+use Shopware\Components\SwagImportExport\Service\Struct\ProfileDataStruct;
+use Shopware\Components\SwagImportExport\UploadPathProvider;
+use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+
+class ProfileServiceTest extends \PHPUnit_Framework_TestCase
+{
+    use DatabaseTestCaseTrait;
+
+    /**
+     * @return ProfileService
+     */
+    private function getProfileService()
+    {
+        return Shopware()->Container()->get('swag_import_export.profile_service');
+    }
+
+    public function test_profile_export_should_give_correct_result()
+    {
+        $service = $this->getProfileService();
+        /** @var Connection $dbalConnection */
+        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $profile = $dbalConnection->executeQuery('SELECT * FROM s_import_export_profile LIMIT 1')->fetch(\PDO::FETCH_ASSOC);
+
+        /** @var ProfileDataStruct $profileDataStruct */
+        $profileDataStruct = $service->exportProfile($profile['id']);
+
+        $this->assertEquals($profile['name'], $profileDataStruct->getName());
+        $this->assertEquals($profile['type'], $profileDataStruct->getType());
+        $this->assertEquals($profile['tree'], json_encode($profileDataStruct->getTree()));
+    }
+
+    public function test_profile_import_should_throw_exception_wrong_filetype()
+    {
+        $service = $this->getProfileService();
+        /** @var UploadPathProvider $uploadPathProvider */
+        $uploadPathProvider = Shopware()->Container()->get('swag_import_export.upload_path_provider');
+
+        // create copy of profile.json testfile because it will be deleted by service
+        copy(__DIR__ . '/_fixtures/profile_import.json', $uploadPathProvider->getPath() . '/test.csv');
+
+        $file = new UploadedFile($uploadPathProvider->getPath() . '/test.csv', 'test.csv');
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Die hochgeladene Datei ist keine JSON Datei.');
+
+        $service->importProfile($file);
+    }
+
+    public function test_profile_import_should_throw_exception_no_content()
+    {
+        $service = $this->getProfileService();
+        /** @var UploadPathProvider $uploadPathProvider */
+        $uploadPathProvider = Shopware()->Container()->get('swag_import_export.upload_path_provider');
+
+        // create copy of profile.json testfile because it will be deleted by service
+        copy(__DIR__ . '/_fixtures/empty.json', $uploadPathProvider->getPath() . '/empty.json');
+
+        $file = new UploadedFile($uploadPathProvider->getPath() . '/empty.json', 'empty.json', 'application/json');
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Die hochgeladene Datei enthält keine Daten.');
+
+        $service->importProfile($file);
+    }
+
+    public function test_profile_import_should_throw_exception_wrong_data()
+    {
+        $service = $this->getProfileService();
+        /** @var UploadPathProvider $uploadPathProvider */
+        $uploadPathProvider = Shopware()->Container()->get('swag_import_export.upload_path_provider');
+
+        // create copy of profile.json testfile because it will be deleted by service
+        copy(__DIR__ . '/_fixtures/wrong.json', $uploadPathProvider->getPath() . '/wrong.json');
+
+        $file = new UploadedFile($uploadPathProvider->getPath() . '/wrong.json', 'wrong.json', 'application/json');
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Die hochgeladenen Profildaten enthalten nicht alle benötigten Felder.');
+
+        $service->importProfile($file);
+    }
+
+    public function test_profile_import_should_succeed()
+    {
+        $service = $this->getProfileService();
+        /** @var Connection $dbalConnection */
+        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        /** @var UploadPathProvider $uploadPathProvider */
+        $uploadPathProvider = Shopware()->Container()->get('swag_import_export.upload_path_provider');
+
+        // create copy of profile.json testfile because it will be deleted by service
+        copy(__DIR__ . '/_fixtures/profile_import.json', $uploadPathProvider->getPath() . '/profile_import.json');
+
+        $file = new UploadedFile($uploadPathProvider->getPath() . '/profile_import.json', 'profile_import.json', 'application/json');
+
+        $service->importProfile($file);
+
+        $importedProfile = $dbalConnection->executeQuery('SELECT * FROM s_import_export_profile WHERE name = "My imported profile test"')->fetch(\PDO::FETCH_ASSOC);
+
+        $this->assertEquals('categories', $importedProfile['type']);
+        $this->assertEquals('{"id":"root","name":"Root","type":"node","children":[{"id":"537359399c80a","name":"Header","index":"0","type":"node","children":[{"id":"537385ed7c799","name":"HeaderChild","index":"0","type":"node"}]},{"id":"537359399c8b7","name":"categories","index":"1","type":"node","children":[{"id":"537359399c90d","name":"category","index":"0","type":"iteration","adapter":"default","children":[{"id":"53e9f539a997d","type":"leaf","index":"0","name":"categoryId","shopwareField":"categoryId"},{"id":"53e0a853f1b98","type":"leaf","index":"1","name":"parentID","shopwareField":"parentId"},{"id":"53e0cf5cad595","type":"leaf","index":"2","name":"description","shopwareField":"name"},{"id":"53e9f69bf2edb","type":"leaf","index":"3","name":"position","shopwareField":"position"},{"id":"53e0d1414b0ad","type":"leaf","index":"4","name":"metatitle","shopwareField":"metaTitle"},{"id":"53e0d1414b0d7","type":"leaf","index":"5","name":"metakeywords","shopwareField":"metaKeywords"},{"id":"53e0d17da1f06","type":"leaf","index":"6","name":"metadescription","shopwareField":"metaDescription"},{"id":"53e9f5c0eedaf","type":"leaf","index":"7","name":"cmsheadline","shopwareField":"cmsHeadline"},{"id":"53e9f5d80f10f","type":"leaf","index":"8","name":"cmstext","shopwareField":"cmsText"},{"id":"53e9f5e603ffe","type":"leaf","index":"9","name":"template","shopwareField":"template"},{"id":"53e9f5f87c87a","type":"leaf","index":"10","name":"active","shopwareField":"active"},{"id":"53e9f609c56eb","type":"leaf","index":"11","name":"blog","shopwareField":"blog"},{"id":"53e9f62a03f55","type":"leaf","index":"13","name":"external","shopwareField":"external"},{"id":"53e9f637aa1fe","type":"leaf","index":"14","name":"hidefilter","shopwareField":"hideFilter"},{"id":"541c35c378bc9","type":"leaf","index":"15","name":"attribute_attribute1","shopwareField":"attributeAttribute1"},{"id":"541c36d0bba0f","type":"leaf","index":"16","name":"attribute_attribute2","shopwareField":"attributeAttribute2"},{"id":"541c36d63fac6","type":"leaf","index":"17","name":"attribute_attribute3","shopwareField":"attributeAttribute3"},{"id":"541c36da52222","type":"leaf","index":"18","name":"attribute_attribute4","shopwareField":"attributeAttribute4"},{"id":"541c36dc540e3","type":"leaf","index":"19","name":"attribute_attribute5","shopwareField":"attributeAttribute5"},{"id":"541c36dd9e130","type":"leaf","index":"20","name":"attribute_attribute6","shopwareField":"attributeAttribute6"},{"id":"54dc86ff4bee5","name":"CustomerGroups","index":"21","type":"iteration","adapter":"customerGroups","parentKey":"categoryId","children":[{"id":"54dc87118ad11","type":"leaf","index":"0","name":"CustomerGroup","shopwareField":"customerGroupId"}]}]}]}]}', $importedProfile['tree']);
+        $this->assertEquals(0, $importedProfile['is_default']);
+        $this->assertEquals(0, $importedProfile['hidden']);
+    }
+}
