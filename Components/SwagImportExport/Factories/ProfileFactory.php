@@ -73,6 +73,8 @@ class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
 
         if (isset($data['hidden']) && $data['hidden']) {
             $tree = TreeHelper::getTreeByHiddenProfileType($data['type']);
+        } else if (isset($data['baseProfile'])) {
+            $tree = TreeHelper::getDefaultTreeByBaseProfile($data['baseProfile']);
         } else {
             $tree = TreeHelper::getDefaultTreeByProfileType($data['type']);
         }
