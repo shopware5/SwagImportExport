@@ -41,14 +41,14 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Window', {
             selectionStore.load();
             if (!me.readOnly) {
                 me.down('#savebutton').enable();
+                me.profileConfigurator.down('toolbar[dock=top]').enable();
+                me.profileConfigurator.changeFieldReadOnlyMode(false);
+                me.profileConfigurator.hideFormFields();
+                if (Ext.isDefined(me.profileConfigurator.treePanel.getView().getPlugin('customtreeviewdragdrop').dragZone)) {
+                    me.profileConfigurator.treePanel.getView().getPlugin('customtreeviewdragdrop').dragZone.unlock();
+                }
             }
             me.profileConfigurator.enable();
-            me.profileConfigurator.down('toolbar[dock=top]').enable();
-            me.profileConfigurator.changeFieldReadOnlyMode(false);
-            me.profileConfigurator.hideFormFields();
-            if (Ext.isDefined(me.profileConfigurator.treePanel.getView().getPlugin('customtreeviewdragdrop').dragZone)) {
-                me.profileConfigurator.treePanel.getView().getPlugin('customtreeviewdragdrop').dragZone.unlock();
-            }
         }
     },
 

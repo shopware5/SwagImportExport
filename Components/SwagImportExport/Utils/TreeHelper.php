@@ -9,7 +9,9 @@
 
 namespace Shopware\Components\SwagImportExport\Utils;
 
+use Shopware\Components\Model\QueryBuilder;
 use Shopware\Components\SwagImportExport\DataManagers\DataManager;
+use Shopware\CustomModels\ImportExport\Profile;
 
 /**
  * Class TreeHelper
@@ -388,6 +390,27 @@ class TreeHelper
             default:
                 throw new \Exception('The profile could not be created.');
         }
+    }
+
+    /**
+     * @param int $baseProfileId
+     * @return string
+     */
+    public static function getDefaultTreeByBaseProfile($baseProfileId)
+    {
+        $modelManager = Shopware()->Container()->get('models');
+
+        /** @var QueryBuilder $qb */
+        $tree = $modelManager->getRepository(Profile::class)
+            ->createQueryBuilder('p')
+            ->select('p.tree')
+            ->where('p.id = :baseProfileId')
+            ->setParameter('baseProfileId', $baseProfileId)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+
+        return $tree;
     }
 
     /**
