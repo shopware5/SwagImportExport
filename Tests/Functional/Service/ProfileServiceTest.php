@@ -93,6 +93,23 @@ class ProfileServiceTest extends \PHPUnit_Framework_TestCase
         $service->importProfile($file);
     }
 
+    public function test_profile_import_should_throw_exception_empty_value()
+    {
+        $service = $this->getProfileService();
+        /** @var UploadPathProvider $uploadPathProvider */
+        $uploadPathProvider = Shopware()->Container()->get('swag_import_export.upload_path_provider');
+
+        // create copy of profile.json testfile because it will be deleted by service
+        copy(__DIR__ . '/_fixtures/empty_value.json', $uploadPathProvider->getPath() . '/empty_value.json');
+
+        $file = new UploadedFile($uploadPathProvider->getPath() . '/empty_value.json', 'empty_value.json', 'application/json');
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Die hochgeladenen Profildaten enthalten nicht alle benötigten Felder.');
+
+        $service->importProfile($file);
+    }
+
     public function test_profile_import_should_succeed()
     {
         $service = $this->getProfileService();

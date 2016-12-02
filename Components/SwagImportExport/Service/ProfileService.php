@@ -64,9 +64,9 @@ class ProfileService implements ProfileServiceInterface
         }
         $profileData = (array) json_decode($content);
 
-        if (!isset($profileData['name'])
-            || !isset($profileData['type'])
-            || !isset($profileData['tree'])
+        if (empty($profileData['name'])
+            || empty($profileData['type'])
+            || empty($profileData['tree'])
         ) {
             $this->fileSystem->remove($file->getPathname());
 
