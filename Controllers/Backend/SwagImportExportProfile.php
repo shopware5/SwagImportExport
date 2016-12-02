@@ -7,6 +7,7 @@
  */
 
 use Doctrine\DBAL\DBALException;
+use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\SwagImportExport\Service\ProfileService;
 use Shopware\CustomModels\ImportExport\Profile;
 use Shopware\Components\SwagImportExport\Utils\TreeHelper;
@@ -20,7 +21,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * @package Shopware\Plugins\SwagImportExport
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Controllers_Backend_ExtJs
+class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
     /**
      * @var Shopware_Plugins_Backend_SwagImportExport_Bootstrap
@@ -36,6 +37,18 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         parent::__construct($request, $response);
 
         $this->plugin = Shopware()->Plugins()->Backend()->SwagImportExport();
+    }
+
+    /**
+     * Returns a list with actions which should not be validated for CSRF protection
+     *
+     * @return string[]
+     */
+    public function getWhitelistedCSRFActions()
+    {
+        return [
+            'exportProfile'
+        ];
     }
 
     public function initAcl()
