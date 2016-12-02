@@ -29,6 +29,11 @@ class ArticlesImagesDbAdapterTest extends \PHPUnit_Framework_TestCase
         return 'file://' . realpath(dirname(__FILE__)) . '/../../../../Helper/ImportFiles/sw-icon_blue128.png';
     }
 
+    private function getInvalidImportImagePath()
+    {
+        return 'file://' . realpath(dirname(__FILE__)) . '/../../../../Helper/ImportFiles/invalid_image_name.png';
+    }
+
     public function test_write_should_throw_exception_if_records_are_empty()
     {
         $articlesImagesDbAdapter = $this->createArticleImagesDbAdapter();
@@ -80,5 +85,41 @@ class ArticlesImagesDbAdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($records['default'][0]['description'], $image['description']);
         $this->assertEquals($articleId, $image['articleID']);
         $this->assertEquals('png', $image['extension']);
+    }
+
+    public function test_write_with_invalid_order_number_throws_exception()
+    {
+        $articlesImagesDbAdapter = $this->createArticleImagesDbAdapter();
+        $records = [
+            'default' => [
+                [
+                    'ordernumber' => 'invalid-order-number',
+                    'image' => $this->getImportImagePath(),
+                    'description' => 'testimport1'
+                ]
+            ]
+        ];
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Artikel mit Nummer invalid-order-number existiert nicht.');
+        $articlesImagesDbAdapter->write($records);
+    }
+
+    public function test_write_with_not_existing_image_throws_exception()
+    {
+        $articlesImagesDbAdapter = $this->createArticleImagesDbAdapter();
+        $records = [
+            'default' => [
+                [
+                    'ordernumber' => 'SW10001',
+                    'image' => $this->getInvalidImportImagePath(),
+                    'description' => 'testimport1'
+                ]
+            ]
+        ];
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Kann file://' . realpath(dirname(__FILE__)) . '/../../../../Helper/ImportFiles/invalid_image_name.png nicht zum Lesen öffnen');
+        $articlesImagesDbAdapter->write($records);
     }
 }

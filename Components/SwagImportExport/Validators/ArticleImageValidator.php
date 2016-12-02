@@ -13,36 +13,36 @@ use Shopware\Components\SwagImportExport\Exception\AdapterException;
 
 class ArticleImageValidator extends Validator
 {
-    public static $mapper = array(
-        'string' => array( //TODO: maybe we don't need to check fields which contains string?
+    public static $mapper = [
+        'string' => [
             'ordernumber',
             'image',
             'description',
-            'relations',
-        ),
-        'int' => array(
+            'relations'
+        ],
+        'int' => [
             'main',
             'position',
             'width',
-            'height',
-        ),
-    );
+            'height'
+        ]
+    ];
 
-    private $requiredFields = array(
+    private $requiredFields = [
         'ordernumber',
-        'image',
-    );
+        'image'
+    ];
 
-    private $snippetData = array(
-        'ordernumber' => array(
+    private $snippetData = [
+        'ordernumber' => [
             'adapters/articlesImages/ordernumber_image_required',
             'Ordernumber and image are required'
-        ),
-        'image' => array(
+        ],
+        'image' => [
             'adapters/articlesImages/ordernumber_image_required',
             'Ordernumber and image are required'
-        ),
-    );
+        ]
+    ];
 
     /**
      * Checks whether required fields are filled-in

@@ -100,7 +100,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
 
         $builder->select('image.id');
 
-        $builder->from('Shopware\Models\Article\Image', 'image')
+        $builder->from(Image::class, 'image')
                 ->where('image.articleDetailId IS NULL')
                 ->andWhere('image.parentId IS NULL');
 
@@ -327,7 +327,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                 $image->setMain($record['main']);
                 $image->setDescription($record['description']);
                 $this->manager->persist($image);
-                $this->manager->flush($image);
+                $this->manager->flush();
 
                 if ($relations && !empty($relations)) {
                     $this->setImageMappings($relations, $image->getId());
@@ -556,7 +556,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
     {
         $builder = $this->manager->createQueryBuilder();
         $builder->select($columns)
-            ->from('Shopware\Models\Article\Image', 'aimage')
+            ->from(Image::class, 'aimage')
             ->innerJoin('aimage.article', 'article')
             ->leftJoin('Shopware\Models\Article\Detail', 'mv', Join::WITH, 'mv.articleId=article.id AND mv.kind=1')
             ->leftJoin('aimage.mappings', 'im')
