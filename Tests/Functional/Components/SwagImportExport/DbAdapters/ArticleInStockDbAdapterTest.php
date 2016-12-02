@@ -61,6 +61,19 @@ class ArticleInStockDbAdapterTest extends \PHPUnit_Framework_TestCase
         $articleInStockDbAdapter->write($updateInStockRecord);
     }
 
+    public function test_read_and_read_records_should_get_same_result_count()
+    {
+        $articleInStockDbAdapter = $this->createArticlesInStockAbAdapter();
+        $filter = [
+            'stockFilter' => 'notInStock'
+        ];
+
+        $preparedExportData = $articleInStockDbAdapter->readRecordIds(null, null, $filter);
+        $exportedData = $articleInStockDbAdapter->read($preparedExportData, $this->getReadColumns());
+
+        $this->assertEquals(count($preparedExportData), count($exportedData["default"]));
+    }
+
     public function test_read()
     {
         $articleInStockDbAdapter = $this->createArticlesInStockAbAdapter();

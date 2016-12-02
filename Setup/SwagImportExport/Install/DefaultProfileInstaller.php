@@ -28,6 +28,7 @@ use Shopware\Setup\SwagImportExport\DefaultProfiles\OrderMainDataProfile;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\ProfileMetaData;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\ArticleAccessoryProfile;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\ArticlePropertiesProfile;
+use Shopware\Setup\SwagImportExport\DefaultProfiles\CustomerProfile;
 use Shopware\Setup\SwagImportExport\SetupContext;
 
 /**
@@ -115,7 +116,8 @@ class DefaultProfileInstaller implements InstallerInterface
             new ArticleInStockProfile(),
             new MinimalOrdersProfile(),
             new OrderMainDataProfile(),
-            new ArticlePropertiesProfile()
+            new ArticlePropertiesProfile(),
+            new CustomerProfile()
         ];
     }
 }

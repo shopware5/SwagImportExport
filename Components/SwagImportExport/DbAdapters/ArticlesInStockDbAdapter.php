@@ -12,6 +12,7 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\QueryBuilder;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
+use Shopware\Models\Article\Detail;
 use Shopware\Components\SwagImportExport\Validators\ArticleInStockValidator;
 
 class ArticlesInStockDbAdapter implements DataDbAdapter
@@ -19,7 +20,7 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
     /**
      * @var ModelManager
      */
-    protected $manager;
+    protected $modelManager;
 
     /**
      * @var array
@@ -55,6 +56,8 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
     {
         $this->validator = new ArticleInStockValidator();
         $this->snippetHelper = new SnippetsHelper();
+        $this->modelManager = Shopware()->Container()->get('models');
+        $this->repository = $this->modelManager->getRepository(Detail::class);
     }
 
     /**
@@ -86,8 +89,6 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
             throw new \Exception($message);
         }
 
-        $manager = $this->getManager();
-
         //prices
         $columns = array_merge(
             $columns,
@@ -99,7 +100,7 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
         $query = $builder->getQuery();
         $query->setHydrationMode(AbstractQuery::HYDRATE_ARRAY);
 
-        $paginator = $manager->createPaginator($query);
+        $paginator = $this->modelManager->createPaginator($query);
 
         $result['default'] = $paginator->getIterator()->getArrayCopy();
 
@@ -137,12 +138,11 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
         if ($stockFilter === null) {
             $stockFilter = 'all';
         }
-        $manager = $this->getManager();
 
-        $builder = $manager->createQueryBuilder();
+        $builder = $this->modelManager->createQueryBuilder();
 
         $builder->select('d.id')
-            ->from('Shopware\Models\Article\Detail', 'd')
+            ->from(Detail::class, 'd')
             ->leftJoin('d.prices', 'p');
 
         switch ($stockFilter) {
@@ -190,7 +190,7 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
 
                 break;
             default:
-                throw new \Exception('Cannot match StockFilter - File:ArticlesInStockAdapter Line:136');
+                throw new \Exception('Cannot match StockFilter - File:ArticlesInStockAdapter Line:' . __LINE__);
         }
 
         if (isset($filter['stockFilter'])) {
@@ -215,7 +215,7 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
 
         $query = $builder->getQuery();
         $query->setHydrationMode(AbstractQuery::HYDRATE_ARRAY);
-        $paginator = $manager->createPaginator($query);
+        $paginator = $this->modelManager->createPaginator($query);
 
         $records = $paginator->getIterator()->getArrayCopy();
         $result = [];
@@ -235,6 +235,8 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
      */
     public function write($records)
     {
+        $articleCount = 0;
+
         if (empty($records['default'])) {
             $message = SnippetsHelper::getNamespace()
                 ->get('adapters/articlesInStock/no_records', 'No article stock records were found.');
@@ -247,15 +249,13 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
             ['subject' => $this]
         );
 
-        $manager = $this->getManager();
-
         foreach ($records['default'] as $record) {
             try {
                 $record = $this->validator->filterEmptyString($record);
                 $this->validator->checkRequiredFields($record);
                 $this->validator->validate($record, ArticleInStockValidator::$mapper);
 
-                $articleDetail = $this->getRepository()->findOneBy(["number" => $record['orderNumber']]);
+                $articleDetail = $this->repository->findOneBy(["number" => $record['orderNumber']]);
                 if (!$articleDetail) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/articlesImages/article_not_found', 'Article with number %s does not exists.');
@@ -266,13 +266,16 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
 
                 $articleDetail->setInStock($inStock);
 
-                $manager->persist($articleDetail);
+                if (($articleCount % 50) === 0) {
+                    $this->modelManager->flush();
+                }
             } catch (AdapterException $e) {
                 $message = $e->getMessage();
                 $this->saveMessage($message);
             }
         }
-        $manager->flush();
+        
+        $this->modelManager->flush();
     }
 
     /**
@@ -301,34 +304,6 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
         }
 
         return false;
-    }
-
-    /**
-     * Returns article detail repository
-     *
-     * @return \Shopware\Models\Article\Repository
-     */
-    public function getRepository()
-    {
-        if ($this->repository === null) {
-            $this->repository = $this->getManager()->getRepository('Shopware\Models\Article\Detail');
-        }
-
-        return $this->repository;
-    }
-
-    /**
-     * Returns entity manager
-     *
-     * @return ModelManager
-     */
-    public function getManager()
-    {
-        if ($this->manager === null) {
-            $this->manager = Shopware()->Models();
-        }
-
-        return $this->manager;
     }
 
     /**
@@ -386,16 +361,20 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
      */
     public function getBuilder($columns, $ids)
     {
-        $builder = $this->getManager()->createQueryBuilder();
+        $builder = $this->modelManager->createQueryBuilder();
         $builder->select($columns)
-            ->from('Shopware\Models\Article\Detail', 'variant')
+            ->from(Detail::class, 'variant')
             ->leftJoin('variant.article', 'article')
             ->leftJoin('article.supplier', 'articleSupplier')
             ->leftJoin('variant.prices', 'prices')
             ->leftJoin('prices.customerGroup', 'customerGroup')
             ->leftJoin('article.tax', 'articleTax')
             ->where('variant.id IN (:ids)')
-            ->setParameter('ids', $ids);
+            ->andWhere('prices.customerGroup = :customergroup')
+            ->setParameters([
+                'ids' => $ids,
+                'customergroup' => 'EK'
+            ]);
 
         return $builder;
     }
