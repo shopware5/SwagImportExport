@@ -95,4 +95,31 @@ class NewsletterDbAdapterTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('New newsletter group', $createdNewsletterGroup[0]['name']);
     }
+
+    public function test_write_should_ignore_existing_customer_registered_in_customer_group()
+    {
+        $newsletterDbAdapter = $this->createNewsletterAdapter();
+        /** @var Connection $dbalConnection */
+        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $dt = new \DateTime();
+        $now = $dt->format('Y-m-d H:i:s');
+
+        // register existing demo customer to newsletter
+        $dbalConnection->executeQuery("INSERT INTO s_campaigns_mailaddresses (customer, email, added) VALUES (1, 'test@example.com', ?)", [$now]);
+
+        $record = [
+            'default' => [
+                [
+                    'email' => 'test@example.com',
+                    'groupName' => ''
+                ]
+            ]
+        ];
+
+        $newsletterDbAdapter->write($record);
+        $groupCount = $dbalConnection->executeQuery('SELECT COUNT(*) FROM s_campaigns_groups')->fetchColumn();
+
+        // check that no new group is created
+        $this->assertEquals(1, $groupCount);
+    }
 }

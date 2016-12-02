@@ -24,24 +24,17 @@ use Shopware\Components\SwagImportExport\DataManagers\NewsletterDataManager;
 class NewsletterDbAdapter implements DataDbAdapter
 {
     /**
+     * @var \Enlight_Components_Db_Adapter_Pdo_Mysql
+     */
+    protected $db;
+
+    /** @var boolean */
+    protected $errorMode;
+
+    /**
      * @var ModelManager
      */
     protected $manager;
-
-    /**
-     * @var EntityRepository
-     */
-    protected $groupRepository;
-
-    /**
-     * @var EntityRepository
-     */
-    protected $addressRepository;
-    
-    /**
-     * @var EntityRepository
-     */
-    protected $contactDataRepository;
 
     /**
      * @var array
@@ -71,16 +64,15 @@ class NewsletterDbAdapter implements DataDbAdapter
     /**
      * @var array
      */
-    protected $defaultValues = array();
+    protected $defaultValues = [];
 
     public function __construct()
     {
         $this->manager = Shopware()->Container()->get('models');
         $this->validator = new NewsletterValidator();
         $this->dataManager = new NewsletterDataManager();
-        $this->groupRepository = $this->manager->getRepository('Shopware\Models\Newsletter\Group');
-        $this->addressRepository = $this->manager->getRepository('Shopware\Models\Newsletter\Address');
-        $this->contactDataRepository = $this->manager->getRepository('Shopware\Models\Newsletter\ContactData');
+        $this->db = Shopware()->Db();
+        $this->errorMode = Shopware()->Config()->get('SwagImportExportErrorMode');
     }
 
     /**
@@ -103,7 +95,7 @@ class NewsletterDbAdapter implements DataDbAdapter
         ];
 
         //removes street number for shopware 5
-        if (!$this->isAdditionalShippingAddressExists()) {
+        if (!$this->hasAdditionalShippingAddress()) {
             $columns[] = 'CASE WHEN (cb.streetNumber IS NULL) THEN cd.streetNumber ELSE cb.streetNumber END as streetNumber';
         }
 
@@ -133,11 +125,12 @@ class NewsletterDbAdapter implements DataDbAdapter
     /**
      * @return bool
      */
-    public function isAdditionalShippingAddressExists()
+    public function hasAdditionalShippingAddress()
     {
         $sql = "SHOW COLUMNS FROM `s_user_shippingaddress` LIKE 'additional_address_line1'";
-        $result = Shopware()->Db()->fetchRow($sql);
-        return $result ? true : false;
+        $result = $this->db->fetchRow($sql);
+
+        return !empty($result);
     }
 
     /**
@@ -173,7 +166,7 @@ class NewsletterDbAdapter implements DataDbAdapter
         $builder = $this->manager->createQueryBuilder();
 
         $builder->select('na.id')
-                ->from('Shopware\Models\Newsletter\Address', 'na')
+                ->from(Address::class, 'na')
                 ->orderBy('na.id', 'ASC');
 
         if (!empty($filter)) {
@@ -190,11 +183,9 @@ class NewsletterDbAdapter implements DataDbAdapter
 
         $records = $builder->getQuery()->getResult();
 
-        $result = array();
+        $result = [];
         if ($records) {
-            foreach ($records as $value) {
-                $result[] = $value['id'];
-            }
+            $result = array_column($records, 'id');
         }
 
         return $result;
@@ -218,17 +209,30 @@ class NewsletterDbAdapter implements DataDbAdapter
         $records = Shopware()->Events()->filter(
             'Shopware_Components_SwagImportExport_DbAdapters_CategoriesDbAdapter_Write',
             $records,
-            array('subject' => $this)
+            ['subject' => $this]
         );
 
         $defaultValues = $this->getDefaultValues();
+        /** @var EntityRepository $addressRepository */
+        $addressRepository = $this->manager->getRepository(Address::class);
+        /** @var EntityRepository $groupRepository */
+        $groupRepository = $this->manager->getRepository(Group::class);
+        /** @var EntityRepository $contactDataRepository */
+        $contactDataRepository = $this->manager->getRepository(ContactData::class);
+        $count = 0;
 
         foreach ($records['default'] as $newsletterData) {
             try {
+                $count++;
                 $newsletterData = $this->validator->filterEmptyString($newsletterData);
                 $this->validator->checkRequiredFields($newsletterData);
 
-                $recipient = $this->addressRepository->findOneByEmail($newsletterData['email']);
+                $recipient = $addressRepository->findOneBy(['email' => $newsletterData['email']]);
+
+                if ($recipient instanceof Address && empty($newsletterData['groupName'])) {
+                    continue;
+                }
+
                 if (!$recipient instanceof Address) {
                     $newsletterData = $this->dataManager->setDefaultFieldsForCreate($newsletterData, $defaultValues);
                     $recipient = new Address();
@@ -238,13 +242,13 @@ class NewsletterDbAdapter implements DataDbAdapter
 
                 if ($newsletterData['groupName']) {
                     /** @var Group $group */
-                    $group = $this->groupRepository->findOneByName($newsletterData['groupName']);
+                    $group = $groupRepository->findOneBy(['name' => $newsletterData['groupName']]);
 
                     if (!$group instanceof Group) {
                         $group = new Group();
                         $group->setName($newsletterData['groupName']);
                         $this->manager->persist($group);
-                        $this->manager->flush();
+                        $this->manager->flush($group);
                     }
 
                     $newsletterData['groupId'] = $group->getId();
@@ -255,22 +259,25 @@ class NewsletterDbAdapter implements DataDbAdapter
                 $recipient->fromArray($newsletterAddress);
                 $this->manager->persist($recipient);
 
-                // save mail data
-                $contactData = $this->contactDataRepository->findOneByEmail($newsletterData['email']);
-                if (!$contactData instanceof ContactData) {
-                    $contactData = new ContactData();
-                    $contactData->setAdded(new \DateTime());
+                if ($recipient->getGroupId() !== 0) {
+                    // save mail data
+                    $contactData = $contactDataRepository->findOneBy(['email' => $newsletterData['email']]);
+                    if (!$contactData instanceof ContactData) {
+                        $contactData = new ContactData();
+                        $contactData->setAdded(new \DateTime());
+                        $this->manager->persist($contactData);
+                    }
+                    $contactData->fromArray($newsletterData);
                 }
-                $contactData->fromArray($newsletterData);
-                $this->manager->persist($contactData);
-
-
-                $this->manager->flush();
+                if (($count % 20) === 0) {
+                    $this->manager->flush();
+                }
             } catch (AdapterException $e) {
                 $message = $e->getMessage();
                 $this->saveMessage($message);
             }
         }
+        $this->manager->flush();
     }
 
     /**
@@ -279,15 +286,15 @@ class NewsletterDbAdapter implements DataDbAdapter
      */
     protected function prepareNewsletterAddress($record)
     {
-        $keys = array(
+        $keys = [
             'email' => 'email',
             'userID' => 'isCustomer',
             'groupId' => 'groupId',
             'lastRead' => 'lastReadId',
             'lastNewsletter' => 'lastMailingId',
-        );
+        ];
 
-        $newsletterAddress = array();
+        $newsletterAddress = [];
         foreach ($keys as $oldKey => $newKey) {
             if (isset($record[$oldKey])) {
                 $newsletterAddress[$newKey] = $record[$oldKey];
@@ -305,9 +312,7 @@ class NewsletterDbAdapter implements DataDbAdapter
      */
     public function saveMessage($message)
     {
-        $errorMode = Shopware()->Config()->get('SwagImportExportErrorMode');
-
-        if ($errorMode === false) {
+        if ($this->errorMode === false) {
             throw new \Exception($message);
         }
 
@@ -352,14 +357,14 @@ class NewsletterDbAdapter implements DataDbAdapter
      */
     public function getSections()
     {
-        return array(
-            array('id' => 'default', 'name' => 'default ')
-        );
+        return [
+            ['id' => 'default', 'name' => 'default ']
+        ];
     }
     
     /**
      * @param string $section
-     * @return mix
+     * @return mixed
      */
     public function getColumns($section)
     {
@@ -382,9 +387,9 @@ class NewsletterDbAdapter implements DataDbAdapter
         $builder = $this->manager->createQueryBuilder();
 
         $builder->select($columns)
-                ->from('Shopware\Models\Newsletter\Address', 'na')
+                ->from(Address::class, 'na')
                 ->leftJoin('na.newsletterGroup', 'ng')
-                ->leftJoin('Shopware\Models\Newsletter\ContactData', 'cd', Join::WITH, 'na.email = cd.email')
+                ->leftJoin(ContactData::class, 'cd', Join::WITH, 'na.email = cd.email')
                 ->leftJoin('na.customer', 'c')
                 ->leftJoin('c.billing', 'cb')
                 ->where('na.id IN (:ids)')
