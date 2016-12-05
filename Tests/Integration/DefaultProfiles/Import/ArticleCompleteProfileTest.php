@@ -45,6 +45,7 @@ class ArticleCompleteProfileTest extends \PHPUnit_Framework_TestCase
 
         $importedVariants = $this->executeQuery("SELECT * FROM s_articles_details WHERE articleID={$importedArticle[0]['id']} ORDER BY ordernumber");
         $this->assertCount(6, $importedVariants, 'Import did not import expected 6 variants');
+        $this->assertEquals(0, $importedVariants[1]['purchasePrice']);
         $this->assertEquals(999, $importedVariants[1]['instock']);
         $this->assertEquals('with different instock', $importedVariants[1]['additionaltext']);
     }

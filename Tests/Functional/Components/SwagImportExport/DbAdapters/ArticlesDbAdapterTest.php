@@ -45,7 +45,8 @@ class ArticlesDbAdapterTest extends \PHPUnit_Framework_TestCase
                     'mainNumber' => 'SW-99999',
                     'supplierId' => 2,
                     'supplierName' => 'Feinbrennerei Sasse',
-                    'taxId' => 1
+                    'taxId' => 1,
+                    'purchasePrice' => 10
                 ]
             ]
         ];
@@ -59,6 +60,7 @@ class ArticlesDbAdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($newArticleRecord['article'][0]['name'], $createdArticle[0]['name']);
         $this->assertEquals($newArticleRecord['article'][0]['taxId'], $createdArticle[0]['taxID']);
         $this->assertEquals($newArticleRecord['article'][0]['orderNumber'], $createdArticleDetail[0]['ordernumber']);
+        $this->assertEquals($newArticleRecord['article'][0]['purchasePrice'], $createdArticleDetail[0]['purchaseprice']);
     }
 
     public function test_write_should_assign_new_similar_articles()
