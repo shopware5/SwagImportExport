@@ -181,6 +181,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                             '{s name=swag_import_export/profile/save/title}Swag import export{/s}',
                             result.message
                         );
+                        me.getGrid().store.reload();
                     }
                 }
             });
