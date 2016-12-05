@@ -302,8 +302,14 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
             return;
         }
         $this->Front()->Plugins()->Json()->setRenderer(false);
-        header('Content-disposition: attachment; filename=' . $exportDataStruct->getName() . '.json');
-        header('Content-type: application/json');
+
+        $profileName = urlencode($exportDataStruct->getName());
+
+        $response = $this->Response();
+        $response->setHeader('Cache-Control', 'public');
+        $response->setHeader('Content-Description', 'File Transfer');
+        $response->setHeader('Content-Disposition', 'attachment; filename=' . $profileName . '.json');
+        $response->setHeader('Content-type', 'application/json');
 
         echo $exportDataStruct->getExportData();
     }
