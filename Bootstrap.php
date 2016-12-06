@@ -202,7 +202,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         );
         $updaters[] = new Update03DefaultProfileSupport($setupContext, $this->get('dbal_connection'), $this->get('snippets'));
 
-
+        $this->registerControllers();
         $this->createAclResource();
         $this->registerEvents();
         $this->createDirectories();
