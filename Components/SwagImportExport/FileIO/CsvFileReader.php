@@ -105,18 +105,21 @@ class CsvFileReader implements FileReader
      */
     public function getTotalCount($fileName)
     {
-        $handle = fopen($fileName, 'r');
+        $fileHandler = fopen($fileName, 'r');
 
-        if ($handle === false) {
+        if ($fileHandler === false) {
             throw new \Exception("Can not open file $fileName");
         }
         $counter = 0;
 
-        while ($row = fgetcsv($handle, 0, ';')) {
+        while ($row = fgetcsv($fileHandler, 0, ';')) {
+            if ($this->isInvalidRecord($row)) {
+                continue;
+            }
             $counter++;
         }
 
-        fclose($handle);
+        fclose($fileHandler);
 
         //removing first row /column names/
         return $counter - 1;
