@@ -216,6 +216,8 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
             $updater->update();
         }
 
+        $this->updateDatabase();
+
         return [
             'success' => true,
             'invalidateCache' => $this->getInvalidateCacheArray()
@@ -367,17 +369,24 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
      */
     private function createDatabase()
     {
-        $tool = new SchemaTool($this->em);
-        $classes = $this->getDoctrineModels();
+        $schemaTool = new SchemaTool($this->em);
+        $doctrineModels = $this->getDoctrineModels();
 
-        $tableNames = $this->removeTablePrefix($tool, $classes);
+        $tableNames = $this->removeTablePrefix($schemaTool, $doctrineModels);
 
         /** @var ModelManager $modelManger */
         $modelManger = $this->get('models');
         $schemaManager = $modelManger->getConnection()->getSchemaManager();
         if (!$schemaManager->tablesExist($tableNames)) {
-            $tool->createSchema($classes);
+            $schemaTool->createSchema($doctrineModels);
         }
+    }
+
+    private function updateDatabase()
+    {
+        $schemaTool = new SchemaTool($this->em);
+        $doctrineModels = $this->getDoctrineModels();
+        $schemaTool->updateSchema($doctrineModels, true);
     }
 
     /**
