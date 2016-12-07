@@ -207,6 +207,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         $this->registerEvents();
         $this->createDirectories();
         $this->createConfiguration();
+        $this->updateDatabase();
 
         /** @var UpdaterInterface $updater */
         foreach ($updaters as $updater) {
@@ -215,8 +216,6 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
             }
             $updater->update();
         }
-
-        $this->updateDatabase();
 
         return [
             'success' => true,

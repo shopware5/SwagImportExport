@@ -55,10 +55,6 @@ class Update03DefaultProfileSupport implements UpdaterInterface
     public function update()
     {
         try {
-            if ($this->defaultColumnDoesNotExist()) {
-                $this->connection->executeQuery('ALTER TABLE s_import_export_profile ADD `is_default` int(1) DEFAULT 0;');
-            }
-
             $this->connection->executeQuery('ALTER TABLE s_import_export_profile ADD UNIQUE (`name`);');
 
             $defaultProfileInstaller = new DefaultProfileInstaller($this->setupContext, $this->connection);
@@ -89,17 +85,5 @@ class Update03DefaultProfileSupport implements UpdaterInterface
     private function isDuplicateNameError(\Exception $exception)
     {
         return (false !== strpos($exception->getMessage(), 'Duplicate entry'));
-    }
-
-    /**
-     * Doctrine creates the tables automatically. Due to this behaviour there is no chance to control the creation of
-     * the is_default column based on the installed plugin version.
-     *
-     * @return bool
-     */
-    private function defaultColumnDoesNotExist()
-    {
-        $statement = $this->connection->executeQuery('SHOW COLUMNS FROM `s_import_export_profile` LIKE "is_default";');
-        return $statement->rowCount() === 0;
     }
 }
