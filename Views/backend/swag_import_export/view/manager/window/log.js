@@ -105,6 +105,9 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.window.Log', {
             flex: 1,
             logStore: Ext.create('Shopware.apps.SwagImportExport.store.Log', {
                 autoLoad: true,
+                sorters: [
+                    { property: 'logDate', direction: 'DESC' }
+                ],
                 filters: [
                     { property: 'session', value: me.getSessionId(), expression: '=' }
                 ]

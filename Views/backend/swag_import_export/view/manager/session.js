@@ -25,7 +25,11 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Session', {
     },
 
     buildStore: function() {
-        return Ext.create('Shopware.apps.SwagImportExport.store.SessionList');
+        return Ext.create('Shopware.apps.SwagImportExport.store.SessionList', {
+            sorters: [
+                { property: 'createdAt', direction: 'DESC' }
+            ]
+        });
     },
 
     buildSelectionModel: function() {
