@@ -145,6 +145,8 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
             throw new MinVersionException('This plugin requires Shopware 5.2.0 or a later version');
         }
 
+        $this->clearDoctrineMetaDataCache();
+
         $setupContext = new SetupContext(
             $this->get('config')->get('version'),
             $this->getVersion(),
@@ -185,6 +187,8 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         if (!$this->assertMinimumVersion('5.2.0')) {
             throw new MinVersionException('This plugin requires Shopware 5.2.0 or a later version');
         }
+
+        $this->clearDoctrineMetaDataCache();
 
         $setupContext = new SetupContext(
             $this->get('config')->get('version'),
@@ -759,5 +763,17 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
             $tableNames[] = array_pop(explode('.', $tableName));
         }
         return $tableNames;
+    }
+
+    /**
+     * Clear doctrine meta data cache to generate classes from class meta data by using SchemaTool::updateSchema()
+     * and SchemaTool::createSchema().
+     */
+    private function clearDoctrineMetaDataCache()
+    {
+        $cacheDriver = $this->get('models')->getConfiguration()->getMetadataCacheImpl();
+        if ($cacheDriver) {
+            $cacheDriver->deleteAll();
+        }
     }
 }
