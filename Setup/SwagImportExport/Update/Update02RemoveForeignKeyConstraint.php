@@ -75,7 +75,8 @@ class Update02RemoveForeignKeyConstraint implements UpdaterInterface
      */
     public function isCompatible()
     {
-        return version_compare($this->setupContext->getPreviousPluginVersion(), self::MAX_PLUGIN_VERSION, '<=');
+        return version_compare($this->setupContext->getPreviousPluginVersion(), self::MAX_PLUGIN_VERSION, '<=')
+            && version_compare($this->setupContext->getPluginVersion(), '2.0.0', '<');
     }
 
     /**

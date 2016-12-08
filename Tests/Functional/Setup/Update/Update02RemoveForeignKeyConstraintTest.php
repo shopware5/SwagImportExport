@@ -41,4 +41,22 @@ class Update02RemoveForeignKeyConstraintTest extends \PHPUnit_Framework_TestCase
 
         $this->assertFalse($isCompatible);
     }
+
+    public function test_it_should_be_incompatible_with_version_higher_or_equals_200()
+    {
+        $updateFromVersion = '1.0.0';
+        $updateToVersion = '2.0.0';
+        $setupContext = new SetupContext('', $updateToVersion, $updateFromVersion);
+
+        $updater = new Update02RemoveForeignKeyConstraint(
+            $setupContext,
+            $this->createMock(Connection::class),
+            $this->createMock(ModelManager::class),
+            $this->createMock(AbstractSchemaManager::class)
+        );
+
+        $isCompatible = $updater->isCompatible();
+
+        $this->assertFalse($isCompatible);
+    }
 }

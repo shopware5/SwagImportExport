@@ -16,7 +16,8 @@ class Update03DefaultProfileSupportTest extends \PHPUnit_Framework_TestCase
 {
     public function test_it_should_be_compatible()
     {
-        $setupContext = new SetupContext('', '', '1.9.0');
+        $updateFromVersion = '1.9.0';
+        $setupContext = new SetupContext('', '', $updateFromVersion);
         $dbalConnectionMock = $this->createMock(Connection::class);
         $snippetManagerMock = $this->createMock(\Shopware_Components_Snippet_Manager::class);
 
@@ -28,7 +29,8 @@ class Update03DefaultProfileSupportTest extends \PHPUnit_Framework_TestCase
 
     public function test_it_should_be_incompatible()
     {
-        $setupContext = new SetupContext('', '', '2.0.0');
+        $updateFromVersion = '2.0.0';
+        $setupContext = new SetupContext('', '', $updateFromVersion);
         $dbalConnectionMock = $this->createMock(Connection::class);
         $snippetManagerMock = $this->createMock(\Shopware_Components_Snippet_Manager::class);
 
