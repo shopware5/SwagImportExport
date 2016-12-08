@@ -44,7 +44,7 @@ class Update02RemoveForeignKeyConstraintTest extends \PHPUnit_Framework_TestCase
 
     public function test_it_should_be_incompatible_with_version_higher_or_equals_200()
     {
-        $updateFromVersion = '1.0.0';
+        $updateFromVersion = '1.2.0';
         $updateToVersion = '2.0.0';
         $setupContext = new SetupContext('', $updateToVersion, $updateFromVersion);
 
