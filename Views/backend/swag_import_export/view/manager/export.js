@@ -251,7 +251,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
             labelStyle: 'font-weight: 700; text-align: left;',
             width: me.configWidth,
             labelWidth: me.configLabelWidth,
-            helpText: '{s name=swag_import_export/export/profile_help}The default profiles can be individually extended and modified with custom profiles in the configuration.{/s}',
+            helpText: '{s name=swag_import_export/export/profile_help}The default profiles can be individually extended and modified with custom profiles in the profiles menu.{/s}',
             margin: '5 0 0 0',
             valueField: 'id',
             displayField: 'name',

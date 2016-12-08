@@ -100,7 +100,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
 
         return Ext.create('Ext.container.Container', {
             margin: '0 0 20 0',
-            html: '<i style="color: grey" >' + "{s name=swag_import_export/manager/import/import_description}With file import, you are able to extract information from CSV and XML documents and save it in your database using profiles. These profiles contain information about which data is imported along with its structure. The default profiles can be individually extended and modified with custom profiles in the configuration.{/s}" + '</i>'
+            html: '<i style="color: grey" >' + "{s name=swag_import_export/manager/import/import_description}With file import, you are able to extract information from CSV and XML documents and save it in your database using profiles. These profiles contain information about which data is imported along with its structure. The default profiles can be individually extended and modified with custom profiles in the profiles menu.{/s}" + '</i>'
         });
     },
 
@@ -224,7 +224,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
             labelStyle: 'font-weight: 700; text-align: left;',
             width: me.configWidth,
             labelWidth: me.configLabelWidth,
-            helpText: '{s name=swag_import_export/export/profile_help}The default profiles can be individually extended and modified with custom profiles in the configuration.{/s}',
+            helpText: '{s name=swag_import_export/export/profile_help}The default profiles can be individually extended and modified with custom profiles in the profiles menu.{/s}',
             valueField: 'id',
             displayField: 'name',
             name: 'profile',

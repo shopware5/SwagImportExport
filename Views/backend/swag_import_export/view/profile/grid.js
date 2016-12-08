@@ -4,7 +4,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Grid', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.swag-import-export-profile-grid',
 
-    title: '{s name=swag_import_export/profile/grid/title}Configuration{/s}',
+    title: '{s name=swag_import_export/profile/grid/title}Profiles{/s}',
     cls: 'x-media-manager-window',
 
     initComponent: function() {
