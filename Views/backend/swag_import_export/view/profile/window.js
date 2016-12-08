@@ -142,7 +142,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Window', {
                             }
                         }
                     ),
-                    helpText: '{s name=swag_import_export/profile/window/profile_helptext}The default profiles can be individually extended and modified with custom profiles in the configuration.{/s}',
+                    helpText: '{s name=swag_import_export/profile/window/profile_helptext}The selected default profile can be individually extended and modified via the configuration tree and be saved as a custom profile.{/s}',
                     listeners: {
                         boxready: function(combo) {
                             combo.relayEvents(combo.getStore(), ['load'], 'store');
