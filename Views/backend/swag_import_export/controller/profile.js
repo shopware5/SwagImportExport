@@ -47,8 +47,13 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                 addNewIteration: me.addNewIteration,
                 addNewNode: me.addNewNode,
                 deleteNode: me.deleteNode,
-                addNewAttribute: me.addNewAttribute,
-                changeColumn: me.changeColumn
+                addNewAttribute: me.addNewAttribute
+            },
+            'swag-import-export-iterator-window{ isVisible(true) }': {
+                addIterator: me.addIterator
+            },
+            'swag-import-export-column-window{ isVisible(true) }': {
+                addNode: me.addNode
             },
             'swag-import-export-mapping-window{ isVisible(true) }': {
                 addConversion: me.addConversion,
@@ -67,7 +72,6 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
 
     onSearchProfile: function(field, newValue) {
         var searchString = Ext.String.trim(newValue),
-            checkboxFilter = field.previousSibling('#defaultprofilefilter'),
             store = field.up('grid').getStore();
 
         //scroll the store to first page
@@ -87,7 +91,6 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
 
     onFilterDefaultProfiles: function(checkbox, value) {
         var searchfilter = checkbox.nextSibling('#searchfield'),
-            searchString = Ext.String.trim(searchfilter.getValue()),
             store = checkbox.up('grid').getStore();
 
         //scroll the store to first page
@@ -157,6 +160,10 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
             store = window.profileStore,
             form = window.down('#profilebaseform'),
             record = form.getRecord();
+
+        if (!form.getForm().isDirty()) {
+            return;
+        }
 
         if (form.getForm().isValid()) {
             form.getForm().updateRecord(record);
@@ -303,116 +310,6 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
     },
 
     /**
-     * Helper function which add and remove default value field
-     * depending on selected shopware column
-     *
-     * @param [Ext.data.Store] store - Column store
-     * @param [integer] value - id of selected shopware column
-     * @param [integer] nodeValue - default value saved in profile
-     */
-    changeColumn: function(store, value, nodeValue) {
-        var me = this;
-
-        //Add default field when store load is done
-        store.on('load', function () {
-            me.createDefaultValueField(store, value, nodeValue);
-        }, me, { single: true });
-
-    },
-
-    createDefaultValueField: function(store, value, nodeValue) {
-        var me = this,
-            profileForm = me.getProfileForm(),
-            formPanel = profileForm.formPanel,
-            fieldType,
-            settings,
-            record;
-
-        formPanel.down('#defaultValue').destroy();
-
-        //Create default value field
-        fieldType = 'hidden';
-        settings = {
-            itemId: 'defaultValue',
-            fieldLabel: '{s namespace=backend/swag_import_export/view/profile name=defaultValue}Default value{/s}',
-            width: 400,
-            labelWidth: 150,
-            name: 'defaultValue',
-            allowBlank: true
-        };
-
-        //Set new field type if selected column have default flag
-        record = store.getById(value);
-        if (record) {
-            if (record.get('default')) {
-                fieldType = record.get('type');
-            }
-        }
-        //Merge component settings depending on field type
-        settings = Ext.apply({ }, settings, me.getDefaultValueType(fieldType));
-
-        //Add default field to grid
-        formPanel.insert(1, settings);
-
-        formPanel.child('#defaultValue').setValue(nodeValue);
-    },
-
-    /**
-     * Helper method which returns xtype for current field
-     *
-     * @param column
-     * @returns Object|boolean
-     */
-    getDefaultValueType: function(column) {
-        if (!column) {
-            return false;
-        }
-
-        switch (column) {
-            case 'id':
-                return { xtype: 'numberfield', minValue: 1 };
-                break;
-            case 'integer':
-            case 'decimal':
-            case 'float':
-                var precision = 0;
-                if (column.precision) {
-                    precision = column.precision
-                } else if (column.type == 'float') {
-                    precision = 3;
-                } else if (column.type == 'decimal') {
-                    precision = 3;
-                }
-                return { xtype: 'numberfield', decimalPrecision: precision };
-                break;
-            case 'string':
-            case 'text':
-                return 'textfield';
-                break;
-            case 'boolean':
-                return {
-                    xtype: 'checkbox',
-                    inputValue: 1,
-                    uncheckedValue: 0
-                };
-                break;
-            case 'date':
-            case 'dateTime':
-                return {
-                    xtype: 'datefield',
-                    format: 'Y-m-d',
-                    submitFormat: 'Y-m-d'
-                };
-                break;
-            default:
-                return {
-                    hidden: true
-                };
-                break;
-        }
-    },
-
-    /**
      * Profile configuration handling
      */
 
@@ -431,21 +328,78 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
      * Adds new node to the tree as a child of the selected node
      *
      * @param { Ext.tree.Panel } treePanel
-     * @param { Ext.data.TreeStore } treeStore
-     * @param { int } selectedNodeId
+     * @param { int } profileId
      */
-    addNewIteration: function(treePanel, treeStore, selectedNodeId) {
-        var me = this;
+    addNewIteration: function(treePanel, profileId) {
+        Ext.create('Shopware.apps.SwagImportExport.view.profile.window.Iterator', {
+            treePanel: treePanel,
+            profileId: profileId,
+            autoShow: true
+        });
+    },
 
-        var node = treeStore.getById(selectedNodeId);
-        if (node.get('type') !== 'iteration') {
-            node.set('type', '');
-            node.set('iconCls', '');
-        }
+    /**
+     * @param { Shopware.apps.SwagImportExport.view.profile.window.Iterator } win
+     */
+    addIterator: function(win) {
+        var me = this,
+            form = win.formPanel,
+            treePanel = win.treePanel,
+            treeStore = treePanel.getStore(),
+            store = win.columnGrid.getStore(),
+            formValues = form.getForm().getValues(),
+            iteratorNode,
+            columns,
+            mainNode = treeStore.getRootNode().findChildBy(function(node) {
+                return node.get('type') === 'iteration' && node.get('inIteration');
+            }, me, true);
 
-        var data = { text: "New Iteration Node", adapter:'none', expanded: true, type: 'iteration', iconCls: 'sprite-blue-folders-stack', inIteration: true };
+        iteratorNode = treeStore.model.create({
+            text: formValues.nodeName,
+            adapter: formValues.adapter,
+            expanded: true,
+            type: 'iteration',
+            iconCls: 'sprite-blue-folders-stack',
+            inIteration: true,
+            parentKey: formValues.parentKey
+        });
 
-        var newNode = node.appendChild(data);
+        columns = store.getRange();
+
+        mainNode.appendChild(iteratorNode);
+
+        me.doSync(treeStore, function() {
+            for (var i = 0, count = columns.length; i < count; i++) {
+                var column = columns[i],
+                    columnNode;
+                if (!column.get('select')) {
+                    continue;
+                }
+                columnNode = treeStore.model.create({
+                    text: column.get('nodeName'),
+                    adapter: formValues.adapter,
+                    inIteration: true,
+                    type: 'leaf',
+                    iconCls: 'sprite-blue-document-text',
+                    swColumn: column.get('swColumn')
+                });
+                iteratorNode.appendChild(columnNode);
+            }
+            me.doSync(treeStore, function() {
+                treePanel.expand();
+                treePanel.getSelectionModel().select(iteratorNode);
+                win.close();
+            });
+        }, me);
+    },
+
+    /**
+     *
+     * @param { Ext.data.TreeStore } treeStore
+     * @param callback
+     * @param scope
+     */
+    doSync: function(treeStore, callback, scope) {
         treeStore.sync({
             failure: function(batch, options) {
                 var error = batch.exceptions[0].getError(),
@@ -459,8 +413,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                 });
             },
             success: function() {
-                treePanel.expand();
-                treePanel.getSelectionModel().select(treeStore.getById(newNode.data.id));
+                Ext.callback(callback, scope);
             }
         });
     },
@@ -469,26 +422,48 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
      * Adds new node to the tree as a child of the selected node
      *
      * @param { Ext.tree.Panel } treePanel
-     * @param { Ext.data.TreeStore } treeStore
-     * @param { int } selectedNodeId
+     * @param { int } profileId
+     * @param { string } adapter
      */
-    addNewNode: function(treePanel, treeStore, selectedNodeId) {
-        var me = this;
+    addNewNode: function(treePanel, profileId, adapter) {
+        Ext.create('Shopware.apps.SwagImportExport.view.profile.window.Column', {
+            treePanel: treePanel,
+            profileId: profileId,
+            adapter: adapter,
+            autoShow: true
+        });
+    },
 
-        var node = treeStore.getById(selectedNodeId);
-        if (node.get('type') !== 'iteration') {
-            node.set('type', '');
-            node.set('iconCls', '');
+    /**
+     * @param { Shopware.apps.SwagImportExport.view.profile.window.Column } win
+     */
+    addNode: function(win) {
+        var me = this,
+            treePanel = win.treePanel,
+            form = win.formPanel,
+            formValues = form.getForm().getValues(),
+            store = treePanel.getStore(),
+            parentNode = treePanel.getSelectionModel().getSelection()[0],
+            newNode;
+
+        if (parentNode.get('type') === 'leaf') {
+            parentNode = parentNode.parentNode;
         }
 
-        var data = { };
-        if (node.get('inIteration') === true) {
-            data = { text: "New Node", expanded: true, type: 'leaf', iconCls: 'sprite-blue-document-text', inIteration: true, adapter: node.get('adapter') };
-        } else {
-            data = { text: "New Node", expanded: true };
-        }
-        var newNode = node.appendChild(data);
-        treeStore.sync({
+        newNode = store.model.create({
+            text: formValues.nodeName,
+            expanded: true,
+            type: 'leaf',
+            iconCls: 'sprite-blue-document-text',
+            inIteration: true,
+            swColumn: formValues.swColumn,
+            defaultValue: formValues.defaultValue || '',
+            adapter: win.getAdapter()
+        });
+
+        parentNode.appendChild(newNode);
+
+        store.sync({
             failure: function(batch, options) {
                 var error = batch.exceptions[0].getError(),
                     msg = Ext.isObject(error) ? error.status + ' ' + error.statusText : error;
@@ -501,8 +476,9 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                 });
             },
             success: function() {
+                win.close();
                 treePanel.expand();
-                treePanel.getSelectionModel().select(treeStore.getById(newNode.data.id));
+                treePanel.getSelectionModel().select(newNode);
             }
         });
     },
@@ -516,8 +492,6 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
      * @param { string } swColumn
      */
     saveNode: function(treePanel, treeStore, selectedNodeId, nodeName, swColumn, defaultValue, adapter, parentKey) {
-        var me = this;
-
         var node = treeStore.getById(selectedNodeId);
 
         if(!node) {
@@ -557,45 +531,51 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
     /**
      * Deletes the selected node
      */
-    deleteNode: function(treeStore, selectedNodeId, selModel) {
+    deleteNode: function(treePanel) {
         var me = this;
         Ext.Msg.show({
             title: '{s name=swag_import_export/profile/delete/title}Delete Node?{/s}',
             msg: '{s name=swag_import_export/profile/delete/msg}Are you sure you want to permanently delete the node?{/s}',
             buttons: Ext.Msg.YESNO,
-            fn: function(response) {
-                if (response === 'yes') {
-                    var node = treeStore.getById(selectedNodeId),
-                        parentNode = node.parentNode,
-                        selectNode = node.previousSibling;
+            fn: function(btn) {
+                if (btn === 'yes') {
+                    var selModel = treePanel.getSelectionModel(),
+                        store = treePanel.getStore(),
+                        selection = selModel.getSelection();
 
-                    if (!selectNode) {
-                        selectNode = node.nextSibling;
-                    }
-                    if (!selectNode) {
-                        selectNode = node.parentNode;
-                    }
+                    for (var i = 0, count = selection.length; i < count; i++) {
+                        var node = selection[i],
+                            parentNode = node.parentNode,
+                            selectNode = node.previousSibling;
 
-                    parentNode.removeChild(node);
+                        if (!selectNode) {
+                            selectNode = node.nextSibling;
+                        }
+                        if (!selectNode) {
+                            selectNode = node.parentNode;
+                        }
 
-                    if (parentNode.get('type') !== 'iteration' && parentNode.get('inIteration') === true) {
-                        var bChildNodes = false;
+                        parentNode.removeChild(node);
 
-                        // check if there is at least one leaf, iteration or node
-                        for (var i = 0; i < parentNode.childNodes.length; i++) {
-                            if (parentNode.childNodes[i].get('type') !== 'attribute') {
-                                bChildNodes = true;
-                                break;
+                        if (parentNode.get('type') !== 'iteration' && parentNode.get('inIteration') === true) {
+                            var bChildNodes = false;
+
+                            // check if there is at least one leaf, iteration or node
+                            for (var j = 0; j < parentNode.childNodes.length; j++) {
+                                if (parentNode.childNodes[j].get('type') !== 'attribute') {
+                                    bChildNodes = true;
+                                    break;
+                                }
+                            }
+
+                            if (!bChildNodes) {
+                                parentNode.set('type', 'leaf');
+                                parentNode.set('iconCls', 'sprite-blue-document-text');
                             }
                         }
-
-                        if (!bChildNodes) {
-                            parentNode.set('type', 'leaf');
-                            parentNode.set('iconCls', 'sprite-icon_taskbar_top_inhalte_active');
-                        }
                     }
 
-                    treeStore.sync({
+                    store.sync({
                         success: function() {
                             selModel.deselectAll();
                             if (selectNode) {
@@ -627,14 +607,15 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
      * @param { int } selectedNodeId
      */
     addNewAttribute: function(treePanel, treeStore, selectedNodeId) {
-        var me = this;
-        var node = treeStore.getById(selectedNodeId);
+        var node = treeStore.getById(selectedNodeId),
+            data,
+            newNode;
+
         node.set('leaf', false);
         node.set('expanded', true);
 
-        var children = node.childNodes;
-        var data = { text: "New Attribute", leaf: true, type: 'attribute', iconCls: 'sprite-sticky-notes-pin', inIteration: true, adapter: node.get('adapter') };
-        var newNode = node.appendChild(data);
+        data = { text: "New Attribute", leaf: true, type: 'attribute', iconCls: 'sprite-sticky-notes-pin', inIteration: true, adapter: node.get('adapter') };
+        newNode = node.appendChild(data);
 
         treeStore.sync({
             failure: function(batch, options) {

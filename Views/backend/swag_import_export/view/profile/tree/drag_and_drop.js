@@ -9,7 +9,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.tree.DragAndDrop', {
         me.callParent(arguments);
         
         /**
-         * @TODO: override onNodeOver, because isValidDropPoint is in private class
+         * Custom drag&drop validation function for profile editor tree
          */
         me.dropZone.isValidDropPoint = function(node, position, dragZone, e, data) {
             if (!node || !data.item) {
@@ -28,6 +28,10 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.tree.DragAndDrop', {
                 return false;
             }
 
+            if (position === 'append') {
+                return false;
+            }
+
             // If the targetNode is within the folder we are dragging
             for (i = 0; i < ln; i++) {
                 record = draggedRecords[i];
@@ -37,10 +41,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.tree.DragAndDrop', {
             }
 
             // Respect the allowDrop field on Tree nodes
-            if (position === 'append' && targetNode.get('allowDrop') === false) {
-                return false;
-            }
-            else if (position !== 'append' && targetNode.parentNode.get('allowDrop') === false) {
+            if (targetNode.get('allowDrop') === false || targetNode.parentNode.get('allowDrop') === false) {
                 return false;
             }
 
@@ -53,17 +54,19 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.tree.DragAndDrop', {
             for (i = 0; i < ln; i++) {
                 record = draggedRecords[i];
                 // check if the node is in the same iteration
-                if (record.get('adapter') !== targetNode.get('adapter')) {
+                if (record.parentNode !== targetNode.parentNode
+                    && record.get('adapter') !== targetNode.get('adapter')
+                ) {
                     return false;
                 }
                 // special case check: node cannot be inserted in the same level as the iteration node
-                if (position === 'before' && record.get('adapter') !== targetNode.parentNode.get('adapter')) {
+                if (record.parentNode !== targetNode.parentNode
+                    && position === 'before' && record.get('adapter') !== targetNode.parentNode.get('adapter')
+                ) {
                     return false;
                 }
             }
 
-            // @TODO: fire some event to notify that there is a valid drop possible for the node you're dragging
-            // Yes: this.fireViewEvent(blah....) fires an event through the owning View.
             return true;
         };
     }

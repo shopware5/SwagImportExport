@@ -86,6 +86,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Window', {
             },
             items: [{
                 xtype: 'form',
+                trackResetOnLoad: true,
                 itemId: 'profilebaseform',
                 padding: 15,
                 defaults: {
