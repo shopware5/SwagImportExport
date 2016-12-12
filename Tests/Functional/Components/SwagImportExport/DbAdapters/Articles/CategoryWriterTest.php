@@ -1,0 +1,75 @@
+<?php
+/**
+ * (c) shopware AG <info@shopware.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace SwagImportExport\Tests\Functional\Components\SwagImportExport\DbAdapters\Articles;
+
+use Doctrine\DBAL\Connection;
+use Shopware\Components\SwagImportExport\DbAdapters\Articles\CategoryWriter;
+use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
+
+class CategoryWriterTest extends \PHPUnit_Framework_TestCase
+{
+    use DatabaseTestCaseTrait;
+
+    /**
+     * @return CategoryWriter
+     */
+    private function createCategoryWriterAdapter()
+    {
+        return new CategoryWriter();
+    }
+
+    public function test_write_with_invalid_category_id_throws_exception()
+    {
+        $categoryWriterAdapter = $this->createCategoryWriterAdapter();
+        $validArticleId = 3;
+        $invalidCategoryArray = [
+            [
+                'categoryId' => 9999
+            ]
+        ];
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage("Kategorie mit ID 9999 konnte nicht gefunden werden.");
+        $categoryWriterAdapter->write($validArticleId, $invalidCategoryArray);
+    }
+
+    public function test_write_with_invalid_category_id_and_invalid_path_throws_exception()
+    {
+        $categoryWriterAdapter = $this->createCategoryWriterAdapter();
+        $validArticleId = 3;
+        $invalidCategoryArray = [
+            [
+                'categoryId' => '',
+                'categoryPath' => "Invalid->Category->Path"
+            ]
+        ];
+
+        $this->expectException(\Exception::class);
+        $categoryWriterAdapter->write($validArticleId, $invalidCategoryArray);
+    }
+
+    public function test_write_should_insert_article_category_association()
+    {
+        $categoryWriterAdapter = $this->createCategoryWriterAdapter();
+        $articleId = 3;
+        $categoryArray = [
+            [
+                'categoryId' => 35
+            ]
+        ];
+
+        $categoryWriterAdapter->write($articleId, $categoryArray);
+
+        /** @var Connection $dbalConnection */
+        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $updatedArticle = $dbalConnection->executeQuery("SELECT * FROM s_articles_categories WHERE articleID=?", [$articleId])->fetchAll();
+
+        $this->assertEquals($categoryArray[0]['categoryId'], $updatedArticle[2]['categoryID']);
+    }
+}

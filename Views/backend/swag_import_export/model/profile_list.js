@@ -1,36 +1,3 @@
-/**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
- *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
- *
- * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * "Shopware" is a registered trademark of shopware AG.
- * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Base
- * @subpackage Model
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author shopware AG
- */
-
-/**
- * Shopware Model
- */
 //{block name="backend/swag_import_export/model/profile_list"}
 Ext.define('Shopware.apps.SwagImportExport.model.ProfileList', {
     /**
@@ -44,9 +11,12 @@ Ext.define('Shopware.apps.SwagImportExport.model.ProfileList', {
      */
     fields: [
         // {block name="backend/swag_import_export/model/profile_list/fields"}{/block}
-        { name: 'id', type: 'string' },
+        { name: 'id', type: 'int', useNull: true },
         { name: 'type', type: 'string' },
+        { name: 'baseProfile', type: 'int', useNull: true },
         { name: 'name', type: 'string' },
+        { name: 'translation', persist: false },
+        { name: 'default', type: 'boolean', persist: false },
         { name: 'tree', type: 'string' }
     ],
     
@@ -58,10 +28,10 @@ Ext.define('Shopware.apps.SwagImportExport.model.ProfileList', {
          * @object
          */
         api: {
-			create:'{url controller="SwagImportExport" action="createProfiles"}',
-            read:'{url controller="SwagImportExport" action="getProfiles"}',
-            update: '{url controller="SwagImportExport" action="updateProfiles"}',
-            destroy: '{url controller="SwagImportExport" action="deleteProfiles"}'
+			create:'{url controller="SwagImportExportProfile" action="createProfiles"}',
+            read:'{url controller="SwagImportExportProfile" action="getProfiles"}',
+            update: '{url controller="SwagImportExportProfile" action="updateProfiles"}',
+            destroy: '{url controller="SwagImportExportProfile" action="deleteProfiles"}'
         },
         /**
          * Configure the data reader

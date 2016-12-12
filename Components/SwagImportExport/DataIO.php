@@ -176,7 +176,7 @@ class DataIO
             return;
         }
 
-        $this->logger->write($messages, $status);
+        $this->logger->write($messages, $status, $this->dataSession->getEntity());
 
         $logDataStruct = new LogDataStruct(
             date("Y-m-d H:i:s"),

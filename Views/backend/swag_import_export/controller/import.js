@@ -1,4 +1,3 @@
-
 //{namespace name="backend/swag_import_export/view/main"}
 //{block name="backend/swag_import_export/controller/import"}
 Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
@@ -35,7 +34,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
                 startProcess: me.onStartProcess,
                 cancelProcess: me.onCancelProcess
             },
-            'swag-import-export-manager-operation': {
+            'swag-import-export-manager-session': {
                 resumeImport: me.onResume
             },
             'swag-import-export-manager-import html5fileupload': {
@@ -92,7 +91,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
         if (!Ext.isEmpty(localFile)) {
             me = this;
             form.submit({
-                url: '{url module=backend controller="swagImportExport" action="uploadFile"}',
+                url: '{url module=backend controller="SwagImportExport" action="uploadFile"}',
                 waitMsg: 'Uploading',
                 scope: me,
                 success: function(fp, response) {
@@ -168,7 +167,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
         var me = this;
 
         me.batchConfig = {
-            requestUrl: '{url controller="SwagImportExport" action="import"}',
+            requestUrl: '{url controller="SwagImportExportImport" action="import"}',
             action: 'close-window-import',
             params: {
                 profileId: me.parameters.profile,
@@ -179,7 +178,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
         };
 
         Ext.Ajax.request({
-            url: '{url controller="SwagImportExport" action="prepareImport"}',
+            url: '{url controller="SwagImportExportImport" action="prepareImport"}',
             method: 'POST',
             params: me.batchConfig.params,
             success: function(response) {
@@ -328,6 +327,9 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
         win.closeButton.enable();
         win.cancelButton.disable();
         win.importProgress.updateText(me.snippets.finished + me.batchConfig.position + ' / ' + me.batchConfig.totalCount);
+        if (!Ext.isEmpty(me.sessionStore)){
+            me.sessionStore.reload();
+        }
     }
     
 });

@@ -49,7 +49,7 @@ Ext.define('Shopware.apps.SwagImportExport', {
      * Requires controllers for sub-application
      * @array
      */
-    controllers: [ 'Main', 'Export', 'Import', 'Operation', 'Profile' ],
+    controllers: [ 'Main', 'Export', 'Import', 'Session', 'Profile' ],
 
     /**
      * Used views here to improve bulk loading
@@ -57,16 +57,17 @@ Ext.define('Shopware.apps.SwagImportExport', {
     views: [
         'Window',
         'profile.window.Mappings',
-        'profile.window.NewProfile',
-        'profile.window.RenameProfile',
 		'profile.Profile',
+        'profile.Grid',
+        'profile.Window',
         'profile.tree.DragAndDrop',
 		'manager.Manager',
 		'manager.Export',
 		'manager.Import',
-		'manager.Operation',
+		'manager.Session',
 		'manager.window.Export',
 		'manager.window.Import',
+        'manager.window.Log',
         'log.Log'
     ],
 
@@ -74,13 +75,13 @@ Ext.define('Shopware.apps.SwagImportExport', {
      * Requires models for sub-application
      * @array
      */
-    models: ['Profile', 'ProfileList', 'SessionList', 'Conversion', 'Log'],
+    models: ['Profile', 'ProfileList', 'SessionList', 'Log', 'Conversion'],
 
     /**
      * Requires stores for sub-application
      * @array
      */
-    stores: ['Profile', 'ProfileList', 'SessionList', 'Conversion', 'Log'],
+    stores: ['Profile', 'ProfileList', 'SessionList', 'Log', 'Conversion'],
 
     /**
      * Returns the main application window for this is expected

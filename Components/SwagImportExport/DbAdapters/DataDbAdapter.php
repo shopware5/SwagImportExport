@@ -10,6 +10,18 @@ namespace Shopware\Components\SwagImportExport\DbAdapters;
 
 interface DataDbAdapter
 {
+    const ARTICLE_ADAPTER = 'articles';
+    const ARTICLE_IMAGE_ADAPTER = 'articlesImages';
+    const ARTICLE_INSTOCK_ADAPTER = 'articlesInStock';
+    const ARTICLE_TRANSLATION_ADAPTER = 'articlesTranslations';
+    const ARTICLE_PRICE_ADAPTER = 'articlesPrices';
+    const CATEGORIES_ADAPTER = 'categories';
+    const ORDER_ADAPTER = 'orders';
+    const MAIN_ORDER_ADAPTER = 'mainOrders';
+    const CUSTOMER_ADAPTER = 'customers';
+    const NEWSLETTER_RECIPIENTS_ADAPTER = 'newsletter';
+    const TRANSLATION_ADAPTER = 'translations';
+
     public function read($ids, $columns);
 
     public function readRecordIds($start, $limit, $filter);

@@ -30,11 +30,11 @@ class NewsletterDataManager extends DataManager
      *
      * @var array
      */
-    private static $defaultFieldsForCreate = array(
-        'string' => array(
+    private static $defaultFieldsForCreate = [
+        'string' => [
             'groupName'
-        )
-    );
+        ]
+    ];
 
     /**
      * initialises the class properties
@@ -42,7 +42,7 @@ class NewsletterDataManager extends DataManager
     public function __construct()
     {
         $this->config = Shopware()->Config();
-        $this->groupRepository = Shopware()->Models()->getRepository('Shopware\Models\Newsletter\Group');
+        $this->groupRepository = Shopware()->Models()->getRepository(Group::class);
     }
 
     /**
@@ -86,10 +86,8 @@ class NewsletterDataManager extends DataManager
                 $record[$key] = $defaultValues[$key];
             }
 
-            switch ($key) {
-                case 'groupName':
-                    $record[$key] = $this->getGroupName($record['email'], $record[$key]);
-                    break;
+            if ($key === 'groupName') {
+                $record[$key] = $this->getGroupName($record['email'], $record[$key]);
             }
         }
 
@@ -106,7 +104,7 @@ class NewsletterDataManager extends DataManager
      */
     private function getGroupName($email, $groupName)
     {
-        $group = $this->groupRepository->findOneBy(array('name' => $groupName));
+        $group = $this->groupRepository->findOneBy(['name' => $groupName]);
         if ($group) {
             return $group->getName();
         }

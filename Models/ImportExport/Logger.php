@@ -32,9 +32,10 @@ class Logger extends ModelEntity
     protected $id;
 
     /**
-     * @var Session[] $session
+     * @var Session $session
      *
-     * @ORM\OneToMany(targetEntity="Shopware\CustomModels\ImportExport\Session", mappedBy="logger")
+     * @ORM\ManyToOne(targetEntity="Shopware\CustomModels\ImportExport\Session")
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $session;
 
@@ -46,6 +47,8 @@ class Logger extends ModelEntity
     protected $message;
 
     /**
+     * Confusing naming here - indicates error state: false = no errors
+     *
      * @var boolean $state
      *
      * @ORM\Column(name="state", type="string", length=100, nullable=true)
@@ -131,10 +134,18 @@ class Logger extends ModelEntity
     }
 
     /**
-     * @return Session[]
+     * @return Session
      */
     public function getSession()
     {
         return $this->session;
+    }
+
+    /**
+     * @param Session $session
+     */
+    public function setSession(Session $session)
+    {
+        $this->session = $session;
     }
 }

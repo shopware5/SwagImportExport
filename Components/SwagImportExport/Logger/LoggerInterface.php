@@ -8,6 +8,8 @@
 
 namespace Shopware\Components\SwagImportExport\Logger;
 
+use Shopware\CustomModels\ImportExport\Session;
+
 interface LoggerInterface
 {
     /**
@@ -22,8 +24,9 @@ interface LoggerInterface
      *
      * @param string|array $messages
      * @param string $status
+     * @param Session $session
      */
-    public function write($messages, $status);
+    public function write($messages, $status, Session $session);
 
     /**
      * Writes a log entry to the import/export log file.

@@ -1,37 +1,3 @@
-/**
- * Shopware 4
- * Copyright © shopware AG
- *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
- *
- * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * "Shopware" is a registered trademark of shopware AG.
- * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
- */
-
-/**
- * Shopware UI - Media Manager Thumbnail Controller
- *
- * The thumbnail controller handles the thumbnail main window,
- * its elements and the batch calls for the thumbnail generation.
- *
- * @category    Shopware
- * @package     MediaManager
- * @copyright   Copyright (c) shopware AG (http://www.shopware.de)
- */
-
 //{namespace name="backend/swag_import_export/view/main"}
 //{block name="backend/swag_import_export/controller/export"}
 Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
@@ -57,7 +23,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
                 downloadFile: me.onDownloadFile,
                 cancelProcess: me.onCancelProcess
             },
-            'swag-import-export-manager-operation': {
+            'swag-import-export-manager-session': {
                 resumeExport: me.onResume
             }
         });
@@ -86,7 +52,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
      * Triggers if the resume button was pressed
      * in the previous operation window.
      * 
-     * @param object Shopware.apps.SwagImportExport.model.SessionList
+     * @param object Shopware.apps.SwagImportExport.model.Session
      */
     onResume: function(record, sessionStore) {
         var me = this;
@@ -135,7 +101,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
         var me = this;
 
         me.batchConfig = {
-            requestUrl: '{url controller="SwagImportExport" action="export"}',
+            requestUrl: '{url controller="SwagImportExportExport" action="export"}',
             params: {
                 profileId: me.parameters.profile,
                 sessionId: me.parameters.sessionId,
@@ -156,7 +122,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
         };
 
         Ext.Ajax.request({
-            url: '{url controller="SwagImportExport" action="prepareExport"}',
+            url: '{url controller="SwagImportExportExport" action="prepareExport"}',
             method: 'POST',
             params: me.batchConfig.params,
             success: function(response) {

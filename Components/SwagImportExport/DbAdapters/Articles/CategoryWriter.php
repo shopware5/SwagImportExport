@@ -71,7 +71,7 @@ class CategoryWriter
      */
     private function prepareValues($categories, $articleId)
     {
-        $this->categoryIds = array();
+        $this->categoryIds = [];
         $values = implode(
             ', ',
             array_map(
@@ -101,8 +101,9 @@ class CategoryWriter
                         $category['categoryId'] = $this->getCategoryId($category['categoryPath']);
 
                         //check whether the category is a leaf
-                        $isNotLeaf = $this->isNotLeaf($category['categoryId']);
-                        if ($isNotLeaf) {
+                        $isLeaf = $this->isLeaf($category['categoryId']);
+
+                        if (!$isLeaf) {
                             $message = SnippetsHelper::getNamespace()
                                 ->get('adapters/articles/category_not_leaf', "Category with id '%s' is not a leaf");
                             throw new AdapterException(sprintf($message, $category['categoryId']));
@@ -131,7 +132,7 @@ class CategoryWriter
     {
         $isCategoryExists = $this->db->fetchOne(
             "SELECT id FROM s_categories WHERE id = ?",
-            array($categoryId)
+            [$categoryId]
         );
 
         return is_numeric($isCategoryExists);
@@ -149,7 +150,7 @@ class CategoryWriter
     {
         $id = null;
         $path = '|';
-        $data = array();
+        $data = [];
         $descriptions = explode('->', $categoryPath);
 
         foreach ($descriptions as $description) {
@@ -176,10 +177,10 @@ class CategoryWriter
     {
         if ($id === null) {
             $sql = "SELECT id FROM s_categories WHERE description = ? AND path IS NULL";
-            $params = array($description);
+            $params = [$description];
         } else {
             $sql = "SELECT id FROM s_categories WHERE description = ? AND parent = ?";
-            $params = array($description, $id);
+            $params = [$description, $id];
         }
 
         $parentId = $this->db->fetchOne($sql, $params);
@@ -260,11 +261,11 @@ class CategoryWriter
      * @param int $categoryId
      * @return bool
      */
-    protected function isNotLeaf($categoryId)
+    protected function isLeaf($categoryId)
     {
         $isLeaf = $this->db->fetchOne(
             "SELECT id FROM s_categories WHERE parent = ?",
-            array($categoryId)
+            [$categoryId]
         );
 
         return is_numeric($isLeaf);

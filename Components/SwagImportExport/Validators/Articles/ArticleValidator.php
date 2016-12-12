@@ -14,35 +14,40 @@ use Shopware\Components\SwagImportExport\Exception\AdapterException;
 
 class ArticleValidator extends Validator
 {
-    private $requiredFields = array(
+    private $requiredFields = [
         'orderNumber',
         'mainNumber'
-    );
+    ];
 
-    private $requiredFieldsForCreate = array(
+    private $requiredFieldsForCreate = [
         'name',
         'mainNumber',
-        array('supplierName', 'supplierId'),
-    );
+        ['supplierName', 'supplierId'],
+        'taxId'
+    ];
 
-    private $snippetData = array(
-        'orderNumber' => array(
+    private $snippetData = [
+        'orderNumber' => [
             'adapters/ordernumber_required',
             'Order number is required.'
-        ),
-        'mainNumber' => array(
+        ],
+        'mainNumber' => [
             'adapters/mainnumber_required',
             'Main number is required for article %s.'
-        ),
-        'supplierName' => array(
+        ],
+        'supplierName' => [
             'adapters/articles/supplier_not_found',
             'Supplier not found for article %s.'
-        ),
-        'name' => array(
+        ],
+        'name' => [
             'adapters/articles/no_name_provided',
             'Please provide article name for article %s.'
-        ),
-    );
+        ],
+        'taxId' => [
+            'adapters/articles/no_tax_provided',
+            'Tax not provided for article %s.'
+        ]
+    ];
 
     /**
      * Checks whether required fields are filled-in
@@ -53,7 +58,7 @@ class ArticleValidator extends Validator
     public function checkRequiredFields($record)
     {
         foreach ($this->requiredFields as $key) {
-            if (isset($record[$key])) {
+            if (isset($record[$key]) && strlen($record[$key])) {
                 continue;
             }
 
@@ -80,14 +85,14 @@ class ArticleValidator extends Validator
                     continue;
                 }
                 $key = $supplierName;
-            } elseif (isset($record[$key])) {
+            } elseif (isset($record[$key]) && !empty($record[$key])) {
                 continue;
             }
 
             list($snippetName, $snippetMessage) = $this->snippetData[$key];
 
             $message = SnippetsHelper::getNamespace()->get($snippetName, $snippetMessage);
-            throw new AdapterException(sprintf($message, $record['orderNumber']));
+            throw new AdapterException(sprintf($message, $record['mainNumber']));
         }
     }
 }

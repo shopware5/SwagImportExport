@@ -1,0 +1,16 @@
+objectKey;objectType;baseName;name;description;languageId
+1;propertygroup;Edelbrände;Brandy UPDATE;;2
+1;propertyoption;Alkoholgehalt;Alcohol in %;;2
+2;propertyoption;Flaschengröße;Capacity;;2
+4;propertyoption;Farbe;Color;;2
+6;propertyoption;Geschmack;Taste;;2
+7;propertyoption;Trinktemperatur;Serve at;;2
+28;propertyvalue;rot;red;;2
+29;propertyvalue;klar;transparent;;2
+31;propertyvalue;goldig;gold;;2
+32;propertyvalue;herb;tart;;2
+33;propertyvalue;mild;mild;;2
+34;propertyvalue;fruchtig;fruity;;2
+35;propertyvalue;Gekühlt;cooled;;2
+36;propertyvalue;Zimmertemperatur;room temperature;;2
+41;propertyvalue;schokobraun;chocolate brown UPDATE;;2

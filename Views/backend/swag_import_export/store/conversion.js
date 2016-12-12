@@ -1,13 +1,14 @@
+//{block name="backend/swag_import_export/store/conversion"}
 Ext.define('Shopware.apps.SwagImportExport.store.Conversion', {
     extend: 'Ext.data.Store',
     model: 'Shopware.apps.SwagImportExport.model.Conversion',
     proxy: {
         type: 'ajax',
         api: {
-            create: '{url controller="SwagImportExport" action="createConversion"}',
-            read: '{url controller="SwagImportExport" action="getConversions"}',
-            update: '{url controller="SwagImportExport" action="updateConversion"}',
-            destroy: '{url controller="SwagImportExport" action="deleteConversion"}'
+            create: '{url controller="SwagImportExportConversion" action="createConversion"}',
+            read: '{url controller="SwagImportExportConversion" action="getConversions"}',
+            update: '{url controller="SwagImportExportConversion" action="updateConversion"}',
+            destroy: '{url controller="SwagImportExportConversion" action="deleteConversion"}'
         },
         actionMethods: 'POST',
         reader: {
@@ -20,3 +21,4 @@ Ext.define('Shopware.apps.SwagImportExport.store.Conversion', {
         }
     }
 });
+//{/block}

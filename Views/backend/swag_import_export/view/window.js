@@ -1,32 +1,3 @@
-/**
- * Shopware 4
- * Copyright © shopware AG
- *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
- *
- * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * "Shopware" is a registered trademark of shopware AG.
- * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
- */
-/**
- * Shopware SwagImportExport Plugin
- *
- * @category Shopware
- * @package Shopware\Plugins\SwagImportExport
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 //{namespace name=backend/swag_gift_packaging/view/main}
 //{block name="backend/swag_gift_packaging/view/main/window"}
 Ext.define('Shopware.apps.SwagImportExport.view.Window', {
@@ -44,6 +15,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.Window', {
     alias: 'widget.swag-import-export-window',
 	
     height: 600,
+    width: 1000,
     
     layout: 'fit',
 	
@@ -56,32 +28,26 @@ Ext.define('Shopware.apps.SwagImportExport.view.Window', {
         me.items = [me.createTabPanel()];
         me.callParent(arguments);
     },
-    
-    /*{if {acl_is_allowed privilege=profile}}*/
-    profilesStore: Ext.create('Shopware.apps.SwagImportExport.store.ProfileList').load(),
-    /*{/if}*/
-
-    logStore: Ext.create('Shopware.apps.SwagImportExport.store.Log'),
 
     createTabPanel: function() {
         var me = this;
         var aclItems = [];
 
         /*{if {acl_is_allowed privilege=export} OR {acl_is_allowed privilege=import}}*/
-        aclItems.push(Ext.create('Shopware.apps.SwagImportExport.view.manager.Manager', {
-            profilesStore: me.profilesStore
-        }));
+        aclItems.push(Ext.create('Shopware.apps.SwagImportExport.view.manager.Manager'));
         /*{/if}*/
 
         /*{if {acl_is_allowed privilege=profile}}*/
-        aclItems.push(Ext.create('Shopware.apps.SwagImportExport.view.profile.Profile', {
-            profilesStore: me.profilesStore
+        aclItems.push(Ext.create('Shopware.apps.SwagImportExport.view.profile.Grid', {
+            // using new instance here because grid uses filtering
+            store: Ext.create('Shopware.apps.SwagImportExport.store.ProfileList'),
+            listeners: {
+                activate: function(grid) {
+                    grid.getStore().load();
+                }
+            }
         }));
         /*{/if}*/
-
-        aclItems.push(Ext.create('Shopware.apps.SwagImportExport.view.log.Log', {
-            logStore: me.logStore
-        }));
 
         return Ext.create('Ext.tab.Panel', {
             name: 'main-tab',

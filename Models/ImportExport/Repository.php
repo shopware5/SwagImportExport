@@ -31,18 +31,22 @@ class Repository extends ModelRepository
      * @param null $offset
      * @return \Shopware\Components\Model\QueryBuilder
      */
-    public function getProfilesListQuery(array $filterBy = array(), array $orderBy = array(), $limit = null, $offset = null)
+    public function getProfilesListQuery(array $filterBy = [], array $orderBy = [], $limit = null, $offset = null)
     {
         /** @var QueryBuilder $builder */
         $builder = $this->createQueryBuilder('p');
         $builder->select(
-            array(
+            [
                 'p.id as id',
                 'p.type as type',
                 'p.name as name',
                 'p.tree as tree',
-            )
+                'p.default as default',
+                'p.baseProfile as baseProfile'
+            ]
         );
+
+        $builder->addFilter(['hidden' => 0]);
 
         if (!empty($filterBy)) {
             $builder->addFilter($filterBy);
@@ -69,13 +73,13 @@ class Repository extends ModelRepository
      * @param null $offset
      * @return \Shopware\Components\Model\QueryBuilder
      */
-    public function getSessionsListQuery(array $filterBy = array(), array $orderBy = array(), $limit = null, $offset = null)
+    public function getSessionsListQuery(array $filterBy = [], array $orderBy = [], $limit = null, $offset = null)
     {
         /** @var QueryBuilder $builder */
         $builder = $this->createQueryBuilder('s');
 
         $builder->select(
-            array(
+            [
                 's.id as id',
                 'p.id as profileId',
                 'p.name as profileName',
@@ -88,7 +92,7 @@ class Repository extends ModelRepository
                 's.fileSize as fileSize',
                 's.state as state',
                 's.createdAt as createdAt',
-            )
+            ]
         );
 
         $builder->join('s.profile', 'p');
@@ -118,19 +122,19 @@ class Repository extends ModelRepository
      * @param null $offset
      * @return \Shopware\Components\Model\QueryBuilder
      */
-    public function getExpressionsListQuery(array $filterBy = array(), array $orderBy = array(), $limit = null, $offset = null)
+    public function getExpressionsListQuery(array $filterBy = [], array $orderBy = [], $limit = null, $offset = null)
     {
         /** @var QueryBuilder $builder */
         $builder = $this->createQueryBuilder('e');
 
         $builder->select(
-            array(
+            [
                 'e.id as id',
                 'p.id as profileId',
                 'e.variable as variable',
                 'e.exportConversion as exportConversion',
                 'e.importConversion as importConversion',
-            )
+            ]
         );
 
         $builder->join('e.profile', 'p');
@@ -159,18 +163,18 @@ class Repository extends ModelRepository
      * @param null $offset
      * @return \Shopware\Components\Model\QueryBuilder
      */
-    public function getLogListQuery(array $filterBy = array(), array $orderBy = array(), $limit = null, $offset = null)
+    public function getLogListQuery(array $filterBy = [], array $orderBy = [], $limit = null, $offset = null)
     {
         /** @var QueryBuilder $builder */
         $builder = $this->createQueryBuilder('l');
 
         $builder->select(
-            array(
+            [
                 'l.id as id',
                 'l.message as message',
-                'l.state as state',
+                'l.state as errorState',
                 'l.createdAt as logDate'
-            )
+            ]
         );
 
         if (!empty($filterBy)) {

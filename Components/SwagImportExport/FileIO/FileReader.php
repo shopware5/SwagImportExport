@@ -10,9 +10,27 @@ namespace Shopware\Components\SwagImportExport\FileIO;
 
 interface FileReader
 {
-    public function readHeader($fileName);
-
+    /**
+     * @param string $fileName
+     * @param int $position
+     * @param int $count
+     * @return array
+     */
     public function readRecords($fileName, $position, $count);
 
-    public function readFooter($fileName);
+    /**
+     * @param string $fileName
+     * @return int
+     */
+    public function getTotalCount($fileName);
+
+    /**
+     * @param array $tree
+     */
+    public function setTree($tree);
+
+    /**
+     * @return bool
+     */
+    public function hasTreeStructure();
 }

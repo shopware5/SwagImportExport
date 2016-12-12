@@ -31,13 +31,6 @@ class CsvFileReader implements FileReader
     }
 
     /**
-     * @param string $fileName
-     */
-    public function readHeader($fileName)
-    {
-    }
-
-    /**
      * Reads csv records
      *
      * @param string $fileName
@@ -70,7 +63,7 @@ class CsvFileReader implements FileReader
         for ($i = 1; $i <= $step; $i++) {
             $row = $file->current();
 
-            if (!$file->valid()) {
+            if ($this->isInvalidRecord($row)) {
                 break;
             }
 
@@ -89,18 +82,18 @@ class CsvFileReader implements FileReader
     }
 
     /**
-     * @param $fileName
-     */
-    public function readFooter($fileName)
-    {
-    }
-
-    /**
      * @return bool
      */
     public function hasTreeStructure()
     {
         return $this->treeStructure;
+    }
+
+    /**
+     * @param array $tree
+     */
+    public function setTree($tree)
+    {
     }
 
     /**
@@ -112,18 +105,21 @@ class CsvFileReader implements FileReader
      */
     public function getTotalCount($fileName)
     {
-        $handle = fopen($fileName, 'r');
+        $fileHandler = fopen($fileName, 'r');
 
-        if ($handle === false) {
+        if ($fileHandler === false) {
             throw new \Exception("Can not open file $fileName");
         }
         $counter = 0;
 
-        while ($row = fgetcsv($handle, 0, ';')) {
+        while ($row = fgetcsv($fileHandler, 0, ';')) {
+            if ($this->isInvalidRecord($row)) {
+                continue;
+            }
             $counter++;
         }
 
-        fclose($handle);
+        fclose($fileHandler);
 
         //removing first row /column names/
         return $counter - 1;
@@ -173,5 +169,14 @@ class CsvFileReader implements FileReader
         );
 
         return $rows;
+    }
+
+    /**
+     * @param array $row
+     * @return bool
+     */
+    private function isInvalidRecord($row)
+    {
+        return null === $row[0];
     }
 }

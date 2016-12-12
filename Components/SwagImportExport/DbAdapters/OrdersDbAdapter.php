@@ -15,19 +15,15 @@ use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Validators\OrderValidator;
 use Shopware\Models\Order\Detail;
-use Shopware\Models\Order\Repository;
+use Shopware\Models\Order\Status;
+use Shopware\Models\Order\DetailStatus;
 
 class OrdersDbAdapter implements DataDbAdapter
 {
     /**
      * @var ModelManager
      */
-    protected $manager;
-
-    /**
-     * @var Repository
-     */
-    protected $detailRepository;
+    protected $modelManager;
 
     /**
      * @var array
@@ -49,6 +45,12 @@ class OrdersDbAdapter implements DataDbAdapter
      */
     protected $validator;
 
+    public function __construct()
+    {
+        $this->modelManager = Shopware()->Container()->get('models');
+        $this->validator = new OrderValidator();
+    }
+
     /**
      * Returns record ids
      *
@@ -59,9 +61,7 @@ class OrdersDbAdapter implements DataDbAdapter
      */
     public function readRecordIds($start = null, $limit = null, $filter = null)
     {
-        $manager = $this->getManager();
-
-        $builder = $manager->createQueryBuilder();
+        $builder = $this->modelManager->createQueryBuilder();
 
         $builder->select('details.id')
             ->from('Shopware\Models\Order\Detail', 'details')
@@ -90,7 +90,7 @@ class OrdersDbAdapter implements DataDbAdapter
         if (isset($filter['dateTo']) && $filter['dateTo']) {
             $dateTo = $filter['dateTo'];
             $builder->andWhere('orders.orderTime <= :dateTo');
-            $builder->setParameter('dateTo', $dateTo->get('yyyy-MM-dd HH:mm:ss'));
+            $builder->setParameter('dateTo', $dateTo->format('Y-m-d H:i:s'));
         }
 
         if ($start) {
@@ -103,7 +103,7 @@ class OrdersDbAdapter implements DataDbAdapter
 
         $records = $builder->getQuery()->getResult();
 
-        $result = array();
+        $result = [];
         if ($records) {
             foreach ($records as $value) {
                 $result[] = $value['id'];
@@ -165,7 +165,7 @@ class OrdersDbAdapter implements DataDbAdapter
         $records = Shopware()->Events()->filter(
             'Shopware_Components_SwagImportExport_DbAdapters_OrdersDbAdapter_Write',
             $records,
-            array('subject' => $this)
+            ['subject' => $this]
         );
 
         if (empty($records['default'])) {
@@ -176,19 +176,21 @@ class OrdersDbAdapter implements DataDbAdapter
             throw new \Exception($message);
         }
 
-        $validator = $this->getValidator();
+        $orderRepository = $this->modelManager->getRepository(Detail::class);
+        $orderStatusRepository = $this->modelManager->getRepository(Status::class);
+        $orderDetailStatusRepository = $this->modelManager->getRepository(DetailStatus::class);
 
         foreach ($records['default'] as $index => $record) {
             try {
-                $record = $validator->filterEmptyString($record);
-                $validator->checkRequiredFields($record);
-                $validator->validate($record, OrderValidator::$mapper);
+                $record = $this->validator->filterEmptyString($record);
+                $this->validator->checkRequiredFields($record);
+                $this->validator->validate($record, OrderValidator::$mapper);
 
                 if (isset($record['orderDetailId']) && $record['orderDetailId']) {
                     /** @var \Shopware\Models\Order\Detail $orderDetailModel */
-                    $orderDetailModel = $this->getDetailRepository()->find($record['orderDetailId']);
+                    $orderDetailModel = $orderRepository->find($record['orderDetailId']);
                 } else {
-                    $orderDetailModel = $this->getDetailRepository()->findOneBy(array('number' => $record['number']));
+                    $orderDetailModel = $orderRepository->findOneBy(['number' => $record['number']]);
                 }
 
                 if (!$orderDetailModel) {
@@ -200,8 +202,7 @@ class OrdersDbAdapter implements DataDbAdapter
                 $orderModel = $orderDetailModel->getOrder();
 
                 if (isset($record['paymentId']) && is_numeric($record['paymentId'])) {
-                    $paymentStatusModel = $this->getManager()
-                        ->find('\Shopware\Models\Order\Status', $record['cleared']);
+                    $paymentStatusModel = $orderStatusRepository->find($record['cleared']);
 
                     if (!$paymentStatusModel) {
                         $message = SnippetsHelper::getNamespace()
@@ -213,7 +214,7 @@ class OrdersDbAdapter implements DataDbAdapter
                 }
 
                 if (isset($record['status']) && is_numeric($record['status'])) {
-                    $orderStatusModel = $this->getManager()->find('\Shopware\Models\Order\Status', $record['status']);
+                    $orderStatusModel = $orderStatusRepository->find($record['status']);
 
                     if (!$orderStatusModel) {
                         $message = SnippetsHelper::getNamespace()
@@ -253,8 +254,7 @@ class OrdersDbAdapter implements DataDbAdapter
                 }
 
                 if (isset($record['statusId']) && is_numeric($record['statusId'])) {
-                    $detailStatusModel = $this->getManager()
-                        ->find('\Shopware\Models\Order\DetailStatus', $record['statusId']);
+                    $detailStatusModel = $orderDetailStatusRepository->find($record['statusId']);
 
                     if (!$detailStatusModel) {
                         $message = SnippetsHelper::getNamespace()
@@ -278,7 +278,7 @@ class OrdersDbAdapter implements DataDbAdapter
                     $orderModel->fromArray($orderData);
                 }
 
-                $this->getManager()->persist($orderModel);
+                $this->modelManager->persist($orderModel);
 
                 unset($orderDetailModel);
                 unset($orderModel);
@@ -289,7 +289,7 @@ class OrdersDbAdapter implements DataDbAdapter
             }
         }
 
-        $this->getManager()->flush();
+        $this->modelManager->flush();
     }
 
     /**
@@ -345,9 +345,12 @@ class OrdersDbAdapter implements DataDbAdapter
      */
     public function getSections()
     {
-        return array(
-            array('id' => 'default', 'name' => 'default')
-        );
+        return [
+            [
+                'id' => 'default',
+                'name' => 'default'
+            ]
+        ];
     }
 
     /**
@@ -370,7 +373,7 @@ class OrdersDbAdapter implements DataDbAdapter
      */
     public function getDefaultColumns()
     {
-        $columns = array(
+        $columns = [
             'details.orderId as orderId',
             'details.id as orderDetailId',
             'details.articleId as articleId',
@@ -422,10 +425,9 @@ class OrdersDbAdapter implements DataDbAdapter
             'details.esdArticle as esd',
             'details.config as config',
             'details.mode as mode',
+        ];
 
-        );
-
-        $billingColumns = array(
+        $billingColumns = [
             'billing.company as billingCompany',
             'billing.department as billingDepartment',
             'billing.salutation as billingSalutation',
@@ -441,11 +443,11 @@ class OrdersDbAdapter implements DataDbAdapter
             'billingCountry.iso as billingCountryIso',
             'billing.additionalAddressLine1 as billingAdditionalAddressLine1',
             'billing.additionalAddressLine2 as billingAdditionalAddressLine2'
-        );
+        ];
 
         $columns = array_merge($columns, $billingColumns);
 
-        $shippingColumns = array(
+        $shippingColumns = [
             'shipping.company as shippingCompany',
             'shipping.department as shippingDepartment',
             'shipping.salutation as shippingSalutation',
@@ -459,16 +461,16 @@ class OrdersDbAdapter implements DataDbAdapter
             'shippingCountry.iso as shippingCountryIso',
             'shipping.additionalAddressLine1 as shippingAdditionalAddressLine1',
             'shipping.additionalAddressLine2 as shippingAdditionalAddressLine2'
-        );
+        ];
 
         $columns = array_merge($columns, $shippingColumns);
 
-        $customerColumns = array(
+        $customerColumns = [
             'customer.email as email',
             'customer.groupKey as customergroup',
             'customer.newsletter as newsletter',
-            'customer.affiliate as affiliate',
-        );
+            'customer.affiliate as affiliate'
+        ];
 
         $columns = array_merge($columns, $customerColumns);
 
@@ -498,7 +500,7 @@ class OrdersDbAdapter implements DataDbAdapter
             $attributes = array_keys($attributes);
 
             $prefix = 'attr';
-            $attributesSelect = array();
+            $attributesSelect = [];
             foreach ($attributes as $attribute) {
                 //underscore to camel case
                 //exmaple: underscore_to_camel_case -> underscoreToCamelCase
@@ -512,41 +514,13 @@ class OrdersDbAdapter implements DataDbAdapter
     }
 
     /**
-     * Returns order detail repository
-     *
-     * @return Repository
-     */
-    private function getDetailRepository()
-    {
-        if ($this->detailRepository === null) {
-            $this->detailRepository = $this->getManager()->getRepository('Shopware\Models\Order\Detail');
-        }
-
-        return $this->detailRepository;
-    }
-
-    /**
-     * Returns entity manager
-     *
-     * @return ModelManager
-     */
-    private function getManager()
-    {
-        if ($this->manager === null) {
-            $this->manager = Shopware()->Models();
-        }
-
-        return $this->manager;
-    }
-
-    /**
      * @param $columns
      * @param $ids
      * @return QueryBuilder
      */
     private function getBuilder($columns, $ids)
     {
-        $builder = $this->getManager()->createQueryBuilder();
+        $builder = $this->modelManager->createQueryBuilder();
 
         $builder->select($columns)
             ->from('Shopware\Models\Order\Detail', 'details')
@@ -566,17 +540,5 @@ class OrdersDbAdapter implements DataDbAdapter
             ->setParameter('ids', $ids);
 
         return $builder;
-    }
-
-    /**
-     * @return OrderValidator
-     */
-    private function getValidator()
-    {
-        if ($this->validator === null) {
-            $this->validator = new OrderValidator();
-        }
-
-        return $this->validator;
     }
 }

@@ -62,9 +62,16 @@ class Profile extends ModelEntity
     protected $type;
 
     /**
+     * @var int $basedOn
+     *
+     * @ORM\Column(name="base_profile", type="integer", nullable=true)
+     */
+    protected $baseProfile;
+
+    /**
      * @var string $name
      *
-     * @ORM\Column(name="name", type="string", length=200)
+     * @ORM\Column(name="name", type="string", length=200, unique=true)
      */
     protected $name;
 
@@ -83,6 +90,12 @@ class Profile extends ModelEntity
     protected $hidden = 0;
 
     /**
+     * @var boolean
+     * @ORM\Column(name="is_default", type="boolean")
+     */
+    protected $default = false;
+
+    /**
      * @return int
      */
     public function getId()
@@ -96,6 +109,14 @@ class Profile extends ModelEntity
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * @return int
+     */
+    public function getBaseProfile()
+    {
+        return $this->baseProfile;
     }
 
     /**
@@ -144,6 +165,14 @@ class Profile extends ModelEntity
     public function setType($type)
     {
         $this->type = $type;
+    }
+
+    /**
+     * @param int $baseProfile
+     */
+    public function setBaseProfile($baseProfile)
+    {
+        $this->baseProfile = $baseProfile;
     }
 
     /**
@@ -206,5 +235,21 @@ class Profile extends ModelEntity
         $session->setProfile($this);
 
         return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getDefault()
+    {
+        return $this->default;
+    }
+
+    /**
+     * @param boolean $default
+     */
+    public function setDefault($default)
+    {
+        $this->default = $default;
     }
 }

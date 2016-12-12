@@ -8,6 +8,7 @@
 
 namespace Shopware\Components\SwagImportExport\Factories;
 
+use Doctrine\ORM\EntityRepository;
 use Shopware\Components\SwagImportExport\DataIO;
 use Shopware\Components\SwagImportExport\DbAdapters\DataDbAdapter;
 use Shopware\Components\SwagImportExport\DbalHelper;
@@ -20,6 +21,7 @@ use Shopware\CustomModels\ImportExport\Session as SessionEntity;
 
 class DataFactory extends \Enlight_Class implements \Enlight_Hook
 {
+    /** @var EntityRepository */
     private $sessionRepository;
 
     /**
@@ -45,7 +47,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     {
         $event = Shopware()->Events()->notifyUntil(
                 'Shopware_Components_SwagImportExport_Factories_CreateDbAdapter',
-                array('subject' => $this, 'adapterType' => $adapterType)
+                ['subject' => $this, 'adapterType' => $adapterType]
         );
 
         if ($event && $event instanceof \Enlight_Event_EventArgs
@@ -54,27 +56,27 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
         }
 
         switch ($adapterType) {
-            case 'categories':
+            case DataDbAdapter::CATEGORIES_ADAPTER:
                 return $this->createCategoriesDbAdapter();
-            case 'articles':
+            case DataDbAdapter::ARTICLE_ADAPTER:
                 return $this->createArticlesDbAdapter();
-            case 'articlesInStock':
+            case DataDbAdapter::ARTICLE_INSTOCK_ADAPTER:
                 return $this->createArticlesInStockDbAdapter();
-            case 'articlesTranslations':
+            case DataDbAdapter::ARTICLE_TRANSLATION_ADAPTER:
                 return $this->createArticlesTranslationsDbAdapter();
-            case 'articlesPrices':
+            case DataDbAdapter::ARTICLE_PRICE_ADAPTER:
                 return $this->createArticlesPricesDbAdapter();
-            case 'articlesImages':
+            case DataDbAdapter::ARTICLE_IMAGE_ADAPTER:
                 return $this->createArticlesImagesDbAdapter();
-            case 'orders':
+            case DataDbAdapter::ORDER_ADAPTER:
                 return $this->createOrdersDbAdapter();
-            case 'mainOrders':
+            case DataDbAdapter::MAIN_ORDER_ADAPTER:
                 return $this->createMainOrdersDbAdapter();
-            case 'customers':
+            case DataDbAdapter::CUSTOMER_ADAPTER:
                 return $this->createCustomerDbAdapter();
-            case 'newsletter':
+            case DataDbAdapter::NEWSLETTER_RECIPIENTS_ADAPTER:
                 return $this->createNewsletterDbAdapter();
-            case 'translations':
+            case DataDbAdapter::TRANSLATION_ADAPTER:
                 return $this->createTranslationsDbAdapter();
             default: throw new \Exception('Db adapter type is not valid');
         }
@@ -89,13 +91,13 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     public function createDataManager($managerType)
     {
         switch ($managerType) {
-            case 'categories':
+            case DataDbAdapter::CATEGORIES_ADAPTER:
                 return $this->getCategoryDataManager();
-            case 'articles':
+            case DataDbAdapter::ARTICLE_ADAPTER:
                 return $this->getArticleDataManager();
-            case 'customers':
+            case DataDbAdapter::CUSTOMER_ADAPTER:
                 return $this->getCustomerDataManager();
-            case 'newsletter':
+            case DataDbAdapter::NEWSLETTER_RECIPIENTS_ADAPTER:
                 return $this->getNewsletterDataManager();
         }
     }
@@ -108,7 +110,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     {
         $sessionId = $data['sessionId'];
 
-        $sessionEntity = $this->getSessionRepository()->findOneBy(array('id' => $sessionId));
+        $sessionEntity = $this->getSessionRepository()->findOneBy(['id' => $sessionId]);
 
         if (!$sessionEntity) {
             $sessionEntity = new SessionEntity();
@@ -120,7 +122,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     /**
      * Returns columnOptions adapter
      * 
-     * @param type $options
+     * @param $options
      * @return \Shopware\Components\SwagImportExport\Utils\DataColumnOptions
      */
     public function createColOpts($options)
@@ -153,7 +155,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     /**
      * Helper Method to get access to the session repository.
      *
-     * @return \Shopware\CustomModels\ImportExport\Session
+     * @return EntityRepository
      */
     public function getSessionRepository()
     {
