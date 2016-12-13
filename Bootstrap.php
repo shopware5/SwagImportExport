@@ -188,6 +188,9 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
             throw new MinVersionException('This plugin requires Shopware 5.2.0 or a later version');
         }
 
+        if (version_compare($oldVersion, '2.0.0', '<=')) {
+            $this->renameDuplicateProfileNames();
+        }
         $this->clearDoctrineMetaDataCache();
 
         $setupContext = new SetupContext(
@@ -774,6 +777,47 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         $cacheDriver = $this->get('models')->getConfiguration()->getMetadataCacheImpl();
         if ($cacheDriver) {
             $cacheDriver->deleteAll();
+        }
+    }
+
+    /**
+     * Rename duplicate profile names to prevent integrity constraint mysql exceptions.
+     */
+    private function renameDuplicateProfileNames()
+    {
+        $connection = $this->get('dbal_connection');
+        $profiles = $connection->fetchAll('SELECT COUNT(id) as count, name FROM s_import_export_profile GROUP BY name');
+
+        foreach ($profiles as $profile) {
+            if ($profile['count'] == 1) {
+                continue;
+            }
+
+            $profilesWithSameName = $connection->fetchAll(
+                'SELECT * FROM s_import_export_profile WHERE name=:name ORDER BY id',
+                [ 'name' => $profile['name'] ]
+            );
+
+            $this->addSuffixToProfileNames($profilesWithSameName);
+        }
+    }
+
+    /**
+     * @param array $profiles
+     */
+    private function addSuffixToProfileNames($profiles)
+    {
+        $dbalConnection = $this->get('dbal_connection');
+
+        foreach ($profiles as $index => $profile) {
+            if ($index === 0) {
+                continue;
+            }
+
+            $dbalConnection->executeQuery(
+                'UPDATE s_import_export_profile SET name = :name WHERE id=:id',
+                [ 'name' => uniqid($profile['name'] . '_', true) , 'id' => $profile['id'] ]
+            );
         }
     }
 }
