@@ -1,8 +1,15 @@
 <?php
+/**
+ * (c) shopware AG <info@shopware.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Shopware\Commands\SwagImportExport;
 
 use Shopware\Commands\ShopwareCommand;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\Profile\Profile;
 use Shopware\Components\SwagImportExport\UploadPathProvider;
 use Shopware\CustomModels\ImportExport\Profile as ProfileEntity;
@@ -16,10 +23,19 @@ use Shopware\Components\SwagImportExport\Utils\CommandHelper;
 
 class ImportCommand extends ShopwareCommand
 {
+    /** @var string */
     protected $profile;
+
+    /** @var ProfileEntity  */
     protected $profileEntity;
+
+    /** @var string */
     protected $format;
+
+    /** @var string */
     protected $filePath;
+
+    /** @var int */
     protected $sessionId;
 
     /**
@@ -46,9 +62,10 @@ class ImportCommand extends ShopwareCommand
 
         $this->start($output, $this->profileEntity, $this->filePath, $this->format);
 
-        $profilesMapper = array('articles', 'articlesImages');
+        $profilesMapper = ['articles', 'articlesImages'];
 
-        $uploadPathProvider = new UploadPathProvider(Shopware()->DocPath());
+        /** @var UploadPathProvider $uploadPathProvider */
+        $uploadPathProvider = $this->container->get('swag_import_export.upload_path_provider');
 
         //loops the unprocessed data
         $pathInfo = pathinfo($this->filePath);
@@ -80,29 +97,28 @@ class ImportCommand extends ShopwareCommand
     protected function start(OutputInterface $output, $profileModel, $file, $format)
     {
         $helper = new CommandHelper(
-            array(
+            [
                 'profileEntity' => $profileModel,
                 'filePath' => $file,
                 'format' => $format,
                 'username' => 'Commandline'
-            )
+            ]
         );
 
         $output->writeln('<info>' . sprintf("Using profile: %s.", $profileModel->getName()) . '</info>');
         $output->writeln('<info>' . sprintf("Using format: %s.", $format) . '</info>');
         $output->writeln('<info>' . sprintf("Using file: %s.", $file) . '</info>');
 
-        $return = $helper->prepareImport();
-        $count = $return['count'];
+        $preparationData = $helper->prepareImport();
+        $count = $preparationData['count'];
         $output->writeln('<info>' . sprintf("Total count: %d.", $count) . '</info>');
 
-        $return = $helper->importAction();
-        $position = $return['data']['position'];
-        $output->writeln('<info>' . sprintf("Processed: %d.", $position) . '</info>');
+        $position = 0;
 
         while ($position < $count) {
-            $return = $helper->importAction();
-            $position = $return['data']['position'];
+            $data = $helper->importAction();
+            $this->container->get('models')->clear();
+            $position = $data['data']['position'];
             $output->writeln('<info>' . sprintf("Processed: %d.", $position) . '</info>');
         }
     }
@@ -119,24 +135,24 @@ class ImportCommand extends ShopwareCommand
 
         $parts = explode('.', $this->filePath);
 
-        // get some service from container (formerly Shopware()->Bootstrap()->getResource())
+        /** @var ModelManager $em */
         $em = $this->container->get('models');
 
         /** @var Repository $profileRepository */
-        $profileRepository = $em->getRepository('Shopware\CustomModels\ImportExport\Profile');
+        $profileRepository = $em->getRepository(ProfileEntity::class);
 
         // if no profile is specified try to find it from the filename
         if ($this->profile === null) {
             foreach ($parts as $part) {
                 $part = strtolower($part);
-                $this->profileEntity = $profileRepository->findOneBy(array('name' => $part));
+                $this->profileEntity = $profileRepository->findOneBy(['name' => $part]);
                 if ($this->profileEntity !== null) {
                     $this->profile = $part;
                     break;
                 }
             }
         } else {
-            $this->profileEntity = $profileRepository->findOneBy(array('name' => $this->profile));
+            $this->profileEntity = $profileRepository->findOneBy(['name' => $this->profile]);
         }
 
         // validate profile
@@ -153,7 +169,7 @@ class ImportCommand extends ShopwareCommand
         $this->format = strtolower($this->format);
 
         // validate type
-        if (!in_array($this->format, array('csv', 'xml'))) {
+        if (!in_array($this->format, ['csv', 'xml'])) {
             throw new \Exception(sprintf('Invalid format: \'%s\'! Valid formats are: CSV and XML.', $this->format));
         }
 
