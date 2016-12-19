@@ -13,6 +13,7 @@ use Doctrine\ORM\Tools\SchemaTool;
 use Shopware\Commands\SwagImportExport\ExportCommand;
 use Shopware\Commands\SwagImportExport\ImportCommand;
 use Shopware\Commands\SwagImportExport\ProfilesCommand;
+use Shopware\Components\CacheManager;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\Factories\DataFactory;
 use Shopware\Components\SwagImportExport\Factories\DataTransformerFactory;
@@ -144,8 +145,9 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         if (!$this->assertMinimumVersion('5.2.0')) {
             throw new MinVersionException('This plugin requires Shopware 5.2.0 or a later version');
         }
-
-        $this->clearDoctrineMetaDataCache();
+        /** @var CacheManager $cacheManager */
+        $cacheManager = $this->get('shopware.cache_manager');
+        $cacheManager->clearProxyCache();
 
         $setupContext = new SetupContext(
             $this->get('config')->get('version'),
@@ -191,7 +193,12 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         if (version_compare($oldVersion, '2.0.0', '<=')) {
             $this->renameDuplicateProfileNames();
         }
-        $this->clearDoctrineMetaDataCache();
+        /** @var CacheManager $cacheManager */
+        $cacheManager = $this->get('shopware.cache_manager');
+        $cacheManager->clearProxyCache();
+        
+        $connection = $this->get('dbal_connection');
+        $connection->executeQuery('SET foreign_key_checks = 0;');
 
         $setupContext = new SetupContext(
             $this->get('config')->get('version'),
@@ -223,6 +230,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
             }
             $updater->update();
         }
+        $connection->executeQuery('SET foreign_key_checks = 1;');
 
         return [
             'success' => true,
@@ -769,18 +777,6 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
     }
 
     /**
-     * Clear doctrine meta data cache to generate classes from class meta data by using SchemaTool::updateSchema()
-     * and SchemaTool::createSchema().
-     */
-    private function clearDoctrineMetaDataCache()
-    {
-        $cacheDriver = $this->get('models')->getConfiguration()->getMetadataCacheImpl();
-        if ($cacheDriver) {
-            $cacheDriver->deleteAll();
-        }
-    }
-
-    /**
      * Rename duplicate profile names to prevent integrity constraint mysql exceptions.
      */
     private function renameDuplicateProfileNames()
@@ -816,7 +812,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
 
             $dbalConnection->executeQuery(
                 'UPDATE s_import_export_profile SET name = :name WHERE id=:id',
-                [ 'name' => uniqid($profile['name'] . '_', true) , 'id' => $profile['id'] ]
+                [ 'name' => uniqid($profile['name'] . '_', true), 'id' => $profile['id'] ]
             );
         }
     }
