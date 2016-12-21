@@ -25,7 +25,15 @@ class NewsletterRecipientProfile implements \JsonSerializable, ProfileMetaData
      */
     public function getName()
     {
-        return "default_newsletter_recipient";
+        return 'default_newsletter_recipient';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getDescription()
+    {
+        return 'default_newsletter_recipient_description';
     }
 
     /**

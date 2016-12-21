@@ -25,7 +25,15 @@ class ArticlePriceProfile implements \JsonSerializable, ProfileMetaData
      */
     public function getName()
     {
-        return "default_article_prices";
+        return 'default_article_prices';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getDescription()
+    {
+        return 'default_article_prices_description';
     }
 
     /**

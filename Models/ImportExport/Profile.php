@@ -76,6 +76,13 @@ class Profile extends ModelEntity
     protected $name;
 
     /**
+     * @var string $description
+     *
+     * @ORM\Column(name="description", type="text", nullable=true)
+     */
+    protected $description;
+
+    /**
      * @var string $format
      *
      * @ORM\Column(name="tree", type="text")
@@ -152,6 +159,14 @@ class Profile extends ModelEntity
     }
 
     /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
      * @param int $id
      */
     public function setId($id)
@@ -189,6 +204,14 @@ class Profile extends ModelEntity
     public function setName($name)
     {
         $this->name = $name;
+    }
+
+    /**
+     * @param string $description
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
     }
 
     /**

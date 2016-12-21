@@ -25,7 +25,15 @@ class ArticleInStockProfile implements \JsonSerializable, ProfileMetaData
      */
     public function getName()
     {
-        return "default_article_in_stock";
+        return 'default_article_in_stock';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getDescription()
+    {
+        return 'default_article_in_stock_description';
     }
 
     /**

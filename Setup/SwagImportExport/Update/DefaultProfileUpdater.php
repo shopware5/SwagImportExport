@@ -6,18 +6,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Shopware\Setup\SwagImportExport\Install;
+namespace Shopware\Setup\SwagImportExport\Update;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\ProfileHelper;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\ProfileMetaData;
 use Shopware\Setup\SwagImportExport\SetupContext;
 
-/**
- * Class DefaultProfileInstaller
- * @package Shopware\Setup\SwagImportExport\Install
- */
-class DefaultProfileInstaller implements InstallerInterface
+class DefaultProfileUpdater implements UpdaterInterface
 {
     const MIN_PLUGIN_VERSION = '2.0.0';
 
@@ -27,6 +23,11 @@ class DefaultProfileInstaller implements InstallerInterface
     private $connection;
 
     /**
+     * @var \Shopware_Components_Snippet_Manager
+     */
+    private $snippetManager;
+
+    /**
      * @var SetupContext
      */
     private $setupContext;
@@ -34,23 +35,30 @@ class DefaultProfileInstaller implements InstallerInterface
     /**
      * @param SetupContext $setupContext
      * @param Connection $connection
+     * @param \Shopware_Components_Snippet_Manager $snippetManager
      */
-    public function __construct(SetupContext $setupContext, Connection $connection)
-    {
+    public function __construct(
+        SetupContext $setupContext,
+        Connection $connection,
+        \Shopware_Components_Snippet_Manager $snippetManager
+    ) {
         $this->connection = $connection;
+        $this->snippetManager = $snippetManager;
         $this->setupContext = $setupContext;
     }
 
     /**
-     * @inheritdoc
+     * Updates the default profiles.
+     * We won´t update unique profile names and types.
+     * Only changes to the profile tree should
+     * be made and make sense.
      */
-    public function install()
+    public function update()
     {
         $sql = '
-            INSERT IGNORE INTO s_import_export_profile
-            (`type`, `name`, `description`, `tree`, `hidden`, `is_default`)
-            VALUES
-            (:type, :name, :description, :tree, :hidden, :is_default)
+            UPDATE s_import_export_profile
+            SET `tree` = :tree
+            WHERE `name` = :name
         ';
 
         /** @var ProfileMetaData[] $profiles */
@@ -60,12 +68,8 @@ class DefaultProfileInstaller implements InstallerInterface
             $serializedTree = json_encode($profile);
 
             $params = [
-                'type' => $profile->getAdapter(),
-                'name' => $profile->getName(),
-                'description' => $profile->getDescription(),
                 'tree' => $serializedTree,
-                'hidden' => 0,
-                'is_default' => 1
+                'name' => $profile->getName()
             ];
 
             $this->connection->executeQuery($sql, $params);
@@ -73,7 +77,7 @@ class DefaultProfileInstaller implements InstallerInterface
     }
 
     /**
-     * @return boolean
+     * @inheritdoc
      */
     public function isCompatible()
     {

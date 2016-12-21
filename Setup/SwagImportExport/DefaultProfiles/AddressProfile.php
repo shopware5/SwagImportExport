@@ -31,6 +31,14 @@ class AddressProfile implements ProfileMetaData, \JsonSerializable
     /**
      * @inheritdoc
      */
+    public function getDescription()
+    {
+        return 'default_addresses_description';
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function jsonSerialize()
     {
         return [
