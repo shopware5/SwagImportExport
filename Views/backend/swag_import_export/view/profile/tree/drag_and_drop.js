@@ -12,7 +12,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.tree.DragAndDrop', {
          * Custom drag&drop validation function for profile editor tree
          */
         me.dropZone.isValidDropPoint = function(node, position, dragZone, e, data) {
-            if (!node || !data.item) {
+            if (!node || !data.item || data.records.length > 1) {
                 return false;
             }
 

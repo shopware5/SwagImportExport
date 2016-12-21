@@ -14,8 +14,8 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Column', {
      */
     alias: 'widget.swag-import-export-column-window',
 
-    width: '50%',
-    height: '30%',
+    width: 500,
+    height: 200,
 
     layout: 'fit',
     title: '{s name=swag_import_export/profile/column/title}Add column{/s}',
@@ -43,7 +43,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Column', {
                 anchor: '100%'
             },
             fieldDefaults: {
-                labelWidth: 200
+                labelWidth: 150
             },
             border: false,
             bodyPadding: 10,

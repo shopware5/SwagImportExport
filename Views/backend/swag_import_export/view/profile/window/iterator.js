@@ -14,8 +14,8 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Iterator', {
      */
     alias: 'widget.swag-import-export-iterator-window',
 
-    width: '70%',
-    height: '70%',
+    width: 615,
+    height: 430,
 
     layout: {
         type: 'vbox',
@@ -94,7 +94,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Iterator', {
                 anchor: '100%'
             },
             fieldDefaults: {
-                labelWidth: 200
+                labelWidth: 150
             },
             flex: 1,
             border: false,
@@ -135,8 +135,12 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Iterator', {
                                 }
                             };
                         keyField.clearValue();
-                        keyField.getStore().load(loadParams);
                         me.columnGrid.getStore().load(loadParams);
+                        loadParams.callback = function(records) {
+                            keyField.setDisabled(records.length === 0);
+                            keyField.setVisible(records.length > 0);
+                        };
+                        keyField.getStore().load(loadParams);
                     }
                 }
             }, {
