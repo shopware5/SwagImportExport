@@ -320,6 +320,12 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
         var me = this,
             type = record.get('type'),
             menuItems;
+
+        e.stopEvent();
+        if (view.getSelectionModel().getSelection().length > 1) {
+            return;
+        }
+
         view.getSelectionModel().select(record);
 
         e.stopEvent();
@@ -349,7 +355,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
             text: '{s name=swag_import_export/profile/profile/remove_item}Remove selected item{/s}',
             iconCls: 'sprite-minus-circle-frame',
             handler: function () {
-                me.fireEvent('deleteNode', me.treeStore, me.selectedNodeId, me.treePanel.getSelectionModel());
+                me.fireEvent('deleteNode', me.treePanel);
             }
         }];
 

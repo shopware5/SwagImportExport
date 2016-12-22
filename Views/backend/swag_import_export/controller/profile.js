@@ -361,7 +361,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
             type: 'iteration',
             iconCls: 'sprite-blue-folders-stack',
             inIteration: true,
-            parentKey: formValues.parentKey
+            parentKey: formValues.parentKey || ''
         });
 
         columns = store.getRange();
@@ -386,6 +386,10 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                 iteratorNode.appendChild(columnNode);
             }
             me.doSync(treeStore, function() {
+                Shopware.Notification.createGrowlMessage(
+                    '{s name=swag_import_export/profile/save/title}Swag import export{/s}',
+                    '{s name=swag_import_export/profile/save/success}Successfully updated.{/s}'
+                );
                 treePanel.expand();
                 treePanel.getSelectionModel().select(iteratorNode);
                 win.close();
@@ -476,6 +480,10 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                 });
             },
             success: function() {
+                Shopware.Notification.createGrowlMessage(
+                    '{s name=swag_import_export/profile/save/title}Swag import export{/s}',
+                    '{s name=swag_import_export/profile/save/success}Successfully updated.{/s}'
+                );
                 win.close();
                 treePanel.expand();
                 treePanel.getSelectionModel().select(newNode);
@@ -510,6 +518,10 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
 
         treeStore.sync({
             success: function() {
+                Shopware.Notification.createGrowlMessage(
+                    '{s name=swag_import_export/profile/save/title}Swag import export{/s}',
+                    '{s name=swag_import_export/profile/save/success}Successfully updated.{/s}'
+                );
                 treePanel.getSelectionModel().deselectAll(true);
                 treePanel.expand();
                 treePanel.getSelectionModel().select(treeStore.getById(node.get('id')));
@@ -532,7 +544,6 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
      * Deletes the selected node
      */
     deleteNode: function(treePanel) {
-        var me = this;
         Ext.Msg.show({
             title: '{s name=swag_import_export/profile/delete/title}Delete Node?{/s}',
             msg: '{s name=swag_import_export/profile/delete/msg}Are you sure you want to permanently delete the node?{/s}',
@@ -577,6 +588,10 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
 
                     store.sync({
                         success: function() {
+                            Shopware.Notification.createGrowlMessage(
+                                '{s name=swag_import_export/profile/save/title}Swag import export{/s}',
+                                '{s name=swag_import_export/profile/save/success}Successfully updated.{/s}'
+                            );
                             selModel.deselectAll();
                             if (selectNode) {
                                 selModel.select(selectNode);
@@ -630,6 +645,10 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                 });
             },
             success: function() {
+                Shopware.Notification.createGrowlMessage(
+                    '{s name=swag_import_export/profile/save/title}Swag import export{/s}',
+                    '{s name=swag_import_export/profile/save/success}Successfully updated.{/s}'
+                );
                 treePanel.expand();
                 treePanel.getSelectionModel().select(treeStore.getById(newNode.getId()));
             }
