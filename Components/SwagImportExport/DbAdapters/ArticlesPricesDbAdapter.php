@@ -242,6 +242,10 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                     $record['pseudoPrice'] = floatval(str_replace(",", ".", $record['pseudoPrice']));
                 }
 
+                if (isset($record['purchasePrice'])) {
+                    $record['purchasePrice'] = floatval(str_replace(",", ".", $record['purchasePrice']));
+                }
+
                 if (isset($record['percent'])) {
                     $record['percent'] = floatval(str_replace(",", ".", $record['percent']));
                 }
@@ -270,6 +274,11 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                 if (isset($record['pseudoPrice'])) {
                     $price->setPseudoPrice($record['pseudoPrice']);
                 }
+
+                if (isset($record['purchasePrice'])) {
+                    $articleDetail->setPurchasePrice($record['purchasePrice']);
+                }
+
                 $price->setPercent($record['percent']);
 
                 $this->manager->persist($price);
