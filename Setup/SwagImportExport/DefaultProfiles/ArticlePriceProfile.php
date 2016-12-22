@@ -117,8 +117,8 @@ class ArticlePriceProfile implements \JsonSerializable, ProfileMetaData
                                 'id' => '540ffb61558eb',
                                 'type' => 'leaf',
                                 'index' => 5,
-                                'name' => 'baseprice',
-                                'shopwareField' => 'basePrice'
+                                'name' => 'purchaseprice',
+                                'shopwareField' => 'purchasePrice'
                             ],
                             6 => [
                                 'id' => '540ffda5904e5',
