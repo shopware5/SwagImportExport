@@ -9,6 +9,7 @@
 namespace Shopware\Setup\SwagImportExport\Install;
 
 use Doctrine\DBAL\Connection;
+use Shopware\Setup\SwagImportExport\DefaultProfiles\AddressProfile;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\ArticleCompleteProfile;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\ArticleTranslationProfile;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\CategoryProfile;
@@ -121,7 +122,8 @@ class DefaultProfileInstaller implements InstallerInterface
             new ArticlePropertiesProfile(),
             new CustomerProfile(),
             new ArticleImagesProfile(),
-            new TranslationProfile()
+            new TranslationProfile(),
+            new AddressProfile()
         ];
     }
 }

@@ -224,6 +224,9 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
             $updater->update();
         }
 
+        $defaultProfileInstaller = new DefaultProfileInstaller($setupContext, $this->get('dbal_connection'));
+        $defaultProfileInstaller->install();
+
         return [
             'success' => true,
             'invalidateCache' => $this->getInvalidateCacheArray()
@@ -321,7 +324,6 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         if ($this->dataFactory === null) {
             $this->dataFactory = Enlight_Class::Instance('Shopware\Components\SwagImportExport\Factories\DataFactory');
         }
-
         return $this->dataFactory;
     }
 
@@ -816,7 +818,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
 
             $dbalConnection->executeQuery(
                 'UPDATE s_import_export_profile SET name = :name WHERE id=:id',
-                [ 'name' => uniqid($profile['name'] . '_', true) , 'id' => $profile['id'] ]
+                [ 'name' => uniqid($profile['name'] . '_', true), 'id' => $profile['id'] ]
             );
         }
     }

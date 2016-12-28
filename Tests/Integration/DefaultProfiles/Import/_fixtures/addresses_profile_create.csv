@@ -1,0 +1,3 @@
+userID;email;customernumber;company;department;salutation;title;firstname;lastname;street;zipcode;city;countryID;stateID;vatID;phone;additionalAddressLine1;additionalAddressLine2
+1;test@example.com;20001;;;mr;Doctor;Max;Mustermann;Different Street;12345;Some City;28;20;An UstId;;;
+2;mustermann@b2b.de;20003;A Company Ltd.;Department X;ms;;Firstname;Lastname;My Street;54321;My City;2;;MyUstId;My phonenumber;My additional address;

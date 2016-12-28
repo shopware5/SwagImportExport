@@ -40,7 +40,6 @@ class ArticleTranslationUpdateProfileTest extends \PHPUnit_Framework_TestCase
             $this->assertArrayHasKey('id', $node, 'Current array: ' . print_r($node, true));
             $this->assertArrayHasKey('name', $node, 'Current array: ' . print_r($node, true));
             $this->assertArrayHasKey('type', $node, 'Current array: ' . print_r($node, true));
-
         });
     }
 }

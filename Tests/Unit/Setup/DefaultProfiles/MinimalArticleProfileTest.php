@@ -37,13 +37,13 @@ class MinimalArticleProfileTest extends \PHPUnit_Framework_TestCase
         $minimalArticleProfile = $this->getMinimalArticleProfile();
 
         $profileTree = $minimalArticleProfile->jsonSerialize();
-        $this->walkRecursive($profileTree, function($node) {
+        $this->walkRecursive($profileTree, function ($node) {
             $this->assertArrayHasKey('id', $node, "Current array: " . print_r($node, true));
             $this->assertArrayHasKey('type', $node, "Current array: " . print_r($node, true));
             $this->assertArrayHasKey('name', $node, "Current array: " . print_r($node, true));
         });
 
-        $profileJson = json_encode($minimalArticleProfile->jsonSerialize());
+        $profileJson = json_encode($minimalArticleProfile);
         $this->assertJson($profileJson);
     }
 }

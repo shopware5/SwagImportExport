@@ -25,7 +25,7 @@ class ArticleAccessoryProfile implements \JsonSerializable, ProfileMetaData
      */
     public function getName()
     {
-        return "default_article_accessories";
+        return 'default_article_accessories';
     }
 
     /**
@@ -53,7 +53,7 @@ class ArticleAccessoryProfile implements \JsonSerializable, ProfileMetaData
                             'parentKey' => '',
                             'shopwareField' => '',
                             'children' => $this->getArticleAccessoryFields(),
-                            'attributes' => NULL
+                            'attributes' => null
                         ]
                     ],
                     'shopwareField' => ''

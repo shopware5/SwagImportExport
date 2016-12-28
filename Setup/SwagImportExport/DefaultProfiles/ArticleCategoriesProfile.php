@@ -25,7 +25,7 @@ class ArticleCategoriesProfile implements \JsonSerializable, ProfileMetaData
      */
     public function getName()
     {
-        return "default_article_categories";
+        return 'default_article_categories';
     }
 
     /**
@@ -53,7 +53,7 @@ class ArticleCategoriesProfile implements \JsonSerializable, ProfileMetaData
                             'parentKey' => '',
                             'shopwareField' => '',
                             'children' => $this->getArticleCategoriesFields(),
-                            'attributes' => NULL
+                            'attributes' => null
                         ]
                     ],
                     'shopwareField' => ''
