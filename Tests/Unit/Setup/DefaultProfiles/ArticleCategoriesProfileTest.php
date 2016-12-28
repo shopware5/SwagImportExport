@@ -40,7 +40,7 @@ class ArticleCategoriesProfileTest extends \PHPUnit_Framework_TestCase
             $this->assertArrayHasKey('type', $node, "Current array: " . print_r($node, true));
         });
 
-        $profileJson = json_encode($categoryProfile->jsonSerialize());
+        $profileJson = json_encode($categoryProfile);
         $this->assertJson($profileJson);
     }
 }

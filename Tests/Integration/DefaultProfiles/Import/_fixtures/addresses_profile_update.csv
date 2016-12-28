@@ -1,0 +1,2 @@
+id;userID;company;department;salutation;title;firstname;lastname;street;zipcode;city;countryID;stateID;vatID;phone;additionalAddressLine1;additionalAddressLine2
+2;2;Updated company;Updated department;Updated salutation;;Updated firstname;Updated lastname;Updated street;Updated zipcode;Updated city;2;3;Updated vatid;Updated telephone;Updated additional address;
