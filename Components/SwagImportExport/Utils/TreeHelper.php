@@ -130,6 +130,8 @@ class TreeHelper
                     'type' => $child['type'],
                     'index' => $child['index'],
                     'name' => $child['text'],
+                    'defaultValue' => $child['defaultValue'],
+                    'shopwareField' => $child['swColumn']
                 );
             }
 
