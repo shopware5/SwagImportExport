@@ -69,7 +69,8 @@ class DefaultProfileUpdater implements UpdaterInterface
 
             $params = [
                 'tree' => $serializedTree,
-                'name' => $profile->getName()
+                'name' => $profile->getName(),
+                'description' => $profile->getDescription()
             ];
 
             $this->connection->executeQuery($sql, $params);
