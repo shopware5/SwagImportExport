@@ -57,7 +57,7 @@ class DefaultProfileUpdater implements UpdaterInterface
     {
         $sql = '
             UPDATE s_import_export_profile
-            SET `tree` = :tree
+            SET `tree` = :tree, `description` = :description
             WHERE `name` = :name
         ';
 
