@@ -25,7 +25,15 @@ class ArticleImagesProfile implements \JsonSerializable, ProfileMetaData
      */
     public function getName()
     {
-        return "default_article_images";
+        return 'default_article_images';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getDescription()
+    {
+        return 'default_article_images_description';
     }
 
     /**

@@ -35,6 +35,14 @@ class ArticleTranslationProfile implements \JsonSerializable, ProfileMetaData
     /**
      * @inheritdoc
      */
+    public function getDescription()
+    {
+        return 'default_article_translations_description';
+    }
+
+    /**
+     * @inheritdoc
+     */
     function jsonSerialize()
     {
         return [

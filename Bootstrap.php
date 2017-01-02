@@ -32,6 +32,7 @@ use Shopware\Setup\SwagImportExport\Install\InstallerInterface;
 use Shopware\Setup\SwagImportExport\Install\MainMenuItemInstaller;
 use Shopware\Setup\SwagImportExport\Install\OldAdvancedMenuInstaller;
 use Shopware\Setup\SwagImportExport\SetupContext;
+use Shopware\Setup\SwagImportExport\Update\DefaultProfileUpdater;
 use Shopware\Setup\SwagImportExport\Update\Update01MainMenuItem;
 use Shopware\Setup\SwagImportExport\Update\Update02RemoveForeignKeyConstraint;
 use Shopware\Setup\SwagImportExport\Update\Update03DefaultProfileSupport;
@@ -208,6 +209,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
             $this->get('dbal_connection')->getSchemaManager()
         );
         $updaters[] = new Update03DefaultProfileSupport($setupContext, $this->get('dbal_connection'), $this->get('snippets'));
+        $updaters[] = new DefaultProfileUpdater($setupContext, $this->get('dbal_connection'), $this->get('snippets'));
 
         $this->registerControllers();
         $this->createAclResource();

@@ -88,11 +88,13 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         $count = $manager->getQueryCount($query);
 
         $data = $query->getArrayResult();
+        /** @var Enlight_Components_Snippet_Namespace $namespace */
+        $namespace = $this->get('snippets')->getNamespace('backend/swag_import_export/default_profiles');
 
         foreach ($data as &$profile) {
             if (true === $profile['default']) {
-                $translatedProfileName = $this->get('snippets')->getNamespace('backend/swag_import_export/default_profiles')->get($profile['name']);
-                $profile['translation'] = $translatedProfileName;
+                $profile['translation'] = $namespace->get($profile['name']);
+                $profile['description'] = $namespace->get($profile['description']);
             }
         }
 

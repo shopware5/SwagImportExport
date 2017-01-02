@@ -31,6 +31,14 @@ class ArticleSimilarsProfile implements \JsonSerializable, ProfileMetaData
     /**
      * @inheritdoc
      */
+    public function getDescription()
+    {
+        return 'default_similar_articles_description';
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function jsonSerialize()
     {
         return [

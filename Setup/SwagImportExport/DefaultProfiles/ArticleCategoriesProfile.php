@@ -31,6 +31,14 @@ class ArticleCategoriesProfile implements \JsonSerializable, ProfileMetaData
     /**
      * @inheritdoc
      */
+    public function getDescription()
+    {
+        return 'default_article_categories_description';
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function jsonSerialize()
     {
         return [

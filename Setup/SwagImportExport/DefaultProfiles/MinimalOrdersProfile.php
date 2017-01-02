@@ -25,7 +25,15 @@ class MinimalOrdersProfile implements \JsonSerializable, ProfileMetaData
      */
     public function getName()
     {
-        return "default_orders_minimal";
+        return 'default_orders_minimal';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getDescription()
+    {
+        return 'default_orders_minimal_description';
     }
 
     /**
