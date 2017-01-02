@@ -34,7 +34,7 @@ class Logger extends ModelEntity
     /**
      * @var Session $session
      *
-     * @ORM\ManyToOne(targetEntity="Shopware\CustomModels\ImportExport\Session")
+     * @ORM\ManyToOne(targetEntity="Shopware\CustomModels\ImportExport\Session", inversedBy="logs")
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $session;
