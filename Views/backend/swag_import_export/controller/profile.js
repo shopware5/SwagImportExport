@@ -39,8 +39,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
             },
             'swag-import-export-profile-window{ isVisible(true) }': {
                 baseprofileselected: me.onBaseProfileSelected,
-                saveProfile: me.onSaveProfile,
-                saveNode: me.saveNode
+                saveProfile: me.onSaveProfile
             },
             'swag-import-export-profile-profile{ isVisible(true) }': {
                 showMappings: me.showMappings,
@@ -157,15 +156,91 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
 
     onSaveProfile: function(window) {
         var me = this,
-            store = window.profileStore,
+            profileConfigurator = window.profileConfigurator,
+            treePanel = profileConfigurator.treePanel,
+            treeStore = profileConfigurator.treeStore,
+            node = treeStore.getById(profileConfigurator.selectedNodeId),
+            form = profileConfigurator.formPanel;
+
+        // call save profile without saving node tree when creating new profile.
+        if (Ext.isEmpty(window.getProfileId())) {
+            me.saveProfile(window, function(success, record, message) {
+                window.setLoading(false);
+                me.getGrid().getStore().load();
+                if (success) {
+                    Shopware.Notification.createGrowlMessage(
+                        '{s name=swag_import_export/profile/save/title}Swag import export{/s}',
+                        message
+                    );
+                    window.down('#profilebaseform').loadRecord(record);
+                    window.setProfileId(record.get('id'));
+                } else {
+                    Ext.MessageBox.show({
+                        title: '{s name=swag_import_export/profile/save/failure_title}Save Failed{/s}',
+                        msg: message,
+                        icon: Ext.Msg.ERROR,
+                        buttons: Ext.Msg.OK
+                    });
+                }
+            }, me);
+        } else {
+            // save profile and node tree when editing existing profile
+            me.saveProfile(window, function(success, record, message) {
+                if (success) {
+                    window.down('#profilebaseform').loadRecord(record);
+                    window.setProfileId(record.get('id'));
+                    // check if node is selected for editing
+                    if (!node) {
+                        window.setLoading(false);
+                        me.getGrid().getStore().load();
+                        Shopware.Notification.createGrowlMessage(
+                            '{s name=swag_import_export/profile/save/title}Swag import export{/s}',
+                            message
+                        );
+                    } else {
+                        // synchronize node tree and give feedback to user
+                        me.saveNode(treePanel, node, form, function(success, message) {
+                            window.setLoading(false);
+                            me.getGrid().getStore().load();
+                            if (success) {
+                                Shopware.Notification.createGrowlMessage(
+                                    '{s name=swag_import_export/profile/save/title}Swag import export{/s}',
+                                    message
+                                );
+                                treePanel.getSelectionModel().deselectAll(true);
+                                treePanel.expand();
+                                treePanel.getSelectionModel().select(node);
+                            } else {
+                                Ext.MessageBox.show({
+                                    title: '{s name=swag_import_export/profile/save/failure_title}Save Failed{/s}',
+                                    msg: message,
+                                    icon: Ext.Msg.ERROR,
+                                    buttons: Ext.Msg.OK
+                                });
+                            }
+                        }, me);
+                    }
+                } else {
+                    Ext.MessageBox.show({
+                        title: '{s name=swag_import_export/profile/save/failure_title}Save Failed{/s}',
+                        msg: message,
+                        icon: Ext.Msg.ERROR,
+                        buttons: Ext.Msg.OK
+                    });
+                }
+            }, me);
+        }
+    },
+
+    saveProfile: function(window, callback, scope) {
+        var store = window.profileStore,
             form = window.down('#profilebaseform'),
             record = form.getRecord();
 
-        if (!form.getForm().isDirty()) {
-            return;
-        }
-
         if (form.getForm().isValid()) {
+            if (!form.getForm().isDirty()) {
+                return Ext.callback(callback, scope, [true, record, '{s name=swag_import_export/profile/save/success}Successfully updated.{/s}']);
+            }
             form.getForm().updateRecord(record);
             record.join(store);
 
@@ -173,23 +248,12 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
 
             record.save({
                 callback: function(record, operation, success) {
-                    var result = operation.request.scope.reader.jsonData;
-                    window.setLoading(false);
-                    if (result.success) {
-                        window.down('#profilebaseform').loadRecord(record);
-                        window.setProfileId(record.get('id'));
-                        me.getGrid().getStore().load();
-                        Shopware.Notification.createGrowlMessage(
-                            '{s name=swag_import_export/profile/save/title}Swag import export{/s}',
-                            '{s name=swag_import_export/profile/save/success}Successfully updated.{/s}'
-                        );
-                    } else {
-                        Shopware.Notification.createGrowlMessage(
-                            '{s name=swag_import_export/profile/save/title}Swag import export{/s}',
-                            result.message
-                        );
-                        me.getGrid().store.reload();
+                    var result = Ext.JSON.decode(operation.response.responseText),
+                        msg = '{s name=swag_import_export/profile/save/success}Successfully updated.{/s}';
+                    if (!result.success) {
+                        msg = result.message;
                     }
+                    return Ext.callback(callback, scope, [result.success, record, msg]);
                 }
             });
         } else {
@@ -331,10 +395,33 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
      * @param { int } profileId
      */
     addNewIteration: function(treePanel, profileId) {
-        Ext.create('Shopware.apps.SwagImportExport.view.profile.window.Iterator', {
-            treePanel: treePanel,
-            profileId: profileId,
-            autoShow: true
+        var me = this,
+            sectionStore = Ext.create('Shopware.apps.SwagImportExport.store.Section', {
+                listeners: {
+                    beforeload: {
+                        single: true,
+                        fn: function(store) {
+                            store.getProxy().setExtraParam('profileId', profileId);
+                        }
+                    }
+                }
+            });
+
+        sectionStore.load({
+            callback: function(records) {
+                if (records.length === 0) {
+                    return Shopware.Notification.createGrowlMessage(
+                        '{s name=swag_import_export/profile/iterator/no_extension_title}No extension available{/s}',
+                        '{s name=swag_import_export/profile/iterator/no_extension_message}There is no extension for this profile available.{/s}'
+                    );
+                }
+                Ext.create('Shopware.apps.SwagImportExport.view.profile.window.Iterator', {
+                    treePanel: treePanel,
+                    profileId: profileId,
+                    sectionStore: sectionStore,
+                    autoShow: true
+                });
+            }
         });
     },
 
@@ -494,50 +581,42 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
     /**
      * Saves the changes of the currently selected node
      *
-     * @param { Ext.data.TreeStore } treeStore
-     * @param { int } selectedNodeId
-     * @param { string } nodeName
-     * @param { string } swColumn
+     * @param { Ext.tree.Panel } treePanel
+     * @param { Ext.data.NodeInterface } node
+     * @param { Ext.form.Panel } form
+     * @param callback
+     * @param scope
      */
-    saveNode: function(treePanel, treeStore, selectedNodeId, nodeName, swColumn, defaultValue, adapter, parentKey) {
-        var node = treeStore.getById(selectedNodeId);
+    saveNode: function(treePanel, node, form, callback, scope) {
+        var treeStore = treePanel.getStore(),
+            values;
 
-        if(!node) {
-            return;
-        }
-
-        node.set('text', nodeName);
-        node.set('swColumn', swColumn);
-        node.set('defaultValue', defaultValue);
+        values = form.getForm().getValues();
+        node.set('text', values.nodeName || '');
+        node.set('swColumn', values.swColumn || '');
+        node.set('defaultValue', values.defaultValue || '');
 
         // change only when in iteration (because otherwise adapter will be empty)
         if (node.get('type') === 'iteration') {
-            node.set('adapter', adapter);
-            node.set('parentKey', parentKey);
+            node.set('adapter', values.adapter || '');
+            node.set('parentKey', values.parentKey || '');
         }
 
-        treeStore.sync({
-            success: function() {
-                Shopware.Notification.createGrowlMessage(
-                    '{s name=swag_import_export/profile/save/title}Swag import export{/s}',
-                    '{s name=swag_import_export/profile/save/success}Successfully updated.{/s}'
-                );
-                treePanel.getSelectionModel().deselectAll(true);
-                treePanel.expand();
-                treePanel.getSelectionModel().select(treeStore.getById(node.get('id')));
-            },
-            failure: function(batch, options) {
-                var error = batch.exceptions[0].getError(),
-                    msg = Ext.isObject(error) ? error.status + ' ' + error.statusText : error;
+        if (Ext.Object.getKeys(node.getChanges()).length > 0) {
+            treeStore.sync({
+                success: function() {
+                    return Ext.callback(callback, scope, [true, '{s name=swag_import_export/profile/save/success}Successfully updated.{/s}']);
+                },
+                failure: function(batch, options) {
+                    var error = batch.exceptions[0].getError(),
+                        msg = Ext.isObject(error) ? error.status + ' ' + error.statusText : error;
 
-                Ext.MessageBox.show({
-                    title: '{s name=swag_import_export/profile/save/failure_title}Save Failed{/s}',
-                    msg: msg,
-                    icon: Ext.Msg.ERROR,
-                    buttons: Ext.Msg.OK
-                });
-            }
-        });
+                    return Ext.callback(callback, scope, [false, msg]);
+                }
+            });
+        } else {
+            return Ext.callback(callback, scope, [true, '{s name=swag_import_export/profile/save/success}Successfully updated.{/s}']);
+        }
     },
 
     /**

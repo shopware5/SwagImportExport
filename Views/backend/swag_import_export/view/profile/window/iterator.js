@@ -23,6 +23,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Iterator', {
     },
 
     config: {
+        sectionStore: null,
         treePanel: null,
         profileId: null
     },
@@ -109,17 +110,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Iterator', {
                 fieldLabel: '{s name=swag_import_export/profile/iterator/adapter}Adapter{/s}',
                 emptyText: '{s name=swag_import_export/profile/iterator/select_adapter}Select extension{/s}',
                 queryMode: 'local',
-                store: Ext.create('Shopware.apps.SwagImportExport.store.Section', {
-                    autoLoad: true,
-                    listeners: {
-                        beforeload: {
-                            single: true,
-                            fn: function(store) {
-                                store.getProxy().setExtraParam('profileId', me.getProfileId());
-                            }
-                        }
-                    }
-                }),
+                store: me.sectionStore,
                 valueField: 'id',
                 displayField: 'name',
                 name: 'adapter',
