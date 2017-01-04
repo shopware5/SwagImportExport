@@ -212,22 +212,8 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Window', {
                 cls: 'primary',
                 itemId: 'savebutton',
                 disabled: me.readOnly,
-                handler: function () {
+                handler: function() {
                     me.fireEvent('saveProfile', me);
-
-                    if (me.profileId !== null) {
-                        me.fireEvent(
-                            'saveNode',
-                            me.profileConfigurator.treePanel,
-                            me.profileConfigurator.treeStore,
-                            me.profileConfigurator.selectedNodeId,
-                            me.profileConfigurator.formPanel.child('#nodeName').getValue(),
-                            me.profileConfigurator.formPanel.child('#swColumn').getValue(),
-                            me.profileConfigurator.formPanel.child('#defaultValue').getValue(),
-                            me.profileConfigurator.formPanel.child('#adapter').getValue(),
-                            me.profileConfigurator.formPanel.child('#parentKey').getValue()
-                        );
-                    }
                 }
             }]
         });
