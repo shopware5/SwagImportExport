@@ -51,7 +51,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Manager', {
                         var combo = container.profileCombo,
                             store = combo.getStore();
 
-                        store.clearFilter();
+                        store.filters.removeAtKey('search');
                         store.load({
                             callback: function() {
                                 if (combo.isDirty() && !store.getById(combo.getValue())) {
@@ -73,7 +73,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Manager', {
                     var combo = container.profileCombo,
                         store = combo.getStore();
 
-                    store.clearFilter();
+                    store.filters.removeAtKey('search');
                     store.load({
                         callback: function() {
                             if (combo.isDirty() && !store.getById(combo.getValue())) {
