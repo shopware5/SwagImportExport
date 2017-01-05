@@ -185,7 +185,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
 
         me.addBtn = Ext.create('Ext.form.field.File', {
             emptyText: '{s name=swag_import_export/manager/import/choose}Please choose{/s}',
-            margin: '5 0 0 0',
+            margin: '5 0 0 2',
             buttonText: '{s name=swag_import_export/manager/import/choose_button}Choose{/s}',
             buttonConfig: {
                 cls: Ext.baseCSSPrefix + 'form-mediamanager-btn small secondary',
