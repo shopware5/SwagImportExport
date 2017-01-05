@@ -40,7 +40,11 @@ Ext.define('Shopware.apps.SwagImportExport.view.Window', {
         /*{if {acl_is_allowed privilege=profile}}*/
         aclItems.push(Ext.create('Shopware.apps.SwagImportExport.view.profile.Grid', {
             // using new instance here because grid uses filtering
-            store: Ext.create('Shopware.apps.SwagImportExport.store.ProfileList'),
+            store: Ext.create('Shopware.apps.SwagImportExport.store.ProfileList', {
+                sorters: [
+                    { property: 'name', direction: 'ASC' }
+                ]
+            }),
             listeners: {
                 activate: function(grid) {
                     grid.getStore().load();

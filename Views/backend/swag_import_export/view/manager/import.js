@@ -215,22 +215,26 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
         var me = this;
 
         me.profileCombo = Ext.create('Ext.form.field.ComboBox', {
-            margin: '5 0 0 0',
+            allowBlank: false,
             fieldLabel: '{s name=swag_import_export/manager/import/select_profile}Select profile{/s}',
             store: Ext.create('Shopware.apps.SwagImportExport.store.ProfileList', {
-                remoteSort: false,
-                remoteFilter: false
+                sorters: [
+                    { property: 'name', direction: 'ASC' }
+                ]
             }),
             labelStyle: 'font-weight: 700; text-align: left;',
             width: me.configWidth,
             labelWidth: me.configLabelWidth,
             helpText: '{s name=swag_import_export/export/profile_help}The default profiles can be individually extended and modified with custom profiles in the profiles menu.{/s}',
+            margin: '5 0 0 0',
             valueField: 'id',
             displayField: 'name',
             name: 'profile',
-            queryMode: 'local',
+            queryMode: 'remote',
             forceSelection: true,
             emptyText: '{s name=swag_import_export/manager/import/choose}Please choose{/s}',
+            matchFieldWidth: false,
+            minChars: 3,
             displayTpl: new Ext.XTemplate(
                 '<tpl for=".">' +
                 '{literal}'  +
@@ -241,30 +245,81 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
                 {
                     getFormattedName: function(values) {
                         if (values.translation) {
-                            return Ext.String.format('[0] ([1])', values.translation, values.name);
+                            return Ext.String.format('[0] ([1])', values.name, values.translation);
                         }
                         return values.name;
                     }
                 }
             ),
             listConfig: {
+                width: 450,
                 getInnerTpl: function (value) {
                     return Ext.XTemplate(
                         '{literal}'  +
-                        '<tpl if="translation">{ translation } <i>({ name })</i>' +
+                        '<tpl if="translation">{ name } <i>({ translation })</i>' +
                         '<tpl else>{ name }</tpl>' +
                         '{/literal}');
                 }
             },
             listeners   : {
-                beforequery: function(record){
-                    record.query = new RegExp(record.query, 'i');
-                    record.forceAll = true;
+                change: {
+                    buffer: 500,
+                    fn: function(combo, newValue) {
+                        var store = combo.getStore(),
+                            searchString;
+
+                        if (Ext.isEmpty(newValue)) {
+                            combo.lastQuery = '';
+                            store.filters.removeAtKey('search');
+                            store.load();
+                        } else if (Ext.isString(newValue)) {
+                            searchString = Ext.String.trim(newValue);
+
+                            //scroll the store to first page
+                            store.currentPage = 1;
+                            //Loads the store with a special filter
+                            store.filter([
+                                { id: 'search', property: 'name', value: '%' + searchString + '%', expression: 'LIKE' }
+                            ]);
+                        }
+                    }
                 }
             }
         });
-        
-        return me.profileCombo;
+
+        me.profileFilterCheckbox = Ext.create('Ext.form.field.Checkbox', {
+            margin: '7 0 0 10',
+            boxLabel: '{s name=swag_import_export/manager/hide_default_profiles}Hide default profiles{/s}',
+            listeners: {
+                change: function(cb, newValue) {
+                    var store = me.profileCombo.getStore();
+
+                    if (newValue) {
+                        store.filter([
+                            { id: 'default', property: 'default', value: false }
+                        ]);
+                    } else {
+                        store.filters.removeAtKey('default');
+                        store.currentPage = 1;
+                        if (me.profileCombo.isDirty()) {
+                            return me.profileCombo.clearValue();
+                        }
+                        store.load();
+                    }
+                }
+            }
+        });
+
+        me.profileFieldContainer = Ext.create('Ext.form.FieldContainer', {
+            layout: 'hbox',
+            width: 800,
+            items: [
+                me.profileCombo,
+                me.profileFilterCheckbox
+            ]
+        });
+
+        return me.profileFieldContainer;
     },
 
     /**

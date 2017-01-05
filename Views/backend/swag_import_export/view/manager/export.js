@@ -245,8 +245,9 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
             allowBlank: false,
             fieldLabel: '{s name=swag_import_export/export/select_profile}Select profile{/s}',
             store: Ext.create('Shopware.apps.SwagImportExport.store.ProfileList', {
-                remoteSort: false,
-                remoteFilter: false
+                sorters: [
+                    { property: 'name', direction: 'ASC' }
+                ]
             }),
             labelStyle: 'font-weight: 700; text-align: left;',
             width: me.configWidth,
@@ -255,15 +256,18 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
             margin: '5 0 0 0',
             valueField: 'id',
             displayField: 'name',
-            queryMode: 'local',
+            queryMode: 'remote',
             forceSelection: true,
             name: 'profile',
             emptyText: '{s name=swag_import_export/manager/import/choose}Please choose{/s}',
+            matchFieldWidth: false,
+            minChars: 3,
             listConfig: {
+                width: 450,
                 getInnerTpl: function (value) {
                     return Ext.XTemplate(
                         '{literal}'  +
-                        '<tpl if="translation">{ translation } <i>({ name })</i>' +
+                        '<tpl if="translation">{ name } <i>({ translation })</i>' +
                         '<tpl else>{ name }</tpl>' +
                         '{/literal}');
                 }
@@ -278,7 +282,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
                 {
                     getFormattedName: function(values) {
                         if (values.translation) {
-                            return Ext.String.format('[0] ([1])', values.translation, values.name);
+                            return Ext.String.format('[0] ([1])', values.name, values.translation);
                         }
                         return values.name;
                     }
@@ -286,9 +290,27 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
             ),
             listeners: {
                 scope: me,
-                beforequery: function(record){
-                    record.query = new RegExp(record.query, 'i');
-                    record.forceAll = true;
+                change: {
+                    buffer: 500,
+                    fn: function(combo, newValue) {
+                        var store = combo.getStore(),
+                            searchString;
+
+                        if (Ext.isEmpty(newValue)) {
+                            combo.lastQuery = '';
+                            store.filters.removeAtKey('search');
+                            store.load();
+                        } else if (Ext.isString(newValue)) {
+                            searchString = Ext.String.trim(newValue);
+
+                            //scroll the store to first page
+                            store.currentPage = 1;
+                            //Loads the store with a special filter
+                            store.filter([
+                                { id: 'search', property: 'name', value: '%' + searchString + '%', expression: 'LIKE' }
+                            ]);
+                        }
+                    }
                 },
                 select: function(cb, selection) {
                     if (Ext.isEmpty(selection)) {
@@ -316,7 +338,39 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
             }
         });
 
-        return me.profileCombo;
+        me.profileFilterCheckbox = Ext.create('Ext.form.field.Checkbox', {
+            margin: '7 0 0 10',
+            boxLabel: '{s name=swag_import_export/manager/hide_default_profiles}Hide default profiles{/s}',
+            listeners: {
+                change: function(cb, newValue) {
+                    var store = me.profileCombo.getStore();
+                    me.resetAdditionalFields();
+                    me.hideFields();
+
+                    store.currentPage = 1;
+
+                    if (newValue) {
+                        store.filters.add(
+                            { id: 'default', property: 'default', value: false }
+                        );
+                    } else {
+                        store.filters.removeAtKey('default');
+                    }
+                    me.profileCombo.clearValue();
+                }
+            }
+        });
+
+        me.profileFieldContainer = Ext.create('Ext.form.FieldContainer', {
+            layout: 'hbox',
+            width: 800,
+            items: [
+                me.profileCombo,
+                me.profileFilterCheckbox
+            ]
+        });
+
+        return me.profileFieldContainer;
     },
     /*
      * Format drop down
