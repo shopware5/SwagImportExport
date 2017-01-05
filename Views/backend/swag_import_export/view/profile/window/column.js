@@ -49,12 +49,12 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Column', {
             bodyPadding: 10,
             items: [{
                 xtype: 'textfield',
-                fieldLabel: '{s name=swag_import_export/profile/column/node_name}Node name{/s}',
+                fieldLabel: '{s name=swag_import_export/profile/column/node_name}Name{/s}',
                 name: 'nodeName',
                 allowBlank: false
             }, {
                 xtype: 'combobox',
-                fieldLabel: '{s name=swag_import_export/profile/column/shopware_column}Shopware column{/s}',
+                fieldLabel: '{s name=swag_import_export/profile/column/shopware_column}Database mapping{/s}',
                 editable: false,
                 emptyText: '{s name=swag_import_export/profile/column/select_column}Select column{/s}',
                 queryMode: 'local',

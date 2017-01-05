@@ -107,7 +107,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Iterator', {
                 allowBlank: false
             }, {
                 xtype: 'combo',
-                fieldLabel: '{s name=swag_import_export/profile/iterator/adapter}Adapter{/s}',
+                fieldLabel: '{s name=swag_import_export/profile/iterator/adapter}Extension{/s}',
                 emptyText: '{s name=swag_import_export/profile/iterator/select_adapter}Select extension{/s}',
                 queryMode: 'local',
                 store: me.sectionStore,
@@ -197,7 +197,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Iterator', {
             }),
             columns: [
                 {
-                    header: '{s name=swag_import_export/profile/iterator/grid_column_column}Shopware column{/s}',
+                    header: '{s name=swag_import_export/profile/iterator/grid_column_column}Database mapping{/s}',
                     dataIndex: 'swColumn',
                     flex: 1
                 },
