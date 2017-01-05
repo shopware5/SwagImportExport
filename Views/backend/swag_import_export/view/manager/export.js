@@ -394,7 +394,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
         return Ext.create('Ext.form.field.ComboBox', {
             allowBlank: false,
             fieldLabel: '{s name=swag_import_export/export/select_format}Select export format{/s}',
-            margin: '20 0 0 0',
+            margin: '20 0 0 2',
             store: formats,
             labelStyle: 'font-weight: 700; text-align: left;',
             width: me.configWidth,
