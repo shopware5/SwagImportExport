@@ -961,6 +961,8 @@ class ArticlesDbAdapter implements DataDbAdapter
             'prices.price as price',
             'prices.pseudoPrice as pseudoPrice',
             'prices.customerGroupKey as priceGroup',
+            'prices.from',
+            'prices.to'
         ];
     }
 

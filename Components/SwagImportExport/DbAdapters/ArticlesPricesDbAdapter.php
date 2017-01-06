@@ -249,10 +249,11 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                 if (isset($record['percent'])) {
                     $record['percent'] = floatval(str_replace(",", ".", $record['percent']));
                 }
-
+                // removes price with same from value from database
                 $this->updateArticleFromPrice($record, $articleDetail->getId());
-
+                // checks if price belongs to graduation price
                 if ($record['from'] != 1) {
+                    // updates graduation to value with from value - 1
                     $this->updateArticleToPrice($record, $articleDetail->getId(), $articleDetail->getArticleId());
                 }
 
@@ -268,7 +269,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                 $price->setDetail($articleDetail);
                 $price->setCustomerGroup($customerGroup);
                 $price->setFrom($record['from']);
-                $price->setTo('beliebig');
+                $price->setTo($record['to']);
                 $price->setPrice($record['price']);
 
                 if (isset($record['pseudoPrice'])) {
