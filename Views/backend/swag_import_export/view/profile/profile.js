@@ -206,12 +206,12 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
                 allowBlank: true
             }, {
                 itemId: 'swColumn',
-                fieldLabel: '{s name=shopwareColumn}Shopware column{/s}',
+                fieldLabel: '{s name=shopwareColumn}Database mapping{/s}',
                 hidden: true,
                 disabled: true,
                 xtype: 'combobox',
                 editable: false,
-                emptyText: '{s name=selectColumn}Select column{/s}',
+                emptyText: '{s name=selectColumn}Select field{/s}',
                 queryMode: 'local',
                 store: me.columnStore,
                 valueField: 'id',
@@ -222,12 +222,12 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
                 allowBlank: false
             }, {
                 itemId: 'adapter',
-                fieldLabel: '{s name=adapter}Adapter{/s}',
+                fieldLabel: '{s name=adapter}Extension{/s}',
                 hidden: true,
                 disabled: true,
                 xtype: 'combobox',
                 editable: false,
-                emptyText: '{s name=selectColumn}Select column{/s}',
+                emptyText: '{s name=selectExtension}Select extension{/s}',
                 queryMode: 'local',
                 store: me.sectionStore,
                 valueField: 'id',
@@ -340,7 +340,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
                 me.fireEvent('addNewIteration', me.treePanel, me.getProfileId());
             }
         }, {
-            text:  '{s name=swag_import_export/profile/new_column}New column{/s}',
+            text:  '{s name=swag_import_export/profile/new_column}New field{/s}',
             iconCls: 'sprite-plus-circle-frame',
             handler: function () {
                 me.fireEvent('addNewNode', me.treePanel, me.getProfileId(), me.lastSelectedNode.get('adapter'));

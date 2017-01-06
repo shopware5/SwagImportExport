@@ -128,14 +128,14 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Mappings', {
             tbar: me.createGridToolbar(),
             selModel: me.getGridSelModel(),
             columns: [{
-                    text: '{s name=swag_import_export/profile/window/shopware_field}Shopware field{/s}',
+                    text: '{s name=swag_import_export/profile/window/shopware_field}Field{/s}',
                     flex: 1,
                     sortable: true,
                     dataIndex: 'variable',
                     editor: {
                         xtype: 'combobox',
                         editable: false,
-                        emptyText: '{s name=swag_import_export/profile/window/select_column}Select column{/s}',
+                        emptyText: '{s name=swag_import_export/profile/window/select_column}Select field{/s}',
                         queryMode: 'local',
                         store: Ext.create('Shopware.apps.SwagImportExport.store.Column').load({ params: { profileId: me.profileId, adapter: 'default' } }),
                         valueField: 'id',
