@@ -220,7 +220,17 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
             store: Ext.create('Shopware.apps.SwagImportExport.store.ProfileList', {
                 sorters: [
                     { property: 'name', direction: 'ASC' }
-                ]
+                ],
+                listeners: {
+                    load: function(store, records) {
+                        if (records.length === 0) {
+                            store.add({
+                                id: -1,
+                                name: '{s name=swag_import_export/profile/no_data}No profiles found{/s}'
+                            });
+                        }
+                    }
+                }
             }),
             labelStyle: 'font-weight: 700; text-align: left;',
             width: me.configWidth,

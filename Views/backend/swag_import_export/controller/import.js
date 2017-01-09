@@ -72,7 +72,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
             values = form.getValues(),
             localFile;
         
-        if (Ext.isEmpty(values.profile)) {
+        if (Ext.isEmpty(values.profile) || values.profile < 1) {
             Shopware.Notification.createGrowlMessage(
                 '{s name=swag_import_export/import/error_title}Swag import export{/s}',
                 '{s name=swag_import_export/import/error_msg_profle}Please select a profile{/s}'
