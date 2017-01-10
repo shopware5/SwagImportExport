@@ -13,6 +13,8 @@ use Doctrine\ORM\Query\Expr\Join;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\QueryBuilder;
 use Shopware\Components\SwagImportExport\DataType\NewsletterDataType;
+use Shopware\Models\Customer\Customer;
+use Shopware\Models\Customer\Repository;
 use Shopware\Models\Newsletter\Address;
 use Shopware\Models\Newsletter\Group;
 use Shopware\Models\Newsletter\ContactData;
@@ -166,8 +168,8 @@ class NewsletterDbAdapter implements DataDbAdapter
         $builder = $this->manager->createQueryBuilder();
 
         $builder->select('na.id')
-                ->from(Address::class, 'na')
-                ->orderBy('na.id', 'ASC');
+            ->from(Address::class, 'na')
+            ->orderBy('na.id', 'ASC');
 
         if (!empty($filter)) {
             $builder->addFilter($filter);
@@ -213,6 +215,8 @@ class NewsletterDbAdapter implements DataDbAdapter
         );
 
         $defaultValues = $this->getDefaultValues();
+        /** @var Repository $customerRepository */
+        $customerRepository = $this->manager->getRepository(Customer::class);
         /** @var EntityRepository $addressRepository */
         $addressRepository = $this->manager->getRepository(Address::class);
         /** @var EntityRepository $groupRepository */
@@ -227,15 +231,26 @@ class NewsletterDbAdapter implements DataDbAdapter
                 $newsletterData = $this->validator->filterEmptyString($newsletterData);
                 $this->validator->checkRequiredFields($newsletterData);
 
-                $recipient = $addressRepository->findOneBy(['email' => $newsletterData['email']]);
+                // no groupname set and is customer - we check if this recipient is already registered
+                if (empty($newsletterData['groupName']) && !empty($newsletterData['userID'])) {
+                    $customer = $customerRepository->find($newsletterData['userID']);
 
-                if ($recipient instanceof Address && empty($newsletterData['groupName'])) {
-                    continue;
+                    if (!$customer instanceof Customer) {
+                        continue;
+                    }
+                    $recipient = $addressRepository->findOneBy(['email' => $newsletterData['email'], 'groupId' => 0, 'isCustomer' => true]);
+
+                    if (!$recipient instanceof Address) {
+                        $recipient = new Address();
+                        $recipient->setEmail($newsletterData['email']);
+                        $recipient->setIsCustomer(true);
+                        $this->manager->persist($recipient);
+                        $this->manager->flush($recipient);
+                    }
                 }
 
-                if (!$recipient instanceof Address) {
+                if (empty($newsletterData['groupName'])) {
                     $newsletterData = $this->dataManager->setDefaultFieldsForCreate($newsletterData, $defaultValues);
-                    $recipient = new Address();
                 }
 
                 $this->validator->validate($newsletterData, NewsletterDataType::$mapper);
@@ -250,10 +265,14 @@ class NewsletterDbAdapter implements DataDbAdapter
                         $this->manager->persist($group);
                         $this->manager->flush($group);
                     }
-
                     $newsletterData['groupId'] = $group->getId();
                 }
 
+                $recipient = $addressRepository->findOneBy(['email' => $newsletterData['email'], 'groupId' => $newsletterData['groupId']]);
+
+                if (!$recipient instanceof Address) {
+                    $recipient = new Address();
+                }
                 // save newsletter address
                 $newsletterAddress = $this->prepareNewsletterAddress($newsletterData);
                 $recipient->fromArray($newsletterAddress);
@@ -269,6 +288,7 @@ class NewsletterDbAdapter implements DataDbAdapter
                     }
                     $contactData->fromArray($newsletterData);
                 }
+
                 if (($count % 20) === 0) {
                     $this->manager->flush();
                 }
@@ -361,7 +381,7 @@ class NewsletterDbAdapter implements DataDbAdapter
             ['id' => 'default', 'name' => 'default ']
         ];
     }
-    
+
     /**
      * @param string $section
      * @return mixed
@@ -369,7 +389,7 @@ class NewsletterDbAdapter implements DataDbAdapter
     public function getColumns($section)
     {
         $method = 'get' . ucfirst($section) . 'Columns';
-        
+
         if (method_exists($this, $method)) {
             return $this->{$method}();
         }
@@ -387,13 +407,13 @@ class NewsletterDbAdapter implements DataDbAdapter
         $builder = $this->manager->createQueryBuilder();
 
         $builder->select($columns)
-                ->from(Address::class, 'na')
-                ->leftJoin('na.newsletterGroup', 'ng')
-                ->leftJoin(ContactData::class, 'cd', Join::WITH, 'na.email = cd.email')
-                ->leftJoin('na.customer', 'c')
-                ->leftJoin('c.billing', 'cb')
-                ->where('na.id IN (:ids)')
-                ->setParameter('ids', $ids);
+            ->from(Address::class, 'na')
+            ->leftJoin('na.newsletterGroup', 'ng')
+            ->leftJoin(ContactData::class, 'cd', Join::WITH, 'na.email = cd.email')
+            ->leftJoin('na.customer', 'c')
+            ->leftJoin('c.billing', 'cb')
+            ->where('na.id IN (:ids)')
+            ->setParameter('ids', $ids);
 
         return $builder;
     }
