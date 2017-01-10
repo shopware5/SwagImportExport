@@ -18,6 +18,7 @@ class ArticlePriceDataManager
     private $defaultFields = array(
         'priceGroup',
         'from',
+        'to',
         'percent'
     );
 
@@ -40,6 +41,9 @@ class ArticlePriceDataManager
                     break;
                 case 'from':
                     $record[$key] = 1;
+                    break;
+                case 'to':
+                    $record[$key] = 'beliebig';
                     break;
                 case 'percent':
                     $record[$key] = 0.0;

@@ -115,37 +115,44 @@ class ArticlePriceProfile implements \JsonSerializable, ProfileMetaData
                                 'shopwareField' => 'from'
                             ],
                             4 => [
-                                'id' => '540ffb5fd04ba',
+                                'id' => '586f65957f616',
                                 'type' => 'leaf',
                                 'index' => 4,
+                                'name' => 'to',
+                                'shopwareField' => 'to'
+                            ],
+                            5 => [
+                                'id' => '540ffb5fd04ba',
+                                'type' => 'leaf',
+                                'index' => 5,
                                 'name' => 'pseudoprice',
                                 'shopwareField' => 'pseudoPrice'
                             ],
-                            5 => [
+                            6 => [
                                 'id' => '540ffb61558eb',
                                 'type' => 'leaf',
-                                'index' => 5,
+                                'index' => 6,
                                 'name' => 'purchaseprice',
                                 'shopwareField' => 'purchasePrice'
                             ],
-                            6 => [
+                            7 => [
                                 'id' => '540ffda5904e5',
                                 'type' => 'leaf',
-                                'index' => 6,
+                                'index' => 7,
                                 'name' => '_name',
                                 'shopwareField' => 'name'
                             ],
-                            7 => [
+                            8 => [
                                 'id' => '540ffc1d66042',
                                 'type' => 'leaf',
-                                'index' => 7,
+                                'index' => 8,
                                 'name' => '_additionaltext',
                                 'shopwareField' => 'additionalText'
                             ],
-                            8 => [
+                            9 => [
                                 'id' => '540ffcf5089af',
                                 'type' => 'leaf',
-                                'index' => 8,
+                                'index' => 9,
                                 'name' => '_supplier',
                                 'shopwareField' => 'supplierName'
                             ]

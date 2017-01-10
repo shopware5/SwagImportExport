@@ -152,6 +152,20 @@ class MinimalArticleProfile implements \JsonSerializable, ProfileMetaData
                                         'index' => 3,
                                         'name' => 'baseprice',
                                         'shopwareField' => 'basePrice'
+                                    ],
+                                    4 => [
+                                        'id' => '586f6b291bb01',
+                                        'type' => 'leaf',
+                                        'index' => 4,
+                                        'name' => 'from',
+                                        'shopwareField' => 'from'
+                                    ],
+                                    5 => [
+                                        'id' => '586f6b33eed94',
+                                        'type' => 'leaf',
+                                        'index' => 5,
+                                        'name' => 'to',
+                                        'shopwareField' => 'to'
                                     ]
                                 ],
                                 'attributes' => NULL
