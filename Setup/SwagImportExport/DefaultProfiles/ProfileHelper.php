@@ -41,7 +41,8 @@ class ProfileHelper
             new CustomerProfile(),
             new ArticleImagesProfile(),
             new TranslationProfile(),
-            new AddressProfile()
+            new AddressProfile(),
+            new OrderProfile()
         ];
     }
 }
