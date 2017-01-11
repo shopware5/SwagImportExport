@@ -33,6 +33,27 @@ class NewsletterDbAdapterTest extends \PHPUnit_Framework_TestCase
         $newsletterDbAdapter->write([]);
     }
 
+    public function test_should_add_customer_as_newsletter_recipient()
+    {
+        $newsletterDbAdapter = $this->createNewsletterAdapter();
+        $customerData = [
+            'default' => [
+                [
+                    'email' => 'test@example.com',
+                    'userID' => 1
+                ]
+            ]
+        ];
+
+        $newsletterDbAdapter->write($customerData);
+
+        /** @var Connection $dbalConnection */
+        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $createdRecipient = $dbalConnection->executeQuery('SELECT * FROM s_campaigns_mailaddresses WHERE email="test@example.com"')->fetchAll();
+
+        $this->assertEquals($customerData['default'][0]['email'], $createdRecipient[0]['email']);
+    }
+
     public function test_write_should_create_newsletter_recipient()
     {
         $newsletterDbAdapter = $this->createNewsletterAdapter();
