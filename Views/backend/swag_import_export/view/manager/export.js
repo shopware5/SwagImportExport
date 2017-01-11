@@ -593,7 +593,14 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
 
         if (activeFieldset) {
             Ext.each(activeFieldset.query('field'), function(field) {
-                 field.reset();
+                // combotree custom field needs special work to reset
+                if (field.getXType() === 'combotree') {
+                    field.treePanel.getSelectionModel().deselectAll();
+                    field.treePanel.collapseAll();
+                    field.setFieldValue(null, '');
+                } else {
+                    field.reset();
+                }
             });
         }
     }
