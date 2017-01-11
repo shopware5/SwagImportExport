@@ -82,23 +82,6 @@ class PropertyWriterTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($importedFilter, "Filter groups will only be created if a new product will be created.");
     }
 
-    public function test_write_should_throw_an_exception_with_empty_property_value_name()
-    {
-        $propertyWriter = $this->createPropertyWriterAdapter();
-        $importData = [
-            'articleId' => self::ARTICLE_ID_WITH_PROPERTIES,
-            'propertyGroupName' => self::EXISTING_FILTER_GROUP_NAME,
-            'propertyGroupId' => self::NOT_EXISTING_FILTER_GROUP_ID
-        ];
-
-        $this->expectException(\Exception::class);
-        $propertyWriter->writeUpdateCreatePropertyGroupsFilterAndValues(
-            self::ARTICLE_ID_WITH_PROPERTIES,
-            self::ARTICLE_ORDERNUMBER,
-            $importData
-        );
-    }
-
     public function test_write_should_update_group_relations()
     {
         $propertyWriter = $this->createPropertyWriterAdapter();
@@ -154,26 +137,6 @@ class PropertyWriterTest extends \PHPUnit_Framework_TestCase
         )->fetch(\PDO::FETCH_COLUMN);
 
         $this->assertEquals(self::NOT_EXISTING_VALUE_NAME, $createdPropertyValue, 'Could not create property value.');
-    }
-
-    public function test_write_should_throw_exception_with_empty_property_value_name()
-    {
-        $propertyWriter = $this->createPropertyWriterAdapter();
-        $importData = [
-            [
-                'articleId' => self::ARTICLE_ID_WITHOUT_PROPERTIES,
-                'propertyGroupName' => self::EXISTING_FILTER_GROUP_NAME,
-                'propertyValueName' => '',
-                'propertyOptionName' => self::NOT_EXISTING_OPTION_NAME
-            ]
-        ];
-
-        $this->expectException(\Exception::class);
-        $propertyWriter->writeUpdateCreatePropertyGroupsFilterAndValues(
-            self::ARTICLE_ID_WITHOUT_PROPERTIES,
-            self::ARTICLE_ORDERNUMBER_WITHOUT_PROPERTIES,
-            $importData
-        );
     }
 
     public function test_write_should_create_option()

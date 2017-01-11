@@ -132,10 +132,6 @@ class PropertyWriter
                 $optionRelationInsertStatements[] = "($optionId, $filterGroupId)";
                 $valueRelationInsertStatements[] = "($valueId, $articleId)";
                 continue;
-            } else {
-                $message = $this->snippetsHelper->getNamespace()
-                    ->get('adapters/articles/property_id_or_name_required', 'Article %s requires name or id for property value');
-                throw new AdapterException(sprintf($message, $orderNumber));
             }
         }
 
