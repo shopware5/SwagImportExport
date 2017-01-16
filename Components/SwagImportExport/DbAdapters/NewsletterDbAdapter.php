@@ -247,6 +247,7 @@ class NewsletterDbAdapter implements DataDbAdapter
                         $this->manager->persist($recipient);
                         $this->manager->flush($recipient);
                     }
+                    continue;
                 }
 
                 if (empty($newsletterData['groupName'])) {
