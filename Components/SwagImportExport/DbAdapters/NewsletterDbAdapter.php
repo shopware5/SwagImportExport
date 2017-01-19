@@ -152,7 +152,7 @@ class NewsletterDbAdapter implements DataDbAdapter
     {
         $builder = $this->getBuilder($columns, $ids);
 
-        $result['default'] = $builder->getQuery()->getResult();
+        $result['default'] = $builder->getQuery()->getArrayResult();
 
         return $result;
     }
@@ -183,7 +183,7 @@ class NewsletterDbAdapter implements DataDbAdapter
             $builder->setMaxResults($limit);
         }
 
-        $records = $builder->getQuery()->getResult();
+        $records = $builder->getQuery()->getArrayResult();
 
         $result = [];
         if ($records) {
@@ -411,7 +411,7 @@ class NewsletterDbAdapter implements DataDbAdapter
             ->from(Address::class, 'na')
             ->leftJoin('na.newsletterGroup', 'ng')
             ->leftJoin(ContactData::class, 'cd', Join::WITH, 'na.email = cd.email')
-            ->leftJoin('na.customer', 'c')
+            ->leftJoin('na.customer', 'c', JOIN::WITH, 'na.isCustomer = 1')
             ->leftJoin('c.billing', 'cb')
             ->where('na.id IN (:ids)')
             ->setParameter('ids', $ids);
