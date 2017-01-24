@@ -56,9 +56,6 @@ class Update03DefaultProfileSupport implements UpdaterInterface
     {
         try {
             $this->connection->executeQuery('ALTER TABLE s_import_export_profile ADD UNIQUE (`name`);');
-
-            $defaultProfileInstaller = new DefaultProfileInstaller($this->setupContext, $this->connection);
-            $defaultProfileInstaller->install();
         } catch (DBALException $exception) {
             if (!$this->isDuplicateNameError($exception)) {
                 throw $exception;
