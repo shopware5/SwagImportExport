@@ -57,7 +57,10 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Window', {
 
         me.profileStore = Ext.create('Shopware.apps.SwagImportExport.store.ProfileList', {
             pageSize: 200,
-            autoLoad: true
+            autoLoad: true,
+            sorters: [
+                { property: 'name', direction: 'ASC' }
+            ]
         });
 
         me.items = me.buildItems();
@@ -126,7 +129,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Window', {
                             getInnerTpl: function () {
                                 return Ext.XTemplate(
                                     '{literal}'  +
-                                    '<tpl if="translation">{ translation } <i>({ name })</i>' +
+                                    '<tpl if="translation">{ name } <i>({ translation })</i>' +
                                     '<tpl else>{ name }</tpl>' +
                                     '{/literal}'
                                 );
