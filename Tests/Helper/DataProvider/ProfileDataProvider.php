@@ -42,7 +42,7 @@ class ProfileDataProvider
 
     const MAIN_ORDERS_PROFILE_TYPE = 'mainOrders';
     const MAIN_ORDERS_PROFILE_NAME = 'main_order_profile';
-    const IMPORT_MAIN_ORDER_PROFILE_NAME = 'order_profile';
+    const IMPORT_MAIN_ORDER_PROFILE_NAME = 'import_main_order_profile';
 
     const TRANSLATIONS_PROFILE_TYPE = 'translations';
     const TRANSLATIONS_PROFILE_NAME = 'translation_profile';

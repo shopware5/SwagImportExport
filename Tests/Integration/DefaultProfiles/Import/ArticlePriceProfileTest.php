@@ -22,6 +22,7 @@ class ArticlePriceProfileTest extends \PHPUnit_Framework_TestCase
     {
         $filePath = __DIR__ . "/_fixtures/article_price_profile.csv";
         $createdArticleOrderNumber = "SW10003";
+        $expectedPurchasePrice = 7.95;
         $expectedArticlePrice = 8.3613445378151;
 
         $this->runCommand("sw:import:import -p default_article_prices {$filePath}");
@@ -29,6 +30,7 @@ class ArticlePriceProfileTest extends \PHPUnit_Framework_TestCase
         $updatedArticle = $this->executeQuery("SELECT * FROM s_articles_details WHERE ordernumber='{$createdArticleOrderNumber}'");
         $updatedArticlePrice = $this->executeQuery("SELECT * FROM s_articles_prices WHERE articleID='{$updatedArticle[0]["articleID"]}'");
 
+        $this->assertEquals($expectedPurchasePrice, $updatedArticle[0]['purchaseprice']);
         $this->assertEquals($expectedArticlePrice, $updatedArticlePrice[0]["price"]);
     }
 

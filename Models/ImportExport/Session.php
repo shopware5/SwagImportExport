@@ -35,8 +35,8 @@ class Session extends ModelEntity
     /**
      * @var Profile $profile
      *
-     * @ORM\ManyToOne(targetEntity="Shopware\CustomModels\ImportExport\Profile", cascade={"persist", "refresh"})
-     * @ORM\JoinColumn(onDelete="CASCADE")
+     * @ORM\ManyToOne(targetEntity="Shopware\CustomModels\ImportExport\Profile", inversedBy="sessions", cascade={"persist", "refresh"})
+     * @ORM\JoinColumn(name="profile_id", onDelete="CASCADE")
      */
     protected $profile;
 

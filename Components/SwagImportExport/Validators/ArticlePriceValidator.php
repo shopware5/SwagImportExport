@@ -13,32 +13,34 @@ use Shopware\Components\SwagImportExport\Exception\AdapterException;
 
 class ArticlePriceValidator extends Validator
 {
-    public static $mapper = array(
-        'string' => array( //TODO: maybe we don't need to check fields which contains string?
+    public static $mapper = [
+        'string' => [ //TODO: maybe we don't need to check fields which contains string?
             'orderNumber',
             'priceGroup',
             'name',
             'additionalText',
             'supplierName',
-        ),
-        'float' => array(
+        ],
+        'float' => [
             'price',
             'purchasePrice',
             'pseudoPrice',
-        ),
-        'int' => array('from'),
-    );
+        ],
+        'int' => [
+            'from'
+        ]
+    ];
 
-    private $requiredFields = array(
-        'orderNumber',
-    );
+    private $requiredFields = [
+        'orderNumber'
+    ];
 
-    private $snippetData = array(
-        'orderNumber' => array(
+    private $snippetData = [
+        'orderNumber' => [
             'adapters/ordernumber_required',
             'Order number is required.'
-        ),
-    );
+        ]
+    ];
 
     /**
      * Checks whether required fields are filled-in

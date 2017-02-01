@@ -6,7 +6,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Window', {
     alias: 'widget.swag-import-export-profile-window',
 
     height: '80%',
-    width: '80%',
+    width: '60%',
 
     layout: 'fit',
 
@@ -57,7 +57,10 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Window', {
 
         me.profileStore = Ext.create('Shopware.apps.SwagImportExport.store.ProfileList', {
             pageSize: 200,
-            autoLoad: true
+            autoLoad: true,
+            sorters: [
+                { property: 'name', direction: 'ASC' }
+            ]
         });
 
         me.items = me.buildItems();
@@ -86,84 +89,101 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Window', {
             },
             items: [{
                 xtype: 'form',
+                layout: {
+                    type: 'hbox'
+                },
+                trackResetOnLoad: true,
                 itemId: 'profilebaseform',
                 padding: 15,
-                defaults: {
-                    anchor: '50%'
-                },
                 border: false,
                 items: [{
-                    xtype: 'hidden',
-                    name: 'id'
-                }, {
-                    xtype: 'textfield',
-                    itemId: 'namefield',
-                    readOnly: me.readOnly,
-                    fieldLabel: '{s name=swag_import_export/profile/window/field_name}Profile name{/s}',
-                    name: 'name',
-                    allowBlank: false
-                }, {
-                    xtype: 'hidden',
-                    name: 'type'
-                }, {
-                    xtype: 'combo',
-                    name: 'baseProfile',
-                    itemId: 'baseProfile',
-                    fieldLabel: '{s name=swag_import_export/profile/window/field_based_on}Based on{/s}',
-                    allowBlank: false,
-                    editable: false,
-                    triggerAction: 'all',
-                    store: me.profileStore,
-                    listConfig: {
-                        getInnerTpl: function () {
-                            return Ext.XTemplate(
-                                '{literal}'  +
-                                '<tpl if="translation">{ translation } <i>({ name })</i>' +
-                                '<tpl else>{ name }</tpl>' +
-                                '{/literal}'
-                            );
-                        },
-                        width: 305
+                    xtype: 'container',
+                    flex: 1,
+                    layout: 'anchor',
+                    defaults: {
+                        anchor: '100%'
                     },
-                    valueField: 'id',
-                    displayTpl: new Ext.XTemplate(
-                        '<tpl for=".">' +
-                        '{literal}'  +
-                        '{[typeof values === "string" ? values : this.getFormattedName(values)]}' +
-                        '<tpl if="xindex < xcount">' + me.delimiter + '</tpl>' +
-                        '{/literal}' +
-                        '</tpl>',
-                        {
-                            getFormattedName: function(values) {
-                                if (values.translation) {
-                                    return Ext.String.format('[0] ([1])', values.translation, values.name);
-                                }
-                                return values.name;
-                            }
-                        }
-                    ),
-                    helpText: '{s name=swag_import_export/profile/window/profile_helptext}The selected default profile can be individually extended and modified via the configuration tree and be saved as a custom profile.{/s}',
-                    listeners: {
-                        boxready: function(combo) {
-                            combo.relayEvents(combo.getStore(), ['load'], 'store');
+                    items: [{
+                        xtype: 'hidden',
+                        name: 'id'
+                    }, {
+                        xtype: 'textfield',
+                        itemId: 'namefield',
+                        readOnly: me.readOnly,
+                        fieldLabel: '{s name=swag_import_export/profile/window/field_name}Profile name{/s}',
+                        name: 'name',
+                        allowBlank: false
+                    }, {
+                        xtype: 'hidden',
+                        name: 'type'
+                    }, {
+                        xtype: 'combo',
+                        name: 'baseProfile',
+                        itemId: 'baseProfile',
+                        fieldLabel: '{s name=swag_import_export/profile/window/field_based_on}Based on{/s}',
+                        allowBlank: false,
+                        editable: false,
+                        triggerAction: 'all',
+                        store: me.profileStore,
+                        listConfig: {
+                            getInnerTpl: function () {
+                                return Ext.XTemplate(
+                                    '{literal}'  +
+                                    '<tpl if="translation">{ name } <i>({ translation })</i>' +
+                                    '<tpl else>{ name }</tpl>' +
+                                    '{/literal}'
+                                );
+                            },
+                            width: 305
                         },
-                        storeload: function() {
-                            if (!Ext.isEmpty(me.profileId)) {
-                                if (Ext.isEmpty(this.getValue())) {
-                                    this.disable();
-                                    return;
+                        valueField: 'id',
+                        displayTpl: new Ext.XTemplate(
+                            '<tpl for=".">' +
+                            '{literal}'  +
+                            '{[typeof values === "string" ? values : this.getFormattedName(values)]}' +
+                            '<tpl if="xindex < xcount">' + me.delimiter + '</tpl>' +
+                            '{/literal}' +
+                            '</tpl>',
+                            {
+                                getFormattedName: function(values) {
+                                    if (values.translation) {
+                                        return Ext.String.format('[0] ([1])', values.translation, values.name);
+                                    }
+                                    return values.name;
                                 }
-                                this.validate();
                             }
-                        },
-                        select: function(combo, selectedRecords) {
-                            var selection = selectedRecords[0],
-                                typefield = combo.previousSibling('hidden[name=type]');
+                        ),
+                        helpText: '{s name=swag_import_export/profile/window/profile_helptext}The selected default profile can be individually extended and modified via the configuration tree and be saved as a custom profile.{/s}',
+                        listeners: {
+                            boxready: function(combo) {
+                                combo.relayEvents(combo.getStore(), ['load'], 'store');
+                            },
+                            storeload: function() {
+                                if (!Ext.isEmpty(me.profileId)) {
+                                    if (Ext.isEmpty(this.getValue())) {
+                                        this.disable();
+                                        return;
+                                    }
+                                    this.validate();
+                                }
+                            },
+                            select: function(combo, selectedRecords) {
+                                var selection = selectedRecords[0],
+                                    typefield = combo.previousSibling('hidden[name=type]');
 
-                            typefield.setValue(selection.get('type'))
-                            me.fireEvent('baseprofileselected', me, selection);
+                                typefield.setValue(selection.get('type'))
+                                me.fireEvent('baseprofileselected', me, selection);
+                            }
                         }
-                    }
+                    }]
+                }, {
+                    xtype: 'container',
+                    margin: '0 10px 0 70px',
+                    flex: 1,
+                    items: [{
+                        xtype: 'displayfield',
+                        name: 'description'
+                    }]
                 }]
             }, me.profileConfigurator]
         }];
@@ -195,22 +215,8 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Window', {
                 cls: 'primary',
                 itemId: 'savebutton',
                 disabled: me.readOnly,
-                handler: function () {
+                handler: function() {
                     me.fireEvent('saveProfile', me);
-
-                    if (me.profileId !== null) {
-                        me.fireEvent(
-                            'saveNode',
-                            me.profileConfigurator.treePanel,
-                            me.profileConfigurator.treeStore,
-                            me.profileConfigurator.selectedNodeId,
-                            me.profileConfigurator.formPanel.child('#nodeName').getValue(),
-                            me.profileConfigurator.formPanel.child('#swColumn').getValue(),
-                            me.profileConfigurator.formPanel.child('#defaultValue').getValue(),
-                            me.profileConfigurator.formPanel.child('#adapter').getValue(),
-                            me.profileConfigurator.formPanel.child('#parentKey').getValue()
-                        );
-                    }
                 }
             }]
         });

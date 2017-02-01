@@ -72,7 +72,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
             values = form.getValues(),
             localFile;
         
-        if (Ext.isEmpty(values.profile)) {
+        if (Ext.isEmpty(values.profile) || values.profile < 1) {
             Shopware.Notification.createGrowlMessage(
                 '{s name=swag_import_export/import/error_title}Swag import export{/s}',
                 '{s name=swag_import_export/import/error_msg_profle}Please select a profile{/s}'
@@ -223,12 +223,17 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
     /**
      * This function sends a request to export data
      *
-     * @param object Enlight.app.SubWindow win
+     * @param { Enlight.app.SubWindow } win
+     * @param { boolean } extension
      */
-    runRequest: function(win) {
+    runRequest: function(win, extension) {
         var me = this,
                 config = me.batchConfig,
                 params = config.params;
+
+        if (!Ext.isDefined(extension)) {
+            extension = false;
+        }
 
         // if cancel button was pressed
         if (me.cancelOperation) {
@@ -245,11 +250,16 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
                 var result = Ext.decode(response.responseText);
                 
                 if(result.success == false){
-                    Shopware.Msg.createStickyGrowlMessage({
-                        title: 'Import Error',
+                    var msg = '{s name=swag_import_export/import/error}Import error{/s}';
+
+                    if (extension) {
+                        msg = '{s name=swag_import_export/import/extension_import_error}Extension import error{/s}'
+                    }
+
+                    return Shopware.Msg.createStickyGrowlMessage({
+                        title: msg,
                         text: result.msg
                     });
-                    return;
                 }
 
                 me.batchConfig.params = result.data;
@@ -260,10 +270,10 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
                 }
 
                 if (result.data.load === true) {
-                    Shopware.Notification.createGrowlMessage(
-                        'Import',
-                        me.snippets.finished + me.snippets.unprocess
-                    );
+                    Shopware.Notification.createStickyGrowlMessage({
+                        title: '{s name=swag_import_export/import/window_title}Import{/s}',
+                        text: me.snippets.finished + me.snippets.unprocess
+                    });
 
                     win.importProgress.updateProgress(
                         me.batchConfig.position / me.batchConfig.totalCount,
@@ -276,7 +286,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
                     //sets artificial delay of 2 secs
                     setTimeout(function () {
                         win.setLoading(false);
-                        me.runRequest(win);
+                        me.runRequest(win, true);
                     }, 2000);
 
                 } else {
@@ -295,10 +305,9 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
             },
             failure: function(response) {
                 Shopware.Msg.createStickyGrowlMessage({
-                    title: 'An error occured',
+                    title: '{s name=swag_import_export/import/failure-title}An error occured{/s}',
                     text: response.responseText
                 });
-
                 me.onProcessFinish(win);
             }
         });

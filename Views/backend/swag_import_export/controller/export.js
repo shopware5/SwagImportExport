@@ -35,8 +35,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
                 form = btn.up('form'),
                 values = form.getValues();
       
-        if (Ext.isEmpty(values.profile) || Ext.isEmpty(values.format))
-        {
+        if (Ext.isEmpty(values.profile) || values.profile < 1 || Ext.isEmpty(values.format)) {
             Shopware.Notification.createGrowlMessage(
                     '{s name=swag_import_export/export/error_title}Swag import export{/s}',
                     '{s name=swag_import_export/export/error_msg}Please select export configuration{/s}'
@@ -139,7 +138,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
             },
             failure: function(response) {
                 Shopware.Msg.createStickyGrowlMessage({
-                    title: 'An error occured',
+                    title: '{s name=swag_import_export/export/error_occured}An error occured{/s}',
                     text: response.responseText
                 });
             }
@@ -171,7 +170,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
 
                 if(result.success === false){
                     Shopware.Msg.createStickyGrowlMessage({
-                        title: 'Export Error',
+                        title: '{s name=swag_import_export/export/error}Export error{/s}',
                         text: result.msg
                     });
 
@@ -199,7 +198,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
             },
             failure: function(response) {
                 Shopware.Msg.createStickyGrowlMessage({
-                    title: 'An error occured',
+                    title: '{s name=swag_import_export/export/error_occured}An error occured{/s}',
                     text: response.responseText
                 });
 

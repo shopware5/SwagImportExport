@@ -828,15 +828,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         $stmt = $this->db->query("SHOW COLUMNS FROM `s_articles_attributes`");
         $columns = $stmt->fetchAll();
 
-        $attributes = [];
-        foreach ($columns as $column) {
-            if ($column['Field'] !== 'id'
-                && $column['Field'] !== 'articleID'
-                && $column['Field'] !== 'articledetailsID'
-            ) {
-                $attributes[] = $column['Field'];
-            }
-        }
+        $attributes = $this->filterAttributeColumns($columns);
 
         $attributesSelect = [];
         if ($attributes) {
@@ -969,6 +961,8 @@ class ArticlesDbAdapter implements DataDbAdapter
             'prices.price as price',
             'prices.pseudoPrice as pseudoPrice',
             'prices.customerGroupKey as priceGroup',
+            'prices.from',
+            'prices.to'
         ];
     }
 
@@ -1563,5 +1557,23 @@ class ArticlesDbAdapter implements DataDbAdapter
     private function underscoreToCamelCase($underscoreString)
     {
         return lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $underscoreString))));
+    }
+
+    /**
+     * @param array $columns
+     * @return array
+     */
+    private function filterAttributeColumns(array $columns)
+    {
+        $attributes = [];
+        foreach ($columns as $column) {
+            if ($column['Field'] !== 'id'
+                && $column['Field'] !== 'articleID'
+                && $column['Field'] !== 'articledetailsID'
+            ) {
+                $attributes[] = $column['Field'];
+            }
+        }
+        return $attributes;
     }
 }

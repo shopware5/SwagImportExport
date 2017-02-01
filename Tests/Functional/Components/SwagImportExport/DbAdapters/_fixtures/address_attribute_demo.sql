@@ -1,0 +1,1 @@
+INSERT INTO s_user_addresses_attributes (address_id, text1) VALUES (1, 'Attr value');

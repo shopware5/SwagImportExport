@@ -22,6 +22,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
         me.initializeStores();
 
         me.selectedNodeId = 0;
+        me.lastSelectedNode = null;
 
         me.items = me.buildItems();
         me.dockedItems = me.buildDockedItems();
@@ -83,15 +84,15 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
                 itemId: 'createIteration',
                 disabled: true,
                 handler: function () {
-                    me.fireEvent('addNewIteration', me.treePanel, me.treeStore, me.selectedNodeId);
+                    me.fireEvent('addNewIteration', me.treePanel, me.getProfileId());
                 }
             }, {
-                text:  '{s name=newNode}New node{/s}',
+                text:  '{s name=swag_import_export/profile/new_column}New column{/s}',
                 iconCls: 'sprite-plus-circle-frame',
                 itemId: 'createChild',
                 disabled: true,
                 handler: function () {
-                    me.fireEvent('addNewNode', me.treePanel, me.treeStore, me.selectedNodeId);
+                    me.fireEvent('addNewNode', me.treePanel, me.getProfileId(), me.lastSelectedNode.get('adapter'));
                 }
             }, {
                 text: '{s name=newAttribute}New attribute{/s}',
@@ -107,7 +108,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
                 itemId: 'deleteSelected',
                 disabled: true,
                 handler: function () {
-                    me.fireEvent('deleteNode', me.treeStore, me.selectedNodeId, me.treePanel.getSelectionModel());
+                    me.fireEvent('deleteNode', me.treePanel);
                 }
             }, '->', {
                 itemId: 'conversionsMenu',
@@ -134,6 +135,10 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
             flex: 1,
             border: false,
             store: me.treeStore,
+            selModel: {
+                selType: 'rowmodel',
+                mode: 'MULTI'
+            },
             viewConfig: {
                 plugins: {
                     ptype: 'customtreeviewdragdrop',
@@ -142,13 +147,6 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
                 },
                 listeners: {
                     drop: function (node, data, overModel, dropPosition, eOpts) {
-                        if (dropPosition === 'append') {
-                            if (overModel.get('type') !== 'iteration') {
-                                overModel.set('type', '');
-                                overModel.set('iconCls', '');
-                            }
-                        }
-
                         me.treeStore.sync({
                             success: function () {
                                 // fix selection
@@ -166,7 +164,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
             margin: '0 5 0 0',
             listeners: {
                 scope: me,
-                select: me.onTreeItemSelection,
+                selectionchange: me.onTreeItemSelection,
                 itemcontextmenu: me.onTreeItemContextMenu
             }
         });
@@ -192,6 +190,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
                 itemId: 'nodeName',
                 fieldLabel: '{s name=nodeName}Node name{/s}',
                 hidden: true,
+                disabled: true,
                 width: 400,
                 labelWidth: 150,
                 name: 'nodeName',
@@ -200,17 +199,19 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
                 itemId: 'defaultValue',
                 fieldLabel: '{s name=defaultValue}Default value{/s}',
                 hidden: true,
+                disabled: true,
                 width: 400,
                 labelWidth: 150,
                 name: 'defaultValue',
                 allowBlank: true
             }, {
                 itemId: 'swColumn',
-                fieldLabel: '{s name=shopwareColumn}Shopware column{/s}',
+                fieldLabel: '{s name=shopwareColumn}Database mapping{/s}',
                 hidden: true,
+                disabled: true,
                 xtype: 'combobox',
                 editable: false,
-                emptyText: 'Select Column',
+                emptyText: '{s name=selectColumn}Select field{/s}',
                 queryMode: 'local',
                 store: me.columnStore,
                 valueField: 'id',
@@ -218,21 +219,15 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
                 width: 400,
                 labelWidth: 150,
                 name: 'swColumn',
-                allowBlank: false,
-                listeners: {
-                    change: function (field, newValue) {
-                        var defaultValue = me.treeStore.getById(me.selectedNodeId).get('defaultValue');
-
-                        me.fireEvent('changeColumn', me.columnStore, newValue, defaultValue);
-                    }
-                }
+                allowBlank: false
             }, {
                 itemId: 'adapter',
-                fieldLabel: '{s name=adapter}Adapter{/s}',
+                fieldLabel: '{s name=adapter}Extension{/s}',
                 hidden: true,
+                disabled: true,
                 xtype: 'combobox',
                 editable: false,
-                emptyText: '{s name=selectColumn}Select column{/s}',
+                emptyText: '{s name=selectExtension}Select extension{/s}',
                 queryMode: 'local',
                 store: me.sectionStore,
                 valueField: 'id',
@@ -243,7 +238,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
                 allowBlank: false,
                 listeners: {
                     change: function (field, newValue, oldValue, eOpts) {
-                        me.formPanel.child('#parentKey').getStore().load({
+                        field.nextSibling('#parentKey').getStore().load({
                             params: {
                                 profileId: me.getProfileId(),
                                 adapter: newValue
@@ -255,6 +250,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
                 itemId: 'parentKey',
                 fieldLabel: '{s name=parentKey}Parent key{/s}',
                 hidden: true,
+                disabled: true,
                 xtype: 'combobox',
                 editable: false,
                 emptyText: '{s name=selectColumn}Select column{/s}',
@@ -271,42 +267,50 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
         return me.formPanel;
     },
 
-    onTreeItemSelection: function (view, record) {
-        var me = this;
+    onTreeItemSelection: function (selModel, selection) {
+        var me = this,
+            toolbar = me.toolbar,
+            rootSelected = false,
+            record;
 
-        me.selectedNodeId = record.getId();
-        me.composeFormFields();
+        // check if root not is selected
+        for (var i = 0, count = selection.length; i < count; i++) {
+            var selectedRecord = selection[i];
 
-        if (!me.readOnly) {
-            var toolbar = me.toolbar;
+            if (selectedRecord.get('id') === 'root') {
+                rootSelected = true;
+                break;
+            }
+        }
 
-            if (record.get('type') === 'attribute') {
-                toolbar.items.get('createIteration').setDisabled(true);
-                toolbar.items.get('createAttribute').setDisabled(true);
-                toolbar.items.get('createChild').setDisabled(true);
-                toolbar.items.get('deleteSelected').setDisabled(false);
-            } else if (record.get('type') === 'leaf') {
-                toolbar.items.get('createIteration').setDisabled(false);
-                toolbar.items.get('createAttribute').setDisabled(false);
-                toolbar.items.get('createChild').setDisabled(false);
-                toolbar.items.get('deleteSelected').setDisabled(false);
-            } else if (record.get('type') === 'iteration') {
-                toolbar.items.get('createIteration').setDisabled(false);
-                toolbar.items.get('createAttribute').setDisabled(false);
-                toolbar.items.get('createChild').setDisabled(false);
-                toolbar.items.get('deleteSelected').setDisabled(false);
-            } else {
-                if (record.get('inIteration') === true) {
+        me.formPanel.setDisabled(selection.length > 1);
+
+        toolbar.items.get('createIteration').setDisabled(true);
+        toolbar.items.get('createAttribute').setDisabled(true);
+        toolbar.items.get('createChild').setDisabled(true);
+        toolbar.items.get('deleteSelected').setDisabled(rootSelected);
+
+        if (selection.length === 1) {
+            record = selection[0];
+            me.selectedNodeId = record.get('id');
+            me.lastSelectedNode = record;
+            me.composeFormFields(record);
+            if (!me.readOnly) {
+                if (record.get('type') === 'leaf') {
+                    toolbar.items.get('createIteration').setDisabled(false);
                     toolbar.items.get('createAttribute').setDisabled(false);
+                    if (record.get('inIteration') === true && record.parentNode.get('type') === 'iteration') {
+                        toolbar.items.get('createChild').setDisabled(false);
+                    }
+                } else if (record.get('type') === 'iteration') {
+                    toolbar.items.get('createIteration').setDisabled(false);
+                    toolbar.items.get('createAttribute').setDisabled(false);
+                    toolbar.items.get('createChild').setDisabled(false);
                 } else {
-                    toolbar.items.get('createAttribute').setDisabled(true);
-                }
-                toolbar.items.get('createIteration').setDisabled(false);
-                toolbar.items.get('createChild').setDisabled(false);
-                if (record.getId() === 'root') {
-                    toolbar.items.get('deleteSelected').setDisabled(true);
-                } else {
-                    toolbar.items.get('deleteSelected').setDisabled(false);
+                    if (record.get('inIteration') === true) {
+                        toolbar.items.get('createAttribute').setDisabled(false);
+                    }
+                    toolbar.items.get('createIteration').setDisabled(false);
                 }
             }
         }
@@ -316,6 +320,12 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
         var me = this,
             type = record.get('type'),
             menuItems;
+
+        e.stopEvent();
+        if (view.getSelectionModel().getSelection().length > 1) {
+            return;
+        }
+
         view.getSelectionModel().select(record);
 
         e.stopEvent();
@@ -327,13 +337,13 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
             text: '{s name=newIterationNode}New iteration Node{/s}',
             iconCls: 'sprite-plus-circle-frame',
             handler: function () {
-                me.fireEvent('addNewIteration', me.treePanel, me.treeStore, record.get('id'));
+                me.fireEvent('addNewIteration', me.treePanel, me.getProfileId());
             }
         }, {
-            text:  '{s name=newNode}New entry{/s}',
+            text:  '{s name=swag_import_export/profile/new_column}New field{/s}',
             iconCls: 'sprite-plus-circle-frame',
             handler: function () {
-                me.fireEvent('addNewNode', me.treePanel, me.treeStore, record.get('id'));
+                me.fireEvent('addNewNode', me.treePanel, me.getProfileId(), me.lastSelectedNode.get('adapter'));
             }
         }, {
             text: '{s name=newAttribute}New attribute{/s}',
@@ -345,9 +355,13 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
             text: '{s name=swag_import_export/profile/profile/remove_item}Remove selected item{/s}',
             iconCls: 'sprite-minus-circle-frame',
             handler: function () {
-                me.fireEvent('deleteNode', me.treeStore, me.selectedNodeId, me.treePanel.getSelectionModel());
+                me.fireEvent('deleteNode', me.treePanel);
             }
         }];
+
+        if (type !== 'iteration' && type !== 'leaf') {
+            delete menuItems[1];
+        }
 
         if (type === 'attribute') {
             menuItems = menuItems[3];
@@ -378,17 +392,33 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
             form = me.formPanel;
 
         form.child('#nodeName').hide();
+        form.child('#nodeName').disable();
         form.child('#swColumn').hide();
+        form.child('#swColumn').disable();
     },
 
-    composeFormFields: function() {
+    composeFormFields: function(node) {
         var me = this,
             form = me.formPanel,
-            node = me.treeStore.getById(me.selectedNodeId);
+            parentNode,
+            isFirst;
+
+        form.child('#swColumn').hide();
+        form.child('#swColumn').disable();
+
+        form.child('#adapter').hide();
+        form.child('#adapter').disable();
+
+        form.child('#parentKey').hide();
+        form.child('#parentKey').disable();
+
+        form.child('#defaultValue').hide();
+        form.child('#defaultValue').disable();
 
         form.child('#nodeName').show();
+        form.child('#nodeName').enable();
         form.child('#nodeName').setValue(node.get('text'));
-        form.child('#swColumn').setValue(node.get('swColumn'));
+        form.child('#nodeName').resetOriginalValue();
 
         if (node.get('type') === 'attribute') {
             form.child('#swColumn').getStore().load({
@@ -398,26 +428,32 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
                 }
             });
             form.child('#swColumn').show();
-            form.child('#adapter').hide();
-            form.child('#parentKey').hide();
+            form.child('#swColumn').enable();
+            form.child('#swColumn').setValue(node.get('swColumn'));
+            form.child('#swColumn').resetOriginalValue();
         } else if (node.get('type') === 'leaf') {
-            form.child('#swColumn').getStore().load({
+            form.child('#swColumn').show();
+            form.child('#swColumn').enable();
+            form.child('#swColumn').setValue(node.get('swColumn'));
+            form.child('#swColumn').resetOriginalValue();
+            me.columnStore.load({
                 params: {
                     profileId: me.getProfileId(),
                     adapter: node.get('adapter')
+                },
+                callback: function() {
+                    me.createDefaultValueField(me.columnStore, node.get('swColumn'), node.get('defaultValue'));
                 }
-            });
-            form.child('#swColumn').show();
-            form.child('#adapter').hide();
-            form.child('#parentKey').hide();
+            }, me);
         } else if (node.get('type') === 'iteration') {
-            form.child('#swColumn').hide();
             form.child('#adapter').show();
+            form.child('#adapter').enable();
             form.child('#adapter').setValue(node.get('adapter'));
+            form.child('#adapter').resetOriginalValue();
 
             // check if it's the first iteration node
-            var parentNode = node.parentNode;
-            var isFirst = true;
+            parentNode = node.parentNode;
+            isFirst = true;
             while (parentNode.get('id') !== 'root') {
                 if (parentNode.get('type') === 'iteration') {
                     isFirst = false;
@@ -432,17 +468,109 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
                         adapter: node.get('adapter')
                     }
                 });
-                form.child('#parentKey').setValue(node.get('parentKey'));
                 form.child('#parentKey').show();
+                form.child('#parentKey').enable();
+                form.child('#parentKey').setValue(node.get('parentKey'));
+                form.child('#parentKey').resetOriginalValue();
             } else {
-                form.child('#parentKey').hide();
-                form.child('#parentKey').setValue('');
+                form.child('#parentKey').clearValue();
             }
-        } else {
-            form.child('#swColumn').hide();
-            form.child('#adapter').hide();
-            form.child('#parentKey').hide();
-            form.child('#defaultValue').hide();
+        }
+    },
+
+    /**
+     * @param { Shopware.apps.SwagImportExport.store.Column } store
+     * @param { string } value
+     * @param { string } nodeValue
+     */
+    createDefaultValueField: function(store, value, nodeValue) {
+        var me = this,
+            formPanel = me.formPanel,
+            fieldType,
+            settings,
+            record;
+
+        formPanel.down('#defaultValue').destroy();
+
+        //Create default value field
+        fieldType = 'hidden';
+        settings = {
+            itemId: 'defaultValue',
+            fieldLabel: '{s namespace=backend/swag_import_export/view/profile name=defaultValue}Default value{/s}',
+            width: 400,
+            labelWidth: 150,
+            name: 'defaultValue',
+            allowBlank: true
+        };
+
+        //Set new field type if selected column have default flag
+        record = store.getById(value);
+        if (record) {
+            if (record.get('default')) {
+                fieldType = record.get('type');
+            }
+        }
+        //Merge component settings depending on field type
+        settings = Ext.apply({ }, settings, me.getDefaultValueType(fieldType));
+
+        //Add default field to grid
+        formPanel.insert(1, settings);
+
+        formPanel.child('#defaultValue').setValue(nodeValue);
+    },
+
+    /**
+     * Helper method which returns xtype for current field
+     *
+     * @param column
+     * @returns Object|boolean
+     */
+    getDefaultValueType: function(column) {
+        if (!column) {
+            return false;
+        }
+
+        switch (column) {
+            case 'id':
+                return { xtype: 'numberfield', minValue: 1 };
+                break;
+            case 'integer':
+            case 'decimal':
+            case 'float':
+                var precision = 0;
+                if (column.precision) {
+                    precision = column.precision
+                } else if (column.type == 'float') {
+                    precision = 3;
+                } else if (column.type == 'decimal') {
+                    precision = 3;
+                }
+                return { xtype: 'numberfield', decimalPrecision: precision };
+                break;
+            case 'string':
+            case 'text':
+                return 'textfield';
+                break;
+            case 'boolean':
+                return {
+                    xtype: 'checkbox',
+                    inputValue: 1,
+                    uncheckedValue: 0
+                };
+                break;
+            case 'date':
+            case 'dateTime':
+                return {
+                    xtype: 'datefield',
+                    format: 'Y-m-d',
+                    submitFormat: 'Y-m-d'
+                };
+                break;
+            default:
+                return {
+                    hidden: true
+                };
+                break;
         }
     },
 

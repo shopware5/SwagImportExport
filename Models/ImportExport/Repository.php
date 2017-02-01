@@ -40,6 +40,7 @@ class Repository extends ModelRepository
                 'p.id as id',
                 'p.type as type',
                 'p.name as name',
+                'p.description as description',
                 'p.tree as tree',
                 'p.default as default',
                 'p.baseProfile as baseProfile'

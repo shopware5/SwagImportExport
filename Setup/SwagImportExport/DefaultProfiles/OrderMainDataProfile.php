@@ -31,6 +31,14 @@ class OrderMainDataProfile implements \JsonSerializable, ProfileMetaData
     /**
      * @inheritdoc
      */
+    public function getDescription()
+    {
+        return 'default_order_main_data_description';
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function jsonSerialize()
     {
         return [

@@ -31,6 +31,14 @@ class MinimalArticleVariantsProfile implements \JsonSerializable, ProfileMetaDat
     /**
      * @inheritdoc
      */
+    public function getDescription()
+    {
+        return 'default_article_variants_minimal_description';
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function jsonSerialize()
     {
         return [

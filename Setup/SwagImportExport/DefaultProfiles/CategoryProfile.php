@@ -31,6 +31,14 @@ class CategoryProfile implements \JsonSerializable, ProfileMetaData
     /**
      * @inheritdoc
      */
+    public function getDescription()
+    {
+        return 'default_categories_description';
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function jsonSerialize()
     {
         return [

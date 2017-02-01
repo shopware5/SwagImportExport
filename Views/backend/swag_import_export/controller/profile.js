@@ -39,16 +39,20 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
             },
             'swag-import-export-profile-window{ isVisible(true) }': {
                 baseprofileselected: me.onBaseProfileSelected,
-                saveProfile: me.onSaveProfile,
-                saveNode: me.saveNode
+                saveProfile: me.onSaveProfile
             },
             'swag-import-export-profile-profile{ isVisible(true) }': {
                 showMappings: me.showMappings,
                 addNewIteration: me.addNewIteration,
                 addNewNode: me.addNewNode,
                 deleteNode: me.deleteNode,
-                addNewAttribute: me.addNewAttribute,
-                changeColumn: me.changeColumn
+                addNewAttribute: me.addNewAttribute
+            },
+            'swag-import-export-iterator-window{ isVisible(true) }': {
+                addIterator: me.addIterator
+            },
+            'swag-import-export-column-window{ isVisible(true) }': {
+                addNode: me.addNode
             },
             'swag-import-export-mapping-window{ isVisible(true) }': {
                 addConversion: me.addConversion,
@@ -67,7 +71,6 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
 
     onSearchProfile: function(field, newValue) {
         var searchString = Ext.String.trim(newValue),
-            checkboxFilter = field.previousSibling('#defaultprofilefilter'),
             store = field.up('grid').getStore();
 
         //scroll the store to first page
@@ -87,7 +90,6 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
 
     onFilterDefaultProfiles: function(checkbox, value) {
         var searchfilter = checkbox.nextSibling('#searchfield'),
-            searchString = Ext.String.trim(searchfilter.getValue()),
             store = checkbox.up('grid').getStore();
 
         //scroll the store to first page
@@ -154,11 +156,91 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
 
     onSaveProfile: function(window) {
         var me = this,
-            store = window.profileStore,
+            profileConfigurator = window.profileConfigurator,
+            treePanel = profileConfigurator.treePanel,
+            treeStore = profileConfigurator.treeStore,
+            node = treeStore.getById(profileConfigurator.selectedNodeId),
+            form = profileConfigurator.formPanel;
+
+        // call save profile without saving node tree when creating new profile.
+        if (Ext.isEmpty(window.getProfileId())) {
+            me.saveProfile(window, function(success, record, message) {
+                window.setLoading(false);
+                me.getGrid().getStore().load();
+                if (success) {
+                    Shopware.Notification.createGrowlMessage(
+                        '{s name=swag_import_export/profile/save/title}Swag import export{/s}',
+                        message
+                    );
+                    window.down('#profilebaseform').loadRecord(record);
+                    window.setProfileId(record.get('id'));
+                } else {
+                    Ext.MessageBox.show({
+                        title: '{s name=swag_import_export/profile/save/failure_title}Save Failed{/s}',
+                        msg: message,
+                        icon: Ext.Msg.ERROR,
+                        buttons: Ext.Msg.OK
+                    });
+                }
+            }, me);
+        } else {
+            // save profile and node tree when editing existing profile
+            me.saveProfile(window, function(success, record, message) {
+                if (success) {
+                    window.down('#profilebaseform').loadRecord(record);
+                    window.setProfileId(record.get('id'));
+                    // check if node is selected for editing
+                    if (!node) {
+                        window.setLoading(false);
+                        me.getGrid().getStore().load();
+                        Shopware.Notification.createGrowlMessage(
+                            '{s name=swag_import_export/profile/save/title}Swag import export{/s}',
+                            message
+                        );
+                    } else {
+                        // synchronize node tree and give feedback to user
+                        me.saveNode(treePanel, node, form, function(success, message) {
+                            window.setLoading(false);
+                            me.getGrid().getStore().load();
+                            if (success) {
+                                Shopware.Notification.createGrowlMessage(
+                                    '{s name=swag_import_export/profile/save/title}Swag import export{/s}',
+                                    message
+                                );
+                                treePanel.getSelectionModel().deselectAll(true);
+                                treePanel.expand();
+                                treePanel.getSelectionModel().select(node);
+                            } else {
+                                Ext.MessageBox.show({
+                                    title: '{s name=swag_import_export/profile/save/failure_title}Save Failed{/s}',
+                                    msg: message,
+                                    icon: Ext.Msg.ERROR,
+                                    buttons: Ext.Msg.OK
+                                });
+                            }
+                        }, me);
+                    }
+                } else {
+                    Ext.MessageBox.show({
+                        title: '{s name=swag_import_export/profile/save/failure_title}Save Failed{/s}',
+                        msg: message,
+                        icon: Ext.Msg.ERROR,
+                        buttons: Ext.Msg.OK
+                    });
+                }
+            }, me);
+        }
+    },
+
+    saveProfile: function(window, callback, scope) {
+        var store = window.profileStore,
             form = window.down('#profilebaseform'),
             record = form.getRecord();
 
         if (form.getForm().isValid()) {
+            if (!form.getForm().isDirty()) {
+                return Ext.callback(callback, scope, [true, record, '{s name=swag_import_export/profile/save/success}Successfully updated.{/s}']);
+            }
             form.getForm().updateRecord(record);
             record.join(store);
 
@@ -166,23 +248,12 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
 
             record.save({
                 callback: function(record, operation, success) {
-                    var result = operation.request.scope.reader.jsonData;
-                    window.setLoading(false);
-                    if (result.success) {
-                        window.down('#profilebaseform').loadRecord(record);
-                        window.setProfileId(record.get('id'));
-                        me.getGrid().getStore().load();
-                        Shopware.Notification.createGrowlMessage(
-                            '{s name=swag_import_export/profile/save/title}Swag import export{/s}',
-                            '{s name=swag_import_export/profile/save/success}Successfully updated.{/s}'
-                        );
-                    } else {
-                        Shopware.Notification.createGrowlMessage(
-                            '{s name=swag_import_export/profile/save/title}Swag import export{/s}',
-                            result.message
-                        );
-                        me.getGrid().store.reload();
+                    var result = Ext.JSON.decode(operation.response.responseText),
+                        msg = '{s name=swag_import_export/profile/save/success}Successfully updated.{/s}';
+                    if (!result.success) {
+                        msg = result.message;
                     }
+                    return Ext.callback(callback, scope, [result.success, record, msg]);
                 }
             });
         } else {
@@ -303,116 +374,6 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
     },
 
     /**
-     * Helper function which add and remove default value field
-     * depending on selected shopware column
-     *
-     * @param [Ext.data.Store] store - Column store
-     * @param [integer] value - id of selected shopware column
-     * @param [integer] nodeValue - default value saved in profile
-     */
-    changeColumn: function(store, value, nodeValue) {
-        var me = this;
-
-        //Add default field when store load is done
-        store.on('load', function () {
-            me.createDefaultValueField(store, value, nodeValue);
-        }, me, { single: true });
-
-    },
-
-    createDefaultValueField: function(store, value, nodeValue) {
-        var me = this,
-            profileForm = me.getProfileForm(),
-            formPanel = profileForm.formPanel,
-            fieldType,
-            settings,
-            record;
-
-        formPanel.down('#defaultValue').destroy();
-
-        //Create default value field
-        fieldType = 'hidden';
-        settings = {
-            itemId: 'defaultValue',
-            fieldLabel: '{s namespace=backend/swag_import_export/view/profile name=defaultValue}Default value{/s}',
-            width: 400,
-            labelWidth: 150,
-            name: 'defaultValue',
-            allowBlank: true
-        };
-
-        //Set new field type if selected column have default flag
-        record = store.getById(value);
-        if (record) {
-            if (record.get('default')) {
-                fieldType = record.get('type');
-            }
-        }
-        //Merge component settings depending on field type
-        settings = Ext.apply({ }, settings, me.getDefaultValueType(fieldType));
-
-        //Add default field to grid
-        formPanel.insert(1, settings);
-
-        formPanel.child('#defaultValue').setValue(nodeValue);
-    },
-
-    /**
-     * Helper method which returns xtype for current field
-     *
-     * @param column
-     * @returns Object|boolean
-     */
-    getDefaultValueType: function(column) {
-        if (!column) {
-            return false;
-        }
-
-        switch (column) {
-            case 'id':
-                return { xtype: 'numberfield', minValue: 1 };
-                break;
-            case 'integer':
-            case 'decimal':
-            case 'float':
-                var precision = 0;
-                if (column.precision) {
-                    precision = column.precision
-                } else if (column.type == 'float') {
-                    precision = 3;
-                } else if (column.type == 'decimal') {
-                    precision = 3;
-                }
-                return { xtype: 'numberfield', decimalPrecision: precision };
-                break;
-            case 'string':
-            case 'text':
-                return 'textfield';
-                break;
-            case 'boolean':
-                return {
-                    xtype: 'checkbox',
-                    inputValue: 1,
-                    uncheckedValue: 0
-                };
-                break;
-            case 'date':
-            case 'dateTime':
-                return {
-                    xtype: 'datefield',
-                    format: 'Y-m-d',
-                    submitFormat: 'Y-m-d'
-                };
-                break;
-            default:
-                return {
-                    hidden: true
-                };
-                break;
-        }
-    },
-
-    /**
      * Profile configuration handling
      */
 
@@ -431,21 +392,105 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
      * Adds new node to the tree as a child of the selected node
      *
      * @param { Ext.tree.Panel } treePanel
-     * @param { Ext.data.TreeStore } treeStore
-     * @param { int } selectedNodeId
+     * @param { int } profileId
      */
-    addNewIteration: function(treePanel, treeStore, selectedNodeId) {
-        var me = this;
+    addNewIteration: function(treePanel, profileId) {
+        var me = this,
+            sectionStore = Ext.create('Shopware.apps.SwagImportExport.store.Section', {
+                listeners: {
+                    beforeload: {
+                        single: true,
+                        fn: function(store) {
+                            store.getProxy().setExtraParam('profileId', profileId);
+                        }
+                    }
+                }
+            });
 
-        var node = treeStore.getById(selectedNodeId);
-        if (node.get('type') !== 'iteration') {
-            node.set('type', '');
-            node.set('iconCls', '');
-        }
+        sectionStore.load({
+            callback: function(records) {
+                if (records.length === 0) {
+                    return Shopware.Notification.createGrowlMessage(
+                        '{s name=swag_import_export/profile/iterator/no_extension_title}No extension available{/s}',
+                        '{s name=swag_import_export/profile/iterator/no_extension_message}There is no extension for this profile available.{/s}'
+                    );
+                }
+                Ext.create('Shopware.apps.SwagImportExport.view.profile.window.Iterator', {
+                    treePanel: treePanel,
+                    profileId: profileId,
+                    sectionStore: sectionStore,
+                    autoShow: true
+                });
+            }
+        });
+    },
 
-        var data = { text: "New Iteration Node", adapter:'none', expanded: true, type: 'iteration', iconCls: 'sprite-blue-folders-stack', inIteration: true };
+    /**
+     * @param { Shopware.apps.SwagImportExport.view.profile.window.Iterator } win
+     */
+    addIterator: function(win) {
+        var me = this,
+            form = win.formPanel,
+            treePanel = win.treePanel,
+            treeStore = treePanel.getStore(),
+            store = win.columnGrid.getStore(),
+            formValues = form.getForm().getValues(),
+            iteratorNode,
+            columns,
+            mainNode = treeStore.getRootNode().findChildBy(function(node) {
+                return node.get('type') === 'iteration' && node.get('inIteration');
+            }, me, true);
 
-        var newNode = node.appendChild(data);
+        iteratorNode = treeStore.model.create({
+            text: formValues.nodeName,
+            adapter: formValues.adapter,
+            expanded: true,
+            type: 'iteration',
+            iconCls: 'sprite-blue-folders-stack',
+            inIteration: true,
+            parentKey: formValues.parentKey || ''
+        });
+
+        columns = store.getRange();
+
+        mainNode.appendChild(iteratorNode);
+
+        me.doSync(treeStore, function() {
+            for (var i = 0, count = columns.length; i < count; i++) {
+                var column = columns[i],
+                    columnNode;
+                if (!column.get('select')) {
+                    continue;
+                }
+                columnNode = treeStore.model.create({
+                    text: column.get('nodeName'),
+                    adapter: formValues.adapter,
+                    inIteration: true,
+                    type: 'leaf',
+                    iconCls: 'sprite-blue-document-text',
+                    swColumn: column.get('swColumn')
+                });
+                iteratorNode.appendChild(columnNode);
+            }
+            me.doSync(treeStore, function() {
+                Shopware.Notification.createGrowlMessage(
+                    '{s name=swag_import_export/profile/save/title}Swag import export{/s}',
+                    '{s name=swag_import_export/profile/save/success}Successfully updated.{/s}'
+                );
+                treePanel.expand();
+                treePanel.getSelectionModel().select(iteratorNode);
+                win.close();
+            });
+        }, me);
+    },
+
+    /**
+     *
+     * @param { Ext.data.TreeStore } treeStore
+     * @param callback
+     * @param scope
+     */
+    doSync: function(treeStore, callback, scope) {
         treeStore.sync({
             failure: function(batch, options) {
                 var error = batch.exceptions[0].getError(),
@@ -459,8 +504,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                 });
             },
             success: function() {
-                treePanel.expand();
-                treePanel.getSelectionModel().select(treeStore.getById(newNode.data.id));
+                Ext.callback(callback, scope);
             }
         });
     },
@@ -469,26 +513,48 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
      * Adds new node to the tree as a child of the selected node
      *
      * @param { Ext.tree.Panel } treePanel
-     * @param { Ext.data.TreeStore } treeStore
-     * @param { int } selectedNodeId
+     * @param { int } profileId
+     * @param { string } adapter
      */
-    addNewNode: function(treePanel, treeStore, selectedNodeId) {
-        var me = this;
+    addNewNode: function(treePanel, profileId, adapter) {
+        Ext.create('Shopware.apps.SwagImportExport.view.profile.window.Column', {
+            treePanel: treePanel,
+            profileId: profileId,
+            adapter: adapter,
+            autoShow: true
+        });
+    },
 
-        var node = treeStore.getById(selectedNodeId);
-        if (node.get('type') !== 'iteration') {
-            node.set('type', '');
-            node.set('iconCls', '');
+    /**
+     * @param { Shopware.apps.SwagImportExport.view.profile.window.Column } win
+     */
+    addNode: function(win) {
+        var me = this,
+            treePanel = win.treePanel,
+            form = win.formPanel,
+            formValues = form.getForm().getValues(),
+            store = treePanel.getStore(),
+            parentNode = treePanel.getSelectionModel().getSelection()[0],
+            newNode;
+
+        if (parentNode.get('type') === 'leaf') {
+            parentNode = parentNode.parentNode;
         }
 
-        var data = { };
-        if (node.get('inIteration') === true) {
-            data = { text: "New Node", expanded: true, type: 'leaf', iconCls: 'sprite-blue-document-text', inIteration: true, adapter: node.get('adapter') };
-        } else {
-            data = { text: "New Node", expanded: true };
-        }
-        var newNode = node.appendChild(data);
-        treeStore.sync({
+        newNode = store.model.create({
+            text: formValues.nodeName,
+            expanded: true,
+            type: 'leaf',
+            iconCls: 'sprite-blue-document-text',
+            inIteration: true,
+            swColumn: formValues.swColumn,
+            defaultValue: formValues.defaultValue || '',
+            adapter: win.getAdapter()
+        });
+
+        parentNode.appendChild(newNode);
+
+        store.sync({
             failure: function(batch, options) {
                 var error = batch.exceptions[0].getError(),
                     msg = Ext.isObject(error) ? error.status + ' ' + error.statusText : error;
@@ -501,8 +567,13 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                 });
             },
             success: function() {
+                Shopware.Notification.createGrowlMessage(
+                    '{s name=swag_import_export/profile/save/title}Swag import export{/s}',
+                    '{s name=swag_import_export/profile/save/success}Successfully updated.{/s}'
+                );
+                win.close();
                 treePanel.expand();
-                treePanel.getSelectionModel().select(treeStore.getById(newNode.data.id));
+                treePanel.getSelectionModel().select(newNode);
             }
         });
     },
@@ -510,93 +581,96 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
     /**
      * Saves the changes of the currently selected node
      *
-     * @param { Ext.data.TreeStore } treeStore
-     * @param { int } selectedNodeId
-     * @param { string } nodeName
-     * @param { string } swColumn
+     * @param { Ext.tree.Panel } treePanel
+     * @param { Ext.data.NodeInterface } node
+     * @param { Ext.form.Panel } form
+     * @param callback
+     * @param scope
      */
-    saveNode: function(treePanel, treeStore, selectedNodeId, nodeName, swColumn, defaultValue, adapter, parentKey) {
-        var me = this;
+    saveNode: function(treePanel, node, form, callback, scope) {
+        var treeStore = treePanel.getStore(),
+            values;
 
-        var node = treeStore.getById(selectedNodeId);
-
-        if(!node) {
-            return;
-        }
-
-        node.set('text', nodeName);
-        node.set('swColumn', swColumn);
-        node.set('defaultValue', defaultValue);
+        values = form.getForm().getValues();
+        node.set('text', values.nodeName || '');
+        node.set('swColumn', values.swColumn || '');
+        node.set('defaultValue', values.defaultValue || '');
 
         // change only when in iteration (because otherwise adapter will be empty)
         if (node.get('type') === 'iteration') {
-            node.set('adapter', adapter);
-            node.set('parentKey', parentKey);
+            node.set('adapter', values.adapter || '');
+            node.set('parentKey', values.parentKey || '');
         }
 
-        treeStore.sync({
-            success: function() {
-                treePanel.getSelectionModel().deselectAll(true);
-                treePanel.expand();
-                treePanel.getSelectionModel().select(treeStore.getById(node.get('id')));
-            },
-            failure: function(batch, options) {
-                var error = batch.exceptions[0].getError(),
-                    msg = Ext.isObject(error) ? error.status + ' ' + error.statusText : error;
+        if (Ext.Object.getKeys(node.getChanges()).length > 0) {
+            treeStore.sync({
+                success: function() {
+                    return Ext.callback(callback, scope, [true, '{s name=swag_import_export/profile/save/success}Successfully updated.{/s}']);
+                },
+                failure: function(batch, options) {
+                    var error = batch.exceptions[0].getError(),
+                        msg = Ext.isObject(error) ? error.status + ' ' + error.statusText : error;
 
-                Ext.MessageBox.show({
-                    title: '{s name=swag_import_export/profile/save/failure_title}Save Failed{/s}',
-                    msg: msg,
-                    icon: Ext.Msg.ERROR,
-                    buttons: Ext.Msg.OK
-                });
-            }
-        });
+                    return Ext.callback(callback, scope, [false, msg]);
+                }
+            });
+        } else {
+            return Ext.callback(callback, scope, [true, '{s name=swag_import_export/profile/save/success}Successfully updated.{/s}']);
+        }
     },
 
     /**
      * Deletes the selected node
      */
-    deleteNode: function(treeStore, selectedNodeId, selModel) {
-        var me = this;
+    deleteNode: function(treePanel) {
         Ext.Msg.show({
             title: '{s name=swag_import_export/profile/delete/title}Delete Node?{/s}',
             msg: '{s name=swag_import_export/profile/delete/msg}Are you sure you want to permanently delete the node?{/s}',
             buttons: Ext.Msg.YESNO,
-            fn: function(response) {
-                if (response === 'yes') {
-                    var node = treeStore.getById(selectedNodeId),
-                        parentNode = node.parentNode,
-                        selectNode = node.previousSibling;
+            fn: function(btn) {
+                if (btn === 'yes') {
+                    var selModel = treePanel.getSelectionModel(),
+                        store = treePanel.getStore(),
+                        selection = selModel.getSelection();
 
-                    if (!selectNode) {
-                        selectNode = node.nextSibling;
-                    }
-                    if (!selectNode) {
-                        selectNode = node.parentNode;
-                    }
+                    for (var i = 0, count = selection.length; i < count; i++) {
+                        var node = selection[i],
+                            parentNode = node.parentNode,
+                            selectNode = node.previousSibling;
 
-                    parentNode.removeChild(node);
+                        if (!selectNode) {
+                            selectNode = node.nextSibling;
+                        }
+                        if (!selectNode) {
+                            selectNode = node.parentNode;
+                        }
 
-                    if (parentNode.get('type') !== 'iteration' && parentNode.get('inIteration') === true) {
-                        var bChildNodes = false;
+                        parentNode.removeChild(node);
 
-                        // check if there is at least one leaf, iteration or node
-                        for (var i = 0; i < parentNode.childNodes.length; i++) {
-                            if (parentNode.childNodes[i].get('type') !== 'attribute') {
-                                bChildNodes = true;
-                                break;
+                        if (parentNode.get('type') !== 'iteration' && parentNode.get('inIteration') === true) {
+                            var bChildNodes = false;
+
+                            // check if there is at least one leaf, iteration or node
+                            for (var j = 0; j < parentNode.childNodes.length; j++) {
+                                if (parentNode.childNodes[j].get('type') !== 'attribute') {
+                                    bChildNodes = true;
+                                    break;
+                                }
+                            }
+
+                            if (!bChildNodes) {
+                                parentNode.set('type', 'leaf');
+                                parentNode.set('iconCls', 'sprite-blue-document-text');
                             }
                         }
-
-                        if (!bChildNodes) {
-                            parentNode.set('type', 'leaf');
-                            parentNode.set('iconCls', 'sprite-icon_taskbar_top_inhalte_active');
-                        }
                     }
 
-                    treeStore.sync({
+                    store.sync({
                         success: function() {
+                            Shopware.Notification.createGrowlMessage(
+                                '{s name=swag_import_export/profile/save/title}Swag import export{/s}',
+                                '{s name=swag_import_export/profile/save/success}Successfully updated.{/s}'
+                            );
                             selModel.deselectAll();
                             if (selectNode) {
                                 selModel.select(selectNode);
@@ -627,14 +701,15 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
      * @param { int } selectedNodeId
      */
     addNewAttribute: function(treePanel, treeStore, selectedNodeId) {
-        var me = this;
-        var node = treeStore.getById(selectedNodeId);
+        var node = treeStore.getById(selectedNodeId),
+            data,
+            newNode;
+
         node.set('leaf', false);
         node.set('expanded', true);
 
-        var children = node.childNodes;
-        var data = { text: "New Attribute", leaf: true, type: 'attribute', iconCls: 'sprite-sticky-notes-pin', inIteration: true, adapter: node.get('adapter') };
-        var newNode = node.appendChild(data);
+        data = { text: "New Attribute", leaf: true, type: 'attribute', iconCls: 'sprite-sticky-notes-pin', inIteration: true, adapter: node.get('adapter') };
+        newNode = node.appendChild(data);
 
         treeStore.sync({
             failure: function(batch, options) {
@@ -649,6 +724,10 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                 });
             },
             success: function() {
+                Shopware.Notification.createGrowlMessage(
+                    '{s name=swag_import_export/profile/save/title}Swag import export{/s}',
+                    '{s name=swag_import_export/profile/save/success}Successfully updated.{/s}'
+                );
                 treePanel.expand();
                 treePanel.getSelectionModel().select(treeStore.getById(newNode.getId()));
             }

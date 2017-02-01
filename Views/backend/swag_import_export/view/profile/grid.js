@@ -198,7 +198,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Grid', {
         if (Ext.isEmpty(record.get('translation'))) {
             return value;
         }
-        return Ext.String.format('[0] ([1])', record.get('translation'), value);
+        return Ext.String.format('[0] ([1])', value, record.get('translation'));
     },
 
     renderDefault: function(value, meta, record) {

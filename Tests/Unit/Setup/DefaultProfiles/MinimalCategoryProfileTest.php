@@ -40,7 +40,7 @@ class MinimalCategoryProfileTest extends \PHPUnit_Framework_TestCase
             $this->assertArrayHasKey('name', $node, "Current array: " . print_r($node, true));
         });
 
-        $profileJson = json_encode($minimalCategoryProfile->jsonSerialize());
+        $profileJson = json_encode($minimalCategoryProfile);
         $this->assertJson($profileJson);
     }
 }

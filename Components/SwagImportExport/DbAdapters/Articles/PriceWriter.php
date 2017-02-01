@@ -14,6 +14,7 @@ use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Validators\Articles\PriceValidator;
 use Shopware\Components\SwagImportExport\DataManagers\Articles\PriceDataManager;
+use Shopware\Models\Article\Price;
 
 class PriceWriter
 {
@@ -92,7 +93,7 @@ class PriceWriter
             $price['articleDetailsId'] = $articleDetailId;
             $price['customerGroupKey'] = $price['priceGroup'];
             $price = $this->calculatePrice($price, $newPrice, $tax);
-            $builder = $this->dbalHelper->getQueryBuilderForEntity($price, 'Shopware\Models\Article\Price', $priceId);
+            $builder = $this->dbalHelper->getQueryBuilderForEntity($price, Price::class, $priceId);
             $builder->execute();
         }
     }

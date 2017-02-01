@@ -25,7 +25,15 @@ class ArticleAccessoryProfile implements \JsonSerializable, ProfileMetaData
      */
     public function getName()
     {
-        return "default_article_accessories";
+        return 'default_article_accessories';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getDescription()
+    {
+        return 'default_article_accessories_description';
     }
 
     /**
@@ -53,7 +61,7 @@ class ArticleAccessoryProfile implements \JsonSerializable, ProfileMetaData
                             'parentKey' => '',
                             'shopwareField' => '',
                             'children' => $this->getArticleAccessoryFields(),
-                            'attributes' => NULL
+                            'attributes' => null
                         ]
                     ],
                     'shopwareField' => ''
