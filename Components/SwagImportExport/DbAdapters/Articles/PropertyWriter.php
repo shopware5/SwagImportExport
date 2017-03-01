@@ -10,6 +10,7 @@ namespace Shopware\Components\SwagImportExport\DbAdapters\Articles;
 
 use Doctrine\DBAL\Connection;
 use Enlight_Components_Db_Adapter_Pdo_Mysql as PDOConnection;
+use Doctrine\DBAL\Query\QueryBuilder as DBALQueryBuilder;
 use Shopware\Components\SwagImportExport\DbalHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
@@ -96,6 +97,9 @@ class PropertyWriter
         if (!$propertiesData) {
             return;
         }
+
+        $updateValueRelations = [];
+
         $optionRelationInsertStatements = [];
         $valueRelationInsertStatements = [];
 
@@ -131,6 +135,8 @@ class PropertyWriter
 
                 $optionRelationInsertStatements[] = "($optionId, $filterGroupId)";
                 $valueRelationInsertStatements[] = "($valueId, $articleId)";
+
+                $updateValueRelations[$articleId][] = $valueId;
                 continue;
             }
         }
@@ -140,7 +146,14 @@ class PropertyWriter
         }
 
         if ($valueRelationInsertStatements) {
+            $originalValueRelations = $this->getOriginalValueRelations(array_keys($updateValueRelations));
+
+            $unspecifiedValueRelations = [];
+            foreach (array_keys($originalValueRelations) as $articleID) {
+                $unspecifiedValueRelations[$articleID] = array_diff($originalValueRelations[$articleID], $updateValueRelations[$articleID]);
+            }
             $this->insertOrUpdateValueRelations($valueRelationInsertStatements);
+            $this->removeValueRelations($unspecifiedValueRelations);
         }
     }
 
@@ -180,6 +193,30 @@ class PropertyWriter
     }
 
     /**
+     * @param array $valueRelationsToRemove
+     */
+    protected function removeValueRelations(array $valueRelationsToRemove)
+    {
+        $deleteValueRelations = [];
+        foreach ($valueRelationsToRemove as $articleID => $valueIDs) {
+            foreach ($valueIDs as $valueID) {
+                $quotedArticleId = $this->connection->quote($articleID);
+                $quotedRelationId = $this->connection->quote($valueID);
+                $deleteValueRelations[] = "($quotedArticleId, $quotedRelationId)";
+            }
+        }
+
+        if ($deleteValueRelations) {
+            $implodedDeleteValueRelations = implode(',', $deleteValueRelations);
+            $queryBuilder = new DBALQueryBuilder($this->connection);
+            $queryBuilder->delete('s_filter_articles');
+            $queryBuilder->where("(articleID, valueID) IN ($implodedDeleteValueRelations)");
+            $queryBuilder->execute();
+        }
+    }
+
+
+    /**
      * Updates/Creates relation between articles and property values
      *
      * @param array $relations
@@ -195,6 +232,24 @@ class PropertyWriter
         ";
 
         $this->connection->exec($sql);
+    }
+
+    /**
+     * @param array $articleIds
+     * @return array
+     */
+    private function getOriginalValueRelations(array $articleIds)
+    {
+        $queryBuilder = new DBALQueryBuilder($this->connection);
+        $queryBuilder->select('articleID', 'valueID');
+        $queryBuilder->from('s_filter_articles');
+        $queryBuilder->where("articleID IN (:articleIds)");
+        $queryBuilder->setParameter('articleIds', $articleIds, Connection::PARAM_INT_ARRAY);
+        $fetch = $queryBuilder->execute()->fetchAll();
+        foreach ($fetch as $valueRelations) {
+            $originalValueRelations[$valueRelations['articleID']][] = $valueRelations['valueID'];
+        }
+        return $originalValueRelations;
     }
 
     /**
