@@ -263,12 +263,12 @@ class CategoryWriter
      */
     protected function isLeaf($categoryId)
     {
-        $isLeaf = $this->db->fetchOne(
+        $isParent = $this->db->fetchOne(
             "SELECT id FROM s_categories WHERE parent = ?",
             [$categoryId]
         );
 
-        return is_numeric($isLeaf);
+        return $isParent === false;
     }
 
     /**
