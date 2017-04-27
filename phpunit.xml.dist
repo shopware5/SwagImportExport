@@ -4,10 +4,6 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/5.3/phpunit.xsd"
 >
-    <php>
-        <env name="SHOPWARE_ENV" value="testing" />
-    </php>
-
     <testsuites>
         <testsuite name="Shopware ImportExport Plugin">
             <directory>./Tests/Functional</directory>
@@ -33,6 +29,11 @@
     <filter>
         <whitelist>
             <directory suffix=".php">./</directory>
+
+            <exclude>
+                <directory suffix=".php">./Tests</directory>
+                <directory suffix=".php">./vendor</directory>
+            </exclude>
         </whitelist>
     </filter>
 </phpunit>

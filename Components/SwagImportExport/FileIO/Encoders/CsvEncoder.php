@@ -8,14 +8,17 @@
 
 namespace Shopware\Components\SwagImportExport\FileIO\Encoders;
 
+use Shopware\Components\Converter\CsvConverter;
+
 /**
  * CsvEncoder
  */
-class CsvEncoder extends \Shopware_Components_Convert_Csv
+class CsvEncoder extends CsvConverter
 {
     /**
      * @param $line
      * @param $keys
+     *
      * @return string
      */
     public function _encode_line($line, $keys)
@@ -25,7 +28,7 @@ class CsvEncoder extends \Shopware_Components_Convert_Csv
         if (isset($this->sSettings['fieldmark'])) {
             $fieldmark = $this->sSettings['fieldmark'];
         } else {
-            $fieldmark = "";
+            $fieldmark = '';
         }
         $lastkey = end($keys);
         foreach ($keys as $key) {
@@ -36,7 +39,7 @@ class CsvEncoder extends \Shopware_Components_Convert_Csv
                     || strpos($line[$key], $this->sSettings['separator']) !== false
                 ) {
                     $csv .= $fieldmark;
-                    if ($this->sSettings['encoding'] == "UTF-8") {
+                    if ($this->sSettings['encoding'] == 'UTF-8') {
                         $line[$key] = utf8_decode($line[$key]);
                     }
                     if (!empty($fieldmark)) {

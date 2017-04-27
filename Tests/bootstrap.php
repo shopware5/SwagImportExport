@@ -10,20 +10,15 @@ use SwagImportExport\Tests\Helper\DataProvider\NewsletterDataProvider;
 use SwagImportExport\Tests\Helper\DataProvider\ProfileDataProvider;
 use Tests\Helper\BackendControllerTestHelper;
 
-include_once __DIR__ . '/../../../../../../../tests/Functional/bootstrap.php';
+require __DIR__ . '/../../../../../../../tests/Functional/bootstrap.php';
 
 class ImportExportTestKernel extends TestKernel
 {
     const IMPORT_FILES_DIR = __DIR__ . '/Helper/ImportFiles/';
 
-    public function getConfig()
-    {
-        return __DIR__ . '/../../../../../../../config_testing.php';
-    }
-
     public static function start()
     {
-        $kernel = new \Shopware\Kernel('testing', true);
+        $kernel = new self(getenv('SHOPWARE_ENV') ?: 'testing', true);
         $kernel->boot();
 
         $container = $kernel->getContainer();
@@ -35,8 +30,10 @@ class ImportExportTestKernel extends TestKernel
         $shop = $repository->getActiveDefault();
         $shop->registerResources();
 
+        $_SERVER['HTTP_HOST'] = $shop->getHost();
+
         if (!self::assertPlugin('SwagImportExport')) {
-            throw new \Exception("Plugin ImportExport must be installed.");
+            throw new \Exception('Plugin ImportExport must be installed.');
         }
 
         Shopware()->Loader()->registerNamespace('SwagImportExport\Tests', __DIR__ . '/../Tests/');
@@ -51,13 +48,14 @@ class ImportExportTestKernel extends TestKernel
 
     /**
      * @param string $name
-     * @return boolean
+     *
+     * @return bool
      */
     private static function assertPlugin($name)
     {
         $sql = 'SELECT 1 FROM s_core_plugins WHERE name = ? AND active = 1';
 
-        return (boolean) Shopware()->Container()->get('dbal_connection')->fetchColumn($sql, [$name]);
+        return (bool) Shopware()->Container()->get('dbal_connection')->fetchColumn($sql, [$name]);
     }
 
     /**
