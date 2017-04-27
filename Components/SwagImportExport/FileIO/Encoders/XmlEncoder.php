@@ -8,33 +8,36 @@
 
 namespace Shopware\Components\SwagImportExport\FileIO\Encoders;
 
+use Shopware\Components\Converter\XmlConverter;
+
 /**
  * XmlEncoder
  */
-class XmlEncoder extends \Shopware_Components_Convert_Xml
+class XmlEncoder extends XmlConverter
 {
     /**
      * @param $array
-     * @param int $pos
+     * @param int    $pos
      * @param string $ekey
+     *
      * @return string
      */
-    public function _encode($array, $pos = 0, $ekey = "")
+    public function _encode($array, $pos = 0, $ekey = '')
     {
-        $ret = "";
+        $ret = '';
         if ($this->sSettings['padding'] !== false) {
             $pad = str_repeat($this->sSettings['padding'], $pos);
         } else {
-            $pad = "";
+            $pad = '';
         }
         foreach ($array as $key => $item) {
             if (!empty($ekey)) {
                 $key = $ekey;
             }
-            $attributes = "";
+            $attributes = '';
             if (is_array($item) && isset($item['_attributes'])) {
                 foreach ($item['_attributes'] as $k => $v) {
-                    $attributes .= " $k=\"" . htmlspecialchars($v) . "\"";
+                    $attributes .= " $k=\"" . htmlspecialchars($v) . '"';
                 }
                 if (isset($item['_value'])) {
                     $item = $item['_value'];
@@ -54,7 +57,7 @@ class XmlEncoder extends \Shopware_Components_Convert_Xml
                 }
             } else {
                 if ($this->hasSpecialCharacters($item)) {
-                    $item = str_replace("]]>", "]]]]><![CDATA[>", $item);
+                    $item = str_replace(']]>', ']]]]><![CDATA[>', $item);
                     $ret .= "$pad<$key$attributes><![CDATA[" . $item . "]]></$key>{$this->sSettings['newline']}";
                 } else {
                     if ($item === false) {
@@ -71,21 +74,23 @@ class XmlEncoder extends \Shopware_Components_Convert_Xml
 
     /**
      * @param $item
+     *
      * @return bool
      */
     private function isEmpty($item)
     {
-        return (empty($item) && $item !== '0' && $item !== false && $item !== 0);
+        return empty($item) && $item !== '0' && $item !== false && $item !== 0;
     }
 
     /**
      * Checks if special xml characters were used.
      *
      * @param $item
+     *
      * @return int
      */
     private function hasSpecialCharacters($item)
     {
-        return preg_match("#<|>|&(?<!amp;)#", $item);
+        return preg_match('#<|>|&(?<!amp;)#', $item);
     }
 }
