@@ -1,5 +1,5 @@
-//{namespace name="backend/swag_import_export/view/main"}
-//{block name="backend/swag_import_export/controller/export"}
+// {namespace name="backend/swag_import_export/view/main"}
+// {block name="backend/swag_import_export/controller/export"}
 Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
     extend: 'Ext.app.Controller',
     snippets: {
@@ -8,7 +8,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
         process: '{s name=swag_import_export/export/process}Exporting... {/s}'
     },
     /**
-     * This method creates listener for events fired from the export 
+     * This method creates listener for events fired from the export
      */
     init: function() {
         var me = this;
@@ -32,17 +32,17 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
     },
     onExport: function(btn) {
         var me = this,
-                form = btn.up('form'),
-                values = form.getValues();
-      
+            form = btn.up('form'),
+            values = form.getValues();
+
         if (Ext.isEmpty(values.profile) || values.profile < 1 || Ext.isEmpty(values.format)) {
             Shopware.Notification.createGrowlMessage(
-                    '{s name=swag_import_export/export/error_title}Swag import export{/s}',
-                    '{s name=swag_import_export/export/error_msg}Please select export configuration{/s}'
-                    );
+                '{s name=swag_import_export/export/error_title}Swag import export{/s}',
+                '{s name=swag_import_export/export/error_msg}Please select export configuration{/s}'
+            );
             return false;
         }
-        
+
         me.parameters = values;
 
         me.onCreateExportWindow();
@@ -50,7 +50,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
     /**
      * Triggers if the resume button was pressed
      * in the previous operation window.
-     * 
+     *
      * @param object Shopware.apps.SwagImportExport.model.Session
      */
     onResume: function(record, sessionStore) {
@@ -61,9 +61,9 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
             profile: record.get('profileId'),
             format: record.get('format')
         };
-        
+
         me.sessionStore = sessionStore;
-        
+
         me.getConfig();
     },
     /**
@@ -73,18 +73,17 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
         var me = this;
 
         me.getBatchConfig = me.getConfig();
-
     },
     /**
      * Triggers if the start exporting button was pressed
      * in the export window.
-     * 
+     *
      * @param object Enlight.app.SubWindow win
      * @param object Ext.button.Button btn
      */
     onStartProcess: function(win, btn) {
         var me = this;
-        
+
         me.cancelOperation = false;
 
         me.runRequest(win);
@@ -116,7 +115,8 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
                 paymentstate: me.parameters.paymentstate,
                 stockFilter: me.parameters.stockFilter,
                 customFilterDirection: me.parameters.customFilterCombo,
-                customFilterValue: me.parameters.filterThanValue
+                customFilterValue: me.parameters.filterThanValue,
+                customerStreamId: me.parameters.customerStreamId
             }
         };
 
@@ -134,7 +134,6 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
                 me.window = me.getView('Shopware.apps.SwagImportExport.view.manager.window.Export').create({
                     batchConfig: me.batchConfig
                 }).show();
-
             },
             failure: function(response) {
                 Shopware.Msg.createStickyGrowlMessage({
@@ -168,7 +167,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
             success: function(response) {
                 var result = Ext.decode(response.responseText);
 
-                if(result.success === false){
+                if (result.success === false) {
                     Shopware.Msg.createStickyGrowlMessage({
                         title: '{s name=swag_import_export/export/error}Export error{/s}',
                         text: result.msg
@@ -189,12 +188,11 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
                         );
 
                 if (me.batchConfig.position === me.batchConfig.totalCount) {
-					me.fileName = result.data.fileName;
+                    me.fileName = result.data.fileName;
                     me.onProcessFinish(win);
                 } else {
                     me.runRequest(win);
                 }
-
             },
             failure: function(response) {
                 Shopware.Msg.createStickyGrowlMessage({
@@ -206,7 +204,6 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
                 win.cancelButton.disable();
             }
         });
-
     },
     /**
      * Sets cancelOperation to true which will be checked in the
@@ -221,6 +218,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
 
         me.cancelOperation = true;
     },
+
     /**
      * Will be called when export finish
      *
@@ -228,22 +226,22 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
      */
     onProcessFinish: function(win) {
         var me = this;
-        
+
         win.closeButton.enable();
         win.cancelButton.hide();
         win.downloadButton.show();
         win.exportProgress.updateText(me.snippets.finished + me.batchConfig.position + ' / ' + me.batchConfig.totalCount);
-        
-        if (!Ext.isEmpty(me.sessionStore)){
+
+        if (!Ext.isEmpty(me.sessionStore)) {
             me.sessionStore.reload();
         }
-        
     },
+
     onDownloadFile: function() {
         var me = this,
             url = '{url action="downloadFile"}' + '?fileName=' + me.fileName;
-    
-        window.open(url, '_blank');        
+
+        window.open(url, '_blank');
     }
 });
-//{/block}
+// {/block}

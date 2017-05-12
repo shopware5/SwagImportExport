@@ -12,6 +12,7 @@ use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
+use Shopware\Components\SwagImportExport\Utils\SwagVersionHelper;
 use Shopware\Components\SwagImportExport\Validators\AddressValidator;
 use Shopware\Models\Attribute\CustomerAddress;
 use Shopware\Models\Country\Country;
@@ -48,7 +49,7 @@ class AddressDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function read($ids, $columns)
     {
@@ -65,34 +66,41 @@ class AddressDbAdapter implements DataDbAdapter
         $addresses = $queryBuilder->getQuery()->getArrayResult();
 
         return [
-            'address' => $addresses
+            'address' => $addresses,
         ];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function readRecordIds($start = 0, $limit = 0, $filter = '')
+    public function readRecordIds($start = 0, $limit = 0, $filter)
     {
-        $builder = $this->modelManager->createQueryBuilder();
-        $builder->select('address.id')
-            ->from(Address::class, 'address')
-            ->orderBy('address.id');
+        $query = $this->modelManager->getConnection()->createQueryBuilder();
+        $query->select(['address.id']);
+        $query->from('s_user_addresses', 'address');
+        $query->orderBy('address.id');
 
-        if ($start > 0) {
-            $builder->setFirstResult($start);
+        if ($start) {
+            $query->setFirstResult($start);
         }
 
-        if ($limit > 0) {
-            $builder->setMaxResults($limit);
+        if ($limit) {
+            $query->setMaxResults($limit);
         }
 
-        $ids = $builder->getQuery()->getArrayResult();
-        return array_column($ids, 'id');
+        if (SwagVersionHelper::hasMinimumVersion('5.3.0')) {
+            if (array_key_exists('customerStreamId', $filter)) {
+                $query->innerJoin('address', 's_customer_streams_mapping', 'mapping', 'mapping.customer_id = address.user_id AND mapping.stream_id = :streamId');
+                $query->setParameter(':streamId', $filter['customerStreamId']);
+                unset($filter['customerStreamId']);
+            }
+        }
+
+        return $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getDefaultColumns()
     {
@@ -115,14 +123,14 @@ class AddressDbAdapter implements DataDbAdapter
             'customer.email as email',
             'customer.number as customernumber',
             'country.id as countryID',
-            'state.id as stateID'
+            'state.id as stateID',
         ];
 
         return array_merge($defaultColumns, $this->getAttributeColumns());
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getSections()
     {
@@ -130,7 +138,7 @@ class AddressDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getColumns($section = [])
     {
@@ -138,7 +146,7 @@ class AddressDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function write($records)
     {
@@ -167,7 +175,6 @@ class AddressDbAdapter implements DataDbAdapter
 
                 $addressModel->fromArray($addressRecord);
 
-
                 $this->setCountry($addressModel, $addressRecord);
 
                 $attributeModel = $this->getAttributeModel($addressRecord, $addressModel);
@@ -182,7 +189,7 @@ class AddressDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getUnprocessedData()
     {
@@ -198,7 +205,7 @@ class AddressDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getLogMessages()
     {
@@ -206,7 +213,7 @@ class AddressDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getLogState()
     {
@@ -214,7 +221,29 @@ class AddressDbAdapter implements DataDbAdapter
     }
 
     /**
+     * @param Address $addressModel
+     * @param array   $addressRecord
+     *
+     * @return Address
+     */
+    protected function setCountry(Address $addressModel, array $addressRecord)
+    {
+        if (!$addressModel->getCountry() && $addressRecord['countryID']) {
+            $addressModel->setCountry($this->modelManager->find(Country::class, $addressRecord['countryID']));
+
+            return $addressModel;
+        }
+
+        if ($addressModel->getCountry()->getId() !== $addressRecord['countryID'] && $addressRecord['countryID'] > 0) {
+            $addressModel->setCountry($this->modelManager->find(Country::class, $addressRecord['countryID']));
+        }
+
+        return $addressModel;
+    }
+
+    /**
      * @param array $addressRecord
+     *
      * @return null|Customer
      */
     private function findCustomerByEmailAndNumber(array $addressRecord)
@@ -223,12 +252,13 @@ class AddressDbAdapter implements DataDbAdapter
 
         return $customerRepository->findOneBy([
             'number' => $addressRecord['customernumber'],
-            'email' => $addressRecord['email']
+            'email' => $addressRecord['email'],
         ]);
     }
 
     /**
      * @param array $addressRecord
+     *
      * @return null|Address
      */
     private function getAddressModel(array $addressRecord)
@@ -242,11 +272,13 @@ class AddressDbAdapter implements DataDbAdapter
         if (!$addressModel) {
             $addressModel = new Address();
         }
+
         return $addressModel;
     }
 
     /**
      * @param array $addressRecord
+     *
      * @return null|State
      */
     private function findStateById(array $addressRecord)
@@ -254,11 +286,13 @@ class AddressDbAdapter implements DataDbAdapter
         if ($addressRecord['stateID']) {
             return $this->modelManager->find(State::class, $addressRecord['stateID']);
         }
+
         return null;
     }
 
     /**
      * @param array $addressRecord
+     *
      * @return Customer
      */
     private function getCustomer(array $addressRecord)
@@ -271,6 +305,7 @@ class AddressDbAdapter implements DataDbAdapter
         if (null === $customer) {
             $customer = $this->findCustomerByEmailAndNumber($addressRecord);
         }
+
         return $customer;
     }
 
@@ -291,8 +326,9 @@ class AddressDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param array $addressRecord
+     * @param array   $addressRecord
      * @param Address $addressModel
+     *
      * @return CustomerAddress
      */
     private function getAttributeModel(array $addressRecord, Address $addressModel)
@@ -318,6 +354,7 @@ class AddressDbAdapter implements DataDbAdapter
 
     /**
      * @param string $message
+     *
      * @throws \Exception
      */
     private function saveErrorMessage($message)
@@ -340,25 +377,8 @@ class AddressDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param Address $addressModel
      * @param array $addressRecord
-     * @return Address
-     */
-    protected function setCountry(Address $addressModel, array $addressRecord)
-    {
-        if (!$addressModel->getCountry() && $addressRecord['countryID']) {
-            $addressModel->setCountry($this->modelManager->find(Country::class, $addressRecord['countryID']));
-            return $addressModel;
-        }
-
-        if ($addressModel->getCountry()->getId() !== $addressRecord['countryID'] && $addressRecord['countryID'] > 0) {
-            $addressModel->setCountry($this->modelManager->find(Country::class, $addressRecord['countryID']));
-        }
-        return $addressModel;
-    }
-
-    /**
-     * @param array $addressRecord
+     *
      * @return null|Address
      */
     private function createAddressWithId(array $addressRecord)
@@ -372,14 +392,17 @@ class AddressDbAdapter implements DataDbAdapter
           ', $addressRecord);
 
         $addressId = $connection->lastInsertId();
+
         return $this->modelManager->find(Address::class, $addressId);
     }
 
     /**
      * @param Address $addressModel
-     * @param array $addressRecord
-     * @return array
+     * @param array   $addressRecord
+     *
      * @throws AdapterException
+     *
+     * @return array
      */
     private function setCustomer(Address $addressModel, array $addressRecord)
     {
@@ -405,9 +428,11 @@ class AddressDbAdapter implements DataDbAdapter
 
     /**
      * @param Address $addressModel
-     * @param array $addressRecord
-     * @return array|void
+     * @param array   $addressRecord
+     *
      * @throws AdapterException
+     *
+     * @return array|void
      */
     private function setState(Address $addressModel, array $addressRecord)
     {

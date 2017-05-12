@@ -13,8 +13,14 @@
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 
-//{namespace name="backend/swag_import_export/view/main"}
-//{block name="backend/swag_import_export/app"}
+Shopware.app.Application.shopware53Installed = false;
+
+/* {if $shopware53Installed} */
+Shopware.app.Application.shopware53Installed = true;
+/* {/if} */
+
+// {namespace name="backend/swag_import_export/view/main"}
+// {block name="backend/swag_import_export/app"}
 Ext.define('Shopware.apps.SwagImportExport', {
 
     /**
@@ -59,16 +65,16 @@ Ext.define('Shopware.apps.SwagImportExport', {
         'profile.window.Mappings',
         'profile.window.Iterator',
         'profile.window.Column',
-		'profile.Profile',
+        'profile.Profile',
         'profile.Grid',
         'profile.Window',
         'profile.tree.DragAndDrop',
-		'manager.Manager',
-		'manager.Export',
-		'manager.Import',
-		'manager.Session',
-		'manager.window.Export',
-		'manager.window.Import',
+        'manager.Manager',
+        'manager.Export',
+        'manager.Import',
+        'manager.Session',
+        'manager.window.Export',
+        'manager.window.Import',
         'manager.window.Log',
         'log.Log'
     ],
@@ -102,6 +108,6 @@ Ext.define('Shopware.apps.SwagImportExport', {
         return this.getController('Main').mainWindow;
     }
 });
-    //{include file="backend/category/model/tree.js"}
-    //{include file="backend/category/store/tree.js"}
-//{/block}
+    // {include file="backend/category/model/tree.js"}
+    // {include file="backend/category/store/tree.js"}
+// {/block}

@@ -12,9 +12,10 @@ class SwagVersionHelper
 {
     /**
      * @param string $version
-     * @return boolean
+     *
+     * @return bool
      */
-    public static function isDeprecated($version)
+    public static function hasMinimumVersion($version)
     {
         $actualVersion = Shopware()->Config()->version;
 

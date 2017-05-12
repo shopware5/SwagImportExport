@@ -25,17 +25,17 @@ class TranslationWriter
     private $manager;
 
     /**
-     * @var Connection $connection
+     * @var Connection
      */
     private $connection;
 
     /**
-     * @var PDOConnection $db
+     * @var PDOConnection
      */
     private $db;
 
     /**
-     * @var TranslationComponent $writer
+     * @var TranslationComponent
      */
     private $writer;
 
@@ -57,31 +57,32 @@ class TranslationWriter
     }
 
     /**
-     * @param int $articleId
-     * @param int $articleDetailId
-     * @param int $mainDetailId
+     * @param int   $articleId
+     * @param int   $articleDetailId
+     * @param int   $mainDetailId
      * @param array $translations
+     *
      * @throws AdapterException
      */
     public function write($articleId, $articleDetailId, $mainDetailId, $translations)
     {
-        $whiteList = array(
+        $whiteList = [
             'name',
             'description',
             'descriptionLong',
             'metaTitle',
             'keywords',
-        );
+        ];
 
-        $variantWhiteList = array(
+        $variantWhiteList = [
             'additionalText',
             'packUnit',
-        );
+        ];
 
         $whiteList = array_merge($whiteList, $variantWhiteList);
 
         // check for v5.3 deprecations
-        if (!SwagVersionHelper::isDeprecated('5.3.0')) {
+        if (!SwagVersionHelper::hasMinimumVersion('5.3.0')) {
             //legacy attributes from s_core_engine_elements
             $legacyAttributes = $this->getLegacyTranslationAttr();
 
@@ -145,26 +146,13 @@ class TranslationWriter
     }
 
     /**
-     * @param $translation
-     * @return bool
-     */
-    private function isValid($translation)
-    {
-        if (!isset($translation['languageId']) || empty($translation['languageId'])) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
      * Returns all shops
      *
      * @return array
      */
     public function getShops()
     {
-        $shops = array();
+        $shops = [];
         $result = $this->connection->fetchAll('SELECT `id`, `name` FROM s_core_shops');
 
         foreach ($result as $row) {
@@ -176,6 +164,7 @@ class TranslationWriter
 
     /**
      * @param int $shopId
+     *
      * @return string
      */
     public function getShop($shopId)
@@ -185,12 +174,28 @@ class TranslationWriter
 
     /**
      * Returns translation attributes
+     *
      * @deprecated To be removed in shopware 5.3
+     *
      * @return array
      */
     public function getLegacyTranslationAttr()
     {
         return $this->connection->fetchAll('SELECT `name` FROM s_core_engine_elements WHERE `translatable` = 1');
+    }
+
+    /**
+     * @param $translation
+     *
+     * @return bool
+     */
+    private function isValid($translation)
+    {
+        if (!isset($translation['languageId']) || empty($translation['languageId'])) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -213,6 +218,7 @@ class TranslationWriter
     /**
      * @param array $translation
      * @param array $whiteList
+     *
      * @return array
      */
     private function filterWhitelistedFields($translation, $whiteList)
@@ -223,6 +229,7 @@ class TranslationWriter
     /**
      * @param array $data
      * @param array $attributes
+     *
      * @return array
      */
     private function prepareAttributePrefix(array $data, array $attributes)

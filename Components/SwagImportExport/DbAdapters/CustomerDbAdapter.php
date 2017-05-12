@@ -10,18 +10,19 @@ namespace Shopware\Components\SwagImportExport\DbAdapters;
 
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Components\SwagImportExport\DataManagers\CustomerDataManager;
 use Shopware\Components\SwagImportExport\DataType\CustomerDataType;
-use Shopware\Models\Customer\Customer;
-use Shopware\Models\Customer\Address;
+use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\DataHelper;
 use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
-use Shopware\Components\SwagImportExport\Exception\AdapterException;
+use Shopware\Components\SwagImportExport\Utils\SwagVersionHelper;
 use Shopware\Components\SwagImportExport\Validators\CustomerValidator;
-use Shopware\Components\SwagImportExport\DataManagers\CustomerDataManager;
-use Shopware\Models\Customer\Group;
 use Shopware\Models\Country\Country;
 use Shopware\Models\Country\State;
+use Shopware\Models\Customer\Address;
+use Shopware\Models\Customer\Customer;
+use Shopware\Models\Customer\Group;
 use Shopware\Models\Shop\Shop;
 
 class CustomerDbAdapter implements DataDbAdapter
@@ -94,18 +95,8 @@ class CustomerDbAdapter implements DataDbAdapter
             $this->getBillingColumns(),
             $this->getShippingColumns()
         );
-        
-        return $default;
-    }
 
-    /**
-     * Return list with default values for fields which are empty or don't exists
-     *
-     * @return array
-     */
-    private function getDefaultValues()
-    {
-        return $this->defaultValues;
+        return $default;
     }
 
     /**
@@ -156,12 +147,12 @@ class CustomerDbAdapter implements DataDbAdapter
         if (!empty($attributesSelect)) {
             $columns = array_merge($columns, $attributesSelect);
         }
-        
+
         return $columns;
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getUnprocessedData()
     {
@@ -191,7 +182,7 @@ class CustomerDbAdapter implements DataDbAdapter
         ];
 
         $attributesSelect = $this->getAttributesFieldsByTableName('s_user_billingaddress_attributes', 'billingID', 'billingAttribute', 'attrBilling');
-        
+
         if (!empty($attributesSelect)) {
             $columns = array_merge($columns, $attributesSelect);
         }
@@ -224,13 +215,14 @@ class CustomerDbAdapter implements DataDbAdapter
         if (!empty($attributesSelect)) {
             $columns = array_merge($columns, $attributesSelect);
         }
-        
+
         return $columns;
     }
 
     /**
      * @param array $ids
      * @param array $columns
+     *
      * @return array
      */
     public function read($ids, $columns)
@@ -254,39 +246,43 @@ class CustomerDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param integer $start
-     * @param integer $limit
+     * @param int   $start
+     * @param int   $limit
      * @param array $filter
+     *
      * @return array
      */
     public function readRecordIds($start, $limit, $filter)
     {
-        $manager = $this->manager;
-
-        $builder = $manager->createQueryBuilder();
-        $builder->select('customer.id')
-                ->from(Customer::class, 'customer');
+        $query = $this->manager->getConnection()->createQueryBuilder();
+        $query->select(['customer.id']);
+        $query->from('s_user', 'customer');
 
         if ($start) {
-            $builder->setFirstResult($start);
+            $query->setFirstResult($start);
         }
 
         if ($limit) {
-            $builder->setMaxResults($limit);
+            $query->setMaxResults($limit);
         }
 
-        if (!empty($filter)) {
-            $builder->addFilter($filter);
+        if (SwagVersionHelper::hasMinimumVersion('5.3.0')) {
+            if (array_key_exists('customerStreamId', $filter)) {
+                $query->innerJoin('customer', 's_customer_streams_mapping', 'mapping', 'mapping.customer_id = customer.id AND mapping.stream_id = :streamId');
+                $query->setParameter(':streamId', $filter['customerStreamId']);
+            }
         }
 
-        $records = $builder->getQuery()->getResult();
-        $result = array_column($records, 'id');
+        $ids = $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
 
-        return $result;
+        return array_map(function ($id) {
+            return (int) $id;
+        }, $ids);
     }
 
     /**
      * @param array $records
+     *
      * @throws \Enlight_Event_Exception
      * @throws \Exception
      * @throws \Zend_Db_Adapter_Exception
@@ -311,7 +307,7 @@ class CustomerDbAdapter implements DataDbAdapter
 
         foreach ($records['default'] as $record) {
             try {
-                $customerCount++;
+                ++$customerCount;
                 $record = $this->validator->filterEmptyString($record);
 
                 $customer = $this->findExistingEntries($record);
@@ -424,9 +420,144 @@ class CustomerDbAdapter implements DataDbAdapter
     }
 
     /**
+     * @param string $message
+     *
+     * @throws \Exception
+     */
+    public function saveMessage($message)
+    {
+        $errorMode = $this->config->get('SwagImportExportErrorMode');
+
+        if ($errorMode === false) {
+            throw new \Exception($message);
+        }
+
+        $this->setLogMessages($message);
+        $this->setLogState('true');
+    }
+
+    /**
+     * @return array
+     */
+    public function getLogMessages()
+    {
+        return $this->logMessages;
+    }
+
+    /**
+     * @param array $logMessages
+     */
+    public function setLogMessages($logMessages)
+    {
+        $this->logMessages[] = $logMessages;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLogState()
+    {
+        return $this->logState;
+    }
+
+    /**
+     * @param $logState
+     */
+    public function setLogState($logState)
+    {
+        $this->logState = $logState;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSections()
+    {
+        return [
+            [
+                'id' => 'default',
+                'name' => 'default',
+            ],
+        ];
+    }
+
+    /**
+     * @param string $tableName
+     * @param string $columnName
+     * @param string $prefixField
+     * @param string $prefixSelect
+     *
+     * @return array
+     */
+    public function getAttributesFieldsByTableName($tableName, $columnName, $prefixField, $prefixSelect)
+    {
+        $stmt = $this->db->query("SHOW COLUMNS FROM $tableName");
+        $columns = $stmt->fetchAll();
+
+        $columnNames = [];
+        foreach ($columns as $column) {
+            if ($column['Field'] !== 'id' && $column['Field'] != $columnName) {
+                $columnNames[] = $column['Field'];
+            }
+        }
+
+        $attributesSelect = [];
+        foreach ($columnNames as $attribute) {
+            //underscore to camel case
+            //exmaple: underscore_to_camel_case -> underscoreToCamelCase
+            $attribute = str_replace(' ', '', ucwords(str_replace('_', ' ', $attribute)));
+            $attributesSelect[] = sprintf('%s.%s as %s%s', $prefixField, lcfirst($attribute), $prefixSelect, $attribute);
+        }
+
+        return $attributesSelect;
+    }
+
+    /**
+     * @param string $section
+     *
+     * @return bool|mixed
+     */
+    public function getColumns($section)
+    {
+        $method = 'get' . ucfirst($section) . 'Columns';
+
+        if (method_exists($this, $method)) {
+            return $this->{$method}();
+        }
+
+        return false;
+    }
+
+    /**
+     * @param array $columns
+     * @param array $ids
+     *
+     * @return \Shopware\Components\Model\QueryBuilder
+     */
+    public function getBuilder($columns, $ids)
+    {
+        $builder = $this->manager->createQueryBuilder();
+        $builder->select($columns)
+                ->from(Customer::class, 'customer')
+                ->join('customer.billing', 'billing')
+                ->leftJoin('customer.shipping', 'shipping')
+                ->leftJoin('customer.orders', 'orders', 'WITH', 'orders.status <> -1 AND orders.status <> 4')
+                ->leftJoin('billing.attribute', 'billingAttribute')
+                ->leftJoin('shipping.attribute', 'shippingAttribute')
+                ->leftJoin('customer.attribute', 'attribute')
+                ->groupBy('customer.id')
+                ->where('customer.id IN (:ids)')
+                ->setParameter('ids', $ids);
+
+        return $builder;
+    }
+
+    /**
      * @param array $record
-     * @return array|null|object
+     *
      * @throws AdapterException
+     *
+     * @return array|null|object
      */
     protected function findExistingEntries(array $record)
     {
@@ -436,7 +567,7 @@ class CustomerDbAdapter implements DataDbAdapter
 
         if (isset($record['customerNumber'])) {
             $customer = $this->manager->getRepository(Customer::class)->findOneBy([
-                'number' => $record['customerNumber']
+                'number' => $record['customerNumber'],
             ]);
         }
 
@@ -450,7 +581,7 @@ class CustomerDbAdapter implements DataDbAdapter
             $customer = $this->manager->getRepository(Customer::class)->findBy($filter);
 
             //checks for multiple email address
-            if (count($customer) > 0 && $customer[0]->getNumber() !== $record["customerNumber"]) {
+            if (count($customer) > 0 && $customer[0]->getNumber() !== $record['customerNumber']) {
                 $message = SnippetsHelper::getNamespace()
                     ->get('adapters/customer/multiple_email', 'There are existing email address/es with %s. Please provide subshopID');
                 throw new AdapterException(sprintf($message, $record['email']));
@@ -464,6 +595,7 @@ class CustomerDbAdapter implements DataDbAdapter
 
     /**
      * @param array $record
+     *
      * @throws AdapterException
      * @throws \Exception
      */
@@ -493,12 +625,14 @@ class CustomerDbAdapter implements DataDbAdapter
 
     /**
      * @param array $record
-     * @return array
+     *
      * @throws AdapterException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
      * @throws \Exception
+     *
+     * @return array
      */
     protected function prepareCustomer(array &$record)
     {
@@ -554,6 +688,7 @@ class CustomerDbAdapter implements DataDbAdapter
 
     /**
      * @param array $record
+     *
      * @return array
      */
     protected function prepareBilling(array &$record)
@@ -589,8 +724,9 @@ class CustomerDbAdapter implements DataDbAdapter
 
     /**
      * @param array $record
-     * @param boolean $newCustomer
+     * @param bool  $newCustomer
      * @param array $billing
+     *
      * @return array
      */
     protected function prepareShipping(array &$record, $newCustomer, array $billing)
@@ -637,9 +773,10 @@ class CustomerDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param array $customerData
-     * @param integer $customerId
-     * @param Customer|boolean $newCustomer
+     * @param array         $customerData
+     * @param int           $customerId
+     * @param Customer|bool $newCustomer
+     *
      * @throws \Zend_Db_Adapter_Exception
      */
     protected function insertCustomerAttributes(array $customerData, $customerId, $newCustomer)
@@ -657,8 +794,9 @@ class CustomerDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param integer $subShopID
-     * @return integer|null
+     * @param int $subShopID
+     *
+     * @return int|null
      */
     protected function preparePayment($subShopID)
     {
@@ -666,177 +804,61 @@ class CustomerDbAdapter implements DataDbAdapter
         if (!isset($subShopID) || $subShopID === '') {
             return $this->config->get('sDEFAULTPAYMENT');
         }
-        
+
         //get defaultPaymentId for subShiopId = $subShopID
         $defaultPaymentId = $this->getSubShopDefaultPaymentId($subShopID);
         if ($defaultPaymentId) {
             return unserialize($defaultPaymentId['value']);
         }
-        
+
         //get defaultPaymentId for mainShiopId
         $defaultPaymentId = $this->getMainShopDefaultPaymentId($subShopID);
         if ($defaultPaymentId) {
             return unserialize($defaultPaymentId['value']);
         }
+
         return $this->config->get('sDEFAULTPAYMENT');
     }
 
     /**
-     * @param integer $subShopID
+     * @param int $subShopID
+     *
      * @return array
      */
     protected function getSubShopDefaultPaymentId($subShopID)
     {
-        $query =  "SELECT `value`.value
+        $query = 'SELECT `value`.value
                    FROM s_core_config_elements AS element
                    JOIN s_core_config_values AS `value` ON `value`.element_id = element.id
                    WHERE `value`.shop_id = ?
-                         AND element.name = ?";
-        
+                         AND element.name = ?';
+
         return $this->db->fetchRow($query, [$subShopID, 'defaultpayment']);
     }
 
     /**
-     * @param integer $subShopID
+     * @param int $subShopID
+     *
      * @return array
      */
     protected function getMainShopDefaultPaymentId($subShopID)
     {
-        $query =  "SELECT `value`.value
+        $query = 'SELECT `value`.value
                    FROM s_core_config_elements AS element
                    JOIN s_core_config_values AS `value` ON `value`.element_id = element.id
                    WHERE `value`.shop_id = (SELECT main_id FROM s_core_shops WHERE id = ?)
-                         AND element.name = ?";
-        
+                         AND element.name = ?';
+
         return $this->db->fetchRow($query, [$subShopID, 'defaultpayment']);
     }
 
     /**
-     * @param string $message
-     * @throws \Exception
-     */
-    public function saveMessage($message)
-    {
-        $errorMode = $this->config->get('SwagImportExportErrorMode');
-
-        if ($errorMode === false) {
-            throw new \Exception($message);
-        }
-
-        $this->setLogMessages($message);
-        $this->setLogState('true');
-    }
-
-    /**
+     * Return list with default values for fields which are empty or don't exists
+     *
      * @return array
      */
-    public function getLogMessages()
+    private function getDefaultValues()
     {
-        return $this->logMessages;
-    }
-
-    /**
-     * @param array $logMessages
-     */
-    public function setLogMessages($logMessages)
-    {
-        $this->logMessages[] = $logMessages;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLogState()
-    {
-        return $this->logState;
-    }
-
-    /**
-     * @param $logState
-     */
-    public function setLogState($logState)
-    {
-        $this->logState = $logState;
-    }
-
-    /**
-     * @return array
-     */
-    public function getSections()
-    {
-        return [
-            [
-                'id' => 'default',
-                'name' => 'default'
-            ]
-        ];
-    }
-
-    /**
-     * @param string $tableName
-     * @param string $columnName
-     * @param string $prefixField
-     * @param string $prefixSelect
-     * @return array
-     */
-    public function getAttributesFieldsByTableName($tableName, $columnName, $prefixField, $prefixSelect)
-    {
-        $stmt = $this->db->query("SHOW COLUMNS FROM $tableName");
-        $columns = $stmt->fetchAll();
-
-        $columnNames = [];
-        foreach ($columns as $column) {
-            if ($column['Field'] !== 'id' && $column['Field'] != $columnName) {
-                $columnNames[] = $column['Field'];
-            }
-        }
-
-        $attributesSelect = [];
-        foreach ($columnNames as $attribute) {
-            //underscore to camel case
-            //exmaple: underscore_to_camel_case -> underscoreToCamelCase
-            $attribute = str_replace(' ', '', ucwords(str_replace('_', ' ', $attribute)));
-            $attributesSelect[] = sprintf('%s.%s as %s%s', $prefixField, lcfirst($attribute), $prefixSelect, $attribute);
-        }
-
-        return $attributesSelect;
-    }
-
-    /**
-     * @param string $section
-     * @return bool|mixed
-     */
-    public function getColumns($section)
-    {
-        $method = 'get' . ucfirst($section) . 'Columns';
-        
-        if (method_exists($this, $method)) {
-            return $this->{$method}();
-        }
-
-        return false;
-    }
-
-    /**
-     * @param array $columns
-     * @param array $ids
-     * @return \Shopware\Components\Model\QueryBuilder
-     */
-    public function getBuilder($columns, $ids)
-    {
-        $builder = $this->manager->createQueryBuilder();
-        $builder->select($columns)
-                ->from(Customer::class, 'customer')
-                ->join('customer.billing', 'billing')
-                ->leftJoin('customer.shipping', 'shipping')
-                ->leftJoin('customer.orders', 'orders', 'WITH', 'orders.status <> -1 AND orders.status <> 4')
-                ->leftJoin('billing.attribute', 'billingAttribute')
-                ->leftJoin('shipping.attribute', 'shippingAttribute')
-                ->leftJoin('customer.attribute', 'attribute')
-                ->groupBy('customer.id')
-                ->where('customer.id IN (:ids)')
-                ->setParameter('ids', $ids);
-
-        return $builder;
+        return $this->defaultValues;
     }
 }

@@ -7,10 +7,10 @@
  * file that was distributed with this source code.
  */
 
-use Shopware\CustomModels\ImportExport\Logger;
-use Shopware\Components\SwagImportExport\UploadPathProvider;
-use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\CSRFWhitelistAware;
+use Shopware\Components\SwagImportExport\UploadPathProvider;
+use Shopware\Components\SwagImportExport\Utils\SwagVersionHelper;
+use Shopware\CustomModels\ImportExport\Logger;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\FileBag;
 
@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\FileBag;
  * Shopware ImportExport Plugin
  *
  * @category Shopware
- * @package Shopware\Plugins\SwagImageEditor
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
@@ -31,8 +31,14 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
     public function getWhitelistedCSRFActions()
     {
         return [
-            'downloadFile'
+            'downloadFile',
         ];
+    }
+
+    public function indexAction()
+    {
+        parent::indexAction();
+        $this->View()->assign('shopware53Installed', SwagVersionHelper::hasMinimumVersion('5.3.0'));
     }
 
     public function uploadFileAction()
@@ -52,8 +58,8 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             'success' => true,
             'data' => [
                 'path' => $uploadPathProvider->getRealPath($clientOriginalName),
-                'fileName' => $clientOriginalName
-            ]
+                'fileName' => $clientOriginalName,
+            ],
         ]);
     }
 
@@ -93,7 +99,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                     [
                         'success' => false,
                         'data' => $this->Request()->getParams(),
-                        'message' => 'File not exist'
+                        'message' => 'File not exist',
                     ]
                 );
             }
@@ -108,15 +114,16 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
             $response->setHeader('Content-Type', $application);
 
-            print file_get_contents($filePath);
+            echo file_get_contents($filePath);
         } catch (\Exception $e) {
             $this->View()->assign(
                 [
                     'success' => false,
                     'data' => $this->Request()->getParams(),
-                    'message' => $e->getMessage()
+                    'message' => $e->getMessage(),
                 ]
             );
+
             return;
         }
     }
@@ -144,18 +151,16 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $data = $paginator->getIterator()->getArrayCopy();
 
         $this->View()->assign([
-            'success' => true, 'data' => $data, 'total' => $total
+            'success' => true, 'data' => $data, 'total' => $total,
         ]);
     }
 
     /**
      * Registers acl permissions for controller actions
-     *
-     * @return void
      */
     public function initAcl()
     {
-        $this->addAclPermission("uploadFile", "import", "Insuficient Permissions (uploadFile)");
-        $this->addAclPermission("downloadFile", "export", "Insuficient Permissions (downloadFile)");
+        $this->addAclPermission('uploadFile', 'import', 'Insuficient Permissions (uploadFile)');
+        $this->addAclPermission('downloadFile', 'export', 'Insuficient Permissions (downloadFile)');
     }
 }
