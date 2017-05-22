@@ -1556,7 +1556,11 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     private function underscoreToCamelCase($underscoreString)
     {
-        return lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $underscoreString))));
+        $func = function ($c) {
+            return strtoupper($c[1]);
+        };
+
+        return lcfirst(preg_replace_callback('/_([a-zA-Z])/', $func, $underscoreString));
     }
 
     /**
