@@ -10,8 +10,8 @@ namespace Shopware\Components\SwagImportExport\DbAdapters;
 
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\QueryBuilder;
-use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
+use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Utils\SwagVersionHelper;
 use Shopware\Components\SwagImportExport\Validators\ArticleTranslationValidator;
 use Shopware\Models\Article\Detail;
@@ -28,7 +28,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
     /** @var \Shopware_Components_Translation */
     protected $translationComponent;
 
-    /** @var boolean */
+    /** @var bool */
     protected $importExportErrorMode;
 
     /** @var array */
@@ -54,7 +54,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
         $this->manager = Shopware()->Models();
         $this->validator = new ArticleTranslationValidator();
         $this->translationComponent = new \Shopware_Components_Translation();
-        $this->importExportErrorMode = (boolean) Shopware()->Config()->get('SwagImportExportErrorMode');
+        $this->importExportErrorMode = (bool) Shopware()->Config()->get('SwagImportExportErrorMode');
         $this->db = Shopware()->Db();
         $this->eventManager = Shopware()->Events();
     }
@@ -73,10 +73,10 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
             't.description_long as descriptionLong',
             't.additional_text as additionalText',
             't.metaTitle as metaTitle',
-            't.packUnit as packUnit'
+            't.packUnit as packUnit',
         ];
 
-        if (!SwagVersionHelper::isDeprecated('5.3.0')) {
+        if (!SwagVersionHelper::hasMinimumVersion('5.3.0')) {
             $elements = $this->getElements();
 
             if ($elements) {
@@ -109,6 +109,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
      * @param $start
      * @param $limit
      * @param $filter
+     *
      * @return array
      */
     public function readRecordIds($start, $limit, $filter)
@@ -138,8 +139,10 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
     /**
      * @param array $ids
      * @param array $columns
-     * @return array
+     *
      * @throws \Exception
+     *
+     * @return array
      */
     public function read($ids, $columns)
     {
@@ -163,66 +166,8 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
     }
 
     /**
-     * Processing serialized object data
-     *
-     * @param array $translations
-     * @return array
-     */
-    protected function prepareTranslations($translations)
-    {
-        $translationAttr = [];
-        if (!SwagVersionHelper::isDeprecated('5.3.0')) {
-            $translationAttr = $this->getElements();
-        }
-
-        $attributes = [];
-        foreach ($this->getAttributes() as $attribute) {
-            $attributes['__attribute_' . $attribute['columnName']] = $attribute['columnName'];
-        }
-
-        $articleMapper = [
-            "txtArtikel" => "name",
-            "txtshortdescription" => "description",
-            "txtlangbeschreibung" => "descriptionLong",
-            "txtkeywords" => "keywords",
-            "metaTitle" => "metaTitle"
-        ];
-
-        $translationAttr['txtzusatztxt'] = 'additionalText';
-        $translationAttr['txtpackunit'] = 'packUnit';
-        $translationAttr = array_merge($translationAttr, $attributes);
-
-        if (!empty($translations)) {
-            foreach ($translations as $index => $translation) {
-                $variantData = unserialize($translation['variantData']);
-                $articleData = unserialize($translation['articleData']);
-
-                if (!empty($articleData)) {
-                    foreach ($articleData as $articleKey => $value) {
-                        if (isset($articleMapper[$articleKey])) {
-                            $translations[$index][$articleMapper[$articleKey]] = $value;
-                        }
-                    }
-                }
-
-                if (!empty($variantData)) {
-                    foreach ($variantData as $variantKey => $value) {
-                        if (isset($translationAttr[$variantKey])) {
-                            $translations[$index][$translationAttr[$variantKey]] = $value;
-                        }
-                    }
-                }
-
-                unset($translations[$index]['articleData']);
-                unset($translations[$index]['variantData']);
-            }
-        }
-
-        return $translations;
-    }
-
-    /**
      * @param $records
+     *
      * @throws AdapterException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
@@ -259,7 +204,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
 
         $whiteList = array_merge($whiteList, $variantWhiteList);
 
-        if (!SwagVersionHelper::isDeprecated('5.3.0')) {
+        if (!SwagVersionHelper::hasMinimumVersion('5.3.0')) {
             $elementBuilder = $this->getElementBuilder();
             $legacyAttributes = $elementBuilder->getQuery()->getArrayResult();
 
@@ -333,6 +278,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
 
     /**
      * @param $message
+     *
      * @throws \Exception
      */
     public function saveMessage($message)
@@ -383,12 +329,13 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
     public function getSections()
     {
         return [
-            ['id' => 'default', 'name' => 'default ']
+            ['id' => 'default', 'name' => 'default '],
         ];
     }
 
     /**
      * @param string $section
+     *
      * @return bool|mixed
      */
     public function getColumns($section)
@@ -440,26 +387,11 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @return array
-     */
-    private function getAttributes()
-    {
-        $repository = $this->manager->getRepository(Configuration::class);
-
-        return $repository->createQueryBuilder('configuration')
-            ->select('configuration.columnName')
-            ->where('configuration.tableName = :tablename')
-            ->andWhere('configuration.translatable = 1')
-            ->setParameter('tablename', 's_articles_attributes')
-            ->getQuery()
-            ->getArrayResult()
-        ;
-    }
-
-    /**
      * @param $ids
-     * @return array
+     *
      * @throws \Zend_Db_Statement_Exception
+     *
+     * @return array
      */
     public function getTranslations($ids)
     {
@@ -488,10 +420,88 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
     }
 
     /**
+     * Processing serialized object data
+     *
+     * @param array $translations
+     *
+     * @return array
+     */
+    protected function prepareTranslations($translations)
+    {
+        $translationAttr = [];
+        if (!SwagVersionHelper::hasMinimumVersion('5.3.0')) {
+            $translationAttr = $this->getElements();
+        }
+
+        $attributes = [];
+        foreach ($this->getAttributes() as $attribute) {
+            $attributes['__attribute_' . $attribute['columnName']] = $attribute['columnName'];
+        }
+
+        $articleMapper = [
+            'txtArtikel' => 'name',
+            'txtshortdescription' => 'description',
+            'txtlangbeschreibung' => 'descriptionLong',
+            'txtkeywords' => 'keywords',
+            'metaTitle' => 'metaTitle',
+        ];
+
+        $translationAttr['txtzusatztxt'] = 'additionalText';
+        $translationAttr['txtpackunit'] = 'packUnit';
+        $translationAttr = array_merge($translationAttr, $attributes);
+
+        if (!empty($translations)) {
+            foreach ($translations as $index => $translation) {
+                $variantData = unserialize($translation['variantData']);
+                $articleData = unserialize($translation['articleData']);
+
+                if (!empty($articleData)) {
+                    foreach ($articleData as $articleKey => $value) {
+                        if (isset($articleMapper[$articleKey])) {
+                            $translations[$index][$articleMapper[$articleKey]] = $value;
+                        }
+                    }
+                }
+
+                if (!empty($variantData)) {
+                    foreach ($variantData as $variantKey => $value) {
+                        if (isset($translationAttr[$variantKey])) {
+                            $translations[$index][$translationAttr[$variantKey]] = $value;
+                        }
+                    }
+                }
+
+                unset($translations[$index]['articleData']);
+                unset($translations[$index]['variantData']);
+            }
+        }
+
+        return $translations;
+    }
+
+    /**
+     * @return array
+     */
+    private function getAttributes()
+    {
+        $repository = $this->manager->getRepository(Configuration::class);
+
+        return $repository->createQueryBuilder('configuration')
+            ->select('configuration.columnName')
+            ->where('configuration.tableName = :tablename')
+            ->andWhere('configuration.translatable = 1')
+            ->setParameter('tablename', 's_articles_attributes')
+            ->getQuery()
+            ->getArrayResult()
+        ;
+    }
+
+    /**
      * Prefix attributes before writing to database
      *
      * @param array $data
      * @param array $attributes
+     *
      * @return array
      */
     private function prepareAttributePrefix($data, $attributes)

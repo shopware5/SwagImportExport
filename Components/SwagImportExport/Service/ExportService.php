@@ -14,9 +14,6 @@ use Shopware\Components\SwagImportExport\DbAdapters\DataDbAdapter;
 use Shopware\Components\SwagImportExport\Service\Struct\PreparationResultStruct;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 
-/**
- * @package Shopware\Components\SwagImportExport\Service
- */
 class ExportService extends AbstractImportExportService implements ExportServiceInterface
 {
     /**
@@ -41,8 +38,10 @@ class ExportService extends AbstractImportExportService implements ExportService
     /**
      * @param array $requestData
      * @param array $filterParams
-     * @return array
+     *
      * @throws \Exception
+     *
+     * @return array
      */
     public function export(array $requestData, array $filterParams)
     {
@@ -79,7 +78,7 @@ class ExportService extends AbstractImportExportService implements ExportService
 
             return $resultData;
         } catch (\Exception $e) {
-            $this->logProcessing('true', $requestData['fileName'], $serviceHelpers->getProfile()->getName(),  $e->getMessage(), 'false', $session);
+            $this->logProcessing('true', $requestData['fileName'], $serviceHelpers->getProfile()->getName(), $e->getMessage(), 'false', $session);
 
             throw $e;
         }
@@ -87,7 +86,8 @@ class ExportService extends AbstractImportExportService implements ExportService
 
     /**
      * @param string $profileType
-     * @param array $filterParams
+     * @param array  $filterParams
+     *
      * @return array
      */
     private function prepareFilter($profileType, $filterParams)
@@ -100,7 +100,7 @@ class ExportService extends AbstractImportExportService implements ExportService
             $filter['variants'] = $filterParams['variants'] ? true : false;
             if (isset($filterParams['categories'])) {
                 $filter['categories'] = [
-                    $filterParams['categories']
+                    $filterParams['categories'],
                 ];
             }
         }
@@ -136,6 +136,13 @@ class ExportService extends AbstractImportExportService implements ExportService
 
             if (isset($filterParams['paymentstate'])) {
                 $filter['paymentstate'] = $filterParams['paymentstate'];
+            }
+        }
+
+        //customer stream filter for addresses and customers
+        if (in_array($profileType, [DataDbAdapter::CUSTOMER_ADAPTER, DataDbAdapter::ADDRESS_ADAPTER], true)) {
+            if (isset($filterParams['customerStreamId'])) {
+                $filter['customerStreamId'] = $filterParams['customerStreamId'];
             }
         }
 

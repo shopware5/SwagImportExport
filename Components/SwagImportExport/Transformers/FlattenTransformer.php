@@ -9,14 +9,12 @@
 
 namespace Shopware\Components\SwagImportExport\Transformers;
 
-use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
+use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Utils\SwagVersionHelper;
 use Shopware\Models\Article\Element;
 
 /**
  * The responsibility of this class is to restructure the flat array to tree and vise ver
- *
- * @package Shopware\Components\SwagImportExport\Transformers
  */
 class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
 {
@@ -43,8 +41,10 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      * Transforms the flat array into tree with list of nodes containing children and attributes.
      *
      * @param array $data
-     * @return array
+     *
      * @throws \Enlight_Event_Exception
+     *
+     * @return array
      */
     public function transformForward($data)
     {
@@ -65,6 +65,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
             $flatData,
             ['subject' => $this]
         );
+
         return $flatData;
     }
 
@@ -72,9 +73,11 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      * Transforms a list of nodes containing children and attributes into flat array.
      *
      * @param $data
-     * @return array
+     *
      * @throws \Enlight_Event_Exception
      * @throws \Exception
+     *
+     * @return array
      */
     public function transformBackward($data)
     {
@@ -154,8 +157,6 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                 $this->findMainIterationPart($value);
             }
         }
-
-        return;
     }
 
     /**
@@ -164,6 +165,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      *
      * @param array $node
      * @param array $mapper
+     *
      * @return array
      */
     public function transform($node, $mapper = null)
@@ -197,6 +199,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      * Creates and returns mapper of provided profile node
      *
      * @param array $node
+     *
      * @return array
      */
     public function createMapperFromProfile($node)
@@ -227,59 +230,28 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
     }
 
     /**
-     * Finds the name of column with price field
-     *
-     * @param array $node
-     * @param string $shopwareField
-     * @return string|boolean
-     */
-    protected function findNodeByShopwareField($node, $shopwareField)
-    {
-        if (isset($node['shopwareField']) && $node['shopwareField'] == $shopwareField) {
-            return $node['name'];
-        } else {
-            if (isset($node['children'])) {
-                foreach ($node['children'] as $child) {
-                    $return = $this->findNodeByShopwareField($child, $shopwareField);
-                    if ($return !== false) {
-                        return $return;
-                    }
-                }
-            }
-            if (isset($node['attributes'])) {
-                foreach ($node['attributes'] as $attribute) {
-                    $return = $this->findNodeByShopwareField($attribute, $shopwareField);
-                    if ($return !== false) {
-                        return $return;
-                    }
-                }
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * Transform flat data into tree array
      *
      * @param mixed $node
      * @param array $data
-     * @param null $nodePath
-     * @param int $iteration
-     * @return array
+     * @param null  $nodePath
+     * @param int   $iteration
+     *
      * @throws \Exception
+     *
+     * @return array
      */
     public function transformToTree($node, $data, $nodePath = null, $iteration = 0)
     {
         $currentPath = null;
 
         if (isset($this->iterationParts[$nodePath])) { // iteration
-            $iteration++;
+            ++$iteration;
             if ($node['adapter'] == 'price') {
                 //find name of column with *price* values
                 $priceColumnName = $this->findNodeByShopwareField($node, 'price');
                 if ($priceColumnName === false) {
-                    throw new \Exception("Price column not found");
+                    throw new \Exception('Price column not found');
                 }
 
                 $dataColumns = array_keys($data);
@@ -289,9 +261,9 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                 $groups = [];
 
                 // find groups
-                $priceColumns = preg_grep("/^" . $priceColumnName . "_+(.*)/i", $dataColumns);
+                $priceColumns = preg_grep('/^' . $priceColumnName . '_+(.*)/i', $dataColumns);
                 foreach ($priceColumns as &$columns) {
-                    preg_match("/" . $priceColumnName . "_+(?P<group>.*)$/i", $columns, $matches);
+                    preg_match('/' . $priceColumnName . '_+(?P<group>.*)$/i', $columns, $matches);
                     $groups[] = $matches['group'];
                 }
 
@@ -327,10 +299,10 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
 
                 if ($columnMapper['configOptionId'] === false) {
                     if ($columnMapper['configOptionName'] === false) {
-                        throw new \Exception("configOptionName column not found");
+                        throw new \Exception('configOptionName column not found');
                     }
                     if ($columnMapper['configGroupName'] === false) {
-                        throw new \Exception("configGroupName column not found");
+                        throw new \Exception('configGroupName column not found');
                     }
                 }
 
@@ -361,7 +333,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                 //creates configOptionId to have more priority than configOptionName
                 $counter = $columnMapper['configOptionId'] !== false ? count($optionIds) : count($values);
 
-                for ($i = 0; $i < $counter; $i++) {
+                for ($i = 0; $i < $counter; ++$i) {
                     if (strstr($values[$i], '::')) {
                         $message = SnippetsHelper::getNamespace()
                             ->get('transformers/used_colon', "In the group name, is used a colon ':'. Please delete it and try again.");
@@ -378,7 +350,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                             $columnMapper['configOptionId'] => $optionIds[$i],
                             $columnMapper['configSetId'] => $configSetId,
                             $columnMapper['configSetType'] => $configSetType,
-                            $columnMapper['configSetName'] => $setNames
+                            $columnMapper['configSetName'] => $setNames,
                         ]
                     );
                 }
@@ -396,10 +368,10 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
 
                 if ($columnMapper['propertyValueId'] === false) {
                     if ($columnMapper['propertyValueName'] === false) {
-                        throw new \Exception("propertyValueName column not found");
+                        throw new \Exception('propertyValueName column not found');
                     }
                     if ($columnMapper['propertyOptionName'] === false) {
-                        throw new \Exception("propertyOptionName column not found");
+                        throw new \Exception('propertyOptionName column not found');
                     }
                 }
 
@@ -423,7 +395,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                 }
 
                 foreach ($collectedData as $key => $values) {
-                    for ($i = 0; $i < $counter; $i++) {
+                    for ($i = 0; $i < $counter; ++$i) {
                         if ($mapper[$key] == 'propertyValueName') {
                             $value = explode(':', $values[$i]);
                             $newData[$i][$columnMapper['propertyOptionName']] = $value[0];
@@ -456,7 +428,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                 $translationLang = $this->findNodeByShopwareField($node, 'languageId');
 
                 foreach ($translationColumns as $column) {
-                    preg_match("/(?P<column>.*)_+(?P<langId>.*)$/i", $column, $matches);
+                    preg_match('/(?P<column>.*)_+(?P<langId>.*)$/i', $column, $matches);
                     $columnName = $matches['column'];
                     $translations[$matches['langId']][$columnName] = $data[$column];
                     if ($translationLang) {
@@ -518,6 +490,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      * Returns first element of the array
      *
      * @param array $data
+     *
      * @return string
      */
     public function getFirstElement($data)
@@ -526,140 +499,19 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
             reset($data);
 
             return current($data);
-        } else {
-            return $data;
-        }
-    }
-
-    /**
-     * Transform flat price data into tree array
-     *
-     * @param mixed $node
-     * @param array $data
-     * @param string $group
-     * @return array
-     */
-    protected function transformPricesToTree($node, $data, $group)
-    {
-        // special case for EK group ('_EK' may be missing)
-        if ($group != '') {
-            $groupValue = $group;
-            $groupExtension = '_' . $group;
-        } else {
-            $groupValue = 'EK';
-            $groupExtension = '';
         }
 
-        if (isset($node['children'])) {
-            if (isset($node['attributes'])) {
-                foreach ($node['attributes'] as $attribute) {
-                    if ($attribute['shopwareField'] != 'priceGroup') {
-                        $value = $this->getDataValue($data, $attribute['name'] . $groupExtension);
-                    } else {
-                        $value = $groupValue;
-                    }
-                    $currentNode['_attributes'][$attribute['name']] = $value;
-                }
-            }
-
-            // the check for group value is not done here, but on the next level (recursion)
-            // because the node may have attribute(s)
-            foreach ($node['children'] as $child) {
-                $currentNode[$child['name']] = $this->transformPricesToTree($child, $data, $group);
-            }
-        } else {
-            if (isset($node['attributes'])) {
-                foreach ($node['attributes'] as $attribute) {
-                    if ($attribute['shopwareField'] != 'priceGroup') {
-                        $value = $this->getDataValue($data, $attribute['name'] . $groupExtension);
-                    } else {
-                        $value = $groupValue;
-                    }
-                    $currentNode['_attributes'][$attribute['name']] = $value;
-                }
-
-                if ($node['shopwareField'] != 'priceGroup') {
-                    $value = $this->getDataValue($data, $node['name'] . $groupExtension);
-                } else {
-                    $value = $groupValue;
-                }
-                $currentNode['_value'] = $value;
-            } else {
-                if ($node['shopwareField'] != 'priceGroup') {
-                    $value = $this->getDataValue($data, $node['name'] . $groupExtension);
-                } else {
-                    $value = $groupValue;
-                }
-                $currentNode = $value;
-            }
-        }
-
-        return $currentNode;
-    }
-
-    /**
-     * Transform flat configurator data into tree array
-     *
-     * @param mixed $node
-     * @param array $data
-     * @return array
-     */
-    protected function transformConfiguratorToTree($node, $data)
-    {
-        if (isset($node['children'])) {
-            if (isset($node['attributes'])) {
-                foreach ($node['attributes'] as $attribute) {
-                    if (isset($data[$attribute['name']])) {
-                        $value = $data[$attribute['name']];
-                    } else {
-                        $value = '';
-                    }
-                    $currentNode['_attributes'][$attribute['name']] = $value;
-                }
-            }
-
-            // the check for group value is not done here, but on the next level (recursion)
-            // because the node may have attribute(s)
-            foreach ($node['children'] as $child) {
-                $currentNode[$child['name']] = $this->transformConfiguratorToTree($child, $data);
-            }
-        } else {
-            if (isset($node['attributes'])) {
-                foreach ($node['attributes'] as $attribute) {
-                    if (isset($data[$attribute['name']])) {
-                        $value = $data[$attribute['name']];
-                    } else {
-                        $value = '';
-                    }
-                    $currentNode['_attributes'][$attribute['name']] = $value;
-                }
-
-                if (isset($data[$node['name']])) {
-                    $value = $data[$node['name']];
-                } else {
-                    $value = '';
-                }
-                $currentNode['_value'] = $value;
-            } else {
-                if (isset($data[$node['name']])) {
-                    $value = $data[$node['name']];
-                } else {
-                    $value = '';
-                }
-                $currentNode = $value;
-            }
-        }
-
-        return $currentNode;
+        return $data;
     }
 
     /**
      * Returns data from the CSV
      * If data don't match with the csv column names, throws exception
      *
-     * @param array $data
+     * @param array  $data
      * @param string $key
-     * @param int $iteration
+     * @param int    $iteration
+     *
      * @return mixed
      */
     public function getDataValue($data, $key, $iteration = 0)
@@ -679,7 +531,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
     /**
      * Creates columns name for the csv file
      *
-     * @param array $node
+     * @param array  $node
      * @param string $path
      */
     public function collectHeader($node, $path)
@@ -746,7 +598,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
     /**
      * Saves price nodes as column names
      *
-     * @param array $node
+     * @param array  $node
      * @param string $groupKey
      * @param string $path
      */
@@ -775,7 +627,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
     /**
      * Saves tax rate sum nodes as column names
      *
-     * @param array $node
+     * @param array  $node
      * @param string $taxRate
      * @param string $path
      */
@@ -791,7 +643,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                 }
                 if ($key == '_value') {
                     $pathParts = explode('/', $path);
-                    $name = $pathParts[count($pathParts) - 1] . '_' . $taxRate ;
+                    $name = $pathParts[count($pathParts) - 1] . '_' . $taxRate;
                     $this->saveTempData($name);
                 } else {
                     $key .= '_' . $taxRate;
@@ -800,11 +652,11 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
             }
         }
     }
-    
+
     /**
      * Saves only the prices group nodes
      *
-     * @param array $node
+     * @param array  $node
      * @param string $path
      */
     public function createHeaderPriceGroup($node, $path = null)
@@ -834,8 +686,8 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      * Saves configurator nodes, also skipping
      * configGroupId, configGroupName and configGroupDescription
      *
-     * @param array $node
-     * @param array $skipList
+     * @param array  $node
+     * @param array  $skipList
      * @param string $path
      */
     public function createHeaderValues($node, $skipList, $path = null)
@@ -863,8 +715,8 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
     /**
      * Saves translation nodes and skips languageId
      *
-     * @param array $node
-     * @param int $shopId
+     * @param array  $node
+     * @param int    $shopId
      * @param string $path
      */
     public function createHeaderTranslation($node, $shopId, $path = null)
@@ -893,7 +745,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
     /**
      * Collects record data
      *
-     * @param mixed $node
+     * @param mixed  $node
      * @param string $path
      */
     public function collectData($node, $path)
@@ -977,7 +829,6 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                 $translationPTreeMapper = $this->createMapperFromProfile($translationPProfile);
                 $translationPFlatMapper = $this->treeToFlat($translationPTreeMapper);
 
-
                 foreach ($node as $value) {
                     $this->collectIterationData($value);
                 }
@@ -1037,7 +888,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
     }
 
     /**
-     * @param array $node
+     * @param array       $node
      * @param string|null $path
      */
     public function collectIterationData($node, $path = null)
@@ -1056,9 +907,10 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
     /**
      * Returns price node by price group
      *
-     * @param array $node
+     * @param array  $node
      * @param string $groupKey
-     * @param array $mapper
+     * @param array  $mapper
+     *
      * @return array
      */
     public function findNodeByPriceGroup($node, $groupKey, $mapper)
@@ -1069,14 +921,13 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                 return $value;
             }
         }
-
-        return;
     }
 
     /**
      * @param $node
      * @param $mapper
      * @param null $path
+     *
      * @return mixed
      */
     public function getPriceGroupFromNode($node, $mapper, $path = null)
@@ -1101,7 +952,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
     /**
      * @param $node
      * @param $mapper
-     * @param null $path
+     * @param null       $path
      * @param bool|false $emptyResult
      */
     public function collectPriceData($node, $mapper, $path = null, $emptyResult = false)
@@ -1125,6 +976,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
 
     /**
      * @param $node
+     *
      * @return mixed
      */
     public function treeToFlat($node)
@@ -1133,23 +985,6 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
         $this->convertToFlat($node, null);
 
         return $this->getTempMapper();
-    }
-
-    /**
-     * @param $node
-     * @param $path
-     */
-    protected function convertToFlat($node, $path)
-    {
-        foreach ($node as $key => $value) {
-            $currentPath = $this->getMergedPath($path, $key);
-
-            if (is_array($value)) {
-                $this->convertToFlat($value, $currentPath);
-            } else {
-                $this->saveTempMapper($currentPath, $value);
-            }
-        }
     }
 
     /**
@@ -1183,7 +1018,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
     /**
      * Finds and saves iteration parts
      *
-     * @param array $nodes
+     * @param array  $nodes
      * @param string $path
      */
     public function processIterationParts($nodes, $path = null)
@@ -1230,6 +1065,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
     /**
      * @param $node
      * @param $adapter
+     *
      * @return mixed
      */
     public function getNodeFromProfile($node, $adapter)
@@ -1251,9 +1087,10 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
     /**
      * Returns configuration group value by given node and mapper
      *
-     * @param array $node
-     * @param array $mapper
+     * @param array  $node
+     * @param array  $mapper
      * @param string $path
+     *
      * @return string
      */
     public function findConfigurationGroupValue($node, $mapper, $path = null)
@@ -1279,6 +1116,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      * @param $node
      * @param $mapper
      * @param null $path
+     *
      * @return mixed
      */
     public function findPropertyOptionName($node, $mapper, $path = null)
@@ -1301,10 +1139,10 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
     }
 
     /**
-     * @param array $node
-     * @param array $mapper
+     * @param array  $node
+     * @param array  $mapper
      * @param string $path
-     * @param array $originalNode
+     * @param array  $originalNode
      */
     public function collectConfiguratorData($node, $mapper, $path = null, $originalNode = null)
     {
@@ -1339,10 +1177,10 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
     }
 
     /**
-     * @param array $node
-     * @param array $mapper
+     * @param array  $node
+     * @param array  $mapper
      * @param string $path
-     * @param array $originalNode
+     * @param array  $originalNode
      */
     public function collectPropertyData($node, $mapper, $path = null, $originalNode = null)
     {
@@ -1396,6 +1234,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
     /**
      * @param $path
      * @param $key
+     *
      * @return string
      */
     public function getMergedPath($path, $key)
@@ -1496,11 +1335,11 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                 'description',
                 'descriptionLong',
                 'keywords',
-                'packUnit'
+                'packUnit',
             ];
 
             $attributes = [];
-            if (!SwagVersionHelper::isDeprecated('5.3.0')) {
+            if (!SwagVersionHelper::hasMinimumVersion('5.3.0')) {
                 $attributes = array_map(
                     function ($item) {
                         return $item['name'];
@@ -1530,8 +1369,9 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
     }
 
     /**
-     * @return array
      * @throws \Zend_Db_Statement_Exception
+     *
+     * @return array
      */
     public function getTaxRates()
     {
@@ -1548,9 +1388,10 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
     /**
      * Returns price node by price group
      *
-     * @param array $node
+     * @param array  $node
      * @param string $taxRate
-     * @param array $mapper
+     * @param array  $mapper
+     *
      * @return array
      */
     public function findNodeByTaxRate($node, $taxRate, $mapper)
@@ -1569,6 +1410,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      * @param $node
      * @param $mapper
      * @param null $path
+     *
      * @return mixed
      */
     public function getTaxRateFromNode($node, $mapper, $path = null)
@@ -1604,6 +1446,180 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
             } elseif ($mapper[$currentPath] === 'taxRateSums') {
                 $tempData = ($emptyResult === true) ? null : $value;
                 $this->saveTempData($tempData);
+            }
+        }
+    }
+
+    /**
+     * Finds the name of column with price field
+     *
+     * @param array  $node
+     * @param string $shopwareField
+     *
+     * @return string|bool
+     */
+    protected function findNodeByShopwareField($node, $shopwareField)
+    {
+        if (isset($node['shopwareField']) && $node['shopwareField'] == $shopwareField) {
+            return $node['name'];
+        }
+        if (isset($node['children'])) {
+            foreach ($node['children'] as $child) {
+                $return = $this->findNodeByShopwareField($child, $shopwareField);
+                if ($return !== false) {
+                    return $return;
+                }
+            }
+        }
+        if (isset($node['attributes'])) {
+            foreach ($node['attributes'] as $attribute) {
+                $return = $this->findNodeByShopwareField($attribute, $shopwareField);
+                if ($return !== false) {
+                    return $return;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Transform flat price data into tree array
+     *
+     * @param mixed  $node
+     * @param array  $data
+     * @param string $group
+     *
+     * @return array
+     */
+    protected function transformPricesToTree($node, $data, $group)
+    {
+        // special case for EK group ('_EK' may be missing)
+        if ($group != '') {
+            $groupValue = $group;
+            $groupExtension = '_' . $group;
+        } else {
+            $groupValue = 'EK';
+            $groupExtension = '';
+        }
+
+        if (isset($node['children'])) {
+            if (isset($node['attributes'])) {
+                foreach ($node['attributes'] as $attribute) {
+                    if ($attribute['shopwareField'] != 'priceGroup') {
+                        $value = $this->getDataValue($data, $attribute['name'] . $groupExtension);
+                    } else {
+                        $value = $groupValue;
+                    }
+                    $currentNode['_attributes'][$attribute['name']] = $value;
+                }
+            }
+
+            // the check for group value is not done here, but on the next level (recursion)
+            // because the node may have attribute(s)
+            foreach ($node['children'] as $child) {
+                $currentNode[$child['name']] = $this->transformPricesToTree($child, $data, $group);
+            }
+        } else {
+            if (isset($node['attributes'])) {
+                foreach ($node['attributes'] as $attribute) {
+                    if ($attribute['shopwareField'] != 'priceGroup') {
+                        $value = $this->getDataValue($data, $attribute['name'] . $groupExtension);
+                    } else {
+                        $value = $groupValue;
+                    }
+                    $currentNode['_attributes'][$attribute['name']] = $value;
+                }
+
+                if ($node['shopwareField'] != 'priceGroup') {
+                    $value = $this->getDataValue($data, $node['name'] . $groupExtension);
+                } else {
+                    $value = $groupValue;
+                }
+                $currentNode['_value'] = $value;
+            } else {
+                if ($node['shopwareField'] != 'priceGroup') {
+                    $value = $this->getDataValue($data, $node['name'] . $groupExtension);
+                } else {
+                    $value = $groupValue;
+                }
+                $currentNode = $value;
+            }
+        }
+
+        return $currentNode;
+    }
+
+    /**
+     * Transform flat configurator data into tree array
+     *
+     * @param mixed $node
+     * @param array $data
+     *
+     * @return array
+     */
+    protected function transformConfiguratorToTree($node, $data)
+    {
+        if (isset($node['children'])) {
+            if (isset($node['attributes'])) {
+                foreach ($node['attributes'] as $attribute) {
+                    if (isset($data[$attribute['name']])) {
+                        $value = $data[$attribute['name']];
+                    } else {
+                        $value = '';
+                    }
+                    $currentNode['_attributes'][$attribute['name']] = $value;
+                }
+            }
+
+            // the check for group value is not done here, but on the next level (recursion)
+            // because the node may have attribute(s)
+            foreach ($node['children'] as $child) {
+                $currentNode[$child['name']] = $this->transformConfiguratorToTree($child, $data);
+            }
+        } else {
+            if (isset($node['attributes'])) {
+                foreach ($node['attributes'] as $attribute) {
+                    if (isset($data[$attribute['name']])) {
+                        $value = $data[$attribute['name']];
+                    } else {
+                        $value = '';
+                    }
+                    $currentNode['_attributes'][$attribute['name']] = $value;
+                }
+
+                if (isset($data[$node['name']])) {
+                    $value = $data[$node['name']];
+                } else {
+                    $value = '';
+                }
+                $currentNode['_value'] = $value;
+            } else {
+                if (isset($data[$node['name']])) {
+                    $value = $data[$node['name']];
+                } else {
+                    $value = '';
+                }
+                $currentNode = $value;
+            }
+        }
+
+        return $currentNode;
+    }
+
+    /**
+     * @param $node
+     * @param $path
+     */
+    protected function convertToFlat($node, $path)
+    {
+        foreach ($node as $key => $value) {
+            $currentPath = $this->getMergedPath($path, $key);
+
+            if (is_array($value)) {
+                $this->convertToFlat($value, $currentPath);
+            } else {
+                $this->saveTempMapper($currentPath, $value);
             }
         }
     }

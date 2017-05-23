@@ -18,33 +18,31 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\ArticleWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\CategoryWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\ConfiguratorWriter;
-use Shopware\Components\SwagImportExport\DbAdapters\Articles\PropertyWriter;
-use Shopware\Components\SwagImportExport\DbAdapters\Articles\TranslationWriter;
-use Shopware\Components\SwagImportExport\DbAdapters\Articles\PriceWriter;
-use Shopware\Components\SwagImportExport\DbAdapters\Articles\RelationWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\ImageWriter;
+use Shopware\Components\SwagImportExport\DbAdapters\Articles\PriceWriter;
+use Shopware\Components\SwagImportExport\DbAdapters\Articles\PropertyWriter;
+use Shopware\Components\SwagImportExport\DbAdapters\Articles\RelationWriter;
+use Shopware\Components\SwagImportExport\DbAdapters\Articles\TranslationWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\Results\ArticleWriterResult;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
-use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
+use Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
 use Shopware\Components\SwagImportExport\Utils\SwagVersionHelper;
 use Shopware\Models\Article\Element;
 use Shopware\Models\Attribute\Configuration;
 
 /**
  * Class ArticlesDbAdapter
- *
- * @package Shopware\Components\SwagImportExport\DbAdapters
  */
 class ArticlesDbAdapter implements DataDbAdapter
 {
     /**
-     * @var ModelManager $modelManager
+     * @var ModelManager
      */
     protected $modelManager;
 
     /**
-     * @var Enlight_Components_Db_Adapter_Pdo_Mysql $db
+     * @var Enlight_Components_Db_Adapter_Pdo_Mysql
      */
     protected $db;
 
@@ -74,14 +72,14 @@ class ArticlesDbAdapter implements DataDbAdapter
     protected $tempData;
 
     /**
-     * @var MediaServiceInterface
-     */
-    private $mediaService;
-
-    /**
      * @var array
      */
     protected $defaultValues = [];
+
+    /**
+     * @var MediaServiceInterface
+     */
+    private $mediaService;
 
     /**
      * @var \Shopware_Components_Config
@@ -118,10 +116,12 @@ class ArticlesDbAdapter implements DataDbAdapter
      * @param $start
      * @param $limit
      * @param $filter
-     * @return array
+     *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
+     *
+     * @return array
      */
     public function readRecordIds($start, $limit, $filter)
     {
@@ -186,8 +186,10 @@ class ArticlesDbAdapter implements DataDbAdapter
     /**
      * @param $ids
      * @param $columns
-     * @return mixed
+     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function read($ids, $columns)
     {
@@ -273,6 +275,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     /**
      * @param $ids
      * @param $categoryColumns
+     *
      * @return array
      */
     public function prepareCategoryExport($ids, $categoryColumns)
@@ -293,102 +296,11 @@ class ArticlesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * Returns article ids
-     *
-     * @param $detailIds
-     * @return array
-     */
-    protected function getArticleIdsByDetailIds($detailIds)
-    {
-        $articleIds = $this->modelManager->createQueryBuilder()
-            ->select('article.id')
-            ->from('Shopware\Models\Article\Detail', 'variant')
-            ->join('variant.article', 'article')
-            ->where('variant.id IN (:ids)')
-            ->setParameter('ids', $detailIds)
-            ->groupBy('article.id');
-
-        $mappedArticleIds = array_map(
-            function ($item) {
-                return $item['id'];
-            },
-            $articleIds->getQuery()->getResult()
-        );
-
-        return $mappedArticleIds;
-    }
-
-    /**
-     * Collects and creates a helper mapper for category path
-     *
-     * @param array $categories
-     * @return array
-     */
-    protected function getAssignedCategoryNames($categories)
-    {
-        $categoryIds = [];
-        foreach ($categories as $category) {
-            if (!empty($category['categoryId'])) {
-                $categoryIds[] = (string) $category['categoryId'];
-            }
-
-            if (!empty($category['categoryPath'])) {
-                $catPath = explode('|', $category['categoryPath']);
-                $categoryIds = array_merge($categoryIds, $catPath);
-            }
-        }
-
-        //only unique ids
-        $categoryIds = array_unique($categoryIds);
-
-        //removes empty value
-        $categoryIds = array_filter($categoryIds);
-
-        $categoriesNames = $this->modelManager->createQueryBuilder()
-            ->select(['category.id, category.name'])
-            ->from('Shopware\Models\Category\Category', 'category')
-            ->where('category.id IN (:ids)')
-            ->setParameter('ids', $categoryIds)
-            ->getQuery()->getResult();
-
-        $names = [];
-        foreach ($categoriesNames as $name) {
-            $names[$name['id']] = $name['name'];
-        }
-
-        return $names;
-    }
-
-    /**
-     * @param array $category contains category data
-     * @param array $mapper contains categories' names
-     * @return string converted path
-     */
-    protected function generatePath($category, $mapper)
-    {
-        $ids = [];
-        if (!empty($category['categoryPath'])) {
-            foreach (explode('|', $category['categoryPath']) as $id) {
-                $ids[] = $mapper[$id];
-            }
-        }
-        krsort($ids);
-
-        if (!empty($category['categoryId'])) {
-            $ids[] = $mapper[$category['categoryId']];
-        }
-
-        $ids = array_filter($ids);
-
-        $path = implode('->', $ids);
-
-        return $path;
-    }
-
-    /**
      * @param $ids
-     * @return array
+     *
      * @throws \Zend_Db_Statement_Exception
+     *
+     * @return array
      */
     public function prepareTranslationExport($ids)
     {
@@ -493,38 +405,6 @@ class ArticlesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * Returns all fields that can be translated.
-     *
-     * @return array
-     */
-    private function getTranslationFields()
-    {
-        $translationFields = [
-            'metaTitle' => 'metaTitle',
-            'txtArtikel' => 'name',
-            'txtkeywords' => 'keywords',
-            'txtpackunit' => 'packUnit',
-            'txtzusatztxt' => 'additionalText',
-            'txtshortdescription' => 'description',
-            'txtlangbeschreibung' => 'descriptionLong'
-        ];
-
-        if (!SwagVersionHelper::isDeprecated('5.3.0')) {
-            $legacyAttributes = $this->getLegacyTranslationAttr();
-            foreach ($legacyAttributes as $attr) {
-                $translationFields[$attr['name']] = $attr['name'];
-            }
-        }
-
-        $attributes = $this->getTranslatableAttributes();
-        foreach ($attributes as $attribute) {
-            $translationFields['__attribute_' . $attribute['columnName']] = $attribute['columnName'];
-        }
-
-        return $translationFields;
-    }
-
-    /**
      * @return \Shopware\Models\Shop\Shop[]
      */
     public function getShops()
@@ -562,16 +442,6 @@ class ArticlesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * Return list with default values for fields which are empty or don't exists
-     *
-     * @return array
-     */
-    private function getDefaultValues()
-    {
-        return $this->defaultValues;
-    }
-
-    /**
      * Set default values for fields which are empty or don't exists
      *
      * @param array $values default values for nodes
@@ -582,141 +452,10 @@ class ArticlesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param array $records
-     * @throws \Exception
-     */
-    private function performImport($records)
-    {
-        $articleWriter = new ArticleWriter();
-        $pricesWriter = new PriceWriter();
-        $categoryWriter = new CategoryWriter();
-        $configuratorWriter = ConfiguratorWriter::createFromGlobalSingleton();
-        $translationWriter = new TranslationWriter();
-        $propertyWriter = PropertyWriter::createFromGlobalSingleton();
-        $relationWriter = new RelationWriter($this);
-        $imageWriter = new ImageWriter($this);
-
-        $defaultValues = $this->getDefaultValues();
-
-        foreach ($records['article'] as $index => $article) {
-            try {
-                $this->modelManager->getConnection()->beginTransaction();
-
-                $articleWriterResult = $articleWriter->write($article, $defaultValues);
-
-                $processedFlag = isset($article['processed']) && $article['processed'] == 1;
-
-                /**
-                 * Only processed data will be imported
-                 */
-                if (!$processedFlag) {
-                    $pricesWriter->write(
-                        $articleWriterResult->getArticleId(),
-                        $articleWriterResult->getDetailId(),
-                        array_filter(
-                            $records['price'],
-                            function ($price) use ($index) {
-                                return $price['parentIndexElement'] == $index;
-                            }
-                        )
-                    );
-
-                    $categoryWriter->write(
-                        $articleWriterResult->getArticleId(),
-                        array_filter(
-                            $records['category'],
-                            function ($category) use ($index) {
-                                return $category['parentIndexElement'] == $index && ($category['categoryId'] || $category['categoryPath']);
-                            }
-                        )
-                    );
-
-                    $configuratorWriter->writeOrUpdateConfiguratorSet(
-                        $articleWriterResult,
-                        array_filter(
-                            $records['configurator'],
-                            function ($configurator) use ($index) {
-                                return $configurator['parentIndexElement'] == $index;
-                            }
-                        )
-                    );
-
-                    $propertyWriter->writeUpdateCreatePropertyGroupsFilterAndValues(
-                        $articleWriterResult->getArticleId(),
-                        $article['orderNumber'],
-                        $this->filterPropertyValues($records, $index, $articleWriterResult)
-                    );
-
-                    $translationWriter->write(
-                        $articleWriterResult->getArticleId(),
-                        $articleWriterResult->getDetailId(),
-                        $articleWriterResult->getMainDetailId(),
-                        array_filter(
-                            $records['translation'],
-                            function ($translation) use ($index) {
-                                return $translation['parentIndexElement'] == $index;
-                            }
-                        )
-                    );
-                }
-
-                /**
-                 * Processed and unprocessed data will be imported
-                 */
-                if ($processedFlag) {
-                    $article['mainNumber'] = $article['orderNumber'];
-                }
-
-                $relationWriter->write(
-                    $articleWriterResult->getArticleId(),
-                    $article['mainNumber'],
-                    array_filter(
-                        $records['accessory'],
-                        function ($accessory) use ($index, $articleWriterResult) {
-                            return $accessory['parentIndexElement'] == $index && $articleWriterResult->getMainDetailId() == $articleWriterResult->getDetailId();
-                        }
-                    ),
-                    'accessory',
-                    $processedFlag
-                );
-
-                $relationWriter->write(
-                    $articleWriterResult->getArticleId(),
-                    $article['mainNumber'],
-                    array_filter(
-                        $records['similar'],
-                        function ($similar) use ($index, $articleWriterResult) {
-                            return $similar['parentIndexElement'] == $index && $articleWriterResult->getMainDetailId() == $articleWriterResult->getDetailId();
-                        }
-                    ),
-                    'similar',
-                    $processedFlag
-                );
-
-                $imageWriter->write(
-                    $articleWriterResult->getArticleId(),
-                    $article['mainNumber'],
-                    array_filter(
-                        $records['image'],
-                        function ($image) use ($index) {
-                            return $image['parentIndexElement'] == $index;
-                        }
-                    )
-                );
-
-                $this->modelManager->getConnection()->commit();
-            } catch (AdapterException $e) {
-                $this->modelManager->getConnection()->rollBack();
-                $message = $e->getMessage();
-                $this->saveMessage($message);
-            }
-        }
-    }
-
-    /**
      * Writes articles into the database
      *
      * @param array $records
+     *
      * @throws \Exception
      * @throws AdapterException
      */
@@ -742,11 +481,13 @@ class ArticlesDbAdapter implements DataDbAdapter
 
     /**
      * @param int $id
-     * @return \Shopware\Models\Shop\Shop $shop
+     *
      * @throws AdapterException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
+     *
+     * @return \Shopware\Models\Shop\Shop $shop
      */
     public function getShop($id)
     {
@@ -773,7 +514,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             ['id' => 'accessory', 'name' => 'accessory'],
             ['id' => 'configurator', 'name' => 'configurator'],
             ['id' => 'category', 'name' => 'category'],
-            ['id' => 'translation', 'name' => 'translation']
+            ['id' => 'translation', 'name' => 'translation'],
         ];
     }
 
@@ -820,12 +561,13 @@ class ArticlesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @return array
      * @throws \Zend_Db_Statement_Exception
+     *
+     * @return array
      */
     public function getArticleAttributes()
     {
-        $stmt = $this->db->query("SHOW COLUMNS FROM `s_articles_attributes`");
+        $stmt = $this->db->query('SHOW COLUMNS FROM `s_articles_attributes`');
         $columns = $stmt->fetchAll();
 
         $attributes = $this->filterAttributeColumns($columns);
@@ -845,6 +587,7 @@ class ArticlesDbAdapter implements DataDbAdapter
 
     /**
      * @param $section
+     *
      * @return bool
      */
     public function getColumns($section)
@@ -860,6 +603,7 @@ class ArticlesDbAdapter implements DataDbAdapter
 
     /**
      * @param $section
+     *
      * @return array
      */
     public function getParentKeys($section)
@@ -937,7 +681,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             'variant.shippingTime as shippingTime',
             'variant.shippingFree as shippingFree',
             'variant.supplierNumber as supplierNumber',
-            'variant.purchasePrice as purchasePrice'
+            'variant.purchasePrice as purchasePrice',
         ];
 
         // Attributes
@@ -962,7 +706,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             'prices.pseudoPrice as pseudoPrice',
             'prices.customerGroupKey as priceGroup',
             'prices.from',
-            'prices.to'
+            'prices.to',
         ];
     }
 
@@ -979,7 +723,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             "CONCAT('media/image/', images.path, '.', images.extension) as imageUrl",
             'images.main as main',
             'images.mediaId as mediaId',
-            ' \'1\' as thumbnail'
+            ' \'1\' as thumbnail',
         ];
     }
 
@@ -1071,7 +815,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             'translation.packUnit as packUnit',
         ];
 
-        if (!SwagVersionHelper::isDeprecated('5.3.0')) {
+        if (!SwagVersionHelper::hasMinimumVersion('5.3.0')) {
             $legacyAttributes = $this->getLegacyTranslationAttr();
 
             if ($legacyAttributes) {
@@ -1103,24 +847,8 @@ class ArticlesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @return array
-     */
-    private function getTranslatableAttributes()
-    {
-        $repository = $this->modelManager->getRepository(Configuration::class);
-
-        return $repository->createQueryBuilder('configuration')
-            ->select('configuration.columnName')
-            ->where('configuration.tableName = :tablename')
-            ->andWhere('configuration.translatable = 1')
-            ->setParameter('tablename', 's_articles_attributes')
-            ->getQuery()
-            ->getArrayResult()
-        ;
-    }
-
-    /**
      * @param $message
+     *
      * @throws \Exception
      */
     public function saveMessage($message)
@@ -1197,31 +925,6 @@ class ArticlesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * This data is for matching similars and accessories
-     *
-     * @param $articleNumber
-     */
-    protected function saveArticleData($articleNumber)
-    {
-        $tempData = $this->getTempData();
-
-        if (isset($tempData[$articleNumber])) {
-            return;
-        }
-
-        $this->setTempData($articleNumber);
-
-        $articleData = [
-            'articleId' => $articleNumber,
-            'mainNumber' => $articleNumber,
-            'orderNumber' => $articleNumber,
-            'processed' => 1
-        ];
-
-        $this->setUnprocessedData('articles', 'article', $articleData);
-    }
-
-    /**
      * @return array
      */
     public function getUnprocessedData()
@@ -1257,8 +960,10 @@ class ArticlesDbAdapter implements DataDbAdapter
 
     /**
      * @param $articleDetailIds
-     * @return array
+     *
      * @throws \Zend_Db_Statement_Exception
+     *
+     * @return array
      */
     public function getTranslationPropertyGroup($articleDetailIds)
     {
@@ -1293,8 +998,10 @@ class ArticlesDbAdapter implements DataDbAdapter
 
     /**
      * @param $articleDetailIds
-     * @return array
+     *
      * @throws \Zend_Db_Statement_Exception
+     *
+     * @return array
      */
     public function getTranslationPropertyOption($articleDetailIds)
     {
@@ -1325,30 +1032,9 @@ class ArticlesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * Collects recursively category ids
-     *
-     * @param \Shopware\Models\Category\Category $categoryModel
-     */
-    protected function collectCategoryIds($categoryModel)
-    {
-        $categoryId = $categoryModel->getId();
-        $this->setCategoryIdCollection($categoryId);
-        $categories = $categoryModel->getChildren();
-
-        if (!$categories) {
-            return;
-        }
-
-        foreach ($categories as $category) {
-            $this->collectCategoryIds($category);
-        }
-
-        return;
-    }
-
-    /**
      * @param $columns
      * @param $ids - s_articles_details.id
+     *
      * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
      */
     public function getArticleBuilder($columns, $ids)
@@ -1366,7 +1052,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             ->leftJoin('variant.unit', 'variantsUnit')
             ->where('variant.id IN (:ids)')
             ->setParameter('ids', $ids, Connection::PARAM_INT_ARRAY)
-            ->orderBy("variant.kind");
+            ->orderBy('variant.kind');
 
         return $articleBuilder;
     }
@@ -1374,6 +1060,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     /**
      * @param $columns
      * @param $ids
+     *
      * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
      */
     public function getPriceBuilder($columns, $ids)
@@ -1394,6 +1081,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     /**
      * @param $columns
      * @param $ids
+     *
      * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
      */
     public function getImageBuilder($columns, $ids)
@@ -1414,6 +1102,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     /**
      * @param $columns
      * @param $ids
+     *
      * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
      */
     public function getPropertyValueBuilder($columns, $ids)
@@ -1436,6 +1125,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     /**
      * @param $columns
      * @param $ids
+     *
      * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
      */
     public function getConfiguratorBuilder($columns, $ids)
@@ -1459,6 +1149,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     /**
      * @param $columns
      * @param $ids
+     *
      * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
      */
     public function getSimilarBuilder($columns, $ids)
@@ -1481,6 +1172,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     /**
      * @param $columns
      * @param $ids
+     *
      * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
      */
     public function getAccessoryBuilder($columns, $ids)
@@ -1503,6 +1195,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     /**
      * @param $columns
      * @param $ids
+     *
      * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
      */
     public function getCategoryBuilder($columns, $ids)
@@ -1533,9 +1226,343 @@ class ArticlesDbAdapter implements DataDbAdapter
     }
 
     /**
+     * Returns article ids
+     *
+     * @param $detailIds
+     *
+     * @return array
+     */
+    protected function getArticleIdsByDetailIds($detailIds)
+    {
+        $articleIds = $this->modelManager->createQueryBuilder()
+            ->select('article.id')
+            ->from('Shopware\Models\Article\Detail', 'variant')
+            ->join('variant.article', 'article')
+            ->where('variant.id IN (:ids)')
+            ->setParameter('ids', $detailIds)
+            ->groupBy('article.id');
+
+        $mappedArticleIds = array_map(
+            function ($item) {
+                return $item['id'];
+            },
+            $articleIds->getQuery()->getResult()
+        );
+
+        return $mappedArticleIds;
+    }
+
+    /**
+     * Collects and creates a helper mapper for category path
+     *
+     * @param array $categories
+     *
+     * @return array
+     */
+    protected function getAssignedCategoryNames($categories)
+    {
+        $categoryIds = [];
+        foreach ($categories as $category) {
+            if (!empty($category['categoryId'])) {
+                $categoryIds[] = (string) $category['categoryId'];
+            }
+
+            if (!empty($category['categoryPath'])) {
+                $catPath = explode('|', $category['categoryPath']);
+                $categoryIds = array_merge($categoryIds, $catPath);
+            }
+        }
+
+        //only unique ids
+        $categoryIds = array_unique($categoryIds);
+
+        //removes empty value
+        $categoryIds = array_filter($categoryIds);
+
+        $categoriesNames = $this->modelManager->createQueryBuilder()
+            ->select(['category.id, category.name'])
+            ->from('Shopware\Models\Category\Category', 'category')
+            ->where('category.id IN (:ids)')
+            ->setParameter('ids', $categoryIds)
+            ->getQuery()->getResult();
+
+        $names = [];
+        foreach ($categoriesNames as $name) {
+            $names[$name['id']] = $name['name'];
+        }
+
+        return $names;
+    }
+
+    /**
+     * @param array $category contains category data
+     * @param array $mapper   contains categories' names
+     *
+     * @return string converted path
+     */
+    protected function generatePath($category, $mapper)
+    {
+        $ids = [];
+        if (!empty($category['categoryPath'])) {
+            foreach (explode('|', $category['categoryPath']) as $id) {
+                $ids[] = $mapper[$id];
+            }
+        }
+        krsort($ids);
+
+        if (!empty($category['categoryId'])) {
+            $ids[] = $mapper[$category['categoryId']];
+        }
+
+        $ids = array_filter($ids);
+
+        $path = implode('->', $ids);
+
+        return $path;
+    }
+
+    /**
+     * This data is for matching similars and accessories
+     *
+     * @param $articleNumber
+     */
+    protected function saveArticleData($articleNumber)
+    {
+        $tempData = $this->getTempData();
+
+        if (isset($tempData[$articleNumber])) {
+            return;
+        }
+
+        $this->setTempData($articleNumber);
+
+        $articleData = [
+            'articleId' => $articleNumber,
+            'mainNumber' => $articleNumber,
+            'orderNumber' => $articleNumber,
+            'processed' => 1,
+        ];
+
+        $this->setUnprocessedData('articles', 'article', $articleData);
+    }
+
+    /**
+     * Collects recursively category ids
+     *
+     * @param \Shopware\Models\Category\Category $categoryModel
+     */
+    protected function collectCategoryIds($categoryModel)
+    {
+        $categoryId = $categoryModel->getId();
+        $this->setCategoryIdCollection($categoryId);
+        $categories = $categoryModel->getChildren();
+
+        if (!$categories) {
+            return;
+        }
+
+        foreach ($categories as $category) {
+            $this->collectCategoryIds($category);
+        }
+    }
+
+    /**
+     * Returns all fields that can be translated.
+     *
+     * @return array
+     */
+    private function getTranslationFields()
+    {
+        $translationFields = [
+            'metaTitle' => 'metaTitle',
+            'txtArtikel' => 'name',
+            'txtkeywords' => 'keywords',
+            'txtpackunit' => 'packUnit',
+            'txtzusatztxt' => 'additionalText',
+            'txtshortdescription' => 'description',
+            'txtlangbeschreibung' => 'descriptionLong',
+        ];
+
+        if (!SwagVersionHelper::hasMinimumVersion('5.3.0')) {
+            $legacyAttributes = $this->getLegacyTranslationAttr();
+            foreach ($legacyAttributes as $attr) {
+                $translationFields[$attr['name']] = $attr['name'];
+            }
+        }
+
+        $attributes = $this->getTranslatableAttributes();
+        foreach ($attributes as $attribute) {
+            $translationFields['__attribute_' . $attribute['columnName']] = $attribute['columnName'];
+        }
+
+        return $translationFields;
+    }
+
+    /**
+     * Return list with default values for fields which are empty or don't exists
+     *
+     * @return array
+     */
+    private function getDefaultValues()
+    {
+        return $this->defaultValues;
+    }
+
+    /**
      * @param array $records
-     * @param int $index
+     *
+     * @throws \Exception
+     */
+    private function performImport($records)
+    {
+        $articleWriter = new ArticleWriter();
+        $pricesWriter = new PriceWriter();
+        $categoryWriter = new CategoryWriter();
+        $configuratorWriter = ConfiguratorWriter::createFromGlobalSingleton();
+        $translationWriter = new TranslationWriter();
+        $propertyWriter = PropertyWriter::createFromGlobalSingleton();
+        $relationWriter = new RelationWriter($this);
+        $imageWriter = new ImageWriter($this);
+
+        $defaultValues = $this->getDefaultValues();
+
+        foreach ($records['article'] as $index => $article) {
+            try {
+                $this->modelManager->getConnection()->beginTransaction();
+
+                $articleWriterResult = $articleWriter->write($article, $defaultValues);
+
+                $processedFlag = isset($article['processed']) && $article['processed'] == 1;
+
+                /*
+                 * Only processed data will be imported
+                 */
+                if (!$processedFlag) {
+                    $pricesWriter->write(
+                        $articleWriterResult->getArticleId(),
+                        $articleWriterResult->getDetailId(),
+                        array_filter(
+                            $records['price'],
+                            function ($price) use ($index) {
+                                return $price['parentIndexElement'] == $index;
+                            }
+                        )
+                    );
+
+                    $categoryWriter->write(
+                        $articleWriterResult->getArticleId(),
+                        array_filter(
+                            $records['category'],
+                            function ($category) use ($index) {
+                                return $category['parentIndexElement'] == $index && ($category['categoryId'] || $category['categoryPath']);
+                            }
+                        )
+                    );
+
+                    $configuratorWriter->writeOrUpdateConfiguratorSet(
+                        $articleWriterResult,
+                        array_filter(
+                            $records['configurator'],
+                            function ($configurator) use ($index) {
+                                return $configurator['parentIndexElement'] == $index;
+                            }
+                        )
+                    );
+
+                    $propertyWriter->writeUpdateCreatePropertyGroupsFilterAndValues(
+                        $articleWriterResult->getArticleId(),
+                        $article['orderNumber'],
+                        $this->filterPropertyValues($records, $index, $articleWriterResult)
+                    );
+
+                    $translationWriter->write(
+                        $articleWriterResult->getArticleId(),
+                        $articleWriterResult->getDetailId(),
+                        $articleWriterResult->getMainDetailId(),
+                        array_filter(
+                            $records['translation'],
+                            function ($translation) use ($index) {
+                                return $translation['parentIndexElement'] == $index;
+                            }
+                        )
+                    );
+                }
+
+                /*
+                 * Processed and unprocessed data will be imported
+                 */
+                if ($processedFlag) {
+                    $article['mainNumber'] = $article['orderNumber'];
+                }
+
+                $relationWriter->write(
+                    $articleWriterResult->getArticleId(),
+                    $article['mainNumber'],
+                    array_filter(
+                        $records['accessory'],
+                        function ($accessory) use ($index, $articleWriterResult) {
+                            return $accessory['parentIndexElement'] == $index && $articleWriterResult->getMainDetailId() == $articleWriterResult->getDetailId();
+                        }
+                    ),
+                    'accessory',
+                    $processedFlag
+                );
+
+                $relationWriter->write(
+                    $articleWriterResult->getArticleId(),
+                    $article['mainNumber'],
+                    array_filter(
+                        $records['similar'],
+                        function ($similar) use ($index, $articleWriterResult) {
+                            return $similar['parentIndexElement'] == $index && $articleWriterResult->getMainDetailId() == $articleWriterResult->getDetailId();
+                        }
+                    ),
+                    'similar',
+                    $processedFlag
+                );
+
+                $imageWriter->write(
+                    $articleWriterResult->getArticleId(),
+                    $article['mainNumber'],
+                    array_filter(
+                        $records['image'],
+                        function ($image) use ($index) {
+                            return $image['parentIndexElement'] == $index;
+                        }
+                    )
+                );
+
+                $this->modelManager->getConnection()->commit();
+            } catch (AdapterException $e) {
+                $this->modelManager->getConnection()->rollBack();
+                $message = $e->getMessage();
+                $this->saveMessage($message);
+            }
+        }
+    }
+
+    /**
+     * @return array
+     */
+    private function getTranslatableAttributes()
+    {
+        $repository = $this->modelManager->getRepository(Configuration::class);
+
+        return $repository->createQueryBuilder('configuration')
+            ->select('configuration.columnName')
+            ->where('configuration.tableName = :tablename')
+            ->andWhere('configuration.translatable = 1')
+            ->setParameter('tablename', 's_articles_attributes')
+            ->getQuery()
+            ->getArrayResult()
+        ;
+    }
+
+    /**
+     * @param array               $records
+     * @param int                 $index
      * @param ArticleWriterResult $articleWriterResult
+     *
      * @return array
      */
     private function filterPropertyValues($records, $index, ArticleWriterResult $articleWriterResult)
@@ -1552,6 +1579,7 @@ class ArticlesDbAdapter implements DataDbAdapter
      * @example: underscore_string will result in underscoreString
      *
      * @param string $underscoreString
+     *
      * @return string
      */
     private function underscoreToCamelCase($underscoreString)
@@ -1561,6 +1589,7 @@ class ArticlesDbAdapter implements DataDbAdapter
 
     /**
      * @param array $columns
+     *
      * @return array
      */
     private function filterAttributeColumns(array $columns)
@@ -1574,6 +1603,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $attributes[] = $column['Field'];
             }
         }
+
         return $attributes;
     }
 }

@@ -1,5 +1,5 @@
-//{namespace name=backend/swag_import_export/view/main}
-//{block name="backend/swag_import_export/view/manager/export"}
+// {namespace name=backend/swag_import_export/view/main}
+// {block name="backend/swag_import_export/view/manager/export"}
 Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
     extend: 'Ext.container.Container',
 
@@ -46,9 +46,9 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
     createFormPanel: function() {
         var me = this,
             formPanelItems = [me.mainFields()];
-        
+
         formPanelItems = formPanelItems.concat(me.additionalFields());
-        
+
         // Form panel which holds off all options
         me.formPanel = Ext.create('Ext.form.Panel', {
             bodyPadding: 15,
@@ -78,7 +78,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
     },
     /**
      * Main fields
-     * 
+     *
      * @return [object] generated Ext.form.FieldSet
      */
     mainFields: function() {
@@ -106,7 +106,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
 
     /**
      * Additional fields
-     * 
+     *
      * @return [object] generated Ext.form.FieldSet
      */
     additionalFields: function() {
@@ -126,7 +126,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
             }]
         });
 
-        me.stockField = Ext.create('Ext.form.FieldSet',{
+        me.stockField = Ext.create('Ext.form.FieldSet', {
             title: '{s name=swag_import_export/export/fieldset_additional}Additional export configuration{/s}',
             padding: 12,
             hidden: true,
@@ -160,7 +160,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
                 ]
             }]
         });
-        
+
         me.orderFields = Ext.create('Ext.form.FieldSet', {
             title: '{s name=swag_import_export/export/fieldset_additional}Additional export configuration{/s}',
             padding: 12,
@@ -217,25 +217,46 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
             }]
         });
 
+        var factory = Ext.create('Shopware.attribute.SelectionFactory');
+
+        me.customerFields = Ext.create('Ext.form.FieldSet', {
+            title: '{s name=swag_import_export/export/fieldset_additional}Additional export configuration{/s}',
+            padding: 12,
+            hidden: true,
+            defaults: {
+                labelStyle: 'font-weight: 700; text-align: right;'
+            },
+            items: [{
+                xtype: 'container',
+                padding: '0 0 8',
+                items: [{
+                    xtype: 'shopware-form-field-customer-stream-single-selection',
+                    fieldLabel: '{s name="swag_import_export/export/customer_stream"}{/s}',
+                    name: 'customerStreamId',
+                    helpText: '{s name="swag_import_export/export/customer_stream_help"}{/s}',
+                    store: factory.createEntitySearchStore('Shopware\\Models\\Customer\\CustomerStream')
+                }]
+            }]
+        });
+
         return [
             me.articleFields,
             me.orderFields,
             me.stockField,
-            me.customFilterFields
+            me.customFilterFields,
+            me.customerFields
         ];
     },
 
     createIntroductionTemplate: function() {
-        var me = this;
-
         return Ext.create('Ext.container.Container', {
-            html: '<i style="color: grey" >' + "{s name=swag_import_export/export/export_info}With file export, you can save information from the database in profiles, either in CSV or XML format. These profiles contain information about which data was exported along with its structure. The default profiles can be individually extended and modified with custom profiles in the configuration.{/s}" + '</i>'
+            html: '<i style="color: grey" >' + '{s name=swag_import_export/export/export_info}With file export, you can save information from the database in profiles, either in CSV or XML format. These profiles contain information about which data was exported along with its structure. The default profiles can be individually extended and modified with custom profiles in the configuration.{/s}' + '</i>'
         });
     },
 
     /*
      * Profile drop down
-     * 
+     *
      * @return [object] generated Ext.form.field.ComboBox
      */
     createProfileCombo: function() {
@@ -276,7 +297,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
                 width: 450,
                 getInnerTpl: function (value) {
                     return Ext.XTemplate(
-                        '{literal}'  +
+                        '{literal}' +
                         '<tpl if="translation">{ name } <i>({ translation })</i>' +
                         '<tpl else>{ name }</tpl>' +
                         '{/literal}');
@@ -284,7 +305,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
             },
             displayTpl: new Ext.XTemplate(
                 '<tpl for=".">' +
-                '{literal}'  +
+                '{literal}' +
                 '{[typeof values === "string" ? values : this.getFormattedName(values)]}' +
                 '<tpl if="xindex < xcount">' + me.delimiter + '</tpl>' +
                 '{/literal}' +
@@ -313,9 +334,9 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
                         } else if (Ext.isString(newValue)) {
                             searchString = Ext.String.trim(newValue);
 
-                            //scroll the store to first page
+                            // scroll the store to first page
                             store.currentPage = 1;
-                            //Loads the store with a special filter
+                            // Loads the store with a special filter
                             store.filter([
                                 { id: 'search', property: 'name', value: '%' + searchString + '%', expression: 'LIKE' }
                             ]);
@@ -340,8 +361,12 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
                         me.orderFields.show();
                     } else if (type === 'articlesInStock') {
                         me.stockField.show();
-                        if(me.filterValue === 'custom'){
+                        if (me.filterValue === 'custom') {
                             me.customFilterFields.show();
+                        }
+                    } else if (type === 'customers' || type === 'addresses') {
+                        if (Shopware.app.Application.shopware53Installed) {
+                            me.customerFields.show();
                         }
                     }
                 }
@@ -388,7 +413,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
     },
     /*
      * Format drop down
-     * 
+     *
      * @return [object] generated Ext.form.field.ComboBox
      */
     createFormatCombo: function() {
@@ -445,19 +470,19 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
         return me.categoryTreeCombo;
     },
 
-    createStockFilterComboBox:function(){
+    createStockFilterComboBox: function() {
         var me = this;
 
         me.stockFilter = Ext.create('Ext.data.Store', {
             fields: ['value', 'name'],
             data: [
-                { "value": "all", "name": '{s name=swag_import_export/profile/filter/alle}all{/s}' },
-                { "value": "inStock", "name": '{s name=swag_import_export/profile/filter/inStock}in stock{/s}' },
-                { "value": "notInStock", "name": '{s name=swag_import_export/profile/filter/notInStock}not in stock{/s}' },
-                { "value": "inStockOnSale", "name": '{s name=swag_import_export/profile/filter/inStockOnSale}in Stock top selling{/s}' },
-                { "value": "notInStockOnSale", "name": '{s name=swag_import_export/profile/filter/notInStockOnSale}not in stock top selling{/s}' },
-                { "value": "notInStockMinStock", "name": '{s name=swag_import_export/profile/filter/notInStockMinStock}less than or equal than min stock{/s}' },
-                { "value": "custom", "name": '{s name=swag_import_export/profile/filter/custom}Custom filter{/s}' }
+                { 'value': 'all', 'name': '{s name=swag_import_export/profile/filter/alle}all{/s}' },
+                { 'value': 'inStock', 'name': '{s name=swag_import_export/profile/filter/inStock}in stock{/s}' },
+                { 'value': 'notInStock', 'name': '{s name=swag_import_export/profile/filter/notInStock}not in stock{/s}' },
+                { 'value': 'inStockOnSale', 'name': '{s name=swag_import_export/profile/filter/inStockOnSale}in Stock top selling{/s}' },
+                { 'value': 'notInStockOnSale', 'name': '{s name=swag_import_export/profile/filter/notInStockOnSale}not in stock top selling{/s}' },
+                { 'value': 'notInStockMinStock', 'name': '{s name=swag_import_export/profile/filter/notInStockMinStock}less than or equal than min stock{/s}' },
+                { 'value': 'custom', 'name': '{s name=swag_import_export/profile/filter/custom}Custom filter{/s}' }
             ]
         });
 
@@ -495,7 +520,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
             fields: ['value', 'name'],
             data: [
                 { value: 'greaterThan', name: '{s name=swag_import_export/profile/filter/greaterThan}Greater than{/s}' },
-                { value: "lessThan", name: '{s name=swag_import_export/profile/filter/lessThan}Less than{/s}' }
+                { value: 'lessThan', name: '{s name=swag_import_export/profile/filter/lessThan}Less than{/s}' }
             ]
         });
 
@@ -530,7 +555,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
 
     /*
      * Products variants checkbox
-     * 
+     *
      * @return [object] generated Ext.form.field.Checkbox
      */
     createVariantsCheckbox: function() {
@@ -546,7 +571,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
 
     /*
      * Limit input field
-     * 
+     *
      * @return [object] generated Ext.form.field.Number
      */
     createLimit: function() {
@@ -561,7 +586,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
     },
     /*
      * Offset input field
-     * 
+     *
      * @return [object] generated Ext.form.field.Number
      */
     createOffset: function() {
@@ -607,4 +632,4 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
         }
     }
 });
-//{/block}
+// {/block}
