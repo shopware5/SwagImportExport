@@ -641,7 +641,8 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
                 'label' => 'Image import mode',
                 'store' => [
                     [1, ['de_DE' => 'Gleiche Artikelbilder erneut verwenden', 'en_GB' => 'Re-use same article images']],
-                    [2, ['de_DE' => 'Gleiche Artikelbilder nicht erneut verwenden', 'en_GB' => 'Don\'t re-use article images']]
+                    [2, ['de_DE' => 'Gleiche Artikelbilder nicht erneut verwenden', 'en_GB' => 'Don\'t re-use article images']],
+                    [3, ['de_DE' => 'Gleiche Artikelbilder überschreiben', 'en_GB' => 'Overwrite existing article images']],
                 ],
                 'required' => false,
                 'multiSelect' => false,
