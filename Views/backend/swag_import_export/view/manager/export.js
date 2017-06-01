@@ -234,7 +234,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
                     fieldLabel: '{s name="swag_import_export/export/customer_stream"}{/s}',
                     name: 'customerStreamId',
                     helpText: '{s name="swag_import_export/export/customer_stream_help"}{/s}',
-                    store: factory.createEntitySearchStore('Shopware\\Models\\Customer\\CustomerStream')
+                    store: factory.createEntitySearchStore('Shopware\\Models\\CustomerStream\\CustomerStream')
                 }]
             }]
         });
