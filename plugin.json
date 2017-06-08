@@ -8,10 +8,11 @@
     "link": "http://store.shopware.com",
     "author": "Shopware AG",
 
-    "currentVersion": "2.0.2",
+    "currentVersion": "2.1.0",
 
     "changelog": {
         "de": {
+            "2.1.0": "PT-7644, SW-18399, SW-18916 - Shopware 5.3 Kompatibilität;",
             "2.0.2": "PT-6830 - Feature: Kundenadressen Standardprofil; PT-7063 - Bugfix: Beschreibungen für Standardprofile; PT-7095 - Bugfix: Artikelpreis-Import über CLI verbessert; PT-7151 - Bugfix: Import von Artikeln mit Staffelpreisen; PT-7189 - Bugfix: Sortierung der Protokolle anhand des Erstelldatums; PT-7190 - Bugfix: Sortieren und Filtern für Profile verbessert; PT-7192 - Bugfix: Verbesserung der Fehlermeldungen bei erweiterten Datensätzen; PT-7198 - Bugfix: Arbeitsablauf Anlegen und Anpassen von Profilen verbessert; PT-7234 - Bugfix: Zuweisung von Newsletter-Empfänger zu Gruppen; PT-7254 - Bugfix: Update Probleme; PT-7286 - Bugfix: Fehler beim Erstellen von Spalten; PT-7272 - Bugfix: Artikelpreis Import für Einkaufspreis; PT-7281 - Feature: Standardprofil für Bestellungen; PT-7293 - Bugfix: Kein Import-Error für leere Artikeleigenschaften;",
             "2.0.1": "PT-7236 - Doppelt vergebene Profil-Namen bekommen einen individuellen Suffix",
             "2.0.0": "PT-6896 - Bugfix: CSV-Dateien lassen sich ohne Leerzeile am Ende importieren; PT-6896 - Bugfix: Kategorie-ID ist nun ein Pflichtfeld für Kategorien; PT-6896 - Bugfix: Kategorie-IDs werden nicht mehr automatisch inkrementiert; PT-6822 - Bugfix: Einkaufspreise konnten nicht importiert werden; PT-6816 - Bugfix: Artikel-Bilder können wieder von externen Ressourcen importiert werden; Feature: Redesign des Import/Export-Moduls; Feature: Standardprofile hinzugefügt; Feature: Import/Export-Profile können exportiert und importiert werden;",
@@ -35,6 +36,7 @@
             "1.0.1": "Problem mit verschwindendem Import/Export Menü-Eintrag behoben; Weitere ACL-Zugangsberechtigungen hinzugefügt; Korrektur: article.active Verhalten; Korrektur: Artikel-Attribute; Korrektur: Datums- und Zeitimporte"
         },
         "en": {
+            "2.1.0": "PT-7644, SW-18399, SW-18916 - Shopware 5.3 compatibility;",
             "2.0.2": "PT-6830 - Feature: customer address default profile; PT-7063 - Bugfix: Descriptions for default profiles; PT-7095 - Bugfix: Improve product prices import via CLI; PT-7151 - Bugfix: Import of products with graduation prices; PT-7189 - Bugfix: Sorting for protocols based on creation date; PT-7190 - Bugfix: Improve filtering and sorting for profiles; PT-7192 - Bugfix: Improved error messages for extended data sets; PT-7198 - Bugfix: Improve workflow for creating and editing profiles; PT-7234 - Bugfix: Linking newsletter recipients to groups; PT-7254 - Bugfix: Update problems; PT-7286 - Bugfix: Issue when adding columns; PT-7272 - Bugfix: Product price import purchase price; PT-7281 - Feature: Default profile for orders; PT-7293 - Bugfix: No import error for empty product property;",
             "2.0.1": "PT-7236 - Duplicate named profile names will get an individual suffix",
             "2.0.0": "PT-6896 - Bugfix: CSV-files are able to import without a whitespace at the end; PT-6896 - Bugfix: Category-ID is required for categories; PT-6896 - Bugfix: Disabled auto-increment of category ids; PT-6822 - Bugfix: Purchase prices could not be imported; PT-6816 - Bugfix: Article images can be imported from external resources; Feature: Redesign of the Import/Export module; Feature: Added default profiles; Feature: Import/Export profiles can be exported and imported;",
