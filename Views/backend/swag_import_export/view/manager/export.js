@@ -627,6 +627,9 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
         me.orderFields.hide();
         me.stockField.hide();
         me.customFilterFields.hide();
+        if (me.customerFields) {
+            me.customerFields.hide();
+        }
     },
 
     resetAdditionalFields: function() {
