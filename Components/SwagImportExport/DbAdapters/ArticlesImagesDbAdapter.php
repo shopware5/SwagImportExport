@@ -290,6 +290,18 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                     $media = $mediaRepository->findOneBy(['name' => $name]);
                 }
 
+                // overwrite existing media
+                if ($this->imageImportMode === 3) {
+                    $mediaRepository = $this->manager->getRepository(Media::class);
+                    $media = $mediaRepository->findOneBy(['name' => $name]);
+
+                    if ($media) {
+                        $this->manager->remove($media);
+                        $this->manager->flush();
+                        $media = false;
+                    }
+                }
+
                 //create new media
                 if ($this->imageImportMode === 2 || empty($media)) {
                     $path = $this->load($record['image'], $name);
