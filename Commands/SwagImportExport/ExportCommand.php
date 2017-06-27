@@ -10,13 +10,13 @@ namespace Shopware\Commands\SwagImportExport;
 
 use Shopware\Commands\ShopwareCommand;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Components\SwagImportExport\Utils\CommandHelper;
 use Shopware\CustomModels\ImportExport\Profile;
 use Shopware\CustomModels\ImportExport\Repository;
 use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Shopware\Components\SwagImportExport\Utils\CommandHelper;
 
 class ExportCommand extends ShopwareCommand
 {
@@ -61,7 +61,7 @@ class ExportCommand extends ShopwareCommand
             ->addOption('offset', 'o', InputOption::VALUE_OPTIONAL, 'What is the offset?')
             ->addOption('limit', 'l', InputOption::VALUE_OPTIONAL, 'What is the limit?')
             ->addOption('category', 'c', InputOption::VALUE_OPTIONAL, 'Provide a category ID')
-            ->setHelp("The <info>%command.name%</info> imports data from a file.");
+            ->setHelp('The <info>%command.name%</info> imports data from a file.');
     }
 
     /**
@@ -83,32 +83,33 @@ class ExportCommand extends ShopwareCommand
                 'limit' => $this->limit,
                 'offset' => $this->offset,
                 'username' => 'Commandline',
-                'category' => $this->category ? [$this->category] : null
+                'category' => $this->category ? [$this->category] : null,
             ]
         );
 
-        $output->writeln('<info>' . sprintf("Using profile: %s.", $this->profile) . '</info>');
-        $output->writeln('<info>' . sprintf("Using format: %s.", $this->format) . '</info>');
-        $output->writeln('<info>' . sprintf("Using file: %s.", $this->filePath) . '</info>');
+        $output->writeln('<info>' . sprintf('Using profile: %s.', $this->profile) . '</info>');
+        $output->writeln('<info>' . sprintf('Using format: %s.', $this->format) . '</info>');
+        $output->writeln('<info>' . sprintf('Using file: %s.', $this->filePath) . '</info>');
         if ($this->category) {
-            $output->writeln('<info>' . sprintf("Using category as filter: %s.", $this->category) . '</info>');
+            $output->writeln('<info>' . sprintf('Using category as filter: %s.', $this->category) . '</info>');
         }
 
         $preparationData = $helper->prepareExport();
         $count = $preparationData['count'];
-        $output->writeln('<info>' . sprintf("Total count: %d.", $count) . '</info>');
+        $output->writeln('<info>' . sprintf('Total count: %d.', $count) . '</info>');
 
         $position = 0;
 
         while ($position < $count) {
             $data = $helper->exportAction();
             $position = $data['position'];
-            $output->writeln('<info>' . sprintf("Processed: %d.", $position) . '</info>');
+            $output->writeln('<info>' . sprintf('Processed: %d.', $position) . '</info>');
         }
     }
 
     /**
      * @param InputInterface $input
+     *
      * @throws \Exception
      */
     protected function prepareExportInputValidation(InputInterface $input)
@@ -122,7 +123,7 @@ class ExportCommand extends ShopwareCommand
         $this->category = $input->getOption('category');
 
         if (!$this->filePath) {
-            throw new \Exception("File path is required.");
+            throw new \Exception('File path is required.');
         }
 
         $parts = explode('.', $this->filePath);
@@ -144,7 +145,7 @@ class ExportCommand extends ShopwareCommand
                 }
             }
         } else {
-            /** @var Profile profileEntity */
+            /* @var Profile profileEntity */
             $this->profileEntity = $profileRepository->findOneBy(['name' => $this->profile]);
             $this->validateProfiles($input);
         }
@@ -177,7 +178,7 @@ class ExportCommand extends ShopwareCommand
         }
 
         if ($this->profileEntity->getType() == 'articlesImages') {
-            throw new \InvalidArgumentException("articlesImages profile type is not supported at the moment.");
+            throw new \InvalidArgumentException('articlesImages profile type is not supported at the moment.');
         }
     }
 }

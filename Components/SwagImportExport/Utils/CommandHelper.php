@@ -60,6 +60,7 @@ class CommandHelper
      * Construct
      *
      * @param array $data
+     *
      * @throws \Exception
      */
     public function __construct(array $data)
@@ -68,13 +69,13 @@ class CommandHelper
         $this->logger = Shopware()->Container()->get('swag_import_export.logger');
 
         if (!isset($data['profileEntity'])) {
-            throw new \Exception("No profile given!");
+            throw new \Exception('No profile given!');
         }
         if (!isset($data['format'])) {
-            throw new \Exception("No format given!");
+            throw new \Exception('No format given!');
         }
         if (!isset($data['filePath']) || !is_dir(dirname($data['filePath']))) {
-            throw new \Exception("Invalid file path " . $data['filePath']);
+            throw new \Exception('Invalid file path ' . $data['filePath']);
         }
 
         $this->profileEntity = $data['profileEntity'];
@@ -106,8 +107,9 @@ class CommandHelper
     /**
      * Tries to find profile by given name
      *
-     * @param string $filename
+     * @param string     $filename
      * @param Repository $repository
+     *
      * @return bool|ProfileEntity
      */
     public static function findProfileByName($filename, Repository $repository)
@@ -144,7 +146,7 @@ class CommandHelper
             'limit' => [
                 'limit' => $this->limit,
                 'offset' => $this->offset,
-            ]
+            ],
         ];
 
         if ($this->exportVariants) {
@@ -182,7 +184,7 @@ class CommandHelper
 
         return [
             'position' => $position,
-            'count' => count($ids)
+            'count' => count($ids),
         ];
     }
 
@@ -203,7 +205,7 @@ class CommandHelper
             'limit' => [
                 'limit' => $this->limit,
                 'offset' => $this->offset,
-            ]
+            ],
         ];
 
         if ($this->exportVariants) {
@@ -260,7 +262,7 @@ class CommandHelper
         $this->logger->write($message, 'false', $dataSession->getEntity());
 
         $logData = new LogDataStruct(
-            date("Y-m-d H:i:s"),
+            date('Y-m-d H:i:s'),
             $resultData['fileName'],
             $profile->getName(),
             $message,
@@ -277,8 +279,9 @@ class CommandHelper
     /**
      * Prepares import
      *
-     * @return array
      * @throws \Exception
+     *
+     * @return array
      */
     public function prepareImport()
     {
@@ -323,15 +326,16 @@ class CommandHelper
         return [
             'success' => true,
             'position' => $position,
-            'count' => $totalCount
+            'count' => $totalCount,
         ];
     }
 
     /**
      * Executes import action
      *
-     * @return array
      * @throws \Exception
+     *
+     * @return array
      */
     public function importAction()
     {
@@ -402,8 +406,8 @@ class CommandHelper
                     'data' => $resultData['unprocessedData'],
                     'session' => [
                         'prevState' => $sessionState,
-                        'currentState' => $dataIO->getSessionState()
-                    ]
+                        'currentState' => $dataIO->getSessionState(),
+                    ],
                 ];
 
                 $pathInfo = pathinfo($inputFile);
@@ -415,7 +419,7 @@ class CommandHelper
 
                     $post['unprocessed'][] = [
                         'profileName' => $key,
-                        'fileName' => $outputFile
+                        'fileName' => $outputFile,
                     ];
                     $this->afterImport($data, $key, $outputFile);
                 }
@@ -438,7 +442,7 @@ class CommandHelper
                 $this->logger->write($message, 'false', $dataSession->getEntity());
 
                 $logDataStruct = new LogDataStruct(
-                    date("Y-m-d H:i:s"),
+                    date('Y-m-d H:i:s'),
                     $inputFile,
                     $profile->getName(),
                     $message,
@@ -453,7 +457,7 @@ class CommandHelper
             $this->logger->write($e->getMessage(), 'true', $dataSession->getEntity());
 
             $logDataStruct = new LogDataStruct(
-                date("Y-m-d H:i:s"),
+                date('Y-m-d H:i:s'),
                 $inputFile,
                 $profile->getName(),
                 $e->getMessage(),
@@ -469,7 +473,7 @@ class CommandHelper
     /**
      * Saves unprocessed data to csv file
      *
-     * @param array $data
+     * @param array  $data
      * @param string $profileName
      * @param string $outputFile
      */
