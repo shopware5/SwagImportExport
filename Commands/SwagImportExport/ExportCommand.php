@@ -11,6 +11,7 @@ namespace Shopware\Commands\SwagImportExport;
 use Shopware\Commands\ShopwareCommand;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\Utils\CommandHelper;
+use Shopware\Components\SwagImportExport\Utils\SwagVersionHelper;
 use Shopware\CustomModels\ImportExport\Profile;
 use Shopware\CustomModels\ImportExport\Repository;
 use Symfony\Component\Console\Input\InputArgument;
@@ -47,6 +48,9 @@ class ExportCommand extends ShopwareCommand
     /** @var int */
     protected $sessionId;
 
+    /** @var int */
+    protected $customerStream;
+
     /**
      * {@inheritdoc}
      */
@@ -55,8 +59,11 @@ class ExportCommand extends ShopwareCommand
         $this->setName('sw:importexport:export')
             ->setDescription('Export data to files.')
             ->addArgument('filepath', InputArgument::REQUIRED, 'Path to file to read from.')
-            ->addOption('profile', 'p', InputOption::VALUE_REQUIRED, 'Which profile will be used?')
-            ->addOption('format', 'f', InputOption::VALUE_OPTIONAL, 'What is the format of the imported file - XML or CSV?')
+            ->addOption('profile', 'p', InputOption::VALUE_REQUIRED, 'Which profile will be used?');
+        if (SwagVersionHelper::hasMinimumVersion('5.3.0')) {
+            $this->addOption('customerstream', 'u', InputOption::VALUE_OPTIONAL, 'Which customer stream id?');
+        }
+        $this->addOption('format', 'f', InputOption::VALUE_OPTIONAL, 'What is the format of the imported file - XML or CSV?')
             ->addOption('exportVariants', 'x', InputOption::VALUE_NONE, 'Should the variants be exported?')
             ->addOption('offset', 'o', InputOption::VALUE_OPTIONAL, 'What is the offset?')
             ->addOption('limit', 'l', InputOption::VALUE_OPTIONAL, 'What is the limit?')
@@ -78,6 +85,7 @@ class ExportCommand extends ShopwareCommand
             [
                 'profileEntity' => $this->profileEntity,
                 'filePath' => Shopware()->DocPath() . $this->filePath,
+                'customerStream' => $this->customerStream,
                 'format' => $this->format,
                 'exportVariants' => $this->exportVariants,
                 'limit' => $this->limit,
@@ -88,6 +96,9 @@ class ExportCommand extends ShopwareCommand
         );
 
         $output->writeln('<info>' . sprintf('Using profile: %s.', $this->profile) . '</info>');
+        if ($this->customerStream) {
+            $output->writeln('<info>' . sprintf('Using customer stream: %d.', $this->customerStream) . '</info>');
+        }
         $output->writeln('<info>' . sprintf('Using format: %s.', $this->format) . '</info>');
         $output->writeln('<info>' . sprintf('Using file: %s.', $this->filePath) . '</info>');
         if ($this->category) {
@@ -115,6 +126,9 @@ class ExportCommand extends ShopwareCommand
     protected function prepareExportInputValidation(InputInterface $input)
     {
         $this->profile = $input->getOption('profile');
+        if (SwagVersionHelper::hasMinimumVersion('5.3.0')) {
+            $this->customerStream = $input->getOption('customerstream');
+        }
         $this->format = $input->getOption('format');
         $this->exportVariants = $input->getOption('exportVariants');
         $this->offset = (int) $input->getOption('offset');
@@ -150,6 +164,11 @@ class ExportCommand extends ShopwareCommand
             $this->validateProfiles($input);
         }
 
+        if (!empty($this->customerStream)) {
+            $customerStream = $em->find('Shopware\Models\CustomerStream\CustomerStream', $this->customerStream);
+            $this->validateCustomerStream($customerStream);
+        }
+
         // if no format is specified try to find it from the filename
         if (empty($this->format)) {
             $this->format = pathinfo($this->filePath, PATHINFO_EXTENSION);
@@ -179,6 +198,20 @@ class ExportCommand extends ShopwareCommand
 
         if ($this->profileEntity->getType() == 'articlesImages') {
             throw new \InvalidArgumentException('articlesImages profile type is not supported at the moment.');
+        }
+    }
+
+    /**
+     * @param $customerStream
+     */
+    protected function validateCustomerStream($customerStream)
+    {
+        if (!$customerStream) {
+            throw new \Exception(sprintf('Invalid stream: \'%s\'! There is no customer stream with this id.', $this->customerStream));
+        }
+
+        if (!in_array($this->profileEntity->getType(), ['customers', 'addresses'], true)) {
+            throw new \Exception(sprintf('Customer stream export can not be used with profile: \'%s\'!', $this->profile));
         }
     }
 }

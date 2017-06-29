@@ -56,6 +56,9 @@ class CommandHelper
     /** @var Logger */
     protected $logger;
 
+    /** @var int */
+    protected $customerStream;
+
     /**
      * Construct
      *
@@ -101,6 +104,10 @@ class CommandHelper
 
         if (!empty($data['category'])) {
             $this->category = $data['category'];
+        }
+
+        if (!empty($data['customerStream'])) {
+            $this->customerStream = $data['customerStream'];
         }
     }
 
@@ -155,6 +162,10 @@ class CommandHelper
 
         if ($this->category) {
             $postData['filter']['categories'] = $this->category;
+        }
+
+        if ($this->customerStream) {
+            $postData['filter']['customerStreamId'] = $this->customerStream;
         }
 
         /** @var Profile $profile */
@@ -213,6 +224,10 @@ class CommandHelper
         }
         if ($this->category) {
             $postData['filter']['categories'] = $this->category;
+        }
+
+        if ($this->customerStream) {
+            $postData['filter']['customerStreamId'] = $this->customerStream;
         }
 
         /** @var Profile $profile */
