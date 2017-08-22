@@ -583,6 +583,12 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $attributesSelect[] = sprintf('%s.%s as attribute%s', $prefix, $attr, ucwords($attr));
             }
         }
+        
+        $attributesSelect = Shopware()->Events()->filter(
+            'Shopware_Components_SwagImportExport_DbAdapters_ArticlesDbAdapter_GetArticleAttributes',
+            $attributesSelect,
+            ['subject' => $this]
+        );
 
         return $attributesSelect;
     }
