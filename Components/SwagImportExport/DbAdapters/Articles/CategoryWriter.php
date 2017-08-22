@@ -53,6 +53,13 @@ class CategoryWriter
         }
 
         $values = $this->prepareValues($categories, $articleId);
+        
+        $values = Shopware()->Events()->filter(
+            'Shopware_Components_SwagImportExport_DbAdapters_Articles_CategoryWriter_Write',
+            $values,
+            ['subject' => $this]
+        );
+        
         $sql = "
             INSERT INTO s_articles_categories (articleID, categoryID)
             VALUES {$values}
