@@ -1,4 +1,6 @@
 //{namespace name=backend/swag_import_export/view/main}
+//{block name="backend/swag_import_export/view/manager/import"}
+// deprecated since 2.4.2 and will be removed with 3.0.0
 //{block name="backend/swag_import_export/view/manager/export"}
 Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
     extend: 'Ext.container.Container',
@@ -365,4 +367,5 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
     }
 
 });
+//{/block}
 //{/block}

@@ -1,4 +1,6 @@
 //{namespace name=backend/swag_import_export/view/session}
+//{block name="backend/swag_import_export/view/log/log"}
+// deprecated since 2.4.2 and will be removed with 3.0.0
 //{block name="backend/swag_import_export/view/manager/manager"}
 Ext.define('Shopware.apps.SwagImportExport.view.log.Log', {
     extend: 'Ext.grid.Panel',
@@ -76,4 +78,5 @@ Ext.define('Shopware.apps.SwagImportExport.view.log.Log', {
         );
     }
 });
+//{/block}
 //{/block}
