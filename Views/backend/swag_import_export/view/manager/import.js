@@ -1,5 +1,5 @@
 //{namespace name=backend/swag_import_export/view/main}
-//{block name="backend/swag_import_export/view/manager/export"}
+//{block name="backend/swag_import_export/view/manager/import"}
 Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
     extend: 'Ext.container.Container',
 
