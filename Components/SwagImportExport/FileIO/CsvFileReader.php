@@ -41,6 +41,9 @@ class CsvFileReader implements FileReader
      */
     public function readRecords($fileName, $position, $step)
     {
+        // Make sure to detect CR LF (Windows) line breaks
+        ini_set('auto_detect_line_endings', true);
+
         $tempFileName = '';
         if (file_exists($fileName)) {
             $tempFileName = $this->uploadPathProvider->getRealPath(md5(microtime() . '.csv'));
