@@ -836,7 +836,9 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         $schema = $tool->getSchemaFromMetadata($classes);
         $tableNames = [];
         foreach ($schema->getTableNames() as $tableName) {
-            $tableNames[] = array_pop(explode('.', $tableName));
+            
+            $tableNamesArray = explode('.', $tableName)
+            $tableNames[] = array_pop($tableNamesArray);
         }
 
         return $tableNames;
