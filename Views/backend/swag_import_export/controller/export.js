@@ -7,6 +7,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
         finished: '{s name=swag_import_export/export/finished}Export finished successfully {/s}',
         process: '{s name=swag_import_export/export/process}Exporting... {/s}'
     },
+
     /**
      * This method creates listener for events fired from the export
      */
@@ -30,6 +31,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
 
         me.callParent(arguments);
     },
+
     onExport: function(btn) {
         var me = this,
             form = btn.up('form'),
@@ -47,6 +49,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
 
         me.onCreateExportWindow();
     },
+
     /**
      * Triggers if the resume button was pressed
      * in the previous operation window.
@@ -66,6 +69,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
 
         me.getConfig();
     },
+
     /**
      * Creates batch configuration
      */
@@ -74,6 +78,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
 
         me.getBatchConfig = me.getConfig();
     },
+
     /**
      * Triggers if the start exporting button was pressed
      * in the export window.
@@ -92,6 +97,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
         win.cancelButton.show();
         win.closeButton.disable();
     },
+
     /**
      * Returns the needed configuration for the next batch call
      */
@@ -100,24 +106,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
 
         me.batchConfig = {
             requestUrl: '{url controller="SwagImportExportExport" action="export"}',
-            params: {
-                profileId: me.parameters.profile,
-                sessionId: me.parameters.sessionId,
-                format: me.parameters.format,
-                limit: me.parameters.limit,
-                offset: me.parameters.offset,
-                categories: me.parameters.category,
-                variants: me.parameters.variants,
-                ordernumberFrom: me.parameters.ordernumberFrom,
-                dateFrom: me.parameters.dateFrom,
-                dateTo: me.parameters.dateTo,
-                orderstate: me.parameters.orderstate,
-                paymentstate: me.parameters.paymentstate,
-                stockFilter: me.parameters.stockFilter,
-                customFilterDirection: me.parameters.customFilterCombo,
-                customFilterValue: me.parameters.filterThanValue,
-                customerStreamId: me.parameters.customerStreamId
-            }
+            params: me.getParams()
         };
 
         Ext.Ajax.request({
@@ -143,6 +132,33 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
             }
         });
     },
+
+    /**
+     * Returns the parameters that will be sent to the backend
+     */
+    getParams: function() {
+        var me = this;
+
+        return {
+            profileId: me.parameters.profile,
+            sessionId: me.parameters.sessionId,
+            format: me.parameters.format,
+            limit: me.parameters.limit,
+            offset: me.parameters.offset,
+            categories: me.parameters.category,
+            variants: me.parameters.variants,
+            ordernumberFrom: me.parameters.ordernumberFrom,
+            dateFrom: me.parameters.dateFrom,
+            dateTo: me.parameters.dateTo,
+            orderstate: me.parameters.orderstate,
+            paymentstate: me.parameters.paymentstate,
+            stockFilter: me.parameters.stockFilter,
+            customFilterDirection: me.parameters.customFilterCombo,
+            customFilterValue: me.parameters.filterThanValue,
+            customerStreamId: me.parameters.customerStreamId
+        };
+    },
+
     /**
      * This function sends a request to export data
      *
@@ -205,6 +221,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
             }
         });
     },
+
     /**
      * Sets cancelOperation to true which will be checked in the
      * next batch call and will stop.
