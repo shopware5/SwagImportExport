@@ -546,6 +546,15 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
                 'value' => false,
             ]
         );
+        
+      $form->setElement(
+            'text',
+            'batch-size',
+            array(
+                'label' => 'Batch-Size',
+                'value' => '1000'
+            )
+        );
 
         $form->setElement(
             'combo',
