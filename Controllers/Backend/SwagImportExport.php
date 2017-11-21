@@ -108,13 +108,17 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             $this->Front()->Plugins()->Json()->setRenderer(false);
 
             $response = $this->Response();
+            $response->clearHeaders();
+            $response->clearRawHeaders();
+
             $response->setHeader('Cache-Control', 'public');
             $response->setHeader('Content-Description', 'File Transfer');
             $response->setHeader('Content-disposition', 'attachment; filename=' . $fileName);
-
             $response->setHeader('Content-Type', $application);
+            $response->sendHeaders();
 
             echo file_get_contents($filePath);
+            exit();
         } catch (\Exception $e) {
             $this->View()->assign(
                 [
