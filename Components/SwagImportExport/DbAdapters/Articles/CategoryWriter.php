@@ -268,7 +268,7 @@ class CategoryWriter
             [$categoryId]
         );
 
-        return is_numeric($isLeaf);
+        return !is_numeric($isLeaf);
     }
 
     /**
