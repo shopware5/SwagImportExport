@@ -46,7 +46,7 @@ class ArticlePricesExportTest extends \Enlight_Components_Test_Controller_TestCa
         $this->assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
-        $this->assertPriceAttributeInXml($file, 'SW10002.1', 'price', '59,99');
+        $this->assertPriceAttributeInXml($file, 'SW10002.1', 'price', '59.99');
         $this->assertPriceAttributeInXml($file, 'SW10002.1', '_name', 'Münsterländer Lagerkorn 32%');
         $this->assertPriceAttributeInXml($file, 'SW10002.1', '_additionaltext', '1,5 Liter');
     }
@@ -68,7 +68,7 @@ class ArticlePricesExportTest extends \Enlight_Components_Test_Controller_TestCa
         $this->backendControllerTestHelper->addFile($file);
 
         $mappedPriceList = $this->csvToArrayIndexedByFieldValue($file, 'ordernumber');
-        $this->assertEquals('59,99', $mappedPriceList['SW10002.1']['price']);
+        $this->assertEquals('59.99', $mappedPriceList['SW10002.1']['price']);
         $this->assertEquals('Münsterländer Lagerkorn 32%', $mappedPriceList['SW10002.1']['_name']);
         $this->assertEquals('1,5 Liter', $mappedPriceList['SW10002.1']['_additionaltext']);
     }
