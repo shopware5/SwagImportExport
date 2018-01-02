@@ -44,6 +44,11 @@ class ImportExportTestKernel extends TestKernel
         Shopware()->Loader()->registerNamespace('Shopware\CustomModels', __DIR__ . '/../Models/');
 
         self::registerResources();
+
+        Shopware()->Db()->query(
+            'UPDATE s_core_config_elements SET value = \'b:0;\' WHERE name = \'useCommaDecimal\''
+        );
+        Shopware()->Container()->get('cache')->clean();
     }
 
     /**
