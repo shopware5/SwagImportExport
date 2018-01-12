@@ -1,12 +1,18 @@
 {
-  "name": "shopware/SwagImportExport",
-  "require-dev": {
-    "shopware/plugin-dev-tools": "master-dev"
-  },
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/shopwareLabs/plugin-dev-tools"
-    }
-  ]
+    "name": "shopware/swag-import-export",
+    "type": "shopware-backend-plugin",
+    "description": "Import and export tool for Shopware",
+    "license": "MIT",
+    "extra": {
+        "installer-name": "SwagImportExport"
+    },
+    "require-dev": {
+        "shopware/plugin-dev-tools": "master-dev"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/shopwareLabs/plugin-dev-tools"
+        }
+    ]
 }
