@@ -99,6 +99,31 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
     },
 
     /**
+     * Returns the parameters that will be sent to the backend
+     */
+    getParams: function() {
+      var me = this;
+
+      return {
+        profileId: me.parameters.profile,
+        sessionId: me.parameters.sessionId,
+        format: me.parameters.format,
+        limit: me.parameters.limit,
+        offset: me.parameters.offset,
+        categories: me.parameters.category,
+        variants: me.parameters.variants,
+        ordernumberFrom: me.parameters.ordernumberFrom,
+        dateFrom: me.parameters.dateFrom,
+        dateTo: me.parameters.dateTo,
+        orderstate: me.parameters.orderstate,
+        paymentstate: me.parameters.paymentstate,
+        stockFilter: me.parameters.stockFilter,
+        customFilterDirection: me.parameters.customFilterCombo,
+        customFilterValue: me.parameters.filterThanValue,
+        customerStreamId: me.parameters.customerStreamId
+      };
+    },
+    /**
      * Returns the needed configuration for the next batch call
      */
     getConfig: function() {
