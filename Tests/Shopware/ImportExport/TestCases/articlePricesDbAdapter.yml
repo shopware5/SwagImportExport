@@ -4,17 +4,17 @@ testRead:
         ids: [3, 4, 6, 20, 21, 22]
         expected:
             0:
-                price: '14,95'
+                price: 14.95
             1:
-                price: '7,99'
+                price: 7.99
             2:
-                price: '35,95'
+                price: 35.95
             3:
-                price: '49,95'
+                price: 49.95
             4:
-                price: '24,99'
+                price: 24.99
             5:
-                price: '5,95'
+                price: 5.95
         expectedCount: 6
 testReadRecordIds:
     test1:

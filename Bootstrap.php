@@ -567,7 +567,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
             'useCommaDecimal',
             [
                 'label' => 'Use comma as decimal separator',
-                'value' => false,
+                'value' => true,
             ]
         );
 
