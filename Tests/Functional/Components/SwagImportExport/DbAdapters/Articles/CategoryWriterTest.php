@@ -39,19 +39,23 @@ class CategoryWriterTest extends \PHPUnit_Framework_TestCase
         $categoryWriterAdapter->write($validArticleId, $invalidCategoryArray);
     }
 
-    public function test_write_with_invalid_category_id_and_invalid_path_throws_exception()
+    public function test_write_with_no_category_id_and_new_path_creates_categories()
     {
         $categoryWriterAdapter = $this->createCategoryWriterAdapter();
         $validArticleId = 3;
         $invalidCategoryArray = [
             [
                 'categoryId' => '',
-                'categoryPath' => "Invalid->Category->Path"
+                'categoryPath' => "Brand->New->Category->Path"
             ]
         ];
 
-        $this->expectException(\Exception::class);
         $categoryWriterAdapter->write($validArticleId, $invalidCategoryArray);
+        /** @var Connection $dbalConnection */
+        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $articleCategories = $dbalConnection->executeQuery("SELECT * FROM s_categories c LEFT JOIN s_articles_categories ac ON ac.categoryID = c.id WHERE ac.articleID=?", [3])->fetchAll();
+
+        $this->assertSame('Path', $articleCategories[3]['description']);
     }
 
     public function test_write_should_insert_article_category_association()
