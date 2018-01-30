@@ -1,18 +1,18 @@
 testRead:
     testCase0:
-        columns: 'customer.id, customer.email, billing.firstName as b_firstName, shipping.firstName as s_firstName'
+        columns: 'customer.id, customer.email, billing.firstname as b_firstname, shipping.firstname as s_firstname'
         ids: [ 1, 2 ]
         expected:
             0:
                 id: '1'
                 email: 'test@example.com'
-                b_firstName: 'Max'
-                s_firstName: 'Max'
+                b_firstname: 'Max'
+                s_firstname: 'Max'
             1:
                 id: '2'
                 email: 'mustermann@b2b.de'
-                b_firstName: 'Händler'
-                s_firstName: 'Händler'
+                b_firstname: 'Händler'
+                s_firstname: 'Händler'
         expectedCount: 2
     testCase1:
         columns: 'customer.id, customer.hashPassword as password, customer.encoderName, customer.email, customer.active, customer.accountMode, customer.confirmationKey, customer.paymentId, customer.firstLogin, customer.lastLogin, customer.sessionId, customer.newsletter, customer.validation, customer.affiliate, customer.groupKey, customer.paymentPreset, customer.languageId, customer.shopId, customer.referer, customer.priceGroupId, customer.internalComment, customer.failedLogins, customer.lockedUntil'
@@ -44,19 +44,18 @@ testRead:
                 lockedUntil: ''
         expectedCount: 1
     testCase2:
-        columns: 'billing.id, billing.customerId, billing.company, billing.department, billing.salutation, billing.firstName, billing.lastName, billing.street, billing.zipCode, billing.city, billing.phone, billing.countryId, billing.stateId, billing.vatId, billing.additionalAddressLine1, billing.additionalAddressLine2'
+        columns: 'billing.id, billing.company, billing.department, billing.salutation, billing.firstname, billing.lastname, billing.street, billing.zipcode, billing.city, billing.phone, billing.countryId, billing.stateId, billing.vatId, billing.additionalAddressLine1, billing.additionalAddressLine2'
         ids: [2]
         expected:
             0:
                 id: '2'
-                customerId: '2'
                 company: 'B2B'
                 department: 'Einkauf'
                 salutation: 'mr'
-                firstName: 'Händler'
-                lastName: 'Kundengruppe-Netto'
+                firstname: 'Händler'
+                lastname: 'Kundengruppe-Netto'
                 street: 'Musterweg 1'
-                zipCode: '55555'
+                zipcode: '55555'
                 city: 'Musterstadt'
                 phone: '012345 / 6789'
                 countryId: '2'

@@ -168,10 +168,10 @@ class CustomerDbAdapter implements DataDbAdapter
             'billing.company as billingCompany',
             'billing.department as billingDepartment',
             'billing.salutation as billingSalutation',
-            'billing.firstName as billingFirstname',
-            'billing.lastName as billingLastname',
+            'billing.firstname as billingFirstname',
+            'billing.lastname as billingLastname',
             'billing.street as billingStreet',
-            'billing.zipCode as billingZipcode',
+            'billing.zipcode as billingZipcode',
             'billing.city as billingCity',
             'billing.phone as billingPhone',
             'billing.countryId as billingCountryID',
@@ -181,7 +181,7 @@ class CustomerDbAdapter implements DataDbAdapter
             'billing.additionalAddressLine2 as billingAdditionalAddressLine2',
         ];
 
-        $attributesSelect = $this->getAttributesFieldsByTableName('s_user_billingaddress_attributes', 'billingID', 'billingAttribute', 'attrBilling');
+        $attributesSelect = $this->getAttributesFieldsByTableName('s_user_addresses_attributes', 'address_id', 'billingAttribute', 'attrBilling');
 
         if (!empty($attributesSelect)) {
             $columns = array_merge($columns, $attributesSelect);
@@ -199,10 +199,10 @@ class CustomerDbAdapter implements DataDbAdapter
             'shipping.company as shippingCompany',
             'shipping.department as shippingDepartment',
             'shipping.salutation as shippingSalutation',
-            'shipping.firstName as shippingFirstname',
-            'shipping.lastName as shippingLastname',
+            'shipping.firstname as shippingFirstname',
+            'shipping.lastname as shippingLastname',
             'shipping.street as shippingStreet',
-            'shipping.zipCode as shippingZipcode',
+            'shipping.zipcode as shippingZipcode',
             'shipping.city as shippingCity',
             'shipping.countryId as shippingCountryID',
             'shipping.stateId as shippingStateID',
@@ -210,7 +210,7 @@ class CustomerDbAdapter implements DataDbAdapter
             'shipping.additionalAddressLine2 as shippingAdditionalAddressLine2',
         ];
 
-        $attributesSelect = $this->getAttributesFieldsByTableName('s_user_shippingaddress_attributes', 'shippingID', 'shippingAttribute', 'attrShipping');
+        $attributesSelect = $this->getAttributesFieldsByTableName('s_user_addresses_attributes', 'address_id', 'shippingAttribute', 'attrShipping');
 
         if (!empty($attributesSelect)) {
             $columns = array_merge($columns, $attributesSelect);
@@ -539,8 +539,8 @@ class CustomerDbAdapter implements DataDbAdapter
         $builder = $this->manager->createQueryBuilder();
         $builder->select($columns)
                 ->from(Customer::class, 'customer')
-                ->join('customer.billing', 'billing')
-                ->leftJoin('customer.shipping', 'shipping')
+                ->join('customer.defaultBillingAddress', 'billing')
+                ->leftJoin('customer.defaultShippingAddress', 'shipping')
                 ->leftJoin('customer.orders', 'orders', 'WITH', 'orders.status <> -1 AND orders.status <> 4')
                 ->leftJoin('billing.attribute', 'billingAttribute')
                 ->leftJoin('shipping.attribute', 'shippingAttribute')
