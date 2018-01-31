@@ -709,9 +709,17 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
             mkdir($importCronPath, 0777, true);
         }
 
+        if (!file_exists($importCronPath . '.htaccess')) {
+            copy($this->Path() . 'Setup/SwagImportExport/template', $importCronPath . '/.htaccess');
+        }
+
         $importExportPath = Shopware()->DocPath() . 'files/import_export/';
         if (!file_exists($importExportPath)) {
             mkdir($importExportPath, 0777, true);
+        }
+
+        if (!file_exists($importExportPath . '.htaccess')) {
+            copy($this->Path() . 'Setup/SwagImportExport/template', $importExportPath . '/.htaccess');
         }
     }
 
