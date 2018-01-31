@@ -182,7 +182,7 @@ class AutoImportService implements AutoImportServiceInterface
 
         $allFiles = scandir($directory);
 
-        return array_diff($allFiles, ['.', '..']);
+        return array_diff($allFiles, ['.', '..', '.htaccess']);
     }
 
     /**
