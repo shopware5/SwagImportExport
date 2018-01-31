@@ -28,8 +28,11 @@ use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
 use Shopware\Components\SwagImportExport\Utils\SwagVersionHelper;
+use Shopware\Models\Article\Article;
+use Shopware\Models\Article\Detail;
 use Shopware\Models\Article\Element;
 use Shopware\Models\Attribute\Configuration;
+use Shopware\Models\Category\Category;
 
 /**
  * Class ArticlesDbAdapter
@@ -129,7 +132,7 @@ class ArticlesDbAdapter implements DataDbAdapter
 
         $builder->select('detail.id');
 
-        $builder->from('Shopware\Models\Article\Detail', 'detail')
+        $builder->from(Detail::class, 'detail')
             ->orderBy('detail.articleId', 'ASC')
             ->orderBy('detail.kind', 'ASC');
 
@@ -140,14 +143,14 @@ class ArticlesDbAdapter implements DataDbAdapter
         }
 
         if ($filter['categories']) {
-            $category = $this->modelManager->find('Shopware\Models\Category\Category', $filter['categories'][0]);
+            $category = $this->modelManager->find(Category::class, $filter['categories'][0]);
 
             $this->collectCategoryIds($category);
             $categories = $this->getCategoryIdCollection();
 
             $categoriesBuilder = $this->modelManager->createQueryBuilder();
             $categoriesBuilder->select('article.id')
-                ->from('Shopware\Models\Article\Article', 'article')
+                ->from(Article::class, 'article')
                 ->leftJoin('article.categories', 'categories')
                 ->where('categories.id IN (:cids)')
                 ->setParameter('cids', $categories)
@@ -544,7 +547,6 @@ class ArticlesDbAdapter implements DataDbAdapter
             "DATE_FORMAT(article.changed, '%Y-%m-%d %H:%i:%s') as changeTime",
             'article.priceGroupId as priceGroupId',
             'article.priceGroupActive as priceGroupActive',
-            'article.lastStock as lastStock',
             'article.crossBundleLook as crossBundleLook',
             'article.notification as notification',
             'article.template as template',
@@ -664,6 +666,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             'variant.inStock as inStock',
             'variant.active as active',
             'variant.stockMin as stockMin',
+            'variant.lastStock as lastStock',
             'variant.weight as weight',
             'variant.position as position',
             'variant.width as width',
@@ -1041,9 +1044,9 @@ class ArticlesDbAdapter implements DataDbAdapter
     {
         $articleBuilder = $this->modelManager->createQueryBuilder();
         $articleBuilder->select($columns)
-            ->from('Shopware\Models\Article\Detail', 'variant')
+            ->from(Detail::class, 'variant')
             ->join('variant.article', 'article')
-            ->leftJoin('Shopware\Models\Article\Detail', 'mv', Join::WITH, 'mv.articleId=article.id AND mv.kind=1')
+            ->leftJoin(Detail::class, 'mv', Join::WITH, 'mv.articleId=article.id AND mv.kind=1')
             ->leftJoin('variant.attribute', 'attribute')
             ->leftJoin('article.tax', 'articleTax')
             ->leftJoin('article.supplier', 'supplier')
@@ -1067,7 +1070,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     {
         $priceBuilder = $this->modelManager->createQueryBuilder();
         $priceBuilder->select($columns)
-            ->from('Shopware\Models\Article\Detail', 'variant')
+            ->from(Detail::class, 'variant')
             ->join('variant.article', 'article')
             ->leftJoin('variant.prices', 'prices')
             ->leftJoin('prices.customerGroup', 'customerGroup')
@@ -1088,7 +1091,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     {
         $imageBuilder = $this->modelManager->createQueryBuilder();
         $imageBuilder->select($columns)
-            ->from('Shopware\Models\Article\Detail', 'variant')
+            ->from(Detail::class, 'variant')
             ->join('variant.article', 'article')
             ->leftJoin('article.images', 'images')
             ->where('variant.id IN (:ids)')
@@ -1109,7 +1112,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     {
         $propertyValueBuilder = $this->modelManager->createQueryBuilder();
         $propertyValueBuilder->select($columns)
-            ->from('Shopware\Models\Article\Detail', 'variant')
+            ->from(Detail::class, 'variant')
             ->join('variant.article', 'article')
             ->leftJoin('article.propertyGroup', 'propertyGroup')
             ->leftJoin('article.propertyValues', 'propertyValues')
@@ -1132,7 +1135,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     {
         $configBuilder = $this->modelManager->createQueryBuilder();
         $configBuilder->select($columns)
-            ->from('Shopware\Models\Article\Detail', 'variant')
+            ->from(Detail::class, 'variant')
             ->join('variant.article', 'article')
             ->leftJoin('variant.configuratorOptions', 'configuratorOptions')
             ->leftJoin('configuratorOptions.group', 'configuratorGroup')
@@ -1156,7 +1159,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     {
         $similarBuilder = $this->modelManager->createQueryBuilder();
         $similarBuilder->select($columns)
-            ->from('Shopware\Models\Article\Detail', 'variant')
+            ->from(Detail::class, 'variant')
             ->join('variant.article', 'article')
             ->leftJoin('article.similar', 'similar')
             ->leftJoin('similar.details', 'similarDetail')
@@ -1179,7 +1182,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     {
         $accessoryBuilder = $this->modelManager->createQueryBuilder();
         $accessoryBuilder->select($columns)
-            ->from('Shopware\Models\Article\Detail', 'variant')
+            ->from(Detail::class, 'variant')
             ->join('variant.article', 'article')
             ->leftJoin('article.related', 'accessory')
             ->leftJoin('accessory.details', 'accessoryDetail')
@@ -1202,7 +1205,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     {
         $categoryBuilder = $this->modelManager->createQueryBuilder();
         $categoryBuilder->select($columns)
-            ->from('Shopware\Models\Article\Article', 'article')
+            ->from(Article::class, 'article')
             ->leftJoin('article.categories', 'categories')
             ->where('article.id IN (:ids)')
             ->andWhere('categories.id IS NOT NULL')
@@ -1236,7 +1239,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     {
         $articleIds = $this->modelManager->createQueryBuilder()
             ->select('article.id')
-            ->from('Shopware\Models\Article\Detail', 'variant')
+            ->from(Detail::class, 'variant')
             ->join('variant.article', 'article')
             ->where('variant.id IN (:ids)')
             ->setParameter('ids', $detailIds)
@@ -1281,7 +1284,7 @@ class ArticlesDbAdapter implements DataDbAdapter
 
         $categoriesNames = $this->modelManager->createQueryBuilder()
             ->select(['category.id, category.name'])
-            ->from('Shopware\Models\Category\Category', 'category')
+            ->from(Category::class, 'category')
             ->where('category.id IN (:ids)')
             ->setParameter('ids', $categoryIds)
             ->getQuery()->getResult();

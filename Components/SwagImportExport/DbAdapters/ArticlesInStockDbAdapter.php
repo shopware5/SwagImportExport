@@ -158,12 +158,12 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
             case 'inStockOnSale':
                 $builder->leftJoin('d.article', 'a')
                     ->where('d.inStock > 0')
-                    ->andWhere('a.lastStock = 1');
+                    ->andWhere('d.lastStock = 1');
                 break;
             case 'notInStockOnSale':
                 $builder->leftJoin('d.article', 'a')
                     ->where('d.inStock <= 0')
-                    ->andWhere('a.lastStock = 1');
+                    ->andWhere('d.lastStock = 1');
                 break;
             case 'notInStockMinStock':
                 $builder->where('d.stockMin >= d.inStock')
