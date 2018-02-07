@@ -143,7 +143,14 @@ class CategoriesDbAdapter implements DataDbAdapter
 
         $categories = $builder->getQuery()->getArrayResult();
 
-        $result['default'] = DbAdapterHelper::decodeHtmlEntities($categories);
+        $result = [];
+        foreach ($categories as $category) {
+            $key = (int) $category['categoryId'] . $category['parentId'];
+            $result[$key] = $category;
+        }
+        ksort($result);
+
+        $result['default'] = DbAdapterHelper::decodeHtmlEntities(array_values($result));
         $result['customerGroups'] = $this->getBuilder($this->getCustomerGroupsColumns(), $ids)->getQuery()->getResult();
 
         return $result;

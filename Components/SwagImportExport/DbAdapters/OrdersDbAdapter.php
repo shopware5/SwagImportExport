@@ -425,6 +425,9 @@ class OrdersDbAdapter implements DataDbAdapter
             'details.esdArticle as esd',
             'details.config as config',
             'details.mode as mode',
+            'details.ean as ean',
+            'details.packUnit as packUnit',
+            'details.unit as unit',
         ];
 
         $billingColumns = [
@@ -523,7 +526,7 @@ class OrdersDbAdapter implements DataDbAdapter
         $builder = $this->modelManager->createQueryBuilder();
 
         $builder->select($columns)
-            ->from('Shopware\Models\Order\Detail', 'details')
+            ->from(Detail::class , 'details')
             ->leftJoin('details.order', 'orders')
             ->leftJoin('details.tax', 'taxes')
             ->leftJoin('orders.billing', 'billing')
