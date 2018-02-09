@@ -8,10 +8,11 @@
     "link": "http://store.shopware.com",
     "author": "Shopware AG",
 
-    "currentVersion": "2.1.0",
+    "currentVersion": "2.2.0",
 
     "changelog": {
         "de": {
+            "2.2.0": "PT-8008 - Snippet update; SW-18952 - Customer stream selector hinzugefügt; PT-7975 - Auto import für cron list hinzugefügt; PT-8031 - CS fixes; PT-7419 - CSV Zeilenumbruch Probleme behoben; NTR - composer.json aktualisiert; PT-8611 - Parameter überschreiben möglich im UI; PT-8770 - Konfiguration für Trennzeichen beachten; PT-8749 - Adressexport über korrekte Tabelle; PT-7624 - Kategorieimport über Pfad gefixt; PT-8534 - Optimierung für Cron runner und Dateisystem; PT-8226 - Kategorieimport ohne Fehler bei komplexen Bäumen; NTR - Weitere Felder für Bestellexport auswählbar",
             "2.1.0": "PT-7644, SW-18399, SW-18916 - Shopware 5.3 Kompatibilität;",
             "2.0.2": "PT-6830 - Feature: Kundenadressen Standardprofil; PT-7063 - Bugfix: Beschreibungen für Standardprofile; PT-7095 - Bugfix: Artikelpreis-Import über CLI verbessert; PT-7151 - Bugfix: Import von Artikeln mit Staffelpreisen; PT-7189 - Bugfix: Sortierung der Protokolle anhand des Erstelldatums; PT-7190 - Bugfix: Sortieren und Filtern für Profile verbessert; PT-7192 - Bugfix: Verbesserung der Fehlermeldungen bei erweiterten Datensätzen; PT-7198 - Bugfix: Arbeitsablauf Anlegen und Anpassen von Profilen verbessert; PT-7234 - Bugfix: Zuweisung von Newsletter-Empfänger zu Gruppen; PT-7254 - Bugfix: Update Probleme; PT-7286 - Bugfix: Fehler beim Erstellen von Spalten; PT-7272 - Bugfix: Artikelpreis Import für Einkaufspreis; PT-7281 - Feature: Standardprofil für Bestellungen; PT-7293 - Bugfix: Kein Import-Error für leere Artikeleigenschaften;",
             "2.0.1": "PT-7236 - Doppelt vergebene Profil-Namen bekommen einen individuellen Suffix",
@@ -36,6 +37,7 @@
             "1.0.1": "Problem mit verschwindendem Import/Export Menü-Eintrag behoben; Weitere ACL-Zugangsberechtigungen hinzugefügt; Korrektur: article.active Verhalten; Korrektur: Artikel-Attribute; Korrektur: Datums- und Zeitimporte"
         },
         "en": {
+            "2.2.0": "PT-8008 - Snippet update; SW-18952 - Add customer stream selector; PT-7975 - Add auto import to cron list; PT-8031 - CS fixes; PT-7419 - Fix csv line break detection; NTR - Updated composer.json; PT-8611 - Allow parameter override; PT-8770 - Recognize config settings for decimal separator; PT-8749 - Use correct address table on export; PT-7624 - Fix category creation on import via path; PT-8534 - Optimize cron runner and filesystem; PT-8226 - Fix category export for complex trees; NTR - Add further fields to order export",
             "2.1.0": "PT-7644, SW-18399, SW-18916 - Shopware 5.3 compatibility;",
             "2.0.2": "PT-6830 - Feature: customer address default profile; PT-7063 - Bugfix: Descriptions for default profiles; PT-7095 - Bugfix: Improve product prices import via CLI; PT-7151 - Bugfix: Import of products with graduation prices; PT-7189 - Bugfix: Sorting for protocols based on creation date; PT-7190 - Bugfix: Improve filtering and sorting for profiles; PT-7192 - Bugfix: Improved error messages for extended data sets; PT-7198 - Bugfix: Improve workflow for creating and editing profiles; PT-7234 - Bugfix: Linking newsletter recipients to groups; PT-7254 - Bugfix: Update problems; PT-7286 - Bugfix: Issue when adding columns; PT-7272 - Bugfix: Product price import purchase price; PT-7281 - Feature: Default profile for orders; PT-7293 - Bugfix: No import error for empty product property;",
             "2.0.1": "PT-7236 - Duplicate named profile names will get an individual suffix",
@@ -63,7 +65,7 @@
 
     "compatibility": {
         "minimumVersion": "5.2.0",
-        "maximumVersion": null,
+        "maximumVersion": "5.3.100",
         "blacklist": [
         ]
     }
