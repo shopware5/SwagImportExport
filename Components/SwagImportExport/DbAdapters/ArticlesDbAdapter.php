@@ -1587,7 +1587,21 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     private function underscoreToCamelCase($underscoreString)
     {
-        return lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $underscoreString))));
+        $underscoreData = explode('_', $underscoreString);
+        $lastElement = array_pop($underscoreData);
+        $isLastElmNum = is_numeric($lastElement);
+
+        if($isLastElmNum) {
+            $underscoreString = implode('_', $underscoreData);
+        }
+
+        $camelCaseString = lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $underscoreString))));
+
+        if($isLastElmNum) {
+            $camelCaseString .= '_' . $lastElement;
+        }
+
+        return $camelCaseString;
     }
 
     /**
