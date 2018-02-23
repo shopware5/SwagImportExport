@@ -93,6 +93,8 @@ class OrdersDbAdapter implements DataDbAdapter
             $builder->setParameter('dateTo', $dateTo->format('Y-m-d H:i:s'));
         }
 
+        $builder->andWhere('orders.status != -1');
+
         if ($start) {
             $builder->setFirstResult($start);
         }
