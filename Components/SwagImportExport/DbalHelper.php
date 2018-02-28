@@ -82,6 +82,12 @@ class DbalHelper
             if (!array_key_exists($field, $metaData->fieldMappings)) {
                 continue;
             }
+            
+            $value = Shopware()->Events()->filter(
+				'Shopware_Components_SwagImportExport_DbalHelper_GetQueryBuilderForEntity',
+				$value,
+				['subject' => $this, 'field' => $field]
+			);
 
             $value = $this->eventManager->filter(
                 'Shopware_Components_SwagImportExport_DbalHelper_GetQueryBuilderForEntity_Value',
