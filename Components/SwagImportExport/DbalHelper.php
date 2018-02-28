@@ -9,17 +9,17 @@
 namespace Shopware\Components\SwagImportExport;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\ORM\Mapping\ClassMetadata;
-use Shopware\Components\Model\ModelManager;
 use Doctrine\DBAL\Query\QueryBuilder;
+use Doctrine\ORM\Mapping\ClassMetadata;
+use Enlight_Event_EventManager as EventManager;
+use Shopware\Components\Model\ModelManager;
 
 class DbalHelper
 {
-    /** @var \Doctrine\DBAL\Connection */
+    /**
+     * @var Connection
+     */
     protected $connection;
-
-    /** @var \Doctrine\DBAL\Driver\Statement[] */
-    protected $statements = [];
 
     /**
      * @var ModelManager
@@ -27,41 +27,42 @@ class DbalHelper
     private $modelManager;
 
     /**
+     * @var EventManager
+     */
+    private $eventManager;
+
+    /**
+     * @param Connection   $connection
+     * @param ModelManager $modelManager
+     * @param EventManager $eventManager
+     */
+    public function __construct(Connection $connection, ModelManager $modelManager, EventManager $eventManager)
+    {
+        $this->connection = $connection;
+        $this->modelManager = $modelManager;
+        $this->eventManager = $eventManager;
+    }
+
+    /**
      * @return DbalHelper
      */
     public static function create()
     {
-        return new DbalHelper(
+        return new self(
             Shopware()->Container()->get('dbal_connection'),
-            Shopware()->Container()->get('models')
+            Shopware()->Container()->get('models'),
+            Shopware()->Container()->get('events')
         );
     }
 
     /**
-     * @param Connection $connection
-     * @param ModelManager $modelManager
-     */
-    public function __construct(Connection $connection, ModelManager $modelManager)
-    {
-        $this->connection = $connection;
-        $this->modelManager = $modelManager;
-    }
-
-    /**
-     * @return QueryBuilder
-     */
-    protected function getQueryBuilder()
-    {
-        return new QueryBuilder($this->connection);
-    }
-
-    /**
-     * @param $data
-     * @param $entity
+     * @param array  $data
+     * @param string $entity
      * @param $primaryId
+     *
      * @return QueryBuilder
      */
-    public function getQueryBuilderForEntity($data, $entity, $primaryId)
+    public function getQueryBuilderForEntity(array $data, $entity, $primaryId)
     {
         $metaData = $this->modelManager->getClassMetadata($entity);
         $table = $metaData->table['name'];
@@ -82,6 +83,15 @@ class DbalHelper
                 continue;
             }
 
+            $value = $this->eventManager->filter(
+                'Shopware_Components_SwagImportExport_DbalHelper_GetQueryBuilderForEntity_Value',
+                $value,
+                [
+                    'subject' => $this,
+                    'field' => $field,
+                ]
+            );
+
             $key = $this->connection->quoteIdentifier($metaData->fieldMappings[$field]['columnName']);
 
             $value = $this->getNamedParameter($value, $field, $metaData, $builder);
@@ -96,10 +106,19 @@ class DbalHelper
     }
 
     /**
-     * @param $value
-     * @param $key
+     * @return QueryBuilder
+     */
+    protected function getQueryBuilder()
+    {
+        return new QueryBuilder($this->connection);
+    }
+
+    /**
+     * @param string        $value
+     * @param string        $key
      * @param ClassMetadata $metaData
-     * @param QueryBuilder $builder
+     * @param QueryBuilder  $builder
+     *
      * @return string
      */
     protected function getNamedParameter($value, $key, ClassMetadata $metaData, QueryBuilder $builder)
@@ -119,20 +138,14 @@ class DbalHelper
 
         // Check if nullable
         if (!isset($value) && $nullAble) {
-            return $builder->createNamedParameter(
-                null,
-                \PDO::PARAM_NULL
-            );
+            return $builder->createNamedParameter(null, \PDO::PARAM_NULL);
         }
 
         $type = $metaData->fieldMappings[$key]['type'];
         if (!array_key_exists($type, $pdoTypeMapping)) {
-            throw new \RuntimeException("Type {$type} not found");
+            throw new \RuntimeException(sprintf('Type %s not found', $type));
         }
 
-        return $builder->createNamedParameter(
-            $value,
-            $pdoTypeMapping[$type]
-        );
+        return $builder->createNamedParameter($value, $pdoTypeMapping[$type]);
     }
 }
