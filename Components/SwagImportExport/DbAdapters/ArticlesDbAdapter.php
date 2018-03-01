@@ -26,13 +26,14 @@ use Shopware\Components\SwagImportExport\DbAdapters\Articles\TranslationWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\Results\ArticleWriterResult;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
-use Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
+use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Utils\SwagVersionHelper;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Detail;
 use Shopware\Models\Article\Element;
 use Shopware\Models\Attribute\Configuration;
 use Shopware\Models\Category\Category;
+use Shopware\Models\Shop\Shop;
 
 /**
  * Class ArticlesDbAdapter
@@ -94,16 +95,6 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     private $eventManager;
 
-    /**
-     * @var SnippetsHelper
-     */
-    private $snippetHelper;
-
-    /**
-     * @var DbAdapterHelper
-     */
-    private $dbAdapterHelper;
-
     public function __construct()
     {
         $this->db = Shopware()->Container()->get('db');
@@ -111,8 +102,6 @@ class ArticlesDbAdapter implements DataDbAdapter
         $this->mediaService = Shopware()->Container()->get('shopware_media.media_service');
         $this->config = Shopware()->Container()->get('config');
         $this->eventManager = Shopware()->Container()->get('events');
-        $this->snippetHelper = new SnippetsHelper();
-        $this->dbAdapterHelper = new DbAdapterHelper();
     }
 
     /**
@@ -190,22 +179,22 @@ class ArticlesDbAdapter implements DataDbAdapter
      * @param $ids
      * @param $columns
      *
-     * @throws \Exception
+     * @throws \RuntimeException
      *
      * @return mixed
      */
     public function read($ids, $columns)
     {
         if (!$ids && empty($ids)) {
-            $message = $this->snippetHelper->getNamespace()
+            $message = SnippetsHelper::getNamespace()
                 ->get('adapters/articles_no_ids', 'Can not read articles without ids.');
-            throw new \Exception($message);
+            throw new \RuntimeException($message);
         }
 
         if (!$columns && empty($columns)) {
-            $message = $this->snippetHelper->getNamespace()
+            $message = SnippetsHelper::getNamespace()
                 ->get('adapters/articles_no_column_names', 'Can not read articles without column names.');
-            throw new \Exception($message);
+            throw new \RuntimeException($message);
         }
 
         //articles
@@ -213,7 +202,7 @@ class ArticlesDbAdapter implements DataDbAdapter
 
         $articles = $articleBuilder->getQuery()->getResult();
 
-        $result['article'] = $this->dbAdapterHelper->decodeHtmlEntities($articles);
+        $result['article'] = DbAdapterHelper::decodeHtmlEntities($articles);
 
         //prices
         $columns['price'] = array_merge(
@@ -242,6 +231,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $record['inStock'] = '0';
             }
         }
+        unset($record);
 
         //images
         $imageBuilder = $this->getImageBuilder($columns['image'], $ids);
@@ -249,6 +239,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         foreach ($tempImageResult as &$tempImage) {
             $tempImage['imageUrl'] = $this->mediaService->getUrl($tempImage['imageUrl']);
         }
+        unset($tempImage);
         $result['image'] = $tempImageResult;
 
         //filter values
@@ -363,13 +354,14 @@ class ArticlesDbAdapter implements DataDbAdapter
         }
 
         //Sets missing translation fields with empty string
-        foreach ($result as &$row) {
+        foreach ($result as &$resultRow) {
             foreach ($translationFields as $field) {
-                if (!isset($row[$field])) {
-                    $row[$field] = '';
+                if (!isset($resultRow[$field])) {
+                    $resultRow[$field] = '';
                 }
             }
         }
+        unset($resultRow);
 
         $sql = "SELECT variant.articleID as articleId, ct.objectdata, ct.objectlanguage as languageId
                 FROM s_articles_details AS variant
@@ -383,7 +375,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             foreach ($articles as $article) {
                 //the translation for the main variant is coming
                 //from article translations
-                if ($translation['variantKind'] == 1
+                if ((int) $translation['variantKind'] === 1
                     && $translation['articleId'] === $article['articleId']
                     && $translation['languageId'] === $article['languageId']
                 ) {
@@ -412,7 +404,7 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     public function getShops()
     {
-        return $this->modelManager->getRepository('Shopware\Models\Shop\Shop')->findAll();
+        return $this->modelManager->getRepository(Shop::class)->findAll();
     }
 
     /**
@@ -459,18 +451,17 @@ class ArticlesDbAdapter implements DataDbAdapter
      *
      * @param array $records
      *
-     * @throws \Exception
-     * @throws AdapterException
+     * @throws \RuntimeException
      */
     public function write($records)
     {
         //articles
         if (empty($records['article'])) {
-            $message = $this->snippetHelper->getNamespace()->get(
+            $message = SnippetsHelper::getNamespace()->get(
                 'adapters/articles/no_records',
                 'No article records were found.'
             );
-            throw new \Exception($message);
+            throw new \RuntimeException($message);
         }
 
         $records = $this->eventManager->filter(
@@ -494,9 +485,9 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     public function getShop($id)
     {
-        $shop = $this->modelManager->find('Shopware\Models\Shop\Shop', $id);
+        $shop = $this->modelManager->find(Shop::class, $id);
         if (!$shop) {
-            $message = $this->snippetHelper->getNamespace()->get('adapters/articles/no_shop_id', 'Shop by id %s not found');
+            $message = SnippetsHelper::getNamespace()->get('adapters/articles/no_shop_id', 'Shop by id %s not found');
             throw new AdapterException(sprintf($message, $id));
         }
 
@@ -583,8 +574,8 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $attributesSelect[] = sprintf('%s.%s as attribute%s', $prefix, $attr, ucwords($attr));
             }
         }
-        
-        $attributesSelect = Shopware()->Events()->filter(
+
+        $attributesSelect = $this->eventManager->filter(
             'Shopware_Components_SwagImportExport_DbAdapters_ArticlesDbAdapter_GetArticleAttributes',
             $attributesSelect,
             ['subject' => $this]
@@ -846,7 +837,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @return mixed
+     * @return array
      */
     public function getLegacyTranslationAttr()
     {
@@ -858,14 +849,14 @@ class ArticlesDbAdapter implements DataDbAdapter
     /**
      * @param $message
      *
-     * @throws \Exception
+     * @throws \RuntimeException
      */
     public function saveMessage($message)
     {
         $errorMode = $this->config->get('SwagImportExportErrorMode');
 
         if ($errorMode === false) {
-            throw new \Exception($message);
+            throw new \RuntimeException($message);
         }
 
         $this->setLogMessages($message);
@@ -1325,9 +1316,7 @@ class ArticlesDbAdapter implements DataDbAdapter
 
         $ids = array_filter($ids);
 
-        $path = implode('->', $ids);
-
-        return $path;
+        return implode('->', $ids);
     }
 
     /**
@@ -1422,7 +1411,7 @@ class ArticlesDbAdapter implements DataDbAdapter
      *
      * @throws \Exception
      */
-    private function performImport($records)
+    private function performImport(array $records)
     {
         $articleWriter = new ArticleWriter();
         $pricesWriter = new PriceWriter();
@@ -1441,7 +1430,7 @@ class ArticlesDbAdapter implements DataDbAdapter
 
                 $articleWriterResult = $articleWriter->write($article, $defaultValues);
 
-                $processedFlag = isset($article['processed']) && $article['processed'] == 1;
+                $processedFlag = isset($article['processed']) && (int) $article['processed'] === 1;
 
                 /*
                  * Only processed data will be imported
@@ -1453,7 +1442,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                         array_filter(
                             $records['price'],
                             function ($price) use ($index) {
-                                return $price['parentIndexElement'] == $index;
+                                return (int) $price['parentIndexElement'] === $index;
                             }
                         )
                     );
@@ -1463,7 +1452,8 @@ class ArticlesDbAdapter implements DataDbAdapter
                         array_filter(
                             $records['category'],
                             function ($category) use ($index) {
-                                return $category['parentIndexElement'] == $index && ($category['categoryId'] || $category['categoryPath']);
+                                return (int) $category['parentIndexElement'] === $index
+                                    && ($category['categoryId'] || $category['categoryPath']);
                             }
                         )
                     );
@@ -1473,7 +1463,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                         array_filter(
                             $records['configurator'],
                             function ($configurator) use ($index) {
-                                return $configurator['parentIndexElement'] == $index;
+                                return (int) $configurator['parentIndexElement'] === $index;
                             }
                         )
                     );
@@ -1491,7 +1481,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                         array_filter(
                             $records['translation'],
                             function ($translation) use ($index) {
-                                return $translation['parentIndexElement'] == $index;
+                                return (int) $translation['parentIndexElement'] === $index;
                             }
                         )
                     );
@@ -1510,7 +1500,8 @@ class ArticlesDbAdapter implements DataDbAdapter
                     array_filter(
                         $records['accessory'],
                         function ($accessory) use ($index, $articleWriterResult) {
-                            return $accessory['parentIndexElement'] == $index && $articleWriterResult->getMainDetailId() == $articleWriterResult->getDetailId();
+                            return (int) $accessory['parentIndexElement'] === $index
+                                && $articleWriterResult->getMainDetailId() === $articleWriterResult->getDetailId();
                         }
                     ),
                     'accessory',
@@ -1523,7 +1514,8 @@ class ArticlesDbAdapter implements DataDbAdapter
                     array_filter(
                         $records['similar'],
                         function ($similar) use ($index, $articleWriterResult) {
-                            return $similar['parentIndexElement'] == $index && $articleWriterResult->getMainDetailId() == $articleWriterResult->getDetailId();
+                            return (int) $similar['parentIndexElement'] === $index
+                                && $articleWriterResult->getMainDetailId() === $articleWriterResult->getDetailId();
                         }
                     ),
                     'similar',
@@ -1536,7 +1528,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                     array_filter(
                         $records['image'],
                         function ($image) use ($index) {
-                            return $image['parentIndexElement'] == $index;
+                            return (int) $image['parentIndexElement'] === $index;
                         }
                     )
                 );
@@ -1563,8 +1555,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             ->andWhere('configuration.translatable = 1')
             ->setParameter('tablename', 's_articles_attributes')
             ->getQuery()
-            ->getArrayResult()
-        ;
+            ->getArrayResult();
     }
 
     /**
@@ -1579,7 +1570,8 @@ class ArticlesDbAdapter implements DataDbAdapter
         return array_filter(
             $records['propertyValue'],
             function ($property) use ($index, $articleWriterResult) {
-                return $property['parentIndexElement'] == $index && $articleWriterResult->getMainDetailId() == $articleWriterResult->getDetailId();
+                return (int) $property['parentIndexElement'] === $index
+                    && $articleWriterResult->getMainDetailId() === $articleWriterResult->getDetailId();
             }
         );
     }
