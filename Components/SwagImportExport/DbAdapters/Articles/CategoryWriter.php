@@ -11,6 +11,7 @@ namespace Shopware\Components\SwagImportExport\DbAdapters\Articles;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
 use Enlight_Components_Db_Adapter_Pdo_Mysql as PDOConnection;
+use Enlight_Event_EventManager as EventManager;
 use Shopware\Components\Model\CategorySubscriber;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
@@ -18,19 +19,24 @@ use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 class CategoryWriter
 {
     /**
-     * @var PDOConnection $db
+     * @var PDOConnection
      */
     protected $db;
 
     /**
-     * @var Connection $connection
+     * @var Connection
      */
     protected $connection;
 
     /**
-     * @var array $categoryIds
+     * @var array
      */
     protected $categoryIds;
+
+    /**
+     * @var EventManager
+     */
+    private $eventManager;
 
     /**
      * initialises the class properties
@@ -39,11 +45,13 @@ class CategoryWriter
     {
         $this->db = Shopware()->Db();
         $this->connection = Shopware()->Models()->getConnection();
+        $this->eventManager = Shopware()->Events();
     }
 
     /**
      * @param string $articleId
-     * @param array $categories
+     * @param array  $categories
+     *
      * @throws DBALException
      */
     public function write($articleId, $categories)
@@ -53,6 +61,13 @@ class CategoryWriter
         }
 
         $values = $this->prepareValues($categories, $articleId);
+
+        $values = $this->eventManager->filter(
+            'Shopware_Components_SwagImportExport_DbAdapters_Articles_CategoryWriter_Write',
+            $values,
+            ['subject' => $this]
+        );
+
         $sql = "
             INSERT INTO s_articles_categories (articleID, categoryID)
             VALUES {$values}
@@ -65,63 +80,6 @@ class CategoryWriter
     }
 
     /**
-     * @param array $categories
-     * @param string $articleId
-     * @return string
-     */
-    private function prepareValues($categories, $articleId)
-    {
-        $this->categoryIds = [];
-        $values = implode(
-            ', ',
-            array_map(
-                function ($category) use ($articleId) {
-                    $isCategoryExists = false;
-                    if (!empty($category['categoryId'])) {
-                        $isCategoryExists = $this->isCategoryExists($category['categoryId']);
-                    }
-
-                    //if categoryId exists, the article will be assigned to it, no matter of the categoryPath
-                    if (true === $isCategoryExists) {
-                        $this->categoryIds[$category['categoryId']] = (int) $category['categoryId'];
-
-                        return "({$articleId}, {$category['categoryId']})";
-                    }
-
-                    //if categoryId does NOT exist and categoryPath is empty an error will be shown
-                    if (false === $isCategoryExists && empty($category['categoryPath'])) {
-                        $message = SnippetsHelper::getNamespace()
-                            ->get('adapters/articles/category_not_found', "Category with id %s could not be found.");
-                        throw new AdapterException(sprintf($message, $category['categoryId']));
-                    }
-
-                    //if categoryPath exists, the article will be assign based on the path
-                    if (!empty($category['categoryPath'])) {
-                        //get categoryId by given path: 'English->Cars->Mazda'
-                        $category['categoryId'] = $this->getCategoryId($category['categoryPath']);
-
-                        //check whether the category is a leaf
-                        $isLeaf = $this->isLeaf($category['categoryId']);
-
-                        if (!$isLeaf) {
-                            $message = SnippetsHelper::getNamespace()
-                                ->get('adapters/articles/category_not_leaf', "Category with id '%s' is not a leaf");
-                            throw new AdapterException(sprintf($message, $category['categoryId']));
-                        }
-
-                        $this->categoryIds[$category['categoryId']] = (int) $category['categoryId'];
-
-                        return "({$articleId}, {$category['categoryId']})";
-                    }
-                },
-                $categories
-            )
-        );
-
-        return $values;
-    }
-
-    /**
      * Checks whether a category with the given id exists
      *
      * @param $categoryId
@@ -131,7 +89,7 @@ class CategoryWriter
     protected function isCategoryExists($categoryId)
     {
         $isCategoryExists = $this->db->fetchOne(
-            "SELECT id FROM s_categories WHERE id = ?",
+            'SELECT id FROM s_categories WHERE id = ?',
             [$categoryId]
         );
 
@@ -143,8 +101,9 @@ class CategoryWriter
      *
      * @param string $categoryPath -> 'English->Cars->Mazda'
      *
-     * @return int|string - categoryId
      * @throws AdapterException
+     *
+     * @return int|string - categoryId
      */
     protected function getCategoryId($categoryPath)
     {
@@ -159,7 +118,9 @@ class CategoryWriter
             $data[$id] = $description;
         }
 
-        return end(array_keys($data));
+        $categoryIds = array_keys($data);
+
+        return end($categoryIds);
     }
 
     /**
@@ -170,16 +131,17 @@ class CategoryWriter
      * @param $id - parent id
      * @param $path - category path
      *
-     * @return int|string - categoryId
      * @throws AdapterException
+     *
+     * @return int|string - categoryId
      */
     protected function getId($description, $id, $path)
     {
         if ($id === null) {
-            $sql = "SELECT id FROM s_categories WHERE description = ? AND path IS NULL";
+            $sql = 'SELECT id FROM s_categories WHERE description = ? AND path IS NULL';
             $params = [$description];
         } else {
-            $sql = "SELECT id FROM s_categories WHERE description = ? AND parent = ?";
+            $sql = 'SELECT id FROM s_categories WHERE description = ? AND parent = ?';
             $params = [$description, $id];
         }
 
@@ -224,23 +186,22 @@ class CategoryWriter
                 VALUES {$values}";
 
         $this->db->exec($sql);
-        $insertedId = $this->db->lastInsertId();
 
-        return $insertedId;
+        return $this->db->lastInsertId();
     }
 
     /**
-     * @throws \Exception
+     * @throws \RuntimeException
      */
     protected function isRootExists()
     {
-        $sql = "SELECT id FROM s_categories WHERE id = 1";
+        $sql = 'SELECT id FROM s_categories WHERE id = 1';
         $rootId = $this->db->fetchOne($sql);
 
         if (false === $rootId) {
             $message = SnippetsHelper::getNamespace()
                 ->get('adapters/articles/root_category_does_not_exist', 'Root category does not exist');
-            throw new \Exception($message);
+            throw new \RuntimeException($message);
         }
     }
 
@@ -259,12 +220,13 @@ class CategoryWriter
      * Checks whether the category is a leaf
      *
      * @param int $categoryId
+     *
      * @return bool
      */
     protected function isLeaf($categoryId)
     {
         $isParent = $this->db->fetchOne(
-            "SELECT id FROM s_categories WHERE parent = ?",
+            'SELECT id FROM s_categories WHERE parent = ?',
             [$categoryId]
         );
 
@@ -283,5 +245,63 @@ class CategoryWriter
         foreach ($this->categoryIds as $categoryId) {
             $categorySubscriber->backlogAddAssignment($articleId, $categoryId);
         }
+    }
+
+    /**
+     * @param array  $categories
+     * @param string $articleId
+     *
+     * @return string
+     */
+    private function prepareValues($categories, $articleId)
+    {
+        $this->categoryIds = [];
+        $values = implode(
+            ', ',
+            array_map(
+                function ($category) use ($articleId) {
+                    $isCategoryExists = false;
+                    if (!empty($category['categoryId'])) {
+                        $isCategoryExists = $this->isCategoryExists($category['categoryId']);
+                    }
+
+                    //if categoryId exists, the article will be assigned to it, no matter of the categoryPath
+                    if (true === $isCategoryExists) {
+                        $this->categoryIds[$category['categoryId']] = (int) $category['categoryId'];
+
+                        return "({$articleId}, {$category['categoryId']})";
+                    }
+
+                    //if categoryId does NOT exist and categoryPath is empty an error will be shown
+                    if (false === $isCategoryExists && empty($category['categoryPath'])) {
+                        $message = SnippetsHelper::getNamespace()
+                            ->get('adapters/articles/category_not_found', 'Category with id %s could not be found.');
+                        throw new AdapterException(sprintf($message, $category['categoryId']));
+                    }
+
+                    //if categoryPath exists, the article will be assign based on the path
+                    if (!empty($category['categoryPath'])) {
+                        //get categoryId by given path: 'English->Cars->Mazda'
+                        $category['categoryId'] = $this->getCategoryId($category['categoryPath']);
+
+                        //check whether the category is a leaf
+                        $isLeaf = $this->isLeaf($category['categoryId']);
+
+                        if (!$isLeaf) {
+                            $message = SnippetsHelper::getNamespace()
+                                ->get('adapters/articles/category_not_leaf', "Category with id '%s' is not a leaf");
+                            throw new AdapterException(sprintf($message, $category['categoryId']));
+                        }
+
+                        $this->categoryIds[$category['categoryId']] = (int) $category['categoryId'];
+
+                        return "({$articleId}, {$category['categoryId']})";
+                    }
+                },
+                $categories
+            )
+        );
+
+        return $values;
     }
 }
