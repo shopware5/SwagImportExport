@@ -146,6 +146,10 @@ class ExportService extends AbstractImportExportService implements ExportService
             }
         }
 
+        if ($profileType === DataDbAdapter::CUSTOMER_COMPLETE_ADAPTER && isset($filterParams['customerId'])) {
+            $filter['customerId'] = $filterParams['customerId'];
+        }
+
         return $filter;
     }
 }

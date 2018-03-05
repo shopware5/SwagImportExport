@@ -8,10 +8,11 @@
     "link": "http://store.shopware.com",
     "author": "Shopware AG",
 
-    "currentVersion": "2.3.1",
+    "currentVersion": "2.4.0",
 
     "changelog": {
         "de": {
+            "2.4.0": "PT-8880 - Komplettexport Kundendaten als Profil hinzugefügt",
             "2.3.1": "PT-8328, PT-8329, PT-8331 - Neue Events in ArticlesDbAdapter, CategoryWriter und DbalHelper hinzugefügt;",
             "2.3.0": "PT-8810 - Shopware 5.4 Kompatibilität;",
             "2.2.0": "PT-8008 - Snippet update; SW-18952 - Customer stream selector hinzugefügt; PT-7975 - Auto import für cron list hinzugefügt; PT-8031 - CS fixes; PT-7419 - CSV Zeilenumbruch Probleme behoben; NTR - composer.json aktualisiert; PT-8611 - Parameter überschreiben möglich im UI; PT-8770 - Konfiguration für Trennzeichen beachten; PT-8749 - Adressexport über korrekte Tabelle; PT-7624 - Kategorieimport über Pfad gefixt; PT-8534 - Optimierung für Cron runner und Dateisystem; PT-8226 - Kategorieimport ohne Fehler bei komplexen Bäumen; NTR - Weitere Felder für Bestellexport auswählbar",
@@ -39,6 +40,7 @@
             "1.0.1": "Problem mit verschwindendem Import/Export Menü-Eintrag behoben; Weitere ACL-Zugangsberechtigungen hinzugefügt; Korrektur: article.active Verhalten; Korrektur: Artikel-Attribute; Korrektur: Datums- und Zeitimporte"
         },
         "en": {
+            "2.4.0": "PT-8880 - Added profile for complete customer data export",
             "2.3.1": "PT-8328, PT-8329, PT-8331 - Added new events in ArticlesDbAdapter, CategoryWriter and DbalHelper;",
             "2.3.0": "PT-8810 - Shopware 5.4 compatibility",
             "2.2.0": "PT-8008 - Snippet update; SW-18952 - Add customer stream selector; PT-7975 - Add auto import to cron list; PT-8031 - CS fixes; PT-7419 - Fix csv line break detection; NTR - Updated composer.json; PT-8611 - Allow parameter override; PT-8770 - Recognize config settings for decimal separator; PT-8749 - Use correct address table on export; PT-7624 - Fix category creation on import via path; PT-8534 - Optimize cron runner and filesystem; PT-8226 - Fix category export for complex trees; NTR - Add further fields to order export",

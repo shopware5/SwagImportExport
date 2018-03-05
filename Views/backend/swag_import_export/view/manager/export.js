@@ -262,6 +262,33 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
             // do nothing
         }
 
+        me.customerCompleteFields = Ext.create('Ext.form.FieldSet', {
+            title: '{s name=swag_import_export/export/fieldset_additional}Additional export configuration{/s}',
+            padding: 12,
+            hidden: true,
+            layout: 'anchor',
+            defaults: {
+                anchor: '100%',
+                labelStyle: 'font-weight: 700; text-align: right;'
+            },
+            items: [{
+                xtype: 'container',
+                layout: 'anchor',
+                items: [
+                    Ext.create('Shopware.form.field.CustomerSingleSelection', {
+                        anchor: '100%',
+                        fieldLabel: '{s name="swag_import_export/export/customer_selection"}{/s}',
+                        helpText: '{s name="swag_import_export/export/customer_selection_help"}{/s}',
+                        store: Ext.create('Shopware.attribute.SelectionFactory').createEntitySearchStore('Shopware\\Models\\Customer\\Customer'),
+                        labelWidth: 150,
+                        name: 'customerId'
+                    })
+                ]
+            }]
+        });
+
+        items.push(me.customerCompleteFields);
+
         return items;
     },
 
@@ -372,6 +399,10 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
 
                     me.hideFields();
 
+                    if (me.down('combo[name=format]').readOnly === true) {
+                        me.down('combo[name=format]').setReadOnly(false);
+                    }
+
                     if (type === 'articles') {
                         me.articleFields.show();
                     } else if (type === 'orders' || type == 'mainOrders') {
@@ -385,6 +416,10 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
                         if (Shopware.app.Application.shopware53Installed) {
                             me.customerFields.show();
                         }
+                    } else if (type === 'customersComplete') {
+                        me.down('combo[name=format]').setValue('xml');
+                        me.down('combo[name=format]').setReadOnly(true);
+                        me.customerCompleteFields.show();
                     }
                 }
             }
@@ -428,6 +463,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
 
         return me.profileFieldContainer;
     },
+
     /*
      * Format drop down
      *
@@ -630,6 +666,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
         if (me.customerFields) {
             me.customerFields.hide();
         }
+        me.customerCompleteFields.hide();
     },
 
     resetAdditionalFields: function() {

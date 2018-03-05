@@ -43,7 +43,16 @@ Ext.define('Shopware.apps.SwagImportExport.view.Window', {
             store: Ext.create('Shopware.apps.SwagImportExport.store.ProfileList', {
                 sorters: [
                     { property: 'name', direction: 'ASC' }
-                ]
+                ],
+                listeners: {
+                    load: function(store, records) {
+                        var record = store.findRecord('type', 'customersComplete');
+
+                        if (record) {
+                            store.remove([record]);
+                        }
+                    }
+                }
             }),
             listeners: {
                 activate: function(grid) {

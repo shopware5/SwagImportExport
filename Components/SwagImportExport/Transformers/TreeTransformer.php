@@ -252,14 +252,12 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
     public function transformToTree($node, $mapper = null, $adapterType = null)
     {
         if (isset($node['adapter']) && is_array($node) && $node['adapter'] != $adapterType) {
-            $currentNode = $this->buildIterationNode($node);
-
-            return $currentNode;
+            return $this->buildIterationNode($node);
         }
 
-        $currentNode = array();
+        $currentNode = [];
 
-        if (isset($node['children']) && is_array($node) && count($node['children']) > 0) {
+        if (!isset($node['rawKey']) && isset($node['children']) && is_array($node) && count($node['children']) > 0) {
             if (isset($node['attributes'])) {
                 foreach ($node['attributes'] as $attribute) {
                     $currentNode['_attributes'][$attribute['name']] = $mapper[$attribute['shopwareField']];
@@ -278,6 +276,15 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
                 $currentNode['_value'] = $mapper[$node['shopwareField']];
             } else {
                 $currentNode = $mapper[$node['shopwareField']];
+                if ($node['type'] === 'raw') {
+                    $currentNode = $mapper[$node['rawKey']];
+
+                    if (isset($node['children']) && is_array($node) && count($node['children']) > 0) {
+                        foreach ($node['children'] as $child) {
+                            $currentNode[$child['name']] = $this->transformToTree($child, $currentNode, $node['adapter']);
+                        }
+                    }
+                }
             }
         }
 

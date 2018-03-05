@@ -22,6 +22,7 @@ use Shopware\Components\SwagImportExport\DbAdapters\ArticlesInStockDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\ArticlesPricesDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\ArticlesTranslationsDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\CategoriesDbAdapter;
+use Shopware\Components\SwagImportExport\DbAdapters\CustomerCompleteDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\CustomerDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\DataDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\MainOrdersDbAdapter;
@@ -89,6 +90,8 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
                 return $this->createMainOrdersDbAdapter();
             case DataDbAdapter::CUSTOMER_ADAPTER:
                 return $this->createCustomerDbAdapter();
+            case DataDbAdapter::CUSTOMER_COMPLETE_ADAPTER:
+                return $this->createCustomerCompleteDbAdapter();
             case DataDbAdapter::NEWSLETTER_RECIPIENTS_ADAPTER:
                 return $this->createNewsletterDbAdapter();
             case DataDbAdapter::TRANSLATION_ADAPTER:
@@ -316,6 +319,16 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     {
         $proxyAdapter = Shopware()->Hooks()
             ->getProxy(CustomerDbAdapter::class);
+        return new $proxyAdapter;
+    }
+
+    /**
+     * @return CustomerCompleteDbAdapter
+     */
+    protected function createCustomerCompleteDbAdapter()
+    {
+        $proxyAdapter = Shopware()->Hooks()
+            ->getProxy(CustomerCompleteDbAdapter::class);
         return new $proxyAdapter;
     }
 
