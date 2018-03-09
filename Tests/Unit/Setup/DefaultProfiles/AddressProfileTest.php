@@ -8,11 +8,12 @@
 
 namespace SwagImportExport\Unit\Setup\DefaultProfiles;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\AddressProfile;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\ProfileMetaData;
 use SwagImportExport\Tests\Unit\Setup\DefaultProfiles\DefaultProfileTestCaseTrait;
 
-class AddressProfileTest extends \PHPUnit_Framework_TestCase
+class AddressProfileTest extends TestCase
 {
     use DefaultProfileTestCaseTrait;
 
@@ -30,11 +31,10 @@ class AddressProfileTest extends \PHPUnit_Framework_TestCase
 
         $profileTree = $addressProfile->jsonSerialize();
         $this->walkRecursive($profileTree, function ($node) {
-            $this->assertArrayHasKey('id', $node, "Current array: " . print_r($node, true));
-            $this->assertArrayHasKey('type', $node, "Current array: " . print_r($node, true));
-            $this->assertArrayHasKey('name', $node, "Current array: " . print_r($node, true));
+            $this->assertArrayHasKey('id', $node, 'Current array: ' . print_r($node, true));
+            $this->assertArrayHasKey('type', $node, 'Current array: ' . print_r($node, true));
+            $this->assertArrayHasKey('name', $node, 'Current array: ' . print_r($node, true));
         });
-
 
         $profileJson = json_encode($addressProfile);
         $this->assertJson($profileJson);

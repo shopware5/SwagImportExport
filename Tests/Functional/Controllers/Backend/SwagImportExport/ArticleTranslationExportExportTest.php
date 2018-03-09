@@ -10,8 +10,8 @@ namespace SwagImportExport\Tests\Functional\Controllers\Backend\SwagImportExport
 
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use SwagImportExport\Tests\Helper\DataProvider\ProfileDataProvider;
-use SwagImportExport\Tests\Helper\FixturesImportTrait;
 use SwagImportExport\Tests\Helper\ExportControllerTrait;
+use SwagImportExport\Tests\Helper\FixturesImportTrait;
 
 class ArticleTranslationExportExportTest extends \Enlight_Components_Test_Controller_TestCase
 {
@@ -28,19 +28,6 @@ class ArticleTranslationExportExportTest extends \Enlight_Components_Test_Contro
 
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
-    }
-
-    /**
-     * @param string $filePath
-     * @param string $orderNumber
-     * @param string $attribute
-     * @param string $expected
-     */
-    private function assertTranslationAttributeInXml($filePath, $orderNumber, $attribute, $expected)
-    {
-        $translationNodeList = $this->queryXpath($filePath, "//Translation[articlenumber='{$orderNumber}']/{$attribute}");
-        $nodeValue = $translationNodeList->item(0)->nodeValue;
-        $this->assertEquals($expected, $nodeValue);
     }
 
     public function test_articles_translations_xml_export()
@@ -82,5 +69,18 @@ class ArticleTranslationExportExportTest extends \Enlight_Components_Test_Contro
         $mappedTranslationList = $this->csvToArrayIndexedByFieldValue($file, 'articlenumber');
         $this->assertEquals('Munsterland Lagerkorn 32%', $mappedTranslationList['SW10002.3']['name']);
         $this->assertEquals(2, $mappedTranslationList['SW10002.3']['languageId']);
+    }
+
+    /**
+     * @param string $filePath
+     * @param string $orderNumber
+     * @param string $attribute
+     * @param string $expected
+     */
+    private function assertTranslationAttributeInXml($filePath, $orderNumber, $attribute, $expected)
+    {
+        $translationNodeList = $this->queryXpath($filePath, "//Translation[articlenumber='{$orderNumber}']/{$attribute}");
+        $nodeValue = $translationNodeList->item(0)->nodeValue;
+        $this->assertEquals($expected, $nodeValue);
     }
 }

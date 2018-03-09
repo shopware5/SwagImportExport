@@ -8,19 +8,12 @@
 
 namespace SwagImportExport\Tests\Unit\Setup\DefaultProfiles;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\ArticleImageUrlProfile;
 
-class ArticleImageUrlProfileTest extends \PHPUnit_Framework_TestCase
+class ArticleImageUrlProfileTest extends TestCase
 {
     use DefaultProfileTestCaseTrait;
-
-    /**
-     * @return ArticleImageUrlProfile
-     */
-    private function createArticleImageUrlProfile()
-    {
-        return new ArticleImageUrlProfile();
-    }
 
     public function test_it_should_return_valid_profile_tree()
     {
@@ -31,5 +24,13 @@ class ArticleImageUrlProfileTest extends \PHPUnit_Framework_TestCase
             $this->assertArrayHasKey('name', $node, 'Current array: ' . print_r($node, true));
             $this->assertArrayHasKey('type', $node, 'Current array: ' . print_r($node, true));
         });
+    }
+
+    /**
+     * @return ArticleImageUrlProfile
+     */
+    private function createArticleImageUrlProfile()
+    {
+        return new ArticleImageUrlProfile();
     }
 }

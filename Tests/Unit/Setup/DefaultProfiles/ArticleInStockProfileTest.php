@@ -8,10 +8,11 @@
 
 namespace SwagImportExport\Tests\Unit\Setup\DefaultProfiles;
 
-use Shopware\Setup\SwagImportExport\DefaultProfiles\ProfileMetaData;
+use PHPUnit\Framework\TestCase;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\ArticleInStockProfile;
+use Shopware\Setup\SwagImportExport\DefaultProfiles\ProfileMetaData;
 
-class ArticleInStockProfileTest extends \PHPUnit_Framework_TestCase
+class ArticleInStockProfileTest extends TestCase
 {
     use DefaultProfileTestCaseTrait;
 

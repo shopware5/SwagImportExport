@@ -8,9 +8,10 @@
 
 namespace SwagImportExport\Tests\Unit\Components\SwagImportExport\Validator;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Components\SwagImportExport\Validators\Validator;
 
-class ValidatorTest extends \PHPUnit_Framework_TestCase
+class ValidatorTest extends TestCase
 {
     const VALID_TYPE_RESULT = 1;
     const INVALID_TYPE_RESULT = 0;
@@ -35,7 +36,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
     public function test_validate_float_with_comma_separated_string_should_be_valid()
     {
-        $validatedValue = "100,2";
+        $validatedValue = '100,2';
         $result = $this->SUT->validateFloat($validatedValue);
 
         $this->assertEquals(self::VALID_TYPE_RESULT, $result);
@@ -43,7 +44,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
     public function test_validate_float_with_negative_number_with_comma_should_be_valid()
     {
-        $validatedValue = "-1,2";
+        $validatedValue = '-1,2';
         $result = $this->SUT->validateFloat($validatedValue);
 
         $this->assertEquals(self::VALID_TYPE_RESULT, $result);
@@ -57,10 +58,9 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(self::VALID_TYPE_RESULT, $result);
     }
 
-
     public function test_validate_float_with_character_should_be_invalid()
     {
-        $validatedValue = "test";
+        $validatedValue = 'test';
         $result = $this->SUT->validateFloat($validatedValue);
 
         $this->assertEquals(self::INVALID_TYPE_RESULT, $result);
@@ -68,7 +68,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
     public function test_validate_float_with_numbers_at_the_beginning_of_a_string_should_be_invalid()
     {
-        $validatedValue = "123.0 abc";
+        $validatedValue = '123.0 abc';
         $result = $this->SUT->validateFloat($validatedValue);
 
         $this->assertEquals(self::INVALID_TYPE_RESULT, $result);
@@ -76,7 +76,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
     public function test_validate_float_with_numbers_at_the_end_of_a_string_should_be_invalid()
     {
-        $validatedValue = "abc 123.0";
+        $validatedValue = 'abc 123.0';
         $result = $this->SUT->validateFloat($validatedValue);
 
         $this->assertEquals(self::INVALID_TYPE_RESULT, $result);
@@ -84,7 +84,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
     public function test_validate_float_with_comma_but_without_decimal_digits_should_be_invalid()
     {
-        $validatedValue = "1,";
+        $validatedValue = '1,';
         $result = $this->SUT->validateFloat($validatedValue);
 
         $this->assertEquals(self::INVALID_TYPE_RESULT, $result);
@@ -92,7 +92,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
     public function test_validate_float_with_empty_string_should_be_invalid()
     {
-        $validatedValue = "";
+        $validatedValue = '';
         $result = $this->SUT->validateFloat($validatedValue);
 
         $this->assertEquals(self::INVALID_TYPE_RESULT, $result);
@@ -111,7 +111,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             'integer' => 1,
             'float' => 1.5,
             'string' => 'This is a string.',
-            'boolean' => true
+            'boolean' => true,
         ];
 
         $result = $this->SUT->filterEmptyString($this->getDemoRecordForFilterEmptyStringTest());

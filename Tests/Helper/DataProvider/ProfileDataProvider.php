@@ -1,4 +1,10 @@
 <?php
+/**
+ * (c) shopware AG <info@shopware.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace SwagImportExport\Tests\Helper\DataProvider;
 
@@ -38,7 +44,7 @@ class ProfileDataProvider
 
     const ORDERS_PROFILE_TYPE = 'orders';
     const ORDERS_PROFILE_NAME = 'order_profile';
-    const ORDER_TABLE = "s_order";
+    const ORDER_TABLE = 's_order';
 
     const MAIN_ORDERS_PROFILE_TYPE = 'mainOrders';
     const MAIN_ORDERS_PROFILE_NAME = 'main_order_profile';
@@ -87,6 +93,7 @@ class ProfileDataProvider
 
     /**
      * @param string $type
+     *
      * @return int
      */
     public function getIdByProfileType($type)
@@ -94,6 +101,7 @@ class ProfileDataProvider
         if (!array_key_exists($type, $this->profileIds)) {
             throw new \RuntimeException("Profile type {$type} not found.");
         }
+
         return $this->profileIds[$type];
     }
 

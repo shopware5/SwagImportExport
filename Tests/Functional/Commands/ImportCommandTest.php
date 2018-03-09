@@ -10,12 +10,13 @@ namespace SwagImportExport\Tests\Functional\Commands;
 
 use Doctrine\DBAL\Connection;
 use ImportExportTestKernel;
+use PHPUnit\Framework\TestCase;
 use SwagImportExport\Tests\Helper\CommandTestCaseTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use SwagImportExport\Tests\Helper\DataProvider\ProfileDataProvider;
 use SwagImportExport\Tests\Helper\FixturesImportTrait;
 
-class ImportCommandTest extends \PHPUnit_Framework_TestCase
+class ImportCommandTest extends TestCase
 {
     use DatabaseTestCaseTrait;
     use CommandTestCaseTrait;
@@ -207,10 +208,10 @@ class ImportCommandTest extends \PHPUnit_Framework_TestCase
         $resultLineAmount = $this->getRowCountForTable(ProfileDataProvider::VARIANT_TABLE);
         $importedVariantsAmount = $resultLineAmount - $actualLineAmount;
 
-        $this->assertEquals('Using profile: variant_profile.', $consoleOutput[0], "Used the wrong profile.");
-        $this->assertEquals('Using format: csv.', $consoleOutput[1], "Returned not the expected export file format.");
-        $this->assertEquals("Total count: {$expectedImportedVariants}.", $consoleOutput[3], "Did not processed the expected amount of data rows.");
-        $this->assertEquals($expectedImportedVariants, $importedVariantsAmount, "Expected 2 new rows in s_articles_details.");
+        $this->assertEquals('Using profile: variant_profile.', $consoleOutput[0], 'Used the wrong profile.');
+        $this->assertEquals('Using format: csv.', $consoleOutput[1], 'Returned not the expected export file format.');
+        $this->assertEquals("Total count: {$expectedImportedVariants}.", $consoleOutput[3], 'Did not processed the expected amount of data rows.');
+        $this->assertEquals($expectedImportedVariants, $importedVariantsAmount, 'Expected 2 new rows in s_articles_details.');
     }
 
     public function testArticleInStockXmlImport()
@@ -369,11 +370,13 @@ class ImportCommandTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $table
+     *
      * @return int
      */
     private function getRowCountForTable($table)
     {
         $statement = $this->connection->executeQuery("SELECT * FROM {$table}");
+
         return $statement->rowCount();
     }
 }

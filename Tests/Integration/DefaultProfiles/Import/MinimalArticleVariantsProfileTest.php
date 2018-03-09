@@ -8,11 +8,12 @@
 
 namespace SwagImportExport\Tests\Integration\DefaultProfiles\Import;
 
+use PHPUnit\Framework\TestCase;
 use SwagImportExport\Tests\Helper\CommandTestCaseTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use SwagImportExport\Tests\Integration\DefaultProfiles\DefaultProfileImportTestCaseTrait;
 
-class MinimalArticleVariantsProfileTest extends \PHPUnit_Framework_TestCase
+class MinimalArticleVariantsProfileTest extends TestCase
 {
     use DatabaseTestCaseTrait;
     use CommandTestCaseTrait;
@@ -27,10 +28,10 @@ class MinimalArticleVariantsProfileTest extends \PHPUnit_Framework_TestCase
         $this->runCommand("sw:import:import -p default_article_variants_minimal {$filePath}");
 
         $importedVariant = $this->executeQuery("SELECT * FROM s_articles_details WHERE ordernumber='{$expectedVariantOrderNumber}'");
-        $importedArticle = $this->executeQuery("SELECT * FROM s_articles WHERE id='{$importedVariant[0]["articleID"]}'");
+        $importedArticle = $this->executeQuery("SELECT * FROM s_articles WHERE id='{$importedVariant[0]['articleID']}'");
 
-        $this->assertEquals($expectedVariantOrderNumber, $importedVariant[0]["ordernumber"]);
-        $this->assertEquals($expectedArticleName, $importedArticle[0]["name"]);
+        $this->assertEquals($expectedVariantOrderNumber, $importedVariant[0]['ordernumber']);
+        $this->assertEquals($expectedArticleName, $importedArticle[0]['name']);
     }
 
     public function test_import_should_insert_new_article_with_variant()
@@ -42,9 +43,9 @@ class MinimalArticleVariantsProfileTest extends \PHPUnit_Framework_TestCase
         $this->runCommand("sw:import:import -p default_article_variants_minimal {$filePath}");
 
         $importedVariant = $this->executeQuery("SELECT * FROM s_articles_details WHERE ordernumber='{$expectedVariantOrderNumber}'");
-        $importedArticle = $this->executeQuery("SELECT * FROM s_articles WHERE id='{$importedVariant[0]["articleID"]}'");
+        $importedArticle = $this->executeQuery("SELECT * FROM s_articles WHERE id='{$importedVariant[0]['articleID']}'");
 
-        $this->assertEquals($expectedVariantOrderNumber, $importedVariant[0]["ordernumber"]);
-        $this->assertEquals($expectedArticleName, $importedArticle[0]["name"]);
+        $this->assertEquals($expectedVariantOrderNumber, $importedVariant[0]['ordernumber']);
+        $this->assertEquals($expectedArticleName, $importedArticle[0]['name']);
     }
 }

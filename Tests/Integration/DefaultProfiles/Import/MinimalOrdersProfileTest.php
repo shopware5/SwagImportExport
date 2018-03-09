@@ -8,11 +8,12 @@
 
 namespace SwagImportExport\Tests\Integration\DefaultProfiles\Import;
 
+use PHPUnit\Framework\TestCase;
 use SwagImportExport\Tests\Helper\CommandTestCaseTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use SwagImportExport\Tests\Integration\DefaultProfiles\DefaultProfileImportTestCaseTrait;
 
-class MinimalOrdersProfileTest extends \PHPUnit_Framework_TestCase
+class MinimalOrdersProfileTest extends TestCase
 {
     use DatabaseTestCaseTrait;
     use CommandTestCaseTrait;
@@ -20,7 +21,7 @@ class MinimalOrdersProfileTest extends \PHPUnit_Framework_TestCase
 
     public function test_write_should_update_order_status()
     {
-        $filePath = __DIR__ . "/_fixtures/minimal_orders_profile.csv";
+        $filePath = __DIR__ . '/_fixtures/minimal_orders_profile.csv';
         $expectedOrderId = 15;
         $expectedOrderStatus = 1;
 
@@ -28,6 +29,6 @@ class MinimalOrdersProfileTest extends \PHPUnit_Framework_TestCase
 
         $updatedOrder = $this->executeQuery("SELECT * FROM s_order WHERE id='{$expectedOrderId}'");
 
-        $this->assertEquals($expectedOrderStatus, $updatedOrder[0]["status"]);
+        $this->assertEquals($expectedOrderStatus, $updatedOrder[0]['status']);
     }
 }

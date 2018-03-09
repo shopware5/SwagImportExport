@@ -8,17 +8,18 @@
 
 namespace SwagImportExport\Tests\Unit\Components\SwagImportExport\Validator;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Validators\CategoryValidator;
 
-class CategoryValidatorTest extends \PHPUnit_Framework_TestCase
+class CategoryValidatorTest extends TestCase
 {
     public function test_it_should_throw_exception()
     {
         $categoryValidator = new CategoryValidator();
 
         $record = [
-            'parentId' => ''
+            'parentId' => '',
         ];
 
         $this->expectException(AdapterException::class);

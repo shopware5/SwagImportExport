@@ -9,11 +9,12 @@
 namespace SwagImportExport\TestsIntegration\DefaultProfiles\Import;
 
 use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
 use SwagImportExport\Tests\Helper\CommandTestCaseTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use SwagImportExport\Tests\Integration\DefaultProfiles\DefaultProfileImportTestCaseTrait;
 
-class TranslationProfileTest extends \PHPUnit_Framework_TestCase
+class TranslationProfileTest extends TestCase
 {
     use DatabaseTestCaseTrait;
     use CommandTestCaseTrait;

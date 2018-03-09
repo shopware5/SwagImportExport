@@ -14,11 +14,11 @@ class ExpressionEvaluatorTest extends ImportExportTestHelper
 {
     public function testPhpEvaluator()
     {
-        $variables = array(
+        $variables = [
             'title' => 'Product',
             'active' => true,
             'status' => 2,
-        );
+        ];
 
         $expression1 = '$active ? false : true';
         $expression2 = '$title . \'-Test\'';
@@ -36,11 +36,11 @@ class ExpressionEvaluatorTest extends ImportExportTestHelper
 
     public function testSmartyEvaluator()
     {
-        $variables = array(
+        $variables = [
             'title' => 'Product',
             'active' => true,
             'status' => 2,
-        );
+        ];
 
         $expression1 = '{if $active} false {else} true {/if}';
         $expression2 = '{if $title == \'Product\'} {$title}-Test {/if}';

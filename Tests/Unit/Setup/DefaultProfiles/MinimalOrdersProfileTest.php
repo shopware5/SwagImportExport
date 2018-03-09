@@ -8,20 +8,13 @@
 
 namespace SwagImportExport\Tests\Unit\Setup\DefaultProfiles;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\MinimalOrdersProfile;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\ProfileMetaData;
 
-class MinimalOrdersProfileTest extends \PHPUnit_Framework_TestCase
+class MinimalOrdersProfileTest extends TestCase
 {
     use DefaultProfileTestCaseTrait;
-
-    /**
-     * @return MinimalOrdersProfile
-     */
-    private function createMinimalOrdersProfile()
-    {
-        return new MinimalOrdersProfile();
-    }
 
     public function test_it_can_be_created()
     {
@@ -38,9 +31,17 @@ class MinimalOrdersProfileTest extends \PHPUnit_Framework_TestCase
 
         $profileTree = $minimalOrdersProfile->jsonSerialize();
         $this->walkRecursive($profileTree, function ($node) {
-            $this->assertArrayHasKey('id', $node, "Current array: " . print_r($node, true));
-            $this->assertArrayHasKey('type', $node, "Current array: " . print_r($node, true));
-            $this->assertArrayHasKey('name', $node, "Current array: " . print_r($node, true));
+            $this->assertArrayHasKey('id', $node, 'Current array: ' . print_r($node, true));
+            $this->assertArrayHasKey('type', $node, 'Current array: ' . print_r($node, true));
+            $this->assertArrayHasKey('name', $node, 'Current array: ' . print_r($node, true));
         });
+    }
+
+    /**
+     * @return MinimalOrdersProfile
+     */
+    private function createMinimalOrdersProfile()
+    {
+        return new MinimalOrdersProfile();
     }
 }

@@ -9,13 +9,12 @@
 namespace SwagImportExport\Tests\Functional\Components\SwagImportExport\DbAdapters;
 
 use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
 use Shopware\Components\SwagImportExport\DbAdapters\AddressDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\DataDbAdapter;
-use Shopware\Components\SwagImportExport\Exception\AdapterException;
-use Shopware\Components\SwagImportExport\Validators\AddressValidator;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 
-class AddressDbAdapterTest extends \PHPUnit_Framework_TestCase
+class AddressDbAdapterTest extends TestCase
 {
     use DatabaseTestCaseTrait;
 
@@ -27,11 +26,6 @@ class AddressDbAdapterTest extends \PHPUnit_Framework_TestCase
     const EXISTING_ADDRESS = 3;
     const NOT_EXISTING_USERID = 999999;
     const STATE_ID_ALABAMA = 20;
-
-    private function createAddressDbAdapter()
-    {
-        return new AddressDbAdapter();
-    }
 
     public function test_it_can_be_created()
     {
@@ -114,9 +108,9 @@ class AddressDbAdapterTest extends \PHPUnit_Framework_TestCase
                     'zipcode' => '12345',
                     'city' => 'My city',
                     'countryID' => self::COUNTRY_ID_USA,
-                    'userID' => self::CUSTOMER_ID
-                ]
-            ]
+                    'userID' => self::CUSTOMER_ID,
+                ],
+            ],
         ];
 
         $addressDbAdapter = $this->createAddressDbAdapter();
@@ -124,7 +118,7 @@ class AddressDbAdapterTest extends \PHPUnit_Framework_TestCase
 
         /** @var Connection $connection */
         $connection = Shopware()->Container()->get('dbal_connection');
-        $createdAddresses = $connection->executeQuery('SELECT * FROM s_user_addresses WHERE firstname="My firstname"')->fetchAll();
+        $createdAddresses = $connection->executeQuery("SELECT * FROM s_user_addresses WHERE firstname='My firstname'")->fetchAll();
 
         $this->assertAddress($createdAddresses);
     }
@@ -140,9 +134,9 @@ class AddressDbAdapterTest extends \PHPUnit_Framework_TestCase
                     'city' => 'My city',
                     'countryID' => self::COUNTRY_ID_USA,
                     'email' => 'test@example.com',
-                    'customernumber' => '20001'
-                ]
-            ]
+                    'customernumber' => '20001',
+                ],
+            ],
         ];
 
         $addressDbAdapter = $this->createAddressDbAdapter();
@@ -150,7 +144,7 @@ class AddressDbAdapterTest extends \PHPUnit_Framework_TestCase
 
         /** @var Connection $connection */
         $connection = Shopware()->Container()->get('dbal_connection');
-        $createdAddresses = $connection->executeQuery('SELECT * FROM s_user_addresses WHERE firstname="My firstname"')->fetchAll();
+        $createdAddresses = $connection->executeQuery("SELECT * FROM s_user_addresses WHERE firstname='My firstname'")->fetchAll();
 
         $this->assertAddress($createdAddresses);
     }
@@ -167,9 +161,9 @@ class AddressDbAdapterTest extends \PHPUnit_Framework_TestCase
                     'countryID' => self::COUNTRY_ID_USA,
                     'userID' => 999999,
                     'email' => 'test@example.com',
-                    'customernumber' => '20001'
-                ]
-            ]
+                    'customernumber' => '20001',
+                ],
+            ],
         ];
 
         $addressesDbAdapter = $this->createAddressDbAdapter();
@@ -177,7 +171,7 @@ class AddressDbAdapterTest extends \PHPUnit_Framework_TestCase
 
         /** @var Connection $connection */
         $connection = Shopware()->Container()->get('dbal_connection');
-        $createdAddresses = $connection->executeQuery('SELECT * FROM s_user_addresses WHERE firstname="My firstname"')->fetchAll();
+        $createdAddresses = $connection->executeQuery("SELECT * FROM s_user_addresses WHERE firstname='My firstname'")->fetchAll();
 
         $this->assertAddress($createdAddresses);
     }
@@ -200,9 +194,9 @@ class AddressDbAdapterTest extends \PHPUnit_Framework_TestCase
                     'zipcode' => '12345',
                     'city' => 'My city',
                     'countryID' => self::COUNTRY_ID_USA,
-                    'userID' => self::CUSTOMER_ID
-                ]
-            ]
+                    'userID' => self::CUSTOMER_ID,
+                ],
+            ],
         ];
 
         $addressDbAdapter = $this->createAddressDbAdapter();
@@ -227,9 +221,9 @@ class AddressDbAdapterTest extends \PHPUnit_Framework_TestCase
                     'city' => 'My city',
                     'countryID' => self::COUNTRY_ID_USA,
                     'userID' => self::CUSTOMER_ID,
-                    'vatId' => 'My VatId'
-                ]
-            ]
+                    'vatId' => 'My VatId',
+                ],
+            ],
         ];
 
         $addressDbAdapter = $this->createAddressDbAdapter();
@@ -237,7 +231,7 @@ class AddressDbAdapterTest extends \PHPUnit_Framework_TestCase
 
         /** @var Connection $connection */
         $connection = Shopware()->Container()->get('dbal_connection');
-        $createdAddresses = $connection->executeQuery('SELECT * FROM s_user_addresses WHERE firstname="My firstname"')->fetchAll();
+        $createdAddresses = $connection->executeQuery("SELECT * FROM s_user_addresses WHERE firstname='My firstname'")->fetchAll();
 
         $this->assertAddress($createdAddresses);
         $this->assertEquals('My VatId', $createdAddresses[0]['ustid']);
@@ -255,9 +249,9 @@ class AddressDbAdapterTest extends \PHPUnit_Framework_TestCase
                     'countryID' => self::COUNTRY_ID_USA,
                     'userID' => self::CUSTOMER_ID,
                     'additionalAddressLine1' => 'My additional address',
-                    'additionalAddressLine2' => 'My additional address2'
-                ]
-            ]
+                    'additionalAddressLine2' => 'My additional address2',
+                ],
+            ],
         ];
 
         $addressDbAdapter = $this->createAddressDbAdapter();
@@ -265,7 +259,7 @@ class AddressDbAdapterTest extends \PHPUnit_Framework_TestCase
 
         /** @var Connection $connection */
         $connection = Shopware()->Container()->get('dbal_connection');
-        $createdAddresses = $connection->executeQuery('SELECT * FROM s_user_addresses WHERE firstname="My firstname"')->fetchAll();
+        $createdAddresses = $connection->executeQuery("SELECT * FROM s_user_addresses WHERE firstname='My firstname'")->fetchAll();
 
         $this->assertAddress($createdAddresses);
         $this->assertEquals('My additional address', $createdAddresses[0]['additional_address_line1']);
@@ -284,9 +278,9 @@ class AddressDbAdapterTest extends \PHPUnit_Framework_TestCase
                     'countryID' => self::COUNTRY_ID_USA,
                     'userID' => self::CUSTOMER_ID,
                     'attributeText1' => 'text1',
-                    'attributeText2' => 'text2'
-                ]
-            ]
+                    'attributeText2' => 'text2',
+                ],
+            ],
         ];
 
         $addressDbAdapter = $this->createAddressDbAdapter();
@@ -294,7 +288,7 @@ class AddressDbAdapterTest extends \PHPUnit_Framework_TestCase
 
         /** @var Connection $connection */
         $connection = Shopware()->Container()->get('dbal_connection');
-        $addressId = $connection->executeQuery('SELECT id FROM s_user_addresses WHERE firstname="My firstname"')->fetchColumn();
+        $addressId = $connection->executeQuery("SELECT id FROM s_user_addresses WHERE firstname='My firstname'")->fetchColumn();
         $createdAttribute = $connection->executeQuery("SELECT * FROM s_user_addresses_attributes WHERE address_id={$addressId}")->fetchAll();
 
         $this->assertEquals('text1', $createdAttribute[0]['text1']);
@@ -314,9 +308,9 @@ class AddressDbAdapterTest extends \PHPUnit_Framework_TestCase
                     'countryID' => self::COUNTRY_ID_USA,
                     'userID' => self::CUSTOMER_ID,
                     'attributeText1' => 'text1',
-                    'attributeText2' => 'text2'
-                ]
-            ]
+                    'attributeText2' => 'text2',
+                ],
+            ],
         ];
 
         $addressDbAdapter = $this->createAddressDbAdapter();
@@ -324,7 +318,7 @@ class AddressDbAdapterTest extends \PHPUnit_Framework_TestCase
 
         /** @var Connection $connection */
         $connection = Shopware()->Container()->get('dbal_connection');
-        $addressId = $connection->executeQuery('SELECT id FROM s_user_addresses WHERE firstname="My firstname"')->fetchColumn();
+        $addressId = $connection->executeQuery("SELECT id FROM s_user_addresses WHERE firstname='My firstname'")->fetchColumn();
 
         $this->assertEquals(99999, $addressId);
     }
@@ -378,9 +372,9 @@ class AddressDbAdapterTest extends \PHPUnit_Framework_TestCase
                     'lastname' => 'My lastname',
                     'zipcode' => '12345',
                     'city' => 'My city',
-                    'countryID' => self::COUNTRY_ID_USA
-                ]
-            ]
+                    'countryID' => self::COUNTRY_ID_USA,
+                ],
+            ],
         ];
 
         $addressDbAdapter = $this->createAddressDbAdapter();
@@ -407,9 +401,9 @@ class AddressDbAdapterTest extends \PHPUnit_Framework_TestCase
                     'city' => 'My city',
                     'countryID' => self::COUNTRY_ID_USA,
                     'stateID' => self::STATE_ID_ALABAMA,
-                    'userID' => self::CUSTOMER_ID
-                ]
-            ]
+                    'userID' => self::CUSTOMER_ID,
+                ],
+            ],
         ];
 
         $addressDbAdapter = $this->createAddressDbAdapter();
@@ -433,9 +427,9 @@ class AddressDbAdapterTest extends \PHPUnit_Framework_TestCase
                     'city' => 'My city',
                     'countryID' => self::COUNTRY_ID_USA,
                     'stateID' => 99999,
-                    'userID' => self::CUSTOMER_ID
-                ]
-            ]
+                    'userID' => self::CUSTOMER_ID,
+                ],
+            ],
         ];
 
         $addressDbAdapter = $this->createAddressDbAdapter();
@@ -443,6 +437,14 @@ class AddressDbAdapterTest extends \PHPUnit_Framework_TestCase
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Bundesland wurde nicht gefunden mit stateID: 99999');
         $addressDbAdapter->write($addresses);
+    }
+
+    /**
+     * @return AddressDbAdapter
+     */
+    private function createAddressDbAdapter()
+    {
+        return new AddressDbAdapter();
     }
 
     /**

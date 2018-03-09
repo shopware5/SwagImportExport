@@ -22,7 +22,7 @@ class DataIOTest extends ImportExportTestHelper
             'adapter' => 'categories',
             'filter' => '',
             'type' => 'export',
-            'limit' => [ 'limit' => 40, 'offset' => 0 ],
+            'limit' => ['limit' => 40, 'offset' => 0],
             'max_record_count' => 100,
             'format' => 'csv',
             'profileId' => 1,
@@ -48,7 +48,7 @@ class DataIOTest extends ImportExportTestHelper
 
         $allIds = $dataIO->getRecordIds();
 
-        $this->assertEquals(62, count($allIds));
+        $this->assertCount(62, $allIds);
     }
 
     public function testGenerateDirectory()
@@ -62,7 +62,7 @@ class DataIOTest extends ImportExportTestHelper
         $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession, $this->getLogger());
 
         $directory = $dataIO->getDirectory();
-        $this->assertTrue(is_dir($directory));
+        $this->assertDirectoryExists($directory);
     }
 
     /**

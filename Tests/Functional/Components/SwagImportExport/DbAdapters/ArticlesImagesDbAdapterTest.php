@@ -9,30 +9,13 @@
 namespace SwagImportExport\Tests\Functional\Components\SwagImportExport\DbAdapters;
 
 use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
 use Shopware\Components\SwagImportExport\DbAdapters\ArticlesImagesDbAdapter;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 
-class ArticlesImagesDbAdapterTest extends \PHPUnit_Framework_TestCase
+class ArticlesImagesDbAdapterTest extends TestCase
 {
     use DatabaseTestCaseTrait;
-
-    /**
-     * @return ArticlesImagesDbAdapter
-     */
-    private function createArticleImagesDbAdapter()
-    {
-        return new ArticlesImagesDbAdapter();
-    }
-
-    private function getImportImagePath()
-    {
-        return 'file://' . realpath(dirname(__FILE__)) . '/../../../../Helper/ImportFiles/sw-icon_blue128.png';
-    }
-
-    private function getInvalidImportImagePath()
-    {
-        return 'file://' . realpath(dirname(__FILE__)) . '/../../../../Helper/ImportFiles/invalid_image_name.png';
-    }
 
     public function test_write_should_throw_exception_if_records_are_empty()
     {
@@ -52,9 +35,9 @@ class ArticlesImagesDbAdapterTest extends \PHPUnit_Framework_TestCase
                     'ordernumber' => 'SW10001',
                     'image' => '/../../../image.png',
                     'description' => 'testimport1',
-                    'thumbnail' => 1
-                ]
-            ]
+                    'thumbnail' => 1,
+                ],
+            ],
         ];
 
         $this->expectException(\Exception::class);
@@ -71,16 +54,16 @@ class ArticlesImagesDbAdapterTest extends \PHPUnit_Framework_TestCase
                     'ordernumber' => 'SW10001',
                     'image' => $this->getImportImagePath(),
                     'description' => 'testimport1',
-                    'thumbnail' => 1
-                ]
-            ]
+                    'thumbnail' => 1,
+                ],
+            ],
         ];
         $articlesImagesDbAdapter->write($records);
 
         /** @var Connection $dbalConnection */
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
-        $articleId = $dbalConnection->executeQuery('SELECT articleID FROM s_articles_details WHERE orderNumber="SW10001"')->fetch(\PDO::FETCH_COLUMN);
-        $image = $dbalConnection->executeQuery('SELECT * FROM s_articles_img WHERE description = "testimport1"')->fetch(\PDO::FETCH_ASSOC);
+        $articleId = $dbalConnection->executeQuery("SELECT articleID FROM s_articles_details WHERE orderNumber='SW10001'")->fetch(\PDO::FETCH_COLUMN);
+        $image = $dbalConnection->executeQuery("SELECT * FROM s_articles_img WHERE description = 'testimport1'")->fetch(\PDO::FETCH_ASSOC);
 
         $this->assertEquals($records['default'][0]['description'], $image['description']);
         $this->assertEquals($articleId, $image['articleID']);
@@ -95,9 +78,9 @@ class ArticlesImagesDbAdapterTest extends \PHPUnit_Framework_TestCase
                 [
                     'ordernumber' => 'invalid-order-number',
                     'image' => $this->getImportImagePath(),
-                    'description' => 'testimport1'
-                ]
-            ]
+                    'description' => 'testimport1',
+                ],
+            ],
         ];
 
         $this->expectException(\Exception::class);
@@ -113,13 +96,37 @@ class ArticlesImagesDbAdapterTest extends \PHPUnit_Framework_TestCase
                 [
                     'ordernumber' => 'SW10001',
                     'image' => $this->getInvalidImportImagePath(),
-                    'description' => 'testimport1'
-                ]
-            ]
+                    'description' => 'testimport1',
+                ],
+            ],
         ];
 
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Kann file://' . realpath(dirname(__FILE__)) . '/../../../../Helper/ImportFiles/invalid_image_name.png nicht zum Lesen öffnen');
+        $this->expectExceptionMessage('Kann file://' . realpath(__DIR__) . '/../../../../Helper/ImportFiles/invalid_image_name.png nicht zum Lesen öffnen');
         $articlesImagesDbAdapter->write($records);
+    }
+
+    /**
+     * @return ArticlesImagesDbAdapter
+     */
+    private function createArticleImagesDbAdapter()
+    {
+        return new ArticlesImagesDbAdapter();
+    }
+
+    /**
+     * @return string
+     */
+    private function getImportImagePath()
+    {
+        return 'file://' . realpath(__DIR__) . '/../../../../Helper/ImportFiles/sw-icon_blue128.png';
+    }
+
+    /**
+     * @return string
+     */
+    private function getInvalidImportImagePath()
+    {
+        return 'file://' . realpath(__DIR__) . '/../../../../Helper/ImportFiles/invalid_image_name.png';
     }
 }

@@ -35,6 +35,7 @@ trait ExportControllerTrait
     /**
      * @param string $filePath
      * @param string $xpath
+     *
      * @return \DOMNodeList
      */
     private function queryXpath($filePath, $xpath)
@@ -43,17 +44,19 @@ trait ExportControllerTrait
         $domDocument->loadXML(file_get_contents($filePath));
 
         $domXpath = new \DOMXPath($domDocument);
+
         return $domXpath->query($xpath);
     }
 
     /**
      * @param string $filePath
      * @param string $indexField
+     *
      * @return array
      */
     private function csvToArrayIndexedByFieldValue($filePath, $indexField)
     {
-        $csv = fopen($filePath, 'r');
+        $csv = fopen($filePath, 'rb');
         $mappedCsv = [];
 
         $header = fgetcsv($csv, null, ';');
@@ -83,7 +86,7 @@ trait ExportControllerTrait
             'dateTo' => '',
             'orderstate' => '',
             'paymentstate' => '',
-            'stockFilter' => 'all'
+            'stockFilter' => 'all',
         ];
     }
 }

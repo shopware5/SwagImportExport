@@ -8,11 +8,12 @@
 
 namespace SwagImportExport\Tests\Functional\Setup\Installer;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Setup\SwagImportExport\Install\OldAdvancedMenuInstaller;
 use Shopware\Setup\SwagImportExport\SetupContext;
 
-class OldAdvancedMenuInstallerTest extends \PHPUnit_Framework_TestCase
+class OldAdvancedMenuInstallerTest extends TestCase
 {
     public function test_it_should_be_compatible()
     {

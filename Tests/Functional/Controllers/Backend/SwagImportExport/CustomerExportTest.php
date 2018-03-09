@@ -10,8 +10,8 @@ namespace SwagImportExport\Tests\Functional\Controllers\Backend\SwagImportExport
 
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use SwagImportExport\Tests\Helper\DataProvider\ProfileDataProvider;
-use SwagImportExport\Tests\Helper\FixturesImportTrait;
 use SwagImportExport\Tests\Helper\ExportControllerTrait;
+use SwagImportExport\Tests\Helper\FixturesImportTrait;
 
 class CustomerExportTest extends \Enlight_Components_Test_Controller_TestCase
 {
@@ -28,19 +28,6 @@ class CustomerExportTest extends \Enlight_Components_Test_Controller_TestCase
 
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
-    }
-
-    /**
-     * @param string $filePath
-     * @param string $customerNumber
-     * @param string $attribute
-     * @param string $expected
-     */
-    private function assertCustomerAttributeInXml($filePath, $customerNumber, $attribute, $expected)
-    {
-        $customerDomNodeList = $this->queryXpath($filePath, "//customer[customernumber='{$customerNumber}']/{$attribute}");
-        $nodeValue = $customerDomNodeList->item(0)->nodeValue;
-        $this->assertEquals($expected, $nodeValue);
     }
 
     public function test_customer_xml_export()
@@ -86,5 +73,18 @@ class CustomerExportTest extends \Enlight_Components_Test_Controller_TestCase
         $this->assertEquals('Muster GmbH', $mappedCustomerList[20001]['billing_company']);
         $this->assertEquals('shopware AG', $mappedCustomerList[20001]['shipping_company']);
         $this->assertEquals(0, $mappedCustomerList[20001]['newsletter']);
+    }
+
+    /**
+     * @param string $filePath
+     * @param string $customerNumber
+     * @param string $attribute
+     * @param string $expected
+     */
+    private function assertCustomerAttributeInXml($filePath, $customerNumber, $attribute, $expected)
+    {
+        $customerDomNodeList = $this->queryXpath($filePath, "//customer[customernumber='{$customerNumber}']/{$attribute}");
+        $nodeValue = $customerDomNodeList->item(0)->nodeValue;
+        $this->assertEquals($expected, $nodeValue);
     }
 }

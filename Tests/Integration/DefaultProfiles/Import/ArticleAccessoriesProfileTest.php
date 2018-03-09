@@ -8,11 +8,12 @@
 
 namespace SwagImportExport\Tests\Integration\DefaultProfiles\Import;
 
+use PHPUnit\Framework\TestCase;
 use SwagImportExport\Tests\Helper\CommandTestCaseTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use SwagImportExport\Tests\Integration\DefaultProfiles\DefaultProfileImportTestCaseTrait;
 
-class ArticleAccessoriesProfileTest extends \PHPUnit_Framework_TestCase
+class ArticleAccessoriesProfileTest extends TestCase
 {
     use DatabaseTestCaseTrait;
     use CommandTestCaseTrait;
@@ -20,15 +21,15 @@ class ArticleAccessoriesProfileTest extends \PHPUnit_Framework_TestCase
 
     public function test_should_write_assert_new_article_asseccory()
     {
-        $filePath = __DIR__ . "/_fixtures/article_accessories_profile.csv";
-        $expectedOrderNumber = "SW10003";
+        $filePath = __DIR__ . '/_fixtures/article_accessories_profile.csv';
+        $expectedOrderNumber = 'SW10003';
         $expectedArticleAccessoryId = 10;
 
         $this->runCommand("sw:import:import -p default_article_accessories {$filePath}");
 
         $updatedArticle = $this->executeQuery("SELECT * FROM s_articles_details WHERE ordernumber='{$expectedOrderNumber}'");
-        $updatedArticleRelations = $this->executeQuery("SELECT * FROM s_articles_relationships WHERE articleID='{$updatedArticle[0]["articleID"]}'");
+        $updatedArticleRelations = $this->executeQuery("SELECT * FROM s_articles_relationships WHERE articleID='{$updatedArticle[0]['articleID']}'");
 
-        $this->assertEquals($expectedArticleAccessoryId, $updatedArticleRelations[0]["relatedarticle"]);
+        $this->assertEquals($expectedArticleAccessoryId, $updatedArticleRelations[0]['relatedarticle']);
     }
 }

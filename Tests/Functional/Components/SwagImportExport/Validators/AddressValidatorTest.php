@@ -8,12 +8,12 @@
 
 namespace SwagImportExport\Tests\Functional\Components\SwagImportExport\Validators;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Validators\AddressValidator;
 use Shopware\Components\SwagImportExport\Validators\Validator;
-use Shopware\Models\Customer\Address;
 
-class AddressValidatorTest extends \PHPUnit_Framework_TestCase
+class AddressValidatorTest extends TestCase
 {
     const DONT_UPDATE_ADDRESS = false;
 
@@ -41,7 +41,7 @@ class AddressValidatorTest extends \PHPUnit_Framework_TestCase
         $emptyAddressRecord = [
             'userID' => 999,
             'firstname' => '',
-            'lastname' => 'lastname'
+            'lastname' => 'lastname',
         ];
 
         $addressValidator = new AddressValidator();
@@ -58,7 +58,7 @@ class AddressValidatorTest extends \PHPUnit_Framework_TestCase
             'lastname' => 'some value',
             'zipcode' => 'some value',
             'city' => 'some value',
-            'countryID' => '1'
+            'countryID' => '1',
         ];
 
         $addressValidator = new AddressValidator();
@@ -76,7 +76,7 @@ class AddressValidatorTest extends \PHPUnit_Framework_TestCase
             'zipcode' => 'some value',
             'city' => 'some value',
             'countryID' => 'some value',
-            'customernumber' => '1'
+            'customernumber' => '1',
         ];
 
         $addressValidator = new AddressValidator();
@@ -94,7 +94,7 @@ class AddressValidatorTest extends \PHPUnit_Framework_TestCase
             'zipcode' => 'some value',
             'city' => 'some value',
             'countryID' => 'some value',
-            'email' => 'test@example.org'
+            'email' => 'test@example.org',
         ];
 
         $addressValidator = new AddressValidator();

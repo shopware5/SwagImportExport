@@ -10,8 +10,8 @@ namespace SwagImportExport\Tests\Functional\Controllers\Backend\SwagImportExport
 
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use SwagImportExport\Tests\Helper\DataProvider\ProfileDataProvider;
-use SwagImportExport\Tests\Helper\FixturesImportTrait;
 use SwagImportExport\Tests\Helper\ExportControllerTrait;
+use SwagImportExport\Tests\Helper\FixturesImportTrait;
 
 class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
 {
@@ -30,28 +30,6 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
 
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
-    }
-
-    /**
-     * @param string $filePath
-     * @param string $orderNumber
-     * @param string $attribute
-     * @param string $expected
-     */
-    private function assertArticleAttributeInXml($filePath, $orderNumber, $attribute, $expected)
-    {
-        $articleDomNodeList = $this->queryXpath($filePath, "//article[ordernumber='{$orderNumber}']/{$attribute}");
-        $nodeValue = $articleDomNodeList->item(0)->nodeValue;
-        $this->assertEquals($expected, $nodeValue);
-    }
-
-    /**
-     * @param string $file
-     * @return array
-     */
-    private function readCsvIndexedByOrdernumber($file)
-    {
-        return $this->csvToArrayIndexedByFieldValue($file, 'ordernumber');
     }
 
     public function test_article_xml_export()
@@ -315,7 +293,7 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
         $this->assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
-        $variantListWithLimit = $this->queryXpath($file, "//article");
+        $variantListWithLimit = $this->queryXpath($file, '//article');
         $this->assertEquals($limit, $variantListWithLimit->length);
     }
 
@@ -364,7 +342,7 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
         $this->assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
-        $variantsNodeListWithOffset = $this->queryXpath($file, "//article");
+        $variantsNodeListWithOffset = $this->queryXpath($file, '//article');
         $this->assertEquals(20, $variantsNodeListWithOffset->length);
     }
 
@@ -442,5 +420,28 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
 
         $mappedVariantList = $this->csvToArrayIndexedByFieldValue($file, 'ordernumber');
         $this->assertCount(10, $mappedVariantList);
+    }
+
+    /**
+     * @param string $filePath
+     * @param string $orderNumber
+     * @param string $attribute
+     * @param string $expected
+     */
+    private function assertArticleAttributeInXml($filePath, $orderNumber, $attribute, $expected)
+    {
+        $articleDomNodeList = $this->queryXpath($filePath, "//article[ordernumber='{$orderNumber}']/{$attribute}");
+        $nodeValue = $articleDomNodeList->item(0)->nodeValue;
+        $this->assertEquals($expected, $nodeValue);
+    }
+
+    /**
+     * @param string $file
+     *
+     * @return array
+     */
+    private function readCsvIndexedByOrdernumber($file)
+    {
+        return $this->csvToArrayIndexedByFieldValue($file, 'ordernumber');
     }
 }

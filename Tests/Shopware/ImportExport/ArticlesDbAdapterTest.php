@@ -1,15 +1,21 @@
 <?php
+/**
+ * (c) shopware AG <info@shopware.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Tests\Shopware\ImportExport;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Components\SwagImportExport\DbAdapters\ArticlesDbAdapter;
-use Shopware\Components\SwagImportExport\Factories\DataFactory;
-use Tests\Helper\DbAdapterTest;
+use Shopware\Components\SwagImportExport\DbAdapters\DataDbAdapter;
+use Tests\Helper\DbAdapterTestHelper;
 
-class ArticlesDbAdapterTest extends DbAdapterTest
+class ArticlesDbAdapterTest extends DbAdapterTestHelper
 {
-    protected $yamlFile = "TestCases/articleDbAdapter.yml";
+    protected $yamlFile = 'TestCases/articleDbAdapter.yml';
 
     public function setUp()
     {
@@ -35,15 +41,19 @@ class ArticlesDbAdapterTest extends DbAdapterTest
         foreach ($rawData['article'] as &$item) {
             unset($item['articleId']);
         }
+        unset($item);
 
         $this->assertTrue(in_array($rawData['article'][0], $expected['article']));
         $this->assertTrue(in_array($rawData['article'][1], $expected['article']));
-        $this->assertEquals(count($rawData['article']), count($expected['article']));
+        $this->assertCount(count($rawData['article']), $expected['article']);
     }
 
+    /**
+     * @return array
+     */
     public function readProvider()
     {
-        return static::getDataProvider('testRead');
+        return $this->getDataProvider('testRead');
     }
 
     /**
@@ -72,22 +82,27 @@ class ArticlesDbAdapterTest extends DbAdapterTest
         $this->assertEquals(50, $prices[1]['price']);
     }
 
+    /**
+     * @return array
+     */
     public function writeProvider()
     {
         return $this->getDataProvider('testWrite');
     }
 
     /**
-     * @return ArticlesDbAdapter
+     * @return DataDbAdapter
      */
     private function createArticlesDbAdapter()
     {
         $dataFactory = $this->Plugin()->getDataFactory();
+
         return $dataFactory->createDbAdapter($this->dbAdapter);
     }
 
     /**
      * @param string $number
+     *
      * @return array
      */
     private function getProductDataResult($number)
@@ -106,6 +121,7 @@ class ArticlesDbAdapterTest extends DbAdapterTest
 
     /**
      * @param string $number
+     *
      * @return array
      */
     private function getProductPriceResult($number)
@@ -128,6 +144,7 @@ class ArticlesDbAdapterTest extends DbAdapterTest
     {
         /** @var Connection $connection */
         $connection = Shopware()->Container()->get('dbal_connection');
+
         return $connection->createQueryBuilder();
     }
 }

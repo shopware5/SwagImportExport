@@ -8,27 +8,22 @@
 
 namespace SwagImportExport\Tests\Functional\Components\SwagImportExport\FileIO;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Components\SwagImportExport\FileIO\CsvFileReader;
 use Shopware\Components\SwagImportExport\UploadPathProvider;
 
-class CsvFileReaderTest extends \PHPUnit_Framework_TestCase
+class CsvFileReaderTest extends TestCase
 {
     const AMOUNT_OF_RECORDS_WITHOUT_EMPTY_LINE = 1;
     const AMOUNT_OF_RECORDS_WITH_EMPTY_LINE = 1;
-
-    private function createCsvFileReader()
-    {
-        $uploadPathProvider = new UploadPathProvider(Shopware()->DocPath());
-        return new CsvFileReader($uploadPathProvider);
-    }
 
     public function test_readRecords_with_csv_file_without_empty_line_at_end_of_file()
     {
         $expectedResult = [
             [
                 'testHeader' => 'testValue',
-                'anotherTestHeader' => 'anotherTestValue'
-            ]
+                'anotherTestHeader' => 'anotherTestValue',
+            ],
         ];
 
         $csvFileReader = $this->createCsvFileReader();
@@ -51,5 +46,15 @@ class CsvFileReaderTest extends \PHPUnit_Framework_TestCase
         $countOfRecords = $csvFileReader->getTotalCount(__DIR__ . '/_fixtures/empty_lines_on_end.csv');
 
         $this->assertEquals(self::AMOUNT_OF_RECORDS_WITH_EMPTY_LINE, $countOfRecords);
+    }
+
+    /**
+     * @return CsvFileReader
+     */
+    private function createCsvFileReader()
+    {
+        $uploadPathProvider = new UploadPathProvider(Shopware()->DocPath());
+
+        return new CsvFileReader($uploadPathProvider);
     }
 }

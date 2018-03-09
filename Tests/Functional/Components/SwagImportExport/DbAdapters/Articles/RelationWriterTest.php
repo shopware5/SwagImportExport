@@ -8,11 +8,12 @@
 
 namespace SwagImportExport\Tests\Functional\Components\SwagImportExport\DbAdapters\Articles;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\RelationWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\ArticlesDbAdapter;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 
-class RelationWriterTest extends \PHPUnit_Framework_TestCase
+class RelationWriterTest extends TestCase
 {
     use DatabaseTestCaseTrait;
 
@@ -34,13 +35,13 @@ class RelationWriterTest extends \PHPUnit_Framework_TestCase
         $invalidRelationData = [
             [
                 'ordernumber' => 'invalid-order-number',
-                'parentIndexElement' => 0
-            ]
+                'parentIndexElement' => 0,
+            ],
         ];
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Zubehör mit Bestellnummer invalid-order-number nicht gefunden.');
-        $relationWriterAdapter->write('3', 'SW10003', $invalidRelationData, "accessory", true);
+        $relationWriterAdapter->write('3', 'SW10003', $invalidRelationData, 'accessory', true);
     }
 
     public function test_write_similar_with_invalid_data_throws_exception()
@@ -50,12 +51,12 @@ class RelationWriterTest extends \PHPUnit_Framework_TestCase
         $invalidRelationData = [
             [
                 'ordernumber' => 'invalid-order-number',
-                'parentIndexElement' => 0
-            ]
+                'parentIndexElement' => 0,
+            ],
         ];
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Ähnlicher Artikel mit Bestellnummer invalid-order-number nicht gefunden.');
-        $relationWriterAdapter->write('3', 'SW10003', $invalidRelationData, "similar", true);
+        $relationWriterAdapter->write('3', 'SW10003', $invalidRelationData, 'similar', true);
     }
 }

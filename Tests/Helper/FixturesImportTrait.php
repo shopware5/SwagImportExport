@@ -16,7 +16,7 @@ use SwagImportExport\Tests\Helper\DataProvider\ProfileDataProvider;
 trait FixturesImportTrait
 {
     /**
-     * @var ModelManager $modelManager
+     * @var ModelManager
      */
     private $modelManager;
 
@@ -35,7 +35,7 @@ trait FixturesImportTrait
         $this->modelManager = Shopware()->Container()->get('models');
         $newsletterGroup = $this->modelManager->find(Group::class, 1);
 
-        for ($addressAmount = 0; $addressAmount < 25; $addressAmount++) {
+        for ($addressAmount = 0; $addressAmount < 25; ++$addressAmount) {
             $address = new Address();
             $address->setEmail('test_' . $addressAmount . '@example.com');
             $address->setAdded(new \DateTime());

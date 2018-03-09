@@ -8,10 +8,11 @@
 
 namespace SwagImportExport\Tests\Unit\Setup\DefaultProfiles;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\NewsletterRecipientProfile;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\ProfileMetaData;
 
-class NewsletterProfileTest extends \PHPUnit_Framework_TestCase
+class NewsletterProfileTest extends TestCase
 {
     use DefaultProfileTestCaseTrait;
 
@@ -29,9 +30,9 @@ class NewsletterProfileTest extends \PHPUnit_Framework_TestCase
         $newsletterProfile = new NewsletterRecipientProfile();
 
         $this->walkRecursive($newsletterProfile->jsonSerialize(), function ($node) {
-            $this->assertArrayHasKey('id', $node, "Current array: " . print_r($node, true));
-            $this->assertArrayHasKey('type', $node, "Current array: " . print_r($node, true));
-            $this->assertArrayHasKey('name', $node, "Current array: " . print_r($node, true));
+            $this->assertArrayHasKey('id', $node, 'Current array: ' . print_r($node, true));
+            $this->assertArrayHasKey('type', $node, 'Current array: ' . print_r($node, true));
+            $this->assertArrayHasKey('name', $node, 'Current array: ' . print_r($node, true));
         });
     }
 }

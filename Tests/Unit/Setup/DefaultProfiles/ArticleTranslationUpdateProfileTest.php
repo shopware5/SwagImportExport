@@ -8,20 +8,13 @@
 
 namespace SwagImportExport\Tests\Unit\Setup\DefaultProfiles;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\ArticleTranslationUpdateProfile;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\ProfileMetaData;
 
-class ArticleTranslationUpdateProfileTest extends \PHPUnit_Framework_TestCase
+class ArticleTranslationUpdateProfileTest extends TestCase
 {
     use DefaultProfileTestCaseTrait;
-
-    /**
-     * @return ArticleTranslationUpdateProfile
-     */
-    private function createArticleTranslationUpdateProfile()
-    {
-        return new ArticleTranslationUpdateProfile();
-    }
 
     public function test_it_can_be_created()
     {
@@ -41,5 +34,13 @@ class ArticleTranslationUpdateProfileTest extends \PHPUnit_Framework_TestCase
             $this->assertArrayHasKey('name', $node, 'Current array: ' . print_r($node, true));
             $this->assertArrayHasKey('type', $node, 'Current array: ' . print_r($node, true));
         });
+    }
+
+    /**
+     * @return ArticleTranslationUpdateProfile
+     */
+    private function createArticleTranslationUpdateProfile()
+    {
+        return new ArticleTranslationUpdateProfile();
     }
 }

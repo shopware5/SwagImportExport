@@ -8,19 +8,12 @@
 
 namespace Functional\Components\SwagImportExport\Validators;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Validators\Articles\ArticleValidator;
 
-class ArticleValidatorTest extends \PHPUnit_Framework_TestCase
+class ArticleValidatorTest extends TestCase
 {
-    /**
-     * @return ArticleValidator
-     */
-    private function createArticleValidator()
-    {
-        return new ArticleValidator();
-    }
-
     public function test_validate_article_without_name_should_throw_exception()
     {
         $articleValidator = $this->createArticleValidator();
@@ -28,7 +21,7 @@ class ArticleValidatorTest extends \PHPUnit_Framework_TestCase
             'mainNumber' => 'SW-99999',
             'supplierId' => 2,
             'supplierName' => 'Feinbrennerei Sasse',
-            'taxId' => 1
+            'taxId' => 1,
         ];
 
         $this->expectException(AdapterException::class);
@@ -43,7 +36,7 @@ class ArticleValidatorTest extends \PHPUnit_Framework_TestCase
             'name' => 'Testartikel',
             'mainNumber' => 'SW-99999',
             'supplierId' => 2,
-            'supplierName' => 'Feinbrennerei Sasse'
+            'supplierName' => 'Feinbrennerei Sasse',
         ];
 
         $this->expectException(AdapterException::class);
@@ -56,7 +49,7 @@ class ArticleValidatorTest extends \PHPUnit_Framework_TestCase
         $articleValidator = $this->createArticleValidator();
         $record = [
             'orderNumber' => '',
-            'mainNumber' => ''
+            'mainNumber' => '',
         ];
 
         $this->expectException(\Exception::class);
@@ -69,11 +62,19 @@ class ArticleValidatorTest extends \PHPUnit_Framework_TestCase
         $articleValidator = $this->createArticleValidator();
         $record = [
             'orderNumber' => 'ordernumber1',
-            'mainNumber' => ''
+            'mainNumber' => '',
         ];
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Hauptbestellnummer für Artikel ordernumber1 erforderlich.');
         $articleValidator->checkRequiredFields($record);
+    }
+
+    /**
+     * @return ArticleValidator
+     */
+    private function createArticleValidator()
+    {
+        return new ArticleValidator();
     }
 }

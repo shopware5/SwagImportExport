@@ -8,9 +8,10 @@
 
 namespace SwagImportExport\Tests\Unit\Components\SwagImportExport\FileIO\Encoders;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Components\SwagImportExport\FileIO\Encoders\XmlEncoder;
 
-class XmlEncoderTest extends \PHPUnit_Framework_TestCase
+class XmlEncoderTest extends TestCase
 {
     /**
      * @var XmlEncoder
@@ -32,7 +33,7 @@ class XmlEncoderTest extends \PHPUnit_Framework_TestCase
     {
         $emptyArray = [];
         $result = $this->SUT->_encode($emptyArray);
-        $this->assertEmpty($result, "Empty input should return an empty string.");
+        $this->assertEmpty($result, 'Empty input should return an empty string.');
     }
 
     public function test_encode_root_element()
@@ -40,12 +41,12 @@ class XmlEncoderTest extends \PHPUnit_Framework_TestCase
         $expectedElementContent = "<root></root>\r\n";
 
         $inputArray = [
-            'root' => []
+            'root' => [],
         ];
 
         $result = $this->SUT->_encode($inputArray);
 
-        $this->assertEquals($expectedElementContent, $result, "Expected empty element content, but root element contains elements.");
+        $this->assertEquals($expectedElementContent, $result, 'Expected empty element content, but root element contains elements.');
     }
 
     public function test_encode_without_padding()
@@ -70,12 +71,12 @@ EOD;
 
         $transformArrayTree = [
             'root' => [
-                'child' => 'child value'
-            ]
+                'child' => 'child value',
+            ],
         ];
 
         $result = $this->SUT->_encode($transformArrayTree, 0, $customRootElement);
-        $this->assertXmlStringEqualsXmlString($expectedElementContent, $result, "Setting a custom root element name failed.");
+        $this->assertXmlStringEqualsXmlString($expectedElementContent, $result, 'Setting a custom root element name failed.');
     }
 
     public function test_encode_with_child_elements()
@@ -96,19 +97,19 @@ EOD;
         $transformArray = [
             'root' => [
                 'child1' => [
-                    'child1.1' => 'child 1.1 value'
+                    'child1.1' => 'child 1.1 value',
                 ],
                 'child2' => [
                     'child2.1' => 'child 2.1 value',
-                    'child2.2' => 'child 2.2 value'
+                    'child2.2' => 'child 2.2 value',
                 ],
-                'child3' => 'child 3 value'
-            ]
+                'child3' => 'child 3 value',
+            ],
         ];
 
         $result = $this->SUT->_encode($transformArray);
 
-        $this->assertXmlStringEqualsXmlString($expectedXml, $result, "XML-child elements does not match.");
+        $this->assertXmlStringEqualsXmlString($expectedXml, $result, 'XML-child elements does not match.');
     }
 
     public function test_encode_attributes()
@@ -121,10 +122,10 @@ EOD;
             'elementWithAttributes' => [
                 '_attributes' => [
                     'attribute1' => 'attr1 value',
-                    'attribute3' => 'attr3 value'
+                    'attribute3' => 'attr3 value',
                 ],
-                '_value' => 'element value'
-            ]
+                '_value' => 'element value',
+            ],
         ];
 
         $result = $this->SUT->_encode($transformArray);
@@ -140,14 +141,14 @@ EOD;
         $transformArray = [
             'elementWithInvalidAttributeValue' => [
                 '_attributes' => [
-                    'attribute1' => 'attr1 value'
-                ]
-            ]
+                    'attribute1' => 'attr1 value',
+                ],
+            ],
         ];
 
         $result = $this->SUT->_encode($transformArray);
 
-        $this->assertXmlStringEqualsXmlString($expectedXml, $result, "Failed asserting that empty elements will be written with attributes.");
+        $this->assertXmlStringEqualsXmlString($expectedXml, $result, 'Failed asserting that empty elements will be written with attributes.');
     }
 
     public function test_encode_with_special_chars_should_add_CDATA_section()
@@ -160,12 +161,12 @@ EOD;
 
         $transformArray = [
             'root' => [
-                'text_with_special_chars' => '<p>This is my <strong>Text</strong> which has a lot of !special! &&chars&&!</p>'
-            ]
+                'text_with_special_chars' => '<p>This is my <strong>Text</strong> which has a lot of !special! &&chars&&!</p>',
+            ],
         ];
 
         $result = $this->SUT->_encode($transformArray);
-        $this->assertXmlStringEqualsXmlString($expectedXml, $result, "Failed adding CDATA-section to content if special characters will be used.");
+        $this->assertXmlStringEqualsXmlString($expectedXml, $result, 'Failed adding CDATA-section to content if special characters will be used.');
     }
 
     public function test_encode_element_with_one_to_many_association()
@@ -195,25 +196,25 @@ EOD;
                 'oneToManyElement' => [
                     1 => [
                         'firstAssociation' => [
-                            'child3' => 'child 3 value'
-                        ]
+                            'child3' => 'child 3 value',
+                        ],
                     ],
                     2 => [
                         'secondAssociation' => [
-                            'child3' => 'child 3 value'
-                        ]
+                            'child3' => 'child 3 value',
+                        ],
                     ],
                     3 => [
                         'thirdAssociation' => [
-                            'child3' => 'child 3 value'
-                        ]
-                    ]
-                ]
-            ]
+                            'child3' => 'child 3 value',
+                        ],
+                    ],
+                ],
+            ],
         ];
 
         $result = $this->SUT->_encode($transformArray);
-        $this->assertXmlStringEqualsXmlString($expectedXml, $result, "Failed creating multiple elements by having one to many associations via numeric indexed arrays.");
+        $this->assertXmlStringEqualsXmlString($expectedXml, $result, 'Failed creating multiple elements by having one to many associations via numeric indexed arrays.');
     }
 
     public function test_encode_with_boolean_values()
@@ -232,8 +233,8 @@ EOD;
                 'child_false' => false,
                 'child_true' => true,
                 'child_0' => 0,
-                'child_1' => 1
-            ]
+                'child_1' => 1,
+            ],
         ];
 
         $result = $this->SUT->_encode($transformArray);

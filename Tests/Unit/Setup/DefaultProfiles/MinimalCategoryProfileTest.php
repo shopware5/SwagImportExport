@@ -8,17 +8,13 @@
 
 namespace SwagImportExport\Tests\Unit\Setup\DefaultProfiles;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\MinimalCategoryProfile;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\ProfileMetaData;
 
-class MinimalCategoryProfileTest extends \PHPUnit_Framework_TestCase
+class MinimalCategoryProfileTest extends TestCase
 {
     use DefaultProfileTestCaseTrait;
-
-    private function createMinimalCategoryProfile()
-    {
-        return new MinimalCategoryProfile();
-    }
 
     public function test_it_can_be_created()
     {
@@ -35,12 +31,20 @@ class MinimalCategoryProfileTest extends \PHPUnit_Framework_TestCase
 
         $profileTree = $minimalCategoryProfile->jsonSerialize();
         $this->walkRecursive($profileTree, function ($node) {
-            $this->assertArrayHasKey('id', $node, "Current array: " . print_r($node, true));
-            $this->assertArrayHasKey('type', $node, "Current array: " . print_r($node, true));
-            $this->assertArrayHasKey('name', $node, "Current array: " . print_r($node, true));
+            $this->assertArrayHasKey('id', $node, 'Current array: ' . print_r($node, true));
+            $this->assertArrayHasKey('type', $node, 'Current array: ' . print_r($node, true));
+            $this->assertArrayHasKey('name', $node, 'Current array: ' . print_r($node, true));
         });
 
         $profileJson = json_encode($minimalCategoryProfile);
         $this->assertJson($profileJson);
+    }
+
+    /**
+     * @return MinimalCategoryProfile
+     */
+    private function createMinimalCategoryProfile()
+    {
+        return new MinimalCategoryProfile();
     }
 }

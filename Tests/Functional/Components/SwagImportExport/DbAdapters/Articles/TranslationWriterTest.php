@@ -8,19 +8,16 @@
 
 namespace SwagImportExport\Tests\Functional\Components\SwagImportExport\DbAdapters\Articles;
 
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\TranslationWriter;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 
-class TranslationWriterTest extends \PHPUnit_Framework_TestCase
+class TranslationWriterTest extends TestCase
 {
     use DatabaseTestCaseTrait;
-
-    private function createTranslationWriter()
-    {
-        return new TranslationWriter();
-    }
 
     public function test_write_should_throw_exception_if_language_id_is_not_available()
     {
@@ -29,8 +26,8 @@ class TranslationWriterTest extends \PHPUnit_Framework_TestCase
         $mainDetailId = 273;
         $translations = [
             [
-                'languageId' => 3
-            ]
+                'languageId' => 3,
+            ],
         ];
 
         $translationWriter = $this->createTranslationWriter();
@@ -53,14 +50,17 @@ class TranslationWriterTest extends \PHPUnit_Framework_TestCase
                 'keywords' => 'translated,keywords',
                 'additionalText' => 'Translated additional text',
                 'packUnit' => 'translated pack unit',
-                'languageId' => '2'
-            ]
+                'languageId' => '2',
+            ],
         ];
 
         $translationsWriter = $this->createTranslationWriter();
         $translationsWriter->write($articleId, $variantId, $mainDetailId, $translations);
 
-        $result = Shopware()->Container()->get('dbal_connection')->executeQuery('SELECT * FROM s_core_translations WHERE objecttype="article" AND objectkey=273')->fetchAll();
+        /** @var Connection $connection */
+        $connection = Shopware()->Container()->get('dbal_connection');
+        $sql = "SELECT * FROM s_core_translations WHERE objecttype='article' AND objectkey=273";
+        $result = $connection->executeQuery($sql)->fetchAll();
         $importedTranslation = unserialize($result[0]['objectdata']);
 
         $this->assertEquals($translations[0]['name'], $importedTranslation['txtArtikel']);
@@ -71,6 +71,7 @@ class TranslationWriterTest extends \PHPUnit_Framework_TestCase
 
     public function test_write_should_create_attribute_translations()
     {
+        /** @var Connection $dbalConnection */
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
         /** @var CrudService $attributeService */
         $attributeService = Shopware()->Container()->get('shopware_attribute.crud_service');
@@ -82,8 +83,8 @@ class TranslationWriterTest extends \PHPUnit_Framework_TestCase
         $translations = [
             [
                 'mycustomfield' => 'my custom translation',
-                'languageId' => '2'
-            ]
+                'languageId' => '2',
+            ],
         ];
 
         $translationsWriter = $this->createTranslationWriter();
@@ -91,11 +92,12 @@ class TranslationWriterTest extends \PHPUnit_Framework_TestCase
 
         $attributeService->delete('s_articles_attributes', 'mycustomfield');
 
-        $result = $dbalConnection->executeQuery('SELECT * FROM s_core_translations WHERE objecttype="article" AND objectkey=272')->fetchAll();
+        $sql = "SELECT * FROM s_core_translations WHERE objecttype='article' AND objectkey=272";
+        $result = $dbalConnection->executeQuery($sql)->fetchAll();
         $importedTranslation = unserialize($result[0]['objectdata']);
 
         // trait rollback not working - so we rollback manually
-        $dbalConnection->executeQuery('DELETE FROM s_core_translations WHERE objecttype="article" AND objectkey=272');
+        $dbalConnection->executeQuery("DELETE FROM s_core_translations WHERE objecttype='article' AND objectkey=272");
         $dbalConnection->executeQuery('DELETE FROM s_articles_translations WHERE articleID=272');
 
         $this->assertEquals($translations[0]['mycustomfield'], $importedTranslation['__attribute_mycustomfield']);
@@ -114,17 +116,28 @@ class TranslationWriterTest extends \PHPUnit_Framework_TestCase
                 'keywords' => 'translated,keywords',
                 'additionalText' => 'Translated additional text',
                 'packUnit' => 'translated pack unit',
-                'languageId' => '2'
-            ]
+                'languageId' => '2',
+            ],
         ];
 
         $translationWriter = $this->createTranslationWriter();
         $translationWriter->write($articleId, $variantId, $mainDetailId, $translations);
 
-        $result = Shopware()->Container()->get('dbal_connection')->executeQuery('SELECT * FROM s_core_translations WHERE objecttype="variant" AND objectkey=1053')->fetchAll();
+        /** @var Connection $connection */
+        $connection = Shopware()->Container()->get('dbal_connection');
+        $sql = "SELECT * FROM s_core_translations WHERE objecttype='variant' AND objectkey=1053";
+        $result = $connection->executeQuery($sql)->fetchAll();
         $importedTranslation = unserialize($result[0]['objectdata']);
 
         $this->assertEquals('Translated additional text', $importedTranslation['txtzusatztxt']);
         $this->assertEquals('translated pack unit', $importedTranslation['txtpackunit']);
+    }
+
+    /**
+     * @return TranslationWriter
+     */
+    private function createTranslationWriter()
+    {
+        return new TranslationWriter();
     }
 }

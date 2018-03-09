@@ -10,8 +10,8 @@ namespace SwagImportExport\Tests\Functional\Controllers\Backend\SwagImportExport
 
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use SwagImportExport\Tests\Helper\DataProvider\ProfileDataProvider;
-use SwagImportExport\Tests\Helper\FixturesImportTrait;
 use SwagImportExport\Tests\Helper\ExportControllerTrait;
+use SwagImportExport\Tests\Helper\FixturesImportTrait;
 
 class ArticlesInstockExportTest extends \Enlight_Components_Test_Controller_TestCase
 {
@@ -28,28 +28,6 @@ class ArticlesInstockExportTest extends \Enlight_Components_Test_Controller_Test
 
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
-    }
-
-    /**
-     * @param string $filePath
-     * @param string $orderNumber
-     * @param string $attribute
-     * @param string $expected
-     */
-    private function assertArticleAttributeInXml($filePath, $orderNumber, $attribute, $expected)
-    {
-        $articleDomNodeList = $this->queryXpath($filePath, "//article[ordernumber='{$orderNumber}']/{$attribute}");
-        $nodeValue = $articleDomNodeList->item(0)->nodeValue;
-        $this->assertEquals($expected, $nodeValue);
-    }
-
-    /**
-     * @param string $file
-     * @return array
-     */
-    private function readCsvIndexedByOrdernumber($file)
-    {
-        return $this->csvToArrayIndexedByFieldValue($file, 'ordernumber');
     }
 
     public function test_articles_instock_xml_export()
@@ -414,5 +392,28 @@ class ArticlesInstockExportTest extends \Enlight_Components_Test_Controller_Test
         $this->assertEquals(2, $mappedArticleInstockList['SW10203.5']['instock']);
         $this->assertEquals('Example', $mappedArticleInstockList['SW10203.5']['_supplier']);
         $this->assertEquals(15, $mappedArticleInstockList['SW10203.5']['_price']);
+    }
+
+    /**
+     * @param string $filePath
+     * @param string $orderNumber
+     * @param string $attribute
+     * @param string $expected
+     */
+    private function assertArticleAttributeInXml($filePath, $orderNumber, $attribute, $expected)
+    {
+        $articleDomNodeList = $this->queryXpath($filePath, "//article[ordernumber='{$orderNumber}']/{$attribute}");
+        $nodeValue = $articleDomNodeList->item(0)->nodeValue;
+        $this->assertEquals($expected, $nodeValue);
+    }
+
+    /**
+     * @param string $file
+     *
+     * @return array
+     */
+    private function readCsvIndexedByOrdernumber($file)
+    {
+        return $this->csvToArrayIndexedByFieldValue($file, 'ordernumber');
     }
 }

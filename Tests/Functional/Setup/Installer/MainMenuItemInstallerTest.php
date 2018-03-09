@@ -9,12 +9,13 @@
 namespace SwagImportExport\Tests\Setup;
 
 use Doctrine\ORM\EntityRepository;
+use PHPUnit\Framework\TestCase;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Menu\Menu;
 use Shopware\Setup\SwagImportExport\Install\MainMenuItemInstaller;
 use Shopware\Setup\SwagImportExport\SetupContext;
 
-class MainMenuItemInstallerTest extends \PHPUnit_Framework_TestCase
+class MainMenuItemInstallerTest extends TestCase
 {
     const OLD_MENU_LABEL = 'Import/Export Advanced';
     const UPDATED_MENU_LABEL = 'Import/Export';
@@ -58,7 +59,7 @@ class MainMenuItemInstallerTest extends \PHPUnit_Framework_TestCase
 
         $this->mainMenuItemInstaller->install();
 
-        $newMenuItem = $menuRepository->findOneBy([ 'label' => self::CREATED_MENU_LABEL ]);
+        $newMenuItem = $menuRepository->findOneBy(['label' => self::CREATED_MENU_LABEL]);
         $this->assertInstanceOf(Menu::class, $newMenuItem, 'Could not create menu item if no menu item was found.');
     }
 
@@ -69,7 +70,7 @@ class MainMenuItemInstallerTest extends \PHPUnit_Framework_TestCase
 
         $this->mainMenuItemInstaller->install();
 
-        $updatedMenuItem = $menuRepository->findOneBy([ 'label' => self::UPDATED_MENU_LABEL ]);
+        $updatedMenuItem = $menuRepository->findOneBy(['label' => self::UPDATED_MENU_LABEL]);
         $this->assertEquals($expectedMenuItemController, $updatedMenuItem->getController(), 'Import/Export menu item could not be updated to use SwagImporExport controller.');
     }
 
@@ -77,12 +78,12 @@ class MainMenuItemInstallerTest extends \PHPUnit_Framework_TestCase
     {
         $menuRepository = $this->modelManger->getRepository(Menu::class);
 
-        $oldMenuItem = $menuRepository->findOneBy([ 'label' => self::OLD_MENU_LABEL ]);
+        $oldMenuItem = $menuRepository->findOneBy(['label' => self::OLD_MENU_LABEL]);
         $this->createMenuItemIfItDoesNotExist($oldMenuItem, self::OLD_MENU_LABEL);
 
         $this->mainMenuItemInstaller->install();
 
-        $removedMenuItem = $menuRepository->findOneBy([ 'label' => self::OLD_MENU_LABEL ]);
+        $removedMenuItem = $menuRepository->findOneBy(['label' => self::OLD_MENU_LABEL]);
         $this->assertNull($removedMenuItem, 'Old menu item for SwagImportExport advanced should be removed on update or installation to 5.3.');
     }
 
@@ -134,7 +135,7 @@ class MainMenuItemInstallerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param Menu|null $menuItem
-     * @param string $menuLabel
+     * @param string    $menuLabel
      */
     private function createMenuItemIfItDoesNotExist($menuItem, $menuLabel)
     {

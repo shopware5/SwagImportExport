@@ -9,21 +9,14 @@
 namespace Functional\Components\SwagImportExport\DbAdapters;
 
 use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Components\SwagImportExport\DbAdapters\ArticlesDbAdapter;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 
-class ArticlesDbAdapterTest extends \PHPUnit_Framework_TestCase
+class ArticlesDbAdapterTest extends TestCase
 {
     use DatabaseTestCaseTrait;
-
-    /**
-     * @return ArticlesDbAdapter
-     */
-    private function createArticleDbAdapter()
-    {
-        return new ArticlesDbAdapter();
-    }
 
     public function test_write_should_throw_exception_if_records_are_empty()
     {
@@ -46,16 +39,16 @@ class ArticlesDbAdapterTest extends \PHPUnit_Framework_TestCase
                     'supplierId' => 2,
                     'supplierName' => 'Feinbrennerei Sasse',
                     'taxId' => 1,
-                    'purchasePrice' => 10
-                ]
-            ]
+                    'purchasePrice' => 10,
+                ],
+            ],
         ];
         $articlesDbAdapter->write($newArticleRecord);
 
         /** @var Connection $dbalConnection */
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
-        $createdArticleDetail = $dbalConnection->executeQuery('SELECT * FROM s_articles_details WHERE orderNumber="SW-99999"')->fetchAll();
-        $createdArticle = $dbalConnection->executeQuery('SELECT a.* FROM s_articles as a JOIN s_articles_details as d ON d.articleID = a.id WHERE d.orderNumber="SW-99999"')->fetchAll();
+        $createdArticleDetail = $dbalConnection->executeQuery("SELECT * FROM s_articles_details WHERE orderNumber='SW-99999'")->fetchAll();
+        $createdArticle = $dbalConnection->executeQuery("SELECT a.* FROM s_articles as a JOIN s_articles_details as d ON d.articleID = a.id WHERE d.orderNumber='SW-99999'")->fetchAll();
 
         $this->assertEquals($newArticleRecord['article'][0]['name'], $createdArticle[0]['name']);
         $this->assertEquals($newArticleRecord['article'][0]['taxId'], $createdArticle[0]['taxID']);
@@ -74,21 +67,23 @@ class ArticlesDbAdapterTest extends \PHPUnit_Framework_TestCase
                     'orderNumber' => 'SW10003',
                     'mainNumber' => 'SW10003',
                     'supplierName' => 'Feinbrennerei Sasse',
-                    'taxId' => 1
-                ]
+                    'taxId' => 1,
+                ],
             ],
-            'similar' => $this->getSimilarArticles()
+            'similar' => $this->getSimilarArticles(),
         ];
 
         $articlesDbAdapter->write($articleRecordWithNewSimilars);
         $unprocessedData = $articlesDbAdapter->getUnprocessedData();
 
+        /** @var Connection $dbalConnection */
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
-        $articleId = $dbalConnection->executeQuery('SELECT articleID FROM s_articles_details WHERE orderNumber="SW10003"')->fetch(\PDO::FETCH_COLUMN);
+        $sql = "SELECT articleID FROM s_articles_details WHERE orderNumber='SW10003'";
+        $articleId = $dbalConnection->executeQuery($sql)->fetch(\PDO::FETCH_COLUMN);
         $createdArticleSimilars = $dbalConnection->executeQuery('SELECT * FROM s_articles_similar WHERE articleID = ?', [$articleId])->fetchAll();
 
-        $this->assertTrue(empty($unprocessedData));
-        $this->assertEquals(7, $createdArticleSimilars[4]["relatedarticle"]);
+        $this->assertEmpty($unprocessedData);
+        $this->assertEquals(7, $createdArticleSimilars[4]['relatedarticle']);
     }
 
     public function test_write_should_add_supplier_if_it_not_exists()
@@ -102,14 +97,16 @@ class ArticlesDbAdapterTest extends \PHPUnit_Framework_TestCase
                     'orderNumber' => 'SW-99999',
                     'mainNumber' => 'SW-99999',
                     'supplierName' => 'Test Supplier',
-                    'taxId' => 1
-                ]
-            ]
+                    'taxId' => 1,
+                ],
+            ],
         ];
         $articlesDbAdapter->write($articleRecordWithNewSupplier);
 
+        /** @var Connection $dbalConnection */
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
-        $createdArticleSupplier = $dbalConnection->executeQuery("SELECT * FROM s_articles_supplier WHERE name='Test Supplier'")->fetchAll();
+        $sql = "SELECT * FROM s_articles_supplier WHERE name='Test Supplier'";
+        $createdArticleSupplier = $dbalConnection->executeQuery($sql)->fetchAll();
 
         $this->assertEquals($articleRecordWithNewSupplier['article']['supplerName'], $createdArticleSupplier[0]['supplierName']);
     }
@@ -123,9 +120,9 @@ class ArticlesDbAdapterTest extends \PHPUnit_Framework_TestCase
                     'name' => 'Testartikel',
                     'orderNumber' => 'SW-99999',
                     'mainNumber' => 'SW-99999',
-                    'taxId' => 1
-                ]
-            ]
+                    'taxId' => 1,
+                ],
+            ],
         ];
 
         $this->expectException(\Exception::class);
@@ -144,30 +141,31 @@ class ArticlesDbAdapterTest extends \PHPUnit_Framework_TestCase
                     'orderNumber' => 'SW10003',
                     'mainNumber' => 'SW10003',
                     'supplierName' => 'Feinbrennerei Sasse',
-                    'taxId' => 1
-                ]
+                    'taxId' => 1,
+                ],
             ],
             'accessory' => [
                 [
                     'accessoryId' => '4',
-                    'parentIndexElement' => 0
+                    'parentIndexElement' => 0,
                 ],
                 [
                     'accessoryId' => '10',
-                    'parentIndexElement' => 0
-                ]
-            ]
+                    'parentIndexElement' => 0,
+                ],
+            ],
         ];
 
         $articlesDbAdapter->write($articleRecordWithNewSimilars);
         $unprocessedData = $articlesDbAdapter->getUnprocessedData();
 
+        /** @var Connection $dbalConnection */
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
-        $articleId = $dbalConnection->executeQuery('SELECT articleID FROM s_articles_details WHERE orderNumber="SW10003"')->fetch(\PDO::FETCH_COLUMN);
+        $articleId = $dbalConnection->executeQuery("SELECT articleID FROM s_articles_details WHERE orderNumber='SW10003'")->fetch(\PDO::FETCH_COLUMN);
         $createdArticleSimilars = $dbalConnection->executeQuery('SELECT * FROM s_articles_relationships WHERE articleID = ?', [$articleId])->fetchAll();
 
-        $this->assertTrue(empty($unprocessedData));
-        $this->assertEquals(4, $createdArticleSimilars[1]["relatedarticle"]);
+        $this->assertEmpty($unprocessedData);
+        $this->assertEquals(4, $createdArticleSimilars[1]['relatedarticle']);
     }
 
     public function test_new_image_should_fill_unprocessed_data_array()
@@ -177,20 +175,20 @@ class ArticlesDbAdapterTest extends \PHPUnit_Framework_TestCase
             'article' => [
                 0 => [
                     'orderNumber' => 'SW10006',
-                    'mainNumber' => 'SW10006'
-                ]
+                    'mainNumber' => 'SW10006',
+                ],
             ],
             'image' => [
                 0 => [
-                    'imageUrl' => 'file://' . realpath(dirname(__FILE__)) . '/../../../../Helper/ImportFiles/sw-icon_blue128.png',
-                    'parentIndexElement' => 0
-                ]
-            ]
+                    'imageUrl' => 'file://' . realpath(__DIR__) . '/../../../../Helper/ImportFiles/sw-icon_blue128.png',
+                    'parentIndexElement' => 0,
+                ],
+            ],
         ];
         $articlesDbAdapter->write($records);
         $unprocessedData = $articlesDbAdapter->getUnprocessedData();
 
-        $this->assertTrue(!empty($unprocessedData));
+        $this->assertNotTrue(empty($unprocessedData));
         $this->assertEquals($records['article'][0]['orderNumber'], $unprocessedData['articlesImages']['default'][0]['ordernumber']);
         $this->assertEquals($records['image'][0]['imageUrl'], $unprocessedData['articlesImages']['default'][0]['image']);
     }
@@ -202,24 +200,24 @@ class ArticlesDbAdapterTest extends \PHPUnit_Framework_TestCase
             'article' => [
                 0 => [
                     'orderNumber' => 'SW10006',
-                    'mainNumber' => 'SW10006'
-                ]
+                    'mainNumber' => 'SW10006',
+                ],
             ],
             'image' => [
                 0 => [
                     'mediaId' => 6,
                     'path' => 'Muensterlaender_Lagerkorn',
                     'description' => 'testimport1',
-                    'parentIndexElement' => 0
-                ]
-            ]
+                    'parentIndexElement' => 0,
+                ],
+            ],
         ];
         $articlesDbAdapter->write($records);
 
         /** @var Connection $dbalConnection */
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
-        $articleId = $dbalConnection->executeQuery('SELECT articleID FROM s_articles_details WHERE orderNumber="SW10006"')->fetch(\PDO::FETCH_COLUMN);
-        $image = $dbalConnection->executeQuery('SELECT * FROM s_articles_img WHERE img = "Muensterlaender_Lagerkorn" AND articleID = ?', [$articleId])->fetch(\PDO::FETCH_ASSOC);
+        $articleId = $dbalConnection->executeQuery("SELECT articleID FROM s_articles_details WHERE orderNumber='SW10006'")->fetch(\PDO::FETCH_COLUMN);
+        $image = $dbalConnection->executeQuery("SELECT * FROM s_articles_img WHERE img = 'Muensterlaender_Lagerkorn' AND articleID = ?", [$articleId])->fetch(\PDO::FETCH_ASSOC);
 
         $this->assertEquals($articleId, $image['articleID']);
         $this->assertEquals($records['image'][0]['mediaId'], $image['media_id']);
@@ -237,23 +235,23 @@ class ArticlesDbAdapterTest extends \PHPUnit_Framework_TestCase
                     'orderNumber' => 'ordernumber.1',
                     'mainNumber' => 'ordernumber.1',
                     'supplierName' => 'shopware AG',
-                    'taxId' => 1
+                    'taxId' => 1,
                 ],
                 [
                     'name' => 'Test Artikel',
                     'orderNumber' => 'ordernumber.2',
                     'mainNumber' => 'ordernumber.1',
                     'supplierName' => 'shopware AG',
-                    'taxId' => 1
-                ]
-            ]
+                    'taxId' => 1,
+                ],
+            ],
         ];
         $articlesDbAdapter->write($newArticleWithVariantRecord);
 
         /** @var Connection $dbalConnection */
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
-        $createdArticleVariantDetail = $dbalConnection->executeQuery('SELECT * FROM s_articles_details WHERE orderNumber="ordernumber.2"')->fetchAll();
-        $createdArticleVariant = $dbalConnection->executeQuery("SELECT * FROM s_articles WHERE id='{$createdArticleVariantDetail[0]["articleID"]}'")->fetchAll();
+        $createdArticleVariantDetail = $dbalConnection->executeQuery("SELECT * FROM s_articles_details WHERE orderNumber='ordernumber.2'")->fetchAll();
+        $createdArticleVariant = $dbalConnection->executeQuery("SELECT * FROM s_articles WHERE id='{$createdArticleVariantDetail[0]['articleID']}'")->fetchAll();
 
         $this->assertEquals($newArticleWithVariantRecord['article'][1]['name'], $createdArticleVariant[0]['name']);
         $this->assertEquals($newArticleWithVariantRecord['article'][1]['taxId'], $createdArticleVariant[0]['taxID']);
@@ -270,9 +268,9 @@ class ArticlesDbAdapterTest extends \PHPUnit_Framework_TestCase
                     'orderNumber' => 'ordernumber.2',
                     'mainNumber' => 'not-existing-main-number',
                     'supplierName' => 'shopware AG',
-                    'taxId' => 1
-                ]
-            ]
+                    'taxId' => 1,
+                ],
+            ],
         ];
 
         $this->expectException(\Exception::class);
@@ -283,7 +281,7 @@ class ArticlesDbAdapterTest extends \PHPUnit_Framework_TestCase
     public function test_write_article_with_attribute_translation_should_be_written_to_database()
     {
         $attributeService = Shopware()->Container()->get('shopware_attribute.crud_service');
-        /** @var CrudService $attributeService */
+        /* @var CrudService $attributeService */
         $attributeService->update('s_articles_attributes', 'mycustomfield', 'string', ['translatable' => true]);
 
         $articlesDbAdapter = $this->createArticleDbAdapter();
@@ -291,16 +289,16 @@ class ArticlesDbAdapterTest extends \PHPUnit_Framework_TestCase
             'article' => [
                 0 => [
                     'orderNumber' => 'SW10006',
-                    'mainNumber' => 'SW10006'
-                ]
+                    'mainNumber' => 'SW10006',
+                ],
             ],
             'translation' => [
                 0 => [
                     'languageId' => 2,
                     'mycustomfield' => 'my custom translation',
-                    'parentIndexElement' => 0
-                ]
-            ]
+                    'parentIndexElement' => 0,
+                ],
+            ],
         ];
         $articlesDbAdapter->write($records);
 
@@ -308,8 +306,8 @@ class ArticlesDbAdapterTest extends \PHPUnit_Framework_TestCase
 
         /** @var Connection $dbalConnection */
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
-        $articleId = $dbalConnection->executeQuery('SELECT articleID FROM s_articles_details WHERE orderNumber="SW10006"')->fetch(\PDO::FETCH_COLUMN);
-        $result = Shopware()->Container()->get('dbal_connection')->executeQuery("SELECT * FROM s_core_translations WHERE objecttype='article' AND objectkey={$articleId}")->fetchAll();
+        $articleId = $dbalConnection->executeQuery("SELECT articleID FROM s_articles_details WHERE orderNumber='SW10006'")->fetch(\PDO::FETCH_COLUMN);
+        $result = $dbalConnection->executeQuery("SELECT * FROM s_core_translations WHERE objecttype='article' AND objectkey={$articleId}")->fetchAll();
         $importedTranslation = unserialize($result[0]['objectdata']);
 
         // trait rollback not working - so we rollback manually
@@ -322,24 +320,24 @@ class ArticlesDbAdapterTest extends \PHPUnit_Framework_TestCase
     public function test_read()
     {
         $articlesDbAdapter = $this->createArticleDbAdapter();
-        $ids = [ 3 ];
+        $ids = [3];
         $result = $articlesDbAdapter->read($ids, $this->getColumns());
 
-        $this->assertArrayHasKey('article', $result, "Could not fetch articles.");
-        $this->assertArrayHasKey('price', $result, "Could not fetch article prices.");
-        $this->assertArrayHasKey('image', $result, "Could not fetch article image prices.");
-        $this->assertArrayHasKey('propertyValue', $result, "Could not fetch article property values.");
-        $this->assertArrayHasKey('similar', $result, "Could not fetch similar articles.");
-        $this->assertArrayHasKey('accessory', $result, "Could not fetch accessory articles.");
-        $this->assertArrayHasKey('category', $result, "Could not fetch categories.");
-        $this->assertArrayHasKey('translation', $result, "Could not fetch article translations.");
-        $this->assertArrayHasKey('configurator', $result, "Could not fetch article configurators");
+        $this->assertArrayHasKey('article', $result, 'Could not fetch articles.');
+        $this->assertArrayHasKey('price', $result, 'Could not fetch article prices.');
+        $this->assertArrayHasKey('image', $result, 'Could not fetch article image prices.');
+        $this->assertArrayHasKey('propertyValue', $result, 'Could not fetch article property values.');
+        $this->assertArrayHasKey('similar', $result, 'Could not fetch similar articles.');
+        $this->assertArrayHasKey('accessory', $result, 'Could not fetch accessory articles.');
+        $this->assertArrayHasKey('category', $result, 'Could not fetch categories.');
+        $this->assertArrayHasKey('translation', $result, 'Could not fetch article translations.');
+        $this->assertArrayHasKey('configurator', $result, 'Could not fetch article configurators');
     }
 
     public function test_read_should_throw_exception_if_ids_are_empty()
     {
         $articlesDbAdapter = $this->createArticleDbAdapter();
-        $columns = [ 'article' => 'article.id as articleId' ];
+        $columns = ['article' => 'article.id as articleId'];
         $ids = [];
 
         $this->expectException(\Exception::class);
@@ -350,10 +348,18 @@ class ArticlesDbAdapterTest extends \PHPUnit_Framework_TestCase
     {
         $articlesDbAdapter = $this->createArticleDbAdapter();
         $columns = [];
-        $ids = [ 1, 2, 3 ];
+        $ids = [1, 2, 3];
 
         $this->expectException(\Exception::class);
         $articlesDbAdapter->read($ids, $columns);
+    }
+
+    /**
+     * @return ArticlesDbAdapter
+     */
+    private function createArticleDbAdapter()
+    {
+        return new ArticlesDbAdapter();
     }
 
     /**
@@ -363,32 +369,32 @@ class ArticlesDbAdapterTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'article' => [
-                "article.id as articleId"
+                'article.id as articleId',
             ],
             'price' => [
-                "prices.articleDetailsId as variantId"
+                'prices.articleDetailsId as variantId',
             ],
             'image' => [
-                "images.id as id"
+                'images.id as id',
             ],
             'propertyValues' => [
-                "article.id as articleId"
+                'article.id as articleId',
             ],
             'similar' => [
-                "similar.id as similarId"
+                'similar.id as similarId',
             ],
             'accessory' => [
-                "accessory.id as accessoryId"
+                'accessory.id as accessoryId',
             ],
             'configurator' => [
-                "variant.id as variantId"
+                'variant.id as variantId',
             ],
             'category' => [
-                "categories.id as categoryId"
+                'categories.id as categoryId',
             ],
             'translation' => [
-                "article.id as articleId"
-            ]
+                'article.id as articleId',
+            ],
         ];
     }
 
@@ -400,24 +406,24 @@ class ArticlesDbAdapterTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 'similarId' => '4',
-                'parentIndexElement' => 0
+                'parentIndexElement' => 0,
             ],
             [
                 'similarId' => '2',
-                'parentIndexElement' => 0
+                'parentIndexElement' => 0,
             ],
             [
                 'similarId' => '5',
-                'parentIndexElement' => 0
+                'parentIndexElement' => 0,
             ],
             [
                 'similarId' => '6',
-                'parentIndexElement' => 0
+                'parentIndexElement' => 0,
             ],
             [
                 'similarId' => '7',
-                'parentIndexElement' => 0
-            ]
+                'parentIndexElement' => 0,
+            ],
         ];
     }
 }

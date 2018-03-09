@@ -9,27 +9,20 @@
 namespace SwagImportExport\Tests\Functional\Components\SwagImportExport\DbAdapters;
 
 use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
 use Shopware\Components\SwagImportExport\DbAdapters\NewsletterDbAdapter;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 
-class NewsletterDbAdapterTest extends \PHPUnit_Framework_TestCase
+class NewsletterDbAdapterTest extends TestCase
 {
     use DatabaseTestCaseTrait;
-
-    /**
-     * @return NewsletterDbAdapter
-     */
-    private function createNewsletterAdapter()
-    {
-        return new NewsletterDbAdapter();
-    }
 
     public function test_write_throws_exception_if_records_are_empty()
     {
         $newsletterDbAdapter = $this->createNewsletterAdapter();
 
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage("Es wurden keine Newsletter gefunden.");
+        $this->expectExceptionMessage('Es wurden keine Newsletter gefunden.');
         $newsletterDbAdapter->write([]);
     }
 
@@ -40,16 +33,16 @@ class NewsletterDbAdapterTest extends \PHPUnit_Framework_TestCase
             'default' => [
                 [
                     'email' => 'test@example.com',
-                    'userID' => 1
-                ]
-            ]
+                    'userID' => 1,
+                ],
+            ],
         ];
 
         $newsletterDbAdapter->write($customerData);
 
         /** @var Connection $dbalConnection */
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
-        $createdRecipient = $dbalConnection->executeQuery('SELECT * FROM s_campaigns_mailaddresses WHERE email="test@example.com"')->fetchAll();
+        $createdRecipient = $dbalConnection->executeQuery("SELECT * FROM s_campaigns_mailaddresses WHERE email='test@example.com'")->fetchAll();
 
         $this->assertEquals($customerData['default'][0]['email'], $createdRecipient[0]['email']);
     }
@@ -58,17 +51,17 @@ class NewsletterDbAdapterTest extends \PHPUnit_Framework_TestCase
     {
         $newsletterDbAdapter = $this->createNewsletterAdapter();
 
-        $notExistingRecipient = [ 'default' => [
+        $notExistingRecipient = ['default' => [
             [
-                'email' => 'email_address_which_does_not_exist@example.org'
-            ]
+                'email' => 'email_address_which_does_not_exist@example.org',
+            ],
         ]];
 
         $newsletterDbAdapter->write($notExistingRecipient);
 
         /** @var Connection $dbalConnection */
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
-        $createdRecipient = $dbalConnection->executeQuery('SELECT * FROM s_campaigns_mailaddresses WHERE email="email_address_which_does_not_exist@example.org"')->fetchAll();
+        $createdRecipient = $dbalConnection->executeQuery("SELECT * FROM s_campaigns_mailaddresses WHERE email='email_address_which_does_not_exist@example.org'")->fetchAll();
 
         $this->assertEquals($notExistingRecipient['default'][0]['email'], $createdRecipient[0]['email']);
     }
@@ -77,20 +70,20 @@ class NewsletterDbAdapterTest extends \PHPUnit_Framework_TestCase
     {
         $newsletterDBAdapter = $this->createNewsletterAdapter();
 
-        $recipientWithContactData = [ 'default' => [
+        $recipientWithContactData = ['default' => [
             [
                 'email' => 'email_address_which_does_not_exists@example.org',
                 'firstname' => 'Test',
                 'lastname' => 'Recipient',
-                'zipcode' => '12345'
-            ]
+                'zipcode' => '12345',
+            ],
         ]];
 
         $newsletterDBAdapter->write($recipientWithContactData);
 
         /** @var Connection $dbalConnection */
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
-        $createdRecipient = $dbalConnection->executeQuery('SELECT * FROM s_campaigns_maildata WHERE email="email_address_which_does_not_exists@example.org"')->fetchAll();
+        $createdRecipient = $dbalConnection->executeQuery("SELECT * FROM s_campaigns_maildata WHERE email='email_address_which_does_not_exists@example.org'")->fetchAll();
 
         $this->assertEquals($recipientWithContactData['default'][0]['firstname'], $createdRecipient[0]['firstname']);
         $this->assertEquals($recipientWithContactData['default'][0]['lastname'], $createdRecipient[0]['lastname']);
@@ -101,18 +94,18 @@ class NewsletterDbAdapterTest extends \PHPUnit_Framework_TestCase
     {
         $newsletterDbAdapter = $this->createNewsletterAdapter();
 
-        $recipientWithNewNewsletterGroup = [ 'default' => [
+        $recipientWithNewNewsletterGroup = ['default' => [
             [
                 'email' => 'email_which_does_not_exists@example.org',
-                'groupName' => 'New newsletter group'
-            ]
+                'groupName' => 'New newsletter group',
+            ],
         ]];
 
         $newsletterDbAdapter->write($recipientWithNewNewsletterGroup);
 
         /** @var Connection $dbalConnection */
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
-        $createdNewsletterGroup = $dbalConnection->executeQuery('SELECT * FROM s_campaigns_groups WHERE name="New newsletter group"')->fetchAll();
+        $createdNewsletterGroup = $dbalConnection->executeQuery("SELECT * FROM s_campaigns_groups WHERE name='New newsletter group'")->fetchAll();
 
         $this->assertEquals('New newsletter group', $createdNewsletterGroup[0]['name']);
     }
@@ -132,9 +125,9 @@ class NewsletterDbAdapterTest extends \PHPUnit_Framework_TestCase
             'default' => [
                 [
                     'email' => 'test@example.com',
-                    'groupName' => ''
-                ]
-            ]
+                    'groupName' => '',
+                ],
+            ],
         ];
 
         $newsletterDbAdapter->write($record);
@@ -142,5 +135,13 @@ class NewsletterDbAdapterTest extends \PHPUnit_Framework_TestCase
 
         // check that no new group is created
         $this->assertEquals(1, $groupCount);
+    }
+
+    /**
+     * @return NewsletterDbAdapter
+     */
+    private function createNewsletterAdapter()
+    {
+        return new NewsletterDbAdapter();
     }
 }

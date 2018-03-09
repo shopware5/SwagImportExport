@@ -31,6 +31,7 @@ trait CommandTestCaseTrait
 
     /**
      * @param string $command
+     *
      * @return array
      */
     protected function runCommand($command)
@@ -45,6 +46,7 @@ trait CommandTestCaseTrait
         $application->doRun($input, $output);
 
         $consoleOutput = $this->readConsoleOutput($fp);
+
         return explode(PHP_EOL, $consoleOutput);
     }
 
@@ -58,6 +60,7 @@ trait CommandTestCaseTrait
 
     /**
      * @param string $fileName
+     *
      * @return string
      */
     private function getFilePath($fileName)
@@ -67,6 +70,7 @@ trait CommandTestCaseTrait
 
     /**
      * @param $fp
+     *
      * @return string
      */
     private function readConsoleOutput($fp)

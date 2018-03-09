@@ -8,15 +8,12 @@
 
 namespace SwagImportExport\Tests\Integration\DefaultProfiles\Import;
 
+use PHPUnit\Framework\TestCase;
 use SwagImportExport\Tests\Helper\CommandTestCaseTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use SwagImportExport\Tests\Integration\DefaultProfiles\DefaultProfileImportTestCaseTrait;
 
-/**
- * Class ArticleTranslationProfileTest
- * @package SwagImportExport\Tests\Integration\DefaultProfiles\Import
- */
-class ArticleTranslationProfileTest extends \PHPUnit_Framework_TestCase
+class ArticleTranslationProfileTest extends TestCase
 {
     use DatabaseTestCaseTrait;
     use CommandTestCaseTrait;
@@ -26,12 +23,12 @@ class ArticleTranslationProfileTest extends \PHPUnit_Framework_TestCase
     {
         $filePath = __DIR__ . '/_fixtures/article_translation_profile.csv';
         $expectedArticleName = 'Boomerang deluxe';
-        $expectedArticleDescription = "My test description";
+        $expectedArticleDescription = 'My test description';
 
         $this->runCommand("sw:import:import -p default_article_translations {$filePath}");
 
         $queryResult = $this->executeQuery(
-            'SELECT * FROM s_core_translations as t JOIN s_articles_details AS a ON t.objectkey = a.articleID AND t.objecttype = "article" WHERE a.ordernumber = "SW10236"',
+            "SELECT * FROM s_core_translations as t JOIN s_articles_details AS a ON t.objectkey = a.articleID AND t.objecttype = 'article' WHERE a.ordernumber = 'SW10236'",
             \PDO::FETCH_ASSOC
         );
 

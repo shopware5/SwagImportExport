@@ -5,7 +5,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use Shopware\Models\Shop\Shop;
+/*
+ * (c) shopware AG <info@shopware.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 use SwagImportExport\Tests\Helper\DataProvider\NewsletterDataProvider;
 use SwagImportExport\Tests\Helper\DataProvider\ProfileDataProvider;
 use Tests\Helper\BackendControllerTestHelper;
@@ -16,6 +22,9 @@ class ImportExportTestKernel extends TestKernel
 {
     const IMPORT_FILES_DIR = __DIR__ . '/Helper/ImportFiles/';
 
+    /**
+     * @throws RuntimeException
+     */
     public static function start()
     {
         $kernel = new self(getenv('SHOPWARE_ENV') ?: 'testing', true);
@@ -25,7 +34,7 @@ class ImportExportTestKernel extends TestKernel
         $container->get('plugins')->Core()->ErrorHandler()->registerErrorHandler(E_ALL | E_STRICT);
 
         /** @var $repository \Shopware\Models\Shop\Repository */
-        $repository = $container->get('models')->getRepository('Shopware\Models\Shop\Shop');
+        $repository = $container->get('models')->getRepository(Shop::class);
 
         $shop = $repository->getActiveDefault();
         $shop->registerResources();
@@ -33,7 +42,7 @@ class ImportExportTestKernel extends TestKernel
         $_SERVER['HTTP_HOST'] = $shop->getHost();
 
         if (!self::assertPlugin('SwagImportExport')) {
-            throw new \Exception('Plugin ImportExport must be installed.');
+            throw new \RuntimeException('Plugin ImportExport must be installed.');
         }
 
         Shopware()->Loader()->registerNamespace('SwagImportExport\Tests', __DIR__ . '/../Tests/');

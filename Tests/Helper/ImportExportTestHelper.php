@@ -31,6 +31,13 @@ class ImportExportTestHelper extends \Enlight_Components_Test_Plugin_TestCase
         $this->plugin = Shopware()->Plugins()->Backend()->SwagImportExport();
     }
 
+    protected function tearDown()
+    {
+        /** @var Connection $connection */
+        $connection = Shopware()->Container()->get('dbal_connection');
+        $connection->rollBack();
+    }
+
     /**
      * Retrieve plugin instance
      *
@@ -39,12 +46,5 @@ class ImportExportTestHelper extends \Enlight_Components_Test_Plugin_TestCase
     public function Plugin()
     {
         return $this->plugin;
-    }
-
-    protected function tearDown()
-    {
-        /** @var Connection $connection */
-        $connection = Shopware()->Container()->get('dbal_connection');
-        $connection->rollBack();
     }
 }
