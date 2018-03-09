@@ -8,11 +8,12 @@
 
 namespace SwagImportExport\Tests\Integration\DefaultProfiles\Import;
 
+use PHPUnit\Framework\TestCase;
 use SwagImportExport\Tests\Helper\CommandTestCaseTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use SwagImportExport\Tests\Integration\DefaultProfiles\DefaultProfileImportTestCaseTrait;
 
-class NewsletterDefaultProfileTest extends \PHPUnit_Framework_TestCase
+class NewsletterDefaultProfileTest extends TestCase
 {
     use DatabaseTestCaseTrait;
     use CommandTestCaseTrait;
@@ -35,8 +36,8 @@ class NewsletterDefaultProfileTest extends \PHPUnit_Framework_TestCase
     public function test_custom_newsletter_group_import_and_assigned_recipient()
     {
         $filePath = __DIR__ . '/_fixtures/newsletter_profile.csv';
-        $expectedAssignedRecipientEmail = "custom_group_should_be_created@example.org";
-        $expectedGroupName = "Custom_Group";
+        $expectedAssignedRecipientEmail = 'custom_group_should_be_created@example.org';
+        $expectedGroupName = 'Custom_Group';
 
         $this->runCommand("sw:import:import -p default_newsletter_recipient {$filePath}");
 
@@ -49,14 +50,14 @@ class NewsletterDefaultProfileTest extends \PHPUnit_Framework_TestCase
 
     public function test_imported_recipient_assigned_to_existing_shop_customer()
     {
-        $filePath = __DIR__ . "/_fixtures/newsletter_profile.csv";
-        $exceptedRecipientCustomerEmail = "mustermann@b2b.de";
+        $filePath = __DIR__ . '/_fixtures/newsletter_profile.csv';
+        $exceptedRecipientCustomerEmail = 'mustermann@b2b.de';
 
         $this->runCommand("sw:import:import -p default_newsletter_recipient {$filePath}");
 
         $importedRecipient = $this->executeQuery("SELECT * FROM s_campaigns_mailaddresses WHERE email='{$exceptedRecipientCustomerEmail}'");
         $assignedShopCustomer = $this->executeQuery("SELECT * FROM s_user WHERE email='{$importedRecipient[0]['email']}'");
 
-        $this->assertEquals($exceptedRecipientCustomerEmail, $assignedShopCustomer[0]["email"]);
+        $this->assertEquals($exceptedRecipientCustomerEmail, $assignedShopCustomer[0]['email']);
     }
 }

@@ -31,9 +31,9 @@ class NewsletterDataProvider
     {
         $newsletterGroup = $this->modelManager->find(Group::class, 1);
 
-        for ($addressAmount = 0; $addressAmount < 25; $addressAmount++) {
+        for ($addressAmount = 0; $addressAmount < 25; ++$addressAmount) {
             $address = new Address();
-            $address->setEmail(uniqid('test_') . '@example.com');
+            $address->setEmail(uniqid('test_', true) . '@example.com');
             $address->setAdded(new \DateTime());
             $address->setNewsletterGroup($newsletterGroup);
             $address->setIsCustomer(false);
@@ -43,5 +43,4 @@ class NewsletterDataProvider
 
         $this->modelManager->flush();
     }
-
 }

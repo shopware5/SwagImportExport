@@ -10,11 +10,12 @@ namespace SwagImportExport\Tests\Unit\Setup\Update;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
+use PHPUnit\Framework\TestCase;
 use Shopware\Setup\SwagImportExport\Exception\DuplicateNameException;
 use Shopware\Setup\SwagImportExport\SetupContext;
 use Shopware\Setup\SwagImportExport\Update\Update03DefaultProfileSupport;
 
-class Update03DefaultProfileSupportTest extends \PHPUnit_Framework_TestCase
+class Update03DefaultProfileSupportTest extends TestCase
 {
     const DUPLICATE_NAME_ERROR_MESSAGE = 'Duplicate name entry exception';
     const RANDOM_EXCEPTION_MESSAGE = 'Test exception message';
@@ -55,6 +56,7 @@ class Update03DefaultProfileSupportTest extends \PHPUnit_Framework_TestCase
         $dbalMock
             ->method('executeQuery')
             ->willThrowException(new DBALException(self::RANDOM_EXCEPTION_MESSAGE));
+
         return $dbalMock;
     }
 
@@ -67,6 +69,7 @@ class Update03DefaultProfileSupportTest extends \PHPUnit_Framework_TestCase
         $dbalMock
             ->method('executeQuery')
             ->willThrowException(new DBALException(self::DUPLICATE_NAME_EXCEPTION_MESSAGE));
+
         return $dbalMock;
     }
 

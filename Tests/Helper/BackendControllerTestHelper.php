@@ -8,16 +8,12 @@
 
 namespace Tests\Helper;
 
-use Shopware\Components\Model\ModelManager;
-use Shopware\Components\SwagImportExport\UploadPathProvider;
-use SwagImportExport\Tests\Helper\DataProvider\NewsletterDataProvider;
 use SwagImportExport\Tests\Helper\DataProvider\ProfileDataProvider;
 
 class BackendControllerTestHelper
 {
-    private $files = [];
-
     const EXPECTED_EXPORT_FILES_DIR = __DIR__ . '/ExportFiles';
+    private $files = [];
     /**
      * @var ProfileDataProvider
      */
@@ -41,6 +37,7 @@ class BackendControllerTestHelper
 
     /**
      * @param string $type
+     *
      * @return int
      */
     public function getProfileIdByType($type)

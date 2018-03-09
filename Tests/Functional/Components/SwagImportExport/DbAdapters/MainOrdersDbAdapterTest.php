@@ -8,20 +8,13 @@
 
 namespace SwagImportExport\Tests\Functional\Components\SwagImportExport\DbAdapters;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Components\SwagImportExport\DbAdapters\MainOrdersDbAdapter;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 
-class MainOrdersDbAdapterTest extends \PHPUnit_Framework_TestCase
+class MainOrdersDbAdapterTest extends TestCase
 {
     use DatabaseTestCaseTrait;
-
-    /**
-     * @return MainOrdersDbAdapter
-     */
-    private function createMainOrdersDbAdapter()
-    {
-        return new MainOrdersDbAdapter();
-    }
 
     public function test_read_with_empty_ids_array_throws_exception()
     {
@@ -31,7 +24,7 @@ class MainOrdersDbAdapterTest extends \PHPUnit_Framework_TestCase
         $ids = [];
 
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage("Kann Bestellungen ohne IDs nicht auslesen.");
+        $this->expectExceptionMessage('Kann Bestellungen ohne IDs nicht auslesen.');
         $mainOrdersDbAdapter->read($ids, $columns);
     }
 
@@ -40,10 +33,10 @@ class MainOrdersDbAdapterTest extends \PHPUnit_Framework_TestCase
         $mainOrdersDbAdapter = $this->createMainOrdersDbAdapter();
 
         $columns = [];
-        $ids = [ 1, 2, 3 ];
+        $ids = [1, 2, 3];
 
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage("Kann Bestellungen ohne Spaltennamen nicht auslesen.");
+        $this->expectExceptionMessage('Kann Bestellungen ohne Spaltennamen nicht auslesen.');
         $mainOrdersDbAdapter->read($ids, $columns);
     }
 
@@ -52,7 +45,7 @@ class MainOrdersDbAdapterTest extends \PHPUnit_Framework_TestCase
         $mainOrdersDbAdapter = $this->createMainOrdersDbAdapter();
 
         $columns = $mainOrdersDbAdapter->getDefaultColumns();
-        $ids = [ 15, 57 ];
+        $ids = [15, 57];
 
         $exportedOrders = $mainOrdersDbAdapter->read($ids, $columns);
 
@@ -70,7 +63,7 @@ class MainOrdersDbAdapterTest extends \PHPUnit_Framework_TestCase
         $mainOrdersDbAdapter = $this->createMainOrdersDbAdapter();
 
         $columns = $mainOrdersDbAdapter->getDefaultColumns();
-        $ids = [ 15 ];
+        $ids = [15];
 
         $exportedOrders = $mainOrdersDbAdapter->read($ids, $columns);
 
@@ -84,5 +77,13 @@ class MainOrdersDbAdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($exportedOrders['taxRateSum'][0]['orderId'], 15);
         $this->assertEquals($exportedOrders['taxRateSum'][0]['taxRateSums'], 159.44);
         $this->assertEquals($exportedOrders['taxRateSum'][0]['taxRate'], 19);
+    }
+
+    /**
+     * @return MainOrdersDbAdapter
+     */
+    private function createMainOrdersDbAdapter()
+    {
+        return new MainOrdersDbAdapter();
     }
 }

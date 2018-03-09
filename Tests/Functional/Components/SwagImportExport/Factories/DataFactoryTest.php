@@ -8,6 +8,7 @@
 
 namespace Shopware\Components\SwagImportExport\Functional\Components\SwagImportExport\Factories;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Components\SwagImportExport\DbAdapters\AddressDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\ArticlesDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\ArticlesImagesDbAdapter;
@@ -22,13 +23,8 @@ use Shopware\Components\SwagImportExport\DbAdapters\OrdersDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\TranslationsDbAdapter;
 use Shopware\Components\SwagImportExport\Factories\DataFactory;
 
-class DataFactoryTest extends \PHPUnit_Framework_TestCase
+class DataFactoryTest extends TestCase
 {
-    private function createDataFactory()
-    {
-        return new TestableDataFactory();
-    }
-
     public function test_createDbAdapter_should_create_AddressDbAdapter()
     {
         $dataFactory = $this->createDataFactory();
@@ -137,6 +133,14 @@ class DataFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(ArticlesImagesDbAdapter::class, $articlesImagesDbAdapter);
         $this->assertInstanceOf(DataDbAdapter::class, $articlesImagesDbAdapter);
+    }
+
+    /**
+     * @return TestableDataFactory
+     */
+    private function createDataFactory()
+    {
+        return new TestableDataFactory();
     }
 }
 

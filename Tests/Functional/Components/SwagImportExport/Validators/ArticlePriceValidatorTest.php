@@ -8,30 +8,31 @@
 
 namespace Functional\Components\SwagImportExport\Validators;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Components\SwagImportExport\Validators\Articles\PriceValidator;
 
-class ArticlePriceValidatorTest extends \PHPUnit_Framework_TestCase
+class ArticlePriceValidatorTest extends TestCase
 {
-    /**
-     * @return PriceValidator
-     */
-    private function createArticlePriceValidator()
-    {
-        return new PriceValidator();
-    }
-
     public function test_write_with_empty_price()
     {
         $priceWriterDbAdapter = $this->createArticlePriceValidator();
 
         $invalidArticlePrice = [
             'price' => '',
-            'priceGroup' => 'EK'
+            'priceGroup' => 'EK',
         ];
         $articleOderNumber = 'SW10003';
 
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage("Preis für Artikel mit Bestellnummer SW10003 nicht gültig");
+        $this->expectExceptionMessage('Preis für Artikel mit Bestellnummer SW10003 nicht gültig');
         $priceWriterDbAdapter->checkRequiredFields($invalidArticlePrice, $articleOderNumber);
+    }
+
+    /**
+     * @return PriceValidator
+     */
+    private function createArticlePriceValidator()
+    {
+        return new PriceValidator();
     }
 }

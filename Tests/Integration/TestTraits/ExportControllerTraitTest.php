@@ -8,9 +8,10 @@
 
 namespace SwagImportExport\Tests\Integration;
 
+use PHPUnit\Framework\TestCase;
 use SwagImportExport\Tests\Helper\ExportControllerTrait;
 
-class ExportControllerTraitTest extends \PHPUnit_Framework_TestCase
+class ExportControllerTraitTest extends TestCase
 {
     use ExportControllerTrait;
 
@@ -35,7 +36,7 @@ class ExportControllerTraitTest extends \PHPUnit_Framework_TestCase
         $expectedFirstArrayElement = [
             'name' => 'Ein Test',
             'identifier' => 123,
-            'anotherHeader' => 'anotherValue'
+            'anotherHeader' => 'anotherValue',
         ];
 
         $filePath = __DIR__ . '/_fixtures/example.csv';

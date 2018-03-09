@@ -8,10 +8,11 @@
 
 namespace SwagImportExport\Tests\Unit\Setup\DefaultProfiles;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\ProfileMetaData;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\TranslationProfile;
 
-class TranslationProfileTest extends \PHPUnit_Framework_TestCase
+class TranslationProfileTest extends TestCase
 {
     use DefaultProfileTestCaseTrait;
 
@@ -29,9 +30,9 @@ class TranslationProfileTest extends \PHPUnit_Framework_TestCase
         $translationProfile = new TranslationProfile();
 
         $this->walkRecursive($translationProfile->jsonSerialize(), function ($node) {
-            $this->assertArrayHasKey('id', $node, "Current array: " . print_r($node, true));
-            $this->assertArrayHasKey('type', $node, "Current array: " . print_r($node, true));
-            $this->assertArrayHasKey('name', $node, "Current array: " . print_r($node, true));
+            $this->assertArrayHasKey('id', $node, 'Current array: ' . print_r($node, true));
+            $this->assertArrayHasKey('type', $node, 'Current array: ' . print_r($node, true));
+            $this->assertArrayHasKey('name', $node, 'Current array: ' . print_r($node, true));
         });
     }
 }

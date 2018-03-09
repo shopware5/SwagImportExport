@@ -8,10 +8,11 @@
 
 namespace SwagImportExport\Tests\Functional\Components\SwagImportExport\Validators;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Validators\CustomerValidator;
 
-class CustomerValidatorTest extends \PHPUnit_Framework_TestCase
+class CustomerValidatorTest extends TestCase
 {
     /**
      * @return CustomerValidator
@@ -48,7 +49,7 @@ class CustomerValidatorTest extends \PHPUnit_Framework_TestCase
         $customerValidator->checkRequiredFieldsForCreate(
             [
                 'email' => 'validator@test.com',
-                'unhashedPassword' => 'testABC'
+                'unhashedPassword' => 'testABC',
             ]
         );
     }
@@ -64,7 +65,7 @@ class CustomerValidatorTest extends \PHPUnit_Framework_TestCase
                 'email' => 'validator@test.com',
                 'unhashedPassword' => 'testABC',
                 'password' => '',
-                'encoder' => 'md5'
+                'encoder' => 'md5',
             ]
         );
     }
@@ -81,7 +82,7 @@ class CustomerValidatorTest extends \PHPUnit_Framework_TestCase
                 'unhashedPassword' => 'testABC',
                 'password' => '',
                 'encoder' => 'md5',
-                'customergroup' => 'EK'
+                'customergroup' => 'EK',
             ]
         );
     }
@@ -99,7 +100,7 @@ class CustomerValidatorTest extends \PHPUnit_Framework_TestCase
                 'password' => '',
                 'encoder' => 'md5',
                 'customergroup' => 'EK',
-                'billingSalutation' => 'mr'
+                'billingSalutation' => 'mr',
             ]
         );
     }
@@ -118,7 +119,7 @@ class CustomerValidatorTest extends \PHPUnit_Framework_TestCase
                 'encoder' => 'md5',
                 'customergroup' => 'EK',
                 'billingSalutation' => 'mr',
-                'billingFirstname' => 'Test'
+                'billingFirstname' => 'Test',
             ]
         );
     }
@@ -138,7 +139,7 @@ class CustomerValidatorTest extends \PHPUnit_Framework_TestCase
                 'customergroup' => 'EK',
                 'billingSalutation' => 'mr',
                 'billingFirstname' => 'Test',
-                'billingLastname' => 'User'
+                'billingLastname' => 'User',
             ]
         );
     }
@@ -159,7 +160,7 @@ class CustomerValidatorTest extends \PHPUnit_Framework_TestCase
                 'billingSalutation' => 'mr',
                 'billingFirstname' => 'Test',
                 'billingLastname' => 'User',
-                'billingStreet' => 'Test street 123'
+                'billingStreet' => 'Test street 123',
             ]
         );
     }
@@ -181,7 +182,7 @@ class CustomerValidatorTest extends \PHPUnit_Framework_TestCase
                 'billingFirstname' => 'Test',
                 'billingLastname' => 'User',
                 'billingStreet' => 'Test street 123',
-                'billingZipcode' => '12345'
+                'billingZipcode' => '12345',
             ]
         );
     }
@@ -204,7 +205,7 @@ class CustomerValidatorTest extends \PHPUnit_Framework_TestCase
                 'billingLastname' => 'User',
                 'billingStreet' => 'Test street 123',
                 'billingZipcode' => '12345',
-                'billingCity' => 'Test City'
+                'billingCity' => 'Test City',
             ]
         );
     }

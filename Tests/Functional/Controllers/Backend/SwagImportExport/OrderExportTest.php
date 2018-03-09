@@ -10,8 +10,8 @@ namespace SwagImportExport\Tests\Functional\Controllers\Backend\SwagImportExport
 
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use SwagImportExport\Tests\Helper\DataProvider\ProfileDataProvider;
-use SwagImportExport\Tests\Helper\FixturesImportTrait;
 use SwagImportExport\Tests\Helper\ExportControllerTrait;
+use SwagImportExport\Tests\Helper\FixturesImportTrait;
 
 class OrderExportTest extends \Enlight_Components_Test_Controller_TestCase
 {
@@ -31,28 +31,6 @@ class OrderExportTest extends \Enlight_Components_Test_Controller_TestCase
 
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
-    }
-
-    /**
-     * @param string $filePath
-     * @param string $number
-     * @param string $attribute
-     * @param string $expected
-     */
-    private function assertOrderAttributeInXmlFile($filePath, $number, $attribute, $expected)
-    {
-        $orderDomNodeList = $this->queryXpath($filePath, "//order[number='{$number}']/{$attribute}");
-        $nodeValue = $orderDomNodeList->item(0)->nodeValue;
-        $this->assertEquals($expected, $nodeValue);
-    }
-
-    /**
-     * @param string $file
-     * @return array
-     */
-    private function readCsvMappedByNumber($file)
-    {
-        return $this->csvToArrayIndexedByFieldValue($file, 'number');
     }
 
     public function test_orders_xml_export()
@@ -319,5 +297,28 @@ class OrderExportTest extends \Enlight_Components_Test_Controller_TestCase
         $this->assertEquals('201.86', $mappedOrderList[20002]['invoiceAmount']);
         $this->assertEquals('4', $mappedOrderList[20002]['paymentID']);
         $this->assertEquals('2012-08-31 08:51:46', $mappedOrderList[20002]['orderTime']);
+    }
+
+    /**
+     * @param string $filePath
+     * @param string $number
+     * @param string $attribute
+     * @param string $expected
+     */
+    private function assertOrderAttributeInXmlFile($filePath, $number, $attribute, $expected)
+    {
+        $orderDomNodeList = $this->queryXpath($filePath, "//order[number='{$number}']/{$attribute}");
+        $nodeValue = $orderDomNodeList->item(0)->nodeValue;
+        $this->assertEquals($expected, $nodeValue);
+    }
+
+    /**
+     * @param string $file
+     *
+     * @return array
+     */
+    private function readCsvMappedByNumber($file)
+    {
+        return $this->csvToArrayIndexedByFieldValue($file, 'number');
     }
 }

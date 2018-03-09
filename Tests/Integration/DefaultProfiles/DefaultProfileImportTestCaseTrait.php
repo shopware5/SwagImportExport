@@ -14,6 +14,7 @@ trait DefaultProfileImportTestCaseTrait
 {
     /**
      * @param string $fileName
+     *
      * @return string
      */
     private function getImportFile($fileName)
@@ -23,12 +24,15 @@ trait DefaultProfileImportTestCaseTrait
 
     /**
      * @param string $sql
-     * @return mixed
+     * @param int    $fetchMode
+     *
+     * @return array
      */
     private function executeQuery($sql, $fetchMode = \PDO::FETCH_BOTH)
     {
         /** @var Statement $stmt */
         $stmt = Shopware()->Container()->get('dbal_connection')->executeQuery($sql);
+
         return $stmt->fetchAll($fetchMode);
     }
 }

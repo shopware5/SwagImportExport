@@ -8,11 +8,12 @@
 
 namespace SwagImportExport\Tests\Functional\Setup\Update;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Setup\SwagImportExport\SetupContext;
 use Shopware\Setup\SwagImportExport\Update\Update01MainMenuItem;
 
-class Update01MainMenuItemTest extends \PHPUnit_Framework_TestCase
+class Update01MainMenuItemTest extends TestCase
 {
     public function test_it_should_be_compatible()
     {

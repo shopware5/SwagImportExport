@@ -9,12 +9,13 @@
 namespace SwagImportExport\Tests\Functional\Service;
 
 use Enlight_Class;
+use PHPUnit\Framework\TestCase;
 use Shopware\Components\SwagImportExport\Factories\ProfileFactory;
 use Shopware\Components\SwagImportExport\Service\AutoImportService;
 use Shopware\Components\SwagImportExport\UploadPathProvider;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 
-class AutoImportServiceTest extends \PHPUnit_Framework_TestCase
+class AutoImportServiceTest extends TestCase
 {
     use DatabaseTestCaseTrait;
 
@@ -105,11 +106,18 @@ class AutoImportServiceTest extends \PHPUnit_Framework_TestCase
         $service->runAutoImport();
     }
 
+    /**
+     * @param string $filename
+     * @param $content
+     */
     private function installProfile($filename, $content)
     {
         file_put_contents($filename, $content);
     }
 
+    /**
+     * @return AutoImportService
+     */
     private function getService()
     {
         return new AutoImportService(

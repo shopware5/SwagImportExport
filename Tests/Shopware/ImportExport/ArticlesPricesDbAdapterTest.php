@@ -8,11 +8,11 @@
 
 namespace Tests\Shopware\ImportExport;
 
-use Tests\Helper\DbAdapterTest;
+use Tests\Helper\DbAdapterTestHelper;
 
-class ArticlesPricesDbAdapterTest extends DbAdapterTest
+class ArticlesPricesDbAdapterTest extends DbAdapterTestHelper
 {
-    protected $yamlFile = "TestCases/articlePricesDbAdapter.yml";
+    protected $yamlFile = 'TestCases/articlePricesDbAdapter.yml';
 
     public function setUp()
     {
@@ -25,7 +25,7 @@ class ArticlesPricesDbAdapterTest extends DbAdapterTest
      * @param array $columns
      * @param int[] $ids
      * @param array $expected
-     * @param int $expectedCount
+     * @param int   $expectedCount
      *
      * @dataProvider readProvider
      */
@@ -34,16 +34,19 @@ class ArticlesPricesDbAdapterTest extends DbAdapterTest
         $this->read($columns, $ids, $expected, $expectedCount);
     }
 
+    /**
+     * @return array
+     */
     public function readProvider()
     {
         return $this->getDataProvider('testRead');
     }
 
     /**
-     * @param int $start
+     * @param int   $start
      * @param array $limit
      * @param array $expected
-     * @param int $expectedCount
+     * @param int   $expectedCount
      *
      * @dataProvider readRecordIdsProvider
      */
@@ -52,6 +55,9 @@ class ArticlesPricesDbAdapterTest extends DbAdapterTest
         $this->readRecordIds($start, $limit, [], $expected, $expectedCount);
     }
 
+    /**
+     * @return array
+     */
     public function readRecordIdsProvider()
     {
         return $this->getDataProvider('testReadRecordIds');

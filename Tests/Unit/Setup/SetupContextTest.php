@@ -8,9 +8,10 @@
 
 namespace SwagImportExport\Tests\Unit\Setup;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Setup\SwagImportExport\SetupContext;
 
-class SetupContextTest extends \PHPUnit_Framework_TestCase
+class SetupContextTest extends TestCase
 {
     const DEV_VERSION = '___VERSION___';
     const CURRENT_SHOPWARE_VERSION = '5.3.0';

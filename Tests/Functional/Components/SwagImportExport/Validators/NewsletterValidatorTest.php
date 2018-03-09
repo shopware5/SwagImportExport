@@ -8,19 +8,12 @@
 
 namespace SwagImportExport\Tests\Functional\Components\SwagImportExport\Validators;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Validators\NewsletterValidator;
 
-class NewsletterValidatorTest extends \PHPUnit_Framework_TestCase
+class NewsletterValidatorTest extends TestCase
 {
-    /**
-     * @return NewsletterValidator
-     */
-    private function createNewsletterValidator()
-    {
-        return new NewsletterValidator();
-    }
-
     public function test_checkRequiredFields_throws_exception_with_empty_record_array()
     {
         $newsletterValidator = $this->createNewsletterValidator();
@@ -34,11 +27,19 @@ class NewsletterValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $newsletterValidator = $this->createNewsletterValidator();
         $record = [
-            'email' => ''
+            'email' => '',
         ];
 
         $this->expectException(AdapterException::class);
         $this->expectExceptionMessage('Mail-Adresse zwingend erforderlich');
         $newsletterValidator->checkRequiredFields($record);
+    }
+
+    /**
+     * @return NewsletterValidator
+     */
+    private function createNewsletterValidator()
+    {
+        return new NewsletterValidator();
     }
 }

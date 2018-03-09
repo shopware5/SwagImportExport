@@ -8,12 +8,13 @@
 
 namespace SwagImportExport\Tests\Functional\Commands;
 
+use PHPUnit\Framework\TestCase;
 use SwagImportExport\Tests\Helper\CommandTestCaseTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use SwagImportExport\Tests\Helper\DataProvider\ProfileDataProvider;
 use SwagImportExport\Tests\Helper\FixturesImportTrait;
 
-class ExportCommandTest extends \PHPUnit_Framework_TestCase
+class ExportCommandTest extends TestCase
 {
     use DatabaseTestCaseTrait;
     use CommandTestCaseTrait;

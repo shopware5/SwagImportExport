@@ -10,8 +10,8 @@ namespace SwagImportExport\Tests\Functional\Controllers\Backend\SwagImportExport
 
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use SwagImportExport\Tests\Helper\DataProvider\ProfileDataProvider;
-use SwagImportExport\Tests\Helper\FixturesImportTrait;
 use SwagImportExport\Tests\Helper\ExportControllerTrait;
+use SwagImportExport\Tests\Helper\FixturesImportTrait;
 
 class CategoryExportTest extends \Enlight_Components_Test_Controller_TestCase
 {
@@ -28,19 +28,6 @@ class CategoryExportTest extends \Enlight_Components_Test_Controller_TestCase
 
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
-    }
-
-    /**
-     * @param string $filePath
-     * @param string $categoryId
-     * @param string $attribute
-     * @param string $expected
-     */
-    private function assertCategoryAttributeInXml($filePath, $categoryId, $attribute, $expected)
-    {
-        $categoryNodeList = $this->queryXpath($filePath, "//category[categoryId='{$categoryId}']/{$attribute}");
-        $nodeValue = $categoryNodeList->item(0)->nodeValue;
-        $this->assertEquals($expected, $nodeValue);
     }
 
     public function test_category_xml_export()
@@ -86,5 +73,18 @@ class CategoryExportTest extends \Enlight_Components_Test_Controller_TestCase
         $this->assertEquals('Deutsch', $mappedCategoryCsv[3]['description']);
         $this->assertEquals(1, $mappedCategoryCsv[3]['active']);
         $this->assertEquals(1, $mappedCategoryCsv[3]['parentID'], 'Category Deutsch has no parent category.');
+    }
+
+    /**
+     * @param string $filePath
+     * @param string $categoryId
+     * @param string $attribute
+     * @param string $expected
+     */
+    private function assertCategoryAttributeInXml($filePath, $categoryId, $attribute, $expected)
+    {
+        $categoryNodeList = $this->queryXpath($filePath, "//category[categoryId='{$categoryId}']/{$attribute}");
+        $nodeValue = $categoryNodeList->item(0)->nodeValue;
+        $this->assertEquals($expected, $nodeValue);
     }
 }

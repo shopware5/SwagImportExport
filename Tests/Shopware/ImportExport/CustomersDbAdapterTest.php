@@ -8,11 +8,11 @@
 
 namespace Tests\Shopware\ImportExport;
 
-use Tests\Helper\DbAdapterTest;
+use Tests\Helper\DbAdapterTestHelper;
 
-class CustomersDbAdapterTest extends DbAdapterTest
+class CustomersDbAdapterTest extends DbAdapterTestHelper
 {
-    protected $yamlFile = "TestCases/customersDbAdapter.yml";
+    protected $yamlFile = 'TestCases/customersDbAdapter.yml';
 
     public function setUp()
     {
@@ -23,10 +23,10 @@ class CustomersDbAdapterTest extends DbAdapterTest
     }
 
     /**
-     * @param string $columns
+     * @param array $columns
      * @param int[] $ids
      * @param array $expected
-     * @param int $expectedCount
+     * @param int   $expectedCount
      *
      * @dataProvider readProvider
      */
@@ -35,16 +35,19 @@ class CustomersDbAdapterTest extends DbAdapterTest
         $this->read($columns, $ids, $expected, $expectedCount);
     }
 
+    /**
+     * @return array
+     */
     public function readProvider()
     {
         return $this->getDataProvider('testRead');
     }
 
     /**
-     * @param int $start
+     * @param int   $start
      * @param array $limit
      * @param int[] $expectedIds
-     * @param int $expectedCount
+     * @param int   $expectedCount
      *
      * @dataProvider readRecordIdsProvider
      */
@@ -53,6 +56,9 @@ class CustomersDbAdapterTest extends DbAdapterTest
         $this->readRecordIds($start, $limit, [], $expectedIds, $expectedCount);
     }
 
+    /**
+     * @return array
+     */
     public function readRecordIdsProvider()
     {
         return $this->getDataProvider('testReadRecordIds');
@@ -70,6 +76,9 @@ class CustomersDbAdapterTest extends DbAdapterTest
         $this->write($records, $expectedInsertedRows);
     }
 
+    /**
+     * @return array
+     */
     public function writeWithEmptyFile()
     {
         return $this->getDataProvider('testWriteWithEmptyFile');
@@ -77,7 +86,7 @@ class CustomersDbAdapterTest extends DbAdapterTest
 
     /**
      * @param array $records
-     * @param int $expectedInsertedRows
+     * @param int   $expectedInsertedRows
      *
      * @dataProvider writeProvider
      */
@@ -86,6 +95,9 @@ class CustomersDbAdapterTest extends DbAdapterTest
         $this->write($records, $expectedInsertedRows);
     }
 
+    /**
+     * @return array
+     */
     public function writeProvider()
     {
         return $this->getDataProvider('testWrite');

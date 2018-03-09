@@ -8,13 +8,14 @@
 
 namespace SwagImportExport\Tests\Unit\Setup\DefaultProfiles;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\OrderMainDataProfile;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\ProfileMetaData;
 
-class OrderMainDataProfileTest extends \PHPUnit_Framework_TestCase
+class OrderMainDataProfileTest extends TestCase
 {
     use DefaultProfileTestCaseTrait;
-    
+
     public function test_it_can_be_created()
     {
         $orderMainDataProfile = new OrderMainDataProfile();
@@ -29,10 +30,9 @@ class OrderMainDataProfileTest extends \PHPUnit_Framework_TestCase
         $orderMainDataProfile = new OrderMainDataProfile();
 
         $this->walkRecursive($orderMainDataProfile->jsonSerialize(), function ($node) {
-            $this->assertArrayHasKey('id', $node, "Current array: " . print_r($node, true));
-            $this->assertArrayHasKey('type', $node, "Current array: " . print_r($node, true));
-            $this->assertArrayHasKey('name', $node, "Current array: " . print_r($node, true));
+            $this->assertArrayHasKey('id', $node, 'Current array: ' . print_r($node, true));
+            $this->assertArrayHasKey('type', $node, 'Current array: ' . print_r($node, true));
+            $this->assertArrayHasKey('name', $node, 'Current array: ' . print_r($node, true));
         });
     }
-
 }

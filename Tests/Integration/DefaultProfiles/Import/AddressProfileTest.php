@@ -8,11 +8,12 @@
 
 namespace SwagImportExport\Tests\Integration\DefaultProfiles\Import;
 
+use PHPUnit\Framework\TestCase;
 use SwagImportExport\Tests\Helper\CommandTestCaseTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use SwagImportExport\Tests\Integration\DefaultProfiles\DefaultProfileImportTestCaseTrait;
 
-class AddressProfileTest extends \PHPUnit_Framework_TestCase
+class AddressProfileTest extends TestCase
 {
     use DatabaseTestCaseTrait;
     use CommandTestCaseTrait;
@@ -23,7 +24,7 @@ class AddressProfileTest extends \PHPUnit_Framework_TestCase
         $file = __DIR__ . '/_fixtures/addresses_profile_create.csv';
         $this->runCommand("sw:importexport:import -p default_addresses {$file}");
 
-        $createdAddress = $this->executeQuery('SELECT * FROM s_user_addresses WHERE company="A Company Ltd."');
+        $createdAddress = $this->executeQuery("SELECT * FROM s_user_addresses WHERE company='A Company Ltd.'");
 
         $this->assertEquals('Department X', $createdAddress[0]['department']);
         $this->assertEquals('MyUstId', $createdAddress[0]['ustid']);
@@ -40,7 +41,7 @@ class AddressProfileTest extends \PHPUnit_Framework_TestCase
         $file = __DIR__ . '/_fixtures/addresses_profile_update.csv';
         $this->runCommand("sw:importexport:import -p default_addresses {$file}");
 
-        $updatedAddress = $this->executeQuery('SELECT * FROM s_user_addresses WHERE company="Updated company"');
+        $updatedAddress = $this->executeQuery("SELECT * FROM s_user_addresses WHERE company='Updated company'");
 
         $this->assertEquals(2, $updatedAddress[0]['id']);
         $this->assertEquals('Updated department', $updatedAddress[0]['department']);

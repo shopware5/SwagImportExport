@@ -8,23 +8,23 @@
 
 namespace Tests\Shopware\ImportExport;
 
-use Tests\Helper\DbAdapterTest;
+use Tests\Helper\DbAdapterTestHelper;
 
-class NewsletterDbAdapterTest extends DbAdapterTest
+class NewsletterDbAdapterTest extends DbAdapterTestHelper
 {
-    protected $yamlFile = "TestCases/newslettersDbAdapter.yml";
-    
+    protected $yamlFile = 'TestCases/newslettersDbAdapter.yml';
+
     public function setUp()
     {
         parent::setUp();
-        
+
         $this->dbAdapter = 'newsletter';
         $this->dbTable = 's_campaigns_mailaddresses';
     }
 
     /**
      * @param array $data
-     * @param int $expectedInsertedRows
+     * @param int   $expectedInsertedRows
      *
      * @dataProvider writeProvider
      */
@@ -33,6 +33,9 @@ class NewsletterDbAdapterTest extends DbAdapterTest
         $this->write($data, $expectedInsertedRows);
     }
 
+    /**
+     * @return array
+     */
     public function writeProvider()
     {
         return $this->getDataProvider('testWrite');

@@ -8,20 +8,13 @@
 
 namespace SwagImportExport\Tests\Unit\Setup\DefaultProfiles;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\MinimalArticleVariantsProfile;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\ProfileMetaData;
 
-class MinimalArticleVariantsProfileTest extends \PHPUnit_Framework_TestCase
+class MinimalArticleVariantsProfileTest extends TestCase
 {
     use DefaultProfileTestCaseTrait;
-
-    /**
-     * @return MinimalArticleVariantsProfile
-     */
-    private function createMinimalArticleVariantsProfile()
-    {
-        return new MinimalArticleVariantsProfile();
-    }
 
     public function test_it_can_be_created()
     {
@@ -41,5 +34,13 @@ class MinimalArticleVariantsProfileTest extends \PHPUnit_Framework_TestCase
             $this->assertArrayHasKey('name', $node, 'Current array: ' . print_r($node, true));
             $this->assertArrayHasKey('type', $node, 'Current array: ' . print_r($node, true));
         });
+    }
+
+    /**
+     * @return MinimalArticleVariantsProfile
+     */
+    private function createMinimalArticleVariantsProfile()
+    {
+        return new MinimalArticleVariantsProfile();
     }
 }

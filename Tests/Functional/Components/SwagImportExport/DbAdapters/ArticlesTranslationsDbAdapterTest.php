@@ -9,20 +9,13 @@
 namespace SwagImportExport\Tests\Functional\Components\SwagImportExport\DbAdapters;
 
 use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
 use Shopware\Components\SwagImportExport\DbAdapters\ArticlesTranslationsDbAdapter;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 
-class ArticlesTranslationsDbAdapterTest extends \PHPUnit_Framework_TestCase
+class ArticlesTranslationsDbAdapterTest extends TestCase
 {
     use DatabaseTestCaseTrait;
-
-    /**
-     * @return ArticlesTranslationsDbAdapter
-     */
-    private function createArticlesTranslationsDbAdapter()
-    {
-        return new ArticlesTranslationsDbAdapter();
-    }
 
     public function test_read_should_throw_exception_if_ids_are_empty()
     {
@@ -57,8 +50,8 @@ class ArticlesTranslationsDbAdapterTest extends \PHPUnit_Framework_TestCase
         $articlesTranslationsDbAdapter = $this->createArticlesTranslationsDbAdapter();
         $records = [
             'default' => [
-                ['articleNumber' => 'SW10003', 'languageId' => 2, 'name' => 'My translation test']
-            ]
+                ['articleNumber' => 'SW10003', 'languageId' => 2, 'name' => 'My translation test'],
+            ],
         ];
 
         $articlesTranslationsDbAdapter->write($records);
@@ -73,5 +66,13 @@ class ArticlesTranslationsDbAdapterTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('My translation test', $mainArticleTranslation);
         $this->assertEquals('My translation test', $translation['txtArtikel']);
+    }
+
+    /**
+     * @return ArticlesTranslationsDbAdapter
+     */
+    private function createArticlesTranslationsDbAdapter()
+    {
+        return new ArticlesTranslationsDbAdapter();
     }
 }

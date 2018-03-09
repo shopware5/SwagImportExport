@@ -8,10 +8,11 @@
 
 namespace Tests\Shopware\ImportExport;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Components\SwagImportExport\Transformers\FlattenTransformer;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 
-class DataFlattenTransformerTest extends \PHPUnit_Framework_TestCase
+class DataFlattenTransformerTest extends TestCase
 {
     use DatabaseTestCaseTrait;
 

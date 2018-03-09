@@ -9,10 +9,11 @@
 namespace SwagImportExport\Tests\Functional\Setup\Update;
 
 use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
 use Shopware\Setup\SwagImportExport\SetupContext;
 use Shopware\Setup\SwagImportExport\Update\Update03DefaultProfileSupport;
 
-class Update03DefaultProfileSupportTest extends \PHPUnit_Framework_TestCase
+class Update03DefaultProfileSupportTest extends TestCase
 {
     public function test_it_should_be_compatible()
     {

@@ -9,10 +9,11 @@
 namespace SwagImportExport\Tests\Functional\Components\SwagImportExport\DbAdapters\Articles;
 
 use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\PropertyWriter;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 
-class PropertyWriterTest extends \PHPUnit_Framework_TestCase
+class PropertyWriterTest extends TestCase
 {
     use DatabaseTestCaseTrait;
 
@@ -34,14 +35,6 @@ class PropertyWriterTest extends \PHPUnit_Framework_TestCase
     const EXISTING_PROPERTY_VALUE_ID = '22';
 
     const NOT_EXISTING_FILTER_GROUP_ID = '999999';
-
-    /**
-     * @return PropertyWriter
-     */
-    private function createPropertyWriterAdapter()
-    {
-        return PropertyWriter::createFromGlobalSingleton();
-    }
 
     public function test_write_should_return_null_if_no_properties_were_given()
     {
@@ -79,7 +72,7 @@ class PropertyWriterTest extends \PHPUnit_Framework_TestCase
             [self::NOT_EXISTING_FILTER_GROUP_NAME]
         )->fetch(\PDO::FETCH_COLUMN);
 
-        $this->assertEmpty($importedFilter, "Filter groups will only be created if a new product will be created.");
+        $this->assertEmpty($importedFilter, 'Filter groups will only be created if a new product will be created.');
     }
 
     public function test_write_should_update_group_relations()
@@ -91,8 +84,8 @@ class PropertyWriterTest extends \PHPUnit_Framework_TestCase
                 'articleId' => self::ARTICLE_ID_WITHOUT_PROPERTIES,
                 'propertyGroupName' => self::EXISTING_FILTER_GROUP_NAME,
                 'propertyValueName' => self::NOT_EXISTING_VALUE_NAME,
-                'propertyOptionName' => self::NOT_EXISTING_OPTION_NAME
-            ]
+                'propertyOptionName' => self::NOT_EXISTING_OPTION_NAME,
+            ],
         ];
 
         $propertyWriter->writeUpdateCreatePropertyGroupsFilterAndValues(
@@ -105,7 +98,7 @@ class PropertyWriterTest extends \PHPUnit_Framework_TestCase
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
         $filterGroupId = $dbalConnection->executeQuery(
             'SELECT filterGroupId FROM s_articles WHERE id = ?',
-            [ self::ARTICLE_ID_WITHOUT_PROPERTIES ]
+            [self::ARTICLE_ID_WITHOUT_PROPERTIES]
         )->fetch(\PDO::FETCH_COLUMN);
 
         $this->assertGreaterThan($expectedMinId, $filterGroupId, 'Could not update filter group for article.');
@@ -119,8 +112,8 @@ class PropertyWriterTest extends \PHPUnit_Framework_TestCase
                 'articleId' => self::ARTICLE_ID_WITHOUT_PROPERTIES,
                 'propertyGroupName' => self::EXISTING_FILTER_GROUP_NAME,
                 'propertyValueName' => self::NOT_EXISTING_VALUE_NAME,
-                'propertyOptionName' => self::NOT_EXISTING_OPTION_NAME
-            ]
+                'propertyOptionName' => self::NOT_EXISTING_OPTION_NAME,
+            ],
         ];
 
         $propertyWriter->writeUpdateCreatePropertyGroupsFilterAndValues(
@@ -133,7 +126,7 @@ class PropertyWriterTest extends \PHPUnit_Framework_TestCase
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
         $createdPropertyValue = $dbalConnection->executeQuery(
             'SELECT `value` FROM s_filter_values WHERE value = ?',
-            [ self::NOT_EXISTING_VALUE_NAME ]
+            [self::NOT_EXISTING_VALUE_NAME]
         )->fetch(\PDO::FETCH_COLUMN);
 
         $this->assertEquals(self::NOT_EXISTING_VALUE_NAME, $createdPropertyValue, 'Could not create property value.');
@@ -147,8 +140,8 @@ class PropertyWriterTest extends \PHPUnit_Framework_TestCase
                 'articleId' => self::ARTICLE_ID_WITHOUT_PROPERTIES,
                 'propertyGroupName' => self::EXISTING_FILTER_GROUP_NAME,
                 'propertyValueName' => self::NOT_EXISTING_VALUE_NAME,
-                'propertyOptionName' => self::NOT_EXISTING_OPTION_NAME
-            ]
+                'propertyOptionName' => self::NOT_EXISTING_OPTION_NAME,
+            ],
         ];
 
         $propertyWriter->writeUpdateCreatePropertyGroupsFilterAndValues(
@@ -161,7 +154,7 @@ class PropertyWriterTest extends \PHPUnit_Framework_TestCase
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
         $createdPropertyValue = $dbalConnection->executeQuery(
             'SELECT `name` FROM s_filter_options WHERE name = ?',
-            [ self::NOT_EXISTING_OPTION_NAME ]
+            [self::NOT_EXISTING_OPTION_NAME]
         )->fetch(\PDO::FETCH_COLUMN);
 
         $this->assertEquals(self::NOT_EXISTING_OPTION_NAME, $createdPropertyValue, 'Could not create property value.');
@@ -175,8 +168,8 @@ class PropertyWriterTest extends \PHPUnit_Framework_TestCase
                 'articleId' => self::ARTICLE_ID_WITHOUT_PROPERTIES,
                 'propertyGroupName' => self::EXISTING_FILTER_GROUP_NAME,
                 'propertyValueName' => self::NOT_EXISTING_VALUE_NAME,
-                'propertyOptionName' => self::INVALID_OPTION_NAME
-            ]
+                'propertyOptionName' => self::INVALID_OPTION_NAME,
+            ],
         ];
 
         $this->expectException(\Exception::class);
@@ -194,8 +187,8 @@ class PropertyWriterTest extends \PHPUnit_Framework_TestCase
             [
                 'articleId' => self::ARTICLE_ID_WITHOUT_PROPERTIES,
                 'propertyGroupName' => self::EXISTING_FILTER_GROUP_NAME,
-                'propertyValueId' => self::EXISTING_PROPERTY_VALUE_ID
-            ]
+                'propertyValueId' => self::EXISTING_PROPERTY_VALUE_ID,
+            ],
         ];
 
         $propertyWriter->writeUpdateCreatePropertyGroupsFilterAndValues(
@@ -208,7 +201,7 @@ class PropertyWriterTest extends \PHPUnit_Framework_TestCase
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
         $valueIdRelationToTestedArticle = $dbalConnection->executeQuery(
             'SELECT valueID FROM s_filter_articles WHERE articleID = ?',
-            [ self::ARTICLE_ID_WITHOUT_PROPERTIES ]
+            [self::ARTICLE_ID_WITHOUT_PROPERTIES]
         )->fetch(\PDO::FETCH_COLUMN);
 
         $this->assertEquals(self::EXISTING_PROPERTY_VALUE_ID, $valueIdRelationToTestedArticle);
@@ -221,8 +214,8 @@ class PropertyWriterTest extends \PHPUnit_Framework_TestCase
             [
                 'articleId' => self::ARTICLE_ID_WITHOUT_PROPERTIES,
                 'propertyGroupName' => self::EXISTING_FILTER_GROUP_NAME,
-                'propertyValueId' => self::EXISTING_PROPERTY_VALUE_ID
-            ]
+                'propertyValueId' => self::EXISTING_PROPERTY_VALUE_ID,
+            ],
         ];
 
         $propertyWriter->writeUpdateCreatePropertyGroupsFilterAndValues(
@@ -235,10 +228,10 @@ class PropertyWriterTest extends \PHPUnit_Framework_TestCase
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
         $createOptionRelation = $dbalConnection->executeQuery(
             'SELECT optionID FROM s_filter_relations LEFT JOIN s_articles ON s_articles.filterGroupID = s_filter_relations.groupID WHERE s_articles.id = ?',
-            [ self::ARTICLE_ID_WITHOUT_PROPERTIES ]
+            [self::ARTICLE_ID_WITHOUT_PROPERTIES]
         )->fetch(\PDO::FETCH_COLUMN);
 
-        $this->assertNotFalse($createOptionRelation, "Could not update option relations.");
+        $this->assertNotFalse($createOptionRelation, 'Could not update option relations.');
     }
 
     public function test_write_should_create_group()
@@ -248,8 +241,8 @@ class PropertyWriterTest extends \PHPUnit_Framework_TestCase
             [
                 'propertyGroupName' => self::NOT_EXISTING_FILTER_GROUP_NAME,
                 'propertyValueName' => self::NOT_EXISTING_VALUE_NAME,
-                'propertyOptionName' => self::NOT_EXISTING_OPTION_NAME
-            ]
+                'propertyOptionName' => self::NOT_EXISTING_OPTION_NAME,
+            ],
         ];
 
         $propertyWriter->writeUpdateCreatePropertyGroupsFilterAndValues(
@@ -262,9 +255,17 @@ class PropertyWriterTest extends \PHPUnit_Framework_TestCase
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
         $createdGroupName = $dbalConnection->executeQuery(
             'SELECT name FROM s_filter WHERE name = ?',
-            [ self::NOT_EXISTING_FILTER_GROUP_NAME ]
+            [self::NOT_EXISTING_FILTER_GROUP_NAME]
         )->fetch(\PDO::FETCH_COLUMN);
 
         $this->assertEquals(self::NOT_EXISTING_FILTER_GROUP_NAME, $createdGroupName, 'Could not create filter group.');
+    }
+
+    /**
+     * @return PropertyWriter
+     */
+    private function createPropertyWriterAdapter()
+    {
+        return PropertyWriter::createFromGlobalSingleton();
     }
 }

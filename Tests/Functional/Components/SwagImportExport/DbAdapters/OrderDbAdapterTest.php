@@ -8,21 +8,13 @@
 
 namespace SwagImportExport\Tests\Functional\Components\SwagImportExport\DbAdapters;
 
-use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
 use Shopware\Components\SwagImportExport\DbAdapters\OrdersDbAdapter;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 
-class OrderDbAdapterTest extends \PHPUnit_Framework_TestCase
+class OrderDbAdapterTest extends TestCase
 {
     use DatabaseTestCaseTrait;
-
-    /**
-     * @return OrdersDbAdapter
-     */
-    private function createOrdersDbAdapter()
-    {
-        return new OrdersDbAdapter();
-    }
 
     public function test_write_should_be_valid()
     {
@@ -37,7 +29,7 @@ class OrderDbAdapterTest extends \PHPUnit_Framework_TestCase
         $ordersDbAdapter = $this->createOrdersDbAdapter();
 
         $invalidRecords = [
-            'defaults' => []
+            'defaults' => [],
         ];
 
         $this->expectException(\Exception::class);
@@ -114,13 +106,21 @@ class OrderDbAdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return OrdersDbAdapter
+     */
+    private function createOrdersDbAdapter()
+    {
+        return new OrdersDbAdapter();
+    }
+
+    /**
      * @return array
      */
     private function getValidDemoRecordsForWriteTest()
     {
         $data = [
             'orderId' => 15,
-            'number' => "20001",
+            'number' => '20001',
             'customerId' => 2,
             'status' => 0,
             'cleared' => 17,
@@ -161,13 +161,13 @@ class OrderDbAdapterTest extends \PHPUnit_Framework_TestCase
             'releaseddate' => '0000-00-00',
             'mode' => 0,
             'esd' => 1,
-            'config' => null
+            'config' => null,
         ];
 
         return [
             'default' => [
-                $data
-            ]
+                $data,
+            ],
         ];
     }
 }

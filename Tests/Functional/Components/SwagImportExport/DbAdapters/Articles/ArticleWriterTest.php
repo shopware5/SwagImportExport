@@ -8,12 +8,13 @@
 
 namespace SwagImportExport\Tests\Functional\Components\SwagImportExport\DbAdapters\Articles;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\ArticleWriter;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Models\Article\Article;
 
-class ArticleWriterTest extends \PHPUnit_Framework_TestCase
+class ArticleWriterTest extends TestCase
 {
     /**
      * @var ArticleWriter

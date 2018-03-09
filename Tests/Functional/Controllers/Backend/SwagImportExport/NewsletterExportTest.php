@@ -1,12 +1,17 @@
 <?php
-
+/**
+ * (c) shopware AG <info@shopware.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace SwagImportExport\Tests\Functional\Controllers\Backend\SwagImportExport;
 
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use SwagImportExport\Tests\Helper\DataProvider\ProfileDataProvider;
-use SwagImportExport\Tests\Helper\FixturesImportTrait;
 use SwagImportExport\Tests\Helper\ExportControllerTrait;
+use SwagImportExport\Tests\Helper\FixturesImportTrait;
 
 class NewsletterExportTest extends \Enlight_Components_Test_Controller_TestCase
 {
@@ -43,7 +48,7 @@ class NewsletterExportTest extends \Enlight_Components_Test_Controller_TestCase
         $this->assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
-        $newsletterNodeList = $this->queryXpath($file, "//user");
+        $newsletterNodeList = $this->queryXpath($file, '//user');
         $this->assertEquals(25, $newsletterNodeList->length);
 
         $newsletterNodeList = $this->queryXpath($file, "//user[email='test_0@example.com']/email");

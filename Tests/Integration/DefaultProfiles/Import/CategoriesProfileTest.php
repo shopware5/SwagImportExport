@@ -8,6 +8,7 @@
 
 namespace SwagImportExport\Tests\Integration\DefaultProfiles\Import;
 
+use PHPUnit\Framework\TestCase;
 use SwagImportExport\Tests\Helper\CommandTestCaseTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use SwagImportExport\Tests\Integration\DefaultProfiles\DefaultProfileImportTestCaseTrait;
@@ -16,7 +17,7 @@ use SwagImportExport\Tests\Integration\DefaultProfiles\DefaultProfileImportTestC
  * Covers the default profile:
  * default_categories
  */
-class CategoriesProfileTest extends \PHPUnit\Framework\TestCase
+class CategoriesProfileTest extends TestCase
 {
     use DatabaseTestCaseTrait;
     use CommandTestCaseTrait;

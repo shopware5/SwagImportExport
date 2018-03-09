@@ -8,11 +8,12 @@
 
 namespace SwagImportExport\Tests\Integration\DefaultProfiles\Import;
 
+use PHPUnit\Framework\TestCase;
 use SwagImportExport\Tests\Helper\CommandTestCaseTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use SwagImportExport\Tests\Integration\DefaultProfiles\DefaultProfileImportTestCaseTrait;
 
-class ArticleCompleteProfileTest extends \PHPUnit_Framework_TestCase
+class ArticleCompleteProfileTest extends TestCase
 {
     use DatabaseTestCaseTrait;
     use CommandTestCaseTrait;
@@ -39,7 +40,7 @@ class ArticleCompleteProfileTest extends \PHPUnit_Framework_TestCase
         $filePath = __DIR__ . '/_fixtures/article_complete.csv';
         $this->runCommand("sw:import:import -p default_articles_complete {$filePath}");
 
-        $importedArticle = $this->executeQuery('SELECT * FROM s_articles WHERE name="Article with Variants"');
+        $importedArticle = $this->executeQuery("SELECT * FROM s_articles WHERE name='Article with Variants'");
         $this->assertEquals('Article with Variants', $importedArticle[0]['name']);
         $this->assertEquals(1, $importedArticle[0]['active']);
 
@@ -79,7 +80,7 @@ class ArticleCompleteProfileTest extends \PHPUnit_Framework_TestCase
         $filePath = __DIR__ . '/_fixtures/article_complete.csv';
         $this->runCommand("sw:import:import -p default_articles_complete {$filePath}");
 
-        $importedArticle = $this->executeQuery('SELECT * FROM s_articles WHERE name="Article with Variants"');
+        $importedArticle = $this->executeQuery("SELECT * FROM s_articles WHERE name='Article with Variants'");
         $importedAttributes = $this->executeQuery("SELECT * FROM s_articles_attributes WHERE articleID={$importedArticle[0]['id']}");
         $this->assertEquals('attribute 1', $importedAttributes[0]['attr1']);
         $this->assertEquals('attribute 2', $importedAttributes[0]['attr2']);
@@ -91,7 +92,7 @@ class ArticleCompleteProfileTest extends \PHPUnit_Framework_TestCase
         $filePath = __DIR__ . '/_fixtures/article_complete.csv';
         $this->runCommand("sw:import:import -p default_articles_complete {$filePath}");
 
-        $importedVariant = $this->executeQuery('SELECT * FROM s_articles_details WHERE ordernumber="test-10001.1"');
+        $importedVariant = $this->executeQuery("SELECT * FROM s_articles_details WHERE ordernumber='test-10001.1'");
         $importedAttributes = $this->executeQuery("SELECT * FROM s_articles_attributes WHERE articledetailsID={$importedVariant[0]['id']}");
         $this->assertEquals('attribute1', $importedAttributes[0]['attr1']);
         $this->assertEquals('attribute2', $importedAttributes[0]['attr2']);
@@ -103,7 +104,7 @@ class ArticleCompleteProfileTest extends \PHPUnit_Framework_TestCase
         $filePath = __DIR__ . '/_fixtures/article_complete.csv';
         $this->runCommand("sw:import:import -p default_articles_complete {$filePath}");
 
-        $importedVariant = $this->executeQuery('SELECT * FROM s_articles_details WHERE ordernumber="test-10001.1"');
+        $importedVariant = $this->executeQuery("SELECT * FROM s_articles_details WHERE ordernumber='test-10001.1'");
         $result = $this->executeQuery("SELECT * FROM s_core_translations WHERE objecttype='article' AND objectkey='{$importedVariant[0]['articleID']}'");
         $importedTranslation = unserialize($result[0]['objectdata']);
 
@@ -117,7 +118,7 @@ class ArticleCompleteProfileTest extends \PHPUnit_Framework_TestCase
         $filePath = __DIR__ . '/_fixtures/article_complete.csv';
         $this->runCommand("sw:import:import -p default_articles_complete {$filePath}");
 
-        $importedArticle = $this->executeQuery('SELECT * FROM s_articles WHERE name="Article with Variants"');
+        $importedArticle = $this->executeQuery("SELECT * FROM s_articles WHERE name='Article with Variants'");
         $similarRelation = $this->executeQuery("SELECT * FROM s_articles_similar WHERE articleID={$importedArticle[0]['id']}");
         $createdSimilarArticle = $this->executeQuery("SELECT * FROM s_articles WHERE id={$similarRelation[0]['relatedarticle']}");
 
@@ -129,7 +130,7 @@ class ArticleCompleteProfileTest extends \PHPUnit_Framework_TestCase
         $filePath = __DIR__ . '/_fixtures/article_complete.csv';
         $this->runCommand("sw:import:import -p default_articles_complete {$filePath}");
 
-        $importedArticle = $this->executeQuery('SELECT * FROM s_articles WHERE name="Article with Variants"');
+        $importedArticle = $this->executeQuery("SELECT * FROM s_articles WHERE name='Article with Variants'");
         $similarRelation = $this->executeQuery("SELECT * FROM s_articles_relationships WHERE articleID={$importedArticle[0]['id']}");
         $createdSimilarArticle = $this->executeQuery("SELECT * FROM s_articles WHERE id={$similarRelation[0]['relatedarticle']}");
 
@@ -141,7 +142,7 @@ class ArticleCompleteProfileTest extends \PHPUnit_Framework_TestCase
         $filePath = __DIR__ . '/_fixtures/article_complete.csv';
         $this->runCommand("sw:import:import -p default_articles_complete {$filePath}");
 
-        $importedArticle = $this->executeQuery('SELECT * FROM s_articles WHERE name="Article with Variants"');
+        $importedArticle = $this->executeQuery("SELECT * FROM s_articles WHERE name='Article with Variants'");
         $mediaRelation = $this->executeQuery("SELECT * FROM s_articles_img WHERE articleID='{$importedArticle[0]['id']}'");
         $mediaFromExternalResource = $this->executeQuery("SELECT * FROM s_media WHERE id='{$mediaRelation[0]['media_id']}'");
 

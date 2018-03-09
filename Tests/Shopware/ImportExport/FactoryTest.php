@@ -8,29 +8,32 @@
 
 namespace Tests\Shopware\ImportExport;
 
+use Shopware\Components\SwagImportExport\DbAdapters\ArticlesDbAdapter;
+use Shopware\Components\SwagImportExport\DbAdapters\CategoriesDbAdapter;
 use Shopware\Components\SwagImportExport\Factories\DataFactory;
 use Shopware\Components\SwagImportExport\Factories\FileIOFactory;
-use Shopware\Components\SwagImportExport\DbAdapters\CategoriesDbAdapter;
-use Shopware\Components\SwagImportExport\DbAdapters\ArticlesDbAdapter;
-use Shopware\Components\SwagImportExport\Utils\DataColumnOptions;
-use Shopware\Components\SwagImportExport\Utils\DataLimit;
-use Shopware\Components\SwagImportExport\Utils\DataFilter;
-use Shopware\Components\SwagImportExport\FileIO\CsvFileWriter;
-use Shopware\Components\SwagImportExport\FileIO\XmlFileWriter;
 use Shopware\Components\SwagImportExport\FileIO\CsvFileReader;
+use Shopware\Components\SwagImportExport\FileIO\CsvFileWriter;
 use Shopware\Components\SwagImportExport\FileIO\XmlFileReader;
+use Shopware\Components\SwagImportExport\FileIO\XmlFileWriter;
+use Shopware\Components\SwagImportExport\Utils\DataColumnOptions;
+use Shopware\Components\SwagImportExport\Utils\DataFilter;
+use Shopware\Components\SwagImportExport\Utils\DataLimit;
 use Tests\Helper\ImportExportTestHelper;
 
 class FactoryTest extends ImportExportTestHelper
 {
+    /**
+     * @return array
+     */
     public function getPostData()
     {
-        $postData = array(
+        $postData = [
             'columnOptions' => 'id, parent, description, active',
             'filter' => '',
-            'limit' => array('limit' => 50, 'offset' => 150),
+            'limit' => ['limit' => 50, 'offset' => 150],
             'max_record_count' => 100,
-        );
+        ];
 
         return $postData;
     }
@@ -38,10 +41,10 @@ class FactoryTest extends ImportExportTestHelper
     public function testFactories()
     {
         $dataFactory = $this->Plugin()->getDataFactory();
-        $this->assertTrue($dataFactory instanceof DataFactory, 'Is not a instance of DataFactory');
+        $this->assertInstanceOf(DataFactory::class, $dataFactory, 'Is not a instance of DataFactory');
 
         $fileIOFactory = $this->Plugin()->getFileIOFactory();
-        $this->assertTrue($fileIOFactory instanceof FileIOFactory, 'Is not a instance of DataFactory');
+        $this->assertInstanceOf(FileIOFactory::class, $fileIOFactory, 'Is not a instance of DataFactory');
     }
 
     public function testDbAdapters()
@@ -50,11 +53,11 @@ class FactoryTest extends ImportExportTestHelper
 
         //tests categories data adapter
         $catergoriesDbAdapter = $dataFactory->createDbAdapter('categories');
-        $this->assertTrue($catergoriesDbAdapter instanceof CategoriesDbAdapter, 'Is not a instance of CategoriesDbAdapter');
+        $this->assertInstanceOf(CategoriesDbAdapter::class, $catergoriesDbAdapter, 'Is not a instance of CategoriesDbAdapter');
 
         //tests articles data adapter
         $articlesDbAdapter = $dataFactory->createDbAdapter('articles');
-        $this->assertTrue($articlesDbAdapter instanceof ArticlesDbAdapter, 'Is not a instance of ArticlesDbAdapter');
+        $this->assertInstanceOf(ArticlesDbAdapter::class, $articlesDbAdapter, 'Is not a instance of ArticlesDbAdapter');
     }
 
     public function testUtils()
@@ -63,29 +66,29 @@ class FactoryTest extends ImportExportTestHelper
         $postData = $this->getPostData();
 
         $colOpts = $dataFactory->createColOpts($postData['columnOptions']);
-        $this->assertTrue($colOpts instanceof DataColumnOptions, 'Is not a instance of DataColumnOptions');
+        $this->assertInstanceOf(DataColumnOptions::class, $colOpts, 'Is not a instance of DataColumnOptions');
 
         $limit = $dataFactory->createLimit($postData['limit']);
-        $this->assertTrue($limit instanceof DataLimit, 'Is not a instance of DataLimit');
+        $this->assertInstanceOf(DataLimit::class, $limit, 'Is not a instance of DataLimit');
 
         $filter = $dataFactory->createFilter($postData['filter']);
-        $this->assertTrue($filter instanceof DataFilter, 'Is not a instance of DataFilter');
+        $this->assertInstanceOf(DataFilter::class, $filter, 'Is not a instance of DataFilter');
     }
 
     public function testFileIO()
     {
         $fileIOFactory = $this->Plugin()->getFileIOFactory();
-        
+
         $csvFileWriter = $fileIOFactory->createFileWriter('csv');
-        $this->assertTrue($csvFileWriter instanceof CsvFileWriter, 'Is not a instance of CsvFileWriter');
+        $this->assertInstanceOf(CsvFileWriter::class, $csvFileWriter, 'Is not a instance of CsvFileWriter');
 
         $xmlFileWriter = $fileIOFactory->createFileWriter('xml');
-        $this->assertTrue($xmlFileWriter instanceof XmlFileWriter, 'Is not a instance of XmlFileWriter');
+        $this->assertInstanceOf(XmlFileWriter::class, $xmlFileWriter, 'Is not a instance of XmlFileWriter');
 
         $csvFileReader = $fileIOFactory->createFileReader('csv');
-        $this->assertTrue($csvFileReader instanceof CsvFileReader, 'Is not a instance of CsvFileReader');
+        $this->assertInstanceOf(CsvFileReader::class, $csvFileReader, 'Is not a instance of CsvFileReader');
 
         $xmlFileReader = $fileIOFactory->createFileReader('xml');
-        $this->assertTrue($xmlFileReader instanceof XmlFileReader, 'Is not a instance of XmlFileReader');
+        $this->assertInstanceOf(XmlFileReader::class, $xmlFileReader, 'Is not a instance of XmlFileReader');
     }
 }

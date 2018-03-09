@@ -8,30 +8,18 @@
 
 namespace Functional\Components\SwagImportExport\Validators;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Components\SwagImportExport\Validators\ArticleImageValidator;
 
-class ArticleImageValidatorTest extends \PHPUnit_Framework_TestCase
+class ArticleImageValidatorTest extends TestCase
 {
-    /**
-     * @return ArticleImageValidator
-     */
-    private function createArticleImageValidator()
-    {
-        return new ArticleImageValidator();
-    }
-
-    private function getImportImagePath()
-    {
-        return 'file://' . realpath(dirname(__FILE__)) . '/../../../../Helper/ImportFiles/sw-icon_blue128.png';
-    }
-
     public function test_validate_without_ordernumber_should_throw_exception()
     {
         $validator = $this->createArticleImageValidator();
         $record = [
             'image' => $this->getImportImagePath(),
             'description' => 'testimport1',
-            'thumbnail' => 1
+            'thumbnail' => 1,
         ];
 
         $this->expectException(\Exception::class);
@@ -45,11 +33,27 @@ class ArticleImageValidatorTest extends \PHPUnit_Framework_TestCase
         $record = [
             'ordernumber' => 'SW10006',
             'description' => 'testimport1',
-            'thumbnail' => 1
+            'thumbnail' => 1,
         ];
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Bestellnummer und Bild zwingend erforderlich.');
         $validator->checkRequiredFields($record);
+    }
+
+    /**
+     * @return ArticleImageValidator
+     */
+    private function createArticleImageValidator()
+    {
+        return new ArticleImageValidator();
+    }
+
+    /**
+     * @return string
+     */
+    private function getImportImagePath()
+    {
+        return 'file://' . realpath(__DIR__) . '/../../../../Helper/ImportFiles/sw-icon_blue128.png';
     }
 }

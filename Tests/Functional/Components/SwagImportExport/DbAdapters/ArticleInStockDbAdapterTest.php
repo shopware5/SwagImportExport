@@ -9,20 +9,13 @@
 namespace SwagImportExport\Tests\Functional\Components\SwagImportExport\DbAdapters;
 
 use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
 use Shopware\Components\SwagImportExport\DbAdapters\ArticlesInStockDbAdapter;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 
-class ArticleInStockDbAdapterTest extends \PHPUnit_Framework_TestCase
+class ArticleInStockDbAdapterTest extends TestCase
 {
     use DatabaseTestCaseTrait;
-
-    /**
-     * @return ArticlesInStockDbAdapter
-     */
-    private function createArticlesInStockAbAdapter()
-    {
-        return new ArticlesInStockDbAdapter();
-    }
 
     public function test_write_should_update_article_stock()
     {
@@ -31,17 +24,17 @@ class ArticleInStockDbAdapterTest extends \PHPUnit_Framework_TestCase
             'default' => [
                 [
                     'orderNumber' => 'SW10004',
-                    'inStock' => '3'
-                ]
-            ]
+                    'inStock' => '3',
+                ],
+            ],
         ];
         $articleInStockDbAdapter->write($updateInStockRecord);
 
         /** @var Connection $dbalConnection */
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
-        $updatedArticleInStock = $dbalConnection->executeQuery('SELECT * FROM s_articles_details WHERE orderNumber="SW10004"')->fetchAll();
+        $updatedArticleInStock = $dbalConnection->executeQuery("SELECT * FROM s_articles_details WHERE orderNumber='SW10004'")->fetchAll();
 
-        $this->assertEquals(3, $updatedArticleInStock[0]["instock"]);
+        $this->assertEquals(3, $updatedArticleInStock[0]['instock']);
     }
 
     public function test_write_with_invalid_order_number_throws_exception()
@@ -51,9 +44,9 @@ class ArticleInStockDbAdapterTest extends \PHPUnit_Framework_TestCase
             'default' => [
                 [
                     'orderNumber' => 'SW-999999',
-                    'inStock' => '3'
-                ]
-            ]
+                    'inStock' => '3',
+                ],
+            ],
         ];
 
         $this->expectException(\Exception::class);
@@ -65,35 +58,35 @@ class ArticleInStockDbAdapterTest extends \PHPUnit_Framework_TestCase
     {
         $articleInStockDbAdapter = $this->createArticlesInStockAbAdapter();
         $filter = [
-            'stockFilter' => 'notInStock'
+            'stockFilter' => 'notInStock',
         ];
 
         $preparedExportData = $articleInStockDbAdapter->readRecordIds(null, null, $filter);
         $exportedData = $articleInStockDbAdapter->read($preparedExportData, $this->getReadColumns());
 
-        $this->assertEquals(count($preparedExportData), count($exportedData["default"]));
+        $this->assertCount(count($preparedExportData), $exportedData['default']);
     }
 
     public function test_read()
     {
         $articleInStockDbAdapter = $this->createArticlesInStockAbAdapter();
-        $ids = [ 3 ];
+        $ids = [3];
         $result = $articleInStockDbAdapter->read($ids, $this->getReadColumns());
 
-        $this->assertArrayHasKey('orderNumber', $result["default"][0], "Could not fetch order number.");
-        $this->assertArrayHasKey('inStock', $result["default"][0], "Could not fetch article stock.");
-        $this->assertArrayHasKey('name', $result["default"][0], "Could not fetch article name.");
-        $this->assertArrayHasKey('additionalText', $result["default"][0], "Could not fetch additional test.");
-        $this->assertArrayHasKey('supplier', $result["default"][0], "Could not fetch supplier.");
-        $this->assertArrayHasKey('price', $result["default"][0], "Could not fetch article price.");
-        $this->assertArrayHasKey('taxInput', $result["default"][0], "Could not fetch tax id.");
-        $this->assertArrayHasKey('tax', $result["default"][0], "Could not fetch tax rate.");
+        $this->assertArrayHasKey('orderNumber', $result['default'][0], 'Could not fetch order number.');
+        $this->assertArrayHasKey('inStock', $result['default'][0], 'Could not fetch article stock.');
+        $this->assertArrayHasKey('name', $result['default'][0], 'Could not fetch article name.');
+        $this->assertArrayHasKey('additionalText', $result['default'][0], 'Could not fetch additional test.');
+        $this->assertArrayHasKey('supplier', $result['default'][0], 'Could not fetch supplier.');
+        $this->assertArrayHasKey('price', $result['default'][0], 'Could not fetch article price.');
+        $this->assertArrayHasKey('taxInput', $result['default'][0], 'Could not fetch tax id.');
+        $this->assertArrayHasKey('tax', $result['default'][0], 'Could not fetch tax rate.');
     }
 
     public function test_read_should_throw_exception_if_ids_are_empty()
     {
         $articleInStockDbAdapter = $this->createArticlesInStockAbAdapter();
-        $columns = [ 'variant.number as orderNumber' ];
+        $columns = ['variant.number as orderNumber'];
         $ids = [];
 
         $this->expectException(\Exception::class);
@@ -102,17 +95,25 @@ class ArticleInStockDbAdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return ArticlesInStockDbAdapter
+     */
+    private function createArticlesInStockAbAdapter()
+    {
+        return new ArticlesInStockDbAdapter();
+    }
+
+    /**
      * @return array
      */
     private function getReadColumns()
     {
         return [
-            "variant.number as orderNumber",
-            "variant.inStock as inStock",
-            "article.name as name",
-            "variant.additionalText as additionalText",
-            "articleSupplier.name as supplier",
-            "prices.price as price"
+            'variant.number as orderNumber',
+            'variant.inStock as inStock',
+            'article.name as name',
+            'variant.additionalText as additionalText',
+            'articleSupplier.name as supplier',
+            'prices.price as price',
         ];
     }
 }

@@ -9,20 +9,13 @@
 namespace SwagImportExport\Tests\Functional\Components\SwagImportExport\DbAdapters\Articles;
 
 use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\PriceWriter;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 
-class PriceWriterTest extends \PHPUnit_Framework_TestCase
+class PriceWriterTest extends TestCase
 {
     use DatabaseTestCaseTrait;
-
-    /**
-     * @return PriceWriter
-     */
-    private function createPriceWriterAdapter()
-    {
-        return new PriceWriter();
-    }
 
     public function test_write_throws_exception_if_empty_values()
     {
@@ -40,8 +33,8 @@ class PriceWriterTest extends \PHPUnit_Framework_TestCase
         $articlePriceData = [
             [
                 'price' => '9,95',
-                'priceGroup' => 'price_group_does_not_exist'
-            ]
+                'priceGroup' => 'price_group_does_not_exist',
+            ],
         ];
         $articleOrderNumber = 3;
         $articleId = 3;
@@ -57,8 +50,8 @@ class PriceWriterTest extends \PHPUnit_Framework_TestCase
 
         $articlePriceData = [
             [
-                'price' => 'invalidPrice'
-            ]
+                'price' => 'invalidPrice',
+            ],
         ];
         $articleOrderNumber = 3;
         $articleId = 3;
@@ -75,8 +68,8 @@ class PriceWriterTest extends \PHPUnit_Framework_TestCase
         $articlePriceData = [
             [
                 'price' => '9,95',
-                'from' => '-12'
-            ]
+                'from' => '-12',
+            ],
         ];
         $articleOrderNumber = 3;
         $articleId = 3;
@@ -93,8 +86,8 @@ class PriceWriterTest extends \PHPUnit_Framework_TestCase
         $articlePriceData = [
             [
                 'price' => '9.95',
-                'priceGroup' => 'EK'
-            ]
+                'priceGroup' => 'EK',
+            ],
         ];
         $articleOrderNumber = 3;
         $articleId = 3;
@@ -116,8 +109,8 @@ class PriceWriterTest extends \PHPUnit_Framework_TestCase
         $articlePriceData = [
             [
                 'price' => '9,95',
-                'priceGroup' => 'EK'
-            ]
+                'priceGroup' => 'EK',
+            ],
         ];
         $articleOrderNumber = 3;
         $articleId = 3;
@@ -140,8 +133,8 @@ class PriceWriterTest extends \PHPUnit_Framework_TestCase
             [
                 'price' => '9,95',
                 'priceGroup' => 'EK',
-                'pseudoPrice' => '15,95'
-            ]
+                'pseudoPrice' => '15,95',
+            ],
         ];
         $articleOrderNumber = 3;
         $articleId = 3;
@@ -153,6 +146,14 @@ class PriceWriterTest extends \PHPUnit_Framework_TestCase
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
         $updatedArticle = $dbalConnection->executeQuery("SELECT * FROM s_articles_prices WHERE articleID='{$articleId}'")->fetchAll();
 
-        $this->assertEquals($expectedArticlePseudoPrice, $updatedArticle[0]["pseudoprice"]);
+        $this->assertEquals($expectedArticlePseudoPrice, $updatedArticle[0]['pseudoprice']);
+    }
+
+    /**
+     * @return PriceWriter
+     */
+    private function createPriceWriterAdapter()
+    {
+        return new PriceWriter();
     }
 }

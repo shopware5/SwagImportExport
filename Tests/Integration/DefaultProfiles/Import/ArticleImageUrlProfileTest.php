@@ -1,12 +1,19 @@
 <?php
+/**
+ * (c) shopware AG <info@shopware.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace SwagImportExport\Tests\Integration\DefaultProfiles\Import;
 
+use PHPUnit\Framework\TestCase;
 use SwagImportExport\Tests\Helper\CommandTestCaseTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use SwagImportExport\Tests\Integration\DefaultProfiles\DefaultProfileImportTestCaseTrait;
 
-class ArticleImageUrlProfileTest extends \PHPUnit_Framework_TestCase
+class ArticleImageUrlProfileTest extends TestCase
 {
     use DatabaseTestCaseTrait;
     use CommandTestCaseTrait;
@@ -26,7 +33,7 @@ class ArticleImageUrlProfileTest extends \PHPUnit_Framework_TestCase
 
         $this->runCommand("sw:import:import -p default_article_images_url {$importFile}");
 
-        $articleResult = $this->executeQuery('SELECT articleID FROM s_articles_details WHERE orderNumber="SW10001"', \PDO::FETCH_COLUMN);
+        $articleResult = $this->executeQuery("SELECT articleID FROM s_articles_details WHERE orderNumber='SW10001'", \PDO::FETCH_COLUMN);
         $images = $this->executeQuery("SELECT * FROM s_articles_img WHERE articleID = '{$articleResult[0]}'", \PDO::FETCH_ASSOC);
 
         $this->assertEquals($articleResult[0], $images[1]['articleID']);

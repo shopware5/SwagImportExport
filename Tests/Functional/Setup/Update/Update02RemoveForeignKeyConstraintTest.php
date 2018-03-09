@@ -10,11 +10,12 @@ namespace SwagImportExport\Tests\Functional\Setup\Update;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
+use PHPUnit\Framework\TestCase;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Setup\SwagImportExport\SetupContext;
 use Shopware\Setup\SwagImportExport\Update\Update02RemoveForeignKeyConstraint;
 
-class Update02RemoveForeignKeyConstraintTest extends \PHPUnit_Framework_TestCase
+class Update02RemoveForeignKeyConstraintTest extends TestCase
 {
     public function test_it_should_be_compatible()
     {
