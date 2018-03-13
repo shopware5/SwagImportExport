@@ -324,12 +324,12 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     public function prepareTranslationExport($ids)
     {
-        $articleDetailIds = implode(',', $ids);
+        $productDetailIds = implode(',', $ids);
 
         $sql = "SELECT variant.articleID as articleId, variant.id as variantId, variant.kind, ct.objectdata, ct.objectlanguage as languageId
                 FROM s_articles_details AS variant
                 LEFT JOIN s_core_translations AS ct ON variant.id = ct.objectkey AND objecttype = 'variant'
-                WHERE variant.id IN ($articleDetailIds)
+                WHERE variant.id IN ($productDetailIds)
                 ORDER BY languageId ASC
                 ";
         $translations = $this->db->query($sql)->fetchAll();
@@ -338,13 +338,13 @@ class ArticlesDbAdapter implements DataDbAdapter
         $translationFields = $this->getTranslationFields();
         $rows = [];
         foreach ($translations as $index => $record) {
-            $articleId = $record['articleId'];
+            $productId = $record['articleId'];
             $variantId = $record['variantId'];
             $languageId = $record['languageId'];
             $kind = $record['kind'];
-            $rows[$variantId]['helper']['articleId'] = $articleId;
+            $rows[$variantId]['helper']['articleId'] = $productId;
             $rows[$variantId]['helper']['variantKind'] = $kind;
-            $rows[$variantId][$languageId]['articleId'] = $articleId;
+            $rows[$variantId][$languageId]['articleId'] = $productId;
             $rows[$variantId][$languageId]['variantId'] = $variantId;
             $rows[$variantId][$languageId]['languageId'] = $languageId;
             $rows[$variantId][$languageId]['variantKind'] = $kind;
@@ -392,34 +392,33 @@ class ArticlesDbAdapter implements DataDbAdapter
         $sql = "SELECT variant.articleID as articleId, ct.objectdata, ct.objectlanguage as languageId
                 FROM s_articles_details AS variant
                 LEFT JOIN s_core_translations AS ct ON variant.articleID = ct.objectkey
-                WHERE variant.id IN ($articleDetailIds) AND objecttype = 'article'
+                WHERE variant.id IN ($productDetailIds) AND objecttype = 'article'
                 GROUP BY ct.id
                 ";
-        $articles = $this->db->query($sql)->fetchAll();
+        $products = $this->db->query($sql)->fetchAll();
+
+        $mappedProducts = [];
+        foreach($products as $product) {
+            $mappedProducts[$product['articleId']][$product['languageId']] = $product;
+        }
 
         foreach ($result as $index => $translation) {
-            foreach ($articles as $article) {
-                //the translation for the main variant is coming
-                //from article translations
-                if ((int) $translation['variantKind'] === 1
-                    && $translation['articleId'] === $article['articleId']
-                    && $translation['languageId'] === $article['languageId']
-                ) {
-                    $serializeData = unserialize($article['objectdata']);
-                    foreach ($translationFields as $key => $field) {
-                        $result[$index][$field] = $serializeData[$key];
-                    }
-                } elseif ($translation['articleId'] === $article['articleId']
-                    && $translation['languageId'] === $article['languageId']
-                ) {
-                    $data = unserialize($article['objectdata']);
-                    $result[$index]['name'] = $data['txtArtikel'];
-                    $result[$index]['description'] = $data['txtshortdescription'];
-                    $result[$index]['descriptionLong'] = $data['txtlangbeschreibung'];
-                    $result[$index]['metaTitle'] = $data['metaTitle'];
-                    $result[$index]['keywords'] = $data['txtkeywords'];
+            $matchedProductTranslation = $mappedProducts[$translation['articleId']][$translation['languageId']];
+            if ((int) $translation['variantKind'] === 1 && $matchedProductTranslation) {
+                $serializeData = unserialize($matchedProductTranslation['objectdata']);
+                foreach ($translationFields as $key => $field) {
+                    $result[$index][$field] = $serializeData[$key];
                 }
+
+                continue;
             }
+
+            $data = unserialize($matchedProductTranslation['objectdata']);
+            $result[$index]['name'] = $data['txtArtikel'];
+            $result[$index]['description'] = $data['txtshortdescription'];
+            $result[$index]['descriptionLong'] = $data['txtlangbeschreibung'];
+            $result[$index]['metaTitle'] = $data['metaTitle'];
+            $result[$index]['keywords'] = $data['txtkeywords'];
         }
 
         return $result;
