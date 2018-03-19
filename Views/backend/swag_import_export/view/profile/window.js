@@ -60,7 +60,16 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Window', {
             autoLoad: true,
             sorters: [
                 { property: 'name', direction: 'ASC' }
-            ]
+            ],
+            listeners: {
+                load: function(store, records) {
+                    var record = store.findRecord('type', 'customersComplete');
+
+                    if (record) {
+                        store.remove([record]);
+                    }
+                }
+            }
         });
 
         me.items = me.buildItems();
