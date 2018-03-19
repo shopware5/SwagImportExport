@@ -228,6 +228,12 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
                                 id: -1,
                                 name: '{s name=swag_import_export/profile/no_data}No profiles found{/s}'
                             });
+                        } else {
+                            var record = store.findRecord('type', 'customersComplete');
+
+                            if (record) {
+                                store.remove([record]);
+                            }
                         }
                     }
                 }

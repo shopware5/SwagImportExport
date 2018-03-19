@@ -40,6 +40,7 @@ use Shopware\Setup\SwagImportExport\Update\Update01MainMenuItem;
 use Shopware\Setup\SwagImportExport\Update\Update02RemoveForeignKeyConstraint;
 use Shopware\Setup\SwagImportExport\Update\Update03DefaultProfileSupport;
 use Shopware\Setup\SwagImportExport\Update\Update04CreateColumns;
+use Shopware\Setup\SwagImportExport\Update\Update05CreateCustomerCompleteProfile;
 use Shopware\Setup\SwagImportExport\Update\UpdaterInterface;
 
 /**
@@ -235,6 +236,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         );
         $updaters[] = new Update03DefaultProfileSupport($setupContext, $this->get('dbal_connection'), $this->get('snippets'));
         $updaters[] = new Update04CreateColumns($setupContext, $this->get('dbal_connection'));
+        $updaters[] = new Update05CreateCustomerCompleteProfile($setupContext, $this->get('dbal_connection'));
         $updaters[] = new DefaultProfileUpdater($setupContext, $this->get('dbal_connection'), $this->get('snippets'));
 
         $this->registerControllers();

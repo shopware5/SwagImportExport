@@ -155,7 +155,8 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
             stockFilter: me.parameters.stockFilter,
             customFilterDirection: me.parameters.customFilterCombo,
             customFilterValue: me.parameters.filterThanValue,
-            customerStreamId: me.parameters.customerStreamId
+            customerStreamId: me.parameters.customerStreamId,
+            customerId: me.parameters.customerId
         };
     },
 

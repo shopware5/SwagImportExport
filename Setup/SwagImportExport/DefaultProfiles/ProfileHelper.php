@@ -10,7 +10,6 @@ namespace Shopware\Setup\SwagImportExport\DefaultProfiles;
 
 /**
  * Class ProfileHelper
- * @package Shopware\Components\SwagImportExport\Profile
  */
 class ProfileHelper
 {
@@ -39,10 +38,11 @@ class ProfileHelper
             new OrderMainDataProfile(),
             new ArticlePropertiesProfile(),
             new CustomerProfile(),
+            new CustomerCompleteProfile(),
             new ArticleImagesProfile(),
             new TranslationProfile(),
             new AddressProfile(),
-            new OrderProfile()
+            new OrderProfile(),
         ];
     }
 }

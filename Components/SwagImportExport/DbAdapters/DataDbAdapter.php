@@ -19,6 +19,7 @@ interface DataDbAdapter
     const ORDER_ADAPTER = 'orders';
     const MAIN_ORDER_ADAPTER = 'mainOrders';
     const CUSTOMER_ADAPTER = 'customers';
+    const CUSTOMER_COMPLETE_ADAPTER = 'customersComplete';
     const NEWSLETTER_RECIPIENTS_ADAPTER = 'newsletter';
     const TRANSLATION_ADAPTER = 'translations';
     const ADDRESS_ADAPTER = 'addresses';
