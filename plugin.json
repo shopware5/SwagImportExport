@@ -8,10 +8,11 @@
     "link": "http://store.shopware.com",
     "author": "Shopware AG",
 
-    "currentVersion": "2.4.0",
+    "currentVersion": "2.4.1",
 
     "changelog": {
         "de": {
+            "2.4.1": "PT-9051 - Behebt ein Problem beim Export über das Profil 'Komplette Kundendaten';",
             "2.4.0": "PT-8880 - Komplettexport Kundendaten als Profil hinzugefügt",
             "2.3.1": "PT-8328, PT-8329, PT-8331 - Neue Events in ArticlesDbAdapter, CategoryWriter und DbalHelper hinzugefügt;",
             "2.3.0": "PT-8810 - Shopware 5.4 Kompatibilität;",
@@ -40,6 +41,7 @@
             "1.0.1": "Problem mit verschwindendem Import/Export Menü-Eintrag behoben; Weitere ACL-Zugangsberechtigungen hinzugefügt; Korrektur: article.active Verhalten; Korrektur: Artikel-Attribute; Korrektur: Datums- und Zeitimporte"
         },
         "en": {
+            "2.4.1": "PT-9051 - Fix problem when exporting complete customer data;",
             "2.4.0": "PT-8880 - Added profile for complete customer data export",
             "2.3.1": "PT-8328, PT-8329, PT-8331 - Added new events in ArticlesDbAdapter, CategoryWriter and DbalHelper;",
             "2.3.0": "PT-8810 - Shopware 5.4 compatibility",
