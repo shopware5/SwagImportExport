@@ -31,14 +31,9 @@ class CustomerCompleteDbAdapter extends CustomerDbAdapter
     public function getCustomerColumns()
     {
         $columns = [
-            'customer'
+            'customer',
+            'attribute',
         ];
-
-        $attributesSelect = $this->getAttributesFieldsByTableName('s_user_attributes', 'userID', 'attribute', 'attrCustomer');
-
-        if (!empty($attributesSelect)) {
-            $columns = array_merge($columns, $attributesSelect);
-        }
 
         return $columns;
     }
@@ -46,6 +41,7 @@ class CustomerCompleteDbAdapter extends CustomerDbAdapter
     /**
      * @param array $columns
      * @param array $ids
+     *
      * @return \Shopware\Components\Model\QueryBuilder
      */
     public function getBuilder($columns, $ids)
@@ -133,6 +129,9 @@ class CustomerCompleteDbAdapter extends CustomerDbAdapter
             if ($orders[$customer['id']]) {
                 $customer['orders'] = DbAdapterHelper::decodeHtmlEntities($orders[$customer['id']]);
             }
+            if (array_key_exists('attribute', $customer)) {
+                unset($customer['attribute']['id'], $customer['attribute']['customerId']);
+            }
         }
 
         $result['customers'] = DbAdapterHelper::decodeHtmlEntities($customers);
@@ -200,7 +199,7 @@ class CustomerCompleteDbAdapter extends CustomerDbAdapter
             ->where('customer.id IN (:ids)')
             ->setParameter('ids', $ids, Connection::PARAM_INT_ARRAY)
             ->execute()
-            ->fetchAll(\PDO::FETCH_GROUP|\PDO::FETCH_UNIQUE)
+            ->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE)
         ;
     }
 }
