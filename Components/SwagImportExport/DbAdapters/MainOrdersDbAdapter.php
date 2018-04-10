@@ -483,13 +483,14 @@ class MainOrdersDbAdapter implements DataDbAdapter
      */
     private function calculateTaxSum($taxData)
     {
-        if (empty($taxData['taxRate'])) {
+        $taxValue = 0;
+        if (!empty($taxData['taxRate'])) {
+            $taxValue = $taxData['taxRate'];
+        } elseif ($taxData['taxId'] !== null) {
             $taxModel = $this->modelManager->getRepository(Tax::class)->find($taxData['taxId']);
             if ($taxModel && $taxModel->getId() !== 0 && $taxModel->getId() !== null && $taxModel->getTax() !== null) {
                 $taxValue = $taxModel->getTax();
             }
-        } else {
-            $taxValue = $taxData['taxRate'];
         }
 
         $price = $taxData['price'] * $taxData['quantity'];
