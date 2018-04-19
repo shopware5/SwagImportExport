@@ -13,6 +13,7 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\DataManagers\CustomerDataManager;
 use Shopware\Components\SwagImportExport\DataType\CustomerDataType;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
+use Shopware\Components\SwagImportExport\Service\UnderscoreToCamelCaseServiceInterface;
 use Shopware\Components\SwagImportExport\Utils\DataHelper;
 use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
@@ -71,6 +72,11 @@ class CustomerDbAdapter implements DataDbAdapter
      */
     protected $defaultValues = [];
 
+    /**
+     * @var UnderscoreToCamelCaseServiceInterface
+     */
+    private $underscoreToCamelCaseService;
+
     public function __construct()
     {
         $this->manager = Shopware()->Models();
@@ -80,6 +86,7 @@ class CustomerDbAdapter implements DataDbAdapter
         $this->passwordManager = Shopware()->PasswordEncoder();
         $this->config = Shopware()->Config();
         $this->eventManager = Shopware()->Events();
+        $this->underscoreToCamelCaseService = Shopware()->Container()->get('swag_import_export.underscore_camelcase_service');
     }
 
     /**
@@ -503,9 +510,7 @@ class CustomerDbAdapter implements DataDbAdapter
 
         $attributesSelect = [];
         foreach ($columnNames as $attribute) {
-            //underscore to camel case
-            //exmaple: underscore_to_camel_case -> underscoreToCamelCase
-            $attribute = str_replace(' ', '', ucwords(str_replace('_', ' ', $attribute)));
+            $attribute = $this->underscoreToCamelCaseService->underscoreToCamelCase($attribute);
             $attributesSelect[] = sprintf('%s.%s as %s%s', $prefixField, lcfirst($attribute), $prefixSelect, $attribute);
         }
 

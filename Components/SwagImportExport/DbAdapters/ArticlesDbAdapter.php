@@ -1,5 +1,4 @@
 <?php
-
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -25,6 +24,7 @@ use Shopware\Components\SwagImportExport\DbAdapters\Articles\RelationWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\TranslationWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\Results\ArticleWriterResult;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
+use Shopware\Components\SwagImportExport\Service\UnderscoreToCamelCaseServiceInterface;
 use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Utils\SwagVersionHelper;
@@ -95,6 +95,11 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     private $eventManager;
 
+    /**
+     * @var UnderscoreToCamelCaseServiceInterface
+     */
+    private $underscoreToCamelCaseService;
+
     public function __construct()
     {
         $this->db = Shopware()->Container()->get('db');
@@ -102,6 +107,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         $this->mediaService = Shopware()->Container()->get('shopware_media.media_service');
         $this->config = Shopware()->Container()->get('config');
         $this->eventManager = Shopware()->Container()->get('events');
+        $this->underscoreToCamelCaseService = Shopware()->Container()->get('swag_import_export.underscore_camelcase_service');
     }
 
     /**
@@ -569,7 +575,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         if ($attributes) {
             $prefix = 'attribute';
             foreach ($attributes as $attribute) {
-                $attr = $this->underscoreToCamelCase($attribute);
+                $attr = $this->underscoreToCamelCaseService->underscoreToCamelCase($attribute);
 
                 $attributesSelect[] = sprintf('%s.%s as attribute%s', $prefix, $attr, ucwords($attr));
             }
@@ -1574,22 +1580,6 @@ class ArticlesDbAdapter implements DataDbAdapter
                     && $articleWriterResult->getMainDetailId() === $articleWriterResult->getDetailId();
             }
         );
-    }
-
-    /**
-     * @example: underscore_string will result in underscoreString
-     *
-     * @param string $underscoreString
-     *
-     * @return string
-     */
-    private function underscoreToCamelCase($underscoreString)
-    {
-        $func = function ($c) {
-            return strtoupper($c[1]);
-        };
-
-        return lcfirst(preg_replace_callback('/_([a-zA-Z])/', $func, $underscoreString));
     }
 
     /**

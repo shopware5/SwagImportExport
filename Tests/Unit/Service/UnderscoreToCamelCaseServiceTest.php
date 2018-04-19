@@ -5,9 +5,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Shopware\Components\SwagImportExport\DbAdapters\ArticlesDbAdapter;
 
-class ArticlesDbAdapterTest extends \PHPUnit_Framework_TestCase
+namespace SwagImportExport\Tests\Unit\Service;
+
+use Shopware\Components\SwagImportExport\Service\UnderscoreToCamelCaseService;
+
+class UnderscoreToCamelCaseServiceTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider test_underscoreToCamelCase_provider
@@ -17,13 +20,9 @@ class ArticlesDbAdapterTest extends \PHPUnit_Framework_TestCase
      */
     public function test_underscoreToCamelCase($string, $expectedResult)
     {
-        $adapter = $this->getAdapter();
+        $service = new UnderscoreToCamelCaseService();
 
-        $reflectionClass = new ReflectionClass(ArticlesDbAdapter::class);
-        $method = $reflectionClass->getMethod('underscoreToCamelCase');
-        $method->setAccessible(true);
-
-        $result = $method->invoke($adapter, $string);
+        $result = $service->underscoreToCamelCase($string);
 
         $this->assertSame($expectedResult, $result);
     }
@@ -48,13 +47,5 @@ class ArticlesDbAdapterTest extends \PHPUnit_Framework_TestCase
             ['this is a test', 'this is a test'],
             ['one_more_test', 'oneMoreTest'],
         ];
-    }
-
-    /**
-     * @return ArticlesDbAdapter
-     */
-    private function getAdapter()
-    {
-        return new ArticlesDbAdapter();
     }
 }
