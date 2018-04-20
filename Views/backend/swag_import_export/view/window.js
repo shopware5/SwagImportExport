@@ -1,4 +1,6 @@
-//{namespace name=backend/swag_gift_packaging/view/main}
+//{namespace name=backend/swag_import_export/view/main}
+//{block name="backend/swag_import_export/view/main/window"}
+// deprecated since 2.4.2 and will be removed with 3.0.0
 //{block name="backend/swag_gift_packaging/view/main/window"}
 Ext.define('Shopware.apps.SwagImportExport.view.Window', {
 	
@@ -68,4 +70,5 @@ Ext.define('Shopware.apps.SwagImportExport.view.Window', {
         });
     }
 });
+//{/block}
 //{/block}

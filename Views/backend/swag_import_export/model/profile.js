@@ -1,3 +1,5 @@
+//{block name="backend/swag_import_export/model/profile"}
+// deprecated since 2.4.2 and will be removed with 3.0.0
 //{block name="backend/swag_import_export/model/profile_list"}
 Ext.define('Shopware.apps.SwagImportExport.model.Profile', {
 	extend: 'Ext.data.Model',
@@ -14,4 +16,5 @@ Ext.define('Shopware.apps.SwagImportExport.model.Profile', {
 	]
 });
 Ext.data.NodeInterface.decorate('Shopware.apps.SwagImportExport.model.Profile');
+//{/block}
 //{/block}

@@ -1,3 +1,5 @@
+//{block name="backend/swag_import_export/store/parent_key"}
+// deprecated since 2.4.2 and will be removed with 3.0.0
 //{block name="backend/swag_import_export/store/column"}
 Ext.define('Shopware.apps.SwagImportExport.store.ParentKey', {
     /**
@@ -27,4 +29,5 @@ Ext.define('Shopware.apps.SwagImportExport.store.ParentKey', {
         }
     }
 });
+//{/block}
 //{/block}
