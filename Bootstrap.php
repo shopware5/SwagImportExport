@@ -1,12 +1,10 @@
 <?php
-
 /**
  * (c) shopware AG <info@shopware.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\Tools\SchemaTool;
@@ -27,6 +25,7 @@ use Shopware\Components\SwagImportExport\Service\AutoImportServiceInterface;
 use Shopware\Components\SwagImportExport\Service\ExportService;
 use Shopware\Components\SwagImportExport\Service\ImportService;
 use Shopware\Components\SwagImportExport\Service\ProfileService;
+use Shopware\Components\SwagImportExport\Service\UnderscoreToCamelCaseService;
 use Shopware\Components\SwagImportExport\UploadPathProvider;
 use Shopware\Components\SwagImportExport\Utils\FileHelper;
 use Shopware\Setup\SwagImportExport\Exception\MinVersionException;
@@ -612,6 +611,14 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
     }
 
     /**
+     * @return UnderscoreToCamelCaseService
+     */
+    public function registerUnderscoreToCamelCaseService()
+    {
+        return new UnderscoreToCamelCaseService();
+    }
+
+    /**
      * Registers all necessary events.
      */
     protected function registerEvents()
@@ -654,6 +661,11 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         $this->subscribeEvent(
             'Enlight_Bootstrap_InitResource_swag_import_export.auto_importer',
             'registerAutoImportService'
+        );
+
+        $this->subscribeEvent(
+            'Enlight_Bootstrap_InitResource_swag_import_export.underscore_camelcase_service',
+            'registerUnderscoreToCamelCaseService'
         );
 
         $this->subscribeEvent(

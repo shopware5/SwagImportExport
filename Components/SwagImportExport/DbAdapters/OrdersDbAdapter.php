@@ -10,13 +10,14 @@ namespace Shopware\Components\SwagImportExport\DbAdapters;
 
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\QueryBuilder;
+use Shopware\Components\SwagImportExport\Exception\AdapterException;
+use Shopware\Components\SwagImportExport\Service\UnderscoreToCamelCaseServiceInterface;
 use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
-use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Validators\OrderValidator;
 use Shopware\Models\Order\Detail;
-use Shopware\Models\Order\Status;
 use Shopware\Models\Order\DetailStatus;
+use Shopware\Models\Order\Status;
 
 class OrdersDbAdapter implements DataDbAdapter
 {
@@ -45,18 +46,25 @@ class OrdersDbAdapter implements DataDbAdapter
      */
     protected $validator;
 
+    /**
+     * @var UnderscoreToCamelCaseServiceInterface
+     */
+    private $underscoreToCamelCaseService;
+
     public function __construct()
     {
         $this->modelManager = Shopware()->Container()->get('models');
         $this->validator = new OrderValidator();
+        $this->underscoreToCamelCaseService = Shopware()->Container()->get('swag_import_export.underscore_camelcase_service');
     }
 
     /**
      * Returns record ids
      *
-     * @param int $start
-     * @param int $limit
+     * @param int   $start
+     * @param int   $limit
      * @param array $filter
+     *
      * @return array
      */
     public function readRecordIds($start = null, $limit = null, $filter = null)
@@ -118,8 +126,10 @@ class OrdersDbAdapter implements DataDbAdapter
      *
      * @param array $ids
      * @param array $columns
-     * @return array
+     *
      * @throws \Exception
+     *
+     * @return array
      */
     public function read($ids, $columns)
     {
@@ -158,6 +168,7 @@ class OrdersDbAdapter implements DataDbAdapter
      * Update order
      *
      * @param array $records
+     *
      * @throws \Exception
      */
     public function write($records)
@@ -294,6 +305,7 @@ class OrdersDbAdapter implements DataDbAdapter
 
     /**
      * @param $message
+     *
      * @throws \Exception
      */
     public function saveMessage($message)
@@ -348,13 +360,14 @@ class OrdersDbAdapter implements DataDbAdapter
         return [
             [
                 'id' => 'default',
-                'name' => 'default'
-            ]
+                'name' => 'default',
+            ],
         ];
     }
 
     /**
      * @param string $section
+     *
      * @return bool|mixed
      */
     public function getColumns($section)
@@ -445,7 +458,7 @@ class OrdersDbAdapter implements DataDbAdapter
             'billingCountry.isoName as billingCountryen',
             'billingCountry.iso as billingCountryIso',
             'billing.additionalAddressLine1 as billingAdditionalAddressLine1',
-            'billing.additionalAddressLine2 as billingAdditionalAddressLine2'
+            'billing.additionalAddressLine2 as billingAdditionalAddressLine2',
         ];
 
         $columns = array_merge($columns, $billingColumns);
@@ -463,7 +476,7 @@ class OrdersDbAdapter implements DataDbAdapter
             'shippingCountry.isoName as shippingCountryIsoName',
             'shippingCountry.iso as shippingCountryIso',
             'shipping.additionalAddressLine1 as shippingAdditionalAddressLine1',
-            'shipping.additionalAddressLine2 as shippingAdditionalAddressLine2'
+            'shipping.additionalAddressLine2 as shippingAdditionalAddressLine2',
         ];
 
         $columns = array_merge($columns, $shippingColumns);
@@ -472,7 +485,7 @@ class OrdersDbAdapter implements DataDbAdapter
             'customer.email as email',
             'customer.groupKey as customergroup',
             'customer.newsletter as newsletter',
-            'customer.affiliate as affiliate'
+            'customer.affiliate as affiliate',
         ];
 
         $columns = array_merge($columns, $customerColumns);
@@ -487,8 +500,9 @@ class OrdersDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @return array|string
      * @throws \Zend_Db_Statement_Exception
+     *
+     * @return array|string
      */
     private function getAttributes()
     {
@@ -505,9 +519,7 @@ class OrdersDbAdapter implements DataDbAdapter
             $prefix = 'attr';
             $attributesSelect = [];
             foreach ($attributes as $attribute) {
-                //underscore to camel case
-                //exmaple: underscore_to_camel_case -> underscoreToCamelCase
-                $catAttr = lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $attribute))));
+                $catAttr = $this->underscoreToCamelCaseService->underscoreToCamelCase($attribute);
 
                 $attributesSelect[] = sprintf('%s.%s as attribute%s', $prefix, $catAttr, ucwords($catAttr));
             }
@@ -519,6 +531,7 @@ class OrdersDbAdapter implements DataDbAdapter
     /**
      * @param $columns
      * @param $ids
+     *
      * @return QueryBuilder
      */
     private function getBuilder($columns, $ids)
@@ -526,7 +539,7 @@ class OrdersDbAdapter implements DataDbAdapter
         $builder = $this->modelManager->createQueryBuilder();
 
         $builder->select($columns)
-            ->from(Detail::class , 'details')
+            ->from(Detail::class, 'details')
             ->leftJoin('details.order', 'orders')
             ->leftJoin('details.tax', 'taxes')
             ->leftJoin('orders.billing', 'billing')
