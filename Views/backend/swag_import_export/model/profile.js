@@ -1,4 +1,4 @@
-//{block name="backend/swag_import_export/model/profile_list"}
+//{block name="backend/swag_import_export/model/profile"}
 Ext.define('Shopware.apps.SwagImportExport.model.Profile', {
 	extend: 'Ext.data.Model',
 	fields: [

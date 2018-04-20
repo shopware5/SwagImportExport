@@ -1,5 +1,5 @@
 //{namespace name=backend/swag_import_export/view/session}
-//{block name="backend/swag_import_export/view/manager/manager"}
+//{block name="backend/swag_import_export/view/log/log"}
 Ext.define('Shopware.apps.SwagImportExport.view.log.Log', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.swag-import-export-log-log',

@@ -1,5 +1,5 @@
 //{namespace name=backend/swag_import_export/view/main}
-//{block name="backend/swag_import_export/view/manager/window/export"}
+//{block name="backend/swag_import_export/view/manager/window/import"}
 Ext.define('Shopware.apps.SwagImportExport.view.manager.window.Import', {
     /**
      * Define that the order main window is an extension of the enlight application window

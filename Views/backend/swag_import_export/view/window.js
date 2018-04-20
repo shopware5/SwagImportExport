@@ -1,5 +1,5 @@
-//{namespace name=backend/swag_gift_packaging/view/main}
-//{block name="backend/swag_gift_packaging/view/main/window"}
+//{namespace name=backend/swag_import_export/view/main}
+//{block name="backend/swag_import_export/view/main/window"}
 Ext.define('Shopware.apps.SwagImportExport.view.Window', {
 	
     /**
