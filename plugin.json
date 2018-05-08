@@ -8,10 +8,11 @@
     "link": "http://store.shopware.com",
     "author": "Shopware AG",
 
-    "currentVersion": "2.4.1",
+    "currentVersion": "2.4.2",
 
     "changelog": {
         "de": {
+            "2.4.2": "PT-7985 - Problem bei Attribut-Importen behoben; PT-8357 - Blocknamen im Backendmodul korrigiert; PT-8661 - Verbessert die Kompatibilität mit Header Modifizierungen bei Export-Downloads; ",
             "2.4.1": "PT-9051 - Behebt ein Problem beim Export über das Profil 'Komplette Kundendaten';",
             "2.4.0": "PT-8880 - Komplettexport Kundendaten als Profil hinzugefügt",
             "2.3.1": "PT-8328, PT-8329, PT-8331 - Neue Events in ArticlesDbAdapter, CategoryWriter und DbalHelper hinzugefügt;",
@@ -41,6 +42,7 @@
             "1.0.1": "Problem mit verschwindendem Import/Export Menü-Eintrag behoben; Weitere ACL-Zugangsberechtigungen hinzugefügt; Korrektur: article.active Verhalten; Korrektur: Artikel-Attribute; Korrektur: Datums- und Zeitimporte"
         },
         "en": {
+            "2.4.2": "PT-7985 - Fix problem with attribute imports; PT-8357 - Fix block names in backend module; PT-8661 - Improves compatibility with header modifications when downloading exports; ",
             "2.4.1": "PT-9051 - Fix problem when exporting complete customer data;",
             "2.4.0": "PT-8880 - Added profile for complete customer data export",
             "2.3.1": "PT-8328, PT-8329, PT-8331 - Added new events in ArticlesDbAdapter, CategoryWriter and DbalHelper;",
