@@ -170,6 +170,22 @@ class NewsletterRecipientProfile implements \JsonSerializable, ProfileMetaData
                     'name' => 'userID',
                     'shopwareField' => 'userID',
                 ],
+            11 =>
+                [
+                    'id' => '53e4b15bde9ff',
+                    'type' => 'leaf',
+                    'index' => 12,
+                    'name' => 'added',
+                    'shopwareField' => 'added',
+                ],
+            12 =>
+                [
+                    'id' => '53e4b15bde9fe',
+                    'type' => 'leaf',
+                    'index' => 13,
+                    'name' => 'doubleOptinConfirmed',
+                    'shopwareField' => 'doubleOptinConfirmed',
+                ],
         ];
     }
 }
