@@ -94,6 +94,8 @@ class NewsletterDbAdapter implements DataDbAdapter
             'na.lastNewsletterId as lastNewsletter',
             'na.lastReadId as lastRead',
             'c.id as userID',
+            'DATE_FORMAT(na.added, \'%Y-%m-%d %H:%i:%s\') as added',
+            'DATE_FORMAT(na.doubleOptinConfirmed, \'%Y-%m-%d %H:%i:%s\') as doubleOptinConfirmed'
         ];
 
         //removes street number for shopware 5
@@ -151,7 +153,6 @@ class NewsletterDbAdapter implements DataDbAdapter
     public function read($ids, $columns)
     {
         $builder = $this->getBuilder($columns, $ids);
-
         $result['default'] = $builder->getQuery()->getArrayResult();
 
         return $result;
@@ -313,6 +314,8 @@ class NewsletterDbAdapter implements DataDbAdapter
             'groupId' => 'groupId',
             'lastRead' => 'lastReadId',
             'lastNewsletter' => 'lastMailingId',
+            'added' => 'added',
+            'doubleOptinConfirmed' => 'doubleOptinConfirmed',
         ];
 
         $newsletterAddress = [];
