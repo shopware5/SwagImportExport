@@ -46,7 +46,7 @@ class ImportService extends AbstractImportExportService implements ImportService
         $serviceHelpers = $this->buildServiceHelpers($requestData);
 
         // set default batchsize for adapter
-        $requestData['batchSize'] = $serviceHelpers->getProfile()->getType() === 'articlesImages' ? 1 : 50;
+        $requestData['batchSize'] = $serviceHelpers->getProfile()->getType() === 'articlesImages' ? 1 : Shopware()->Config()->getByNamespace('SwagImportExport', 'batch-size');
 
         $this->initializeDataIO($serviceHelpers->getDataIO(), $requestData);
 
