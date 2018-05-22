@@ -117,7 +117,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             $response->setHeader('Content-Type', $application);
             $response->sendHeaders();
 
-            echo file_get_contents($filePath);
+            readfile($filePath);
             exit();
         } catch (\Exception $e) {
             $this->View()->assign(
