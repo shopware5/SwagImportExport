@@ -116,6 +116,7 @@ class CustomerCompleteDbAdapter extends CustomerDbAdapter
         $customerIds = array_column($customers, 'id');
         $addresses = $this->getAddresses($customerIds);
         $orders = $this->getCustomerOrders($customerIds);
+
         $newsletterRecipients = $this->getNewsletterRecipients($customerIds);
 
         foreach ($customers as &$customer) {
@@ -167,7 +168,7 @@ class CustomerCompleteDbAdapter extends CustomerDbAdapter
     {
         $builder = $this->manager->createQueryBuilder();
 
-        return $builder->from(Order::class, 'o', 'o.customerId')
+        $orders = $builder->from(Order::class, 'o')
             ->select(['o', 'attr', 'partial payment.{id, name, description}', 'paymentStatus', 'orderStatus', 'details', 'detailAttr', 'billingAddress', 'shippingAddress'])
             ->leftJoin('o.details', 'details')
             ->leftJoin('details.attribute', 'detailAttr')
@@ -182,6 +183,16 @@ class CustomerCompleteDbAdapter extends CustomerDbAdapter
             ->getQuery()
             ->getArrayResult()
         ;
+
+        $indexedOrders = [];
+        foreach ($orders as $order) {
+            if (!array_key_exists($order['customerId'], $indexedOrders)) {
+                $indexedOrders[$order['customerId']] = [];
+            }
+            $indexedOrders[$order['customerId']][] = $order;
+        }
+
+        return $indexedOrders;
     }
 
     /**
