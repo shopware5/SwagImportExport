@@ -8,10 +8,11 @@
     "link": "http://store.shopware.com",
     "author": "Shopware AG",
 
-    "currentVersion": "2.4.3",
+    "currentVersion": "2.4.4",
 
     "changelog": {
         "de": {
+            "2.4.4": "PT-9240 - Kunden komplett Profile berücksichtigt nun alle Bestellungen des Kunden;",
             "2.4.3": "PT-9191 - Double-Opt-in Registrierungs- und Verfizierungsdaten wurden zu den Newsletter-Informationen hinzugefügt;",
             "2.4.2": "PT-7985 - Problem bei Attribut-Importen behoben; PT-8357 - Blocknamen im Backendmodul korrigiert; PT-8661 - Verbessert die Kompatibilität mit Header Modifizierungen bei Export-Downloads; ",
             "2.4.1": "PT-9051 - Behebt ein Problem beim Export über das Profil 'Komplette Kundendaten';",
@@ -43,6 +44,7 @@
             "1.0.1": "Problem mit verschwindendem Import/Export Menü-Eintrag behoben; Weitere ACL-Zugangsberechtigungen hinzugefügt; Korrektur: article.active Verhalten; Korrektur: Artikel-Attribute; Korrektur: Datums- und Zeitimporte"
         },
         "en": {
+            "2.4.4": "PT-9240 - Customer complete profile considers now every order of the customer;",
             "2.4.3": "PT-9191 - Added Double-Opt-In register and confirmation dates to newsletter information;",
             "2.4.2": "PT-7985 - Fix problem with attribute imports; PT-8357 - Fix block names in backend module; PT-8661 - Improves compatibility with header modifications when downloading exports; ",
             "2.4.1": "PT-9051 - Fix problem when exporting complete customer data;",
