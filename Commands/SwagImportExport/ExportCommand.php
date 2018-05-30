@@ -63,12 +63,12 @@ class ExportCommand extends ShopwareCommand
         if (SwagVersionHelper::hasMinimumVersion('5.3.0')) {
             $this->addOption('customerstream', 'u', InputOption::VALUE_OPTIONAL, 'Which customer stream id?');
         }
-        $this->addOption('format', 'f', InputOption::VALUE_OPTIONAL, 'What is the format of the imported file - XML or CSV?')
+        $this->addOption('format', 'f', InputOption::VALUE_OPTIONAL, 'What is the format of the exported file - XML or CSV?')
             ->addOption('exportVariants', 'x', InputOption::VALUE_NONE, 'Should the variants be exported?')
             ->addOption('offset', 'o', InputOption::VALUE_OPTIONAL, 'What is the offset?')
             ->addOption('limit', 'l', InputOption::VALUE_OPTIONAL, 'What is the limit?')
             ->addOption('category', 'c', InputOption::VALUE_OPTIONAL, 'Provide a category ID')
-            ->setHelp('The <info>%command.name%</info> imports data from a file.');
+            ->setHelp('The <info>%command.name%</info> exports data to a file.');
     }
 
     /**
