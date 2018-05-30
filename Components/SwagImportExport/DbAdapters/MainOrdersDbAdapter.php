@@ -10,6 +10,7 @@ namespace Shopware\Components\SwagImportExport\DbAdapters;
 
 use Enlight_Components_Db_Adapter_Pdo_Mysql;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Model\QueryBuilder;
 use Shopware\Components\SwagImportExport\Service\UnderscoreToCamelCaseServiceInterface;
 use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
@@ -32,6 +33,7 @@ class MainOrdersDbAdapter implements DataDbAdapter
      * @var string
      */
     protected $logState;
+
     /**
      * @var ModelManager
      */
@@ -70,7 +72,7 @@ class MainOrdersDbAdapter implements DataDbAdapter
         /* @var \Doctrine\DBAL\Query\QueryBuilder */
         $builder = $connection->createQueryBuilder();
         $builder->select('id')
-                ->from('s_order');
+            ->from('s_order');
 
         if (isset($filter['orderstate']) && is_numeric($filter['orderstate'])) {
             $builder->andWhere('status = :orderstate');
@@ -119,7 +121,7 @@ class MainOrdersDbAdapter implements DataDbAdapter
      * @param $ids
      * @param $columns
      *
-     * @throws \Exception
+     * @throws \RuntimeException
      *
      * @return array
      */
@@ -130,7 +132,7 @@ class MainOrdersDbAdapter implements DataDbAdapter
                 'adapters/orders/no_ids',
                 'Can not read orders without ids.'
             );
-            throw new \Exception($message);
+            throw new \RuntimeException($message);
         }
 
         if (!$columns) {
@@ -138,7 +140,7 @@ class MainOrdersDbAdapter implements DataDbAdapter
                 'adapters/orders/no_column_names',
                 'Can not read orders without column names.'
             );
-            throw new \Exception($message);
+            throw new \RuntimeException($message);
         }
 
         $result = [];
@@ -259,8 +261,7 @@ class MainOrdersDbAdapter implements DataDbAdapter
             return '';
         }
 
-        unset($attributes['id']);
-        unset($attributes['orderID']);
+        unset($attributes['id'], $attributes['orderID']);
         $attributes = array_keys($attributes);
 
         $prefix = 'attr';
@@ -277,13 +278,13 @@ class MainOrdersDbAdapter implements DataDbAdapter
     /**
      * @param $records
      *
-     * @throws \Exception
+     * @throws \RuntimeException
      */
     public function write($records)
     {
         $message = SnippetsHelper::getNamespace()
             ->get('adapters/mainOrders/use_order_profile_for_import', 'This is only an export profile. Please use `Orders` profile for imports!');
-        throw new \Exception($message);
+        throw new \RuntimeException($message);
     }
 
     /**
@@ -295,15 +296,15 @@ class MainOrdersDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $message
+     * @param string $message
      *
-     * @throws \Exception
+     * @throws \RuntimeException
      */
     public function saveMessage($message)
     {
         $errorMode = Shopware()->Config()->get('SwagImportExportErrorMode');
         if ($errorMode === false) {
-            throw new \Exception($message);
+            throw new \RuntimeException($message);
         }
 
         $this->setLogMessages($message);
@@ -319,7 +320,7 @@ class MainOrdersDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param array $logMessages
+     * @param string $logMessages
      */
     public function setLogMessages($logMessages)
     {
@@ -335,7 +336,7 @@ class MainOrdersDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $logState
+     * @param string $logState
      */
     public function setLogState($logState)
     {
@@ -380,7 +381,7 @@ class MainOrdersDbAdapter implements DataDbAdapter
      * @param array $columns
      * @param array $ids
      *
-     * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
+     * @return QueryBuilder
      */
     public function getOrderBuilder($columns, $ids)
     {
@@ -410,7 +411,7 @@ class MainOrdersDbAdapter implements DataDbAdapter
     /**
      * @param array $ids
      *
-     * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
+     * @return QueryBuilder
      */
     public function getTaxSumBuilder($ids)
     {
@@ -492,10 +493,6 @@ class MainOrdersDbAdapter implements DataDbAdapter
     /**
      * @param array $taxData
      *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
-     *
      * @return float
      */
     private function calculateTaxSum($taxData)
@@ -504,9 +501,14 @@ class MainOrdersDbAdapter implements DataDbAdapter
         if (!empty($taxData['taxRate'])) {
             $taxValue = $taxData['taxRate'];
         } elseif ($taxData['taxId'] !== null) {
+            /** @var Tax $taxModel */
             $taxModel = $this->modelManager->getRepository(Tax::class)->find($taxData['taxId']);
-            if ($taxModel && $taxModel->getId() !== 0 && $taxModel->getId() !== null && $taxModel->getTax() !== null) {
-                $taxValue = $taxModel->getTax();
+            if ($taxModel !== null) {
+                $taxId = $taxModel->getId();
+                $tax = $taxModel->getTax();
+                if ($taxId !== 0 && $taxId !== null && $tax !== null) {
+                    $taxValue = $tax;
+                }
             }
         }
 
