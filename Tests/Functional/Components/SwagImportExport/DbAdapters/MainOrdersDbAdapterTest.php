@@ -79,6 +79,51 @@ class MainOrdersDbAdapterTest extends TestCase
         $this->assertEquals($exportedOrders['taxRateSum'][0]['taxRate'], 19);
     }
 
+    public function test_read_should_export_correct_result_without_tax_id()
+    {
+        // Set the tax ID and rate of a single order detail to null and zero, respectively
+        $orderDetailId = 44;
+        $db = Shopware()->Container()->get('db');
+        $db->query(
+            'UPDATE s_order_details
+            SET taxID = NULL, tax_rate = 0
+            WHERE id = :orderDetailId',
+            [
+                'orderDetailId' => $orderDetailId,
+            ]
+        );
+
+        $ids = [15];
+        $mainOrdersDbAdapter = $this->createMainOrdersDbAdapter();
+        $columns = $mainOrdersDbAdapter->getDefaultColumns();
+        $exportedOrders = $mainOrdersDbAdapter->read($ids, $columns);
+
+        // Check order details
+        $this->assertEquals(15, $exportedOrders['order'][0]['orderId']);
+        $this->assertEquals('20001', $exportedOrders['order'][0]['orderNumber']);
+        $this->assertEquals(998.56, $exportedOrders['order'][0]['invoiceAmount']);
+        $this->assertEquals(839.13, $exportedOrders['order'][0]['invoiceAmountNet']);
+
+        // Check order tax details
+        $this->assertCount(2, $exportedOrders['taxRateSum']);
+        $this->assertEquals(15, $exportedOrders['taxRateSum'][0]['orderId']);
+        $this->assertEquals(0, $exportedOrders['taxRateSum'][0]['taxRate']);
+        $this->assertEquals(0, $exportedOrders['taxRateSum'][0]['taxRateSums']);
+        $this->assertEquals(15, $exportedOrders['taxRateSum'][1]['orderId']);
+        $this->assertEquals(19, $exportedOrders['taxRateSum'][1]['taxRate']);
+        $this->assertEquals(158.49, $exportedOrders['taxRateSum'][1]['taxRateSums']);
+
+        // Revert the changes made to the order detail
+        $db->query(
+            'UPDATE s_order_details
+            SET taxID = 1, tax_rate = 19
+            WHERE id = :orderDetailId',
+            [
+                'orderDetailId' => $orderDetailId,
+            ]
+        );
+    }
+
     /**
      * @return MainOrdersDbAdapter
      */
