@@ -8,10 +8,11 @@
     "link": "http://store.shopware.com",
     "author": "Shopware AG",
 
-    "currentVersion": "2.4.4",
+    "currentVersion": "2.4.5",
 
     "changelog": {
         "de": {
+            "2.4.5": "PT-9090 - Fehler beim Export von Bestellungen behoben, wenn keine gültige Steuer hinterlegt ist; PT-9243 - Hilfetext für CLI-Command korrigiert;",
             "2.4.4": "PT-9240 - Kunden komplett Profile berücksichtigt nun alle Bestellungen des Kunden;",
             "2.4.3": "PT-9191 - Double-Opt-in Registrierungs- und Verfizierungsdaten wurden zu den Newsletter-Informationen hinzugefügt;",
             "2.4.2": "PT-7985 - Problem bei Attribut-Importen behoben; PT-8357 - Blocknamen im Backendmodul korrigiert; PT-8661 - Verbessert die Kompatibilität mit Header Modifizierungen bei Export-Downloads; ",
@@ -44,6 +45,7 @@
             "1.0.1": "Problem mit verschwindendem Import/Export Menü-Eintrag behoben; Weitere ACL-Zugangsberechtigungen hinzugefügt; Korrektur: article.active Verhalten; Korrektur: Artikel-Attribute; Korrektur: Datums- und Zeitimporte"
         },
         "en": {
+            "2.4.5": "PT-9090 - Fix error on export of orders, if a non valid tax is set; PT-9243 - Fix help text for CLI command;",
             "2.4.4": "PT-9240 - Customer complete profile considers now every order of the customer;",
             "2.4.3": "PT-9191 - Added Double-Opt-In register and confirmation dates to newsletter information;",
             "2.4.2": "PT-7985 - Fix problem with attribute imports; PT-8357 - Fix block names in backend module; PT-8661 - Improves compatibility with header modifications when downloading exports; ",
