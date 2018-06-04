@@ -30,12 +30,10 @@ class CustomerCompleteDbAdapter extends CustomerDbAdapter
      */
     public function getCustomerColumns()
     {
-        $columns = [
+        return [
             'customer',
             'attribute',
         ];
-
-        return $columns;
     }
 
     /**
@@ -78,11 +76,9 @@ class CustomerCompleteDbAdapter extends CustomerDbAdapter
             $query->setMaxResults($limit);
         }
 
-        if (SwagVersionHelper::hasMinimumVersion('5.4.0')) {
-            if (array_key_exists('customerId', $filter)) {
-                $query->andWhere('customer.id = :customerId');
-                $query->setParameter('customerId', $filter['customerId']);
-            }
+        if (SwagVersionHelper::hasMinimumVersion('5.4.0') && array_key_exists('customerId', $filter)) {
+            $query->andWhere('customer.id = :customerId');
+            $query->setParameter('customerId', $filter['customerId']);
         }
 
         $ids = $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
@@ -134,6 +130,7 @@ class CustomerCompleteDbAdapter extends CustomerDbAdapter
                 unset($customer['attribute']['id'], $customer['attribute']['customerId']);
             }
         }
+        unset($customer);
 
         $result['customers'] = DbAdapterHelper::decodeHtmlEntities($customers);
 
@@ -169,7 +166,17 @@ class CustomerCompleteDbAdapter extends CustomerDbAdapter
         $builder = $this->manager->createQueryBuilder();
 
         $orders = $builder->from(Order::class, 'o')
-            ->select(['o', 'attr', 'partial payment.{id, name, description}', 'paymentStatus', 'orderStatus', 'details', 'detailAttr', 'billingAddress', 'shippingAddress'])
+            ->select([
+                'o',
+                'attr',
+                'partial payment.{id, name, description}',
+                'paymentStatus',
+                'orderStatus',
+                'details',
+                'detailAttr',
+                'billingAddress',
+                'shippingAddress',
+            ])
             ->leftJoin('o.details', 'details')
             ->leftJoin('details.attribute', 'detailAttr')
             ->leftJoin('o.billing', 'billingAddress')
@@ -186,6 +193,15 @@ class CustomerCompleteDbAdapter extends CustomerDbAdapter
 
         $indexedOrders = [];
         foreach ($orders as $order) {
+            /** @var \DateTime $orderTime */
+            $orderTime = $order['orderTime'];
+            $order['orderTime'] = $orderTime->format('Y-m-d H:i:s');
+            foreach ($order['details'] as &$detail) {
+                /** @var \DateTime $releaseDate */
+                $releaseDate = $detail['releaseDate'];
+                $detail['releaseDate'] = $releaseDate->format('Y-m-d H:i:s');
+            }
+            unset($detail);
             if (!array_key_exists($order['customerId'], $indexedOrders)) {
                 $indexedOrders[$order['customerId']] = [];
             }
