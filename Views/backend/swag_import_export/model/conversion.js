@@ -1,4 +1,4 @@
-//{block name="backend/swag_import_export/model/conversion"}
+// {block name="backend/swag_import_export/model/conversion"}
 Ext.define('Shopware.apps.SwagImportExport.model.Conversion', {
     extend: 'Ext.data.Model',
     fields: [
@@ -9,4 +9,4 @@ Ext.define('Shopware.apps.SwagImportExport.model.Conversion', {
         { name: 'importConversion', type: 'string' }
     ]
 });
-//{/block}
+// {/block}

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -11,14 +10,14 @@
  * Shopware ImportExport Plugin
  *
  * @category  Shopware
- * @package   Shopware\Components\Console\Command
+ *
  * @copyright Copyright (c) 2014, shopware AG (http://www.shopware.de)
  */
 
 namespace Shopware\CustomModels\ImportExport;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Session Model
@@ -32,7 +31,7 @@ class Expression extends ModelEntity
     /**
      * Primary Key - autoincrement value
      *
-     * @var int $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -49,26 +48,25 @@ class Expression extends ModelEntity
     protected $profile;
 
     /**
-     * @var string $variable
+     * @var string
      *
      * @ORM\Column(name="variable", type="string", length=200)
      */
     protected $variable;
 
     /**
-     * @var string $exportConversion
+     * @var string
      *
      * @ORM\Column(name="export_conversion", type="text")
      */
     protected $exportConversion;
 
     /**
-     * @var string $importConversion
+     * @var string
      *
      * @ORM\Column(name="import_conversion", type="text")
      */
     protected $importConversion;
-
 
     /**
      * @return int
@@ -122,6 +120,7 @@ class Expression extends ModelEntity
      * Sets the profile object.
      *
      * @param Profile $profile
+     *
      * @return Expression
      */
     public function setProfile(Profile $profile = null)
@@ -133,6 +132,7 @@ class Expression extends ModelEntity
 
     /**
      * @param string $exportConversion
+     *
      * @return Expression
      */
     public function setExportConversion($exportConversion)
@@ -144,6 +144,7 @@ class Expression extends ModelEntity
 
     /**
      * @param string $importConversion
+     *
      * @return Expression
      */
     public function setImportConversion($importConversion)
@@ -155,6 +156,7 @@ class Expression extends ModelEntity
 
     /**
      * @param string $variable
+     *
      * @return Expression
      */
     public function setVariable($variable)

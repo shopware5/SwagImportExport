@@ -18,7 +18,13 @@ class CsvConverter
         'escaped_fieldmark' => '""', 'newline' => "\n", 'escaped_newline' => '',
     ];
 
-    public function encode($array, $keys = [])
+    /**
+     * @param array $array
+     * @param array $keys
+     *
+     * @return string
+     */
+    public function encode($array, array $keys = [])
     {
         if (!is_array($keys) || !count($keys)) {
             $keys = array_keys(current($array));
@@ -31,10 +37,17 @@ class CsvConverter
         return $csv;
     }
 
-    public function encode_stream($array, $keys = [], &$stream = null)
+    /**
+     * @param array $array
+     * @param array $keys
+     * @param null  $stream
+     *
+     * @return bool
+     */
+    public function encode_stream($array, array $keys = [], &$stream = null)
     {
         if (empty($stream)) {
-            $stream = fopen('php://output', 'w');
+            $stream = fopen('php://output', 'wb');
         }
         if (!is_array($keys) || !count($keys)) {
             $keys = array_keys(current($array));
@@ -46,6 +59,11 @@ class CsvConverter
         return true;
     }
 
+    /**
+     * @param array $array
+     *
+     * @return array
+     */
     public function get_all_keys($array)
     {
         $keys = [];
@@ -58,6 +76,12 @@ class CsvConverter
         return $keys;
     }
 
+    /**
+     * @param $line
+     * @param $keys
+     *
+     * @return string
+     */
     public function _encode_line($line, $keys)
     {
         $csv = '';
@@ -75,7 +99,7 @@ class CsvConverter
                     ) !== false || strpos($line[$key], $this->sSettings['separator']) !== false
                 ) {
                     $csv .= $fieldmark;
-                    if ($this->sSettings['encoding'] == 'UTF-8') {
+                    if ($this->sSettings['encoding'] === 'UTF-8') {
                         $line[$key] = utf8_decode($line[$key]);
                     }
                     if (!empty($fieldmark)) {
@@ -100,11 +124,17 @@ class CsvConverter
         return $csv;
     }
 
-    public function decode($csv, $keys = [])
+    /**
+     * @param       $csv
+     * @param array $keys
+     *
+     * @return array
+     */
+    public function decode($csv, array $keys = [])
     {
         $csv = file_get_contents($csv);
 
-        if ($this->sSettings['encoding'] == 'UTF-8') {
+        if ($this->sSettings['encoding'] === 'UTF-8') {
             $csv = utf8_decode($csv);
         }
 
@@ -144,6 +174,11 @@ class CsvConverter
         return $array;
     }
 
+    /**
+     * @param $line
+     *
+     * @return array
+     */
     public function _decode_line($line)
     {
         $fieldmark = $this->sSettings['fieldmark'];
@@ -174,6 +209,11 @@ class CsvConverter
         return $tmp_elements;
     }
 
+    /**
+     * @param $csv
+     *
+     * @return array
+     */
     public function _split_line($csv)
     {
         $lines = [];

@@ -168,19 +168,15 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
     /**
      * @param $records
      *
-     * @throws AdapterException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
      * @throws \Enlight_Event_Exception
-     * @throws \Exception
+     * @throws \RuntimeException
      */
     public function write($records)
     {
         if (empty($records['default'])) {
             $message = SnippetsHelper::getNamespace()
                 ->get('adapters/articlesTranslations/no_records', 'No article translation records were found.');
-            throw new \Exception($message);
+            throw new \RuntimeException($message);
         }
 
         $records = $this->eventManager->filter(

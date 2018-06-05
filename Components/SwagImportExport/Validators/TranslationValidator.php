@@ -8,15 +8,15 @@
 
 namespace Shopware\Components\SwagImportExport\Validators;
 
-use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
+use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 
 class TranslationValidator extends Validator
 {
-    public static $mapper = array(
-        'string' => array('name', 'baseName', 'objectType', 'description'), //TODO: maybe we don't need to check fields which contains string?
-        'int' => array('objectKey', 'languageId'),
-    );
+    public static $mapper = [
+        'string' => ['name', 'baseName', 'objectType', 'description'], //TODO: maybe we don't need to check fields which contains string?
+        'int' => ['objectKey', 'languageId'],
+    ];
 
     /**
      * Indexed by field name
@@ -35,6 +35,7 @@ class TranslationValidator extends Validator
      * Checks whether required fields are filled-in
      *
      * @param array $record
+     *
      * @throws AdapterException
      */
     public function checkRequiredFields($record)

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -11,48 +10,71 @@ namespace Shopware\Components\SwagImportExport\Profile;
 
 /**
  * Class Profile
- *
- * @package Shopware\Components\SwagImportExport\Profile
  */
 class Profile
 {
-    /** @var  $profileEntity \Shopware\CustomModels\ImportExport\Profile */
+    /** @var $profileEntity \Shopware\CustomModels\ImportExport\Profile */
     private $profileEntity;
-    
+
     /** @var array $configNames */
     private $configNames;
 
     /**
      * @var array
      */
-    private $defaultValues = array();
+    private $defaultValues = [];
 
-    public function __construct($profile, array $configNames = array())
+    /**
+     * Profile constructor.
+     *
+     * @param       $profile
+     * @param array $configNames
+     */
+    public function __construct($profile, array $configNames = [])
     {
         $this->profileEntity = $profile;
-        $this->configNames = $configNames ?: array('exportConversion', 'tree', 'decimals');
+        $this->configNames = $configNames ?: ['exportConversion', 'tree', 'decimals'];
     }
 
+    /**
+     * @return int
+     */
     public function getId()
     {
         return $this->profileEntity->getId();
     }
 
+    /**
+     * @return string
+     */
     public function getType()
     {
         return $this->profileEntity->getType();
     }
-    
+
+    /**
+     * @return string
+     */
     public function getName()
     {
         return $this->profileEntity->getName();
     }
 
+    /**
+     * @return array
+     */
     public function getConfigNames()
     {
         return $this->configNames;
     }
 
+    /**
+     * @param $name
+     *
+     * @throws \RuntimeException
+     *
+     * @return array|\Shopware\CustomModels\ImportExport\Expression[]|string
+     */
     public function getConfig($name)
     {
         switch ($name) {
@@ -63,10 +85,16 @@ class Profile
             case 'decimals':
                 return [Shopware()->Plugins()->Backend()->SwagImportExport()->Config(), $this];
             default:
-                throw new \Exception('Config does not exists');
+                throw new \RuntimeException('Config does not exists');
         }
     }
 
+    /**
+     * @param $name
+     * @param $value
+     *
+     * @throws \RuntimeException
+     */
     public function setConfig($name, $value)
     {
         switch ($name) {
@@ -74,24 +102,40 @@ class Profile
                 $this->profileEntity->setTree($value);
                 break;
             default:
-                throw new \Exception('Config does not exists');
+                throw new \RuntimeException('Config does not exists');
         }
     }
-    
+
+    /**
+     * @return \Shopware\CustomModels\ImportExport\Profile
+     */
     public function getEntity()
     {
         return $this->profileEntity;
     }
-    
+
     public function persist()
     {
         Shopware()->Models()->persist($this->profileEntity);
     }
 
     /**
+     * Return list with default fields and values for current profile
+     *
+     * @param array $tree profile tree
+     *
+     * @return array
+     */
+    public function getDefaultValues($tree)
+    {
+        return $this->getDefaultFields($tree);
+    }
+
+    /**
      * Check if current node have default value
      *
      * @param array $node
+     *
      * @return array
      */
     private function getDefaultFields($node)
@@ -109,16 +153,5 @@ class Profile
         }
 
         return $this->defaultValues;
-    }
-
-    /**
-     * Return list with default fields and values for current profile
-     *
-     * @param array $tree profile tree
-     * @return array
-     */
-    public function getDefaultValues($tree)
-    {
-        return $this->getDefaultFields($tree);
     }
 }

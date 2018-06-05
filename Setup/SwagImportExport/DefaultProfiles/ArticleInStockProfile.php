@@ -13,7 +13,7 @@ use Shopware\Components\SwagImportExport\DbAdapters\DataDbAdapter;
 class ArticleInStockProfile implements \JsonSerializable, ProfileMetaData
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getAdapter()
     {
@@ -21,7 +21,7 @@ class ArticleInStockProfile implements \JsonSerializable, ProfileMetaData
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -29,7 +29,7 @@ class ArticleInStockProfile implements \JsonSerializable, ProfileMetaData
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getDescription()
     {
@@ -37,7 +37,7 @@ class ArticleInStockProfile implements \JsonSerializable, ProfileMetaData
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {
@@ -57,9 +57,9 @@ class ArticleInStockProfile implements \JsonSerializable, ProfileMetaData
                             'name' => 'HeaderChild',
                             'index' => 0,
                             'type' => 'node',
-                            'shopwareField' => ''
-                        ]
-                    ]
+                            'shopwareField' => '',
+                        ],
+                    ],
                 ],
                 1 => [
                     'id' => '537359399c8b7',
@@ -76,12 +76,12 @@ class ArticleInStockProfile implements \JsonSerializable, ProfileMetaData
                             'adapter' => 'default',
                             'parentKey' => '',
                             'shopwareField' => '',
-                            'attributes' => NULL,
-                            'children' => $this->getArticleInStockFields()
-                        ]
-                    ]
-                ]
-            ]
+                            'attributes' => null,
+                            'children' => $this->getArticleInStockFields(),
+                        ],
+                    ],
+                ],
+            ],
         ];
     }
 
@@ -96,36 +96,36 @@ class ArticleInStockProfile implements \JsonSerializable, ProfileMetaData
                 'name' => 'ordernumber',
                 'index' => 0,
                 'type' => 'leaf',
-                'shopwareField' => 'orderNumber'
+                'shopwareField' => 'orderNumber',
             ],
             1 => [
                 'id' => '537388742e20e',
                 'name' => 'instock',
                 'index' => 1,
                 'type' => 'leaf',
-                'shopwareField' => 'inStock'
+                'shopwareField' => 'inStock',
             ],
             2 => [
                 'id' => '541c4b9ddc00e',
                 'type' => 'leaf',
                 'index' => 2,
                 'name' => '_additionaltext',
-                'shopwareField' => 'additionalText'
+                'shopwareField' => 'additionalText',
             ],
             3 => [
                 'id' => '541c4bc6b7e0a',
                 'type' => 'leaf',
                 'index' => 3,
                 'name' => '_supplier',
-                'shopwareField' => 'supplier'
+                'shopwareField' => 'supplier',
             ],
             4 => [
                 'id' => '541c4bd27761c',
                 'type' => 'leaf',
                 'index' => 4,
                 'name' => '_price',
-                'shopwareField' => 'price'
-            ]
+                'shopwareField' => 'price',
+            ],
         ];
     }
 }

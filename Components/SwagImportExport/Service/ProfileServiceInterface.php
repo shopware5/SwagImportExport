@@ -13,18 +13,19 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Interface ProfileServiceInterface
- * @package Shopware\Components\SwagImportExport\Service
  */
 interface ProfileServiceInterface
 {
     /**
      * @param UploadedFile $file
+     *
      * @throws \Exception
      */
     public function importProfile(UploadedFile $file);
 
     /**
      * @param int $profileId
+     *
      * @return ProfileDataStruct
      */
     public function exportProfile($profileId);

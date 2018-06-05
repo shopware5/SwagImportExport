@@ -18,8 +18,10 @@ class SmartyExpressionEvaluator implements ExpressionEvaluator
     /**
      * @param $expression
      * @param $variables
-     * @return string
+     *
      * @throws \Exception
+     *
+     * @return string
      */
     public function evaluate($expression, $variables)
     {

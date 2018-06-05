@@ -1,5 +1,4 @@
 <?php
-
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -11,9 +10,6 @@ namespace Shopware\Components\SwagImportExport\Service;
 
 use Shopware\Components\SwagImportExport\Service\Struct\PreparationResultStruct;
 
-/**
- * @package Shopware\Components\SwagImportExport\Service
- */
 interface ExportServiceInterface
 {
     /**
@@ -22,8 +18,10 @@ interface ExportServiceInterface
      *
      * @param array $requestData
      * @param array $filterParams
-     * @return PreparationResultStruct
+     *
      * @throws \Exception
+     *
+     * @return PreparationResultStruct
      */
     public function prepareExport(array $requestData, array $filterParams);
 
@@ -33,8 +31,10 @@ interface ExportServiceInterface
      *
      * @param array $requestData
      * @param array $filterParams
-     * @return array
+     *
      * @throws \Exception
+     *
+     * @return array
      */
     public function export(array $requestData, array $filterParams);
 }

@@ -60,7 +60,7 @@ class AutoImportService implements AutoImportServiceInterface
         $lockerFileLocation = $this->getDirectory() . '/' . $lockerFilename;
 
         if (in_array($lockerFilename, $files)) {
-            $file = fopen($lockerFileLocation, 'r');
+            $file = fopen($lockerFileLocation, 'rb');
             $fileContent = (int) fread($file, filesize($lockerFileLocation));
             fclose($file);
 
@@ -72,7 +72,7 @@ class AutoImportService implements AutoImportServiceInterface
             unlink($lockerFileLocation);
         }
 
-        if ($files === false || count($files) == 0) {
+        if ($files === false || count($files) === 0) {
             echo 'No import files are found.' . PHP_EOL;
 
             return;
@@ -96,7 +96,7 @@ class AutoImportService implements AutoImportServiceInterface
             $fileExtension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
             $fileName = strtolower(pathinfo($file, PATHINFO_FILENAME));
 
-            if ($fileExtension == 'xml' || $fileExtension == 'csv') {
+            if ($fileExtension === 'xml' || $fileExtension === 'csv') {
                 try {
                     $profile = $this->getProfile($fileName, $file, $profileRepository);
 
@@ -193,7 +193,7 @@ class AutoImportService implements AutoImportServiceInterface
     private function flagCronAsRunning($lockerFileLocation)
     {
         $timeout = time() + 1800;
-        $file = fopen($lockerFileLocation, 'w');
+        $file = fopen($lockerFileLocation, 'wb');
         fwrite($file, $timeout);
         fclose($file);
     }

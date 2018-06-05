@@ -8,8 +8,8 @@
 
 namespace Shopware\Components\SwagImportExport\Factories;
 
-use Shopware\Components\SwagImportExport\Utils\TreeHelper;
 use Shopware\Components\SwagImportExport\Profile\Profile;
+use Shopware\Components\SwagImportExport\Utils\TreeHelper;
 use Shopware\CustomModels\ImportExport\Profile as ProfileEntity;
 use Shopware\CustomModels\ImportExport\Repository;
 
@@ -29,8 +29,10 @@ class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
 
     /**
      * @param $params
-     * @return Profile
+     *
      * @throws \Exception
+     *
+     * @return Profile
      */
     public function loadProfile($params)
     {
@@ -51,9 +53,11 @@ class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
 
     /**
      * @param $data
-     * @return mixed|ProfileEntity
+     *
      * @throws \Enlight_Exception
      * @throws \Exception
+     *
+     * @return mixed|ProfileEntity
      */
     public function createProfileModel($data)
     {
@@ -75,7 +79,7 @@ class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
 
         if (isset($data['hidden']) && $data['hidden']) {
             $tree = TreeHelper::getTreeByHiddenProfileType($data['type']);
-        } else if (isset($data['baseProfile'])) {
+        } elseif (isset($data['baseProfile'])) {
             $tree = TreeHelper::getDefaultTreeByBaseProfile($data['baseProfile']);
         } else {
             $tree = TreeHelper::getDefaultTreeByProfileType($data['type']);
@@ -99,8 +103,10 @@ class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
 
     /**
      * @param $type
-     * @return Profile
+     *
      * @throws \Exception
+     *
+     * @return Profile
      */
     public function loadHiddenProfile($type)
     {
@@ -112,7 +118,7 @@ class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
             $data = [
                 'name' => $type . 'Shopware',
                 'type' => $type,
-                'hidden' => 1
+                'hidden' => 1,
             ];
             $profileEntity = $this->createProfileModel($data);
         }

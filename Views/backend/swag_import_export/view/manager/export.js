@@ -113,6 +113,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
      */
     additionalFields: function() {
         var me = this,
+            factory = Ext.create('Shopware.attribute.SelectionFactory'),
             items;
 
         me.customFilterFields = Ext.create('Ext.form.FieldSet', {
@@ -219,8 +220,6 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
                 }]
             }]
         });
-
-        var factory = Ext.create('Shopware.attribute.SelectionFactory');
 
         items = [
             me.articleFields,

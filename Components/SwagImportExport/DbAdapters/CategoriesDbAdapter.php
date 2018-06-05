@@ -18,6 +18,7 @@ use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Validators\CategoryValidator;
 use Shopware\Models\Category\Category;
+use Shopware\Models\Customer\Group;
 
 class CategoriesDbAdapter implements DataDbAdapter
 {
@@ -66,7 +67,7 @@ class CategoriesDbAdapter implements DataDbAdapter
      */
     protected $defaultValues;
 
-    private $categoryAvoidCustomerGroups = null;
+    private $categoryAvoidCustomerGroups;
 
     /**
      * @var UnderscoreToCamelCaseServiceInterface
@@ -98,7 +99,7 @@ class CategoriesDbAdapter implements DataDbAdapter
 
         $builder->select('c.id');
 
-        $builder->from('Shopware\Models\Category\Category', 'c')
+        $builder->from(Category::class, 'c')
             ->where('c.id != 1')
             ->orderBy('c.parentId', 'ASC');
 
@@ -254,7 +255,7 @@ class CategoriesDbAdapter implements DataDbAdapter
                 $this->validateCategoryModel($category);
 
                 /** @var ClassMetadata $metaData */
-                $metaData = $this->modelManager->getClassMetaData(Category::class);
+                $metaData = $this->modelManager->getClassMetadata(Category::class);
                 $metaData->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_NONE);
 
                 $this->modelManager->persist($category);
@@ -530,12 +531,12 @@ class CategoriesDbAdapter implements DataDbAdapter
     /**
      * @param int $id
      *
-     * @return null|\Shopware\Models\Customer\Group
+     * @return null|Group
      */
     private function getCustomerGroupById($id)
     {
-        /* @var \Shopware\Models\Customer\Group $group */
-        return $this->modelManager->getRepository('Shopware\Models\Customer\Group')->find($id);
+        /* @var Group $group */
+        return $this->modelManager->getRepository(Group::class)->find($id);
     }
 
     /**

@@ -11,6 +11,8 @@ namespace Shopware\Components\SwagImportExport\Utils;
 class SnippetsHelper
 {
     /**
+     * @param string $namespace
+     *
      * @return \Enlight_Components_Snippet_Namespace
      */
     public static function getNamespace($namespace = 'backend/swag_importexport/main')

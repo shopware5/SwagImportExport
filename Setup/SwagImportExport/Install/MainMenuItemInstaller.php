@@ -57,10 +57,11 @@ class MainMenuItemInstaller implements InstallerInterface
         $currentMenuItem = $this->findMenuItemByLabel(self::CURRENT_MENU_LABEL);
 
         $pluginRepository = $this->modelManager->getRepository(Plugin::class);
-        $plugin = $pluginRepository->findOneBy([ 'name' => 'SwagImportExport' ]);
+        $plugin = $pluginRepository->findOneBy(['name' => 'SwagImportExport']);
 
         if ($this->menuItemExists($currentMenuItem)) {
             $this->updateImportExportMenuItem($currentMenuItem, $plugin);
+
             return;
         }
 
@@ -68,7 +69,7 @@ class MainMenuItemInstaller implements InstallerInterface
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isCompatible()
     {
@@ -109,7 +110,7 @@ class MainMenuItemInstaller implements InstallerInterface
     }
 
     /**
-     * @param Menu $menuItem
+     * @param Menu   $menuItem
      * @param Plugin $plugin
      */
     private function updateImportExportMenuItem(Menu $menuItem, Plugin $plugin)
@@ -124,6 +125,7 @@ class MainMenuItemInstaller implements InstallerInterface
 
     /**
      * @param mixed $menuItem
+     *
      * @return bool
      */
     private function menuItemExists($menuItem)
@@ -133,11 +135,13 @@ class MainMenuItemInstaller implements InstallerInterface
 
     /**
      * @param string $label
+     *
      * @return null|Menu
      */
     private function findMenuItemByLabel($label)
     {
         $menuRepository = $this->modelManager->getRepository(Menu::class);
+
         return $menuRepository->findOneBy(['label' => $label]);
     }
 }

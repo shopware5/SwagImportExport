@@ -8,36 +8,37 @@
 
 namespace Shopware\Components\SwagImportExport\Validators;
 
-use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
+use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 
 class ArticleInStockValidator extends Validator
 {
-    public static $mapper = array(
-        'string' => array( //TODO: maybe we don't need to check fields which contains string?
+    public static $mapper = [
+        'string' => [ //TODO: maybe we don't need to check fields which contains string?
             'orderNumber',
             'additionalText',
             'supplier',
-        ),
-        'int' => array('inStock'),
-        'float' => array('price'),
-    );
+        ],
+        'int' => ['inStock'],
+        'float' => ['price'],
+    ];
 
-    private $requiredFields = array(
+    private $requiredFields = [
         'orderNumber',
-    );
+    ];
 
-    private $snippetData = array(
-        'orderNumber' => array(
+    private $snippetData = [
+        'orderNumber' => [
             'adapters/ordernumber_required',
-            'Order number is required'
-        ),
-    );
+            'Order number is required',
+        ],
+    ];
 
     /**
      * Checks whether required fields are filled-in
      *
      * @param array $record
+     *
      * @throws AdapterException
      */
     public function checkRequiredFields($record)

@@ -11,7 +11,7 @@ namespace Shopware\Components\SwagImportExport\Profile;
 class ProfileSerializer
 {
     /**
-     * @var Profile $profile
+     * @var Profile
      */
     private $profile;
 

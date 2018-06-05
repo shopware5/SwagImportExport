@@ -1,5 +1,4 @@
 <?php
-
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -15,31 +14,30 @@ use Shopware\CustomModels\ImportExport\Profile;
 
 /**
  * Class TreeHelper
- *
- * @package Shopware\Components\SwagImportExport\Utils
  */
 class TreeHelper
 {
     /**
      * Converts the JSON tree to ExtJS tree
      *
-     * @param array $node
-     * @param boolean $isInIteration
+     * @param array  $node
+     * @param bool   $isInIteration
      * @param string $adapter
+     *
      * @return array
      */
     public static function convertToExtJSTree(array $node, $isInIteration = false, $adapter = '')
     {
         $parentKey = '';
-        $children = array();
+        $children = [];
 
-        if ($node['type'] == 'iteration') {
+        if ($node['type'] === 'iteration') {
             $isInIteration = true;
             $adapter = $node['adapter'];
             $parentKey = $node['parentKey'];
 
             $icon = 'sprite-blue-folders-stack';
-        } elseif ($node['type'] == 'leaf') {
+        } elseif ($node['type'] === 'leaf') {
             $icon = 'sprite-blue-document-text';
         } else {
             // $node['type'] == 'node'
@@ -49,7 +47,7 @@ class TreeHelper
         // Get the attributes
         if (isset($node['attributes'])) {
             foreach ($node['attributes'] as $attribute) {
-                $children[] = array(
+                $children[] = [
                     'id' => $attribute['id'],
                     'text' => $attribute['name'],
                     'type' => $attribute['type'],
@@ -60,8 +58,8 @@ class TreeHelper
                     'iconCls' => 'sprite-sticky-notes-pin',
                     'type' => 'attribute',
                     'swColumn' => $attribute['shopwareField'],
-                    'inIteration' => $isInIteration
-                );
+                    'inIteration' => $isInIteration,
+                ];
             }
         }
 
@@ -72,7 +70,7 @@ class TreeHelper
             }
         }
 
-        return array(
+        return [
             'id' => $node['id'],
             'type' => $node['type'],
             'index' => $node['index'],
@@ -85,8 +83,8 @@ class TreeHelper
             'swColumn' => $node['shopwareField'],
             'defaultValue' => $node['defaultValue'],
             'inIteration' => $isInIteration,
-            'children' => $children
-        );
+            'children' => $children,
+        ];
     }
 
     /**
@@ -94,54 +92,54 @@ class TreeHelper
      *
      * @param array $child
      * @param array $node
-     * @return boolean
+     *
+     * @return bool
      */
     public static function appendNode(array $child, array &$node)
     {
         if ($node['id'] == $child['parentId']) { // the parent node is found
-            if ($child['type'] == 'attribute') {
-                $node['attributes'][] = array(
+            if ($child['type'] === 'attribute') {
+                $node['attributes'][] = [
                     'id' => $child['id'],
                     'type' => $child['type'],
                     'index' => $child['index'],
                     'name' => $child['text'],
                     'shopwareField' => $child['swColumn'],
-                );
-            } elseif ($child['type'] == 'node') {
-                $node['children'][] = array(
+                ];
+            } elseif ($child['type'] === 'node') {
+                $node['children'][] = [
                     'id' => $child['id'],
                     'index' => $child['index'],
                     'type' => $child['type'],
                     'name' => $child['text'],
                     'shopwareField' => $child['swColumn'],
-                );
-            } elseif ($child['type'] == 'iteration') {
-                $node['children'][] = array(
+                ];
+            } elseif ($child['type'] === 'iteration') {
+                $node['children'][] = [
                     'id' => $child['id'],
                     'name' => $child['text'],
                     'index' => $child['index'],
                     'type' => $child['type'],
                     'adapter' => $child['adapter'],
                     'parentKey' => $child['parentKey'],
-                );
+                ];
             } else {
-                $node['children'][] = array(
+                $node['children'][] = [
                     'id' => $child['id'],
                     'type' => $child['type'],
                     'index' => $child['index'],
                     'name' => $child['text'],
                     'defaultValue' => $child['defaultValue'],
-                    'shopwareField' => $child['swColumn']
-                );
+                    'shopwareField' => $child['swColumn'],
+                ];
             }
 
             return true;
-        } else {
-            if (isset($node['children'])) {
-                foreach ($node['children'] as &$childNode) {
-                    if (static::appendNode($child, $childNode)) {
-                        return true;
-                    }
+        }
+        if (isset($node['children'])) {
+            foreach ($node['children'] as &$childNode) {
+                if (static::appendNode($child, $childNode)) {
+                    return true;
                 }
             }
         }
@@ -153,9 +151,10 @@ class TreeHelper
      * Helper function which finds node from the tree
      *
      * @param string $id
-     * @param array $node
+     * @param array  $node
      * @param string $parentId
-     * @return boolean|array
+     *
+     * @return bool|array
      */
     public static function getNodeById($id, array $node, $parentId = 'root')
     {
@@ -163,21 +162,20 @@ class TreeHelper
             $node['parentId'] = $parentId;
 
             return $node;
-        } else {
-            if (isset($node['attributes'])) {
-                foreach ($node['attributes'] as $attribute) {
-                    $result = static::getNodeById($id, $attribute, $node['id']);
-                    if ($result !== false) {
-                        return $result;
-                    }
+        }
+        if (isset($node['attributes'])) {
+            foreach ($node['attributes'] as $attribute) {
+                $result = static::getNodeById($id, $attribute, $node['id']);
+                if ($result !== false) {
+                    return $result;
                 }
             }
-            if (isset($node['children'])) {
-                foreach ($node['children'] as $childNode) {
-                    $result = static::getNodeById($id, $childNode, $node['id']);
-                    if ($result !== false) {
-                        return $result;
-                    }
+        }
+        if (isset($node['children'])) {
+            foreach ($node['children'] as $childNode) {
+                $result = static::getNodeById($id, $childNode, $node['id']);
+                if ($result !== false) {
+                    return $result;
                 }
             }
         }
@@ -190,15 +188,16 @@ class TreeHelper
      *
      * @param array $child
      * @param array $node
-     * @return boolean
+     *
+     * @return bool
      */
     public static function moveNode(array $child, array &$node)
     {
         if ($node['id'] == $child['parentId']) { // the parent node is found
-            if ($child['type'] == 'attribute') {
+            if ($child['type'] === 'attribute') {
                 unset($child['parentId']);
                 $node['attributes'][] = $child;
-            } elseif ($child['type'] == 'node') {
+            } elseif ($child['type'] === 'node') {
                 unset($child['parentId']);
                 $node['children'][] = $child;
             } else {
@@ -207,12 +206,11 @@ class TreeHelper
             }
 
             return true;
-        } else {
-            if (isset($node['children'])) {
-                foreach ($node['children'] as &$childNode) {
-                    if (static::moveNode($child, $childNode)) {
-                        return true;
-                    }
+        }
+        if (isset($node['children'])) {
+            foreach ($node['children'] as &$childNode) {
+                if (static::moveNode($child, $childNode)) {
+                    return true;
                 }
             }
         }
@@ -226,9 +224,10 @@ class TreeHelper
      * @param array $child
      * @param array $node
      * @param array $defaultFields
-     * @return boolean
+     *
+     * @return bool
      */
-    public static function changeNode(array $child, array &$node, $defaultFields = array())
+    public static function changeNode(array $child, array &$node, $defaultFields = [])
     {
         if ($node['id'] == $child['id']) { // the node is found
             $node['name'] = $child['text'];
@@ -249,7 +248,7 @@ class TreeHelper
                 unset($node['defaultValue']);
             }
 
-            if ($child['type'] == 'iteration') {
+            if ($child['type'] === 'iteration') {
                 if (isset($child['adapter'])) {
                     $node['adapter'] = $child['adapter'];
                 } else {
@@ -263,19 +262,18 @@ class TreeHelper
             }
 
             return true;
-        } else {
-            if (isset($node['children'])) {
-                foreach ($node['children'] as &$childNode) {
-                    if (static::changeNode($child, $childNode, $defaultFields)) {
-                        return true;
-                    }
+        }
+        if (isset($node['children'])) {
+            foreach ($node['children'] as &$childNode) {
+                if (static::changeNode($child, $childNode, $defaultFields)) {
+                    return true;
                 }
             }
-            if (isset($node['attributes'])) {
-                foreach ($node['attributes'] as &$childNode) {
-                    if (static::changeNode($child, $childNode, $defaultFields)) {
-                        return true;
-                    }
+        }
+        if (isset($node['attributes'])) {
+            foreach ($node['attributes'] as &$childNode) {
+                if (static::changeNode($child, $childNode, $defaultFields)) {
+                    return true;
                 }
             }
         }
@@ -288,7 +286,8 @@ class TreeHelper
      *
      * @param array $child
      * @param array $node
-     * @return boolean
+     *
+     * @return bool
      */
     public static function deleteNode(array $child, array &$node)
     {
@@ -301,7 +300,9 @@ class TreeHelper
                     }
 
                     return true;
-                } elseif (static::deleteNode($child, $childNode)) {
+                }
+
+                if (static::deleteNode($child, $childNode)) {
                     return true;
                 }
             }
@@ -326,11 +327,12 @@ class TreeHelper
      * Sorting tree via index key
      *
      * @param array $node
+     *
      * @return array
      */
     public static function reorderTree($node)
     {
-        $reorderdNode = array();
+        $reorderdNode = [];
         if (is_array($node) && isset($node['children'])) {
             foreach ($node as $key => $value) {
                 if ($key === 'children' || $key === 'attributes') {
@@ -361,8 +363,10 @@ class TreeHelper
      * Note: The id of the root node MUST be 'root', but the name may be different.
      *
      * @param string $profileType
-     * @return string
+     *
      * @throws \Exception
+     *
+     * @return string
      */
     public static function getDefaultTreeByProfileType($profileType)
     {
@@ -396,6 +400,7 @@ class TreeHelper
 
     /**
      * @param int $baseProfileId
+     *
      * @return string
      */
     public static function getDefaultTreeByBaseProfile($baseProfileId)
@@ -417,8 +422,10 @@ class TreeHelper
 
     /**
      * @param string $profileType
-     * @return string
+     *
      * @throws \Exception
+     *
+     * @return string
      */
     public static function getTreeByHiddenProfileType($profileType)
     {

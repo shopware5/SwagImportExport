@@ -1,5 +1,4 @@
 <?php
-
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -17,8 +16,9 @@ use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 class ImportService extends AbstractImportExportService implements ImportServiceInterface
 {
     /**
-     * @param array $requestData
+     * @param array  $requestData
      * @param string $inputFileName
+     *
      * @return PreparationResultStruct
      * @trows \Exception
      */
@@ -35,11 +35,13 @@ class ImportService extends AbstractImportExportService implements ImportService
     }
 
     /**
-     * @param array $requestData
-     * @param array $unprocessedFiles
+     * @param array  $requestData
+     * @param array  $unprocessedFiles
      * @param string $inputFile
-     * @return array
+     *
      * @throws \Exception
+     *
+     * @return array
      */
     public function import(array $requestData, array $unprocessedFiles, $inputFile)
     {
@@ -64,13 +66,13 @@ class ImportService extends AbstractImportExportService implements ImportService
                     'data' => $resultData['unprocessedData'],
                     'session' => [
                         'prevState' => $sessionState,
-                        'currentState' => $serviceHelpers->getDataIO()->getSessionState()
-                    ]
+                        'currentState' => $serviceHelpers->getDataIO()->getSessionState(),
+                    ],
                 ];
 
                 foreach ($unprocessedData['data'] as $profileName => $value) {
                     $outputFile = $this->uploadPathProvider->getRealPath(
-                        $this->uploadPathProvider->getFileNameFromPath($inputFile) . '-' . $profileName .'-tmp.csv'
+                        $this->uploadPathProvider->getFileNameFromPath($inputFile) . '-' . $profileName . '-tmp.csv'
                     );
                     $this->afterImport($unprocessedData, $profileName, $outputFile);
                     $unprocessedFiles[$profileName] = $outputFile;
@@ -117,13 +119,13 @@ class ImportService extends AbstractImportExportService implements ImportService
     }
 
     /**
-     * @param array $unprocessedData
+     * @param array  $unprocessedData
      * @param string $profileName
      * @param string $outputFile
      */
     protected function afterImport(array $unprocessedData, $profileName, $outputFile)
     {
-       //loads hidden profile for article
+        //loads hidden profile for article
         $profile = $this->profileFactory->loadHiddenProfile($profileName);
 
         $fileWriter = $this->fileIOFactory->createFileWriter('csv');
@@ -142,6 +144,7 @@ class ImportService extends AbstractImportExportService implements ImportService
      * Returns unprocessed file for import
      *
      * @param array $unprocessedFiles
+     *
      * @return array|bool
      */
     protected function processData(&$unprocessedFiles)

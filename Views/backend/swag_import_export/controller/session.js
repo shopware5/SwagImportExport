@@ -1,5 +1,5 @@
-//{namespace name="backend/swag_import_export/view/session"}
-//{block name="backend/swag_import_export/controller/session"}
+// {namespace name="backend/swag_import_export/view/session"}
+// {block name="backend/swag_import_export/controller/session"}
 Ext.define('Shopware.apps.SwagImportExport.controller.Session', {
     extend: 'Ext.app.Controller',
 
@@ -36,13 +36,12 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Session', {
     },
 
     onDeleteSession: function(view, records) {
-        var me = this,
-            store = view.getStore();
+        var store = view.getStore();
 
         if (records.length == 0) {
             return;
         }
-        //ask the user if he is sure.
+        // ask the user if he is sure.
         Ext.MessageBox.confirm(
             '{s name=swag_import_export/manager/log/delete_operations_title}Delete selected operation(s)?{/s}',
             '{s name=swag_import_export/manager/log/delete_operations_confirm}{/s}',
@@ -70,7 +69,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Session', {
         var grid = view.up('grid'),
             type = record.get('type');
 
-        switch(type) {
+        switch (type) {
             case 'export':
                 grid.fireEvent('resumeExport', record, view.getStore());
                 break;
@@ -91,4 +90,4 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Session', {
         me.logWindow.show();
     }
 });
-//{/block}
+// {/block}

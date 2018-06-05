@@ -1,5 +1,4 @@
 <?php
-
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -7,14 +6,11 @@
  * file that was distributed with this source code.
  */
 
-use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
-use \Shopware\Components\SwagImportExport\Utils\CommandHelper;
-
 /**
  * Shopware ImportExport Plugin
  *
  * @category Shopware
- * @package Shopware\Plugins\SwagImportExport
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Frontend_SwagImportExport extends Enlight_Controller_Action
@@ -36,7 +32,7 @@ class Shopware_Controllers_Frontend_SwagImportExport extends Enlight_Controller_
     public function preDispatch()
     {
         //Call cron only if request is not from browser
-        if (php_sapi_name() == 'cli') {
+        if (PHP_SAPI === 'cli') {
             $this->cronAction();
         }
     }

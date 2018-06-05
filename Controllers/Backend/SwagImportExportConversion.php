@@ -1,12 +1,10 @@
 <?php
-
 /**
  * (c) shopware AG <info@shopware.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 use Shopware\CustomModels\ImportExport\Expression;
 use Shopware\CustomModels\ImportExport\Profile;
 use Shopware\CustomModels\ImportExport\Repository;
@@ -15,17 +13,17 @@ use Shopware\CustomModels\ImportExport\Repository;
  * Shopware ImportExport Plugin
  *
  * @category Shopware
- * @package Shopware\Plugins\SwagImportExport
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Backend_SwagImportExportConversion extends Shopware_Controllers_Backend_ExtJs
 {
     public function initAcl()
     {
-        $this->addAclPermission("getConversions", "export", "Insuficient Permissions (getConversions)");
-        $this->addAclPermission("createConversion", "export", "Insuficient Permissions (createConversion)");
-        $this->addAclPermission("updateConversion", "export", "Insuficient Permissions (updateConversion)");
-        $this->addAclPermission("deleteConversion", "export", "Insuficient Permissions (deleteConversion)");
+        $this->addAclPermission('getConversions', 'export', 'Insuficient Permissions (getConversions)');
+        $this->addAclPermission('createConversion', 'export', 'Insuficient Permissions (createConversion)');
+        $this->addAclPermission('updateConversion', 'export', 'Insuficient Permissions (updateConversion)');
+        $this->addAclPermission('deleteConversion', 'export', 'Insuficient Permissions (deleteConversion)');
     }
 
     public function getConversionsAction()
@@ -42,7 +40,7 @@ class Shopware_Controllers_Backend_SwagImportExportConversion extends Shopware_C
         $query = $expressionRepository->getExpressionsListQuery(
             $filter,
             $this->Request()->getParam('sort', []),
-            $this->Request()->getParam('limit', null),
+            $this->Request()->getParam('limit'),
             $this->Request()->getParam('start')
         )->getQuery();
 
@@ -51,7 +49,7 @@ class Shopware_Controllers_Backend_SwagImportExportConversion extends Shopware_C
         $data = $query->getArrayResult();
 
         $this->View()->assign([
-            'success' => true, 'data' => $data, 'total' => $count
+            'success' => true, 'data' => $data, 'total' => $count,
         ]);
     }
 
@@ -77,11 +75,11 @@ class Shopware_Controllers_Backend_SwagImportExportConversion extends Shopware_C
         $this->View()->assign([
             'success' => true,
             'data' => [
-                "id" => $expressionEntity->getId(),
+                'id' => $expressionEntity->getId(),
                 'profileId' => $expressionEntity->getProfile()->getId(),
                 'exportConversion' => $expressionEntity->getExportConversion(),
                 'importConversion' => $expressionEntity->getImportConversion(),
-            ]
+            ],
         ]);
     }
 

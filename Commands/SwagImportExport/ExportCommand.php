@@ -14,6 +14,7 @@ use Shopware\Components\SwagImportExport\Utils\CommandHelper;
 use Shopware\Components\SwagImportExport\Utils\SwagVersionHelper;
 use Shopware\CustomModels\ImportExport\Profile;
 use Shopware\CustomModels\ImportExport\Repository;
+use Shopware\Models\CustomerStream\CustomerStream;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -146,7 +147,7 @@ class ExportCommand extends ShopwareCommand
         $em = $this->container->get('models');
 
         /** @var Repository $profileRepository */
-        $profileRepository = $em->getRepository('Shopware\CustomModels\ImportExport\Profile');
+        $profileRepository = $em->getRepository(Profile::class);
 
         // if no profile is specified try to find it from the filename
         if ($this->profile === null) {
@@ -165,7 +166,7 @@ class ExportCommand extends ShopwareCommand
         }
 
         if (!empty($this->customerStream)) {
-            $customerStream = $em->find('Shopware\Models\CustomerStream\CustomerStream', $this->customerStream);
+            $customerStream = $em->find(CustomerStream::class, $this->customerStream);
             $this->validateCustomerStream($customerStream);
         }
 
@@ -192,11 +193,11 @@ class ExportCommand extends ShopwareCommand
             throw new \Exception(sprintf('Invalid profile: \'%s\'!', $this->profile));
         }
 
-        if ($this->profileEntity->getType() != 'articles' && $input->getOption('exportVariants')) {
+        if ($this->profileEntity->getType() !== 'articles' && $input->getOption('exportVariants')) {
             throw new \InvalidArgumentException('You can only export variants when exporting the articles profile type.');
         }
 
-        if ($this->profileEntity->getType() == 'articlesImages') {
+        if ($this->profileEntity->getType() === 'articlesImages') {
             throw new \InvalidArgumentException('articlesImages profile type is not supported at the moment.');
         }
     }

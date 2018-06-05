@@ -8,51 +8,52 @@
 
 namespace Shopware\Components\SwagImportExport\Validators\Articles;
 
-use Shopware\Components\SwagImportExport\Validators\Validator;
-use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
+use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
+use Shopware\Components\SwagImportExport\Validators\Validator;
 
 class ArticleValidator extends Validator
 {
     private $requiredFields = [
         'orderNumber',
-        'mainNumber'
+        'mainNumber',
     ];
 
     private $requiredFieldsForCreate = [
         'name',
         'mainNumber',
         ['supplierName', 'supplierId'],
-        'taxId'
+        'taxId',
     ];
 
     private $snippetData = [
         'orderNumber' => [
             'adapters/ordernumber_required',
-            'Order number is required.'
+            'Order number is required.',
         ],
         'mainNumber' => [
             'adapters/mainnumber_required',
-            'Main number is required for article %s.'
+            'Main number is required for article %s.',
         ],
         'supplierName' => [
             'adapters/articles/supplier_not_found',
-            'Supplier not found for article %s.'
+            'Supplier not found for article %s.',
         ],
         'name' => [
             'adapters/articles/no_name_provided',
-            'Please provide article name for article %s.'
+            'Please provide article name for article %s.',
         ],
         'taxId' => [
             'adapters/articles/no_tax_provided',
-            'Tax not provided for article %s.'
-        ]
+            'Tax not provided for article %s.',
+        ],
     ];
 
     /**
      * Checks whether required fields are filled-in
      *
      * @param array $record
+     *
      * @throws AdapterException
      */
     public function checkRequiredFields($record)
@@ -73,6 +74,7 @@ class ArticleValidator extends Validator
      * Checks whether required fields for create are filled-in
      *
      * @param array $record
+     *
      * @throws AdapterException
      */
     public function checkRequiredFieldsForCreate($record)

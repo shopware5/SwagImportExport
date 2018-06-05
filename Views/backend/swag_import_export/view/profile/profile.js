@@ -1,5 +1,5 @@
-//{namespace name=backend/swag_import_export/view/profile}
-//{block name="backend/swag_import_export/view/profile/profile"}
+// {namespace name=backend/swag_import_export/view/profile}
+// {block name="backend/swag_import_export/view/profile/profile"}
 Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
     extend: 'Ext.panel.Panel',
 
@@ -15,7 +15,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
 
     layout: 'fit',
     title: '{s name=swag_import_export/profile/profile/title}Configuration{/s}',
-    
+
     initComponent: function() {
         var me = this;
 
@@ -60,7 +60,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
                 me.createTreePanel(),
                 me.createFormPanel()
             ]
-        }]
+        }];
     },
 
     buildDockedItems: function() {
@@ -87,7 +87,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
                     me.fireEvent('addNewIteration', me.treePanel, me.getProfileId());
                 }
             }, {
-                text:  '{s name=swag_import_export/profile/new_column}New column{/s}',
+                text: '{s name=swag_import_export/profile/new_column}New column{/s}',
                 iconCls: 'sprite-plus-circle-frame',
                 itemId: 'createChild',
                 disabled: true,
@@ -340,7 +340,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
                 me.fireEvent('addNewIteration', me.treePanel, me.getProfileId());
             }
         }, {
-            text:  '{s name=swag_import_export/profile/new_column}New field{/s}',
+            text: '{s name=swag_import_export/profile/new_column}New field{/s}',
             iconCls: 'sprite-plus-circle-frame',
             handler: function () {
                 me.fireEvent('addNewNode', me.treePanel, me.getProfileId(), me.lastSelectedNode.get('adapter'));
@@ -492,7 +492,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
 
         formPanel.down('#defaultValue').destroy();
 
-        //Create default value field
+        // Create default value field
         fieldType = 'hidden';
         settings = {
             itemId: 'defaultValue',
@@ -503,17 +503,17 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
             allowBlank: true
         };
 
-        //Set new field type if selected column have default flag
+        // Set new field type if selected column have default flag
         record = store.getById(value);
         if (record) {
             if (record.get('default')) {
                 fieldType = record.get('type');
             }
         }
-        //Merge component settings depending on field type
+        // Merge component settings depending on field type
         settings = Ext.apply({ }, settings, me.getDefaultValueType(fieldType));
 
-        //Add default field to grid
+        // Add default field to grid
         formPanel.insert(1, settings);
 
         formPanel.child('#defaultValue').setValue(nodeValue);
@@ -533,31 +533,27 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
         switch (column) {
             case 'id':
                 return { xtype: 'numberfield', minValue: 1 };
-                break;
             case 'integer':
             case 'decimal':
             case 'float':
                 var precision = 0;
                 if (column.precision) {
-                    precision = column.precision
-                } else if (column.type == 'float') {
+                    precision = column.precision;
+                } else if (column.type === 'float') {
                     precision = 3;
-                } else if (column.type == 'decimal') {
+                } else if (column.type === 'decimal') {
                     precision = 3;
                 }
                 return { xtype: 'numberfield', decimalPrecision: precision };
-                break;
             case 'string':
             case 'text':
                 return 'textfield';
-                break;
             case 'boolean':
                 return {
                     xtype: 'checkbox',
                     inputValue: 1,
                     uncheckedValue: 0
                 };
-                break;
             case 'date':
             case 'dateTime':
                 return {
@@ -565,12 +561,10 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
                     format: 'Y-m-d',
                     submitFormat: 'Y-m-d'
                 };
-                break;
             default:
                 return {
                     hidden: true
                 };
-                break;
         }
     },
 
@@ -587,4 +581,4 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Profile', {
         });
     }
 });
-//{/block}
+// {/block}

@@ -56,6 +56,9 @@ class Update05CreateCustomerCompleteProfile implements UpdaterInterface
         $this->connection->executeQuery($sql, $params);
     }
 
+    /**
+     * @return bool
+     */
     public function isCompatible()
     {
         return version_compare($this->setupContext->getPreviousPluginVersion(), self::MAX_PLUGIN_VERSION, '<');

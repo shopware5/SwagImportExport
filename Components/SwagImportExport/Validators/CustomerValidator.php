@@ -8,13 +8,13 @@
 
 namespace Shopware\Components\SwagImportExport\Validators;
 
-use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
+use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 
 class CustomerValidator extends Validator
 {
     private $requiredFields = [
-        'email'
+        'email',
     ];
 
     private $requiredFieldsForCreate = [
@@ -27,60 +27,61 @@ class CustomerValidator extends Validator
         'billingStreet',
         'billingZipcode',
         'billingCity',
-        'billingCountryID'
+        'billingCountryID',
     ];
 
     private $snippetData = [
         'email' => [
             'adapters/customer/email_required',
-            'User email is required field.'
+            'User email is required field.',
         ],
         'unhashedPassword' => [
             'adapters/customer/unhashedPassword_required',
-            'Unhashed password must be provided for email %s.'
+            'Unhashed password must be provided for email %s.',
         ],
         'encoder' => [
             'adapters/customer/encoder_required',
-            'To create a new user with email: %s, unhashedPassword must be provided and password must be empty.'
+            'To create a new user with email: %s, unhashedPassword must be provided and password must be empty.',
         ],
         'customergroup' => [
             'adapters/customer/customergroup_required',
-            'Customer group must be provided for user with email: %s.'
+            'Customer group must be provided for user with email: %s.',
         ],
         'billingSalutation' => [
             'adapters/customer/billingSalutation_required',
-            'Billing salutation must be provided for user with email: %s.'
+            'Billing salutation must be provided for user with email: %s.',
         ],
         'billingFirstname' => [
             'adapters/customer/billingFirstname_required',
-            'Billing first name must be provided for user with email: %s.'
+            'Billing first name must be provided for user with email: %s.',
         ],
         'billingLastname' => [
             'adapters/customer/billingLastname_required',
-            'Billing last name must be provided for user with email: %s.'
+            'Billing last name must be provided for user with email: %s.',
         ],
         'billingStreet' => [
             'adapters/customer/billingStreet_required',
-            'Billing street must be provided for user with email: %s.'
+            'Billing street must be provided for user with email: %s.',
         ],
         'billingZipcode' => [
             'adapters/customer/billingZipcode_required',
-            'Billing zip code must be provided for user with email: %s.'
+            'Billing zip code must be provided for user with email: %s.',
         ],
         'billingCity' => [
             'adapters/customer/billingCity_required',
-            'Billing city must be provided for user with email: %s.'
+            'Billing city must be provided for user with email: %s.',
         ],
         'billingCountryID' => [
             'adapters/customer/billingCountryID_required',
-            'Billing countryId must be provided for user with email: %s.'
-        ]
+            'Billing countryId must be provided for user with email: %s.',
+        ],
     ];
 
     /**
      * Checks whether required fields are filled-in
      *
      * @param array $record
+     *
      * @throws AdapterException
      */
     public function checkRequiredFields($record)
@@ -101,6 +102,7 @@ class CustomerValidator extends Validator
      * Checks whether required fields for create are filled-in
      *
      * @param array $record
+     *
      * @throws AdapterException
      */
     public function checkRequiredFieldsForCreate($record)
@@ -112,7 +114,7 @@ class CustomerValidator extends Validator
 
             switch ($columnName) {
                 case 'unhashedPassword':
-                    if ((isset($record['password']) && isset($record['encoder']))) {
+                    if (isset($record['password']) && isset($record['encoder'])) {
                         continue 2;
                     }
                     break;

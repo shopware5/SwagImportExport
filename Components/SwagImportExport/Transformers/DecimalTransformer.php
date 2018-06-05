@@ -1,5 +1,4 @@
 <?php
-
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -13,8 +12,6 @@ use Shopware\Components\SwagImportExport\Profile\Profile;
 
 /**
  * Class DecimalTransformer
- *
- * @package Shopware\Components\SwagImportExport\Transformers
  */
 class DecimalTransformer implements DataTransformerAdapter
 {
@@ -31,7 +28,7 @@ class DecimalTransformer implements DataTransformerAdapter
         'pseudoPrice',
         'purchasePrice',
         'invoiceAmount',
-        'invoiceAmountNet'
+        'invoiceAmountNet',
     ];
 
     /** @var \Enlight_Plugin_Bootstrap_Config $pluginConfig */
@@ -58,6 +55,7 @@ class DecimalTransformer implements DataTransformerAdapter
      * Transforms the data in direction to formatted output file and returns the transformed data.
      *
      * @param array $data
+     *
      * @return array
      */
     public function transformForward($data)
@@ -66,13 +64,14 @@ class DecimalTransformer implements DataTransformerAdapter
             return $data;
         }
 
-        return $this->transform($data, true);
+        return $this->transform($data);
     }
 
     /**
      * Transforms the data in direction from formatted output file and returns the transformed data.
      *
      * @param array $data
+     *
      * @return array
      */
     public function transformBackward($data)
@@ -91,7 +90,8 @@ class DecimalTransformer implements DataTransformerAdapter
      * Direction (forward / backward) is given by the parameter $direction.
      *
      * @param array $data
-     * @param boolean $isForward
+     * @param bool  $isForward
+     *
      * @return array
      */
     public function transform($data, $isForward = true)
@@ -108,7 +108,8 @@ class DecimalTransformer implements DataTransformerAdapter
      * It replaces the decimal-delimiter.
      *
      * @param array $records
-     * @param bool $isForward
+     * @param bool  $isForward
+     *
      * @return array
      */
     public function transformRecord(array $records, $isForward = true)
@@ -166,6 +167,7 @@ class DecimalTransformer implements DataTransformerAdapter
      * Returns if the given key is an adapter.
      *
      * @param string $key
+     *
      * @return bool
      */
     private function isAdapter($key)
@@ -177,6 +179,7 @@ class DecimalTransformer implements DataTransformerAdapter
      * Returns if the given key is a node.
      *
      * @param string $key
+     *
      * @return bool
      */
     private function isNode($key)
@@ -189,9 +192,10 @@ class DecimalTransformer implements DataTransformerAdapter
      *
      * @param array $currentNode
      * @param array $result
+     *
      * @return array
      */
-    private function iterateTree(array $currentNode, array $result = array())
+    private function iterateTree(array $currentNode, array $result = [])
     {
         $currentEl = $currentNode;
         unset($currentEl['children']);
@@ -199,6 +203,7 @@ class DecimalTransformer implements DataTransformerAdapter
         switch ($currentNode['type']) {
             case 'leaf':
                 $result['fields'][$currentNode['name']] = $currentNode['shopwareField'];
+
                 return $result;
             case 'iteration':
                 $result['adapters'][$currentNode['name']] = $currentEl;

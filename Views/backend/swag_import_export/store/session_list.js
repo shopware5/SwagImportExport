@@ -1,7 +1,7 @@
-//{block name="backend/swag_import_export/store/session_list"}
+// {block name="backend/swag_import_export/store/session_list"}
 Ext.define('Shopware.apps.SwagImportExport.store.SessionList', {
-    extend : 'Ext.data.Store',
-    
+    extend: 'Ext.data.Store',
+
     autoLoad: false,
 
     remoteSort: true,
@@ -12,6 +12,6 @@ Ext.define('Shopware.apps.SwagImportExport.store.SessionList', {
      * Define the used model for this store
      * @string
      */
-    model : 'Shopware.apps.SwagImportExport.model.SessionList'
+    model: 'Shopware.apps.SwagImportExport.model.SessionList'
 });
-//{/block}
+// {/block}

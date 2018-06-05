@@ -16,11 +16,10 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Class ProfileService
- * @package Shopware\Components\SwagImportExport\Service
  */
 class ProfileService implements ProfileServiceInterface
 {
-    /** @var ModelManager  */
+    /** @var ModelManager */
     protected $modelManager;
 
     /** @var Filesystem */
@@ -31,8 +30,9 @@ class ProfileService implements ProfileServiceInterface
 
     /**
      * ProfileService constructor.
-     * @param ModelManager $manager
-     * @param Filesystem $filesystem
+     *
+     * @param ModelManager                        $manager
+     * @param Filesystem                          $filesystem
      * @param \Enlight_Components_Snippet_Manager $snippetManager
      */
     public function __construct(ModelManager $manager, Filesystem $filesystem, \Enlight_Components_Snippet_Manager $snippetManager)
@@ -43,7 +43,7 @@ class ProfileService implements ProfileServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function importProfile(UploadedFile $file)
     {
@@ -97,7 +97,7 @@ class ProfileService implements ProfileServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function exportProfile($profileId)
     {

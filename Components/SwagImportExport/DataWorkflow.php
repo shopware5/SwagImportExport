@@ -32,7 +32,7 @@ class DataWorkflow
     protected $transformerChain;
 
     /**
-     * @var FileWriter $fileIO
+     * @var FileWriter
      */
     protected $fileIO;
 
@@ -42,14 +42,14 @@ class DataWorkflow
     protected $dataSession;
 
     /**
-     * @var $dbAdapter
+     * @var
      */
     protected $dbAdapter;
 
     /**
-     * @param DataIO $dataIO
-     * @param Profile $profile
-     * @param DataTransformerChain $transformerChain
+     * @param DataIO                $dataIO
+     * @param Profile               $profile
+     * @param DataTransformerChain  $transformerChain
      * @param FileWriter|FileReader $fileIO
      */
     public function __construct($dataIO, $profile, $transformerChain, $fileIO)
@@ -63,19 +63,21 @@ class DataWorkflow
     /**
      * @param $postData
      * @param string $outputFileName
-     * @return mixed
+     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function export($postData, $outputFileName = '')
     {
-        if ($this->dataIO->getSessionState() == 'closed') {
+        if ($this->dataIO->getSessionState() === 'closed') {
             $postData['position'] = $this->dataIO->getSessionPosition();
             $postData['fileName'] = $this->dataIO->getDataSession()->getFileName();
 
             return $postData;
         }
 
-        if ($this->dataIO->getSessionState() == 'new') {
+        if ($this->dataIO->getSessionState() === 'new') {
             //todo: create file here ?
             if ($outputFileName === '') {
                 $fileName = $this->dataIO->generateFileName($this->profile);
@@ -100,7 +102,7 @@ class DataWorkflow
             }
         }
 
-        if ($this->dataIO->getSessionState() == 'active') {
+        if ($this->dataIO->getSessionState() === 'active') {
             $stepSize = 1000;
             // read a bunch of records into simple php array;
             // the count of records may be less than 100 if we are at the end of the read.
@@ -116,7 +118,7 @@ class DataWorkflow
             $this->dataIO->progressSession($stepSize, $outputFileName);
         }
 
-        if ($this->dataIO->getSessionState() == 'finished') {
+        if ($this->dataIO->getSessionState() === 'finished') {
             // Session finished means we have exported all the ids in the session.
             // Therefore we can close the file with a footer and mark the session as done.
             $footer = $this->transformerChain->composeFooter();
@@ -140,17 +142,19 @@ class DataWorkflow
     /**
      * @param $postData
      * @param $inputFile
-     * @return mixed
+     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function import($postData, $inputFile)
     {
-        $tree = json_decode($this->profile->getConfig("tree"), true);
+        $tree = json_decode($this->profile->getConfig('tree'), true);
         if ($postData['format'] === 'xml') {
             $this->fileIO->setTree($tree);
         }
 
-        if ($this->dataIO->getSessionState() == 'new') {
+        if ($this->dataIO->getSessionState() === 'new') {
             $totalCount = $this->fileIO->getTotalCount($inputFile);
             $this->dataIO->setFileName($postData['importFile']);
             $this->dataIO->setFileSize(filesize($inputFile));
@@ -162,7 +166,7 @@ class DataWorkflow
         }
 
         $this->dataIO->usernameSession();
-        if ($this->dataIO->getSessionState() == 'active') {
+        if ($this->dataIO->getSessionState() === 'active') {
             //get current session position
             $batchSize = (int) $postData['batchSize'];
 
@@ -187,7 +191,7 @@ class DataWorkflow
             $postData['unprocessedData'] = $this->dataIO->getUnprocessedData();
         }
 
-        if ($this->dataIO->getSessionState() == 'finished') {
+        if ($this->dataIO->getSessionState() === 'finished') {
             $this->dataIO->closeSession();
         }
 
@@ -222,7 +226,7 @@ class DataWorkflow
      */
     private function getUploadPathProvider()
     {
-        /** @var UploadPathProvider $uploadPathProvider */
+        /* @var UploadPathProvider $uploadPathProvider */
         return Shopware()->Container()->get('swag_import_export.upload_path_provider');
     }
 }

@@ -8,13 +8,13 @@
 
 namespace Shopware\Components\SwagImportExport\Validators;
 
-use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
+use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 
 class OrderValidator extends Validator
 {
-    public static $mapper = array(
-        'int' => array(
+    public static $mapper = [
+        'int' => [
             'orderId',
             'customerId',
             'status',
@@ -32,9 +32,9 @@ class OrderValidator extends Validator
             'shipped',
             'shippedGroup',
             'mode',
-            'esd'
-        ),
-        'string' => array( //TODO: maybe we don't need to check fields which contains string?
+            'esd',
+        ],
+        'string' => [ //TODO: maybe we don't need to check fields which contains string?
             'number',
             'comment',
             'transactionId',
@@ -49,36 +49,37 @@ class OrderValidator extends Validator
             'remoteAddress',
             'articleNumber',
             'articleName',
-            'config'
-        ),
-        'float' => array(
+            'config',
+        ],
+        'float' => [
             'invoiceAmount',
             'invoiceAmountNet',
             'invoiceShipping',
             'invoiceShippingNet',
             'currencyFactor',
             'taxRate',
-            'price'
-        ),
-        'dateTime' => array('orderTime', 'clearedDate', 'releasedate'),
-    );
+            'price',
+        ],
+        'dateTime' => ['orderTime', 'clearedDate', 'releasedate'],
+    ];
 
     //TODO: check which other fields are required
-    private $requiredFields = array(
-        array('orderId', 'number', 'orderDetailId'), //one of these fields must be set
-    );
+    private $requiredFields = [
+        ['orderId', 'number', 'orderDetailId'], //one of these fields must be set
+    ];
 
-    private $snippetData = array(
-        'orderId' => array(
+    private $snippetData = [
+        'orderId' => [
             'adapters/orders/ordernumber_order_details_requires',
-            'Order number or order detail id must be provided'
-        ),
-    );
+            'Order number or order detail id must be provided',
+        ],
+    ];
 
     /**
      * Checks whether required fields are filled-in
      *
      * @param array $record
+     *
      * @throws AdapterException
      */
     public function checkRequiredFields($record)

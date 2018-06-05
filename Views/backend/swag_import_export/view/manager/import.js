@@ -1,7 +1,7 @@
-//{namespace name=backend/swag_import_export/view/main}
-//{block name="backend/swag_import_export/view/manager/import"}
+// {namespace name=backend/swag_import_export/view/main}
+// {block name="backend/swag_import_export/view/manager/import"}
 // deprecated since 2.4.2 and will be removed with 3.0.0
-//{block name="backend/swag_import_export/view/manager/export"}
+// {block name="backend/swag_import_export/view/manager/export"}
 Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
     extend: 'Ext.container.Container',
 
@@ -98,18 +98,14 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
     },
 
     createInfoText: function() {
-        var me = this;
-
         return Ext.create('Ext.container.Container', {
             margin: '0 0 20 0',
-            html: '<i style="color: grey" >' + "{s name=swag_import_export/manager/import/import_description}With file import, you are able to extract information from CSV and XML documents and save it in your database using profiles. These profiles contain information about which data is imported along with its structure. The default profiles can be individually extended and modified with custom profiles in the profiles menu.{/s}" + '</i>'
+            html: '<i style="color: grey" >' + '{s name=swag_import_export/manager/import/import_description}With file import, you are able to extract information from CSV and XML documents and save it in your database using profiles. These profiles contain information about which data is imported along with its structure. The default profiles can be individually extended and modified with custom profiles in the profiles menu.{/s}' + '</i>'
         });
     },
 
     createInfoBox: function() {
-        var me = this;
-
-        return Shopware.Notification.createBlockMessage('{s name=swag_import_export/manager/import/import_notice}Warning: Importing can permanently overwrite existing data and database structures!{/s}', 'notice')
+        return Shopware.Notification.createBlockMessage('{s name=swag_import_export/manager/import/import_notice}Warning: Importing can permanently overwrite existing data and database structures!{/s}', 'notice');
     },
 
     /**
@@ -134,7 +130,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
             dropZoneText: '{s name=swag_import_export/manager/import/drag_and_drop}SELECT FILE USING DRAG + DROP{/s}',
             height: 100,
             generatedId: id,
-            html: '<div id="'+ id +'" style="display: none;"></div>'
+            html: '<div id="' + id + '" style="display: none;"></div>'
         });
 
         return me.dropZone;
@@ -142,12 +138,12 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
 
     /**
      * Returns hidden file field
-     * 
+     *
      * @returns { Ext.form.TextField }
      */
-    createFileInput: function(){
+    createFileInput: function() {
         var me = this;
-        
+
         return {
             xtype: 'textfield',
             itemId: 'swag-import-export-file',
@@ -204,13 +200,13 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
                 }
             }
         });
-        
+
         return me.addBtn;
     },
 
     /**
      * Returns profile combo box
-     * 
+     *
      * @returns Ext.form.field.ComboBox
      */
     createProfileCombo: function() {
@@ -255,7 +251,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
             minChars: 3,
             displayTpl: new Ext.XTemplate(
                 '<tpl for=".">' +
-                '{literal}'  +
+                '{literal}' +
                 '{[typeof values === "string" ? values : this.getFormattedName(values)]}' +
                 '<tpl if="xindex < xcount">' + me.delimiter + '</tpl>' +
                 '{/literal}' +
@@ -273,13 +269,13 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
                 width: 450,
                 getInnerTpl: function (value) {
                     return Ext.XTemplate(
-                        '{literal}'  +
+                        '{literal}' +
                         '<tpl if="translation">{ name } <i>({ translation })</i>' +
                         '<tpl else>{ name }</tpl>' +
                         '{/literal}');
                 }
             },
-            listeners   : {
+            listeners: {
                 change: {
                     buffer: 500,
                     fn: function(combo, newValue) {
@@ -293,9 +289,9 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
                         } else if (Ext.isString(newValue)) {
                             searchString = Ext.String.trim(newValue);
 
-                            //scroll the store to first page
+                            // scroll the store to first page
                             store.currentPage = 1;
-                            //Loads the store with a special filter
+                            // Loads the store with a special filter
                             store.filter([
                                 { id: 'search', property: 'name', value: '%' + searchString + '%', expression: 'LIKE' }
                             ]);
@@ -342,7 +338,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
 
     /**
      * Finds profile and preselect if exists
-     * 
+     *
      * @param { string } value
      */
     findProfile: function(value) {
@@ -355,7 +351,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
 
         for (i = 0; i < parts.length; i++) {
             index = profileStore.find('name', parts[i]);
-            
+
             if (index !== -1) {
                 if (me.profileCombo.getValue() == undefined) {
                     record = profileStore.getAt(index);
@@ -367,5 +363,5 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
     }
 
 });
-//{/block}
-//{/block}
+// {/block}
+// {/block}

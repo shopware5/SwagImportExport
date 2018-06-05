@@ -1,5 +1,4 @@
 <?php
-
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -20,13 +19,10 @@ use Shopware\Components\SwagImportExport\Logger\LogDataStruct;
 use Shopware\Components\SwagImportExport\Logger\Logger;
 use Shopware\Components\SwagImportExport\Profile\Profile;
 use Shopware\Components\SwagImportExport\Service\Struct\ServiceHelperStruct;
-use Shopware\CustomModels\ImportExport\Session;
 use Shopware\Components\SwagImportExport\Transformers\DataTransformerChain;
 use Shopware\Components\SwagImportExport\UploadPathProvider;
+use Shopware\CustomModels\ImportExport\Session;
 
-/**
- * @package Shopware\Components\SwagImportExport\Service
- */
 abstract class AbstractImportExportService
 {
     /** @var DataFactory */
@@ -54,14 +50,14 @@ abstract class AbstractImportExportService
     protected $mediaService;
 
     /**
-     * @param ProfileFactory $profileFactory
-     * @param FileIOFactory $fileIOFactory
-     * @param DataFactory $dataFactory
-     * @param DataTransformerFactory $dataTransformerFactory
-     * @param Logger $logger
-     * @param UploadPathProvider $uploadPathProvider
+     * @param ProfileFactory            $profileFactory
+     * @param FileIOFactory             $fileIOFactory
+     * @param DataFactory               $dataFactory
+     * @param DataTransformerFactory    $dataTransformerFactory
+     * @param Logger                    $logger
+     * @param UploadPathProvider        $uploadPathProvider
      * @param \Shopware_Components_Auth $auth
-     * @param MediaService $mediaService
+     * @param MediaService              $mediaService
      */
     public function __construct(
         ProfileFactory $profileFactory,
@@ -85,6 +81,7 @@ abstract class AbstractImportExportService
 
     /**
      * @param array $requestData
+     *
      * @return ServiceHelperStruct
      */
     protected function buildServiceHelpers(array $requestData)
@@ -107,7 +104,7 @@ abstract class AbstractImportExportService
     }
 
     /**
-     * @param array $requestData
+     * @param array  $requestData
      * @param DataIO $dataIO
      */
     protected function initializeDataIO(DataIO $dataIO, array $requestData)
@@ -126,7 +123,8 @@ abstract class AbstractImportExportService
 
     /**
      * @param Profile $profile
-     * @param boolean $hasTreeStructure
+     * @param bool    $hasTreeStructure
+     *
      * @return DataTransformerChain
      */
     protected function createDataTransformerChain(Profile $profile, $hasTreeStructure)
@@ -140,11 +138,11 @@ abstract class AbstractImportExportService
     }
 
     /**
-     * @param string $writeStatus
-     * @param string $filename
-     * @param string $profileName
-     * @param string $logMessage
-     * @param string $status
+     * @param string  $writeStatus
+     * @param string  $filename
+     * @param string  $profileName
+     * @param string  $logMessage
+     * @param string  $status
      * @param Session $session
      */
     protected function logProcessing($writeStatus, $filename, $profileName, $logMessage, $status, Session $session)
@@ -152,7 +150,7 @@ abstract class AbstractImportExportService
         $this->logger->write($logMessage, $writeStatus, $session);
 
         $logDataStruct = new LogDataStruct(
-            date("Y-m-d H:i:s"),
+            date('Y-m-d H:i:s'),
             $filename,
             $profileName,
             $logMessage,
@@ -165,13 +163,14 @@ abstract class AbstractImportExportService
     /**
      * @param Profile $profile
      * @param $format
+     *
      * @return FileReader
      */
     private function createFileReader(Profile $profile, $format)
     {
         $fileReader = $this->fileIOFactory->createFileReader($format);
         if ($format === 'xml') {
-            $tree = json_decode($profile->getConfig("tree"), true);
+            $tree = json_decode($profile->getConfig('tree'), true);
 
             $fileReader->setTree($tree);
         }

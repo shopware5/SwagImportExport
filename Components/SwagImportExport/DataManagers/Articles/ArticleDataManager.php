@@ -8,31 +8,32 @@
 
 namespace Shopware\Components\SwagImportExport\DataManagers\Articles;
 
-use Shopware\Components\SwagImportExport\DbalHelper;
-use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
-use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\DataManagers\DataManager;
 use Shopware\Components\SwagImportExport\DataType\ArticleDataType;
+use Shopware\Components\SwagImportExport\DbalHelper;
+use Shopware\Components\SwagImportExport\Exception\AdapterException;
+use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
+use Shopware\Models\Article\Supplier;
 
 class ArticleDataManager extends DataManager
 {
     /**
      * @var \Enlight_Components_Db_Adapter_Pdo_Mysql
      */
-    private $db = null;
+    private $db;
 
     /**
      * @var DbalHelper
      */
-    private $dbalHelper = null;
+    private $dbalHelper;
 
-    private $taxRates = null;
+    private $taxRates;
 
-    private $suppliers = null;
+    private $suppliers;
 
     /**
      * @param \Enlight_Components_Db_Adapter_Pdo_Mysql $db
-     * @param DbalHelper $dbalHelper
+     * @param DbalHelper                               $dbalHelper
      */
     public function __construct(\Enlight_Components_Db_Adapter_Pdo_Mysql $db, DbalHelper $dbalHelper)
     {
@@ -62,69 +63,11 @@ class ArticleDataManager extends DataManager
     }
 
     /**
-     * Returns available taxes.
-     *
-     * @return array
-     */
-    private function getTaxRates()
-    {
-        if ($this->taxRates === null) {
-            $this->taxRates = $this->prepareTaxRates();
-        }
-
-        return $this->taxRates;
-    }
-
-    /**
-     * Return list with all shop taxes
-     *
-     * @return array
-     */
-    private function prepareTaxRates()
-    {
-        $taxes = $this->db->fetchPairs('SELECT id, tax FROM s_core_tax');
-        if (!is_array($taxes)) {
-            return array();
-        }
-        ksort($taxes);
-
-        return $taxes;
-    }
-
-    /**
-     * Returns available suppliers.
-     *
-     * @return array
-     */
-    private function getSuppliers()
-    {
-        if ($this->suppliers === null) {
-            $this->suppliers = $this->prepareSuppliers();
-        }
-
-        return $this->suppliers;
-    }
-
-    /**
-     * Return list with suppliers
-     *
-     * @return array
-     */
-    private function prepareSuppliers()
-    {
-        $suppliers = $this->db->fetchPairs('SELECT name, id FROM s_articles_supplier');
-        if (!is_array($suppliers)) {
-            return array();
-        }
-
-        return $suppliers;
-    }
-
-    /**
      * Sets fields which are empty, but we need them to create new entry.
      *
      * @param array $record
      * @param array $defaultValues
+     *
      * @return mixed
      */
     public function setDefaultFieldsForCreate($record, $defaultValues)
@@ -255,84 +198,13 @@ class ArticleDataManager extends DataManager
     }
 
     /**
-     * Get valid tax id depending on tax id or tax rate field.
-     *
-     * @param array $record
-     * @return bool|mixed
-     * @throws AdapterException
-     */
-    private function getTaxId($record)
-    {
-        $taxes = $this->getTaxRates();
-
-        $taxIds = array_keys($taxes);
-
-        if (isset($record['taxId']) && in_array($record['taxId'], $taxIds)) {
-            return $record['taxId'];
-        } elseif (isset($record['tax'])) {
-            $taxId = $this->getTaxByTaxRate($record['tax'], $record['orderNumber']);
-
-            return $taxId;
-        }
-
-        return false;
-    }
-
-    /**
-     * @param float $taxRate
-     * @param string $orderNumber
-     * @return mixed
-     * @throws AdapterException
-     */
-    private function getTaxByTaxRate($taxRate, $orderNumber)
-    {
-        $taxRate = number_format($taxRate, 2);
-
-        $taxId = array_search($taxRate, $this->getTaxRates());
-
-        if (!$taxId) {
-            $message = SnippetsHelper::getNamespace()->get(
-                'adapters/articles/no_tax_found',
-                "Tax by tax rate %s not found for article %s."
-            );
-            throw new AdapterException(sprintf($message, $taxRate, $orderNumber));
-        }
-
-        return $taxId;
-    }
-
-    /**
-     * @param array $record
-     * @return string
-     */
-    private function getSupplierId($record)
-    {
-        $this->suppliers = $this->getSuppliers();
-        $name = $record['supplierName'];
-        $supplierId = $this->suppliers[$name];
-
-        //creates supplier if does not exists
-        if (!$supplierId) {
-            $data = array('name' => $name);
-            $builder = $this->dbalHelper->getQueryBuilderForEntity(
-                $data,
-                'Shopware\Models\Article\Supplier',
-                false
-            );
-            $builder->execute();
-            $supplierId = $this->db->lastInsertId();
-            $this->suppliers[$name] = $supplierId;
-        }
-
-        return $supplierId;
-    }
-
-    /**
      * Sets fields which are empty by default.
      *
      * @param array $record
-     * @return mixed
+     *
      * @throws AdapterException
+     *
+     * @return mixed
      */
     public function setDefaultFields($record)
     {
@@ -363,6 +235,7 @@ class ArticleDataManager extends DataManager
      * Return proper values for article fields which have values NULL
      *
      * @param array $records
+     *
      * @return array
      */
     public function fixDefaultValues($records)
@@ -379,6 +252,7 @@ class ArticleDataManager extends DataManager
      *
      * @param array $record
      * @param array $mapping
+     *
      * @return array
      */
     public function setArticleData($record, $mapping)
@@ -392,10 +266,148 @@ class ArticleDataManager extends DataManager
      *
      * @param array $record
      * @param array $mapping
+     *
      * @return array
      */
     public function setArticleVariantData($record, $mapping)
     {
         return $this->mapFields($record, $mapping);
+    }
+
+    /**
+     * Returns available taxes.
+     *
+     * @return array
+     */
+    private function getTaxRates()
+    {
+        if ($this->taxRates === null) {
+            $this->taxRates = $this->prepareTaxRates();
+        }
+
+        return $this->taxRates;
+    }
+
+    /**
+     * Return list with all shop taxes
+     *
+     * @return array
+     */
+    private function prepareTaxRates()
+    {
+        $taxes = $this->db->fetchPairs('SELECT id, tax FROM s_core_tax');
+        if (!is_array($taxes)) {
+            return [];
+        }
+        ksort($taxes);
+
+        return $taxes;
+    }
+
+    /**
+     * Returns available suppliers.
+     *
+     * @return array
+     */
+    private function getSuppliers()
+    {
+        if ($this->suppliers === null) {
+            $this->suppliers = $this->prepareSuppliers();
+        }
+
+        return $this->suppliers;
+    }
+
+    /**
+     * Return list with suppliers
+     *
+     * @return array
+     */
+    private function prepareSuppliers()
+    {
+        $suppliers = $this->db->fetchPairs('SELECT name, id FROM s_articles_supplier');
+        if (!is_array($suppliers)) {
+            return [];
+        }
+
+        return $suppliers;
+    }
+
+    /**
+     * Get valid tax id depending on tax id or tax rate field.
+     *
+     * @param array $record
+     *
+     * @throws AdapterException
+     *
+     * @return bool|mixed
+     */
+    private function getTaxId($record)
+    {
+        $taxes = $this->getTaxRates();
+
+        $taxIds = array_keys($taxes);
+
+        if (isset($record['taxId']) && in_array($record['taxId'], $taxIds)) {
+            return $record['taxId'];
+        }
+
+        if (isset($record['tax'])) {
+            return $this->getTaxByTaxRate($record['tax'], $record['orderNumber']);
+        }
+
+        return false;
+    }
+
+    /**
+     * @param float  $taxRate
+     * @param string $orderNumber
+     *
+     * @throws AdapterException
+     *
+     * @return mixed
+     */
+    private function getTaxByTaxRate($taxRate, $orderNumber)
+    {
+        $taxRate = number_format($taxRate, 2);
+
+        $taxId = array_search($taxRate, $this->getTaxRates());
+
+        if (!$taxId) {
+            $message = SnippetsHelper::getNamespace()->get(
+                'adapters/articles/no_tax_found',
+                'Tax by tax rate %s not found for article %s.'
+            );
+            throw new AdapterException(sprintf($message, $taxRate, $orderNumber));
+        }
+
+        return $taxId;
+    }
+
+    /**
+     * @param array $record
+     *
+     * @return string
+     */
+    private function getSupplierId($record)
+    {
+        $this->suppliers = $this->getSuppliers();
+        $name = $record['supplierName'];
+        $supplierId = $this->suppliers[$name];
+
+        //creates supplier if does not exists
+        if (!$supplierId) {
+            $data = ['name' => $name];
+            $builder = $this->dbalHelper->getQueryBuilderForEntity(
+                $data,
+                Supplier::class,
+                false
+            );
+            $builder->execute();
+            $supplierId = $this->db->lastInsertId();
+            $this->suppliers[$name] = $supplierId;
+        }
+
+        return $supplierId;
     }
 }

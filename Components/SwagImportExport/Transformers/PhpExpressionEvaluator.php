@@ -13,8 +13,10 @@ class PhpExpressionEvaluator implements ExpressionEvaluator
     /**
      * @param $expression
      * @param $variables
-     * @return mixed|void
+     *
      * @throws \Exception
+     *
+     * @return mixed|void
      */
     public function evaluate($expression, $variables)
     {
@@ -30,7 +32,7 @@ class PhpExpressionEvaluator implements ExpressionEvaluator
 
         $errorBefore = error_get_last();
 
-        $evaledParam = @eval("return " . $expression . ";");
+        $evaledParam = @eval('return ' . $expression . ';');
 
         $errorAfter = error_get_last();
 

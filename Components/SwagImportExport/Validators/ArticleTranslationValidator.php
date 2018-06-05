@@ -8,38 +8,39 @@
 
 namespace Shopware\Components\SwagImportExport\Validators;
 
-use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
+use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 
 class ArticleTranslationValidator extends Validator
 {
     /**
      * @var array
      */
-    public static $mapper = array(
-        'string' => array( //TODO: maybe we don't need to check fields which contains string?
+    public static $mapper = [
+        'string' => [ //TODO: maybe we don't need to check fields which contains string?
             'articleNumber',
             'name',
             'description',
             'descriptionLong',
             'keywords',
-            'metaTitle'
-        ),
-        'int' => array('languageId'),
-    );
+            'metaTitle',
+        ],
+        'int' => ['languageId'],
+    ];
 
     /**
      * @var array
      */
-    private $requiredFields = array(
+    private $requiredFields = [
         'articleNumber' => 'adapters/ordernumber_required',
-        'languageId' => 'adapters/translations/language_not_found'
-    );
+        'languageId' => 'adapters/translations/language_not_found',
+    ];
 
     /**
      * Checks whether required fields are filled-in
      *
      * @param array $record
+     *
      * @throws AdapterException
      */
     public function checkRequiredFields($record)

@@ -9,5 +9,7 @@
 namespace Shopware\Models\Article;
 
 if (!class_exists('\Shopware\Models\Article\Element')) {
-    class Element {}
+    class Element
+    {
+    }
 }

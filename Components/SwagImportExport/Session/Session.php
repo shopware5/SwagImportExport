@@ -8,13 +8,13 @@
 
 namespace Shopware\Components\SwagImportExport\Session;
 
+use Shopware\Components\SwagImportExport\Profile\Profile;
 use Shopware\Components\SwagImportExport\UploadPathProvider;
 use Shopware\CustomModels\ImportExport\Session as SessionEntity;
-use Shopware\Components\SwagImportExport\Profile\Profile as Profile;
 
 /**
  * Class Session
- * @package Shopware\Components\SwagImportExport\Session
+ *
  * @method int getTotalCount
  */
 class Session
@@ -27,7 +27,7 @@ class Session
     protected $sessionRepository;
 
     /**
-     * @var integer $sessionId
+     * @var int
      */
     protected $sessionId;
 
@@ -36,6 +36,9 @@ class Session
      */
     protected $manager;
 
+    /**
+     * @param SessionEntity $session
+     */
     public function __construct(SessionEntity $session)
     {
         $this->sessionEntity = $session;
@@ -44,17 +47,18 @@ class Session
     /**
      * @param $method
      * @param $arguments
-     * @return mixed
+     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function __call($method, $arguments)
     {
         $session = $this->getEntity();
         if (method_exists($session, $method)) {
             return $session->$method($arguments);
-        } else {
-            throw new \Exception("Method $method does not exists.");
         }
+        throw new \Exception("Method $method does not exists.");
     }
 
     /**
@@ -65,14 +69,14 @@ class Session
     public function getEntity()
     {
         if ($this->sessionEntity === null) {
-            $this->sessionEntity = $this->getSessionRepository()->findOneBy(array('id' => $this->getSessionId()));
+            $this->sessionEntity = $this->getSessionRepository()->findOneBy(['id' => $this->getSessionId()]);
         }
 
         return $this->sessionEntity;
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getSessionId()
     {
@@ -86,7 +90,8 @@ class Session
      * For now we will write the ids as a serialized array.
      *
      * @param Profile $profile
-     * @param array $data
+     * @param array   $data
+     *
      * @throws \Exception
      */
     public function start(Profile $profile, array $data)
@@ -155,7 +160,7 @@ class Session
      * Updates the session position with the current position (stored in a member variable).
      * Updates the file size of the output file
      *
-     * @param integer $step
+     * @param int  $step
      * @param null $file
      */
     public function progress($step, $file = null)
@@ -202,10 +207,10 @@ class Session
 
         $this->getManager()->flush();
 
-        $data = array(
+        $data = [
             'recordIds' => unserialize($recordIds),
             'fileName' => $sessionEntity->getFileName(),
-        );
+        ];
 
         return $data;
     }
@@ -233,7 +238,7 @@ class Session
     {
         $sessionEntity = $this->getEntity();
 
-        $sessionEntity->setUsername($username);
+        $sessionEntity->setUserName($username);
 
         $this->getManager()->persist($sessionEntity);
         $this->getManager()->flush();
@@ -298,7 +303,7 @@ class Session
     public function getSessionRepository()
     {
         if ($this->sessionRepository === null) {
-            $this->sessionRepository = Shopware()->Models()->getRepository('Shopware\CustomModels\ImportExport\Session');
+            $this->sessionRepository = Shopware()->Models()->getRepository(SessionEntity::class);
         }
 
         return $this->sessionRepository;

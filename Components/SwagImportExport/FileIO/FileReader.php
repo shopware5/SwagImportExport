@@ -12,14 +12,16 @@ interface FileReader
 {
     /**
      * @param string $fileName
-     * @param int $position
-     * @param int $count
+     * @param int    $position
+     * @param int    $count
+     *
      * @return array
      */
     public function readRecords($fileName, $position, $count);
 
     /**
      * @param string $fileName
+     *
      * @return int
      */
     public function getTotalCount($fileName);

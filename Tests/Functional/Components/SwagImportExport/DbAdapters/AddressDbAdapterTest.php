@@ -328,21 +328,21 @@ class AddressDbAdapterTest extends TestCase
         $addressDbAdapter = $this->createAddressDbAdapter();
         $columns = $addressDbAdapter->getColumns();
 
-        $this->assertTrue(in_array('address.id as id', $columns, true));
-        $this->assertTrue(in_array('address.company as company', $columns, true));
-        $this->assertTrue(in_array('address.firstname as firstname', $columns, true));
-        $this->assertTrue(in_array('address.lastname as lastname', $columns, true));
-        $this->assertTrue(in_array('address.street as street', $columns, true));
-        $this->assertTrue(in_array('address.city as city', $columns, true));
-        $this->assertTrue(in_array('address.zipcode as zipcode', $columns, true));
-        $this->assertTrue(in_array('address.zipcode as zipcode', $columns, true));
+        $this->assertContains('address.id as id', $columns);
+        $this->assertContains('address.company as company', $columns);
+        $this->assertContains('address.firstname as firstname', $columns);
+        $this->assertContains('address.lastname as lastname', $columns);
+        $this->assertContains('address.street as street', $columns);
+        $this->assertContains('address.city as city', $columns);
+        $this->assertContains('address.zipcode as zipcode', $columns);
+        $this->assertContains('address.zipcode as zipcode', $columns);
 
-        $this->assertTrue(in_array('country.id as countryID', $columns, true));
-        $this->assertTrue(in_array('state.id as stateID', $columns, true));
+        $this->assertContains('country.id as countryID', $columns);
+        $this->assertContains('state.id as stateID', $columns);
 
-        $this->assertTrue(in_array('customer.email as email', $columns, true));
-        $this->assertTrue(in_array('customer.number as customernumber', $columns, true));
-        $this->assertTrue(in_array('customer.id as userID', $columns, true));
+        $this->assertContains('customer.email as email', $columns);
+        $this->assertContains('customer.number as customernumber', $columns);
+        $this->assertContains('customer.id as userID', $columns);
     }
 
     public function test_getColumns_should_get_attribute_columns()
@@ -350,8 +350,8 @@ class AddressDbAdapterTest extends TestCase
         $addressDbAdapter = $this->createAddressDbAdapter();
         $columns = $addressDbAdapter->getColumns();
 
-        $this->assertTrue(in_array('attribute.text1 as attributeText1', $columns, true));
-        $this->assertTrue(in_array('attribute.text2 as attributeText2', $columns, true));
+        $this->assertContains('attribute.text1 as attributeText1', $columns);
+        $this->assertContains('attribute.text2 as attributeText2', $columns);
     }
 
     public function test_write_should_throw_exception_if_no_addresses_were_given()

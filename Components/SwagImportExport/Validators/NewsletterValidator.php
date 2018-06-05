@@ -8,26 +8,27 @@
 
 namespace Shopware\Components\SwagImportExport\Validators;
 
-use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
+use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 
 class NewsletterValidator extends Validator
 {
-    private $requiredFields = array(
+    private $requiredFields = [
         'email',
-    );
+    ];
 
-    private $snippetData = array(
-        'email' => array(
+    private $snippetData = [
+        'email' => [
             'adapters/newsletter/email_required',
-            'Email address is required field.'
-        ),
-    );
+            'Email address is required field.',
+        ],
+    ];
 
     /**
      * Checks whether required fields are filled-in
      *
      * @param array $record
+     *
      * @throws AdapterException
      */
     public function checkRequiredFields($record)

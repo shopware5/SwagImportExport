@@ -1,10 +1,10 @@
-//{block name="backend/swag_import_export/store/profile_list"}
+// {block name="backend/swag_import_export/store/profile_list"}
 Ext.define('Shopware.apps.SwagImportExport.store.ProfileList', {
     /**
      * Define that this component is an extension of the Ext.data.TreeStore
      */
-    extend : 'Ext.data.Store',
-    
+    extend: 'Ext.data.Store',
+
     autoLoad: false,
 
     remoteSort: true,
@@ -15,8 +15,8 @@ Ext.define('Shopware.apps.SwagImportExport.store.ProfileList', {
      * Define the used model for this store
      * @string
      */
-    model : 'Shopware.apps.SwagImportExport.model.ProfileList',
+    model: 'Shopware.apps.SwagImportExport.model.ProfileList',
 
     pageSize: 50
 });
-//{/block}
+// {/block}

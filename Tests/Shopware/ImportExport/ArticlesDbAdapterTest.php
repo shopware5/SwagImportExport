@@ -43,8 +43,8 @@ class ArticlesDbAdapterTest extends DbAdapterTestHelper
         }
         unset($item);
 
-        $this->assertTrue(in_array($rawData['article'][0], $expected['article']));
-        $this->assertTrue(in_array($rawData['article'][1], $expected['article']));
+        $this->assertContains($rawData['article'][0], $expected['article']);
+        $this->assertContains($rawData['article'][1], $expected['article']);
         $this->assertCount(count($rawData['article']), $expected['article']);
     }
 

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -9,18 +8,16 @@
 
 namespace Shopware\Components\SwagImportExport\Factories;
 
+use Shopware\Components\SwagImportExport\Transformers\DataTransformerChain;
 use Shopware\Components\SwagImportExport\Transformers\DecimalTransformer;
+use Shopware\Components\SwagImportExport\Transformers\FlattenTransformer;
 use Shopware\Components\SwagImportExport\Transformers\PhpExpressionEvaluator;
 use Shopware\Components\SwagImportExport\Transformers\SmartyExpressionEvaluator;
-use Shopware\Components\SwagImportExport\Transformers\DataTransformerChain;
 use Shopware\Components\SwagImportExport\Transformers\TreeTransformer;
-use Shopware\Components\SwagImportExport\Transformers\FlattenTransformer;
 use Shopware\Components\SwagImportExport\Transformers\ValuesTransformer;
 
 /**
  * Class DataTransformerFactory
- *
- * @package Shopware\Components\SwagImportExport\Factories
  */
 class DataTransformerFactory extends \Enlight_Class implements \Enlight_Hook
 {
@@ -29,7 +26,8 @@ class DataTransformerFactory extends \Enlight_Class implements \Enlight_Hook
      * The $dataUserOptions is an object that will return info for the output file structure - tree or flat.
      *
      * @param \Shopware\Components\SwagImportExport\Profile\Profile $profile
-     * @param array $dataUserOptions
+     * @param array                                                 $dataUserOptions
+     *
      * @return \Shopware\Components\SwagImportExport\Transformers\DataTransformerChain
      */
     public function createDataTransformerChain($profile, $dataUserOptions)
@@ -60,8 +58,10 @@ class DataTransformerFactory extends \Enlight_Class implements \Enlight_Hook
      *
      * @param $transformerType
      * @param $config
-     * @return FlattenTransformer|TreeTransformer|ValuesTransformer
+     *
      * @throws \Exception
+     *
+     * @return FlattenTransformer|TreeTransformer|ValuesTransformer
      */
     public function createDataTransformer($transformerType, $config)
     {
@@ -70,10 +70,10 @@ class DataTransformerFactory extends \Enlight_Class implements \Enlight_Hook
                 $transformer = new TreeTransformer();
                 break;
             case 'exportConversion':
-                $config = array(
+                $config = [
                     'expression' => $config,
-                    'evaluator' => $this->createValueConvertor('smartyEvaluator')
-                );
+                    'evaluator' => $this->createValueConvertor('smartyEvaluator'),
+                ];
                 $transformer = new ValuesTransformer();
                 break;
             case 'flatten':
@@ -93,8 +93,10 @@ class DataTransformerFactory extends \Enlight_Class implements \Enlight_Hook
 
     /**
      * @param $convertorType
-     * @return PhpExpressionEvaluator|SmartyExpressionEvaluator
+     *
      * @throws \Exception
+     *
+     * @return PhpExpressionEvaluator|SmartyExpressionEvaluator
      */
     public function createValueConvertor($convertorType)
     {

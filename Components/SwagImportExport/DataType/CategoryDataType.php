@@ -13,16 +13,16 @@ class CategoryDataType
     /**
      * @var array
      */
-    public static $mapper = array(
-        'int' => array(
+    public static $mapper = [
+        'int' => [
             'categoryId',
             'parentId',
             'position',
             'active',
             'blog',
-            'hideFilter'
-        ),
-        'string' => array(
+            'hideFilter',
+        ],
+        'string' => [
             'name',
             'metaKeywords',
             'metaDescription',
@@ -35,28 +35,28 @@ class CategoryDataType
             'attributeAttribute3',
             'attributeAttribute4',
             'attributeAttribute5',
-            'attributeAttribute6'
-        ),
-    );
+            'attributeAttribute6',
+        ],
+    ];
 
     /**
      * @var array
      */
-    public static $defaultFieldsForCreate = array(
-        'id' => array(
-            'parentId'
-        ),
-        'boolean' => array(
+    public static $defaultFieldsForCreate = [
+        'id' => [
+            'parentId',
+        ],
+        'boolean' => [
             'active',
-        ),
-        'string' => array(
+        ],
+        'string' => [
             'template',
             'attributeAttribute1',
             'attributeAttribute2',
             'attributeAttribute3',
             'attributeAttribute4',
             'attributeAttribute5',
-            'attributeAttribute6'
-        )
-    );
+            'attributeAttribute6',
+        ],
+    ];
 }

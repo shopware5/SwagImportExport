@@ -1,13 +1,13 @@
 Ext.define('Shopware.apps.SwagImportExport.view.profile.tree.DragAndDrop', {
     extend: 'Ext.tree.plugin.TreeViewDragDrop',
-    
+
     alias: 'plugin.customtreeviewdragdrop',
-    
+
     onViewRender: function() {
         var me = this;
-        
+
         me.callParent(arguments);
-        
+
         /**
          * Custom drag&drop validation function for profile editor tree
          */
@@ -17,12 +17,12 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.tree.DragAndDrop', {
             }
 
             var view = me.dropZone.view,
-                    targetNode = view.getRecord(node),
-                    draggedRecords = data.records,
-                    dataLength = draggedRecords.length,
-                    ln = draggedRecords.length,
-                    i, record;
-            
+                targetNode = view.getRecord(node),
+                draggedRecords = data.records,
+                dataLength = draggedRecords.length,
+                ln = draggedRecords.length,
+                i, record;
+
             // No drop position, or dragged records: invalid drop point
             if (!(targetNode && position && dataLength)) {
                 return false;
@@ -49,19 +49,19 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.tree.DragAndDrop', {
             if (Ext.Array.contains(draggedRecords, targetNode)) {
                 return false;
             }
-            
+
             // Custom checks
             for (i = 0; i < ln; i++) {
                 record = draggedRecords[i];
                 // check if the node is in the same iteration
-                if (record.parentNode !== targetNode.parentNode
-                    && record.get('adapter') !== targetNode.get('adapter')
+                if (record.parentNode !== targetNode.parentNode &&
+                    record.get('adapter') !== targetNode.get('adapter')
                 ) {
                     return false;
                 }
                 // special case check: node cannot be inserted in the same level as the iteration node
-                if (record.parentNode !== targetNode.parentNode
-                    && position === 'before' && record.get('adapter') !== targetNode.parentNode.get('adapter')
+                if (record.parentNode !== targetNode.parentNode &&
+                    position === 'before' && record.get('adapter') !== targetNode.parentNode.get('adapter')
                 ) {
                     return false;
                 }

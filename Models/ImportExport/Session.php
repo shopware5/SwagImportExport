@@ -9,8 +9,8 @@
 namespace Shopware\CustomModels\ImportExport;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Session Model
@@ -24,7 +24,7 @@ class Session extends ModelEntity
     /**
      * Primary Key - autoincrement value
      *
-     * @var int $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -33,7 +33,7 @@ class Session extends ModelEntity
     protected $id;
 
     /**
-     * @var Profile $profile
+     * @var Profile
      *
      * @ORM\ManyToOne(targetEntity="Shopware\CustomModels\ImportExport\Profile", inversedBy="sessions", cascade={"persist", "refresh"})
      * @ORM\JoinColumn(name="profile_id", onDelete="CASCADE")
@@ -41,49 +41,49 @@ class Session extends ModelEntity
     protected $profile;
 
     /**
-     * @var string $type
+     * @var string
      *
      * @ORM\Column(name="type", type="string", length=200)
      */
     protected $type;
 
     /**
-     * @var string $ids
+     * @var string
      *
      * @ORM\Column(name="ids", type="text", nullable=false)
      */
     protected $ids;
 
     /**
-     * @var int $position
+     * @var int
      *
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
     protected $position;
 
     /**
-     * @var int $totalCount
+     * @var int
      *
      * @ORM\Column(name="total_count", type="integer", nullable=false)
      */
     protected $totalCount;
 
     /**
-     * @var string $userName
+     * @var string
      *
      * @ORM\Column(name="username", type="string", length=200, nullable=true)
      */
     protected $userName;
 
     /**
-     * @var string $fileName
+     * @var string
      *
      * @ORM\Column(name="file_name", type="string", length=200)
      */
     protected $fileName;
 
     /**
-     * @var string $format
+     * @var string
      *
      * @ORM\Column(name="format", type="string", length=100)
      */
@@ -92,35 +92,35 @@ class Session extends ModelEntity
     /**
      * Filesize of the file in bytes
      *
-     * @var int $fileSize
+     * @var int
      *
      * @ORM\Column(name="file_size", type="integer", nullable=true)
      */
     protected $fileSize;
 
     /**
-     * @var string $state
+     * @var string
      *
      * @ORM\Column(name="state", type="string", length=100)
      */
     protected $state = 'new';
 
     /**
-     * @var \Datetime $createdAt
+     * @var \Datetime
      *
      * @ORM\Column(name="created_at", type="datetime")
      */
     protected $createdAt;
 
     /**
-     * @var ArrayCollection $logs
+     * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Shopware\CustomModels\ImportExport\Logger", mappedBy="session")
      */
     protected $logs;
 
-
-    public function __construct() {
+    public function __construct()
+    {
         $this->logs = new ArrayCollection();
     }
 
@@ -234,6 +234,7 @@ class Session extends ModelEntity
      * Sets the profile object.
      *
      * @param Profile $profile
+     *
      * @return Session
      */
     public function setProfile(Profile $profile = null)
@@ -245,6 +246,7 @@ class Session extends ModelEntity
 
     /**
      * @param string $type
+     *
      * @return Session
      */
     public function setType($type)
@@ -256,6 +258,7 @@ class Session extends ModelEntity
 
     /**
      * @param string $ids
+     *
      * @return Session
      */
     public function setIds($ids)
@@ -267,6 +270,7 @@ class Session extends ModelEntity
 
     /**
      * @param int $position
+     *
      * @return Session
      */
     public function setPosition($position)
@@ -278,6 +282,7 @@ class Session extends ModelEntity
 
     /**
      * @param int $totalCount
+     *
      * @return Session
      */
     public function setTotalCount($totalCount)
@@ -289,6 +294,7 @@ class Session extends ModelEntity
 
     /**
      * @param string $userName
+     *
      * @return Session
      */
     public function setUserName($userName)
@@ -300,6 +306,7 @@ class Session extends ModelEntity
 
     /**
      * @param string $fileName
+     *
      * @return Session
      */
     public function setFileName($fileName)
@@ -311,6 +318,7 @@ class Session extends ModelEntity
 
     /**
      * @param string $format
+     *
      * @return Session
      */
     public function setFormat($format)
@@ -322,6 +330,7 @@ class Session extends ModelEntity
 
     /**
      * @param int $fileSize
+     *
      * @return Session
      */
     public function setFileSize($fileSize)
@@ -333,6 +342,7 @@ class Session extends ModelEntity
 
     /**
      * @param string $state
+     *
      * @return Session
      */
     public function setState($state)
@@ -346,6 +356,7 @@ class Session extends ModelEntity
      * Set createdAt
      *
      * @param \DateTime $createdAt
+     *
      * @return Session
      */
     public function setCreatedAt($createdAt)

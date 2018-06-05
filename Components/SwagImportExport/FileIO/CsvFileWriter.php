@@ -8,15 +8,15 @@
 
 namespace Shopware\Components\SwagImportExport\FileIO;
 
-use Shopware\Components\SwagImportExport\Utils\FileHelper;
 use Shopware\Components\SwagImportExport\FileIO\Encoders\CsvEncoder;
+use Shopware\Components\SwagImportExport\Utils\FileHelper;
 
 class CsvFileWriter implements FileWriter
 {
     protected $treeStructure = false;
 
     /**
-     * @var FileHelper $fileHelper
+     * @var FileHelper
      */
     protected $fileHelper;
 
@@ -30,7 +30,8 @@ class CsvFileWriter implements FileWriter
 
     /**
      * @param string $fileName
-     * @param array $headerData
+     * @param array  $headerData
+     *
      * @throws \Exception
      * @throws \Exception
      */
@@ -46,6 +47,7 @@ class CsvFileWriter implements FileWriter
     /**
      * @param $fileName
      * @param $data
+     *
      * @throws \Exception
      */
     public function writeRecords($fileName, $data)

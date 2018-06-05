@@ -39,7 +39,7 @@ class CsvEncoder extends CsvConverter
                     || strpos($line[$key], $this->sSettings['separator']) !== false
                 ) {
                     $csv .= $fieldmark;
-                    if ($this->sSettings['encoding'] == 'UTF-8') {
+                    if ($this->sSettings['encoding'] === 'UTF-8') {
                         $line[$key] = utf8_decode($line[$key]);
                     }
                     if (!empty($fieldmark)) {

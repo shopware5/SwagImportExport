@@ -1,12 +1,10 @@
 <?php
-
 /**
  * (c) shopware AG <info@shopware.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 use Shopware\Components\SwagImportExport\Service\ExportService;
 
 /**
@@ -14,16 +12,16 @@ use Shopware\Components\SwagImportExport\Service\ExportService;
  *
  * Export Controller to handle all exports
  *
- * @category Shopware
- * @package Shopware\Plugins\SwagImportExport
+ * @category  Shopware
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Backend_SwagImportExportExport extends Shopware_Controllers_Backend_ExtJs
 {
     public function initAcl()
     {
-        $this->addAclPermission("prepareExport", "export", "Insuficient Permissions (prepareExport)");
-        $this->addAclPermission("export", "export", "Insuficient Permissions (export)");
+        $this->addAclPermission('prepareExport', 'export', 'Insufficient Permissions (prepareExport)');
+        $this->addAclPermission('export', 'export', 'Insufficient Permissions (export)');
     }
 
     public function prepareExportAction()
@@ -43,11 +41,11 @@ class Shopware_Controllers_Backend_SwagImportExportExport extends Shopware_Contr
             'profileId' => (int) $this->Request()->getParam('profileId'),
             'type' => 'export',
             'format' => $this->Request()->getParam('format'),
-            'filter' =>  [],
-            'limit' =>  [
+            'filter' => [],
+            'limit' => [
                 'limit' => $limit,
                 'offset' => $offset,
-            ]
+            ],
         ];
 
         /** @var ExportService $exportService */
@@ -56,17 +54,21 @@ class Shopware_Controllers_Backend_SwagImportExportExport extends Shopware_Contr
         try {
             $resultStruct = $exportService->prepareExport($postData, $this->Request()->getParams());
         } catch (\Exception $e) {
-            return $this->View()->assign(['success' => false, 'msg' => $e->getMessage()]);
+            $this->View()->assign(['success' => false, 'msg' => $e->getMessage()]);
+
+            return;
         }
 
         if ($resultStruct->getTotalResultCount() === 0) {
-            return $this->View()->assign(['success' => false, 'msg' => 'No data to export', 'position' => 0, 'count' => 0]);
+            $this->View()->assign(['success' => false, 'msg' => 'No data to export', 'position' => 0, 'count' => 0]);
+
+            return;
         }
 
-        return $this->View()->assign([
+        $this->View()->assign([
             'success' => true,
             'position' => $resultStruct->getPosition(),
-            'count' => $resultStruct->getTotalResultCount()
+            'count' => $resultStruct->getTotalResultCount(),
         ]);
     }
 
@@ -88,8 +90,8 @@ class Shopware_Controllers_Backend_SwagImportExportExport extends Shopware_Contr
             'format' => $this->Request()->getParam('format'),
             'sessionId' => $this->Request()->getParam('sessionId'),
             'fileName' => $this->Request()->getParam('fileName'),
-            'filter' =>  [],
-            'limit' =>  [
+            'filter' => [],
+            'limit' => [
                 'limit' => $limit,
                 'offset' => $offset,
             ],

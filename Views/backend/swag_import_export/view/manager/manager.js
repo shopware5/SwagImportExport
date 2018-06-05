@@ -1,5 +1,5 @@
-//{namespace name=backend/swag_import_export/view/main}
-//{block name="backend/swag_import_export/view/manager/manager"}
+// {namespace name=backend/swag_import_export/view/main}
+// {block name="backend/swag_import_export/view/manager/manager"}
 Ext.define('Shopware.apps.SwagImportExport.view.manager.Manager', {
     extend: 'Ext.container.Container',
 
@@ -9,7 +9,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Manager', {
      */
     alias: 'widget.swag-import-export-manager-manager',
     height: 450,
-    
+
     title: '{s name=swag_import_export/manager/manager/title}Import / Export manager{/s}',
     layout: 'fit',
     style: {
@@ -104,4 +104,4 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Manager', {
         return me.tabPanel;
     }
 });
-//{/block}
+// {/block}

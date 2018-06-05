@@ -13,21 +13,21 @@ use Enlight_Components_Db_Adapter_Pdo_Mysql as PDOConnection;
 class ArticleImageDataManager
 {
     /**
-     * @var PDOConnection $db
+     * @var PDOConnection
      */
-    private $db = null;
+    private $db;
 
     /**
      * Define which field should be set by default
      *
      * @var array
      */
-    private $defaultFields = array(
+    private $defaultFields = [
         'main',
         'position',
         'thumbnail',
         'description',
-    );
+    ];
 
     /**
      * initialises the class properties
@@ -41,7 +41,8 @@ class ArticleImageDataManager
      * Sets fields which are empty by default.
      *
      * @param array $record
-     * @param int $articleId
+     * @param int   $articleId
+     *
      * @return mixed
      */
     public function setDefaultFields($record, $articleId)
@@ -72,11 +73,12 @@ class ArticleImageDataManager
 
     /**
      * @param int $articleId
+     *
      * @return int
      */
     private function getPosition($articleId)
     {
-        $sql = "SELECT MAX(position) FROM s_articles_img WHERE articleID = ?;";
+        $sql = 'SELECT MAX(position) FROM s_articles_img WHERE articleID = ?;';
         $result = $this->db->fetchOne($sql, $articleId);
 
         return isset($result) ? ((int) $result + 1) : 1;

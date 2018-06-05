@@ -432,7 +432,7 @@ class AddressDbAdapter implements DataDbAdapter
      *
      * @throws AdapterException
      *
-     * @return array|void
+     * @return array
      */
     private function setState(Address $addressModel, array $addressRecord)
     {

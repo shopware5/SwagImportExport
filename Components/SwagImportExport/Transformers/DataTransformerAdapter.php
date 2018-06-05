@@ -1,5 +1,4 @@
 <?php
-
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -12,8 +11,6 @@ namespace Shopware\Components\SwagImportExport\Transformers;
 /**
  * This interface defines the way the transformers must work.
  * Each of them must be able to compose headers and footers, and to transform the data in both directions.
- *
- * @package Shopware\Components\SwagImportExport\Transformers
  */
 interface DataTransformerAdapter
 {
@@ -28,6 +25,8 @@ interface DataTransformerAdapter
      * Transforms the data in direction to formatted output file and returns the transformed data.
      *
      * @param $data
+     *
+     * @return array
      */
     public function transformForward($data);
 
@@ -35,6 +34,8 @@ interface DataTransformerAdapter
      * Transforms the data in direction from formatted output file and returns the transformed data.
      *
      * @param $data
+     *
+     * @return array
      */
     public function transformBackward($data);
 }

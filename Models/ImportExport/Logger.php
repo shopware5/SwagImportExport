@@ -8,8 +8,8 @@
 
 namespace Shopware\CustomModels\ImportExport;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Logger Model
@@ -23,7 +23,7 @@ class Logger extends ModelEntity
     /**
      * Primary Key - autoincrement value
      *
-     * @var int $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -32,7 +32,7 @@ class Logger extends ModelEntity
     protected $id;
 
     /**
-     * @var Session $session
+     * @var Session
      *
      * @ORM\ManyToOne(targetEntity="Shopware\CustomModels\ImportExport\Session", inversedBy="logs")
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id", onDelete="SET NULL")
@@ -40,7 +40,7 @@ class Logger extends ModelEntity
     protected $session;
 
     /**
-     * @var string $message
+     * @var string
      *
      * @ORM\Column(name="message", type="text", nullable=true)
      */
@@ -49,14 +49,14 @@ class Logger extends ModelEntity
     /**
      * Confusing naming here - indicates error state: false = no errors
      *
-     * @var boolean $state
+     * @var bool
      *
      * @ORM\Column(name="state", type="string", length=100, nullable=true)
      */
     protected $state;
 
     /**
-     * @var \Datetime $createdAt
+     * @var \Datetime
      *
      * @ORM\Column(name="created_at", type="datetime")
      */
@@ -80,6 +80,7 @@ class Logger extends ModelEntity
 
     /**
      * @param string $message
+     *
      * @return Logger
      */
     public function setMessage($message)
@@ -99,6 +100,7 @@ class Logger extends ModelEntity
 
     /**
      * @param bool $status
+     *
      * @return Logger
      */
     public function setStatus($status)
@@ -120,6 +122,7 @@ class Logger extends ModelEntity
      * Set date
      *
      * @param \DateTime|string $createdAt
+     *
      * @return Logger
      */
     public function setCreatedAt($createdAt = 'now')

@@ -15,7 +15,6 @@ use Shopware\Setup\SwagImportExport\SetupContext;
 
 /**
  * Class DefaultProfileInstaller
- * @package Shopware\Setup\SwagImportExport\Install
  */
 class DefaultProfileInstaller implements InstallerInterface
 {
@@ -33,7 +32,7 @@ class DefaultProfileInstaller implements InstallerInterface
 
     /**
      * @param SetupContext $setupContext
-     * @param Connection $connection
+     * @param Connection   $connection
      */
     public function __construct(SetupContext $setupContext, Connection $connection)
     {
@@ -42,7 +41,7 @@ class DefaultProfileInstaller implements InstallerInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function install()
     {
@@ -65,7 +64,7 @@ class DefaultProfileInstaller implements InstallerInterface
                 'description' => $profile->getDescription(),
                 'tree' => $serializedTree,
                 'hidden' => 0,
-                'is_default' => 1
+                'is_default' => 1,
             ];
 
             $this->connection->executeQuery($sql, $params);
@@ -73,7 +72,7 @@ class DefaultProfileInstaller implements InstallerInterface
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isCompatible()
     {

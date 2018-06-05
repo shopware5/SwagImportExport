@@ -1,16 +1,16 @@
-//{block name="backend/swag_import_export/store/column"}
+// {block name="backend/swag_import_export/store/column"}
 Ext.define('Shopware.apps.SwagImportExport.store.Column', {
     /**
      * Define that this component is an extension of the Ext.data.TreeStore
      */
     extend: 'Ext.data.Store',
-    
+
     /**
      * Define the used model for this store
      * @string
      */
     model: 'Shopware.apps.SwagImportExport.model.Column',
-    
+
     proxy: {
         type: 'ajax',
         api: {
@@ -27,4 +27,4 @@ Ext.define('Shopware.apps.SwagImportExport.store.Column', {
         }
     }
 });
-//{/block}
+// {/block}

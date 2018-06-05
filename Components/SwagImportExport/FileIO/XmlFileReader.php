@@ -15,7 +15,7 @@ class XmlFileReader implements FileReader
     protected $iterationTag = [];
 
     /**
-     * @var bool $treeStructure
+     * @var bool
      */
     protected $treeStructure = true;
 
@@ -29,8 +29,76 @@ class XmlFileReader implements FileReader
     }
 
     /**
-     * @param \DOMNode $node
-     * @param $path
+     * @param $fileName
+     * @param $position
+     * @param $count
+     *
+     * @return array
+     */
+    public function readRecords($fileName, $position, $count)
+    {
+        //todo: add string argument
+        $reader = new \XMLReader();
+        $reader->open($fileName);
+
+        // find the first iterationNode
+        foreach (explode('/', $this->iterationPath[0]) as $node) {
+            $reader->next($node);
+            $reader->read();
+        }
+
+        // skip records
+        $i = 0;
+        while ($i < $position && $reader->next($this->iterationTag[0])) {
+            ++$i;
+        }
+
+        $j = 0;
+        $records = [];
+        while ($j < $count && $reader->next($this->iterationTag[0])) {
+            $node = $reader->expand();
+            $records[] = $this->toArrayTree($node, $this->iterationPath[0]);
+            ++$j;
+        }
+
+        return $records;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasTreeStructure()
+    {
+        return $this->treeStructure;
+    }
+
+    /**
+     * @param $fileName
+     *
+     * @return int
+     */
+    public function getTotalCount($fileName)
+    {
+        $z = new \XMLReader();
+        $z->open($fileName);
+
+        foreach (explode('/', $this->iterationPath[0]) as $node) {
+            $z->next($node);
+            $z->read();
+        }
+
+        $count = 0;
+        while ($z->next($this->iterationTag[0])) {
+            ++$count;
+        }
+
+        return $count;
+    }
+
+    /**
+     * @param \DOMElement $node
+     * @param             $path
+     *
      * @return array|string
      */
     protected function toArrayTree(\DOMElement $node, $path)
@@ -53,12 +121,12 @@ class XmlFileReader implements FileReader
         }
 
         if ($node->hasAttributes()) {
-            $record["_attributes"] = [];
+            $record['_attributes'] = [];
             foreach ($node->attributes as $attr) {
-                $record["_attributes"][$attr->name] = $attr->value;
+                $record['_attributes'][$attr->name] = $attr->value;
             }
             if (!$hasChildren) {
-                $record["_value"] = $node->nodeValue;
+                $record['_value'] = $node->nodeValue;
             }
         } elseif (!$hasChildren) {
             $record = trim($node->nodeValue);
@@ -68,58 +136,15 @@ class XmlFileReader implements FileReader
     }
 
     /**
-     * @param $fileName
-     * @param $position
-     * @param $count
-     * @return array
-     */
-    public function readRecords($fileName, $position, $count)
-    {
-        //todo: add string argument
-        $reader = new \XMLReader();
-        $reader->open($fileName);
-
-        // find the first iterationNode
-        foreach (explode('/', $this->iterationPath[0]) as $node) {
-            $reader->next($node);
-            $reader->read();
-        }
-
-        // skip records
-        $i = 0;
-        while ($i < $position && $reader->next($this->iterationTag[0])) {
-            $i++;
-        }
-
-        $j = 0;
-        $records = [];
-        while ($j < $count && $reader->next($this->iterationTag[0])) {
-            $node = $reader->expand();
-            $records[] = $this->toArrayTree($node, $this->iterationPath[0]);
-            $j++;
-        }
-
-        return $records;
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasTreeStructure()
-    {
-        return $this->treeStructure;
-    }
-
-    /**
      * @param $node
      * @param array $path
      */
     protected function findIterationNode($node, array $path)
     {
-        $path[] = $node["name"];
+        $path[] = $node['name'];
         if (isset($node['children'])) {
             foreach ($node['children'] as $child) {
-                if ($child['type'] == 'iteration') {
+                if ($child['type'] === 'iteration') {
                     $this->iterationPath[] = implode('/', $path);
                     $this->iterationTag[] = $child['name'];
                 }
@@ -127,27 +152,5 @@ class XmlFileReader implements FileReader
                 $this->findIterationNode($child, $path);
             }
         }
-    }
-
-    /**
-     * @param $fileName
-     * @return int
-     */
-    public function getTotalCount($fileName)
-    {
-        $z = new \XMLReader();
-        $z->open($fileName);
-
-        foreach (explode('/', $this->iterationPath[0]) as $node) {
-            $z->next($node);
-            $z->read();
-        }
-
-        $count = 0;
-        while ($z->next($this->iterationTag[0])) {
-            $count++;
-        }
-
-        return $count;
     }
 }

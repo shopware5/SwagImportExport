@@ -1,5 +1,4 @@
 <?php
-
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -12,15 +11,13 @@ namespace Shopware\Components\SwagImportExport\Transformers;
 /**
  * The responsibility of this class is to execute all the transformers in a predefined order
  * and to pass the output of one as input to the next.
- *
- * @package Shopware\Components\SwagImportExport\Transformers
  */
 class DataTransformerChain
 {
     /**
      * @var array DataTransformerAdapter[]
      */
-    private $chain = array();
+    private $chain = [];
 
     /**
      * Installs a new transformer in the chain.
@@ -36,7 +33,8 @@ class DataTransformerChain
      * Execute the transformers in the way they were installed
      *
      * @param $data
-     * @return
+     *
+     * @return array
      */
     public function transformForward($data)
     {
@@ -52,7 +50,8 @@ class DataTransformerChain
      * Execute the transformers back in the web they were installed
      *
      * @param $data
-     * @return
+     *
+     * @return array
      */
     public function transformBackward($data)
     {
@@ -73,6 +72,7 @@ class DataTransformerChain
     public function composeHeader()
     {
         $transformer = $this->getLastComposerTransformer($this->chain);
+
         return $transformer->composeHeader();
     }
 
@@ -94,6 +94,7 @@ class DataTransformerChain
      * (Always last because that is the closest transformer to the export/import physical file)
      *
      * @param array $data
+     *
      * @return array
      */
     public function parseHeader($data)
@@ -108,6 +109,7 @@ class DataTransformerChain
      * (Always last because that is the closest transformer to the export/import physical file)
      *
      * @param array $data
+     *
      * @return array
      */
     public function parseFooter($data)
@@ -121,8 +123,10 @@ class DataTransformerChain
      * Returns the last transformer implementing the composer-interface.
      *
      * @param array $transformers
-     * @return ComposerInterface
+     *
      * @throws \Exception
+     *
+     * @return ComposerInterface
      */
     private function getLastComposerTransformer($transformers)
     {

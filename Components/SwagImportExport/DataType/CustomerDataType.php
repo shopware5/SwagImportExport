@@ -13,8 +13,8 @@ class CustomerDataType
     /**
      * @var array
      */
-    public static $mapper = array(
-        'string' => array(
+    public static $mapper = [
+        'string' => [
             'customerNumber',
             'password',
             'encoder',
@@ -36,12 +36,12 @@ class CustomerDataType
             'shippingStreet',
             'shippingZipcode',
             'customergroup',
-            'language'
-        ),
-        'email' => array(
-            'email'
-        ),
-        'int' => array(
+            'language',
+        ],
+        'email' => [
+            'email',
+        ],
+        'int' => [
             'active',
             'billingCountryID',
             'billingStateID',
@@ -50,21 +50,21 @@ class CustomerDataType
             'newsletter',
             'accountMode',
             'subshopID',
-        ),
-    );
+        ],
+    ];
 
     /**
      * @var array
      */
-    public static $defaultFieldsForCreate = array(
-        'boolean' => array(
+    public static $defaultFieldsForCreate = [
+        'boolean' => [
             'active',
-        ),
-        'id' => array(
+        ],
+        'id' => [
             'subshopID',
             'paymentID',
-        ),
-        'string' => array(
+        ],
+        'string' => [
             'encoder',
             'attrBillingText1',
             'attrBillingText2',
@@ -77,15 +77,15 @@ class CustomerDataType
             'attrShippingText3',
             'attrShippingText4',
             'attrShippingText5',
-            'attrShippingText6'
-        )
-    );
+            'attrShippingText6',
+        ],
+    ];
 
     /**
      * @var array
      */
-    public static $defaultFieldsValues = array(
-        'string' => array(
+    public static $defaultFieldsValues = [
+        'string' => [
             'attrBillingText1',
             'attrBillingText2',
             'attrBillingText3',
@@ -98,6 +98,6 @@ class CustomerDataType
             'attrShippingText4',
             'attrShippingText5',
             'attrShippingText6',
-        )
-    );
+        ],
+    ];
 }

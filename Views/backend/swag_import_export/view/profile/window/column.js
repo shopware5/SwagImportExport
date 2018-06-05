@@ -1,5 +1,5 @@
-//{namespace name=backend/swag_import_export/view/profile/column}
-//{block name="backend/swag_import_export/view/profile/window/column"}
+// {namespace name=backend/swag_import_export/view/profile/column}
+// {block name="backend/swag_import_export/view/profile/window/column"}
 Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Column', {
     /**
      * Define that the order main window is an extension of the enlight application window
@@ -140,6 +140,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Column', {
 
     createDefaultValueField: function(type) {
         var me = this,
+            precision = 0,
             fieldConfig;
 
         switch (type) {
@@ -149,12 +150,11 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Column', {
             case 'integer':
             case 'decimal':
             case 'float':
-                var precision = 0;
                 if (type.precision) {
-                    precision = type.precision
-                } else if (type.type == 'float') {
+                    precision = type.precision;
+                } else if (type.type === 'float') {
                     precision = 3;
-                } else if (type.type == 'decimal') {
+                } else if (type.type === 'decimal') {
                     precision = 3;
                 }
                 fieldConfig = { xtype: 'numberfield', decimalPrecision: precision };
@@ -193,4 +193,4 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Column', {
         me.formPanel.add(fieldConfig);
     }
 });
-//{/block}
+// {/block}

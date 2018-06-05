@@ -9,7 +9,6 @@
 namespace Shopware\Components\SwagImportExport\DbAdapters\Articles;
 
 use Doctrine\DBAL\Connection;
-use Enlight_Components_Db_Adapter_Pdo_Mysql as PDOConnection;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
@@ -30,11 +29,6 @@ class TranslationWriter
     private $connection;
 
     /**
-     * @var PDOConnection
-     */
-    private $db;
-
-    /**
      * @var TranslationComponent
      */
     private $writer;
@@ -51,7 +45,6 @@ class TranslationWriter
     {
         $this->manager = Shopware()->Models();
         $this->connection = $this->manager->getConnection();
-        $this->db = Shopware()->Db();
         $this->writer = new TranslationComponent();
         $this->shops = $this->getShops();
     }

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -11,7 +10,7 @@
  * Shopware ImportExport Plugin
  *
  * @category  Shopware
- * @package   Shopware\Components\Console\Command
+ *
  * @copyright Copyright (c) 2014, shopware AG (http://www.shopware.de)
  */
 
@@ -27,8 +26,9 @@ class Repository extends ModelRepository
      *
      * @param array $filterBy
      * @param array $orderBy
-     * @param null $limit
-     * @param null $offset
+     * @param null  $limit
+     * @param null  $offset
+     *
      * @return \Shopware\Components\Model\QueryBuilder
      */
     public function getProfilesListQuery(array $filterBy = [], array $orderBy = [], $limit = null, $offset = null)
@@ -43,7 +43,7 @@ class Repository extends ModelRepository
                 'p.description as description',
                 'p.tree as tree',
                 'p.default as default',
-                'p.baseProfile as baseProfile'
+                'p.baseProfile as baseProfile',
             ]
         );
 
@@ -70,8 +70,9 @@ class Repository extends ModelRepository
      *
      * @param array $filterBy
      * @param array $orderBy
-     * @param null $limit
-     * @param null $offset
+     * @param null  $limit
+     * @param null  $offset
+     *
      * @return \Shopware\Components\Model\QueryBuilder
      */
     public function getSessionsListQuery(array $filterBy = [], array $orderBy = [], $limit = null, $offset = null)
@@ -119,8 +120,9 @@ class Repository extends ModelRepository
      *
      * @param array $filterBy
      * @param array $orderBy
-     * @param null $limit
-     * @param null $offset
+     * @param null  $limit
+     * @param null  $offset
+     *
      * @return \Shopware\Components\Model\QueryBuilder
      */
     public function getExpressionsListQuery(array $filterBy = [], array $orderBy = [], $limit = null, $offset = null)
@@ -160,8 +162,9 @@ class Repository extends ModelRepository
      *
      * @param array $filterBy
      * @param array $orderBy
-     * @param null $limit
-     * @param null $offset
+     * @param null  $limit
+     * @param null  $offset
+     *
      * @return \Shopware\Components\Model\QueryBuilder
      */
     public function getLogListQuery(array $filterBy = [], array $orderBy = [], $limit = null, $offset = null)
@@ -174,7 +177,7 @@ class Repository extends ModelRepository
                 'l.id as id',
                 'l.message as message',
                 'l.state as errorState',
-                'l.createdAt as logDate'
+                'l.createdAt as logDate',
             ]
         );
 

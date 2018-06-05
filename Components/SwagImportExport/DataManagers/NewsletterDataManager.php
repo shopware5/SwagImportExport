@@ -9,21 +9,21 @@
 namespace Shopware\Components\SwagImportExport\DataManagers;
 
 use Shopware\Components\SwagImportExport\DataType\NewsletterDataType;
-use Shopware\Models\Newsletter\Group;
-use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
+use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
+use Shopware\Models\Newsletter\Group;
 
 class NewsletterDataManager extends DataManager
 {
     /**
      * @var \Shopware_Components_Config
      */
-    private $config = null;
+    private $config;
 
     /**
      * @var \Shopware\Models\Newsletter\Repository
      */
-    private $groupRepository = null;
+    private $groupRepository;
 
     /**
      * Define which field should be set by default
@@ -32,8 +32,8 @@ class NewsletterDataManager extends DataManager
      */
     private static $defaultFieldsForCreate = [
         'string' => [
-            'groupName'
-        ]
+            'groupName',
+        ],
     ];
 
     /**
@@ -71,8 +71,10 @@ class NewsletterDataManager extends DataManager
      *
      * @param array $record
      * @param array $defaultValues
-     * @return mixed
+     *
      * @throws AdapterException
+     *
+     * @return mixed
      */
     public function setDefaultFieldsForCreate($record, $defaultValues)
     {
@@ -99,8 +101,10 @@ class NewsletterDataManager extends DataManager
      *
      * @param string $email
      * @param string $groupName
-     * @return string
+     *
      * @throws AdapterException
+     *
+     * @return string
      */
     private function getGroupName($email, $groupName)
     {
@@ -109,7 +113,7 @@ class NewsletterDataManager extends DataManager
             return $group->getName();
         }
 
-        $groupId = $this->config->get("sNEWSLETTERDEFAULTGROUP");
+        $groupId = $this->config->get('sNEWSLETTERDEFAULTGROUP');
         $group = $this->groupRepository->find($groupId);
 
         if (!$group instanceof Group) {

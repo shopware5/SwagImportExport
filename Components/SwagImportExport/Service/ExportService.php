@@ -1,5 +1,4 @@
 <?php
-
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -19,6 +18,8 @@ class ExportService extends AbstractImportExportService implements ExportService
     /**
      * @param array $requestData
      * @param array $filterParams
+     *
+     * @return PreparationResultStruct
      */
     public function prepareExport(array $requestData, array $filterParams)
     {

@@ -1,12 +1,10 @@
 <?php
-
 /**
  * (c) shopware AG <info@shopware.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\SwagImportExport\UploadPathProvider;
 use Shopware\Components\SwagImportExport\Utils\SwagVersionHelper;
@@ -74,7 +72,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         $uploadPathProvider = $this->get('swag_import_export.upload_path_provider');
 
         try {
-            $fileName = $this->Request()->getParam('fileName', null);
+            $fileName = $this->Request()->getParam('fileName');
 
             if ($fileName === null) {
                 throw new \Exception('File name must be provided');

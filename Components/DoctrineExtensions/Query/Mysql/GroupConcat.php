@@ -1,6 +1,11 @@
 <?php
+/**
+ * (c) shopware AG <info@shopware.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
-// -------------------------------------------------
 // Complete support of GROUP_CONCAT in Doctrine2
 // -------------------------------------------------
 // Credit : http://sysmagazine.com/posts/181666/
@@ -33,29 +38,29 @@ use Doctrine\ORM\Query\SqlWalker;
  *              [ORDER BY {unsigned_integer | col_name | expr}
  *                  [ASC | DESC] [,col_name ...]]
  *              [SEPARATOR str_val])
- *
  */
 class GroupConcat extends FunctionNode
 {
     /**
-     * @var bool $isDistinct
+     * @var bool
      */
     public $isDistinct = false;
 
     /**
-     * @var PathExpression[] $pathExp
+     * @var PathExpression[]
      */
-    public $pathExp = null;
+    public $pathExp;
 
-    public $separator = null;
+    public $separator;
 
     /**
-     * @var OrderByClause $orderBy
+     * @var OrderByClause
      */
-    public $orderBy = null;
+    public $orderBy;
 
     /**
      * @param Parser $parser
+     *
      * @throws \Doctrine\ORM\Query\QueryException
      */
     public function parse(Parser $parser)
@@ -71,7 +76,7 @@ class GroupConcat extends FunctionNode
         }
 
         // first Path Expression is mandatory
-        $this->pathExp = array();
+        $this->pathExp = [];
         $this->pathExp[] = $parser->SingleValuedPathExpression();
 
         while ($lexer->isNextToken(Lexer::T_COMMA)) {
@@ -97,13 +102,14 @@ class GroupConcat extends FunctionNode
 
     /**
      * @param SqlWalker $sqlWalker
+     *
      * @return string
      */
     public function getSql(SqlWalker $sqlWalker)
     {
         $result = 'GROUP_CONCAT(' . ($this->isDistinct ? 'DISTINCT ' : '');
 
-        $fields = array();
+        $fields = [];
 
         /** @var PathExpression $pathExp */
         foreach ($this->pathExp as $pathExp) {

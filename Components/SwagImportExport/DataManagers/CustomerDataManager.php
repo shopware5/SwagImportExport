@@ -15,17 +15,17 @@ class CustomerDataManager extends DataManager
     /**
      * @var \Shopware_Components_Config
      */
-    private $config = null;
+    private $config;
 
     /**
      * @var \Enlight_Components_Db_Adapter_Pdo_Mysql
      */
-    private $db = null;
+    private $db;
 
     /**
      * @var \Shopware\Components\Password\Manager
      */
-    private $passwordManager = null;
+    private $passwordManager;
 
     /**
      * initialises the class properties
@@ -63,6 +63,7 @@ class CustomerDataManager extends DataManager
      *
      * @param $record
      * @param array $defaultValues
+     *
      * @return mixed
      */
     public function setDefaultFieldsForCreate($record, $defaultValues)
@@ -133,7 +134,23 @@ class CustomerDataManager extends DataManager
     }
 
     /**
+     * Return proper values for customer fields which have values NULL
+     *
+     * @param array $records
+     *
+     * @return array
+     */
+    public function fixDefaultValues($records)
+    {
+        $defaultFieldsValues = CustomerDataType::$defaultFieldsValues;
+        $records = $this->fixFieldsValues($records, $defaultFieldsValues);
+
+        return $records;
+    }
+
+    /**
      * @param array $record
+     *
      * @return mixed
      */
     private function getPayment($record)
@@ -161,6 +178,7 @@ class CustomerDataManager extends DataManager
 
     /**
      * @param int $subShopId
+     *
      * @return string
      */
     private function getSubShopDefaultPaymentId($subShopId)
@@ -170,11 +188,12 @@ class CustomerDataManager extends DataManager
                   JOIN s_core_config_values AS `value` ON `value`.element_id = element.id
                   WHERE `value`.shop_id = ? AND element.name = 'defaultpayment'";
 
-        return $this->db->fetchOne($query, array($subShopId));
+        return $this->db->fetchOne($query, [$subShopId]);
     }
 
     /**
      * @param int $subShopId
+     *
      * @return string
      */
     private function getMainShopDefaultPaymentId($subShopId)
@@ -185,7 +204,7 @@ class CustomerDataManager extends DataManager
                   WHERE `value`.shop_id = (SELECT main_id FROM s_core_shops WHERE id = ?)
                     AND element.name = 'defaultpayment'";
 
-        return $this->db->fetchOne($query, array($subShopId));
+        return $this->db->fetchOne($query, [$subShopId]);
     }
 
     /**
@@ -194,19 +213,5 @@ class CustomerDataManager extends DataManager
     private function getEncoder()
     {
         return $this->passwordManager->getDefaultPasswordEncoderName();
-    }
-
-    /**
-     * Return proper values for customer fields which have values NULL
-     *
-     * @param array $records
-     * @return array
-     */
-    public function fixDefaultValues($records)
-    {
-        $defaultFieldsValues = CustomerDataType::$defaultFieldsValues;
-        $records = $this->fixFieldsValues($records, $defaultFieldsValues);
-
-        return $records;
     }
 }

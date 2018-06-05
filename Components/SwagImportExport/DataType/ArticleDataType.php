@@ -13,8 +13,8 @@ class ArticleDataType
     /**
      * @var array
      */
-    public static $mapper = array(
-        'string' => array(
+    public static $mapper = [
+        'string' => [
             'orderNumber',
             'mainNumber',
             'name',
@@ -28,8 +28,8 @@ class ArticleDataType
             'packUnit',
             'supplierNumber',
             'ean',
-        ),
-        'float' => array(
+        ],
+        'float' => [
             'tax',
             'purchaseUnit',
             'referenceUnit',
@@ -37,8 +37,8 @@ class ArticleDataType
             'width',
             'height',
             'length',
-        ),
-        'int' => array(
+        ],
+        'int' => [
             'active',
             'inStock',
             'stockMin',
@@ -51,32 +51,32 @@ class ArticleDataType
             'priceGroupId',
             'priceGroupActive',
             'lastStock',
-        ),
-        'dateTime' => array(
+        ],
+        'dateTime' => [
             'date',
             'changeTime',
-            'releaseDate'
-        ),
-    );
+            'releaseDate',
+        ],
+    ];
 
     /**
      * @var array
      */
-    public static $defaultFieldsForCreate = array(
-        'date' => array(
+    public static $defaultFieldsForCreate = [
+        'date' => [
             'availableFrom',
             'availableTo',
-            'added'
-        ),
-        'integer' => array(
+            'added',
+        ],
+        'integer' => [
             'inStock',
             'tax',
-            'stockMin'
-        ),
-        'float' => array(
-            'weight'
-        ),
-        'string' => array(
+            'stockMin',
+        ],
+        'float' => [
+            'weight',
+        ],
+        'string' => [
             'shippingTime',
             'supplierName',
             'attributeAttr1',
@@ -98,22 +98,22 @@ class ArticleDataType
             'attributeAttr17',
             'attributeAttr18',
             'attributeAttr19',
-            'attributeAttr20'
-        ),
-        'id' => array(
-            'supplierId'
-        ),
-        'boolean' => array(
+            'attributeAttr20',
+        ],
+        'id' => [
+            'supplierId',
+        ],
+        'boolean' => [
             'active',
             'shippingFree',
-        )
-    );
+        ],
+    ];
 
     /**
      * @var array
      */
-    public static $defaultFieldsValues = array(
-        'string' => array(
+    public static $defaultFieldsValues = [
+        'string' => [
             'description',
             'descriptionLong',
             'metaTitle',
@@ -141,35 +141,35 @@ class ArticleDataType
             'attributeAttr17',
             'attributeAttr18',
             'attributeAttr19',
-            'attributeAttr20'
-        ),
-        'date' => array(
-            'added'
-        ),
-        'int' => array(
+            'attributeAttr20',
+        ],
+        'date' => [
+            'added',
+        ],
+        'int' => [
             'inStock',
             'stockMin',
-        ),
-        'float' => array(
+        ],
+        'float' => [
             'weight',
-            'purchasePrice'
-        )
-    );
+            'purchasePrice',
+        ],
+    ];
 
     /**
      * @var array
      */
-    public static $articleFieldsMapping = array(
+    public static $articleFieldsMapping = [
         'added' => 'date',
         'changed' => 'changeTime',
-        'highlight' => 'topSeller'
-    );
+        'highlight' => 'topSeller',
+    ];
 
     /**
      * @var array
      */
-    public static $articleVariantFieldsMapping = array(
+    public static $articleVariantFieldsMapping = [
         'number' => 'orderNumber',
         'len' => 'length',
-    );
+    ];
 }

@@ -10,10 +10,10 @@ namespace Shopware\Components\SwagImportExport\DbAdapters;
 
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\QueryBuilder;
-use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
-use Shopware\Components\SwagImportExport\Exception\AdapterException;
-use Shopware\Components\SwagImportExport\Validators\ArticlePriceValidator;
 use Shopware\Components\SwagImportExport\DataManagers\ArticlePriceDataManager;
+use Shopware\Components\SwagImportExport\Exception\AdapterException;
+use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
+use Shopware\Components\SwagImportExport\Validators\ArticlePriceValidator;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Detail;
 use Shopware\Models\Article\Price as ArticlePrice;
@@ -50,6 +50,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
      * @param $start
      * @param $limit
      * @param $filter
+     *
      * @return array
      */
     public function readRecordIds($start, $limit, $filter)
@@ -90,8 +91,10 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
     /**
      * @param $ids
      * @param $columns
-     * @return mixed
+     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function read($ids, $columns)
     {
@@ -150,7 +153,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
             'article.name as name',
             'detail.additionalText as additionalText',
             'detail.purchasePrice as purchasePrice',
-            'supplier.name as supplierName'
+            'supplier.name as supplierName',
         ];
     }
 
@@ -167,6 +170,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
      * <b>Note:</b> The logic is copied from the old Import/Export Module
      *
      * @param array $records
+     *
      * @throws \Enlight_Event_Exception
      * @throws \Exception
      */
@@ -192,14 +196,14 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
 
         foreach ($records['default'] as $record) {
             try {
-                $flushCounter++;
+                ++$flushCounter;
                 $record = $this->validator->filterEmptyString($record);
                 $this->validator->checkRequiredFields($record);
                 $record = $this->dataManager->setDefaultFields($record);
                 $this->validator->validate($record, ArticlePriceValidator::$mapper);
 
                 /** @var CustomerGroup $customerGroup */
-                $customerGroup = $customerGroupRepository->findOneBy(["key" => $record['priceGroup']]);
+                $customerGroup = $customerGroupRepository->findOneBy(['key' => $record['priceGroup']]);
                 if (!$customerGroup) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/articlesPrices/price_group_not_found', 'Price group %s was not found');
@@ -207,7 +211,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                 }
 
                 /** @var Detail $articleDetail */
-                $articleDetail = $detailRepository->findOneBy(["number" => $record['orderNumber']]);
+                $articleDetail = $detailRepository->findOneBy(['number' => $record['orderNumber']]);
                 if (!$articleDetail) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/article_number_not_found', 'Article with order number %s does not exists');
@@ -215,7 +219,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                 }
 
                 if (isset($record['from'])) {
-                    $record['from'] = intval($record['from']);
+                    $record['from'] = (int) $record['from'];
                 }
 
                 if (empty($record['price']) && empty($record['percent'])) {
@@ -235,24 +239,24 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                 }
 
                 if (isset($record['price'])) {
-                    $record['price'] = floatval(str_replace(",", ".", $record['price']));
+                    $record['price'] = (float) str_replace(',', '.', $record['price']);
                 }
 
                 if (isset($record['pseudoPrice'])) {
-                    $record['pseudoPrice'] = floatval(str_replace(",", ".", $record['pseudoPrice']));
+                    $record['pseudoPrice'] = (float) str_replace(',', '.', $record['pseudoPrice']);
                 }
 
                 if (isset($record['purchasePrice'])) {
-                    $record['purchasePrice'] = floatval(str_replace(",", ".", $record['purchasePrice']));
+                    $record['purchasePrice'] = (float) str_replace(',', '.', $record['purchasePrice']);
                 }
 
                 if (isset($record['percent'])) {
-                    $record['percent'] = floatval(str_replace(",", ".", $record['percent']));
+                    $record['percent'] = (float) str_replace(',', '.', $record['percent']);
                 }
                 // removes price with same from value from database
                 $this->updateArticleFromPrice($record, $articleDetail->getId());
                 // checks if price belongs to graduation price
-                if ($record['from'] != 1) {
+                if ((int) $record['from'] !== 1) {
                     // updates graduation to value with from value - 1
                     $this->updateArticleToPrice($record, $articleDetail->getId(), $articleDetail->getArticleId());
                 }
@@ -303,12 +307,13 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
     public function getSections()
     {
         return [
-            ['id' => 'default', 'name' => 'default ']
+            ['id' => 'default', 'name' => 'default '],
         ];
     }
 
     /**
      * @param string $section
+     *
      * @return bool|mixed
      */
     public function getColumns($section)
@@ -324,6 +329,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
 
     /**
      * @param $message
+     *
      * @throws \Exception
      */
     public function saveMessage($message)
@@ -373,6 +379,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
     /**
      * @param $columns
      * @param $ids
+     *
      * @return QueryBuilder
      */
     public function getBuilder($columns, $ids)
@@ -392,6 +399,10 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
         return $builder;
     }
 
+    /**
+     * @param $record
+     * @param $articleDetailId
+     */
     private function updateArticleFromPrice($record, $articleDetailId)
     {
         $dql = 'DELETE FROM Shopware\Models\Article\Price price
@@ -411,6 +422,11 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
         $query->execute();
     }
 
+    /**
+     * @param $record
+     * @param $articleDetailId
+     * @param $articleId
+     */
     private function updateArticleToPrice($record, $articleDetailId, $articleId)
     {
         $dql = "UPDATE Shopware\Models\Article\Price price SET price.to = :toValue

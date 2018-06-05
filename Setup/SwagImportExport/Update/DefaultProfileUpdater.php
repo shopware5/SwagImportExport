@@ -33,8 +33,8 @@ class DefaultProfileUpdater implements UpdaterInterface
     private $setupContext;
 
     /**
-     * @param SetupContext $setupContext
-     * @param Connection $connection
+     * @param SetupContext                         $setupContext
+     * @param Connection                           $connection
      * @param \Shopware_Components_Snippet_Manager $snippetManager
      */
     public function __construct(
@@ -70,7 +70,7 @@ class DefaultProfileUpdater implements UpdaterInterface
             $params = [
                 'tree' => $serializedTree,
                 'name' => $profile->getName(),
-                'description' => $profile->getDescription()
+                'description' => $profile->getDescription(),
             ];
 
             $this->connection->executeQuery($sql, $params);
@@ -78,7 +78,7 @@ class DefaultProfileUpdater implements UpdaterInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function isCompatible()
     {

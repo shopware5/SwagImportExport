@@ -11,9 +11,10 @@ namespace Shopware\Components\SwagImportExport\Utils;
 class FileHelper
 {
     /**
-     * @param string $file
-     * @param string $content
+     * @param string   $file
+     * @param string   $content
      * @param int|null $flag
+     *
      * @throws \Exception
      */
     public function writeStringToFile($file, $content, $flag = null)

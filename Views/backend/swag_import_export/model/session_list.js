@@ -1,10 +1,10 @@
-//{block name="backend/swag_import_export/model/session_list"}
+// {block name="backend/swag_import_export/model/session_list"}
 Ext.define('Shopware.apps.SwagImportExport.model.SessionList', {
     /**
      * Extends the standard ExtJS 4
      * @string
      */
-    extend : 'Ext.data.Model',
+    extend: 'Ext.data.Model',
     /**
      * Configure the data communication
      * @object
@@ -25,7 +25,7 @@ Ext.define('Shopware.apps.SwagImportExport.model.SessionList', {
         { name: 'state', type: 'string' },
         { name: 'createdAt', type: 'date' }
     ],
-    
+
     proxy: {
         type: 'ajax',
         /**
@@ -34,8 +34,8 @@ Ext.define('Shopware.apps.SwagImportExport.model.SessionList', {
          * @object
          */
         api: {
-            read:'{url controller="SwagImportExportSession" action="getSessions"}',
-            destroy:'{url controller="SwagImportExportSession" action="deleteSession"}'
+            read: '{url controller="SwagImportExportSession" action="getSessions"}',
+            destroy: '{url controller="SwagImportExportSession" action="deleteSession"}'
         },
         /**
          * Configure the data reader
@@ -52,4 +52,4 @@ Ext.define('Shopware.apps.SwagImportExport.model.SessionList', {
         }
     }
 });
-//{/block}
+// {/block}
