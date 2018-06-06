@@ -101,7 +101,7 @@ class DataWorkflow
         }
 
         if ($this->dataIO->getSessionState() == 'active') {
-            $stepSize = Shopware()->Config()->getByNamespace('SwagImportExport', 'batch-size');
+            $stepSize = Shopware()->Config()->getByNamespace('SwagImportExport', 'batch-size-export');
             // read a bunch of records into simple php array;
             // the count of records may be less than 100 if we are at the end of the read.
             $data = $this->dataIO->read($stepSize);
