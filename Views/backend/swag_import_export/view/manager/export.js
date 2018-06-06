@@ -228,38 +228,28 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
             me.customFilterFields
         ];
 
-        try {
-            /**
-             * if you have installed Shopware 5.2.x configure the application.php ___VERSION___
-             * with a valid Shopware version. Otherwise throws a exception.
-             */
-            if (Shopware.app.Application.shopware53Installed) {
-                me.customerFields = Ext.create('Ext.form.FieldSet', {
-                    title: '{s name=swag_import_export/export/fieldset_additional}Additional export configuration{/s}',
-                    padding: 12,
-                    hidden: true,
-                    defaults: {
-                        labelStyle: 'font-weight: 700; text-align: right;'
-                    },
-                    items: [{
-                        xtype: 'container',
-                        padding: '0 0 8',
-                        items: [
-                            Ext.create('Shopware.form.field.CustomerStreamSingleSelection', {
-                                fieldLabel: '{s name="swag_import_export/export/customer_stream"}{/s}',
-                                name: 'customerStreamId',
-                                helpText: '{s name="swag_import_export/export/customer_stream_help"}{/s}',
-                                store: factory.createEntitySearchStore('Shopware\\Models\\CustomerStream\\CustomerStream')
-                            })
-                        ]
-                    }]
-                });
+        me.customerFields = Ext.create('Ext.form.FieldSet', {
+            title: '{s name=swag_import_export/export/fieldset_additional}Additional export configuration{/s}',
+            padding: 12,
+            hidden: true,
+            defaults: {
+                labelStyle: 'font-weight: 700; text-align: right;'
+            },
+            items: [{
+                xtype: 'container',
+                padding: '0 0 8',
+                items: [
+                    Ext.create('Shopware.form.field.CustomerStreamSingleSelection', {
+                        fieldLabel: '{s name="swag_import_export/export/customer_stream"}{/s}',
+                        name: 'customerStreamId',
+                        helpText: '{s name="swag_import_export/export/customer_stream_help"}{/s}',
+                        store: factory.createEntitySearchStore('Shopware\\Models\\CustomerStream\\CustomerStream')
+                    })
+                ]
+            }]
+        });
 
-                items.push(me.customerFields);
-            }
-        } catch (e) {
-            // do nothing
-        }
+        items.push(me.customerFields);
 
         me.customerCompleteFields = Ext.create('Ext.form.FieldSet', {
             title: '{s name=swag_import_export/export/fieldset_additional}Additional export configuration{/s}',
@@ -412,9 +402,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
                             me.customFilterFields.show();
                         }
                     } else if (type === 'customers' || type === 'addresses') {
-                        if (Shopware.app.Application.shopware53Installed) {
-                            me.customerFields.show();
-                        }
+                        me.customerFields.show();
                     } else if (type === 'customersComplete') {
                         me.down('combo[name=format]').setValue('xml');
                         me.down('combo[name=format]').setReadOnly(true);

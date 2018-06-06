@@ -7,7 +7,6 @@
  */
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\SwagImportExport\UploadPathProvider;
-use Shopware\Components\SwagImportExport\Utils\SwagVersionHelper;
 use Shopware\CustomModels\ImportExport\Logger;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\FileBag;
@@ -31,12 +30,6 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         return [
             'downloadFile',
         ];
-    }
-
-    public function indexAction()
-    {
-        parent::indexAction();
-        $this->View()->assign('shopware53Installed', SwagVersionHelper::hasMinimumVersion('5.3.0'));
     }
 
     public function uploadFileAction()

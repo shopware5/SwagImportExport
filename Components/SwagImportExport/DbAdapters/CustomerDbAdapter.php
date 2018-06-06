@@ -17,7 +17,6 @@ use Shopware\Components\SwagImportExport\Service\UnderscoreToCamelCaseServiceInt
 use Shopware\Components\SwagImportExport\Utils\DataHelper;
 use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
-use Shopware\Components\SwagImportExport\Utils\SwagVersionHelper;
 use Shopware\Components\SwagImportExport\Validators\CustomerValidator;
 use Shopware\Models\Country\Country;
 use Shopware\Models\Country\State;
@@ -273,11 +272,14 @@ class CustomerDbAdapter implements DataDbAdapter
             $query->setMaxResults($limit);
         }
 
-        if (SwagVersionHelper::hasMinimumVersion('5.3.0')) {
-            if (array_key_exists('customerStreamId', $filter)) {
-                $query->innerJoin('customer', 's_customer_streams_mapping', 'mapping', 'mapping.customer_id = customer.id AND mapping.stream_id = :streamId');
-                $query->setParameter(':streamId', $filter['customerStreamId']);
-            }
+        if (array_key_exists('customerStreamId', $filter)) {
+            $query->innerJoin(
+                'customer',
+                's_customer_streams_mapping',
+                'mapping',
+                'mapping.customer_id = customer.id AND mapping.stream_id = :streamId'
+            );
+            $query->setParameter(':streamId', $filter['customerStreamId']);
         }
 
         $ids = $query->execute()->fetchAll(\PDO::FETCH_COLUMN);

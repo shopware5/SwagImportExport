@@ -9,13 +9,10 @@
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
 use Shopware\Components\Model\ModelManager;
-use Shopware\Components\Model\QueryBuilder;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
-use Shopware\Components\SwagImportExport\Utils\SwagVersionHelper;
 use Shopware\Components\SwagImportExport\Validators\ArticleTranslationValidator;
 use Shopware\Models\Article\Detail;
-use Shopware\Models\Article\Element;
 use Shopware\Models\Attribute\Configuration;
 use Shopware\Models\Shop\Shop;
 use Shopware\Models\Translation\Translation;
@@ -75,16 +72,6 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
             't.metaTitle as metaTitle',
             't.packUnit as packUnit',
         ];
-
-        if (!SwagVersionHelper::hasMinimumVersion('5.3.0')) {
-            $elements = $this->getElements();
-
-            if ($elements) {
-                foreach ($elements as $element) {
-                    $translation[] = 't.' . $element;
-                }
-            }
-        }
 
         $attributes = $this->getAttributes();
 
@@ -199,18 +186,6 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
         ];
 
         $whiteList = array_merge($whiteList, $variantWhiteList);
-
-        if (!SwagVersionHelper::hasMinimumVersion('5.3.0')) {
-            $elementBuilder = $this->getElementBuilder();
-            $legacyAttributes = $elementBuilder->getQuery()->getArrayResult();
-
-            if ($legacyAttributes) {
-                foreach ($legacyAttributes as $attr) {
-                    $whiteList[] = $attr['name'];
-                    $variantWhiteList[] = $attr['name'];
-                }
-            }
-        }
 
         $attributes = $this->getAttributes();
 
@@ -346,43 +321,6 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @deprecated Element will be removed in shopware 5.3. Beware of backwards compatibility
-     *
-     * @return QueryBuilder
-     */
-    public function getElementBuilder()
-    {
-        $repository = $this->manager->getRepository(Element::class);
-
-        $builder = $repository->createQueryBuilder('attribute');
-        $builder->andWhere('attribute.translatable = 1');
-        $builder->orderBy('attribute.position');
-
-        return $builder;
-    }
-
-    /**
-     * @deprecated Element will be removed in shopware 5.3. Beware of backwards compatibility
-     *
-     * @return array
-     */
-    public function getElements()
-    {
-        $elementBuilder = $this->getElementBuilder();
-
-        $elements = $elementBuilder->getQuery()->getArrayResult();
-
-        $elementsCollection = [];
-
-        foreach ($elements as $element) {
-            $name = $element['name'];
-            $elementsCollection[$name] = $name;
-        }
-
-        return $elementsCollection;
-    }
-
-    /**
      * @param $ids
      *
      * @throws \Zend_Db_Statement_Exception
@@ -425,9 +363,6 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
     protected function prepareTranslations($translations)
     {
         $translationAttr = [];
-        if (!SwagVersionHelper::hasMinimumVersion('5.3.0')) {
-            $translationAttr = $this->getElements();
-        }
 
         $attributes = [];
         foreach ($this->getAttributes() as $attribute) {

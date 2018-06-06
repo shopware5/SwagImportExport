@@ -9,7 +9,6 @@
 namespace Shopware\Components\SwagImportExport\Transformers;
 
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
-use Shopware\Components\SwagImportExport\Utils\SwagVersionHelper;
 use Shopware\Models\Article\Element;
 use Shopware\Models\Customer\Group;
 use Shopware\Models\Shop\Shop;
@@ -1340,33 +1339,11 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
             ];
 
             $attributes = [];
-            if (!SwagVersionHelper::hasMinimumVersion('5.3.0')) {
-                $attributes = array_map(
-                    function ($item) {
-                        return $item['name'];
-                    },
-                    $this->getTranslationAttr()
-                );
-            }
 
             $this->translationColumns = array_merge($translationFields, $attributes);
         }
 
         return $this->translationColumns;
-    }
-
-    /**
-     * @return array
-     */
-    public function getTranslationAttr()
-    {
-        $repository = Shopware()->Models()->getRepository(Element::class);
-
-        $builder = $repository->createQueryBuilder('attribute');
-        $builder->andWhere('attribute.translatable = 1');
-        $builder->orderBy('attribute.position');
-
-        return $builder->getQuery()->getArrayResult();
     }
 
     /**

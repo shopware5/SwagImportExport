@@ -12,7 +12,6 @@ use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
-use Shopware\Components\SwagImportExport\Utils\SwagVersionHelper;
 use Shopware\Components\SwagImportExport\Validators\AddressValidator;
 use Shopware\Models\Attribute\CustomerAddress;
 use Shopware\Models\Country\Country;
@@ -88,12 +87,15 @@ class AddressDbAdapter implements DataDbAdapter
             $query->setMaxResults($limit);
         }
 
-        if (SwagVersionHelper::hasMinimumVersion('5.3.0')) {
-            if (array_key_exists('customerStreamId', $filter)) {
-                $query->innerJoin('address', 's_customer_streams_mapping', 'mapping', 'mapping.customer_id = address.user_id AND mapping.stream_id = :streamId');
-                $query->setParameter(':streamId', $filter['customerStreamId']);
-                unset($filter['customerStreamId']);
-            }
+        if (array_key_exists('customerStreamId', $filter)) {
+            $query->innerJoin(
+                'address',
+                's_customer_streams_mapping',
+                'mapping',
+                'mapping.customer_id = address.user_id AND mapping.stream_id = :streamId'
+            );
+            $query->setParameter(':streamId', $filter['customerStreamId']);
+            unset($filter['customerStreamId']);
         }
 
         return $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
