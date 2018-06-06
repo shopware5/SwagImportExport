@@ -549,10 +549,19 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         
       $form->setElement(
             'text',
-            'batch-size',
+            'batch-size-export',
             array(
-                'label' => 'Batch-Size',
+                'label' => 'Batch-Size Export',
                 'value' => '1000'
+            )
+        );
+        
+       $form->setElement(
+            'text',
+            'batch-size-import',
+            array(
+                'label' => 'Batch-Size Import',
+                'value' => '50'
             )
         );
 
