@@ -12,6 +12,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\ORM\Query\Expr\Join;
 use Enlight_Components_Db_Adapter_Pdo_Mysql;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
+use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Components\ContainerAwareEventManager;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\ArticleWriter;
@@ -27,10 +28,8 @@ use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Service\UnderscoreToCamelCaseServiceInterface;
 use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
-use Shopware\Components\SwagImportExport\Utils\SwagVersionHelper;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Detail;
-use Shopware\Models\Article\Element;
 use Shopware\Models\Attribute\Configuration;
 use Shopware\Models\Category\Category;
 use Shopware\Models\Shop\Shop;
@@ -138,6 +137,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         }
 
         if ($filter['categories']) {
+            /** @var Category $category */
             $category = $this->modelManager->find(Category::class, $filter['categories'][0]);
 
             $this->collectCategoryIds($category);
@@ -161,6 +161,26 @@ class ArticlesDbAdapter implements DataDbAdapter
             $builder->join('detail.article', 'article')
                 ->andWhere('article.id IN (:ids)')
                 ->setParameter('ids', $articleIds);
+        } elseif ($filter['productStreamId']) {
+            $productStreamId = $filter['productStreamId'][0];
+
+            /** @var \Shopware\Models\Shop\Repository $shopRepo */
+            $shopRepo = $this->modelManager->getRepository(Shop::class);
+            $shop = $shopRepo->getActiveDefault();
+            $contextService = Shopware()->Container()->get('shopware_storefront.context_service');
+            $context = $contextService->createShopContext($shop->getId());
+            $criteriaService = Shopware()->Container()->get('shopware_search.store_front_criteria_factory');
+            $criteria = $criteriaService->createBaseCriteria([$shop->getCategory()->getId()], $context);
+            $streamRepo = Shopware()->Container()->get('shopware_product_stream.repository');
+            $streamRepo->prepareCriteria($criteria, $productStreamId);
+
+            $productNumberSearch = Shopware()->Container()->get('shopware_search.product_number_search');
+            /** @var ProductNumberSearchResult $products */
+            $products = $productNumberSearch->search($criteria, $context);
+            $productNumbers = array_keys($products->getProducts());
+
+            $builder->andWhere('detail.number IN(:productNumbers)')
+                ->setParameter('productNumbers', $productNumbers);
         }
 
         if ($start) {
@@ -821,16 +841,6 @@ class ArticlesDbAdapter implements DataDbAdapter
             'translation.packUnit as packUnit',
         ];
 
-        if (!SwagVersionHelper::hasMinimumVersion('5.3.0')) {
-            $legacyAttributes = $this->getLegacyTranslationAttr();
-
-            if ($legacyAttributes) {
-                foreach ($legacyAttributes as $attr) {
-                    $columns[] = $attr['name'];
-                }
-            }
-        }
-
         $attributes = $this->getTranslatableAttributes();
 
         if ($attributes) {
@@ -840,16 +850,6 @@ class ArticlesDbAdapter implements DataDbAdapter
         }
 
         return $columns;
-    }
-
-    /**
-     * @return array
-     */
-    public function getLegacyTranslationAttr()
-    {
-        $elementBuilder = $this->getElementBuilder();
-
-        return $elementBuilder->getQuery()->getArrayResult();
     }
 
     /**
@@ -1218,20 +1218,6 @@ class ArticlesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @return \Doctrine\ORM\QueryBuilder
-     */
-    public function getElementBuilder()
-    {
-        $repository = $this->modelManager->getRepository(Element::class);
-
-        $builder = $repository->createQueryBuilder('attribute');
-        $builder->andWhere('attribute.translatable = 1');
-        $builder->orderBy('attribute.position');
-
-        return $builder;
-    }
-
-    /**
      * Returns article ids
      *
      * @param $detailIds
@@ -1386,13 +1372,6 @@ class ArticlesDbAdapter implements DataDbAdapter
             'txtshortdescription' => 'description',
             'txtlangbeschreibung' => 'descriptionLong',
         ];
-
-        if (!SwagVersionHelper::hasMinimumVersion('5.3.0')) {
-            $legacyAttributes = $this->getLegacyTranslationAttr();
-            foreach ($legacyAttributes as $attr) {
-                $translationFields[$attr['name']] = $attr['name'];
-            }
-        }
 
         $attributes = $this->getTranslatableAttributes();
         foreach ($attributes as $attribute) {

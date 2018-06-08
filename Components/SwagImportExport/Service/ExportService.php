@@ -100,9 +100,9 @@ class ExportService extends AbstractImportExportService implements ExportService
         if ($profileType === DataDbAdapter::ARTICLE_ADAPTER) {
             $filter['variants'] = $filterParams['variants'] ? true : false;
             if (isset($filterParams['categories'])) {
-                $filter['categories'] = [
-                    $filterParams['categories'],
-                ];
+                $filter['categories'] = [$filterParams['categories']];
+            } elseif (isset($filterParams['productStreamId'])) {
+                $filter['productStreamId'] = [$filterParams['productStreamId']];
             }
         }
 

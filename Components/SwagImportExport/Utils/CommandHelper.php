@@ -23,48 +23,75 @@ use Shopware\CustomModels\ImportExport\Repository;
 
 class CommandHelper
 {
-    /** @var ProfileEntity */
+    /**
+     * @var ProfileEntity
+     */
     protected $profileEntity;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $filePath;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $format;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $exportVariants;
 
-    /** @var int */
+    /**
+     * @var int
+     */
     protected $limit;
 
-    /** @var int */
+    /**
+     * @var int
+     */
     protected $offset;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $username;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $category;
 
-    /** @var int */
+    /**
+     * @var int
+     */
+    protected $productStream;
+
+    /**
+     * @var int
+     */
     protected $sessionId;
 
-    /** @var \Shopware_Plugins_Backend_SwagImportExport_Bootstrap */
+    /**
+     * @var \Shopware_Plugins_Backend_SwagImportExport_Bootstrap
+     */
     protected $plugin;
 
-    /** @var Logger */
+    /**
+     * @var Logger
+     */
     protected $logger;
 
-    /** @var int */
+    /**
+     * @var int
+     */
     protected $customerStream;
 
     /**
-     * Construct
-     *
      * @param array $data
      *
-     * @throws \Exception
+     * @throws \RuntimeException
      */
     public function __construct(array $data)
     {
@@ -72,13 +99,13 @@ class CommandHelper
         $this->logger = Shopware()->Container()->get('swag_import_export.logger');
 
         if (!isset($data['profileEntity'])) {
-            throw new \Exception('No profile given!');
+            throw new \RuntimeException('No profile given!');
         }
         if (!isset($data['format'])) {
-            throw new \Exception('No format given!');
+            throw new \RuntimeException('No format given!');
         }
         if (!isset($data['filePath']) || !is_dir(dirname($data['filePath']))) {
-            throw new \Exception('Invalid file path ' . $data['filePath']);
+            throw new \RuntimeException('Invalid file path ' . $data['filePath']);
         }
 
         $this->profileEntity = $data['profileEntity'];
@@ -104,6 +131,10 @@ class CommandHelper
 
         if (!empty($data['category'])) {
             $this->category = $data['category'];
+        }
+
+        if (!empty($data['productStream'])) {
+            $this->productStream = $data['productStream'];
         }
 
         if (!empty($data['customerStream'])) {
@@ -164,6 +195,10 @@ class CommandHelper
             $postData['filter']['categories'] = $this->category;
         }
 
+        if ($this->productStream) {
+            $postData['filter']['productStreamId'] = $this->productStream;
+        }
+
         if ($this->customerStream) {
             $postData['filter']['customerStreamId'] = $this->customerStream;
         }
@@ -222,10 +257,14 @@ class CommandHelper
         if ($this->exportVariants) {
             $postData['filter']['variants'] = $this->exportVariants;
         }
+
         if ($this->category) {
             $postData['filter']['categories'] = $this->category;
         }
 
+        if ($this->productStream) {
+            $postData['filter']['productStreamId'] = $this->productStream;
+        }
         if ($this->customerStream) {
             $postData['filter']['customerStreamId'] = $this->customerStream;
         }
@@ -442,9 +481,9 @@ class CommandHelper
 
             $this->sessionId = $resultData['sessionId'];
 
-            if (
-                $dataSession->getTotalCount() > 0
-                && ($dataSession->getTotalCount() == $resultData['position'])
+            $dataSessionTotalCount = $dataSession->getTotalCount();
+            if ($dataSessionTotalCount > 0
+                && ($dataSessionTotalCount == $resultData['position'])
                 && $this->logger->getMessage() === null
             ) {
                 $message = sprintf(

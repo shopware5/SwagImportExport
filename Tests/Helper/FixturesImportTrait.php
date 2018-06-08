@@ -47,4 +47,16 @@ trait FixturesImportTrait
 
         $this->modelManager->flush();
     }
+
+    private function addProductStream()
+    {
+        $connection = Shopware()->Container()->get('dbal_connection');
+
+        $sql = <<<SQL
+INSERT INTO `s_product_streams` (`id`, `name`, `conditions`, `type`) VALUES
+(999999, 'Test', '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Condition\\\\\\\ManufacturerCondition":{"manufacturerIds":[2]}}', 1);
+SQL;
+
+        $connection->executeQuery($sql);
+    }
 }

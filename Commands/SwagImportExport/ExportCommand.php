@@ -11,7 +11,6 @@ namespace Shopware\Commands\SwagImportExport;
 use Shopware\Commands\ShopwareCommand;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\Utils\CommandHelper;
-use Shopware\Components\SwagImportExport\Utils\SwagVersionHelper;
 use Shopware\CustomModels\ImportExport\Profile;
 use Shopware\CustomModels\ImportExport\Repository;
 use Shopware\Models\CustomerStream\CustomerStream;
@@ -22,35 +21,60 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ExportCommand extends ShopwareCommand
 {
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $profile;
 
-    /** @var Profile $profileEntity */
+    /**
+     * @var Profile
+     */
     protected $profileEntity;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $exportVariants;
 
-    /** @var int */
+    /**
+     * @var int
+     */
     protected $limit;
 
-    /** @var int */
+    /**
+     * @var int
+     */
     protected $offset;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $format;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $filePath;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $category;
 
-    /** @var int */
+    /**
+     * @var int
+     */
     protected $sessionId;
 
-    /** @var int */
+    /**
+     * @var int
+     */
     protected $customerStream;
+
+    /**
+     * @var int
+     */
+    private $productStream;
 
     /**
      * {@inheritdoc}
@@ -60,15 +84,14 @@ class ExportCommand extends ShopwareCommand
         $this->setName('sw:importexport:export')
             ->setDescription('Export data to files.')
             ->addArgument('filepath', InputArgument::REQUIRED, 'Path to file to read from.')
-            ->addOption('profile', 'p', InputOption::VALUE_REQUIRED, 'Which profile will be used?');
-        if (SwagVersionHelper::hasMinimumVersion('5.3.0')) {
-            $this->addOption('customerstream', 'u', InputOption::VALUE_OPTIONAL, 'Which customer stream id?');
-        }
-        $this->addOption('format', 'f', InputOption::VALUE_OPTIONAL, 'What is the format of the exported file - XML or CSV?')
+            ->addOption('profile', 'p', InputOption::VALUE_REQUIRED, 'Which profile will be used?')
+            ->addOption('customerstream', 'u', InputOption::VALUE_OPTIONAL, 'Which customer stream id?')
+            ->addOption('format', 'f', InputOption::VALUE_OPTIONAL, 'What is the format of the exported file - XML or CSV?')
             ->addOption('exportVariants', 'x', InputOption::VALUE_NONE, 'Should the variants be exported?')
             ->addOption('offset', 'o', InputOption::VALUE_OPTIONAL, 'What is the offset?')
             ->addOption('limit', 'l', InputOption::VALUE_OPTIONAL, 'What is the limit?')
             ->addOption('category', 'c', InputOption::VALUE_OPTIONAL, 'Provide a category ID')
+            ->addOption('productStream', null, InputOption::VALUE_OPTIONAL, 'Provide a Product-Stream ID')
             ->setHelp('The <info>%command.name%</info> exports data to a file.');
     }
 
@@ -93,6 +116,7 @@ class ExportCommand extends ShopwareCommand
                 'offset' => $this->offset,
                 'username' => 'Commandline',
                 'category' => $this->category ? [$this->category] : null,
+                'productStream' => $this->productStream ? [$this->productStream] : null,
             ]
         );
 
@@ -104,6 +128,8 @@ class ExportCommand extends ShopwareCommand
         $output->writeln('<info>' . sprintf('Using file: %s.', $this->filePath) . '</info>');
         if ($this->category) {
             $output->writeln('<info>' . sprintf('Using category as filter: %s.', $this->category) . '</info>');
+        } elseif ($this->productStream) {
+            $output->writeln('<info>' . sprintf('Using Product-Stream as filter: %s.', $this->productStream) . '</info>');
         }
 
         $preparationData = $helper->prepareExport();
@@ -122,23 +148,22 @@ class ExportCommand extends ShopwareCommand
     /**
      * @param InputInterface $input
      *
-     * @throws \Exception
+     * @throws \RuntimeException
      */
     protected function prepareExportInputValidation(InputInterface $input)
     {
         $this->profile = $input->getOption('profile');
-        if (SwagVersionHelper::hasMinimumVersion('5.3.0')) {
-            $this->customerStream = $input->getOption('customerstream');
-        }
+        $this->customerStream = $input->getOption('customerstream');
         $this->format = $input->getOption('format');
         $this->exportVariants = $input->getOption('exportVariants');
         $this->offset = (int) $input->getOption('offset');
         $this->limit = (int) $input->getOption('limit');
         $this->filePath = $input->getArgument('filepath');
         $this->category = $input->getOption('category');
+        $this->productStream = $input->getOption('productStream');
 
         if (!$this->filePath) {
-            throw new \Exception('File path is required.');
+            throw new \RuntimeException('File path is required.');
         }
 
         $parts = explode('.', $this->filePath);
@@ -180,17 +205,20 @@ class ExportCommand extends ShopwareCommand
 
         // validate type
         if (!in_array($this->format, ['csv', 'xml'])) {
-            throw new \Exception(sprintf('Invalid format: \'%s\'! Valid formats are: CSV and XML.', $this->format));
+            throw new \RuntimeException(sprintf('Invalid format: \'%s\'! Valid formats are: CSV and XML.', $this->format));
         }
     }
 
     /**
      * @param InputInterface $input
+     *
+     * @throws \RuntimeException
+     * @throws \InvalidArgumentException
      */
     protected function validateProfiles(InputInterface $input)
     {
         if (!$this->profileEntity) {
-            throw new \Exception(sprintf('Invalid profile: \'%s\'!', $this->profile));
+            throw new \RuntimeException(sprintf('Invalid profile: \'%s\'!', $this->profile));
         }
 
         if ($this->profileEntity->getType() !== 'articles' && $input->getOption('exportVariants')) {
@@ -204,15 +232,17 @@ class ExportCommand extends ShopwareCommand
 
     /**
      * @param $customerStream
+     *
+     * @throws \RuntimeException
      */
     protected function validateCustomerStream($customerStream)
     {
         if (!$customerStream) {
-            throw new \Exception(sprintf('Invalid stream: \'%s\'! There is no customer stream with this id.', $this->customerStream));
+            throw new \RuntimeException(sprintf('Invalid stream: \'%s\'! There is no customer stream with this id.', $this->customerStream));
         }
 
         if (!in_array($this->profileEntity->getType(), ['customers', 'addresses'], true)) {
-            throw new \Exception(sprintf('Customer stream export can not be used with profile: \'%s\'!', $this->profile));
+            throw new \RuntimeException(sprintf('Customer stream export can not be used with profile: \'%s\'!', $this->profile));
         }
     }
 }

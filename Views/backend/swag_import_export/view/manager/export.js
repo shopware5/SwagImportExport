@@ -41,7 +41,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
 
     /**
      * Creates the main form panel for the component which
-     * features all neccessary form elements
+     * features all necessary form elements
      *
      * @return [object] me.formPnl - generated Ext.form.Panel
      */
@@ -160,7 +160,8 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
                     me.createVariantsCheckbox(),
                     me.createLimit(),
                     me.createOffset(),
-                    me.createCategoryTreeCombo()
+                    me.createCategoryTreeCombo(),
+                    me.createProductStreamSelection()
                 ]
             }]
         });
@@ -328,7 +329,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
             minChars: 3,
             listConfig: {
                 width: 450,
-                getInnerTpl: function (value) {
+                getInnerTpl: function () {
                     return Ext.XTemplate(
                         '{literal}' +
                         '<tpl if="translation">{ name } <i>({ translation })</i>' +
@@ -394,7 +395,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
 
                     if (type === 'articles') {
                         me.articleFields.show();
-                    } else if (type === 'orders' || type == 'mainOrders') {
+                    } else if (type === 'orders' || type === 'mainOrders') {
                         me.orderFields.show();
                     } else if (type === 'articlesInStock') {
                         me.stockField.show();
@@ -432,7 +433,8 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
                     }
 
                     if (me.profileCombo.isDirty()) {
-                        return me.profileCombo.clearValue();
+                        me.profileCombo.clearValue();
+                        return;
                     }
                     store.load();
                 }
@@ -488,7 +490,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
 
     /**
      * Returns category dropdown
-     * @returns [ Shopware.form.field.ComboTree ]
+     * @returns { Shopware.form.field.ComboTree }
      */
     createCategoryTreeCombo: function() {
         var me = this;
@@ -508,6 +510,22 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
         };
 
         return me.categoryTreeCombo;
+    },
+
+    /**
+     * @returns { Shopware.form.field.ProductStreamSelection }
+     */
+    createProductStreamSelection: function() {
+        var me = this;
+
+        me.productStreamCombo = Ext.create('Shopware.form.field.ProductStreamSelection', {
+            name: 'productStreamId',
+            fieldLabel: '{s name=swag_import_export/export/product_stream}or select Product-Stream{/s}',
+            labelWidth: me.configLabelWidth,
+            width: me.configWidth
+        });
+
+        return me.productStreamCombo;
     },
 
     createStockFilterComboBox: function() {
@@ -539,7 +557,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
             value: me.stockFilter.getAt(0),
             name: 'stockFilter',
             listeners: {
-                change: function(combo, newValue, oldValue, eOpts) {
+                change: function(combo, newValue) {
                     if (newValue === 'custom') {
                         me.customFilterFields.show();
                     } else {
