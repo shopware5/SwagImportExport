@@ -19,6 +19,11 @@ class XmlConverter
         'newline' => "\r\n",
     ];
 
+    /**
+     * @param $array
+     *
+     * @return string
+     */
     public function encode($array)
     {
         $standalone = $this->sSettings['standalone'] ? 'yes' : 'no';
@@ -29,6 +34,13 @@ class XmlConverter
         return $ret;
     }
 
+    /**
+     * @param        $array
+     * @param int    $pos
+     * @param string $ekey
+     *
+     * @return string
+     */
     public function _encode($array, $pos = 0, $ekey = '')
     {
         $ret = '';
@@ -76,6 +88,11 @@ class XmlConverter
         return $ret;
     }
 
+    /**
+     * @param $contents
+     *
+     * @return array
+     */
     public function decode($contents)
     {
         if (!$contents) {
@@ -122,7 +139,7 @@ class XmlConverter
             }
 
             //See tag status and do the needed.
-            if ($type == 'open') { //The starting of the tag '<tag>'
+            if ($type === 'open') { //The starting of the tag '<tag>'
                 $parent[$level - 1] = &$current;
 
                 if (!is_array($current) or (!in_array($tag, array_keys($current)))) { //Insert New tag
@@ -130,14 +147,14 @@ class XmlConverter
                     $current = &$current[$tag];
                 } else { //There was another element with the same tag name
                     if (isset($current[$tag][0])) {
-                        array_push($current[$tag], $result);
+                        $current[$tag][] = $result;
                     } else {
                         $current[$tag] = [$current[$tag], $result];
                     }
                     $last = count($current[$tag]) - 1;
                     $current = &$current[$tag][$last];
                 }
-            } elseif ($type == 'complete') { //Tags that ends in 1 line '<tag />'
+            } elseif ($type === 'complete') { //Tags that ends in 1 line '<tag />'
                 //See if the key is already taken.
                 if (!isset($current[$tag])) { //New Key
                     $current[$tag] = $result;
@@ -157,7 +174,7 @@ class XmlConverter
                         ]; //...Make it an array using using the existing value and the new value
                     }
                 }
-            } elseif ($type == 'close') { //End of tag '</tag>'
+            } elseif ($type === 'close') { //End of tag '</tag>'
                 $current = &$parent[$level - 1];
             }
         }
@@ -165,6 +182,12 @@ class XmlConverter
         return $xml_array;
     }
 
+    /**
+     * @param        $array
+     * @param string $name
+     *
+     * @return bool
+     */
     public function fix_array(&$array, $name = '')
     {
         if (!empty($name) && (empty($array[$name]) || !is_array($array[$name]))) {
@@ -183,6 +206,11 @@ class XmlConverter
         return true;
     }
 
+    /**
+     * @param $string
+     *
+     * @return bool
+     */
     public function fix_string(&$string)
     {
         if (empty($string)) {
@@ -198,6 +226,11 @@ class XmlConverter
         return true;
     }
 
+    /**
+     * @param        $array
+     * @param        $atr
+     * @param string $valuename
+     */
     public function attr_as_key(&$array, $atr, $valuename = '')
     {
         $data = [];
@@ -227,6 +260,11 @@ class XmlConverter
         $array = $data;
     }
 
+    /**
+     * @param        $array
+     * @param        $name
+     * @param string $valuename
+     */
     public function value_as_key(&$array, $name, $valuename = '')
     {
         $data = [];
@@ -248,6 +286,12 @@ class XmlConverter
         $array = $data;
     }
 
+    /**
+     * @param        $array
+     * @param string $valuename
+     *
+     * @return bool
+     */
     public function atr_as_values(&$array, $valuename = '')
     {
         if (!empty($valuename) && is_string($array)) {

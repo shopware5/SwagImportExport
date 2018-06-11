@@ -1,10 +1,10 @@
-//{block name="backend/swag_import_export/model/log"}
+// {block name="backend/swag_import_export/model/log"}
 Ext.define('Shopware.apps.SwagImportExport.model.Log', {
     /**
      * Extends the standard ExtJS 4
      * @string
      */
-    extend : 'Ext.data.Model',
+    extend: 'Ext.data.Model',
     /**
      * Configure the data communication
      * @object
@@ -15,7 +15,7 @@ Ext.define('Shopware.apps.SwagImportExport.model.Log', {
         { name: 'logDate', type: 'date', format: 'timestamp' },
         { name: 'errorState', type: 'boolean' }
     ],
-    
+
     proxy: {
         type: 'ajax',
         /**
@@ -24,7 +24,7 @@ Ext.define('Shopware.apps.SwagImportExport.model.Log', {
          * @object
          */
         api: {
-            read:'{url controller="SwagImportExport" action="getLogs"}'
+            read: '{url controller="SwagImportExport" action="getLogs"}'
         },
         /**
          * Configure the data reader
@@ -36,4 +36,4 @@ Ext.define('Shopware.apps.SwagImportExport.model.Log', {
         }
     }
 });
-//{/block}
+// {/block}

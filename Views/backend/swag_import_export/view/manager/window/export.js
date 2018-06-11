@@ -1,5 +1,5 @@
-//{namespace name=backend/swag_import_export/view/main}
-//{block name="backend/swag_import_export/view/manager/window/export"}
+// {namespace name=backend/swag_import_export/view/main}
+// {block name="backend/swag_import_export/view/manager/window/export"}
 Ext.define('Shopware.apps.SwagImportExport.view.manager.window.Export', {
     /**
      * Define that the order main window is an extension of the enlight application window
@@ -86,7 +86,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.window.Export', {
         me.items = me.createItems();
         me.callParent(arguments);
 
-        //No data available for export.
+        // No data available for export.
         if (me.batchConfig.totalCount === 0) {
             me.startButton.hide();
             me.exportProgress.text = me.snippets.noData;
@@ -98,8 +98,8 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.window.Export', {
      */
     createItems: function() {
         var me = this;
-        
-        if (Ext.isEmpty(me.batchConfig.progress)){
+
+        if (Ext.isEmpty(me.batchConfig.progress)) {
             me.batchConfig.progress = 0;
         }
 
@@ -198,7 +198,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.window.Export', {
     },
     /**
      * Returns a download button for export popup
-     * 
+     *
      * @returns Ext.button.Button
      */
     createDownloadButton: function() {
@@ -234,4 +234,4 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.window.Export', {
         });
     }
 });
-//{/block}
+// {/block}

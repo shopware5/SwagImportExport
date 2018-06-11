@@ -72,7 +72,7 @@ class OrdersDbAdapter implements DataDbAdapter
         $builder = $this->modelManager->createQueryBuilder();
 
         $builder->select('details.id')
-            ->from('Shopware\Models\Order\Detail', 'details')
+            ->from(Detail::class, 'details')
             ->leftJoin('details.order', 'orders');
 
         if (isset($filter['orderstate']) && is_numeric($filter['orderstate'])) {

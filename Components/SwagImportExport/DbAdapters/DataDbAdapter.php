@@ -29,6 +29,7 @@ interface DataDbAdapter
      *
      * @param array $ids
      * @param array $columns
+     *
      * @return array
      */
     public function read($ids, $columns);
@@ -36,15 +37,17 @@ interface DataDbAdapter
     /**
      * Returns all ids for the given export with the given parameters.
      *
-     * @param int $start
-     * @param int $limit
+     * @param int   $start
+     * @param int   $limit
      * @param mixed $filter
+     *
      * @return array
      */
     public function readRecordIds($start, $limit, $filter);
 
     /**
      * Returns the default column.
+     *
      * @see DataDbAdapter::getColumns()
      *
      * @return array
@@ -60,6 +63,7 @@ interface DataDbAdapter
 
     /**
      * Returns all column names.
+     *
      * @example:
      * [
      *  'address.id as id',
@@ -67,6 +71,7 @@ interface DataDbAdapter
      * ]
      *
      * @param string $section
+     *
      * @return array
      */
     public function getColumns($section);
@@ -96,7 +101,7 @@ interface DataDbAdapter
     /**
      * Returns true if log messages are available.
      *
-     * @return boolean
+     * @return bool
      */
     public function getLogState();
 }

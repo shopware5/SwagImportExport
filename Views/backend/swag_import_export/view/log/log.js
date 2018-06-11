@@ -1,14 +1,14 @@
-//{namespace name=backend/swag_import_export/view/session}
-//{block name="backend/swag_import_export/view/log/log"}
+// {namespace name=backend/swag_import_export/view/session}
+// {block name="backend/swag_import_export/view/log/log"}
 // deprecated since 2.4.2 and will be removed with 3.0.0
-//{block name="backend/swag_import_export/view/manager/manager"}
+// {block name="backend/swag_import_export/view/manager/manager"}
 Ext.define('Shopware.apps.SwagImportExport.view.log.Log', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.swag-import-export-log-log',
 
     title: '{s name=swag_import_export/logs/title}Logs{/s}',
     autoScroll: true,
-    
+
     initComponent: function() {
         var me = this;
 
@@ -17,10 +17,10 @@ Ext.define('Shopware.apps.SwagImportExport.view.log.Log', {
         me.dockedItems = [
             me.getPagingbar()
         ];
-        
+
         me.callParent(arguments);
     },
-    
+
     /**
      * Creates the grid columns
      *
@@ -30,7 +30,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.log.Log', {
         var me = this;
 
         return [{
-            xtype : 'datecolumn',
+            xtype: 'datecolumn',
             header: '{s name=swag_import_export/logs/date}Date{/s}',
             format: 'Y-m-d H:i:s',
             dataIndex: 'logDate',
@@ -39,7 +39,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.log.Log', {
             header: '{s name=swag_import_export/logs/message}Message{/s}',
             dataIndex: 'message',
             renderer: function(v) {
-                return v.replace(/\n/g,'<br>')
+                return v.replace(/\n/g, '<br>');
             },
             flex: 2
         }, {
@@ -49,7 +49,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.log.Log', {
             renderer: me.renderErrorState
         }];
     },
-    
+
     /**
      * Creates pagingbar shown at the bottom of the grid
      *
@@ -78,5 +78,5 @@ Ext.define('Shopware.apps.SwagImportExport.view.log.Log', {
         );
     }
 });
-//{/block}
-//{/block}
+// {/block}
+// {/block}

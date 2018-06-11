@@ -15,17 +15,18 @@ class ArticlePriceDataManager
      *
      * @var array
      */
-    private $defaultFields = array(
+    private $defaultFields = [
         'priceGroup',
         'from',
         'to',
-        'percent'
-    );
+        'percent',
+    ];
 
     /**
      * Sets fields which are empty by default.
      *
      * @param array $record
+     *
      * @return mixed
      */
     public function setDefaultFields($record)

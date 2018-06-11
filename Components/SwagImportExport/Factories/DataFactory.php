@@ -9,7 +9,6 @@
 namespace Shopware\Components\SwagImportExport\Factories;
 
 use Doctrine\ORM\EntityRepository;
-use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\DataIO;
 use Shopware\Components\SwagImportExport\DataManagers\Articles\ArticleDataManager;
 use Shopware\Components\SwagImportExport\DataManagers\CategoriesDataManager;
@@ -30,12 +29,11 @@ use Shopware\Components\SwagImportExport\DbAdapters\NewsletterDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\OrdersDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\TranslationsDbAdapter;
 use Shopware\Components\SwagImportExport\DbalHelper;
-use Shopware\Components\SwagImportExport\Session\Session;
 use Shopware\Components\SwagImportExport\Logger\Logger;
+use Shopware\Components\SwagImportExport\Session\Session;
 use Shopware\Components\SwagImportExport\Utils\DataColumnOptions;
-use Shopware\Components\SwagImportExport\Utils\DataLimit;
 use Shopware\Components\SwagImportExport\Utils\DataFilter;
-use Shopware\Components\SwagImportExport\Validators\AddressValidator;
+use Shopware\Components\SwagImportExport\Utils\DataLimit;
 use Shopware\CustomModels\ImportExport\Session as SessionEntity;
 
 class DataFactory extends \Enlight_Class implements \Enlight_Hook
@@ -47,11 +45,13 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
      * @param DataDbAdapter $dbAdapter
      * @param $dataSession
      * @param Logger $logger
+     *
      * @return DataIO
      */
     public function createDataIO(DataDbAdapter $dbAdapter, $dataSession, Logger $logger)
     {
         $uploadPathProvider = Shopware()->Container()->get('swag_import_export.upload_path_provider');
+
         return new DataIO($dbAdapter, $dataSession, $logger, $uploadPathProvider);
     }
 
@@ -59,8 +59,10 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
      * Returns the necessary adapter
      *
      * @param string $adapterType
-     * @return DataDbAdapter dbAdapter
+     *
      * @throws \Exception
+     *
+     * @return DataDbAdapter dbAdapter
      */
     public function createDbAdapter($adapterType)
     {
@@ -104,20 +106,10 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     }
 
     /**
-     * @param string $adapterType
-     * @return \Enlight_Event_EventArgs|null
-     */
-    protected function fireCreateFactoryEvent($adapterType)
-    {
-        return Shopware()->Events()->notifyUntil(
-            'Shopware_Components_SwagImportExport_Factories_CreateDbAdapter',
-            ['subject' => $this, 'adapterType' => $adapterType]);
-    }
-
-    /**
      * Return necessary data manager
      *
      * @param string $managerType
+     *
      * @return object dbAdapter
      */
     public function createDataManager($managerType)
@@ -136,6 +128,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
 
     /**
      * @param array $data
+     *
      * @return Session
      */
     public function loadSession($data)
@@ -155,6 +148,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
      * Returns columnOptions adapter
      *
      * @param $options
+     *
      * @return \Shopware\Components\SwagImportExport\Utils\DataColumnOptions
      */
     public function createColOpts($options)
@@ -166,6 +160,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
      * Returns limit adapter
      *
      * @param array $limit
+     *
      * @return \Shopware\Components\SwagImportExport\Utils\DataLimit
      */
     public function createLimit(array $limit)
@@ -177,6 +172,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
      * Returns filter adapter
      *
      * @param $filter
+     *
      * @return \Shopware\Components\SwagImportExport\Utils\DataFilter
      */
     public function createFilter($filter)
@@ -192,11 +188,29 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     public function getSessionRepository()
     {
         if ($this->sessionRepository === null) {
-            $this->sessionRepository = Shopware()->Models()->getRepository('Shopware\CustomModels\ImportExport\Session');
+            $this->sessionRepository = Shopware()->Models()->getRepository(SessionEntity::class);
         }
+
         return $this->sessionRepository;
     }
 
+    /**
+     * @param string $adapterType
+     *
+     * @return \Enlight_Event_EventArgs|null
+     */
+    protected function fireCreateFactoryEvent($adapterType)
+    {
+        return Shopware()->Events()->notifyUntil(
+            'Shopware_Components_SwagImportExport_Factories_CreateDbAdapter',
+            ['subject' => $this, 'adapterType' => $adapterType]);
+    }
+
+    /**
+     * @param SessionEntity $sessionEntity
+     *
+     * @return Session
+     */
     protected function createSession(SessionEntity $sessionEntity)
     {
         return new Session($sessionEntity);
@@ -208,8 +222,9 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     protected function getCategoryDataManager()
     {
         $proxyAdapter = Shopware()->Hooks()
-            ->getProxy('Shopware\Components\SwagImportExport\DataManagers\CategoriesDataManager');
-        return new $proxyAdapter;
+            ->getProxy(CategoriesDataManager::class);
+
+        return new $proxyAdapter();
     }
 
     /**
@@ -218,9 +233,10 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     protected function getArticleDataManager()
     {
         $proxyAdapter = Shopware()->Hooks()
-            ->getProxy('Shopware\Components\SwagImportExport\DataManagers\Articles\ArticleDataManager');
+            ->getProxy(ArticleDataManager::class);
         $db = Shopware()->Db();
         $dbalHelper = DbalHelper::create();
+
         return new $proxyAdapter($db, $dbalHelper);
     }
 
@@ -230,8 +246,9 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     protected function getCustomerDataManager()
     {
         $proxyAdapter = Shopware()->Hooks()
-            ->getProxy('Shopware\Components\SwagImportExport\DataManagers\CustomerDataManager');
-        return new $proxyAdapter;
+            ->getProxy(CustomerDataManager::class);
+
+        return new $proxyAdapter();
     }
 
     /**
@@ -240,8 +257,9 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     protected function getNewsletterDataManager()
     {
         $proxyAdapter = Shopware()->Hooks()
-            ->getProxy('Shopware\Components\SwagImportExport\DataManagers\NewsletterDataManager');
-        return new $proxyAdapter;
+            ->getProxy(NewsletterDataManager::class);
+
+        return new $proxyAdapter();
     }
 
     /**
@@ -253,18 +271,19 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     {
         $proxyAdapter = Shopware()->Hooks()
             ->getProxy(CategoriesDbAdapter::class);
-        return new $proxyAdapter;
+
+        return new $proxyAdapter();
     }
 
     /**
-     *
      * @return ArticlesDbAdapter
      */
     protected function createArticlesDbAdapter()
     {
         $proxyAdapter = Shopware()->Hooks()
             ->getProxy(ArticlesDbAdapter::class);
-        return new $proxyAdapter;
+
+        return new $proxyAdapter();
     }
 
     /**
@@ -274,18 +293,19 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     {
         $proxyAdapter = Shopware()->Hooks()
             ->getProxy(ArticlesInStockDbAdapter::class);
-        return new $proxyAdapter;
+
+        return new $proxyAdapter();
     }
 
     /**
-     *
      * @return ArticlesTranslationsDbAdapter
      */
     protected function createArticlesTranslationsDbAdapter()
     {
         $proxyAdapter = Shopware()->Hooks()
             ->getProxy(ArticlesTranslationsDbAdapter::class);
-        return new $proxyAdapter;
+
+        return new $proxyAdapter();
     }
 
     /**
@@ -297,7 +317,8 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     {
         $proxyAdapter = Shopware()->Hooks()
             ->getProxy(ArticlesPricesDbAdapter::class);
-        return new $proxyAdapter;
+
+        return new $proxyAdapter();
     }
 
     /**
@@ -309,7 +330,8 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     {
         $proxyAdapter = Shopware()->Hooks()
             ->getProxy(ArticlesImagesDbAdapter::class);
-        return new $proxyAdapter;
+
+        return new $proxyAdapter();
     }
 
     /**
@@ -319,7 +341,8 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     {
         $proxyAdapter = Shopware()->Hooks()
             ->getProxy(CustomerDbAdapter::class);
-        return new $proxyAdapter;
+
+        return new $proxyAdapter();
     }
 
     /**
@@ -329,7 +352,8 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     {
         $proxyAdapter = Shopware()->Hooks()
             ->getProxy(CustomerCompleteDbAdapter::class);
-        return new $proxyAdapter;
+
+        return new $proxyAdapter();
     }
 
     /**
@@ -339,7 +363,8 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     {
         $proxyAdapter = Shopware()->Hooks()
             ->getProxy(OrdersDbAdapter::class);
-        return new $proxyAdapter;
+
+        return new $proxyAdapter();
     }
 
     /**
@@ -349,7 +374,8 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     {
         $proxyAdapter = Shopware()->Hooks()
             ->getProxy(MainOrdersDbAdapter::class);
-        return new $proxyAdapter;
+
+        return new $proxyAdapter();
     }
 
     /**
@@ -359,7 +385,8 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     {
         $proxyAdapter = Shopware()->Hooks()
             ->getProxy(NewsletterDbAdapter::class);
-        return new $proxyAdapter;
+
+        return new $proxyAdapter();
     }
 
     /**
@@ -369,7 +396,8 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     {
         $proxyAdapter = Shopware()->Hooks()
             ->getProxy(TranslationsDbAdapter::class);
-        return new $proxyAdapter;
+
+        return new $proxyAdapter();
     }
 
     /**
@@ -379,6 +407,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     {
         $proxyAdapter = Shopware()->Hooks()
             ->getProxy(AddressDbAdapter::class);
-        return new $proxyAdapter;
+
+        return new $proxyAdapter();
     }
 }

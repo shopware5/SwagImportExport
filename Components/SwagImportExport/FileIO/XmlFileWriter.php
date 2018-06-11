@@ -8,8 +8,8 @@
 
 namespace Shopware\Components\SwagImportExport\FileIO;
 
-use Shopware\Components\SwagImportExport\Utils\FileHelper;
 use Shopware\Components\SwagImportExport\FileIO\Encoders\XmlEncoder;
+use Shopware\Components\SwagImportExport\Utils\FileHelper;
 
 /**
  * This class is responsible to generate XML file or portions of an XML file on the hard disk.
@@ -18,7 +18,7 @@ use Shopware\Components\SwagImportExport\FileIO\Encoders\XmlEncoder;
 class XmlFileWriter implements FileWriter
 {
     /**
-     * @var boolean
+     * @var bool
      */
     protected $treeStructure = true;
 
@@ -26,9 +26,9 @@ class XmlFileWriter implements FileWriter
      * @var XmlEncoder
      */
     protected $xmlConvertor;
-    
+
     /**
-     * @var FileHelper $fileHelper
+     * @var FileHelper
      */
     protected $fileHelper;
 
@@ -45,6 +45,7 @@ class XmlFileWriter implements FileWriter
      *
      * @param $fileName
      * @param $headerData
+     *
      * @throws \Exception
      */
     public function writeHeader($fileName, $headerData)
@@ -60,6 +61,7 @@ class XmlFileWriter implements FileWriter
      *
      * @param $fileName
      * @param $data
+     *
      * @throws \Exception
      */
     public function writeRecords($fileName, $data)
@@ -77,6 +79,7 @@ class XmlFileWriter implements FileWriter
      *
      * @param $fileName
      * @param $footerData
+     *
      * @throws \Exception
      */
     public function writeFooter($fileName, $footerData)
@@ -108,8 +111,10 @@ class XmlFileWriter implements FileWriter
      * Splitting the tree into two parts
      *
      * @param array $data
-     * @return string
+     *
      * @throws \Exception
+     *
+     * @return string
      */
     protected function splitHeaderFooter($data)
     {

@@ -45,7 +45,7 @@ class OldAdvancedMenuInstaller implements InstallerInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function install()
     {
@@ -67,7 +67,7 @@ class OldAdvancedMenuInstaller implements InstallerInterface
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isCompatible()
     {
@@ -80,7 +80,8 @@ class OldAdvancedMenuInstaller implements InstallerInterface
     private function findParent()
     {
         $menuRepository = $this->modelManager->getRepository(Menu::class);
-        return $menuRepository->findOneBy([ 'label' => 'Inhalte' ]);
+
+        return $menuRepository->findOneBy(['label' => 'Inhalte']);
     }
 
     /**
@@ -89,6 +90,7 @@ class OldAdvancedMenuInstaller implements InstallerInterface
     private function findPlugin()
     {
         $pluginRepository = $this->modelManager->getRepository(Plugin::class);
-        return $pluginRepository->findOneBy([ 'name' => 'SwagImportExport' ]);
+
+        return $pluginRepository->findOneBy(['name' => 'SwagImportExport']);
     }
 }

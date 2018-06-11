@@ -17,12 +17,12 @@ use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 class ImageWriter
 {
     /**
-     * @var ArticlesDbAdapter $articlesDbAdapter
+     * @var ArticlesDbAdapter
      */
-    protected $articlesDbAdapter = null;
+    protected $articlesDbAdapter;
 
     /**
-     * @var PDOConnection $db
+     * @var PDOConnection
      */
     protected $db;
 
@@ -53,11 +53,12 @@ class ImageWriter
      * @param $articleId
      * @param $mainDetailOrderNumber
      * @param $images
+     *
      * @throws AdapterException
      */
     public function write($articleId, $mainDetailOrderNumber, $images)
     {
-        $newImages = array();
+        $newImages = [];
         foreach ($images as $image) {
             //if image data has only 'parentIndexElement' element
             if (count($image) < 2) {
@@ -80,11 +81,11 @@ class ImageWriter
                 // if data comes from article adapter prepare data for hidden profile
                 if (!$media) {
                     $thumbnail = isset($image['thumbnail']) && $image['thumbnail'] == 0 ? 0 : 1;
-                    $data = array(
+                    $data = [
                         'ordernumber' => $mainDetailOrderNumber,
                         'image' => $image['imageUrl'],
-                        'thumbnail' => $thumbnail
-                    );
+                        'thumbnail' => $thumbnail,
+                    ];
                     // set unprocessed data to use hidden profile for articleImages
                     $this->getArticlesDbAdapter()->setUnprocessedData('articlesImages', 'default', $data);
                 }
@@ -116,13 +117,14 @@ class ImageWriter
 
     /**
      * @param $mediaId
+     *
      * @return mixed
      */
     protected function getMediaById($mediaId)
     {
         $media = $this->db->fetchRow(
             'SELECT id, name, description, extension FROM s_media WHERE id = ?',
-            array($mediaId)
+            [$mediaId]
         );
 
         return $media;
@@ -130,13 +132,14 @@ class ImageWriter
 
     /**
      * @param $name
+     *
      * @return mixed
      */
     protected function getMediaByName($name)
     {
         $media = $this->db->fetchRow(
             'SELECT id, name, description, extension FROM s_media media WHERE media.name = ?',
-            array($name)
+            [$name]
         );
 
         return $media;
@@ -145,13 +148,14 @@ class ImageWriter
     /**
      * @param $articleId
      * @param $mediaId
+     *
      * @return bool
      */
     protected function isImageExists($articleId, $mediaId)
     {
         $isImageExists = $this->db->fetchOne(
             'SELECT id FROM s_articles_img WHERE articleID = ? AND media_id = ?',
-            array($articleId, $mediaId)
+            [$articleId, $mediaId]
         );
 
         return is_numeric($isImageExists);
@@ -160,13 +164,14 @@ class ImageWriter
     /**
      * @param $mediaId
      * @param $imageName
+     *
      * @return bool
      */
     protected function isImageNameCorrect($mediaId, $imageName)
     {
         $isImageNameCorrect = $this->db->fetchOne(
             'SELECT media.id FROM s_media media WHERE media.id = ? AND media.name = ?',
-            array($mediaId, $imageName)
+            [$mediaId, $imageName]
         );
 
         return is_numeric($isImageNameCorrect);
@@ -175,6 +180,7 @@ class ImageWriter
     /**
      * @param $data
      * @param $articleId
+     *
      * @throws \Doctrine\DBAL\DBALException
      */
     protected function insertImages($data, $articleId)
@@ -190,9 +196,9 @@ class ImageWriter
                 function ($image) use ($articleId) {
                     if ($image['variantId']) {
                         return "({$articleId}, '{$image['name']}', '{$image['main']}', '{$image['description']}', '{$image['extension']}', '{$image['variantId']}', {$image['id']})";
-                    } else {
-                        return "({$articleId}, '{$image['name']}', '{$image['main']}', '{$image['description']}', '{$image['extension']}', NULL, {$image['id']})";
                     }
+
+                    return "({$articleId}, '{$image['name']}', '{$image['main']}', '{$image['description']}', '{$image['extension']}', NULL, {$image['id']})";
                 },
                 $imageData
             )
@@ -206,12 +212,13 @@ class ImageWriter
     /**
      * @param $medias
      * @param $images
+     *
      * @return array
      */
     protected function prepareImageData($medias, $images)
     {
         $mediaId = null;
-        $imageData = array();
+        $imageData = [];
         foreach ($images as $key => $image) {
             $imageData[$key]['name'] = $image['path'];
             $imageData[$key]['main'] = $image['main'] ?: 2;
@@ -225,7 +232,7 @@ class ImageWriter
             }
         }
 
-        return array($imageData, $mediaId);
+        return [$imageData, $mediaId];
     }
 
     /**
@@ -248,6 +255,7 @@ class ImageWriter
 
     /**
      * @param $articleId
+     *
      * @return string
      */
     protected function countOfMainImages($articleId)
@@ -256,7 +264,7 @@ class ImageWriter
             'SELECT COUNT(main)
              FROM s_articles_img
              WHERE main = 1 AND articleID = ?',
-            array($articleId)
+            [$articleId]
         );
 
         return $count;
@@ -264,6 +272,7 @@ class ImageWriter
 
     /**
      * @param $articleId
+     *
      * @throws \Doctrine\DBAL\DBALException
      */
     protected function setFirstImageAsMain($articleId)
@@ -275,6 +284,7 @@ class ImageWriter
     /**
      * @param $articleId
      * @param $mediaId
+     *
      * @throws \Doctrine\DBAL\DBALException
      */
     protected function updateMain($articleId, $mediaId)

@@ -13,7 +13,7 @@ use Shopware\Components\SwagImportExport\DbAdapters\DataDbAdapter;
 class CategoryProfile implements \JsonSerializable, ProfileMetaData
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getAdapter()
     {
@@ -21,7 +21,7 @@ class CategoryProfile implements \JsonSerializable, ProfileMetaData
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -29,7 +29,7 @@ class CategoryProfile implements \JsonSerializable, ProfileMetaData
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getDescription()
     {
@@ -37,7 +37,7 @@ class CategoryProfile implements \JsonSerializable, ProfileMetaData
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {
@@ -242,7 +242,7 @@ class CategoryProfile implements \JsonSerializable, ProfileMetaData
                         'shopwareField' => 'customerGroupId',
                     ],
                 ],
-            ]
+            ],
         ];
     }
 }

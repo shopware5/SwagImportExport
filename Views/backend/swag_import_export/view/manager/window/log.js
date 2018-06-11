@@ -1,5 +1,5 @@
-//{namespace name=backend/swag_import_export/view/session}
-//{block name="backend/swag_import_export/view/manager/window/log"}
+// {namespace name=backend/swag_import_export/view/session}
+// {block name="backend/swag_import_export/view/manager/window/log"}
 Ext.define('Shopware.apps.SwagImportExport.view.manager.window.Log', {
     extend: 'Enlight.app.SubWindow',
     alias: 'widget.swag-import-export-manager-window-log',
@@ -35,7 +35,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.window.Log', {
         return [
             me.propertyGrid,
             me.logGrid
-        ]
+        ];
     },
 
     buildPropertyGrid: function() {
@@ -115,4 +115,4 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.window.Log', {
         });
     }
 });
-//{/block}
+// {/block}

@@ -9,34 +9,39 @@
 namespace Shopware\Components\SwagImportExport\DbAdapters\Articles;
 
 use Enlight_Components_Db_Adapter_Pdo_Mysql as PDOConnection;
+use Shopware\Components\SwagImportExport\DataManagers\Articles\PriceDataManager;
 use Shopware\Components\SwagImportExport\DbalHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Validators\Articles\PriceValidator;
-use Shopware\Components\SwagImportExport\DataManagers\Articles\PriceDataManager;
 use Shopware\Models\Article\Price;
 
 class PriceWriter
 {
     /**
-     * @var PDOConnection $db
+     * @var PDOConnection
      */
     protected $db;
 
     /**
-     * @var array $customerGroups
+     * @var array
      */
     protected $customerGroups;
 
     /**
-     * @var PriceValidator $validator
+     * @var PriceValidator
      */
     protected $validator;
 
     /**
-     * @var PriceDataManager $dataManager
+     * @var PriceDataManager
      */
     protected $dataManager;
+
+    /**
+     * @var DbalHelper
+     */
+    private $dbalHelper;
 
     /**
      * initialises the class properties
@@ -55,6 +60,7 @@ class PriceWriter
      * @param $articleId
      * @param $articleDetailId
      * @param $prices
+     *
      * @throws AdapterException
      */
     public function write($articleId, $articleDetailId, $prices)
@@ -102,6 +108,7 @@ class PriceWriter
      * @param $price
      * @param $newPrice
      * @param $tax
+     *
      * @return mixed
      */
     protected function calculatePrice($price, $newPrice, $tax)
@@ -138,6 +145,12 @@ class PriceWriter
         return $price;
     }
 
+    /**
+     * @param $price
+     * @param $orderNumber
+     *
+     * @throws AdapterException
+     */
     protected function checkRequirements($price, $orderNumber)
     {
         if (!array_key_exists($price['priceGroup'], $this->customerGroups)) {
@@ -158,28 +171,11 @@ class PriceWriter
     }
 
     /**
-     * @return array
-     */
-    private function getCustomerGroup()
-    {
-        $groups = $this->db->fetchPairs('SELECT groupkey, taxinput FROM s_core_customergroups');
-
-        return $groups;
-    }
-
-    /**
-     * @param string $price
-     * @return float
-     */
-    private function formatToFloatValue($price)
-    {
-        return floatval(str_replace(",", ".", $price));
-    }
-
-    /**
      * @param $articleId
-     * @return float
+     *
      * @throws AdapterException
+     *
+     * @return float
      */
     protected function getArticleTaxRate($articleId)
     {
@@ -192,11 +188,12 @@ class PriceWriter
             throw new AdapterException("Tax for article $articleId not found");
         }
 
-        return floatval($tax);
+        return (float) $tax;
     }
 
     /**
      * @param int $articleDetailId
+     *
      * @return string
      */
     protected function getArticleOrderNumber($articleDetailId)
@@ -205,5 +202,25 @@ class PriceWriter
         $orderNumber = $this->db->fetchOne($sql, [$articleDetailId]);
 
         return $orderNumber;
+    }
+
+    /**
+     * @return array
+     */
+    private function getCustomerGroup()
+    {
+        $groups = $this->db->fetchPairs('SELECT groupkey, taxinput FROM s_core_customergroups');
+
+        return $groups;
+    }
+
+    /**
+     * @param string $price
+     *
+     * @return float
+     */
+    private function formatToFloatValue($price)
+    {
+        return (float) str_replace(',', '.', $price);
     }
 }

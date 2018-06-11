@@ -13,7 +13,7 @@ use Shopware\Components\SwagImportExport\DbAdapters\DataDbAdapter;
 class MinimalArticleVariantsProfile implements \JsonSerializable, ProfileMetaData
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getAdapter()
     {
@@ -21,7 +21,7 @@ class MinimalArticleVariantsProfile implements \JsonSerializable, ProfileMetaDat
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -29,7 +29,7 @@ class MinimalArticleVariantsProfile implements \JsonSerializable, ProfileMetaDat
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getDescription()
     {
@@ -37,7 +37,7 @@ class MinimalArticleVariantsProfile implements \JsonSerializable, ProfileMetaDat
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {
@@ -61,12 +61,12 @@ class MinimalArticleVariantsProfile implements \JsonSerializable, ProfileMetaDat
                             'parentKey' => '',
                             'shopwareField' => '',
                             'children' => $this->getArticleVariantFields(),
-                            'attributes' => NULL
-                        ]
+                            'attributes' => null,
+                        ],
                     ],
-                    'shopwareField' => ''
-                ]
-            ]
+                    'shopwareField' => '',
+                ],
+            ],
         ];
     }
 
@@ -81,35 +81,35 @@ class MinimalArticleVariantsProfile implements \JsonSerializable, ProfileMetaDat
                 'type' => 'leaf',
                 'index' => 0,
                 'name' => 'ordernumber',
-                'shopwareField' => 'orderNumber'
+                'shopwareField' => 'orderNumber',
             ],
             1 => [
                 'id' => '53e0d329364c4',
                 'type' => 'leaf',
                 'index' => 1,
                 'name' => 'mainnumber',
-                'shopwareField' => 'mainNumber'
+                'shopwareField' => 'mainNumber',
             ],
             2 => [
                 'id' => '53e0d3a201785',
                 'type' => 'leaf',
                 'index' => 2,
                 'name' => 'name',
-                'shopwareField' => 'name'
+                'shopwareField' => 'name',
             ],
             3 => [
                 'id' => '53e0d3fea6646',
                 'type' => 'leaf',
                 'index' => 3,
                 'name' => 'supplier',
-                'shopwareField' => 'supplierName'
+                'shopwareField' => 'supplierName',
             ],
             4 => [
                 'id' => '53e0d4333dca7',
                 'type' => 'leaf',
                 'index' => 4,
                 'name' => 'tax',
-                'shopwareField' => 'tax'
+                'shopwareField' => 'tax',
             ],
             5 => [
                 'id' => '57a49838a7656',
@@ -117,7 +117,7 @@ class MinimalArticleVariantsProfile implements \JsonSerializable, ProfileMetaDat
                 'index' => 5,
                 'name' => 'kind',
                 'shopwareField' => 'kind',
-                'defaultValue' => ''
+                'defaultValue' => '',
             ],
             6 => [
                 'id' => '53e0d44938a70',
@@ -140,34 +140,34 @@ class MinimalArticleVariantsProfile implements \JsonSerializable, ProfileMetaDat
                                 'type' => 'leaf',
                                 'index' => 0,
                                 'name' => 'group',
-                                'shopwareField' => 'priceGroup'
+                                'shopwareField' => 'priceGroup',
                             ],
                             1 => [
                                 'id' => '53e0d472a0aa8',
                                 'type' => 'leaf',
                                 'index' => 1,
                                 'name' => 'price',
-                                'shopwareField' => 'price'
+                                'shopwareField' => 'price',
                             ],
                             2 => [
                                 'id' => '53e0d48a9313a',
                                 'type' => 'leaf',
                                 'index' => 2,
                                 'name' => 'pseudoprice',
-                                'shopwareField' => 'pseudoPrice'
+                                'shopwareField' => 'pseudoPrice',
                             ],
                             3 => [
                                 'id' => '541af979237a1',
                                 'type' => 'leaf',
                                 'index' => 3,
                                 'name' => 'baseprice',
-                                'shopwareField' => 'basePrice'
-                            ]
+                                'shopwareField' => 'basePrice',
+                            ],
                         ],
-                        'attributes' => NULL
-                    ]
+                        'attributes' => null,
+                    ],
                 ],
-                'defaultValue' => ''
+                'defaultValue' => '',
             ],
             7 => [
                 'id' => '53fb272db680f',
@@ -175,7 +175,7 @@ class MinimalArticleVariantsProfile implements \JsonSerializable, ProfileMetaDat
                 'index' => 7,
                 'name' => 'active',
                 'shopwareField' => 'active',
-                'defaultValue' => 0
+                'defaultValue' => 0,
             ],
             8 => [
                 'id' => '54211df500e93',
@@ -191,10 +191,10 @@ class MinimalArticleVariantsProfile implements \JsonSerializable, ProfileMetaDat
                         'type' => 'leaf',
                         'index' => 0,
                         'name' => 'categories',
-                        'shopwareField' => 'categoryId'
-                    ]
+                        'shopwareField' => 'categoryId',
+                    ],
                 ],
-                'defaultValue' => ''
+                'defaultValue' => '',
             ],
             9 => [
                 'id' => '55d59e2fc0c56',
@@ -210,18 +210,18 @@ class MinimalArticleVariantsProfile implements \JsonSerializable, ProfileMetaDat
                         'type' => 'leaf',
                         'index' => 0,
                         'name' => 'configGroupName',
-                        'shopwareField' => 'configGroupName'
+                        'shopwareField' => 'configGroupName',
                     ],
                     1 => [
                         'id' => '55d59e4b02a39',
                         'type' => 'leaf',
                         'index' => 1,
                         'name' => 'configOptionName',
-                        'shopwareField' => 'configOptionName'
-                    ]
+                        'shopwareField' => 'configOptionName',
+                    ],
                 ],
-                'defaultValue' => ''
-            ]
+                'defaultValue' => '',
+            ],
         ];
     }
 }

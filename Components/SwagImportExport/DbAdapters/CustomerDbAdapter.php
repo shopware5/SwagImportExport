@@ -17,7 +17,6 @@ use Shopware\Components\SwagImportExport\Service\UnderscoreToCamelCaseServiceInt
 use Shopware\Components\SwagImportExport\Utils\DataHelper;
 use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
-use Shopware\Components\SwagImportExport\Utils\SwagVersionHelper;
 use Shopware\Components\SwagImportExport\Validators\CustomerValidator;
 use Shopware\Models\Country\Country;
 use Shopware\Models\Country\State;
@@ -235,7 +234,7 @@ class CustomerDbAdapter implements DataDbAdapter
     public function read($ids, $columns)
     {
         foreach ($columns as $key => $value) {
-            if ($value == 'unhashedPassword') {
+            if ($value === 'unhashedPassword') {
                 unset($columns[$key]);
             }
         }
@@ -273,11 +272,14 @@ class CustomerDbAdapter implements DataDbAdapter
             $query->setMaxResults($limit);
         }
 
-        if (SwagVersionHelper::hasMinimumVersion('5.3.0')) {
-            if (array_key_exists('customerStreamId', $filter)) {
-                $query->innerJoin('customer', 's_customer_streams_mapping', 'mapping', 'mapping.customer_id = customer.id AND mapping.stream_id = :streamId');
-                $query->setParameter(':streamId', $filter['customerStreamId']);
-            }
+        if (array_key_exists('customerStreamId', $filter)) {
+            $query->innerJoin(
+                'customer',
+                's_customer_streams_mapping',
+                'mapping',
+                'mapping.customer_id = customer.id AND mapping.stream_id = :streamId'
+            );
+            $query->setParameter(':streamId', $filter['customerStreamId']);
         }
 
         $ids = $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
@@ -631,11 +633,7 @@ class CustomerDbAdapter implements DataDbAdapter
     /**
      * @param array $record
      *
-     * @throws AdapterException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
-     * @throws \Exception
+     * @throws \RuntimeException
      *
      * @return array
      */
@@ -678,7 +676,7 @@ class CustomerDbAdapter implements DataDbAdapter
             if (!$customerData['group']) {
                 $message = SnippetsHelper::getNamespace()
                     ->get('adapters/customerGroup_not_found', 'Customer Group by key %s not found');
-                throw new \Exception(sprintf($message, $customerData['groupKey']));
+                throw new \RuntimeException(sprintf($message, $customerData['groupKey']));
             }
         }
 

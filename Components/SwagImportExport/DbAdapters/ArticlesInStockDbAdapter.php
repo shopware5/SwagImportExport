@@ -5,15 +5,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\QueryBuilder;
-use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
-use Shopware\Models\Article\Detail;
+use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Validators\ArticleInStockValidator;
+use Shopware\Models\Article\Detail;
 
 class ArticlesInStockDbAdapter implements DataDbAdapter
 {
@@ -43,14 +44,14 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
     protected $repository;
 
     /**
-     * @var SnippetsHelper
-     */
-    private $snippetHelper;
-
-    /**
      * @var ArticleInStockValidator
      */
     protected $validator;
+
+    /**
+     * @var SnippetsHelper
+     */
+    private $snippetHelper;
 
     public function __construct()
     {
@@ -65,21 +66,23 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
      */
     public function getDefaultColumns()
     {
-        return array(
+        return [
             'variant.number as orderNumber',
             'variant.inStock as inStock',
             'article.name as name',
             'variant.additionalText as additionalText',
             'articleSupplier.name as supplier',
             'prices.price as price',
-        );
+        ];
     }
 
     /**
      * @param array $ids
      * @param array $columns
-     * @return array
+     *
      * @throws \Exception
+     *
+     * @return array
      */
     public function read($ids, $columns)
     {
@@ -129,8 +132,10 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
      * @param $start
      * @param $limit
      * @param $filter
-     * @return array
+     *
      * @throws \Exception
+     *
+     * @return array
      */
     public function readRecordIds($start, $limit, $filter)
     {
@@ -198,7 +203,7 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
         }
 
         $builder->andWhere("p.customerGroupKey = 'EK'")
-            ->andWhere("p.from = 1")
+            ->andWhere('p.from = 1')
             ->orderBy('d.id', 'ASC');
 
         if (!empty($filter)) {
@@ -230,6 +235,7 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
 
     /**
      * @param $records
+     *
      * @throws \Enlight_Event_Exception
      * @throws \Exception
      */
@@ -255,7 +261,7 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
                 $this->validator->checkRequiredFields($record);
                 $this->validator->validate($record, ArticleInStockValidator::$mapper);
 
-                $articleDetail = $this->repository->findOneBy(["number" => $record['orderNumber']]);
+                $articleDetail = $this->repository->findOneBy(['number' => $record['orderNumber']]);
                 if (!$articleDetail) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/articlesImages/article_not_found', 'Article with number %s does not exists.');
@@ -274,7 +280,7 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
                 $this->saveMessage($message);
             }
         }
-        
+
         $this->modelManager->flush();
     }
 
@@ -283,16 +289,17 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
      */
     public function getSections()
     {
-        return array(
+        return [
             [
                 'id' => 'default',
-                'name' => 'default '
-            ]
-        );
+                'name' => 'default ',
+            ],
+        ];
     }
 
     /**
      * @param string $section
+     *
      * @return bool|mixed
      */
     public function getColumns($section)
@@ -308,6 +315,7 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
 
     /**
      * @param $message
+     *
      * @throws \Exception
      */
     public function saveMessage($message)
@@ -357,6 +365,7 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
     /**
      * @param $columns
      * @param $ids
+     *
      * @return QueryBuilder
      */
     public function getBuilder($columns, $ids)
@@ -373,7 +382,7 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
             ->andWhere('prices.customerGroup = :customergroup')
             ->setParameters([
                 'ids' => $ids,
-                'customergroup' => 'EK'
+                'customergroup' => 'EK',
             ]);
 
         return $builder;

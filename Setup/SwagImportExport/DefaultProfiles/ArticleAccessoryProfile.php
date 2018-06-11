@@ -13,7 +13,7 @@ use Shopware\Components\SwagImportExport\DbAdapters\DataDbAdapter;
 class ArticleAccessoryProfile implements \JsonSerializable, ProfileMetaData
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getAdapter()
     {
@@ -21,7 +21,7 @@ class ArticleAccessoryProfile implements \JsonSerializable, ProfileMetaData
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -29,7 +29,7 @@ class ArticleAccessoryProfile implements \JsonSerializable, ProfileMetaData
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getDescription()
     {
@@ -37,7 +37,7 @@ class ArticleAccessoryProfile implements \JsonSerializable, ProfileMetaData
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {
@@ -61,12 +61,12 @@ class ArticleAccessoryProfile implements \JsonSerializable, ProfileMetaData
                             'parentKey' => '',
                             'shopwareField' => '',
                             'children' => $this->getArticleAccessoryFields(),
-                            'attributes' => null
-                        ]
+                            'attributes' => null,
+                        ],
                     ],
-                    'shopwareField' => ''
-                ]
-            ]
+                    'shopwareField' => '',
+                ],
+            ],
         ];
     }
 
@@ -81,13 +81,13 @@ class ArticleAccessoryProfile implements \JsonSerializable, ProfileMetaData
                 'type' => 'leaf',
                 'index' => 0,
                 'name' => 'ordernumber',
-                'shopwareField' => 'orderNumber',],
+                'shopwareField' => 'orderNumber', ],
             1 => [
                 'id' => '53e0d329364c4',
                 'type' => 'leaf',
                 'index' => 1,
                 'name' => 'mainnumber',
-                'shopwareField' => 'mainNumber',],
+                'shopwareField' => 'mainNumber', ],
             2 => [
                 'id' => '55dc3386b8c5f',
                 'name' => 'accessory',
@@ -102,10 +102,10 @@ class ArticleAccessoryProfile implements \JsonSerializable, ProfileMetaData
                         'type' => 'leaf',
                         'index' => 0,
                         'name' => 'accessory',
-                        'shopwareField' => 'ordernumber'
-                    ]
-                ]
-            ]
+                        'shopwareField' => 'ordernumber',
+                    ],
+                ],
+            ],
         ];
     }
 }

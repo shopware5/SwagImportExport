@@ -16,49 +16,45 @@ use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 
 /**
  * Class RelationWriter
- *
- * @package Shopware\Components\SwagImportExport\DbAdapters\Articles
- *
- * This writer is used to import 'similar' or 'accessory' articles.
  */
 class RelationWriter
 {
     /**
-     * @var ArticlesDbAdapter $articlesDbAdapter
+     * @var ArticlesDbAdapter
      */
-    protected $articlesDbAdapter = null;
+    protected $articlesDbAdapter;
 
     /**
-     * @var array $relationTypes
+     * @var array
      */
     protected $relationTypes = [
         'similar',
-        'accessory'
+        'accessory',
     ];
 
     /**
-     * @var array $relationTables
+     * @var array
      */
     protected $relationTables = [
         'accessory' => 's_articles_relationships',
-        'similar' => 's_articles_similar'
+        'similar' => 's_articles_similar',
     ];
 
-    protected $table = null;
+    protected $table;
 
-    protected $idKey = null;
+    protected $idKey;
 
-    protected $snippetName = null;
+    protected $snippetName;
 
-    protected $defaultSnippetMessage = null;
+    protected $defaultSnippetMessage;
 
     /**
-     * @var PDOConnection $db
+     * @var PDOConnection
      */
     protected $db;
 
     /**
-     * @var Connection $connection
+     * @var Connection
      */
     protected $connection;
 
@@ -81,11 +77,12 @@ class RelationWriter
     }
 
     /**
-     * @param integer $articleId
+     * @param int    $articleId
      * @param string $mainOrderNumber
-     * @param array $relations
+     * @param array  $relations
      * @param string $relationType
-     * @param integer $processedFlag
+     * @param int    $processedFlag
+     *
      * @throws AdapterException
      */
     public function write($articleId, $mainOrderNumber, $relations, $relationType, $processedFlag)
@@ -122,7 +119,7 @@ class RelationWriter
                 if (!$relationId) {
                     $data = [
                         'articleId' => $mainOrderNumber,
-                        'ordernumber' => $relation['ordernumber']
+                        'ordernumber' => $relation['ordernumber'],
                     ];
 
                     $this->getArticlesDbAdapter()->saveUnprocessedData(
@@ -165,7 +162,6 @@ class RelationWriter
      * similar - $relation['similarId']
      *
      * @param string $relationType
-     * @throws AdapterException
      */
     protected function initializeRelationData($relationType)
     {
@@ -181,6 +177,7 @@ class RelationWriter
      * Checks whether the relation type exists.
      *
      * @param string $relationType
+     *
      * @throws \Exception
      */
     protected function checkRelation($relationType)
@@ -195,6 +192,7 @@ class RelationWriter
      * Gets relation id by orderNumber.
      *
      * @param string $orderNumber
+     *
      * @return string
      */
     protected function getRelationIdByOrderNumber($orderNumber)
@@ -211,6 +209,7 @@ class RelationWriter
      * Checks whether this article exists.
      *
      * @param $relationId
+     *
      * @return bool
      */
     protected function isRelationIdExists($relationId)
@@ -228,6 +227,7 @@ class RelationWriter
      *
      * @param $relationId
      * @param $articleId
+     *
      * @return bool
      */
     protected function isRelationExists($relationId, $articleId)
@@ -244,6 +244,7 @@ class RelationWriter
      * Deletes all relations.
      *
      * @param $articleId
+     *
      * @throws \Doctrine\DBAL\DBALException
      */
     private function deleteAllRelations($articleId)
@@ -257,6 +258,7 @@ class RelationWriter
      *
      * @param $relations
      * @param $articleId
+     *
      * @throws \Doctrine\DBAL\DBALException
      */
     private function deleteRelations($relations, $articleId)
@@ -280,6 +282,7 @@ class RelationWriter
      *
      * @param $relations
      * @param $articleId
+     *
      * @throws \Doctrine\DBAL\DBALException
      */
     private function insertRelations($relations, $articleId)

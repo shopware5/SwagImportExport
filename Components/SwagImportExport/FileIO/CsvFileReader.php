@@ -13,7 +13,7 @@ use Shopware\Components\SwagImportExport\UploadPathProvider;
 class CsvFileReader implements FileReader
 {
     /**
-     * @var bool $treeStructure
+     * @var bool
      */
     protected $treeStructure = false;
 
@@ -34,10 +34,12 @@ class CsvFileReader implements FileReader
      * Reads csv records
      *
      * @param string $fileName
-     * @param int $position
-     * @param int $step
-     * @return array
+     * @param int    $position
+     * @param int    $step
+     *
      * @throws \Exception
+     *
+     * @return array
      */
     public function readRecords($fileName, $position, $step)
     {
@@ -52,7 +54,7 @@ class CsvFileReader implements FileReader
         }
 
         $file = new \SplFileObject($fileName);
-        $file->setCsvControl(";", '"');
+        $file->setCsvControl(';', '"');
         $file->setFlags(\SplFileObject::READ_CSV);
 
         $columnNames = $this->getColumnNames($file);
@@ -63,7 +65,7 @@ class CsvFileReader implements FileReader
 
         $readRows = [];
         $data = [];
-        for ($i = 1; $i <= $step; $i++) {
+        for ($i = 1; $i <= $step; ++$i) {
             $row = $file->current();
 
             if ($this->isInvalidRecord($row)) {
@@ -81,6 +83,7 @@ class CsvFileReader implements FileReader
         }
 
         unlink($tempFileName);
+
         return $this->toUtf8($readRows);
     }
 
@@ -103,12 +106,14 @@ class CsvFileReader implements FileReader
      * Counts total rows of the entire CSV file
      *
      * @param $fileName
-     * @return int
+     *
      * @throws \Exception
+     *
+     * @return int
      */
     public function getTotalCount($fileName)
     {
-        $fileHandler = fopen($fileName, 'r');
+        $fileHandler = fopen($fileName, 'rb');
 
         if ($fileHandler === false) {
             throw new \Exception("Can not open file $fileName");
@@ -119,7 +124,7 @@ class CsvFileReader implements FileReader
             if ($this->isInvalidRecord($row)) {
                 continue;
             }
-            $counter++;
+            ++$counter;
         }
 
         fclose($fileHandler);
@@ -129,27 +134,8 @@ class CsvFileReader implements FileReader
     }
 
     /**
-     * Returns column names of the given CSV file
-     *
-     * @param \SplFileObject $file
-     * @return array
-     */
-    private function getColumnNames(\SplFileObject $file)
-    {
-        //Rewinds to first line
-        $file->rewind();
-        $columnNames = $file->current();
-
-        //removes UTF-8 BOM
-        foreach ($columnNames as $index => $name) {
-            $columnNames[$index] = str_replace("\xEF\xBB\xBF", '', $name);
-        }
-
-        return $columnNames;
-    }
-
-    /**
      * @param array $rows
+     *
      * @return array
      */
     protected function toUtf8(array $rows)
@@ -175,7 +161,29 @@ class CsvFileReader implements FileReader
     }
 
     /**
+     * Returns column names of the given CSV file
+     *
+     * @param \SplFileObject $file
+     *
+     * @return array
+     */
+    private function getColumnNames(\SplFileObject $file)
+    {
+        //Rewinds to first line
+        $file->rewind();
+        $columnNames = $file->current();
+
+        //removes UTF-8 BOM
+        foreach ($columnNames as $index => $name) {
+            $columnNames[$index] = str_replace("\xEF\xBB\xBF", '', $name);
+        }
+
+        return $columnNames;
+    }
+
+    /**
      * @param array $row
+     *
      * @return bool
      */
     private function isInvalidRecord($row)

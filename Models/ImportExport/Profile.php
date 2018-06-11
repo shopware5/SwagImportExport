@@ -1,5 +1,4 @@
 <?php
-
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -11,14 +10,14 @@
  * Shopware ImportExport Plugin
  *
  * @category  Shopware
- * @package   Shopware\Components\Console\Command
+ *
  * @copyright Copyright (c) 2014, shopware AG (http://www.shopware.de)
  */
 
 namespace Shopware\CustomModels\ImportExport;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Session Model
@@ -32,7 +31,7 @@ class Profile extends ModelEntity
     /**
      * Primary Key - autoincrement value
      *
-     * @var int $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -41,49 +40,49 @@ class Profile extends ModelEntity
     protected $id;
 
     /**
-     * @var Expression[] $expressions
+     * @var Expression[]
      *
      * @ORM\OneToMany(targetEntity="Shopware\CustomModels\ImportExport\Expression", mappedBy="profile")
      */
     protected $expressions;
 
     /**
-     * @var Session[] $sessions
+     * @var Session[]
      *
      * @ORM\OneToMany(targetEntity="Shopware\CustomModels\ImportExport\Session", mappedBy="profile")
      */
     protected $sessions;
 
     /**
-     * @var string $type
+     * @var string
      *
      * @ORM\Column(name="type", type="string", length=200)
      */
     protected $type;
 
     /**
-     * @var int $basedOn
+     * @var int
      *
      * @ORM\Column(name="base_profile", type="integer", nullable=true)
      */
     protected $baseProfile;
 
     /**
-     * @var string $name
+     * @var string
      *
      * @ORM\Column(name="name", type="string", length=200, unique=true)
      */
     protected $name;
 
     /**
-     * @var string $description
+     * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
     protected $description;
 
     /**
-     * @var string $format
+     * @var string
      *
      * @ORM\Column(name="tree", type="text")
      */
@@ -97,7 +96,7 @@ class Profile extends ModelEntity
     protected $hidden = 0;
 
     /**
-     * @var boolean
+     * @var bool
      * @ORM\Column(name="is_default", type="boolean")
      */
     protected $default = false;
@@ -261,7 +260,7 @@ class Profile extends ModelEntity
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getDefault()
     {
@@ -269,7 +268,7 @@ class Profile extends ModelEntity
     }
 
     /**
-     * @param boolean $default
+     * @param bool $default
      */
     public function setDefault($default)
     {

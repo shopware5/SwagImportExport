@@ -1,5 +1,4 @@
 <?php
-
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -9,9 +8,6 @@
 
 namespace Shopware\Components\SwagImportExport\Service\Struct;
 
-/**
- * @package Shopware\Components\SwagImportExport\Service\Struct
- */
 class PreparationResultStruct
 {
     /** @var int */

@@ -1,5 +1,5 @@
-//{namespace name=backend/swag_import_export/view/session}
-//{block name="backend/swag_import_export/view/manager/session"}
+// {namespace name=backend/swag_import_export/view/session}
+// {block name="backend/swag_import_export/view/manager/session"}
 Ext.define('Shopware.apps.SwagImportExport.view.manager.Session', {
     extend: 'Ext.grid.Panel',
     /**
@@ -114,7 +114,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Session', {
         return [
             me.buildMenuBar(),
             me.buildPagingBar()
-        ]
+        ];
     },
 
     buildMenuBar: function() {
@@ -172,4 +172,4 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Session', {
         return '{s name=swag_import_export/manager/log/import}import{/s}';
     }
 });
-//{/block}
+// {/block}

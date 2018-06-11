@@ -13,7 +13,7 @@ use Shopware\Components\SwagImportExport\DbAdapters\DataDbAdapter;
 class MinimalCategoryProfile implements \JsonSerializable, ProfileMetaData
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getAdapter()
     {
@@ -21,7 +21,7 @@ class MinimalCategoryProfile implements \JsonSerializable, ProfileMetaData
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -29,7 +29,7 @@ class MinimalCategoryProfile implements \JsonSerializable, ProfileMetaData
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getDescription()
     {
@@ -37,7 +37,7 @@ class MinimalCategoryProfile implements \JsonSerializable, ProfileMetaData
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {
@@ -57,9 +57,9 @@ class MinimalCategoryProfile implements \JsonSerializable, ProfileMetaData
                             'name' => 'HeaderChild',
                             'index' => '0',
                             'type' => 'node',
-                            'shopwareField' => ''
-                        ]
-                    ]
+                            'shopwareField' => '',
+                        ],
+                    ],
                 ],
                 [
                     'id' => '537359399c8b7',
@@ -77,12 +77,12 @@ class MinimalCategoryProfile implements \JsonSerializable, ProfileMetaData
                             'children' => [
                                 $this->getCategoryIdField(),
                                 $this->getParentIdField(),
-                                $this->getNameField()
-                            ]
-                        ]
-                    ]
-                ]
-            ]
+                                $this->getNameField(),
+                            ],
+                        ],
+                    ],
+                ],
+            ],
         ];
     }
 
@@ -96,7 +96,7 @@ class MinimalCategoryProfile implements \JsonSerializable, ProfileMetaData
             'type' => 'leaf',
             'index' => '0',
             'name' => 'categoryId',
-            'shopwareField' => 'categoryId'
+            'shopwareField' => 'categoryId',
         ];
     }
 
@@ -110,7 +110,7 @@ class MinimalCategoryProfile implements \JsonSerializable, ProfileMetaData
             'type' => 'leaf',
             'index' => '1',
             'name' => 'parentID',
-            'shopwareField' => 'parentId'
+            'shopwareField' => 'parentId',
         ];
     }
 
@@ -125,7 +125,7 @@ class MinimalCategoryProfile implements \JsonSerializable, ProfileMetaData
             'index' => '2',
             'name' => 'name',
             'shopwareField' => 'name',
-            'defaultValue' => ''
+            'defaultValue' => '',
         ];
     }
 }

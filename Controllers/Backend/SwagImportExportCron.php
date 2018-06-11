@@ -5,8 +5,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-use \Shopware\Components\CSRFWhitelistAware;
+use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\SwagImportExport\Service\AutoImportServiceInterface;
 use Shopware\Models\Plugin\Plugin;
 
@@ -38,7 +37,7 @@ class Shopware_Controllers_Backend_SwagImportExportCron extends Shopware_Control
     public function preDispatch()
     {
         //Call cron only if request is not from browser
-        if (php_sapi_name() == 'cli') {
+        if (PHP_SAPI === 'cli') {
             $this->cronAction();
         }
     }

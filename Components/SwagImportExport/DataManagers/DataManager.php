@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  * (c) shopware AG <info@shopware.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -11,8 +10,6 @@ namespace Shopware\Components\SwagImportExport\DataManagers;
 
 /**
  * Class DataManager
- *
- * @package Shopware\Components\SwagImportExport\DataManagers
  */
 class DataManager
 {
@@ -20,11 +17,12 @@ class DataManager
      * Return fields which should be set by default
      *
      * @param array $defaultFields Contains default fields name and types
+     *
      * @return array
      */
     public function getFields($defaultFields)
     {
-        $defaultValues = array();
+        $defaultValues = [];
         foreach ($defaultFields as $type => $fields) {
             foreach ($fields as $field) {
                 $defaultValues[] = $field;
@@ -39,6 +37,7 @@ class DataManager
      *
      * @param array $record
      * @param array $mapper
+     *
      * @return bool|int|string
      */
     public static function getFieldType($record, $mapper)
@@ -57,6 +56,7 @@ class DataManager
      *
      * @param string $value
      * @param string $type
+     *
      * @return mixed
      */
     public static function castDefaultValue($value, $type)
@@ -80,6 +80,7 @@ class DataManager
      *
      * @param array $records
      * @param array $fieldsValues
+     *
      * @return array
      */
     public function fixFieldsValues($records, $fieldsValues)
@@ -98,7 +99,7 @@ class DataManager
                             $records[$field] = '0.0';
                             break;
                         case 'date':
-                            $records[$field] = date('Y-m-d', time());
+                            $records[$field] = date('Y-m-d');
                     }
                 }
             }
@@ -113,6 +114,7 @@ class DataManager
      *
      * @param array $records
      * @param array $adapterFields
+     *
      * @return array
      */
     public function mapFields($records, $adapterFields)

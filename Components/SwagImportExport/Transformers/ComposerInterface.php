@@ -1,5 +1,4 @@
 <?php
-
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -11,8 +10,6 @@ namespace Shopware\Components\SwagImportExport\Transformers;
 
 /**
  * Interface ComposerInterface
- *
- * @package Shopware\Components\SwagImportExport\Transformers
  */
 interface ComposerInterface
 {

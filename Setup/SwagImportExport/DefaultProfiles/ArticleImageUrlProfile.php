@@ -12,12 +12,11 @@ use Shopware\Components\SwagImportExport\DbAdapters\DataDbAdapter;
 
 /**
  * Class ArticleImageUrlProfile
- * @package Shopware\Setup\SwagImportExport\DefaultProfiles
  */
 class ArticleImageUrlProfile implements \JsonSerializable, ProfileMetaData
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getAdapter()
     {
@@ -25,7 +24,7 @@ class ArticleImageUrlProfile implements \JsonSerializable, ProfileMetaData
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -33,7 +32,7 @@ class ArticleImageUrlProfile implements \JsonSerializable, ProfileMetaData
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getDescription()
     {
@@ -41,7 +40,7 @@ class ArticleImageUrlProfile implements \JsonSerializable, ProfileMetaData
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {
@@ -65,24 +64,21 @@ class ArticleImageUrlProfile implements \JsonSerializable, ProfileMetaData
                                     'parentKey' => '',
                                     'shopwareField' => '',
                                     'children' => [
-                                        0 =>
-                                            [
+                                        0 => [
                                                 'id' => '53e0d365881b7',
                                                 'type' => 'leaf',
                                                 'index' => 0,
                                                 'name' => 'ordernumber',
                                                 'shopwareField' => 'orderNumber',
                                             ],
-                                        1 =>
-                                            [
+                                        1 => [
                                                 'id' => '53e0d329364c4',
                                                 'type' => 'leaf',
                                                 'index' => 1,
                                                 'name' => 'mainnumber',
                                                 'shopwareField' => 'mainNumber',
                                             ],
-                                        2 =>
-                                            [
+                                        2 => [
                                                 'id' => '55d59f9798545',
                                                 'name' => 'image',
                                                 'index' => 2,
@@ -91,23 +87,22 @@ class ArticleImageUrlProfile implements \JsonSerializable, ProfileMetaData
                                                 'parentKey' => 'articleId',
                                                 'shopwareField' => '',
                                                 'children' => [
-                                                    0 =>
-                                                        [
+                                                    0 => [
                                                             'id' => '55d59fb16edca',
                                                             'type' => 'leaf',
                                                             'index' => 0,
                                                             'name' => 'imageUrl',
                                                             'shopwareField' => 'imageUrl',
-                                                        ]
-                                                ]
-                                            ]
+                                                        ],
+                                                ],
+                                            ],
                                         ],
-                                    'attributes' => NULL
-                                ]
+                                    'attributes' => null,
+                                ],
                         ],
-                    'shopwareField' => ''
-                ]
-            ]
+                    'shopwareField' => '',
+                ],
+            ],
         ];
     }
 }

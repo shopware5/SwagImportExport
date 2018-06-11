@@ -10,14 +10,32 @@ namespace Shopware\Components\SwagImportExport\FileIO;
 
 interface FileWriter
 {
+    /**
+     * @param $fileName
+     * @param $headerData
+     *
+     * @return mixed
+     */
     public function writeHeader($fileName, $headerData);
 
+    /**
+     * @param $fileName
+     * @param $treeData
+     *
+     * @return mixed
+     */
     public function writeRecords($fileName, $treeData);
 
+    /**
+     * @param $fileName
+     * @param $footerData
+     *
+     * @return mixed
+     */
     public function writeFooter($fileName, $footerData);
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function hasTreeStructure();
 }

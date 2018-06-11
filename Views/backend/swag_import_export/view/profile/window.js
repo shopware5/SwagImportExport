@@ -1,5 +1,5 @@
-//{namespace name=backend/swag_import_export/view/profile/window}
-//{block name="backend/swag_import_export/view/profile/window"}
+// {namespace name=backend/swag_import_export/view/profile/window}
+// {block name="backend/swag_import_export/view/profile/window"}
 Ext.define('Shopware.apps.SwagImportExport.view.profile.Window', {
     extend: 'Enlight.app.Window',
 
@@ -137,7 +137,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Window', {
                         listConfig: {
                             getInnerTpl: function () {
                                 return Ext.XTemplate(
-                                    '{literal}'  +
+                                    '{literal}' +
                                     '<tpl if="translation">{ name } <i>({ translation })</i>' +
                                     '<tpl else>{ name }</tpl>' +
                                     '{/literal}'
@@ -148,7 +148,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Window', {
                         valueField: 'id',
                         displayTpl: new Ext.XTemplate(
                             '<tpl for=".">' +
-                            '{literal}'  +
+                            '{literal}' +
                             '{[typeof values === "string" ? values : this.getFormattedName(values)]}' +
                             '<tpl if="xindex < xcount">' + me.delimiter + '</tpl>' +
                             '{/literal}' +
@@ -180,7 +180,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Window', {
                                 var selection = selectedRecords[0],
                                     typefield = combo.previousSibling('hidden[name=type]');
 
-                                typefield.setValue(selection.get('type'))
+                                typefield.setValue(selection.get('type'));
                                 me.fireEvent('baseprofileselected', me, selection);
                             }
                         }
@@ -235,4 +235,4 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Window', {
         ];
     }
 });
-//{/block}
+// {/block}

@@ -13,7 +13,7 @@ use Shopware\Components\SwagImportExport\DbAdapters\DataDbAdapter;
 class ArticlePropertiesProfile implements \JsonSerializable, ProfileMetaData
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getAdapter()
     {
@@ -21,7 +21,7 @@ class ArticlePropertiesProfile implements \JsonSerializable, ProfileMetaData
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -29,7 +29,7 @@ class ArticlePropertiesProfile implements \JsonSerializable, ProfileMetaData
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getDescription()
     {
@@ -37,7 +37,7 @@ class ArticlePropertiesProfile implements \JsonSerializable, ProfileMetaData
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {
@@ -61,12 +61,12 @@ class ArticlePropertiesProfile implements \JsonSerializable, ProfileMetaData
                             'parentKey' => '',
                             'shopwareField' => '',
                             'children' => $this->getArticlePropertiesFields(),
-                            'attributes' => NULL
-                        ]
+                            'attributes' => null,
+                        ],
                     ],
-                    'shopwareField' => ''
-                ]
-            ]
+                    'shopwareField' => '',
+                ],
+            ],
         ];
     }
 
@@ -81,14 +81,14 @@ class ArticlePropertiesProfile implements \JsonSerializable, ProfileMetaData
                 'type' => 'leaf',
                 'index' => 0,
                 'name' => 'ordernumber',
-                'shopwareField' => 'orderNumber'
+                'shopwareField' => 'orderNumber',
             ],
             1 => [
                 'id' => '53e0d329364c4',
                 'type' => 'leaf',
                 'index' => 1,
                 'name' => 'mainnumber',
-                'shopwareField' => 'mainNumber'
+                'shopwareField' => 'mainNumber',
             ],
             2 => [
                 'id' => '55dc553cb00e5',
@@ -104,24 +104,24 @@ class ArticlePropertiesProfile implements \JsonSerializable, ProfileMetaData
                         'type' => 'leaf',
                         'index' => 0,
                         'name' => 'propertyGroupName',
-                        'shopwareField' => 'propertyGroupName'
+                        'shopwareField' => 'propertyGroupName',
                     ],
                     1 => [
                         'id' => '55dc5550e7e30',
                         'type' => 'leaf',
                         'index' => 1,
                         'name' => 'propertyValueName',
-                        'shopwareField' => 'propertyValueName'
+                        'shopwareField' => 'propertyValueName',
                     ],
                     2 => [
                         'id' => '55dc555869ed8',
                         'type' => 'leaf',
                         'index' => 2,
                         'name' => 'propertyOptionName',
-                        'shopwareField' => 'propertyOptionName'
-                    ]
-                ]
-            ]
+                        'shopwareField' => 'propertyOptionName',
+                    ],
+                ],
+            ],
         ];
     }
 }

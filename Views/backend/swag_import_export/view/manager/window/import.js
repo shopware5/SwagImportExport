@@ -1,14 +1,14 @@
-//{namespace name=backend/swag_import_export/view/main}
-//{block name="backend/swag_import_export/view/manager/window/import"}
+// {namespace name=backend/swag_import_export/view/main}
+// {block name="backend/swag_import_export/view/manager/window/import"}
 // deprecated since 2.4.2 and will be removed with 3.0.0
-//{block name="backend/swag_import_export/view/manager/window/export"}
+// {block name="backend/swag_import_export/view/manager/window/export"}
 Ext.define('Shopware.apps.SwagImportExport.view.manager.window.Import', {
     /**
      * Define that the order main window is an extension of the enlight application window
      * @string
      */
     extend: 'Enlight.app.SubWindow',
-    
+
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
@@ -108,7 +108,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.window.Import', {
     createItems: function() {
         var me = this;
 
-        if (Ext.isEmpty(me.batchConfig.progress)){
+        if (Ext.isEmpty(me.batchConfig.progress)) {
             me.batchConfig.progress = 0;
         }
 
@@ -134,8 +134,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.window.Import', {
      * @param text
      * @returns { Ext.ProgressBar }
      */
-    createProgressBar: function(name, text, value)
-    {
+    createProgressBar: function(name, text, value) {
         return Ext.create('Ext.ProgressBar', {
             animate: true,
             name: name,
@@ -229,5 +228,5 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.window.Import', {
         });
     }
 });
-//{/block}
-//{/block}
+// {/block}
+// {/block}

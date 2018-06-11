@@ -29,7 +29,7 @@ class Update01MainMenuItem implements UpdaterInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function update()
     {
@@ -37,7 +37,7 @@ class Update01MainMenuItem implements UpdaterInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function isCompatible()
     {

@@ -8,8 +8,8 @@
 
 namespace Shopware\Components\SwagImportExport\Validators;
 
-use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
+use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 
 abstract class Validator
 {
@@ -17,6 +17,7 @@ abstract class Validator
      * Removes fields which contain empty string.
      *
      * @param array $record
+     *
      * @return array
      */
     public function filterEmptyString($record)
@@ -29,6 +30,7 @@ abstract class Validator
      *
      * @param array $record
      * @param array $mapper
+     *
      * @throws AdapterException
      * @throws \Exception
      */
@@ -45,33 +47,10 @@ abstract class Validator
     }
 
     /**
-     * Helper function, which is used to validate current field's value.
-     *
-     * @param string $type
-     * @param $value
-     * @param string $fieldName
-     * @throws AdapterException
-     * @throws \Exception
-     */
-    private function validateType($type, $value, $fieldName)
-    {
-        $action = 'validate' . ucfirst($type);
-        if (!is_callable(array($this, $action))) {
-            throw new \Exception('Method with name `' . $action . '` does not exist!');
-        }
-
-        $isCorrect = $this->$action($value);
-
-        if (!$isCorrect) {
-            $message = SnippetsHelper::getNamespace()->get('validators/wrong_type', '%s field has to be %s!');
-            throw new AdapterException(sprintf($message, $fieldName, $type));
-        }
-    }
-
-    /**
      * Validates fields with int type. It is possible this field to has as a value '-1'.
      *
      * @param $value
+     *
      * @return int
      */
     public function validateInt($value)
@@ -83,6 +62,7 @@ abstract class Validator
      * Validates fields with float type.
      *
      * @param string $value
+     *
      * @return int
      */
     public function validateFloat($value)
@@ -94,6 +74,7 @@ abstract class Validator
      * Validates fields which contains date data.
      *
      * @param $value
+     *
      * @return bool
      */
     public function validateDateTime($value)
@@ -105,8 +86,10 @@ abstract class Validator
      * Validates email fields.
      *
      * @param $email
-     * @return mixed
+     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function validateEmail($email)
     {
@@ -120,10 +103,36 @@ abstract class Validator
      * Validates fields which contains string.
      *
      * @param $value
+     *
      * @return bool
      */
     public function validateString($value)
     {
         return is_string($value);
+    }
+
+    /**
+     * Helper function, which is used to validate current field's value.
+     *
+     * @param string $type
+     * @param $value
+     * @param string $fieldName
+     *
+     * @throws AdapterException
+     * @throws \Exception
+     */
+    private function validateType($type, $value, $fieldName)
+    {
+        $action = 'validate' . ucfirst($type);
+        if (!is_callable([$this, $action])) {
+            throw new \Exception('Method with name `' . $action . '` does not exist!');
+        }
+
+        $isCorrect = $this->$action($value);
+
+        if (!$isCorrect) {
+            $message = SnippetsHelper::getNamespace()->get('validators/wrong_type', '%s field has to be %s!');
+            throw new AdapterException(sprintf($message, $fieldName, $type));
+        }
     }
 }

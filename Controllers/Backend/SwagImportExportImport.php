@@ -1,12 +1,10 @@
 <?php
-
 /**
  * (c) shopware AG <info@shopware.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 use Shopware\Components\SwagImportExport\Service\ImportService;
 use Shopware\Components\SwagImportExport\Service\Struct\PreparationResultStruct;
 use Shopware\Components\SwagImportExport\UploadPathProvider;
@@ -17,15 +15,15 @@ use Shopware\Components\SwagImportExport\UploadPathProvider;
  * Import controller to handle all imports.
  *
  * @category Shopware
- * @package Shopware\Plugins\SwagImportExport
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Backend_SwagImportExportImport extends Shopware_Controllers_Backend_ExtJs
 {
     public function initAcl()
     {
-        $this->addAclPermission("prepareImport", "import", "Insuficient Permissions (prepareImport)");
-        $this->addAclPermission("import", "import", "Insuficient Permissions (import)");
+        $this->addAclPermission('prepareImport', 'import', 'Insuficient Permissions (prepareImport)');
+        $this->addAclPermission('import', 'import', 'Insuficient Permissions (import)');
     }
 
     /**
@@ -41,7 +39,7 @@ class Shopware_Controllers_Backend_SwagImportExportImport extends Shopware_Contr
             'sessionId' => $request->getParam('sessionId'),
             'profileId' => (int) $request->getParam('profileId'),
             'type' => 'import',
-            'file' => $uploadPathProvider->getRealPath($request->getParam('importFile'))
+            'file' => $uploadPathProvider->getRealPath($request->getParam('importFile')),
         ];
 
         if (empty($postData['file'])) {
@@ -70,7 +68,7 @@ class Shopware_Controllers_Backend_SwagImportExportImport extends Shopware_Contr
         return $this->View()->assign([
             'success' => true,
             'position' => $resultStruct->getPosition(),
-            'count' => $resultStruct->getTotalResultCount()
+            'count' => $resultStruct->getTotalResultCount(),
         ]);
     }
 
@@ -87,7 +85,7 @@ class Shopware_Controllers_Backend_SwagImportExportImport extends Shopware_Contr
             'profileId' => (int) $request->getParam('profileId'),
             'importFile' => $inputFile,
             'sessionId' => $request->getParam('sessionId'),
-            'limit' => []
+            'limit' => [],
         ];
 
         if ($request->getParam('unprocessedFiles')) {
@@ -106,12 +104,12 @@ class Shopware_Controllers_Backend_SwagImportExportImport extends Shopware_Contr
             $resultData = $importService->import($postData, $unprocessedFiles, $inputFile);
             $this->View()->assign([
                 'success' => true,
-                'data' => $resultData
+                'data' => $resultData,
             ]);
         } catch (\Exception $e) {
             $this->View()->assign([
                 'success' => false,
-                'msg' => $e->getMessage()
+                'msg' => $e->getMessage(),
             ]);
         }
     }
@@ -120,7 +118,8 @@ class Shopware_Controllers_Backend_SwagImportExportImport extends Shopware_Contr
      * Check is file format valid
      *
      * @param string $extension
-     * @return boolean
+     *
+     * @return bool
      */
     private function isFormatValid($extension)
     {

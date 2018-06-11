@@ -12,7 +12,6 @@ use Shopware\CustomModels\ImportExport\Profile;
 
 /**
  * Class ProfileDataStruct
- * @package Shopware\Components\SwagImportExport\Service\Struct
  */
 class ProfileDataStruct
 {
@@ -81,7 +80,7 @@ class ProfileDataStruct
         return [
             'name' => $this->getName(),
             'type' => $this->getType(),
-            'tree' => $this->getTree()
+            'tree' => $this->getTree(),
         ];
     }
 }

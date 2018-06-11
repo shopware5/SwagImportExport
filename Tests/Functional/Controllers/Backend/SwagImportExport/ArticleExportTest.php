@@ -23,6 +23,7 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
     const FORMAT_CSV = 'csv';
 
     const CATEGORY_ID_VINTAGE = 31;
+    const PRODUCT_STREAM_ID = 999999;
 
     public function setUp()
     {
@@ -220,6 +221,54 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
 
         $mappedArticleList = $this->readCsvIndexedByOrdernumber($file);
         $this->assertCount(10, $mappedArticleList);
+    }
+
+    public function test_product_xml_export_with_product_stream_filter()
+    {
+        $productStreamId = self::PRODUCT_STREAM_ID;
+
+        $this->addProductStream();
+        $params = $this->getExportRequestParams();
+        $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::ARTICLE_PROFILE_TYPE);
+        $params['format'] = self::FORMAT_XML;
+        $params['productStreamId'] = $productStreamId;
+        $this->Request()->setParams($params);
+
+        $this->dispatch('backend/SwagImportExportExport/export');
+        $assigned = $this->View()->getAssign('data');
+
+        $fileName = $assigned['fileName'];
+        $file = $this->uploadPathProvider->getRealPath($fileName);
+
+        $this->assertFileExists($file, "File not found {$fileName}");
+        $this->backendControllerTestHelper->addFile($file);
+
+        $productList = $this->queryXpath($file, '//article');
+        $this->assertEquals(12, $productList->length);
+    }
+
+    public function test_product_csv_export_with_product_stream_filter()
+    {
+        $productStreamId = self::PRODUCT_STREAM_ID;
+
+        $this->addProductStream();
+        $params = $this->getExportRequestParams();
+        $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::ARTICLE_PROFILE_TYPE);
+        $params['format'] = self::FORMAT_CSV;
+        $params['productStreamId'] = $productStreamId;
+        $this->Request()->setParams($params);
+
+        $this->dispatch('backend/SwagImportExportExport/export');
+        $assigned = $this->View()->getAssign('data');
+
+        $fileName = $assigned['fileName'];
+        $file = $this->uploadPathProvider->getRealPath($fileName);
+
+        $this->assertFileExists($file, "File not found {$fileName}");
+        $this->backendControllerTestHelper->addFile($file);
+
+        $mappedProductList = $this->readCsvIndexedByOrdernumber($file);
+        $this->assertCount(12, $mappedProductList);
     }
 
     public function test_variant_xml_export()

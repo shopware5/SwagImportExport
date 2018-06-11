@@ -17,27 +17,27 @@ use Shopware\CustomModels\ImportExport\Session;
 class Logger implements LoggerInterface
 {
     /**
-     * @var ModelManager $modelManager
+     * @var ModelManager
      */
     protected $modelManager;
 
     /**
-     * @var Repository $loggerRepository
+     * @var Repository
      */
     protected $loggerRepository;
 
     /**
-     * @var LoggerEntity $loggerEntity
+     * @var LoggerEntity
      */
     protected $loggerEntity;
 
     /**
-     * @var FileWriter $fileWriter
+     * @var FileWriter
      */
     protected $fileWriter;
 
     /**
-     * @param FileWriter $fileWriter
+     * @param FileWriter   $fileWriter
      * @param ModelManager $modelManager
      */
     public function __construct(FileWriter $fileWriter, ModelManager $modelManager)
@@ -60,20 +60,18 @@ class Logger implements LoggerInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function write($messages, $status, Session $session)
     {
         $loggerModel = new LoggerEntity();
 
-        if (!is_array($messages)) {
-            $messages = [ $messages ];
-        }
+        $messages = (array) $messages;
 
         $messages = implode(';', $messages);
         $loggerModel->setSession($session);
         $loggerModel->setMessage($messages);
-        $loggerModel->setCreatedAt('now');
+        $loggerModel->setCreatedAt();
         $loggerModel->setStatus($status);
 
         $this->modelManager->persist($loggerModel);
@@ -86,7 +84,7 @@ class Logger implements LoggerInterface
     public function writeToFile(LogDataStruct $logDataStruct)
     {
         $file = $this->getLogFile();
-        $this->fileWriter->writeRecords($file, array($logDataStruct->toArray()));
+        $this->fileWriter->writeRecords($file, [$logDataStruct->toArray()]);
     }
 
     /**
@@ -108,7 +106,7 @@ class Logger implements LoggerInterface
      */
     private function createLogFile($filePath)
     {
-        $columns = array('date/time', 'file', 'profile', 'message', 'successFlag');
+        $columns = ['date/time', 'file', 'profile', 'message', 'successFlag'];
         $this->fileWriter->writeHeader($filePath, $columns);
     }
 }

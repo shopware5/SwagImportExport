@@ -9,29 +9,26 @@
 namespace Shopware\Components\SwagImportExport\DbAdapters\Articles;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Components\Model\ModelManager;
+use Shopware\Components\SwagImportExport\DataManagers\Articles\ArticleDataManager;
 use Shopware\Components\SwagImportExport\DataType\ArticleDataType;
 use Shopware\Components\SwagImportExport\DbAdapters\Results\ArticleWriterResult;
 use Shopware\Components\SwagImportExport\DbalHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Validators\Articles\ArticleValidator;
-use Shopware\Components\SwagImportExport\DataManagers\Articles\ArticleDataManager;
+use Shopware\Models\Article\Article;
+use Shopware\Models\Article\Detail;
+use Shopware\Models\Attribute\Article as ProductAttribute;
 
 class ArticleWriter
 {
     /**
-     * @var \Enlight_Components_Db_Adapter_Pdo_Mysql $db
+     * @var \Enlight_Components_Db_Adapter_Pdo_Mysql
      */
     protected $db;
 
     /**
-     * @var DbalHelper $dbalHelper
-     */
-    private $dbalHelper;
-
-    /**
-     * @var Connection $connection
+     * @var Connection
      */
     protected $connection;
 
@@ -46,9 +43,9 @@ class ArticleWriter
     protected $dataManager;
 
     /**
-     * @var ModelManager
+     * @var DbalHelper
      */
-    private $modelManager;
+    private $dbalHelper;
 
     /**
      * initialises the class properties
@@ -58,7 +55,6 @@ class ArticleWriter
         $this->connection = Shopware()->Container()->get('dbal_connection');
         $this->db = Shopware()->Container()->get('db');
         $this->dbalHelper = DbalHelper::create();
-        $this->modelManager = Shopware()->Container()->get('models');
 
         $this->validator = new ArticleValidator();
         $this->dataManager = new ArticleDataManager($this->db, $this->dbalHelper);
@@ -67,8 +63,10 @@ class ArticleWriter
     /**
      * @param array $article
      * @param array $defaultValues
-     * @return ArticleWriterResult
+     *
      * @throws AdapterException
+     *
+     * @return ArticleWriterResult
      */
     public function write($article, $defaultValues)
     {
@@ -81,8 +79,10 @@ class ArticleWriter
     /**
      * @param array $article
      * @param array $defaultValues
-     * @return ArticleWriterResult
+     *
      * @throws AdapterException
+     *
+     * @return ArticleWriterResult
      */
     protected function insertOrUpdateArticle($article, $defaultValues)
     {
@@ -128,7 +128,7 @@ class ArticleWriter
 
         // set reference
         if ($shouldCreateMainArticle) {
-            $this->db->query('UPDATE s_articles SET main_detail_id = ? WHERE id = ?', array($detailId, $articleId));
+            $this->db->query('UPDATE s_articles SET main_detail_id = ? WHERE id = ?', [$detailId, $articleId]);
         }
 
         // insert attributes
@@ -143,6 +143,7 @@ class ArticleWriter
 
     /**
      * @param array $article
+     *
      * @return array
      */
     protected function findExistingEntries($article)
@@ -166,23 +167,24 @@ class ArticleWriter
         // try to find the existing detail
         $result = $this->db->fetchRow(
             'SELECT ad.id, ad.articleID FROM s_articles_details ad WHERE ordernumber = ?',
-            array($article['orderNumber'])
+            [$article['orderNumber']]
         );
         if (!empty($result)) {
             $detailId = $result['id'];
             $articleId = $result['articleID'];
         }
 
-        return array($mainDetailId, $articleId, $detailId);
+        return [$mainDetailId, $articleId, $detailId];
     }
 
     /**
      * @param array $article
+     *
      * @return array
      */
     protected function mapArticleAttributes($article)
     {
-        $attributes = array();
+        $attributes = [];
         foreach ($article as $key => $value) {
             $position = strpos($key, 'attribute');
             if ($position === false || $position !== 0) {
@@ -198,18 +200,20 @@ class ArticleWriter
 
     /**
      * @param int $detailId
+     *
      * @return string|bool
      */
     protected function getAttrId($detailId)
     {
-        $sql = "SELECT id FROM s_articles_attributes WHERE articledetailsID = ?";
-        $attrId = $this->connection->fetchColumn($sql, array($detailId));
+        $sql = 'SELECT id FROM s_articles_attributes WHERE articledetailsID = ?';
+        $attrId = $this->connection->fetchColumn($sql, [$detailId]);
 
         return $attrId;
     }
 
     /**
      * @param array $article
+     *
      * @return bool
      */
     private function isMainDetail(array $article)
@@ -219,15 +223,16 @@ class ArticleWriter
 
     /**
      * @param array $article
-     * @param boolean $shouldCreateMainArticle
-     * @param int $articleId
+     * @param bool  $shouldCreateMainArticle
+     * @param int   $articleId
+     *
      * @return int
      */
     private function createOrUpdateMainDetail($article, $shouldCreateMainArticle, $articleId)
     {
         $builder = $this->dbalHelper->getQueryBuilderForEntity(
             $article,
-            'Shopware\Models\Article\Article',
+            Article::class,
             $shouldCreateMainArticle ? false : $articleId
         );
         $builder->execute();
@@ -235,14 +240,15 @@ class ArticleWriter
         if ($shouldCreateMainArticle) {
             return $this->connection->lastInsertId();
         }
+
         return $articleId;
     }
 
     /**
      * @param array $article
-     * @param int $articleId
-     * @param int $detailId
-     * @param boolean $createArticle
+     * @param int   $articleId
+     * @param int   $detailId
+     * @param bool  $createArticle
      */
     private function createArticleAttributes($article, $articleId, $detailId, $createArticle)
     {
@@ -252,7 +258,7 @@ class ArticleWriter
 
         $builder = $this->dbalHelper->getQueryBuilderForEntity(
             $attributes,
-            'Shopware\Models\Attribute\Article',
+            ProductAttribute::class,
             $createArticle ? false : $this->getAttrId($detailId)
         );
         $builder->execute();
@@ -261,8 +267,9 @@ class ArticleWriter
     /**
      * @param array $article
      * @param array $defaultValues
-     * @param int $detailId
-     * @param boolean $createDetail
+     * @param int   $detailId
+     * @param bool  $createDetail
+     *
      * @return array
      */
     private function createOrUpdateArticleDetail($article, $defaultValues, $detailId, $createDetail)
@@ -273,13 +280,13 @@ class ArticleWriter
             $article = $this->dataManager->setDefaultFieldsForCreate($article, $defaultValues);
         }
 
-        $builder = $this->dbalHelper->getQueryBuilderForEntity($article, 'Shopware\Models\Article\Detail', $detailId);
+        $builder = $this->dbalHelper->getQueryBuilderForEntity($article, Detail::class, $detailId);
         $builder->execute();
 
         if (!$detailId) {
             $detailId = $this->connection->lastInsertId();
         }
 
-        return array($article, $detailId);
+        return [$article, $detailId];
     }
 }

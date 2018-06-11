@@ -12,12 +12,11 @@ use Shopware\Components\SwagImportExport\DbAdapters\DataDbAdapter;
 
 /**
  * Class ArticleTranslationUpdateProfile
- * @package Shopware\Setup\SwagImportExport\DefaultProfiles
  */
 class ArticleTranslationUpdateProfile implements \JsonSerializable, ProfileMetaData
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getAdapter()
     {
@@ -25,7 +24,7 @@ class ArticleTranslationUpdateProfile implements \JsonSerializable, ProfileMetaD
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -33,7 +32,7 @@ class ArticleTranslationUpdateProfile implements \JsonSerializable, ProfileMetaD
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getDescription()
     {
@@ -41,7 +40,7 @@ class ArticleTranslationUpdateProfile implements \JsonSerializable, ProfileMetaD
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {
@@ -49,18 +48,14 @@ class ArticleTranslationUpdateProfile implements \JsonSerializable, ProfileMetaD
             'id' => 'root',
             'name' => 'Root',
             'type' => 'node',
-            'children' =>
-                [
-                    0 =>
-                        [
+            'children' => [
+                    0 => [
                             'id' => '4',
                             'name' => 'articles',
                             'index' => 0,
                             'type' => '',
-                            'children' =>
-                                [
-                                    0 =>
-                                        [
+                            'children' => [
+                                    0 => [
                                             'id' => '53e0d3148b0b2',
                                             'name' => 'article',
                                             'index' => 0,
@@ -68,26 +63,22 @@ class ArticleTranslationUpdateProfile implements \JsonSerializable, ProfileMetaD
                                             'adapter' => 'article',
                                             'parentKey' => '',
                                             'shopwareField' => '',
-                                            'children' =>
-                                                [
-                                                    0 =>
-                                                        [
+                                            'children' => [
+                                                    0 => [
                                                             'id' => '53e0d365881b7',
                                                             'type' => 'leaf',
                                                             'index' => 0,
                                                             'name' => 'ordernumber',
                                                             'shopwareField' => 'orderNumber',
                                                         ],
-                                                    1 =>
-                                                        [
+                                                    1 => [
                                                             'id' => '53e0d329364c4',
                                                             'type' => 'leaf',
                                                             'index' => 1,
                                                             'name' => 'mainnumber',
                                                             'shopwareField' => 'mainNumber',
                                                         ],
-                                                    2 =>
-                                                        [
+                                                    2 => [
                                                             'id' => '55ddb1813e917',
                                                             'name' => 'translation',
                                                             'index' => 2,
@@ -95,53 +86,52 @@ class ArticleTranslationUpdateProfile implements \JsonSerializable, ProfileMetaD
                                                             'adapter' => 'translation',
                                                             'parentKey' => 'variantId',
                                                             'shopwareField' => '',
-                                                            'children' => $this->getTranslationFields()
-                                                        ]
+                                                            'children' => $this->getTranslationFields(),
+                                                        ],
                                                 ],
-                                            'attributes' => NULL
-                                        ]
+                                            'attributes' => null,
+                                        ],
                                 ],
-                            'shopwareField' => ''
-                        ]
-                ]
+                            'shopwareField' => '',
+                        ],
+                ],
         ];
     }
 
+    /**
+     * @return array
+     */
     private function getTranslationFields()
     {
         return [
-            0 =>
-                [
+            0 => [
                     'id' => '55ddb18975737',
                     'type' => 'leaf',
                     'index' => 0,
                     'name' => 'languageId',
-                    'shopwareField' => 'languageId'
+                    'shopwareField' => 'languageId',
                 ],
-            1 =>
-                [
+            1 => [
                     'id' => '55def1344b49a',
                     'type' => 'leaf',
                     'index' => 1,
                     'name' => 'translationname',
-                    'shopwareField' => 'name'
+                    'shopwareField' => 'name',
                 ],
-            2 =>
-                [
+            2 => [
                     'id' => '55ddb19ce4d72',
                     'type' => 'leaf',
                     'index' => 2,
                     'name' => 'translatedescriptionLong',
-                    'shopwareField' => 'descriptionLong'
+                    'shopwareField' => 'descriptionLong',
                 ],
-            3 =>
-                [
+            3 => [
                     'id' => '55def112b9991',
                     'type' => 'leaf',
                     'index' => 3,
                     'name' => 'translatedescription',
-                    'shopwareField' => 'description'
-                ]
+                    'shopwareField' => 'description',
+                ],
         ];
     }
 }

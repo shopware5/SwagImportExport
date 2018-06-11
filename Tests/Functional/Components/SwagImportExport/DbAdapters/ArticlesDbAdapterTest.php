@@ -188,7 +188,7 @@ class ArticlesDbAdapterTest extends TestCase
         $articlesDbAdapter->write($records);
         $unprocessedData = $articlesDbAdapter->getUnprocessedData();
 
-        $this->assertNotTrue(empty($unprocessedData));
+        $this->assertNotEmpty($unprocessedData);
         $this->assertEquals($records['article'][0]['orderNumber'], $unprocessedData['articlesImages']['default'][0]['ordernumber']);
         $this->assertEquals($records['image'][0]['imageUrl'], $unprocessedData['articlesImages']['default'][0]['image']);
     }

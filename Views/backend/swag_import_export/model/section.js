@@ -1,4 +1,4 @@
-//{block name="backend/swag_import_export/model/section"}
+// {block name="backend/swag_import_export/model/section"}
 Ext.define('Shopware.apps.SwagImportExport.model.Section', {
     /**
      * Extends the standard ExtJS 4
@@ -17,4 +17,4 @@ Ext.define('Shopware.apps.SwagImportExport.model.Section', {
         { name: 'type', type: 'string' }
     ]
 });
-//{/block}
+// {/block}

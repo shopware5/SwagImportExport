@@ -42,7 +42,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
                 '{s name=swag_import_export/export/error_title}Swag import export{/s}',
                 '{s name=swag_import_export/export/error_msg}Please select export configuration{/s}'
             );
-            return false;
+            return;
         }
 
         me.parameters = values;
@@ -54,7 +54,8 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
      * Triggers if the resume button was pressed
      * in the previous operation window.
      *
-     * @param object Shopware.apps.SwagImportExport.model.Session
+     * @param { Shopware.apps.SwagImportExport.model.SessionList } record
+     * @param { Shopware.apps.SwagImportExport.store.SessionList } sessionStore
      */
     onResume: function(record, sessionStore) {
         var me = this;
@@ -83,8 +84,8 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
      * Triggers if the start exporting button was pressed
      * in the export window.
      *
-     * @param object Enlight.app.SubWindow win
-     * @param object Ext.button.Button btn
+     * @param { Shopware.apps.SwagImportExport.view.manager.window.Export } win
+     * @param { Ext.button.Button } btn
      */
     onStartProcess: function(win, btn) {
         var me = this;
@@ -146,6 +147,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
             limit: me.parameters.limit,
             offset: me.parameters.offset,
             categories: me.parameters.category,
+            productStreamId: me.parameters.productStreamId,
             variants: me.parameters.variants,
             ordernumberFrom: me.parameters.ordernumberFrom,
             dateFrom: me.parameters.dateFrom,
@@ -163,7 +165,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
     /**
      * This function sends a request to export data
      *
-     * @param object Enlight.app.SubWindow win
+     * @param { Shopware.apps.SwagImportExport.view.manager.window.Export } win
      */
     runRequest: function(win) {
         var me = this,
@@ -240,7 +242,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
     /**
      * Will be called when export finish
      *
-     * @param object Enlight.app.SubWindow win
+     * @param { Shopware.apps.SwagImportExport.view.manager.window.Export } win
      */
     onProcessFinish: function(win) {
         var me = this;

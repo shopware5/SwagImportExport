@@ -9,11 +9,9 @@
 namespace Shopware\Components\SwagImportExport\DbAdapters\Articles;
 
 use Doctrine\DBAL\Connection;
-use Enlight_Components_Db_Adapter_Pdo_Mysql as PDOConnection;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
-use Shopware\Components\SwagImportExport\Utils\SwagVersionHelper;
 use Shopware\Models\Attribute\Configuration;
 use Shopware_Components_Translation as TranslationComponent;
 
@@ -28,11 +26,6 @@ class TranslationWriter
      * @var Connection
      */
     private $connection;
-
-    /**
-     * @var PDOConnection
-     */
-    private $db;
 
     /**
      * @var TranslationComponent
@@ -51,7 +44,6 @@ class TranslationWriter
     {
         $this->manager = Shopware()->Models();
         $this->connection = $this->manager->getConnection();
-        $this->db = Shopware()->Db();
         $this->writer = new TranslationComponent();
         $this->shops = $this->getShops();
     }
@@ -80,19 +72,6 @@ class TranslationWriter
         ];
 
         $whiteList = array_merge($whiteList, $variantWhiteList);
-
-        // check for v5.3 deprecations
-        if (!SwagVersionHelper::hasMinimumVersion('5.3.0')) {
-            //legacy attributes from s_core_engine_elements
-            $legacyAttributes = $this->getLegacyTranslationAttr();
-
-            if ($legacyAttributes) {
-                foreach ($legacyAttributes as $attr) {
-                    $whiteList[] = $attr['name'];
-                    $variantWhiteList[] = $attr['name'];
-                }
-            }
-        }
 
         // covers 5.2 attribute system
         $attributes = $this->getAttributes();
@@ -170,18 +149,6 @@ class TranslationWriter
     public function getShop($shopId)
     {
         return $this->shops[$shopId];
-    }
-
-    /**
-     * Returns translation attributes
-     *
-     * @deprecated To be removed in shopware 5.3
-     *
-     * @return array
-     */
-    public function getLegacyTranslationAttr()
-    {
-        return $this->connection->fetchAll('SELECT `name` FROM s_core_engine_elements WHERE `translatable` = 1');
     }
 
     /**

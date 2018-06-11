@@ -23,8 +23,8 @@ interface LoggerInterface
      * Writes a log entry to the database.
      *
      * @param string|array $messages
-     * @param string $status
-     * @param Session $session
+     * @param string       $status
+     * @param Session      $session
      */
     public function write($messages, $status, Session $session);
 

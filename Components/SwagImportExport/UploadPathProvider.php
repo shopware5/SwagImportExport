@@ -31,6 +31,7 @@ class UploadPathProvider
      *
      * @param string $fileName
      * @param string $directory
+     *
      * @return string
      */
     public function getRealPath($fileName, $directory = self::DIR)
@@ -40,6 +41,7 @@ class UploadPathProvider
 
     /**
      * @param string $path
+     *
      * @return string
      */
     public function getFileNameFromPath($path)
@@ -49,6 +51,7 @@ class UploadPathProvider
 
     /**
      * @param string $path
+     *
      * @return string
      */
     public function getFileExtension($path)
@@ -60,13 +63,15 @@ class UploadPathProvider
      * Return the path to the upload directory.
      *
      * @param string $directory
+     *
      * @return string
      */
     public function getPath($directory = self::DIR)
     {
-        if ($directory == self::CRON_DIR) {
+        if ($directory === self::CRON_DIR) {
             return $this->rootPath . self::CRON_DIR;
         }
+
         return $this->rootPath . self::DIR;
     }
 }

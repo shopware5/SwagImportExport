@@ -13,7 +13,7 @@ use Shopware\Components\SwagImportExport\DbAdapters\DataDbAdapter;
 class TranslationProfile implements \JsonSerializable, ProfileMetaData
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getAdapter()
     {
@@ -21,7 +21,7 @@ class TranslationProfile implements \JsonSerializable, ProfileMetaData
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -29,7 +29,7 @@ class TranslationProfile implements \JsonSerializable, ProfileMetaData
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getDescription()
     {
@@ -37,7 +37,7 @@ class TranslationProfile implements \JsonSerializable, ProfileMetaData
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {
@@ -58,8 +58,8 @@ class TranslationProfile implements \JsonSerializable, ProfileMetaData
                             'index' => 0,
                             'type' => 'node',
                             'shopwareField' => '',
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
                 [
                     'id' => '537359399c8b7',
@@ -76,11 +76,11 @@ class TranslationProfile implements \JsonSerializable, ProfileMetaData
                             'adapter' => 'default',
                             'parentKey' => '',
                             'shopwareField' => '',
-                            'children' => $this->getTranslationFields()
-                        ]
-                    ]
-                ]
-            ]
+                            'children' => $this->getTranslationFields(),
+                        ],
+                    ],
+                ],
+            ],
         ];
     }
 
@@ -131,7 +131,7 @@ class TranslationProfile implements \JsonSerializable, ProfileMetaData
                 'index' => 5,
                 'name' => 'languageId',
                 'shopwareField' => 'languageId',
-            ]
+            ],
         ];
     }
 }

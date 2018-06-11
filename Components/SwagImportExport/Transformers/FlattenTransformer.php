@@ -1,5 +1,4 @@
 <?php
-
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -10,8 +9,9 @@
 namespace Shopware\Components\SwagImportExport\Transformers;
 
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
-use Shopware\Components\SwagImportExport\Utils\SwagVersionHelper;
 use Shopware\Models\Article\Element;
+use Shopware\Models\Customer\Group;
+use Shopware\Models\Shop\Shop;
 
 /**
  * The responsibility of this class is to restructure the flat array to tree and vise ver
@@ -376,9 +376,9 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                 }
 
                 foreach ($mapper as $key => $value) {
-                    if ($mapper[$key] == 'propertyGroupName') {
+                    if ($mapper[$key] === 'propertyGroupName') {
                         $propertyGroupName = $this->getDataValue($data, $key);
-                    } elseif ($mapper[$key] == 'propertyGroupId') {
+                    } elseif ($mapper[$key] === 'propertyGroupId') {
                         $propertyGroupId = $this->getDataValue($data, $key);
                     } else {
                         $collectedData[$key] = explode('|', $this->getDataValue($data, $key));
@@ -396,7 +396,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
 
                 foreach ($collectedData as $key => $values) {
                     for ($i = 0; $i < $counter; ++$i) {
-                        if ($mapper[$key] == 'propertyValueName') {
+                        if ($mapper[$key] === 'propertyValueName') {
                             $value = explode(':', $values[$i]);
                             $newData[$i][$columnMapper['propertyOptionName']] = $value[0];
                             $newData[$i][$key] = $value[1];
@@ -536,7 +536,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      */
     public function collectHeader($node, $path)
     {
-        if ($this->iterationParts[$path] == 'price') {
+        if ($this->iterationParts[$path] === 'price') {
             $priceProfile = $this->getNodeFromProfile($this->getMainIterationPart(), 'price');
             $priceNodeMapper = $this->createMapperFromProfile($priceProfile);
 
@@ -547,30 +547,30 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
             foreach ($this->getCustomerGroups() as $group) {
                 $this->createHeaderPriceNodes($priceNodeMapper, $group->getKey());
             }
-        } elseif ($this->iterationParts[$path] == 'configurator') {
+        } elseif ($this->iterationParts[$path] === 'configurator') {
             $configuratorProfile = $this->getNodeFromProfile($this->getMainIterationPart(), 'configurator');
             $configuratorNodeMapper = $this->createMapperFromProfile($configuratorProfile);
 
             //group name, group description and group id is skipped
             $skipList = ['configGroupId', 'configGroupName', 'configGroupDescription'];
             $this->createHeaderValues($configuratorNodeMapper, $skipList);
-        } elseif ($this->iterationParts[$path] == 'propertyValue') {
+        } elseif ($this->iterationParts[$path] === 'propertyValue') {
             $propertyProfile = $this->getNodeFromProfile($this->getMainIterationPart(), 'propertyValue');
             $propertyProfileNodeMapper = $this->createMapperFromProfile($propertyProfile);
 
             //group name, group description and group id is skipped
             $skipList = ['propertyOptionName'];
             $this->createHeaderValues($propertyProfileNodeMapper, $skipList);
-        } elseif ($this->iterationParts[$path] == 'translation') {
+        } elseif ($this->iterationParts[$path] === 'translation') {
             $translationProfile = $this->getNodeFromProfile($this->getMainIterationPart(), 'translation');
             $translationNodeMapper = $this->createMapperFromProfile($translationProfile);
 
             foreach ($this->getShops() as $shop) {
-                if ($shop->getId() != 1) {
+                if ((int) $shop->getId() !== 1) {
                     $this->createHeaderTranslation($translationNodeMapper, $shop->getId());
                 }
             }
-        } elseif ($this->iterationParts[$path] == 'taxRateSum') {
+        } elseif ($this->iterationParts[$path] === 'taxRateSum') {
             $taxSumProfile = $this->getNodeFromProfile($this->getMainIterationPart(), 'taxRateSum');
             $taxSumNodeMapper = $this->createMapperFromProfile($taxSumProfile);
 
@@ -584,7 +584,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                     $currentPath = $path . '/' . $key;
                     $this->collectHeader($value, $currentPath);
                 } else {
-                    if ($key == '_value') {
+                    if ($key === '_value') {
                         $pathParts = explode('/', $path);
                         $this->saveTempData($pathParts[count($pathParts) - 1]);
                     } else {
@@ -609,10 +609,10 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                 $currentPath = $this->getMergedPath($path, $key);
                 $this->createHeaderPriceNodes($value, $groupKey, $currentPath);
             } else {
-                if ($value == 'priceGroup') {
+                if ($value === 'priceGroup') {
                     continue;
                 }
-                if ($key == '_value') {
+                if ($key === '_value') {
                     $pathParts = explode('/', $path);
                     $name = $pathParts[count($pathParts) - 1] . '_' . $groupKey;
                     $this->saveTempData($name);
@@ -638,10 +638,10 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                 $currentPath = $this->getMergedPath($path, $key);
                 $this->createHeaderTaxSumNodes($value, $taxRate, $currentPath);
             } else {
-                if ($value == 'taxRate') {
+                if ($value === 'taxRate') {
                     continue;
                 }
-                if ($key == '_value') {
+                if ($key === '_value') {
                     $pathParts = explode('/', $path);
                     $name = $pathParts[count($pathParts) - 1] . '_' . $taxRate;
                     $this->saveTempData($name);
@@ -667,11 +667,11 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                 $this->createHeaderPriceGroup($value, $currentPath);
             } else {
                 //skipping price group
-                if ($value != 'priceGroup') {
+                if ($value !== 'priceGroup') {
                     continue;
                 }
 
-                if ($key == '_value') {
+                if ($key === '_value') {
                     $pathParts = explode('/', $path);
                     $name = $pathParts[count($pathParts) - 1];
                     $this->saveTempData($name);
@@ -701,7 +701,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                     continue;
                 }
 
-                if ($key == '_value') {
+                if ($key === '_value') {
                     $pathParts = explode('/', $path);
                     $name = $pathParts[count($pathParts) - 1];
                     $this->saveTempData($name);
@@ -726,11 +726,11 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                 $currentPath = $path . '/' . $key;
                 $this->createHeaderTranslation($value, $shopId, $currentPath);
             } else {
-                if ($value == 'languageId') {
+                if ($value === 'languageId') {
                     continue;
                 }
 
-                if ($key == '_value') {
+                if ($key === '_value') {
                     $pathParts = explode('/', $path);
                     $name = $pathParts[count($pathParts) - 1] . '_' . $shopId;
                     $this->saveTempData($name);
@@ -751,7 +751,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
     public function collectData($node, $path)
     {
         if (isset($this->iterationParts[$path]) && $this->iterationParts[$path] != $this->getMainAdapter()) {
-            if ($this->iterationParts[$path] == 'price') {
+            if ($this->iterationParts[$path] === 'price') {
                 $priceProfile = $this->getNodeFromProfile($this->getMainIterationPart(), 'price');
                 $priceTreeMapper = $this->createMapperFromProfile($priceProfile);
                 $priceFlatMapper = $this->treeToFlat($priceTreeMapper);
@@ -767,7 +767,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                     }
                     unset($priceNode);
                 }
-            } elseif ($this->iterationParts[$path] == 'configurator') {
+            } elseif ($this->iterationParts[$path] === 'configurator') {
                 $configuratorProfile = $this->getNodeFromProfile($this->getMainIterationPart(), 'configurator');
                 $configuratorTreeMapper = $this->createMapperFromProfile($configuratorProfile);
                 $configuratorFlatMapper = $this->treeToFlat($configuratorTreeMapper);
@@ -793,7 +793,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                 }
 
                 unset($this->iterationTempData);
-            } elseif ($this->iterationParts[$path] == 'propertyValue') {
+            } elseif ($this->iterationParts[$path] === 'propertyValue') {
                 $propertyValueProfile = $this->getNodeFromProfile($this->getMainIterationPart(), 'propertyValue');
                 $propertyValueTreeMapper = $this->createMapperFromProfile($propertyValueProfile);
                 $propertyValueFlatMapper = $this->treeToFlat($propertyValueTreeMapper);
@@ -816,7 +816,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                 }
 
                 unset($this->iterationTempData);
-            } elseif ($this->iterationParts[$path] == 'translation') {
+            } elseif ($this->iterationParts[$path] === 'translation') {
                 $translationProfile = $this->getNodeFromProfile($this->getMainIterationPart(), 'translation');
                 $translationTreeMapper = $this->createMapperFromProfile($translationProfile);
                 $translationFlatMapper = $this->treeToFlat($translationTreeMapper);
@@ -824,7 +824,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                 foreach ($node as $key => $translation) {
                     $this->collectTranslationData($translation, $translationFlatMapper);
                 }
-            } elseif ($this->iterationParts[$path] == 'translationProperty') {
+            } elseif ($this->iterationParts[$path] === 'translationProperty') {
                 $translationPProfile = $this->getNodeFromProfile($this->getMainIterationPart(), 'translationProperty');
                 $translationPTreeMapper = $this->createMapperFromProfile($translationPProfile);
                 $translationPFlatMapper = $this->treeToFlat($translationPTreeMapper);
@@ -834,9 +834,9 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                 }
 
                 foreach ($this->getIterationTempData() as $nodeName => $tempData) {
-                    if ($translationPFlatMapper[$nodeName] == 'propertyGroupBaseName'
-                        || $translationPFlatMapper[$nodeName] == 'propertyGroupName'
-                        || $translationPFlatMapper[$nodeName] == 'propertyGroupId'
+                    if ($translationPFlatMapper[$nodeName] === 'propertyGroupBaseName'
+                        || $translationPFlatMapper[$nodeName] === 'propertyGroupName'
+                        || $translationPFlatMapper[$nodeName] === 'propertyGroupId'
                     ) {
                         $this->saveTempData($tempData[0]);
                     } elseif (is_array($tempData)) {
@@ -845,7 +845,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                     }
                 }
                 unset($this->iterationTempData);
-            } elseif ($this->iterationParts[$path] == 'taxRateSum') {
+            } elseif ($this->iterationParts[$path] === 'taxRateSum') {
                 $taxSumProfile = $this->getNodeFromProfile($this->getMainIterationPart(), 'taxRateSum');
                 $taxSumTreeMapper = $this->createMapperFromProfile($taxSumProfile);
                 $taxSumFlatMapper = $this->treeToFlat($taxSumTreeMapper);
@@ -943,7 +943,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                 }
             }
 
-            if ($mapper[$currentPath] == 'priceGroup') {
+            if ($mapper[$currentPath] === 'priceGroup') {
                 return $value;
             }
         }
@@ -963,7 +963,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
             if (is_array($value)) {
                 $this->collectPriceData($value, $mapper, $currentPath, $emptyResult);
             } else {
-                if ($mapper[$currentPath] != 'priceGroup') {
+                if ($mapper[$currentPath] !== 'priceGroup') {
                     if ($emptyResult) {
                         $this->saveTempData(null);
                     } else {
@@ -1030,7 +1030,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                 $currentPath = $path;
             }
 
-            if ($key == 'type' && $node == 'iteration') {
+            if ($key === 'type' && $node === 'iteration') {
                 $this->saveIterationParts($currentPath, $nodes['adapter']);
             }
 
@@ -1071,7 +1071,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
     public function getNodeFromProfile($node, $adapter)
     {
         foreach ($node as $key => $value) {
-            if ($key == 'adapter' && $value == $adapter) {
+            if ($key === 'adapter' && $value == $adapter) {
                 return $node;
             }
 
@@ -1105,7 +1105,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                     return $result;
                 }
             } else {
-                if ($mapper[$currentPath] == 'configGroupName') {
+                if ($mapper[$currentPath] === 'configGroupName') {
                     return $value;
                 }
             }
@@ -1131,7 +1131,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                     return $result;
                 }
             } else {
-                if ($mapper[$currentPath] == 'propertyOptionName') {
+                if ($mapper[$currentPath] === 'propertyOptionName') {
                     return $value;
                 }
             }
@@ -1152,14 +1152,14 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
             if (is_array($value)) {
                 $this->collectConfiguratorData($value, $mapper, $currentPath, $node);
             } else {
-                if ($mapper[$currentPath] == 'configGroupName'
-                    || $mapper[$currentPath] == 'configGroupDescription'
-                    || $mapper[$currentPath] == 'configGroupId'
+                if ($mapper[$currentPath] === 'configGroupName'
+                    || $mapper[$currentPath] === 'configGroupDescription'
+                    || $mapper[$currentPath] === 'configGroupId'
                 ) {
                     continue;
                 }
 
-                if ($mapper[$currentPath] == 'configOptionName') {
+                if ($mapper[$currentPath] === 'configOptionName') {
                     $group = $this->findConfigurationGroupValue($originalNode, $mapper);
 
                     //check if configuration group and value are not empty or string 0
@@ -1190,11 +1190,11 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
             if (is_array($value)) {
                 $this->collectPropertyData($value, $mapper, $currentPath, $node);
             } else {
-                if ($mapper[$currentPath] == 'propertyOptionName') {
+                if ($mapper[$currentPath] === 'propertyOptionName') {
                     continue;
                 }
 
-                if ($mapper[$currentPath] == 'propertyValueName') {
+                if ($mapper[$currentPath] === 'propertyValueName') {
                     $option = $this->findPropertyOptionName($originalNode, $mapper);
 
                     if ($value && $option) {
@@ -1222,7 +1222,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
             if (is_array($value)) {
                 $this->collectTranslationData($value, $mapper, $currentPath);
             } else {
-                if ($mapper[$currentPath] == 'languageId') {
+                if ($mapper[$currentPath] === 'languageId') {
                     continue;
                 }
 
@@ -1307,7 +1307,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      */
     public function getCustomerGroups()
     {
-        $groups = Shopware()->Models()->getRepository('Shopware\Models\Customer\Group')->findAll();
+        $groups = Shopware()->Models()->getRepository(Group::class)->findAll();
 
         return $groups;
     }
@@ -1317,7 +1317,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      */
     public function getShops()
     {
-        $shops = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop')->findAll();
+        $shops = Shopware()->Models()->getRepository(Shop::class)->findAll();
 
         return $shops;
     }
@@ -1339,33 +1339,11 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
             ];
 
             $attributes = [];
-            if (!SwagVersionHelper::hasMinimumVersion('5.3.0')) {
-                $attributes = array_map(
-                    function ($item) {
-                        return $item['name'];
-                    },
-                    $this->getTranslationAttr()
-                );
-            }
 
             $this->translationColumns = array_merge($translationFields, $attributes);
         }
 
         return $this->translationColumns;
-    }
-
-    /**
-     * @return array
-     */
-    public function getTranslationAttr()
-    {
-        $repository = Shopware()->Models()->getRepository(Element::class);
-
-        $builder = $repository->createQueryBuilder('attribute');
-        $builder->andWhere('attribute.translatable = 1');
-        $builder->orderBy('attribute.position');
-
-        return $builder->getQuery()->getArrayResult();
     }
 
     /**
@@ -1425,7 +1403,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                 }
             }
 
-            if ($mapper[$currentPath] == 'taxRate') {
+            if ($mapper[$currentPath] === 'taxRate') {
                 return $value;
             }
         }
@@ -1506,7 +1484,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
         if (isset($node['children'])) {
             if (isset($node['attributes'])) {
                 foreach ($node['attributes'] as $attribute) {
-                    if ($attribute['shopwareField'] != 'priceGroup') {
+                    if ($attribute['shopwareField'] !== 'priceGroup') {
                         $value = $this->getDataValue($data, $attribute['name'] . $groupExtension);
                     } else {
                         $value = $groupValue;
@@ -1523,7 +1501,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
         } else {
             if (isset($node['attributes'])) {
                 foreach ($node['attributes'] as $attribute) {
-                    if ($attribute['shopwareField'] != 'priceGroup') {
+                    if ($attribute['shopwareField'] !== 'priceGroup') {
                         $value = $this->getDataValue($data, $attribute['name'] . $groupExtension);
                     } else {
                         $value = $groupValue;
@@ -1531,14 +1509,14 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                     $currentNode['_attributes'][$attribute['name']] = $value;
                 }
 
-                if ($node['shopwareField'] != 'priceGroup') {
+                if ($node['shopwareField'] !== 'priceGroup') {
                     $value = $this->getDataValue($data, $node['name'] . $groupExtension);
                 } else {
                     $value = $groupValue;
                 }
                 $currentNode['_value'] = $value;
             } else {
-                if ($node['shopwareField'] != 'priceGroup') {
+                if ($node['shopwareField'] !== 'priceGroup') {
                     $value = $this->getDataValue($data, $node['name'] . $groupExtension);
                 } else {
                     $value = $groupValue;

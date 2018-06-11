@@ -5,12 +5,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 use Doctrine\DBAL\DBALException;
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\SwagImportExport\Service\ProfileService;
-use Shopware\CustomModels\ImportExport\Profile;
 use Shopware\Components\SwagImportExport\Utils\TreeHelper;
+use Shopware\CustomModels\ImportExport\Profile;
 use Shopware\CustomModels\ImportExport\Repository;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -18,7 +17,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * Shopware ImportExport Plugin
  *
  * @category Shopware
- * @package Shopware\Plugins\SwagImportExport
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
@@ -29,7 +28,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
     protected $plugin;
 
     /**
-     * @param Enlight_Controller_Request_Request $request
+     * @param Enlight_Controller_Request_Request   $request
      * @param Enlight_Controller_Response_Response $response
      */
     public function __construct(Enlight_Controller_Request_Request $request, Enlight_Controller_Response_Response $response)
@@ -47,26 +46,26 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
     public function getWhitelistedCSRFActions()
     {
         return [
-            'exportProfile'
+            'exportProfile',
         ];
     }
 
     public function initAcl()
     {
-        $this->addAclPermission("getProfiles", "profile", "Insuficient Permissions (getProfiles)");
-        $this->addAclPermission("createProfiles", "profile", "Insuficient Permissions (createProfiles)");
-        $this->addAclPermission("updateProfiles", "profile", "Insuficient Permissions (updateProfiles)");
-        $this->addAclPermission("deleteProfiles", "profile", "Insuficient Permissions (deleteProfiles)");
-        $this->addAclPermission("getProfile", "profile", "Insuficient Permissions (getProfile)");
-        $this->addAclPermission("duplicateProfile", "profile", "Insuficient Permissions (duplicateProfile)");
-        $this->addAclPermission("exportProfile", "profile", "Insuficient Permissions (exportProfile)");
-        $this->addAclPermission("importProfile", "profile", "Insuficient Permissions (importProfile)");
-        $this->addAclPermission("createNode", "export", "Insuficient Permissions (createNode)");
-        $this->addAclPermission("updateNode", "export", "Insuficient Permissions (updateNode)");
-        $this->addAclPermission("deleteNode", "export", "Insuficient Permissions (deleteNode)");
-        $this->addAclPermission("getSections", "profile", "Insuficient Permissions (getSections)");
-        $this->addAclPermission("getColumns", "profile", "Insuficient Permissions (getColumns)");
-        $this->addAclPermission("getParentKeys", "profile", "Insuficient Permissions (getParentKeys)");
+        $this->addAclPermission('getProfiles', 'profile', 'Insuficient Permissions (getProfiles)');
+        $this->addAclPermission('createProfiles', 'profile', 'Insuficient Permissions (createProfiles)');
+        $this->addAclPermission('updateProfiles', 'profile', 'Insuficient Permissions (updateProfiles)');
+        $this->addAclPermission('deleteProfiles', 'profile', 'Insuficient Permissions (deleteProfiles)');
+        $this->addAclPermission('getProfile', 'profile', 'Insuficient Permissions (getProfile)');
+        $this->addAclPermission('duplicateProfile', 'profile', 'Insuficient Permissions (duplicateProfile)');
+        $this->addAclPermission('exportProfile', 'profile', 'Insuficient Permissions (exportProfile)');
+        $this->addAclPermission('importProfile', 'profile', 'Insuficient Permissions (importProfile)');
+        $this->addAclPermission('createNode', 'export', 'Insuficient Permissions (createNode)');
+        $this->addAclPermission('updateNode', 'export', 'Insuficient Permissions (updateNode)');
+        $this->addAclPermission('deleteNode', 'export', 'Insuficient Permissions (deleteNode)');
+        $this->addAclPermission('getSections', 'profile', 'Insuficient Permissions (getSections)');
+        $this->addAclPermission('getColumns', 'profile', 'Insuficient Permissions (getColumns)');
+        $this->addAclPermission('getParentKeys', 'profile', 'Insuficient Permissions (getParentKeys)');
     }
 
     /**
@@ -81,7 +80,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         $query = $profileRepository->getProfilesListQuery(
             $this->Request()->getParam('filter', []),
             $this->Request()->getParam('sort', []),
-            $this->Request()->getParam('limit', null),
+            $this->Request()->getParam('limit'),
             $this->Request()->getParam('start')
         )->getQuery();
 
@@ -99,7 +98,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         }
 
         $this->View()->assign([
-            'success' => true, 'data' => $data, 'total' => $count
+            'success' => true, 'data' => $data, 'total' => $count,
         ]);
     }
 
@@ -121,13 +120,13 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
                     'type' => $profileEntity->getType(),
                     'baseProfile' => $profileEntity->getBaseProfile(),
                     'tree' => $profileEntity->getTree(),
-                    'default' => $profileEntity->getDefault()
-                ]
+                    'default' => $profileEntity->getDefault(),
+                ],
             ]);
         } catch (DBALException $e) {
             return $this->View()->assign([
                 'success' => false,
-                'message' => $this->get('snippets')->getNamespace('backend/swag_import_export/controller')->get('swag_import_export/profile/duplicate_unique_error_msg')
+                'message' => $this->get('snippets')->getNamespace('backend/swag_import_export/controller')->get('swag_import_export/profile/duplicate_unique_error_msg'),
             ]);
         } catch (\Exception $e) {
             return $this->View()->assign(
@@ -157,15 +156,17 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
             $manager->flush();
         } catch (\Exception $e) {
             return $this->View()->assign([
-                'success' => false
+                'success' => false,
             ]);
         }
+
         return $this->View()->assign(['success' => true]);
     }
 
     /**
-     * @return Enlight_View|Enlight_View_Default
      * @throws Exception
+     *
+     * @return Enlight_View|Enlight_View_Default
      */
     public function updateProfilesAction()
     {
@@ -176,7 +177,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         $profileEntity = $profileRepository->findOneBy(['id' => $data['id']]);
 
         if (!$profileEntity) {
-            throw new \Exception("Profile not found!");
+            throw new \Exception('Profile not found!');
         }
 
         $profileEntity->setName($data['name']);
@@ -187,12 +188,12 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         } catch (DBALException $e) {
             return $this->View()->assign([
                 'success' => false,
-                'message' => $this->get('snippets')->getNamespace('backend/swag_import_export/controller')->get('swag_import_export/profile/duplicate_unique_error_msg')
+                'message' => $this->get('snippets')->getNamespace('backend/swag_import_export/controller')->get('swag_import_export/profile/duplicate_unique_error_msg'),
             ]);
         } catch (\Exception $e) {
             return $this->View()->assign([
                 'success' => false,
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ]);
         }
 
@@ -204,8 +205,8 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
                 'type' => $profileEntity->getType(),
                 'baseProfile' => $profileEntity->getBaseProfile(),
                 'tree' => $profileEntity->getTree(),
-                'default' => $profileEntity->getDefault()
-            ]
+                'default' => $profileEntity->getDefault(),
+            ],
         ]);
     }
 
@@ -231,8 +232,9 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
     }
 
     /**
-     * @return Enlight_View|Enlight_View_Default
      * @throws Exception
+     *
+     * @return Enlight_View|Enlight_View_Default
      */
     public function duplicateProfileAction()
     {
@@ -259,12 +261,12 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         } catch (DBALException $e) {
             return $this->View()->assign([
                 'success' => false,
-                'message' => $snippetManager->getNamespace('backend/swag_import_export/controller')->get('swag_import_export/profile/duplicate_unique_error_msg')
+                'message' => $snippetManager->getNamespace('backend/swag_import_export/controller')->get('swag_import_export/profile/duplicate_unique_error_msg'),
             ]);
         } catch (\Exception $e) {
             return $this->View()->assign([
                 'success' => false,
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ]);
         }
 
@@ -276,8 +278,8 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
                 'type' => $profile->getType(),
                 'baseProfile' => $profile->getBaseProfile(),
                 'tree' => $profile->getTree(),
-                'default' => $profile->getDefault()
-            ]
+                'default' => $profile->getDefault(),
+            ],
         ]);
     }
 
@@ -287,8 +289,9 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
 
         if (empty($profileId)) {
             $this->View()->assign([
-                'success' => false
+                'success' => false,
             ]);
+
             return;
         }
 
@@ -299,8 +302,9 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
             $exportDataStruct = $service->exportProfile($profileId);
         } catch (\Exception $e) {
             $this->View()->assign([
-                'success' => false
+                'success' => false,
             ]);
+
             return;
         }
         $this->Front()->Plugins()->Json()->setRenderer(false);
@@ -321,7 +325,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
      */
     public function importProfileAction()
     {
-        /**@var $file UploadedFile */
+        /** @var $file UploadedFile */
         $file = Symfony\Component\HttpFoundation\Request::createFromGlobals()->files->get('profilefile');
 
         /** @var ProfileService $service */
@@ -332,12 +336,12 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         } catch (\Exception $e) {
             return $this->View()->assign([
                 'success' => false,
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ]);
         }
 
         return $this->View()->assign([
-            'success' => true
+            'success' => true,
         ]);
     }
 
@@ -406,7 +410,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
             }
 
             // the root cannot be moved or deleted
-            if ($node['id'] == 'root') {
+            if ($node['id'] === 'root') {
                 continue;
             }
 
@@ -419,7 +423,9 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
                 if (!TreeHelper::deleteNode($node, $tree)) {
                     $errors = true;
                     break;
-                } elseif (!TreeHelper::moveNode($changedNode, $tree)) {
+                }
+
+                if (!TreeHelper::moveNode($changedNode, $tree)) {
                     $errors = true;
                     break;
                 }
@@ -479,8 +485,9 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
 
         if (!$postData['profileId']) {
             $this->View()->assign([
-                'success' => false, 'message' => 'No profile Id'
+                'success' => false, 'message' => 'No profile Id',
             ]);
+
             return;
         }
 
@@ -494,7 +501,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         $this->View()->assign([
             'success' => true,
             'data' => $sections,
-            'total' => count($sections)
+            'total' => count($sections),
         ]);
     }
 
@@ -505,8 +512,9 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
 
         if (!$postData['profileId']) {
             $this->View()->assign([
-                'success' => false, 'message' => 'No profile Id'
+                'success' => false, 'message' => 'No profile Id',
             ]);
+
             return;
         }
 
@@ -527,12 +535,12 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
 
         if (!$columns || empty($columns)) {
             $this->View()->assign([
-                'success' => false, 'msg' => 'No columns found.'
+                'success' => false, 'msg' => 'No columns found.',
             ]);
         }
 
         // merge all sections
-        if ($section == 'default' && count($dbAdapter->getSections()) > 1) {
+        if ($section === 'default' && count($dbAdapter->getSections()) > 1) {
             $columns = array_reduce($columns, function ($carry, $item) {
                 return array_merge($carry, $item);
             }, []);
@@ -563,7 +571,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         }
 
         $this->View()->assign([
-            'success' => true, 'data' => $columns, 'total' => count($columns)
+            'success' => true, 'data' => $columns, 'total' => count($columns),
         ]);
     }
 
@@ -574,8 +582,9 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
 
         if (!$postData['profileId']) {
             $this->View()->assign([
-                'success' => false, 'message' => 'No profile Id'
+                'success' => false, 'message' => 'No profile Id',
             ]);
+
             return;
         }
 
@@ -586,8 +595,9 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
 
         if (!method_exists($dbAdapter, 'getParentKeys')) {
             $this->View()->assign([
-                'success' => true, 'data' => [], 'total' => 0
+                'success' => true, 'data' => [], 'total' => 0,
             ]);
+
             return;
         }
 
@@ -613,7 +623,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         }
 
         $this->View()->assign([
-            'success' => true, 'data' => $columns, 'total' => count($columns)
+            'success' => true, 'data' => $columns, 'total' => count($columns),
         ]);
     }
 }

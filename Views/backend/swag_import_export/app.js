@@ -13,12 +13,6 @@
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 
-Shopware.app.Application.shopware53Installed = false;
-
-/* {if $shopware53Installed} */
-Shopware.app.Application.shopware53Installed = true;
-/* {/if} */
-
 // {namespace name="backend/swag_import_export/view/main"}
 // {block name="backend/swag_import_export/app"}
 Ext.define('Shopware.apps.SwagImportExport', {

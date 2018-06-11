@@ -12,17 +12,20 @@ use Shopware\Components\SwagImportExport\Validators\Validator;
 
 class ConfiguratorValidator extends Validator
 {
-    public static $mapper = array(
-        'int' => array(
+    public static $mapper = [
+        'int' => [
             'configSetId',
             'configSetType',
-        ),
-        'string' => array( //TODO: maybe we don't need to check fields which contains string?
+        ],
+        'string' => [ //TODO: maybe we don't need to check fields which contains string?
             'configGroupName',
             'configOptionName',
-        ),
-    );
+        ],
+    ];
 
+    /**
+     * @param $record
+     */
     public function checkRequiredFields($record)
     {
     }

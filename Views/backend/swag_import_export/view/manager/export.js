@@ -41,7 +41,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
 
     /**
      * Creates the main form panel for the component which
-     * features all neccessary form elements
+     * features all necessary form elements
      *
      * @return [object] me.formPnl - generated Ext.form.Panel
      */
@@ -113,6 +113,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
      */
     additionalFields: function() {
         var me = this,
+            factory = Ext.create('Shopware.attribute.SelectionFactory'),
             items;
 
         me.customFilterFields = Ext.create('Ext.form.FieldSet', {
@@ -159,7 +160,8 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
                     me.createVariantsCheckbox(),
                     me.createLimit(),
                     me.createOffset(),
-                    me.createCategoryTreeCombo()
+                    me.createCategoryTreeCombo(),
+                    me.createProductStreamSelection()
                 ]
             }]
         });
@@ -220,8 +222,6 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
             }]
         });
 
-        var factory = Ext.create('Shopware.attribute.SelectionFactory');
-
         items = [
             me.articleFields,
             me.orderFields,
@@ -229,38 +229,28 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
             me.customFilterFields
         ];
 
-        try {
-            /**
-             * if you have installed Shopware 5.2.x configure the application.php ___VERSION___
-             * with a valid Shopware version. Otherwise throws a exception.
-             */
-            if (Shopware.app.Application.shopware53Installed) {
-                me.customerFields = Ext.create('Ext.form.FieldSet', {
-                    title: '{s name=swag_import_export/export/fieldset_additional}Additional export configuration{/s}',
-                    padding: 12,
-                    hidden: true,
-                    defaults: {
-                        labelStyle: 'font-weight: 700; text-align: right;'
-                    },
-                    items: [{
-                        xtype: 'container',
-                        padding: '0 0 8',
-                        items: [
-                            Ext.create('Shopware.form.field.CustomerStreamSingleSelection', {
-                                fieldLabel: '{s name="swag_import_export/export/customer_stream"}{/s}',
-                                name: 'customerStreamId',
-                                helpText: '{s name="swag_import_export/export/customer_stream_help"}{/s}',
-                                store: factory.createEntitySearchStore('Shopware\\Models\\CustomerStream\\CustomerStream')
-                            })
-                        ]
-                    }]
-                });
+        me.customerFields = Ext.create('Ext.form.FieldSet', {
+            title: '{s name=swag_import_export/export/fieldset_additional}Additional export configuration{/s}',
+            padding: 12,
+            hidden: true,
+            defaults: {
+                labelStyle: 'font-weight: 700; text-align: right;'
+            },
+            items: [{
+                xtype: 'container',
+                padding: '0 0 8',
+                items: [
+                    Ext.create('Shopware.form.field.CustomerStreamSingleSelection', {
+                        fieldLabel: '{s name="swag_import_export/export/customer_stream"}{/s}',
+                        name: 'customerStreamId',
+                        helpText: '{s name="swag_import_export/export/customer_stream_help"}{/s}',
+                        store: factory.createEntitySearchStore('Shopware\\Models\\CustomerStream\\CustomerStream')
+                    })
+                ]
+            }]
+        });
 
-                items.push(me.customerFields);
-            }
-        } catch (e) {
-            // do nothing
-        }
+        items.push(me.customerFields);
 
         me.customerCompleteFields = Ext.create('Ext.form.FieldSet', {
             title: '{s name=swag_import_export/export/fieldset_additional}Additional export configuration{/s}',
@@ -339,7 +329,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
             minChars: 3,
             listConfig: {
                 width: 450,
-                getInnerTpl: function (value) {
+                getInnerTpl: function () {
                     return Ext.XTemplate(
                         '{literal}' +
                         '<tpl if="translation">{ name } <i>({ translation })</i>' +
@@ -405,7 +395,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
 
                     if (type === 'articles') {
                         me.articleFields.show();
-                    } else if (type === 'orders' || type == 'mainOrders') {
+                    } else if (type === 'orders' || type === 'mainOrders') {
                         me.orderFields.show();
                     } else if (type === 'articlesInStock') {
                         me.stockField.show();
@@ -413,9 +403,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
                             me.customFilterFields.show();
                         }
                     } else if (type === 'customers' || type === 'addresses') {
-                        if (Shopware.app.Application.shopware53Installed) {
-                            me.customerFields.show();
-                        }
+                        me.customerFields.show();
                     } else if (type === 'customersComplete') {
                         me.down('combo[name=format]').setValue('xml');
                         me.down('combo[name=format]').setReadOnly(true);
@@ -445,7 +433,8 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
                     }
 
                     if (me.profileCombo.isDirty()) {
-                        return me.profileCombo.clearValue();
+                        me.profileCombo.clearValue();
+                        return;
                     }
                     store.load();
                 }
@@ -501,7 +490,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
 
     /**
      * Returns category dropdown
-     * @returns [ Shopware.form.field.ComboTree ]
+     * @returns { Shopware.form.field.ComboTree }
      */
     createCategoryTreeCombo: function() {
         var me = this;
@@ -521,6 +510,22 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
         };
 
         return me.categoryTreeCombo;
+    },
+
+    /**
+     * @returns { Shopware.form.field.ProductStreamSelection }
+     */
+    createProductStreamSelection: function() {
+        var me = this;
+
+        me.productStreamCombo = Ext.create('Shopware.form.field.ProductStreamSelection', {
+            name: 'productStreamId',
+            fieldLabel: '{s name=swag_import_export/export/product_stream}or select Product-Stream{/s}',
+            labelWidth: me.configLabelWidth,
+            width: me.configWidth
+        });
+
+        return me.productStreamCombo;
     },
 
     createStockFilterComboBox: function() {
@@ -552,7 +557,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
             value: me.stockFilter.getAt(0),
             name: 'stockFilter',
             listeners: {
-                change: function(combo, newValue, oldValue, eOpts) {
+                change: function(combo, newValue) {
                     if (newValue === 'custom') {
                         me.customFilterFields.show();
                     } else {

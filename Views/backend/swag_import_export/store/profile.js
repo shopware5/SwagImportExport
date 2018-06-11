@@ -1,11 +1,11 @@
-//{block name="backend/swag_import_export/store/profile"}
+// {block name="backend/swag_import_export/store/profile"}
 Ext.define('Shopware.apps.SwagImportExport.store.Profile', {
     extend: 'Ext.data.TreeStore',
     model: 'Shopware.apps.SwagImportExport.model.Profile',
     defaultRootId: '/',
     root: {
         expanded: true,
-        text: "Root"
+        text: 'Root'
     },
     proxy: {
         type: 'ajax',
@@ -25,4 +25,4 @@ Ext.define('Shopware.apps.SwagImportExport.store.Profile', {
         }
     }
 });
-//{/block}
+// {/block}

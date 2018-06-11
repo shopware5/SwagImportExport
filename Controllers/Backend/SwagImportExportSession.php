@@ -1,12 +1,10 @@
 <?php
-
 /**
  * (c) shopware AG <info@shopware.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 use Shopware\Components\SwagImportExport\Utils\DataHelper;
 use Shopware\CustomModels\ImportExport\Repository;
 use Shopware\CustomModels\ImportExport\Session;
@@ -15,21 +13,21 @@ use Shopware\CustomModels\ImportExport\Session;
  * Shopware ImportExport Plugin
  *
  * @category Shopware
- * @package Shopware\Plugins\SwagImportExport
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Backend_SwagImportExportSession extends Shopware_Controllers_Backend_ExtJs
 {
     public function initAcl()
     {
-        $this->addAclPermission("getSessions", "read", "Insuficient Permissions (getSessions)");
-        $this->addAclPermission("deleteSession", "export", "Insuficient Permissions (deleteSession)");
+        $this->addAclPermission('getSessions', 'read', 'Insuficient Permissions (getSessions)');
+        $this->addAclPermission('deleteSession', 'export', 'Insuficient Permissions (deleteSession)');
     }
 
     public function getSessionDetailsAction()
     {
         $manager = $this->getModelManager();
-        $sessionId = $this->Request()->getParam('sessionId', null);
+        $sessionId = $this->Request()->getParam('sessionId');
 
         if (null === $sessionId) {
             $this->View()->assign(['success' => false, 'message' => 'No session found']);
@@ -44,15 +42,15 @@ class Shopware_Controllers_Backend_SwagImportExportSession extends Shopware_Cont
         }
 
         $dataSet = [
-            'fileName'  => $sessionModel->getFileName(),
-            'type'      => $sessionModel->getType(),
-            'profile'   => $sessionModel->getProfile()->getName(),
-            'dataset'   => $sessionModel->getTotalCount(),
-            'position'  => $sessionModel->getPosition(),
-            'fileSize'  => DataHelper::formatFileSize($sessionModel->getFileSize()),
-            'userName'  => $sessionModel->getUserName(),
-            'date'      => $sessionModel->getCreatedAt()->format('d.m.Y H:i'),
-            'status'    => $sessionModel->getState()
+            'fileName' => $sessionModel->getFileName(),
+            'type' => $sessionModel->getType(),
+            'profile' => $sessionModel->getProfile()->getName(),
+            'dataset' => $sessionModel->getTotalCount(),
+            'position' => $sessionModel->getPosition(),
+            'fileSize' => DataHelper::formatFileSize($sessionModel->getFileSize()),
+            'userName' => $sessionModel->getUserName(),
+            'date' => $sessionModel->getCreatedAt()->format('d.m.Y H:i'),
+            'status' => $sessionModel->getState(),
         ];
 
         $result = $this->translateDataSet($dataSet);
@@ -90,7 +88,7 @@ class Shopware_Controllers_Backend_SwagImportExportSession extends Shopware_Cont
         }
 
         $this->View()->assign([
-            'success' => true, 'data' => $data, 'total' => $total
+            'success' => true, 'data' => $data, 'total' => $total,
         ]);
     }
 
@@ -115,8 +113,9 @@ class Shopware_Controllers_Backend_SwagImportExportSession extends Shopware_Cont
                     $this->View()->assign([
                         'success' => false,
                         'data' => $this->Request()->getParams(),
-                        'message' => 'No valid Id'
+                        'message' => 'No valid Id',
                     ]);
+
                     return;
                 }
 
@@ -130,19 +129,20 @@ class Shopware_Controllers_Backend_SwagImportExportSession extends Shopware_Cont
 
             $this->View()->assign([
                 'success' => true,
-                'data' => $this->Request()->getParams()
+                'data' => $this->Request()->getParams(),
             ]);
         } catch (Exception $e) {
             $this->View()->assign([
                 'success' => false,
                 'data' => $this->Request()->getParams(),
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ]);
         }
     }
 
     /**
      * @param array $data
+     *
      * @return array
      */
     private function translateDataSet(array $data)

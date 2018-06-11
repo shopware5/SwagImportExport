@@ -18,6 +18,7 @@ class DataHelper
      * example: 'customer.number as customerNumber' results in ['customerNumber', 'number']
      *
      * @param $column
+     *
      * @return array
      */
     public static function generateMappingFromColumns($column)
@@ -30,19 +31,20 @@ class DataHelper
         preg_match("/(?<=\.).*?(?= as|\W)/", $column, $name);
         $name = trim($name[0]);
 
-        return array($alias, $name);
+        return [$alias, $name];
     }
 
     /**
      * @param $bytes
+     *
      * @return string
      */
     public static function formatFileSize($bytes)
     {
         if ($bytes > 0) {
-            $unit = intval(log($bytes, 1024));
+            $unit = (int) log($bytes, 1024);
 
-            $units = array('B', 'KB', 'MB', 'GB');
+            $units = ['B', 'KB', 'MB', 'GB'];
 
             if (array_key_exists($unit, $units) === true) {
                 return sprintf('%s %s', number_format($bytes / pow(1024, $unit), 2), $units[$unit]);

@@ -15,15 +15,15 @@ class Update04CreateColumns implements UpdaterInterface
 {
     const MAX_PLUGIN_VERSION = '2.0.2';
 
-    /** @var SetupContext  */
+    /** @var SetupContext */
     private $setupContext;
 
-    /** @var Connection  */
+    /** @var Connection */
     private $connection;
 
     /**
      * @param SetupContext $setupContext
-     * @param Connection $connection
+     * @param Connection   $connection
      */
     public function __construct(SetupContext $setupContext, Connection $connection)
     {
@@ -32,7 +32,7 @@ class Update04CreateColumns implements UpdaterInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function update()
     {
@@ -53,7 +53,7 @@ class Update04CreateColumns implements UpdaterInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function isCompatible()
     {

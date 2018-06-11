@@ -12,10 +12,10 @@ use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Query\Expr\Join;
 use Shopware\Bundle\MediaBundle\MediaService;
 use Shopware\Components\Model\ModelManager;
-use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
-use Shopware\Components\SwagImportExport\Exception\AdapterException;
-use Shopware\Components\SwagImportExport\Validators\ArticleImageValidator;
 use Shopware\Components\SwagImportExport\DataManagers\ArticleImageDataManager;
+use Shopware\Components\SwagImportExport\Exception\AdapterException;
+use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
+use Shopware\Components\SwagImportExport\Validators\ArticleImageValidator;
 use Shopware\Components\Thumbnail\Manager;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Configurator\Group;
@@ -50,7 +50,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
     /** @var int */
     protected $imageImportMode;
 
-    /** @var boolean */
+    /** @var bool */
     protected $importExportErrorMode;
 
     /** @var \Enlight_Components_Db_Adapter_Pdo_Mysql */
@@ -92,6 +92,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
      * @param int $start
      * @param int $limit
      * @param $filter
+     *
      * @return array
      */
     public function readRecordIds($start = null, $limit = null, $filter = null)
@@ -123,8 +124,10 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
      *
      * @param array $ids
      * @param array $columns
-     * @return array
+     *
      * @throws
+     *
+     * @return array
      */
     public function read($ids, $columns)
     {
@@ -166,7 +169,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
 
             $temp = [];
             foreach ($out as $group) {
-                $temp [] = "{" . implode('|', $group) . "}";
+                $temp[] = '{' . implode('|', $group) . '}';
             }
 
             $image['relations'] = implode('&', $temp);
@@ -195,7 +198,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
             "GroupConcat( im.id, '|', mr.optionId, '|' , co.name, '|', cg.name
             ORDER by im.id
             SEPARATOR ';' ) as relations",
-            ' \'1\' as thumbnail'
+            ' \'1\' as thumbnail',
         ];
 
         return $columns;
@@ -213,6 +216,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
      * Insert/Update data into db
      *
      * @param array $records
+     *
      * @throws \Enlight_Event_Exception
      * @throws \Exception
      * @throws \Zend_Db_Adapter_Exception
@@ -251,16 +255,16 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
 
                 $relations = [];
                 if (isset($record['relations'])) {
-                    $importedRelations = explode("&", $record['relations']);
+                    $importedRelations = explode('&', $record['relations']);
 
                     foreach ($importedRelations as $key => $relation) {
-                        if ($relation === "") {
+                        if ($relation === '') {
                             continue;
                         }
 
                         $variantConfig = explode('|', preg_replace('/{|}/', '', $relation));
                         foreach ($variantConfig as $config) {
-                            list($group, $option) = explode(":", $config);
+                            list($group, $option) = explode(':', $config);
 
                             //Get configurator group
                             $cGroupModel = $this->manager->getRepository(Group::class)->findOneBy(['name' => $group]);
@@ -274,7 +278,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                                 continue;
                             }
 
-                            $relations[$key][] = ["group" => $cGroupModel, "option" => $cOptionModel];
+                            $relations[$key][] = ['group' => $cGroupModel, 'option' => $cOptionModel];
                         }
                     }
                 }
@@ -313,7 +317,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                     $thumbnail = (bool) $record['thumbnail'];
 
                     //generate thumbnails
-                    if ($media->getType() == Media::TYPE_IMAGE && $thumbnail) {
+                    if ($media->getType() === Media::TYPE_IMAGE && $thumbnail) {
                         $this->thumbnailManager->createMediaThumbnail($media, [], true);
                     }
                 }
@@ -340,7 +344,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                         ['main' => 2],
                         [
                             'articleID = ?' => $article->getId(),
-                            'id <> ?' => $image->getId()
+                            'id <> ?' => $image->getId(),
                         ]
                     );
                 }
@@ -352,10 +356,107 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
     }
 
     /**
+     * @return array
+     */
+    public function getSections()
+    {
+        return [
+            ['id' => 'default', 'name' => 'default'],
+        ];
+    }
+
+    /**
+     * @param string $section
+     *
+     * @return bool|mixed
+     */
+    public function getColumns($section)
+    {
+        $method = 'get' . ucfirst($section) . 'Columns';
+
+        if (method_exists($this, $method)) {
+            return $this->{$method}();
+        }
+
+        return false;
+    }
+
+    /**
+     * @param $message
+     *
+     * @throws \RuntimeException
+     */
+    public function saveMessage($message)
+    {
+        if ($this->importExportErrorMode === false) {
+            throw new \RuntimeException($message);
+        }
+
+        $this->setLogMessages($message);
+        $this->setLogState('true');
+    }
+
+    /**
+     * @return array
+     */
+    public function getLogMessages()
+    {
+        return $this->logMessages;
+    }
+
+    /**
+     * @param $logMessages
+     */
+    public function setLogMessages($logMessages)
+    {
+        $this->logMessages[] = $logMessages;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLogState()
+    {
+        return $this->logState;
+    }
+
+    /**
+     * @param $logState
+     */
+    public function setLogState($logState)
+    {
+        $this->logState = $logState;
+    }
+
+    /**
+     * @param array $columns
+     * @param array $ids
+     *
+     * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
+     */
+    public function getBuilder($columns, $ids)
+    {
+        $builder = $this->manager->createQueryBuilder();
+        $builder->select($columns)
+            ->from(Image::class, 'aimage')
+            ->innerJoin('aimage.article', 'article')
+            ->leftJoin(Detail::class, 'mv', Join::WITH, 'mv.articleId=article.id AND mv.kind=1')
+            ->leftJoin('aimage.mappings', 'im')
+            ->leftJoin('im.rules', 'mr')
+            ->leftJoin('mr.option', 'co')
+            ->leftJoin('co.group', 'cg')
+            ->where('aimage.id IN (:ids)')
+            ->groupBy('aimage.id')
+            ->setParameter('ids', $ids);
+
+        return $builder;
+    }
+
+    /**
      * Sets image mapping for variants
      *
      * @param array $relationGroups
-     * @param int $imageId
+     * @param int   $imageId
      */
     protected function setImageMappings($relationGroups, $imageId)
     {
@@ -406,10 +507,10 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                     ' ON ' . $alias . '.option_id = ' . $option->getId() .
                     ' AND ' . $alias . '.article_id = d.id ';
         }
-        $sql = "SELECT d.id
+        $sql = 'SELECT d.id
                 FROM s_articles_details d
-        " . $join . "
-        WHERE d.articleID = " . (int) $articleId;
+        ' . $join . '
+        WHERE d.articleID = ' . (int) $articleId;
 
         $details = $this->db->fetchCol($sql);
 
@@ -423,35 +524,12 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @return array
-     */
-    public function getSections()
-    {
-        return [
-            ['id' => 'default', 'name' => 'default']
-        ];
-    }
-
-    /**
-     * @param string $section
-     * @return bool|mixed
-     */
-    public function getColumns($section)
-    {
-        $method = 'get' . ucfirst($section) . 'Columns';
-
-        if (method_exists($this, $method)) {
-            return $this->{$method}();
-        }
-
-        return false;
-    }
-
-    /**
-     * @param string $url URL of the resource that should be loaded (ftp, http, file)
+     * @param string $url          URL of the resource that should be loaded (ftp, http, file)
      * @param string $baseFilename Optional: Instead of creating a hash, create a filename based on the given one
-     * @return bool|string returns the absolute path of the downloaded file
+     *
      * @throws \Exception
+     *
+     * @return bool|string returns the absolute path of the downloaded file
      */
     protected function load($url, $baseFilename = null)
     {
@@ -465,26 +543,28 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
             $message = SnippetsHelper::getNamespace()
                 ->get('adapters/articlesImages/directory_not_found', 'Destination directory %s does not exist.');
             throw new \Exception(sprintf($message, $destPath));
-        } elseif (!is_writable($destPath)) {
+        }
+
+        if (!is_writable($destPath)) {
             $message = SnippetsHelper::getNamespace()
                 ->get('adapters/articlesImages/directory_permissions', 'Destination directory %s does not have write permissions.');
             throw new \Exception(sprintf($message, $destPath));
         }
 
         $urlArray = parse_url($url);
-        $urlArray['path'] = explode("/", $urlArray['path']);
+        $urlArray['path'] = explode('/', $urlArray['path']);
         switch ($urlArray['scheme']) {
-            case "ftp":
-            case "http":
-            case "https":
-            case "file":
+            case 'ftp':
+            case 'http':
+            case 'https':
+            case 'file':
                 if ($baseFilename === null) {
-                    $filename = md5(uniqid(rand(), true));
+                    $filename = md5(uniqid(mt_rand(), true));
                 } else {
                     $filename = $baseFilename;
                 }
 
-                if (!$put_handle = fopen("$destPath/$filename", "w+")) {
+                if (!$put_handle = fopen("$destPath/$filename", 'wb+')) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/articlesImages/could_open_dir_file', 'Could not open %s/%s for writing');
                     throw new AdapterException(sprintf($message), $destPath, $filename);
@@ -493,7 +573,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                 //replace empty spaces
                 $url = str_replace(' ', '%20', $url);
 
-                if (!$get_handle = fopen($url, "r")) {
+                if (!$get_handle = fopen($url, 'rb')) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/articlesImages/could_not_open_url', 'Could not open %s for reading');
                     throw new AdapterException(sprintf($message, $url));
@@ -509,64 +589,5 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
         $message = SnippetsHelper::getNamespace()
             ->get('adapters/articlesImages/unsupported_schema', 'Unsupported schema %s.');
         throw new AdapterException(sprintf($message, $urlArray['scheme']));
-    }
-
-    public function saveMessage($message)
-    {
-        if ($this->importExportErrorMode === false) {
-            throw new \Exception($message);
-        }
-
-        $this->setLogMessages($message);
-        $this->setLogState('true');
-    }
-
-    public function getLogMessages()
-    {
-        return $this->logMessages;
-    }
-
-    public function setLogMessages($logMessages)
-    {
-        $this->logMessages[] = $logMessages;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLogState()
-    {
-        return $this->logState;
-    }
-
-    /**
-     * @param $logState
-     */
-    public function setLogState($logState)
-    {
-        $this->logState = $logState;
-    }
-
-    /**
-     * @param array $columns
-     * @param array $ids
-     * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
-     */
-    public function getBuilder($columns, $ids)
-    {
-        $builder = $this->manager->createQueryBuilder();
-        $builder->select($columns)
-            ->from(Image::class, 'aimage')
-            ->innerJoin('aimage.article', 'article')
-            ->leftJoin('Shopware\Models\Article\Detail', 'mv', Join::WITH, 'mv.articleId=article.id AND mv.kind=1')
-            ->leftJoin('aimage.mappings', 'im')
-            ->leftJoin('im.rules', 'mr')
-            ->leftJoin('mr.option', 'co')
-            ->leftJoin('co.group', 'cg')
-            ->where('aimage.id IN (:ids)')
-            ->groupBy('aimage.id')
-            ->setParameter('ids', $ids);
-
-        return $builder;
     }
 }

@@ -1,10 +1,10 @@
-//{block name="backend/swag_import_export/model/profile_list"}
+// {block name="backend/swag_import_export/model/profile_list"}
 Ext.define('Shopware.apps.SwagImportExport.model.ProfileList', {
     /**
      * Extends the standard ExtJS 4
      * @string
      */
-    extend : 'Ext.data.Model',
+    extend: 'Ext.data.Model',
     /**
      * Configure the data communication
      * @object
@@ -20,7 +20,7 @@ Ext.define('Shopware.apps.SwagImportExport.model.ProfileList', {
         { name: 'default', type: 'boolean', persist: false },
         { name: 'tree', type: 'string' }
     ],
-    
+
     proxy: {
         type: 'ajax',
         /**
@@ -29,8 +29,8 @@ Ext.define('Shopware.apps.SwagImportExport.model.ProfileList', {
          * @object
          */
         api: {
-			create:'{url controller="SwagImportExportProfile" action="createProfiles"}',
-            read:'{url controller="SwagImportExportProfile" action="getProfiles"}',
+            create: '{url controller="SwagImportExportProfile" action="createProfiles"}',
+            read: '{url controller="SwagImportExportProfile" action="getProfiles"}',
             update: '{url controller="SwagImportExportProfile" action="updateProfiles"}',
             destroy: '{url controller="SwagImportExportProfile" action="deleteProfiles"}'
         },
@@ -42,10 +42,10 @@ Ext.define('Shopware.apps.SwagImportExport.model.ProfileList', {
             type: 'json',
             root: 'data'
         },
-		writer: {
-			type: 'json',
-			root: 'data'
-		}
+        writer: {
+            type: 'json',
+            root: 'data'
+        }
     }
 });
-//{/block}
+// {/block}

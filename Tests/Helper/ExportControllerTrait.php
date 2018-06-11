@@ -80,6 +80,7 @@ trait ExportControllerTrait
             'limit' => '',
             'offset' => '',
             'categories' => '',
+            'productStreamId' => '',
             'variants' => '',
             'ordernumberFrom' => '',
             'dateFrom' => '',

@@ -12,21 +12,21 @@ use Shopware\Commands\ShopwareCommand;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\Profile\Profile;
 use Shopware\Components\SwagImportExport\UploadPathProvider;
+use Shopware\Components\SwagImportExport\Utils\CommandHelper;
 use Shopware\CustomModels\ImportExport\Profile as ProfileEntity;
 use Shopware\CustomModels\ImportExport\Repository;
 use Shopware_Plugins_Backend_SwagImportExport_Bootstrap as SwagImportExport_Bootstrap;
 use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Shopware\Components\SwagImportExport\Utils\CommandHelper;
 
 class ImportCommand extends ShopwareCommand
 {
     /** @var string */
     protected $profile;
 
-    /** @var ProfileEntity  */
+    /** @var ProfileEntity */
     protected $profileEntity;
 
     /** @var string */
@@ -48,7 +48,7 @@ class ImportCommand extends ShopwareCommand
             ->addArgument('filepath', InputArgument::REQUIRED, 'Path to file to read from.')
             ->addOption('profile', 'p', InputOption::VALUE_REQUIRED, 'Which profile will be used?', null)
             ->addOption('format', 'f', InputOption::VALUE_REQUIRED, 'What is the format of the imported file - XML or CSV?', null)
-            ->setHelp("The <info>%command.name%</info> imports data from a file.");
+            ->setHelp('The <info>%command.name%</info> imports data from a file.');
     }
 
     /**
@@ -88,11 +88,10 @@ class ImportCommand extends ShopwareCommand
     }
 
     /**
-     *
      * @param OutputInterface $output
-     * @param ProfileEntity $profileModel
-     * @param string $file
-     * @param string $format
+     * @param ProfileEntity   $profileModel
+     * @param string          $file
+     * @param string          $format
      */
     protected function start(OutputInterface $output, $profileModel, $file, $format)
     {
@@ -101,17 +100,17 @@ class ImportCommand extends ShopwareCommand
                 'profileEntity' => $profileModel,
                 'filePath' => $file,
                 'format' => $format,
-                'username' => 'Commandline'
+                'username' => 'Commandline',
             ]
         );
 
-        $output->writeln('<info>' . sprintf("Using profile: %s.", $profileModel->getName()) . '</info>');
-        $output->writeln('<info>' . sprintf("Using format: %s.", $format) . '</info>');
-        $output->writeln('<info>' . sprintf("Using file: %s.", $file) . '</info>');
+        $output->writeln('<info>' . sprintf('Using profile: %s.', $profileModel->getName()) . '</info>');
+        $output->writeln('<info>' . sprintf('Using format: %s.', $format) . '</info>');
+        $output->writeln('<info>' . sprintf('Using file: %s.', $file) . '</info>');
 
         $preparationData = $helper->prepareImport();
         $count = $preparationData['count'];
-        $output->writeln('<info>' . sprintf("Total count: %d.", $count) . '</info>');
+        $output->writeln('<info>' . sprintf('Total count: %d.', $count) . '</info>');
 
         $position = 0;
 
@@ -119,12 +118,13 @@ class ImportCommand extends ShopwareCommand
             $data = $helper->importAction();
             $this->container->get('models')->clear();
             $position = $data['data']['position'];
-            $output->writeln('<info>' . sprintf("Processed: %d.", $position) . '</info>');
+            $output->writeln('<info>' . sprintf('Processed: %d.', $position) . '</info>');
         }
     }
 
     /**
      * @param InputInterface $input
+     *
      * @throws \Exception
      */
     protected function prepareImportInputValidation(InputInterface $input)

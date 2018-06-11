@@ -8,8 +8,8 @@
 
 namespace Shopware\Components\SwagImportExport\Validators;
 
-use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
+use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 
 class ArticlePriceValidator extends Validator
 {
@@ -27,25 +27,26 @@ class ArticlePriceValidator extends Validator
             'pseudoPrice',
         ],
         'int' => [
-            'from'
-        ]
+            'from',
+        ],
     ];
 
     private $requiredFields = [
-        'orderNumber'
+        'orderNumber',
     ];
 
     private $snippetData = [
         'orderNumber' => [
             'adapters/ordernumber_required',
-            'Order number is required.'
-        ]
+            'Order number is required.',
+        ],
     ];
 
     /**
      * Checks whether required fields are filled-in
      *
      * @param array $record
+     *
      * @throws AdapterException
      */
     public function checkRequiredFields($record)

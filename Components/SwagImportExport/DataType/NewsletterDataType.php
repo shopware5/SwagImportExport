@@ -13,11 +13,11 @@ class NewsletterDataType
     /**
      * @var array
      */
-    public static $mapper = array(
-        'email' => array(
-            'email'
-        ),
-        'string' => array(
+    public static $mapper = [
+        'email' => [
+            'email',
+        ],
+        'string' => [
             'groupName',
             'salutation',
             'firstName',
@@ -26,20 +26,20 @@ class NewsletterDataType
             'streetNumber',
             'zipCode',
             'city',
-        ),
-        'int' => array(
+        ],
+        'int' => [
             'lastNewsletter',
             'lastRead',
-            'userID'
-        ),
-    );
+            'userID',
+        ],
+    ];
 
     /**
      * @var array
      */
-    public static $defaultFieldsForCreate = array(
-        'string' => array(
-            'groupName'
-        )
-    );
+    public static $defaultFieldsForCreate = [
+        'string' => [
+            'groupName',
+        ],
+    ];
 }

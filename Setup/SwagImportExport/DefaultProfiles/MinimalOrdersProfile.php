@@ -13,7 +13,7 @@ use Shopware\Components\SwagImportExport\DbAdapters\DataDbAdapter;
 class MinimalOrdersProfile implements \JsonSerializable, ProfileMetaData
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getAdapter()
     {
@@ -21,7 +21,7 @@ class MinimalOrdersProfile implements \JsonSerializable, ProfileMetaData
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -29,7 +29,7 @@ class MinimalOrdersProfile implements \JsonSerializable, ProfileMetaData
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getDescription()
     {
@@ -37,7 +37,7 @@ class MinimalOrdersProfile implements \JsonSerializable, ProfileMetaData
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {
@@ -57,9 +57,9 @@ class MinimalOrdersProfile implements \JsonSerializable, ProfileMetaData
                             'name' => 'HeaderChild',
                             'index' => 0,
                             'type' => 'node',
-                            'shopwareField' => ''
-                        ]
-                    ]
+                            'shopwareField' => '',
+                        ],
+                    ],
                 ],
                 [
                     'id' => '537359399c8b7',
@@ -77,12 +77,12 @@ class MinimalOrdersProfile implements \JsonSerializable, ProfileMetaData
                             'parentKey' => '',
                             'shopwareField' => '',
                             'defaultValue' => '',
-                            'children' => $this->getOrderStatusFields()
-                        ]
+                            'children' => $this->getOrderStatusFields(),
+                        ],
                     ],
-                    'defaultValue' => ''
-                ]
-            ]
+                    'defaultValue' => '',
+                ],
+            ],
         ];
     }
 
@@ -98,7 +98,7 @@ class MinimalOrdersProfile implements \JsonSerializable, ProfileMetaData
                 'index' => 0,
                 'name' => 'orderId',
                 'shopwareField' => 'orderId',
-                'defaultValue' => ''
+                'defaultValue' => '',
             ],
             1 => [
                 'id' => '568b80cff3bd0',
@@ -106,7 +106,7 @@ class MinimalOrdersProfile implements \JsonSerializable, ProfileMetaData
                 'index' => 1,
                 'name' => 'number',
                 'shopwareField' => 'number',
-                'defaultValue' => ''
+                'defaultValue' => '',
             ],
             2 => [
                 'id' => '568b80d808eda',
@@ -114,7 +114,7 @@ class MinimalOrdersProfile implements \JsonSerializable, ProfileMetaData
                 'index' => 2,
                 'name' => 'customerId',
                 'shopwareField' => 'customerId',
-                'defaultValue' => ''
+                'defaultValue' => '',
             ],
             3 => [
                 'id' => '568b80e3b5e42',
@@ -122,7 +122,7 @@ class MinimalOrdersProfile implements \JsonSerializable, ProfileMetaData
                 'index' => 3,
                 'name' => 'paymentStatusId',
                 'shopwareField' => 'paymentStatusId',
-                'defaultValue' => ''
+                'defaultValue' => '',
             ],
             4 => [
                 'id' => '568b80ed9fdd3',
@@ -130,8 +130,8 @@ class MinimalOrdersProfile implements \JsonSerializable, ProfileMetaData
                 'index' => 4,
                 'name' => 'status',
                 'shopwareField' => 'status',
-                'defaultValue' => ''
-            ]
+                'defaultValue' => '',
+            ],
         ];
     }
 }

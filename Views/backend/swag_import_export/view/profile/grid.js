@@ -1,5 +1,5 @@
-//{namespace name=backend/swag_import_export/view/profile/grid}
-//{block name="backend/swag_import_export/view/profile/grid"}
+// {namespace name=backend/swag_import_export/view/profile/grid}
+// {block name="backend/swag_import_export/view/profile/grid"}
 Ext.define('Shopware.apps.SwagImportExport.view.profile.Grid', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.swag-import-export-profile-grid',
@@ -75,7 +75,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Grid', {
                     }
                 }, {
                     iconCls: 'sprite-blue-document-copy',
-                    cls:'duplicate',
+                    cls: 'duplicate',
                     handler: function (view, rowIndex, colIndex, item, opts, record) {
                         me.fireEvent('duplicateProfile', view, record);
                     }
@@ -109,7 +109,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Grid', {
         me.filefield = Ext.create('Ext.form.field.File', {
             name: 'profilefile',
             buttonOnly: true,
-            buttonConfig : {
+            buttonConfig: {
                 iconCls: 'sprite-plus-circle-frame'
             },
             buttonText: '{s name=swag_import_export/profile/grid/button_import_profile}Import profile{/s}',
@@ -158,13 +158,13 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Grid', {
                     }
                 }
             }, '->', {
-                xtype:'textfield',
-                itemId:'searchfield',
-                cls:'searchfield',
-                width:170,
+                xtype: 'textfield',
+                itemId: 'searchfield',
+                cls: 'searchfield',
+                width: 170,
                 emptyText: '{s name=swag_import_export/profile/grid/search}Search...{/s}',
-                enableKeyEvents:true,
-                checkChangeBuffer:500,
+                enableKeyEvents: true,
+                checkChangeBuffer: 500,
                 listeners: {
                     change: function(field, newValue) {
                         me.fireEvent('searchfilterchange', field, newValue);
@@ -207,4 +207,4 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Grid', {
         }
     }
 });
-//{/block}
+// {/block}

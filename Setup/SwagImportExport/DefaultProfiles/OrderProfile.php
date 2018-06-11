@@ -12,12 +12,11 @@ use Shopware\Components\SwagImportExport\DbAdapters\DataDbAdapter;
 
 /**
  * Class OrderProfile
- * @package Shopware\Setup\SwagImportExport\DefaultProfiles
  */
 class OrderProfile implements \JsonSerializable, ProfileMetaData
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getAdapter()
     {
@@ -25,7 +24,7 @@ class OrderProfile implements \JsonSerializable, ProfileMetaData
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -33,7 +32,7 @@ class OrderProfile implements \JsonSerializable, ProfileMetaData
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getDescription()
     {
@@ -41,7 +40,7 @@ class OrderProfile implements \JsonSerializable, ProfileMetaData
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {
@@ -49,7 +48,7 @@ class OrderProfile implements \JsonSerializable, ProfileMetaData
             'id' => 'root',
             'name' => 'Root',
             'type' => 'node',
-            'children' =>[
+            'children' => [
                 0 => [
                     'id' => '537359399c80a',
                     'name' => 'Header',
@@ -61,9 +60,9 @@ class OrderProfile implements \JsonSerializable, ProfileMetaData
                             'name' => 'HeaderChild',
                             'index' => 0,
                             'type' => 'node',
-                            'shopwareField' => ''
-                        ]
-                    ]
+                            'shopwareField' => '',
+                        ],
+                    ],
                 ],
                 1 => [
                     'id' => '537359399c8b7',
@@ -77,15 +76,15 @@ class OrderProfile implements \JsonSerializable, ProfileMetaData
                             'index' => 0,
                             'type' => 'iteration',
                             'adapter' => 'default',
-                            'attributes' => NULL,
+                            'attributes' => null,
                             'children' => $this->getOrderFields(),
                             'shopwareField' => '',
-                            'parentKey' => ''
-                        ]
+                            'parentKey' => '',
+                        ],
                     ],
-                    'shopwareField' => ''
-                ]
-            ]
+                    'shopwareField' => '',
+                ],
+            ],
         ];
     }
 
@@ -95,369 +94,323 @@ class OrderProfile implements \JsonSerializable, ProfileMetaData
     private function getOrderFields()
     {
         return [
-            0 =>
-                [
+            0 => [
                     'id' => '53eca77b49d6d',
                     'type' => 'leaf',
                     'index' => 0,
                     'name' => 'orderId',
                     'shopwareField' => 'orderId',
                 ],
-            1 =>
-                [
+            1 => [
                     'id' => '5373865547d06',
                     'name' => 'number',
                     'index' => 1,
                     'type' => 'leaf',
                     'shopwareField' => 'number',
                 ],
-            2 =>
-                [
+            2 => [
                     'id' => '53ecb1fa09cfd',
                     'type' => 'leaf',
                     'index' => 2,
                     'name' => 'customerId',
                     'shopwareField' => 'customerId',
                 ],
-            3 =>
-                [
+            3 => [
                     'id' => '53ecb3a3e43fb',
                     'type' => 'leaf',
                     'index' => 3,
                     'name' => 'orderStatusID',
                     'shopwareField' => 'status',
                 ],
-            4 =>
-                [
+            4 => [
                     'id' => '53ecb496e80e0',
                     'type' => 'leaf',
                     'index' => 4,
                     'name' => 'cleared',
                     'shopwareField' => 'cleared',
                 ],
-            5 =>
-                [
+            5 => [
                     'id' => '53ecb4e584159',
                     'type' => 'leaf',
                     'index' => 5,
                     'name' => 'paymentID',
                     'shopwareField' => 'paymentId',
                 ],
-            6 =>
-                [
+            6 => [
                     'id' => '53ecb4f9a203b',
                     'type' => 'leaf',
                     'index' => 6,
                     'name' => 'dispatchId',
                     'shopwareField' => 'dispatchId',
                 ],
-            7 =>
-                [
+            7 => [
                     'id' => '53ecb510a3379',
                     'type' => 'leaf',
                     'index' => 7,
                     'name' => 'partnerId',
                     'shopwareField' => 'partnerId',
                 ],
-            8 =>
-                [
+            8 => [
                     'id' => '53ecb51a93f21',
                     'type' => 'leaf',
                     'index' => 8,
                     'name' => 'shopId',
                     'shopwareField' => 'shopId',
                 ],
-            9 =>
-                [
+            9 => [
                     'id' => '53ecb6a059334',
                     'type' => 'leaf',
                     'index' => 9,
                     'name' => 'invoiceAmount',
                     'shopwareField' => 'invoiceAmount',
                 ],
-            10 =>
-                [
+            10 => [
                     'id' => '53ecb6a74e399',
                     'type' => 'leaf',
                     'index' => 10,
                     'name' => 'invoiceAmountNet',
                     'shopwareField' => 'invoiceAmountNet',
                 ],
-            11 =>
-                [
+            11 => [
                     'id' => '53ecb6b4587ba',
                     'type' => 'leaf',
                     'index' => 11,
                     'name' => 'invoiceShipping',
                     'shopwareField' => 'invoiceShipping',
                 ],
-            12 =>
-                [
+            12 => [
                     'id' => '53ecb6be27e2e',
                     'type' => 'leaf',
                     'index' => 12,
                     'name' => 'invoiceShippingNet',
                     'shopwareField' => 'invoiceShippingNet',
                 ],
-            13 =>
-                [
+            13 => [
                     'id' => '53ecb6db22a2e',
                     'type' => 'leaf',
                     'index' => 13,
                     'name' => 'orderTime',
                     'shopwareField' => 'orderTime',
                 ],
-            14 =>
-                [
+            14 => [
                     'id' => '53ecb6ebaf4c5',
                     'type' => 'leaf',
                     'index' => 14,
                     'name' => 'transactionId',
                     'shopwareField' => 'transactionId',
                 ],
-            15 =>
-                [
+            15 => [
                     'id' => '53ecb7014e7ad',
                     'type' => 'leaf',
                     'index' => 15,
                     'name' => 'comment',
                     'shopwareField' => 'comment',
                 ],
-            16 =>
-                [
+            16 => [
                     'id' => '53ecb7f0df5db',
                     'type' => 'leaf',
                     'index' => 16,
                     'name' => 'customerComment',
                     'shopwareField' => 'customerComment',
                 ],
-            17 =>
-                [
+            17 => [
                     'id' => '53ecb7f265873',
                     'type' => 'leaf',
                     'index' => 17,
                     'name' => 'internalComment',
                     'shopwareField' => 'internalComment',
                 ],
-            18 =>
-                [
+            18 => [
                     'id' => '53ecb7f3baed3',
                     'type' => 'leaf',
                     'index' => 18,
                     'name' => 'net',
                     'shopwareField' => 'net',
                 ],
-            19 =>
-                [
+            19 => [
                     'id' => '53ecb7f518b2a',
                     'type' => 'leaf',
                     'index' => 19,
                     'name' => 'taxFree',
                     'shopwareField' => 'taxFree',
                 ],
-            20 =>
-                [
+            20 => [
                     'id' => '53ecb7f778bb0',
                     'type' => 'leaf',
                     'index' => 20,
                     'name' => 'temporaryId',
                     'shopwareField' => 'temporaryId',
                 ],
-            21 =>
-                [
+            21 => [
                     'id' => '53ecb7f995899',
                     'type' => 'leaf',
                     'index' => 21,
                     'name' => 'referer',
                     'shopwareField' => 'referer',
                 ],
-            22 =>
-                [
+            22 => [
                     'id' => '53ecb8ba28544',
                     'type' => 'leaf',
                     'index' => 22,
                     'name' => 'clearedDate',
                     'shopwareField' => 'clearedDate',
                 ],
-            23 =>
-                [
+            23 => [
                     'id' => '53ecb8bd55dda',
                     'type' => 'leaf',
                     'index' => 23,
                     'name' => 'trackingCode',
                     'shopwareField' => 'trackingCode',
                 ],
-            24 =>
-                [
+            24 => [
                     'id' => '53ecb8c076318',
                     'type' => 'leaf',
                     'index' => 24,
                     'name' => 'languageIso',
                     'shopwareField' => 'languageIso',
                 ],
-            25 =>
-                [
+            25 => [
                     'id' => '53ecb8c42923d',
                     'type' => 'leaf',
                     'index' => 25,
                     'name' => 'currency',
                     'shopwareField' => 'currency',
                 ],
-            26 =>
-                [
+            26 => [
                     'id' => '53ecb8c74168b',
                     'type' => 'leaf',
                     'index' => 26,
                     'name' => 'currencyFactor',
                     'shopwareField' => 'currencyFactor',
                 ],
-            27 =>
-                [
+            27 => [
                     'id' => '53ecb9203cb33',
                     'type' => 'leaf',
                     'index' => 27,
                     'name' => 'remoteAddress',
                     'shopwareField' => 'remoteAddress',
                 ],
-            28 =>
-                [
+            28 => [
                     'id' => '53fddf437e561',
                     'type' => 'node',
                     'index' => 28,
                     'name' => 'details',
                     'shopwareField' => '',
                     'children' => [
-                        0 =>
-                            [
+                        0 => [
                                 'id' => '53ecb9c7d602d',
                                 'type' => 'leaf',
                                 'index' => 0,
                                 'name' => 'orderDetailId',
                                 'shopwareField' => 'orderDetailId',
                             ],
-                        1 =>
-                            [
+                        1 => [
                                 'id' => '53ecb9ee6f821',
                                 'type' => 'leaf',
                                 'index' => 1,
                                 'name' => 'articleId',
                                 'shopwareField' => 'articleId',
                             ],
-                        2 =>
-                            [
+                        2 => [
                                 'id' => '53ecbaa627334',
                                 'type' => 'leaf',
                                 'index' => 2,
                                 'name' => 'taxId',
                                 'shopwareField' => 'taxId',
                             ],
-                        3 =>
-                            [
+                        3 => [
                                 'id' => '53ecba416356a',
                                 'type' => 'leaf',
                                 'index' => 3,
                                 'name' => 'taxRate',
                                 'shopwareField' => 'taxRate',
                             ],
-                        4 =>
-                            [
+                        4 => [
                                 'id' => '53ecbaa813093',
                                 'type' => 'leaf',
                                 'index' => 4,
                                 'name' => 'statusId',
                                 'shopwareField' => 'statusId',
                             ],
-                        5 =>
-                            [
+                        5 => [
                                 'id' => '53ecbb05eccf1',
                                 'type' => 'leaf',
                                 'index' => 5,
                                 'name' => 'number',
                                 'shopwareField' => 'number',
                             ],
-                        6 =>
-                            [
+                        6 => [
                                 'id' => '53ecbb0411d43',
                                 'type' => 'leaf',
                                 'index' => 6,
                                 'name' => 'articleNumber',
                                 'shopwareField' => 'articleNumber',
                             ],
-                        7 =>
-                            [
+                        7 => [
                                 'id' => '53ecba19dc9ef',
                                 'type' => 'leaf',
                                 'index' => 7,
                                 'name' => 'price',
                                 'shopwareField' => 'price',
                             ],
-                        8 =>
-                            [
+                        8 => [
                                 'id' => '53ecba29e1a37',
                                 'type' => 'leaf',
                                 'index' => 8,
                                 'name' => 'quantity',
                                 'shopwareField' => 'quantity',
                             ],
-                        9 =>
-                            [
+                        9 => [
                                 'id' => '53ecba34bf110',
                                 'type' => 'leaf',
                                 'index' => 9,
                                 'name' => 'articleName',
                                 'shopwareField' => 'articleName',
                             ],
-                        10 =>
-                            [
+                        10 => [
                                 'id' => '53ecbb07dda54',
                                 'type' => 'leaf',
                                 'index' => 10,
                                 'name' => 'shipped',
                                 'shopwareField' => 'shipped',
                             ],
-                        11 =>
-                            [
+                        11 => [
                                 'id' => '53ecbb09bb007',
                                 'type' => 'leaf',
                                 'index' => 11,
                                 'name' => 'shippedGroup',
                                 'shopwareField' => 'shippedGroup',
                             ],
-                        12 =>
-                            [
+                        12 => [
                                 'id' => '53ecbbc15479a',
                                 'type' => 'leaf',
                                 'index' => 12,
                                 'name' => 'releaseDate',
                                 'shopwareField' => 'releasedate',
                             ],
-                        13 =>
-                            [
+                        13 => [
                                 'id' => '53ecbbc40bcd3',
                                 'type' => 'leaf',
                                 'index' => 13,
                                 'name' => 'mode',
                                 'shopwareField' => 'mode',
                             ],
-                        14 =>
-                            [
+                        14 => [
                                 'id' => '53ecbbc57169d',
                                 'type' => 'leaf',
                                 'index' => 14,
                                 'name' => 'esdArticle',
                                 'shopwareField' => 'esd',
                             ],
-                        15 =>
-                            [
+                        15 => [
                                 'id' => '53ecbbc6b6f2c',
                                 'type' => 'leaf',
                                 'index' => 15,
                                 'name' => 'config',
                                 'shopwareField' => 'config',
-                            ]
-                    ]
-                ]
+                            ],
+                    ],
+                ],
         ];
     }
-
 }

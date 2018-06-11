@@ -1,5 +1,4 @@
 <?php
-
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -11,8 +10,6 @@ namespace Shopware\Components\SwagImportExport\Transformers;
 
 /**
  * The responsibility of this class is to restructure the flat array to tree and vise versa
- *
- * @package Shopware\Components\SwagImportExport\Transformers
  */
 class TreeTransformer implements DataTransformerAdapter, ComposerInterface
 {
@@ -39,7 +36,7 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
     protected $currentRecord;
     protected $preparedData;
 
-    protected $iterationNodes = array();
+    protected $iterationNodes = [];
 
     /**
      * Sets the config that has the tree structure
@@ -55,13 +52,15 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
      * Transforms the flat array into tree with list of nodes containing children and attributes.
      *
      * @param $data
-     * @return array|mixed
+     *
      * @throws \Enlight_Event_Exception
+     *
+     * @return array|mixed
      */
     public function transformForward($data)
     {
         $this->setData($data);
-        $transformData = array();
+        $transformData = [];
 
         $iterationPart = $this->getIterationPart();
 
@@ -74,12 +73,12 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
         }
 
         //creates iteration array
-        $tree = array($iterationPart['name'] => $transformData);
+        $tree = [$iterationPart['name'] => $transformData];
 
         $tree = Shopware()->Events()->filter(
             'Shopware_Components_SwagImportExport_Transformers_TreeTransformer_TransformForward',
             $tree,
-            array('subject' => $this)
+            ['subject' => $this]
         );
 
         return $tree;
@@ -89,6 +88,7 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
      * Transforms a list of nodes containing children and attributes into flat array.
      *
      * @param $data
+     *
      * @return mixed
      */
     public function transformBackward($data)
@@ -96,7 +96,7 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
         $data = Shopware()->Events()->filter(
             'Shopware_Components_SwagImportExport_Transformers_TreeTransformer_TransformBackward',
             $data,
-            array('subject' => $this)
+            ['subject' => $this]
         );
 
         //gets iteration nodes
@@ -114,12 +114,14 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
      * Helper method which creates iteration nodes array structure
      *
      * @param array $node
-     * @return array
+     *
      * @throws \Exception
+     *
+     * @return array
      */
     public function buildIterationNode($node)
     {
-        $transformData = array();
+        $transformData = [];
 
         if ($this->currentRecord === null) {
             throw new \Exception('Current record was not found');
@@ -159,7 +161,7 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
     /**
      * Helper method which creates rawData from array structure
      *
-     * @param array $data
+     * @param array  $data
      * @param string $type
      * @param string $nodePath
      */
@@ -246,7 +248,8 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
      *
      * @param array $node
      * @param array $mapper
-     * @param null $adapterType
+     * @param null  $adapterType
+     *
      * @return array
      */
     public function transformToTree($node, $mapper = null, $adapterType = null)
@@ -356,8 +359,6 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
                 $this->findIterationPart($value);
             }
         }
-
-        return;
     }
 
     /**
@@ -375,6 +376,11 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
         return $this->iterationPart;
     }
 
+    /**
+     * @throws \RuntimeException
+     *
+     * @return array|null
+     */
     public function getHeaderAndFooterData()
     {
         if ($this->headerFooterData === null) {
@@ -385,10 +391,10 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
             $modifiedTree = $this->transformToTree($tree);
 
             if (!isset($tree['name'])) {
-                throw new \Exception('Root category in the tree does not exists');
+                throw new \RuntimeException('Root category in the tree does not exists');
             }
 
-            $this->headerFooterData = array($tree['name'] => $modifiedTree);
+            $this->headerFooterData = [$tree['name'] => $modifiedTree];
         }
 
         return $this->headerFooterData;
@@ -412,6 +418,7 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
     /**
      * @param string $key
      * @param string $value
+     *
      * @throws \Exception
      */
     public function saveMapper($key, $value)
@@ -448,15 +455,16 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
 
     /**
      * @param $type
-     * @return null
+     *
+     * @return null|array
      */
     public function getBufferData($type)
     {
         if (isset($this->bufferData[$type])) {
             return $this->bufferData[$type];
-        } else {
-            return null;
         }
+
+        return null;
     }
 
     /**
@@ -510,6 +518,7 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
     /**
      * @param $type
      * @param $recordLink
+     *
      * @return mixed
      */
     public function getPreparedData($type, $recordLink)
@@ -529,7 +538,7 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
      * Create iteration node mapper for import
      *
      * @param mixed $node
-     * @param null $nodePath
+     * @param null  $nodePath
      */
     protected function createIterationNodeMapper($node, $nodePath = null)
     {
@@ -553,7 +562,7 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
      * Generates import mapper from the js tree
      *
      * @param mixed $node
-     * @param null $nodePath
+     * @param null  $nodePath
      */
     protected function generateMapper($node, $nodePath = null)
     {
@@ -595,7 +604,7 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
     protected function removeIterationPart(&$node)
     {
         if (isset($node['adapter'])) {
-            $node = array('name' => '_currentMarker');
+            $node = ['name' => '_currentMarker'];
         }
 
         if (isset($node['children'])) {

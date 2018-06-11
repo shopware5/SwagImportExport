@@ -11,12 +11,12 @@ namespace Shopware\Components\SwagImportExport;
 use Shopware\Components\SwagImportExport\DbAdapters\DataDbAdapter;
 use Shopware\Components\SwagImportExport\Logger\LogDataStruct;
 use Shopware\Components\SwagImportExport\Logger\Logger;
-use \Shopware\Components\SwagImportExport\Profile\Profile;
+use Shopware\Components\SwagImportExport\Profile\Profile;
 use Shopware\Components\SwagImportExport\Session\Session;
 use Shopware\Components\SwagImportExport\Utils\DataColumnOptions;
 use Shopware\Components\SwagImportExport\Utils\DataFilter;
 use Shopware\Components\SwagImportExport\Utils\DataLimit;
-use \Shopware\Components\SwagImportExport\Utils\SnippetsHelper as SnippetsHelper;
+use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 
 class DataIO
 {
@@ -99,9 +99,10 @@ class DataIO
     private $uploadPathProvider;
 
     /**
-     * @param DataDbAdapter $dbAdapter
-     * @param Session $dataSession
-     * @param Logger $logger
+     * @param DataDbAdapter      $dbAdapter
+     * @param Session            $dataSession
+     * @param Logger             $logger
+     * @param UploadPathProvider $uploadPathProvider
      */
     public function __construct(DataDbAdapter $dbAdapter, $dataSession, $logger, UploadPathProvider $uploadPathProvider)
     {
@@ -130,7 +131,8 @@ class DataIO
     }
 
     /**
-     * @param integer $numberOfRecords
+     * @param int $numberOfRecords
+     *
      * @return mixed
      */
     public function read($numberOfRecords)
@@ -143,11 +145,13 @@ class DataIO
 
         $dbAdapter = $this->getDbAdapter();
 
-        $rawData = $dbAdapter->read($ids, $columns);
-
-        return $rawData;
+        return $dbAdapter->read($ids, $columns);
     }
 
+    /**
+     * @param $data
+     * @param $defaults
+     */
     public function write($data, $defaults)
     {
         $dbAdapter = $this->getDbAdapter();
@@ -179,7 +183,7 @@ class DataIO
         $this->logger->write($messages, $status, $this->dataSession->getEntity());
 
         $logDataStruct = new LogDataStruct(
-            date("Y-m-d H:i:s"),
+            date('Y-m-d H:i:s'),
             $fileName,
             $profileName,
             implode("\n", $messages),
@@ -189,6 +193,9 @@ class DataIO
         $this->logger->writeToFile($logDataStruct);
     }
 
+    /**
+     * @return array
+     */
     public function getUnprocessedData()
     {
         $dbAdapter = $this->getDbAdapter();
@@ -221,6 +228,7 @@ class DataIO
         }
 
         $this->setRecordIds($ids);
+
         return $this;
     }
 
@@ -259,6 +267,7 @@ class DataIO
      * Generates file name
      *
      * @param \Shopware\Components\SwagImportExport\Profile\Profile $profile
+     *
      * @return string
      */
     public function generateFileName(Profile $profile)
@@ -285,6 +294,7 @@ class DataIO
      * Generates random hash depends on the length
      *
      * @param int $length
+     *
      * @return string
      */
     public function generateRandomHash($length)
@@ -312,6 +322,7 @@ class DataIO
      * Creates directory
      *
      * @param string $path
+     *
      * @throws \Exception
      */
     public function createDirectory($path)
@@ -329,15 +340,16 @@ class DataIO
      * For now we will write the ids as a serialized array.
      *
      * @param Profile $profile
+     *
      * @throws \Exception
      */
     public function startSession(Profile $profile)
     {
-        $sessionData = array(
+        $sessionData = [
             'type' => $this->getType(),
             'fileName' => $this->getFileName(),
             'format' => $this->getFormat(),
-        );
+        ];
 
         $session = $this->getDataSession();
 
@@ -555,7 +567,7 @@ class DataIO
     /**
      * Returns db columns
      *
-     * @return string
+     * @return array
      */
     public function getColumns()
     {
@@ -573,8 +585,10 @@ class DataIO
      *
      * @param int $start
      * @param int $numberOfRecords
-     * @return array
+     *
      * @throws \Exception
+     *
+     * @return array
      */
     private function loadIds($start, $numberOfRecords)
     {
@@ -586,9 +600,9 @@ class DataIO
         }
 
         $end = $start + $numberOfRecords;
-        $filterIds = array();
+        $filterIds = [];
 
-        for ($index = $start; $index < $end; $index++) {
+        for ($index = $start; $index < $end; ++$index) {
             if (isset($storedIds[$index])) {
                 $filterIds[] = $storedIds[$index];
             }

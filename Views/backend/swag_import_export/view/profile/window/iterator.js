@@ -1,5 +1,5 @@
-//{namespace name=backend/swag_import_export/view/profile/iterator}
-//{block name="backend/swag_import_export/view/profile/window/iterator"}
+// {namespace name=backend/swag_import_export/view/profile/iterator}
+// {block name="backend/swag_import_export/view/profile/window/iterator"}
 Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Iterator', {
     /**
      * Define that the order main window is an extension of the enlight application window
@@ -31,8 +31,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Iterator', {
     title: '{s name=swag_import_export/profile/iterator/title}Extend dataset{/s}',
 
     initComponent: function() {
-        var me = this,
-            treePanel;
+        var me = this;
 
         me.items = me.buildItems();
         me.dockedItems = me.buildDockedItems();
@@ -236,4 +235,4 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Iterator', {
         });
     }
 });
-//{/block}
+// {/block}

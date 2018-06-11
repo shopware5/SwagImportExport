@@ -8,18 +8,20 @@
 
 namespace Shopware\Components\SwagImportExport\Factories;
 
-use Shopware\Components\SwagImportExport\FileIO\CsvFileWriter;
-use Shopware\Components\SwagImportExport\FileIO\XmlFileWriter;
 use Shopware\Components\SwagImportExport\FileIO\CsvFileReader;
+use Shopware\Components\SwagImportExport\FileIO\CsvFileWriter;
 use Shopware\Components\SwagImportExport\FileIO\XmlFileReader;
+use Shopware\Components\SwagImportExport\FileIO\XmlFileWriter;
 use Shopware\Components\SwagImportExport\Utils\FileHelper;
 
 class FileIOFactory extends \Enlight_Class implements \Enlight_Hook
 {
     /**
      * @param string $format
-     * @return CsvFileReader|XmlFileReader
+     *
      * @throws \Exception
+     *
+     * @return CsvFileReader|XmlFileReader
      */
     public function createFileReader($format)
     {
@@ -35,8 +37,10 @@ class FileIOFactory extends \Enlight_Class implements \Enlight_Hook
 
     /**
      * @param string $format
-     * @return CsvFileWriter|XmlFileWriter
+     *
      * @throws \Exception
+     *
+     * @return CsvFileWriter|XmlFileWriter
      */
     public function createFileWriter($format)
     {

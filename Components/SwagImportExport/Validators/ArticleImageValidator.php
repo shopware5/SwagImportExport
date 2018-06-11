@@ -8,8 +8,8 @@
 
 namespace Shopware\Components\SwagImportExport\Validators;
 
-use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
+use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 
 class ArticleImageValidator extends Validator
 {
@@ -18,36 +18,37 @@ class ArticleImageValidator extends Validator
             'ordernumber',
             'image',
             'description',
-            'relations'
+            'relations',
         ],
         'int' => [
             'main',
             'position',
             'width',
-            'height'
-        ]
+            'height',
+        ],
     ];
 
     private $requiredFields = [
         'ordernumber',
-        'image'
+        'image',
     ];
 
     private $snippetData = [
         'ordernumber' => [
             'adapters/articlesImages/ordernumber_image_required',
-            'Ordernumber and image are required'
+            'Ordernumber and image are required',
         ],
         'image' => [
             'adapters/articlesImages/ordernumber_image_required',
-            'Ordernumber and image are required'
-        ]
+            'Ordernumber and image are required',
+        ],
     ];
 
     /**
      * Checks whether required fields are filled-in
      *
      * @param array $record
+     *
      * @throws AdapterException
      */
     public function checkRequiredFields($record)

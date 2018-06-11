@@ -11,7 +11,6 @@ namespace Shopware\Setup\SwagImportExport\Update;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
 use Shopware\Setup\SwagImportExport\Exception\DuplicateNameException;
-use Shopware\Setup\SwagImportExport\Install\DefaultProfileInstaller;
 use Shopware\Setup\SwagImportExport\SetupContext;
 
 class Update03DefaultProfileSupport implements UpdaterInterface
@@ -34,8 +33,8 @@ class Update03DefaultProfileSupport implements UpdaterInterface
     private $setupContext;
 
     /**
-     * @param SetupContext $setupContext
-     * @param Connection $connection
+     * @param SetupContext                         $setupContext
+     * @param Connection                           $connection
      * @param \Shopware_Components_Snippet_Manager $snippetManager
      */
     public function __construct(
@@ -49,7 +48,8 @@ class Update03DefaultProfileSupport implements UpdaterInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
+     *
      * @throws \Exception
      */
     public function update()
@@ -68,7 +68,7 @@ class Update03DefaultProfileSupport implements UpdaterInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function isCompatible()
     {
@@ -77,10 +77,11 @@ class Update03DefaultProfileSupport implements UpdaterInterface
 
     /**
      * @param \Exception $exception
+     *
      * @return bool
      */
     private function isDuplicateNameError(\Exception $exception)
     {
-        return (false !== strpos($exception->getMessage(), 'Duplicate entry'));
+        return false !== strpos($exception->getMessage(), 'Duplicate entry');
     }
 }

@@ -8,9 +8,9 @@
 
 namespace Shopware\Components\SwagImportExport\Validators\Articles;
 
-use Shopware\Components\SwagImportExport\Validators\Validator;
-use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
+use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
+use Shopware\Components\SwagImportExport\Validators\Validator;
 
 class PriceValidator extends Validator
 {
@@ -18,26 +18,27 @@ class PriceValidator extends Validator
         'float' => [
             'price',
             'purchasePrice',
-            'pseudoPrice'
+            'pseudoPrice',
         ],
     ];
 
     private $requiredFields = [
-        ['price', 'priceGroup']
+        ['price', 'priceGroup'],
     ];
 
     private $snippetData = [
         'price' => [
             'adapters/articles/incorrect_price',
-            'Price value is incorrect for article with number %s'
-        ]
+            'Price value is incorrect for article with number %s',
+        ],
     ];
 
     /**
      * Checks whether required fields are filled-in
      *
-     * @param array $record
+     * @param array  $record
      * @param string $orderNumber
+     *
      * @throws AdapterException
      */
     public function checkRequiredFields($record, $orderNumber)

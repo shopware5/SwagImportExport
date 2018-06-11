@@ -1,5 +1,4 @@
 <?php
-
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -11,8 +10,6 @@ namespace Shopware\Components\SwagImportExport\Transformers;
 
 /**
  * The responsibility of this class is to modify the values of the data values due to given user small scripts.
- *
- * @package Shopware\Components\SwagImportExport\Transformers
  */
 class ValuesTransformer implements DataTransformerAdapter
 {
@@ -41,6 +38,7 @@ class ValuesTransformer implements DataTransformerAdapter
      * Maps the values by using the config export smarty fields and returns the new array
      *
      * @param array $data
+     *
      * @return array
      */
     public function transformForward($data)
@@ -54,6 +52,7 @@ class ValuesTransformer implements DataTransformerAdapter
      * Changes and returns the new values, before importing
      *
      * @param array $data
+     *
      * @return array
      */
     public function transformBackward($data)
@@ -65,13 +64,15 @@ class ValuesTransformer implements DataTransformerAdapter
 
     /**
      * @param string $type
-     * @param array $data
-     * @return array
+     * @param array  $data
+     *
      * @throws \Exception
+     *
+     * @return array
      */
     public function transform($type, $data)
     {
-        $conversions = array();
+        $conversions = [];
 
         switch ($type) {
             case 'export':

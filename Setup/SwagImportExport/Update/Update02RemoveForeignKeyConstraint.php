@@ -39,9 +39,9 @@ class Update02RemoveForeignKeyConstraint implements UpdaterInterface
     private $setupContext;
 
     /**
-     * @param SetupContext $setupContext
-     * @param Connection $dbalConnection
-     * @param ModelManager $modelManager
+     * @param SetupContext          $setupContext
+     * @param Connection            $dbalConnection
+     * @param ModelManager          $modelManager
      * @param AbstractSchemaManager $schemaManager
      */
     public function __construct(
@@ -57,7 +57,7 @@ class Update02RemoveForeignKeyConstraint implements UpdaterInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function update()
     {
@@ -71,7 +71,7 @@ class Update02RemoveForeignKeyConstraint implements UpdaterInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function isCompatible()
     {
@@ -82,8 +82,10 @@ class Update02RemoveForeignKeyConstraint implements UpdaterInterface
     /**
      * @param string $table
      * @param string $column
-     * @return string
+     *
      * @throws \Exception
+     *
+     * @return string
      */
     private function getForeignKeyConstraint($table, $column)
     {

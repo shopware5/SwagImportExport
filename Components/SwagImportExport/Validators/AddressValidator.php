@@ -10,7 +10,6 @@ namespace Shopware\Components\SwagImportExport\Validators;
 
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
-use Shopware\Models\Customer\Address;
 
 class AddressValidator extends Validator
 {
@@ -20,29 +19,29 @@ class AddressValidator extends Validator
     private $requiredFields = [
         'firstname' => [
             'snippet' => 'adapters/address/firstname_required',
-            'default' => 'Field firstname is required. Record %s'
+            'default' => 'Field firstname is required. Record %s',
         ],
         'lastname' => [
             'snippet' => 'adapters/address/lastname_required',
-            'default' => 'Field lastname is required. Record %s'
+            'default' => 'Field lastname is required. Record %s',
         ],
         'zipcode' => [
             'snippet' => 'adapters/address/zipcode_required',
-            'default' => 'Field zipcode is required. Record %s'
+            'default' => 'Field zipcode is required. Record %s',
         ],
         'city' => [
             'snippet' => 'adapters/address/city_required',
-            'default' => 'Field city is required. Record %s'
+            'default' => 'Field city is required. Record %s',
         ],
         'countryID' => [
             'snippet' => 'adapters/address/country_id_required',
-            'default' => 'Field countryID is required. Record %s'
-        ]
+            'default' => 'Field countryID is required. Record %s',
+        ],
     ];
 
     /**
      * @param array $addressRecord
-     * @param bool $updateAddress
+     * @param bool  $updateAddress
      */
     public function checkRequiredFields($addressRecord, $updateAddress = false)
     {
@@ -58,6 +57,7 @@ class AddressValidator extends Validator
 
     /**
      * @param array $addressRecord
+     *
      * @throws AdapterException
      */
     private function validateEmptyAddressRecord($addressRecord)
@@ -74,6 +74,7 @@ class AddressValidator extends Validator
 
     /**
      * @param array $addressRecord
+     *
      * @throws AdapterException
      */
     private function validateAddressFields($addressRecord)
@@ -91,6 +92,7 @@ class AddressValidator extends Validator
 
     /**
      * @param array $addressRecord
+     *
      * @throws AdapterException
      */
     private function validateCustomerCanBeIdentified($addressRecord)
@@ -107,6 +109,7 @@ class AddressValidator extends Validator
 
     /**
      * @param array $addressRecord
+     *
      * @return string
      */
     private function recordToString($addressRecord)
@@ -125,6 +128,7 @@ class AddressValidator extends Validator
 
     /**
      * @param string $message
+     *
      * @return string
      */
     private function removeLastComma($message)

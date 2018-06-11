@@ -23,27 +23,27 @@ use Shopware\Models\Property\Value;
 class PropertyWriter
 {
     /**
-     * @var DbalHelper $dbalHelper
+     * @var DbalHelper
      */
     private $dbalHelper;
 
     /**
-     * @var Connection $connection
+     * @var Connection
      */
     private $connection;
 
     /**
-     * @var PDOConnection $db
+     * @var PDOConnection
      */
     private $db;
 
     /**
-     * @var array $groups
+     * @var array
      */
     private $groups;
 
     /**
-     * @var array $options
+     * @var array
      */
     private $options;
     /**
@@ -52,22 +52,9 @@ class PropertyWriter
     private $snippetsHelper;
 
     /**
-     * @return PropertyWriter
-     */
-    public static function createFromGlobalSingleton()
-    {
-        return new PropertyWriter(
-            DbalHelper::create(),
-            Shopware()->Container()->get('dbal_connection'),
-            Shopware()->Container()->get('db'),
-            new SnippetsHelper()
-        );
-    }
-
-    /**
-     * @param DbalHelper $dbalHelper
-     * @param Connection $connection
-     * @param PDOConnection $db
+     * @param DbalHelper     $dbalHelper
+     * @param Connection     $connection
+     * @param PDOConnection  $db
      * @param SnippetsHelper $snippetsHelper
      */
     public function __construct(
@@ -86,9 +73,23 @@ class PropertyWriter
     }
 
     /**
-     * @param int $articleId
+     * @return PropertyWriter
+     */
+    public static function createFromGlobalSingleton()
+    {
+        return new PropertyWriter(
+            DbalHelper::create(),
+            Shopware()->Container()->get('dbal_connection'),
+            Shopware()->Container()->get('db'),
+            new SnippetsHelper()
+        );
+    }
+
+    /**
+     * @param int    $articleId
      * @param string $orderNumber
-     * @param array $propertiesData
+     * @param array  $propertiesData
+     *
      * @throws AdapterException
      */
     public function writeUpdateCreatePropertyGroupsFilterAndValues($articleId, $orderNumber, $propertiesData)
@@ -105,7 +106,7 @@ class PropertyWriter
                 continue;
             }
 
-            /**
+            /*
              * Only update relations if value and option id were passed.
              */
             if (isset($propertyData['propertyValueId']) && !empty($propertyData['propertyValueId'])) {
@@ -123,7 +124,7 @@ class PropertyWriter
                 continue;
             }
 
-            /**
+            /*
              * Update or create options by value name
              */
             if (isset($propertyData['propertyValueName']) && !empty($propertyData['propertyValueName'])) {
@@ -146,7 +147,8 @@ class PropertyWriter
 
     /**
      * @param string $entityName
-     * @param array $data
+     * @param array  $data
+     *
      * @return string
      */
     private function createElement($entityName, $data)
@@ -218,6 +220,7 @@ class PropertyWriter
 
     /**
      * @param string $name
+     *
      * @return int
      */
     private function getFilterGroupIdByNameFromCacheProperty($name)
@@ -237,6 +240,7 @@ class PropertyWriter
      * Returns the id of an option
      *
      * @param string $name
+     *
      * @return int
      */
     private function getOptionByName($name)
@@ -246,35 +250,38 @@ class PropertyWriter
 
     /**
      * @param string $name
-     * @param int $filterGroupId
-     * @return string|boolean
+     * @param int    $filterGroupId
+     *
+     * @return string|bool
      */
     private function getValue($name, $filterGroupId)
     {
         return $this->connection->fetchColumn(
-            "SELECT `id` FROM s_filter_values
-             WHERE `optionID` = ? AND `value` = ?",
+            'SELECT `id` FROM s_filter_values
+             WHERE `optionID` = ? AND `value` = ?',
             [$filterGroupId, $name]
         );
     }
 
     /**
      * @param string|int $articleId
-     * @return string|boolean
+     *
+     * @return string|bool
      */
     private function getGroupFromArticle($articleId)
     {
         return $this->connection->fetchColumn(
-            "SELECT `filtergroupID` FROM s_articles
+            'SELECT `filtergroupID` FROM s_articles
              INNER JOIN s_filter ON s_articles.filtergroupID = s_filter.id
-             WHERE s_articles.id = ?",
+             WHERE s_articles.id = ?',
             [$articleId]
         );
     }
 
     /**
      * @param string|int $valueId
-     * @return string|boolean
+     *
+     * @return string|bool
      */
     private function getOptionByValueId($valueId)
     {
@@ -283,24 +290,27 @@ class PropertyWriter
 
     /**
      * @param string $optionName
-     * @param array $propertyData
+     * @param array  $propertyData
+     *
      * @return int
      */
     private function createOption($optionName, $propertyData)
     {
         $optionData = [
             'name' => $optionName,
-            'filterable' => !empty($propertyData['propertyOptionFilterable']) ? 1 : 0
+            'filterable' => !empty($propertyData['propertyOptionFilterable']) ? 1 : 0,
         ];
 
         $this->options[$optionName] = $this->createElement(Option::class, $optionData);
+
         return $this->options[$optionName];
     }
 
     /**
      * @param string $propertyData
      * @param string $valueName
-     * @param int $optionId
+     * @param int    $optionId
+     *
      * @return string
      */
     private function createValue($propertyData, $valueName, $optionId)
@@ -318,12 +328,13 @@ class PropertyWriter
 
     /**
      * @param string $groupName
+     *
      * @return string
      */
     private function createGroup($groupName)
     {
         $groupData = [
-            'name' => $groupName
+            'name' => $groupName,
         ];
 
         $groupId = $this->createElement(Group::class, $groupData);
@@ -333,10 +344,10 @@ class PropertyWriter
     }
 
     /**
-     * @param int $articleId
+     * @param int   $articleId
      * @param array $propertyData
+     *
      * @return string|null
-     * @throws AdapterException
      */
     private function findCreateOrUpdateGroup($articleId, $propertyData)
     {
@@ -353,15 +364,16 @@ class PropertyWriter
             $this->updateGroupsRelation($filterGroupId, $articleId);
         }
 
-
         return $filterGroupId;
     }
 
     /**
      * @param string $orderNumber
      * @param string $propertyData
-     * @return array
+     *
      * @throws AdapterException
+     *
+     * @return array
      */
     private function updateOrCreateOptionAndValuesByValueName($orderNumber, $propertyData)
     {
@@ -387,6 +399,7 @@ class PropertyWriter
         if (!$valueId) {
             $valueId = $this->createValue($propertyData, $valueName, $optionId);
         }
-        return [ $optionId, $valueId ];
+
+        return [$optionId, $valueId];
     }
 }

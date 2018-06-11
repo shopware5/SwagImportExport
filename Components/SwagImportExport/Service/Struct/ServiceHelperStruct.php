@@ -1,5 +1,4 @@
 <?php
-
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -16,9 +15,6 @@ use Shopware\Components\SwagImportExport\FileIO\FileWriter;
 use Shopware\Components\SwagImportExport\Profile\Profile;
 use Shopware\Components\SwagImportExport\Session\Session;
 
-/**
- * @package Shopware\Components\SwagImportExport\Service\Struct
- */
 class ServiceHelperStruct
 {
     /** @var Profile */
@@ -40,12 +36,12 @@ class ServiceHelperStruct
     private $dataIO;
 
     /**
-     * @param Profile $profile
-     * @param Session $session
+     * @param Profile       $profile
+     * @param Session       $session
      * @param DataDbAdapter $dbAdapter
-     * @param FileReader $fileReader
-     * @param FileWriter $fileWriter
-     * @param DataIO $dataIO
+     * @param FileReader    $fileReader
+     * @param FileWriter    $fileWriter
+     * @param DataIO        $dataIO
      */
     public function __construct(
         Profile $profile,

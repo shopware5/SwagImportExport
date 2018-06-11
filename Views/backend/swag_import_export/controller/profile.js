@@ -1,5 +1,5 @@
-//{namespace name="backend/swag_import_export/controller"}
-//{block name="backend/swag_import_export/controller/profile"}
+// {namespace name="backend/swag_import_export/controller"}
+// {block name="backend/swag_import_export/controller/profile"}
 Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
     extend: 'Ext.app.Controller',
 
@@ -73,26 +73,30 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
         var searchString = Ext.String.trim(newValue),
             store = field.up('grid').getStore();
 
-        //scroll the store to first page
+        // scroll the store to first page
         store.currentPage = 1;
 
-        //If the search-value is empty, reset the filter
-        if ( searchString.length === 0 ) {
+        // If the search-value is empty, reset the filter
+        if (searchString.length === 0) {
             store.filters.removeAtKey('search');
             store.load();
         } else {
-            //Loads the store with a special filter
+            // Loads the store with a special filter
             store.filter([
-                { id: 'search', property: 'name', value: '%' + searchString + '%', expression: 'LIKE' }
+                {
+                    id: 'search',
+                    property: 'name',
+                    value: '%' + searchString + '%',
+                    expression: 'LIKE'
+                }
             ]);
         }
     },
 
     onFilterDefaultProfiles: function(checkbox, value) {
-        var searchfilter = checkbox.nextSibling('#searchfield'),
-            store = checkbox.up('grid').getStore();
+        var store = checkbox.up('grid').getStore();
 
-        //scroll the store to first page
+        // scroll the store to first page
         store.currentPage = 1;
 
         if (value) {
@@ -259,7 +263,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
         } else {
             Ext.MessageBox.show({
                 title: '{s name="swag_import_export/profile/new_profile/failure_title"}Create New Profile Failed{/s}',
-                msg:  '{s name="swag_import_export/profile/new_profile/not_all_fields_filled_error"}Not all fields are filled!{/s}',
+                msg: '{s name="swag_import_export/profile/new_profile/not_all_fields_filled_error"}Not all fields are filled!{/s}',
                 icon: Ext.Msg.ERROR,
                 buttons: Ext.Msg.OK
             });
@@ -267,8 +271,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
     },
 
     onDeleteProfile: function(grid, selection) {
-        var me = this,
-            record = selection[0];
+        var record = selection[0];
 
         if (record.get('default') === true) {
             Shopware.Notification.createGrowlMessage(
@@ -305,8 +308,6 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
     },
 
     onDuplicateProfile: function(grid, record) {
-        var me = this;
-
         Ext.Ajax.request({
             url: '{url controller="SwagImportExportProfile" action="duplicateProfile"}',
             method: 'POST',
@@ -329,7 +330,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
             failure: function(response) {
                 Shopware.Msg.createStickyGrowlMessage({
                     title: 'An error occured',
-                    text: "Profile was not created"
+                    text: 'Profile was not created'
                 });
             }
         });
@@ -348,12 +349,11 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
 
     /**
      * @param { Ext.grid.Panel } grid
-     * @param { Ext.form.field.File } uploadfield
-     * @param { string } newValue
+     * @param { Ext.form.field.File } uploadField
      */
-    startImport: function(grid, uploadfield, newValue) {
+    startImport: function(grid, uploadField) {
         var me = this,
-            form = uploadfield.up('form');
+            form = uploadField.up('form');
 
         form.submit({
             url: me.importUrl,
@@ -379,12 +379,8 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
 
     /**
      * Shows the window with the conversions for the current profile
-     *
-     * @param { Ext.tree.Panel } treeStore
      */
     showMappings: function(profileId) {
-        var me = this;
-
         Ext.create('Shopware.apps.SwagImportExport.view.profile.window.Mappings', { profileId: profileId }).show();
     },
 
@@ -395,17 +391,16 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
      * @param { int } profileId
      */
     addNewIteration: function(treePanel, profileId) {
-        var me = this,
-            sectionStore = Ext.create('Shopware.apps.SwagImportExport.store.Section', {
-                listeners: {
-                    beforeload: {
-                        single: true,
-                        fn: function(store) {
-                            store.getProxy().setExtraParam('profileId', profileId);
-                        }
+        var sectionStore = Ext.create('Shopware.apps.SwagImportExport.store.Section', {
+            listeners: {
+                beforeload: {
+                    single: true,
+                    fn: function(store) {
+                        store.getProxy().setExtraParam('profileId', profileId);
                     }
                 }
-            });
+            }
+        });
 
         sectionStore.load({
             callback: function(records) {
@@ -529,8 +524,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
      * @param { Shopware.apps.SwagImportExport.view.profile.window.Column } win
      */
     addNode: function(win) {
-        var me = this,
-            treePanel = win.treePanel,
+        var treePanel = win.treePanel,
             form = win.formPanel,
             formValues = form.getForm().getValues(),
             store = treePanel.getStore(),
@@ -708,7 +702,14 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
         node.set('leaf', false);
         node.set('expanded', true);
 
-        data = { text: "New Attribute", leaf: true, type: 'attribute', iconCls: 'sprite-sticky-notes-pin', inIteration: true, adapter: node.get('adapter') };
+        data = {
+            text: 'New Attribute',
+            leaf: true,
+            type: 'attribute',
+            iconCls: 'sprite-sticky-notes-pin',
+            inIteration: true,
+            adapter: node.get('adapter')
+        };
         newNode = node.appendChild(data);
 
         treeStore.sync({
@@ -739,26 +740,22 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
      */
 
     addConversion: function(grid, editor) {
-        var me = this;
-
-        editor.cancelEdit();
         var conversion = Ext.create('Shopware.apps.SwagImportExport.model.Conversion', {
             profileId: 1,
             variable: '',
             exportConversion: '',
             importConversion: ''
         });
+        editor.cancelEdit();
 
         grid.getStore().add(conversion);
         editor.startEdit(conversion, 0);
     },
 
     updateConversion: function(store, flag) {
-        var me = this;
-
-        if (flag === true){
+        if (flag === true) {
             store.sync({
-                success: function(){
+                success: function() {
                     Shopware.Notification.createGrowlMessage(
                         '{s name="swag_import_export/profile/conversion/title"}Import/Export conversion{/s}',
                         '{s name="swag_import_export/profile/conversion/success_msg"}Conversion was save successfully{/s}'
@@ -786,4 +783,4 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
         store.sync();
     }
 });
-//{/block}
+// {/block}
