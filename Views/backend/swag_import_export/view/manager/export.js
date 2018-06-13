@@ -520,7 +520,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
 
         me.productStreamCombo = Ext.create('Shopware.form.field.ProductStreamSelection', {
             name: 'productStreamId',
-            fieldLabel: '{s name=swag_import_export/export/product_stream}or select Product-Stream{/s}',
+            fieldLabel: '{s name=swag_import_export/export/product_stream}or Product-Stream{/s}',
             labelWidth: me.configLabelWidth,
             width: me.configWidth
         });

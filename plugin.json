@@ -8,10 +8,11 @@
     "link": "http://store.shopware.com",
     "author": "Shopware AG",
 
-    "currentVersion": "2.4.5",
+    "currentVersion": "2.5.0",
 
     "changelog": {
         "de": {
+            "2.5.0": "PT-8657 - Konfiguration der BatchSize für Export und Import; PT-8910 - Der Wert '0' wird nun korrekt importiert; PT-8923 - Der Artikelexport kann nun auf Product-Streams eingeschränkt werden;",
             "2.4.5": "PT-9090 - Fehler beim Export von Bestellungen behoben, wenn keine gültige Steuer hinterlegt ist; PT-9243 - Hilfetext für CLI-Command korrigiert;",
             "2.4.4": "PT-9240 - Kunden komplett Profile berücksichtigt nun alle Bestellungen des Kunden;",
             "2.4.3": "PT-9191 - Double-Opt-in Registrierungs- und Verfizierungsdaten wurden zu den Newsletter-Informationen hinzugefügt;",
@@ -45,6 +46,7 @@
             "1.0.1": "Problem mit verschwindendem Import/Export Menü-Eintrag behoben; Weitere ACL-Zugangsberechtigungen hinzugefügt; Korrektur: article.active Verhalten; Korrektur: Artikel-Attribute; Korrektur: Datums- und Zeitimporte"
         },
         "en": {
+            "2.5.0": "PT-8657 - Configuration of batch size for export and import; PT-8910 - The value '0' gets imported correctly now; PT-8923 - It is now possible to limit the product export to a Product-Stream;",
             "2.4.5": "PT-9090 - Fix error on export of orders, if a non valid tax is set; PT-9243 - Fix help text for CLI command;",
             "2.4.4": "PT-9240 - Customer complete profile considers now every order of the customer;",
             "2.4.3": "PT-9191 - Added Double-Opt-In register and confirmation dates to newsletter information;",
