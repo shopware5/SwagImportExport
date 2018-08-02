@@ -380,10 +380,8 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
             ->leftJoin('article.tax', 'articleTax')
             ->where('variant.id IN (:ids)')
             ->andWhere('prices.customerGroup = :customergroup')
-            ->setParameters([
-                'ids' => $ids,
-                'customergroup' => 'EK',
-            ]);
+            ->setParameter('ids', $ids)
+            ->setParameter('customergroup', 'EK');
 
         return $builder;
     }

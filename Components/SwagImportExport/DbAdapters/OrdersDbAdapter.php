@@ -419,7 +419,6 @@ class OrdersDbAdapter implements DataDbAdapter
             'payment.id as paymentId',
             'payment.description as paymentDescription',
             'paymentStatus.id as paymentStatusId',
-            'paymentStatus.description as paymentStatusDescription',
             'dispatch.id as dispatchId',
             'dispatch.description as dispatchDescription',
 

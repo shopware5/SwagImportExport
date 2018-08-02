@@ -201,8 +201,6 @@ class MainOrdersDbAdapter implements DataDbAdapter
             'orders.net',
             'orders.taxFree',
             'payment.description as paymentName',
-            'paymentStatus.description as paymentState',
-            'orderStatus.description as orderState',
             'orders.currency',
             'orders.currencyFactor',
             'orders.transactionId',

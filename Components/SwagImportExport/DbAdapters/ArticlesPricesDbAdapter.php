@@ -412,14 +412,10 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
 
         $query = $this->manager->createQuery($dql);
 
-        $query->setParameters(
-            [
-                'customerGroup' => $record['priceGroup'],
-                'detailId' => $articleDetailId,
-                'fromValue' => $record['from'],
-            ]
-        );
-        $query->execute();
+        $query->setParameter('customerGroup', $record['priceGroup'])
+        ->setParameter('detailId', $articleDetailId)
+        ->setParameter('fromValue', $record['from'])
+        ->execute();
     }
 
     /**
@@ -437,14 +433,10 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
 
         $query = $this->manager->createQuery($dql);
 
-        $query->setParameters(
-            [
-                'toValue' => $record['from'] - 1,
-                'customerGroup' => $record['priceGroup'],
-                'detailId' => $articleDetailId,
-                'articleId' => $articleId,
-            ]
-        );
-        $query->execute();
+        $query->setParameter('toValue', $record['from'] - 1)
+        ->setParameter('customerGroup', $record['priceGroup'])
+        ->setParameter('detailId', $articleDetailId)
+        ->setParameter('articleId', $articleId)
+        ->execute();
     }
 }
