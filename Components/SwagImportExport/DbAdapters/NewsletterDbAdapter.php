@@ -86,11 +86,11 @@ class NewsletterDbAdapter implements DataDbAdapter
             'na.email as email',
             'ng.name as groupName',
             'CASE WHEN (cb.salutation IS NULL) THEN cd.salutation ELSE cb.salutation END as salutation',
-            'CASE WHEN (cb.firstName IS NULL) THEN cd.firstName ELSE cb.firstName END as firstName',
-            'CASE WHEN (cb.lastName IS NULL) THEN cd.lastName ELSE cb.lastName END as lastName',
+            'CASE WHEN (cb.firstname IS NULL) THEN cd.firstName ELSE cb.firstname END as firstName',
+            'CASE WHEN (cb.lastname IS NULL) THEN cd.lastName ELSE cb.lastname END as lastName',
             'CASE WHEN (cb.street IS NULL) THEN cd.street ELSE cb.street END as street',
             'CASE WHEN (cb.city IS NULL) THEN cd.city ELSE cb.city END as city',
-            'CASE WHEN (cb.zipCode IS NULL) THEN cd.zipCode ELSE cb.zipCode END as zipCode',
+            'CASE WHEN (cb.zipcode IS NULL) THEN cd.zipCode ELSE cb.zipcode END as zipCode',
             'na.lastNewsletterId as lastNewsletter',
             'na.lastReadId as lastRead',
             'c.id as userID',
@@ -383,7 +383,7 @@ class NewsletterDbAdapter implements DataDbAdapter
             ->leftJoin('na.newsletterGroup', 'ng')
             ->leftJoin(ContactData::class, 'cd', Join::WITH, 'na.email = cd.email')
             ->leftJoin('na.customer', 'c', JOIN::WITH, 'na.isCustomer = 1')
-            ->leftJoin('c.billing', 'cb')
+            ->leftJoin('c.defaultBillingAddress', 'cb')
             ->where('na.id IN (:ids)')
             ->setParameter('ids', $ids);
 

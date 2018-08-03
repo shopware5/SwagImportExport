@@ -4,27 +4,9 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/5.3/phpunit.xsd"
 >
-    <testsuites>
-        <testsuite name="Shopware ImportExport Plugin">
-            <directory>./Tests/Functional</directory>
-            <directory>./Tests/Shopware</directory>
-            <directory>./Tests/Unit</directory>
-        </testsuite>
-
-        <testsuite name="unit">
-            <directory>./Tests/Unit</directory>
-        </testsuite>
-
-        <testsuite name="functional">
-            <directory>./Tests/Functional</directory>
-        </testsuite>
-    </testsuites>
-
-    <groups>
-        <exclude>
-            <group>disable</group>
-        </exclude>
-    </groups>
+    <testsuite name="SwagBackendOrder Test Suite">
+        <directory>./Tests</directory>
+    </testsuite>
 
     <filter>
         <whitelist>

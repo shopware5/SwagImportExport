@@ -99,8 +99,8 @@ class CustomerDbAdapterTest extends TestCase
         /** @var Connection $dbalConnection */
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
         $updatedUserBillingAddress = $dbalConnection->executeQuery("
-              SELECT * FROM s_user_billingaddress
-              WHERE userID = '1'"
+              SELECT * FROM s_user_addresses
+              WHERE user_id = '1'"
         )->fetchAll();
 
         $this->assertEquals($records['default'][0]['billingCity'], $updatedUserBillingAddress[0]['city']);
@@ -180,8 +180,8 @@ class CustomerDbAdapterTest extends TestCase
         /** @var Connection $dbalConnection */
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
         $updatedUserBillingAddress = $dbalConnection->executeQuery("
-              SELECT * FROM s_user_billingaddress
-              WHERE userID = '1'"
+              SELECT * FROM s_user_addresses
+              WHERE user_id = '1'"
         )->fetchAll();
 
         $this->assertEquals($records['default'][0]['billingPhone'], $updatedUserBillingAddress[0]['phone']);

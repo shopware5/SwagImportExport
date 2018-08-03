@@ -13,7 +13,9 @@ use Doctrine\ORM\Query\Expr\Join;
 use Shopware\Bundle\MediaBundle\MediaService;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\DataManagers\ArticleImageDataManager;
+use Shopware\Components\SwagImportExport\DbalHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
+use Shopware\Components\SwagImportExport\Service\UnderscoreToCamelCaseServiceInterface;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Validators\ArticleImageValidator;
 use Shopware\Components\Thumbnail\Manager;
@@ -29,47 +31,85 @@ use Symfony\Component\HttpFoundation\File\File;
 
 class ArticlesImagesDbAdapter implements DataDbAdapter
 {
-    /** @var ModelManager */
+    /**
+     * @var ModelManager
+     */
     protected $manager;
 
-    /** @var MediaService */
+    /**
+     * @var MediaService
+     */
     protected $mediaService;
 
-    /** @var \Enlight_Controller_Request_Request */
+    /**
+     * @var \Enlight_Controller_Request_Request
+     */
     protected $request;
 
-    /** @var \Enlight_Event_EventManager */
+    /**
+     * @var \Enlight_Event_EventManager
+     */
     protected $eventManager;
 
-    /** @var ArticleImageValidator */
+    /**
+     * @var ArticleImageValidator
+     */
     protected $validator;
 
-    /** @var ArticleImageDataManager */
+    /**
+     * @var ArticleImageDataManager
+     */
     protected $dataManager;
 
-    /** @var int */
+    /**
+     * @var int
+     */
     protected $imageImportMode;
 
-    /** @var bool */
+    /**
+     * @var bool
+     */
     protected $importExportErrorMode;
 
-    /** @var \Enlight_Components_Db_Adapter_Pdo_Mysql */
+    /**
+     * @var \Enlight_Components_Db_Adapter_Pdo_Mysql
+     */
     protected $db;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $unprocessedData;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $logMessages;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $logState;
 
-    /** @var Manager */
+    /**
+     * @var Manager
+     */
     protected $thumbnailManager;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $docPath;
+
+    /**
+     * @var UnderscoreToCamelCaseServiceInterface
+     */
+    protected $underscoreToCamelCaseService;
+
+    /**
+     * @var DbalHelper
+     */
+    private $dbalHelper;
 
     public function __construct()
     {
@@ -84,6 +124,8 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
         $this->importExportErrorMode = (bool) Shopware()->Config()->get('SwagImportExportErrorMode');
         $this->thumbnailManager = Shopware()->Container()->get('thumbnail_manager');
         $this->docPath = Shopware()->DocPath('media_' . 'temp');
+        $this->underscoreToCamelCaseService = Shopware()->Container()->get('swag_import_export.underscore_camelcase_service');
+        $this->dbalHelper = DbalHelper::create();
     }
 
     /**
@@ -200,6 +242,8 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
             SEPARATOR ';' ) as relations",
             ' \'1\' as thumbnail',
         ];
+
+        $columns = array_merge($columns, $this->getAttributesColumns());
 
         return $columns;
     }
@@ -337,6 +381,8 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                     $this->setImageMappings($relations, $image->getId());
                 }
 
+                $this->createAttribute($record, $image);
+
                 // Prevent multiple images from being a preview
                 if ((int) $record['main'] === 1) {
                     $this->db->update(
@@ -445,11 +491,68 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
             ->leftJoin('im.rules', 'mr')
             ->leftJoin('mr.option', 'co')
             ->leftJoin('co.group', 'cg')
+            ->leftJoin('aimage.attribute', 'attribute')
             ->where('aimage.id IN (:ids)')
             ->groupBy('aimage.id')
             ->setParameter('ids', $ids);
 
         return $builder;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getAttributesColumns()
+    {
+        $stmt = $this->db->query('SHOW COLUMNS FROM `s_articles_img_attributes`');
+        $columns = $stmt->fetchAll();
+
+        $attributes = [];
+        foreach ($columns as $column) {
+            if (in_array($column['Field'], ['id', 'imageID'])) {
+                continue;
+            }
+            $attributes[] = $column['Field'];
+        }
+
+        $attributesSelect = [];
+        if ($attributes) {
+            $prefix = 'attribute';
+            foreach ($attributes as $attribute) {
+                $attr = $this->underscoreToCamelCaseService->underscoreToCamelCase($attribute);
+
+                $attributesSelect[] = sprintf('%s.%s as attribute%s', $prefix, $attr, ucwords($attr));
+            }
+        }
+
+        $attributesSelect = $this->eventManager->filter(
+            'Shopware_Components_SwagImportExport_DbAdapters_ArticlesImagesDbAdapter_GetArticleImagesAttributes',
+            $attributesSelect,
+            ['subject' => $this]
+        );
+
+        return $attributesSelect;
+    }
+
+    /**
+     * @param array $image
+     *
+     * @return array
+     */
+    protected function mapAttributes($image)
+    {
+        $attributes = [];
+        foreach ($image as $key => $value) {
+            $position = strpos($key, 'attribute');
+            if ($position === false || $position !== 0) {
+                continue;
+            }
+
+            $attrKey = lcfirst(str_replace('attribute', '', $key));
+            $attributes[$attrKey] = $value;
+        }
+
+        return $attributes;
     }
 
     /**
@@ -589,5 +692,30 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
         $message = SnippetsHelper::getNamespace()
             ->get('adapters/articlesImages/unsupported_schema', 'Unsupported schema %s.');
         throw new AdapterException(sprintf($message, $urlArray['scheme']));
+    }
+
+    /**
+     * @param array $record
+     * @param Image $image
+     */
+    private function createAttribute(array $record, Image $image)
+    {
+        $attributes = $this->mapAttributes($record);
+
+        $attributesId = false;
+        if ($image->getAttribute()) {
+            $attributesId = $image->getAttribute()->getId();
+        }
+
+        if (!empty($attributes)) {
+            $attributes['articleImageId'] = $image->getId();
+            $queryBuilder = $this->dbalHelper->getQueryBuilderForEntity(
+                $attributes,
+                \Shopware\Models\Attribute\ArticleImage::class,
+                $attributesId
+            );
+
+            $queryBuilder->execute();
+        }
     }
 }

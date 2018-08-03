@@ -28,11 +28,11 @@ class CustomersProfileTest extends TestCase
 
         $this->runCommand("sw:import:import -p default_customers {$filePath}");
 
-        $updatedCustomer = $this->executeQuery("SELECT * FROM s_user as u JOIN s_user_shippingaddress AS s ON u.id = s.userID WHERE u.customernumber = '20003'");
+        $updatedCustomer = $this->executeQuery("SELECT * FROM s_user as u JOIN s_user_addresses AS s ON u.id = s.user_id WHERE u.customernumber = '20003'");
         $bigDataTestCustomer = $this->executeQuery("SELECT * FROM s_user WHERE customernumber = '20075'");
 
         $this->assertEquals($expectedZip, $updatedCustomer[0]['zipcode']);
-        $this->assertEquals($expectedCity, $updatedCustomer[0]['city']);
+        $this->assertEquals($expectedCity, $updatedCustomer[1]['city']);
         $this->assertEquals($expectedBigDataCustomerEmail, $bigDataTestCustomer[0]['email']);
     }
 }
