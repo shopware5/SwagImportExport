@@ -131,8 +131,8 @@ abstract class Validator
         $isCorrect = $this->$action($value);
 
         if (!$isCorrect) {
-            $message = SnippetsHelper::getNamespace()->get('validators/wrong_type', '%s field has to be %s!');
-            throw new AdapterException(sprintf($message, $fieldName, $type));
+            $message = SnippetsHelper::getNamespace()->get('validators/wrong_type', '%s field has to be %s but is %s!');
+            throw new AdapterException(sprintf($message, $fieldName, $type, $value));
         }
     }
 }
