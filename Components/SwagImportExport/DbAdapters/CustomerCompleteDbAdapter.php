@@ -152,8 +152,7 @@ class CustomerCompleteDbAdapter extends CustomerDbAdapter
             ->where('address.user_id IN (:ids)')
             ->setParameter('ids', $ids, Connection::PARAM_INT_ARRAY)
             ->execute()
-            ->fetchAll(\PDO::FETCH_GROUP)
-        ;
+            ->fetchAll(\PDO::FETCH_GROUP);
     }
 
     /**
@@ -188,8 +187,7 @@ class CustomerCompleteDbAdapter extends CustomerDbAdapter
             ->where('o.customerId IN (:ids)')
             ->setParameter('ids', $ids, Connection::PARAM_INT_ARRAY)
             ->getQuery()
-            ->getArrayResult()
-        ;
+            ->getArrayResult();
 
         $indexedOrders = [];
         foreach ($orders as $order) {
@@ -199,6 +197,11 @@ class CustomerCompleteDbAdapter extends CustomerDbAdapter
             foreach ($order['details'] as &$detail) {
                 /** @var \DateTime $releaseDate */
                 $releaseDate = $detail['releaseDate'];
+
+                if (!$releaseDate instanceof \DateTime) {
+                    $releaseDate = new \DateTime('1970-01-01');
+                }
+
                 $detail['releaseDate'] = $releaseDate->format('Y-m-d H:i:s');
             }
             unset($detail);
@@ -226,7 +229,6 @@ class CustomerCompleteDbAdapter extends CustomerDbAdapter
             ->where('customer.id IN (:ids)')
             ->setParameter('ids', $ids, Connection::PARAM_INT_ARRAY)
             ->execute()
-            ->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE)
-        ;
+            ->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE);
     }
 }
