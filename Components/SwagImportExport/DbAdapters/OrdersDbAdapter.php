@@ -453,6 +453,8 @@ class OrdersDbAdapter implements DataDbAdapter
             'billing.city as billingCity',
             'billing.vatId as billingVatId',
             'billing.phone as billingPhone',
+            'billingState.id as billingStateId',
+            'billingState.name as billingStateName',
             'billingCountry.name as billingCountryName',
             'billingCountry.isoName as billingCountryen',
             'billingCountry.iso as billingCountryIso',
@@ -471,6 +473,9 @@ class OrdersDbAdapter implements DataDbAdapter
             'shipping.street as shippingStreet',
             'shipping.zipCode as shippingZipcode',
             'shipping.city as shippingCity',
+            'shipping.phone as shippingPhone',
+            'shippingState.id as shippingStateId',
+            'shippingState.name as shippingStateName',
             'shippingCountry.name as shippingCountryName',
             'shippingCountry.isoName as shippingCountryIsoName',
             'shippingCountry.iso as shippingCountryIso',
@@ -543,8 +548,10 @@ class OrdersDbAdapter implements DataDbAdapter
             ->leftJoin('details.tax', 'taxes')
             ->leftJoin('orders.billing', 'billing')
             ->leftJoin('billing.country', 'billingCountry')
+            ->leftJoin('billing.state', 'billingState')
             ->leftJoin('orders.shipping', 'shipping')
             ->leftJoin('shipping.country', 'shippingCountry')
+            ->leftJoin('shipping.state', 'shippingState')
             ->leftJoin('orders.payment', 'payment')
             ->leftJoin('orders.paymentStatus', 'paymentStatus')
             ->leftJoin('orders.orderStatus', 'orderStatus')
