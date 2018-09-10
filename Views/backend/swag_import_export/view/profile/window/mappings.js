@@ -98,6 +98,9 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Mappings', {
             clicksToMoveEditor: 2,
             autoCancel: true,
             listeners: {
+                edit: function() {
+                    store.reload();
+                },
                 canceledit: function(editor, e) {
                     if (Ext.isEmpty(e.record.get('id'))) {
                         e.store.remove(e.record);
@@ -108,6 +111,12 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Mappings', {
 
         // create the Grid
         me.conversionsGrid = Ext.create('Ext.grid.Panel', {
+            dockedItems: [{
+                xtype: 'pagingtoolbar',
+                store: store,
+                dock: 'bottom',
+                displayInfo: true
+            }],
             flex: 2,
             store: store,
             plugins: [
@@ -152,7 +161,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Mappings', {
                 }
             }, {
                 xtype: 'actioncolumn',
-                width: 90,
+                width: 30,
                 items: [
                     {
                         iconCls: 'sprite-minus-circle-frame',
