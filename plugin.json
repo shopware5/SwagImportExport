@@ -8,10 +8,11 @@
     "link": "http://store.shopware.com",
     "author": "Shopware AG",
 
-    "currentVersion": "2.6.0",
+    "currentVersion": "2.6.1",
 
     "changelog": {
         "de": {
+            "2.6.1": "PT-9004 - Optimierung der Performanz beim Export von Produkten;",
             "2.6.0": "PT-9177 - Shopware 5.5 Kompatibilität; PT-9220 - Konvertierung sind nun paginiert;",
             "2.5.0": "PT-8657 - Konfiguration der BatchSize für Export und Import; PT-8910 - Der Wert '0' wird nun korrekt importiert; PT-8923 - Der Artikelexport kann nun auf Product-Streams eingeschränkt werden;",
             "2.4.5": "PT-9090 - Fehler beim Export von Bestellungen behoben, wenn keine gültige Steuer hinterlegt ist; PT-9243 - Hilfetext für CLI-Command korrigiert;",
@@ -47,6 +48,7 @@
             "1.0.1": "Problem mit verschwindendem Import/Export Menü-Eintrag behoben; Weitere ACL-Zugangsberechtigungen hinzugefügt; Korrektur: article.active Verhalten; Korrektur: Artikel-Attribute; Korrektur: Datums- und Zeitimporte"
         },
         "en": {
+            "2.6.1": "PT-9004 - Improve export performance for products;",
             "2.6.0": "PT-9177 - Shopware 5.5 compatibility; PT-9220 - Conversion is now paginated;",
             "2.5.0": "PT-8657 - Configuration of batch size for export and import; PT-8910 - The value '0' gets imported correctly now; PT-8923 - It is now possible to limit the product export to a Product-Stream;",
             "2.4.5": "PT-9090 - Fix error on export of orders, if a non valid tax is set; PT-9243 - Fix help text for CLI command;",
