@@ -8,7 +8,7 @@
 
 namespace Shopware\Components\SwagImportExport\Service;
 
-use Shopware\Bundle\MediaBundle\MediaService;
+use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Components\SwagImportExport\DataIO;
 use Shopware\Components\SwagImportExport\Factories\DataFactory;
 use Shopware\Components\SwagImportExport\Factories\DataTransformerFactory;
@@ -46,7 +46,7 @@ abstract class AbstractImportExportService
     /** @var \Shopware_Components_Auth */
     protected $auth;
 
-    /** @var MediaService */
+    /** @var MediaServiceInterface */
     protected $mediaService;
 
     /**
@@ -57,7 +57,7 @@ abstract class AbstractImportExportService
      * @param Logger                    $logger
      * @param UploadPathProvider        $uploadPathProvider
      * @param \Shopware_Components_Auth $auth
-     * @param MediaService              $mediaService
+     * @param MediaServiceInterface     $mediaService
      */
     public function __construct(
         ProfileFactory $profileFactory,
@@ -67,7 +67,7 @@ abstract class AbstractImportExportService
         Logger $logger,
         UploadPathProvider $uploadPathProvider,
         \Shopware_Components_Auth $auth,
-        MediaService $mediaService
+        MediaServiceInterface $mediaService
     ) {
         $this->profileFactory = $profileFactory;
         $this->fileIOFactory = $fileIOFactory;
