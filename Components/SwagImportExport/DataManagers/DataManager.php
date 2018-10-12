@@ -99,7 +99,7 @@ class DataManager
                             $records[$field] = '0.0';
                             break;
                         case 'date':
-                            $records[$field] = date('Y-m-d');
+                            $records[$field] = date('Y-m-d H:i:s');
                     }
                 }
             }

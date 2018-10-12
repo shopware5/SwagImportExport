@@ -145,6 +145,7 @@ class ArticleDataType
         ],
         'date' => [
             'added',
+            'changed',
         ],
         'int' => [
             'inStock',

@@ -399,6 +399,17 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
     }
 
     /**
+     * This event needs to be registered so it's guaranteed this plugin's afterInit() method will always be called and
+     * gets a chance to register the plugin's namespaces.
+     *
+     * @param \Enlight_Event_EventArgs $args
+     */
+    public function onStartDispatch(Enlight_Event_EventArgs $args)
+    {
+        // Nothing to do
+    }
+
+    /**
      * @return UploadPathProvider
      */
     public function registerUploadPathProvider()
@@ -649,6 +660,11 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
      */
     protected function registerEvents()
     {
+        $this->subscribeEvent(
+            'Enlight_Controller_Front_StartDispatch',
+            'onStartDispatch'
+        );
+
         $this->subscribeEvent(
             'Enlight_Bootstrap_InitResource_swag_import_export.csv_file_writer',
             'registerCsvFileWriter'
