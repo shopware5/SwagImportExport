@@ -21,6 +21,7 @@ use Shopware\Components\SwagImportExport\DbAdapters\ArticlesInStockDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\ArticlesPricesDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\ArticlesTranslationsDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\CategoriesDbAdapter;
+use Shopware\Components\SwagImportExport\DbAdapters\CategoryTranslationDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\CustomerCompleteDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\CustomerDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\DataDbAdapter;
@@ -100,6 +101,8 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
                 return $this->createTranslationsDbAdapter();
             case DataDbAdapter::ADDRESS_ADAPTER:
                 return $this->createAddressDbAdapter();
+            case DataDbAdapter::CATEGORIES_TRANSLATION_ADAPTER:
+                return $this->createCategoriesTranslationsDbAdapter();
             default:
                 throw new \Exception('Db adapter type is not valid');
         }
@@ -304,6 +307,17 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     {
         $proxyAdapter = Shopware()->Hooks()
             ->getProxy(ArticlesTranslationsDbAdapter::class);
+
+        return new $proxyAdapter();
+    }
+
+    /**
+     * @return CategoryTranslationDbAdapter
+     */
+    protected function createCategoriesTranslationsDbAdapter()
+    {
+        $proxyAdapter = Shopware()->Hooks()
+            ->getProxy(CategoryTranslationDbAdapter::class);
 
         return new $proxyAdapter();
     }

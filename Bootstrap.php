@@ -45,6 +45,7 @@ use Shopware\Setup\SwagImportExport\Update\Update02RemoveForeignKeyConstraint;
 use Shopware\Setup\SwagImportExport\Update\Update03DefaultProfileSupport;
 use Shopware\Setup\SwagImportExport\Update\Update04CreateColumns;
 use Shopware\Setup\SwagImportExport\Update\Update05CreateCustomerCompleteProfile;
+use Shopware\Setup\SwagImportExport\Update\Update06CreateCategoryTranslationProfile;
 use Shopware\Setup\SwagImportExport\Update\UpdaterInterface;
 
 /**
@@ -239,6 +240,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         $updaters[] = new Update03DefaultProfileSupport($setupContext, $this->get('dbal_connection'), $this->get('snippets'));
         $updaters[] = new Update04CreateColumns($setupContext, $this->get('dbal_connection'));
         $updaters[] = new Update05CreateCustomerCompleteProfile($setupContext, $this->get('dbal_connection'));
+        $updaters[] = new Update06CreateCategoryTranslationProfile($setupContext, $this->get('dbal_connection'));
         $updaters[] = new DefaultProfileUpdater($setupContext, $this->get('dbal_connection'), $this->get('snippets'));
 
         $this->registerControllers();
@@ -564,25 +566,25 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
                 'value' => false,
             ]
         );
-        
-      $form->setElement(
+
+        $form->setElement(
             'number',
             'batch-size-export',
-            array(
+            [
                 'label' => 'Batch-Size Export',
                 'value' => 1000,
-                'minValue' => 0
-            )
+                'minValue' => 0,
+            ]
         );
-        
-       $form->setElement(
+
+        $form->setElement(
             'number',
             'batch-size-import',
-            array(
+            [
                 'label' => 'Batch-Size Import',
                 'value' => 50,
-                'minValue' => 0
-            )
+                'minValue' => 0,
+            ]
         );
 
         $form->setElement(

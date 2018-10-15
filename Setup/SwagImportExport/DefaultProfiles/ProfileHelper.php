@@ -21,6 +21,7 @@ class ProfileHelper
         return [
             new MinimalCategoryProfile(),
             new CategoryProfile(),
+            new CategoryTranslationProfile(),
             new ArticleCompleteProfile(),
             new ArticleProfile(),
             new NewsletterRecipientProfile(),
