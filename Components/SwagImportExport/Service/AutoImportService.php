@@ -117,8 +117,7 @@ class AutoImportService implements AutoImportServiceInterface
                     $pathInfo = pathinfo($mediaPath);
                     foreach ($profilesMapper as $profileName) {
                         $tmpFile = $this->uploadPathProvider->getRealPath(
-                            $pathInfo['filename'] . '-' . $profileName . '-tmp.csv',
-                            UploadPathProvider::CRON_DIR
+                            $pathInfo['basename'] . '-' . $profileName . '-tmp.csv'
                         );
 
                         if (file_exists($tmpFile)) {
@@ -231,13 +230,10 @@ class AutoImportService implements AutoImportServiceInterface
         $return = $commandHelper->prepareImport();
         $count = $return['count'];
 
-        $return = $commandHelper->importAction();
-        $position = $return['data']['position'];
-
-        while ($position < $count) {
+        do {
             $return = $commandHelper->importAction();
             $position = $return['data']['position'];
-        }
+        } while ($position < $count);
 
         return $return;
     }

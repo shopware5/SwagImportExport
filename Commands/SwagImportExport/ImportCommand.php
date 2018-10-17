@@ -71,7 +71,7 @@ class ImportCommand extends ShopwareCommand
         $pathInfo = pathinfo($this->filePath);
         foreach ($profilesMapper as $profileName) {
             $tmpFile = $uploadPathProvider->getRealPath(
-                $pathInfo['filename'] . '-' . $profileName . '-tmp.csv'
+                $pathInfo['basename'] . '-' . $profileName . '-tmp.csv'
             );
             if (file_exists($tmpFile)) {
                 $outputFile = str_replace('-tmp', '-swag', $tmpFile);

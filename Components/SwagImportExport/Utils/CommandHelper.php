@@ -456,7 +456,7 @@ class CommandHelper
             $resultData = $dataWorkflow->import($postData, $inputFile);
 
             if (isset($resultData['unprocessedData']) && $resultData['unprocessedData']) {
-                $data = [
+                $unprocessedData = [
                     'data' => $resultData['unprocessedData'],
                     'session' => [
                         'prevState' => $sessionState,
@@ -464,18 +464,13 @@ class CommandHelper
                     ],
                 ];
 
-                $pathInfo = pathinfo($inputFile);
-
-                foreach ($data['data'] as $key => $value) {
+                foreach ($unprocessedData['data'] as $profileName => $value) {
                     $outputFile = $uploadPathProvider->getRealPath(
-                        $pathInfo['filename'] . '-' . $key . '-tmp.csv'
+                        $uploadPathProvider->getFileNameFromPath($inputFile) . '-' . $profileName . '-tmp.csv'
                     );
 
-                    $post['unprocessed'][] = [
-                        'profileName' => $key,
-                        'fileName' => $outputFile,
-                    ];
-                    $this->afterImport($data, $key, $outputFile);
+                    $this->afterImport($unprocessedData, $profileName, $outputFile);
+                    $unprocessedFiles[$profileName] = $outputFile;
                 }
             }
 
