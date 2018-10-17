@@ -16,6 +16,7 @@ interface DataDbAdapter
     const ARTICLE_TRANSLATION_ADAPTER = 'articlesTranslations';
     const ARTICLE_PRICE_ADAPTER = 'articlesPrices';
     const CATEGORIES_ADAPTER = 'categories';
+    const CATEGORIES_TRANSLATION_ADAPTER = 'categoriesTranslations';
     const ORDER_ADAPTER = 'orders';
     const MAIN_ORDER_ADAPTER = 'mainOrders';
     const CUSTOMER_ADAPTER = 'customers';
