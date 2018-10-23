@@ -76,8 +76,8 @@ class PriceWriter
 
             $this->checkRequirements($price, $orderNumber);
 
-            // skip empty prices for non-default customer groups
-            if (empty($price['price']) && $price['priceGroup'] !== 'EK') {
+            // skip empty strings for non-default customer group prices
+            if ($price['price'] === '' && $price['priceGroup'] !== 'EK') {
                 continue;
             }
 
