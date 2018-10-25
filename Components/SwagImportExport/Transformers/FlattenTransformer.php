@@ -8,8 +8,8 @@
 
 namespace Shopware\Components\SwagImportExport\Transformers;
 
+use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
-use Shopware\Models\Article\Element;
 use Shopware\Models\Customer\Group;
 use Shopware\Models\Shop\Shop;
 
@@ -539,9 +539,6 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
         if ($this->iterationParts[$path] === 'price') {
             $priceProfile = $this->getNodeFromProfile($this->getMainIterationPart(), 'price');
             $priceNodeMapper = $this->createMapperFromProfile($priceProfile);
-
-            //only saving the price groups
-//            $this->createHeaderPriceGroup($priceNodeMapper);
 
             //saving nodes different from price groups
             foreach ($this->getCustomerGroups() as $group) {
@@ -1330,20 +1327,34 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
         if ($this->translationColumns === null) {
             $translationFields = [
                 'name',
-                'additionalText',
+                'keywords',
                 'metaTitle',
                 'description',
                 'descriptionLong',
-                'keywords',
+                'additionalText',
                 'packUnit',
             ];
 
-            $attributes = [];
+            $attributes = $this->getAttributeColumns();
 
             $this->translationColumns = array_merge($translationFields, $attributes);
         }
 
         return $this->translationColumns;
+    }
+
+
+    /**
+     * Returns the columns of the article attributes table
+     *
+     * @return array
+     */
+    protected function getAttributeColumns()
+    {
+        /** @var AbstractSchemaManager $schemaManager */
+        $schemaManager = Shopware()->Container()->get('models')->getConnection()->getSchemaManager();
+
+        return array_keys($schemaManager->listTableColumns('s_articles_attributes'));
     }
 
     /**
