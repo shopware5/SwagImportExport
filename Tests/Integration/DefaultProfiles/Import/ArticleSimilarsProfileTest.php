@@ -23,13 +23,22 @@ class ArticleSimilarsProfileTest extends TestCase
     {
         $filePath = __DIR__ . '/_fixtures/article_similars_profile.csv';
         $expectedOrderNumber = 'SW10003';
-        $expectedRelatedArticleId = 7;
+        $expectedRelatedArticleId = [
+            0 => 2,
+            1 => 4,
+            2 => 6
+        ];
 
         $this->runCommand("sw:import:import -p default_similar_articles {$filePath}");
 
-        $updatedArticle = $this->executeQuery("SELECT * FROM s_articles_details WHERE ordernumber='{$expectedOrderNumber}'");
-        $updatedArticleSimilars = $this->executeQuery("SELECT * FROM s_articles_similar WHERE articleID='{$updatedArticle[0]['articleID']}'");
+        $updatedArticleId = $this->executeQuery("SELECT articleID FROM s_articles_details WHERE ordernumber='{$expectedOrderNumber}'", \PDO::FETCH_COLUMN)[0];
+        $updatedArticleSimilars = $this->executeQuery("SELECT * FROM s_articles_similar WHERE articleID='{$updatedArticleId}'");
 
-        $this->assertEquals($expectedRelatedArticleId, $updatedArticleSimilars[4]['relatedarticle']);
+        foreach (array_keys($expectedRelatedArticleId) as $key) {
+            $this->assertEquals($expectedRelatedArticleId[$key], $updatedArticleSimilars[$key]['relatedarticle']);
+        }
+
+        // Now deleted element
+        $this->assertNull($updatedArticleSimilars[3]);
     }
 }
