@@ -37,13 +37,20 @@ class Logger implements LoggerInterface
     protected $fileWriter;
 
     /**
+     * @var string
+     */
+    protected $logDirectory;
+
+    /**
      * @param FileWriter   $fileWriter
      * @param ModelManager $modelManager
+     * @param string       $logDirectory
      */
-    public function __construct(FileWriter $fileWriter, ModelManager $modelManager)
+    public function __construct(FileWriter $fileWriter, ModelManager $modelManager, $logDirectory)
     {
         $this->fileWriter = $fileWriter;
         $this->modelManager = $modelManager;
+        $this->logDirectory = $logDirectory;
         $this->loggerRepository = $this->modelManager->getRepository(LoggerEntity::class);
     }
 
@@ -92,7 +99,7 @@ class Logger implements LoggerInterface
      */
     private function getLogFile()
     {
-        $filePath = Shopware()->DocPath() . 'var/log/importexport.log';
+        $filePath = $this->logDirectory . '/importexport.log';
 
         if (!file_exists($filePath)) {
             $this->createLogFile($filePath);
