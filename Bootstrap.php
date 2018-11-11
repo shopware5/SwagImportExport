@@ -438,7 +438,8 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
     {
         return new Logger(
             $this->get('swag_import_export.csv_file_writer'),
-            $this->get('models')
+            $this->get('models'),
+            $this->Application()->Container()->getParameter('shopware.app.rootdir') . 'var/log'
         );
     }
 
