@@ -14,7 +14,7 @@ use Shopware\Setup\SwagImportExport\SetupContext;
 
 class Update06CreateCategoryTranslationProfile implements UpdaterInterface
 {
-    const MAX_PLUGIN_VERSION = '2.6.3';
+    const MAX_PLUGIN_VERSION = '2.7.0';
 
     /**
      * @var SetupContext
