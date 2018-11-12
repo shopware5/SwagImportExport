@@ -11,10 +11,13 @@ namespace Shopware\Components\SwagImportExport\DbAdapters;
 use Enlight_Components_Db_Adapter_Pdo_Mysql;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\QueryBuilder;
+use Shopware\Components\StateTranslatorService;
+use Shopware\Components\StateTranslatorServiceInterface;
 use Shopware\Components\SwagImportExport\Service\UnderscoreToCamelCaseServiceInterface;
 use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Models\Order\Order;
+use Shopware\Models\Order\Status;
 use Shopware\Models\Tax\Tax;
 
 class MainOrdersDbAdapter implements DataDbAdapter
@@ -49,11 +52,17 @@ class MainOrdersDbAdapter implements DataDbAdapter
      */
     private $underscoreToCamelCaseService;
 
+    /**
+     * @var StateTranslatorServiceInterface
+     */
+    private $stateTranslator;
+
     public function __construct()
     {
         $this->db = Shopware()->Container()->get('db');
         $this->modelManager = Shopware()->Container()->get('models');
         $this->underscoreToCamelCaseService = Shopware()->Container()->get('swag_import_export.underscore_camelcase_service');
+        $this->stateTranslator = Shopware()->Container()->get('shopware.components.state_translator');
     }
 
     /**
@@ -152,6 +161,7 @@ class MainOrdersDbAdapter implements DataDbAdapter
             $orders = $orderBuilder->getQuery()->getResult();
             $orders = DbAdapterHelper::decodeHtmlEntities($orders);
             $orders = DbAdapterHelper::escapeNewLines($orders);
+            $orders = $this->addOrderAndPaymentState($orders);
             $result = ['order' => $orders];
         }
 
@@ -234,6 +244,8 @@ class MainOrdersDbAdapter implements DataDbAdapter
             'shipping.additionalAddressLine2 as shippingAdditionalAddressLine2',
             'sState.name as shippingState',
             'sCountry.name as shippingCountry',
+            'paymentStatus.id as paymentStateId',
+            'orderStatus.id as orderStateId',
         ];
 
         $attributesSelect = $this->getAttributes();
@@ -423,6 +435,60 @@ class MainOrdersDbAdapter implements DataDbAdapter
             ->orderBy('details.orderId, details.taxRate', 'ASC');
 
         return $builder;
+    }
+
+    /**
+     * @param array $orders
+     *
+     * @return array
+     */
+    private function addOrderAndPaymentState(array $orders)
+    {
+        $states = $this->getStates();
+
+        foreach ($orders as &$order) {
+            $order['paymentState'] = $this->getStateName((int) $order['paymentStateId'], $states);
+            $order['orderState'] = $this->getStateName((int) $order['orderStateId'], $states);
+        }
+
+        return $orders;
+    }
+
+    /**
+     * @param int   $id
+     * @param array $states
+     *
+     * @return string
+     */
+    private function getStateName($id, array $states)
+    {
+        foreach ($states as $state) {
+            if ($id === (int) $state['id']) {
+                return $state['description'];
+            }
+        }
+
+        return '';
+    }
+
+    /**
+     * @return array
+     */
+    private function getStates()
+    {
+        $data = $this->modelManager->getRepository(Status::class)->createQueryBuilder('state')
+            ->select('state')
+            ->getQuery()
+            ->getArrayResult();
+
+        foreach ($data as $key => $state) {
+            $data[$key] = $this->stateTranslator->translateState(
+                $state['group'] === 'state' ? StateTranslatorService::STATE_ORDER : $state['group'],
+                $state
+            );
+        }
+
+        return $data;
     }
 
     /**
