@@ -191,7 +191,7 @@ class ExportCommand extends ShopwareCommand
             try {
                 $this->dateFrom = new \DateTime($this->dateFrom);
             } catch (Exception $e) {
-                sprintf('Invalid format! %s', $e->getMessage());
+                throw new \RuntimeException(sprintf('Invalid format! %s', $e->getMessage()));
             }
         }
 
@@ -200,7 +200,7 @@ class ExportCommand extends ShopwareCommand
                 $this->dateTo = new \DateTime($this->dateTo);
                 $this->dateTo->setTime(23, 59, 59);
             } catch (Exception $e) {
-                sprintf('Invalid format! %s', $e->getMessage());
+                throw new \RuntimeException(sprintf('Invalid format! %s', $e->getMessage()));
             }
         }
 
