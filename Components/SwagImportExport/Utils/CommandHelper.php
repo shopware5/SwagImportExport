@@ -56,6 +56,16 @@ class CommandHelper
     /**
      * @var string
      */
+    protected $dateFrom;
+
+    /**
+     * @var string
+     */
+    protected $dateTo;
+
+    /**
+     * @var string
+     */
     protected $username;
 
     /**
@@ -123,6 +133,14 @@ class CommandHelper
 
         if (isset($data['offset'])) {
             $this->offset = $data['offset'];
+        }
+
+        if (isset($data['dateFrom'])) {
+            $this->dateFrom = $data['dateFrom'];
+        }
+
+        if (isset($data['dateTo'])) {
+            $this->dateTo = $data['dateTo'];
         }
 
         if (isset($data['username'])) {
@@ -203,6 +221,18 @@ class CommandHelper
             $postData['filter']['customerStreamId'] = $this->customerStream;
         }
 
+        if ($this->dateFrom) {
+            $postData['filter']['dateFrom'] = $this->dateFrom;
+        }
+
+        if ($this->dateTo) {
+            $postData['filter']['dateTo'] = $this->dateTo;
+        }
+
+        /*$postData['filter']['dateFrom'] = new \DateTime('2018-11-01');
+        $postData['filter']['dateTo'] = new \DateTime('2018-11-21');*/
+
+
         /** @var Profile $profile */
         $profile = $this->plugin->getProfileFactory()->loadProfile($postData);
 
@@ -247,7 +277,8 @@ class CommandHelper
             'format' => $this->format,
             'sessionId' => $this->sessionId,
             'fileName' => basename($this->filePath),
-            'filter' => [],
+            'filter' => [
+            ],
             'limit' => [
                 'limit' => $this->limit,
                 'offset' => $this->offset,
