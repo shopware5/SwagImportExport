@@ -229,10 +229,6 @@ class CommandHelper
             $postData['filter']['dateTo'] = $this->dateTo;
         }
 
-        /*$postData['filter']['dateFrom'] = new \DateTime('2018-11-01');
-        $postData['filter']['dateTo'] = new \DateTime('2018-11-21');*/
-
-
         /** @var Profile $profile */
         $profile = $this->plugin->getProfileFactory()->loadProfile($postData);
 
@@ -299,6 +295,15 @@ class CommandHelper
         if ($this->customerStream) {
             $postData['filter']['customerStreamId'] = $this->customerStream;
         }
+
+        if ($this->dateFrom) {
+            $postData['filter']['dateFrom'] = $this->dateFrom;
+        }
+
+        if ($this->dateTo) {
+            $postData['filter']['dateTo'] = $this->dateTo;
+        }
+
 
         /** @var Profile $profile */
         $profile = $this->plugin->getProfileFactory()->loadProfile($postData);
