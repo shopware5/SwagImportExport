@@ -273,8 +273,7 @@ class CommandHelper
             'format' => $this->format,
             'sessionId' => $this->sessionId,
             'fileName' => basename($this->filePath),
-            'filter' => [
-            ],
+            'filter' => [],
             'limit' => [
                 'limit' => $this->limit,
                 'offset' => $this->offset,
@@ -303,7 +302,6 @@ class CommandHelper
         if ($this->dateTo) {
             $postData['filter']['dateTo'] = $this->dateTo;
         }
-
 
         /** @var Profile $profile */
         $profile = $this->plugin->getProfileFactory()->loadProfile($postData);
