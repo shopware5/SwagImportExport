@@ -393,7 +393,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
                         me.down('combo[name=format]').setReadOnly(false);
                     }
 
-                    if (type === 'articles') {
+                    if (type === 'articles' || type === 'articlesPrices') {
                         me.articleFields.show();
                     } else if (type === 'orders' || type === 'mainOrders') {
                         me.orderFields.show();
