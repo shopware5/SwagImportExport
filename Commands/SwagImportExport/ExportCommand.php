@@ -205,7 +205,7 @@ class ExportCommand extends ShopwareCommand
         }
 
         if (!empty($this->dateFrom) && !empty($this->dateTo)) {
-            if($this->dateFrom > $this->dateTo) {
+            if ($this->dateFrom > $this->dateTo) {
                 throw new \RuntimeException(sprintf('from date must be greater than to date'));
             }
         }
