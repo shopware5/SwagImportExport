@@ -79,7 +79,7 @@ class OrderDbAdapterTest extends TestCase
         $records['default'][0]['status'] = 'abc';
 
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('status Feld muss int sein!');
+        $this->expectExceptionMessage('status Feld muss int sein und nicht abc!');
         $ordersDbAdapter->write($records);
     }
 

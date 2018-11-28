@@ -57,7 +57,7 @@ class PriceWriterTest extends TestCase
         $articleId = 3;
 
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('price Feld muss float sein!');
+        $this->expectExceptionMessage('price Feld muss float sein und nicht invalidPrice!');
         $priceWriterDbAdapter->write($articleId, $articleOrderNumber, $articlePriceData);
     }
 
