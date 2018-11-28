@@ -590,7 +590,7 @@ class CustomerDbAdapter implements DataDbAdapter
             //checks for multiple email address
             if (count($customer) > 0 && $customer[0]->getNumber() !== $record['customerNumber']) {
                 $message = SnippetsHelper::getNamespace()
-                    ->get('adapters/customer/multiple_email', 'There are existing email address/es with %s. Please provide subshopID');
+                    ->get('adapters/customer/multiple_email', 'There are existing email address/es with %s having different customer numbers. Please provide subshopID or equalize customer number');
                 throw new AdapterException(sprintf($message, $record['email']));
             }
 
