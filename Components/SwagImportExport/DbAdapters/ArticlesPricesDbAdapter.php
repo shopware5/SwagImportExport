@@ -8,6 +8,7 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
+use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\QueryBuilder;
 use Shopware\Components\SwagImportExport\DataManagers\ArticlePriceDataManager;
@@ -277,7 +278,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                 }
 
                 if (isset($record['from'])) {
-                    $record['from'] = (int)$record['from'];
+                    $record['from'] = (int) $record['from'];
                 }
 
                 if (empty($record['price']) && empty($record['percent'])) {
@@ -297,24 +298,24 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                 }
 
                 if (isset($record['price'])) {
-                    $record['price'] = (float)str_replace(',', '.', $record['price']);
+                    $record['price'] = (float) str_replace(',', '.', $record['price']);
                 }
 
                 if (isset($record['pseudoPrice'])) {
-                    $record['pseudoPrice'] = (float)str_replace(',', '.', $record['pseudoPrice']);
+                    $record['pseudoPrice'] = (float) str_replace(',', '.', $record['pseudoPrice']);
                 }
 
                 if (isset($record['purchasePrice'])) {
-                    $record['purchasePrice'] = (float)str_replace(',', '.', $record['purchasePrice']);
+                    $record['purchasePrice'] = (float) str_replace(',', '.', $record['purchasePrice']);
                 }
 
                 if (isset($record['percent'])) {
-                    $record['percent'] = (float)str_replace(',', '.', $record['percent']);
+                    $record['percent'] = (float) str_replace(',', '.', $record['percent']);
                 }
                 // removes price with same from value from database
                 $this->updateArticleFromPrice($record, $articleDetail->getId());
                 // checks if price belongs to graduation price
-                if ((int)$record['from'] !== 1) {
+                if ((int) $record['from'] !== 1) {
                     // updates graduation to value with from value - 1
                     $this->updateArticleToPrice($record, $articleDetail->getId(), $articleDetail->getArticleId());
                 }
