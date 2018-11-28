@@ -59,6 +59,16 @@ class ExportCommand extends ShopwareCommand
     /**
      * @var string
      */
+    protected $dateFrom;
+
+    /**
+     * @var string
+     */
+    protected $dateTo;
+
+    /**
+     * @var string
+     */
     protected $category;
 
     /**
@@ -90,6 +100,8 @@ class ExportCommand extends ShopwareCommand
             ->addOption('exportVariants', 'x', InputOption::VALUE_NONE, 'Should the variants be exported?')
             ->addOption('offset', 'o', InputOption::VALUE_OPTIONAL, 'What is the offset?')
             ->addOption('limit', 'l', InputOption::VALUE_OPTIONAL, 'What is the limit?')
+            ->addOption('dateFrom', 'from', InputOption::VALUE_OPTIONAL, 'Date from')
+            ->addOption('dateTo', 'to', InputOption::VALUE_OPTIONAL, 'Date to')
             ->addOption('category', 'c', InputOption::VALUE_OPTIONAL, 'Provide a category ID')
             ->addOption('productStream', null, InputOption::VALUE_OPTIONAL, 'Provide a Product-Stream ID')
             ->setHelp('The <info>%command.name%</info> exports data to a file.');
@@ -114,6 +126,9 @@ class ExportCommand extends ShopwareCommand
                 'exportVariants' => $this->exportVariants,
                 'limit' => $this->limit,
                 'offset' => $this->offset,
+                'dateFrom' => $this->dateFrom,
+                'dateTo' => $this->dateTo,
+                'filter' => [],
                 'username' => 'Commandline',
                 'category' => $this->category ? [$this->category] : null,
                 'productStream' => $this->productStream ? [$this->productStream] : null,
@@ -130,6 +145,14 @@ class ExportCommand extends ShopwareCommand
             $output->writeln('<info>' . sprintf('Using category as filter: %s.', $this->category) . '</info>');
         } elseif ($this->productStream) {
             $output->writeln('<info>' . sprintf('Using Product-Stream as filter: %s.', $this->productStream) . '</info>');
+        }
+
+        if ($this->dateFrom) {
+            $output->writeln('<info>' . sprintf('from: %s.', $this->dateFrom->format('d.m.Y H:i:s')) . '</info>');
+        }
+
+        if ($this->dateTo) {
+            $output->writeln('<info>' . sprintf('to: %s.', $this->dateTo->format('d.m.Y H:i:s')) . '</info>');
         }
 
         $preparationData = $helper->prepareExport();
@@ -161,6 +184,31 @@ class ExportCommand extends ShopwareCommand
         $this->filePath = $input->getArgument('filepath');
         $this->category = $input->getOption('category');
         $this->productStream = $input->getOption('productStream');
+        $this->dateFrom = $input->getOption('dateFrom');
+        $this->dateTo = $input->getOption('dateTo');
+
+        if (!empty($this->dateFrom)) {
+            try {
+                $this->dateFrom = new \DateTime($this->dateFrom);
+            } catch (\Exception $e) {
+                throw new \RuntimeException(sprintf('Invalid format! %s', $e->getMessage()));
+            }
+        }
+
+        if (!empty($this->dateTo)) {
+            try {
+                $this->dateTo = new \DateTime($this->dateTo);
+                $this->dateTo->setTime(23, 59, 59);
+            } catch (\Exception $e) {
+                throw new \RuntimeException(sprintf('Invalid format! %s', $e->getMessage()));
+            }
+        }
+
+        if (!empty($this->dateFrom) && !empty($this->dateTo)) {
+            if ($this->dateFrom > $this->dateTo) {
+                throw new \RuntimeException(sprintf('from date must be greater than to date'));
+            }
+        }
 
         if (!$this->filePath) {
             throw new \RuntimeException('File path is required.');
