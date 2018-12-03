@@ -8,10 +8,11 @@
     "link": "http://store.shopware.com",
     "author": "Shopware AG",
 
-    "currentVersion": "2.7.0",
+    "currentVersion": "2.8.0",
 
     "changelog": {
         "de": {
+            "2.8.0": "PT-9223 - Optimiert den Download von großen Dateien; PT-9479 - Verbessert Information in der Fehlermeldung beim Kundenimport; PT-9606 - Fügt weitere Felder beim Export von Bestellungen hinzu; PT-9834 - Kompatibilität mit übersetzbaren Bestell- und Zahlungsstatus hergestellt; PT-9869 - Ergänzt die Fehlermeldung bei doppelten E-Mail-Adressen mit unterschiedlichen Kundennummern; PT-9870 - Behebt ein Problem mit dem Pfad für die Logs bei Composer Installationen; PT-9937 - Ermöglicht das Filter von Exporten via CLI-Command mit dateFrom und dateTo Parametern;",
             "2.7.0": "PT-8508 - Freitextfeld-Übersetzungen zu CSV-Import hinzugefügt; PT-9186 - Kompatibilität zu anderen Plugins verbessert; PT-9672 - Standardwert für das Änderungsdatum von Artikeln; PT-9703 - Profil für Kategorieübersetzungen hinzugefügt; PT-9711 - Profil für ähnliche Artikel verbessert;",
             "2.6.2": "PT-9279 - Kompatibilität zu anderen Plugins verbessert;",
             "2.6.1": "PT-9004 - Optimierung der Performanz beim Export von Produkten;",
@@ -50,6 +51,7 @@
             "1.0.1": "Problem mit verschwindendem Import/Export Menü-Eintrag behoben; Weitere ACL-Zugangsberechtigungen hinzugefügt; Korrektur: article.active Verhalten; Korrektur: Artikel-Attribute; Korrektur: Datums- und Zeitimporte"
         },
         "en": {
+            "2.8.0": "PT-9223 - Optimizes download of large files; PT-9479 - Improves information in error message when importing customer; PT-9606 - Adds further available fields for order export; PT-9834 - Fixed compatibility with translatable order and payment status; PT-9869 - Adds the error message for duplicate email addresses with different customer numbers; PT-9870 - Fixes an issue with path building for logs when installing via composer; PT-9937 - Allows filtering of exports via CLI command with dateFrom and dateTo parameters;",
             "2.7.0": "PT-8508 - Added attribute translations to CSV import; PT-9186 - Improve compatibility to other plugins; PT-9672 - Default value for change date of products; PT-9703 - Added profile for category translations; PT-9711 - Improve profile for similar products;",
             "2.6.2": "PT-9279 - Improve compatibility with other plugins;",
             "2.6.1": "PT-9004 - Improve export performance for products;",
@@ -90,7 +92,7 @@
     },
 
     "compatibility": {
-        "minimumVersion": "5.5.0",
+        "minimumVersion": "5.5.2",
         "maximumVersion": null,
         "blacklist": [
         ]
