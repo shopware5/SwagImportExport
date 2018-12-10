@@ -8,6 +8,7 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
+use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\QueryBuilder;
 use Shopware\Components\SwagImportExport\DataManagers\ArticlePriceDataManager;
@@ -17,12 +18,17 @@ use Shopware\Components\SwagImportExport\Validators\ArticlePriceValidator;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Detail;
 use Shopware\Models\Article\Price as ArticlePrice;
+use Shopware\Models\Category\Category;
 use Shopware\Models\Customer\Group as CustomerGroup;
+use Shopware\Models\Shop\Shop;
 
 class ArticlesPricesDbAdapter implements DataDbAdapter
 {
     /** @var ModelManager */
     protected $manager;
+
+    /** @var array */
+    protected $categoryIdCollection;
 
     /** @var array */
     protected $logMessages;
@@ -65,7 +71,60 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
             ->orderBy('price.id', 'ASC');
 
         if (!empty($filter)) {
-            $builder->addFilter($filter);
+            if ($filter['variants']) {
+                $builder->andWhere('detail.kind <> 3');
+            } else {
+                $builder->andWhere('detail.kind = 1');
+            }
+
+            if (isset($filter['categories'])) {
+                /** @var Category $category */
+                $category = $this->manager->find(Category::class, $filter['categories'][0]);
+
+                $this->collectCategoryIds($category);
+                $categories = $this->getCategoryIdCollection();
+
+                $categoriesBuilder = $this->manager->createQueryBuilder();
+                $categoriesBuilder->select('article.id')
+                    ->from(Article::class, 'article')
+                    ->leftJoin('article.categories', 'categories')
+                    ->where('categories.id IN (:cids)')
+                    ->setParameter('cids', $categories)
+                    ->groupBy('article.id');
+
+                $articleIds = array_map(
+                    function ($item) {
+                        return $item['id'];
+                    },
+                    $categoriesBuilder->getQuery()->getResult()
+                );
+
+                $builder
+                    ->andWhere('article.id IN (:ids)')
+                    ->setParameter('ids', $articleIds);
+            } else {
+                if (isset($filter['productStreamId'])) {
+                    $productStreamId = $filter['productStreamId'][0];
+
+                    /** @var \Shopware\Models\Shop\Repository $shopRepo */
+                    $shopRepo = $this->manager->getRepository(Shop::class);
+                    $shop = $shopRepo->getActiveDefault();
+                    $contextService = Shopware()->Container()->get('shopware_storefront.context_service');
+                    $context = $contextService->createShopContext($shop->getId());
+                    $criteriaService = Shopware()->Container()->get('shopware_search.store_front_criteria_factory');
+                    $criteria = $criteriaService->createBaseCriteria([$shop->getCategory()->getId()], $context);
+                    $streamRepo = Shopware()->Container()->get('shopware_product_stream.repository');
+                    $streamRepo->prepareCriteria($criteria, $productStreamId);
+
+                    $productNumberSearch = Shopware()->Container()->get('shopware_search.product_number_search');
+                    /** @var ProductNumberSearchResult $products */
+                    $products = $productNumberSearch->search($criteria, $context);
+                    $productNumbers = array_keys($products->getProducts());
+
+                    $builder->andWhere('detail.number IN(:productNumbers)')
+                        ->setParameter('productNumbers', $productNumbers);
+                }
+            }
         }
 
         if ($start) {
@@ -377,6 +436,22 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
     }
 
     /**
+     * @return array
+     */
+    public function getCategoryIdCollection()
+    {
+        return $this->categoryIdCollection;
+    }
+
+    /**
+     * @param $categoryIdCollection
+     */
+    public function setCategoryIdCollection($categoryIdCollection)
+    {
+        $this->categoryIdCollection[] = $categoryIdCollection;
+    }
+
+    /**
      * @param $columns
      * @param $ids
      *
@@ -400,6 +475,26 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
     }
 
     /**
+     * Collects recursively category ids
+     *
+     * @param \Shopware\Models\Category\Category $categoryModel
+     */
+    protected function collectCategoryIds($categoryModel)
+    {
+        $categoryId = $categoryModel->getId();
+        $this->setCategoryIdCollection($categoryId);
+        $categories = $categoryModel->getChildren();
+
+        if (!$categories) {
+            return;
+        }
+
+        foreach ($categories as $category) {
+            $this->collectCategoryIds($category);
+        }
+    }
+
+    /**
      * @param $record
      * @param $articleDetailId
      */
@@ -413,9 +508,9 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
         $query = $this->manager->createQuery($dql);
 
         $query->setParameter('customerGroup', $record['priceGroup'])
-        ->setParameter('detailId', $articleDetailId)
-        ->setParameter('fromValue', $record['from'])
-        ->execute();
+            ->setParameter('detailId', $articleDetailId)
+            ->setParameter('fromValue', $record['from'])
+            ->execute();
     }
 
     /**
@@ -434,9 +529,9 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
         $query = $this->manager->createQuery($dql);
 
         $query->setParameter('toValue', $record['from'] - 1)
-        ->setParameter('customerGroup', $record['priceGroup'])
-        ->setParameter('detailId', $articleDetailId)
-        ->setParameter('articleId', $articleId)
-        ->execute();
+            ->setParameter('customerGroup', $record['priceGroup'])
+            ->setParameter('detailId', $articleDetailId)
+            ->setParameter('articleId', $articleId)
+            ->execute();
     }
 }
