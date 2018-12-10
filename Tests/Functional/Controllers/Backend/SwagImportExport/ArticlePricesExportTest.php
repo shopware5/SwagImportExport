@@ -35,6 +35,7 @@ class ArticlePricesExportTest extends \Enlight_Components_Test_Controller_TestCa
         $params = $this->getExportRequestParams();
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::ARTICLES_PRICES_PROFILE_TYPE);
         $params['format'] = self::FORMAT_XML;
+        $params['variants'] = 1;
         $this->Request()->setParams($params);
 
         $this->dispatch('backend/SwagImportExportExport/export');
@@ -56,6 +57,7 @@ class ArticlePricesExportTest extends \Enlight_Components_Test_Controller_TestCa
         $params = $this->getExportRequestParams();
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::ARTICLES_PRICES_PROFILE_TYPE);
         $params['format'] = self::FORMAT_CSV;
+        $params['variants'] = 1;
         $this->Request()->setParams($params);
 
         $this->dispatch('backend/SwagImportExportExport/export');
