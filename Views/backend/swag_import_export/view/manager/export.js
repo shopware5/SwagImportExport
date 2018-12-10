@@ -395,6 +395,9 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
 
                     if (type === 'articles' || type === 'articlesPrices') {
                         me.articleFields.show();
+                        if (type === 'articlesPrices') {
+                            me.down('field[name=variants]').setValue(true);
+                        }
                     } else if (type === 'orders' || type === 'mainOrders') {
                         me.orderFields.show();
                     } else if (type === 'articlesInStock') {
