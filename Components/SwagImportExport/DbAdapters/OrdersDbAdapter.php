@@ -276,6 +276,20 @@ class OrdersDbAdapter implements DataDbAdapter
                     $orderDetailModel->setStatus($detailStatusModel);
                 }
 
+                // prepares the detail attributes
+                $orderDetailData = [];
+                foreach ($record as $key => $value) {
+                    if (preg_match('/^detailAttribute/', $key)) {
+                        $newKey = lcfirst(preg_replace('/^detailAttribute/', '', $key));
+                        $orderDetailData['attribute'][$newKey] = $value;
+                        unset($record[$key]);
+                    }
+                }
+
+                if (!empty($orderDetailData)) {
+                    $orderDetailModel->fromArray($orderDetailData);
+                }
+
                 //prepares the attributes
                 foreach ($record as $key => $value) {
                     if (strpos($key, 'attribute') === 0) {
@@ -496,6 +510,11 @@ class OrdersDbAdapter implements DataDbAdapter
 
         $columns = \array_merge($columns, $documentColumns);
 
+        $attributesSelect = $this->getDetailAttributes();
+        if (!empty($attributesSelect)) {
+            $columns = array_merge($columns, $attributesSelect);
+        }
+
         $attributesSelect = $this->getAttributes();
 
         if (!empty($attributesSelect)) {
@@ -535,6 +554,35 @@ class OrdersDbAdapter implements DataDbAdapter
     }
 
     /**
+     * @throws \Zend_Db_Statement_Exception
+     *
+     * @return array
+     */
+    private function getDetailAttributes()
+    {
+        // Attributes
+        $stmt = Shopware()->Db()->query('SELECT * FROM s_order_details_attributes LIMIT 1');
+        $attributes = $stmt->fetch();
+
+        $attributesSelect = [];
+        if ($attributes) {
+            unset($attributes['id']);
+            unset($attributes['detailID']);
+            $attributes = array_keys($attributes);
+
+            $prefix = 'detailAttr';
+            $attributesSelect = [];
+            foreach ($attributes as $attribute) {
+                $catAttr = $this->underscoreToCamelCaseService->underscoreToCamelCase($attribute);
+
+                $attributesSelect[] = sprintf('%s.%s as detailAttribute%s', $prefix, $catAttr, ucwords($catAttr));
+            }
+        }
+
+        return $attributesSelect;
+    }
+
+    /**
      * @return QueryBuilder
      */
     private function getBuilder($columns, $ids)
@@ -558,6 +606,7 @@ class OrdersDbAdapter implements DataDbAdapter
             ->leftJoin('orders.customer', 'customer')
             ->leftJoin('orders.attribute', 'attr')
             ->leftJoin('orders.documents', 'documents')
+            ->leftJoin('details.attribute', 'detailAttr')
             ->where('details.id IN (:ids)')
             ->setParameter('ids', $ids);
 
