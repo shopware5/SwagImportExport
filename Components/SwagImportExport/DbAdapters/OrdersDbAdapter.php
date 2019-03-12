@@ -482,6 +482,7 @@ class OrdersDbAdapter implements DataDbAdapter
             'customer.groupKey as customergroup',
             'customer.newsletter as newsletter',
             'customer.affiliate as affiliate',
+            'customer.number as customerNumber',
         ];
 
         $columns = \array_merge($columns, $customerColumns);
