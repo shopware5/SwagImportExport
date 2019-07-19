@@ -4,6 +4,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
  */
 
 namespace SwagImportExport\Tests\Functional\Components\SwagImportExport\DbAdapters\Articles;
@@ -127,7 +128,7 @@ class ArticleWriterTest extends TestCase
         $this->assertEquals($expectedModifiedArticle['description'], $updatedArticle->getDescription(), 'Could not update field description.');
         $this->assertEquals($expectedModifiedArticle['descriptionLong'], $updatedArticle->getDescriptionLong(), 'Could not update field description long.');
         $this->assertEquals($expectedModifiedArticle['inStock'], $updatedArticle->getMainDetail()->getInStock(), 'Could not update field instock.');
-        $this->assertEquals($expectedModifiedArticle['lastStock'], $updatedArticle->getLastStock(), 'Could not update field last stock.');
+        $this->assertEquals($expectedModifiedArticle['lastStock'], $updatedArticle->getMainDetail()->getLastStock(), 'Could not update field last stock.');
         $this->assertFalse($updatedArticle->getActive(), 'Could not update field active.');
         $this->assertEquals($expectedModifiedArticle['supplierName'], $updatedArticle->getSupplier()->getName(), 'Could not update field supplier name.');
     }

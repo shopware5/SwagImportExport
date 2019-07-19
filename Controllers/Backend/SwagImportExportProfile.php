@@ -4,7 +4,9 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
  */
+
 use Doctrine\DBAL\DBALException;
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\SwagImportExport\Service\ProfileService;
@@ -31,9 +33,9 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
      * @param Enlight_Controller_Request_Request   $request
      * @param Enlight_Controller_Response_Response $response
      */
-    public function __construct(Enlight_Controller_Request_Request $request, Enlight_Controller_Response_Response $response)
+    public function __construct()
     {
-        parent::__construct($request, $response);
+        parent::__construct();
 
         $this->plugin = Shopware()->Plugins()->Backend()->SwagImportExport();
     }
@@ -91,7 +93,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         $namespace = $this->get('snippets')->getNamespace('backend/swag_import_export/default_profiles');
 
         foreach ($data as &$profile) {
-            if (true === $profile['default']) {
+            if ($profile['default'] === true) {
                 $profile['translation'] = $namespace->get($profile['name']);
                 $profile['description'] = $namespace->get($profile['description']);
             }

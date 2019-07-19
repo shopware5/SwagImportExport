@@ -4,7 +4,9 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
  */
+
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\SwagImportExport\UploadPathProvider;
 use Shopware\CustomModels\ImportExport\Logger;
@@ -100,7 +102,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
             $response = $this->Response();
             $response->clearHeaders();
-            $response->clearRawHeaders();
+            $response->headers->replace();
 
             $response->setHeader('Cache-Control', 'public');
             $response->setHeader('Content-Description', 'File Transfer');
