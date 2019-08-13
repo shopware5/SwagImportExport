@@ -44,7 +44,7 @@ class TranslationWriter
     {
         $this->manager = Shopware()->Models();
         $this->connection = $this->manager->getConnection();
-        $this->writer = new TranslationComponent();
+        $this->writer = Shopware()->Container()->get('translation');
         $this->shops = $this->getShops();
     }
 
