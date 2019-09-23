@@ -4,6 +4,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
  */
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
@@ -206,7 +207,7 @@ class TranslationsDbAdapter implements DataDbAdapter
 
         $validator = $this->getValidator();
         $importMapper = $this->getElementMapper();
-        $translationWriter = new \Shopware_Components_Translation();
+        $translationWriter = Shopware()->Container()->get('translation');
 
         foreach ($records['default'] as $index => $record) {
             try {
