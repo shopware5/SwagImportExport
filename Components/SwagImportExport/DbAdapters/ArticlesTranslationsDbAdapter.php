@@ -4,6 +4,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
  */
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
@@ -50,7 +51,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
     {
         $this->manager = Shopware()->Models();
         $this->validator = new ArticleTranslationValidator();
-        $this->translationComponent = new \Shopware_Components_Translation();
+        $this->translationComponent = Shopware()->Container()->get('translation');
         $this->importExportErrorMode = (bool) Shopware()->Config()->get('SwagImportExportErrorMode');
         $this->db = Shopware()->Db();
         $this->eventManager = Shopware()->Events();
