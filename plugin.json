@@ -8,10 +8,11 @@
     "link": "http://store.shopware.com",
     "author": "Shopware AG",
 
-    "currentVersion": "2.10.1",
+    "currentVersion": "2.10.2",
 
     "changelog": {
         "de": {
+            "2.10.2": "PT-10789 - Problem beim Im/Export der Übersetzungen behoben;",
             "2.10.1": "PT-10727 - Behebt ein Problem mit der 5.6 Kompatibilität;",
             "2.10.0": "PT-10425 - Shopware 5.6 Kompatibilität;",
             "2.9.0": "PT-9955 - Erlaubt Filterung beim Export von Artikelpreisen;",
@@ -54,6 +55,7 @@
             "1.0.1": "Problem mit verschwindendem Import/Export Menü-Eintrag behoben; Weitere ACL-Zugangsberechtigungen hinzugefügt; Korrektur: article.active Verhalten; Korrektur: Artikel-Attribute; Korrektur: Datums- und Zeitimporte"
         },
         "en": {
+            "2.10.2": "PT-10789 - Fix problem on im/exporting translations;",
             "2.10.1": "PT-10727 - Solves an issue regarding 5.6 compatibility",
             "2.10.0": "PT-10425 - Shopware 5.6 compatibility;",
             "2.9.0": "PT-9955 - Allows filtering on export product prices;",
