@@ -5,6 +5,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 use Shopware\Components\SwagImportExport\Utils\DataHelper;
 use Shopware\CustomModels\ImportExport\Repository;
 use Shopware\CustomModels\ImportExport\Session;
@@ -29,7 +30,7 @@ class Shopware_Controllers_Backend_SwagImportExportSession extends Shopware_Cont
         $manager = $this->getModelManager();
         $sessionId = $this->Request()->getParam('sessionId');
 
-        if (null === $sessionId) {
+        if ($sessionId === null) {
             $this->View()->assign(['success' => false, 'message' => 'No session found']);
         }
         /** @var Repository $sessionRepository */

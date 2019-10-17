@@ -1343,20 +1343,6 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
         return $this->translationColumns;
     }
 
-
-    /**
-     * Returns the columns of the article attributes table
-     *
-     * @return array
-     */
-    protected function getAttributeColumns()
-    {
-        /** @var AbstractSchemaManager $schemaManager */
-        $schemaManager = Shopware()->Container()->get('models')->getConnection()->getSchemaManager();
-
-        return array_keys($schemaManager->listTableColumns('s_articles_attributes'));
-    }
-
     /**
      * @throws \Zend_Db_Statement_Exception
      *
@@ -1437,6 +1423,19 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                 $this->saveTempData($tempData);
             }
         }
+    }
+
+    /**
+     * Returns the columns of the article attributes table
+     *
+     * @return array
+     */
+    protected function getAttributeColumns()
+    {
+        /** @var AbstractSchemaManager $schemaManager */
+        $schemaManager = Shopware()->Container()->get('models')->getConnection()->getSchemaManager();
+
+        return array_keys($schemaManager->listTableColumns('s_articles_attributes'));
     }
 
     /**

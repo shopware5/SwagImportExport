@@ -398,7 +398,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         $products = $this->db->query($sql)->fetchAll();
 
         $mappedProducts = [];
-        foreach($products as $product) {
+        foreach ($products as $product) {
             $mappedProducts[$product['articleId']][$product['languageId']] = $product;
         }
 

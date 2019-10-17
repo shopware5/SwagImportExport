@@ -26,7 +26,7 @@ class ArticleSimilarsProfileTest extends TestCase
         $expectedRelatedArticleId = [
             0 => 2,
             1 => 4,
-            2 => 6
+            2 => 6,
         ];
 
         $this->runCommand("sw:import:import -p default_similar_articles {$filePath}");

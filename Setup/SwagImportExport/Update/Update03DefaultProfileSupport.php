@@ -82,6 +82,6 @@ class Update03DefaultProfileSupport implements UpdaterInterface
      */
     private function isDuplicateNameError(\Exception $exception)
     {
-        return false !== strpos($exception->getMessage(), 'Duplicate entry');
+        return strpos($exception->getMessage(), 'Duplicate entry') !== false;
     }
 }

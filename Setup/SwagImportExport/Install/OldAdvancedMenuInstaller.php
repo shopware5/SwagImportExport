@@ -75,7 +75,7 @@ class OldAdvancedMenuInstaller implements InstallerInterface
     }
 
     /**
-     * @return null|Menu
+     * @return Menu|null
      */
     private function findParent()
     {
@@ -85,7 +85,7 @@ class OldAdvancedMenuInstaller implements InstallerInterface
     }
 
     /**
-     * @return null|Plugin
+     * @return Plugin|null
      */
     private function findPlugin()
     {

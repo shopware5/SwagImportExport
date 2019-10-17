@@ -55,7 +55,7 @@ class DbAdapterHelper
      */
     private static function convertBooleanFalseToString($value)
     {
-        if (false === $value) {
+        if ($value === false) {
             return '0';
         }
 

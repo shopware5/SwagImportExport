@@ -5,6 +5,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\SwagImportExport\Service\AutoImportServiceInterface;
 use Shopware\Models\Plugin\Plugin;

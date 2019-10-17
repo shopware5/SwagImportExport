@@ -456,7 +456,7 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
     /**
      * @param $type
      *
-     * @return null|array
+     * @return array|null
      */
     public function getBufferData($type)
     {

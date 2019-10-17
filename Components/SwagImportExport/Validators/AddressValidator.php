@@ -62,7 +62,7 @@ class AddressValidator extends Validator
      */
     private function validateEmptyAddressRecord($addressRecord)
     {
-        if (0 === count($addressRecord)) {
+        if (count($addressRecord) === 0) {
             throw new AdapterException(
                 SnippetsHelper::getNamespace()->get(
                     'adapters/address/no_records',

@@ -188,6 +188,6 @@ class CsvFileReader implements FileReader
      */
     private function isInvalidRecord($row)
     {
-        return null === $row[0];
+        return $row[0] === null;
     }
 }

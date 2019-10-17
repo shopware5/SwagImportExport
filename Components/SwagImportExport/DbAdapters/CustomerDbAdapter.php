@@ -564,7 +564,7 @@ class CustomerDbAdapter implements DataDbAdapter
      *
      * @throws AdapterException
      *
-     * @return array|null|object
+     * @return array|object|null
      */
     protected function findExistingEntries(array $record)
     {

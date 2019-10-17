@@ -198,7 +198,7 @@ class CategoryWriter
         $sql = 'SELECT id FROM s_categories WHERE id = 1';
         $rootId = $this->db->fetchOne($sql);
 
-        if (false === $rootId) {
+        if ($rootId === false) {
             $message = SnippetsHelper::getNamespace()
                 ->get('adapters/articles/root_category_does_not_exist', 'Root category does not exist');
             throw new \RuntimeException($message);
@@ -266,14 +266,14 @@ class CategoryWriter
                     }
 
                     //if categoryId exists, the article will be assigned to it, no matter of the categoryPath
-                    if (true === $isCategoryExists) {
+                    if ($isCategoryExists === true) {
                         $this->categoryIds[$category['categoryId']] = (int) $category['categoryId'];
 
                         return "({$articleId}, {$category['categoryId']})";
                     }
 
                     //if categoryId does NOT exist and categoryPath is empty an error will be shown
-                    if (false === $isCategoryExists && empty($category['categoryPath'])) {
+                    if ($isCategoryExists === false && empty($category['categoryPath'])) {
                         $message = SnippetsHelper::getNamespace()
                             ->get('adapters/articles/category_not_found', 'Category with id %s could not be found.');
                         throw new AdapterException(sprintf($message, $category['categoryId']));
