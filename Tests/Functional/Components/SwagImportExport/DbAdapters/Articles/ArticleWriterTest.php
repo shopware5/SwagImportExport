@@ -4,7 +4,6 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
  */
 
 namespace SwagImportExport\Tests\Functional\Components\SwagImportExport\DbAdapters\Articles;

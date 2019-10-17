@@ -490,11 +490,11 @@ class CategoriesDbAdapter implements DataDbAdapter
      *
      * @param int $id
      *
-     * @return null|Category
+     * @return Category|null
      */
     private function findCategoryById($id)
     {
-        if (null === $id) {
+        if ($id === null) {
             return null;
         }
 
@@ -531,7 +531,7 @@ class CategoriesDbAdapter implements DataDbAdapter
     /**
      * @param int $id
      *
-     * @return null|Group
+     * @return Group|null
      */
     private function getCustomerGroupById($id)
     {

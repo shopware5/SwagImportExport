@@ -136,7 +136,7 @@ class MainMenuItemInstaller implements InstallerInterface
     /**
      * @param string $label
      *
-     * @return null|Menu
+     * @return Menu|null
      */
     private function findMenuItemByLabel($label)
     {

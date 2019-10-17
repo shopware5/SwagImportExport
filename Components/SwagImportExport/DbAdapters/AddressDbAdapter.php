@@ -246,7 +246,7 @@ class AddressDbAdapter implements DataDbAdapter
     /**
      * @param array $addressRecord
      *
-     * @return null|Customer
+     * @return Customer|null
      */
     private function findCustomerByEmailAndNumber(array $addressRecord)
     {
@@ -261,7 +261,7 @@ class AddressDbAdapter implements DataDbAdapter
     /**
      * @param array $addressRecord
      *
-     * @return null|Address
+     * @return Address|null
      */
     private function getAddressModel(array $addressRecord)
     {
@@ -281,7 +281,7 @@ class AddressDbAdapter implements DataDbAdapter
     /**
      * @param array $addressRecord
      *
-     * @return null|State
+     * @return State|null
      */
     private function findStateById(array $addressRecord)
     {
@@ -304,7 +304,7 @@ class AddressDbAdapter implements DataDbAdapter
             $customer = $this->modelManager->find(Customer::class, $addressRecord['userID']);
         }
 
-        if (null === $customer) {
+        if ($customer === null) {
             $customer = $this->findCustomerByEmailAndNumber($addressRecord);
         }
 
@@ -337,7 +337,7 @@ class AddressDbAdapter implements DataDbAdapter
     {
         $attribute = [];
         foreach ($addressRecord as $field => $value) {
-            if (false === strpos($field, 'attribute')) {
+            if (strpos($field, 'attribute') === false) {
                 continue;
             }
 
@@ -381,7 +381,7 @@ class AddressDbAdapter implements DataDbAdapter
     /**
      * @param array $addressRecord
      *
-     * @return null|Address
+     * @return Address|null
      */
     private function createAddressWithId(array $addressRecord)
     {
