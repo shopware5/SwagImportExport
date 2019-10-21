@@ -8,6 +8,7 @@ variables:
     MYSQL_DATABASE: shopware
     WEB_DOCUMENT_ROOT: $CI_PROJECT_DIR/
     GIT_STRATEGY: clone
+    CHECKOUT_SHOPWARE_BRANCH: "5.6"
 
 stages:
     - Code Style Check
@@ -18,14 +19,25 @@ default:
     image: shopware/5-continuous:7.3
     before_script:
         - zip -rq plugin.zip .
-        - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.shopware.com/shopware/5/product/shopware.git shopware --depth=1
+        - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.shopware.com/shopware/5/product/shopware.git shopware --depth=1 -b ${CHECKOUT_SHOPWARE_BRANCH}
         - unzip -q plugin.zip -d shopware/engine/Shopware/Plugins/Local/Backend/SwagImportExport
         - cd shopware
         - /entrypoint supervisord &>/dev/null &
+        - ./psh.phar init --SW_HOST="localhost"
+        - php bin/console sw:plugin:refresh
+        - php bin/console sw:plugin:list
+        - php bin/console sw:plugin:install --activate SwagImportExport
+        - php bin/console sw:cache:clear -e testing
 
 PHP analyze:
     stage: Code Style Check
+    before_script: []
     script:
+        - zip -rq plugin.zip .
+        - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.shopware.com/shopware/5/product/shopware.git shopware --depth=1 -b ${CHECKOUT_SHOPWARE_BRANCH}
+        - unzip -q plugin.zip -d shopware/engine/Shopware/Plugins/Local/Backend/SwagImportExport
+        - cd shopware
+        - /entrypoint supervisord &>/dev/null &
         - cp /usr/local/bin/composer composer.phar
         - php composer.phar install
         - vendor/bin/php-cs-fixer fix --dry-run -v --config=engine/Shopware/Plugins/Local/Backend/SwagImportExport/.php_cs.dist --format=junit | tee php-cs-fixer.xml
@@ -37,16 +49,11 @@ Code Coverage:
     stage: Coverage
     needs: [PHP analyze]
     script:
-        - ./psh.phar init --SW_HOST="localhost"
-        - php bin/console sw:plugin:refresh
-        - php bin/console sw:plugin:list
-        - php bin/console sw:plugin:install --activate SwagImportExport
-        - php bin/console sw:cache:clear -e testing
         - composer require pcov/clobber
         - vendor/bin/pcov clobber
         - cd engine/Shopware/Plugins/Local/Backend/SwagImportExport
         - php -d pcov.enabled=1 -d pcov.directory=$CI_PROJECT_DIR
-            /builds/shopware/5/services/swagimportexport/shopware/vendor/bin/phpunit
+            ../../../../../../vendor/bin/phpunit
             --configuration phpunit.xml.dist
             --log-junit build/artifacts/phpunit.junit.xml
             --colors=never
@@ -66,22 +73,13 @@ SW 5.6:
     stage: Shopware Versions
     needs: [PHP analyze]
     image: shopware/5-continuous:7.2
-    before_script: []
+    variables:
+        CHECKOUT_SHOPWARE_BRANCH: "5.6"
     only:
         - master
     script:
-        - zip -rq plugin.zip .
-        - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.shopware.com/shopware/5/product/shopware.git shopware -b 5.6
-        - unzip -q plugin.zip -d shopware/engine/Shopware/Plugins/Local/Backend/SwagImportExport
-        - cd shopware
-        - /entrypoint supervisord &>/dev/null &
-        - ./psh.phar init --SW_HOST="localhost"
-        - php bin/console sw:plugin:refresh
-        - php bin/console sw:plugin:list
-        - php bin/console sw:plugin:install --activate SwagImportExport
-        - php bin/console sw:cache:clear -e testing
-        - cd shopware/engine/Shopware/Plugins/Local/Backend/SwagImportExport
-        - php ../../../vendor/bin/phpunit
+        - cd engine/Shopware/Plugins/Local/Backend/SwagImportExport
+        - php  ../../../../../../vendor/bin/phpunit
             --configuration phpunit.xml.dist
             --colors=never
     coverage: '/^\s*Lines:\s*(\d+(?:\.\d+)?%)/'
@@ -93,22 +91,13 @@ SW 5.7:
     stage: Shopware Versions
     needs: [PHP analyze]
     image: shopware/5-continuous:7.2
-    before_script: []
+    variables:
+        CHECKOUT_SHOPWARE_BRANCH: "5.7"
     only:
         - master
     script:
-        - zip -rq plugin.zip .
-        - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.shopware.com/shopware/5/product/shopware.git shopware -b 5.7
-        - unzip -q plugin.zip -d shopware/engine/Shopware/Plugins/Local/Backend/SwagImportExport
-        - cd shopware
-        - /entrypoint supervisord &>/dev/null &
-        - ./psh.phar init --SW_HOST="localhost"
-        - php bin/console sw:plugin:refresh
-        - php bin/console sw:plugin:list
-        - php bin/console sw:plugin:install --activate SwagImportExport
-        - php bin/console sw:cache:clear -e testing
-        - cd shopware/engine/Shopware/Plugins/Local/Backend/SwagImportExport
-        - php ../../../vendor/bin/phpunit
+        - cd engine/Shopware/Plugins/Local/Backend/SwagImportExport
+        - php  ../../../../../../vendor/bin/phpunit
             --configuration phpunit.xml.dist
             --colors=never
     coverage: '/^\s*Lines:\s*(\d+(?:\.\d+)?%)/'
