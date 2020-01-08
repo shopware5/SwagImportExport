@@ -123,7 +123,26 @@ class ArticleWriter
         }
 
         $article['articleId'] = $productId;
-        $article['kind'] = $mainVariantId == $variantId ? 1 : 2;
+        if (!isset($article['kind']) || empty($article['kind'])) {
+            $article['kind'] = $mainVariantId == $variantId ? 1 : 2;
+        }else {
+            $this->db->query('
+            UPDATE
+                s_articles a
+                LEFT JOIN s_articles_details d ON d.id = a.main_detail_id
+            SET
+                a.main_detail_id = (
+                    SELECT
+                        id
+                    FROM
+                        s_articles_details
+                    WHERE
+                        articleID = a.id
+                        AND kind = 1
+                    LIMIT 1)
+            WHERE a.id = ?
+            ', [$productId]);
+        }
         list($article, $variantId) = $this->createOrUpdateProductVariant($article, $defaultValues, $variantId, $createDetail);
 
         // set reference
