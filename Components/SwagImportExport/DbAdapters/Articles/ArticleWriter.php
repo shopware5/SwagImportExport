@@ -123,7 +123,9 @@ class ArticleWriter
         }
 
         $article['articleId'] = $articleId;
-        $article['kind'] = $mainDetailId == $detailId ? 1 : 2;
+        if (!isset($article['kind']) || empty($article['kind'])) {
+            $article['kind'] = $mainDetailId == $detailId ? 1 : 2;
+        }
         list($article, $detailId) = $this->createOrUpdateArticleDetail($article, $defaultValues, $detailId, $createDetail);
 
         // set reference
