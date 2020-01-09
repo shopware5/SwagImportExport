@@ -125,6 +125,23 @@ class ArticleWriter
         $article['articleId'] = $articleId;
         if (!isset($article['kind']) || empty($article['kind'])) {
             $article['kind'] = $mainDetailId == $detailId ? 1 : 2;
+        } else {
+            $this->db->query('
+            UPDATE
+                s_articles a
+                LEFT JOIN s_articles_details d ON d.id = a.main_detail_id
+            SET
+                a.main_detail_id = (
+                    SELECT
+                        id
+                    FROM
+                        s_articles_details
+                    WHERE
+                        articleID = a.id
+                        AND kind = 1
+                    LIMIT 1)
+            WHERE a.id = ?
+            ', [$articleId]);
         }
         list($article, $detailId) = $this->createOrUpdateArticleDetail($article, $defaultValues, $detailId, $createDetail);
 
