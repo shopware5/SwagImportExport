@@ -120,9 +120,6 @@ class MainMenuItemInstallerTest extends TestCase
         $this->assertFalse($isCompatible);
     }
 
-    /**
-     * @param EntityRepository $menuRepository
-     */
     private function removeActualMenuItem(EntityRepository $menuRepository)
     {
         /** @var Menu $currentMenuItem */

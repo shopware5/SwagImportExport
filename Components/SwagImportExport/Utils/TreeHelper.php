@@ -20,7 +20,6 @@ class TreeHelper
     /**
      * Converts the JSON tree to ExtJS tree
      *
-     * @param array  $node
      * @param bool   $isInIteration
      * @param string $adapter
      *
@@ -90,9 +89,6 @@ class TreeHelper
     /**
      * Helper function which appends child node to the tree
      *
-     * @param array $child
-     * @param array $node
-     *
      * @return bool
      */
     public static function appendNode(array $child, array &$node)
@@ -151,7 +147,6 @@ class TreeHelper
      * Helper function which finds node from the tree
      *
      * @param string $id
-     * @param array  $node
      * @param string $parentId
      *
      * @return bool|array
@@ -186,9 +181,6 @@ class TreeHelper
     /**
      * Helper function which appends child node to the tree
      *
-     * @param array $child
-     * @param array $node
-     *
      * @return bool
      */
     public static function moveNode(array $child, array &$node)
@@ -221,8 +213,6 @@ class TreeHelper
     /**
      * Helper function which finds and changes node from the tree
      *
-     * @param array $child
-     * @param array $node
      * @param array $defaultFields
      *
      * @return bool
@@ -283,9 +273,6 @@ class TreeHelper
 
     /**
      * Helper function which finds and deletes node from the tree
-     *
-     * @param array $child
-     * @param array $node
      *
      * @return bool
      */

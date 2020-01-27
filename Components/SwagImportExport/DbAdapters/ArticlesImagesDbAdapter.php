@@ -694,10 +694,6 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
         throw new AdapterException(sprintf($message, $urlArray['scheme']));
     }
 
-    /**
-     * @param array $record
-     * @param Image $image
-     */
     private function createAttribute(array $record, Image $image)
     {
         $attributes = $this->mapAttributes($record);

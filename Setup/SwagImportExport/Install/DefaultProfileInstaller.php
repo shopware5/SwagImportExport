@@ -30,10 +30,6 @@ class DefaultProfileInstaller implements InstallerInterface
      */
     private $setupContext;
 
-    /**
-     * @param SetupContext $setupContext
-     * @param Connection   $connection
-     */
     public function __construct(SetupContext $setupContext, Connection $connection)
     {
         $this->connection = $connection;

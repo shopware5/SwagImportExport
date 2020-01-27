@@ -32,9 +32,6 @@ class XmlFileWriter implements FileWriter
      */
     protected $fileHelper;
 
-    /**
-     * @param FileHelper $fileHelper
-     */
     public function __construct(FileHelper $fileHelper)
     {
         $this->fileHelper = $fileHelper;

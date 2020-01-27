@@ -560,8 +560,6 @@ class CustomerDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param array $record
-     *
      * @throws AdapterException
      *
      * @return array|object|null
@@ -601,8 +599,6 @@ class CustomerDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param array $record
-     *
      * @throws AdapterException
      * @throws \Exception
      */
@@ -631,8 +627,6 @@ class CustomerDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param array $record
-     *
      * @throws \RuntimeException
      *
      * @return array
@@ -690,8 +684,6 @@ class CustomerDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param array $record
-     *
      * @return array
      */
     protected function prepareBilling(array &$record)
@@ -726,9 +718,7 @@ class CustomerDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param array $record
-     * @param bool  $newCustomer
-     * @param array $billing
+     * @param bool $newCustomer
      *
      * @return array
      */
@@ -776,7 +766,6 @@ class CustomerDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param array         $customerData
      * @param int           $customerId
      * @param Customer|bool $newCustomer
      *

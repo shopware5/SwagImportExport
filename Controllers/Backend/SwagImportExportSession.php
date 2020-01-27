@@ -142,8 +142,6 @@ class Shopware_Controllers_Backend_SwagImportExportSession extends Shopware_Cont
     }
 
     /**
-     * @param array $data
-     *
      * @return array
      */
     private function translateDataSet(array $data)

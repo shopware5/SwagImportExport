@@ -20,7 +20,6 @@ class CsvConverter
 
     /**
      * @param array $array
-     * @param array $keys
      *
      * @return string
      */
@@ -39,7 +38,6 @@ class CsvConverter
 
     /**
      * @param array $array
-     * @param array $keys
      * @param null  $stream
      *
      * @return bool
@@ -125,8 +123,7 @@ class CsvConverter
     }
 
     /**
-     * @param       $csv
-     * @param array $keys
+     * @param $csv
      *
      * @return array
      */

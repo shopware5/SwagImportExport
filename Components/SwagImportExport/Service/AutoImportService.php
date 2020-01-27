@@ -37,11 +37,6 @@ class AutoImportService implements AutoImportServiceInterface
      */
     private $directory;
 
-    /**
-     * @param UploadPathProvider $uploadPathProvider
-     * @param ModelManager       $modelManager
-     * @param ProfileFactory     $profileFactory
-     */
     public function __construct(
         UploadPathProvider $uploadPathProvider,
         ModelManager $modelManager,
@@ -86,7 +81,6 @@ class AutoImportService implements AutoImportServiceInterface
     }
 
     /**
-     * @param array  $files
      * @param string $lockerFileLocation
      */
     private function importFiles(array $files, $lockerFileLocation)

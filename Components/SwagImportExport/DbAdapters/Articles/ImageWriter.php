@@ -31,9 +31,6 @@ class ImageWriter
      */
     protected $connection;
 
-    /**
-     * @param ArticlesDbAdapter $articlesDbAdapter
-     */
     public function __construct(ArticlesDbAdapter $articlesDbAdapter)
     {
         $this->articlesDbAdapter = $articlesDbAdapter;

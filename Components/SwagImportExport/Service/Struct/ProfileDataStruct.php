@@ -30,9 +30,6 @@ class ProfileDataStruct
      */
     private $tree;
 
-    /**
-     * @param Profile $profile
-     */
     public function __construct(Profile $profile)
     {
         $this->name = $profile->getName();

@@ -31,9 +31,7 @@ class DbAdapterTestHelper extends ImportExportTestHelper
     protected $dataProvider;
 
     /**
-     * @param \PHPUnit_Extensions_Database_DataSet_DefaultTable $expected
-     * @param \PHPUnit_Extensions_Database_DataSet_ITable       $actual
-     * @param string                                            $message
+     * @param string $message
      */
     public function assertTablesEqual(
         \PHPUnit_Extensions_Database_DataSet_DefaultTable $expected,

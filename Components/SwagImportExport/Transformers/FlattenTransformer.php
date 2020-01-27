@@ -141,8 +141,6 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
 
     /**
      * Search the iteration part of the tree template
-     *
-     * @param array $tree
      */
     public function findMainIterationPart(array $tree)
     {

@@ -14,9 +14,6 @@ class DataLimit
 
     protected $offset;
 
-    /**
-     * @param array $options
-     */
     public function __construct(array $options)
     {
         if (isset($options['limit'])) {

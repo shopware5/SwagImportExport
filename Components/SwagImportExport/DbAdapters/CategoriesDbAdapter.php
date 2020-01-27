@@ -414,7 +414,6 @@ class CategoriesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param array $data
      * @param $index
      * @param $categoryId
      * @param $groups

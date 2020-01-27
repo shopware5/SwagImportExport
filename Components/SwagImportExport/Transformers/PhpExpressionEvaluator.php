@@ -37,9 +37,7 @@ class PhpExpressionEvaluator implements ExpressionEvaluator
         $errorAfter = error_get_last();
 
         if ($errorAfter && ($errorBefore != $errorAfter)) {
-            throw new \Exception(
-                "Error on evaluating  with expression $expression. Error message: {$errorAfter['message']}"
-            );
+            throw new \Exception("Error on evaluating  with expression $expression. Error message: {$errorAfter['message']}");
         }
 
         return $evaledParam;

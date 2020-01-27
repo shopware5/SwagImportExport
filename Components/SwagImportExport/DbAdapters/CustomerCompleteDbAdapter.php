@@ -138,8 +138,6 @@ class CustomerCompleteDbAdapter extends CustomerDbAdapter
     }
 
     /**
-     * @param array $ids
-     *
      * @return array
      */
     private function getAddresses(array $ids)

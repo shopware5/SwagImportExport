@@ -37,10 +37,6 @@ class MainMenuItemInstaller implements InstallerInterface
      */
     private $setupContext;
 
-    /**
-     * @param SetupContext $setupContext
-     * @param ModelManager $modelManager
-     */
     public function __construct(SetupContext $setupContext, ModelManager $modelManager)
     {
         $this->modelManager = $modelManager;
@@ -76,9 +72,6 @@ class MainMenuItemInstaller implements InstallerInterface
         return $this->setupContext->assertMinimumShopwareVersion(self::SHOPWARE_MIN_VERSION);
     }
 
-    /**
-     * @param Plugin $plugin
-     */
     private function createMenuItem(Plugin $plugin)
     {
         $parentMenuItem = $this->findMenuItemByLabel(self::PARENT_MENU_LABEL_FOR_CURRENT_MENU);
@@ -109,10 +102,6 @@ class MainMenuItemInstaller implements InstallerInterface
         }
     }
 
-    /**
-     * @param Menu   $menuItem
-     * @param Plugin $plugin
-     */
     private function updateImportExportMenuItem(Menu $menuItem, Plugin $plugin)
     {
         $menuItem->setController(self::SWAG_IMPORT_EXPORT_CONTROLLER);

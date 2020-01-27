@@ -144,9 +144,6 @@ class Logger extends ModelEntity
         return $this->session;
     }
 
-    /**
-     * @param Session $session
-     */
     public function setSession(Session $session)
     {
         $this->session = $session;

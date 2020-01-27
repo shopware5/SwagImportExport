@@ -22,9 +22,6 @@ class CsvFileReader implements FileReader
      */
     private $uploadPathProvider;
 
-    /**
-     * @param UploadPathProvider $uploadPathProvider
-     */
     public function __construct(UploadPathProvider $uploadPathProvider)
     {
         $this->uploadPathProvider = $uploadPathProvider;
@@ -134,8 +131,6 @@ class CsvFileReader implements FileReader
     }
 
     /**
-     * @param array $rows
-     *
      * @return array
      */
     protected function toUtf8(array $rows)
@@ -162,8 +157,6 @@ class CsvFileReader implements FileReader
 
     /**
      * Returns column names of the given CSV file
-     *
-     * @param \SplFileObject $file
      *
      * @return array
      */

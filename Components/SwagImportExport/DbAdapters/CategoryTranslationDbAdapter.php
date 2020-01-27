@@ -285,9 +285,7 @@ class CategoryTranslationDbAdapter implements DataDbAdapter
             $message = SnippetsHelper::getNamespace()
                 ->get('adapters/translations/lang_id_not_found', 'Language with id %s does not exists');
 
-            throw new AdapterException(
-                sprintf($message, $objectLanguage)
-            );
+            throw new AdapterException(sprintf($message, $objectLanguage));
         }
     }
 
@@ -310,9 +308,7 @@ class CategoryTranslationDbAdapter implements DataDbAdapter
             $message = SnippetsHelper::getNamespace()
                 ->get('adapters/category_id_not_found', 'Category with Id: %s does not exists');
 
-            throw new AdapterException(
-                sprintf($message, $objectKey)
-            );
+            throw new AdapterException(sprintf($message, $objectKey));
         }
     }
 }

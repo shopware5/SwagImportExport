@@ -99,10 +99,8 @@ class DataIO
     private $uploadPathProvider;
 
     /**
-     * @param DataDbAdapter      $dbAdapter
-     * @param Session            $dataSession
-     * @param Logger             $logger
-     * @param UploadPathProvider $uploadPathProvider
+     * @param Session $dataSession
+     * @param Logger  $logger
      */
     public function __construct(DataDbAdapter $dbAdapter, $dataSession, $logger, UploadPathProvider $uploadPathProvider)
     {
@@ -266,8 +264,6 @@ class DataIO
     /**
      * Generates file name
      *
-     * @param \Shopware\Components\SwagImportExport\Profile\Profile $profile
-     *
      * @return string
      */
     public function generateFileName(Profile $profile)
@@ -338,8 +334,6 @@ class DataIO
      * If the session has no ids, then the db adapter must be used to retrieve them.
      * Then writes these ids to the session and sets the session state to "active".
      * For now we will write the ids as a serialized array.
-     *
-     * @param Profile $profile
      *
      * @throws \Exception
      */

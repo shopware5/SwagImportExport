@@ -19,10 +19,6 @@ class Update01MainMenuItem implements UpdaterInterface
      */
     private $mainMenuItemInstaller;
 
-    /**
-     * @param SetupContext $setupContext
-     * @param ModelManager $modelManager
-     */
     public function __construct(SetupContext $setupContext, ModelManager $modelManager)
     {
         $this->mainMenuItemInstaller = new MainMenuItemInstaller($setupContext, $modelManager);

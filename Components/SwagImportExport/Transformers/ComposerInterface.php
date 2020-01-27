@@ -25,15 +25,11 @@ interface ComposerInterface
 
     /**
      * Parses the header of the formatted input file data.
-     *
-     * @param array $data
      */
     public function parseHeader(array $data);
 
     /**
      * Parses the footer of the formatted input file data.
-     *
-     * @param array $data
      */
     public function parseFooter(array $data);
 }

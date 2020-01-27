@@ -31,11 +31,6 @@ class DbalHelper
      */
     private $eventManager;
 
-    /**
-     * @param Connection   $connection
-     * @param ModelManager $modelManager
-     * @param EventManager $eventManager
-     */
     public function __construct(Connection $connection, ModelManager $modelManager, EventManager $eventManager)
     {
         $this->connection = $connection;
@@ -56,7 +51,6 @@ class DbalHelper
     }
 
     /**
-     * @param array  $data
      * @param string $entity
      * @param $primaryId
      *
@@ -114,10 +108,8 @@ class DbalHelper
     }
 
     /**
-     * @param string        $value
-     * @param string        $key
-     * @param ClassMetadata $metaData
-     * @param QueryBuilder  $builder
+     * @param string $value
+     * @param string $key
      *
      * @return string
      */

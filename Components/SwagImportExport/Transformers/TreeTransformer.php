@@ -343,8 +343,6 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
 
     /**
      * Search the iteration part of the tree template
-     *
-     * @param array $tree
      */
     public function findIterationPart(array $tree)
     {

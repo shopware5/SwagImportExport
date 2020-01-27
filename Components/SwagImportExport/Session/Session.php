@@ -36,9 +36,6 @@ class Session
      */
     protected $manager;
 
-    /**
-     * @param SessionEntity $session
-     */
     public function __construct(SessionEntity $session)
     {
         $this->sessionEntity = $session;
@@ -88,9 +85,6 @@ class Session
      * If the session has no ids, then the db adapter must be used to retrieve them.
      * Then writes these ids to the session and sets the session state to "active".
      * For now we will write the ids as a serialized array.
-     *
-     * @param Profile $profile
-     * @param array   $data
      *
      * @throws \Exception
      */

@@ -30,10 +30,6 @@ class ProfileService implements ProfileServiceInterface
 
     /**
      * ProfileService constructor.
-     *
-     * @param ModelManager                        $manager
-     * @param Filesystem                          $filesystem
-     * @param \Enlight_Components_Snippet_Manager $snippetManager
      */
     public function __construct(ModelManager $manager, Filesystem $filesystem, \Enlight_Components_Snippet_Manager $snippetManager)
     {

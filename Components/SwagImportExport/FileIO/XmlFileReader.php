@@ -96,8 +96,7 @@ class XmlFileReader implements FileReader
     }
 
     /**
-     * @param \DOMElement $node
-     * @param             $path
+     * @param $path
      *
      * @return array|string
      */
@@ -137,7 +136,6 @@ class XmlFileReader implements FileReader
 
     /**
      * @param $node
-     * @param array $path
      */
     protected function findIterationNode($node, array $path)
     {

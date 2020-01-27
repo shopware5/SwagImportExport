@@ -35,14 +35,6 @@ class ServiceHelperStruct
     /** @var DataIO */
     private $dataIO;
 
-    /**
-     * @param Profile       $profile
-     * @param Session       $session
-     * @param DataDbAdapter $dbAdapter
-     * @param FileReader    $fileReader
-     * @param FileWriter    $fileWriter
-     * @param DataIO        $dataIO
-     */
     public function __construct(
         Profile $profile,
         Session $session,

@@ -194,9 +194,6 @@ class TranslationWriter
     }
 
     /**
-     * @param array $data
-     * @param array $attributes
-     *
      * @return array
      */
     private function prepareAttributePrefix(array $data, array $attributes)

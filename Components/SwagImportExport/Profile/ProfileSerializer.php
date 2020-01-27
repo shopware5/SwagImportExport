@@ -15,9 +15,6 @@ class ProfileSerializer
      */
     private $profile;
 
-    /**
-     * @param Profile $profile
-     */
     public function __construct(Profile $profile)
     {
         $this->profile = $profile;

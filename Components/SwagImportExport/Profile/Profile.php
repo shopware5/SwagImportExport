@@ -27,8 +27,7 @@ class Profile
     /**
      * Profile constructor.
      *
-     * @param       $profile
-     * @param array $configNames
+     * @param $profile
      */
     public function __construct($profile, array $configNames = [])
     {

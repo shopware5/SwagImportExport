@@ -17,8 +17,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 interface ProfileServiceInterface
 {
     /**
-     * @param UploadedFile $file
-     *
      * @throws \Exception
      */
     public function importProfile(UploadedFile $file);

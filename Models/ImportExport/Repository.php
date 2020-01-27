@@ -24,10 +24,8 @@ class Repository extends ModelRepository
     /**
      * Returns a query builder object to get all profiles.
      *
-     * @param array $filterBy
-     * @param array $orderBy
-     * @param null  $limit
-     * @param null  $offset
+     * @param null $limit
+     * @param null $offset
      *
      * @return \Shopware\Components\Model\QueryBuilder
      */
@@ -68,10 +66,8 @@ class Repository extends ModelRepository
     /**
      * Returns a query builder object to get all sessions.
      *
-     * @param array $filterBy
-     * @param array $orderBy
-     * @param null  $limit
-     * @param null  $offset
+     * @param null $limit
+     * @param null $offset
      *
      * @return \Shopware\Components\Model\QueryBuilder
      */
@@ -118,10 +114,8 @@ class Repository extends ModelRepository
     /**
      * Returns a query builder object to get all expressions.
      *
-     * @param array $filterBy
-     * @param array $orderBy
-     * @param null  $limit
-     * @param null  $offset
+     * @param null $limit
+     * @param null $offset
      *
      * @return \Shopware\Components\Model\QueryBuilder
      */
@@ -160,10 +154,8 @@ class Repository extends ModelRepository
     /**
      * Returns a query builder object to get all logs.
      *
-     * @param array $filterBy
-     * @param array $orderBy
-     * @param null  $limit
-     * @param null  $offset
+     * @param null $limit
+     * @param null $offset
      *
      * @return \Shopware\Components\Model\QueryBuilder
      */

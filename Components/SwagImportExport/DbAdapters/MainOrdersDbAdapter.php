@@ -438,8 +438,6 @@ class MainOrdersDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param array $orders
-     *
      * @return array
      */
     private function addOrderAndPaymentState(array $orders)
@@ -455,8 +453,7 @@ class MainOrdersDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param int   $id
-     * @param array $states
+     * @param int $id
      *
      * @return string
      */

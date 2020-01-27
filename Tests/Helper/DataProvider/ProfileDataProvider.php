@@ -67,9 +67,6 @@ class ProfileDataProvider
      */
     private $profileIds = [];
 
-    /**
-     * @param ModelManager $modelManager
-     */
     public function __construct(ModelManager $modelManager)
     {
         $this->modelManager = $modelManager;

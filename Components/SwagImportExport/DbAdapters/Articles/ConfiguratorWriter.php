@@ -46,12 +46,6 @@ class ConfiguratorWriter
      */
     private $sets;
 
-    /**
-     * @param DbalHelper                               $dbalHelper
-     * @param Connection                               $connection
-     * @param \Enlight_Components_Db_Adapter_Pdo_Mysql $db
-     * @param ConfiguratorValidator                    $configuratorValidator
-     */
     public function __construct(
         DbalHelper $dbalHelper,
         Connection $connection,
@@ -79,8 +73,7 @@ class ConfiguratorWriter
     }
 
     /**
-     * @param ArticleWriterResult $articleWriterResult
-     * @param array               $configuratorData
+     * @param array $configuratorData
      *
      * @throws AdapterException
      */

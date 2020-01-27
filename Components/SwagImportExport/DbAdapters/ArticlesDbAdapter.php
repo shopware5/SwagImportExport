@@ -1391,8 +1391,6 @@ class ArticlesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param array $records
-     *
      * @throws \Exception
      */
     private function performImport(array $records)
@@ -1543,9 +1541,8 @@ class ArticlesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param array               $records
-     * @param int                 $index
-     * @param ArticleWriterResult $articleWriterResult
+     * @param array $records
+     * @param int   $index
      *
      * @return array
      */
@@ -1561,8 +1558,6 @@ class ArticlesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param array $columns
-     *
      * @return array
      */
     private function filterAttributeColumns(array $columns)

@@ -32,11 +32,6 @@ class DefaultProfileUpdater implements UpdaterInterface
      */
     private $setupContext;
 
-    /**
-     * @param SetupContext                         $setupContext
-     * @param Connection                           $connection
-     * @param \Shopware_Components_Snippet_Manager $snippetManager
-     */
     public function __construct(
         SetupContext $setupContext,
         Connection $connection,

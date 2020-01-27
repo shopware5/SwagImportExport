@@ -31,10 +31,6 @@ class ArticleDataManager extends DataManager
 
     private $suppliers;
 
-    /**
-     * @param \Enlight_Components_Db_Adapter_Pdo_Mysql $db
-     * @param DbalHelper                               $dbalHelper
-     */
     public function __construct(\Enlight_Components_Db_Adapter_Pdo_Mysql $db, DbalHelper $dbalHelper)
     {
         $this->db = $db;

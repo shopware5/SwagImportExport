@@ -19,9 +19,6 @@ class BackendControllerTestHelper
      */
     private $profileDataProvider;
 
-    /**
-     * @param ProfileDataProvider $profileDataProvider
-     */
     public function __construct(
         ProfileDataProvider $profileDataProvider
     ) {

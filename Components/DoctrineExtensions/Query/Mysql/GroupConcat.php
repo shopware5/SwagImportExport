@@ -59,8 +59,6 @@ class GroupConcat extends FunctionNode
     public $orderBy;
 
     /**
-     * @param Parser $parser
-     *
      * @throws \Doctrine\ORM\Query\QueryException
      */
     public function parse(Parser $parser)
@@ -101,8 +99,6 @@ class GroupConcat extends FunctionNode
     }
 
     /**
-     * @param SqlWalker $sqlWalker
-     *
      * @return string
      */
     public function getSql(SqlWalker $sqlWalker)

@@ -512,8 +512,6 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
 
     /**
      * Injects Ace Editor used in Conversions GUI
-     *
-     * @param Enlight_Event_EventArgs $args
      */
     public function injectBackendAceEditor(Enlight_Event_EventArgs $args)
     {
@@ -898,9 +896,6 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
     }
 
     /**
-     * @param SchemaTool $tool
-     * @param array      $classes
-     *
      * @return array
      */
     private function removeTablePrefix(SchemaTool $tool, array $classes)

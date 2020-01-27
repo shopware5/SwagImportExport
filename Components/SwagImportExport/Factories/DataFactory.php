@@ -43,9 +43,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     private $sessionRepository;
 
     /**
-     * @param DataDbAdapter $dbAdapter
      * @param $dataSession
-     * @param Logger $logger
      *
      * @return DataIO
      */
@@ -162,8 +160,6 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     /**
      * Returns limit adapter
      *
-     * @param array $limit
-     *
      * @return \Shopware\Components\SwagImportExport\Utils\DataLimit
      */
     public function createLimit(array $limit)
@@ -210,8 +206,6 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     }
 
     /**
-     * @param SessionEntity $sessionEntity
-     *
      * @return Session
      */
     protected function createSession(SessionEntity $sessionEntity)
