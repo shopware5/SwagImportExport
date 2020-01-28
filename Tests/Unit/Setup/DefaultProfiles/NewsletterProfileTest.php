@@ -20,9 +20,9 @@ class NewsletterProfileTest extends TestCase
     {
         $newsletterProfile = new NewsletterRecipientProfile();
 
-        $this->assertInstanceOf(NewsletterRecipientProfile::class, $newsletterProfile);
-        $this->assertInstanceOf(ProfileMetaData::class, $newsletterProfile);
-        $this->assertInstanceOf(\JsonSerializable::class, $newsletterProfile);
+        static::assertInstanceOf(NewsletterRecipientProfile::class, $newsletterProfile);
+        static::assertInstanceOf(ProfileMetaData::class, $newsletterProfile);
+        static::assertInstanceOf(\JsonSerializable::class, $newsletterProfile);
     }
 
     public function test_it_should_return_valid_profile()

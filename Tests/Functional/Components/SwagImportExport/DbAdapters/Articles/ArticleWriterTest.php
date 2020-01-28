@@ -26,7 +26,7 @@ class ArticleWriterTest extends TestCase
      */
     private $modelManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->modelManager = Shopware()->Container()->get('models');
@@ -35,7 +35,7 @@ class ArticleWriterTest extends TestCase
         $this->articleWriter = new ArticleWriter();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->modelManager->rollback();
@@ -63,9 +63,9 @@ class ArticleWriterTest extends TestCase
 
         $articleWriterResult = $this->articleWriter->write($demoArticle, []);
 
-        $this->assertEquals($expectedArticleId, $articleWriterResult->getArticleId(), 'Expected articleId does not match the obtained articleId.');
-        $this->assertEquals($expectedDetailId, $articleWriterResult->getDetailId(), 'Expected detailId does not match the obtained detailId.');
-        $this->assertEquals($expectedMainDetailId, $articleWriterResult->getMainDetailId(), 'Expected mainDetailId id does not match the obtained detailId.');
+        static::assertEquals($expectedArticleId, $articleWriterResult->getArticleId(), 'Expected articleId does not match the obtained articleId.');
+        static::assertEquals($expectedDetailId, $articleWriterResult->getDetailId(), 'Expected detailId does not match the obtained detailId.');
+        static::assertEquals($expectedMainDetailId, $articleWriterResult->getMainDetailId(), 'Expected mainDetailId id does not match the obtained detailId.');
     }
 
     public function test_write_should_insert_a_new_article()
@@ -90,13 +90,13 @@ class ArticleWriterTest extends TestCase
         /** @var Article $insertedArticle */
         $insertedArticle = $this->modelManager->find(Article::class, $articleWriterResult->getArticleId());
 
-        $this->assertNotNull($insertedArticle, 'Could not insert article');
-        $this->assertEquals($expectedNewArticle['orderNumber'], $insertedArticle->getMainDetail()->getNumber(), 'Could not insert field ordernumber.');
-        $this->assertEquals($expectedNewArticle['description'], $insertedArticle->getDescription(), 'Could not insert field description.');
-        $this->assertEquals($expectedNewArticle['descriptionLong'], $insertedArticle->getDescriptionLong(), 'Could not insert field descrption_long.');
-        $this->assertEquals($expectedNewArticle['inStock'], $insertedArticle->getMainDetail()->getInStock(), 'Could not insert field instock.');
-        $this->assertEquals($expectedNewArticle['active'], $insertedArticle->getActive(), 'Could not insert field active.');
-        $this->assertEquals($expectedNewArticle['supplierName'], $insertedArticle->getSupplier()->getName(), 'Could not insert field supplier name.');
+        static::assertNotNull($insertedArticle, 'Could not insert article');
+        static::assertEquals($expectedNewArticle['orderNumber'], $insertedArticle->getMainDetail()->getNumber(), 'Could not insert field ordernumber.');
+        static::assertEquals($expectedNewArticle['description'], $insertedArticle->getDescription(), 'Could not insert field description.');
+        static::assertEquals($expectedNewArticle['descriptionLong'], $insertedArticle->getDescriptionLong(), 'Could not insert field descrption_long.');
+        static::assertEquals($expectedNewArticle['inStock'], $insertedArticle->getMainDetail()->getInStock(), 'Could not insert field instock.');
+        static::assertEquals($expectedNewArticle['active'], $insertedArticle->getActive(), 'Could not insert field active.');
+        static::assertEquals($expectedNewArticle['supplierName'], $insertedArticle->getSupplier()->getName(), 'Could not insert field supplier name.');
     }
 
     public function test_write_should_update_an_existing_article()
@@ -122,14 +122,14 @@ class ArticleWriterTest extends TestCase
         /** @var Article $updatedArticle */
         $updatedArticle = $this->modelManager->find(Article::class, $articleWriterResult->getArticleId());
 
-        $this->assertNotNull($updatedArticle, 'Could not find updated article');
-        $this->assertEquals($expectedModifiedArticle['orderNumber'], $updatedArticle->getMainDetail()->getNumber(), 'Could not update field ordernumber.');
-        $this->assertEquals($expectedModifiedArticle['description'], $updatedArticle->getDescription(), 'Could not update field description.');
-        $this->assertEquals($expectedModifiedArticle['descriptionLong'], $updatedArticle->getDescriptionLong(), 'Could not update field description long.');
-        $this->assertEquals($expectedModifiedArticle['inStock'], $updatedArticle->getMainDetail()->getInStock(), 'Could not update field instock.');
-        $this->assertEquals($expectedModifiedArticle['lastStock'], $updatedArticle->getMainDetail()->getLastStock(), 'Could not update field last stock.');
-        $this->assertFalse($updatedArticle->getActive(), 'Could not update field active.');
-        $this->assertEquals($expectedModifiedArticle['supplierName'], $updatedArticle->getSupplier()->getName(), 'Could not update field supplier name.');
+        static::assertNotNull($updatedArticle, 'Could not find updated article');
+        static::assertEquals($expectedModifiedArticle['orderNumber'], $updatedArticle->getMainDetail()->getNumber(), 'Could not update field ordernumber.');
+        static::assertEquals($expectedModifiedArticle['description'], $updatedArticle->getDescription(), 'Could not update field description.');
+        static::assertEquals($expectedModifiedArticle['descriptionLong'], $updatedArticle->getDescriptionLong(), 'Could not update field description long.');
+        static::assertEquals($expectedModifiedArticle['inStock'], $updatedArticle->getMainDetail()->getInStock(), 'Could not update field instock.');
+        static::assertEquals($expectedModifiedArticle['lastStock'], $updatedArticle->getMainDetail()->getLastStock(), 'Could not update field last stock.');
+        static::assertFalse($updatedArticle->getActive(), 'Could not update field active.');
+        static::assertEquals($expectedModifiedArticle['supplierName'], $updatedArticle->getSupplier()->getName(), 'Could not update field supplier name.');
     }
 
     public function test_write_with_processed_article()
@@ -146,9 +146,9 @@ class ArticleWriterTest extends TestCase
 
         $articleWriterResult = $this->articleWriter->write($expectedModifiedArticle, []);
 
-        $this->assertEquals($articleWriterResult->getArticleId(), $expectedId, 'The expected article id do not match');
-        $this->assertEquals($articleWriterResult->getDetailId(), $expectedDetailId, 'The expected article detail id do not match');
-        $this->assertEquals($articleWriterResult->getMainDetailId(), $expectedMainDetailId, 'The expected article main detail id do not match');
+        static::assertEquals($articleWriterResult->getArticleId(), $expectedId, 'The expected article id do not match');
+        static::assertEquals($articleWriterResult->getDetailId(), $expectedDetailId, 'The expected article detail id do not match');
+        static::assertEquals($articleWriterResult->getMainDetailId(), $expectedMainDetailId, 'The expected article main detail id do not match');
     }
 
     public function test_write_detail_with_not_existing_main_detail_should_throw_exception()
@@ -176,8 +176,8 @@ class ArticleWriterTest extends TestCase
         $isMainArticleActive = $this->getArticlesActiveFlag($articleWriterResult->getArticleId());
         $isMainDetailActive = $this->getArticleDetailActiveFlag($articleWriterResult->getDetailId());
 
-        $this->assertEquals(0, $isMainDetailActive, 'Could not update active flag for article main detail.');
-        $this->assertEquals(0, $isMainArticleActive, 'Could not update active flag for s_articles if main detail active flag is given.');
+        static::assertEquals(0, $isMainDetailActive, 'Could not update active flag for article main detail.');
+        static::assertEquals(0, $isMainArticleActive, 'Could not update active flag for s_articles if main detail active flag is given.');
     }
 
     public function test_write_should_not_update_article_active_flag_if_detail_active_flag_is_given()
@@ -193,13 +193,11 @@ class ArticleWriterTest extends TestCase
         $isMainArticleActive = $this->getArticlesActiveFlag($articleWriterResult->getArticleId());
         $isDetailActive = $this->getArticleDetailActiveFlag($articleWriterResult->getDetailId());
 
-        $this->assertEquals(0, $isDetailActive, 'Could not update article detail active flag.');
-        $this->assertEquals(1, $isMainArticleActive, 'Article active flag was updated, but only article detail should be updated.');
+        static::assertEquals(0, $isDetailActive, 'Could not update article detail active flag.');
+        static::assertEquals(1, $isMainArticleActive, 'Article active flag was updated, but only article detail should be updated.');
     }
 
     /**
-     * @param $articleId
-     *
      * @return bool|string
      */
     protected function getArticlesActiveFlag($articleId)

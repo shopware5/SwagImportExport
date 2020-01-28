@@ -15,9 +15,9 @@ use SwagImportExport\Tests\Integration\DefaultProfiles\DefaultProfileImportTestC
 
 class MinimalCategoriesProfileTest extends TestCase
 {
-    use DatabaseTestCaseTrait;
     use CommandTestCaseTrait;
     use DefaultProfileImportTestCaseTrait;
+    use DatabaseTestCaseTrait;
 
     public function test_import_should_import_categories()
     {
@@ -28,12 +28,12 @@ class MinimalCategoriesProfileTest extends TestCase
         $createdChildCategory = $this->executeQuery("SELECT * FROM s_categories WHERE description='NewChildCategoryWithId'");
 
         //Parent category assertion
-        $this->assertEquals('NewCategoryWithId', $createdCategory[0]['description']);
-        $this->assertEquals('9999', $createdCategory[0]['id']);
+        static::assertEquals('NewCategoryWithId', $createdCategory[0]['description']);
+        static::assertEquals('9999', $createdCategory[0]['id']);
 
         //Child category assertion
-        $this->assertEquals('NewChildCategoryWithId', $createdChildCategory[0]['description']);
-        $this->assertEquals('10000', $createdChildCategory[0]['id']);
-        $this->assertEquals('9999', $createdChildCategory[0]['parent']);
+        static::assertEquals('NewChildCategoryWithId', $createdChildCategory[0]['description']);
+        static::assertEquals('10000', $createdChildCategory[0]['id']);
+        static::assertEquals('9999', $createdChildCategory[0]['parent']);
     }
 }

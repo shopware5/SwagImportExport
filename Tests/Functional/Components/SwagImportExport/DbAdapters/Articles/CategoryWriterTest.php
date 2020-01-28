@@ -48,7 +48,7 @@ class CategoryWriterTest extends TestCase
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
         $articleCategories = $dbalConnection->executeQuery('SELECT * FROM s_categories c LEFT JOIN s_articles_categories ac ON ac.categoryID = c.id WHERE ac.articleID=?', [3])->fetchAll();
 
-        $this->assertSame('Path', $articleCategories[3]['description']);
+        static::assertSame('Path', $articleCategories[3]['description']);
     }
 
     public function test_write_should_insert_article_category_association()
@@ -67,7 +67,7 @@ class CategoryWriterTest extends TestCase
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
         $updatedArticle = $dbalConnection->executeQuery('SELECT * FROM s_articles_categories WHERE articleID=?', [$articleId])->fetchAll();
 
-        $this->assertEquals($categoryArray[0]['categoryId'], $updatedArticle[2]['categoryID']);
+        static::assertEquals($categoryArray[0]['categoryId'], $updatedArticle[2]['categoryID']);
     }
 
     /**

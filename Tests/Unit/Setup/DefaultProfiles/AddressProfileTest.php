@@ -20,9 +20,9 @@ class AddressProfileTest extends TestCase
     public function test_it_can_be_created()
     {
         $addressProfile = new AddressProfile();
-        $this->assertInstanceOf(AddressProfile::class, $addressProfile);
-        $this->assertInstanceOf(ProfileMetaData::class, $addressProfile);
-        $this->assertInstanceOf(\JsonSerializable::class, $addressProfile);
+        static::assertInstanceOf(AddressProfile::class, $addressProfile);
+        static::assertInstanceOf(ProfileMetaData::class, $addressProfile);
+        static::assertInstanceOf(\JsonSerializable::class, $addressProfile);
     }
 
     public function test_it_should_return_valid_profile_tree()
@@ -37,6 +37,6 @@ class AddressProfileTest extends TestCase
         });
 
         $profileJson = json_encode($addressProfile);
-        $this->assertJson($profileJson);
+        static::assertJson($profileJson);
     }
 }

@@ -16,9 +16,6 @@ class SmartyExpressionEvaluator implements ExpressionEvaluator
     protected $compiler;
 
     /**
-     * @param $expression
-     * @param $variables
-     *
      * @throws \Exception
      *
      * @return string

@@ -31,21 +31,22 @@ class CustomerDbAdapterTest extends TestCase
         $customersDbAdapter = $this->createCustomerDbAdapter();
         $records = [
             'default' => [
-                    $this->getTestUserDataRecord(),
-                ],
+                $this->getTestUserDataRecord(),
+            ],
         ];
 
         $customersDbAdapter->write($records);
 
         /** @var Connection $dbalConnection */
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
-        $updatedUser = $dbalConnection->executeQuery("
+        $updatedUser = $dbalConnection->executeQuery(
+            "
               SELECT * FROM s_user
               WHERE customernumber = '21999'"
         )->fetchAll();
 
-        $this->assertEquals($records['default'][0]['active'], $updatedUser[0]['active']);
-        $this->assertEquals($records['default'][0]['customerNumber'], $updatedUser[0]['customernumber']);
+        static::assertEquals($records['default'][0]['active'], $updatedUser[0]['active']);
+        static::assertEquals($records['default'][0]['customerNumber'], $updatedUser[0]['customernumber']);
     }
 
     public function test_write_should_update_customer()
@@ -68,12 +69,13 @@ class CustomerDbAdapterTest extends TestCase
 
         /** @var Connection $dbalConnection */
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
-        $updatedUser = $dbalConnection->executeQuery("
+        $updatedUser = $dbalConnection->executeQuery(
+            "
               SELECT * FROM s_user
               WHERE customernumber = '20001'"
         )->fetchAll();
 
-        $this->assertEquals($records['default'][0]['active'], $updatedUser[0]['active']);
+        static::assertEquals($records['default'][0]['active'], $updatedUser[0]['active']);
     }
 
     public function test_write_should_update_billing_city()
@@ -98,13 +100,14 @@ class CustomerDbAdapterTest extends TestCase
 
         /** @var Connection $dbalConnection */
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
-        $updatedUserBillingAddress = $dbalConnection->executeQuery("
+        $updatedUserBillingAddress = $dbalConnection->executeQuery(
+            "
               SELECT * FROM s_user_addresses
               WHERE user_id = '1'"
         )->fetchAll();
 
-        $this->assertEquals($records['default'][0]['billingCity'], $updatedUserBillingAddress[0]['city']);
-        $this->assertEquals($records['default'][0]['billingZipcode'], $updatedUserBillingAddress[0]['zipcode']);
+        static::assertEquals($records['default'][0]['billingCity'], $updatedUserBillingAddress[0]['city']);
+        static::assertEquals($records['default'][0]['billingZipcode'], $updatedUserBillingAddress[0]['zipcode']);
     }
 
     public function test_write_should_update_customer_group()
@@ -128,12 +131,13 @@ class CustomerDbAdapterTest extends TestCase
 
         /** @var Connection $dbalConnection */
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
-        $updatedUser = $dbalConnection->executeQuery("
+        $updatedUser = $dbalConnection->executeQuery(
+            "
               SELECT * FROM s_user
               WHERE customernumber = '20001'"
         )->fetchAll();
 
-        $this->assertEquals($records['default'][0]['customergroup'], $updatedUser[0]['customergroup']);
+        static::assertEquals($records['default'][0]['customergroup'], $updatedUser[0]['customergroup']);
     }
 
     public function test_write_with_customer_group_id_throws_exception()
@@ -179,12 +183,13 @@ class CustomerDbAdapterTest extends TestCase
 
         /** @var Connection $dbalConnection */
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
-        $updatedUserBillingAddress = $dbalConnection->executeQuery("
+        $updatedUserBillingAddress = $dbalConnection->executeQuery(
+            "
               SELECT * FROM s_user_addresses
               WHERE user_id = '1'"
         )->fetchAll();
 
-        $this->assertEquals($records['default'][0]['billingPhone'], $updatedUserBillingAddress[0]['phone']);
+        static::assertEquals($records['default'][0]['billingPhone'], $updatedUserBillingAddress[0]['phone']);
     }
 
     public function test_write_should_update_payment_id()
@@ -207,12 +212,13 @@ class CustomerDbAdapterTest extends TestCase
 
         /** @var Connection $dbalConnection */
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
-        $updatedUser = $dbalConnection->executeQuery("
+        $updatedUser = $dbalConnection->executeQuery(
+            "
               SELECT * FROM s_user
               WHERE customernumber = '20001'"
         )->fetchAll();
 
-        $this->assertEquals($records['default'][0]['paymentID'], $updatedUser[0]['paymentID']);
+        static::assertEquals($records['default'][0]['paymentID'], $updatedUser[0]['paymentID']);
     }
 
     public function test_write_should_update_last_login()
@@ -235,12 +241,13 @@ class CustomerDbAdapterTest extends TestCase
 
         /** @var Connection $dbalConnection */
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
-        $updatedUser = $dbalConnection->executeQuery("
+        $updatedUser = $dbalConnection->executeQuery(
+            "
               SELECT * FROM s_user
               WHERE customernumber = '20001'"
         )->fetchAll();
 
-        $this->assertEquals('2016-11-29 12:13:45', $updatedUser[0]['lastlogin']);
+        static::assertEquals('2016-11-29 12:13:45', $updatedUser[0]['lastlogin']);
     }
 
     public function test_write_without_email_throws_exception()
@@ -358,12 +365,13 @@ class CustomerDbAdapterTest extends TestCase
 
         /** @var Connection $dbalConnection */
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
-        $updatedUser = $dbalConnection->executeQuery("
+        $updatedUser = $dbalConnection->executeQuery(
+            "
               SELECT * FROM s_user
               WHERE customernumber = '20001'"
         )->fetchAll();
 
-        $this->assertEquals('test@exampleNew.com', $updatedUser[0]['email']);
+        static::assertEquals('test@exampleNew.com', $updatedUser[0]['email']);
     }
 
     public function test_write_should_update_customer_password()
@@ -386,12 +394,13 @@ class CustomerDbAdapterTest extends TestCase
 
         /** @var Connection $dbalConnection */
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
-        $updatedUser = $dbalConnection->executeQuery("
+        $updatedUser = $dbalConnection->executeQuery(
+            "
               SELECT * FROM s_user
               WHERE customernumber = '20001'"
         )->fetchAll();
 
-        $this->assertEquals('ac1ef17c2db40995e9fdd40b04a5a649', $updatedUser[0]['password']);
+        static::assertEquals('ac1ef17c2db40995e9fdd40b04a5a649', $updatedUser[0]['password']);
     }
 
     public function test_write_new_customer_without_billing_data_throws_exception()

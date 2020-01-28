@@ -75,9 +75,6 @@ class CsvConverter
     }
 
     /**
-     * @param $line
-     * @param $keys
-     *
      * @return string
      */
     public function _encode_line($line, $keys)
@@ -93,8 +90,9 @@ class CsvConverter
         foreach ($keys as $key) {
             if (!empty($line[$key])) {
                 if (strpos($line[$key], "\r") !== false || strpos($line[$key], "\n") !== false || strpos(
-                        $line[$key], $fieldmark
-                    ) !== false || strpos($line[$key], $this->sSettings['separator']) !== false
+                    $line[$key],
+                    $fieldmark
+                ) !== false || strpos($line[$key], $this->sSettings['separator']) !== false
                 ) {
                     $csv .= $fieldmark;
                     if ($this->sSettings['encoding'] === 'UTF-8') {
@@ -102,11 +100,15 @@ class CsvConverter
                     }
                     if (!empty($fieldmark)) {
                         $csv .= str_replace(
-                            $fieldmark, $this->sSettings['escaped_fieldmark'], $line[$key]
+                            $fieldmark,
+                            $this->sSettings['escaped_fieldmark'],
+                            $line[$key]
                         );
                     } else {
                         $csv .= str_replace(
-                            $this->sSettings['separator'], $this->sSettings['escaped_separator'], $line[$key]
+                            $this->sSettings['separator'],
+                            $this->sSettings['escaped_separator'],
+                            $line[$key]
                         );
                     }
                     $csv .= $fieldmark;
@@ -123,7 +125,7 @@ class CsvConverter
     }
 
     /**
-     * @param $csv
+     * @param string $csv
      *
      * @return array
      */
@@ -172,8 +174,6 @@ class CsvConverter
     }
 
     /**
-     * @param $line
-     *
      * @return array
      */
     public function _decode_line($line)
@@ -196,7 +196,9 @@ class CsvConverter
                         $elements[$i] = substr($elements[$i], 0, -1);
                     }
                     $elements[$i] = str_replace(
-                        $this->sSettings['escaped_fieldmark'], $this->sSettings['fieldmark'], $elements[$i]
+                        $this->sSettings['escaped_fieldmark'],
+                        $this->sSettings['fieldmark'],
+                        $elements[$i]
                     );
                 }
                 $tmp_elements[] = $elements[$i];
@@ -207,8 +209,6 @@ class CsvConverter
     }
 
     /**
-     * @param $csv
-     *
      * @return array
      */
     public function _split_line($csv)

@@ -20,9 +20,6 @@ class ProfileSerializer
         $this->profile = $profile;
     }
 
-    /**
-     * @param $key
-     */
     public function readProfileConfig($key)
     {
         $key = ucfirst($key);

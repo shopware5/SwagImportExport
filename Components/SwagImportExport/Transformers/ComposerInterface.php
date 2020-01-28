@@ -8,9 +8,6 @@
 
 namespace Shopware\Components\SwagImportExport\Transformers;
 
-/**
- * Interface ComposerInterface
- */
 interface ComposerInterface
 {
     /**

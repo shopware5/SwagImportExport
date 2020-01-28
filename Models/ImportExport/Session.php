@@ -213,8 +213,6 @@ class Session extends ModelEntity
     }
 
     /**
-     * Get createdAt
-     *
      * @return \DateTime
      */
     public function getCreatedAt()
@@ -353,8 +351,6 @@ class Session extends ModelEntity
     }
 
     /**
-     * Set createdAt
-     *
      * @param \DateTime $createdAt
      *
      * @return Session

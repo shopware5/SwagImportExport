@@ -20,9 +20,9 @@ class OrderMainDataProfileTest extends TestCase
     {
         $orderMainDataProfile = new OrderMainDataProfile();
 
-        $this->assertInstanceOf(OrderMainDataProfile::class, $orderMainDataProfile);
-        $this->assertInstanceOf(ProfileMetaData::class, $orderMainDataProfile);
-        $this->assertInstanceOf(\JsonSerializable::class, $orderMainDataProfile);
+        static::assertInstanceOf(OrderMainDataProfile::class, $orderMainDataProfile);
+        static::assertInstanceOf(ProfileMetaData::class, $orderMainDataProfile);
+        static::assertInstanceOf(\JsonSerializable::class, $orderMainDataProfile);
     }
 
     public function test_it_should_return_valid_profile()

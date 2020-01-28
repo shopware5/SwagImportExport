@@ -8,9 +8,8 @@
 
 namespace SwagImportExport\Tests\Helper\DataProvider;
 
-use Shopware\Components\Model\ModelManager;
+use Doctrine\DBAL\Connection;
 use Shopware\Components\SwagImportExport\Utils\TreeHelper;
-use Shopware\CustomModels\ImportExport\Profile;
 
 class ProfileDataProvider
 {
@@ -58,18 +57,18 @@ class ProfileDataProvider
     const NEWSLETTER_TABLE = 's_campaigns_mailaddresses';
 
     /**
-     * @var ModelManager
-     */
-    private $modelManager;
-
-    /**
      * @var array - Indexed by profile type
      */
     private $profileIds = [];
 
-    public function __construct(ModelManager $modelManager)
+    /**
+     * @var Connection
+     */
+    private $connection;
+
+    public function __construct(Connection $connection)
     {
-        $this->modelManager = $modelManager;
+        $this->connection = $connection;
     }
 
     public function createProfiles()
@@ -102,23 +101,49 @@ class ProfileDataProvider
         return $this->profileIds[$type];
     }
 
-    /**
-     * @param string $profileType
-     * @param string $profileName
-     */
-    private function createProfile($profileType, $profileName)
+    public function getProfileId(string $profile): int
     {
+        $queryBuilder = $this->connection->createQueryBuilder();
+
+        return (int) $queryBuilder->select('id')
+            ->from('s_import_export_profile')
+            ->where('type = :profileType')
+            ->orWhere('name = :profileName')
+            ->setParameter('profileType', $profile)
+            ->setParameter('profileName', $profile)
+            ->execute()
+            ->fetch(\PDO::FETCH_COLUMN);
+    }
+
+    private function createProfile(string $profileType, string $profileName): void
+    {
+        if ($this->isProfileInstalled($profileType)) {
+            return;
+        }
+
         $defaultTree = TreeHelper::getDefaultTreeByProfileType($profileType);
 
-        $profile = new Profile();
-        $profile->setHidden(0);
-        $profile->setName($profileName);
-        $profile->setType($profileType);
-        $profile->setTree($defaultTree);
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $queryBuilder->insert('s_import_export_profile')
+            ->setValue('type', ':type')
+            ->setValue('base_profile', 'NULL')
+            ->setValue('name', ':name')
+            ->setValue('description', ':description')
+            ->setValue('tree', ':tree')
+            ->setValue('hidden', 0)
+            ->setValue('is_default', 1)
+            ->setParameter('type', $profileType)
+            ->setParameter('name', $profileName)
+            ->setParameter('description', $profileName . '_description_unit_test')
+            ->setParameter('tree', $defaultTree);
 
-        $this->modelManager->persist($profile);
-        $this->modelManager->flush();
+        $queryBuilder->execute();
 
-        $this->profileIds[$profileType] = $profile->getId();
+        $this->profileIds[$profileType] = $queryBuilder->getConnection()->lastInsertId();
+    }
+
+    private function isProfileInstalled(string $profileType): bool
+    {
+        return (bool) $this->getProfileId($profileType);
     }
 }

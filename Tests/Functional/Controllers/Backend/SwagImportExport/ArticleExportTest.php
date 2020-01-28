@@ -15,9 +15,9 @@ use SwagImportExport\Tests\Helper\FixturesImportTrait;
 
 class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
 {
-    use DatabaseTestCaseTrait;
-    use FixturesImportTrait;
     use ExportControllerTrait;
+    use FixturesImportTrait;
+    use DatabaseTestCaseTrait;
 
     const FORMAT_XML = 'xml';
     const FORMAT_CSV = 'csv';
@@ -25,7 +25,7 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
     const CATEGORY_ID_VINTAGE = 31;
     const PRODUCT_STREAM_ID = 999999;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -36,6 +36,7 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
     public function test_article_xml_export()
     {
         $params = $this->getExportRequestParams();
+
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::ARTICLE_PROFILE_TYPE);
         $params['format'] = self::FORMAT_XML;
         $this->Request()->setParams($params);
@@ -46,7 +47,7 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         $this->assertArticleAttributeInXml($file, 'SW10012', 'name', 'Kobra Vodka 37,5%');
@@ -71,17 +72,17 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         $exportedArticles = $this->csvToArrayIndexedByFieldValue($file, 'ordernumber');
-        $this->assertEquals('Kobra Vodka 37,5%', $exportedArticles['SW10012']['name']);
-        $this->assertEquals('60', $exportedArticles['SW10012']['instock']);
-        $this->assertEquals('Feinbrennerei Sasse', $exportedArticles['SW10012']['supplier']);
+        static::assertEquals('Kobra Vodka 37,5%', $exportedArticles['SW10012']['name']);
+        static::assertEquals('60', $exportedArticles['SW10012']['instock']);
+        static::assertEquals('Feinbrennerei Sasse', $exportedArticles['SW10012']['supplier']);
 
-        $this->assertEquals('Special Finish Lagerkorn X.O. 32%', $exportedArticles['SW10009']['name']);
-        $this->assertEquals('12', $exportedArticles['SW10009']['instock']);
-        $this->assertEquals('Feinbrennerei Sasse', $exportedArticles['SW10009']['supplier']);
+        static::assertEquals('Special Finish Lagerkorn X.O. 32%', $exportedArticles['SW10009']['name']);
+        static::assertEquals('12', $exportedArticles['SW10009']['instock']);
+        static::assertEquals('Feinbrennerei Sasse', $exportedArticles['SW10009']['supplier']);
     }
 
     public function test_article_xml_export_with_limit()
@@ -100,11 +101,11 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         $articleList = $this->queryXpath($file, '//article');
-        $this->assertEquals($limit, $articleList->length);
+        static::assertEquals($limit, $articleList->length);
     }
 
     public function test_article_csv_export_with_limit()
@@ -123,11 +124,11 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         $mappedArticleList = $this->readCsvIndexedByOrdernumber($file);
-        $this->assertCount($limit, $mappedArticleList);
+        static::assertCount($limit, $mappedArticleList);
     }
 
     public function test_article_xml_export_with_offset_210()
@@ -146,11 +147,11 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         $articleListWithOffset = $this->queryXpath($file, '//article');
-        $this->assertEquals(15, $articleListWithOffset->length);
+        static::assertEquals(15, $articleListWithOffset->length);
     }
 
     public function test_article_csv_export_with_offset_210()
@@ -169,11 +170,11 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         $mappedArticleList = $this->readCsvIndexedByOrdernumber($file);
-        $this->assertCount(15, $mappedArticleList);
+        static::assertCount(15, $mappedArticleList);
     }
 
     public function test_article_xml_export_with_category_filter()
@@ -192,12 +193,12 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         //Fetch all article nodes with given category
         $articleDomNodeList = $this->queryXpath($file, "//article/category[categories='{$categoryId}']");
-        $this->assertEquals(10, $articleDomNodeList->length);
+        static::assertEquals(10, $articleDomNodeList->length);
     }
 
     public function test_article_csv_export_with_category_filter()
@@ -216,11 +217,11 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         $mappedArticleList = $this->readCsvIndexedByOrdernumber($file);
-        $this->assertCount(10, $mappedArticleList);
+        static::assertCount(10, $mappedArticleList);
     }
 
     public function test_product_xml_export_with_product_stream_filter()
@@ -240,11 +241,11 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         $productList = $this->queryXpath($file, '//article');
-        $this->assertEquals(12, $productList->length);
+        static::assertEquals(12, $productList->length);
     }
 
     public function test_product_csv_export_with_product_stream_filter()
@@ -264,11 +265,11 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         $mappedProductList = $this->readCsvIndexedByOrdernumber($file);
-        $this->assertCount(12, $mappedProductList);
+        static::assertCount(12, $mappedProductList);
     }
 
     public function test_variant_xml_export()
@@ -287,11 +288,11 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         $variantList = $this->queryXpath($file, "//article[mainnumber='SW10002.3']");
-        $this->assertEquals(3, $variantList->length);
+        static::assertEquals(3, $variantList->length);
     }
 
     public function test_variant_csv_export()
@@ -310,15 +311,15 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         $mappedArticleList = $this->readCsvIndexedByOrdernumber($file);
-        $this->assertEquals('Münsterländer Lagerkorn 32%', $mappedArticleList['SW10002.3']['name']);
-        $this->assertEquals('0,5 Liter', $mappedArticleList['SW10002.3']['additionalText']);
+        static::assertEquals('Münsterländer Lagerkorn 32%', $mappedArticleList['SW10002.3']['name']);
+        static::assertEquals('0,5 Liter', $mappedArticleList['SW10002.3']['additionalText']);
 
-        $this->assertEquals('Münsterländer Lagerkorn 32%', $mappedArticleList['SW10002.1']['name']);
-        $this->assertEquals('1,5 Liter', $mappedArticleList['SW10002.1']['additionalText']);
+        static::assertEquals('Münsterländer Lagerkorn 32%', $mappedArticleList['SW10002.1']['name']);
+        static::assertEquals('1,5 Liter', $mappedArticleList['SW10002.1']['additionalText']);
     }
 
     public function test_variant_xml_export_with_limit()
@@ -339,11 +340,11 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         $variantListWithLimit = $this->queryXpath($file, '//article');
-        $this->assertEquals($limit, $variantListWithLimit->length);
+        static::assertEquals($limit, $variantListWithLimit->length);
     }
 
     public function test_variant_csv_export_with_limit()
@@ -363,11 +364,11 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         $mappedArticleList = $this->readCsvIndexedByOrdernumber($file);
-        $this->assertCount($limit, $mappedArticleList);
+        static::assertCount($limit, $mappedArticleList);
     }
 
     public function test_variant_xml_export_with_offset()
@@ -388,11 +389,11 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         $variantsNodeListWithOffset = $this->queryXpath($file, '//article');
-        $this->assertEquals(20, $variantsNodeListWithOffset->length);
+        static::assertEquals(20, $variantsNodeListWithOffset->length);
     }
 
     public function test_variant_csv_export_with_offset()
@@ -413,11 +414,11 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         $mappedVariantList = $this->csvToArrayIndexedByFieldValue($file, 'ordernumber');
-        $this->assertCount(20, $mappedVariantList);
+        static::assertCount(20, $mappedVariantList);
     }
 
     public function test_variant_xml_export_with_category_filter()
@@ -438,12 +439,12 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         //Fetch all article nodes with given category
         $variantNodeListWithCategoryFilter = $this->queryXpath($file, "//article/category[categories='{$categoryId}']");
-        $this->assertEquals(10, $variantNodeListWithCategoryFilter->length);
+        static::assertEquals(10, $variantNodeListWithCategoryFilter->length);
     }
 
     public function test_variant_csv_export_with_category_filter()
@@ -464,11 +465,11 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         $mappedVariantList = $this->csvToArrayIndexedByFieldValue($file, 'ordernumber');
-        $this->assertCount(10, $mappedVariantList);
+        static::assertCount(10, $mappedVariantList);
     }
 
     /**
@@ -481,7 +482,7 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
     {
         $articleDomNodeList = $this->queryXpath($filePath, "//article[ordernumber='{$orderNumber}']/{$attribute}");
         $nodeValue = $articleDomNodeList->item(0)->nodeValue;
-        $this->assertEquals($expected, $nodeValue);
+        static::assertEquals($expected, $nodeValue);
     }
 
     /**

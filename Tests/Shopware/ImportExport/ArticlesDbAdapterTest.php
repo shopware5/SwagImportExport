@@ -17,7 +17,7 @@ class ArticlesDbAdapterTest extends DbAdapterTestHelper
 {
     protected $yamlFile = 'TestCases/articleDbAdapter.yml';
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -43,9 +43,9 @@ class ArticlesDbAdapterTest extends DbAdapterTestHelper
         }
         unset($item);
 
-        $this->assertContains($rawData['article'][0], $expected['article']);
-        $this->assertContains($rawData['article'][1], $expected['article']);
-        $this->assertCount(count($rawData['article']), $expected['article']);
+        static::assertContains($rawData['article'][0], $expected['article']);
+        static::assertContains($rawData['article'][1], $expected['article']);
+        static::assertCount(count($rawData['article']), $expected['article']);
     }
 
     /**
@@ -72,14 +72,14 @@ class ArticlesDbAdapterTest extends DbAdapterTestHelper
         $product = $this->getProductDataResult($expectedOrderNumber);
         $prices = $this->getProductPriceResult($expectedOrderNumber);
 
-        $this->assertEquals('test9999', $product[0]['ordernumber']);
-        $this->assertEquals('shopware-test1', $product[0]['name']);
+        static::assertEquals('test9999', $product[0]['ordernumber']);
+        static::assertEquals('shopware-test1', $product[0]['name']);
 
-        $this->assertEquals('EK', $prices[0]['pricegroup']);
-        $this->assertEquals(84.033613445378, $prices[0]['price']);
+        static::assertEquals('EK', $prices[0]['pricegroup']);
+        static::assertEquals(84.033613445378, $prices[0]['price']);
 
-        $this->assertEquals('H', $prices[1]['pricegroup']);
-        $this->assertEquals(50, $prices[1]['price']);
+        static::assertEquals('H', $prices[1]['pricegroup']);
+        static::assertEquals(50, $prices[1]['price']);
     }
 
     /**

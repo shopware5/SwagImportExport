@@ -82,8 +82,6 @@ class CategoryWriter
     /**
      * Checks whether a category with the given id exists
      *
-     * @param $categoryId
-     *
      * @return bool
      */
     protected function isCategoryExists($categoryId)
@@ -127,9 +125,9 @@ class CategoryWriter
      * Checks whether a category with the given name exists and returns its id.
      * Creates a category if it does not exist and returns the new inserted id.
      *
-     * @param $description - category name
-     * @param $id - parent id
-     * @param $path - category path
+     * @param mixed $description - category name
+     * @param mixed $id          - parent id
+     * @param mixed $path        - category path
      *
      * @throws AdapterException
      *
@@ -167,9 +165,9 @@ class CategoryWriter
     /**
      * Creates a category and returns its id
      *
-     * @param $description - category name
-     * @param $id - id of the parent category
-     * @param $path - category path
+     * @param mixed $description - category name
+     * @param mixed $id          - id of the parent category
+     * @param mixed $path        - category path
      *
      * @return int created category id
      */

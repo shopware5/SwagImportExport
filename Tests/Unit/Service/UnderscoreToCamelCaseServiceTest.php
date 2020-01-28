@@ -14,10 +14,7 @@ use Shopware\Components\SwagImportExport\Service\UnderscoreToCamelCaseService;
 class UnderscoreToCamelCaseServiceTest extends TestCase
 {
     /**
-     * @dataProvider test_underscoreToCamelCase_provider
-     *
-     * @param $string
-     * @param $expectedResult
+     * @dataProvider underscoreToCamelCaseTest_provider
      */
     public function test_underscoreToCamelCase($string, $expectedResult)
     {
@@ -25,13 +22,13 @@ class UnderscoreToCamelCaseServiceTest extends TestCase
 
         $result = $service->underscoreToCamelCase($string);
 
-        $this->assertSame($expectedResult, $result);
+        static::assertSame($expectedResult, $result);
     }
 
     /**
      * @return array
      */
-    public function test_underscoreToCamelCase_provider()
+    public function underscoreToCamelCaseTest_provider()
     {
         return [
             [null, ''],

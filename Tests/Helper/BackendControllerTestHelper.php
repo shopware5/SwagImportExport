@@ -25,7 +25,7 @@ class BackendControllerTestHelper
         $this->profileDataProvider = $profileDataProvider;
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         foreach ($this->files as $file) {
             unlink($file);
@@ -39,7 +39,11 @@ class BackendControllerTestHelper
      */
     public function getProfileIdByType($type)
     {
-        return $this->profileDataProvider->getIdByProfileType($type);
+        $profileDataProvider = new ProfileDataProvider(
+            Shopware()->Container()->get('dbal_connection')
+        );
+
+        return $profileDataProvider->getProfileId($type);
     }
 
     /**

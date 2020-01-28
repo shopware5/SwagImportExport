@@ -44,7 +44,7 @@ class NewsletterDbAdapterTest extends TestCase
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
         $createdRecipient = $dbalConnection->executeQuery("SELECT * FROM s_campaigns_mailaddresses WHERE email='test@example.com'")->fetchAll();
 
-        $this->assertEquals($customerData['default'][0]['email'], $createdRecipient[0]['email']);
+        static::assertEquals($customerData['default'][0]['email'], $createdRecipient[0]['email']);
     }
 
     public function test_write_should_create_newsletter_recipient()
@@ -63,7 +63,7 @@ class NewsletterDbAdapterTest extends TestCase
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
         $createdRecipient = $dbalConnection->executeQuery("SELECT * FROM s_campaigns_mailaddresses WHERE email='email_address_which_does_not_exist@example.org'")->fetchAll();
 
-        $this->assertEquals($notExistingRecipient['default'][0]['email'], $createdRecipient[0]['email']);
+        static::assertEquals($notExistingRecipient['default'][0]['email'], $createdRecipient[0]['email']);
     }
 
     public function test_write_should_create_newsletter_recipient_contact_data()
@@ -85,9 +85,9 @@ class NewsletterDbAdapterTest extends TestCase
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
         $createdRecipient = $dbalConnection->executeQuery("SELECT * FROM s_campaigns_maildata WHERE email='email_address_which_does_not_exists@example.org'")->fetchAll();
 
-        $this->assertEquals($recipientWithContactData['default'][0]['firstname'], $createdRecipient[0]['firstname']);
-        $this->assertEquals($recipientWithContactData['default'][0]['lastname'], $createdRecipient[0]['lastname']);
-        $this->assertEquals($recipientWithContactData['default'][0]['zipcode'], '12345');
+        static::assertEquals($recipientWithContactData['default'][0]['firstname'], $createdRecipient[0]['firstname']);
+        static::assertEquals($recipientWithContactData['default'][0]['lastname'], $createdRecipient[0]['lastname']);
+        static::assertEquals($recipientWithContactData['default'][0]['zipcode'], '12345');
     }
 
     public function test_write_should_create_newsletter_group()
@@ -107,7 +107,7 @@ class NewsletterDbAdapterTest extends TestCase
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
         $createdNewsletterGroup = $dbalConnection->executeQuery("SELECT * FROM s_campaigns_groups WHERE name='New newsletter group'")->fetchAll();
 
-        $this->assertEquals('New newsletter group', $createdNewsletterGroup[0]['name']);
+        static::assertEquals('New newsletter group', $createdNewsletterGroup[0]['name']);
     }
 
     public function test_write_should_ignore_existing_customer_registered_in_customer_group()
@@ -134,7 +134,7 @@ class NewsletterDbAdapterTest extends TestCase
         $groupCount = $dbalConnection->executeQuery('SELECT COUNT(*) FROM s_campaigns_groups')->fetchColumn();
 
         // check that no new group is created
-        $this->assertEquals(1, $groupCount);
+        static::assertEquals(1, $groupCount);
     }
 
     /**

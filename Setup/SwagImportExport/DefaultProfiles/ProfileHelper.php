@@ -8,9 +8,6 @@
 
 namespace Shopware\Setup\SwagImportExport\DefaultProfiles;
 
-/**
- * Class ProfileHelper
- */
 class ProfileHelper
 {
     /**

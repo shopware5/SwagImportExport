@@ -102,8 +102,6 @@ class CsvFileReader implements FileReader
     /**
      * Counts total rows of the entire CSV file
      *
-     * @param $fileName
-     *
      * @throws \Exception
      *
      * @return int

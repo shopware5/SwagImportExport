@@ -69,8 +69,6 @@ trait CommandTestCaseTrait
     }
 
     /**
-     * @param $fp
-     *
      * @return string
      */
     private function readConsoleOutput($fp)

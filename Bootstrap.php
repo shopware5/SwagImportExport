@@ -51,10 +51,6 @@ use Shopware\Setup\SwagImportExport\Update\UpdaterInterface;
 
 /**
  * Shopware SwagImportExport Plugin - Bootstrap
- *
- * @category  Shopware
- *
- * @copyright  Copyright (c) shopware AG (http://www.shopware.com)
  */
 final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {

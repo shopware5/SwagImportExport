@@ -15,10 +15,10 @@ use SwagImportExport\Tests\Helper\ExportControllerTrait;
 
 class AddressExportTest extends \Enlight_Components_Test_Controller_TestCase
 {
-    use DatabaseTestCaseTrait;
     use ExportControllerTrait;
+    use DatabaseTestCaseTrait;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -46,14 +46,14 @@ class AddressExportTest extends \Enlight_Components_Test_Controller_TestCase
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file);
+        static::assertFileExists($file);
         $this->backendControllerTestHelper->addFile($file);
 
         $company = $this->queryXpath($file, "//address[company='Muster GmbH']/company");
-        $this->assertEquals('Muster GmbH', $company->item(0)->nodeValue);
+        static::assertEquals('Muster GmbH', $company->item(0)->nodeValue);
 
         $company = $this->queryXpath($file, "//address[company='Muster GmbH']/firstname");
-        $this->assertEquals('Max', $company->item(0)->nodeValue);
+        static::assertEquals('Max', $company->item(0)->nodeValue);
     }
 
     public function test_address_export_with_csv()
@@ -75,13 +75,13 @@ class AddressExportTest extends \Enlight_Components_Test_Controller_TestCase
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file);
+        static::assertFileExists($file);
         $this->backendControllerTestHelper->addFile($file);
 
         $exportedAddresses = $this->csvToArrayIndexedByFieldValue($file, 'id');
 
-        $this->assertEquals($exportedAddresses[1]['company'], 'Muster GmbH');
-        $this->assertEquals($exportedAddresses[1]['firstname'], 'Max');
-        $this->assertEquals($exportedAddresses[1]['lastname'], 'Mustermann');
+        static::assertEquals($exportedAddresses[1]['company'], 'Muster GmbH');
+        static::assertEquals($exportedAddresses[1]['firstname'], 'Max');
+        static::assertEquals($exportedAddresses[1]['lastname'], 'Mustermann');
     }
 }

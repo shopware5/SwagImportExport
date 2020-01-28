@@ -20,9 +20,9 @@ class ArticleTranslationUpdateProfileTest extends TestCase
     {
         $articleTranslationUpdateProfile = $this->createArticleTranslationUpdateProfile();
 
-        $this->assertInstanceOf(ArticleTranslationUpdateProfile::class, $articleTranslationUpdateProfile);
-        $this->assertInstanceOf(\JsonSerializable::class, $articleTranslationUpdateProfile);
-        $this->assertInstanceOf(ProfileMetaData::class, $articleTranslationUpdateProfile);
+        static::assertInstanceOf(ArticleTranslationUpdateProfile::class, $articleTranslationUpdateProfile);
+        static::assertInstanceOf(\JsonSerializable::class, $articleTranslationUpdateProfile);
+        static::assertInstanceOf(ProfileMetaData::class, $articleTranslationUpdateProfile);
     }
 
     public function test_it_should_return_valid_profile_tree()

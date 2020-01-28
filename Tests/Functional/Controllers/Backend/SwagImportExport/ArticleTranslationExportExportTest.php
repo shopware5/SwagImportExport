@@ -15,14 +15,14 @@ use SwagImportExport\Tests\Helper\FixturesImportTrait;
 
 class ArticleTranslationExportExportTest extends \Enlight_Components_Test_Controller_TestCase
 {
-    use DatabaseTestCaseTrait;
     use FixturesImportTrait;
+    use DatabaseTestCaseTrait;
     use ExportControllerTrait;
 
     const FORMAT_XML = 'xml';
     const FORMAT_CSV = 'csv';
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -43,7 +43,7 @@ class ArticleTranslationExportExportTest extends \Enlight_Components_Test_Contro
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         $this->assertTranslationAttributeInXml($file, 'SW10002.3', 'name', 'Munsterland Lagerkorn 32%');
@@ -63,12 +63,12 @@ class ArticleTranslationExportExportTest extends \Enlight_Components_Test_Contro
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         $mappedTranslationList = $this->csvToArrayIndexedByFieldValue($file, 'articlenumber');
-        $this->assertEquals('Munsterland Lagerkorn 32%', $mappedTranslationList['SW10002.3']['name']);
-        $this->assertEquals(2, $mappedTranslationList['SW10002.3']['languageId']);
+        static::assertEquals('Munsterland Lagerkorn 32%', $mappedTranslationList['SW10002.3']['name']);
+        static::assertEquals(2, $mappedTranslationList['SW10002.3']['languageId']);
     }
 
     /**
@@ -81,6 +81,6 @@ class ArticleTranslationExportExportTest extends \Enlight_Components_Test_Contro
     {
         $translationNodeList = $this->queryXpath($filePath, "//Translation[articlenumber='{$orderNumber}']/{$attribute}");
         $nodeValue = $translationNodeList->item(0)->nodeValue;
-        $this->assertEquals($expected, $nodeValue);
+        static::assertEquals($expected, $nodeValue);
     }
 }

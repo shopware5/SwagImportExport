@@ -239,8 +239,6 @@ class CategoryTranslationDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $ids
-     *
      * @return array
      */
     private function getTranslations($ids)

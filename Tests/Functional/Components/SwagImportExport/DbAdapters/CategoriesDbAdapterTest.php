@@ -56,8 +56,8 @@ class CategoriesDbAdapterTest extends TestCase
         $createdCategory = $dbalConnection->executeQuery("SELECT * FROM s_categories WHERE description='New Category'")->fetchAll();
         $createdCategory2 = $dbalConnection->executeQuery("SELECT * FROM s_categories WHERE description='Second New Category'")->fetchAll();
 
-        $this->assertEquals($categoryRecords['default'][0]['categoryId'], $createdCategory[0]['id']);
-        $this->assertEquals($categoryRecords['default'][1]['categoryId'], $createdCategory2[0]['id']);
+        static::assertEquals($categoryRecords['default'][0]['categoryId'], $createdCategory[0]['id']);
+        static::assertEquals($categoryRecords['default'][1]['categoryId'], $createdCategory2[0]['id']);
     }
 
     public function test_write_should_throw_exception_if_category_has_no_id()

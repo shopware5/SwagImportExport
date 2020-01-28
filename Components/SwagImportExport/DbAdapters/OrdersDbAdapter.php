@@ -304,8 +304,6 @@ class OrdersDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $message
-     *
      * @throws \Exception
      */
     public function saveMessage($message)
@@ -328,9 +326,6 @@ class OrdersDbAdapter implements DataDbAdapter
         return $this->logMessages;
     }
 
-    /**
-     * @param $logMessages
-     */
     public function setLogMessages($logMessages)
     {
         $this->logMessages[] = $logMessages;
@@ -344,9 +339,6 @@ class OrdersDbAdapter implements DataDbAdapter
         return $this->logState;
     }
 
-    /**
-     * @param $logState
-     */
     public function setLogState($logState)
     {
         $this->logState = $logState;
@@ -533,9 +525,6 @@ class OrdersDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $columns
-     * @param $ids
-     *
      * @return QueryBuilder
      */
     private function getBuilder($columns, $ids)

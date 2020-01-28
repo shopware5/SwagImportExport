@@ -123,7 +123,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
         $this->imageImportMode = (int) Shopware()->Config()->get('SwagImportExportImageMode');
         $this->importExportErrorMode = (bool) Shopware()->Config()->get('SwagImportExportErrorMode');
         $this->thumbnailManager = Shopware()->Container()->get('thumbnail_manager');
-        $this->docPath = Shopware()->DocPath('media_' . 'temp');
+        $this->docPath = Shopware()->DocPath('media_temp');
         $this->underscoreToCamelCaseService = Shopware()->Container()->get('swag_import_export.underscore_camelcase_service');
         $this->dbalHelper = DbalHelper::create();
     }
@@ -133,7 +133,6 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
      *
      * @param int $start
      * @param int $limit
-     * @param $filter
      *
      * @return array
      */
@@ -428,8 +427,6 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $message
-     *
      * @throws \RuntimeException
      */
     public function saveMessage($message)
@@ -450,9 +447,6 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
         return $this->logMessages;
     }
 
-    /**
-     * @param $logMessages
-     */
     public function setLogMessages($logMessages)
     {
         $this->logMessages[] = $logMessages;
@@ -466,9 +460,6 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
         return $this->logState;
     }
 
-    /**
-     * @param $logState
-     */
     public function setLogState($logState)
     {
         $this->logState = $logState;
@@ -594,8 +585,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
 
     /**
      * @param Option[] $options
-     * @param $imageData
-     * @param $parent Image
+     * @param mixed    $parent  Image
      */
     protected function createImagesForOptions($options, $imageData, $parent)
     {

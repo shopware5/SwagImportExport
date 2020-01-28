@@ -28,8 +28,6 @@ class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
     }
 
     /**
-     * @param $params
-     *
      * @throws \Exception
      *
      * @return Profile
@@ -52,8 +50,6 @@ class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
     }
 
     /**
-     * @param $data
-     *
      * @throws \Enlight_Exception
      * @throws \Exception
      *
@@ -102,8 +98,6 @@ class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
     }
 
     /**
-     * @param $type
-     *
      * @throws \Exception
      *
      * @return Profile

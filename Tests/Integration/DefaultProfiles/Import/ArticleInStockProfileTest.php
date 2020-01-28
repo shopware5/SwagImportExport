@@ -15,9 +15,9 @@ use SwagImportExport\Tests\Integration\DefaultProfiles\DefaultProfileImportTestC
 
 class ArticleInStockProfileTest extends TestCase
 {
-    use DatabaseTestCaseTrait;
     use CommandTestCaseTrait;
     use DefaultProfileImportTestCaseTrait;
+    use DatabaseTestCaseTrait;
 
     public function test_write_should_update_article_stock()
     {
@@ -29,6 +29,6 @@ class ArticleInStockProfileTest extends TestCase
 
         $updatedArticle = $this->executeQuery("SELECT * FROM s_articles_details WHERE ordernumber='{$expectedArticleOrderNumber}'");
 
-        $this->assertEquals($expectedArticleStock, $updatedArticle[0]['instock']);
+        static::assertEquals($expectedArticleStock, $updatedArticle[0]['instock']);
     }
 }

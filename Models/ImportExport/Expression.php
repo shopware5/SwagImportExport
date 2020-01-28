@@ -8,10 +8,6 @@
 
 /**
  * Shopware ImportExport Plugin
- *
- * @category  Shopware
- *
- * @copyright Copyright (c) 2014, shopware AG (http://www.shopware.de)
  */
 
 namespace Shopware\CustomModels\ImportExport;

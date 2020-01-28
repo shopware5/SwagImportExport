@@ -12,9 +12,6 @@ use Shopware\Components\Model\QueryBuilder;
 use Shopware\Components\SwagImportExport\DataManagers\DataManager;
 use Shopware\CustomModels\ImportExport\Profile;
 
-/**
- * Class TreeHelper
- */
 class TreeHelper
 {
     /**

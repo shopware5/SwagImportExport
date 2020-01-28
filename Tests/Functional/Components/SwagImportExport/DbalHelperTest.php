@@ -40,7 +40,7 @@ class DbalHelperTest extends TestCase
      */
     private $SUT;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -54,7 +54,7 @@ class DbalHelperTest extends TestCase
         $this->SUT = new DbalHelper($connection, $modelManagerStub, $eventManager);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->modelManager->rollback();
@@ -70,7 +70,7 @@ class DbalHelperTest extends TestCase
 
         $builder = $this->SUT->getQueryBuilderForEntity($importData, Article::class, self::CREATE_INSERT_STATEMENT);
 
-        $this->assertEquals($expectedSQL, $builder->getSQL(), 'Could not generate insert sql statement.');
+        static::assertEquals($expectedSQL, $builder->getSQL(), 'Could not generate insert sql statement.');
     }
 
     public function test_get_query_builder_for_entity_should_return_update_query()
@@ -89,8 +89,8 @@ class DbalHelperTest extends TestCase
 
         $builder = $this->SUT->getQueryBuilderForEntity($givenData, Article::class, self::UPDATE_RECORD_BY_ID);
 
-        $this->assertEquals($expectedSQL, $builder->getSQL(), "SQL UPDATE statement wasn't generated correctly");
-        $this->assertEquals($expectedSQLParams, $builder->getParameters(), "Parameters for query builder wasn't set correctly.");
+        static::assertEquals($expectedSQL, $builder->getSQL(), "SQL UPDATE statement wasn't generated correctly");
+        static::assertEquals($expectedSQLParams, $builder->getParameters(), "Parameters for query builder wasn't set correctly.");
     }
 
     /**

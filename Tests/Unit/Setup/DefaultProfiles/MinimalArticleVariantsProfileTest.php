@@ -20,9 +20,9 @@ class MinimalArticleVariantsProfileTest extends TestCase
     {
         $articleVariantsMinimalProfile = $this->createMinimalArticleVariantsProfile();
 
-        $this->assertInstanceOf(MinimalArticleVariantsProfile::class, $articleVariantsMinimalProfile);
-        $this->assertInstanceOf(\JsonSerializable::class, $articleVariantsMinimalProfile);
-        $this->assertInstanceOf(ProfileMetaData::class, $articleVariantsMinimalProfile);
+        static::assertInstanceOf(MinimalArticleVariantsProfile::class, $articleVariantsMinimalProfile);
+        static::assertInstanceOf(\JsonSerializable::class, $articleVariantsMinimalProfile);
+        static::assertInstanceOf(ProfileMetaData::class, $articleVariantsMinimalProfile);
     }
 
     public function test_it_should_return_valid_profile_tree()

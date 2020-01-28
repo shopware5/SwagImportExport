@@ -10,9 +10,6 @@ namespace Shopware\Components\SwagImportExport\Transformers;
 
 use Shopware\Components\SwagImportExport\Profile\Profile;
 
-/**
- * Class DecimalTransformer
- */
 class DecimalTransformer implements DataTransformerAdapter
 {
     /** @var array $decimalValues */

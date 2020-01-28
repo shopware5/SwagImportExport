@@ -21,7 +21,7 @@ class ValidatorTest extends TestCase
      */
     private $SUT;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->SUT = $this->getMockForAbstractClass(Validator::class);
     }
@@ -31,7 +31,7 @@ class ValidatorTest extends TestCase
         $validatedValue = 100;
         $result = $this->SUT->validateFloat($validatedValue);
 
-        $this->assertEquals(self::VALID_TYPE_RESULT, $result);
+        static::assertEquals(self::VALID_TYPE_RESULT, $result);
     }
 
     public function test_validate_float_with_comma_separated_string_should_be_valid()
@@ -39,7 +39,7 @@ class ValidatorTest extends TestCase
         $validatedValue = '100,2';
         $result = $this->SUT->validateFloat($validatedValue);
 
-        $this->assertEquals(self::VALID_TYPE_RESULT, $result);
+        static::assertEquals(self::VALID_TYPE_RESULT, $result);
     }
 
     public function test_validate_float_with_negative_number_with_comma_should_be_valid()
@@ -47,7 +47,7 @@ class ValidatorTest extends TestCase
         $validatedValue = '-1,2';
         $result = $this->SUT->validateFloat($validatedValue);
 
-        $this->assertEquals(self::VALID_TYPE_RESULT, $result);
+        static::assertEquals(self::VALID_TYPE_RESULT, $result);
     }
 
     public function test_validate_float_with_negative_number_should_be_valid()
@@ -55,7 +55,7 @@ class ValidatorTest extends TestCase
         $validatedValue = -1.2;
         $result = $this->SUT->validateFloat($validatedValue);
 
-        $this->assertEquals(self::VALID_TYPE_RESULT, $result);
+        static::assertEquals(self::VALID_TYPE_RESULT, $result);
     }
 
     public function test_validate_float_with_character_should_be_invalid()
@@ -63,7 +63,7 @@ class ValidatorTest extends TestCase
         $validatedValue = 'test';
         $result = $this->SUT->validateFloat($validatedValue);
 
-        $this->assertEquals(self::INVALID_TYPE_RESULT, $result);
+        static::assertEquals(self::INVALID_TYPE_RESULT, $result);
     }
 
     public function test_validate_float_with_numbers_at_the_beginning_of_a_string_should_be_invalid()
@@ -71,7 +71,7 @@ class ValidatorTest extends TestCase
         $validatedValue = '123.0 abc';
         $result = $this->SUT->validateFloat($validatedValue);
 
-        $this->assertEquals(self::INVALID_TYPE_RESULT, $result);
+        static::assertEquals(self::INVALID_TYPE_RESULT, $result);
     }
 
     public function test_validate_float_with_numbers_at_the_end_of_a_string_should_be_invalid()
@@ -79,7 +79,7 @@ class ValidatorTest extends TestCase
         $validatedValue = 'abc 123.0';
         $result = $this->SUT->validateFloat($validatedValue);
 
-        $this->assertEquals(self::INVALID_TYPE_RESULT, $result);
+        static::assertEquals(self::INVALID_TYPE_RESULT, $result);
     }
 
     public function test_validate_float_with_comma_but_without_decimal_digits_should_be_invalid()
@@ -87,7 +87,7 @@ class ValidatorTest extends TestCase
         $validatedValue = '1,';
         $result = $this->SUT->validateFloat($validatedValue);
 
-        $this->assertEquals(self::INVALID_TYPE_RESULT, $result);
+        static::assertEquals(self::INVALID_TYPE_RESULT, $result);
     }
 
     public function test_validate_float_with_empty_string_should_be_invalid()
@@ -95,14 +95,14 @@ class ValidatorTest extends TestCase
         $validatedValue = '';
         $result = $this->SUT->validateFloat($validatedValue);
 
-        $this->assertEquals(self::INVALID_TYPE_RESULT, $result);
+        static::assertEquals(self::INVALID_TYPE_RESULT, $result);
     }
 
     public function test_filter_empty_string_should_filter_empty_string()
     {
         $result = $this->SUT->filterEmptyString($this->getDemoRecordForFilterEmptyStringTest());
 
-        $this->assertEmpty($result['filteredEmptyString']);
+        static::assertEmpty($result['filteredEmptyString']);
     }
 
     public function test_filter_empty_string_should_not_filter_other_data_types()
@@ -116,7 +116,7 @@ class ValidatorTest extends TestCase
 
         $result = $this->SUT->filterEmptyString($this->getDemoRecordForFilterEmptyStringTest());
 
-        $this->assertEquals($expectedFilteredData, $result);
+        static::assertEquals($expectedFilteredData, $result);
     }
 
     /**

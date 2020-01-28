@@ -15,14 +15,14 @@ use SwagImportExport\Tests\Helper\FixturesImportTrait;
 
 class ArticlesInstockExportTest extends \Enlight_Components_Test_Controller_TestCase
 {
-    use DatabaseTestCaseTrait;
     use FixturesImportTrait;
+    use DatabaseTestCaseTrait;
     use ExportControllerTrait;
 
     const FORMAT_XML = 'xml';
     const FORMAT_CSV = 'csv';
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -43,7 +43,7 @@ class ArticlesInstockExportTest extends \Enlight_Components_Test_Controller_Test
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         $this->assertArticleAttributeInXml($file, 'SW10023', 'instock', 0);
@@ -63,12 +63,12 @@ class ArticlesInstockExportTest extends \Enlight_Components_Test_Controller_Test
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         $mappedArticleInstockList = $this->readCsvIndexedByOrdernumber($file);
-        $this->assertEquals(0, $mappedArticleInstockList['SW10023']['instock']);
-        $this->assertEquals(35, $mappedArticleInstockList['SW10023']['_price']);
+        static::assertEquals(0, $mappedArticleInstockList['SW10023']['instock']);
+        static::assertEquals(35, $mappedArticleInstockList['SW10023']['_price']);
     }
 
     public function test_articles_instock_xml_export_with_instock_filter()
@@ -85,11 +85,11 @@ class ArticlesInstockExportTest extends \Enlight_Components_Test_Controller_Test
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         $articleNodeList = $this->queryXpath($file, '//article');
-        $this->assertEquals(342, $articleNodeList->length);
+        static::assertEquals(342, $articleNodeList->length);
         $this->assertArticleAttributeInXml($file, 'SW10003', 'instock', 25);
         $this->assertArticleAttributeInXml($file, 'SW10003', '_price', 14.95);
     }
@@ -108,12 +108,12 @@ class ArticlesInstockExportTest extends \Enlight_Components_Test_Controller_Test
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         $mappedArticleInstockList = $this->readCsvIndexedByOrdernumber($file);
-        $this->assertEquals(25, $mappedArticleInstockList['SW10003']['instock']);
-        $this->assertEquals(14.95, $mappedArticleInstockList['SW10003']['_price']);
+        static::assertEquals(25, $mappedArticleInstockList['SW10003']['instock']);
+        static::assertEquals(14.95, $mappedArticleInstockList['SW10003']['_price']);
     }
 
     public function test_articles_instock_xml_export_with_not_instock_filter()
@@ -130,7 +130,7 @@ class ArticlesInstockExportTest extends \Enlight_Components_Test_Controller_Test
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         $this->assertArticleAttributeInXml($file, 'SW10023', '_price', 35);
@@ -152,13 +152,13 @@ class ArticlesInstockExportTest extends \Enlight_Components_Test_Controller_Test
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         $mappedArticleInstockList = $this->readCsvIndexedByOrdernumber($file);
-        $this->assertEquals(35, $mappedArticleInstockList['SW10023']['_price']);
-        $this->assertEquals(0, $mappedArticleInstockList['SW10023']['instock']);
-        $this->assertEquals('Teapavilion', $mappedArticleInstockList['SW10023']['_supplier']);
+        static::assertEquals(35, $mappedArticleInstockList['SW10023']['_price']);
+        static::assertEquals(0, $mappedArticleInstockList['SW10023']['instock']);
+        static::assertEquals('Teapavilion', $mappedArticleInstockList['SW10023']['_supplier']);
     }
 
     public function test_articles_instock_xml_export_with_in_stock_on_sale_filter()
@@ -175,7 +175,7 @@ class ArticlesInstockExportTest extends \Enlight_Components_Test_Controller_Test
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         $this->assertArticleAttributeInXml($file, 'SW10082', 'instock', 5);
@@ -197,13 +197,13 @@ class ArticlesInstockExportTest extends \Enlight_Components_Test_Controller_Test
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         $mappedArticleList = $this->csvToArrayIndexedByFieldValue($file, 'ordernumber');
-        $this->assertEquals(5, $mappedArticleList['SW10082']['instock']);
-        $this->assertEquals('Das blaue Haus', $mappedArticleList['SW10082']['_supplier']);
-        $this->assertEquals(7.99, $mappedArticleList['SW10082']['_price']);
+        static::assertEquals(5, $mappedArticleList['SW10082']['instock']);
+        static::assertEquals('Das blaue Haus', $mappedArticleList['SW10082']['_supplier']);
+        static::assertEquals(7.99, $mappedArticleList['SW10082']['_price']);
     }
 
     public function test_articles_instock_xml_export_with_not_in_stock_on_sale_filter()
@@ -220,7 +220,7 @@ class ArticlesInstockExportTest extends \Enlight_Components_Test_Controller_Test
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         $this->assertArticleAttributeInXml($file, 'SW10198', 'instock', 0);
@@ -242,13 +242,13 @@ class ArticlesInstockExportTest extends \Enlight_Components_Test_Controller_Test
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         $mappedArticleInstockList = $this->readCsvIndexedByOrdernumber($file);
-        $this->assertEquals(0, $mappedArticleInstockList['SW10198']['instock']);
-        $this->assertEquals(238, $mappedArticleInstockList['SW10198']['_price']);
-        $this->assertEquals('Example', $mappedArticleInstockList['SW10198']['_supplier']);
+        static::assertEquals(0, $mappedArticleInstockList['SW10198']['instock']);
+        static::assertEquals(238, $mappedArticleInstockList['SW10198']['_price']);
+        static::assertEquals('Example', $mappedArticleInstockList['SW10198']['_supplier']);
     }
 
     public function test_articles_instock_xml_export_with_not_in_stock_min_stock_filter()
@@ -265,7 +265,7 @@ class ArticlesInstockExportTest extends \Enlight_Components_Test_Controller_Test
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         $this->assertArticleAttributeInXml($file, 'SW10200', '_supplier', 'Example');
@@ -287,13 +287,13 @@ class ArticlesInstockExportTest extends \Enlight_Components_Test_Controller_Test
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         $mappedArticleList = $this->csvToArrayIndexedByFieldValue($file, 'ordernumber');
-        $this->assertEquals('Example', $mappedArticleList['SW10200']['_supplier']);
-        $this->assertEquals(0, $mappedArticleList['SW10200']['instock']);
-        $this->assertEquals(99, $mappedArticleList['SW10200']['_price']);
+        static::assertEquals('Example', $mappedArticleList['SW10200']['_supplier']);
+        static::assertEquals(0, $mappedArticleList['SW10200']['instock']);
+        static::assertEquals(99, $mappedArticleList['SW10200']['_price']);
     }
 
     public function test_articles_instock_xml_export_with_custom_instock_greater_than_filter()
@@ -312,7 +312,7 @@ class ArticlesInstockExportTest extends \Enlight_Components_Test_Controller_Test
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         $this->assertArticleAttributeInXml($file, 'SW10014', 'instock', 178);
@@ -336,13 +336,13 @@ class ArticlesInstockExportTest extends \Enlight_Components_Test_Controller_Test
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         $mappedArticleInstockList = $this->readCsvIndexedByOrdernumber($file);
-        $this->assertEquals(178, $mappedArticleInstockList['SW10014']['instock']);
-        $this->assertEquals(3.8, $mappedArticleInstockList['SW10014']['_price']);
-        $this->assertEquals('Teapavilion', $mappedArticleInstockList['SW10014']['_supplier']);
+        static::assertEquals(178, $mappedArticleInstockList['SW10014']['instock']);
+        static::assertEquals(3.8, $mappedArticleInstockList['SW10014']['_price']);
+        static::assertEquals('Teapavilion', $mappedArticleInstockList['SW10014']['_supplier']);
     }
 
     public function test_articles_instock_xml_export_with_custom_instock_lower_than_filter()
@@ -361,7 +361,7 @@ class ArticlesInstockExportTest extends \Enlight_Components_Test_Controller_Test
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         $this->assertArticleAttributeInXml($file, 'SW10203.5', 'instock', 2);
@@ -385,13 +385,13 @@ class ArticlesInstockExportTest extends \Enlight_Components_Test_Controller_Test
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         $mappedArticleInstockList = $this->readCsvIndexedByOrdernumber($file);
-        $this->assertEquals(2, $mappedArticleInstockList['SW10203.5']['instock']);
-        $this->assertEquals('Example', $mappedArticleInstockList['SW10203.5']['_supplier']);
-        $this->assertEquals(15, $mappedArticleInstockList['SW10203.5']['_price']);
+        static::assertEquals(2, $mappedArticleInstockList['SW10203.5']['instock']);
+        static::assertEquals('Example', $mappedArticleInstockList['SW10203.5']['_supplier']);
+        static::assertEquals(15, $mappedArticleInstockList['SW10203.5']['_price']);
     }
 
     /**
@@ -404,7 +404,7 @@ class ArticlesInstockExportTest extends \Enlight_Components_Test_Controller_Test
     {
         $articleDomNodeList = $this->queryXpath($filePath, "//article[ordernumber='{$orderNumber}']/{$attribute}");
         $nodeValue = $articleDomNodeList->item(0)->nodeValue;
-        $this->assertEquals($expected, $nodeValue);
+        static::assertEquals($expected, $nodeValue);
     }
 
     /**

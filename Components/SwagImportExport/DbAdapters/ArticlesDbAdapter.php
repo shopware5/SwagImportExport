@@ -34,9 +34,6 @@ use Shopware\Models\Attribute\Configuration;
 use Shopware\Models\Category\Category;
 use Shopware\Models\Shop\Shop;
 
-/**
- * Class ArticlesDbAdapter
- */
 class ArticlesDbAdapter implements DataDbAdapter
 {
     /**
@@ -110,10 +107,6 @@ class ArticlesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $start
-     * @param $limit
-     * @param $filter
-     *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
@@ -202,12 +195,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $ids
-     * @param $columns
-     *
      * @throws \RuntimeException
-     *
-     * @return mixed
      */
     public function read($ids, $columns)
     {
@@ -293,9 +281,6 @@ class ArticlesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $ids
-     * @param $categoryColumns
-     *
      * @return array
      */
     public function prepareCategoryExport($ids, $categoryColumns)
@@ -316,8 +301,6 @@ class ArticlesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $ids
-     *
      * @throws \Zend_Db_Statement_Exception
      *
      * @return array
@@ -610,8 +593,6 @@ class ArticlesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $section
-     *
      * @return bool
      */
     public function getColumns($section)
@@ -626,8 +607,6 @@ class ArticlesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $section
-     *
      * @return array
      */
     public function getParentKeys($section)
@@ -852,8 +831,6 @@ class ArticlesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $message
-     *
      * @throws \RuntimeException
      */
     public function saveMessage($message)
@@ -876,9 +853,6 @@ class ArticlesDbAdapter implements DataDbAdapter
         return $this->logMessages;
     }
 
-    /**
-     * @param $logMessages
-     */
     public function setLogMessages($logMessages)
     {
         $this->logMessages[] = $logMessages;
@@ -892,9 +866,6 @@ class ArticlesDbAdapter implements DataDbAdapter
         return $this->logState;
     }
 
-    /**
-     * @param $logState
-     */
     public function setLogState($logState)
     {
         $this->logState = $logState;
@@ -908,20 +879,11 @@ class ArticlesDbAdapter implements DataDbAdapter
         return $this->categoryIdCollection;
     }
 
-    /**
-     * @param $categoryIdCollection
-     */
     public function setCategoryIdCollection($categoryIdCollection)
     {
         $this->categoryIdCollection[] = $categoryIdCollection;
     }
 
-    /**
-     * @param $profileName
-     * @param $type
-     * @param $articleNumber
-     * @param $data
-     */
     public function saveUnprocessedData($profileName, $type, $articleNumber, $data)
     {
         $this->saveArticleData($articleNumber);
@@ -937,11 +899,6 @@ class ArticlesDbAdapter implements DataDbAdapter
         return $this->unprocessedData;
     }
 
-    /**
-     * @param $profileName
-     * @param $type
-     * @param $data
-     */
     public function setUnprocessedData($profileName, $type, $data)
     {
         $this->unprocessedData[$profileName][$type][] = $data;
@@ -955,17 +912,12 @@ class ArticlesDbAdapter implements DataDbAdapter
         return $this->tempData;
     }
 
-    /**
-     * @param $tempData
-     */
     public function setTempData($tempData)
     {
         $this->tempData[$tempData] = $tempData;
     }
 
     /**
-     * @param $articleDetailIds
-     *
      * @throws \Zend_Db_Statement_Exception
      *
      * @return array
@@ -1002,8 +954,6 @@ class ArticlesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $articleDetailIds
-     *
      * @throws \Zend_Db_Statement_Exception
      *
      * @return array
@@ -1037,8 +987,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $columns
-     * @param $ids - s_articles_details.id
+     * @param mixed $ids - s_articles_details.id
      *
      * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
      */
@@ -1063,9 +1012,6 @@ class ArticlesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $columns
-     * @param $ids
-     *
      * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
      */
     public function getPriceBuilder($columns, $ids)
@@ -1084,9 +1030,6 @@ class ArticlesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $columns
-     * @param $ids
-     *
      * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
      */
     public function getImageBuilder($columns, $ids)
@@ -1105,9 +1048,6 @@ class ArticlesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $columns
-     * @param $ids
-     *
      * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
      */
     public function getPropertyValueBuilder($columns, $ids)
@@ -1128,9 +1068,6 @@ class ArticlesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $columns
-     * @param $ids
-     *
      * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
      */
     public function getConfiguratorBuilder($columns, $ids)
@@ -1152,9 +1089,6 @@ class ArticlesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $columns
-     * @param $ids
-     *
      * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
      */
     public function getSimilarBuilder($columns, $ids)
@@ -1175,9 +1109,6 @@ class ArticlesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $columns
-     * @param $ids
-     *
      * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
      */
     public function getAccessoryBuilder($columns, $ids)
@@ -1198,9 +1129,6 @@ class ArticlesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $columns
-     * @param $ids
-     *
      * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
      */
     public function getCategoryBuilder($columns, $ids)
@@ -1218,8 +1146,6 @@ class ArticlesDbAdapter implements DataDbAdapter
 
     /**
      * Returns article ids
-     *
-     * @param $detailIds
      *
      * @return array
      */
@@ -1312,8 +1238,6 @@ class ArticlesDbAdapter implements DataDbAdapter
 
     /**
      * This data is for matching similars and accessories
-     *
-     * @param $articleNumber
      */
     protected function saveArticleData($articleNumber)
     {

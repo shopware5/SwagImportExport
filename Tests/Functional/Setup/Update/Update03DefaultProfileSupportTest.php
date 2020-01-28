@@ -25,7 +25,7 @@ class Update03DefaultProfileSupportTest extends TestCase
         $updater = new Update03DefaultProfileSupport($setupContext, $dbalConnectionMock, $snippetManagerMock);
         $isCompatible = $updater->isCompatible();
 
-        $this->assertTrue($isCompatible);
+        static::assertTrue($isCompatible);
     }
 
     public function test_it_should_be_incompatible()
@@ -38,6 +38,6 @@ class Update03DefaultProfileSupportTest extends TestCase
         $updater = new Update03DefaultProfileSupport($setupContext, $dbalConnectionMock, $snippetManagerMock);
         $isCompatible = $updater->isCompatible();
 
-        $this->assertFalse($isCompatible);
+        static::assertFalse($isCompatible);
     }
 }

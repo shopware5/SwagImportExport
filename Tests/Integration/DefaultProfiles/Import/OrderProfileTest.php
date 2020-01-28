@@ -15,9 +15,9 @@ use SwagImportExport\Tests\Integration\DefaultProfiles\DefaultProfileImportTestC
 
 class OrderProfileTest extends TestCase
 {
-    use DatabaseTestCaseTrait;
     use CommandTestCaseTrait;
     use DefaultProfileImportTestCaseTrait;
+    use DatabaseTestCaseTrait;
 
     public function test_write_should_update_order_status()
     {
@@ -29,6 +29,6 @@ class OrderProfileTest extends TestCase
 
         $updatedOrder = $this->executeQuery("SELECT * FROM s_order WHERE id='{$expectedOrderId}'");
 
-        $this->assertEquals($expectedOrderStatus, $updatedOrder[0]['status']);
+        static::assertEquals($expectedOrderStatus, $updatedOrder[0]['status']);
     }
 }

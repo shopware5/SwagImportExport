@@ -30,8 +30,6 @@ class DataTransformerChain
     /**
      * Execute the transformers in the way they were installed
      *
-     * @param $data
-     *
      * @return array
      */
     public function transformForward($data)
@@ -46,8 +44,6 @@ class DataTransformerChain
 
     /**
      * Execute the transformers back in the web they were installed
-     *
-     * @param $data
      *
      * @return array
      */

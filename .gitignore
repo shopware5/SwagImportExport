@@ -1,4 +1,6 @@
 .psh.yml
 .psh.yaml
+.phpunit.result.cache
+.build/
 
 vendor

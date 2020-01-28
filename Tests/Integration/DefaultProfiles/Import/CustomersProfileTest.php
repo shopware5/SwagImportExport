@@ -15,9 +15,9 @@ use SwagImportExport\Tests\Integration\DefaultProfiles\DefaultProfileImportTestC
 
 class CustomersProfileTest extends TestCase
 {
-    use DatabaseTestCaseTrait;
     use CommandTestCaseTrait;
     use DefaultProfileImportTestCaseTrait;
+    use DatabaseTestCaseTrait;
 
     public function test_import_should_update_customer_shipping_address()
     {
@@ -31,8 +31,8 @@ class CustomersProfileTest extends TestCase
         $updatedCustomer = $this->executeQuery("SELECT * FROM s_user as u JOIN s_user_addresses AS s ON u.id = s.user_id WHERE u.customernumber = '20003'");
         $bigDataTestCustomer = $this->executeQuery("SELECT * FROM s_user WHERE customernumber = '20075'");
 
-        $this->assertEquals($expectedZip, $updatedCustomer[0]['zipcode']);
-        $this->assertEquals($expectedCity, $updatedCustomer[1]['city']);
-        $this->assertEquals($expectedBigDataCustomerEmail, $bigDataTestCustomer[0]['email']);
+        static::assertEquals($expectedZip, $updatedCustomer[0]['zipcode']);
+        static::assertEquals($expectedCity, $updatedCustomer[1]['city']);
+        static::assertEquals($expectedBigDataCustomerEmail, $bigDataTestCustomer[0]['email']);
     }
 }

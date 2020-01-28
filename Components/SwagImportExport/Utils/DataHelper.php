@@ -17,8 +17,6 @@ class DataHelper
      *
      * example: 'customer.number as customerNumber' results in ['customerNumber', 'number']
      *
-     * @param $column
-     *
      * @return array
      */
     public static function generateMappingFromColumns($column)
@@ -35,8 +33,6 @@ class DataHelper
     }
 
     /**
-     * @param $bytes
-     *
      * @return string
      */
     public static function formatFileSize($bytes)

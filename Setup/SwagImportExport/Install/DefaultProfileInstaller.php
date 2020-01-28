@@ -13,9 +13,6 @@ use Shopware\Setup\SwagImportExport\DefaultProfiles\ProfileHelper;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\ProfileMetaData;
 use Shopware\Setup\SwagImportExport\SetupContext;
 
-/**
- * Class DefaultProfileInstaller
- */
 class DefaultProfileInstaller implements InstallerInterface
 {
     const MIN_PLUGIN_VERSION = '2.0.0';

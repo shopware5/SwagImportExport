@@ -11,9 +11,6 @@ namespace Shopware\Components\SwagImportExport\Transformers;
 class PhpExpressionEvaluator implements ExpressionEvaluator
 {
     /**
-     * @param $expression
-     * @param $variables
-     *
      * @throws \Exception
      *
      * @return mixed|void

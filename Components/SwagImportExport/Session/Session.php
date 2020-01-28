@@ -13,8 +13,6 @@ use Shopware\Components\SwagImportExport\UploadPathProvider;
 use Shopware\CustomModels\ImportExport\Session as SessionEntity;
 
 /**
- * Class Session
- *
  * @method int getTotalCount
  */
 class Session
@@ -42,12 +40,7 @@ class Session
     }
 
     /**
-     * @param $method
-     * @param $arguments
-     *
      * @throws \Exception
-     *
-     * @return mixed
      */
     public function __call($method, $arguments)
     {
@@ -281,9 +274,6 @@ class Session
         return $this->getEntity()->getState();
     }
 
-    /**
-     * @param $totalCount
-     */
     public function setTotalCount($totalCount)
     {
         $this->getEntity()->setTotalCount($totalCount);

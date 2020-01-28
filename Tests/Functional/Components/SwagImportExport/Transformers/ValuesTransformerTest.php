@@ -13,7 +13,7 @@ use Shopware\Components\SwagImportExport\Transformers\ValuesTransformer;
 class ValuesTransformerTest extends TestCase
 {
     /**
-     * @dataProvider test_transform_dataProvider
+     * @dataProvider transform_test_dataProvider
      *
      * @param null $type
      * @param null $data
@@ -35,13 +35,13 @@ class ValuesTransformerTest extends TestCase
 
         $result = $transformer->transform($type, $data);
 
-        $this->assertSame($expectedResult, $result);
+        static::assertSame($expectedResult, $result);
     }
 
     /**
      * @return array
      */
-    public function test_transform_dataProvider()
+    public function transform_test_dataProvider()
     {
         $data = [
             [['testVar' => 'someValue'], ['otherTestVar' => 'someValue']],
@@ -67,8 +67,6 @@ class ValuesTransformerTest extends TestCase
     }
 
     /**
-     * @param $evaluator
-     *
      * @return ValuesTransformer
      */
     private function getValuesTransformer($evaluator)

@@ -52,7 +52,6 @@ class DbalHelper
 
     /**
      * @param string $entity
-     * @param $primaryId
      *
      * @return QueryBuilder
      */

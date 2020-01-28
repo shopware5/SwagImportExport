@@ -20,9 +20,9 @@ class MinimalArticleProfileTest extends TestCase
     {
         $minimalArticleProfile = $this->getMinimalArticleProfile();
 
-        $this->assertInstanceOf(MinimalArticleProfile::class, $minimalArticleProfile);
-        $this->assertInstanceOf(\JsonSerializable::class, $minimalArticleProfile);
-        $this->assertInstanceOf(ProfileMetaData::class, $minimalArticleProfile);
+        static::assertInstanceOf(MinimalArticleProfile::class, $minimalArticleProfile);
+        static::assertInstanceOf(\JsonSerializable::class, $minimalArticleProfile);
+        static::assertInstanceOf(ProfileMetaData::class, $minimalArticleProfile);
     }
 
     public function test_it_should_return_valid_profile_tree()
@@ -37,7 +37,7 @@ class MinimalArticleProfileTest extends TestCase
         });
 
         $profileJson = json_encode($minimalArticleProfile);
-        $this->assertJson($profileJson);
+        static::assertJson($profileJson);
     }
 
     /**

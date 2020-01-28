@@ -43,7 +43,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     private $sessionRepository;
 
     /**
-     * @param $dataSession
+     * @param Session $dataSession
      *
      * @return DataIO
      */
@@ -148,8 +148,6 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     /**
      * Returns columnOptions adapter
      *
-     * @param $options
-     *
      * @return \Shopware\Components\SwagImportExport\Utils\DataColumnOptions
      */
     public function createColOpts($options)
@@ -169,8 +167,6 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
 
     /**
      * Returns filter adapter
-     *
-     * @param $filter
      *
      * @return \Shopware\Components\SwagImportExport\Utils\DataFilter
      */
@@ -202,7 +198,8 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     {
         return Shopware()->Events()->notifyUntil(
             'Shopware_Components_SwagImportExport_Factories_CreateDbAdapter',
-            ['subject' => $this, 'adapterType' => $adapterType]);
+            ['subject' => $this, 'adapterType' => $adapterType]
+        );
     }
 
     /**

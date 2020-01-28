@@ -8,8 +8,8 @@
 
 namespace Tests\Helper;
 
-use PHPUnit\DbUnit\DataSet\SymfonyYamlParser;
 use Shopware\Components\SwagImportExport\Factories\DataFactory;
+use Symfony\Component\Yaml\Parser;
 
 class DbAdapterTestHelper extends ImportExportTestHelper
 {
@@ -24,7 +24,7 @@ class DbAdapterTestHelper extends ImportExportTestHelper
     protected $dbTable;
 
     /**
-     * @var \PHPUnit_Extensions_Database_DataSet_SymfonyYamlParser
+     * @var Parser
      */
     protected $parser;
     protected $yamlFile;
@@ -50,7 +50,11 @@ class DbAdapterTestHelper extends ImportExportTestHelper
     public function getDataProvider($testCase)
     {
         if ($this->dataProvider === null) {
-            $this->dataProvider = $this->parseYaml($this->getYamlFile($this->yamlFile));
+            $this->dataProvider = $this->parseYaml(
+                file_get_contents(
+                    $this->getYamlFile($this->yamlFile)
+                )
+            );
         }
 
         return $this->dataProvider[$testCase];
@@ -64,10 +68,10 @@ class DbAdapterTestHelper extends ImportExportTestHelper
     public function parseYaml($yamlFile)
     {
         if ($this->parser === null) {
-            $this->parser = new SymfonyYamlParser();
+            $this->parser = new Parser();
         }
 
-        return $this->parser->parseYaml($yamlFile);
+        return $this->parser->parse($yamlFile);
     }
 
     /**
@@ -127,13 +131,14 @@ class DbAdapterTestHelper extends ImportExportTestHelper
      */
     public function write($records, $expectedInsertedRows)
     {
-        $recordsCountBeforeImport = $this->getDatabaseTester()->getConnection()->getRowCount($this->dbTable);
+        $recordsCountBeforeImport = $this->getTableCount($this->dbTable);
+
         $dataFactory = $this->Plugin()->getDataFactory();
 
         $dbAdapter = $dataFactory->createDbAdapter($this->dbAdapter);
         $dbAdapter->write($records);
 
-        $recordsCountAfterImport = $this->getDatabaseTester()->getConnection()->getRowCount($this->dbTable);
+        $recordsCountAfterImport = $this->getTableCount($this->dbTable);
 
         $this->assertEquals($expectedInsertedRows, $recordsCountAfterImport - $recordsCountBeforeImport);
     }
@@ -147,7 +152,8 @@ class DbAdapterTestHelper extends ImportExportTestHelper
         // Prepare expected data
         $columnsSelect = implode(', ', array_keys($expectedRow));
         $queryTableBefore = $this->getDatabaseTester()->getConnection()->createQueryTable(
-            $this->dbTable, 'SELECT ' . $columnsSelect . ' FROM ' . $this->dbTable
+            $this->dbTable,
+            'SELECT ' . $columnsSelect . ' FROM ' . $this->dbTable
         );
 
         $expectedTable = new \PHPUnit_Extensions_Database_DataSet_DefaultTable($queryTableBefore->getTableMetaData());
@@ -161,7 +167,8 @@ class DbAdapterTestHelper extends ImportExportTestHelper
 
         // Assert
         $resultTable = $this->getDatabaseTester()->getConnection()->createQueryTable(
-            $this->dbTable, 'SELECT ' . $columnsSelect . ' FROM ' . $this->dbTable
+            $this->dbTable,
+            'SELECT ' . $columnsSelect . ' FROM ' . $this->dbTable
         );
 
         $this->assertTablesEqual($expectedTable, $resultTable);
@@ -176,7 +183,8 @@ class DbAdapterTestHelper extends ImportExportTestHelper
         // Prepare expected data
         $columnsSelect = implode(', ', array_keys($expectedRow));
         $queryTableBefore = $this->getDatabaseTester()->getConnection()->createQueryTable(
-                $this->dbTable, 'SELECT ' . $columnsSelect . ' FROM ' . $this->dbTable
+            $this->dbTable,
+            'SELECT ' . $columnsSelect . ' FROM ' . $this->dbTable
         );
         $rowCount = $queryTableBefore->getRowCount();
         $expectedTable = new \PHPUnit_Extensions_Database_DataSet_DefaultTable($queryTableBefore->getTableMetaData());
@@ -198,7 +206,8 @@ class DbAdapterTestHelper extends ImportExportTestHelper
 
         // Assert
         $queryTable = $this->getDatabaseTester()->getConnection()->createQueryTable(
-            $this->dbTable, 'SELECT ' . $columnsSelect . ' FROM ' . $this->dbTable
+            $this->dbTable,
+            'SELECT ' . $columnsSelect . ' FROM ' . $this->dbTable
         );
 
         $this->assertTablesEqual($expectedTable, $queryTable);
@@ -212,5 +221,14 @@ class DbAdapterTestHelper extends ImportExportTestHelper
     protected function getYamlFile($fileName)
     {
         return __DIR__ . '/../Shopware/ImportExport/' . $fileName;
+    }
+
+    private function getTableCount(string $tableName): int
+    {
+        return (int) Shopware()->Container()->get('dbal_connection')->createQueryBuilder()
+            ->select('COUNT(id)')
+            ->from($tableName)
+            ->execute()
+            ->fetch(\PDO::FETCH_COLUMN);
     }
 }

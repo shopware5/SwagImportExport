@@ -16,7 +16,7 @@ class CsvFileWriterTest extends TestCase
 {
     const TEST_FILE = __DIR__ . '/test.csv';
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unlink(self::TEST_FILE);
     }
@@ -28,7 +28,7 @@ class CsvFileWriterTest extends TestCase
         $csvFileWriter = $this->createCsvFileWriter();
         $csvFileWriter->writeRecords(self::TEST_FILE, $exampleData);
 
-        $this->assertFileEquals(__DIR__ . '/_fixtures/created_csv_file.csv', self::TEST_FILE);
+        static::assertFileEquals(__DIR__ . '/_fixtures/created_csv_file.csv', self::TEST_FILE);
     }
 
     /**

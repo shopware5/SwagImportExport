@@ -212,11 +212,6 @@ class ConfiguratorWriter
         return $this->db->fetchOne($sql, [$optionName, $groupId]);
     }
 
-    /**
-     * @param $id
-     *
-     * @return mixed
-     */
     public function getOptionRow($id)
     {
         $sql = 'SELECT `id`, `group_id`, `name`, `position`
@@ -297,8 +292,6 @@ class ConfiguratorWriter
 
     /**
      * @param int $articleId
-     *
-     * @return mixed
      */
     protected function getConfiguratorSetIdByArticleId($articleId)
     {
@@ -354,8 +347,6 @@ class ConfiguratorWriter
 
     /**
      * @param int $articleId
-     *
-     * @return mixed
      */
     protected function getOrderNumber($articleId)
     {
@@ -472,8 +463,6 @@ class ConfiguratorWriter
     }
 
     /**
-     * @param $groupId
-     *
      * @return int
      */
     private function getNextOptionPosition($groupId)
@@ -490,9 +479,6 @@ class ConfiguratorWriter
 
     /**
      * Compares the given setId from the import file by name
-     *
-     * @param $articleId
-     * @param $setId
      *
      * @return bool
      */

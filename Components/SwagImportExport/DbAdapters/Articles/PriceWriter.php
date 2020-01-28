@@ -57,10 +57,6 @@ class PriceWriter
     }
 
     /**
-     * @param $articleId
-     * @param $articleDetailId
-     * @param $prices
-     *
      * @throws AdapterException
      */
     public function write($articleId, $articleDetailId, $prices)
@@ -104,13 +100,6 @@ class PriceWriter
         }
     }
 
-    /**
-     * @param $price
-     * @param $newPrice
-     * @param $tax
-     *
-     * @return mixed
-     */
     protected function calculatePrice($price, $newPrice, $tax)
     {
         $taxInput = $this->customerGroups[$price['priceGroup']];
@@ -146,9 +135,6 @@ class PriceWriter
     }
 
     /**
-     * @param $price
-     * @param $orderNumber
-     *
      * @throws AdapterException
      */
     protected function checkRequirements($price, $orderNumber)
@@ -171,8 +157,6 @@ class PriceWriter
     }
 
     /**
-     * @param $articleId
-     *
      * @throws AdapterException
      *
      * @return float

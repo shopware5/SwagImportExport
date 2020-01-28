@@ -27,7 +27,7 @@ class Update02RemoveForeignKeyConstraintTest extends TestCase
         $update = new Update02RemoveForeignKeyConstraint($setupContext, $dbalConnectionMock, $modelManagerMock, $abstractSchemaMock);
         $isCompatible = $update->isCompatible();
 
-        $this->assertTrue($isCompatible);
+        static::assertTrue($isCompatible);
     }
 
     public function test_it_should_be_incompatible()
@@ -40,7 +40,7 @@ class Update02RemoveForeignKeyConstraintTest extends TestCase
         $update = new Update02RemoveForeignKeyConstraint($setupContext, $dbalConnectionMock, $modelManagerMock, $abstractSchemaMock);
         $isCompatible = $update->isCompatible();
 
-        $this->assertFalse($isCompatible);
+        static::assertFalse($isCompatible);
     }
 
     public function test_it_should_be_incompatible_with_version_higher_or_equals_200()
@@ -58,6 +58,6 @@ class Update02RemoveForeignKeyConstraintTest extends TestCase
 
         $isCompatible = $updater->isCompatible();
 
-        $this->assertFalse($isCompatible);
+        static::assertFalse($isCompatible);
     }
 }

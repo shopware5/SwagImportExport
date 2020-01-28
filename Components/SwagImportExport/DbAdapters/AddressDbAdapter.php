@@ -198,9 +198,6 @@ class AddressDbAdapter implements DataDbAdapter
         return [];
     }
 
-    /**
-     * @param $logMessages
-     */
     public function setLogMessages($logMessages)
     {
         $this->logMessages[] = $logMessages;
@@ -375,7 +372,9 @@ class AddressDbAdapter implements DataDbAdapter
               (id, user_id, country_id, zipcode, firstname, lastname)
               VALUES
               (:id, :userID, :countryID, :zipcode, :firstname, :lastname)
-          ', $addressRecord);
+          ',
+            $addressRecord
+        );
 
         $addressId = $connection->lastInsertId();
 
@@ -397,7 +396,14 @@ class AddressDbAdapter implements DataDbAdapter
         if (!$addressModel->getCustomer()) {
             $customer = $this->getCustomer($addressRecord);
             if (!$customer) {
-                throw new AdapterException(sprintf($errorMessage, $addressRecord['email'], $addressRecord['customernumber'], $addressRecord['userID']));
+                throw new AdapterException(
+                    sprintf(
+                        $errorMessage,
+                        $addressRecord['email'],
+                        $addressRecord['customernumber'],
+                        $addressRecord['userID']
+                    )
+                );
             }
 
             $addressRecord['userID'] = $customer->getId();

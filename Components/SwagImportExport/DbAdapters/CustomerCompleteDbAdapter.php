@@ -213,8 +213,6 @@ class CustomerCompleteDbAdapter extends CustomerDbAdapter
     }
 
     /**
-     * @param $ids
-     *
      * @return array
      */
     private function getNewsletterRecipients($ids)

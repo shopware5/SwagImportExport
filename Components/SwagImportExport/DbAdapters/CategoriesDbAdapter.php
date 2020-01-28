@@ -89,7 +89,6 @@ class CategoriesDbAdapter implements DataDbAdapter
      *
      * @param int $start
      * @param int $limit
-     * @param $filter
      *
      * @return array
      */
@@ -126,12 +125,7 @@ class CategoriesDbAdapter implements DataDbAdapter
     /**
      * Returns categories
      *
-     * @param $ids
-     * @param $columns
-     *
      * @throws \Exception
-     *
-     * @return mixed
      */
     public function read($ids, $columns)
     {
@@ -165,9 +159,6 @@ class CategoriesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $columns
-     * @param $ids
-     *
      * @return \Shopware\Components\Model\QueryBuilder
      */
     public function getBuilder($columns, $ids)
@@ -295,8 +286,6 @@ class CategoriesDbAdapter implements DataDbAdapter
 
     /**
      * @param string $section
-     *
-     * @return mixed
      */
     public function getColumns($section)
     {
@@ -365,8 +354,6 @@ class CategoriesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $message
-     *
      * @throws \Exception
      */
     public function saveMessage($message)
@@ -389,9 +376,6 @@ class CategoriesDbAdapter implements DataDbAdapter
         return $this->logMessages;
     }
 
-    /**
-     * @param $logMessages
-     */
     public function setLogMessages($logMessages)
     {
         $this->logMessages[] = $logMessages;
@@ -405,19 +389,12 @@ class CategoriesDbAdapter implements DataDbAdapter
         return $this->logState;
     }
 
-    /**
-     * @param $logState
-     */
     public function setLogState($logState)
     {
         $this->logState = $logState;
     }
 
     /**
-     * @param $index
-     * @param $categoryId
-     * @param $groups
-     *
      * @return array
      */
     protected function prepareData(array $data, $index, $categoryId, $groups)
@@ -449,8 +426,6 @@ class CategoriesDbAdapter implements DataDbAdapter
 
     /**
      * Helper method: Filtered the field names and return them
-     *
-     * @param $columns
      *
      * @return array
      */
@@ -501,9 +476,6 @@ class CategoriesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $categoryId
-     * @param $customerGroupId
-     *
      * @return bool
      */
     private function checkIfRelationExists($categoryId, $customerGroupId)

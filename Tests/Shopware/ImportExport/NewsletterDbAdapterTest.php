@@ -14,7 +14,7 @@ class NewsletterDbAdapterTest extends DbAdapterTestHelper
 {
     protected $yamlFile = 'TestCases/newslettersDbAdapter.yml';
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

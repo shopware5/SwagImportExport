@@ -31,8 +31,8 @@ class DataFactoryTest extends TestCase
 
         $addressDbAdapter = $dataFactory->createDbAdapter('addresses');
 
-        $this->assertInstanceOf(AddressDbAdapter::class, $addressDbAdapter);
-        $this->assertInstanceOf(DataDbAdapter::class, $addressDbAdapter);
+        static::assertInstanceOf(AddressDbAdapter::class, $addressDbAdapter);
+        static::assertInstanceOf(DataDbAdapter::class, $addressDbAdapter);
     }
 
     public function test_createDbAdapter_should_create_CategoriesDbAdapter()
@@ -41,8 +41,8 @@ class DataFactoryTest extends TestCase
 
         $categoriesDbAdapter = $dataFactory->createDbAdapter('categories');
 
-        $this->assertInstanceOf(CategoriesDbAdapter::class, $categoriesDbAdapter);
-        $this->assertInstanceOf(DataDbAdapter::class, $categoriesDbAdapter);
+        static::assertInstanceOf(CategoriesDbAdapter::class, $categoriesDbAdapter);
+        static::assertInstanceOf(DataDbAdapter::class, $categoriesDbAdapter);
     }
 
     public function test_createDbAdapter_should_create_ArticlesDbAdapter()
@@ -51,8 +51,8 @@ class DataFactoryTest extends TestCase
 
         $articlesDbAdapter = $dataFactory->createDbAdapter('articles');
 
-        $this->assertInstanceOf(ArticlesDbAdapter::class, $articlesDbAdapter);
-        $this->assertInstanceOf(DataDbAdapter::class, $articlesDbAdapter);
+        static::assertInstanceOf(ArticlesDbAdapter::class, $articlesDbAdapter);
+        static::assertInstanceOf(DataDbAdapter::class, $articlesDbAdapter);
     }
 
     public function test_createDbAdapter_should_create_ArticlesInstockDbAdapter()
@@ -61,8 +61,8 @@ class DataFactoryTest extends TestCase
 
         $articlesInstockDbAdapter = $dataFactory->createDbAdapter('articlesInStock');
 
-        $this->assertInstanceOf(ArticlesInStockDbAdapter::class, $articlesInstockDbAdapter);
-        $this->assertInstanceOf(DataDbAdapter::class, $articlesInstockDbAdapter);
+        static::assertInstanceOf(ArticlesInStockDbAdapter::class, $articlesInstockDbAdapter);
+        static::assertInstanceOf(DataDbAdapter::class, $articlesInstockDbAdapter);
     }
 
     public function test_createDbAdapter_should_create_ArticlesPricesDbAdapter()
@@ -71,8 +71,8 @@ class DataFactoryTest extends TestCase
 
         $articlesPricesDbAdapter = $dataFactory->createDbAdapter('articlesPrices');
 
-        $this->assertInstanceOf(ArticlesPricesDbAdapter::class, $articlesPricesDbAdapter);
-        $this->assertInstanceOf(DataDbAdapter::class, $articlesPricesDbAdapter);
+        static::assertInstanceOf(ArticlesPricesDbAdapter::class, $articlesPricesDbAdapter);
+        static::assertInstanceOf(DataDbAdapter::class, $articlesPricesDbAdapter);
     }
 
     public function test_createDbAdapter_should_create_OrdersDbAdapter()
@@ -81,8 +81,8 @@ class DataFactoryTest extends TestCase
 
         $ordersDbAdapter = $dataFactory->createDbAdapter('orders');
 
-        $this->assertInstanceOf(OrdersDbAdapter::class, $ordersDbAdapter);
-        $this->assertInstanceOf(DataDbAdapter::class, $ordersDbAdapter);
+        static::assertInstanceOf(OrdersDbAdapter::class, $ordersDbAdapter);
+        static::assertInstanceOf(DataDbAdapter::class, $ordersDbAdapter);
     }
 
     public function test_createDbAdapter_should_create_MainOrderDbAdapter()
@@ -91,8 +91,8 @@ class DataFactoryTest extends TestCase
 
         $mainOrdersDbAdapter = $dataFactory->createDbAdapter('mainOrders');
 
-        $this->assertInstanceOf(MainOrdersDbAdapter::class, $mainOrdersDbAdapter);
-        $this->assertInstanceOf(DataDbAdapter::class, $mainOrdersDbAdapter);
+        static::assertInstanceOf(MainOrdersDbAdapter::class, $mainOrdersDbAdapter);
+        static::assertInstanceOf(DataDbAdapter::class, $mainOrdersDbAdapter);
     }
 
     public function test_createDbAdapter_should_create_CustomerDbAdapter()
@@ -101,8 +101,8 @@ class DataFactoryTest extends TestCase
 
         $customerDbAdapter = $dataFactory->createDbAdapter('customers');
 
-        $this->assertInstanceOf(CustomerDbAdapter::class, $customerDbAdapter);
-        $this->assertInstanceOf(DataDbAdapter::class, $customerDbAdapter);
+        static::assertInstanceOf(CustomerDbAdapter::class, $customerDbAdapter);
+        static::assertInstanceOf(DataDbAdapter::class, $customerDbAdapter);
     }
 
     public function test_createDbAdapter_should_create_NewsletterDbAdapter()
@@ -111,8 +111,8 @@ class DataFactoryTest extends TestCase
 
         $newsletterDbAdapter = $dataFactory->createDbAdapter('newsletter');
 
-        $this->assertInstanceOf(NewsletterDbAdapter::class, $newsletterDbAdapter);
-        $this->assertInstanceOf(DataDbAdapter::class, $newsletterDbAdapter);
+        static::assertInstanceOf(NewsletterDbAdapter::class, $newsletterDbAdapter);
+        static::assertInstanceOf(DataDbAdapter::class, $newsletterDbAdapter);
     }
 
     public function test_createDbAdapter_should_create_TranslationsDbAdapter()
@@ -121,8 +121,8 @@ class DataFactoryTest extends TestCase
 
         $translationsDbAdapter = $dataFactory->createDbAdapter('translations');
 
-        $this->assertInstanceOf(TranslationsDbAdapter::class, $translationsDbAdapter);
-        $this->assertInstanceOf(DataDbAdapter::class, $translationsDbAdapter);
+        static::assertInstanceOf(TranslationsDbAdapter::class, $translationsDbAdapter);
+        static::assertInstanceOf(DataDbAdapter::class, $translationsDbAdapter);
     }
 
     public function test_createDbAdapter_should_create_ArticlesImagesDbAdapter()
@@ -131,8 +131,8 @@ class DataFactoryTest extends TestCase
 
         $articlesImagesDbAdapter = $dataFactory->createDbAdapter('articlesImages');
 
-        $this->assertInstanceOf(ArticlesImagesDbAdapter::class, $articlesImagesDbAdapter);
-        $this->assertInstanceOf(DataDbAdapter::class, $articlesImagesDbAdapter);
+        static::assertInstanceOf(ArticlesImagesDbAdapter::class, $articlesImagesDbAdapter);
+        static::assertInstanceOf(DataDbAdapter::class, $articlesImagesDbAdapter);
     }
 
     /**

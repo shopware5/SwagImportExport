@@ -49,13 +49,13 @@ class MainOrdersDbAdapterTest extends TestCase
 
         $exportedOrders = $mainOrdersDbAdapter->read($ids, $columns);
 
-        $this->assertArrayHasKey('order', $exportedOrders, 'Could not fetch orders.');
-        $this->assertArrayHasKey('orderId', $exportedOrders['order'][0], 'Could not fetch order id.');
-        $this->assertArrayHasKey('invoiceAmount', $exportedOrders['order'][0], 'Could not fetch amount.');
-        $this->assertArrayHasKey('taxRateSum', $exportedOrders, 'Could not fetch tax rates.');
-        $this->assertArrayHasKey('orderId', $exportedOrders['taxRateSum'][0], 'Could not fetch order id.');
-        $this->assertArrayHasKey('taxRateSums', $exportedOrders['taxRateSum'][0], 'Could not fetch tax sum.');
-        $this->assertArrayHasKey('taxRate', $exportedOrders['taxRateSum'][0], 'Could not fetch tax rate.');
+        static::assertArrayHasKey('order', $exportedOrders, 'Could not fetch orders.');
+        static::assertArrayHasKey('orderId', $exportedOrders['order'][0], 'Could not fetch order id.');
+        static::assertArrayHasKey('invoiceAmount', $exportedOrders['order'][0], 'Could not fetch amount.');
+        static::assertArrayHasKey('taxRateSum', $exportedOrders, 'Could not fetch tax rates.');
+        static::assertArrayHasKey('orderId', $exportedOrders['taxRateSum'][0], 'Could not fetch order id.');
+        static::assertArrayHasKey('taxRateSums', $exportedOrders['taxRateSum'][0], 'Could not fetch tax sum.');
+        static::assertArrayHasKey('taxRate', $exportedOrders['taxRateSum'][0], 'Could not fetch tax rate.');
     }
 
     public function test_read_should_export_correct_result()
@@ -68,15 +68,15 @@ class MainOrdersDbAdapterTest extends TestCase
         $exportedOrders = $mainOrdersDbAdapter->read($ids, $columns);
 
         /*Check order details*/
-        $this->assertEquals($exportedOrders['order'][0]['orderId'], 15);
-        $this->assertEquals($exportedOrders['order'][0]['orderNumber'], '20001');
-        $this->assertEquals($exportedOrders['order'][0]['invoiceAmount'], 998.56);
-        $this->assertEquals($exportedOrders['order'][0]['invoiceAmountNet'], 839.13);
+        static::assertEquals($exportedOrders['order'][0]['orderId'], 15);
+        static::assertEquals($exportedOrders['order'][0]['orderNumber'], '20001');
+        static::assertEquals($exportedOrders['order'][0]['invoiceAmount'], 998.56);
+        static::assertEquals($exportedOrders['order'][0]['invoiceAmountNet'], 839.13);
 
         /*Check order tax details*/
-        $this->assertEquals($exportedOrders['taxRateSum'][0]['orderId'], 15);
-        $this->assertEquals($exportedOrders['taxRateSum'][0]['taxRateSums'], 159.44);
-        $this->assertEquals($exportedOrders['taxRateSum'][0]['taxRate'], 19);
+        static::assertEquals($exportedOrders['taxRateSum'][0]['orderId'], 15);
+        static::assertEquals($exportedOrders['taxRateSum'][0]['taxRateSums'], 159.44);
+        static::assertEquals($exportedOrders['taxRateSum'][0]['taxRate'], 19);
     }
 
     public function test_read_should_export_correct_result_without_tax_id()
@@ -99,19 +99,19 @@ class MainOrdersDbAdapterTest extends TestCase
         $exportedOrders = $mainOrdersDbAdapter->read($ids, $columns);
 
         // Check order details
-        $this->assertEquals(15, $exportedOrders['order'][0]['orderId']);
-        $this->assertEquals('20001', $exportedOrders['order'][0]['orderNumber']);
-        $this->assertEquals(998.56, $exportedOrders['order'][0]['invoiceAmount']);
-        $this->assertEquals(839.13, $exportedOrders['order'][0]['invoiceAmountNet']);
+        static::assertEquals(15, $exportedOrders['order'][0]['orderId']);
+        static::assertEquals('20001', $exportedOrders['order'][0]['orderNumber']);
+        static::assertEquals(998.56, $exportedOrders['order'][0]['invoiceAmount']);
+        static::assertEquals(839.13, $exportedOrders['order'][0]['invoiceAmountNet']);
 
         // Check order tax details
-        $this->assertCount(2, $exportedOrders['taxRateSum']);
-        $this->assertEquals(15, $exportedOrders['taxRateSum'][0]['orderId']);
-        $this->assertEquals(0, $exportedOrders['taxRateSum'][0]['taxRate']);
-        $this->assertEquals(0, $exportedOrders['taxRateSum'][0]['taxRateSums']);
-        $this->assertEquals(15, $exportedOrders['taxRateSum'][1]['orderId']);
-        $this->assertEquals(19, $exportedOrders['taxRateSum'][1]['taxRate']);
-        $this->assertEquals(158.49, $exportedOrders['taxRateSum'][1]['taxRateSums']);
+        static::assertCount(2, $exportedOrders['taxRateSum']);
+        static::assertEquals(15, $exportedOrders['taxRateSum'][0]['orderId']);
+        static::assertEquals(0, $exportedOrders['taxRateSum'][0]['taxRate']);
+        static::assertEquals(0, $exportedOrders['taxRateSum'][0]['taxRateSums']);
+        static::assertEquals(15, $exportedOrders['taxRateSum'][1]['orderId']);
+        static::assertEquals(19, $exportedOrders['taxRateSum'][1]['taxRate']);
+        static::assertEquals(158.49, $exportedOrders['taxRateSum'][1]['taxRateSums']);
 
         // Revert the changes made to the order detail
         $db->query(

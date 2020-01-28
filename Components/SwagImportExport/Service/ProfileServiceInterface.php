@@ -11,9 +11,6 @@ namespace Shopware\Components\SwagImportExport\Service;
 use Shopware\Components\SwagImportExport\Service\Struct\ProfileDataStruct;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-/**
- * Interface ProfileServiceInterface
- */
 interface ProfileServiceInterface
 {
     /**

@@ -113,8 +113,6 @@ class MainMenuItemInstaller implements InstallerInterface
     }
 
     /**
-     * @param mixed $menuItem
-     *
      * @return bool
      */
     private function menuItemExists($menuItem)

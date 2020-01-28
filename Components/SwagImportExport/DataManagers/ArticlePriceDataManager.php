@@ -26,8 +26,6 @@ class ArticlePriceDataManager
      * Sets fields which are empty by default.
      *
      * @param array $record
-     *
-     * @return mixed
      */
     public function setDefaultFields($record)
     {

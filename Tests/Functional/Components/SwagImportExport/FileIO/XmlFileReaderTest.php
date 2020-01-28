@@ -20,7 +20,7 @@ class XmlFileReaderTest extends TestCase
         $tree = $this->getDefaultArticleTree();
         $count = $this->getReaderCount($tree, 'ArticleImport.csv');
 
-        $this->assertEquals(0, $count);
+        static::assertEquals(0, $count);
     }
 
     public function test_default_article_count()
@@ -28,7 +28,7 @@ class XmlFileReaderTest extends TestCase
         $tree = $this->getDefaultArticleTree();
         $count = $this->getReaderCount($tree, 'ArticleImport.xml');
 
-        $this->assertEquals(2, $count);
+        static::assertEquals(2, $count);
     }
 
     public function test_default_articles_read()
@@ -36,12 +36,12 @@ class XmlFileReaderTest extends TestCase
         $tree = $this->getDefaultArticleTree();
         $records = $this->getReaderRecords($tree, 'ArticleImport.xml');
 
-        $this->assertCount(2, $records);
+        static::assertCount(2, $records);
 
-        $this->assertEquals('Test Supplier', $records[0]['supplier']);
-        $this->assertEquals('My_Article_With_Variants', $records[1]['name']);
-        $this->assertEquals(1, $records[1]['minpurchase']);
-        $this->assertEquals('Set-SW10002', $records[1]['configurators']['configurator'][0]['configSetName']);
+        static::assertEquals('Test Supplier', $records[0]['supplier']);
+        static::assertEquals('My_Article_With_Variants', $records[1]['name']);
+        static::assertEquals(1, $records[1]['minpurchase']);
+        static::assertEquals('Set-SW10002', $records[1]['configurators']['configurator'][0]['configSetName']);
     }
 
     public function test_minimal_article_count()
@@ -49,7 +49,7 @@ class XmlFileReaderTest extends TestCase
         $tree = $this->getMinimalArticleTree();
         $count = $this->getReaderCount($tree, 'ArticleImport.xml');
 
-        $this->assertEquals(2, $count);
+        static::assertEquals(2, $count);
     }
 
     public function test_minimal_articles_read()
@@ -57,8 +57,8 @@ class XmlFileReaderTest extends TestCase
         $tree = $this->getMinimalArticleTree();
         $records = $this->getReaderRecords($tree, 'ArticleImport.xml', 1, 1);
 
-        $this->assertCount(1, $records);
-        $this->assertEquals('test_SW10002', $records[0]['ordernumber']);
+        static::assertCount(1, $records);
+        static::assertEquals('test_SW10002', $records[0]['ordernumber']);
     }
 
     public function test_minimal_category_count()
@@ -66,7 +66,7 @@ class XmlFileReaderTest extends TestCase
         $tree = $this->getMinimalCategoryTree();
         $count = $this->getReaderCount($tree, 'CategoriesImport.xml');
 
-        $this->assertEquals(16, $count);
+        static::assertEquals(16, $count);
     }
 
     public function test_minimal_categories_read()
@@ -74,15 +74,15 @@ class XmlFileReaderTest extends TestCase
         $tree = $this->getMinimalCategoryTree();
         $records = $this->getReaderRecords($tree, 'CategoriesImport.xml', 5, 8);
 
-        $this->assertCount(8, $records);
+        static::assertCount(8, $records);
 
-        $this->assertEquals(1009, $records[0]['categoryId']);
-        $this->assertEquals(1005, $records[0]['parentID']);
-        $this->assertEquals('SubCategory2', $records[0]['description']);
+        static::assertEquals(1009, $records[0]['categoryId']);
+        static::assertEquals(1005, $records[0]['parentID']);
+        static::assertEquals('SubCategory2', $records[0]['description']);
 
-        $this->assertEquals(1016, end($records)['categoryId']);
-        $this->assertEquals(1013, end($records)['parentID']);
-        $this->assertEquals('Sub-Category1', end($records)['description']);
+        static::assertEquals(1016, end($records)['categoryId']);
+        static::assertEquals(1013, end($records)['parentID']);
+        static::assertEquals('Sub-Category1', end($records)['description']);
     }
 
     public function test_minimal_customer_count()
@@ -90,7 +90,7 @@ class XmlFileReaderTest extends TestCase
         $tree = $this->getMinimalCustomerTree();
         $count = $this->getReaderCount($tree, 'CustomerImport.xml');
 
-        $this->assertEquals(4, $count);
+        static::assertEquals(4, $count);
     }
 
     public function test_minimal_customer_read()
@@ -98,13 +98,13 @@ class XmlFileReaderTest extends TestCase
         $tree = $this->getMinimalCustomerTree();
         $records = $this->getReaderRecords($tree, 'CustomerImport.xml');
 
-        $this->assertCount(4, $records);
+        static::assertCount(4, $records);
 
-        $this->assertEquals('$2y$10$TK5lWW/5kSMUXg.yZpkmr.RQf1rs/BJIeOzYFwWoPslSOxSKjZpru', $records[1]['password']);
-        $this->assertEquals('Examplecity', $records[1]['billing_city']);
+        static::assertEquals('$2y$10$TK5lWW/5kSMUXg.yZpkmr.RQf1rs/BJIeOzYFwWoPslSOxSKjZpru', $records[1]['password']);
+        static::assertEquals('Examplecity', $records[1]['billing_city']);
 
-        $this->assertEquals('120008', end($records)['customernumber']);
-        $this->assertEquals('mf5 Password', end($records)['shipping_firstname']);
+        static::assertEquals('120008', end($records)['customernumber']);
+        static::assertEquals('mf5 Password', end($records)['shipping_firstname']);
     }
 
     public function test_article_translation_count()
@@ -112,7 +112,7 @@ class XmlFileReaderTest extends TestCase
         $tree = $this->getArticleTranslationTree();
         $count = $this->getReaderCount($tree, 'ArticleTranslationImport.xml');
 
-        $this->assertEquals(103, $count);
+        static::assertEquals(103, $count);
     }
 
     public function test_article_translation_read()
@@ -120,12 +120,12 @@ class XmlFileReaderTest extends TestCase
         $tree = $this->getArticleTranslationTree();
         $records = $this->getReaderRecords($tree, 'ArticleTranslationImport.xml', 50, 53);
 
-        $this->assertCount(53, $records);
+        static::assertCount(53, $records);
 
-        $this->assertEquals('SW10144', $records[0]['articlenumber']);
-        $this->assertEmpty($records['keywords']);
+        static::assertEquals('SW10144', $records[0]['articlenumber']);
+        static::assertEmpty($records['keywords']);
 
-        $this->assertEquals('Shipping costs by weight', end($records)['name']);
+        static::assertEquals('Shipping costs by weight', end($records)['name']);
     }
 
     public function test_minimal_variants_count()
@@ -133,7 +133,7 @@ class XmlFileReaderTest extends TestCase
         $tree = $this->getMinimalVariantsTree();
         $count = $this->getReaderCount($tree, 'VariantsMinimalImport.xml');
 
-        $this->assertEquals(3, $count);
+        static::assertEquals(3, $count);
     }
 
     public function test_minimal_variants_read()
@@ -141,10 +141,10 @@ class XmlFileReaderTest extends TestCase
         $tree = $this->getMinimalVariantsTree();
         $records = $this->getReaderRecords($tree, 'VariantsMinimalImport.xml');
 
-        $this->assertCount(3, $records);
+        static::assertCount(3, $records);
 
-        $this->assertEquals('Farbe', $records[1]['configurator'][0]['configGroupName']);
-        $this->assertEquals('S', $records[1]['configurator'][1]['configOptionName']);
+        static::assertEquals('Farbe', $records[1]['configurator'][0]['configGroupName']);
+        static::assertEquals('S', $records[1]['configurator'][1]['configOptionName']);
     }
 
     public function test_orders_count()
@@ -152,7 +152,7 @@ class XmlFileReaderTest extends TestCase
         $tree = $this->getOrdersTree();
         $count = $this->getReaderCount($tree, 'OrderImport.xml');
 
-        $this->assertEquals(17, $count);
+        static::assertEquals(17, $count);
     }
 
     public function test_orders_read()
@@ -160,16 +160,16 @@ class XmlFileReaderTest extends TestCase
         $tree = $this->getOrdersTree();
         $records = $this->getReaderRecords($tree, 'OrderImport.xml');
 
-        $this->assertCount(17, $records);
+        static::assertCount(17, $records);
 
-        $this->assertEquals(57, $records[4]['orderId']);
-        $this->assertEmpty($records[4]['partnerId']);
+        static::assertEquals(57, $records[4]['orderId']);
+        static::assertEmpty($records[4]['partnerId']);
 
-        $this->assertEquals('9a0271fe91e7fc853a4a7a1e7ca789c812257d74', $records[9]['temporaryId']);
-        $this->assertEquals('SW10145', $records[9]['details']['articleNumber']);
+        static::assertEquals('9a0271fe91e7fc853a4a7a1e7ca789c812257d74', $records[9]['temporaryId']);
+        static::assertEquals('SW10145', $records[9]['details']['articleNumber']);
 
-        $this->assertEquals(42.6, end($records)['invoiceAmount']);
-        $this->assertEquals(-4.3, end($records)['details']['price']);
+        static::assertEquals(42.6, end($records)['invoiceAmount']);
+        static::assertEquals(-4.3, end($records)['details']['price']);
     }
 
     public function test_newsletter_recipients_count()
@@ -177,7 +177,7 @@ class XmlFileReaderTest extends TestCase
         $tree = $this->getNewsletterRecipientsTree();
         $count = $this->getReaderCount($tree, 'NewsletterRecipientImport.xml');
 
-        $this->assertEquals(6, $count);
+        static::assertEquals(6, $count);
     }
 
     public function test_newsletter_recipients_read()
@@ -185,10 +185,10 @@ class XmlFileReaderTest extends TestCase
         $tree = $this->getNewsletterRecipientsTree();
         $records = $this->getReaderRecords($tree, 'NewsletterRecipientImport.xml', 3, 2);
 
-        $this->assertCount(2, $records);
+        static::assertCount(2, $records);
 
-        $this->assertEquals('test4@exmaple.com', $records[0]['email']);
-        $this->assertEquals('Test_Group', end($records)['group']);
+        static::assertEquals('test4@exmaple.com', $records[0]['email']);
+        static::assertEquals('Test_Group', end($records)['group']);
     }
 
     /**

@@ -15,9 +15,9 @@ use SwagImportExport\Tests\Integration\DefaultProfiles\DefaultProfileImportTestC
 
 class ArticleAccessoriesProfileTest extends TestCase
 {
-    use DatabaseTestCaseTrait;
     use CommandTestCaseTrait;
     use DefaultProfileImportTestCaseTrait;
+    use DatabaseTestCaseTrait;
 
     public function test_should_write_assert_new_article_asseccory()
     {
@@ -30,6 +30,6 @@ class ArticleAccessoriesProfileTest extends TestCase
         $updatedArticle = $this->executeQuery("SELECT * FROM s_articles_details WHERE ordernumber='{$expectedOrderNumber}'");
         $updatedArticleRelations = $this->executeQuery("SELECT * FROM s_articles_relationships WHERE articleID='{$updatedArticle[0]['articleID']}'");
 
-        $this->assertEquals($expectedArticleAccessoryId, $updatedArticleRelations[0]['relatedarticle']);
+        static::assertEquals($expectedArticleAccessoryId, $updatedArticleRelations[0]['relatedarticle']);
     }
 }

@@ -99,7 +99,7 @@ class PriceWriterTest extends TestCase
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
         $updatedArticle = $dbalConnection->executeQuery("SELECT * FROM s_articles_prices WHERE articleID='{$articleId}'")->fetchAll();
 
-        $this->assertEquals($expectedArticlePrice, $updatedArticle[0]['price']);
+        static::assertEquals($expectedArticlePrice, $updatedArticle[0]['price']);
     }
 
     public function test_write_should_update_article_price()
@@ -122,7 +122,7 @@ class PriceWriterTest extends TestCase
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
         $updatedArticle = $dbalConnection->executeQuery("SELECT * FROM s_articles_prices WHERE articleID='{$articleId}'")->fetchAll();
 
-        $this->assertEquals($expectedArticlePrice, $updatedArticle[0]['price']);
+        static::assertEquals($expectedArticlePrice, $updatedArticle[0]['price']);
     }
 
     public function test_write_should_update_article_pseudo_price()
@@ -146,7 +146,7 @@ class PriceWriterTest extends TestCase
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
         $updatedArticle = $dbalConnection->executeQuery("SELECT * FROM s_articles_prices WHERE articleID='{$articleId}'")->fetchAll();
 
-        $this->assertEquals($expectedArticlePseudoPrice, $updatedArticle[0]['pseudoprice']);
+        static::assertEquals($expectedArticlePseudoPrice, $updatedArticle[0]['pseudoprice']);
     }
 
     /**

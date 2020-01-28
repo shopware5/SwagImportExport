@@ -93,10 +93,6 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $start
-     * @param $limit
-     * @param $filter
-     *
      * @return array
      */
     public function readRecordIds($start, $limit, $filter)
@@ -106,8 +102,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
         $builder->select('t.id')
             ->from(Translation::class, 't')
             ->where('t.type IN (:types)')
-            ->setParameter('types', ['article', 'variant'])
-        ;
+            ->setParameter('types', ['article', 'variant']);
 
         if ($start) {
             $builder->setFirstResult($start);
@@ -139,12 +134,6 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
             throw new \Exception($message);
         }
 
-        if (!$columns && empty($columns)) {
-            $message = SnippetsHelper::getNamespace()
-                ->get('adapters/translations/no_column_names', 'Can not read translations without column names.');
-            throw new \Exception($message);
-        }
-
         $translations = $this->getTranslations($ids);
 
         $result['default'] = $this->prepareTranslations($translations);
@@ -153,8 +142,6 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $records
-     *
      * @throws \Enlight_Event_Exception
      * @throws \RuntimeException
      */
@@ -248,8 +235,6 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $message
-     *
      * @throws \Exception
      */
     public function saveMessage($message)
@@ -270,9 +255,6 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
         return $this->logMessages;
     }
 
-    /**
-     * @param $logMessages
-     */
     public function setLogMessages($logMessages)
     {
         $this->logMessages[] = $logMessages;
@@ -286,9 +268,6 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
         return $this->logState;
     }
 
-    /**
-     * @param $logState
-     */
     public function setLogState($logState)
     {
         $this->logState = $logState;
@@ -321,8 +300,6 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $ids
-     *
      * @throws \Zend_Db_Statement_Exception
      *
      * @return array
@@ -337,16 +314,16 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
             FROM s_core_translations t
             LEFT JOIN s_articles a ON (t.objectkey = a.id)
             LEFT JOIN s_articles_details ad ON (ad.articleID = a.id AND ad.kind = 1)
-            WHERE t.id IN ($translationIds) AND t.objecttype = 'article')            
-            
+            WHERE t.id IN ($translationIds) AND t.objecttype = 'article')
+
             UNION
-            
+
             (SELECT  ad.id as id, ad.ordernumber as articleNumber, ad.kind as kind,
                     t.objectdata as articleData, t.objectdata as variantData, t.objectlanguage as languageId
             FROM s_core_translations t
             LEFT JOIN s_articles_details ad ON (t.objectkey = ad.id)
             WHERE t.id IN ($translationIds) AND t.objecttype = 'variant')
-            
+
             ORDER BY languageId ASC
         ";
 
@@ -423,8 +400,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
             ->andWhere('configuration.translatable = 1')
             ->setParameter('tablename', 's_articles_attributes')
             ->getQuery()
-            ->getArrayResult()
-        ;
+            ->getArrayResult();
     }
 
     /**

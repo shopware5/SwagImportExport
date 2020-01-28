@@ -16,9 +16,6 @@ use Shopware\Components\SwagImportExport\Transformers\SmartyExpressionEvaluator;
 use Shopware\Components\SwagImportExport\Transformers\TreeTransformer;
 use Shopware\Components\SwagImportExport\Transformers\ValuesTransformer;
 
-/**
- * Class DataTransformerFactory
- */
 class DataTransformerFactory extends \Enlight_Class implements \Enlight_Hook
 {
     /**
@@ -56,9 +53,6 @@ class DataTransformerFactory extends \Enlight_Class implements \Enlight_Hook
     /**
      * Creates a concrete data transformer due to the given type - "values", "tree", "flatten"
      *
-     * @param $transformerType
-     * @param $config
-     *
      * @throws \Exception
      *
      * @return FlattenTransformer|TreeTransformer|ValuesTransformer
@@ -92,8 +86,6 @@ class DataTransformerFactory extends \Enlight_Class implements \Enlight_Hook
     }
 
     /**
-     * @param $convertorType
-     *
      * @throws \Exception
      *
      * @return PhpExpressionEvaluator|SmartyExpressionEvaluator

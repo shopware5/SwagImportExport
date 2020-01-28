@@ -40,10 +40,6 @@ class TranslationsDbAdapter implements DataDbAdapter
     protected $validator;
 
     /**
-     * @param $start
-     * @param $limit
-     * @param $filter
-     *
      * @return array
      */
     public function readRecordIds($start, $limit, $filter)
@@ -81,12 +77,7 @@ class TranslationsDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $ids
-     * @param $columns
-     *
      * @throws \Exception
-     *
-     * @return mixed
      */
     public function read($ids, $columns)
     {
@@ -110,8 +101,6 @@ class TranslationsDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $translations
-     *
      * @return array
      */
     public function prepareTranslations($translations)
@@ -182,8 +171,6 @@ class TranslationsDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $records
-     *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
@@ -275,8 +262,6 @@ class TranslationsDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $message
-     *
      * @throws \Exception
      */
     public function saveMessage($message)
@@ -299,9 +284,6 @@ class TranslationsDbAdapter implements DataDbAdapter
         return $this->logMessages;
     }
 
-    /**
-     * @param $logMessages
-     */
     public function setLogMessages($logMessages)
     {
         $this->logMessages[] = $logMessages;
@@ -315,9 +297,6 @@ class TranslationsDbAdapter implements DataDbAdapter
         return $this->logState;
     }
 
-    /**
-     * @param $logState
-     */
     public function setLogState($logState)
     {
         $this->logState = $logState;
@@ -338,8 +317,6 @@ class TranslationsDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $ids
-     *
      * @return \Shopware\Components\Model\QueryBuilder
      */
     public function getBuilder($ids)
@@ -446,8 +423,6 @@ class TranslationsDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $ids
-     *
      * @throws \Zend_Db_Statement_Exception
      *
      * @return array
@@ -511,8 +486,6 @@ class TranslationsDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $type
-     *
      * @throws AdapterException
      *
      * @return \Shopware\Components\Model\ModelRepository

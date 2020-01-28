@@ -56,7 +56,9 @@ class Update03DefaultProfileSupport implements UpdaterInterface
                 throw $exception;
             }
 
-            throw new DuplicateNameException($this->snippetManager->getNamespace('backend/swag_importexport/default_profiles')->get('update/duplicate_names'));
+            throw new DuplicateNameException(
+                $this->snippetManager->getNamespace('backend/swag_importexport/default_profiles')->get('update/duplicate_names')
+            );
         }
     }
 

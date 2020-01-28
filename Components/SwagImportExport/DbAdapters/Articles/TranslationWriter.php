@@ -152,8 +152,6 @@ class TranslationWriter
     }
 
     /**
-     * @param $translation
-     *
      * @return bool
      */
     private function isValid($translation)

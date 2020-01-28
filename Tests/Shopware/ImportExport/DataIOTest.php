@@ -48,7 +48,7 @@ class DataIOTest extends ImportExportTestHelper
 
         $allIds = $dataIO->getRecordIds();
 
-        $this->assertCount(62, $allIds);
+        static::assertCount(62, $allIds);
     }
 
     public function testGenerateDirectory()
@@ -62,7 +62,7 @@ class DataIOTest extends ImportExportTestHelper
         $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession, $this->getLogger());
 
         $directory = $dataIO->getDirectory();
-        $this->assertDirectoryExists($directory);
+        static::assertDirectoryExists($directory);
     }
 
     /**

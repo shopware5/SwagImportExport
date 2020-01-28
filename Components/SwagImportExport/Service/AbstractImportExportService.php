@@ -143,7 +143,7 @@ abstract class AbstractImportExportService
     }
 
     /**
-     * @param $format
+     * @param string $format
      *
      * @return FileReader
      */

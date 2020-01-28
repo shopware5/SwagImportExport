@@ -9,6 +9,7 @@
 namespace SwagImportExport\Tests\Helper;
 
 use Shopware\Components\SwagImportExport\UploadPathProvider;
+use SwagImportExport\Tests\Helper\DataProvider\ProfileDataProvider;
 use Tests\Helper\BackendControllerTestHelper;
 
 trait ExportControllerTrait
@@ -28,7 +29,12 @@ trait ExportControllerTrait
      */
     protected function loadDependenciesBefore()
     {
-        $this->backendControllerTestHelper = Shopware()->Container()->get('swag_import_export.tests.backend_controller_test_helper');
+        $this->backendControllerTestHelper = new BackendControllerTestHelper(
+            new ProfileDataProvider(
+                Shopware()->Container()->get('dbal_connection')
+            )
+        );
+
         $this->uploadPathProvider = Shopware()->Container()->get('swag_import_export.upload_path_provider');
     }
 

@@ -19,9 +19,6 @@ class XmlFileReader implements FileReader
      */
     protected $treeStructure = true;
 
-    /**
-     * @param $tree
-     */
     public function setTree($tree)
     {
         $this->tree = $tree;
@@ -29,10 +26,6 @@ class XmlFileReader implements FileReader
     }
 
     /**
-     * @param $fileName
-     * @param $position
-     * @param $count
-     *
      * @return array
      */
     public function readRecords($fileName, $position, $count)
@@ -73,8 +66,6 @@ class XmlFileReader implements FileReader
     }
 
     /**
-     * @param $fileName
-     *
      * @return int
      */
     public function getTotalCount($fileName)
@@ -96,7 +87,7 @@ class XmlFileReader implements FileReader
     }
 
     /**
-     * @param $path
+     * @param string $path
      *
      * @return array|string
      */
@@ -135,7 +126,7 @@ class XmlFileReader implements FileReader
     }
 
     /**
-     * @param $node
+     * @param string $node
      */
     protected function findIterationNode($node, array $path)
     {

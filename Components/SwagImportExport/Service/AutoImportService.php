@@ -131,7 +131,8 @@ class AutoImportService implements AutoImportServiceInterface
                 } catch (\Exception $e) {
                     // copy file as broken
                     $brokenFilePath = $this->uploadPathProvider->getRealPath(
-                        'broken-' . $file, UploadPathProvider::DIR
+                        'broken-' . $file,
+                        UploadPathProvider::DIR
                     );
                     copy($mediaPath, $brokenFilePath);
 
@@ -147,7 +148,6 @@ class AutoImportService implements AutoImportServiceInterface
     /**
      * @param string   $fileName
      * @param resource $file
-     * @param $profileRepository
      *
      * @throws \Exception
      *

@@ -15,9 +15,9 @@ use SwagImportExport\Tests\Integration\DefaultProfiles\DefaultProfileImportTestC
 
 class ArticleTranslationUpdateProfileTest extends TestCase
 {
-    use DatabaseTestCaseTrait;
     use CommandTestCaseTrait;
     use DefaultProfileImportTestCaseTrait;
+    use DatabaseTestCaseTrait;
 
     public function test_import_should_update_existing_article_translation()
     {
@@ -36,8 +36,8 @@ class ArticleTranslationUpdateProfileTest extends TestCase
         $article = $queryResult[0];
         $translations = unserialize($article['objectdata']);
 
-        $this->assertEquals($expectedArticleName, $translations['txtArtikel']);
-        $this->assertEquals($expectedArticleDescription, $translations['txtshortdescription']);
-        $this->assertEquals($expectedArticleLongDescription, $translations['txtlangbeschreibung']);
+        static::assertEquals($expectedArticleName, $translations['txtArtikel']);
+        static::assertEquals($expectedArticleDescription, $translations['txtshortdescription']);
+        static::assertEquals($expectedArticleLongDescription, $translations['txtlangbeschreibung']);
     }
 }

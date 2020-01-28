@@ -8,10 +8,6 @@
 
 /**
  * Shopware ImportExport Plugin
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Frontend_SwagImportExport extends Enlight_Controller_Action
 {

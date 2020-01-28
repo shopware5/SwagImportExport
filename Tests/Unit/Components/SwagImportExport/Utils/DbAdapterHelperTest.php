@@ -18,7 +18,7 @@ class DbAdapterHelperTest extends TestCase
      */
     private $SUT;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->SUT = new DbAdapterHelper();
@@ -39,11 +39,11 @@ class DbAdapterHelperTest extends TestCase
 
         $result = DbAdapterHelper::decodeHtmlEntities($inputRecords);
 
-        $this->assertEquals('100', $result[0]['integer'], 'Could not decode integer');
-        $this->assertEquals('1.5', $result[0]['float'], 'Could not decode float');
-        $this->assertEquals('<b>With bold text with html entities</b>', $result[0]['textWithHtml'], 'Could not decode string with html tags');
-        $this->assertEquals('0', $result[0]['false'], 'Could not decode boolean false');
-        $this->assertEquals('1', $result[0]['true'], 'Could not decode boolean true');
-        $this->assertEquals('Hi, this is a string', $result[0]['string'], 'Could not decode a string');
+        static::assertEquals('100', $result[0]['integer'], 'Could not decode integer');
+        static::assertEquals('1.5', $result[0]['float'], 'Could not decode float');
+        static::assertEquals('<b>With bold text with html entities</b>', $result[0]['textWithHtml'], 'Could not decode string with html tags');
+        static::assertEquals('0', $result[0]['false'], 'Could not decode boolean false');
+        static::assertEquals('1', $result[0]['true'], 'Could not decode boolean true');
+        static::assertEquals('Hi, this is a string', $result[0]['string'], 'Could not decode a string');
     }
 }

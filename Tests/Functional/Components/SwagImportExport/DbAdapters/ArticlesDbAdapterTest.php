@@ -50,10 +50,10 @@ class ArticlesDbAdapterTest extends TestCase
         $createdArticleDetail = $dbalConnection->executeQuery("SELECT * FROM s_articles_details WHERE orderNumber='SW-99999'")->fetchAll();
         $createdArticle = $dbalConnection->executeQuery("SELECT a.* FROM s_articles as a JOIN s_articles_details as d ON d.articleID = a.id WHERE d.orderNumber='SW-99999'")->fetchAll();
 
-        $this->assertEquals($newArticleRecord['article'][0]['name'], $createdArticle[0]['name']);
-        $this->assertEquals($newArticleRecord['article'][0]['taxId'], $createdArticle[0]['taxID']);
-        $this->assertEquals($newArticleRecord['article'][0]['orderNumber'], $createdArticleDetail[0]['ordernumber']);
-        $this->assertEquals($newArticleRecord['article'][0]['purchasePrice'], $createdArticleDetail[0]['purchaseprice']);
+        static::assertEquals($newArticleRecord['article'][0]['name'], $createdArticle[0]['name']);
+        static::assertEquals($newArticleRecord['article'][0]['taxId'], $createdArticle[0]['taxID']);
+        static::assertEquals($newArticleRecord['article'][0]['orderNumber'], $createdArticleDetail[0]['ordernumber']);
+        static::assertEquals($newArticleRecord['article'][0]['purchasePrice'], $createdArticleDetail[0]['purchaseprice']);
     }
 
     public function test_write_should_assign_new_similar_articles()
@@ -82,8 +82,8 @@ class ArticlesDbAdapterTest extends TestCase
         $articleId = $dbalConnection->executeQuery($sql)->fetch(\PDO::FETCH_COLUMN);
         $createdArticleSimilars = $dbalConnection->executeQuery('SELECT * FROM s_articles_similar WHERE articleID = ?', [$articleId])->fetchAll();
 
-        $this->assertEmpty($unprocessedData);
-        $this->assertEquals(7, $createdArticleSimilars[4]['relatedarticle']);
+        static::assertEmpty($unprocessedData);
+        static::assertEquals(7, $createdArticleSimilars[4]['relatedarticle']);
     }
 
     public function test_write_should_add_supplier_if_it_not_exists()
@@ -108,7 +108,7 @@ class ArticlesDbAdapterTest extends TestCase
         $sql = "SELECT * FROM s_articles_supplier WHERE name='Test Supplier'";
         $createdArticleSupplier = $dbalConnection->executeQuery($sql)->fetchAll();
 
-        $this->assertEquals($articleRecordWithNewSupplier['article']['supplerName'], $createdArticleSupplier[0]['supplierName']);
+        static::assertEquals($articleRecordWithNewSupplier['article']['supplerName'], $createdArticleSupplier[0]['supplierName']);
     }
 
     public function test_write_article_without_supplier_throws_exception()
@@ -164,8 +164,8 @@ class ArticlesDbAdapterTest extends TestCase
         $articleId = $dbalConnection->executeQuery("SELECT articleID FROM s_articles_details WHERE orderNumber='SW10003'")->fetch(\PDO::FETCH_COLUMN);
         $createdArticleSimilars = $dbalConnection->executeQuery('SELECT * FROM s_articles_relationships WHERE articleID = ?', [$articleId])->fetchAll();
 
-        $this->assertEmpty($unprocessedData);
-        $this->assertEquals(4, $createdArticleSimilars[1]['relatedarticle']);
+        static::assertEmpty($unprocessedData);
+        static::assertEquals(4, $createdArticleSimilars[1]['relatedarticle']);
     }
 
     public function test_new_image_should_fill_unprocessed_data_array()
@@ -188,9 +188,9 @@ class ArticlesDbAdapterTest extends TestCase
         $articlesDbAdapter->write($records);
         $unprocessedData = $articlesDbAdapter->getUnprocessedData();
 
-        $this->assertNotEmpty($unprocessedData);
-        $this->assertEquals($records['article'][0]['orderNumber'], $unprocessedData['articlesImages']['default'][0]['ordernumber']);
-        $this->assertEquals($records['image'][0]['imageUrl'], $unprocessedData['articlesImages']['default'][0]['image']);
+        static::assertNotEmpty($unprocessedData);
+        static::assertEquals($records['article'][0]['orderNumber'], $unprocessedData['articlesImages']['default'][0]['ordernumber']);
+        static::assertEquals($records['image'][0]['imageUrl'], $unprocessedData['articlesImages']['default'][0]['image']);
     }
 
     public function test_existing_image_should_be_added_to_article()
@@ -219,10 +219,10 @@ class ArticlesDbAdapterTest extends TestCase
         $articleId = $dbalConnection->executeQuery("SELECT articleID FROM s_articles_details WHERE orderNumber='SW10006'")->fetch(\PDO::FETCH_COLUMN);
         $image = $dbalConnection->executeQuery("SELECT * FROM s_articles_img WHERE img = 'Muensterlaender_Lagerkorn' AND articleID = ?", [$articleId])->fetch(\PDO::FETCH_ASSOC);
 
-        $this->assertEquals($articleId, $image['articleID']);
-        $this->assertEquals($records['image'][0]['mediaId'], $image['media_id']);
-        $this->assertEquals($records['image'][0]['description'], $image['description']);
-        $this->assertEquals('jpg', $image['extension']);
+        static::assertEquals($articleId, $image['articleID']);
+        static::assertEquals($records['image'][0]['mediaId'], $image['media_id']);
+        static::assertEquals($records['image'][0]['description'], $image['description']);
+        static::assertEquals('jpg', $image['extension']);
     }
 
     public function test_write_article_variant_should_be_written_to_database()
@@ -253,9 +253,9 @@ class ArticlesDbAdapterTest extends TestCase
         $createdArticleVariantDetail = $dbalConnection->executeQuery("SELECT * FROM s_articles_details WHERE orderNumber='ordernumber.2'")->fetchAll();
         $createdArticleVariant = $dbalConnection->executeQuery("SELECT * FROM s_articles WHERE id='{$createdArticleVariantDetail[0]['articleID']}'")->fetchAll();
 
-        $this->assertEquals($newArticleWithVariantRecord['article'][1]['name'], $createdArticleVariant[0]['name']);
-        $this->assertEquals($newArticleWithVariantRecord['article'][1]['taxId'], $createdArticleVariant[0]['taxID']);
-        $this->assertEquals($newArticleWithVariantRecord['article'][1]['orderNumber'], $createdArticleVariantDetail[0]['ordernumber']);
+        static::assertEquals($newArticleWithVariantRecord['article'][1]['name'], $createdArticleVariant[0]['name']);
+        static::assertEquals($newArticleWithVariantRecord['article'][1]['taxId'], $createdArticleVariant[0]['taxID']);
+        static::assertEquals($newArticleWithVariantRecord['article'][1]['orderNumber'], $createdArticleVariantDetail[0]['ordernumber']);
     }
 
     public function test_write_article_variant_with_not_existing_main_number_throws_exception()
@@ -303,6 +303,8 @@ class ArticlesDbAdapterTest extends TestCase
         $articlesDbAdapter->write($records);
 
         $attributeService->delete('s_articles_attributes', 'mycustomfield');
+        Shopware()->Container()->get('shopware.cache_manager')->clearOpCache();
+        Shopware()->Container()->get('shopware.cache_manager')->clearProxyCache();
 
         /** @var Connection $dbalConnection */
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
@@ -314,7 +316,7 @@ class ArticlesDbAdapterTest extends TestCase
         $dbalConnection->executeQuery("DELETE FROM s_core_translations WHERE objecttype='article' AND objectkey={$articleId}");
         $dbalConnection->executeQuery("DELETE FROM s_articles_translations WHERE articleID={$articleId}");
 
-        $this->assertEquals($records['translation'][0]['mycustomfield'], $importedTranslation['__attribute_mycustomfield']);
+        static::assertEquals($records['translation'][0]['mycustomfield'], $importedTranslation['__attribute_mycustomfield']);
     }
 
     public function test_read()
@@ -323,15 +325,15 @@ class ArticlesDbAdapterTest extends TestCase
         $ids = [3];
         $result = $articlesDbAdapter->read($ids, $this->getColumns());
 
-        $this->assertArrayHasKey('article', $result, 'Could not fetch articles.');
-        $this->assertArrayHasKey('price', $result, 'Could not fetch article prices.');
-        $this->assertArrayHasKey('image', $result, 'Could not fetch article image prices.');
-        $this->assertArrayHasKey('propertyValue', $result, 'Could not fetch article property values.');
-        $this->assertArrayHasKey('similar', $result, 'Could not fetch similar articles.');
-        $this->assertArrayHasKey('accessory', $result, 'Could not fetch accessory articles.');
-        $this->assertArrayHasKey('category', $result, 'Could not fetch categories.');
-        $this->assertArrayHasKey('translation', $result, 'Could not fetch article translations.');
-        $this->assertArrayHasKey('configurator', $result, 'Could not fetch article configurators');
+        static::assertArrayHasKey('article', $result, 'Could not fetch articles.');
+        static::assertArrayHasKey('price', $result, 'Could not fetch article prices.');
+        static::assertArrayHasKey('image', $result, 'Could not fetch article image prices.');
+        static::assertArrayHasKey('propertyValue', $result, 'Could not fetch article property values.');
+        static::assertArrayHasKey('similar', $result, 'Could not fetch similar articles.');
+        static::assertArrayHasKey('accessory', $result, 'Could not fetch accessory articles.');
+        static::assertArrayHasKey('category', $result, 'Could not fetch categories.');
+        static::assertArrayHasKey('translation', $result, 'Could not fetch article translations.');
+        static::assertArrayHasKey('configurator', $result, 'Could not fetch article configurators');
     }
 
     public function test_read_should_throw_exception_if_ids_are_empty()

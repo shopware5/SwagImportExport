@@ -25,17 +25,11 @@ class DataLimit
         }
     }
 
-    /**
-     * @return mixed
-     */
     public function getLimit()
     {
         return $this->limit;
     }
 
-    /**
-     * @return mixed
-     */
     public function getOffset()
     {
         return $this->offset;

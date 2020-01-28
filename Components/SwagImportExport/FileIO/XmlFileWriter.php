@@ -40,9 +40,6 @@ class XmlFileWriter implements FileWriter
     /**
      * Writes the header data in the file. The header data should be in a tree-like structure.
      *
-     * @param $fileName
-     * @param $headerData
-     *
      * @throws \Exception
      */
     public function writeHeader($fileName, $headerData)
@@ -55,9 +52,6 @@ class XmlFileWriter implements FileWriter
      * Writes records in the file. The data must be a tree-like structure.
      * The header of the file must be already written on the harddisk,
      * otherwise the xml fill have an invalid format.
-     *
-     * @param $fileName
-     * @param $data
      *
      * @throws \Exception
      */
@@ -73,9 +67,6 @@ class XmlFileWriter implements FileWriter
     /**
      * Writes the footer data in the file. These are usually some closing tags -
      * they should be in a tree-like structure.
-     *
-     * @param $fileName
-     * @param $footerData
      *
      * @throws \Exception
      */

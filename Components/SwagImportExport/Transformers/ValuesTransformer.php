@@ -25,8 +25,6 @@ class ValuesTransformer implements DataTransformerAdapter
 
     /**
      * The $config must contain the smarty or php transformation of values.
-     *
-     * @param $config
      */
     public function initialize($config)
     {

@@ -16,15 +16,11 @@ interface DataTransformerAdapter
 {
     /**
      * Sets the main config which defines the data restructuring
-     *
-     * @param $config
      */
     public function initialize($config);
 
     /**
      * Transforms the data in direction to formatted output file and returns the transformed data.
-     *
-     * @param $data
      *
      * @return array
      */
@@ -32,8 +28,6 @@ interface DataTransformerAdapter
 
     /**
      * Transforms the data in direction from formatted output file and returns the transformed data.
-     *
-     * @param $data
      *
      * @return array
      */

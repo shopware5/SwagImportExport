@@ -15,9 +15,9 @@ use SwagImportExport\Tests\Integration\DefaultProfiles\DefaultProfileImportTestC
 
 class ArticlePropertiesProfileTest extends TestCase
 {
-    use DatabaseTestCaseTrait;
     use CommandTestCaseTrait;
     use DefaultProfileImportTestCaseTrait;
+    use DatabaseTestCaseTrait;
 
     public function test_write_should_update_existing_property()
     {
@@ -31,7 +31,7 @@ class ArticlePropertiesProfileTest extends TestCase
         $updatedArticleFilters = $this->executeQuery("SELECT * FROM s_filter_articles WHERE articleID='{$updatedArticle[0]['articleID']}'");
         $updatedArticleFilterValue = $this->executeQuery("SELECT * FROM s_filter_values WHERE id='{$updatedArticleFilters[5]['valueID']}'");
 
-        $this->assertEquals($expectedUpdatedValue, $updatedArticleFilterValue[0]['value']);
+        static::assertEquals($expectedUpdatedValue, $updatedArticleFilterValue[0]['value']);
     }
 
     public function test_write_should_create_new_property_value()
@@ -46,7 +46,7 @@ class ArticlePropertiesProfileTest extends TestCase
         $updatedArticleFilters = $this->executeQuery("SELECT * FROM s_filter_articles WHERE articleID='{$updatedArticle[0]['articleID']}'");
         $updatedArticleFilterValue = $this->executeQuery("SELECT * FROM s_filter_values WHERE id='{$updatedArticleFilters[5]['valueID']}'");
 
-        $this->assertEquals($expectedInsertedValue, $updatedArticleFilterValue[0]['value']);
+        static::assertEquals($expectedInsertedValue, $updatedArticleFilterValue[0]['value']);
     }
 
     public function test_write_should_create_new_property_group()
@@ -58,7 +58,7 @@ class ArticlePropertiesProfileTest extends TestCase
 
         $filterOptions = $this->executeQuery('SELECT * FROM s_filter ORDER BY id DESC LIMIT 1');
 
-        $this->assertEquals($expectedInsertedGroupName, $filterOptions[0]['name']);
+        static::assertEquals($expectedInsertedGroupName, $filterOptions[0]['name']);
     }
 
     public function test_write_should_create_new_property_option()
@@ -70,6 +70,6 @@ class ArticlePropertiesProfileTest extends TestCase
 
         $filterOptions = $this->executeQuery('SELECT * FROM s_filter_options ORDER BY id DESC LIMIT 1');
 
-        $this->assertEquals($expectedInsertedGroupName, $filterOptions[0]['name']);
+        static::assertEquals($expectedInsertedGroupName, $filterOptions[0]['name']);
     }
 }

@@ -63,8 +63,6 @@ class ArticleDataManager extends DataManager
      *
      * @param array $record
      * @param array $defaultValues
-     *
-     * @return mixed
      */
     public function setDefaultFieldsForCreate($record, $defaultValues)
     {
@@ -199,8 +197,6 @@ class ArticleDataManager extends DataManager
      * @param array $record
      *
      * @throws AdapterException
-     *
-     * @return mixed
      */
     public function setDefaultFields($record)
     {
@@ -360,8 +356,6 @@ class ArticleDataManager extends DataManager
      * @param string $orderNumber
      *
      * @throws AdapterException
-     *
-     * @return mixed
      */
     private function getTaxByTaxRate($taxRate, $orderNumber)
     {

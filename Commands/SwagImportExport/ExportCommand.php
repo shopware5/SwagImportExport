@@ -275,8 +275,6 @@ class ExportCommand extends ShopwareCommand
     }
 
     /**
-     * @param $customerStream
-     *
      * @throws \RuntimeException
      */
     protected function validateCustomerStream($customerStream)

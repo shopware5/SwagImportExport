@@ -23,7 +23,7 @@ class Update01MainMenuItemTest extends TestCase
         $updater = new Update01MainMenuItem($setupContext, $modelManagerMock);
         $isCompatible = $updater->isCompatible();
 
-        $this->assertTrue($isCompatible);
+        static::assertTrue($isCompatible);
     }
 
     public function test_it_should_be_incompatible()
@@ -34,6 +34,6 @@ class Update01MainMenuItemTest extends TestCase
         $updater = new Update01MainMenuItem($setupContext, $modelManagerMock);
         $isCompatible = $updater->isCompatible();
 
-        $this->assertFalse($isCompatible);
+        static::assertFalse($isCompatible);
     }
 }

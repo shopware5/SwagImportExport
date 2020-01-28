@@ -16,10 +16,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Shopware ImportExport Plugin
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
@@ -28,10 +24,6 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
      */
     protected $plugin;
 
-    /**
-     * @param Enlight_Controller_Request_Request   $request
-     * @param Enlight_Controller_Response_Response $response
-     */
     public function __construct()
     {
         parent::__construct();
@@ -326,7 +318,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
      */
     public function importProfileAction()
     {
-        /** @var $file UploadedFile */
+        /** @var UploadedFile $file */
         $file = Symfony\Component\HttpFoundation\Request::createFromGlobals()->files->get('profilefile');
 
         /** @var ProfileService $service */

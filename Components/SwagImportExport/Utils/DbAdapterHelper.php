@@ -10,11 +10,6 @@ namespace Shopware\Components\SwagImportExport\Utils;
 
 class DbAdapterHelper
 {
-    /**
-     * @param $records
-     *
-     * @return mixed
-     */
     public static function decodeHtmlEntities($records)
     {
         foreach ($records as &$record) {
@@ -30,11 +25,6 @@ class DbAdapterHelper
         return $records;
     }
 
-    /**
-     * @param $records
-     *
-     * @return mixed
-     */
     public static function escapeNewLines($records)
     {
         foreach ($records as &$record) {
@@ -48,8 +38,6 @@ class DbAdapterHelper
 
     /**
      * html_entity_encode would return an empty string if boolean false is passed.
-     *
-     * @param mixed $value
      *
      * @return mixed|string
      */

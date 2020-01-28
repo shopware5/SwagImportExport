@@ -23,7 +23,7 @@ class OldAdvancedMenuInstallerTest extends TestCase
         $installer = new OldAdvancedMenuInstaller($setupContext, $modelManagerMock);
         $isCompatible = $installer->isCompatible();
 
-        $this->assertTrue($isCompatible);
+        static::assertTrue($isCompatible);
     }
 
     public function test_it_should_be_incompatible()
@@ -34,6 +34,6 @@ class OldAdvancedMenuInstallerTest extends TestCase
         $installer = new OldAdvancedMenuInstaller($setupContext, $modelManagerMock);
         $isCompatible = $installer->isCompatible();
 
-        $this->assertFalse($isCompatible);
+        static::assertFalse($isCompatible);
     }
 }

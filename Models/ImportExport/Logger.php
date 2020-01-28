@@ -119,8 +119,6 @@ class Logger extends ModelEntity
     }
 
     /**
-     * Set date
-     *
      * @param \DateTime|string $createdAt
      *
      * @return Logger

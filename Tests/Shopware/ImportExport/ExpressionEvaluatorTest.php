@@ -30,8 +30,8 @@ class ExpressionEvaluatorTest extends ImportExportTestHelper
         $evalVariable1 = $phpEval->evaluate($expression1, $variables);
         $evalVariable2 = $phpEval->evaluate($expression2, $variables);
 
-        $this->assertEquals($evalVariable1, false);
-        $this->assertEquals($evalVariable2, 'Product-Test');
+        static::assertEquals($evalVariable1, false);
+        static::assertEquals($evalVariable2, 'Product-Test');
     }
 
     public function testSmartyEvaluator()
@@ -52,7 +52,7 @@ class ExpressionEvaluatorTest extends ImportExportTestHelper
         $evalVariable1 = $smartyEval->evaluate($expression1, $variables);
         $evalVariable2 = $smartyEval->evaluate($expression2, $variables);
 
-        $this->assertEquals($evalVariable1, 'false');
-        $this->assertEquals($evalVariable2, 'Product-Test');
+        static::assertEquals($evalVariable1, 'false');
+        static::assertEquals($evalVariable2, 'Product-Test');
     }
 }

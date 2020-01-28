@@ -8,12 +8,11 @@
 
 namespace Shopware\Components\SwagImportExport\Profile;
 
-/**
- * Class Profile
- */
+use Shopware\CustomModels\ImportExport\Profile as ProfileEntity;
+
 class Profile
 {
-    /** @var $profileEntity \Shopware\CustomModels\ImportExport\Profile */
+    /** @var ProfileEntity $profileEntity */
     private $profileEntity;
 
     /** @var array $configNames */
@@ -25,9 +24,7 @@ class Profile
     private $defaultValues = [];
 
     /**
-     * Profile constructor.
-     *
-     * @param $profile
+     * @param ProfileEntity $profile
      */
     public function __construct($profile, array $configNames = [])
     {
@@ -68,8 +65,6 @@ class Profile
     }
 
     /**
-     * @param $name
-     *
      * @throws \RuntimeException
      *
      * @return array|\Shopware\CustomModels\ImportExport\Expression[]|string
@@ -89,9 +84,6 @@ class Profile
     }
 
     /**
-     * @param $name
-     * @param $value
-     *
      * @throws \RuntimeException
      */
     public function setConfig($name, $value)
@@ -106,7 +98,7 @@ class Profile
     }
 
     /**
-     * @return \Shopware\CustomModels\ImportExport\Profile
+     * @return ProfileEntity
      */
     public function getEntity()
     {

@@ -42,9 +42,6 @@ class CsvFileWriter implements FileWriter
     }
 
     /**
-     * @param $fileName
-     * @param $data
-     *
      * @throws \Exception
      */
     public function writeRecords($fileName, $data)
@@ -59,10 +56,6 @@ class CsvFileWriter implements FileWriter
         $this->getFileHelper()->writeStringToFile($fileName, $flatData, FILE_APPEND);
     }
 
-    /**
-     * @param $fileName
-     * @param $footerData
-     */
     public function writeFooter($fileName, $footerData)
     {
     }

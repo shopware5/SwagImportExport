@@ -20,9 +20,9 @@ class ArticleSimilarsProfileTest extends TestCase
     {
         $articleSimilarsProfile = $this->createArticlSimilarsProfile();
 
-        $this->assertInstanceOf(ArticleSimilarsProfile::class, $articleSimilarsProfile);
-        $this->assertInstanceOf(ProfileMetaData::class, $articleSimilarsProfile);
-        $this->assertInstanceOf(\JsonSerializable::class, $articleSimilarsProfile);
+        static::assertInstanceOf(ArticleSimilarsProfile::class, $articleSimilarsProfile);
+        static::assertInstanceOf(ProfileMetaData::class, $articleSimilarsProfile);
+        static::assertInstanceOf(\JsonSerializable::class, $articleSimilarsProfile);
     }
 
     public function test_it_should_return_valid_profile_tree()

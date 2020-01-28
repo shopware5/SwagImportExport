@@ -20,9 +20,9 @@ class ArticleAccessoriesTest extends TestCase
     {
         $articleAccessoryProfile = $this->createArticleAccessoryProfile();
 
-        $this->assertInstanceOf(ArticleAccessoryProfile::class, $articleAccessoryProfile);
-        $this->assertInstanceOf(ProfileMetaData::class, $articleAccessoryProfile);
-        $this->assertInstanceOf(\JsonSerializable::class, $articleAccessoryProfile);
+        static::assertInstanceOf(ArticleAccessoryProfile::class, $articleAccessoryProfile);
+        static::assertInstanceOf(ProfileMetaData::class, $articleAccessoryProfile);
+        static::assertInstanceOf(\JsonSerializable::class, $articleAccessoryProfile);
     }
 
     public function test_it_should_return_valid_profile_tree()
