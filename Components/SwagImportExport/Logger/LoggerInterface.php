@@ -24,14 +24,11 @@ interface LoggerInterface
      *
      * @param string|array $messages
      * @param string       $status
-     * @param Session      $session
      */
     public function write($messages, $status, Session $session);
 
     /**
      * Writes a log entry to the import/export log file.
-     *
-     * @param LogDataStruct $logDataStruct
      */
     public function writeToFile(LogDataStruct $logDataStruct);
 }

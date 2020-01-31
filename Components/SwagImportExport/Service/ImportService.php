@@ -16,7 +16,6 @@ use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 class ImportService extends AbstractImportExportService implements ImportServiceInterface
 {
     /**
-     * @param array  $requestData
      * @param string $inputFileName
      *
      * @return PreparationResultStruct
@@ -35,8 +34,6 @@ class ImportService extends AbstractImportExportService implements ImportService
     }
 
     /**
-     * @param array  $requestData
-     * @param array  $unprocessedFiles
      * @param string $inputFile
      *
      * @throws \Exception
@@ -119,7 +116,6 @@ class ImportService extends AbstractImportExportService implements ImportService
     }
 
     /**
-     * @param array  $unprocessedData
      * @param string $profileName
      * @param string $outputFile
      */

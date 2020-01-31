@@ -108,7 +108,6 @@ class AutoImportServiceTest extends TestCase
 
     /**
      * @param string $filename
-     * @param $content
      */
     private function installProfile($filename, $content)
     {

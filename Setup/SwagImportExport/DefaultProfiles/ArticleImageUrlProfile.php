@@ -10,9 +10,6 @@ namespace Shopware\Setup\SwagImportExport\DefaultProfiles;
 
 use Shopware\Components\SwagImportExport\DbAdapters\DataDbAdapter;
 
-/**
- * Class ArticleImageUrlProfile
- */
 class ArticleImageUrlProfile implements \JsonSerializable, ProfileMetaData
 {
     /**

@@ -20,7 +20,7 @@ class ImportExportTestHelper extends \Enlight_Components_Test_Plugin_TestCase
     /**
      * Test set up method
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -31,7 +31,7 @@ class ImportExportTestHelper extends \Enlight_Components_Test_Plugin_TestCase
         $this->plugin = Shopware()->Plugins()->Backend()->SwagImportExport();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         /** @var Connection $connection */
         $connection = Shopware()->Container()->get('dbal_connection');

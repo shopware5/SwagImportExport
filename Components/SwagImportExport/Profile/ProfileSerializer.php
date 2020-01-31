@@ -15,17 +15,11 @@ class ProfileSerializer
      */
     private $profile;
 
-    /**
-     * @param Profile $profile
-     */
     public function __construct(Profile $profile)
     {
         $this->profile = $profile;
     }
 
-    /**
-     * @param $key
-     */
     public function readProfileConfig($key)
     {
         $key = ucfirst($key);

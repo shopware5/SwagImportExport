@@ -15,9 +15,9 @@ use SwagImportExport\Tests\Integration\DefaultProfiles\DefaultProfileImportTestC
 
 class ArticlePriceProfileTest extends TestCase
 {
-    use DatabaseTestCaseTrait;
     use CommandTestCaseTrait;
     use DefaultProfileImportTestCaseTrait;
+    use DatabaseTestCaseTrait;
 
     public function test_import_should_update_article_price()
     {
@@ -31,8 +31,8 @@ class ArticlePriceProfileTest extends TestCase
         $updatedArticle = $this->executeQuery("SELECT * FROM s_articles_details WHERE ordernumber='{$createdArticleOrderNumber}'");
         $updatedArticlePrice = $this->executeQuery("SELECT * FROM s_articles_prices WHERE articleID='{$updatedArticle[0]['articleID']}'");
 
-        $this->assertEquals($expectedPurchasePrice, $updatedArticle[0]['purchaseprice']);
-        $this->assertEquals($expectedArticlePrice, $updatedArticlePrice[0]['price']);
+        static::assertEquals($expectedPurchasePrice, $updatedArticle[0]['purchaseprice']);
+        static::assertEquals($expectedArticlePrice, $updatedArticlePrice[0]['price']);
     }
 
     public function test_import_should_update_article_pseudo_price()
@@ -46,7 +46,7 @@ class ArticlePriceProfileTest extends TestCase
         $updatedArticle = $this->executeQuery("SELECT * FROM s_articles_details WHERE ordernumber='{$createdArticleOrderNumber}'");
         $updatedArticlePseudoPrice = $this->executeQuery("SELECT * FROM s_articles_prices WHERE articleID='{$updatedArticle[0]['articleID']}'");
 
-        $this->assertEquals($expectedArticlePseudoPrice, $updatedArticlePseudoPrice[0]['pseudoprice']);
+        static::assertEquals($expectedArticlePseudoPrice, $updatedArticlePseudoPrice[0]['pseudoprice']);
     }
 
     public function test_import_should_update_price_group()
@@ -60,6 +60,6 @@ class ArticlePriceProfileTest extends TestCase
         $updatedArticle = $this->executeQuery("SELECT * FROM s_articles_details WHERE ordernumber='{$createdArticleOrderNumber}'");
         $updatedArticlePseudoPrice = $this->executeQuery("SELECT * FROM s_articles_prices WHERE articleID='{$updatedArticle[0]['articleID']}'");
 
-        $this->assertEquals($expectedArticlePriceGroup, $updatedArticlePseudoPrice[0]['pricegroup']);
+        static::assertEquals($expectedArticlePriceGroup, $updatedArticlePseudoPrice[0]['pricegroup']);
     }
 }

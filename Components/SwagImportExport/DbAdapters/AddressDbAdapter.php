@@ -198,9 +198,6 @@ class AddressDbAdapter implements DataDbAdapter
         return [];
     }
 
-    /**
-     * @param $logMessages
-     */
     public function setLogMessages($logMessages)
     {
         $this->logMessages[] = $logMessages;
@@ -223,9 +220,6 @@ class AddressDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param Address $addressModel
-     * @param array   $addressRecord
-     *
      * @return Address
      */
     protected function setCountry(Address $addressModel, array $addressRecord)
@@ -244,8 +238,6 @@ class AddressDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param array $addressRecord
-     *
      * @return Customer|null
      */
     private function findCustomerByEmailAndNumber(array $addressRecord)
@@ -259,8 +251,6 @@ class AddressDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param array $addressRecord
-     *
      * @return Address|null
      */
     private function getAddressModel(array $addressRecord)
@@ -279,8 +269,6 @@ class AddressDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param array $addressRecord
-     *
      * @return State|null
      */
     private function findStateById(array $addressRecord)
@@ -293,8 +281,6 @@ class AddressDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param array $addressRecord
-     *
      * @return Customer
      */
     private function getCustomer(array $addressRecord)
@@ -328,9 +314,6 @@ class AddressDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param array   $addressRecord
-     * @param Address $addressModel
-     *
      * @return CustomerAddress
      */
     private function getAttributeModel(array $addressRecord, Address $addressModel)
@@ -379,8 +362,6 @@ class AddressDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param array $addressRecord
-     *
      * @return Address|null
      */
     private function createAddressWithId(array $addressRecord)
@@ -391,7 +372,9 @@ class AddressDbAdapter implements DataDbAdapter
               (id, user_id, country_id, zipcode, firstname, lastname)
               VALUES
               (:id, :userID, :countryID, :zipcode, :firstname, :lastname)
-          ', $addressRecord);
+          ',
+            $addressRecord
+        );
 
         $addressId = $connection->lastInsertId();
 
@@ -399,9 +382,6 @@ class AddressDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param Address $addressModel
-     * @param array   $addressRecord
-     *
      * @throws AdapterException
      *
      * @return array
@@ -417,7 +397,12 @@ class AddressDbAdapter implements DataDbAdapter
             $customer = $this->getCustomer($addressRecord);
             if (!$customer) {
                 throw new AdapterException(
-                    sprintf($errorMessage, $addressRecord['email'], $addressRecord['customernumber'], $addressRecord['userID'])
+                    sprintf(
+                        $errorMessage,
+                        $addressRecord['email'],
+                        $addressRecord['customernumber'],
+                        $addressRecord['userID']
+                    )
                 );
             }
 
@@ -429,9 +414,6 @@ class AddressDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param Address $addressModel
-     * @param array   $addressRecord
-     *
      * @throws AdapterException
      *
      * @return array
@@ -449,9 +431,7 @@ class AddressDbAdapter implements DataDbAdapter
 
         $state = $this->findStateById($addressRecord);
         if (!$state) {
-            throw new AdapterException(
-                sprintf($errorMessage, $addressRecord['stateID'])
-            );
+            throw new AdapterException(sprintf($errorMessage, $addressRecord['stateID']));
         }
 
         $addressModel->setState($state);

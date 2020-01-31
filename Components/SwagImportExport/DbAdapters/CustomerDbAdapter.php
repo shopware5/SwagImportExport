@@ -469,9 +469,6 @@ class CustomerDbAdapter implements DataDbAdapter
         return $this->logState;
     }
 
-    /**
-     * @param $logState
-     */
     public function setLogState($logState)
     {
         $this->logState = $logState;
@@ -560,8 +557,6 @@ class CustomerDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param array $record
-     *
      * @throws AdapterException
      *
      * @return array|object|null
@@ -601,8 +596,6 @@ class CustomerDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param array $record
-     *
      * @throws AdapterException
      * @throws \Exception
      */
@@ -621,8 +614,8 @@ class CustomerDbAdapter implements DataDbAdapter
             unset($record['unhashedPassword']);
         }
 
-        if ((isset($record['password']) && !isset($record['encoder'])) ||
-            (!isset($record['password']) && isset($record['encoder']))
+        if ((isset($record['password']) && !isset($record['encoder']))
+            || (!isset($record['password']) && isset($record['encoder']))
         ) {
             $message = SnippetsHelper::getNamespace()
                 ->get('adapters/customer/password_and_encoder_required', 'Password and encoder must be provided for email %s');
@@ -631,8 +624,6 @@ class CustomerDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param array $record
-     *
      * @throws \RuntimeException
      *
      * @return array
@@ -690,8 +681,6 @@ class CustomerDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param array $record
-     *
      * @return array
      */
     protected function prepareBilling(array &$record)
@@ -726,9 +715,7 @@ class CustomerDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param array $record
-     * @param bool  $newCustomer
-     * @param array $billing
+     * @param bool $newCustomer
      *
      * @return array
      */
@@ -776,7 +763,6 @@ class CustomerDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param array         $customerData
      * @param int           $customerId
      * @param Customer|bool $newCustomer
      *

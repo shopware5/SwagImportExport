@@ -8,9 +8,6 @@
 
 namespace Shopware\Components\SwagImportExport\DataManagers;
 
-/**
- * Class DataManager
- */
 class DataManager
 {
     /**
@@ -56,8 +53,6 @@ class DataManager
      *
      * @param string $value
      * @param string $type
-     *
-     * @return mixed
      */
     public static function castDefaultValue($value, $type)
     {

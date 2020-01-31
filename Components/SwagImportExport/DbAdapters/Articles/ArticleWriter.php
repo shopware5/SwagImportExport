@@ -212,8 +212,6 @@ class ArticleWriter
     }
 
     /**
-     * @param array $article
-     *
      * @return bool
      */
     private function isMainDetail(array $article)

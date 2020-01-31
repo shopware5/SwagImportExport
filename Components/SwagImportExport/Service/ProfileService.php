@@ -14,9 +14,6 @@ use Shopware\CustomModels\ImportExport\Profile;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-/**
- * Class ProfileService
- */
 class ProfileService implements ProfileServiceInterface
 {
     /** @var ModelManager */
@@ -28,13 +25,6 @@ class ProfileService implements ProfileServiceInterface
     /** @var \Enlight_Components_Snippet_Manager */
     protected $snippetManager;
 
-    /**
-     * ProfileService constructor.
-     *
-     * @param ModelManager                        $manager
-     * @param Filesystem                          $filesystem
-     * @param \Enlight_Components_Snippet_Manager $snippetManager
-     */
     public function __construct(ModelManager $manager, Filesystem $filesystem, \Enlight_Components_Snippet_Manager $snippetManager)
     {
         $this->modelManager = $manager;

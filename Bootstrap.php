@@ -51,10 +51,6 @@ use Shopware\Setup\SwagImportExport\Update\UpdaterInterface;
 
 /**
  * Shopware SwagImportExport Plugin - Bootstrap
- *
- * @category  Shopware
- *
- * @copyright  Copyright (c) shopware AG (http://www.shopware.com)
  */
 final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
@@ -512,8 +508,6 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
 
     /**
      * Injects Ace Editor used in Conversions GUI
-     *
-     * @param Enlight_Event_EventArgs $args
      */
     public function injectBackendAceEditor(Enlight_Event_EventArgs $args)
     {
@@ -898,9 +892,6 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
     }
 
     /**
-     * @param SchemaTool $tool
-     * @param array      $classes
-     *
      * @return array
      */
     private function removeTablePrefix(SchemaTool $tool, array $classes)

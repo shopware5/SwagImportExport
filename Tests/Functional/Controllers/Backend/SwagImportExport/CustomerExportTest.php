@@ -15,14 +15,14 @@ use SwagImportExport\Tests\Helper\FixturesImportTrait;
 
 class CustomerExportTest extends \Enlight_Components_Test_Controller_TestCase
 {
-    use DatabaseTestCaseTrait;
     use FixturesImportTrait;
+    use DatabaseTestCaseTrait;
     use ExportControllerTrait;
 
     const FORMAT_XML = 'xml';
     const FORMAT_CSV = 'csv';
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -43,7 +43,7 @@ class CustomerExportTest extends \Enlight_Components_Test_Controller_TestCase
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         $this->assertCustomerAttributeInXml($file, '20001', 'email', 'test@example.com');
@@ -65,14 +65,14 @@ class CustomerExportTest extends \Enlight_Components_Test_Controller_TestCase
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         $mappedCustomerList = $this->csvToArrayIndexedByFieldValue($file, 'customernumber');
-        $this->assertEquals('test@example.com', $mappedCustomerList[20001]['email']);
-        $this->assertEquals('Muster GmbH', $mappedCustomerList[20001]['billing_company']);
-        $this->assertEquals('shopware AG', $mappedCustomerList[20001]['shipping_company']);
-        $this->assertEquals(0, $mappedCustomerList[20001]['newsletter']);
+        static::assertEquals('test@example.com', $mappedCustomerList[20001]['email']);
+        static::assertEquals('Muster GmbH', $mappedCustomerList[20001]['billing_company']);
+        static::assertEquals('shopware AG', $mappedCustomerList[20001]['shipping_company']);
+        static::assertEquals(0, $mappedCustomerList[20001]['newsletter']);
     }
 
     /**
@@ -85,6 +85,6 @@ class CustomerExportTest extends \Enlight_Components_Test_Controller_TestCase
     {
         $customerDomNodeList = $this->queryXpath($filePath, "//customer[customernumber='{$customerNumber}']/{$attribute}");
         $nodeValue = $customerDomNodeList->item(0)->nodeValue;
-        $this->assertEquals($expected, $nodeValue);
+        static::assertEquals($expected, $nodeValue);
     }
 }

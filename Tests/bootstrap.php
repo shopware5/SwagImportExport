@@ -7,19 +7,10 @@
  */
 
 use Shopware\Models\Shop\Shop;
-/*
- * (c) shopware AG <info@shopware.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-use SwagImportExport\Tests\Helper\DataProvider\NewsletterDataProvider;
-use SwagImportExport\Tests\Helper\DataProvider\ProfileDataProvider;
-use Tests\Helper\BackendControllerTestHelper;
 
-require __DIR__ . '/../../../../../../../tests/Functional/bootstrap.php';
+require __DIR__ . '/../../../../../../../autoload.php';
 
-class ImportExportTestKernel extends TestKernel
+class ImportExportTestKernel extends \Shopware\Kernel
 {
     const IMPORT_FILES_DIR = __DIR__ . '/Helper/ImportFiles/';
 
@@ -34,11 +25,10 @@ class ImportExportTestKernel extends TestKernel
         $container = $kernel->getContainer();
         $container->get('plugins')->Core()->ErrorHandler()->registerErrorHandler(E_ALL | E_STRICT);
 
-        /** @var $repository \Shopware\Models\Shop\Repository */
         $repository = $container->get('models')->getRepository(Shop::class);
 
         $shop = $repository->getActiveDefault();
-        $shop->registerResources();
+        Shopware()->Container()->get('shopware.components.shop_registration_service')->registerResources($shop);
 
         $_SERVER['HTTP_HOST'] = $shop->getHost();
 
@@ -52,8 +42,6 @@ class ImportExportTestKernel extends TestKernel
         Shopware()->Loader()->registerNamespace('Shopware\Setup\SwagImportExport', __DIR__ . '/../Setup/SwagImportExport/');
         Shopware()->Loader()->registerNamespace('Shopware\Components', __DIR__ . '/../Components/');
         Shopware()->Loader()->registerNamespace('Shopware\CustomModels', __DIR__ . '/../Models/');
-
-        self::registerResources();
 
         Shopware()->Db()->query(
             'UPDATE s_core_config_elements SET value = \'b:0;\' WHERE name = \'useCommaDecimal\''
@@ -71,33 +59,6 @@ class ImportExportTestKernel extends TestKernel
         $sql = 'SELECT 1 FROM s_core_plugins WHERE name = ? AND active = 1';
 
         return (bool) Shopware()->Container()->get('dbal_connection')->fetchColumn($sql, [$name]);
-    }
-
-    /**
-     * Registers all necessary classes to the di container.
-     */
-    private static function registerResources()
-    {
-        Shopware()->Container()->set(
-            'swag_import_export.tests.profile_data_provider',
-            new ProfileDataProvider(
-                Shopware()->Container()->get('models')
-            )
-        );
-
-        Shopware()->Container()->set(
-            'swag_import_export.tests.newsletter_data_provider',
-            new NewsletterDataProvider(
-                Shopware()->Container()->get('models')
-            )
-        );
-
-        Shopware()->Container()->set(
-            'swag_import_export.tests.backend_controller_test_helper',
-            new BackendControllerTestHelper(
-                Shopware()->Container()->get('swag_import_export.tests.profile_data_provider')
-            )
-        );
     }
 }
 

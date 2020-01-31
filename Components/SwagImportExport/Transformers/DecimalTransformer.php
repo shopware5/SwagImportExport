@@ -10,9 +10,6 @@ namespace Shopware\Components\SwagImportExport\Transformers;
 
 use Shopware\Components\SwagImportExport\Profile\Profile;
 
-/**
- * Class DecimalTransformer
- */
 class DecimalTransformer implements DataTransformerAdapter
 {
     /** @var array $decimalValues */
@@ -109,8 +106,7 @@ class DecimalTransformer implements DataTransformerAdapter
      * Transforms a record both forward and backwards.
      * It replaces the decimal-delimiter.
      *
-     * @param array $records
-     * @param bool  $isForward
+     * @param bool $isForward
      *
      * @return array
      */
@@ -191,9 +187,6 @@ class DecimalTransformer implements DataTransformerAdapter
 
     /**
      * Iterates recursively through the profile-tree and returns a flat-array of all the profile-fields.
-     *
-     * @param array $currentNode
-     * @param array $result
      *
      * @return array
      */

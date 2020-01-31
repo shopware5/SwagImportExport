@@ -21,8 +21,6 @@ class DataTransformerChain
 
     /**
      * Installs a new transformer in the chain.
-     *
-     * @param DataTransformerAdapter $transformer
      */
     public function add(DataTransformerAdapter $transformer)
     {
@@ -31,8 +29,6 @@ class DataTransformerChain
 
     /**
      * Execute the transformers in the way they were installed
-     *
-     * @param $data
      *
      * @return array
      */
@@ -48,8 +44,6 @@ class DataTransformerChain
 
     /**
      * Execute the transformers back in the web they were installed
-     *
-     * @param $data
      *
      * @return array
      */

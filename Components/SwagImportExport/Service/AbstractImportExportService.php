@@ -49,16 +49,6 @@ abstract class AbstractImportExportService
     /** @var MediaServiceInterface */
     protected $mediaService;
 
-    /**
-     * @param ProfileFactory            $profileFactory
-     * @param FileIOFactory             $fileIOFactory
-     * @param DataFactory               $dataFactory
-     * @param DataTransformerFactory    $dataTransformerFactory
-     * @param Logger                    $logger
-     * @param UploadPathProvider        $uploadPathProvider
-     * @param \Shopware_Components_Auth $auth
-     * @param MediaServiceInterface     $mediaService
-     */
     public function __construct(
         ProfileFactory $profileFactory,
         FileIOFactory $fileIOFactory,
@@ -80,8 +70,6 @@ abstract class AbstractImportExportService
     }
 
     /**
-     * @param array $requestData
-     *
      * @return ServiceHelperStruct
      */
     protected function buildServiceHelpers(array $requestData)
@@ -103,10 +91,6 @@ abstract class AbstractImportExportService
         );
     }
 
-    /**
-     * @param array  $requestData
-     * @param DataIO $dataIO
-     */
     protected function initializeDataIO(DataIO $dataIO, array $requestData)
     {
         $colOpts = $this->dataFactory->createColOpts($requestData['columnOptions']);
@@ -122,8 +106,7 @@ abstract class AbstractImportExportService
     }
 
     /**
-     * @param Profile $profile
-     * @param bool    $hasTreeStructure
+     * @param bool $hasTreeStructure
      *
      * @return DataTransformerChain
      */
@@ -138,12 +121,11 @@ abstract class AbstractImportExportService
     }
 
     /**
-     * @param string  $writeStatus
-     * @param string  $filename
-     * @param string  $profileName
-     * @param string  $logMessage
-     * @param string  $status
-     * @param Session $session
+     * @param string $writeStatus
+     * @param string $filename
+     * @param string $profileName
+     * @param string $logMessage
+     * @param string $status
      */
     protected function logProcessing($writeStatus, $filename, $profileName, $logMessage, $status, Session $session)
     {
@@ -161,8 +143,7 @@ abstract class AbstractImportExportService
     }
 
     /**
-     * @param Profile $profile
-     * @param $format
+     * @param string $format
      *
      * @return FileReader
      */

@@ -51,12 +51,6 @@ class PropertyWriter
      */
     private $snippetsHelper;
 
-    /**
-     * @param DbalHelper     $dbalHelper
-     * @param Connection     $connection
-     * @param PDOConnection  $db
-     * @param SnippetsHelper $snippetsHelper
-     */
     public function __construct(
         DbalHelper $dbalHelper,
         Connection $connection,
@@ -165,8 +159,6 @@ class PropertyWriter
 
     /**
      * Updates/Creates relation between property group and property option
-     *
-     * @param array $relations
      */
     private function insertOrUpdateOptionRelations(array $relations)
     {
@@ -183,8 +175,6 @@ class PropertyWriter
 
     /**
      * Updates/Creates relation between articles and property values
-     *
-     * @param array $relations
      */
     private function insertOrUpdateValueRelations(array $relations)
     {

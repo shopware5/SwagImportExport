@@ -99,8 +99,6 @@ class CommandHelper
     protected $customerStream;
 
     /**
-     * @param array $data
-     *
      * @throws \RuntimeException
      */
     public function __construct(array $data)
@@ -163,8 +161,7 @@ class CommandHelper
     /**
      * Tries to find profile by given name
      *
-     * @param string     $filename
-     * @param Repository $repository
+     * @param string $filename
      *
      * @return bool|ProfileEntity
      */

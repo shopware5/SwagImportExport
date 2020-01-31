@@ -25,8 +25,10 @@ trait FixturesImportTrait
      */
     protected function importFixtures()
     {
-        /** @var ProfileDataProvider $profileDataProvider */
-        $profileDataProvider = Shopware()->Container()->get('swag_import_export.tests.profile_data_provider');
+        $profileDataProvider = new ProfileDataProvider(
+            Shopware()->Container()->get('dbal_connection')
+        );
+
         $profileDataProvider->createProfiles();
     }
 
@@ -43,13 +45,16 @@ trait FixturesImportTrait
             $address->setIsCustomer(false);
 
             $this->modelManager->persist($address);
+            $this->modelManager->flush();
         }
-
-        $this->modelManager->flush();
     }
 
     private function addProductStream()
     {
+        if ($this->isStreamInstalled()) {
+            return;
+        }
+
         $connection = Shopware()->Container()->get('dbal_connection');
 
         $sql = <<<SQL
@@ -58,5 +63,16 @@ INSERT INTO `s_product_streams` (`id`, `name`, `conditions`, `type`) VALUES
 SQL;
 
         $connection->executeQuery($sql);
+    }
+
+    private function isStreamInstalled(): bool
+    {
+        return (bool) Shopware()->Container()->get('dbal_connection')
+            ->createQueryBuilder()
+            ->select('id')
+            ->from('s_product_streams')
+            ->where('id = 999999')
+            ->execute()
+            ->fetch(\PDO::FETCH_COLUMN);
     }
 }

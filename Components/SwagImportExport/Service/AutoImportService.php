@@ -37,11 +37,6 @@ class AutoImportService implements AutoImportServiceInterface
      */
     private $directory;
 
-    /**
-     * @param UploadPathProvider $uploadPathProvider
-     * @param ModelManager       $modelManager
-     * @param ProfileFactory     $profileFactory
-     */
     public function __construct(
         UploadPathProvider $uploadPathProvider,
         ModelManager $modelManager,
@@ -86,7 +81,6 @@ class AutoImportService implements AutoImportServiceInterface
     }
 
     /**
-     * @param array  $files
      * @param string $lockerFileLocation
      */
     private function importFiles(array $files, $lockerFileLocation)
@@ -137,7 +131,8 @@ class AutoImportService implements AutoImportServiceInterface
                 } catch (\Exception $e) {
                     // copy file as broken
                     $brokenFilePath = $this->uploadPathProvider->getRealPath(
-                        'broken-' . $file, UploadPathProvider::DIR
+                        'broken-' . $file,
+                        UploadPathProvider::DIR
                     );
                     copy($mediaPath, $brokenFilePath);
 
@@ -153,7 +148,6 @@ class AutoImportService implements AutoImportServiceInterface
     /**
      * @param string   $fileName
      * @param resource $file
-     * @param $profileRepository
      *
      * @throws \Exception
      *

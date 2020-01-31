@@ -14,7 +14,7 @@ class CustomersDbAdapterTest extends DbAdapterTestHelper
 {
     protected $yamlFile = 'TestCases/customersDbAdapter.yml';
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -65,14 +65,12 @@ class CustomersDbAdapterTest extends DbAdapterTestHelper
     }
 
     /**
-     * @param $records
-     * @param $expectedInsertedRows
-     *
      * @dataProvider writeWithEmptyFile
-     * @expectedException \Exception
      */
     public function testWriteWithEmptyFile($records, $expectedInsertedRows)
     {
+        self::expectException(\Exception::class);
+
         $this->write($records, $expectedInsertedRows);
     }
 
@@ -81,7 +79,7 @@ class CustomersDbAdapterTest extends DbAdapterTestHelper
      */
     public function writeWithEmptyFile()
     {
-        return $this->getDataProvider('testWriteWithEmptyFile');
+        return $this->getDataProvider('writeWithEmptyFile');
     }
 
     /**

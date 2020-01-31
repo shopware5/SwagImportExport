@@ -119,8 +119,6 @@ class Logger extends ModelEntity
     }
 
     /**
-     * Set date
-     *
      * @param \DateTime|string $createdAt
      *
      * @return Logger
@@ -144,9 +142,6 @@ class Logger extends ModelEntity
         return $this->session;
     }
 
-    /**
-     * @param Session $session
-     */
     public function setSession(Session $session)
     {
         $this->session = $session;

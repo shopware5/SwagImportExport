@@ -12,10 +12,6 @@ use Shopware\Components\SwagImportExport\Service\ExportService;
  * Shopware ImportExport Plugin
  *
  * Export Controller to handle all exports
- *
- * @category  Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Backend_SwagImportExportExport extends Shopware_Controllers_Backend_ExtJs
 {

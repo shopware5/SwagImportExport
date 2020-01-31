@@ -31,9 +31,9 @@ class ArticlesTranslationsDbAdapterTest extends TestCase
         $articlesTranslationsDbAdapter = $this->createArticlesTranslationsDbAdapter();
         $translations = $articlesTranslationsDbAdapter->read([151, 152], $articlesTranslationsDbAdapter->getDefaultColumns());
 
-        $this->assertArrayHasKey('default', $translations);
-        $this->assertEquals('Dart machine standard device', $translations['default'][0]['name']);
-        $this->assertEquals('Beach bag Sailor', $translations['default'][1]['name']);
+        static::assertArrayHasKey('default', $translations);
+        static::assertEquals('Dart machine standard device', $translations['default'][0]['name']);
+        static::assertEquals('Beach bag Sailor', $translations['default'][1]['name']);
     }
 
     public function test_write_should_throw_exception_if_records_are_empty()
@@ -64,8 +64,8 @@ class ArticlesTranslationsDbAdapterTest extends TestCase
         $result = $dbalConnection->executeQuery("SELECT * from s_core_translations WHERE objectkey = '{$articleId}' AND objecttype = 'Article'")->fetch(\PDO::FETCH_ASSOC);
         $translation = unserialize($result['objectdata']);
 
-        $this->assertEquals('My translation test', $mainArticleTranslation);
-        $this->assertEquals('My translation test', $translation['txtArtikel']);
+        static::assertEquals('My translation test', $mainArticleTranslation);
+        static::assertEquals('My translation test', $translation['txtArtikel']);
     }
 
     /**

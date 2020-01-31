@@ -16,9 +16,6 @@ use Shopware\Components\Converter\CsvConverter;
 class CsvEncoder extends CsvConverter
 {
     /**
-     * @param $line
-     * @param $keys
-     *
      * @return string
      */
     public function _encode_line($line, $keys)

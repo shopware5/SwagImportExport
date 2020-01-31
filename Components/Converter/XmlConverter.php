@@ -20,8 +20,6 @@ class XmlConverter
     ];
 
     /**
-     * @param $array
-     *
      * @return string
      */
     public function encode($array)
@@ -35,7 +33,6 @@ class XmlConverter
     }
 
     /**
-     * @param        $array
      * @param int    $pos
      * @param string $ekey
      *
@@ -71,8 +68,9 @@ class XmlConverter
                     $ret .= $this->_encode($item, $pos, $key);
                 } else {
                     $ret .= "$pad<$key$attributes>{$this->sSettings['newline']}" . $this->_encode(
-                            $item, $pos + 1
-                        ) . "$pad</$key>{$this->sSettings['newline']}";
+                        $item,
+                        $pos + 1
+                    ) . "$pad</$key>{$this->sSettings['newline']}";
                 }
             } else {
                 if (preg_match('#<|>|&(?<!amp;)#', $item)) {
@@ -89,8 +87,6 @@ class XmlConverter
     }
 
     /**
-     * @param $contents
-     *
      * @return array
      */
     public function decode($contents)
@@ -160,11 +156,11 @@ class XmlConverter
                     $current[$tag] = $result;
                 } else { //If taken, put all things inside a list(array)
                     if ((is_array(
-                                $current[$tag]
-                            ) and $this->sSettings['attributes'] == 0) //If it is already an array...
+                        $current[$tag]
+                    ) and $this->sSettings['attributes'] == 0) //If it is already an array...
                         or (isset($current[$tag][0]) and is_array(
-                                $current[$tag]
-                            ) and $this->sSettings['attributes'] == 1)
+                            $current[$tag]
+                        ) and $this->sSettings['attributes'] == 1)
                     ) {
                         //array_push($current[$tag],$result); // ...push the new element into that array.
                         $current[$tag][] = $result;
@@ -183,7 +179,7 @@ class XmlConverter
     }
 
     /**
-     * @param        $array
+     * @param mixed  $array
      * @param string $name
      *
      * @return bool
@@ -207,7 +203,7 @@ class XmlConverter
     }
 
     /**
-     * @param $string
+     * @param mixed $string
      *
      * @return bool
      */
@@ -227,8 +223,7 @@ class XmlConverter
     }
 
     /**
-     * @param        $array
-     * @param        $atr
+     * @param mixed  $array
      * @param string $valuename
      */
     public function attr_as_key(&$array, $atr, $valuename = '')
@@ -261,8 +256,7 @@ class XmlConverter
     }
 
     /**
-     * @param        $array
-     * @param        $name
+     * @param mixed  $array
      * @param string $valuename
      */
     public function value_as_key(&$array, $name, $valuename = '')
@@ -287,7 +281,7 @@ class XmlConverter
     }
 
     /**
-     * @param        $array
+     * @param mixed  $array
      * @param string $valuename
      *
      * @return bool
@@ -301,8 +295,8 @@ class XmlConverter
             return false;
         }
         if (!empty($array['_attributes']) && is_array(
-                $array['_attributes']
-            )
+            $array['_attributes']
+        )
         ) {
             foreach ($array['_attributes'] as $key => $value) {
                 $array[$key] = $value;

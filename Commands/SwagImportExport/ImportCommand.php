@@ -88,10 +88,9 @@ class ImportCommand extends ShopwareCommand
     }
 
     /**
-     * @param OutputInterface $output
-     * @param ProfileEntity   $profileModel
-     * @param string          $file
-     * @param string          $format
+     * @param ProfileEntity $profileModel
+     * @param string        $file
+     * @param string        $format
      */
     protected function start(OutputInterface $output, $profileModel, $file, $format)
     {
@@ -123,8 +122,6 @@ class ImportCommand extends ShopwareCommand
     }
 
     /**
-     * @param InputInterface $input
-     *
      * @throws \Exception
      */
     protected function prepareImportInputValidation(InputInterface $input)

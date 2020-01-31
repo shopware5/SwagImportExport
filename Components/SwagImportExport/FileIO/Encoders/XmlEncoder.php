@@ -16,7 +16,6 @@ use Shopware\Components\Converter\XmlConverter;
 class XmlEncoder extends XmlConverter
 {
     /**
-     * @param $array
      * @param int    $pos
      * @param string $ekey
      *
@@ -73,8 +72,6 @@ class XmlEncoder extends XmlConverter
     }
 
     /**
-     * @param $item
-     *
      * @return bool
      */
     private function isEmpty($item)
@@ -84,8 +81,6 @@ class XmlEncoder extends XmlConverter
 
     /**
      * Checks if special xml characters were used.
-     *
-     * @param $item
      *
      * @return int
      */

@@ -15,14 +15,14 @@ use SwagImportExport\Tests\Helper\FixturesImportTrait;
 
 class CategoryExportTest extends \Enlight_Components_Test_Controller_TestCase
 {
-    use DatabaseTestCaseTrait;
     use FixturesImportTrait;
+    use DatabaseTestCaseTrait;
     use ExportControllerTrait;
 
     const FORMAT_XML = 'xml';
     const FORMAT_CSV = 'csv';
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -43,14 +43,14 @@ class CategoryExportTest extends \Enlight_Components_Test_Controller_TestCase
         $fileName = $assigned['fileName'];
         $filePath = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($filePath, "File not found {$fileName}");
+        static::assertFileExists($filePath, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($filePath);
 
-        $this->assertCategoryAttributeInXml($filePath, '5', 'description', 'Genusswelten');
-        $this->assertCategoryAttributeInXml($filePath, '3', 'description', 'Deutsch');
+        $this->assertCategoryAttributeInXml($filePath, '5', 'name', 'Genusswelten');
+        $this->assertCategoryAttributeInXml($filePath, '3', 'name', 'Deutsch');
 
         $categoryNodeList = $this->queryXpath($filePath, '//category');
-        $this->assertEquals(62, $categoryNodeList->length);
+        static::assertEquals(62, $categoryNodeList->length);
     }
 
     public function test_category_csv_export()
@@ -66,13 +66,13 @@ class CategoryExportTest extends \Enlight_Components_Test_Controller_TestCase
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         $mappedCategoryCsv = $this->csvToArrayIndexedByFieldValue($file, 'categoryId');
-        $this->assertEquals('Deutsch', $mappedCategoryCsv[3]['description']);
-        $this->assertEquals(1, $mappedCategoryCsv[3]['active']);
-        $this->assertEquals(1, $mappedCategoryCsv[3]['parentID'], 'Category Deutsch has no parent category.');
+
+        static::assertEquals('Deutsch', $mappedCategoryCsv[3]['name']);
+        static::assertEquals(1, $mappedCategoryCsv[3]['parentID'], 'Category Deutsch has no parent category.');
     }
 
     /**
@@ -85,6 +85,6 @@ class CategoryExportTest extends \Enlight_Components_Test_Controller_TestCase
     {
         $categoryNodeList = $this->queryXpath($filePath, "//category[categoryId='{$categoryId}']/{$attribute}");
         $nodeValue = $categoryNodeList->item(0)->nodeValue;
-        $this->assertEquals($expected, $nodeValue);
+        static::assertEquals($expected, $nodeValue);
     }
 }

@@ -15,9 +15,9 @@ use SwagImportExport\Tests\Integration\DefaultProfiles\DefaultProfileImportTestC
 
 class ArticleCategoriesProfileTest extends TestCase
 {
-    use DatabaseTestCaseTrait;
     use CommandTestCaseTrait;
     use DefaultProfileImportTestCaseTrait;
+    use DatabaseTestCaseTrait;
 
     public function test_should_update_existing_article_categories()
     {
@@ -31,7 +31,7 @@ class ArticleCategoriesProfileTest extends TestCase
         $updatedArticle = $this->executeQuery("SELECT * FROM s_articles_details WHERE ordernumber='{$expectedOrderNumber}'");
         $updatedArticleCategories = $this->executeQuery("SELECT * FROM s_articles_categories WHERE articleID='{$updatedArticle[0]['articleID']}'");
 
-        $this->assertEquals($expectedCategoryId, $updatedArticleCategories[3]['categoryID']);
-        $this->assertCount($expectedCategoryArrayLength, $updatedArticleCategories);
+        static::assertEquals($expectedCategoryId, $updatedArticleCategories[3]['categoryID']);
+        static::assertCount($expectedCategoryArrayLength, $updatedArticleCategories);
     }
 }

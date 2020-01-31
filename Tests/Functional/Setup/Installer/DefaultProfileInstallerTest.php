@@ -23,7 +23,7 @@ class DefaultProfileInstallerTest extends TestCase
         $installer = new DefaultProfileInstaller($setupContext, $dbalConnectionMock);
         $isCompatible = $installer->isCompatible();
 
-        $this->assertTrue($isCompatible);
+        static::assertTrue($isCompatible);
     }
 
     public function test_it_should_be_incompatible()
@@ -34,6 +34,6 @@ class DefaultProfileInstallerTest extends TestCase
         $installer = new DefaultProfileInstaller($setupContext, $dbalConnectionMock);
         $isCompatible = $installer->isCompatible();
 
-        $this->assertFalse($isCompatible);
+        static::assertFalse($isCompatible);
     }
 }

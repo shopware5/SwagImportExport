@@ -29,7 +29,7 @@ class CsvFileReaderTest extends TestCase
         $csvFileReader = $this->createCsvFileReader();
         $actualRows = $csvFileReader->readRecords(__DIR__ . '/_fixtures/without_empty_line_on_end.csv', 0, 50);
 
-        $this->assertEquals($expectedResult, $actualRows);
+        static::assertEquals($expectedResult, $actualRows);
     }
 
     public function test_getTotalCount_without_empty_line_at_the_end_of_file()
@@ -37,7 +37,7 @@ class CsvFileReaderTest extends TestCase
         $csvFileReader = $this->createCsvFileReader();
         $countOfRecords = $csvFileReader->getTotalCount(__DIR__ . '/_fixtures/without_empty_line_on_end.csv');
 
-        $this->assertEquals(self::AMOUNT_OF_RECORDS_WITHOUT_EMPTY_LINE, $countOfRecords);
+        static::assertEquals(self::AMOUNT_OF_RECORDS_WITHOUT_EMPTY_LINE, $countOfRecords);
     }
 
     public function test_getTotalCount_with_multiple_empty_lines_at_the_end_of_file()
@@ -45,7 +45,7 @@ class CsvFileReaderTest extends TestCase
         $csvFileReader = $this->createCsvFileReader();
         $countOfRecords = $csvFileReader->getTotalCount(__DIR__ . '/_fixtures/empty_lines_on_end.csv');
 
-        $this->assertEquals(self::AMOUNT_OF_RECORDS_WITH_EMPTY_LINE, $countOfRecords);
+        static::assertEquals(self::AMOUNT_OF_RECORDS_WITH_EMPTY_LINE, $countOfRecords);
     }
 
     /**

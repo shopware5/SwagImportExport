@@ -11,7 +11,6 @@ namespace SwagImportExport\Tests\Unit\Setup\DefaultProfiles;
 trait DefaultProfileTestCaseTrait
 {
     /**
-     * @param array    $item
      * @param callable $callable - Callable with assertions which will be executed on every array
      */
     private function walkRecursive(array $item, callable $callable)

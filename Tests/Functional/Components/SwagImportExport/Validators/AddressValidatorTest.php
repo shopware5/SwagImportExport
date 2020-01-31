@@ -21,8 +21,8 @@ class AddressValidatorTest extends TestCase
     {
         $addressValidator = new AddressValidator();
 
-        $this->assertInstanceOf(AddressValidator::class, $addressValidator);
-        $this->assertInstanceOf(Validator::class, $addressValidator);
+        static::assertInstanceOf(AddressValidator::class, $addressValidator);
+        static::assertInstanceOf(Validator::class, $addressValidator);
     }
 
     public function test_checkRquieredFields_should_throw_exception_if_address_is_empty()

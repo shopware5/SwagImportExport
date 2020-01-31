@@ -56,6 +56,6 @@ class DataFlattenTransformerTest extends TestCase
         $flattenTransformer->initialize($jsonTree);
 
         $data = $flattenTransformer->composeHeader();
-        $this->assertEquals($expectedData, $data);
+        static::assertEquals($expectedData, $data);
     }
 }

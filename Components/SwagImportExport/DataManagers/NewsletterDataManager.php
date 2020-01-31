@@ -73,8 +73,6 @@ class NewsletterDataManager extends DataManager
      * @param array $defaultValues
      *
      * @throws AdapterException
-     *
-     * @return mixed
      */
     public function setDefaultFieldsForCreate($record, $defaultValues)
     {

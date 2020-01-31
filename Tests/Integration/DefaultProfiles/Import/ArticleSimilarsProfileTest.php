@@ -15,9 +15,9 @@ use SwagImportExport\Tests\Integration\DefaultProfiles\DefaultProfileImportTestC
 
 class ArticleSimilarsProfileTest extends TestCase
 {
-    use DatabaseTestCaseTrait;
     use CommandTestCaseTrait;
     use DefaultProfileImportTestCaseTrait;
+    use DatabaseTestCaseTrait;
 
     public function test_write_should_assert_new_similar_article()
     {
@@ -35,10 +35,10 @@ class ArticleSimilarsProfileTest extends TestCase
         $updatedArticleSimilars = $this->executeQuery("SELECT * FROM s_articles_similar WHERE articleID='{$updatedArticleId}'");
 
         foreach (array_keys($expectedRelatedArticleId) as $key) {
-            $this->assertEquals($expectedRelatedArticleId[$key], $updatedArticleSimilars[$key]['relatedarticle']);
+            static::assertEquals($expectedRelatedArticleId[$key], $updatedArticleSimilars[$key]['relatedarticle']);
         }
 
         // Now deleted element
-        $this->assertNull($updatedArticleSimilars[3]);
+        static::assertNull($updatedArticleSimilars[3]);
     }
 }

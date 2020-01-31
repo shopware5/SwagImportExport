@@ -46,7 +46,7 @@ class PropertyWriterTest extends TestCase
             self::ARTICLE_ORDERNUMBER,
             $propertyValues
         );
-        $this->assertNull($result);
+        static::assertNull($result);
     }
 
     public function test_write_should_not_create_new_group_with_existing_article_and_existing_properties()
@@ -72,7 +72,7 @@ class PropertyWriterTest extends TestCase
             [self::NOT_EXISTING_FILTER_GROUP_NAME]
         )->fetch(\PDO::FETCH_COLUMN);
 
-        $this->assertEmpty($importedFilter, 'Filter groups will only be created if a new product will be created.');
+        static::assertEmpty($importedFilter, 'Filter groups will only be created if a new product will be created.');
     }
 
     public function test_write_should_update_group_relations()
@@ -101,7 +101,7 @@ class PropertyWriterTest extends TestCase
             [self::ARTICLE_ID_WITHOUT_PROPERTIES]
         )->fetch(\PDO::FETCH_COLUMN);
 
-        $this->assertGreaterThan($expectedMinId, $filterGroupId, 'Could not update filter group for article.');
+        static::assertGreaterThan($expectedMinId, $filterGroupId, 'Could not update filter group for article.');
     }
 
     public function test_write_should_create_value()
@@ -129,7 +129,7 @@ class PropertyWriterTest extends TestCase
             [self::NOT_EXISTING_VALUE_NAME]
         )->fetch(\PDO::FETCH_COLUMN);
 
-        $this->assertEquals(self::NOT_EXISTING_VALUE_NAME, $createdPropertyValue, 'Could not create property value.');
+        static::assertEquals(self::NOT_EXISTING_VALUE_NAME, $createdPropertyValue, 'Could not create property value.');
     }
 
     public function test_write_should_create_option()
@@ -157,7 +157,7 @@ class PropertyWriterTest extends TestCase
             [self::NOT_EXISTING_OPTION_NAME]
         )->fetch(\PDO::FETCH_COLUMN);
 
-        $this->assertEquals(self::NOT_EXISTING_OPTION_NAME, $createdPropertyValue, 'Could not create property value.');
+        static::assertEquals(self::NOT_EXISTING_OPTION_NAME, $createdPropertyValue, 'Could not create property value.');
     }
 
     public function test_write_should_throw_exception_with_empty_property_option_name()
@@ -204,7 +204,7 @@ class PropertyWriterTest extends TestCase
             [self::ARTICLE_ID_WITHOUT_PROPERTIES]
         )->fetch(\PDO::FETCH_COLUMN);
 
-        $this->assertEquals(self::EXISTING_PROPERTY_VALUE_ID, $valueIdRelationToTestedArticle);
+        static::assertEquals(self::EXISTING_PROPERTY_VALUE_ID, $valueIdRelationToTestedArticle);
     }
 
     public function test_write_should_create_option_relation()
@@ -231,7 +231,7 @@ class PropertyWriterTest extends TestCase
             [self::ARTICLE_ID_WITHOUT_PROPERTIES]
         )->fetch(\PDO::FETCH_COLUMN);
 
-        $this->assertNotFalse($createOptionRelation, 'Could not update option relations.');
+        static::assertNotFalse($createOptionRelation, 'Could not update option relations.');
     }
 
     public function test_write_should_create_group()
@@ -258,7 +258,7 @@ class PropertyWriterTest extends TestCase
             [self::NOT_EXISTING_FILTER_GROUP_NAME]
         )->fetch(\PDO::FETCH_COLUMN);
 
-        $this->assertEquals(self::NOT_EXISTING_FILTER_GROUP_NAME, $createdGroupName, 'Could not create filter group.');
+        static::assertEquals(self::NOT_EXISTING_FILTER_GROUP_NAME, $createdGroupName, 'Could not create filter group.');
     }
 
     /**

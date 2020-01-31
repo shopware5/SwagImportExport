@@ -31,10 +31,6 @@ class ArticleDataManager extends DataManager
 
     private $suppliers;
 
-    /**
-     * @param \Enlight_Components_Db_Adapter_Pdo_Mysql $db
-     * @param DbalHelper                               $dbalHelper
-     */
     public function __construct(\Enlight_Components_Db_Adapter_Pdo_Mysql $db, DbalHelper $dbalHelper)
     {
         $this->db = $db;
@@ -67,8 +63,6 @@ class ArticleDataManager extends DataManager
      *
      * @param array $record
      * @param array $defaultValues
-     *
-     * @return mixed
      */
     public function setDefaultFieldsForCreate($record, $defaultValues)
     {
@@ -203,8 +197,6 @@ class ArticleDataManager extends DataManager
      * @param array $record
      *
      * @throws AdapterException
-     *
-     * @return mixed
      */
     public function setDefaultFields($record)
     {
@@ -364,8 +356,6 @@ class ArticleDataManager extends DataManager
      * @param string $orderNumber
      *
      * @throws AdapterException
-     *
-     * @return mixed
      */
     private function getTaxByTaxRate($taxRate, $orderNumber)
     {

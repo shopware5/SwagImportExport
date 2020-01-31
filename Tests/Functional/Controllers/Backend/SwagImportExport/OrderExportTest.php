@@ -15,8 +15,8 @@ use SwagImportExport\Tests\Helper\FixturesImportTrait;
 
 class OrderExportTest extends \Enlight_Components_Test_Controller_TestCase
 {
-    use DatabaseTestCaseTrait;
     use FixturesImportTrait;
+    use DatabaseTestCaseTrait;
     use ExportControllerTrait;
 
     const FORMAT_XML = 'xml';
@@ -25,7 +25,7 @@ class OrderExportTest extends \Enlight_Components_Test_Controller_TestCase
     const PAYMENT_STATE_OPEN = '17';
     const ORDER_STATE_OPEN = '0';
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -46,12 +46,11 @@ class OrderExportTest extends \Enlight_Components_Test_Controller_TestCase
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         $this->assertOrderAttributeInXmlFile($file, '20001', 'orderId', '15');
-        $this->assertOrderAttributeInXmlFile($file, '20001', 'paymentID', '4');
-        $this->assertOrderAttributeInXmlFile($file, '20001', 'invoiceAmount', '998.56');
+        $this->assertOrderAttributeInXmlFile($file, '20001', 'paymentStatusId', '17');
     }
 
     public function test_orders_csv_export()
@@ -67,13 +66,12 @@ class OrderExportTest extends \Enlight_Components_Test_Controller_TestCase
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         $mappedOrderList = $this->readCsvMappedByNumber($file);
-        $this->assertEquals('15', $mappedOrderList[20001]['orderId']);
-        $this->assertEquals('4', $mappedOrderList[20001]['paymentID']);
-        $this->assertEquals('998.56', $mappedOrderList[20001]['invoiceAmount']);
+        static::assertEquals('15', $mappedOrderList[20001]['orderId']);
+        static::assertEquals('17', $mappedOrderList[20001]['paymentStatusId']);
     }
 
     public function test_orders_xml_export_with_orderstate_filter()
@@ -90,12 +88,11 @@ class OrderExportTest extends \Enlight_Components_Test_Controller_TestCase
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         $this->assertOrderAttributeInXmlFile($file, '20001', 'orderId', 15);
-        $this->assertOrderAttributeInXmlFile($file, '20001', 'invoiceAmount', '998.56');
-        $this->assertOrderAttributeInXmlFile($file, '20001', 'paymentID', '4');
+        $this->assertOrderAttributeInXmlFile($file, '20001', 'paymentStatusId', '17');
     }
 
     public function test_orders_csv_export_with_orderstate_filter()
@@ -112,11 +109,11 @@ class OrderExportTest extends \Enlight_Components_Test_Controller_TestCase
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         $mappedOrderList = $this->readCsvMappedByNumber($file);
-        $this->assertEquals(self::ORDER_STATE_OPEN, $mappedOrderList[20002]['orderStatusID']);
+        static::assertEquals('17', $mappedOrderList[20002]['paymentStatusId']);
     }
 
     public function test_orders_xml_export_with_paymentstate_filter()
@@ -133,12 +130,11 @@ class OrderExportTest extends \Enlight_Components_Test_Controller_TestCase
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
-        $this->assertOrderAttributeInXmlFile($file, '20001', 'invoiceAmount', '998.56');
         $this->assertOrderAttributeInXmlFile($file, '20001', 'orderId', '15');
-        $this->assertOrderAttributeInXmlFile($file, '20001', 'paymentID', '4');
+        $this->assertOrderAttributeInXmlFile($file, '20001', 'paymentStatusId', '17');
     }
 
     public function test_orders_csv_export_with_paymentstate_filter()
@@ -155,11 +151,11 @@ class OrderExportTest extends \Enlight_Components_Test_Controller_TestCase
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         $mappedOrderList = $this->readCsvMappedByNumber($file);
-        $this->assertEquals(self::PAYMENT_STATE_OPEN, $mappedOrderList[20002]['cleared']);
+        static::assertEquals(self::PAYMENT_STATE_OPEN, $mappedOrderList[20002]['paymentStatusId']);
     }
 
     public function test_orders_xml_export_with_ordernumber_from_filter()
@@ -176,14 +172,13 @@ class OrderExportTest extends \Enlight_Components_Test_Controller_TestCase
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         $notExistingEntry = $this->queryXpath($file, '//order[number=20001]');
-        $this->assertEquals(0, $notExistingEntry->length);
+        static::assertEquals(0, $notExistingEntry->length);
 
-        $this->assertOrderAttributeInXmlFile($file, '20002', 'paymentID', '4');
-        $this->assertOrderAttributeInXmlFile($file, '20002', 'invoiceAmount', '201.86');
+        $this->assertOrderAttributeInXmlFile($file, '20002', 'paymentStatusId', '17');
         $this->assertOrderAttributeInXmlFile($file, '20002', 'orderId', '57');
     }
 
@@ -201,13 +196,12 @@ class OrderExportTest extends \Enlight_Components_Test_Controller_TestCase
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         $mappedOrderList = $this->readCsvMappedByNumber($file);
-        $this->assertEquals('4', $mappedOrderList[20002]['paymentID']);
-        $this->assertEquals('57', $mappedOrderList[20002]['orderId']);
-        $this->assertEquals('201.86', $mappedOrderList[20002]['invoiceAmount']);
+        static::assertEquals('17', $mappedOrderList[20002]['paymentStatusId']);
+        static::assertEquals('57', $mappedOrderList[20002]['orderId']);
     }
 
     public function test_orders_xml_export_with_date_to_filter()
@@ -224,12 +218,11 @@ class OrderExportTest extends \Enlight_Components_Test_Controller_TestCase
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
-        $this->assertOrderAttributeInXmlFile($file, '20001', 'invoiceAmount', '998.56');
         $this->assertOrderAttributeInXmlFile($file, '20001', 'orderId', '15');
-        $this->assertOrderAttributeInXmlFile($file, '20001', 'paymentID', '4');
+        $this->assertOrderAttributeInXmlFile($file, '20001', 'paymentStatusId', '17');
     }
 
     public function test_orders_csv_export_with_date_to_filter()
@@ -246,11 +239,8 @@ class OrderExportTest extends \Enlight_Components_Test_Controller_TestCase
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
-
-        $mappedOrderList = $this->readCsvMappedByNumber($file);
-        $this->assertEquals('2012-08-30 10:15:54', $mappedOrderList[20001]['orderTime']);
     }
 
     public function test_orders_xml_export_with_date_from_filter()
@@ -267,12 +257,11 @@ class OrderExportTest extends \Enlight_Components_Test_Controller_TestCase
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         $this->assertOrderAttributeInXmlFile($file, '20002', 'orderId', '57');
-        $this->assertOrderAttributeInXmlFile($file, '20002', 'invoiceAmount', '201.86');
-        $this->assertOrderAttributeInXmlFile($file, '20002', 'paymentID', '4');
+        $this->assertOrderAttributeInXmlFile($file, '20002', 'paymentStatusId', '17');
     }
 
     public function test_orders_csv_export_with_date_from_filter()
@@ -289,14 +278,12 @@ class OrderExportTest extends \Enlight_Components_Test_Controller_TestCase
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         $mappedOrderList = $this->readCsvMappedByNumber($file);
-        $this->assertEquals('57', $mappedOrderList[20002]['orderId']);
-        $this->assertEquals('201.86', $mappedOrderList[20002]['invoiceAmount']);
-        $this->assertEquals('4', $mappedOrderList[20002]['paymentID']);
-        $this->assertEquals('2012-08-31 08:51:46', $mappedOrderList[20002]['orderTime']);
+        static::assertEquals('57', $mappedOrderList[20002]['orderId']);
+        static::assertEquals('17', $mappedOrderList[20002]['paymentStatusId']);
     }
 
     /**
@@ -309,7 +296,7 @@ class OrderExportTest extends \Enlight_Components_Test_Controller_TestCase
     {
         $orderDomNodeList = $this->queryXpath($filePath, "//order[number='{$number}']/{$attribute}");
         $nodeValue = $orderDomNodeList->item(0)->nodeValue;
-        $this->assertEquals($expected, $nodeValue);
+        static::assertEquals($expected, $nodeValue);
     }
 
     /**

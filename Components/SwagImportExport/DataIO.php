@@ -99,10 +99,8 @@ class DataIO
     private $uploadPathProvider;
 
     /**
-     * @param DataDbAdapter      $dbAdapter
-     * @param Session            $dataSession
-     * @param Logger             $logger
-     * @param UploadPathProvider $uploadPathProvider
+     * @param Session $dataSession
+     * @param Logger  $logger
      */
     public function __construct(DataDbAdapter $dbAdapter, $dataSession, $logger, UploadPathProvider $uploadPathProvider)
     {
@@ -112,14 +110,6 @@ class DataIO
         $this->uploadPathProvider = $uploadPathProvider;
     }
 
-    /**
-     * @param $colOpts
-     * @param $limit
-     * @param $filter
-     * @param $type
-     * @param $format
-     * @param $maxRecordCount
-     */
     public function initialize($colOpts, $limit, $filter, $type, $format, $maxRecordCount)
     {
         $this->columnOptions = $colOpts;
@@ -132,8 +122,6 @@ class DataIO
 
     /**
      * @param int $numberOfRecords
-     *
-     * @return mixed
      */
     public function read($numberOfRecords)
     {
@@ -148,10 +136,6 @@ class DataIO
         return $dbAdapter->read($ids, $columns);
     }
 
-    /**
-     * @param $data
-     * @param $defaults
-     */
     public function write($data, $defaults)
     {
         $dbAdapter = $this->getDbAdapter();
@@ -266,8 +250,6 @@ class DataIO
     /**
      * Generates file name
      *
-     * @param \Shopware\Components\SwagImportExport\Profile\Profile $profile
-     *
      * @return string
      */
     public function generateFileName(Profile $profile)
@@ -339,8 +321,6 @@ class DataIO
      * Then writes these ids to the session and sets the session state to "active".
      * For now we will write the ids as a serialized array.
      *
-     * @param Profile $profile
-     *
      * @throws \Exception
      */
     public function startSession(Profile $profile)
@@ -387,7 +367,6 @@ class DataIO
      * If reached then the session state will be set to "stopped"
      * Updates the session position with the current position (stored in a member variable).
      *
-     * @param $step
      * @param null $outputFileName
      */
     public function progressSession($step, $outputFileName = null)
@@ -426,9 +405,6 @@ class DataIO
         $this->setFileName($sessionData['fileName']);
     }
 
-    /**
-     * @return mixed
-     */
     public function getSessionId()
     {
         $session = $this->getDataSession();
@@ -484,9 +460,6 @@ class DataIO
         return $this->recordIds;
     }
 
-    /**
-     * @param $recordIds
-     */
     public function setRecordIds($recordIds)
     {
         $this->recordIds = $recordIds;
@@ -524,9 +497,6 @@ class DataIO
         return $this->fileName;
     }
 
-    /**
-     * @param $fileName
-     */
     public function setFileName($fileName)
     {
         $this->fileName = $fileName;
@@ -540,9 +510,6 @@ class DataIO
         return $this->fileSize;
     }
 
-    /**
-     * @param $fileSize
-     */
     public function setFileSize($fileSize)
     {
         $this->fileSize = $fileSize;
@@ -556,9 +523,6 @@ class DataIO
         return $this->username;
     }
 
-    /**
-     * @param $username
-     */
     public function setUsername($username)
     {
         $this->username = $username;

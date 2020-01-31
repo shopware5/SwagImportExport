@@ -31,8 +31,8 @@ class AddressDbAdapterTest extends TestCase
     {
         $addressDbAdapter = $this->createAddressDbAdapter();
 
-        $this->assertInstanceOf(AddressDbAdapter::class, $addressDbAdapter);
-        $this->assertInstanceOf(DataDbAdapter::class, $addressDbAdapter);
+        static::assertInstanceOf(AddressDbAdapter::class, $addressDbAdapter);
+        static::assertInstanceOf(DataDbAdapter::class, $addressDbAdapter);
     }
 
     public function test_readRecordIds_should_return_ids()
@@ -42,7 +42,7 @@ class AddressDbAdapterTest extends TestCase
 
         $addressIds = $addressDbAdapter->readRecordIds(self::NO_START, self::NO_LIMIT, self::NO_FILTER);
 
-        $this->assertEquals($allAddressIdsInDatabase, $addressIds);
+        static::assertEquals($allAddressIdsInDatabase, $addressIds);
     }
 
     public function test_readRecordIds_with_start_should_return_two_ids()
@@ -53,7 +53,7 @@ class AddressDbAdapterTest extends TestCase
 
         $addressIds = $addressDbAdapter->readRecordIds($firstResult, self::NO_LIMIT, self::NO_FILTER);
 
-        $this->assertCount($fetchedAmountOfIds, $addressIds);
+        static::assertCount($fetchedAmountOfIds, $addressIds);
     }
 
     public function test_readRecordIds_with_limit_should_return_two_ids()
@@ -64,7 +64,7 @@ class AddressDbAdapterTest extends TestCase
 
         $addressIds = $addressDbAdapter->readRecordIds(self::NO_START, $limit, self::NO_FILTER);
 
-        $this->assertCount($fetchedAmountOfIds, $addressIds);
+        static::assertCount($fetchedAmountOfIds, $addressIds);
     }
 
     public function test_read_should_return_addresses_by_ids_and_select_given_columns()
@@ -76,11 +76,11 @@ class AddressDbAdapterTest extends TestCase
         $addresses = $addressDbAdapter->read($addressIdsToFetch, $selectedColumns);
 
         $addresses = $addresses['address'];
-        $this->assertEquals('Max', $addresses[0]['firstname']);
-        $this->assertEquals('Mustermann', $addresses[0]['lastname']);
-        $this->assertEquals('Muster GmbH', $addresses[0]['company']);
-        $this->assertEquals('test@example.com', $addresses[0]['email']);
-        $this->assertCount(2, $addresses);
+        static::assertEquals('Max', $addresses[0]['firstname']);
+        static::assertEquals('Mustermann', $addresses[0]['lastname']);
+        static::assertEquals('Muster GmbH', $addresses[0]['company']);
+        static::assertEquals('test@example.com', $addresses[0]['email']);
+        static::assertCount(2, $addresses);
     }
 
     public function test_read_should_return_attributes()
@@ -95,7 +95,7 @@ class AddressDbAdapterTest extends TestCase
         $addresses = $addressDbAdapter->read($addressIdsToFetch, $selectedColumns);
 
         $addresses = $addresses['address'];
-        $this->assertEquals('Attr value', $addresses[0]['text1']);
+        static::assertEquals('Attr value', $addresses[0]['text1']);
     }
 
     public function test_write_should_create_new_address_with_all_required_fields()
@@ -234,7 +234,7 @@ class AddressDbAdapterTest extends TestCase
         $createdAddresses = $connection->executeQuery("SELECT * FROM s_user_addresses WHERE firstname='My firstname'")->fetchAll();
 
         $this->assertAddress($createdAddresses);
-        $this->assertEquals('My VatId', $createdAddresses[0]['ustid']);
+        static::assertEquals('My VatId', $createdAddresses[0]['ustid']);
     }
 
     public function test_write_should_import_additionalAddressLines()
@@ -262,8 +262,8 @@ class AddressDbAdapterTest extends TestCase
         $createdAddresses = $connection->executeQuery("SELECT * FROM s_user_addresses WHERE firstname='My firstname'")->fetchAll();
 
         $this->assertAddress($createdAddresses);
-        $this->assertEquals('My additional address', $createdAddresses[0]['additional_address_line1']);
-        $this->assertEquals('My additional address2', $createdAddresses[0]['additional_address_line2']);
+        static::assertEquals('My additional address', $createdAddresses[0]['additional_address_line1']);
+        static::assertEquals('My additional address2', $createdAddresses[0]['additional_address_line2']);
     }
 
     public function test_write_should_import_attributes()
@@ -291,8 +291,8 @@ class AddressDbAdapterTest extends TestCase
         $addressId = $connection->executeQuery("SELECT id FROM s_user_addresses WHERE firstname='My firstname'")->fetchColumn();
         $createdAttribute = $connection->executeQuery("SELECT * FROM s_user_addresses_attributes WHERE address_id={$addressId}")->fetchAll();
 
-        $this->assertEquals('text1', $createdAttribute[0]['text1']);
-        $this->assertEquals('text2', $createdAttribute[0]['text2']);
+        static::assertEquals('text1', $createdAttribute[0]['text1']);
+        static::assertEquals('text2', $createdAttribute[0]['text2']);
     }
 
     public function test_write_should_create_address_with_given_id()
@@ -320,7 +320,7 @@ class AddressDbAdapterTest extends TestCase
         $connection = Shopware()->Container()->get('dbal_connection');
         $addressId = $connection->executeQuery("SELECT id FROM s_user_addresses WHERE firstname='My firstname'")->fetchColumn();
 
-        $this->assertEquals(99999, $addressId);
+        static::assertEquals(99999, $addressId);
     }
 
     public function test_getColumns_should_get_all_required_columns()
@@ -328,21 +328,21 @@ class AddressDbAdapterTest extends TestCase
         $addressDbAdapter = $this->createAddressDbAdapter();
         $columns = $addressDbAdapter->getColumns();
 
-        $this->assertContains('address.id as id', $columns);
-        $this->assertContains('address.company as company', $columns);
-        $this->assertContains('address.firstname as firstname', $columns);
-        $this->assertContains('address.lastname as lastname', $columns);
-        $this->assertContains('address.street as street', $columns);
-        $this->assertContains('address.city as city', $columns);
-        $this->assertContains('address.zipcode as zipcode', $columns);
-        $this->assertContains('address.zipcode as zipcode', $columns);
+        static::assertContains('address.id as id', $columns);
+        static::assertContains('address.company as company', $columns);
+        static::assertContains('address.firstname as firstname', $columns);
+        static::assertContains('address.lastname as lastname', $columns);
+        static::assertContains('address.street as street', $columns);
+        static::assertContains('address.city as city', $columns);
+        static::assertContains('address.zipcode as zipcode', $columns);
+        static::assertContains('address.zipcode as zipcode', $columns);
 
-        $this->assertContains('country.id as countryID', $columns);
-        $this->assertContains('state.id as stateID', $columns);
+        static::assertContains('country.id as countryID', $columns);
+        static::assertContains('state.id as stateID', $columns);
 
-        $this->assertContains('customer.email as email', $columns);
-        $this->assertContains('customer.number as customernumber', $columns);
-        $this->assertContains('customer.id as userID', $columns);
+        static::assertContains('customer.email as email', $columns);
+        static::assertContains('customer.number as customernumber', $columns);
+        static::assertContains('customer.id as userID', $columns);
     }
 
     public function test_getColumns_should_get_attribute_columns()
@@ -350,8 +350,8 @@ class AddressDbAdapterTest extends TestCase
         $addressDbAdapter = $this->createAddressDbAdapter();
         $columns = $addressDbAdapter->getColumns();
 
-        $this->assertContains('attribute.text1 as attributeText1', $columns);
-        $this->assertContains('attribute.text2 as attributeText2', $columns);
+        static::assertContains('attribute.text1 as attributeText1', $columns);
+        static::assertContains('attribute.text2 as attributeText2', $columns);
     }
 
     public function test_write_should_throw_exception_if_no_addresses_were_given()
@@ -413,7 +413,7 @@ class AddressDbAdapterTest extends TestCase
         $connection = Shopware()->Container()->get('dbal_connection');
         $updateAddress = $connection->executeQuery("SELECT * FROM s_user_addresses WHERE id={$addressId}")->fetchAll();
 
-        $this->assertEquals(self::STATE_ID_ALABAMA, $updateAddress[0]['state_id']);
+        static::assertEquals(self::STATE_ID_ALABAMA, $updateAddress[0]['state_id']);
     }
 
     public function test_write_should_throw_exception_if_stateID_was_not_found()
@@ -452,11 +452,11 @@ class AddressDbAdapterTest extends TestCase
      */
     private function assertAddress($createdAddresses)
     {
-        $this->assertEquals('My firstname', $createdAddresses[0]['firstname']);
-        $this->assertEquals('My lastname', $createdAddresses[0]['lastname']);
-        $this->assertEquals('12345', $createdAddresses[0]['zipcode']);
-        $this->assertEquals('My city', $createdAddresses[0]['city']);
-        $this->assertEquals(self::COUNTRY_ID_USA, $createdAddresses[0]['country_id']);
-        $this->assertEquals(self::CUSTOMER_ID, $createdAddresses[0]['user_id']);
+        static::assertEquals('My firstname', $createdAddresses[0]['firstname']);
+        static::assertEquals('My lastname', $createdAddresses[0]['lastname']);
+        static::assertEquals('12345', $createdAddresses[0]['zipcode']);
+        static::assertEquals('My city', $createdAddresses[0]['city']);
+        static::assertEquals(self::COUNTRY_ID_USA, $createdAddresses[0]['country_id']);
+        static::assertEquals(self::CUSTOMER_ID, $createdAddresses[0]['user_id']);
     }
 }

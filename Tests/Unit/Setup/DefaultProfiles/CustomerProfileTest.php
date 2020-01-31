@@ -20,9 +20,9 @@ class CustomerProfileTest extends TestCase
     {
         $categoryProfile = $this->createCustomerProfile();
 
-        $this->assertInstanceOf(CustomerProfile::class, $categoryProfile);
-        $this->assertInstanceOf(\JsonSerializable::class, $categoryProfile);
-        $this->assertInstanceOf(ProfileMetaData::class, $categoryProfile);
+        static::assertInstanceOf(CustomerProfile::class, $categoryProfile);
+        static::assertInstanceOf(\JsonSerializable::class, $categoryProfile);
+        static::assertInstanceOf(ProfileMetaData::class, $categoryProfile);
     }
 
     public function test_it_should_return_valid_profile_tree()
@@ -37,7 +37,7 @@ class CustomerProfileTest extends TestCase
         });
 
         $profileJson = json_encode($categoryProfile);
-        $this->assertJson($profileJson);
+        static::assertJson($profileJson);
     }
 
     /**

@@ -32,11 +32,6 @@ class Update03DefaultProfileSupport implements UpdaterInterface
      */
     private $setupContext;
 
-    /**
-     * @param SetupContext                         $setupContext
-     * @param Connection                           $connection
-     * @param \Shopware_Components_Snippet_Manager $snippetManager
-     */
     public function __construct(
         SetupContext $setupContext,
         Connection $connection,
@@ -76,8 +71,6 @@ class Update03DefaultProfileSupport implements UpdaterInterface
     }
 
     /**
-     * @param \Exception $exception
-     *
      * @return bool
      */
     private function isDuplicateNameError(\Exception $exception)

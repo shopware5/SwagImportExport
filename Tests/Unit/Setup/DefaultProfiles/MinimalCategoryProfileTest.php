@@ -20,9 +20,9 @@ class MinimalCategoryProfileTest extends TestCase
     {
         $categoryMinimalProfile = $this->createMinimalCategoryProfile();
 
-        $this->assertInstanceOf(MinimalCategoryProfile::class, $categoryMinimalProfile);
-        $this->assertInstanceOf(\JsonSerializable::class, $categoryMinimalProfile);
-        $this->assertInstanceOf(ProfileMetaData::class, $categoryMinimalProfile);
+        static::assertInstanceOf(MinimalCategoryProfile::class, $categoryMinimalProfile);
+        static::assertInstanceOf(\JsonSerializable::class, $categoryMinimalProfile);
+        static::assertInstanceOf(ProfileMetaData::class, $categoryMinimalProfile);
     }
 
     public function test_it_should_return_valid_profile_tree()
@@ -37,7 +37,7 @@ class MinimalCategoryProfileTest extends TestCase
         });
 
         $profileJson = json_encode($minimalCategoryProfile);
-        $this->assertJson($profileJson);
+        static::assertJson($profileJson);
     }
 
     /**

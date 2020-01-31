@@ -22,10 +22,6 @@ class Update05CreateCustomerCompleteProfile implements UpdaterInterface
     /** @var Connection */
     private $connection;
 
-    /**
-     * @param SetupContext $setupContext
-     * @param Connection   $connection
-     */
     public function __construct(SetupContext $setupContext, Connection $connection)
     {
         $this->setupContext = $setupContext;

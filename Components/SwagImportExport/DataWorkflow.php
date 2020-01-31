@@ -61,12 +61,9 @@ class DataWorkflow
     }
 
     /**
-     * @param $postData
      * @param string $outputFileName
      *
      * @throws \Exception
-     *
-     * @return mixed
      */
     public function export($postData, $outputFileName = '')
     {
@@ -140,12 +137,7 @@ class DataWorkflow
     }
 
     /**
-     * @param $postData
-     * @param $inputFile
-     *
      * @throws \Exception
-     *
-     * @return mixed
      */
     public function import($postData, $inputFile)
     {
@@ -204,11 +196,6 @@ class DataWorkflow
         return $postData;
     }
 
-    /**
-     * @param $postData
-     * @param $profileName
-     * @param $outputFile
-     */
     public function saveUnprocessedData($postData, $profileName, $outputFile)
     {
         if ($postData['session']['prevState'] === 'new') {

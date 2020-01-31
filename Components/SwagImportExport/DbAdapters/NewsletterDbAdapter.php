@@ -135,12 +135,6 @@ class NewsletterDbAdapter implements DataDbAdapter
         return $this->unprocessedData;
     }
 
-    /**
-     * @param $ids
-     * @param $columns
-     *
-     * @return mixed
-     */
     public function read($ids, $columns)
     {
         $builder = $this->getBuilder($columns, $ids);
@@ -150,10 +144,6 @@ class NewsletterDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $start
-     * @param $limit
-     * @param $filter
-     *
      * @return array
      */
     public function readRecordIds($start, $limit, $filter)
@@ -296,8 +286,6 @@ class NewsletterDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $message
-     *
      * @throws \Exception
      */
     public function saveMessage($message)
@@ -318,9 +306,6 @@ class NewsletterDbAdapter implements DataDbAdapter
         return $this->logMessages;
     }
 
-    /**
-     * @param $logMessages
-     */
     public function setLogMessages($logMessages)
     {
         $this->logMessages[] = $logMessages;
@@ -334,9 +319,6 @@ class NewsletterDbAdapter implements DataDbAdapter
         return $this->logState;
     }
 
-    /**
-     * @param $logState
-     */
     public function setLogState($logState)
     {
         $this->logState = $logState;
@@ -354,8 +336,6 @@ class NewsletterDbAdapter implements DataDbAdapter
 
     /**
      * @param string $section
-     *
-     * @return mixed
      */
     public function getColumns($section)
     {
@@ -369,9 +349,6 @@ class NewsletterDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $columns
-     * @param $ids
-     *
      * @return QueryBuilder
      */
     public function getBuilder($columns, $ids)
@@ -391,8 +368,6 @@ class NewsletterDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $record
-     *
      * @return array
      */
     protected function prepareNewsletterAddress($record)

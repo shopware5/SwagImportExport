@@ -32,7 +32,7 @@ class MainMenuItemInstallerTest extends TestCase
      */
     private $modelManger;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->modelManger = Shopware()->Container()->get('models');
@@ -46,7 +46,7 @@ class MainMenuItemInstallerTest extends TestCase
         $this->mainMenuItemInstaller = new MainMenuItemInstaller($setupContext, $this->modelManger);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->modelManger->rollback();
@@ -60,7 +60,7 @@ class MainMenuItemInstallerTest extends TestCase
         $this->mainMenuItemInstaller->install();
 
         $newMenuItem = $menuRepository->findOneBy(['label' => self::CREATED_MENU_LABEL]);
-        $this->assertInstanceOf(Menu::class, $newMenuItem, 'Could not create menu item if no menu item was found.');
+        static::assertInstanceOf(Menu::class, $newMenuItem, 'Could not create menu item if no menu item was found.');
     }
 
     public function test_install_should_update_existing_item()
@@ -71,7 +71,7 @@ class MainMenuItemInstallerTest extends TestCase
         $this->mainMenuItemInstaller->install();
 
         $updatedMenuItem = $menuRepository->findOneBy(['label' => self::UPDATED_MENU_LABEL]);
-        $this->assertEquals($expectedMenuItemController, $updatedMenuItem->getController(), 'Import/Export menu item could not be updated to use SwagImporExport controller.');
+        static::assertEquals($expectedMenuItemController, $updatedMenuItem->getController(), 'Import/Export menu item could not be updated to use SwagImporExport controller.');
     }
 
     public function test_install_should_remove_old_menu_item()
@@ -84,7 +84,7 @@ class MainMenuItemInstallerTest extends TestCase
         $this->mainMenuItemInstaller->install();
 
         $removedMenuItem = $menuRepository->findOneBy(['label' => self::OLD_MENU_LABEL]);
-        $this->assertNull($removedMenuItem, 'Old menu item for SwagImportExport advanced should be removed on update or installation to 5.3.');
+        static::assertNull($removedMenuItem, 'Old menu item for SwagImportExport advanced should be removed on update or installation to 5.3.');
     }
 
     public function test_it_should_be_compatible()
@@ -95,7 +95,7 @@ class MainMenuItemInstallerTest extends TestCase
         $mainMenuItemInstaller = new MainMenuItemInstaller($setupContext, $modelManagerMock);
         $isCompatible = $mainMenuItemInstaller->isCompatible();
 
-        $this->assertTrue($isCompatible);
+        static::assertTrue($isCompatible);
     }
 
     public function test_it_should_be_compatible_with_greater_version()
@@ -106,7 +106,7 @@ class MainMenuItemInstallerTest extends TestCase
         $mainMenuItemInstaller = new MainMenuItemInstaller($setupContext, $modelManagerMock);
         $isCompatible = $mainMenuItemInstaller->isCompatible();
 
-        $this->assertTrue($isCompatible);
+        static::assertTrue($isCompatible);
     }
 
     public function test_it_should_be_incompatible()
@@ -117,12 +117,9 @@ class MainMenuItemInstallerTest extends TestCase
         $mainMenuItemInstaller = new MainMenuItemInstaller($setupContext, $modelManagerMock);
         $isCompatible = $mainMenuItemInstaller->isCompatible();
 
-        $this->assertFalse($isCompatible);
+        static::assertFalse($isCompatible);
     }
 
-    /**
-     * @param EntityRepository $menuRepository
-     */
     private function removeActualMenuItem(EntityRepository $menuRepository)
     {
         /** @var Menu $currentMenuItem */

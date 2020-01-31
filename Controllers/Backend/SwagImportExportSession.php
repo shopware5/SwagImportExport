@@ -12,10 +12,6 @@ use Shopware\CustomModels\ImportExport\Session;
 
 /**
  * Shopware ImportExport Plugin
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Backend_SwagImportExportSession extends Shopware_Controllers_Backend_ExtJs
 {
@@ -142,8 +138,6 @@ class Shopware_Controllers_Backend_SwagImportExportSession extends Shopware_Cont
     }
 
     /**
-     * @param array $data
-     *
      * @return array
      */
     private function translateDataSet(array $data)

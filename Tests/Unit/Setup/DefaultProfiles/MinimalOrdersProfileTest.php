@@ -20,9 +20,9 @@ class MinimalOrdersProfileTest extends TestCase
     {
         $minimalOrdersProfile = $this->createMinimalOrdersProfile();
 
-        $this->assertInstanceOf(MinimalOrdersProfile::class, $minimalOrdersProfile);
-        $this->assertInstanceOf(\JsonSerializable::class, $minimalOrdersProfile);
-        $this->assertInstanceOf(ProfileMetaData::class, $minimalOrdersProfile);
+        static::assertInstanceOf(MinimalOrdersProfile::class, $minimalOrdersProfile);
+        static::assertInstanceOf(\JsonSerializable::class, $minimalOrdersProfile);
+        static::assertInstanceOf(ProfileMetaData::class, $minimalOrdersProfile);
     }
 
     public function test_it_should_return_valid_profile_tree()

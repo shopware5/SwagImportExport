@@ -42,9 +42,7 @@ class Logger implements LoggerInterface
     protected $logDirectory;
 
     /**
-     * @param FileWriter   $fileWriter
-     * @param ModelManager $modelManager
-     * @param string       $logDirectory
+     * @param string $logDirectory
      */
     public function __construct(FileWriter $fileWriter, ModelManager $modelManager, $logDirectory)
     {
@@ -85,9 +83,6 @@ class Logger implements LoggerInterface
         $this->modelManager->flush();
     }
 
-    /**
-     * @param LogDataStruct $logDataStruct
-     */
     public function writeToFile(LogDataStruct $logDataStruct)
     {
         $file = $this->getLogFile();

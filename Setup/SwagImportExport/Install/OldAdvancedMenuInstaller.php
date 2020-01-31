@@ -34,10 +34,6 @@ class OldAdvancedMenuInstaller implements InstallerInterface
      */
     private $setupContext;
 
-    /**
-     * @param SetupContext $setupContext
-     * @param ModelManager $modelManager
-     */
     public function __construct(SetupContext $setupContext, ModelManager $modelManager)
     {
         $this->modelManager = $modelManager;

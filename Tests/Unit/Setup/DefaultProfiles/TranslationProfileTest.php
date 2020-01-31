@@ -20,9 +20,9 @@ class TranslationProfileTest extends TestCase
     {
         $translationProfile = new TranslationProfile();
 
-        $this->assertInstanceOf(TranslationProfile::class, $translationProfile);
-        $this->assertInstanceOf(\JsonSerializable::class, $translationProfile);
-        $this->assertInstanceOf(ProfileMetaData::class, $translationProfile);
+        static::assertInstanceOf(TranslationProfile::class, $translationProfile);
+        static::assertInstanceOf(\JsonSerializable::class, $translationProfile);
+        static::assertInstanceOf(ProfileMetaData::class, $translationProfile);
     }
 
     public function test_it_should_return_valid_profile()

@@ -15,14 +15,14 @@ use SwagImportExport\Tests\Helper\FixturesImportTrait;
 
 class ArticlePricesExportTest extends \Enlight_Components_Test_Controller_TestCase
 {
-    use DatabaseTestCaseTrait;
     use FixturesImportTrait;
+    use DatabaseTestCaseTrait;
     use ExportControllerTrait;
 
     const FORMAT_XML = 'xml';
     const FORMAT_CSV = 'csv';
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -44,7 +44,7 @@ class ArticlePricesExportTest extends \Enlight_Components_Test_Controller_TestCa
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         $this->assertPriceAttributeInXml($file, 'SW10002.1', 'price', '59.99');
@@ -66,13 +66,13 @@ class ArticlePricesExportTest extends \Enlight_Components_Test_Controller_TestCa
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         $mappedPriceList = $this->csvToArrayIndexedByFieldValue($file, 'ordernumber');
-        $this->assertEquals('59.99', $mappedPriceList['SW10002.1']['price']);
-        $this->assertEquals('Münsterländer Lagerkorn 32%', $mappedPriceList['SW10002.1']['_name']);
-        $this->assertEquals('1,5 Liter', $mappedPriceList['SW10002.1']['_additionaltext']);
+        static::assertEquals('59.99', $mappedPriceList['SW10002.1']['price']);
+        static::assertEquals('Münsterländer Lagerkorn 32%', $mappedPriceList['SW10002.1']['_name']);
+        static::assertEquals('1,5 Liter', $mappedPriceList['SW10002.1']['_additionaltext']);
     }
 
     /**
@@ -85,6 +85,6 @@ class ArticlePricesExportTest extends \Enlight_Components_Test_Controller_TestCa
     {
         $articleDomNodeList = $this->queryXpath($filePath, "//Price[ordernumber='{$orderNumber}']/{$attribute}");
         $nodeValue = $articleDomNodeList->item(0)->nodeValue;
-        $this->assertEquals($expected, $nodeValue);
+        static::assertEquals($expected, $nodeValue);
     }
 }

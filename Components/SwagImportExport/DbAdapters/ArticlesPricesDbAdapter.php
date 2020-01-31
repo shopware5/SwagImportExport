@@ -53,10 +53,6 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $start
-     * @param $limit
-     * @param $filter
-     *
      * @return array
      */
     public function readRecordIds($start, $limit, $filter)
@@ -148,12 +144,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $ids
-     * @param $columns
-     *
      * @throws \Exception
-     *
-     * @return mixed
      */
     public function read($ids, $columns)
     {
@@ -387,8 +378,6 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $message
-     *
      * @throws \Exception
      */
     public function saveMessage($message)
@@ -411,9 +400,6 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
         return $this->logMessages;
     }
 
-    /**
-     * @param $logMessages
-     */
     public function setLogMessages($logMessages)
     {
         $this->logMessages[] = $logMessages;
@@ -427,9 +413,6 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
         return $this->logState;
     }
 
-    /**
-     * @param $logState
-     */
     public function setLogState($logState)
     {
         $this->logState = $logState;
@@ -443,18 +426,12 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
         return $this->categoryIdCollection;
     }
 
-    /**
-     * @param $categoryIdCollection
-     */
     public function setCategoryIdCollection($categoryIdCollection)
     {
         $this->categoryIdCollection[] = $categoryIdCollection;
     }
 
     /**
-     * @param $columns
-     * @param $ids
-     *
      * @return QueryBuilder
      */
     public function getBuilder($columns, $ids)
@@ -494,10 +471,6 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
         }
     }
 
-    /**
-     * @param $record
-     * @param $articleDetailId
-     */
     private function updateArticleFromPrice($record, $articleDetailId)
     {
         $dql = 'DELETE FROM Shopware\Models\Article\Price price
@@ -513,11 +486,6 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
             ->execute();
     }
 
-    /**
-     * @param $record
-     * @param $articleDetailId
-     * @param $articleId
-     */
     private function updateArticleToPrice($record, $articleDetailId, $articleId)
     {
         $dql = "UPDATE Shopware\Models\Article\Price price SET price.to = :toValue

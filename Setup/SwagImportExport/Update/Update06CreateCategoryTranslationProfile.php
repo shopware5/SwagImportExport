@@ -26,10 +26,6 @@ class Update06CreateCategoryTranslationProfile implements UpdaterInterface
      */
     private $connection;
 
-    /**
-     * @param SetupContext $setupContext
-     * @param Connection   $connection
-     */
     public function __construct(SetupContext $setupContext, Connection $connection)
     {
         $this->setupContext = $setupContext;

@@ -296,7 +296,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Export', {
     createProfileCombo: function() {
         var me = this;
 
-        me.profileCombo = Ext.create('Ext.form.field.ComboBox', {
+        me.profileCombo = Ext.create('Shopware.form.field.PagingComboBox', {
             allowBlank: false,
             fieldLabel: '{s name=swag_import_export/export/select_profile}Select profile{/s}',
             store: Ext.create('Shopware.apps.SwagImportExport.store.ProfileList', {

@@ -13,8 +13,6 @@ use Shopware\Components\SwagImportExport\UploadPathProvider;
 use Shopware\CustomModels\ImportExport\Session as SessionEntity;
 
 /**
- * Class Session
- *
  * @method int getTotalCount
  */
 class Session
@@ -36,21 +34,13 @@ class Session
      */
     protected $manager;
 
-    /**
-     * @param SessionEntity $session
-     */
     public function __construct(SessionEntity $session)
     {
         $this->sessionEntity = $session;
     }
 
     /**
-     * @param $method
-     * @param $arguments
-     *
      * @throws \Exception
-     *
-     * @return mixed
      */
     public function __call($method, $arguments)
     {
@@ -88,9 +78,6 @@ class Session
      * If the session has no ids, then the db adapter must be used to retrieve them.
      * Then writes these ids to the session and sets the session state to "active".
      * For now we will write the ids as a serialized array.
-     *
-     * @param Profile $profile
-     * @param array   $data
      *
      * @throws \Exception
      */
@@ -287,9 +274,6 @@ class Session
         return $this->getEntity()->getState();
     }
 
-    /**
-     * @param $totalCount
-     */
     public function setTotalCount($totalCount)
     {
         $this->getEntity()->setTotalCount($totalCount);

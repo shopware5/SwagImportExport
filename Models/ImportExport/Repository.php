@@ -8,10 +8,6 @@
 
 /**
  * Shopware ImportExport Plugin
- *
- * @category  Shopware
- *
- * @copyright Copyright (c) 2014, shopware AG (http://www.shopware.de)
  */
 
 namespace Shopware\CustomModels\ImportExport;
@@ -24,10 +20,8 @@ class Repository extends ModelRepository
     /**
      * Returns a query builder object to get all profiles.
      *
-     * @param array $filterBy
-     * @param array $orderBy
-     * @param null  $limit
-     * @param null  $offset
+     * @param int|null $limit
+     * @param int|null $offset
      *
      * @return \Shopware\Components\Model\QueryBuilder
      */
@@ -68,10 +62,8 @@ class Repository extends ModelRepository
     /**
      * Returns a query builder object to get all sessions.
      *
-     * @param array $filterBy
-     * @param array $orderBy
-     * @param null  $limit
-     * @param null  $offset
+     * @param int|null $limit
+     * @param int|null $offset
      *
      * @return \Shopware\Components\Model\QueryBuilder
      */
@@ -118,10 +110,8 @@ class Repository extends ModelRepository
     /**
      * Returns a query builder object to get all expressions.
      *
-     * @param array $filterBy
-     * @param array $orderBy
-     * @param null  $limit
-     * @param null  $offset
+     * @param int|null $limit
+     * @param int|null $offset
      *
      * @return \Shopware\Components\Model\QueryBuilder
      */
@@ -160,10 +150,8 @@ class Repository extends ModelRepository
     /**
      * Returns a query builder object to get all logs.
      *
-     * @param array $filterBy
-     * @param array $orderBy
-     * @param null  $limit
-     * @param null  $offset
+     * @param int|null $limit
+     * @param int|null $offset
      *
      * @return \Shopware\Components\Model\QueryBuilder
      */

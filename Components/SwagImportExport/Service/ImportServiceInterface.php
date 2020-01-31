@@ -16,7 +16,6 @@ interface ImportServiceInterface
      * Prepares import session based on profile and input file
      * and delivers information on how many records to import.
      *
-     * @param array  $requestData
      * @param string $inputFileName
      *
      * @throws \Exception
@@ -29,8 +28,6 @@ interface ImportServiceInterface
      * Processes import based on profile and session and will be called
      * many times based on batch size.
      *
-     * @param array  $requestData
-     * @param array  $unprocessedFiles
      * @param string $inputFile
      *
      * @throws \Exception

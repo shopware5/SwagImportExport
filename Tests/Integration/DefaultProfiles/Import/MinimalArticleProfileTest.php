@@ -15,9 +15,9 @@ use SwagImportExport\Tests\Integration\DefaultProfiles\DefaultProfileImportTestC
 
 class MinimalArticleProfileTest extends TestCase
 {
-    use DatabaseTestCaseTrait;
     use CommandTestCaseTrait;
     use DefaultProfileImportTestCaseTrait;
+    use DatabaseTestCaseTrait;
 
     public function test_import_should_create_article()
     {
@@ -28,7 +28,7 @@ class MinimalArticleProfileTest extends TestCase
 
         $createdArticle = $this->executeQuery("SELECT * FROM s_articles WHERE name='{$expectedArticleName}'");
 
-        $this->assertEquals($expectedArticleName, $createdArticle[0]['name']);
+        static::assertEquals($expectedArticleName, $createdArticle[0]['name']);
     }
 
     public function test_import_should_create_supplier()
@@ -42,7 +42,7 @@ class MinimalArticleProfileTest extends TestCase
         $createdArticle = $this->executeQuery("SELECT * FROM s_articles WHERE name='{$expectedArticleName}'");
         $createdSupplier = $this->executeQuery("SELECT * FROM s_articles_supplier WHERE id={$createdArticle[0]['supplierID']}");
 
-        $this->assertEquals($expectedArticleName, $createdArticle[0]['name']);
-        $this->assertEquals($expectedSupplierName, $createdSupplier[0]['name']);
+        static::assertEquals($expectedArticleName, $createdArticle[0]['name']);
+        static::assertEquals($expectedSupplierName, $createdSupplier[0]['name']);
     }
 }

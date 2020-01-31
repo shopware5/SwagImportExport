@@ -28,8 +28,6 @@ class PriceDataManager extends DataManager
      * Sets fields which are empty by default.
      *
      * @param array $record
-     *
-     * @return mixed
      */
     public function setDefaultFields($record)
     {
@@ -66,8 +64,6 @@ class PriceDataManager extends DataManager
     }
 
     /**
-     * @param $to
-     *
      * @return int|string
      */
     private function getTo($to)

@@ -127,9 +127,6 @@ class MainOrdersDbAdapter implements DataDbAdapter
     /**
      * Reads order data from `s_order` table
      *
-     * @param $ids
-     * @param $columns
-     *
      * @throws \RuntimeException
      *
      * @return array
@@ -286,8 +283,6 @@ class MainOrdersDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $records
-     *
      * @throws \RuntimeException
      */
     public function write($records)
@@ -373,8 +368,6 @@ class MainOrdersDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $section
-     *
      * @return bool|array
      */
     public function getColumns($section)
@@ -438,8 +431,6 @@ class MainOrdersDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param array $orders
-     *
      * @return array
      */
     private function addOrderAndPaymentState(array $orders)
@@ -455,8 +446,7 @@ class MainOrdersDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param int   $id
-     * @param array $states
+     * @param int $id
      *
      * @return string
      */

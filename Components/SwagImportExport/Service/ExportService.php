@@ -16,9 +16,6 @@ use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 class ExportService extends AbstractImportExportService implements ExportServiceInterface
 {
     /**
-     * @param array $requestData
-     * @param array $filterParams
-     *
      * @return PreparationResultStruct
      */
     public function prepareExport(array $requestData, array $filterParams)
@@ -37,9 +34,6 @@ class ExportService extends AbstractImportExportService implements ExportService
     }
 
     /**
-     * @param array $requestData
-     * @param array $filterParams
-     *
      * @throws \Exception
      *
      * @return array

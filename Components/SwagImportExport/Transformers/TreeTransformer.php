@@ -40,8 +40,6 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
 
     /**
      * Sets the config that has the tree structure
-     *
-     * @param $config
      */
     public function initialize($config)
     {
@@ -50,8 +48,6 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
 
     /**
      * Transforms the flat array into tree with list of nodes containing children and attributes.
-     *
-     * @param $data
      *
      * @throws \Enlight_Event_Exception
      *
@@ -86,10 +82,6 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
 
     /**
      * Transforms a list of nodes containing children and attributes into flat array.
-     *
-     * @param $data
-     *
-     * @return mixed
      */
     public function transformBackward($data)
     {
@@ -227,7 +219,7 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
     /**
      * Parses a tree header based on config
      *
-     * @param $data
+     * @param mixed $data
      */
     public function parseHeader(array $data)
     {
@@ -236,7 +228,7 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
     /**
      * Parses a tree footer based on config
      *
-     * @param $data
+     * @param mixed $data
      */
     public function parseFooter(array $data)
     {
@@ -297,9 +289,6 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
     /**
      * Transforms read it data into raw data
      *
-     * @param $node
-     * @param $importMapper
-     * @param $adapter
      * @param null $nodePath
      */
     public function transformFromTree($node, $importMapper, $adapter, $nodePath = null)
@@ -343,8 +332,6 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
 
     /**
      * Search the iteration part of the tree template
-     *
-     * @param array $tree
      */
     public function findIterationPart(array $tree)
     {
@@ -427,7 +414,6 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
     }
 
     /**
-     * @param $adapter
      * @param string $key
      * @param string $value
      */
@@ -436,26 +422,17 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
         $this->bufferData[$adapter][$key] = $value;
     }
 
-    /**
-     * @return mixed
-     */
     public function getRawData()
     {
         return $this->rawData;
     }
 
-    /**
-     * @param $type
-     * @param $rawData
-     */
     public function setRawData($type, $rawData)
     {
         $this->rawData[$type][] = $rawData;
     }
 
     /**
-     * @param $type
-     *
      * @return array|null
      */
     public function getBufferData($type)
@@ -467,60 +444,36 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
         return null;
     }
 
-    /**
-     * @param $bufferData
-     */
     public function setBufferData($bufferData)
     {
         $this->bufferData = $bufferData;
     }
 
-    /**
-     * @param $type
-     */
     public function unsetBufferData($type)
     {
         unset($this->bufferData[$type]);
     }
 
-    /**
-     * @return mixed
-     */
     public function getData()
     {
         return $this->data;
     }
 
-    /**
-     * @param $data
-     */
     public function setData($data)
     {
         $this->data = $data;
     }
 
-    /**
-     * @return mixed
-     */
     public function getMainType()
     {
         return $this->mainType;
     }
 
-    /**
-     * @param $mainType
-     */
     public function setMainType($mainType)
     {
         $this->mainType = $mainType;
     }
 
-    /**
-     * @param $type
-     * @param $recordLink
-     *
-     * @return mixed
-     */
     public function getPreparedData($type, $recordLink)
     {
         if ($this->preparedData[$type] === null) {
@@ -537,8 +490,7 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
     /**
      * Create iteration node mapper for import
      *
-     * @param mixed $node
-     * @param null  $nodePath
+     * @param null $nodePath
      */
     protected function createIterationNodeMapper($node, $nodePath = null)
     {
@@ -561,8 +513,7 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
     /**
      * Generates import mapper from the js tree
      *
-     * @param mixed $node
-     * @param null  $nodePath
+     * @param null $nodePath
      */
     protected function generateMapper($node, $nodePath = null)
     {

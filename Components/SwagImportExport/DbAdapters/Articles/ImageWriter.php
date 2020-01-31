@@ -31,9 +31,6 @@ class ImageWriter
      */
     protected $connection;
 
-    /**
-     * @param ArticlesDbAdapter $articlesDbAdapter
-     */
     public function __construct(ArticlesDbAdapter $articlesDbAdapter)
     {
         $this->articlesDbAdapter = $articlesDbAdapter;
@@ -50,10 +47,6 @@ class ImageWriter
     }
 
     /**
-     * @param $articleId
-     * @param $mainDetailOrderNumber
-     * @param $images
-     *
      * @throws AdapterException
      */
     public function write($articleId, $mainDetailOrderNumber, $images)
@@ -115,11 +108,6 @@ class ImageWriter
         }
     }
 
-    /**
-     * @param $mediaId
-     *
-     * @return mixed
-     */
     protected function getMediaById($mediaId)
     {
         $media = $this->db->fetchRow(
@@ -130,11 +118,6 @@ class ImageWriter
         return $media;
     }
 
-    /**
-     * @param $name
-     *
-     * @return mixed
-     */
     protected function getMediaByName($name)
     {
         $media = $this->db->fetchRow(
@@ -146,9 +129,6 @@ class ImageWriter
     }
 
     /**
-     * @param $articleId
-     * @param $mediaId
-     *
      * @return bool
      */
     protected function isImageExists($articleId, $mediaId)
@@ -162,9 +142,6 @@ class ImageWriter
     }
 
     /**
-     * @param $mediaId
-     * @param $imageName
-     *
      * @return bool
      */
     protected function isImageNameCorrect($mediaId, $imageName)
@@ -178,9 +155,6 @@ class ImageWriter
     }
 
     /**
-     * @param $data
-     * @param $articleId
-     *
      * @throws \Doctrine\DBAL\DBALException
      */
     protected function insertImages($data, $articleId)
@@ -210,9 +184,6 @@ class ImageWriter
     }
 
     /**
-     * @param $medias
-     * @param $images
-     *
      * @return array
      */
     protected function prepareImageData($medias, $images)
@@ -235,10 +206,6 @@ class ImageWriter
         return [$imageData, $mediaId];
     }
 
-    /**
-     * @param $articleId
-     * @param $mediaId
-     */
     protected function setMainImage($articleId, $mediaId)
     {
         $count = $this->countOfMainImages($articleId);
@@ -254,8 +221,6 @@ class ImageWriter
     }
 
     /**
-     * @param $articleId
-     *
      * @return string
      */
     protected function countOfMainImages($articleId)
@@ -271,8 +236,6 @@ class ImageWriter
     }
 
     /**
-     * @param $articleId
-     *
      * @throws \Doctrine\DBAL\DBALException
      */
     protected function setFirstImageAsMain($articleId)
@@ -282,9 +245,6 @@ class ImageWriter
     }
 
     /**
-     * @param $articleId
-     * @param $mediaId
-     *
      * @throws \Doctrine\DBAL\DBALException
      */
     protected function updateMain($articleId, $mediaId)

@@ -49,8 +49,6 @@ abstract class Validator
     /**
      * Validates fields with int type. It is possible this field to has as a value '-1'.
      *
-     * @param $value
-     *
      * @return int
      */
     public function validateInt($value)
@@ -73,8 +71,6 @@ abstract class Validator
     /**
      * Validates fields which contains date data.
      *
-     * @param $value
-     *
      * @return bool
      */
     public function validateDateTime($value)
@@ -85,11 +81,7 @@ abstract class Validator
     /**
      * Validates email fields.
      *
-     * @param $email
-     *
      * @throws \Exception
-     *
-     * @return mixed
      */
     public function validateEmail($email)
     {
@@ -102,8 +94,6 @@ abstract class Validator
     /**
      * Validates fields which contains string.
      *
-     * @param $value
-     *
      * @return bool
      */
     public function validateString($value)
@@ -115,7 +105,6 @@ abstract class Validator
      * Helper function, which is used to validate current field's value.
      *
      * @param string $type
-     * @param $value
      * @param string $fieldName
      *
      * @throws AdapterException

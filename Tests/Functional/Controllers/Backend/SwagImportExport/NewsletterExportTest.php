@@ -15,14 +15,14 @@ use SwagImportExport\Tests\Helper\FixturesImportTrait;
 
 class NewsletterExportTest extends \Enlight_Components_Test_Controller_TestCase
 {
-    use DatabaseTestCaseTrait;
     use FixturesImportTrait;
+    use DatabaseTestCaseTrait;
     use ExportControllerTrait;
 
     const FORMAT_XML = 'xml';
     const FORMAT_CSV = 'csv';
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -45,14 +45,14 @@ class NewsletterExportTest extends \Enlight_Components_Test_Controller_TestCase
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         $newsletterNodeList = $this->queryXpath($file, '//user');
-        $this->assertEquals(25, $newsletterNodeList->length);
+        static::assertEquals(25, $newsletterNodeList->length);
 
         $newsletterNodeList = $this->queryXpath($file, "//user[email='test_0@example.com']/email");
-        $this->assertEquals('test_0@example.com', $newsletterNodeList->item(0)->nodeValue);
+        static::assertEquals('test_0@example.com', $newsletterNodeList->item(0)->nodeValue);
     }
 
     public function test_newsletter_csv_export()
@@ -70,11 +70,11 @@ class NewsletterExportTest extends \Enlight_Components_Test_Controller_TestCase
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        $this->assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
         $mappedNewsletterList = $this->csvToArrayIndexedByFieldValue($file, 'email');
-        $this->assertEquals('test_0@example.com', $mappedNewsletterList['test_0@example.com']['email']);
-        $this->assertCount(25, $mappedNewsletterList);
+        static::assertEquals('test_0@example.com', $mappedNewsletterList['test_0@example.com']['email']);
+        static::assertCount(25, $mappedNewsletterList);
     }
 }

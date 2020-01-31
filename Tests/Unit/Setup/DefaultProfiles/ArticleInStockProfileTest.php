@@ -28,9 +28,9 @@ class ArticleInStockProfileTest extends TestCase
     {
         $articleInStockProfile = $this->createArticleInStockProfile();
 
-        $this->assertInstanceOf(ArticleInStockProfile::class, $articleInStockProfile);
-        $this->assertInstanceOf(ProfileMetaData::class, $articleInStockProfile);
-        $this->assertInstanceOf(\JsonSerializable::class, $articleInStockProfile);
+        static::assertInstanceOf(ArticleInStockProfile::class, $articleInStockProfile);
+        static::assertInstanceOf(ProfileMetaData::class, $articleInStockProfile);
+        static::assertInstanceOf(\JsonSerializable::class, $articleInStockProfile);
     }
 
     public function test_it_should_return_valid_profile_tree()

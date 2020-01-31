@@ -23,9 +23,6 @@ class ConfiguratorValidator extends Validator
         ],
     ];
 
-    /**
-     * @param $record
-     */
     public function checkRequiredFields($record)
     {
     }

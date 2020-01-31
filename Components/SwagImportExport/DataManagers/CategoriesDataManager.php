@@ -36,10 +36,7 @@ class CategoriesDataManager extends DataManager
     /**
      * Sets fields which are empty by default.
      *
-     * @param $record
      * @param array $defaultValues
-     *
-     * @return mixed
      */
     public function setDefaultFieldsForCreate($record, $defaultValues)
     {

@@ -34,7 +34,7 @@ class ArticleInStockDbAdapterTest extends TestCase
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
         $updatedArticleInStock = $dbalConnection->executeQuery("SELECT * FROM s_articles_details WHERE orderNumber='SW10004'")->fetchAll();
 
-        $this->assertEquals(3, $updatedArticleInStock[0]['instock']);
+        static::assertEquals(3, $updatedArticleInStock[0]['instock']);
     }
 
     public function test_write_with_invalid_order_number_throws_exception()
@@ -64,7 +64,7 @@ class ArticleInStockDbAdapterTest extends TestCase
         $preparedExportData = $articleInStockDbAdapter->readRecordIds(null, null, $filter);
         $exportedData = $articleInStockDbAdapter->read($preparedExportData, $this->getReadColumns());
 
-        $this->assertCount(count($preparedExportData), $exportedData['default']);
+        static::assertCount(count($preparedExportData), $exportedData['default']);
     }
 
     public function test_read()
@@ -73,14 +73,14 @@ class ArticleInStockDbAdapterTest extends TestCase
         $ids = [3];
         $result = $articleInStockDbAdapter->read($ids, $this->getReadColumns());
 
-        $this->assertArrayHasKey('orderNumber', $result['default'][0], 'Could not fetch order number.');
-        $this->assertArrayHasKey('inStock', $result['default'][0], 'Could not fetch article stock.');
-        $this->assertArrayHasKey('name', $result['default'][0], 'Could not fetch article name.');
-        $this->assertArrayHasKey('additionalText', $result['default'][0], 'Could not fetch additional test.');
-        $this->assertArrayHasKey('supplier', $result['default'][0], 'Could not fetch supplier.');
-        $this->assertArrayHasKey('price', $result['default'][0], 'Could not fetch article price.');
-        $this->assertArrayHasKey('taxInput', $result['default'][0], 'Could not fetch tax id.');
-        $this->assertArrayHasKey('tax', $result['default'][0], 'Could not fetch tax rate.');
+        static::assertArrayHasKey('orderNumber', $result['default'][0], 'Could not fetch order number.');
+        static::assertArrayHasKey('inStock', $result['default'][0], 'Could not fetch article stock.');
+        static::assertArrayHasKey('name', $result['default'][0], 'Could not fetch article name.');
+        static::assertArrayHasKey('additionalText', $result['default'][0], 'Could not fetch additional test.');
+        static::assertArrayHasKey('supplier', $result['default'][0], 'Could not fetch supplier.');
+        static::assertArrayHasKey('price', $result['default'][0], 'Could not fetch article price.');
+        static::assertArrayHasKey('taxInput', $result['default'][0], 'Could not fetch tax id.');
+        static::assertArrayHasKey('tax', $result['default'][0], 'Could not fetch tax rate.');
     }
 
     public function test_read_should_throw_exception_if_ids_are_empty()

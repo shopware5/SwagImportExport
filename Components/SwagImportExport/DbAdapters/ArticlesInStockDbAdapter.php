@@ -129,10 +129,6 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $start
-     * @param $limit
-     * @param $filter
-     *
      * @throws \Exception
      *
      * @return array
@@ -234,8 +230,6 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $records
-     *
      * @throws \Enlight_Event_Exception
      * @throws \Exception
      */
@@ -314,8 +308,6 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param $message
-     *
      * @throws \Exception
      */
     public function saveMessage($message)
@@ -338,9 +330,6 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
         return $this->logMessages;
     }
 
-    /**
-     * @param $logMessages
-     */
     public function setLogMessages($logMessages)
     {
         $this->logMessages[] = $logMessages;
@@ -354,18 +343,12 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
         return $this->logState;
     }
 
-    /**
-     * @param $logState
-     */
     public function setLogState($logState)
     {
         $this->logState = $logState;
     }
 
     /**
-     * @param $columns
-     * @param $ids
-     *
      * @return QueryBuilder
      */
     public function getBuilder($columns, $ids)

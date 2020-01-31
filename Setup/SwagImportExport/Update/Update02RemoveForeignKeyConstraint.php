@@ -38,12 +38,6 @@ class Update02RemoveForeignKeyConstraint implements UpdaterInterface
      */
     private $setupContext;
 
-    /**
-     * @param SetupContext          $setupContext
-     * @param Connection            $dbalConnection
-     * @param ModelManager          $modelManager
-     * @param AbstractSchemaManager $schemaManager
-     */
     public function __construct(
         SetupContext $setupContext,
         Connection $dbalConnection,

@@ -10,9 +10,6 @@ namespace Shopware\Components\SwagImportExport\Service\Struct;
 
 use Shopware\CustomModels\ImportExport\Profile;
 
-/**
- * Class ProfileDataStruct
- */
 class ProfileDataStruct
 {
     /**
@@ -30,9 +27,6 @@ class ProfileDataStruct
      */
     private $tree;
 
-    /**
-     * @param Profile $profile
-     */
     public function __construct(Profile $profile)
     {
         $this->name = $profile->getName();
@@ -56,9 +50,6 @@ class ProfileDataStruct
         return $this->type;
     }
 
-    /**
-     * @return mixed
-     */
     public function getTree()
     {
         return $this->tree;

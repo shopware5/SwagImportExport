@@ -16,9 +16,6 @@ interface ExportServiceInterface
      * Prepares export session based on profile and delivers
      * information on how many records to export.
      *
-     * @param array $requestData
-     * @param array $filterParams
-     *
      * @throws \Exception
      *
      * @return PreparationResultStruct
@@ -28,9 +25,6 @@ interface ExportServiceInterface
     /**
      * Processes export based on profile and session and accepts special
      * filtering for several dataDbAdapters.
-     *
-     * @param array $requestData
-     * @param array $filterParams
      *
      * @throws \Exception
      *

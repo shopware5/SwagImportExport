@@ -65,9 +65,9 @@ class ArticlesImagesDbAdapterTest extends TestCase
         $articleId = $dbalConnection->executeQuery("SELECT articleID FROM s_articles_details WHERE orderNumber='SW10001'")->fetch(\PDO::FETCH_COLUMN);
         $image = $dbalConnection->executeQuery("SELECT * FROM s_articles_img WHERE description = 'testimport1'")->fetch(\PDO::FETCH_ASSOC);
 
-        $this->assertEquals($records['default'][0]['description'], $image['description']);
-        $this->assertEquals($articleId, $image['articleID']);
-        $this->assertEquals('png', $image['extension']);
+        static::assertEquals($records['default'][0]['description'], $image['description']);
+        static::assertEquals($articleId, $image['articleID']);
+        static::assertEquals('png', $image['extension']);
     }
 
     public function test_write_with_invalid_order_number_throws_exception()

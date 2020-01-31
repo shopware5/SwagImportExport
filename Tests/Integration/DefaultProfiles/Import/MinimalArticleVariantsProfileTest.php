@@ -15,9 +15,9 @@ use SwagImportExport\Tests\Integration\DefaultProfiles\DefaultProfileImportTestC
 
 class MinimalArticleVariantsProfileTest extends TestCase
 {
-    use DatabaseTestCaseTrait;
     use CommandTestCaseTrait;
     use DefaultProfileImportTestCaseTrait;
+    use DatabaseTestCaseTrait;
 
     public function test_import_should_insert_new_variant()
     {
@@ -30,8 +30,8 @@ class MinimalArticleVariantsProfileTest extends TestCase
         $importedVariant = $this->executeQuery("SELECT * FROM s_articles_details WHERE ordernumber='{$expectedVariantOrderNumber}'");
         $importedArticle = $this->executeQuery("SELECT * FROM s_articles WHERE id='{$importedVariant[0]['articleID']}'");
 
-        $this->assertEquals($expectedVariantOrderNumber, $importedVariant[0]['ordernumber']);
-        $this->assertEquals($expectedArticleName, $importedArticle[0]['name']);
+        static::assertEquals($expectedVariantOrderNumber, $importedVariant[0]['ordernumber']);
+        static::assertEquals($expectedArticleName, $importedArticle[0]['name']);
     }
 
     public function test_import_should_insert_new_article_with_variant()
@@ -45,7 +45,7 @@ class MinimalArticleVariantsProfileTest extends TestCase
         $importedVariant = $this->executeQuery("SELECT * FROM s_articles_details WHERE ordernumber='{$expectedVariantOrderNumber}'");
         $importedArticle = $this->executeQuery("SELECT * FROM s_articles WHERE id='{$importedVariant[0]['articleID']}'");
 
-        $this->assertEquals($expectedVariantOrderNumber, $importedVariant[0]['ordernumber']);
-        $this->assertEquals($expectedArticleName, $importedArticle[0]['name']);
+        static::assertEquals($expectedVariantOrderNumber, $importedVariant[0]['ordernumber']);
+        static::assertEquals($expectedArticleName, $importedArticle[0]['name']);
     }
 }

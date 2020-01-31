@@ -61,10 +61,7 @@ class CustomerDataManager extends DataManager
     /**
      * Sets fields which are empty by default.
      *
-     * @param $record
      * @param array $defaultValues
-     *
-     * @return mixed
      */
     public function setDefaultFieldsForCreate($record, $defaultValues)
     {
@@ -150,8 +147,6 @@ class CustomerDataManager extends DataManager
 
     /**
      * @param array $record
-     *
-     * @return mixed
      */
     private function getPayment($record)
     {

@@ -43,9 +43,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     private $sessionRepository;
 
     /**
-     * @param DataDbAdapter $dbAdapter
-     * @param $dataSession
-     * @param Logger $logger
+     * @param Session $dataSession
      *
      * @return DataIO
      */
@@ -150,8 +148,6 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     /**
      * Returns columnOptions adapter
      *
-     * @param $options
-     *
      * @return \Shopware\Components\SwagImportExport\Utils\DataColumnOptions
      */
     public function createColOpts($options)
@@ -162,8 +158,6 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     /**
      * Returns limit adapter
      *
-     * @param array $limit
-     *
      * @return \Shopware\Components\SwagImportExport\Utils\DataLimit
      */
     public function createLimit(array $limit)
@@ -173,8 +167,6 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
 
     /**
      * Returns filter adapter
-     *
-     * @param $filter
      *
      * @return \Shopware\Components\SwagImportExport\Utils\DataFilter
      */
@@ -206,12 +198,11 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     {
         return Shopware()->Events()->notifyUntil(
             'Shopware_Components_SwagImportExport_Factories_CreateDbAdapter',
-            ['subject' => $this, 'adapterType' => $adapterType]);
+            ['subject' => $this, 'adapterType' => $adapterType]
+        );
     }
 
     /**
-     * @param SessionEntity $sessionEntity
-     *
      * @return Session
      */
     protected function createSession(SessionEntity $sessionEntity)

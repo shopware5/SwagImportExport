@@ -15,9 +15,9 @@ use SwagImportExport\Tests\Integration\DefaultProfiles\DefaultProfileImportTestC
 
 class AddressProfileTest extends TestCase
 {
-    use DatabaseTestCaseTrait;
     use CommandTestCaseTrait;
     use DefaultProfileImportTestCaseTrait;
+    use DatabaseTestCaseTrait;
 
     public function test_should_import_new_addresses()
     {
@@ -26,14 +26,14 @@ class AddressProfileTest extends TestCase
 
         $createdAddress = $this->executeQuery("SELECT * FROM s_user_addresses WHERE company='A Company Ltd.'");
 
-        $this->assertEquals('Department X', $createdAddress[0]['department']);
-        $this->assertEquals('MyUstId', $createdAddress[0]['ustid']);
-        $this->assertEquals('My City', $createdAddress[0]['city']);
-        $this->assertEquals('Firstname', $createdAddress[0]['firstname']);
-        $this->assertEquals('Lastname', $createdAddress[0]['lastname']);
-        $this->assertEquals('ms', $createdAddress[0]['salutation']);
-        $this->assertEquals('My phonenumber', $createdAddress[0]['phone']);
-        $this->assertEquals('My additional address', $createdAddress[0]['additional_address_line1']);
+        static::assertEquals('Department X', $createdAddress[0]['department']);
+        static::assertEquals('MyUstId', $createdAddress[0]['ustid']);
+        static::assertEquals('My City', $createdAddress[0]['city']);
+        static::assertEquals('Firstname', $createdAddress[0]['firstname']);
+        static::assertEquals('Lastname', $createdAddress[0]['lastname']);
+        static::assertEquals('ms', $createdAddress[0]['salutation']);
+        static::assertEquals('My phonenumber', $createdAddress[0]['phone']);
+        static::assertEquals('My additional address', $createdAddress[0]['additional_address_line1']);
     }
 
     public function test_should_update_existing_addresses_by_id()
@@ -43,14 +43,14 @@ class AddressProfileTest extends TestCase
 
         $updatedAddress = $this->executeQuery("SELECT * FROM s_user_addresses WHERE company='Updated company'");
 
-        $this->assertEquals(2, $updatedAddress[0]['id']);
-        $this->assertEquals('Updated department', $updatedAddress[0]['department']);
-        $this->assertEquals('Updated firstname', $updatedAddress[0]['firstname']);
-        $this->assertEquals('Updated lastname', $updatedAddress[0]['lastname']);
-        $this->assertEquals('Updated city', $updatedAddress[0]['city']);
-        $this->assertEquals('Updated vatid', $updatedAddress[0]['ustid']);
-        $this->assertEquals('Updated salutation', $updatedAddress[0]['salutation']);
-        $this->assertEquals('Updated telephone', $updatedAddress[0]['phone']);
-        $this->assertEquals('Updated additional address', $updatedAddress[0]['additional_address_line1']);
+        static::assertEquals(2, $updatedAddress[0]['id']);
+        static::assertEquals('Updated department', $updatedAddress[0]['department']);
+        static::assertEquals('Updated firstname', $updatedAddress[0]['firstname']);
+        static::assertEquals('Updated lastname', $updatedAddress[0]['lastname']);
+        static::assertEquals('Updated city', $updatedAddress[0]['city']);
+        static::assertEquals('Updated vatid', $updatedAddress[0]['ustid']);
+        static::assertEquals('Updated salutation', $updatedAddress[0]['salutation']);
+        static::assertEquals('Updated telephone', $updatedAddress[0]['phone']);
+        static::assertEquals('Updated additional address', $updatedAddress[0]['additional_address_line1']);
     }
 }

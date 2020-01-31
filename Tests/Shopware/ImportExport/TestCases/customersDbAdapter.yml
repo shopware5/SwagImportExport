@@ -142,7 +142,7 @@ testDefaultColumns:
         expectedCount: 64
 writeWithEmptyFile:
     testCase0:
-        records:
+        records: []
         expectedInsertedRows: 0
 testWrite:
     testCase0:

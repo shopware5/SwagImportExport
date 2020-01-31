@@ -42,8 +42,6 @@ class ArticleImageDataManager
      *
      * @param array $record
      * @param int   $articleId
-     *
-     * @return mixed
      */
     public function setDefaultFields($record, $articleId)
     {

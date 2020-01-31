@@ -63,10 +63,10 @@ class TranslationWriterTest extends TestCase
         $result = $connection->executeQuery($sql)->fetchAll();
         $importedTranslation = unserialize($result[0]['objectdata']);
 
-        $this->assertEquals($translations[0]['name'], $importedTranslation['txtArtikel']);
-        $this->assertEquals($translations[0]['description'], $importedTranslation['txtshortdescription']);
-        $this->assertEquals($translations[0]['additionalText'], $importedTranslation['txtzusatztxt']);
-        $this->assertEquals($translations[0]['packUnit'], $importedTranslation['txtpackunit']);
+        static::assertEquals($translations[0]['name'], $importedTranslation['txtArtikel']);
+        static::assertEquals($translations[0]['description'], $importedTranslation['txtshortdescription']);
+        static::assertEquals($translations[0]['additionalText'], $importedTranslation['txtzusatztxt']);
+        static::assertEquals($translations[0]['packUnit'], $importedTranslation['txtpackunit']);
     }
 
     public function test_write_should_create_attribute_translations()
@@ -100,7 +100,7 @@ class TranslationWriterTest extends TestCase
         $dbalConnection->executeQuery("DELETE FROM s_core_translations WHERE objecttype='article' AND objectkey=272");
         $dbalConnection->executeQuery('DELETE FROM s_articles_translations WHERE articleID=272');
 
-        $this->assertEquals($translations[0]['mycustomfield'], $importedTranslation['__attribute_mycustomfield']);
+        static::assertEquals($translations[0]['mycustomfield'], $importedTranslation['__attribute_mycustomfield']);
     }
 
     public function test_write_should_create_variant_translation()
@@ -129,8 +129,8 @@ class TranslationWriterTest extends TestCase
         $result = $connection->executeQuery($sql)->fetchAll();
         $importedTranslation = unserialize($result[0]['objectdata']);
 
-        $this->assertEquals('Translated additional text', $importedTranslation['txtzusatztxt']);
-        $this->assertEquals('translated pack unit', $importedTranslation['txtpackunit']);
+        static::assertEquals('Translated additional text', $importedTranslation['txtzusatztxt']);
+        static::assertEquals('translated pack unit', $importedTranslation['txtpackunit']);
     }
 
     /**

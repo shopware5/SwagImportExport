@@ -169,8 +169,6 @@ class ExportCommand extends ShopwareCommand
     }
 
     /**
-     * @param InputInterface $input
-     *
      * @throws \RuntimeException
      */
     protected function prepareExportInputValidation(InputInterface $input)
@@ -258,8 +256,6 @@ class ExportCommand extends ShopwareCommand
     }
 
     /**
-     * @param InputInterface $input
-     *
      * @throws \RuntimeException
      * @throws \InvalidArgumentException
      */
@@ -279,8 +275,6 @@ class ExportCommand extends ShopwareCommand
     }
 
     /**
-     * @param $customerStream
-     *
      * @throws \RuntimeException
      */
     protected function validateCustomerStream($customerStream)

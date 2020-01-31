@@ -14,10 +14,6 @@ use Shopware\Components\SwagImportExport\UploadPathProvider;
  * Shopware ImportExport Plugin
  *
  * Import controller to handle all imports.
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Backend_SwagImportExportImport extends Shopware_Controllers_Backend_ExtJs
 {

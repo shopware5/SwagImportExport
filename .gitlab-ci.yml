@@ -2,18 +2,18 @@ variables:
     DOCKER_DRIVER: overlay2
     DOCKER_HOST: "tcp://docker:2375"
     DOCKER_TLS_CERTDIR: "/certs"
-    MYSQL_ROOT_PASSWORD: app
+    MYSQL_ROOT_PASSWORD: root
     MYSQL_USER: app
     MYSQL_PASSWORD: app
     MYSQL_DATABASE: shopware
     WEB_DOCUMENT_ROOT: $CI_PROJECT_DIR/
     GIT_STRATEGY: clone
+    SHOPWARE_ENV: swagimportexporttest
     CHECKOUT_SHOPWARE_BRANCH: "5.6"
 
 stages:
     - Code Style Check
-    - Coverage
-    - Shopware Versions
+    - PHPUnit
 
 default:
     image: shopware/5-continuous:7.3
@@ -22,12 +22,13 @@ default:
         - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.shopware.com/shopware/5/product/shopware.git shopware --depth=1 -b ${CHECKOUT_SHOPWARE_BRANCH}
         - unzip -q plugin.zip -d shopware/engine/Shopware/Plugins/Local/Backend/SwagImportExport
         - cd shopware
-        - /entrypoint supervisord &>/dev/null &
         - ./psh.phar init --SW_HOST="localhost"
+        - cp -r engine/Shopware/Plugins/Local/Backend/SwagImportExport/Tests/config_gitlab.php config.php
         - php bin/console sw:plugin:refresh
         - php bin/console sw:plugin:list
         - php bin/console sw:plugin:install --activate SwagImportExport
-        - php bin/console sw:cache:clear -e testing
+        - php bin/console sw:cache:clear
+        - /entrypoint supervisord &>/dev/null &
 
 PHP analyze:
     stage: Code Style Check
@@ -37,20 +38,17 @@ PHP analyze:
         - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.shopware.com/shopware/5/product/shopware.git shopware --depth=1 -b ${CHECKOUT_SHOPWARE_BRANCH}
         - unzip -q plugin.zip -d shopware/engine/Shopware/Plugins/Local/Backend/SwagImportExport
         - cd shopware
-        - /entrypoint supervisord &>/dev/null &
-        - cp /usr/local/bin/composer composer.phar
-        - php composer.phar install
+        - composer install
         - vendor/bin/php-cs-fixer fix --dry-run -v --config=engine/Shopware/Plugins/Local/Backend/SwagImportExport/.php_cs.dist --format=junit | tee php-cs-fixer.xml
     artifacts:
         reports:
             junit: shopware/php-cs-fixer.xml
 
 Code Coverage:
-    stage: Coverage
+    stage: PHPUnit
     needs: [PHP analyze]
     script:
-        - composer require pcov/clobber
-        - vendor/bin/pcov clobber
+        - composer req --dev phpunit/phpunit:~8.0 --update-with-all-dependencies
         - cd engine/Shopware/Plugins/Local/Backend/SwagImportExport
         - php -d pcov.enabled=1 -d pcov.directory=$CI_PROJECT_DIR
             ../../../../../../vendor/bin/phpunit
@@ -70,37 +68,36 @@ Code Coverage:
             junit: shopware/engine/Shopware/Plugins/Local/Backend/SwagImportExport/build/artifacts/phpunit.junit.xml
 
 SW 5.6:
-    stage: Shopware Versions
+    stage: PHPUnit
     needs: [PHP analyze]
     image: shopware/5-continuous:7.2
-    variables:
-        CHECKOUT_SHOPWARE_BRANCH: "5.6"
     only:
         - master
+    variables:
+        CHECKOUT_SHOPWARE_BRANCH: "5.6"
     script:
         - cd engine/Shopware/Plugins/Local/Backend/SwagImportExport
         - php  ../../../../../../vendor/bin/phpunit
             --configuration phpunit.xml.dist
             --colors=never
-    coverage: '/^\s*Lines:\s*(\d+(?:\.\d+)?%)/'
     services:
         -   name: mysql:5.7
             alias: mysql
 
 SW 5.7:
-    stage: Shopware Versions
+    stage: PHPUnit
     needs: [PHP analyze]
     image: shopware/5-continuous:7.2
-    variables:
-        CHECKOUT_SHOPWARE_BRANCH: "5.7"
     only:
         - master
+    allow_failure: true
+    variables:
+        CHECKOUT_SHOPWARE_BRANCH: "5.7"
     script:
         - cd engine/Shopware/Plugins/Local/Backend/SwagImportExport
         - php  ../../../../../../vendor/bin/phpunit
             --configuration phpunit.xml.dist
             --colors=never
-    coverage: '/^\s*Lines:\s*(\d+(?:\.\d+)?%)/'
     services:
         -   name: mysql:5.7
             alias: mysql

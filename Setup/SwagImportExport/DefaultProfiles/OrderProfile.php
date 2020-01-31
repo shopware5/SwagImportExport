@@ -10,9 +10,6 @@ namespace Shopware\Setup\SwagImportExport\DefaultProfiles;
 
 use Shopware\Components\SwagImportExport\DbAdapters\DataDbAdapter;
 
-/**
- * Class OrderProfile
- */
 class OrderProfile implements \JsonSerializable, ProfileMetaData
 {
     /**

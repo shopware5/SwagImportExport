@@ -14,9 +14,6 @@ use Shopware\Components\SwagImportExport\DbAdapters\ArticlesDbAdapter;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 
-/**
- * Class RelationWriter
- */
 class RelationWriter
 {
     /**
@@ -58,9 +55,6 @@ class RelationWriter
      */
     protected $connection;
 
-    /**
-     * @param ArticlesDbAdapter $articlesDbAdapter
-     */
     public function __construct(ArticlesDbAdapter $articlesDbAdapter)
     {
         $this->articlesDbAdapter = $articlesDbAdapter;
@@ -208,8 +202,6 @@ class RelationWriter
     /**
      * Checks whether this article exists.
      *
-     * @param $relationId
-     *
      * @return bool
      */
     protected function isRelationIdExists($relationId)
@@ -224,9 +216,6 @@ class RelationWriter
 
     /**
      * Checks whether this relation exists.
-     *
-     * @param $relationId
-     * @param $articleId
      *
      * @return bool
      */
@@ -243,8 +232,6 @@ class RelationWriter
     /**
      * Deletes all relations.
      *
-     * @param $articleId
-     *
      * @throws \Doctrine\DBAL\DBALException
      */
     private function deleteAllRelations($articleId)
@@ -255,9 +242,6 @@ class RelationWriter
 
     /**
      * Deletes unnecessary relations.
-     *
-     * @param $relations
-     * @param $articleId
      *
      * @throws \Doctrine\DBAL\DBALException
      */
@@ -279,9 +263,6 @@ class RelationWriter
 
     /**
      * Inserts new relations.
-     *
-     * @param $relations
-     * @param $articleId
      *
      * @throws \Doctrine\DBAL\DBALException
      */
