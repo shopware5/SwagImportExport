@@ -12,6 +12,7 @@
 
     "changelog": {
         "de": {
+            "2.10.4": "PT-11213 - Profil-Auswahl-Combobox zu eine PaginationCombobox geändert;",
             "2.10.3": "PT-10898 - Die Rechnungsversandkosten werden nun im richtigen Dezimalformat exportiert;",
             "2.10.2": "PT-10789 - Problem beim Im/Export der Übersetzungen behoben;",
             "2.10.1": "PT-10727 - Behebt ein Problem mit der 5.6 Kompatibilität;",
@@ -56,6 +57,7 @@
             "1.0.1": "Problem mit verschwindendem Import/Export Menü-Eintrag behoben; Weitere ACL-Zugangsberechtigungen hinzugefügt; Korrektur: article.active Verhalten; Korrektur: Artikel-Attribute; Korrektur: Datums- und Zeitimporte"
         },
         "en": {
+            "2.10.4": "PT-11213 - Change profile selection to PaginationCombobox;",
             "2.10.3": "PT-10898 - The invoice shipping costs are now exported in the correct decimal format;",
             "2.10.2": "PT-10789 - Fix problem on im/exporting translations;",
             "2.10.1": "PT-10727 - Solves an issue regarding 5.6 compatibility",
