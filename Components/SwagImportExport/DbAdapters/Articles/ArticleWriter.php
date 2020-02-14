@@ -9,6 +9,7 @@
 namespace Shopware\Components\SwagImportExport\DbAdapters\Articles;
 
 use Doctrine\DBAL\Connection;
+use Enlight_Components_Db_Adapter_Pdo_Mysql;
 use Shopware\Components\SwagImportExport\DataManagers\Articles\ArticleDataManager;
 use Shopware\Components\SwagImportExport\DataType\ArticleDataType;
 use Shopware\Components\SwagImportExport\DbAdapters\Results\ArticleWriterResult;
@@ -23,7 +24,7 @@ use Shopware\Models\Attribute\Article as ProductAttribute;
 class ArticleWriter
 {
     /**
-     * @var \Enlight_Components_Db_Adapter_Pdo_Mysql
+     * @var Enlight_Components_Db_Adapter_Pdo_Mysql
      */
     protected $db;
 
@@ -46,18 +47,30 @@ class ArticleWriter
      * @var DbalHelper
      */
     private $dbalHelper;
+    /**
+     * @var ArticleValidator
+     */
+    private $articleValidator;
+    /**
+     * @var ArticleDataManager
+     */
+    private $articleDataManager;
 
     /**
      * initialises the class properties
+     * @param Connection $connection
+     * @param Enlight_Components_Db_Adapter_Pdo_Mysql $db
+     * @param DbalHelper $dbalHelper
+     * @param ArticleValidator $articleValidator
+     * @param ArticleDataManager $articleDataManager
      */
-    public function __construct()
+    public function __construct(Connection $connection, Enlight_Components_Db_Adapter_Pdo_Mysql $db, DbalHelper $dbalHelper, ArticleValidator $articleValidator, ArticleDataManager $articleDataManager)
     {
-        $this->connection = Shopware()->Container()->get('dbal_connection');
-        $this->db = Shopware()->Container()->get('db');
-        $this->dbalHelper = DbalHelper::create();
-
-        $this->validator = new ArticleValidator();
-        $this->dataManager = new ArticleDataManager($this->db, $this->dbalHelper);
+        $this->connection = $connection;
+        $this->db = $db;
+        $this->dbalHelper = $dbalHelper;
+        $this->articleValidator = $articleValidator;
+        $this->articleDataManager = $articleDataManager;
     }
 
     /**

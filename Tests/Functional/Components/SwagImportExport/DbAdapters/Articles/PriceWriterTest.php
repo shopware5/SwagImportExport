@@ -10,7 +10,10 @@ namespace SwagImportExport\Tests\Functional\Components\SwagImportExport\DbAdapte
 
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
+use Shopware\Components\SwagImportExport\DataManagers\Articles\PriceDataManager;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\PriceWriter;
+use Shopware\Components\SwagImportExport\DbalHelper;
+use Shopware\Components\SwagImportExport\Validators\Articles\PriceValidator;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 
 class PriceWriterTest extends TestCase
@@ -154,6 +157,8 @@ class PriceWriterTest extends TestCase
      */
     private function createPriceWriterAdapter()
     {
-        return new PriceWriter();
+        $container = Shopware()->Container();
+
+        return new PriceWriter($container->get('db'), DbalHelper::create(), new PriceValidator(), new PriceDataManager());
     }
 }

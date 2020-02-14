@@ -10,7 +10,7 @@ namespace Shopware\Components\SwagImportExport\DbAdapters\Articles;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
-use Enlight_Components_Db_Adapter_Pdo_Mysql as PDOConnection;
+use Enlight_Components_Db_Adapter_Pdo_Mysql;
 use Enlight_Event_EventManager as EventManager;
 use Shopware\Components\Model\CategorySubscriber;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
@@ -19,7 +19,7 @@ use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 class CategoryWriter
 {
     /**
-     * @var PDOConnection
+     * @var Enlight_Components_Db_Adapter_Pdo_Mysql
      */
     protected $db;
 
@@ -37,15 +37,22 @@ class CategoryWriter
      * @var EventManager
      */
     private $eventManager;
+    /**
+     * @var EventManager
+     */
+    private $events;
 
     /**
      * initialises the class properties
+     * @param Enlight_Components_Db_Adapter_Pdo_Mysql $db
+     * @param Connection $connection
+     * @param EventManager $events
      */
-    public function __construct()
+    public function __construct(Enlight_Components_Db_Adapter_Pdo_Mysql $db, Connection $connection, EventManager $events)
     {
-        $this->db = Shopware()->Db();
-        $this->connection = Shopware()->Models()->getConnection();
-        $this->eventManager = Shopware()->Events();
+        $this->db = $db;
+        $this->connection = $connection;
+        $this->events = $events;
     }
 
     /**

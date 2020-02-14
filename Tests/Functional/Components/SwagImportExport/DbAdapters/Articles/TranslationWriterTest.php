@@ -13,6 +13,7 @@ use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\TranslationWriter;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
+use Shopware_Components_Translation;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 
 class TranslationWriterTest extends TestCase
@@ -138,6 +139,8 @@ class TranslationWriterTest extends TestCase
      */
     private function createTranslationWriter()
     {
-        return new TranslationWriter();
+        $container = Shopware()->Container();
+
+        return new TranslationWriter($container->get('models'), $container->get('dbal_connection'), $container->get('translation'));
     }
 }

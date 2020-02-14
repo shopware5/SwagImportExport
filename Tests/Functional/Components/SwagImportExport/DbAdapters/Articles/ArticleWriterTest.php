@@ -10,8 +10,11 @@ namespace SwagImportExport\Tests\Functional\Components\SwagImportExport\DbAdapte
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Components\SwagImportExport\DataManagers\Articles\ArticleDataManager;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\ArticleWriter;
+use Shopware\Components\SwagImportExport\DbalHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
+use Shopware\Components\SwagImportExport\Validators\Articles\ArticleValidator;
 use Shopware\Models\Article\Article;
 
 class ArticleWriterTest extends TestCase
@@ -29,10 +32,20 @@ class ArticleWriterTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->modelManager = Shopware()->Container()->get('models');
+        $container = Shopware()->Container();
+        $this->modelManager = $container->get('models');
         $this->modelManager->beginTransaction();
 
-        $this->articleWriter = new ArticleWriter();
+        $db = $container->get('db');
+        $dbalHelper = DbalHelper::create();
+
+        $this->articleWriter = new ArticleWriter(
+            $this->modelManager->getConnection(),
+            $db,
+            $dbalHelper,
+            new ArticleValidator(),
+            new ArticleDataManager($db, $dbalHelper)
+        );
     }
 
     protected function tearDown(): void

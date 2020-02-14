@@ -75,6 +75,8 @@ class CategoryWriterTest extends TestCase
      */
     private function createCategoryWriterAdapter()
     {
-        return new CategoryWriter();
+        $container = Shopware()->Container();
+
+        return new CategoryWriter($container->get('dbal_connection'), $container->get('db'), $container->get('events'));
     }
 }

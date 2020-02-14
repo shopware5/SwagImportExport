@@ -15,6 +15,9 @@ use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Components\ContainerAwareEventManager;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Model\QueryBuilder;
+use Shopware\Components\SwagImportExport\DataManagers\Articles\ArticleDataManager;
+use Shopware\Components\SwagImportExport\DataManagers\Articles\PriceDataManager;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\ArticleWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\CategoryWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\ConfiguratorWriter;
@@ -24,15 +27,20 @@ use Shopware\Components\SwagImportExport\DbAdapters\Articles\PropertyWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\RelationWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\TranslationWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\Results\ArticleWriterResult;
+use Shopware\Components\SwagImportExport\DbalHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Service\UnderscoreToCamelCaseServiceInterface;
 use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
+use Shopware\Components\SwagImportExport\Validators\Articles\ArticleValidator;
+use Shopware\Components\SwagImportExport\Validators\Articles\PriceValidator;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Detail;
 use Shopware\Models\Attribute\Configuration;
 use Shopware\Models\Category\Category;
 use Shopware\Models\Shop\Shop;
+use Shopware_Components_Config;
+use Shopware_Components_Translation;
 
 class ArticlesDbAdapter implements DataDbAdapter
 {
@@ -82,7 +90,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     private $mediaService;
 
     /**
-     * @var \Shopware_Components_Config
+     * @var Shopware_Components_Config
      */
     private $config;
 
@@ -1181,14 +1189,15 @@ class ArticlesDbAdapter implements DataDbAdapter
         $categoryIds = [];
         foreach ($categories as $category) {
             if (!empty($category['categoryId'])) {
-                $categoryIds[] = (string) $category['categoryId'];
+                $categoryIds[] = [(string) $category['categoryId']];
             }
 
             if (!empty($category['categoryPath'])) {
                 $catPath = explode('|', $category['categoryPath']);
-                $categoryIds = array_merge($categoryIds, $catPath);
+                $categoryIds[] = $catPath;
             }
         }
+        $categoryIds = array_merge([], ...$categoryIds);
 
         //only unique ids
         $categoryIds = array_unique($categoryIds);
@@ -1319,14 +1328,19 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     private function performImport(array $records)
     {
-        $articleWriter = new ArticleWriter();
-        $pricesWriter = new PriceWriter();
-        $categoryWriter = new CategoryWriter();
+        $container = Shopware()->Container();
+        $db = $container->get('db');
+        $dbalHelper = DbalHelper::create();
+        $connection = $container->get('dbal_connection');
+
+        $articleWriter = new ArticleWriter($connection, $db, $dbalHelper, new ArticleValidator(), new ArticleDataManager($db, $dbalHelper));
+        $pricesWriter = new PriceWriter($db, $dbalHelper, new PriceValidator(), new PriceDataManager());
+        $categoryWriter = new CategoryWriter($connection, $db, $container->get('events'));
         $configuratorWriter = ConfiguratorWriter::createFromGlobalSingleton();
-        $translationWriter = new TranslationWriter();
+        $translationWriter = new TranslationWriter($this->modelManager, $connection, $container->get('translation'));
         $propertyWriter = PropertyWriter::createFromGlobalSingleton();
-        $relationWriter = new RelationWriter($this);
-        $imageWriter = new ImageWriter($this);
+        $relationWriter = new RelationWriter($this, $db, $connection);
+        $imageWriter = new ImageWriter($this, $db, $connection);
 
         $defaultValues = $this->getDefaultValues();
 

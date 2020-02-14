@@ -8,7 +8,7 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters\Articles;
 
-use Enlight_Components_Db_Adapter_Pdo_Mysql as PDOConnection;
+use Enlight_Components_Db_Adapter_Pdo_Mysql;
 use Shopware\Components\SwagImportExport\DataManagers\Articles\PriceDataManager;
 use Shopware\Components\SwagImportExport\DbalHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
@@ -19,7 +19,7 @@ use Shopware\Models\Article\Price;
 class PriceWriter
 {
     /**
-     * @var PDOConnection
+     * @var Enlight_Components_Db_Adapter_Pdo_Mysql
      */
     protected $db;
 
@@ -42,16 +42,28 @@ class PriceWriter
      * @var DbalHelper
      */
     private $dbalHelper;
+    /**
+     * @var PriceValidator
+     */
+    private $priceValidator;
+    /**
+     * @var PriceDataManager
+     */
+    private $priceDataManager;
 
     /**
      * initialises the class properties
+     * @param Enlight_Components_Db_Adapter_Pdo_Mysql $db
+     * @param DbalHelper $dbalHelper
+     * @param PriceValidator $priceValidator
+     * @param PriceDataManager $priceDataManager
      */
-    public function __construct()
+    public function __construct(Enlight_Components_Db_Adapter_Pdo_Mysql $db, DbalHelper $dbalHelper, PriceValidator $priceValidator, PriceDataManager $priceDataManager)
     {
-        $this->db = Shopware()->Db();
-        $this->dbalHelper = DbalHelper::create();
-        $this->validator = new PriceValidator();
-        $this->dataManager = new PriceDataManager();
+        $this->db = $db;
+        $this->dbalHelper = $dbalHelper;
+        $this->priceValidator = $priceValidator;
+        $this->priceDataManager = $priceDataManager;
 
         $this->customerGroups = $this->getCustomerGroup();
     }

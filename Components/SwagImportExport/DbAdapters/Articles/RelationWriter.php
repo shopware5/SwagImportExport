@@ -9,7 +9,7 @@
 namespace Shopware\Components\SwagImportExport\DbAdapters\Articles;
 
 use Doctrine\DBAL\Connection;
-use Enlight_Components_Db_Adapter_Pdo_Mysql as PDOConnection;
+use Enlight_Components_Db_Adapter_Pdo_Mysql;
 use Shopware\Components\SwagImportExport\DbAdapters\ArticlesDbAdapter;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
@@ -46,7 +46,7 @@ class RelationWriter
     protected $defaultSnippetMessage;
 
     /**
-     * @var PDOConnection
+     * @var Enlight_Components_Db_Adapter_Pdo_Mysql
      */
     protected $db;
 
@@ -55,11 +55,11 @@ class RelationWriter
      */
     protected $connection;
 
-    public function __construct(ArticlesDbAdapter $articlesDbAdapter)
+    public function __construct(ArticlesDbAdapter $articlesDbAdapter, Enlight_Components_Db_Adapter_Pdo_Mysql $db, Connection $connection)
     {
         $this->articlesDbAdapter = $articlesDbAdapter;
-        $this->db = Shopware()->Db();
-        $this->connection = Shopware()->Models()->getConnection();
+        $this->db = $db;
+        $this->connection = $connection;
     }
 
     /**

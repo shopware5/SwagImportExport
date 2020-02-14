@@ -13,7 +13,7 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Models\Attribute\Configuration;
-use Shopware_Components_Translation as TranslationComponent;
+use Shopware_Components_Translation;
 
 class TranslationWriter
 {
@@ -28,7 +28,7 @@ class TranslationWriter
     private $connection;
 
     /**
-     * @var TranslationComponent
+     * @var Shopware_Components_Translation
      */
     private $writer;
 
@@ -40,11 +40,11 @@ class TranslationWriter
     /**
      * initialises the class properties
      */
-    public function __construct()
+    public function __construct(ModelManager $manager, Connection $connection, Shopware_Components_Translation $translation)
     {
-        $this->manager = Shopware()->Models();
-        $this->connection = $this->manager->getConnection();
-        $this->writer = Shopware()->Container()->get('translation');
+        $this->manager = $manager;
+        $this->connection = $connection;
+        $this->writer = $translation;
         $this->shops = $this->getShops();
     }
 
