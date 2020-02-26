@@ -12,7 +12,9 @@ use Doctrine\DBAL\Connection;
 use Doctrine\ORM\Query\Expr\Join;
 use Enlight_Components_Db_Adapter_Pdo_Mysql;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
+use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
+use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 use Shopware\Components\ContainerAwareEventManager;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\ArticleWriter;
@@ -77,6 +79,11 @@ class ArticlesDbAdapter implements DataDbAdapter
     protected $defaultValues = [];
 
     /**
+     * @var \Shopware\Components\DependencyInjection\Container
+     */
+    protected $container;
+
+    /**
      * @var MediaServiceInterface
      */
     private $mediaService;
@@ -98,12 +105,13 @@ class ArticlesDbAdapter implements DataDbAdapter
 
     public function __construct()
     {
-        $this->db = Shopware()->Container()->get('db');
-        $this->modelManager = Shopware()->Container()->get('models');
-        $this->mediaService = Shopware()->Container()->get('shopware_media.media_service');
-        $this->config = Shopware()->Container()->get('config');
-        $this->eventManager = Shopware()->Container()->get('events');
-        $this->underscoreToCamelCaseService = Shopware()->Container()->get('swag_import_export.underscore_camelcase_service');
+        $this->container = $container = Shopware()->Container();
+        $this->db = $container->get('db');
+        $this->modelManager = $container->get('models');
+        $this->mediaService = $container->get('shopware_media.media_service');
+        $this->config = $container->get('config');
+        $this->eventManager = $container->get('events');
+        $this->underscoreToCamelCaseService = $container->get('swag_import_export.underscore_camelcase_service');
     }
 
     /**
@@ -145,7 +153,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 ->groupBy('article.id');
 
             $articleIds = array_map(
-                function ($item) {
+                static function ($item) {
                     return $item['id'];
                 },
                 $categoriesBuilder->getQuery()->getResult()
@@ -157,23 +165,39 @@ class ArticlesDbAdapter implements DataDbAdapter
         } elseif ($filter['productStreamId']) {
             $productStreamId = $filter['productStreamId'][0];
 
+            $contextService = $this->container->get('shopware_storefront.context_service');
+            $streamRepo = $this->container->get('shopware_product_stream.repository');
+            $productNumberSearch = $this->container->get('shopware_search.product_number_search');
+
             /** @var \Shopware\Models\Shop\Repository $shopRepo */
             $shopRepo = $this->modelManager->getRepository(Shop::class);
             $shop = $shopRepo->getActiveDefault();
-            $contextService = Shopware()->Container()->get('shopware_storefront.context_service');
             $context = $contextService->createShopContext($shop->getId());
-            $criteriaService = Shopware()->Container()->get('shopware_search.store_front_criteria_factory');
-            $criteria = $criteriaService->createBaseCriteria([$shop->getCategory()->getId()], $context);
-            $streamRepo = Shopware()->Container()->get('shopware_product_stream.repository');
+            $criteria = new Criteria();
             $streamRepo->prepareCriteria($criteria, $productStreamId);
 
-            $productNumberSearch = Shopware()->Container()->get('shopware_search.product_number_search');
             /** @var ProductNumberSearchResult $products */
             $products = $productNumberSearch->search($criteria, $context);
-            $productNumbers = array_keys($products->getProducts());
+            if (empty($products->getProducts())) {
+                return [];
+            }
 
-            $builder->andWhere('detail.number IN(:productNumbers)')
-                ->setParameter('productNumbers', $productNumbers);
+            if ($filter['variants']) {
+                $articleIds = array_values(array_map(static function (BaseProduct $product) {
+                    return $product->getId();
+                }, $products->getProducts()));
+
+                $builder
+                    ->join('detail.article', 'article')
+                    ->andWhere('article.id IN (:ids)')
+                    ->setParameter('ids', $articleIds);
+            } else {
+                $productNumbers = array_keys($products->getProducts());
+
+                $builder
+                    ->andWhere('detail.number IN(:productNumbers)')
+                    ->setParameter('productNumbers', $productNumbers);
+            }
         }
 
         if ($start) {
