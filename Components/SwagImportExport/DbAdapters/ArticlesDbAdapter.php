@@ -183,14 +183,14 @@ class ArticlesDbAdapter implements DataDbAdapter
             }
 
             if ($filter['variants']) {
-                $articleIds = array_values(array_map(static function (BaseProduct $product) {
+                $productIds = array_values(array_map(static function (BaseProduct $product) {
                     return $product->getId();
                 }, $products->getProducts()));
 
                 $builder
                     ->join('detail.article', 'article')
                     ->andWhere('article.id IN (:ids)')
-                    ->setParameter('ids', $articleIds);
+                    ->setParameter('ids', $productIds);
             } else {
                 $productNumbers = array_keys($products->getProducts());
 
@@ -1175,7 +1175,7 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     protected function getArticleIdsByDetailIds($detailIds)
     {
-        $articleIds = $this->modelManager->createQueryBuilder()
+        $productIds = $this->modelManager->createQueryBuilder()
             ->select('article.id')
             ->from(Detail::class, 'variant')
             ->join('variant.article', 'article')
@@ -1183,14 +1183,12 @@ class ArticlesDbAdapter implements DataDbAdapter
             ->setParameter('ids', $detailIds)
             ->groupBy('article.id');
 
-        $mappedArticleIds = array_map(
-            function ($item) {
+        return array_map(
+            static function ($item) {
                 return $item['id'];
             },
-            $articleIds->getQuery()->getResult()
+            $productIds->getQuery()->getResult()
         );
-
-        return $mappedArticleIds;
     }
 
     /**
