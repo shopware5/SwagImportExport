@@ -650,7 +650,7 @@ class CustomerDbAdapter implements DataDbAdapter
         $customerData = [];
 
         foreach ($record as $key => $value) {
-            if (preg_match('/^attrCustomer/', $key)) {
+            if (strpos($key, 'attrCustomer') === 0) {
                 $newKey = lcfirst(preg_replace('/^attrCustomer/', '', $key));
                 $customerData['attribute'][$newKey] = $value;
                 unset($record[$key]);
@@ -701,7 +701,7 @@ class CustomerDbAdapter implements DataDbAdapter
 
         foreach ($record as $key => $value) {
             //prepares the attributes
-            if (preg_match('/^attrBilling/', $key)) {
+            if (strpos($key, 'attrBilling') === 0) {
                 $newKey = lcfirst(preg_replace('/^attrBilling/', '', $key));
                 $billingData['attribute'][$newKey] = $value;
                 unset($record[$key]);
@@ -749,7 +749,7 @@ class CustomerDbAdapter implements DataDbAdapter
 
         foreach ($record as $key => $value) {
             //prepares the attributes
-            if (preg_match('/^attrShipping/', $key)) {
+            if (strpos($key, 'attrShipping') === 0) {
                 $newKey = lcfirst(preg_replace('/^attrShipping/', '', $key));
                 $shippingData['attribute'][$newKey] = $value;
                 unset($record[$key]);

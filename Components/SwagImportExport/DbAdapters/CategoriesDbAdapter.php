@@ -401,7 +401,7 @@ class CategoriesDbAdapter implements DataDbAdapter
     {
         //prepares attribute associated data
         foreach ($data as $column => $value) {
-            if (preg_match('/^attribute/', $column)) {
+            if (strpos($column, 'attribute') === 0) {
                 $newKey = lcfirst(preg_replace('/^attribute/', '', $column));
                 $data['attribute'][$newKey] = $value;
                 unset($data[$column]);
