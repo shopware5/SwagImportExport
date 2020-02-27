@@ -413,11 +413,11 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
 
                     if ($tempData[$column]) {
                         $greps = preg_grep('/^' . $tempData[$column] . '_\d+$/i', $dataColumns);
-                        $translationColumns = array_merge($translationColumns, $greps);
+                        $translationColumns[] = $greps;
                     }
                 }
-
                 unset($tempData);
+                $translationColumns = array_merge([], ...$translationColumns);
 
                 $translationLang = $this->findNodeByShopwareField($node, 'languageId');
 

@@ -67,8 +67,9 @@ class CsvConverter
         $keys = [];
         if (!empty($array) && is_array($array)) {
             foreach ($array as $line) {
-                $keys = array_merge($keys, array_diff(array_keys($line), $keys));
+                $keys[] = array_keys($line);
             }
+            $keys = array_unique(array_merge([], ...$keys));
         }
 
         return $keys;
@@ -181,9 +182,9 @@ class CsvConverter
         $fieldmark = $this->sSettings['fieldmark'];
         $elements = explode($this->sSettings['separator'], $line);
         $tmp_elements = [];
-        for ($i = 0; $i < count($elements); ++$i) {
+        for ($i = 0, $iMax = count($elements); $i < $iMax; ++$i) {
             $nquotes = substr_count($elements[$i], $this->sSettings['fieldmark']);
-            if ($nquotes % 2 == 1) {
+            if ($nquotes % 2 === 1) {
                 if (isset($elements[$i + 1])) {
                     $elements[$i + 1] = $elements[$i] . $this->sSettings['separator'] . $elements[$i + 1];
                 }
@@ -215,9 +216,9 @@ class CsvConverter
     {
         $lines = [];
         $elements = explode($this->sSettings['newline'], $csv);
-        for ($i = 0; $i < count($elements); ++$i) {
+        for ($i = 0, $iMax = count($elements); $i < $iMax; ++$i) {
             $nquotes = substr_count($elements[$i], $this->sSettings['fieldmark']);
-            if ($nquotes % 2 == 1) {
+            if ($nquotes % 2 === 1) {
                 $elements[$i + 1] = $elements[$i] . $this->sSettings['newline'] . $elements[$i + 1];
             } else {
                 $lines[] = $elements[$i];
