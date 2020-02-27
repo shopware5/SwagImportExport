@@ -113,7 +113,9 @@ class XmlConverter
 
         foreach ($xml_values as $data) {
             unset($attributes, $value); //Remove existing values, or there will be trouble
-            extract($data); //We could use the array by itself, but this cooler.
+
+            ['type' => $type, 'value' => $value, 'level' => $level, 'tag' => $tag, 'attributes' => $attributes] = $data;
+
             $result = '';
             if (!empty($attributes)) { //The second argument of the function decides this.
                 $result = [];
