@@ -14,5 +14,9 @@
             "type": "vcs",
             "url": "https://github.com/shopwareLabs/plugin-dev-tools"
         }
-    ]
+    ],
+  "require": {
+        "ext-xml": "*",
+        "ext-json": "*"
+  }
 }
