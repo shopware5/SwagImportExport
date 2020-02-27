@@ -259,9 +259,10 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                     preg_match('/' . $priceColumnName . '_+(?P<group>.*)$/i', $columns, $matches);
                     $groups[] = $matches['group'];
                 }
+                unset($columns);
 
                 // special case for EK group ('_EK' may be missing)
-                if (!in_array('EK', $groups)) {
+                if (!in_array('EK', $groups, true)) {
                     array_unshift($groups, 'EK');
                     $isEkGroupMissing = true;
                 }
@@ -271,7 +272,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                 // extract values
                 foreach ($groups as $group) {
                     // special case for EK group ('_EK' may be missing)
-                    if ($group == 'EK' && $isEkGroupMissing) {
+                    if ($group === 'EK' && $isEkGroupMissing) {
                         $group = '';
                     }
                     $prices[] = $this->transformPricesToTree($node, $data, $group);

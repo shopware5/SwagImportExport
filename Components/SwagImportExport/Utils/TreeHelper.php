@@ -256,6 +256,7 @@ class TreeHelper
                     return true;
                 }
             }
+            unset($childNode);
         }
         if (isset($node['attributes'])) {
             foreach ($node['attributes'] as &$childNode) {
@@ -263,6 +264,7 @@ class TreeHelper
                     return true;
                 }
             }
+            unset($childNode);
         }
 
         return false;
@@ -290,6 +292,7 @@ class TreeHelper
                     return true;
                 }
             }
+            unset($childNode);
         }
         if (isset($node['attributes'])) {
             foreach ($node['attributes'] as $key => &$childNode) {
@@ -302,6 +305,7 @@ class TreeHelper
                     return true;
                 }
             }
+            unset($childNode);
         }
 
         return false;
