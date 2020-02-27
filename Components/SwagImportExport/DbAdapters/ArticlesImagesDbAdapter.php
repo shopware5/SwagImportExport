@@ -596,9 +596,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
         $join = '';
         foreach ($options as $option) {
             $alias = 'alias' . $option->getId();
-            $join = $join . ' INNER JOIN s_article_configurator_option_relations alias' . $option->getId() .
-                    ' ON ' . $alias . '.option_id = ' . $option->getId() .
-                    ' AND ' . $alias . '.article_id = d.id ';
+            $join .= ' INNER JOIN s_article_configurator_option_relations alias' . $option->getId() . ' ON ' . $alias . '.option_id = ' . $option->getId() . ' AND ' . $alias . '.article_id = d.id ';
         }
         $sql = 'SELECT d.id
                 FROM s_articles_details d

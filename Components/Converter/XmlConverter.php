@@ -138,7 +138,7 @@ class XmlConverter
             if ($type === 'open') { //The starting of the tag '<tag>'
                 $parent[$level - 1] = &$current;
 
-                if (!is_array($current) or (!in_array($tag, array_keys($current)))) { //Insert New tag
+                if (!is_array($current) || (!array_key_exists($tag, $current))) { //Insert New tag
                     $current[$tag] = $result;
                     $current = &$current[$tag];
                 } else { //There was another element with the same tag name
@@ -154,21 +154,15 @@ class XmlConverter
                 //See if the key is already taken.
                 if (!isset($current[$tag])) { //New Key
                     $current[$tag] = $result;
-                } else { //If taken, put all things inside a list(array)
-                    if ((is_array(
-                        $current[$tag]
-                    ) and $this->sSettings['attributes'] == 0) //If it is already an array...
-                        or (isset($current[$tag][0]) and is_array(
-                            $current[$tag]
-                        ) and $this->sSettings['attributes'] == 1)
-                    ) {
-                        //array_push($current[$tag],$result); // ...push the new element into that array.
-                        $current[$tag][] = $result;
-                    } else { //If it is not an array...
-                        $current[$tag] = [
-                            $current[$tag], $result,
-                        ]; //...Make it an array using using the existing value and the new value
-                    }
+                } elseif ((is_array($current[$tag]) && $this->sSettings['attributes'] == 0) //If it is already an array...
+                    || (isset($current[$tag][0]) && is_array($current[$tag]) && $this->sSettings['attributes'] == 1)
+                ) {
+                    //array_push($current[$tag],$result); // ...push the new element into that array.
+                    $current[$tag][] = $result;
+                } else { //If it is not an array...
+                    $current[$tag] = [
+                        $current[$tag], $result,
+                    ]; //...Make it an array using using the existing value and the new value
                 }
             } elseif ($type === 'close') { //End of tag '</tag>'
                 $current = &$parent[$level - 1];

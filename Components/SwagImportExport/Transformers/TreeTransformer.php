@@ -494,16 +494,13 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
      */
     protected function createIterationNodeMapper($node, $nodePath = null)
     {
-        $separator = null;
+        $separator = $nodePath ? '_' : null;
         if (isset($node['adapter']) && $nodePath) {
             $this->iterationNodes[$nodePath] = $node['adapter'];
         }
 
         if (isset($node['children'])) {
             foreach ($node['children'] as $child) {
-                if ($nodePath) {
-                    $separator = '_';
-                }
                 $currentPath = $nodePath . $separator . $child['name'];
                 $this->createIterationNodeMapper($child, $currentPath);
             }
