@@ -1181,14 +1181,15 @@ class ArticlesDbAdapter implements DataDbAdapter
         $categoryIds = [];
         foreach ($categories as $category) {
             if (!empty($category['categoryId'])) {
-                $categoryIds[] = (string) $category['categoryId'];
+                $categoryIds[] = [(string) $category['categoryId']];
             }
 
             if (!empty($category['categoryPath'])) {
                 $catPath = explode('|', $category['categoryPath']);
-                $categoryIds = array_merge($categoryIds, $catPath);
+                $categoryIds[] = $catPath;
             }
         }
+        $categoryIds = array_merge([], ...$categoryIds);
 
         //only unique ids
         $categoryIds = array_unique($categoryIds);
