@@ -8,10 +8,11 @@
     "link": "http://store.shopware.com",
     "author": "Shopware AG",
 
-    "currentVersion": "2.10.4",
+    "currentVersion": "2.10.5",
 
     "changelog": {
         "de": {
+            "2.10.5": "PT-10211 - Verbessert den Import von Kundennummern;",
             "2.10.4": "PT-11213 - Profil-Auswahl-Combobox zu eine PaginationCombobox geändert;",
             "2.10.3": "PT-10898 - Die Rechnungsversandkosten werden nun im richtigen Dezimalformat exportiert;",
             "2.10.2": "PT-10789 - Problem beim Im/Export der Übersetzungen behoben;",
@@ -57,6 +58,7 @@
             "1.0.1": "Problem mit verschwindendem Import/Export Menü-Eintrag behoben; Weitere ACL-Zugangsberechtigungen hinzugefügt; Korrektur: article.active Verhalten; Korrektur: Artikel-Attribute; Korrektur: Datums- und Zeitimporte"
         },
         "en": {
+            "2.10.5": "PT-10211 - Improves import of customer numbers;",
             "2.10.4": "PT-11213 - Change profile selection to PaginationCombobox;",
             "2.10.3": "PT-10898 - The invoice shipping costs are now exported in the correct decimal format;",
             "2.10.2": "PT-10789 - Fix problem on im/exporting translations;",
