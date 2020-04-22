@@ -24,10 +24,11 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
      */
     protected $plugin;
 
-    public function __construct()
+    public function __construct(
+        Enlight_Controller_Request_Request $request,
+        Enlight_Controller_Response_Response $response)
     {
-        parent::__construct();
-
+        parent::__construct($request, $response);
         $this->plugin = Shopware()->Plugins()->Backend()->SwagImportExport();
     }
 
