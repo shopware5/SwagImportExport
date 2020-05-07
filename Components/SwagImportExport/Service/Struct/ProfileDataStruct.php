@@ -22,9 +22,6 @@ class ProfileDataStruct
      */
     private $type;
 
-    /**
-     * @var mixed
-     */
     private $tree;
 
     public function __construct(Profile $profile)

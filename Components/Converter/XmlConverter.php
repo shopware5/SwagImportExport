@@ -179,7 +179,6 @@ class XmlConverter
     }
 
     /**
-     * @param mixed  $array
      * @param string $name
      *
      * @return bool
@@ -203,8 +202,6 @@ class XmlConverter
     }
 
     /**
-     * @param mixed $string
-     *
      * @return bool
      */
     public function fix_string(&$string)
@@ -223,7 +220,6 @@ class XmlConverter
     }
 
     /**
-     * @param mixed  $array
      * @param string $valuename
      */
     public function attr_as_key(&$array, $atr, $valuename = '')
@@ -256,7 +252,6 @@ class XmlConverter
     }
 
     /**
-     * @param mixed  $array
      * @param string $valuename
      */
     public function value_as_key(&$array, $name, $valuename = '')
@@ -281,7 +276,6 @@ class XmlConverter
     }
 
     /**
-     * @param mixed  $array
      * @param string $valuename
      *
      * @return bool

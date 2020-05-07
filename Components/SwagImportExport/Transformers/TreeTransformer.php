@@ -549,8 +549,6 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
 
     /**
      * Replace the iteration part with custom tag "_currentMarker"
-     *
-     * @param mixed $node
      */
     protected function removeIterationPart(&$node)
     {
