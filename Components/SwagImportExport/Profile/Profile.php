@@ -12,10 +12,10 @@ use Shopware\CustomModels\ImportExport\Profile as ProfileEntity;
 
 class Profile
 {
-    /** @var ProfileEntity $profileEntity */
+    /** @var ProfileEntity */
     private $profileEntity;
 
-    /** @var array $configNames */
+    /** @var array */
     private $configNames;
 
     /**

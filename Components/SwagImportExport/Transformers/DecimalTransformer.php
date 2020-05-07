@@ -12,7 +12,7 @@ use Shopware\Components\SwagImportExport\Profile\Profile;
 
 class DecimalTransformer implements DataTransformerAdapter
 {
-    /** @var array $decimalValues */
+    /** @var array */
     private $decimalValues = [
         'weight',
         'width',
@@ -30,13 +30,13 @@ class DecimalTransformer implements DataTransformerAdapter
         'invoiceShippingNet',
     ];
 
-    /** @var \Enlight_Plugin_Bootstrap_Config $pluginConfig */
+    /** @var \Enlight_Plugin_Bootstrap_Config */
     private $pluginConfig;
 
-    /** @var Profile $profile */
+    /** @var Profile */
     private $profile;
 
-    /** @var array $treeData */
+    /** @var array */
     private $treeData;
 
     /**
