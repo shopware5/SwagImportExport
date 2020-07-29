@@ -8,6 +8,7 @@
 
 namespace Shopware\Components\SwagImportExport\Utils;
 
+use Doctrine\DBAL\Connection;
 use Shopware\Components\SwagImportExport\DataWorkflow;
 use Shopware\Components\SwagImportExport\Factories\DataFactory;
 use Shopware\Components\SwagImportExport\Factories\FileIOFactory;
@@ -99,12 +100,18 @@ class CommandHelper
     protected $customerStream;
 
     /**
+     * @var Connection
+     */
+    protected $connection;
+
+    /**
      * @throws \RuntimeException
      */
     public function __construct(array $data)
     {
         $this->plugin = Shopware()->Plugins()->Backend()->SwagImportExport();
         $this->logger = Shopware()->Container()->get('swag_import_export.logger');
+        $this->connection = Shopware()->Container()->get('dbal_connection');
 
         if (!isset($data['profileEntity'])) {
             throw new \RuntimeException('No profile given!');
@@ -150,7 +157,11 @@ class CommandHelper
         }
 
         if (!empty($data['productStream'])) {
-            $this->productStream = $data['productStream'];
+            if (is_array($data['productStream'])) {
+                $data['productStream'] = array_shift($data['productStream']);
+            }
+
+            $this->productStream = $this->getProductStreamIdByName($data['productStream']);
         }
 
         if (!empty($data['customerStream'])) {
@@ -574,5 +585,41 @@ class CommandHelper
 
         $dataWorkflow = new DataWorkflow(null, $profile, $dataTransformerChain, $fileWriter);
         $dataWorkflow->saveUnprocessedData($data, $profileName, $outputFile);
+    }
+
+    /**
+     * @throws \RuntimeException
+     *
+     * @return int|null
+     */
+    private function getProductStreamIdByName($productStreamName)
+    {
+        $tempProductStreamName = (int) $productStreamName;
+        if ($tempProductStreamName) {
+            return $productStreamName;
+        }
+
+        if (!$productStreamName) {
+            return null;
+        }
+
+        $id = $this->connection->createQueryBuilder()
+            ->select('id')
+            ->from('s_product_streams')
+            ->where('name LIKE :productStreamName')
+            ->setParameter('productStreamName', $productStreamName)
+            ->execute()
+            ->fetchAll(\PDO::FETCH_COLUMN);
+
+        $idAmount = count($id);
+        if ($idAmount > 1) {
+            throw new \RuntimeException(sprintf('There are %d streams with the name: %s. Please use the stream id.', $idAmount, $productStreamName));
+        }
+
+        if ($idAmount < 1) {
+            throw new \RuntimeException(sprintf('There are no streams with the name: %s', $productStreamName));
+        }
+
+        return array_shift($id);
     }
 }
