@@ -10,6 +10,7 @@ namespace Shopware\Components\SwagImportExport\DbAdapters;
 
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Query\Expr\Join;
+use GuzzleHttp\ClientInterface;
 use Shopware\Bundle\MediaBundle\MediaService;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\DataManagers\ArticleImageDataManager;
@@ -111,6 +112,11 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
      */
     private $dbalHelper;
 
+    /**
+     * @var ClientInterface
+     */
+    private $httpClient;
+
     public function __construct()
     {
         $this->manager = Shopware()->Models();
@@ -126,6 +132,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
         $this->docPath = Shopware()->DocPath('media_temp');
         $this->underscoreToCamelCaseService = Shopware()->Container()->get('swag_import_export.underscore_camelcase_service');
         $this->dbalHelper = DbalHelper::create();
+        $this->httpClient = Shopware()->Container()->get('guzzle_http_client_factory')->createClient();
     }
 
     /**
@@ -666,15 +673,15 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                 //replace empty spaces
                 $url = str_replace(' ', '%20', $url);
 
-                if (!$get_handle = fopen($url, 'rb')) {
+                try {
+                    $contents = $this->httpClient->get($url)->getBody()->getContents();
+                } catch (\Throwable $exception) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/articlesImages/could_not_open_url', 'Could not open %s for reading');
                     throw new AdapterException(sprintf($message, $url));
                 }
-                while (!feof($get_handle)) {
-                    fwrite($put_handle, fgets($get_handle, 4096));
-                }
-                fclose($get_handle);
+
+                fwrite($put_handle, $contents);
                 fclose($put_handle);
 
                 return "$destPath/$filename";
