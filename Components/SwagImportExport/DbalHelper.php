@@ -82,6 +82,8 @@ class DbalHelper
                 [
                     'subject' => $this,
                     'field' => $field,
+                    'entity' => $entity,
+                    'data' => $data,
                 ]
             );
 
