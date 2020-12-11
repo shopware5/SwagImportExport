@@ -41,13 +41,13 @@ class ProfilesCommand extends ShopwareCommand
 
         $count = $em->getQueryCount($query);
 
-        $output->writeln('<info>' . sprintf('Total count: %d.', $count) . '</info>');
+        $output->writeln('<info>' . \sprintf('Total count: %d.', $count) . '</info>');
 
         $data = $query->getArrayResult();
         foreach ($data as $profile) {
             $output->writeln(
                 '<info>'
-                . sprintf("\tProfile %d: '%s', type: %s", $profile['id'], $profile['name'], $profile['type'])
+                . \sprintf("\tProfile %d: '%s', type: %s", $profile['id'], $profile['name'], $profile['type'])
                 . '</info>'
             );
         }

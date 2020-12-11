@@ -30,9 +30,9 @@ class MinimalArticleVariantsProfileTest extends TestCase
         $articleProfile = $this->createMinimalArticleVariantsProfile();
 
         $this->walkRecursive($articleProfile->jsonSerialize(), function ($node) {
-            $this->assertArrayHasKey('id', $node, 'Current array: ' . print_r($node, true));
-            $this->assertArrayHasKey('name', $node, 'Current array: ' . print_r($node, true));
-            $this->assertArrayHasKey('type', $node, 'Current array: ' . print_r($node, true));
+            $this->assertArrayHasKey('id', $node, 'Current array: ' . \print_r($node, true));
+            $this->assertArrayHasKey('name', $node, 'Current array: ' . \print_r($node, true));
+            $this->assertArrayHasKey('type', $node, 'Current array: ' . \print_r($node, true));
         });
     }
 

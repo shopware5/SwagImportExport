@@ -118,7 +118,7 @@ class PriceWriter
             }
 
             if ($taxInput) {
-                $price['pseudoPrice'] = round($price['pseudoPrice'] * (100 + $tax) / 100, 2);
+                $price['pseudoPrice'] = \round($price['pseudoPrice'] * (100 + $tax) / 100, 2);
             }
         }
 
@@ -139,12 +139,12 @@ class PriceWriter
      */
     protected function checkRequirements($price, $orderNumber)
     {
-        if (!array_key_exists($price['priceGroup'], $this->customerGroups)) {
+        if (!\array_key_exists($price['priceGroup'], $this->customerGroups)) {
             $message = SnippetsHelper::getNamespace()->get(
                 'adapters/article_customerGroup_not_found',
                 'Customer Group by key %s not found for article %s'
             );
-            throw new AdapterException(sprintf($message, $price['priceGroup'], $orderNumber));
+            throw new AdapterException(\sprintf($message, $price['priceGroup'], $orderNumber));
         }
 
         if ($price['from'] <= 0) {
@@ -152,7 +152,7 @@ class PriceWriter
                 'adapters/articles/invalid_price',
                 'Invalid Price "from" value for article %s'
             );
-            throw new AdapterException(sprintf($message, $orderNumber));
+            throw new AdapterException(\sprintf($message, $orderNumber));
         }
     }
 
@@ -205,6 +205,6 @@ class PriceWriter
      */
     private function formatToFloatValue($price)
     {
-        return (float) str_replace(',', '.', $price);
+        return (float) \str_replace(',', '.', $price);
     }
 }

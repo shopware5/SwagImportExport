@@ -38,7 +38,7 @@ class Update05CreateCustomerCompleteProfile implements UpdaterInterface
         ';
 
         $profile = new CustomerCompleteProfile();
-        $serializedTree = json_encode($profile);
+        $serializedTree = \json_encode($profile);
 
         $params = [
             'type' => $profile->getAdapter(),
@@ -57,6 +57,6 @@ class Update05CreateCustomerCompleteProfile implements UpdaterInterface
      */
     public function isCompatible()
     {
-        return version_compare($this->setupContext->getPreviousPluginVersion(), self::MAX_PLUGIN_VERSION, '<');
+        return \version_compare($this->setupContext->getPreviousPluginVersion(), self::MAX_PLUGIN_VERSION, '<');
     }
 }

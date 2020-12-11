@@ -49,7 +49,7 @@ class DefaultProfileInstaller implements InstallerInterface
         $profiles = ProfileHelper::getProfileInstances();
 
         foreach ($profiles as $profile) {
-            $serializedTree = json_encode($profile);
+            $serializedTree = \json_encode($profile);
 
             $params = [
                 'type' => $profile->getAdapter(),

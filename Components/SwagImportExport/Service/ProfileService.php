@@ -40,19 +40,19 @@ class ProfileService implements ProfileServiceInterface
         /** @var \Shopware_Components_Plugin_Namespace $namespace */
         $namespace = $this->snippetManager->getNamespace('backend/swag_import_export/controller');
 
-        if (strtolower($file->getClientOriginalExtension()) !== 'json') {
+        if (\strtolower($file->getClientOriginalExtension()) !== 'json') {
             $this->fileSystem->remove($file->getPathname());
 
             throw new \Exception($namespace->get('swag_import_export/profile/profile_import_no_json_error'));
         }
-        $content = file_get_contents($file->getPathname());
+        $content = \file_get_contents($file->getPathname());
 
         if (empty($content)) {
             $this->fileSystem->remove($file->getPathname());
 
             throw new \Exception($namespace->get('swag_import_export/profile/profile_import_no_data_error'));
         }
-        $profileData = (array) json_decode($content);
+        $profileData = (array) \json_decode($content);
 
         if (empty($profileData['name'])
             || empty($profileData['type'])
@@ -67,7 +67,7 @@ class ProfileService implements ProfileServiceInterface
             $profile = new Profile();
             $profile->setName($profileData['name']);
             $profile->setType($profileData['type']);
-            $profile->setTree(json_encode($profileData['tree']));
+            $profile->setTree(\json_encode($profileData['tree']));
 
             $this->modelManager->persist($profile);
             $this->modelManager->flush($profile);
@@ -78,7 +78,7 @@ class ProfileService implements ProfileServiceInterface
             $message = $e->getMessage();
             $msg = $namespace->get('swag_import_export/profile/profile_import_error');
 
-            if (strpbrk('Duplicate entry', $message) !== false) {
+            if (\strpbrk('Duplicate entry', $message) !== false) {
                 $msg = $namespace->get('swag_import_export/profile/profile_import_duplicate_error');
             }
 

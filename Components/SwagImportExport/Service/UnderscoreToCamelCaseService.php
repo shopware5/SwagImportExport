@@ -18,9 +18,9 @@ class UnderscoreToCamelCaseService implements UnderscoreToCamelCaseServiceInterf
     public function underscoreToCamelCase($string)
     {
         $func = function ($c) {
-            return strtoupper($c[1]);
+            return \strtoupper($c[1]);
         };
 
-        return lcfirst(preg_replace_callback('/_([a-zA-Z])/', $func, $string));
+        return \lcfirst(\preg_replace_callback('/_([a-zA-Z])/', $func, $string));
     }
 }

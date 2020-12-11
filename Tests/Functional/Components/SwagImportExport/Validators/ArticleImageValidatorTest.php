@@ -54,6 +54,6 @@ class ArticleImageValidatorTest extends TestCase
      */
     private function getImportImagePath()
     {
-        return 'file://' . realpath(__DIR__) . '/../../../../Helper/ImportFiles/sw-icon_blue128.png';
+        return 'file://' . \realpath(__DIR__) . '/../../../../Helper/ImportFiles/sw-icon_blue128.png';
     }
 }

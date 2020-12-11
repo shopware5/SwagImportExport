@@ -62,7 +62,7 @@ class ArticlesTranslationsDbAdapterTest extends TestCase
 
         $mainArticleTranslation = $dbalConnection->executeQuery("SELECT name FROM s_articles_translations WHERE articleID = '{$articleId}'")->fetch(\PDO::FETCH_COLUMN);
         $result = $dbalConnection->executeQuery("SELECT * from s_core_translations WHERE objectkey = '{$articleId}' AND objecttype = 'Article'")->fetch(\PDO::FETCH_ASSOC);
-        $translation = unserialize($result['objectdata']);
+        $translation = \unserialize($result['objectdata']);
 
         static::assertEquals('My translation test', $mainArticleTranslation);
         static::assertEquals('My translation test', $translation['txtArtikel']);

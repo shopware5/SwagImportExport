@@ -114,7 +114,7 @@ class DecimalTransformer implements DataTransformerAdapter
     {
         foreach ($records as &$record) {
             foreach ($record as $key => &$value) {
-                if (is_array($value)) {
+                if (\is_array($value)) {
                     if (!$isForward) {
                         continue;
                     }
@@ -133,16 +133,16 @@ class DecimalTransformer implements DataTransformerAdapter
 
                 $realKey = $this->treeData['fields'][$key];
 
-                if (!in_array($realKey, $this->decimalValues) || !$realKey) {
+                if (!\in_array($realKey, $this->decimalValues) || !$realKey) {
                     continue;
                 }
 
                 if ($isForward) {
-                    $value = str_replace('.', ',', $value);
+                    $value = \str_replace('.', ',', $value);
                     continue;
                 }
 
-                $value = str_replace(',', '.', $value);
+                $value = \str_replace(',', '.', $value);
             }
         }
 
@@ -225,6 +225,6 @@ class DecimalTransformer implements DataTransformerAdapter
      */
     private function getProfileTree()
     {
-        return json_decode($this->profile->getEntity()->getTree(), true);
+        return \json_decode($this->profile->getEntity()->getTree(), true);
     }
 }

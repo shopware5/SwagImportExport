@@ -30,7 +30,7 @@ class NewsletterDataProvider
 
         for ($addressAmount = 0; $addressAmount < 25; ++$addressAmount) {
             $address = new Address();
-            $address->setEmail(uniqid('test_', true) . '@example.com');
+            $address->setEmail(\uniqid('test_', true) . '@example.com');
             $address->setAdded(new \DateTime());
             $address->setNewsletterGroup($newsletterGroup);
             $address->setIsCustomer(false);

@@ -104,7 +104,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
      */
     public function getVersion()
     {
-        $info = json_decode(file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . 'plugin.json'), true);
+        $info = \json_decode(\file_get_contents(__DIR__ . \DIRECTORY_SEPARATOR . 'plugin.json'), true);
 
         if ($info) {
             return $info['currentVersion'];
@@ -210,7 +210,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
             throw new MinVersionException('This plugin requires Shopware 5.4.0 or a later version');
         }
 
-        if (version_compare($oldVersion, '2.0.0', '<=')) {
+        if (\version_compare($oldVersion, '2.0.0', '<=')) {
             $this->renameDuplicateProfileNames();
         }
         /** @var CacheManager $cacheManager */
@@ -759,21 +759,21 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
     private function createDirectories()
     {
         $importCronPath = Shopware()->DocPath() . 'files/import_cron/';
-        if (!file_exists($importCronPath)) {
-            mkdir($importCronPath, 0777, true);
+        if (!\file_exists($importCronPath)) {
+            \mkdir($importCronPath, 0777, true);
         }
 
-        if (!file_exists($importCronPath . '.htaccess')) {
-            copy($this->Path() . 'Setup/SwagImportExport/template', $importCronPath . '/.htaccess');
+        if (!\file_exists($importCronPath . '.htaccess')) {
+            \copy($this->Path() . 'Setup/SwagImportExport/template', $importCronPath . '/.htaccess');
         }
 
         $importExportPath = Shopware()->DocPath() . 'files/import_export/';
-        if (!file_exists($importExportPath)) {
-            mkdir($importExportPath, 0777, true);
+        if (!\file_exists($importExportPath)) {
+            \mkdir($importExportPath, 0777, true);
         }
 
-        if (!file_exists($importExportPath . '.htaccess')) {
-            copy($this->Path() . 'Setup/SwagImportExport/template', $importExportPath . '/.htaccess');
+        if (!\file_exists($importExportPath . '.htaccess')) {
+            \copy($this->Path() . 'Setup/SwagImportExport/template', $importExportPath . '/.htaccess');
         }
     }
 
@@ -899,8 +899,8 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         $schema = $tool->getSchemaFromMetadata($classes);
         $tableNames = [];
         foreach ($schema->getTableNames() as $tableName) {
-            $explodedTableNames = explode('.', $tableName);
-            $tableNames[] = array_pop($explodedTableNames);
+            $explodedTableNames = \explode('.', $tableName);
+            $tableNames[] = \array_pop($explodedTableNames);
         }
 
         return $tableNames;
@@ -942,7 +942,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
 
             $dbalConnection->executeQuery(
                 'UPDATE s_import_export_profile SET name = :name WHERE id=:id',
-                ['name' => uniqid($profile['name'] . '_', true), 'id' => $profile['id']]
+                ['name' => \uniqid($profile['name'] . '_', true), 'id' => $profile['id']]
             );
         }
     }

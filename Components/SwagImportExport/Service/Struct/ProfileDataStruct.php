@@ -28,7 +28,7 @@ class ProfileDataStruct
     {
         $this->name = $profile->getName();
         $this->type = $profile->getType();
-        $this->tree = json_decode($profile->getTree(), true);
+        $this->tree = \json_decode($profile->getTree(), true);
     }
 
     /**
@@ -57,7 +57,7 @@ class ProfileDataStruct
      */
     public function getExportData()
     {
-        return json_encode($this->asArray(), JSON_PRETTY_PRINT);
+        return \json_encode($this->asArray(), \JSON_PRETTY_PRINT);
     }
 
     /**

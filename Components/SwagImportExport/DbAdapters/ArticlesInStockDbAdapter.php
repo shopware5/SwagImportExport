@@ -93,7 +93,7 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
         }
 
         //prices
-        $columns = array_merge(
+        $columns = \array_merge(
             $columns,
             ['customerGroup.taxInput as taxInput', 'articleTax.tax as tax']
         );
@@ -259,7 +259,7 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
                 if (!$articleDetail) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/articlesImages/article_not_found', 'Article with number %s does not exists.');
-                    throw new AdapterException(sprintf($message, $record['orderNumber']));
+                    throw new AdapterException(\sprintf($message, $record['orderNumber']));
                 }
 
                 $inStock = (int) $record['inStock'];
@@ -298,9 +298,9 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
      */
     public function getColumns($section)
     {
-        $method = 'get' . ucfirst($section) . 'Columns';
+        $method = 'get' . \ucfirst($section) . 'Columns';
 
-        if (method_exists($this, $method)) {
+        if (\method_exists($this, $method)) {
             return $this->{$method}();
         }
 

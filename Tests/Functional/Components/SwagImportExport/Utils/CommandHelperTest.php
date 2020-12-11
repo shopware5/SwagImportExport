@@ -41,7 +41,7 @@ class CommandHelperTest extends TestCase
 
     public function test_getProductStreamIdByName_shouldFoundCorrectId()
     {
-        $sql = file_get_contents(__DIR__ . '/_fixtures/stream.sql');
+        $sql = \file_get_contents(__DIR__ . '/_fixtures/stream.sql');
         Shopware()->Container()->get('dbal_connection')->exec($sql);
 
         $commandHelper = new CommandHelper([
@@ -69,7 +69,7 @@ class CommandHelperTest extends TestCase
 
     public function test_getProductStreamIdByName_expectException_multipleStreamsFound()
     {
-        $sql = file_get_contents(__DIR__ . '/_fixtures/multiple_streams.sql');
+        $sql = \file_get_contents(__DIR__ . '/_fixtures/multiple_streams.sql');
         Shopware()->Container()->get('dbal_connection')->exec($sql);
 
         static::expectException(\RuntimeException::class);

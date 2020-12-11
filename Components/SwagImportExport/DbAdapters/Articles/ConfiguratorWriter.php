@@ -111,7 +111,7 @@ class ConfiguratorWriter
                     $dataSet['type'] = $configurator['configSetType'];
                 }
 
-                if (array_key_exists($dataSet['name'], $this->sets)) {
+                if (\array_key_exists($dataSet['name'], $this->sets)) {
                     $configuratorSetId = $this->sets[$dataSet['name']];
                 } else {
                     $configuratorSetId = $this->createSet($dataSet);
@@ -135,7 +135,7 @@ class ConfiguratorWriter
                 if (!$optionId) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/articles/config_option_not_found', 'ConfiguratorOption with id %s not found');
-                    throw new AdapterException(sprintf($message, $configurator['configOptionId']));
+                    throw new AdapterException(\sprintf($message, $configurator['configOptionId']));
                 }
             } else {
                 //gets or creates configurator group

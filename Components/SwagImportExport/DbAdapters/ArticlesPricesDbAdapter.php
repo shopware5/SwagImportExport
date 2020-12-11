@@ -88,7 +88,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                     ->setParameter('cids', $categories)
                     ->groupBy('article.id');
 
-                $articleIds = array_map(
+                $articleIds = \array_map(
                     function ($item) {
                         return $item['id'];
                     },
@@ -115,7 +115,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                     $productNumberSearch = Shopware()->Container()->get('shopware_search.product_number_search');
                     /** @var ProductNumberSearchResult $products */
                     $products = $productNumberSearch->search($criteria, $context);
-                    $productNumbers = array_keys($products->getProducts());
+                    $productNumbers = \array_keys($products->getProducts());
 
                     $builder->andWhere('detail.number IN(:productNumbers)')
                         ->setParameter('productNumbers', $productNumbers);
@@ -160,7 +160,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
             throw new \Exception($message);
         }
 
-        $columns = array_merge($columns, ['customerGroup.taxInput as taxInput', 'articleTax.tax as tax']);
+        $columns = \array_merge($columns, ['customerGroup.taxInput as taxInput', 'articleTax.tax as tax']);
 
         $builder = $this->getBuilder($columns, $ids);
 
@@ -169,15 +169,15 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
         // add the tax if needed
         foreach ($result['default'] as &$record) {
             if ($record['taxInput']) {
-                $record['price'] = round($record['price'] * (100 + $record['tax']) / 100, 2);
-                $record['pseudoPrice'] = round($record['pseudoPrice'] * (100 + $record['tax']) / 100, 2);
+                $record['price'] = \round($record['price'] * (100 + $record['tax']) / 100, 2);
+                $record['pseudoPrice'] = \round($record['pseudoPrice'] * (100 + $record['tax']) / 100, 2);
             } else {
-                $record['price'] = round($record['price'], 2);
-                $record['pseudoPrice'] = round($record['pseudoPrice'], 2);
+                $record['price'] = \round($record['price'], 2);
+                $record['pseudoPrice'] = \round($record['pseudoPrice'], 2);
             }
 
             if ($record['purchasePrice']) {
-                $record['purchasePrice'] = round($record['purchasePrice'], 2);
+                $record['purchasePrice'] = \round($record['purchasePrice'], 2);
             }
         }
 
@@ -257,7 +257,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                 if (!$customerGroup) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/articlesPrices/price_group_not_found', 'Price group %s was not found');
-                    throw new AdapterException(sprintf($message, $record['priceGroup']));
+                    throw new AdapterException(\sprintf($message, $record['priceGroup']));
                 }
 
                 /** @var Detail $articleDetail */
@@ -265,7 +265,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                 if (!$articleDetail) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/article_number_not_found', 'Article with order number %s does not exists');
-                    throw new AdapterException(sprintf($message, $record['orderNumber']));
+                    throw new AdapterException(\sprintf($message, $record['orderNumber']));
                 }
 
                 if (isset($record['from'])) {
@@ -289,19 +289,19 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                 }
 
                 if (isset($record['price'])) {
-                    $record['price'] = (float) str_replace(',', '.', $record['price']);
+                    $record['price'] = (float) \str_replace(',', '.', $record['price']);
                 }
 
                 if (isset($record['pseudoPrice'])) {
-                    $record['pseudoPrice'] = (float) str_replace(',', '.', $record['pseudoPrice']);
+                    $record['pseudoPrice'] = (float) \str_replace(',', '.', $record['pseudoPrice']);
                 }
 
                 if (isset($record['purchasePrice'])) {
-                    $record['purchasePrice'] = (float) str_replace(',', '.', $record['purchasePrice']);
+                    $record['purchasePrice'] = (float) \str_replace(',', '.', $record['purchasePrice']);
                 }
 
                 if (isset($record['percent'])) {
-                    $record['percent'] = (float) str_replace(',', '.', $record['percent']);
+                    $record['percent'] = (float) \str_replace(',', '.', $record['percent']);
                 }
                 // removes price with same from value from database
                 $this->updateArticleFromPrice($record, $articleDetail->getId());
@@ -368,9 +368,9 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
      */
     public function getColumns($section)
     {
-        $method = 'get' . ucfirst($section) . 'Columns';
+        $method = 'get' . \ucfirst($section) . 'Columns';
 
-        if (method_exists($this, $method)) {
+        if (\method_exists($this, $method)) {
             return $this->{$method}();
         }
 

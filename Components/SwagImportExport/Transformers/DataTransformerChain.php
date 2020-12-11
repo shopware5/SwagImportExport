@@ -50,7 +50,7 @@ class DataTransformerChain
     public function transformBackward($data)
     {
         /** @var DataTransformerAdapter $transformer */
-        foreach (array_reverse($this->chain) as $transformer) {
+        foreach (\array_reverse($this->chain) as $transformer) {
             $data = $transformer->transformBackward($data);
         }
 
@@ -124,7 +124,7 @@ class DataTransformerChain
      */
     private function getLastComposerTransformer($transformers)
     {
-        $transformers = array_reverse($transformers);
+        $transformers = \array_reverse($transformers);
         foreach ($transformers as $transformer) {
             if ($transformer instanceof ComposerInterface) {
                 return $transformer;

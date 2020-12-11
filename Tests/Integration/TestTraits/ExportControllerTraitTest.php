@@ -42,6 +42,6 @@ class ExportControllerTraitTest extends TestCase
         $filePath = __DIR__ . '/_fixtures/example.csv';
         $indexedCsvAsArray = $this->csvToArrayIndexedByFieldValue($filePath, 'identifier');
 
-        static::assertEquals($expectedFirstArrayElement, array_shift($indexedCsvAsArray));
+        static::assertEquals($expectedFirstArrayElement, \array_shift($indexedCsvAsArray));
     }
 }

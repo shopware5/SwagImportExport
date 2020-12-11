@@ -34,7 +34,7 @@ class NewsletterValidator extends Validator
     public function checkRequiredFields($record)
     {
         foreach ($this->requiredFields as $key) {
-            if (isset($record[$key]) && strlen($record[$key])) {
+            if (isset($record[$key]) && \strlen($record[$key])) {
                 continue;
             }
 

@@ -30,9 +30,9 @@ class ArticleTranslationUpdateProfileTest extends TestCase
         $articleTranslationUpdateProfile = $this->createArticleTranslationUpdateProfile();
 
         $this->walkRecursive($articleTranslationUpdateProfile->jsonSerialize(), function ($node) {
-            $this->assertArrayHasKey('id', $node, 'Current array: ' . print_r($node, true));
-            $this->assertArrayHasKey('name', $node, 'Current array: ' . print_r($node, true));
-            $this->assertArrayHasKey('type', $node, 'Current array: ' . print_r($node, true));
+            $this->assertArrayHasKey('id', $node, 'Current array: ' . \print_r($node, true));
+            $this->assertArrayHasKey('name', $node, 'Current array: ' . \print_r($node, true));
+            $this->assertArrayHasKey('type', $node, 'Current array: ' . \print_r($node, true));
         });
     }
 

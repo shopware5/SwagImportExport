@@ -50,7 +50,7 @@ class SetupContext
             return true;
         }
 
-        return version_compare($this->shopwareVersion, $minVersion, '>=');
+        return \version_compare($this->shopwareVersion, $minVersion, '>=');
     }
 
     /**
@@ -64,7 +64,7 @@ class SetupContext
             return false;
         }
 
-        return version_compare($this->shopwareVersion, $maxVersion, '<');
+        return \version_compare($this->shopwareVersion, $maxVersion, '<');
     }
 
     /**
@@ -74,7 +74,7 @@ class SetupContext
      */
     public function assertMinimumPluginVersion($minVersion)
     {
-        return version_compare($this->pluginVersion, $minVersion, '>=');
+        return \version_compare($this->pluginVersion, $minVersion, '>=');
     }
 
     /**
@@ -84,7 +84,7 @@ class SetupContext
      */
     public function assertMaximumPluginVersion($maxVersion)
     {
-        return version_compare($this->pluginVersion, $maxVersion, '<');
+        return \version_compare($this->pluginVersion, $maxVersion, '<');
     }
 
     /**

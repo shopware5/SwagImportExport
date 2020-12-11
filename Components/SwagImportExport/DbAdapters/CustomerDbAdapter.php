@@ -95,7 +95,7 @@ class CustomerDbAdapter implements DataDbAdapter
     {
         $default = [];
 
-        $default = array_merge(
+        $default = \array_merge(
             $default,
             $this->getCustomerColumns(),
             $this->getBillingColumns(),
@@ -151,7 +151,7 @@ class CustomerDbAdapter implements DataDbAdapter
         $attributesSelect = $this->getAttributesFieldsByTableName('s_user_attributes', 'userID', 'attribute', 'attrCustomer');
 
         if (!empty($attributesSelect)) {
-            $columns = array_merge($columns, $attributesSelect);
+            $columns = \array_merge($columns, $attributesSelect);
         }
 
         return $columns;
@@ -190,7 +190,7 @@ class CustomerDbAdapter implements DataDbAdapter
         $attributesSelect = $this->getAttributesFieldsByTableName('s_user_addresses_attributes', 'address_id', 'billingAttribute', 'attrBilling');
 
         if (!empty($attributesSelect)) {
-            $columns = array_merge($columns, $attributesSelect);
+            $columns = \array_merge($columns, $attributesSelect);
         }
 
         return $columns;
@@ -219,7 +219,7 @@ class CustomerDbAdapter implements DataDbAdapter
         $attributesSelect = $this->getAttributesFieldsByTableName('s_user_addresses_attributes', 'address_id', 'shippingAttribute', 'attrShipping');
 
         if (!empty($attributesSelect)) {
-            $columns = array_merge($columns, $attributesSelect);
+            $columns = \array_merge($columns, $attributesSelect);
         }
 
         return $columns;
@@ -272,7 +272,7 @@ class CustomerDbAdapter implements DataDbAdapter
             $query->setMaxResults($limit);
         }
 
-        if (array_key_exists('customerStreamId', $filter)) {
+        if (\array_key_exists('customerStreamId', $filter)) {
             $query->innerJoin(
                 'customer',
                 's_customer_streams_mapping',
@@ -284,7 +284,7 @@ class CustomerDbAdapter implements DataDbAdapter
 
         $ids = $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
 
-        return array_map(function ($id) {
+        return \array_map(function ($id) {
             return (int) $id;
         }, $ids);
     }
@@ -345,7 +345,7 @@ class CustomerDbAdapter implements DataDbAdapter
                     if (!$shop) {
                         $message = SnippetsHelper::getNamespace()
                             ->get('adapters/shop_not_found', 'Shop with id %s was not found');
-                        throw new AdapterException(sprintf($message, $customerData['subshopID']));
+                        throw new AdapterException(\sprintf($message, $customerData['subshopID']));
                     }
 
                     $customer->setShop($shop);
@@ -357,7 +357,7 @@ class CustomerDbAdapter implements DataDbAdapter
                     if (!$languageSubShop) {
                         $message = SnippetsHelper::getNamespace()
                             ->get('adapters/language_shop_not_found', 'Language-Shop with id %s was not found');
-                        throw new AdapterException(sprintf($message, $customerData['languageId']));
+                        throw new AdapterException(\sprintf($message, $customerData['languageId']));
                     }
 
                     $customer->setLanguageSubShop($languageSubShop);
@@ -398,7 +398,7 @@ class CustomerDbAdapter implements DataDbAdapter
                 if ($violations->count() > 0) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/customer/no_valid_customer_entity', 'No valid user entity for email %s');
-                    $message = sprintf($message, $customer->getEmail());
+                    $message = \sprintf($message, $customer->getEmail());
                     foreach ($violations as $violation) {
                         $message .= "\n" . $violation->getPropertyPath() . ': ' . $violation->getMessage();
                     }
@@ -510,7 +510,7 @@ class CustomerDbAdapter implements DataDbAdapter
         $attributesSelect = [];
         foreach ($columnNames as $attribute) {
             $attribute = $this->underscoreToCamelCaseService->underscoreToCamelCase($attribute);
-            $attributesSelect[] = sprintf('%s.%s as %s%s', $prefixField, lcfirst($attribute), $prefixSelect, $attribute);
+            $attributesSelect[] = \sprintf('%s.%s as %s%s', $prefixField, \lcfirst($attribute), $prefixSelect, $attribute);
         }
 
         return $attributesSelect;
@@ -523,9 +523,9 @@ class CustomerDbAdapter implements DataDbAdapter
      */
     public function getColumns($section)
     {
-        $method = 'get' . ucfirst($section) . 'Columns';
+        $method = 'get' . \ucfirst($section) . 'Columns';
 
-        if (method_exists($this, $method)) {
+        if (\method_exists($this, $method)) {
             return $this->{$method}();
         }
 
@@ -583,10 +583,10 @@ class CustomerDbAdapter implements DataDbAdapter
             $customer = $this->manager->getRepository(Customer::class)->findBy($filter);
 
             //checks for multiple email address
-            if (count($customer) > 0 && $customer[0]->getNumber() !== $record['customerNumber']) {
+            if (\count($customer) > 0 && $customer[0]->getNumber() !== $record['customerNumber']) {
                 $message = SnippetsHelper::getNamespace()
                     ->get('adapters/customer/multiple_email', 'There are existing email address/es with %s having different customer numbers. Please provide subshopID or equalize customer number');
-                throw new AdapterException(sprintf($message, $record['email']));
+                throw new AdapterException(\sprintf($message, $record['email']));
             }
 
             $customer = $customer[0];
@@ -619,7 +619,7 @@ class CustomerDbAdapter implements DataDbAdapter
         ) {
             $message = SnippetsHelper::getNamespace()
                 ->get('adapters/customer/password_and_encoder_required', 'Password and encoder must be provided for email %s');
-            throw new AdapterException(sprintf($message, $record['email']));
+            throw new AdapterException(\sprintf($message, $record['email']));
         }
     }
 
@@ -633,7 +633,7 @@ class CustomerDbAdapter implements DataDbAdapter
         if ($this->customerMap === null) {
             $columns = $this->getCustomerColumns();
 
-            $columns = array_merge($columns, [
+            $columns = \array_merge($columns, [
                 'customer.subshopID as subshopID',
                 'customer.languageID as languageId',
             ]);
@@ -650,8 +650,8 @@ class CustomerDbAdapter implements DataDbAdapter
         $customerData = [];
 
         foreach ($record as $key => $value) {
-            if (preg_match('/^attrCustomer/', $key)) {
-                $newKey = lcfirst(preg_replace('/^attrCustomer/', '', $key));
+            if (\preg_match('/^attrCustomer/', $key)) {
+                $newKey = \lcfirst(\preg_replace('/^attrCustomer/', '', $key));
                 $customerData['attribute'][$newKey] = $value;
                 unset($record[$key]);
             } elseif (isset($this->customerMap[$key])) {
@@ -667,7 +667,7 @@ class CustomerDbAdapter implements DataDbAdapter
             if (!$customerData['group']) {
                 $message = SnippetsHelper::getNamespace()
                     ->get('adapters/customerGroup_not_found', 'Customer Group by key %s not found');
-                throw new \RuntimeException(sprintf($message, $customerData['groupKey']));
+                throw new \RuntimeException(\sprintf($message, $customerData['groupKey']));
             }
         }
 
@@ -701,8 +701,8 @@ class CustomerDbAdapter implements DataDbAdapter
 
         foreach ($record as $key => $value) {
             //prepares the attributes
-            if (preg_match('/^attrBilling/', $key)) {
-                $newKey = lcfirst(preg_replace('/^attrBilling/', '', $key));
+            if (\preg_match('/^attrBilling/', $key)) {
+                $newKey = \lcfirst(\preg_replace('/^attrBilling/', '', $key));
                 $billingData['attribute'][$newKey] = $value;
                 unset($record[$key]);
             } elseif (isset($this->billingMap[$key])) {
@@ -749,8 +749,8 @@ class CustomerDbAdapter implements DataDbAdapter
 
         foreach ($record as $key => $value) {
             //prepares the attributes
-            if (preg_match('/^attrShipping/', $key)) {
-                $newKey = lcfirst(preg_replace('/^attrShipping/', '', $key));
+            if (\preg_match('/^attrShipping/', $key)) {
+                $newKey = \lcfirst(\preg_replace('/^attrShipping/', '', $key));
                 $shippingData['attribute'][$newKey] = $value;
                 unset($record[$key]);
             } elseif (isset($this->shippingMap[$key])) {
@@ -797,13 +797,13 @@ class CustomerDbAdapter implements DataDbAdapter
         //get defaultPaymentId for subShiopId = $subShopID
         $defaultPaymentId = $this->getSubShopDefaultPaymentId($subShopID);
         if ($defaultPaymentId) {
-            return unserialize($defaultPaymentId['value']);
+            return \unserialize($defaultPaymentId['value']);
         }
 
         //get defaultPaymentId for mainShiopId
         $defaultPaymentId = $this->getMainShopDefaultPaymentId($subShopID);
         if ($defaultPaymentId) {
-            return unserialize($defaultPaymentId['value']);
+            return \unserialize($defaultPaymentId['value']);
         }
 
         return $this->config->get('sDEFAULTPAYMENT');

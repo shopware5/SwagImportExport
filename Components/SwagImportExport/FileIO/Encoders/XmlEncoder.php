@@ -25,7 +25,7 @@ class XmlEncoder extends XmlConverter
     {
         $ret = '';
         if ($this->sSettings['padding'] !== false) {
-            $pad = str_repeat($this->sSettings['padding'], $pos);
+            $pad = \str_repeat($this->sSettings['padding'], $pos);
         } else {
             $pad = '';
         }
@@ -34,9 +34,9 @@ class XmlEncoder extends XmlConverter
                 $key = $ekey;
             }
             $attributes = '';
-            if (is_array($item) && isset($item['_attributes'])) {
+            if (\is_array($item) && isset($item['_attributes'])) {
                 foreach ($item['_attributes'] as $k => $v) {
-                    $attributes .= " $k=\"" . htmlspecialchars($v) . '"';
+                    $attributes .= " $k=\"" . \htmlspecialchars($v) . '"';
                 }
                 if (isset($item['_value'])) {
                     $item = $item['_value'];
@@ -46,8 +46,8 @@ class XmlEncoder extends XmlConverter
             }
             if ($this->isEmpty($item)) {
                 $ret .= "$pad<$key$attributes></$key>{$this->sSettings['newline']}";
-            } elseif (is_array($item)) {
-                if (is_numeric(key($item))) {
+            } elseif (\is_array($item)) {
+                if (\is_numeric(\key($item))) {
                     $ret .= $this->_encode($item, $pos, $key);
                 } else {
                     $ret .= "$pad<$key$attributes>{$this->sSettings['newline']}"
@@ -56,7 +56,7 @@ class XmlEncoder extends XmlConverter
                 }
             } else {
                 if ($this->hasSpecialCharacters($item)) {
-                    $item = str_replace(']]>', ']]]]><![CDATA[>', $item);
+                    $item = \str_replace(']]>', ']]]]><![CDATA[>', $item);
                     $ret .= "$pad<$key$attributes><![CDATA[" . $item . "]]></$key>{$this->sSettings['newline']}";
                 } else {
                     if ($item === false) {
@@ -86,6 +86,6 @@ class XmlEncoder extends XmlConverter
      */
     private function hasSpecialCharacters($item)
     {
-        return preg_match('#<|>|&(?<!amp;)#', $item);
+        return \preg_match('#<|>|&(?<!amp;)#', $item);
     }
 }

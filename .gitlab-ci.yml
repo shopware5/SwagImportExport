@@ -96,17 +96,18 @@ SW 5.6:
     script:
         - zip -rq plugin.zip .
         - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.shopware.com/shopware/5/product/shopware.git shopware --depth=1 -b ${CHECKOUT_SHOPWARE_BRANCH}
-        - unzip -q plugin.zip -d shopware/custom/plugins/SwagFuzzy
+        - unzip -q plugin.zip -d shopware/engine/Shopware/Plugins/Local/Backend/SwagImportExport
         - cd shopware
         - cp .env.dist .env
         - make init
+        - cp -r engine/Shopware/Plugins/Local/Backend/SwagImportExport/Tests/config_gitlab_5.7.php config.php
         - php bin/console sw:plugin:refresh
         - php bin/console sw:plugin:list
-        - php bin/console sw:plugin:install --activate SwagFuzzy
+        - php bin/console sw:plugin:install --activate SwagImportExport
         - php bin/console sw:cache:clear
         - /entrypoint supervisord &>/dev/null &
-        - cd custom/plugins/SwagFuzzy
-        - php ../../../vendor/bin/phpunit
+        - cd engine/Shopware/Plugins/Local/Backend/SwagImportExport
+        - php ../../../../../../vendor/bin/phpunit
             --configuration phpunit.xml.dist
             --colors=never
 

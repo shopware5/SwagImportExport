@@ -150,9 +150,9 @@ class CategoriesDbAdapter implements DataDbAdapter
             $key = (int) $category['categoryId'] . $category['parentId'];
             $result[$key] = $category;
         }
-        ksort($result);
+        \ksort($result);
 
-        $result['default'] = DbAdapterHelper::decodeHtmlEntities(array_values($result));
+        $result['default'] = DbAdapterHelper::decodeHtmlEntities(\array_values($result));
         $result['customerGroups'] = $this->getBuilder($this->getCustomerGroupsColumns(), $ids)->getQuery()->getResult();
 
         return $result;
@@ -201,7 +201,7 @@ class CategoriesDbAdapter implements DataDbAdapter
             foreach ($attributes as $attribute) {
                 $catAttr = $this->underscoreToCamelCaseService->underscoreToCamelCase($attribute);
 
-                $attributesSelect[] = sprintf('%s.%s as attribute%s', $prefix, $catAttr, ucwords($catAttr));
+                $attributesSelect[] = \sprintf('%s.%s as attribute%s', $prefix, $catAttr, \ucwords($catAttr));
             }
         }
 
@@ -289,8 +289,8 @@ class CategoriesDbAdapter implements DataDbAdapter
      */
     public function getColumns($section)
     {
-        $method = 'get' . ucfirst($section) . 'Columns';
-        if (method_exists($this, $method)) {
+        $method = 'get' . \ucfirst($section) . 'Columns';
+        if (\method_exists($this, $method)) {
             return $this->{$method}();
         }
 
@@ -337,7 +337,7 @@ class CategoriesDbAdapter implements DataDbAdapter
         $attributesSelect = $this->getAttributes();
 
         if ($attributesSelect && !empty($attributesSelect)) {
-            $columns['default'] = array_merge($columns['default'], $attributesSelect);
+            $columns['default'] = \array_merge($columns['default'], $attributesSelect);
         }
 
         return $columns;
@@ -401,8 +401,8 @@ class CategoriesDbAdapter implements DataDbAdapter
     {
         //prepares attribute associated data
         foreach ($data as $column => $value) {
-            if (preg_match('/^attribute/', $column)) {
-                $newKey = lcfirst(preg_replace('/^attribute/', '', $column));
+            if (\preg_match('/^attribute/', $column)) {
+                $newKey = \lcfirst(\preg_replace('/^attribute/', '', $column));
                 $data['attribute'][$newKey] = $value;
                 unset($data[$column]);
             }
@@ -536,7 +536,7 @@ class CategoriesDbAdapter implements DataDbAdapter
         if ($violations->count() > 0) {
             $message = SnippetsHelper::getNamespace()
                 ->get('adapters/category/no_valid_category_entity', 'No valid category entity for category %s');
-            throw new AdapterException(sprintf($message, $category->getName()));
+            throw new AdapterException(\sprintf($message, $category->getName()));
         }
     }
 
@@ -550,7 +550,7 @@ class CategoriesDbAdapter implements DataDbAdapter
         if (!$record['parent'] instanceof Category) {
             $message = SnippetsHelper::getNamespace()
                 ->get('adapters/categories/parent_not_exists', 'Parent category does not exists for category %s');
-            throw new AdapterException(sprintf($message, $record['name']));
+            throw new AdapterException(\sprintf($message, $record['name']));
         }
     }
 

@@ -62,7 +62,7 @@ class TranslationWriterTest extends TestCase
         $connection = Shopware()->Container()->get('dbal_connection');
         $sql = "SELECT * FROM s_core_translations WHERE objecttype='article' AND objectkey=273";
         $result = $connection->executeQuery($sql)->fetchAll();
-        $importedTranslation = unserialize($result[0]['objectdata']);
+        $importedTranslation = \unserialize($result[0]['objectdata']);
 
         static::assertEquals($translations[0]['name'], $importedTranslation['txtArtikel']);
         static::assertEquals($translations[0]['description'], $importedTranslation['txtshortdescription']);
@@ -99,7 +99,7 @@ class TranslationWriterTest extends TestCase
 
         $sql = "SELECT * FROM s_core_translations WHERE objecttype='article' AND objectkey=272";
         $result = $dbalConnection->executeQuery($sql)->fetchAll();
-        $importedTranslation = unserialize($result[0]['objectdata']);
+        $importedTranslation = \unserialize($result[0]['objectdata']);
 
         // trait rollback not working - so we rollback manually
         $dbalConnection->executeQuery("DELETE FROM s_core_translations WHERE objecttype='article' AND objectkey=272");
@@ -134,7 +134,7 @@ class TranslationWriterTest extends TestCase
         $connection = Shopware()->Container()->get('dbal_connection');
         $sql = "SELECT * FROM s_core_translations WHERE objecttype='variant' AND objectkey=1053";
         $result = $connection->executeQuery($sql)->fetchAll();
-        $importedTranslation = unserialize($result[0]['objectdata']);
+        $importedTranslation = \unserialize($result[0]['objectdata']);
 
         static::assertEquals('Translated additional text', $importedTranslation['txtzusatztxt']);
         static::assertEquals('translated pack unit', $importedTranslation['txtpackunit']);

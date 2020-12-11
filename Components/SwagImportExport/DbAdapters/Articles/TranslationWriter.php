@@ -71,7 +71,7 @@ class TranslationWriter
             'packUnit',
         ];
 
-        $whiteList = array_merge($whiteList, $variantWhiteList);
+        $whiteList = \array_merge($whiteList, $variantWhiteList);
 
         // covers 5.2 attribute system
         $attributes = $this->getAttributes();
@@ -93,7 +93,7 @@ class TranslationWriter
             if (!$this->getShop($languageId)) {
                 $message = SnippetsHelper::getNamespace()
                     ->get('adapters/articles/no_shop_id', 'Shop by id %s not found');
-                throw new AdapterException(sprintf($message, $languageId));
+                throw new AdapterException(\sprintf($message, $languageId));
             }
 
             if ($articleDetailId === $mainDetailId) {
@@ -188,7 +188,7 @@ class TranslationWriter
      */
     private function filterWhitelistedFields($translation, $whiteList)
     {
-        return array_intersect_key($translation, array_flip($whiteList));
+        return \array_intersect_key($translation, \array_flip($whiteList));
     }
 
     /**
@@ -197,10 +197,10 @@ class TranslationWriter
     private function prepareAttributePrefix(array $data, array $attributes)
     {
         $result = [];
-        $attributes = array_column($attributes, 'columnName');
+        $attributes = \array_column($attributes, 'columnName');
 
         foreach ($data as $field => $translation) {
-            if (in_array($field, $attributes)) {
+            if (\in_array($field, $attributes)) {
                 $result['__attribute_' . $field] = $translation;
                 continue;
             }

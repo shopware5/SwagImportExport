@@ -19,14 +19,14 @@ class DataWorkflowTest extends TestCase
     {
         $postData['session']['prevState'] = 'old';
         $file = __DIR__ . '/_fixtures/emptyFile.csv';
-        $handle = fopen($file, 'r+');
-        ftruncate($handle, 0);
-        fclose($handle);
+        $handle = \fopen($file, 'r+');
+        \ftruncate($handle, 0);
+        \fclose($handle);
         $workflow = $this->getWorkflow();
         $workflow->saveUnprocessedData($postData, 'someProfileName', $file);
 
-        $expected = 'new | empty | header | test' . PHP_EOL . 'just | another | return | value';
-        $result = file_get_contents($file);
+        $expected = 'new | empty | header | test' . \PHP_EOL . 'just | another | return | value';
+        $result = \file_get_contents($file);
 
         static::assertSame($expected, $result);
     }
@@ -64,12 +64,12 @@ class FileIoMock extends DataIO
 
     public function writeHeader($outputFile, $data): void
     {
-        file_put_contents($outputFile, $data);
+        \file_put_contents($outputFile, $data);
     }
 
     public function writeRecords($outputFile, $data): void
     {
-        file_put_contents($outputFile, $data, FILE_APPEND);
+        \file_put_contents($outputFile, $data, \FILE_APPEND);
     }
 }
 
@@ -87,6 +87,6 @@ class TransformerChainMock extends DataTransformerChain
 
     public function transformForward($data): string
     {
-        return PHP_EOL . 'just | another | return | value';
+        return \PHP_EOL . 'just | another | return | value';
     }
 }

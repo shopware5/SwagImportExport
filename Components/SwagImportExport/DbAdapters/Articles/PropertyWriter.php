@@ -110,7 +110,7 @@ class PropertyWriter
                 if (!$optionId) {
                     $message = $this->snippetsHelper->getNamespace()
                         ->get('adapters/articles/property_id_not_found', 'Property value by id %s not found for article %s');
-                    throw new AdapterException(sprintf($message, $valueId, $orderNumber));
+                    throw new AdapterException(\sprintf($message, $valueId, $orderNumber));
                 }
 
                 $optionRelationInsertStatements[] = "($optionId, $filterGroupId)";
@@ -162,7 +162,7 @@ class PropertyWriter
      */
     private function insertOrUpdateOptionRelations(array $relations)
     {
-        $values = implode(',', $relations);
+        $values = \implode(',', $relations);
 
         $sql = "
             INSERT INTO s_filter_relations (optionID, groupID)
@@ -178,7 +178,7 @@ class PropertyWriter
      */
     private function insertOrUpdateValueRelations(array $relations)
     {
-        $values = implode(',', $relations);
+        $values = \implode(',', $relations);
 
         $sql = "
             INSERT INTO s_filter_articles (valueID, articleID)
@@ -380,7 +380,7 @@ class PropertyWriter
         } else {
             $message = $this->snippetsHelper->getNamespace()
                 ->get('adapters/articles/property_option_required', '');
-            throw new AdapterException(sprintf($message, $orderNumber));
+            throw new AdapterException(\sprintf($message, $orderNumber));
         }
 
         $valueName = $propertyData['propertyValueName'];

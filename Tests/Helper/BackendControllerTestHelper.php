@@ -28,7 +28,7 @@ class BackendControllerTestHelper
     public function tearDown(): void
     {
         foreach ($this->files as $file) {
-            unlink($file);
+            \unlink($file);
         }
     }
 

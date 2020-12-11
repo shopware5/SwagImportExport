@@ -80,9 +80,9 @@ class XmlFileReaderTest extends TestCase
         static::assertEquals(1005, $records[0]['parentID']);
         static::assertEquals('SubCategory2', $records[0]['description']);
 
-        static::assertEquals(1016, end($records)['categoryId']);
-        static::assertEquals(1013, end($records)['parentID']);
-        static::assertEquals('Sub-Category1', end($records)['description']);
+        static::assertEquals(1016, \end($records)['categoryId']);
+        static::assertEquals(1013, \end($records)['parentID']);
+        static::assertEquals('Sub-Category1', \end($records)['description']);
     }
 
     public function test_minimal_customer_count()
@@ -103,8 +103,8 @@ class XmlFileReaderTest extends TestCase
         static::assertEquals('$2y$10$TK5lWW/5kSMUXg.yZpkmr.RQf1rs/BJIeOzYFwWoPslSOxSKjZpru', $records[1]['password']);
         static::assertEquals('Examplecity', $records[1]['billing_city']);
 
-        static::assertEquals('120008', end($records)['customernumber']);
-        static::assertEquals('mf5 Password', end($records)['shipping_firstname']);
+        static::assertEquals('120008', \end($records)['customernumber']);
+        static::assertEquals('mf5 Password', \end($records)['shipping_firstname']);
     }
 
     public function test_article_translation_count()
@@ -125,7 +125,7 @@ class XmlFileReaderTest extends TestCase
         static::assertEquals('SW10144', $records[0]['articlenumber']);
         static::assertEmpty($records['keywords']);
 
-        static::assertEquals('Shipping costs by weight', end($records)['name']);
+        static::assertEquals('Shipping costs by weight', \end($records)['name']);
     }
 
     public function test_minimal_variants_count()
@@ -168,8 +168,8 @@ class XmlFileReaderTest extends TestCase
         static::assertEquals('9a0271fe91e7fc853a4a7a1e7ca789c812257d74', $records[9]['temporaryId']);
         static::assertEquals('SW10145', $records[9]['details']['articleNumber']);
 
-        static::assertEquals(42.6, end($records)['invoiceAmount']);
-        static::assertEquals(-4.3, end($records)['details']['price']);
+        static::assertEquals(42.6, \end($records)['invoiceAmount']);
+        static::assertEquals(-4.3, \end($records)['details']['price']);
     }
 
     public function test_newsletter_recipients_count()
@@ -188,7 +188,7 @@ class XmlFileReaderTest extends TestCase
         static::assertCount(2, $records);
 
         static::assertEquals('test4@exmaple.com', $records[0]['email']);
-        static::assertEquals('Test_Group', end($records)['group']);
+        static::assertEquals('Test_Group', \end($records)['group']);
     }
 
     /**

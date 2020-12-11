@@ -68,14 +68,14 @@ class ImportCommand extends ShopwareCommand
         $uploadPathProvider = $this->container->get('swag_import_export.upload_path_provider');
 
         //loops the unprocessed data
-        $pathInfo = pathinfo($this->filePath);
+        $pathInfo = \pathinfo($this->filePath);
         foreach ($profilesMapper as $profileName) {
             $tmpFile = $uploadPathProvider->getRealPath(
                 $pathInfo['basename'] . '-' . $profileName . '-tmp.csv'
             );
-            if (file_exists($tmpFile)) {
-                $outputFile = str_replace('-tmp', '-swag', $tmpFile);
-                rename($tmpFile, $outputFile);
+            if (\file_exists($tmpFile)) {
+                $outputFile = \str_replace('-tmp', '-swag', $tmpFile);
+                \rename($tmpFile, $outputFile);
 
                 /** @var Profile $profile */
                 $profile = $this->getPlugin()->getProfileFactory()->loadHiddenProfile($profileName);
@@ -103,13 +103,13 @@ class ImportCommand extends ShopwareCommand
             ]
         );
 
-        $output->writeln('<info>' . sprintf('Using profile: %s.', $profileModel->getName()) . '</info>');
-        $output->writeln('<info>' . sprintf('Using format: %s.', $format) . '</info>');
-        $output->writeln('<info>' . sprintf('Using file: %s.', $file) . '</info>');
+        $output->writeln('<info>' . \sprintf('Using profile: %s.', $profileModel->getName()) . '</info>');
+        $output->writeln('<info>' . \sprintf('Using format: %s.', $format) . '</info>');
+        $output->writeln('<info>' . \sprintf('Using file: %s.', $file) . '</info>');
 
         $preparationData = $helper->prepareImport();
         $count = $preparationData['count'];
-        $output->writeln('<info>' . sprintf('Total count: %d.', $count) . '</info>');
+        $output->writeln('<info>' . \sprintf('Total count: %d.', $count) . '</info>');
 
         $position = 0;
 
@@ -117,7 +117,7 @@ class ImportCommand extends ShopwareCommand
             $data = $helper->importAction();
             $this->container->get('models')->clear();
             $position = $data['data']['position'];
-            $output->writeln('<info>' . sprintf('Processed: %d.', $position) . '</info>');
+            $output->writeln('<info>' . \sprintf('Processed: %d.', $position) . '</info>');
         }
     }
 
@@ -130,7 +130,7 @@ class ImportCommand extends ShopwareCommand
         $this->format = $input->getOption('format');
         $this->filePath = $input->getArgument('filepath');
 
-        $parts = explode('.', $this->filePath);
+        $parts = \explode('.', $this->filePath);
 
         /** @var ModelManager $em */
         $em = $this->container->get('models');
@@ -141,7 +141,7 @@ class ImportCommand extends ShopwareCommand
         // if no profile is specified try to find it from the filename
         if ($this->profile === null) {
             foreach ($parts as $part) {
-                $part = strtolower($part);
+                $part = \strtolower($part);
                 $this->profileEntity = $profileRepository->findOneBy(['name' => $part]);
                 if ($this->profileEntity !== null) {
                     $this->profile = $part;
@@ -154,25 +154,25 @@ class ImportCommand extends ShopwareCommand
 
         // validate profile
         if (!$this->profileEntity) {
-            throw new \Exception(sprintf('Invalid profile: \'%s\'!', $this->profile));
+            throw new \Exception(\sprintf('Invalid profile: \'%s\'!', $this->profile));
         }
 
         // if no format is specified try to find it from the filename
         if (empty($this->format)) {
-            $this->format = pathinfo($this->filePath, PATHINFO_EXTENSION);
+            $this->format = \pathinfo($this->filePath, \PATHINFO_EXTENSION);
         }
 
         // format should be case insensitive
-        $this->format = strtolower($this->format);
+        $this->format = \strtolower($this->format);
 
         // validate type
-        if (!in_array($this->format, ['csv', 'xml'])) {
-            throw new \Exception(sprintf('Invalid format: \'%s\'! Valid formats are: CSV and XML.', $this->format));
+        if (!\in_array($this->format, ['csv', 'xml'])) {
+            throw new \Exception(\sprintf('Invalid format: \'%s\'! Valid formats are: CSV and XML.', $this->format));
         }
 
         // validate path
-        if (!file_exists($this->filePath)) {
-            throw new \Exception(sprintf('File \'%s\' not found!', $this->filePath));
+        if (!\file_exists($this->filePath)) {
+            throw new \Exception(\sprintf('File \'%s\' not found!', $this->filePath));
         }
     }
 

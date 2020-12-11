@@ -69,8 +69,8 @@ class Update02RemoveForeignKeyConstraint implements UpdaterInterface
      */
     public function isCompatible()
     {
-        return version_compare($this->setupContext->getPreviousPluginVersion(), self::MAX_PLUGIN_VERSION, '<=')
-            && version_compare($this->setupContext->getPluginVersion(), '2.0.0', '<');
+        return \version_compare($this->setupContext->getPreviousPluginVersion(), self::MAX_PLUGIN_VERSION, '<=')
+            && \version_compare($this->setupContext->getPluginVersion(), '2.0.0', '<');
     }
 
     /**
@@ -86,7 +86,7 @@ class Update02RemoveForeignKeyConstraint implements UpdaterInterface
         $keys = $this->schemaManager->listTableForeignKeys($table);
 
         foreach ($keys as $key) {
-            if (in_array($column, $key->getLocalColumns(), false)) {
+            if (\in_array($column, $key->getLocalColumns(), false)) {
                 return $key->getName();
             }
         }

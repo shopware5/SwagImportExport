@@ -86,7 +86,7 @@ class ArticleDataManager extends DataManager
                     }
                     break;
                 case 'added':
-                    $record[$key] = date('Y-m-d');
+                    $record[$key] = \date('Y-m-d');
                     break;
                 case 'description':
                     $record[$key] = '';
@@ -288,10 +288,10 @@ class ArticleDataManager extends DataManager
     private function prepareTaxRates()
     {
         $taxes = $this->db->fetchPairs('SELECT id, tax FROM s_core_tax');
-        if (!is_array($taxes)) {
+        if (!\is_array($taxes)) {
             return [];
         }
-        ksort($taxes);
+        \ksort($taxes);
 
         return $taxes;
     }
@@ -318,7 +318,7 @@ class ArticleDataManager extends DataManager
     private function prepareSuppliers()
     {
         $suppliers = $this->db->fetchPairs('SELECT name, id FROM s_articles_supplier');
-        if (!is_array($suppliers)) {
+        if (!\is_array($suppliers)) {
             return [];
         }
 
@@ -338,9 +338,9 @@ class ArticleDataManager extends DataManager
     {
         $taxes = $this->getTaxRates();
 
-        $taxIds = array_keys($taxes);
+        $taxIds = \array_keys($taxes);
 
-        if (isset($record['taxId']) && in_array($record['taxId'], $taxIds)) {
+        if (isset($record['taxId']) && \in_array($record['taxId'], $taxIds)) {
             return $record['taxId'];
         }
 
@@ -359,16 +359,16 @@ class ArticleDataManager extends DataManager
      */
     private function getTaxByTaxRate($taxRate, $orderNumber)
     {
-        $taxRate = number_format($taxRate, 2);
+        $taxRate = \number_format($taxRate, 2);
 
-        $taxId = array_search($taxRate, $this->getTaxRates());
+        $taxId = \array_search($taxRate, $this->getTaxRates());
 
         if (!$taxId) {
             $message = SnippetsHelper::getNamespace()->get(
                 'adapters/articles/no_tax_found',
                 'Tax by tax rate %s not found for article %s.'
             );
-            throw new AdapterException(sprintf($message, $taxRate, $orderNumber));
+            throw new AdapterException(\sprintf($message, $taxRate, $orderNumber));
         }
 
         return $taxId;

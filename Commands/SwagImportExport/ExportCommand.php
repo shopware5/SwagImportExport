@@ -135,36 +135,36 @@ class ExportCommand extends ShopwareCommand
             ]
         );
 
-        $output->writeln('<info>' . sprintf('Using profile: %s.', $this->profile) . '</info>');
+        $output->writeln('<info>' . \sprintf('Using profile: %s.', $this->profile) . '</info>');
         if ($this->customerStream) {
-            $output->writeln('<info>' . sprintf('Using customer stream: %d.', $this->customerStream) . '</info>');
+            $output->writeln('<info>' . \sprintf('Using customer stream: %d.', $this->customerStream) . '</info>');
         }
-        $output->writeln('<info>' . sprintf('Using format: %s.', $this->format) . '</info>');
-        $output->writeln('<info>' . sprintf('Using file: %s.', $this->filePath) . '</info>');
+        $output->writeln('<info>' . \sprintf('Using format: %s.', $this->format) . '</info>');
+        $output->writeln('<info>' . \sprintf('Using file: %s.', $this->filePath) . '</info>');
         if ($this->category) {
-            $output->writeln('<info>' . sprintf('Using category as filter: %s.', $this->category) . '</info>');
+            $output->writeln('<info>' . \sprintf('Using category as filter: %s.', $this->category) . '</info>');
         } elseif ($this->productStream) {
-            $output->writeln('<info>' . sprintf('Using Product-Stream as filter: %s.', $this->productStream) . '</info>');
+            $output->writeln('<info>' . \sprintf('Using Product-Stream as filter: %s.', $this->productStream) . '</info>');
         }
 
         if ($this->dateFrom) {
-            $output->writeln('<info>' . sprintf('from: %s.', $this->dateFrom->format('d.m.Y H:i:s')) . '</info>');
+            $output->writeln('<info>' . \sprintf('from: %s.', $this->dateFrom->format('d.m.Y H:i:s')) . '</info>');
         }
 
         if ($this->dateTo) {
-            $output->writeln('<info>' . sprintf('to: %s.', $this->dateTo->format('d.m.Y H:i:s')) . '</info>');
+            $output->writeln('<info>' . \sprintf('to: %s.', $this->dateTo->format('d.m.Y H:i:s')) . '</info>');
         }
 
         $preparationData = $helper->prepareExport();
         $count = $preparationData['count'];
-        $output->writeln('<info>' . sprintf('Total count: %d.', $count) . '</info>');
+        $output->writeln('<info>' . \sprintf('Total count: %d.', $count) . '</info>');
 
         $position = 0;
 
         while ($position < $count) {
             $data = $helper->exportAction();
             $position = $data['position'];
-            $output->writeln('<info>' . sprintf('Processed: %d.', $position) . '</info>');
+            $output->writeln('<info>' . \sprintf('Processed: %d.', $position) . '</info>');
         }
     }
 
@@ -189,7 +189,7 @@ class ExportCommand extends ShopwareCommand
             try {
                 $this->dateFrom = new \DateTime($this->dateFrom);
             } catch (\Exception $e) {
-                throw new \RuntimeException(sprintf('Invalid format! %s', $e->getMessage()));
+                throw new \RuntimeException(\sprintf('Invalid format! %s', $e->getMessage()));
             }
         }
 
@@ -198,13 +198,13 @@ class ExportCommand extends ShopwareCommand
                 $this->dateTo = new \DateTime($this->dateTo);
                 $this->dateTo->setTime(23, 59, 59);
             } catch (\Exception $e) {
-                throw new \RuntimeException(sprintf('Invalid format! %s', $e->getMessage()));
+                throw new \RuntimeException(\sprintf('Invalid format! %s', $e->getMessage()));
             }
         }
 
         if (!empty($this->dateFrom) && !empty($this->dateTo)) {
             if ($this->dateFrom > $this->dateTo) {
-                throw new \RuntimeException(sprintf('from date must be greater than to date'));
+                throw new \RuntimeException(\sprintf('from date must be greater than to date'));
             }
         }
 
@@ -212,7 +212,7 @@ class ExportCommand extends ShopwareCommand
             throw new \RuntimeException('File path is required.');
         }
 
-        $parts = explode('.', $this->filePath);
+        $parts = \explode('.', $this->filePath);
 
         /** @var ModelManager $em */
         $em = $this->container->get('models');
@@ -223,7 +223,7 @@ class ExportCommand extends ShopwareCommand
         // if no profile is specified try to find it from the filename
         if ($this->profile === null) {
             foreach ($parts as $part) {
-                $part = strtolower($part);
+                $part = \strtolower($part);
                 $this->profileEntity = $profileRepository->findOneBy(['name' => $part]);
                 if ($this->profileEntity !== null) {
                     $this->profile = $part;
@@ -243,15 +243,15 @@ class ExportCommand extends ShopwareCommand
 
         // if no format is specified try to find it from the filename
         if (empty($this->format)) {
-            $this->format = pathinfo($this->filePath, PATHINFO_EXTENSION);
+            $this->format = \pathinfo($this->filePath, \PATHINFO_EXTENSION);
         }
 
         // format should be case insensitive
-        $this->format = strtolower($this->format);
+        $this->format = \strtolower($this->format);
 
         // validate type
-        if (!in_array($this->format, ['csv', 'xml'])) {
-            throw new \RuntimeException(sprintf('Invalid format: \'%s\'! Valid formats are: CSV and XML.', $this->format));
+        if (!\in_array($this->format, ['csv', 'xml'])) {
+            throw new \RuntimeException(\sprintf('Invalid format: \'%s\'! Valid formats are: CSV and XML.', $this->format));
         }
     }
 
@@ -262,7 +262,7 @@ class ExportCommand extends ShopwareCommand
     protected function validateProfiles(InputInterface $input)
     {
         if (!$this->profileEntity) {
-            throw new \RuntimeException(sprintf('Invalid profile: \'%s\'!', $this->profile));
+            throw new \RuntimeException(\sprintf('Invalid profile: \'%s\'!', $this->profile));
         }
 
         if ($this->profileEntity->getType() !== 'articles' && $input->getOption('exportVariants')) {
@@ -280,11 +280,11 @@ class ExportCommand extends ShopwareCommand
     protected function validateCustomerStream($customerStream)
     {
         if (!$customerStream) {
-            throw new \RuntimeException(sprintf('Invalid stream: \'%s\'! There is no customer stream with this id.', $this->customerStream));
+            throw new \RuntimeException(\sprintf('Invalid stream: \'%s\'! There is no customer stream with this id.', $this->customerStream));
         }
 
-        if (!in_array($this->profileEntity->getType(), ['customers', 'addresses'], true)) {
-            throw new \RuntimeException(sprintf('Customer stream export can not be used with profile: \'%s\'!', $this->profile));
+        if (!\in_array($this->profileEntity->getType(), ['customers', 'addresses'], true)) {
+            throw new \RuntimeException(\sprintf('Customer stream export can not be used with profile: \'%s\'!', $this->profile));
         }
     }
 }

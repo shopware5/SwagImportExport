@@ -8,14 +8,13 @@
 
 namespace Tests\Helper;
 
-use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBag;
 use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
 
 class TestSessionStorage extends NativeSessionStorage
 {
     public function start()
     {
-        session_start();
+        \session_start();
 
         $this->loadSession();
 

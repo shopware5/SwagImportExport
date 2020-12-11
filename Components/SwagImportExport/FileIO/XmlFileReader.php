@@ -35,7 +35,7 @@ class XmlFileReader implements FileReader
         $reader->open($fileName);
 
         // find the first iterationNode
-        foreach (explode('/', $this->iterationPath[0]) as $node) {
+        foreach (\explode('/', $this->iterationPath[0]) as $node) {
             $reader->next($node);
             $reader->read();
         }
@@ -73,7 +73,7 @@ class XmlFileReader implements FileReader
         $z = new \XMLReader();
         $z->open($fileName);
 
-        foreach (explode('/', $this->iterationPath[0]) as $node) {
+        foreach (\explode('/', $this->iterationPath[0]) as $node) {
             $z->next($node);
             $z->read();
         }
@@ -101,7 +101,7 @@ class XmlFileReader implements FileReader
             foreach ($node->childNodes as $child) {
                 if ($child instanceof \DOMElement) {
                     $hasChildren = true;
-                    if (in_array($currentPath, $this->iterationPath) && in_array($child->nodeName, $this->iterationTag)) {
+                    if (\in_array($currentPath, $this->iterationPath) && \in_array($child->nodeName, $this->iterationTag)) {
                         $record[$child->nodeName][] = $this->toArrayTree($child, $currentPath);
                     } else {
                         $record[$child->nodeName] = $this->toArrayTree($child, $currentPath);
@@ -119,7 +119,7 @@ class XmlFileReader implements FileReader
                 $record['_value'] = $node->nodeValue;
             }
         } elseif (!$hasChildren) {
-            $record = trim($node->nodeValue);
+            $record = \trim($node->nodeValue);
         }
 
         return $record;
@@ -134,7 +134,7 @@ class XmlFileReader implements FileReader
         if (isset($node['children'])) {
             foreach ($node['children'] as $child) {
                 if ($child['type'] === 'iteration') {
-                    $this->iterationPath[] = implode('/', $path);
+                    $this->iterationPath[] = \implode('/', $path);
                     $this->iterationTag[] = $child['name'];
                 }
 

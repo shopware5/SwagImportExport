@@ -31,12 +31,12 @@ class ArticleCategoriesProfileTest extends TestCase
 
         $profileTree = $categoryProfile->jsonSerialize();
         $this->walkRecursive($profileTree, function ($node) {
-            $this->assertArrayHasKey('id', $node, 'Current array: ' . print_r($node, true));
-            $this->assertArrayHasKey('name', $node, 'Current array: ' . print_r($node, true));
-            $this->assertArrayHasKey('type', $node, 'Current array: ' . print_r($node, true));
+            $this->assertArrayHasKey('id', $node, 'Current array: ' . \print_r($node, true));
+            $this->assertArrayHasKey('name', $node, 'Current array: ' . \print_r($node, true));
+            $this->assertArrayHasKey('type', $node, 'Current array: ' . \print_r($node, true));
         });
 
-        $profileJson = json_encode($categoryProfile);
+        $profileJson = \json_encode($categoryProfile);
         static::assertJson($profileJson);
     }
 

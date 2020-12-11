@@ -170,7 +170,7 @@ class NewsletterDbAdapter implements DataDbAdapter
 
         $result = [];
         if ($records) {
-            $result = array_column($records, 'id');
+            $result = \array_column($records, 'id');
         }
 
         return $result;
@@ -339,9 +339,9 @@ class NewsletterDbAdapter implements DataDbAdapter
      */
     public function getColumns($section)
     {
-        $method = 'get' . ucfirst($section) . 'Columns';
+        $method = 'get' . \ucfirst($section) . 'Columns';
 
-        if (method_exists($this, $method)) {
+        if (\method_exists($this, $method)) {
             return $this->{$method}();
         }
 

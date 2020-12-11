@@ -79,7 +79,7 @@ class Shopware_Controllers_Backend_SwagImportExportSession extends Shopware_Cont
         $data = $paginator->getIterator()->getArrayCopy();
 
         foreach ($data as $key => $row) {
-            $data[$key]['fileUrl'] = urlencode($row['fileName']);
+            $data[$key]['fileUrl'] = \urlencode($row['fileName']);
             $data[$key]['fileName'] = $row['fileName'];
             $data[$key]['fileSize'] = DataHelper::formatFileSize($row['fileSize']);
         }
@@ -99,14 +99,14 @@ class Shopware_Controllers_Backend_SwagImportExportSession extends Shopware_Cont
         try {
             $data = $this->Request()->getParam('data');
 
-            if (is_array($data) && isset($data['id'])) {
+            if (\is_array($data) && isset($data['id'])) {
                 $data = [$data];
             }
 
             foreach ($data as $record) {
                 $sessionId = $record['id'];
 
-                if (empty($sessionId) || !is_numeric($sessionId)) {
+                if (empty($sessionId) || !\is_numeric($sessionId)) {
                     $this->View()->assign([
                         'success' => false,
                         'data' => $this->Request()->getParams(),

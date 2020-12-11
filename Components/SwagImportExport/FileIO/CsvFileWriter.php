@@ -34,10 +34,10 @@ class CsvFileWriter implements FileWriter
      */
     public function writeHeader($fileName, $headerData)
     {
-        if (!is_array($headerData)) {
+        if (!\is_array($headerData)) {
             throw new \Exception('Header data is not valid');
         }
-        $columnNames = implode(';', $headerData) . "\n";
+        $columnNames = \implode(';', $headerData) . "\n";
         $this->getFileHelper()->writeStringToFile($fileName, $columnNames);
     }
 
@@ -49,11 +49,11 @@ class CsvFileWriter implements FileWriter
         $flatData = '';
 
         $convertor = new CsvEncoder();
-        $keys = array_keys(current($data));
+        $keys = \array_keys(\current($data));
         foreach ($data as $line) {
             $flatData .= $convertor->_encode_line($line, $keys) . $convertor->sSettings['newline'];
         }
-        $this->getFileHelper()->writeStringToFile($fileName, $flatData, FILE_APPEND);
+        $this->getFileHelper()->writeStringToFile($fileName, $flatData, \FILE_APPEND);
     }
 
     public function writeFooter($fileName, $footerData)

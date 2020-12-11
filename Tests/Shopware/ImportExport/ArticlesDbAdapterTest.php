@@ -45,7 +45,7 @@ class ArticlesDbAdapterTest extends DbAdapterTestHelper
 
         static::assertContains($rawData['article'][0], $expected['article']);
         static::assertContains($rawData['article'][1], $expected['article']);
-        static::assertCount(count($rawData['article']), $expected['article']);
+        static::assertCount(\count($rawData['article']), $expected['article']);
     }
 
     /**

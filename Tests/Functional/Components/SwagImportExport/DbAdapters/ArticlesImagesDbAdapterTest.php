@@ -102,7 +102,7 @@ class ArticlesImagesDbAdapterTest extends TestCase
         ];
 
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Kann file://' . realpath(__DIR__) . '/../../../../Helper/ImportFiles/invalid_image_name.png nicht zum Lesen öffnen');
+        $this->expectExceptionMessage('Kann file://' . \realpath(__DIR__) . '/../../../../Helper/ImportFiles/invalid_image_name.png nicht zum Lesen öffnen');
         $articlesImagesDbAdapter->write($records);
     }
 
@@ -119,7 +119,7 @@ class ArticlesImagesDbAdapterTest extends TestCase
      */
     private function getImportImagePath()
     {
-        return 'file://' . realpath(__DIR__) . '/../../../../Helper/ImportFiles/sw-icon_blue128.png';
+        return 'file://' . \realpath(__DIR__) . '/../../../../Helper/ImportFiles/sw-icon_blue128.png';
     }
 
     /**
@@ -127,6 +127,6 @@ class ArticlesImagesDbAdapterTest extends TestCase
      */
     private function getInvalidImportImagePath()
     {
-        return 'file://' . realpath(__DIR__) . '/../../../../Helper/ImportFiles/invalid_image_name.png';
+        return 'file://' . \realpath(__DIR__) . '/../../../../Helper/ImportFiles/invalid_image_name.png';
     }
 }

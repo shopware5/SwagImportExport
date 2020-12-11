@@ -155,7 +155,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
         }
 
         $records = $builder->getQuery()->getResult();
-        $result = array_column($records, 'id');
+        $result = \array_column($records, 'id');
 
         return $result;
     }
@@ -194,12 +194,12 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                 continue;
             }
 
-            $relations = explode(';', $image['relations']);
-            $relations = array_unique($relations);
+            $relations = \explode(';', $image['relations']);
+            $relations = \array_unique($relations);
 
             $out = [];
             foreach ($relations as $rule) {
-                $split = explode('|', $rule);
+                $split = \explode('|', $rule);
                 $ruleId = $split[0];
                 $name = $split[2];
                 $groupName = $split[3];
@@ -210,10 +210,10 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
 
             $temp = [];
             foreach ($out as $group) {
-                $temp[] = '{' . implode('|', $group) . '}';
+                $temp[] = '{' . \implode('|', $group) . '}';
             }
 
-            $image['relations'] = implode('&', $temp);
+            $image['relations'] = \implode('&', $temp);
         }
 
         return $result;
@@ -242,7 +242,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
             ' \'1\' as thumbnail',
         ];
 
-        $columns = array_merge($columns, $this->getAttributesColumns());
+        $columns = \array_merge($columns, $this->getAttributesColumns());
 
         return $columns;
     }
@@ -290,7 +290,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                 if (!$articleDetailModel) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/articlesImages/article_not_found', 'Article with number %s does not exists');
-                    throw new AdapterException(sprintf($message, $record['ordernumber']));
+                    throw new AdapterException(\sprintf($message, $record['ordernumber']));
                 }
 
                 $record = $this->dataManager->setDefaultFields($record, $articleDetailModel->getArticle()->getId());
@@ -298,16 +298,16 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
 
                 $relations = [];
                 if (isset($record['relations'])) {
-                    $importedRelations = explode('&', $record['relations']);
+                    $importedRelations = \explode('&', $record['relations']);
 
                     foreach ($importedRelations as $key => $relation) {
                         if ($relation === '') {
                             continue;
                         }
 
-                        $variantConfig = explode('|', preg_replace('/{|}/', '', $relation));
+                        $variantConfig = \explode('|', \preg_replace('/{|}/', '', $relation));
                         foreach ($variantConfig as $config) {
-                            list($group, $option) = explode(':', $config);
+                            list($group, $option) = \explode(':', $config);
 
                             //Get configurator group
                             $cGroupModel = $this->manager->getRepository(Group::class)->findOneBy(['name' => $group]);
@@ -329,7 +329,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                 /** @var \Shopware\Models\Article\Article $article */
                 $article = $articleDetailModel->getArticle();
 
-                $name = pathinfo($record['image'], PATHINFO_FILENAME);
+                $name = \pathinfo($record['image'], \PATHINFO_FILENAME);
 
                 $media = false;
                 if ($this->imageImportMode === 1) {
@@ -347,7 +347,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                     $media->setAlbum($this->manager->getRepository(Album::class)->find(-1));
 
                     $media->setFile($file);
-                    $media->setName(pathinfo($record['image'], PATHINFO_FILENAME));
+                    $media->setName(\pathinfo($record['image'], \PATHINFO_FILENAME));
                     $media->setDescription('');
                     $media->setCreated(new \DateTime());
                     $media->setUserId(0);
@@ -417,9 +417,9 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
      */
     public function getColumns($section)
     {
-        $method = 'get' . ucfirst($section) . 'Columns';
+        $method = 'get' . \ucfirst($section) . 'Columns';
 
-        if (method_exists($this, $method)) {
+        if (\method_exists($this, $method)) {
             return $this->{$method}();
         }
 
@@ -500,7 +500,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
 
         $attributes = [];
         foreach ($columns as $column) {
-            if (in_array($column['Field'], ['id', 'imageID'])) {
+            if (\in_array($column['Field'], ['id', 'imageID'])) {
                 continue;
             }
             $attributes[] = $column['Field'];
@@ -512,7 +512,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
             foreach ($attributes as $attribute) {
                 $attr = $this->underscoreToCamelCaseService->underscoreToCamelCase($attribute);
 
-                $attributesSelect[] = sprintf('%s.%s as attribute%s', $prefix, $attr, ucwords($attr));
+                $attributesSelect[] = \sprintf('%s.%s as attribute%s', $prefix, $attr, \ucwords($attr));
             }
         }
 
@@ -534,12 +534,12 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
     {
         $attributes = [];
         foreach ($image as $key => $value) {
-            $position = strpos($key, 'attribute');
+            $position = \strpos($key, 'attribute');
             if ($position === false || $position !== 0) {
                 continue;
             }
 
-            $attrKey = lcfirst(str_replace('attribute', '', $key));
+            $attrKey = \lcfirst(\str_replace('attribute', '', $key));
             $attributes[$attrKey] = $value;
         }
 
@@ -626,62 +626,62 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
      */
     protected function load($url, $baseFilename = null)
     {
-        if (!is_dir($this->docPath)) {
-            mkdir($this->docPath, 0777, true);
+        if (!\is_dir($this->docPath)) {
+            \mkdir($this->docPath, 0777, true);
         }
 
-        $destPath = realpath($this->docPath);
+        $destPath = \realpath($this->docPath);
 
-        if (!file_exists($destPath)) {
+        if (!\file_exists($destPath)) {
             $message = SnippetsHelper::getNamespace()
                 ->get('adapters/articlesImages/directory_not_found', 'Destination directory %s does not exist.');
-            throw new \Exception(sprintf($message, $destPath));
+            throw new \Exception(\sprintf($message, $destPath));
         }
 
-        if (!is_writable($destPath)) {
+        if (!\is_writable($destPath)) {
             $message = SnippetsHelper::getNamespace()
                 ->get('adapters/articlesImages/directory_permissions', 'Destination directory %s does not have write permissions.');
-            throw new \Exception(sprintf($message, $destPath));
+            throw new \Exception(\sprintf($message, $destPath));
         }
 
-        $urlArray = parse_url($url);
-        $urlArray['path'] = explode('/', $urlArray['path']);
+        $urlArray = \parse_url($url);
+        $urlArray['path'] = \explode('/', $urlArray['path']);
         switch ($urlArray['scheme']) {
             case 'ftp':
             case 'http':
             case 'https':
             case 'file':
                 if ($baseFilename === null) {
-                    $filename = md5(uniqid(mt_rand(), true));
+                    $filename = \md5(\uniqid(\mt_rand(), true));
                 } else {
                     $filename = $baseFilename;
                 }
 
-                if (!$put_handle = fopen("$destPath/$filename", 'wb+')) {
+                if (!$put_handle = \fopen("$destPath/$filename", 'wb+')) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/articlesImages/could_open_dir_file', 'Could not open %s/%s for writing');
-                    throw new AdapterException(sprintf($message), $destPath, $filename);
+                    throw new AdapterException(\sprintf($message), $destPath, $filename);
                 }
 
                 //replace empty spaces
-                $url = str_replace(' ', '%20', $url);
+                $url = \str_replace(' ', '%20', $url);
 
-                if (!$get_handle = fopen($url, 'rb')) {
+                if (!$get_handle = \fopen($url, 'rb')) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/articlesImages/could_not_open_url', 'Could not open %s for reading');
-                    throw new AdapterException(sprintf($message, $url));
+                    throw new AdapterException(\sprintf($message, $url));
                 }
-                while (!feof($get_handle)) {
-                    fwrite($put_handle, fgets($get_handle, 4096));
+                while (!\feof($get_handle)) {
+                    \fwrite($put_handle, \fgets($get_handle, 4096));
                 }
-                fclose($get_handle);
-                fclose($put_handle);
+                \fclose($get_handle);
+                \fclose($put_handle);
 
                 return "$destPath/$filename";
         }
         $message = SnippetsHelper::getNamespace()
             ->get('adapters/articlesImages/unsupported_schema', 'Unsupported schema %s.');
-        throw new AdapterException(sprintf($message, $urlArray['scheme']));
+        throw new AdapterException(\sprintf($message, $urlArray['scheme']));
     }
 
     private function createAttribute(array $record, Image $image)

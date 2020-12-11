@@ -31,12 +31,12 @@ class MinimalCategoryProfileTest extends TestCase
 
         $profileTree = $minimalCategoryProfile->jsonSerialize();
         $this->walkRecursive($profileTree, function ($node) {
-            $this->assertArrayHasKey('id', $node, 'Current array: ' . print_r($node, true));
-            $this->assertArrayHasKey('type', $node, 'Current array: ' . print_r($node, true));
-            $this->assertArrayHasKey('name', $node, 'Current array: ' . print_r($node, true));
+            $this->assertArrayHasKey('id', $node, 'Current array: ' . \print_r($node, true));
+            $this->assertArrayHasKey('type', $node, 'Current array: ' . \print_r($node, true));
+            $this->assertArrayHasKey('name', $node, 'Current array: ' . \print_r($node, true));
         });
 
-        $profileJson = json_encode($minimalCategoryProfile);
+        $profileJson = \json_encode($minimalCategoryProfile);
         static::assertJson($profileJson);
     }
 

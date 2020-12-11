@@ -181,7 +181,7 @@ class ArticlesDbAdapterTest extends TestCase
             ],
             'image' => [
                 0 => [
-                    'imageUrl' => 'file://' . realpath(__DIR__) . '/../../../../Helper/ImportFiles/sw-icon_blue128.png',
+                    'imageUrl' => 'file://' . \realpath(__DIR__) . '/../../../../Helper/ImportFiles/sw-icon_blue128.png',
                     'parentIndexElement' => 0,
                 ],
             ],
@@ -315,7 +315,7 @@ class ArticlesDbAdapterTest extends TestCase
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
         $articleId = $dbalConnection->executeQuery("SELECT articleID FROM s_articles_details WHERE orderNumber='SW10006'")->fetch(\PDO::FETCH_COLUMN);
         $result = $dbalConnection->executeQuery("SELECT * FROM s_core_translations WHERE objecttype='article' AND objectkey={$articleId}")->fetchAll();
-        $importedTranslation = unserialize($result[0]['objectdata']);
+        $importedTranslation = \unserialize($result[0]['objectdata']);
 
         // trait rollback not working - so we rollback manually
         $dbalConnection->executeQuery("DELETE FROM s_core_translations WHERE objecttype='article' AND objectkey={$articleId}");

@@ -10,5 +10,4 @@ namespace Tests\Helper;
 
 class ImportExportTestSession extends \Enlight_Components_Session_Namespace
 {
-
 }

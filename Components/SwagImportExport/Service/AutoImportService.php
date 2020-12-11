@@ -54,21 +54,21 @@ class AutoImportService implements AutoImportServiceInterface
         $lockerFilename = '__running';
         $lockerFileLocation = $this->getDirectory() . '/' . $lockerFilename;
 
-        if (in_array($lockerFilename, $files)) {
-            $file = fopen($lockerFileLocation, 'rb');
-            $fileContent = (int) fread($file, filesize($lockerFileLocation));
-            fclose($file);
+        if (\in_array($lockerFilename, $files)) {
+            $file = \fopen($lockerFileLocation, 'rb');
+            $fileContent = (int) \fread($file, \filesize($lockerFileLocation));
+            \fclose($file);
 
-            if ($fileContent > time()) {
-                echo 'There is already an import in progress.' . PHP_EOL;
+            if ($fileContent > \time()) {
+                echo 'There is already an import in progress.' . \PHP_EOL;
 
                 return;
             }
-            unlink($lockerFileLocation);
+            \unlink($lockerFileLocation);
         }
 
-        if ($files === false || count($files) === 0) {
-            echo 'No import files are found.' . PHP_EOL;
+        if ($files === false || \count($files) === 0) {
+            echo 'No import files are found.' . \PHP_EOL;
 
             return;
         }
@@ -77,7 +77,7 @@ class AutoImportService implements AutoImportServiceInterface
 
         $this->importFiles($files, $lockerFileLocation);
 
-        unlink($lockerFileLocation);
+        \unlink($lockerFileLocation);
     }
 
     /**
@@ -87,8 +87,8 @@ class AutoImportService implements AutoImportServiceInterface
     {
         $profileRepository = $this->modelManager->getRepository(Profile::class);
         foreach ($files as $file) {
-            $fileExtension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-            $fileName = strtolower(pathinfo($file, PATHINFO_FILENAME));
+            $fileExtension = \strtolower(\pathinfo($file, \PATHINFO_EXTENSION));
+            $fileName = \strtolower(\pathinfo($file, \PATHINFO_FILENAME));
 
             if ($fileExtension === 'xml' || $fileExtension === 'csv') {
                 try {
@@ -96,8 +96,8 @@ class AutoImportService implements AutoImportServiceInterface
 
                     $mediaPath = $this->uploadPathProvider->getRealPath($file, UploadPathProvider::CRON_DIR);
                 } catch (\Exception $e) {
-                    echo $e->getMessage() . PHP_EOL;
-                    unlink($lockerFileLocation);
+                    echo $e->getMessage() . \PHP_EOL;
+                    \unlink($lockerFileLocation);
 
                     return;
                 }
@@ -108,15 +108,15 @@ class AutoImportService implements AutoImportServiceInterface
                     $profilesMapper = ['articles', 'articlesImages'];
 
                     //loops the unprocessed data
-                    $pathInfo = pathinfo($mediaPath);
+                    $pathInfo = \pathinfo($mediaPath);
                     foreach ($profilesMapper as $profileName) {
                         $tmpFile = $this->uploadPathProvider->getRealPath(
                             $pathInfo['basename'] . '-' . $profileName . '-tmp.csv'
                         );
 
-                        if (file_exists($tmpFile)) {
-                            $outputFile = str_replace('-tmp', '-swag', $tmpFile);
-                            rename($tmpFile, $outputFile);
+                        if (\file_exists($tmpFile)) {
+                            $outputFile = \str_replace('-tmp', '-swag', $tmpFile);
+                            \rename($tmpFile, $outputFile);
 
                             $profile = $this->profileFactory->loadHiddenProfile($profileName);
                             $profileEntity = $profile->getEntity();
@@ -125,19 +125,19 @@ class AutoImportService implements AutoImportServiceInterface
                         }
                     }
 
-                    $message = $return['data']['position'] . ' ' . $return['data']['adapter'] . ' imported successfully' . PHP_EOL;
+                    $message = $return['data']['position'] . ' ' . $return['data']['adapter'] . ' imported successfully' . \PHP_EOL;
                     echo $message;
-                    unlink($mediaPath);
+                    \unlink($mediaPath);
                 } catch (\Exception $e) {
                     // copy file as broken
                     $brokenFilePath = $this->uploadPathProvider->getRealPath(
                         'broken-' . $file,
                         UploadPathProvider::DIR
                     );
-                    copy($mediaPath, $brokenFilePath);
+                    \copy($mediaPath, $brokenFilePath);
 
-                    echo $e->getMessage() . PHP_EOL;
-                    unlink($lockerFileLocation);
+                    echo $e->getMessage() . \PHP_EOL;
+                    \unlink($lockerFileLocation);
 
                     return;
                 }
@@ -160,7 +160,7 @@ class AutoImportService implements AutoImportServiceInterface
         if ($profile === false) {
             $message = SnippetsHelper::getNamespace()->get('cronjob/no_profile', 'No profile found %s');
 
-            throw new \Exception(sprintf($message, $fileName));
+            throw new \Exception(\sprintf($message, $fileName));
         }
 
         return $profile;
@@ -173,9 +173,9 @@ class AutoImportService implements AutoImportServiceInterface
     {
         $directory = $this->getDirectory();
 
-        $allFiles = scandir($directory);
+        $allFiles = \scandir($directory);
 
-        return array_diff($allFiles, ['.', '..', '.htaccess']);
+        return \array_diff($allFiles, ['.', '..', '.htaccess']);
     }
 
     /**
@@ -185,10 +185,10 @@ class AutoImportService implements AutoImportServiceInterface
      */
     private function flagCronAsRunning($lockerFileLocation)
     {
-        $timeout = time() + 1800;
-        $file = fopen($lockerFileLocation, 'wb');
-        fwrite($file, $timeout);
-        fclose($file);
+        $timeout = \time() + 1800;
+        $file = \fopen($lockerFileLocation, 'wb');
+        \fwrite($file, $timeout);
+        \fclose($file);
     }
 
     /**

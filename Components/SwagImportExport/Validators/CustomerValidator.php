@@ -94,7 +94,7 @@ class CustomerValidator extends Validator
             list($snippetName, $snippetMessage) = $this->snippetData[$key];
 
             $message = SnippetsHelper::getNamespace()->get($snippetName, $snippetMessage);
-            throw new AdapterException(sprintf($message, $record['email']));
+            throw new AdapterException(\sprintf($message, $record['email']));
         }
     }
 
@@ -123,7 +123,7 @@ class CustomerValidator extends Validator
             list($snippetName, $snippetMessage) = $this->snippetData[$columnName];
 
             $message = SnippetsHelper::getNamespace()->get($snippetName, $snippetMessage);
-            throw new AdapterException(sprintf($message, $record['email']));
+            throw new AdapterException(\sprintf($message, $record['email']));
         }
     }
 }

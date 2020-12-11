@@ -66,7 +66,7 @@ class TranslationsDbAdapter implements DataDbAdapter
 
         $records = $builder->getQuery()->getResult();
 
-        $result = array_map(
+        $result = \array_map(
             function ($item) {
                 return $item['id'];
             },
@@ -109,7 +109,7 @@ class TranslationsDbAdapter implements DataDbAdapter
 
         $result = [];
         foreach ($translations as $index => $translation) {
-            $data = unserialize($translation['objectdata']);
+            $data = \unserialize($translation['objectdata']);
 
             //key for different translation types
             $key = $mapper[$translation['objecttype']];
@@ -161,9 +161,9 @@ class TranslationsDbAdapter implements DataDbAdapter
      */
     public function getColumns($section)
     {
-        $method = 'get' . ucfirst($section) . 'Columns';
+        $method = 'get' . \ucfirst($section) . 'Columns';
 
-        if (method_exists($this, $method)) {
+        if (\method_exists($this, $method)) {
             return $this->{$method}();
         }
 
@@ -208,7 +208,7 @@ class TranslationsDbAdapter implements DataDbAdapter
                 if (!$shop) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/translations/lang_id_not_found', 'Language with id %s does not exists');
-                    throw new AdapterException(sprintf($message, $record['languageId']));
+                    throw new AdapterException(\sprintf($message, $record['languageId']));
                 }
 
                 $repository = $this->getRepository($record['objectType']);
@@ -219,7 +219,7 @@ class TranslationsDbAdapter implements DataDbAdapter
                     if (!$element) {
                         $message = SnippetsHelper::getNamespace()
                             ->get('adapters/translations/element_id_not_found', '%s element not found with ID %s');
-                        throw new AdapterException(sprintf($message, $record['objectType'], $record['objectKey']));
+                        throw new AdapterException(\sprintf($message, $record['objectType'], $record['objectKey']));
                     }
                 } elseif (isset($record['baseName'])) {
                     $findKey = $record['objectType'] === 'propertyvalue' ? 'value' : 'name';
@@ -228,14 +228,14 @@ class TranslationsDbAdapter implements DataDbAdapter
                     if (!$element) {
                         $message = SnippetsHelper::getNamespace()
                             ->get('adapters/translations/element_baseName_not_found', '%s element not found with name %s');
-                        throw new AdapterException(sprintf($message, $record['objectType'], $record['baseName']));
+                        throw new AdapterException(\sprintf($message, $record['objectType'], $record['baseName']));
                     }
                 }
 
                 if (!$element) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/translations/element_objectKey_baseName_not_found', 'Please provide objectKey or baseName');
-                    throw new AdapterException(sprintf($message));
+                    throw new AdapterException(\sprintf($message));
                 }
 
                 $key = $importMapper[$record['objectType']];
@@ -429,7 +429,7 @@ class TranslationsDbAdapter implements DataDbAdapter
      */
     protected function getTranslations($ids)
     {
-        $articleDetailIds = implode(',', $ids);
+        $articleDetailIds = \implode(',', $ids);
 
         $translationColumns = 'ct.objecttype, ct.objectkey, ct.objectdata as objectdata, ct.objectlanguage as languageId';
 
@@ -506,7 +506,7 @@ class TranslationsDbAdapter implements DataDbAdapter
             default:
                 $message = SnippetsHelper::getNamespace()
                     ->get('adapters/translations/object_type_not_existing', 'Object type %s not existing.');
-                throw new AdapterException(sprintf($message, $type));
+                throw new AdapterException(\sprintf($message, $type));
         }
     }
 }

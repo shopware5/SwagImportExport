@@ -22,7 +22,7 @@ class ProfileSerializer
 
     public function readProfileConfig($key)
     {
-        $key = ucfirst($key);
+        $key = \ucfirst($key);
         $method = 'get' . $key;
         $this->profile->{$method}();
     }

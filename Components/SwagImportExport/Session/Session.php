@@ -45,7 +45,7 @@ class Session
     public function __call($method, $arguments)
     {
         $session = $this->getEntity();
-        if (method_exists($session, $method)) {
+        if (\method_exists($session, $method)) {
             return $session->$method($arguments);
         }
         throw new \Exception("Method $method does not exists.");
@@ -166,8 +166,8 @@ class Session
             $sessionEntity->setPosition($newPosition);
         }
 
-        if ($file && file_exists($file)) {
-            $fileSize = sprintf('%u', filesize($file));
+        if ($file && \file_exists($file)) {
+            $fileSize = \sprintf('%u', \filesize($file));
             $sessionEntity->setFileSize($fileSize);
         }
 
@@ -195,7 +195,7 @@ class Session
         $this->getManager()->flush();
 
         $data = [
-            'recordIds' => unserialize($recordIds),
+            'recordIds' => \unserialize($recordIds),
             'fileName' => $sessionEntity->getFileName(),
         ];
 

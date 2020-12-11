@@ -82,7 +82,7 @@ class TranslationProfileTest extends TestCase
         $this->truncateTranslationTable();
         /** @var Connection $connection */
         $connection = Shopware()->Container()->get('dbal_connection');
-        $connection->executeQuery(file_get_contents(__DIR__ . '/_fixtures/configurator_translations_demo.sql'));
+        $connection->executeQuery(\file_get_contents(__DIR__ . '/_fixtures/configurator_translations_demo.sql'));
 
         $filePath = __DIR__ . '/_fixtures/translations_configurators_update.csv';
 

@@ -73,7 +73,7 @@ class Logger implements LoggerInterface
 
         $messages = (array) $messages;
 
-        $messages = implode(';', $messages);
+        $messages = \implode(';', $messages);
         $loggerModel->setSession($session);
         $loggerModel->setMessage($messages);
         $loggerModel->setCreatedAt();
@@ -96,7 +96,7 @@ class Logger implements LoggerInterface
     {
         $filePath = $this->logDirectory . '/importexport.log';
 
-        if (!file_exists($filePath)) {
+        if (!\file_exists($filePath)) {
             $this->createLogFile($filePath);
         }
 

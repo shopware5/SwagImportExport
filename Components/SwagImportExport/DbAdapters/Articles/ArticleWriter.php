@@ -103,7 +103,7 @@ class ArticleWriter
         if ($createDetail && !$mainDetailId && !$this->isMainDetail($article)) {
             $message = SnippetsHelper::getNamespace()
                 ->get('adapters/articles/variant_existence', 'Variant with number %s does not exists.');
-            throw new AdapterException(sprintf($message, $article['mainNumber']));
+            throw new AdapterException(\sprintf($message, $article['mainNumber']));
         }
 
         // Set create flag
@@ -186,12 +186,12 @@ class ArticleWriter
     {
         $attributes = [];
         foreach ($article as $key => $value) {
-            $position = strpos($key, 'attribute');
+            $position = \strpos($key, 'attribute');
             if ($position === false || $position !== 0) {
                 continue;
             }
 
-            $attrKey = lcfirst(str_replace('attribute', '', $key));
+            $attrKey = \lcfirst(\str_replace('attribute', '', $key));
             $attributes[$attrKey] = $value;
         }
 

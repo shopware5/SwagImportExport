@@ -81,7 +81,7 @@ class RelationWriter
      */
     public function write($articleId, $mainOrderNumber, $relations, $relationType, $processedFlag)
     {
-        if (!is_numeric($articleId)) {
+        if (!\is_numeric($articleId)) {
             return;
         }
 
@@ -91,7 +91,7 @@ class RelationWriter
         $allRelations = [];
         foreach ($relations as $relation) {
             //if relation data has only 'parentIndexElement' element
-            if (count($relation) < 2) {
+            if (\count($relation) < 2) {
                 break;
             }
 
@@ -107,7 +107,7 @@ class RelationWriter
 
                 if (!$relationId && $processedFlag === true) {
                     $message = SnippetsHelper::getNamespace()->get($this->snippetName, $this->defaultSnippetMessage);
-                    throw new AdapterException(sprintf($message, $relation['ordernumber']));
+                    throw new AdapterException(\sprintf($message, $relation['ordernumber']));
                 }
 
                 if (!$relationId) {
@@ -118,7 +118,7 @@ class RelationWriter
 
                     $this->getArticlesDbAdapter()->saveUnprocessedData(
                         'articles',
-                        strtolower($relationType),
+                        \strtolower($relationType),
                         $mainOrderNumber,
                         $data
                     );
@@ -162,9 +162,9 @@ class RelationWriter
         $this->checkRelation($relationType);
 
         $this->table = $this->relationTables[$relationType];
-        $this->idKey = strtolower($relationType) . 'Id';
-        $this->snippetName = 'adapters/articles/' . strtolower($relationType) . '_not_found';
-        $this->defaultSnippetMessage = ucfirst($relationType) . ' with ordernumber %s does not exists';
+        $this->idKey = \strtolower($relationType) . 'Id';
+        $this->snippetName = 'adapters/articles/' . \strtolower($relationType) . '_not_found';
+        $this->defaultSnippetMessage = \ucfirst($relationType) . ' with ordernumber %s does not exists';
     }
 
     /**
@@ -176,7 +176,7 @@ class RelationWriter
      */
     protected function checkRelation($relationType)
     {
-        if (!in_array($relationType, $this->relationTypes)) {
+        if (!\in_array($relationType, $this->relationTypes)) {
             $message = "Wrong relation type is used! Allowed types are: 'accessory' or 'similar'";
             throw new \Exception($message);
         }
@@ -211,7 +211,7 @@ class RelationWriter
             [$relationId]
         );
 
-        return is_numeric($articleId);
+        return \is_numeric($articleId);
     }
 
     /**
@@ -226,7 +226,7 @@ class RelationWriter
             [$relationId, $articleId]
         );
 
-        return is_numeric($isRelationExists);
+        return \is_numeric($isRelationExists);
     }
 
     /**
@@ -247,9 +247,9 @@ class RelationWriter
      */
     private function deleteRelations($relations, $articleId)
     {
-        $relatedIds = implode(
+        $relatedIds = \implode(
             ', ',
-            array_map(
+            \array_map(
                 function ($relation) {
                     return $relation[$this->idKey];
                 },
@@ -268,9 +268,9 @@ class RelationWriter
      */
     private function insertRelations($relations, $articleId)
     {
-        $values = implode(
+        $values = \implode(
             ', ',
-            array_map(
+            \array_map(
                 function ($relation) use ($articleId) {
                     return "({$articleId}, {$relation[$this->idKey]})";
                 },

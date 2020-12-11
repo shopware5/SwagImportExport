@@ -36,7 +36,7 @@ class SmartyExpressionEvaluator implements ExpressionEvaluator
 
         $evaledParam = $compiler->compileSmartyString($expression, $variables);
 
-        return trim($evaledParam);
+        return \trim($evaledParam);
     }
 
     /**
@@ -60,13 +60,13 @@ class SmartyExpressionEvaluator implements ExpressionEvaluator
     protected function convertPricesColumnsToFloat(&$variables)
     {
         if (isset($variables['price'])) {
-            $variables['price'] = (float) str_replace(',', '.', $variables['price']);
+            $variables['price'] = (float) \str_replace(',', '.', $variables['price']);
         }
         if (isset($variables['pseudoPrice'])) {
-            $variables['pseudoPrice'] = (float) str_replace(',', '.', $variables['pseudoPrice']);
+            $variables['pseudoPrice'] = (float) \str_replace(',', '.', $variables['pseudoPrice']);
         }
         if (isset($variables['purchasePrice'])) {
-            $variables['purchasePrice'] = (float) str_replace(',', '.', $variables['purchasePrice']);
+            $variables['purchasePrice'] = (float) \str_replace(',', '.', $variables['purchasePrice']);
         }
     }
 }
