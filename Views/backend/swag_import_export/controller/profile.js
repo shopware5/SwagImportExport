@@ -173,14 +173,14 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                 me.getGrid().getStore().load();
                 if (success) {
                     Shopware.Notification.createGrowlMessage(
-                        '{s name=swag_import_export/profile/save/title}Swag import export{/s}',
+                        '{s name="swag_import_export/profile/save/title"}Swag import export{/s}',
                         message
                     );
                     window.down('#profilebaseform').loadRecord(record);
                     window.setProfileId(record.get('id'));
                 } else {
                     Ext.MessageBox.show({
-                        title: '{s name=swag_import_export/profile/save/failure_title}Save Failed{/s}',
+                        title: '{s name="swag_import_export/profile/save/failure_title"}Save Failed{/s}',
                         msg: message,
                         icon: Ext.Msg.ERROR,
                         buttons: Ext.Msg.OK
@@ -198,7 +198,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                         window.setLoading(false);
                         me.getGrid().getStore().load();
                         Shopware.Notification.createGrowlMessage(
-                            '{s name=swag_import_export/profile/save/title}Swag import export{/s}',
+                            '{s name="swag_import_export/profile/save/title"}Swag import export{/s}',
                             message
                         );
                     } else {
@@ -208,7 +208,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                             me.getGrid().getStore().load();
                             if (success) {
                                 Shopware.Notification.createGrowlMessage(
-                                    '{s name=swag_import_export/profile/save/title}Swag import export{/s}',
+                                    '{s name="swag_import_export/profile/save/title"}Swag import export{/s}',
                                     message
                                 );
                                 treePanel.getSelectionModel().deselectAll(true);
@@ -216,7 +216,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                                 treePanel.getSelectionModel().select(node);
                             } else {
                                 Ext.MessageBox.show({
-                                    title: '{s name=swag_import_export/profile/save/failure_title}Save Failed{/s}',
+                                    title: '{s name="swag_import_export/profile/save/failure_title"}Save Failed{/s}',
                                     msg: message,
                                     icon: Ext.Msg.ERROR,
                                     buttons: Ext.Msg.OK
@@ -226,7 +226,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                     }
                 } else {
                     Ext.MessageBox.show({
-                        title: '{s name=swag_import_export/profile/save/failure_title}Save Failed{/s}',
+                        title: '{s name="swag_import_export/profile/save/failure_title"}Save Failed{/s}',
                         msg: message,
                         icon: Ext.Msg.ERROR,
                         buttons: Ext.Msg.OK
@@ -243,7 +243,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
 
         if (form.getForm().isValid()) {
             if (!form.getForm().isDirty()) {
-                return Ext.callback(callback, scope, [true, record, '{s name=swag_import_export/profile/save/success}Successfully updated.{/s}']);
+                return Ext.callback(callback, scope, [true, record, '{s name="swag_import_export/profile/save/success"}Successfully updated.{/s}']);
             }
             form.getForm().updateRecord(record);
             record.join(store);
@@ -253,7 +253,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
             record.save({
                 callback: function(record, operation, success) {
                     var result = Ext.JSON.decode(operation.response.responseText),
-                        msg = '{s name=swag_import_export/profile/save/success}Successfully updated.{/s}';
+                        msg = '{s name="swag_import_export/profile/save/success"}Successfully updated.{/s}';
                     if (!result.success) {
                         msg = result.message;
                     }
@@ -275,14 +275,14 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
 
         if (record.get('default') === true) {
             Shopware.Notification.createGrowlMessage(
-                '{s name=swag_import_export/profile/delete_profile}Delete profile{/s}',
-                '{s name=swag_import_export/profile/delete_default_msg}Default profiles can not be removed.{/s}'
+                '{s name="swag_import_export/profile/delete_profile"}Delete profile{/s}',
+                '{s name="swag_import_export/profile/delete_default_msg"}Default profiles can not be removed.{/s}'
             );
             return;
         }
         Ext.Msg.show({
-            title: '{s name=swag_import_export/profile/deleteProfile/title}Delete Profile?{/s}',
-            msg: '{s name=swag_import_export/profile/deleteProfile/msg}Are you sure you want to permanently delete the profile?{/s}',
+            title: '{s name="swag_import_export/profile/deleteProfile/title"}Delete Profile?{/s}',
+            msg: '{s name="swag_import_export/profile/deleteProfile/msg"}Are you sure you want to permanently delete the profile?{/s}',
             buttons: Ext.Msg.YESNO,
             fn: function(response) {
                 if (response === 'yes') {
@@ -290,14 +290,14 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                         callback: function(records, operation, success) {
                             if (operation.success) {
                                 Shopware.Notification.createGrowlMessage(
-                                    '{s name=swag_import_export/profile/save/title}Swag import export{/s}',
-                                    '{s name=swag_import_export/profile/save/delete_success}Successfully deleted.{/s}'
+                                    '{s name="swag_import_export/profile/save/title"}Swag import export{/s}',
+                                    '{s name="swag_import_export/profile/save/delete_success"}Successfully deleted.{/s}'
                                 );
                                 grid.getStore().loadPage(1);
                             } else {
                                 Shopware.Notification.createGrowlMessage(
-                                    '{s name=swag_import_export/profile/save/failure}Failure{/s}',
-                                    '{s name=swag_import_export/profile/deletion_error_msg}Unexpected error while deleting profile.{/s}'
+                                    '{s name="swag_import_export/profile/save/failure"}Failure{/s}',
+                                    '{s name="swag_import_export/profile/deletion_error_msg"}Unexpected error while deleting profile.{/s}'
                                 );
                             }
                         }
@@ -317,12 +317,12 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                 if (result.success) {
                     grid.getStore().load();
                     Shopware.Notification.createGrowlMessage(
-                        '{s name=swag_import_export/profile/save/title}Swag import export{/s}',
-                        '{s name=swag_import_export/profile/duplicater}Profile was duplicate successfully{/s}'
+                        '{s name="swag_import_export/profile/save/title"}Swag import export{/s}',
+                        '{s name="swag_import_export/profile/duplicater"}Profile was duplicate successfully{/s}'
                     );
                 } else {
                     Shopware.Notification.createGrowlMessage(
-                        '{s name=swag_import_export/profile/save/title}Swag import export{/s}',
+                        '{s name="swag_import_export/profile/save/title"}Swag import export{/s}',
                         result.message
                     );
                 }
@@ -359,14 +359,14 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
             url: me.importUrl,
             success: function() {
                 Shopware.Notification.createGrowlMessage(
-                    '{s name=swag_import_export/profile/save/title}Swag import export{/s}',
-                    '{s name=swag_import_export/profile/save/success}Successfully updated.{/s}'
+                    '{s name="swag_import_export/profile/save/title"}Swag import export{/s}',
+                    '{s name="swag_import_export/profile/save/success"}Successfully updated.{/s}'
                 );
                 grid.getStore().load();
             },
             failure: function(form, action) {
                 Shopware.Notification.createGrowlMessage(
-                    '{s name=swag_import_export/profile/save/title}Swag import export{/s}',
+                    '{s name="swag_import_export/profile/save/title"}Swag import export{/s}',
                     action.result.message
                 );
             }
@@ -406,8 +406,8 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
             callback: function(records) {
                 if (records.length === 0) {
                     return Shopware.Notification.createGrowlMessage(
-                        '{s name=swag_import_export/profile/iterator/no_extension_title}No extension available{/s}',
-                        '{s name=swag_import_export/profile/iterator/no_extension_message}There is no extension for this profile available.{/s}'
+                        '{s name="swag_import_export/profile/iterator/no_extension_title"}No extension available{/s}',
+                        '{s name="swag_import_export/profile/iterator/no_extension_message"}There is no extension for this profile available.{/s}'
                     );
                 }
                 Ext.create('Shopware.apps.SwagImportExport.view.profile.window.Iterator', {
@@ -469,8 +469,8 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
             }
             me.doSync(treeStore, function() {
                 Shopware.Notification.createGrowlMessage(
-                    '{s name=swag_import_export/profile/save/title}Swag import export{/s}',
-                    '{s name=swag_import_export/profile/save/success}Successfully updated.{/s}'
+                    '{s name="swag_import_export/profile/save/title"}Swag import export{/s}',
+                    '{s name="swag_import_export/profile/save/success"}Successfully updated.{/s}'
                 );
                 treePanel.expand();
                 treePanel.getSelectionModel().select(iteratorNode);
@@ -492,7 +492,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                     msg = Ext.isObject(error) ? error.status + ' ' + error.statusText : error;
 
                 Ext.MessageBox.show({
-                    title: '{s name=swag_import_export/profile/add_child/failure_title}Create Child Node Failed{/s}',
+                    title: '{s name="swag_import_export/profile/add_child/failure_title"}Create Child Node Failed{/s}',
                     msg: msg,
                     icon: Ext.Msg.ERROR,
                     buttons: Ext.Msg.OK
@@ -554,7 +554,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                     msg = Ext.isObject(error) ? error.status + ' ' + error.statusText : error;
 
                 Ext.MessageBox.show({
-                    title: '{s name=swag_import_export/profile/add_child/failure_title}Create Child Node Failed{/s}',
+                    title: '{s name="swag_import_export/profile/add_child/failure_title"}Create Child Node Failed{/s}',
                     msg: msg,
                     icon: Ext.Msg.ERROR,
                     buttons: Ext.Msg.OK
@@ -562,8 +562,8 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
             },
             success: function() {
                 Shopware.Notification.createGrowlMessage(
-                    '{s name=swag_import_export/profile/save/title}Swag import export{/s}',
-                    '{s name=swag_import_export/profile/save/success}Successfully updated.{/s}'
+                    '{s name="swag_import_export/profile/save/title"}Swag import export{/s}',
+                    '{s name="swag_import_export/profile/save/success"}Successfully updated.{/s}'
                 );
                 win.close();
                 treePanel.expand();
@@ -599,7 +599,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
         if (Ext.Object.getKeys(node.getChanges()).length > 0) {
             treeStore.sync({
                 success: function() {
-                    return Ext.callback(callback, scope, [true, '{s name=swag_import_export/profile/save/success}Successfully updated.{/s}']);
+                    return Ext.callback(callback, scope, [true, '{s name="swag_import_export/profile/save/success"}Successfully updated.{/s}']);
                 },
                 failure: function(batch, options) {
                     var error = batch.exceptions[0].getError(),
@@ -609,7 +609,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                 }
             });
         } else {
-            return Ext.callback(callback, scope, [true, '{s name=swag_import_export/profile/save/success}Successfully updated.{/s}']);
+            return Ext.callback(callback, scope, [true, '{s name="swag_import_export/profile/save/success"}Successfully updated.{/s}']);
         }
     },
 
@@ -618,8 +618,8 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
      */
     deleteNode: function(treePanel) {
         Ext.Msg.show({
-            title: '{s name=swag_import_export/profile/delete/title}Delete Node?{/s}',
-            msg: '{s name=swag_import_export/profile/delete/msg}Are you sure you want to permanently delete the node?{/s}',
+            title: '{s name="swag_import_export/profile/delete/title"}Delete Node?{/s}',
+            msg: '{s name="swag_import_export/profile/delete/msg"}Are you sure you want to permanently delete the node?{/s}',
             buttons: Ext.Msg.YESNO,
             fn: function(btn) {
                 if (btn === 'yes') {
@@ -662,8 +662,8 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                     store.sync({
                         success: function() {
                             Shopware.Notification.createGrowlMessage(
-                                '{s name=swag_import_export/profile/save/title}Swag import export{/s}',
-                                '{s name=swag_import_export/profile/save/success}Successfully updated.{/s}'
+                                '{s name="swag_import_export/profile/save/title"}Swag import export{/s}',
+                                '{s name="swag_import_export/profile/save/success"}Successfully updated.{/s}'
                             );
                             selModel.deselectAll();
                             if (selectNode) {
@@ -675,7 +675,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                                 msg = Ext.isObject(error) ? error.status + ' ' + error.statusText : error;
 
                             Ext.MessageBox.show({
-                                title: '{s name=swag_import_export/profile/delete/failed}Delete List Failed{/s}',
+                                title: '{s name="swag_import_export/profile/delete/failed"}Delete List Failed{/s}',
                                 msg: msg,
                                 icon: Ext.Msg.ERROR,
                                 buttons: Ext.Msg.OK
@@ -718,7 +718,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
                     msg = Ext.isObject(error) ? error.status + ' ' + error.statusText : error;
 
                 Ext.MessageBox.show({
-                    title: '{s name=swag_import_export/profile/add_attribute/failure_title}Create Attribute Failed{/s}',
+                    title: '{s name="swag_import_export/profile/add_attribute/failure_title"}Create Attribute Failed{/s}',
                     msg: msg,
                     icon: Ext.Msg.ERROR,
                     buttons: Ext.Msg.OK
@@ -726,8 +726,8 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
             },
             success: function() {
                 Shopware.Notification.createGrowlMessage(
-                    '{s name=swag_import_export/profile/save/title}Swag import export{/s}',
-                    '{s name=swag_import_export/profile/save/success}Successfully updated.{/s}'
+                    '{s name="swag_import_export/profile/save/title"}Swag import export{/s}',
+                    '{s name="swag_import_export/profile/save/success"}Successfully updated.{/s}'
                 );
                 treePanel.expand();
                 treePanel.getSelectionModel().select(treeStore.getById(newNode.getId()));

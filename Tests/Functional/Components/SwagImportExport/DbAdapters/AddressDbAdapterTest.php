@@ -20,7 +20,7 @@ class AddressDbAdapterTest extends TestCase
 
     const NO_START = 0;
     const NO_LIMIT = 0;
-    const NO_FILTER = '';
+    const NO_FILTER = [];
     const COUNTRY_ID_USA = 28;
     const CUSTOMER_ID = 1;
     const EXISTING_ADDRESS = 3;

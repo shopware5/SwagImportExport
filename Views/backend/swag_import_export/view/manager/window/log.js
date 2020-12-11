@@ -6,7 +6,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.window.Log', {
 
     width: 620,
     height: 580,
-    title: '{s name=swag_import_export/manager/window/log/title}Detail information{/s}',
+    title: '{s name="swag_import_export/manager/window/log/title"}Detail information{/s}',
 
     config: {
         sessionId: null
@@ -63,7 +63,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.window.Log', {
                 ui: 'shopware-ui',
                 dock: 'top',
                 items: [{
-                    text: '{s name=swag_import_export/manager/window/log/button_repeat}Repeat{/s}',
+                    text: '{s name="swag_import_export/manager/window/log/button_repeat"}Repeat{/s}',
                     iconCls: 'sprite-arrow-circle-315',
                     handler: function() {
                         me.fireEvent(
@@ -78,7 +78,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.window.Log', {
                         );
                     }
                 }, {
-                    text: '{s name=swag_import_export/manager/window/log/button_delete}Delete{/s}',
+                    text: '{s name="swag_import_export/manager/window/log/button_delete"}Delete{/s}',
                     iconCls: 'sprite-minus-circle-frame',
                     handler: function() {
                         me.fireEvent(

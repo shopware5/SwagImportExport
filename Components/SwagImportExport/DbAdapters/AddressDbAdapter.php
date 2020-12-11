@@ -72,7 +72,7 @@ class AddressDbAdapter implements DataDbAdapter
     /**
      * {@inheritdoc}
      */
-    public function readRecordIds($start = 0, $limit = 0, $filter)
+    public function readRecordIds($start = 0, $limit = 0, $filter = [])
     {
         $query = $this->modelManager->getConnection()->createQueryBuilder();
         $query->select(['address.id']);
@@ -87,7 +87,7 @@ class AddressDbAdapter implements DataDbAdapter
             $query->setMaxResults($limit);
         }
 
-        if (array_key_exists('customerStreamId', $filter)) {
+        if ($filter && array_key_exists('customerStreamId', $filter)) {
             $query->innerJoin(
                 'address',
                 's_customer_streams_mapping',

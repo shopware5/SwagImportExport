@@ -436,7 +436,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         return new Logger(
             $this->get('swag_import_export.csv_file_writer'),
             $this->get('models'),
-            $this->Application()->Container()->getParameter('shopware.app.rootdir') . 'var/log'
+            $this->Application()->Container()->getParameter('shopware.app.rootDir') . 'var/log'
         );
     }
 
@@ -452,7 +452,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
             $this->getDataTransformerFactory(),
             $this->get('swag_import_export.logger'),
             $this->get('swag_import_export.upload_path_provider'),
-            Shopware()->Auth(),
+            $this->get('auth'),
             $this->get('shopware_media.media_service')
         );
     }
@@ -469,7 +469,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
             $this->getDataTransformerFactory(),
             $this->get('swag_import_export.logger'),
             $this->get('swag_import_export.upload_path_provider'),
-            Shopware()->Auth(),
+            $this->get('auth'),
             $this->get('shopware_media.media_service')
         );
     }

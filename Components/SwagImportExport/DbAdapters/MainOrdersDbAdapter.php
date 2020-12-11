@@ -539,6 +539,10 @@ class MainOrdersDbAdapter implements DataDbAdapter
      */
     private function getShippingRate($amount, $amountNet)
     {
+        if (empty($amountNet)) {
+            $amountNet = 1.0;
+        }
+
         $percent = abs((1 - $amount / $amountNet) * 100);
 
         return round($percent);

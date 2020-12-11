@@ -3,13 +3,13 @@
 Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
     extend: 'Ext.app.Controller',
     snippets: {
-        window: '{s name=swag_import_export/import/window_title}Import window{/s}',
-        finished: '{s name=swag_import_export/import/finished}Importing finished successfully. {/s}',
-        process: '{s name=swag_import_export/import/process}Importing... {/s}',
-        start: '{s name=swag_import_export/import/start}Start importing{/s}',
-        close: '{s name=swag_import_export/import/close}Close{/s}',
-        failure: '{s name=swag_import_export/import/failure-title}An error occured{/s}',
-        unprocess: '{s name=swag_import_export/import/unprocessed}Start importing unprocessed data{/s}'
+        window: '{s name="swag_import_export/import/window_title"}Import window{/s}',
+        finished: '{s name="swag_import_export/import/finished"}Importing finished successfully. {/s}',
+        process: '{s name="swag_import_export/import/process"}Importing... {/s}',
+        start: '{s name="swag_import_export/import/start"}Start importing{/s}',
+        close: '{s name="swag_import_export/import/close"}Close{/s}',
+        failure: '{s name="swag_import_export/import/failure-title"}An error occured{/s}',
+        unprocess: '{s name="swag_import_export/import/unprocessed"}Start importing unprocessed data{/s}'
     },
 
     refs: [
@@ -74,8 +74,8 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
 
         if (Ext.isEmpty(values.profile) || values.profile < 1) {
             Shopware.Notification.createGrowlMessage(
-                '{s name=swag_import_export/import/error_title}Swag import export{/s}',
-                '{s name=swag_import_export/import/error_msg_profle}Please select a profile{/s}'
+                '{s name="swag_import_export/import/error_title"}Swag import export{/s}',
+                '{s name="swag_import_export/import/error_msg_profle"}Please select a profile{/s}'
             );
             return;
         }
@@ -110,8 +110,8 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
             });
         } else {
             Shopware.Notification.createGrowlMessage(
-                '{s name=swag_import_export/import/error_title}Swag import export{/s}',
-                '{s name=swag_import_export/import/error_msg_file}No file was selected{/s}'
+                '{s name="swag_import_export/import/error_title"}Swag import export{/s}',
+                '{s name="swag_import_export/import/error_msg_file"}No file was selected{/s}'
             );
         }
     },
@@ -247,10 +247,10 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
                 var result = Ext.decode(response.responseText);
 
                 if (result.success == false) {
-                    var msg = '{s name=swag_import_export/import/error}Import error{/s}';
+                    var msg = '{s name="swag_import_export/import/error"}Import error{/s}';
 
                     if (extension) {
-                        msg = '{s name=swag_import_export/import/extension_import_error}Extension import error{/s}';
+                        msg = '{s name="swag_import_export/import/extension_import_error"}Extension import error{/s}';
                     }
 
                     return Shopware.Msg.createStickyGrowlMessage({
@@ -268,7 +268,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
 
                 if (result.data.load === true) {
                     Shopware.Notification.createStickyGrowlMessage({
-                        title: '{s name=swag_import_export/import/window_title}Import{/s}',
+                        title: '{s name="swag_import_export/import/window_title"}Import{/s}',
                         text: me.snippets.finished + me.snippets.unprocess
                     });
 
@@ -301,7 +301,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
             },
             failure: function(response) {
                 Shopware.Msg.createStickyGrowlMessage({
-                    title: '{s name=swag_import_export/import/failure-title}An error occured{/s}',
+                    title: '{s name="swag_import_export/import/failure-title"}An error occured{/s}',
                     text: response.responseText
                 });
                 me.onProcessFinish(win);

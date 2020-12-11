@@ -239,7 +239,7 @@ class CategoryWriter
     protected function updateArticlesCategoriesRO($articleId)
     {
         /** @var CategorySubscriber $categorySubscriber */
-        $categorySubscriber = Shopware()->CategorySubscriber();
+        $categorySubscriber = Shopware()->Container()->get('categorysubscriber');
         foreach ($this->categoryIds as $categoryId) {
             $categorySubscriber->backlogAddAssignment($articleId, $categoryId);
         }

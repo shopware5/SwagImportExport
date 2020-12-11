@@ -1346,7 +1346,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                         $articleWriterResult->getArticleId(),
                         $articleWriterResult->getDetailId(),
                         array_filter(
-                            $records['price'],
+                            $records['price'] ?? [],
                             function ($price) use ($index) {
                                 return (int) $price['parentIndexElement'] === $index;
                             }
@@ -1356,7 +1356,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                     $categoryWriter->write(
                         $articleWriterResult->getArticleId(),
                         array_filter(
-                            $records['category'],
+                            $records['category'] ?? [],
                             function ($category) use ($index) {
                                 return (int) $category['parentIndexElement'] === $index
                                     && ($category['categoryId'] || $category['categoryPath']);
@@ -1367,7 +1367,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                     $configuratorWriter->writeOrUpdateConfiguratorSet(
                         $articleWriterResult,
                         array_filter(
-                            $records['configurator'],
+                            $records['configurator'] ?? [],
                             function ($configurator) use ($index) {
                                 return (int) $configurator['parentIndexElement'] === $index;
                             }
@@ -1385,7 +1385,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                         $articleWriterResult->getDetailId(),
                         $articleWriterResult->getMainDetailId(),
                         array_filter(
-                            $records['translation'],
+                            $records['translation'] ?? [],
                             function ($translation) use ($index) {
                                 return (int) $translation['parentIndexElement'] === $index;
                             }
@@ -1404,7 +1404,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                     $articleWriterResult->getArticleId(),
                     $article['mainNumber'],
                     array_filter(
-                        $records['accessory'],
+                        $records['accessory'] ?? [],
                         function ($accessory) use ($index, $articleWriterResult) {
                             return (int) $accessory['parentIndexElement'] === $index
                                 && $articleWriterResult->getMainDetailId() === $articleWriterResult->getDetailId();
@@ -1418,7 +1418,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                     $articleWriterResult->getArticleId(),
                     $article['mainNumber'],
                     array_filter(
-                        $records['similar'],
+                        $records['similar'] ?? [],
                         function ($similar) use ($index, $articleWriterResult) {
                             return (int) $similar['parentIndexElement'] === $index
                                 && $articleWriterResult->getMainDetailId() === $articleWriterResult->getDetailId();
@@ -1432,7 +1432,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                     $articleWriterResult->getArticleId(),
                     $article['mainNumber'],
                     array_filter(
-                        $records['image'],
+                        $records['image'] ?? [],
                         function ($image) use ($index) {
                             return (int) $image['parentIndexElement'] === $index;
                         }
@@ -1473,7 +1473,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     private function filterPropertyValues($records, $index, ArticleWriterResult $articleWriterResult)
     {
         return array_filter(
-            $records['propertyValue'],
+            $records['propertyValue'] ?? [],
             function ($property) use ($index, $articleWriterResult) {
                 return (int) $property['parentIndexElement'] === $index
                     && $articleWriterResult->getMainDetailId() === $articleWriterResult->getDetailId();

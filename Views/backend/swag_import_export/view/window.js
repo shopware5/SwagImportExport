@@ -21,7 +21,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.Window', {
 
     layout: 'fit',
 
-    title: '{s name=swag_import_export/window/title}Import / Export{/s}',
+    title: '{s name="swag_import_export/window/title"}Import / Export{/s}',
 
     initComponent: function() {
         var me = this;

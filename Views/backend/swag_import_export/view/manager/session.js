@@ -7,7 +7,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Session', {
      * @string
      */
     alias: 'widget.swag-import-export-manager-session',
-    title: '{s name=swag_import_export/manager/log/title}Protocol{/s}',
+    title: '{s name="swag_import_export/manager/log/title"}Protocol{/s}',
 
     initComponent: function() {
         var me = this;
@@ -50,38 +50,38 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Session', {
             },
             items: [{
                 xtype: 'datecolumn',
-                header: '{s name=swag_import_export/manager/log/header_date}Date{/s}',
+                header: '{s name="swag_import_export/manager/log/header_date"}Date{/s}',
                 dataIndex: 'createdAt',
                 format: 'd.m.Y H:i:s',
                 flex: 1
             }, {
-                header: '{s name=swag_import_export/manager/log/header_file}File{/s}',
+                header: '{s name="swag_import_export/manager/log/header_file"}File{/s}',
                 dataIndex: 'fileName',
                 renderer: function(value, view, record) {
                     return '<a href={url action="downloadFile"}' + '?type=' + record.get('type') + '&fileName=' + record.get('fileUrl') + ' >' + value + '</a>';
                 },
                 flex: 2
             }, {
-                header: '{s name=swag_import_export/manager/log/header_status}Status{/s}',
+                header: '{s name="swag_import_export/manager/log/header_status"}Status{/s}',
                 dataIndex: 'state',
                 width: 60,
                 renderer: me.renderStatus
             }, {
-                header: '{s name=swag_import_export/manager/log/header_type}Type{/s}',
+                header: '{s name="swag_import_export/manager/log/header_type"}Type{/s}',
                 dataIndex: 'type',
                 width: 60,
                 renderer: me.renderType
             }, {
-                header: '{s name=swag_import_export/manager/log/header_profile}Profile{/s}',
+                header: '{s name="swag_import_export/manager/log/header_profile"}Profile{/s}',
                 dataIndex: 'profileName',
                 flex: 1
             }, {
-                header: '{s name=swag_import_export/manager/log/header_user}User{/s}',
+                header: '{s name="swag_import_export/manager/log/header_user"}User{/s}',
                 dataIndex: 'username',
                 width: 80
             }, {
                 xtype: 'actioncolumn',
-                header: '{s name=swag_import_export/manager/log/header_actions}Actions{/s}',
+                header: '{s name="swag_import_export/manager/log/header_actions"}Actions{/s}',
                 width: 80,
                 items: [{
                     iconCls: 'sprite-magnifier',
@@ -125,7 +125,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Session', {
             ui: 'shopware-ui',
             dock: 'top',
             items: [{
-                text: '{s name=swag_import_export/manager/log/button_delete_operations}Delete selected operation(s){/s}',
+                text: '{s name="swag_import_export/manager/log/button_delete_operations"}Delete selected operation(s){/s}',
                 iconCls: 'sprite-minus-circle-frame',
                 itemId: 'deletebutton',
                 disabled: true,
@@ -167,9 +167,9 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Session', {
 
     renderType: function(value) {
         if (value == 'export') {
-            return '{s name=swag_import_export/manager/log/export}export{/s}';
+            return '{s name="swag_import_export/manager/log/export"}export{/s}';
         }
-        return '{s name=swag_import_export/manager/log/import}import{/s}';
+        return '{s name="swag_import_export/manager/log/import"}import{/s}';
     }
 });
 // {/block}

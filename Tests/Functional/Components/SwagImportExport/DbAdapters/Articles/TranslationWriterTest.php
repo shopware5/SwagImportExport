@@ -11,6 +11,7 @@ namespace SwagImportExport\Tests\Functional\Components\SwagImportExport\DbAdapte
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\TranslationWriter;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
@@ -71,6 +72,10 @@ class TranslationWriterTest extends TestCase
 
     public function test_write_should_create_attribute_translations()
     {
+        /** @var ModelManager $modelManager */
+        $modelManager = Shopware()->Container()->get('models');
+        $modelManager->rollback();
+
         /** @var Connection $dbalConnection */
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
         /** @var CrudService $attributeService */
@@ -101,6 +106,8 @@ class TranslationWriterTest extends TestCase
         $dbalConnection->executeQuery('DELETE FROM s_articles_translations WHERE articleID=272');
 
         static::assertEquals($translations[0]['mycustomfield'], $importedTranslation['__attribute_mycustomfield']);
+
+        $modelManager->beginTransaction();
     }
 
     public function test_write_should_create_variant_translation()

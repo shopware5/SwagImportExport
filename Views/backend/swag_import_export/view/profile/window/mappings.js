@@ -22,7 +22,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Mappings', {
         align: 'stretch'
     },
 
-    title: '{s name=swag_import_export/profile/window/conversion}Conversions{/s}',
+    title: '{s name="swag_import_export/profile/window/conversion"}Conversions{/s}',
 
     initComponent: function() {
         var me = this;
@@ -43,14 +43,14 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Mappings', {
         me.exportEditor = Ext.create('Ext.ux.aceeditor.Panel', {
             flex: 2,
             disabled: true,
-            title: '{s name=swag_import_export/profile/window/export_conversion}Export conversion{/s}',
+            title: '{s name="swag_import_export/profile/window/export_conversion"}Export conversion{/s}',
             sourceCode: '',
             parser: 'smarty'
         });
         me.importEditor = Ext.create('Ext.ux.aceeditor.Panel', {
             flex: 2,
             disabled: true,
-            title: '{s name=swag_import_export/profile/window/import_conversion}Import conversion{/s}',
+            title: '{s name="swag_import_export/profile/window/import_conversion"}Import conversion{/s}',
             sourceCode: '',
             parser: 'smarty'
         });
@@ -72,7 +72,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Mappings', {
                     backgroundColor: '#F0F2F4'
                 },
                 items: ['->', {
-                    text: '{s name=swag_import_export/profile/window/save}Save{/s}',
+                    text: '{s name="swag_import_export/profile/window/save"}Save{/s}',
                     cls: 'primary',
                     action: 'swag-import-export-manager-profile-save',
                     handler: function() {
@@ -137,14 +137,14 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Mappings', {
             tbar: me.createGridToolbar(),
             selModel: me.getGridSelModel(),
             columns: [{
-                text: '{s name=swag_import_export/profile/window/shopware_field}Field{/s}',
+                text: '{s name="swag_import_export/profile/window/shopware_field"}Field{/s}',
                 flex: 1,
                 sortable: true,
                 dataIndex: 'variable',
                 editor: {
                     xtype: 'combobox',
                     editable: false,
-                    emptyText: '{s name=swag_import_export/profile/window/select_column}Select field{/s}',
+                    emptyText: '{s name="swag_import_export/profile/window/select_column"}Select field{/s}',
                     queryMode: 'local',
                     store: Ext.create('Shopware.apps.SwagImportExport.store.Column').load({
                         params: {
@@ -166,7 +166,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Mappings', {
                     {
                         iconCls: 'sprite-minus-circle-frame',
                         action: 'deleteConversion',
-                        tooltip: '{s name=swag_import_export/profile/window/delete_mapping}Delete conversion{/s}',
+                        tooltip: '{s name="swag_import_export/profile/window/delete_mapping"}Delete conversion{/s}',
                         handler: function(view, rowIndex, colIndex, item) {
                             me.fireEvent('deleteConversion', me.conversionsGrid.getStore(), rowIndex);
                         }
@@ -217,7 +217,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Mappings', {
 
         me.deleteConversionsButton = Ext.create('Ext.button.Button', {
             iconCls: 'sprite-minus-circle-frame',
-            text: '{s name=swag_import_export/profile/window/delete_selected}Delete selected{/s}',
+            text: '{s name="swag_import_export/profile/window/delete_selected"}Delete selected{/s}',
             disabled: true,
             action: 'deleteConversion',
             handler: function() {
@@ -227,7 +227,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Mappings', {
 
         me.addConversionButton = Ext.create('Ext.button.Button', {
             iconCls: 'sprite-plus-circle-frame',
-            text: '{s name=swag_import_export/profile/window/add_new}Add new{/s}',
+            text: '{s name="swag_import_export/profile/window/add_new"}Add new{/s}',
             action: 'addConversion',
             handler: function() {
                 me.fireEvent('addConversion', me.conversionsGrid, me.rowEditor);

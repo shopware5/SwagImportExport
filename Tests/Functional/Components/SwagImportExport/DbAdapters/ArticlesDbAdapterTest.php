@@ -11,6 +11,7 @@ namespace Functional\Components\SwagImportExport\DbAdapters;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\DbAdapters\ArticlesDbAdapter;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 
@@ -280,6 +281,10 @@ class ArticlesDbAdapterTest extends TestCase
 
     public function test_write_article_with_attribute_translation_should_be_written_to_database()
     {
+        /** @var ModelManager $modelManager */
+        $modelManager = Shopware()->Container()->get('models');
+        $modelManager->rollback();
+
         $attributeService = Shopware()->Container()->get('shopware_attribute.crud_service');
         /* @var CrudService $attributeService */
         $attributeService->update('s_articles_attributes', 'mycustomfield', 'string', ['translatable' => true]);
@@ -317,6 +322,8 @@ class ArticlesDbAdapterTest extends TestCase
         $dbalConnection->executeQuery("DELETE FROM s_articles_translations WHERE articleID={$articleId}");
 
         static::assertEquals($records['translation'][0]['mycustomfield'], $importedTranslation['__attribute_mycustomfield']);
+
+        $modelManager->beginTransaction();
     }
 
     public function test_read()
