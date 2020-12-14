@@ -20,7 +20,7 @@ class AddressDbAdapterTest extends TestCase
 
     const NO_START = 0;
     const NO_LIMIT = 0;
-    const NO_FILTER = '';
+    const NO_FILTER = [];
     const COUNTRY_ID_USA = 28;
     const CUSTOMER_ID = 1;
     const EXISTING_ADDRESS = 3;
@@ -86,7 +86,7 @@ class AddressDbAdapterTest extends TestCase
     public function test_read_should_return_attributes()
     {
         $connection = Shopware()->Container()->get('dbal_connection');
-        $connection->executeQuery(file_get_contents(__DIR__ . '/_fixtures/address_attribute_demo.sql'));
+        $connection->executeQuery(\file_get_contents(__DIR__ . '/_fixtures/address_attribute_demo.sql'));
 
         $addressIdsToFetch = [1];
         $selectedColumns = ['attribute.text1', 'attribute.text2'];
@@ -180,7 +180,7 @@ class AddressDbAdapterTest extends TestCase
     {
         /** @var Connection $connection */
         $connection = Shopware()->Container()->get('dbal_connection');
-        $demoSQL = file_get_contents(__DIR__ . '/_fixtures/address_demo.sql');
+        $demoSQL = \file_get_contents(__DIR__ . '/_fixtures/address_demo.sql');
         $connection->executeQuery($demoSQL)->execute();
 
         $updatedAddressId = $connection->lastInsertId();
@@ -388,7 +388,7 @@ class AddressDbAdapterTest extends TestCase
     {
         /** @var Connection $connection */
         $connection = Shopware()->Container()->get('dbal_connection');
-        $connection->executeQuery(file_get_contents(__DIR__ . '/_fixtures/address_with_state_demo.sql'));
+        $connection->executeQuery(\file_get_contents(__DIR__ . '/_fixtures/address_with_state_demo.sql'));
         $addressId = $connection->lastInsertId();
 
         $addresses = [

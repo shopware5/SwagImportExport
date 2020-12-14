@@ -53,6 +53,6 @@ class Update04CreateColumns implements UpdaterInterface
      */
     public function isCompatible()
     {
-        return version_compare($this->setupContext->getPreviousPluginVersion(), self::MAX_PLUGIN_VERSION, '<');
+        return \version_compare($this->setupContext->getPreviousPluginVersion(), self::MAX_PLUGIN_VERSION, '<');
     }
 }

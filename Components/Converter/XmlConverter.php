@@ -42,7 +42,7 @@ class XmlConverter
     {
         $ret = '';
         if ($this->sSettings['padding'] !== false) {
-            $pad = str_repeat($this->sSettings['padding'], $pos);
+            $pad = \str_repeat($this->sSettings['padding'], $pos);
         } else {
             $pad = '';
         }
@@ -51,9 +51,9 @@ class XmlConverter
                 $key = $ekey;
             }
             $attributes = '';
-            if (is_array($item) && isset($item['_attributes'])) {
+            if (\is_array($item) && isset($item['_attributes'])) {
                 foreach ($item['_attributes'] as $k => $v) {
-                    $attributes .= " $k=\"" . htmlspecialchars($v) . '"';
+                    $attributes .= " $k=\"" . \htmlspecialchars($v) . '"';
                 }
                 if (isset($item['_value'])) {
                     $item = $item['_value'];
@@ -63,8 +63,8 @@ class XmlConverter
             }
             if (empty($item)) {
                 $ret .= "$pad<$key$attributes></$key>{$this->sSettings['newline']}";
-            } elseif (is_array($item)) {
-                if (is_numeric(key($item))) {
+            } elseif (\is_array($item)) {
+                if (\is_numeric(\key($item))) {
                     $ret .= $this->_encode($item, $pos, $key);
                 } else {
                     $ret .= "$pad<$key$attributes>{$this->sSettings['newline']}" . $this->_encode(
@@ -73,9 +73,9 @@ class XmlConverter
                     ) . "$pad</$key>{$this->sSettings['newline']}";
                 }
             } else {
-                if (preg_match('#<|>|&(?<!amp;)#', $item)) {
+                if (\preg_match('#<|>|&(?<!amp;)#', $item)) {
                     //$item = str_replace("<![CDATA[", "&lt;![CDATA[", $item);
-                    $item = str_replace(']]>', ']]]]><![CDATA[>', $item);
+                    $item = \str_replace(']]>', ']]]]><![CDATA[>', $item);
                     $ret .= "$pad<$key$attributes><![CDATA[" . $item . "]]></$key>{$this->sSettings['newline']}";
                 } else {
                     $ret .= "$pad<$key$attributes>" . $item . "</$key>{$this->sSettings['newline']}";
@@ -94,15 +94,15 @@ class XmlConverter
         if (!$contents) {
             return [];
         }
-        if (!function_exists('xml_parser_create')) {
+        if (!\function_exists('xml_parser_create')) {
             return [];
         }
-        $parser = xml_parser_create();
-        xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
-        xml_parser_set_option($parser, XML_OPTION_SKIP_WHITE, 1);
-        xml_parser_set_option($parser, XML_OPTION_TARGET_ENCODING, $this->sSettings['encoding']);
-        xml_parse_into_struct($parser, file_get_contents($contents), $xml_values);
-        xml_parser_free($parser);
+        $parser = \xml_parser_create();
+        \xml_parser_set_option($parser, \XML_OPTION_CASE_FOLDING, 0);
+        \xml_parser_set_option($parser, \XML_OPTION_SKIP_WHITE, 1);
+        \xml_parser_set_option($parser, \XML_OPTION_TARGET_ENCODING, $this->sSettings['encoding']);
+        \xml_parse_into_struct($parser, \file_get_contents($contents), $xml_values);
+        \xml_parser_free($parser);
 
         if (!$xml_values) {
             return;
@@ -113,7 +113,7 @@ class XmlConverter
 
         foreach ($xml_values as $data) {
             unset($attributes, $value); //Remove existing values, or there will be trouble
-            extract($data); //We could use the array by itself, but this cooler.
+            \extract($data); //We could use the array by itself, but this cooler.
             $result = '';
             if (!empty($attributes)) { //The second argument of the function decides this.
                 $result = [];
@@ -138,7 +138,7 @@ class XmlConverter
             if ($type === 'open') { //The starting of the tag '<tag>'
                 $parent[$level - 1] = &$current;
 
-                if (!is_array($current) or (!in_array($tag, array_keys($current)))) { //Insert New tag
+                if (!\is_array($current) or (!\in_array($tag, \array_keys($current)))) { //Insert New tag
                     $current[$tag] = $result;
                     $current = &$current[$tag];
                 } else { //There was another element with the same tag name
@@ -147,7 +147,7 @@ class XmlConverter
                     } else {
                         $current[$tag] = [$current[$tag], $result];
                     }
-                    $last = count($current[$tag]) - 1;
+                    $last = \count($current[$tag]) - 1;
                     $current = &$current[$tag][$last];
                 }
             } elseif ($type === 'complete') { //Tags that ends in 1 line '<tag />'
@@ -155,10 +155,10 @@ class XmlConverter
                 if (!isset($current[$tag])) { //New Key
                     $current[$tag] = $result;
                 } else { //If taken, put all things inside a list(array)
-                    if ((is_array(
+                    if ((\is_array(
                         $current[$tag]
                     ) and $this->sSettings['attributes'] == 0) //If it is already an array...
-                        or (isset($current[$tag][0]) and is_array(
+                        or (isset($current[$tag][0]) and \is_array(
                             $current[$tag]
                         ) and $this->sSettings['attributes'] == 1)
                     ) {
@@ -185,16 +185,16 @@ class XmlConverter
      */
     public function fix_array(&$array, $name = '')
     {
-        if (!empty($name) && (empty($array[$name]) || !is_array($array[$name]))) {
+        if (!empty($name) && (empty($array[$name]) || !\is_array($array[$name]))) {
             return false;
         }
         if (!empty($name)) {
             $array = $array[$name];
         }
-        if (empty($array) || !is_array($array)) {
+        if (empty($array) || !\is_array($array)) {
             return false;
         }
-        if (key($array) !== 0) {
+        if (\key($array) !== 0) {
             $array = [0 => $array];
         }
 
@@ -209,7 +209,7 @@ class XmlConverter
         if (empty($string)) {
             return false;
         }
-        if (!is_array($string)) {
+        if (!\is_array($string)) {
             $string = ['_value' => $string];
         }
         if (empty($string['_value'])) {
@@ -225,7 +225,7 @@ class XmlConverter
     public function attr_as_key(&$array, $atr, $valuename = '')
     {
         $data = [];
-        if (!empty($array) && is_array($array)) {
+        if (!empty($array) && \is_array($array)) {
             foreach ($array as $value) {
                 if (!isset($value['_attributes'][$atr])) {
                 } elseif (isset($value['_value'])) {
@@ -257,7 +257,7 @@ class XmlConverter
     public function value_as_key(&$array, $name, $valuename = '')
     {
         $data = [];
-        if (!empty($array) && is_array($array)) {
+        if (!empty($array) && \is_array($array)) {
             foreach ($array as $value) {
                 if (!isset($value[$name])) {
                     $data[$value[$name]] = null;
@@ -282,13 +282,13 @@ class XmlConverter
      */
     public function atr_as_values(&$array, $valuename = '')
     {
-        if (!empty($valuename) && is_string($array)) {
+        if (!empty($valuename) && \is_string($array)) {
             $array[$valuename] = $array;
         }
-        if (empty($array) || !is_array($array)) {
+        if (empty($array) || !\is_array($array)) {
             return false;
         }
-        if (!empty($array['_attributes']) && is_array(
+        if (!empty($array['_attributes']) && \is_array(
             $array['_attributes']
         )
         ) {

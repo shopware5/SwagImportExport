@@ -18,7 +18,7 @@ class CsvFileWriterTest extends TestCase
 
     protected function tearDown(): void
     {
-        unlink(self::TEST_FILE);
+        \unlink(self::TEST_FILE);
     }
 
     public function test_it_should_create_csv()

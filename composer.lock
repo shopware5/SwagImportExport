@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3baf92c45b5f18918db0d026bf333987",
+    "content-hash": "06ef0a3d5716f5496d41c996719168e4",
     "packages": [],
     "packages-dev": [
         {
             "name": "shopware/plugin-dev-tools",
-            "version": "dev-master",
+            "version": "dev-2.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/shopwareLabs/plugin-dev-tools.git",
-                "reference": "78fef1ba3a52fa97c3f00940236c9e8455e012f1"
+                "reference": "4e7207571a9690c16fb4bc8c744dcb3436b9b34f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/shopwareLabs/plugin-dev-tools/zipball/78fef1ba3a52fa97c3f00940236c9e8455e012f1",
-                "reference": "78fef1ba3a52fa97c3f00940236c9e8455e012f1",
+                "url": "https://api.github.com/repos/shopwareLabs/plugin-dev-tools/zipball/4e7207571a9690c16fb4bc8c744dcb3436b9b34f",
+                "reference": "4e7207571a9690c16fb4bc8c744dcb3436b9b34f",
                 "shasum": ""
             },
             "type": "application",
@@ -30,10 +30,10 @@
             ],
             "description": "Tools for plugin development.",
             "support": {
-                "source": "https://github.com/shopwareLabs/plugin-dev-tools/tree/master",
+                "source": "https://github.com/shopwareLabs/plugin-dev-tools/tree/2.x-dev",
                 "issues": "https://github.com/shopwareLabs/plugin-dev-tools/issues"
             },
-            "time": "2017-12-20T07:47:21+00:00"
+            "time": "2020-10-21T07:06:34+00:00"
         }
     ],
     "aliases": [],

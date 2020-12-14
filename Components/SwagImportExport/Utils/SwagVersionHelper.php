@@ -23,6 +23,6 @@ class SwagVersionHelper
             return true;
         }
 
-        return version_compare($actualVersion, $version, '>=');
+        return \version_compare($actualVersion, $version, '>=');
     }
 }

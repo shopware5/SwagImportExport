@@ -91,7 +91,7 @@ class CategoryWriter
             [$categoryId]
         );
 
-        return is_numeric($isCategoryExists);
+        return \is_numeric($isCategoryExists);
     }
 
     /**
@@ -108,7 +108,7 @@ class CategoryWriter
         $id = null;
         $path = '|';
         $data = [];
-        $descriptions = explode('->', $categoryPath);
+        $descriptions = \explode('->', $categoryPath);
 
         foreach ($descriptions as $description) {
             $id = $this->getId($description, $id, $path);
@@ -116,9 +116,9 @@ class CategoryWriter
             $data[$id] = $description;
         }
 
-        $categoryIds = array_keys($data);
+        $categoryIds = \array_keys($data);
 
-        return end($categoryIds);
+        return \end($categoryIds);
     }
 
     /**
@@ -147,14 +147,14 @@ class CategoryWriter
 
         //check whether we have more than one category on the same level with the same name
         $count = $this->db->fetchCol($sql, $params);
-        if (count($count) > 1) {
+        if (\count($count) > 1) {
             $message = SnippetsHelper::getNamespace()
                 ->get('adapters/articles/category_duplicated', "Category with name '%s' is duplicated");
-            throw new AdapterException(sprintf($message, $description));
+            throw new AdapterException(\sprintf($message, $description));
         }
 
         //check whether the category should be created
-        if (!is_numeric($parentId)) {
+        if (!\is_numeric($parentId)) {
             $parentId = $this->insertCategory($description, $id, $path);
             $this->insertCategoryAttributes($parentId);
         }
@@ -239,7 +239,7 @@ class CategoryWriter
     protected function updateArticlesCategoriesRO($articleId)
     {
         /** @var CategorySubscriber $categorySubscriber */
-        $categorySubscriber = Shopware()->CategorySubscriber();
+        $categorySubscriber = Shopware()->Container()->get('categorysubscriber');
         foreach ($this->categoryIds as $categoryId) {
             $categorySubscriber->backlogAddAssignment($articleId, $categoryId);
         }
@@ -254,9 +254,9 @@ class CategoryWriter
     private function prepareValues($categories, $articleId)
     {
         $this->categoryIds = [];
-        $values = implode(
+        $values = \implode(
             ', ',
-            array_map(
+            \array_map(
                 function ($category) use ($articleId) {
                     $isCategoryExists = false;
                     if (!empty($category['categoryId'])) {
@@ -274,7 +274,7 @@ class CategoryWriter
                     if ($isCategoryExists === false && empty($category['categoryPath'])) {
                         $message = SnippetsHelper::getNamespace()
                             ->get('adapters/articles/category_not_found', 'Category with id %s could not be found.');
-                        throw new AdapterException(sprintf($message, $category['categoryId']));
+                        throw new AdapterException(\sprintf($message, $category['categoryId']));
                     }
 
                     //if categoryPath exists, the article will be assign based on the path
@@ -288,7 +288,7 @@ class CategoryWriter
                         if (!$isLeaf) {
                             $message = SnippetsHelper::getNamespace()
                                 ->get('adapters/articles/category_not_leaf', "Category with id '%s' is not a leaf");
-                            throw new AdapterException(sprintf($message, $category['categoryId']));
+                            throw new AdapterException(\sprintf($message, $category['categoryId']));
                         }
 
                         $this->categoryIds[$category['categoryId']] = (int) $category['categoryId'];

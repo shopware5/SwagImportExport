@@ -113,7 +113,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
         }
 
         $records = $builder->getQuery()->getArrayResult();
-        $result = array_column($records, 'id');
+        $result = \array_column($records, 'id');
 
         return $result;
     }
@@ -172,7 +172,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
             'packUnit',
         ];
 
-        $whiteList = array_merge($whiteList, $variantWhiteList);
+        $whiteList = \array_merge($whiteList, $variantWhiteList);
 
         $attributes = $this->getAttributes();
 
@@ -200,7 +200,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
                 if (!$shop) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/articlesTranslations/lang_id_not_found', 'Language with id %s does not exists for article %s');
-                    throw new AdapterException(sprintf($message, $record['languageId'], $record['articleNumber']));
+                    throw new AdapterException(\sprintf($message, $record['languageId'], $record['articleNumber']));
                 }
 
                 $articleDetail = $articleDetailRepository->findOneBy(['number' => $record['articleNumber']]);
@@ -208,17 +208,17 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
                 if (!$articleDetail) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/article_number_not_found', 'Article with order number %s doen not exists');
-                    throw new AdapterException(sprintf($message, $record['articleNumber']));
+                    throw new AdapterException(\sprintf($message, $record['articleNumber']));
                 }
 
                 $articleId = $articleDetail->getArticle()->getId();
 
                 if ($articleDetail->getKind() === 1) {
-                    $data = array_intersect_key($record, array_flip($whiteList));
+                    $data = \array_intersect_key($record, \array_flip($whiteList));
                     $type = 'article';
                     $objectKey = $articleId;
                 } else {
-                    $data = array_intersect_key($record, array_flip($variantWhiteList));
+                    $data = \array_intersect_key($record, \array_flip($variantWhiteList));
                     $type = 'variant';
                     $objectKey = $articleDetail->getId();
                 }
@@ -290,9 +290,9 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
      */
     public function getColumns($section)
     {
-        $method = 'get' . ucfirst($section) . 'Columns';
+        $method = 'get' . \ucfirst($section) . 'Columns';
 
-        if (method_exists($this, $method)) {
+        if (\method_exists($this, $method)) {
             return $this->{$method}();
         }
 
@@ -306,7 +306,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
      */
     public function getTranslations($ids)
     {
-        $translationIds = implode(',', $ids);
+        $translationIds = \implode(',', $ids);
 
         $sql = "
             (SELECT ad.id as id, ad.ordernumber as articleNumber, ad.kind as kind,
@@ -356,12 +356,12 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
 
         $translationAttr['txtzusatztxt'] = 'additionalText';
         $translationAttr['txtpackunit'] = 'packUnit';
-        $translationAttr = array_merge($translationAttr, $attributes);
+        $translationAttr = \array_merge($translationAttr, $attributes);
 
         if (!empty($translations)) {
             foreach ($translations as $index => $translation) {
-                $variantData = unserialize($translation['variantData']);
-                $articleData = unserialize($translation['articleData']);
+                $variantData = \unserialize($translation['variantData']);
+                $articleData = \unserialize($translation['articleData']);
 
                 if (!empty($articleData)) {
                     foreach ($articleData as $articleKey => $value) {
@@ -414,10 +414,10 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
     private function prepareAttributePrefix($data, $attributes)
     {
         $result = [];
-        $attributes = array_column($attributes, 'columnName');
+        $attributes = \array_column($attributes, 'columnName');
 
         foreach ($data as $field => $translation) {
-            if (in_array($field, $attributes)) {
+            if (\in_array($field, $attributes)) {
                 $result['__attribute_' . $field] = $translation;
                 continue;
             }

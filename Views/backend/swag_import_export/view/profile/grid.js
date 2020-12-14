@@ -4,7 +4,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Grid', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.swag-import-export-profile-grid',
 
-    title: '{s name=swag_import_export/profile/grid/title}Profiles{/s}',
+    title: '{s name="swag_import_export/profile/grid/title"}Profiles{/s}',
     cls: 'x-media-manager-window',
 
     initComponent: function() {
@@ -30,18 +30,18 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Grid', {
                 draggable: false
             },
             items: [{
-                header: '{s name=swag_import_export/profile/grid/header_name}Name{/s}',
+                header: '{s name="swag_import_export/profile/grid/header_name"}Name{/s}',
                 dataIndex: 'name',
                 flex: 1,
                 renderer: me.renderName
             }, {
-                header: '{s name=swag_import_export/profile/grid/header_default_profile}Default{/s}',
+                header: '{s name="swag_import_export/profile/grid/header_default_profile"}Default{/s}',
                 dataIndex: 'default',
                 width: 90,
                 renderer: me.renderDefault
             }, {
                 xtype: 'actioncolumn',
-                header: '{s name=swag_import_export/profile/grid/header_actions}Actions{/s}',
+                header: '{s name="swag_import_export/profile/grid/header_actions"}Actions{/s}',
                 width: 100,
                 items: [{
                     iconCls: 'sprite-magnifier',
@@ -112,7 +112,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Grid', {
             buttonConfig: {
                 iconCls: 'sprite-plus-circle-frame'
             },
-            buttonText: '{s name=swag_import_export/profile/grid/button_import_profile}Import profile{/s}',
+            buttonText: '{s name="swag_import_export/profile/grid/button_import_profile"}Import profile{/s}',
             listeners: {
                 change: function(field, newValue) {
                     me.fireEvent('onImportFileSelected', me, field, newValue);
@@ -126,14 +126,14 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Grid', {
             dock: 'top',
             items: [{
                 xtype: 'button',
-                text: '{s name=swag_import_export/profile/grid/button_add_profile}Add profile{/s}',
+                text: '{s name="swag_import_export/profile/grid/button_add_profile"}Add profile{/s}',
                 iconCls: 'sprite-plus-circle-frame',
                 handler: function() {
                     me.fireEvent('addProfile');
                 }
             }, {
                 xtype: 'button',
-                text: '{s name=swag_import_export/profile/grid/button_delete_profile}Delete selected profile{/s}',
+                text: '{s name="swag_import_export/profile/grid/button_delete_profile"}Delete selected profile{/s}',
                 iconCls: 'sprite-minus-circle-frame',
                 itemId: 'deletebutton',
                 disabled: true,
@@ -151,7 +151,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Grid', {
                 xtype: 'checkbox',
                 itemId: 'defaultprofilefilter',
                 margin: '0 0 0 5',
-                boxLabel: '{s name=swag_import_export/profile/grid/boxlabel_hide_default_profiles}Hide default profiles{/s}',
+                boxLabel: '{s name="swag_import_export/profile/grid/boxlabel_hide_default_profiles"}Hide default profiles{/s}',
                 listeners: {
                     change: function(cb, newValue) {
                         me.fireEvent('checkboxfilterchange', cb, newValue);
@@ -162,7 +162,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Grid', {
                 itemId: 'searchfield',
                 cls: 'searchfield',
                 width: 170,
-                emptyText: '{s name=swag_import_export/profile/grid/search}Search...{/s}',
+                emptyText: '{s name="swag_import_export/profile/grid/search"}Search...{/s}',
                 enableKeyEvents: true,
                 checkChangeBuffer: 500,
                 listeners: {

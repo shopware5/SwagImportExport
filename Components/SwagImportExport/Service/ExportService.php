@@ -30,7 +30,7 @@ class ExportService extends AbstractImportExportService implements ExportService
         $position = $serviceHelpers->getDataIO()->getSessionPosition();
         $position = $position == null ? 0 : $position;
 
-        return new PreparationResultStruct($position, count($recordIds));
+        return new PreparationResultStruct($position, \count($recordIds));
     }
 
     /**
@@ -61,7 +61,7 @@ class ExportService extends AbstractImportExportService implements ExportService
 
         try {
             $resultData = $dataWorkflow->export($requestData);
-            $message = sprintf(
+            $message = \sprintf(
                 '%s %s %s',
                 $resultData['position'],
                 SnippetsHelper::getNamespace('backend/swag_import_export/default_profiles')->get('type/' . $serviceHelpers->getProfile()->getType()),
@@ -87,7 +87,7 @@ class ExportService extends AbstractImportExportService implements ExportService
      */
     private function prepareFilter($profileType, $filterParams)
     {
-        $filterParams = array_filter($filterParams, 'strlen');
+        $filterParams = \array_filter($filterParams, 'strlen');
         $filter = [];
 
         // prepare article filter
@@ -110,7 +110,7 @@ class ExportService extends AbstractImportExportService implements ExportService
         }
 
         // prepare orders and mainOrders filter
-        if (in_array($profileType, [DataDbAdapter::ORDER_ADAPTER, DataDbAdapter::MAIN_ORDER_ADAPTER], true)) {
+        if (\in_array($profileType, [DataDbAdapter::ORDER_ADAPTER, DataDbAdapter::MAIN_ORDER_ADAPTER], true)) {
             if (isset($filterParams['ordernumberFrom'])) {
                 $filter['ordernumberFrom'] = $filterParams['ordernumberFrom'];
             }
@@ -135,7 +135,7 @@ class ExportService extends AbstractImportExportService implements ExportService
         }
 
         //customer stream filter for addresses and customers
-        if (in_array($profileType, [DataDbAdapter::CUSTOMER_ADAPTER, DataDbAdapter::ADDRESS_ADAPTER], true)) {
+        if (\in_array($profileType, [DataDbAdapter::CUSTOMER_ADAPTER, DataDbAdapter::ADDRESS_ADAPTER], true)) {
             if (isset($filterParams['customerStreamId'])) {
                 $filter['customerStreamId'] = $filterParams['customerStreamId'];
             }

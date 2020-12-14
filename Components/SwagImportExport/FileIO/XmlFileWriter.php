@@ -61,7 +61,7 @@ class XmlFileWriter implements FileWriter
         $convertor = $this->getXmlConvertor();
         $data = $convertor->_encode($data);
 
-        $this->getFileHelper()->writeStringToFile($fileName, trim($data), FILE_APPEND);
+        $this->getFileHelper()->writeStringToFile($fileName, \trim($data), \FILE_APPEND);
     }
 
     /**
@@ -76,7 +76,7 @@ class XmlFileWriter implements FileWriter
 
         $data = isset($dataParts[1]) ? $dataParts[1] : null;
 
-        $this->getFileHelper()->writeStringToFile($fileName, $data, FILE_APPEND);
+        $this->getFileHelper()->writeStringToFile($fileName, $data, \FILE_APPEND);
     }
 
     /**
@@ -111,7 +111,7 @@ class XmlFileWriter implements FileWriter
         $data = $convertor->encode($data);
 
         //spliting the the tree in to two parts
-        $dataParts = explode('<_currentMarker></_currentMarker>', $data);
+        $dataParts = \explode('<_currentMarker></_currentMarker>', $data);
 
         return $dataParts;
     }

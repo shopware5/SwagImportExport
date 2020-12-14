@@ -32,7 +32,7 @@ class Shopware_Controllers_Backend_SwagImportExportConversion extends Shopware_C
         /** @var Repository $expressionRepository */
         $expressionRepository = $manager->getRepository(Expression::class);
 
-        $filter = array_merge(['p.id' => $profileId], $filter);
+        $filter = \array_merge(['p.id' => $profileId], $filter);
 
         $query = $expressionRepository->getExpressionsListQuery(
             $filter,

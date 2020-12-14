@@ -28,7 +28,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Iterator', {
         profileId: null
     },
 
-    title: '{s name=swag_import_export/profile/iterator/title}Extend dataset{/s}',
+    title: '{s name="swag_import_export/profile/iterator/title"}Extend dataset{/s}',
 
     initComponent: function() {
         var me = this;
@@ -67,13 +67,13 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Iterator', {
                 borderBottom: '1px solid #A4B5C0'
             },
             items: ['->', {
-                text: '{s name=swag_import_export/profile/iterator/close}Close{/s}',
+                text: '{s name="swag_import_export/profile/iterator/close"}Close{/s}',
                 cls: 'secondary',
                 handler: function() {
                     me.close();
                 }
             }, {
-                text: '{s name=swag_import_export/profile/iterator/save}Save{/s}',
+                text: '{s name="swag_import_export/profile/iterator/save"}Save{/s}',
                 cls: 'primary',
                 handler: function () {
                     if (me.formPanel.getForm().isValid()) {
@@ -101,13 +101,13 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Iterator', {
             bodyPadding: 10,
             items: [{
                 xtype: 'textfield',
-                fieldLabel: '{s name=swag_import_export/profile/iterator/node_name}Node name{/s}',
+                fieldLabel: '{s name="swag_import_export/profile/iterator/node_name"}Node name{/s}',
                 name: 'nodeName',
                 allowBlank: false
             }, {
                 xtype: 'combo',
-                fieldLabel: '{s name=swag_import_export/profile/iterator/adapter}Extension{/s}',
-                emptyText: '{s name=swag_import_export/profile/iterator/select_adapter}Select extension{/s}',
+                fieldLabel: '{s name="swag_import_export/profile/iterator/adapter"}Extension{/s}',
+                emptyText: '{s name="swag_import_export/profile/iterator/select_adapter"}Select extension{/s}',
                 queryMode: 'local',
                 store: me.sectionStore,
                 valueField: 'id',
@@ -135,8 +135,8 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Iterator', {
                 }
             }, {
                 xtype: 'combobox',
-                fieldLabel: '{s name=swag_import_export/profile/iterator/parent_key}Parent key{/s}',
-                emptyText: '{s name=swag_import_export/profile/iterator/select_parent_key}Select parent key{/s}',
+                fieldLabel: '{s name="swag_import_export/profile/iterator/parent_key"}Parent key{/s}',
+                emptyText: '{s name="swag_import_export/profile/iterator/select_parent_key"}Select parent key{/s}',
                 store: Ext.create('Shopware.apps.SwagImportExport.store.ParentKey'),
                 queryMode: 'local',
                 editable: false,
@@ -154,7 +154,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Iterator', {
         return Ext.create('Ext.grid.Panel', {
             flex: 2,
             border: false,
-            title: '{s name=swag_import_export/profile/iterator/grid_title}Set columns{/s}',
+            title: '{s name="swag_import_export/profile/iterator/grid_title"}Set columns{/s}',
             selType: 'rowmodel',
             plugins: [
                 Ext.create('Ext.grid.plugin.RowEditing', {
@@ -196,12 +196,12 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Iterator', {
             }),
             columns: [
                 {
-                    header: '{s name=swag_import_export/profile/iterator/grid_column_column}Database mapping{/s}',
+                    header: '{s name="swag_import_export/profile/iterator/grid_column_column"}Database mapping{/s}',
                     dataIndex: 'swColumn',
                     flex: 1
                 },
                 {
-                    header: '{s name=swag_import_export/profile/iterator/grid_column_name}Name{/s}',
+                    header: '{s name="swag_import_export/profile/iterator/grid_column_name"}Name{/s}',
                     dataIndex: 'nodeName',
                     flex: 1,
                     editor: {
@@ -210,7 +210,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Iterator', {
                     }
                 },
                 {
-                    header: '{s name=swag_import_export/profile/iterator/grid_column_selected}Selected{/s}',
+                    header: '{s name="swag_import_export/profile/iterator/grid_column_selected"}Selected{/s}',
                     dataIndex: 'select',
                     width: 80,
                     renderer: function(value) {

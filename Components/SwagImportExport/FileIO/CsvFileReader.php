@@ -41,12 +41,12 @@ class CsvFileReader implements FileReader
     public function readRecords($fileName, $position, $step)
     {
         // Make sure to detect CR LF (Windows) line breaks
-        ini_set('auto_detect_line_endings', true);
+        \ini_set('auto_detect_line_endings', true);
 
         $tempFileName = '';
-        if (file_exists($fileName)) {
-            $tempFileName = $this->uploadPathProvider->getRealPath(md5(microtime() . '.csv'));
-            file_put_contents($tempFileName, file_get_contents($fileName));
+        if (\file_exists($fileName)) {
+            $tempFileName = $this->uploadPathProvider->getRealPath(\md5(\microtime() . '.csv'));
+            \file_put_contents($tempFileName, \file_get_contents($fileName));
             $fileName = $tempFileName;
         }
 
@@ -79,7 +79,7 @@ class CsvFileReader implements FileReader
             $file->next();
         }
 
-        unlink($tempFileName);
+        \unlink($tempFileName);
 
         return $this->toUtf8($readRows);
     }
@@ -108,21 +108,21 @@ class CsvFileReader implements FileReader
      */
     public function getTotalCount($fileName)
     {
-        $fileHandler = fopen($fileName, 'rb');
+        $fileHandler = \fopen($fileName, 'rb');
 
         if ($fileHandler === false) {
             throw new \Exception("Can not open file $fileName");
         }
         $counter = 0;
 
-        while ($row = fgetcsv($fileHandler, 0, ';')) {
+        while ($row = \fgetcsv($fileHandler, 0, ';')) {
             if ($this->isInvalidRecord($row)) {
                 continue;
             }
             ++$counter;
         }
 
-        fclose($fileHandler);
+        \fclose($fileHandler);
 
         //removing first row /column names/
         return $counter - 1;
@@ -134,16 +134,16 @@ class CsvFileReader implements FileReader
     protected function toUtf8(array $rows)
     {
         // detect whether the input is UTF-8 or ISO-8859-1
-        array_walk_recursive(
+        \array_walk_recursive(
             $rows,
             function (&$value) {
                 // will fail, if special chars are encoded to latin-1
                 // $isUtf8 = (utf8_encode(utf8_decode($value)) == $value);
 
                 // might have issues with encodings other than utf-8 and latin-1
-                $isUtf8 = (mb_detect_encoding($value, 'UTF-8', true) !== false);
+                $isUtf8 = (\mb_detect_encoding($value, 'UTF-8', true) !== false);
                 if (!$isUtf8) {
-                    $value = utf8_encode($value);
+                    $value = \utf8_encode($value);
                 }
 
                 return $value;
@@ -166,7 +166,7 @@ class CsvFileReader implements FileReader
 
         //removes UTF-8 BOM
         foreach ($columnNames as $index => $name) {
-            $columnNames[$index] = str_replace("\xEF\xBB\xBF", '', $name);
+            $columnNames[$index] = \str_replace("\xEF\xBB\xBF", '', $name);
         }
 
         return $columnNames;

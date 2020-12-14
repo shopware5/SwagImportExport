@@ -54,7 +54,7 @@ class ImageWriter
         $newImages = [];
         foreach ($images as $image) {
             //if image data has only 'parentIndexElement' element
-            if (count($image) < 2) {
+            if (\count($image) < 2) {
                 break;
             }
 
@@ -68,7 +68,7 @@ class ImageWriter
             } elseif (isset($image['path']) && !empty($image['path'])) {
                 $media = $this->getMediaByName($image['path']);
             } elseif (isset($image['imageUrl']) && !empty($image['imageUrl'])) {
-                $name = pathinfo($image['imageUrl'], PATHINFO_FILENAME);
+                $name = \pathinfo($image['imageUrl'], \PATHINFO_FILENAME);
                 $media = $this->getMediaByName($name);
                 $image['path'] = $name;
                 // if data comes from article adapter prepare data for hidden profile
@@ -98,7 +98,7 @@ class ImageWriter
                 if (!$isImageNameCorrect) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/articles/image_not_found', 'Image with name %s could not be found');
-                    throw new AdapterException(sprintf($message, $image['path']));
+                    throw new AdapterException(\sprintf($message, $image['path']));
                 }
             }
         }
@@ -138,7 +138,7 @@ class ImageWriter
             [$articleId, $mediaId]
         );
 
-        return is_numeric($isImageExists);
+        return \is_numeric($isImageExists);
     }
 
     /**
@@ -151,7 +151,7 @@ class ImageWriter
             [$mediaId, $imageName]
         );
 
-        return is_numeric($isImageNameCorrect);
+        return \is_numeric($isImageNameCorrect);
     }
 
     /**
@@ -164,9 +164,9 @@ class ImageWriter
 
         list($imageData, $mediaId) = $this->prepareImageData($medias, $images);
 
-        $values = implode(
+        $values = \implode(
             ', ',
-            array_map(
+            \array_map(
                 function ($image) use ($articleId) {
                     if ($image['variantId']) {
                         return "({$articleId}, '{$image['name']}', '{$image['main']}', '{$image['description']}', '{$image['extension']}', '{$image['variantId']}', {$image['id']})";

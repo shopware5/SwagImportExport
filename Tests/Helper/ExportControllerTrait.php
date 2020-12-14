@@ -47,7 +47,7 @@ trait ExportControllerTrait
     private function queryXpath($filePath, $xpath)
     {
         $domDocument = new \DOMDocument();
-        $domDocument->loadXML(file_get_contents($filePath));
+        $domDocument->loadXML(\file_get_contents($filePath));
 
         $domXpath = new \DOMXPath($domDocument);
 
@@ -62,12 +62,12 @@ trait ExportControllerTrait
      */
     private function csvToArrayIndexedByFieldValue($filePath, $indexField)
     {
-        $csv = fopen($filePath, 'rb');
+        $csv = \fopen($filePath, 'rb');
         $mappedCsv = [];
 
-        $header = fgetcsv($csv, null, ';');
-        while (($row = fgetcsv($csv, null, ';')) !== false) {
-            $tmpRow = array_combine($header, $row);
+        $header = \fgetcsv($csv, null, ';');
+        while (($row = \fgetcsv($csv, null, ';')) !== false) {
+            $tmpRow = \array_combine($header, $row);
             $mappedCsv[$tmpRow[$indexField]] = $tmpRow;
         }
 

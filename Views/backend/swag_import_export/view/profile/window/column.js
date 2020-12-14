@@ -18,7 +18,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Column', {
     height: 200,
 
     layout: 'fit',
-    title: '{s name=swag_import_export/profile/column/title}Add column{/s}',
+    title: '{s name="swag_import_export/profile/column/title"}Add column{/s}',
 
     config: {
         treePanel: null,
@@ -49,14 +49,14 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Column', {
             bodyPadding: 10,
             items: [{
                 xtype: 'textfield',
-                fieldLabel: '{s name=swag_import_export/profile/column/node_name}Name{/s}',
+                fieldLabel: '{s name="swag_import_export/profile/column/node_name"}Name{/s}',
                 name: 'nodeName',
                 allowBlank: false
             }, {
                 xtype: 'combobox',
-                fieldLabel: '{s name=swag_import_export/profile/column/shopware_column}Database mapping{/s}',
+                fieldLabel: '{s name="swag_import_export/profile/column/shopware_column"}Database mapping{/s}',
                 editable: false,
-                emptyText: '{s name=swag_import_export/profile/column/select_column}Select column{/s}',
+                emptyText: '{s name="swag_import_export/profile/column/select_column"}Select column{/s}',
                 queryMode: 'local',
                 store: Ext.create('Shopware.apps.SwagImportExport.store.Column', {
                     autoLoad: true,
@@ -119,13 +119,13 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Column', {
                 borderBottom: '1px solid #A4B5C0'
             },
             items: ['->', {
-                text: '{s name=swag_import_export/profile/column/close}Close{/s}',
+                text: '{s name="swag_import_export/profile/column/close"}Close{/s}',
                 cls: 'secondary',
                 handler: function() {
                     me.close();
                 }
             }, {
-                text: '{s name=swag_import_export/profile/column/save}Save{/s}',
+                text: '{s name="swag_import_export/profile/column/save"}Save{/s}',
                 cls: 'primary',
                 handler: function () {
                     if (me.formPanel.getForm().isValid()) {
@@ -186,7 +186,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.window.Column', {
         }
 
         fieldConfig = Ext.apply(fieldConfig, {
-            fieldLabel: '{s name=swag_import_export/profile/column/default_value}Default value{/s}',
+            fieldLabel: '{s name="swag_import_export/profile/column/default_value"}Default value{/s}',
             name: 'defaultValue'
         });
 

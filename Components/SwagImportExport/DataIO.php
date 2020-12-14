@@ -167,10 +167,10 @@ class DataIO
         $this->logger->write($messages, $status, $this->dataSession->getEntity());
 
         $logDataStruct = new LogDataStruct(
-            date('Y-m-d H:i:s'),
+            \date('Y-m-d H:i:s'),
             $fileName,
             $profileName,
-            implode("\n", $messages),
+            \implode("\n", $messages),
             $status
         );
 
@@ -198,7 +198,7 @@ class DataIO
         $storedIds = $session->getIds();
 
         if ($storedIds) {
-            $ids = unserialize($storedIds);
+            $ids = \unserialize($storedIds);
         } else {
             $dbAdapter = $this->getDbAdapter();
             $limitAdapter = $this->getLimitAdapter();
@@ -281,7 +281,7 @@ class DataIO
      */
     public function generateRandomHash($length)
     {
-        return substr(md5(uniqid()), 0, $length);
+        return \substr(\md5(\uniqid()), 0, $length);
     }
 
     /**
@@ -293,7 +293,7 @@ class DataIO
     {
         $directory = $this->uploadPathProvider->getPath();
 
-        if (!file_exists($directory)) {
+        if (!\file_exists($directory)) {
             $this->createDirectory($directory);
         }
 
@@ -309,9 +309,9 @@ class DataIO
      */
     public function createDirectory($path)
     {
-        if (!mkdir($path, 0777, true)) {
+        if (!\mkdir($path, 0777, true)) {
             $message = SnippetsHelper::getNamespace()->get('dataio/no_profile', 'Failed to create directory %s');
-            throw new \Exception(sprintf($message, $path));
+            throw new \Exception(\sprintf($message, $path));
         }
     }
 
@@ -343,8 +343,8 @@ class DataIO
                     throw new \Exception($message);
                 }
 
-                $sessionData['serializedIds'] = serialize($ids);
-                $sessionData['totalCountedIds'] = count($ids);
+                $sessionData['serializedIds'] = \serialize($ids);
+                $sessionData['totalCountedIds'] = \count($ids);
                 $sessionData['username'] = $this->getUsername();
                 break;
             case 'import':
@@ -356,7 +356,7 @@ class DataIO
             default:
                 $message = SnippetsHelper::getNamespace()
                     ->get('dataio/session_type_not_valid', 'Session type %s is not valid');
-                throw new \Exception(sprintf($message, $sessionData['type']));
+                throw new \Exception(\sprintf($message, $sessionData['type']));
         }
 
         $session->start($profile, $sessionData);

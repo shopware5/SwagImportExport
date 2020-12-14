@@ -60,7 +60,7 @@ class DefaultProfileUpdater implements UpdaterInterface
         $profiles = ProfileHelper::getProfileInstances();
 
         foreach ($profiles as $profile) {
-            $serializedTree = json_encode($profile);
+            $serializedTree = \json_encode($profile);
 
             $params = [
                 'tree' => $serializedTree,

@@ -10,7 +10,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Window', {
 
     layout: 'fit',
 
-    title: '{s name=swag_import_export/profile/window/title}Profile settings{/s}',
+    title: '{s name="swag_import_export/profile/window/title"}Profile settings{/s}',
 
     config: {
         readOnly: false,
@@ -119,7 +119,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Window', {
                         xtype: 'textfield',
                         itemId: 'namefield',
                         readOnly: me.readOnly,
-                        fieldLabel: '{s name=swag_import_export/profile/window/field_name}Profile name{/s}',
+                        fieldLabel: '{s name="swag_import_export/profile/window/field_name"}Profile name{/s}',
                         name: 'name',
                         allowBlank: false
                     }, {
@@ -129,7 +129,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Window', {
                         xtype: 'combo',
                         name: 'baseProfile',
                         itemId: 'baseProfile',
-                        fieldLabel: '{s name=swag_import_export/profile/window/field_based_on}Based on{/s}',
+                        fieldLabel: '{s name="swag_import_export/profile/window/field_based_on"}Based on{/s}',
                         allowBlank: false,
                         editable: false,
                         triggerAction: 'all',
@@ -162,7 +162,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Window', {
                                 }
                             }
                         ),
-                        helpText: '{s name=swag_import_export/profile/window/profile_helptext}The selected default profile can be individually extended and modified via the configuration tree and be saved as a custom profile.{/s}',
+                        helpText: '{s name="swag_import_export/profile/window/profile_helptext"}The selected default profile can be individually extended and modified via the configuration tree and be saved as a custom profile.{/s}',
                         listeners: {
                             boxready: function(combo) {
                                 combo.relayEvents(combo.getStore(), ['load'], 'store');
@@ -214,13 +214,13 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Window', {
                 borderBottom: '1px solid #A4B5C0'
             },
             items: ['->', {
-                text: '{s name=swag_import_export/profile/window/close}Close{/s}',
+                text: '{s name="swag_import_export/profile/window/close"}Close{/s}',
                 cls: 'secondary',
                 handler: function() {
                     me.close();
                 }
             }, {
-                text: '{s name=swag_import_export/profile/window/save}Save{/s}',
+                text: '{s name="swag_import_export/profile/window/save"}Save{/s}',
                 cls: 'primary',
                 itemId: 'savebutton',
                 disabled: me.readOnly,

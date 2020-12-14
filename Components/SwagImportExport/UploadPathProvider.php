@@ -46,7 +46,7 @@ class UploadPathProvider
      */
     public function getFileNameFromPath($path)
     {
-        return pathinfo($path, PATHINFO_BASENAME);
+        return \pathinfo($path, \PATHINFO_BASENAME);
     }
 
     /**
@@ -56,7 +56,7 @@ class UploadPathProvider
      */
     public function getFileExtension($path)
     {
-        return pathinfo($path, PATHINFO_EXTENSION);
+        return \pathinfo($path, \PATHINFO_EXTENSION);
     }
 
     /**

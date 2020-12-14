@@ -72,7 +72,7 @@ class AddressDbAdapter implements DataDbAdapter
     /**
      * {@inheritdoc}
      */
-    public function readRecordIds($start = 0, $limit = 0, $filter)
+    public function readRecordIds($start = 0, $limit = 0, $filter = [])
     {
         $query = $this->modelManager->getConnection()->createQueryBuilder();
         $query->select(['address.id']);
@@ -87,7 +87,7 @@ class AddressDbAdapter implements DataDbAdapter
             $query->setMaxResults($limit);
         }
 
-        if (array_key_exists('customerStreamId', $filter)) {
+        if ($filter && \array_key_exists('customerStreamId', $filter)) {
             $query->innerJoin(
                 'address',
                 's_customer_streams_mapping',
@@ -128,7 +128,7 @@ class AddressDbAdapter implements DataDbAdapter
             'state.id as stateID',
         ];
 
-        return array_merge($defaultColumns, $this->getAttributeColumns());
+        return \array_merge($defaultColumns, $this->getAttributeColumns());
     }
 
     /**
@@ -307,7 +307,7 @@ class AddressDbAdapter implements DataDbAdapter
 
         $attributeSelections = [];
         foreach ($fieldNames as $fieldName) {
-            $attributeSelections[] = 'attribute.' . $fieldName . ' as attribute' . ucfirst($fieldName);
+            $attributeSelections[] = 'attribute.' . $fieldName . ' as attribute' . \ucfirst($fieldName);
         }
 
         return $attributeSelections;
@@ -320,12 +320,12 @@ class AddressDbAdapter implements DataDbAdapter
     {
         $attribute = [];
         foreach ($addressRecord as $field => $value) {
-            if (strpos($field, 'attribute') === false) {
+            if (\strpos($field, 'attribute') === false) {
                 continue;
             }
 
-            $modelFieldName = str_replace('attribute', '', $field);
-            $modelFieldName = lcfirst($modelFieldName);
+            $modelFieldName = \str_replace('attribute', '', $field);
+            $modelFieldName = \lcfirst($modelFieldName);
             $attribute[$modelFieldName] = $value;
         }
 
@@ -397,7 +397,7 @@ class AddressDbAdapter implements DataDbAdapter
             $customer = $this->getCustomer($addressRecord);
             if (!$customer) {
                 throw new AdapterException(
-                    sprintf(
+                    \sprintf(
                         $errorMessage,
                         $addressRecord['email'],
                         $addressRecord['customernumber'],
@@ -431,7 +431,7 @@ class AddressDbAdapter implements DataDbAdapter
 
         $state = $this->findStateById($addressRecord);
         if (!$state) {
-            throw new AdapterException(sprintf($errorMessage, $addressRecord['stateID']));
+            throw new AdapterException(\sprintf($errorMessage, $addressRecord['stateID']));
         }
 
         $addressModel->setState($state);

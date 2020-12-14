@@ -60,7 +60,7 @@ class TreeHelper
         }
 
         // Get the child nodes
-        if (isset($node['children']) && count($node['children']) > 0) {
+        if (isset($node['children']) && \count($node['children']) > 0) {
             foreach ($node['children'] as $child) {
                 $children[] = static::convertToExtJSTree($child, $isInIteration, $adapter);
             }
@@ -279,7 +279,7 @@ class TreeHelper
             foreach ($node['children'] as $key => &$childNode) {
                 if ($childNode['id'] == $child['id']) {
                     unset($node['children'][$key]);
-                    if (count($node['children']) == 0) {
+                    if (\count($node['children']) == 0) {
                         unset($node['children']);
                     }
 
@@ -295,7 +295,7 @@ class TreeHelper
             foreach ($node['attributes'] as $key => &$childNode) {
                 if ($childNode['id'] == $child['id']) {
                     unset($node['attributes'][$key]);
-                    if (count($node['attributes']) == 0) {
+                    if (\count($node['attributes']) == 0) {
                         unset($node['attributes']);
                     }
 
@@ -317,10 +317,10 @@ class TreeHelper
     public static function reorderTree($node)
     {
         $reorderdNode = [];
-        if (is_array($node) && isset($node['children'])) {
+        if (\is_array($node) && isset($node['children'])) {
             foreach ($node as $key => $value) {
                 if ($key === 'children' || $key === 'attributes') {
-                    $count = count($value);
+                    $count = \count($value);
                     foreach ($value as $currentIndex => $innerValue) {
                         $value3 = self::reorderTree($innerValue);
 
@@ -330,7 +330,7 @@ class TreeHelper
                         }
                         $reorderdNode[$key][$innerValue['index']] = $value3;
                     }
-                    ksort($reorderdNode[$key]);
+                    \ksort($reorderdNode[$key]);
                 } else {
                     $reorderdNode[$key] = $value;
                 }

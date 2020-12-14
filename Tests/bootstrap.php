@@ -19,11 +19,18 @@ class ImportExportTestKernel extends \Shopware\Kernel
      */
     public static function start()
     {
-        $kernel = new self(getenv('SHOPWARE_ENV') ?: 'testing', true);
+        $kernel = new self(\getenv('SHOPWARE_ENV') ?: 'testing', true);
         $kernel->boot();
 
+        Shopware()->Loader()->registerNamespace('SwagImportExport\Tests', __DIR__ . '/../Tests/');
+        Shopware()->Loader()->registerNamespace('Tests\Helper', __DIR__ . '/Helper/');
+        Shopware()->Loader()->registerNamespace('Tests\Shopware\ImportExport', __DIR__ . '/Shopware/ImportExport/');
+        Shopware()->Loader()->registerNamespace('Shopware\Setup\SwagImportExport', __DIR__ . '/../Setup/SwagImportExport/');
+        Shopware()->Loader()->registerNamespace('Shopware\Components', __DIR__ . '/../Components/');
+        Shopware()->Loader()->registerNamespace('Shopware\CustomModels', __DIR__ . '/../Models/');
+
         $container = $kernel->getContainer();
-        $container->get('plugins')->Core()->ErrorHandler()->registerErrorHandler(E_ALL | E_STRICT);
+        $container->get('plugins')->Core()->ErrorHandler()->registerErrorHandler(\E_ALL | \E_STRICT);
 
         $repository = $container->get('models')->getRepository(Shop::class);
 
@@ -36,16 +43,10 @@ class ImportExportTestKernel extends \Shopware\Kernel
             throw new \RuntimeException('Plugin ImportExport must be installed.');
         }
 
-        Shopware()->Loader()->registerNamespace('SwagImportExport\Tests', __DIR__ . '/../Tests/');
-        Shopware()->Loader()->registerNamespace('Tests\Helper', __DIR__ . '/Helper/');
-        Shopware()->Loader()->registerNamespace('Tests\Shopware\ImportExport', __DIR__ . '/Shopware/ImportExport/');
-        Shopware()->Loader()->registerNamespace('Shopware\Setup\SwagImportExport', __DIR__ . '/../Setup/SwagImportExport/');
-        Shopware()->Loader()->registerNamespace('Shopware\Components', __DIR__ . '/../Components/');
-        Shopware()->Loader()->registerNamespace('Shopware\CustomModels', __DIR__ . '/../Models/');
-
         Shopware()->Db()->query(
             'UPDATE s_core_config_elements SET value = \'b:0;\' WHERE name = \'useCommaDecimal\''
         );
+
         Shopware()->Container()->get('cache')->clean();
     }
 

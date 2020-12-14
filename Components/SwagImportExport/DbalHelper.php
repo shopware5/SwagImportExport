@@ -72,7 +72,7 @@ class DbalHelper
         }
 
         foreach ($data as $field => $value) {
-            if (!array_key_exists($field, $metaData->fieldMappings)) {
+            if (!\array_key_exists($field, $metaData->fieldMappings)) {
                 continue;
             }
 
@@ -133,8 +133,8 @@ class DbalHelper
         }
 
         $type = $metaData->fieldMappings[$key]['type'];
-        if (!array_key_exists($type, $pdoTypeMapping)) {
-            throw new \RuntimeException(sprintf('Type %s not found', $type));
+        if (!\array_key_exists($type, $pdoTypeMapping)) {
+            throw new \RuntimeException(\sprintf('Type %s not found', $type));
         }
 
         return $builder->createNamedParameter($value, $pdoTypeMapping[$type]);

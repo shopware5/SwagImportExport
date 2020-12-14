@@ -83,17 +83,17 @@ class MainOrdersDbAdapter implements DataDbAdapter
         $builder->select('id')
             ->from('s_order');
 
-        if (isset($filter['orderstate']) && is_numeric($filter['orderstate'])) {
+        if (isset($filter['orderstate']) && \is_numeric($filter['orderstate'])) {
             $builder->andWhere('status = :orderstate');
             $builder->setParameter('orderstate', $filter['orderstate']);
         }
 
-        if (isset($filter['paymentstate']) && is_numeric($filter['paymentstate'])) {
+        if (isset($filter['paymentstate']) && \is_numeric($filter['paymentstate'])) {
             $builder->andWhere('cleared = :paymentstate');
             $builder->setParameter('paymentstate', $filter['paymentstate']);
         }
 
-        if (isset($filter['ordernumberFrom']) && is_numeric($filter['ordernumberFrom'])) {
+        if (isset($filter['ordernumberFrom']) && \is_numeric($filter['ordernumberFrom'])) {
             $builder->andWhere('ordernumber > :orderNumberFrom');
             $builder->setParameter('orderNumberFrom', $filter['ordernumberFrom']);
         }
@@ -121,7 +121,7 @@ class MainOrdersDbAdapter implements DataDbAdapter
 
         $ids = $builder->execute()->fetchAll(\PDO::FETCH_COLUMN);
 
-        return is_array($ids) ? $ids : [];
+        return \is_array($ids) ? $ids : [];
     }
 
     /**
@@ -247,7 +247,7 @@ class MainOrdersDbAdapter implements DataDbAdapter
 
         $attributesSelect = $this->getAttributes();
         if ($attributesSelect && !empty($attributesSelect)) {
-            $columns = array_merge($columns, $attributesSelect);
+            $columns = \array_merge($columns, $attributesSelect);
         }
 
         return $columns;
@@ -269,14 +269,14 @@ class MainOrdersDbAdapter implements DataDbAdapter
         }
 
         unset($attributes['id'], $attributes['orderID']);
-        $attributes = array_keys($attributes);
+        $attributes = \array_keys($attributes);
 
         $prefix = 'attr';
         $attributesSelect = [];
         foreach ($attributes as $attribute) {
             $catAttr = $this->underscoreToCamelCaseService->underscoreToCamelCase($attribute);
 
-            $attributesSelect[] = sprintf('%s.%s as attribute%s', $prefix, $catAttr, ucwords($catAttr));
+            $attributesSelect[] = \sprintf('%s.%s as attribute%s', $prefix, $catAttr, \ucwords($catAttr));
         }
 
         return $attributesSelect;
@@ -372,8 +372,8 @@ class MainOrdersDbAdapter implements DataDbAdapter
      */
     public function getColumns($section)
     {
-        $method = 'get' . ucfirst($section) . 'Columns';
-        if (method_exists($this, $method)) {
+        $method = 'get' . \ucfirst($section) . 'Columns';
+        if (\method_exists($this, $method)) {
             return $this->{$method}();
         }
 
@@ -539,9 +539,13 @@ class MainOrdersDbAdapter implements DataDbAdapter
      */
     private function getShippingRate($amount, $amountNet)
     {
-        $percent = abs((1 - $amount / $amountNet) * 100);
+        if (empty($amountNet)) {
+            $amountNet = 1.0;
+        }
 
-        return round($percent);
+        $percent = \abs((1 - $amount / $amountNet) * 100);
+
+        return \round($percent);
     }
 
     /**
@@ -568,9 +572,9 @@ class MainOrdersDbAdapter implements DataDbAdapter
 
         $price = $taxData['price'] * $taxData['quantity'];
         if ($taxData['net']) {
-            return round(($taxValue / 100) * $price, 2);
+            return \round(($taxValue / 100) * $price, 2);
         }
 
-        return round($price * ($taxValue / (100 + $taxValue)), 2);
+        return \round($price * ($taxValue / (100 + $taxValue)), 2);
     }
 }

@@ -15,9 +15,12 @@ class DbAdapterHelper
         foreach ($records as &$record) {
             foreach ($record as &$value) {
                 $value = self::convertBooleanFalseToString($value);
+                if ($value instanceof \DateTime) {
+                    $value = $value->format(\DateTimeInterface::ATOM);
+                }
 
-                if (!is_array($value)) {
-                    $value = html_entity_decode($value, ENT_COMPAT | ENT_HTML401, 'UTF-8');
+                if (!\is_array($value)) {
+                    $value = \html_entity_decode($value, \ENT_COMPAT | \ENT_HTML401, 'UTF-8');
                 }
             }
         }
@@ -29,7 +32,7 @@ class DbAdapterHelper
     {
         foreach ($records as &$record) {
             foreach ($record as &$value) {
-                $value = str_replace(["\n", "\r", "\r\n", "\n\r"], ' ', $value);
+                $value = \str_replace(["\n", "\r", "\r\n", "\n\r"], ' ', $value);
             }
         }
 

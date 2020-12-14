@@ -34,7 +34,7 @@ class ArticleSimilarsProfileTest extends TestCase
         $updatedArticleId = $this->executeQuery("SELECT articleID FROM s_articles_details WHERE ordernumber='{$expectedOrderNumber}'", \PDO::FETCH_COLUMN)[0];
         $updatedArticleSimilars = $this->executeQuery("SELECT * FROM s_articles_similar WHERE articleID='{$updatedArticleId}'");
 
-        foreach (array_keys($expectedRelatedArticleId) as $key) {
+        foreach (\array_keys($expectedRelatedArticleId) as $key) {
             static::assertEquals($expectedRelatedArticleId[$key], $updatedArticleSimilars[$key]['relatedarticle']);
         }
 

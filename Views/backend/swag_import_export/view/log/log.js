@@ -6,7 +6,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.log.Log', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.swag-import-export-log-log',
 
-    title: '{s name=swag_import_export/logs/title}Logs{/s}',
+    title: '{s name="swag_import_export/logs/title"}Logs{/s}',
     autoScroll: true,
 
     initComponent: function() {
@@ -31,19 +31,19 @@ Ext.define('Shopware.apps.SwagImportExport.view.log.Log', {
 
         return [{
             xtype: 'datecolumn',
-            header: '{s name=swag_import_export/logs/date}Date{/s}',
+            header: '{s name="swag_import_export/logs/date"}Date{/s}',
             format: 'Y-m-d H:i:s',
             dataIndex: 'logDate',
             flex: 1
         }, {
-            header: '{s name=swag_import_export/logs/message}Message{/s}',
+            header: '{s name="swag_import_export/logs/message"}Message{/s}',
             dataIndex: 'message',
             renderer: function(v) {
                 return v.replace(/\n/g, '<br>');
             },
             flex: 2
         }, {
-            header: '{s name=swag_import_export/logs/status}Status{/s}',
+            header: '{s name="swag_import_export/logs/status"}Status{/s}',
             dataIndex: 'errorState',
             width: 60,
             renderer: me.renderErrorState

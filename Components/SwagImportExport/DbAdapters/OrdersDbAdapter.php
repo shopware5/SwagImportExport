@@ -75,17 +75,17 @@ class OrdersDbAdapter implements DataDbAdapter
             ->from(Detail::class, 'details')
             ->leftJoin('details.order', 'orders');
 
-        if (isset($filter['orderstate']) && is_numeric($filter['orderstate'])) {
+        if (isset($filter['orderstate']) && \is_numeric($filter['orderstate'])) {
             $builder->andWhere('orders.status = :orderstate');
             $builder->setParameter('orderstate', $filter['orderstate']);
         }
 
-        if (isset($filter['paymentstate']) && is_numeric($filter['paymentstate'])) {
+        if (isset($filter['paymentstate']) && \is_numeric($filter['paymentstate'])) {
             $builder->andWhere('orders.cleared = :paymentstate');
             $builder->setParameter('paymentstate', $filter['paymentstate']);
         }
 
-        if (isset($filter['ordernumberFrom']) && is_numeric($filter['ordernumberFrom'])) {
+        if (isset($filter['ordernumberFrom']) && \is_numeric($filter['ordernumberFrom'])) {
             $builder->andWhere('orders.number > :orderNumberFrom');
             $builder->setParameter('orderNumberFrom', $filter['ordernumberFrom']);
         }
@@ -207,30 +207,30 @@ class OrdersDbAdapter implements DataDbAdapter
                 if (!$orderDetailModel) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/orders/order_detail_id_not_found', 'Order detail id %s was not found');
-                    throw new AdapterException(sprintf($message, $record['orderDetailId']));
+                    throw new AdapterException(\sprintf($message, $record['orderDetailId']));
                 }
 
                 $orderModel = $orderDetailModel->getOrder();
 
-                if (isset($record['paymentId']) && is_numeric($record['paymentId'])) {
+                if (isset($record['paymentId']) && \is_numeric($record['paymentId'])) {
                     $paymentStatusModel = $orderStatusRepository->find($record['cleared']);
 
                     if (!$paymentStatusModel) {
                         $message = SnippetsHelper::getNamespace()
                             ->get('adapters/orders/payment_status_id_not_found', 'Payment status id %s was not found for order %s');
-                        throw new AdapterException(sprintf($message, $record['cleared'], $orderModel->getNumber()));
+                        throw new AdapterException(\sprintf($message, $record['cleared'], $orderModel->getNumber()));
                     }
 
                     $orderModel->setPaymentStatus($paymentStatusModel);
                 }
 
-                if (isset($record['status']) && is_numeric($record['status'])) {
+                if (isset($record['status']) && \is_numeric($record['status'])) {
                     $orderStatusModel = $orderStatusRepository->find($record['status']);
 
                     if (!$orderStatusModel) {
                         $message = SnippetsHelper::getNamespace()
                             ->get('adapters/orders/status_not_found', 'Status %s was not found for order %s');
-                        throw new AdapterException(sprintf($message, $record['status'], $orderModel->getNumber()));
+                        throw new AdapterException(\sprintf($message, $record['status'], $orderModel->getNumber()));
                     }
 
                     $orderModel->setOrderStatus($orderStatusModel);
@@ -264,13 +264,13 @@ class OrdersDbAdapter implements DataDbAdapter
                     $orderDetailModel->setShipped($record['shipped']);
                 }
 
-                if (isset($record['statusId']) && is_numeric($record['statusId'])) {
+                if (isset($record['statusId']) && \is_numeric($record['statusId'])) {
                     $detailStatusModel = $orderDetailStatusRepository->find($record['statusId']);
 
                     if (!$detailStatusModel) {
                         $message = SnippetsHelper::getNamespace()
                             ->get('adapters/orders/detail_status_not_found', 'Detail status with id %s was not found');
-                        throw new AdapterException(sprintf($message, $record['statusId']));
+                        throw new AdapterException(\sprintf($message, $record['statusId']));
                     }
 
                     $orderDetailModel->setStatus($detailStatusModel);
@@ -278,8 +278,8 @@ class OrdersDbAdapter implements DataDbAdapter
 
                 //prepares the attributes
                 foreach ($record as $key => $value) {
-                    if (preg_match('/^attribute/', $key)) {
-                        $newKey = lcfirst(preg_replace('/^attribute/', '', $key));
+                    if (\preg_match('/^attribute/', $key)) {
+                        $newKey = \lcfirst(\preg_replace('/^attribute/', '', $key));
                         $orderData['attribute'][$newKey] = $value;
                         unset($record[$key]);
                     }
@@ -364,9 +364,9 @@ class OrdersDbAdapter implements DataDbAdapter
      */
     public function getColumns($section)
     {
-        $method = 'get' . ucfirst($section) . 'Columns';
+        $method = 'get' . \ucfirst($section) . 'Columns';
 
-        if (method_exists($this, $method)) {
+        if (\method_exists($this, $method)) {
             return $this->{$method}();
         }
 
@@ -454,7 +454,7 @@ class OrdersDbAdapter implements DataDbAdapter
             'billing.additionalAddressLine2 as billingAdditionalAddressLine2',
         ];
 
-        $columns = array_merge($columns, $billingColumns);
+        $columns = \array_merge($columns, $billingColumns);
 
         $shippingColumns = [
             'shipping.company as shippingCompany',
@@ -475,7 +475,7 @@ class OrdersDbAdapter implements DataDbAdapter
             'shipping.additionalAddressLine2 as shippingAdditionalAddressLine2',
         ];
 
-        $columns = array_merge($columns, $shippingColumns);
+        $columns = \array_merge($columns, $shippingColumns);
 
         $customerColumns = [
             'customer.email as email',
@@ -484,12 +484,12 @@ class OrdersDbAdapter implements DataDbAdapter
             'customer.affiliate as affiliate',
         ];
 
-        $columns = array_merge($columns, $customerColumns);
+        $columns = \array_merge($columns, $customerColumns);
 
         $attributesSelect = $this->getAttributes();
 
         if ($attributesSelect && !empty($attributesSelect)) {
-            $columns = array_merge($columns, $attributesSelect);
+            $columns = \array_merge($columns, $attributesSelect);
         }
 
         return $columns;
@@ -510,14 +510,14 @@ class OrdersDbAdapter implements DataDbAdapter
         if ($attributes) {
             unset($attributes['id']);
             unset($attributes['orderID']);
-            $attributes = array_keys($attributes);
+            $attributes = \array_keys($attributes);
 
             $prefix = 'attr';
             $attributesSelect = [];
             foreach ($attributes as $attribute) {
                 $catAttr = $this->underscoreToCamelCaseService->underscoreToCamelCase($attribute);
 
-                $attributesSelect[] = sprintf('%s.%s as attribute%s', $prefix, $catAttr, ucwords($catAttr));
+                $attributesSelect[] = \sprintf('%s.%s as attribute%s', $prefix, $catAttr, \ucwords($catAttr));
             }
         }
 

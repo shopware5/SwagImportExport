@@ -68,13 +68,13 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.window.Export', {
     /**
      * The title shown in the window header
      */
-    title: '{s name=swag_import_export/manager/window/export/title}Export window{/s}',
+    title: '{s name="swag_import_export/manager/window/export/title"}Export window{/s}',
     snippets: {
-        start: '{s name=swag_import_export/manager/window/export/start}Start exporting{/s}',
-        cancel: '{s name=swag_import_export/manager/window/export/cancel}Cancel{/s}',
-        close: '{s name=swag_import_export/manager/window/export/close}Close{/s}',
-        download: '{s name=swag_import_export/manager/window/export/download}Download{/s}',
-        noData: '{s name=swag_import_export/manager/window/export/noData}No data available{/s}'
+        start: '{s name="swag_import_export/manager/window/export/start"}Start exporting{/s}',
+        cancel: '{s name="swag_import_export/manager/window/export/cancel"}Cancel{/s}',
+        close: '{s name="swag_import_export/manager/window/export/close"}Close{/s}',
+        download: '{s name="swag_import_export/manager/window/export/download"}Download{/s}',
+        noData: '{s name="swag_import_export/manager/window/export/noData"}No data available{/s}'
     },
     /**
      * Constructor for the generation window

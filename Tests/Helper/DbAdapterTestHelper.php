@@ -51,7 +51,7 @@ class DbAdapterTestHelper extends ImportExportTestHelper
     {
         if ($this->dataProvider === null) {
             $this->dataProvider = $this->parseYaml(
-                file_get_contents(
+                \file_get_contents(
                     $this->getYamlFile($this->yamlFile)
                 )
             );
@@ -150,7 +150,7 @@ class DbAdapterTestHelper extends ImportExportTestHelper
     public function insertOne($data, $expectedRow)
     {
         // Prepare expected data
-        $columnsSelect = implode(', ', array_keys($expectedRow));
+        $columnsSelect = \implode(', ', \array_keys($expectedRow));
         $queryTableBefore = $this->getDatabaseTester()->getConnection()->createQueryTable(
             $this->dbTable,
             'SELECT ' . $columnsSelect . ' FROM ' . $this->dbTable
@@ -181,7 +181,7 @@ class DbAdapterTestHelper extends ImportExportTestHelper
     public function updateOne($category, $expectedRow)
     {
         // Prepare expected data
-        $columnsSelect = implode(', ', array_keys($expectedRow));
+        $columnsSelect = \implode(', ', \array_keys($expectedRow));
         $queryTableBefore = $this->getDatabaseTester()->getConnection()->createQueryTable(
             $this->dbTable,
             'SELECT ' . $columnsSelect . ' FROM ' . $this->dbTable

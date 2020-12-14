@@ -40,7 +40,7 @@ class DataManager
     public static function getFieldType($record, $mapper)
     {
         foreach ($mapper as $type => $fields) {
-            if (in_array($record, $fields)) {
+            if (\in_array($record, $fields)) {
                 return $type;
             }
         }
@@ -94,7 +94,7 @@ class DataManager
                             $records[$field] = '0.0';
                             break;
                         case 'date':
-                            $records[$field] = date('Y-m-d H:i:s');
+                            $records[$field] = \date('Y-m-d H:i:s');
                     }
                 }
             }

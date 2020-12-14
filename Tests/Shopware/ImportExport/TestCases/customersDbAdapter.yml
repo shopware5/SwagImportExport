@@ -27,8 +27,8 @@ testRead:
                 accountMode: '0'
                 confirmationKey: ''
                 paymentId: '5'
-                firstLogin: null
-                lastLogin: null
+                firstLogin: '2011-11-23T00:00:00+01:00'
+                lastLogin: '2012-01-04T14:12:05+01:00'
                 sessionId: 'uiorqd755gaar8dn89ukp178c7'
                 newsletter: '0'
                 validation: ''

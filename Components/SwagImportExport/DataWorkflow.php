@@ -81,7 +81,7 @@ class DataWorkflow
                 $this->dataIO->getDirectory();
                 $outputFileName = $this->getUploadPathProvider()->getRealPath($fileName);
             } else {
-                $fileName = basename($outputFileName);
+                $fileName = \basename($outputFileName);
                 $this->dataIO->setFileName($fileName);
             }
 
@@ -141,7 +141,7 @@ class DataWorkflow
      */
     public function import($postData, $inputFile)
     {
-        $tree = json_decode($this->profile->getConfig('tree'), true);
+        $tree = \json_decode($this->profile->getConfig('tree'), true);
         if ($postData['format'] === 'xml') {
             $this->fileIO->setTree($tree);
         }
@@ -149,7 +149,7 @@ class DataWorkflow
         if ($this->dataIO->getSessionState() === 'new') {
             $totalCount = $this->fileIO->getTotalCount($inputFile);
             $this->dataIO->setFileName($postData['importFile']);
-            $this->dataIO->setFileSize(filesize($inputFile));
+            $this->dataIO->setFileSize(\filesize($inputFile));
             $this->dataIO->getDataSession()->setTotalCount($totalCount);
             $this->dataIO->startSession($this->profile);
         } else {
@@ -198,7 +198,7 @@ class DataWorkflow
 
     public function saveUnprocessedData($postData, $profileName, $outputFile)
     {
-        if ($postData['session']['prevState'] === 'new' || !filesize($outputFile)) {
+        if ($postData['session']['prevState'] === 'new' || !\filesize($outputFile)) {
             $header = $this->transformerChain->composeHeader();
             $this->fileIO->writeHeader($outputFile, $header);
         }

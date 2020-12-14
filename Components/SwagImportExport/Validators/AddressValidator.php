@@ -62,7 +62,7 @@ class AddressValidator extends Validator
      */
     private function validateEmptyAddressRecord($addressRecord)
     {
-        if (count($addressRecord) === 0) {
+        if (\count($addressRecord) === 0) {
             throw new AdapterException(
                 SnippetsHelper::getNamespace()->get(
                     'adapters/address/no_records',
@@ -80,13 +80,13 @@ class AddressValidator extends Validator
     private function validateAddressFields($addressRecord)
     {
         foreach ($this->requiredFields as $field => $snippetData) {
-            if (strlen($addressRecord[$field]) > 0) {
+            if (\strlen($addressRecord[$field]) > 0) {
                 continue;
             }
 
             $message = SnippetsHelper::getNamespace()->get($snippetData['snippet'], $snippetData['default']);
             $recordDataForMessage = $this->recordToString($addressRecord);
-            throw new AdapterException(sprintf($message, $recordDataForMessage));
+            throw new AdapterException(\sprintf($message, $recordDataForMessage));
         }
     }
 
@@ -103,7 +103,7 @@ class AddressValidator extends Validator
         ) {
             $message = SnippetsHelper::getNamespace()->get('adapters/address/cant_identify_customer');
             $recordDataForMessage = $this->recordToString($addressRecord);
-            throw new AdapterException(sprintf($message, $recordDataForMessage));
+            throw new AdapterException(\sprintf($message, $recordDataForMessage));
         }
     }
 
@@ -120,7 +120,7 @@ class AddressValidator extends Validator
             if (!$value) {
                 $value = ' - ';
             }
-            $message .= sprintf($messageTemplate, $fieldName, $value);
+            $message .= \sprintf($messageTemplate, $fieldName, $value);
         }
 
         return $this->removeLastComma($message);
@@ -133,6 +133,6 @@ class AddressValidator extends Validator
      */
     private function removeLastComma($message)
     {
-        return substr($message, 0, -2);
+        return \substr($message, 0, -2);
     }
 }

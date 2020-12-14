@@ -219,7 +219,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         $profileEntity = $profileRepository->findOneBy(['id' => $profileId]);
 
         $tree = $profileEntity->getTree();
-        $root = TreeHelper::convertToExtJSTree(json_decode($tree, 1));
+        $root = TreeHelper::convertToExtJSTree(\json_decode($tree, 1));
 
         return $this->View()->assign(['success' => true, 'children' => $root]);
     }
@@ -238,7 +238,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         $loadedProfile = $manager->find(Profile::class, $profileId);
 
         if (!$loadedProfile) {
-            throw new \Exception(sprintf('Profile with id %s does NOT exist', $profileId));
+            throw new \Exception(\sprintf('Profile with id %s does NOT exist', $profileId));
         }
 
         $profile = new Profile();
@@ -302,7 +302,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         }
         $this->Front()->Plugins()->Json()->setRenderer(false);
 
-        $profileName = urlencode($exportDataStruct->getName());
+        $profileName = \urlencode($exportDataStruct->getName());
 
         $response = $this->Response();
         $response->setHeader('Cache-Control', 'public');
@@ -346,7 +346,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         $profileRepository = $manager->getRepository(Profile::class);
         $profileEntity = $profileRepository->findOneBy(['id' => $profileId]);
 
-        $tree = json_decode($profileEntity->getTree(), 1);
+        $tree = \json_decode($profileEntity->getTree(), 1);
 
         if (isset($data['parentId'])) {
             $data = [$data];
@@ -355,13 +355,13 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         $errors = false;
 
         foreach ($data as &$node) {
-            $node['id'] = uniqid();
+            $node['id'] = \uniqid();
             if (!TreeHelper::appendNode($node, $tree)) {
                 $errors = true;
             }
         }
 
-        $profileEntity->setTree(json_encode($tree));
+        $profileEntity->setTree(\json_encode($tree));
 
         $manager->persist($profileEntity);
         $manager->flush();
@@ -388,7 +388,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
             $defaultFields = $dataManager->getDefaultFields();
         }
 
-        $tree = json_decode($profileEntity->getTree(), 1);
+        $tree = \json_decode($profileEntity->getTree(), 1);
 
         if (isset($data['parentId'])) {
             $data = [$data];
@@ -426,7 +426,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         }
         $reorderedTree = TreeHelper::reorderTree($tree);
 
-        $profileEntity->setTree(json_encode($reorderedTree));
+        $profileEntity->setTree(\json_encode($reorderedTree));
 
         $manager->persist($profileEntity);
         $manager->flush();
@@ -446,7 +446,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         $profileRepository = $manager->getRepository(Profile::class);
         $profileEntity = $profileRepository->findOneBy(['id' => $profileId]);
 
-        $tree = json_decode($profileEntity->getTree(), 1);
+        $tree = \json_decode($profileEntity->getTree(), 1);
 
         if (isset($data['parentId'])) {
             $data = [$data];
@@ -460,7 +460,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
             }
         }
 
-        $profileEntity->setTree(json_encode($tree));
+        $profileEntity->setTree(\json_encode($tree));
 
         $manager->persist($profileEntity);
         $manager->flush();
@@ -494,7 +494,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         $this->View()->assign([
             'success' => true,
             'data' => $sections,
-            'total' => count($sections),
+            'total' => \count($sections),
         ]);
     }
 
@@ -533,23 +533,23 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         }
 
         // merge all sections
-        if ($section === 'default' && count($dbAdapter->getSections()) > 1) {
-            $columns = array_reduce($columns, function ($carry, $item) {
-                return array_merge($carry, $item);
+        if ($section === 'default' && \count($dbAdapter->getSections()) > 1) {
+            $columns = \array_reduce($columns, function ($carry, $item) {
+                return \array_merge($carry, $item);
             }, []);
         }
 
         foreach ($columns as &$column) {
             $match = '';
-            preg_match('/(?<=as ).*/', $column, $match);
+            \preg_match('/(?<=as ).*/', $column, $match);
 
-            $match = trim($match[0]);
+            $match = \trim($match[0]);
 
             if ($match != '') {
                 $column = $match;
             } else {
-                preg_match('/(?<=\.).*/', $column, $match);
-                $match = trim($match[0]);
+                \preg_match('/(?<=\.).*/', $column, $match);
+                $match = \trim($match[0]);
                 if ($match != '') {
                     $column = $match;
                 }
@@ -557,14 +557,14 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
 
             $column = ['id' => $column, 'name' => $column];
 
-            if ($defaultFieldsName && in_array($column['name'], $defaultFieldsName)) {
+            if ($defaultFieldsName && \in_array($column['name'], $defaultFieldsName)) {
                 $column['default'] = true;
                 $column['type'] = $dataManager->getFieldType($column['name'], $defaultFields);
             }
         }
 
         $this->View()->assign([
-            'success' => true, 'data' => $columns, 'total' => count($columns),
+            'success' => true, 'data' => $columns, 'total' => \count($columns),
         ]);
     }
 
@@ -586,7 +586,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
 
         $dbAdapter = $this->plugin->getDataFactory()->createDbAdapter($type);
 
-        if (!method_exists($dbAdapter, 'getParentKeys')) {
+        if (!\method_exists($dbAdapter, 'getParentKeys')) {
             $this->View()->assign([
                 'success' => true, 'data' => [], 'total' => 0,
             ]);
@@ -598,15 +598,15 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
 
         foreach ($columns as &$column) {
             $match = '';
-            preg_match('/(?<=as ).*/', $column, $match);
+            \preg_match('/(?<=as ).*/', $column, $match);
 
-            $match = trim($match[0]);
+            $match = \trim($match[0]);
 
             if ($match != '') {
                 $column = $match;
             } else {
-                preg_match('/(?<=\.).*/', $column, $match);
-                $match = trim($match[0]);
+                \preg_match('/(?<=\.).*/', $column, $match);
+                $match = \trim($match[0]);
                 if ($match != '') {
                     $column = $match;
                 }
@@ -616,7 +616,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         }
 
         $this->View()->assign([
-            'success' => true, 'data' => $columns, 'total' => count($columns),
+            'success' => true, 'data' => $columns, 'total' => \count($columns),
         ]);
     }
 }

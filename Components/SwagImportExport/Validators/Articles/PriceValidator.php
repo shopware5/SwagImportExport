@@ -54,7 +54,7 @@ class PriceValidator extends Validator
             list($snippetName, $snippetMessage) = $this->snippetData[$key];
 
             $message = SnippetsHelper::getNamespace()->get($snippetName, $snippetMessage);
-            throw new AdapterException(sprintf($message, $orderNumber));
+            throw new AdapterException(\sprintf($message, $orderNumber));
         }
     }
 }

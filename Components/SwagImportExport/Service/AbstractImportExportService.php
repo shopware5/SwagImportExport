@@ -132,7 +132,7 @@ abstract class AbstractImportExportService
         $this->logger->write($logMessage, $writeStatus, $session);
 
         $logDataStruct = new LogDataStruct(
-            date('Y-m-d H:i:s'),
+            \date('Y-m-d H:i:s'),
             $filename,
             $profileName,
             $logMessage,
@@ -151,7 +151,7 @@ abstract class AbstractImportExportService
     {
         $fileReader = $this->fileIOFactory->createFileReader($format);
         if ($format === 'xml') {
-            $tree = json_decode($profile->getConfig('tree'), true);
+            $tree = \json_decode($profile->getConfig('tree'), true);
 
             $fileReader->setTree($tree);
         }

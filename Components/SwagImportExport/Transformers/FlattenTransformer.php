@@ -147,7 +147,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                 return;
             }
 
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 $this->findMainIterationPart($value);
             }
         }
@@ -247,22 +247,22 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                     throw new \Exception('Price column not found');
                 }
 
-                $dataColumns = array_keys($data);
+                $dataColumns = \array_keys($data);
                 $isEkGroupMissing = false;
                 $prices = [];
                 $matches = [];
                 $groups = [];
 
                 // find groups
-                $priceColumns = preg_grep('/^' . $priceColumnName . '_+(.*)/i', $dataColumns);
+                $priceColumns = \preg_grep('/^' . $priceColumnName . '_+(.*)/i', $dataColumns);
                 foreach ($priceColumns as &$columns) {
-                    preg_match('/' . $priceColumnName . '_+(?P<group>.*)$/i', $columns, $matches);
+                    \preg_match('/' . $priceColumnName . '_+(?P<group>.*)$/i', $columns, $matches);
                     $groups[] = $matches['group'];
                 }
 
                 // special case for EK group ('_EK' may be missing)
-                if (!in_array('EK', $groups)) {
-                    array_unshift($groups, 'EK');
+                if (!\in_array('EK', $groups)) {
+                    \array_unshift($groups, 'EK');
                     $isEkGroupMissing = true;
                 }
 
@@ -301,39 +301,39 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
 
                 $separator = '|';
                 if ($columnMapper['configSetId'] !== false) {
-                    $configSetId = explode($separator, $this->getDataValue($data, $columnMapper['configSetId']));
+                    $configSetId = \explode($separator, $this->getDataValue($data, $columnMapper['configSetId']));
                     $configSetId = $this->getFirstElement($configSetId);
                 }
 
                 if ($columnMapper['configSetType'] !== false) {
-                    $configSetType = explode($separator, $this->getDataValue($data, $columnMapper['configSetType']));
+                    $configSetType = \explode($separator, $this->getDataValue($data, $columnMapper['configSetType']));
                     $configSetType = $this->getFirstElement($configSetType);
                 }
 
                 if ($columnMapper['configSetName'] !== false) {
-                    $setNames = explode($separator, $this->getDataValue($data, $columnMapper['configSetName']));
+                    $setNames = \explode($separator, $this->getDataValue($data, $columnMapper['configSetName']));
                     $setNames = $this->getFirstElement($setNames);
                 }
 
                 if ($columnMapper['configOptionPosition'] !== false) {
-                    $positions = explode($separator, $this->getDataValue($data, $columnMapper['configOptionPosition']));
+                    $positions = \explode($separator, $this->getDataValue($data, $columnMapper['configOptionPosition']));
                 }
 
                 $configs = [];
-                $values = explode($separator, $this->getDataValue($data, $columnMapper['configOptionName']));
-                $optionIds = explode($separator, $this->getDataValue($data, $columnMapper['configOptionId']));
+                $values = \explode($separator, $this->getDataValue($data, $columnMapper['configOptionName']));
+                $optionIds = \explode($separator, $this->getDataValue($data, $columnMapper['configOptionId']));
 
                 //creates configOptionId to have more priority than configOptionName
-                $counter = $columnMapper['configOptionId'] !== false ? count($optionIds) : count($values);
+                $counter = $columnMapper['configOptionId'] !== false ? \count($optionIds) : \count($values);
 
                 for ($i = 0; $i < $counter; ++$i) {
-                    if (strstr($values[$i], '::')) {
+                    if (\strstr($values[$i], '::')) {
                         $message = SnippetsHelper::getNamespace()
                             ->get('transformers/used_colon', "In the group name, is used a colon ':'. Please delete it and try again.");
                         throw new \Exception($message);
                     }
 
-                    $value = explode(':', $values[$i]);
+                    $value = \explode(':', $values[$i]);
                     $configs[] = $this->transformConfiguratorToTree(
                         $node,
                         [
@@ -374,7 +374,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                     } elseif ($mapper[$key] === 'propertyGroupId') {
                         $propertyGroupId = $this->getDataValue($data, $key);
                     } else {
-                        $collectedData[$key] = explode('|', $this->getDataValue($data, $key));
+                        $collectedData[$key] = \explode('|', $this->getDataValue($data, $key));
                     }
                 }
 
@@ -382,15 +382,15 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
 
                 $newData = [];
                 if ($columnMapper['propertyValueId'] !== false) {
-                    $counter = count($collectedData[$columnMapper['propertyValueId']]);
+                    $counter = \count($collectedData[$columnMapper['propertyValueId']]);
                 } else {
-                    $counter = count($collectedData[$columnMapper['propertyValueName']]);
+                    $counter = \count($collectedData[$columnMapper['propertyValueName']]);
                 }
 
                 foreach ($collectedData as $key => $values) {
                     for ($i = 0; $i < $counter; ++$i) {
                         if ($mapper[$key] === 'propertyValueName') {
-                            $value = explode(':', $values[$i]);
+                            $value = \explode(':', $values[$i]);
                             $newData[$i][$columnMapper['propertyOptionName']] = $value[0];
                             $newData[$i][$key] = $value[1];
                         } else {
@@ -404,15 +404,15 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
             } elseif ($node['adapter'] === 'translation') {
                 $tempData = [];
                 $translationColumns = [];
-                $dataColumns = array_keys($data);
+                $dataColumns = \array_keys($data);
 
                 $columns = $this->getAllTranslationColumns();
                 foreach ($columns as $column) {
                     $tempData[$column] = $this->findNodeByShopwareField($node, $column);
 
                     if ($tempData[$column]) {
-                        $greps = preg_grep('/^' . $tempData[$column] . '_\d+$/i', $dataColumns);
-                        $translationColumns = array_merge($translationColumns, $greps);
+                        $greps = \preg_grep('/^' . $tempData[$column] . '_\d+$/i', $dataColumns);
+                        $translationColumns = \array_merge($translationColumns, $greps);
                     }
                 }
 
@@ -421,7 +421,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                 $translationLang = $this->findNodeByShopwareField($node, 'languageId');
 
                 foreach ($translationColumns as $column) {
-                    preg_match('/(?P<column>.*)_+(?P<langId>.*)$/i', $column, $matches);
+                    \preg_match('/(?P<column>.*)_+(?P<langId>.*)$/i', $column, $matches);
                     $columnName = $matches['column'];
                     $translations[$matches['langId']][$columnName] = $data[$column];
                     if ($translationLang) {
@@ -439,7 +439,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
 
                 $newData = [];
                 foreach ($collectedData as $key => $groupValue) {
-                    $values = explode('|', $groupValue);
+                    $values = \explode('|', $groupValue);
                     foreach ($values as $index => $value) {
                         $newData[$index][$key] = $value;
                     }
@@ -488,10 +488,10 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      */
     public function getFirstElement($data)
     {
-        if (is_array($data)) {
-            reset($data);
+        if (\is_array($data)) {
+            \reset($data);
 
-            return current($data);
+            return \current($data);
         }
 
         return $data;
@@ -513,7 +513,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
         }
 
         if ($iteration > 1) { // if it is sub iteration node
-            return explode('|', $data['key']);
+            return \explode('|', $data['key']);
         }
 
         return $data[$key];
@@ -568,13 +568,13 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
             }
         } else {
             foreach ($node as $key => $value) {
-                if (is_array($value)) {
+                if (\is_array($value)) {
                     $currentPath = $path . '/' . $key;
                     $this->collectHeader($value, $currentPath);
                 } else {
                     if ($key === '_value') {
-                        $pathParts = explode('/', $path);
-                        $this->saveTempData($pathParts[count($pathParts) - 1]);
+                        $pathParts = \explode('/', $path);
+                        $this->saveTempData($pathParts[\count($pathParts) - 1]);
                     } else {
                         $this->saveTempData($key);
                     }
@@ -593,7 +593,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
     public function createHeaderPriceNodes($node, $groupKey, $path = null)
     {
         foreach ($node as $key => $value) {
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 $currentPath = $this->getMergedPath($path, $key);
                 $this->createHeaderPriceNodes($value, $groupKey, $currentPath);
             } else {
@@ -601,8 +601,8 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                     continue;
                 }
                 if ($key === '_value') {
-                    $pathParts = explode('/', $path);
-                    $name = $pathParts[count($pathParts) - 1] . '_' . $groupKey;
+                    $pathParts = \explode('/', $path);
+                    $name = $pathParts[\count($pathParts) - 1] . '_' . $groupKey;
                     $this->saveTempData($name);
                 } else {
                     $key .= '_' . $groupKey;
@@ -622,7 +622,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
     public function createHeaderTaxSumNodes($node, $taxRate, $path = null)
     {
         foreach ($node as $key => $value) {
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 $currentPath = $this->getMergedPath($path, $key);
                 $this->createHeaderTaxSumNodes($value, $taxRate, $currentPath);
             } else {
@@ -630,8 +630,8 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                     continue;
                 }
                 if ($key === '_value') {
-                    $pathParts = explode('/', $path);
-                    $name = $pathParts[count($pathParts) - 1] . '_' . $taxRate;
+                    $pathParts = \explode('/', $path);
+                    $name = $pathParts[\count($pathParts) - 1] . '_' . $taxRate;
                     $this->saveTempData($name);
                 } else {
                     $key .= '_' . $taxRate;
@@ -650,7 +650,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
     public function createHeaderPriceGroup($node, $path = null)
     {
         foreach ($node as $key => $value) {
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 $currentPath = $path . '/' . $key;
                 $this->createHeaderPriceGroup($value, $currentPath);
             } else {
@@ -660,8 +660,8 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                 }
 
                 if ($key === '_value') {
-                    $pathParts = explode('/', $path);
-                    $name = $pathParts[count($pathParts) - 1];
+                    $pathParts = \explode('/', $path);
+                    $name = $pathParts[\count($pathParts) - 1];
                     $this->saveTempData($name);
                 } else {
                     $this->saveTempData($key);
@@ -681,17 +681,17 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
     public function createHeaderValues($node, $skipList, $path = null)
     {
         foreach ($node as $key => $value) {
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 $currentPath = $path . '/' . $key;
                 $this->createHeaderValues($value, $skipList, $currentPath);
             } else {
-                if (in_array($value, $skipList)) {
+                if (\in_array($value, $skipList)) {
                     continue;
                 }
 
                 if ($key === '_value') {
-                    $pathParts = explode('/', $path);
-                    $name = $pathParts[count($pathParts) - 1];
+                    $pathParts = \explode('/', $path);
+                    $name = $pathParts[\count($pathParts) - 1];
                     $this->saveTempData($name);
                 } else {
                     $this->saveTempData($key);
@@ -710,7 +710,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
     public function createHeaderTranslation($node, $shopId, $path = null)
     {
         foreach ($node as $key => $value) {
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 $currentPath = $path . '/' . $key;
                 $this->createHeaderTranslation($value, $shopId, $currentPath);
             } else {
@@ -719,8 +719,8 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                 }
 
                 if ($key === '_value') {
-                    $pathParts = explode('/', $path);
-                    $name = $pathParts[count($pathParts) - 1] . '_' . $shopId;
+                    $pathParts = \explode('/', $path);
+                    $name = $pathParts[\count($pathParts) - 1] . '_' . $shopId;
                     $this->saveTempData($name);
                 } else {
                     $key .= '_' . $shopId;
@@ -766,14 +766,14 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                 $iterationTempData = $this->getIterationTempData();
 
                 foreach ($iterationTempData as $key => $tempData) {
-                    if (is_array($tempData)) {
+                    if (\is_array($tempData)) {
                         if ($configuratorFlatMapper[$key] === 'configSetId'
                             || $configuratorFlatMapper[$key] === 'configSetType'
                             || $configuratorFlatMapper[$key] === 'configSetName'
                         ) {
                             $this->saveTempData($tempData[0]);
                         } else {
-                            $data = implode('|', $tempData);
+                            $data = \implode('|', $tempData);
                             $this->saveTempData($data);
                         }
                     }
@@ -792,11 +792,11 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                 $iterationTempData = $this->getIterationTempData();
 
                 foreach ($iterationTempData as $key => $tempData) {
-                    if (is_array($tempData)) {
+                    if (\is_array($tempData)) {
                         if ($propertyValueFlatMapper[$key] === 'propertyGroupName') {
                             $this->saveTempData($tempData[0]);
                         } else {
-                            $data = implode('|', $tempData);
+                            $data = \implode('|', $tempData);
                             $this->saveTempData($data);
                         }
                     }
@@ -826,8 +826,8 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                         || $translationPFlatMapper[$nodeName] === 'propertyGroupId'
                     ) {
                         $this->saveTempData($tempData[0]);
-                    } elseif (is_array($tempData)) {
-                        $data = implode('|', $tempData);
+                    } elseif (\is_array($tempData)) {
+                        $data = \implode('|', $tempData);
                         $this->saveTempData($data);
                     }
                 }
@@ -854,8 +854,8 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                 }
 
                 foreach ($this->getIterationTempData() as $tempData) {
-                    if (is_array($tempData)) {
-                        $data = implode('|', $tempData);
+                    if (\is_array($tempData)) {
+                        $data = \implode('|', $tempData);
                         $this->saveTempData($data);
                     }
                 }
@@ -864,7 +864,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
             }
         } else {
             foreach ($node as $key => $value) {
-                if (is_array($value)) {
+                if (\is_array($value)) {
                     $currentPath = $this->getMergedPath($path, $key);
                     $this->collectData($value, $currentPath);
                 } else {
@@ -883,7 +883,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
         foreach ($node as $key => $value) {
             $currentPath = $this->getMergedPath($path, $key);
 
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 $this->collectIterationData($value, $currentPath);
             } else {
                 $this->saveIterationTempData($currentPath, $value);
@@ -918,7 +918,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
         foreach ($node as $key => $value) {
             $currentPath = $this->getMergedPath($path, $key);
 
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 $result = $this->getPriceGroupFromNode($value, $mapper, $currentPath);
 
                 if ($result) {
@@ -941,7 +941,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
         foreach ($node as $key => $value) {
             $currentPath = $this->getMergedPath($path, $key);
 
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 $this->collectPriceData($value, $mapper, $currentPath, $emptyResult);
             } else {
                 if ($mapper[$currentPath] !== 'priceGroup') {
@@ -971,7 +971,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
     public function getMainIterationPart()
     {
         if ($this->mainIterationPart == null) {
-            $tree = json_decode($this->config, true);
+            $tree = \json_decode($this->config, true);
             $this->findMainIterationPart($tree);
         }
 
@@ -1007,7 +1007,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                 $this->saveIterationParts($currentPath, $nodes['adapter']);
             }
 
-            if (is_array($node)) {
+            if (\is_array($node)) {
                 $this->processIterationParts($node, $currentPath);
             }
         }
@@ -1035,7 +1035,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                 return $node;
             }
 
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 $seekNode = $this->getNodeFromProfile($value, $adapter);
                 if ($seekNode) {
                     return $seekNode;
@@ -1058,7 +1058,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
         foreach ($node as $key => $value) {
             $currentPath = $this->getMergedPath($path, $key);
 
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 $result = $this->findConfigurationGroupValue($value, $mapper, $currentPath);
 
                 if ($result) {
@@ -1080,7 +1080,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
         foreach ($node as $key => $value) {
             $currentPath = $this->getMergedPath($path, $key);
 
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 $result = $this->findPropertyOptionName($value, $mapper, $currentPath);
 
                 if ($result) {
@@ -1105,7 +1105,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
         foreach ($node as $key => $value) {
             $currentPath = $this->getMergedPath($path, $key);
 
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 $this->collectConfiguratorData($value, $mapper, $currentPath, $node);
             } else {
                 if ($mapper[$currentPath] === 'configGroupName'
@@ -1143,7 +1143,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
         foreach ($node as $key => $value) {
             $currentPath = $this->getMergedPath($path, $key);
 
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 $this->collectPropertyData($value, $mapper, $currentPath, $node);
             } else {
                 if ($mapper[$currentPath] === 'propertyOptionName') {
@@ -1170,7 +1170,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
     {
         foreach ($node as $key => $value) {
             $currentPath = $this->getMergedPath($path, $key);
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 $this->collectTranslationData($value, $mapper, $currentPath);
             } else {
                 if ($mapper[$currentPath] === 'languageId') {
@@ -1284,7 +1284,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
 
             $attributes = $this->getAttributeColumns();
 
-            $this->translationColumns = array_merge($translationFields, $attributes);
+            $this->translationColumns = \array_merge($translationFields, $attributes);
         }
 
         return $this->translationColumns;
@@ -1335,7 +1335,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
     {
         foreach ($node as $key => $value) {
             $currentPath = $this->getMergedPath($path, $key);
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 $result = $this->getTaxRateFromNode($value, $mapper, $currentPath);
 
                 if ($result) {
@@ -1357,7 +1357,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
     {
         foreach ($node as $key => $value) {
             $currentPath = $this->getMergedPath($path, $key);
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 $this->collectTaxRateData($value, $mapper, $currentPath, $emptyResult);
             } elseif ($mapper[$currentPath] === 'taxRateSums') {
                 $tempData = ($emptyResult === true) ? null : $value;
@@ -1376,7 +1376,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
         /** @var AbstractSchemaManager $schemaManager */
         $schemaManager = Shopware()->Container()->get('models')->getConnection()->getSchemaManager();
 
-        return array_keys($schemaManager->listTableColumns('s_articles_attributes'));
+        return \array_keys($schemaManager->listTableColumns('s_articles_attributes'));
     }
 
     /**
@@ -1539,7 +1539,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
         foreach ($node as $key => $value) {
             $currentPath = $this->getMergedPath($path, $key);
 
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 $this->convertToFlat($value, $currentPath);
             } else {
                 $this->saveTempMapper($currentPath, $value);

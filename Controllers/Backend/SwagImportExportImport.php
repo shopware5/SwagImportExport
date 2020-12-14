@@ -86,12 +86,12 @@ class Shopware_Controllers_Backend_SwagImportExportImport extends Shopware_Contr
         ];
 
         if ($request->getParam('unprocessedFiles')) {
-            $unprocessedFiles = json_decode($request->getParam('unprocessedFiles'), true);
+            $unprocessedFiles = \json_decode($request->getParam('unprocessedFiles'), true);
         }
 
         if (!isset($postData['format'])) {
             // get file format
-            $postData['format'] = pathinfo($inputFile, PATHINFO_EXTENSION);
+            $postData['format'] = \pathinfo($inputFile, \PATHINFO_EXTENSION);
         }
 
         /** @var ImportService $importService */

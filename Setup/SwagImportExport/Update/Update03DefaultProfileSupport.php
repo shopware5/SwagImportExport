@@ -67,7 +67,7 @@ class Update03DefaultProfileSupport implements UpdaterInterface
      */
     public function isCompatible()
     {
-        return version_compare($this->setupContext->getPreviousPluginVersion(), self::MIN_PLUGIN_VERSION, '<');
+        return \version_compare($this->setupContext->getPreviousPluginVersion(), self::MIN_PLUGIN_VERSION, '<');
     }
 
     /**
@@ -75,6 +75,6 @@ class Update03DefaultProfileSupport implements UpdaterInterface
      */
     private function isDuplicateNameError(\Exception $exception)
     {
-        return strpos($exception->getMessage(), 'Duplicate entry') !== false;
+        return \strpos($exception->getMessage(), 'Duplicate entry') !== false;
     }
 }

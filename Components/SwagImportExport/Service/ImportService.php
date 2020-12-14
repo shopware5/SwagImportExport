@@ -87,11 +87,11 @@ class ImportService extends AbstractImportExportService implements ImportService
                     unset($resultData['sessionId']);
                     unset($resultData['adapter']);
 
-                    $resultData = array_merge($resultData, $postProcessedData);
+                    $resultData = \array_merge($resultData, $postProcessedData);
                 }
 
                 if ($this->logger->getMessage() === null) {
-                    $message = sprintf(
+                    $message = \sprintf(
                         '%s %s %s',
                         $resultData['position'],
                         SnippetsHelper::getNamespace('backend/swag_import_export/default_profiles')->get($resultData['adapter']),
@@ -103,7 +103,7 @@ class ImportService extends AbstractImportExportService implements ImportService
             }
 
             unset($resultData['unprocessedData']);
-            $resultData['unprocessedFiles'] = json_encode($unprocessedFiles);
+            $resultData['unprocessedFiles'] = \json_encode($unprocessedFiles);
             $resultData['importFile'] = $this->uploadPathProvider->getFileNameFromPath($resultData['importFile']);
 
             return $resultData;
@@ -146,10 +146,10 @@ class ImportService extends AbstractImportExportService implements ImportService
     protected function processData(&$unprocessedFiles)
     {
         foreach ($unprocessedFiles as $hiddenProfile => $inputFile) {
-            if (is_readable($inputFile)) {
+            if (\is_readable($inputFile)) {
                 // renames
-                $outputFile = str_replace('-tmp', '-swag', $inputFile);
-                rename($inputFile, $outputFile);
+                $outputFile = \str_replace('-tmp', '-swag', $inputFile);
+                \rename($inputFile, $outputFile);
 
                 $profile = $this->profileFactory->loadHiddenProfile($hiddenProfile);
                 $profileId = $profile->getId();

@@ -113,13 +113,13 @@ class CategoryTranslationDbAdapter implements DataDbAdapter
         }
 
         foreach ($translationRows as &$translationRow) {
-            $translation = unserialize($translationRow['objectdata']);
+            $translation = \unserialize($translationRow['objectdata']);
 
             if (!$translation) {
                 continue;
             }
 
-            $translationRow = array_merge($translationRow, $translation);
+            $translationRow = \array_merge($translationRow, $translation);
         }
 
         return ['default' => $translationRows];
@@ -147,7 +147,7 @@ class CategoryTranslationDbAdapter implements DataDbAdapter
 
         $records = $builder->getQuery()->getArrayResult();
 
-        return array_column($records, 'id');
+        return \array_column($records, 'id');
     }
 
     /**
@@ -165,9 +165,9 @@ class CategoryTranslationDbAdapter implements DataDbAdapter
      */
     public function getColumns($section)
     {
-        $method = 'get' . ucfirst($section) . 'Columns';
+        $method = 'get' . \ucfirst($section) . 'Columns';
 
-        if (method_exists($this, $method)) {
+        if (\method_exists($this, $method)) {
             return $this->{$method}();
         }
 
@@ -283,7 +283,7 @@ class CategoryTranslationDbAdapter implements DataDbAdapter
             $message = SnippetsHelper::getNamespace()
                 ->get('adapters/translations/lang_id_not_found', 'Language with id %s does not exists');
 
-            throw new AdapterException(sprintf($message, $objectLanguage));
+            throw new AdapterException(\sprintf($message, $objectLanguage));
         }
     }
 
@@ -306,7 +306,7 @@ class CategoryTranslationDbAdapter implements DataDbAdapter
             $message = SnippetsHelper::getNamespace()
                 ->get('adapters/category_id_not_found', 'Category with Id: %s does not exists');
 
-            throw new AdapterException(sprintf($message, $objectKey));
+            throw new AdapterException(\sprintf($message, $objectKey));
         }
     }
 }

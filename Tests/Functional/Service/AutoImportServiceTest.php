@@ -30,7 +30,7 @@ class AutoImportServiceTest extends TestCase
     public function deleteFilesAfter()
     {
         foreach ($this->files as $file) {
-            file_exists($file) ? unlink($file) : '';
+            \file_exists($file) ? \unlink($file) : '';
         }
 
         $this->files = [];
@@ -55,14 +55,14 @@ class AutoImportServiceTest extends TestCase
 
         $methodFlagCronAsRunning->invoke($service, $directory);
 
-        $this->expectOutputString('There is already an import in progress.' . PHP_EOL);
+        $this->expectOutputString('There is already an import in progress.' . \PHP_EOL);
         $service->runAutoImport();
     }
 
     public function test_runAutoImport_no_files_for_import()
     {
         $service = $this->getService();
-        $this->expectOutputString('No import files are found.' . PHP_EOL);
+        $this->expectOutputString('No import files are found.' . \PHP_EOL);
         $service->runAutoImport();
     }
 
@@ -82,7 +82,7 @@ class AutoImportServiceTest extends TestCase
 
         $this->installProfile($directory, 'no-content');
 
-        $this->expectOutputString('Kein Profil im Dateinamen no-profile gefunden' . PHP_EOL);
+        $this->expectOutputString('Kein Profil im Dateinamen no-profile gefunden' . \PHP_EOL);
         $service->runAutoImport();
     }
 
@@ -100,9 +100,9 @@ class AutoImportServiceTest extends TestCase
         $this->files[] = $baseDirectory . '/__running';
         $this->files[] = $userFile;
 
-        $this->installProfile($userFile, file_get_contents(__DIR__ . '/_fixtures/export.customers.csv'));
+        $this->installProfile($userFile, \file_get_contents(__DIR__ . '/_fixtures/export.customers.csv'));
 
-        $this->expectOutputString('3 customers imported successfully' . PHP_EOL);
+        $this->expectOutputString('3 customers imported successfully' . \PHP_EOL);
         $service->runAutoImport();
     }
 
@@ -111,7 +111,7 @@ class AutoImportServiceTest extends TestCase
      */
     private function installProfile($filename, $content)
     {
-        file_put_contents($filename, $content);
+        \file_put_contents($filename, $content);
     }
 
     /**

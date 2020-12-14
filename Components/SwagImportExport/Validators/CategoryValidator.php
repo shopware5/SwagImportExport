@@ -53,7 +53,7 @@ class CategoryValidator extends Validator
             list($snippetName, $snippetMessage, $messageKey) = $this->snippetData[$key];
 
             $message = SnippetsHelper::getNamespace()->get($snippetName, $snippetMessage);
-            throw new AdapterException(sprintf($message, $record[$messageKey]));
+            throw new AdapterException(\sprintf($message, $record[$messageKey]));
         }
     }
 }

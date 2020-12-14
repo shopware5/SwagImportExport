@@ -21,13 +21,13 @@ class DataHelper
      */
     public static function generateMappingFromColumns($column)
     {
-        if (!preg_match('/(?<=as ).*/', $column, $alias)) {
+        if (!\preg_match('/(?<=as ).*/', $column, $alias)) {
             return [];
         }
-        $alias = trim($alias[0]);
+        $alias = \trim($alias[0]);
 
-        preg_match("/(?<=\.).*?(?= as|\W)/", $column, $name);
-        $name = trim($name[0]);
+        \preg_match("/(?<=\.).*?(?= as|\W)/", $column, $name);
+        $name = \trim($name[0]);
 
         return [$alias, $name];
     }
@@ -38,12 +38,12 @@ class DataHelper
     public static function formatFileSize($bytes)
     {
         if ($bytes > 0) {
-            $unit = (int) log($bytes, 1024);
+            $unit = (int) \log($bytes, 1024);
 
             $units = ['B', 'KB', 'MB', 'GB'];
 
-            if (array_key_exists($unit, $units) === true) {
-                return sprintf('%s %s', number_format($bytes / pow(1024, $unit), 2), $units[$unit]);
+            if (\array_key_exists($unit, $units) === true) {
+                return \sprintf('%s %s', \number_format($bytes / \pow(1024, $unit), 2), $units[$unit]);
             }
         }
 

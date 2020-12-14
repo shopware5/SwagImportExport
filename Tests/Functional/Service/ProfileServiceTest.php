@@ -32,7 +32,7 @@ class ProfileServiceTest extends TestCase
 
         static::assertEquals($profile['name'], $profileDataStruct->getName());
         static::assertEquals($profile['type'], $profileDataStruct->getType());
-        static::assertEquals($profile['tree'], json_encode($profileDataStruct->getTree()));
+        static::assertEquals($profile['tree'], \json_encode($profileDataStruct->getTree()));
     }
 
     public function test_profile_import_should_throw_exception_wrong_filetype()
@@ -42,7 +42,7 @@ class ProfileServiceTest extends TestCase
         $uploadPathProvider = Shopware()->Container()->get('swag_import_export.upload_path_provider');
 
         // create copy of profile.json testfile because it will be deleted by service
-        copy(__DIR__ . '/_fixtures/profile_import.json', $uploadPathProvider->getPath() . '/test.csv');
+        \copy(__DIR__ . '/_fixtures/profile_import.json', $uploadPathProvider->getPath() . '/test.csv');
 
         $file = new UploadedFile($uploadPathProvider->getPath() . '/test.csv', 'test.csv');
 
@@ -59,7 +59,7 @@ class ProfileServiceTest extends TestCase
         $uploadPathProvider = Shopware()->Container()->get('swag_import_export.upload_path_provider');
 
         // create copy of profile.json testfile because it will be deleted by service
-        copy(__DIR__ . '/_fixtures/empty.json', $uploadPathProvider->getPath() . '/empty.json');
+        \copy(__DIR__ . '/_fixtures/empty.json', $uploadPathProvider->getPath() . '/empty.json');
 
         $file = new UploadedFile($uploadPathProvider->getPath() . '/empty.json', 'empty.json', 'application/json');
 
@@ -76,7 +76,7 @@ class ProfileServiceTest extends TestCase
         $uploadPathProvider = Shopware()->Container()->get('swag_import_export.upload_path_provider');
 
         // create copy of profile.json testfile because it will be deleted by service
-        copy(__DIR__ . '/_fixtures/wrong.json', $uploadPathProvider->getPath() . '/wrong.json');
+        \copy(__DIR__ . '/_fixtures/wrong.json', $uploadPathProvider->getPath() . '/wrong.json');
 
         $file = new UploadedFile($uploadPathProvider->getPath() . '/wrong.json', 'wrong.json', 'application/json');
 
@@ -93,7 +93,7 @@ class ProfileServiceTest extends TestCase
         $uploadPathProvider = Shopware()->Container()->get('swag_import_export.upload_path_provider');
 
         // create copy of profile.json testfile because it will be deleted by service
-        copy(__DIR__ . '/_fixtures/empty_value.json', $uploadPathProvider->getPath() . '/empty_value.json');
+        \copy(__DIR__ . '/_fixtures/empty_value.json', $uploadPathProvider->getPath() . '/empty_value.json');
 
         $file = new UploadedFile($uploadPathProvider->getPath() . '/empty_value.json', 'empty_value.json', 'application/json');
 
@@ -112,7 +112,7 @@ class ProfileServiceTest extends TestCase
         $uploadPathProvider = Shopware()->Container()->get('swag_import_export.upload_path_provider');
 
         // create copy of profile.json testfile because it will be deleted by service
-        copy(__DIR__ . '/_fixtures/profile_import.json', $uploadPathProvider->getPath() . '/profile_import.json');
+        \copy(__DIR__ . '/_fixtures/profile_import.json', $uploadPathProvider->getPath() . '/profile_import.json');
 
         $file = new UploadedFile($uploadPathProvider->getPath() . '/profile_import.json', 'profile_import.json', 'application/json');
 

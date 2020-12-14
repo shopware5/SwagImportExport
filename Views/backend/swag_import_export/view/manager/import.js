@@ -10,7 +10,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
      * @string
      */
     alias: 'widget.swag-import-export-manager-import',
-    title: '{s name=swag_import_export/manager/import/title}Import{/s}',
+    title: '{s name="swag_import_export/manager/import/title"}Import{/s}',
     layout: 'fit',
     autoScroll: true,
 
@@ -60,7 +60,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
                 ui: 'shopware-ui',
                 cls: 'shopware-toolbar',
                 items: ['->', {
-                    text: '{s name=swag_import_export/manager/import/import_button}Start import{/s}',
+                    text: '{s name="swag_import_export/manager/import/import_button"}Start import{/s}',
                     cls: 'primary',
                     action: 'swag-import-export-manager-import-button'
                 }]
@@ -100,12 +100,12 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
     createInfoText: function() {
         return Ext.create('Ext.container.Container', {
             margin: '0 0 20 0',
-            html: '<i style="color: grey" >' + '{s name=swag_import_export/manager/import/import_description}With file import, you are able to extract information from CSV and XML documents and save it in your database using profiles. These profiles contain information about which data is imported along with its structure. The default profiles can be individually extended and modified with custom profiles in the profiles menu.{/s}' + '</i>'
+            html: '<i style="color: grey" >' + '{s name="swag_import_export/manager/import/import_description"}With file import, you are able to extract information from CSV and XML documents and save it in your database using profiles. These profiles contain information about which data is imported along with its structure. The default profiles can be individually extended and modified with custom profiles in the profiles menu.{/s}' + '</i>'
         });
     },
 
     createInfoBox: function() {
-        return Shopware.Notification.createBlockMessage('{s name=swag_import_export/manager/import/import_notice}Warning: Importing can permanently overwrite existing data and database structures!{/s}', 'notice');
+        return Shopware.Notification.createBlockMessage('{s name="swag_import_export/manager/import/import_notice"}Warning: Importing can permanently overwrite existing data and database structures!{/s}', 'notice');
     },
 
     /**
@@ -127,7 +127,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
             checkType: false,
             checkAmount: true,
             enablePreviewImage: false,
-            dropZoneText: '{s name=swag_import_export/manager/import/drag_and_drop}SELECT FILE USING DRAG + DROP{/s}',
+            dropZoneText: '{s name="swag_import_export/manager/import/drag_and_drop"}SELECT FILE USING DRAG + DROP{/s}',
             height: 100,
             generatedId: id,
             html: '<div id="' + id + '" style="display: none;"></div>'
@@ -182,9 +182,9 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
         var me = this;
 
         me.addBtn = Ext.create('Ext.form.field.File', {
-            emptyText: '{s name=swag_import_export/manager/import/choose}Please choose{/s}',
+            emptyText: '{s name="swag_import_export/manager/import/choose"}Please choose{/s}',
             margin: '5 0 0 2',
-            buttonText: '{s name=swag_import_export/manager/import/choose_button}Choose{/s}',
+            buttonText: '{s name="swag_import_export/manager/import/choose_button"}Choose{/s}',
             buttonConfig: {
                 cls: Ext.baseCSSPrefix + 'form-mediamanager-btn small secondary',
                 iconCls: 'sprite-plus-circle-frame'
@@ -193,7 +193,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
             itemId: 'importSelectFile',
             width: me.configWidth,
             labelWidth: me.configLabelWidth,
-            fieldLabel: '{s name=swag_import_export/manager/import/select_file}Select file{/s}',
+            fieldLabel: '{s name="swag_import_export/manager/import/select_file"}Select file{/s}',
             listeners: {
                 change: function(element, value, eOpts) {
                     me.findProfile(value);
@@ -214,7 +214,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
 
         me.profileCombo = Ext.create('Ext.form.field.ComboBox', {
             allowBlank: false,
-            fieldLabel: '{s name=swag_import_export/manager/import/select_profile}Select profile{/s}',
+            fieldLabel: '{s name="swag_import_export/manager/import/select_profile"}Select profile{/s}',
             store: Ext.create('Shopware.apps.SwagImportExport.store.ProfileList', {
                 sorters: [
                     { property: 'name', direction: 'ASC' }
@@ -224,7 +224,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
                         if (records.length === 0) {
                             store.add({
                                 id: -1,
-                                name: '{s name=swag_import_export/profile/no_data}No profiles found{/s}'
+                                name: '{s name="swag_import_export/profile/no_data"}No profiles found{/s}'
                             });
                         } else {
                             var record = store.findRecord('type', 'customersComplete');
@@ -239,14 +239,14 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
             labelStyle: 'font-weight: 700; text-align: left;',
             width: me.configWidth,
             labelWidth: me.configLabelWidth,
-            helpText: '{s name=swag_import_export/export/profile_help}The default profiles can be individually extended and modified with custom profiles in the profiles menu.{/s}',
+            helpText: '{s name="swag_import_export/export/profile_help"}The default profiles can be individually extended and modified with custom profiles in the profiles menu.{/s}',
             margin: '5 0 0 0',
             valueField: 'id',
             displayField: 'name',
             name: 'profile',
             queryMode: 'remote',
             forceSelection: true,
-            emptyText: '{s name=swag_import_export/manager/import/choose}Please choose{/s}',
+            emptyText: '{s name="swag_import_export/manager/import/choose"}Please choose{/s}',
             matchFieldWidth: false,
             minChars: 3,
             displayTpl: new Ext.XTemplate(
@@ -303,7 +303,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.manager.Import', {
 
         me.profileFilterCheckbox = Ext.create('Ext.form.field.Checkbox', {
             margin: '7 0 0 10',
-            boxLabel: '{s name=swag_import_export/manager/hide_default_profiles}Hide default profiles{/s}',
+            boxLabel: '{s name="swag_import_export/manager/hide_default_profiles"}Hide default profiles{/s}',
             listeners: {
                 change: function(cb, newValue) {
                     var store = me.profileCombo.getStore();

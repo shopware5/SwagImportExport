@@ -94,7 +94,7 @@ class ProfileDataProvider
      */
     public function getIdByProfileType($type)
     {
-        if (!array_key_exists($type, $this->profileIds)) {
+        if (!\array_key_exists($type, $this->profileIds)) {
             throw new \RuntimeException("Profile type {$type} not found.");
         }
 

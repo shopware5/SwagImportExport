@@ -34,7 +34,7 @@ class ArticleTranslationUpdateProfileTest extends TestCase
         );
 
         $article = $queryResult[0];
-        $translations = unserialize($article['objectdata']);
+        $translations = \unserialize($article['objectdata']);
 
         static::assertEquals($expectedArticleName, $translations['txtArtikel']);
         static::assertEquals($expectedArticleDescription, $translations['txtshortdescription']);

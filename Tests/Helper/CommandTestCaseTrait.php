@@ -25,7 +25,7 @@ trait CommandTestCaseTrait
     protected function removeCreatedFilesAfter()
     {
         foreach ($this->files as $filePath) {
-            unlink($filePath);
+            \unlink($filePath);
         }
     }
 
@@ -39,7 +39,7 @@ trait CommandTestCaseTrait
         $application = new Application(Shopware()->Container()->get('kernel'));
         $application->setAutoExit(true);
 
-        $fp = tmpfile();
+        $fp = \tmpfile();
         $input = new StringInput($command);
         $output = new StreamOutput($fp);
 
@@ -47,7 +47,7 @@ trait CommandTestCaseTrait
 
         $consoleOutput = $this->readConsoleOutput($fp);
 
-        return explode(PHP_EOL, $consoleOutput);
+        return \explode(\PHP_EOL, $consoleOutput);
     }
 
     /**
@@ -73,12 +73,12 @@ trait CommandTestCaseTrait
      */
     private function readConsoleOutput($fp)
     {
-        fseek($fp, 0);
+        \fseek($fp, 0);
         $output = '';
-        while (!feof($fp)) {
-            $output = fread($fp, 4096);
+        while (!\feof($fp)) {
+            $output = \fread($fp, 4096);
         }
-        fclose($fp);
+        \fclose($fp);
 
         return $output;
     }

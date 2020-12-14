@@ -11,6 +11,7 @@ namespace Functional\Components\SwagImportExport\DbAdapters;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\DbAdapters\ArticlesDbAdapter;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 
@@ -180,7 +181,7 @@ class ArticlesDbAdapterTest extends TestCase
             ],
             'image' => [
                 0 => [
-                    'imageUrl' => 'file://' . realpath(__DIR__) . '/../../../../Helper/ImportFiles/sw-icon_blue128.png',
+                    'imageUrl' => 'file://' . \realpath(__DIR__) . '/../../../../Helper/ImportFiles/sw-icon_blue128.png',
                     'parentIndexElement' => 0,
                 ],
             ],
@@ -280,6 +281,10 @@ class ArticlesDbAdapterTest extends TestCase
 
     public function test_write_article_with_attribute_translation_should_be_written_to_database()
     {
+        /** @var ModelManager $modelManager */
+        $modelManager = Shopware()->Container()->get('models');
+        $modelManager->rollback();
+
         $attributeService = Shopware()->Container()->get('shopware_attribute.crud_service');
         /* @var CrudService $attributeService */
         $attributeService->update('s_articles_attributes', 'mycustomfield', 'string', ['translatable' => true]);
@@ -310,13 +315,15 @@ class ArticlesDbAdapterTest extends TestCase
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
         $articleId = $dbalConnection->executeQuery("SELECT articleID FROM s_articles_details WHERE orderNumber='SW10006'")->fetch(\PDO::FETCH_COLUMN);
         $result = $dbalConnection->executeQuery("SELECT * FROM s_core_translations WHERE objecttype='article' AND objectkey={$articleId}")->fetchAll();
-        $importedTranslation = unserialize($result[0]['objectdata']);
+        $importedTranslation = \unserialize($result[0]['objectdata']);
 
         // trait rollback not working - so we rollback manually
         $dbalConnection->executeQuery("DELETE FROM s_core_translations WHERE objecttype='article' AND objectkey={$articleId}");
         $dbalConnection->executeQuery("DELETE FROM s_articles_translations WHERE articleID={$articleId}");
 
         static::assertEquals($records['translation'][0]['mycustomfield'], $importedTranslation['__attribute_mycustomfield']);
+
+        $modelManager->beginTransaction();
     }
 
     public function test_read()

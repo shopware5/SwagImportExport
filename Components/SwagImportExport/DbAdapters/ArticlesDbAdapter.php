@@ -144,7 +144,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 ->setParameter('cids', $categories)
                 ->groupBy('article.id');
 
-            $articleIds = array_map(
+            $articleIds = \array_map(
                 function ($item) {
                     return $item['id'];
                 },
@@ -170,7 +170,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             $productNumberSearch = Shopware()->Container()->get('shopware_search.product_number_search');
             /** @var ProductNumberSearchResult $products */
             $products = $productNumberSearch->search($criteria, $context);
-            $productNumbers = array_keys($products->getProducts());
+            $productNumbers = \array_keys($products->getProducts());
 
             $builder->andWhere('detail.number IN(:productNumbers)')
                 ->setParameter('productNumbers', $productNumbers);
@@ -188,7 +188,7 @@ class ArticlesDbAdapter implements DataDbAdapter
 
         $result = [];
         if ($records) {
-            $result = array_column($records, 'id');
+            $result = \array_column($records, 'id');
         }
 
         return $result;
@@ -219,7 +219,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         $result['article'] = DbAdapterHelper::decodeHtmlEntities($articles);
 
         //prices
-        $columns['price'] = array_merge(
+        $columns['price'] = \array_merge(
             $columns['price'],
             ['customerGroup.taxInput as taxInput', 'articleTax.tax as tax']
         );
@@ -229,16 +229,16 @@ class ArticlesDbAdapter implements DataDbAdapter
         $result['price'] = $priceBuilder->getQuery()->getResult();
 
         if ($result['purchasePrice']) {
-            $result['purchasePrice'] = round($result['purchasePrice'], 2);
+            $result['purchasePrice'] = \round($result['purchasePrice'], 2);
         }
 
         foreach ($result['price'] as &$record) {
             if ($record['taxInput']) {
-                $record['price'] = round($record['price'] * (100 + $record['tax']) / 100, 2);
-                $record['pseudoPrice'] = round($record['pseudoPrice'] * (100 + $record['tax']) / 100, 2);
+                $record['price'] = \round($record['price'] * (100 + $record['tax']) / 100, 2);
+                $record['pseudoPrice'] = \round($record['pseudoPrice'] * (100 + $record['tax']) / 100, 2);
             } else {
-                $record['price'] = round($record['price'], 2);
-                $record['pseudoPrice'] = round($record['pseudoPrice'], 2);
+                $record['price'] = \round($record['price'], 2);
+                $record['pseudoPrice'] = \round($record['pseudoPrice'], 2);
             }
 
             if (!$record['inStock']) {
@@ -307,7 +307,7 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     public function prepareTranslationExport($ids)
     {
-        $productDetailIds = implode(',', $ids);
+        $productDetailIds = \implode(',', $ids);
 
         $sql = "SELECT variant.articleID as articleId, variant.id as variantId, variant.kind, ct.objectdata, ct.objectlanguage as languageId
                 FROM s_articles_details AS variant
@@ -332,7 +332,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             $rows[$variantId][$languageId]['languageId'] = $languageId;
             $rows[$variantId][$languageId]['variantKind'] = $kind;
 
-            $objectData = unserialize($record['objectdata']);
+            $objectData = \unserialize($record['objectdata']);
             if (!empty($objectData)) {
                 foreach ($objectData as $key => $value) {
                     if (isset($translationFields[$key])) {
@@ -388,7 +388,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         foreach ($result as $index => $translation) {
             $matchedProductTranslation = $mappedProducts[$translation['articleId']][$translation['languageId']];
             if ((int) $translation['variantKind'] === 1 && $matchedProductTranslation) {
-                $serializeData = unserialize($matchedProductTranslation['objectdata']);
+                $serializeData = \unserialize($matchedProductTranslation['objectdata']);
                 foreach ($translationFields as $key => $field) {
                     $result[$index][$field] = $serializeData[$key];
                 }
@@ -396,7 +396,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 continue;
             }
 
-            $data = unserialize($matchedProductTranslation['objectdata']);
+            $data = \unserialize($matchedProductTranslation['objectdata']);
             $result[$index]['name'] = $data['txtArtikel'];
             $result[$index]['description'] = $data['txtshortdescription'];
             $result[$index]['descriptionLong'] = $data['txtlangbeschreibung'];
@@ -427,7 +427,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             'articleEsd.file as esd',
         ];
 
-        $columns['article'] = array_merge(
+        $columns['article'] = \array_merge(
             $this->getArticleColumns(),
             $otherColumns
         );
@@ -496,7 +496,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         $shop = $this->modelManager->find(Shop::class, $id);
         if (!$shop) {
             $message = SnippetsHelper::getNamespace()->get('adapters/articles/no_shop_id', 'Shop by id %s not found');
-            throw new AdapterException(sprintf($message, $id));
+            throw new AdapterException(\sprintf($message, $id));
         }
 
         return $shop;
@@ -525,7 +525,7 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     public function getArticleColumns()
     {
-        return array_merge($this->getArticleVariantColumns(), $this->getVariantColumns());
+        return \array_merge($this->getArticleVariantColumns(), $this->getVariantColumns());
     }
 
     /**
@@ -579,7 +579,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             foreach ($attributes as $attribute) {
                 $attr = $this->underscoreToCamelCaseService->underscoreToCamelCase($attribute);
 
-                $attributesSelect[] = sprintf('%s.%s as attribute%s', $prefix, $attr, ucwords($attr));
+                $attributesSelect[] = \sprintf('%s.%s as attribute%s', $prefix, $attr, \ucwords($attr));
             }
         }
 
@@ -597,9 +597,9 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     public function getColumns($section)
     {
-        $method = 'get' . ucfirst($section) . 'Columns';
+        $method = 'get' . \ucfirst($section) . 'Columns';
 
-        if (method_exists($this, $method)) {
+        if (\method_exists($this, $method)) {
             return $this->{$method}();
         }
 
@@ -692,7 +692,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         $attributesSelect = $this->getArticleAttributes();
 
         if ($attributesSelect && !empty($attributesSelect)) {
-            $columns = array_merge($columns, $attributesSelect);
+            $columns = \array_merge($columns, $attributesSelect);
         }
 
         return $columns;
@@ -1159,7 +1159,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             ->setParameter('ids', $detailIds)
             ->groupBy('article.id');
 
-        $mappedArticleIds = array_map(
+        $mappedArticleIds = \array_map(
             function ($item) {
                 return $item['id'];
             },
@@ -1185,16 +1185,16 @@ class ArticlesDbAdapter implements DataDbAdapter
             }
 
             if (!empty($category['categoryPath'])) {
-                $catPath = explode('|', $category['categoryPath']);
-                $categoryIds = array_merge($categoryIds, $catPath);
+                $catPath = \explode('|', $category['categoryPath']);
+                $categoryIds = \array_merge($categoryIds, $catPath);
             }
         }
 
         //only unique ids
-        $categoryIds = array_unique($categoryIds);
+        $categoryIds = \array_unique($categoryIds);
 
         //removes empty value
-        $categoryIds = array_filter($categoryIds);
+        $categoryIds = \array_filter($categoryIds);
 
         $categoriesNames = $this->modelManager->createQueryBuilder()
             ->select(['category.id, category.name'])
@@ -1221,19 +1221,19 @@ class ArticlesDbAdapter implements DataDbAdapter
     {
         $ids = [];
         if (!empty($category['categoryPath'])) {
-            foreach (explode('|', $category['categoryPath']) as $id) {
+            foreach (\explode('|', $category['categoryPath']) as $id) {
                 $ids[] = $mapper[$id];
             }
         }
-        krsort($ids);
+        \krsort($ids);
 
         if (!empty($category['categoryId'])) {
             $ids[] = $mapper[$category['categoryId']];
         }
 
-        $ids = array_filter($ids);
+        $ids = \array_filter($ids);
 
-        return implode('->', $ids);
+        return \implode('->', $ids);
     }
 
     /**
@@ -1345,8 +1345,8 @@ class ArticlesDbAdapter implements DataDbAdapter
                     $pricesWriter->write(
                         $articleWriterResult->getArticleId(),
                         $articleWriterResult->getDetailId(),
-                        array_filter(
-                            $records['price'],
+                        \array_filter(
+                            $records['price'] ?? [],
                             function ($price) use ($index) {
                                 return (int) $price['parentIndexElement'] === $index;
                             }
@@ -1355,8 +1355,8 @@ class ArticlesDbAdapter implements DataDbAdapter
 
                     $categoryWriter->write(
                         $articleWriterResult->getArticleId(),
-                        array_filter(
-                            $records['category'],
+                        \array_filter(
+                            $records['category'] ?? [],
                             function ($category) use ($index) {
                                 return (int) $category['parentIndexElement'] === $index
                                     && ($category['categoryId'] || $category['categoryPath']);
@@ -1366,8 +1366,8 @@ class ArticlesDbAdapter implements DataDbAdapter
 
                     $configuratorWriter->writeOrUpdateConfiguratorSet(
                         $articleWriterResult,
-                        array_filter(
-                            $records['configurator'],
+                        \array_filter(
+                            $records['configurator'] ?? [],
                             function ($configurator) use ($index) {
                                 return (int) $configurator['parentIndexElement'] === $index;
                             }
@@ -1384,8 +1384,8 @@ class ArticlesDbAdapter implements DataDbAdapter
                         $articleWriterResult->getArticleId(),
                         $articleWriterResult->getDetailId(),
                         $articleWriterResult->getMainDetailId(),
-                        array_filter(
-                            $records['translation'],
+                        \array_filter(
+                            $records['translation'] ?? [],
                             function ($translation) use ($index) {
                                 return (int) $translation['parentIndexElement'] === $index;
                             }
@@ -1403,8 +1403,8 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $relationWriter->write(
                     $articleWriterResult->getArticleId(),
                     $article['mainNumber'],
-                    array_filter(
-                        $records['accessory'],
+                    \array_filter(
+                        $records['accessory'] ?? [],
                         function ($accessory) use ($index, $articleWriterResult) {
                             return (int) $accessory['parentIndexElement'] === $index
                                 && $articleWriterResult->getMainDetailId() === $articleWriterResult->getDetailId();
@@ -1417,8 +1417,8 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $relationWriter->write(
                     $articleWriterResult->getArticleId(),
                     $article['mainNumber'],
-                    array_filter(
-                        $records['similar'],
+                    \array_filter(
+                        $records['similar'] ?? [],
                         function ($similar) use ($index, $articleWriterResult) {
                             return (int) $similar['parentIndexElement'] === $index
                                 && $articleWriterResult->getMainDetailId() === $articleWriterResult->getDetailId();
@@ -1431,8 +1431,8 @@ class ArticlesDbAdapter implements DataDbAdapter
                 $imageWriter->write(
                     $articleWriterResult->getArticleId(),
                     $article['mainNumber'],
-                    array_filter(
-                        $records['image'],
+                    \array_filter(
+                        $records['image'] ?? [],
                         function ($image) use ($index) {
                             return (int) $image['parentIndexElement'] === $index;
                         }
@@ -1472,8 +1472,8 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     private function filterPropertyValues($records, $index, ArticleWriterResult $articleWriterResult)
     {
-        return array_filter(
-            $records['propertyValue'],
+        return \array_filter(
+            $records['propertyValue'] ?? [],
             function ($property) use ($index, $articleWriterResult) {
                 return (int) $property['parentIndexElement'] === $index
                     && $articleWriterResult->getMainDetailId() === $articleWriterResult->getDetailId();

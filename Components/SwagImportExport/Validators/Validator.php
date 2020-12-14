@@ -22,7 +22,7 @@ abstract class Validator
      */
     public function filterEmptyString($record)
     {
-        return array_filter($record, 'strlen');
+        return \array_filter($record, 'strlen');
     }
 
     /**
@@ -38,7 +38,7 @@ abstract class Validator
     {
         foreach ($record as $fieldName => $value) {
             foreach ($mapper as $type => $fields) {
-                if (in_array($fieldName, $fields)) {
+                if (\in_array($fieldName, $fields)) {
                     $this->validateType($type, $value, $fieldName);
                     break;
                 }
@@ -53,7 +53,7 @@ abstract class Validator
      */
     public function validateInt($value)
     {
-        return preg_match('/^-{0,1}\d+$/', $value);
+        return \preg_match('/^-{0,1}\d+$/', $value);
     }
 
     /**
@@ -65,7 +65,7 @@ abstract class Validator
      */
     public function validateFloat($value)
     {
-        return preg_match('/^-?\d+((\.|,){0,1}\d+)*$/', $value);
+        return \preg_match('/^-?\d+((\.|,){0,1}\d+)*$/', $value);
     }
 
     /**
@@ -75,7 +75,7 @@ abstract class Validator
      */
     public function validateDateTime($value)
     {
-        return (bool) strtotime($value);
+        return (bool) \strtotime($value);
     }
 
     /**
@@ -98,7 +98,7 @@ abstract class Validator
      */
     public function validateString($value)
     {
-        return is_string($value);
+        return \is_string($value);
     }
 
     /**
@@ -112,8 +112,8 @@ abstract class Validator
      */
     private function validateType($type, $value, $fieldName)
     {
-        $action = 'validate' . ucfirst($type);
-        if (!is_callable([$this, $action])) {
+        $action = 'validate' . \ucfirst($type);
+        if (!\is_callable([$this, $action])) {
             throw new \Exception('Method with name `' . $action . '` does not exist!');
         }
 
@@ -121,7 +121,7 @@ abstract class Validator
 
         if (!$isCorrect) {
             $message = SnippetsHelper::getNamespace()->get('validators/wrong_type', '%s field has to be %s but is %s!');
-            throw new AdapterException(sprintf($message, $fieldName, $type, $value));
+            throw new AdapterException(\sprintf($message, $fieldName, $type, $value));
         }
     }
 }

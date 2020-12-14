@@ -76,14 +76,14 @@ class CustomerCompleteDbAdapter extends CustomerDbAdapter
             $query->setMaxResults($limit);
         }
 
-        if (SwagVersionHelper::hasMinimumVersion('5.4.0') && array_key_exists('customerId', $filter)) {
+        if (SwagVersionHelper::hasMinimumVersion('5.4.0') && \array_key_exists('customerId', $filter)) {
             $query->andWhere('customer.id = :customerId');
             $query->setParameter('customerId', $filter['customerId']);
         }
 
         $ids = $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
 
-        return array_map(function ($id) {
+        return \array_map(function ($id) {
             return (int) $id;
         }, $ids);
     }
@@ -109,7 +109,7 @@ class CustomerCompleteDbAdapter extends CustomerDbAdapter
         $paginator = $this->manager->createPaginator($query);
         $customers = $paginator->getIterator()->getArrayCopy();
 
-        $customerIds = array_column($customers, 'id');
+        $customerIds = \array_column($customers, 'id');
         $addresses = $this->getAddresses($customerIds);
         $orders = $this->getCustomerOrders($customerIds);
 
@@ -126,7 +126,7 @@ class CustomerCompleteDbAdapter extends CustomerDbAdapter
             if ($orders[$customer['id']]) {
                 $customer['orders'] = DbAdapterHelper::decodeHtmlEntities($orders[$customer['id']]);
             }
-            if (array_key_exists('attribute', $customer)) {
+            if (\array_key_exists('attribute', $customer)) {
                 unset($customer['attribute']['id'], $customer['attribute']['customerId']);
             }
         }
@@ -203,7 +203,7 @@ class CustomerCompleteDbAdapter extends CustomerDbAdapter
                 $detail['releaseDate'] = $releaseDate->format('Y-m-d H:i:s');
             }
             unset($detail);
-            if (!array_key_exists($order['customerId'], $indexedOrders)) {
+            if (!\array_key_exists($order['customerId'], $indexedOrders)) {
                 $indexedOrders[$order['customerId']] = [];
             }
             $indexedOrders[$order['customerId']][] = $order;

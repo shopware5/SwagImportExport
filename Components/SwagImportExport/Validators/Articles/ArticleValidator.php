@@ -59,14 +59,14 @@ class ArticleValidator extends Validator
     public function checkRequiredFields($record)
     {
         foreach ($this->requiredFields as $key) {
-            if (isset($record[$key]) && strlen($record[$key])) {
+            if (isset($record[$key]) && \strlen($record[$key])) {
                 continue;
             }
 
             list($snippetName, $snippetMessage) = $this->snippetData[$key];
 
             $message = SnippetsHelper::getNamespace()->get($snippetName, $snippetMessage);
-            throw new AdapterException(sprintf($message, $record['orderNumber']));
+            throw new AdapterException(\sprintf($message, $record['orderNumber']));
         }
     }
 
@@ -80,7 +80,7 @@ class ArticleValidator extends Validator
     public function checkRequiredFieldsForCreate($record)
     {
         foreach ($this->requiredFieldsForCreate as $key) {
-            if (is_array($key)) {
+            if (\is_array($key)) {
                 list($supplierName, $supplierId) = $key;
 
                 if (isset($record[$supplierName]) || isset($record[$supplierId])) {
@@ -94,7 +94,7 @@ class ArticleValidator extends Validator
             list($snippetName, $snippetMessage) = $this->snippetData[$key];
 
             $message = SnippetsHelper::getNamespace()->get($snippetName, $snippetMessage);
-            throw new AdapterException(sprintf($message, $record['mainNumber']));
+            throw new AdapterException(\sprintf($message, $record['mainNumber']));
         }
     }
 }

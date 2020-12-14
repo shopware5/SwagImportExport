@@ -3,9 +3,9 @@
 Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
     extend: 'Ext.app.Controller',
     snippets: {
-        exportWindow: '{s name=swag_import_export/export/window_title}Export window{/s}',
-        finished: '{s name=swag_import_export/export/finished}Export finished successfully {/s}',
-        process: '{s name=swag_import_export/export/process}Exporting... {/s}'
+        exportWindow: '{s name="swag_import_export/export/window_title"}Export window{/s}',
+        finished: '{s name="swag_import_export/export/finished"}Export finished successfully {/s}',
+        process: '{s name="swag_import_export/export/process"}Exporting... {/s}'
     },
 
     /**
@@ -39,8 +39,8 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
 
         if (Ext.isEmpty(values.profile) || values.profile < 1 || Ext.isEmpty(values.format)) {
             Shopware.Notification.createGrowlMessage(
-                '{s name=swag_import_export/export/error_title}Swag import export{/s}',
-                '{s name=swag_import_export/export/error_msg}Please select export configuration{/s}'
+                '{s name="swag_import_export/export/error_title"}Swag import export{/s}',
+                '{s name="swag_import_export/export/error_msg"}Please select export configuration{/s}'
             );
             return;
         }
@@ -127,7 +127,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
             },
             failure: function(response) {
                 Shopware.Msg.createStickyGrowlMessage({
-                    title: '{s name=swag_import_export/export/error_occured}An error occured{/s}',
+                    title: '{s name="swag_import_export/export/error_occured"}An error occured{/s}',
                     text: response.responseText
                 });
             }
@@ -188,7 +188,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
 
                 if (result.success === false) {
                     Shopware.Msg.createStickyGrowlMessage({
-                        title: '{s name=swag_import_export/export/error}Export error{/s}',
+                        title: '{s name="swag_import_export/export/error"}Export error{/s}',
                         text: result.msg
                     });
 
@@ -215,7 +215,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
             },
             failure: function(response) {
                 Shopware.Msg.createStickyGrowlMessage({
-                    title: '{s name=swag_import_export/export/error_occured}An error occured{/s}',
+                    title: '{s name="swag_import_export/export/error_occured"}An error occured{/s}',
                     text: response.responseText
                 });
 

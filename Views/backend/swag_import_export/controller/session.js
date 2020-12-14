@@ -43,8 +43,8 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Session', {
         }
         // ask the user if he is sure.
         Ext.MessageBox.confirm(
-            '{s name=swag_import_export/manager/log/delete_operations_title}Delete selected operation(s)?{/s}',
-            '{s name=swag_import_export/manager/log/delete_operations_confirm}{/s}',
+            '{s name="swag_import_export/manager/log/delete_operations_title"}Delete selected operation(s)?{/s}',
+            '{s name="swag_import_export/manager/log/delete_operations_confirm"}{/s}',
             function (response) {
                 if (response !== 'yes') {
                     return;
@@ -54,9 +54,9 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Session', {
                 store.sync({
                     callback: function () {
                         Shopware.Notification.createGrowlMessage(
-                            '{s name=swag_import_export/manager/log/delete_operations_success_title}Success{/s}',
-                            '{s name=swag_import_export/manager/log/delete_operations_delete_success}The selected operation(s) have been removed{/s}',
-                            '{s name=wag_import_export/manager/log/delete_operations_growlmessage}Operation{/s}'
+                            '{s name="swag_import_export/manager/log/delete_operations_success_title"}Success{/s}',
+                            '{s name="swag_import_export/manager/log/delete_operations_delete_success"}The selected operation(s) have been removed{/s}',
+                            '{s name="swag_import_export/manager/log/delete_operations_growlmessage"}Operation{/s}'
                         );
                         store.load();
                     }

@@ -84,20 +84,37 @@ SW 5.6:
         -   name: mysql:5.7
             alias: mysql
 
-SW 5.7:
+.SW 5.7 default:
     stage: PHPUnit
     needs: [PHP analyze]
-    image: shopware/5-continuous:7.2
-    only:
-        - master
-    allow_failure: true
+    services:
+        - name: mysql:5.7
+          alias: mysql
     variables:
         CHECKOUT_SHOPWARE_BRANCH: "5.7"
+    before_script: []
     script:
+        - zip -rq plugin.zip .
+        - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.shopware.com/shopware/5/product/shopware.git shopware --depth=1 -b ${CHECKOUT_SHOPWARE_BRANCH}
+        - unzip -q plugin.zip -d shopware/engine/Shopware/Plugins/Local/Backend/SwagImportExport
+        - cd shopware
+        - cp .env.dist .env
+        - make init
+        - cp -r engine/Shopware/Plugins/Local/Backend/SwagImportExport/Tests/config_gitlab_5.7.php config.php
+        - php bin/console sw:plugin:refresh
+        - php bin/console sw:plugin:list
+        - php bin/console sw:plugin:install --activate SwagImportExport
+        - php bin/console sw:cache:clear
+        - /entrypoint supervisord &>/dev/null &
         - cd engine/Shopware/Plugins/Local/Backend/SwagImportExport
-        - php  ../../../../../../vendor/bin/phpunit
+        - php ../../../../../../vendor/bin/phpunit
             --configuration phpunit.xml.dist
             --colors=never
-    services:
-        -   name: mysql:5.7
-            alias: mysql
+
+SW 5.7 PHP 7.3:
+    extends: .SW 5.7 default
+    image: shopware/5-continuous:7.3
+
+SW 5.7 PHP 8.0:
+    extends: .SW 5.7 default
+    image: gitlab.shopware.com:5005/shopware/5/product/image/continuous:8.0

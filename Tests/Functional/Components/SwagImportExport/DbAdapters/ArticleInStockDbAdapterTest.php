@@ -64,7 +64,7 @@ class ArticleInStockDbAdapterTest extends TestCase
         $preparedExportData = $articleInStockDbAdapter->readRecordIds(null, null, $filter);
         $exportedData = $articleInStockDbAdapter->read($preparedExportData, $this->getReadColumns());
 
-        static::assertCount(count($preparedExportData), $exportedData['default']);
+        static::assertCount(\count($preparedExportData), $exportedData['default']);
     }
 
     public function test_read()

@@ -117,7 +117,7 @@ class NewsletterDataManager extends DataManager
         if (!$group instanceof Group) {
             $message = SnippetsHelper::getNamespace()
                 ->get('adapters/newsletter/group_required', 'Group is required for email %s');
-            throw new AdapterException(sprintf($message, $email));
+            throw new AdapterException(\sprintf($message, $email));
         }
 
         return $group->getName();

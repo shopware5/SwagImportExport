@@ -22,17 +22,17 @@ class ArticleCompleteProfileTest extends TestCase
     protected function setUp(): void
     {
         $csvFile = __DIR__ . '/_fixtures/article_complete.csv';
-        $fixtureImagePath = 'file://' . realpath(__DIR__) . '/../../../Helper/ImportFiles/sw-icon_blue128.png';
-        $csvContentWithExternalImagePath = str_replace('[placeholder_for_fixture_image]', $fixtureImagePath, file_get_contents($csvFile));
-        file_put_contents($csvFile, $csvContentWithExternalImagePath);
+        $fixtureImagePath = 'file://' . \realpath(__DIR__) . '/../../../Helper/ImportFiles/sw-icon_blue128.png';
+        $csvContentWithExternalImagePath = \str_replace('[placeholder_for_fixture_image]', $fixtureImagePath, \file_get_contents($csvFile));
+        \file_put_contents($csvFile, $csvContentWithExternalImagePath);
     }
 
     protected function tearDown(): void
     {
         $csvFile = __DIR__ . '/_fixtures/article_complete.csv';
-        $fixtureImagePath = 'file://' . realpath(__DIR__) . '/../../../Helper/ImportFiles/sw-icon_blue128.png';
-        $csvContentWithPlaceholder = str_replace($fixtureImagePath, '[placeholder_for_fixture_image]', file_get_contents($csvFile));
-        file_put_contents($csvFile, $csvContentWithPlaceholder);
+        $fixtureImagePath = 'file://' . \realpath(__DIR__) . '/../../../Helper/ImportFiles/sw-icon_blue128.png';
+        $csvContentWithPlaceholder = \str_replace($fixtureImagePath, '[placeholder_for_fixture_image]', \file_get_contents($csvFile));
+        \file_put_contents($csvFile, $csvContentWithPlaceholder);
     }
 
     public function test_import_should_create_article_with_variants()
@@ -106,7 +106,7 @@ class ArticleCompleteProfileTest extends TestCase
 
         $importedVariant = $this->executeQuery("SELECT * FROM s_articles_details WHERE ordernumber='test-10001.1'");
         $result = $this->executeQuery("SELECT * FROM s_core_translations WHERE objecttype='article' AND objectkey='{$importedVariant[0]['articleID']}'");
-        $importedTranslation = unserialize($result[0]['objectdata']);
+        $importedTranslation = \unserialize($result[0]['objectdata']);
 
         static::assertEquals('Translated Name', $importedTranslation['txtArtikel']);
         static::assertEquals('short description translation', $importedTranslation['txtshortdescription']);
