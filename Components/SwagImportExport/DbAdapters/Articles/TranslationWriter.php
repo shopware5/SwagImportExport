@@ -64,11 +64,13 @@ class TranslationWriter
             'descriptionLong',
             'metaTitle',
             'keywords',
+            'shippingTime',
         ];
 
         $variantWhiteList = [
             'additionalText',
             'packUnit',
+            'shippingTime',
         ];
 
         $whiteList = \array_merge($whiteList, $variantWhiteList);

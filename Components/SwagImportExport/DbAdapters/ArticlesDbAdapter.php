@@ -389,6 +389,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             $result[$index]['descriptionLong'] = $data['txtlangbeschreibung'];
             $result[$index]['metaTitle'] = $data['metaTitle'];
             $result[$index]['keywords'] = $data['txtkeywords'];
+            $result[$index]['shippingtime'] = $data['txtshippingtime'];
         }
 
         return $result;
@@ -806,6 +807,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             'translation.description_long as descriptionLong',
             'translation.additionalText as additionalText',
             'translation.packUnit as packUnit',
+            'translation.shippingtime as shippingTime',
         ];
 
         $attributes = $this->getTranslatableAttributes();
@@ -1283,6 +1285,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             'txtzusatztxt' => 'additionalText',
             'txtshortdescription' => 'description',
             'txtlangbeschreibung' => 'descriptionLong',
+            'txtshippingtime' => 'shippingTime',
         ];
 
         $attributes = $this->getTranslatableAttributes();
