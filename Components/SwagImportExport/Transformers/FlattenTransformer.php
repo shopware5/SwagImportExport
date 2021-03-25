@@ -1280,6 +1280,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                 'descriptionLong',
                 'additionalText',
                 'packUnit',
+                'shippingTime',
             ];
 
             $attributes = $this->getAttributeColumns();
