@@ -12,7 +12,7 @@
 
     "changelog": {
         "de": {
-            "2.10.8": "PT-12120 - Shopware 5.6 und PHP8 Kompatibilität;",
+            "2.10.8": "PT-12120 - Shopware 5.7 und PHP8 Kompatibilität;",
             "2.10.7": "PT-9529 - Optimiert den Export Prozess;",
             "2.10.6": "PT-10810 - Optimiert den Import Prozess;",
             "2.10.5": "PT-10211 - Verbessert den Import von Kundennummern;",
@@ -61,7 +61,7 @@
             "1.0.1": "Problem mit verschwindendem Import/Export Menü-Eintrag behoben; Weitere ACL-Zugangsberechtigungen hinzugefügt; Korrektur: article.active Verhalten; Korrektur: Artikel-Attribute; Korrektur: Datums- und Zeitimporte"
         },
         "en": {
-            "2.10.8": "PT-12120 - Shopware 5.6 and PHP8 compatibility;",
+            "2.10.8": "PT-12120 - Shopware 5.7 and PHP8 compatibility;",
             "2.10.7": "PT-9529 - Optimizes the export process;",
             "2.10.6": "PT-10810 - Optimizes the import process;",
             "2.10.5": "PT-10211 - Improves import of customer numbers;",
