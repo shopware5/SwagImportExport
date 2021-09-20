@@ -19,8 +19,8 @@ class CategoryExportTest extends \Enlight_Components_Test_Controller_TestCase
     use DatabaseTestCaseTrait;
     use ExportControllerTrait;
 
-    const FORMAT_XML = 'xml';
-    const FORMAT_CSV = 'csv';
+    public const FORMAT_XML = 'xml';
+    public const FORMAT_CSV = 'csv';
 
     public function setUp(): void
     {
@@ -30,7 +30,7 @@ class CategoryExportTest extends \Enlight_Components_Test_Controller_TestCase
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
     }
 
-    public function test_category_xml_export()
+    public function testCategoryXmlExport()
     {
         $params = $this->getExportRequestParams();
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::CATEGORY_PROFILE_TYPE);
@@ -53,7 +53,7 @@ class CategoryExportTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertEquals(62, $categoryNodeList->length);
     }
 
-    public function test_category_csv_export()
+    public function testCategoryCsvExport()
     {
         $params = $this->getExportRequestParams();
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::CATEGORY_PROFILE_TYPE);

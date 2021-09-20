@@ -27,13 +27,18 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
 
     //import properties
     protected $mainType;
+
     protected $rawData;
+
     protected $bufferData;
+
     protected $importMapper;
 
     //export properties
     protected $data;
+
     protected $currentRecord;
+
     protected $preparedData;
 
     protected $iterationNodes = [];

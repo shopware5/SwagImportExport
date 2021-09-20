@@ -19,7 +19,7 @@ class ArticlePropertiesProfileTest extends TestCase
     use DefaultProfileImportTestCaseTrait;
     use DatabaseTestCaseTrait;
 
-    public function test_write_should_update_existing_property()
+    public function testWriteShouldUpdateExistingProperty()
     {
         $filePath = __DIR__ . '/_fixtures/article_properties_profile.csv';
         $createdArticleOrderNumber = 'SW10003';
@@ -34,7 +34,7 @@ class ArticlePropertiesProfileTest extends TestCase
         static::assertEquals($expectedUpdatedValue, $updatedArticleFilterValue[0]['value']);
     }
 
-    public function test_write_should_create_new_property_value()
+    public function testWriteShouldCreateNewPropertyValue()
     {
         $filePath = __DIR__ . '/_fixtures/article_properties_profile.csv';
         $createdArticleOrderNumber = 'SW10004';
@@ -49,7 +49,7 @@ class ArticlePropertiesProfileTest extends TestCase
         static::assertEquals($expectedInsertedValue, $updatedArticleFilterValue[0]['value']);
     }
 
-    public function test_write_should_create_new_property_group()
+    public function testWriteShouldCreateNewPropertyGroup()
     {
         $filePath = __DIR__ . '/_fixtures/article_properties_profile.csv';
         $expectedInsertedGroupName = 'New property group';
@@ -61,7 +61,7 @@ class ArticlePropertiesProfileTest extends TestCase
         static::assertEquals($expectedInsertedGroupName, $filterOptions[0]['name']);
     }
 
-    public function test_write_should_create_new_property_option()
+    public function testWriteShouldCreateNewPropertyOption()
     {
         $filePath = __DIR__ . '/_fixtures/article_properties_profile.csv';
         $expectedInsertedGroupName = 'New value name';

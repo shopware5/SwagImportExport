@@ -25,7 +25,7 @@ use Shopware\Components\SwagImportExport\Factories\DataFactory;
 
 class DataFactoryTest extends TestCase
 {
-    public function test_createDbAdapter_should_create_AddressDbAdapter()
+    public function testCreateDbAdapterShouldCreateAddressDbAdapter()
     {
         $dataFactory = $this->createDataFactory();
 
@@ -35,7 +35,7 @@ class DataFactoryTest extends TestCase
         static::assertInstanceOf(DataDbAdapter::class, $addressDbAdapter);
     }
 
-    public function test_createDbAdapter_should_create_CategoriesDbAdapter()
+    public function testCreateDbAdapterShouldCreateCategoriesDbAdapter()
     {
         $dataFactory = $this->createDataFactory();
 
@@ -45,7 +45,7 @@ class DataFactoryTest extends TestCase
         static::assertInstanceOf(DataDbAdapter::class, $categoriesDbAdapter);
     }
 
-    public function test_createDbAdapter_should_create_ArticlesDbAdapter()
+    public function testCreateDbAdapterShouldCreateArticlesDbAdapter()
     {
         $dataFactory = $this->createDataFactory();
 
@@ -55,7 +55,7 @@ class DataFactoryTest extends TestCase
         static::assertInstanceOf(DataDbAdapter::class, $articlesDbAdapter);
     }
 
-    public function test_createDbAdapter_should_create_ArticlesInstockDbAdapter()
+    public function testCreateDbAdapterShouldCreateArticlesInstockDbAdapter()
     {
         $dataFactory = $this->createDataFactory();
 
@@ -65,7 +65,7 @@ class DataFactoryTest extends TestCase
         static::assertInstanceOf(DataDbAdapter::class, $articlesInstockDbAdapter);
     }
 
-    public function test_createDbAdapter_should_create_ArticlesPricesDbAdapter()
+    public function testCreateDbAdapterShouldCreateArticlesPricesDbAdapter()
     {
         $dataFactory = $this->createDataFactory();
 
@@ -75,7 +75,7 @@ class DataFactoryTest extends TestCase
         static::assertInstanceOf(DataDbAdapter::class, $articlesPricesDbAdapter);
     }
 
-    public function test_createDbAdapter_should_create_OrdersDbAdapter()
+    public function testCreateDbAdapterShouldCreateOrdersDbAdapter()
     {
         $dataFactory = $this->createDataFactory();
 
@@ -85,7 +85,7 @@ class DataFactoryTest extends TestCase
         static::assertInstanceOf(DataDbAdapter::class, $ordersDbAdapter);
     }
 
-    public function test_createDbAdapter_should_create_MainOrderDbAdapter()
+    public function testCreateDbAdapterShouldCreateMainOrderDbAdapter()
     {
         $dataFactory = $this->createDataFactory();
 
@@ -95,7 +95,7 @@ class DataFactoryTest extends TestCase
         static::assertInstanceOf(DataDbAdapter::class, $mainOrdersDbAdapter);
     }
 
-    public function test_createDbAdapter_should_create_CustomerDbAdapter()
+    public function testCreateDbAdapterShouldCreateCustomerDbAdapter()
     {
         $dataFactory = $this->createDataFactory();
 
@@ -105,7 +105,7 @@ class DataFactoryTest extends TestCase
         static::assertInstanceOf(DataDbAdapter::class, $customerDbAdapter);
     }
 
-    public function test_createDbAdapter_should_create_NewsletterDbAdapter()
+    public function testCreateDbAdapterShouldCreateNewsletterDbAdapter()
     {
         $dataFactory = $this->createDataFactory();
 
@@ -115,7 +115,7 @@ class DataFactoryTest extends TestCase
         static::assertInstanceOf(DataDbAdapter::class, $newsletterDbAdapter);
     }
 
-    public function test_createDbAdapter_should_create_TranslationsDbAdapter()
+    public function testCreateDbAdapterShouldCreateTranslationsDbAdapter()
     {
         $dataFactory = $this->createDataFactory();
 
@@ -125,7 +125,7 @@ class DataFactoryTest extends TestCase
         static::assertInstanceOf(DataDbAdapter::class, $translationsDbAdapter);
     }
 
-    public function test_createDbAdapter_should_create_ArticlesImagesDbAdapter()
+    public function testCreateDbAdapterShouldCreateArticlesImagesDbAdapter()
     {
         $dataFactory = $this->createDataFactory();
 

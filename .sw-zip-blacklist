@@ -1,2 +1,14 @@
-psh.phar
+.githooks
+Tests
+.eslintignore
+.gitignore
+.gitlab-ci.yml
+.make.env
+.php-cs-fixer.php
+.psh.yml.dist
+before_install_plugin.sh
+Makefile
+phpstan.neon
+phpstan-baseline.neon
+phpunit.xml.dist
 psh

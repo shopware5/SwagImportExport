@@ -17,7 +17,7 @@ class ArticlesImagesDbAdapterTest extends TestCase
 {
     use DatabaseTestCaseTrait;
 
-    public function test_write_should_throw_exception_if_records_are_empty()
+    public function testWriteShouldThrowExceptionIfRecordsAreEmpty()
     {
         $articlesImagesDbAdapter = $this->createArticleImagesDbAdapter();
 
@@ -26,7 +26,7 @@ class ArticlesImagesDbAdapterTest extends TestCase
         $articlesImagesDbAdapter->write([]);
     }
 
-    public function test_write_should_throw_exception_having_wrong_path()
+    public function testWriteShouldThrowExceptionHavingWrongPath()
     {
         $articlesImagesDbAdapter = $this->createArticleImagesDbAdapter();
         $records = [
@@ -45,7 +45,7 @@ class ArticlesImagesDbAdapterTest extends TestCase
         $articlesImagesDbAdapter->write($records);
     }
 
-    public function test_new_article_image_should_be_written_to_database()
+    public function testNewArticleImageShouldBeWrittenToDatabase()
     {
         $articlesImagesDbAdapter = $this->createArticleImagesDbAdapter();
         $records = [
@@ -70,7 +70,7 @@ class ArticlesImagesDbAdapterTest extends TestCase
         static::assertEquals('png', $image['extension']);
     }
 
-    public function test_write_with_invalid_order_number_throws_exception()
+    public function testWriteWithInvalidOrderNumberThrowsException()
     {
         $articlesImagesDbAdapter = $this->createArticleImagesDbAdapter();
         $records = [
@@ -88,7 +88,7 @@ class ArticlesImagesDbAdapterTest extends TestCase
         $articlesImagesDbAdapter->write($records);
     }
 
-    public function test_write_with_not_existing_image_throws_exception()
+    public function testWriteWithNotExistingImageThrowsException()
     {
         $articlesImagesDbAdapter = $this->createArticleImagesDbAdapter();
         $records = [

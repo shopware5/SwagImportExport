@@ -10,8 +10,8 @@ namespace Shopware\Components\SwagImportExport;
 
 class UploadPathProvider
 {
-    const DIR = 'files/import_export';
-    const CRON_DIR = 'files/import_cron';
+    public const DIR = 'files/import_export';
+    public const CRON_DIR = 'files/import_cron';
 
     /**
      * @var string

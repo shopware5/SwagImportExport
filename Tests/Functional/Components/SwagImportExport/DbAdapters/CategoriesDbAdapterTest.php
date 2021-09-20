@@ -17,7 +17,7 @@ class CategoriesDbAdapterTest extends TestCase
 {
     use DatabaseTestCaseTrait;
 
-    public function test_write_should_throw_exception_if_records_are_empty()
+    public function testWriteShouldThrowExceptionIfRecordsAreEmpty()
     {
         $categoriesDbAdapter = $this->createCategoriesDbAdapter();
 
@@ -26,7 +26,7 @@ class CategoriesDbAdapterTest extends TestCase
         $categoriesDbAdapter->write([]);
     }
 
-    public function test_write_should_throw_exception_if_parent_category_does_not_exist()
+    public function testWriteShouldThrowExceptionIfParentCategoryDoesNotExist()
     {
         $categoryRecords = ['default' => [
                 ['categoryId' => '123', 'name' => 'Category with invalid parent', 'parentId' => '123123'],
@@ -40,7 +40,7 @@ class CategoriesDbAdapterTest extends TestCase
         $categoriesDbAdapter->write($categoryRecords);
     }
 
-    public function test_write_should_not_increment_id_on_creation_when_id_is_given()
+    public function testWriteShouldNotIncrementIdOnCreationWhenIdIsGiven()
     {
         $categoryRecords = ['default' => [
                 ['categoryId' => '99999', 'name' => 'New Category', 'parentId' => '3'],
@@ -60,7 +60,7 @@ class CategoriesDbAdapterTest extends TestCase
         static::assertEquals($categoryRecords['default'][1]['categoryId'], $createdCategory2[0]['id']);
     }
 
-    public function test_write_should_throw_exception_if_category_has_no_id()
+    public function testWriteShouldThrowExceptionIfCategoryHasNoId()
     {
         $categoryRecords = ['default' => [
                 ['name' => 'New Category', 'parentId' => '3'],

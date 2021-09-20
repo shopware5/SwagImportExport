@@ -19,7 +19,7 @@ class MinimalArticleVariantsProfileTest extends TestCase
     use DefaultProfileImportTestCaseTrait;
     use DatabaseTestCaseTrait;
 
-    public function test_import_should_insert_new_variant()
+    public function testImportShouldInsertNewVariant()
     {
         $filePath = __DIR__ . '/_fixtures/minimal_article_variants_profile.csv';
         $expectedVariantOrderNumber = 'SW10002.4';
@@ -34,7 +34,7 @@ class MinimalArticleVariantsProfileTest extends TestCase
         static::assertEquals($expectedArticleName, $importedArticle[0]['name']);
     }
 
-    public function test_import_should_insert_new_article_with_variant()
+    public function testImportShouldInsertNewArticleWithVariant()
     {
         $filePath = __DIR__ . '/_fixtures/minimal_article_variants_profile.csv';
         $expectedVariantOrderNumber = 'ordernumber.2';

@@ -16,7 +16,7 @@ class NewsletterProfileTest extends TestCase
 {
     use DefaultProfileTestCaseTrait;
 
-    public function test_it_can_be_created()
+    public function testItCanBeCreated()
     {
         $newsletterProfile = new NewsletterRecipientProfile();
 
@@ -25,7 +25,7 @@ class NewsletterProfileTest extends TestCase
         static::assertInstanceOf(\JsonSerializable::class, $newsletterProfile);
     }
 
-    public function test_it_should_return_valid_profile()
+    public function testItShouldReturnValidProfile()
     {
         $newsletterProfile = new NewsletterRecipientProfile();
 

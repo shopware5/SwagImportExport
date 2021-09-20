@@ -24,7 +24,7 @@ class DbAdapterHelperTest extends TestCase
         $this->SUT = new DbAdapterHelper();
     }
 
-    public function test_decode_html_entities()
+    public function testDecodeHtmlEntities()
     {
         $inputRecords = [
             [

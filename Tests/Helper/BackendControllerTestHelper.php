@@ -12,8 +12,10 @@ use SwagImportExport\Tests\Helper\DataProvider\ProfileDataProvider;
 
 class BackendControllerTestHelper
 {
-    const EXPECTED_EXPORT_FILES_DIR = __DIR__ . '/ExportFiles';
+    public const EXPECTED_EXPORT_FILES_DIR = __DIR__ . '/ExportFiles';
+
     private $files = [];
+
     /**
      * @var ProfileDataProvider
      */

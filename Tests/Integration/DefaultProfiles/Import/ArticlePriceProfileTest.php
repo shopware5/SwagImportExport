@@ -19,7 +19,7 @@ class ArticlePriceProfileTest extends TestCase
     use DefaultProfileImportTestCaseTrait;
     use DatabaseTestCaseTrait;
 
-    public function test_import_should_update_article_price()
+    public function testImportShouldUpdateArticlePrice()
     {
         $filePath = __DIR__ . '/_fixtures/article_price_profile.csv';
         $createdArticleOrderNumber = 'SW10003';
@@ -35,7 +35,7 @@ class ArticlePriceProfileTest extends TestCase
         static::assertEquals($expectedArticlePrice, $updatedArticlePrice[0]['price']);
     }
 
-    public function test_import_should_update_article_pseudo_price()
+    public function testImportShouldUpdateArticlePseudoPrice()
     {
         $filePath = __DIR__ . '/_fixtures/article_price_profile.csv';
         $createdArticleOrderNumber = 'SW10003';
@@ -49,7 +49,7 @@ class ArticlePriceProfileTest extends TestCase
         static::assertEquals($expectedArticlePseudoPrice, $updatedArticlePseudoPrice[0]['pseudoprice']);
     }
 
-    public function test_import_should_update_price_group()
+    public function testImportShouldUpdatePriceGroup()
     {
         $filePath = __DIR__ . '/_fixtures/article_price_profile.csv';
         $createdArticleOrderNumber = 'SW10003';

@@ -19,7 +19,7 @@ class NewsletterDefaultProfileTest extends TestCase
     use DefaultProfileImportTestCaseTrait;
     use DatabaseTestCaseTrait;
 
-    public function test_newsletter_recipient_should_be_imported()
+    public function testNewsletterRecipientShouldBeImported()
     {
         $filePath = __DIR__ . '/_fixtures/newsletter_profile.csv';
         $expectedRecipientEmail = 'email_should_be_created@example.org';
@@ -33,7 +33,7 @@ class NewsletterDefaultProfileTest extends TestCase
         static::assertEquals('Newsletter-Empfänger', $assignedGroup[0]['name']);
     }
 
-    public function test_custom_newsletter_group_import_and_assigned_recipient()
+    public function testCustomNewsletterGroupImportAndAssignedRecipient()
     {
         $filePath = __DIR__ . '/_fixtures/newsletter_profile.csv';
         $expectedAssignedRecipientEmail = 'custom_group_should_be_created@example.org';
@@ -48,7 +48,7 @@ class NewsletterDefaultProfileTest extends TestCase
         static::assertEquals($expectedAssignedRecipientEmail, $assignedRecipient[0]['email']);
     }
 
-    public function test_imported_recipient_assigned_to_existing_shop_customer()
+    public function testImportedRecipientAssignedToExistingShopCustomer()
     {
         $filePath = __DIR__ . '/_fixtures/newsletter_profile.csv';
         $exceptedRecipientCustomerEmail = 'mustermann@b2b.de';

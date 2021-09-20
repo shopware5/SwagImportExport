@@ -9,47 +9,45 @@ variables:
     WEB_DOCUMENT_ROOT: $CI_PROJECT_DIR/
     GIT_STRATEGY: clone
     SHOPWARE_ENV: swagimportexporttest
-    CHECKOUT_SHOPWARE_BRANCH: "5.6"
+    CHECKOUT_SHOPWARE_BRANCH: "5.7"
+    PLUGIN_NAME: SwagImportExport
 
 stages:
-    - Code Style Check
+    - Code Analysis
     - PHPUnit
 
 default:
-    image: shopware/5-continuous:7.3
+    image: gitlab.shopware.com:5005/shopware/5/product/image/continuous:7.4
+    services:
+        -   name: mysql:5.7
+            alias: mysql
     before_script:
         - zip -rq plugin.zip .
         - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.shopware.com/shopware/5/product/shopware.git shopware --depth=1 -b ${CHECKOUT_SHOPWARE_BRANCH}
-        - unzip -q plugin.zip -d shopware/engine/Shopware/Plugins/Local/Backend/SwagImportExport
+        - unzip -q plugin.zip -d shopware/engine/Shopware/Plugins/Local/Backend/${PLUGIN_NAME}
         - cd shopware
-        - ./psh.phar init --SW_HOST="localhost"
+        - cp .env.dist .env
+        - make init
         - cp -r engine/Shopware/Plugins/Local/Backend/SwagImportExport/Tests/config_gitlab.php config.php
         - php bin/console sw:plugin:refresh
         - php bin/console sw:plugin:list
-        - php bin/console sw:plugin:install --activate SwagImportExport
+        - php bin/console sw:plugin:install --activate ${PLUGIN_NAME}
         - php bin/console sw:cache:clear
         - /entrypoint supervisord &>/dev/null &
 
 PHP analyze:
-    stage: Code Style Check
-    before_script: []
+    stage: Code Analysis
     script:
-        - zip -rq plugin.zip .
-        - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.shopware.com/shopware/5/product/shopware.git shopware --depth=1 -b ${CHECKOUT_SHOPWARE_BRANCH}
-        - unzip -q plugin.zip -d shopware/engine/Shopware/Plugins/Local/Backend/SwagImportExport
-        - cd shopware
-        - composer install
-        - vendor/bin/php-cs-fixer fix --dry-run -v --config=engine/Shopware/Plugins/Local/Backend/SwagImportExport/.php_cs.dist --format=junit | tee php-cs-fixer.xml
-    artifacts:
-        reports:
-            junit: shopware/php-cs-fixer.xml
+        - php bin/console -e production
+        - cd engine/Shopware/Plugins/Local/Backend/${PLUGIN_NAME}
+        - make fix-cs-dry
+        - make phpstan
 
 Code Coverage:
     stage: PHPUnit
-    needs: [PHP analyze]
+    needs: [ PHP analyze ]
     script:
-        - composer req --dev phpunit/phpunit:~8.0 --update-with-all-dependencies
-        - cd engine/Shopware/Plugins/Local/Backend/SwagImportExport
+        - cd engine/Shopware/Plugins/Local/Backend/${PLUGIN_NAME}
         - php -d pcov.enabled=1 -d pcov.directory=$CI_PROJECT_DIR
             ../../../../../../vendor/bin/phpunit
             --configuration phpunit.xml.dist
@@ -58,26 +56,33 @@ Code Coverage:
             --coverage-text=build/artifacts/phpunit-coverage-text
         - cat build/artifacts/phpunit-coverage-text | sed -e '/\\Shopware\\.*/d' -e '/\s*Methods:\s*\d*/d'
     coverage: '/^\s*Lines:\s*(\d+(?:\.\d+)?%)/'
-    services:
-        -   name: mysql:5.7
-            alias: mysql
     artifacts:
         paths:
-            - shopware/engine/Shopware/Plugins/Local/Backend/SwagImportExport/build/artifacts/*
+            - shopware/engine/Shopware/Plugins/Local/Backend/${PLUGIN_NAME}/build/artifacts/*
         reports:
-            junit: shopware/engine/Shopware/Plugins/Local/Backend/SwagImportExport/build/artifacts/phpunit.junit.xml
+            junit: shopware/engine/Shopware/Plugins/Local/Backend/${PLUGIN_NAME}/build/artifacts/phpunit.junit.xml
 
 SW 5.6:
     stage: PHPUnit
-    needs: [PHP analyze]
-    image: shopware/5-continuous:7.2
-    only:
-        - master
+    needs: [ PHP analyze ]
+    image: gitlab.shopware.com:5005/shopware/5/product/image/continuous:7.2
     variables:
         CHECKOUT_SHOPWARE_BRANCH: "5.6"
+    before_script: [ ]
     script:
-        - cd engine/Shopware/Plugins/Local/Backend/SwagImportExport
-        - php  ../../../../../../vendor/bin/phpunit
+        - zip -rq plugin.zip .
+        - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.shopware.com/shopware/5/product/shopware.git shopware --depth=1 -b ${CHECKOUT_SHOPWARE_BRANCH}
+        - unzip -q plugin.zip -d shopware/engine/Shopware/Plugins/Local/Backend/${PLUGIN_NAME}
+        - cd shopware
+        - ./psh.phar init --SW_HOST="localhost"
+        - cp -r engine/Shopware/Plugins/Local/Backend/SwagImportExport/Tests/config_gitlab_56.php config.php
+        - php bin/console sw:plugin:refresh
+        - php bin/console sw:plugin:list
+        - php bin/console sw:plugin:install --activate ${PLUGIN_NAME}
+        - php bin/console sw:cache:clear
+        - /entrypoint supervisord &>/dev/null &
+        - cd engine/Shopware/Plugins/Local/Backend/${PLUGIN_NAME}
+        - php ../../../../../../vendor/bin/phpunit
             --configuration phpunit.xml.dist
             --colors=never
     services:
@@ -87,33 +92,16 @@ SW 5.6:
 .SW 5.7 default:
     stage: PHPUnit
     needs: [PHP analyze]
-    services:
-        - name: mysql:5.7
-          alias: mysql
-    variables:
-        CHECKOUT_SHOPWARE_BRANCH: "5.7"
-    before_script: []
     script:
-        - zip -rq plugin.zip .
-        - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.shopware.com/shopware/5/product/shopware.git shopware --depth=1 -b ${CHECKOUT_SHOPWARE_BRANCH}
-        - unzip -q plugin.zip -d shopware/engine/Shopware/Plugins/Local/Backend/SwagImportExport
-        - cd shopware
-        - cp .env.dist .env
-        - make init
-        - cp -r engine/Shopware/Plugins/Local/Backend/SwagImportExport/Tests/config_gitlab_5.7.php config.php
-        - php bin/console sw:plugin:refresh
-        - php bin/console sw:plugin:list
-        - php bin/console sw:plugin:install --activate SwagImportExport
-        - php bin/console sw:cache:clear
-        - /entrypoint supervisord &>/dev/null &
-        - cd engine/Shopware/Plugins/Local/Backend/SwagImportExport
+        - cd engine/Shopware/Plugins/Local/Backend/${PLUGIN_NAME}
         - php ../../../../../../vendor/bin/phpunit
             --configuration phpunit.xml.dist
             --colors=never
 
-SW 5.7 PHP 7.3:
+SW 5.7 PHP 7.4:
     extends: .SW 5.7 default
-    image: shopware/5-continuous:7.3
+    only:
+        - master
 
 SW 5.7 PHP 8.0:
     extends: .SW 5.7 default

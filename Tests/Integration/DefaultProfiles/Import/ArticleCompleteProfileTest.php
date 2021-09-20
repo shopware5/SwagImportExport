@@ -35,7 +35,7 @@ class ArticleCompleteProfileTest extends TestCase
         \file_put_contents($csvFile, $csvContentWithPlaceholder);
     }
 
-    public function test_import_should_create_article_with_variants()
+    public function testImportShouldCreateArticleWithVariants()
     {
         $filePath = __DIR__ . '/_fixtures/article_complete.csv';
         $this->runCommand("sw:import:import -p default_articles_complete {$filePath}");
@@ -51,7 +51,7 @@ class ArticleCompleteProfileTest extends TestCase
         static::assertEquals('with different instock', $importedVariants[1]['additionaltext']);
     }
 
-    public function test_import_should_create_variant_with_different_prices_for_customer_groups()
+    public function testImportShouldCreateVariantWithDifferentPricesForCustomerGroups()
     {
         $filePath = __DIR__ . '/_fixtures/article_complete.csv';
         $this->runCommand("sw:import:import -p default_articles_complete {$filePath}");
@@ -63,7 +63,7 @@ class ArticleCompleteProfileTest extends TestCase
         static::assertEquals(550, $importedVariantPrice[1]['price'], 'Could not import price for customer group H');
     }
 
-    public function test_import_should_create_article_with_different_prices_for_customer_groups()
+    public function testImportShouldCreateArticleWithDifferentPricesForCustomerGroups()
     {
         $filePath = __DIR__ . '/_fixtures/article_complete.csv';
         $this->runCommand("sw:import:import -p default_articles_complete {$filePath}");
@@ -75,7 +75,7 @@ class ArticleCompleteProfileTest extends TestCase
         static::assertEquals(150, $importedArticlePrice[1]['price'], 'Could not import price for customer group H');
     }
 
-    public function test_import_should_import_article_with_attributes()
+    public function testImportShouldImportArticleWithAttributes()
     {
         $filePath = __DIR__ . '/_fixtures/article_complete.csv';
         $this->runCommand("sw:import:import -p default_articles_complete {$filePath}");
@@ -87,7 +87,7 @@ class ArticleCompleteProfileTest extends TestCase
         static::assertEquals('comment', $importedAttributes[0]['attr3']);
     }
 
-    public function test_import_should_import_variant_with_attributes()
+    public function testImportShouldImportVariantWithAttributes()
     {
         $filePath = __DIR__ . '/_fixtures/article_complete.csv';
         $this->runCommand("sw:import:import -p default_articles_complete {$filePath}");
@@ -99,7 +99,7 @@ class ArticleCompleteProfileTest extends TestCase
         static::assertEquals('comment', $importedAttributes[0]['attr3']);
     }
 
-    public function test_import_should_import_translations()
+    public function testImportShouldImportTranslations()
     {
         $filePath = __DIR__ . '/_fixtures/article_complete.csv';
         $this->runCommand("sw:import:import -p default_articles_complete {$filePath}");
@@ -113,7 +113,7 @@ class ArticleCompleteProfileTest extends TestCase
         static::assertEquals('meta title description', $importedTranslation['metaTitle']);
     }
 
-    public function test_import_should_create_similar_associations()
+    public function testImportShouldCreateSimilarAssociations()
     {
         $filePath = __DIR__ . '/_fixtures/article_complete.csv';
         $this->runCommand("sw:import:import -p default_articles_complete {$filePath}");
@@ -125,7 +125,7 @@ class ArticleCompleteProfileTest extends TestCase
         static::assertEquals('Similar article', $createdSimilarArticle[0]['name']);
     }
 
-    public function test_import_should_create_accessory_associations()
+    public function testImportShouldCreateAccessoryAssociations()
     {
         $filePath = __DIR__ . '/_fixtures/article_complete.csv';
         $this->runCommand("sw:import:import -p default_articles_complete {$filePath}");
@@ -137,7 +137,7 @@ class ArticleCompleteProfileTest extends TestCase
         static::assertEquals('Accessory article', $createdSimilarArticle[0]['name']);
     }
 
-    public function test_import_should_create_media_from_external_ressource()
+    public function testImportShouldCreateMediaFromExternalRessource()
     {
         $filePath = __DIR__ . '/_fixtures/article_complete.csv';
         $this->runCommand("sw:import:import -p default_articles_complete {$filePath}");

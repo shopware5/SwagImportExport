@@ -41,7 +41,7 @@ class ArticleWriterTest extends TestCase
         $this->modelManager->rollback();
     }
 
-    public function test_write()
+    public function testWrite()
     {
         $expectedArticleId = 3;
         $expectedDetailId = 3;
@@ -68,7 +68,7 @@ class ArticleWriterTest extends TestCase
         static::assertEquals($expectedMainDetailId, $articleWriterResult->getMainDetailId(), 'Expected mainDetailId id does not match the obtained detailId.');
     }
 
-    public function test_write_should_insert_a_new_article()
+    public function testWriteShouldInsertANewArticle()
     {
         $expectedNewArticle = [
             'orderNumber' => 'test-9999',
@@ -99,7 +99,7 @@ class ArticleWriterTest extends TestCase
         static::assertEquals($expectedNewArticle['supplierName'], $insertedArticle->getSupplier()->getName(), 'Could not insert field supplier name.');
     }
 
-    public function test_write_should_update_an_existing_article()
+    public function testWriteShouldUpdateAnExistingArticle()
     {
         $expectedModifiedArticle = [
             'orderNumber' => 'SW10002',
@@ -132,7 +132,7 @@ class ArticleWriterTest extends TestCase
         static::assertEquals($expectedModifiedArticle['supplierName'], $updatedArticle->getSupplier()->getName(), 'Could not update field supplier name.');
     }
 
-    public function test_write_with_processed_article()
+    public function testWriteWithProcessedArticle()
     {
         $expectedId = 3;
         $expectedDetailId = 3;
@@ -151,7 +151,7 @@ class ArticleWriterTest extends TestCase
         static::assertEquals($articleWriterResult->getMainDetailId(), $expectedMainDetailId, 'The expected article main detail id do not match');
     }
 
-    public function test_write_detail_with_not_existing_main_detail_should_throw_exception()
+    public function testWriteDetailWithNotExistingMainDetailShouldThrowException()
     {
         $expectedModifiedArticle = [
             'orderNumber' => 'number_does_not_exist',
@@ -162,7 +162,7 @@ class ArticleWriterTest extends TestCase
         $this->articleWriter->write($expectedModifiedArticle, []);
     }
 
-    public function test_write_should_update_article_active_flag_if_main_detail_active_flag_is_given()
+    public function testWriteShouldUpdateArticleActiveFlagIfMainDetailActiveFlagIsGiven()
     {
         $expectedModifiedArticle = [
             'orderNumber' => 'SW10123.1',
@@ -180,7 +180,7 @@ class ArticleWriterTest extends TestCase
         static::assertEquals(0, $isMainArticleActive, 'Could not update active flag for s_articles if main detail active flag is given.');
     }
 
-    public function test_write_should_not_update_article_active_flag_if_detail_active_flag_is_given()
+    public function testWriteShouldNotUpdateArticleActiveFlagIfDetailActiveFlagIsGiven()
     {
         $expectedModifiedArticle = [
             'orderNumber' => 'SW10123.2',

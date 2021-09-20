@@ -15,7 +15,7 @@ class ArticlePriceProfileTest extends TestCase
 {
     use DefaultProfileTestCaseTrait;
 
-    public function test_it_should_return_valid_profile_tree()
+    public function testItShouldReturnValidProfileTree()
     {
         $articleProfile = $this->createArticlePriceProfile();
 

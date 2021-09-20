@@ -22,7 +22,7 @@ class ImportCommandTest extends TestCase
     use CommandTestCaseTrait;
     use DatabaseTestCaseTrait;
 
-    const CLI_IMPORT_COMMAND = 'sw:importexport:import -p';
+    public const CLI_IMPORT_COMMAND = 'sw:importexport:import -p';
 
     /**
      * @var Connection

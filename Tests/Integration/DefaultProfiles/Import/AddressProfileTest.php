@@ -19,7 +19,7 @@ class AddressProfileTest extends TestCase
     use DefaultProfileImportTestCaseTrait;
     use DatabaseTestCaseTrait;
 
-    public function test_should_import_new_addresses()
+    public function testShouldImportNewAddresses()
     {
         $file = __DIR__ . '/_fixtures/addresses_profile_create.csv';
         $this->runCommand("sw:importexport:import -p default_addresses {$file}");
@@ -36,7 +36,7 @@ class AddressProfileTest extends TestCase
         static::assertEquals('My additional address', $createdAddress[0]['additional_address_line1']);
     }
 
-    public function test_should_update_existing_addresses_by_id()
+    public function testShouldUpdateExistingAddressesById()
     {
         $file = __DIR__ . '/_fixtures/addresses_profile_update.csv';
         $this->runCommand("sw:importexport:import -p default_addresses {$file}");

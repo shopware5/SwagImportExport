@@ -17,10 +17,10 @@ use Shopware\Setup\SwagImportExport\SetupContext;
 
 class MainMenuItemInstallerTest extends TestCase
 {
-    const OLD_MENU_LABEL = 'Import/Export Advanced';
-    const UPDATED_MENU_LABEL = 'Import/Export';
-    const CREATED_MENU_LABEL = 'Import/Export';
-    const RANDOM_PLUGIN_VERSION = '0';
+    public const OLD_MENU_LABEL = 'Import/Export Advanced';
+    public const UPDATED_MENU_LABEL = 'Import/Export';
+    public const CREATED_MENU_LABEL = 'Import/Export';
+    public const RANDOM_PLUGIN_VERSION = '0';
 
     /**
      * @var MainMenuItemInstaller
@@ -52,7 +52,7 @@ class MainMenuItemInstallerTest extends TestCase
         $this->modelManger->rollback();
     }
 
-    public function test_install_should_create_menu_item()
+    public function testInstallShouldCreateMenuItem()
     {
         $menuRepository = $this->modelManger->getRepository(Menu::class);
         $this->removeActualMenuItem($menuRepository);
@@ -63,7 +63,7 @@ class MainMenuItemInstallerTest extends TestCase
         static::assertInstanceOf(Menu::class, $newMenuItem, 'Could not create menu item if no menu item was found.');
     }
 
-    public function test_install_should_update_existing_item()
+    public function testInstallShouldUpdateExistingItem()
     {
         $expectedMenuItemController = 'SwagImportExport';
         $menuRepository = $this->modelManger->getRepository(Menu::class);
@@ -74,7 +74,7 @@ class MainMenuItemInstallerTest extends TestCase
         static::assertEquals($expectedMenuItemController, $updatedMenuItem->getController(), 'Import/Export menu item could not be updated to use SwagImporExport controller.');
     }
 
-    public function test_install_should_remove_old_menu_item()
+    public function testInstallShouldRemoveOldMenuItem()
     {
         $menuRepository = $this->modelManger->getRepository(Menu::class);
 
@@ -87,7 +87,7 @@ class MainMenuItemInstallerTest extends TestCase
         static::assertNull($removedMenuItem, 'Old menu item for SwagImportExport advanced should be removed on update or installation to 5.3.');
     }
 
-    public function test_it_should_be_compatible()
+    public function testItShouldBeCompatible()
     {
         $setupContext = new SetupContext('5.3.0', '', '');
         $modelManagerMock = $this->createMock(ModelManager::class);
@@ -98,7 +98,7 @@ class MainMenuItemInstallerTest extends TestCase
         static::assertTrue($isCompatible);
     }
 
-    public function test_it_should_be_compatible_with_greater_version()
+    public function testItShouldBeCompatibleWithGreaterVersion()
     {
         $setupContext = new SetupContext('5.3.5', '', '');
         $modelManagerMock = $this->createMock(ModelManager::class);
@@ -109,7 +109,7 @@ class MainMenuItemInstallerTest extends TestCase
         static::assertTrue($isCompatible);
     }
 
-    public function test_it_should_be_incompatible()
+    public function testItShouldBeIncompatible()
     {
         $setupContext = new SetupContext('5.2.0', '', '');
         $modelManagerMock = $this->createMock(ModelManager::class);

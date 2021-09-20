@@ -14,7 +14,7 @@ use Shopware\Components\SwagImportExport\Validators\NewsletterValidator;
 
 class NewsletterValidatorTest extends TestCase
 {
-    public function test_checkRequiredFields_throws_exception_with_empty_record_array()
+    public function testCheckRequiredFieldsThrowsExceptionWithEmptyRecordArray()
     {
         $newsletterValidator = $this->createNewsletterValidator();
 
@@ -23,7 +23,7 @@ class NewsletterValidatorTest extends TestCase
         $newsletterValidator->checkRequiredFields([]);
     }
 
-    public function test_checkRequiredFields_throws_exception_with_empty_email_address()
+    public function testCheckRequiredFieldsThrowsExceptionWithEmptyEmailAddress()
     {
         $newsletterValidator = $this->createNewsletterValidator();
         $record = [

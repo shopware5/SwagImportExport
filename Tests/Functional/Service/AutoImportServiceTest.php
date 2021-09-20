@@ -36,7 +36,7 @@ class AutoImportServiceTest extends TestCase
         $this->files = [];
     }
 
-    public function test_runAutoImport_there_is_already_an_import_in_progress()
+    public function testRunAutoImportThereIsAlreadyAnImportInProgress()
     {
         $service = $this->getService();
 
@@ -59,14 +59,14 @@ class AutoImportServiceTest extends TestCase
         $service->runAutoImport();
     }
 
-    public function test_runAutoImport_no_files_for_import()
+    public function testRunAutoImportNoFilesForImport()
     {
         $service = $this->getService();
         $this->expectOutputString('No import files are found.' . \PHP_EOL);
         $service->runAutoImport();
     }
 
-    public function test_runAutoImport_should_throw_no_profile_exception()
+    public function testRunAutoImportShouldThrowNoProfileException()
     {
         $service = $this->getService();
 
@@ -86,7 +86,7 @@ class AutoImportServiceTest extends TestCase
         $service->runAutoImport();
     }
 
-    public function test_runAutoImport_should_import_files()
+    public function testRunAutoImportShouldImportFiles()
     {
         $service = $this->getService();
 

@@ -14,7 +14,7 @@ use Shopware\Components\SwagImportExport\Validators\CategoryValidator;
 
 class CategoryValidatorTest extends TestCase
 {
-    public function test_it_should_throw_exception()
+    public function testItShouldThrowException()
     {
         $categoryValidator = new CategoryValidator();
 

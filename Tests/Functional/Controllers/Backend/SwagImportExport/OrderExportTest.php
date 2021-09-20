@@ -19,11 +19,11 @@ class OrderExportTest extends \Enlight_Components_Test_Controller_TestCase
     use DatabaseTestCaseTrait;
     use ExportControllerTrait;
 
-    const FORMAT_XML = 'xml';
-    const FORMAT_CSV = 'csv';
+    public const FORMAT_XML = 'xml';
+    public const FORMAT_CSV = 'csv';
 
-    const PAYMENT_STATE_OPEN = '17';
-    const ORDER_STATE_OPEN = '0';
+    public const PAYMENT_STATE_OPEN = '17';
+    public const ORDER_STATE_OPEN = '0';
 
     public function setUp(): void
     {
@@ -33,7 +33,7 @@ class OrderExportTest extends \Enlight_Components_Test_Controller_TestCase
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
     }
 
-    public function test_orders_xml_export()
+    public function testOrdersXmlExport()
     {
         $params = $this->getExportRequestParams();
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::ORDERS_PROFILE_TYPE);
@@ -53,7 +53,7 @@ class OrderExportTest extends \Enlight_Components_Test_Controller_TestCase
         $this->assertOrderAttributeInXmlFile($file, '20001', 'paymentStatusId', '17');
     }
 
-    public function test_orders_csv_export()
+    public function testOrdersCsvExport()
     {
         $params = $this->getExportRequestParams();
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::ORDERS_PROFILE_TYPE);
@@ -74,7 +74,7 @@ class OrderExportTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertEquals('17', $mappedOrderList[20001]['paymentStatusId']);
     }
 
-    public function test_orders_xml_export_with_orderstate_filter()
+    public function testOrdersXmlExportWithOrderstateFilter()
     {
         $params = $this->getExportRequestParams();
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::ORDERS_PROFILE_TYPE);
@@ -95,7 +95,7 @@ class OrderExportTest extends \Enlight_Components_Test_Controller_TestCase
         $this->assertOrderAttributeInXmlFile($file, '20001', 'paymentStatusId', '17');
     }
 
-    public function test_orders_csv_export_with_orderstate_filter()
+    public function testOrdersCsvExportWithOrderstateFilter()
     {
         $params = $this->getExportRequestParams();
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::ORDERS_PROFILE_TYPE);
@@ -116,7 +116,7 @@ class OrderExportTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertEquals('17', $mappedOrderList[20002]['paymentStatusId']);
     }
 
-    public function test_orders_xml_export_with_paymentstate_filter()
+    public function testOrdersXmlExportWithPaymentstateFilter()
     {
         $params = $this->getExportRequestParams();
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::ORDERS_PROFILE_TYPE);
@@ -137,7 +137,7 @@ class OrderExportTest extends \Enlight_Components_Test_Controller_TestCase
         $this->assertOrderAttributeInXmlFile($file, '20001', 'paymentStatusId', '17');
     }
 
-    public function test_orders_csv_export_with_paymentstate_filter()
+    public function testOrdersCsvExportWithPaymentstateFilter()
     {
         $params = $this->getExportRequestParams();
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::ORDERS_PROFILE_TYPE);
@@ -158,7 +158,7 @@ class OrderExportTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertEquals(self::PAYMENT_STATE_OPEN, $mappedOrderList[20002]['paymentStatusId']);
     }
 
-    public function test_orders_xml_export_with_ordernumber_from_filter()
+    public function testOrdersXmlExportWithOrdernumberFromFilter()
     {
         $params = $this->getExportRequestParams();
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::ORDERS_PROFILE_TYPE);
@@ -182,7 +182,7 @@ class OrderExportTest extends \Enlight_Components_Test_Controller_TestCase
         $this->assertOrderAttributeInXmlFile($file, '20002', 'orderId', '57');
     }
 
-    public function test_orders_csv_export_with_ordernumber_from_filter()
+    public function testOrdersCsvExportWithOrdernumberFromFilter()
     {
         $params = $this->getExportRequestParams();
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::ORDERS_PROFILE_TYPE);
@@ -204,7 +204,7 @@ class OrderExportTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertEquals('57', $mappedOrderList[20002]['orderId']);
     }
 
-    public function test_orders_xml_export_with_date_to_filter()
+    public function testOrdersXmlExportWithDateToFilter()
     {
         $params = $this->getExportRequestParams();
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::ORDERS_PROFILE_TYPE);
@@ -225,7 +225,7 @@ class OrderExportTest extends \Enlight_Components_Test_Controller_TestCase
         $this->assertOrderAttributeInXmlFile($file, '20001', 'paymentStatusId', '17');
     }
 
-    public function test_orders_csv_export_with_date_to_filter()
+    public function testOrdersCsvExportWithDateToFilter()
     {
         $params = $this->getExportRequestParams();
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::ORDERS_PROFILE_TYPE);
@@ -243,7 +243,7 @@ class OrderExportTest extends \Enlight_Components_Test_Controller_TestCase
         $this->backendControllerTestHelper->addFile($file);
     }
 
-    public function test_orders_xml_export_with_date_from_filter()
+    public function testOrdersXmlExportWithDateFromFilter()
     {
         $params = $this->getExportRequestParams();
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::ORDERS_PROFILE_TYPE);
@@ -264,7 +264,7 @@ class OrderExportTest extends \Enlight_Components_Test_Controller_TestCase
         $this->assertOrderAttributeInXmlFile($file, '20002', 'paymentStatusId', '17');
     }
 
-    public function test_orders_csv_export_with_date_from_filter()
+    public function testOrdersCsvExportWithDateFromFilter()
     {
         $params = $this->getExportRequestParams();
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::ORDERS_PROFILE_TYPE);

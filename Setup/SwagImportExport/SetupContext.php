@@ -10,7 +10,7 @@ namespace Shopware\Setup\SwagImportExport;
 
 class SetupContext
 {
-    const NO_PREVIOUS_VERSION = '0';
+    public const NO_PREVIOUS_VERSION = '0';
 
     /**
      * @var string

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -53,14 +55,5 @@ return [
         'gc_probability' => 1,
         'gc_divisor' => 100,
         'save_handler' => 'db',
-    ],
-
-    'backendsession' => [
-        'unitTestEnabled' => true,
-        'name' => 'SHOPWAREBACKEND',
-        'cookie_lifetime' => 0,
-        'cookie_httponly' => 1,
-        'use_trans_sid' => 0,
-        'locking' => false,
     ],
 ];

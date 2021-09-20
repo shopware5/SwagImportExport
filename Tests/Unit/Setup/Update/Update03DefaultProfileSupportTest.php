@@ -17,12 +17,12 @@ use Shopware\Setup\SwagImportExport\Update\Update03DefaultProfileSupport;
 
 class Update03DefaultProfileSupportTest extends TestCase
 {
-    const DUPLICATE_NAME_ERROR_MESSAGE = 'Duplicate name entry exception';
-    const RANDOM_EXCEPTION_MESSAGE = 'Test exception message';
-    const DUPLICATE_NAME_EXCEPTION_MESSAGE = 'Duplicate entry ... something';
-    const ANY_VERSION = '0.0.0';
+    public const DUPLICATE_NAME_ERROR_MESSAGE = 'Duplicate name entry exception';
+    public const RANDOM_EXCEPTION_MESSAGE = 'Test exception message';
+    public const DUPLICATE_NAME_EXCEPTION_MESSAGE = 'Duplicate entry ... something';
+    public const ANY_VERSION = '0.0.0';
 
-    public function test_update_should_throw_original_exception()
+    public function testUpdateShouldThrowOriginalException()
     {
         $setProfileNameColumnUniqueUpdater = new Update03DefaultProfileSupport(
             new SetupContext(self::ANY_VERSION, self::ANY_VERSION, self::ANY_VERSION),
@@ -35,7 +35,7 @@ class Update03DefaultProfileSupportTest extends TestCase
         $setProfileNameColumnUniqueUpdater->update();
     }
 
-    public function test_update_should_throw_DuplicateNameException()
+    public function testUpdateShouldThrowDuplicateNameException()
     {
         $setProfileNameColumnUniqueUpdater = new Update03DefaultProfileSupport(
             new SetupContext(self::ANY_VERSION, self::ANY_VERSION, self::ANY_VERSION),

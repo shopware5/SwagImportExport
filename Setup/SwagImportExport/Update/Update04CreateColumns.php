@@ -13,7 +13,7 @@ use Shopware\Setup\SwagImportExport\SetupContext;
 
 class Update04CreateColumns implements UpdaterInterface
 {
-    const MAX_PLUGIN_VERSION = '2.0.2';
+    public const MAX_PLUGIN_VERSION = '2.0.2';
 
     /** @var SetupContext */
     private $setupContext;

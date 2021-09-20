@@ -13,9 +13,9 @@ use Shopware\Components\SwagImportExport\FileIO\XmlFileReader;
 
 class XmlFileReaderTest extends TestCase
 {
-    const IMPORT_FILES_DIR = __DIR__ . '/../../../../Helper/ImportFiles/';
+    public const IMPORT_FILES_DIR = __DIR__ . '/../../../../Helper/ImportFiles/';
 
-    public function test_wrong_filetype()
+    public function testWrongFiletype()
     {
         $tree = $this->getDefaultArticleTree();
         $count = $this->getReaderCount($tree, 'ArticleImport.csv');
@@ -23,7 +23,7 @@ class XmlFileReaderTest extends TestCase
         static::assertEquals(0, $count);
     }
 
-    public function test_default_article_count()
+    public function testDefaultArticleCount()
     {
         $tree = $this->getDefaultArticleTree();
         $count = $this->getReaderCount($tree, 'ArticleImport.xml');
@@ -31,7 +31,7 @@ class XmlFileReaderTest extends TestCase
         static::assertEquals(2, $count);
     }
 
-    public function test_default_articles_read()
+    public function testDefaultArticlesRead()
     {
         $tree = $this->getDefaultArticleTree();
         $records = $this->getReaderRecords($tree, 'ArticleImport.xml');
@@ -44,7 +44,7 @@ class XmlFileReaderTest extends TestCase
         static::assertEquals('Set-SW10002', $records[1]['configurators']['configurator'][0]['configSetName']);
     }
 
-    public function test_minimal_article_count()
+    public function testMinimalArticleCount()
     {
         $tree = $this->getMinimalArticleTree();
         $count = $this->getReaderCount($tree, 'ArticleImport.xml');
@@ -52,7 +52,7 @@ class XmlFileReaderTest extends TestCase
         static::assertEquals(2, $count);
     }
 
-    public function test_minimal_articles_read()
+    public function testMinimalArticlesRead()
     {
         $tree = $this->getMinimalArticleTree();
         $records = $this->getReaderRecords($tree, 'ArticleImport.xml', 1, 1);
@@ -61,7 +61,7 @@ class XmlFileReaderTest extends TestCase
         static::assertEquals('test_SW10002', $records[0]['ordernumber']);
     }
 
-    public function test_minimal_category_count()
+    public function testMinimalCategoryCount()
     {
         $tree = $this->getMinimalCategoryTree();
         $count = $this->getReaderCount($tree, 'CategoriesImport.xml');
@@ -69,7 +69,7 @@ class XmlFileReaderTest extends TestCase
         static::assertEquals(16, $count);
     }
 
-    public function test_minimal_categories_read()
+    public function testMinimalCategoriesRead()
     {
         $tree = $this->getMinimalCategoryTree();
         $records = $this->getReaderRecords($tree, 'CategoriesImport.xml', 5, 8);
@@ -85,7 +85,7 @@ class XmlFileReaderTest extends TestCase
         static::assertEquals('Sub-Category1', \end($records)['description']);
     }
 
-    public function test_minimal_customer_count()
+    public function testMinimalCustomerCount()
     {
         $tree = $this->getMinimalCustomerTree();
         $count = $this->getReaderCount($tree, 'CustomerImport.xml');
@@ -93,7 +93,7 @@ class XmlFileReaderTest extends TestCase
         static::assertEquals(4, $count);
     }
 
-    public function test_minimal_customer_read()
+    public function testMinimalCustomerRead()
     {
         $tree = $this->getMinimalCustomerTree();
         $records = $this->getReaderRecords($tree, 'CustomerImport.xml');
@@ -107,7 +107,7 @@ class XmlFileReaderTest extends TestCase
         static::assertEquals('mf5 Password', \end($records)['shipping_firstname']);
     }
 
-    public function test_article_translation_count()
+    public function testArticleTranslationCount()
     {
         $tree = $this->getArticleTranslationTree();
         $count = $this->getReaderCount($tree, 'ArticleTranslationImport.xml');
@@ -115,7 +115,7 @@ class XmlFileReaderTest extends TestCase
         static::assertEquals(103, $count);
     }
 
-    public function test_article_translation_read()
+    public function testArticleTranslationRead()
     {
         $tree = $this->getArticleTranslationTree();
         $records = $this->getReaderRecords($tree, 'ArticleTranslationImport.xml', 50, 53);
@@ -128,7 +128,7 @@ class XmlFileReaderTest extends TestCase
         static::assertEquals('Shipping costs by weight', \end($records)['name']);
     }
 
-    public function test_minimal_variants_count()
+    public function testMinimalVariantsCount()
     {
         $tree = $this->getMinimalVariantsTree();
         $count = $this->getReaderCount($tree, 'VariantsMinimalImport.xml');
@@ -136,7 +136,7 @@ class XmlFileReaderTest extends TestCase
         static::assertEquals(3, $count);
     }
 
-    public function test_minimal_variants_read()
+    public function testMinimalVariantsRead()
     {
         $tree = $this->getMinimalVariantsTree();
         $records = $this->getReaderRecords($tree, 'VariantsMinimalImport.xml');
@@ -147,7 +147,7 @@ class XmlFileReaderTest extends TestCase
         static::assertEquals('S', $records[1]['configurator'][1]['configOptionName']);
     }
 
-    public function test_orders_count()
+    public function testOrdersCount()
     {
         $tree = $this->getOrdersTree();
         $count = $this->getReaderCount($tree, 'OrderImport.xml');
@@ -155,7 +155,7 @@ class XmlFileReaderTest extends TestCase
         static::assertEquals(17, $count);
     }
 
-    public function test_orders_read()
+    public function testOrdersRead()
     {
         $tree = $this->getOrdersTree();
         $records = $this->getReaderRecords($tree, 'OrderImport.xml');
@@ -172,7 +172,7 @@ class XmlFileReaderTest extends TestCase
         static::assertEquals(-4.3, \end($records)['details']['price']);
     }
 
-    public function test_newsletter_recipients_count()
+    public function testNewsletterRecipientsCount()
     {
         $tree = $this->getNewsletterRecipientsTree();
         $count = $this->getReaderCount($tree, 'NewsletterRecipientImport.xml');
@@ -180,7 +180,7 @@ class XmlFileReaderTest extends TestCase
         static::assertEquals(6, $count);
     }
 
-    public function test_newsletter_recipients_read()
+    public function testNewsletterRecipientsRead()
     {
         $tree = $this->getNewsletterRecipientsTree();
         $records = $this->getReaderRecords($tree, 'NewsletterRecipientImport.xml', 3, 2);

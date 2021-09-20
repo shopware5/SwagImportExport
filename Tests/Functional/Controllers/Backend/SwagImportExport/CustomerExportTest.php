@@ -19,8 +19,8 @@ class CustomerExportTest extends \Enlight_Components_Test_Controller_TestCase
     use DatabaseTestCaseTrait;
     use ExportControllerTrait;
 
-    const FORMAT_XML = 'xml';
-    const FORMAT_CSV = 'csv';
+    public const FORMAT_XML = 'xml';
+    public const FORMAT_CSV = 'csv';
 
     public function setUp(): void
     {
@@ -30,7 +30,7 @@ class CustomerExportTest extends \Enlight_Components_Test_Controller_TestCase
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
     }
 
-    public function test_customer_xml_export()
+    public function testCustomerXmlExport()
     {
         $params = $this->getExportRequestParams();
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::CUSTOMER_PROFILE_TYPE);
@@ -52,7 +52,7 @@ class CustomerExportTest extends \Enlight_Components_Test_Controller_TestCase
         $this->assertCustomerAttributeInXml($file, '20001', 'newsletter', '0');
     }
 
-    public function test_customer_csv_export()
+    public function testCustomerCsvExport()
     {
         $params = $this->getExportRequestParams();
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::CUSTOMER_PROFILE_TYPE);

@@ -19,7 +19,7 @@ class ArticlesDbAdapterTest extends TestCase
 {
     use DatabaseTestCaseTrait;
 
-    public function test_write_should_throw_exception_if_records_are_empty()
+    public function testWriteShouldThrowExceptionIfRecordsAreEmpty()
     {
         $articlesDbAdapter = $this->createArticleDbAdapter();
 
@@ -28,7 +28,7 @@ class ArticlesDbAdapterTest extends TestCase
         $articlesDbAdapter->write([]);
     }
 
-    public function test_new_article_should_be_written_to_database()
+    public function testNewArticleShouldBeWrittenToDatabase()
     {
         $articlesDbAdapter = $this->createArticleDbAdapter();
         $newArticleRecord = [
@@ -57,7 +57,7 @@ class ArticlesDbAdapterTest extends TestCase
         static::assertEquals($newArticleRecord['article'][0]['purchasePrice'], $createdArticleDetail[0]['purchaseprice']);
     }
 
-    public function test_write_should_assign_new_similar_articles()
+    public function testWriteShouldAssignNewSimilarArticles()
     {
         $articlesDbAdapter = $this->createArticleDbAdapter();
 
@@ -87,7 +87,7 @@ class ArticlesDbAdapterTest extends TestCase
         static::assertEquals(7, $createdArticleSimilars[4]['relatedarticle']);
     }
 
-    public function test_write_should_add_supplier_if_it_not_exists()
+    public function testWriteShouldAddSupplierIfItNotExists()
     {
         $articlesDbAdapter = $this->createArticleDbAdapter();
 
@@ -112,7 +112,7 @@ class ArticlesDbAdapterTest extends TestCase
         static::assertEquals($articleRecordWithNewSupplier['article']['supplerName'], $createdArticleSupplier[0]['supplierName']);
     }
 
-    public function test_write_article_without_supplier_throws_exception()
+    public function testWriteArticleWithoutSupplierThrowsException()
     {
         $articlesDbAdapter = $this->createArticleDbAdapter();
         $articleWithoutSupplier = [
@@ -131,7 +131,7 @@ class ArticlesDbAdapterTest extends TestCase
         $articlesDbAdapter->write($articleWithoutSupplier);
     }
 
-    public function test_write_should_assign_new_accessory_articles()
+    public function testWriteShouldAssignNewAccessoryArticles()
     {
         $articlesDbAdapter = $this->createArticleDbAdapter();
 
@@ -169,7 +169,7 @@ class ArticlesDbAdapterTest extends TestCase
         static::assertEquals(4, $createdArticleSimilars[1]['relatedarticle']);
     }
 
-    public function test_new_image_should_fill_unprocessed_data_array()
+    public function testNewImageShouldFillUnprocessedDataArray()
     {
         $articlesDbAdapter = $this->createArticleDbAdapter();
         $records = [
@@ -194,7 +194,7 @@ class ArticlesDbAdapterTest extends TestCase
         static::assertEquals($records['image'][0]['imageUrl'], $unprocessedData['articlesImages']['default'][0]['image']);
     }
 
-    public function test_existing_image_should_be_added_to_article()
+    public function testExistingImageShouldBeAddedToArticle()
     {
         $articlesDbAdapter = $this->createArticleDbAdapter();
         $records = [
@@ -226,7 +226,7 @@ class ArticlesDbAdapterTest extends TestCase
         static::assertEquals('jpg', $image['extension']);
     }
 
-    public function test_write_article_variant_should_be_written_to_database()
+    public function testWriteArticleVariantShouldBeWrittenToDatabase()
     {
         $articlesDbAdapter = $this->createArticleDbAdapter();
         $newArticleWithVariantRecord = [
@@ -259,7 +259,7 @@ class ArticlesDbAdapterTest extends TestCase
         static::assertEquals($newArticleWithVariantRecord['article'][1]['orderNumber'], $createdArticleVariantDetail[0]['ordernumber']);
     }
 
-    public function test_write_article_variant_with_not_existing_main_number_throws_exception()
+    public function testWriteArticleVariantWithNotExistingMainNumberThrowsException()
     {
         $articlesDbAdapter = $this->createArticleDbAdapter();
         $articleWithoutExistingMainNumber = [
@@ -279,7 +279,7 @@ class ArticlesDbAdapterTest extends TestCase
         $articlesDbAdapter->write($articleWithoutExistingMainNumber);
     }
 
-    public function test_write_article_with_attribute_translation_should_be_written_to_database()
+    public function testWriteArticleWithAttributeTranslationShouldBeWrittenToDatabase()
     {
         /** @var ModelManager $modelManager */
         $modelManager = Shopware()->Container()->get('models');
@@ -326,7 +326,7 @@ class ArticlesDbAdapterTest extends TestCase
         $modelManager->beginTransaction();
     }
 
-    public function test_read()
+    public function testRead()
     {
         $articlesDbAdapter = $this->createArticleDbAdapter();
         $ids = [3];
@@ -343,7 +343,7 @@ class ArticlesDbAdapterTest extends TestCase
         static::assertArrayHasKey('configurator', $result, 'Could not fetch article configurators');
     }
 
-    public function test_read_should_throw_exception_if_ids_are_empty()
+    public function testReadShouldThrowExceptionIfIdsAreEmpty()
     {
         $articlesDbAdapter = $this->createArticleDbAdapter();
         $columns = ['article' => 'article.id as articleId'];
@@ -353,7 +353,7 @@ class ArticlesDbAdapterTest extends TestCase
         $articlesDbAdapter->read($ids, $columns);
     }
 
-    public function test_read_should_throw_exception_if_columns_are_empty()
+    public function testReadShouldThrowExceptionIfColumnsAreEmpty()
     {
         $articlesDbAdapter = $this->createArticleDbAdapter();
         $columns = [];

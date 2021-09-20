@@ -19,7 +19,7 @@ class ArticleTranslationUpdateProfileTest extends TestCase
     use DefaultProfileImportTestCaseTrait;
     use DatabaseTestCaseTrait;
 
-    public function test_import_should_update_existing_article_translation()
+    public function testImportShouldUpdateExistingArticleTranslation()
     {
         $filePath = __DIR__ . '/_fixtures/article_translation_profile_update.csv';
         $expectedArticleName = 'Munsterland Aperitif 16% Super deluxe';

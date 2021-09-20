@@ -15,7 +15,7 @@ use Shopware\Setup\SwagImportExport\SetupContext;
 
 class DefaultProfileInstallerTest extends TestCase
 {
-    public function test_it_should_be_compatible()
+    public function testItShouldBeCompatible()
     {
         $setupContext = new SetupContext('', '2.0.0', '');
         $dbalConnectionMock = $this->createMock(Connection::class);
@@ -26,7 +26,7 @@ class DefaultProfileInstallerTest extends TestCase
         static::assertTrue($isCompatible);
     }
 
-    public function test_it_should_be_incompatible()
+    public function testItShouldBeIncompatible()
     {
         $setupContext = new SetupContext('', '1.9.0', '');
         $dbalConnectionMock = $this->createMock(Connection::class);

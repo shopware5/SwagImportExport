@@ -13,7 +13,7 @@ use SwagImportExport\Tests\Functional\Components\SwagImportExport\DataManagers\m
 
 class CustomerDataManagerTest extends TestCase
 {
-    public function test_setDefaultFieldsForCreate_shouldAddANewCustomerNumber()
+    public function testSetDefaultFieldsForCreateShouldAddANewCustomerNumber()
     {
         $record = [];
         $defaultFields = [];

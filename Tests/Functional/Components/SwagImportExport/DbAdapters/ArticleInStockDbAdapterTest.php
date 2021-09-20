@@ -17,7 +17,7 @@ class ArticleInStockDbAdapterTest extends TestCase
 {
     use DatabaseTestCaseTrait;
 
-    public function test_write_should_update_article_stock()
+    public function testWriteShouldUpdateArticleStock()
     {
         $articleInStockDbAdapter = $this->createArticlesInStockAbAdapter();
         $updateInStockRecord = [
@@ -37,7 +37,7 @@ class ArticleInStockDbAdapterTest extends TestCase
         static::assertEquals(3, $updatedArticleInStock[0]['instock']);
     }
 
-    public function test_write_with_invalid_order_number_throws_exception()
+    public function testWriteWithInvalidOrderNumberThrowsException()
     {
         $articleInStockDbAdapter = $this->createArticlesInStockAbAdapter();
         $updateInStockRecord = [
@@ -54,7 +54,7 @@ class ArticleInStockDbAdapterTest extends TestCase
         $articleInStockDbAdapter->write($updateInStockRecord);
     }
 
-    public function test_read_and_read_records_should_get_same_result_count()
+    public function testReadAndReadRecordsShouldGetSameResultCount()
     {
         $articleInStockDbAdapter = $this->createArticlesInStockAbAdapter();
         $filter = [
@@ -67,7 +67,7 @@ class ArticleInStockDbAdapterTest extends TestCase
         static::assertCount(\count($preparedExportData), $exportedData['default']);
     }
 
-    public function test_read()
+    public function testRead()
     {
         $articleInStockDbAdapter = $this->createArticlesInStockAbAdapter();
         $ids = [3];
@@ -83,7 +83,7 @@ class ArticleInStockDbAdapterTest extends TestCase
         static::assertArrayHasKey('tax', $result['default'][0], 'Could not fetch tax rate.');
     }
 
-    public function test_read_should_throw_exception_if_ids_are_empty()
+    public function testReadShouldThrowExceptionIfIdsAreEmpty()
     {
         $articleInStockDbAdapter = $this->createArticlesInStockAbAdapter();
         $columns = ['variant.number as orderNumber'];

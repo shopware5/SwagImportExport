@@ -16,7 +16,7 @@ class UnderscoreToCamelCaseServiceTest extends TestCase
     /**
      * @dataProvider underscoreToCamelCaseTest_provider
      */
-    public function test_underscoreToCamelCase($string, $expectedResult)
+    public function testUnderscoreToCamelCase($string, $expectedResult)
     {
         $service = new UnderscoreToCamelCaseService();
 

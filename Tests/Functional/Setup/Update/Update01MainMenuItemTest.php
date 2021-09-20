@@ -15,7 +15,7 @@ use Shopware\Setup\SwagImportExport\Update\Update01MainMenuItem;
 
 class Update01MainMenuItemTest extends TestCase
 {
-    public function test_it_should_be_compatible()
+    public function testItShouldBeCompatible()
     {
         $setupContext = new SetupContext('5.3.0', '', '');
         $modelManagerMock = $this->createMock(ModelManager::class);
@@ -26,7 +26,7 @@ class Update01MainMenuItemTest extends TestCase
         static::assertTrue($isCompatible);
     }
 
-    public function test_it_should_be_incompatible()
+    public function testItShouldBeIncompatible()
     {
         $setupContext = new SetupContext('5.2.0', '', '');
         $modelManagerMock = $this->createMock(ModelManager::class);

@@ -46,6 +46,7 @@ class PropertyWriter
      * @var array
      */
     private $options;
+
     /**
      * @var SnippetsHelper
      */
@@ -54,7 +55,7 @@ class PropertyWriter
     public function __construct(
         DbalHelper $dbalHelper,
         Connection $connection,
-        \Enlight_Components_Db_Adapter_Pdo_Mysql $db,
+        PDOConnection $db,
         SnippetsHelper $snippetsHelper
     ) {
         $this->dbalHelper = $dbalHelper;

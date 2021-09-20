@@ -15,9 +15,9 @@ use Shopware\Components\SwagImportExport\Validators\Validator;
 
 class AddressValidatorTest extends TestCase
 {
-    const DONT_UPDATE_ADDRESS = false;
+    public const DONT_UPDATE_ADDRESS = false;
 
-    public function test_it_can_be_created()
+    public function testItCanBeCreated()
     {
         $addressValidator = new AddressValidator();
 
@@ -25,7 +25,7 @@ class AddressValidatorTest extends TestCase
         static::assertInstanceOf(Validator::class, $addressValidator);
     }
 
-    public function test_checkRquieredFields_should_throw_exception_if_address_is_empty()
+    public function testCheckRquieredFieldsShouldThrowExceptionIfAddressIsEmpty()
     {
         $emptyAddressRecord = [];
 
@@ -36,7 +36,7 @@ class AddressValidatorTest extends TestCase
         $addressValidator->checkRequiredFields($emptyAddressRecord, self::DONT_UPDATE_ADDRESS);
     }
 
-    public function test_checkRequiredFields_should_throw_exception_if_required_field_is_empty()
+    public function testCheckRequiredFieldsShouldThrowExceptionIfRequiredFieldIsEmpty()
     {
         $emptyAddressRecord = [
             'userID' => 999,
@@ -51,7 +51,7 @@ class AddressValidatorTest extends TestCase
         $addressValidator->checkRequiredFields($emptyAddressRecord, self::DONT_UPDATE_ADDRESS);
     }
 
-    public function test_checkRequiredFields_should_throw_exception_if_customer_could_not_be_identified()
+    public function testCheckRequiredFieldsShouldThrowExceptionIfCustomerCouldNotBeIdentified()
     {
         $addressWithoutCustomerId = [
             'firstname' => 'some value',
@@ -68,7 +68,7 @@ class AddressValidatorTest extends TestCase
         $addressValidator->checkRequiredFields($addressWithoutCustomerId, self::DONT_UPDATE_ADDRESS);
     }
 
-    public function test_checkRequiredFields_should_throw_exception_if_address_has_no_email_but_customernumber_is_given()
+    public function testCheckRequiredFieldsShouldThrowExceptionIfAddressHasNoEmailButCustomernumberIsGiven()
     {
         $addressWithoutEmail = [
             'firstname' => 'some value',
@@ -86,7 +86,7 @@ class AddressValidatorTest extends TestCase
         $addressValidator->checkRequiredFields($addressWithoutEmail, self::DONT_UPDATE_ADDRESS);
     }
 
-    public function test_checkRequiredFields_should_throw_exception_if_address_has_customernumber_but_email_is_given()
+    public function testCheckRequiredFieldsShouldThrowExceptionIfAddressHasCustomernumberButEmailIsGiven()
     {
         $addressWithoutCustomernumber = [
             'firstname' => 'some value',

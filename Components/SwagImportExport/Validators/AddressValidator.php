@@ -80,7 +80,7 @@ class AddressValidator extends Validator
     private function validateAddressFields($addressRecord)
     {
         foreach ($this->requiredFields as $field => $snippetData) {
-            if (\strlen($addressRecord[$field]) > 0) {
+            if ($addressRecord[$field] !== '') {
                 continue;
             }
 

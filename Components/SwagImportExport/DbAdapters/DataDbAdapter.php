@@ -10,20 +10,20 @@ namespace Shopware\Components\SwagImportExport\DbAdapters;
 
 interface DataDbAdapter
 {
-    const ARTICLE_ADAPTER = 'articles';
-    const ARTICLE_IMAGE_ADAPTER = 'articlesImages';
-    const ARTICLE_INSTOCK_ADAPTER = 'articlesInStock';
-    const ARTICLE_TRANSLATION_ADAPTER = 'articlesTranslations';
-    const ARTICLE_PRICE_ADAPTER = 'articlesPrices';
-    const CATEGORIES_ADAPTER = 'categories';
-    const CATEGORIES_TRANSLATION_ADAPTER = 'categoriesTranslations';
-    const ORDER_ADAPTER = 'orders';
-    const MAIN_ORDER_ADAPTER = 'mainOrders';
-    const CUSTOMER_ADAPTER = 'customers';
-    const CUSTOMER_COMPLETE_ADAPTER = 'customersComplete';
-    const NEWSLETTER_RECIPIENTS_ADAPTER = 'newsletter';
-    const TRANSLATION_ADAPTER = 'translations';
-    const ADDRESS_ADAPTER = 'addresses';
+    public const ARTICLE_ADAPTER = 'articles';
+    public const ARTICLE_IMAGE_ADAPTER = 'articlesImages';
+    public const ARTICLE_INSTOCK_ADAPTER = 'articlesInStock';
+    public const ARTICLE_TRANSLATION_ADAPTER = 'articlesTranslations';
+    public const ARTICLE_PRICE_ADAPTER = 'articlesPrices';
+    public const CATEGORIES_ADAPTER = 'categories';
+    public const CATEGORIES_TRANSLATION_ADAPTER = 'categoriesTranslations';
+    public const ORDER_ADAPTER = 'orders';
+    public const MAIN_ORDER_ADAPTER = 'mainOrders';
+    public const CUSTOMER_ADAPTER = 'customers';
+    public const CUSTOMER_COMPLETE_ADAPTER = 'customersComplete';
+    public const NEWSLETTER_RECIPIENTS_ADAPTER = 'newsletter';
+    public const TRANSLATION_ADAPTER = 'translations';
+    public const ADDRESS_ADAPTER = 'addresses';
 
     /**
      * Reads all records with the given ids and selects the passed columns.

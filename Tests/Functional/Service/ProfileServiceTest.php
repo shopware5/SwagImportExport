@@ -20,7 +20,7 @@ class ProfileServiceTest extends TestCase
 {
     use DatabaseTestCaseTrait;
 
-    public function test_profile_export_should_give_correct_result()
+    public function testProfileExportShouldGiveCorrectResult()
     {
         $service = $this->getProfileService();
         /** @var Connection $dbalConnection */
@@ -35,7 +35,7 @@ class ProfileServiceTest extends TestCase
         static::assertEquals($profile['tree'], \json_encode($profileDataStruct->getTree()));
     }
 
-    public function test_profile_import_should_throw_exception_wrong_filetype()
+    public function testProfileImportShouldThrowExceptionWrongFiletype()
     {
         $service = $this->getProfileService();
         /** @var UploadPathProvider $uploadPathProvider */
@@ -52,7 +52,7 @@ class ProfileServiceTest extends TestCase
         $service->importProfile($file);
     }
 
-    public function test_profile_import_should_throw_exception_no_content()
+    public function testProfileImportShouldThrowExceptionNoContent()
     {
         $service = $this->getProfileService();
         /** @var UploadPathProvider $uploadPathProvider */
@@ -69,7 +69,7 @@ class ProfileServiceTest extends TestCase
         $service->importProfile($file);
     }
 
-    public function test_profile_import_should_throw_exception_wrong_data()
+    public function testProfileImportShouldThrowExceptionWrongData()
     {
         $service = $this->getProfileService();
         /** @var UploadPathProvider $uploadPathProvider */
@@ -86,7 +86,7 @@ class ProfileServiceTest extends TestCase
         $service->importProfile($file);
     }
 
-    public function test_profile_import_should_throw_exception_empty_value()
+    public function testProfileImportShouldThrowExceptionEmptyValue()
     {
         $service = $this->getProfileService();
         /** @var UploadPathProvider $uploadPathProvider */
@@ -103,7 +103,7 @@ class ProfileServiceTest extends TestCase
         $service->importProfile($file);
     }
 
-    public function test_profile_import_should_succeed()
+    public function testProfileImportShouldSucceed()
     {
         $service = $this->getProfileService();
         /** @var Connection $dbalConnection */

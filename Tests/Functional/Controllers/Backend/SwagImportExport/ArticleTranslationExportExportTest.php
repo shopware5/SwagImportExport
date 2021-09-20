@@ -19,8 +19,8 @@ class ArticleTranslationExportExportTest extends \Enlight_Components_Test_Contro
     use DatabaseTestCaseTrait;
     use ExportControllerTrait;
 
-    const FORMAT_XML = 'xml';
-    const FORMAT_CSV = 'csv';
+    public const FORMAT_XML = 'xml';
+    public const FORMAT_CSV = 'csv';
 
     public function setUp(): void
     {
@@ -30,7 +30,7 @@ class ArticleTranslationExportExportTest extends \Enlight_Components_Test_Contro
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
     }
 
-    public function test_articles_translations_xml_export()
+    public function testArticlesTranslationsXmlExport()
     {
         $params = $this->getExportRequestParams();
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::ARTICLES_TRANSLATIONS_PROFILE_TYPE);
@@ -50,7 +50,7 @@ class ArticleTranslationExportExportTest extends \Enlight_Components_Test_Contro
         $this->assertTranslationAttributeInXml($file, 'SW10002.3', 'languageId', '2');
     }
 
-    public function test_articles_translations_csv_export()
+    public function testArticlesTranslationsCsvExport()
     {
         $params = $this->getExportRequestParams();
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::ARTICLES_TRANSLATIONS_PROFILE_TYPE);

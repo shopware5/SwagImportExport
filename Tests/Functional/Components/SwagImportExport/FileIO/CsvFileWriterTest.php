@@ -14,14 +14,14 @@ use Shopware\Components\SwagImportExport\Utils\FileHelper;
 
 class CsvFileWriterTest extends TestCase
 {
-    const TEST_FILE = __DIR__ . '/test.csv';
+    public const TEST_FILE = __DIR__ . '/test.csv';
 
     protected function tearDown(): void
     {
         \unlink(self::TEST_FILE);
     }
 
-    public function test_it_should_create_csv()
+    public function testItShouldCreateCsv()
     {
         $exampleData = [['row1-column1', 'row1-column2']];
 

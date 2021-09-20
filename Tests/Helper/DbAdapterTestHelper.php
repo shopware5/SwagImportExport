@@ -27,7 +27,9 @@ class DbAdapterTestHelper extends ImportExportTestHelper
      * @var Parser
      */
     protected $parser;
+
     protected $yamlFile;
+
     protected $dataProvider;
 
     /**
