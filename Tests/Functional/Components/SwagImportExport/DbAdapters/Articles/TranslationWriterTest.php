@@ -20,7 +20,7 @@ class TranslationWriterTest extends TestCase
 {
     use DatabaseTestCaseTrait;
 
-    public function test_write_should_throw_exception_if_language_id_is_not_available()
+    public function testWriteShouldThrowExceptionIfLanguageIdIsNotAvailable()
     {
         $articleId = 273;
         $variantId = 273;
@@ -38,7 +38,7 @@ class TranslationWriterTest extends TestCase
         $translationWriter->write($articleId, $variantId, $mainDetailId, $translations);
     }
 
-    public function test_write_should_create_translations()
+    public function testWriteShouldCreateTranslations()
     {
         $articleId = 273;
         $variantId = 273;
@@ -70,7 +70,7 @@ class TranslationWriterTest extends TestCase
         static::assertEquals($translations[0]['packUnit'], $importedTranslation['txtpackunit']);
     }
 
-    public function test_write_should_create_attribute_translations()
+    public function testWriteShouldCreateAttributeTranslations()
     {
         /** @var ModelManager $modelManager */
         $modelManager = Shopware()->Container()->get('models');
@@ -110,7 +110,7 @@ class TranslationWriterTest extends TestCase
         $modelManager->beginTransaction();
     }
 
-    public function test_write_should_create_variant_translation()
+    public function testWriteShouldCreateVariantTranslation()
     {
         $articleId = 273;
         $variantId = 1053;

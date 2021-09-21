@@ -14,10 +14,10 @@ use Shopware\Components\SwagImportExport\UploadPathProvider;
 
 class CsvFileReaderTest extends TestCase
 {
-    const AMOUNT_OF_RECORDS_WITHOUT_EMPTY_LINE = 1;
-    const AMOUNT_OF_RECORDS_WITH_EMPTY_LINE = 1;
+    public const AMOUNT_OF_RECORDS_WITHOUT_EMPTY_LINE = 1;
+    public const AMOUNT_OF_RECORDS_WITH_EMPTY_LINE = 1;
 
-    public function test_readRecords_with_csv_file_without_empty_line_at_end_of_file()
+    public function testReadRecordsWithCsvFileWithoutEmptyLineAtEndOfFile()
     {
         $expectedResult = [
             [
@@ -32,7 +32,7 @@ class CsvFileReaderTest extends TestCase
         static::assertEquals($expectedResult, $actualRows);
     }
 
-    public function test_getTotalCount_without_empty_line_at_the_end_of_file()
+    public function testGetTotalCountWithoutEmptyLineAtTheEndOfFile()
     {
         $csvFileReader = $this->createCsvFileReader();
         $countOfRecords = $csvFileReader->getTotalCount(__DIR__ . '/_fixtures/without_empty_line_on_end.csv');
@@ -40,7 +40,7 @@ class CsvFileReaderTest extends TestCase
         static::assertEquals(self::AMOUNT_OF_RECORDS_WITHOUT_EMPTY_LINE, $countOfRecords);
     }
 
-    public function test_getTotalCount_with_multiple_empty_lines_at_the_end_of_file()
+    public function testGetTotalCountWithMultipleEmptyLinesAtTheEndOfFile()
     {
         $csvFileReader = $this->createCsvFileReader();
         $countOfRecords = $csvFileReader->getTotalCount(__DIR__ . '/_fixtures/empty_lines_on_end.csv');

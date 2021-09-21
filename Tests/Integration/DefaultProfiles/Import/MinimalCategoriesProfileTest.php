@@ -19,7 +19,7 @@ class MinimalCategoriesProfileTest extends TestCase
     use DefaultProfileImportTestCaseTrait;
     use DatabaseTestCaseTrait;
 
-    public function test_import_should_import_categories()
+    public function testImportShouldImportCategories()
     {
         $filePath = $this->getImportFile('categories_profile_test.csv');
         $this->runCommand("sw:import:import -p default_categories {$filePath}");

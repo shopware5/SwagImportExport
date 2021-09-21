@@ -15,7 +15,7 @@ use Shopware\Setup\SwagImportExport\SetupContext;
 
 class Update03DefaultProfileSupport implements UpdaterInterface
 {
-    const MIN_PLUGIN_VERSION = '2.0.0';
+    public const MIN_PLUGIN_VERSION = '2.0.0';
 
     /**
      * @var Connection

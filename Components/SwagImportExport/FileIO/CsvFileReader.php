@@ -141,7 +141,7 @@ class CsvFileReader implements FileReader
                 // $isUtf8 = (utf8_encode(utf8_decode($value)) == $value);
 
                 // might have issues with encodings other than utf-8 and latin-1
-                $isUtf8 = (\mb_detect_encoding($value, 'UTF-8', true) !== false);
+                $isUtf8 = \mb_detect_encoding($value, 'UTF-8', true) !== false;
                 if (!$isUtf8) {
                     $value = \utf8_encode($value);
                 }

@@ -19,8 +19,8 @@ class ArticlePricesExportTest extends \Enlight_Components_Test_Controller_TestCa
     use DatabaseTestCaseTrait;
     use ExportControllerTrait;
 
-    const FORMAT_XML = 'xml';
-    const FORMAT_CSV = 'csv';
+    public const FORMAT_XML = 'xml';
+    public const FORMAT_CSV = 'csv';
 
     public function setUp(): void
     {
@@ -30,7 +30,7 @@ class ArticlePricesExportTest extends \Enlight_Components_Test_Controller_TestCa
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
     }
 
-    public function test_articles_prices_xml_export()
+    public function testArticlesPricesXmlExport()
     {
         $params = $this->getExportRequestParams();
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::ARTICLES_PRICES_PROFILE_TYPE);
@@ -52,7 +52,7 @@ class ArticlePricesExportTest extends \Enlight_Components_Test_Controller_TestCa
         $this->assertPriceAttributeInXml($file, 'SW10002.1', '_additionaltext', '1,5 Liter');
     }
 
-    public function test_articles_prices_csv_export()
+    public function testArticlesPricesCsvExport()
     {
         $params = $this->getExportRequestParams();
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::ARTICLES_PRICES_PROFILE_TYPE);

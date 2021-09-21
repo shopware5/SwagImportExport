@@ -24,7 +24,7 @@ class ArticleInStockProfileTest extends TestCase
         return new ArticleInStockProfile();
     }
 
-    public function test_it_can_be_created()
+    public function testItCanBeCreated()
     {
         $articleInStockProfile = $this->createArticleInStockProfile();
 
@@ -33,7 +33,7 @@ class ArticleInStockProfileTest extends TestCase
         static::assertInstanceOf(\JsonSerializable::class, $articleInStockProfile);
     }
 
-    public function test_it_should_return_valid_profile_tree()
+    public function testItShouldReturnValidProfileTree()
     {
         $articleProfile = $this->createArticleInStockProfile();
 

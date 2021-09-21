@@ -16,7 +16,7 @@ class ArticleCategoriesProfileTest extends TestCase
 {
     use DefaultProfileTestCaseTrait;
 
-    public function test_it_can_be_created()
+    public function testItCanBeCreated()
     {
         $categoryProfile = $this->createArticleCategoriesProfile();
 
@@ -25,7 +25,7 @@ class ArticleCategoriesProfileTest extends TestCase
         static::assertInstanceOf(ProfileMetaData::class, $categoryProfile);
     }
 
-    public function test_it_should_return_valid_profile_tree()
+    public function testItShouldReturnValidProfileTree()
     {
         $categoryProfile = $this->createArticleCategoriesProfile();
 

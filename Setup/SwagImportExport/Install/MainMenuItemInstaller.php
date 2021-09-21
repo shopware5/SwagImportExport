@@ -18,14 +18,14 @@ use Shopware\Setup\SwagImportExport\SetupContext;
  */
 class MainMenuItemInstaller implements InstallerInterface
 {
-    const SHOPWARE_MIN_VERSION = '5.3.0';
+    public const SHOPWARE_MIN_VERSION = '5.3.0';
 
-    const SWAG_IMPORT_EXPORT_CONTROLLER = 'SwagImportExport';
-    const SWAG_IMPORT_EXPORT_ACTION = 'index';
-    const OLD_MENU_LABEL = 'Import/Export Advanced';
-    const CURRENT_MENU_LABEL = 'Import/Export';
-    const CURRENT_MENU_ITEM_CLASS = 'sprite-arrow-circle-double-135 contents--import-export';
-    const PARENT_MENU_LABEL_FOR_CURRENT_MENU = 'Inhalte';
+    public const SWAG_IMPORT_EXPORT_CONTROLLER = 'SwagImportExport';
+    public const SWAG_IMPORT_EXPORT_ACTION = 'index';
+    public const OLD_MENU_LABEL = 'Import/Export Advanced';
+    public const CURRENT_MENU_LABEL = 'Import/Export';
+    public const CURRENT_MENU_ITEM_CLASS = 'sprite-arrow-circle-double-135 contents--import-export';
+    public const PARENT_MENU_LABEL_FOR_CURRENT_MENU = 'Inhalte';
 
     /**
      * @var ModelManager

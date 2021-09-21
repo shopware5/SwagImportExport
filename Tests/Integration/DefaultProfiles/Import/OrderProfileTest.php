@@ -19,7 +19,7 @@ class OrderProfileTest extends TestCase
     use DefaultProfileImportTestCaseTrait;
     use DatabaseTestCaseTrait;
 
-    public function test_write_should_update_order_status()
+    public function testWriteShouldUpdateOrderStatus()
     {
         $filePath = __DIR__ . '/_fixtures/order_profile.csv';
         $expectedOrderId = 15;

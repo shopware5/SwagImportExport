@@ -16,7 +16,7 @@ class CommandHelperTest extends TestCase
 {
     use DatabaseTransactionBehaviour;
 
-    public function test_getProductStreamIdByName_shouldBeNull()
+    public function testGetProductStreamIdByNameShouldBeNull()
     {
         $commandHelper = new CommandHelper([
             'profileEntity' => 'unitTest',
@@ -27,7 +27,7 @@ class CommandHelperTest extends TestCase
         static::assertNull($this->getProductStreamValue($commandHelper));
     }
 
-    public function test_getProductStreamIdByName_shouldBeLikeGivenId()
+    public function testGetProductStreamIdByNameShouldBeLikeGivenId()
     {
         $commandHelper = new CommandHelper([
             'profileEntity' => 'unitTest',
@@ -39,7 +39,7 @@ class CommandHelperTest extends TestCase
         static::assertSame('12', $this->getProductStreamValue($commandHelper));
     }
 
-    public function test_getProductStreamIdByName_shouldFoundCorrectId()
+    public function testGetProductStreamIdByNameShouldFoundCorrectId()
     {
         $sql = \file_get_contents(__DIR__ . '/_fixtures/stream.sql');
         Shopware()->Container()->get('dbal_connection')->exec($sql);
@@ -54,7 +54,7 @@ class CommandHelperTest extends TestCase
         static::assertSame('1', $this->getProductStreamValue($commandHelper));
     }
 
-    public function test_getProductStreamIdByName_expectException_noStreamFound()
+    public function testGetProductStreamIdByNameExpectExceptionNoStreamFound()
     {
         static::expectException(\RuntimeException::class);
         static::expectExceptionMessage('There are no streams with the name: TestStream');
@@ -67,7 +67,7 @@ class CommandHelperTest extends TestCase
         ]);
     }
 
-    public function test_getProductStreamIdByName_expectException_multipleStreamsFound()
+    public function testGetProductStreamIdByNameExpectExceptionMultipleStreamsFound()
     {
         $sql = \file_get_contents(__DIR__ . '/_fixtures/multiple_streams.sql');
         Shopware()->Container()->get('dbal_connection')->exec($sql);

@@ -17,7 +17,7 @@ class PriceWriterTest extends TestCase
 {
     use DatabaseTestCaseTrait;
 
-    public function test_write_throws_exception_if_empty_values()
+    public function testWriteThrowsExceptionIfEmptyValues()
     {
         $priceWriterDbAdapter = $this->createPriceWriterAdapter();
 
@@ -26,7 +26,7 @@ class PriceWriterTest extends TestCase
         $priceWriterDbAdapter->write('', '', []);
     }
 
-    public function test_write_throws_exception_if_price_group_not_exists()
+    public function testWriteThrowsExceptionIfPriceGroupNotExists()
     {
         $priceWriterDbAdapter = $this->createPriceWriterAdapter();
 
@@ -44,7 +44,7 @@ class PriceWriterTest extends TestCase
         $priceWriterDbAdapter->write($articleId, $articleOrderNumber, $articlePriceData);
     }
 
-    public function test_write_throws_exception_if_price_is_invalid()
+    public function testWriteThrowsExceptionIfPriceIsInvalid()
     {
         $priceWriterDbAdapter = $this->createPriceWriterAdapter();
 
@@ -61,7 +61,7 @@ class PriceWriterTest extends TestCase
         $priceWriterDbAdapter->write($articleId, $articleOrderNumber, $articlePriceData);
     }
 
-    public function test_write_throws_exception_if_price_from_is_invalid()
+    public function testWriteThrowsExceptionIfPriceFromIsInvalid()
     {
         $priceWriterDbAdapter = $this->createPriceWriterAdapter();
 
@@ -79,7 +79,7 @@ class PriceWriterTest extends TestCase
         $priceWriterDbAdapter->write($articleId, $articleOrderNumber, $articlePriceData);
     }
 
-    public function test_write_should_update_price_with_dot_seperation()
+    public function testWriteShouldUpdatePriceWithDotSeperation()
     {
         $priceWriterAdapter = $this->createPriceWriterAdapter();
 
@@ -102,7 +102,7 @@ class PriceWriterTest extends TestCase
         static::assertEquals($expectedArticlePrice, $updatedArticle[0]['price']);
     }
 
-    public function test_write_should_update_article_price()
+    public function testWriteShouldUpdateArticlePrice()
     {
         $priceWriterAdapter = $this->createPriceWriterAdapter();
 
@@ -125,7 +125,7 @@ class PriceWriterTest extends TestCase
         static::assertEquals($expectedArticlePrice, $updatedArticle[0]['price']);
     }
 
-    public function test_write_should_update_article_pseudo_price()
+    public function testWriteShouldUpdateArticlePseudoPrice()
     {
         $priceWriterAdapter = $this->createPriceWriterAdapter();
 

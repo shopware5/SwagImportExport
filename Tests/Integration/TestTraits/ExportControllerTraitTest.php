@@ -15,7 +15,7 @@ class ExportControllerTraitTest extends TestCase
 {
     use ExportControllerTrait;
 
-    public function test_csvToArrayIndexedByFieldValue_should_return_mapped_array_and_indexed_by_identifier()
+    public function testCsvToArrayIndexedByFieldValueShouldReturnMappedArrayAndIndexedByIdentifier()
     {
         $filePath = __DIR__ . '/_fixtures/example.csv';
         $indexedCsvAsArray = $this->csvToArrayIndexedByFieldValue($filePath, 'identifier');
@@ -23,7 +23,7 @@ class ExportControllerTraitTest extends TestCase
         static::assertEquals('Ein Test', $indexedCsvAsArray[123]['name']);
     }
 
-    public function test_csvToArrayIndexedByFieldValue_should_fill_missing_fields()
+    public function testCsvToArrayIndexedByFieldValueShouldFillMissingFields()
     {
         $filePath = __DIR__ . '/_fixtures/csv_with_missing_fields.csv';
         $indexedCsvAsArray = $this->csvToArrayIndexedByFieldValue($filePath, 'header02');
@@ -31,7 +31,7 @@ class ExportControllerTraitTest extends TestCase
         static::assertEquals('', $indexedCsvAsArray['value02']['field_without_value']);
     }
 
-    public function test_csvToArrayIndexedByFieldValue_should_remove_header()
+    public function testCsvToArrayIndexedByFieldValueShouldRemoveHeader()
     {
         $expectedFirstArrayElement = [
             'name' => 'Ein Test',

@@ -11,7 +11,9 @@ namespace Shopware\Components\SwagImportExport\FileIO;
 class XmlFileReader implements FileReader
 {
     protected $tree;
+
     protected $iterationPath = [];
+
     protected $iterationTag = [];
 
     /**

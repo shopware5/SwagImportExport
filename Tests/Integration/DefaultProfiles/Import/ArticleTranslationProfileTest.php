@@ -19,7 +19,7 @@ class ArticleTranslationProfileTest extends TestCase
     use DefaultProfileImportTestCaseTrait;
     use DatabaseTestCaseTrait;
 
-    public function test_import_should_create_article_translation()
+    public function testImportShouldCreateArticleTranslation()
     {
         $filePath = __DIR__ . '/_fixtures/article_translation_profile.csv';
         $expectedArticleName = 'Boomerang deluxe';

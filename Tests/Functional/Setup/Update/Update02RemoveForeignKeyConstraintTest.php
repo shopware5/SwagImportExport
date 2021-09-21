@@ -17,7 +17,7 @@ use Shopware\Setup\SwagImportExport\Update\Update02RemoveForeignKeyConstraint;
 
 class Update02RemoveForeignKeyConstraintTest extends TestCase
 {
-    public function test_it_should_be_compatible()
+    public function testItShouldBeCompatible()
     {
         $setupContext = new SetupContext('', '', '1.2.0');
         $dbalConnectionMock = $this->createMock(Connection::class);
@@ -30,7 +30,7 @@ class Update02RemoveForeignKeyConstraintTest extends TestCase
         static::assertTrue($isCompatible);
     }
 
-    public function test_it_should_be_incompatible()
+    public function testItShouldBeIncompatible()
     {
         $setupContext = new SetupContext('', '', '1.3.0');
         $dbalConnectionMock = $this->createMock(Connection::class);
@@ -43,7 +43,7 @@ class Update02RemoveForeignKeyConstraintTest extends TestCase
         static::assertFalse($isCompatible);
     }
 
-    public function test_it_should_be_incompatible_with_version_higher_or_equals_200()
+    public function testItShouldBeIncompatibleWithVersionHigherOrEquals200()
     {
         $updateFromVersion = '1.2.0';
         $updateToVersion = '2.0.0';

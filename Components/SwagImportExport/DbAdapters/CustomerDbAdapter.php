@@ -39,7 +39,6 @@ class CustomerDbAdapter implements DataDbAdapter
     /** @var array */
     protected $shippingMap;
 
-    /** @var mixed */
     protected $unprocessedData;
 
     /** @var array */

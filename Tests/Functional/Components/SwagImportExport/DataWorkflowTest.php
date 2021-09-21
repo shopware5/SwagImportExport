@@ -15,7 +15,7 @@ use Shopware\Components\SwagImportExport\Transformers\DataTransformerChain;
 
 class DataWorkflowTest extends TestCase
 {
-    public function test_saveUnprocessedData_shouldWriteHeader(): void
+    public function testSaveUnprocessedDataShouldWriteHeader(): void
     {
         $postData['session']['prevState'] = 'old';
         $file = __DIR__ . '/_fixtures/emptyFile.csv';

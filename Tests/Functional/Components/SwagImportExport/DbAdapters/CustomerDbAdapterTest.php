@@ -17,7 +17,7 @@ class CustomerDbAdapterTest extends TestCase
 {
     use DatabaseTestCaseTrait;
 
-    public function test_write_without_records_throws_exception()
+    public function testWriteWithoutRecordsThrowsException()
     {
         $customersDbAdapter = $this->createCustomerDbAdapter();
 
@@ -26,7 +26,7 @@ class CustomerDbAdapterTest extends TestCase
         $customersDbAdapter->write([]);
     }
 
-    public function test_write_should_create_customer()
+    public function testWriteShouldCreateCustomer()
     {
         $customersDbAdapter = $this->createCustomerDbAdapter();
         $records = [
@@ -49,7 +49,7 @@ class CustomerDbAdapterTest extends TestCase
         static::assertEquals($records['default'][0]['customerNumber'], $updatedUser[0]['customernumber']);
     }
 
-    public function test_write_should_update_customer()
+    public function testWriteShouldUpdateCustomer()
     {
         $customerDbAdapter = $this->createCustomerDbAdapter();
 
@@ -78,7 +78,7 @@ class CustomerDbAdapterTest extends TestCase
         static::assertEquals($records['default'][0]['active'], $updatedUser[0]['active']);
     }
 
-    public function test_write_should_update_billing_city()
+    public function testWriteShouldUpdateBillingCity()
     {
         $customerDbAdapter = $this->createCustomerDbAdapter();
 
@@ -110,7 +110,7 @@ class CustomerDbAdapterTest extends TestCase
         static::assertEquals($records['default'][0]['billingZipcode'], $updatedUserBillingAddress[0]['zipcode']);
     }
 
-    public function test_write_should_update_customer_group()
+    public function testWriteShouldUpdateCustomerGroup()
     {
         $customerDbAdapter = $this->createCustomerDbAdapter();
 
@@ -140,7 +140,7 @@ class CustomerDbAdapterTest extends TestCase
         static::assertEquals($records['default'][0]['customergroup'], $updatedUser[0]['customergroup']);
     }
 
-    public function test_write_with_customer_group_id_throws_exception()
+    public function testWriteWithCustomerGroupIdThrowsException()
     {
         $customerDbAdapter = $this->createCustomerDbAdapter();
 
@@ -162,7 +162,7 @@ class CustomerDbAdapterTest extends TestCase
         $customerDbAdapter->write($records);
     }
 
-    public function test_write_should_update_phone_number()
+    public function testWriteShouldUpdatePhoneNumber()
     {
         $customerDbAdapter = $this->createCustomerDbAdapter();
 
@@ -192,7 +192,7 @@ class CustomerDbAdapterTest extends TestCase
         static::assertEquals($records['default'][0]['billingPhone'], $updatedUserBillingAddress[0]['phone']);
     }
 
-    public function test_write_should_update_payment_id()
+    public function testWriteShouldUpdatePaymentId()
     {
         $customerDbAdapter = $this->createCustomerDbAdapter();
 
@@ -221,7 +221,7 @@ class CustomerDbAdapterTest extends TestCase
         static::assertEquals($records['default'][0]['paymentID'], $updatedUser[0]['paymentID']);
     }
 
-    public function test_write_should_update_last_login()
+    public function testWriteShouldUpdateLastLogin()
     {
         $customerDbAdapter = $this->createCustomerDbAdapter();
 
@@ -250,7 +250,7 @@ class CustomerDbAdapterTest extends TestCase
         static::assertEquals('2016-11-29 12:13:45', $updatedUser[0]['lastlogin']);
     }
 
-    public function test_write_without_email_throws_exception()
+    public function testWriteWithoutEmailThrowsException()
     {
         $customerDbAdapter = $this->createCustomerDbAdapter();
 
@@ -270,7 +270,7 @@ class CustomerDbAdapterTest extends TestCase
         $customerDbAdapter->write($records);
     }
 
-    public function test_write_without_password_throws_exception()
+    public function testWriteWithoutPasswordThrowsException()
     {
         $customerDbAdapter = $this->createCustomerDbAdapter();
 
@@ -289,7 +289,7 @@ class CustomerDbAdapterTest extends TestCase
         $customerDbAdapter->write($records);
     }
 
-    public function test_write_create_customer_with_existing_email_throws_exception()
+    public function testWriteCreateCustomerWithExistingEmailThrowsException()
     {
         $customerDbAdapter = $this->createCustomerDbAdapter();
 
@@ -308,7 +308,7 @@ class CustomerDbAdapterTest extends TestCase
         $customerDbAdapter->write($records);
     }
 
-    public function test_write_with_invalid_sub_shop_throws_exception()
+    public function testWriteWithInvalidSubShopThrowsException()
     {
         $customerDbAdapter = $this->createCustomerDbAdapter();
 
@@ -327,7 +327,7 @@ class CustomerDbAdapterTest extends TestCase
         $customerDbAdapter->write($records);
     }
 
-    public function test_write_with_invalid_language_id_throws_exception()
+    public function testWriteWithInvalidLanguageIdThrowsException()
     {
         $customerDbAdapter = $this->createCustomerDbAdapter();
 
@@ -346,7 +346,7 @@ class CustomerDbAdapterTest extends TestCase
         $customerDbAdapter->write($records);
     }
 
-    public function test_write_should_update_email_address()
+    public function testWriteShouldUpdateEmailAddress()
     {
         $customerDbAdapter = $this->createCustomerDbAdapter();
 
@@ -374,7 +374,7 @@ class CustomerDbAdapterTest extends TestCase
         static::assertEquals('test@exampleNew.com', $updatedUser[0]['email']);
     }
 
-    public function test_write_should_update_customer_password()
+    public function testWriteShouldUpdateCustomerPassword()
     {
         $customerDbAdapter = $this->createCustomerDbAdapter();
 
@@ -403,7 +403,7 @@ class CustomerDbAdapterTest extends TestCase
         static::assertEquals('ac1ef17c2db40995e9fdd40b04a5a649', $updatedUser[0]['password']);
     }
 
-    public function test_write_new_customer_without_billing_data_throws_exception()
+    public function testWriteNewCustomerWithoutBillingDataThrowsException()
     {
         $customerDbAdapter = $this->createCustomerDbAdapter();
 

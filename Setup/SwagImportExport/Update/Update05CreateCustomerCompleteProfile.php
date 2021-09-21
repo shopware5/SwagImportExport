@@ -14,7 +14,7 @@ use Shopware\Setup\SwagImportExport\SetupContext;
 
 class Update05CreateCustomerCompleteProfile implements UpdaterInterface
 {
-    const MAX_PLUGIN_VERSION = '2.4.0';
+    public const MAX_PLUGIN_VERSION = '2.4.0';
 
     /** @var SetupContext */
     private $setupContext;

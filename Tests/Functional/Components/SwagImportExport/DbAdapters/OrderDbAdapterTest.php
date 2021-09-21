@@ -16,7 +16,7 @@ class OrderDbAdapterTest extends TestCase
 {
     use DatabaseTestCaseTrait;
 
-    public function test_write_should_be_valid()
+    public function testWriteShouldBeValid()
     {
         $ordersDbAdapter = $this->createOrdersDbAdapter();
         $validOrderRecords = $this->getValidDemoRecordsForWriteTest();
@@ -24,7 +24,7 @@ class OrderDbAdapterTest extends TestCase
         $ordersDbAdapter->write($validOrderRecords);
     }
 
-    public function test_write_should_throw_exception_with_invalid_array()
+    public function testWriteShouldThrowExceptionWithInvalidArray()
     {
         $ordersDbAdapter = $this->createOrdersDbAdapter();
 
@@ -37,7 +37,7 @@ class OrderDbAdapterTest extends TestCase
         $ordersDbAdapter->write($invalidRecords);
     }
 
-    public function test_write_without_orderDetailId_should_use_number_instead()
+    public function testWriteWithoutOrderDetailIdShouldUseNumberInstead()
     {
         $ordersDbAdapter = $this->createOrdersDbAdapter();
 
@@ -47,7 +47,7 @@ class OrderDbAdapterTest extends TestCase
         $ordersDbAdapter->write($records);
     }
 
-    public function test_write_with_not_existing_orderDetailId_should_throw_an_exception()
+    public function testWriteWithNotExistingOrderDetailIdShouldThrowAnException()
     {
         $ordersDbAdapter = $this->createOrdersDbAdapter();
 
@@ -59,7 +59,7 @@ class OrderDbAdapterTest extends TestCase
         $ordersDbAdapter->write($records);
     }
 
-    public function test_write_with_not_existing_status_id_should_throw_an_exception()
+    public function testWriteWithNotExistingStatusIdShouldThrowAnException()
     {
         $ordersDbAdapter = $this->createOrdersDbAdapter();
 
@@ -71,7 +71,7 @@ class OrderDbAdapterTest extends TestCase
         $ordersDbAdapter->write($records);
     }
 
-    public function test_write_with_invalid_status_id_should_throw_an_exception()
+    public function testWriteWithInvalidStatusIdShouldThrowAnException()
     {
         $ordersDbAdapter = $this->createOrdersDbAdapter();
 
@@ -83,7 +83,7 @@ class OrderDbAdapterTest extends TestCase
         $ordersDbAdapter->write($records);
     }
 
-    public function test_write_with_invalid_payment_status_should_throw_an_exception()
+    public function testWriteWithInvalidPaymentStatusShouldThrowAnException()
     {
         $ordersDbAdapter = $this->createOrdersDbAdapter();
 
@@ -95,7 +95,7 @@ class OrderDbAdapterTest extends TestCase
         $ordersDbAdapter->write($records);
     }
 
-    public function test_write_with_empty_status_should_be_valid()
+    public function testWriteWithEmptyStatusShouldBeValid()
     {
         $ordersDbAdapter = $this->createOrdersDbAdapter();
 

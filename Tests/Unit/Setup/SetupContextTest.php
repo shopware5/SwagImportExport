@@ -13,10 +13,10 @@ use Shopware\Setup\SwagImportExport\SetupContext;
 
 class SetupContextTest extends TestCase
 {
-    const DEV_VERSION = '___VERSION___';
-    const CURRENT_SHOPWARE_VERSION = '5.3.0';
+    public const DEV_VERSION = '___VERSION___';
+    public const CURRENT_SHOPWARE_VERSION = '5.3.0';
 
-    public function test_assertMinimumShopwareVersion_should_return_true_if_dev_version_is_used()
+    public function testAssertMinimumShopwareVersionShouldReturnTrueIfDevVersionIsUsed()
     {
         $setupContext = new SetupContext(self::DEV_VERSION, '', '');
         $isCompatible = $setupContext->assertMinimumShopwareVersion('');
@@ -24,7 +24,7 @@ class SetupContextTest extends TestCase
         static::assertTrue($isCompatible);
     }
 
-    public function test_assertMinimumShopwareVersion_should_return_false()
+    public function testAssertMinimumShopwareVersionShouldReturnFalse()
     {
         $currentShopwareVersion = '5.3.0';
         $minVersion = '5.4.0';
@@ -35,7 +35,7 @@ class SetupContextTest extends TestCase
         static::assertFalse($isCompatible);
     }
 
-    public function test_assertMinimumShopwareVersion_should_return_true()
+    public function testAssertMinimumShopwareVersionShouldReturnTrue()
     {
         $currentShopwareVersion = '5.3.0';
         $minVersion = '5.2.0';
@@ -46,7 +46,7 @@ class SetupContextTest extends TestCase
         static::assertTrue($isCompatible);
     }
 
-    public function test_assertMinimumShopwareVersion_should_return_true_if_same_versions_were_given()
+    public function testAssertMinimumShopwareVersionShouldReturnTrueIfSameVersionsWereGiven()
     {
         $currentShopwareVersion = '5.3.0';
         $minVersion = '5.3.0';
@@ -57,7 +57,7 @@ class SetupContextTest extends TestCase
         static::assertTrue($isCompatible);
     }
 
-    public function test_assertMaximumPluginVersion_should_return_false()
+    public function testAssertMaximumPluginVersionShouldReturnFalse()
     {
         $currentPluginVersion = '1.0.0';
         $maxVersion = '0.9.0';
@@ -68,7 +68,7 @@ class SetupContextTest extends TestCase
         static::assertFalse($isCompatible);
     }
 
-    public function test_assertMaximumPluginVersion_should_return_true()
+    public function testAssertMaximumPluginVersionShouldReturnTrue()
     {
         $currentPluginVersion = '1.0.0';
         $maxVersion = '1.1.0';
@@ -79,7 +79,7 @@ class SetupContextTest extends TestCase
         static::assertTrue($isCompatible);
     }
 
-    public function test_assertMaximumPluginVersion_should_return_false_if_same_versions_were_given()
+    public function testAssertMaximumPluginVersionShouldReturnFalseIfSameVersionsWereGiven()
     {
         $currentPluginVersion = '1.1.0';
         $maxVersion = '1.1.0';
@@ -90,7 +90,7 @@ class SetupContextTest extends TestCase
         static::assertFalse($isCompatible);
     }
 
-    public function test_assertMinimumPluginVersion_should_return_false()
+    public function testAssertMinimumPluginVersionShouldReturnFalse()
     {
         $currentPluginVersion = '1.0.0';
         $minVersion = '1.1.0';
@@ -101,7 +101,7 @@ class SetupContextTest extends TestCase
         static::assertFalse($isCompatible);
     }
 
-    public function test_assertMinimumPluginVersion_should_return_true()
+    public function testAssertMinimumPluginVersionShouldReturnTrue()
     {
         $currentPluginVersion = '1.0.0';
         $minVersion = '0.9.0';
@@ -112,7 +112,7 @@ class SetupContextTest extends TestCase
         static::assertTrue($isCompatible);
     }
 
-    public function test_assertMinimumPluginVersion_should_return_true_if_same_versions_were_given()
+    public function testAssertMinimumPluginVersionShouldReturnTrueIfSameVersionsWereGiven()
     {
         $currentPluginVersion = '1.0.0';
         $minVersion = '1.0.0';
@@ -123,7 +123,7 @@ class SetupContextTest extends TestCase
         static::assertTrue($isCompatible);
     }
 
-    public function test_assertMaximumShopwareVersion_should_return_true()
+    public function testAssertMaximumShopwareVersionShouldReturnTrue()
     {
         $maxVersion = '5.2.0';
         $currentShopwareVersion = '5.1.0';
@@ -134,7 +134,7 @@ class SetupContextTest extends TestCase
         static::assertTrue($isCompatible);
     }
 
-    public function test_assertMaximumShopwareVersion_should_return_false()
+    public function testAssertMaximumShopwareVersionShouldReturnFalse()
     {
         $maxVersion = '5.2.0';
         $currentShopwareVersion = '5.3.0';
@@ -145,7 +145,7 @@ class SetupContextTest extends TestCase
         static::assertFalse($isCompatible);
     }
 
-    public function test_assertMaximumShopwareVersion_with_dev_version_should_return_false()
+    public function testAssertMaximumShopwareVersionWithDevVersionShouldReturnFalse()
     {
         $requiredShopwareVersion = '5.2.0';
 
@@ -155,7 +155,7 @@ class SetupContextTest extends TestCase
         static::assertFalse($isCompatible);
     }
 
-    public function test_assertMaximumShopwareVersion_should_return_false_if_same_versions_were_given()
+    public function testAssertMaximumShopwareVersionShouldReturnFalseIfSameVersionsWereGiven()
     {
         $currentShopwareVersion = '5.3.0';
         $maxVersion = '5.3.0';

@@ -13,7 +13,7 @@ use Shopware\Components\SwagImportExport\Validators\ArticleImageValidator;
 
 class ArticleImageValidatorTest extends TestCase
 {
-    public function test_validate_without_ordernumber_should_throw_exception()
+    public function testValidateWithoutOrdernumberShouldThrowException()
     {
         $validator = $this->createArticleImageValidator();
         $record = [
@@ -27,7 +27,7 @@ class ArticleImageValidatorTest extends TestCase
         $validator->checkRequiredFields($record);
     }
 
-    public function test_validate_without_image_path_should_throw_exception()
+    public function testValidateWithoutImagePathShouldThrowException()
     {
         $validator = $this->createArticleImageValidator();
         $record = [

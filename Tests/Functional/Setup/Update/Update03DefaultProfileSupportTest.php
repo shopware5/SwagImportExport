@@ -15,7 +15,7 @@ use Shopware\Setup\SwagImportExport\Update\Update03DefaultProfileSupport;
 
 class Update03DefaultProfileSupportTest extends TestCase
 {
-    public function test_it_should_be_compatible()
+    public function testItShouldBeCompatible()
     {
         $updateFromVersion = '1.9.0';
         $setupContext = new SetupContext('', '', $updateFromVersion);
@@ -28,7 +28,7 @@ class Update03DefaultProfileSupportTest extends TestCase
         static::assertTrue($isCompatible);
     }
 
-    public function test_it_should_be_incompatible()
+    public function testItShouldBeIncompatible()
     {
         $updateFromVersion = '2.0.0';
         $setupContext = new SetupContext('', '', $updateFromVersion);

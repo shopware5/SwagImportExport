@@ -20,14 +20,14 @@ class TranslationProfileTest extends TestCase
     use DefaultProfileImportTestCaseTrait;
     use DatabaseTestCaseTrait;
 
-    const LANGUAGE_ENGLISH_ID = 2;
+    public const LANGUAGE_ENGLISH_ID = 2;
 
-    const BRANDY_PROPERTYGROUP_INDEX = 0;
-    const CHOCOLATE_BROWN_PROPERTYGROUP_INDEX = 14;
-    const AMOUNT_OF_IMPORTED_CONFIGURATOR_TRANSLATIONS = 3;
-    const CONFIGURATOR_15LITER_INDEX = 0;
+    public const BRANDY_PROPERTYGROUP_INDEX = 0;
+    public const CHOCOLATE_BROWN_PROPERTYGROUP_INDEX = 14;
+    public const AMOUNT_OF_IMPORTED_CONFIGURATOR_TRANSLATIONS = 3;
+    public const CONFIGURATOR_15LITER_INDEX = 0;
 
-    public function test_import_translations_should_create_new_translations_for_properties()
+    public function testImportTranslationsShouldCreateNewTranslationsForProperties()
     {
         $this->truncateTranslationTable();
 
@@ -45,7 +45,7 @@ class TranslationProfileTest extends TestCase
         static::assertEquals('a:1:{s:11:"optionValue";s:15:"chocolate brown";}', $importedPropertyTranslations[self::CHOCOLATE_BROWN_PROPERTYGROUP_INDEX]['objectdata']);
     }
 
-    public function test_import_translations_should_update_translations_for_properties()
+    public function testImportTranslationsShouldUpdateTranslationsForProperties()
     {
         $this->truncateTranslationTable();
 
@@ -62,7 +62,7 @@ class TranslationProfileTest extends TestCase
         static::assertEquals('a:1:{s:11:"optionValue";s:22:"chocolate brown UPDATE";}', $updatedPropertyTranslations[self::CHOCOLATE_BROWN_PROPERTYGROUP_INDEX]['objectdata']);
     }
 
-    public function test_import_translations_should_create_translations_for_configurators()
+    public function testImportTranslationsShouldCreateTranslationsForConfigurators()
     {
         $this->truncateTranslationTable();
         $filePath = __DIR__ . '/_fixtures/translations_configurators_create.csv';
@@ -77,7 +77,7 @@ class TranslationProfileTest extends TestCase
         static::assertCount(self::AMOUNT_OF_IMPORTED_CONFIGURATOR_TRANSLATIONS, $importedConfiguratorTranslations);
     }
 
-    public function test_import_translations_should_update_configurator_translations()
+    public function testImportTranslationsShouldUpdateConfiguratorTranslations()
     {
         $this->truncateTranslationTable();
         /** @var Connection $connection */

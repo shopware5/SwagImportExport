@@ -19,12 +19,19 @@ use Shopware\Models\Shop\Shop;
 class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
 {
     protected $config;
+
     protected $mainIterationPart;
+
     protected $mainAdapter;
+
     protected $iterationParts;
+
     protected $iterationTempData;
+
     protected $tempData = [];
+
     protected $tempMapper;
+
     protected $translationColumns;
 
     /**

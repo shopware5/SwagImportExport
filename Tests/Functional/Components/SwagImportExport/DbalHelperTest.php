@@ -16,19 +16,19 @@ use Shopware\Models\Article\Article;
 
 class DbalHelperTest extends TestCase
 {
-    const EXAMPLE_TABLE = 'example_table';
+    public const EXAMPLE_TABLE = 'example_table';
 
-    const DB_COLUMN_NAME = 'name_in_db_one';
-    const ANOTHER_DB_COLUMN_NAME = 'name_in_db_two';
+    public const DB_COLUMN_NAME = 'name_in_db_one';
+    public const ANOTHER_DB_COLUMN_NAME = 'name_in_db_two';
 
-    const MODEL_FIELD_NAME = 'name_in_model_one';
-    const ANOTHER_MODEL_FIELD_NAME = 'name_in_model_two';
+    public const MODEL_FIELD_NAME = 'name_in_model_one';
+    public const ANOTHER_MODEL_FIELD_NAME = 'name_in_model_two';
 
-    const IMPORT_VALUE = 'field value 01';
-    const ANOTHER_IMPORT_VALUE = 'field value 02';
+    public const IMPORT_VALUE = 'field value 01';
+    public const ANOTHER_IMPORT_VALUE = 'field value 02';
 
-    const UPDATE_RECORD_BY_ID = 999;
-    const CREATE_INSERT_STATEMENT = null;
+    public const UPDATE_RECORD_BY_ID = 999;
+    public const CREATE_INSERT_STATEMENT = null;
 
     /**
      * @var ModelManager
@@ -60,7 +60,7 @@ class DbalHelperTest extends TestCase
         $this->modelManager->rollback();
     }
 
-    public function test_get_query_builder_for_entity_should_return_insert_query()
+    public function testGetQueryBuilderForEntityShouldReturnInsertQuery()
     {
         $expectedSQL = 'INSERT INTO example_table (`name_in_db_one`, `name_in_db_two`) VALUES(:dcValue1, :dcValue2)';
         $importData = [
@@ -73,7 +73,7 @@ class DbalHelperTest extends TestCase
         static::assertEquals($expectedSQL, $builder->getSQL(), 'Could not generate insert sql statement.');
     }
 
-    public function test_get_query_builder_for_entity_should_return_update_query()
+    public function testGetQueryBuilderForEntityShouldReturnUpdateQuery()
     {
         $expectedSQL = 'UPDATE example_table SET id = :dcValue1, `name_in_db_one` = :dcValue2, `name_in_db_two` = :dcValue3 WHERE id = :dcValue1';
         $expectedSQLParams = [

@@ -22,7 +22,7 @@ class CustomerValidatorTest extends TestCase
         return new CustomerValidator();
     }
 
-    public function test_validator_with_empty_record()
+    public function testValidatorWithEmptyRecord()
     {
         $customerValidator = $this->createCustomerValidator();
 
@@ -31,7 +31,7 @@ class CustomerValidatorTest extends TestCase
         $customerValidator->checkRequiredFields([]);
     }
 
-    public function test_validator_without_password_throws_exception()
+    public function testValidatorWithoutPasswordThrowsException()
     {
         $customerValidator = new CustomerValidator();
 
@@ -40,7 +40,7 @@ class CustomerValidatorTest extends TestCase
         $customerValidator->checkRequiredFieldsForCreate([]);
     }
 
-    public function test_validator_without_password_and_given_unhashed_throws_exception()
+    public function testValidatorWithoutPasswordAndGivenUnhashedThrowsException()
     {
         $customerValidator = new CustomerValidator();
 
@@ -54,7 +54,7 @@ class CustomerValidatorTest extends TestCase
         );
     }
 
-    public function test_validator_without_customer_group_throws_exception()
+    public function testValidatorWithoutCustomerGroupThrowsException()
     {
         $customerValidator = new CustomerValidator();
 
@@ -70,7 +70,7 @@ class CustomerValidatorTest extends TestCase
         );
     }
 
-    public function test_validator_without_billing_salutation_throws_exception()
+    public function testValidatorWithoutBillingSalutationThrowsException()
     {
         $customerValidator = new CustomerValidator();
 
@@ -87,7 +87,7 @@ class CustomerValidatorTest extends TestCase
         );
     }
 
-    public function test_validator_without_billing_first_name_throws_exception()
+    public function testValidatorWithoutBillingFirstNameThrowsException()
     {
         $customerValidator = new CustomerValidator();
 
@@ -105,7 +105,7 @@ class CustomerValidatorTest extends TestCase
         );
     }
 
-    public function test_validator_without_billing_last_name_throws_exception()
+    public function testValidatorWithoutBillingLastNameThrowsException()
     {
         $customerValidator = new CustomerValidator();
 
@@ -124,7 +124,7 @@ class CustomerValidatorTest extends TestCase
         );
     }
 
-    public function test_validator_without_billing_street_throws_exception()
+    public function testValidatorWithoutBillingStreetThrowsException()
     {
         $customerValidator = new CustomerValidator();
 
@@ -144,7 +144,7 @@ class CustomerValidatorTest extends TestCase
         );
     }
 
-    public function test_validator_without_billing_zip_code_throws_exception()
+    public function testValidatorWithoutBillingZipCodeThrowsException()
     {
         $customerValidator = new CustomerValidator();
 
@@ -165,7 +165,7 @@ class CustomerValidatorTest extends TestCase
         );
     }
 
-    public function test_validator_without_billing_city_throws_exception()
+    public function testValidatorWithoutBillingCityThrowsException()
     {
         $customerValidator = new CustomerValidator();
 
@@ -187,7 +187,7 @@ class CustomerValidatorTest extends TestCase
         );
     }
 
-    public function test_validator_without_billing_country_id_throws_exception()
+    public function testValidatorWithoutBillingCountryIdThrowsException()
     {
         $customerValidator = new CustomerValidator();
 

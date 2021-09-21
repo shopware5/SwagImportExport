@@ -16,7 +16,7 @@ use Shopware\Setup\SwagImportExport\SetupContext;
 
 class Update02RemoveForeignKeyConstraint implements UpdaterInterface
 {
-    const MAX_PLUGIN_VERSION = '1.2.1';
+    public const MAX_PLUGIN_VERSION = '1.2.1';
 
     /**
      * @var Connection

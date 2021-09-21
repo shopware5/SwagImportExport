@@ -14,7 +14,7 @@ use Shopware\Components\SwagImportExport\Validators\Articles\ArticleValidator;
 
 class ArticleValidatorTest extends TestCase
 {
-    public function test_validate_article_without_name_should_throw_exception()
+    public function testValidateArticleWithoutNameShouldThrowException()
     {
         $articleValidator = $this->createArticleValidator();
         $record = [
@@ -29,7 +29,7 @@ class ArticleValidatorTest extends TestCase
         $articleValidator->checkRequiredFieldsForCreate($record);
     }
 
-    public function test_validate_article_without_tax_should_throw_exception()
+    public function testValidateArticleWithoutTaxShouldThrowException()
     {
         $articleValidator = $this->createArticleValidator();
         $record = [
@@ -44,7 +44,7 @@ class ArticleValidatorTest extends TestCase
         $articleValidator->checkRequiredFieldsForCreate($record);
     }
 
-    public function test_validate_article_without_ordernumber_throws_exception()
+    public function testValidateArticleWithoutOrdernumberThrowsException()
     {
         $articleValidator = $this->createArticleValidator();
         $record = [
@@ -57,7 +57,7 @@ class ArticleValidatorTest extends TestCase
         $articleValidator->checkRequiredFields($record);
     }
 
-    public function test_validate_article_without_mainnumber_throws_exception()
+    public function testValidateArticleWithoutMainnumberThrowsException()
     {
         $articleValidator = $this->createArticleValidator();
         $record = [

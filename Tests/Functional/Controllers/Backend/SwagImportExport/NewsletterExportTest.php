@@ -19,8 +19,8 @@ class NewsletterExportTest extends \Enlight_Components_Test_Controller_TestCase
     use DatabaseTestCaseTrait;
     use ExportControllerTrait;
 
-    const FORMAT_XML = 'xml';
-    const FORMAT_CSV = 'csv';
+    public const FORMAT_XML = 'xml';
+    public const FORMAT_CSV = 'csv';
 
     public function setUp(): void
     {
@@ -30,7 +30,7 @@ class NewsletterExportTest extends \Enlight_Components_Test_Controller_TestCase
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
     }
 
-    public function test_newsletter_xml_export()
+    public function testNewsletterXmlExport()
     {
         $this->importNewsletterDemoData();
 
@@ -55,7 +55,7 @@ class NewsletterExportTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertEquals('test_0@example.com', $newsletterNodeList->item(0)->nodeValue);
     }
 
-    public function test_newsletter_csv_export()
+    public function testNewsletterCsvExport()
     {
         $this->importNewsletterDemoData();
 

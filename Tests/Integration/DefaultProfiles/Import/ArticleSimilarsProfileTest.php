@@ -19,7 +19,7 @@ class ArticleSimilarsProfileTest extends TestCase
     use DefaultProfileImportTestCaseTrait;
     use DatabaseTestCaseTrait;
 
-    public function test_write_should_assert_new_similar_article()
+    public function testWriteShouldAssertNewSimilarArticle()
     {
         $filePath = __DIR__ . '/_fixtures/article_similars_profile.csv';
         $expectedOrderNumber = 'SW10003';

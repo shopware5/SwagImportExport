@@ -21,7 +21,7 @@ class ValuesTransformerTest extends TestCase
      * @param null $expectedResult
      * @param null $evaluator
      */
-    public function test_transform($type = null, $data = null, $expectException = false, $expectedResult = null, $evaluator = null)
+    public function testTransform($type = null, $data = null, $expectException = false, $expectedResult = null, $evaluator = null)
     {
         $transformer = $this->getValuesTransformer($evaluator);
 

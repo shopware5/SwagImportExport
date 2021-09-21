@@ -28,7 +28,7 @@ class RelationWriterTest extends TestCase
         return new RelationWriter($articlesDbAdapter);
     }
 
-    public function test_write_accessory_with_invalid_data_throws_exception()
+    public function testWriteAccessoryWithInvalidDataThrowsException()
     {
         $relationWriterAdapter = $this->createRelationWriterAdapter();
 
@@ -44,7 +44,7 @@ class RelationWriterTest extends TestCase
         $relationWriterAdapter->write('3', 'SW10003', $invalidRelationData, 'accessory', true);
     }
 
-    public function test_write_similar_with_invalid_data_throws_exception()
+    public function testWriteSimilarWithInvalidDataThrowsException()
     {
         $relationWriterAdapter = $this->createRelationWriterAdapter();
 

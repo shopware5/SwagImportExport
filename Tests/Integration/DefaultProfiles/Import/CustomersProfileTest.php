@@ -19,7 +19,7 @@ class CustomersProfileTest extends TestCase
     use DefaultProfileImportTestCaseTrait;
     use DatabaseTestCaseTrait;
 
-    public function test_import_should_update_customer_shipping_address()
+    public function testImportShouldUpdateCustomerShippingAddress()
     {
         $filePath = __DIR__ . '/_fixtures/customers_profile.csv';
         $expectedCity = 'New Shipping City';

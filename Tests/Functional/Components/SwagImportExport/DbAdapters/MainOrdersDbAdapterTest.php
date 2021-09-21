@@ -16,7 +16,7 @@ class MainOrdersDbAdapterTest extends TestCase
 {
     use DatabaseTestCaseTrait;
 
-    public function test_read_with_empty_ids_array_throws_exception()
+    public function testReadWithEmptyIdsArrayThrowsException()
     {
         $mainOrdersDbAdapter = $this->createMainOrdersDbAdapter();
 
@@ -28,7 +28,7 @@ class MainOrdersDbAdapterTest extends TestCase
         $mainOrdersDbAdapter->read($ids, $columns);
     }
 
-    public function test_read_with_empty_columns_array_throws_exception()
+    public function testReadWithEmptyColumnsArrayThrowsException()
     {
         $mainOrdersDbAdapter = $this->createMainOrdersDbAdapter();
 
@@ -40,7 +40,7 @@ class MainOrdersDbAdapterTest extends TestCase
         $mainOrdersDbAdapter->read($ids, $columns);
     }
 
-    public function test_read_should_create_valid_columns()
+    public function testReadShouldCreateValidColumns()
     {
         $mainOrdersDbAdapter = $this->createMainOrdersDbAdapter();
 
@@ -58,7 +58,7 @@ class MainOrdersDbAdapterTest extends TestCase
         static::assertArrayHasKey('taxRate', $exportedOrders['taxRateSum'][0], 'Could not fetch tax rate.');
     }
 
-    public function test_read_should_export_correct_result()
+    public function testReadShouldExportCorrectResult()
     {
         $mainOrdersDbAdapter = $this->createMainOrdersDbAdapter();
 
@@ -79,7 +79,7 @@ class MainOrdersDbAdapterTest extends TestCase
         static::assertEquals($exportedOrders['taxRateSum'][0]['taxRate'], 19);
     }
 
-    public function test_read_should_export_correct_result_without_tax_id()
+    public function testReadShouldExportCorrectResultWithoutTaxId()
     {
         // Set the tax ID and rate of a single order detail to null and zero, respectively
         $orderDetailId = 44;

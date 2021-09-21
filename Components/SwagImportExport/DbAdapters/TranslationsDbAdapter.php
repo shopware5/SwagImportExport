@@ -23,10 +23,13 @@ class TranslationsDbAdapter implements DataDbAdapter
     protected $manager;
 
     protected $configuratorGroupRepo;
+
     protected $configuratorOptionRepo;
 
     protected $propertyGroupRepo;
+
     protected $propertyOptionRepo;
+
     protected $propertyValueRepo;
 
     protected $logMessages;

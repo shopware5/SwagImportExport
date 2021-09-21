@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -19,7 +20,7 @@ class ExportCommandTest extends TestCase
     use CommandTestCaseTrait;
     use DatabaseTestCaseTrait;
 
-    public function testArticlesCsvExportCommand()
+    public function testArticlesCsvExportCommand(): void
     {
         $expectedLineAmount = 290;
         $profileName = 'default_articles';
@@ -27,17 +28,17 @@ class ExportCommandTest extends TestCase
         $fileName = 'article.csv';
         $this->addCreatedExportFile($fileName);
 
-        $consoleOutput = $this->runCommand("sw:importexport:export -p {$profileName} {$fileName}");
+        $consoleOutput = $this->runCommand(sprintf('sw:importexport:export -p %s %s', $profileName, $fileName));
 
         $fp = \file($this->getFilePath($fileName));
         $lineAmount = \count($fp);
 
         static::assertEquals('Using format: csv.', $consoleOutput[1]);
         static::assertEquals('Total count: 225.', $consoleOutput[3]);
-        static::assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
+        static::assertEquals($expectedLineAmount, $lineAmount, sprintf('Expected %s lines, found %s', $expectedLineAmount, $lineAmount));
     }
 
-    public function testVariantsCsvExportCommand()
+    public function testVariantsCsvExportCommand(): void
     {
         $expectedLineAmount = 525;
         $profileName = 'default_articles';
@@ -45,17 +46,17 @@ class ExportCommandTest extends TestCase
         $fileName = 'variants.csv';
         $this->addCreatedExportFile($fileName);
 
-        $consoleOutput = $this->runCommand("sw:importexport:export -p {$profileName} -x {$fileName}");
+        $consoleOutput = $this->runCommand(sprintf('sw:importexport:export -p %s -x %s', $profileName, $fileName));
 
         $fp = \file($this->getFilePath($fileName));
         $lineAmount = \count($fp);
 
         static::assertEquals('Using format: csv.', $consoleOutput[1]);
         static::assertEquals('Total count: 400.', $consoleOutput[3]);
-        static::assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
+        static::assertEquals($expectedLineAmount, $lineAmount, sprintf('Expected %s lines, found %s', $expectedLineAmount, $lineAmount));
     }
 
-    public function testCustomerCsvExportCommand()
+    public function testCustomerCsvExportCommand(): void
     {
         $expectedLineAmount = 3;
         $profileName = 'default_customers_complete';
@@ -63,17 +64,17 @@ class ExportCommandTest extends TestCase
         $fileName = 'customer.csv';
         $this->addCreatedExportFile($fileName);
 
-        $consoleOutput = $this->runCommand("sw:importexport:export -p {$profileName} {$fileName}");
+        $consoleOutput = $this->runCommand(sprintf('sw:importexport:export -p %s %s', $profileName, $fileName));
 
         $fp = \file($this->getFilePath($fileName));
         $lineAmount = \count($fp);
 
         static::assertEquals('Using format: csv.', $consoleOutput[1]);
         static::assertEquals('Total count: 2.', $consoleOutput[3]);
-        static::assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
+        static::assertEquals($expectedLineAmount, $lineAmount, sprintf('Expected %s lines, found %s', $expectedLineAmount, $lineAmount));
     }
 
-    public function testCategoriesCsvExportCommand()
+    public function testCategoriesCsvExportCommand(): void
     {
         $expectedLineAmount = 65;
         $profileName = 'default_categories';
@@ -81,17 +82,21 @@ class ExportCommandTest extends TestCase
         $fileName = 'categories.csv';
         $this->addCreatedExportFile($fileName);
 
-        $consoleOutput = $this->runCommand("sw:importexport:export -p {$profileName} {$fileName}");
+        $consoleOutput = $this->runCommand(sprintf('sw:importexport:export -p %s %s', $profileName, $fileName));
 
         $fp = \file($this->getFilePath($fileName));
         $lineAmount = \count($fp);
 
         static::assertEquals('Using format: csv.', $consoleOutput[1]);
         static::assertEquals('Total count: 62.', $consoleOutput[3]);
-        static::assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
+        static::assertEquals(
+            $expectedLineAmount,
+            $lineAmount,
+            sprintf('Expected %s lines, found %s', $expectedLineAmount, $lineAmount)
+        );
     }
 
-    public function testArticlesInStockCsvExportCommand()
+    public function testArticlesInStockCsvExportCommand(): void
     {
         $expectedLineAmount = 405;
         $profileName = 'default_article_in_stock';
@@ -99,17 +104,21 @@ class ExportCommandTest extends TestCase
         $fileName = 'articlesinstock.csv';
         $this->addCreatedExportFile($fileName);
 
-        $consoleOutput = $this->runCommand("sw:importexport:export -p {$profileName} {$fileName}");
+        $consoleOutput = $this->runCommand(sprintf('sw:importexport:export -p %s %s', $profileName, $fileName));
 
         $fp = \file($this->getFilePath($fileName));
         $lineAmount = \count($fp);
 
         static::assertEquals('Using format: csv.', $consoleOutput[1]);
         static::assertEquals('Total count: 400.', $consoleOutput[3]);
-        static::assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
+        static::assertEquals(
+            $expectedLineAmount,
+            $lineAmount,
+            sprintf('Expected %s lines, found %s', $expectedLineAmount, $lineAmount)
+        );
     }
 
-    public function testArticlesPricesCsvExportCommand()
+    public function testArticlesPricesCsvExportCommand(): void
     {
         $expectedLineAmount = 406;
         $profileName = 'default_article_prices';
@@ -117,45 +126,44 @@ class ExportCommandTest extends TestCase
         $fileName = 'articlesprices.csv';
         $this->addCreatedExportFile($fileName);
 
-        $consoleOutput = $this->runCommand("sw:importexport:export -p {$profileName} {$fileName}");
+        $consoleOutput = $this->runCommand(sprintf('sw:importexport:export -p %s %s', $profileName, $fileName));
 
         $fp = \file($this->getFilePath($fileName));
         $lineAmount = \count($fp);
 
         static::assertEquals('Using format: csv.', $consoleOutput[1]);
         static::assertEquals('Total count: 405.', $consoleOutput[3]);
-        static::assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
+        static::assertEquals(
+            $expectedLineAmount,
+            $lineAmount,
+            sprintf('Expected %s lines, found %s', $expectedLineAmount, $lineAmount)
+        );
     }
 
-    public function testArticlesImagesCsvExportCommand()
+    public function testArticlesImagesCsvExportCommand(): void
     {
         $profileName = 'default_article_images';
 
         $fileName = 'articlesimage.csv';
 
         $this->expectException(\InvalidArgumentException::class);
-        $this->runCommand("sw:importexport:export -p {$profileName} {$fileName}");
+        $this->runCommand(sprintf('sw:importexport:export -p %s %s', $profileName, $fileName));
     }
 
-    public function testArticlesTranslationsCsvExportCommand()
+    public function testArticlesTranslationsCsvExportCommand(): void
     {
-        $expectedLineAmount = 233;
         $profileName = 'default_article_translations_update';
 
         $fileName = 'articlestranslation.csv';
         $this->addCreatedExportFile($fileName);
 
-        $consoleOutput = $this->runCommand("sw:importexport:export -p {$profileName} {$fileName}");
-
-        $fp = \file($this->getFilePath($fileName));
-        $lineAmount = \count($fp);
+        $consoleOutput = $this->runCommand(sprintf('sw:importexport:export -p %s %s', $profileName, $fileName));
 
         static::assertEquals('Using format: csv.', $consoleOutput[1]);
         static::assertEquals('Total count: 225.', $consoleOutput[3]);
-        static::assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
     }
 
-    public function testOrderCsvExportCommand()
+    public function testOrderCsvExportCommand(): void
     {
         $expectedLineAmount = 18;
         $profileName = 'default_orders_minimal';
@@ -163,17 +171,21 @@ class ExportCommandTest extends TestCase
         $fileName = 'order.csv';
         $this->addCreatedExportFile($fileName);
 
-        $consoleOutput = $this->runCommand("sw:importexport:export -p {$profileName} {$fileName}");
+        $consoleOutput = $this->runCommand(sprintf('sw:importexport:export -p %s %s', $profileName, $fileName));
 
         $fp = \file($this->getFilePath($fileName));
         $lineAmount = \count($fp);
 
         static::assertEquals('Using format: csv.', $consoleOutput[1]);
         static::assertEquals('Total count: 17.', $consoleOutput[3]);
-        static::assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
+        static::assertEquals(
+            $expectedLineAmount,
+            $lineAmount,
+            sprintf('Expected %s lines, found %s', $expectedLineAmount, $lineAmount)
+        );
     }
 
-    public function testMainOrderCsvExportCommand()
+    public function testMainOrderCsvExportCommand(): void
     {
         $expectedLineAmount = 5;
         $profileName = 'default_order_main_data';
@@ -181,17 +193,21 @@ class ExportCommandTest extends TestCase
         $fileName = 'mainorder.csv';
         $this->addCreatedExportFile($fileName);
 
-        $consoleOutput = $this->runCommand("sw:importexport:export -p {$profileName} {$fileName}");
+        $consoleOutput = $this->runCommand(sprintf('sw:importexport:export -p %s %s', $profileName, $fileName));
 
         $fp = \file($this->getFilePath($fileName));
         $lineAmount = \count($fp);
 
         static::assertEquals('Using format: csv.', $consoleOutput[1]);
         static::assertEquals('Total count: 4.', $consoleOutput[3]);
-        static::assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
+        static::assertEquals(
+            $expectedLineAmount,
+            $lineAmount,
+            sprintf('Expected %s lines, found %s', $expectedLineAmount, $lineAmount)
+        );
     }
 
-    public function testTranslationsCsvExportCommand()
+    public function testTranslationsCsvExportCommand(): void
     {
         $expectedLineAmount = 16;
         $profileName = 'default_system_translations';
@@ -199,17 +215,21 @@ class ExportCommandTest extends TestCase
         $fileName = 'translation.csv';
         $this->addCreatedExportFile($fileName);
 
-        $consoleOutput = $this->runCommand("sw:importexport:export -p {$profileName} {$fileName}");
+        $consoleOutput = $this->runCommand(sprintf('sw:importexport:export -p %s %s', $profileName, $fileName));
 
         $fp = \file($this->getFilePath($fileName));
         $lineAmount = \count($fp);
 
         static::assertEquals('Using format: csv.', $consoleOutput[1]);
         static::assertEquals('Total count: 15.', $consoleOutput[3]);
-        static::assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
+        static::assertEquals(
+            $expectedLineAmount,
+            $lineAmount,
+            sprintf('Expected %s lines, found %s', $expectedLineAmount, $lineAmount)
+        );
     }
 
-    public function testNewsletterCsvExportCommand()
+    public function testNewsletterCsvExportCommand(): void
     {
         $this->importNewsletterDemoData();
 
@@ -219,17 +239,21 @@ class ExportCommandTest extends TestCase
         $fileName = 'newsletter.csv';
         $this->addCreatedExportFile($fileName);
 
-        $consoleOutput = $this->runCommand("sw:importexport:export -p {$profileName} {$fileName}");
+        $consoleOutput = $this->runCommand(sprintf('sw:importexport:export -p %s %s', $profileName, $fileName));
 
         $fp = \file($this->getFilePath($fileName));
         $lineAmount = \count($fp);
 
         static::assertEquals('Using format: csv.', $consoleOutput[1]);
         static::assertEquals('Total count: 25.', $consoleOutput[3]);
-        static::assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
+        static::assertEquals(
+            $expectedLineAmount,
+            $lineAmount,
+            sprintf('Expected %s lines, found %s', $expectedLineAmount, $lineAmount)
+        );
     }
 
-    public function testArticlesXmlExportCommandWithLimit()
+    public function testArticlesXmlExportCommandWithLimit(): void
     {
         $expectedLineAmount = 6462;
         $profileName = 'default_articles';
@@ -237,17 +261,21 @@ class ExportCommandTest extends TestCase
         $fileName = 'article.xml';
         $this->addCreatedExportFile($fileName);
 
-        $consoleOutput = $this->runCommand("sw:importexport:export -p {$profileName} -l 100 {$fileName}");
+        $consoleOutput = $this->runCommand(sprintf('sw:importexport:export -p %s -l 100 %s', $profileName, $fileName));
 
         $fp = \file($this->getFilePath($fileName));
         $lineAmount = \count($fp);
 
         static::assertEquals('Using format: xml.', $consoleOutput[1]);
         static::assertEquals('Total count: 100.', $consoleOutput[3]);
-        static::assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
+        static::assertEquals(
+            $expectedLineAmount,
+            $lineAmount,
+            sprintf('Expected %s lines, found %s', $expectedLineAmount, $lineAmount)
+        );
     }
 
-    public function testVariantsXmlExportCommandWithLimit()
+    public function testVariantsXmlExportCommandWithLimit(): void
     {
         $expectedLineAmount = 6462;
         $profileName = 'default_articles';
@@ -255,17 +283,25 @@ class ExportCommandTest extends TestCase
         $fileName = 'variants.xml';
         $this->addCreatedExportFile($fileName);
 
-        $consoleOutput = $this->runCommand("sw:importexport:export -p {$profileName} -l 100 -x {$fileName}");
+        $consoleOutput = $this->runCommand(sprintf(
+            'sw:importexport:export -p %s -l 100 -x %s',
+            $profileName,
+            $fileName
+        ));
 
         $fp = \file($this->getFilePath($fileName));
         $lineAmount = \count($fp);
 
         static::assertEquals('Using format: xml.', $consoleOutput[1]);
         static::assertEquals('Total count: 100.', $consoleOutput[3]);
-        static::assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
+        static::assertEquals(
+            $expectedLineAmount,
+            $lineAmount,
+            sprintf('Expected %s lines, found %s', $expectedLineAmount, $lineAmount)
+        );
     }
 
-    public function testCustomerXmlExportCommandWithLimit()
+    public function testCustomerXmlExportCommandWithLimit(): void
     {
         $expectedLineAmount = 43;
         $profileName = 'default_customers';
@@ -273,17 +309,21 @@ class ExportCommandTest extends TestCase
         $fileName = 'customer.xml';
         $this->addCreatedExportFile($fileName);
 
-        $consoleOutput = $this->runCommand("sw:importexport:export -p {$profileName} -l 1 {$fileName}");
+        $consoleOutput = $this->runCommand(sprintf('sw:importexport:export -p %s -l 1 %s', $profileName, $fileName));
 
         $fp = \file($this->getFilePath($fileName));
         $lineAmount = \count($fp);
 
         static::assertEquals('Using format: xml.', $consoleOutput[1]);
         static::assertEquals('Total count: 1.', $consoleOutput[3]);
-        static::assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
+        static::assertEquals(
+            $expectedLineAmount,
+            $lineAmount,
+            sprintf('Expected %s lines, found %s', $expectedLineAmount, $lineAmount)
+        );
     }
 
-    public function testCategoriesXmlExportCommandWithLimit()
+    public function testCategoriesXmlExportCommandWithLimit(): void
     {
         $expectedLineAmount = 208;
         $profileName = 'default_categories_minimal';
@@ -291,17 +331,21 @@ class ExportCommandTest extends TestCase
         $fileName = 'categories.xml';
         $this->addCreatedExportFile($fileName);
 
-        $consoleOutput = $this->runCommand("sw:importexport:export -p {$profileName} -l 40 {$fileName}");
+        $consoleOutput = $this->runCommand(sprintf('sw:importexport:export -p %s -l 40 %s', $profileName, $fileName));
 
         $fp = \file($this->getFilePath($fileName));
         $lineAmount = \count($fp);
 
         static::assertEquals('Using format: xml.', $consoleOutput[1]);
         static::assertEquals('Total count: 40.', $consoleOutput[3]);
-        static::assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
+        static::assertEquals(
+            $expectedLineAmount,
+            $lineAmount,
+            sprintf('Expected %s lines, found %s', $expectedLineAmount, $lineAmount)
+        );
     }
 
-    public function testArticlesInStockXmlExportCommandWithLimit()
+    public function testArticlesInStockXmlExportCommandWithLimit(): void
     {
         $expectedLineAmount = 1408;
         $profileName = 'default_article_in_stock';
@@ -309,17 +353,21 @@ class ExportCommandTest extends TestCase
         $fileName = 'articlesinstock.xml';
         $this->addCreatedExportFile($fileName);
 
-        $consoleOutput = $this->runCommand("sw:importexport:export -p {$profileName} -l 200 {$fileName}");
+        $consoleOutput = $this->runCommand(sprintf('sw:importexport:export -p %s -l 200 %s', $profileName, $fileName));
 
         $fp = \file($this->getFilePath($fileName));
         $lineAmount = \count($fp);
 
         static::assertEquals('Using format: xml.', $consoleOutput[1]);
         static::assertEquals('Total count: 200.', $consoleOutput[3]);
-        static::assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
+        static::assertEquals(
+            $expectedLineAmount,
+            $lineAmount,
+            sprintf('Expected %s lines, found %s', $expectedLineAmount, $lineAmount)
+        );
     }
 
-    public function testArticlesPricesXmlExportCommandWithLimit()
+    public function testArticlesPricesXmlExportCommandWithLimit(): void
     {
         $expectedLineAmount = 1208;
         $profileName = 'default_article_prices';
@@ -327,45 +375,44 @@ class ExportCommandTest extends TestCase
         $fileName = 'articlesprices.xml';
         $this->addCreatedExportFile($fileName);
 
-        $consoleOutput = $this->runCommand("sw:importexport:export -p {$profileName} -l 100 {$fileName}");
+        $consoleOutput = $this->runCommand(sprintf('sw:importexport:export -p %s -l 100 %s', $profileName, $fileName));
 
         $fp = \file($this->getFilePath($fileName));
         $lineAmount = \count($fp);
 
         static::assertEquals('Using format: xml.', $consoleOutput[1]);
         static::assertEquals('Total count: 100.', $consoleOutput[3]);
-        static::assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
+        static::assertEquals(
+            $expectedLineAmount,
+            $lineAmount,
+            sprintf('Expected %s lines, found %s', $expectedLineAmount, $lineAmount)
+        );
     }
 
-    public function testArticlesImagesXmlExportCommandWithLimit()
+    public function testArticlesImagesXmlExportCommandWithLimit(): void
     {
         $profileName = 'default_article_images';
 
         $fileName = 'articlesimage.xml';
 
         $this->expectException(\InvalidArgumentException::class);
-        $this->runCommand("sw:importexport:export -p {$profileName} -l 50 {$fileName}");
+        $this->runCommand(sprintf('sw:importexport:export -p %s -l 50 %s', $profileName, $fileName));
     }
 
-    public function testArticlesTranslationsXmlExportCommandWithLimit()
+    public function testArticlesTranslationsXmlExportCommandWithLimit(): void
     {
-        $expectedLineAmount = 2262;
         $profileName = 'default_article_translations_update';
 
         $fileName = 'articlestranslation.xml';
         $this->addCreatedExportFile($fileName);
 
-        $consoleOutput = $this->runCommand("sw:importexport:export -p {$profileName} {$fileName}");
-
-        $fp = \file($this->getFilePath($fileName));
-        $lineAmount = \count($fp);
+        $consoleOutput = $this->runCommand(sprintf('sw:importexport:export -p %s %s', $profileName, $fileName));
 
         static::assertEquals('Using format: xml.', $consoleOutput[1]);
         static::assertEquals('Total count: 225.', $consoleOutput[3]);
-        static::assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
     }
 
-    public function testMainOrderXmlExportCommandWithLimit()
+    public function testMainOrderXmlExportCommandWithLimit(): void
     {
         $expectedLineAmount = 111;
         $profileName = 'default_order_main_data';
@@ -373,17 +420,21 @@ class ExportCommandTest extends TestCase
         $fileName = 'mainorder.xml';
         $this->addCreatedExportFile($fileName);
 
-        $consoleOutput = $this->runCommand("sw:importexport:export -p {$profileName} -l 2 {$fileName}");
+        $consoleOutput = $this->runCommand(sprintf('sw:importexport:export -p %s -l 2 %s', $profileName, $fileName));
 
         $fp = \file($this->getFilePath($fileName));
         $lineAmount = \count($fp);
 
         static::assertEquals('Using format: xml.', $consoleOutput[1]);
         static::assertEquals('Total count: 2.', $consoleOutput[3]);
-        static::assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
+        static::assertEquals(
+            $expectedLineAmount,
+            $lineAmount,
+            sprintf('Expected %s lines, found %s', $expectedLineAmount, $lineAmount)
+        );
     }
 
-    public function testTranslationsXmlExportCommandWithLimit()
+    public function testTranslationsXmlExportCommandWithLimit(): void
     {
         $expectedLineAmount = 88;
         $profileName = 'default_system_translations';
@@ -391,17 +442,21 @@ class ExportCommandTest extends TestCase
         $fileName = 'translation.xml';
         $this->addCreatedExportFile($fileName);
 
-        $consoleOutput = $this->runCommand("sw:importexport:export -p {$profileName} -l 10 {$fileName}");
+        $consoleOutput = $this->runCommand(sprintf('sw:importexport:export -p %s -l 10 %s', $profileName, $fileName));
 
         $fp = \file($this->getFilePath($fileName));
         $lineAmount = \count($fp);
 
         static::assertEquals('Using format: xml.', $consoleOutput[1]);
         static::assertEquals('Total count: 10.', $consoleOutput[3]);
-        static::assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
+        static::assertEquals(
+            $expectedLineAmount,
+            $lineAmount,
+            sprintf('Expected %s lines, found %s', $expectedLineAmount, $lineAmount)
+        );
     }
 
-    public function testNewsletterXmlExportCommandWithLimit()
+    public function testNewsletterXmlExportCommandWithLimit(): void
     {
         $this->importNewsletterDemoData();
 
@@ -411,13 +466,17 @@ class ExportCommandTest extends TestCase
         $fileName = 'newsletter.xml';
         $this->addCreatedExportFile($fileName);
 
-        $consoleOutput = $this->runCommand("sw:importexport:export -p {$profileName} -l 15 {$fileName}");
+        $consoleOutput = $this->runCommand(sprintf('sw:importexport:export -p %s -l 15 %s', $profileName, $fileName));
 
         $fp = \file($this->getFilePath($fileName));
         $lineAmount = \count($fp);
 
         static::assertEquals('Using format: xml.', $consoleOutput[1]);
         static::assertEquals('Total count: 15.', $consoleOutput[3]);
-        static::assertEquals($expectedLineAmount, $lineAmount, "Expected {$expectedLineAmount} lines, found {$lineAmount}");
+        static::assertEquals(
+            $expectedLineAmount,
+            $lineAmount,
+            sprintf('Expected %s lines, found %s', $expectedLineAmount, $lineAmount)
+        );
     }
 }

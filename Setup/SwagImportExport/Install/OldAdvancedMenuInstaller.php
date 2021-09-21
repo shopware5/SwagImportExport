@@ -18,11 +18,11 @@ use Shopware\Setup\SwagImportExport\SetupContext;
  */
 class OldAdvancedMenuInstaller implements InstallerInterface
 {
-    const SHOPWARE_MAX_VERSION = '5.3.0';
+    public const SHOPWARE_MAX_VERSION = '5.3.0';
 
-    const MENU_LABEL = 'Import/Export Advanced';
-    const PLUGIN_NAME = 'SwagImportExport';
-    const MENU_ITEM_CLASS = 'sprite-server--plus';
+    public const MENU_LABEL = 'Import/Export Advanced';
+    public const PLUGIN_NAME = 'SwagImportExport';
+    public const MENU_ITEM_CLASS = 'sprite-server--plus';
 
     /**
      * @var ModelManager

@@ -51,6 +51,7 @@ class CategoryTranslationDbAdapter implements DataDbAdapter
      * @var \Enlight_Event_EventManager
      */
     protected $eventManager;
+
     /**
      * @var Connection
      */

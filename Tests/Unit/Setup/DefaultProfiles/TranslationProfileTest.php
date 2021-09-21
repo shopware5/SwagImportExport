@@ -16,7 +16,7 @@ class TranslationProfileTest extends TestCase
 {
     use DefaultProfileTestCaseTrait;
 
-    public function test_it_can_be_created()
+    public function testItCanBeCreated()
     {
         $translationProfile = new TranslationProfile();
 
@@ -25,7 +25,7 @@ class TranslationProfileTest extends TestCase
         static::assertInstanceOf(ProfileMetaData::class, $translationProfile);
     }
 
-    public function test_it_should_return_valid_profile()
+    public function testItShouldReturnValidProfile()
     {
         $translationProfile = new TranslationProfile();
 

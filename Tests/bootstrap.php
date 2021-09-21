@@ -12,7 +12,7 @@ require __DIR__ . '/../../../../../../../autoload.php';
 
 class ImportExportTestKernel extends \Shopware\Kernel
 {
-    const IMPORT_FILES_DIR = __DIR__ . '/Helper/ImportFiles/';
+    public const IMPORT_FILES_DIR = __DIR__ . '/Helper/ImportFiles/';
 
     /**
      * @throws RuntimeException

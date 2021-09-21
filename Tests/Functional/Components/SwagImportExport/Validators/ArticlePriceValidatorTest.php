@@ -13,7 +13,7 @@ use Shopware\Components\SwagImportExport\Validators\Articles\PriceValidator;
 
 class ArticlePriceValidatorTest extends TestCase
 {
-    public function test_write_with_empty_price()
+    public function testWriteWithEmptyPrice()
     {
         $priceWriterDbAdapter = $this->createArticlePriceValidator();
 

@@ -19,7 +19,7 @@ class MinimalArticleProfileTest extends TestCase
     use DefaultProfileImportTestCaseTrait;
     use DatabaseTestCaseTrait;
 
-    public function test_import_should_create_article()
+    public function testImportShouldCreateArticle()
     {
         $filePath = __DIR__ . '/_fixtures/minimal_article_profile_create.csv';
         $expectedArticleName = 'Test Article';
@@ -31,7 +31,7 @@ class MinimalArticleProfileTest extends TestCase
         static::assertEquals($expectedArticleName, $createdArticle[0]['name']);
     }
 
-    public function test_import_should_create_supplier()
+    public function testImportShouldCreateSupplier()
     {
         $filePath = __DIR__ . '/_fixtures/minimal_article_profile_create.csv';
         $expectedSupplierName = 'New Supplier';

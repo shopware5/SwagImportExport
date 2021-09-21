@@ -16,7 +16,7 @@ class MinimalOrdersProfileTest extends TestCase
 {
     use DefaultProfileTestCaseTrait;
 
-    public function test_it_can_be_created()
+    public function testItCanBeCreated()
     {
         $minimalOrdersProfile = $this->createMinimalOrdersProfile();
 
@@ -25,7 +25,7 @@ class MinimalOrdersProfileTest extends TestCase
         static::assertInstanceOf(ProfileMetaData::class, $minimalOrdersProfile);
     }
 
-    public function test_it_should_return_valid_profile_tree()
+    public function testItShouldReturnValidProfileTree()
     {
         $minimalOrdersProfile = $this->createMinimalOrdersProfile();
 
