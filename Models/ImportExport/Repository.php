@@ -15,6 +15,9 @@ namespace Shopware\CustomModels\ImportExport;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Model\QueryBuilder;
 
+/**
+ * @extends ModelRepository<Profile|Expression|Logger|Session>
+ */
 class Repository extends ModelRepository
 {
     /**
@@ -23,7 +26,7 @@ class Repository extends ModelRepository
      * @param int|null $limit
      * @param int|null $offset
      *
-     * @return \Shopware\Components\Model\QueryBuilder
+     * @return QueryBuilder
      */
     public function getProfilesListQuery(array $filterBy = [], array $orderBy = [], $limit = null, $offset = null)
     {
@@ -65,7 +68,7 @@ class Repository extends ModelRepository
      * @param int|null $limit
      * @param int|null $offset
      *
-     * @return \Shopware\Components\Model\QueryBuilder
+     * @return QueryBuilder
      */
     public function getSessionsListQuery(array $filterBy = [], array $orderBy = [], $limit = null, $offset = null)
     {
@@ -113,7 +116,7 @@ class Repository extends ModelRepository
      * @param int|null $limit
      * @param int|null $offset
      *
-     * @return \Shopware\Components\Model\QueryBuilder
+     * @return QueryBuilder
      */
     public function getExpressionsListQuery(array $filterBy = [], array $orderBy = [], $limit = null, $offset = null)
     {
@@ -153,7 +156,7 @@ class Repository extends ModelRepository
      * @param int|null $limit
      * @param int|null $offset
      *
-     * @return \Shopware\Components\Model\QueryBuilder
+     * @return QueryBuilder
      */
     public function getLogListQuery(array $filterBy = [], array $orderBy = [], $limit = null, $offset = null)
     {

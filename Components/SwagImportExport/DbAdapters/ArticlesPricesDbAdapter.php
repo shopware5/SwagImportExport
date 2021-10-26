@@ -314,8 +314,8 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                 // remove tax
                 if ($customerGroup->getTaxInput()) {
                     $tax = $articleDetail->getArticle()->getTax();
-                    $record['price'] = $record['price'] / (100 + $tax->getTax()) * 100;
-                    $record['pseudoPrice'] = $record['pseudoPrice'] / (100 + $tax->getTax()) * 100;
+                    $record['price'] = $record['price'] / (100 + (float) $tax->getTax()) * 100;
+                    $record['pseudoPrice'] = $record['pseudoPrice'] / (100 + (float) $tax->getTax()) * 100;
                 }
 
                 $price = new ArticlePrice();
@@ -491,7 +491,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
         $dql = "UPDATE Shopware\Models\Article\Price price SET price.to = :toValue
                 WHERE price.customerGroup = :customerGroup
                 AND price.articleDetailsId = :detailId
-                AND price.articleId = :articleId 
+                AND price.articleId = :articleId
                 AND price.to LIKE 'beliebig'";
 
         $query = $this->manager->createQuery($dql);

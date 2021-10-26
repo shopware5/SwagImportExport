@@ -6,14 +6,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Functional\Components\SwagImportExport\Validators;
+namespace SwagImportExport\Tests\Functional\Components\SwagImportExport\Validators;
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\SwagImportExport\Validators\ArticleImageValidator;
 
 class ArticleImageValidatorTest extends TestCase
 {
-    public function testValidateWithoutOrdernumberShouldThrowException()
+    public function testValidateWithoutOrderNumberShouldThrowException(): void
     {
         $validator = $this->createArticleImageValidator();
         $record = [
@@ -27,7 +27,7 @@ class ArticleImageValidatorTest extends TestCase
         $validator->checkRequiredFields($record);
     }
 
-    public function testValidateWithoutImagePathShouldThrowException()
+    public function testValidateWithoutImagePathShouldThrowException(): void
     {
         $validator = $this->createArticleImageValidator();
         $record = [
@@ -41,18 +41,12 @@ class ArticleImageValidatorTest extends TestCase
         $validator->checkRequiredFields($record);
     }
 
-    /**
-     * @return ArticleImageValidator
-     */
-    private function createArticleImageValidator()
+    private function createArticleImageValidator(): ArticleImageValidator
     {
         return new ArticleImageValidator();
     }
 
-    /**
-     * @return string
-     */
-    private function getImportImagePath()
+    private function getImportImagePath(): string
     {
         return 'file://' . \realpath(__DIR__) . '/../../../../Helper/ImportFiles/sw-icon_blue128.png';
     }

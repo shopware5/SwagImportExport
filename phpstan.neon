@@ -5,8 +5,33 @@ parameters:
     level: 8
     symfony:
         constant_hassers: false
-        container_xml_path: '../../../../../../var/cache/production____REVISION___/container.xml'
+        container_xml_path: ../../../../../../var/cache/production____REVISION___/container.xml
         console_application_loader: ../../../../../../tests/phpstan-console-application.php
+    doctrine:
+        repositoryClass: Shopware\Components\Model\ModelRepository
     excludes_analyse:
         - .githooks
         - vendor
+    scanDirectories:
+        - ../../../../../../var/cache/production____REVISION___/doctrine/attributes
+    ignoreErrors:
+        # Needs some improvements in the doctrine PHPStan extensions: see https://github.com/phpstan/phpstan-doctrine/pull/167
+        - '#Cannot call method fetch.*\(\) on Doctrine\\DBAL\\.*Statement\|int#'
+        - # No real entity used in this test, so it is not possible to define the meta data correctly
+            message: '#Doctrine\\ORM\\Mapping\\ClassMetadata#'
+            path: Tests/Functional/Components/SwagImportExport/DbalHelperTest.php
+        - # Mocks with test data
+            message: '#Method SwagImportExport\\Tests\\Functional\\Components\\SwagImportExport\\TransformerChainMock::#'
+            path: Tests/Functional/Components/SwagImportExport/DataWorkflowTest.php
+        - # Could not determine used Doctrine model for meta data in this place
+            message: '#Method Shopware\\Components\\SwagImportExport\\DbalHelper::getNamedParameter\(\) has parameter \$metaData with generic class Doctrine\\ORM\\Mapping\\ClassMetadata but does not specify its types: T#'
+            path: Components/SwagImportExport/DbalHelper.php
+        - # Doctrine PHPStan plugin could not be configured correctly
+            message: '#Property .*repo|Repo.* does not accept Shopware\\Components\\Model\\ModelRepository<.*>#'
+            paths:
+                - Components/SwagImportExport/DataManagers/NewsletterDataManager.php
+                - Components/SwagImportExport/DbAdapters/ArticlesInStockDbAdapter.php
+                - Components/SwagImportExport/Logger/Logger.php
+        -
+            message: '#Method Shopware\\Components\\SwagImportExport\\DbAdapters\\TranslationsDbAdapter::getRepository\(\) return type with generic class Shopware\\Components\\Model\\ModelRepository does not specify its types: TEntityClass#'
+            path: Components/SwagImportExport/DbAdapters/TranslationsDbAdapter.php

@@ -15,6 +15,7 @@ use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Validators\ArticleInStockValidator;
 use Shopware\Models\Article\Detail;
+use Shopware\Models\Article\Repository;
 
 class ArticlesInStockDbAdapter implements DataDbAdapter
 {
@@ -39,7 +40,7 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
     protected $logState;
 
     /**
-     * @var \Shopware\Models\Article\Repository
+     * @var Repository
      */
     protected $repository;
 
@@ -256,7 +257,7 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
                 $this->validator->validate($record, ArticleInStockValidator::$mapper);
 
                 $articleDetail = $this->repository->findOneBy(['number' => $record['orderNumber']]);
-                if (!$articleDetail) {
+                if (!$articleDetail instanceof Detail) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/articlesImages/article_not_found', 'Article with number %s does not exists.');
                     throw new AdapterException(\sprintf($message, $record['orderNumber']));

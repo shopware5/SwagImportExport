@@ -6,7 +6,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Functional\Components\SwagImportExport\Utils;
+namespace SwagImportExport\Tests\Functional\Components\SwagImportExport\Utils;
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\SwagImportExport\Utils\CommandHelper;
@@ -16,7 +16,7 @@ class CommandHelperTest extends TestCase
 {
     use DatabaseTransactionBehaviour;
 
-    public function testGetProductStreamIdByNameShouldBeNull()
+    public function testGetProductStreamIdByNameShouldBeNull(): void
     {
         $commandHelper = new CommandHelper([
             'profileEntity' => 'unitTest',
@@ -27,7 +27,7 @@ class CommandHelperTest extends TestCase
         static::assertNull($this->getProductStreamValue($commandHelper));
     }
 
-    public function testGetProductStreamIdByNameShouldBeLikeGivenId()
+    public function testGetProductStreamIdByNameShouldBeLikeGivenId(): void
     {
         $commandHelper = new CommandHelper([
             'profileEntity' => 'unitTest',
@@ -39,9 +39,10 @@ class CommandHelperTest extends TestCase
         static::assertSame('12', $this->getProductStreamValue($commandHelper));
     }
 
-    public function testGetProductStreamIdByNameShouldFoundCorrectId()
+    public function testGetProductStreamIdByNameShouldFoundCorrectId(): void
     {
         $sql = \file_get_contents(__DIR__ . '/_fixtures/stream.sql');
+        static::assertIsString($sql);
         Shopware()->Container()->get('dbal_connection')->exec($sql);
 
         $commandHelper = new CommandHelper([
@@ -54,10 +55,10 @@ class CommandHelperTest extends TestCase
         static::assertSame('1', $this->getProductStreamValue($commandHelper));
     }
 
-    public function testGetProductStreamIdByNameExpectExceptionNoStreamFound()
+    public function testGetProductStreamIdByNameExpectExceptionNoStreamFound(): void
     {
-        static::expectException(\RuntimeException::class);
-        static::expectExceptionMessage('There are no streams with the name: TestStream');
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('There are no streams with the name: TestStream');
 
         new CommandHelper([
             'profileEntity' => 'unitTest',
@@ -67,13 +68,14 @@ class CommandHelperTest extends TestCase
         ]);
     }
 
-    public function testGetProductStreamIdByNameExpectExceptionMultipleStreamsFound()
+    public function testGetProductStreamIdByNameExpectExceptionMultipleStreamsFound(): void
     {
         $sql = \file_get_contents(__DIR__ . '/_fixtures/multiple_streams.sql');
+        static::assertIsString($sql);
         Shopware()->Container()->get('dbal_connection')->exec($sql);
 
-        static::expectException(\RuntimeException::class);
-        static::expectExceptionMessage('There are 2 streams with the name: TestStream. Please use the stream id.');
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('There are 2 streams with the name: TestStream. Please use the stream id.');
 
         new CommandHelper([
             'profileEntity' => 'unitTest',
@@ -83,7 +85,7 @@ class CommandHelperTest extends TestCase
         ]);
     }
 
-    private function getProductStreamValue(CommandHelper $commandHelper)
+    private function getProductStreamValue(CommandHelper $commandHelper): ?string
     {
         $reflectionProperty = (new \ReflectionClass(CommandHelper::class))->getProperty('productStream');
         $reflectionProperty->setAccessible(true);

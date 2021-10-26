@@ -8,8 +8,11 @@
 
 namespace Shopware\Components\SwagImportExport\Session;
 
+use Doctrine\ORM\EntityRepository;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\Profile\Profile;
 use Shopware\Components\SwagImportExport\UploadPathProvider;
+use Shopware\CustomModels\ImportExport\Repository;
 use Shopware\CustomModels\ImportExport\Session as SessionEntity;
 
 /**
@@ -18,10 +21,13 @@ use Shopware\CustomModels\ImportExport\Session as SessionEntity;
 class Session
 {
     /**
-     * @var \Shopware\CustomModels\ImportExport\Session
+     * @var SessionEntity|null
      */
     protected $sessionEntity;
 
+    /**
+     * @var EntityRepository<SessionEntity>|null
+     */
     protected $sessionRepository;
 
     /**
@@ -30,7 +36,7 @@ class Session
     protected $sessionId;
 
     /**
-     * @var \Shopware\Components\Model\ModelManager
+     * @var ModelManager
      */
     protected $manager;
 
@@ -54,12 +60,16 @@ class Session
     /**
      * Returns session entity
      *
-     * @return \Shopware\CustomModels\ImportExport\Session
+     * @return SessionEntity
      */
     public function getEntity()
     {
         if ($this->sessionEntity === null) {
-            $this->sessionEntity = $this->getSessionRepository()->findOneBy(['id' => $this->getSessionId()]);
+            $session = $this->getSessionRepository()->findOneBy(['id' => $this->getSessionId()]);
+            if (!$session instanceof SessionEntity) {
+                throw new \RuntimeException(sprintf('Cannot find %s with ID "%s"', SessionEntity::class, $this->getSessionId()));
+            }
+            $this->sessionEntity = $session;
         }
 
         return $this->sessionEntity;
@@ -234,7 +244,7 @@ class Session
     /**
      * Returns entity manager
      *
-     * @return \Shopware\Components\Model\ModelManager
+     * @return ModelManager
      */
     public function getManager()
     {
@@ -282,7 +292,7 @@ class Session
     /**
      * Helper Method to get access to the session repository.
      *
-     * @return \Shopware\CustomModels\ImportExport\Repository
+     * @return EntityRepository<SessionEntity>
      */
     public function getSessionRepository()
     {

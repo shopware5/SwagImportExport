@@ -6,14 +6,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Functional\Components\SwagImportExport\Validators;
+namespace SwagImportExport\Tests\Functional\Components\SwagImportExport\Validators;
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\SwagImportExport\Validators\Articles\PriceValidator;
 
 class ArticlePriceValidatorTest extends TestCase
 {
-    public function testWriteWithEmptyPrice()
+    public function testWriteWithEmptyPrice(): void
     {
         $priceWriterDbAdapter = $this->createArticlePriceValidator();
 
@@ -28,10 +28,7 @@ class ArticlePriceValidatorTest extends TestCase
         $priceWriterDbAdapter->checkRequiredFields($invalidArticlePrice, $articleOderNumber);
     }
 
-    /**
-     * @return PriceValidator
-     */
-    private function createArticlePriceValidator()
+    private function createArticlePriceValidator(): PriceValidator
     {
         return new PriceValidator();
     }

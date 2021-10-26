@@ -13,7 +13,7 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Validators\AddressValidator;
-use Shopware\Models\Attribute\CustomerAddress;
+use Shopware\Models\Attribute\CustomerAddress as CustomerAddressAttribute;
 use Shopware\Models\Country\Country;
 use Shopware\Models\Country\State;
 use Shopware\Models\Customer\Address;
@@ -32,7 +32,7 @@ class AddressDbAdapter implements DataDbAdapter
     private $addressValidator;
 
     /**
-     * @var array
+     * @var array<string>
      */
     private $logMessages;
 
@@ -198,6 +198,11 @@ class AddressDbAdapter implements DataDbAdapter
         return [];
     }
 
+    /**
+     * @param string $logMessages
+     *
+     * @return void
+     */
     public function setLogMessages($logMessages)
     {
         $this->logMessages[] = $logMessages;
@@ -302,7 +307,7 @@ class AddressDbAdapter implements DataDbAdapter
      */
     private function getAttributeColumns()
     {
-        $classMetadata = $this->modelManager->getClassMetadata(CustomerAddress::class);
+        $classMetadata = $this->modelManager->getClassMetadata(CustomerAddressAttribute::class);
         $fieldNames = $classMetadata->getFieldNames();
 
         $attributeSelections = [];
@@ -314,7 +319,7 @@ class AddressDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @return CustomerAddress
+     * @return CustomerAddressAttribute
      */
     private function getAttributeModel(array $addressRecord, Address $addressModel)
     {
@@ -329,8 +334,8 @@ class AddressDbAdapter implements DataDbAdapter
             $attribute[$modelFieldName] = $value;
         }
 
-        $attributeModel = new CustomerAddress();
-        if ($addressModel->getAttribute()) {
+        $attributeModel = new CustomerAddressAttribute();
+        if ($addressModel->getAttribute() instanceof CustomerAddressAttribute) {
             $attributeModel = $addressModel->getAttribute();
         }
 

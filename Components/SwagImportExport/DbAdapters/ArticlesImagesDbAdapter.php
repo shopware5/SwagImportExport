@@ -12,6 +12,7 @@ use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Query\Expr\Join;
 use Shopware\Bundle\MediaBundle\MediaService;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Model\QueryBuilder;
 use Shopware\Components\SwagImportExport\DataManagers\ArticleImageDataManager;
 use Shopware\Components\SwagImportExport\DbalHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
@@ -25,6 +26,8 @@ use Shopware\Models\Article\Configurator\Option;
 use Shopware\Models\Article\Detail;
 use Shopware\Models\Article\Image;
 use Shopware\Models\Article\Repository;
+use Shopware\Models\Attribute\ArticleImage;
+use Shopware\Models\Attribute\ArticleImage as ProductImageAttribute;
 use Shopware\Models\Media\Album;
 use Shopware\Models\Media\Media;
 use Symfony\Component\HttpFoundation\File\File;
@@ -285,7 +288,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                 $record = $this->validator->filterEmptyString($record);
                 $this->validator->checkRequiredFields($record);
 
-                /** @var \Shopware\Models\Article\Detail $articleDetailModel */
+                /** @var Detail $articleDetailModel */
                 $articleDetailModel = $this->manager->getRepository(Detail::class)->findOneBy(['number' => $record['ordernumber']]);
                 if (!$articleDetailModel) {
                     $message = SnippetsHelper::getNamespace()
@@ -326,7 +329,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                     }
                 }
 
-                /** @var \Shopware\Models\Article\Article $article */
+                /** @var Article $article */
                 $article = $articleDetailModel->getArticle();
 
                 $name = \pathinfo($record['image'], \PATHINFO_FILENAME);
@@ -469,7 +472,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
      * @param array $columns
      * @param array $ids
      *
-     * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
+     * @return \Doctrine\ORM\QueryBuilder|QueryBuilder
      */
     public function getBuilder($columns, $ids)
     {
@@ -684,12 +687,12 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
         throw new AdapterException(\sprintf($message, $urlArray['scheme']));
     }
 
-    private function createAttribute(array $record, Image $image)
+    private function createAttribute(array $record, Image $image): void
     {
         $attributes = $this->mapAttributes($record);
 
         $attributesId = false;
-        if ($image->getAttribute()) {
+        if ($image->getAttribute() instanceof ProductImageAttribute) {
             $attributesId = $image->getAttribute()->getId();
         }
 
@@ -697,7 +700,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
             $attributes['articleImageId'] = $image->getId();
             $queryBuilder = $this->dbalHelper->getQueryBuilderForEntity(
                 $attributes,
-                \Shopware\Models\Attribute\ArticleImage::class,
+                ArticleImage::class,
                 $attributesId
             );
 

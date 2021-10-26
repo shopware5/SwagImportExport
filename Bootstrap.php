@@ -878,10 +878,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         return ['config', 'backend', 'proxy'];
     }
 
-    /**
-     * @return array
-     */
-    private function getDoctrineModels()
+    private function getDoctrineModels(): array
     {
         return [
             $this->em->getClassMetadata(Session::class),

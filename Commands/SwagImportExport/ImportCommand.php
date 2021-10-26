@@ -9,12 +9,10 @@
 namespace Shopware\Commands\SwagImportExport;
 
 use Shopware\Commands\ShopwareCommand;
-use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\Profile\Profile;
 use Shopware\Components\SwagImportExport\UploadPathProvider;
 use Shopware\Components\SwagImportExport\Utils\CommandHelper;
 use Shopware\CustomModels\ImportExport\Profile as ProfileEntity;
-use Shopware\CustomModels\ImportExport\Repository;
 use Shopware_Plugins_Backend_SwagImportExport_Bootstrap as SwagImportExport_Bootstrap;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -23,19 +21,29 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ImportCommand extends ShopwareCommand
 {
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $profile;
 
-    /** @var ProfileEntity */
+    /**
+     * @var ProfileEntity|null
+     */
     protected $profileEntity;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $format;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $filePath;
 
-    /** @var int */
+    /**
+     * @var int
+     */
     protected $sessionId;
 
     /**
@@ -60,6 +68,11 @@ class ImportCommand extends ShopwareCommand
 
         $this->registerErrorHandler($output);
 
+        // validate profile
+        if (!$this->profileEntity instanceof ProfileEntity) {
+            throw new \Exception(\sprintf('Invalid profile: \'%s\'!', $this->profile));
+        }
+
         $this->start($output, $this->profileEntity, $this->filePath, $this->format);
 
         $profilesMapper = ['articles', 'articlesImages'];
@@ -77,9 +90,7 @@ class ImportCommand extends ShopwareCommand
                 $outputFile = \str_replace('-tmp', '-swag', $tmpFile);
                 \rename($tmpFile, $outputFile);
 
-                /** @var Profile $profile */
                 $profile = $this->getPlugin()->getProfileFactory()->loadHiddenProfile($profileName);
-                /** @var ProfileEntity $profileEntity */
                 $profileEntity = $profile->getEntity();
 
                 $this->start($output, $profileEntity, $outputFile, 'csv');
@@ -132,10 +143,8 @@ class ImportCommand extends ShopwareCommand
 
         $parts = \explode('.', $this->filePath);
 
-        /** @var ModelManager $em */
         $em = $this->container->get('models');
 
-        /** @var Repository $profileRepository */
         $profileRepository = $em->getRepository(ProfileEntity::class);
 
         // if no profile is specified try to find it from the filename
@@ -153,7 +162,7 @@ class ImportCommand extends ShopwareCommand
         }
 
         // validate profile
-        if (!$this->profileEntity) {
+        if (!$this->profileEntity instanceof ProfileEntity) {
             throw new \Exception(\sprintf('Invalid profile: \'%s\'!', $this->profile));
         }
 

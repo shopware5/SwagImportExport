@@ -29,6 +29,7 @@ use Doctrine\ORM\Query\AST\OrderByClause;
 use Doctrine\ORM\Query\AST\PathExpression;
 use Doctrine\ORM\Query\Lexer;
 use Doctrine\ORM\Query\Parser;
+use Doctrine\ORM\Query\QueryException;
 use Doctrine\ORM\Query\SqlWalker;
 
 /**
@@ -47,7 +48,7 @@ class GroupConcat extends FunctionNode
     public $isDistinct = false;
 
     /**
-     * @var PathExpression[]
+     * @var array<PathExpression>
      */
     public $pathExp;
 
@@ -59,7 +60,7 @@ class GroupConcat extends FunctionNode
     public $orderBy;
 
     /**
-     * @throws \Doctrine\ORM\Query\QueryException
+     * @throws QueryException
      */
     public function parse(Parser $parser)
     {
@@ -79,7 +80,11 @@ class GroupConcat extends FunctionNode
 
         while ($lexer->isNextToken(Lexer::T_COMMA)) {
             $parser->match(Lexer::T_COMMA);
-            $this->pathExp[] = $parser->StringPrimary();
+            $stringPrimary = $parser->StringPrimary();
+            if (!$stringPrimary instanceof PathExpression) {
+                continue;
+            }
+            $this->pathExp[] = $stringPrimary;
         }
 
         if ($lexer->isNextToken(Lexer::T_ORDER)) {
@@ -107,7 +112,6 @@ class GroupConcat extends FunctionNode
 
         $fields = [];
 
-        /** @var PathExpression $pathExp */
         foreach ($this->pathExp as $pathExp) {
             $fields[] = $pathExp->dispatch($sqlWalker);
         }

@@ -6,7 +6,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Functional\Components\SwagImportExport\Validators;
+namespace SwagImportExport\Tests\Functional\Components\SwagImportExport\Validators;
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
@@ -14,7 +14,7 @@ use Shopware\Components\SwagImportExport\Validators\Articles\ArticleValidator;
 
 class ArticleValidatorTest extends TestCase
 {
-    public function testValidateArticleWithoutNameShouldThrowException()
+    public function testValidateArticleWithoutNameShouldThrowException(): void
     {
         $articleValidator = $this->createArticleValidator();
         $record = [
@@ -29,7 +29,7 @@ class ArticleValidatorTest extends TestCase
         $articleValidator->checkRequiredFieldsForCreate($record);
     }
 
-    public function testValidateArticleWithoutTaxShouldThrowException()
+    public function testValidateArticleWithoutTaxShouldThrowException(): void
     {
         $articleValidator = $this->createArticleValidator();
         $record = [
@@ -44,7 +44,7 @@ class ArticleValidatorTest extends TestCase
         $articleValidator->checkRequiredFieldsForCreate($record);
     }
 
-    public function testValidateArticleWithoutOrdernumberThrowsException()
+    public function testValidateArticleWithoutOrdernumberThrowsException(): void
     {
         $articleValidator = $this->createArticleValidator();
         $record = [
@@ -57,7 +57,7 @@ class ArticleValidatorTest extends TestCase
         $articleValidator->checkRequiredFields($record);
     }
 
-    public function testValidateArticleWithoutMainnumberThrowsException()
+    public function testValidateArticleWithoutMainnumberThrowsException(): void
     {
         $articleValidator = $this->createArticleValidator();
         $record = [
@@ -70,10 +70,7 @@ class ArticleValidatorTest extends TestCase
         $articleValidator->checkRequiredFields($record);
     }
 
-    /**
-     * @return ArticleValidator
-     */
-    private function createArticleValidator()
+    private function createArticleValidator(): ArticleValidator
     {
         return new ArticleValidator();
     }

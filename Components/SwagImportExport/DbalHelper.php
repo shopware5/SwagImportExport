@@ -51,7 +51,7 @@ class DbalHelper
     }
 
     /**
-     * @param string $entity
+     * @param class-string $entity
      *
      * @return QueryBuilder
      */
@@ -84,6 +84,10 @@ class DbalHelper
                     'field' => $field,
                 ]
             );
+
+            if (!\array_key_exists('columnName', $metaData->fieldMappings[$field])) {
+                continue;
+            }
 
             $key = $this->connection->quoteIdentifier($metaData->fieldMappings[$field]['columnName']);
 
@@ -125,7 +129,7 @@ class DbalHelper
             'float' => \PDO::PARAM_STR,
         ];
 
-        $nullAble = $metaData->fieldMappings[$key]['nullable'];
+        $nullAble = \array_key_exists('nullable', $metaData->fieldMappings[$key]) ? $metaData->fieldMappings[$key]['nullable'] : false;
 
         // Check if nullable
         if (!isset($value) && $nullAble) {

@@ -87,21 +87,21 @@ interface DataDbAdapter
      * Returns unprocessed data. This will be used every time if an import wants to create data which relies on created data.
      * For instance article images, similar or accessory articles.
      *
-     * @return array
+     * @return array|null
      */
     public function getUnprocessedData();
 
     /**
      * Returns all log messages as an array.
      *
-     * @return array
+     * @return array<string>
      */
     public function getLogMessages();
 
     /**
      * Returns true if log messages are available.
      *
-     * @return bool
+     * @return string
      */
     public function getLogState();
 }
