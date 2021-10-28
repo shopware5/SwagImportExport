@@ -89,13 +89,14 @@ class Shopware_Controllers_Backend_SwagImportExportConversion extends Shopware_C
         }
 
         $manager = $this->getModelManager();
-        /** @var Repository $expressionRepository */
         $expressionRepository = $manager->getRepository(Expression::class);
 
         try {
             foreach ($data as $expression) {
-                /** @var Expression $expressionEntity */
                 $expressionEntity = $expressionRepository->findOneBy(['id' => $expression['id']]);
+                if (!$expressionEntity instanceof Expression) {
+                    continue;
+                }
                 $expressionEntity->setVariable($expression['variable']);
                 $expressionEntity->setExportConversion($expression['exportConversion']);
                 $expressionEntity->setImportConversion($expression['importConversion']);
@@ -119,13 +120,14 @@ class Shopware_Controllers_Backend_SwagImportExportConversion extends Shopware_C
         }
 
         $manager = $this->getModelManager();
-        /** @var Repository $expressionRepository */
         $expressionRepository = $manager->getRepository(Expression::class);
 
         try {
             foreach ($data as $expression) {
                 $expressionEntity = $expressionRepository->findOneBy(['id' => $expression['id']]);
-                $manager->remove($expressionEntity);
+                if ($expressionEntity instanceof Expression) {
+                    $manager->remove($expressionEntity);
+                }
             }
 
             $manager->flush();

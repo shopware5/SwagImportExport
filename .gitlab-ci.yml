@@ -28,7 +28,7 @@ default:
         - cd shopware
         - cp .env.dist .env
         - make init
-        - cp -r engine/Shopware/Plugins/Local/Backend/SwagImportExport/Tests/config_gitlab.php config.php
+        - cp -r engine/Shopware/Plugins/Local/Backend/${PLUGIN_NAME}/Tests/config_gitlab.php config.php
         - php bin/console sw:plugin:refresh
         - php bin/console sw:plugin:list
         - php bin/console sw:plugin:install --activate ${PLUGIN_NAME}
@@ -75,7 +75,7 @@ SW 5.6:
         - unzip -q plugin.zip -d shopware/engine/Shopware/Plugins/Local/Backend/${PLUGIN_NAME}
         - cd shopware
         - ./psh.phar init --SW_HOST="localhost"
-        - cp -r engine/Shopware/Plugins/Local/Backend/SwagImportExport/Tests/config_gitlab_56.php config.php
+        - cp -r engine/Shopware/Plugins/Local/Backend/${PLUGIN_NAME}/Tests/config_gitlab_56.php config.php
         - php bin/console sw:plugin:refresh
         - php bin/console sw:plugin:list
         - php bin/console sw:plugin:install --activate ${PLUGIN_NAME}

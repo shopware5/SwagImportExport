@@ -6,7 +6,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Functional\Components\SwagImportExport;
+namespace SwagImportExport\Tests\Functional\Components\SwagImportExport;
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\SwagImportExport\DataIO;
@@ -20,6 +20,7 @@ class DataWorkflowTest extends TestCase
         $postData['session']['prevState'] = 'old';
         $file = __DIR__ . '/_fixtures/emptyFile.csv';
         $handle = \fopen($file, 'r+');
+        static::assertIsResource($handle);
         \ftruncate($handle, 0);
         \fclose($handle);
         $workflow = $this->getWorkflow();
@@ -62,11 +63,19 @@ class FileIoMock extends DataIO
         // DO NOTHING
     }
 
+    /**
+     * @param string     $outputFile
+     * @param mixed|null $data
+     */
     public function writeHeader($outputFile, $data): void
     {
         \file_put_contents($outputFile, $data);
     }
 
+    /**
+     * @param string     $outputFile
+     * @param mixed|null $data
+     */
     public function writeRecords($outputFile, $data): void
     {
         \file_put_contents($outputFile, $data, \FILE_APPEND);
@@ -80,12 +89,12 @@ class TransformerChainMock extends DataTransformerChain
         // DO NOTHING
     }
 
-    public function composeHeader(): string
+    public function composeHeader()
     {
         return 'new | empty | header | test';
     }
 
-    public function transformForward($data): string
+    public function transformForward($data)
     {
         return \PHP_EOL . 'just | another | return | value';
     }

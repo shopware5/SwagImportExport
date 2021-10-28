@@ -8,31 +8,59 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
+use Doctrine\ORM\TransactionRequiredException;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Model\ModelRepository;
+use Shopware\Components\Model\QueryBuilder;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Validators\TranslationValidator;
-use Shopware\Models\Article\Configurator\Group;
-use Shopware\Models\Article\Configurator\Option;
-use Shopware\Models\Property\Value;
+use Shopware\Models\Article\Configurator\Group as ConfiguratorGroup;
+use Shopware\Models\Article\Configurator\Option as ConfiguratorOption;
+use Shopware\Models\Property\Group as PropertyGroup;
+use Shopware\Models\Property\Option as PropertyOption;
+use Shopware\Models\Property\Value as PropertyValue;
 use Shopware\Models\Shop\Shop;
 use Shopware\Models\Translation\Translation;
 
 class TranslationsDbAdapter implements DataDbAdapter
 {
+    /**
+     * @var ModelManager|null
+     */
     protected $manager;
 
+    /**
+     * @var ModelRepository<ConfiguratorGroup>|null
+     */
     protected $configuratorGroupRepo;
 
+    /**
+     * @var ModelRepository<ConfiguratorOption>|null
+     */
     protected $configuratorOptionRepo;
 
+    /**
+     * @var ModelRepository<PropertyGroup>|null
+     */
     protected $propertyGroupRepo;
 
+    /**
+     * @var ModelRepository<PropertyOption>|null
+     */
     protected $propertyOptionRepo;
 
+    /**
+     * @var ModelRepository<PropertyValue>|null
+     */
     protected $propertyValueRepo;
 
-    protected $logMessages;
+    /**
+     * @var array<string>
+     */
+    protected $logMessages = [];
 
     /**
      * @var string
@@ -174,11 +202,13 @@ class TranslationsDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
+     * @throws ORMException
+     * @throws OptimisticLockException
+     * @throws TransactionRequiredException
      * @throws \Enlight_Event_Exception
      * @throws \Exception
+     *
+     * @return void
      */
     public function write($records)
     {
@@ -204,11 +234,12 @@ class TranslationsDbAdapter implements DataDbAdapter
                 $validator->checkRequiredFields($record);
                 $validator->validate($record, TranslationValidator::$mapper);
 
+                $shop = null;
                 if (isset($record['languageId'])) {
                     $shop = $this->getManager()->find(Shop::class, $record['languageId']);
                 }
 
-                if (!$shop) {
+                if (!$shop instanceof Shop) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/translations/lang_id_not_found', 'Language with id %s does not exists');
                     throw new AdapterException(\sprintf($message, $record['languageId']));
@@ -216,6 +247,7 @@ class TranslationsDbAdapter implements DataDbAdapter
 
                 $repository = $this->getRepository($record['objectType']);
 
+                $element = null;
                 if (isset($record['objectKey'])) {
                     $element = $repository->findOneBy(['id' => (int) $record['objectKey']]);
 
@@ -262,10 +294,15 @@ class TranslationsDbAdapter implements DataDbAdapter
 
     public function getUnprocessedData()
     {
+        return null;
     }
 
     /**
+     * @param string $message
+     *
      * @throws \Exception
+     *
+     * @return void
      */
     public function saveMessage($message)
     {
@@ -287,6 +324,11 @@ class TranslationsDbAdapter implements DataDbAdapter
         return $this->logMessages;
     }
 
+    /**
+     * @param string $logMessages
+     *
+     * @return void
+     */
     public function setLogMessages($logMessages)
     {
         $this->logMessages[] = $logMessages;
@@ -300,6 +342,11 @@ class TranslationsDbAdapter implements DataDbAdapter
         return $this->logState;
     }
 
+    /**
+     * @param string $logState
+     *
+     * @return void
+     */
     public function setLogState($logState)
     {
         $this->logState = $logState;
@@ -320,7 +367,7 @@ class TranslationsDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @return \Shopware\Components\Model\QueryBuilder
+     * @return QueryBuilder
      */
     public function getBuilder($ids)
     {
@@ -335,11 +382,13 @@ class TranslationsDbAdapter implements DataDbAdapter
 
     /**
      * Returns configurator group repository
+     *
+     * @return ModelRepository<ConfiguratorGroup>
      */
     public function getConfiguratorGroupRepository()
     {
         if ($this->configuratorGroupRepo === null) {
-            $this->configuratorGroupRepo = $this->getManager()->getRepository(Group::class);
+            $this->configuratorGroupRepo = $this->getManager()->getRepository(ConfiguratorGroup::class);
         }
 
         return $this->configuratorGroupRepo;
@@ -347,11 +396,13 @@ class TranslationsDbAdapter implements DataDbAdapter
 
     /**
      * Returns configurator option repository
+     *
+     * @return ModelRepository<ConfiguratorOption>
      */
     public function getConfiguratorOptionRepository()
     {
         if ($this->configuratorOptionRepo === null) {
-            $this->configuratorOptionRepo = $this->getManager()->getRepository(Option::class);
+            $this->configuratorOptionRepo = $this->getManager()->getRepository(ConfiguratorOption::class);
         }
 
         return $this->configuratorOptionRepo;
@@ -360,12 +411,12 @@ class TranslationsDbAdapter implements DataDbAdapter
     /**
      * Returns property group repository
      *
-     * @return \Shopware\Models\Property\Repository
+     * @return ModelRepository<PropertyGroup>
      */
     public function getPropertyGroupRepository()
     {
         if ($this->propertyGroupRepo === null) {
-            $this->propertyGroupRepo = $this->getManager()->getRepository(\Shopware\Models\Property\Group::class);
+            $this->propertyGroupRepo = $this->getManager()->getRepository(PropertyGroup::class);
         }
 
         return $this->propertyGroupRepo;
@@ -374,12 +425,12 @@ class TranslationsDbAdapter implements DataDbAdapter
     /**
      * Returns property option repository
      *
-     * @return \Shopware\Models\Property\Repository
+     * @return ModelRepository<PropertyOption>
      */
     public function getPropertyOptionRepository()
     {
         if ($this->propertyOptionRepo === null) {
-            $this->propertyOptionRepo = $this->getManager()->getRepository(\Shopware\Models\Property\Option::class);
+            $this->propertyOptionRepo = $this->getManager()->getRepository(PropertyOption::class);
         }
 
         return $this->propertyOptionRepo;
@@ -388,12 +439,12 @@ class TranslationsDbAdapter implements DataDbAdapter
     /**
      * Returns property value repository
      *
-     * @return \Shopware\Models\Property\Repository
+     * @return ModelRepository<PropertyValue>
      */
     public function getPropertyValueRepository()
     {
         if ($this->propertyValueRepo === null) {
-            $this->propertyValueRepo = $this->getManager()->getRepository(Value::class);
+            $this->propertyValueRepo = $this->getManager()->getRepository(PropertyValue::class);
         }
 
         return $this->propertyValueRepo;
@@ -489,9 +540,11 @@ class TranslationsDbAdapter implements DataDbAdapter
     }
 
     /**
+     * @param string $type
+     *
      * @throws AdapterException
      *
-     * @return \Shopware\Components\Model\ModelRepository
+     * @return ModelRepository
      */
     protected function getRepository($type)
     {

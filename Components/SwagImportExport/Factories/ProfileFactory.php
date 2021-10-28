@@ -8,15 +8,15 @@
 
 namespace Shopware\Components\SwagImportExport\Factories;
 
+use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\Profile\Profile;
 use Shopware\Components\SwagImportExport\Utils\TreeHelper;
 use Shopware\CustomModels\ImportExport\Profile as ProfileEntity;
-use Shopware\CustomModels\ImportExport\Repository;
 
 class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
 {
     /**
-     * @var \Shopware\Components\Model\ModelManager
+     * @var ModelManager
      */
     private $modelManager;
 
@@ -38,11 +38,10 @@ class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
             throw new \Exception('Profile id is empty');
         }
 
-        /** @var Repository $profileRepository */
         $profileRepository = $this->modelManager->getRepository(ProfileEntity::class);
         $profileEntity = $profileRepository->findOneBy(['id' => $params['profileId']]);
 
-        if (!$profileEntity) {
+        if (!$profileEntity instanceof ProfileEntity) {
             throw new \Exception('Profile does not exists');
         }
 
@@ -53,7 +52,7 @@ class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
      * @throws \Enlight_Exception
      * @throws \Exception
      *
-     * @return mixed|ProfileEntity
+     * @return ProfileEntity
      */
     public function createProfileModel($data)
     {
@@ -62,7 +61,7 @@ class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
             ['subject' => $this, 'data' => $data]
         );
 
-        if ($event && $event instanceof \Enlight_Event_EventArgs && $event->getReturn() instanceof ProfileEntity) {
+        if ($event instanceof \Enlight_Event_EventArgs && $event->getReturn() instanceof ProfileEntity) {
             return $event->getReturn();
         }
 
@@ -104,11 +103,10 @@ class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
      */
     public function loadHiddenProfile($type)
     {
-        /** @var Repository $profileRepository */
         $profileRepository = $this->modelManager->getRepository(ProfileEntity::class);
         $profileEntity = $profileRepository->findOneBy(['type' => $type, 'hidden' => 1]);
 
-        if (!$profileEntity) {
+        if (!$profileEntity instanceof ProfileEntity) {
             $data = [
                 'name' => $type . 'Shopware',
                 'type' => $type,

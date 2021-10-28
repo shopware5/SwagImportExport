@@ -141,12 +141,11 @@ class PropertyWriter
     }
 
     /**
-     * @param string $entityName
-     * @param array  $data
+     * @param class-string $entityName
      *
      * @return string
      */
-    private function createElement($entityName, $data)
+    private function createElement(string $entityName, array $data)
     {
         $builder = $this->dbalHelper->getQueryBuilderForEntity(
             $data,

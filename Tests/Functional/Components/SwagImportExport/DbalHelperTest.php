@@ -6,9 +6,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Functional\Components\SwagImportExport;
+namespace SwagImportExport\Tests\Functional\Components\SwagImportExport;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\DbalHelper;
@@ -60,7 +61,7 @@ class DbalHelperTest extends TestCase
         $this->modelManager->rollback();
     }
 
-    public function testGetQueryBuilderForEntityShouldReturnInsertQuery()
+    public function testGetQueryBuilderForEntityShouldReturnInsertQuery(): void
     {
         $expectedSQL = 'INSERT INTO example_table (`name_in_db_one`, `name_in_db_two`) VALUES(:dcValue1, :dcValue2)';
         $importData = [
@@ -73,7 +74,7 @@ class DbalHelperTest extends TestCase
         static::assertEquals($expectedSQL, $builder->getSQL(), 'Could not generate insert sql statement.');
     }
 
-    public function testGetQueryBuilderForEntityShouldReturnUpdateQuery()
+    public function testGetQueryBuilderForEntityShouldReturnUpdateQuery(): void
     {
         $expectedSQL = 'UPDATE example_table SET id = :dcValue1, `name_in_db_one` = :dcValue2, `name_in_db_two` = :dcValue3 WHERE id = :dcValue1';
         $expectedSQLParams = [
@@ -94,7 +95,7 @@ class DbalHelperTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject&ModelManager
      */
     private function getModelManagerStub()
     {
@@ -108,10 +109,7 @@ class DbalHelperTest extends TestCase
         return $modelManagerStub;
     }
 
-    /**
-     * @return ClassMetadata
-     */
-    private function createClassMetadataObject()
+    private function createClassMetadataObject(): ClassMetadata
     {
         $classMetaData = new ClassMetadata('ExampleEntity', null);
 

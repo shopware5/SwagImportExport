@@ -6,20 +6,19 @@
  * file that was distributed with this source code.
  */
 
+use Shopware\Kernel;
+use Shopware\Models\Shop\Repository;
 use Shopware\Models\Shop\Shop;
 
 require __DIR__ . '/../../../../../../../autoload.php';
 
-class ImportExportTestKernel extends \Shopware\Kernel
+class ImportExportTestKernel extends Kernel
 {
     public const IMPORT_FILES_DIR = __DIR__ . '/Helper/ImportFiles/';
 
-    /**
-     * @throws RuntimeException
-     */
-    public static function start()
+    public static function start(): void
     {
-        $kernel = new self(\getenv('SHOPWARE_ENV') ?: 'testing', true);
+        $kernel = new self(getenv('SHOPWARE_ENV') ?: 'testing', true);
         $kernel->boot();
 
         Shopware()->Loader()->registerNamespace('SwagImportExport\Tests', __DIR__ . '/../Tests/');
@@ -32,6 +31,7 @@ class ImportExportTestKernel extends \Shopware\Kernel
         $container = $kernel->getContainer();
         $container->get('plugins')->Core()->ErrorHandler()->registerErrorHandler(\E_ALL | \E_STRICT);
 
+        /** @var Repository $repository */
         $repository = $container->get('models')->getRepository(Shop::class);
 
         $shop = $repository->getActiveDefault();
@@ -40,7 +40,7 @@ class ImportExportTestKernel extends \Shopware\Kernel
         $_SERVER['HTTP_HOST'] = $shop->getHost();
 
         if (!self::assertPlugin('SwagImportExport')) {
-            throw new \RuntimeException('Plugin ImportExport must be installed.');
+            throw new RuntimeException('Plugin ImportExport must be installed.');
         }
 
         Shopware()->Db()->query(
@@ -50,12 +50,7 @@ class ImportExportTestKernel extends \Shopware\Kernel
         Shopware()->Container()->get('cache')->clean();
     }
 
-    /**
-     * @param string $name
-     *
-     * @return bool
-     */
-    private static function assertPlugin($name)
+    private static function assertPlugin(string $name): bool
     {
         $sql = 'SELECT 1 FROM s_core_plugins WHERE name = ? AND active = 1';
 

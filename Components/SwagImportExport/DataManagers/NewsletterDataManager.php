@@ -12,6 +12,7 @@ use Shopware\Components\SwagImportExport\DataType\NewsletterDataType;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Models\Newsletter\Group;
+use Shopware\Models\Newsletter\Repository;
 
 class NewsletterDataManager extends DataManager
 {
@@ -21,20 +22,9 @@ class NewsletterDataManager extends DataManager
     private $config;
 
     /**
-     * @var \Shopware\Models\Newsletter\Repository
+     * @var Repository
      */
     private $groupRepository;
-
-    /**
-     * Define which field should be set by default
-     *
-     * @var array
-     */
-    private static $defaultFieldsForCreate = [
-        'string' => [
-            'groupName',
-        ],
-    ];
 
     /**
      * initialises the class properties
@@ -107,7 +97,7 @@ class NewsletterDataManager extends DataManager
     private function getGroupName($email, $groupName)
     {
         $group = $this->groupRepository->findOneBy(['name' => $groupName]);
-        if ($group) {
+        if ($group instanceof Group) {
             return $group->getName();
         }
 

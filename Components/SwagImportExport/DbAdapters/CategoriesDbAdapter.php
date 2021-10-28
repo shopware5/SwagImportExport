@@ -9,7 +9,9 @@
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\DataManagers\CategoriesDataManager;
 use Shopware\Components\SwagImportExport\DataType\CategoryDataType;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
@@ -23,7 +25,7 @@ use Shopware\Models\Customer\Group;
 class CategoriesDbAdapter implements DataDbAdapter
 {
     /**
-     * @var \Shopware\Components\Model\ModelManager
+     * @var ModelManager
      */
     protected $modelManager;
 
@@ -33,7 +35,7 @@ class CategoriesDbAdapter implements DataDbAdapter
     protected $db;
 
     /**
-     * @var \Doctrine\ORM\EntityRepository
+     * @var EntityRepository
      */
     protected $repository;
 
@@ -245,7 +247,6 @@ class CategoriesDbAdapter implements DataDbAdapter
 
                 $this->validateCategoryModel($category);
 
-                /** @var ClassMetadata $metaData */
                 $metaData = $this->modelManager->getClassMetadata(Category::class);
                 $metaData->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_NONE);
 

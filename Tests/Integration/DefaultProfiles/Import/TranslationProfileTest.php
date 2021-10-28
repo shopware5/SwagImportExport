@@ -8,7 +8,6 @@
 
 namespace SwagImportExport\TestsIntegration\DefaultProfiles\Import;
 
-use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use SwagImportExport\Tests\Helper\CommandTestCaseTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
@@ -80,13 +79,14 @@ class TranslationProfileTest extends TestCase
     public function testImportTranslationsShouldUpdateConfiguratorTranslations()
     {
         $this->truncateTranslationTable();
-        /** @var Connection $connection */
         $connection = Shopware()->Container()->get('dbal_connection');
-        $connection->executeQuery(\file_get_contents(__DIR__ . '/_fixtures/configurator_translations_demo.sql'));
+        $sql = \file_get_contents(__DIR__ . '/_fixtures/configurator_translations_demo.sql');
+        static::assertIsString($sql);
+        $connection->executeQuery($sql);
 
         $filePath = __DIR__ . '/_fixtures/translations_configurators_update.csv';
 
-        $this->runCommand("sw:importexport:import -p default_system_translations {$filePath}");
+        $this->runCommand(sprintf('sw:importexport:import -p default_system_translations %s', $filePath));
 
         $updatedConfiguratorTranslations = $this->executeQuery('SELECT * FROM s_core_translations ORDER BY objectKey');
 
@@ -97,7 +97,6 @@ class TranslationProfileTest extends TestCase
 
     private function truncateTranslationTable()
     {
-        /** @var Connection $connection */
         $connection = Shopware()->Container()->get('dbal_connection');
         $connection->executeQuery('DELETE FROM s_core_translations WHERE id > 0');
     }

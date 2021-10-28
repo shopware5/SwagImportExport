@@ -8,16 +8,13 @@
 
 namespace SwagImportExport\Tests\Helper;
 
-use Shopware\Components\Model\ModelManager;
-
 trait DatabaseTestCaseTrait
 {
     /**
      * @before
      */
-    protected function startTransactionBefore()
+    protected function startTransactionBefore(): void
     {
-        /** @var ModelManager $modelManager */
         $modelManager = Shopware()->Container()->get('models');
         $modelManager->beginTransaction();
     }
@@ -25,9 +22,8 @@ trait DatabaseTestCaseTrait
     /**
      * @after
      */
-    protected function rollbackTransactionAfter()
+    protected function rollbackTransactionAfter(): void
     {
-        /** @var ModelManager $modelManager */
         $modelManager = Shopware()->Container()->get('models');
         $modelManager->rollback();
     }

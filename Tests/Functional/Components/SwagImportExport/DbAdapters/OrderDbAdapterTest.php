@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -16,15 +17,17 @@ class OrderDbAdapterTest extends TestCase
 {
     use DatabaseTestCaseTrait;
 
-    public function testWriteShouldBeValid()
+    public function testWriteShouldBeValid(): void
     {
         $ordersDbAdapter = $this->createOrdersDbAdapter();
         $validOrderRecords = $this->getValidDemoRecordsForWriteTest();
 
         $ordersDbAdapter->write($validOrderRecords);
+
+        static::assertTrue(true);
     }
 
-    public function testWriteShouldThrowExceptionWithInvalidArray()
+    public function testWriteShouldThrowExceptionWithInvalidArray(): void
     {
         $ordersDbAdapter = $this->createOrdersDbAdapter();
 
@@ -37,7 +40,7 @@ class OrderDbAdapterTest extends TestCase
         $ordersDbAdapter->write($invalidRecords);
     }
 
-    public function testWriteWithoutOrderDetailIdShouldUseNumberInstead()
+    public function testWriteWithoutOrderDetailIdShouldUseNumberInstead(): void
     {
         $ordersDbAdapter = $this->createOrdersDbAdapter();
 
@@ -45,9 +48,11 @@ class OrderDbAdapterTest extends TestCase
         unset($records['default'][0]['orderDetailId']);
 
         $ordersDbAdapter->write($records);
+
+        static::assertTrue(true);
     }
 
-    public function testWriteWithNotExistingOrderDetailIdShouldThrowAnException()
+    public function testWriteWithNotExistingOrderDetailIdShouldThrowAnException(): void
     {
         $ordersDbAdapter = $this->createOrdersDbAdapter();
 
@@ -59,7 +64,7 @@ class OrderDbAdapterTest extends TestCase
         $ordersDbAdapter->write($records);
     }
 
-    public function testWriteWithNotExistingStatusIdShouldThrowAnException()
+    public function testWriteWithNotExistingStatusIdShouldThrowAnException(): void
     {
         $ordersDbAdapter = $this->createOrdersDbAdapter();
 
@@ -71,7 +76,7 @@ class OrderDbAdapterTest extends TestCase
         $ordersDbAdapter->write($records);
     }
 
-    public function testWriteWithInvalidStatusIdShouldThrowAnException()
+    public function testWriteWithInvalidStatusIdShouldThrowAnException(): void
     {
         $ordersDbAdapter = $this->createOrdersDbAdapter();
 
@@ -83,7 +88,7 @@ class OrderDbAdapterTest extends TestCase
         $ordersDbAdapter->write($records);
     }
 
-    public function testWriteWithInvalidPaymentStatusShouldThrowAnException()
+    public function testWriteWithInvalidPaymentStatusShouldThrowAnException(): void
     {
         $ordersDbAdapter = $this->createOrdersDbAdapter();
 
@@ -95,7 +100,7 @@ class OrderDbAdapterTest extends TestCase
         $ordersDbAdapter->write($records);
     }
 
-    public function testWriteWithEmptyStatusShouldBeValid()
+    public function testWriteWithEmptyStatusShouldBeValid(): void
     {
         $ordersDbAdapter = $this->createOrdersDbAdapter();
 
@@ -103,20 +108,16 @@ class OrderDbAdapterTest extends TestCase
         $records['default'][0]['status'] = null;
 
         $ordersDbAdapter->write($records);
+
+        static::assertTrue(true);
     }
 
-    /**
-     * @return OrdersDbAdapter
-     */
-    private function createOrdersDbAdapter()
+    private function createOrdersDbAdapter(): OrdersDbAdapter
     {
         return new OrdersDbAdapter();
     }
 
-    /**
-     * @return array
-     */
-    private function getValidDemoRecordsForWriteTest()
+    private function getValidDemoRecordsForWriteTest(): array
     {
         $data = [
             'orderId' => 15,

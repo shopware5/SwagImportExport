@@ -9,10 +9,8 @@
 namespace Shopware\Commands\SwagImportExport;
 
 use Shopware\Commands\ShopwareCommand;
-use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\Utils\CommandHelper;
 use Shopware\CustomModels\ImportExport\Profile;
-use Shopware\CustomModels\ImportExport\Repository;
 use Shopware\Models\CustomerStream\CustomerStream;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -27,7 +25,7 @@ class ExportCommand extends ShopwareCommand
     protected $profile;
 
     /**
-     * @var Profile
+     * @var Profile|null
      */
     protected $profileEntity;
 
@@ -57,12 +55,12 @@ class ExportCommand extends ShopwareCommand
     protected $filePath;
 
     /**
-     * @var string
+     * @var \DateTimeInterface|null
      */
     protected $dateFrom;
 
     /**
-     * @var string
+     * @var \DateTimeInterface|null
      */
     protected $dateTo;
 
@@ -214,10 +212,8 @@ class ExportCommand extends ShopwareCommand
 
         $parts = \explode('.', $this->filePath);
 
-        /** @var ModelManager $em */
         $em = $this->container->get('models');
 
-        /** @var Repository $profileRepository */
         $profileRepository = $em->getRepository(Profile::class);
 
         // if no profile is specified try to find it from the filename
@@ -231,7 +227,6 @@ class ExportCommand extends ShopwareCommand
                 }
             }
         } else {
-            /* @var Profile profileEntity */
             $this->profileEntity = $profileRepository->findOneBy(['name' => $this->profile]);
             $this->validateProfiles($input);
         }
@@ -275,6 +270,8 @@ class ExportCommand extends ShopwareCommand
     }
 
     /**
+     * @param CustomerStream|null $customerStream
+     *
      * @throws \RuntimeException
      */
     protected function validateCustomerStream($customerStream)
@@ -283,7 +280,7 @@ class ExportCommand extends ShopwareCommand
             throw new \RuntimeException(\sprintf('Invalid stream: \'%s\'! There is no customer stream with this id.', $this->customerStream));
         }
 
-        if (!\in_array($this->profileEntity->getType(), ['customers', 'addresses'], true)) {
+        if (!$this->profileEntity instanceof Profile || !\in_array($this->profileEntity->getType(), ['customers', 'addresses'], true)) {
             throw new \RuntimeException(\sprintf('Customer stream export can not be used with profile: \'%s\'!', $this->profile));
         }
     }
