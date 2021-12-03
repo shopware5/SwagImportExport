@@ -185,7 +185,7 @@ class CategoryWriter
 
         $this->db->exec($sql);
 
-        return $this->db->lastInsertId();
+        return (int) $this->db->lastInsertId();
     }
 
     /**
