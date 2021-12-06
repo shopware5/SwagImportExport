@@ -10,9 +10,6 @@ namespace Shopware\Components\SwagImportExport\FileIO\Encoders;
 
 use Shopware\Components\Converter\CsvConverter;
 
-/**
- * CsvEncoder
- */
 class CsvEncoder extends CsvConverter
 {
     /**

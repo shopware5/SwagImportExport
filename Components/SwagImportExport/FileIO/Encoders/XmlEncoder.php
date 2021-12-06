@@ -10,9 +10,6 @@ namespace Shopware\Components\SwagImportExport\FileIO\Encoders;
 
 use Shopware\Components\Converter\XmlConverter;
 
-/**
- * XmlEncoder
- */
 class XmlEncoder extends XmlConverter
 {
     /**
