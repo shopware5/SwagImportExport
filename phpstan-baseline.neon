@@ -61,11 +61,6 @@ parameters:
 			path: Bootstrap.php
 
 		-
-			message: "#^Method Shopware_Plugins_Backend_SwagImportExport_Bootstrap\\:\\:injectBackendAceEditor\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Event_EventArgs\\.$#"
-			count: 1
-			path: Bootstrap.php
-
-		-
 			message: "#^Method Shopware_Plugins_Backend_SwagImportExport_Bootstrap\\:\\:onAddConsoleCommand\\(\\) return type with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
 			count: 1
 			path: Bootstrap.php
@@ -77,11 +72,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Plugins_Backend_SwagImportExport_Bootstrap\\:\\:onStartDispatch\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Backend_SwagImportExport_Bootstrap\\:\\:onStartDispatch\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Event_EventArgs\\.$#"
 			count: 1
 			path: Bootstrap.php
 
@@ -4916,11 +4906,6 @@ parameters:
 			path: Components/SwagImportExport/Factories/DataFactory.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\Factories\\\\DataFactory\\:\\:fireCreateFactoryEvent\\(\\) return type has no value type specified in iterable type Enlight_Event_EventArgs\\.$#"
-			count: 1
-			path: Components/SwagImportExport/Factories/DataFactory.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\Factories\\\\DataFactory\\:\\:getSessionRepository\\(\\) return type with generic class Doctrine\\\\ORM\\\\EntityRepository does not specify its types\\: TEntityClass$#"
 			count: 1
 			path: Components/SwagImportExport/Factories/DataFactory.php
@@ -5742,11 +5727,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\Service\\\\ProfileService\\:\\:importProfile\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: Components/SwagImportExport/Service/ProfileService.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$namespace has no value type specified in iterable type Shopware_Components_Plugin_Namespace\\.$#"
 			count: 1
 			path: Components/SwagImportExport/Service/ProfileService.php
 
@@ -7541,11 +7521,6 @@ parameters:
 			path: Components/SwagImportExport/Utils/FileHelper.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\Utils\\\\SnippetsHelper\\:\\:getNamespace\\(\\) return type has no value type specified in iterable type Enlight_Components_Snippet_Namespace\\.$#"
-			count: 1
-			path: Components/SwagImportExport/Utils/SnippetsHelper.php
-
-		-
 			message: "#^Access to an undefined property Shopware_Components_Config\\:\\:\\$version\\.$#"
 			count: 1
 			path: Components/SwagImportExport/Utils/SwagVersionHelper.php
@@ -8131,22 +8106,12 @@ parameters:
 			path: Controllers/Backend/SwagImportExportCron.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_SwagImportExportCron\\:\\:init\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: Controllers/Backend/SwagImportExportCron.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_SwagImportExportCron\\:\\:preDispatch\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: Controllers/Backend/SwagImportExportCron.php
 
 		-
 			message: "#^Negated boolean expression is always false\\.$#"
-			count: 1
-			path: Controllers/Backend/SwagImportExportCron.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$namespace has no value type specified in iterable type Shopware_Components_Plugin_Namespace\\.$#"
 			count: 1
 			path: Controllers/Backend/SwagImportExportCron.php
 
@@ -8262,11 +8227,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_SwagImportExportProfile\\:\\:updateNodeAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: Controllers/Backend/SwagImportExportProfile.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$namespace has no value type specified in iterable type Enlight_Components_Snippet_Namespace\\.$#"
 			count: 1
 			path: Controllers/Backend/SwagImportExportProfile.php
 
