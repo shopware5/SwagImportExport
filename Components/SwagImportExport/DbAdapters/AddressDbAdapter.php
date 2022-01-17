@@ -255,10 +255,7 @@ class AddressDbAdapter implements DataDbAdapter
         ]);
     }
 
-    /**
-     * @return Address|null
-     */
-    private function getAddressModel(array $addressRecord)
+    private function getAddressModel(array $addressRecord): Address
     {
         $addressModel = null;
 
@@ -366,10 +363,7 @@ class AddressDbAdapter implements DataDbAdapter
         $this->logState = $logState;
     }
 
-    /**
-     * @return Address|null
-     */
-    private function createAddressWithId(array $addressRecord)
+    private function createAddressWithId(array $addressRecord): Address
     {
         $connection = $this->modelManager->getConnection();
         $connection->executeQuery(
@@ -383,7 +377,12 @@ class AddressDbAdapter implements DataDbAdapter
 
         $addressId = $connection->lastInsertId();
 
-        return $this->modelManager->find(Address::class, $addressId);
+        $address = $this->modelManager->find(Address::class, $addressId);
+        if (!$address instanceof Address) {
+            throw new \RuntimeException(sprintf('Recently created address with ID %s not found', $addressId));
+        }
+
+        return $address;
     }
 
     /**

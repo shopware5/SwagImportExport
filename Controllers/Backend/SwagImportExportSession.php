@@ -6,8 +6,8 @@
  * file that was distributed with this source code.
  */
 
+use Doctrine\ORM\AbstractQuery;
 use Shopware\Components\SwagImportExport\Utils\DataHelper;
-use Shopware\CustomModels\ImportExport\Repository;
 use Shopware\CustomModels\ImportExport\Session;
 
 /**
@@ -21,6 +21,9 @@ class Shopware_Controllers_Backend_SwagImportExportSession extends Shopware_Cont
         $this->addAclPermission('deleteSession', 'export', 'Insuficient Permissions (deleteSession)');
     }
 
+    /**
+     * @return void
+     */
     public function getSessionDetailsAction()
     {
         $manager = $this->getModelManager();
@@ -28,14 +31,16 @@ class Shopware_Controllers_Backend_SwagImportExportSession extends Shopware_Cont
 
         if ($sessionId === null) {
             $this->View()->assign(['success' => false, 'message' => 'No session found']);
+
+            return;
         }
-        /** @var Repository $sessionRepository */
         $sessionRepository = $manager->getRepository(Session::class);
-        /** @var Session $sessionModel */
         $sessionModel = $sessionRepository->find($sessionId);
 
         if (empty($sessionModel)) {
             $this->View()->assign(['success' => false, 'message' => 'No session found']);
+
+            return;
         }
 
         $dataSet = [
@@ -57,18 +62,15 @@ class Shopware_Controllers_Backend_SwagImportExportSession extends Shopware_Cont
 
     public function getSessionsAction()
     {
-        $manager = $this->getModelManager();
-        /** @var Repository $sessionRepository */
-        $sessionRepository = $manager->getRepository(Session::class);
-
-        $query = $sessionRepository->getSessionsListQuery(
+        $manager = $this->get('models');
+        $query = $manager->getRepository(Session::class)->getSessionsListQuery(
             $this->Request()->getParam('filter', []),
             $this->Request()->getParam('sort', []),
             $this->Request()->getParam('limit', 25),
             $this->Request()->getParam('start', 0)
         )->getQuery();
 
-        $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $query->setHydrationMode(AbstractQuery::HYDRATE_ARRAY);
 
         $paginator = $manager->createPaginator($query);
 
@@ -116,9 +118,10 @@ class Shopware_Controllers_Backend_SwagImportExportSession extends Shopware_Cont
                     return;
                 }
 
-                /** @var Session $entity */
                 $entity = $manager->getRepository(Session::class)->find($sessionId);
-                $manager->remove($entity);
+                if ($entity instanceof Session) {
+                    $manager->remove($entity);
+                }
             }
 
             //Performs all of the collected actions.
@@ -138,17 +141,17 @@ class Shopware_Controllers_Backend_SwagImportExportSession extends Shopware_Cont
     }
 
     /**
-     * @return array
+     * @param array<string, string|int> $data
+     *
+     * @return array<string, mixed>
      */
-    private function translateDataSet(array $data)
+    private function translateDataSet(array $data): array
     {
-        /** @var Shopware_Components_Snippet_Manager $snippetManager */
-        $snippetManager = $this->get('snippets');
-        $namespace = $snippetManager->getNamespace('backend/swag_import_export/session_data');
+        $namespace = $this->get('snippets')->getNamespace('backend/swag_import_export/session_data');
         $result = [];
 
         foreach ($data as $key => $value) {
-            $result[$namespace->get($key, $key)] = $namespace->get($value, $value);
+            $result[(string) $namespace->get($key, $key)] = $namespace->get($value, $value);
         }
 
         return $result;

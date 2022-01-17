@@ -36,6 +36,7 @@ class ImportExportTestHelper extends \Enlight_Components_Test_Plugin_TestCase
         /** @var Connection $connection */
         $connection = Shopware()->Container()->get('dbal_connection');
         $connection->rollBack();
+        parent::tearDown();
     }
 
     /**

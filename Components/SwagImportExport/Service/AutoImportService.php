@@ -56,7 +56,7 @@ class AutoImportService implements AutoImportServiceInterface
 
         if (\in_array($lockerFilename, $files)) {
             $file = \fopen($lockerFileLocation, 'rb');
-            $fileContent = (int) \fread($file, \filesize($lockerFileLocation));
+            $fileContent = (int) \fread($file, (int) \filesize($lockerFileLocation));
             \fclose($file);
 
             if ($fileContent > \time()) {
@@ -187,7 +187,7 @@ class AutoImportService implements AutoImportServiceInterface
     {
         $timeout = \time() + 1800;
         $file = \fopen($lockerFileLocation, 'wb');
-        \fwrite($file, $timeout);
+        \fwrite($file, (string) $timeout);
         \fclose($file);
     }
 

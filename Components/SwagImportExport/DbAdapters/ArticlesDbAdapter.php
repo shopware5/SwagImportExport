@@ -199,13 +199,13 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     public function read($ids, $columns)
     {
-        if (!$ids && empty($ids)) {
+        if (empty($ids)) {
             $message = SnippetsHelper::getNamespace()
                 ->get('adapters/articles_no_ids', 'Can not read articles without ids.');
             throw new \RuntimeException($message);
         }
 
-        if (!$columns && empty($columns)) {
+        if (empty($columns)) {
             $message = SnippetsHelper::getNamespace()
                 ->get('adapters/articles_no_column_names', 'Can not read articles without column names.');
             throw new \RuntimeException($message);
@@ -691,7 +691,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         // Attributes
         $attributesSelect = $this->getArticleAttributes();
 
-        if ($attributesSelect && !empty($attributesSelect)) {
+        if (!empty($attributesSelect)) {
             $columns = \array_merge($columns, $attributesSelect);
         }
 

@@ -131,13 +131,13 @@ class CategoriesDbAdapter implements DataDbAdapter
      */
     public function read($ids, $columns)
     {
-        if (!$ids && empty($ids)) {
+        if (empty($ids)) {
             $message = SnippetsHelper::getNamespace()
                 ->get('adapters/categories/no_ids', 'Can not read categories without ids.');
             throw new \Exception($message);
         }
 
-        if (!$columns && empty($columns)) {
+        if (empty($columns)) {
             $message = SnippetsHelper::getNamespace()
                 ->get('adapters/categories/no_column_names', 'Can not read categories without column names.');
             throw new \Exception($message);
@@ -337,7 +337,7 @@ class CategoriesDbAdapter implements DataDbAdapter
         // Attributes
         $attributesSelect = $this->getAttributes();
 
-        if ($attributesSelect && !empty($attributesSelect)) {
+        if (!empty($attributesSelect)) {
             $columns['default'] = \array_merge($columns['default'], $attributesSelect);
         }
 

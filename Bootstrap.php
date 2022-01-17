@@ -238,7 +238,7 @@ final class Shopware_Plugins_Backend_SwagImportExport_Bootstrap extends Shopware
         $updaters[] = new Update04CreateColumns($setupContext, $this->get('dbal_connection'));
         $updaters[] = new Update05CreateCustomerCompleteProfile($setupContext, $this->get('dbal_connection'));
         $updaters[] = new Update06CreateCategoryTranslationProfile($setupContext, $this->get('dbal_connection'));
-        $updaters[] = new DefaultProfileUpdater($setupContext, $this->get('dbal_connection'), $this->get('snippets'));
+        $updaters[] = new DefaultProfileUpdater($setupContext, $this->get('dbal_connection'));
 
         $this->registerControllers();
         $this->createAclResource();

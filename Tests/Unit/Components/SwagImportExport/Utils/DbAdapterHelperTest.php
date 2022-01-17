@@ -13,17 +13,6 @@ use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
 
 class DbAdapterHelperTest extends TestCase
 {
-    /**
-     * @var DbAdapterHelper
-     */
-    private $SUT;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->SUT = new DbAdapterHelper();
-    }
-
     public function testDecodeHtmlEntities()
     {
         $inputRecords = [

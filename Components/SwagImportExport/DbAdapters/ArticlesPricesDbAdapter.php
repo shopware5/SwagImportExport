@@ -148,13 +148,13 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
      */
     public function read($ids, $columns)
     {
-        if (!$ids && empty($ids)) {
+        if (empty($ids)) {
             $message = SnippetsHelper::getNamespace()
                 ->get('adapters/articles_no_ids', 'Can not read articles without ids');
             throw new \Exception($message);
         }
 
-        if (!$columns && empty($columns)) {
+        if (empty($columns)) {
             $message = SnippetsHelper::getNamespace()
                 ->get('adapters/articles_no_column_names', 'Can not read articles without column names.');
             throw new \Exception($message);

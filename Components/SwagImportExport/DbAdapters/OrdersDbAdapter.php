@@ -133,13 +133,13 @@ class OrdersDbAdapter implements DataDbAdapter
      */
     public function read($ids, $columns)
     {
-        if (!$ids && empty($ids)) {
+        if (empty($ids)) {
             $message = SnippetsHelper::getNamespace()
                 ->get('adapters/orders/no_ids', 'Can not read orders without ids.');
             throw new \Exception($message);
         }
 
-        if (!$columns && empty($columns)) {
+        if (empty($columns)) {
             $message = SnippetsHelper::getNamespace()
                 ->get('adapters/orders/no_column_names', 'Can not read orders without column names.');
             throw new \Exception($message);
@@ -488,7 +488,7 @@ class OrdersDbAdapter implements DataDbAdapter
 
         $attributesSelect = $this->getAttributes();
 
-        if ($attributesSelect && !empty($attributesSelect)) {
+        if (!empty($attributesSelect)) {
             $columns = \array_merge($columns, $attributesSelect);
         }
 

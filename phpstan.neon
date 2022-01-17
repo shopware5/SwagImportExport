@@ -10,7 +10,7 @@ parameters:
         console_application_loader: ../../../../../../tests/phpstan-console-application.php
     doctrine:
         repositoryClass: Shopware\Components\Model\ModelRepository
-    excludes_analyse:
+    excludePaths:
         - .githooks
         - vendor
     scanDirectories:
