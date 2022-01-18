@@ -37,8 +37,10 @@ class CsvConverter
     }
 
     /**
-     * @param array $array
-     * @param null  $stream
+     * @deprecated - Unused, will be removed without replacement in 3.0.0
+     *
+     * @param array         $array
+     * @param resource|null $stream
      *
      * @return bool
      */

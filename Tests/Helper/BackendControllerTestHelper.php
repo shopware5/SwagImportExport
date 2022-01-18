@@ -16,17 +16,6 @@ class BackendControllerTestHelper
 
     private $files = [];
 
-    /**
-     * @var ProfileDataProvider
-     */
-    private $profileDataProvider;
-
-    public function __construct(
-        ProfileDataProvider $profileDataProvider
-    ) {
-        $this->profileDataProvider = $profileDataProvider;
-    }
-
     public function tearDown(): void
     {
         foreach ($this->files as $file) {

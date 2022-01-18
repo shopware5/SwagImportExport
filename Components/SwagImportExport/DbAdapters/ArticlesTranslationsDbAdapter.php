@@ -128,7 +128,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
      */
     public function read($ids, $columns)
     {
-        if (!$ids && empty($ids)) {
+        if (empty($ids)) {
             $message = SnippetsHelper::getNamespace()
                 ->get('adapters/translations/no_ids', 'Can not read translations without ids.');
             throw new \Exception($message);

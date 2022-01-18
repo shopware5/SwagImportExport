@@ -23,8 +23,10 @@ class Repository extends ModelRepository
     /**
      * Returns a query builder object to get all profiles.
      *
-     * @param int|null $limit
-     * @param int|null $offset
+     * @param array<string, string>|array<array{property: string, value: mixed, expression?: string}> $filterBy
+     * @param array<array{property: string, direction: string}>                                       $orderBy
+     * @param int|null                                                                                $limit
+     * @param int|null                                                                                $offset
      *
      * @return QueryBuilder
      */
@@ -44,7 +46,7 @@ class Repository extends ModelRepository
             ]
         );
 
-        $builder->addFilter(['hidden' => 0]);
+        $builder->addFilter(['hidden' => '0']);
 
         if (!empty($filterBy)) {
             $builder->addFilter($filterBy);
@@ -65,8 +67,10 @@ class Repository extends ModelRepository
     /**
      * Returns a query builder object to get all sessions.
      *
-     * @param int|null $limit
-     * @param int|null $offset
+     * @param array<string, string>|array<array{property: string, value: mixed, expression?: string}> $filterBy
+     * @param array<array{property: string, direction: string}>                                       $orderBy
+     * @param int|null                                                                                $limit
+     * @param int|null                                                                                $offset
      *
      * @return QueryBuilder
      */
@@ -113,8 +117,10 @@ class Repository extends ModelRepository
     /**
      * Returns a query builder object to get all expressions.
      *
-     * @param int|null $limit
-     * @param int|null $offset
+     * @param array<string, string>|array<array{property: string, value: mixed, expression?: string}> $filterBy
+     * @param array<array{property: string, direction: string}>                                       $orderBy
+     * @param int|null                                                                                $limit
+     * @param int|null                                                                                $offset
      *
      * @return QueryBuilder
      */
@@ -153,8 +159,10 @@ class Repository extends ModelRepository
     /**
      * Returns a query builder object to get all logs.
      *
-     * @param int|null $limit
-     * @param int|null $offset
+     * @param array<string, string>|array<array{property: string, value: mixed, expression?: string}> $filterBy
+     * @param array<array{property: string, direction: string}>                                       $orderBy
+     * @param int|null                                                                                $limit
+     * @param int|null                                                                                $offset
      *
      * @return QueryBuilder
      */

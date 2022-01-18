@@ -23,22 +23,15 @@ class DefaultProfileUpdater implements UpdaterInterface
     private $connection;
 
     /**
-     * @var \Shopware_Components_Snippet_Manager
-     */
-    private $snippetManager;
-
-    /**
      * @var SetupContext
      */
     private $setupContext;
 
     public function __construct(
         SetupContext $setupContext,
-        Connection $connection,
-        \Shopware_Components_Snippet_Manager $snippetManager
+        Connection $connection
     ) {
         $this->connection = $connection;
-        $this->snippetManager = $snippetManager;
         $this->setupContext = $setupContext;
     }
 

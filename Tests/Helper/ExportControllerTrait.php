@@ -9,7 +9,6 @@
 namespace SwagImportExport\Tests\Helper;
 
 use Shopware\Components\SwagImportExport\UploadPathProvider;
-use SwagImportExport\Tests\Helper\DataProvider\ProfileDataProvider;
 use Tests\Helper\BackendControllerTestHelper;
 
 trait ExportControllerTrait
@@ -29,11 +28,7 @@ trait ExportControllerTrait
      */
     protected function loadDependenciesBefore()
     {
-        $this->backendControllerTestHelper = new BackendControllerTestHelper(
-            new ProfileDataProvider(
-                Shopware()->Container()->get('dbal_connection')
-            )
-        );
+        $this->backendControllerTestHelper = new BackendControllerTestHelper();
 
         $this->uploadPathProvider = Shopware()->Container()->get('swag_import_export.upload_path_provider');
     }
@@ -65,8 +60,8 @@ trait ExportControllerTrait
         $csv = \fopen($filePath, 'rb');
         $mappedCsv = [];
 
-        $header = \fgetcsv($csv, null, ';');
-        while (($row = \fgetcsv($csv, null, ';')) !== false) {
+        $header = \fgetcsv($csv, 0, ';');
+        while (($row = \fgetcsv($csv, 0, ';')) !== false) {
             $tmpRow = \array_combine($header, $row);
             $mappedCsv[$tmpRow[$indexField]] = $tmpRow;
         }

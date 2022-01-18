@@ -160,7 +160,7 @@ class DataIO
         $state = $dbAdapter->getLogState();
         $status = isset($state) ? $state : 'false';
 
-        if (!$messages || empty($messages)) {
+        if (empty($messages)) {
             return;
         }
 

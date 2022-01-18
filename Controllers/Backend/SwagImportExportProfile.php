@@ -526,7 +526,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
 
         $columns = $dbAdapter->getColumns($section);
 
-        if (!$columns || empty($columns)) {
+        if (empty($columns)) {
             $this->View()->assign([
                 'success' => false, 'msg' => 'No columns found.',
             ]);

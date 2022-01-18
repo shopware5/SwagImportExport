@@ -246,7 +246,7 @@ class MainOrdersDbAdapter implements DataDbAdapter
         ];
 
         $attributesSelect = $this->getAttributes();
-        if ($attributesSelect && !empty($attributesSelect)) {
+        if (!empty($attributesSelect)) {
             $columns = \array_merge($columns, $attributesSelect);
         }
 

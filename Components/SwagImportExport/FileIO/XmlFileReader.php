@@ -128,7 +128,7 @@ class XmlFileReader implements FileReader
     }
 
     /**
-     * @param string $node
+     * @param array $node
      */
     protected function findIterationNode($node, array $path)
     {

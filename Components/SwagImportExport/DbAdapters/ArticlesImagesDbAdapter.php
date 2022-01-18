@@ -175,13 +175,13 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
      */
     public function read($ids, $columns)
     {
-        if (!$ids && empty($ids)) {
+        if (empty($ids)) {
             $message = SnippetsHelper::getNamespace()
                 ->get('adapters/articlesImages/no_article_images_ids', 'Can not read article images without ids.');
             throw new \Exception($message);
         }
 
-        if (!$columns && empty($columns)) {
+        if (empty($columns)) {
             $message = SnippetsHelper::getNamespace()
                 ->get('adapters/articlesImages/no_article_images_column', 'Can not read article images without column names.');
             throw new \Exception($message);
@@ -379,7 +379,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                 $this->manager->persist($image);
                 $this->manager->flush();
 
-                if ($relations && !empty($relations)) {
+                if (!empty($relations)) {
                     $this->setImageMappings($relations, $image->getId());
                 }
 

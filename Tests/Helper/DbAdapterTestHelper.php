@@ -33,18 +33,6 @@ class DbAdapterTestHelper extends ImportExportTestHelper
     protected $dataProvider;
 
     /**
-     * @param string $message
-     */
-    public function assertTablesEqual(
-        \PHPUnit_Extensions_Database_DataSet_DefaultTable $expected,
-        \PHPUnit_Extensions_Database_DataSet_ITable $actual,
-        $message = ''
-    ) {
-        $constraint = new \PHPUnit_Extensions_Database_Constraint_TableIsEqual($expected);
-        $this->assertThat($actual, $constraint, $message);
-    }
-
-    /**
      * @param string $testCase
      *
      * @return array
@@ -143,76 +131,6 @@ class DbAdapterTestHelper extends ImportExportTestHelper
         $recordsCountAfterImport = $this->getTableCount($this->dbTable);
 
         $this->assertEquals($expectedInsertedRows, $recordsCountAfterImport - $recordsCountBeforeImport);
-    }
-
-    /**
-     * @param array $data
-     * @param array $expectedRow
-     */
-    public function insertOne($data, $expectedRow)
-    {
-        // Prepare expected data
-        $columnsSelect = \implode(', ', \array_keys($expectedRow));
-        $queryTableBefore = $this->getDatabaseTester()->getConnection()->createQueryTable(
-            $this->dbTable,
-            'SELECT ' . $columnsSelect . ' FROM ' . $this->dbTable
-        );
-
-        $expectedTable = new \PHPUnit_Extensions_Database_DataSet_DefaultTable($queryTableBefore->getTableMetaData());
-        $expectedTable->addTableRows($queryTableBefore);
-        $expectedTable->addRow($expectedRow);
-
-        // Start the action
-        $dataFactory = $this->Plugin()->getDataFactory();
-        $dbAdapter = $dataFactory->createDbAdapter($this->dbAdapter);
-        $dbAdapter->write($data);
-
-        // Assert
-        $resultTable = $this->getDatabaseTester()->getConnection()->createQueryTable(
-            $this->dbTable,
-            'SELECT ' . $columnsSelect . ' FROM ' . $this->dbTable
-        );
-
-        $this->assertTablesEqual($expectedTable, $resultTable);
-    }
-
-    /**
-     * @param array $category
-     * @param array $expectedRow
-     */
-    public function updateOne($category, $expectedRow)
-    {
-        // Prepare expected data
-        $columnsSelect = \implode(', ', \array_keys($expectedRow));
-        $queryTableBefore = $this->getDatabaseTester()->getConnection()->createQueryTable(
-            $this->dbTable,
-            'SELECT ' . $columnsSelect . ' FROM ' . $this->dbTable
-        );
-        $rowCount = $queryTableBefore->getRowCount();
-        $expectedTable = new \PHPUnit_Extensions_Database_DataSet_DefaultTable($queryTableBefore->getTableMetaData());
-
-        for ($row = 0; $row < $rowCount; ++$row) {
-            $currentRow = $queryTableBefore->getRow($row);
-            if ($currentRow['id'] == $expectedRow['id']) {
-                $expectedTable->addRow($expectedRow);
-            } else {
-                $expectedTable->addRow($currentRow);
-            }
-        }
-
-        // Start the action
-        $dataFactory = $this->Plugin()->getDataFactory();
-
-        $catDbAdapter = $dataFactory->createDbAdapter($this->dbAdapter);
-        $catDbAdapter->write($category);
-
-        // Assert
-        $queryTable = $this->getDatabaseTester()->getConnection()->createQueryTable(
-            $this->dbTable,
-            'SELECT ' . $columnsSelect . ' FROM ' . $this->dbTable
-        );
-
-        $this->assertTablesEqual($expectedTable, $queryTable);
     }
 
     /**

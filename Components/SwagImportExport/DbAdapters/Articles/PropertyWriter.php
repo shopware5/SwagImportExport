@@ -38,7 +38,7 @@ class PropertyWriter
     private $db;
 
     /**
-     * @var array
+     * @var array<string, int>
      */
     private $groups;
 
@@ -142,10 +142,8 @@ class PropertyWriter
 
     /**
      * @param class-string $entityName
-     *
-     * @return string
      */
-    private function createElement(string $entityName, array $data)
+    private function createElement(string $entityName, array $data): int
     {
         $builder = $this->dbalHelper->getQueryBuilderForEntity(
             $data,
@@ -154,7 +152,7 @@ class PropertyWriter
         );
         $builder->execute();
 
-        return $this->connection->lastInsertId();
+        return (int) $this->connection->lastInsertId();
     }
 
     /**
@@ -192,10 +190,10 @@ class PropertyWriter
     /**
      * Updates/Creates relation between articles and property groups
      *
-     * @param int|string $filterGroupId
-     * @param int|string $articleId
+     * @param int $filterGroupId
+     * @param int $articleId
      */
-    private function updateGroupsRelation($filterGroupId, $articleId)
+    private function updateGroupsRelation($filterGroupId, $articleId): void
     {
         $this->db->query('UPDATE s_articles SET filtergroupID = ? WHERE id = ?', [$filterGroupId, $articleId]);
     }
@@ -211,11 +209,11 @@ class PropertyWriter
     /**
      * @param string $name
      *
-     * @return int
+     * @return int|null
      */
     private function getFilterGroupIdByNameFromCacheProperty($name)
     {
-        return $this->groups[$name];
+        return $this->groups[$name] ?? null;
     }
 
     /**
@@ -255,12 +253,10 @@ class PropertyWriter
 
     /**
      * @param string|int $articleId
-     *
-     * @return string|bool
      */
-    private function getGroupFromArticle($articleId)
+    private function getGroupFromArticle($articleId): int
     {
-        return $this->connection->fetchColumn(
+        return (int) $this->connection->fetchColumn(
             'SELECT `filtergroupID` FROM s_articles
              INNER JOIN s_filter ON s_articles.filtergroupID = s_filter.id
              WHERE s_articles.id = ?',
@@ -297,13 +293,11 @@ class PropertyWriter
     }
 
     /**
-     * @param string $propertyData
+     * @param array  $propertyData
      * @param string $valueName
      * @param int    $optionId
-     *
-     * @return string
      */
-    private function createValue($propertyData, $valueName, $optionId)
+    private function createValue($propertyData, $valueName, $optionId): int
     {
         $position = !empty($propertyData['propertyValuePosition']) ? $propertyData['propertyValuePosition'] : 0;
 
@@ -318,10 +312,8 @@ class PropertyWriter
 
     /**
      * @param string $groupName
-     *
-     * @return string
      */
-    private function createGroup($groupName)
+    private function createGroup($groupName): int
     {
         $groupData = [
             'name' => $groupName,
@@ -337,18 +329,18 @@ class PropertyWriter
      * @param int   $articleId
      * @param array $propertyData
      *
-     * @return string|null
+     * @return int
      */
     private function findCreateOrUpdateGroup($articleId, $propertyData)
     {
         $filterGroupId = $this->getGroupFromArticle($articleId);
 
         if (!$filterGroupId && $propertyData['propertyGroupName']) {
-            $fitlerGroupName = $propertyData['propertyGroupName'];
-            $filterGroupId = $this->getFilterGroupIdByNameFromCacheProperty($fitlerGroupName);
+            $filterGroupName = $propertyData['propertyGroupName'];
+            $filterGroupId = $this->getFilterGroupIdByNameFromCacheProperty($filterGroupName);
 
             if (!$filterGroupId) {
-                $filterGroupId = $this->createGroup($fitlerGroupName);
+                $filterGroupId = $this->createGroup($filterGroupName);
             }
 
             $this->updateGroupsRelation($filterGroupId, $articleId);
@@ -359,7 +351,7 @@ class PropertyWriter
 
     /**
      * @param string $orderNumber
-     * @param string $propertyData
+     * @param array  $propertyData
      *
      * @throws AdapterException
      *

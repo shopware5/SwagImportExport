@@ -47,10 +47,7 @@ class Update03DefaultProfileSupportTest extends TestCase
         $setProfileNameColumnUniqueUpdater->update();
     }
 
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|Connection
-     */
-    private function getDbalMockThrowsException()
+    private function getDbalMockThrowsException(): Connection
     {
         $dbalMock = $this->createMock(Connection::class);
         $dbalMock
@@ -60,10 +57,7 @@ class Update03DefaultProfileSupportTest extends TestCase
         return $dbalMock;
     }
 
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|Connection
-     */
-    private function getDbalMockThrowsIntegrityConstraintException()
+    private function getDbalMockThrowsIntegrityConstraintException(): Connection
     {
         $dbalMock = $this->createMock(Connection::class);
         $dbalMock
@@ -73,10 +67,7 @@ class Update03DefaultProfileSupportTest extends TestCase
         return $dbalMock;
     }
 
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Shopware_Components_Snippet_Manager
-     */
-    private function getSnippetManagerMock()
+    private function getSnippetManagerMock(): \Shopware_Components_Snippet_Manager
     {
         $snippetNamespaceMock = $this->createMock(\Enlight_Components_Snippet_Namespace::class);
         $snippetNamespaceMock->method('get')
