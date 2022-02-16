@@ -283,6 +283,8 @@ class CategoriesDbAdapter implements DataDbAdapter
                     'c.id as categoryId',
                 ];
         }
+
+        throw new \RuntimeException(sprintf('No case found for section "%s"', $section));
     }
 
     /**

@@ -28,6 +28,8 @@ class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
     }
 
     /**
+     * @param array{profileId?: int} $params
+     *
      * @throws \Exception
      *
      * @return Profile

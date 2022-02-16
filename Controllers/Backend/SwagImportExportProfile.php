@@ -594,7 +594,15 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
             return;
         }
 
-        $columns = $dbAdapter->getParentKeys($section);
+        try {
+            $columns = $dbAdapter->getParentKeys($section);
+        } catch (RuntimeException $e) {
+            $this->View()->assign([
+               'success' => false, 'message' => $e->getMessage(),
+            ]);
+
+            return;
+        }
 
         foreach ($columns as &$column) {
             $match = '';

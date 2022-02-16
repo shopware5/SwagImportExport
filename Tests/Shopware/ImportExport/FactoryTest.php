@@ -19,7 +19,7 @@ use Shopware\Components\SwagImportExport\FileIO\XmlFileWriter;
 use Shopware\Components\SwagImportExport\Utils\DataColumnOptions;
 use Shopware\Components\SwagImportExport\Utils\DataFilter;
 use Shopware\Components\SwagImportExport\Utils\DataLimit;
-use Tests\Helper\ImportExportTestHelper;
+use SwagImportExport\Tests\Helper\ImportExportTestHelper;
 
 class FactoryTest extends ImportExportTestHelper
 {

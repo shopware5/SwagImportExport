@@ -6,7 +6,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Helper;
+namespace SwagImportExport\Tests\Helper;
 
 use Shopware\Components\SwagImportExport\Factories\DataFactory;
 use Symfony\Component\Yaml\Parser;

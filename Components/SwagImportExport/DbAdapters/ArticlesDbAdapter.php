@@ -651,6 +651,8 @@ class ArticlesDbAdapter implements DataDbAdapter
                     'variant.id as variantId',
                 ];
         }
+
+        throw new \RuntimeException(sprintf('No case found for section "%s"', $section));
     }
 
     /**

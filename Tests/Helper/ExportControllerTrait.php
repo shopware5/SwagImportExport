@@ -9,7 +9,6 @@
 namespace SwagImportExport\Tests\Helper;
 
 use Shopware\Components\SwagImportExport\UploadPathProvider;
-use Tests\Helper\BackendControllerTestHelper;
 
 trait ExportControllerTrait
 {

@@ -11,7 +11,7 @@ namespace Tests\Shopware\ImportExport;
 use Doctrine\DBAL\Connection;
 use Shopware\Components\SwagImportExport\DbAdapters\ArticlesDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\DataDbAdapter;
-use Tests\Helper\DbAdapterTestHelper;
+use SwagImportExport\Tests\Helper\DbAdapterTestHelper;
 
 class ArticlesDbAdapterTest extends DbAdapterTestHelper
 {
