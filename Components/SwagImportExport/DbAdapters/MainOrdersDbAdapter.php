@@ -212,6 +212,7 @@ class MainOrdersDbAdapter implements DataDbAdapter
             'orders.currencyFactor',
             'orders.transactionId',
             'orders.trackingCode',
+            "DATE_FORMAT(orders.clearedDate, '%Y-%m-%d %H:%i:%s') as clearedDate",
             "DATE_FORMAT(orders.orderTime, '%Y-%m-%d %H:%i:%s') as orderTime",
             'customer.email',
             'billing.number as customerNumber',
