@@ -9,7 +9,7 @@
 namespace Tests\Shopware\ImportExport;
 
 use Shopware\Components\SwagImportExport\Logger\Logger;
-use Tests\Helper\ImportExportTestHelper;
+use SwagImportExport\Tests\Helper\ImportExportTestHelper;
 
 class DataIOTest extends ImportExportTestHelper
 {

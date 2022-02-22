@@ -9,7 +9,6 @@
 namespace SwagImportExport\Tests\Functional\Components\SwagImportExport;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\DbalHelper;
@@ -94,10 +93,7 @@ class DbalHelperTest extends TestCase
         static::assertEquals($expectedSQLParams, $builder->getParameters(), "Parameters for query builder wasn't set correctly.");
     }
 
-    /**
-     * @return MockObject&ModelManager
-     */
-    private function getModelManagerStub()
+    private function getModelManagerStub(): ModelManager
     {
         $modelManagerStub = $this->getMockBuilder(ModelManager::class)
             ->disableOriginalConstructor()

@@ -6,7 +6,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Helper;
+namespace SwagImportExport\Tests\Helper;
 
 use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
 

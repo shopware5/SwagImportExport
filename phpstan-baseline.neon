@@ -251,16 +251,6 @@ parameters:
 			path: Components/Converter/CsvConverter.php
 
 		-
-			message: "#^Cannot access offset int on array\\<int, \\(array\\|string\\)\\>\\|false\\.$#"
-			count: 1
-			path: Components/Converter/CsvConverter.php
-
-		-
-			message: "#^Cannot access offset int on array\\<int, string\\>\\|false\\.$#"
-			count: 10
-			path: Components/Converter/CsvConverter.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Converter\\\\CsvConverter\\:\\:_decode_line\\(\\) has parameter \\$line with no type specified\\.$#"
 			count: 1
 			path: Components/Converter/CsvConverter.php
@@ -338,11 +328,6 @@ parameters:
 		-
 			message: "#^Parameter \\#1 \\$fp of function fwrite expects resource, resource\\|false given\\.$#"
 			count: 1
-			path: Components/Converter/CsvConverter.php
-
-		-
-			message: "#^Parameter \\#1 \\$var of function count expects array\\|Countable, array\\<int, string\\>\\|false given\\.$#"
-			count: 2
 			path: Components/Converter/CsvConverter.php
 
 		-
@@ -481,7 +466,7 @@ parameters:
 			path: Components/DoctrineExtensions/Query/Mysql/GroupConcat.php
 
 		-
-			message: "#^Offset 'value' does not exist on array\\|null\\.$#"
+			message: "#^Offset 'value' does not exist on array\\{value\\: string, type\\: int\\|string\\|null, position\\: int\\}\\|null\\.$#"
 			count: 1
 			path: Components/DoctrineExtensions/Query/Mysql/GroupConcat.php
 
@@ -1396,7 +1381,7 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/Articles/ArticleWriter.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\Articles\\\\ArticleWriter\\:\\:createOrUpdateMainDetail\\(\\) should return int but returns string\\.$#"
+			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\Articles\\\\ArticleWriter\\:\\:createOrUpdateMainDetail\\(\\) should return int but returns int\\|string\\|false\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/Articles/ArticleWriter.php
 
@@ -1516,12 +1501,27 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/Articles/ConfiguratorWriter.php
 
 		-
+			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\Articles\\\\ConfiguratorWriter\\:\\:createGroup\\(\\) should return string but returns int\\|string\\|false\\.$#"
+			count: 1
+			path: Components/SwagImportExport/DbAdapters/Articles/ConfiguratorWriter.php
+
+		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\Articles\\\\ConfiguratorWriter\\:\\:createOption\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/Articles/ConfiguratorWriter.php
 
 		-
+			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\Articles\\\\ConfiguratorWriter\\:\\:createOption\\(\\) should return string but returns int\\|string\\|false\\.$#"
+			count: 1
+			path: Components/SwagImportExport/DbAdapters/Articles/ConfiguratorWriter.php
+
+		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\Articles\\\\ConfiguratorWriter\\:\\:createSet\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Components/SwagImportExport/DbAdapters/Articles/ConfiguratorWriter.php
+
+		-
+			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\Articles\\\\ConfiguratorWriter\\:\\:createSet\\(\\) should return string but returns int\\|string\\|false\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/Articles/ConfiguratorWriter.php
 
@@ -2126,11 +2126,6 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/Articles/TranslationWriter.php
 
 		-
-			message: "#^Cannot call method fetchAll\\(\\) on Zend_Db_Statement_Pdo\\|false\\.$#"
-			count: 5
-			path: Components/SwagImportExport/DbAdapters/ArticlesDbAdapter.php
-
-		-
 			message: "#^Cannot call method getId\\(\\) on Shopware\\\\Models\\\\Category\\\\Category\\|null\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/ArticlesDbAdapter.php
@@ -2297,11 +2292,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesDbAdapter\\:\\:getParentKeys\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/ArticlesDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesDbAdapter\\:\\:getParentKeys\\(\\) should return array but return statement is missing\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/ArticlesDbAdapter.php
 
@@ -2653,11 +2643,6 @@ parameters:
 		-
 			message: "#^Cannot access offset 'path' on array\\{scheme\\?\\: string, host\\?\\: string, port\\?\\: int, user\\?\\: string, pass\\?\\: string, path\\?\\: string, query\\?\\: string, fragment\\?\\: string\\}\\|false\\.$#"
 			count: 2
-			path: Components/SwagImportExport/DbAdapters/ArticlesImagesDbAdapter.php
-
-		-
-			message: "#^Cannot call method fetchAll\\(\\) on Zend_Db_Statement_Pdo\\|false\\.$#"
-			count: 1
 			path: Components/SwagImportExport/DbAdapters/ArticlesImagesDbAdapter.php
 
 		-
@@ -3181,11 +3166,6 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/ArticlesPricesDbAdapter.php
 
 		-
-			message: "#^Cannot call method fetchAll\\(\\) on Zend_Db_Statement_Pdo\\|false\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/ArticlesTranslationsDbAdapter.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesTranslationsDbAdapter\\:\\:getAttributes\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/ArticlesTranslationsDbAdapter.php
@@ -3321,11 +3301,6 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/ArticlesTranslationsDbAdapter.php
 
 		-
-			message: "#^Cannot call method fetchAll\\(\\) on Zend_Db_Statement_Pdo\\|false\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/CategoriesDbAdapter.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\CategoriesDbAdapter\\:\\:checkIfRelationExists\\(\\) has parameter \\$categoryId with no type specified\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/CategoriesDbAdapter.php
@@ -3407,11 +3382,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\CategoriesDbAdapter\\:\\:getParentKeys\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/CategoriesDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\CategoriesDbAdapter\\:\\:getParentKeys\\(\\) should return array but return statement is missing\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/CategoriesDbAdapter.php
 
@@ -3776,11 +3746,6 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/CustomerCompleteDbAdapter.php
 
 		-
-			message: "#^Cannot call method fetchAll\\(\\) on Zend_Db_Statement_Pdo\\|false\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/CustomerDbAdapter.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\CustomerDbAdapter\\:\\:findExistingEntries\\(\\) has parameter \\$record with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/CustomerDbAdapter.php
@@ -4104,11 +4069,6 @@ parameters:
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\DataDbAdapter\\:\\:write\\(\\) has parameter \\$records with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/DataDbAdapter.php
-
-		-
-			message: "#^Cannot call method fetch\\(\\) on Zend_Db_Statement_Pdo\\|false\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/MainOrdersDbAdapter.php
 
 		-
 			message: "#^Else branch is unreachable because ternary operator condition is always true\\.$#"
@@ -4476,11 +4436,6 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/NewsletterDbAdapter.php
 
 		-
-			message: "#^Cannot call method fetch\\(\\) on Zend_Db_Statement_Pdo\\|false\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/OrdersDbAdapter.php
-
-		-
 			message: "#^Cannot call method fromArray\\(\\) on Shopware\\\\Models\\\\Order\\\\Order\\|null\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/OrdersDbAdapter.php
@@ -4687,11 +4642,6 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method object\\:\\:getId\\(\\)\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/TranslationsDbAdapter.php
-
-		-
-			message: "#^Cannot call method fetchAll\\(\\) on Zend_Db_Statement_Pdo\\|false\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/TranslationsDbAdapter.php
 
@@ -4992,11 +4942,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\Factories\\\\ProfileFactory\\:\\:loadHiddenProfile\\(\\) has parameter \\$type with no type specified\\.$#"
-			count: 1
-			path: Components/SwagImportExport/Factories/ProfileFactory.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\Factories\\\\ProfileFactory\\:\\:loadProfile\\(\\) has parameter \\$params with no type specified\\.$#"
 			count: 1
 			path: Components/SwagImportExport/Factories/ProfileFactory.php
 
@@ -6057,11 +6002,6 @@ parameters:
 
 		-
 			message: "#^Argument of an invalid type array\\|false supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: Components/SwagImportExport/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Cannot call method fetchAll\\(\\) on Zend_Db_Statement_Pdo\\|false\\.$#"
 			count: 1
 			path: Components/SwagImportExport/Transformers/FlattenTransformer.php
 
@@ -11071,12 +11011,12 @@ parameters:
 			path: Tests/Functional/Setup/Update/Update03DefaultProfileSupportTest.php
 
 		-
-			message: "#^Method Tests\\\\Helper\\\\BackendControllerTestHelper\\:\\:addFile\\(\\) has no return type specified\\.$#"
+			message: "#^Method SwagImportExport\\\\Tests\\\\Helper\\\\BackendControllerTestHelper\\:\\:addFile\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Helper/BackendControllerTestHelper.php
 
 		-
-			message: "#^Property Tests\\\\Helper\\\\BackendControllerTestHelper\\:\\:\\$files has no type specified\\.$#"
+			message: "#^Property SwagImportExport\\\\Tests\\\\Helper\\\\BackendControllerTestHelper\\:\\:\\$files has no type specified\\.$#"
 			count: 1
 			path: Tests/Helper/BackendControllerTestHelper.php
 
@@ -11106,67 +11046,67 @@ parameters:
 			path: Tests/Helper/DataProvider/ProfileDataProvider.php
 
 		-
-			message: "#^Method Tests\\\\Helper\\\\DbAdapterTestHelper\\:\\:getDataProvider\\(\\) return type has no value type specified in iterable type array\\.$#"
+			message: "#^Method SwagImportExport\\\\Tests\\\\Helper\\\\DbAdapterTestHelper\\:\\:getDataProvider\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Helper/DbAdapterTestHelper.php
 
 		-
-			message: "#^Method Tests\\\\Helper\\\\DbAdapterTestHelper\\:\\:parseYaml\\(\\) return type has no value type specified in iterable type array\\.$#"
+			message: "#^Method SwagImportExport\\\\Tests\\\\Helper\\\\DbAdapterTestHelper\\:\\:parseYaml\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Helper/DbAdapterTestHelper.php
 
 		-
-			message: "#^Method Tests\\\\Helper\\\\DbAdapterTestHelper\\:\\:read\\(\\) has no return type specified\\.$#"
+			message: "#^Method SwagImportExport\\\\Tests\\\\Helper\\\\DbAdapterTestHelper\\:\\:read\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Helper/DbAdapterTestHelper.php
 
 		-
-			message: "#^Method Tests\\\\Helper\\\\DbAdapterTestHelper\\:\\:read\\(\\) has parameter \\$columns with no value type specified in iterable type array\\.$#"
+			message: "#^Method SwagImportExport\\\\Tests\\\\Helper\\\\DbAdapterTestHelper\\:\\:read\\(\\) has parameter \\$columns with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Helper/DbAdapterTestHelper.php
 
 		-
-			message: "#^Method Tests\\\\Helper\\\\DbAdapterTestHelper\\:\\:read\\(\\) has parameter \\$expectedResults with no value type specified in iterable type array\\.$#"
+			message: "#^Method SwagImportExport\\\\Tests\\\\Helper\\\\DbAdapterTestHelper\\:\\:read\\(\\) has parameter \\$expectedResults with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Helper/DbAdapterTestHelper.php
 
 		-
-			message: "#^Method Tests\\\\Helper\\\\DbAdapterTestHelper\\:\\:readRecordIds\\(\\) has no return type specified\\.$#"
+			message: "#^Method SwagImportExport\\\\Tests\\\\Helper\\\\DbAdapterTestHelper\\:\\:readRecordIds\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Helper/DbAdapterTestHelper.php
 
 		-
-			message: "#^Method Tests\\\\Helper\\\\DbAdapterTestHelper\\:\\:readRecordIds\\(\\) has parameter \\$expectedIds with no value type specified in iterable type array\\.$#"
+			message: "#^Method SwagImportExport\\\\Tests\\\\Helper\\\\DbAdapterTestHelper\\:\\:readRecordIds\\(\\) has parameter \\$expectedIds with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Helper/DbAdapterTestHelper.php
 
 		-
-			message: "#^Method Tests\\\\Helper\\\\DbAdapterTestHelper\\:\\:readRecordIds\\(\\) has parameter \\$filter with no value type specified in iterable type array\\.$#"
+			message: "#^Method SwagImportExport\\\\Tests\\\\Helper\\\\DbAdapterTestHelper\\:\\:readRecordIds\\(\\) has parameter \\$filter with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Helper/DbAdapterTestHelper.php
 
 		-
-			message: "#^Method Tests\\\\Helper\\\\DbAdapterTestHelper\\:\\:write\\(\\) has no return type specified\\.$#"
+			message: "#^Method SwagImportExport\\\\Tests\\\\Helper\\\\DbAdapterTestHelper\\:\\:write\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Helper/DbAdapterTestHelper.php
 
 		-
-			message: "#^Method Tests\\\\Helper\\\\DbAdapterTestHelper\\:\\:write\\(\\) has parameter \\$records with no value type specified in iterable type array\\.$#"
+			message: "#^Method SwagImportExport\\\\Tests\\\\Helper\\\\DbAdapterTestHelper\\:\\:write\\(\\) has parameter \\$records with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Helper/DbAdapterTestHelper.php
 
 		-
-			message: "#^Parameter \\#1 \\$yamlFile of method Tests\\\\Helper\\\\DbAdapterTestHelper\\:\\:parseYaml\\(\\) expects string, string\\|false given\\.$#"
+			message: "#^Parameter \\#1 \\$yamlFile of method SwagImportExport\\\\Tests\\\\Helper\\\\DbAdapterTestHelper\\:\\:parseYaml\\(\\) expects string, string\\|false given\\.$#"
 			count: 1
 			path: Tests/Helper/DbAdapterTestHelper.php
 
 		-
-			message: "#^Property Tests\\\\Helper\\\\DbAdapterTestHelper\\:\\:\\$dataProvider has no type specified\\.$#"
+			message: "#^Property SwagImportExport\\\\Tests\\\\Helper\\\\DbAdapterTestHelper\\:\\:\\$dataProvider has no type specified\\.$#"
 			count: 1
 			path: Tests/Helper/DbAdapterTestHelper.php
 
 		-
-			message: "#^Property Tests\\\\Helper\\\\DbAdapterTestHelper\\:\\:\\$yamlFile has no type specified\\.$#"
+			message: "#^Property SwagImportExport\\\\Tests\\\\Helper\\\\DbAdapterTestHelper\\:\\:\\$yamlFile has no type specified\\.$#"
 			count: 1
 			path: Tests/Helper/DbAdapterTestHelper.php
 
@@ -11176,12 +11116,12 @@ parameters:
 			path: Tests/Helper/ImportExportTestHelper.php
 
 		-
-			message: "#^Method Tests\\\\Helper\\\\TestSessionStorage\\:\\:setBags\\(\\) has no return type specified\\.$#"
+			message: "#^Method SwagImportExport\\\\Tests\\\\Helper\\\\TestSessionStorage\\:\\:setBags\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Helper/TestSessionStorage.php
 
 		-
-			message: "#^Method Tests\\\\Helper\\\\TestSessionStorage\\:\\:setBags\\(\\) has parameter \\$bags with no type specified\\.$#"
+			message: "#^Method SwagImportExport\\\\Tests\\\\Helper\\\\TestSessionStorage\\:\\:setBags\\(\\) has parameter \\$bags with no type specified\\.$#"
 			count: 1
 			path: Tests/Helper/TestSessionStorage.php
 
@@ -12526,7 +12466,7 @@ parameters:
 			path: Tests/Shopware/ImportExport/ArticlesPricesDbAdapterTest.php
 
 		-
-			message: "#^Parameter \\#2 \\$limit of method Tests\\\\Helper\\\\DbAdapterTestHelper\\:\\:readRecordIds\\(\\) expects int, array given\\.$#"
+			message: "#^Parameter \\#2 \\$limit of method SwagImportExport\\\\Tests\\\\Helper\\\\DbAdapterTestHelper\\:\\:readRecordIds\\(\\) expects int, array given\\.$#"
 			count: 1
 			path: Tests/Shopware/ImportExport/ArticlesPricesDbAdapterTest.php
 
@@ -12606,7 +12546,7 @@ parameters:
 			path: Tests/Shopware/ImportExport/CustomersDbAdapterTest.php
 
 		-
-			message: "#^Parameter \\#2 \\$limit of method Tests\\\\Helper\\\\DbAdapterTestHelper\\:\\:readRecordIds\\(\\) expects int, array given\\.$#"
+			message: "#^Parameter \\#2 \\$limit of method SwagImportExport\\\\Tests\\\\Helper\\\\DbAdapterTestHelper\\:\\:readRecordIds\\(\\) expects int, array given\\.$#"
 			count: 1
 			path: Tests/Shopware/ImportExport/CustomersDbAdapterTest.php
 

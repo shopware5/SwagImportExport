@@ -8,7 +8,7 @@
 
 namespace Tests\Shopware\ImportExport;
 
-use Tests\Helper\ImportExportTestHelper;
+use SwagImportExport\Tests\Helper\ImportExportTestHelper;
 
 class ExpressionEvaluatorTest extends ImportExportTestHelper
 {

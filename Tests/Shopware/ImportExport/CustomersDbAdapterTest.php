@@ -8,7 +8,7 @@
 
 namespace Tests\Shopware\ImportExport;
 
-use Tests\Helper\DbAdapterTestHelper;
+use SwagImportExport\Tests\Helper\DbAdapterTestHelper;
 
 class CustomersDbAdapterTest extends DbAdapterTestHelper
 {
