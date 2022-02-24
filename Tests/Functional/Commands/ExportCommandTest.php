@@ -33,9 +33,9 @@ class ExportCommandTest extends TestCase
         $fp = \file($this->getFilePath($fileName));
         $lineAmount = \count($fp);
 
-        static::assertEquals('Using format: csv.', $consoleOutput[1]);
-        static::assertEquals('Total count: 225.', $consoleOutput[3]);
-        static::assertEquals($expectedLineAmount, $lineAmount, sprintf('Expected %s lines, found %s', $expectedLineAmount, $lineAmount));
+        static::assertSame('Using format: csv.', $consoleOutput[1]);
+        static::assertSame('Total count: 225.', $consoleOutput[3]);
+        static::assertSame($expectedLineAmount, $lineAmount, sprintf('Expected %s lines, found %s', $expectedLineAmount, $lineAmount));
     }
 
     public function testVariantsCsvExportCommand(): void
@@ -51,9 +51,9 @@ class ExportCommandTest extends TestCase
         $fp = \file($this->getFilePath($fileName));
         $lineAmount = \count($fp);
 
-        static::assertEquals('Using format: csv.', $consoleOutput[1]);
-        static::assertEquals('Total count: 400.', $consoleOutput[3]);
-        static::assertEquals($expectedLineAmount, $lineAmount, sprintf('Expected %s lines, found %s', $expectedLineAmount, $lineAmount));
+        static::assertSame('Using format: csv.', $consoleOutput[1]);
+        static::assertSame('Total count: 400.', $consoleOutput[3]);
+        static::assertSame($expectedLineAmount, $lineAmount, sprintf('Expected %s lines, found %s', $expectedLineAmount, $lineAmount));
     }
 
     public function testCustomerCsvExportCommand(): void
@@ -69,9 +69,9 @@ class ExportCommandTest extends TestCase
         $fp = \file($this->getFilePath($fileName));
         $lineAmount = \count($fp);
 
-        static::assertEquals('Using format: csv.', $consoleOutput[1]);
-        static::assertEquals('Total count: 2.', $consoleOutput[3]);
-        static::assertEquals($expectedLineAmount, $lineAmount, sprintf('Expected %s lines, found %s', $expectedLineAmount, $lineAmount));
+        static::assertSame('Using format: csv.', $consoleOutput[1]);
+        static::assertSame('Total count: 2.', $consoleOutput[3]);
+        static::assertSame($expectedLineAmount, $lineAmount, sprintf('Expected %s lines, found %s', $expectedLineAmount, $lineAmount));
     }
 
     public function testCategoriesCsvExportCommand(): void
@@ -87,9 +87,9 @@ class ExportCommandTest extends TestCase
         $fp = \file($this->getFilePath($fileName));
         $lineAmount = \count($fp);
 
-        static::assertEquals('Using format: csv.', $consoleOutput[1]);
-        static::assertEquals('Total count: 62.', $consoleOutput[3]);
-        static::assertEquals(
+        static::assertSame('Using format: csv.', $consoleOutput[1]);
+        static::assertSame('Total count: 62.', $consoleOutput[3]);
+        static::assertSame(
             $expectedLineAmount,
             $lineAmount,
             sprintf('Expected %s lines, found %s', $expectedLineAmount, $lineAmount)
@@ -109,9 +109,9 @@ class ExportCommandTest extends TestCase
         $fp = \file($this->getFilePath($fileName));
         $lineAmount = \count($fp);
 
-        static::assertEquals('Using format: csv.', $consoleOutput[1]);
-        static::assertEquals('Total count: 400.', $consoleOutput[3]);
-        static::assertEquals(
+        static::assertSame('Using format: csv.', $consoleOutput[1]);
+        static::assertSame('Total count: 400.', $consoleOutput[3]);
+        static::assertSame(
             $expectedLineAmount,
             $lineAmount,
             sprintf('Expected %s lines, found %s', $expectedLineAmount, $lineAmount)
@@ -131,9 +131,9 @@ class ExportCommandTest extends TestCase
         $fp = \file($this->getFilePath($fileName));
         $lineAmount = \count($fp);
 
-        static::assertEquals('Using format: csv.', $consoleOutput[1]);
-        static::assertEquals('Total count: 405.', $consoleOutput[3]);
-        static::assertEquals(
+        static::assertSame('Using format: csv.', $consoleOutput[1]);
+        static::assertSame('Total count: 405.', $consoleOutput[3]);
+        static::assertSame(
             $expectedLineAmount,
             $lineAmount,
             sprintf('Expected %s lines, found %s', $expectedLineAmount, $lineAmount)
@@ -159,8 +159,8 @@ class ExportCommandTest extends TestCase
 
         $consoleOutput = $this->runCommand(sprintf('sw:importexport:export -p %s %s', $profileName, $fileName));
 
-        static::assertEquals('Using format: csv.', $consoleOutput[1]);
-        static::assertEquals('Total count: 225.', $consoleOutput[3]);
+        static::assertSame('Using format: csv.', $consoleOutput[1]);
+        static::assertSame('Total count: 225.', $consoleOutput[3]);
     }
 
     public function testOrderCsvExportCommand(): void
@@ -176,9 +176,9 @@ class ExportCommandTest extends TestCase
         $fp = \file($this->getFilePath($fileName));
         $lineAmount = \count($fp);
 
-        static::assertEquals('Using format: csv.', $consoleOutput[1]);
-        static::assertEquals('Total count: 17.', $consoleOutput[3]);
-        static::assertEquals(
+        static::assertSame('Using format: csv.', $consoleOutput[1]);
+        static::assertSame('Total count: 17.', $consoleOutput[3]);
+        static::assertSame(
             $expectedLineAmount,
             $lineAmount,
             sprintf('Expected %s lines, found %s', $expectedLineAmount, $lineAmount)
@@ -198,9 +198,9 @@ class ExportCommandTest extends TestCase
         $fp = \file($this->getFilePath($fileName));
         $lineAmount = \count($fp);
 
-        static::assertEquals('Using format: csv.', $consoleOutput[1]);
-        static::assertEquals('Total count: 4.', $consoleOutput[3]);
-        static::assertEquals(
+        static::assertSame('Using format: csv.', $consoleOutput[1]);
+        static::assertSame('Total count: 4.', $consoleOutput[3]);
+        static::assertSame(
             $expectedLineAmount,
             $lineAmount,
             sprintf('Expected %s lines, found %s', $expectedLineAmount, $lineAmount)
@@ -220,9 +220,9 @@ class ExportCommandTest extends TestCase
         $fp = \file($this->getFilePath($fileName));
         $lineAmount = \count($fp);
 
-        static::assertEquals('Using format: csv.', $consoleOutput[1]);
-        static::assertEquals('Total count: 15.', $consoleOutput[3]);
-        static::assertEquals(
+        static::assertSame('Using format: csv.', $consoleOutput[1]);
+        static::assertSame('Total count: 15.', $consoleOutput[3]);
+        static::assertSame(
             $expectedLineAmount,
             $lineAmount,
             sprintf('Expected %s lines, found %s', $expectedLineAmount, $lineAmount)
@@ -244,9 +244,9 @@ class ExportCommandTest extends TestCase
         $fp = \file($this->getFilePath($fileName));
         $lineAmount = \count($fp);
 
-        static::assertEquals('Using format: csv.', $consoleOutput[1]);
-        static::assertEquals('Total count: 25.', $consoleOutput[3]);
-        static::assertEquals(
+        static::assertSame('Using format: csv.', $consoleOutput[1]);
+        static::assertSame('Total count: 25.', $consoleOutput[3]);
+        static::assertSame(
             $expectedLineAmount,
             $lineAmount,
             sprintf('Expected %s lines, found %s', $expectedLineAmount, $lineAmount)
@@ -266,9 +266,9 @@ class ExportCommandTest extends TestCase
         $fp = \file($this->getFilePath($fileName));
         $lineAmount = \count($fp);
 
-        static::assertEquals('Using format: xml.', $consoleOutput[1]);
-        static::assertEquals('Total count: 100.', $consoleOutput[3]);
-        static::assertEquals(
+        static::assertSame('Using format: xml.', $consoleOutput[1]);
+        static::assertSame('Total count: 100.', $consoleOutput[3]);
+        static::assertSame(
             $expectedLineAmount,
             $lineAmount,
             sprintf('Expected %s lines, found %s', $expectedLineAmount, $lineAmount)
@@ -292,9 +292,9 @@ class ExportCommandTest extends TestCase
         $fp = \file($this->getFilePath($fileName));
         $lineAmount = \count($fp);
 
-        static::assertEquals('Using format: xml.', $consoleOutput[1]);
-        static::assertEquals('Total count: 100.', $consoleOutput[3]);
-        static::assertEquals(
+        static::assertSame('Using format: xml.', $consoleOutput[1]);
+        static::assertSame('Total count: 100.', $consoleOutput[3]);
+        static::assertSame(
             $expectedLineAmount,
             $lineAmount,
             sprintf('Expected %s lines, found %s', $expectedLineAmount, $lineAmount)
@@ -314,9 +314,9 @@ class ExportCommandTest extends TestCase
         $fp = \file($this->getFilePath($fileName));
         $lineAmount = \count($fp);
 
-        static::assertEquals('Using format: xml.', $consoleOutput[1]);
-        static::assertEquals('Total count: 1.', $consoleOutput[3]);
-        static::assertEquals(
+        static::assertSame('Using format: xml.', $consoleOutput[1]);
+        static::assertSame('Total count: 1.', $consoleOutput[3]);
+        static::assertSame(
             $expectedLineAmount,
             $lineAmount,
             sprintf('Expected %s lines, found %s', $expectedLineAmount, $lineAmount)
@@ -336,9 +336,9 @@ class ExportCommandTest extends TestCase
         $fp = \file($this->getFilePath($fileName));
         $lineAmount = \count($fp);
 
-        static::assertEquals('Using format: xml.', $consoleOutput[1]);
-        static::assertEquals('Total count: 40.', $consoleOutput[3]);
-        static::assertEquals(
+        static::assertSame('Using format: xml.', $consoleOutput[1]);
+        static::assertSame('Total count: 40.', $consoleOutput[3]);
+        static::assertSame(
             $expectedLineAmount,
             $lineAmount,
             sprintf('Expected %s lines, found %s', $expectedLineAmount, $lineAmount)
@@ -358,9 +358,9 @@ class ExportCommandTest extends TestCase
         $fp = \file($this->getFilePath($fileName));
         $lineAmount = \count($fp);
 
-        static::assertEquals('Using format: xml.', $consoleOutput[1]);
-        static::assertEquals('Total count: 200.', $consoleOutput[3]);
-        static::assertEquals(
+        static::assertSame('Using format: xml.', $consoleOutput[1]);
+        static::assertSame('Total count: 200.', $consoleOutput[3]);
+        static::assertSame(
             $expectedLineAmount,
             $lineAmount,
             sprintf('Expected %s lines, found %s', $expectedLineAmount, $lineAmount)
@@ -380,9 +380,9 @@ class ExportCommandTest extends TestCase
         $fp = \file($this->getFilePath($fileName));
         $lineAmount = \count($fp);
 
-        static::assertEquals('Using format: xml.', $consoleOutput[1]);
-        static::assertEquals('Total count: 100.', $consoleOutput[3]);
-        static::assertEquals(
+        static::assertSame('Using format: xml.', $consoleOutput[1]);
+        static::assertSame('Total count: 100.', $consoleOutput[3]);
+        static::assertSame(
             $expectedLineAmount,
             $lineAmount,
             sprintf('Expected %s lines, found %s', $expectedLineAmount, $lineAmount)
@@ -408,8 +408,8 @@ class ExportCommandTest extends TestCase
 
         $consoleOutput = $this->runCommand(sprintf('sw:importexport:export -p %s %s', $profileName, $fileName));
 
-        static::assertEquals('Using format: xml.', $consoleOutput[1]);
-        static::assertEquals('Total count: 225.', $consoleOutput[3]);
+        static::assertSame('Using format: xml.', $consoleOutput[1]);
+        static::assertSame('Total count: 225.', $consoleOutput[3]);
     }
 
     public function testMainOrderXmlExportCommandWithLimit(): void
@@ -425,9 +425,9 @@ class ExportCommandTest extends TestCase
         $fp = \file($this->getFilePath($fileName));
         $lineAmount = \count($fp);
 
-        static::assertEquals('Using format: xml.', $consoleOutput[1]);
-        static::assertEquals('Total count: 2.', $consoleOutput[3]);
-        static::assertEquals(
+        static::assertSame('Using format: xml.', $consoleOutput[1]);
+        static::assertSame('Total count: 2.', $consoleOutput[3]);
+        static::assertSame(
             $expectedLineAmount,
             $lineAmount,
             sprintf('Expected %s lines, found %s', $expectedLineAmount, $lineAmount)
@@ -447,9 +447,9 @@ class ExportCommandTest extends TestCase
         $fp = \file($this->getFilePath($fileName));
         $lineAmount = \count($fp);
 
-        static::assertEquals('Using format: xml.', $consoleOutput[1]);
-        static::assertEquals('Total count: 10.', $consoleOutput[3]);
-        static::assertEquals(
+        static::assertSame('Using format: xml.', $consoleOutput[1]);
+        static::assertSame('Total count: 10.', $consoleOutput[3]);
+        static::assertSame(
             $expectedLineAmount,
             $lineAmount,
             sprintf('Expected %s lines, found %s', $expectedLineAmount, $lineAmount)
@@ -471,9 +471,9 @@ class ExportCommandTest extends TestCase
         $fp = \file($this->getFilePath($fileName));
         $lineAmount = \count($fp);
 
-        static::assertEquals('Using format: xml.', $consoleOutput[1]);
-        static::assertEquals('Total count: 15.', $consoleOutput[3]);
-        static::assertEquals(
+        static::assertSame('Using format: xml.', $consoleOutput[1]);
+        static::assertSame('Total count: 15.', $consoleOutput[3]);
+        static::assertSame(
             $expectedLineAmount,
             $lineAmount,
             sprintf('Expected %s lines, found %s', $expectedLineAmount, $lineAmount)

@@ -10,11 +10,18 @@ namespace Shopware\Components\SwagImportExport\Utils;
 
 class DbAdapterHelper
 {
+    /**
+     * @param array<array<string, mixed>> $records
+     *
+     * @return array<array<string, string>>
+     */
     public static function decodeHtmlEntities($records)
     {
         foreach ($records as &$record) {
             foreach ($record as &$value) {
-                $value = self::convertBooleanFalseToString($value);
+                if (\is_bool($value)) {
+                    $value = self::convertBooleanToString($value);
+                }
                 if ($value instanceof \DateTime) {
                     $value = $value->format(\DateTimeInterface::ATOM);
                 }
@@ -28,6 +35,11 @@ class DbAdapterHelper
         return $records;
     }
 
+    /**
+     * @param array<array<string, mixed>> $records
+     *
+     * @return array<array<string, string>>
+     */
     public static function escapeNewLines($records)
     {
         foreach ($records as &$record) {
@@ -41,15 +53,9 @@ class DbAdapterHelper
 
     /**
      * html_entity_encode would return an empty string if boolean false is passed.
-     *
-     * @return mixed|string
      */
-    private static function convertBooleanFalseToString($value)
+    private static function convertBooleanToString(bool $value): string
     {
-        if ($value === false) {
-            return '0';
-        }
-
-        return $value;
+        return $value ? '1' : '0';
     }
 }

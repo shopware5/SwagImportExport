@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -16,7 +17,7 @@ class MainOrdersDbAdapterTest extends TestCase
 {
     use DatabaseTestCaseTrait;
 
-    public function testReadWithEmptyIdsArrayThrowsException()
+    public function testReadWithEmptyIdsArrayThrowsException(): void
     {
         $mainOrdersDbAdapter = $this->createMainOrdersDbAdapter();
 
@@ -28,7 +29,7 @@ class MainOrdersDbAdapterTest extends TestCase
         $mainOrdersDbAdapter->read($ids, $columns);
     }
 
-    public function testReadWithEmptyColumnsArrayThrowsException()
+    public function testReadWithEmptyColumnsArrayThrowsException(): void
     {
         $mainOrdersDbAdapter = $this->createMainOrdersDbAdapter();
 
@@ -40,7 +41,7 @@ class MainOrdersDbAdapterTest extends TestCase
         $mainOrdersDbAdapter->read($ids, $columns);
     }
 
-    public function testReadShouldCreateValidColumns()
+    public function testReadShouldCreateValidColumns(): void
     {
         $mainOrdersDbAdapter = $this->createMainOrdersDbAdapter();
 
@@ -52,13 +53,14 @@ class MainOrdersDbAdapterTest extends TestCase
         static::assertArrayHasKey('order', $exportedOrders, 'Could not fetch orders.');
         static::assertArrayHasKey('orderId', $exportedOrders['order'][0], 'Could not fetch order id.');
         static::assertArrayHasKey('invoiceAmount', $exportedOrders['order'][0], 'Could not fetch amount.');
+        static::assertArrayHasKey('clearedDate', $exportedOrders['order'][0], 'Could not fetch clear date.');
         static::assertArrayHasKey('taxRateSum', $exportedOrders, 'Could not fetch tax rates.');
         static::assertArrayHasKey('orderId', $exportedOrders['taxRateSum'][0], 'Could not fetch order id.');
         static::assertArrayHasKey('taxRateSums', $exportedOrders['taxRateSum'][0], 'Could not fetch tax sum.');
         static::assertArrayHasKey('taxRate', $exportedOrders['taxRateSum'][0], 'Could not fetch tax rate.');
     }
 
-    public function testReadShouldExportCorrectResult()
+    public function testReadShouldExportCorrectResult(): void
     {
         $mainOrdersDbAdapter = $this->createMainOrdersDbAdapter();
 
@@ -68,18 +70,18 @@ class MainOrdersDbAdapterTest extends TestCase
         $exportedOrders = $mainOrdersDbAdapter->read($ids, $columns);
 
         /*Check order details*/
-        static::assertEquals($exportedOrders['order'][0]['orderId'], 15);
-        static::assertEquals($exportedOrders['order'][0]['orderNumber'], '20001');
-        static::assertEquals($exportedOrders['order'][0]['invoiceAmount'], 998.56);
-        static::assertEquals($exportedOrders['order'][0]['invoiceAmountNet'], 839.13);
+        static::assertSame('15', $exportedOrders['order'][0]['orderId']);
+        static::assertSame('20001', $exportedOrders['order'][0]['orderNumber']);
+        static::assertSame('998.56', $exportedOrders['order'][0]['invoiceAmount']);
+        static::assertSame('839.13', $exportedOrders['order'][0]['invoiceAmountNet']);
 
         /*Check order tax details*/
-        static::assertEquals($exportedOrders['taxRateSum'][0]['orderId'], 15);
-        static::assertEquals($exportedOrders['taxRateSum'][0]['taxRateSums'], 159.44);
-        static::assertEquals($exportedOrders['taxRateSum'][0]['taxRate'], 19);
+        static::assertSame('15', $exportedOrders['taxRateSum'][0]['orderId']);
+        static::assertSame('159.44', $exportedOrders['taxRateSum'][0]['taxRateSums']);
+        static::assertSame('19', $exportedOrders['taxRateSum'][0]['taxRate']);
     }
 
-    public function testReadShouldExportCorrectResultWithoutTaxId()
+    public function testReadShouldExportCorrectResultWithoutTaxId(): void
     {
         // Set the tax ID and rate of a single order detail to null and zero, respectively
         $orderDetailId = 44;
@@ -99,19 +101,19 @@ class MainOrdersDbAdapterTest extends TestCase
         $exportedOrders = $mainOrdersDbAdapter->read($ids, $columns);
 
         // Check order details
-        static::assertEquals(15, $exportedOrders['order'][0]['orderId']);
-        static::assertEquals('20001', $exportedOrders['order'][0]['orderNumber']);
-        static::assertEquals(998.56, $exportedOrders['order'][0]['invoiceAmount']);
-        static::assertEquals(839.13, $exportedOrders['order'][0]['invoiceAmountNet']);
+        static::assertSame('15', $exportedOrders['order'][0]['orderId']);
+        static::assertSame('20001', $exportedOrders['order'][0]['orderNumber']);
+        static::assertSame('998.56', $exportedOrders['order'][0]['invoiceAmount']);
+        static::assertSame('839.13', $exportedOrders['order'][0]['invoiceAmountNet']);
 
         // Check order tax details
         static::assertCount(2, $exportedOrders['taxRateSum']);
-        static::assertEquals(15, $exportedOrders['taxRateSum'][0]['orderId']);
-        static::assertEquals(0, $exportedOrders['taxRateSum'][0]['taxRate']);
-        static::assertEquals(0, $exportedOrders['taxRateSum'][0]['taxRateSums']);
-        static::assertEquals(15, $exportedOrders['taxRateSum'][1]['orderId']);
-        static::assertEquals(19, $exportedOrders['taxRateSum'][1]['taxRate']);
-        static::assertEquals(158.49, $exportedOrders['taxRateSum'][1]['taxRateSums']);
+        static::assertSame('15', $exportedOrders['taxRateSum'][0]['orderId']);
+        static::assertSame('0', $exportedOrders['taxRateSum'][0]['taxRate']);
+        static::assertSame('0', $exportedOrders['taxRateSum'][0]['taxRateSums']);
+        static::assertSame('15', $exportedOrders['taxRateSum'][1]['orderId']);
+        static::assertSame('19', $exportedOrders['taxRateSum'][1]['taxRate']);
+        static::assertSame('158.49', $exportedOrders['taxRateSum'][1]['taxRateSums']);
 
         // Revert the changes made to the order detail
         $db->query(
@@ -124,10 +126,7 @@ class MainOrdersDbAdapterTest extends TestCase
         );
     }
 
-    /**
-     * @return MainOrdersDbAdapter
-     */
-    private function createMainOrdersDbAdapter()
+    private function createMainOrdersDbAdapter(): MainOrdersDbAdapter
     {
         return new MainOrdersDbAdapter();
     }

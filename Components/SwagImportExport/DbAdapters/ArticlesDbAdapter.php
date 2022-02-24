@@ -211,26 +211,13 @@ class ArticlesDbAdapter implements DataDbAdapter
             throw new \RuntimeException($message);
         }
 
-        //articles
-        $articleBuilder = $this->getArticleBuilder($columns['article'], $ids);
+        $products = $this->getArticleBuilder($columns['article'], $ids)->getQuery()->getResult();
 
-        $articles = $articleBuilder->getQuery()->getResult();
+        $result['article'] = DbAdapterHelper::decodeHtmlEntities($products);
 
-        $result['article'] = DbAdapterHelper::decodeHtmlEntities($articles);
+        array_push($columns['price'], 'customerGroup.taxInput as taxInput', 'articleTax.tax as tax');
 
-        //prices
-        $columns['price'] = \array_merge(
-            $columns['price'],
-            ['customerGroup.taxInput as taxInput', 'articleTax.tax as tax']
-        );
-
-        $priceBuilder = $this->getPriceBuilder($columns['price'], $ids);
-
-        $result['price'] = $priceBuilder->getQuery()->getResult();
-
-        if ($result['purchasePrice']) {
-            $result['purchasePrice'] = \round($result['purchasePrice'], 2);
-        }
+        $result['price'] = $this->getPriceBuilder($columns['price'], $ids)->getQuery()->getResult();
 
         foreach ($result['price'] as &$record) {
             if ($record['taxInput']) {

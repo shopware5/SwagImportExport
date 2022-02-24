@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -13,7 +14,7 @@ use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
 
 class DbAdapterHelperTest extends TestCase
 {
-    public function testDecodeHtmlEntities()
+    public function testDecodeHtmlEntities(): void
     {
         $inputRecords = [
             [
@@ -28,11 +29,11 @@ class DbAdapterHelperTest extends TestCase
 
         $result = DbAdapterHelper::decodeHtmlEntities($inputRecords);
 
-        static::assertEquals('100', $result[0]['integer'], 'Could not decode integer');
-        static::assertEquals('1.5', $result[0]['float'], 'Could not decode float');
-        static::assertEquals('<b>With bold text with html entities</b>', $result[0]['textWithHtml'], 'Could not decode string with html tags');
-        static::assertEquals('0', $result[0]['false'], 'Could not decode boolean false');
-        static::assertEquals('1', $result[0]['true'], 'Could not decode boolean true');
-        static::assertEquals('Hi, this is a string', $result[0]['string'], 'Could not decode a string');
+        static::assertSame('100', $result[0]['integer'], 'Could not decode integer');
+        static::assertSame('1.5', $result[0]['float'], 'Could not decode float');
+        static::assertSame('<b>With bold text with html entities</b>', $result[0]['textWithHtml'], 'Could not decode string with html tags');
+        static::assertSame('0', $result[0]['false'], 'Could not decode boolean false');
+        static::assertSame('1', $result[0]['true'], 'Could not decode boolean true');
+        static::assertSame('Hi, this is a string', $result[0]['string'], 'Could not decode a string');
     }
 }

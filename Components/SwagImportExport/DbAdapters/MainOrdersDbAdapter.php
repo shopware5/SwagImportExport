@@ -164,6 +164,8 @@ class MainOrdersDbAdapter implements DataDbAdapter
 
         if (!empty($columns['taxRateSum'])) {
             $taxRateSums = $this->getTaxSums($ids, $orders);
+            $taxRateSums = DbAdapterHelper::decodeHtmlEntities($taxRateSums);
+            $taxRateSums = DbAdapterHelper::escapeNewLines($taxRateSums);
             $result['taxRateSum'] = $taxRateSums;
         }
 
