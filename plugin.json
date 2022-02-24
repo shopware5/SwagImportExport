@@ -12,6 +12,7 @@
 
     "changelog": {
         "de": {
+            "REPLACE_GLOBALLY_WITH_NEXT_VERSION (2.11.0)": "SW-26128, SW-26398, SW-26417, PT-12454, PT-26422 - Verbesserung der allgemeinen Code-Qualität; PT-12480 - Verbesserung der PHP 8 Kompatibilität; PT-12606 - Fehlendes Feld 'clearedDate' zum Bestellexport-Profil hinzugefügt;",
             "2.10.8": "PT-12120 - Shopware 5.7 und PHP8 Kompatibilität;",
             "2.10.7": "PT-9529 - Optimiert den Export Prozess;",
             "2.10.6": "PT-10810 - Optimiert den Import Prozess;",
@@ -61,6 +62,7 @@
             "1.0.1": "Problem mit verschwindendem Import/Export Menü-Eintrag behoben; Weitere ACL-Zugangsberechtigungen hinzugefügt; Korrektur: article.active Verhalten; Korrektur: Artikel-Attribute; Korrektur: Datums- und Zeitimporte"
         },
         "en": {
+            "REPLACE_GLOBALLY_WITH_NEXT_VERSION (2.11.0)": "SW-26128, SW-26398, SW-26417, PT-12454, PT-26422 - Improve overall code quality; PT-12480 - Improve PHP 8 compatibility; PT-12606 - Add missing field 'clearedDate' to order export profile;",
             "2.10.8": "PT-12120 - Shopware 5.7 and PHP8 compatibility;",
             "2.10.7": "PT-9529 - Optimizes the export process;",
             "2.10.6": "PT-10810 - Optimizes the import process;",
