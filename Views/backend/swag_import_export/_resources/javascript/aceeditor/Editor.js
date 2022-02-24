@@ -31,8 +31,7 @@ Ext.define('Ext.ux.aceeditor.Editor', {
 
         me.addEvents({
             'editorcreated': true
-        },
-            'change');
+        }, 'change');
 
         me.callParent();
     },
