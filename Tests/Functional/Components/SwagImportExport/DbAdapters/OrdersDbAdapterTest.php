@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 use Shopware\Components\SwagImportExport\DbAdapters\OrdersDbAdapter;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 
-class OrderDbAdapterTest extends TestCase
+class OrdersDbAdapterTest extends TestCase
 {
     use DatabaseTestCaseTrait;
 
@@ -112,11 +112,27 @@ class OrderDbAdapterTest extends TestCase
         static::assertTrue(true);
     }
 
+    public function testRead(): void
+    {
+        $ordersDbAdapter = $this->createOrdersDbAdapter();
+        $columns = $ordersDbAdapter->getDefaultColumns();
+        $ids = [42, 43, 44];
+
+        $exportedOrders = $ordersDbAdapter->read($ids, $columns);
+
+        static::assertArrayHasKey('default', $exportedOrders);
+        static::assertIsArray($exportedOrders['default']);
+        static::assertArrayHasKey('customerNumber', $exportedOrders['default'][0]);
+    }
+
     private function createOrdersDbAdapter(): OrdersDbAdapter
     {
         return new OrdersDbAdapter();
     }
 
+    /**
+     * @return array{default: array<array<string, mixed>>}
+     */
     private function getValidDemoRecordsForWriteTest(): array
     {
         $data = [

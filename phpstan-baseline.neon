@@ -9391,11 +9391,6 @@ parameters:
 			path: Tests/Functional/Components/SwagImportExport/DbAdapters/NewsletterDbAdapterTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\OrderDbAdapterTest\\:\\:getValidDemoRecordsForWriteTest\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Functional/Components/SwagImportExport/DbAdapters/OrderDbAdapterTest.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\Functional\\\\Components\\\\SwagImportExport\\\\Factories\\\\DataFactoryTest\\:\\:testCreateDbAdapterShouldCreateAddressDbAdapter\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Functional/Components/SwagImportExport/Factories/DataFactoryTest.php
