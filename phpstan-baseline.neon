@@ -2551,11 +2551,6 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/ArticlesDbAdapter.php
 
 		-
-			message: "#^Cannot access offset 'path' on array\\{scheme\\?\\: string, host\\?\\: string, port\\?\\: int, user\\?\\: string, pass\\?\\: string, path\\?\\: string, query\\?\\: string, fragment\\?\\: string\\}\\|false\\.$#"
-			count: 2
-			path: Components/SwagImportExport/DbAdapters/ArticlesImagesDbAdapter.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesImagesDbAdapter\\:\\:createAttribute\\(\\) has parameter \\$record with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/ArticlesImagesDbAdapter.php
@@ -2741,12 +2736,12 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/ArticlesImagesDbAdapter.php
 
 		-
-			message: "#^Parameter \\#2 \\$str of function fwrite expects string, string\\|false given\\.$#"
+			message: "#^Parameter \\#3 \\$previous of class Shopware\\\\Components\\\\SwagImportExport\\\\Exception\\\\AdapterException constructor expects Exception\\|null, string given\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/ArticlesImagesDbAdapter.php
 
 		-
-			message: "#^Parameter \\#3 \\$previous of class Shopware\\\\Components\\\\SwagImportExport\\\\Exception\\\\AdapterException constructor expects Exception\\|null, string given\\.$#"
+			message: "#^Property Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesImagesDbAdapter\\:\\:\\$httpClient \\(GuzzleHttp\\\\Client\\) does not accept GuzzleHttp\\\\ClientInterface\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/ArticlesImagesDbAdapter.php
 
@@ -9041,31 +9036,6 @@ parameters:
 			path: Tests/Functional/Components/SwagImportExport/DbAdapters/Articles/RelationWriterTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesImagesDbAdapterTest\\:\\:testNewArticleImageShouldBeWrittenToDatabase\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/SwagImportExport/DbAdapters/ArticlesImagesDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesImagesDbAdapterTest\\:\\:testWriteShouldThrowExceptionHavingWrongPath\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/SwagImportExport/DbAdapters/ArticlesImagesDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesImagesDbAdapterTest\\:\\:testWriteShouldThrowExceptionIfRecordsAreEmpty\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/SwagImportExport/DbAdapters/ArticlesImagesDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesImagesDbAdapterTest\\:\\:testWriteWithInvalidOrderNumberThrowsException\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/SwagImportExport/DbAdapters/ArticlesImagesDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesImagesDbAdapterTest\\:\\:testWriteWithNotExistingImageThrowsException\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/SwagImportExport/DbAdapters/ArticlesImagesDbAdapterTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesTranslationsDbAdapterTest\\:\\:testReadShouldRespondCorrectTranslations\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Functional/Components/SwagImportExport/DbAdapters/ArticlesTranslationsDbAdapterTest.php
@@ -13079,3 +13049,4 @@ parameters:
 			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\Update\\\\Update03DefaultProfileSupportTest\\:\\:testUpdateShouldThrowOriginalException\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Unit/Setup/Update/Update03DefaultProfileSupportTest.php
+
