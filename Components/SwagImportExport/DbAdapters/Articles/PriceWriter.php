@@ -77,7 +77,7 @@ class PriceWriter
                 continue;
             }
 
-            $priceId = $this->db->fetchOne(
+            $priceId = (int) $this->db->fetchOne(
                 '
                     SELECT id
                     FROM s_articles_prices

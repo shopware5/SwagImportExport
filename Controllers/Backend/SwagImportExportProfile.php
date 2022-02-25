@@ -219,7 +219,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         $profileEntity = $profileRepository->findOneBy(['id' => $profileId]);
 
         $tree = $profileEntity->getTree();
-        $root = TreeHelper::convertToExtJSTree(\json_decode($tree, 1));
+        $root = TreeHelper::convertToExtJSTree(\json_decode($tree, true));
 
         return $this->View()->assign(['success' => true, 'children' => $root]);
     }
@@ -346,7 +346,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         $profileRepository = $manager->getRepository(Profile::class);
         $profileEntity = $profileRepository->findOneBy(['id' => $profileId]);
 
-        $tree = \json_decode($profileEntity->getTree(), 1);
+        $tree = \json_decode($profileEntity->getTree(), true);
 
         if (isset($data['parentId'])) {
             $data = [$data];
@@ -388,7 +388,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
             $defaultFields = $dataManager->getDefaultFields();
         }
 
-        $tree = \json_decode($profileEntity->getTree(), 1);
+        $tree = \json_decode($profileEntity->getTree(), true);
 
         if (isset($data['parentId'])) {
             $data = [$data];
@@ -446,7 +446,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         $profileRepository = $manager->getRepository(Profile::class);
         $profileEntity = $profileRepository->findOneBy(['id' => $profileId]);
 
-        $tree = \json_decode($profileEntity->getTree(), 1);
+        $tree = \json_decode($profileEntity->getTree(), true);
 
         if (isset($data['parentId'])) {
             $data = [$data];

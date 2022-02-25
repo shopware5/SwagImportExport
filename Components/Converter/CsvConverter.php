@@ -183,15 +183,19 @@ class CsvConverter
         $fieldmark = $this->sSettings['fieldmark'];
         $elements = \explode($this->sSettings['separator'], $line);
         $tmp_elements = [];
-        for ($i = 0; $i < \count($elements); ++$i) {
+        if (!\is_array($elements)) {
+            return $tmp_elements;
+        }
+
+        foreach ($elements as $i => $element) {
             $nquotes = \substr_count($elements[$i], $this->sSettings['fieldmark']);
             if ($nquotes % 2 == 1) {
                 if (isset($elements[$i + 1])) {
-                    $elements[$i + 1] = $elements[$i] . $this->sSettings['separator'] . $elements[$i + 1];
+                    $elements[$i + 1] = $element . $this->sSettings['separator'] . $elements[$i + 1];
                 }
             } else {
                 if ($nquotes > 0) {
-                    if (\substr($elements[$i], 0, 1) == $fieldmark) {
+                    if (\strpos($elements[$i], $fieldmark) === 0) {
                         $elements[$i] = \substr($elements[$i], 1);
                     }
                     if (\substr($elements[$i], -1, 1) == $fieldmark) {
@@ -203,7 +207,7 @@ class CsvConverter
                         $elements[$i]
                     );
                 }
-                $tmp_elements[] = $elements[$i];
+                $tmp_elements[] = $element;
             }
         }
 
@@ -217,12 +221,16 @@ class CsvConverter
     {
         $lines = [];
         $elements = \explode($this->sSettings['newline'], $csv);
-        for ($i = 0; $i < \count($elements); ++$i) {
+        if (!\is_array($elements)) {
+            return $lines;
+        }
+
+        foreach ($elements as $i => $element) {
             $nquotes = \substr_count($elements[$i], $this->sSettings['fieldmark']);
             if ($nquotes % 2 == 1) {
-                $elements[$i + 1] = $elements[$i] . $this->sSettings['newline'] . $elements[$i + 1];
+                $elements[$i + 1] = $element . $this->sSettings['newline'] . $elements[$i + 1];
             } else {
-                $lines[] = $elements[$i];
+                $lines[] = $element;
             }
         }
 

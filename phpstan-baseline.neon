@@ -391,11 +391,6 @@ parameters:
 			path: Components/Converter/XmlConverter.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Converter\\\\XmlConverter\\:\\:decode\\(\\) should return array but empty return statement found\\.$#"
-			count: 1
-			path: Components/Converter/XmlConverter.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Converter\\\\XmlConverter\\:\\:encode\\(\\) has parameter \\$array with no type specified\\.$#"
 			count: 1
 			path: Components/Converter/XmlConverter.php
@@ -1349,86 +1344,6 @@ parameters:
 			message: "#^Parameter \\#1 \\$country of method Shopware\\\\Models\\\\Customer\\\\Address\\:\\:setCountry\\(\\) expects Shopware\\\\Models\\\\Country\\\\Country, Shopware\\\\Models\\\\Country\\\\Country\\|null given\\.$#"
 			count: 2
 			path: Components/SwagImportExport/DbAdapters/AddressDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\Articles\\\\ArticleWriter\\:\\:createArticleAttributes\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/Articles/ArticleWriter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\Articles\\\\ArticleWriter\\:\\:createArticleAttributes\\(\\) has parameter \\$article with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/Articles/ArticleWriter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\Articles\\\\ArticleWriter\\:\\:createOrUpdateArticleDetail\\(\\) has parameter \\$article with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/Articles/ArticleWriter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\Articles\\\\ArticleWriter\\:\\:createOrUpdateArticleDetail\\(\\) has parameter \\$defaultValues with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/Articles/ArticleWriter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\Articles\\\\ArticleWriter\\:\\:createOrUpdateArticleDetail\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/Articles/ArticleWriter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\Articles\\\\ArticleWriter\\:\\:createOrUpdateMainDetail\\(\\) has parameter \\$article with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/Articles/ArticleWriter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\Articles\\\\ArticleWriter\\:\\:createOrUpdateMainDetail\\(\\) should return int but returns int\\|string\\|false\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/Articles/ArticleWriter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\Articles\\\\ArticleWriter\\:\\:findExistingEntries\\(\\) has parameter \\$article with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/Articles/ArticleWriter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\Articles\\\\ArticleWriter\\:\\:findExistingEntries\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/Articles/ArticleWriter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\Articles\\\\ArticleWriter\\:\\:insertOrUpdateArticle\\(\\) has parameter \\$article with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/Articles/ArticleWriter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\Articles\\\\ArticleWriter\\:\\:insertOrUpdateArticle\\(\\) has parameter \\$defaultValues with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/Articles/ArticleWriter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\Articles\\\\ArticleWriter\\:\\:isMainDetail\\(\\) has parameter \\$article with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/Articles/ArticleWriter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\Articles\\\\ArticleWriter\\:\\:mapArticleAttributes\\(\\) has parameter \\$article with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/Articles/ArticleWriter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\Articles\\\\ArticleWriter\\:\\:mapArticleAttributes\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/Articles/ArticleWriter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\Articles\\\\ArticleWriter\\:\\:write\\(\\) has parameter \\$article with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/Articles/ArticleWriter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\Articles\\\\ArticleWriter\\:\\:write\\(\\) has parameter \\$defaultValues with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/Articles/ArticleWriter.php
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\Articles\\\\CategoryWriter\\:\\:insertCategoryAttributes\\(\\) has no return type specified\\.$#"
@@ -4726,26 +4641,6 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/TranslationsDbAdapter.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbalHelper\\:\\:getQueryBuilderForEntity\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbalHelper.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbalHelper\\:\\:getQueryBuilderForEntity\\(\\) has parameter \\$primaryId with no type specified\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbalHelper.php
-
-		-
-			message: "#^Result of && is always false\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbalHelper.php
-
-		-
-			message: "#^Variable \\$value in isset\\(\\) always exists and is not nullable\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbalHelper.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\Factories\\\\DataFactory\\:\\:createAddressDbAdapter\\(\\) should return Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\AddressDbAdapter but returns object\\.$#"
 			count: 1
 			path: Components/SwagImportExport/Factories/DataFactory.php
@@ -6791,11 +6686,6 @@ parameters:
 			path: Components/SwagImportExport/Transformers/SmartyExpressionEvaluator.php
 
 		-
-			message: "#^If condition is always false\\.$#"
-			count: 3
-			path: Components/SwagImportExport/Transformers/TreeTransformer.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\Transformers\\\\TreeTransformer\\:\\:buildIterationNode\\(\\) has parameter \\$node with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/SwagImportExport/Transformers/TreeTransformer.php
@@ -7096,27 +6986,7 @@ parameters:
 			path: Components/SwagImportExport/Transformers/TreeTransformer.php
 
 		-
-			message: "#^Parameter \\#1 \\$key of method Shopware\\\\Components\\\\SwagImportExport\\\\Transformers\\\\TreeTransformer\\:\\:saveMapper\\(\\) expects string, null given\\.$#"
-			count: 1
-			path: Components/SwagImportExport/Transformers/TreeTransformer.php
-
-		-
-			message: "#^Parameter \\#2 \\$nodePath of method Shopware\\\\Components\\\\SwagImportExport\\\\Transformers\\\\TreeTransformer\\:\\:createIterationNodeMapper\\(\\) expects null, string given\\.$#"
-			count: 1
-			path: Components/SwagImportExport/Transformers/TreeTransformer.php
-
-		-
-			message: "#^Parameter \\#2 \\$nodePath of method Shopware\\\\Components\\\\SwagImportExport\\\\Transformers\\\\TreeTransformer\\:\\:generateMapper\\(\\) expects null, string given\\.$#"
-			count: 1
-			path: Components/SwagImportExport/Transformers/TreeTransformer.php
-
-		-
 			message: "#^Parameter \\#3 \\$adapterType of method Shopware\\\\Components\\\\SwagImportExport\\\\Transformers\\\\TreeTransformer\\:\\:transformToTree\\(\\) expects null, mixed given\\.$#"
-			count: 2
-			path: Components/SwagImportExport/Transformers/TreeTransformer.php
-
-		-
-			message: "#^Parameter \\#4 \\$nodePath of method Shopware\\\\Components\\\\SwagImportExport\\\\Transformers\\\\TreeTransformer\\:\\:transformFromTree\\(\\) expects null, string\\|null given\\.$#"
 			count: 2
 			path: Components/SwagImportExport/Transformers/TreeTransformer.php
 
@@ -7172,11 +7042,6 @@ parameters:
 
 		-
 			message: "#^Property Shopware\\\\Components\\\\SwagImportExport\\\\Transformers\\\\TreeTransformer\\:\\:\\$rawData has no type specified\\.$#"
-			count: 1
-			path: Components/SwagImportExport/Transformers/TreeTransformer.php
-
-		-
-			message: "#^Right side of && is always false\\.$#"
 			count: 1
 			path: Components/SwagImportExport/Transformers/TreeTransformer.php
 
@@ -8093,11 +7958,6 @@ parameters:
 		-
 			message: "#^Parameter \\#1 \\$entity of method Doctrine\\\\ORM\\\\EntityManager\\:\\:remove\\(\\) expects object, Shopware\\\\CustomModels\\\\ImportExport\\\\Profile\\|null given\\.$#"
 			count: 1
-			path: Controllers/Backend/SwagImportExportProfile.php
-
-		-
-			message: "#^Parameter \\#2 \\$assoc of function json_decode expects bool, int given\\.$#"
-			count: 4
 			path: Controllers/Backend/SwagImportExportProfile.php
 
 		-
