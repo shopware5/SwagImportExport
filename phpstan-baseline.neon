@@ -7501,11 +7501,6 @@ parameters:
 			path: Components/SwagImportExport/Utils/TreeHelper.php
 
 		-
-			message: "#^Variable \\$qb in PHPDoc tag @var does not match assigned variable \\$tree\\.$#"
-			count: 1
-			path: Components/SwagImportExport/Utils/TreeHelper.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\Validators\\\\AddressValidator\\:\\:checkRequiredFields\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Components/SwagImportExport/Validators/AddressValidator.php
@@ -9184,26 +9179,6 @@ parameters:
 			message: "#^Parameter \\#5 \\$processedFlag of method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\Articles\\\\RelationWriter\\:\\:write\\(\\) expects int, true given\\.$#"
 			count: 2
 			path: Tests/Functional/Components/SwagImportExport/DbAdapters/Articles/RelationWriterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\Articles\\\\TranslationWriterTest\\:\\:testWriteShouldCreateAttributeTranslations\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/SwagImportExport/DbAdapters/Articles/TranslationWriterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\Articles\\\\TranslationWriterTest\\:\\:testWriteShouldCreateTranslations\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/SwagImportExport/DbAdapters/Articles/TranslationWriterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\Articles\\\\TranslationWriterTest\\:\\:testWriteShouldCreateVariantTranslation\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/SwagImportExport/DbAdapters/Articles/TranslationWriterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\Articles\\\\TranslationWriterTest\\:\\:testWriteShouldThrowExceptionIfLanguageIdIsNotAvailable\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/SwagImportExport/DbAdapters/Articles/TranslationWriterTest.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesImagesDbAdapterTest\\:\\:testNewArticleImageShouldBeWrittenToDatabase\\(\\) has no return type specified\\.$#"
