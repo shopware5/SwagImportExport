@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -8,21 +9,20 @@
 
 namespace SwagImportExport\Tests\Functional\Components\SwagImportExport\DbAdapters\Articles;
 
-use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\AttributeBundle\Service\CrudService;
-use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\TranslationWriter;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
+use SwagImportExport\Tests\Functional\ContainerTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 
 class TranslationWriterTest extends TestCase
 {
+    use ContainerTrait;
     use DatabaseTestCaseTrait;
 
-    public function testWriteShouldThrowExceptionIfLanguageIdIsNotAvailable()
+    public function testWriteShouldThrowExceptionIfLanguageIdIsNotAvailable(): void
     {
-        $articleId = 273;
+        $productId = 273;
         $variantId = 273;
         $mainDetailId = 273;
         $translations = [
@@ -35,54 +35,54 @@ class TranslationWriterTest extends TestCase
 
         $this->expectException(AdapterException::class);
         $this->expectExceptionMessage('Shop mit ID 3 nicht gefunden');
-        $translationWriter->write($articleId, $variantId, $mainDetailId, $translations);
+        $translationWriter->write($productId, $variantId, $mainDetailId, $translations);
     }
 
-    public function testWriteShouldCreateTranslations()
+    public function testWriteShouldCreateTranslations(): void
     {
-        $articleId = 273;
+        $productId = 273;
         $variantId = 273;
         $mainDetailId = 273;
         $translations = [
             [
                 'name' => 'translatedName',
-                'description' => 'Translated descritpion',
+                'description' => 'Translated description',
                 'metaTitle' => 'Translated meta title',
                 'keywords' => 'translated,keywords',
                 'additionalText' => 'Translated additional text',
                 'packUnit' => 'translated pack unit',
+                'shippingTime' => 'Translated shipping time',
                 'languageId' => '2',
             ],
         ];
 
         $translationsWriter = $this->createTranslationWriter();
-        $translationsWriter->write($articleId, $variantId, $mainDetailId, $translations);
+        $translationsWriter->write($productId, $variantId, $mainDetailId, $translations);
 
-        /** @var Connection $connection */
-        $connection = Shopware()->Container()->get('dbal_connection');
+        $connection = $this->getContainer()->get('dbal_connection');
         $sql = "SELECT * FROM s_core_translations WHERE objecttype='article' AND objectkey=273";
         $result = $connection->executeQuery($sql)->fetchAll();
         $importedTranslation = \unserialize($result[0]['objectdata']);
 
-        static::assertEquals($translations[0]['name'], $importedTranslation['txtArtikel']);
-        static::assertEquals($translations[0]['description'], $importedTranslation['txtshortdescription']);
-        static::assertEquals($translations[0]['additionalText'], $importedTranslation['txtzusatztxt']);
-        static::assertEquals($translations[0]['packUnit'], $importedTranslation['txtpackunit']);
+        static::assertSame($translations[0]['name'], $importedTranslation['txtArtikel']);
+        static::assertSame($translations[0]['description'], $importedTranslation['txtshortdescription']);
+        static::assertSame($translations[0]['metaTitle'], $importedTranslation['metaTitle']);
+        static::assertSame($translations[0]['keywords'], $importedTranslation['txtkeywords']);
+        static::assertSame($translations[0]['additionalText'], $importedTranslation['txtzusatztxt']);
+        static::assertSame($translations[0]['packUnit'], $importedTranslation['txtpackunit']);
+        static::assertSame($translations[0]['shippingTime'], $importedTranslation['txtshippingtime']);
     }
 
-    public function testWriteShouldCreateAttributeTranslations()
+    public function testWriteShouldCreateAttributeTranslations(): void
     {
-        /** @var ModelManager $modelManager */
-        $modelManager = Shopware()->Container()->get('models');
+        $modelManager = $this->getContainer()->get('models');
         $modelManager->rollback();
 
-        /** @var Connection $dbalConnection */
-        $dbalConnection = Shopware()->Container()->get('dbal_connection');
-        /** @var CrudService $attributeService */
-        $attributeService = Shopware()->Container()->get('shopware_attribute.crud_service');
+        $dbalConnection = $this->getContainer()->get('dbal_connection');
+        $attributeService = $this->getContainer()->get('shopware_attribute.crud_service');
         $attributeService->update('s_articles_attributes', 'mycustomfield', 'string', ['translatable' => true]);
 
-        $articleId = 272;
+        $productId = 272;
         $variantId = 827;
         $mainDetailId = 827;
         $translations = [
@@ -93,7 +93,7 @@ class TranslationWriterTest extends TestCase
         ];
 
         $translationsWriter = $this->createTranslationWriter();
-        $translationsWriter->write($articleId, $variantId, $mainDetailId, $translations);
+        $translationsWriter->write($productId, $variantId, $mainDetailId, $translations);
 
         $attributeService->delete('s_articles_attributes', 'mycustomfield');
 
@@ -101,49 +101,47 @@ class TranslationWriterTest extends TestCase
         $result = $dbalConnection->executeQuery($sql)->fetchAll();
         $importedTranslation = \unserialize($result[0]['objectdata']);
 
-        // trait rollback not working - so we rollback manually
+        // trait rollback not working - so we roll back manually
         $dbalConnection->executeQuery("DELETE FROM s_core_translations WHERE objecttype='article' AND objectkey=272");
         $dbalConnection->executeQuery('DELETE FROM s_articles_translations WHERE articleID=272');
 
-        static::assertEquals($translations[0]['mycustomfield'], $importedTranslation['__attribute_mycustomfield']);
+        static::assertSame($translations[0]['mycustomfield'], $importedTranslation['__attribute_mycustomfield']);
 
         $modelManager->beginTransaction();
     }
 
-    public function testWriteShouldCreateVariantTranslation()
+    public function testWriteShouldCreateVariantTranslation(): void
     {
-        $articleId = 273;
+        $productId = 273;
         $variantId = 1053;
         $mainDetailId = 273;
         $translations = [
             [
                 'name' => 'translatedName',
-                'description' => 'Translated descritpion',
+                'description' => 'Translated description',
                 'metaTitle' => 'Translated meta title',
                 'keywords' => 'translated,keywords',
                 'additionalText' => 'Translated additional text',
                 'packUnit' => 'translated pack unit',
+                'shippingTime' => 'Translated shipping time',
                 'languageId' => '2',
             ],
         ];
 
         $translationWriter = $this->createTranslationWriter();
-        $translationWriter->write($articleId, $variantId, $mainDetailId, $translations);
+        $translationWriter->write($productId, $variantId, $mainDetailId, $translations);
 
-        /** @var Connection $connection */
-        $connection = Shopware()->Container()->get('dbal_connection');
+        $connection = $this->getContainer()->get('dbal_connection');
         $sql = "SELECT * FROM s_core_translations WHERE objecttype='variant' AND objectkey=1053";
         $result = $connection->executeQuery($sql)->fetchAll();
         $importedTranslation = \unserialize($result[0]['objectdata']);
 
-        static::assertEquals('Translated additional text', $importedTranslation['txtzusatztxt']);
-        static::assertEquals('translated pack unit', $importedTranslation['txtpackunit']);
+        static::assertSame($translations[0]['additionalText'], $importedTranslation['txtzusatztxt']);
+        static::assertSame($translations[0]['packUnit'], $importedTranslation['txtpackunit']);
+        static::assertSame($translations[0]['shippingTime'], $importedTranslation['txtshippingtime']);
     }
 
-    /**
-     * @return TranslationWriter
-     */
-    private function createTranslationWriter()
+    private function createTranslationWriter(): TranslationWriter
     {
         return new TranslationWriter();
     }

@@ -205,7 +205,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
 
                 $articleDetail = $articleDetailRepository->findOneBy(['number' => $record['articleNumber']]);
 
-                if (!$articleDetail) {
+                if (!$articleDetail instanceof Detail) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/article_number_not_found', 'Article with order number %s doen not exists');
                     throw new AdapterException(\sprintf($message, $record['articleNumber']));
