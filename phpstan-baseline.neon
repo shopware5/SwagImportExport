@@ -2586,11 +2586,6 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/ArticlesDbAdapter.php
 
 		-
-			message: "#^Offset 'purchasePrice' does not exist on array\\{article\\: mixed, price\\: mixed\\}\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/ArticlesDbAdapter.php
-
-		-
 			message: "#^Parameter \\#1 \\$articleId of method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\Articles\\\\CategoryWriter\\:\\:write\\(\\) expects string, int given\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/ArticlesDbAdapter.php
@@ -7406,31 +7401,6 @@ parameters:
 			path: Components/SwagImportExport/Utils/DataLimit.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\Utils\\\\DbAdapterHelper\\:\\:convertBooleanFalseToString\\(\\) has parameter \\$value with no type specified\\.$#"
-			count: 1
-			path: Components/SwagImportExport/Utils/DbAdapterHelper.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\Utils\\\\DbAdapterHelper\\:\\:decodeHtmlEntities\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/SwagImportExport/Utils/DbAdapterHelper.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\Utils\\\\DbAdapterHelper\\:\\:decodeHtmlEntities\\(\\) has parameter \\$records with no type specified\\.$#"
-			count: 1
-			path: Components/SwagImportExport/Utils/DbAdapterHelper.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\Utils\\\\DbAdapterHelper\\:\\:escapeNewLines\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/SwagImportExport/Utils/DbAdapterHelper.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\Utils\\\\DbAdapterHelper\\:\\:escapeNewLines\\(\\) has parameter \\$records with no type specified\\.$#"
-			count: 1
-			path: Components/SwagImportExport/Utils/DbAdapterHelper.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\Utils\\\\FileHelper\\:\\:writeStringToFile\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Components/SwagImportExport/Utils/FileHelper.php
@@ -9389,31 +9359,6 @@ parameters:
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\CustomerDbAdapterTest\\:\\:testWriteWithoutRecordsThrowsException\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Functional/Components/SwagImportExport/DbAdapters/CustomerDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\MainOrdersDbAdapterTest\\:\\:testReadShouldCreateValidColumns\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/SwagImportExport/DbAdapters/MainOrdersDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\MainOrdersDbAdapterTest\\:\\:testReadShouldExportCorrectResult\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/SwagImportExport/DbAdapters/MainOrdersDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\MainOrdersDbAdapterTest\\:\\:testReadShouldExportCorrectResultWithoutTaxId\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/SwagImportExport/DbAdapters/MainOrdersDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\MainOrdersDbAdapterTest\\:\\:testReadWithEmptyColumnsArrayThrowsException\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/SwagImportExport/DbAdapters/MainOrdersDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\MainOrdersDbAdapterTest\\:\\:testReadWithEmptyIdsArrayThrowsException\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/SwagImportExport/DbAdapters/MainOrdersDbAdapterTest.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\NewsletterDbAdapterTest\\:\\:testShouldAddCustomerAsNewsletterRecipient\\(\\) has no return type specified\\.$#"
@@ -12691,11 +12636,6 @@ parameters:
 			path: Tests/Unit/Components/SwagImportExport/FileIO/Encoders/XmlEncoderTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Components\\\\SwagImportExport\\\\Validator\\\\DbAdapterHelperTest\\:\\:testDecodeHtmlEntities\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Components/SwagImportExport/Utils/DbAdapterHelperTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Components\\\\SwagImportExport\\\\Validator\\\\CategoryValidatorTest\\:\\:testItShouldThrowException\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Unit/Components/SwagImportExport/Validator/CategoryValidatorTest.php
@@ -13309,4 +13249,3 @@ parameters:
 			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\Update\\\\Update03DefaultProfileSupportTest\\:\\:testUpdateShouldThrowOriginalException\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Unit/Setup/Update/Update03DefaultProfileSupportTest.php
-

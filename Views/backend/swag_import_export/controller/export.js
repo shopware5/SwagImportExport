@@ -201,10 +201,10 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
                 me.batchConfig.position = result.data.position;
 
                 win.exportProgress.updateProgress(
-                        me.batchConfig.position / me.batchConfig.totalCount,
-                        me.snippets.process + me.batchConfig.position + ' / ' + me.batchConfig.totalCount,
-                        true
-                        );
+                    me.batchConfig.position / me.batchConfig.totalCount,
+                    me.snippets.process + me.batchConfig.position + ' / ' + me.batchConfig.totalCount,
+                    true
+                );
 
                 if (me.batchConfig.position === me.batchConfig.totalCount) {
                     me.fileName = result.data.fileName;
