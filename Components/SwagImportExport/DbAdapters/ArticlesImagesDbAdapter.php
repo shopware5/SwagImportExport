@@ -10,6 +10,7 @@ namespace Shopware\Components\SwagImportExport\DbAdapters;
 
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Query\Expr\Join;
+use GuzzleHttp\Client;
 use Shopware\Bundle\MediaBundle\MediaService;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\QueryBuilder;
@@ -26,7 +27,6 @@ use Shopware\Models\Article\Configurator\Option;
 use Shopware\Models\Article\Detail;
 use Shopware\Models\Article\Image;
 use Shopware\Models\Article\Repository;
-use Shopware\Models\Attribute\ArticleImage;
 use Shopware\Models\Attribute\ArticleImage as ProductImageAttribute;
 use Shopware\Models\Media\Album;
 use Shopware\Models\Media\Media;
@@ -34,6 +34,18 @@ use Symfony\Component\HttpFoundation\File\File;
 
 class ArticlesImagesDbAdapter implements DataDbAdapter
 {
+    private const PROTOCOL_FTP = 'ftp';
+    private const PROTOCOL_HTTP = 'http';
+    private const PROTOCOL_HTTPS = 'https';
+    private const PROTOCOL_FILE = 'file';
+
+    private const ALLOWED_PROTOCOLS = [
+        self::PROTOCOL_FTP,
+        self::PROTOCOL_HTTP,
+        self::PROTOCOL_HTTPS,
+        self::PROTOCOL_FILE,
+    ];
+
     /**
      * @var ModelManager
      */
@@ -114,6 +126,11 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
      */
     private $dbalHelper;
 
+    /**
+     * @var Client
+     */
+    private $httpClient;
+
     public function __construct()
     {
         $this->manager = Shopware()->Models();
@@ -129,6 +146,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
         $this->docPath = Shopware()->DocPath('media_temp');
         $this->underscoreToCamelCaseService = Shopware()->Container()->get('swag_import_export.underscore_camelcase_service');
         $this->dbalHelper = DbalHelper::create();
+        $this->httpClient = Shopware()->Container()->get('guzzle_http_client_factory')->createClient();
     }
 
     /**
@@ -620,8 +638,8 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param string $url          URL of the resource that should be loaded (ftp, http, file)
-     * @param string $baseFilename Optional: Instead of creating a hash, create a filename based on the given one
+     * @param string      $url          URL of the resource that should be loaded (ftp, http, file)
+     * @param string|null $baseFilename Optional: Instead of creating a hash, create a filename based on the given one
      *
      * @throws \Exception
      *
@@ -647,44 +665,56 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
             throw new \Exception(\sprintf($message, $destPath));
         }
 
-        $urlArray = \parse_url($url);
-        $urlArray['path'] = \explode('/', $urlArray['path']);
-        switch ($urlArray['scheme']) {
-            case 'ftp':
-            case 'http':
-            case 'https':
-            case 'file':
-                if ($baseFilename === null) {
-                    $filename = \md5(\uniqid(\mt_rand(), true));
-                } else {
-                    $filename = $baseFilename;
-                }
+        $urlScheme = \parse_url($url, \PHP_URL_SCHEME);
 
-                if (!$put_handle = \fopen("$destPath/$filename", 'wb+')) {
-                    $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/articlesImages/could_open_dir_file', 'Could not open %s/%s for writing');
-                    throw new AdapterException(\sprintf($message), $destPath, $filename);
-                }
-
-                //replace empty spaces
-                $url = \str_replace(' ', '%20', $url);
-
-                if (!$get_handle = \fopen($url, 'rb')) {
-                    $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/articlesImages/could_not_open_url', 'Could not open %s for reading');
-                    throw new AdapterException(\sprintf($message, $url));
-                }
-                while (!\feof($get_handle)) {
-                    \fwrite($put_handle, \fgets($get_handle, 4096));
-                }
-                \fclose($get_handle);
-                \fclose($put_handle);
-
-                return "$destPath/$filename";
+        if (!\in_array($urlScheme, self::ALLOWED_PROTOCOLS, true)) {
+            $message = SnippetsHelper::getNamespace()
+                ->get('adapters/articlesImages/unsupported_schema', 'Unsupported schema %s.');
+            throw new AdapterException(\sprintf($message, $urlScheme ?? '"No URL scheme given"'));
         }
-        $message = SnippetsHelper::getNamespace()
-            ->get('adapters/articlesImages/unsupported_schema', 'Unsupported schema %s.');
-        throw new AdapterException(\sprintf($message, $urlArray['scheme']));
+
+        $filename = $baseFilename ?? \md5(\uniqid(\mt_rand(), true));
+
+        $put_handle = \fopen(sprintf('%s/%s', $destPath, $filename), 'wb+');
+        if (!$put_handle) {
+            $message = SnippetsHelper::getNamespace()
+                ->get('adapters/articlesImages/could_open_dir_file', 'Could not open %s/%s for writing');
+            throw new AdapterException(\sprintf($message), $destPath, $filename);
+        }
+
+        //replace empty spaces
+        $url = \str_replace(' ', '%20', $url);
+
+        if ($urlScheme === self::PROTOCOL_FILE) {
+            $get_handle = \fopen($url, 'rb');
+            if (!$get_handle) {
+                $message = SnippetsHelper::getNamespace()
+                    ->get('adapters/articlesImages/could_not_open_url', 'Could not open %s for reading');
+                throw new AdapterException(\sprintf($message, $url));
+            }
+            while (!\feof($get_handle)) {
+                $data = \fgets($get_handle, 4096);
+                if (!\is_string($data)) {
+                    continue;
+                }
+                \fwrite($put_handle, $data);
+            }
+            \fclose($get_handle);
+        } else {
+            try {
+                $contents = $this->httpClient->get($url)->getBody()->getContents();
+            } catch (\Throwable $exception) {
+                $message = SnippetsHelper::getNamespace()
+                    ->get('adapters/articlesImages/could_not_open_url', 'Could not open %s for reading');
+                throw new AdapterException(\sprintf($message, $url));
+            }
+
+            fwrite($put_handle, $contents);
+        }
+
+        fclose($put_handle);
+
+        return sprintf('%s/%s', $destPath, $filename);
     }
 
     private function createAttribute(array $record, Image $image): void
@@ -700,7 +730,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
             $attributes['articleImageId'] = $image->getId();
             $queryBuilder = $this->dbalHelper->getQueryBuilderForEntity(
                 $attributes,
-                ArticleImage::class,
+                ProductImageAttribute::class,
                 $attributesId
             );
 
