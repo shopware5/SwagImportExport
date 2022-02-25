@@ -61,8 +61,8 @@ class ArticleWriter
     }
 
     /**
-     * @param array $article
-     * @param array $defaultValues
+     * @param array<string, mixed> $article
+     * @param array<string, mixed> $defaultValues
      *
      * @throws AdapterException
      *
@@ -77,8 +77,8 @@ class ArticleWriter
     }
 
     /**
-     * @param array $article
-     * @param array $defaultValues
+     * @param array<string, mixed> $article
+     * @param array<string, mixed> $defaultValues
      *
      * @throws AdapterException
      *
@@ -87,20 +87,20 @@ class ArticleWriter
     protected function insertOrUpdateArticle($article, $defaultValues)
     {
         $shouldCreateMainArticle = false;
-        list($mainDetailId, $articleId, $detailId) = $this->findExistingEntries($article);
+        list($mainVariantId, $productId, $variantId) = $this->findExistingEntries($article);
 
         if ($article['processed']) {
-            if (!$mainDetailId) {
-                $mainDetailId = $detailId;
+            if (!$mainVariantId) {
+                $mainVariantId = $variantId;
             }
 
-            return new ArticleWriterResult($articleId, $detailId, $mainDetailId);
+            return new ArticleWriterResult($productId, $variantId, $mainVariantId);
         }
 
-        $createDetail = $detailId == 0;
+        $createDetail = $variantId == 0;
 
         // if detail needs to be created and the (different) mainDetail does not exist: error
-        if ($createDetail && !$mainDetailId && !$this->isMainDetail($article)) {
+        if ($createDetail && !$mainVariantId && !$this->isMainDetail($article)) {
             $message = SnippetsHelper::getNamespace()
                 ->get('adapters/articles/variant_existence', 'Variant with number %s does not exists.');
             throw new AdapterException(\sprintf($message, $article['mainNumber']));
@@ -119,38 +119,38 @@ class ArticleWriter
 
         // insert/update main detail article
         if ($this->isMainDetail($article)) {
-            $articleId = $this->createOrUpdateMainDetail($article, $shouldCreateMainArticle, $articleId);
+            $productId = $this->createOrUpdateMainVariant($article, $shouldCreateMainArticle, $productId);
         }
 
-        $article['articleId'] = $articleId;
-        $article['kind'] = $mainDetailId == $detailId ? 1 : 2;
-        list($article, $detailId) = $this->createOrUpdateArticleDetail($article, $defaultValues, $detailId, $createDetail);
+        $article['articleId'] = $productId;
+        $article['kind'] = $mainVariantId == $variantId ? 1 : 2;
+        list($article, $variantId) = $this->createOrUpdateProductVariant($article, $defaultValues, $variantId, $createDetail);
 
         // set reference
         if ($shouldCreateMainArticle) {
-            $this->db->query('UPDATE s_articles SET main_detail_id = ? WHERE id = ?', [$detailId, $articleId]);
+            $this->db->query('UPDATE s_articles SET main_detail_id = ? WHERE id = ?', [$variantId, $productId]);
         }
 
         // insert attributes
-        $this->createArticleAttributes($article, $articleId, $detailId, $shouldCreateMainArticle);
+        $this->createProductAttributes($article, $productId, $variantId, $shouldCreateMainArticle);
 
-        if (!$mainDetailId) {
-            $mainDetailId = $detailId;
+        if (!$mainVariantId) {
+            $mainVariantId = $variantId;
         }
 
-        return new ArticleWriterResult($articleId, $mainDetailId, $detailId);
+        return new ArticleWriterResult($productId, $mainVariantId, $variantId);
     }
 
     /**
-     * @param array $article
+     * @param array<string, mixed> $article
      *
-     * @return array
+     * @return array{0: int, 1: int, 2: int}
      */
     protected function findExistingEntries($article)
     {
-        $articleId = null;
-        $mainDetailId = null;
-        $detailId = null;
+        $productId = 0;
+        $mainVariantId = 0;
+        $variantId = 0;
 
         // Try to find an existing main variant
         if ($article['mainNumber']) {
@@ -159,8 +159,8 @@ class ArticleWriter
                 $article['mainNumber']
             );
             if (!empty($result)) {
-                $mainDetailId = $result['id'];
-                $articleId = $result['articleID'];
+                $mainVariantId = (int) $result['id'];
+                $productId = (int) $result['articleID'];
             }
         }
 
@@ -170,24 +170,24 @@ class ArticleWriter
             [$article['orderNumber']]
         );
         if (!empty($result)) {
-            $detailId = $result['id'];
-            $articleId = $result['articleID'];
+            $variantId = (int) $result['id'];
+            $productId = (int) $result['articleID'];
         }
 
-        return [$mainDetailId, $articleId, $detailId];
+        return [$mainVariantId, $productId, $variantId];
     }
 
     /**
-     * @param array $article
+     * @param array<string, mixed> $article
      *
-     * @return array
+     * @return array<string, mixed>
      */
     protected function mapArticleAttributes($article)
     {
         $attributes = [];
         foreach ($article as $key => $value) {
             $position = \strpos($key, 'attribute');
-            if ($position === false || $position !== 0) {
+            if ($position !== 0) {
                 continue;
             }
 
@@ -201,90 +201,80 @@ class ArticleWriter
     /**
      * @param int $detailId
      *
-     * @return string|bool
+     * @return int
      */
     protected function getAttrId($detailId)
     {
         $sql = 'SELECT id FROM s_articles_attributes WHERE articledetailsID = ?';
-        $attrId = $this->connection->fetchColumn($sql, [$detailId]);
 
-        return $attrId;
+        return (int) $this->connection->fetchColumn($sql, [$detailId]);
     }
 
     /**
-     * @return bool
+     * @param array<string, mixed> $product
      */
-    private function isMainDetail(array $article)
+    private function isMainDetail(array $product): bool
     {
-        return $article['mainNumber'] == $article['orderNumber'];
+        return $product['mainNumber'] === $product['orderNumber'];
     }
 
     /**
-     * @param array $article
-     * @param bool  $shouldCreateMainArticle
-     * @param int   $articleId
-     *
-     * @return int
+     * @param array<string, mixed> $product
      */
-    private function createOrUpdateMainDetail($article, $shouldCreateMainArticle, $articleId)
+    private function createOrUpdateMainVariant(array $product, bool $shouldCreateMainProduct, int $productId): int
     {
         $builder = $this->dbalHelper->getQueryBuilderForEntity(
-            $article,
+            $product,
             Article::class,
-            $shouldCreateMainArticle ? false : $articleId
+            $shouldCreateMainProduct ? false : $productId
         );
         $builder->execute();
 
-        if ($shouldCreateMainArticle) {
-            return $this->connection->lastInsertId();
+        if ($shouldCreateMainProduct) {
+            return (int) $this->connection->lastInsertId();
         }
 
-        return $articleId;
+        return $productId;
     }
 
     /**
-     * @param array $article
-     * @param int   $articleId
-     * @param int   $detailId
-     * @param bool  $createArticle
+     * @param array<string, mixed> $product
      */
-    private function createArticleAttributes($article, $articleId, $detailId, $createArticle)
+    private function createProductAttributes(array $product, int $productId, int $variantId, bool $createProduct): void
     {
-        $attributes = $this->mapArticleAttributes($article);
-        $attributes['articleId'] = $articleId;
-        $attributes['articleDetailId'] = $detailId;
+        $attributes = $this->mapArticleAttributes($product);
+        $attributes['articleId'] = $productId;
+        $attributes['articleDetailId'] = $variantId;
 
         $builder = $this->dbalHelper->getQueryBuilderForEntity(
             $attributes,
             ProductAttribute::class,
-            $createArticle ? false : $this->getAttrId($detailId)
+            $createProduct ? false : $this->getAttrId($variantId)
         );
         $builder->execute();
     }
 
     /**
-     * @param array $article
-     * @param array $defaultValues
-     * @param int   $detailId
-     * @param bool  $createDetail
+     * @param array<string, mixed> $product
+     * @param array<string, mixed> $defaultValues
      *
-     * @return array
+     * @return array{0: array<string, mixed>, 1: int}
      */
-    private function createOrUpdateArticleDetail($article, $defaultValues, $detailId, $createDetail)
+    private function createOrUpdateProductVariant(array $product, array $defaultValues, int $variantId, bool $createVariant): array
     {
-        $article = $this->dataManager->setArticleVariantData($article, ArticleDataType::$articleVariantFieldsMapping);
+        $product = $this->dataManager->setArticleVariantData($product, ArticleDataType::$articleVariantFieldsMapping);
 
-        if ($createDetail) {
-            $article = $this->dataManager->setDefaultFieldsForCreate($article, $defaultValues);
+        if ($createVariant) {
+            $product = $this->dataManager->setDefaultFieldsForCreate($product, $defaultValues);
         }
 
-        $builder = $this->dbalHelper->getQueryBuilderForEntity($article, Detail::class, $detailId);
+        $builder = $this->dbalHelper->getQueryBuilderForEntity($product, Detail::class, $variantId);
         $builder->execute();
 
-        if (!$detailId) {
-            $detailId = $this->connection->lastInsertId();
+        if ($variantId === 0) {
+            $variantId = (int) $this->connection->lastInsertId();
         }
 
-        return [$article, $detailId];
+        return [$product, $variantId];
     }
 }

@@ -51,7 +51,9 @@ class DbalHelper
     }
 
     /**
-     * @param class-string $entity
+     * @param array<string, mixed> $data
+     * @param class-string         $entity
+     * @param int|false            $primaryId
      *
      * @return QueryBuilder
      */
@@ -113,8 +115,8 @@ class DbalHelper
     }
 
     /**
-     * @param string $value
-     * @param string $key
+     * @param string|null $value
+     * @param string      $key
      *
      * @return string
      */
@@ -131,7 +133,7 @@ class DbalHelper
             'float' => \PDO::PARAM_STR,
         ];
 
-        $nullAble = \array_key_exists('nullable', $metaData->fieldMappings[$key]) ? $metaData->fieldMappings[$key]['nullable'] : false;
+        $nullAble = \array_key_exists('nullable', $metaData->fieldMappings[$key]) && $metaData->fieldMappings[$key]['nullable'];
 
         // Check if nullable
         if (!isset($value) && $nullAble) {

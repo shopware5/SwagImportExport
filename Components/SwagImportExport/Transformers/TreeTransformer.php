@@ -158,9 +158,9 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
     /**
      * Helper method which creates rawData from array structure
      *
-     * @param array  $data
-     * @param string $type
-     * @param string $nodePath
+     * @param array       $data
+     * @param string      $type
+     * @param string|null $nodePath
      */
     public function buildRawData($data, $type, $nodePath = null)
     {
@@ -294,7 +294,7 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
     /**
      * Transforms read it data into raw data
      *
-     * @param null $nodePath
+     * @param string|null $nodePath
      */
     public function transformFromTree($node, $importMapper, $adapter, $nodePath = null)
     {
@@ -495,20 +495,17 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
     /**
      * Create iteration node mapper for import
      *
-     * @param null $nodePath
+     * @param string|null $nodePath
      */
     protected function createIterationNodeMapper($node, $nodePath = null)
     {
-        $separator = null;
+        $separator = $nodePath ? '_' : null;
         if (isset($node['adapter']) && $nodePath) {
             $this->iterationNodes[$nodePath] = $node['adapter'];
         }
 
         if (isset($node['children'])) {
             foreach ($node['children'] as $child) {
-                if ($nodePath) {
-                    $separator = '_';
-                }
                 $currentPath = $nodePath . $separator . $child['name'];
                 $this->createIterationNodeMapper($child, $currentPath);
             }
@@ -518,7 +515,7 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
     /**
      * Generates import mapper from the js tree
      *
-     * @param null $nodePath
+     * @param string|null $nodePath
      */
     protected function generateMapper($node, $nodePath = null)
     {
@@ -548,7 +545,7 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
                 }
             }
 
-            $this->saveMapper($nodePath, $node['shopwareField']);
+            $this->saveMapper((string) $nodePath, $node['shopwareField']);
         }
     }
 
