@@ -123,6 +123,7 @@ class OrdersDbAdapterTest extends TestCase
         static::assertArrayHasKey('default', $exportedOrders);
         static::assertIsArray($exportedOrders['default']);
         static::assertArrayHasKey('customerNumber', $exportedOrders['default'][0]);
+        static::assertArrayHasKey('deviceType', $exportedOrders['default'][0]);
     }
 
     private function createOrdersDbAdapter(): OrdersDbAdapter
