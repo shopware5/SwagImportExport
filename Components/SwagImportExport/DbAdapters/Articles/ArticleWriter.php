@@ -22,6 +22,9 @@ use Shopware\Models\Attribute\Article as ProductAttribute;
 
 class ArticleWriter
 {
+    private const MAIN_KIND = 1;
+    private const VARIANT_KIND = 2;
+
     /**
      * @var \Enlight_Components_Db_Adapter_Pdo_Mysql
      */
@@ -103,7 +106,7 @@ class ArticleWriter
         if ($createDetail && !$mainVariantId && !$this->isMainDetail($article)) {
             $message = SnippetsHelper::getNamespace()
                 ->get('adapters/articles/variant_existence', 'Variant with number %s does not exists.');
-            throw new AdapterException(\sprintf($message, $article['mainNumber']));
+            throw new AdapterException(sprintf($message, $article['mainNumber']));
         }
 
         // Set create flag
@@ -124,25 +127,9 @@ class ArticleWriter
 
         $article['articleId'] = $productId;
         if (!isset($article['kind']) || empty($article['kind'])) {
-            $article['kind'] = $mainVariantId == $variantId ? 1 : 2;
-        }else {
-            $this->db->query('
-            UPDATE
-                s_articles a
-                LEFT JOIN s_articles_details d ON d.id = a.main_detail_id
-            SET
-                a.main_detail_id = (
-                    SELECT
-                        id
-                    FROM
-                        s_articles_details
-                    WHERE
-                        articleID = a.id
-                        AND kind = 1
-                    LIMIT 1)
-            WHERE a.id = ?
-            ', [$productId]);
+            $article['kind'] = $mainVariantId == $variantId ? self::MAIN_KIND : self::VARIANT_KIND;
         }
+
         list($article, $variantId) = $this->createOrUpdateProductVariant($article, $defaultValues, $variantId, $createDetail);
 
         // set reference
@@ -177,6 +164,7 @@ class ArticleWriter
                 'SELECT ad.id, ad.articleID FROM s_articles_details ad WHERE ordernumber = ?',
                 $article['mainNumber']
             );
+
             if (!empty($result)) {
                 $mainVariantId = (int) $result['id'];
                 $productId = (int) $result['articleID'];
@@ -188,6 +176,7 @@ class ArticleWriter
             'SELECT ad.id, ad.articleID FROM s_articles_details ad WHERE ordernumber = ?',
             [$article['orderNumber']]
         );
+
         if (!empty($result)) {
             $variantId = (int) $result['id'];
             $productId = (int) $result['articleID'];
@@ -205,12 +194,12 @@ class ArticleWriter
     {
         $attributes = [];
         foreach ($article as $key => $value) {
-            $position = \strpos($key, 'attribute');
+            $position = strpos($key, 'attribute');
             if ($position !== 0) {
                 continue;
             }
 
-            $attrKey = \lcfirst(\str_replace('attribute', '', $key));
+            $attrKey = lcfirst(str_replace('attribute', '', $key));
             $attributes[$attrKey] = $value;
         }
 
