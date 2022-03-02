@@ -488,6 +488,14 @@ class OrdersDbAdapter implements DataDbAdapter
 
         $columns = \array_merge($columns, $customerColumns);
 
+        $documentColumns = [
+          'documents.documentId as documentId',
+          'documents.typeId as documentTypeId',
+          "DATE_FORMAT(documents.date, '%Y-%m-%d') as documentDate",
+        ];
+
+        $columns = \array_merge($columns, $documentColumns);
+
         $attributesSelect = $this->getAttributes();
 
         if (!empty($attributesSelect)) {
@@ -549,6 +557,7 @@ class OrdersDbAdapter implements DataDbAdapter
             ->leftJoin('orders.dispatch', 'dispatch')
             ->leftJoin('orders.customer', 'customer')
             ->leftJoin('orders.attribute', 'attr')
+            ->leftJoin('orders.documents', 'documents')
             ->where('details.id IN (:ids)')
             ->setParameter('ids', $ids);
 

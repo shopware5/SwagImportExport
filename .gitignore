@@ -2,5 +2,6 @@
 .psh.yaml
 .phpunit.result.cache
 .build/
+.idea
 
 vendor
