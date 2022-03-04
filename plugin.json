@@ -12,7 +12,7 @@
 
     "changelog": {
         "de": {
-            "REPLACE_GLOBALLY_WITH_NEXT_VERSION (2.11.0)": "SW-26128, SW-26398, SW-26417, PT-12454, PT-26422 - Verbesserung der allgemeinen Code-Qualität; PT-10154 - Fehlendes Feld 'deviceType' zum Bestellexport-Profil hinzugefügt; PT-10268 - Kundennummer zum Export der Bestellungen hinzugefügt; PT-12138 - Bilder-Download verbessert; PT-12146 - Verfügbare Daten im Event 'Shopware_Components_SwagImportExport_DbalHelper_GetQueryBuilderForEntity_Value' erweitert; PT-12447 - Das Produktfeld 'shippingTime' kann nun übersetzt werden; PT-12480 - Verbesserung der PHP 8 Kompatibilität; PT-12606 - Fehlendes Feld 'clearedDate' zum Bestellexport-Profil hinzugefügt;",
+            "REPLACE_GLOBALLY_WITH_NEXT_VERSION (2.11.0)": "SW-26128, SW-26398, SW-26417, PT-12454, PT-26422 - Verbesserung der allgemeinen Code-Qualität; PT-10154 - Fehlendes Feld 'deviceType' zum Bestellexport-Profil hinzugefügt; PT-10268 - Kundennummer zum Export der Bestellungen hinzugefügt; PT-12138 - Bilder-Download verbessert; PT-12146 - Verfügbare Daten im Event 'Shopware_Components_SwagImportExport_DbalHelper_GetQueryBuilderForEntity_Value' erweitert; PT-12384 - Fehlende Felder 'documentId, documentTypeId, documentDate' zum Bestellexport-Profil hinzugefügt; PT-12447 - Das Produktfeld 'shippingTime' kann nun übersetzt werden; PT-12480 - Verbesserung der PHP 8 Kompatibilität; PT-12606 - Fehlendes Feld 'clearedDate' zum Bestellexport-Profil hinzugefügt;",
             "2.10.8": "PT-12120 - Shopware 5.7 und PHP8 Kompatibilität;",
             "2.10.7": "PT-9529 - Optimiert den Export Prozess;",
             "2.10.6": "PT-10810 - Optimiert den Import Prozess;",
@@ -62,7 +62,7 @@
             "1.0.1": "Problem mit verschwindendem Import/Export Menü-Eintrag behoben; Weitere ACL-Zugangsberechtigungen hinzugefügt; Korrektur: article.active Verhalten; Korrektur: Artikel-Attribute; Korrektur: Datums- und Zeitimporte"
         },
         "en": {
-            "REPLACE_GLOBALLY_WITH_NEXT_VERSION (2.11.0)": "SW-26128, SW-26398, SW-26417, PT-12454, PT-26422 - Improve overall code quality; PT-10154 - Add missing field 'deviceType' to order export profile; PT-10268 - Add customer number to order export;  PT-12138 - Improve image download;  PT-12146 - Extend available data in 'Shopware_Components_SwagImportExport_DbalHelper_GetQueryBuilderForEntity_Value' event; PT-12447 - The product field 'shippingTime' can now be translated; PT-12480 - Improve PHP 8 compatibility; PT-12606 - Add missing field 'clearedDate' to order export profile;",
+            "REPLACE_GLOBALLY_WITH_NEXT_VERSION (2.11.0)": "SW-26128, SW-26398, SW-26417, PT-12454, PT-26422 - Improve overall code quality; PT-10154 - Add missing field 'deviceType' to order export profile; PT-10268 - Add customer number to order export;  PT-12138 - Improve image download;  PT-12146 - Extend available data in 'Shopware_Components_SwagImportExport_DbalHelper_GetQueryBuilderForEntity_Value' event; PT-12384 - Add missing fields 'documentId, documentTypeId, documentDate' to order export profile; PT-12447 - The product field 'shippingTime' can now be translated; PT-12480 - Improve PHP 8 compatibility; PT-12606 - Add missing field 'clearedDate' to order export profile;",
             "2.10.8": "PT-12120 - Shopware 5.7 and PHP8 compatibility;",
             "2.10.7": "PT-9529 - Optimizes the export process;",
             "2.10.6": "PT-10810 - Optimizes the import process;",
