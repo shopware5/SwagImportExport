@@ -38,6 +38,11 @@ use Shopware\Models\Shop\Shop;
 
 class ArticlesDbAdapter implements DataDbAdapter
 {
+    public const VARIANTS_FILTER_KEY = 'variants';
+    public const CATEGORIES_FILTER_KEY = 'categories';
+    public const PRODUCT_STREAM_ID_FILTER_KEY = 'productStreamId';
+    private const MAIN_KIND = 1;
+
     /**
      * @var ModelManager
      */
@@ -115,6 +120,8 @@ class ArticlesDbAdapter implements DataDbAdapter
     }
 
     /**
+     * @param array{self::VARIANTS_FILTER_KEY: bool, self::CATEGORIES_FILTER_KEY: bool, productStreamId: array{0: int} } $filter
+     *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
@@ -131,13 +138,11 @@ class ArticlesDbAdapter implements DataDbAdapter
             ->orderBy('detail.articleId', 'ASC')
             ->orderBy('detail.kind', 'ASC');
 
-        if ($filter['variants']) {
-            $builder->andWhere('detail.kind <> 3');
-        } else {
-            $builder->andWhere('detail.kind = 1');
+        if (!$filter[self::VARIANTS_FILTER_KEY]) {
+            $builder->andWhere('detail.kind = ' . self::MAIN_KIND);
         }
 
-        if ($filter['categories']) {
+        if ($filter[self::CATEGORIES_FILTER_KEY]) {
             /** @var Category $category */
             $category = $this->modelManager->find(Category::class, $filter['categories'][0]);
 
@@ -162,8 +167,8 @@ class ArticlesDbAdapter implements DataDbAdapter
             $builder->join('detail.article', 'article')
                 ->andWhere('article.id IN (:ids)')
                 ->setParameter('ids', $articleIds);
-        } elseif ($filter['productStreamId']) {
-            $productStreamId = $filter['productStreamId'][0];
+        } elseif ($filter[self::PRODUCT_STREAM_ID_FILTER_KEY]) {
+            $productStreamId = $filter[self::PRODUCT_STREAM_ID_FILTER_KEY][0];
 
             $contextService = $this->container->get('shopware_storefront.context_service');
             $streamRepo = $this->container->get('shopware_product_stream.repository');
@@ -182,7 +187,9 @@ class ArticlesDbAdapter implements DataDbAdapter
                 return [];
             }
 
-            if ($filter['variants']) {
+            if ($filter[self::VARIANTS_FILTER_KEY]) {
+//                var_dump($products->getProducts());
+
                 $productIds = array_values(array_map(static function (BaseProduct $product) {
                     return $product->getId();
                 }, $products->getProducts()));
@@ -1174,13 +1181,8 @@ class ArticlesDbAdapter implements DataDbAdapter
             ->setParameter('ids', $detailIds)
             ->groupBy('article.id');
 
-<<<<<<< HEAD
-        $mappedArticleIds = \array_map(
+        return \array_map(
             function ($item) {
-=======
-        return array_map(
-            static function ($item) {
->>>>>>> 9d303cf (replace all "article" references with "product")
                 return $item['id'];
             },
             $productIds->getQuery()->getResult()

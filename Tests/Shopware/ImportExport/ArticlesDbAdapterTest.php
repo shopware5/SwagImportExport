@@ -11,10 +11,17 @@ namespace Tests\Shopware\ImportExport;
 use Doctrine\DBAL\Connection;
 use Shopware\Components\SwagImportExport\DbAdapters\ArticlesDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\DataDbAdapter;
+use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use SwagImportExport\Tests\Helper\DbAdapterTestHelper;
+use SwagImportExport\Tests\Helper\FixturesImportTrait;
 
 class ArticlesDbAdapterTest extends DbAdapterTestHelper
 {
+    use DatabaseTestCaseTrait;
+    use FixturesImportTrait;
+
+    private const PRODUCT_VARIANTS_IDS = [123, 124, 14, 257, 15, 258, 16, 259, 253, 254, 255, 250, 251];
+
     protected $yamlFile = 'TestCases/articleDbAdapter.yml';
 
     public function setUp(): void
@@ -49,14 +56,6 @@ class ArticlesDbAdapterTest extends DbAdapterTestHelper
     }
 
     /**
-     * @return array
-     */
-    public function readProvider()
-    {
-        return $this->getDataProvider('testRead');
-    }
-
-    /**
      * @param array $data
      *
      * @dataProvider writeProvider
@@ -80,6 +79,31 @@ class ArticlesDbAdapterTest extends DbAdapterTestHelper
 
         static::assertEquals('H', $prices[1]['pricegroup']);
         static::assertEquals(50, $prices[1]['price']);
+    }
+
+    public function testReadVariantIdsOfProdcutStream()
+    {
+        $this->addProductStream();
+
+        $filter = [
+            ArticlesDbAdapter::VARIANTS_FILTER_KEY => true,
+            ArticlesDbAdapter::PRODUCT_STREAM_ID_FILTER_KEY => [
+                0 => 999999,
+            ],
+        ];
+
+        $articleDbAdapter = $this->createArticlesDbAdapter();
+        $recordIds = $articleDbAdapter->readRecordIds(null, null, $filter);
+
+        static::assertCount(13, array_intersect(self::PRODUCT_VARIANTS_IDS, $recordIds));
+    }
+
+    /**
+     * @return array
+     */
+    public function readProvider()
+    {
+        return $this->getDataProvider('testRead');
     }
 
     /**
