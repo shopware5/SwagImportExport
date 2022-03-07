@@ -100,7 +100,7 @@ class ArticleWriter
             return new ArticleWriterResult($productId, $variantId, $mainVariantId);
         }
 
-        $createDetail = $variantId == 0;
+        $createDetail = $variantId === 0;
 
         // if detail needs to be created and the (different) mainDetail does not exist: error
         if ($createDetail && !$mainVariantId && !$this->isMainDetail($article)) {
@@ -127,9 +127,8 @@ class ArticleWriter
 
         $article['articleId'] = $productId;
         if (!isset($article['kind']) || empty($article['kind'])) {
-            $article['kind'] = $mainVariantId == $variantId ? self::MAIN_KIND : self::VARIANT_KIND;
+            $article['kind'] = $mainVariantId === $variantId ? self::MAIN_KIND : self::VARIANT_KIND;
         }
-
         list($article, $variantId) = $this->createOrUpdateProductVariant($article, $defaultValues, $variantId, $createDetail);
 
         // set reference

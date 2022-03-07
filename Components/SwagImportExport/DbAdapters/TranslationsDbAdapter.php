@@ -71,7 +71,7 @@ class TranslationsDbAdapter implements DataDbAdapter
     protected $validator;
 
     /**
-     * @return array
+     * {@inheritDoc}
      */
     public function readRecordIds($start, $limit, $filter)
     {

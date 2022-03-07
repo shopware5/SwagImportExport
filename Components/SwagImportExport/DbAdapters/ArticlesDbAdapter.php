@@ -14,9 +14,12 @@ use Enlight_Components_Db_Adapter_Pdo_Mysql;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
+use Shopware\Bundle\SearchBundleDBAL\ProductNumberSearch;
+use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 use Shopware\Components\ContainerAwareEventManager;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Components\ProductStream\Repository;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\ArticleWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\CategoryWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\ConfiguratorWriter;
@@ -34,6 +37,7 @@ use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Detail;
 use Shopware\Models\Attribute\Configuration;
 use Shopware\Models\Category\Category;
+use Shopware\Models\Shop\Repository as ShopRepository;
 use Shopware\Models\Shop\Shop;
 
 class ArticlesDbAdapter implements DataDbAdapter
@@ -108,6 +112,26 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     private $underscoreToCamelCaseService;
 
+    /**
+     * @var ContextService
+     */
+    private $contextService;
+
+    /**
+     * @var Repository
+     */
+    private $streamRepo;
+
+    /**
+     * @var ProductNumberSearch
+     */
+    private $productNumberSearch;
+
+    /**
+     * @var ShopRepository
+     */
+    private $shopRepository;
+
     public function __construct()
     {
         $this->container = $container = Shopware()->Container();
@@ -117,10 +141,14 @@ class ArticlesDbAdapter implements DataDbAdapter
         $this->config = $container->get('config');
         $this->eventManager = $container->get('events');
         $this->underscoreToCamelCaseService = $container->get('swag_import_export.underscore_camelcase_service');
+        $this->contextService = $this->container->get('shopware_storefront.context_service');
+        $this->streamRepo = $this->container->get('shopware_product_stream.repository');
+        $this->productNumberSearch = $this->container->get('shopware_search.product_number_search');
+        $this->shopRepository = $this->modelManager->getRepository(Shop::class);
     }
 
     /**
-     * @param array{self::VARIANTS_FILTER_KEY: bool, self::CATEGORIES_FILTER_KEY: bool, productStreamId: array{0: int} } $filter
+     * @param array{variants: bool, categories: array<int>, productStreamId: array<int> } $filter
      *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
@@ -170,26 +198,18 @@ class ArticlesDbAdapter implements DataDbAdapter
         } elseif ($filter[self::PRODUCT_STREAM_ID_FILTER_KEY]) {
             $productStreamId = $filter[self::PRODUCT_STREAM_ID_FILTER_KEY][0];
 
-            $contextService = $this->container->get('shopware_storefront.context_service');
-            $streamRepo = $this->container->get('shopware_product_stream.repository');
-            $productNumberSearch = $this->container->get('shopware_search.product_number_search');
-
-            /** @var \Shopware\Models\Shop\Repository $shopRepo */
-            $shopRepo = $this->modelManager->getRepository(Shop::class);
-            $shop = $shopRepo->getActiveDefault();
-            $context = $contextService->createShopContext($shop->getId());
+            $shop = $this->shopRepository->getActiveDefault();
+            $context = $this->contextService->createShopContext($shop->getId());
             $criteria = new Criteria();
-            $streamRepo->prepareCriteria($criteria, $productStreamId);
+            $this->streamRepo->prepareCriteria($criteria, $productStreamId);
 
             /** @var ProductNumberSearchResult $products */
-            $products = $productNumberSearch->search($criteria, $context);
+            $products = $this->productNumberSearch->search($criteria, $context);
             if (empty($products->getProducts())) {
                 return [];
             }
 
             if ($filter[self::VARIANTS_FILTER_KEY]) {
-//                var_dump($products->getProducts());
-
                 $productIds = array_values(array_map(static function (BaseProduct $product) {
                     return $product->getId();
                 }, $products->getProducts()));

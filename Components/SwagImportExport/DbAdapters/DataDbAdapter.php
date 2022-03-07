@@ -38,9 +38,9 @@ interface DataDbAdapter
     /**
      * Returns all ids for the given export with the given parameters.
      *
-     * @param int   $start
-     * @param int   $limit
-     * @param array $filter
+     * @param int                  $start
+     * @param int                  $limit
+     * @param array<string, mixed> $filter
      *
      * @return array
      */

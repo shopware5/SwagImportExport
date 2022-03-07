@@ -9,6 +9,7 @@
 namespace Tests\Shopware\ImportExport;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Components\SwagImportExport\DbAdapters\ArticlesDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\DataDbAdapter;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
@@ -22,6 +23,9 @@ class ArticlesDbAdapterTest extends DbAdapterTestHelper
 
     private const PRODUCT_VARIANTS_IDS = [123, 124, 14, 257, 15, 258, 16, 259, 253, 254, 255, 250, 251];
 
+    /**
+     * @var string
+     */
     protected $yamlFile = 'TestCases/articleDbAdapter.yml';
 
     public function setUp(): void
@@ -33,13 +37,11 @@ class ArticlesDbAdapterTest extends DbAdapterTestHelper
     }
 
     /**
-     * @param array $columns
      * @param int[] $ids
-     * @param array $expected
      *
      * @dataProvider readProvider
      */
-    public function testRead($columns, $ids, $expected)
+    public function testRead(array $columns, array $ids, array $expected): void
     {
         $dbAdapter = $this->createArticlesDbAdapter();
 
@@ -60,7 +62,7 @@ class ArticlesDbAdapterTest extends DbAdapterTestHelper
      *
      * @dataProvider writeProvider
      */
-    public function testWrite($data)
+    public function testWrite($data): void
     {
         $expectedOrderNumber = 'test9999';
 
@@ -81,7 +83,7 @@ class ArticlesDbAdapterTest extends DbAdapterTestHelper
         static::assertEquals(50, $prices[1]['price']);
     }
 
-    public function testReadVariantIdsOfProdcutStream()
+    public function testReadVariantIdsOfProdcutStream(): void
     {
         $this->addProductStream();
 
@@ -93,23 +95,17 @@ class ArticlesDbAdapterTest extends DbAdapterTestHelper
         ];
 
         $articleDbAdapter = $this->createArticlesDbAdapter();
-        $recordIds = $articleDbAdapter->readRecordIds(null, null, $filter);
+        $recordIds = $articleDbAdapter->readRecordIds(0, \PHP_INT_MAX, $filter);
 
         static::assertCount(13, array_intersect(self::PRODUCT_VARIANTS_IDS, $recordIds));
     }
 
-    /**
-     * @return array
-     */
-    public function readProvider()
+    public function readProvider(): array
     {
         return $this->getDataProvider('testRead');
     }
 
-    /**
-     * @return array
-     */
-    public function writeProvider()
+    public function writeProvider(): array
     {
         return $this->getDataProvider('testWrite');
     }
@@ -124,12 +120,7 @@ class ArticlesDbAdapterTest extends DbAdapterTestHelper
         return $dataFactory->createDbAdapter($this->dbAdapter);
     }
 
-    /**
-     * @param string $number
-     *
-     * @return array
-     */
-    private function getProductDataResult($number)
+    private function getProductDataResult(string $number): array
     {
         $builder = $this->getQueryBuilder();
 
@@ -143,12 +134,7 @@ class ArticlesDbAdapterTest extends DbAdapterTestHelper
         return $builder->execute()->fetchAll();
     }
 
-    /**
-     * @param string $number
-     *
-     * @return array
-     */
-    private function getProductPriceResult($number)
+    private function getProductPriceResult(string $number): array
     {
         $builder = $this->getQueryBuilder();
 
@@ -161,10 +147,7 @@ class ArticlesDbAdapterTest extends DbAdapterTestHelper
         return $builder->execute()->fetchAll();
     }
 
-    /**
-     * @return \Doctrine\DBAL\Query\QueryBuilder
-     */
-    private function getQueryBuilder()
+    private function getQueryBuilder(): QueryBuilder
     {
         /** @var Connection $connection */
         $connection = Shopware()->Container()->get('dbal_connection');
