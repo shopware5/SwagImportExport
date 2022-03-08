@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -13,6 +16,8 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\ArticleWriter;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Models\Article\Article;
+use Shopware\Models\Article\Detail;
+use Shopware\Models\Article\Supplier;
 
 class ArticleWriterTest extends TestCase
 {
@@ -41,7 +46,7 @@ class ArticleWriterTest extends TestCase
         $this->modelManager->rollback();
     }
 
-    public function testWrite()
+    public function testWrite(): void
     {
         $expectedArticleId = 3;
         $expectedDetailId = 3;
@@ -68,7 +73,7 @@ class ArticleWriterTest extends TestCase
         static::assertEquals($expectedMainDetailId, $articleWriterResult->getMainDetailId(), 'Expected mainDetailId id does not match the obtained detailId.');
     }
 
-    public function testWriteShouldInsertANewArticle()
+    public function testWriteShouldInsertANewArticle(): void
     {
         $expectedNewArticle = [
             'orderNumber' => 'test-9999',
@@ -90,16 +95,22 @@ class ArticleWriterTest extends TestCase
         /** @var Article $insertedArticle */
         $insertedArticle = $this->modelManager->find(Article::class, $articleWriterResult->getArticleId());
 
+        $mainDetail = $insertedArticle->getMainDetail();
+        static::assertInstanceOf(Detail::class, $mainDetail);
+
+        $supplier = $insertedArticle->getSupplier();
+        static::assertInstanceOf(Supplier::class, $supplier);
+
         static::assertNotNull($insertedArticle, 'Could not insert article');
-        static::assertEquals($expectedNewArticle['orderNumber'], $insertedArticle->getMainDetail()->getNumber(), 'Could not insert field ordernumber.');
+        static::assertEquals($expectedNewArticle['orderNumber'], $mainDetail->getNumber(), 'Could not insert field ordernumber.');
         static::assertEquals($expectedNewArticle['description'], $insertedArticle->getDescription(), 'Could not insert field description.');
         static::assertEquals($expectedNewArticle['descriptionLong'], $insertedArticle->getDescriptionLong(), 'Could not insert field descrption_long.');
-        static::assertEquals($expectedNewArticle['inStock'], $insertedArticle->getMainDetail()->getInStock(), 'Could not insert field instock.');
+        static::assertEquals($expectedNewArticle['inStock'], $mainDetail->getInStock(), 'Could not insert field instock.');
         static::assertEquals($expectedNewArticle['active'], $insertedArticle->getActive(), 'Could not insert field active.');
-        static::assertEquals($expectedNewArticle['supplierName'], $insertedArticle->getSupplier()->getName(), 'Could not insert field supplier name.');
+        static::assertEquals($expectedNewArticle['supplierName'], $supplier->getName(), 'Could not insert field supplier name.');
     }
 
-    public function testWriteShouldUpdateAnExistingArticle()
+    public function testWriteShouldUpdateAnExistingArticle(): void
     {
         $expectedModifiedArticle = [
             'orderNumber' => 'SW10002',
@@ -115,6 +126,7 @@ class ArticleWriterTest extends TestCase
             'description' => 'This is the description of a very good drink. The description should be updated.',
             'descriptionLong' => 'This is the description of a very good drink. This description is longeeeer. And should be updated!',
             'unitId' => '1',
+            'kind' => 2,
         ];
 
         $articleWriterResult = $this->articleWriter->write($expectedModifiedArticle, []);
@@ -122,17 +134,24 @@ class ArticleWriterTest extends TestCase
         /** @var Article $updatedArticle */
         $updatedArticle = $this->modelManager->find(Article::class, $articleWriterResult->getArticleId());
 
+        $mainDetail = $updatedArticle->getMainDetail();
+        static::assertInstanceOf(Detail::class, $mainDetail);
+
+        $supplier = $updatedArticle->getSupplier();
+        static::assertInstanceOf(Supplier::class, $supplier);
+
         static::assertNotNull($updatedArticle, 'Could not find updated article');
-        static::assertEquals($expectedModifiedArticle['orderNumber'], $updatedArticle->getMainDetail()->getNumber(), 'Could not update field ordernumber.');
+        static::assertEquals($expectedModifiedArticle['kind'], $mainDetail->getKind(), 'Could not update kind.');
+        static::assertEquals($expectedModifiedArticle['orderNumber'], $mainDetail->getNumber(), 'Could not update field ordernumber.');
         static::assertEquals($expectedModifiedArticle['description'], $updatedArticle->getDescription(), 'Could not update field description.');
         static::assertEquals($expectedModifiedArticle['descriptionLong'], $updatedArticle->getDescriptionLong(), 'Could not update field description long.');
-        static::assertEquals($expectedModifiedArticle['inStock'], $updatedArticle->getMainDetail()->getInStock(), 'Could not update field instock.');
-        static::assertEquals($expectedModifiedArticle['lastStock'], $updatedArticle->getMainDetail()->getLastStock(), 'Could not update field last stock.');
+        static::assertEquals($expectedModifiedArticle['inStock'], $mainDetail->getInStock(), 'Could not update field instock.');
+        static::assertEquals($expectedModifiedArticle['lastStock'], $mainDetail->getLastStock(), 'Could not update field last stock.');
         static::assertFalse($updatedArticle->getActive(), 'Could not update field active.');
-        static::assertEquals($expectedModifiedArticle['supplierName'], $updatedArticle->getSupplier()->getName(), 'Could not update field supplier name.');
+        static::assertEquals($expectedModifiedArticle['supplierName'], $supplier->getName(), 'Could not update field supplier name.');
     }
 
-    public function testWriteWithProcessedArticle()
+    public function testWriteWithProcessedArticle(): void
     {
         $expectedId = 3;
         $expectedDetailId = 3;
@@ -151,7 +170,7 @@ class ArticleWriterTest extends TestCase
         static::assertEquals($articleWriterResult->getMainDetailId(), $expectedMainDetailId, 'The expected article main detail id do not match');
     }
 
-    public function testWriteDetailWithNotExistingMainDetailShouldThrowException()
+    public function testWriteDetailWithNotExistingMainDetailShouldThrowException(): void
     {
         $expectedModifiedArticle = [
             'orderNumber' => 'number_does_not_exist',
@@ -162,7 +181,7 @@ class ArticleWriterTest extends TestCase
         $this->articleWriter->write($expectedModifiedArticle, []);
     }
 
-    public function testWriteShouldUpdateArticleActiveFlagIfMainDetailActiveFlagIsGiven()
+    public function testWriteShouldUpdateArticleActiveFlagIfMainDetailActiveFlagIsGiven(): void
     {
         $expectedModifiedArticle = [
             'orderNumber' => 'SW10123.1',
@@ -172,7 +191,6 @@ class ArticleWriterTest extends TestCase
 
         $articleWriterResult = $this->articleWriter->write($expectedModifiedArticle, []);
 
-        /** @var Article $article */
         $isMainArticleActive = $this->getArticlesActiveFlag($articleWriterResult->getArticleId());
         $isMainDetailActive = $this->getArticleDetailActiveFlag($articleWriterResult->getDetailId());
 
@@ -180,7 +198,7 @@ class ArticleWriterTest extends TestCase
         static::assertEquals(0, $isMainArticleActive, 'Could not update active flag for s_articles if main detail active flag is given.');
     }
 
-    public function testWriteShouldNotUpdateArticleActiveFlagIfDetailActiveFlagIsGiven()
+    public function testWriteShouldNotUpdateArticleActiveFlagIfDetailActiveFlagIsGiven(): void
     {
         $expectedModifiedArticle = [
             'orderNumber' => 'SW10123.2',
@@ -197,25 +215,25 @@ class ArticleWriterTest extends TestCase
         static::assertEquals(1, $isMainArticleActive, 'Article active flag was updated, but only article detail should be updated.');
     }
 
-    /**
-     * @return bool|string
-     */
-    protected function getArticlesActiveFlag($articleId)
+    protected function getArticlesActiveFlag(int $articleId): string
     {
         $connection = $this->modelManager->getConnection();
 
-        return $connection->executeQuery('SELECT active FROM s_articles WHERE id = ?', [$articleId])->fetchColumn();
+        $result = $connection->executeQuery('SELECT active FROM s_articles WHERE id = ?', [$articleId])->fetchColumn();
+
+        static::assertIsString($result);
+
+        return $result;
     }
 
-    /**
-     * @param int $detailId
-     *
-     * @return bool|string
-     */
-    protected function getArticleDetailActiveFlag($detailId)
+    protected function getArticleDetailActiveFlag(int $detailId): string
     {
         $connection = $this->modelManager->getConnection();
 
-        return $connection->executeQuery('SELECT active FROM s_articles_details WHERE id = ?', [$detailId])->fetchColumn();
+        $result = $connection->executeQuery('SELECT active FROM s_articles_details WHERE id = ?', [$detailId])->fetchColumn();
+
+        static::assertIsString($result);
+
+        return $result;
     }
 }
