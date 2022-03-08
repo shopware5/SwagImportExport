@@ -19,31 +19,49 @@ use Shopware\Models\Translation\Translation;
 
 class ArticlesTranslationsDbAdapter implements DataDbAdapter
 {
-    /** @var ModelManager */
+    /**
+     * @var ModelManager
+     */
     protected $manager;
 
-    /** @var \Shopware_Components_Translation */
+    /**
+     * @var \Shopware_Components_Translation
+     */
     protected $translationComponent;
 
-    /** @var bool */
+    /**
+     * @var bool
+     */
     protected $importExportErrorMode;
 
-    /** @var array */
-    protected $unprocessedData;
+    /**
+     * @var array<mixed>
+     */
+    protected $unprocessedData = [];
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $logMessages;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $logState;
 
-    /** @var ArticleTranslationValidator */
+    /**
+     * @var ArticleTranslationValidator
+     */
     protected $validator;
 
-    /** @var \Enlight_Components_Db_Adapter_Pdo_Mysql */
+    /**
+     * @var \Enlight_Components_Db_Adapter_Pdo_Mysql
+     */
     protected $db;
 
-    /** @var \Enlight_Event_EventManager */
+    /**
+     * @var \Enlight_Event_EventManager
+     */
     protected $eventManager;
 
     public function __construct()
@@ -57,7 +75,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @return array
+     * {@inheritDoc}
      */
     public function getDefaultColumns()
     {
@@ -85,7 +103,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @return array
+     * {@inheritDoc}
      */
     public function getUnprocessedData()
     {
@@ -93,7 +111,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @return array
+     * {@inheritDoc}
      */
     public function readRecordIds($start, $limit, $filter)
     {

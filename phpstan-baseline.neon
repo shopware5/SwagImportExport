@@ -1236,11 +1236,6 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/AddressDbAdapter.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\AddressDbAdapter\\:\\:getColumns\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/AddressDbAdapter.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\AddressDbAdapter\\:\\:getCustomer\\(\\) has parameter \\$addressRecord with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/AddressDbAdapter.php
@@ -1251,37 +1246,12 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/AddressDbAdapter.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\AddressDbAdapter\\:\\:getDefaultColumns\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/AddressDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\AddressDbAdapter\\:\\:getSections\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/AddressDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\AddressDbAdapter\\:\\:getUnprocessedData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/AddressDbAdapter.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\AddressDbAdapter\\:\\:read\\(\\) has parameter \\$columns with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/AddressDbAdapter.php
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\AddressDbAdapter\\:\\:read\\(\\) has parameter \\$ids with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/AddressDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\AddressDbAdapter\\:\\:read\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/AddressDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\AddressDbAdapter\\:\\:readRecordIds\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/AddressDbAdapter.php
 
@@ -1317,16 +1287,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\AddressDbAdapter\\:\\:setState\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/AddressDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\AddressDbAdapter\\:\\:write\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/AddressDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\AddressDbAdapter\\:\\:write\\(\\) has parameter \\$records with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/AddressDbAdapter.php
 
@@ -2346,16 +2306,6 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/ArticlesDbAdapter.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesDbAdapter\\:\\:read\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/ArticlesDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesDbAdapter\\:\\:readRecordIds\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/ArticlesDbAdapter.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesDbAdapter\\:\\:saveArticleData\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/ArticlesDbAdapter.php
@@ -2471,11 +2421,6 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/ArticlesDbAdapter.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesDbAdapter\\:\\:write\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/ArticlesDbAdapter.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesDbAdapter\\:\\:write\\(\\) has parameter \\$records with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/ArticlesDbAdapter.php
@@ -2522,11 +2467,6 @@ parameters:
 
 		-
 			message: "#^Property Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesDbAdapter\\:\\:\\$unprocessedData type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/ArticlesDbAdapter.php
-
-		-
-			message: "#^Return type \\(bool\\) of method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesDbAdapter\\:\\:getColumns\\(\\) should be compatible with return type \\(array\\) of method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\DataDbAdapter\\:\\:getColumns\\(\\)$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/ArticlesDbAdapter.php
 
@@ -2611,11 +2551,6 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/ArticlesImagesDbAdapter.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesImagesDbAdapter\\:\\:readRecordIds\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/ArticlesImagesDbAdapter.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesImagesDbAdapter\\:\\:saveMessage\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/ArticlesImagesDbAdapter.php
@@ -2652,11 +2587,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesImagesDbAdapter\\:\\:setLogState\\(\\) has parameter \\$logState with no type specified\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/ArticlesImagesDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesImagesDbAdapter\\:\\:write\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/ArticlesImagesDbAdapter.php
 
@@ -2771,11 +2701,6 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/ArticlesInStockDbAdapter.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesInStockDbAdapter\\:\\:getDefaultColumns\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/ArticlesInStockDbAdapter.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesInStockDbAdapter\\:\\:getLogMessages\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/ArticlesInStockDbAdapter.php
@@ -2786,27 +2711,12 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/ArticlesInStockDbAdapter.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesInStockDbAdapter\\:\\:getUnprocessedData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/ArticlesInStockDbAdapter.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesInStockDbAdapter\\:\\:read\\(\\) has parameter \\$columns with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/ArticlesInStockDbAdapter.php
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesInStockDbAdapter\\:\\:read\\(\\) has parameter \\$ids with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/ArticlesInStockDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesInStockDbAdapter\\:\\:read\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/ArticlesInStockDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesInStockDbAdapter\\:\\:readRecordIds\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/ArticlesInStockDbAdapter.php
 
@@ -2841,22 +2751,7 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/ArticlesInStockDbAdapter.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesInStockDbAdapter\\:\\:write\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/ArticlesInStockDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesInStockDbAdapter\\:\\:write\\(\\) has parameter \\$records with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/ArticlesInStockDbAdapter.php
-
-		-
 			message: "#^Property Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesInStockDbAdapter\\:\\:\\$logMessages type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/ArticlesInStockDbAdapter.php
-
-		-
-			message: "#^Property Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesInStockDbAdapter\\:\\:\\$unprocessedData type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/ArticlesInStockDbAdapter.php
 
@@ -2922,16 +2817,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesPricesDbAdapter\\:\\:read\\(\\) has parameter \\$ids with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/ArticlesPricesDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesPricesDbAdapter\\:\\:read\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/ArticlesPricesDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesPricesDbAdapter\\:\\:readRecordIds\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/ArticlesPricesDbAdapter.php
 
@@ -3011,11 +2896,6 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/ArticlesPricesDbAdapter.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesPricesDbAdapter\\:\\:write\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/ArticlesPricesDbAdapter.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesPricesDbAdapter\\:\\:write\\(\\) has parameter \\$records with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/ArticlesPricesDbAdapter.php
@@ -3046,11 +2926,6 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/ArticlesTranslationsDbAdapter.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesTranslationsDbAdapter\\:\\:getDefaultColumns\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/ArticlesTranslationsDbAdapter.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesTranslationsDbAdapter\\:\\:getLogMessages\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/ArticlesTranslationsDbAdapter.php
@@ -3067,11 +2942,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesTranslationsDbAdapter\\:\\:getTranslations\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/ArticlesTranslationsDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesTranslationsDbAdapter\\:\\:getUnprocessedData\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/ArticlesTranslationsDbAdapter.php
 
@@ -3116,11 +2986,6 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/ArticlesTranslationsDbAdapter.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesTranslationsDbAdapter\\:\\:readRecordIds\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/ArticlesTranslationsDbAdapter.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesTranslationsDbAdapter\\:\\:saveMessage\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/ArticlesTranslationsDbAdapter.php
@@ -3151,22 +3016,7 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/ArticlesTranslationsDbAdapter.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesTranslationsDbAdapter\\:\\:write\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/ArticlesTranslationsDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesTranslationsDbAdapter\\:\\:write\\(\\) has parameter \\$records with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/ArticlesTranslationsDbAdapter.php
-
-		-
 			message: "#^Property Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesTranslationsDbAdapter\\:\\:\\$logMessages type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/ArticlesTranslationsDbAdapter.php
-
-		-
-			message: "#^Property Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesTranslationsDbAdapter\\:\\:\\$unprocessedData type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/ArticlesTranslationsDbAdapter.php
 
@@ -3202,16 +3052,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\CategoriesDbAdapter\\:\\:getBuilder\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/CategoriesDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\CategoriesDbAdapter\\:\\:getColumns\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/CategoriesDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\CategoriesDbAdapter\\:\\:getColumns\\(\\) should return array but returns false\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/CategoriesDbAdapter.php
 
@@ -3301,16 +3141,6 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/CategoriesDbAdapter.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\CategoriesDbAdapter\\:\\:read\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/CategoriesDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\CategoriesDbAdapter\\:\\:readRecordIds\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/CategoriesDbAdapter.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\CategoriesDbAdapter\\:\\:saveMessage\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/CategoriesDbAdapter.php
@@ -3381,11 +3211,6 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/CategoriesDbAdapter.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\CategoriesDbAdapter\\:\\:write\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/CategoriesDbAdapter.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\CategoriesDbAdapter\\:\\:write\\(\\) has parameter \\$records with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/CategoriesDbAdapter.php
@@ -3451,37 +3276,12 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/CategoryTranslationDbAdapter.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\CategoryTranslationDbAdapter\\:\\:getColumns\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/CategoryTranslationDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\CategoryTranslationDbAdapter\\:\\:getColumns\\(\\) should return array but returns false\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/CategoryTranslationDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\CategoryTranslationDbAdapter\\:\\:getDefaultColumns\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/CategoryTranslationDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\CategoryTranslationDbAdapter\\:\\:getSections\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/CategoryTranslationDbAdapter.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\CategoryTranslationDbAdapter\\:\\:getTranslations\\(\\) has parameter \\$ids with no type specified\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/CategoryTranslationDbAdapter.php
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\CategoryTranslationDbAdapter\\:\\:getTranslations\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/CategoryTranslationDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\CategoryTranslationDbAdapter\\:\\:getUnprocessedData\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/CategoryTranslationDbAdapter.php
 
@@ -3496,27 +3296,7 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/CategoryTranslationDbAdapter.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\CategoryTranslationDbAdapter\\:\\:read\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/CategoryTranslationDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\CategoryTranslationDbAdapter\\:\\:read\\(\\) should return array but empty return statement found\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/CategoryTranslationDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\CategoryTranslationDbAdapter\\:\\:readRecordIds\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/CategoryTranslationDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\CategoryTranslationDbAdapter\\:\\:write\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/CategoryTranslationDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\CategoryTranslationDbAdapter\\:\\:write\\(\\) has parameter \\$records with no value type specified in iterable type array\\.$#"
+			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\CategoryTranslationDbAdapter\\:\\:read\\(\\) should return array\\<string, mixed\\> but empty return statement found\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/CategoryTranslationDbAdapter.php
 
@@ -3547,11 +3327,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\CustomerCompleteDbAdapter\\:\\:getBuilder\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/CustomerCompleteDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\CustomerCompleteDbAdapter\\:\\:getCustomerColumns\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/CustomerCompleteDbAdapter.php
 
@@ -3596,16 +3371,6 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/CustomerCompleteDbAdapter.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\CustomerCompleteDbAdapter\\:\\:readRecordIds\\(\\) has parameter \\$filter with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/CustomerCompleteDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\CustomerCompleteDbAdapter\\:\\:readRecordIds\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/CustomerCompleteDbAdapter.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\CustomerDbAdapter\\:\\:findExistingEntries\\(\\) has parameter \\$record with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/CustomerDbAdapter.php
@@ -3641,11 +3406,6 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/CustomerDbAdapter.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\CustomerDbAdapter\\:\\:getCustomerColumns\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/CustomerDbAdapter.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\CustomerDbAdapter\\:\\:getDefaultColumns\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/CustomerDbAdapter.php
@@ -3677,11 +3437,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\CustomerDbAdapter\\:\\:getSubShopDefaultPaymentId\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/CustomerDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\CustomerDbAdapter\\:\\:getUnprocessedData\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/CustomerDbAdapter.php
 
@@ -3756,16 +3511,6 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/CustomerDbAdapter.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\CustomerDbAdapter\\:\\:readRecordIds\\(\\) has parameter \\$filter with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/CustomerDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\CustomerDbAdapter\\:\\:readRecordIds\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/CustomerDbAdapter.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\CustomerDbAdapter\\:\\:saveMessage\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/CustomerDbAdapter.php
@@ -3797,11 +3542,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\CustomerDbAdapter\\:\\:setLogState\\(\\) has parameter \\$logState with no type specified\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/CustomerDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\CustomerDbAdapter\\:\\:write\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/CustomerDbAdapter.php
 
@@ -3851,11 +3591,6 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/CustomerDbAdapter.php
 
 		-
-			message: "#^Property Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\CustomerDbAdapter\\:\\:\\$unprocessedData has no type specified\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/CustomerDbAdapter.php
-
-		-
 			message: "#^Result of \\|\\| is always false\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/CustomerDbAdapter.php
@@ -3876,52 +3611,12 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/CustomerDbAdapter.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\DataDbAdapter\\:\\:getColumns\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/DataDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\DataDbAdapter\\:\\:getDefaultColumns\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/DataDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\DataDbAdapter\\:\\:getSections\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/DataDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\DataDbAdapter\\:\\:getUnprocessedData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/DataDbAdapter.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\DataDbAdapter\\:\\:read\\(\\) has parameter \\$columns with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/DataDbAdapter.php
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\DataDbAdapter\\:\\:read\\(\\) has parameter \\$ids with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/DataDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\DataDbAdapter\\:\\:read\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/DataDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\DataDbAdapter\\:\\:readRecordIds\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/DataDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\DataDbAdapter\\:\\:write\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/DataDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\DataDbAdapter\\:\\:write\\(\\) has parameter \\$records with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/DataDbAdapter.php
 
@@ -4056,16 +3751,6 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/MainOrdersDbAdapter.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\MainOrdersDbAdapter\\:\\:readRecordIds\\(\\) has parameter \\$filter with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/MainOrdersDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\MainOrdersDbAdapter\\:\\:readRecordIds\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/MainOrdersDbAdapter.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\MainOrdersDbAdapter\\:\\:saveMessage\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/MainOrdersDbAdapter.php
@@ -4077,16 +3762,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\MainOrdersDbAdapter\\:\\:setLogState\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/MainOrdersDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\MainOrdersDbAdapter\\:\\:write\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/MainOrdersDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\MainOrdersDbAdapter\\:\\:write\\(\\) has parameter \\$records with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/MainOrdersDbAdapter.php
 
@@ -4141,16 +3816,6 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/NewsletterDbAdapter.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\NewsletterDbAdapter\\:\\:getColumns\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/NewsletterDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\NewsletterDbAdapter\\:\\:getColumns\\(\\) should return array but returns false\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/NewsletterDbAdapter.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\NewsletterDbAdapter\\:\\:getDefaultColumns\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/NewsletterDbAdapter.php
@@ -4196,16 +3861,6 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/NewsletterDbAdapter.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\NewsletterDbAdapter\\:\\:read\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/NewsletterDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\NewsletterDbAdapter\\:\\:readRecordIds\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/NewsletterDbAdapter.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\NewsletterDbAdapter\\:\\:saveMessage\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/NewsletterDbAdapter.php
@@ -4242,11 +3897,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\NewsletterDbAdapter\\:\\:setLogState\\(\\) has parameter \\$logState with no type specified\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/NewsletterDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\NewsletterDbAdapter\\:\\:write\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/NewsletterDbAdapter.php
 
@@ -4341,42 +3991,7 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/OrdersDbAdapter.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\OrdersDbAdapter\\:\\:getAttributes\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/OrdersDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\OrdersDbAdapter\\:\\:getBuilder\\(\\) has parameter \\$columns with no type specified\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/OrdersDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\OrdersDbAdapter\\:\\:getBuilder\\(\\) has parameter \\$ids with no type specified\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/OrdersDbAdapter.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\OrdersDbAdapter\\:\\:getBuilder\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/OrdersDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\OrdersDbAdapter\\:\\:getDefaultColumns\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/OrdersDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\OrdersDbAdapter\\:\\:getLogMessages\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/OrdersDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\OrdersDbAdapter\\:\\:getSections\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/OrdersDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\OrdersDbAdapter\\:\\:getUnprocessedData\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/OrdersDbAdapter.php
 
@@ -4391,77 +4006,7 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/OrdersDbAdapter.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\OrdersDbAdapter\\:\\:read\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/OrdersDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\OrdersDbAdapter\\:\\:readRecordIds\\(\\) has parameter \\$filter with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/OrdersDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\OrdersDbAdapter\\:\\:readRecordIds\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/OrdersDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\OrdersDbAdapter\\:\\:saveMessage\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/OrdersDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\OrdersDbAdapter\\:\\:saveMessage\\(\\) has parameter \\$message with no type specified\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/OrdersDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\OrdersDbAdapter\\:\\:setLogMessages\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/OrdersDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\OrdersDbAdapter\\:\\:setLogMessages\\(\\) has parameter \\$logMessages with no type specified\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/OrdersDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\OrdersDbAdapter\\:\\:setLogState\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/OrdersDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\OrdersDbAdapter\\:\\:setLogState\\(\\) has parameter \\$logState with no type specified\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/OrdersDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\OrdersDbAdapter\\:\\:write\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/OrdersDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\OrdersDbAdapter\\:\\:write\\(\\) has parameter \\$records with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/OrdersDbAdapter.php
-
-		-
 			message: "#^Parameter \\#1 \\$entity of method Doctrine\\\\ORM\\\\EntityManager\\:\\:persist\\(\\) expects object, Shopware\\\\Models\\\\Order\\\\Order\\|null given\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/OrdersDbAdapter.php
-
-		-
-			message: "#^Parameter \\#1 \\$str of function lcfirst expects string, string\\|null given\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/OrdersDbAdapter.php
-
-		-
-			message: "#^Parameter \\#1 \\$string of method Shopware\\\\Components\\\\SwagImportExport\\\\Service\\\\UnderscoreToCamelCaseServiceInterface\\:\\:underscoreToCamelCase\\(\\) expects string, int\\|string given\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/OrdersDbAdapter.php
-
-		-
-			message: "#^Parameter \\#2 \\.\\.\\.\\$args of function array_merge expects array, array\\|string given\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/OrdersDbAdapter.php
 
@@ -4536,11 +4081,6 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/TranslationsDbAdapter.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\TranslationsDbAdapter\\:\\:getUnprocessedData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/TranslationsDbAdapter.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\TranslationsDbAdapter\\:\\:prepareTranslations\\(\\) has parameter \\$translations with no type specified\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/TranslationsDbAdapter.php
@@ -4557,21 +4097,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\TranslationsDbAdapter\\:\\:read\\(\\) has parameter \\$ids with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/TranslationsDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\TranslationsDbAdapter\\:\\:read\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/TranslationsDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\TranslationsDbAdapter\\:\\:readRecordIds\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/TranslationsDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\TranslationsDbAdapter\\:\\:write\\(\\) has parameter \\$records with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/TranslationsDbAdapter.php
 

@@ -24,25 +24,39 @@ use Shopware\Models\Shop\Shop;
 
 class ArticlesPricesDbAdapter implements DataDbAdapter
 {
-    /** @var ModelManager */
+    /**
+     * @var ModelManager
+     */
     protected $manager;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $categoryIdCollection;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $logMessages;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $logState;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $unprocessedData;
 
-    /** @var ArticlePriceValidator */
+    /**
+     * @var ArticlePriceValidator
+     */
     protected $validator;
 
-    /** @var ArticlePriceDataManager */
+    /**
+     * @var ArticlePriceDataManager
+     */
     protected $dataManager;
 
     public function __construct()
@@ -53,7 +67,9 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @return array
+     * {@inheritDoc}
+     *
+     * @return array<int>
      */
     public function readRecordIds($start, $limit, $filter)
     {
@@ -136,7 +152,9 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
         $result = [];
         if ($records) {
             foreach ($records as $value) {
-                $result[] = $value['id'];
+                if (isset($value['id'])) {
+                    $result[] = (int) $value['id'];
+                }
             }
         }
 

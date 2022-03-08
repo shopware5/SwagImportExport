@@ -18,16 +18,13 @@ use Shopware\Models\Order\Order;
 class CustomerCompleteDbAdapter extends CustomerDbAdapter
 {
     /**
-     * @return array
+     * {@inheritDoc}
      */
     public function getDefaultColumns()
     {
         return $this->getCustomerColumns();
     }
 
-    /**
-     * @return array
-     */
     public function getCustomerColumns()
     {
         return [
@@ -56,11 +53,7 @@ class CustomerCompleteDbAdapter extends CustomerDbAdapter
     }
 
     /**
-     * @param int   $start
-     * @param int   $limit
-     * @param array $filter
-     *
-     * @return array
+     * {@inheritDoc}
      */
     public function readRecordIds($start, $limit, $filter)
     {

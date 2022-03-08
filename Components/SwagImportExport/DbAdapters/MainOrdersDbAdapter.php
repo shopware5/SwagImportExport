@@ -66,13 +66,7 @@ class MainOrdersDbAdapter implements DataDbAdapter
     }
 
     /**
-     * Returns orders' ids. Executed during `prepareExport`.
-     *
-     * @param int   $start
-     * @param int   $limit
-     * @param array $filter
-     *
-     * @return array
+     * {@inheritDoc}
      */
     public function readRecordIds($start = null, $limit = null, $filter = null)
     {

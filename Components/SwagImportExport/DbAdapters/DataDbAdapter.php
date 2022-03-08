@@ -31,7 +31,7 @@ interface DataDbAdapter
      * @param array $ids
      * @param array $columns
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function read($ids, $columns);
 
@@ -42,7 +42,7 @@ interface DataDbAdapter
      * @param int                  $limit
      * @param array<string, mixed> $filter
      *
-     * @return array
+     * @return array<int>
      */
     public function readRecordIds($start, $limit, $filter);
 
@@ -51,14 +51,14 @@ interface DataDbAdapter
      *
      * @see DataDbAdapter::getColumns()
      *
-     * @return array
+     * @return array<string>
      */
     public function getDefaultColumns();
 
     /**
      * Returns all iteration nodes, i.e. for articles it configuratiors, similar, ...
      *
-     * @return array
+     * @return array<array<string>>
      */
     public function getSections();
 
@@ -73,14 +73,16 @@ interface DataDbAdapter
      *
      * @param string $section
      *
-     * @return array
+     * @return bool|mixed
      */
     public function getColumns($section);
 
     /**
      * Creates, updates and validates the imported records.
      *
-     * @param array $records
+     * @param array<string, mixed> $records
+     *
+     * @return void
      */
     public function write($records);
 
@@ -88,7 +90,7 @@ interface DataDbAdapter
      * Returns unprocessed data. This will be used every time if an import wants to create data which relies on created data.
      * For instance article images, similar or accessory articles.
      *
-     * @return array|null
+     * @return array<mixed>
      */
     public function getUnprocessedData();
 
