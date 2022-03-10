@@ -194,8 +194,8 @@ class ArticleWriterTest extends TestCase
         $isMainArticleActive = $this->getArticlesActiveFlag($articleWriterResult->getArticleId());
         $isMainDetailActive = $this->getArticleDetailActiveFlag($articleWriterResult->getDetailId());
 
-        static::assertEquals(0, $isMainDetailActive, 'Could not update active flag for article main detail.');
-        static::assertEquals(0, $isMainArticleActive, 'Could not update active flag for s_articles if main detail active flag is given.');
+        static::assertFalse($isMainDetailActive, 'Could not update active flag for article main detail.');
+        static::assertFalse($isMainArticleActive, 'Could not update active flag for s_articles if main detail active flag is given.');
     }
 
     public function testWriteShouldNotUpdateArticleActiveFlagIfDetailActiveFlagIsGiven(): void
@@ -211,29 +211,21 @@ class ArticleWriterTest extends TestCase
         $isMainArticleActive = $this->getArticlesActiveFlag($articleWriterResult->getArticleId());
         $isDetailActive = $this->getArticleDetailActiveFlag($articleWriterResult->getDetailId());
 
-        static::assertEquals(0, $isDetailActive, 'Could not update article detail active flag.');
-        static::assertEquals(1, $isMainArticleActive, 'Article active flag was updated, but only article detail should be updated.');
+        static::assertFalse($isDetailActive, 'Could not update article detail active flag.');
+        static::assertTrue($isMainArticleActive, 'Article active flag was updated, but only article detail should be updated.');
     }
 
-    protected function getArticlesActiveFlag(int $articleId): string
+    protected function getArticlesActiveFlag(int $articleId): bool
     {
         $connection = $this->modelManager->getConnection();
 
-        $result = $connection->executeQuery('SELECT active FROM s_articles WHERE id = ?', [$articleId])->fetchColumn();
-
-        static::assertIsString($result);
-
-        return $result;
+        return (bool) $connection->executeQuery('SELECT active FROM s_articles WHERE id = ?', [$articleId])->fetchColumn();
     }
 
-    protected function getArticleDetailActiveFlag(int $detailId): string
+    protected function getArticleDetailActiveFlag(int $detailId): bool
     {
         $connection = $this->modelManager->getConnection();
 
-        $result = $connection->executeQuery('SELECT active FROM s_articles_details WHERE id = ?', [$detailId])->fetchColumn();
-
-        static::assertIsString($result);
-
-        return $result;
+        return (bool) $connection->executeQuery('SELECT active FROM s_articles_details WHERE id = ?', [$detailId])->fetchColumn();
     }
 }

@@ -23,7 +23,7 @@ trait FixturesImportTrait
     /**
      * @before
      */
-    protected function importFixtures()
+    protected function importFixtures(): void
     {
         $profileDataProvider = new ProfileDataProvider(
             Shopware()->Container()->get('dbal_connection')
@@ -32,10 +32,12 @@ trait FixturesImportTrait
         $profileDataProvider->createProfiles();
     }
 
-    private function importNewsletterDemoData()
+    private function importNewsletterDemoData(): void
     {
         $this->modelManager = Shopware()->Container()->get('models');
         $newsletterGroup = $this->modelManager->find(Group::class, 1);
+
+        self::assertInstanceOf(Group::class, $newsletterGroup);
 
         for ($addressAmount = 0; $addressAmount < 25; ++$addressAmount) {
             $address = new Address();
@@ -49,7 +51,7 @@ trait FixturesImportTrait
         }
     }
 
-    private function addProductStream()
+    private function addProductStream(): void
     {
         if ($this->isStreamInstalled()) {
             return;

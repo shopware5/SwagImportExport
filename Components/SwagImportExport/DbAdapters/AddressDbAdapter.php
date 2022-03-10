@@ -87,7 +87,7 @@ class AddressDbAdapter implements DataDbAdapter
             $query->setMaxResults($limit);
         }
 
-        if ($filter && \array_key_exists('customerStreamId', $filter)) {
+        if (\array_key_exists('customerStreamId', $filter)) {
             $query->innerJoin(
                 'address',
                 's_customer_streams_mapping',

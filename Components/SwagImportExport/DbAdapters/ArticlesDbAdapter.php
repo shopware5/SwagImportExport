@@ -12,9 +12,14 @@ use Doctrine\DBAL\Connection;
 use Doctrine\ORM\Query\Expr\Join;
 use Enlight_Components_Db_Adapter_Pdo_Mysql;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
+use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
+use Shopware\Bundle\SearchBundleDBAL\ProductNumberSearch;
+use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
+use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 use Shopware\Components\ContainerAwareEventManager;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Components\ProductStream\Repository;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\ArticleWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\CategoryWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\ConfiguratorWriter;
@@ -32,10 +37,16 @@ use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Detail;
 use Shopware\Models\Attribute\Configuration;
 use Shopware\Models\Category\Category;
+use Shopware\Models\Shop\Repository as ShopRepository;
 use Shopware\Models\Shop\Shop;
 
 class ArticlesDbAdapter implements DataDbAdapter
 {
+    public const VARIANTS_FILTER_KEY = 'variants';
+    public const CATEGORIES_FILTER_KEY = 'categories';
+    public const PRODUCT_STREAM_ID_FILTER_KEY = 'productStreamId';
+    private const MAIN_KIND = 1;
+
     /**
      * @var ModelManager
      */
@@ -77,6 +88,11 @@ class ArticlesDbAdapter implements DataDbAdapter
     protected $defaultValues = [];
 
     /**
+     * @var \Shopware\Components\DependencyInjection\Container
+     */
+    protected $container;
+
+    /**
      * @var MediaServiceInterface
      */
     private $mediaService;
@@ -96,17 +112,44 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     private $underscoreToCamelCaseService;
 
+    /**
+     * @var ContextService
+     */
+    private $contextService;
+
+    /**
+     * @var Repository
+     */
+    private $streamRepo;
+
+    /**
+     * @var ProductNumberSearch
+     */
+    private $productNumberSearch;
+
+    /**
+     * @var ShopRepository
+     */
+    private $shopRepository;
+
     public function __construct()
     {
-        $this->db = Shopware()->Container()->get('db');
-        $this->modelManager = Shopware()->Container()->get('models');
-        $this->mediaService = Shopware()->Container()->get('shopware_media.media_service');
-        $this->config = Shopware()->Container()->get('config');
-        $this->eventManager = Shopware()->Container()->get('events');
-        $this->underscoreToCamelCaseService = Shopware()->Container()->get('swag_import_export.underscore_camelcase_service');
+        $this->container = $container = Shopware()->Container();
+        $this->db = $container->get('db');
+        $this->modelManager = $container->get('models');
+        $this->mediaService = $container->get('shopware_media.media_service');
+        $this->config = $container->get('config');
+        $this->eventManager = $container->get('events');
+        $this->underscoreToCamelCaseService = $container->get('swag_import_export.underscore_camelcase_service');
+        $this->contextService = $this->container->get('shopware_storefront.context_service');
+        $this->streamRepo = $this->container->get('shopware_product_stream.repository');
+        $this->productNumberSearch = $this->container->get('shopware_search.product_number_search');
+        $this->shopRepository = $this->modelManager->getRepository(Shop::class);
     }
 
     /**
+     * @param array{variants: bool, categories: array<int>, productStreamId: array<int> } $filter
+     *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
@@ -123,13 +166,11 @@ class ArticlesDbAdapter implements DataDbAdapter
             ->orderBy('detail.articleId', 'ASC')
             ->orderBy('detail.kind', 'ASC');
 
-        if ($filter['variants']) {
-            $builder->andWhere('detail.kind <> 3');
-        } else {
-            $builder->andWhere('detail.kind = 1');
+        if (!$filter[self::VARIANTS_FILTER_KEY]) {
+            $builder->andWhere('detail.kind = ' . self::MAIN_KIND);
         }
 
-        if ($filter['categories']) {
+        if ($filter[self::CATEGORIES_FILTER_KEY]) {
             /** @var Category $category */
             $category = $this->modelManager->find(Category::class, $filter['categories'][0]);
 
@@ -154,26 +195,36 @@ class ArticlesDbAdapter implements DataDbAdapter
             $builder->join('detail.article', 'article')
                 ->andWhere('article.id IN (:ids)')
                 ->setParameter('ids', $articleIds);
-        } elseif ($filter['productStreamId']) {
-            $productStreamId = $filter['productStreamId'][0];
+        } elseif ($filter[self::PRODUCT_STREAM_ID_FILTER_KEY]) {
+            $productStreamId = $filter[self::PRODUCT_STREAM_ID_FILTER_KEY][0];
 
-            /** @var \Shopware\Models\Shop\Repository $shopRepo */
-            $shopRepo = $this->modelManager->getRepository(Shop::class);
-            $shop = $shopRepo->getActiveDefault();
-            $contextService = Shopware()->Container()->get('shopware_storefront.context_service');
-            $context = $contextService->createShopContext($shop->getId());
-            $criteriaService = Shopware()->Container()->get('shopware_search.store_front_criteria_factory');
-            $criteria = $criteriaService->createBaseCriteria([$shop->getCategory()->getId()], $context);
-            $streamRepo = Shopware()->Container()->get('shopware_product_stream.repository');
-            $streamRepo->prepareCriteria($criteria, $productStreamId);
+            $shop = $this->shopRepository->getActiveDefault();
+            $context = $this->contextService->createShopContext($shop->getId());
+            $criteria = new Criteria();
+            $this->streamRepo->prepareCriteria($criteria, $productStreamId);
 
-            $productNumberSearch = Shopware()->Container()->get('shopware_search.product_number_search');
             /** @var ProductNumberSearchResult $products */
-            $products = $productNumberSearch->search($criteria, $context);
-            $productNumbers = \array_keys($products->getProducts());
+            $products = $this->productNumberSearch->search($criteria, $context);
+            if (empty($products->getProducts())) {
+                return [];
+            }
 
-            $builder->andWhere('detail.number IN(:productNumbers)')
-                ->setParameter('productNumbers', $productNumbers);
+            if ($filter[self::VARIANTS_FILTER_KEY]) {
+                $productIds = array_values(array_map(static function (BaseProduct $product) {
+                    return $product->getId();
+                }, $products->getProducts()));
+
+                $builder
+                    ->join('detail.article', 'article')
+                    ->andWhere('article.id IN (:ids)')
+                    ->setParameter('ids', $productIds);
+            } else {
+                $productNumbers = \array_keys($products->getProducts());
+
+                $builder
+                    ->andWhere('detail.number IN(:productNumbers)')
+                    ->setParameter('productNumbers', $productNumbers);
+            }
         }
 
         if ($start) {
@@ -1142,7 +1193,7 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     protected function getArticleIdsByDetailIds($detailIds)
     {
-        $articleIds = $this->modelManager->createQueryBuilder()
+        $productIds = $this->modelManager->createQueryBuilder()
             ->select('article.id')
             ->from(Detail::class, 'variant')
             ->join('variant.article', 'article')
@@ -1150,14 +1201,12 @@ class ArticlesDbAdapter implements DataDbAdapter
             ->setParameter('ids', $detailIds)
             ->groupBy('article.id');
 
-        $mappedArticleIds = \array_map(
+        return \array_map(
             function ($item) {
                 return $item['id'];
             },
-            $articleIds->getQuery()->getResult()
+            $productIds->getQuery()->getResult()
         );
-
-        return $mappedArticleIds;
     }
 
     /**

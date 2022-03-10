@@ -144,7 +144,7 @@ class NewsletterDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @return array
+     * {@inheritDoc}
      */
     public function readRecordIds($start, $limit, $filter)
     {

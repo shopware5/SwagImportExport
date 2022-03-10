@@ -166,7 +166,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     }
 
     /**
-     * Returns filter adapter
+     * @param array<string, mixed> $filter
      *
      * @return \Shopware\Components\SwagImportExport\Utils\DataFilter
      */

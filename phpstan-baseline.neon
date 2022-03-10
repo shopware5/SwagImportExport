@@ -1281,11 +1281,6 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/AddressDbAdapter.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\AddressDbAdapter\\:\\:readRecordIds\\(\\) has parameter \\$filter with no type specified\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/AddressDbAdapter.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\AddressDbAdapter\\:\\:readRecordIds\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/AddressDbAdapter.php
@@ -2041,11 +2036,6 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/Articles/TranslationWriter.php
 
 		-
-			message: "#^Cannot call method getId\\(\\) on Shopware\\\\Models\\\\Category\\\\Category\\|null\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/ArticlesDbAdapter.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesDbAdapter\\:\\:collectCategoryIds\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/ArticlesDbAdapter.php
@@ -2361,11 +2351,6 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/ArticlesDbAdapter.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesDbAdapter\\:\\:readRecordIds\\(\\) has parameter \\$filter with no type specified\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/ArticlesDbAdapter.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesDbAdapter\\:\\:readRecordIds\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/ArticlesDbAdapter.php
@@ -2626,11 +2611,6 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/ArticlesImagesDbAdapter.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesImagesDbAdapter\\:\\:readRecordIds\\(\\) has parameter \\$filter with no type specified\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/ArticlesImagesDbAdapter.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesImagesDbAdapter\\:\\:readRecordIds\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/ArticlesImagesDbAdapter.php
@@ -2826,11 +2806,6 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/ArticlesInStockDbAdapter.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesInStockDbAdapter\\:\\:readRecordIds\\(\\) has parameter \\$filter with no type specified\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/ArticlesInStockDbAdapter.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesInStockDbAdapter\\:\\:readRecordIds\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/ArticlesInStockDbAdapter.php
@@ -2952,11 +2927,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesPricesDbAdapter\\:\\:read\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/ArticlesPricesDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesPricesDbAdapter\\:\\:readRecordIds\\(\\) has parameter \\$filter with no type specified\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/ArticlesPricesDbAdapter.php
 
@@ -3142,11 +3112,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesTranslationsDbAdapter\\:\\:read\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/ArticlesTranslationsDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesTranslationsDbAdapter\\:\\:readRecordIds\\(\\) has parameter \\$filter with no type specified\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/ArticlesTranslationsDbAdapter.php
 
@@ -3337,11 +3302,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\CategoriesDbAdapter\\:\\:read\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/CategoriesDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\CategoriesDbAdapter\\:\\:readRecordIds\\(\\) has parameter \\$filter with no type specified\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/CategoriesDbAdapter.php
 
@@ -3542,11 +3502,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\CategoryTranslationDbAdapter\\:\\:read\\(\\) should return array but empty return statement found\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/CategoryTranslationDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\CategoryTranslationDbAdapter\\:\\:readRecordIds\\(\\) has parameter \\$filter with no type specified\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/CategoryTranslationDbAdapter.php
 
@@ -3956,11 +3911,6 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/DataDbAdapter.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\DataDbAdapter\\:\\:readRecordIds\\(\\) has parameter \\$filter with no type specified\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/DataDbAdapter.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\DataDbAdapter\\:\\:readRecordIds\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/DataDbAdapter.php
@@ -4247,11 +4197,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\NewsletterDbAdapter\\:\\:read\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/NewsletterDbAdapter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\NewsletterDbAdapter\\:\\:readRecordIds\\(\\) has parameter \\$filter with no type specified\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/NewsletterDbAdapter.php
 
@@ -4621,11 +4566,6 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/TranslationsDbAdapter.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\TranslationsDbAdapter\\:\\:readRecordIds\\(\\) has parameter \\$filter with no type specified\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/TranslationsDbAdapter.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\TranslationsDbAdapter\\:\\:readRecordIds\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/TranslationsDbAdapter.php
@@ -4692,11 +4632,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\Factories\\\\DataFactory\\:\\:createDataManager\\(\\) should return object but return statement is missing\\.$#"
-			count: 1
-			path: Components/SwagImportExport/Factories/DataFactory.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\Factories\\\\DataFactory\\:\\:createFilter\\(\\) has parameter \\$filter with no type specified\\.$#"
 			count: 1
 			path: Components/SwagImportExport/Factories/DataFactory.php
 
@@ -8461,21 +8396,6 @@ parameters:
 			path: Tests/Functional/Commands/ExportCommandTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Commands\\\\ExportCommandTest\\:\\:addProductStream\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Commands/ExportCommandTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Commands\\\\ExportCommandTest\\:\\:importFixtures\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Commands/ExportCommandTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Commands\\\\ExportCommandTest\\:\\:importNewsletterDemoData\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Commands/ExportCommandTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Commands\\\\ExportCommandTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
 			count: 1
 			path: Tests/Functional/Commands/ExportCommandTest.php
@@ -8496,11 +8416,6 @@ parameters:
 			path: Tests/Functional/Commands/ExportCommandTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$newsletterGroup of method Shopware\\\\Models\\\\Newsletter\\\\Address\\:\\:setNewsletterGroup\\(\\) expects Shopware\\\\Models\\\\Newsletter\\\\Group, Shopware\\\\Models\\\\Newsletter\\\\Group\\|null given\\.$#"
-			count: 1
-			path: Tests/Functional/Commands/ExportCommandTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
 			count: 1
 			path: Tests/Functional/Commands/ExportCommandTest.php
@@ -8517,21 +8432,6 @@ parameters:
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Commands\\\\ImportCommandTest\\:\\:addCreatedExportFile\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Commands/ImportCommandTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Commands\\\\ImportCommandTest\\:\\:addProductStream\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Commands/ImportCommandTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Commands\\\\ImportCommandTest\\:\\:importFixtures\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Commands/ImportCommandTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Commands\\\\ImportCommandTest\\:\\:importNewsletterDemoData\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Functional/Commands/ImportCommandTest.php
 
@@ -8662,11 +8562,6 @@ parameters:
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Commands\\\\ImportCommandTest\\:\\:testVariantXmlImport\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Commands/ImportCommandTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$newsletterGroup of method Shopware\\\\Models\\\\Newsletter\\\\Address\\:\\:setNewsletterGroup\\(\\) expects Shopware\\\\Models\\\\Newsletter\\\\Group, Shopware\\\\Models\\\\Newsletter\\\\Group\\|null given\\.$#"
 			count: 1
 			path: Tests/Functional/Commands/ImportCommandTest.php
 
@@ -9481,11 +9376,6 @@ parameters:
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticleExportTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\ArticleExportTest\\:\\:addProductStream\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticleExportTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\ArticleExportTest\\:\\:assertArticleAttributeInXml\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticleExportTest.php
@@ -9497,16 +9387,6 @@ parameters:
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\ArticleExportTest\\:\\:getExportRequestParams\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticleExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\ArticleExportTest\\:\\:importFixtures\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticleExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\ArticleExportTest\\:\\:importNewsletterDemoData\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticleExportTest.php
 
@@ -9631,11 +9511,6 @@ parameters:
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticleExportTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$newsletterGroup of method Shopware\\\\Models\\\\Newsletter\\\\Address\\:\\:setNewsletterGroup\\(\\) expects Shopware\\\\Models\\\\Newsletter\\\\Group, Shopware\\\\Models\\\\Newsletter\\\\Group\\|null given\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticleExportTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$source of method DOMDocument\\:\\:loadXML\\(\\) expects string, string\\|false given\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticleExportTest.php
@@ -9666,11 +9541,6 @@ parameters:
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticlePricesExportTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\ArticlePricesExportTest\\:\\:addProductStream\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticlePricesExportTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\ArticlePricesExportTest\\:\\:assertPriceAttributeInXml\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticlePricesExportTest.php
@@ -9682,16 +9552,6 @@ parameters:
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\ArticlePricesExportTest\\:\\:getExportRequestParams\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticlePricesExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\ArticlePricesExportTest\\:\\:importFixtures\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticlePricesExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\ArticlePricesExportTest\\:\\:importNewsletterDemoData\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticlePricesExportTest.php
 
@@ -9731,11 +9591,6 @@ parameters:
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticlePricesExportTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$newsletterGroup of method Shopware\\\\Models\\\\Newsletter\\\\Address\\:\\:setNewsletterGroup\\(\\) expects Shopware\\\\Models\\\\Newsletter\\\\Group, Shopware\\\\Models\\\\Newsletter\\\\Group\\|null given\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticlePricesExportTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$source of method DOMDocument\\:\\:loadXML\\(\\) expects string, string\\|false given\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticlePricesExportTest.php
@@ -9766,11 +9621,6 @@ parameters:
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticleTranslationExportExportTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\ArticleTranslationExportExportTest\\:\\:addProductStream\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticleTranslationExportExportTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\ArticleTranslationExportExportTest\\:\\:assertTranslationAttributeInXml\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticleTranslationExportExportTest.php
@@ -9782,16 +9632,6 @@ parameters:
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\ArticleTranslationExportExportTest\\:\\:getExportRequestParams\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticleTranslationExportExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\ArticleTranslationExportExportTest\\:\\:importFixtures\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticleTranslationExportExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\ArticleTranslationExportExportTest\\:\\:importNewsletterDemoData\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticleTranslationExportExportTest.php
 
@@ -9831,11 +9671,6 @@ parameters:
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticleTranslationExportExportTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$newsletterGroup of method Shopware\\\\Models\\\\Newsletter\\\\Address\\:\\:setNewsletterGroup\\(\\) expects Shopware\\\\Models\\\\Newsletter\\\\Group, Shopware\\\\Models\\\\Newsletter\\\\Group\\|null given\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticleTranslationExportExportTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$source of method DOMDocument\\:\\:loadXML\\(\\) expects string, string\\|false given\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticleTranslationExportExportTest.php
@@ -9866,11 +9701,6 @@ parameters:
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticlesInstockExportTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\ArticlesInstockExportTest\\:\\:addProductStream\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticlesInstockExportTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\ArticlesInstockExportTest\\:\\:assertArticleAttributeInXml\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticlesInstockExportTest.php
@@ -9882,16 +9712,6 @@ parameters:
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\ArticlesInstockExportTest\\:\\:getExportRequestParams\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticlesInstockExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\ArticlesInstockExportTest\\:\\:importFixtures\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticlesInstockExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\ArticlesInstockExportTest\\:\\:importNewsletterDemoData\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticlesInstockExportTest.php
 
@@ -10006,11 +9826,6 @@ parameters:
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticlesInstockExportTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$newsletterGroup of method Shopware\\\\Models\\\\Newsletter\\\\Address\\:\\:setNewsletterGroup\\(\\) expects Shopware\\\\Models\\\\Newsletter\\\\Group, Shopware\\\\Models\\\\Newsletter\\\\Group\\|null given\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticlesInstockExportTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$source of method DOMDocument\\:\\:loadXML\\(\\) expects string, string\\|false given\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticlesInstockExportTest.php
@@ -10051,11 +9866,6 @@ parameters:
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/CategoryExportTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\CategoryExportTest\\:\\:addProductStream\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/CategoryExportTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\CategoryExportTest\\:\\:assertCategoryAttributeInXml\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/CategoryExportTest.php
@@ -10067,16 +9877,6 @@ parameters:
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\CategoryExportTest\\:\\:getExportRequestParams\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/CategoryExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\CategoryExportTest\\:\\:importFixtures\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/CategoryExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\CategoryExportTest\\:\\:importNewsletterDemoData\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/CategoryExportTest.php
 
@@ -10116,11 +9916,6 @@ parameters:
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/CategoryExportTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$newsletterGroup of method Shopware\\\\Models\\\\Newsletter\\\\Address\\:\\:setNewsletterGroup\\(\\) expects Shopware\\\\Models\\\\Newsletter\\\\Group, Shopware\\\\Models\\\\Newsletter\\\\Group\\|null given\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/CategoryExportTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$source of method DOMDocument\\:\\:loadXML\\(\\) expects string, string\\|false given\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/CategoryExportTest.php
@@ -10151,11 +9946,6 @@ parameters:
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/CustomerExportTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\CustomerExportTest\\:\\:addProductStream\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/CustomerExportTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\CustomerExportTest\\:\\:assertCustomerAttributeInXml\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/CustomerExportTest.php
@@ -10167,16 +9957,6 @@ parameters:
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\CustomerExportTest\\:\\:getExportRequestParams\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/CustomerExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\CustomerExportTest\\:\\:importFixtures\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/CustomerExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\CustomerExportTest\\:\\:importNewsletterDemoData\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/CustomerExportTest.php
 
@@ -10216,11 +9996,6 @@ parameters:
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/CustomerExportTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$newsletterGroup of method Shopware\\\\Models\\\\Newsletter\\\\Address\\:\\:setNewsletterGroup\\(\\) expects Shopware\\\\Models\\\\Newsletter\\\\Group, Shopware\\\\Models\\\\Newsletter\\\\Group\\|null given\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/CustomerExportTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$source of method DOMDocument\\:\\:loadXML\\(\\) expects string, string\\|false given\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/CustomerExportTest.php
@@ -10251,27 +10026,12 @@ parameters:
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/NewsletterExportTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\NewsletterExportTest\\:\\:addProductStream\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/NewsletterExportTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\NewsletterExportTest\\:\\:csvToArrayIndexedByFieldValue\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/NewsletterExportTest.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\NewsletterExportTest\\:\\:getExportRequestParams\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/NewsletterExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\NewsletterExportTest\\:\\:importFixtures\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/NewsletterExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\NewsletterExportTest\\:\\:importNewsletterDemoData\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/NewsletterExportTest.php
 
@@ -10311,11 +10071,6 @@ parameters:
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/NewsletterExportTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$newsletterGroup of method Shopware\\\\Models\\\\Newsletter\\\\Address\\:\\:setNewsletterGroup\\(\\) expects Shopware\\\\Models\\\\Newsletter\\\\Group, Shopware\\\\Models\\\\Newsletter\\\\Group\\|null given\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/NewsletterExportTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$source of method DOMDocument\\:\\:loadXML\\(\\) expects string, string\\|false given\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/NewsletterExportTest.php
@@ -10346,11 +10101,6 @@ parameters:
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/OrderExportTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\OrderExportTest\\:\\:addProductStream\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/OrderExportTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\OrderExportTest\\:\\:assertOrderAttributeInXmlFile\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/OrderExportTest.php
@@ -10362,16 +10112,6 @@ parameters:
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\OrderExportTest\\:\\:getExportRequestParams\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/OrderExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\OrderExportTest\\:\\:importFixtures\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/OrderExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\OrderExportTest\\:\\:importNewsletterDemoData\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/OrderExportTest.php
 
@@ -10462,11 +10202,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$keys of function array_combine expects array, array\\|false\\|null given\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/OrderExportTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$newsletterGroup of method Shopware\\\\Models\\\\Newsletter\\\\Address\\:\\:setNewsletterGroup\\(\\) expects Shopware\\\\Models\\\\Newsletter\\\\Group, Shopware\\\\Models\\\\Newsletter\\\\Group\\|null given\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/OrderExportTest.php
 
@@ -10699,16 +10434,6 @@ parameters:
 			message: "#^Property SwagImportExport\\\\Tests\\\\Helper\\\\BackendControllerTestHelper\\:\\:\\$files has no type specified\\.$#"
 			count: 1
 			path: Tests/Helper/BackendControllerTestHelper.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Helper\\\\DataProvider\\\\NewsletterDataProvider\\:\\:createNewsletterDemoData\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Helper/DataProvider/NewsletterDataProvider.php
-
-		-
-			message: "#^Parameter \\#1 \\$newsletterGroup of method Shopware\\\\Models\\\\Newsletter\\\\Address\\:\\:setNewsletterGroup\\(\\) expects Shopware\\\\Models\\\\Newsletter\\\\Group, Shopware\\\\Models\\\\Newsletter\\\\Group\\|null given\\.$#"
-			count: 1
-			path: Tests/Helper/DataProvider/NewsletterDataProvider.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Helper\\\\DataProvider\\\\ProfileDataProvider\\:\\:createProfiles\\(\\) has no return type specified\\.$#"
@@ -12071,11 +11796,6 @@ parameters:
 			path: Tests/Shopware/ImportExport/ArticlesDbAdapterTest.php
 
 		-
-			message: "#^Method Tests\\\\Shopware\\\\ImportExport\\\\ArticlesDbAdapterTest\\:\\:testRead\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Shopware/ImportExport/ArticlesDbAdapterTest.php
-
-		-
 			message: "#^Method Tests\\\\Shopware\\\\ImportExport\\\\ArticlesDbAdapterTest\\:\\:testRead\\(\\) has parameter \\$columns with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Shopware/ImportExport/ArticlesDbAdapterTest.php
@@ -12086,22 +11806,12 @@ parameters:
 			path: Tests/Shopware/ImportExport/ArticlesDbAdapterTest.php
 
 		-
-			message: "#^Method Tests\\\\Shopware\\\\ImportExport\\\\ArticlesDbAdapterTest\\:\\:testWrite\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Shopware/ImportExport/ArticlesDbAdapterTest.php
-
-		-
 			message: "#^Method Tests\\\\Shopware\\\\ImportExport\\\\ArticlesDbAdapterTest\\:\\:testWrite\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Shopware/ImportExport/ArticlesDbAdapterTest.php
 
 		-
 			message: "#^Method Tests\\\\Shopware\\\\ImportExport\\\\ArticlesDbAdapterTest\\:\\:writeProvider\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Shopware/ImportExport/ArticlesDbAdapterTest.php
-
-		-
-			message: "#^Property Tests\\\\Shopware\\\\ImportExport\\\\ArticlesDbAdapterTest\\:\\:\\$yamlFile has no type specified\\.$#"
 			count: 1
 			path: Tests/Shopware/ImportExport/ArticlesDbAdapterTest.php
 

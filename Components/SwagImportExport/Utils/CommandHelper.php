@@ -446,7 +446,7 @@ class CommandHelper
             'format' => $this->format,
             'columnOptions' => null,
             'limit' => [],
-            'filter' => null,
+            'filter' => [],
             'max_record_count' => null,
         ];
 
