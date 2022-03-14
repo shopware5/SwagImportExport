@@ -27,42 +27,69 @@ use Shopware\Models\Shop\Shop;
 
 class CustomerDbAdapter implements DataDbAdapter
 {
-    /** @var ModelManager */
+    /**
+     * @var ModelManager
+     */
     protected $manager;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $customerMap;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $billingMap;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $shippingMap;
 
-    protected $unprocessedData;
+    /**
+     * @var array<mixed>
+     */
+    protected $unprocessedData = [];
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $logMessages;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $logState;
 
-    /** @var \Enlight_Components_Db_Adapter_Pdo_Mysql */
+    /**
+     * @var \Enlight_Components_Db_Adapter_Pdo_Mysql
+     */
     protected $db;
 
-    /** @var CustomerValidator */
+    /**
+     * @var CustomerValidator
+     */
     protected $validator;
 
-    /** @var CustomerDataManager */
+    /**
+     * @var CustomerDataManager
+     */
     protected $dataManager;
 
-    /** @var \Shopware\Components\Password\Manager */
+    /**
+     * @var \Shopware\Components\Password\Manager
+     */
     protected $passwordManager;
 
-    /** @var \Shopware_Components_Config */
+    /**
+     * @var \Shopware_Components_Config
+     */
     protected $config;
 
-    /** @var \Enlight_Event_EventManager */
+    /**
+     * @var \Enlight_Event_EventManager
+     */
     protected $eventManager;
 
     /**
@@ -115,7 +142,7 @@ class CustomerDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @return array
+     * @return array<string>
      */
     public function getCustomerColumns()
     {
@@ -251,11 +278,7 @@ class CustomerDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param int   $start
-     * @param int   $limit
-     * @param array $filter
-     *
-     * @return array
+     * {@inheritDoc}
      */
     public function readRecordIds($start, $limit, $filter)
     {

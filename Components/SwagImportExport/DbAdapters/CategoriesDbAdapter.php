@@ -87,12 +87,7 @@ class CategoriesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * Returns record ids
-     *
-     * @param int $start
-     * @param int $limit
-     *
-     * @return array
+     * {@inheritDoc}
      */
     public function readRecordIds($start = null, $limit = null, $filter = null)
     {

@@ -29,7 +29,7 @@ class OrdersDbAdapter implements DataDbAdapter
     /**
      * @var array
      */
-    protected $unprocessedData;
+    protected $unprocessedData = [];
 
     /**
      * @var array
@@ -59,13 +59,7 @@ class OrdersDbAdapter implements DataDbAdapter
     }
 
     /**
-     * Returns record ids
-     *
-     * @param int   $start
-     * @param int   $limit
-     * @param array $filter
-     *
-     * @return array
+     * {@inheritDoc}
      */
     public function readRecordIds($start = null, $limit = null, $filter = null)
     {
@@ -114,7 +108,7 @@ class OrdersDbAdapter implements DataDbAdapter
         $result = [];
         if ($records) {
             foreach ($records as $value) {
-                $result[] = $value['id'];
+                $result[] = (int) $value['id'];
             }
         }
 
@@ -122,14 +116,7 @@ class OrdersDbAdapter implements DataDbAdapter
     }
 
     /**
-     * Returns categories
-     *
-     * @param array $ids
-     * @param array $columns
-     *
-     * @throws \Exception
-     *
-     * @return array
+     * {@inheritDoc}
      */
     public function read($ids, $columns)
     {
@@ -157,7 +144,7 @@ class OrdersDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @return array
+     * {@inheritDoc}
      */
     public function getUnprocessedData()
     {
@@ -165,11 +152,7 @@ class OrdersDbAdapter implements DataDbAdapter
     }
 
     /**
-     * Update order
-     *
-     * @param array $records
-     *
-     * @throws \Exception
+     * {@inheritDoc}
      */
     public function write($records)
     {
@@ -204,7 +187,7 @@ class OrdersDbAdapter implements DataDbAdapter
                     $orderDetailModel = $orderRepository->findOneBy(['number' => $record['number']]);
                 }
 
-                if (!$orderDetailModel) {
+                if (!$orderDetailModel instanceof Detail) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/orders/order_detail_id_not_found', 'Order detail id %s was not found');
                     throw new AdapterException(\sprintf($message, $record['orderDetailId']));
@@ -276,10 +259,24 @@ class OrdersDbAdapter implements DataDbAdapter
                     $orderDetailModel->setStatus($detailStatusModel);
                 }
 
+                // prepares the detail attributes
+                $orderDetailData = [];
+                foreach ($record as $key => $value) {
+                    if (preg_match('/^detailAttribute/', $key) && $newKey = preg_replace('/^detailAttribute/', '', $key)) {
+                        $newKey = lcfirst($newKey);
+                        $orderDetailData['attribute'][$newKey] = $value;
+                        unset($record[$key]);
+                    }
+                }
+
+                if (!empty($orderDetailData)) {
+                    $orderDetailModel->fromArray($orderDetailData);
+                }
+
                 //prepares the attributes
                 foreach ($record as $key => $value) {
-                    if (strpos($key, 'attribute') === 0) {
-                        $newKey = \lcfirst(\preg_replace('/^attribute/', '', $key));
+                    if (strpos($key, 'attribute') === 0 && $newKey = \preg_replace('/^attribute/', '', $key)) {
+                        $newKey = \lcfirst($newKey);
                         $orderData['attribute'][$newKey] = $value;
                         unset($record[$key]);
                     }
@@ -304,7 +301,9 @@ class OrdersDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @throws \Exception
+     * @param string $message
+     *
+     * @return void
      */
     public function saveMessage($message)
     {
@@ -319,33 +318,43 @@ class OrdersDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @return array
+     * {@inheritDoc}
      */
     public function getLogMessages()
     {
         return $this->logMessages;
     }
 
+    /**
+     * @param string $logMessages
+     *
+     * @return void
+     */
     public function setLogMessages($logMessages)
     {
         $this->logMessages[] = $logMessages;
     }
 
     /**
-     * @return string
+     * {@inheritDoc}
      */
     public function getLogState()
     {
         return $this->logState;
     }
 
+    /**
+     * @param string $logState
+     *
+     * @return void
+     */
     public function setLogState($logState)
     {
         $this->logState = $logState;
     }
 
     /**
-     * @return array
+     * {@inheritDoc}
      */
     public function getSections()
     {
@@ -358,9 +367,7 @@ class OrdersDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param string $section
-     *
-     * @return bool|mixed
+     * {@inheritDoc}
      */
     public function getColumns($section)
     {
@@ -370,11 +377,11 @@ class OrdersDbAdapter implements DataDbAdapter
             return $this->{$method}();
         }
 
-        return false;
+        return [];
     }
 
     /**
-     * @return array
+     * {@inheritDoc}
      */
     public function getDefaultColumns()
     {
@@ -496,7 +503,12 @@ class OrdersDbAdapter implements DataDbAdapter
 
         $columns = \array_merge($columns, $documentColumns);
 
-        $attributesSelect = $this->getAttributes();
+        $attributesSelect = $this->getAttributes('s_order_details_attributes', 'detailAttr', 'detailAttribute', ['detailid']);
+        if (!empty($attributesSelect)) {
+            $columns = array_merge($columns, $attributesSelect);
+        }
+
+        $attributesSelect = $this->getAttributes('s_order_attributes', 'attr', 'attribute', ['orderid']);
 
         if (!empty($attributesSelect)) {
             $columns = \array_merge($columns, $attributesSelect);
@@ -506,38 +518,40 @@ class OrdersDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @throws \Zend_Db_Statement_Exception
+     * @param array<string> $ignoredFields
      *
-     * @return array|string
+     * @return array<string>
      */
-    private function getAttributes()
+    private function getAttributes(string $tableName, string $joinAlias, string $prefix, array $ignoredFields): array
     {
-        // Attributes
-        $stmt = Shopware()->Db()->query('SELECT * FROM s_order_attributes LIMIT 1');
-        $attributes = $stmt->fetch();
+        $columns = $this->modelManager->getConnection()->getSchemaManager()->listTableColumns($tableName);
+        unset($columns['id']);
 
-        $attributesSelect = '';
-        if ($attributes) {
-            unset($attributes['id']);
-            unset($attributes['orderID']);
-            $attributes = \array_keys($attributes);
+        foreach ($ignoredFields as $field) {
+            unset($columns[$field]);
+        }
 
-            $prefix = 'attr';
-            $attributesSelect = [];
-            foreach ($attributes as $attribute) {
-                $catAttr = $this->underscoreToCamelCaseService->underscoreToCamelCase($attribute);
+        unset($columns['id']);
+        unset($columns['orderid']);
 
-                $attributesSelect[] = \sprintf('%s.%s as attribute%s', $prefix, $catAttr, \ucwords($catAttr));
-            }
+        $attributes = \array_map(function ($column) {
+            return $column->getName();
+        }, $columns);
+
+        $attributesSelect = [];
+        foreach ($attributes as $attribute) {
+            $catAttr = $this->underscoreToCamelCaseService->underscoreToCamelCase($attribute);
+            $attributesSelect[] = \sprintf('%s.%s as %s%s', $joinAlias, $catAttr, $prefix, \ucwords($catAttr));
         }
 
         return $attributesSelect;
     }
 
     /**
-     * @return QueryBuilder
+     * @param array<string> $columns
+     * @param array<int>    $ids
      */
-    private function getBuilder($columns, $ids)
+    private function getBuilder(array $columns, array $ids): QueryBuilder
     {
         $builder = $this->modelManager->createQueryBuilder();
 
@@ -558,6 +572,7 @@ class OrdersDbAdapter implements DataDbAdapter
             ->leftJoin('orders.customer', 'customer')
             ->leftJoin('orders.attribute', 'attr')
             ->leftJoin('orders.documents', 'documents')
+            ->leftJoin('details.attribute', 'detailAttr')
             ->where('details.id IN (:ids)')
             ->setParameter('ids', $ids);
 

@@ -220,7 +220,7 @@ class CategoryTranslationDbAdapter implements DataDbAdapter
      */
     public function getUnprocessedData()
     {
-        return null;
+        return [];
     }
 
     /**

@@ -148,13 +148,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param array{variants: bool, categories: array<int>, productStreamId: array<int> } $filter
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
-     *
-     * @return array
+     * {@inheritDoc}
      */
     public function readRecordIds($start, $limit, $filter)
     {

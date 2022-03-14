@@ -25,9 +25,9 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
     protected $modelManager;
 
     /**
-     * @var array
+     * @var array<mixed>
      */
-    protected $unprocessedData;
+    protected $unprocessedData = [];
 
     /**
      * @var array
@@ -63,7 +63,7 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @return array
+     * {@inheritDoc}
      */
     public function getDefaultColumns()
     {
@@ -78,12 +78,7 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @param array $ids
-     * @param array $columns
-     *
-     * @throws \Exception
-     *
-     * @return array
+     * {@inheritDoc}
      */
     public function read($ids, $columns)
     {
@@ -122,7 +117,7 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @return array
+     * {@inheritDoc}
      */
     public function getUnprocessedData()
     {
@@ -130,9 +125,7 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
     }
 
     /**
-     * @throws \Exception
-     *
-     * @return array
+     * {@inheritDoc}
      */
     public function readRecordIds($start, $limit, $filter)
     {

@@ -126,6 +126,7 @@ class OrdersDbAdapterTest extends TestCase
         static::assertArrayHasKey('deviceType', $exportedOrders['default'][0]);
         static::assertArrayHasKey('documentId', $exportedOrders['default'][0]);
         static::assertArrayHasKey('documentTypeId', $exportedOrders['default'][0]);
+        static::assertArrayHasKey('detailAttributeAttribute1', $exportedOrders['default'][0]);
         static::assertArrayHasKey('documentDate', $exportedOrders['default'][0]);
     }
 

@@ -67,7 +67,9 @@ class TranslationsDbAdapter implements DataDbAdapter
      */
     protected $logState;
 
-    /** @var TranslationValidator */
+    /**
+     * @var TranslationValidator
+     */
     protected $validator;
 
     /**
@@ -294,7 +296,7 @@ class TranslationsDbAdapter implements DataDbAdapter
 
     public function getUnprocessedData()
     {
-        return null;
+        return [];
     }
 
     /**
