@@ -49,6 +49,20 @@ class ArticlePriceProfileTest extends TestCase
         static::assertEquals($expectedArticlePseudoPrice, $updatedArticlePseudoPrice[0]['pseudoprice']);
     }
 
+    public function testImportShouldUpdateArticleRegulationPrice()
+    {
+        $filePath = __DIR__ . '/_fixtures/article_price_profile.csv';
+        $createdArticleOrderNumber = 'SW10003';
+        $expectedArticleRegulationPrice = 13.403361344538;
+
+        $this->runCommand("sw:import:import -p default_article_prices {$filePath}");
+
+        $updatedArticle = $this->executeQuery("SELECT * FROM s_articles_details WHERE ordernumber='{$createdArticleOrderNumber}'");
+        $updatedArticlePseudoPrice = $this->executeQuery("SELECT * FROM s_articles_prices WHERE articleID='{$updatedArticle[0]['articleID']}'");
+
+        static::assertEquals($expectedArticleRegulationPrice, $updatedArticlePseudoPrice[0]['regulation_price']);
+    }
+
     public function testImportShouldUpdatePriceGroup()
     {
         $filePath = __DIR__ . '/_fixtures/article_price_profile.csv';

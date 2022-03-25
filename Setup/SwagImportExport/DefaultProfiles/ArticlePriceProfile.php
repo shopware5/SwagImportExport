@@ -155,7 +155,7 @@ class ArticlePriceProfile implements \JsonSerializable, ProfileMetaData
                                 'index' => 9,
                                 'name' => '_supplier',
                                 'shopwareField' => 'supplierName',
-                            ],
+                            ]
                         ],
                     ],
                 ],

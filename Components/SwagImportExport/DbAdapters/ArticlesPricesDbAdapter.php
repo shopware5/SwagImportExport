@@ -14,6 +14,7 @@ use Shopware\Components\Model\QueryBuilder;
 use Shopware\Components\SwagImportExport\DataManagers\ArticlePriceDataManager;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
+use Shopware\Components\SwagImportExport\Utils\SwagVersionHelper;
 use Shopware\Components\SwagImportExport\Validators\ArticlePriceValidator;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Detail;
@@ -189,9 +190,15 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
             if ($record['taxInput']) {
                 $record['price'] = \round($record['price'] * (100 + $record['tax']) / 100, 2);
                 $record['pseudoPrice'] = \round($record['pseudoPrice'] * (100 + $record['tax']) / 100, 2);
+                if (SwagVersionHelper::hasMinimumVersion('5.7.8')) {
+                    $record['regulationPrice'] = \round($record['regulationPrice'] * (100 + $record['tax']) / 100, 2);
+                }
             } else {
                 $record['price'] = \round($record['price'], 2);
                 $record['pseudoPrice'] = \round($record['pseudoPrice'], 2);
+                if (SwagVersionHelper::hasMinimumVersion('5.7.8')) {
+                    $record['regulationPrice'] = \round($record['regulationPrice'], 2);
+                }
             }
 
             if ($record['purchasePrice']) {
@@ -207,7 +214,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
      */
     public function getDefaultColumns()
     {
-        return [
+        $columns = [
             'detail.number as orderNumber',
             'price.id',
             'price.articleId',
@@ -223,6 +230,12 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
             'detail.purchasePrice as purchasePrice',
             'supplier.name as supplierName',
         ];
+
+        if (SwagVersionHelper::hasMinimumVersion('5.7.8')) {
+            $columns[] = 'price.regulationPrice';
+        }
+
+        return $columns;
     }
 
     /**
@@ -314,6 +327,10 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                     $record['pseudoPrice'] = (float) \str_replace(',', '.', $record['pseudoPrice']);
                 }
 
+                if (isset($record['regulation_price'])) {
+                    $record['regulation_price'] = (float) \str_replace(',', '.', $record['regulation_price']);
+                }
+
                 if (isset($record['purchasePrice'])) {
                     $record['purchasePrice'] = (float) \str_replace(',', '.', $record['purchasePrice']);
                 }
@@ -321,6 +338,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                 if (isset($record['percent'])) {
                     $record['percent'] = (float) \str_replace(',', '.', $record['percent']);
                 }
+
                 // removes price with same from value from database
                 $this->updateArticleFromPrice($record, $articleDetail->getId());
                 // checks if price belongs to graduation price
@@ -334,6 +352,9 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                     $tax = $articleDetail->getArticle()->getTax();
                     $record['price'] = $record['price'] / (100 + (float) $tax->getTax()) * 100;
                     $record['pseudoPrice'] = $record['pseudoPrice'] / (100 + (float) $tax->getTax()) * 100;
+                    if (SwagVersionHelper::hasMinimumVersion('5.7.8')) {
+                        $record['regulation_price'] = $record['regulation_price'] / (100 + (float) $tax->getTax()) * 100;
+                    }
                 }
 
                 $price = new ArticlePrice();
@@ -346,6 +367,10 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
 
                 if (isset($record['pseudoPrice'])) {
                     $price->setPseudoPrice($record['pseudoPrice']);
+                }
+
+                if (SwagVersionHelper::hasMinimumVersion('5.7.8') && isset($record['regulation_price'])) {
+                    $price->setRegulationPrice($record['regulation_price']);
                 }
 
                 if (isset($record['purchasePrice'])) {

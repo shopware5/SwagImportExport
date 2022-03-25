@@ -25,6 +25,7 @@ class ArticlePriceValidator extends Validator
             'price',
             'purchasePrice',
             'pseudoPrice',
+            'regulationPrice',
         ],
         'int' => [
             'from',

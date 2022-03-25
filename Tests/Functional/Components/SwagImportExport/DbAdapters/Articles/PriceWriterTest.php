@@ -149,6 +149,30 @@ class PriceWriterTest extends TestCase
         static::assertEquals($expectedArticlePseudoPrice, $updatedArticle[0]['pseudoprice']);
     }
 
+    public function testWriteShouldUpdateArticleRegulationPrice()
+    {
+        $priceWriterAdapter = $this->createPriceWriterAdapter();
+
+        $articlePriceData = [
+            [
+                'price' => '9,95',
+                'priceGroup' => 'EK',
+                'regulationPrice' => '15,95',
+            ],
+        ];
+        $articleOrderNumber = 3;
+        $articleId = 3;
+        $expectedArticleRegulationPrice = 13.403361344538;
+
+        $priceWriterAdapter->write($articleId, $articleOrderNumber, $articlePriceData);
+
+        /** @var Connection $dbalConnection */
+        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $updatedArticle = $dbalConnection->executeQuery("SELECT * FROM s_articles_prices WHERE articleID='{$articleId}'")->fetchAll();
+
+        static::assertEquals($expectedArticleRegulationPrice, $updatedArticle[0]['regulation_price']);
+    }
+
     /**
      * @return PriceWriter
      */

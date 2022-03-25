@@ -13,6 +13,7 @@ use Shopware\Components\SwagImportExport\DataManagers\Articles\PriceDataManager;
 use Shopware\Components\SwagImportExport\DbalHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
+use Shopware\Components\SwagImportExport\Utils\SwagVersionHelper;
 use Shopware\Components\SwagImportExport\Validators\Articles\PriceValidator;
 use Shopware\Models\Article\Price;
 
@@ -122,6 +123,20 @@ class PriceWriter
             }
         }
 
+        if (SwagVersionHelper::hasMinimumVersion('5.7.8')) {
+            if (isset($price['regulationPrice'])) {
+                $price['regulationPrice'] = $this->formatToFloatValue($price['regulationPrice']);
+            } else {
+                if ($newPrice) {
+                    $price['regulationPrice'] = 0;
+                }
+
+                if ($taxInput) {
+                    $price['regulationPrice'] = \round($price['regulationPrice'] * (100 + $tax) / 100, 2);
+                }
+            }
+        }
+
         if (isset($price['percent'])) {
             $price['percent'] = $this->formatToFloatValue($price['percent']);
         }
@@ -129,6 +144,7 @@ class PriceWriter
         if ($taxInput) {
             $price['price'] = $price['price'] / (100 + $tax) * 100;
             $price['pseudoPrice'] = $price['pseudoPrice'] / (100 + $tax) * 100;
+            $price['regulationPrice'] = $price['regulationPrice'] / (100 + $tax) * 100;
         }
 
         return $price;

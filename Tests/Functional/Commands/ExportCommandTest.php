@@ -369,7 +369,7 @@ class ExportCommandTest extends TestCase
 
     public function testArticlesPricesXmlExportCommandWithLimit(): void
     {
-        $expectedLineAmount = 1208;
+        $expectedLineAmount = 1308;
         $profileName = 'default_article_prices';
 
         $fileName = 'articlesprices.xml';
