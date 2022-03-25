@@ -15,14 +15,14 @@ use Symfony\Component\Console\Output\StreamOutput;
 trait CommandTestCaseTrait
 {
     /**
-     * @var array
+     * @var array<string>
      */
-    private $files;
+    private $files = [];
 
     /**
      * @after
      */
-    protected function removeCreatedFilesAfter()
+    protected function removeCreatedFilesAfter(): void
     {
         foreach ($this->files as $filePath) {
             \unlink($filePath);
@@ -30,11 +30,9 @@ trait CommandTestCaseTrait
     }
 
     /**
-     * @param string $command
-     *
-     * @return array
+     * @return array<mixed>
      */
-    protected function runCommand($command)
+    protected function runCommand(string $command): array
     {
         $application = new Application(Shopware()->Container()->get('kernel'));
         $application->setAutoExit(true);
@@ -50,28 +48,17 @@ trait CommandTestCaseTrait
         return \explode(\PHP_EOL, $consoleOutput);
     }
 
-    /**
-     * @param string $file
-     */
-    private function addCreatedExportFile($file)
+    private function addCreatedExportFile(string $file): void
     {
         $this->files[] = $this->getFilePath($file);
     }
 
-    /**
-     * @param string $fileName
-     *
-     * @return string
-     */
-    private function getFilePath($fileName)
+    private function getFilePath(string $fileName): string
     {
         return Shopware()->DocPath() . $fileName;
     }
 
-    /**
-     * @return string
-     */
-    private function readConsoleOutput($fp)
+    private function readConsoleOutput($fp): string
     {
         \fseek($fp, 0);
         $output = '';
@@ -79,6 +66,10 @@ trait CommandTestCaseTrait
             $output = \fread($fp, 4096);
         }
         \fclose($fp);
+
+        if (!\is_string($output)) {
+            throw new \Exception(sprintf('Could not read filepath %s', $fp));
+        }
 
         return $output;
     }

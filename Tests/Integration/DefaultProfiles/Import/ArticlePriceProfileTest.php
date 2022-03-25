@@ -9,6 +9,7 @@
 namespace SwagImportExport\Tests\Integration\DefaultProfiles\Import;
 
 use PHPUnit\Framework\TestCase;
+use Shopware\Components\SwagImportExport\Utils\SwagVersionHelper;
 use SwagImportExport\Tests\Helper\CommandTestCaseTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use SwagImportExport\Tests\Integration\DefaultProfiles\DefaultProfileImportTestCaseTrait;
@@ -19,7 +20,7 @@ class ArticlePriceProfileTest extends TestCase
     use DefaultProfileImportTestCaseTrait;
     use DatabaseTestCaseTrait;
 
-    public function testImportShouldUpdateArticlePrice()
+    public function testImportShouldUpdateArticlePrice(): void
     {
         $filePath = __DIR__ . '/_fixtures/article_price_profile.csv';
         $createdArticleOrderNumber = 'SW10003';
@@ -35,7 +36,7 @@ class ArticlePriceProfileTest extends TestCase
         static::assertEquals($expectedArticlePrice, $updatedArticlePrice[0]['price']);
     }
 
-    public function testImportShouldUpdateArticlePseudoPrice()
+    public function testImportShouldUpdateArticlePseudoPrice(): void
     {
         $filePath = __DIR__ . '/_fixtures/article_price_profile.csv';
         $createdArticleOrderNumber = 'SW10003';
@@ -49,8 +50,12 @@ class ArticlePriceProfileTest extends TestCase
         static::assertEquals($expectedArticlePseudoPrice, $updatedArticlePseudoPrice[0]['pseudoprice']);
     }
 
-    public function testImportShouldUpdateArticleRegulationPrice()
+    public function testImportShouldUpdateArticleRegulationPrice(): void
     {
+        if (!SwagVersionHelper::isShopware578()) {
+            static::markTestSkipped('This test is not supported lower shopware version 5.7.8');
+        }
+
         $filePath = __DIR__ . '/_fixtures/article_price_profile.csv';
         $createdArticleOrderNumber = 'SW10003';
         $expectedArticleRegulationPrice = 13.403361344538;
@@ -63,7 +68,7 @@ class ArticlePriceProfileTest extends TestCase
         static::assertEquals($expectedArticleRegulationPrice, $updatedArticlePseudoPrice[0]['regulation_price']);
     }
 
-    public function testImportShouldUpdatePriceGroup()
+    public function testImportShouldUpdatePriceGroup(): void
     {
         $filePath = __DIR__ . '/_fixtures/article_price_profile.csv';
         $createdArticleOrderNumber = 'SW10003';

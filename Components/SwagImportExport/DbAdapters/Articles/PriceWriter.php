@@ -123,7 +123,7 @@ class PriceWriter
             }
         }
 
-        if (SwagVersionHelper::hasMinimumVersion('5.7.8')) {
+        if (SwagVersionHelper::isShopware578()) {
             if (isset($price['regulationPrice'])) {
                 $price['regulationPrice'] = $this->formatToFloatValue($price['regulationPrice']);
             } else {

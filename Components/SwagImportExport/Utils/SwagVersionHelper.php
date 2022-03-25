@@ -25,4 +25,9 @@ class SwagVersionHelper
 
         return \version_compare($actualVersion, $version, '>=');
     }
+
+    public static function isShopware578(): bool
+    {
+        return class_exists('Shopware\Bundle\CustomerSearchBundle\Condition\HasNoAddressWithCountryCondition');
+    }
 }

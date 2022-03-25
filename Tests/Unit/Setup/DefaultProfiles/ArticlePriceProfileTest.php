@@ -15,7 +15,7 @@ class ArticlePriceProfileTest extends TestCase
 {
     use DefaultProfileTestCaseTrait;
 
-    public function testItShouldReturnValidProfileTree()
+    public function testItShouldReturnValidProfileTree(): void
     {
         $articleProfile = $this->createArticlePriceProfile();
 
@@ -26,10 +26,7 @@ class ArticlePriceProfileTest extends TestCase
         });
     }
 
-    /**
-     * @return ArticlePriceProfile
-     */
-    private function createArticlePriceProfile()
+    private function createArticlePriceProfile(): ArticlePriceProfile
     {
         return new ArticlePriceProfile();
     }

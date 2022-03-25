@@ -22,6 +22,7 @@ use Shopware\Models\Article\Price as ArticlePrice;
 use Shopware\Models\Category\Category;
 use Shopware\Models\Customer\Group as CustomerGroup;
 use Shopware\Models\Shop\Shop;
+use Shopware\Models\Tax\Tax;
 
 class ArticlesPricesDbAdapter implements DataDbAdapter
 {
@@ -190,13 +191,13 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
             if ($record['taxInput']) {
                 $record['price'] = \round($record['price'] * (100 + $record['tax']) / 100, 2);
                 $record['pseudoPrice'] = \round($record['pseudoPrice'] * (100 + $record['tax']) / 100, 2);
-                if (SwagVersionHelper::hasMinimumVersion('5.7.8')) {
+                if (SwagVersionHelper::isShopware578()) {
                     $record['regulationPrice'] = \round($record['regulationPrice'] * (100 + $record['tax']) / 100, 2);
                 }
             } else {
                 $record['price'] = \round($record['price'], 2);
                 $record['pseudoPrice'] = \round($record['pseudoPrice'], 2);
-                if (SwagVersionHelper::hasMinimumVersion('5.7.8')) {
+                if (SwagVersionHelper::isShopware578()) {
                     $record['regulationPrice'] = \round($record['regulationPrice'], 2);
                 }
             }
@@ -231,7 +232,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
             'supplier.name as supplierName',
         ];
 
-        if (SwagVersionHelper::hasMinimumVersion('5.7.8')) {
+        if (SwagVersionHelper::isShopware578()) {
             $columns[] = 'price.regulationPrice';
         }
 
@@ -327,8 +328,8 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                     $record['pseudoPrice'] = (float) \str_replace(',', '.', $record['pseudoPrice']);
                 }
 
-                if (isset($record['regulation_price'])) {
-                    $record['regulation_price'] = (float) \str_replace(',', '.', $record['regulation_price']);
+                if (isset($record['regulationPrice'])) {
+                    $record['regulationPrice'] = (float) \str_replace(',', '.', $record['regulationPrice']);
                 }
 
                 if (isset($record['purchasePrice'])) {
@@ -350,10 +351,12 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                 // remove tax
                 if ($customerGroup->getTaxInput()) {
                     $tax = $articleDetail->getArticle()->getTax();
-                    $record['price'] = $record['price'] / (100 + (float) $tax->getTax()) * 100;
-                    $record['pseudoPrice'] = $record['pseudoPrice'] / (100 + (float) $tax->getTax()) * 100;
-                    if (SwagVersionHelper::hasMinimumVersion('5.7.8')) {
-                        $record['regulation_price'] = $record['regulation_price'] / (100 + (float) $tax->getTax()) * 100;
+                    if ($tax instanceof Tax) {
+                        $record['price'] = $record['price'] / (100 + (float) $tax->getTax()) * 100;
+                        $record['pseudoPrice'] = $record['pseudoPrice'] / (100 + (float) $tax->getTax()) * 100;
+                        if (SwagVersionHelper::isShopware578()) {
+                            $record['regulationPrice'] = $record['regulationPrice'] / (100 + (float) $tax->getTax()) * 100;
+                        }
                     }
                 }
 
@@ -369,8 +372,8 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
                     $price->setPseudoPrice($record['pseudoPrice']);
                 }
 
-                if (SwagVersionHelper::hasMinimumVersion('5.7.8') && isset($record['regulation_price'])) {
-                    $price->setRegulationPrice($record['regulation_price']);
+                if (SwagVersionHelper::isShopware578() && isset($record['regulationPrice'])) {
+                    $price->setRegulationPrice($record['regulationPrice']);
                 }
 
                 if (isset($record['purchasePrice'])) {

@@ -12,23 +12,17 @@ use Doctrine\DBAL\Statement;
 
 trait DefaultProfileImportTestCaseTrait
 {
-    /**
-     * @param string $fileName
-     *
-     * @return string
-     */
-    private function getImportFile($fileName)
+    private function getImportFile(string $fileName): string
     {
         return __DIR__ . '/Import/_fixtures/' . $fileName;
     }
 
     /**
-     * @param string $sql
-     * @param int    $fetchMode
+     * @param \PDO::FETCH_* $fetchMode
      *
-     * @return array
+     * @return mixed[]
      */
-    private function executeQuery($sql, $fetchMode = \PDO::FETCH_BOTH)
+    private function executeQuery(string $sql, int $fetchMode = \PDO::FETCH_BOTH): array
     {
         /** @var Statement $stmt */
         $stmt = Shopware()->Container()->get('dbal_connection')->executeQuery($sql);

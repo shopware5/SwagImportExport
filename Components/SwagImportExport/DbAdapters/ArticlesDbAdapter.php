@@ -269,13 +269,13 @@ class ArticlesDbAdapter implements DataDbAdapter
             if ($record['taxInput']) {
                 $record['price'] = \round($record['price'] * (100 + $record['tax']) / 100, 2);
                 $record['pseudoPrice'] = \round($record['pseudoPrice'] * (100 + $record['tax']) / 100, 2);
-                if (SwagVersionHelper::hasMinimumVersion('5.7.8')) {
+                if (SwagVersionHelper::isShopware578()) {
                     $record['regulationPrice'] = \round($record['regulationPrice'] * (100 + $record['tax']) / 100, 2);
                 }
             } else {
                 $record['price'] = \round($record['price'], 2);
                 $record['pseudoPrice'] = \round($record['pseudoPrice'], 2);
-                if (SwagVersionHelper::hasMinimumVersion('5.7.8')) {
+                if (SwagVersionHelper::isShopware578()) {
                     $record['regulationPrice'] = round($record['regulationPrice'], 2);
                 }
             }
@@ -755,7 +755,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             'prices.to',
         ];
 
-        if (SwagVersionHelper::hasMinimumVersion('5.7.8')) {
+        if (SwagVersionHelper::isShopware578()) {
             $columns[] = 'prices.regulationPrice as regulationPrice';
         }
 
