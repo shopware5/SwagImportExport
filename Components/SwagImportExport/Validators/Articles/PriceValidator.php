@@ -19,6 +19,7 @@ class PriceValidator extends Validator
             'price',
             'purchasePrice',
             'pseudoPrice',
+            'regulationPrice',
         ],
     ];
 

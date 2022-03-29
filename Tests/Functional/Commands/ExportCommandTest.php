@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace SwagImportExport\Tests\Functional\Commands;
 
 use PHPUnit\Framework\TestCase;
+use Shopware\Components\SwagImportExport\Utils\SwagVersionHelper;
 use SwagImportExport\Tests\Helper\CommandTestCaseTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use SwagImportExport\Tests\Helper\FixturesImportTrait;
@@ -369,7 +370,11 @@ class ExportCommandTest extends TestCase
 
     public function testArticlesPricesXmlExportCommandWithLimit(): void
     {
-        $expectedLineAmount = 1208;
+        if (SwagVersionHelper::isShopware578()) {
+            $expectedLineAmount = 1308;
+        } else {
+            $expectedLineAmount = 1208;
+        }
         $profileName = 'default_article_prices';
 
         $fileName = 'articlesprices.xml';

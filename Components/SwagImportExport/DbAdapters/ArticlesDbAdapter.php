@@ -33,6 +33,7 @@ use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Service\UnderscoreToCamelCaseServiceInterface;
 use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
+use Shopware\Components\SwagImportExport\Utils\SwagVersionHelper;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Detail;
 use Shopware\Models\Attribute\Configuration;
@@ -268,9 +269,15 @@ class ArticlesDbAdapter implements DataDbAdapter
             if ($record['taxInput']) {
                 $record['price'] = \round($record['price'] * (100 + $record['tax']) / 100, 2);
                 $record['pseudoPrice'] = \round($record['pseudoPrice'] * (100 + $record['tax']) / 100, 2);
+                if (SwagVersionHelper::isShopware578()) {
+                    $record['regulationPrice'] = \round($record['regulationPrice'] * (100 + $record['tax']) / 100, 2);
+                }
             } else {
                 $record['price'] = \round($record['price'], 2);
                 $record['pseudoPrice'] = \round($record['pseudoPrice'], 2);
+                if (SwagVersionHelper::isShopware578()) {
+                    $record['regulationPrice'] = round($record['regulationPrice'], 2);
+                }
             }
 
             if (!$record['inStock']) {
@@ -738,7 +745,7 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     public function getPriceColumns()
     {
-        return [
+        $columns = [
             'prices.articleDetailsId as variantId',
             'prices.articleId as articleId',
             'prices.price as price',
@@ -747,6 +754,12 @@ class ArticlesDbAdapter implements DataDbAdapter
             'prices.from',
             'prices.to',
         ];
+
+        if (SwagVersionHelper::isShopware578()) {
+            $columns[] = 'prices.regulationPrice as regulationPrice';
+        }
+
+        return $columns;
     }
 
     /**

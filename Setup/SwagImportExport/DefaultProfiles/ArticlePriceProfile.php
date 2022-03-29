@@ -9,6 +9,7 @@
 namespace Shopware\Setup\SwagImportExport\DefaultProfiles;
 
 use Shopware\Components\SwagImportExport\DbAdapters\DataDbAdapter;
+use Shopware\Components\SwagImportExport\Utils\SwagVersionHelper;
 
 class ArticlePriceProfile implements \JsonSerializable, ProfileMetaData
 {
@@ -54,7 +55,7 @@ class ArticlePriceProfile implements \JsonSerializable, ProfileMetaData
      */
     private function getArticlePriceFields()
     {
-        return [
+        $columns = [
             0 => [
                 'id' => '537359399c80a',
                 'name' => 'Header',
@@ -161,5 +162,17 @@ class ArticlePriceProfile implements \JsonSerializable, ProfileMetaData
                 ],
             ],
         ];
+
+        if (SwagVersionHelper::isShopware578()) {
+            $columns[1]['children'][0]['children'][] = [
+                'id' => '540ffb5fdaaa',
+                'type' => 'leaf',
+                'index' => 10,
+                'name' => 'regulationPrice',
+                'shopwareField' => 'regulationPrice',
+            ];
+        }
+
+        return $columns;
     }
 }

@@ -1,2 +1,2 @@
-ordernumber;price;pricegroup;from;pseudoprice;purchaseprice;_name;_additionaltext;_supplier
-SW10003;9,95;EK;1;15,95;7,95;Münsterländer Aperitif 16%;;Feinbrennerei Sasse
+ordernumber;price;pricegroup;from;pseudoprice;regulationPrice;purchaseprice;_name;_additionaltext;_supplier
+SW10003;9,95;EK;1;15,95;15,95;7,95;Münsterländer Aperitif 16%;;Feinbrennerei Sasse

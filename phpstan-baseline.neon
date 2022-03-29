@@ -2761,11 +2761,6 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/ArticlesPricesDbAdapter.php
 
 		-
-			message: "#^Cannot call method getTax\\(\\) on Shopware\\\\Models\\\\Tax\\\\Tax\\|null\\.$#"
-			count: 2
-			path: Components/SwagImportExport/DbAdapters/ArticlesPricesDbAdapter.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesPricesDbAdapter\\:\\:collectCategoryIds\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/ArticlesPricesDbAdapter.php
@@ -7916,27 +7911,7 @@ parameters:
 			path: Setup/SwagImportExport/Update/UpdaterInterface.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Commands\\\\ExportCommandTest\\:\\:addCreatedExportFile\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Commands/ExportCommandTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Commands\\\\ExportCommandTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Commands/ExportCommandTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Commands\\\\ExportCommandTest\\:\\:readConsoleOutput\\(\\) should return string but returns string\\|false\\.$#"
-			count: 1
-			path: Tests/Functional/Commands/ExportCommandTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Commands\\\\ExportCommandTest\\:\\:removeCreatedFilesAfter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Commands/ExportCommandTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Commands\\\\ExportCommandTest\\:\\:runCommand\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Functional/Commands/ExportCommandTest.php
 
@@ -7951,32 +7926,7 @@ parameters:
 			path: Tests/Functional/Commands/ExportCommandTest.php
 
 		-
-			message: "#^Property SwagImportExport\\\\Tests\\\\Functional\\\\Commands\\\\ExportCommandTest\\:\\:\\$files type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Functional/Commands/ExportCommandTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Commands\\\\ImportCommandTest\\:\\:addCreatedExportFile\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Commands/ImportCommandTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Commands\\\\ImportCommandTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Commands/ImportCommandTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Commands\\\\ImportCommandTest\\:\\:readConsoleOutput\\(\\) should return string but returns string\\|false\\.$#"
-			count: 1
-			path: Tests/Functional/Commands/ImportCommandTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Commands\\\\ImportCommandTest\\:\\:removeCreatedFilesAfter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Commands/ImportCommandTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Commands\\\\ImportCommandTest\\:\\:runCommand\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Functional/Commands/ImportCommandTest.php
 
@@ -8092,11 +8042,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: Tests/Functional/Commands/ImportCommandTest.php
-
-		-
-			message: "#^Property SwagImportExport\\\\Tests\\\\Functional\\\\Commands\\\\ImportCommandTest\\:\\:\\$files type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Functional/Commands/ImportCommandTest.php
 
@@ -8279,41 +8224,6 @@ parameters:
 			message: "#^Parameter \\#1 \\$articleId of method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\Articles\\\\CategoryWriter\\:\\:write\\(\\) expects string, int given\\.$#"
 			count: 3
 			path: Tests/Functional/Components/SwagImportExport/DbAdapters/Articles/CategoryWriterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\Articles\\\\PriceWriterTest\\:\\:testWriteShouldUpdateArticlePrice\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/SwagImportExport/DbAdapters/Articles/PriceWriterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\Articles\\\\PriceWriterTest\\:\\:testWriteShouldUpdateArticlePseudoPrice\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/SwagImportExport/DbAdapters/Articles/PriceWriterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\Articles\\\\PriceWriterTest\\:\\:testWriteShouldUpdatePriceWithDotSeperation\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/SwagImportExport/DbAdapters/Articles/PriceWriterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\Articles\\\\PriceWriterTest\\:\\:testWriteThrowsExceptionIfEmptyValues\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/SwagImportExport/DbAdapters/Articles/PriceWriterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\Articles\\\\PriceWriterTest\\:\\:testWriteThrowsExceptionIfPriceFromIsInvalid\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/SwagImportExport/DbAdapters/Articles/PriceWriterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\Articles\\\\PriceWriterTest\\:\\:testWriteThrowsExceptionIfPriceGroupNotExists\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/SwagImportExport/DbAdapters/Articles/PriceWriterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\Articles\\\\PriceWriterTest\\:\\:testWriteThrowsExceptionIfPriceIsInvalid\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/SwagImportExport/DbAdapters/Articles/PriceWriterTest.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\Articles\\\\PropertyWriterTest\\:\\:testWriteShouldCreateGroup\\(\\) has no return type specified\\.$#"
@@ -10056,32 +9966,7 @@ parameters:
 			path: Tests/Helper/TestSessionStorage.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\AddressProfileTest\\:\\:addCreatedExportFile\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/AddressProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\AddressProfileTest\\:\\:executeQuery\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/AddressProfileTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\AddressProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/AddressProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\AddressProfileTest\\:\\:readConsoleOutput\\(\\) should return string but returns string\\|false\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/AddressProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\AddressProfileTest\\:\\:removeCreatedFilesAfter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/AddressProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\AddressProfileTest\\:\\:runCommand\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/AddressProfileTest.php
 
@@ -10106,37 +9991,7 @@ parameters:
 			path: Tests/Integration/DefaultProfiles/Import/AddressProfileTest.php
 
 		-
-			message: "#^Property SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\AddressProfileTest\\:\\:\\$files type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/AddressProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleAccessoriesProfileTest\\:\\:addCreatedExportFile\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleAccessoriesProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleAccessoriesProfileTest\\:\\:executeQuery\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleAccessoriesProfileTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleAccessoriesProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleAccessoriesProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleAccessoriesProfileTest\\:\\:readConsoleOutput\\(\\) should return string but returns string\\|false\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleAccessoriesProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleAccessoriesProfileTest\\:\\:removeCreatedFilesAfter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleAccessoriesProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleAccessoriesProfileTest\\:\\:runCommand\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/ArticleAccessoriesProfileTest.php
 
@@ -10156,37 +10011,7 @@ parameters:
 			path: Tests/Integration/DefaultProfiles/Import/ArticleAccessoriesProfileTest.php
 
 		-
-			message: "#^Property SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleAccessoriesProfileTest\\:\\:\\$files type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleAccessoriesProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleCategoriesProfileTest\\:\\:addCreatedExportFile\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleCategoriesProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleCategoriesProfileTest\\:\\:executeQuery\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleCategoriesProfileTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleCategoriesProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleCategoriesProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleCategoriesProfileTest\\:\\:readConsoleOutput\\(\\) should return string but returns string\\|false\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleCategoriesProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleCategoriesProfileTest\\:\\:removeCreatedFilesAfter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleCategoriesProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleCategoriesProfileTest\\:\\:runCommand\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/ArticleCategoriesProfileTest.php
 
@@ -10206,37 +10031,7 @@ parameters:
 			path: Tests/Integration/DefaultProfiles/Import/ArticleCategoriesProfileTest.php
 
 		-
-			message: "#^Property SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleCategoriesProfileTest\\:\\:\\$files type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleCategoriesProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleCompleteProfileTest\\:\\:addCreatedExportFile\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleCompleteProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleCompleteProfileTest\\:\\:executeQuery\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleCompleteProfileTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleCompleteProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleCompleteProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleCompleteProfileTest\\:\\:readConsoleOutput\\(\\) should return string but returns string\\|false\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleCompleteProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleCompleteProfileTest\\:\\:removeCreatedFilesAfter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleCompleteProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleCompleteProfileTest\\:\\:runCommand\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/ArticleCompleteProfileTest.php
 
@@ -10301,37 +10096,7 @@ parameters:
 			path: Tests/Integration/DefaultProfiles/Import/ArticleCompleteProfileTest.php
 
 		-
-			message: "#^Property SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleCompleteProfileTest\\:\\:\\$files type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleCompleteProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleDefaultProfileTest\\:\\:addCreatedExportFile\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleDefaultProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleDefaultProfileTest\\:\\:executeQuery\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleDefaultProfileTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleDefaultProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleDefaultProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleDefaultProfileTest\\:\\:readConsoleOutput\\(\\) should return string but returns string\\|false\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleDefaultProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleDefaultProfileTest\\:\\:removeCreatedFilesAfter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleDefaultProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleDefaultProfileTest\\:\\:runCommand\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/ArticleDefaultProfileTest.php
 
@@ -10361,37 +10126,7 @@ parameters:
 			path: Tests/Integration/DefaultProfiles/Import/ArticleDefaultProfileTest.php
 
 		-
-			message: "#^Property SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleDefaultProfileTest\\:\\:\\$files type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleDefaultProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleImageUrlProfileTest\\:\\:addCreatedExportFile\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleImageUrlProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleImageUrlProfileTest\\:\\:executeQuery\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleImageUrlProfileTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleImageUrlProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleImageUrlProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleImageUrlProfileTest\\:\\:readConsoleOutput\\(\\) should return string but returns string\\|false\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleImageUrlProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleImageUrlProfileTest\\:\\:removeCreatedFilesAfter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleImageUrlProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleImageUrlProfileTest\\:\\:runCommand\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/ArticleImageUrlProfileTest.php
 
@@ -10411,37 +10146,7 @@ parameters:
 			path: Tests/Integration/DefaultProfiles/Import/ArticleImageUrlProfileTest.php
 
 		-
-			message: "#^Property SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleImageUrlProfileTest\\:\\:\\$files type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleImageUrlProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleInStockProfileTest\\:\\:addCreatedExportFile\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleInStockProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleInStockProfileTest\\:\\:executeQuery\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleInStockProfileTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleInStockProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleInStockProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleInStockProfileTest\\:\\:readConsoleOutput\\(\\) should return string but returns string\\|false\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleInStockProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleInStockProfileTest\\:\\:removeCreatedFilesAfter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleInStockProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleInStockProfileTest\\:\\:runCommand\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/ArticleInStockProfileTest.php
 
@@ -10461,52 +10166,7 @@ parameters:
 			path: Tests/Integration/DefaultProfiles/Import/ArticleInStockProfileTest.php
 
 		-
-			message: "#^Property SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleInStockProfileTest\\:\\:\\$files type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleInStockProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticlePriceProfileTest\\:\\:addCreatedExportFile\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticlePriceProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticlePriceProfileTest\\:\\:executeQuery\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticlePriceProfileTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticlePriceProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticlePriceProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticlePriceProfileTest\\:\\:readConsoleOutput\\(\\) should return string but returns string\\|false\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticlePriceProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticlePriceProfileTest\\:\\:removeCreatedFilesAfter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticlePriceProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticlePriceProfileTest\\:\\:runCommand\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticlePriceProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticlePriceProfileTest\\:\\:testImportShouldUpdateArticlePrice\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticlePriceProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticlePriceProfileTest\\:\\:testImportShouldUpdateArticlePseudoPrice\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticlePriceProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticlePriceProfileTest\\:\\:testImportShouldUpdatePriceGroup\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/ArticlePriceProfileTest.php
 
@@ -10521,37 +10181,7 @@ parameters:
 			path: Tests/Integration/DefaultProfiles/Import/ArticlePriceProfileTest.php
 
 		-
-			message: "#^Property SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticlePriceProfileTest\\:\\:\\$files type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticlePriceProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticlePropertiesProfileTest\\:\\:addCreatedExportFile\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticlePropertiesProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticlePropertiesProfileTest\\:\\:executeQuery\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticlePropertiesProfileTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticlePropertiesProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticlePropertiesProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticlePropertiesProfileTest\\:\\:readConsoleOutput\\(\\) should return string but returns string\\|false\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticlePropertiesProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticlePropertiesProfileTest\\:\\:removeCreatedFilesAfter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticlePropertiesProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticlePropertiesProfileTest\\:\\:runCommand\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/ArticlePropertiesProfileTest.php
 
@@ -10586,37 +10216,7 @@ parameters:
 			path: Tests/Integration/DefaultProfiles/Import/ArticlePropertiesProfileTest.php
 
 		-
-			message: "#^Property SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticlePropertiesProfileTest\\:\\:\\$files type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticlePropertiesProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleSimilarsProfileTest\\:\\:addCreatedExportFile\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleSimilarsProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleSimilarsProfileTest\\:\\:executeQuery\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleSimilarsProfileTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleSimilarsProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleSimilarsProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleSimilarsProfileTest\\:\\:readConsoleOutput\\(\\) should return string but returns string\\|false\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleSimilarsProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleSimilarsProfileTest\\:\\:removeCreatedFilesAfter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleSimilarsProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleSimilarsProfileTest\\:\\:runCommand\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/ArticleSimilarsProfileTest.php
 
@@ -10636,37 +10236,7 @@ parameters:
 			path: Tests/Integration/DefaultProfiles/Import/ArticleSimilarsProfileTest.php
 
 		-
-			message: "#^Property SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleSimilarsProfileTest\\:\\:\\$files type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleSimilarsProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleTranslationProfileTest\\:\\:addCreatedExportFile\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleTranslationProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleTranslationProfileTest\\:\\:executeQuery\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleTranslationProfileTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleTranslationProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleTranslationProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleTranslationProfileTest\\:\\:readConsoleOutput\\(\\) should return string but returns string\\|false\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleTranslationProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleTranslationProfileTest\\:\\:removeCreatedFilesAfter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleTranslationProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleTranslationProfileTest\\:\\:runCommand\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/ArticleTranslationProfileTest.php
 
@@ -10686,37 +10256,7 @@ parameters:
 			path: Tests/Integration/DefaultProfiles/Import/ArticleTranslationProfileTest.php
 
 		-
-			message: "#^Property SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleTranslationProfileTest\\:\\:\\$files type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleTranslationProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleTranslationUpdateProfileTest\\:\\:addCreatedExportFile\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleTranslationUpdateProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleTranslationUpdateProfileTest\\:\\:executeQuery\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleTranslationUpdateProfileTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleTranslationUpdateProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleTranslationUpdateProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleTranslationUpdateProfileTest\\:\\:readConsoleOutput\\(\\) should return string but returns string\\|false\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleTranslationUpdateProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleTranslationUpdateProfileTest\\:\\:removeCreatedFilesAfter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleTranslationUpdateProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleTranslationUpdateProfileTest\\:\\:runCommand\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/ArticleTranslationUpdateProfileTest.php
 
@@ -10736,37 +10276,7 @@ parameters:
 			path: Tests/Integration/DefaultProfiles/Import/ArticleTranslationUpdateProfileTest.php
 
 		-
-			message: "#^Property SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleTranslationUpdateProfileTest\\:\\:\\$files type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleTranslationUpdateProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\CategoriesProfileTest\\:\\:addCreatedExportFile\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/CategoriesProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\CategoriesProfileTest\\:\\:executeQuery\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/CategoriesProfileTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\CategoriesProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/CategoriesProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\CategoriesProfileTest\\:\\:readConsoleOutput\\(\\) should return string but returns string\\|false\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/CategoriesProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\CategoriesProfileTest\\:\\:removeCreatedFilesAfter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/CategoriesProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\CategoriesProfileTest\\:\\:runCommand\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/CategoriesProfileTest.php
 
@@ -10786,37 +10296,7 @@ parameters:
 			path: Tests/Integration/DefaultProfiles/Import/CategoriesProfileTest.php
 
 		-
-			message: "#^Property SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\CategoriesProfileTest\\:\\:\\$files type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/CategoriesProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\CustomersProfileTest\\:\\:addCreatedExportFile\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/CustomersProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\CustomersProfileTest\\:\\:executeQuery\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/CustomersProfileTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\CustomersProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/CustomersProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\CustomersProfileTest\\:\\:readConsoleOutput\\(\\) should return string but returns string\\|false\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/CustomersProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\CustomersProfileTest\\:\\:removeCreatedFilesAfter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/CustomersProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\CustomersProfileTest\\:\\:runCommand\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/CustomersProfileTest.php
 
@@ -10836,37 +10316,7 @@ parameters:
 			path: Tests/Integration/DefaultProfiles/Import/CustomersProfileTest.php
 
 		-
-			message: "#^Property SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\CustomersProfileTest\\:\\:\\$files type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/CustomersProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\MinimalArticleProfileTest\\:\\:addCreatedExportFile\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/MinimalArticleProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\MinimalArticleProfileTest\\:\\:executeQuery\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/MinimalArticleProfileTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\MinimalArticleProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/MinimalArticleProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\MinimalArticleProfileTest\\:\\:readConsoleOutput\\(\\) should return string but returns string\\|false\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/MinimalArticleProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\MinimalArticleProfileTest\\:\\:removeCreatedFilesAfter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/MinimalArticleProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\MinimalArticleProfileTest\\:\\:runCommand\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/MinimalArticleProfileTest.php
 
@@ -10891,37 +10341,7 @@ parameters:
 			path: Tests/Integration/DefaultProfiles/Import/MinimalArticleProfileTest.php
 
 		-
-			message: "#^Property SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\MinimalArticleProfileTest\\:\\:\\$files type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/MinimalArticleProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\MinimalArticleVariantsProfileTest\\:\\:addCreatedExportFile\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/MinimalArticleVariantsProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\MinimalArticleVariantsProfileTest\\:\\:executeQuery\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/MinimalArticleVariantsProfileTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\MinimalArticleVariantsProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/MinimalArticleVariantsProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\MinimalArticleVariantsProfileTest\\:\\:readConsoleOutput\\(\\) should return string but returns string\\|false\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/MinimalArticleVariantsProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\MinimalArticleVariantsProfileTest\\:\\:removeCreatedFilesAfter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/MinimalArticleVariantsProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\MinimalArticleVariantsProfileTest\\:\\:runCommand\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/MinimalArticleVariantsProfileTest.php
 
@@ -10946,37 +10366,7 @@ parameters:
 			path: Tests/Integration/DefaultProfiles/Import/MinimalArticleVariantsProfileTest.php
 
 		-
-			message: "#^Property SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\MinimalArticleVariantsProfileTest\\:\\:\\$files type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/MinimalArticleVariantsProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\MinimalCategoriesProfileTest\\:\\:addCreatedExportFile\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/MinimalCategoriesProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\MinimalCategoriesProfileTest\\:\\:executeQuery\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/MinimalCategoriesProfileTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\MinimalCategoriesProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/MinimalCategoriesProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\MinimalCategoriesProfileTest\\:\\:readConsoleOutput\\(\\) should return string but returns string\\|false\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/MinimalCategoriesProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\MinimalCategoriesProfileTest\\:\\:removeCreatedFilesAfter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/MinimalCategoriesProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\MinimalCategoriesProfileTest\\:\\:runCommand\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/MinimalCategoriesProfileTest.php
 
@@ -10996,37 +10386,7 @@ parameters:
 			path: Tests/Integration/DefaultProfiles/Import/MinimalCategoriesProfileTest.php
 
 		-
-			message: "#^Property SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\MinimalCategoriesProfileTest\\:\\:\\$files type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/MinimalCategoriesProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\MinimalOrdersProfileTest\\:\\:addCreatedExportFile\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/MinimalOrdersProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\MinimalOrdersProfileTest\\:\\:executeQuery\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/MinimalOrdersProfileTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\MinimalOrdersProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/MinimalOrdersProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\MinimalOrdersProfileTest\\:\\:readConsoleOutput\\(\\) should return string but returns string\\|false\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/MinimalOrdersProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\MinimalOrdersProfileTest\\:\\:removeCreatedFilesAfter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/MinimalOrdersProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\MinimalOrdersProfileTest\\:\\:runCommand\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/MinimalOrdersProfileTest.php
 
@@ -11046,37 +10406,7 @@ parameters:
 			path: Tests/Integration/DefaultProfiles/Import/MinimalOrdersProfileTest.php
 
 		-
-			message: "#^Property SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\MinimalOrdersProfileTest\\:\\:\\$files type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/MinimalOrdersProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\NewsletterDefaultProfileTest\\:\\:addCreatedExportFile\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/NewsletterDefaultProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\NewsletterDefaultProfileTest\\:\\:executeQuery\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/NewsletterDefaultProfileTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\NewsletterDefaultProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/NewsletterDefaultProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\NewsletterDefaultProfileTest\\:\\:readConsoleOutput\\(\\) should return string but returns string\\|false\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/NewsletterDefaultProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\NewsletterDefaultProfileTest\\:\\:removeCreatedFilesAfter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/NewsletterDefaultProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\NewsletterDefaultProfileTest\\:\\:runCommand\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/NewsletterDefaultProfileTest.php
 
@@ -11106,37 +10436,7 @@ parameters:
 			path: Tests/Integration/DefaultProfiles/Import/NewsletterDefaultProfileTest.php
 
 		-
-			message: "#^Property SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\NewsletterDefaultProfileTest\\:\\:\\$files type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/NewsletterDefaultProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\OrderProfileTest\\:\\:addCreatedExportFile\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/OrderProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\OrderProfileTest\\:\\:executeQuery\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/OrderProfileTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\OrderProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/OrderProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\OrderProfileTest\\:\\:readConsoleOutput\\(\\) should return string but returns string\\|false\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/OrderProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\OrderProfileTest\\:\\:removeCreatedFilesAfter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/OrderProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\OrderProfileTest\\:\\:runCommand\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/OrderProfileTest.php
 
@@ -11156,37 +10456,7 @@ parameters:
 			path: Tests/Integration/DefaultProfiles/Import/OrderProfileTest.php
 
 		-
-			message: "#^Property SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\OrderProfileTest\\:\\:\\$files type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/OrderProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\TestsIntegration\\\\DefaultProfiles\\\\Import\\\\TranslationProfileTest\\:\\:addCreatedExportFile\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/TranslationProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\TestsIntegration\\\\DefaultProfiles\\\\Import\\\\TranslationProfileTest\\:\\:executeQuery\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/TranslationProfileTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\TestsIntegration\\\\DefaultProfiles\\\\Import\\\\TranslationProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/TranslationProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\TestsIntegration\\\\DefaultProfiles\\\\Import\\\\TranslationProfileTest\\:\\:readConsoleOutput\\(\\) should return string but returns string\\|false\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/TranslationProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\TestsIntegration\\\\DefaultProfiles\\\\Import\\\\TranslationProfileTest\\:\\:removeCreatedFilesAfter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/TranslationProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\TestsIntegration\\\\DefaultProfiles\\\\Import\\\\TranslationProfileTest\\:\\:runCommand\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/TranslationProfileTest.php
 
@@ -11222,11 +10492,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/TranslationProfileTest.php
-
-		-
-			message: "#^Property SwagImportExport\\\\TestsIntegration\\\\DefaultProfiles\\\\Import\\\\TranslationProfileTest\\:\\:\\$files type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/TranslationProfileTest.php
 
@@ -11711,16 +10976,6 @@ parameters:
 			path: Tests/Unit/Setup/DefaultProfiles/AddressProfileTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\AddressProfileTest\\:\\:walkRecursive\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/AddressProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\AddressProfileTest\\:\\:walkRecursive\\(\\) has parameter \\$item with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/AddressProfileTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$actualJson of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertJson\\(\\) expects string, string\\|false given\\.$#"
 			count: 1
 			path: Tests/Unit/Setup/DefaultProfiles/AddressProfileTest.php
@@ -11736,32 +10991,12 @@ parameters:
 			path: Tests/Unit/Setup/DefaultProfiles/ArticleAccessoriesTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\ArticleAccessoriesTest\\:\\:walkRecursive\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/ArticleAccessoriesTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\ArticleAccessoriesTest\\:\\:walkRecursive\\(\\) has parameter \\$item with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/ArticleAccessoriesTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\ArticleCategoriesProfileTest\\:\\:testItCanBeCreated\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Unit/Setup/DefaultProfiles/ArticleCategoriesProfileTest.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\ArticleCategoriesProfileTest\\:\\:testItShouldReturnValidProfileTree\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/ArticleCategoriesProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\ArticleCategoriesProfileTest\\:\\:walkRecursive\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/ArticleCategoriesProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\ArticleCategoriesProfileTest\\:\\:walkRecursive\\(\\) has parameter \\$item with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Unit/Setup/DefaultProfiles/ArticleCategoriesProfileTest.php
 
@@ -11781,27 +11016,7 @@ parameters:
 			path: Tests/Unit/Setup/DefaultProfiles/ArticleCompleteProfileTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\ArticleCompleteProfileTest\\:\\:walkRecursive\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/ArticleCompleteProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\ArticleCompleteProfileTest\\:\\:walkRecursive\\(\\) has parameter \\$item with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/ArticleCompleteProfileTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\ArticleImageUrlProfileTest\\:\\:testItShouldReturnValidProfileTree\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/ArticleImageUrlProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\ArticleImageUrlProfileTest\\:\\:walkRecursive\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/ArticleImageUrlProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\ArticleImageUrlProfileTest\\:\\:walkRecursive\\(\\) has parameter \\$item with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Unit/Setup/DefaultProfiles/ArticleImageUrlProfileTest.php
 
@@ -11816,16 +11031,6 @@ parameters:
 			path: Tests/Unit/Setup/DefaultProfiles/ArticleImagesProfileTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\ArticleImagesProfileTest\\:\\:walkRecursive\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/ArticleImagesProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\ArticleImagesProfileTest\\:\\:walkRecursive\\(\\) has parameter \\$item with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/ArticleImagesProfileTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\ArticleInStockProfileTest\\:\\:testItCanBeCreated\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Unit/Setup/DefaultProfiles/ArticleInStockProfileTest.php
@@ -11836,47 +11041,12 @@ parameters:
 			path: Tests/Unit/Setup/DefaultProfiles/ArticleInStockProfileTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\ArticleInStockProfileTest\\:\\:walkRecursive\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/ArticleInStockProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\ArticleInStockProfileTest\\:\\:walkRecursive\\(\\) has parameter \\$item with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/ArticleInStockProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\ArticlePriceProfileTest\\:\\:testItShouldReturnValidProfileTree\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/ArticlePriceProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\ArticlePriceProfileTest\\:\\:walkRecursive\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/ArticlePriceProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\ArticlePriceProfileTest\\:\\:walkRecursive\\(\\) has parameter \\$item with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/ArticlePriceProfileTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\ArticleProfileTest\\:\\:testItCanBeCreated\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Unit/Setup/DefaultProfiles/ArticleProfileTest.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\ArticleProfileTest\\:\\:testItShouldReturnValidProfileTree\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/ArticleProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\ArticleProfileTest\\:\\:walkRecursive\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/ArticleProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\ArticleProfileTest\\:\\:walkRecursive\\(\\) has parameter \\$item with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Unit/Setup/DefaultProfiles/ArticleProfileTest.php
 
@@ -11891,32 +11061,12 @@ parameters:
 			path: Tests/Unit/Setup/DefaultProfiles/ArticlePropertiesProfileTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\ArticlePropertiesProfileTest\\:\\:walkRecursive\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/ArticlePropertiesProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\ArticlePropertiesProfileTest\\:\\:walkRecursive\\(\\) has parameter \\$item with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/ArticlePropertiesProfileTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\ArticleSimilarsProfileTest\\:\\:testItCanBeCreated\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Unit/Setup/DefaultProfiles/ArticleSimilarsProfileTest.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\ArticleSimilarsProfileTest\\:\\:testItShouldReturnValidProfileTree\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/ArticleSimilarsProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\ArticleSimilarsProfileTest\\:\\:walkRecursive\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/ArticleSimilarsProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\ArticleSimilarsProfileTest\\:\\:walkRecursive\\(\\) has parameter \\$item with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Unit/Setup/DefaultProfiles/ArticleSimilarsProfileTest.php
 
@@ -11931,32 +11081,12 @@ parameters:
 			path: Tests/Unit/Setup/DefaultProfiles/ArticleTranslationUpdateProfileTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\ArticleTranslationUpdateProfileTest\\:\\:walkRecursive\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/ArticleTranslationUpdateProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\ArticleTranslationUpdateProfileTest\\:\\:walkRecursive\\(\\) has parameter \\$item with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/ArticleTranslationUpdateProfileTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\CategoryProfileTest\\:\\:testItCanBeCreated\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Unit/Setup/DefaultProfiles/CategoryProfileTest.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\CategoryProfileTest\\:\\:testItShouldReturnValidProfileTree\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/CategoryProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\CategoryProfileTest\\:\\:walkRecursive\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/CategoryProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\CategoryProfileTest\\:\\:walkRecursive\\(\\) has parameter \\$item with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Unit/Setup/DefaultProfiles/CategoryProfileTest.php
 
@@ -11976,16 +11106,6 @@ parameters:
 			path: Tests/Unit/Setup/DefaultProfiles/CustomerProfileTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\CustomerProfileTest\\:\\:walkRecursive\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/CustomerProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\CustomerProfileTest\\:\\:walkRecursive\\(\\) has parameter \\$item with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/CustomerProfileTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$actualJson of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertJson\\(\\) expects string, string\\|false given\\.$#"
 			count: 1
 			path: Tests/Unit/Setup/DefaultProfiles/CustomerProfileTest.php
@@ -11997,16 +11117,6 @@ parameters:
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\MinimalArticleProfileTest\\:\\:testItShouldReturnValidProfileTree\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/MinimalArticleProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\MinimalArticleProfileTest\\:\\:walkRecursive\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/MinimalArticleProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\MinimalArticleProfileTest\\:\\:walkRecursive\\(\\) has parameter \\$item with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Unit/Setup/DefaultProfiles/MinimalArticleProfileTest.php
 
@@ -12026,32 +11136,12 @@ parameters:
 			path: Tests/Unit/Setup/DefaultProfiles/MinimalArticleVariantsProfileTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\MinimalArticleVariantsProfileTest\\:\\:walkRecursive\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/MinimalArticleVariantsProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\MinimalArticleVariantsProfileTest\\:\\:walkRecursive\\(\\) has parameter \\$item with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/MinimalArticleVariantsProfileTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\MinimalCategoryProfileTest\\:\\:testItCanBeCreated\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Unit/Setup/DefaultProfiles/MinimalCategoryProfileTest.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\MinimalCategoryProfileTest\\:\\:testItShouldReturnValidProfileTree\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/MinimalCategoryProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\MinimalCategoryProfileTest\\:\\:walkRecursive\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/MinimalCategoryProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\MinimalCategoryProfileTest\\:\\:walkRecursive\\(\\) has parameter \\$item with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Unit/Setup/DefaultProfiles/MinimalCategoryProfileTest.php
 
@@ -12071,32 +11161,12 @@ parameters:
 			path: Tests/Unit/Setup/DefaultProfiles/MinimalOrdersProfileTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\MinimalOrdersProfileTest\\:\\:walkRecursive\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/MinimalOrdersProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\MinimalOrdersProfileTest\\:\\:walkRecursive\\(\\) has parameter \\$item with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/MinimalOrdersProfileTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\NewsletterProfileTest\\:\\:testItCanBeCreated\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Unit/Setup/DefaultProfiles/NewsletterProfileTest.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\NewsletterProfileTest\\:\\:testItShouldReturnValidProfile\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/NewsletterProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\NewsletterProfileTest\\:\\:walkRecursive\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/NewsletterProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\NewsletterProfileTest\\:\\:walkRecursive\\(\\) has parameter \\$item with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Unit/Setup/DefaultProfiles/NewsletterProfileTest.php
 
@@ -12111,32 +11181,12 @@ parameters:
 			path: Tests/Unit/Setup/DefaultProfiles/OrderMainDataProfileTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\OrderMainDataProfileTest\\:\\:walkRecursive\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/OrderMainDataProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\OrderMainDataProfileTest\\:\\:walkRecursive\\(\\) has parameter \\$item with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/OrderMainDataProfileTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\TranslationProfileTest\\:\\:testItCanBeCreated\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Unit/Setup/DefaultProfiles/TranslationProfileTest.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\TranslationProfileTest\\:\\:testItShouldReturnValidProfile\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/TranslationProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\TranslationProfileTest\\:\\:walkRecursive\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/TranslationProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\TranslationProfileTest\\:\\:walkRecursive\\(\\) has parameter \\$item with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Unit/Setup/DefaultProfiles/TranslationProfileTest.php
 

@@ -24,6 +24,7 @@ class DecimalTransformer implements DataTransformerAdapter
         'price',
         'pseudoPrice',
         'purchasePrice',
+        'regulationPrice',
         'invoiceAmount',
         'invoiceAmountNet',
         'invoiceShipping',

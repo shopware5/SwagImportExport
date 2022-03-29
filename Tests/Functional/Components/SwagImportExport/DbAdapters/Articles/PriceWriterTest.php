@@ -11,13 +11,14 @@ namespace SwagImportExport\Tests\Functional\Components\SwagImportExport\DbAdapte
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\PriceWriter;
+use Shopware\Components\SwagImportExport\Utils\SwagVersionHelper;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 
 class PriceWriterTest extends TestCase
 {
     use DatabaseTestCaseTrait;
 
-    public function testWriteThrowsExceptionIfEmptyValues()
+    public function testWriteThrowsExceptionIfEmptyValues(): void
     {
         $priceWriterDbAdapter = $this->createPriceWriterAdapter();
 
@@ -26,7 +27,7 @@ class PriceWriterTest extends TestCase
         $priceWriterDbAdapter->write('', '', []);
     }
 
-    public function testWriteThrowsExceptionIfPriceGroupNotExists()
+    public function testWriteThrowsExceptionIfPriceGroupNotExists(): void
     {
         $priceWriterDbAdapter = $this->createPriceWriterAdapter();
 
@@ -44,7 +45,7 @@ class PriceWriterTest extends TestCase
         $priceWriterDbAdapter->write($articleId, $articleOrderNumber, $articlePriceData);
     }
 
-    public function testWriteThrowsExceptionIfPriceIsInvalid()
+    public function testWriteThrowsExceptionIfPriceIsInvalid(): void
     {
         $priceWriterDbAdapter = $this->createPriceWriterAdapter();
 
@@ -61,7 +62,7 @@ class PriceWriterTest extends TestCase
         $priceWriterDbAdapter->write($articleId, $articleOrderNumber, $articlePriceData);
     }
 
-    public function testWriteThrowsExceptionIfPriceFromIsInvalid()
+    public function testWriteThrowsExceptionIfPriceFromIsInvalid(): void
     {
         $priceWriterDbAdapter = $this->createPriceWriterAdapter();
 
@@ -79,7 +80,7 @@ class PriceWriterTest extends TestCase
         $priceWriterDbAdapter->write($articleId, $articleOrderNumber, $articlePriceData);
     }
 
-    public function testWriteShouldUpdatePriceWithDotSeperation()
+    public function testWriteShouldUpdatePriceWithDotSeperation(): void
     {
         $priceWriterAdapter = $this->createPriceWriterAdapter();
 
@@ -102,7 +103,7 @@ class PriceWriterTest extends TestCase
         static::assertEquals($expectedArticlePrice, $updatedArticle[0]['price']);
     }
 
-    public function testWriteShouldUpdateArticlePrice()
+    public function testWriteShouldUpdateArticlePrice(): void
     {
         $priceWriterAdapter = $this->createPriceWriterAdapter();
 
@@ -125,7 +126,7 @@ class PriceWriterTest extends TestCase
         static::assertEquals($expectedArticlePrice, $updatedArticle[0]['price']);
     }
 
-    public function testWriteShouldUpdateArticlePseudoPrice()
+    public function testWriteShouldUpdateArticlePseudoPrice(): void
     {
         $priceWriterAdapter = $this->createPriceWriterAdapter();
 
@@ -149,10 +150,35 @@ class PriceWriterTest extends TestCase
         static::assertEquals($expectedArticlePseudoPrice, $updatedArticle[0]['pseudoprice']);
     }
 
-    /**
-     * @return PriceWriter
-     */
-    private function createPriceWriterAdapter()
+    public function testWriteShouldUpdateArticleRegulationPrice(): void
+    {
+        if (!SwagVersionHelper::isShopware578()) {
+            static::markTestSkipped('This test is not supported lower shopware version 5.7.8');
+        }
+
+        $priceWriterAdapter = $this->createPriceWriterAdapter();
+
+        $articlePriceData = [
+            [
+                'price' => '9,95',
+                'priceGroup' => 'EK',
+                'regulationPrice' => '15,95',
+            ],
+        ];
+        $articleOrderNumber = 3;
+        $articleId = 3;
+        $expectedArticleRegulationPrice = 13.403361344538;
+
+        $priceWriterAdapter->write($articleId, $articleOrderNumber, $articlePriceData);
+
+        /** @var Connection $dbalConnection */
+        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $updatedArticle = $dbalConnection->executeQuery("SELECT * FROM s_articles_prices WHERE articleID='{$articleId}'")->fetchAll();
+
+        static::assertEquals($expectedArticleRegulationPrice, $updatedArticle[0]['regulation_price']);
+    }
+
+    private function createPriceWriterAdapter(): PriceWriter
     {
         return new PriceWriter();
     }
