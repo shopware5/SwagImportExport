@@ -11,7 +11,9 @@ namespace Shopware\Components\SwagImportExport\Utils;
 use Doctrine\DBAL\Connection;
 use Shopware\Components\SwagImportExport\DataWorkflow;
 use Shopware\Components\SwagImportExport\Factories\DataFactory;
+use Shopware\Components\SwagImportExport\Factories\DataTransformerFactory;
 use Shopware\Components\SwagImportExport\Factories\FileIOFactory;
+use Shopware\Components\SwagImportExport\Factories\ProfileFactory;
 use Shopware\Components\SwagImportExport\FileIO\FileReader;
 use Shopware\Components\SwagImportExport\FileIO\FileWriter;
 use Shopware\Components\SwagImportExport\Logger\LogDataStruct;
@@ -105,11 +107,34 @@ class CommandHelper
     protected $connection;
 
     /**
+     * @var mixed|object|ProfileFactory|\Symfony\Component\DependencyInjection\Container|null
+     */
+    private $profileFactory;
+
+    /**
+     * @var mixed|object|DataFactory|\Symfony\Component\DependencyInjection\Container|null
+     */
+    private $dataFactory;
+
+    /**
+     * @var mixed|object|FileIOFactory|\Symfony\Component\DependencyInjection\Container|null
+     */
+    private $fileIoFactory;
+
+    /**
+     * @var mixed|object|DataTransformerFactory|\Symfony\Component\DependencyInjection\Container|null
+     */
+    private $dataTransformationFactory;
+
+    /**
      * @throws \RuntimeException
      */
     public function __construct(array $data)
     {
-        $this->plugin = Shopware()->Plugins()->Backend()->SwagImportExport();
+        $this->profileFactory = Shopware()->Container()->get(ProfileFactory::class);
+        $this->dataFactory = Shopware()->Container()->get(DataFactory::class);
+        $this->fileIoFactory = Shopware()->Container()->get(FileIOFactory::class);
+        $this->dataTransformationFactory = Shopware()->Container()->get(DataTransformerFactory::class);
         $this->logger = Shopware()->Container()->get('swag_import_export.logger');
         $this->connection = Shopware()->Container()->get('dbal_connection');
 
@@ -238,10 +263,10 @@ class CommandHelper
         }
 
         /** @var Profile $profile */
-        $profile = $this->plugin->getProfileFactory()->loadProfile($postData);
+        $profile = $this->profileFactory->loadProfile($postData);
 
         /** @var DataFactory $dataFactory */
-        $dataFactory = $this->plugin->getDataFactory();
+        $dataFactory = $this->dataFactory;
 
         $dbAdapter = $dataFactory->createDbAdapter($profile->getType());
         $dataSession = $dataFactory->loadSession($postData);
@@ -312,10 +337,10 @@ class CommandHelper
         }
 
         /** @var Profile $profile */
-        $profile = $this->plugin->getProfileFactory()->loadProfile($postData);
+        $profile = $this->profileFactory->loadProfile($postData);
 
         /** @var DataFactory $dataFactory */
-        $dataFactory = $this->plugin->getDataFactory();
+        $dataFactory = $this->dataFactory;
 
         $dbAdapter = $dataFactory->createDbAdapter($profile->getType());
         $dataSession = $dataFactory->loadSession($postData);
@@ -335,13 +360,13 @@ class CommandHelper
 
         // we create the file writer that will write (partially) the result file
         /** @var FileIOFactory $fileFactory */
-        $fileFactory = $this->plugin->getFileIOFactory();
+        $fileFactory = $this->fileIoFactory;
 
         /** @var FileWriter $fileWriter */
         $fileWriter = $fileFactory->createFileWriter($postData['format']);
 
         /** @var DataTransformerChain $dataTransformerChain */
-        $dataTransformerChain = $this->plugin->getDataTransformerFactory()
+        $dataTransformerChain = $this->dataTransformationFactory
             ->createDataTransformerChain($profile, ['isTree' => $fileWriter->hasTreeStructure()]);
 
         $dataWorkflow = new DataWorkflow($dataIO, $profile, $dataTransformerChain, $fileWriter);
@@ -398,7 +423,7 @@ class CommandHelper
 
         // we create the file reader that will read the result file
         /** @var FileReader $fileReader */
-        $fileReader = $this->plugin->getFileIOFactory()->createFileReader($postData['format']);
+        $fileReader = $this->fileIoFactory->createFileReader($postData['format']);
 
         if ($this->format === 'xml') {
             $tree = \json_decode($this->profileEntity->getTree(), true);
@@ -406,7 +431,7 @@ class CommandHelper
         }
 
         /** @var DataFactory $dataFactory */
-        $dataFactory = $this->plugin->getDataFactory();
+        $dataFactory = $this->dataFactory;
 
         $dbAdapter = $dataFactory->createDbAdapter($this->profileEntity->getType());
         $dataSession = $dataFactory->loadSession($postData);
@@ -454,12 +479,12 @@ class CommandHelper
 
         // we create the file reader that will read the result file
         /** @var FileIOFactory $fileFactory */
-        $fileFactory = $this->plugin->getFileIOFactory();
+        $fileFactory = $this->fileIoFactory;
         $fileReader = $fileFactory->createFileReader($postData['format']);
 
         //load profile
         /** @var Profile $profile */
-        $profile = $this->plugin->getProfileFactory()->loadProfile($postData);
+        $profile = $this->profileFactory->loadProfile($postData);
 
         //get profile type
         $postData['adapter'] = $profile->getType();
@@ -468,7 +493,7 @@ class CommandHelper
         $postData['batchSize'] = $profile->getType() === 'articlesImages' ? 1 : 50;
 
         /** @var DataFactory $dataFactory */
-        $dataFactory = $this->plugin->getDataFactory();
+        $dataFactory = $this->dataFactory;
 
         $dbAdapter = $dataFactory->createDbAdapter($profile->getType());
         $dataSession = $dataFactory->loadSession($postData);
@@ -487,7 +512,7 @@ class CommandHelper
         $dataIO->setUsername($this->username);
 
         /** @var DataTransformerChain $dataTransformerChain */
-        $dataTransformerChain = $this->plugin->getDataTransformerFactory()
+        $dataTransformerChain = $this->dataTransformationFactory
             ->createDataTransformerChain($profile, ['isTree' => $fileReader->hasTreeStructure()]);
 
         $sessionState = $dataIO->getSessionState();
@@ -571,16 +596,16 @@ class CommandHelper
     protected function afterImport($data, $profileName, $outputFile)
     {
         /** @var FileIOFactory $fileFactory */
-        $fileFactory = $this->plugin->getFileIOFactory();
+        $fileFactory = $this->fileIoFactory;
 
         //loads hidden profile for article
         /** @var Profile $profile */
-        $profile = $this->plugin->getProfileFactory()->loadHiddenProfile($profileName);
+        $profile = $this->profileFactory->loadHiddenProfile($profileName);
 
         $fileWriter = $fileFactory->createFileWriter('csv');
 
         /** @var DataTransformerChain $dataTransformerChain */
-        $dataTransformerChain = $this->plugin->getDataTransformerFactory()
+        $dataTransformerChain = $this->dataTransformationFactory
             ->createDataTransformerChain($profile, ['isTree' => $fileWriter->hasTreeStructure()]);
 
         $dataWorkflow = new DataWorkflow(null, $profile, $dataTransformerChain, $fileWriter);

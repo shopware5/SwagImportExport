@@ -8,27 +8,32 @@
 
 use Doctrine\DBAL\DBALException;
 use Shopware\Components\CSRFWhitelistAware;
+use Shopware\Components\SwagImportExport\Factories\DataFactory;
+use Shopware\Components\SwagImportExport\Factories\ProfileFactory;
 use Shopware\Components\SwagImportExport\Service\ProfileService;
 use Shopware\Components\SwagImportExport\Utils\TreeHelper;
 use Shopware\CustomModels\ImportExport\Profile;
 use Shopware\CustomModels\ImportExport\Repository;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-/**
- * Shopware ImportExport Plugin
- */
 class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
     /**
-     * @var Shopware_Plugins_Backend_SwagImportExport_Bootstrap
+     * @var mixed|object|DataFactory|\Symfony\Component\DependencyInjection\Container|null
      */
-    protected $plugin;
+    private $dataFactory;
 
-    public function __construct()
+    /**
+     * @var mixed|object|\Symfony\Component\DependencyInjection\Container|null
+     */
+    private $profileFactory;
+
+    public function preDispatch()
     {
-        parent::__construct();
+        $this->dataFactory = $this->container->get(DataFactory::class);
+        $this->profileFactory = $this->container->get(ProfileFactory::class);
 
-        $this->plugin = Shopware()->Plugins()->Backend()->SwagImportExport();
+        parent::preDispatch();
     }
 
     /**
@@ -103,7 +108,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         $data = $this->Request()->getParam('data', 1);
 
         try {
-            $profileEntity = $this->plugin->getProfileFactory()->createProfileModel($data);
+            $profileEntity = $this->profileFactory->createProfileModel($data);
 
             return $this->View()->assign([
                 'success' => true,
@@ -383,7 +388,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         $profileType = $profileEntity->getType();
         $defaultFields = [];
 
-        $dataManager = $this->plugin->getDataFactory()->createDataManager($profileType);
+        $dataManager = $this->dataFactory->createDataManager($profileType);
         if ($dataManager) {
             $defaultFields = $dataManager->getDefaultFields();
         }
@@ -484,10 +489,10 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
             return;
         }
 
-        $profile = $this->plugin->getProfileFactory()->loadProfile($postData);
+        $profile = $this->profileFactory->loadProfile($postData);
         $type = $profile->getType();
 
-        $dbAdapter = $this->plugin->getDataFactory()->createDbAdapter($type);
+        $dbAdapter = $this->dataFactory->createDbAdapter($type);
 
         $sections = $dbAdapter->getSections();
 
@@ -511,11 +516,11 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
             return;
         }
 
-        $profile = $this->plugin->getProfileFactory()->loadProfile($postData);
+        $profile = $this->profileFactory->loadProfile($postData);
         $type = $profile->getType();
 
-        $dbAdapter = $this->plugin->getDataFactory()->createDbAdapter($type);
-        $dataManager = $this->plugin->getDataFactory()->createDataManager($type);
+        $dbAdapter = $this->dataFactory->createDbAdapter($type);
+        $dataManager = $this->dataFactory->createDataManager($type);
 
         $defaultFieldsName = null;
         $defaultFields = [];
@@ -581,10 +586,10 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
             return;
         }
 
-        $profile = $this->plugin->getProfileFactory()->loadProfile($postData);
+        $profile = $this->profileFactory->loadProfile($postData);
         $type = $profile->getType();
 
-        $dbAdapter = $this->plugin->getDataFactory()->createDbAdapter($type);
+        $dbAdapter = $this->dataFactory->createDbAdapter($type);
 
         if (!\method_exists($dbAdapter, 'getParentKeys')) {
             $this->View()->assign([

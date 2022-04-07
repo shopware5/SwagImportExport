@@ -339,6 +339,14 @@ class ArticleCompleteProfile implements ProfileMetaData, \JsonSerializable
                                                             'shopwareField' => 'purchasePrice',
                                                             'defaultValue' => '',
                                                         ],
+                                                    47 => [
+                                                        'id' => '584as6d60f4a4',
+                                                        'type' => 'leaf',
+                                                        'index' => 46,
+                                                        'name' => 'regulationPrice',
+                                                        'shopwareField' => 'regulationPrice',
+                                                        'defaultValue' => '',
+                                                    ],
                                                     1600 => [
                                                             'id' => '541af887a00ee',
                                                             'type' => 'leaf',

@@ -8,6 +8,7 @@
 
 namespace Shopware\Components\SwagImportExport\Profile;
 
+use Shopware\Components\Plugin\Configuration\CachedReader;
 use Shopware\CustomModels\ImportExport\Profile as ProfileEntity;
 
 class Profile
@@ -77,7 +78,7 @@ class Profile
             case 'tree':
                 return $this->profileEntity->getTree();
             case 'decimals':
-                return [Shopware()->Plugins()->Backend()->SwagImportExport()->Config(), $this];
+                return [new \Enlight_Config(Shopware()->Container()->get(CachedReader::class)->getByPluginName($this->getName()), true), $this];
             default:
                 throw new \RuntimeException('Config does not exists');
         }

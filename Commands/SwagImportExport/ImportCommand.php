@@ -9,6 +9,7 @@
 namespace Shopware\Commands\SwagImportExport;
 
 use Shopware\Commands\ShopwareCommand;
+use Shopware\Components\SwagImportExport\Factories\ProfileFactory;
 use Shopware\Components\SwagImportExport\Profile\Profile;
 use Shopware\Components\SwagImportExport\UploadPathProvider;
 use Shopware\Components\SwagImportExport\Utils\CommandHelper;
@@ -45,6 +46,15 @@ class ImportCommand extends ShopwareCommand
      * @var int
      */
     protected $sessionId;
+
+    private ProfileFactory $profileFactory;
+
+    public function __construct(ProfileFactory $profileFactory)
+    {
+        $this->profileFactory = $profileFactory;
+
+        parent::__construct();
+    }
 
     /**
      * {@inheritdoc}
@@ -90,7 +100,7 @@ class ImportCommand extends ShopwareCommand
                 $outputFile = \str_replace('-tmp', '-swag', $tmpFile);
                 \rename($tmpFile, $outputFile);
 
-                $profile = $this->getPlugin()->getProfileFactory()->loadHiddenProfile($profileName);
+                $profile = $this->profileFactory->loadHiddenProfile($profileName);
                 $profileEntity = $profile->getEntity();
 
                 $this->start($output, $profileEntity, $outputFile, 'csv');
@@ -183,13 +193,5 @@ class ImportCommand extends ShopwareCommand
         if (!\file_exists($this->filePath)) {
             throw new \Exception(\sprintf('File \'%s\' not found!', $this->filePath));
         }
-    }
-
-    /**
-     * @return SwagImportExport_Bootstrap
-     */
-    private function getPlugin()
-    {
-        return Shopware()->Plugins()->Backend()->SwagImportExport();
     }
 }
