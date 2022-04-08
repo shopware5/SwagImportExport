@@ -1,5 +1,11 @@
 <?php
 declare(strict_types=1);
+/**
+ * (c) shopware AG <info@shopware.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Shopware\Subscribers;
 
@@ -8,6 +14,7 @@ use Shopware\Components\SwagImportExport\Factories\DataFactory;
 use Shopware\Components\SwagImportExport\Factories\DataTransformerFactory;
 use Shopware\Components\SwagImportExport\Factories\FileIOFactory;
 use Shopware\Components\SwagImportExport\Factories\ProfileFactory;
+use Shopware\Components\SwagImportExport\FileIO\CsvFileReader;
 use Shopware\Components\SwagImportExport\FileIO\CsvFileWriter;
 use Shopware\Components\SwagImportExport\Logger\Logger;
 use Shopware\Components\SwagImportExport\Service\AutoImportService;
@@ -38,8 +45,7 @@ class Subscriber implements SubscriberInterface
         FileIOFactory $fileIOFactory,
         DataFactory $dataFactory,
         DataTransformerFactory $dataTransformerFactory
-    )
-    {
+    ) {
         $this->container = $container;
         $this->profileFactory = $profileFactory;
         $this->fileIOFactory = $fileIOFactory;
@@ -59,29 +65,23 @@ class Subscriber implements SubscriberInterface
           'Enlight_Bootstrap_InitResource_swag_import_export.profile_service' => 'registerProfileService',
           'Enlight_Bootstrap_InitResource_swag_import_export.csv_file_reader' => 'registerCsvFileReader',
           'Enlight_Bootstrap_InitResource_swag_import_export.csv_file_writer' => 'registerCsvFileWriter',
-          'Enlight_Bootstrap_InitResource_swag_import_export.underscore_camelcase_service' => 'registerUnderscoreToCamelCaseService'
+          'Enlight_Bootstrap_InitResource_swag_import_export.underscore_camelcase_service' => 'registerUnderscoreToCamelCaseService',
         ];
     }
 
-    public function onCronImport()
+    public function onCronImport(): void
     {
         /** @var AutoImportServiceInterface $importService */
         $importService = $this->container->get('swag_import_export.auto_importer');
         $importService->runAutoImport();
     }
 
-    /**
-     * @return UploadPathProvider
-     */
-    public function registerUploadPathProvider()
+    public function registerUploadPathProvider(): UploadPathProvider
     {
         return new UploadPathProvider(Shopware()->DocPath());
     }
 
-    /**
-     * @return AutoImportService
-     */
-    public function registerAutoImportService()
+    public function registerAutoImportService(): AutoImportService
     {
         return new AutoImportService(
             $this->container->get('swag_import_export.upload_path_provider'),
@@ -90,10 +90,7 @@ class Subscriber implements SubscriberInterface
         );
     }
 
-    /**
-     * @return Logger
-     */
-    public function registerLogger()
+    public function registerLogger(): Logger
     {
         return new Logger(
             $this->container->get('swag_import_export.csv_file_writer'),
@@ -102,11 +99,7 @@ class Subscriber implements SubscriberInterface
         );
     }
 
-
-    /**
-     * @return ImportService
-     */
-    public function registerImportService()
+    public function registerImportService(): ImportService
     {
         return new ImportService(
             $this->profileFactory,
@@ -120,11 +113,7 @@ class Subscriber implements SubscriberInterface
         );
     }
 
-
-    /**
-     * @return ExportService
-     */
-    public function registerExportService()
+    public function registerExportService(): ExportService
     {
         return new ExportService(
             $this->profileFactory,
@@ -138,37 +127,31 @@ class Subscriber implements SubscriberInterface
         );
     }
 
-
-    /**
-     * @return ProfileService
-     */
-    public function registerProfileService()
+    public function registerProfileService(): ProfileService
     {
         return new ProfileService(
             $this->container->get('models'),
-            new Symfony\Component\Filesystem\Filesystem(),
+            new \Symfony\Component\Filesystem\Filesystem(),
             $this->container->get('snippets')
         );
     }
 
-
-    /**
-     * @return CsvFileWriter
-     */
-    public function registerCsvFileWriter()
+    public function registerCsvFileWriter(): CsvFileWriter
     {
         return new CsvFileWriter(
             new FileHelper()
         );
     }
 
+    public function registerCsvFileReader(): CsvFileReader
+    {
+        return new CsvFileReader(
+            $this->container->get('swag_import_export.upload_path_provider')
+        );
+    }
 
-    /**
-     * @return UnderscoreToCamelCaseService
-     */
-    public function registerUnderscoreToCamelCaseService()
+    public function registerUnderscoreToCamelCaseService(): UnderscoreToCamelCaseService
     {
         return new UnderscoreToCamelCaseService();
     }
-
 }

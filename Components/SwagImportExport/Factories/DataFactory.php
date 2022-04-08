@@ -30,7 +30,6 @@ use Shopware\Components\SwagImportExport\DbAdapters\NewsletterDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\OrdersDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\TranslationsDbAdapter;
 use Shopware\Components\SwagImportExport\DbalHelper;
-use Shopware\Components\SwagImportExport\FileIO\CsvFileReader;
 use Shopware\Components\SwagImportExport\Logger\Logger;
 use Shopware\Components\SwagImportExport\Session\Session;
 use Shopware\Components\SwagImportExport\Utils\DataColumnOptions;
@@ -59,12 +58,8 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
      * Returns the necessary adapter
      *
      * @param string $adapterType
-     *
-     * @throws \Exception
-     *
-     * @return DataDbAdapter dbAdapter
      */
-    public function createDbAdapter($adapterType)
+    public function createDbAdapter($adapterType): DataDbAdapter
     {
         $event = $this->fireCreateFactoryEvent($adapterType);
         if ($event && $event instanceof \Enlight_Event_EventArgs
@@ -415,15 +410,5 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
             ->getProxy(AddressDbAdapter::class);
 
         return new $proxyAdapter();
-    }
-
-    /**
-     * @return CsvFileReader
-     */
-    public function registerCsvFileReader()
-    {
-        return new CsvFileReader(
-            $this->get('swag_import_export.upload_path_provider')
-        );
     }
 }

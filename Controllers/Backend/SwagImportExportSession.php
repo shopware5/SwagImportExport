@@ -141,7 +141,7 @@ class Shopware_Controllers_Backend_SwagImportExportSession extends Shopware_Cont
     }
 
     /**
-     * @param array<string, string|int> $data
+     * @param array<string, string|int|null> $data
      *
      * @return array<string, mixed>
      */

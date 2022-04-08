@@ -10,7 +10,6 @@ namespace Shopware\Commands\SwagImportExport;
 
 use Shopware\Commands\ShopwareCommand;
 use Shopware\CustomModels\ImportExport\Profile;
-use Shopware\CustomModels\ImportExport\Repository;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -34,7 +33,7 @@ class ProfilesCommand extends ShopwareCommand
         $this->registerErrorHandler($output);
 
         $em = $this->container->get('models');
-        /** @var Repository $profileRepository */
+
         $profileRepository = $em->getRepository(Profile::class);
 
         $query = $profileRepository->getProfilesListQuery()->getQuery();

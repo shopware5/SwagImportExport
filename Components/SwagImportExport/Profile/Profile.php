@@ -68,7 +68,7 @@ class Profile
     /**
      * @throws \RuntimeException
      *
-     * @return array|\Shopware\CustomModels\ImportExport\Expression[]|string
+     * @return array|\Shopware\CustomModels\ImportExport\Expression[]|string|array{0: \Enlight_Config, 1: Profile}
      */
     public function getConfig($name)
     {

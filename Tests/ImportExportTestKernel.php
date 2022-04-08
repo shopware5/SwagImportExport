@@ -9,7 +9,7 @@
 use Shopware\Kernel;
 use Shopware\Models\Shop\Shop;
 
-require __DIR__ . '/../../../../../../../autoload.php';
+require __DIR__ . '/../../../../autoload.php';
 
 class ImportExportTestKernel extends Kernel
 {

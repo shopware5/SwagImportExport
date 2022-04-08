@@ -74,7 +74,7 @@ class DbAdapterTestHelper extends ImportExportTestHelper
     public function read($columns, $ids, $expectedResults, $expectedCount, $section = 'default')
     {
         /* @var DataFactory $dataFactory */
-        $dataFactory = $this->Plugin()->getDataFactory();
+        $dataFactory = Shopware()->Container()->get(DataFactory::class);
         $dbAdapter = $dataFactory->createDbAdapter($this->dbAdapter);
 
         $rawData = $dbAdapter->read($ids, $columns);
@@ -97,7 +97,7 @@ class DbAdapterTestHelper extends ImportExportTestHelper
     public function readRecordIds($start, $limit, $filter, $expectedIds, $expectedCount)
     {
         /* @var DataFactory $dataFactory */
-        $dataFactory = $this->Plugin()->getDataFactory();
+        $dataFactory = Shopware()->Container()->get(DataFactory::class);
         $dbAdapter = $dataFactory->createDbAdapter($this->dbAdapter);
 
         $ids = $dbAdapter->readRecordIds($start, $limit, $filter);
@@ -123,7 +123,7 @@ class DbAdapterTestHelper extends ImportExportTestHelper
     {
         $recordsCountBeforeImport = $this->getTableCount($this->dbTable);
 
-        $dataFactory = $this->Plugin()->getDataFactory();
+        $dataFactory = Shopware()->Container()->get(DataFactory::class);
 
         $dbAdapter = $dataFactory->createDbAdapter($this->dbAdapter);
         $dbAdapter->write($records);

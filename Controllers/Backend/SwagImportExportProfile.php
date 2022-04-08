@@ -8,12 +8,12 @@
 
 use Doctrine\DBAL\DBALException;
 use Shopware\Components\CSRFWhitelistAware;
+use Shopware\Components\Snippet\DbAdapter;
 use Shopware\Components\SwagImportExport\Factories\DataFactory;
 use Shopware\Components\SwagImportExport\Factories\ProfileFactory;
 use Shopware\Components\SwagImportExport\Service\ProfileService;
 use Shopware\Components\SwagImportExport\Utils\TreeHelper;
 use Shopware\CustomModels\ImportExport\Profile;
-use Shopware\CustomModels\ImportExport\Repository;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
@@ -72,7 +72,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
     public function getProfilesAction()
     {
         $manager = $this->getModelManager();
-        /** @var Repository $profileRepository */
+
         $profileRepository = $manager->getRepository(Profile::class);
 
         $query = $profileRepository->getProfilesListQuery(
@@ -589,6 +589,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         $profile = $this->profileFactory->loadProfile($postData);
         $type = $profile->getType();
 
+        /** @var DbAdapter $dbAdapter */
         $dbAdapter = $this->dataFactory->createDbAdapter($type);
 
         if (!\method_exists($dbAdapter, 'getParentKeys')) {

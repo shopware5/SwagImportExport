@@ -13,10 +13,7 @@ use Enlight_Template_Manager;
 
 class BackendControllerSubscriber implements SubscriberInterface
 {
-    /**
-     * @var Enlight_Template_Manager
-     */
-    private $template;
+    private Enlight_Template_Manager $template;
 
     private string $pluginDirectory;
 
@@ -29,7 +26,7 @@ class BackendControllerSubscriber implements SubscriberInterface
     /**
      * {@inheritdoc}
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             'Enlight_Controller_Dispatcher_ControllerPath_Backend_SwagImportExport' => 'onSwagImportExport',
@@ -42,44 +39,42 @@ class BackendControllerSubscriber implements SubscriberInterface
         ];
     }
 
-    public function onSwagImportExport()
+    public function onSwagImportExport(): string
     {
-        $this->template->addTemplateDir($this->pluginDirectory .'/Resources/views/');
+        $this->template->addTemplateDir($this->pluginDirectory . '/Resources/views/');
 
         return $this->pluginDirectory . '/Controllers/Backend/SwagImportExport.php';
     }
 
-    public function onSwagImportExportConversion()
+    public function onSwagImportExportConversion(): string
     {
-        $this->template->addTemplateDir($this->pluginDirectory .'/Resources/views/');
+        $this->template->addTemplateDir($this->pluginDirectory . '/Resources/views/');
 
         return $this->pluginDirectory . '/Controllers/Backend/SwagImportExportConversion.php';
     }
 
-
-    public function onSwagImportExportExport()
+    public function onSwagImportExportExport(): string
     {
-        $this->template->addTemplateDir($this->pluginDirectory .'/Resources/views/');
+        $this->template->addTemplateDir($this->pluginDirectory . '/Resources/views/');
 
         return $this->pluginDirectory . '/Controllers/Backend/SwagImportExportExport.php';
     }
 
-
-    public function onSwagImportExportImport()
+    public function onSwagImportExportImport(): string
     {
-        $this->template->addTemplateDir($this->pluginDirectory .'/Resources/views/');
+        $this->template->addTemplateDir($this->pluginDirectory . '/Resources/views/');
 
         return $this->pluginDirectory . '/Controllers/Backend/SwagImportExportImport.php';
     }
 
-    public function onSwagImportExportProfile()
+    public function onSwagImportExportProfile(): string
     {
         return $this->pluginDirectory . '/Controllers/Backend/SwagImportExportProfile.php';
     }
 
-    public function onSwagImportExportSession()
+    public function onSwagImportExportSession(): string
     {
-        $this->template->addTemplateDir($this->pluginDirectory .'/Resources/views/');
+        $this->template->addTemplateDir($this->pluginDirectory . '/Resources/views/');
 
         return $this->pluginDirectory . '/Controllers/Backend/SwagImportExportSession.php';
     }

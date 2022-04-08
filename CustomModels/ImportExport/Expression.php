@@ -6,10 +6,6 @@
  * file that was distributed with this source code.
  */
 
-/**
- * Shopware ImportExport Plugin
- */
-
 namespace Shopware\CustomModels\ImportExport;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -19,7 +15,7 @@ use Shopware\Components\Model\ModelEntity;
  * Session Model
  *
  * @ORM\Table(name="s_import_export_expression")
- * @ORM\Entity(repositoryClass="Repository")
+ * @ORM\Entity(repositoryClass="ExpressionRepository")
  * @ORM\HasLifecycleCallbacks
  */
 class Expression extends ModelEntity
@@ -36,7 +32,7 @@ class Expression extends ModelEntity
     protected $id;
 
     /**
-     * @var Profile
+     * @var Profile|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\CustomModels\ImportExport\Profile", cascade={"persist", "refresh"})
      * @ORM\JoinColumn(onDelete="CASCADE")
@@ -64,98 +60,58 @@ class Expression extends ModelEntity
      */
     protected $importConversion;
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @return Profile
-     */
-    public function getProfile()
+    public function getProfile(): ?Profile
     {
         return $this->profile;
     }
 
-    /**
-     * @return string
-     */
-    public function getExportConversion()
+    public function getExportConversion(): string
     {
         return $this->exportConversion;
     }
 
-    /**
-     * @return string
-     */
-    public function getImportConversion()
+    public function getImportConversion(): string
     {
         return $this->importConversion;
     }
 
-    /**
-     * @param int $id
-     */
-    public function setId($id)
+    public function setId(int $id): void
     {
         $this->id = $id;
     }
 
-    /**
-     * @return string
-     */
-    public function getVariable()
+    public function getVariable(): string
     {
         return $this->variable;
     }
 
-    /**
-     * Sets the profile object.
-     *
-     * @param Profile $profile
-     *
-     * @return Expression
-     */
-    public function setProfile(Profile $profile = null)
+    public function setProfile(Profile $profile = null): Expression
     {
         $this->profile = $profile;
 
         return $this;
     }
 
-    /**
-     * @param string $exportConversion
-     *
-     * @return Expression
-     */
-    public function setExportConversion($exportConversion)
+    public function setExportConversion(string $exportConversion): Expression
     {
         $this->exportConversion = $exportConversion;
 
         return $this;
     }
 
-    /**
-     * @param string $importConversion
-     *
-     * @return Expression
-     */
-    public function setImportConversion($importConversion)
+    public function setImportConversion(string $importConversion): Expression
     {
         $this->importConversion = $importConversion;
 
         return $this;
     }
 
-    /**
-     * @param string $variable
-     *
-     * @return Expression
-     */
-    public function setVariable($variable)
+    public function setVariable(string $variable): Expression
     {
         $this->variable = $variable;
 

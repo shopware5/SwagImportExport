@@ -16,7 +16,6 @@
 
         <service id="Shopware\Subscribers\ControllerSubscriber">
             <argument>%swag_import_export.plugin_dir%</argument>
-            <argument id="service_container" type="service"/>
             <tag name="shopware.event_subscriber"/>
         </service>
 

@@ -14,7 +14,6 @@ use Shopware\Components\SwagImportExport\Profile\Profile;
 use Shopware\Components\SwagImportExport\UploadPathProvider;
 use Shopware\Components\SwagImportExport\Utils\CommandHelper;
 use Shopware\CustomModels\ImportExport\Profile as ProfileEntity;
-use Shopware_Plugins_Backend_SwagImportExport_Bootstrap as SwagImportExport_Bootstrap;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;

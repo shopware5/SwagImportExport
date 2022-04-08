@@ -122,7 +122,6 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
     public function getLogsAction()
     {
-        /** @var \Shopware\CustomModels\ImportExport\Repository $loggerRepository */
         $loggerRepository = $this->getModelManager()->getRepository(Logger::class);
 
         $query = $loggerRepository->getLogListQuery(

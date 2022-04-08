@@ -14,6 +14,8 @@ if (file_exists(__DIR__ . '/vendor/autoload.php')) {
     throw new \Exception('Vendor is missing');
 }
 
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Tools\SchemaTool;
 use Shopware\Components\CacheManager;
 use Shopware\Components\Model\ModelManager;
@@ -48,7 +50,7 @@ class SwagImportExport extends Plugin
     /**
      * {@inheritdoc}
      */
-    public function build(ContainerBuilder $container)
+    public function build(ContainerBuilder $container): void
     {
         $container->addCompilerPass(new HookablePass());
 
@@ -58,7 +60,7 @@ class SwagImportExport extends Plugin
     /**
      * {@inheritdoc}
      */
-    public function install(InstallContext $context)
+    public function install(InstallContext $context): void
     {
         /** @var CacheManager $cacheManager */
         $cacheManager = $this->container->get('shopware.cache_manager');
@@ -69,8 +71,6 @@ class SwagImportExport extends Plugin
             $context->getCurrentVersion(),
             SetupContext::NO_PREVIOUS_VERSION
         );
-
-
 
         $installers = [];
         $installers[] = new DefaultProfileInstaller($setupContext, $this->container->get('dbal_connection'));
@@ -90,14 +90,12 @@ class SwagImportExport extends Plugin
             }
             $installer->install();
         }
-
-        return true;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function update(UpdateContext $context)
+    public function update(UpdateContext $context): void
     {
         $oldVersion = $context->getCurrentVersion();
 
@@ -155,28 +153,27 @@ class SwagImportExport extends Plugin
     /**
      * {@inheritdoc}
      */
-    public function uninstall(UninstallContext $context)
+    public function uninstall(UninstallContext $context): void
     {
         $this->removeDatabaseTables();
         $this->removeAclResource($context->getPlugin());
     }
 
-
     /**
      * {@inheritdoc}
      */
-    public function activate(ActivateContext $context)
+    public function activate(ActivateContext $context): void
     {
     }
 
     /**
      * {@inheritdoc}
      */
-    public function deactivate(DeactivateContext $context)
+    public function deactivate(DeactivateContext $context): void
     {
     }
 
-    private function createDirectories()
+    private function createDirectories(): void
     {
         $importCronPath = Shopware()->DocPath() . 'files/import_cron/';
         if (!\file_exists($importCronPath)) {
@@ -184,7 +181,7 @@ class SwagImportExport extends Plugin
         }
 
         if (!\file_exists($importCronPath . '.htaccess')) {
-            \copy($this->Path() . 'Setup/SwagImportExport/template', $importCronPath . '/.htaccess');
+            \copy($this->container->getParameter('swag_import_export.plugin_dir') . 'Setup/SwagImportExport/template', $importCronPath . '/.htaccess');
         }
 
         $importExportPath = Shopware()->DocPath() . 'files/import_export/';
@@ -193,15 +190,14 @@ class SwagImportExport extends Plugin
         }
 
         if (!\file_exists($importExportPath . '.htaccess')) {
-            \copy($this->Path() . 'Setup/SwagImportExport/template', $importExportPath . '/.htaccess');
+            \copy($this->container->getParameter('swag_import_export.plugin_dir') . 'Setup/SwagImportExport/template', $importExportPath . '/.htaccess');
         }
     }
-
 
     /**
      * Creates the plugin database table over the doctrine schema tool.
      */
-    private function createDatabase()
+    private function createDatabase(): void
     {
         $schemaTool = new SchemaTool($this->getEntityManager());
         $doctrineModels = $this->getDoctrineModels();
@@ -216,7 +212,7 @@ class SwagImportExport extends Plugin
         }
     }
 
-    private function updateDatabase()
+    private function updateDatabase(): void
     {
         $schemaTool = new SchemaTool($this->getEntityManager());
         $doctrineModels = $this->getDoctrineModels();
@@ -226,14 +222,14 @@ class SwagImportExport extends Plugin
     /**
      * Removes the plugin database tables
      */
-    private function removeDatabaseTables()
+    private function removeDatabaseTables(): void
     {
         $tool = new SchemaTool($this->getEntityManager());
         $classes = $this->getDoctrineModels();
         $tool->dropSchema($classes);
     }
 
-    private function createAclResource(\Shopware\Models\Plugin\Plugin $plugin)
+    private function createAclResource(\Shopware\Models\Plugin\Plugin $plugin): void
     {
         // If exists: find existing SwagImportExport resource
         $pluginId = $this->getDatabase()->fetchRow(
@@ -264,7 +260,7 @@ class SwagImportExport extends Plugin
         $this->getEntityManager()->flush();
     }
 
-    private function removeAclResource(\Shopware\Models\Plugin\Plugin $plugin)
+    private function removeAclResource(\Shopware\Models\Plugin\Plugin $plugin): void
     {
         $sql = 'SELECT id FROM s_core_acl_resources
                 WHERE pluginID = ?;';
@@ -288,7 +284,9 @@ class SwagImportExport extends Plugin
         $this->getEntityManager()->flush();
     }
 
-
+    /**
+     * @return array<ClassMetadata>
+     */
     private function getDoctrineModels(): array
     {
         return [
@@ -300,9 +298,11 @@ class SwagImportExport extends Plugin
     }
 
     /**
-     * @return array
+     * @param array<int, ClassMetadata> $classes
+     *
+     * @return array<string>
      */
-    private function removeTablePrefix(SchemaTool $tool, array $classes)
+    private function removeTablePrefix(SchemaTool $tool, array $classes): array
     {
         $schema = $tool->getSchemaFromMetadata($classes);
         $tableNames = [];
@@ -317,7 +317,7 @@ class SwagImportExport extends Plugin
     /**
      * Rename duplicate profile names to prevent integrity constraint mysql exceptions.
      */
-    private function renameDuplicateProfileNames()
+    private function renameDuplicateProfileNames(): void
     {
         $connection = $this->container->get('dbal_connection');
         $profiles = $connection->fetchAll('SELECT COUNT(id) as count, name FROM s_import_export_profile GROUP BY name');
@@ -337,9 +337,9 @@ class SwagImportExport extends Plugin
     }
 
     /**
-     * @param array $profiles
+     * @param array<int, array{name: string, id: int}> $profiles
      */
-    private function addSuffixToProfileNames($profiles)
+    private function addSuffixToProfileNames(array $profiles): void
     {
         $dbalConnection = $this->container->get('dbal_connection');
 
@@ -355,11 +355,13 @@ class SwagImportExport extends Plugin
         }
     }
 
-    private function getEntityManager() {
+    private function getEntityManager(): EntityManagerInterface
+    {
         return $this->container->get('models');
     }
 
-    private function getDatabase() {
+    private function getDatabase(): \Enlight_Components_Db_Adapter_Pdo_Mysql
+    {
         return $this->container->get('db');
     }
 }

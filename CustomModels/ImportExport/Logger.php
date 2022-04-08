@@ -12,10 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 
 /**
- * Logger Model
- *
  * @ORM\Table(name="s_import_export_log")
- * @ORM\Entity(repositoryClass="Repository")
+ * @ORM\Entity(repositoryClass="LoggerRepository")
  * @ORM\HasLifecycleCallbacks
  */
 class Logger extends ModelEntity
@@ -32,7 +30,7 @@ class Logger extends ModelEntity
     protected $id;
 
     /**
-     * @var Session
+     * @var Session|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\CustomModels\ImportExport\Session", inversedBy="logs")
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id", onDelete="SET NULL")
@@ -40,7 +38,7 @@ class Logger extends ModelEntity
     protected $session;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="message", type="text", nullable=true)
      */
@@ -49,7 +47,7 @@ class Logger extends ModelEntity
     /**
      * Confusing naming here - indicates error state: false = no errors
      *
-     * @var bool
+     * @var string|null
      *
      * @ORM\Column(name="state", type="string", length=100, nullable=true)
      */
@@ -70,50 +68,31 @@ class Logger extends ModelEntity
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
-    public function getMessage()
+    public function getMessage(): ?string
     {
         return $this->message;
     }
 
-    /**
-     * @param string $message
-     *
-     * @return Logger
-     */
-    public function setMessage($message)
+    public function setMessage(string $message): Logger
     {
         $this->message = $message;
 
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function getStatus()
+    public function getStatus(): ?string
     {
         return $this->state;
     }
 
-    /**
-     * @param bool $status
-     *
-     * @return Logger
-     */
-    public function setStatus($status)
+    public function setStatus(string $status): Logger
     {
         $this->state = $status;
 
         return $this;
     }
 
-    /**
-     * @return \Datetime
-     */
-    public function getCreatedAt()
+    public function getCreatedAt(): \Datetime
     {
         return $this->createdAt;
     }
@@ -134,15 +113,12 @@ class Logger extends ModelEntity
         return $this;
     }
 
-    /**
-     * @return Session
-     */
-    public function getSession()
+    public function getSession(): ?Session
     {
         return $this->session;
     }
 
-    public function setSession(Session $session)
+    public function setSession(Session $session): void
     {
         $this->session = $session;
     }

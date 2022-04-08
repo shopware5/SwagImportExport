@@ -6,20 +6,15 @@
  * file that was distributed with this source code.
  */
 
-/**
- * Shopware ImportExport Plugin
- */
-
 namespace Shopware\CustomModels\ImportExport;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 
 /**
- * Session Model
- *
  * @ORM\Table(name="s_import_export_profile")
- * @ORM\Entity(repositoryClass="Repository")
+ * @ORM\Entity(repositoryClass="ProfileRepository")
  * @ORM\HasLifecycleCallbacks
  */
 class Profile extends ModelEntity
@@ -36,14 +31,14 @@ class Profile extends ModelEntity
     protected $id;
 
     /**
-     * @var Expression[]
+     * @var Collection<Expression>
      *
      * @ORM\OneToMany(targetEntity="Shopware\CustomModels\ImportExport\Expression", mappedBy="profile")
      */
     protected $expressions;
 
     /**
-     * @var Session[]
+     * @var iterable<Session>
      *
      * @ORM\OneToMany(targetEntity="Shopware\CustomModels\ImportExport\Session", mappedBy="profile")
      */
@@ -57,7 +52,7 @@ class Profile extends ModelEntity
     protected $type;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="base_profile", type="integer", nullable=true)
      */
@@ -71,7 +66,7 @@ class Profile extends ModelEntity
     protected $name;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
@@ -97,142 +92,93 @@ class Profile extends ModelEntity
      */
     protected $default = false;
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
 
-    /**
-     * @return int
-     */
-    public function getBaseProfile()
+    public function getBaseProfile(): ?int
     {
         return $this->baseProfile;
     }
 
-    /**
-     * @return string
-     */
-    public function getTree()
+    public function getTree(): string
     {
         return $this->tree;
     }
 
     /**
-     * @return Expression[]
+     * @return iterable<Expression>|null
      */
-    public function getExpressions()
+    public function getExpressions(): ?iterable
     {
         return $this->expressions;
     }
 
     /**
-     * @return Session[]
+     * @return iterable<Session>
      */
-    public function getSessions()
+    public function getSessions(): iterable
     {
         return $this->sessions;
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return string
-     */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    /**
-     * @param int $id
-     */
-    public function setId($id)
+    public function setId(int $id): void
     {
         $this->id = $id;
     }
 
-    /**
-     * @param string $type
-     */
-    public function setType($type)
+    public function setType(string $type): void
     {
         $this->type = $type;
     }
 
-    /**
-     * @param int $baseProfile
-     */
-    public function setBaseProfile($baseProfile)
+    public function setBaseProfile(?int $baseProfile): void
     {
         $this->baseProfile = $baseProfile;
     }
 
-    /**
-     * @param string $tree
-     */
-    public function setTree($tree)
+    public function setTree(string $tree): void
     {
         $this->tree = $tree;
     }
 
-    /**
-     * @param string $name
-     */
-    public function setName($name)
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
 
-    /**
-     * @param string $description
-     */
-    public function setDescription($description)
+    public function setDescription(string $description): void
     {
         $this->description = $description;
     }
 
-    /**
-     * @return int
-     */
-    public function getHidden()
+    public function getHidden(): int
     {
         return $this->hidden;
     }
 
-    /**
-     * @param int $hidden
-     */
-    public function setHidden($hidden)
+    public function setHidden(int $hidden): void
     {
         $this->hidden = $hidden;
     }
 
-    /**
-     * Adds an expression to the profile.
-     *
-     * @param Expression $expression
-     *
-     * @return $this
-     */
-    public function addExpression($expression)
+    public function addExpression(Expression $expression): Profile
     {
         $this->expressions[] = $expression;
         $expression->setProfile($this);
@@ -242,12 +188,8 @@ class Profile extends ModelEntity
 
     /**
      * Adds an session to the profile.
-     *
-     * @param Session $session
-     *
-     * @return $this
      */
-    public function addSession($session)
+    public function addSession(Session $session): Profile
     {
         $this->sessions[] = $session;
         $session->setProfile($this);
@@ -255,18 +197,12 @@ class Profile extends ModelEntity
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function getDefault()
+    public function getDefault(): bool
     {
         return $this->default;
     }
 
-    /**
-     * @param bool $default
-     */
-    public function setDefault($default)
+    public function setDefault(bool $default): void
     {
         $this->default = $default;
     }

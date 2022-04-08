@@ -22,7 +22,7 @@ use Shopware\Components\SwagImportExport\Profile\Profile;
 use Shopware\Components\SwagImportExport\Transformers\DataTransformerChain;
 use Shopware\Components\SwagImportExport\UploadPathProvider;
 use Shopware\CustomModels\ImportExport\Profile as ProfileEntity;
-use Shopware\CustomModels\ImportExport\Repository;
+use Shopware\CustomModels\ImportExport\ProfileRepository;
 
 class CommandHelper
 {
@@ -85,11 +85,6 @@ class CommandHelper
      * @var int
      */
     protected $sessionId;
-
-    /**
-     * @var \Shopware_Plugins_Backend_SwagImportExport_Bootstrap
-     */
-    protected $plugin;
 
     /**
      * @var Logger
@@ -201,7 +196,7 @@ class CommandHelper
      *
      * @return bool|ProfileEntity
      */
-    public static function findProfileByName($filename, Repository $repository)
+    public static function findProfileByName($filename, ProfileRepository $repository)
     {
         $parts = \explode('.', $filename);
 

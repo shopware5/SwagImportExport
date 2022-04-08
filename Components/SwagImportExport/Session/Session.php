@@ -12,7 +12,6 @@ use Doctrine\ORM\EntityRepository;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\Profile\Profile;
 use Shopware\Components\SwagImportExport\UploadPathProvider;
-use Shopware\CustomModels\ImportExport\Repository;
 use Shopware\CustomModels\ImportExport\Session as SessionEntity;
 
 /**
@@ -294,7 +293,7 @@ class Session
      *
      * @return EntityRepository<SessionEntity>
      */
-    public function getSessionRepository()
+    public function getSessionRepository(): EntityRepository
     {
         if ($this->sessionRepository === null) {
             $this->sessionRepository = Shopware()->Models()->getRepository(SessionEntity::class);

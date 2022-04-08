@@ -40,16 +40,16 @@ class FactoryTest extends ImportExportTestHelper
 
     public function testFactories()
     {
-        $dataFactory = $this->Plugin()->getDataFactory();
+        $dataFactory = Shopware()->Container()->get(DataFactory::class);
         static::assertInstanceOf(DataFactory::class, $dataFactory, 'Is not a instance of DataFactory');
 
-        $fileIOFactory = $this->Plugin()->getFileIOFactory();
+        $fileIOFactory = Shopware()->Container()->get(FileIOFactory::class);
         static::assertInstanceOf(FileIOFactory::class, $fileIOFactory, 'Is not a instance of DataFactory');
     }
 
     public function testDbAdapters()
     {
-        $dataFactory = $this->Plugin()->getDataFactory();
+        $dataFactory = Shopware()->Container()->get(DataFactory::class);
 
         //tests categories data adapter
         $catergoriesDbAdapter = $dataFactory->createDbAdapter('categories');
@@ -62,7 +62,7 @@ class FactoryTest extends ImportExportTestHelper
 
     public function testUtils()
     {
-        $dataFactory = $this->Plugin()->getDataFactory();
+        $dataFactory = Shopware()->Container()->get(DataFactory::class);
         $postData = $this->getPostData();
 
         $colOpts = $dataFactory->createColOpts($postData['columnOptions']);
@@ -77,7 +77,7 @@ class FactoryTest extends ImportExportTestHelper
 
     public function testFileIO()
     {
-        $fileIOFactory = $this->Plugin()->getFileIOFactory();
+        $fileIOFactory = Shopware()->Container()->get(FileIOFactory::class);
 
         $csvFileWriter = $fileIOFactory->createFileWriter('csv');
         static::assertInstanceOf(CsvFileWriter::class, $csvFileWriter, 'Is not a instance of CsvFileWriter');

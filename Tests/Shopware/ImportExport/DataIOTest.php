@@ -8,6 +8,7 @@
 
 namespace Tests\Shopware\ImportExport;
 
+use Shopware\Components\SwagImportExport\Factories\DataFactory;
 use Shopware\Components\SwagImportExport\Logger\Logger;
 use SwagImportExport\Tests\Helper\ImportExportTestHelper;
 
@@ -34,7 +35,7 @@ class DataIOTest extends ImportExportTestHelper
         $postData = $this->getPostData();
         $postData['limit'] = [];
 
-        $dataFactory = $this->Plugin()->getDataFactory();
+        $dataFactory = Shopware()->Container()->get(DataFactory::class);
         $dataSession = $dataFactory->loadSession($postData);
 
         $dbAdapter = $dataFactory->createDbAdapter($postData['adapter']);
@@ -55,7 +56,7 @@ class DataIOTest extends ImportExportTestHelper
     {
         $postData = $this->getPostData();
 
-        $dataFactory = $this->Plugin()->getDataFactory();
+        $dataFactory = Shopware()->Container()->get(DataFactory::class);
         $dbAdapter = $dataFactory->createDbAdapter($postData['adapter']);
         $dataSession = $dataFactory->loadSession($postData);
 

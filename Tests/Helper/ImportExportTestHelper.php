@@ -12,7 +12,6 @@ use Doctrine\DBAL\Connection;
 
 class ImportExportTestHelper extends \Enlight_Components_Test_Plugin_TestCase
 {
-
     /**
      * Test set up method
      */

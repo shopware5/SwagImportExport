@@ -6,16 +6,16 @@ parameters:
     reportUnmatchedIgnoredErrors: true
     symfony:
         constant_hassers: false
-        container_xml_path: ../../../../../../var/cache/production____REVISION___/container.xml
-        console_application_loader: ../../../../../../tests/phpstan-console-application.php
+        container_xml_path: ./../../../var/cache/production____REVISION___/container.xml
+        console_application_loader: ./../../../tests/phpstan-console-application.php
     doctrine:
         repositoryClass: Shopware\Components\Model\ModelRepository
-        objectManagerLoader: ../../../../../../tests/phpstan-doctrine-model-manager.php
+        objectManagerLoader: ./../../../tests/phpstan-doctrine-model-manager.php
     excludePaths:
         - .githooks
         - vendor
     scanDirectories:
-        - ../../../../../../var/cache/production____REVISION___/doctrine/attributes
+        - ./../../../var/cache/production____REVISION___/doctrine/attributes
     ignoreErrors:
         # Needs some improvements in the doctrine PHPStan extensions: see https://github.com/phpstan/phpstan-doctrine/pull/167
         - '#Cannot call method fetch.*\(\) on Doctrine\\DBAL\\.*\|int#'

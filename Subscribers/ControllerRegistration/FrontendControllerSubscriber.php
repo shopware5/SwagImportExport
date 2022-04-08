@@ -22,7 +22,7 @@ class FrontendControllerSubscriber implements SubscriberInterface
     /**
      * {@inheritdoc}
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             'Enlight_Controller_Dispatcher_ControllerPath_Frontend_SwagImportExport' => 'getSwagImportExport',
@@ -32,11 +32,9 @@ class FrontendControllerSubscriber implements SubscriberInterface
     /**
      * Handles the Enlight_Controller_Dispatcher_ControllerPath_Frontend_PaypalUnified event.
      * Returns the path to the frontend controller.
-     *
-     * @return string
      */
-    public function onGetUnifiedControllerPath()
+    public function onGetUnifiedControllerPath(): string
     {
-        return __DIR__ . '/../../Controllers/Frontend/SwagImportExport.php';
+        return $this->pluginDirectory . '/Controllers/Frontend/SwagImportExport.php';
     }
 }

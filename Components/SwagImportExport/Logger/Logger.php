@@ -11,7 +11,7 @@ namespace Shopware\Components\SwagImportExport\Logger;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\FileIO\FileWriter;
 use Shopware\CustomModels\ImportExport\Logger as LoggerEntity;
-use Shopware\CustomModels\ImportExport\Repository;
+use Shopware\CustomModels\ImportExport\LoggerRepository;
 use Shopware\CustomModels\ImportExport\Session;
 
 class Logger implements LoggerInterface
@@ -22,7 +22,7 @@ class Logger implements LoggerInterface
     protected $modelManager;
 
     /**
-     * @var Repository
+     * @var LoggerRepository
      */
     protected $loggerRepository;
 
@@ -41,10 +41,7 @@ class Logger implements LoggerInterface
      */
     protected $logDirectory;
 
-    /**
-     * @param string $logDirectory
-     */
-    public function __construct(FileWriter $fileWriter, ModelManager $modelManager, $logDirectory)
+    public function __construct(FileWriter $fileWriter, ModelManager $modelManager, string $logDirectory)
     {
         $this->fileWriter = $fileWriter;
         $this->modelManager = $modelManager;

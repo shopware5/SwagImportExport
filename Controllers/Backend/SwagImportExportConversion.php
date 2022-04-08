@@ -8,7 +8,6 @@
 
 use Shopware\CustomModels\ImportExport\Expression;
 use Shopware\CustomModels\ImportExport\Profile;
-use Shopware\CustomModels\ImportExport\Repository;
 
 /**
  * Shopware ImportExport Plugin
@@ -29,7 +28,7 @@ class Shopware_Controllers_Backend_SwagImportExportConversion extends Shopware_C
         $filter = $this->Request()->getParam('filter', []);
 
         $manager = $this->getModelManager();
-        /** @var Repository $expressionRepository */
+
         $expressionRepository = $manager->getRepository(Expression::class);
 
         $filter = \array_merge(['p.id' => $profileId], $filter);

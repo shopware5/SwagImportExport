@@ -9,14 +9,13 @@
 namespace Shopware\CustomModels\ImportExport;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 
 /**
- * Session Model
- *
  * @ORM\Table(name="s_import_export_session")
- * @ORM\Entity(repositoryClass="Repository")
+ * @ORM\Entity(repositoryClass="SessionRepository")
  * @ORM\HasLifecycleCallbacks
  */
 class Session extends ModelEntity
@@ -69,7 +68,7 @@ class Session extends ModelEntity
     protected $totalCount;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="username", type="string", length=200, nullable=true)
      */
@@ -92,7 +91,7 @@ class Session extends ModelEntity
     /**
      * Filesize of the file in bytes
      *
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="file_size", type="integer", nullable=true)
      */
@@ -113,7 +112,7 @@ class Session extends ModelEntity
     protected $createdAt;
 
     /**
-     * @var ArrayCollection
+     * @var Collection<Logger>
      *
      * @ORM\OneToMany(targetEntity="Shopware\CustomModels\ImportExport\Logger", mappedBy="session")
      */
@@ -124,82 +123,52 @@ class Session extends ModelEntity
         $this->logs = new ArrayCollection();
     }
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @return Profile
-     */
-    public function getProfile()
+    public function getProfile(): Profile
     {
         return $this->profile;
     }
 
-    /**
-     * @return string
-     */
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
 
-    /**
-     * @return string
-     */
-    public function getIds()
+    public function getIds(): ?string
     {
         return $this->ids;
     }
 
-    /**
-     * @return int
-     */
-    public function getPosition()
+    public function getPosition(): ?int
     {
         return $this->position;
     }
 
-    /**
-     * @return int
-     */
-    public function getTotalCount()
+    public function getTotalCount(): int
     {
         return $this->totalCount;
     }
 
-    /**
-     * @return string
-     */
-    public function getUserName()
+    public function getUserName(): ?string
     {
         return $this->userName;
     }
 
-    /**
-     * @return string
-     */
-    public function getFileName()
+    public function getFileName(): string
     {
         return $this->fileName;
     }
 
-    /**
-     * @return string
-     */
-    public function getFormat()
+    public function getFormat(): string
     {
         return $this->format;
     }
 
-    /**
-     * @return int
-     */
-    public function getFileSize()
+    public function getFileSize(): ?int
     {
         return $this->fileSize;
     }
@@ -220,10 +189,7 @@ class Session extends ModelEntity
         return $this->createdAt;
     }
 
-    /**
-     * @param int $id
-     */
-    public function setId($id)
+    public function setId(int $id): void
     {
         $this->id = $id;
     }

@@ -8,6 +8,7 @@
 
 namespace Tests\Shopware\ImportExport;
 
+use Shopware\Components\SwagImportExport\Factories\DataTransformerFactory;
 use SwagImportExport\Tests\Helper\ImportExportTestHelper;
 
 class ExpressionEvaluatorTest extends ImportExportTestHelper
@@ -23,7 +24,7 @@ class ExpressionEvaluatorTest extends ImportExportTestHelper
         $expression1 = '$active ? false : true';
         $expression2 = '$title . \'-Test\'';
 
-        $transformersFactory = $this->Plugin()->getDataTransformerFactory();
+        $transformersFactory = Shopware()->Container()->get(DataTransformerFactory::class);
 
         $phpEval = $transformersFactory->createValueConvertor('phpEvaluator');
 
@@ -45,7 +46,7 @@ class ExpressionEvaluatorTest extends ImportExportTestHelper
         $expression1 = '{if $active} false {else} true {/if}';
         $expression2 = '{if $title == \'Product\'} {$title}-Test {/if}';
 
-        $transformersFactory = $this->Plugin()->getDataTransformerFactory();
+        $transformersFactory = Shopware()->Container()->get(DataTransformerFactory::class);
 
         $smartyEval = $transformersFactory->createValueConvertor('smartyEvaluator');
 
