@@ -71,6 +71,6 @@ class DataIOTest extends ImportExportTestHelper
      */
     private function getLogger()
     {
-        return Shopware()->Container()->get('swag_import_export.logger');
+        return Shopware()->Container()->get(Logger::class);
     }
 }

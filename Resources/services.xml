@@ -4,12 +4,10 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="Shopware\Subscribers\Subscriber">
+        <service id="Shopware\Components\SwagImportExport\Utils\FileHelper"/>
+
+        <service id="Shopware\Subscribers\Cronjob">
             <argument id="service_container" type="service"/>
-            <argument type="service" id="Shopware\Components\SwagImportExport\Factories\ProfileFactory"/>
-            <argument type="service" id="Shopware\Components\SwagImportExport\Factories\FileIOFactory"/>
-            <argument type="service" id="Shopware\Components\SwagImportExport\Factories\DataFactory"/>
-            <argument type="service" id="Shopware\Components\SwagImportExport\Factories\DataTransformerFactory"/>
 
             <tag name="shopware.event_subscriber"/>
         </service>
@@ -58,5 +56,78 @@
         <service id="Shopware\Components\SwagImportExport\Factories\DataTransformerFactory" public="true">
             <tag name="import_export.proxyable"/>
         </service>
+
+        <service id="Shopware\Components\SwagImportExport\Service\UnderscoreToCamelCaseService"
+                 public="true"/>
+        <service id="swag_import_export.underscore_camelcase_service" alias="Shopware\Components\SwagImportExport\Service\UnderscoreToCamelCaseService" public="true"/>
+
+        <service
+            id="Shopware\Components\SwagImportExport\FileIO\CsvFileWriter"
+        >
+            <argument type="service" id="Shopware\Components\SwagImportExport\Utils\FileHelper"/>
+        </service>
+        <service id="swag_import_export.csv_file_writer" alias="Shopware\Components\SwagImportExport\FileIO\CsvFileWriter" public="true" />
+
+        <service id="Shopware\Components\SwagImportExport\FileIO\CsvFileReader"
+        >
+            <argument type="service" id="Shopware\Components\SwagImportExport\UploadPathProvider"/>
+        </service>
+        <service id="swag_import_export.csv_file_reader" alias="Shopware\Components\SwagImportExport\FileIO\CsvFileReader" public="true"/>
+
+        <service
+            id="Shopware\Components\SwagImportExport\UploadPathProvider">
+            <argument type="expression">service('application').DocPath()</argument>
+        </service>
+
+        <service id="swag_import_export.upload_path_provider" alias="Shopware\Components\SwagImportExport\UploadPathProvider" public="true"/>
+
+        <service
+            id="Shopware\Components\SwagImportExport\Service\AutoImportService"
+        >
+            <argument type="service" id="Shopware\Components\SwagImportExport\UploadPathProvider"/>
+            <argument type="service" id="models"/>
+            <argument type="service" id="Shopware\Components\SwagImportExport\Factories\ProfileFactory"/>
+        </service>
+        <service id="swag_import_export.auto_importer" alias="Shopware\Components\SwagImportExport\Service\AutoImportService" public="true"/>
+
+
+        <service id="Shopware\Components\SwagImportExport\Service\ProfileService">
+            <argument type="service" id="models"/>
+            <argument type="service" id="file_system"/>
+            <argument type="service" id="snippets"/>
+        </service>
+        <service id="swag_import_export.profile_service" alias="Shopware\Components\SwagImportExport\Service\ProfileService" public="true"/>
+
+        <service id="Shopware\Components\SwagImportExport\Service\ExportService">
+            <argument type="service" id="Shopware\Components\SwagImportExport\Factories\ProfileFactory"/>
+            <argument type="service" id="Shopware\Components\SwagImportExport\Factories\FileIOFactory"/>
+            <argument type="service" id="Shopware\Components\SwagImportExport\Factories\DataFactory"/>
+            <argument type="service" id="Shopware\Components\SwagImportExport\Factories\DataTransformerFactory"/>
+            <argument type="service" id="Shopware\Components\SwagImportExport\Logger\Logger"/>
+            <argument type="service" id="swag_import_export.upload_path_provider"/>
+            <argument type="service" id="auth"/>
+            <argument type="service" id="shopware_media.media_service"/>
+        </service>
+        <service id="swag_import_export.export_service" alias="Shopware\Components\SwagImportExport\Service\ExportService" public="true"/>
+
+
+        <service id="Shopware\Components\SwagImportExport\Service\ImportService">
+            <argument type="service" id="Shopware\Components\SwagImportExport\Factories\ProfileFactory"/>
+            <argument type="service" id="Shopware\Components\SwagImportExport\Factories\FileIOFactory"/>
+            <argument type="service" id="Shopware\Components\SwagImportExport\Factories\DataFactory"/>
+            <argument type="service" id="Shopware\Components\SwagImportExport\Factories\DataTransformerFactory"/>
+            <argument type="service" id="Shopware\Components\SwagImportExport\Logger\Logger"/>
+            <argument type="service" id="swag_import_export.upload_path_provider"/>
+            <argument type="service" id="auth"/>
+            <argument type="service" id="shopware_media.media_service"/>
+        </service>
+        <service id="swag_import_export.import_service" alias="Shopware\Components\SwagImportExport\Service\ImportService" public="true"/>
+
+        <service id="Shopware\Components\SwagImportExport\Logger\Logger" public="true">
+            <argument type="service" id="Shopware\Components\SwagImportExport\FileIO\CsvFileWriter"/>
+            <argument type="service" id="models"/>
+            <argument>%shopware.app.rootDir%/var/log</argument>
+        </service>
+        <service id="swag_import_export.logger" alias="Shopware\Components\SwagImportExport\Logger\Logger" public="true"/>
     </services>
 </container>

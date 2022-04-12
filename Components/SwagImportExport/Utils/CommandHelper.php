@@ -130,7 +130,7 @@ class CommandHelper
         $this->dataFactory = Shopware()->Container()->get(DataFactory::class);
         $this->fileIoFactory = Shopware()->Container()->get(FileIOFactory::class);
         $this->dataTransformationFactory = Shopware()->Container()->get(DataTransformerFactory::class);
-        $this->logger = Shopware()->Container()->get('swag_import_export.logger');
+        $this->logger = Shopware()->Container()->get(Logger::class);
         $this->connection = Shopware()->Container()->get('dbal_connection');
 
         if (!isset($data['profileEntity'])) {

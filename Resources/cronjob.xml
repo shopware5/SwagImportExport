@@ -4,7 +4,7 @@
 
     <cronjob>
         <name>ImportExport - AutoImport</name>
-        <action>CronAutoImport</action>
+        <action>Shopware_CronJob_CronAutoImport</action>
         <active>true</active>
         <interval>86400</interval>
         <disableOnError>false</disableOnError>
