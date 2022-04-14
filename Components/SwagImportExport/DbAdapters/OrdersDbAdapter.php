@@ -21,6 +21,9 @@ use Shopware\Models\Order\Status;
 
 class OrdersDbAdapter implements DataDbAdapter
 {
+    public const OrderDBAdapterQueryEvent = 'OrdersDbAdapter::getQuery';
+    public const OrderDBAdapterColumnsEvent = 'OrdersDbAdapter::adjustColumns';
+
     /**
      * @var ModelManager
      */
@@ -506,6 +509,8 @@ class OrdersDbAdapter implements DataDbAdapter
             $columns = \array_merge($columns, $attributesSelect);
         }
 
+        $columns = Shopware()->Events()->filter(self::OrderDBAdapterColumnsEvent, $columns);
+
         return $columns;
     }
 
@@ -566,6 +571,10 @@ class OrdersDbAdapter implements DataDbAdapter
             ->leftJoin('details.attribute', 'detailAttr')
             ->where('details.id IN (:ids)')
             ->setParameter('ids', $ids);
+
+        Shopware()->Events()->notify(self::OrderDBAdapterQueryEvent, [
+            'builder' => $builder,
+        ]);
 
         return $builder;
     }
