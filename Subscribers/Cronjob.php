@@ -15,7 +15,10 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class Cronjob implements SubscriberInterface
 {
-    private ContainerInterface $container;
+    /**
+     * @var ContainerInterface
+     */
+    private $container;
 
     public function __construct(
         ContainerInterface $container

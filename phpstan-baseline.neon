@@ -1,176 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Method Shopware_Plugins_Backend_SwagImportExport_Bootstrap\\:\\:addSuffixToProfileNames\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Backend_SwagImportExport_Bootstrap\\:\\:addSuffixToProfileNames\\(\\) has parameter \\$profiles with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Backend_SwagImportExport_Bootstrap\\:\\:afterInit\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Backend_SwagImportExport_Bootstrap\\:\\:createAclResource\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Backend_SwagImportExport_Bootstrap\\:\\:createConfiguration\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Backend_SwagImportExport_Bootstrap\\:\\:createCronJobs\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Backend_SwagImportExport_Bootstrap\\:\\:createDatabase\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Backend_SwagImportExport_Bootstrap\\:\\:createDirectories\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Backend_SwagImportExport_Bootstrap\\:\\:createTranslations\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Backend_SwagImportExport_Bootstrap\\:\\:getDoctrineModels\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Backend_SwagImportExport_Bootstrap\\:\\:getInvalidateCacheArray\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Backend_SwagImportExport_Bootstrap\\:\\:injectBackendAceEditor\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Backend_SwagImportExport_Bootstrap\\:\\:onAddConsoleCommand\\(\\) return type with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
-			count: 1
-			path: Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Backend_SwagImportExport_Bootstrap\\:\\:onCronImport\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Backend_SwagImportExport_Bootstrap\\:\\:onStartDispatch\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Backend_SwagImportExport_Bootstrap\\:\\:registerControllers\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Backend_SwagImportExport_Bootstrap\\:\\:registerEvents\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Backend_SwagImportExport_Bootstrap\\:\\:registerMyNamespace\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Backend_SwagImportExport_Bootstrap\\:\\:removeAclResource\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Backend_SwagImportExport_Bootstrap\\:\\:removeDatabaseTables\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Backend_SwagImportExport_Bootstrap\\:\\:removeTablePrefix\\(\\) has parameter \\$classes with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Backend_SwagImportExport_Bootstrap\\:\\:removeTablePrefix\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Backend_SwagImportExport_Bootstrap\\:\\:renameDuplicateProfileNames\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Backend_SwagImportExport_Bootstrap\\:\\:secureUninstall\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Backend_SwagImportExport_Bootstrap\\:\\:uninstall\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Backend_SwagImportExport_Bootstrap\\:\\:update\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Backend_SwagImportExport_Bootstrap\\:\\:updateDatabase\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Bootstrap.php
-
-		-
-			message: "#^Parameter \\#1 \\$json of function json_decode expects string, string\\|false given\\.$#"
-			count: 1
-			path: Bootstrap.php
-
-		-
-			message: "#^Parameter \\#3 \\$interval of method Shopware_Components_Plugin_Bootstrap\\:\\:createCronJob\\(\\) expects int, string given\\.$#"
-			count: 1
-			path: Bootstrap.php
-
-		-
-			message: "#^Parameter \\#4 \\$active of method Shopware_Components_Plugin_Bootstrap\\:\\:createCronJob\\(\\) expects int, true given\\.$#"
-			count: 1
-			path: Bootstrap.php
-
-		-
-			message: "#^Property Shopware_Plugins_Backend_SwagImportExport_Bootstrap\\:\\:\\$dataFactory \\(Shopware\\\\Components\\\\SwagImportExport\\\\Factories\\\\DataFactory\\) does not accept Enlight_Class\\.$#"
-			count: 1
-			path: Bootstrap.php
-
-		-
-			message: "#^Property Shopware_Plugins_Backend_SwagImportExport_Bootstrap\\:\\:\\$dataTransformerFactory \\(Shopware\\\\Components\\\\SwagImportExport\\\\Factories\\\\DataTransformerFactory\\) does not accept Enlight_Class\\.$#"
-			count: 1
-			path: Bootstrap.php
-
-		-
-			message: "#^Property Shopware_Plugins_Backend_SwagImportExport_Bootstrap\\:\\:\\$fileIOFactory \\(Shopware\\\\Components\\\\SwagImportExport\\\\Factories\\\\FileIOFactory\\) does not accept Enlight_Class\\.$#"
-			count: 1
-			path: Bootstrap.php
-
-		-
-			message: "#^Property Shopware_Plugins_Backend_SwagImportExport_Bootstrap\\:\\:\\$profileFactory \\(Shopware\\\\Components\\\\SwagImportExport\\\\Factories\\\\ProfileFactory\\) does not accept Enlight_Class\\.$#"
-			count: 1
-			path: Bootstrap.php
-
-		-
 			message: "#^Method Shopware\\\\Commands\\\\SwagImportExport\\\\ExportCommand\\:\\:configure\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Commands/SwagImportExport/ExportCommand.php
@@ -196,11 +26,6 @@ parameters:
 			path: Commands/SwagImportExport/ExportCommand.php
 
 		-
-			message: "#^Call to an undefined method Shopware_Components_Plugin_Namespace\\:\\:SwagImportExport\\(\\)\\.$#"
-			count: 1
-			path: Commands/SwagImportExport/ImportCommand.php
-
-		-
 			message: "#^Method Shopware\\\\Commands\\\\SwagImportExport\\\\ImportCommand\\:\\:configure\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Commands/SwagImportExport/ImportCommand.php
@@ -217,11 +42,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Commands\\\\SwagImportExport\\\\ImportCommand\\:\\:start\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Commands/SwagImportExport/ImportCommand.php
-
-		-
-			message: "#^Service \"swag_import_export\\.upload_path_provider\" is not registered in the container\\.$#"
 			count: 1
 			path: Commands/SwagImportExport/ImportCommand.php
 
@@ -1121,11 +941,6 @@ parameters:
 			path: Components/SwagImportExport/DataWorkflow.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DataWorkflow\\:\\:getUploadPathProvider\\(\\) should return Shopware\\\\Components\\\\SwagImportExport\\\\UploadPathProvider but returns object\\|null\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DataWorkflow.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\DataWorkflow\\:\\:import\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DataWorkflow.php
@@ -1166,7 +981,7 @@ parameters:
 			path: Components/SwagImportExport/DataWorkflow.php
 
 		-
-			message: "#^Parameter \\#1 \\$json of function json_decode expects string, array\\<Shopware\\\\CustomModels\\\\ImportExport\\\\Expression\\>\\|string given\\.$#"
+			message: "#^Parameter \\#1 \\$json of function json_decode expects string, array\\<Enlight_Config\\|Shopware\\\\Components\\\\SwagImportExport\\\\Profile\\\\Profile\\|Shopware\\\\CustomModels\\\\ImportExport\\\\Expression\\>\\|string given\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DataWorkflow.php
 
@@ -1182,11 +997,6 @@ parameters:
 
 		-
 			message: "#^Property Shopware\\\\Components\\\\SwagImportExport\\\\DataWorkflow\\:\\:\\$fileIO \\(Shopware\\\\Components\\\\SwagImportExport\\\\FileIO\\\\FileWriter\\) does not accept Shopware\\\\Components\\\\SwagImportExport\\\\FileIO\\\\FileReader\\|Shopware\\\\Components\\\\SwagImportExport\\\\FileIO\\\\FileWriter\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DataWorkflow.php
-
-		-
-			message: "#^Service \"swag_import_export\\.upload_path_provider\" is not registered in the container\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DataWorkflow.php
 
@@ -2461,17 +2271,7 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/ArticlesDbAdapter.php
 
 		-
-			message: "#^Property Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesDbAdapter\\:\\:\\$underscoreToCamelCaseService \\(Shopware\\\\Components\\\\SwagImportExport\\\\Service\\\\UnderscoreToCamelCaseServiceInterface\\) does not accept object\\|null\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/ArticlesDbAdapter.php
-
-		-
 			message: "#^Property Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesDbAdapter\\:\\:\\$unprocessedData type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/ArticlesDbAdapter.php
-
-		-
-			message: "#^Service \"swag_import_export\\.underscore_camelcase_service\" is not registered in the container\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/ArticlesDbAdapter.php
 
@@ -2666,17 +2466,7 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/ArticlesImagesDbAdapter.php
 
 		-
-			message: "#^Property Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesImagesDbAdapter\\:\\:\\$underscoreToCamelCaseService \\(Shopware\\\\Components\\\\SwagImportExport\\\\Service\\\\UnderscoreToCamelCaseServiceInterface\\) does not accept object\\|null\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/ArticlesImagesDbAdapter.php
-
-		-
 			message: "#^Property Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\ArticlesImagesDbAdapter\\:\\:\\$unprocessedData type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/ArticlesImagesDbAdapter.php
-
-		-
-			message: "#^Service \"swag_import_export\\.underscore_camelcase_service\" is not registered in the container\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/ArticlesImagesDbAdapter.php
 
@@ -3241,17 +3031,7 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/CategoriesDbAdapter.php
 
 		-
-			message: "#^Property Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\CategoriesDbAdapter\\:\\:\\$underscoreToCamelCaseService \\(Shopware\\\\Components\\\\SwagImportExport\\\\Service\\\\UnderscoreToCamelCaseServiceInterface\\) does not accept object\\|null\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/CategoriesDbAdapter.php
-
-		-
 			message: "#^Property Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\CategoriesDbAdapter\\:\\:\\$unprocessedData type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/CategoriesDbAdapter.php
-
-		-
-			message: "#^Service \"swag_import_export\\.underscore_camelcase_service\" is not registered in the container\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/CategoriesDbAdapter.php
 
@@ -3581,17 +3361,7 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/CustomerDbAdapter.php
 
 		-
-			message: "#^Property Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\CustomerDbAdapter\\:\\:\\$underscoreToCamelCaseService \\(Shopware\\\\Components\\\\SwagImportExport\\\\Service\\\\UnderscoreToCamelCaseServiceInterface\\) does not accept object\\|null\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/CustomerDbAdapter.php
-
-		-
 			message: "#^Result of \\|\\| is always false\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/CustomerDbAdapter.php
-
-		-
-			message: "#^Service \"swag_import_export\\.underscore_camelcase_service\" is not registered in the container\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/CustomerDbAdapter.php
 
@@ -3776,17 +3546,7 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/MainOrdersDbAdapter.php
 
 		-
-			message: "#^Property Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\MainOrdersDbAdapter\\:\\:\\$underscoreToCamelCaseService \\(Shopware\\\\Components\\\\SwagImportExport\\\\Service\\\\UnderscoreToCamelCaseServiceInterface\\) does not accept object\\|null\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/MainOrdersDbAdapter.php
-
-		-
 			message: "#^Property Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\MainOrdersDbAdapter\\:\\:\\$unprocessedData type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/MainOrdersDbAdapter.php
-
-		-
-			message: "#^Service \"swag_import_export\\.underscore_camelcase_service\" is not registered in the container\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/MainOrdersDbAdapter.php
 
@@ -4011,17 +3771,7 @@ parameters:
 			path: Components/SwagImportExport/DbAdapters/OrdersDbAdapter.php
 
 		-
-			message: "#^Property Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\OrdersDbAdapter\\:\\:\\$underscoreToCamelCaseService \\(Shopware\\\\Components\\\\SwagImportExport\\\\Service\\\\UnderscoreToCamelCaseServiceInterface\\) does not accept object\\|null\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/OrdersDbAdapter.php
-
-		-
 			message: "#^Property Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\OrdersDbAdapter\\:\\:\\$unprocessedData type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/SwagImportExport/DbAdapters/OrdersDbAdapter.php
-
-		-
-			message: "#^Service \"swag_import_export\\.underscore_camelcase_service\" is not registered in the container\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DbAdapters/OrdersDbAdapter.php
 
@@ -4216,17 +3966,7 @@ parameters:
 			path: Components/SwagImportExport/Factories/DataFactory.php
 
 		-
-			message: "#^Parameter \\#4 \\$uploadPathProvider of class Shopware\\\\Components\\\\SwagImportExport\\\\DataIO constructor expects Shopware\\\\Components\\\\SwagImportExport\\\\UploadPathProvider, object\\|null given\\.$#"
-			count: 1
-			path: Components/SwagImportExport/Factories/DataFactory.php
-
-		-
 			message: "#^Property Shopware\\\\Components\\\\SwagImportExport\\\\Factories\\\\DataFactory\\:\\:\\$sessionRepository with generic class Doctrine\\\\ORM\\\\EntityRepository does not specify its types\\: TEntityClass$#"
-			count: 1
-			path: Components/SwagImportExport/Factories/DataFactory.php
-
-		-
-			message: "#^Service \"swag_import_export\\.upload_path_provider\" is not registered in the container\\.$#"
 			count: 1
 			path: Components/SwagImportExport/Factories/DataFactory.php
 
@@ -4254,26 +3994,6 @@ parameters:
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\Factories\\\\DataTransformerFactory\\:\\:createValueConvertor\\(\\) has parameter \\$convertorType with no type specified\\.$#"
 			count: 1
 			path: Components/SwagImportExport/Factories/DataTransformerFactory.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\Factories\\\\FileIOFactory\\:\\:createFileReader\\(\\) should return Shopware\\\\Components\\\\SwagImportExport\\\\FileIO\\\\CsvFileReader\\|Shopware\\\\Components\\\\SwagImportExport\\\\FileIO\\\\XmlFileReader but returns object\\|null\\.$#"
-			count: 1
-			path: Components/SwagImportExport/Factories/FileIOFactory.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\Factories\\\\FileIOFactory\\:\\:createFileWriter\\(\\) should return Shopware\\\\Components\\\\SwagImportExport\\\\FileIO\\\\CsvFileWriter\\|Shopware\\\\Components\\\\SwagImportExport\\\\FileIO\\\\XmlFileWriter but returns object\\|null\\.$#"
-			count: 1
-			path: Components/SwagImportExport/Factories/FileIOFactory.php
-
-		-
-			message: "#^Service \"swag_import_export\\.csv_file_reader\" is not registered in the container\\.$#"
-			count: 1
-			path: Components/SwagImportExport/Factories/FileIOFactory.php
-
-		-
-			message: "#^Service \"swag_import_export\\.csv_file_writer\" is not registered in the container\\.$#"
-			count: 1
-			path: Components/SwagImportExport/Factories/FileIOFactory.php
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\Factories\\\\ProfileFactory\\:\\:createProfileModel\\(\\) has parameter \\$data with no type specified\\.$#"
@@ -4656,11 +4376,6 @@ parameters:
 			path: Components/SwagImportExport/Logger/Logger.php
 
 		-
-			message: "#^Parameter \\#1 \\$status of method Shopware\\\\CustomModels\\\\ImportExport\\\\Logger\\:\\:setStatus\\(\\) expects bool, string given\\.$#"
-			count: 1
-			path: Components/SwagImportExport/Logger/Logger.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\Logger\\\\LoggerInterface\\:\\:write\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Components/SwagImportExport/Logger/LoggerInterface.php
@@ -4676,11 +4391,6 @@ parameters:
 			path: Components/SwagImportExport/Logger/LoggerInterface.php
 
 		-
-			message: "#^Call to an undefined method Shopware_Components_Plugin_Namespace\\:\\:SwagImportExport\\(\\)\\.$#"
-			count: 1
-			path: Components/SwagImportExport/Profile/Profile.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\Profile\\\\Profile\\:\\:__construct\\(\\) has parameter \\$configNames with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/SwagImportExport/Profile/Profile.php
@@ -4691,7 +4401,7 @@ parameters:
 			path: Components/SwagImportExport/Profile/Profile.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\Profile\\\\Profile\\:\\:getConfig\\(\\) should return array\\<Shopware\\\\CustomModels\\\\ImportExport\\\\Expression\\>\\|string but returns array\\<int, mixed\\>\\.$#"
+			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\Profile\\\\Profile\\:\\:getConfig\\(\\) should return array\\<Enlight_Config\\|Shopware\\\\Components\\\\SwagImportExport\\\\Profile\\\\Profile\\|Shopware\\\\CustomModels\\\\ImportExport\\\\Expression\\>\\|string but returns iterable\\<Shopware\\\\CustomModels\\\\ImportExport\\\\Expression\\>\\|null\\.$#"
 			count: 1
 			path: Components/SwagImportExport/Profile/Profile.php
 
@@ -4781,7 +4491,7 @@ parameters:
 			path: Components/SwagImportExport/Service/AbstractImportExportService.php
 
 		-
-			message: "#^Parameter \\#1 \\$json of function json_decode expects string, array\\<Shopware\\\\CustomModels\\\\ImportExport\\\\Expression\\>\\|string given\\.$#"
+			message: "#^Parameter \\#1 \\$json of function json_decode expects string, array\\<Enlight_Config\\|Shopware\\\\Components\\\\SwagImportExport\\\\Profile\\\\Profile\\|Shopware\\\\CustomModels\\\\ImportExport\\\\Expression\\>\\|string given\\.$#"
 			count: 1
 			path: Components/SwagImportExport/Service/AbstractImportExportService.php
 
@@ -5111,7 +4821,7 @@ parameters:
 			path: Components/SwagImportExport/Session/Session.php
 
 		-
-			message: "#^Service \"swag_import_export\\.upload_path_provider\" is not registered in the container\\.$#"
+			message: "#^Parameter \\#1 \\$variable_representation of function unserialize expects string, string\\|null given\\.$#"
 			count: 1
 			path: Components/SwagImportExport/Session/Session.php
 
@@ -6546,11 +6256,6 @@ parameters:
 			path: Components/SwagImportExport/Utils/CommandHelper.php
 
 		-
-			message: "#^Call to an undefined method Shopware_Components_Plugin_Namespace\\:\\:SwagImportExport\\(\\)\\.$#"
-			count: 1
-			path: Components/SwagImportExport/Utils/CommandHelper.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\SwagImportExport\\\\Utils\\\\CommandHelper\\:\\:__construct\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/SwagImportExport/Utils/CommandHelper.php
@@ -6616,11 +6321,6 @@ parameters:
 			path: Components/SwagImportExport/Utils/CommandHelper.php
 
 		-
-			message: "#^Property Shopware\\\\Components\\\\SwagImportExport\\\\Utils\\\\CommandHelper\\:\\:\\$logger \\(Shopware\\\\Components\\\\SwagImportExport\\\\Logger\\\\Logger\\) does not accept object\\|null\\.$#"
-			count: 1
-			path: Components/SwagImportExport/Utils/CommandHelper.php
-
-		-
 			message: "#^Property Shopware\\\\Components\\\\SwagImportExport\\\\Utils\\\\CommandHelper\\:\\:\\$productStream \\(int\\) does not accept int\\|null\\.$#"
 			count: 1
 			path: Components/SwagImportExport/Utils/CommandHelper.php
@@ -6628,16 +6328,6 @@ parameters:
 		-
 			message: "#^Property Shopware\\\\Components\\\\SwagImportExport\\\\Utils\\\\CommandHelper\\:\\:\\$sessionId \\(int\\) does not accept null\\.$#"
 			count: 2
-			path: Components/SwagImportExport/Utils/CommandHelper.php
-
-		-
-			message: "#^Service \"swag_import_export\\.logger\" is not registered in the container\\.$#"
-			count: 1
-			path: Components/SwagImportExport/Utils/CommandHelper.php
-
-		-
-			message: "#^Service \"swag_import_export\\.upload_path_provider\" is not registered in the container\\.$#"
-			count: 1
 			path: Components/SwagImportExport/Utils/CommandHelper.php
 
 		-
@@ -7256,6 +6946,11 @@ parameters:
 			path: Controllers/Backend/SwagImportExport.php
 
 		-
+			message: "#^Cannot call method getId\\(\\) on Shopware\\\\CustomModels\\\\ImportExport\\\\Profile\\|null\\.$#"
+			count: 1
+			path: Controllers/Backend/SwagImportExportConversion.php
+
+		-
 			message: "#^Method Shopware_Controllers_Backend_SwagImportExportConversion\\:\\:createConversionAction\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Controllers/Backend/SwagImportExportConversion.php
@@ -7311,26 +7006,6 @@ parameters:
 			path: Controllers/Backend/SwagImportExportImport.php
 
 		-
-			message: "#^Call to an undefined method Shopware_Components_Plugin_Namespace\\:\\:SwagImportExport\\(\\)\\.$#"
-			count: 1
-			path: Controllers/Backend/SwagImportExportProfile.php
-
-		-
-			message: "#^Call to an undefined method object\\:\\:getDefaultFields\\(\\)\\.$#"
-			count: 2
-			path: Controllers/Backend/SwagImportExportProfile.php
-
-		-
-			message: "#^Call to an undefined method object\\:\\:getDefaultFieldsName\\(\\)\\.$#"
-			count: 1
-			path: Controllers/Backend/SwagImportExportProfile.php
-
-		-
-			message: "#^Call to an undefined method object\\:\\:getFieldType\\(\\)\\.$#"
-			count: 1
-			path: Controllers/Backend/SwagImportExportProfile.php
-
-		-
 			message: "#^Cannot access offset 'parentId' on array\\|bool\\.$#"
 			count: 2
 			path: Controllers/Backend/SwagImportExportProfile.php
@@ -7352,11 +7027,6 @@ parameters:
 
 		-
 			message: "#^Dead catch \\- Doctrine\\\\DBAL\\\\DBALException is never thrown in the try block\\.$#"
-			count: 2
-			path: Controllers/Backend/SwagImportExportProfile.php
-
-		-
-			message: "#^If condition is always true\\.$#"
 			count: 2
 			path: Controllers/Backend/SwagImportExportProfile.php
 
@@ -7431,74 +7101,9 @@ parameters:
 			path: Controllers/Frontend/SwagImportExport.php
 
 		-
-			message: "#^Method Shopware\\\\CustomModels\\\\ImportExport\\\\Expression\\:\\:setId\\(\\) has no return type specified\\.$#"
+			message: "#^Method Shopware\\\\CustomModels\\\\ImportExport\\\\Session\\:\\:getProfile\\(\\) should return Shopware\\\\CustomModels\\\\ImportExport\\\\Profile but returns Shopware\\\\CustomModels\\\\ImportExport\\\\Profile\\|null\\.$#"
 			count: 1
-			path: Models/ImportExport/Expression.php
-
-		-
-			message: "#^Property Shopware\\\\CustomModels\\\\ImportExport\\\\Expression\\:\\:\\$profile \\(Shopware\\\\CustomModels\\\\ImportExport\\\\Profile\\) does not accept Shopware\\\\CustomModels\\\\ImportExport\\\\Profile\\|null\\.$#"
-			count: 1
-			path: Models/ImportExport/Expression.php
-
-		-
-			message: "#^Method Shopware\\\\CustomModels\\\\ImportExport\\\\Logger\\:\\:setSession\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Models/ImportExport/Logger.php
-
-		-
-			message: "#^Method Shopware\\\\CustomModels\\\\ImportExport\\\\Profile\\:\\:setBaseProfile\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Models/ImportExport/Profile.php
-
-		-
-			message: "#^Method Shopware\\\\CustomModels\\\\ImportExport\\\\Profile\\:\\:setDefault\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Models/ImportExport/Profile.php
-
-		-
-			message: "#^Method Shopware\\\\CustomModels\\\\ImportExport\\\\Profile\\:\\:setDescription\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Models/ImportExport/Profile.php
-
-		-
-			message: "#^Method Shopware\\\\CustomModels\\\\ImportExport\\\\Profile\\:\\:setHidden\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Models/ImportExport/Profile.php
-
-		-
-			message: "#^Method Shopware\\\\CustomModels\\\\ImportExport\\\\Profile\\:\\:setId\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Models/ImportExport/Profile.php
-
-		-
-			message: "#^Method Shopware\\\\CustomModels\\\\ImportExport\\\\Profile\\:\\:setName\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Models/ImportExport/Profile.php
-
-		-
-			message: "#^Method Shopware\\\\CustomModels\\\\ImportExport\\\\Profile\\:\\:setTree\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Models/ImportExport/Profile.php
-
-		-
-			message: "#^Method Shopware\\\\CustomModels\\\\ImportExport\\\\Profile\\:\\:setType\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Models/ImportExport/Profile.php
-
-		-
-			message: "#^Method Shopware\\\\CustomModels\\\\ImportExport\\\\Session\\:\\:setId\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Models/ImportExport/Session.php
-
-		-
-			message: "#^Property Shopware\\\\CustomModels\\\\ImportExport\\\\Session\\:\\:\\$logs with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
-			count: 1
-			path: Models/ImportExport/Session.php
-
-		-
-			message: "#^Property Shopware\\\\CustomModels\\\\ImportExport\\\\Session\\:\\:\\$profile \\(Shopware\\\\CustomModels\\\\ImportExport\\\\Profile\\) does not accept Shopware\\\\CustomModels\\\\ImportExport\\\\Profile\\|null\\.$#"
-			count: 1
-			path: Models/ImportExport/Session.php
+			path: CustomModels/ImportExport/Session.php
 
 		-
 			message: "#^Method Shopware\\\\Setup\\\\SwagImportExport\\\\DefaultProfiles\\\\AddressProfile\\:\\:getAdapter\\(\\) has no return type specified\\.$#"
@@ -8791,16 +8396,6 @@ parameters:
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/AddressExportTest.php
 
 		-
-			message: "#^Property SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\AddressExportTest\\:\\:\\$uploadPathProvider \\(Shopware\\\\Components\\\\SwagImportExport\\\\UploadPathProvider\\) does not accept object\\|null\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/AddressExportTest.php
-
-		-
-			message: "#^Service \"swag_import_export\\.upload_path_provider\" is not registered in the container\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/AddressExportTest.php
-
-		-
 			message: "#^Cannot access offset string on array\\|false\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticleExportTest.php
@@ -8956,16 +8551,6 @@ parameters:
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticleExportTest.php
 
 		-
-			message: "#^Property SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\ArticleExportTest\\:\\:\\$uploadPathProvider \\(Shopware\\\\Components\\\\SwagImportExport\\\\UploadPathProvider\\) does not accept object\\|null\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticleExportTest.php
-
-		-
-			message: "#^Service \"swag_import_export\\.upload_path_provider\" is not registered in the container\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticleExportTest.php
-
-		-
 			message: "#^Cannot access offset string on array\\|false\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticlePricesExportTest.php
@@ -9036,16 +8621,6 @@ parameters:
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticlePricesExportTest.php
 
 		-
-			message: "#^Property SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\ArticlePricesExportTest\\:\\:\\$uploadPathProvider \\(Shopware\\\\Components\\\\SwagImportExport\\\\UploadPathProvider\\) does not accept object\\|null\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticlePricesExportTest.php
-
-		-
-			message: "#^Service \"swag_import_export\\.upload_path_provider\" is not registered in the container\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticlePricesExportTest.php
-
-		-
 			message: "#^Cannot access offset string on array\\|false\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticleTranslationExportExportTest.php
@@ -9112,16 +8687,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#2 \\$values of function array_combine expects array, array\\|null given\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticleTranslationExportExportTest.php
-
-		-
-			message: "#^Property SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\ArticleTranslationExportExportTest\\:\\:\\$uploadPathProvider \\(Shopware\\\\Components\\\\SwagImportExport\\\\UploadPathProvider\\) does not accept object\\|null\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticleTranslationExportExportTest.php
-
-		-
-			message: "#^Service \"swag_import_export\\.upload_path_provider\" is not registered in the container\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticleTranslationExportExportTest.php
 
@@ -9281,16 +8846,6 @@ parameters:
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticlesInstockExportTest.php
 
 		-
-			message: "#^Property SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\ArticlesInstockExportTest\\:\\:\\$uploadPathProvider \\(Shopware\\\\Components\\\\SwagImportExport\\\\UploadPathProvider\\) does not accept object\\|null\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticlesInstockExportTest.php
-
-		-
-			message: "#^Service \"swag_import_export\\.upload_path_provider\" is not registered in the container\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticlesInstockExportTest.php
-
-		-
 			message: "#^Cannot access offset string on array\\|false\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/CategoryExportTest.php
@@ -9357,16 +8912,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#2 \\$values of function array_combine expects array, array\\|null given\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/CategoryExportTest.php
-
-		-
-			message: "#^Property SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\CategoryExportTest\\:\\:\\$uploadPathProvider \\(Shopware\\\\Components\\\\SwagImportExport\\\\UploadPathProvider\\) does not accept object\\|null\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/CategoryExportTest.php
-
-		-
-			message: "#^Service \"swag_import_export\\.upload_path_provider\" is not registered in the container\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/CategoryExportTest.php
 
@@ -9441,16 +8986,6 @@ parameters:
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/CustomerExportTest.php
 
 		-
-			message: "#^Property SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\CustomerExportTest\\:\\:\\$uploadPathProvider \\(Shopware\\\\Components\\\\SwagImportExport\\\\UploadPathProvider\\) does not accept object\\|null\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/CustomerExportTest.php
-
-		-
-			message: "#^Service \"swag_import_export\\.upload_path_provider\" is not registered in the container\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/CustomerExportTest.php
-
-		-
 			message: "#^Cannot access offset string on array\\|false\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/NewsletterExportTest.php
@@ -9512,16 +9047,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#2 \\$values of function array_combine expects array, array\\|null given\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/NewsletterExportTest.php
-
-		-
-			message: "#^Property SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\NewsletterExportTest\\:\\:\\$uploadPathProvider \\(Shopware\\\\Components\\\\SwagImportExport\\\\UploadPathProvider\\) does not accept object\\|null\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/NewsletterExportTest.php
-
-		-
-			message: "#^Service \"swag_import_export\\.upload_path_provider\" is not registered in the container\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/NewsletterExportTest.php
 
@@ -9656,16 +9181,6 @@ parameters:
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/OrderExportTest.php
 
 		-
-			message: "#^Property SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\OrderExportTest\\:\\:\\$uploadPathProvider \\(Shopware\\\\Components\\\\SwagImportExport\\\\UploadPathProvider\\) does not accept object\\|null\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/OrderExportTest.php
-
-		-
-			message: "#^Service \"swag_import_export\\.upload_path_provider\" is not registered in the container\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/OrderExportTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Service\\\\AutoImportServiceTest\\:\\:deleteFilesAfter\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Functional/Service/AutoImportServiceTest.php
@@ -9711,11 +9226,6 @@ parameters:
 			path: Tests/Functional/Service/AutoImportServiceTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Service\\\\ProfileServiceTest\\:\\:getProfileService\\(\\) should return Shopware\\\\Components\\\\SwagImportExport\\\\Service\\\\ProfileService but returns object\\|null\\.$#"
-			count: 1
-			path: Tests/Functional/Service/ProfileServiceTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Service\\\\ProfileServiceTest\\:\\:testProfileExportShouldGiveCorrectResult\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Functional/Service/ProfileServiceTest.php
@@ -9743,16 +9253,6 @@ parameters:
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Service\\\\ProfileServiceTest\\:\\:testProfileImportShouldThrowExceptionWrongFiletype\\(\\) has no return type specified\\.$#"
 			count: 1
-			path: Tests/Functional/Service/ProfileServiceTest.php
-
-		-
-			message: "#^Service \"swag_import_export\\.profile_service\" is not registered in the container\\.$#"
-			count: 1
-			path: Tests/Functional/Service/ProfileServiceTest.php
-
-		-
-			message: "#^Service \"swag_import_export\\.upload_path_provider\" is not registered in the container\\.$#"
-			count: 5
 			path: Tests/Functional/Service/ProfileServiceTest.php
 
 		-
@@ -9949,11 +9449,6 @@ parameters:
 			message: "#^Property SwagImportExport\\\\Tests\\\\Helper\\\\DbAdapterTestHelper\\:\\:\\$yamlFile has no type specified\\.$#"
 			count: 1
 			path: Tests/Helper/DbAdapterTestHelper.php
-
-		-
-			message: "#^Call to an undefined method Shopware_Components_Plugin_Namespace\\:\\:SwagImportExport\\(\\)\\.$#"
-			count: 1
-			path: Tests/Helper/ImportExportTestHelper.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Helper\\\\TestSessionStorage\\:\\:setBags\\(\\) has no return type specified\\.$#"
@@ -10561,16 +10056,6 @@ parameters:
 			path: Tests/Integration/TestTraits/ExportControllerTraitTest.php
 
 		-
-			message: "#^Property SwagImportExport\\\\Tests\\\\Integration\\\\ExportControllerTraitTest\\:\\:\\$uploadPathProvider \\(Shopware\\\\Components\\\\SwagImportExport\\\\UploadPathProvider\\) does not accept object\\|null\\.$#"
-			count: 1
-			path: Tests/Integration/TestTraits/ExportControllerTraitTest.php
-
-		-
-			message: "#^Service \"swag_import_export\\.upload_path_provider\" is not registered in the container\\.$#"
-			count: 1
-			path: Tests/Integration/TestTraits/ExportControllerTraitTest.php
-
-		-
 			message: "#^Method Tests\\\\Shopware\\\\ImportExport\\\\ArticlesDbAdapterTest\\:\\:getProductDataResult\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Shopware/ImportExport/ArticlesDbAdapterTest.php
@@ -10741,11 +10226,6 @@ parameters:
 			path: Tests/Shopware/ImportExport/DataFlattenTransformerTest.php
 
 		-
-			message: "#^Method Tests\\\\Shopware\\\\ImportExport\\\\DataIOTest\\:\\:getLogger\\(\\) should return Shopware\\\\Components\\\\SwagImportExport\\\\Logger\\\\Logger but returns object\\|null\\.$#"
-			count: 1
-			path: Tests/Shopware/ImportExport/DataIOTest.php
-
-		-
 			message: "#^Method Tests\\\\Shopware\\\\ImportExport\\\\DataIOTest\\:\\:getPostData\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Shopware/ImportExport/DataIOTest.php
@@ -10757,11 +10237,6 @@ parameters:
 
 		-
 			message: "#^Method Tests\\\\Shopware\\\\ImportExport\\\\DataIOTest\\:\\:testPreloadRecordIds\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Shopware/ImportExport/DataIOTest.php
-
-		-
-			message: "#^Service \"swag_import_export\\.logger\" is not registered in the container\\.$#"
 			count: 1
 			path: Tests/Shopware/ImportExport/DataIOTest.php
 

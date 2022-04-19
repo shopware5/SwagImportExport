@@ -52,6 +52,7 @@ class SwagImportExport extends Plugin
      */
     public function build(ContainerBuilder $container): void
     {
+        $container->setParameter('swag_import_export.plugin_dir', $this->getPath());
         $container->addCompilerPass(new HookablePass());
 
         parent::build($container);
@@ -181,7 +182,7 @@ class SwagImportExport extends Plugin
         }
 
         if (!\file_exists($importCronPath . '.htaccess')) {
-            \copy($this->container->getParameter('swag_import_export.plugin_dir') . 'Setup/SwagImportExport/template', $importCronPath . '/.htaccess');
+            \copy($this->getPath() . '/Setup/SwagImportExport/template', $importCronPath . '/.htaccess');
         }
 
         $importExportPath = Shopware()->DocPath() . 'files/import_export/';
@@ -190,7 +191,7 @@ class SwagImportExport extends Plugin
         }
 
         if (!\file_exists($importExportPath . '.htaccess')) {
-            \copy($this->container->getParameter('swag_import_export.plugin_dir') . 'Setup/SwagImportExport/template', $importExportPath . '/.htaccess');
+            \copy($this->getPath() . '/Setup/SwagImportExport/template', $importExportPath . '/.htaccess');
         }
     }
 

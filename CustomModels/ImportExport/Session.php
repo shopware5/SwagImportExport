@@ -32,7 +32,7 @@ class Session extends ModelEntity
     protected $id;
 
     /**
-     * @var Profile
+     * @var ?Profile
      *
      * @ORM\ManyToOne(targetEntity="Shopware\CustomModels\ImportExport\Profile", inversedBy="sessions", cascade={"persist", "refresh"})
      * @ORM\JoinColumn(name="profile_id", onDelete="CASCADE")
@@ -112,7 +112,7 @@ class Session extends ModelEntity
     protected $createdAt;
 
     /**
-     * @var Collection<Logger>
+     * @var Collection<string, Logger>
      *
      * @ORM\OneToMany(targetEntity="Shopware\CustomModels\ImportExport\Logger", mappedBy="session")
      */
@@ -197,11 +197,11 @@ class Session extends ModelEntity
     /**
      * Sets the profile object.
      *
-     * @param Profile $profile
+     * @param ?Profile $profile
      *
      * @return Session
      */
-    public function setProfile(Profile $profile = null)
+    public function setProfile(?Profile $profile = null)
     {
         $this->profile = $profile;
 

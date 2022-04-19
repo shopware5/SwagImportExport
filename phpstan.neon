@@ -25,14 +25,6 @@ parameters:
         - # Mocks with test data
             message: '#Method SwagImportExport\\Tests\\Functional\\Components\\SwagImportExport\\TransformerChainMock::#'
             path: Tests/Functional/Components/SwagImportExport/DataWorkflowTest.php
-        - # Should be fixed, once the plugin is moved to new plugin system
-            message: '#Property .*repo|Repo.* does not accept Shopware\\Components\\Model\\ModelRepository<.*>#'
-            paths:
-                - Components/SwagImportExport/Logger/Logger.php
         -
             message: '#Method Shopware\\Components\\SwagImportExport\\DbAdapters\\TranslationsDbAdapter::getRepository\(\) return type with generic class Shopware\\Components\\Model\\ModelRepository does not specify its types: TEntityClass#'
             path: Components/SwagImportExport/DbAdapters/TranslationsDbAdapter.php
-        - # Should be fixed, once the plugin is moved to new plugin system
-            message: "#Semantical Error#"
-            paths:
-                - Components/SwagImportExport/Utils/TreeHelper.php

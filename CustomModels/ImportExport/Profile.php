@@ -31,14 +31,14 @@ class Profile extends ModelEntity
     protected $id;
 
     /**
-     * @var Collection<Expression>
+     * @var Collection<string|null, Expression>
      *
      * @ORM\OneToMany(targetEntity="Shopware\CustomModels\ImportExport\Expression", mappedBy="profile")
      */
     protected $expressions;
 
     /**
-     * @var iterable<Session>
+     * @var Collection<string|null, Session>
      *
      * @ORM\OneToMany(targetEntity="Shopware\CustomModels\ImportExport\Session", mappedBy="profile")
      */

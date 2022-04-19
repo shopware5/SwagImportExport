@@ -255,7 +255,7 @@ class Session
     }
 
     /**
-     * @return int
+     * @return ?int
      */
     public function getSessionPosition()
     {

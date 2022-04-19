@@ -13,9 +13,15 @@ use Enlight_Template_Manager;
 
 class BackendControllerSubscriber implements SubscriberInterface
 {
-    private Enlight_Template_Manager $template;
+    /**
+     * @var Enlight_Template_Manager
+     */
+    private $template;
 
-    private string $pluginDirectory;
+    /**
+     * @var string
+     */
+    private $pluginDirectory;
 
     public function __construct(string $pluginDirectory, Enlight_Template_Manager $template)
     {

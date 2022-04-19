@@ -46,7 +46,10 @@ class ImportCommand extends ShopwareCommand
      */
     protected $sessionId;
 
-    private ProfileFactory $profileFactory;
+    /**
+     * @var ProfileFactory
+     */
+    private $profileFactory;
 
     public function __construct(ProfileFactory $profileFactory)
     {
