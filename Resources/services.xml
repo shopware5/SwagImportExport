@@ -162,6 +162,10 @@
             <tag name="import_export.proxyable"/>
         </service>
 
+        <service id="Shopware\Components\SwagImportExport\DataManagers\ArticlePriceDataManager" public="true">
+            <tag name="import_export.proxyable"/>
+        </service>
+
         <service id="Shopware\Components\SwagImportExport\DbalHelper">
             <argument type="service" id="dbal_connection"/>
             <argument type="service" id="models"/>

@@ -63,7 +63,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
 
     public function __construct()
     {
-        $this->dataManager = new ArticlePriceDataManager();
+        $this->dataManager = Shopware()->Container()->get(ArticlePriceDataManager::class);
         $this->validator = new ArticlePriceValidator();
         $this->manager = Shopware()->Models();
     }
