@@ -49,27 +49,13 @@ class ConfiguratorWriter
     public function __construct(
         DbalHelper $dbalHelper,
         Connection $connection,
-        \Enlight_Components_Db_Adapter_Pdo_Mysql $db,
-        ConfiguratorValidator $configuratorValidator
+        \Enlight_Components_Db_Adapter_Pdo_Mysql $db
     ) {
         $this->dbalHelper = $dbalHelper;
         $this->connection = $connection;
         $this->sets = $this->getSets();
         $this->db = $db;
-        $this->configuratorValidator = $configuratorValidator;
-    }
-
-    /**
-     * @return ConfiguratorWriter
-     */
-    public static function createFromGlobalSingleton()
-    {
-        return new ConfiguratorWriter(
-            DbalHelper::create(),
-            Shopware()->Container()->get('dbal_connection'),
-            Shopware()->Container()->get('db'),
-            new ConfiguratorValidator()
-        );
+        $this->configuratorValidator = new ConfiguratorValidator();
     }
 
     /**
