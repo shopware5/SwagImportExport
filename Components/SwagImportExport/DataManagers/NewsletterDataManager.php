@@ -8,13 +8,14 @@
 
 namespace Shopware\Components\SwagImportExport\DataManagers;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Shopware\Components\SwagImportExport\DataType\NewsletterDataType;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Models\Newsletter\Group;
 use Shopware\Models\Newsletter\Repository;
 
-class NewsletterDataManager extends DataManager
+class NewsletterDataManager extends DataManager implements \Enlight_Hook
 {
     /**
      * @var \Shopware_Components_Config
@@ -29,10 +30,12 @@ class NewsletterDataManager extends DataManager
     /**
      * initialises the class properties
      */
-    public function __construct()
-    {
-        $this->config = Shopware()->Config();
-        $this->groupRepository = Shopware()->Models()->getRepository(Group::class);
+    public function __construct(
+        \Shopware_Components_Config $config,
+        EntityManagerInterface $entityManager
+    ) {
+        $this->groupRepository = $entityManager->getRepository(Group::class);
+        $this->config = $config;
     }
 
     /**

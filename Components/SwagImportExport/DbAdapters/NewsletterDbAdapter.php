@@ -72,7 +72,7 @@ class NewsletterDbAdapter implements DataDbAdapter
     {
         $this->manager = Shopware()->Container()->get('models');
         $this->validator = new NewsletterValidator();
-        $this->dataManager = new NewsletterDataManager();
+        $this->dataManager = Shopware()->Container()->get(NewsletterDataManager::class);
         $this->db = Shopware()->Db();
         $this->errorMode = Shopware()->Config()->get('SwagImportExportErrorMode');
     }

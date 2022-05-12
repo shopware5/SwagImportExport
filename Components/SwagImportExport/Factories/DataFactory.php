@@ -234,10 +234,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
      */
     protected function getNewsletterDataManager()
     {
-        $proxyAdapter = Shopware()->Hooks()
-            ->getProxy(NewsletterDataManager::class);
-
-        return new $proxyAdapter();
+        return Shopware()->Container()->get(NewsletterDataManager::class);
     }
 
     /**

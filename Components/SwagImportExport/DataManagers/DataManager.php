@@ -8,7 +8,7 @@
 
 namespace Shopware\Components\SwagImportExport\DataManagers;
 
-class DataManager
+abstract class DataManager
 {
     /**
      * Return fields which should be set by default
