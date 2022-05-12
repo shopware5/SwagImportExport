@@ -8,7 +8,7 @@
 
 namespace Shopware\Components\SwagImportExport\DataManagers;
 
-class ArticlePriceDataManager
+class ArticlePriceDataManager implements \Enlight_Hook
 {
     /**
      * Define which field should be set by default

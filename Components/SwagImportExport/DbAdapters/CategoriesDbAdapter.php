@@ -80,7 +80,7 @@ class CategoriesDbAdapter implements DataDbAdapter
     {
         $this->modelManager = Shopware()->Container()->get('models');
         $this->repository = $this->modelManager->getRepository(Category::class);
-        $this->dataManager = new CategoriesDataManager();
+        $this->dataManager = Shopware()->Container()->get(CategoriesDataManager::class);
         $this->validator = new CategoryValidator();
         $this->db = Shopware()->Db();
         $this->underscoreToCamelCaseService = Shopware()->Container()->get('swag_import_export.underscore_camelcase_service');

@@ -210,10 +210,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
      */
     protected function getCategoryDataManager()
     {
-        $proxyAdapter = Shopware()->Hooks()
-            ->getProxy(CategoriesDataManager::class);
-
-        return new $proxyAdapter();
+        return Shopware()->Container()->get(CategoriesDataManager::class);
     }
 
     /**

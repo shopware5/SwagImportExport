@@ -10,7 +10,7 @@ namespace Shopware\Components\SwagImportExport\DataManagers;
 
 use Shopware\Components\SwagImportExport\DataType\CategoryDataType;
 
-class CategoriesDataManager extends DataManager
+class CategoriesDataManager extends DataManager implements \Enlight_Hook
 {
     /**
      * @return array
