@@ -118,5 +118,7 @@
             <argument type="service" id="models"/>
             <argument type="service" id="events"/>
         </service>
+
+        <service id="Shopware\Components\SwagImportExport\Utils\SnippetsHelper"/>
     </services>
 </container>

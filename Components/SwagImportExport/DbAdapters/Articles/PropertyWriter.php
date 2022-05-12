@@ -38,16 +38,6 @@ class PropertyWriter
     private $db;
 
     /**
-     * @var array<string, int>
-     */
-    private $groups;
-
-    /**
-     * @var array
-     */
-    private $options;
-
-    /**
      * @var SnippetsHelper
      */
     private $snippetsHelper;
@@ -62,22 +52,6 @@ class PropertyWriter
         $this->connection = $connection;
         $this->db = $db;
         $this->snippetsHelper = $snippetsHelper;
-
-        $this->groups = $this->getFilterGroups();
-        $this->options = $this->getOptions();
-    }
-
-    /**
-     * @return PropertyWriter
-     */
-    public static function createFromGlobalSingleton()
-    {
-        return new PropertyWriter(
-            DbalHelper::create(),
-            Shopware()->Container()->get('dbal_connection'),
-            Shopware()->Container()->get('db'),
-            new SnippetsHelper()
-        );
     }
 
     /**
@@ -213,7 +187,7 @@ class PropertyWriter
      */
     private function getFilterGroupIdByNameFromCacheProperty($name)
     {
-        return $this->groups[$name] ?? null;
+        return $this->getFilterGroups()[$name] ?? null;
     }
 
     /**
@@ -233,7 +207,7 @@ class PropertyWriter
      */
     private function getOptionByName($name)
     {
-        return $this->options[$name];
+        return $this->getOptions()[$name];
     }
 
     /**
@@ -287,9 +261,7 @@ class PropertyWriter
             'filterable' => !empty($propertyData['propertyOptionFilterable']) ? 1 : 0,
         ];
 
-        $this->options[$optionName] = $this->createElement(Option::class, $optionData);
-
-        return $this->options[$optionName];
+        return $this->createElement(Option::class, $optionData);
     }
 
     /**
@@ -319,10 +291,7 @@ class PropertyWriter
             'name' => $groupName,
         ];
 
-        $groupId = $this->createElement(Group::class, $groupData);
-        $this->groups[$groupName] = $groupId;
-
-        return $groupId;
+        return $this->createElement(Group::class, $groupData);
     }
 
     /**

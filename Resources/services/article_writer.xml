@@ -33,5 +33,12 @@
             <argument type="service" id="Shopware\Components\SwagImportExport\DbalHelper"/>
             <argument type="service" id="Shopware\Components\SwagImportExport\DataManagers\Articles\PriceDataManager"/>
         </service>
+
+        <service id="Shopware\Components\SwagImportExport\DbAdapters\Articles\PropertyWriter" public="true">
+            <argument type="service" id="Shopware\Components\SwagImportExport\DbalHelper"/>
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="db"/>
+            <argument type="service" id="Shopware\Components\SwagImportExport\Utils\SnippetsHelper"/>
+        </service>
     </services>
 </container>

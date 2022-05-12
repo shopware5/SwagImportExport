@@ -38,7 +38,7 @@ class PropertyWriterTest extends TestCase
 
     public function testWriteShouldReturnNullIfNoPropertiesWereGiven()
     {
-        $propertyWriter = $this->createPropertyWriterAdapter();
+        $propertyWriter = $this->getPropertyWriterAdapter();
         $propertyValues = null;
 
         $result = $propertyWriter->writeUpdateCreatePropertyGroupsFilterAndValues(
@@ -51,7 +51,7 @@ class PropertyWriterTest extends TestCase
 
     public function testWriteShouldNotCreateNewGroupWithExistingArticleAndExistingProperties()
     {
-        $propertyWriter = $this->createPropertyWriterAdapter();
+        $propertyWriter = $this->getPropertyWriterAdapter();
         $importData = [
             'articleId' => self::ARTICLE_ID_WITH_PROPERTIES,
             'propertyGroupName' => self::NOT_EXISTING_FILTER_GROUP_NAME,
@@ -77,7 +77,7 @@ class PropertyWriterTest extends TestCase
 
     public function testWriteShouldUpdateGroupRelations()
     {
-        $propertyWriter = $this->createPropertyWriterAdapter();
+        $propertyWriter = $this->getPropertyWriterAdapter();
         $expectedMinId = 0;
         $importData = [
             [
@@ -106,7 +106,7 @@ class PropertyWriterTest extends TestCase
 
     public function testWriteShouldCreateValue()
     {
-        $propertyWriter = $this->createPropertyWriterAdapter();
+        $propertyWriter = $this->getPropertyWriterAdapter();
         $importData = [
             [
                 'articleId' => self::ARTICLE_ID_WITHOUT_PROPERTIES,
@@ -134,7 +134,7 @@ class PropertyWriterTest extends TestCase
 
     public function testWriteShouldCreateOption()
     {
-        $propertyWriter = $this->createPropertyWriterAdapter();
+        $propertyWriter = $this->getPropertyWriterAdapter();
         $importData = [
             [
                 'articleId' => self::ARTICLE_ID_WITHOUT_PROPERTIES,
@@ -162,7 +162,7 @@ class PropertyWriterTest extends TestCase
 
     public function testWriteShouldThrowExceptionWithEmptyPropertyOptionName()
     {
-        $propertyWriter = $this->createPropertyWriterAdapter();
+        $propertyWriter = $this->getPropertyWriterAdapter();
         $importData = [
             [
                 'articleId' => self::ARTICLE_ID_WITHOUT_PROPERTIES,
@@ -182,7 +182,7 @@ class PropertyWriterTest extends TestCase
 
     public function testWriteShouldCreateValueRelation()
     {
-        $propertyWriter = $this->createPropertyWriterAdapter();
+        $propertyWriter = $this->getPropertyWriterAdapter();
         $importData = [
             [
                 'articleId' => self::ARTICLE_ID_WITHOUT_PROPERTIES,
@@ -209,7 +209,7 @@ class PropertyWriterTest extends TestCase
 
     public function testWriteShouldCreateOptionRelation()
     {
-        $propertyWriter = $this->createPropertyWriterAdapter();
+        $propertyWriter = $this->getPropertyWriterAdapter();
         $importData = [
             [
                 'articleId' => self::ARTICLE_ID_WITHOUT_PROPERTIES,
@@ -236,7 +236,7 @@ class PropertyWriterTest extends TestCase
 
     public function testWriteShouldCreateGroup()
     {
-        $propertyWriter = $this->createPropertyWriterAdapter();
+        $propertyWriter = $this->getPropertyWriterAdapter();
         $importData = [
             [
                 'propertyGroupName' => self::NOT_EXISTING_FILTER_GROUP_NAME,
@@ -264,8 +264,8 @@ class PropertyWriterTest extends TestCase
     /**
      * @return PropertyWriter
      */
-    private function createPropertyWriterAdapter()
+    private function getPropertyWriterAdapter()
     {
-        return PropertyWriter::createFromGlobalSingleton();
+        return Shopware()->Container()->get(PropertyWriter::class);
     }
 }
