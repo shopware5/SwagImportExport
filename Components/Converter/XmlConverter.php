@@ -61,23 +61,25 @@ class XmlConverter
                     unset($item['_attributes'], $item['_value']);
                 }
             }
-            if (empty($item)) {
+            if ($this->isEmpty($item)) {
                 $ret .= "$pad<$key$attributes></$key>{$this->sSettings['newline']}";
             } elseif (\is_array($item)) {
                 if (\is_numeric(\key($item))) {
                     $ret .= $this->_encode($item, $pos, $key);
                 } else {
-                    $ret .= "$pad<$key$attributes>{$this->sSettings['newline']}" . $this->_encode(
-                        $item,
-                        $pos + 1
-                    ) . "$pad</$key>{$this->sSettings['newline']}";
+                    $ret .= "$pad<$key$attributes>{$this->sSettings['newline']}"
+                        . $this->_encode($item, $pos + 1)
+                        . "$pad</$key>{$this->sSettings['newline']}";
                 }
             } else {
-                if (\preg_match('#<|>|&(?<!amp;)#', $item)) {
-                    //$item = str_replace("<![CDATA[", "&lt;![CDATA[", $item);
+                if ($this->hasSpecialCharacters($item)) {
                     $item = \str_replace(']]>', ']]]]><![CDATA[>', $item);
                     $ret .= "$pad<$key$attributes><![CDATA[" . $item . "]]></$key>{$this->sSettings['newline']}";
                 } else {
+                    if ($item === false) {
+                        $item = 0;
+                    }
+
                     $ret .= "$pad<$key$attributes>" . $item . "</$key>{$this->sSettings['newline']}";
                 }
             }
@@ -301,5 +303,23 @@ class XmlConverter
             $array[$valuename] = $array['_value'];
             unset($array['_value']);
         }
+    }
+
+    /**
+     * @return bool
+     */
+    private function isEmpty($item)
+    {
+        return empty($item) && $item !== '0' && $item !== false && $item !== 0;
+    }
+
+    /**
+     * Checks if special xml characters were used.
+     *
+     * @return int
+     */
+    private function hasSpecialCharacters($item)
+    {
+        return \preg_match('#<|>|&(?<!amp;)#', $item);
     }
 }

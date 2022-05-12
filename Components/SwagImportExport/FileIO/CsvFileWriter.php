@@ -8,7 +8,7 @@
 
 namespace Shopware\Components\SwagImportExport\FileIO;
 
-use Shopware\Components\SwagImportExport\FileIO\Encoders\CsvEncoder;
+use Shopware\Components\Converter\CsvConverter;
 use Shopware\Components\SwagImportExport\Utils\FileHelper;
 
 class CsvFileWriter implements FileWriter
@@ -48,7 +48,7 @@ class CsvFileWriter implements FileWriter
     {
         $flatData = '';
 
-        $convertor = new CsvEncoder();
+        $convertor = new CsvConverter();
         $keys = \array_keys(\current($data));
         foreach ($data as $line) {
             $flatData .= $convertor->_encode_line($line, $keys) . $convertor->sSettings['newline'];

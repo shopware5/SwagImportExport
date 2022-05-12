@@ -6,22 +6,22 @@
  * file that was distributed with this source code.
  */
 
-namespace SwagImportExport\Tests\Unit\Components\SwagImportExport\FileIO\Encoders;
+namespace SwagImportExport\Tests\Unit\Components\Converters;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Components\SwagImportExport\FileIO\Encoders\XmlEncoder;
+use Shopware\Components\Converter\XmlConverter;
 
-class XmlEncoderTest extends TestCase
+class XmlConverterTest extends TestCase
 {
     /**
-     * @var XmlEncoder
+     * @var XmlConverter
      */
     private $SUT;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->SUT = new XmlEncoder();
+        $this->SUT = new XmlConverter();
     }
 
     protected function tearDown(): void
