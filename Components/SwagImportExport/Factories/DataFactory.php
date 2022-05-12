@@ -29,7 +29,6 @@ use Shopware\Components\SwagImportExport\DbAdapters\MainOrdersDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\NewsletterDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\OrdersDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\TranslationsDbAdapter;
-use Shopware\Components\SwagImportExport\DbalHelper;
 use Shopware\Components\SwagImportExport\Logger\Logger;
 use Shopware\Components\SwagImportExport\Session\Session;
 use Shopware\Components\SwagImportExport\Utils\DataColumnOptions;
@@ -222,12 +221,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
      */
     protected function getArticleDataManager()
     {
-        $proxyAdapter = Shopware()->Hooks()
-            ->getProxy(ArticleDataManager::class);
-        $db = Shopware()->Db();
-        $dbalHelper = DbalHelper::create();
-
-        return new $proxyAdapter($db, $dbalHelper);
+        return Shopware()->Container()->get(ArticleDataManager::class);
     }
 
     /**

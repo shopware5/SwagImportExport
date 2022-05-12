@@ -15,7 +15,7 @@ use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Models\Article\Supplier;
 
-class ArticleDataManager extends DataManager
+class ArticleDataManager extends DataManager implements \Enlight_Hook
 {
     /**
      * @var \Enlight_Components_Db_Adapter_Pdo_Mysql
@@ -26,10 +26,6 @@ class ArticleDataManager extends DataManager
      * @var DbalHelper
      */
     private $dbalHelper;
-
-    private $taxRates;
-
-    private $suppliers;
 
     public function __construct(\Enlight_Components_Db_Adapter_Pdo_Mysql $db, DbalHelper $dbalHelper)
     {
@@ -53,9 +49,8 @@ class ArticleDataManager extends DataManager
     public function getDefaultFieldsName()
     {
         $defaultFieldsForCreate = $this->getDefaultFields();
-        $defaultFields = $this->getFields($defaultFieldsForCreate);
 
-        return $defaultFields;
+        return $this->getFields($defaultFieldsForCreate);
     }
 
     /**
@@ -273,11 +268,7 @@ class ArticleDataManager extends DataManager
      */
     private function getTaxRates()
     {
-        if ($this->taxRates === null) {
-            $this->taxRates = $this->prepareTaxRates();
-        }
-
-        return $this->taxRates;
+        return $this->prepareTaxRates();
     }
 
     /**
@@ -303,11 +294,7 @@ class ArticleDataManager extends DataManager
      */
     private function getSuppliers()
     {
-        if ($this->suppliers === null) {
-            $this->suppliers = $this->prepareSuppliers();
-        }
-
-        return $this->suppliers;
+        return $this->prepareSuppliers();
     }
 
     /**

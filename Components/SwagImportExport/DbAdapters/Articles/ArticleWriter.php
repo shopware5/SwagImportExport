@@ -60,7 +60,7 @@ class ArticleWriter
         $this->dbalHelper = DbalHelper::create();
 
         $this->validator = new ArticleValidator();
-        $this->dataManager = new ArticleDataManager($this->db, $this->dbalHelper);
+        $this->dataManager = Shopware()->Container()->get(ArticleDataManager::class);
     }
 
     /**
