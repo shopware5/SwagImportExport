@@ -107,7 +107,7 @@ class CustomerDbAdapter implements DataDbAdapter
         $this->manager = Shopware()->Models();
         $this->db = Shopware()->Db();
         $this->validator = new CustomerValidator();
-        $this->dataManager = new CustomerDataManager();
+        $this->dataManager = Shopware()->Container()->get(CustomerDataManager::class);
         $this->passwordManager = Shopware()->PasswordEncoder();
         $this->config = Shopware()->Config();
         $this->eventManager = Shopware()->Events();

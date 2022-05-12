@@ -18,7 +18,13 @@ class CustomerDataManagerTest extends TestCase
         $record = [];
         $defaultFields = [];
 
-        $service = new CustomerDataManagerMock();
+        $service = new CustomerDataManagerMock(
+            Shopware()->Db(),
+            Shopware()->Config(),
+            Shopware()->PasswordEncoder(),
+            Shopware()->Container()->get('shopware.number_range_incrementer')
+        );
+
         $result = $service->setDefaultFieldsForCreate($record, $defaultFields);
 
         static::assertSame('bcrypt', $result['encoder']);

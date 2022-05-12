@@ -8,9 +8,11 @@
 
 namespace Shopware\Components\SwagImportExport\DataManagers;
 
+use Shopware\Components\NumberRangeIncrementerInterface;
+use Shopware\Components\Password\Manager;
 use Shopware\Components\SwagImportExport\DataType\CustomerDataType;
 
-class CustomerDataManager extends DataManager
+class CustomerDataManager extends DataManager implements \Enlight_Hook
 {
     /**
      * @var \Shopware_Components_Config
@@ -35,12 +37,16 @@ class CustomerDataManager extends DataManager
     /**
      * initialises the class properties
      */
-    public function __construct()
-    {
-        $this->db = Shopware()->Db();
-        $this->config = Shopware()->Config();
-        $this->passwordManager = Shopware()->PasswordEncoder();
-        $this->numbergenerator = Shopware()->Container()->get('shopware.number_range_incrementer');
+    public function __construct(
+        \Enlight_Components_Db_Adapter_Pdo_Mysql $db,
+        \Shopware_Components_Config $config,
+        Manager $passwordManager,
+        NumberRangeIncrementerInterface $numberRangeIncrementer
+    ) {
+        $this->db = $db;
+        $this->config = $config;
+        $this->passwordManager = $passwordManager;
+        $this->numbergenerator = $numberRangeIncrementer;
     }
 
     /**
@@ -59,9 +65,8 @@ class CustomerDataManager extends DataManager
     public function getDefaultFieldsName()
     {
         $defaultFieldsForCreate = $this->getDefaultFields();
-        $defaultFields = $this->getFields($defaultFieldsForCreate);
 
-        return $defaultFields;
+        return $this->getFields($defaultFieldsForCreate);
     }
 
     /**
