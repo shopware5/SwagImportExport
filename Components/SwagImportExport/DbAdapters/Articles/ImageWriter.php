@@ -31,11 +31,17 @@ class ImageWriter
      */
     protected $connection;
 
-    public function __construct(ArticlesDbAdapter $articlesDbAdapter)
+    public function __construct(
+        PDOConnection $db,
+        Connection $connection
+    ) {
+        $this->db = $db;
+        $this->connection = $connection;
+    }
+
+    public function setArticleDBAdapter(ArticlesDbAdapter $articlesDbAdapter)
     {
         $this->articlesDbAdapter = $articlesDbAdapter;
-        $this->db = Shopware()->Db();
-        $this->connection = Shopware()->Models()->getConnection();
     }
 
     /**

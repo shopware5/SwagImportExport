@@ -1374,7 +1374,8 @@ class ArticlesDbAdapter implements DataDbAdapter
         $translationWriter = new TranslationWriter();
         $propertyWriter = PropertyWriter::createFromGlobalSingleton();
         $relationWriter = new RelationWriter($this);
-        $imageWriter = new ImageWriter($this);
+        $imageWriter = Shopware()->Container()->get(ImageWriter::class);
+        $imageWriter->setArticleDBAdapter($this);
 
         $defaultValues = $this->getDefaultValues();
 
