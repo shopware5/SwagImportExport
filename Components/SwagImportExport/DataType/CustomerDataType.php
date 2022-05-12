@@ -100,4 +100,8 @@ class CustomerDataType
             'attrShippingText6',
         ],
     ];
+
+    private function __construct()
+    {
+    }
 }

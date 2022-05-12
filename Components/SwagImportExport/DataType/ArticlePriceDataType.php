@@ -18,4 +18,8 @@ class ArticlePriceDataType
             'percent',
         ],
     ];
+
+    private function __construct()
+    {
+    }
 }

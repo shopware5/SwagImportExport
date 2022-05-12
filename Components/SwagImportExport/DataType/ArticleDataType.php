@@ -173,4 +173,8 @@ class ArticleDataType
         'number' => 'orderNumber',
         'len' => 'length',
     ];
+
+    private function __construct()
+    {
+    }
 }

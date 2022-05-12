@@ -59,4 +59,8 @@ class CategoryDataType
             'attributeAttribute6',
         ],
     ];
+
+    private function __construct()
+    {
+    }
 }

@@ -42,4 +42,8 @@ class NewsletterDataType
             'groupName',
         ],
     ];
+
+    private function __construct()
+    {
+    }
 }
