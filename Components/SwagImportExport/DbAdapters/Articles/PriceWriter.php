@@ -47,13 +47,15 @@ class PriceWriter
     /**
      * initialises the class properties
      */
-    public function __construct()
-    {
-        $this->db = Shopware()->Db();
-        $this->dbalHelper = DbalHelper::create();
+    public function __construct(
+        PDOConnection $db,
+        DbalHelper $dbalHelper,
+        PriceDataManager $dataManager
+    ) {
         $this->validator = new PriceValidator();
-        $this->dataManager = Shopware()->Container()->get(PriceDataManager::class);
-
+        $this->db = $db;
+        $this->dbalHelper = $dbalHelper;
+        $this->dataManager = $dataManager;
         $this->customerGroups = $this->getCustomerGroup();
     }
 
@@ -199,9 +201,8 @@ class PriceWriter
     protected function getArticleOrderNumber($articleDetailId)
     {
         $sql = 'SELECT ordernumber FROM s_articles_details WHERE id = ?';
-        $orderNumber = $this->db->fetchOne($sql, [$articleDetailId]);
 
-        return $orderNumber;
+        return $this->db->fetchOne($sql, [$articleDetailId]);
     }
 
     /**
@@ -209,9 +210,7 @@ class PriceWriter
      */
     private function getCustomerGroup()
     {
-        $groups = $this->db->fetchPairs('SELECT groupkey, taxinput FROM s_core_customergroups');
-
-        return $groups;
+        return $this->db->fetchPairs('SELECT groupkey, taxinput FROM s_core_customergroups');
     }
 
     /**

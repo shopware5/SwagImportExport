@@ -20,7 +20,7 @@ class PriceWriterTest extends TestCase
 
     public function testWriteThrowsExceptionIfEmptyValues(): void
     {
-        $priceWriterDbAdapter = $this->createPriceWriterAdapter();
+        $priceWriterDbAdapter = $this->getPriceWriterAdapter();
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Tax for article  not found');
@@ -29,7 +29,7 @@ class PriceWriterTest extends TestCase
 
     public function testWriteThrowsExceptionIfPriceGroupNotExists(): void
     {
-        $priceWriterDbAdapter = $this->createPriceWriterAdapter();
+        $priceWriterDbAdapter = $this->getPriceWriterAdapter();
 
         $articlePriceData = [
             [
@@ -47,7 +47,7 @@ class PriceWriterTest extends TestCase
 
     public function testWriteThrowsExceptionIfPriceIsInvalid(): void
     {
-        $priceWriterDbAdapter = $this->createPriceWriterAdapter();
+        $priceWriterDbAdapter = $this->getPriceWriterAdapter();
 
         $articlePriceData = [
             [
@@ -64,7 +64,7 @@ class PriceWriterTest extends TestCase
 
     public function testWriteThrowsExceptionIfPriceFromIsInvalid(): void
     {
-        $priceWriterDbAdapter = $this->createPriceWriterAdapter();
+        $priceWriterDbAdapter = $this->getPriceWriterAdapter();
 
         $articlePriceData = [
             [
@@ -82,7 +82,7 @@ class PriceWriterTest extends TestCase
 
     public function testWriteShouldUpdatePriceWithDotSeperation(): void
     {
-        $priceWriterAdapter = $this->createPriceWriterAdapter();
+        $priceWriterAdapter = $this->getPriceWriterAdapter();
 
         $articlePriceData = [
             [
@@ -105,7 +105,7 @@ class PriceWriterTest extends TestCase
 
     public function testWriteShouldUpdateArticlePrice(): void
     {
-        $priceWriterAdapter = $this->createPriceWriterAdapter();
+        $priceWriterAdapter = $this->getPriceWriterAdapter();
 
         $articlePriceData = [
             [
@@ -128,7 +128,7 @@ class PriceWriterTest extends TestCase
 
     public function testWriteShouldUpdateArticlePseudoPrice(): void
     {
-        $priceWriterAdapter = $this->createPriceWriterAdapter();
+        $priceWriterAdapter = $this->getPriceWriterAdapter();
 
         $articlePriceData = [
             [
@@ -156,7 +156,7 @@ class PriceWriterTest extends TestCase
             static::markTestSkipped('This test is not supported lower shopware version 5.7.8');
         }
 
-        $priceWriterAdapter = $this->createPriceWriterAdapter();
+        $priceWriterAdapter = $this->getPriceWriterAdapter();
 
         $articlePriceData = [
             [
@@ -178,8 +178,8 @@ class PriceWriterTest extends TestCase
         static::assertEquals($expectedArticleRegulationPrice, $updatedArticle[0]['regulation_price']);
     }
 
-    private function createPriceWriterAdapter(): PriceWriter
+    private function getPriceWriterAdapter(): PriceWriter
     {
-        return new PriceWriter();
+        return Shopware()->Container()->get(PriceWriter::class);
     }
 }
