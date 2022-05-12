@@ -10,7 +10,7 @@ namespace Shopware\Components\SwagImportExport\DataManagers;
 
 use Enlight_Components_Db_Adapter_Pdo_Mysql as PDOConnection;
 
-class ArticleImageDataManager
+class ArticleImageDataManager implements \Enlight_Hook
 {
     /**
      * @var PDOConnection
@@ -32,9 +32,9 @@ class ArticleImageDataManager
     /**
      * initialises the class properties
      */
-    public function __construct()
+    public function __construct(PDOConnection $pdo)
     {
-        $this->db = Shopware()->Db();
+        $this->db = $pdo;
     }
 
     /**

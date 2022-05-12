@@ -139,7 +139,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
         $this->request = Shopware()->Front()->Request();
         $this->eventManager = Shopware()->Events();
         $this->validator = new ArticleImageValidator();
-        $this->dataManager = new ArticleImageDataManager();
+        $this->dataManager = Shopware()->Container()->get(ArticleImageDataManager::class);
         $this->imageImportMode = (int) Shopware()->Config()->get('SwagImportExportImageMode');
         $this->importExportErrorMode = (bool) Shopware()->Config()->get('SwagImportExportErrorMode');
         $this->thumbnailManager = Shopware()->Container()->get('thumbnail_manager');
