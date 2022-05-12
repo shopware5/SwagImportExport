@@ -19,7 +19,7 @@ class CategoryWriterTest extends TestCase
 
     public function testWriteWithInvalidCategoryIdThrowsException()
     {
-        $categoryWriterAdapter = $this->createCategoryWriterAdapter();
+        $categoryWriterAdapter = $this->getCategoryWriterAdapter();
         $validArticleId = 3;
         $invalidCategoryArray = [
             [
@@ -34,7 +34,7 @@ class CategoryWriterTest extends TestCase
 
     public function testWriteWithNoCategoryIdAndNewPathCreatesCategories()
     {
-        $categoryWriterAdapter = $this->createCategoryWriterAdapter();
+        $categoryWriterAdapter = $this->getCategoryWriterAdapter();
         $validArticleId = 3;
         $invalidCategoryArray = [
             [
@@ -53,7 +53,7 @@ class CategoryWriterTest extends TestCase
 
     public function testWriteShouldInsertArticleCategoryAssociation()
     {
-        $categoryWriterAdapter = $this->createCategoryWriterAdapter();
+        $categoryWriterAdapter = $this->getCategoryWriterAdapter();
         $articleId = 3;
         $categoryArray = [
             [
@@ -73,8 +73,8 @@ class CategoryWriterTest extends TestCase
     /**
      * @return CategoryWriter
      */
-    private function createCategoryWriterAdapter()
+    private function getCategoryWriterAdapter()
     {
-        return new CategoryWriter();
+        return Shopware()->Container()->get(CategoryWriter::class);
     }
 }

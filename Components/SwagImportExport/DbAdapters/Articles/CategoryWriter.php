@@ -41,11 +41,14 @@ class CategoryWriter
     /**
      * initialises the class properties
      */
-    public function __construct()
-    {
-        $this->db = Shopware()->Db();
-        $this->connection = Shopware()->Models()->getConnection();
-        $this->eventManager = Shopware()->Events();
+    public function __construct(
+        PDOConnection $db,
+        Connection $connection,
+        EventManager $eventManager
+    ) {
+        $this->db = $db;
+        $this->connection = $connection;
+        $this->eventManager = $eventManager;
     }
 
     /**

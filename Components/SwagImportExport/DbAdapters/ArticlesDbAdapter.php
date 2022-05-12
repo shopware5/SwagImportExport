@@ -1369,7 +1369,7 @@ class ArticlesDbAdapter implements DataDbAdapter
     {
         $articleWriter = Shopware()->Container()->get(ArticleWriter::class);
         $pricesWriter = new PriceWriter();
-        $categoryWriter = new CategoryWriter();
+        $categoryWriter = Shopware()->Container()->get(CategoryWriter::class);
         $configuratorWriter = ConfiguratorWriter::createFromGlobalSingleton();
         $translationWriter = new TranslationWriter();
         $propertyWriter = PropertyWriter::createFromGlobalSingleton();
