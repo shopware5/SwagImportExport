@@ -31,7 +31,7 @@ class TranslationWriterTest extends TestCase
             ],
         ];
 
-        $translationWriter = $this->createTranslationWriter();
+        $translationWriter = $this->getTranslationWriter();
 
         $this->expectException(AdapterException::class);
         $this->expectExceptionMessage('Shop mit ID 3 nicht gefunden');
@@ -56,7 +56,7 @@ class TranslationWriterTest extends TestCase
             ],
         ];
 
-        $translationsWriter = $this->createTranslationWriter();
+        $translationsWriter = $this->getTranslationWriter();
         $translationsWriter->write($productId, $variantId, $mainDetailId, $translations);
 
         $connection = $this->getContainer()->get('dbal_connection');
@@ -92,7 +92,7 @@ class TranslationWriterTest extends TestCase
             ],
         ];
 
-        $translationsWriter = $this->createTranslationWriter();
+        $translationsWriter = $this->getTranslationWriter();
         $translationsWriter->write($productId, $variantId, $mainDetailId, $translations);
 
         $attributeService->delete('s_articles_attributes', 'mycustomfield');
@@ -128,7 +128,7 @@ class TranslationWriterTest extends TestCase
             ],
         ];
 
-        $translationWriter = $this->createTranslationWriter();
+        $translationWriter = $this->getTranslationWriter();
         $translationWriter->write($productId, $variantId, $mainDetailId, $translations);
 
         $connection = $this->getContainer()->get('dbal_connection');
@@ -141,8 +141,8 @@ class TranslationWriterTest extends TestCase
         static::assertSame($translations[0]['shippingTime'], $importedTranslation['txtshippingtime']);
     }
 
-    private function createTranslationWriter(): TranslationWriter
+    private function getTranslationWriter(): TranslationWriter
     {
-        return new TranslationWriter();
+        return Shopware()->Container()->get(TranslationWriter::class);
     }
 }

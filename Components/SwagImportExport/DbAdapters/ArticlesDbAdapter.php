@@ -1371,7 +1371,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         $pricesWriter = Shopware()->Container()->get(PriceWriter::class);
         $categoryWriter = Shopware()->Container()->get(CategoryWriter::class);
         $configuratorWriter = Shopware()->Container()->get(ConfiguratorWriter::class);
-        $translationWriter = new TranslationWriter();
+        $translationWriter = Shopware()->Container()->get(TranslationWriter::class);
         $propertyWriter = Shopware()->Container()->get(PropertyWriter::class);
         $relationWriter = Shopware()->Container()->get(RelationWriter::class);
         $imageWriter = Shopware()->Container()->get(ImageWriter::class);

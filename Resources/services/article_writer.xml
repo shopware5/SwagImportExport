@@ -45,5 +45,11 @@
             <argument type="service" id="db"/>
             <argument type="service" id="dbal_connection"/>
         </service>
+
+        <service id="Shopware\Components\SwagImportExport\DbAdapters\Articles\TranslationWriter" public="true">
+            <argument type="service" id="models"/>
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="translation"/>
+        </service>
     </services>
 </container>
