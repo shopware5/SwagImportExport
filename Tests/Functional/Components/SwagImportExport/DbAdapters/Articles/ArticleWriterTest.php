@@ -37,7 +37,7 @@ class ArticleWriterTest extends TestCase
         $this->modelManager = Shopware()->Container()->get('models');
         $this->modelManager->beginTransaction();
 
-        $this->articleWriter = new ArticleWriter();
+        $this->articleWriter = Shopware()->Container()->get(ArticleWriter::class);
     }
 
     protected function tearDown(): void

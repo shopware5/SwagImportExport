@@ -50,17 +50,17 @@ class ArticleWriter
      */
     private $dbalHelper;
 
-    /**
-     * initialises the class properties
-     */
-    public function __construct()
-    {
-        $this->connection = Shopware()->Container()->get('dbal_connection');
-        $this->db = Shopware()->Container()->get('db');
-        $this->dbalHelper = DbalHelper::create();
-
+    public function __construct(
+        Connection $connection,
+        \Enlight_Components_Db_Adapter_Pdo_Mysql $db,
+        DbalHelper $dbalHelper,
+        ArticleDataManager $articleDataManager
+    ) {
         $this->validator = new ArticleValidator();
-        $this->dataManager = Shopware()->Container()->get(ArticleDataManager::class);
+        $this->connection = $connection;
+        $this->db = $db;
+        $this->dbalHelper = $dbalHelper;
+        $this->dataManager = $articleDataManager;
     }
 
     /**
@@ -90,7 +90,7 @@ class ArticleWriter
     protected function insertOrUpdateArticle($article, $defaultValues)
     {
         $shouldCreateMainArticle = false;
-        list($mainVariantId, $productId, $variantId) = $this->findExistingEntries($article);
+        [$mainVariantId, $productId, $variantId] = $this->findExistingEntries($article);
 
         if ($article['processed']) {
             if (!$mainVariantId) {
@@ -129,7 +129,7 @@ class ArticleWriter
         if (!isset($article['kind']) || empty($article['kind'])) {
             $article['kind'] = $mainVariantId === $variantId ? self::MAIN_KIND : self::VARIANT_KIND;
         }
-        list($article, $variantId) = $this->createOrUpdateProductVariant($article, $defaultValues, $variantId, $createDetail);
+        [$article, $variantId] = $this->createOrUpdateProductVariant($article, $defaultValues, $variantId, $createDetail);
 
         // set reference
         if ($shouldCreateMainArticle) {

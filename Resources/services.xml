@@ -8,6 +8,7 @@
         <import resource="services/data_managers.xml"/>
         <import resource="services/commands.xml"/>
         <import resource="services/factories.xml"/>
+        <import resource="services/article_writer.xml"/>
     </imports>
     <services>
         <service id="Shopware\Components\SwagImportExport\Utils\FileHelper"/>

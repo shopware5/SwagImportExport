@@ -1367,7 +1367,7 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     private function performImport(array $records)
     {
-        $articleWriter = new ArticleWriter();
+        $articleWriter = Shopware()->Container()->get(ArticleWriter::class);
         $pricesWriter = new PriceWriter();
         $categoryWriter = new CategoryWriter();
         $configuratorWriter = ConfiguratorWriter::createFromGlobalSingleton();
