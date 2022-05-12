@@ -8,13 +8,28 @@
 
 namespace Shopware\Commands\SwagImportExport;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Shopware\Commands\ShopwareCommand;
-use Shopware\CustomModels\ImportExport\Profile;
+use Shopware\CustomModels\ImportExport\ProfileRepository;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ProfilesCommand extends ShopwareCommand
 {
+    private ProfileRepository $profileRepository;
+
+    private EntityManagerInterface $entityManager;
+
+    public function __construct(
+        ProfileRepository $profileRepository,
+        EntityManagerInterface $entityManager
+    ) {
+        $this->profileRepository = $profileRepository;
+        $this->entityManager = $entityManager;
+
+        parent::__construct();
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -32,13 +47,9 @@ class ProfilesCommand extends ShopwareCommand
     {
         $this->registerErrorHandler($output);
 
-        $em = $this->container->get('models');
+        $query = $this->profileRepository->getProfilesListQuery()->getQuery();
 
-        $profileRepository = $em->getRepository(Profile::class);
-
-        $query = $profileRepository->getProfilesListQuery()->getQuery();
-
-        $count = $em->getQueryCount($query);
+        $count = $this->entityManager->getQueryCount($query);
 
         $output->writeln('<info>' . \sprintf('Total count: %d.', $count) . '</info>');
 

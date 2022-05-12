@@ -8,6 +8,8 @@
 
 namespace Shopware\Commands\SwagImportExport;
 
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 use Shopware\Commands\ShopwareCommand;
 use Shopware\Components\SwagImportExport\Utils\CommandHelper;
 use Shopware\CustomModels\ImportExport\Profile;
@@ -83,6 +85,20 @@ class ExportCommand extends ShopwareCommand
      * @var int
      */
     private $productStream;
+
+    private EntityRepository $profileRepository;
+
+    private EntityManagerInterface $entityManager;
+
+    public function __construct(
+        EntityRepository $profileRepository,
+        EntityManagerInterface $entityManager
+    ) {
+        $this->profileRepository = $profileRepository;
+        $this->entityManager = $entityManager;
+
+        parent::__construct();
+    }
 
     /**
      * {@inheritdoc}
@@ -212,27 +228,23 @@ class ExportCommand extends ShopwareCommand
 
         $parts = \explode('.', $this->filePath);
 
-        $em = $this->container->get('models');
-
-        $profileRepository = $em->getRepository(Profile::class);
-
         // if no profile is specified try to find it from the filename
         if ($this->profile === null) {
             foreach ($parts as $part) {
                 $part = \strtolower($part);
-                $this->profileEntity = $profileRepository->findOneBy(['name' => $part]);
+                $this->profileEntity = $this->profileRepository->findOneBy(['name' => $part]);
                 if ($this->profileEntity !== null) {
                     $this->profile = $part;
                     break;
                 }
             }
         } else {
-            $this->profileEntity = $profileRepository->findOneBy(['name' => $this->profile]);
+            $this->profileEntity = $this->profileRepository->findOneBy(['name' => $this->profile]);
             $this->validateProfiles($input);
         }
 
         if (!empty($this->customerStream)) {
-            $customerStream = $em->find(CustomerStream::class, $this->customerStream);
+            $customerStream = $this->entityManager->find(CustomerStream::class, $this->customerStream);
             $this->validateCustomerStream($customerStream);
         }
 

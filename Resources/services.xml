@@ -30,14 +30,24 @@
 
         <service id="Shopware\Commands\SwagImportExport\ImportCommand">
             <argument type="service" id="Shopware\Components\SwagImportExport\Factories\ProfileFactory"/>
+            <argument type="service" id="Shopware\Components\SwagImportExport\UploadPathProvider"/>
+            <argument type="service" id="models"/>
+            <argument type="service" id="Shopware\CustomModels\ImportExport\ProfileRepository"/>
+
             <tag name="console.command" command="sw:importexport:import"/>
         </service>
 
         <service id="Shopware\Commands\SwagImportExport\ExportCommand">
+            <argument type="service" id="Shopware\CustomModels\ImportExport\ProfileRepository"/>
+            <argument type="service" id="models"/>
+
             <tag name="console.command" command="sw:importexport:export"/>
         </service>
 
         <service id="Shopware\Commands\SwagImportExport\ProfilesCommand">
+            <argument type="service" id="Shopware\CustomModels\ImportExport\ProfileRepository"/>
+            <argument type="service" id="models"/>
+
             <tag name="console.command" command="sw:importexport:profiles"/>
         </service>
 
@@ -129,5 +139,10 @@
             <argument>%shopware.app.rootDir%/var/log</argument>
         </service>
         <service id="swag_import_export.logger" alias="Shopware\Components\SwagImportExport\Logger\Logger" public="true"/>
+
+        <service id="Shopware\CustomModels\ImportExport\ProfileRepository">
+            <factory service="models" method="getRepository"/>
+            <argument>Shopware\CustomModels\ImportExport\Profile</argument>
+        </service>
     </services>
 </container>

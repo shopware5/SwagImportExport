@@ -8,12 +8,14 @@
 
 namespace Shopware\Commands\SwagImportExport;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Shopware\Commands\ShopwareCommand;
 use Shopware\Components\SwagImportExport\Factories\ProfileFactory;
 use Shopware\Components\SwagImportExport\Profile\Profile;
 use Shopware\Components\SwagImportExport\UploadPathProvider;
 use Shopware\Components\SwagImportExport\Utils\CommandHelper;
 use Shopware\CustomModels\ImportExport\Profile as ProfileEntity;
+use Shopware\CustomModels\ImportExport\ProfileRepository;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -51,9 +53,22 @@ class ImportCommand extends ShopwareCommand
      */
     private $profileFactory;
 
-    public function __construct(ProfileFactory $profileFactory)
-    {
+    private UploadPathProvider $uploadPathProvider;
+
+    private EntityManagerInterface $entityManager;
+
+    private ProfileRepository $profileRepository;
+
+    public function __construct(
+        ProfileFactory $profileFactory,
+        UploadPathProvider $uploadPathProvider,
+        EntityManagerInterface $entityManager,
+        ProfileRepository $profileRepository
+    ) {
         $this->profileFactory = $profileFactory;
+        $this->uploadPathProvider = $uploadPathProvider;
+        $this->entityManager = $entityManager;
+        $this->profileRepository = $profileRepository;
 
         parent::__construct();
     }
@@ -89,13 +104,10 @@ class ImportCommand extends ShopwareCommand
 
         $profilesMapper = ['articles', 'articlesImages'];
 
-        /** @var UploadPathProvider $uploadPathProvider */
-        $uploadPathProvider = $this->container->get('swag_import_export.upload_path_provider');
-
         //loops the unprocessed data
         $pathInfo = \pathinfo($this->filePath);
         foreach ($profilesMapper as $profileName) {
-            $tmpFile = $uploadPathProvider->getRealPath(
+            $tmpFile = $this->uploadPathProvider->getRealPath(
                 $pathInfo['basename'] . '-' . $profileName . '-tmp.csv'
             );
             if (\file_exists($tmpFile)) {
@@ -138,7 +150,7 @@ class ImportCommand extends ShopwareCommand
 
         while ($position < $count) {
             $data = $helper->importAction();
-            $this->container->get('models')->clear();
+            $this->entityManager->clear();
             $position = $data['data']['position'];
             $output->writeln('<info>' . \sprintf('Processed: %d.', $position) . '</info>');
         }
@@ -155,22 +167,18 @@ class ImportCommand extends ShopwareCommand
 
         $parts = \explode('.', $this->filePath);
 
-        $em = $this->container->get('models');
-
-        $profileRepository = $em->getRepository(ProfileEntity::class);
-
         // if no profile is specified try to find it from the filename
         if ($this->profile === null) {
             foreach ($parts as $part) {
                 $part = \strtolower($part);
-                $this->profileEntity = $profileRepository->findOneBy(['name' => $part]);
+                $this->profileEntity = $this->profileRepository->findOneBy(['name' => $part]);
                 if ($this->profileEntity !== null) {
                     $this->profile = $part;
                     break;
                 }
             }
         } else {
-            $this->profileEntity = $profileRepository->findOneBy(['name' => $this->profile]);
+            $this->profileEntity = $this->profileRepository->findOneBy(['name' => $this->profile]);
         }
 
         // validate profile
