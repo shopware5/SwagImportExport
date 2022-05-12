@@ -25,7 +25,10 @@ class RelationWriterTest extends TestCase
         //We need to get an instance of the ArticlesDbAdapter because of the given dependency
         $articlesDbAdapter = new ArticlesDbAdapter();
 
-        return new RelationWriter($articlesDbAdapter);
+        $relationWriter = Shopware()->Container()->get(RelationWriter::class);
+        $relationWriter->setArticlesDbAdapter($articlesDbAdapter);
+
+        return $relationWriter;
     }
 
     public function testWriteAccessoryWithInvalidDataThrowsException()
