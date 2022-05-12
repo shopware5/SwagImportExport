@@ -52,7 +52,7 @@ class PriceWriter
         $this->db = Shopware()->Db();
         $this->dbalHelper = DbalHelper::create();
         $this->validator = new PriceValidator();
-        $this->dataManager = new PriceDataManager();
+        $this->dataManager = Shopware()->Container()->get(PriceDataManager::class);
 
         $this->customerGroups = $this->getCustomerGroup();
     }

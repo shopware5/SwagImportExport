@@ -11,7 +11,7 @@ namespace Shopware\Components\SwagImportExport\DataManagers\Articles;
 use Shopware\Components\SwagImportExport\DataManagers\DataManager;
 use Shopware\Components\SwagImportExport\DataType\ArticlePriceDataType;
 
-class PriceDataManager extends DataManager
+class PriceDataManager extends DataManager implements \Enlight_Hook
 {
     /**
      * Define which field should be set by default
@@ -58,9 +58,8 @@ class PriceDataManager extends DataManager
     public function fixDefaultValues($records)
     {
         $defaultFieldsValues = ArticlePriceDataType::$defaultFieldsValues;
-        $records = $this->fixFieldsValues($records, $defaultFieldsValues);
 
-        return $records;
+        return $this->fixFieldsValues($records, $defaultFieldsValues);
     }
 
     /**
