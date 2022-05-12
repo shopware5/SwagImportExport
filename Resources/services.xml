@@ -3,6 +3,12 @@
 <container xmlns="http://symfony.com/schema/dic/services"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <imports>
+        <import resource="services/data_managers.xml"/>
+        <import resource="services/commands.xml"/>
+        <import resource="services/factories.xml"/>
+    </imports>
     <services>
         <service id="Shopware\Components\SwagImportExport\Utils\FileHelper"/>
 
@@ -26,45 +32,6 @@
         <service id="Shopware\Subscribers\ControllerRegistration\FrontendControllerSubscriber">
             <argument>%swag_import_export.plugin_dir%</argument>
             <tag name="shopware.event_subscriber"/>
-        </service>
-
-        <service id="Shopware\Commands\SwagImportExport\ImportCommand">
-            <argument type="service" id="Shopware\Components\SwagImportExport\Factories\ProfileFactory"/>
-            <argument type="service" id="Shopware\Components\SwagImportExport\UploadPathProvider"/>
-            <argument type="service" id="models"/>
-            <argument type="service" id="Shopware\CustomModels\ImportExport\ProfileRepository"/>
-
-            <tag name="console.command" command="sw:importexport:import"/>
-        </service>
-
-        <service id="Shopware\Commands\SwagImportExport\ExportCommand">
-            <argument type="service" id="Shopware\CustomModels\ImportExport\ProfileRepository"/>
-            <argument type="service" id="models"/>
-
-            <tag name="console.command" command="sw:importexport:export"/>
-        </service>
-
-        <service id="Shopware\Commands\SwagImportExport\ProfilesCommand">
-            <argument type="service" id="Shopware\CustomModels\ImportExport\ProfileRepository"/>
-            <argument type="service" id="models"/>
-
-            <tag name="console.command" command="sw:importexport:profiles"/>
-        </service>
-
-        <service id="Shopware\Components\SwagImportExport\Factories\DataFactory" public="true">
-            <tag name="import_export.proxyable"/>
-        </service>
-
-        <service id="Shopware\Components\SwagImportExport\Factories\ProfileFactory" public="true">
-            <tag name="import_export.proxyable"/>
-        </service>
-
-        <service id="Shopware\Components\SwagImportExport\Factories\FileIOFactory" public="true">
-            <tag name="import_export.proxyable"/>
-        </service>
-
-        <service id="Shopware\Components\SwagImportExport\Factories\DataTransformerFactory" public="true">
-            <tag name="import_export.proxyable"/>
         </service>
 
         <service id="Shopware\Components\SwagImportExport\Service\UnderscoreToCamelCaseService"
@@ -143,47 +110,6 @@
         <service id="Shopware\CustomModels\ImportExport\ProfileRepository">
             <factory service="models" method="getRepository"/>
             <argument>Shopware\CustomModels\ImportExport\Profile</argument>
-        </service>
-
-        <service id="Shopware\Components\SwagImportExport\DataManagers\Articles\ArticleDataManager" public="true">
-            <argument type="service" id="db"/>
-            <argument type="service" id="Shopware\Components\SwagImportExport\DbalHelper"/>
-
-            <tag name="import_export.proxyable"/>
-        </service>
-
-        <service id="Shopware\Components\SwagImportExport\DataManagers\Articles\PriceDataManager" public="true">
-            <tag name="import_export.proxyable"/>
-        </service>
-
-        <service id="Shopware\Components\SwagImportExport\DataManagers\ArticleImageDataManager" public="true">
-            <argument type="service" id="db"/>
-
-            <tag name="import_export.proxyable"/>
-        </service>
-
-        <service id="Shopware\Components\SwagImportExport\DataManagers\ArticlePriceDataManager" public="true">
-            <tag name="import_export.proxyable"/>
-        </service>
-
-        <service id="Shopware\Components\SwagImportExport\DataManagers\CategoriesDataManager" public="true">
-            <tag name="import_export.proxyable"/>
-        </service>
-
-        <service id="Shopware\Components\SwagImportExport\DataManagers\CustomerDataManager" public="true">
-            <argument type="service" id="db"/>
-            <argument type="service" id="config"/>
-            <argument type="service" id="passwordencoder"/>
-            <argument type="service" id="shopware.number_range_incrementer"/>
-
-            <tag name="import_export.proxyable"/>
-        </service>
-
-        <service id="Shopware\Components\SwagImportExport\DataManagers\NewsletterDataManager" public="true">
-            <argument type="service" id="config"/>
-            <argument type="service" id="models"/>
-
-            <tag name="import_export.proxyable"/>
         </service>
 
         <service id="Shopware\Components\SwagImportExport\DbalHelper">

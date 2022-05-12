@@ -1,0 +1,48 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+
+        <service id="Shopware\Components\SwagImportExport\DataManagers\Articles\ArticleDataManager" public="true">
+            <argument type="service" id="db"/>
+            <argument type="service" id="Shopware\Components\SwagImportExport\DbalHelper"/>
+
+            <tag name="import_export.proxyable"/>
+        </service>
+
+        <service id="Shopware\Components\SwagImportExport\DataManagers\Articles\PriceDataManager" public="true">
+            <tag name="import_export.proxyable"/>
+        </service>
+
+        <service id="Shopware\Components\SwagImportExport\DataManagers\ArticleImageDataManager" public="true">
+            <argument type="service" id="db"/>
+
+            <tag name="import_export.proxyable"/>
+        </service>
+
+        <service id="Shopware\Components\SwagImportExport\DataManagers\ArticlePriceDataManager" public="true">
+            <tag name="import_export.proxyable"/>
+        </service>
+
+        <service id="Shopware\Components\SwagImportExport\DataManagers\CategoriesDataManager" public="true">
+            <tag name="import_export.proxyable"/>
+        </service>
+
+        <service id="Shopware\Components\SwagImportExport\DataManagers\CustomerDataManager" public="true">
+            <argument type="service" id="db"/>
+            <argument type="service" id="config"/>
+            <argument type="service" id="passwordencoder"/>
+            <argument type="service" id="shopware.number_range_incrementer"/>
+
+            <tag name="import_export.proxyable"/>
+        </service>
+
+        <service id="Shopware\Components\SwagImportExport\DataManagers\NewsletterDataManager" public="true">
+            <argument type="service" id="config"/>
+            <argument type="service" id="models"/>
+
+            <tag name="import_export.proxyable"/>
+        </service>
+    </services>
+</container>

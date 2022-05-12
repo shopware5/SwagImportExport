@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+<services>
+    <service id="Shopware\Components\SwagImportExport\Factories\DataFactory" public="true">
+        <tag name="import_export.proxyable"/>
+    </service>
+
+    <service id="Shopware\Components\SwagImportExport\Factories\ProfileFactory" public="true">
+        <tag name="import_export.proxyable"/>
+    </service>
+
+    <service id="Shopware\Components\SwagImportExport\Factories\FileIOFactory" public="true">
+        <tag name="import_export.proxyable"/>
+    </service>
+
+    <service id="Shopware\Components\SwagImportExport\Factories\DataTransformerFactory" public="true">
+        <tag name="import_export.proxyable"/>
+    </service>
+</services>
+</container>
