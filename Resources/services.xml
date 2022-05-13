@@ -9,6 +9,7 @@
         <import resource="services/commands.xml"/>
         <import resource="services/factories.xml"/>
         <import resource="services/article_writer.xml"/>
+        <import resource="services/db_adapters.xml"/>
     </imports>
     <services>
         <service id="Shopware\Components\SwagImportExport\Utils\FileHelper"/>

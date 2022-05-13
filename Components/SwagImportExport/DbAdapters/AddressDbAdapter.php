@@ -9,6 +9,7 @@
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\ORM\EntityManagerInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
@@ -41,9 +42,10 @@ class AddressDbAdapter implements DataDbAdapter
      */
     private $logState;
 
-    public function __construct()
-    {
-        $this->modelManager = Shopware()->Container()->get('models');
+    public function __construct(
+        EntityManagerInterface $modelManager
+    ) {
+        $this->modelManager = $modelManager;
         $this->addressValidator = new AddressValidator();
     }
 

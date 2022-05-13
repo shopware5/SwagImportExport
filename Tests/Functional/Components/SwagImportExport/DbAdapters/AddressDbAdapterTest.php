@@ -28,7 +28,7 @@ class AddressDbAdapterTest extends TestCase
 
     public function testItCanBeCreated()
     {
-        $addressDbAdapter = $this->createAddressDbAdapter();
+        $addressDbAdapter = $this->getAddressDbAdapter();
 
         static::assertInstanceOf(AddressDbAdapter::class, $addressDbAdapter);
         static::assertInstanceOf(DataDbAdapter::class, $addressDbAdapter);
@@ -37,7 +37,7 @@ class AddressDbAdapterTest extends TestCase
     public function testReadRecordIdsShouldReturnIds()
     {
         $allAddressIdsInDatabase = [1, 2, 3, 4];
-        $addressDbAdapter = $this->createAddressDbAdapter();
+        $addressDbAdapter = $this->getAddressDbAdapter();
 
         $addressIds = $addressDbAdapter->readRecordIds(self::NO_START, self::NO_LIMIT, self::NO_FILTER);
 
@@ -48,7 +48,7 @@ class AddressDbAdapterTest extends TestCase
     {
         $fetchedAmountOfIds = 2;
         $firstResult = 2;
-        $addressDbAdapter = $this->createAddressDbAdapter();
+        $addressDbAdapter = $this->getAddressDbAdapter();
 
         $addressIds = $addressDbAdapter->readRecordIds($firstResult, self::NO_LIMIT, self::NO_FILTER);
 
@@ -59,7 +59,7 @@ class AddressDbAdapterTest extends TestCase
     {
         $fetchedAmountOfIds = 2;
         $limit = 2;
-        $addressDbAdapter = $this->createAddressDbAdapter();
+        $addressDbAdapter = $this->getAddressDbAdapter();
 
         $addressIds = $addressDbAdapter->readRecordIds(self::NO_START, $limit, self::NO_FILTER);
 
@@ -71,7 +71,7 @@ class AddressDbAdapterTest extends TestCase
         $addressIdsToFetch = [1, 2];
         $selectedColumns = ['address.company', 'address.firstname', 'address.lastname', 'customer.email'];
 
-        $addressDbAdapter = $this->createAddressDbAdapter();
+        $addressDbAdapter = $this->getAddressDbAdapter();
         $addresses = $addressDbAdapter->read($addressIdsToFetch, $selectedColumns);
 
         $addresses = $addresses['address'];
@@ -92,7 +92,7 @@ class AddressDbAdapterTest extends TestCase
         $addressIdsToFetch = [1];
         $selectedColumns = ['attribute.text1', 'attribute.text2'];
 
-        $addressDbAdapter = $this->createAddressDbAdapter();
+        $addressDbAdapter = $this->getAddressDbAdapter();
         $addresses = $addressDbAdapter->read($addressIdsToFetch, $selectedColumns);
 
         $addresses = $addresses['address'];
@@ -114,7 +114,7 @@ class AddressDbAdapterTest extends TestCase
             ],
         ];
 
-        $addressDbAdapter = $this->createAddressDbAdapter();
+        $addressDbAdapter = $this->getAddressDbAdapter();
         $addressDbAdapter->write($addresses);
 
         $connection = Shopware()->Container()->get('dbal_connection');
@@ -139,7 +139,7 @@ class AddressDbAdapterTest extends TestCase
             ],
         ];
 
-        $addressDbAdapter = $this->createAddressDbAdapter();
+        $addressDbAdapter = $this->getAddressDbAdapter();
         $addressDbAdapter->write($addresses);
 
         $connection = Shopware()->Container()->get('dbal_connection');
@@ -165,7 +165,7 @@ class AddressDbAdapterTest extends TestCase
             ],
         ];
 
-        $addressesDbAdapter = $this->createAddressDbAdapter();
+        $addressesDbAdapter = $this->getAddressDbAdapter();
         $addressesDbAdapter->write($addresses);
 
         $connection = Shopware()->Container()->get('dbal_connection');
@@ -197,7 +197,7 @@ class AddressDbAdapterTest extends TestCase
             ],
         ];
 
-        $addressDbAdapter = $this->createAddressDbAdapter();
+        $addressDbAdapter = $this->getAddressDbAdapter();
         $addressDbAdapter->write($addresses);
 
         $createdAddresses = $connection->executeQuery(
@@ -224,7 +224,7 @@ class AddressDbAdapterTest extends TestCase
             ],
         ];
 
-        $addressDbAdapter = $this->createAddressDbAdapter();
+        $addressDbAdapter = $this->getAddressDbAdapter();
         $addressDbAdapter->write($addresses);
 
         $connection = Shopware()->Container()->get('dbal_connection');
@@ -251,7 +251,7 @@ class AddressDbAdapterTest extends TestCase
             ],
         ];
 
-        $addressDbAdapter = $this->createAddressDbAdapter();
+        $addressDbAdapter = $this->getAddressDbAdapter();
         $addressDbAdapter->write($addresses);
 
         $connection = Shopware()->Container()->get('dbal_connection');
@@ -279,7 +279,7 @@ class AddressDbAdapterTest extends TestCase
             ],
         ];
 
-        $addressDbAdapter = $this->createAddressDbAdapter();
+        $addressDbAdapter = $this->getAddressDbAdapter();
         $addressDbAdapter->write($addresses);
 
         $connection = Shopware()->Container()->get('dbal_connection');
@@ -308,7 +308,7 @@ class AddressDbAdapterTest extends TestCase
             ],
         ];
 
-        $addressDbAdapter = $this->createAddressDbAdapter();
+        $addressDbAdapter = $this->getAddressDbAdapter();
         $addressDbAdapter->write($addresses);
 
         $connection = Shopware()->Container()->get('dbal_connection');
@@ -319,7 +319,7 @@ class AddressDbAdapterTest extends TestCase
 
     public function testGetColumnsShouldGetAllRequiredColumns()
     {
-        $addressDbAdapter = $this->createAddressDbAdapter();
+        $addressDbAdapter = $this->getAddressDbAdapter();
         $columns = $addressDbAdapter->getColumns();
 
         static::assertContains('address.id as id', $columns);
@@ -341,7 +341,7 @@ class AddressDbAdapterTest extends TestCase
 
     public function testGetColumnsShouldGetAttributeColumns()
     {
-        $addressDbAdapter = $this->createAddressDbAdapter();
+        $addressDbAdapter = $this->getAddressDbAdapter();
         $columns = $addressDbAdapter->getColumns();
 
         static::assertContains('attribute.text1 as attributeText1', $columns);
@@ -350,7 +350,7 @@ class AddressDbAdapterTest extends TestCase
 
     public function testWriteShouldThrowExceptionIfNoAddressesWereGiven()
     {
-        $addressDbAdapter = $this->createAddressDbAdapter();
+        $addressDbAdapter = $this->getAddressDbAdapter();
 
         $this->expectException(\Exception::class);
         $addressDbAdapter->write([]);
@@ -371,7 +371,7 @@ class AddressDbAdapterTest extends TestCase
             ],
         ];
 
-        $addressDbAdapter = $this->createAddressDbAdapter();
+        $addressDbAdapter = $this->getAddressDbAdapter();
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Konnte Kunden nicht finden. Email: , Customernumber: , userID: 999999');
@@ -401,7 +401,7 @@ class AddressDbAdapterTest extends TestCase
             ],
         ];
 
-        $addressDbAdapter = $this->createAddressDbAdapter();
+        $addressDbAdapter = $this->getAddressDbAdapter();
         $addressDbAdapter->write($addresses);
 
         $connection = Shopware()->Container()->get('dbal_connection');
@@ -426,7 +426,7 @@ class AddressDbAdapterTest extends TestCase
             ],
         ];
 
-        $addressDbAdapter = $this->createAddressDbAdapter();
+        $addressDbAdapter = $this->getAddressDbAdapter();
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Bundesland wurde nicht gefunden mit stateID: 99999');
@@ -436,9 +436,9 @@ class AddressDbAdapterTest extends TestCase
     /**
      * @return AddressDbAdapter
      */
-    private function createAddressDbAdapter()
+    private function getAddressDbAdapter()
     {
-        return new AddressDbAdapter();
+        return Shopware()->Container()->get(AddressDbAdapter::class);
     }
 
     /**

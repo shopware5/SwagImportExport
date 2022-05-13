@@ -93,7 +93,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
             case DataDbAdapter::TRANSLATION_ADAPTER:
                 return $this->createTranslationsDbAdapter();
             case DataDbAdapter::ADDRESS_ADAPTER:
-                return $this->createAddressDbAdapter();
+                return $this->getAddressDbAdapter();
             case DataDbAdapter::CATEGORIES_TRANSLATION_ADAPTER:
                 return $this->createCategoriesTranslationsDbAdapter();
             default:
@@ -389,11 +389,8 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     /**
      * @return AddressDbAdapter
      */
-    private function createAddressDbAdapter()
+    private function getAddressDbAdapter()
     {
-        $proxyAdapter = Shopware()->Hooks()
-            ->getProxy(AddressDbAdapter::class);
-
-        return new $proxyAdapter();
+        return Shopware()->Container()->get(AddressDbAdapter::class);
     }
 }
