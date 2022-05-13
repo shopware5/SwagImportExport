@@ -9,12 +9,15 @@
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Expr\Join;
 use Enlight_Components_Db_Adapter_Pdo_Mysql;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Bundle\SearchBundle\ProductNumberSearchInterface;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\SearchBundleDBAL\ProductNumberSearch;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 use Shopware\Components\ContainerAwareEventManager;
@@ -40,6 +43,7 @@ use Shopware\Models\Attribute\Configuration;
 use Shopware\Models\Category\Category;
 use Shopware\Models\Shop\Repository as ShopRepository;
 use Shopware\Models\Shop\Shop;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class ArticlesDbAdapter implements DataDbAdapter
 {
@@ -57,11 +61,6 @@ class ArticlesDbAdapter implements DataDbAdapter
      * @var Enlight_Components_Db_Adapter_Pdo_Mysql
      */
     protected $db;
-
-    /**
-     * @var array
-     */
-    protected $categoryIdCollection;
 
     /**
      * @var array
@@ -133,19 +132,61 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     private $shopRepository;
 
-    public function __construct()
-    {
-        $this->container = $container = Shopware()->Container();
-        $this->db = $container->get('db');
-        $this->modelManager = $container->get('models');
-        $this->mediaService = $container->get('shopware_media.media_service');
-        $this->config = $container->get('config');
-        $this->eventManager = $container->get('events');
-        $this->underscoreToCamelCaseService = $container->get('swag_import_export.underscore_camelcase_service');
-        $this->contextService = $this->container->get('shopware_storefront.context_service');
-        $this->streamRepo = $this->container->get('shopware_product_stream.repository');
-        $this->productNumberSearch = $this->container->get('shopware_search.product_number_search');
+    private ArticleWriter $articleWriter;
+
+    private PriceWriter $priceWriter;
+
+    private CategoryWriter $categoryWriter;
+
+    private ConfiguratorWriter $configuratorWriter;
+
+    private TranslationWriter $translationWriter;
+
+    private PropertyWriter $propertyWriter;
+
+    private RelationWriter $relationWriter;
+
+    private ImageWriter $imageWriter;
+
+    public function __construct(
+        ContainerInterface $container,
+        Enlight_Components_Db_Adapter_Pdo_Mysql $db,
+        EntityManagerInterface $modelManager,
+        MediaServiceInterface $mediaService,
+        \Shopware_Components_Config $config,
+        ContainerAwareEventManager $eventManager,
+        UnderscoreToCamelCaseServiceInterface $underscoreToCamelCaseService,
+        ContextServiceInterface $contextService,
+        Repository $streamRepo,
+        ProductNumberSearchInterface $productNumberSearch,
+        ArticleWriter $articleWriter,
+        PriceWriter $priceWriter,
+        CategoryWriter $categoryWriter,
+        ConfiguratorWriter $configuratorWriter,
+        TranslationWriter $translationWriter,
+        PropertyWriter $propertyWriter,
+        RelationWriter $relationWriter,
+        ImageWriter $imageWriter
+    ) {
+        $this->container = $container;
+        $this->db = $db;
+        $this->modelManager = $modelManager;
+        $this->mediaService = $mediaService;
+        $this->config = $config;
+        $this->eventManager = $eventManager;
+        $this->underscoreToCamelCaseService = $underscoreToCamelCaseService;
+        $this->contextService = $contextService;
+        $this->streamRepo = $streamRepo;
+        $this->productNumberSearch = $productNumberSearch;
         $this->shopRepository = $this->modelManager->getRepository(Shop::class);
+        $this->articleWriter = $articleWriter;
+        $this->priceWriter = $priceWriter;
+        $this->categoryWriter = $categoryWriter;
+        $this->configuratorWriter = $configuratorWriter;
+        $this->translationWriter = $translationWriter;
+        $this->propertyWriter = $propertyWriter;
+        $this->relationWriter = $relationWriter;
+        $this->imageWriter = $imageWriter;
     }
 
     /**
@@ -169,8 +210,8 @@ class ArticlesDbAdapter implements DataDbAdapter
             /** @var Category $category */
             $category = $this->modelManager->find(Category::class, $filter['categories'][0]);
 
-            $this->collectCategoryIds($category);
-            $categories = $this->getCategoryIdCollection();
+            $categories = [];
+            $this->collectCategoryIds($category, $categories);
 
             $categoriesBuilder = $this->modelManager->createQueryBuilder();
             $categoriesBuilder->select('article.id')
@@ -920,19 +961,6 @@ class ArticlesDbAdapter implements DataDbAdapter
         $this->logState = $logState;
     }
 
-    /**
-     * @return array
-     */
-    public function getCategoryIdCollection()
-    {
-        return $this->categoryIdCollection;
-    }
-
-    public function setCategoryIdCollection($categoryIdCollection)
-    {
-        $this->categoryIdCollection[] = $categoryIdCollection;
-    }
-
     public function saveUnprocessedData($profileName, $type, $articleNumber, $data)
     {
         $this->saveArticleData($articleNumber);
@@ -1311,10 +1339,10 @@ class ArticlesDbAdapter implements DataDbAdapter
      *
      * @param \Shopware\Models\Category\Category $categoryModel
      */
-    protected function collectCategoryIds($categoryModel)
+    protected function collectCategoryIds($categoryModel, array &$categoriesReturn)
     {
         $categoryId = $categoryModel->getId();
-        $this->setCategoryIdCollection($categoryId);
+        $categoriesReturn[] = $categoryId;
         $categories = $categoryModel->getChildren();
 
         if (!$categories) {
@@ -1322,7 +1350,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         }
 
         foreach ($categories as $category) {
-            $this->collectCategoryIds($category);
+            $this->collectCategoryIds($category, $categoriesReturn);
         }
     }
 
@@ -1367,18 +1395,21 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     private function performImport(array $records)
     {
-        $articleWriter = Shopware()->Container()->get(ArticleWriter::class);
-        $pricesWriter = Shopware()->Container()->get(PriceWriter::class);
-        $categoryWriter = Shopware()->Container()->get(CategoryWriter::class);
-        $configuratorWriter = Shopware()->Container()->get(ConfiguratorWriter::class);
-        $translationWriter = Shopware()->Container()->get(TranslationWriter::class);
-        $propertyWriter = Shopware()->Container()->get(PropertyWriter::class);
-        $relationWriter = Shopware()->Container()->get(RelationWriter::class);
-        $imageWriter = Shopware()->Container()->get(ImageWriter::class);
+        $articleWriter = $this->articleWriter;
+        $pricesWriter = $this->priceWriter;
+        $categoryWriter = $this->categoryWriter;
+        $configuratorWriter = $this->configuratorWriter;
+        $translationWriter = $this->translationWriter;
+        $propertyWriter = $this->propertyWriter;
+        $relationWriter = $this->relationWriter;
+        $imageWriter = $this->imageWriter;
         $imageWriter->setArticleDBAdapter($this);
         $relationWriter->setArticlesDbAdapter($this);
 
         $defaultValues = $this->getDefaultValues();
+        $this->setDefaultValues([]);
+        $this->unprocessedData = [];
+        $this->tempData = [];
 
         foreach ($records['article'] as $index => $article) {
             try {

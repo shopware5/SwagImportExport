@@ -20,7 +20,7 @@ class ArticlesDbAdapterTest extends TestCase
 
     public function testWriteShouldThrowExceptionIfRecordsAreEmpty(): void
     {
-        $productDbAdapter = $this->createProductDbAdapter();
+        $productDbAdapter = $this->getProductDbAdapter();
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Keine Artikel gefunden.');
@@ -29,7 +29,7 @@ class ArticlesDbAdapterTest extends TestCase
 
     public function testNewProductShouldBeWrittenToDatabase(): void
     {
-        $productDbAdapter = $this->createProductDbAdapter();
+        $productDbAdapter = $this->getProductDbAdapter();
         $newProductRecord = [
             'article' => [
                 [
@@ -57,7 +57,7 @@ class ArticlesDbAdapterTest extends TestCase
 
     public function testWriteShouldAssignNewSimilarProducts(): void
     {
-        $productDbAdapter = $this->createProductDbAdapter();
+        $productDbAdapter = $this->getProductDbAdapter();
 
         $productRecordWithNewSimilar = [
             'article' => [
@@ -86,7 +86,7 @@ class ArticlesDbAdapterTest extends TestCase
 
     public function testWriteShouldAddSupplierIfItNotExists(): void
     {
-        $productDbAdapter = $this->createProductDbAdapter();
+        $productDbAdapter = $this->getProductDbAdapter();
 
         $productRecordWithNewSupplier = [
             'article' => [
@@ -110,7 +110,7 @@ class ArticlesDbAdapterTest extends TestCase
 
     public function testWriteProductWithoutSupplierThrowsException(): void
     {
-        $productDbAdapter = $this->createProductDbAdapter();
+        $productDbAdapter = $this->getProductDbAdapter();
         $productWithoutSupplier = [
             'article' => [
                 [
@@ -129,7 +129,7 @@ class ArticlesDbAdapterTest extends TestCase
 
     public function testWriteShouldAssignNewAccessoryProducts(): void
     {
-        $productDbAdapter = $this->createProductDbAdapter();
+        $productDbAdapter = $this->getProductDbAdapter();
 
         $productRecordWithNewAccessory = [
             'article' => [
@@ -166,7 +166,7 @@ class ArticlesDbAdapterTest extends TestCase
 
     public function testNewImageShouldFillUnprocessedDataArray(): void
     {
-        $productDbAdapter = $this->createProductDbAdapter();
+        $productDbAdapter = $this->getProductDbAdapter();
         $records = [
             'article' => [
                 0 => [
@@ -191,7 +191,7 @@ class ArticlesDbAdapterTest extends TestCase
 
     public function testExistingImageShouldBeAddedToProduct(): void
     {
-        $productDbAdapter = $this->createProductDbAdapter();
+        $productDbAdapter = $this->getProductDbAdapter();
         $records = [
             'article' => [
                 0 => [
@@ -222,7 +222,7 @@ class ArticlesDbAdapterTest extends TestCase
 
     public function testWriteProductVariantShouldBeWrittenToDatabase(): void
     {
-        $productDbAdapter = $this->createProductDbAdapter();
+        $productDbAdapter = $this->getProductDbAdapter();
         $newProductWithVariantRecord = [
             'article' => [
                 [
@@ -254,7 +254,7 @@ class ArticlesDbAdapterTest extends TestCase
 
     public function testWriteProductVariantWithNotExistingMainNumberThrowsException(): void
     {
-        $productDbAdapter = $this->createProductDbAdapter();
+        $productDbAdapter = $this->getProductDbAdapter();
         $productWithoutExistingMainNumber = [
             'article' => [
                 [
@@ -280,7 +280,7 @@ class ArticlesDbAdapterTest extends TestCase
         $attributeService = $this->getContainer()->get('shopware_attribute.crud_service');
         $attributeService->update('s_articles_attributes', 'mycustomfield', 'string', ['translatable' => true]);
 
-        $productDbAdapter = $this->createProductDbAdapter();
+        $productDbAdapter = $this->getProductDbAdapter();
         $records = [
             'article' => [
                 0 => [
@@ -322,7 +322,7 @@ class ArticlesDbAdapterTest extends TestCase
 
     public function testRead(): void
     {
-        $productDbAdapter = $this->createProductDbAdapter();
+        $productDbAdapter = $this->getProductDbAdapter();
         $ids = [3];
         $result = $productDbAdapter->read($ids, $this->getColumns());
 
@@ -339,7 +339,7 @@ class ArticlesDbAdapterTest extends TestCase
 
     public function testReadShouldThrowExceptionIfIdsAreEmpty(): void
     {
-        $productDbAdapter = $this->createProductDbAdapter();
+        $productDbAdapter = $this->getProductDbAdapter();
         $columns = ['article' => 'article.id as articleId'];
         $ids = [];
 
@@ -349,7 +349,7 @@ class ArticlesDbAdapterTest extends TestCase
 
     public function testReadShouldThrowExceptionIfColumnsAreEmpty(): void
     {
-        $productDbAdapter = $this->createProductDbAdapter();
+        $productDbAdapter = $this->getProductDbAdapter();
         $columns = [];
         $ids = [1, 2, 3];
 
@@ -357,9 +357,9 @@ class ArticlesDbAdapterTest extends TestCase
         $productDbAdapter->read($ids, $columns);
     }
 
-    private function createProductDbAdapter(): ArticlesDbAdapter
+    private function getProductDbAdapter(): ArticlesDbAdapter
     {
-        return new ArticlesDbAdapter();
+        return Shopware()->Container()->get(ArticlesDbAdapter::class);
     }
 
     /**

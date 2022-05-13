@@ -71,7 +71,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
             case DataDbAdapter::CATEGORIES_ADAPTER:
                 return $this->createCategoriesDbAdapter();
             case DataDbAdapter::ARTICLE_ADAPTER:
-                return $this->createArticlesDbAdapter();
+                return $this->getArticlesDbAdapter();
             case DataDbAdapter::ARTICLE_INSTOCK_ADAPTER:
                 return $this->createArticlesInStockDbAdapter();
             case DataDbAdapter::ARTICLE_TRANSLATION_ADAPTER:
@@ -205,34 +205,22 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
         return new Session($sessionEntity);
     }
 
-    /**
-     * @return CategoriesDataManager
-     */
-    protected function getCategoryDataManager()
+    protected function getCategoryDataManager(): CategoriesDataManager
     {
         return Shopware()->Container()->get(CategoriesDataManager::class);
     }
 
-    /**
-     * @return ArticleDataManager
-     */
-    protected function getArticleDataManager()
+    protected function getArticleDataManager(): ArticleDataManager
     {
         return Shopware()->Container()->get(ArticleDataManager::class);
     }
 
-    /**
-     * @return CustomerDataManager
-     */
-    protected function getCustomerDataManager()
+    protected function getCustomerDataManager(): CustomerDataManager
     {
         return Shopware()->Container()->get(CustomerDataManager::class);
     }
 
-    /**
-     * @return NewsletterDataManager
-     */
-    protected function getNewsletterDataManager()
+    protected function getNewsletterDataManager(): NewsletterDataManager
     {
         return Shopware()->Container()->get(NewsletterDataManager::class);
     }
@@ -250,15 +238,9 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
         return new $proxyAdapter();
     }
 
-    /**
-     * @return ArticlesDbAdapter
-     */
-    protected function createArticlesDbAdapter()
+    protected function getArticlesDbAdapter(): ArticlesDbAdapter
     {
-        $proxyAdapter = Shopware()->Hooks()
-            ->getProxy(ArticlesDbAdapter::class);
-
-        return new $proxyAdapter();
+        return Shopware()->Container()->get(ArticlesDbAdapter::class);
     }
 
     /**

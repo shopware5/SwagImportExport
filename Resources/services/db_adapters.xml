@@ -9,5 +9,28 @@
 
             <tag name="import_export.proxyable"/>
         </service>
+
+        <service id="Shopware\Components\SwagImportExport\DbAdapters\ArticlesDbAdapter" public="true">
+            <argument type="service" id="service_container"/>
+            <argument type="service" id="db"/>
+            <argument type="service" id="models"/>
+            <argument type="service" id="shopware_media.media_service"/>
+            <argument type="service" id="config"/>
+            <argument type="service" id="events"/>
+            <argument type="service" id="Shopware\Components\SwagImportExport\Service\UnderscoreToCamelCaseService"/>
+            <argument type="service" id="shopware_storefront.context_service"/>
+            <argument type="service" id="shopware_product_stream.repository"/>
+            <argument type="service" id="shopware_search.product_number_search"/>
+            <argument type="service" id="Shopware\Components\SwagImportExport\DbAdapters\Articles\ArticleWriter"/>
+            <argument type="service" id="Shopware\Components\SwagImportExport\DbAdapters\Articles\PriceWriter"/>
+            <argument type="service" id="Shopware\Components\SwagImportExport\DbAdapters\Articles\CategoryWriter"/>
+            <argument type="service" id="Shopware\Components\SwagImportExport\DbAdapters\Articles\ConfiguratorWriter"/>
+            <argument type="service" id="Shopware\Components\SwagImportExport\DbAdapters\Articles\TranslationWriter"/>
+            <argument type="service" id="Shopware\Components\SwagImportExport\DbAdapters\Articles\PropertyWriter"/>
+            <argument type="service" id="Shopware\Components\SwagImportExport\DbAdapters\Articles\RelationWriter"/>
+            <argument type="service" id="Shopware\Components\SwagImportExport\DbAdapters\Articles\ImageWriter"/>
+
+            <tag name="import_export.proxyable"/>
+        </service>
     </services>
 </container>

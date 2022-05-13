@@ -20,10 +20,10 @@ class RelationWriterTest extends TestCase
     /**
      * @return RelationWriter
      */
-    public function createRelationWriterAdapter()
+    public function getRelationWriterAdapter()
     {
         //We need to get an instance of the ArticlesDbAdapter because of the given dependency
-        $articlesDbAdapter = new ArticlesDbAdapter();
+        $articlesDbAdapter = Shopware()->Container()->get(ArticlesDbAdapter::class);
 
         $relationWriter = Shopware()->Container()->get(RelationWriter::class);
         $relationWriter->setArticlesDbAdapter($articlesDbAdapter);
@@ -33,7 +33,7 @@ class RelationWriterTest extends TestCase
 
     public function testWriteAccessoryWithInvalidDataThrowsException()
     {
-        $relationWriterAdapter = $this->createRelationWriterAdapter();
+        $relationWriterAdapter = $this->getRelationWriterAdapter();
 
         $invalidRelationData = [
             [
@@ -49,7 +49,7 @@ class RelationWriterTest extends TestCase
 
     public function testWriteSimilarWithInvalidDataThrowsException()
     {
-        $relationWriterAdapter = $this->createRelationWriterAdapter();
+        $relationWriterAdapter = $this->getRelationWriterAdapter();
 
         $invalidRelationData = [
             [
