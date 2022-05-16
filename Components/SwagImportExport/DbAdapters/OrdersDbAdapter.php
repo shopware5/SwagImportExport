@@ -20,7 +20,7 @@ use Shopware\Models\Order\Detail;
 use Shopware\Models\Order\DetailStatus;
 use Shopware\Models\Order\Status;
 
-class OrdersDbAdapter implements DataDbAdapter
+class OrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
 {
     public const OrderDBAdapterQueryEvent = 'OrdersDbAdapter::getQuery';
     public const OrderDBAdapterColumnsEvent = 'OrdersDbAdapter::adjustColumns';

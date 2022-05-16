@@ -24,7 +24,7 @@ use Shopware\Models\Newsletter\Address;
 use Shopware\Models\Newsletter\ContactData;
 use Shopware\Models\Newsletter\Group;
 
-class NewsletterDbAdapter implements DataDbAdapter
+class NewsletterDbAdapter implements DataDbAdapter, \Enlight_Hook
 {
     /**
      * @var \Enlight_Components_Db_Adapter_Pdo_Mysql

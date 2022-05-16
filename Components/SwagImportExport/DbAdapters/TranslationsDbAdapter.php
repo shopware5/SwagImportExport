@@ -8,6 +8,7 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\TransactionRequiredException;
@@ -25,7 +26,7 @@ use Shopware\Models\Property\Value as PropertyValue;
 use Shopware\Models\Shop\Shop;
 use Shopware\Models\Translation\Translation;
 
-class TranslationsDbAdapter implements DataDbAdapter
+class TranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
 {
     /**
      * @var ModelManager|null
@@ -72,12 +73,34 @@ class TranslationsDbAdapter implements DataDbAdapter
      */
     protected $validator;
 
+    private \Enlight_Event_EventManager $eventManager;
+
+    private \Shopware_Components_Translation $translation;
+
+    private \Shopware_Components_Config $config;
+
+    private \Enlight_Components_Db_Adapter_Pdo_Mysql $db;
+
+    public function __construct(
+        EntityManagerInterface $manager,
+        \Enlight_Event_EventManager $eventManager,
+        \Shopware_Components_Translation $translation,
+        \Shopware_Components_Config $config,
+        \Enlight_Components_Db_Adapter_Pdo_Mysql $db
+    ) {
+        $this->manager = $manager;
+        $this->eventManager = $eventManager;
+        $this->translation = $translation;
+        $this->config = $config;
+        $this->db = $db;
+    }
+
     /**
      * {@inheritDoc}
      */
     public function readRecordIds($start, $limit, $filter)
     {
-        $manager = $this->getManager();
+        $manager = $this->manager;
 
         $builder = $manager->createQueryBuilder();
 
@@ -220,7 +243,7 @@ class TranslationsDbAdapter implements DataDbAdapter
             throw new \Exception($message);
         }
 
-        $records = Shopware()->Events()->filter(
+        $records = $this->eventManager->filter(
             'Shopware_Components_SwagImportExport_DbAdapters_TranslationsDbAdapter_Write',
             $records,
             ['subject' => $this]
@@ -228,7 +251,6 @@ class TranslationsDbAdapter implements DataDbAdapter
 
         $validator = $this->getValidator();
         $importMapper = $this->getElementMapper();
-        $translationWriter = Shopware()->Container()->get('translation');
 
         foreach ($records['default'] as $index => $record) {
             try {
@@ -238,7 +260,7 @@ class TranslationsDbAdapter implements DataDbAdapter
 
                 $shop = null;
                 if (isset($record['languageId'])) {
-                    $shop = $this->getManager()->find(Shop::class, $record['languageId']);
+                    $shop = $this->manager->find(Shop::class, $record['languageId']);
                 }
 
                 if (!$shop instanceof Shop) {
@@ -282,7 +304,7 @@ class TranslationsDbAdapter implements DataDbAdapter
                     $data['description'] = $record['description'];
                 }
 
-                $translationWriter->write($shop->getId(), $record['objectType'], $element->getId(), $data);
+                $this->translation->write($shop->getId(), $record['objectType'], $element->getId(), $data);
 
                 unset($shop);
                 unset($element);
@@ -308,7 +330,7 @@ class TranslationsDbAdapter implements DataDbAdapter
      */
     public function saveMessage($message)
     {
-        $errorMode = Shopware()->Config()->get('SwagImportExportErrorMode');
+        $errorMode = $this->config->get('SwagImportExportErrorMode');
 
         if ($errorMode === false) {
             throw new \Exception($message);
@@ -355,25 +377,11 @@ class TranslationsDbAdapter implements DataDbAdapter
     }
 
     /**
-     * Returns entity manager
-     *
-     * @return ModelManager
-     */
-    public function getManager()
-    {
-        if ($this->manager === null) {
-            $this->manager = Shopware()->Models();
-        }
-
-        return $this->manager;
-    }
-
-    /**
      * @return QueryBuilder
      */
     public function getBuilder($ids)
     {
-        $builder = $this->getManager()->createQueryBuilder();
+        $builder = $this->manager->createQueryBuilder();
         $builder->select('translation')
             ->from(Translation::class, 'translation')
             ->where('translation.id IN (:ids)')
@@ -390,7 +398,7 @@ class TranslationsDbAdapter implements DataDbAdapter
     public function getConfiguratorGroupRepository()
     {
         if ($this->configuratorGroupRepo === null) {
-            $this->configuratorGroupRepo = $this->getManager()->getRepository(ConfiguratorGroup::class);
+            $this->configuratorGroupRepo = $this->manager->getRepository(ConfiguratorGroup::class);
         }
 
         return $this->configuratorGroupRepo;
@@ -404,7 +412,7 @@ class TranslationsDbAdapter implements DataDbAdapter
     public function getConfiguratorOptionRepository()
     {
         if ($this->configuratorOptionRepo === null) {
-            $this->configuratorOptionRepo = $this->getManager()->getRepository(ConfiguratorOption::class);
+            $this->configuratorOptionRepo = $this->manager->getRepository(ConfiguratorOption::class);
         }
 
         return $this->configuratorOptionRepo;
@@ -418,7 +426,7 @@ class TranslationsDbAdapter implements DataDbAdapter
     public function getPropertyGroupRepository()
     {
         if ($this->propertyGroupRepo === null) {
-            $this->propertyGroupRepo = $this->getManager()->getRepository(PropertyGroup::class);
+            $this->propertyGroupRepo = $this->manager->getRepository(PropertyGroup::class);
         }
 
         return $this->propertyGroupRepo;
@@ -432,7 +440,7 @@ class TranslationsDbAdapter implements DataDbAdapter
     public function getPropertyOptionRepository()
     {
         if ($this->propertyOptionRepo === null) {
-            $this->propertyOptionRepo = $this->getManager()->getRepository(PropertyOption::class);
+            $this->propertyOptionRepo = $this->manager->getRepository(PropertyOption::class);
         }
 
         return $this->propertyOptionRepo;
@@ -446,7 +454,7 @@ class TranslationsDbAdapter implements DataDbAdapter
     public function getPropertyValueRepository()
     {
         if ($this->propertyValueRepo === null) {
-            $this->propertyValueRepo = $this->getManager()->getRepository(PropertyValue::class);
+            $this->propertyValueRepo = $this->manager->getRepository(PropertyValue::class);
         }
 
         return $this->propertyValueRepo;
@@ -538,7 +546,7 @@ class TranslationsDbAdapter implements DataDbAdapter
                 WHERE ct.id IN ($articleDetailIds) AND ct.objecttype = 'propertyvalue')
                 ";
 
-        return Shopware()->Db()->query($sql)->fetchAll();
+        return $this->db->query($sql)->fetchAll();
     }
 
     /**

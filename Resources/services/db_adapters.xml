@@ -137,5 +137,15 @@
 
             <tag name="import_export.proxyable"/>
         </service>
+
+        <service id="Shopware\Components\SwagImportExport\DbAdapters\TranslationsDbAdapter" public="true">
+            <argument type="service" id="models"/>
+            <argument type="service" id="events"/>
+            <argument type="service" id="translation"/>
+            <argument type="service" id="config"/>
+            <argument type="service" id="db"/>
+
+            <tag name="import_export.proxyable"/>
+        </service>
     </services>
 </container>

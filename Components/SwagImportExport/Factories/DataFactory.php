@@ -91,7 +91,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
             case DataDbAdapter::NEWSLETTER_RECIPIENTS_ADAPTER:
                 return $this->getNewsletterDbAdapter();
             case DataDbAdapter::TRANSLATION_ADAPTER:
-                return $this->createTranslationsDbAdapter();
+                return $this->getTranslationsDbAdapter();
             case DataDbAdapter::ADDRESS_ADAPTER:
                 return $this->getAddressDbAdapter();
             case DataDbAdapter::CATEGORIES_TRANSLATION_ADAPTER:
@@ -197,10 +197,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
         );
     }
 
-    /**
-     * @return Session
-     */
-    protected function createSession(SessionEntity $sessionEntity)
+    protected function createSession(SessionEntity $sessionEntity): Session
     {
         return new Session($sessionEntity);
     }
@@ -285,21 +282,12 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
         return Shopware()->Container()->get(NewsletterDbAdapter::class);
     }
 
-    /**
-     * @return TranslationsDbAdapter
-     */
-    protected function createTranslationsDbAdapter()
+    protected function getTranslationsDbAdapter(): TranslationsDbAdapter
     {
-        $proxyAdapter = Shopware()->Hooks()
-            ->getProxy(TranslationsDbAdapter::class);
-
-        return new $proxyAdapter();
+        return Shopware()->Container()->get(TranslationsDbAdapter::class);
     }
 
-    /**
-     * @return AddressDbAdapter
-     */
-    private function getAddressDbAdapter()
+    private function getAddressDbAdapter(): AddressDbAdapter
     {
         return Shopware()->Container()->get(AddressDbAdapter::class);
     }
