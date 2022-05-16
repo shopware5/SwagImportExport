@@ -30,6 +30,9 @@
     </service>
 
     <service id="Shopware\Components\SwagImportExport\Factories\ProfileFactory" public="true">
+        <argument type="service" id="models"/>
+        <argument type="service" id="events"/>
+
         <tag name="import_export.proxyable"/>
     </service>
 

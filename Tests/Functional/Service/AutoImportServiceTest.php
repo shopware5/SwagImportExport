@@ -8,7 +8,6 @@
 
 namespace SwagImportExport\Tests\Functional\Service;
 
-use Enlight_Class;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\SwagImportExport\Factories\ProfileFactory;
 use Shopware\Components\SwagImportExport\Service\AutoImportService;
@@ -122,7 +121,7 @@ class AutoImportServiceTest extends TestCase
         return new AutoImportService(
             new UploadPathProvider(Shopware()->DocPath()),
             Shopware()->Container()->get('models'),
-            Enlight_Class::Instance(ProfileFactory::class)
+            Shopware()->Container()->get(ProfileFactory::class)
         );
     }
 }

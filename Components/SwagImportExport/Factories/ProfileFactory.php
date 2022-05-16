@@ -20,11 +20,14 @@ class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
      */
     private $modelManager;
 
-    public function __construct()
-    {
-        parent::__construct();
+    private \Enlight_Event_EventManager $eventManager;
 
-        $this->modelManager = Shopware()->Models();
+    public function __construct(
+        ModelManager $modelManager,
+        \Enlight_Event_EventManager $eventManager
+    ) {
+        $this->modelManager = $modelManager;
+        $this->eventManager = $eventManager;
     }
 
     /**
@@ -58,7 +61,7 @@ class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
      */
     public function createProfileModel($data)
     {
-        $event = Shopware()->Events()->notifyUntil(
+        $event = $this->eventManager->notifyUntil(
             'Shopware_Components_SwagImportExport_Factories_CreateProfileModel',
             ['subject' => $this, 'data' => $data]
         );
