@@ -20,7 +20,7 @@ use Shopware\Models\Country\State;
 use Shopware\Models\Customer\Address;
 use Shopware\Models\Customer\Customer;
 
-class AddressDbAdapter implements DataDbAdapter
+class AddressDbAdapter implements DataDbAdapter, \Enlight_Hook
 {
     /**
      * @var ModelManager

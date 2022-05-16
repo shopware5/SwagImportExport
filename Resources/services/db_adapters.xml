@@ -6,7 +6,6 @@
         <service id="Shopware\Components\SwagImportExport\DbAdapters\AddressDbAdapter" public="true">
             <argument type="service" id="models"/>
 
-
             <tag name="import_export.proxyable"/>
         </service>
 
@@ -29,6 +28,20 @@
             <argument type="service" id="Shopware\Components\SwagImportExport\DbAdapters\Articles\PropertyWriter"/>
             <argument type="service" id="Shopware\Components\SwagImportExport\DbAdapters\Articles\RelationWriter"/>
             <argument type="service" id="Shopware\Components\SwagImportExport\DbAdapters\Articles\ImageWriter"/>
+
+            <tag name="import_export.proxyable"/>
+        </service>
+
+        <service id="Shopware\Components\SwagImportExport\DbAdapters\ArticlesImagesDbAdapter" public="true">
+            <argument type="service" id="models"/>
+            <argument type="service" id="db"/>
+            <argument type="service" id="shopware_media.media_service"/>
+            <argument type="service" id="events"/>
+            <argument type="service" id="Shopware\Components\SwagImportExport\DataManagers\ArticleImageDataManager"/>
+            <argument type="service" id="thumbnail_manager"/>
+            <argument type="service" id="Shopware\Components\SwagImportExport\Service\UnderscoreToCamelCaseService"/>
+            <argument type="service" id="Shopware\Components\SwagImportExport\DbalHelper"/>
+            <argument type="service" id="guzzle_http_client_factory"/>
 
             <tag name="import_export.proxyable"/>
         </service>

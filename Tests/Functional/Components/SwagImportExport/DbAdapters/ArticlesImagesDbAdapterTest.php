@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace SwagImportExport\Tests\Functional\Components\SwagImportExport\DbAdapters;
 
 use PHPUnit\Framework\TestCase;
+use Pimple\Container;
 use Shopware\Components\SwagImportExport\DbAdapters\ArticlesImagesDbAdapter;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 
@@ -19,7 +20,7 @@ class ArticlesImagesDbAdapterTest extends TestCase
 
     public function testWriteShouldThrowExceptionIfRecordsAreEmpty(): void
     {
-        $productsImagesDbAdapter = $this->createProductImagesDbAdapter();
+        $productsImagesDbAdapter = $this->getProductImagesDbAdapter();
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Es wurden keine neuen Artikelbilder gefunden.');
@@ -28,7 +29,7 @@ class ArticlesImagesDbAdapterTest extends TestCase
 
     public function testWriteShouldThrowExceptionHavingWrongPath(): void
     {
-        $productsImagesDbAdapter = $this->createProductImagesDbAdapter();
+        $productsImagesDbAdapter = $this->getProductImagesDbAdapter();
         $records = [
             'default' => [
                 [
@@ -47,7 +48,7 @@ class ArticlesImagesDbAdapterTest extends TestCase
 
     public function testNewProductImageShouldBeWrittenToDatabase(): void
     {
-        $productsImagesDbAdapter = $this->createProductImagesDbAdapter();
+        $productsImagesDbAdapter = $this->getProductImagesDbAdapter();
         $records = [
             'default' => [
                 [
@@ -71,7 +72,7 @@ class ArticlesImagesDbAdapterTest extends TestCase
 
     public function testNewProductImageFromHTTPShouldBeWrittenToDatabase(): void
     {
-        $productsImagesDbAdapter = $this->createProductImagesDbAdapter();
+        $productsImagesDbAdapter = $this->getProductImagesDbAdapter();
         $records = [
             'default' => [
                 [
@@ -95,7 +96,7 @@ class ArticlesImagesDbAdapterTest extends TestCase
 
     public function testWriteWithInvalidOrderNumberThrowsException(): void
     {
-        $productsImagesDbAdapter = $this->createProductImagesDbAdapter();
+        $productsImagesDbAdapter = $this->getProductImagesDbAdapter();
         $records = [
             'default' => [
                 [
@@ -113,7 +114,7 @@ class ArticlesImagesDbAdapterTest extends TestCase
 
     public function testWriteWithNotExistingImageThrowsException(): void
     {
-        $productsImagesDbAdapter = $this->createProductImagesDbAdapter();
+        $productsImagesDbAdapter = $this->getProductImagesDbAdapter();
         $records = [
             'default' => [
                 [
@@ -129,9 +130,9 @@ class ArticlesImagesDbAdapterTest extends TestCase
         $productsImagesDbAdapter->write($records);
     }
 
-    private function createProductImagesDbAdapter(): ArticlesImagesDbAdapter
+    private function getProductImagesDbAdapter(): ArticlesImagesDbAdapter
     {
-        return new ArticlesImagesDbAdapter();
+        return Shopware()->Container()->get(ArticlesImagesDbAdapter::class);
     }
 
     private function getImportImagePath(): string

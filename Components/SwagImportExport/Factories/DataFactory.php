@@ -289,17 +289,9 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
         return new $proxyAdapter();
     }
 
-    /**
-     * This method can be hookable
-     *
-     * @return ArticlesImagesDbAdapter
-     */
-    protected function createArticlesImagesDbAdapter()
+    protected function createArticlesImagesDbAdapter(): ArticlesImagesDbAdapter
     {
-        $proxyAdapter = Shopware()->Hooks()
-            ->getProxy(ArticlesImagesDbAdapter::class);
-
-        return new $proxyAdapter();
+        return Shopware()->Container()->get(ArticlesImagesDbAdapter::class);
     }
 
     /**

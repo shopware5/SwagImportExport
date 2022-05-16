@@ -8,15 +8,20 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
+use Doctrine\Common\EventManager;
 use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Expr\Join;
 use GuzzleHttp\Client;
 use Shopware\Bundle\MediaBundle\MediaService;
+use Shopware\Components\ContainerAwareEventManager;
+use Shopware\Components\HttpClient\GuzzleFactory;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\QueryBuilder;
 use Shopware\Components\SwagImportExport\DataManagers\ArticleImageDataManager;
 use Shopware\Components\SwagImportExport\DbalHelper;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
+use Shopware\Components\SwagImportExport\Service\UnderscoreToCamelCaseService;
 use Shopware\Components\SwagImportExport\Service\UnderscoreToCamelCaseServiceInterface;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Validators\ArticleImageValidator;
@@ -131,22 +136,32 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
      */
     private $httpClient;
 
-    public function __construct()
-    {
-        $this->manager = Shopware()->Models();
-        $this->db = Shopware()->Db();
-        $this->mediaService = Shopware()->Container()->get('shopware_media.media_service');
-        $this->request = Shopware()->Front()->Request();
-        $this->eventManager = Shopware()->Events();
-        $this->validator = new ArticleImageValidator();
-        $this->dataManager = Shopware()->Container()->get(ArticleImageDataManager::class);
+    public function __construct(
+        EntityManagerInterface $manager,
+        \Enlight_Components_Db_Adapter_Pdo_Mysql $db,
+        MediaService $mediaService,
+        ContainerAwareEventManager $eventManager,
+        ArticleImageDataManager $dataManager,
+        Manager $thumbnailManager,
+        UnderscoreToCamelCaseService $underscoreToCamelCaseService,
+        DbalHelper $dbalHelper,
+        GuzzleFactory $guzzleFactory
+    ) {
+        $this->manager = $manager;
+        $this->db = $db;
+        $this->mediaService = $mediaService;
+        $this->eventManager = $eventManager;
+        $this->dataManager = $dataManager;
+        $this->thumbnailManager = $thumbnailManager;
+        $this->underscoreToCamelCaseService = $underscoreToCamelCaseService;
+        $this->dbalHelper = $dbalHelper;
+        $this->httpClient = $guzzleFactory->createClient();
+
         $this->imageImportMode = (int) Shopware()->Config()->get('SwagImportExportImageMode');
         $this->importExportErrorMode = (bool) Shopware()->Config()->get('SwagImportExportErrorMode');
-        $this->thumbnailManager = Shopware()->Container()->get('thumbnail_manager');
         $this->docPath = Shopware()->DocPath('media_temp');
-        $this->underscoreToCamelCaseService = Shopware()->Container()->get('swag_import_export.underscore_camelcase_service');
-        $this->dbalHelper = DbalHelper::create();
-        $this->httpClient = Shopware()->Container()->get('guzzle_http_client_factory')->createClient();
+        $this->validator = new ArticleImageValidator();
+        $this->request = Shopware()->Front()->Request();
     }
 
     /**
@@ -296,6 +311,8 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
             ['subject' => $this]
         );
 
+        $this->unprocessedData = [];
+
         foreach ($records['default'] as $record) {
             try {
                 $record = $this->validator->filterEmptyString($record);
@@ -323,7 +340,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
 
                         $variantConfig = \explode('|', \preg_replace('/{|}/', '', $relation));
                         foreach ($variantConfig as $config) {
-                            list($group, $option) = \explode(':', $config);
+                            [$group, $option] = \explode(':', $config);
 
                             //Get configurator group
                             $cGroupModel = $this->manager->getRepository(Group::class)->findOneBy(['name' => $group]);
