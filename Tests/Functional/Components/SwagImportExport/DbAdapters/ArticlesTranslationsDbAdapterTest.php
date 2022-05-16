@@ -19,7 +19,7 @@ class ArticlesTranslationsDbAdapterTest extends TestCase
 
     public function testReadShouldThrowExceptionIfIdsAreEmpty()
     {
-        $articlesTranslationsDbAdapter = $this->createArticlesTranslationsDbAdapter();
+        $articlesTranslationsDbAdapter = $this->getArticlesTranslationsDbAdapter();
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Kann Übersetzungen ohne IDs nicht lesen.');
@@ -28,7 +28,7 @@ class ArticlesTranslationsDbAdapterTest extends TestCase
 
     public function testReadShouldRespondCorrectTranslations()
     {
-        $articlesTranslationsDbAdapter = $this->createArticlesTranslationsDbAdapter();
+        $articlesTranslationsDbAdapter = $this->getArticlesTranslationsDbAdapter();
         $translations = $articlesTranslationsDbAdapter->read([151, 152], $articlesTranslationsDbAdapter->getDefaultColumns());
 
         static::assertArrayHasKey('default', $translations);
@@ -38,7 +38,7 @@ class ArticlesTranslationsDbAdapterTest extends TestCase
 
     public function testWriteShouldThrowExceptionIfRecordsAreEmpty()
     {
-        $articlesTranslationsDbAdapter = $this->createArticlesTranslationsDbAdapter();
+        $articlesTranslationsDbAdapter = $this->getArticlesTranslationsDbAdapter();
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Es wurden keine Artikelübersetzungen gefunden.');
@@ -47,7 +47,7 @@ class ArticlesTranslationsDbAdapterTest extends TestCase
 
     public function testWriteShouldUpdateArticleTranslationToDatabase()
     {
-        $articlesTranslationsDbAdapter = $this->createArticlesTranslationsDbAdapter();
+        $articlesTranslationsDbAdapter = $this->getArticlesTranslationsDbAdapter();
         $records = [
             'default' => [
                 ['articleNumber' => 'SW10003', 'languageId' => 2, 'name' => 'My translation test'],
@@ -68,11 +68,8 @@ class ArticlesTranslationsDbAdapterTest extends TestCase
         static::assertEquals('My translation test', $translation['txtArtikel']);
     }
 
-    /**
-     * @return ArticlesTranslationsDbAdapter
-     */
-    private function createArticlesTranslationsDbAdapter()
+    private function getArticlesTranslationsDbAdapter(): ArticlesTranslationsDbAdapter
     {
-        return new ArticlesTranslationsDbAdapter();
+        return Shopware()->Container()->get(ArticlesTranslationsDbAdapter::class);
     }
 }

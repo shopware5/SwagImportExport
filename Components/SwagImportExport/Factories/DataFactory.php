@@ -248,15 +248,9 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
         return Shopware()->Container()->get(ArticlesInStockDbAdapter::class);
     }
 
-    /**
-     * @return ArticlesTranslationsDbAdapter
-     */
-    protected function createArticlesTranslationsDbAdapter()
+    protected function createArticlesTranslationsDbAdapter(): ArticlesTranslationsDbAdapter
     {
-        $proxyAdapter = Shopware()->Hooks()
-            ->getProxy(ArticlesTranslationsDbAdapter::class);
-
-        return new $proxyAdapter();
+        return Shopware()->Container()->get(ArticlesTranslationsDbAdapter::class);
     }
 
     /**

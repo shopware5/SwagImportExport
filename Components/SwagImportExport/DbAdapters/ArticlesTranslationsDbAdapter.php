@@ -8,6 +8,7 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
@@ -17,7 +18,7 @@ use Shopware\Models\Attribute\Configuration;
 use Shopware\Models\Shop\Shop;
 use Shopware\Models\Translation\Translation;
 
-class ArticlesTranslationsDbAdapter implements DataDbAdapter
+class ArticlesTranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
 {
     /**
      * @var ModelManager
@@ -64,14 +65,19 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
      */
     protected $eventManager;
 
-    public function __construct()
-    {
-        $this->manager = Shopware()->Models();
+    public function __construct(
+        EntityManagerInterface $manager,
+        \Shopware_Components_Translation $translationComponent,
+        \Enlight_Components_Db_Adapter_Pdo_Mysql $db,
+        \Enlight_Event_EventManager $eventManager,
+        \Shopware_Components_Config $config
+    ) {
         $this->validator = new ArticleTranslationValidator();
-        $this->translationComponent = Shopware()->Container()->get('translation');
-        $this->importExportErrorMode = (bool) Shopware()->Config()->get('SwagImportExportErrorMode');
-        $this->db = Shopware()->Db();
-        $this->eventManager = Shopware()->Events();
+        $this->manager = $manager;
+        $this->translationComponent = $translationComponent;
+        $this->importExportErrorMode = (bool) $config->get('SwagImportExportErrorMode');
+        $this->db = $db;
+        $this->eventManager = $eventManager;
     }
 
     /**
@@ -165,6 +171,8 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter
      */
     public function write($records)
     {
+        $this->unprocessedData = [];
+
         if (empty($records['default'])) {
             $message = SnippetsHelper::getNamespace()
                 ->get('adapters/articlesTranslations/no_records', 'No article translation records were found.');
