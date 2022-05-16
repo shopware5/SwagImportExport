@@ -45,5 +45,12 @@
 
             <tag name="import_export.proxyable"/>
         </service>
+
+        <service id="Shopware\Components\SwagImportExport\DbAdapters\ArticlesInStockDbAdapter" public="true">
+            <argument type="service" id="Shopware\Components\SwagImportExport\Utils\SnippetsHelper"/>
+            <argument type="service" id="models"/>
+
+            <tag name="import_export.proxyable"/>
+        </service>
     </services>
 </container>

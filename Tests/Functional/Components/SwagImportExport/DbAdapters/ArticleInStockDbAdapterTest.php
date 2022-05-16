@@ -99,7 +99,7 @@ class ArticleInStockDbAdapterTest extends TestCase
      */
     private function createArticlesInStockAbAdapter()
     {
-        return new ArticlesInStockDbAdapter();
+        return Shopware()->Container()->get(ArticlesInStockDbAdapter::class);
     }
 
     /**

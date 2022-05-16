@@ -9,6 +9,7 @@
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
 use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\EntityManagerInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\QueryBuilder;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
@@ -54,11 +55,13 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
      */
     private $snippetHelper;
 
-    public function __construct()
-    {
+    public function __construct(
+        SnippetsHelper $snippetHelper,
+        EntityManagerInterface $modelManager
+    ) {
         $this->validator = new ArticleInStockValidator();
-        $this->snippetHelper = new SnippetsHelper();
-        $this->modelManager = Shopware()->Container()->get('models');
+        $this->snippetHelper = $snippetHelper;
+        $this->modelManager = $modelManager;
         $this->repository = $this->modelManager->getRepository(Detail::class);
     }
 
@@ -230,6 +233,7 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
     public function write($records)
     {
         $articleCount = 0;
+        $this->unprocessedData = [];
 
         if (empty($records['default'])) {
             $message = SnippetsHelper::getNamespace()
