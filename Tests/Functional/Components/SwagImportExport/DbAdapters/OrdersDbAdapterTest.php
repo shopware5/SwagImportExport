@@ -129,7 +129,7 @@ class OrdersDbAdapterTest extends TestCase
 
     private function createOrdersDbAdapter(): OrdersDbAdapter
     {
-        return new OrdersDbAdapter();
+        return Shopware()->Container()->get(OrdersDbAdapter::class);
     }
 
     /**

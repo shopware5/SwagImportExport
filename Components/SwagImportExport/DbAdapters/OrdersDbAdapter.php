@@ -8,6 +8,7 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\QueryBuilder;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
@@ -54,11 +55,14 @@ class OrdersDbAdapter implements DataDbAdapter
      */
     private $underscoreToCamelCaseService;
 
-    public function __construct()
-    {
-        $this->modelManager = Shopware()->Container()->get('models');
+    public function __construct(
+        EntityManagerInterface $manager,
+        UnderscoreToCamelCaseServiceInterface $underscoreToCamelCaseService
+    ) {
+        $this->modelManager = $manager;
+        $this->underscoreToCamelCaseService = $underscoreToCamelCaseService;
+
         $this->validator = new OrderValidator();
-        $this->underscoreToCamelCaseService = Shopware()->Container()->get('swag_import_export.underscore_camelcase_service');
     }
 
     /**
@@ -159,6 +163,8 @@ class OrdersDbAdapter implements DataDbAdapter
      */
     public function write($records)
     {
+        $this->unprocessedData = [];
+
         $records = Shopware()->Events()->filter(
             'Shopware_Components_SwagImportExport_DbAdapters_OrdersDbAdapter_Write',
             $records,
