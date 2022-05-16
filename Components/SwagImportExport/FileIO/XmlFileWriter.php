@@ -9,7 +9,6 @@
 namespace Shopware\Components\SwagImportExport\FileIO;
 
 use Shopware\Components\Converter\XmlConverter;
-use Shopware\Components\SwagImportExport\FileIO\Encoders\XmlEncoder;
 use Shopware\Components\SwagImportExport\Utils\FileHelper;
 
 /**
@@ -118,8 +117,6 @@ class XmlFileWriter implements FileWriter
     }
 
     /**
-     * Returns XmlEncoder
-     *
      * @return XmlConverter
      */
     protected function getXmlConvertor()

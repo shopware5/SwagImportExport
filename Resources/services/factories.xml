@@ -34,6 +34,11 @@
     </service>
 
     <service id="Shopware\Components\SwagImportExport\Factories\FileIOFactory" public="true">
+        <argument type="service" id="Shopware\Components\SwagImportExport\FileIO\CsvFileReader"/>
+        <argument type="service" id="Shopware\Components\SwagImportExport\FileIO\CsvFileWriter"/>
+        <argument type="service" id="Shopware\Components\SwagImportExport\FileIO\XmlFileReader"/>
+        <argument type="service" id="Shopware\Components\SwagImportExport\FileIO\XmlFileWriter"/>
+
         <tag name="import_export.proxyable"/>
     </service>
 

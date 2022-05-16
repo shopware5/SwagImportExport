@@ -12,10 +12,29 @@ use Shopware\Components\SwagImportExport\FileIO\CsvFileReader;
 use Shopware\Components\SwagImportExport\FileIO\CsvFileWriter;
 use Shopware\Components\SwagImportExport\FileIO\XmlFileReader;
 use Shopware\Components\SwagImportExport\FileIO\XmlFileWriter;
-use Shopware\Components\SwagImportExport\Utils\FileHelper;
 
 class FileIOFactory extends \Enlight_Class implements \Enlight_Hook
 {
+    private CsvFileReader $csvFileReader;
+
+    private CsvFileWriter $csvFileWriter;
+
+    private XmlFileWriter $xmlFileWriter;
+
+    private XmlFileReader $xmlFileReader;
+
+    public function __construct(
+        CsvFileReader $csvFileReader,
+        CsvFileWriter $csvFileWriter,
+        XmlFileReader $xmlFileReader,
+        XmlFileWriter $xmlFileWriter
+    ) {
+        $this->csvFileReader = $csvFileReader;
+        $this->csvFileWriter = $csvFileWriter;
+        $this->xmlFileWriter = $xmlFileWriter;
+        $this->xmlFileReader = $xmlFileReader;
+    }
+
     /**
      * @param string $format
      *
@@ -27,9 +46,9 @@ class FileIOFactory extends \Enlight_Class implements \Enlight_Hook
     {
         switch ($format) {
             case 'csv':
-                return Shopware()->Container()->get('swag_import_export.csv_file_reader');
+                return $this->csvFileReader;
             case 'xml':
-                return new XmlFileReader();
+                return $this->xmlFileReader;
             default:
                 throw new \Exception('File reader ' . $format . ' does not exists.');
         }
@@ -44,13 +63,11 @@ class FileIOFactory extends \Enlight_Class implements \Enlight_Hook
      */
     public function createFileWriter($format)
     {
-        $fileHelper = new FileHelper();
-
         switch ($format) {
             case 'csv':
-                return Shopware()->Container()->get('swag_import_export.csv_file_writer');
+                return $this->csvFileWriter;
             case 'xml':
-                return new XmlFileWriter($fileHelper);
+                return $this->xmlFileWriter;
             default:
                 throw new \Exception('File writer' . $format . ' does not exists.');
         }

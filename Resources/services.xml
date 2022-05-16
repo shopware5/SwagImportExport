@@ -47,10 +47,19 @@
         </service>
         <service id="swag_import_export.csv_file_writer" alias="Shopware\Components\SwagImportExport\FileIO\CsvFileWriter" public="true" />
 
+        <service
+            id="Shopware\Components\SwagImportExport\FileIO\XmlFileWriter"
+        >
+            <argument type="service" id="Shopware\Components\SwagImportExport\Utils\FileHelper"/>
+        </service>
+
+        <service id="Shopware\Components\SwagImportExport\FileIO\XmlFileReader"/>
+
         <service id="Shopware\Components\SwagImportExport\FileIO\CsvFileReader"
         >
             <argument type="service" id="Shopware\Components\SwagImportExport\UploadPathProvider"/>
         </service>
+
         <service id="swag_import_export.csv_file_reader" alias="Shopware\Components\SwagImportExport\FileIO\CsvFileReader" public="true"/>
 
         <service

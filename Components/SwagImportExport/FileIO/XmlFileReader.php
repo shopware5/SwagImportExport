@@ -10,11 +10,9 @@ namespace Shopware\Components\SwagImportExport\FileIO;
 
 class XmlFileReader implements FileReader
 {
-    protected $tree;
+    protected array $iterationPath = [];
 
-    protected $iterationPath = [];
-
-    protected $iterationTag = [];
+    protected array $iterationTag = [];
 
     /**
      * @var bool
@@ -23,7 +21,8 @@ class XmlFileReader implements FileReader
 
     public function setTree($tree)
     {
-        $this->tree = $tree;
+        $this->iterationPath = [];
+        $this->iterationTag = [];
         $this->findIterationNode($tree, []);
     }
 
