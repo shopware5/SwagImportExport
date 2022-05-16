@@ -70,10 +70,7 @@ class CategoryWriterTest extends TestCase
         static::assertEquals($categoryArray[0]['categoryId'], $updatedArticle[2]['categoryID']);
     }
 
-    /**
-     * @return CategoryWriter
-     */
-    private function getCategoryWriterAdapter()
+    private function getCategoryWriterAdapter(): CategoryWriter
     {
         return Shopware()->Container()->get(CategoryWriter::class);
     }

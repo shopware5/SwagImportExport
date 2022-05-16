@@ -9,7 +9,6 @@
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
 use Doctrine\ORM\AbstractQuery;
-use Doctrine\ORM\EntityManagerInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Password\Manager;
 use Shopware\Components\SwagImportExport\DataManagers\CustomerDataManager;
@@ -105,7 +104,7 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook
     private $underscoreToCamelCaseService;
 
     public function __construct(
-        EntityManagerInterface $manager,
+        ModelManager $manager,
         \Enlight_Components_Db_Adapter_Pdo_Mysql $db,
         CustomerDataManager $dataManager,
         Manager $passwordManager,

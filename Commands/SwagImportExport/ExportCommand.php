@@ -9,10 +9,10 @@
 namespace Shopware\Commands\SwagImportExport;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
 use Shopware\Commands\ShopwareCommand;
 use Shopware\Components\SwagImportExport\Utils\CommandHelper;
 use Shopware\CustomModels\ImportExport\Profile;
+use Shopware\CustomModels\ImportExport\ProfileRepository;
 use Shopware\Models\CustomerStream\CustomerStream;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -86,12 +86,12 @@ class ExportCommand extends ShopwareCommand
      */
     private $productStream;
 
-    private EntityRepository $profileRepository;
+    private ProfileRepository $profileRepository;
 
     private EntityManagerInterface $entityManager;
 
     public function __construct(
-        EntityRepository $profileRepository,
+        ProfileRepository $profileRepository,
         EntityManagerInterface $entityManager
     ) {
         $this->profileRepository = $profileRepository;

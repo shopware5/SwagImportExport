@@ -8,7 +8,6 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
-use Doctrine\ORM\EntityManagerInterface;
 use Enlight_Components_Db_Adapter_Pdo_Mysql;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\QueryBuilder;
@@ -60,7 +59,7 @@ class MainOrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
 
     public function __construct(
         Enlight_Components_Db_Adapter_Pdo_Mysql $db,
-        EntityManagerInterface $entityManager,
+        ModelManager $entityManager,
         UnderscoreToCamelCaseServiceInterface $underscoreToCamelCaseService,
         StateTranslatorServiceInterface $stateTranslator
     ) {

@@ -9,7 +9,6 @@
 namespace Shopware\Components\SwagImportExport\DbAdapters\Articles;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\ORM\EntityManagerInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
@@ -42,7 +41,7 @@ class TranslationWriter
      * initialises the class properties
      */
     public function __construct(
-        EntityManagerInterface $manager,
+        ModelManager $manager,
         Connection $connection,
         TranslationComponent $writer
     ) {

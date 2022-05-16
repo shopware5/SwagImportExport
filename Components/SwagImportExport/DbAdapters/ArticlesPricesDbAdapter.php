@@ -8,7 +8,6 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
-use Doctrine\ORM\EntityManagerInterface;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\QueryBuilder;
@@ -64,7 +63,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
 
     public function __construct(
         ArticlePriceDataManager $dataManager,
-        EntityManagerInterface $manager
+        ModelManager $manager
     ) {
         $this->dataManager = $dataManager;
         $this->validator = new ArticlePriceValidator();

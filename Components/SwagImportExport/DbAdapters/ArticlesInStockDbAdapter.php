@@ -9,7 +9,6 @@
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
 use Doctrine\ORM\AbstractQuery;
-use Doctrine\ORM\EntityManagerInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\QueryBuilder;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
@@ -57,7 +56,7 @@ class ArticlesInStockDbAdapter implements DataDbAdapter, \Enlight_Hook
 
     public function __construct(
         SnippetsHelper $snippetHelper,
-        EntityManagerInterface $modelManager
+        ModelManager $modelManager
     ) {
         $this->validator = new ArticleInStockValidator();
         $this->snippetHelper = $snippetHelper;

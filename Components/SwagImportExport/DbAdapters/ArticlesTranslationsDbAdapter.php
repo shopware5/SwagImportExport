@@ -8,7 +8,6 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
-use Doctrine\ORM\EntityManagerInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
@@ -66,7 +65,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
     protected $eventManager;
 
     public function __construct(
-        EntityManagerInterface $manager,
+        ModelManager $manager,
         \Shopware_Components_Translation $translationComponent,
         \Enlight_Components_Db_Adapter_Pdo_Mysql $db,
         \Enlight_Event_EventManager $eventManager,

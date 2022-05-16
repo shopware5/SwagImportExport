@@ -29,14 +29,14 @@ class XmlConverterTest extends TestCase
         parent::tearDown();
     }
 
-    public function testEncodeWithEmptyInputArray()
+    public function testEncodeWithEmptyInputArray(): void
     {
         $emptyArray = [];
         $result = $this->xmlConverter->_encode($emptyArray);
         static::assertEmpty($result, 'Empty input should return an empty string.');
     }
 
-    public function testEncodeRootElement()
+    public function testEncodeRootElement(): void
     {
         $expectedElementContent = "<root></root>\r\n";
 
@@ -49,7 +49,7 @@ class XmlConverterTest extends TestCase
         static::assertEquals($expectedElementContent, $result, 'Expected empty element content, but root element contains elements.');
     }
 
-    public function testEncodeWithoutPadding()
+    public function testEncodeWithoutPadding(): void
     {
         $expectedElementContent = "<article></article>\r\n";
 
@@ -59,7 +59,7 @@ class XmlConverterTest extends TestCase
         static::assertXmlStringEqualsXmlString($expectedElementContent, $result, 'Expected only root element.');
     }
 
-    public function testEncodeWithCustomRootElementName()
+    public function testEncodeWithCustomRootElementName(): void
     {
         $customRootElement = 'customRoot';
 
@@ -79,7 +79,7 @@ EOD;
         static::assertXmlStringEqualsXmlString($expectedElementContent, $result, 'Setting a custom root element name failed.');
     }
 
-    public function testEncodeWithChildElements()
+    public function testEncodeWithChildElements(): void
     {
         $expectedXml = <<<EOD
 <root>
@@ -112,7 +112,7 @@ EOD;
         static::assertXmlStringEqualsXmlString($expectedXml, $result, 'XML-child elements does not match.');
     }
 
-    public function testEncodeAttributes()
+    public function testEncodeAttributes(): void
     {
         $expectedXml = <<<EOD
 <elementWithAttributes attribute1="attr1 value" attribute3="attr3 value">element value</elementWithAttributes>
@@ -132,7 +132,7 @@ EOD;
         static::assertXmlStringEqualsXmlString($expectedXml, $result, "Failed asserting that xml element has attributes, i.e. <element attr1='value' />");
     }
 
-    public function testEncodeWithEmptyValueAndAttributeShouldReturnEmptyElement()
+    public function testEncodeWithEmptyValueAndAttributeShouldReturnEmptyElement(): void
     {
         $expectedXml = <<<EOD
 <elementWithInvalidAttributeValue attribute1="attr1 value"/>
@@ -151,7 +151,7 @@ EOD;
         static::assertXmlStringEqualsXmlString($expectedXml, $result, 'Failed asserting that empty elements will be written with attributes.');
     }
 
-    public function testEncodeWithSpecialCharsShouldAddCDATASection()
+    public function testEncodeWithSpecialCharsShouldAddCDATASection(): void
     {
         $expectedXml = <<<EOD
 <root>
@@ -169,7 +169,7 @@ EOD;
         static::assertXmlStringEqualsXmlString($expectedXml, $result, 'Failed adding CDATA-section to content if special characters will be used.');
     }
 
-    public function testEncodeElementWithOneToManyAssociation()
+    public function testEncodeElementWithOneToManyAssociation(): void
     {
         $expectedXml = <<<EOD
 <root>
@@ -217,7 +217,7 @@ EOD;
         static::assertXmlStringEqualsXmlString($expectedXml, $result, 'Failed creating multiple elements by having one to many associations via numeric indexed arrays.');
     }
 
-    public function testEncodeWithBooleanValues()
+    public function testEncodeWithBooleanValues(): void
     {
         $expectedXml = <<<EOD
 <root>

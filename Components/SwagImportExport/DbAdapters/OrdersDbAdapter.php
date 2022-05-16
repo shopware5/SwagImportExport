@@ -8,7 +8,6 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
-use Doctrine\ORM\EntityManagerInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\QueryBuilder;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
@@ -56,7 +55,7 @@ class OrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
     private $underscoreToCamelCaseService;
 
     public function __construct(
-        EntityManagerInterface $manager,
+        ModelManager $manager,
         UnderscoreToCamelCaseServiceInterface $underscoreToCamelCaseService
     ) {
         $this->modelManager = $manager;

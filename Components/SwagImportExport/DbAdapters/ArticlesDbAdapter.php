@@ -9,16 +9,13 @@
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Expr\Join;
 use Enlight_Components_Db_Adapter_Pdo_Mysql;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchInterface;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
-use Shopware\Bundle\SearchBundleDBAL\ProductNumberSearch;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 use Shopware\Components\ContainerAwareEventManager;
 use Shopware\Components\Model\ModelManager;
@@ -88,7 +85,7 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
     protected $defaultValues = [];
 
     /**
-     * @var \Shopware\Components\DependencyInjection\Container
+     * @var ContainerInterface
      */
     protected $container;
 
@@ -113,7 +110,7 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
     private $underscoreToCamelCaseService;
 
     /**
-     * @var ContextService
+     * @var ContextServiceInterface
      */
     private $contextService;
 
@@ -123,7 +120,7 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
     private $streamRepo;
 
     /**
-     * @var ProductNumberSearch
+     * @var ProductNumberSearchInterface
      */
     private $productNumberSearch;
 
@@ -151,7 +148,7 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
     public function __construct(
         ContainerInterface $container,
         Enlight_Components_Db_Adapter_Pdo_Mysql $db,
-        EntityManagerInterface $modelManager,
+        ModelManager $modelManager,
         MediaServiceInterface $mediaService,
         \Shopware_Components_Config $config,
         ContainerAwareEventManager $eventManager,
@@ -1338,8 +1335,9 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
      * Collects recursively category ids
      *
      * @param \Shopware\Models\Category\Category $categoryModel
+     * @param array<int>                         $categoriesReturn
      */
-    protected function collectCategoryIds($categoryModel, array &$categoriesReturn)
+    protected function collectCategoryIds($categoryModel, array &$categoriesReturn): void
     {
         $categoryId = $categoryModel->getId();
         $categoriesReturn[] = $categoryId;

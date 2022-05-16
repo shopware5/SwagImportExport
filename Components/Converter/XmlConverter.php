@@ -33,12 +33,9 @@ class XmlConverter
     }
 
     /**
-     * @param int    $pos
-     * @param string $ekey
-     *
-     * @return string
+     * @param array<string, mixed> $array
      */
-    public function _encode($array, $pos = 0, $ekey = '')
+    public function _encode(array $array, int $pos = 0, string $ekey = ''): string
     {
         $ret = '';
         if ($this->sSettings['padding'] !== false) {

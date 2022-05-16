@@ -39,7 +39,7 @@ class ImageWriter
         $this->connection = $connection;
     }
 
-    public function setArticleDBAdapter(ArticlesDbAdapter $articlesDbAdapter)
+    public function setArticleDBAdapter(ArticlesDbAdapter $articlesDbAdapter): void
     {
         $this->articlesDbAdapter = $articlesDbAdapter;
     }

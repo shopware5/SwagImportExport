@@ -27,6 +27,11 @@ class ArticleDataManager extends DataManager implements \Enlight_Hook
      */
     private $dbalHelper;
 
+    /**
+     * @var array<int, string>
+     */
+    private array $suppliers;
+
     public function __construct(\Enlight_Components_Db_Adapter_Pdo_Mysql $db, DbalHelper $dbalHelper)
     {
         $this->db = $db;
@@ -300,7 +305,7 @@ class ArticleDataManager extends DataManager implements \Enlight_Hook
     /**
      * Return list with suppliers
      *
-     * @return array
+     * @return array<int, string>
      */
     private function prepareSuppliers()
     {

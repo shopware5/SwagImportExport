@@ -8,8 +8,8 @@
 
 namespace Shopware\Commands\SwagImportExport;
 
-use Doctrine\ORM\EntityManagerInterface;
 use Shopware\Commands\ShopwareCommand;
+use Shopware\Components\Model\ModelManager;
 use Shopware\CustomModels\ImportExport\ProfileRepository;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -18,11 +18,11 @@ class ProfilesCommand extends ShopwareCommand
 {
     private ProfileRepository $profileRepository;
 
-    private EntityManagerInterface $entityManager;
+    private ModelManager $entityManager;
 
     public function __construct(
         ProfileRepository $profileRepository,
-        EntityManagerInterface $entityManager
+        ModelManager $entityManager
     ) {
         $this->profileRepository = $profileRepository;
         $this->entityManager = $entityManager;

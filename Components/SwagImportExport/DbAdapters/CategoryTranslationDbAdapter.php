@@ -9,7 +9,6 @@
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\ORM\EntityManagerInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
@@ -60,7 +59,7 @@ class CategoryTranslationDbAdapter implements DataDbAdapter, \Enlight_Hook
 
     public function __construct(
         \Shopware_Components_Translation $translationComponent,
-        EntityManagerInterface $entityManager,
+        ModelManager $entityManager,
         Connection $connection,
         \Enlight_Event_EventManager $eventManager,
         \Shopware_Components_Config $config

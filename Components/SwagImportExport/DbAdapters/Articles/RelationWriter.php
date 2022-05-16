@@ -63,7 +63,7 @@ class RelationWriter
         $this->connection = $connection;
     }
 
-    public function setArticlesDbAdapter(ArticlesDbAdapter $articlesDbAdapter)
+    public function setArticlesDbAdapter(ArticlesDbAdapter $articlesDbAdapter): void
     {
         $this->articlesDbAdapter = $articlesDbAdapter;
     }

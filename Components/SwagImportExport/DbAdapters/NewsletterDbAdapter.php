@@ -8,7 +8,6 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use Shopware\Components\Model\ModelManager;
@@ -70,7 +69,7 @@ class NewsletterDbAdapter implements DataDbAdapter, \Enlight_Hook
     protected $defaultValues = [];
 
     public function __construct(
-        EntityManagerInterface $manager,
+        ModelManager $manager,
         NewsletterDataManager $dataManager,
         \Enlight_Components_Db_Adapter_Pdo_Mysql $db,
         \Shopware_Components_Config $config

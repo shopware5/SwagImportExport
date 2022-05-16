@@ -8,7 +8,6 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\TransactionRequiredException;
@@ -29,32 +28,32 @@ use Shopware\Models\Translation\Translation;
 class TranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
 {
     /**
-     * @var ModelManager|null
+     * @var ModelManager
      */
     protected $manager;
 
     /**
-     * @var ModelRepository<ConfiguratorGroup>|null
+     * @var ModelRepository<ConfiguratorGroup>
      */
     protected $configuratorGroupRepo;
 
     /**
-     * @var ModelRepository<ConfiguratorOption>|null
+     * @var ModelRepository<ConfiguratorOption>
      */
     protected $configuratorOptionRepo;
 
     /**
-     * @var ModelRepository<PropertyGroup>|null
+     * @var ModelRepository<PropertyGroup>
      */
     protected $propertyGroupRepo;
 
     /**
-     * @var ModelRepository<PropertyOption>|null
+     * @var ModelRepository<PropertyOption>
      */
     protected $propertyOptionRepo;
 
     /**
-     * @var ModelRepository<PropertyValue>|null
+     * @var ModelRepository<PropertyValue>
      */
     protected $propertyValueRepo;
 
@@ -82,7 +81,7 @@ class TranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
     private \Enlight_Components_Db_Adapter_Pdo_Mysql $db;
 
     public function __construct(
-        EntityManagerInterface $manager,
+        ModelManager $manager,
         \Enlight_Event_EventManager $eventManager,
         \Shopware_Components_Translation $translation,
         \Shopware_Components_Config $config,
