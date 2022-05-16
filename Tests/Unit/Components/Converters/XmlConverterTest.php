@@ -16,12 +16,12 @@ class XmlConverterTest extends TestCase
     /**
      * @var XmlConverter
      */
-    private $SUT;
+    private $xmlConverter;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->SUT = new XmlConverter();
+        $this->xmlConverter = new XmlConverter();
     }
 
     protected function tearDown(): void
@@ -32,7 +32,7 @@ class XmlConverterTest extends TestCase
     public function testEncodeWithEmptyInputArray()
     {
         $emptyArray = [];
-        $result = $this->SUT->_encode($emptyArray);
+        $result = $this->xmlConverter->_encode($emptyArray);
         static::assertEmpty($result, 'Empty input should return an empty string.');
     }
 
@@ -44,7 +44,7 @@ class XmlConverterTest extends TestCase
             'root' => [],
         ];
 
-        $result = $this->SUT->_encode($inputArray);
+        $result = $this->xmlConverter->_encode($inputArray);
 
         static::assertEquals($expectedElementContent, $result, 'Expected empty element content, but root element contains elements.');
     }
@@ -53,8 +53,8 @@ class XmlConverterTest extends TestCase
     {
         $expectedElementContent = "<article></article>\r\n";
 
-        $this->SUT->sSettings['padding'] = false;
-        $result = $this->SUT->_encode(['article' => []]);
+        $this->xmlConverter->sSettings['padding'] = false;
+        $result = $this->xmlConverter->_encode(['article' => []]);
 
         static::assertXmlStringEqualsXmlString($expectedElementContent, $result, 'Expected only root element.');
     }
@@ -75,7 +75,7 @@ EOD;
             ],
         ];
 
-        $result = $this->SUT->_encode($transformArrayTree, 0, $customRootElement);
+        $result = $this->xmlConverter->_encode($transformArrayTree, 0, $customRootElement);
         static::assertXmlStringEqualsXmlString($expectedElementContent, $result, 'Setting a custom root element name failed.');
     }
 
@@ -107,7 +107,7 @@ EOD;
             ],
         ];
 
-        $result = $this->SUT->_encode($transformArray);
+        $result = $this->xmlConverter->_encode($transformArray);
 
         static::assertXmlStringEqualsXmlString($expectedXml, $result, 'XML-child elements does not match.');
     }
@@ -128,7 +128,7 @@ EOD;
             ],
         ];
 
-        $result = $this->SUT->_encode($transformArray);
+        $result = $this->xmlConverter->_encode($transformArray);
         static::assertXmlStringEqualsXmlString($expectedXml, $result, "Failed asserting that xml element has attributes, i.e. <element attr1='value' />");
     }
 
@@ -146,7 +146,7 @@ EOD;
             ],
         ];
 
-        $result = $this->SUT->_encode($transformArray);
+        $result = $this->xmlConverter->_encode($transformArray);
 
         static::assertXmlStringEqualsXmlString($expectedXml, $result, 'Failed asserting that empty elements will be written with attributes.');
     }
@@ -165,7 +165,7 @@ EOD;
             ],
         ];
 
-        $result = $this->SUT->_encode($transformArray);
+        $result = $this->xmlConverter->_encode($transformArray);
         static::assertXmlStringEqualsXmlString($expectedXml, $result, 'Failed adding CDATA-section to content if special characters will be used.');
     }
 
@@ -213,7 +213,7 @@ EOD;
             ],
         ];
 
-        $result = $this->SUT->_encode($transformArray);
+        $result = $this->xmlConverter->_encode($transformArray);
         static::assertXmlStringEqualsXmlString($expectedXml, $result, 'Failed creating multiple elements by having one to many associations via numeric indexed arrays.');
     }
 
@@ -237,7 +237,7 @@ EOD;
             ],
         ];
 
-        $result = $this->SUT->_encode($transformArray);
+        $result = $this->xmlConverter->_encode($transformArray);
 
         static::assertXmlStringEqualsXmlString($expectedXml, $result);
     }

@@ -8,6 +8,7 @@
 
 namespace Shopware\Components\SwagImportExport\Factories;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Shopware\Components\SwagImportExport\DataIO;
 use Shopware\Components\SwagImportExport\DataManagers\Articles\ArticleDataManager;
@@ -41,6 +42,90 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     /** @var EntityRepository */
     private $sessionRepository;
 
+    private CategoriesDbAdapter $categoriesDbAdapter;
+
+    private ArticlesDbAdapter $articlesDbAdapter;
+
+    private ArticlesInStockDbAdapter $articlesInStockDbAdapter;
+
+    private ArticlesTranslationsDbAdapter $articlesTranslationsDbAdapter;
+
+    private ArticlesPricesDbAdapter $articlesPricesDbAdapter;
+
+    private ArticlesImagesDbAdapter $articlesImagesDbAdapter;
+
+    private OrdersDbAdapter $ordersDbAdapter;
+
+    private MainOrdersDbAdapter $mainOrdersDbAdapter;
+
+    private CustomerDbAdapter $customerDbAdapter;
+
+    private CustomerCompleteDbAdapter $customerCompleteDbAdapter;
+
+    private NewsletterDbAdapter $newsletterDbAdapter;
+
+    private TranslationsDbAdapter $translationsDbAdapter;
+
+    private AddressDbAdapter $addressDbAdapter;
+
+    private CategoryTranslationDbAdapter $categoryTranslationDbAdapter;
+
+    private CategoriesDataManager $categoriesDataManager;
+
+    private ArticleDataManager $articleDataManager;
+
+    private CustomerDataManager $customerDataManager;
+
+    private NewsletterDataManager $newsletterDataManager;
+
+    private \Enlight_Event_EventManager $eventManager;
+
+    private EntityManagerInterface $entityManager;
+
+    public function __construct(
+        \Enlight_Event_EventManager $eventManager,
+        EntityManagerInterface $entityManager,
+        CategoriesDbAdapter $categoriesDbAdapter,
+        ArticlesDbAdapter $articlesDbAdapter,
+        ArticlesInStockDbAdapter $articlesInStockDbAdapter,
+        ArticlesTranslationsDbAdapter $articlesTranslationsDbAdapter,
+        ArticlesPricesDbAdapter $articlesPricesDbAdapter,
+        ArticlesImagesDbAdapter $articlesImagesDbAdapter,
+        OrdersDbAdapter $ordersDbAdapter,
+        MainOrdersDbAdapter $mainOrdersDbAdapter,
+        CustomerDbAdapter $customerDbAdapter,
+        CustomerCompleteDbAdapter $customerCompleteDbAdapter,
+        NewsletterDbAdapter $newsletterDbAdapter,
+        TranslationsDbAdapter $translationsDbAdapter,
+        AddressDbAdapter $addressDbAdapter,
+        CategoryTranslationDbAdapter $categoryTranslationDbAdapter,
+        CategoriesDataManager $categoriesDataManager,
+        ArticleDataManager $articleDataManager,
+        CustomerDataManager $customerDataManager,
+        NewsletterDataManager $newsletterDataManager
+    ) {
+        $this->categoriesDbAdapter = $categoriesDbAdapter;
+        $this->articlesDbAdapter = $articlesDbAdapter;
+        $this->articlesInStockDbAdapter = $articlesInStockDbAdapter;
+        $this->articlesTranslationsDbAdapter = $articlesTranslationsDbAdapter;
+        $this->articlesPricesDbAdapter = $articlesPricesDbAdapter;
+        $this->articlesImagesDbAdapter = $articlesImagesDbAdapter;
+        $this->ordersDbAdapter = $ordersDbAdapter;
+        $this->mainOrdersDbAdapter = $mainOrdersDbAdapter;
+        $this->customerDbAdapter = $customerDbAdapter;
+        $this->customerCompleteDbAdapter = $customerCompleteDbAdapter;
+        $this->newsletterDbAdapter = $newsletterDbAdapter;
+        $this->translationsDbAdapter = $translationsDbAdapter;
+        $this->addressDbAdapter = $addressDbAdapter;
+        $this->categoryTranslationDbAdapter = $categoryTranslationDbAdapter;
+        $this->categoriesDataManager = $categoriesDataManager;
+        $this->articleDataManager = $articleDataManager;
+        $this->customerDataManager = $customerDataManager;
+        $this->newsletterDataManager = $newsletterDataManager;
+        $this->eventManager = $eventManager;
+        $this->entityManager = $entityManager;
+    }
+
     /**
      * @param Session $dataSession
      *
@@ -69,33 +154,33 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
 
         switch ($adapterType) {
             case DataDbAdapter::CATEGORIES_ADAPTER:
-                return $this->getCategoriesDbAdapter();
+                return $this->categoriesDbAdapter;
             case DataDbAdapter::ARTICLE_ADAPTER:
-                return $this->getArticlesDbAdapter();
+                return $this->articlesDbAdapter;
             case DataDbAdapter::ARTICLE_INSTOCK_ADAPTER:
-                return $this->getArticlesInStockDbAdapter();
+                return $this->articlesInStockDbAdapter;
             case DataDbAdapter::ARTICLE_TRANSLATION_ADAPTER:
-                return $this->createArticlesTranslationsDbAdapter();
+                return $this->articlesTranslationsDbAdapter;
             case DataDbAdapter::ARTICLE_PRICE_ADAPTER:
-                return $this->getArticlesPricesDbAdapter();
+                return $this->articlesPricesDbAdapter;
             case DataDbAdapter::ARTICLE_IMAGE_ADAPTER:
-                return $this->createArticlesImagesDbAdapter();
+                return $this->articlesImagesDbAdapter;
             case DataDbAdapter::ORDER_ADAPTER:
-                return $this->getOrdersDbAdapter();
+                return $this->ordersDbAdapter;
             case DataDbAdapter::MAIN_ORDER_ADAPTER:
-                return $this->getMainOrdersDbAdapter();
+                return $this->mainOrdersDbAdapter;
             case DataDbAdapter::CUSTOMER_ADAPTER:
-                return $this->getCustomerDbAdapter();
+                return $this->customerDbAdapter;
             case DataDbAdapter::CUSTOMER_COMPLETE_ADAPTER:
-                return $this->getCustomerCompleteDbAdapter();
+                return $this->customerCompleteDbAdapter;
             case DataDbAdapter::NEWSLETTER_RECIPIENTS_ADAPTER:
-                return $this->getNewsletterDbAdapter();
+                return $this->newsletterDbAdapter;
             case DataDbAdapter::TRANSLATION_ADAPTER:
-                return $this->getTranslationsDbAdapter();
+                return $this->translationsDbAdapter;
             case DataDbAdapter::ADDRESS_ADAPTER:
-                return $this->getAddressDbAdapter();
+                return $this->addressDbAdapter;
             case DataDbAdapter::CATEGORIES_TRANSLATION_ADAPTER:
-                return $this->getCategoriesTranslationsDbAdapter();
+                return $this->categoryTranslationDbAdapter;
             default:
                 throw new \Exception('Db adapter type is not valid');
         }
@@ -112,13 +197,13 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     {
         switch ($managerType) {
             case DataDbAdapter::CATEGORIES_ADAPTER:
-                return $this->getCategoryDataManager();
+                return $this->categoriesDataManager;
             case DataDbAdapter::ARTICLE_ADAPTER:
-                return $this->getArticleDataManager();
+                return $this->articleDataManager;
             case DataDbAdapter::CUSTOMER_ADAPTER:
-                return $this->getCustomerDataManager();
+                return $this->customerDataManager;
             case DataDbAdapter::NEWSLETTER_RECIPIENTS_ADAPTER:
-                return $this->getNewsletterDataManager();
+                return $this->newsletterDataManager;
         }
     }
 
@@ -178,7 +263,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     public function getSessionRepository()
     {
         if ($this->sessionRepository === null) {
-            $this->sessionRepository = Shopware()->Models()->getRepository(SessionEntity::class);
+            $this->sessionRepository = $this->entityManager->getRepository(SessionEntity::class);
         }
 
         return $this->sessionRepository;
@@ -191,7 +276,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
      */
     protected function fireCreateFactoryEvent($adapterType)
     {
-        return Shopware()->Events()->notifyUntil(
+        return $this->eventManager->notifyUntil(
             'Shopware_Components_SwagImportExport_Factories_CreateDbAdapter',
             ['subject' => $this, 'adapterType' => $adapterType]
         );
@@ -200,95 +285,5 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     protected function createSession(SessionEntity $sessionEntity): Session
     {
         return new Session($sessionEntity);
-    }
-
-    protected function getCategoryDataManager(): CategoriesDataManager
-    {
-        return Shopware()->Container()->get(CategoriesDataManager::class);
-    }
-
-    protected function getArticleDataManager(): ArticleDataManager
-    {
-        return Shopware()->Container()->get(ArticleDataManager::class);
-    }
-
-    protected function getCustomerDataManager(): CustomerDataManager
-    {
-        return Shopware()->Container()->get(CustomerDataManager::class);
-    }
-
-    protected function getNewsletterDataManager(): NewsletterDataManager
-    {
-        return Shopware()->Container()->get(NewsletterDataManager::class);
-    }
-
-    protected function getCategoriesDbAdapter(): CategoriesDbAdapter
-    {
-        return Shopware()->Container()->get(CategoriesDbAdapter::class);
-    }
-
-    protected function getArticlesDbAdapter(): ArticlesDbAdapter
-    {
-        return Shopware()->Container()->get(ArticlesDbAdapter::class);
-    }
-
-    protected function getArticlesInStockDbAdapter(): ArticlesInStockDbAdapter
-    {
-        return Shopware()->Container()->get(ArticlesInStockDbAdapter::class);
-    }
-
-    protected function createArticlesTranslationsDbAdapter(): ArticlesTranslationsDbAdapter
-    {
-        return Shopware()->Container()->get(ArticlesTranslationsDbAdapter::class);
-    }
-
-    protected function getCategoriesTranslationsDbAdapter(): CategoryTranslationDbAdapter
-    {
-        return Shopware()->Container()->get(CategoryTranslationDbAdapter::class);
-    }
-
-    protected function getArticlesPricesDbAdapter(): ArticlesPricesDbAdapter
-    {
-        return Shopware()->Container()->get(ArticlesPricesDbAdapter::class);
-    }
-
-    protected function createArticlesImagesDbAdapter(): ArticlesImagesDbAdapter
-    {
-        return Shopware()->Container()->get(ArticlesImagesDbAdapter::class);
-    }
-
-    protected function getCustomerDbAdapter(): CustomerDbAdapter
-    {
-        return Shopware()->Container()->get(CustomerDbAdapter::class);
-    }
-
-    protected function getCustomerCompleteDbAdapter(): CustomerCompleteDbAdapter
-    {
-        return Shopware()->Container()->get(CustomerCompleteDbAdapter::class);
-    }
-
-    protected function getOrdersDbAdapter(): OrdersDbAdapter
-    {
-        return Shopware()->Container()->get(OrdersDbAdapter::class);
-    }
-
-    protected function getMainOrdersDbAdapter(): MainOrdersDbAdapter
-    {
-        return Shopware()->Container()->get(MainOrdersDbAdapter::class);
-    }
-
-    protected function getNewsletterDbAdapter(): NewsletterDbAdapter
-    {
-        return Shopware()->Container()->get(NewsletterDbAdapter::class);
-    }
-
-    protected function getTranslationsDbAdapter(): TranslationsDbAdapter
-    {
-        return Shopware()->Container()->get(TranslationsDbAdapter::class);
-    }
-
-    private function getAddressDbAdapter(): AddressDbAdapter
-    {
-        return Shopware()->Container()->get(AddressDbAdapter::class);
     }
 }

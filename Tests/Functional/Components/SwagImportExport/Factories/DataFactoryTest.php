@@ -27,7 +27,7 @@ class DataFactoryTest extends TestCase
 {
     public function testCreateDbAdapterShouldCreateAddressDbAdapter()
     {
-        $dataFactory = $this->createDataFactory();
+        $dataFactory = $this->getDataFactory();
 
         $addressDbAdapter = $dataFactory->createDbAdapter('addresses');
 
@@ -37,7 +37,7 @@ class DataFactoryTest extends TestCase
 
     public function testCreateDbAdapterShouldCreateCategoriesDbAdapter()
     {
-        $dataFactory = $this->createDataFactory();
+        $dataFactory = $this->getDataFactory();
 
         $categoriesDbAdapter = $dataFactory->createDbAdapter('categories');
 
@@ -47,7 +47,7 @@ class DataFactoryTest extends TestCase
 
     public function testCreateDbAdapterShouldCreateArticlesDbAdapter()
     {
-        $dataFactory = $this->createDataFactory();
+        $dataFactory = $this->getDataFactory();
 
         $articlesDbAdapter = $dataFactory->createDbAdapter('articles');
 
@@ -57,7 +57,7 @@ class DataFactoryTest extends TestCase
 
     public function testCreateDbAdapterShouldCreateArticlesInstockDbAdapter()
     {
-        $dataFactory = $this->createDataFactory();
+        $dataFactory = $this->getDataFactory();
 
         $articlesInstockDbAdapter = $dataFactory->createDbAdapter('articlesInStock');
 
@@ -67,7 +67,7 @@ class DataFactoryTest extends TestCase
 
     public function testCreateDbAdapterShouldCreateArticlesPricesDbAdapter()
     {
-        $dataFactory = $this->createDataFactory();
+        $dataFactory = $this->getDataFactory();
 
         $articlesPricesDbAdapter = $dataFactory->createDbAdapter('articlesPrices');
 
@@ -77,7 +77,7 @@ class DataFactoryTest extends TestCase
 
     public function testCreateDbAdapterShouldCreateOrdersDbAdapter()
     {
-        $dataFactory = $this->createDataFactory();
+        $dataFactory = $this->getDataFactory();
 
         $ordersDbAdapter = $dataFactory->createDbAdapter('orders');
 
@@ -87,7 +87,7 @@ class DataFactoryTest extends TestCase
 
     public function testCreateDbAdapterShouldCreateMainOrderDbAdapter()
     {
-        $dataFactory = $this->createDataFactory();
+        $dataFactory = $this->getDataFactory();
 
         $mainOrdersDbAdapter = $dataFactory->createDbAdapter('mainOrders');
 
@@ -97,7 +97,7 @@ class DataFactoryTest extends TestCase
 
     public function testCreateDbAdapterShouldCreateCustomerDbAdapter()
     {
-        $dataFactory = $this->createDataFactory();
+        $dataFactory = $this->getDataFactory();
 
         $customerDbAdapter = $dataFactory->createDbAdapter('customers');
 
@@ -107,7 +107,7 @@ class DataFactoryTest extends TestCase
 
     public function testCreateDbAdapterShouldCreateNewsletterDbAdapter()
     {
-        $dataFactory = $this->createDataFactory();
+        $dataFactory = $this->getDataFactory();
 
         $newsletterDbAdapter = $dataFactory->createDbAdapter('newsletter');
 
@@ -117,7 +117,7 @@ class DataFactoryTest extends TestCase
 
     public function testCreateDbAdapterShouldCreateTranslationsDbAdapter()
     {
-        $dataFactory = $this->createDataFactory();
+        $dataFactory = $this->getDataFactory();
 
         $translationsDbAdapter = $dataFactory->createDbAdapter('translations');
 
@@ -127,7 +127,7 @@ class DataFactoryTest extends TestCase
 
     public function testCreateDbAdapterShouldCreateArticlesImagesDbAdapter()
     {
-        $dataFactory = $this->createDataFactory();
+        $dataFactory = $this->getDataFactory();
 
         $articlesImagesDbAdapter = $dataFactory->createDbAdapter('articlesImages');
 
@@ -135,18 +135,8 @@ class DataFactoryTest extends TestCase
         static::assertInstanceOf(DataDbAdapter::class, $articlesImagesDbAdapter);
     }
 
-    /**
-     * @return TestableDataFactory
-     */
-    private function createDataFactory()
+    private function getDataFactory(): DataFactory
     {
-        return new TestableDataFactory();
-    }
-}
-
-class TestableDataFactory extends DataFactory
-{
-    public function __construct()
-    {
+        return Shopware()->Container()->get(DataFactory::class);
     }
 }
