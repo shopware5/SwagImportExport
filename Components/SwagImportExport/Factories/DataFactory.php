@@ -95,7 +95,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
             case DataDbAdapter::ADDRESS_ADAPTER:
                 return $this->getAddressDbAdapter();
             case DataDbAdapter::CATEGORIES_TRANSLATION_ADAPTER:
-                return $this->createCategoriesTranslationsDbAdapter();
+                return $this->getCategoriesTranslationsDbAdapter();
             default:
                 throw new \Exception('Db adapter type is not valid');
         }
@@ -245,15 +245,9 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
         return Shopware()->Container()->get(ArticlesTranslationsDbAdapter::class);
     }
 
-    /**
-     * @return CategoryTranslationDbAdapter
-     */
-    protected function createCategoriesTranslationsDbAdapter()
+    protected function getCategoriesTranslationsDbAdapter(): CategoryTranslationDbAdapter
     {
-        $proxyAdapter = Shopware()->Hooks()
-            ->getProxy(CategoryTranslationDbAdapter::class);
-
-        return new $proxyAdapter();
+        return Shopware()->Container()->get(CategoryTranslationDbAdapter::class);
     }
 
     protected function getArticlesPricesDbAdapter(): ArticlesPricesDbAdapter

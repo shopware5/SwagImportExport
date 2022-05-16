@@ -9,13 +9,14 @@
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\ORM\EntityManagerInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 use Shopware\Components\SwagImportExport\Validators\CategoryTranslationValidator;
 use Shopware\Models\Translation\Translation;
 
-class CategoryTranslationDbAdapter implements DataDbAdapter
+class CategoryTranslationDbAdapter implements DataDbAdapter, \Enlight_Hook
 {
     /**
      * @var ModelManager
@@ -35,7 +36,7 @@ class CategoryTranslationDbAdapter implements DataDbAdapter
     /**
      * @var array
      */
-    protected $logMessages;
+    protected $logMessages = [];
 
     /**
      * @var string
@@ -57,17 +58,20 @@ class CategoryTranslationDbAdapter implements DataDbAdapter
      */
     private $connection;
 
-    public function __construct()
-    {
-        $container = Shopware()->Container();
+    public function __construct(
+        \Shopware_Components_Translation $translationComponent,
+        EntityManagerInterface $entityManager,
+        Connection $connection,
+        \Enlight_Event_EventManager $eventManager,
+        \Shopware_Components_Config $config
+    ) {
+        $this->translationComponent = $translationComponent;
+        $this->manager = $entityManager;
+        $this->connection = $connection;
+        $this->eventManager = $eventManager;
+        $this->importExportErrorMode = (bool) $config->get('SwagImportExportErrorMode');
 
-        $this->logMessages = [];
-        $this->translationComponent = $container->get('translation');
         $this->validator = new CategoryTranslationValidator();
-        $this->manager = $container->get('models');
-        $this->connection = $container->get('dbal_connection');
-        $this->eventManager = $container->get('events');
-        $this->importExportErrorMode = (bool) $container->get('config')->get('SwagImportExportErrorMode');
     }
 
     /**
