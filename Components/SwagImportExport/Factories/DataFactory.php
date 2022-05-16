@@ -69,7 +69,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
 
         switch ($adapterType) {
             case DataDbAdapter::CATEGORIES_ADAPTER:
-                return $this->createCategoriesDbAdapter();
+                return $this->getCategoriesDbAdapter();
             case DataDbAdapter::ARTICLE_ADAPTER:
                 return $this->getArticlesDbAdapter();
             case DataDbAdapter::ARTICLE_INSTOCK_ADAPTER:
@@ -225,17 +225,9 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
         return Shopware()->Container()->get(NewsletterDataManager::class);
     }
 
-    /**
-     * This method can be hookable
-     *
-     * @return CategoriesDbAdapter
-     */
-    protected function createCategoriesDbAdapter()
+    protected function getCategoriesDbAdapter(): CategoriesDbAdapter
     {
-        $proxyAdapter = Shopware()->Hooks()
-            ->getProxy(CategoriesDbAdapter::class);
-
-        return new $proxyAdapter();
+        return Shopware()->Container()->get(CategoriesDbAdapter::class);
     }
 
     protected function getArticlesDbAdapter(): ArticlesDbAdapter

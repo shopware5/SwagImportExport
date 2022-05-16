@@ -9,12 +9,14 @@
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\DataManagers\CategoriesDataManager;
 use Shopware\Components\SwagImportExport\DataType\CategoryDataType;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
+use Shopware\Components\SwagImportExport\Service\UnderscoreToCamelCaseService;
 use Shopware\Components\SwagImportExport\Service\UnderscoreToCamelCaseServiceInterface;
 use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
@@ -22,7 +24,7 @@ use Shopware\Components\SwagImportExport\Validators\CategoryValidator;
 use Shopware\Models\Category\Category;
 use Shopware\Models\Customer\Group;
 
-class CategoriesDbAdapter implements DataDbAdapter
+class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook
 {
     /**
      * @var ModelManager
@@ -76,14 +78,18 @@ class CategoriesDbAdapter implements DataDbAdapter
      */
     private $underscoreToCamelCaseService;
 
-    public function __construct()
-    {
-        $this->modelManager = Shopware()->Container()->get('models');
+    public function __construct(
+        EntityManagerInterface $modelManager,
+        CategoriesDataManager $dataManager,
+        \Enlight_Components_Db_Adapter_Pdo_Mysql $db,
+        UnderscoreToCamelCaseService $underscoreToCamelCase
+    ) {
+        $this->modelManager = $modelManager;
         $this->repository = $this->modelManager->getRepository(Category::class);
-        $this->dataManager = Shopware()->Container()->get(CategoriesDataManager::class);
+        $this->dataManager = $dataManager;
         $this->validator = new CategoryValidator();
-        $this->db = Shopware()->Db();
-        $this->underscoreToCamelCaseService = Shopware()->Container()->get('swag_import_export.underscore_camelcase_service');
+        $this->db = $db;
+        $this->underscoreToCamelCaseService = $underscoreToCamelCase;
     }
 
     /**
@@ -212,6 +218,8 @@ class CategoriesDbAdapter implements DataDbAdapter
      */
     public function write($records)
     {
+        $this->unprocessedData = [];
+
         $records = $records['default'];
         $this->validateRecordsShouldNotBeEmpty($records);
 

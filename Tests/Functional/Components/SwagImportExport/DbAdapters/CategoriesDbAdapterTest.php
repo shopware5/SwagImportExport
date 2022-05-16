@@ -19,7 +19,7 @@ class CategoriesDbAdapterTest extends TestCase
 
     public function testWriteShouldThrowExceptionIfRecordsAreEmpty()
     {
-        $categoriesDbAdapter = $this->createCategoriesDbAdapter();
+        $categoriesDbAdapter = $this->getCategoriesDbAdapter();
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Es wurden keine Kategorien gefunden.');
@@ -33,7 +33,7 @@ class CategoriesDbAdapterTest extends TestCase
             ],
         ];
 
-        $categoriesDbAdapter = $this->createCategoriesDbAdapter();
+        $categoriesDbAdapter = $this->getCategoriesDbAdapter();
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Vaterkategorie existiert nicht für Kategorie');
@@ -48,7 +48,7 @@ class CategoriesDbAdapterTest extends TestCase
             ],
         ];
 
-        $categoriesDbAdapter = $this->createCategoriesDbAdapter();
+        $categoriesDbAdapter = $this->getCategoriesDbAdapter();
         $categoriesDbAdapter->write($categoryRecords);
 
         /** @var Connection $dbalConnection */
@@ -66,7 +66,7 @@ class CategoriesDbAdapterTest extends TestCase
                 ['name' => 'New Category', 'parentId' => '3'],
             ],
         ];
-        $categoriesDbAdapter = $this->createCategoriesDbAdapter();
+        $categoriesDbAdapter = $this->getCategoriesDbAdapter();
 
         $this->expectExceptionMessage('Die Kategorie ID ist ein Pflichtfeld. Wenn keine ID mitimportiert wird wäre es nicht möglich Kind- und Vaterkategorien zu referenzieren.');
         $this->expectException(\Exception::class);
@@ -76,8 +76,8 @@ class CategoriesDbAdapterTest extends TestCase
     /**
      * @return CategoriesDbAdapter
      */
-    private function createCategoriesDbAdapter()
+    private function getCategoriesDbAdapter()
     {
-        return new CategoriesDbAdapter();
+        return Shopware()->Container()->get(CategoriesDbAdapter::class);
     }
 }
