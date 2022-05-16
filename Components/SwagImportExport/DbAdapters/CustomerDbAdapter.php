@@ -9,7 +9,9 @@
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
 use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\EntityManagerInterface;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Password\Manager;
 use Shopware\Components\SwagImportExport\DataManagers\CustomerDataManager;
 use Shopware\Components\SwagImportExport\DataType\CustomerDataType;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
@@ -25,7 +27,7 @@ use Shopware\Models\Customer\Customer;
 use Shopware\Models\Customer\Group;
 use Shopware\Models\Shop\Shop;
 
-class CustomerDbAdapter implements DataDbAdapter
+class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook
 {
     /**
      * @var ModelManager
@@ -102,16 +104,24 @@ class CustomerDbAdapter implements DataDbAdapter
      */
     private $underscoreToCamelCaseService;
 
-    public function __construct()
-    {
-        $this->manager = Shopware()->Models();
-        $this->db = Shopware()->Db();
+    public function __construct(
+        EntityManagerInterface $manager,
+        \Enlight_Components_Db_Adapter_Pdo_Mysql $db,
+        CustomerDataManager $dataManager,
+        Manager $passwordManager,
+        \Shopware_Components_Config $config,
+        \Enlight_Event_EventManager $eventManager,
+        UnderscoreToCamelCaseServiceInterface $underscoreToCamelCaseService
+    ) {
+        $this->manager = $manager;
+        $this->db = $db;
+        $this->dataManager = $dataManager;
+        $this->passwordManager = $passwordManager;
+        $this->config = $config;
+        $this->eventManager = $eventManager;
+        $this->underscoreToCamelCaseService = $underscoreToCamelCaseService;
+
         $this->validator = new CustomerValidator();
-        $this->dataManager = Shopware()->Container()->get(CustomerDataManager::class);
-        $this->passwordManager = Shopware()->PasswordEncoder();
-        $this->config = Shopware()->Config();
-        $this->eventManager = Shopware()->Events();
-        $this->underscoreToCamelCaseService = Shopware()->Container()->get('swag_import_export.underscore_camelcase_service');
     }
 
     /**

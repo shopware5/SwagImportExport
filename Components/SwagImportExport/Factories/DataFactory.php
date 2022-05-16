@@ -85,9 +85,9 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
             case DataDbAdapter::MAIN_ORDER_ADAPTER:
                 return $this->createMainOrdersDbAdapter();
             case DataDbAdapter::CUSTOMER_ADAPTER:
-                return $this->createCustomerDbAdapter();
+                return $this->getCustomerDbAdapter();
             case DataDbAdapter::CUSTOMER_COMPLETE_ADAPTER:
-                return $this->createCustomerCompleteDbAdapter();
+                return $this->getCustomerCompleteDbAdapter();
             case DataDbAdapter::NEWSLETTER_RECIPIENTS_ADAPTER:
                 return $this->createNewsletterDbAdapter();
             case DataDbAdapter::TRANSLATION_ADAPTER:
@@ -260,26 +260,14 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
         return Shopware()->Container()->get(ArticlesImagesDbAdapter::class);
     }
 
-    /**
-     * @return CustomerDbAdapter
-     */
-    protected function createCustomerDbAdapter()
+    protected function getCustomerDbAdapter(): CustomerDbAdapter
     {
-        $proxyAdapter = Shopware()->Hooks()
-            ->getProxy(CustomerDbAdapter::class);
-
-        return new $proxyAdapter();
+        return Shopware()->Container()->get(CustomerDbAdapter::class);
     }
 
-    /**
-     * @return CustomerCompleteDbAdapter
-     */
-    protected function createCustomerCompleteDbAdapter()
+    protected function getCustomerCompleteDbAdapter(): CustomerCompleteDbAdapter
     {
-        $proxyAdapter = Shopware()->Hooks()
-            ->getProxy(CustomerCompleteDbAdapter::class);
-
-        return new $proxyAdapter();
+        return Shopware()->Container()->get(CustomerCompleteDbAdapter::class);
     }
 
     /**

@@ -19,7 +19,7 @@ class CustomerDbAdapterTest extends TestCase
 
     public function testWriteWithoutRecordsThrowsException()
     {
-        $customersDbAdapter = $this->createCustomerDbAdapter();
+        $customersDbAdapter = $this->getCustomerDbAdapter();
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Es wurden keine Kunden gefunden.');
@@ -28,7 +28,7 @@ class CustomerDbAdapterTest extends TestCase
 
     public function testWriteShouldCreateCustomer()
     {
-        $customersDbAdapter = $this->createCustomerDbAdapter();
+        $customersDbAdapter = $this->getCustomerDbAdapter();
         $records = [
             'default' => [
                 $this->getTestUserDataRecord(),
@@ -51,7 +51,7 @@ class CustomerDbAdapterTest extends TestCase
 
     public function testWriteShouldUpdateCustomer()
     {
-        $customerDbAdapter = $this->createCustomerDbAdapter();
+        $customerDbAdapter = $this->getCustomerDbAdapter();
 
         $records = [
             'default' => [
@@ -80,7 +80,7 @@ class CustomerDbAdapterTest extends TestCase
 
     public function testWriteShouldUpdateBillingCity()
     {
-        $customerDbAdapter = $this->createCustomerDbAdapter();
+        $customerDbAdapter = $this->getCustomerDbAdapter();
 
         $records = [
             'default' => [
@@ -112,7 +112,7 @@ class CustomerDbAdapterTest extends TestCase
 
     public function testWriteShouldUpdateCustomerGroup()
     {
-        $customerDbAdapter = $this->createCustomerDbAdapter();
+        $customerDbAdapter = $this->getCustomerDbAdapter();
 
         $records = [
             'default' => [
@@ -142,7 +142,7 @@ class CustomerDbAdapterTest extends TestCase
 
     public function testWriteWithCustomerGroupIdThrowsException()
     {
-        $customerDbAdapter = $this->createCustomerDbAdapter();
+        $customerDbAdapter = $this->getCustomerDbAdapter();
 
         $records = [
             'default' => [
@@ -164,7 +164,7 @@ class CustomerDbAdapterTest extends TestCase
 
     public function testWriteShouldUpdatePhoneNumber()
     {
-        $customerDbAdapter = $this->createCustomerDbAdapter();
+        $customerDbAdapter = $this->getCustomerDbAdapter();
 
         $records = [
             'default' => [
@@ -194,7 +194,7 @@ class CustomerDbAdapterTest extends TestCase
 
     public function testWriteShouldUpdatePaymentId()
     {
-        $customerDbAdapter = $this->createCustomerDbAdapter();
+        $customerDbAdapter = $this->getCustomerDbAdapter();
 
         $records = [
             'default' => [
@@ -223,7 +223,7 @@ class CustomerDbAdapterTest extends TestCase
 
     public function testWriteShouldUpdateLastLogin()
     {
-        $customerDbAdapter = $this->createCustomerDbAdapter();
+        $customerDbAdapter = $this->getCustomerDbAdapter();
 
         $records = [
             'default' => [
@@ -252,7 +252,7 @@ class CustomerDbAdapterTest extends TestCase
 
     public function testWriteWithoutEmailThrowsException()
     {
-        $customerDbAdapter = $this->createCustomerDbAdapter();
+        $customerDbAdapter = $this->getCustomerDbAdapter();
 
         $records = [
             'default' => [
@@ -272,7 +272,7 @@ class CustomerDbAdapterTest extends TestCase
 
     public function testWriteWithoutPasswordThrowsException()
     {
-        $customerDbAdapter = $this->createCustomerDbAdapter();
+        $customerDbAdapter = $this->getCustomerDbAdapter();
 
         $records = [
             'default' => [
@@ -291,7 +291,7 @@ class CustomerDbAdapterTest extends TestCase
 
     public function testWriteCreateCustomerWithExistingEmailThrowsException()
     {
-        $customerDbAdapter = $this->createCustomerDbAdapter();
+        $customerDbAdapter = $this->getCustomerDbAdapter();
 
         $records = [
             'default' => [
@@ -310,7 +310,7 @@ class CustomerDbAdapterTest extends TestCase
 
     public function testWriteWithInvalidSubShopThrowsException()
     {
-        $customerDbAdapter = $this->createCustomerDbAdapter();
+        $customerDbAdapter = $this->getCustomerDbAdapter();
 
         $records = [
             'default' => [
@@ -329,7 +329,7 @@ class CustomerDbAdapterTest extends TestCase
 
     public function testWriteWithInvalidLanguageIdThrowsException()
     {
-        $customerDbAdapter = $this->createCustomerDbAdapter();
+        $customerDbAdapter = $this->getCustomerDbAdapter();
 
         $records = [
             'default' => [
@@ -348,7 +348,7 @@ class CustomerDbAdapterTest extends TestCase
 
     public function testWriteShouldUpdateEmailAddress()
     {
-        $customerDbAdapter = $this->createCustomerDbAdapter();
+        $customerDbAdapter = $this->getCustomerDbAdapter();
 
         $records = [
             'default' => [
@@ -376,7 +376,7 @@ class CustomerDbAdapterTest extends TestCase
 
     public function testWriteShouldUpdateCustomerPassword()
     {
-        $customerDbAdapter = $this->createCustomerDbAdapter();
+        $customerDbAdapter = $this->getCustomerDbAdapter();
 
         // password is the md5 hash for "new password"
         $records = [
@@ -405,7 +405,7 @@ class CustomerDbAdapterTest extends TestCase
 
     public function testWriteNewCustomerWithoutBillingDataThrowsException()
     {
-        $customerDbAdapter = $this->createCustomerDbAdapter();
+        $customerDbAdapter = $this->getCustomerDbAdapter();
 
         $records = [
             'default' => [
@@ -427,12 +427,9 @@ class CustomerDbAdapterTest extends TestCase
         $customerDbAdapter->write($records);
     }
 
-    /**
-     * @return CustomerDbAdapter
-     */
-    private function createCustomerDbAdapter()
+    private function getCustomerDbAdapter(): CustomerDbAdapter
     {
-        return new CustomerDbAdapter();
+        return Shopware()->Container()->get(CustomerDbAdapter::class);
     }
 
     /**
