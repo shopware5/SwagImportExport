@@ -18,7 +18,7 @@ use Shopware\Components\SwagImportExport\Validators\ArticleInStockValidator;
 use Shopware\Models\Article\Detail;
 use Shopware\Models\Article\Repository;
 
-class ArticlesInStockDbAdapter implements DataDbAdapter
+class ArticlesInStockDbAdapter implements DataDbAdapter, \Enlight_Hook
 {
     /**
      * @var ModelManager

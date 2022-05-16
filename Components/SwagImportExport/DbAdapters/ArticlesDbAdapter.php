@@ -45,7 +45,7 @@ use Shopware\Models\Shop\Repository as ShopRepository;
 use Shopware\Models\Shop\Shop;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class ArticlesDbAdapter implements DataDbAdapter
+class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
 {
     public const VARIANTS_FILTER_KEY = 'variants';
     public const CATEGORIES_FILTER_KEY = 'categories';

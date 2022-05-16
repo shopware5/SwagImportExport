@@ -8,7 +8,6 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
-use Doctrine\Common\EventManager;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Expr\Join;
@@ -37,7 +36,7 @@ use Shopware\Models\Media\Album;
 use Shopware\Models\Media\Media;
 use Symfony\Component\HttpFoundation\File\File;
 
-class ArticlesImagesDbAdapter implements DataDbAdapter
+class ArticlesImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
 {
     private const PROTOCOL_FTP = 'ftp';
     private const PROTOCOL_HTTP = 'http';

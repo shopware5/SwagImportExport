@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace SwagImportExport\Tests\Functional\Components\SwagImportExport\DbAdapters;
 
 use PHPUnit\Framework\TestCase;
-use Pimple\Container;
 use Shopware\Components\SwagImportExport\DbAdapters\ArticlesImagesDbAdapter;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 

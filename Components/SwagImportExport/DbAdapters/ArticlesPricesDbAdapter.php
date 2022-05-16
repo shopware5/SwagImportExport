@@ -8,6 +8,7 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\QueryBuilder;
@@ -24,7 +25,7 @@ use Shopware\Models\Customer\Group as CustomerGroup;
 use Shopware\Models\Shop\Shop;
 use Shopware\Models\Tax\Tax;
 
-class ArticlesPricesDbAdapter implements DataDbAdapter
+class ArticlesPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
 {
     /**
      * @var ModelManager
@@ -61,11 +62,13 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
      */
     protected $dataManager;
 
-    public function __construct()
-    {
-        $this->dataManager = Shopware()->Container()->get(ArticlePriceDataManager::class);
+    public function __construct(
+        ArticlePriceDataManager $dataManager,
+        EntityManagerInterface $manager
+    ) {
+        $this->dataManager = $dataManager;
         $this->validator = new ArticlePriceValidator();
-        $this->manager = Shopware()->Models();
+        $this->manager = $manager;
     }
 
     /**
@@ -258,6 +261,8 @@ class ArticlesPricesDbAdapter implements DataDbAdapter
      */
     public function write($records)
     {
+        $this->unprocessedData = [];
+
         if (empty($records['default'])) {
             $message = SnippetsHelper::getNamespace()->get(
                 'adapters/articlesPrices/no_records',
