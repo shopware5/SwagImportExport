@@ -8,6 +8,7 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Enlight_Components_Db_Adapter_Pdo_Mysql;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\QueryBuilder;
@@ -20,7 +21,7 @@ use Shopware\Models\Order\Order;
 use Shopware\Models\Order\Status;
 use Shopware\Models\Tax\Tax;
 
-class MainOrdersDbAdapter implements DataDbAdapter
+class MainOrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
 {
     /**
      * @var array
@@ -57,12 +58,16 @@ class MainOrdersDbAdapter implements DataDbAdapter
      */
     private $stateTranslator;
 
-    public function __construct()
-    {
-        $this->db = Shopware()->Container()->get('db');
-        $this->modelManager = Shopware()->Container()->get('models');
-        $this->underscoreToCamelCaseService = Shopware()->Container()->get('swag_import_export.underscore_camelcase_service');
-        $this->stateTranslator = Shopware()->Container()->get('shopware.components.state_translator');
+    public function __construct(
+        Enlight_Components_Db_Adapter_Pdo_Mysql $db,
+        EntityManagerInterface $entityManager,
+        UnderscoreToCamelCaseServiceInterface $underscoreToCamelCaseService,
+        StateTranslatorServiceInterface $stateTranslator
+    ) {
+        $this->db = $db;
+        $this->modelManager = $entityManager;
+        $this->underscoreToCamelCaseService = $underscoreToCamelCaseService;
+        $this->stateTranslator = $stateTranslator;
     }
 
     /**

@@ -113,5 +113,13 @@
             <tag name="import_export.proxyable"/>
         </service>
 
+        <service id="Shopware\Components\SwagImportExport\DbAdapters\MainOrdersDbAdapter" public="true">
+            <argument type="service" id="db"/>
+            <argument type="service" id="models"/>
+            <argument type="service" id="Shopware\Components\SwagImportExport\Service\UnderscoreToCamelCaseService"/>
+            <argument type="service" id="shopware.components.state_translator"/>
+
+            <tag name="import_export.proxyable"/>
+        </service>
     </services>
 </container>

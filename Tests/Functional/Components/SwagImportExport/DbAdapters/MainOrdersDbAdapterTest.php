@@ -19,7 +19,7 @@ class MainOrdersDbAdapterTest extends TestCase
 
     public function testReadWithEmptyIdsArrayThrowsException(): void
     {
-        $mainOrdersDbAdapter = $this->createMainOrdersDbAdapter();
+        $mainOrdersDbAdapter = $this->getMainOrdersDbAdapter();
 
         $columns = $mainOrdersDbAdapter->getDefaultColumns();
         $ids = [];
@@ -31,7 +31,7 @@ class MainOrdersDbAdapterTest extends TestCase
 
     public function testReadWithEmptyColumnsArrayThrowsException(): void
     {
-        $mainOrdersDbAdapter = $this->createMainOrdersDbAdapter();
+        $mainOrdersDbAdapter = $this->getMainOrdersDbAdapter();
 
         $columns = [];
         $ids = [1, 2, 3];
@@ -43,7 +43,7 @@ class MainOrdersDbAdapterTest extends TestCase
 
     public function testReadShouldCreateValidColumns(): void
     {
-        $mainOrdersDbAdapter = $this->createMainOrdersDbAdapter();
+        $mainOrdersDbAdapter = $this->getMainOrdersDbAdapter();
 
         $columns = $mainOrdersDbAdapter->getDefaultColumns();
         $ids = [15, 57];
@@ -62,7 +62,7 @@ class MainOrdersDbAdapterTest extends TestCase
 
     public function testReadShouldExportCorrectResult(): void
     {
-        $mainOrdersDbAdapter = $this->createMainOrdersDbAdapter();
+        $mainOrdersDbAdapter = $this->getMainOrdersDbAdapter();
 
         $columns = $mainOrdersDbAdapter->getDefaultColumns();
         $ids = [15];
@@ -96,7 +96,7 @@ class MainOrdersDbAdapterTest extends TestCase
         );
 
         $ids = [15];
-        $mainOrdersDbAdapter = $this->createMainOrdersDbAdapter();
+        $mainOrdersDbAdapter = $this->getMainOrdersDbAdapter();
         $columns = $mainOrdersDbAdapter->getDefaultColumns();
         $exportedOrders = $mainOrdersDbAdapter->read($ids, $columns);
 
@@ -126,8 +126,8 @@ class MainOrdersDbAdapterTest extends TestCase
         );
     }
 
-    private function createMainOrdersDbAdapter(): MainOrdersDbAdapter
+    private function getMainOrdersDbAdapter(): MainOrdersDbAdapter
     {
-        return new MainOrdersDbAdapter();
+        return Shopware()->Container()->get(MainOrdersDbAdapter::class);
     }
 }

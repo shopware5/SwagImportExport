@@ -83,7 +83,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
             case DataDbAdapter::ORDER_ADAPTER:
                 return $this->createOrdersDbAdapter();
             case DataDbAdapter::MAIN_ORDER_ADAPTER:
-                return $this->createMainOrdersDbAdapter();
+                return $this->getMainOrdersDbAdapter();
             case DataDbAdapter::CUSTOMER_ADAPTER:
                 return $this->getCustomerDbAdapter();
             case DataDbAdapter::CUSTOMER_COMPLETE_ADAPTER:
@@ -281,15 +281,9 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
         return new $proxyAdapter();
     }
 
-    /**
-     * @return MainOrdersDbAdapter
-     */
-    protected function createMainOrdersDbAdapter()
+    protected function getMainOrdersDbAdapter(): MainOrdersDbAdapter
     {
-        $proxyAdapter = Shopware()->Hooks()
-            ->getProxy(MainOrdersDbAdapter::class);
-
-        return new $proxyAdapter();
+        return Shopware()->Container()->get(MainOrdersDbAdapter::class);
     }
 
     /**
