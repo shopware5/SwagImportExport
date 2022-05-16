@@ -7,7 +7,6 @@
             <label lang="de">Mit Import/Export fortfahren, wenn ein Fehler auftritt</label>
             <label lang="en">Continue import/export if an error occurs during the process</label>
             <value>false</value>
-            <description>This slogan will be shown on the storefront</description>
 
             <options>
                 <option>
@@ -39,13 +38,13 @@
             <options>
                 <option>
                     <id>1</id>
-                    <name>Re-use same article images</name>
-                    <name lang="de-DE">Gleiche Artikelbilder erneut verwenden</name>
+                    <name>Re-use same product images</name>
+                    <name lang="de-DE">Bestehende Produktbilder erneut verwenden</name>
                 </option>
                 <option>
                     <id>2</id>
-                    <name>Don\'t re-use article images</name>
-                    <name lang="de-DE">Gleiche Artikelbilder nicht erneut verwenden</name>
+                    <name>Don\'t re-use product images</name>
+                    <name lang="de-DE">Bestehende Produktbilder nicht erneut verwenden</name>
                 </option>
             </options>
         </element>

@@ -7006,6 +7006,21 @@ parameters:
 			path: Controllers/Backend/SwagImportExportImport.php
 
 		-
+			message: "#^Call to an undefined method object\\:\\:getDefaultFields\\(\\)\\.$#"
+			count: 2
+			path: Controllers/Backend/SwagImportExportProfile.php
+
+		-
+			message: "#^Call to an undefined method object\\:\\:getDefaultFieldsName\\(\\)\\.$#"
+			count: 1
+			path: Controllers/Backend/SwagImportExportProfile.php
+
+		-
+			message: "#^Call to an undefined method object\\:\\:getFieldType\\(\\)\\.$#"
+			count: 1
+			path: Controllers/Backend/SwagImportExportProfile.php
+
+		-
 			message: "#^Cannot access offset 'parentId' on array\\|bool\\.$#"
 			count: 2
 			path: Controllers/Backend/SwagImportExportProfile.php
@@ -7027,6 +7042,11 @@ parameters:
 
 		-
 			message: "#^Dead catch \\- Doctrine\\\\DBAL\\\\DBALException is never thrown in the try block\\.$#"
+			count: 2
+			path: Controllers/Backend/SwagImportExportProfile.php
+
+		-
+			message: "#^If condition is always true\\.$#"
 			count: 2
 			path: Controllers/Backend/SwagImportExportProfile.php
 
