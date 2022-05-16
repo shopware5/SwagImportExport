@@ -330,6 +330,7 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook
      */
     public function write($records)
     {
+        $this->unprocessedData = [];
         $customerCount = 0;
 
         if (empty($records)) {

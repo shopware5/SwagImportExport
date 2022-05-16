@@ -89,7 +89,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
             case DataDbAdapter::CUSTOMER_COMPLETE_ADAPTER:
                 return $this->getCustomerCompleteDbAdapter();
             case DataDbAdapter::NEWSLETTER_RECIPIENTS_ADAPTER:
-                return $this->createNewsletterDbAdapter();
+                return $this->getNewsletterDbAdapter();
             case DataDbAdapter::TRANSLATION_ADAPTER:
                 return $this->createTranslationsDbAdapter();
             case DataDbAdapter::ADDRESS_ADAPTER:
@@ -286,15 +286,9 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
         return Shopware()->Container()->get(MainOrdersDbAdapter::class);
     }
 
-    /**
-     * @return NewsletterDbAdapter
-     */
-    protected function createNewsletterDbAdapter()
+    protected function getNewsletterDbAdapter(): NewsletterDbAdapter
     {
-        $proxyAdapter = Shopware()->Hooks()
-            ->getProxy(NewsletterDbAdapter::class);
-
-        return new $proxyAdapter();
+        return Shopware()->Container()->get(NewsletterDbAdapter::class);
     }
 
     /**

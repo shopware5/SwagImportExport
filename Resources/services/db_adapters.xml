@@ -121,5 +121,14 @@
 
             <tag name="import_export.proxyable"/>
         </service>
+
+        <service id="Shopware\Components\SwagImportExport\DbAdapters\NewsletterDbAdapter" public="true">
+            <argument type="service" id="models"/>
+            <argument type="service" id="Shopware\Components\SwagImportExport\DataManagers\NewsletterDataManager"/>
+            <argument type="service" id="db"/>
+            <argument type="service" id="config"/>
+
+            <tag name="import_export.proxyable"/>
+        </service>
     </services>
 </container>

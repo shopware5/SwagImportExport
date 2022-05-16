@@ -19,7 +19,7 @@ class NewsletterDbAdapterTest extends TestCase
 
     public function testWriteThrowsExceptionIfRecordsAreEmpty()
     {
-        $newsletterDbAdapter = $this->createNewsletterAdapter();
+        $newsletterDbAdapter = $this->getNewsletterAdapter();
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Es wurden keine Newsletter gefunden.');
@@ -28,7 +28,7 @@ class NewsletterDbAdapterTest extends TestCase
 
     public function testShouldAddCustomerAsNewsletterRecipient()
     {
-        $newsletterDbAdapter = $this->createNewsletterAdapter();
+        $newsletterDbAdapter = $this->getNewsletterAdapter();
         $customerData = [
             'default' => [
                 [
@@ -49,7 +49,7 @@ class NewsletterDbAdapterTest extends TestCase
 
     public function testWriteShouldCreateNewsletterRecipient()
     {
-        $newsletterDbAdapter = $this->createNewsletterAdapter();
+        $newsletterDbAdapter = $this->getNewsletterAdapter();
 
         $notExistingRecipient = ['default' => [
             [
@@ -68,7 +68,7 @@ class NewsletterDbAdapterTest extends TestCase
 
     public function testWriteShouldCreateNewsletterRecipientContactData()
     {
-        $newsletterDBAdapter = $this->createNewsletterAdapter();
+        $newsletterDBAdapter = $this->getNewsletterAdapter();
 
         $recipientWithContactData = ['default' => [
             [
@@ -92,7 +92,7 @@ class NewsletterDbAdapterTest extends TestCase
 
     public function testWriteShouldCreateNewsletterGroup()
     {
-        $newsletterDbAdapter = $this->createNewsletterAdapter();
+        $newsletterDbAdapter = $this->getNewsletterAdapter();
 
         $recipientWithNewNewsletterGroup = ['default' => [
             [
@@ -112,7 +112,7 @@ class NewsletterDbAdapterTest extends TestCase
 
     public function testWriteShouldIgnoreExistingCustomerRegisteredInCustomerGroup()
     {
-        $newsletterDbAdapter = $this->createNewsletterAdapter();
+        $newsletterDbAdapter = $this->getNewsletterAdapter();
         /** @var Connection $dbalConnection */
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
         $dt = new \DateTime();
@@ -137,11 +137,8 @@ class NewsletterDbAdapterTest extends TestCase
         static::assertEquals(1, $groupCount);
     }
 
-    /**
-     * @return NewsletterDbAdapter
-     */
-    private function createNewsletterAdapter()
+    private function getNewsletterAdapter(): NewsletterDbAdapter
     {
-        return new NewsletterDbAdapter();
+        return Shopware()->Container()->get(NewsletterDbAdapter::class);
     }
 }

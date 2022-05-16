@@ -8,6 +8,7 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use Shopware\Components\Model\ModelManager;
@@ -41,7 +42,7 @@ class NewsletterDbAdapter implements DataDbAdapter
     /**
      * @var array
      */
-    protected $unprocessedData;
+    protected $unprocessedData = [];
 
     /**
      * @var array
@@ -68,13 +69,17 @@ class NewsletterDbAdapter implements DataDbAdapter
      */
     protected $defaultValues = [];
 
-    public function __construct()
-    {
-        $this->manager = Shopware()->Container()->get('models');
+    public function __construct(
+        EntityManagerInterface $manager,
+        NewsletterDataManager $dataManager,
+        \Enlight_Components_Db_Adapter_Pdo_Mysql $db,
+        \Shopware_Components_Config $config
+    ) {
+        $this->manager = $manager;
         $this->validator = new NewsletterValidator();
-        $this->dataManager = Shopware()->Container()->get(NewsletterDataManager::class);
-        $this->db = Shopware()->Db();
-        $this->errorMode = Shopware()->Config()->get('SwagImportExportErrorMode');
+        $this->dataManager = $dataManager;
+        $this->db = $db;
+        $this->errorMode = $config->get('SwagImportExportErrorMode');
     }
 
     /**
@@ -184,6 +189,8 @@ class NewsletterDbAdapter implements DataDbAdapter
      */
     public function write($records)
     {
+        $this->unprocessedData = [];
+
         if (empty($records['default'])) {
             $message = SnippetsHelper::getNamespace()->get(
                 'adapters/newsletter/no_records',
