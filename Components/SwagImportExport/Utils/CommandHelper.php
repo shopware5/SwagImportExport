@@ -102,22 +102,22 @@ class CommandHelper
     protected $connection;
 
     /**
-     * @var mixed|object|ProfileFactory|\Symfony\Component\DependencyInjection\Container|null
+     * @var ProfileFactory
      */
     private $profileFactory;
 
     /**
-     * @var mixed|object|DataFactory|\Symfony\Component\DependencyInjection\Container|null
+     * @var DataFactory
      */
     private $dataFactory;
 
     /**
-     * @var mixed|object|FileIOFactory|\Symfony\Component\DependencyInjection\Container|null
+     * @var FileIOFactory
      */
     private $fileIoFactory;
 
     /**
-     * @var mixed|object|DataTransformerFactory|\Symfony\Component\DependencyInjection\Container|null
+     * @var DataTransformerFactory
      */
     private $dataTransformationFactory;
 
