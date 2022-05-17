@@ -119,7 +119,7 @@ class XmlFileReader implements FileReader
             if (!$hasChildren) {
                 $record['_value'] = $node->nodeValue;
             }
-        } elseif (!$hasChildren) {
+        } elseif (!$hasChildren && \is_string($node->nodeValue)) {
             $record = \trim($node->nodeValue);
         }
 

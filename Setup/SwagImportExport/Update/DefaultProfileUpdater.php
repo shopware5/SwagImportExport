@@ -11,28 +11,18 @@ namespace Shopware\Setup\SwagImportExport\Update;
 use Doctrine\DBAL\Connection;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\ProfileHelper;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\ProfileMetaData;
-use Shopware\Setup\SwagImportExport\SetupContext;
 
-class DefaultProfileUpdater implements UpdaterInterface
+class DefaultProfileUpdater
 {
-    public const MIN_PLUGIN_VERSION = '2.0.0';
-
     /**
      * @var Connection
      */
     private $connection;
 
-    /**
-     * @var SetupContext
-     */
-    private $setupContext;
-
     public function __construct(
-        SetupContext $setupContext,
         Connection $connection
     ) {
         $this->connection = $connection;
-        $this->setupContext = $setupContext;
     }
 
     /**
@@ -46,7 +36,7 @@ class DefaultProfileUpdater implements UpdaterInterface
         $sql = '
             UPDATE s_import_export_profile
             SET `tree` = :tree, `description` = :description
-            WHERE `name` = :name
+            WHERE `name` = :name AND is_default = 1
         ';
 
         /** @var ProfileMetaData[] $profiles */
@@ -63,13 +53,5 @@ class DefaultProfileUpdater implements UpdaterInterface
 
             $this->connection->executeQuery($sql, $params);
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isCompatible()
-    {
-        return $this->setupContext->assertMinimumPluginVersion(self::MIN_PLUGIN_VERSION);
     }
 }

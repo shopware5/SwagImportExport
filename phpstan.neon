@@ -16,6 +16,7 @@ parameters:
         - vendor
     scanDirectories:
         - ./../../../var/cache/production____REVISION___/doctrine/attributes
+
     ignoreErrors:
         # Needs some improvements in the doctrine PHPStan extensions: see https://github.com/phpstan/phpstan-doctrine/pull/167
         - '#Cannot call method fetch.*\(\) on Doctrine\\DBAL\\.*\|int#'

@@ -346,15 +346,10 @@ class ImportCommandTest extends TestCase
         static::assertEquals('Total count: 15.', $consoleOutput[3]);
     }
 
-    /**
-     * @param string $table
-     *
-     * @return int
-     */
-    private function getRowCountForTable($table)
+    private function getRowCountForTable(string $table): int
     {
         $statement = $this->connection->executeQuery("SELECT * FROM {$table}");
 
-        return $statement->rowCount();
+        return (int) $statement->rowCount();
     }
 }

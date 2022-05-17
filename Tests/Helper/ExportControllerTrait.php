@@ -39,7 +39,7 @@ trait ExportControllerTrait
      * @param string $filePath
      * @param string $xpath
      *
-     * @return \DOMNodeList
+     * @return \DOMNodeList<\DOMNode>
      */
     private function queryXpath($filePath, $xpath)
     {
@@ -48,7 +48,11 @@ trait ExportControllerTrait
 
         $domXpath = new \DOMXPath($domDocument);
 
-        return $domXpath->query($xpath);
+        $path = $domXpath->query($xpath);
+
+        self::assertInstanceOf(\DOMNodeList::class, $path);
+
+        return $path;
     }
 
     /**

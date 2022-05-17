@@ -286,21 +286,6 @@ parameters:
 			path: Components/Converter/XmlConverter.php
 
 		-
-			message: "#^If condition is always true\\.$#"
-			count: 1
-			path: Components/DoctrineExtensions/Query/Mysql/GroupConcat.php
-
-		-
-			message: "#^Offset 'value' does not exist on array\\{value\\: string, type\\: int\\|string\\|null, position\\: int\\}\\|null\\.$#"
-			count: 1
-			path: Components/DoctrineExtensions/Query/Mysql/GroupConcat.php
-
-		-
-			message: "#^Property DoctrineExtensions\\\\Query\\\\Mysql\\\\GroupConcat\\:\\:\\$separator has no type specified\\.$#"
-			count: 1
-			path: Components/DoctrineExtensions/Query/Mysql/GroupConcat.php
-
-		-
 			message: "#^Call to an undefined method Shopware\\\\Components\\\\SwagImportExport\\\\DbAdapters\\\\DataDbAdapter\\:\\:setDefaultValues\\(\\)\\.$#"
 			count: 1
 			path: Components/SwagImportExport/DataIO.php
@@ -5496,11 +5481,6 @@ parameters:
 			path: Components/SwagImportExport/Transformers/FlattenTransformer.php
 
 		-
-			message: "#^Parameter \\#1 \\$data of method Shopware\\\\Components\\\\SwagImportExport\\\\Transformers\\\\FlattenTransformer\\:\\:saveTempData\\(\\) expects string, int\\|string given\\.$#"
-			count: 3
-			path: Components/SwagImportExport/Transformers/FlattenTransformer.php
-
-		-
 			message: "#^Parameter \\#1 \\$data of method Shopware\\\\Components\\\\SwagImportExport\\\\Transformers\\\\FlattenTransformer\\:\\:saveTempData\\(\\) expects string, null given\\.$#"
 			count: 1
 			path: Components/SwagImportExport/Transformers/FlattenTransformer.php
@@ -6886,11 +6866,6 @@ parameters:
 			path: Controllers/Backend/SwagImportExportProfile.php
 
 		-
-			message: "#^Dead catch \\- Doctrine\\\\DBAL\\\\DBALException is never thrown in the try block\\.$#"
-			count: 2
-			path: Controllers/Backend/SwagImportExportProfile.php
-
-		-
 			message: "#^If condition is always true\\.$#"
 			count: 2
 			path: Controllers/Backend/SwagImportExportProfile.php
@@ -6969,6 +6944,16 @@ parameters:
 			message: "#^Method Shopware\\\\CustomModels\\\\ImportExport\\\\Session\\:\\:getProfile\\(\\) should return Shopware\\\\CustomModels\\\\ImportExport\\\\Profile but returns Shopware\\\\CustomModels\\\\ImportExport\\\\Profile\\|null\\.$#"
 			count: 1
 			path: CustomModels/ImportExport/Session.php
+
+		-
+			message: "#^Cannot call method fetchColumn\\(\\) on PDOStatement\\|false\\.$#"
+			count: 2
+			path: Resources/migrations/3-add-acl.php
+
+		-
+			message: "#^Cannot call method fetchAll\\(\\) on PDOStatement\\|false\\.$#"
+			count: 1
+			path: Resources/migrations/5-rename-duplicate-profile-names.php
 
 		-
 			message: "#^Method Shopware\\\\Setup\\\\SwagImportExport\\\\DefaultProfiles\\\\AddressProfile\\:\\:getAdapter\\(\\) has no return type specified\\.$#"
@@ -7276,109 +7261,9 @@ parameters:
 			path: Setup/SwagImportExport/Install/DefaultProfileInstaller.php
 
 		-
-			message: "#^Method Shopware\\\\Setup\\\\SwagImportExport\\\\Install\\\\InstallerInterface\\:\\:install\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Setup/SwagImportExport/Install/InstallerInterface.php
-
-		-
-			message: "#^Method Shopware\\\\Setup\\\\SwagImportExport\\\\Install\\\\MainMenuItemInstaller\\:\\:createMenuItem\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Setup/SwagImportExport/Install/MainMenuItemInstaller.php
-
-		-
-			message: "#^Method Shopware\\\\Setup\\\\SwagImportExport\\\\Install\\\\MainMenuItemInstaller\\:\\:install\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Setup/SwagImportExport/Install/MainMenuItemInstaller.php
-
-		-
-			message: "#^Method Shopware\\\\Setup\\\\SwagImportExport\\\\Install\\\\MainMenuItemInstaller\\:\\:menuItemExists\\(\\) has parameter \\$menuItem with no type specified\\.$#"
-			count: 1
-			path: Setup/SwagImportExport/Install/MainMenuItemInstaller.php
-
-		-
-			message: "#^Method Shopware\\\\Setup\\\\SwagImportExport\\\\Install\\\\MainMenuItemInstaller\\:\\:removeImportExportAdvancedMenuItem\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Setup/SwagImportExport/Install/MainMenuItemInstaller.php
-
-		-
-			message: "#^Method Shopware\\\\Setup\\\\SwagImportExport\\\\Install\\\\MainMenuItemInstaller\\:\\:updateImportExportMenuItem\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Setup/SwagImportExport/Install/MainMenuItemInstaller.php
-
-		-
-			message: "#^Parameter \\#1 \\$entity of method Doctrine\\\\ORM\\\\EntityManager\\:\\:remove\\(\\) expects object, Shopware\\\\Models\\\\Menu\\\\Menu\\|null given\\.$#"
-			count: 1
-			path: Setup/SwagImportExport/Install/MainMenuItemInstaller.php
-
-		-
-			message: "#^Parameter \\#1 \\$menuItem of method Shopware\\\\Setup\\\\SwagImportExport\\\\Install\\\\MainMenuItemInstaller\\:\\:updateImportExportMenuItem\\(\\) expects Shopware\\\\Models\\\\Menu\\\\Menu, Shopware\\\\Models\\\\Menu\\\\Menu\\|null given\\.$#"
-			count: 1
-			path: Setup/SwagImportExport/Install/MainMenuItemInstaller.php
-
-		-
-			message: "#^Parameter \\#1 \\$plugin of method Shopware\\\\Setup\\\\SwagImportExport\\\\Install\\\\MainMenuItemInstaller\\:\\:createMenuItem\\(\\) expects Shopware\\\\Models\\\\Plugin\\\\Plugin, Shopware\\\\Models\\\\Plugin\\\\Plugin\\|null given\\.$#"
-			count: 1
-			path: Setup/SwagImportExport/Install/MainMenuItemInstaller.php
-
-		-
-			message: "#^Parameter \\#2 \\$plugin of method Shopware\\\\Setup\\\\SwagImportExport\\\\Install\\\\MainMenuItemInstaller\\:\\:updateImportExportMenuItem\\(\\) expects Shopware\\\\Models\\\\Plugin\\\\Plugin, Shopware\\\\Models\\\\Plugin\\\\Plugin\\|null given\\.$#"
-			count: 1
-			path: Setup/SwagImportExport/Install/MainMenuItemInstaller.php
-
-		-
-			message: "#^Method Shopware\\\\Setup\\\\SwagImportExport\\\\Install\\\\OldAdvancedMenuInstaller\\:\\:install\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Setup/SwagImportExport/Install/OldAdvancedMenuInstaller.php
-
-		-
-			message: "#^Parameter \\#1 \\$active of method Shopware\\\\Models\\\\Menu\\\\Menu\\:\\:setActive\\(\\) expects bool, int given\\.$#"
-			count: 1
-			path: Setup/SwagImportExport/Install/OldAdvancedMenuInstaller.php
-
-		-
 			message: "#^Method Shopware\\\\Setup\\\\SwagImportExport\\\\Update\\\\DefaultProfileUpdater\\:\\:update\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Setup/SwagImportExport/Update/DefaultProfileUpdater.php
-
-		-
-			message: "#^Method Shopware\\\\Setup\\\\SwagImportExport\\\\Update\\\\Update01MainMenuItem\\:\\:update\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Setup/SwagImportExport/Update/Update01MainMenuItem.php
-
-		-
-			message: "#^Method Shopware\\\\Setup\\\\SwagImportExport\\\\Update\\\\Update02RemoveForeignKeyConstraint\\:\\:removeImportFilesAlbum\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Setup/SwagImportExport/Update/Update02RemoveForeignKeyConstraint.php
-
-		-
-			message: "#^Method Shopware\\\\Setup\\\\SwagImportExport\\\\Update\\\\Update02RemoveForeignKeyConstraint\\:\\:update\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Setup/SwagImportExport/Update/Update02RemoveForeignKeyConstraint.php
-
-		-
-			message: "#^Method Shopware\\\\Setup\\\\SwagImportExport\\\\Update\\\\Update03DefaultProfileSupport\\:\\:update\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Setup/SwagImportExport/Update/Update03DefaultProfileSupport.php
-
-		-
-			message: "#^Method Shopware\\\\Setup\\\\SwagImportExport\\\\Update\\\\Update04CreateColumns\\:\\:update\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Setup/SwagImportExport/Update/Update04CreateColumns.php
-
-		-
-			message: "#^Method Shopware\\\\Setup\\\\SwagImportExport\\\\Update\\\\Update05CreateCustomerCompleteProfile\\:\\:update\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Setup/SwagImportExport/Update/Update05CreateCustomerCompleteProfile.php
-
-		-
-			message: "#^Method Shopware\\\\Setup\\\\SwagImportExport\\\\Update\\\\Update06CreateCategoryTranslationProfile\\:\\:update\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Setup/SwagImportExport/Update/Update06CreateCategoryTranslationProfile.php
-
-		-
-			message: "#^Method Shopware\\\\Setup\\\\SwagImportExport\\\\Update\\\\UpdaterInterface\\:\\:update\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Setup/SwagImportExport/Update/UpdaterInterface.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Commands\\\\ExportCommandTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
@@ -8091,11 +7976,6 @@ parameters:
 			path: Tests/Functional/Components/SwagImportExport/Transformers/ValuesTransformerTest.php
 
 		-
-			message: "#^You should use assertNull\\(\\) instead of assertSame\\(null, \\$actual\\)\\.$#"
-			count: 1
-			path: Tests/Functional/Components/SwagImportExport/Transformers/ValuesTransformerTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\SwagImportExport\\\\Validators\\\\AddressValidatorTest\\:\\:testCheckRequiredFieldsShouldThrowExceptionIfAddressHasCustomernumberButEmailIsGiven\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Functional/Components/SwagImportExport/Validators/AddressValidatorTest.php
@@ -8221,16 +8101,6 @@ parameters:
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/AddressExportTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\AddressExportTest\\:\\:queryXpath\\(\\) return type with generic class DOMNodeList does not specify its types\\: TNode$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/AddressExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\AddressExportTest\\:\\:queryXpath\\(\\) should return DOMNodeList but returns DOMNodeList\\|false\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/AddressExportTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\AddressExportTest\\:\\:testAddressExportWithCsv\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/AddressExportTest.php
@@ -8287,16 +8157,6 @@ parameters:
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\ArticleExportTest\\:\\:loadDependenciesBefore\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticleExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\ArticleExportTest\\:\\:queryXpath\\(\\) return type with generic class DOMNodeList does not specify its types\\: TNode$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticleExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\ArticleExportTest\\:\\:queryXpath\\(\\) should return DOMNodeList but returns DOMNodeList\\|false\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticleExportTest.php
 
@@ -8446,16 +8306,6 @@ parameters:
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticlePricesExportTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\ArticlePricesExportTest\\:\\:queryXpath\\(\\) return type with generic class DOMNodeList does not specify its types\\: TNode$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticlePricesExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\ArticlePricesExportTest\\:\\:queryXpath\\(\\) should return DOMNodeList but returns DOMNodeList\\|false\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticlePricesExportTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\ArticlePricesExportTest\\:\\:testArticlesPricesCsvExport\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticlePricesExportTest.php
@@ -8516,16 +8366,6 @@ parameters:
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticleTranslationExportExportTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\ArticleTranslationExportExportTest\\:\\:queryXpath\\(\\) return type with generic class DOMNodeList does not specify its types\\: TNode$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticleTranslationExportExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\ArticleTranslationExportExportTest\\:\\:queryXpath\\(\\) should return DOMNodeList but returns DOMNodeList\\|false\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticleTranslationExportExportTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\ArticleTranslationExportExportTest\\:\\:testArticlesTranslationsCsvExport\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticleTranslationExportExportTest.php
@@ -8582,16 +8422,6 @@ parameters:
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\ArticlesInstockExportTest\\:\\:loadDependenciesBefore\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticlesInstockExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\ArticlesInstockExportTest\\:\\:queryXpath\\(\\) return type with generic class DOMNodeList does not specify its types\\: TNode$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticlesInstockExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\ArticlesInstockExportTest\\:\\:queryXpath\\(\\) should return DOMNodeList but returns DOMNodeList\\|false\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/ArticlesInstockExportTest.php
 
@@ -8741,16 +8571,6 @@ parameters:
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/CategoryExportTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\CategoryExportTest\\:\\:queryXpath\\(\\) return type with generic class DOMNodeList does not specify its types\\: TNode$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/CategoryExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\CategoryExportTest\\:\\:queryXpath\\(\\) should return DOMNodeList but returns DOMNodeList\\|false\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/CategoryExportTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\CategoryExportTest\\:\\:testCategoryCsvExport\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/CategoryExportTest.php
@@ -8811,16 +8631,6 @@ parameters:
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/CustomerExportTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\CustomerExportTest\\:\\:queryXpath\\(\\) return type with generic class DOMNodeList does not specify its types\\: TNode$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/CustomerExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\CustomerExportTest\\:\\:queryXpath\\(\\) should return DOMNodeList but returns DOMNodeList\\|false\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/CustomerExportTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\CustomerExportTest\\:\\:testCustomerCsvExport\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/CustomerExportTest.php
@@ -8872,16 +8682,6 @@ parameters:
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\NewsletterExportTest\\:\\:loadDependenciesBefore\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/NewsletterExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\NewsletterExportTest\\:\\:queryXpath\\(\\) return type with generic class DOMNodeList does not specify its types\\: TNode$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/NewsletterExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\NewsletterExportTest\\:\\:queryXpath\\(\\) should return DOMNodeList but returns DOMNodeList\\|false\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/NewsletterExportTest.php
 
@@ -8942,16 +8742,6 @@ parameters:
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\OrderExportTest\\:\\:loadDependenciesBefore\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/OrderExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\OrderExportTest\\:\\:queryXpath\\(\\) return type with generic class DOMNodeList does not specify its types\\: TNode$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/SwagImportExport/OrderExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SwagImportExport\\\\OrderExportTest\\:\\:queryXpath\\(\\) should return DOMNodeList but returns DOMNodeList\\|false\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/SwagImportExport/OrderExportTest.php
 
@@ -9116,111 +8906,6 @@ parameters:
 			path: Tests/Functional/Service/ProfileServiceTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Setup\\\\Installer\\\\DefaultProfileInstallerTest\\:\\:testItShouldBeCompatible\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Setup/Installer/DefaultProfileInstallerTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Setup\\\\Installer\\\\DefaultProfileInstallerTest\\:\\:testItShouldBeIncompatible\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Setup/Installer/DefaultProfileInstallerTest.php
-
-		-
-			message: "#^Cannot call method getController\\(\\) on Shopware\\\\Models\\\\Menu\\\\Menu\\|null\\.$#"
-			count: 1
-			path: Tests/Functional/Setup/Installer/MainMenuItemInstallerTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Setup\\\\MainMenuItemInstallerTest\\:\\:createMenuItemIfItDoesNotExist\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Setup/Installer/MainMenuItemInstallerTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Setup\\\\MainMenuItemInstallerTest\\:\\:removeActualMenuItem\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Setup/Installer/MainMenuItemInstallerTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Setup\\\\MainMenuItemInstallerTest\\:\\:removeActualMenuItem\\(\\) has parameter \\$menuRepository with generic class Doctrine\\\\ORM\\\\EntityRepository but does not specify its types\\: TEntityClass$#"
-			count: 1
-			path: Tests/Functional/Setup/Installer/MainMenuItemInstallerTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Setup\\\\MainMenuItemInstallerTest\\:\\:testInstallShouldCreateMenuItem\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Setup/Installer/MainMenuItemInstallerTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Setup\\\\MainMenuItemInstallerTest\\:\\:testInstallShouldRemoveOldMenuItem\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Setup/Installer/MainMenuItemInstallerTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Setup\\\\MainMenuItemInstallerTest\\:\\:testInstallShouldUpdateExistingItem\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Setup/Installer/MainMenuItemInstallerTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Setup\\\\MainMenuItemInstallerTest\\:\\:testItShouldBeCompatible\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Setup/Installer/MainMenuItemInstallerTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Setup\\\\MainMenuItemInstallerTest\\:\\:testItShouldBeCompatibleWithGreaterVersion\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Setup/Installer/MainMenuItemInstallerTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Setup\\\\MainMenuItemInstallerTest\\:\\:testItShouldBeIncompatible\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Setup/Installer/MainMenuItemInstallerTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Setup\\\\Installer\\\\OldAdvancedMenuInstallerTest\\:\\:testItShouldBeCompatible\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Setup/Installer/OldAdvancedMenuInstallerTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Setup\\\\Installer\\\\OldAdvancedMenuInstallerTest\\:\\:testItShouldBeIncompatible\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Setup/Installer/OldAdvancedMenuInstallerTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Setup\\\\Update\\\\Update01MainMenuItemTest\\:\\:testItShouldBeCompatible\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Setup/Update/Update01MainMenuItemTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Setup\\\\Update\\\\Update01MainMenuItemTest\\:\\:testItShouldBeIncompatible\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Setup/Update/Update01MainMenuItemTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Setup\\\\Update\\\\Update02RemoveForeignKeyConstraintTest\\:\\:testItShouldBeCompatible\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Setup/Update/Update02RemoveForeignKeyConstraintTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Setup\\\\Update\\\\Update02RemoveForeignKeyConstraintTest\\:\\:testItShouldBeIncompatible\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Setup/Update/Update02RemoveForeignKeyConstraintTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Setup\\\\Update\\\\Update02RemoveForeignKeyConstraintTest\\:\\:testItShouldBeIncompatibleWithVersionHigherOrEquals200\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Setup/Update/Update02RemoveForeignKeyConstraintTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Setup\\\\Update\\\\Update03DefaultProfileSupportTest\\:\\:testItShouldBeCompatible\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Setup/Update/Update03DefaultProfileSupportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Setup\\\\Update\\\\Update03DefaultProfileSupportTest\\:\\:testItShouldBeIncompatible\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Setup/Update/Update03DefaultProfileSupportTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Helper\\\\BackendControllerTestHelper\\:\\:addFile\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Helper/BackendControllerTestHelper.php
@@ -9336,11 +9021,6 @@ parameters:
 			path: Tests/Integration/DefaultProfiles/Import/AddressProfileTest.php
 
 		-
-			message: "#^PHPDoc tag @var for variable \\$stmt has no value type specified in iterable type Doctrine\\\\DBAL\\\\Statement\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/AddressProfileTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/AddressProfileTest.php
@@ -9356,11 +9036,6 @@ parameters:
 			path: Tests/Integration/DefaultProfiles/Import/ArticleAccessoriesProfileTest.php
 
 		-
-			message: "#^PHPDoc tag @var for variable \\$stmt has no value type specified in iterable type Doctrine\\\\DBAL\\\\Statement\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleAccessoriesProfileTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/ArticleAccessoriesProfileTest.php
@@ -9372,11 +9047,6 @@ parameters:
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleCategoriesProfileTest\\:\\:testShouldUpdateExistingArticleCategories\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleCategoriesProfileTest.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$stmt has no value type specified in iterable type Doctrine\\\\DBAL\\\\Statement\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/ArticleCategoriesProfileTest.php
 
@@ -9436,11 +9106,6 @@ parameters:
 			path: Tests/Integration/DefaultProfiles/Import/ArticleCompleteProfileTest.php
 
 		-
-			message: "#^PHPDoc tag @var for variable \\$stmt has no value type specified in iterable type Doctrine\\\\DBAL\\\\Statement\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleCompleteProfileTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/ArticleCompleteProfileTest.php
@@ -9471,11 +9136,6 @@ parameters:
 			path: Tests/Integration/DefaultProfiles/Import/ArticleDefaultProfileTest.php
 
 		-
-			message: "#^PHPDoc tag @var for variable \\$stmt has no value type specified in iterable type Doctrine\\\\DBAL\\\\Statement\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleDefaultProfileTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/ArticleDefaultProfileTest.php
@@ -9487,11 +9147,6 @@ parameters:
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleImageUrlProfileTest\\:\\:testImportShouldAddNewImageToArticle\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleImageUrlProfileTest.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$stmt has no value type specified in iterable type Doctrine\\\\DBAL\\\\Statement\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/ArticleImageUrlProfileTest.php
 
@@ -9511,22 +9166,12 @@ parameters:
 			path: Tests/Integration/DefaultProfiles/Import/ArticleInStockProfileTest.php
 
 		-
-			message: "#^PHPDoc tag @var for variable \\$stmt has no value type specified in iterable type Doctrine\\\\DBAL\\\\Statement\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleInStockProfileTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/ArticleInStockProfileTest.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticlePriceProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticlePriceProfileTest.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$stmt has no value type specified in iterable type Doctrine\\\\DBAL\\\\Statement\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/ArticlePriceProfileTest.php
 
@@ -9561,11 +9206,6 @@ parameters:
 			path: Tests/Integration/DefaultProfiles/Import/ArticlePropertiesProfileTest.php
 
 		-
-			message: "#^PHPDoc tag @var for variable \\$stmt has no value type specified in iterable type Doctrine\\\\DBAL\\\\Statement\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticlePropertiesProfileTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/ArticlePropertiesProfileTest.php
@@ -9577,11 +9217,6 @@ parameters:
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleSimilarsProfileTest\\:\\:testWriteShouldAssertNewSimilarArticle\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleSimilarsProfileTest.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$stmt has no value type specified in iterable type Doctrine\\\\DBAL\\\\Statement\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/ArticleSimilarsProfileTest.php
 
@@ -9601,11 +9236,6 @@ parameters:
 			path: Tests/Integration/DefaultProfiles/Import/ArticleTranslationProfileTest.php
 
 		-
-			message: "#^PHPDoc tag @var for variable \\$stmt has no value type specified in iterable type Doctrine\\\\DBAL\\\\Statement\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleTranslationProfileTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/ArticleTranslationProfileTest.php
@@ -9617,11 +9247,6 @@ parameters:
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleTranslationUpdateProfileTest\\:\\:testImportShouldUpdateExistingArticleTranslation\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleTranslationUpdateProfileTest.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$stmt has no value type specified in iterable type Doctrine\\\\DBAL\\\\Statement\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/ArticleTranslationUpdateProfileTest.php
 
@@ -9641,11 +9266,6 @@ parameters:
 			path: Tests/Integration/DefaultProfiles/Import/CategoriesProfileTest.php
 
 		-
-			message: "#^PHPDoc tag @var for variable \\$stmt has no value type specified in iterable type Doctrine\\\\DBAL\\\\Statement\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/CategoriesProfileTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/CategoriesProfileTest.php
@@ -9657,11 +9277,6 @@ parameters:
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\CustomersProfileTest\\:\\:testImportShouldUpdateCustomerShippingAddress\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/CustomersProfileTest.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$stmt has no value type specified in iterable type Doctrine\\\\DBAL\\\\Statement\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/CustomersProfileTest.php
 
@@ -9686,11 +9301,6 @@ parameters:
 			path: Tests/Integration/DefaultProfiles/Import/MinimalArticleProfileTest.php
 
 		-
-			message: "#^PHPDoc tag @var for variable \\$stmt has no value type specified in iterable type Doctrine\\\\DBAL\\\\Statement\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/MinimalArticleProfileTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/MinimalArticleProfileTest.php
@@ -9711,11 +9321,6 @@ parameters:
 			path: Tests/Integration/DefaultProfiles/Import/MinimalArticleVariantsProfileTest.php
 
 		-
-			message: "#^PHPDoc tag @var for variable \\$stmt has no value type specified in iterable type Doctrine\\\\DBAL\\\\Statement\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/MinimalArticleVariantsProfileTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/MinimalArticleVariantsProfileTest.php
@@ -9731,11 +9336,6 @@ parameters:
 			path: Tests/Integration/DefaultProfiles/Import/MinimalCategoriesProfileTest.php
 
 		-
-			message: "#^PHPDoc tag @var for variable \\$stmt has no value type specified in iterable type Doctrine\\\\DBAL\\\\Statement\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/MinimalCategoriesProfileTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/MinimalCategoriesProfileTest.php
@@ -9747,11 +9347,6 @@ parameters:
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\MinimalOrdersProfileTest\\:\\:testWriteShouldUpdateOrderStatus\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/MinimalOrdersProfileTest.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$stmt has no value type specified in iterable type Doctrine\\\\DBAL\\\\Statement\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/MinimalOrdersProfileTest.php
 
@@ -9781,11 +9376,6 @@ parameters:
 			path: Tests/Integration/DefaultProfiles/Import/NewsletterDefaultProfileTest.php
 
 		-
-			message: "#^PHPDoc tag @var for variable \\$stmt has no value type specified in iterable type Doctrine\\\\DBAL\\\\Statement\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/NewsletterDefaultProfileTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/NewsletterDefaultProfileTest.php
@@ -9797,11 +9387,6 @@ parameters:
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\OrderProfileTest\\:\\:testWriteShouldUpdateOrderStatus\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/OrderProfileTest.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$stmt has no value type specified in iterable type Doctrine\\\\DBAL\\\\Statement\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/OrderProfileTest.php
 
@@ -9841,11 +9426,6 @@ parameters:
 			path: Tests/Integration/DefaultProfiles/Import/TranslationProfileTest.php
 
 		-
-			message: "#^PHPDoc tag @var for variable \\$stmt has no value type specified in iterable type Doctrine\\\\DBAL\\\\Statement\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/TranslationProfileTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/TranslationProfileTest.php
@@ -9867,16 +9447,6 @@ parameters:
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\ExportControllerTraitTest\\:\\:loadDependenciesBefore\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/TestTraits/ExportControllerTraitTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\ExportControllerTraitTest\\:\\:queryXpath\\(\\) return type with generic class DOMNodeList does not specify its types\\: TNode$#"
-			count: 1
-			path: Tests/Integration/TestTraits/ExportControllerTraitTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\ExportControllerTraitTest\\:\\:queryXpath\\(\\) should return DOMNodeList but returns DOMNodeList\\|false\\.$#"
 			count: 1
 			path: Tests/Integration/TestTraits/ExportControllerTraitTest.php
 
@@ -10474,84 +10044,4 @@ parameters:
 			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\TranslationProfileTest\\:\\:testItShouldReturnValidProfile\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Unit/Setup/DefaultProfiles/TranslationProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\SetupContextTest\\:\\:testAssertMaximumPluginVersionShouldReturnFalse\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/SetupContextTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\SetupContextTest\\:\\:testAssertMaximumPluginVersionShouldReturnFalseIfSameVersionsWereGiven\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/SetupContextTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\SetupContextTest\\:\\:testAssertMaximumPluginVersionShouldReturnTrue\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/SetupContextTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\SetupContextTest\\:\\:testAssertMaximumShopwareVersionShouldReturnFalse\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/SetupContextTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\SetupContextTest\\:\\:testAssertMaximumShopwareVersionShouldReturnFalseIfSameVersionsWereGiven\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/SetupContextTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\SetupContextTest\\:\\:testAssertMaximumShopwareVersionShouldReturnTrue\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/SetupContextTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\SetupContextTest\\:\\:testAssertMaximumShopwareVersionWithDevVersionShouldReturnFalse\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/SetupContextTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\SetupContextTest\\:\\:testAssertMinimumPluginVersionShouldReturnFalse\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/SetupContextTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\SetupContextTest\\:\\:testAssertMinimumPluginVersionShouldReturnTrue\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/SetupContextTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\SetupContextTest\\:\\:testAssertMinimumPluginVersionShouldReturnTrueIfSameVersionsWereGiven\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/SetupContextTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\SetupContextTest\\:\\:testAssertMinimumShopwareVersionShouldReturnFalse\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/SetupContextTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\SetupContextTest\\:\\:testAssertMinimumShopwareVersionShouldReturnTrue\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/SetupContextTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\SetupContextTest\\:\\:testAssertMinimumShopwareVersionShouldReturnTrueIfDevVersionIsUsed\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/SetupContextTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\SetupContextTest\\:\\:testAssertMinimumShopwareVersionShouldReturnTrueIfSameVersionsWereGiven\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/SetupContextTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\Update\\\\Update03DefaultProfileSupportTest\\:\\:testUpdateShouldThrowDuplicateNameException\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/Update/Update03DefaultProfileSupportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\Update\\\\Update03DefaultProfileSupportTest\\:\\:testUpdateShouldThrowOriginalException\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/Update/Update03DefaultProfileSupportTest.php
 

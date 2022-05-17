@@ -11,31 +11,19 @@ namespace Shopware\Setup\SwagImportExport\Install;
 use Doctrine\DBAL\Connection;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\ProfileHelper;
 use Shopware\Setup\SwagImportExport\DefaultProfiles\ProfileMetaData;
-use Shopware\Setup\SwagImportExport\SetupContext;
 
-class DefaultProfileInstaller implements InstallerInterface
+class DefaultProfileInstaller
 {
-    public const MIN_PLUGIN_VERSION = '2.0.0';
-
     /**
      * @var Connection
      */
     private $connection;
 
-    /**
-     * @var SetupContext
-     */
-    private $setupContext;
-
-    public function __construct(SetupContext $setupContext, Connection $connection)
+    public function __construct(Connection $connection)
     {
         $this->connection = $connection;
-        $this->setupContext = $setupContext;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function install()
     {
         $sql = '
@@ -62,13 +50,5 @@ class DefaultProfileInstaller implements InstallerInterface
 
             $this->connection->executeQuery($sql, $params);
         }
-    }
-
-    /**
-     * @return bool
-     */
-    public function isCompatible()
-    {
-        return $this->setupContext->assertMinimumPluginVersion(self::MIN_PLUGIN_VERSION);
     }
 }
