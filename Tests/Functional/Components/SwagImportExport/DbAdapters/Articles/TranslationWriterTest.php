@@ -12,7 +12,7 @@ namespace SwagImportExport\Tests\Functional\Components\SwagImportExport\DbAdapte
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\TranslationWriter;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
-use SwagImportExport\Tests\Functional\ContainerTrait;
+use SwagImportExport\Tests\Helper\ContainerTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 
 class TranslationWriterTest extends TestCase

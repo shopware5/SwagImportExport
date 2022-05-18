@@ -9,8 +9,9 @@
 namespace SwagImportExport\Tests\Helper;
 
 use Doctrine\DBAL\Connection;
+use Shopware\Components\DependencyInjection\Container;
 
-class ImportExportTestHelper extends \Enlight_Components_Test_Plugin_TestCase
+abstract class ImportExportTestHelper extends \Enlight_Components_Test_Plugin_TestCase
 {
     /**
      * Test set up method
@@ -20,15 +21,17 @@ class ImportExportTestHelper extends \Enlight_Components_Test_Plugin_TestCase
         parent::setUp();
 
         /** @var Connection $connection */
-        $connection = Shopware()->Container()->get('dbal_connection');
+        $connection = $this->getContainer()->get('dbal_connection');
         $connection->beginTransaction();
     }
 
     protected function tearDown(): void
     {
         /** @var Connection $connection */
-        $connection = Shopware()->Container()->get('dbal_connection');
+        $connection = $this->getContainer()->get('dbal_connection');
         $connection->rollBack();
         parent::tearDown();
     }
+
+    abstract public function getContainer(): Container;
 }

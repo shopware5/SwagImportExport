@@ -13,6 +13,8 @@ use Symfony\Component\Yaml\Parser;
 
 class DbAdapterTestHelper extends ImportExportTestHelper
 {
+    use ContainerTrait;
+
     /**
      * @var string
      */

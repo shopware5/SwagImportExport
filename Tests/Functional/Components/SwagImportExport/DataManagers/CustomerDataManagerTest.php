@@ -10,19 +10,22 @@ namespace SwagImportExport\Tests\Functional\Components\SwagImportExport\DataMana
 
 use PHPUnit\Framework\TestCase;
 use SwagImportExport\Tests\Functional\Components\SwagImportExport\DataManagers\mocks\CustomerDataManagerMock;
+use SwagImportExport\Tests\Helper\ContainerTrait;
 
 class CustomerDataManagerTest extends TestCase
 {
+    use ContainerTrait;
+
     public function testSetDefaultFieldsForCreateShouldAddANewCustomerNumber()
     {
         $record = [];
         $defaultFields = [];
 
         $service = new CustomerDataManagerMock(
-            Shopware()->Db(),
-            Shopware()->Config(),
-            Shopware()->PasswordEncoder(),
-            Shopware()->Container()->get('shopware.number_range_incrementer')
+            $this->getContainer()->get('db'),
+            $this->getContainer()->get('config'),
+            $this->getContainer()->get('passwordencoder'),
+            $this->getContainer()->get('shopware.number_range_incrementer')
         );
 
         $result = $service->setDefaultFieldsForCreate($record, $defaultFields);

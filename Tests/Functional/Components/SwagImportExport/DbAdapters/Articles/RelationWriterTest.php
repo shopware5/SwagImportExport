@@ -11,11 +11,13 @@ namespace SwagImportExport\Tests\Functional\Components\SwagImportExport\DbAdapte
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\RelationWriter;
 use Shopware\Components\SwagImportExport\DbAdapters\ArticlesDbAdapter;
+use SwagImportExport\Tests\Helper\ContainerTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 
 class RelationWriterTest extends TestCase
 {
     use DatabaseTestCaseTrait;
+    use ContainerTrait;
 
     /**
      * @return RelationWriter

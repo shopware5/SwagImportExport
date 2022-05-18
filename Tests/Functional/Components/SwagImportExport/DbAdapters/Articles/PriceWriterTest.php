@@ -12,11 +12,13 @@ use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\PriceWriter;
 use Shopware\Components\SwagImportExport\Utils\SwagVersionHelper;
+use SwagImportExport\Tests\Helper\ContainerTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 
 class PriceWriterTest extends TestCase
 {
     use DatabaseTestCaseTrait;
+    use ContainerTrait;
 
     public function testWriteThrowsExceptionIfEmptyValues(): void
     {

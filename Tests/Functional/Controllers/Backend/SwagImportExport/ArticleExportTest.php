@@ -8,6 +8,7 @@
 
 namespace SwagImportExport\Tests\Functional\Controllers\Backend\SwagImportExport;
 
+use SwagImportExport\Tests\Helper\ContainerTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use SwagImportExport\Tests\Helper\DataProvider\ProfileDataProvider;
 use SwagImportExport\Tests\Helper\ExportControllerTrait;
@@ -18,6 +19,7 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
     use ExportControllerTrait;
     use FixturesImportTrait;
     use DatabaseTestCaseTrait;
+    use ContainerTrait;
 
     public const FORMAT_XML = 'xml';
     public const FORMAT_CSV = 'csv';

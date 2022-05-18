@@ -11,11 +11,13 @@ namespace SwagImportExport\Tests\Functional\Components\SwagImportExport\DbAdapte
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\SwagImportExport\DbAdapters\AddressDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\DataDbAdapter;
+use SwagImportExport\Tests\Helper\ContainerTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 
 class AddressDbAdapterTest extends TestCase
 {
     use DatabaseTestCaseTrait;
+    use ContainerTrait;
 
     public const NO_START = 0;
     public const NO_LIMIT = 0;
@@ -84,7 +86,7 @@ class AddressDbAdapterTest extends TestCase
 
     public function testReadShouldReturnAttributes()
     {
-        $connection = Shopware()->Container()->get('dbal_connection');
+        $connection = $this->getContainer()->get('dbal_connection');
         $sql = \file_get_contents(__DIR__ . '/_fixtures/address_attribute_demo.sql');
         static::assertIsString($sql);
         $connection->executeQuery($sql);
@@ -117,7 +119,7 @@ class AddressDbAdapterTest extends TestCase
         $addressDbAdapter = $this->getAddressDbAdapter();
         $addressDbAdapter->write($addresses);
 
-        $connection = Shopware()->Container()->get('dbal_connection');
+        $connection = $this->getContainer()->get('dbal_connection');
         $createdAddresses = $connection->executeQuery("SELECT * FROM s_user_addresses WHERE firstname='My firstname'")->fetchAll();
 
         $this->assertAddress($createdAddresses);
@@ -142,7 +144,7 @@ class AddressDbAdapterTest extends TestCase
         $addressDbAdapter = $this->getAddressDbAdapter();
         $addressDbAdapter->write($addresses);
 
-        $connection = Shopware()->Container()->get('dbal_connection');
+        $connection = $this->getContainer()->get('dbal_connection');
         $createdAddresses = $connection->executeQuery("SELECT * FROM s_user_addresses WHERE firstname='My firstname'")->fetchAll();
 
         $this->assertAddress($createdAddresses);
@@ -168,7 +170,7 @@ class AddressDbAdapterTest extends TestCase
         $addressesDbAdapter = $this->getAddressDbAdapter();
         $addressesDbAdapter->write($addresses);
 
-        $connection = Shopware()->Container()->get('dbal_connection');
+        $connection = $this->getContainer()->get('dbal_connection');
         $createdAddresses = $connection->executeQuery("SELECT * FROM s_user_addresses WHERE firstname='My firstname'")->fetchAll();
 
         $this->assertAddress($createdAddresses);
@@ -176,7 +178,7 @@ class AddressDbAdapterTest extends TestCase
 
     public function testWriteShouldUpdateExistingAddress()
     {
-        $connection = Shopware()->Container()->get('dbal_connection');
+        $connection = $this->getContainer()->get('dbal_connection');
         $demoSQL = \file_get_contents(__DIR__ . '/_fixtures/address_demo.sql');
         static::assertIsString($demoSQL);
         $connection->executeUpdate($demoSQL);
@@ -227,7 +229,7 @@ class AddressDbAdapterTest extends TestCase
         $addressDbAdapter = $this->getAddressDbAdapter();
         $addressDbAdapter->write($addresses);
 
-        $connection = Shopware()->Container()->get('dbal_connection');
+        $connection = $this->getContainer()->get('dbal_connection');
         $createdAddresses = $connection->executeQuery("SELECT * FROM s_user_addresses WHERE firstname='My firstname'")->fetchAll();
 
         $this->assertAddress($createdAddresses);
@@ -254,7 +256,7 @@ class AddressDbAdapterTest extends TestCase
         $addressDbAdapter = $this->getAddressDbAdapter();
         $addressDbAdapter->write($addresses);
 
-        $connection = Shopware()->Container()->get('dbal_connection');
+        $connection = $this->getContainer()->get('dbal_connection');
         $createdAddresses = $connection->executeQuery("SELECT * FROM s_user_addresses WHERE firstname='My firstname'")->fetchAll();
 
         $this->assertAddress($createdAddresses);
@@ -282,7 +284,7 @@ class AddressDbAdapterTest extends TestCase
         $addressDbAdapter = $this->getAddressDbAdapter();
         $addressDbAdapter->write($addresses);
 
-        $connection = Shopware()->Container()->get('dbal_connection');
+        $connection = $this->getContainer()->get('dbal_connection');
         $addressId = $connection->executeQuery("SELECT id FROM s_user_addresses WHERE firstname='My firstname'")->fetchColumn();
         $createdAttribute = $connection->executeQuery("SELECT * FROM s_user_addresses_attributes WHERE address_id={$addressId}")->fetchAll();
 
@@ -311,7 +313,7 @@ class AddressDbAdapterTest extends TestCase
         $addressDbAdapter = $this->getAddressDbAdapter();
         $addressDbAdapter->write($addresses);
 
-        $connection = Shopware()->Container()->get('dbal_connection');
+        $connection = $this->getContainer()->get('dbal_connection');
         $addressId = $connection->executeQuery("SELECT id FROM s_user_addresses WHERE firstname='My firstname'")->fetchColumn();
 
         static::assertEquals(99999, $addressId);
@@ -380,7 +382,7 @@ class AddressDbAdapterTest extends TestCase
 
     public function testWriteShouldUpdateState()
     {
-        $connection = Shopware()->Container()->get('dbal_connection');
+        $connection = $this->getContainer()->get('dbal_connection');
         $sql = \file_get_contents(__DIR__ . '/_fixtures/address_with_state_demo.sql');
         static::assertIsString($sql);
         $connection->executeQuery($sql);
@@ -404,7 +406,7 @@ class AddressDbAdapterTest extends TestCase
         $addressDbAdapter = $this->getAddressDbAdapter();
         $addressDbAdapter->write($addresses);
 
-        $connection = Shopware()->Container()->get('dbal_connection');
+        $connection = $this->getContainer()->get('dbal_connection');
         $updateAddress = $connection->executeQuery("SELECT * FROM s_user_addresses WHERE id={$addressId}")->fetchAll();
 
         static::assertEquals(self::STATE_ID_ALABAMA, $updateAddress[0]['state_id']);

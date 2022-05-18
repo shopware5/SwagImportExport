@@ -10,7 +10,7 @@ namespace SwagImportExport\Tests\Functional\Components\SwagImportExport\DbAdapte
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\SwagImportExport\DbAdapters\ArticlesDbAdapter;
-use SwagImportExport\Tests\Functional\ContainerTrait;
+use SwagImportExport\Tests\Helper\ContainerTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 
 class ArticlesDbAdapterTest extends TestCase

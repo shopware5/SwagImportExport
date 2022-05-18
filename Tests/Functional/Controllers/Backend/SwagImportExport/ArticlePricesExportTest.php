@@ -8,6 +8,7 @@
 
 namespace SwagImportExport\Tests\Functional\Controllers\Backend\SwagImportExport;
 
+use SwagImportExport\Tests\Helper\ContainerTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use SwagImportExport\Tests\Helper\DataProvider\ProfileDataProvider;
 use SwagImportExport\Tests\Helper\ExportControllerTrait;
@@ -17,6 +18,7 @@ class ArticlePricesExportTest extends \Enlight_Components_Test_Controller_TestCa
 {
     use FixturesImportTrait;
     use DatabaseTestCaseTrait;
+    use ContainerTrait;
     use ExportControllerTrait;
 
     public const FORMAT_XML = 'xml';

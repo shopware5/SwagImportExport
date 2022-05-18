@@ -12,11 +12,14 @@ use PHPUnit\Framework\TestCase;
 use Shopware\Components\SwagImportExport\Factories\ProfileFactory;
 use Shopware\Components\SwagImportExport\Service\AutoImportService;
 use Shopware\Components\SwagImportExport\UploadPathProvider;
+use SwagImportExport\Tests\Helper\ContainerTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 
 class AutoImportServiceTest extends TestCase
 {
     use DatabaseTestCaseTrait;
+
+    use ContainerTrait;
 
     /**
      * @var array

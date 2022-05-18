@@ -10,6 +10,7 @@ namespace SwagImportExport\Tests\Functional\Controllers\Backend\SwagImportExport
 
 use Shopware\Components\Model\ModelManager;
 use Shopware\CustomModels\ImportExport\Profile;
+use SwagImportExport\Tests\Helper\ContainerTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use SwagImportExport\Tests\Helper\ExportControllerTrait;
 
@@ -17,6 +18,7 @@ class AddressExportTest extends \Enlight_Components_Test_Controller_TestCase
 {
     use ExportControllerTrait;
     use DatabaseTestCaseTrait;
+    use ContainerTrait;
 
     public function setUp(): void
     {

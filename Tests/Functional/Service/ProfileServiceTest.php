@@ -13,12 +13,15 @@ use PHPUnit\Framework\TestCase;
 use Shopware\Components\SwagImportExport\Service\ProfileService;
 use Shopware\Components\SwagImportExport\Service\Struct\ProfileDataStruct;
 use Shopware\Components\SwagImportExport\UploadPathProvider;
+use SwagImportExport\Tests\Helper\ContainerTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ProfileServiceTest extends TestCase
 {
     use DatabaseTestCaseTrait;
+
+    use ContainerTrait;
 
     public function testProfileExportShouldGiveCorrectResult()
     {

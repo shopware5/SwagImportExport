@@ -11,11 +11,13 @@ namespace SwagImportExport\Tests\Functional\Components\SwagImportExport\DbAdapte
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\SwagImportExport\DbAdapters\CategoriesDbAdapter;
+use SwagImportExport\Tests\Helper\ContainerTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 
 class CategoriesDbAdapterTest extends TestCase
 {
     use DatabaseTestCaseTrait;
+    use ContainerTrait;
 
     public function testWriteShouldThrowExceptionIfRecordsAreEmpty()
     {

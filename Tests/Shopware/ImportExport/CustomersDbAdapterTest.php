@@ -8,10 +8,13 @@
 
 namespace Tests\Shopware\ImportExport;
 
+use SwagImportExport\Tests\Helper\ContainerTrait;
 use SwagImportExport\Tests\Helper\DbAdapterTestHelper;
 
 class CustomersDbAdapterTest extends DbAdapterTestHelper
 {
+    use ContainerTrait;
+
     protected $yamlFile = 'TestCases/customersDbAdapter.yml';
 
     public function setUp(): void

@@ -11,11 +11,13 @@ namespace SwagImportExport\Tests\Functional\Components\SwagImportExport\DbAdapte
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\SwagImportExport\DbAdapters\Articles\PropertyWriter;
+use SwagImportExport\Tests\Helper\ContainerTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 
 class PropertyWriterTest extends TestCase
 {
     use DatabaseTestCaseTrait;
+    use ContainerTrait;
 
     public const ARTICLE_ORDERNUMBER = 'SW10002.1';
     public const ARTICLE_ORDERNUMBER_WITHOUT_PROPERTIES = 'SW10239';

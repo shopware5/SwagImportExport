@@ -12,6 +12,7 @@ use Doctrine\DBAL\Connection;
 use ImportExportTestKernel;
 use PHPUnit\Framework\TestCase;
 use SwagImportExport\Tests\Helper\CommandTestCaseTrait;
+use SwagImportExport\Tests\Helper\ContainerTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use SwagImportExport\Tests\Helper\DataProvider\ProfileDataProvider;
 use SwagImportExport\Tests\Helper\FixturesImportTrait;
@@ -21,6 +22,7 @@ class ImportCommandTest extends TestCase
     use FixturesImportTrait;
     use CommandTestCaseTrait;
     use DatabaseTestCaseTrait;
+    use ContainerTrait;
 
     public const CLI_IMPORT_COMMAND = 'sw:importexport:import -p';
 
@@ -31,7 +33,7 @@ class ImportCommandTest extends TestCase
 
     public function setUp(): void
     {
-        $this->connection = Shopware()->Container()->get('dbal_connection');
+        $this->connection = $this->getContainer()->get('dbal_connection');
     }
 
     public function testCustomerXmlImport()
