@@ -9,9 +9,12 @@
 namespace SwagImportExport\Tests\Integration\DefaultProfiles;
 
 use Doctrine\DBAL\Statement;
+use Shopware\Components\DependencyInjection\Container;
 
 trait DefaultProfileImportTestCaseTrait
 {
+    abstract public function getContainer(): Container;
+
     private function getImportFile(string $fileName): string
     {
         return __DIR__ . '/Import/_fixtures/' . $fileName;
@@ -25,7 +28,7 @@ trait DefaultProfileImportTestCaseTrait
     private function executeQuery(string $sql, int $fetchMode = \PDO::FETCH_BOTH): array
     {
         /** @var Statement $stmt */
-        $stmt = Shopware()->Container()->get('dbal_connection')->executeQuery($sql);
+        $stmt = $this->getContainer()->get('dbal_connection')->executeQuery($sql);
 
         return $stmt->fetchAll($fetchMode);
     }

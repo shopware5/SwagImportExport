@@ -10,6 +10,7 @@ namespace SwagImportExport\Tests\Integration\DefaultProfiles\Import;
 
 use PHPUnit\Framework\TestCase;
 use SwagImportExport\Tests\Helper\CommandTestCaseTrait;
+use SwagImportExport\Tests\Helper\ContainerTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use SwagImportExport\Tests\Integration\DefaultProfiles\DefaultProfileImportTestCaseTrait;
 
@@ -18,6 +19,7 @@ class ArticleInStockProfileTest extends TestCase
     use CommandTestCaseTrait;
     use DefaultProfileImportTestCaseTrait;
     use DatabaseTestCaseTrait;
+    use ContainerTrait;
 
     public function testWriteShouldUpdateArticleStock()
     {

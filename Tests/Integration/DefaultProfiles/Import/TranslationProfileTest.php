@@ -10,6 +10,7 @@ namespace SwagImportExport\TestsIntegration\DefaultProfiles\Import;
 
 use PHPUnit\Framework\TestCase;
 use SwagImportExport\Tests\Helper\CommandTestCaseTrait;
+use SwagImportExport\Tests\Helper\ContainerTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use SwagImportExport\Tests\Integration\DefaultProfiles\DefaultProfileImportTestCaseTrait;
 
@@ -18,6 +19,7 @@ class TranslationProfileTest extends TestCase
     use CommandTestCaseTrait;
     use DefaultProfileImportTestCaseTrait;
     use DatabaseTestCaseTrait;
+    use ContainerTrait;
 
     public const LANGUAGE_ENGLISH_ID = 2;
 
