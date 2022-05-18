@@ -39,18 +39,6 @@ class DbalHelper
     }
 
     /**
-     * @return DbalHelper
-     */
-    public static function create()
-    {
-        return new self(
-            Shopware()->Container()->get('dbal_connection'),
-            Shopware()->Container()->get('models'),
-            Shopware()->Container()->get('events')
-        );
-    }
-
-    /**
      * @param array<string, mixed> $data
      * @param class-string         $entity
      * @param int|false            $primaryId

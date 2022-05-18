@@ -90,14 +90,18 @@ class ExportCommand extends ShopwareCommand
 
     private EntityManagerInterface $entityManager;
 
+    private string $path;
+
     public function __construct(
         ProfileRepository $profileRepository,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        string $path
     ) {
         $this->profileRepository = $profileRepository;
         $this->entityManager = $entityManager;
 
         parent::__construct();
+        $this->path = $path;
     }
 
     /**
@@ -134,7 +138,7 @@ class ExportCommand extends ShopwareCommand
         $helper = new CommandHelper(
             [
                 'profileEntity' => $this->profileEntity,
-                'filePath' => Shopware()->DocPath() . $this->filePath,
+                'filePath' => $this->path . \DIRECTORY_SEPARATOR . $this->filePath,
                 'customerStream' => $this->customerStream,
                 'format' => $this->format,
                 'exportVariants' => $this->exportVariants,

@@ -68,17 +68,21 @@ class NewsletterDbAdapter implements DataDbAdapter, \Enlight_Hook
      */
     protected $defaultValues = [];
 
+    private \Enlight_Event_EventManager $eventManager;
+
     public function __construct(
         ModelManager $manager,
         NewsletterDataManager $dataManager,
         \Enlight_Components_Db_Adapter_Pdo_Mysql $db,
-        \Shopware_Components_Config $config
+        \Shopware_Components_Config $config,
+        \Enlight_Event_EventManager $eventManager
     ) {
         $this->manager = $manager;
         $this->validator = new NewsletterValidator();
         $this->dataManager = $dataManager;
         $this->db = $db;
         $this->errorMode = $config->get('SwagImportExportErrorMode');
+        $this->eventManager = $eventManager;
     }
 
     /**
@@ -198,7 +202,7 @@ class NewsletterDbAdapter implements DataDbAdapter, \Enlight_Hook
             throw new \Exception($message);
         }
 
-        $records = Shopware()->Events()->filter(
+        $records = $this->eventManager->filter(
             'Shopware_Components_SwagImportExport_DbAdapters_CategoriesDbAdapter_Write',
             $records,
             ['subject' => $this]

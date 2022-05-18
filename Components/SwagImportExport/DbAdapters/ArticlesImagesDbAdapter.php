@@ -143,7 +143,10 @@ class ArticlesImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
         Manager $thumbnailManager,
         UnderscoreToCamelCaseService $underscoreToCamelCaseService,
         DbalHelper $dbalHelper,
-        GuzzleFactory $guzzleFactory
+        GuzzleFactory $guzzleFactory,
+        \Shopware_Components_Config $config,
+        \Enlight_Controller_Front $front,
+        string $path
     ) {
         $this->manager = $manager;
         $this->db = $db;
@@ -155,11 +158,11 @@ class ArticlesImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
         $this->dbalHelper = $dbalHelper;
         $this->httpClient = $guzzleFactory->createClient();
 
-        $this->imageImportMode = (int) Shopware()->Config()->get('SwagImportExportImageMode');
-        $this->importExportErrorMode = (bool) Shopware()->Config()->get('SwagImportExportErrorMode');
-        $this->docPath = Shopware()->DocPath('media_temp');
+        $this->imageImportMode = (int) $config->get('SwagImportExportImageMode');
+        $this->importExportErrorMode = (bool) $config->get('SwagImportExportErrorMode');
+        $this->docPath = $path . \DIRECTORY_SEPARATOR . 'media_temp';
         $this->validator = new ArticleImageValidator();
-        $this->request = Shopware()->Front()->Request();
+        $this->request = $front->Request();
     }
 
     /**

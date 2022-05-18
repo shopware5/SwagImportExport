@@ -32,6 +32,7 @@ use Shopware\Components\SwagImportExport\DbAdapters\OrdersDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\TranslationsDbAdapter;
 use Shopware\Components\SwagImportExport\Logger\Logger;
 use Shopware\Components\SwagImportExport\Session\Session;
+use Shopware\Components\SwagImportExport\UploadPathProvider;
 use Shopware\Components\SwagImportExport\Utils\DataColumnOptions;
 use Shopware\Components\SwagImportExport\Utils\DataFilter;
 use Shopware\Components\SwagImportExport\Utils\DataLimit;
@@ -82,6 +83,8 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
 
     private EntityManagerInterface $entityManager;
 
+    private UploadPathProvider $uploadPathProvider;
+
     public function __construct(
         \Enlight_Event_EventManager $eventManager,
         EntityManagerInterface $entityManager,
@@ -102,7 +105,8 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
         CategoriesDataManager $categoriesDataManager,
         ArticleDataManager $articleDataManager,
         CustomerDataManager $customerDataManager,
-        NewsletterDataManager $newsletterDataManager
+        NewsletterDataManager $newsletterDataManager,
+        UploadPathProvider $uploadPathProvider
     ) {
         $this->categoriesDbAdapter = $categoriesDbAdapter;
         $this->articlesDbAdapter = $articlesDbAdapter;
@@ -124,6 +128,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
         $this->newsletterDataManager = $newsletterDataManager;
         $this->eventManager = $eventManager;
         $this->entityManager = $entityManager;
+        $this->uploadPathProvider = $uploadPathProvider;
     }
 
     /**
@@ -133,7 +138,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
      */
     public function createDataIO(DataDbAdapter $dbAdapter, $dataSession, Logger $logger)
     {
-        $uploadPathProvider = Shopware()->Container()->get('swag_import_export.upload_path_provider');
+        $uploadPathProvider = $this->uploadPathProvider;
 
         return new DataIO($dbAdapter, $dataSession, $logger, $uploadPathProvider);
     }

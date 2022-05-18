@@ -16,6 +16,7 @@
         <service id="Shopware\Commands\SwagImportExport\ExportCommand">
             <argument type="service" id="Shopware\CustomModels\ImportExport\ProfileRepository"/>
             <argument type="service" id="models"/>
+            <argument>%kernel.root_dir%</argument>
 
             <tag name="console.command" command="sw:importexport:export"/>
         </service>

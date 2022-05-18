@@ -54,14 +54,22 @@ class ArticlesInStockDbAdapter implements DataDbAdapter, \Enlight_Hook
      */
     private $snippetHelper;
 
+    private \Enlight_Event_EventManager $eventManager;
+
+    private \Shopware_Components_Config $config;
+
     public function __construct(
         SnippetsHelper $snippetHelper,
-        ModelManager $modelManager
+        ModelManager $modelManager,
+        \Enlight_Event_EventManager $eventManager,
+        \Shopware_Components_Config $config
     ) {
         $this->validator = new ArticleInStockValidator();
         $this->snippetHelper = $snippetHelper;
         $this->modelManager = $modelManager;
         $this->repository = $this->modelManager->getRepository(Detail::class);
+        $this->eventManager = $eventManager;
+        $this->config = $config;
     }
 
     /**
@@ -240,7 +248,7 @@ class ArticlesInStockDbAdapter implements DataDbAdapter, \Enlight_Hook
             throw new \Exception($message);
         }
 
-        $records = Shopware()->Events()->filter(
+        $records = $this->eventManager->filter(
             'Shopware_Components_SwagImportExport_DbAdapters_ArticlesInStockDbAdapter_Write',
             $records,
             ['subject' => $this]
@@ -309,7 +317,7 @@ class ArticlesInStockDbAdapter implements DataDbAdapter, \Enlight_Hook
      */
     public function saveMessage($message)
     {
-        $errorMode = Shopware()->Config()->get('SwagImportExportErrorMode');
+        $errorMode = $this->config->get('SwagImportExportErrorMode');
 
         if ($errorMode === false) {
             throw new \Exception($message);

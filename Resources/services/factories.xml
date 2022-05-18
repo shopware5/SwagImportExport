@@ -25,6 +25,7 @@
         <argument type="service" id="Shopware\Components\SwagImportExport\DataManagers\Articles\ArticleDataManager"/>
         <argument type="service" id="Shopware\Components\SwagImportExport\DataManagers\CustomerDataManager"/>
         <argument type="service" id="Shopware\Components\SwagImportExport\DataManagers\NewsletterDataManager"/>
+        <argument type="service" id="Shopware\Components\SwagImportExport\UploadPathProvider"/>
 
         <tag name="import_export.proxyable"/>
     </service>

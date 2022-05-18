@@ -41,11 +41,15 @@ class AddressDbAdapter implements DataDbAdapter, \Enlight_Hook
      */
     private $logState;
 
+    private \Shopware_Components_Config $config;
+
     public function __construct(
-        ModelManager $modelManager
+        ModelManager $modelManager,
+        \Shopware_Components_Config $config
     ) {
         $this->modelManager = $modelManager;
         $this->addressValidator = new AddressValidator();
+        $this->config = $config;
     }
 
     /**
@@ -347,7 +351,7 @@ class AddressDbAdapter implements DataDbAdapter, \Enlight_Hook
      */
     private function saveErrorMessage($message)
     {
-        $errorMode = Shopware()->Config()->get('SwagImportExportErrorMode');
+        $errorMode = $this->config->get('SwagImportExportErrorMode');
         if ($errorMode === false) {
             throw new \Exception($message);
         }

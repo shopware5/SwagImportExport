@@ -38,17 +38,21 @@ class CategoryWriter
      */
     private $eventManager;
 
+    private CategorySubscriber $categorySubscriber;
+
     /**
      * initialises the class properties
      */
     public function __construct(
         PDOConnection $db,
         Connection $connection,
-        EventManager $eventManager
+        EventManager $eventManager,
+        CategorySubscriber $categorySubscriber
     ) {
         $this->db = $db;
         $this->connection = $connection;
         $this->eventManager = $eventManager;
+        $this->categorySubscriber = $categorySubscriber;
     }
 
     /**
@@ -241,10 +245,8 @@ class CategoryWriter
      */
     protected function updateArticlesCategoriesRO($articleId)
     {
-        /** @var CategorySubscriber $categorySubscriber */
-        $categorySubscriber = Shopware()->Container()->get('categorysubscriber');
         foreach ($this->categoryIds as $categoryId) {
-            $categorySubscriber->backlogAddAssignment($articleId, $categoryId);
+            $this->categorySubscriber->backlogAddAssignment($articleId, $categoryId);
         }
     }
 

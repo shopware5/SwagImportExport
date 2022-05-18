@@ -77,11 +77,17 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook
      */
     private $underscoreToCamelCaseService;
 
+    private \Enlight_Event_EventManager $eventManager;
+
+    private \Shopware_Components_Config $config;
+
     public function __construct(
         ModelManager $modelManager,
         CategoriesDataManager $dataManager,
         \Enlight_Components_Db_Adapter_Pdo_Mysql $db,
-        UnderscoreToCamelCaseService $underscoreToCamelCase
+        UnderscoreToCamelCaseService $underscoreToCamelCase,
+        \Enlight_Event_EventManager $eventManager,
+        \Shopware_Components_Config $config
     ) {
         $this->modelManager = $modelManager;
         $this->repository = $this->modelManager->getRepository(Category::class);
@@ -89,6 +95,8 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook
         $this->validator = new CategoryValidator();
         $this->db = $db;
         $this->underscoreToCamelCaseService = $underscoreToCamelCase;
+        $this->eventManager = $eventManager;
+        $this->config = $config;
     }
 
     /**
@@ -222,7 +230,7 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook
         $records = $records['default'];
         $this->validateRecordsShouldNotBeEmpty($records);
 
-        $records = Shopware()->Events()->filter(
+        $records = $this->eventManager->filter(
             'Shopware_Components_SwagImportExport_DbAdapters_CategoriesDbAdapter_Write',
             $records,
             ['subject' => $this]
@@ -363,7 +371,7 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook
      */
     public function saveMessage($message)
     {
-        $errorMode = Shopware()->Config()->get('SwagImportExportErrorMode');
+        $errorMode = $this->config->get('SwagImportExportErrorMode');
 
         if ($errorMode === false) {
             throw new \Exception($message);

@@ -8,9 +8,12 @@
 
 namespace Shopware\Components\SwagImportExport\DbAdapters;
 
-use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
+use Shopware\Bundle\SearchBundle\ProductNumberSearchInterface;
+use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\QueryBuilder;
+use Shopware\Components\ProductStream\Repository;
 use Shopware\Components\SwagImportExport\DataManagers\ArticlePriceDataManager;
 use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
@@ -61,13 +64,37 @@ class ArticlesPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
      */
     protected $dataManager;
 
+    private ContextServiceInterface $contextService;
+
+    private StoreFrontCriteriaFactoryInterface $storeFrontCriteriaFactory;
+
+    private Repository $productStreamRepository;
+
+    private ProductNumberSearchInterface $productNumberSearch;
+
+    private \Enlight_Event_EventManager $eventManager;
+
+    private \Shopware_Components_Config $config;
+
     public function __construct(
         ArticlePriceDataManager $dataManager,
-        ModelManager $manager
+        ModelManager $manager,
+        ContextServiceInterface $contextService,
+        StoreFrontCriteriaFactoryInterface $storeFrontCriteriaFactory,
+        Repository $productStreamRepository,
+        ProductNumberSearchInterface $productNumberSearch,
+        \Enlight_Event_EventManager $eventManager,
+        \Shopware_Components_Config $config
     ) {
         $this->dataManager = $dataManager;
         $this->validator = new ArticlePriceValidator();
         $this->manager = $manager;
+        $this->contextService = $contextService;
+        $this->storeFrontCriteriaFactory = $storeFrontCriteriaFactory;
+        $this->productStreamRepository = $productStreamRepository;
+        $this->productNumberSearch = $productNumberSearch;
+        $this->eventManager = $eventManager;
+        $this->config = $config;
     }
 
     /**
@@ -125,16 +152,10 @@ class ArticlesPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
                     /** @var \Shopware\Models\Shop\Repository $shopRepo */
                     $shopRepo = $this->manager->getRepository(Shop::class);
                     $shop = $shopRepo->getActiveDefault();
-                    $contextService = Shopware()->Container()->get('shopware_storefront.context_service');
-                    $context = $contextService->createShopContext($shop->getId());
-                    $criteriaService = Shopware()->Container()->get('shopware_search.store_front_criteria_factory');
-                    $criteria = $criteriaService->createBaseCriteria([$shop->getCategory()->getId()], $context);
-                    $streamRepo = Shopware()->Container()->get('shopware_product_stream.repository');
-                    $streamRepo->prepareCriteria($criteria, $productStreamId);
-
-                    $productNumberSearch = Shopware()->Container()->get('shopware_search.product_number_search');
-                    /** @var ProductNumberSearchResult $products */
-                    $products = $productNumberSearch->search($criteria, $context);
+                    $context = $this->contextService->createShopContext($shop->getId());
+                    $criteria = $this->storeFrontCriteriaFactory->createBaseCriteria([$shop->getCategory()->getId()], $context);
+                    $this->productStreamRepository->prepareCriteria($criteria, $productStreamId);
+                    $products = $this->productNumberSearch->search($criteria, $context);
                     $productNumbers = \array_keys($products->getProducts());
 
                     $builder->andWhere('detail.number IN(:productNumbers)')
@@ -270,7 +291,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
             throw new \Exception($message);
         }
 
-        $records = Shopware()->Events()->filter(
+        $records = $this->eventManager->filter(
             'Shopware_Components_SwagImportExport_DbAdapters_ArticlesPricesDbAdapter_Write',
             $records,
             ['subject' => $this]
@@ -432,7 +453,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
      */
     public function saveMessage($message)
     {
-        $errorMode = Shopware()->Config()->get('SwagImportExportErrorMode');
+        $errorMode = $this->config->get('SwagImportExportErrorMode');
 
         if ($errorMode === false) {
             throw new \Exception($message);

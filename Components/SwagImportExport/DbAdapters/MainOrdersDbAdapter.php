@@ -57,16 +57,20 @@ class MainOrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
      */
     private $stateTranslator;
 
+    private \Shopware_Components_Config $config;
+
     public function __construct(
         Enlight_Components_Db_Adapter_Pdo_Mysql $db,
         ModelManager $entityManager,
         UnderscoreToCamelCaseServiceInterface $underscoreToCamelCaseService,
-        StateTranslatorServiceInterface $stateTranslator
+        StateTranslatorServiceInterface $stateTranslator,
+        \Shopware_Components_Config $config
     ) {
         $this->db = $db;
         $this->modelManager = $entityManager;
         $this->underscoreToCamelCaseService = $underscoreToCamelCaseService;
         $this->stateTranslator = $stateTranslator;
+        $this->config = $config;
     }
 
     /**
@@ -308,7 +312,7 @@ class MainOrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
      */
     public function saveMessage($message)
     {
-        $errorMode = Shopware()->Config()->get('SwagImportExportErrorMode');
+        $errorMode = $this->config->get('SwagImportExportErrorMode');
         if ($errorMode === false) {
             throw new \RuntimeException($message);
         }

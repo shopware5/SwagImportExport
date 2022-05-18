@@ -54,14 +54,22 @@ class OrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
      */
     private $underscoreToCamelCaseService;
 
+    private \Enlight_Event_EventManager $eventManager;
+
+    private \Shopware_Components_Config $config;
+
     public function __construct(
         ModelManager $manager,
-        UnderscoreToCamelCaseServiceInterface $underscoreToCamelCaseService
+        UnderscoreToCamelCaseServiceInterface $underscoreToCamelCaseService,
+        \Enlight_Event_EventManager $eventManager,
+        \Shopware_Components_Config $config
     ) {
         $this->modelManager = $manager;
         $this->underscoreToCamelCaseService = $underscoreToCamelCaseService;
+        $this->eventManager = $eventManager;
 
         $this->validator = new OrderValidator();
+        $this->config = $config;
     }
 
     /**
@@ -164,7 +172,7 @@ class OrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
     {
         $this->unprocessedData = [];
 
-        $records = Shopware()->Events()->filter(
+        $records = $this->eventManager->filter(
             'Shopware_Components_SwagImportExport_DbAdapters_OrdersDbAdapter_Write',
             $records,
             ['subject' => $this]
@@ -315,7 +323,7 @@ class OrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
      */
     public function saveMessage($message)
     {
-        $errorMode = Shopware()->Config()->get('SwagImportExportErrorMode');
+        $errorMode = $this->config->get('SwagImportExportErrorMode');
 
         if ($errorMode === false) {
             throw new \Exception($message);
@@ -514,7 +522,7 @@ class OrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
             $columns = \array_merge($columns, $attributesSelect);
         }
 
-        $columns = Shopware()->Events()->filter(self::OrderDBAdapterColumnsEvent, $columns);
+        $columns = $this->eventManager->filter(self::OrderDBAdapterColumnsEvent, $columns);
 
         return $columns;
     }
@@ -577,7 +585,7 @@ class OrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
             ->where('details.id IN (:ids)')
             ->setParameter('ids', $ids);
 
-        Shopware()->Events()->notify(self::OrderDBAdapterQueryEvent, [
+        $this->eventManager->notify(self::OrderDBAdapterQueryEvent, [
             'builder' => $builder,
         ]);
 

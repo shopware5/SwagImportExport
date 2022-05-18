@@ -49,6 +49,8 @@ abstract class AbstractImportExportService
     /** @var MediaServiceInterface */
     protected $mediaService;
 
+    protected \Shopware_Components_Config $config;
+
     public function __construct(
         ProfileFactory $profileFactory,
         FileIOFactory $fileIOFactory,
@@ -57,7 +59,8 @@ abstract class AbstractImportExportService
         Logger $logger,
         UploadPathProvider $uploadPathProvider,
         \Shopware_Components_Auth $auth,
-        MediaServiceInterface $mediaService
+        MediaServiceInterface $mediaService,
+        \Shopware_Components_Config $config
     ) {
         $this->profileFactory = $profileFactory;
         $this->fileIOFactory = $fileIOFactory;
@@ -67,6 +70,7 @@ abstract class AbstractImportExportService
         $this->uploadPathProvider = $uploadPathProvider;
         $this->auth = $auth;
         $this->mediaService = $mediaService;
+        $this->config = $config;
     }
 
     /**

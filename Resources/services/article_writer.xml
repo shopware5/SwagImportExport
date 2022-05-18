@@ -15,6 +15,7 @@
             <argument type="service" id="db"/>
             <argument type="service" id="dbal_connection"/>
             <argument type="service" id="events"/>
+            <argument type="service" id="categorysubscriber"/>
         </service>
 
         <service id="Shopware\Components\SwagImportExport\DbAdapters\Articles\ConfiguratorWriter" public="true">
