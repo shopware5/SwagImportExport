@@ -116,7 +116,7 @@ class ArticlesDbAdapterTest extends DbAdapterTestHelper
      */
     private function createArticlesDbAdapter()
     {
-        $dataFactory = Shopware()->Container()->get(DataFactory::class);
+        $dataFactory = $this->getContainer()->get(DataFactory::class);
 
         return $dataFactory->createDbAdapter($this->dbAdapter);
     }
@@ -151,7 +151,7 @@ class ArticlesDbAdapterTest extends DbAdapterTestHelper
     private function getQueryBuilder(): QueryBuilder
     {
         /** @var Connection $connection */
-        $connection = Shopware()->Container()->get('dbal_connection');
+        $connection = $this->getContainer()->get('dbal_connection');
 
         return $connection->createQueryBuilder();
     }

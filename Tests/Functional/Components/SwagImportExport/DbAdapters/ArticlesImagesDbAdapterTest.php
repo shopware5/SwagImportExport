@@ -62,7 +62,7 @@ class ArticlesImagesDbAdapterTest extends TestCase
         ];
         $productsImagesDbAdapter->write($records);
 
-        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $dbalConnection = $this->getContainer()->get('dbal_connection');
         $productId = $dbalConnection->executeQuery("SELECT articleID FROM s_articles_details WHERE orderNumber='SW10001'")->fetch(\PDO::FETCH_COLUMN);
         $image = $dbalConnection->executeQuery("SELECT * FROM s_articles_img WHERE description = 'testimport1'")->fetch(\PDO::FETCH_ASSOC);
 
@@ -86,7 +86,7 @@ class ArticlesImagesDbAdapterTest extends TestCase
         ];
         $productsImagesDbAdapter->write($records);
 
-        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $dbalConnection = $this->getContainer()->get('dbal_connection');
         $productId = $dbalConnection->executeQuery("SELECT articleID FROM s_articles_details WHERE orderNumber='SW10001'")->fetch(\PDO::FETCH_COLUMN);
         $image = $dbalConnection->executeQuery("SELECT * FROM s_articles_img WHERE description = 'testimport1'")->fetch(\PDO::FETCH_ASSOC);
 
@@ -133,7 +133,7 @@ class ArticlesImagesDbAdapterTest extends TestCase
 
     private function getProductImagesDbAdapter(): ArticlesImagesDbAdapter
     {
-        return Shopware()->Container()->get(ArticlesImagesDbAdapter::class);
+        return $this->getContainer()->get(ArticlesImagesDbAdapter::class);
     }
 
     private function getImportImagePath(): string

@@ -359,7 +359,7 @@ class ArticlesDbAdapterTest extends TestCase
 
     private function getProductDbAdapter(): ArticlesDbAdapter
     {
-        return Shopware()->Container()->get(ArticlesDbAdapter::class);
+        return $this->getContainer()->get(ArticlesDbAdapter::class);
     }
 
     /**

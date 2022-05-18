@@ -59,7 +59,7 @@ class ArticlesTranslationsDbAdapterTest extends TestCase
         $articlesTranslationsDbAdapter->write($records);
 
         /** @var Connection $dbalConnection */
-        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $dbalConnection = $this->getContainer()->get('dbal_connection');
         $articleId = $dbalConnection->executeQuery("SELECT articleID FROM s_articles_details WHERE orderNumber='SW10003'")->fetch(\PDO::FETCH_COLUMN);
 
         $mainArticleTranslation = $dbalConnection->executeQuery("SELECT name FROM s_articles_translations WHERE articleID = '{$articleId}'")->fetch(\PDO::FETCH_COLUMN);
@@ -72,6 +72,6 @@ class ArticlesTranslationsDbAdapterTest extends TestCase
 
     private function getArticlesTranslationsDbAdapter(): ArticlesTranslationsDbAdapter
     {
-        return Shopware()->Container()->get(ArticlesTranslationsDbAdapter::class);
+        return $this->getContainer()->get(ArticlesTranslationsDbAdapter::class);
     }
 }

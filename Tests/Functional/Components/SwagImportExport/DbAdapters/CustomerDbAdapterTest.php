@@ -40,7 +40,7 @@ class CustomerDbAdapterTest extends TestCase
         $customersDbAdapter->write($records);
 
         /** @var Connection $dbalConnection */
-        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $dbalConnection = $this->getContainer()->get('dbal_connection');
         $updatedUser = $dbalConnection->executeQuery(
             "
               SELECT * FROM s_user
@@ -70,7 +70,7 @@ class CustomerDbAdapterTest extends TestCase
         $customerDbAdapter->write($records);
 
         /** @var Connection $dbalConnection */
-        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $dbalConnection = $this->getContainer()->get('dbal_connection');
         $updatedUser = $dbalConnection->executeQuery(
             "
               SELECT * FROM s_user
@@ -101,7 +101,7 @@ class CustomerDbAdapterTest extends TestCase
         $customerDbAdapter->write($records);
 
         /** @var Connection $dbalConnection */
-        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $dbalConnection = $this->getContainer()->get('dbal_connection');
         $updatedUserBillingAddress = $dbalConnection->executeQuery(
             "
               SELECT * FROM s_user_addresses
@@ -132,7 +132,7 @@ class CustomerDbAdapterTest extends TestCase
         $customerDbAdapter->write($records);
 
         /** @var Connection $dbalConnection */
-        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $dbalConnection = $this->getContainer()->get('dbal_connection');
         $updatedUser = $dbalConnection->executeQuery(
             "
               SELECT * FROM s_user
@@ -184,7 +184,7 @@ class CustomerDbAdapterTest extends TestCase
         $customerDbAdapter->write($records);
 
         /** @var Connection $dbalConnection */
-        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $dbalConnection = $this->getContainer()->get('dbal_connection');
         $updatedUserBillingAddress = $dbalConnection->executeQuery(
             "
               SELECT * FROM s_user_addresses
@@ -213,7 +213,7 @@ class CustomerDbAdapterTest extends TestCase
         $customerDbAdapter->write($records);
 
         /** @var Connection $dbalConnection */
-        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $dbalConnection = $this->getContainer()->get('dbal_connection');
         $updatedUser = $dbalConnection->executeQuery(
             "
               SELECT * FROM s_user
@@ -242,7 +242,7 @@ class CustomerDbAdapterTest extends TestCase
         $customerDbAdapter->write($records);
 
         /** @var Connection $dbalConnection */
-        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $dbalConnection = $this->getContainer()->get('dbal_connection');
         $updatedUser = $dbalConnection->executeQuery(
             "
               SELECT * FROM s_user
@@ -366,7 +366,7 @@ class CustomerDbAdapterTest extends TestCase
         $customerDbAdapter->write($records);
 
         /** @var Connection $dbalConnection */
-        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $dbalConnection = $this->getContainer()->get('dbal_connection');
         $updatedUser = $dbalConnection->executeQuery(
             "
               SELECT * FROM s_user
@@ -395,7 +395,7 @@ class CustomerDbAdapterTest extends TestCase
         $customerDbAdapter->write($records);
 
         /** @var Connection $dbalConnection */
-        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $dbalConnection = $this->getContainer()->get('dbal_connection');
         $updatedUser = $dbalConnection->executeQuery(
             "
               SELECT * FROM s_user
@@ -431,7 +431,7 @@ class CustomerDbAdapterTest extends TestCase
 
     private function getCustomerDbAdapter(): CustomerDbAdapter
     {
-        return Shopware()->Container()->get(CustomerDbAdapter::class);
+        return $this->getContainer()->get(CustomerDbAdapter::class);
     }
 
     /**

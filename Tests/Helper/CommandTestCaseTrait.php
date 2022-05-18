@@ -9,6 +9,7 @@
 namespace SwagImportExport\Tests\Helper;
 
 use Shopware\Components\Console\Application;
+use Shopware\Components\DependencyInjection\Container;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\StreamOutput;
 
@@ -18,6 +19,8 @@ trait CommandTestCaseTrait
      * @var array<string>
      */
     private $files = [];
+
+    abstract public function getContainer(): Container;
 
     /**
      * @after
@@ -34,7 +37,7 @@ trait CommandTestCaseTrait
      */
     protected function runCommand(string $command): array
     {
-        $application = new Application(Shopware()->Container()->get('kernel'));
+        $application = new Application($this->getContainer()->get('kernel'));
         $application->setAutoExit(true);
 
         $fp = \tmpfile();

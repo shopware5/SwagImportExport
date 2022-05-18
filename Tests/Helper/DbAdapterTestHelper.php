@@ -76,7 +76,7 @@ class DbAdapterTestHelper extends ImportExportTestHelper
     public function read($columns, $ids, $expectedResults, $expectedCount, $section = 'default')
     {
         /* @var DataFactory $dataFactory */
-        $dataFactory = Shopware()->Container()->get(DataFactory::class);
+        $dataFactory = $this->getContainer()->get(DataFactory::class);
         $dbAdapter = $dataFactory->createDbAdapter($this->dbAdapter);
 
         $rawData = $dbAdapter->read($ids, $columns);
@@ -99,7 +99,7 @@ class DbAdapterTestHelper extends ImportExportTestHelper
     public function readRecordIds($start, $limit, $filter, $expectedIds, $expectedCount)
     {
         /* @var DataFactory $dataFactory */
-        $dataFactory = Shopware()->Container()->get(DataFactory::class);
+        $dataFactory = $this->getContainer()->get(DataFactory::class);
         $dbAdapter = $dataFactory->createDbAdapter($this->dbAdapter);
 
         $ids = $dbAdapter->readRecordIds($start, $limit, $filter);
@@ -125,7 +125,7 @@ class DbAdapterTestHelper extends ImportExportTestHelper
     {
         $recordsCountBeforeImport = $this->getTableCount($this->dbTable);
 
-        $dataFactory = Shopware()->Container()->get(DataFactory::class);
+        $dataFactory = $this->getContainer()->get(DataFactory::class);
 
         $dbAdapter = $dataFactory->createDbAdapter($this->dbAdapter);
         $dbAdapter->write($records);
@@ -147,7 +147,7 @@ class DbAdapterTestHelper extends ImportExportTestHelper
 
     private function getTableCount(string $tableName): int
     {
-        return (int) Shopware()->Container()->get('dbal_connection')->createQueryBuilder()
+        return (int) $this->getContainer()->get('dbal_connection')->createQueryBuilder()
             ->select('COUNT(id)')
             ->from($tableName)
             ->execute()

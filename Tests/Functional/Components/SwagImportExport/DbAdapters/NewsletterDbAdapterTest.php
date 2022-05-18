@@ -43,7 +43,7 @@ class NewsletterDbAdapterTest extends TestCase
         $newsletterDbAdapter->write($customerData);
 
         /** @var Connection $dbalConnection */
-        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $dbalConnection = $this->getContainer()->get('dbal_connection');
         $createdRecipient = $dbalConnection->executeQuery("SELECT * FROM s_campaigns_mailaddresses WHERE email='test@example.com'")->fetchAll();
 
         static::assertEquals($customerData['default'][0]['email'], $createdRecipient[0]['email']);
@@ -62,7 +62,7 @@ class NewsletterDbAdapterTest extends TestCase
         $newsletterDbAdapter->write($notExistingRecipient);
 
         /** @var Connection $dbalConnection */
-        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $dbalConnection = $this->getContainer()->get('dbal_connection');
         $createdRecipient = $dbalConnection->executeQuery("SELECT * FROM s_campaigns_mailaddresses WHERE email='email_address_which_does_not_exist@example.org'")->fetchAll();
 
         static::assertEquals($notExistingRecipient['default'][0]['email'], $createdRecipient[0]['email']);
@@ -84,7 +84,7 @@ class NewsletterDbAdapterTest extends TestCase
         $newsletterDBAdapter->write($recipientWithContactData);
 
         /** @var Connection $dbalConnection */
-        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $dbalConnection = $this->getContainer()->get('dbal_connection');
         $createdRecipient = $dbalConnection->executeQuery("SELECT * FROM s_campaigns_maildata WHERE email='email_address_which_does_not_exists@example.org'")->fetchAll();
 
         static::assertEquals($recipientWithContactData['default'][0]['firstname'], $createdRecipient[0]['firstname']);
@@ -106,7 +106,7 @@ class NewsletterDbAdapterTest extends TestCase
         $newsletterDbAdapter->write($recipientWithNewNewsletterGroup);
 
         /** @var Connection $dbalConnection */
-        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $dbalConnection = $this->getContainer()->get('dbal_connection');
         $createdNewsletterGroup = $dbalConnection->executeQuery("SELECT * FROM s_campaigns_groups WHERE name='New newsletter group'")->fetchAll();
 
         static::assertEquals('New newsletter group', $createdNewsletterGroup[0]['name']);
@@ -116,7 +116,7 @@ class NewsletterDbAdapterTest extends TestCase
     {
         $newsletterDbAdapter = $this->getNewsletterAdapter();
         /** @var Connection $dbalConnection */
-        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $dbalConnection = $this->getContainer()->get('dbal_connection');
         $dt = new \DateTime();
         $now = $dt->format('Y-m-d H:i:s');
 
@@ -141,6 +141,6 @@ class NewsletterDbAdapterTest extends TestCase
 
     private function getNewsletterAdapter(): NewsletterDbAdapter
     {
-        return Shopware()->Container()->get(NewsletterDbAdapter::class);
+        return $this->getContainer()->get(NewsletterDbAdapter::class);
     }
 }

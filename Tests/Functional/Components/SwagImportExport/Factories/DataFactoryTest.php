@@ -22,9 +22,12 @@ use Shopware\Components\SwagImportExport\DbAdapters\NewsletterDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\OrdersDbAdapter;
 use Shopware\Components\SwagImportExport\DbAdapters\TranslationsDbAdapter;
 use Shopware\Components\SwagImportExport\Factories\DataFactory;
+use SwagImportExport\Tests\Helper\ContainerTrait;
 
 class DataFactoryTest extends TestCase
 {
+    use ContainerTrait;
+
     public function testCreateDbAdapterShouldCreateAddressDbAdapter()
     {
         $dataFactory = $this->getDataFactory();
@@ -137,6 +140,6 @@ class DataFactoryTest extends TestCase
 
     private function getDataFactory(): DataFactory
     {
-        return Shopware()->Container()->get(DataFactory::class);
+        return $this->getContainer()->get(DataFactory::class);
     }
 }

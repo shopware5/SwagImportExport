@@ -33,7 +33,7 @@ class ArticleInStockDbAdapterTest extends TestCase
         $articleInStockDbAdapter->write($updateInStockRecord);
 
         /** @var Connection $dbalConnection */
-        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $dbalConnection = $this->getContainer()->get('dbal_connection');
         $updatedArticleInStock = $dbalConnection->executeQuery("SELECT * FROM s_articles_details WHERE orderNumber='SW10004'")->fetchAll();
 
         static::assertEquals(3, $updatedArticleInStock[0]['instock']);
@@ -101,7 +101,7 @@ class ArticleInStockDbAdapterTest extends TestCase
      */
     private function createArticlesInStockAbAdapter()
     {
-        return Shopware()->Container()->get(ArticlesInStockDbAdapter::class);
+        return $this->getContainer()->get(ArticlesInStockDbAdapter::class);
     }
 
     /**

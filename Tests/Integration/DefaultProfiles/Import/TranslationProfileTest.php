@@ -81,7 +81,7 @@ class TranslationProfileTest extends TestCase
     public function testImportTranslationsShouldUpdateConfiguratorTranslations()
     {
         $this->truncateTranslationTable();
-        $connection = Shopware()->Container()->get('dbal_connection');
+        $connection = $this->getContainer()->get('dbal_connection');
         $sql = \file_get_contents(__DIR__ . '/_fixtures/configurator_translations_demo.sql');
         static::assertIsString($sql);
         $connection->executeQuery($sql);
@@ -99,7 +99,7 @@ class TranslationProfileTest extends TestCase
 
     private function truncateTranslationTable()
     {
-        $connection = Shopware()->Container()->get('dbal_connection');
+        $connection = $this->getContainer()->get('dbal_connection');
         $connection->executeQuery('DELETE FROM s_core_translations WHERE id > 0');
     }
 }

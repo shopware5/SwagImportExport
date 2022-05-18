@@ -68,7 +68,7 @@ class PropertyWriterTest extends TestCase
         );
 
         /** @var Connection $dbalConnection */
-        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $dbalConnection = $this->getContainer()->get('dbal_connection');
         $importedFilter = $dbalConnection->executeQuery(
             'SELECT * FROM s_filter WHERE name = ?',
             [self::NOT_EXISTING_FILTER_GROUP_NAME]
@@ -97,7 +97,7 @@ class PropertyWriterTest extends TestCase
         );
 
         /** @var Connection $dbalConnection */
-        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $dbalConnection = $this->getContainer()->get('dbal_connection');
         $filterGroupId = $dbalConnection->executeQuery(
             'SELECT filterGroupId FROM s_articles WHERE id = ?',
             [self::ARTICLE_ID_WITHOUT_PROPERTIES]
@@ -125,7 +125,7 @@ class PropertyWriterTest extends TestCase
         );
 
         /** @var Connection $dbalConnection */
-        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $dbalConnection = $this->getContainer()->get('dbal_connection');
         $createdPropertyValue = $dbalConnection->executeQuery(
             'SELECT `value` FROM s_filter_values WHERE value = ?',
             [self::NOT_EXISTING_VALUE_NAME]
@@ -153,7 +153,7 @@ class PropertyWriterTest extends TestCase
         );
 
         /** @var Connection $dbalConnection */
-        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $dbalConnection = $this->getContainer()->get('dbal_connection');
         $createdPropertyValue = $dbalConnection->executeQuery(
             'SELECT `name` FROM s_filter_options WHERE name = ?',
             [self::NOT_EXISTING_OPTION_NAME]
@@ -200,7 +200,7 @@ class PropertyWriterTest extends TestCase
         );
 
         /** @var Connection $dbalConnection */
-        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $dbalConnection = $this->getContainer()->get('dbal_connection');
         $valueIdRelationToTestedArticle = $dbalConnection->executeQuery(
             'SELECT valueID FROM s_filter_articles WHERE articleID = ?',
             [self::ARTICLE_ID_WITHOUT_PROPERTIES]
@@ -227,7 +227,7 @@ class PropertyWriterTest extends TestCase
         );
 
         /** @var Connection $dbalConnection */
-        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $dbalConnection = $this->getContainer()->get('dbal_connection');
         $createOptionRelation = $dbalConnection->executeQuery(
             'SELECT optionID FROM s_filter_relations LEFT JOIN s_articles ON s_articles.filterGroupID = s_filter_relations.groupID WHERE s_articles.id = ?',
             [self::ARTICLE_ID_WITHOUT_PROPERTIES]
@@ -254,7 +254,7 @@ class PropertyWriterTest extends TestCase
         );
 
         /** @var Connection $dbalConnection */
-        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $dbalConnection = $this->getContainer()->get('dbal_connection');
         $createdGroupName = $dbalConnection->executeQuery(
             'SELECT name FROM s_filter WHERE name = ?',
             [self::NOT_EXISTING_FILTER_GROUP_NAME]
@@ -268,6 +268,6 @@ class PropertyWriterTest extends TestCase
      */
     private function getPropertyWriterAdapter()
     {
-        return Shopware()->Container()->get(PropertyWriter::class);
+        return $this->getContainer()->get(PropertyWriter::class);
     }
 }

@@ -18,9 +18,12 @@ use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Detail;
 use Shopware\Models\Article\Supplier;
+use SwagImportExport\Tests\Helper\ContainerTrait;
 
 class ArticleWriterTest extends TestCase
 {
+    use ContainerTrait;
+
     /**
      * @var ArticleWriter
      */
@@ -34,10 +37,10 @@ class ArticleWriterTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->modelManager = Shopware()->Container()->get('models');
+        $this->modelManager = $this->getContainer()->get('models');
         $this->modelManager->beginTransaction();
 
-        $this->articleWriter = Shopware()->Container()->get(ArticleWriter::class);
+        $this->articleWriter = $this->getContainer()->get(ArticleWriter::class);
     }
 
     protected function tearDown(): void

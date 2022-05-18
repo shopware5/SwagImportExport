@@ -8,6 +8,7 @@
 
 namespace SwagImportExport\Tests\Helper;
 
+use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Newsletter\Address;
 use Shopware\Models\Newsletter\Group;
@@ -20,13 +21,15 @@ trait FixturesImportTrait
      */
     private $modelManager;
 
+    abstract public function getContainer(): Container;
+
     /**
      * @before
      */
     protected function importFixtures(): void
     {
         $profileDataProvider = new ProfileDataProvider(
-            Shopware()->Container()->get('dbal_connection')
+            $this->getContainer()->get('dbal_connection')
         );
 
         $profileDataProvider->createProfiles();
@@ -34,7 +37,7 @@ trait FixturesImportTrait
 
     private function importNewsletterDemoData(): void
     {
-        $this->modelManager = Shopware()->Container()->get('models');
+        $this->modelManager = $this->getContainer()->get('models');
         $newsletterGroup = $this->modelManager->find(Group::class, 1);
 
         self::assertInstanceOf(Group::class, $newsletterGroup);
@@ -57,7 +60,7 @@ trait FixturesImportTrait
             return;
         }
 
-        $connection = Shopware()->Container()->get('dbal_connection');
+        $connection = $this->getContainer()->get('dbal_connection');
 
         $sql = <<<SQL
 INSERT INTO `s_product_streams` (`id`, `name`, `conditions`, `type`) VALUES
@@ -69,7 +72,7 @@ SQL;
 
     private function isStreamInstalled(): bool
     {
-        return (bool) Shopware()->Container()->get('dbal_connection')
+        return (bool) $this->getContainer()->get('dbal_connection')
             ->createQueryBuilder()
             ->select('id')
             ->from('s_product_streams')

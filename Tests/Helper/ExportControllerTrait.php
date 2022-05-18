@@ -8,6 +8,7 @@
 
 namespace SwagImportExport\Tests\Helper;
 
+use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\SwagImportExport\UploadPathProvider;
 
 trait ExportControllerTrait
@@ -22,6 +23,8 @@ trait ExportControllerTrait
      */
     private $uploadPathProvider;
 
+    abstract public function getContainer(): Container;
+
     /**
      * @before
      */
@@ -29,7 +32,7 @@ trait ExportControllerTrait
     {
         $this->backendControllerTestHelper = new BackendControllerTestHelper();
 
-        $this->uploadPathProvider = Shopware()->Container()->get('swag_import_export.upload_path_provider');
+        $this->uploadPathProvider = $this->getContainer()->get('swag_import_export.upload_path_provider');
     }
 
     /**

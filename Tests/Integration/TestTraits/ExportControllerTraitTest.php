@@ -9,11 +9,13 @@
 namespace SwagImportExport\Tests\Integration;
 
 use PHPUnit\Framework\TestCase;
+use SwagImportExport\Tests\Helper\ContainerTrait;
 use SwagImportExport\Tests\Helper\ExportControllerTrait;
 
 class ExportControllerTraitTest extends TestCase
 {
     use ExportControllerTrait;
+    use ContainerTrait;
 
     public function testCsvToArrayIndexedByFieldValueShouldReturnMappedArrayAndIndexedByIdentifier()
     {

@@ -18,7 +18,6 @@ use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 class AutoImportServiceTest extends TestCase
 {
     use DatabaseTestCaseTrait;
-
     use ContainerTrait;
 
     /**
@@ -123,8 +122,8 @@ class AutoImportServiceTest extends TestCase
     {
         return new AutoImportService(
             new UploadPathProvider(Shopware()->DocPath()),
-            Shopware()->Container()->get('models'),
-            Shopware()->Container()->get(ProfileFactory::class)
+            $this->getContainer()->get('models'),
+            $this->getContainer()->get(ProfileFactory::class)
         );
     }
 }

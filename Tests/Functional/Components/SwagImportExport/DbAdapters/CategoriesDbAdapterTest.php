@@ -54,7 +54,7 @@ class CategoriesDbAdapterTest extends TestCase
         $categoriesDbAdapter->write($categoryRecords);
 
         /** @var Connection $dbalConnection */
-        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $dbalConnection = $this->getContainer()->get('dbal_connection');
         $createdCategory = $dbalConnection->executeQuery("SELECT * FROM s_categories WHERE description='New Category'")->fetchAll();
         $createdCategory2 = $dbalConnection->executeQuery("SELECT * FROM s_categories WHERE description='Second New Category'")->fetchAll();
 
@@ -80,6 +80,6 @@ class CategoriesDbAdapterTest extends TestCase
      */
     private function getCategoriesDbAdapter()
     {
-        return Shopware()->Container()->get(CategoriesDbAdapter::class);
+        return $this->getContainer()->get(CategoriesDbAdapter::class);
     }
 }

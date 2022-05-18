@@ -440,7 +440,7 @@ class AddressDbAdapterTest extends TestCase
      */
     private function getAddressDbAdapter()
     {
-        return Shopware()->Container()->get(AddressDbAdapter::class);
+        return $this->getContainer()->get(AddressDbAdapter::class);
     }
 
     /**

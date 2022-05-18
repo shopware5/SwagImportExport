@@ -47,7 +47,7 @@ class CategoryWriterTest extends TestCase
 
         $categoryWriterAdapter->write($validArticleId, $invalidCategoryArray);
         /** @var Connection $dbalConnection */
-        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $dbalConnection = $this->getContainer()->get('dbal_connection');
         $articleCategories = $dbalConnection->executeQuery('SELECT * FROM s_categories c LEFT JOIN s_articles_categories ac ON ac.categoryID = c.id WHERE ac.articleID=?', [3])->fetchAll();
 
         static::assertSame('Path', $articleCategories[3]['description']);
@@ -66,7 +66,7 @@ class CategoryWriterTest extends TestCase
         $categoryWriterAdapter->write($articleId, $categoryArray);
 
         /** @var Connection $dbalConnection */
-        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $dbalConnection = $this->getContainer()->get('dbal_connection');
         $updatedArticle = $dbalConnection->executeQuery('SELECT * FROM s_articles_categories WHERE articleID=?', [$articleId])->fetchAll();
 
         static::assertEquals($categoryArray[0]['categoryId'], $updatedArticle[2]['categoryID']);
@@ -74,6 +74,6 @@ class CategoryWriterTest extends TestCase
 
     private function getCategoryWriterAdapter(): CategoryWriter
     {
-        return Shopware()->Container()->get(CategoryWriter::class);
+        return $this->getContainer()->get(CategoryWriter::class);
     }
 }

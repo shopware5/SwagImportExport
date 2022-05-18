@@ -13,9 +13,11 @@ use PHPUnit\Framework\TestCase;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\SwagImportExport\DbalHelper;
 use Shopware\Models\Article\Article;
+use SwagImportExport\Tests\Helper\ContainerTrait;
 
 class DbalHelperTest extends TestCase
 {
+    use ContainerTrait;
     public const EXAMPLE_TABLE = 'example_table';
 
     public const DB_COLUMN_NAME = 'name_in_db_one';
@@ -38,20 +40,20 @@ class DbalHelperTest extends TestCase
     /**
      * @var DbalHelper
      */
-    private $SUT;
+    private $dbalHelper;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->modelManager = Shopware()->Container()->get('models');
+        $this->modelManager = $this->getContainer()->get('models');
         $this->modelManager->beginTransaction();
 
         $modelManagerStub = $this->getModelManagerStub();
-        $connection = Shopware()->Container()->get('dbal_connection');
-        $eventManager = Shopware()->Container()->get('events');
+        $connection = $this->getContainer()->get('dbal_connection');
+        $eventManager = $this->getContainer()->get('events');
 
-        $this->SUT = new DbalHelper($connection, $modelManagerStub, $eventManager);
+        $this->dbalHelper = new DbalHelper($connection, $modelManagerStub, $eventManager);
     }
 
     protected function tearDown(): void
@@ -68,7 +70,7 @@ class DbalHelperTest extends TestCase
             self::ANOTHER_MODEL_FIELD_NAME => self::ANOTHER_IMPORT_VALUE,
         ];
 
-        $builder = $this->SUT->getQueryBuilderForEntity($importData, Article::class, self::CREATE_INSERT_STATEMENT);
+        $builder = $this->dbalHelper->getQueryBuilderForEntity($importData, Article::class, self::CREATE_INSERT_STATEMENT);
 
         static::assertEquals($expectedSQL, $builder->getSQL(), 'Could not generate insert sql statement.');
     }
@@ -87,7 +89,7 @@ class DbalHelperTest extends TestCase
             self::ANOTHER_MODEL_FIELD_NAME => self::ANOTHER_IMPORT_VALUE,
         ];
 
-        $builder = $this->SUT->getQueryBuilderForEntity($givenData, Article::class, self::UPDATE_RECORD_BY_ID);
+        $builder = $this->dbalHelper->getQueryBuilderForEntity($givenData, Article::class, self::UPDATE_RECORD_BY_ID);
 
         static::assertEquals($expectedSQL, $builder->getSQL(), "SQL UPDATE statement wasn't generated correctly");
         static::assertEquals($expectedSQLParams, $builder->getParameters(), "Parameters for query builder wasn't set correctly.");

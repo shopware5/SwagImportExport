@@ -11,10 +11,12 @@ namespace SwagImportExport\Tests\Functional\Components\SwagImportExport\Utils;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\SwagImportExport\Utils\CommandHelper;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
+use SwagImportExport\Tests\Helper\ContainerTrait;
 
 class CommandHelperTest extends TestCase
 {
     use DatabaseTransactionBehaviour;
+    use ContainerTrait;
 
     public function testGetProductStreamIdByNameShouldBeNull(): void
     {
@@ -43,7 +45,7 @@ class CommandHelperTest extends TestCase
     {
         $sql = \file_get_contents(__DIR__ . '/_fixtures/stream.sql');
         static::assertIsString($sql);
-        Shopware()->Container()->get('dbal_connection')->exec($sql);
+        $this->getContainer()->get('dbal_connection')->exec($sql);
 
         $commandHelper = new CommandHelper([
             'profileEntity' => 'unitTest',
@@ -72,7 +74,7 @@ class CommandHelperTest extends TestCase
     {
         $sql = \file_get_contents(__DIR__ . '/_fixtures/multiple_streams.sql');
         static::assertIsString($sql);
-        Shopware()->Container()->get('dbal_connection')->exec($sql);
+        $this->getContainer()->get('dbal_connection')->exec($sql);
 
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('There are 2 streams with the name: TestStream. Please use the stream id.');

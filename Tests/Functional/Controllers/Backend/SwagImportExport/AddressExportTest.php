@@ -33,7 +33,7 @@ class AddressExportTest extends \Enlight_Components_Test_Controller_TestCase
         $params = $this->getExportRequestParams();
 
         /** @var ModelManager $modelManager */
-        $modelManager = Shopware()->Container()->get('models');
+        $modelManager = $this->getContainer()->get('models');
         $repo = $modelManager->getRepository(Profile::class);
         $profile = $repo->findOneBy(['name' => 'default_addresses']);
 
@@ -63,7 +63,7 @@ class AddressExportTest extends \Enlight_Components_Test_Controller_TestCase
         $params = $this->getExportRequestParams();
 
         /** @var ModelManager $modelManager */
-        $modelManager = Shopware()->Container()->get('models');
+        $modelManager = $this->getContainer()->get('models');
         $repo = $modelManager->getRepository(Profile::class);
         $profile = $repo->findOneBy(['name' => 'default_addresses']);
 

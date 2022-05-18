@@ -99,7 +99,7 @@ class PriceWriterTest extends TestCase
         $priceWriterAdapter->write($articleId, $articleOrderNumber, $articlePriceData);
 
         /** @var Connection $dbalConnection */
-        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $dbalConnection = $this->getContainer()->get('dbal_connection');
         $updatedArticle = $dbalConnection->executeQuery("SELECT * FROM s_articles_prices WHERE articleID='{$articleId}'")->fetchAll();
 
         static::assertEquals($expectedArticlePrice, $updatedArticle[0]['price']);
@@ -122,7 +122,7 @@ class PriceWriterTest extends TestCase
         $priceWriterAdapter->write($articleId, $articleOrderNumber, $articlePriceData);
 
         /** @var Connection $dbalConnection */
-        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $dbalConnection = $this->getContainer()->get('dbal_connection');
         $updatedArticle = $dbalConnection->executeQuery("SELECT * FROM s_articles_prices WHERE articleID='{$articleId}'")->fetchAll();
 
         static::assertEquals($expectedArticlePrice, $updatedArticle[0]['price']);
@@ -146,7 +146,7 @@ class PriceWriterTest extends TestCase
         $priceWriterAdapter->write($articleId, $articleOrderNumber, $articlePriceData);
 
         /** @var Connection $dbalConnection */
-        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $dbalConnection = $this->getContainer()->get('dbal_connection');
         $updatedArticle = $dbalConnection->executeQuery("SELECT * FROM s_articles_prices WHERE articleID='{$articleId}'")->fetchAll();
 
         static::assertEquals($expectedArticlePseudoPrice, $updatedArticle[0]['pseudoprice']);
@@ -174,7 +174,7 @@ class PriceWriterTest extends TestCase
         $priceWriterAdapter->write($articleId, $articleOrderNumber, $articlePriceData);
 
         /** @var Connection $dbalConnection */
-        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $dbalConnection = $this->getContainer()->get('dbal_connection');
         $updatedArticle = $dbalConnection->executeQuery("SELECT * FROM s_articles_prices WHERE articleID='{$articleId}'")->fetchAll();
 
         static::assertEquals($expectedArticleRegulationPrice, $updatedArticle[0]['regulation_price']);
@@ -182,6 +182,6 @@ class PriceWriterTest extends TestCase
 
     private function getPriceWriterAdapter(): PriceWriter
     {
-        return Shopware()->Container()->get(PriceWriter::class);
+        return $this->getContainer()->get(PriceWriter::class);
     }
 }

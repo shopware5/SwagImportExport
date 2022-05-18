@@ -87,7 +87,7 @@ class MainOrdersDbAdapterTest extends TestCase
     {
         // Set the tax ID and rate of a single order detail to null and zero, respectively
         $orderDetailId = 44;
-        $db = Shopware()->Container()->get('db');
+        $db = $this->getContainer()->get('db');
         $db->query(
             'UPDATE s_order_details
             SET taxID = NULL, tax_rate = 0
@@ -130,6 +130,6 @@ class MainOrdersDbAdapterTest extends TestCase
 
     private function getMainOrdersDbAdapter(): MainOrdersDbAdapter
     {
-        return Shopware()->Container()->get(MainOrdersDbAdapter::class);
+        return $this->getContainer()->get(MainOrdersDbAdapter::class);
     }
 }

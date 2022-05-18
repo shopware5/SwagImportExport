@@ -143,6 +143,6 @@ class TranslationWriterTest extends TestCase
 
     private function getTranslationWriter(): TranslationWriter
     {
-        return Shopware()->Container()->get(TranslationWriter::class);
+        return $this->getContainer()->get(TranslationWriter::class);
     }
 }
