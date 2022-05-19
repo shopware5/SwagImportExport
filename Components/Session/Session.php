@@ -10,9 +10,9 @@ namespace SwagImportExport\Components\Session;
 
 use Doctrine\ORM\EntityRepository;
 use Shopware\Components\Model\ModelManager;
-use Shopware\CustomModels\ImportExport\Session as SessionEntity;
 use SwagImportExport\Components\Profile\Profile;
 use SwagImportExport\Components\UploadPathProvider;
+use SwagImportExport\CustomModels\Session as SessionEntity;
 
 /**
  * @method int getTotalCount

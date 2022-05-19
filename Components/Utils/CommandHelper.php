@@ -9,8 +9,6 @@
 namespace SwagImportExport\Components\Utils;
 
 use Doctrine\DBAL\Connection;
-use Shopware\CustomModels\ImportExport\Profile as ProfileEntity;
-use Shopware\CustomModels\ImportExport\ProfileRepository;
 use SwagImportExport\Components\DataWorkflow;
 use SwagImportExport\Components\Factories\DataFactory;
 use SwagImportExport\Components\Factories\DataTransformerFactory;
@@ -23,6 +21,8 @@ use SwagImportExport\Components\Logger\Logger;
 use SwagImportExport\Components\Profile\Profile;
 use SwagImportExport\Components\Transformers\DataTransformerChain;
 use SwagImportExport\Components\UploadPathProvider;
+use SwagImportExport\CustomModels\Profile as ProfileEntity;
+use SwagImportExport\CustomModels\ProfileRepository;
 
 class CommandHelper
 {

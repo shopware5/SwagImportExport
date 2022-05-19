@@ -10,7 +10,6 @@ namespace SwagImportExport\Components\Factories;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
-use Shopware\CustomModels\ImportExport\Session as SessionEntity;
 use SwagImportExport\Components\DataIO;
 use SwagImportExport\Components\DataManagers\Articles\ArticleDataManager;
 use SwagImportExport\Components\DataManagers\CategoriesDataManager;
@@ -37,6 +36,7 @@ use SwagImportExport\Components\UploadPathProvider;
 use SwagImportExport\Components\Utils\DataColumnOptions;
 use SwagImportExport\Components\Utils\DataFilter;
 use SwagImportExport\Components\Utils\DataLimit;
+use SwagImportExport\CustomModels\Session as SessionEntity;
 
 class DataFactory extends \Enlight_Class implements \Enlight_Hook
 {

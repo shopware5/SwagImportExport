@@ -9,8 +9,8 @@
 namespace SwagImportExport\Components\Service;
 
 use Shopware\Components\Model\ModelManager;
-use Shopware\CustomModels\ImportExport\Profile;
 use SwagImportExport\Components\Service\Struct\ProfileDataStruct;
+use SwagImportExport\CustomModels\Profile;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 

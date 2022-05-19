@@ -9,11 +9,11 @@
 namespace SwagImportExport\Components\Service;
 
 use Shopware\Components\Model\ModelManager;
-use Shopware\CustomModels\ImportExport\Profile;
 use SwagImportExport\Components\Factories\ProfileFactory;
 use SwagImportExport\Components\UploadPathProvider;
 use SwagImportExport\Components\Utils\CommandHelper;
 use SwagImportExport\Components\Utils\SnippetsHelper;
+use SwagImportExport\CustomModels\Profile;
 
 class AutoImportService implements AutoImportServiceInterface
 {

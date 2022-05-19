@@ -8,7 +8,7 @@
 
 namespace SwagImportExport\Components\Service\Struct;
 
-use Shopware\CustomModels\ImportExport\Profile;
+use SwagImportExport\CustomModels\Profile;
 
 class ProfileDataStruct
 {

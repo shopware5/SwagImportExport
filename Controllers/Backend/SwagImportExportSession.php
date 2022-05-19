@@ -7,8 +7,8 @@
  */
 
 use Doctrine\ORM\AbstractQuery;
-use Shopware\CustomModels\ImportExport\Session;
 use SwagImportExport\Components\Utils\DataHelper;
+use SwagImportExport\CustomModels\Session;
 
 /**
  * Shopware ImportExport Plugin

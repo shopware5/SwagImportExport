@@ -9,10 +9,10 @@
 namespace SwagImportExport\Components\Logger;
 
 use Shopware\Components\Model\ModelManager;
-use Shopware\CustomModels\ImportExport\Logger as LoggerEntity;
-use Shopware\CustomModels\ImportExport\LoggerRepository;
-use Shopware\CustomModels\ImportExport\Session;
 use SwagImportExport\Components\FileIO\FileWriter;
+use SwagImportExport\CustomModels\Logger as LoggerEntity;
+use SwagImportExport\CustomModels\LoggerRepository;
+use SwagImportExport\CustomModels\Session;
 
 class Logger implements LoggerInterface
 {

@@ -6,8 +6,8 @@
  * file that was distributed with this source code.
  */
 
-use Shopware\CustomModels\ImportExport\Expression;
-use Shopware\CustomModels\ImportExport\Profile;
+use SwagImportExport\CustomModels\Expression;
+use SwagImportExport\CustomModels\Profile;
 
 /**
  * Shopware ImportExport Plugin

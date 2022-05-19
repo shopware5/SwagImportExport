@@ -6,7 +6,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Shopware\CustomModels\ImportExport;
+namespace SwagImportExport\CustomModels;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -34,7 +34,7 @@ class Session extends ModelEntity
     /**
      * @var ?Profile
      *
-     * @ORM\ManyToOne(targetEntity="Shopware\CustomModels\ImportExport\Profile", inversedBy="sessions", cascade={"persist", "refresh"})
+     * @ORM\ManyToOne(targetEntity="SwagImportExport\CustomModels\Profile", inversedBy="sessions", cascade={"persist", "refresh"})
      * @ORM\JoinColumn(name="profile_id", onDelete="CASCADE")
      */
     protected $profile;
@@ -114,7 +114,7 @@ class Session extends ModelEntity
     /**
      * @var Collection<string, Logger>
      *
-     * @ORM\OneToMany(targetEntity="Shopware\CustomModels\ImportExport\Logger", mappedBy="session")
+     * @ORM\OneToMany(targetEntity="SwagImportExport\CustomModels\Logger", mappedBy="session")
      */
     protected $logs;
 

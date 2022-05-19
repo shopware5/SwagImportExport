@@ -9,7 +9,7 @@
 namespace SwagImportExport\Components\Profile;
 
 use Shopware\Components\Plugin\Configuration\CachedReader;
-use Shopware\CustomModels\ImportExport\Profile as ProfileEntity;
+use SwagImportExport\CustomModels\Profile as ProfileEntity;
 
 class Profile
 {
@@ -68,7 +68,7 @@ class Profile
     /**
      * @throws \RuntimeException
      *
-     * @return array|\Shopware\CustomModels\ImportExport\Expression[]|string|array{0: \Enlight_Config, 1: Profile}
+     * @return array|\SwagImportExport\CustomModels\Expression[]|string|array{0: \Enlight_Config, 1: Profile}
      */
     public function getConfig($name)
     {

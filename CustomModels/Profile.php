@@ -6,7 +6,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Shopware\CustomModels\ImportExport;
+namespace SwagImportExport\CustomModels;
 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -33,14 +33,14 @@ class Profile extends ModelEntity
     /**
      * @var Collection<string|null, Expression>
      *
-     * @ORM\OneToMany(targetEntity="Shopware\CustomModels\ImportExport\Expression", mappedBy="profile")
+     * @ORM\OneToMany(targetEntity="SwagImportExport\CustomModels\Expression", mappedBy="profile")
      */
     protected $expressions;
 
     /**
      * @var Collection<string|null, Session>
      *
-     * @ORM\OneToMany(targetEntity="Shopware\CustomModels\ImportExport\Session", mappedBy="profile")
+     * @ORM\OneToMany(targetEntity="SwagImportExport\CustomModels\Session", mappedBy="profile")
      */
     protected $sessions;
 

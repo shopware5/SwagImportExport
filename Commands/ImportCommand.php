@@ -10,12 +10,12 @@ namespace SwagImportExport\Commands;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Shopware\Commands\ShopwareCommand;
-use Shopware\CustomModels\ImportExport\Profile as ProfileEntity;
-use Shopware\CustomModels\ImportExport\ProfileRepository;
 use SwagImportExport\Components\Factories\ProfileFactory;
 use SwagImportExport\Components\Profile\Profile;
 use SwagImportExport\Components\UploadPathProvider;
 use SwagImportExport\Components\Utils\CommandHelper;
+use SwagImportExport\CustomModels\Profile as ProfileEntity;
+use SwagImportExport\CustomModels\ProfileRepository;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;

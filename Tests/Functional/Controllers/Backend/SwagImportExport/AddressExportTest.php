@@ -9,7 +9,7 @@
 namespace SwagImportExport\Tests\Functional\Controllers\Backend\SwagImportExport;
 
 use Shopware\Components\Model\ModelManager;
-use Shopware\CustomModels\ImportExport\Profile;
+use SwagImportExport\CustomModels\Profile;
 use SwagImportExport\Tests\Helper\ContainerTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use SwagImportExport\Tests\Helper\ExportControllerTrait;

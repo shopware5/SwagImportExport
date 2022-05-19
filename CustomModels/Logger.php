@@ -6,7 +6,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Shopware\CustomModels\ImportExport;
+namespace SwagImportExport\CustomModels;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
@@ -32,7 +32,7 @@ class Logger extends ModelEntity
     /**
      * @var Session|null
      *
-     * @ORM\ManyToOne(targetEntity="Shopware\CustomModels\ImportExport\Session", inversedBy="logs")
+     * @ORM\ManyToOne(targetEntity="SwagImportExport\CustomModels\Session", inversedBy="logs")
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $session;

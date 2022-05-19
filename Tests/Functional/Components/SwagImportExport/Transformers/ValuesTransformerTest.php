@@ -71,10 +71,10 @@ class ValuesTransformerTest extends TestCase
      */
     private function getValuesTransformer($evaluator)
     {
-        $expression1 = new \Shopware\CustomModels\ImportExport\Expression();
+        $expression1 = new \SwagImportExport\CustomModels\Expression();
         $expression1->fromArray(['id' => 1, 'variable' => 'testVar', 'importConversion' => 'importConversion', 'exportConversion' => 'exportConversion']);
 
-        $expression2 = new \Shopware\CustomModels\ImportExport\Expression();
+        $expression2 = new \SwagImportExport\CustomModels\Expression();
         $expression2->fromArray(['id' => 2, 'variable' => 'otherTestVar', 'importConversion' => 'importConversion1', 'exportConversion' => 'exportConversion1']);
 
         $config['evaluator'] = $evaluator;

@@ -9,11 +9,11 @@
 use Doctrine\DBAL\DBALException;
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\Snippet\DbAdapter;
-use Shopware\CustomModels\ImportExport\Profile;
 use SwagImportExport\Components\Factories\DataFactory;
 use SwagImportExport\Components\Factories\ProfileFactory;
 use SwagImportExport\Components\Service\ProfileService;
 use SwagImportExport\Components\Utils\TreeHelper;
+use SwagImportExport\CustomModels\Profile;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware

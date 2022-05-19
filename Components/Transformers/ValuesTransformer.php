@@ -14,7 +14,7 @@ namespace SwagImportExport\Components\Transformers;
 class ValuesTransformer implements DataTransformerAdapter
 {
     /**
-     * @var \Shopware\CustomModels\ImportExport\Expression[]
+     * @var \SwagImportExport\CustomModels\Expression[]
      */
     private $config;
 

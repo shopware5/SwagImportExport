@@ -8,7 +8,7 @@
 
 namespace SwagImportExport\Components\Logger;
 
-use Shopware\CustomModels\ImportExport\Session;
+use SwagImportExport\CustomModels\Session;
 
 interface LoggerInterface
 {

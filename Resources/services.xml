@@ -122,9 +122,9 @@
         </service>
         <service id="swag_import_export.logger" alias="SwagImportExport\Components\Logger\Logger" public="true"/>
 
-        <service id="Shopware\CustomModels\ImportExport\ProfileRepository">
+        <service id="SwagImportExport\CustomModels\ProfileRepository">
             <factory service="models" method="getRepository"/>
-            <argument>Shopware\CustomModels\ImportExport\Profile</argument>
+            <argument>SwagImportExport\CustomModels\Profile</argument>
         </service>
 
         <service id="SwagImportExport\Components\DbalHelper">

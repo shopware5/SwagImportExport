@@ -9,7 +9,6 @@
 namespace SwagImportExport\Components\Service;
 
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
-use Shopware\CustomModels\ImportExport\Session;
 use SwagImportExport\Components\DataIO;
 use SwagImportExport\Components\Factories\DataFactory;
 use SwagImportExport\Components\Factories\DataTransformerFactory;
@@ -22,6 +21,7 @@ use SwagImportExport\Components\Profile\Profile;
 use SwagImportExport\Components\Service\Struct\ServiceHelperStruct;
 use SwagImportExport\Components\Transformers\DataTransformerChain;
 use SwagImportExport\Components\UploadPathProvider;
+use SwagImportExport\CustomModels\Session;
 
 abstract class AbstractImportExportService
 {

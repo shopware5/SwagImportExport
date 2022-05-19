@@ -9,9 +9,9 @@
 namespace SwagImportExport\Components\Factories;
 
 use Shopware\Components\Model\ModelManager;
-use Shopware\CustomModels\ImportExport\Profile as ProfileEntity;
 use SwagImportExport\Components\Profile\Profile;
 use SwagImportExport\Components\Utils\TreeHelper;
+use SwagImportExport\CustomModels\Profile as ProfileEntity;
 
 class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
 {

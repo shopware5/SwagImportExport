@@ -8,13 +8,13 @@
             <argument type="service" id="SwagImportExport\Components\Factories\ProfileFactory"/>
             <argument type="service" id="SwagImportExport\Components\UploadPathProvider"/>
             <argument type="service" id="models"/>
-            <argument type="service" id="Shopware\CustomModels\ImportExport\ProfileRepository"/>
+            <argument type="service" id="SwagImportExport\CustomModels\ProfileRepository"/>
 
             <tag name="console.command" command="sw:importexport:import"/>
         </service>
 
         <service id="SwagImportExport\Commands\ExportCommand">
-            <argument type="service" id="Shopware\CustomModels\ImportExport\ProfileRepository"/>
+            <argument type="service" id="SwagImportExport\CustomModels\ProfileRepository"/>
             <argument type="service" id="models"/>
             <argument>%kernel.root_dir%</argument>
 
@@ -22,7 +22,7 @@
         </service>
 
         <service id="SwagImportExport\Commands\ProfilesCommand">
-            <argument type="service" id="Shopware\CustomModels\ImportExport\ProfileRepository"/>
+            <argument type="service" id="SwagImportExport\CustomModels\ProfileRepository"/>
             <argument type="service" id="models"/>
 
             <tag name="console.command" command="sw:importexport:profiles"/>

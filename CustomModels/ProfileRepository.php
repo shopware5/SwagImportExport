@@ -6,7 +6,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Shopware\CustomModels\ImportExport;
+namespace SwagImportExport\CustomModels;
 
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Model\QueryBuilder;

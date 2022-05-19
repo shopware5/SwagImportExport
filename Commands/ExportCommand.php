@@ -10,10 +10,10 @@ namespace SwagImportExport\Commands;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Shopware\Commands\ShopwareCommand;
-use Shopware\CustomModels\ImportExport\Profile;
-use Shopware\CustomModels\ImportExport\ProfileRepository;
 use Shopware\Models\CustomerStream\CustomerStream;
 use SwagImportExport\Components\Utils\CommandHelper;
+use SwagImportExport\CustomModels\Profile;
+use SwagImportExport\CustomModels\ProfileRepository;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;

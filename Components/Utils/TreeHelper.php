@@ -8,8 +8,8 @@
 
 namespace SwagImportExport\Components\Utils;
 
-use Shopware\CustomModels\ImportExport\Profile;
 use SwagImportExport\Components\DataManagers\DataManager;
+use SwagImportExport\CustomModels\Profile;
 
 class TreeHelper
 {

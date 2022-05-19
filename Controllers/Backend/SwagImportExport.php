@@ -7,8 +7,8 @@
  */
 
 use Shopware\Components\CSRFWhitelistAware;
-use Shopware\CustomModels\ImportExport\Logger;
 use SwagImportExport\Components\UploadPathProvider;
+use SwagImportExport\CustomModels\Logger;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\FileBag;
 
