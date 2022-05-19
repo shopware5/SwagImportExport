@@ -10,7 +10,7 @@ namespace SwagImportExport\Components\Converter;
 
 class XmlConverter
 {
-    public $sSettings = [
+    public array $sSettings = [
         'encoding' => 'UTF-8',
         'standalone' => true,
         'attributes' => true,

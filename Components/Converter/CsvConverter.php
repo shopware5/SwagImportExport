@@ -10,7 +10,7 @@ namespace SwagImportExport\Components\Converter;
 
 class CsvConverter
 {
-    public $sSettings = [
+    public array $sSettings = [
         'fieldmark' => '"',
         'separator' => ';',
         'encoding' => 'ISO-8859-1', //UTF-8
