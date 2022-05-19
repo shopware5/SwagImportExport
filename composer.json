@@ -6,11 +6,6 @@
     "extra": {
         "installer-name": "SwagImportExport"
     },
-    "autoload": {
-        "psr-4": {
-            "Shopware\\Resources\\": "Resources"
-        }
-    },
     "require-dev": {
         "shopware/plugin-dev-tools": "dev-2.x-dev"
     },

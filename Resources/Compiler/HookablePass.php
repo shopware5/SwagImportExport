@@ -6,7 +6,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Shopware\Resources\Compiler;
+namespace SwagImportExport\Resources\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
