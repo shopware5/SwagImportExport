@@ -12,15 +12,9 @@ use SwagImportExport\CustomModels\Profile;
 
 class ProfileDataStruct
 {
-    /**
-     * @var string
-     */
-    private $name;
+    private string $name;
 
-    /**
-     * @var string
-     */
-    private $type;
+    private string $type;
 
     private $tree;
 

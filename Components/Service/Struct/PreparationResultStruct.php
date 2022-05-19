@@ -10,11 +10,9 @@ namespace SwagImportExport\Components\Service\Struct;
 
 class PreparationResultStruct
 {
-    /** @var int */
-    private $position;
+    private int $position;
 
-    /** @var int */
-    private $totalResultCount;
+    private int $totalResultCount;
 
     /**
      * @param int $position

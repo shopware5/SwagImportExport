@@ -17,23 +17,17 @@ use SwagImportExport\Components\Session\Session;
 
 class ServiceHelperStruct
 {
-    /** @var Profile */
-    private $profile;
+    private Profile $profile;
 
-    /** @var Session */
-    private $session;
+    private Session $session;
 
-    /** @var DataDbAdapter */
-    private $dbAdapter;
+    private DataDbAdapter $dbAdapter;
 
-    /** @var FileReader */
-    private $fileReader;
+    private FileReader $fileReader;
 
-    /** @var FileWriter */
-    private $fileWriter;
+    private FileWriter $fileWriter;
 
-    /** @var DataIO */
-    private $dataIO;
+    private DataIO $dataIO;
 
     public function __construct(
         Profile $profile,

@@ -17,25 +17,13 @@ use SwagImportExport\CustomModels\Profile;
 
 class AutoImportService implements AutoImportServiceInterface
 {
-    /**
-     * @var UploadPathProvider
-     */
-    private $uploadPathProvider;
+    private UploadPathProvider $uploadPathProvider;
 
-    /**
-     * @var ModelManager
-     */
-    private $modelManager;
+    private ModelManager $modelManager;
 
-    /**
-     * @var ProfileFactory
-     */
-    private $profileFactory;
+    private ProfileFactory $profileFactory;
 
-    /**
-     * @var string
-     */
-    private $directory;
+    private ?string $directory = null;
 
     public function __construct(
         UploadPathProvider $uploadPathProvider,

@@ -16,14 +16,11 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ProfileService implements ProfileServiceInterface
 {
-    /** @var ModelManager */
-    protected $modelManager;
+    protected ModelManager $modelManager;
 
-    /** @var Filesystem */
-    protected $fileSystem;
+    protected Filesystem $fileSystem;
 
-    /** @var \Enlight_Components_Snippet_Manager */
-    protected $snippetManager;
+    protected \Enlight_Components_Snippet_Manager $snippetManager;
 
     public function __construct(ModelManager $manager, Filesystem $filesystem, \Enlight_Components_Snippet_Manager $snippetManager)
     {

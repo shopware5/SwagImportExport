@@ -25,29 +25,21 @@ use SwagImportExport\CustomModels\Session;
 
 abstract class AbstractImportExportService
 {
-    /** @var DataFactory */
-    protected $dataFactory;
+    protected DataFactory $dataFactory;
 
-    /** @var ProfileFactory */
-    protected $profileFactory;
+    protected ProfileFactory $profileFactory;
 
-    /** @var FileIOFactory */
-    protected $fileIOFactory;
+    protected FileIOFactory $fileIOFactory;
 
-    /** @var DataTransformerFactory */
-    protected $dataTransformerFactory;
+    protected DataTransformerFactory $dataTransformerFactory;
 
-    /** @var Logger */
-    protected $logger;
+    protected Logger $logger;
 
-    /** @var UploadPathProvider */
-    protected $uploadPathProvider;
+    protected UploadPathProvider $uploadPathProvider;
 
-    /** @var \Shopware_Components_Auth */
-    protected $auth;
+    protected \Shopware_Components_Auth $auth;
 
-    /** @var MediaServiceInterface */
-    protected $mediaService;
+    protected MediaServiceInterface $mediaService;
 
     protected \Shopware_Components_Config $config;
 
