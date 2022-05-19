@@ -10,10 +10,7 @@ namespace SwagImportExport\Components\DataType;
 
 class CustomerDataType
 {
-    /**
-     * @var array
-     */
-    public static $mapper = [
+    public static array $mapper = [
         'string' => [
             'customerNumber',
             'password',
@@ -53,10 +50,7 @@ class CustomerDataType
         ],
     ];
 
-    /**
-     * @var array
-     */
-    public static $defaultFieldsForCreate = [
+    public static array $defaultFieldsForCreate = [
         'boolean' => [
             'active',
         ],
@@ -81,10 +75,7 @@ class CustomerDataType
         ],
     ];
 
-    /**
-     * @var array
-     */
-    public static $defaultFieldsValues = [
+    public static array $defaultFieldsValues = [
         'string' => [
             'attrBillingText1',
             'attrBillingText2',

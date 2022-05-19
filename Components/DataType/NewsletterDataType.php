@@ -10,10 +10,7 @@ namespace SwagImportExport\Components\DataType;
 
 class NewsletterDataType
 {
-    /**
-     * @var array
-     */
-    public static $mapper = [
+    public static array $mapper = [
         'email' => [
             'email',
         ],
@@ -34,10 +31,7 @@ class NewsletterDataType
         ],
     ];
 
-    /**
-     * @var array
-     */
-    public static $defaultFieldsForCreate = [
+    public static array $defaultFieldsForCreate = [
         'string' => [
             'groupName',
         ],

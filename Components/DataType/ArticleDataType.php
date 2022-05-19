@@ -10,10 +10,7 @@ namespace SwagImportExport\Components\DataType;
 
 class ArticleDataType
 {
-    /**
-     * @var array
-     */
-    public static $mapper = [
+    public static array $mapper = [
         'string' => [
             'orderNumber',
             'mainNumber',
@@ -59,10 +56,7 @@ class ArticleDataType
         ],
     ];
 
-    /**
-     * @var array
-     */
-    public static $defaultFieldsForCreate = [
+    public static array $defaultFieldsForCreate = [
         'date' => [
             'availableFrom',
             'availableTo',
@@ -109,10 +103,7 @@ class ArticleDataType
         ],
     ];
 
-    /**
-     * @var array
-     */
-    public static $defaultFieldsValues = [
+    public static array $defaultFieldsValues = [
         'string' => [
             'description',
             'descriptionLong',
@@ -157,19 +148,13 @@ class ArticleDataType
         ],
     ];
 
-    /**
-     * @var array
-     */
-    public static $articleFieldsMapping = [
+    public static array $articleFieldsMapping = [
         'added' => 'date',
         'changed' => 'changeTime',
         'highlight' => 'topSeller',
     ];
 
-    /**
-     * @var array
-     */
-    public static $articleVariantFieldsMapping = [
+    public static array $articleVariantFieldsMapping = [
         'number' => 'orderNumber',
         'len' => 'length',
     ];

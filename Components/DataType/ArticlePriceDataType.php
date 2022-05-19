@@ -10,10 +10,7 @@ namespace SwagImportExport\Components\DataType;
 
 class ArticlePriceDataType
 {
-    /**
-     * @var array
-     */
-    public static $defaultFieldsValues = [
+    public static array $defaultFieldsValues = [
         'float' => [
             'percent',
         ],
