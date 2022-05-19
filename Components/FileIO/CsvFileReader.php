@@ -12,15 +12,9 @@ use SwagImportExport\Components\UploadPathProvider;
 
 class CsvFileReader implements FileReader
 {
-    /**
-     * @var bool
-     */
-    protected $treeStructure = false;
+    protected bool $treeStructure = false;
 
-    /**
-     * @var UploadPathProvider
-     */
-    private $uploadPathProvider;
+    private UploadPathProvider $uploadPathProvider;
 
     public function __construct(UploadPathProvider $uploadPathProvider)
     {

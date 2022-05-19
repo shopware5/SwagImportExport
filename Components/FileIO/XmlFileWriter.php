@@ -17,24 +17,16 @@ use SwagImportExport\Components\Utils\FileHelper;
  */
 class XmlFileWriter implements FileWriter
 {
-    /**
-     * @var bool
-     */
-    protected $treeStructure = true;
+    protected bool $treeStructure = true;
 
-    /**
-     * @var XmlConverter
-     */
-    protected $xmlConvertor;
+    protected XmlConverter $xmlConvertor;
 
-    /**
-     * @var FileHelper
-     */
-    protected $fileHelper;
+    protected FileHelper $fileHelper;
 
     public function __construct(FileHelper $fileHelper)
     {
         $this->fileHelper = $fileHelper;
+        $this->xmlConvertor = new XmlConverter();
     }
 
     /**
@@ -58,8 +50,7 @@ class XmlFileWriter implements FileWriter
     public function writeRecords($fileName, $data)
     {
         //converting the whole template tree without the interation part
-        $convertor = $this->getXmlConvertor();
-        $data = $convertor->_encode($data);
+        $data = $this->xmlConvertor->_encode($data);
 
         $this->getFileHelper()->writeStringToFile($fileName, \trim($data), \FILE_APPEND);
     }
@@ -107,24 +98,11 @@ class XmlFileWriter implements FileWriter
     protected function splitHeaderFooter($data)
     {
         //converting the whole template tree without the iteration part
-        $convertor = $this->getXmlConvertor();
-        $data = $convertor->encode($data);
+        $data = $this->xmlConvertor->encode($data);
 
         //spliting the the tree in to two parts
         $dataParts = \explode('<_currentMarker></_currentMarker>', $data);
 
         return $dataParts;
-    }
-
-    /**
-     * @return XmlConverter
-     */
-    protected function getXmlConvertor()
-    {
-        if ($this->xmlConvertor === null) {
-            $this->xmlConvertor = new XmlConverter();
-        }
-
-        return $this->xmlConvertor;
     }
 }

@@ -14,10 +14,7 @@ class XmlFileReader implements FileReader
 
     protected array $iterationTag = [];
 
-    /**
-     * @var bool
-     */
-    protected $treeStructure = true;
+    protected bool $treeStructure = true;
 
     public function setTree($tree)
     {

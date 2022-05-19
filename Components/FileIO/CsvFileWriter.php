@@ -13,12 +13,9 @@ use SwagImportExport\Components\Utils\FileHelper;
 
 class CsvFileWriter implements FileWriter
 {
-    protected $treeStructure = false;
+    protected bool $treeStructure = false;
 
-    /**
-     * @var FileHelper
-     */
-    protected $fileHelper;
+    protected FileHelper $fileHelper;
 
     public function __construct(FileHelper $fileHelper)
     {
