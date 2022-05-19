@@ -10,9 +10,9 @@ namespace SwagImportExport\Components\Utils;
 
 class DataColumnOptions
 {
-    private $columnOptions;
+    private ?string $columnOptions;
 
-    public function __construct($columnOptions)
+    public function __construct(?string $columnOptions)
     {
         $this->columnOptions = $columnOptions;
     }

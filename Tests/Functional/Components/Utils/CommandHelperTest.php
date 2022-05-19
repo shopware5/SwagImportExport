@@ -11,6 +11,7 @@ namespace SwagImportExport\Tests\Functional\Components\Utils;
 use PHPUnit\Framework\TestCase;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 use SwagImportExport\Components\Utils\CommandHelper;
+use SwagImportExport\CustomModels\Profile;
 use SwagImportExport\Tests\Helper\ContainerTrait;
 
 class CommandHelperTest extends TestCase
@@ -21,7 +22,7 @@ class CommandHelperTest extends TestCase
     public function testGetProductStreamIdByNameShouldBeNull(): void
     {
         $commandHelper = new CommandHelper([
-            'profileEntity' => 'unitTest',
+            'profileEntity' => new Profile(),
             'format' => 'unitTest',
             'filePath' => 'unitTest',
         ]);
@@ -32,7 +33,7 @@ class CommandHelperTest extends TestCase
     public function testGetProductStreamIdByNameShouldBeLikeGivenId(): void
     {
         $commandHelper = new CommandHelper([
-            'profileEntity' => 'unitTest',
+            'profileEntity' => new Profile(),
             'format' => 'unitTest',
             'filePath' => 'unitTest',
             'productStream' => '12',
@@ -48,7 +49,7 @@ class CommandHelperTest extends TestCase
         $this->getContainer()->get('dbal_connection')->exec($sql);
 
         $commandHelper = new CommandHelper([
-            'profileEntity' => 'unitTest',
+            'profileEntity' => new Profile(),
             'format' => 'unitTest',
             'filePath' => 'unitTest',
             'productStream' => 'TestStream',
@@ -63,7 +64,7 @@ class CommandHelperTest extends TestCase
         $this->expectExceptionMessage('There are no streams with the name: TestStream');
 
         new CommandHelper([
-            'profileEntity' => 'unitTest',
+            'profileEntity' => new Profile(),
             'format' => 'unitTest',
             'filePath' => 'unitTest',
             'productStream' => 'TestStream',
@@ -80,7 +81,7 @@ class CommandHelperTest extends TestCase
         $this->expectExceptionMessage('There are 2 streams with the name: TestStream. Please use the stream id.');
 
         new CommandHelper([
-            'profileEntity' => 'unitTest',
+            'profileEntity' => new Profile(),
             'format' => 'unitTest',
             'filePath' => 'unitTest',
             'productStream' => 'TestStream',

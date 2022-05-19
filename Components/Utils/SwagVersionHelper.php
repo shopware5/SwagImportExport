@@ -12,10 +12,8 @@ class SwagVersionHelper
 {
     /**
      * @param string $version
-     *
-     * @return bool
      */
-    public static function hasMinimumVersion($version)
+    public static function hasMinimumVersion($version): bool
     {
         $actualVersion = Shopware()->Config()->version;
 

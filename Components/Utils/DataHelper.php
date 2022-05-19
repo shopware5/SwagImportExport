@@ -32,10 +32,7 @@ class DataHelper
         return [$alias, $name];
     }
 
-    /**
-     * @return string
-     */
-    public static function formatFileSize($bytes)
+    public static function formatFileSize($bytes): string
     {
         if ($bytes > 0) {
             $unit = (int) \log($bytes, 1024);

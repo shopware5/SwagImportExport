@@ -24,7 +24,7 @@ class DataIOTest extends ImportExportTestHelper
     {
         return [
             'adapter' => 'categories',
-            'filter' => '',
+            'filter' => [],
             'type' => 'export',
             'limit' => ['limit' => 40, 'offset' => 0],
             'max_record_count' => 100,

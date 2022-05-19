@@ -18,10 +18,8 @@ class TreeHelper
      *
      * @param bool   $isInIteration
      * @param string $adapter
-     *
-     * @return array
      */
-    public static function convertToExtJSTree(array $node, $isInIteration = false, $adapter = '')
+    public static function convertToExtJSTree(array $node, $isInIteration = false, $adapter = ''): array
     {
         $parentKey = '';
         $children = [];
@@ -84,10 +82,8 @@ class TreeHelper
 
     /**
      * Helper function which appends child node to the tree
-     *
-     * @return bool
      */
-    public static function appendNode(array $child, array &$node)
+    public static function appendNode(array $child, array &$node): bool
     {
         if ($node['id'] == $child['parentId']) { // the parent node is found
             if ($child['type'] === 'attribute') {
@@ -176,10 +172,8 @@ class TreeHelper
 
     /**
      * Helper function which appends child node to the tree
-     *
-     * @return bool
      */
-    public static function moveNode(array $child, array &$node)
+    public static function moveNode(array $child, array &$node): bool
     {
         if ($node['id'] == $child['parentId']) { // the parent node is found
             if ($child['type'] === 'attribute') {
@@ -210,10 +204,8 @@ class TreeHelper
      * Helper function which finds and changes node from the tree
      *
      * @param array $defaultFields
-     *
-     * @return bool
      */
-    public static function changeNode(array $child, array &$node, $defaultFields = [])
+    public static function changeNode(array $child, array &$node, $defaultFields = []): bool
     {
         if ($node['id'] == $child['id']) { // the node is found
             $node['name'] = $child['text'];
@@ -269,10 +261,8 @@ class TreeHelper
 
     /**
      * Helper function which finds and deletes node from the tree
-     *
-     * @return bool
      */
-    public static function deleteNode(array $child, array &$node)
+    public static function deleteNode(array $child, array &$node): bool
     {
         if (isset($node['children'])) {
             foreach ($node['children'] as $key => &$childNode) {
@@ -310,10 +300,8 @@ class TreeHelper
      * Sorting tree via index key
      *
      * @param array $node
-     *
-     * @return array
      */
-    public static function reorderTree($node)
+    public static function reorderTree($node): array
     {
         $reorderdNode = [];
         if (\is_array($node) && isset($node['children'])) {
@@ -348,10 +336,8 @@ class TreeHelper
      * @param string $profileType
      *
      * @throws \Exception
-     *
-     * @return string
      */
-    public static function getDefaultTreeByProfileType($profileType)
+    public static function getDefaultTreeByProfileType($profileType): string
     {
         switch ($profileType) {
             case 'categories':
@@ -383,10 +369,8 @@ class TreeHelper
 
     /**
      * @param int $baseProfileId
-     *
-     * @return string
      */
-    public static function getDefaultTreeByBaseProfile($baseProfileId)
+    public static function getDefaultTreeByBaseProfile($baseProfileId): string
     {
         return Shopware()->Container()->get('models')
             ->getRepository(Profile::class)
@@ -402,10 +386,8 @@ class TreeHelper
      * @param string $profileType
      *
      * @throws \Exception
-     *
-     * @return string
      */
-    public static function getTreeByHiddenProfileType($profileType)
+    public static function getTreeByHiddenProfileType($profileType): string
     {
         switch ($profileType) {
             case 'articles':

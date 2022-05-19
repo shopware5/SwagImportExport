@@ -15,7 +15,7 @@ class DbAdapterHelper
      *
      * @return array<array<string, string>>
      */
-    public static function decodeHtmlEntities($records)
+    public static function decodeHtmlEntities(array $records): array
     {
         foreach ($records as &$record) {
             foreach ($record as &$value) {
@@ -40,7 +40,7 @@ class DbAdapterHelper
      *
      * @return array<array<string, string>>
      */
-    public static function escapeNewLines($records)
+    public static function escapeNewLines(array $records): array
     {
         foreach ($records as &$record) {
             foreach ($record as &$value) {

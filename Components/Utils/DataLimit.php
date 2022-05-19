@@ -10,9 +10,9 @@ namespace SwagImportExport\Components\Utils;
 
 class DataLimit
 {
-    protected $limit;
+    protected ?int $limit = null;
 
-    protected $offset;
+    protected ?int $offset = null;
 
     public function __construct(array $options)
     {

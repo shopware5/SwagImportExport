@@ -26,100 +26,43 @@ use SwagImportExport\CustomModels\ProfileRepository;
 
 class CommandHelper
 {
-    /**
-     * @var ProfileEntity
-     */
-    protected $profileEntity;
+    protected ProfileEntity $profileEntity;
 
-    /**
-     * @var string
-     */
-    protected $filePath;
+    protected string $filePath;
 
-    /**
-     * @var string
-     */
-    protected $format;
+    protected string $format;
 
-    /**
-     * @var string
-     */
-    protected $exportVariants;
+    protected ?string $exportVariants = null;
 
-    /**
-     * @var int
-     */
-    protected $limit;
+    protected ?int $limit = null;
 
-    /**
-     * @var int
-     */
-    protected $offset;
+    protected ?int $offset = null;
 
-    /**
-     * @var string
-     */
-    protected $dateFrom;
+    protected ?string $dateFrom = null;
 
-    /**
-     * @var string
-     */
-    protected $dateTo;
+    protected ?string $dateTo = null;
 
-    /**
-     * @var string
-     */
-    protected $username;
+    protected ?string $username = null;
 
-    /**
-     * @var string
-     */
-    protected $category;
+    protected ?string $category = null;
 
-    /**
-     * @var int
-     */
-    protected $productStream;
+    protected ?int $productStream = null;
 
-    /**
-     * @var int
-     */
-    protected $sessionId;
+    protected ?int $sessionId = null;
 
-    /**
-     * @var Logger
-     */
-    protected $logger;
+    protected Logger $logger;
 
-    /**
-     * @var int
-     */
-    protected $customerStream;
+    protected ?int $customerStream = null;
 
-    /**
-     * @var Connection
-     */
-    protected $connection;
+    protected Connection $connection;
 
-    /**
-     * @var ProfileFactory
-     */
-    private $profileFactory;
+    private ProfileFactory $profileFactory;
 
-    /**
-     * @var DataFactory
-     */
-    private $dataFactory;
+    private DataFactory $dataFactory;
 
-    /**
-     * @var FileIOFactory
-     */
-    private $fileIoFactory;
+    private FileIOFactory $fileIoFactory;
 
-    /**
-     * @var DataTransformerFactory
-     */
-    private $dataTransformationFactory;
+    private DataTransformerFactory $dataTransformationFactory;
 
     /**
      * @throws \RuntimeException
