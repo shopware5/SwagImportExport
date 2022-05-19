@@ -9,8 +9,8 @@
 namespace SwagImportExport\Tests\Unit\Setup\DefaultProfiles;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Setup\SwagImportExport\DefaultProfiles\OrderMainDataProfile;
-use Shopware\Setup\SwagImportExport\DefaultProfiles\ProfileMetaData;
+use SwagImportExport\Setup\DefaultProfiles\OrderMainDataProfile;
+use SwagImportExport\Setup\DefaultProfiles\ProfileMetaData;
 
 class OrderMainDataProfileTest extends TestCase
 {

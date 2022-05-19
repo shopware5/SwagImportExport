@@ -9,8 +9,8 @@
 namespace SwagImportExport\Tests\Unit\Setup\DefaultProfiles;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Setup\SwagImportExport\DefaultProfiles\ArticleTranslationUpdateProfile;
-use Shopware\Setup\SwagImportExport\DefaultProfiles\ProfileMetaData;
+use SwagImportExport\Setup\DefaultProfiles\ArticleTranslationUpdateProfile;
+use SwagImportExport\Setup\DefaultProfiles\ProfileMetaData;
 
 class ArticleTranslationUpdateProfileTest extends TestCase
 {

@@ -8,7 +8,6 @@
     },
     "autoload": {
         "psr-4": {
-            "Shopware\\Setup\\": "Setup",
             "Shopware\\Subscribers\\": "Subscribers",
             "Shopware\\Resources\\": "Resources"
         }

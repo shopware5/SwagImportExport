@@ -9,8 +9,8 @@
 namespace SwagImportExport\Tests\Unit\Setup\DefaultProfiles;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Setup\SwagImportExport\DefaultProfiles\MinimalArticleVariantsProfile;
-use Shopware\Setup\SwagImportExport\DefaultProfiles\ProfileMetaData;
+use SwagImportExport\Setup\DefaultProfiles\MinimalArticleVariantsProfile;
+use SwagImportExport\Setup\DefaultProfiles\ProfileMetaData;
 
 class MinimalArticleVariantsProfileTest extends TestCase
 {

@@ -22,8 +22,8 @@ use Shopware\Components\Plugin\Context\InstallContext;
 use Shopware\Components\Plugin\Context\UninstallContext;
 use Shopware\Components\Plugin\Context\UpdateContext;
 use Shopware\Resources\Compiler\HookablePass;
-use Shopware\Setup\SwagImportExport\Install\DefaultProfileInstaller;
-use Shopware\Setup\SwagImportExport\Update\DefaultProfileUpdater;
+use SwagImportExport\Setup\Install\DefaultProfileInstaller;
+use SwagImportExport\Setup\Update\DefaultProfileUpdater;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class SwagImportExport extends Plugin

@@ -9,7 +9,7 @@
 namespace SwagImportExport\Tests\Unit\Setup\DefaultProfiles;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Setup\SwagImportExport\DefaultProfiles\ArticlePriceProfile;
+use SwagImportExport\Setup\DefaultProfiles\ArticlePriceProfile;
 
 class ArticlePriceProfileTest extends TestCase
 {

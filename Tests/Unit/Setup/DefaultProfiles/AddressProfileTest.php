@@ -9,8 +9,8 @@
 namespace SwagImportExport\Unit\Setup\DefaultProfiles;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Setup\SwagImportExport\DefaultProfiles\AddressProfile;
-use Shopware\Setup\SwagImportExport\DefaultProfiles\ProfileMetaData;
+use SwagImportExport\Setup\DefaultProfiles\AddressProfile;
+use SwagImportExport\Setup\DefaultProfiles\ProfileMetaData;
 use SwagImportExport\Tests\Unit\Setup\DefaultProfiles\DefaultProfileTestCaseTrait;
 
 class AddressProfileTest extends TestCase
