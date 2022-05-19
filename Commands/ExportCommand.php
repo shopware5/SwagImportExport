@@ -6,7 +6,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Shopware\Commands\SwagImportExport;
+namespace SwagImportExport\Commands;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Shopware\Commands\ShopwareCommand;

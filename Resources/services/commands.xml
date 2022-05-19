@@ -4,7 +4,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
 
-        <service id="Shopware\Commands\SwagImportExport\ImportCommand">
+        <service id="SwagImportExport\Commands\ImportCommand">
             <argument type="service" id="Shopware\Components\SwagImportExport\Factories\ProfileFactory"/>
             <argument type="service" id="Shopware\Components\SwagImportExport\UploadPathProvider"/>
             <argument type="service" id="models"/>
@@ -13,7 +13,7 @@
             <tag name="console.command" command="sw:importexport:import"/>
         </service>
 
-        <service id="Shopware\Commands\SwagImportExport\ExportCommand">
+        <service id="SwagImportExport\Commands\ExportCommand">
             <argument type="service" id="Shopware\CustomModels\ImportExport\ProfileRepository"/>
             <argument type="service" id="models"/>
             <argument>%kernel.root_dir%</argument>
@@ -21,7 +21,7 @@
             <tag name="console.command" command="sw:importexport:export"/>
         </service>
 
-        <service id="Shopware\Commands\SwagImportExport\ProfilesCommand">
+        <service id="SwagImportExport\Commands\ProfilesCommand">
             <argument type="service" id="Shopware\CustomModels\ImportExport\ProfileRepository"/>
             <argument type="service" id="models"/>
 

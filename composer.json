@@ -8,7 +8,6 @@
     },
     "autoload": {
         "psr-4": {
-            "Shopware\\Commands\\": "Commands",
             "Shopware\\Components\\": "Components",
             "Shopware\\CustomModels\\": "CustomModels",
             "Shopware\\Setup\\": "Setup",
