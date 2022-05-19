@@ -18,7 +18,7 @@ use PhpCsFixerCustomFixers\Fixers;
 
 $finder = PhpCsFixer\Finder::create()
     ->in(__DIR__ . DIRECTORY_SEPARATOR . 'Commands')
-
+    ->in(__DIR__ . '/Components/DataManagers')
     ->in(__DIR__ . '/Components/Converter');
 
 $header = <<<EOF

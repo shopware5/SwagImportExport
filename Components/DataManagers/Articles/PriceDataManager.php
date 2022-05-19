@@ -15,10 +15,8 @@ class PriceDataManager extends DataManager implements \Enlight_Hook
 {
     /**
      * Define which field should be set by default
-     *
-     * @var array
      */
-    private $defaultFields = [
+    private array $defaultFields = [
         'priceGroup',
         'from',
         'to',

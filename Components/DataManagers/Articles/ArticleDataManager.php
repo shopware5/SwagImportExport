@@ -17,15 +17,9 @@ use SwagImportExport\Components\Utils\SnippetsHelper;
 
 class ArticleDataManager extends DataManager implements \Enlight_Hook
 {
-    /**
-     * @var \Enlight_Components_Db_Adapter_Pdo_Mysql
-     */
-    private $db;
+    private \Enlight_Components_Db_Adapter_Pdo_Mysql $db;
 
-    /**
-     * @var DbalHelper
-     */
-    private $dbalHelper;
+    private DbalHelper $dbalHelper;
 
     /**
      * @var array<int, string>

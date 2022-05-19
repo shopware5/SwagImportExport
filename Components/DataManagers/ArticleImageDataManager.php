@@ -12,17 +12,12 @@ use Enlight_Components_Db_Adapter_Pdo_Mysql as PDOConnection;
 
 class ArticleImageDataManager implements \Enlight_Hook
 {
-    /**
-     * @var PDOConnection
-     */
-    private $db;
+    private PDOConnection $db;
 
     /**
      * Define which field should be set by default
-     *
-     * @var array
      */
-    private $defaultFields = [
+    private array $defaultFields = [
         'main',
         'position',
         'thumbnail',

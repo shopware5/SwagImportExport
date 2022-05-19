@@ -14,25 +14,13 @@ use SwagImportExport\Components\DataType\CustomerDataType;
 
 class CustomerDataManager extends DataManager implements \Enlight_Hook
 {
-    /**
-     * @var \Shopware_Components_Config
-     */
-    private $config;
+    private \Shopware_Components_Config $config;
 
-    /**
-     * @var \Enlight_Components_Db_Adapter_Pdo_Mysql
-     */
-    private $db;
+    private \Enlight_Components_Db_Adapter_Pdo_Mysql $db;
 
-    /**
-     * @var \Shopware\Components\Password\Manager
-     */
-    private $passwordManager;
+    private Manager $passwordManager;
 
-    /**
-     * @var \Shopware\Components\NumberRangeIncrementerInterface
-     */
-    private $numbergenerator;
+    private NumberRangeIncrementerInterface $numbergenerator;
 
     /**
      * initialises the class properties

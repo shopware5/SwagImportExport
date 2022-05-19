@@ -17,15 +17,9 @@ use SwagImportExport\Components\Utils\SnippetsHelper;
 
 class NewsletterDataManager extends DataManager implements \Enlight_Hook
 {
-    /**
-     * @var \Shopware_Components_Config
-     */
-    private $config;
+    private \Shopware_Components_Config $config;
 
-    /**
-     * @var Repository
-     */
-    private $groupRepository;
+    private Repository $groupRepository;
 
     /**
      * initialises the class properties
