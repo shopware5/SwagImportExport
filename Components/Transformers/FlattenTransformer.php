@@ -18,21 +18,21 @@ use SwagImportExport\Components\Utils\SnippetsHelper;
  */
 class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
 {
-    protected $config;
+    protected ?string $config = null;
 
-    protected $mainIterationPart;
+    protected ?array $mainIterationPart = null;
 
-    protected $mainAdapter;
+    protected ?string $mainAdapter = null;
 
-    protected $iterationParts;
+    protected array $iterationParts = [];
 
-    protected $iterationTempData;
+    protected ?array $iterationTempData = null;
 
-    protected $tempData = [];
+    protected array $tempData = [];
 
-    protected $tempMapper;
+    protected array $tempMapper = [];
 
-    protected $translationColumns;
+    protected ?array $translationColumns = null;
 
     /**
      * Sets the config that has the tree structure

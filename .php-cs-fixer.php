@@ -27,6 +27,7 @@ $finder = PhpCsFixer\Finder::create()
     ->in(__DIR__ . '/Components/Profile')
     ->in(__DIR__ . '/Components/Service')
     ->in(__DIR__ . '/Components/Session')
+    ->in(__DIR__ . '/Components/Transformers')
     ->in(__DIR__ . '/Components/Converter');
 
 $header = <<<EOF

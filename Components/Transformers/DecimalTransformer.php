@@ -12,8 +12,7 @@ use SwagImportExport\Components\Profile\Profile;
 
 class DecimalTransformer implements DataTransformerAdapter
 {
-    /** @var array */
-    private $decimalValues = [
+    private array $decimalValues = [
         'weight',
         'width',
         'height',
@@ -31,14 +30,11 @@ class DecimalTransformer implements DataTransformerAdapter
         'invoiceShippingNet',
     ];
 
-    /** @var \Enlight_Plugin_Bootstrap_Config */
-    private $pluginConfig;
+    private \Enlight_Config $pluginConfig;
 
-    /** @var Profile */
-    private $profile;
+    private Profile $profile;
 
-    /** @var array */
-    private $treeData;
+    private array $treeData;
 
     /**
      * Sets the main config which defines the data restructuring

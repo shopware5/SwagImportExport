@@ -10,10 +10,7 @@ namespace SwagImportExport\Components\Transformers;
 
 class SmartyExpressionEvaluator implements ExpressionEvaluator
 {
-    /**
-     * Shopware_Components_StringCompiler
-     */
-    protected $compiler;
+    protected ?\Shopware_Components_StringCompiler $compiler = null;
 
     /**
      * @throws \Exception

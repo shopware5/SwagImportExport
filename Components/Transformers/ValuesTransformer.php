@@ -13,15 +13,9 @@ namespace SwagImportExport\Components\Transformers;
  */
 class ValuesTransformer implements DataTransformerAdapter
 {
-    /**
-     * @var \SwagImportExport\CustomModels\Expression[]
-     */
-    private $config;
+    private ?iterable $config = null;
 
-    /**
-     * @var object
-     */
-    private $evaluator;
+    private ?object $evaluator = null;
 
     /**
      * The $config must contain the smarty or php transformation of values.

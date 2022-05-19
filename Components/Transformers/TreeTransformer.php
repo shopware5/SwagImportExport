@@ -13,35 +13,28 @@ namespace SwagImportExport\Components\Transformers;
  */
 class TreeTransformer implements DataTransformerAdapter, ComposerInterface
 {
-    protected $config;
+    protected ?string $config = null;
 
-    /**
-     * @var array
-     */
-    protected $iterationPart;
+    protected ?array $iterationPart = null;
 
-    /**
-     * @var array
-     */
-    protected $headerFooterData;
+    protected ?array $headerFooterData = null;
 
-    //import properties
-    protected $mainType;
+    protected ?string $mainType = null;
 
-    protected $rawData;
+    protected array $rawData = [];
 
-    protected $bufferData;
+    protected ?array $bufferData = null;
 
-    protected $importMapper;
+    protected ?array $importMapper = null;
 
     //export properties
-    protected $data;
+    protected ?array $data = null;
 
-    protected $currentRecord;
+    protected ?array $currentRecord = null;
 
-    protected $preparedData;
+    protected ?array $preparedData = null;
 
-    protected $iterationNodes = [];
+    protected array $iterationNodes = [];
 
     /**
      * Sets the config that has the tree structure
@@ -360,7 +353,7 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
      */
     public function getIterationPart()
     {
-        if ($this->iterationPart == null) {
+        if (!\is_array($this->iterationPart)) {
             $tree = \json_decode($this->config, true);
             $this->findIterationPart($tree);
         }
@@ -375,7 +368,7 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
      */
     public function getHeaderAndFooterData()
     {
-        if ($this->headerFooterData === null) {
+        if (!\is_array($this->headerFooterData)) {
             $tree = \json_decode($this->config, true);
             //replacing iteration part with custom marker
             $this->removeIterationPart($tree);

@@ -17,7 +17,7 @@ class DataTransformerChain
     /**
      * @var array DataTransformerAdapter[]
      */
-    private $chain = [];
+    private array $chain = [];
 
     /**
      * Installs a new transformer in the chain.
