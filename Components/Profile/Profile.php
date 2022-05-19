@@ -13,16 +13,11 @@ use SwagImportExport\CustomModels\Profile as ProfileEntity;
 
 class Profile
 {
-    /** @var ProfileEntity */
-    private $profileEntity;
+    private ProfileEntity $profileEntity;
 
-    /** @var array */
-    private $configNames;
+    private array $configNames;
 
-    /**
-     * @var array
-     */
-    private $defaultValues = [];
+    private array $defaultValues = [];
 
     /**
      * @param ProfileEntity $profile

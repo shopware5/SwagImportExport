@@ -10,10 +10,7 @@ namespace SwagImportExport\Components\Profile;
 
 class ProfileSerializer
 {
-    /**
-     * @var Profile
-     */
-    private $profile;
+    private Profile $profile;
 
     public function __construct(Profile $profile)
     {
