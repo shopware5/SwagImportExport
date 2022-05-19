@@ -6,7 +6,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Shopware\Subscribers\ControllerRegistration;
+namespace SwagImportExport\Subscribers\ControllerRegistration;
 
 use Enlight\Event\SubscriberInterface;
 use Enlight_Template_Manager;

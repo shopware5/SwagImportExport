@@ -14,24 +14,24 @@
     <services>
         <service id="SwagImportExport\Components\Utils\FileHelper"/>
 
-        <service id="Shopware\Subscribers\Cronjob">
+        <service id="SwagImportExport\Subscribers\Cronjob">
             <argument id="service_container" type="service"/>
 
             <tag name="shopware.event_subscriber"/>
         </service>
 
-        <service id="Shopware\Subscribers\ControllerSubscriber">
+        <service id="SwagImportExport\Subscribers\ControllerSubscriber">
             <argument>%swag_import_export.plugin_dir%</argument>
             <tag name="shopware.event_subscriber"/>
         </service>
 
-        <service id="Shopware\Subscribers\ControllerRegistration\BackendControllerSubscriber">
+        <service id="SwagImportExport\Subscribers\ControllerRegistration\BackendControllerSubscriber">
             <argument>%swag_import_export.plugin_dir%</argument>
             <argument type="service" id="template"/>
             <tag name="shopware.event_subscriber"/>
         </service>
 
-        <service id="Shopware\Subscribers\ControllerRegistration\FrontendControllerSubscriber">
+        <service id="SwagImportExport\Subscribers\ControllerRegistration\FrontendControllerSubscriber">
             <argument>%swag_import_export.plugin_dir%</argument>
             <tag name="shopware.event_subscriber"/>
         </service>

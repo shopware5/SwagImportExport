@@ -7,7 +7,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Shopware\Subscribers;
+namespace SwagImportExport\Subscribers;
 
 use Enlight\Event\SubscriberInterface;
 use SwagImportExport\Components\Service\AutoImportServiceInterface;
