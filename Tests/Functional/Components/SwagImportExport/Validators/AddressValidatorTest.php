@@ -9,9 +9,9 @@
 namespace SwagImportExport\Tests\Functional\Components\SwagImportExport\Validators;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Components\SwagImportExport\Exception\AdapterException;
-use Shopware\Components\SwagImportExport\Validators\AddressValidator;
-use Shopware\Components\SwagImportExport\Validators\Validator;
+use SwagImportExport\Components\Exception\AdapterException;
+use SwagImportExport\Components\Validators\AddressValidator;
+use SwagImportExport\Components\Validators\Validator;
 
 class AddressValidatorTest extends TestCase
 {

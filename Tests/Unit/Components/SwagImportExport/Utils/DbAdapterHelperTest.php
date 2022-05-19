@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace SwagImportExport\Tests\Unit\Components\SwagImportExport\Validator;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Components\SwagImportExport\Utils\DbAdapterHelper;
+use SwagImportExport\Components\Utils\DbAdapterHelper;
 
 class DbAdapterHelperTest extends TestCase
 {

@@ -9,7 +9,7 @@
 namespace SwagImportExport\Tests\Unit\Service;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Components\SwagImportExport\Service\UnderscoreToCamelCaseService;
+use SwagImportExport\Components\Service\UnderscoreToCamelCaseService;
 
 class UnderscoreToCamelCaseServiceTest extends TestCase
 {

@@ -10,9 +10,9 @@ namespace SwagImportExport\Tests\Functional\Service;
 
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
-use Shopware\Components\SwagImportExport\Service\ProfileService;
-use Shopware\Components\SwagImportExport\Service\Struct\ProfileDataStruct;
-use Shopware\Components\SwagImportExport\UploadPathProvider;
+use SwagImportExport\Components\Service\ProfileService;
+use SwagImportExport\Components\Service\Struct\ProfileDataStruct;
+use SwagImportExport\Components\UploadPathProvider;
 use SwagImportExport\Tests\Helper\ContainerTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use Symfony\Component\HttpFoundation\File\UploadedFile;

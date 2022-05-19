@@ -8,17 +8,17 @@
 
 namespace Tests\Shopware\ImportExport;
 
-use Shopware\Components\SwagImportExport\DbAdapters\ArticlesDbAdapter;
-use Shopware\Components\SwagImportExport\DbAdapters\CategoriesDbAdapter;
-use Shopware\Components\SwagImportExport\Factories\DataFactory;
-use Shopware\Components\SwagImportExport\Factories\FileIOFactory;
-use Shopware\Components\SwagImportExport\FileIO\CsvFileReader;
-use Shopware\Components\SwagImportExport\FileIO\CsvFileWriter;
-use Shopware\Components\SwagImportExport\FileIO\XmlFileReader;
-use Shopware\Components\SwagImportExport\FileIO\XmlFileWriter;
-use Shopware\Components\SwagImportExport\Utils\DataColumnOptions;
-use Shopware\Components\SwagImportExport\Utils\DataFilter;
-use Shopware\Components\SwagImportExport\Utils\DataLimit;
+use SwagImportExport\Components\DbAdapters\ArticlesDbAdapter;
+use SwagImportExport\Components\DbAdapters\CategoriesDbAdapter;
+use SwagImportExport\Components\Factories\DataFactory;
+use SwagImportExport\Components\Factories\FileIOFactory;
+use SwagImportExport\Components\FileIO\CsvFileReader;
+use SwagImportExport\Components\FileIO\CsvFileWriter;
+use SwagImportExport\Components\FileIO\XmlFileReader;
+use SwagImportExport\Components\FileIO\XmlFileWriter;
+use SwagImportExport\Components\Utils\DataColumnOptions;
+use SwagImportExport\Components\Utils\DataFilter;
+use SwagImportExport\Components\Utils\DataLimit;
 use SwagImportExport\Tests\Helper\ContainerTrait;
 use SwagImportExport\Tests\Helper\ImportExportTestHelper;
 

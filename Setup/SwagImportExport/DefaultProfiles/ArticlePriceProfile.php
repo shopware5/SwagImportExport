@@ -8,8 +8,8 @@
 
 namespace Shopware\Setup\SwagImportExport\DefaultProfiles;
 
-use Shopware\Components\SwagImportExport\DbAdapters\DataDbAdapter;
-use Shopware\Components\SwagImportExport\Utils\SwagVersionHelper;
+use SwagImportExport\Components\DbAdapters\DataDbAdapter;
+use SwagImportExport\Components\Utils\SwagVersionHelper;
 
 class ArticlePriceProfile implements \JsonSerializable, ProfileMetaData
 {

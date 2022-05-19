@@ -9,7 +9,7 @@
 namespace SwagImportExport\Tests\Integration\DefaultProfiles\Import;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Components\SwagImportExport\Utils\SwagVersionHelper;
+use SwagImportExport\Components\Utils\SwagVersionHelper;
 use SwagImportExport\Tests\Helper\CommandTestCaseTrait;
 use SwagImportExport\Tests\Helper\ContainerTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;

@@ -9,7 +9,7 @@
 namespace SwagImportExport\Tests\Helper\DataProvider;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Components\SwagImportExport\Utils\TreeHelper;
+use SwagImportExport\Components\Utils\TreeHelper;
 
 class ProfileDataProvider
 {

@@ -9,9 +9,9 @@
 namespace SwagImportExport\Tests\Functional\Components\SwagImportExport;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Components\SwagImportExport\DataIO;
-use Shopware\Components\SwagImportExport\DataWorkflow;
-use Shopware\Components\SwagImportExport\Transformers\DataTransformerChain;
+use SwagImportExport\Components\DataIO;
+use SwagImportExport\Components\DataWorkflow;
+use SwagImportExport\Components\Transformers\DataTransformerChain;
 
 class DataWorkflowTest extends TestCase
 {

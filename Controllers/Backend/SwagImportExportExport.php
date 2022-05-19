@@ -6,7 +6,7 @@
  * file that was distributed with this source code.
  */
 
-use Shopware\Components\SwagImportExport\Service\ExportService;
+use SwagImportExport\Components\Service\ExportService;
 
 /**
  * Shopware ImportExport Plugin

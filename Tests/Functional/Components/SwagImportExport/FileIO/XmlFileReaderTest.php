@@ -9,7 +9,7 @@
 namespace SwagImportExport\Tests\Functional\Components\SwagImportExport\FileIO;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Components\SwagImportExport\FileIO\XmlFileReader;
+use SwagImportExport\Components\FileIO\XmlFileReader;
 
 class XmlFileReaderTest extends TestCase
 {

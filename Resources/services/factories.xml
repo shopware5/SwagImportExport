@@ -4,49 +4,49 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 <services>
-    <service id="Shopware\Components\SwagImportExport\Factories\DataFactory" public="true">
+    <service id="SwagImportExport\Components\Factories\DataFactory" public="true">
         <argument type="service" id="events"/>
         <argument type="service" id="models"/>
-        <argument type="service" id="Shopware\Components\SwagImportExport\DbAdapters\CategoriesDbAdapter"/>
-        <argument type="service" id="Shopware\Components\SwagImportExport\DbAdapters\ArticlesDbAdapter"/>
-        <argument type="service" id="Shopware\Components\SwagImportExport\DbAdapters\ArticlesInStockDbAdapter"/>
-        <argument type="service" id="Shopware\Components\SwagImportExport\DbAdapters\ArticlesTranslationsDbAdapter"/>
-        <argument type="service" id="Shopware\Components\SwagImportExport\DbAdapters\ArticlesPricesDbAdapter"/>
-        <argument type="service" id="Shopware\Components\SwagImportExport\DbAdapters\ArticlesImagesDbAdapter"/>
-        <argument type="service" id="Shopware\Components\SwagImportExport\DbAdapters\OrdersDbAdapter"/>
-        <argument type="service" id="Shopware\Components\SwagImportExport\DbAdapters\MainOrdersDbAdapter"/>
-        <argument type="service" id="Shopware\Components\SwagImportExport\DbAdapters\CustomerDbAdapter"/>
-        <argument type="service" id="Shopware\Components\SwagImportExport\DbAdapters\CustomerCompleteDbAdapter"/>
-        <argument type="service" id="Shopware\Components\SwagImportExport\DbAdapters\NewsletterDbAdapter"/>
-        <argument type="service" id="Shopware\Components\SwagImportExport\DbAdapters\TranslationsDbAdapter"/>
-        <argument type="service" id="Shopware\Components\SwagImportExport\DbAdapters\AddressDbAdapter"/>
-        <argument type="service" id="Shopware\Components\SwagImportExport\DbAdapters\CategoryTranslationDbAdapter"/>
-        <argument type="service" id="Shopware\Components\SwagImportExport\DataManagers\CategoriesDataManager"/>
-        <argument type="service" id="Shopware\Components\SwagImportExport\DataManagers\Articles\ArticleDataManager"/>
-        <argument type="service" id="Shopware\Components\SwagImportExport\DataManagers\CustomerDataManager"/>
-        <argument type="service" id="Shopware\Components\SwagImportExport\DataManagers\NewsletterDataManager"/>
-        <argument type="service" id="Shopware\Components\SwagImportExport\UploadPathProvider"/>
+        <argument type="service" id="SwagImportExport\Components\DbAdapters\CategoriesDbAdapter"/>
+        <argument type="service" id="SwagImportExport\Components\DbAdapters\ArticlesDbAdapter"/>
+        <argument type="service" id="SwagImportExport\Components\DbAdapters\ArticlesInStockDbAdapter"/>
+        <argument type="service" id="SwagImportExport\Components\DbAdapters\ArticlesTranslationsDbAdapter"/>
+        <argument type="service" id="SwagImportExport\Components\DbAdapters\ArticlesPricesDbAdapter"/>
+        <argument type="service" id="SwagImportExport\Components\DbAdapters\ArticlesImagesDbAdapter"/>
+        <argument type="service" id="SwagImportExport\Components\DbAdapters\OrdersDbAdapter"/>
+        <argument type="service" id="SwagImportExport\Components\DbAdapters\MainOrdersDbAdapter"/>
+        <argument type="service" id="SwagImportExport\Components\DbAdapters\CustomerDbAdapter"/>
+        <argument type="service" id="SwagImportExport\Components\DbAdapters\CustomerCompleteDbAdapter"/>
+        <argument type="service" id="SwagImportExport\Components\DbAdapters\NewsletterDbAdapter"/>
+        <argument type="service" id="SwagImportExport\Components\DbAdapters\TranslationsDbAdapter"/>
+        <argument type="service" id="SwagImportExport\Components\DbAdapters\AddressDbAdapter"/>
+        <argument type="service" id="SwagImportExport\Components\DbAdapters\CategoryTranslationDbAdapter"/>
+        <argument type="service" id="SwagImportExport\Components\DataManagers\CategoriesDataManager"/>
+        <argument type="service" id="SwagImportExport\Components\DataManagers\Articles\ArticleDataManager"/>
+        <argument type="service" id="SwagImportExport\Components\DataManagers\CustomerDataManager"/>
+        <argument type="service" id="SwagImportExport\Components\DataManagers\NewsletterDataManager"/>
+        <argument type="service" id="SwagImportExport\Components\UploadPathProvider"/>
 
         <tag name="import_export.proxyable"/>
     </service>
 
-    <service id="Shopware\Components\SwagImportExport\Factories\ProfileFactory" public="true">
+    <service id="SwagImportExport\Components\Factories\ProfileFactory" public="true">
         <argument type="service" id="models"/>
         <argument type="service" id="events"/>
 
         <tag name="import_export.proxyable"/>
     </service>
 
-    <service id="Shopware\Components\SwagImportExport\Factories\FileIOFactory" public="true">
-        <argument type="service" id="Shopware\Components\SwagImportExport\FileIO\CsvFileReader"/>
-        <argument type="service" id="Shopware\Components\SwagImportExport\FileIO\CsvFileWriter"/>
-        <argument type="service" id="Shopware\Components\SwagImportExport\FileIO\XmlFileReader"/>
-        <argument type="service" id="Shopware\Components\SwagImportExport\FileIO\XmlFileWriter"/>
+    <service id="SwagImportExport\Components\Factories\FileIOFactory" public="true">
+        <argument type="service" id="SwagImportExport\Components\FileIO\CsvFileReader"/>
+        <argument type="service" id="SwagImportExport\Components\FileIO\CsvFileWriter"/>
+        <argument type="service" id="SwagImportExport\Components\FileIO\XmlFileReader"/>
+        <argument type="service" id="SwagImportExport\Components\FileIO\XmlFileWriter"/>
 
         <tag name="import_export.proxyable"/>
     </service>
 
-    <service id="Shopware\Components\SwagImportExport\Factories\DataTransformerFactory" public="true">
+    <service id="SwagImportExport\Components\Factories\DataTransformerFactory" public="true">
         <tag name="import_export.proxyable"/>
     </service>
 </services>

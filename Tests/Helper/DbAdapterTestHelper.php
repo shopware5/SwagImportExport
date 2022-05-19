@@ -8,7 +8,7 @@
 
 namespace SwagImportExport\Tests\Helper;
 
-use Shopware\Components\SwagImportExport\Factories\DataFactory;
+use SwagImportExport\Components\Factories\DataFactory;
 use Symfony\Component\Yaml\Parser;
 
 class DbAdapterTestHelper extends ImportExportTestHelper

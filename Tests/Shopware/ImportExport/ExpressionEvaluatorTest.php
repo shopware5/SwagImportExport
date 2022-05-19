@@ -8,7 +8,7 @@
 
 namespace Tests\Shopware\ImportExport;
 
-use Shopware\Components\SwagImportExport\Factories\DataTransformerFactory;
+use SwagImportExport\Components\Factories\DataTransformerFactory;
 use SwagImportExport\Tests\Helper\ContainerTrait;
 use SwagImportExport\Tests\Helper\ImportExportTestHelper;
 

@@ -10,7 +10,7 @@ namespace SwagImportExport\Tests\Functional\Components\SwagImportExport\DbAdapte
 
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
-use Shopware\Components\SwagImportExport\DbAdapters\CustomerDbAdapter;
+use SwagImportExport\Components\DbAdapters\CustomerDbAdapter;
 use SwagImportExport\Tests\Helper\ContainerTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 

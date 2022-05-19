@@ -9,7 +9,7 @@
 namespace SwagImportExport\Tests\Unit\Components\SwagImportExport\Validator;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Components\SwagImportExport\Validators\Validator;
+use SwagImportExport\Components\Validators\Validator;
 
 class ValidatorTest extends TestCase
 {

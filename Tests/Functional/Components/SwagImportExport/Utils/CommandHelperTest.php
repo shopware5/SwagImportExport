@@ -9,8 +9,8 @@
 namespace SwagImportExport\Tests\Functional\Components\SwagImportExport\Utils;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Components\SwagImportExport\Utils\CommandHelper;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
+use SwagImportExport\Components\Utils\CommandHelper;
 use SwagImportExport\Tests\Helper\ContainerTrait;
 
 class CommandHelperTest extends TestCase

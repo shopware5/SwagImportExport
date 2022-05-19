@@ -10,9 +10,9 @@ namespace Tests\Shopware\ImportExport;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Shopware\Components\SwagImportExport\DbAdapters\ArticlesDbAdapter;
-use Shopware\Components\SwagImportExport\DbAdapters\DataDbAdapter;
-use Shopware\Components\SwagImportExport\Factories\DataFactory;
+use SwagImportExport\Components\DbAdapters\ArticlesDbAdapter;
+use SwagImportExport\Components\DbAdapters\DataDbAdapter;
+use SwagImportExport\Components\Factories\DataFactory;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use SwagImportExport\Tests\Helper\DbAdapterTestHelper;
 use SwagImportExport\Tests\Helper\FixturesImportTrait;

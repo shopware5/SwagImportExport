@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace Shopware\Subscribers;
 
 use Enlight\Event\SubscriberInterface;
-use Shopware\Components\SwagImportExport\Service\AutoImportServiceInterface;
+use SwagImportExport\Components\Service\AutoImportServiceInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class Cronjob implements SubscriberInterface

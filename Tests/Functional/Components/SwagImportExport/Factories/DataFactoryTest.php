@@ -6,22 +6,22 @@
  * file that was distributed with this source code.
  */
 
-namespace Shopware\Components\SwagImportExport\Functional\Components\SwagImportExport\Factories;
+namespace SwagImportExport\Components\Functional\Components\SwagImportExport\Factories;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Components\SwagImportExport\DbAdapters\AddressDbAdapter;
-use Shopware\Components\SwagImportExport\DbAdapters\ArticlesDbAdapter;
-use Shopware\Components\SwagImportExport\DbAdapters\ArticlesImagesDbAdapter;
-use Shopware\Components\SwagImportExport\DbAdapters\ArticlesInStockDbAdapter;
-use Shopware\Components\SwagImportExport\DbAdapters\ArticlesPricesDbAdapter;
-use Shopware\Components\SwagImportExport\DbAdapters\CategoriesDbAdapter;
-use Shopware\Components\SwagImportExport\DbAdapters\CustomerDbAdapter;
-use Shopware\Components\SwagImportExport\DbAdapters\DataDbAdapter;
-use Shopware\Components\SwagImportExport\DbAdapters\MainOrdersDbAdapter;
-use Shopware\Components\SwagImportExport\DbAdapters\NewsletterDbAdapter;
-use Shopware\Components\SwagImportExport\DbAdapters\OrdersDbAdapter;
-use Shopware\Components\SwagImportExport\DbAdapters\TranslationsDbAdapter;
-use Shopware\Components\SwagImportExport\Factories\DataFactory;
+use SwagImportExport\Components\DbAdapters\AddressDbAdapter;
+use SwagImportExport\Components\DbAdapters\ArticlesDbAdapter;
+use SwagImportExport\Components\DbAdapters\ArticlesImagesDbAdapter;
+use SwagImportExport\Components\DbAdapters\ArticlesInStockDbAdapter;
+use SwagImportExport\Components\DbAdapters\ArticlesPricesDbAdapter;
+use SwagImportExport\Components\DbAdapters\CategoriesDbAdapter;
+use SwagImportExport\Components\DbAdapters\CustomerDbAdapter;
+use SwagImportExport\Components\DbAdapters\DataDbAdapter;
+use SwagImportExport\Components\DbAdapters\MainOrdersDbAdapter;
+use SwagImportExport\Components\DbAdapters\NewsletterDbAdapter;
+use SwagImportExport\Components\DbAdapters\OrdersDbAdapter;
+use SwagImportExport\Components\DbAdapters\TranslationsDbAdapter;
+use SwagImportExport\Components\Factories\DataFactory;
 use SwagImportExport\Tests\Helper\ContainerTrait;
 
 class DataFactoryTest extends TestCase

@@ -9,7 +9,7 @@
 namespace SwagImportExport\Tests\Helper;
 
 use Shopware\Components\DependencyInjection\Container;
-use Shopware\Components\SwagImportExport\UploadPathProvider;
+use SwagImportExport\Components\UploadPathProvider;
 
 trait ExportControllerTrait
 {

@@ -9,7 +9,7 @@
 namespace Tests\Shopware\ImportExport;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Components\SwagImportExport\Transformers\FlattenTransformer;
+use SwagImportExport\Components\Transformers\FlattenTransformer;
 use SwagImportExport\Tests\Helper\ContainerTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 

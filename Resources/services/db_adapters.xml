@@ -3,45 +3,45 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="Shopware\Components\SwagImportExport\DbAdapters\AddressDbAdapter" public="true">
+        <service id="SwagImportExport\Components\DbAdapters\AddressDbAdapter" public="true">
             <argument type="service" id="models"/>
             <argument type="service" id="config"/>
 
             <tag name="import_export.proxyable"/>
         </service>
 
-        <service id="Shopware\Components\SwagImportExport\DbAdapters\ArticlesDbAdapter" public="true">
+        <service id="SwagImportExport\Components\DbAdapters\ArticlesDbAdapter" public="true">
             <argument type="service" id="service_container"/>
             <argument type="service" id="db"/>
             <argument type="service" id="models"/>
             <argument type="service" id="shopware_media.media_service"/>
             <argument type="service" id="config"/>
             <argument type="service" id="events"/>
-            <argument type="service" id="Shopware\Components\SwagImportExport\Service\UnderscoreToCamelCaseService"/>
+            <argument type="service" id="SwagImportExport\Components\Service\UnderscoreToCamelCaseService"/>
             <argument type="service" id="shopware_storefront.context_service"/>
             <argument type="service" id="shopware_product_stream.repository"/>
             <argument type="service" id="shopware_search.product_number_search"/>
-            <argument type="service" id="Shopware\Components\SwagImportExport\DbAdapters\Articles\ArticleWriter"/>
-            <argument type="service" id="Shopware\Components\SwagImportExport\DbAdapters\Articles\PriceWriter"/>
-            <argument type="service" id="Shopware\Components\SwagImportExport\DbAdapters\Articles\CategoryWriter"/>
-            <argument type="service" id="Shopware\Components\SwagImportExport\DbAdapters\Articles\ConfiguratorWriter"/>
-            <argument type="service" id="Shopware\Components\SwagImportExport\DbAdapters\Articles\TranslationWriter"/>
-            <argument type="service" id="Shopware\Components\SwagImportExport\DbAdapters\Articles\PropertyWriter"/>
-            <argument type="service" id="Shopware\Components\SwagImportExport\DbAdapters\Articles\RelationWriter"/>
-            <argument type="service" id="Shopware\Components\SwagImportExport\DbAdapters\Articles\ImageWriter"/>
+            <argument type="service" id="SwagImportExport\Components\DbAdapters\Articles\ArticleWriter"/>
+            <argument type="service" id="SwagImportExport\Components\DbAdapters\Articles\PriceWriter"/>
+            <argument type="service" id="SwagImportExport\Components\DbAdapters\Articles\CategoryWriter"/>
+            <argument type="service" id="SwagImportExport\Components\DbAdapters\Articles\ConfiguratorWriter"/>
+            <argument type="service" id="SwagImportExport\Components\DbAdapters\Articles\TranslationWriter"/>
+            <argument type="service" id="SwagImportExport\Components\DbAdapters\Articles\PropertyWriter"/>
+            <argument type="service" id="SwagImportExport\Components\DbAdapters\Articles\RelationWriter"/>
+            <argument type="service" id="SwagImportExport\Components\DbAdapters\Articles\ImageWriter"/>
 
             <tag name="import_export.proxyable"/>
         </service>
 
-        <service id="Shopware\Components\SwagImportExport\DbAdapters\ArticlesImagesDbAdapter" public="true">
+        <service id="SwagImportExport\Components\DbAdapters\ArticlesImagesDbAdapter" public="true">
             <argument type="service" id="models"/>
             <argument type="service" id="db"/>
             <argument type="service" id="shopware_media.media_service"/>
             <argument type="service" id="events"/>
-            <argument type="service" id="Shopware\Components\SwagImportExport\DataManagers\ArticleImageDataManager"/>
+            <argument type="service" id="SwagImportExport\Components\DataManagers\ArticleImageDataManager"/>
             <argument type="service" id="thumbnail_manager"/>
-            <argument type="service" id="Shopware\Components\SwagImportExport\Service\UnderscoreToCamelCaseService"/>
-            <argument type="service" id="Shopware\Components\SwagImportExport\DbalHelper"/>
+            <argument type="service" id="SwagImportExport\Components\Service\UnderscoreToCamelCaseService"/>
+            <argument type="service" id="SwagImportExport\Components\DbalHelper"/>
             <argument type="service" id="guzzle_http_client_factory"/>
             <argument type="service" id="config"/>
             <argument type="service" id="front"/>
@@ -51,8 +51,8 @@
 
         </service>
 
-        <service id="Shopware\Components\SwagImportExport\DbAdapters\ArticlesInStockDbAdapter" public="true">
-            <argument type="service" id="Shopware\Components\SwagImportExport\Utils\SnippetsHelper"/>
+        <service id="SwagImportExport\Components\DbAdapters\ArticlesInStockDbAdapter" public="true">
+            <argument type="service" id="SwagImportExport\Components\Utils\SnippetsHelper"/>
             <argument type="service" id="models"/>
             <argument type="service" id="events"/>
             <argument type="service" id="config"/>
@@ -60,8 +60,8 @@
             <tag name="import_export.proxyable"/>
         </service>
 
-        <service id="Shopware\Components\SwagImportExport\DbAdapters\ArticlesPricesDbAdapter" public="true">
-            <argument type="service" id="Shopware\Components\SwagImportExport\DataManagers\ArticlePriceDataManager"/>
+        <service id="SwagImportExport\Components\DbAdapters\ArticlesPricesDbAdapter" public="true">
+            <argument type="service" id="SwagImportExport\Components\DataManagers\ArticlePriceDataManager"/>
             <argument type="service" id="models"/>
             <argument type="service" id="shopware_storefront.context_service"/>
             <argument type="service" id="shopware_search.store_front_criteria_factory"/>
@@ -73,7 +73,7 @@
             <tag name="import_export.proxyable"/>
         </service>
 
-        <service id="Shopware\Components\SwagImportExport\DbAdapters\ArticlesTranslationsDbAdapter" public="true">
+        <service id="SwagImportExport\Components\DbAdapters\ArticlesTranslationsDbAdapter" public="true">
             <argument type="service" id="models"/>
             <argument type="service" id="translation"/>
             <argument type="service" id="db"/>
@@ -83,18 +83,18 @@
             <tag name="import_export.proxyable"/>
         </service>
 
-        <service id="Shopware\Components\SwagImportExport\DbAdapters\CategoriesDbAdapter" public="true">
+        <service id="SwagImportExport\Components\DbAdapters\CategoriesDbAdapter" public="true">
             <argument type="service" id="models"/>
-            <argument type="service" id="Shopware\Components\SwagImportExport\DataManagers\CategoriesDataManager"/>
+            <argument type="service" id="SwagImportExport\Components\DataManagers\CategoriesDataManager"/>
             <argument type="service" id="db"/>
-            <argument type="service" id="Shopware\Components\SwagImportExport\Service\UnderscoreToCamelCaseService"/>
+            <argument type="service" id="SwagImportExport\Components\Service\UnderscoreToCamelCaseService"/>
             <argument type="service" id="events"/>
             <argument type="service" id="config"/>
 
             <tag name="import_export.proxyable"/>
         </service>
 
-        <service id="Shopware\Components\SwagImportExport\DbAdapters\CategoryTranslationDbAdapter" public="true">
+        <service id="SwagImportExport\Components\DbAdapters\CategoryTranslationDbAdapter" public="true">
             <argument type="service" id="translation"/>
             <argument type="service" id="models"/>
             <argument type="service" id="dbal_connection"/>
@@ -104,43 +104,43 @@
             <tag name="import_export.proxyable"/>
         </service>
 
-        <service id="Shopware\Components\SwagImportExport\DbAdapters\CustomerCompleteDbAdapter" public="true">
+        <service id="SwagImportExport\Components\DbAdapters\CustomerCompleteDbAdapter" public="true">
             <argument type="service" id="models"/>
             <argument type="service" id="db"/>
-            <argument type="service" id="Shopware\Components\SwagImportExport\DataManagers\CustomerDataManager"/>
+            <argument type="service" id="SwagImportExport\Components\DataManagers\CustomerDataManager"/>
             <argument type="service" id="passwordencoder"/>
             <argument type="service" id="config"/>
             <argument type="service" id="events"/>
-            <argument type="service" id="Shopware\Components\SwagImportExport\Service\UnderscoreToCamelCaseService"/>
+            <argument type="service" id="SwagImportExport\Components\Service\UnderscoreToCamelCaseService"/>
 
             <tag name="import_export.proxyable"/>
         </service>
 
-        <service id="Shopware\Components\SwagImportExport\DbAdapters\CustomerDbAdapter" public="true">
+        <service id="SwagImportExport\Components\DbAdapters\CustomerDbAdapter" public="true">
             <argument type="service" id="models"/>
             <argument type="service" id="db"/>
-            <argument type="service" id="Shopware\Components\SwagImportExport\DataManagers\CustomerDataManager"/>
+            <argument type="service" id="SwagImportExport\Components\DataManagers\CustomerDataManager"/>
             <argument type="service" id="passwordencoder"/>
             <argument type="service" id="config"/>
             <argument type="service" id="events"/>
-            <argument type="service" id="Shopware\Components\SwagImportExport\Service\UnderscoreToCamelCaseService"/>
+            <argument type="service" id="SwagImportExport\Components\Service\UnderscoreToCamelCaseService"/>
 
             <tag name="import_export.proxyable"/>
         </service>
 
-        <service id="Shopware\Components\SwagImportExport\DbAdapters\MainOrdersDbAdapter" public="true">
+        <service id="SwagImportExport\Components\DbAdapters\MainOrdersDbAdapter" public="true">
             <argument type="service" id="db"/>
             <argument type="service" id="models"/>
-            <argument type="service" id="Shopware\Components\SwagImportExport\Service\UnderscoreToCamelCaseService"/>
+            <argument type="service" id="SwagImportExport\Components\Service\UnderscoreToCamelCaseService"/>
             <argument type="service" id="shopware.components.state_translator"/>
             <argument type="service" id="config"/>
 
             <tag name="import_export.proxyable"/>
         </service>
 
-        <service id="Shopware\Components\SwagImportExport\DbAdapters\NewsletterDbAdapter" public="true">
+        <service id="SwagImportExport\Components\DbAdapters\NewsletterDbAdapter" public="true">
             <argument type="service" id="models"/>
-            <argument type="service" id="Shopware\Components\SwagImportExport\DataManagers\NewsletterDataManager"/>
+            <argument type="service" id="SwagImportExport\Components\DataManagers\NewsletterDataManager"/>
             <argument type="service" id="db"/>
             <argument type="service" id="config"/>
             <argument type="service" id="events"/>
@@ -148,9 +148,9 @@
             <tag name="import_export.proxyable"/>
         </service>
 
-        <service id="Shopware\Components\SwagImportExport\DbAdapters\OrdersDbAdapter" public="true">
+        <service id="SwagImportExport\Components\DbAdapters\OrdersDbAdapter" public="true">
             <argument type="service" id="models"/>
-            <argument type="service" id="Shopware\Components\SwagImportExport\Service\UnderscoreToCamelCaseService"/>
+            <argument type="service" id="SwagImportExport\Components\Service\UnderscoreToCamelCaseService"/>
             <argument type="service" id="events"/>
             <argument type="service" id="config"/>
 
@@ -158,7 +158,7 @@
 
         </service>
 
-        <service id="Shopware\Components\SwagImportExport\DbAdapters\TranslationsDbAdapter" public="true">
+        <service id="SwagImportExport\Components\DbAdapters\TranslationsDbAdapter" public="true">
             <argument type="service" id="models"/>
             <argument type="service" id="events"/>
             <argument type="service" id="translation"/>

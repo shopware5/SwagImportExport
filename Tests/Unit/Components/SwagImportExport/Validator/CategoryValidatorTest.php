@@ -9,8 +9,8 @@
 namespace SwagImportExport\Tests\Unit\Components\SwagImportExport\Validator;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Components\SwagImportExport\Exception\AdapterException;
-use Shopware\Components\SwagImportExport\Validators\CategoryValidator;
+use SwagImportExport\Components\Exception\AdapterException;
+use SwagImportExport\Components\Validators\CategoryValidator;
 
 class CategoryValidatorTest extends TestCase
 {

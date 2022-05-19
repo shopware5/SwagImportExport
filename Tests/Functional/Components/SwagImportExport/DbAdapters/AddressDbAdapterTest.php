@@ -9,8 +9,8 @@
 namespace SwagImportExport\Tests\Functional\Components\SwagImportExport\DbAdapters;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Components\SwagImportExport\DbAdapters\AddressDbAdapter;
-use Shopware\Components\SwagImportExport\DbAdapters\DataDbAdapter;
+use SwagImportExport\Components\DbAdapters\AddressDbAdapter;
+use SwagImportExport\Components\DbAdapters\DataDbAdapter;
 use SwagImportExport\Tests\Helper\ContainerTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 

@@ -13,11 +13,11 @@ namespace SwagImportExport\Tests\Functional\Components\SwagImportExport\DbAdapte
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\Model\ModelManager;
-use Shopware\Components\SwagImportExport\DbAdapters\Articles\ArticleWriter;
-use Shopware\Components\SwagImportExport\Exception\AdapterException;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Detail;
 use Shopware\Models\Article\Supplier;
+use SwagImportExport\Components\DbAdapters\Articles\ArticleWriter;
+use SwagImportExport\Components\Exception\AdapterException;
 use SwagImportExport\Tests\Helper\ContainerTrait;
 
 class ArticleWriterTest extends TestCase

@@ -10,8 +10,8 @@ namespace SwagImportExport\Tests\Functional\Components\SwagImportExport\DbAdapte
 
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
-use Shopware\Components\SwagImportExport\DbAdapters\Articles\PriceWriter;
-use Shopware\Components\SwagImportExport\Utils\SwagVersionHelper;
+use SwagImportExport\Components\DbAdapters\Articles\PriceWriter;
+use SwagImportExport\Components\Utils\SwagVersionHelper;
 use SwagImportExport\Tests\Helper\ContainerTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 

@@ -7,8 +7,8 @@
  */
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Components\SwagImportExport\Transformers\SmartyExpressionEvaluator;
-use Shopware\Components\SwagImportExport\Transformers\ValuesTransformer;
+use SwagImportExport\Components\Transformers\SmartyExpressionEvaluator;
+use SwagImportExport\Components\Transformers\ValuesTransformer;
 
 class ValuesTransformerTest extends TestCase
 {

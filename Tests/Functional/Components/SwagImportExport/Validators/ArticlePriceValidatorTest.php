@@ -9,7 +9,7 @@
 namespace SwagImportExport\Tests\Functional\Components\SwagImportExport\Validators;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Components\SwagImportExport\Validators\Articles\PriceValidator;
+use SwagImportExport\Components\Validators\Articles\PriceValidator;
 
 class ArticlePriceValidatorTest extends TestCase
 {

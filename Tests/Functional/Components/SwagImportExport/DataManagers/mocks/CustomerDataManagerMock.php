@@ -8,7 +8,7 @@
 
 namespace SwagImportExport\Tests\Functional\Components\SwagImportExport\DataManagers\mocks;
 
-use Shopware\Components\SwagImportExport\DataManagers\CustomerDataManager;
+use SwagImportExport\Components\DataManagers\CustomerDataManager;
 
 class CustomerDataManagerMock extends CustomerDataManager
 {

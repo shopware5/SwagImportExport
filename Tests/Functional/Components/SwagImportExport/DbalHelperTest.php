@@ -11,8 +11,8 @@ namespace SwagImportExport\Tests\Functional\Components\SwagImportExport;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\Model\ModelManager;
-use Shopware\Components\SwagImportExport\DbalHelper;
 use Shopware\Models\Article\Article;
+use SwagImportExport\Components\DbalHelper;
 use SwagImportExport\Tests\Helper\ContainerTrait;
 
 class DbalHelperTest extends TestCase

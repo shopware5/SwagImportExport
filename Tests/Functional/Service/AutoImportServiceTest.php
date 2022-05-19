@@ -9,9 +9,9 @@
 namespace SwagImportExport\Tests\Functional\Service;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Components\SwagImportExport\Factories\ProfileFactory;
-use Shopware\Components\SwagImportExport\Service\AutoImportService;
-use Shopware\Components\SwagImportExport\UploadPathProvider;
+use SwagImportExport\Components\Factories\ProfileFactory;
+use SwagImportExport\Components\Service\AutoImportService;
+use SwagImportExport\Components\UploadPathProvider;
 use SwagImportExport\Tests\Helper\ContainerTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 

@@ -9,7 +9,7 @@
 namespace SwagImportExport\Tests\Unit\Components\Converters;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Components\Converter\XmlConverter;
+use SwagImportExport\Components\Converter\XmlConverter;
 
 class XmlConverterTest extends TestCase
 {

@@ -8,8 +8,8 @@
 
 namespace Tests\Shopware\ImportExport;
 
-use Shopware\Components\SwagImportExport\Factories\DataFactory;
-use Shopware\Components\SwagImportExport\Logger\Logger;
+use SwagImportExport\Components\Factories\DataFactory;
+use SwagImportExport\Components\Logger\Logger;
 use SwagImportExport\Tests\Helper\ContainerTrait;
 use SwagImportExport\Tests\Helper\ImportExportTestHelper;
 

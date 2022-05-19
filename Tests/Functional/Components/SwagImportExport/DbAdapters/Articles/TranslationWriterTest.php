@@ -10,8 +10,8 @@ declare(strict_types=1);
 namespace SwagImportExport\Tests\Functional\Components\SwagImportExport\DbAdapters\Articles;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Components\SwagImportExport\DbAdapters\Articles\TranslationWriter;
-use Shopware\Components\SwagImportExport\Exception\AdapterException;
+use SwagImportExport\Components\DbAdapters\Articles\TranslationWriter;
+use SwagImportExport\Components\Exception\AdapterException;
 use SwagImportExport\Tests\Helper\ContainerTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 

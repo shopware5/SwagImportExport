@@ -7,8 +7,8 @@
  */
 
 use Shopware\Components\CSRFWhitelistAware;
-use Shopware\Components\SwagImportExport\Service\AutoImportServiceInterface;
 use Shopware\Models\Plugin\Plugin;
+use SwagImportExport\Components\Service\AutoImportServiceInterface;
 
 /**
  * This is a controller and not a correct implementation of a Shopware cron job. By implementing the cron job as

@@ -9,8 +9,8 @@
 namespace SawgImportExport\Tests\Functional\Components\SwagImportExport\FileIO;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Components\SwagImportExport\FileIO\CsvFileWriter;
-use Shopware\Components\SwagImportExport\Utils\FileHelper;
+use SwagImportExport\Components\FileIO\CsvFileWriter;
+use SwagImportExport\Components\Utils\FileHelper;
 
 class CsvFileWriterTest extends TestCase
 {

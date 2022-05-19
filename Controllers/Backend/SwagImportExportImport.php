@@ -6,9 +6,9 @@
  * file that was distributed with this source code.
  */
 
-use Shopware\Components\SwagImportExport\Service\ImportService;
-use Shopware\Components\SwagImportExport\Service\Struct\PreparationResultStruct;
-use Shopware\Components\SwagImportExport\UploadPathProvider;
+use SwagImportExport\Components\Service\ImportService;
+use SwagImportExport\Components\Service\Struct\PreparationResultStruct;
+use SwagImportExport\Components\UploadPathProvider;
 
 /**
  * Shopware ImportExport Plugin
