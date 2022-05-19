@@ -40,8 +40,7 @@ use SwagImportExport\CustomModels\Session as SessionEntity;
 
 class DataFactory extends \Enlight_Class implements \Enlight_Hook
 {
-    /** @var EntityRepository */
-    private $sessionRepository;
+    private EntityRepository $sessionRepository;
 
     private CategoriesDbAdapter $categoriesDbAdapter;
 
@@ -129,6 +128,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
         $this->eventManager = $eventManager;
         $this->entityManager = $entityManager;
         $this->uploadPathProvider = $uploadPathProvider;
+        $this->sessionRepository = $this->entityManager->getRepository(SessionEntity::class);
     }
 
     /**
@@ -221,7 +221,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     {
         $sessionId = $data['sessionId'];
 
-        $sessionEntity = $this->getSessionRepository()->findOneBy(['id' => $sessionId]);
+        $sessionEntity = $this->sessionRepository->findOneBy(['id' => $sessionId]);
 
         if (!$sessionEntity) {
             $sessionEntity = new SessionEntity();
@@ -258,20 +258,6 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     public function createFilter($filter)
     {
         return new DataFilter($filter);
-    }
-
-    /**
-     * Helper Method to get access to the session repository.
-     *
-     * @return EntityRepository
-     */
-    public function getSessionRepository()
-    {
-        if ($this->sessionRepository === null) {
-            $this->sessionRepository = $this->entityManager->getRepository(SessionEntity::class);
-        }
-
-        return $this->sessionRepository;
     }
 
     /**

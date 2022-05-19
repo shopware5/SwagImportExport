@@ -15,10 +15,7 @@ use SwagImportExport\CustomModels\Profile as ProfileEntity;
 
 class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
 {
-    /**
-     * @var ModelManager
-     */
-    private $modelManager;
+    private ModelManager $modelManager;
 
     private \Enlight_Event_EventManager $eventManager;
 
