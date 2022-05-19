@@ -12,10 +12,10 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\Persistence\Mapping\ClassMetadata;
 use Shopware\Components\Migrations\AbstractPluginMigration;
-use Shopware\CustomModels\ImportExport\Expression;
-use Shopware\CustomModels\ImportExport\Logger;
-use Shopware\CustomModels\ImportExport\Profile;
-use Shopware\CustomModels\ImportExport\Session;
+use SwagImportExport\CustomModels\Expression;
+use SwagImportExport\CustomModels\Logger;
+use SwagImportExport\CustomModels\Profile;
+use SwagImportExport\CustomModels\Session;
 
 class Migration2 extends AbstractPluginMigration
 {

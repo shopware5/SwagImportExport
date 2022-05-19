@@ -9,6 +9,7 @@
 use Shopware\Components\CSRFWhitelistAware;
 use SwagImportExport\Components\UploadPathProvider;
 use SwagImportExport\CustomModels\Logger;
+use SwagImportExport\CustomModels\LoggerRepository;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\FileBag;
 
@@ -122,6 +123,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
     public function getLogsAction()
     {
+        /** @var LoggerRepository $loggerRepository */
         $loggerRepository = $this->getModelManager()->getRepository(Logger::class);
 
         $query = $loggerRepository->getLogListQuery(

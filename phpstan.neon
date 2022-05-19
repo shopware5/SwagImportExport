@@ -20,12 +20,3 @@ parameters:
     ignoreErrors:
         # Needs some improvements in the doctrine PHPStan extensions: see https://github.com/phpstan/phpstan-doctrine/pull/167
         - '#Cannot call method fetch.*\(\) on Doctrine\\DBAL\\.*\|int#'
-        - # No real entity used in this test, so it is not possible to define the meta data correctly
-            message: '#Doctrine\\ORM\\Mapping\\ClassMetadata#'
-            path: Tests/Functional/Components/SwagImportExport/DbalHelperTest.php
-        - # Mocks with test data
-            message: '#Method SwagImportExport\\Tests\\Functional\\Components\\SwagImportExport\\TransformerChainMock::#'
-            path: Tests/Functional/Components/SwagImportExport/DataWorkflowTest.php
-        -
-            message: '#Method Shopware\\Components\\SwagImportExport\\DbAdapters\\TranslationsDbAdapter::getRepository\(\) return type with generic class Shopware\\Components\\Model\\ModelRepository does not specify its types: TEntityClass#'
-            path: Components/SwagImportExport/DbAdapters/TranslationsDbAdapter.php
