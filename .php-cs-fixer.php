@@ -17,7 +17,7 @@ use PhpCsFixerCustomFixers\Fixer\SingleSpaceBeforeStatementFixer;
 use PhpCsFixerCustomFixers\Fixers;
 
 $finder = PhpCsFixer\Finder::create()
-    ->in(__DIR__);
+    ->in(__DIR__ . DIRECTORY_SEPARATOR . 'Commands');
 
 $header = <<<EOF
 (c) shopware AG <info@shopware.com>
@@ -57,6 +57,7 @@ return (new Config())
         'php_unit_test_case_static_method_calls' => true,
         'single_line_throw' => false,
         'yoda_style' => ['equal' => false, 'identical' => false, 'less_and_greater' => false],
+        'phpdoc_to_property_type' => true,
 
         NoSuperfluousConcatenationFixer::name() => true,
         NoUselessCommentFixer::name() => true,

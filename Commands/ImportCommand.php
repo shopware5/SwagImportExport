@@ -23,35 +23,17 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ImportCommand extends ShopwareCommand
 {
-    /**
-     * @var string
-     */
-    protected $profile;
+    protected string $profile;
 
-    /**
-     * @var ProfileEntity|null
-     */
-    protected $profileEntity;
+    protected ?ProfileEntity $profileEntity;
 
-    /**
-     * @var string
-     */
-    protected $format;
+    protected ?string $format = null;
 
-    /**
-     * @var string
-     */
-    protected $filePath;
+    protected string $filePath;
 
-    /**
-     * @var int
-     */
-    protected $sessionId;
+    protected int $sessionId;
 
-    /**
-     * @var ProfileFactory
-     */
-    private $profileFactory;
+    private ProfileFactory $profileFactory;
 
     private UploadPathProvider $uploadPathProvider;
 

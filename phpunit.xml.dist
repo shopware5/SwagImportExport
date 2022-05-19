@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <phpunit bootstrap="./Tests/ImportExportTestKernel.php"
          backupGlobals="false"
+         stopOnFailure="true"
          colors="true">
 
     <testsuite name="SwagImportExport Test Suite">

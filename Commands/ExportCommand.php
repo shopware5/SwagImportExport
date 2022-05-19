@@ -21,70 +21,31 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ExportCommand extends ShopwareCommand
 {
-    /**
-     * @var string
-     */
-    protected $profile;
+    protected string $profile;
 
-    /**
-     * @var Profile|null
-     */
-    protected $profileEntity;
+    protected ?Profile $profileEntity;
 
-    /**
-     * @var string
-     */
-    protected $exportVariants;
+    protected ?string $exportVariants = null;
 
-    /**
-     * @var int
-     */
-    protected $limit;
+    protected int $limit;
 
-    /**
-     * @var int
-     */
-    protected $offset;
+    protected int $offset;
 
-    /**
-     * @var string
-     */
-    protected $format;
+    protected ?string $format = null;
 
-    /**
-     * @var string
-     */
-    protected $filePath;
+    protected string $filePath;
 
-    /**
-     * @var \DateTimeInterface|null
-     */
-    protected $dateFrom;
+    protected ?\DateTimeInterface $dateFrom;
 
-    /**
-     * @var \DateTimeInterface|null
-     */
-    protected $dateTo;
+    protected ?\DateTimeInterface $dateTo;
 
-    /**
-     * @var string
-     */
-    protected $category;
+    protected ?string $category = string;
 
-    /**
-     * @var int
-     */
-    protected $sessionId;
+    protected int $sessionId;
 
-    /**
-     * @var int
-     */
-    protected $customerStream;
+    protected ?int $customerStream = null;
 
-    /**
-     * @var int
-     */
-    private $productStream;
+    private ?int $productStream = null;
 
     private ProfileRepository $profileRepository;
 
