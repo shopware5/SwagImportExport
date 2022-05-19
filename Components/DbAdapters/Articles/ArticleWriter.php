@@ -25,30 +25,15 @@ class ArticleWriter
     private const MAIN_KIND = 1;
     private const VARIANT_KIND = 2;
 
-    /**
-     * @var \Enlight_Components_Db_Adapter_Pdo_Mysql
-     */
-    protected $db;
+    protected \Enlight_Components_Db_Adapter_Pdo_Mysql $db;
 
-    /**
-     * @var Connection
-     */
-    protected $connection;
+    protected Connection $connection;
 
-    /**
-     * @var ArticleValidator
-     */
-    protected $validator;
+    protected ArticleValidator $validator;
 
-    /**
-     * @var ArticleDataManager
-     */
-    protected $dataManager;
+    protected ArticleDataManager $dataManager;
 
-    /**
-     * @var DbalHelper
-     */
-    private $dbalHelper;
+    private DbalHelper $dbalHelper;
 
     public function __construct(
         Connection $connection,

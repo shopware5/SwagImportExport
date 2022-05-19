@@ -49,90 +49,39 @@ class ArticlesImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
         self::PROTOCOL_FILE,
     ];
 
-    /**
-     * @var ModelManager
-     */
-    protected $manager;
+    protected ModelManager $manager;
 
-    /**
-     * @var MediaService
-     */
-    protected $mediaService;
+    protected MediaService $mediaService;
 
-    /**
-     * @var \Enlight_Controller_Request_Request
-     */
-    protected $request;
+    protected ?\Enlight_Controller_Request_Request $request = null;
 
-    /**
-     * @var \Enlight_Event_EventManager
-     */
-    protected $eventManager;
+    protected \Enlight_Event_EventManager $eventManager;
 
-    /**
-     * @var ArticleImageValidator
-     */
-    protected $validator;
+    protected ArticleImageValidator $validator;
 
-    /**
-     * @var ArticleImageDataManager
-     */
-    protected $dataManager;
+    protected ArticleImageDataManager $dataManager;
 
-    /**
-     * @var int
-     */
-    protected $imageImportMode;
+    protected int $imageImportMode;
 
-    /**
-     * @var bool
-     */
-    protected $importExportErrorMode;
+    protected bool $importExportErrorMode;
 
-    /**
-     * @var \Enlight_Components_Db_Adapter_Pdo_Mysql
-     */
-    protected $db;
+    protected \Enlight_Components_Db_Adapter_Pdo_Mysql $db;
 
-    /**
-     * @var array
-     */
-    protected $unprocessedData;
+    protected array $unprocessedData;
 
-    /**
-     * @var array
-     */
-    protected $logMessages;
+    protected array $logMessages = [];
 
-    /**
-     * @var string
-     */
-    protected $logState;
+    protected ?string $logState = null;
 
-    /**
-     * @var Manager
-     */
-    protected $thumbnailManager;
+    protected Manager $thumbnailManager;
 
-    /**
-     * @var string
-     */
-    protected $docPath;
+    protected string $docPath;
 
-    /**
-     * @var UnderscoreToCamelCaseServiceInterface
-     */
-    protected $underscoreToCamelCaseService;
+    protected UnderscoreToCamelCaseServiceInterface $underscoreToCamelCaseService;
 
-    /**
-     * @var DbalHelper
-     */
-    private $dbalHelper;
+    private DbalHelper $dbalHelper;
 
-    /**
-     * @var Client
-     */
-    private $httpClient;
+    private Client $httpClient;
 
     public function __construct(
         ModelManager $manager,

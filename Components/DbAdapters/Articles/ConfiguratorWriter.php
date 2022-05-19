@@ -21,30 +21,15 @@ use SwagImportExport\Components\Validators\Articles\ConfiguratorValidator;
 
 class ConfiguratorWriter
 {
-    /**
-     * @var ConfiguratorValidator
-     */
-    protected $configuratorValidator;
+    protected ConfiguratorValidator $configuratorValidator;
 
-    /**
-     * @var DbalHelper
-     */
-    private $dbalHelper;
+    private DbalHelper $dbalHelper;
 
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
-    /**
-     * @var \Enlight_Components_Db_Adapter_Pdo_Mysql
-     */
-    private $db;
+    private \Enlight_Components_Db_Adapter_Pdo_Mysql $db;
 
-    /**
-     * @var array
-     */
-    private $sets;
+    private array $sets;
 
     public function __construct(
         DbalHelper $dbalHelper,

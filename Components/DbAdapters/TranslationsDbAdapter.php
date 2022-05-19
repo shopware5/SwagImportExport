@@ -27,50 +27,41 @@ use SwagImportExport\Components\Validators\TranslationValidator;
 
 class TranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
 {
-    /**
-     * @var ModelManager
-     */
-    protected $manager;
+    protected ModelManager $manager;
 
     /**
      * @var ModelRepository<ConfiguratorGroup>
      */
-    protected $configuratorGroupRepo;
+    protected ModelRepository $configuratorGroupRepo;
 
     /**
      * @var ModelRepository<ConfiguratorOption>
      */
-    protected $configuratorOptionRepo;
+    protected ModelRepository $configuratorOptionRepo;
 
     /**
      * @var ModelRepository<PropertyGroup>
      */
-    protected $propertyGroupRepo;
+    protected ModelRepository $propertyGroupRepo;
 
     /**
      * @var ModelRepository<PropertyOption>
      */
-    protected $propertyOptionRepo;
+    protected ModelRepository $propertyOptionRepo;
 
     /**
      * @var ModelRepository<PropertyValue>
      */
-    protected $propertyValueRepo;
+    protected ModelRepository $propertyValueRepo;
 
     /**
      * @var array<string>
      */
-    protected $logMessages = [];
+    protected array $logMessages = [];
 
-    /**
-     * @var string
-     */
-    protected $logState;
+    protected ?string $logState = null;
 
-    /**
-     * @var TranslationValidator
-     */
-    protected $validator;
+    protected TranslationValidator $validator;
 
     private \Enlight_Event_EventManager $eventManager;
 
@@ -92,6 +83,12 @@ class TranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
         $this->translation = $translation;
         $this->config = $config;
         $this->db = $db;
+        $this->propertyGroupRepo = $this->manager->getRepository(PropertyGroup::class);
+        $this->propertyOptionRepo = $this->manager->getRepository(PropertyOption::class);
+        $this->configuratorGroupRepo = $this->manager->getRepository(ConfiguratorGroup::class);
+        $this->configuratorOptionRepo = $this->manager->getRepository(ConfiguratorOption::class);
+        $this->propertyValueRepo = $this->manager->getRepository(PropertyValue::class);
+        $this->validator = new TranslationValidator();
     }
 
     /**
@@ -248,14 +245,13 @@ class TranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
             ['subject' => $this]
         );
 
-        $validator = $this->getValidator();
         $importMapper = $this->getElementMapper();
 
         foreach ($records['default'] as $index => $record) {
             try {
-                $record = $validator->filterEmptyString($record);
-                $validator->checkRequiredFields($record);
-                $validator->validate($record, TranslationValidator::$mapper);
+                $record = $this->validator->filterEmptyString($record);
+                $this->validator->checkRequiredFields($record);
+                $this->validator->validate($record, TranslationValidator::$mapper);
 
                 $shop = null;
                 if (isset($record['languageId'])) {
@@ -390,88 +386,6 @@ class TranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * Returns configurator group repository
-     *
-     * @return ModelRepository<ConfiguratorGroup>
-     */
-    public function getConfiguratorGroupRepository()
-    {
-        if ($this->configuratorGroupRepo === null) {
-            $this->configuratorGroupRepo = $this->manager->getRepository(ConfiguratorGroup::class);
-        }
-
-        return $this->configuratorGroupRepo;
-    }
-
-    /**
-     * Returns configurator option repository
-     *
-     * @return ModelRepository<ConfiguratorOption>
-     */
-    public function getConfiguratorOptionRepository()
-    {
-        if ($this->configuratorOptionRepo === null) {
-            $this->configuratorOptionRepo = $this->manager->getRepository(ConfiguratorOption::class);
-        }
-
-        return $this->configuratorOptionRepo;
-    }
-
-    /**
-     * Returns property group repository
-     *
-     * @return ModelRepository<PropertyGroup>
-     */
-    public function getPropertyGroupRepository()
-    {
-        if ($this->propertyGroupRepo === null) {
-            $this->propertyGroupRepo = $this->manager->getRepository(PropertyGroup::class);
-        }
-
-        return $this->propertyGroupRepo;
-    }
-
-    /**
-     * Returns property option repository
-     *
-     * @return ModelRepository<PropertyOption>
-     */
-    public function getPropertyOptionRepository()
-    {
-        if ($this->propertyOptionRepo === null) {
-            $this->propertyOptionRepo = $this->manager->getRepository(PropertyOption::class);
-        }
-
-        return $this->propertyOptionRepo;
-    }
-
-    /**
-     * Returns property value repository
-     *
-     * @return ModelRepository<PropertyValue>
-     */
-    public function getPropertyValueRepository()
-    {
-        if ($this->propertyValueRepo === null) {
-            $this->propertyValueRepo = $this->manager->getRepository(PropertyValue::class);
-        }
-
-        return $this->propertyValueRepo;
-    }
-
-    /**
-     * @return TranslationValidator
-     */
-    public function getValidator()
-    {
-        if ($this->validator === null) {
-            $this->validator = new TranslationValidator();
-        }
-
-        return $this->validator;
-    }
-
-    /**
      * @return array
      */
     protected function getElementMapper()
@@ -559,15 +473,15 @@ class TranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
     {
         switch ($type) {
             case 'configuratorgroup':
-                return $this->getConfiguratorGroupRepository();
+                return $this->configuratorGroupRepo;
             case 'configuratoroption':
-                return $this->getConfiguratorOptionRepository();
+                return $this->configuratorOptionRepo;
             case 'propertygroup':
-                return $this->getPropertyGroupRepository();
+                return $this->propertyGroupRepo;
             case 'propertyoption':
-                return $this->getPropertyOptionRepository();
+                return $this->propertyOptionRepo;
             case 'propertyvalue':
-                return $this->getPropertyValueRepository();
+                return $this->propertyValueRepo;
             default:
                 $message = SnippetsHelper::getNamespace()
                     ->get('adapters/translations/object_type_not_existing', 'Object type %s not existing.');

@@ -18,25 +18,13 @@ use SwagImportExport\Components\Utils\SnippetsHelper;
 
 class CategoryWriter
 {
-    /**
-     * @var PDOConnection
-     */
-    protected $db;
+    protected PDOConnection $db;
 
-    /**
-     * @var Connection
-     */
-    protected $connection;
+    protected Connection $connection;
 
-    /**
-     * @var array
-     */
-    protected $categoryIds;
+    protected array $categoryIds;
 
-    /**
-     * @var EventManager
-     */
-    private $eventManager;
+    private EventManager $eventManager;
 
     private CategorySubscriber $categorySubscriber;
 

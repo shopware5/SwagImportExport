@@ -24,35 +24,17 @@ class OrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
     public const OrderDBAdapterQueryEvent = 'OrdersDbAdapter::getQuery';
     public const OrderDBAdapterColumnsEvent = 'OrdersDbAdapter::adjustColumns';
 
-    /**
-     * @var ModelManager
-     */
-    protected $modelManager;
+    protected ModelManager $modelManager;
 
-    /**
-     * @var array
-     */
-    protected $unprocessedData = [];
+    protected array $unprocessedData = [];
 
-    /**
-     * @var array
-     */
-    protected $logMessages;
+    protected array $logMessages = [];
 
-    /**
-     * @var string
-     */
-    protected $logState;
+    protected ?string $logState = null;
 
-    /**
-     * @var OrderValidator
-     */
-    protected $validator;
+    protected OrderValidator $validator;
 
-    /**
-     * @var UnderscoreToCamelCaseServiceInterface
-     */
-    private $underscoreToCamelCaseService;
+    private UnderscoreToCamelCaseServiceInterface $underscoreToCamelCaseService;
 
     private \Enlight_Event_EventManager $eventManager;
 

@@ -19,30 +19,15 @@ use SwagImportExport\Components\Validators\Articles\PriceValidator;
 
 class PriceWriter
 {
-    /**
-     * @var PDOConnection
-     */
-    protected $db;
+    protected PDOConnection $db;
 
-    /**
-     * @var array
-     */
-    protected $customerGroups;
+    protected array $customerGroups;
 
-    /**
-     * @var PriceValidator
-     */
-    protected $validator;
+    protected PriceValidator $validator;
 
-    /**
-     * @var PriceDataManager
-     */
-    protected $dataManager;
+    protected PriceDataManager $dataManager;
 
-    /**
-     * @var DbalHelper
-     */
-    private $dbalHelper;
+    private DbalHelper $dbalHelper;
 
     /**
      * initialises the class properties

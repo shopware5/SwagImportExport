@@ -28,80 +28,38 @@ use SwagImportExport\Components\Validators\CustomerValidator;
 
 class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook
 {
-    /**
-     * @var ModelManager
-     */
-    protected $manager;
+    protected ModelManager $manager;
 
-    /**
-     * @var array
-     */
-    protected $customerMap;
+    protected ?array $customerMap = null;
 
-    /**
-     * @var array
-     */
-    protected $billingMap;
+    protected ?array $billingMap = null;
 
-    /**
-     * @var array
-     */
-    protected $shippingMap;
+    protected ?array $shippingMap = null;
 
     /**
      * @var array<mixed>
      */
-    protected $unprocessedData = [];
+    protected array $unprocessedData = [];
 
-    /**
-     * @var array
-     */
-    protected $logMessages;
+    protected array $logMessages = [];
 
-    /**
-     * @var string
-     */
-    protected $logState;
+    protected ?string $logState = null;
 
-    /**
-     * @var \Enlight_Components_Db_Adapter_Pdo_Mysql
-     */
-    protected $db;
+    protected \Enlight_Components_Db_Adapter_Pdo_Mysql $db;
 
-    /**
-     * @var CustomerValidator
-     */
-    protected $validator;
+    protected CustomerValidator $validator;
 
-    /**
-     * @var CustomerDataManager
-     */
-    protected $dataManager;
+    protected CustomerDataManager $dataManager;
 
-    /**
-     * @var \Shopware\Components\Password\Manager
-     */
-    protected $passwordManager;
+    protected \Shopware\Components\Password\Manager $passwordManager;
 
-    /**
-     * @var \Shopware_Components_Config
-     */
-    protected $config;
+    protected \Shopware_Components_Config $config;
 
-    /**
-     * @var \Enlight_Event_EventManager
-     */
-    protected $eventManager;
+    protected \Enlight_Event_EventManager $eventManager;
 
-    /**
-     * @var array
-     */
-    protected $defaultValues = [];
+    protected array $defaultValues = [];
 
-    /**
-     * @var UnderscoreToCamelCaseServiceInterface
-     */
-    private $underscoreToCamelCaseService;
+    private UnderscoreToCamelCaseServiceInterface $underscoreToCamelCaseService;
 
     public function __construct(
         ModelManager $manager,
@@ -494,14 +452,14 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @return string
+     * @return ?string
      */
     public function getLogState()
     {
         return $this->logState;
     }
 
-    public function setLogState($logState)
+    public function setLogState(?string $logState)
     {
         $this->logState = $logState;
     }

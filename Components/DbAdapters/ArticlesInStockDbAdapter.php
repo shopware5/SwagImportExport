@@ -19,40 +19,22 @@ use SwagImportExport\Components\Validators\ArticleInStockValidator;
 
 class ArticlesInStockDbAdapter implements DataDbAdapter, \Enlight_Hook
 {
-    /**
-     * @var ModelManager
-     */
-    protected $modelManager;
+    protected ModelManager $modelManager;
 
     /**
      * @var array<mixed>
      */
-    protected $unprocessedData = [];
+    protected array $unprocessedData = [];
 
-    /**
-     * @var array
-     */
-    protected $logMessages;
+    protected array $logMessages = [];
 
-    /**
-     * @var string
-     */
-    protected $logState;
+    protected ?string $logState = null;
 
-    /**
-     * @var Repository
-     */
-    protected $repository;
+    protected Repository $repository;
 
-    /**
-     * @var ArticleInStockValidator
-     */
-    protected $validator;
+    protected ArticleInStockValidator $validator;
 
-    /**
-     * @var SnippetsHelper
-     */
-    private $snippetHelper;
+    private SnippetsHelper $snippetHelper;
 
     private \Enlight_Event_EventManager $eventManager;
 

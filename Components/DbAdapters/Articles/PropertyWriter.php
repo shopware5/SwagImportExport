@@ -22,25 +22,13 @@ use SwagImportExport\Components\Utils\SnippetsHelper;
  */
 class PropertyWriter
 {
-    /**
-     * @var DbalHelper
-     */
-    private $dbalHelper;
+    private DbalHelper $dbalHelper;
 
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
-    /**
-     * @var PDOConnection
-     */
-    private $db;
+    private PDOConnection $db;
 
-    /**
-     * @var SnippetsHelper
-     */
-    private $snippetsHelper;
+    private SnippetsHelper $snippetsHelper;
 
     public function __construct(
         DbalHelper $dbalHelper,

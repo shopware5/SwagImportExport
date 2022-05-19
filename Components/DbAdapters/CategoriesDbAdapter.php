@@ -25,57 +25,27 @@ use SwagImportExport\Components\Validators\CategoryValidator;
 
 class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook
 {
-    /**
-     * @var ModelManager
-     */
-    protected $modelManager;
+    protected ModelManager $modelManager;
 
-    /**
-     * @var \Enlight_Components_Db_Adapter_Pdo_Mysql
-     */
-    protected $db;
+    protected \Enlight_Components_Db_Adapter_Pdo_Mysql $db;
 
-    /**
-     * @var EntityRepository
-     */
-    protected $repository;
+    protected EntityRepository $repository;
 
-    /**
-     * @var array
-     */
-    protected $unprocessedData;
+    protected array $unprocessedData = [];
 
-    /**
-     * @var array
-     */
-    protected $logMessages;
+    protected array $logMessages = [];
 
-    /**
-     * @var string
-     */
-    protected $logState;
+    protected ?string $logState = null;
 
-    /**
-     * @var CategoryValidator
-     */
-    protected $validator;
+    protected CategoryValidator $validator;
 
-    /**
-     * @var CategoriesDataManager
-     */
-    protected $dataManager;
+    protected CategoriesDataManager $dataManager;
 
-    /**
-     * @var array
-     */
-    protected $defaultValues;
+    protected array $defaultValues = [];
 
     private $categoryAvoidCustomerGroups;
 
-    /**
-     * @var UnderscoreToCamelCaseServiceInterface
-     */
-    private $underscoreToCamelCaseService;
+    private UnderscoreToCamelCaseServiceInterface $underscoreToCamelCaseService;
 
     private \Enlight_Event_EventManager $eventManager;
 

@@ -17,25 +17,13 @@ use SwagImportExport\Components\Utils\SnippetsHelper;
 
 class TranslationWriter
 {
-    /**
-     * @var ModelManager
-     */
-    private $manager;
+    private ModelManager $manager;
 
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
-    /**
-     * @var TranslationComponent
-     */
-    private $writer;
+    private TranslationComponent $writer;
 
-    /**
-     * @var array
-     */
-    private $shops;
+    private array $shops;
 
     /**
      * initialises the class properties

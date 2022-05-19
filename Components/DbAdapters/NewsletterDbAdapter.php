@@ -25,48 +25,23 @@ use SwagImportExport\Components\Validators\NewsletterValidator;
 
 class NewsletterDbAdapter implements DataDbAdapter, \Enlight_Hook
 {
-    /**
-     * @var \Enlight_Components_Db_Adapter_Pdo_Mysql
-     */
-    protected $db;
+    protected \Enlight_Components_Db_Adapter_Pdo_Mysql $db;
 
-    /** @var bool */
-    protected $errorMode;
+    protected bool $errorMode;
 
-    /**
-     * @var ModelManager
-     */
-    protected $manager;
+    protected ModelManager $manager;
 
-    /**
-     * @var array
-     */
-    protected $unprocessedData = [];
+    protected array $unprocessedData = [];
 
-    /**
-     * @var array
-     */
-    protected $logMessages;
+    protected array $logMessages = [];
 
-    /**
-     * @var string
-     */
-    protected $logState;
+    protected ?string $logState = null;
 
-    /**
-     * @var NewsletterValidator
-     */
-    protected $validator;
+    protected NewsletterValidator $validator;
 
-    /**
-     * @var NewsletterDataManager
-     */
-    protected $dataManager;
+    protected NewsletterDataManager $dataManager;
 
-    /**
-     * @var array
-     */
-    protected $defaultValues = [];
+    protected array $defaultValues = [];
 
     private \Enlight_Event_EventManager $eventManager;
 

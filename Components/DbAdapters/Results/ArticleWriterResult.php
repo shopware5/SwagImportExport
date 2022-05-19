@@ -10,20 +10,11 @@ namespace SwagImportExport\Components\DbAdapters\Results;
 
 class ArticleWriterResult
 {
-    /**
-     * @var int
-     */
-    private $articleId;
+    private int $articleId;
 
-    /**
-     * @var int
-     */
-    private $mainDetailId;
+    private int $mainDetailId;
 
-    /**
-     * @var int
-     */
-    private $detailId;
+    private int $detailId;
 
     /**
      * @param int $articleId

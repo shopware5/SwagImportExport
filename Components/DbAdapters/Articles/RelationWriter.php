@@ -16,23 +16,14 @@ use SwagImportExport\Components\Utils\SnippetsHelper;
 
 class RelationWriter
 {
-    /**
-     * @var ArticlesDbAdapter
-     */
-    protected $articlesDbAdapter;
+    protected ArticlesDbAdapter $articlesDbAdapter;
 
-    /**
-     * @var array
-     */
-    protected $relationTypes = [
+    protected array $relationTypes = [
         'similar',
         'accessory',
     ];
 
-    /**
-     * @var array
-     */
-    protected $relationTables = [
+    protected array $relationTables = [
         'accessory' => 's_articles_relationships',
         'similar' => 's_articles_similar',
     ];
@@ -45,15 +36,9 @@ class RelationWriter
 
     protected $defaultSnippetMessage;
 
-    /**
-     * @var PDOConnection
-     */
-    protected $db;
+    protected PDOConnection $db;
 
-    /**
-     * @var Connection
-     */
-    protected $connection;
+    protected Connection $connection;
 
     public function __construct(
         PDOConnection $db,

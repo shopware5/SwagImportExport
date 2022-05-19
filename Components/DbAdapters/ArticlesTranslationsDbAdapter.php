@@ -19,50 +19,26 @@ use SwagImportExport\Components\Validators\ArticleTranslationValidator;
 
 class ArticlesTranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
 {
-    /**
-     * @var ModelManager
-     */
-    protected $manager;
+    protected ModelManager $manager;
 
-    /**
-     * @var \Shopware_Components_Translation
-     */
-    protected $translationComponent;
+    protected \Shopware_Components_Translation $translationComponent;
 
-    /**
-     * @var bool
-     */
-    protected $importExportErrorMode;
+    protected bool $importExportErrorMode;
 
     /**
      * @var array<mixed>
      */
-    protected $unprocessedData = [];
+    protected array $unprocessedData = [];
 
-    /**
-     * @var array
-     */
-    protected $logMessages;
+    protected array $logMessages = [];
 
-    /**
-     * @var string
-     */
-    protected $logState;
+    protected ?string $logState = null;
 
-    /**
-     * @var ArticleTranslationValidator
-     */
-    protected $validator;
+    protected ArticleTranslationValidator $validator;
 
-    /**
-     * @var \Enlight_Components_Db_Adapter_Pdo_Mysql
-     */
-    protected $db;
+    protected \Enlight_Components_Db_Adapter_Pdo_Mysql $db;
 
-    /**
-     * @var \Enlight_Event_EventManager
-     */
-    protected $eventManager;
+    protected \Enlight_Event_EventManager $eventManager;
 
     public function __construct(
         ModelManager $manager,

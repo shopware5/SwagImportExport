@@ -22,40 +22,19 @@ use SwagImportExport\Components\Utils\SnippetsHelper;
 
 class MainOrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
 {
-    /**
-     * @var array
-     */
-    protected $unprocessedData;
+    protected array $unprocessedData;
 
-    /**
-     * @var array
-     */
-    protected $logMessages;
+    protected array $logMessages = [];
 
-    /**
-     * @var string
-     */
-    protected $logState;
+    protected ?string $logState = null;
 
-    /**
-     * @var ModelManager
-     */
-    private $modelManager;
+    private ModelManager $modelManager;
 
-    /**
-     * @var Enlight_Components_Db_Adapter_Pdo_Mysql
-     */
-    private $db;
+    private Enlight_Components_Db_Adapter_Pdo_Mysql $db;
 
-    /**
-     * @var UnderscoreToCamelCaseServiceInterface
-     */
-    private $underscoreToCamelCaseService;
+    private UnderscoreToCamelCaseServiceInterface $underscoreToCamelCaseService;
 
-    /**
-     * @var StateTranslatorServiceInterface
-     */
-    private $stateTranslator;
+    private StateTranslatorServiceInterface $stateTranslator;
 
     private \Shopware_Components_Config $config;
 

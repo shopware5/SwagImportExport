@@ -29,40 +29,19 @@ use SwagImportExport\Components\Validators\ArticlePriceValidator;
 
 class ArticlesPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
 {
-    /**
-     * @var ModelManager
-     */
-    protected $manager;
+    protected ModelManager $manager;
 
-    /**
-     * @var array
-     */
-    protected $categoryIdCollection;
+    protected array $categoryIdCollection;
 
-    /**
-     * @var array
-     */
-    protected $logMessages;
+    protected array $logMessages = [];
 
-    /**
-     * @var string
-     */
-    protected $logState;
+    protected ?string $logState = null;
 
-    /**
-     * @var array
-     */
-    protected $unprocessedData;
+    protected array $unprocessedData;
 
-    /**
-     * @var ArticlePriceValidator
-     */
-    protected $validator;
+    protected ArticlePriceValidator $validator;
 
-    /**
-     * @var ArticlePriceDataManager
-     */
-    protected $dataManager;
+    protected ArticlePriceDataManager $dataManager;
 
     private ContextServiceInterface $contextService;
 

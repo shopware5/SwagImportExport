@@ -21,25 +21,16 @@ use SwagImportExport\Components\Validators\AddressValidator;
 
 class AddressDbAdapter implements DataDbAdapter, \Enlight_Hook
 {
-    /**
-     * @var ModelManager
-     */
-    private $modelManager;
+    private ModelManager $modelManager;
 
-    /**
-     * @var AddressValidator
-     */
-    private $addressValidator;
+    private AddressValidator $addressValidator;
 
     /**
      * @var array<string>
      */
-    private $logMessages;
+    private array $logMessages = [];
 
-    /**
-     * @var string
-     */
-    private $logState;
+    private ?string $logState = null;
 
     private \Shopware_Components_Config $config;
 

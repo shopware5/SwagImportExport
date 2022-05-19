@@ -49,85 +49,37 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
     public const PRODUCT_STREAM_ID_FILTER_KEY = 'productStreamId';
     private const MAIN_KIND = 1;
 
-    /**
-     * @var ModelManager
-     */
-    protected $modelManager;
+    protected ModelManager $modelManager;
 
-    /**
-     * @var Enlight_Components_Db_Adapter_Pdo_Mysql
-     */
-    protected $db;
+    protected Enlight_Components_Db_Adapter_Pdo_Mysql $db;
 
-    /**
-     * @var array
-     */
-    protected $unprocessedData;
+    protected array $unprocessedData;
 
-    /**
-     * @var array
-     */
-    protected $logMessages;
+    protected array $logMessages = [];
 
-    /**
-     * @var string
-     */
-    protected $logState;
+    protected ?string $logState = null;
 
-    /**
-     * @var array
-     */
-    protected $tempData;
+    protected array $tempData;
 
-    /**
-     * @var array
-     */
-    protected $defaultValues = [];
+    protected array $defaultValues = [];
 
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
+    protected ContainerInterface $container;
 
-    /**
-     * @var MediaServiceInterface
-     */
-    private $mediaService;
+    private MediaServiceInterface $mediaService;
 
-    /**
-     * @var \Shopware_Components_Config
-     */
-    private $config;
+    private \Shopware_Components_Config $config;
 
-    /**
-     * @var ContainerAwareEventManager
-     */
-    private $eventManager;
+    private ContainerAwareEventManager $eventManager;
 
-    /**
-     * @var UnderscoreToCamelCaseServiceInterface
-     */
-    private $underscoreToCamelCaseService;
+    private UnderscoreToCamelCaseServiceInterface $underscoreToCamelCaseService;
 
-    /**
-     * @var ContextServiceInterface
-     */
-    private $contextService;
+    private ContextServiceInterface $contextService;
 
-    /**
-     * @var Repository
-     */
-    private $streamRepo;
+    private Repository $streamRepo;
 
-    /**
-     * @var ProductNumberSearchInterface
-     */
-    private $productNumberSearch;
+    private ProductNumberSearchInterface $productNumberSearch;
 
-    /**
-     * @var ShopRepository
-     */
-    private $shopRepository;
+    private ShopRepository $shopRepository;
 
     private ArticleWriter $articleWriter;
 
