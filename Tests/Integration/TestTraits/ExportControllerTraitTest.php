@@ -6,7 +6,7 @@
  * file that was distributed with this source code.
  */
 
-namespace SwagImportExport\Tests\Integration;
+namespace SwagImportExport\Tests\Integration\TestTraits;
 
 use PHPUnit\Framework\TestCase;
 use SwagImportExport\Tests\Helper\ContainerTrait;

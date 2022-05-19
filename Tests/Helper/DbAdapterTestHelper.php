@@ -142,7 +142,7 @@ class DbAdapterTestHelper extends ImportExportTestHelper
      */
     protected function getYamlFile($fileName)
     {
-        return __DIR__ . '/../Shopware/ImportExport/' . $fileName;
+        return __DIR__ . '/../Integration/Components/' . $fileName;
     }
 
     private function getTableCount(string $tableName): int
