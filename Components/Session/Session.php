@@ -19,25 +19,16 @@ use SwagImportExport\CustomModels\Session as SessionEntity;
  */
 class Session
 {
-    /**
-     * @var SessionEntity|null
-     */
-    protected $sessionEntity;
+    protected ?SessionEntity $sessionEntity;
 
     /**
      * @var EntityRepository<SessionEntity>|null
      */
-    protected $sessionRepository;
+    protected ?EntityRepository $sessionRepository;
 
-    /**
-     * @var int
-     */
-    protected $sessionId;
+    protected int $sessionId;
 
-    /**
-     * @var ModelManager
-     */
-    protected $manager;
+    protected ?ModelManager $manager = null;
 
     public function __construct(SessionEntity $session)
     {
