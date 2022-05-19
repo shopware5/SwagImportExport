@@ -16,30 +16,15 @@ use SwagImportExport\CustomModels\Session;
 
 class Logger implements LoggerInterface
 {
-    /**
-     * @var ModelManager
-     */
-    protected $modelManager;
+    protected ModelManager $modelManager;
 
-    /**
-     * @var LoggerRepository
-     */
-    protected $loggerRepository;
+    protected LoggerRepository $loggerRepository;
 
-    /**
-     * @var LoggerEntity
-     */
-    protected $loggerEntity;
+    protected ?LoggerEntity $loggerEntity = null;
 
-    /**
-     * @var FileWriter
-     */
-    protected $fileWriter;
+    protected FileWriter $fileWriter;
 
-    /**
-     * @var string
-     */
-    protected $logDirectory;
+    protected string $logDirectory;
 
     public function __construct(FileWriter $fileWriter, ModelManager $modelManager, string $logDirectory)
     {

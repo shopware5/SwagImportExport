@@ -10,30 +10,15 @@ namespace SwagImportExport\Components\Logger;
 
 class LogDataStruct
 {
-    /**
-     * @var string
-     */
-    private $date;
+    private string $date;
 
-    /**
-     * @var string
-     */
-    private $fileName;
+    private string $fileName;
 
-    /**
-     * @var string
-     */
-    private $profileName;
+    private string $profileName;
 
-    /**
-     * @var string
-     */
-    private $messages;
+    private string $messages;
 
-    /**
-     * @var string
-     */
-    private $status;
+    private string $status;
 
     /**
      * @param string $date
