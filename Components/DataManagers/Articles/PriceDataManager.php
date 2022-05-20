@@ -25,9 +25,9 @@ class PriceDataManager extends DataManager implements \Enlight_Hook
     /**
      * Sets fields which are empty by default.
      *
-     * @param array $record
+     * @param array<string, mixed> $record
      */
-    public function setDefaultFields($record)
+    public function setDefaultFields(array $record)
     {
         foreach ($this->defaultFields as $key) {
             switch ($key) {
@@ -49,11 +49,11 @@ class PriceDataManager extends DataManager implements \Enlight_Hook
     /**
      * Return proper values for article price fields which have values NULL
      *
-     * @param array $records
+     * @param array<string, mixed> $records
      *
      * @return array
      */
-    public function fixDefaultValues($records)
+    public function fixDefaultValues(array $records)
     {
         $defaultFieldsValues = ArticlePriceDataType::$defaultFieldsValues;
 
@@ -61,6 +61,8 @@ class PriceDataManager extends DataManager implements \Enlight_Hook
     }
 
     /**
+     * @param string|int $to
+     *
      * @return int|string
      */
     private function getTo($to)

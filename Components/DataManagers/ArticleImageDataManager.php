@@ -35,10 +35,9 @@ class ArticleImageDataManager implements \Enlight_Hook
     /**
      * Sets fields which are empty by default.
      *
-     * @param array $record
-     * @param int   $articleId
+     * @param array<string, mixed> $record
      */
-    public function setDefaultFields($record, $articleId)
+    public function setDefaultFields(array $record, int $articleId)
     {
         foreach ($this->defaultFields as $key) {
             if (isset($record[$key])) {
@@ -65,11 +64,9 @@ class ArticleImageDataManager implements \Enlight_Hook
     }
 
     /**
-     * @param int $articleId
-     *
      * @return int
      */
-    private function getPosition($articleId)
+    private function getPosition(int $articleId)
     {
         $sql = 'SELECT MAX(position) FROM s_articles_img WHERE articleID = ?;';
         $result = $this->db->fetchOne($sql, $articleId);

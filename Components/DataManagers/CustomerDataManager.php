@@ -60,9 +60,10 @@ class CustomerDataManager extends DataManager implements \Enlight_Hook
     /**
      * Sets fields which are empty by default.
      *
-     * @param array $defaultValues
+     * @param array<string, string|int> $record
+     * @param array<string, string|int> $defaultValues
      */
-    public function setDefaultFieldsForCreate($record, $defaultValues)
+    public function setDefaultFieldsForCreate(array $record, array $defaultValues)
     {
         $getDefaultFields = $this->getDefaultFieldsName();
         foreach ($getDefaultFields as $key) {
@@ -137,11 +138,11 @@ class CustomerDataManager extends DataManager implements \Enlight_Hook
     /**
      * Return proper values for customer fields which have values NULL
      *
-     * @param array $records
+     * @param array<string, string|int> $records
      *
      * @return array
      */
-    public function fixDefaultValues($records)
+    public function fixDefaultValues(array $records)
     {
         $defaultFieldsValues = CustomerDataType::$defaultFieldsValues;
         $records = $this->fixFieldsValues($records, $defaultFieldsValues);
@@ -150,9 +151,9 @@ class CustomerDataManager extends DataManager implements \Enlight_Hook
     }
 
     /**
-     * @param array $record
+     * @param array<int|string, mixed> $record
      */
-    private function getPayment($record)
+    private function getPayment(array $record)
     {
         if (!isset($record['subshopID'])) {
             return $this->config->get('sDEFAULTPAYMENT');
@@ -160,14 +161,14 @@ class CustomerDataManager extends DataManager implements \Enlight_Hook
 
         $subShopId = $record['subshopID'];
 
-        //get defaultPaymentId for subShop
-        $defaultPaymentId = $this->getSubShopDefaultPaymentId($subShopId);
+        // get defaultPaymentId for subShop
+        $defaultPaymentId = $this->getSubShopDefaultPaymentId((int) $subShopId);
         if ($defaultPaymentId) {
             return \unserialize($defaultPaymentId);
         }
 
-        //get defaultPaymentId for mainShop
-        $defaultPaymentId = $this->getMainShopDefaultPaymentId($subShopId);
+        // get defaultPaymentId for mainShop
+        $defaultPaymentId = $this->getMainShopDefaultPaymentId((int) $subShopId);
         if ($defaultPaymentId) {
             return \unserialize($defaultPaymentId);
         }
@@ -176,11 +177,9 @@ class CustomerDataManager extends DataManager implements \Enlight_Hook
     }
 
     /**
-     * @param int $subShopId
-     *
      * @return string
      */
-    private function getSubShopDefaultPaymentId($subShopId)
+    private function getSubShopDefaultPaymentId(int $subShopId)
     {
         $query = "SELECT `value`.value
                   FROM s_core_config_elements AS element
@@ -191,11 +190,9 @@ class CustomerDataManager extends DataManager implements \Enlight_Hook
     }
 
     /**
-     * @param int $subShopId
-     *
      * @return string
      */
-    private function getMainShopDefaultPaymentId($subShopId)
+    private function getMainShopDefaultPaymentId(int $subShopId)
     {
         $query = "SELECT `value`.value
                   FROM s_core_config_elements AS element

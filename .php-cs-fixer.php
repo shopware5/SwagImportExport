@@ -19,6 +19,7 @@ use PhpCsFixerCustomFixers\Fixers;
 $finder = PhpCsFixer\Finder::create()
     ->in(__DIR__ . '/Commands')
     ->in(__DIR__ . '/Components/Converter')
+    ->in(__DIR__ . '/Components/DataManagers')
 //    ->in(__DIR__ . '/Controllers')
 //    ->in(__DIR__ . '/CustomModels')
 //    ->in(__DIR__ . '/Setup')

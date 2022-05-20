@@ -55,10 +55,10 @@ class ArticleDataManager extends DataManager implements \Enlight_Hook
     /**
      * Sets fields which are empty, but we need them to create new entry.
      *
-     * @param array $record
-     * @param array $defaultValues
+     * @param array<string, string|int> $record
+     * @param array<string, mixed>      $defaultValues
      */
-    public function setDefaultFieldsForCreate($record, $defaultValues)
+    public function setDefaultFieldsForCreate(array $record, array $defaultValues)
     {
         $getDefaultFields = $this->getDefaultFieldsName();
         foreach ($getDefaultFields as $key) {
@@ -188,11 +188,11 @@ class ArticleDataManager extends DataManager implements \Enlight_Hook
     /**
      * Sets fields which are empty by default.
      *
-     * @param array $record
+     * @param array<string, mixed> $record
      *
      * @throws AdapterException
      */
-    public function setDefaultFields($record)
+    public function setDefaultFields(array $record)
     {
         $getDefaultFields = $this->getDefaultFieldsName();
         foreach ($getDefaultFields as $key) {
@@ -220,11 +220,11 @@ class ArticleDataManager extends DataManager implements \Enlight_Hook
     /**
      * Return proper values for article fields which have values NULL
      *
-     * @param array $records
+     * @param array<string, int|string> $records
      *
      * @return array
      */
-    public function fixDefaultValues($records)
+    public function fixDefaultValues(array $records)
     {
         $defaultFieldsValues = ArticleDataType::$defaultFieldsValues;
         $records = $this->fixFieldsValues($records, $defaultFieldsValues);
@@ -236,12 +236,12 @@ class ArticleDataManager extends DataManager implements \Enlight_Hook
      * Update article records which are missing because
      * doctrine property and database mismatch
      *
-     * @param array $record
-     * @param array $mapping
+     * @param array<string, string|int> $record
+     * @param array<string, string|int> $mapping
      *
      * @return array
      */
-    public function setArticleData($record, $mapping)
+    public function setArticleData(array $record, array $mapping)
     {
         return $this->mapFields($record, $mapping);
     }
@@ -250,12 +250,12 @@ class ArticleDataManager extends DataManager implements \Enlight_Hook
      * Update article variant records which are missing because
      * doctrine property and database name mismatch
      *
-     * @param array $record
-     * @param array $mapping
+     * @param array<string, string|int> $record
+     * @param array<string, string|int> $mapping
      *
      * @return array
      */
-    public function setArticleVariantData($record, $mapping)
+    public function setArticleVariantData(array $record, array $mapping)
     {
         return $this->mapFields($record, $mapping);
     }
@@ -314,13 +314,13 @@ class ArticleDataManager extends DataManager implements \Enlight_Hook
     /**
      * Get valid tax id depending on tax id or tax rate field.
      *
-     * @param array $record
+     * @param array<string, string|int> $record
      *
      * @throws AdapterException
      *
      * @return bool|mixed
      */
-    private function getTaxId($record)
+    private function getTaxId(array $record)
     {
         $taxes = $this->getTaxRates();
 
@@ -338,12 +338,9 @@ class ArticleDataManager extends DataManager implements \Enlight_Hook
     }
 
     /**
-     * @param float  $taxRate
-     * @param string $orderNumber
-     *
      * @throws AdapterException
      */
-    private function getTaxByTaxRate($taxRate, $orderNumber)
+    private function getTaxByTaxRate(float $taxRate, string $orderNumber)
     {
         $taxRate = \number_format($taxRate, 2);
 
@@ -361,17 +358,17 @@ class ArticleDataManager extends DataManager implements \Enlight_Hook
     }
 
     /**
-     * @param array $record
+     * @param array<string, string|int> $record
      *
      * @return string
      */
-    private function getSupplierId($record)
+    private function getSupplierId(array $record)
     {
         $this->suppliers = $this->getSuppliers();
         $name = $record['supplierName'];
         $supplierId = $this->suppliers[$name];
 
-        //creates supplier if does not exists
+        // creates supplier if does not exists
         if (!$supplierId) {
             $data = ['name' => $name];
             $builder = $this->dbalHelper->getQueryBuilderForEntity(

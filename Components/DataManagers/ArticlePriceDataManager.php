@@ -23,9 +23,9 @@ class ArticlePriceDataManager implements \Enlight_Hook
     /**
      * Sets fields which are empty by default.
      *
-     * @param array $record
+     * @param array<string, mixed> $record
      */
-    public function setDefaultFields($record)
+    public function setDefaultFields(array $record)
     {
         foreach ($this->defaultFields as $key) {
             if (isset($record[$key])) {

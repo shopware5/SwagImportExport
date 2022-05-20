@@ -36,9 +36,10 @@ class CategoriesDataManager extends DataManager implements \Enlight_Hook
     /**
      * Sets fields which are empty by default.
      *
-     * @param array $defaultValues
+     * @param array<string, string|int> $record
+     * @param array<string, mixed>      $defaultValues
      */
-    public function setDefaultFieldsForCreate($record, $defaultValues)
+    public function setDefaultFieldsForCreate(array $record, array $defaultValues)
     {
         $getDefaultFields = $this->getDefaultFieldsName();
         foreach ($getDefaultFields as $key) {

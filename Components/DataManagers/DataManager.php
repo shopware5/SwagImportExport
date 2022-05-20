@@ -13,11 +13,11 @@ abstract class DataManager
     /**
      * Return fields which should be set by default
      *
-     * @param array $defaultFields Contains default fields name and types
+     * @param array<string, array<string>> $defaultFields Contains default fields name and types
      *
      * @return array
      */
-    public function getFields($defaultFields)
+    public function getFields(array $defaultFields)
     {
         $defaultValues = [];
         foreach ($defaultFields as $type => $fields) {
@@ -32,12 +32,9 @@ abstract class DataManager
     /**
      * Return type of default field
      *
-     * @param array $record
-     * @param array $mapper
-     *
      * @return bool|int|string
      */
-    public static function getFieldType($record, $mapper)
+    public static function getFieldType(array $record, array $mapper)
     {
         foreach ($mapper as $type => $fields) {
             if (\in_array($record, $fields)) {
@@ -50,11 +47,8 @@ abstract class DataManager
 
     /**
      * Cast default value to it proper type
-     *
-     * @param string $value
-     * @param string $type
      */
-    public static function castDefaultValue($value, $type)
+    public static function castDefaultValue(string $value, string $type)
     {
         switch ($type) {
             case 'id':
@@ -73,12 +67,9 @@ abstract class DataManager
     /**
      * Return proper values for fields which have values NULL
      *
-     * @param array $records
-     * @param array $fieldsValues
-     *
-     * @return array
+     * @return array<string, int|string>
      */
-    public function fixFieldsValues($records, $fieldsValues)
+    public function fixFieldsValues(array $records, array $fieldsValues)
     {
         foreach ($fieldsValues as $type => $fields) {
             foreach ($fields as $field) {
@@ -107,12 +98,12 @@ abstract class DataManager
      * Add columns which are missing because
      * doctrine property and database mismatch
      *
-     * @param array $records
-     * @param array $adapterFields
+     * @param array<string, string|int> $records
+     * @param array<string, string|int> $adapterFields
      *
      * @return array
      */
-    public function mapFields($records, $adapterFields)
+    public function mapFields(array $records, array $adapterFields)
     {
         foreach ($adapterFields as $tableField => $adapterField) {
             if (isset($records[$adapterField])) {
