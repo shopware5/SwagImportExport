@@ -12,10 +12,7 @@ use Enlight\Event\SubscriberInterface;
 
 class FrontendControllerSubscriber implements SubscriberInterface
 {
-    /**
-     * @var string
-     */
-    private $pluginDirectory;
+    private string $pluginDirectory;
 
     public function __construct(string $pluginDirectory)
     {

@@ -21,6 +21,7 @@ $finder = PhpCsFixer\Finder::create()
     ->in(__DIR__ . '/Controllers')
     ->in(__DIR__ . '/CustomModels')
     ->in(__DIR__ . '/Setup')
+    ->in(__DIR__ . '/Subscribers')
     ->in(__DIR__ . '/Components');
 
 $header = <<<EOF
