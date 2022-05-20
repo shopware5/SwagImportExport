@@ -20,83 +20,42 @@ use SwagImportExport\Components\Utils\SnippetsHelper;
 
 class DataIO
 {
-    /**
-     * @var DataDbAdapter
-     */
-    private $dbAdapter;
+    private DataDbAdapter $dbAdapter;
 
-    /**
-     * @var DataColumnOptions
-     */
-    private $columnOptions;
+    private DataColumnOptions $columnOptions;
 
-    /**
-     * @var DataLimit
-     */
-    private $limit;
+    private DataLimit $limit;
 
-    /**
-     * @var DataFilter
-     */
-    private $filter;
+    private DataFilter $filter;
 
     /**
      * Array of records ids
-     *
-     * @var array
      */
-    private $recordIds;
+    private array $recordIds;
 
     /**
      * Type of the dataIO - export/import
-     *
-     * @var string
      */
-    private $type;
+    private ?string $type = null;
 
     /**
      * Format of the doc - csv, xml
-     *
-     * @var string
      */
-    private $format;
+    private string $format;
 
-    /**
-     * @var int
-     */
-    private $maxRecordCount;
+    private int $maxRecordCount;
 
-    /**
-     * @var string
-     */
-    private $fileName;
+    private string $fileName;
 
-    /**
-     * @var string
-     */
-    private $fileSize;
+    private string $fileSize;
 
-    /**
-     * Username made the action
-     *
-     * @var string
-     */
-    private $username;
+    private ?string $username = null;
 
-    /**
-     * @var Session
-     */
-    private $dataSession;
+    private Session $dataSession;
 
-    /**
-     * @var Logger
-     */
-    private $logger;
+    private Logger $logger;
 
-    /**
-     * @var UploadPathProvider
-     */
-    private $uploadPathProvider;
+    private UploadPathProvider $uploadPathProvider;
 
     /**
      * @param Session $dataSession
@@ -117,7 +76,7 @@ class DataIO
         $this->filter = $filter;
         $this->type = $type;
         $this->format = $format;
-        $this->maxRecordCount = $maxRecordCount;
+        $this->maxRecordCount = (int) $maxRecordCount;
     }
 
     /**

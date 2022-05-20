@@ -16,20 +16,11 @@ use Shopware\Components\Model\ModelManager;
 
 class DbalHelper
 {
-    /**
-     * @var Connection
-     */
-    protected $connection;
+    protected Connection $connection;
 
-    /**
-     * @var ModelManager
-     */
-    private $modelManager;
+    private ModelManager $modelManager;
 
-    /**
-     * @var EventManager
-     */
-    private $eventManager;
+    private EventManager $eventManager;
 
     public function __construct(Connection $connection, ModelManager $modelManager, EventManager $eventManager)
     {

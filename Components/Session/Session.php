@@ -194,8 +194,10 @@ class Session
 
         $this->getManager()->flush();
 
+
+
         $data = [
-            'recordIds' => \unserialize($recordIds),
+            'recordIds' => empty($recordIds) ? [] : \unserialize($recordIds),
             'fileName' => $sessionEntity->getFileName(),
         ];
 

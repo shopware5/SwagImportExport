@@ -10,6 +10,7 @@ namespace SwagImportExport\Tests\Integration\Components;
 
 use SwagImportExport\Components\Factories\DataFactory;
 use SwagImportExport\Components\Logger\Logger;
+use SwagImportExport\Components\Utils\DataColumnOptions;
 use SwagImportExport\Tests\Helper\ContainerTrait;
 use SwagImportExport\Tests\Helper\ImportExportTestHelper;
 
@@ -46,7 +47,7 @@ class DataIOTest extends ImportExportTestHelper
         $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession, $this->getLogger());
         $limit = $dataFactory->createLimit($postData['limit']);
         $filter = $dataFactory->createFilter($postData['filter']);
-        $dataIO->initialize([], $limit, $filter, 'import', 'csv', $postData['max_record_count']);
+        $dataIO->initialize(new DataColumnOptions(''), $limit, $filter, 'import', 'csv', $postData['max_record_count']);
 
         $dataIO->preloadRecordIds();
 

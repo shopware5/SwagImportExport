@@ -13,10 +13,7 @@ class UploadPathProvider
     public const DIR = 'files/import_export';
     public const CRON_DIR = 'files/import_cron';
 
-    /**
-     * @var string
-     */
-    private $rootPath;
+    private string $rootPath;
 
     /**
      * @param string $rootPath - Root path to shopware

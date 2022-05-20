@@ -16,30 +16,18 @@ use SwagImportExport\Components\Transformers\DataTransformerChain;
 
 class DataWorkflow
 {
-    /**
-     * @var DataIO
-     */
-    protected $dataIO;
+    protected ?DataIO $dataIO = null;
+
+    protected Profile $profile;
+
+    protected DataTransformerChain $transformerChain;
 
     /**
-     * @var Profile
+     * @var FileWriter|FileReader
      */
-    protected $profile;
+    protected object $fileIO;
 
-    /**
-     * @var DataTransformerChain
-     */
-    protected $transformerChain;
-
-    /**
-     * @var FileWriter
-     */
-    protected $fileIO;
-
-    /**
-     * @var Session
-     */
-    protected $dataSession;
+    protected Session $dataSession;
 
     /**
      * @var
@@ -47,7 +35,7 @@ class DataWorkflow
     protected $dbAdapter;
 
     /**
-     * @param DataIO                $dataIO
+     * @param ?DataIO                $dataIO
      * @param Profile               $profile
      * @param DataTransformerChain  $transformerChain
      * @param FileWriter|FileReader $fileIO
