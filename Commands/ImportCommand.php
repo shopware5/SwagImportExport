@@ -90,7 +90,7 @@ class ImportCommand extends ShopwareCommand
 
         $profilesMapper = ['articles', 'articlesImages'];
 
-        //loops the unprocessed data
+        // loops the unprocessed data
         $pathInfo = \pathinfo($this->filePath);
         foreach ($profilesMapper as $profileName) {
             $tmpFile = $this->uploadPathProvider->getRealPath(
@@ -108,12 +108,7 @@ class ImportCommand extends ShopwareCommand
         }
     }
 
-    /**
-     * @param ProfileEntity $profileModel
-     * @param string        $file
-     * @param string        $format
-     */
-    protected function start(OutputInterface $output, $profileModel, $file, $format)
+    protected function start(OutputInterface $output, ProfileEntity $profileModel, string $file, string $format)
     {
         $helper = new CommandHelper(
             [

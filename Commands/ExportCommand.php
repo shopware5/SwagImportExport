@@ -247,11 +247,9 @@ class ExportCommand extends ShopwareCommand
     }
 
     /**
-     * @param CustomerStream|null $customerStream
-     *
      * @throws \RuntimeException
      */
-    protected function validateCustomerStream($customerStream)
+    protected function validateCustomerStream(?CustomerStream $customerStream)
     {
         if (!$customerStream) {
             throw new \RuntimeException(\sprintf('Invalid stream: \'%s\'! There is no customer stream with this id.', $this->customerStream));
