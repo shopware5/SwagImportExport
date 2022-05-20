@@ -13,10 +13,16 @@ use SwagImportExport\Components\Utils\SnippetsHelper;
 
 class NewsletterValidator extends Validator
 {
+    /**
+     * @var array<string>
+     */
     private array $requiredFields = [
         'email',
     ];
 
+    /**
+     * @var array<string, array<string>>
+     */
     private array $snippetData = [
         'email' => [
             'adapters/newsletter/email_required',
@@ -38,7 +44,7 @@ class NewsletterValidator extends Validator
                 continue;
             }
 
-            list($snippetName, $snippetMessage) = $this->snippetData[$key];
+            [$snippetName, $snippetMessage] = $this->snippetData[$key];
 
             $message = SnippetsHelper::getNamespace()->get($snippetName, $snippetMessage);
             throw new AdapterException($message);

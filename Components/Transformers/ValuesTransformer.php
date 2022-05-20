@@ -13,9 +13,12 @@ namespace SwagImportExport\Components\Transformers;
  */
 class ValuesTransformer implements DataTransformerAdapter
 {
+    /**
+     * @var iterable<object>
+     */
     private ?iterable $config = null;
 
-    private ?object $evaluator = null;
+    private ?ExpressionEvaluator $evaluator;
 
     /**
      * The $config must contain the smarty or php transformation of values.
@@ -77,6 +80,10 @@ class ValuesTransformer implements DataTransformerAdapter
                 throw new \Exception("Convert type $type does not exist.");
         }
 
+        if (!\is_array($this->config)) {
+            return $data;
+        }
+
         foreach ($this->config as $expression) {
             $conversions[$expression->getVariable()] = $expression->{$method}();
         }
@@ -85,6 +92,10 @@ class ValuesTransformer implements DataTransformerAdapter
             foreach ($data as &$records) {
                 foreach ($records as &$record) {
                     foreach ($conversions as $variableName => $conversion) {
+                        if (!$this->evaluator) {
+                            throw new \Exception('Evaluator is not set');
+                        }
+
                         if (isset($record[$variableName]) && !empty($conversion)) {
                             $evalData = $this->evaluator->evaluate($conversion, $record);
                             if ($evalData || $evalData === '0') {

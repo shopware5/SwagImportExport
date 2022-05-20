@@ -53,7 +53,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
 
     protected MediaService $mediaService;
 
-    protected ?\Enlight_Controller_Request_Request $request = null;
+    protected ?\Enlight_Controller_Request_Request $request;
 
     protected \Enlight_Event_EventManager $eventManager;
 
@@ -436,7 +436,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @return string
+     * @return ?string
      */
     public function getLogState()
     {

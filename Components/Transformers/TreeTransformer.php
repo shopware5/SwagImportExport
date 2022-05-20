@@ -21,19 +21,39 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
 
     protected ?string $mainType = null;
 
+    /**
+     * @var array<string|int, mixed>
+     */
     protected array $rawData = [];
 
+    /**
+     * @var array<int|string, string>
+     */
     protected ?array $bufferData = null;
 
+    /**
+     * @var array<string, mixed>
+     */
     protected ?array $importMapper = null;
 
-    //export properties
+    /**
+     * @var array<string, mixed>|null
+     */
     protected ?array $data = null;
 
+    /**
+     * @var array<string, mixed>
+     */
     protected ?array $currentRecord = null;
 
+    /**
+     * @var array<string|int, string|array<mixed>
+     */
     protected ?array $preparedData = null;
 
+    /**
+     * @var array<string, mixed>
+     */
     protected array $iterationNodes = [];
 
     /**
@@ -358,6 +378,10 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
             $this->findIterationPart($tree);
         }
 
+        if (!\is_array($this->iterationPart)) {
+            throw new \DomainException('Iteration part is no array');
+        }
+
         return $this->iterationPart;
     }
 
@@ -395,6 +419,10 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
         if ($this->importMapper === null) {
             $iterationPart = $this->getIterationPart();
             $this->generateMapper($iterationPart);
+        }
+
+        if (!\is_array($this->importMapper)) {
+            throw new \DomainException('Iteration part is no array');
         }
 
         return $this->importMapper;
@@ -474,7 +502,7 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
 
     public function getPreparedData($type, $recordLink)
     {
-        if ($this->preparedData[$type] === null) {
+        if (\is_null($this->preparedData[$type])) {
             $data = $this->getData();
 
             foreach ($data[$type] as $record) {

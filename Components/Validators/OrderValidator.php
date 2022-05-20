@@ -13,6 +13,9 @@ use SwagImportExport\Components\Utils\SnippetsHelper;
 
 class OrderValidator extends Validator
 {
+    /**
+     * @var array<string, array<string>>
+     */
     public static array $mapper = [
         'int' => [
             'orderId',
@@ -63,10 +66,16 @@ class OrderValidator extends Validator
         'dateTime' => ['orderTime', 'clearedDate', 'releasedate'],
     ];
 
+    /**
+     * @var array<array<string>>
+     */
     private array $requiredFields = [
         ['orderId', 'number', 'orderDetailId'], //one of these fields must be set
     ];
 
+    /**
+     * @var array<string, array<string>>
+     */
     private array $snippetData = [
         'orderId' => [
             'adapters/orders/ordernumber_order_details_requires',
@@ -85,7 +94,7 @@ class OrderValidator extends Validator
     {
         foreach ($this->requiredFields as $key) {
             if (\is_array($key)) {
-                list($orderId, $number, $orderDetailId) = $key;
+                [$orderId, $number, $orderDetailId] = $key;
 
                 if (isset($record[$orderId]) || isset($record[$number]) || isset($record[$orderDetailId])) {
                     continue;
@@ -95,7 +104,7 @@ class OrderValidator extends Validator
                 continue;
             }
 
-            list($snippetName, $snippetMessage) = $this->snippetData[$key];
+            [$snippetName, $snippetMessage] = $this->snippetData[$key];
 
             $message = SnippetsHelper::getNamespace()->get($snippetName, $snippetMessage);
             throw new AdapterException($message);

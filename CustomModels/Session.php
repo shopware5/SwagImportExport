@@ -257,7 +257,7 @@ class Session extends ModelEntity
     }
 
     /**
-     * @param string $userName
+     * @param ?string $userName
      *
      * @return Session
      */

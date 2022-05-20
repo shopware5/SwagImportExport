@@ -14,6 +14,9 @@ use SwagImportExport\Components\Validators\Validator;
 
 class PriceValidator extends Validator
 {
+    /**
+     * @var array<string, array<string>>
+     */
     public static array $mapper = [
         'float' => [
             'price',
@@ -23,10 +26,16 @@ class PriceValidator extends Validator
         ],
     ];
 
+    /**
+     * @var array<array<string>>
+     */
     private array $requiredFields = [
         ['price', 'priceGroup'],
     ];
 
+    /**
+     * @var array<string, array<string>>
+     */
     private array $snippetData = [
         'price' => [
             'adapters/articles/incorrect_price',
@@ -45,14 +54,14 @@ class PriceValidator extends Validator
     public function checkRequiredFields($record, $orderNumber)
     {
         foreach ($this->requiredFields as $key) {
-            list($price, $priceGroup) = $key;
+            [$price, $priceGroup] = $key;
             if (!empty($record[$price]) || $record[$priceGroup] !== 'EK') {
                 continue;
             }
 
             $key = $price;
 
-            list($snippetName, $snippetMessage) = $this->snippetData[$key];
+            [$snippetName, $snippetMessage] = $this->snippetData[$key];
 
             $message = SnippetsHelper::getNamespace()->get($snippetName, $snippetMessage);
             throw new AdapterException(\sprintf($message, $orderNumber));

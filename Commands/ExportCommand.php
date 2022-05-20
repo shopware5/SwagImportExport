@@ -39,7 +39,7 @@ class ExportCommand extends ShopwareCommand
 
     protected ?\DateTimeInterface $dateTo;
 
-    protected ?string $category = string;
+    protected ?string $category = null;
 
     protected int $sessionId;
 

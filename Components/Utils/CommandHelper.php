@@ -211,10 +211,10 @@ class CommandHelper
 
         $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession, $this->logger);
 
-        $colOpts = $dataFactory->createColOpts($postData['columnOptions']);
+        $colOpts = $dataFactory->createColOpts('');
         $limit = $dataFactory->createLimit($postData['limit']);
         $filter = $dataFactory->createFilter($postData['filter']);
-        $maxRecordCount = $postData['max_record_count'];
+        $maxRecordCount = $postData['max_record_count'] ?? 0;
         $type = $postData['type'];
         $format = $postData['format'];
 

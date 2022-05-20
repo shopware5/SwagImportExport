@@ -323,7 +323,7 @@ class ArticlesInStockDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @return string
+     * @return ?string
      */
     public function getLogState()
     {

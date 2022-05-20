@@ -13,12 +13,18 @@ use SwagImportExport\Components\Utils\SnippetsHelper;
 
 class CategoryValidator extends Validator
 {
+    /**
+     * @var array<string>
+     */
     private array $requiredFields = [
         'name',
         'parentId',
         'categoryId',
     ];
 
+    /**
+     * @var array<string, array<string>>
+     */
     private array $snippetData = [
         'name' => [
             'adapters/categories/name_required',

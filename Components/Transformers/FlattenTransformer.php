@@ -20,18 +20,33 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
 {
     protected ?string $config = null;
 
+    /**
+     * @var array<string, mixed>|null
+     */
     protected ?array $mainIterationPart = null;
 
     protected ?string $mainAdapter = null;
 
+    /**
+     * @var array<string, mixed>
+     */
     protected array $iterationParts = [];
 
     protected ?array $iterationTempData = null;
 
+    /**
+     * @var array<string|int, mixed>
+     */
     protected array $tempData = [];
 
+    /**
+     * @var array<string|int, mixed>
+     */
     protected array $tempMapper = [];
 
+    /**
+     * @var array<string, mixed>|null
+     */
     protected ?array $translationColumns = null;
 
     /**
@@ -516,7 +531,6 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
     {
         if (!isset($data[$key])) {
             return;
-//            throw new \Exception("Data does not match with CSV column name $key");
         }
 
         if ($iteration > 1) { // if it is sub iteration node
@@ -982,6 +996,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
             $this->findMainIterationPart($tree);
         }
 
+        /* @var array */
         return $this->mainIterationPart;
     }
 

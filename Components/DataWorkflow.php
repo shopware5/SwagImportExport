@@ -35,7 +35,7 @@ class DataWorkflow
     protected $dbAdapter;
 
     /**
-     * @param ?DataIO                $dataIO
+     * @param ?DataIO               $dataIO
      * @param Profile               $profile
      * @param DataTransformerChain  $transformerChain
      * @param FileWriter|FileReader $fileIO

@@ -13,10 +13,16 @@ use SwagImportExport\Components\Utils\SnippetsHelper;
 
 class CustomerValidator extends Validator
 {
+    /**
+     * @var array<string>
+     */
     private array $requiredFields = [
         'email',
     ];
 
+    /**
+     * @var array<string>
+     */
     private array $requiredFieldsForCreate = [
         'unhashedPassword',
         'encoder',
@@ -30,6 +36,9 @@ class CustomerValidator extends Validator
         'billingCountryID',
     ];
 
+    /**
+     * @var array<string, array<string>>
+     */
     private array $snippetData = [
         'email' => [
             'adapters/customer/email_required',
@@ -91,7 +100,7 @@ class CustomerValidator extends Validator
                 continue;
             }
 
-            list($snippetName, $snippetMessage) = $this->snippetData[$key];
+            [$snippetName, $snippetMessage] = $this->snippetData[$key];
 
             $message = SnippetsHelper::getNamespace()->get($snippetName, $snippetMessage);
             throw new AdapterException(\sprintf($message, $record['email']));
@@ -120,7 +129,7 @@ class CustomerValidator extends Validator
                     break;
             }
 
-            list($snippetName, $snippetMessage) = $this->snippetData[$columnName];
+            [$snippetName, $snippetMessage] = $this->snippetData[$columnName];
 
             $message = SnippetsHelper::getNamespace()->get($snippetName, $snippetMessage);
             throw new AdapterException(\sprintf($message, $record['email']));

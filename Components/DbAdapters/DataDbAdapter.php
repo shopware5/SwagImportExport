@@ -104,7 +104,7 @@ interface DataDbAdapter
     /**
      * Returns true if log messages are available.
      *
-     * @return string
+     * @return ?string
      */
     public function getLogState();
 }

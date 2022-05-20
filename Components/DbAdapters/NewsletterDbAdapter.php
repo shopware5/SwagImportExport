@@ -297,7 +297,7 @@ class NewsletterDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @return string
+     * @return ?string
      */
     public function getLogState()
     {

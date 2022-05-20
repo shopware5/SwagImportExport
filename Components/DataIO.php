@@ -433,7 +433,7 @@ class DataIO
     }
 
     /**
-     * @return string
+     * @return ?string
      */
     public function getType()
     {
@@ -475,7 +475,7 @@ class DataIO
     }
 
     /**
-     * @return string
+     * @return ?string
      */
     public function getUsername()
     {

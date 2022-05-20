@@ -13,6 +13,9 @@ use SwagImportExport\Components\Utils\SnippetsHelper;
 
 class ArticleTranslationValidator extends Validator
 {
+    /**
+     * @var array<string, array<string>>
+     */
     public static array $mapper = [
         'string' => [ //TODO: maybe we don't need to check fields which contains string?
             'articleNumber',
@@ -25,6 +28,9 @@ class ArticleTranslationValidator extends Validator
         'int' => ['languageId'],
     ];
 
+    /**
+     * @var array<string>
+     */
     private array $requiredFields = [
         'articleNumber' => 'adapters/ordernumber_required',
         'languageId' => 'adapters/translations/language_not_found',

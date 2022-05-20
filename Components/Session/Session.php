@@ -194,8 +194,6 @@ class Session
 
         $this->getManager()->flush();
 
-
-
         $data = [
             'recordIds' => empty($recordIds) ? [] : \unserialize($recordIds),
             'fileName' => $sessionEntity->getFileName(),
@@ -221,7 +219,7 @@ class Session
     /**
      * Update session username
      *
-     * @param string $username
+     * @param ?string $username
      */
     public function setUsername($username)
     {

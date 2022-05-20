@@ -14,11 +14,17 @@ use SwagImportExport\Components\Validators\Validator;
 
 class ArticleValidator extends Validator
 {
+    /**
+     * @var array<string>
+     */
     private array $requiredFields = [
         'orderNumber',
         'mainNumber',
     ];
 
+    /**
+     * @var array<string|array<string>>
+     */
     private array $requiredFieldsForCreate = [
         'name',
         'mainNumber',
@@ -26,6 +32,9 @@ class ArticleValidator extends Validator
         'taxId',
     ];
 
+    /**
+     * @var array<string, array<string>>
+     */
     private array $snippetData = [
         'orderNumber' => [
             'adapters/ordernumber_required',
@@ -63,7 +72,7 @@ class ArticleValidator extends Validator
                 continue;
             }
 
-            list($snippetName, $snippetMessage) = $this->snippetData[$key];
+            [$snippetName, $snippetMessage] = $this->snippetData[$key];
 
             $message = SnippetsHelper::getNamespace()->get($snippetName, $snippetMessage);
             throw new AdapterException(\sprintf($message, $record['orderNumber']));
@@ -81,7 +90,7 @@ class ArticleValidator extends Validator
     {
         foreach ($this->requiredFieldsForCreate as $key) {
             if (\is_array($key)) {
-                list($supplierName, $supplierId) = $key;
+                [$supplierName, $supplierId] = $key;
 
                 if (isset($record[$supplierName]) || isset($record[$supplierId])) {
                     continue;
@@ -91,7 +100,7 @@ class ArticleValidator extends Validator
                 continue;
             }
 
-            list($snippetName, $snippetMessage) = $this->snippetData[$key];
+            [$snippetName, $snippetMessage] = $this->snippetData[$key];
 
             $message = SnippetsHelper::getNamespace()->get($snippetName, $snippetMessage);
             throw new AdapterException(\sprintf($message, $record['mainNumber']));

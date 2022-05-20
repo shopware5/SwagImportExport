@@ -727,6 +727,10 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook
 
         //use shipping as billing
         if ($newCustomer && empty($record['shippingFirstname']) && empty($record['shippingLastname'])) {
+            if (!\is_array($this->shippingMap)) {
+                throw new \Exception('ShippingMap is not set');
+            }
+
             foreach ($this->shippingMap as $mapKey => $addressKey) {
                 if (!isset($record[$mapKey]) && isset($billing[$addressKey])) {
                     $shippingData[$addressKey] = $billing[$addressKey];

@@ -82,6 +82,10 @@ class ImportCommand extends ShopwareCommand
             throw new \Exception(\sprintf('Invalid profile: \'%s\'!', $this->profile));
         }
 
+        if (!\is_string($this->format)) {
+            throw new \Exception('Format could not be determined');
+        }
+
         $this->start($output, $this->profileEntity, $this->filePath, $this->format);
 
         $profilesMapper = ['articles', 'articlesImages'];
