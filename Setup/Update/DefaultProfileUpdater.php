@@ -14,10 +14,7 @@ use SwagImportExport\Setup\DefaultProfiles\ProfileMetaData;
 
 class DefaultProfileUpdater
 {
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
     public function __construct(
         Connection $connection
