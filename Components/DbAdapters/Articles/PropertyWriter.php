@@ -43,13 +43,11 @@ class PropertyWriter
     }
 
     /**
-     * @param int    $articleId
-     * @param string $orderNumber
-     * @param array  $propertiesData
+     * @param array<int, array<string, string>>|null $propertiesData
      *
      * @throws AdapterException
      */
-    public function writeUpdateCreatePropertyGroupsFilterAndValues($articleId, $orderNumber, $propertiesData)
+    public function writeUpdateCreatePropertyGroupsFilterAndValues(int $articleId, string $orderNumber, ?array $propertiesData)
     {
         if (!$propertiesData) {
             return;
@@ -68,7 +66,7 @@ class PropertyWriter
              */
             if (isset($propertyData['propertyValueId']) && !empty($propertyData['propertyValueId'])) {
                 $valueId = $propertyData['propertyValueId'];
-                $optionId = $this->getOptionByValueId($valueId);
+                $optionId = $this->getOptionByValueId((int) $valueId);
 
                 if (!$optionId) {
                     $message = $this->snippetsHelper->getNamespace()
@@ -85,7 +83,7 @@ class PropertyWriter
              * Update or create options by value name
              */
             if (isset($propertyData['propertyValueName']) && !empty($propertyData['propertyValueName'])) {
-                list($optionId, $valueId) = $this->updateOrCreateOptionAndValuesByValueName($orderNumber, $propertyData);
+                [$optionId, $valueId] = $this->updateOrCreateOptionAndValuesByValueName($orderNumber, $propertyData);
 
                 $optionRelationInsertStatements[] = "($optionId, $filterGroupId)";
                 $valueRelationInsertStatements[] = "($valueId, $articleId)";
@@ -103,7 +101,8 @@ class PropertyWriter
     }
 
     /**
-     * @param class-string $entityName
+     * @param array<string, mixed> $data
+     * @param class-string         $entityName
      */
     private function createElement(string $entityName, array $data): int
     {
@@ -118,6 +117,8 @@ class PropertyWriter
     }
 
     /**
+     * @param array<string> $relations
+     *
      * Updates/Creates relation between property group and property option
      */
     private function insertOrUpdateOptionRelations(array $relations)
@@ -134,6 +135,8 @@ class PropertyWriter
     }
 
     /**
+     * @param array<string> $relations
+     *
      * Updates/Creates relation between articles and property values
      */
     private function insertOrUpdateValueRelations(array $relations)
@@ -151,11 +154,8 @@ class PropertyWriter
 
     /**
      * Updates/Creates relation between articles and property groups
-     *
-     * @param int $filterGroupId
-     * @param int $articleId
      */
-    private function updateGroupsRelation($filterGroupId, $articleId): void
+    private function updateGroupsRelation(int $filterGroupId, int $articleId): void
     {
         $this->db->query('UPDATE s_articles SET filtergroupID = ? WHERE id = ?', [$filterGroupId, $articleId]);
     }
@@ -169,11 +169,9 @@ class PropertyWriter
     }
 
     /**
-     * @param string $name
-     *
      * @return int|null
      */
-    private function getFilterGroupIdByNameFromCacheProperty($name)
+    private function getFilterGroupIdByNameFromCacheProperty(string $name)
     {
         return $this->getFilterGroups()[$name] ?? null;
     }
@@ -189,22 +187,17 @@ class PropertyWriter
     /**
      * Returns the id of an option
      *
-     * @param string $name
-     *
      * @return int
      */
-    private function getOptionByName($name)
+    private function getOptionByName(string $name)
     {
         return $this->getOptions()[$name];
     }
 
     /**
-     * @param string $name
-     * @param int    $filterGroupId
-     *
      * @return string|bool
      */
-    private function getValue($name, $filterGroupId)
+    private function getValue(string $name, int $filterGroupId)
     {
         return $this->connection->fetchColumn(
             'SELECT `id` FROM s_filter_values
@@ -213,10 +206,7 @@ class PropertyWriter
         );
     }
 
-    /**
-     * @param string|int $articleId
-     */
-    private function getGroupFromArticle($articleId): int
+    private function getGroupFromArticle(int $articleId): int
     {
         return (int) $this->connection->fetchColumn(
             'SELECT `filtergroupID` FROM s_articles
@@ -227,22 +217,19 @@ class PropertyWriter
     }
 
     /**
-     * @param string|int $valueId
-     *
      * @return string|bool
      */
-    private function getOptionByValueId($valueId)
+    private function getOptionByValueId(int $valueId)
     {
         return $this->connection->fetchColumn('SELECT `optionID` FROM s_filter_values WHERE id = ?', [$valueId]);
     }
 
     /**
-     * @param string $optionName
-     * @param array  $propertyData
+     * @param array<string, mixed> $propertyData
      *
      * @return int
      */
-    private function createOption($optionName, $propertyData)
+    private function createOption(string $optionName, array $propertyData)
     {
         $optionData = [
             'name' => $optionName,
@@ -253,11 +240,9 @@ class PropertyWriter
     }
 
     /**
-     * @param array  $propertyData
-     * @param string $valueName
-     * @param int    $optionId
+     * @param array<string, mixed> $propertyData
      */
-    private function createValue($propertyData, $valueName, $optionId): int
+    private function createValue(array $propertyData, string $valueName, int $optionId): int
     {
         $position = !empty($propertyData['propertyValuePosition']) ? $propertyData['propertyValuePosition'] : 0;
 
@@ -270,10 +255,7 @@ class PropertyWriter
         return $this->createElement(Value::class, $valueData);
     }
 
-    /**
-     * @param string $groupName
-     */
-    private function createGroup($groupName): int
+    private function createGroup(string $groupName): int
     {
         $groupData = [
             'name' => $groupName,
@@ -283,12 +265,11 @@ class PropertyWriter
     }
 
     /**
-     * @param int   $articleId
-     * @param array $propertyData
+     * @param array<string, mixed> $propertyData
      *
      * @return int
      */
-    private function findCreateOrUpdateGroup($articleId, $propertyData)
+    private function findCreateOrUpdateGroup(int $articleId, array $propertyData)
     {
         $filterGroupId = $this->getGroupFromArticle($articleId);
 
@@ -307,17 +288,16 @@ class PropertyWriter
     }
 
     /**
-     * @param string $orderNumber
-     * @param array  $propertyData
+     * @param array<string, mixed> $propertyData
      *
      * @throws AdapterException
      *
      * @return array
      */
-    private function updateOrCreateOptionAndValuesByValueName($orderNumber, $propertyData)
+    private function updateOrCreateOptionAndValuesByValueName(string $orderNumber, array $propertyData)
     {
         if (isset($propertyData['propertyOptionId']) && !empty($propertyData['propertyOptionId'])) {
-            //todo: check  propertyOptionId existence
+            // todo: check  propertyOptionId existence
             $optionId = $propertyData['propertyOptionId'];
         } elseif (isset($propertyData['propertyOptionName']) && !empty($propertyData['propertyOptionName'])) {
             $optionName = $propertyData['propertyOptionName'];

@@ -57,7 +57,7 @@ class OrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * {@inheritDoc}
      */
-    public function readRecordIds($start = null, $limit = null, $filter = null)
+    public function readRecordIds(int $start = null, int $limit = null, array $filter = null)
     {
         $builder = $this->modelManager->createQueryBuilder();
 
@@ -114,7 +114,7 @@ class OrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * {@inheritDoc}
      */
-    public function read($ids, $columns)
+    public function read(array $ids, array $columns)
     {
         if (empty($ids)) {
             $message = SnippetsHelper::getNamespace()
@@ -150,7 +150,7 @@ class OrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * {@inheritDoc}
      */
-    public function write($records)
+    public function write(array $records)
     {
         $this->unprocessedData = [];
 
@@ -271,7 +271,7 @@ class OrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
                     $orderDetailModel->fromArray($orderDetailData);
                 }
 
-                //prepares the attributes
+                // prepares the attributes
                 foreach ($record as $key => $value) {
                     if (strpos($key, 'attribute') === 0 && $newKey = \preg_replace('/^attribute/', '', $key)) {
                         $newKey = \lcfirst($newKey);
@@ -299,11 +299,9 @@ class OrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @param string $message
-     *
      * @return void
      */
-    public function saveMessage($message)
+    public function saveMessage(string $message)
     {
         $errorMode = $this->config->get('SwagImportExportErrorMode');
 
@@ -324,11 +322,9 @@ class OrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @param string $logMessages
-     *
      * @return void
      */
-    public function setLogMessages($logMessages)
+    public function setLogMessages(string $logMessages)
     {
         $this->logMessages[] = $logMessages;
     }
@@ -342,11 +338,9 @@ class OrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @param string $logState
-     *
      * @return void
      */
-    public function setLogState($logState)
+    public function setLogState(string $logState)
     {
         $this->logState = $logState;
     }
@@ -367,7 +361,7 @@ class OrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * {@inheritDoc}
      */
-    public function getColumns($section)
+    public function getColumns(string $section)
     {
         $method = 'get' . \ucfirst($section) . 'Columns';
 
@@ -540,8 +534,8 @@ class OrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @param array<string> $columns
-     * @param array<int>    $ids
+     * @param array<array<string>|string> $columns
+     * @param array<int>                  $ids
      */
     private function getBuilder(array $columns, array $ids): QueryBuilder
     {

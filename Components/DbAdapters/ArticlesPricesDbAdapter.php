@@ -81,7 +81,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
      *
      * @return array<int>
      */
-    public function readRecordIds($start, $limit, $filter)
+    public function readRecordIds(?int $start, ?int $limit, array $filter = [])
     {
         $builder = $this->manager->createQueryBuilder();
 
@@ -168,7 +168,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * @throws \Exception
      */
-    public function read($ids, $columns)
+    public function read(array $ids, array $columns)
     {
         if (empty($ids)) {
             $message = SnippetsHelper::getNamespace()
@@ -253,12 +253,10 @@ class ArticlesPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
      * Imports the records. <br/>
      * <b>Note:</b> The logic is copied from the old Import/Export Module
      *
-     * @param array $records
-     *
      * @throws \Enlight_Event_Exception
      * @throws \Exception
      */
-    public function write($records)
+    public function write(array $records)
     {
         $this->unprocessedData = [];
 
@@ -412,11 +410,9 @@ class ArticlesPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @param string $section
-     *
      * @return bool|mixed
      */
-    public function getColumns($section)
+    public function getColumns(string $section)
     {
         $method = 'get' . \ucfirst($section) . 'Columns';
 
@@ -430,7 +426,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * @throws \Exception
      */
-    public function saveMessage($message)
+    public function saveMessage(string $message)
     {
         $errorMode = $this->config->get('SwagImportExportErrorMode');
 
@@ -450,7 +446,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
         return $this->logMessages;
     }
 
-    public function setLogMessages($logMessages)
+    public function setLogMessages(string $logMessages)
     {
         $this->logMessages[] = $logMessages;
     }
@@ -463,7 +459,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
         return $this->logState;
     }
 
-    public function setLogState($logState)
+    public function setLogState(string $logState)
     {
         $this->logState = $logState;
     }
@@ -482,9 +478,12 @@ class ArticlesPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
+     * @param array<array<string>|string> $columns
+     * @param array<int>                  $ids
+     *
      * @return QueryBuilder
      */
-    public function getBuilder($columns, $ids)
+    public function getBuilder(array $columns, array $ids)
     {
         $builder = $this->manager->createQueryBuilder();
 
@@ -503,10 +502,8 @@ class ArticlesPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
 
     /**
      * Collects recursively category ids
-     *
-     * @param \Shopware\Models\Category\Category $categoryModel
      */
-    protected function collectCategoryIds($categoryModel)
+    protected function collectCategoryIds(Category $categoryModel)
     {
         $categoryId = $categoryModel->getId();
         $this->setCategoryIdCollection($categoryId);
@@ -521,7 +518,10 @@ class ArticlesPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
         }
     }
 
-    private function updateArticleFromPrice($record, $articleDetailId)
+    /**
+     * @param array<string, mixed> $record
+     */
+    private function updateArticleFromPrice(array $record, int $articleDetailId)
     {
         $dql = 'DELETE FROM Shopware\Models\Article\Price price
                 WHERE price.customerGroup = :customerGroup
@@ -536,7 +536,10 @@ class ArticlesPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
             ->execute();
     }
 
-    private function updateArticleToPrice($record, $articleDetailId, $articleId)
+    /**
+     * @param array<string, mixed> $record
+     */
+    private function updateArticleToPrice(array $record, int $articleDetailId, int $articleId)
     {
         $dql = "UPDATE Shopware\Models\Article\Price price SET price.to = :toValue
                 WHERE price.customerGroup = :customerGroup

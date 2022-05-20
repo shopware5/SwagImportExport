@@ -20,15 +20,6 @@ class PriceWriterTest extends TestCase
     use DatabaseTestCaseTrait;
     use ContainerTrait;
 
-    public function testWriteThrowsExceptionIfEmptyValues(): void
-    {
-        $priceWriterDbAdapter = $this->getPriceWriterAdapter();
-
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Tax for article  not found');
-        $priceWriterDbAdapter->write('', '', []);
-    }
-
     public function testWriteThrowsExceptionIfPriceGroupNotExists(): void
     {
         $priceWriterDbAdapter = $this->getPriceWriterAdapter();

@@ -8,9 +8,6 @@
 
 namespace SwagImportExport\Components\DbAdapters;
 
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMException;
-use Doctrine\ORM\TransactionRequiredException;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Model\QueryBuilder;
@@ -94,7 +91,7 @@ class TranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * {@inheritDoc}
      */
-    public function readRecordIds($start, $limit, $filter)
+    public function readRecordIds(?int $start, ?int $limit, array $filter = [])
     {
         $manager = $this->manager;
 
@@ -131,7 +128,7 @@ class TranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * @throws \Exception
      */
-    public function read($ids, $columns)
+    public function read(array $ids, array $columns)
     {
         if (empty($ids)) {
             $message = SnippetsHelper::getNamespace()
@@ -153,9 +150,11 @@ class TranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
+     * @param array<int, array<string, mixed>> $translations
+     *
      * @return array
      */
-    public function prepareTranslations($translations)
+    public function prepareTranslations(array $translations)
     {
         $mapper = $this->getElementMapper();
 
@@ -163,7 +162,7 @@ class TranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
         foreach ($translations as $index => $translation) {
             $data = \unserialize($translation['objectdata']);
 
-            //key for different translation types
+            // key for different translation types
             $key = $mapper[$translation['objecttype']];
 
             $result[] = [
@@ -207,11 +206,9 @@ class TranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @param string $section
-     *
      * @return bool|mixed
      */
-    public function getColumns($section)
+    public function getColumns(string $section)
     {
         $method = 'get' . \ucfirst($section) . 'Columns';
 
@@ -223,15 +220,11 @@ class TranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @throws ORMException
-     * @throws OptimisticLockException
-     * @throws TransactionRequiredException
-     * @throws \Enlight_Event_Exception
-     * @throws \Exception
+     * @param array<string, mixed> $records
      *
      * @return void
      */
-    public function write($records)
+    public function write(array $records)
     {
         if (empty($records['default'])) {
             $message = SnippetsHelper::getNamespace()
@@ -317,13 +310,11 @@ class TranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @param string $message
-     *
      * @throws \Exception
      *
      * @return void
      */
-    public function saveMessage($message)
+    public function saveMessage(string $message)
     {
         $errorMode = $this->config->get('SwagImportExportErrorMode');
 
@@ -344,11 +335,9 @@ class TranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @param string $logMessages
-     *
      * @return void
      */
-    public function setLogMessages($logMessages)
+    public function setLogMessages(string $logMessages)
     {
         $this->logMessages[] = $logMessages;
     }
@@ -362,19 +351,19 @@ class TranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @param string $logState
-     *
      * @return void
      */
-    public function setLogState($logState)
+    public function setLogState(string $logState)
     {
         $this->logState = $logState;
     }
 
     /**
+     * @param array<int> $ids
+     *
      * @return QueryBuilder
      */
-    public function getBuilder($ids)
+    public function getBuilder(array $ids)
     {
         $builder = $this->manager->createQueryBuilder();
         $builder->select('translation')
@@ -400,11 +389,13 @@ class TranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
+     * @param array<int> $ids
+     *
      * @throws \Zend_Db_Statement_Exception
      *
      * @return array
      */
-    protected function getTranslations($ids)
+    protected function getTranslations(array $ids)
     {
         $articleDetailIds = \implode(',', $ids);
 
@@ -463,13 +454,11 @@ class TranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @param string $type
-     *
      * @throws AdapterException
      *
      * @return ModelRepository
      */
-    protected function getRepository($type)
+    protected function getRepository(string $type)
     {
         switch ($type) {
             case 'configuratorgroup':

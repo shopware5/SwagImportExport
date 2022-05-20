@@ -101,9 +101,9 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * Set default values for fields which are empty or don't exists
      *
-     * @param array $values default values for nodes
+     * @param array<string, array<string, mixed>> $values default values for nodes
      */
-    public function setDefaultValues($values)
+    public function setDefaultValues(array $values)
     {
         $this->defaultValues = $values;
     }
@@ -219,12 +219,9 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @param array $ids
-     * @param array $columns
-     *
      * @return array
      */
-    public function read($ids, $columns)
+    public function read(array $ids, array $columns)
     {
         foreach ($columns as $key => $value) {
             if ($value === 'unhashedPassword') {
@@ -247,7 +244,7 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * {@inheritDoc}
      */
-    public function readRecordIds($start, $limit, $filter)
+    public function readRecordIds(?int $start, ?int $limit, array $filter = [])
     {
         $query = $this->manager->getConnection()->createQueryBuilder();
         $query->select(['customer.id']);
@@ -279,13 +276,11 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @param array $records
-     *
      * @throws \Enlight_Event_Exception
      * @throws \Exception
      * @throws \Zend_Db_Adapter_Exception
      */
-    public function write($records)
+    public function write(array $records)
     {
         $this->unprocessedData = [];
         $customerCount = 0;
@@ -419,11 +414,9 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @param string $message
-     *
      * @throws \Exception
      */
-    public function saveMessage($message)
+    public function saveMessage(string $message)
     {
         $errorMode = $this->config->get('SwagImportExportErrorMode');
 
@@ -443,10 +436,7 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook
         return $this->logMessages;
     }
 
-    /**
-     * @param array $logMessages
-     */
-    public function setLogMessages($logMessages)
+    public function setLogMessages(array $logMessages)
     {
         $this->logMessages[] = $logMessages;
     }
@@ -478,14 +468,9 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @param string $tableName
-     * @param string $columnName
-     * @param string $prefixField
-     * @param string $prefixSelect
-     *
      * @return array
      */
-    public function getAttributesFieldsByTableName($tableName, $columnName, $prefixField, $prefixSelect)
+    public function getAttributesFieldsByTableName(string $tableName, string $columnName, string $prefixField, string $prefixSelect)
     {
         $stmt = $this->db->query("SHOW COLUMNS FROM $tableName");
         $columns = $stmt->fetchAll();
@@ -507,11 +492,9 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @param string $section
-     *
      * @return bool|mixed
      */
-    public function getColumns($section)
+    public function getColumns(string $section)
     {
         $method = 'get' . \ucfirst($section) . 'Columns';
 
@@ -523,12 +506,9 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @param array $columns
-     * @param array $ids
-     *
      * @return \Shopware\Components\Model\QueryBuilder
      */
-    public function getBuilder($columns, $ids)
+    public function getBuilder(array $columns, array $ids)
     {
         $builder = $this->manager->createQueryBuilder();
         $builder->select($columns)
@@ -547,6 +527,8 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
+     * @param array<string, mixed> $record
+     *
      * @throws AdapterException
      *
      * @return array|object|null
@@ -572,7 +554,7 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook
 
             $customer = $this->manager->getRepository(Customer::class)->findBy($filter);
 
-            //checks for multiple email address
+            // checks for multiple email address
             if (\count($customer) > 0 && $customer[0]->getNumber() !== $record['customerNumber']) {
                 $message = SnippetsHelper::getNamespace()
                     ->get('adapters/customer/multiple_email', 'There are existing email address/es with %s having different customer numbers. Please provide subshopID or equalize customer number');
@@ -586,6 +568,8 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
+     * @param array<string, mixed> $record
+     *
      * @throws AdapterException
      * @throws \Exception
      */
@@ -614,6 +598,8 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
+     * @param array<string, mixed> $record
+     *
      * @throws \RuntimeException
      *
      * @return array
@@ -671,6 +657,8 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
+     * @param array<string, mixed> $record
+     *
      * @return array
      */
     protected function prepareBilling(array &$record)
@@ -690,7 +678,7 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook
         $billingData = [];
 
         foreach ($record as $key => $value) {
-            //prepares the attributes
+            // prepares the attributes
             if (strpos($key, 'attrBilling') === 0) {
                 $newKey = \lcfirst(\preg_replace('/^attrBilling/', '', $key));
                 $billingData['attribute'][$newKey] = $value;
@@ -705,11 +693,11 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @param bool $newCustomer
+     * @param array<string, mixed> $billing
      *
      * @return array
      */
-    protected function prepareShipping(array &$record, $newCustomer, array $billing)
+    protected function prepareShipping(array &$record, bool $newCustomer, array $billing)
     {
         if ($this->shippingMap === null) {
             $columns = $this->getShippingColumns();
@@ -725,7 +713,7 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook
 
         $shippingData = [];
 
-        //use shipping as billing
+        // use shipping as billing
         if ($newCustomer && empty($record['shippingFirstname']) && empty($record['shippingLastname'])) {
             if (!\is_array($this->shippingMap)) {
                 throw new \Exception('ShippingMap is not set');
@@ -742,7 +730,7 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook
         }
 
         foreach ($record as $key => $value) {
-            //prepares the attributes
+            // prepares the attributes
             if (strpos($key, 'attrShipping') === 0) {
                 $newKey = \lcfirst(\preg_replace('/^attrShipping/', '', $key));
                 $shippingData['attribute'][$newKey] = $value;
@@ -757,12 +745,9 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @param int           $customerId
-     * @param Customer|bool $newCustomer
-     *
      * @throws \Zend_Db_Adapter_Exception
      */
-    protected function insertCustomerAttributes(array $customerData, $customerId, $newCustomer)
+    protected function insertCustomerAttributes(array $customerData, int $customerId, bool $newCustomer)
     {
         if ($newCustomer === false) {
             return;
@@ -777,24 +762,22 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @param int $subShopID
-     *
      * @return int|null
      */
-    protected function preparePayment($subShopID)
+    protected function preparePayment(int $subShopID)
     {
-        //on missing shopId return defaultPaymentId
+        // on missing shopId return defaultPaymentId
         if (!isset($subShopID) || $subShopID === '') {
             return $this->config->get('sDEFAULTPAYMENT');
         }
 
-        //get defaultPaymentId for subShiopId = $subShopID
+        // get defaultPaymentId for subShiopId = $subShopID
         $defaultPaymentId = $this->getSubShopDefaultPaymentId($subShopID);
         if ($defaultPaymentId) {
             return \unserialize($defaultPaymentId['value']);
         }
 
-        //get defaultPaymentId for mainShiopId
+        // get defaultPaymentId for mainShiopId
         $defaultPaymentId = $this->getMainShopDefaultPaymentId($subShopID);
         if ($defaultPaymentId) {
             return \unserialize($defaultPaymentId['value']);
@@ -804,11 +787,9 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @param int $subShopID
-     *
      * @return array
      */
-    protected function getSubShopDefaultPaymentId($subShopID)
+    protected function getSubShopDefaultPaymentId(int $subShopID)
     {
         $query = 'SELECT `value`.value
                    FROM s_core_config_elements AS element
@@ -820,11 +801,9 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @param int $subShopID
-     *
      * @return array
      */
-    protected function getMainShopDefaultPaymentId($subShopID)
+    protected function getMainShopDefaultPaymentId(int $subShopID)
     {
         $query = 'SELECT `value`.value
                    FROM s_core_config_elements AS element

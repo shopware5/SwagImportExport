@@ -56,7 +56,7 @@ class ArticleWriter
      *
      * @return ArticleWriterResult
      */
-    public function write($article, $defaultValues)
+    public function write(array $article, array $defaultValues)
     {
         $article = $this->validator->filterEmptyString($article);
         $this->validator->checkRequiredFields($article);
@@ -72,7 +72,7 @@ class ArticleWriter
      *
      * @return ArticleWriterResult
      */
-    protected function insertOrUpdateArticle($article, $defaultValues)
+    protected function insertOrUpdateArticle(array $article, array $defaultValues)
     {
         $shouldCreateMainArticle = false;
         [$mainVariantId, $productId, $variantId] = $this->findExistingEntries($article);
@@ -136,7 +136,7 @@ class ArticleWriter
      *
      * @return array{0: int, 1: int, 2: int}
      */
-    protected function findExistingEntries($article)
+    protected function findExistingEntries(array $article)
     {
         $productId = 0;
         $mainVariantId = 0;
@@ -174,7 +174,7 @@ class ArticleWriter
      *
      * @return array<string, mixed>
      */
-    protected function mapArticleAttributes($article)
+    protected function mapArticleAttributes(array $article)
     {
         $attributes = [];
         foreach ($article as $key => $value) {
@@ -191,11 +191,9 @@ class ArticleWriter
     }
 
     /**
-     * @param int $detailId
-     *
      * @return int
      */
-    protected function getAttrId($detailId)
+    protected function getAttrId(int $detailId)
     {
         $sql = 'SELECT id FROM s_articles_attributes WHERE articledetailsID = ?';
 

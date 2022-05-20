@@ -28,13 +28,13 @@ class RelationWriter
         'similar' => 's_articles_similar',
     ];
 
-    protected $table;
+    protected string $table;
 
-    protected $idKey;
+    protected string $idKey;
 
-    protected $snippetName;
+    protected string $snippetName;
 
-    protected $defaultSnippetMessage;
+    protected string $defaultSnippetMessage;
 
     protected PDOConnection $db;
 
@@ -62,15 +62,9 @@ class RelationWriter
     }
 
     /**
-     * @param int    $articleId
-     * @param string $mainOrderNumber
-     * @param array  $relations
-     * @param string $relationType
-     * @param int    $processedFlag
-     *
      * @throws AdapterException
      */
-    public function write($articleId, $mainOrderNumber, $relations, $relationType, $processedFlag)
+    public function write(int $articleId, string $mainOrderNumber, array $relations, string $relationType, bool $processedFlag)
     {
         if (!\is_numeric($articleId)) {
             return;
@@ -81,7 +75,7 @@ class RelationWriter
         $newRelations = [];
         $allRelations = [];
         foreach ($relations as $relation) {
-            //if relation data has only 'parentIndexElement' element
+            // if relation data has only 'parentIndexElement' element
             if (\count($relation) < 2) {
                 break;
             }
@@ -131,12 +125,12 @@ class RelationWriter
         }
 
         if ($allRelations && !$processedFlag) {
-            //delete the relations that don't exist in the csv file, but exist in the db"
+            // delete the relations that don't exist in the csv file, but exist in the db"
             $this->deleteRelations($allRelations, $articleId);
         }
 
         if ($newRelations) {
-            $this->insertRelations($newRelations, $articleId); //insert only new relations
+            $this->insertRelations($newRelations, $articleId); // insert only new relations
         }
     }
 
@@ -145,10 +139,8 @@ class RelationWriter
      * Sets the table name.
      * Sets the idKey used to access relation's id. Example: accessory - $relation['accessoryId'],
      * similar - $relation['similarId']
-     *
-     * @param string $relationType
      */
-    protected function initializeRelationData($relationType)
+    protected function initializeRelationData(string $relationType)
     {
         $this->checkRelation($relationType);
 
@@ -161,11 +153,9 @@ class RelationWriter
     /**
      * Checks whether the relation type exists.
      *
-     * @param string $relationType
-     *
      * @throws \Exception
      */
-    protected function checkRelation($relationType)
+    protected function checkRelation(string $relationType)
     {
         if (!\in_array($relationType, $this->relationTypes)) {
             $message = "Wrong relation type is used! Allowed types are: 'accessory' or 'similar'";
@@ -176,11 +166,9 @@ class RelationWriter
     /**
      * Gets relation id by orderNumber.
      *
-     * @param string $orderNumber
-     *
      * @return string
      */
-    protected function getRelationIdByOrderNumber($orderNumber)
+    protected function getRelationIdByOrderNumber(string $orderNumber)
     {
         $relationId = $this->db->fetchOne(
             'SELECT articleID FROM s_articles_details WHERE ordernumber = ?',

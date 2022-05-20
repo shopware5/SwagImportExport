@@ -45,9 +45,11 @@ class PriceWriter
     }
 
     /**
+     * @param array<int, array<string, string>> $prices
+     *
      * @throws AdapterException
      */
-    public function write($articleId, $articleDetailId, $prices)
+    public function write(int $articleId, int $articleDetailId, array $prices)
     {
         $tax = $this->getArticleTaxRate($articleId);
 
@@ -88,7 +90,10 @@ class PriceWriter
         }
     }
 
-    protected function calculatePrice($price, $newPrice, $tax)
+    /**
+     * @param array<string, mixed> $price
+     */
+    protected function calculatePrice(array $price, bool $newPrice, float $tax)
     {
         $taxInput = $this->customerGroups[$price['priceGroup']];
 
@@ -138,9 +143,11 @@ class PriceWriter
     }
 
     /**
+     * @param array<string, mixed> $price
+     *
      * @throws AdapterException
      */
-    protected function checkRequirements($price, $orderNumber)
+    protected function checkRequirements(array $price, string $orderNumber)
     {
         if (!\array_key_exists($price['priceGroup'], $this->customerGroups)) {
             $message = SnippetsHelper::getNamespace()->get(
@@ -164,7 +171,7 @@ class PriceWriter
      *
      * @return float
      */
-    protected function getArticleTaxRate($articleId)
+    protected function getArticleTaxRate(int $articleId)
     {
         $sql = 'SELECT coretax.tax FROM s_core_tax AS coretax
                 LEFT JOIN s_articles AS article ON article.taxID = coretax.id
@@ -179,11 +186,9 @@ class PriceWriter
     }
 
     /**
-     * @param int $articleDetailId
-     *
      * @return string
      */
-    protected function getArticleOrderNumber($articleDetailId)
+    protected function getArticleOrderNumber(int $articleDetailId)
     {
         $sql = 'SELECT ordernumber FROM s_articles_details WHERE id = ?';
 
@@ -199,11 +204,9 @@ class PriceWriter
     }
 
     /**
-     * @param string $price
-     *
      * @return float
      */
-    private function formatToFloatValue($price)
+    private function formatToFloatValue(string $price)
     {
         return (float) \str_replace(',', '.', $price);
     }

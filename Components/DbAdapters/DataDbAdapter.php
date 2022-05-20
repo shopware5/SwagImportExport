@@ -28,23 +28,21 @@ interface DataDbAdapter
     /**
      * Reads all records with the given ids and selects the passed columns.
      *
-     * @param array $ids
-     * @param array $columns
+     * @param array<int>                                 $ids
+     * @param array<string>|array<string, array<string>> $columns
      *
      * @return array<string, mixed>
      */
-    public function read($ids, $columns);
+    public function read(array $ids, array $columns);
 
     /**
      * Returns all ids for the given export with the given parameters.
      *
-     * @param int                  $start
-     * @param int                  $limit
      * @param array<string, mixed> $filter
      *
      * @return array<int>
      */
-    public function readRecordIds($start, $limit, $filter);
+    public function readRecordIds(?int $start, ?int $limit, array $filter = []);
 
     /**
      * Returns the default column.
@@ -71,11 +69,9 @@ interface DataDbAdapter
      *  'address.firstname as firstname'
      * ]
      *
-     * @param string $section
-     *
      * @return bool|mixed
      */
-    public function getColumns($section);
+    public function getColumns(string $section);
 
     /**
      * Creates, updates and validates the imported records.
@@ -84,7 +80,7 @@ interface DataDbAdapter
      *
      * @return void
      */
-    public function write($records);
+    public function write(array $records);
 
     /**
      * Returns unprocessed data. This will be used every time if an import wants to create data which relies on created data.

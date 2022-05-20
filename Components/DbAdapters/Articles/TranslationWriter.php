@@ -40,14 +40,11 @@ class TranslationWriter
     }
 
     /**
-     * @param int   $articleId
-     * @param int   $articleDetailId
-     * @param int   $mainDetailId
-     * @param array $translations
+     * @param array<int, array<string, string|int>> $translations
      *
      * @throws AdapterException
      */
-    public function write($articleId, $articleDetailId, $mainDetailId, $translations)
+    public function write(int $articleId, int $articleDetailId, int $mainDetailId, array $translations)
     {
         $whiteList = [
             'name',
@@ -83,7 +80,7 @@ class TranslationWriter
 
             $languageId = $translation['languageId'];
 
-            if (!$this->getShop($languageId)) {
+            if (!$this->getShop((int) $languageId)) {
                 $message = SnippetsHelper::getNamespace()
                     ->get('adapters/articles/no_shop_id', 'Shop by id %s not found');
                 throw new AdapterException(\sprintf($message, $languageId));
@@ -97,17 +94,17 @@ class TranslationWriter
             } else {
                 $data = $this->filterWhitelistedFields($translation, $variantWhiteList);
 
-                //checks for empty translations
+                // checks for empty translations
                 if (!empty($data)) {
                     foreach ($data as $index => $rows) {
-                        //removes empty rows
+                        // removes empty rows
                         if (empty($rows)) {
                             unset($data[$index]);
                         }
                     }
                 }
 
-                //saves if there is available data
+                // saves if there is available data
                 if (!empty($data)) {
                     $data = $this->prepareAttributePrefix($data, $attributes);
 
@@ -135,19 +132,19 @@ class TranslationWriter
     }
 
     /**
-     * @param int $shopId
-     *
      * @return string
      */
-    public function getShop($shopId)
+    public function getShop(int $shopId)
     {
         return $this->shops[$shopId];
     }
 
     /**
+     * @param array<string, mixed> $translation
+     *
      * @return bool
      */
-    private function isValid($translation)
+    private function isValid(array $translation)
     {
         if (!isset($translation['languageId']) || empty($translation['languageId'])) {
             return false;
@@ -174,17 +171,19 @@ class TranslationWriter
     }
 
     /**
-     * @param array $translation
-     * @param array $whiteList
+     * @param array<string, mixed> $translation
+     * @param array<int, mixed>    $whiteList
      *
      * @return array
      */
-    private function filterWhitelistedFields($translation, $whiteList)
+    private function filterWhitelistedFields(array $translation, array $whiteList)
     {
         return \array_intersect_key($translation, \array_flip($whiteList));
     }
 
     /**
+     * @param array<string, mixed> $attributes
+     *
      * @return array
      */
     private function prepareAttributePrefix(array $data, array $attributes)

@@ -117,7 +117,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * {@inheritDoc}
      */
-    public function readRecordIds($start = null, $limit = null, $filter = null)
+    public function readRecordIds(int $start = null, int $limit = null, array $filter = null)
     {
         $builder = $this->manager->createQueryBuilder();
 
@@ -144,14 +144,9 @@ class ArticlesImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * Returns article images
      *
-     * @param array $ids
-     * @param array $columns
-     *
-     * @throws
-     *
      * @return array
      */
-    public function read($ids, $columns)
+    public function read(array $ids, array $columns)
     {
         if (empty($ids)) {
             $message = SnippetsHelper::getNamespace()
@@ -239,13 +234,11 @@ class ArticlesImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * Insert/Update data into db
      *
-     * @param array $records
-     *
      * @throws \Enlight_Event_Exception
      * @throws \Exception
      * @throws \Zend_Db_Adapter_Exception
      */
-    public function write($records)
+    public function write(array $records)
     {
         if (empty($records['default'])) {
             $message = SnippetsHelper::getNamespace()->get(
@@ -292,13 +285,13 @@ class ArticlesImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
                         foreach ($variantConfig as $config) {
                             [$group, $option] = \explode(':', $config);
 
-                            //Get configurator group
+                            // Get configurator group
                             $cGroupModel = $this->manager->getRepository(Group::class)->findOneBy(['name' => $group]);
                             if ($cGroupModel === null) {
                                 continue;
                             }
 
-                            //Get configurator option
+                            // Get configurator option
                             $cOptionModel = $this->manager->getRepository(Option::class)->findOneBy(['name' => $option, 'groupId' => $cGroupModel->getId()]);
                             if ($cOptionModel === null) {
                                 continue;
@@ -320,7 +313,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
                     $media = $mediaRepository->findOneBy(['name' => $name]);
                 }
 
-                //create new media
+                // create new media
                 if ($this->imageImportMode === 2 || empty($media)) {
                     $path = $this->load($record['image'], $name);
                     $file = new File($path);
@@ -338,11 +331,11 @@ class ArticlesImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
                     $this->manager->persist($media);
                     $this->manager->flush();
 
-                    //thumbnail flag
-                    //TODO: validate thumbnail
+                    // thumbnail flag
+                    // TODO: validate thumbnail
                     $thumbnail = (bool) $record['thumbnail'];
 
-                    //generate thumbnails
+                    // generate thumbnails
                     if ($media->getType() === Media::TYPE_IMAGE && $thumbnail) {
                         $this->thumbnailManager->createMediaThumbnail($media, [], true);
                     }
@@ -394,11 +387,9 @@ class ArticlesImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @param string $section
-     *
      * @return bool|mixed
      */
-    public function getColumns($section)
+    public function getColumns(string $section)
     {
         $method = 'get' . \ucfirst($section) . 'Columns';
 
@@ -412,7 +403,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * @throws \RuntimeException
      */
-    public function saveMessage($message)
+    public function saveMessage(string $message)
     {
         if ($this->importExportErrorMode === false) {
             throw new \RuntimeException($message);
@@ -430,7 +421,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
         return $this->logMessages;
     }
 
-    public function setLogMessages($logMessages)
+    public function setLogMessages(string $logMessages)
     {
         $this->logMessages[] = $logMessages;
     }
@@ -443,18 +434,15 @@ class ArticlesImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
         return $this->logState;
     }
 
-    public function setLogState($logState)
+    public function setLogState(string $logState)
     {
         $this->logState = $logState;
     }
 
     /**
-     * @param array $columns
-     * @param array $ids
-     *
      * @return \Doctrine\ORM\QueryBuilder|QueryBuilder
      */
-    public function getBuilder($columns, $ids)
+    public function getBuilder(array $columns, array $ids)
     {
         $builder = $this->manager->createQueryBuilder();
         $builder->select($columns)
@@ -509,11 +497,9 @@ class ArticlesImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @param array $image
-     *
      * @return array
      */
-    protected function mapAttributes($image)
+    protected function mapAttributes(array $image)
     {
         $attributes = [];
         foreach ($image as $key => $value) {
@@ -531,11 +517,8 @@ class ArticlesImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
 
     /**
      * Sets image mapping for variants
-     *
-     * @param array $relationGroups
-     * @param int   $imageId
      */
-    protected function setImageMappings($relationGroups, $imageId)
+    protected function setImageMappings(array $relationGroups, int $imageId)
     {
         /** @var Repository $articleRepository */
         $articleRepository = $this->manager->getRepository(Article::class);
@@ -570,7 +553,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
      * @param Option[] $options
      * @param mixed    $parent  Image
      */
-    protected function createImagesForOptions($options, $imageData, $parent)
+    protected function createImagesForOptions(array $options, $imageData, $parent)
     {
         $articleId = $parent->getArticle()->getId();
         $imageData['path'] = null;
@@ -607,7 +590,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
      *
      * @return bool|string returns the absolute path of the downloaded file
      */
-    protected function load($url, $baseFilename = null)
+    protected function load(string $url, ?string $baseFilename = null)
     {
         if (!\is_dir($this->docPath)) {
             \mkdir($this->docPath, 0777, true);
@@ -644,7 +627,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
             throw new AdapterException(\sprintf($message), $destPath, $filename);
         }
 
-        //replace empty spaces
+        // replace empty spaces
         $url = \str_replace(' ', '%20', $url);
 
         if ($urlScheme === self::PROTOCOL_FILE) {

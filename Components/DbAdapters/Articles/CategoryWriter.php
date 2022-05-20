@@ -44,12 +44,11 @@ class CategoryWriter
     }
 
     /**
-     * @param string $articleId
-     * @param array  $categories
+     * @param array<int, array<string, int|string>> $categories
      *
      * @throws DBALException
      */
-    public function write($articleId, $categories)
+    public function write(string $articleId, array $categories)
     {
         if (!$categories) {
             return;
@@ -79,7 +78,7 @@ class CategoryWriter
      *
      * @return bool
      */
-    protected function isCategoryExists($categoryId)
+    protected function isCategoryExists(int $categoryId)
     {
         $isCategoryExists = $this->db->fetchOne(
             'SELECT id FROM s_categories WHERE id = ?',
@@ -98,7 +97,7 @@ class CategoryWriter
      *
      * @return int|string - categoryId
      */
-    protected function getCategoryId($categoryPath)
+    protected function getCategoryId(string $categoryPath)
     {
         $id = null;
         $path = '|';
@@ -106,7 +105,7 @@ class CategoryWriter
         $descriptions = \explode('->', $categoryPath);
 
         foreach ($descriptions as $description) {
-            $id = $this->getId($description, $id, $path);
+            $id = $this->getId($description, $id ? (int) $id : null, $path);
             $path = '|' . $id . $path;
             $data[$id] = $description;
         }
@@ -120,15 +119,11 @@ class CategoryWriter
      * Checks whether a category with the given name exists and returns its id.
      * Creates a category if it does not exist and returns the new inserted id.
      *
-     * @param mixed $description - category name
-     * @param mixed $id          - parent id
-     * @param mixed $path        - category path
-     *
      * @throws AdapterException
      *
      * @return int|string - categoryId
      */
-    protected function getId($description, $id, $path)
+    protected function getId(string $description, ?int $id, string $path)
     {
         if ($id === null) {
             $sql = 'SELECT id FROM s_categories WHERE description = ? AND path IS NULL';
@@ -140,7 +135,7 @@ class CategoryWriter
 
         $parentId = $this->db->fetchOne($sql, $params);
 
-        //check whether we have more than one category on the same level with the same name
+        // check whether we have more than one category on the same level with the same name
         $count = $this->db->fetchCol($sql, $params);
         if (\count($count) > 1) {
             $message = SnippetsHelper::getNamespace()
@@ -148,7 +143,7 @@ class CategoryWriter
             throw new AdapterException(\sprintf($message, $description));
         }
 
-        //check whether the category should be created
+        // check whether the category should be created
         if (!\is_numeric($parentId)) {
             $parentId = $this->insertCategory($description, $id, $path);
             $this->insertCategoryAttributes($parentId);
@@ -160,13 +155,9 @@ class CategoryWriter
     /**
      * Creates a category and returns its id
      *
-     * @param mixed $description - category name
-     * @param mixed $id          - id of the parent category
-     * @param mixed $path        - category path
-     *
      * @return int created category id
      */
-    protected function insertCategory($description, $id, $path)
+    protected function insertCategory(string $description, ?int $id, string $path)
     {
         if ($id === null) {
             $this->isRootExists();
@@ -200,10 +191,8 @@ class CategoryWriter
 
     /**
      * Creates categories' attributes
-     *
-     * @param int $categoryId
      */
-    protected function insertCategoryAttributes($categoryId)
+    protected function insertCategoryAttributes(int $categoryId)
     {
         $sql = "INSERT INTO s_categories_attributes (categoryID) VALUES ({$categoryId})";
         $this->db->exec($sql);
@@ -212,11 +201,9 @@ class CategoryWriter
     /**
      * Checks whether the category is a leaf
      *
-     * @param int $categoryId
-     *
      * @return bool
      */
-    protected function isLeaf($categoryId)
+    protected function isLeaf(int $categoryId)
     {
         $isParent = $this->db->fetchOne(
             'SELECT id FROM s_categories WHERE parent = ?',
@@ -228,10 +215,8 @@ class CategoryWriter
 
     /**
      * Updates s_articles_categories_ro table
-     *
-     * @param string $articleId
      */
-    protected function updateArticlesCategoriesRO($articleId)
+    protected function updateArticlesCategoriesRO(string $articleId)
     {
         foreach ($this->categoryIds as $categoryId) {
             $this->categorySubscriber->backlogAddAssignment($articleId, $categoryId);
@@ -239,12 +224,11 @@ class CategoryWriter
     }
 
     /**
-     * @param array  $categories
-     * @param string $articleId
+     * @param array<string, mixed> $categories
      *
      * @return string
      */
-    private function prepareValues($categories, $articleId)
+    private function prepareValues(array $categories, string $articleId)
     {
         $this->categoryIds = [];
         $values = \implode(
@@ -256,26 +240,26 @@ class CategoryWriter
                         $isCategoryExists = $this->isCategoryExists($category['categoryId']);
                     }
 
-                    //if categoryId exists, the article will be assigned to it, no matter of the categoryPath
+                    // if categoryId exists, the article will be assigned to it, no matter of the categoryPath
                     if ($isCategoryExists === true) {
                         $this->categoryIds[$category['categoryId']] = (int) $category['categoryId'];
 
                         return "({$articleId}, {$category['categoryId']})";
                     }
 
-                    //if categoryId does NOT exist and categoryPath is empty an error will be shown
+                    // if categoryId does NOT exist and categoryPath is empty an error will be shown
                     if ($isCategoryExists === false && empty($category['categoryPath'])) {
                         $message = SnippetsHelper::getNamespace()
                             ->get('adapters/articles/category_not_found', 'Category with id %s could not be found.');
                         throw new AdapterException(\sprintf($message, $category['categoryId']));
                     }
 
-                    //if categoryPath exists, the article will be assign based on the path
+                    // if categoryPath exists, the article will be assign based on the path
                     if (!empty($category['categoryPath'])) {
-                        //get categoryId by given path: 'English->Cars->Mazda'
+                        // get categoryId by given path: 'English->Cars->Mazda'
                         $category['categoryId'] = $this->getCategoryId($category['categoryPath']);
 
-                        //check whether the category is a leaf
+                        // check whether the category is a leaf
                         $isLeaf = $this->isLeaf($category['categoryId']);
 
                         if (!$isLeaf) {

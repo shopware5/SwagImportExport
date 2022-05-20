@@ -59,7 +59,10 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
 
     protected ?string $logState = null;
 
-    protected array $tempData;
+    /**
+     * @var array<string, string>
+     */
+    protected ?array $tempData = null;
 
     protected array $defaultValues = [];
 
@@ -141,7 +144,7 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * {@inheritDoc}
      */
-    public function readRecordIds($start, $limit, $filter)
+    public function readRecordIds(?int $start, ?int $limit, array $filter = [])
     {
         $builder = $this->modelManager->createQueryBuilder();
 
@@ -233,7 +236,7 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * @throws \RuntimeException
      */
-    public function read($ids, $columns)
+    public function read(array $ids, array $columns)
     {
         if (empty($ids)) {
             $message = SnippetsHelper::getNamespace()
@@ -276,7 +279,7 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
         }
         unset($record);
 
-        //images
+        // images
         $imageBuilder = $this->getImageBuilder($columns['image'], $ids);
         $tempImageResult = $imageBuilder->getQuery()->getResult();
         foreach ($tempImageResult as &$tempImage) {
@@ -285,23 +288,23 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
         unset($tempImage);
         $result['image'] = $tempImageResult;
 
-        //filter values
+        // filter values
         $propertyValuesBuilder = $this->getPropertyValueBuilder($columns['propertyValues'], $ids);
         $result['propertyValue'] = $propertyValuesBuilder->getQuery()->getResult();
 
-        //configurator
+        // configurator
         $configBuilder = $this->getConfiguratorBuilder($columns['configurator'], $ids);
         $result['configurator'] = $configBuilder->getQuery()->getResult();
 
-        //similar
+        // similar
         $similarsBuilder = $this->getSimilarBuilder($columns['similar'], $ids);
         $result['similar'] = $similarsBuilder->getQuery()->getResult();
 
-        //accessories
+        // accessories
         $accessoryBuilder = $this->getAccessoryBuilder($columns['accessory'], $ids);
         $result['accessory'] = $accessoryBuilder->getQuery()->getResult();
 
-        //categories
+        // categories
         $result['category'] = $this->prepareCategoryExport($ids, $columns['category']);
 
         $result['translation'] = $this->prepareTranslationExport($ids);
@@ -310,9 +313,12 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
+     * @param array<int>    $ids
+     * @param array<string> $categoryColumns
+     *
      * @return array
      */
-    public function prepareCategoryExport($ids, $categoryColumns)
+    public function prepareCategoryExport(array $ids, array $categoryColumns)
     {
         $mappedArticleIds = $this->getArticleIdsByDetailIds($ids);
 
@@ -321,7 +327,7 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
 
         $categoryMapper = $this->getAssignedCategoryNames($articleCategories);
 
-        //convert path
+        // convert path
         foreach ($articleCategories as &$pathIds) {
             $pathIds['categoryPath'] = $this->generatePath($pathIds, $categoryMapper);
         }
@@ -330,11 +336,11 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @throws \Zend_Db_Statement_Exception
+     * @param array<int> $ids
      *
      * @return array
      */
-    public function prepareTranslationExport($ids)
+    public function prepareTranslationExport(array $ids)
     {
         $productDetailIds = \implode(',', $ids);
 
@@ -346,7 +352,7 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
                 ";
         $translations = $this->db->query($sql)->fetchAll();
 
-        //all translation fields that can be translated for an article
+        // all translation fields that can be translated for an article
         $translationFields = $this->getTranslationFields();
         $rows = [];
         foreach ($translations as $index => $record) {
@@ -372,7 +378,7 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
         }
 
         $shops = $this->getShops();
-        unset($shops[0]); //removes default language
+        unset($shops[0]); // removes default language
 
         $result = [];
         foreach ($rows as $vId => $row) {
@@ -391,7 +397,7 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
             }
         }
 
-        //Sets missing translation fields with empty string
+        // Sets missing translation fields with empty string
         foreach ($result as &$resultRow) {
             foreach ($translationFields as $field) {
                 if (!isset($resultRow[$field])) {
@@ -477,9 +483,9 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * Set default values for fields which are empty or don't exists
      *
-     * @param array $values default values for nodes
+     * @param array<string, mixed> $values default values for nodes
      */
-    public function setDefaultValues($values)
+    public function setDefaultValues(array $values)
     {
         $this->defaultValues = $values;
     }
@@ -487,13 +493,13 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * Writes articles into the database
      *
-     * @param array $records
+     * @param array<string, mixed> $records
      *
      * @throws \RuntimeException
      */
-    public function write($records)
+    public function write(array $records)
     {
-        //articles
+        // articles
         if (empty($records['article'])) {
             $message = SnippetsHelper::getNamespace()->get(
                 'adapters/articles/no_records',
@@ -512,8 +518,6 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @param int $id
-     *
      * @throws AdapterException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
@@ -521,7 +525,7 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
      *
      * @return \Shopware\Models\Shop\Shop $shop
      */
-    public function getShop($id)
+    public function getShop(int $id)
     {
         $shop = $this->modelManager->find(Shop::class, $id);
         if (!$shop) {
@@ -625,7 +629,7 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * @return bool
      */
-    public function getColumns($section)
+    public function getColumns(string $section)
     {
         $method = 'get' . \ucfirst($section) . 'Columns';
 
@@ -639,7 +643,7 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * @return array
      */
-    public function getParentKeys($section)
+    public function getParentKeys(string $section)
     {
         switch ($section) {
             case 'article':
@@ -872,7 +876,7 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * @throws \RuntimeException
      */
-    public function saveMessage($message)
+    public function saveMessage(string $message)
     {
         $errorMode = $this->config->get('SwagImportExportErrorMode');
 
@@ -892,7 +896,7 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
         return $this->logMessages;
     }
 
-    public function setLogMessages($logMessages)
+    public function setLogMessages(string $logMessages)
     {
         $this->logMessages[] = $logMessages;
     }
@@ -905,12 +909,15 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
         return $this->logState;
     }
 
-    public function setLogState($logState)
+    public function setLogState(string $logState)
     {
         $this->logState = $logState;
     }
 
-    public function saveUnprocessedData($profileName, $type, $articleNumber, $data)
+    /**
+     * @param array<string, mixed> $data
+     */
+    public function saveUnprocessedData(string $profileName, string $type, string $articleNumber, array $data)
     {
         $this->saveArticleData($articleNumber);
 
@@ -925,99 +932,34 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
         return $this->unprocessedData;
     }
 
-    public function setUnprocessedData($profileName, $type, $data)
+    /**
+     * @param array<string, mixed> $data
+     */
+    public function setUnprocessedData(string $profileName, string $type, array $data)
     {
         $this->unprocessedData[$profileName][$type][] = $data;
     }
 
     /**
-     * @return array
+     * @return array<string, string>|null
      */
     public function getTempData()
     {
         return $this->tempData;
     }
 
-    public function setTempData($tempData)
+    public function setTempData(string $tempData)
     {
         $this->tempData[$tempData] = $tempData;
     }
 
     /**
-     * @throws \Zend_Db_Statement_Exception
-     *
-     * @return array
-     */
-    public function getTranslationPropertyGroup($articleDetailIds)
-    {
-        $sql = "SELECT filter.name as baseName,
-                ct.objectkey, ct.objectdata, ct.objectlanguage as propertyLanguageId
-                FROM s_articles_details AS articleDetails
-
-                INNER JOIN s_articles AS article
-                ON article.id = articleDetails.articleID
-
-                LEFT JOIN s_filter_articles AS fa
-                ON fa.articleID = article.id
-
-                LEFT JOIN s_filter_values AS fv
-                ON fv.id = fa.valueID
-
-                LEFT JOIN s_filter_relations AS fr
-                ON fr.optionID = fv.optionID
-
-                LEFT JOIN s_filter AS filter
-                ON filter.id = fr.groupID
-
-                LEFT JOIN s_core_translations AS ct
-                ON ct.objectkey = filter.id
-
-                WHERE articleDetails.id IN ($articleDetailIds) AND ct.objecttype = 'propertygroup'
-                GROUP BY ct.id
-                ";
-
-        return $this->db->query($sql)->fetchAll();
-    }
-
-    /**
-     * @throws \Zend_Db_Statement_Exception
-     *
-     * @return array
-     */
-    public function getTranslationPropertyOption($articleDetailIds)
-    {
-        $sql = "SELECT fo.name as baseName,
-                ct.objectkey, ct.objectdata, ct.objectlanguage as propertyLanguageId
-                FROM s_articles_details AS articleDetails
-
-                INNER JOIN s_articles AS article
-                ON article.id = articleDetails.articleID
-
-                LEFT JOIN s_filter_articles AS fa
-                ON fa.articleID = article.id
-
-                LEFT JOIN s_filter_values AS fv
-                ON fv.id = fa.valueID
-
-                LEFT JOIN s_filter_options AS fo
-                ON fo.id = fv.optionID
-
-                LEFT JOIN s_core_translations AS ct
-                ON ct.objectkey = fo.id
-
-                WHERE articleDetails.id IN ($articleDetailIds) AND ct.objecttype = 'propertyoption'
-                GROUP BY ct.id
-                ";
-
-        return $this->db->query($sql)->fetchAll();
-    }
-
-    /**
-     * @param mixed $ids - s_articles_details.id
+     * @param array<mixed> $columns
+     * @param array<int>   $ids
      *
      * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
      */
-    public function getArticleBuilder($columns, $ids)
+    public function getArticleBuilder(array $columns, array $ids)
     {
         $articleBuilder = $this->modelManager->createQueryBuilder();
         $articleBuilder->select($columns)
@@ -1038,9 +980,12 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
+     * @param array<mixed> $columns
+     * @param array<int>   $ids
+     *
      * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
      */
-    public function getPriceBuilder($columns, $ids)
+    public function getPriceBuilder(array $columns, array $ids)
     {
         $priceBuilder = $this->modelManager->createQueryBuilder();
         $priceBuilder->select($columns)
@@ -1056,9 +1001,12 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
+     * @param array<mixed> $columns
+     * @param array<int>   $ids
+     *
      * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
      */
-    public function getImageBuilder($columns, $ids)
+    public function getImageBuilder(array $columns, array $ids)
     {
         $imageBuilder = $this->modelManager->createQueryBuilder();
         $imageBuilder->select($columns)
@@ -1074,9 +1022,12 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
+     * @param array<mixed> $columns
+     * @param array<int>   $ids
+     *
      * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
      */
-    public function getPropertyValueBuilder($columns, $ids)
+    public function getPropertyValueBuilder(array $columns, array $ids)
     {
         $propertyValueBuilder = $this->modelManager->createQueryBuilder();
         $propertyValueBuilder->select($columns)
@@ -1094,9 +1045,12 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
+     * @param array<mixed> $columns
+     * @param array<int>   $ids
+     *
      * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
      */
-    public function getConfiguratorBuilder($columns, $ids)
+    public function getConfiguratorBuilder(array $columns, array $ids)
     {
         $configBuilder = $this->modelManager->createQueryBuilder();
         $configBuilder->select($columns)
@@ -1115,9 +1069,12 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
+     * @param array<mixed> $columns
+     * @param array<int>   $ids
+     *
      * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
      */
-    public function getSimilarBuilder($columns, $ids)
+    public function getSimilarBuilder(array $columns, array $ids)
     {
         $similarBuilder = $this->modelManager->createQueryBuilder();
         $similarBuilder->select($columns)
@@ -1135,9 +1092,12 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
+     * @param array<mixed> $columns
+     * @param array<int>   $ids
+     *
      * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
      */
-    public function getAccessoryBuilder($columns, $ids)
+    public function getAccessoryBuilder(array $columns, array $ids)
     {
         $accessoryBuilder = $this->modelManager->createQueryBuilder();
         $accessoryBuilder->select($columns)
@@ -1155,9 +1115,12 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
+     * @param array<mixed> $columns
+     * @param array<int>   $ids
+     *
      * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
      */
-    public function getCategoryBuilder($columns, $ids)
+    public function getCategoryBuilder(array $columns, array $ids)
     {
         $categoryBuilder = $this->modelManager->createQueryBuilder();
         $categoryBuilder->select($columns)
@@ -1171,11 +1134,13 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
+     * @param array<int> $detailIds
+     *
      * Returns article ids
      *
      * @return array
      */
-    protected function getArticleIdsByDetailIds($detailIds)
+    protected function getArticleIdsByDetailIds(array $detailIds)
     {
         $productIds = $this->modelManager->createQueryBuilder()
             ->select('article.id')
@@ -1196,11 +1161,11 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * Collects and creates a helper mapper for category path
      *
-     * @param array $categories
+     * @param array<string, mixed> $categories
      *
      * @return array
      */
-    protected function getAssignedCategoryNames($categories)
+    protected function getAssignedCategoryNames(array $categories)
     {
         $categoryIds = [];
         foreach ($categories as $category) {
@@ -1214,10 +1179,10 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
             }
         }
 
-        //only unique ids
+        // only unique ids
         $categoryIds = \array_unique($categoryIds);
 
-        //removes empty value
+        // removes empty value
         $categoryIds = \array_filter($categoryIds);
 
         $categoriesNames = $this->modelManager->createQueryBuilder()
@@ -1236,12 +1201,12 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @param array $category contains category data
-     * @param array $mapper   contains categories' names
+     * @param array<string, mixed> $category contains category data
+     * @param array<string>        $mapper   contains categories' names
      *
      * @return string converted path
      */
-    protected function generatePath($category, $mapper)
+    protected function generatePath(array $category, array $mapper)
     {
         $ids = [];
         if (!empty($category['categoryPath'])) {
@@ -1263,7 +1228,7 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * This data is for matching similars and accessories
      */
-    protected function saveArticleData($articleNumber)
+    protected function saveArticleData(string $articleNumber)
     {
         $tempData = $this->getTempData();
 
@@ -1286,10 +1251,9 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * Collects recursively category ids
      *
-     * @param \Shopware\Models\Category\Category $categoryModel
-     * @param array<int>                         $categoriesReturn
+     * @param array<int> $categoriesReturn
      */
-    protected function collectCategoryIds($categoryModel, array &$categoriesReturn): void
+    protected function collectCategoryIds(Category $categoryModel, array &$categoriesReturn): void
     {
         $categoryId = $categoryModel->getId();
         $categoriesReturn[] = $categoryId;
@@ -1341,6 +1305,8 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
+     * @param array<string, mixed> $records
+     *
      * @throws \Exception
      */
     private function performImport(array $records)
@@ -1496,12 +1462,11 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @param array $records
-     * @param int   $index
+     * @param array<string, mixed> $records
      *
      * @return array
      */
-    private function filterPropertyValues($records, $index, ArticleWriterResult $articleWriterResult)
+    private function filterPropertyValues(array $records, int $index, ArticleWriterResult $articleWriterResult)
     {
         return \array_filter(
             $records['propertyValue'] ?? [],
@@ -1513,6 +1478,8 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
+     * @param array<mixed> $columns
+     *
      * @return array
      */
     private function filterAttributeColumns(array $columns)

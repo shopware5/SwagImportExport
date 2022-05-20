@@ -46,7 +46,7 @@ class AddressDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * {@inheritdoc}
      */
-    public function read($ids, $columns)
+    public function read(array $ids, array $columns)
     {
         $queryBuilder = $this->modelManager->createQueryBuilder();
         $queryBuilder->select($columns)
@@ -68,7 +68,7 @@ class AddressDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * {@inheritdoc}
      */
-    public function readRecordIds($start = 0, $limit = 0, $filter = [])
+    public function readRecordIds(?int $start, ?int $limit, array $filter = [])
     {
         $query = $this->modelManager->getConnection()->createQueryBuilder();
         $query->select(['address.id']);
@@ -138,7 +138,7 @@ class AddressDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * {@inheritdoc}
      */
-    public function getColumns($section = [])
+    public function getColumns(?string $section = null)
     {
         return $this->getDefaultColumns();
     }
@@ -146,7 +146,7 @@ class AddressDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * {@inheritdoc}
      */
-    public function write($records)
+    public function write(array $records)
     {
         if (empty($records['address'])) {
             throw new \Exception(SnippetsHelper::getNamespace()->get('adapters/address/no_records', 'Could not find address records.'));
@@ -195,11 +195,9 @@ class AddressDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @param string $logMessages
-     *
      * @return void
      */
-    public function setLogMessages($logMessages)
+    public function setLogMessages(string $logMessages)
     {
         $this->logMessages[] = $logMessages;
     }
@@ -239,6 +237,8 @@ class AddressDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
+     * @param array<string, mixed> $addressRecord
+     *
      * @return Customer|null
      */
     private function findCustomerByEmailAndNumber(array $addressRecord)
@@ -251,6 +251,9 @@ class AddressDbAdapter implements DataDbAdapter, \Enlight_Hook
         ]);
     }
 
+    /**
+     * @param array<string, mixed> $addressRecord
+     */
     private function getAddressModel(array $addressRecord): Address
     {
         $addressModel = null;
@@ -267,6 +270,8 @@ class AddressDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
+     * @param array<string, mixed> $addressRecord
+     *
      * @return State|null
      */
     private function findStateById(array $addressRecord)
@@ -279,6 +284,8 @@ class AddressDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
+     * @param array<string, mixed> $addressRecord
+     *
      * @return Customer
      */
     private function getCustomer(array $addressRecord)
@@ -312,6 +319,8 @@ class AddressDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
+     * @param array<string, mixed> $addressRecord
+     *
      * @return CustomerAddressAttribute
      */
     private function getAttributeModel(array $addressRecord, Address $addressModel)
@@ -336,11 +345,9 @@ class AddressDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @param string $message
-     *
      * @throws \Exception
      */
-    private function saveErrorMessage($message)
+    private function saveErrorMessage(string $message)
     {
         $errorMode = $this->config->get('SwagImportExportErrorMode');
         if ($errorMode === false) {
@@ -351,14 +358,14 @@ class AddressDbAdapter implements DataDbAdapter, \Enlight_Hook
         $this->setLogState('true');
     }
 
-    /**
-     * @param string $logState
-     */
-    private function setLogState($logState)
+    private function setLogState(string $logState)
     {
         $this->logState = $logState;
     }
 
+    /**
+     * @param array<string, mixed> $addressRecord
+     */
     private function createAddressWithId(array $addressRecord): Address
     {
         $connection = $this->modelManager->getConnection();
@@ -382,6 +389,8 @@ class AddressDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
+     * @param array<string, mixed> $addressRecord
+     *
      * @throws AdapterException
      *
      * @return array
@@ -414,6 +423,8 @@ class AddressDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
+     * @param array<string, mixed> $addressRecord
+     *
      * @throws AdapterException
      *
      * @return array

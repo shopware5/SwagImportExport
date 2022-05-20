@@ -1,6 +1,6 @@
 testRead:
     testCase0:
-        columns: 'customer.id, customer.email, billing.firstname as b_firstname, shipping.firstname as s_firstname'
+        columns: [customer.id, customer.email, billing.firstname as b_firstname, shipping.firstname as s_firstname]
         ids: [ 1, 2 ]
         expected:
             0:
@@ -15,7 +15,7 @@ testRead:
                 s_firstname: 'Händler'
         expectedCount: 2
     testCase1:
-        columns: 'customer.id, customer.hashPassword as password, customer.encoderName, customer.email, customer.active, customer.accountMode, customer.confirmationKey, customer.paymentId, customer.firstLogin, customer.lastLogin, customer.sessionId, customer.newsletter, customer.validation, customer.affiliate, customer.groupKey, customer.paymentPreset, customer.languageId, customer.shopId, customer.referer, customer.priceGroupId, customer.internalComment, customer.failedLogins, customer.lockedUntil'
+        columns: [customer.id, customer.hashPassword as password, customer.encoderName, customer.email, customer.active, customer.accountMode, customer.confirmationKey, customer.paymentId, customer.firstLogin, customer.lastLogin, customer.sessionId, customer.newsletter, customer.validation, customer.affiliate, customer.groupKey, customer.paymentPreset, customer.languageId, customer.shopId, customer.referer, customer.priceGroupId, customer.internalComment, customer.failedLogins, customer.lockedUntil]
         ids: [1]
         expected:
             0:
@@ -44,7 +44,7 @@ testRead:
                 lockedUntil: ''
         expectedCount: 1
     testCase2:
-        columns: 'billing.id, billing.company, billing.department, billing.salutation, billing.firstname, billing.lastname, billing.street, billing.zipcode, billing.city, billing.phone, billing.countryId, billing.stateId, billing.vatId, billing.additionalAddressLine1, billing.additionalAddressLine2'
+        columns: [billing.id, billing.company, billing.department, billing.salutation, billing.firstname, billing.lastname, billing.street, billing.zipcode, billing.city, billing.phone, billing.countryId, billing.stateId, billing.vatId, billing.additionalAddressLine1, billing.additionalAddressLine2]
         ids: [2]
         expected:
             0:

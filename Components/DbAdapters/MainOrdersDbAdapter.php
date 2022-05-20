@@ -55,7 +55,7 @@ class MainOrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * {@inheritDoc}
      */
-    public function readRecordIds($start = null, $limit = null, $filter = null)
+    public function readRecordIds(int $start = null, int $limit = null, array $filter = null)
     {
         $connection = $this->modelManager->getConnection();
 
@@ -112,7 +112,7 @@ class MainOrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
      *
      * @return array
      */
-    public function read($ids, $columns)
+    public function read(array $ids, array $columns)
     {
         if (!$ids) {
             $message = SnippetsHelper::getNamespace()->get(
@@ -269,7 +269,7 @@ class MainOrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * @throws \RuntimeException
      */
-    public function write($records)
+    public function write(array $records)
     {
         $message = SnippetsHelper::getNamespace()
             ->get('adapters/mainOrders/use_order_profile_for_import', 'This is only an export profile. Please use `Orders` profile for imports!');
@@ -285,11 +285,9 @@ class MainOrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @param string $message
-     *
      * @throws \RuntimeException
      */
-    public function saveMessage($message)
+    public function saveMessage(string $message)
     {
         $errorMode = $this->config->get('SwagImportExportErrorMode');
         if ($errorMode === false) {
@@ -308,10 +306,7 @@ class MainOrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
         return $this->logMessages;
     }
 
-    /**
-     * @param string $logMessages
-     */
-    public function setLogMessages($logMessages)
+    public function setLogMessages(string $logMessages)
     {
         $this->logMessages[] = $logMessages;
     }
@@ -324,10 +319,7 @@ class MainOrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
         return $this->logState;
     }
 
-    /**
-     * @param string $logState
-     */
-    public function setLogState($logState)
+    public function setLogState(string $logState)
     {
         $this->logState = $logState;
     }
@@ -354,7 +346,7 @@ class MainOrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * @return bool|array
      */
-    public function getColumns($section)
+    public function getColumns(string $section)
     {
         $method = 'get' . \ucfirst($section) . 'Columns';
         if (\method_exists($this, $method)) {
@@ -365,12 +357,12 @@ class MainOrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @param array $columns
-     * @param array $ids
+     * @param array<string>|string $columns
+     * @param array<int>           $ids
      *
      * @return QueryBuilder
      */
-    public function getOrderBuilder($columns, $ids)
+    public function getOrderBuilder(array $columns, array $ids)
     {
         $builder = $this->modelManager->createQueryBuilder();
         $builder->select($columns)
@@ -396,11 +388,11 @@ class MainOrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @param array $ids
+     * @param array<int> $ids
      *
      * @return QueryBuilder
      */
-    public function getTaxSumBuilder($ids)
+    public function getTaxSumBuilder(array $ids)
     {
         $builder = $this->modelManager->createQueryBuilder();
         $builder->select(['details.orderId, orders.invoiceAmount, orders.invoiceAmountNet, orders.invoiceShipping, orders.invoiceShippingNet, orders.net, details.price, details.quantity, details.taxId, details.taxRate'])
@@ -415,6 +407,8 @@ class MainOrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
+     * @param array<string, mixed> $orders
+     *
      * @return array
      */
     private function addOrderAndPaymentState(array $orders)
@@ -430,11 +424,11 @@ class MainOrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @param int $id
+     * @param array<string, string> $states
      *
      * @return string
      */
-    private function getStateName($id, array $states)
+    private function getStateName(int $id, array $states)
     {
         foreach ($states as $state) {
             if ($id === (int) $state['id']) {
@@ -466,12 +460,12 @@ class MainOrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @param array $ids
-     * @param array $orders
+     * @param array<int>           $ids
+     * @param array<string, mixed> $orders
      *
      * @return array
      */
-    private function getTaxSums($ids, $orders)
+    private function getTaxSums(array $ids, array $orders)
     {
         $orderRecords = [];
         foreach ($orders as $order) {
@@ -516,12 +510,9 @@ class MainOrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * Get shipping tax rate
      *
-     * @param float $amount
-     * @param float $amountNet
-     *
      * @return float
      */
-    private function getShippingRate($amount, $amountNet)
+    private function getShippingRate(float $amount, float $amountNet)
     {
         if (empty($amountNet)) {
             $amountNet = 1.0;
@@ -533,11 +524,11 @@ class MainOrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @param array $taxData
+     * @param array<string, mixed> $taxData
      *
      * @return float
      */
-    private function calculateTaxSum($taxData)
+    private function calculateTaxSum(array $taxData)
     {
         $taxValue = 0;
         if (!empty($taxData['taxRate'])) {

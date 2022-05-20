@@ -94,7 +94,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * {@inheritDoc}
      */
-    public function readRecordIds($start, $limit, $filter)
+    public function readRecordIds(?int $start, ?int $limit, array $filter = [])
     {
         $builder = $this->manager->createQueryBuilder();
 
@@ -118,14 +118,11 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @param array $ids
-     * @param array $columns
-     *
      * @throws \Exception
      *
      * @return array
      */
-    public function read($ids, $columns)
+    public function read(array $ids, array $columns)
     {
         if (empty($ids)) {
             $message = SnippetsHelper::getNamespace()
@@ -144,7 +141,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
      * @throws \Enlight_Event_Exception
      * @throws \RuntimeException
      */
-    public function write($records)
+    public function write(array $records)
     {
         $this->unprocessedData = [];
 
@@ -238,7 +235,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * @throws \Exception
      */
-    public function saveMessage($message)
+    public function saveMessage(string $message)
     {
         if ($this->importExportErrorMode === false) {
             throw new \Exception($message);
@@ -256,7 +253,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
         return $this->logMessages;
     }
 
-    public function setLogMessages($logMessages)
+    public function setLogMessages(string $logMessages)
     {
         $this->logMessages[] = $logMessages;
     }
@@ -269,7 +266,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
         return $this->logState;
     }
 
-    public function setLogState($logState)
+    public function setLogState(string $logState)
     {
         $this->logState = $logState;
     }
@@ -285,11 +282,9 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @param string $section
-     *
      * @return bool|mixed
      */
-    public function getColumns($section)
+    public function getColumns(string $section)
     {
         $method = 'get' . \ucfirst($section) . 'Columns';
 
@@ -301,11 +296,13 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
+     * @param array<int> $ids
+     *
      * @throws \Zend_Db_Statement_Exception
      *
      * @return array
      */
-    public function getTranslations($ids)
+    public function getTranslations(array $ids)
     {
         $translationIds = \implode(',', $ids);
 
@@ -334,11 +331,11 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * Processing serialized object data
      *
-     * @param array $translations
+     * @param array<string, mixed> $translations
      *
      * @return array
      */
-    protected function prepareTranslations($translations)
+    protected function prepareTranslations(array $translations)
     {
         $translationAttr = [];
 
@@ -407,12 +404,12 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * Prefix attributes before writing to database
      *
-     * @param array $data
-     * @param array $attributes
+     * @param array<string, mixed> $data
+     * @param array<string, mixed> $attributes
      *
      * @return array
      */
-    private function prepareAttributePrefix($data, $attributes)
+    private function prepareAttributePrefix(array $data, array $attributes)
     {
         $result = [];
         $attributes = \array_column($attributes, 'columnName');

@@ -16,12 +16,7 @@ class ArticleWriterResult
 
     private int $detailId;
 
-    /**
-     * @param int $articleId
-     * @param int $mainDetailId
-     * @param int $detailId
-     */
-    public function __construct($articleId, $mainDetailId, $detailId)
+    public function __construct(int $articleId, int $mainDetailId, int $detailId)
     {
         $this->articleId = $articleId;
         $this->mainDetailId = $mainDetailId;

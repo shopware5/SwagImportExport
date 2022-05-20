@@ -44,13 +44,15 @@ class ImageWriter
     }
 
     /**
+     * @param array<string, mixed> $images
+     *
      * @throws AdapterException
      */
-    public function write($articleId, $mainDetailOrderNumber, $images)
+    public function write(int $articleId, string $mainDetailOrderNumber, array $images)
     {
         $newImages = [];
         foreach ($images as $image) {
-            //if image data has only 'parentIndexElement' element
+            // if image data has only 'parentIndexElement' element
             if (\count($image) < 2) {
                 break;
             }
@@ -101,11 +103,11 @@ class ImageWriter
         }
 
         if ($newImages) {
-            $this->insertImages($newImages, $articleId); //insert only new images
+            $this->insertImages($newImages, $articleId); // insert only new images
         }
     }
 
-    protected function getMediaById($mediaId)
+    protected function getMediaById(int $mediaId)
     {
         $media = $this->db->fetchRow(
             'SELECT id, name, description, extension FROM s_media WHERE id = ?',
@@ -115,7 +117,7 @@ class ImageWriter
         return $media;
     }
 
-    protected function getMediaByName($name)
+    protected function getMediaByName(string $name)
     {
         $media = $this->db->fetchRow(
             'SELECT id, name, description, extension FROM s_media media WHERE media.name = ?',
@@ -128,7 +130,7 @@ class ImageWriter
     /**
      * @return bool
      */
-    protected function isImageExists($articleId, $mediaId)
+    protected function isImageExists(int $articleId, int $mediaId)
     {
         $isImageExists = $this->db->fetchOne(
             'SELECT id FROM s_articles_img WHERE articleID = ? AND media_id = ?',
@@ -141,7 +143,7 @@ class ImageWriter
     /**
      * @return bool
      */
-    protected function isImageNameCorrect($mediaId, $imageName)
+    protected function isImageNameCorrect(int $mediaId, string $imageName)
     {
         $isImageNameCorrect = $this->db->fetchOne(
             'SELECT media.id FROM s_media media WHERE media.id = ? AND media.name = ?',
@@ -152,9 +154,11 @@ class ImageWriter
     }
 
     /**
+     * @param array<string, mixed> $data
+     *
      * @throws \Doctrine\DBAL\DBALException
      */
-    protected function insertImages($data, $articleId)
+    protected function insertImages(array $data, int $articleId)
     {
         $medias = $data['medias'];
         $images = $data['images'];
@@ -181,9 +185,12 @@ class ImageWriter
     }
 
     /**
+     * @param array<string, mixed> $medias
+     * @param array<string, mixed> $images
+     *
      * @return array
      */
-    protected function prepareImageData($medias, $images)
+    protected function prepareImageData(array $medias, array $images)
     {
         $mediaId = null;
         $imageData = [];
@@ -203,7 +210,7 @@ class ImageWriter
         return [$imageData, $mediaId];
     }
 
-    protected function setMainImage($articleId, $mediaId)
+    protected function setMainImage(int $articleId, ?int $mediaId)
     {
         $count = $this->countOfMainImages($articleId);
         if ($count == 1) {
@@ -220,7 +227,7 @@ class ImageWriter
     /**
      * @return string
      */
-    protected function countOfMainImages($articleId)
+    protected function countOfMainImages(int $articleId)
     {
         $count = $this->db->fetchOne(
             'SELECT COUNT(main)
@@ -235,7 +242,7 @@ class ImageWriter
     /**
      * @throws \Doctrine\DBAL\DBALException
      */
-    protected function setFirstImageAsMain($articleId)
+    protected function setFirstImageAsMain(int $articleId)
     {
         $update = "UPDATE s_articles_img SET main = 1 WHERE articleID = {$articleId} ORDER BY id ASC LIMIT 1";
         $this->connection->exec($update);
@@ -244,7 +251,7 @@ class ImageWriter
     /**
      * @throws \Doctrine\DBAL\DBALException
      */
-    protected function updateMain($articleId, $mediaId)
+    protected function updateMain(int $articleId, int $mediaId)
     {
         $update = "UPDATE s_articles_img SET main = 2 WHERE articleID = {$articleId} AND media_id != {$mediaId}";
         $this->connection->exec($update);

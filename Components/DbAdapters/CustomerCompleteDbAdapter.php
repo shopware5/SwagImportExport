@@ -34,12 +34,9 @@ class CustomerCompleteDbAdapter extends CustomerDbAdapter
     }
 
     /**
-     * @param array $columns
-     * @param array $ids
-     *
      * @return \Shopware\Components\Model\QueryBuilder
      */
-    public function getBuilder($columns, $ids)
+    public function getBuilder(array $columns, array $ids)
     {
         $builder = $this->manager->createQueryBuilder();
         $builder->select($columns)
@@ -55,7 +52,7 @@ class CustomerCompleteDbAdapter extends CustomerDbAdapter
     /**
      * {@inheritDoc}
      */
-    public function readRecordIds($start, $limit, $filter)
+    public function readRecordIds(?int $start, ?int $limit, array $filter = [])
     {
         $query = $this->manager->getConnection()->createQueryBuilder();
         $query->select(['customer.id']);
@@ -82,12 +79,9 @@ class CustomerCompleteDbAdapter extends CustomerDbAdapter
     }
 
     /**
-     * @param array $ids
-     * @param array $columns
-     *
      * @return array
      */
-    public function read($ids, $columns)
+    public function read(array $ids, array $columns)
     {
         foreach ($columns as $key => $value) {
             if ($value === 'unhashedPassword') {
@@ -131,6 +125,8 @@ class CustomerCompleteDbAdapter extends CustomerDbAdapter
     }
 
     /**
+     * @param array<int> $ids
+     *
      * @return array
      */
     private function getAddresses(array $ids)
@@ -147,11 +143,11 @@ class CustomerCompleteDbAdapter extends CustomerDbAdapter
     }
 
     /**
-     * @param array $ids
+     * @param array<int> $ids
      *
      * @return array
      */
-    private function getCustomerOrders($ids)
+    private function getCustomerOrders(array $ids)
     {
         $builder = $this->manager->createQueryBuilder();
 
@@ -206,9 +202,11 @@ class CustomerCompleteDbAdapter extends CustomerDbAdapter
     }
 
     /**
+     * @param array<int> $ids
+     *
      * @return array
      */
-    private function getNewsletterRecipients($ids)
+    private function getNewsletterRecipients(array $ids)
     {
         $dbalQueryBuilder = $this->manager->getConnection()->createQueryBuilder();
 
