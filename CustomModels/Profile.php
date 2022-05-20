@@ -22,75 +22,63 @@ class Profile extends ModelEntity
     /**
      * Primary Key - autoincrement value
      *
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var Collection<string|null, Expression>
+     * @var Collection<Expression>
      *
      * @ORM\OneToMany(targetEntity="SwagImportExport\CustomModels\Expression", mappedBy="profile")
+     * @ORM\JoinColumn(nullable=true)
      */
-    protected $expressions;
+    protected ?Collection $expressions = null;
 
     /**
      * @var Collection<string|null, Session>
      *
      * @ORM\OneToMany(targetEntity="SwagImportExport\CustomModels\Session", mappedBy="profile")
      */
-    protected $sessions;
+    protected Collection $sessions;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="type", type="string", length=200)
      */
-    protected $type;
+    protected string $type;
 
     /**
-     * @var int|null
-     *
      * @ORM\Column(name="base_profile", type="integer", nullable=true)
      */
-    protected $baseProfile;
+    protected ?int $baseProfile;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="name", type="string", length=200, unique=true)
      */
-    protected $name;
+    protected string $name;
 
     /**
-     * @var string|null
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected $description;
+    protected ?string $description;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="tree", type="text")
      */
-    protected $tree;
+    protected string $tree;
 
     /**
      * @var int hidden
      *
      * @ORM\Column(name="hidden", type="integer")
      */
-    protected $hidden = 0;
+    protected int $hidden = 0;
 
     /**
-     * @var bool
      * @ORM\Column(name="is_default", type="boolean")
      */
-    protected $default = false;
+    protected bool $default = false;
 
     public function getId(): int
     {

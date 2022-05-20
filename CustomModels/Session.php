@@ -21,102 +21,76 @@ use Shopware\Components\Model\ModelEntity;
 class Session extends ModelEntity
 {
     /**
-     * Primary Key - autoincrement value
-     *
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var ?Profile
-     *
      * @ORM\ManyToOne(targetEntity="SwagImportExport\CustomModels\Profile", inversedBy="sessions", cascade={"persist", "refresh"})
      * @ORM\JoinColumn(name="profile_id", onDelete="CASCADE")
      */
-    protected $profile;
+    protected ?Profile $profile;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="type", type="string", length=200)
      */
-    protected $type;
+    protected string $type;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="ids", type="text", nullable=false)
      */
-    protected $ids;
+    protected ?string $ids = null;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
-    protected $position;
+    protected ?int $position = null;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="total_count", type="integer", nullable=false)
      */
-    protected $totalCount;
+    protected int $totalCount;
 
     /**
-     * @var string|null
-     *
      * @ORM\Column(name="username", type="string", length=200, nullable=true)
      */
-    protected $userName;
+    protected ?string $userName;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="file_name", type="string", length=200)
      */
-    protected $fileName;
+    protected string $fileName;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="format", type="string", length=100)
      */
-    protected $format;
+    protected string $format;
 
     /**
      * Filesize of the file in bytes
      *
-     * @var int|null
-     *
      * @ORM\Column(name="file_size", type="integer", nullable=true)
      */
-    protected $fileSize;
+    protected ?int $fileSize;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="state", type="string", length=100)
      */
-    protected $state = 'new';
+    protected string $state = 'new';
 
     /**
-     * @var \Datetime
-     *
      * @ORM\Column(name="created_at", type="datetime")
      */
-    protected $createdAt;
+    protected \Datetime $createdAt;
 
     /**
      * @var Collection<string, Logger>
      *
      * @ORM\OneToMany(targetEntity="SwagImportExport\CustomModels\Logger", mappedBy="session")
      */
-    protected $logs;
+    protected Collection $logs;
 
     public function __construct()
     {

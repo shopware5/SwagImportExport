@@ -21,44 +21,34 @@ class Logger extends ModelEntity
     /**
      * Primary Key - autoincrement value
      *
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var Session|null
-     *
      * @ORM\ManyToOne(targetEntity="SwagImportExport\CustomModels\Session", inversedBy="logs")
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    protected $session;
+    protected ?Session $session;
 
     /**
-     * @var string|null
-     *
      * @ORM\Column(name="message", type="text", nullable=true)
      */
-    protected $message;
+    protected ?string $message;
 
     /**
      * Confusing naming here - indicates error state: false = no errors
      *
-     * @var string|null
-     *
      * @ORM\Column(name="state", type="string", length=100, nullable=true)
      */
-    protected $state;
+    protected ?string $state;
 
     /**
-     * @var \Datetime
-     *
      * @ORM\Column(name="created_at", type="datetime")
      */
-    protected $createdAt;
+    protected \Datetime $createdAt;
 
     /**
      * @return int

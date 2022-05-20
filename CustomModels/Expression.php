@@ -23,42 +23,32 @@ class Expression extends ModelEntity
     /**
      * Primary Key - autoincrement value
      *
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected int $id;
 
     /**
-     * @var Profile|null
-     *
      * @ORM\ManyToOne(targetEntity="SwagImportExport\CustomModels\Profile", cascade={"persist", "refresh"})
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
-    protected $profile;
+    protected ?Profile $profile;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="variable", type="string", length=200)
      */
-    protected $variable;
+    protected string $variable;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="export_conversion", type="text")
      */
-    protected $exportConversion;
+    protected string $exportConversion;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="import_conversion", type="text")
      */
-    protected $importConversion;
+    protected string $importConversion;
 
     public function getId(): int
     {
