@@ -166,62 +166,7 @@ parameters:
 			path: Components/Converter/CsvConverter.php
 
 		-
-			message: "#^Cannot assign offset non\\-empty\\-string to string\\.$#"
-			count: 1
-			path: Components/Converter/XmlConverter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Converter\\\\XmlConverter\\:\\:atr_as_values\\(\\) has parameter \\$array with no type specified\\.$#"
-			count: 1
-			path: Components/Converter/XmlConverter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Converter\\\\XmlConverter\\:\\:atr_as_values\\(\\) should return bool but return statement is missing\\.$#"
-			count: 1
-			path: Components/Converter/XmlConverter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Converter\\\\XmlConverter\\:\\:attr_as_key\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Converter/XmlConverter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Converter\\\\XmlConverter\\:\\:attr_as_key\\(\\) has parameter \\$array with no type specified\\.$#"
-			count: 1
-			path: Components/Converter/XmlConverter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Converter\\\\XmlConverter\\:\\:attr_as_key\\(\\) has parameter \\$atr with no type specified\\.$#"
-			count: 1
-			path: Components/Converter/XmlConverter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Converter\\\\XmlConverter\\:\\:decode\\(\\) has parameter \\$contents with no type specified\\.$#"
-			count: 1
-			path: Components/Converter/XmlConverter.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Converter\\\\XmlConverter\\:\\:decode\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Converter/XmlConverter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Converter\\\\XmlConverter\\:\\:encode\\(\\) has parameter \\$array with no type specified\\.$#"
-			count: 1
-			path: Components/Converter/XmlConverter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Converter\\\\XmlConverter\\:\\:fix_array\\(\\) has parameter \\$array with no type specified\\.$#"
-			count: 1
-			path: Components/Converter/XmlConverter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Converter\\\\XmlConverter\\:\\:fix_string\\(\\) has parameter \\$string with no type specified\\.$#"
-			count: 1
-			path: Components/Converter/XmlConverter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Converter\\\\XmlConverter\\:\\:hasSpecialCharacters\\(\\) has parameter \\$item with no type specified\\.$#"
 			count: 1
 			path: Components/Converter/XmlConverter.php
 
@@ -232,21 +177,6 @@ parameters:
 
 		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Converter\\\\XmlConverter\\:\\:isEmpty\\(\\) has parameter \\$item with no type specified\\.$#"
-			count: 1
-			path: Components/Converter/XmlConverter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Converter\\\\XmlConverter\\:\\:value_as_key\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Converter/XmlConverter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Converter\\\\XmlConverter\\:\\:value_as_key\\(\\) has parameter \\$array with no type specified\\.$#"
-			count: 1
-			path: Components/Converter/XmlConverter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Converter\\\\XmlConverter\\:\\:value_as_key\\(\\) has parameter \\$name with no type specified\\.$#"
 			count: 1
 			path: Components/Converter/XmlConverter.php
 

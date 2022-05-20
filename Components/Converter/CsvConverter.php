@@ -16,7 +16,7 @@ class CsvConverter
     public array $sSettings = [
         'fieldmark' => '"',
         'separator' => ';',
-        'encoding' => 'ISO-8859-1', //UTF-8
+        'encoding' => 'ISO-8859-1', // UTF-8
         'escaped_separator' => '',
         'escaped_fieldmark' => '""',
         'newline' => "\n",
@@ -24,11 +24,9 @@ class CsvConverter
     ];
 
     /**
-     * @param array $array
-     *
      * @return string
      */
-    public function encode($array, array $keys = [])
+    public function encode(array $array, array $keys = [])
     {
         if (!\is_array($keys) || !\count($keys)) {
             $keys = \array_keys(\current($array));
@@ -39,46 +37,6 @@ class CsvConverter
         }
 
         return $csv;
-    }
-
-    /**
-     * @deprecated - Unused, will be removed without replacement in 3.0.0
-     *
-     * @param array         $array
-     * @param resource|null $stream
-     *
-     * @return bool
-     */
-    public function encode_stream($array, array $keys = [], &$stream = null)
-    {
-        if (empty($stream)) {
-            $stream = \fopen('php://output', 'wb');
-        }
-        if (!\is_array($keys) || !\count($keys)) {
-            $keys = \array_keys(\current($array));
-        }
-        foreach ($array as $line) {
-            \fwrite($stream, $this->_encode_line($line, $keys) . $this->sSettings['newline']);
-        }
-
-        return true;
-    }
-
-    /**
-     * @param array $array
-     *
-     * @return array
-     */
-    public function get_all_keys($array)
-    {
-        $keys = [];
-        if (!empty($array) && \is_array($array)) {
-            foreach ($array as $line) {
-                $keys = \array_merge($keys, \array_diff(\array_keys($line), $keys));
-            }
-        }
-
-        return $keys;
     }
 
     /**
@@ -124,11 +82,9 @@ class CsvConverter
     }
 
     /**
-     * @param string $csv
-     *
      * @return array
      */
-    public function decode($csv, array $keys = [])
+    public function decode(string $csv, array $keys = [])
     {
         $csv = \file_get_contents($csv);
 
@@ -214,7 +170,7 @@ class CsvConverter
     /**
      * @return array
      */
-    public function _split_line($csv)
+    private function _split_line(string $csv)
     {
         $lines = [];
         $elements = \explode($this->sSettings['newline'], $csv);
