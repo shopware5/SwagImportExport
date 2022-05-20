@@ -6,15 +6,14 @@
  * file that was distributed with this source code.
  */
 
+use Shopware\Components\Model\ModelManager;
+
 /**
  * Shopware ImportExport Plugin
  */
 class Shopware_Controllers_Frontend_SwagImportExport extends Enlight_Controller_Action
 {
-    /**
-     * Shopware\Components\Model\ModelManager
-     */
-    protected $manager;
+    protected ModelManager $manager;
 
     public function init()
     {

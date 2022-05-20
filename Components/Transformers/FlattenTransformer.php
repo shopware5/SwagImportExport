@@ -996,7 +996,6 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
             $this->findMainIterationPart($tree);
         }
 
-        /* @var array */
         return $this->mainIterationPart;
     }
 

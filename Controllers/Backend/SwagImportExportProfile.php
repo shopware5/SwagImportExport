@@ -18,15 +18,9 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
-    /**
-     * @var DataFactory
-     */
-    private $dataFactory;
+    private DataFactory $dataFactory;
 
-    /**
-     * @var ProfileFactory
-     */
-    private $profileFactory;
+    private ProfileFactory $profileFactory;
 
     public function preDispatch()
     {
