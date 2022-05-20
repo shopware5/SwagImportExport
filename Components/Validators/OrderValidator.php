@@ -13,7 +13,7 @@ use SwagImportExport\Components\Utils\SnippetsHelper;
 
 class OrderValidator extends Validator
 {
-    public static $mapper = [
+    public static array $mapper = [
         'int' => [
             'orderId',
             'customerId',
@@ -63,12 +63,11 @@ class OrderValidator extends Validator
         'dateTime' => ['orderTime', 'clearedDate', 'releasedate'],
     ];
 
-    //TODO: check which other fields are required
-    private $requiredFields = [
+    private array $requiredFields = [
         ['orderId', 'number', 'orderDetailId'], //one of these fields must be set
     ];
 
-    private $snippetData = [
+    private array $snippetData = [
         'orderId' => [
             'adapters/orders/ordernumber_order_details_requires',
             'Order number or order detail id must be provided',

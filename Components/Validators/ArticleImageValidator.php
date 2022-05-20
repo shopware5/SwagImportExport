@@ -13,7 +13,7 @@ use SwagImportExport\Components\Utils\SnippetsHelper;
 
 class ArticleImageValidator extends Validator
 {
-    public static $mapper = [
+    public static array $mapper = [
         'string' => [
             'ordernumber',
             'image',
@@ -28,12 +28,12 @@ class ArticleImageValidator extends Validator
         ],
     ];
 
-    private $requiredFields = [
+    private array $requiredFields = [
         'ordernumber',
         'image',
     ];
 
-    private $snippetData = [
+    private array $snippetData = [
         'ordernumber' => [
             'adapters/articlesImages/ordernumber_image_required',
             'Ordernumber and image are required',

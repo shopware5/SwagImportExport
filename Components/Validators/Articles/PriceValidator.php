@@ -14,7 +14,7 @@ use SwagImportExport\Components\Validators\Validator;
 
 class PriceValidator extends Validator
 {
-    public static $mapper = [
+    public static array $mapper = [
         'float' => [
             'price',
             'purchasePrice',
@@ -23,11 +23,11 @@ class PriceValidator extends Validator
         ],
     ];
 
-    private $requiredFields = [
+    private array $requiredFields = [
         ['price', 'priceGroup'],
     ];
 
-    private $snippetData = [
+    private array $snippetData = [
         'price' => [
             'adapters/articles/incorrect_price',
             'Price value is incorrect for article with number %s',

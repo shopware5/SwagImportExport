@@ -13,7 +13,7 @@ use SwagImportExport\Components\Utils\SnippetsHelper;
 
 class ArticleInStockValidator extends Validator
 {
-    public static $mapper = [
+    public static array $mapper = [
         'string' => [ //TODO: maybe we don't need to check fields which contains string?
             'orderNumber',
             'additionalText',
@@ -23,11 +23,11 @@ class ArticleInStockValidator extends Validator
         'float' => ['price'],
     ];
 
-    private $requiredFields = [
+    private array $requiredFields = [
         'orderNumber',
     ];
 
-    private $snippetData = [
+    private array $snippetData = [
         'orderNumber' => [
             'adapters/ordernumber_required',
             'Order number is required',

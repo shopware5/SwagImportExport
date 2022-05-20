@@ -13,11 +13,11 @@ use SwagImportExport\Components\Utils\SnippetsHelper;
 
 class NewsletterValidator extends Validator
 {
-    private $requiredFields = [
+    private array $requiredFields = [
         'email',
     ];
 
-    private $snippetData = [
+    private array $snippetData = [
         'email' => [
             'adapters/newsletter/email_required',
             'Email address is required field.',

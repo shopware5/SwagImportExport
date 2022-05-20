@@ -13,10 +13,7 @@ use SwagImportExport\Components\Utils\SnippetsHelper;
 
 class AddressValidator extends Validator
 {
-    /**
-     * @var array
-     */
-    private $requiredFields = [
+    private array $requiredFields = [
         'firstname' => [
             'snippet' => 'adapters/address/firstname_required',
             'default' => 'Field firstname is required. Record %s',

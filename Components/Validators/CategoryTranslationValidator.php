@@ -13,10 +13,7 @@ use SwagImportExport\Components\Utils\SnippetsHelper;
 
 class CategoryTranslationValidator extends Validator
 {
-    /**
-     * @var array
-     */
-    private $requiredFields = [
+    private array $requiredFields = [
         'categoryId' => 'adapters/category_required',
         'languageId' => 'adapters/translations/language_not_found',
     ];

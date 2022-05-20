@@ -13,7 +13,7 @@ use SwagImportExport\Components\Utils\SnippetsHelper;
 
 class TranslationValidator extends Validator
 {
-    public static $mapper = [
+    public static array $mapper = [
         'string' => ['name', 'baseName', 'objectType', 'description'], //TODO: maybe we don't need to check fields which contains string?
         'int' => ['objectKey', 'languageId'],
     ];
@@ -21,10 +21,8 @@ class TranslationValidator extends Validator
     /**
      * Indexed by field name
      * Value: snippet name
-     *
-     * @var array
      */
-    private $requiredFields = [
+    private array $requiredFields = [
         'objectType' => 'adapters/translations/object_type_not_found',
         'objectKey' => 'adapters/translations/object_key_not_found',
         'name' => 'adapters/translations/element_name_not_found',

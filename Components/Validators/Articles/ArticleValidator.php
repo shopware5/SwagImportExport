@@ -14,19 +14,19 @@ use SwagImportExport\Components\Validators\Validator;
 
 class ArticleValidator extends Validator
 {
-    private $requiredFields = [
+    private array $requiredFields = [
         'orderNumber',
         'mainNumber',
     ];
 
-    private $requiredFieldsForCreate = [
+    private array $requiredFieldsForCreate = [
         'name',
         'mainNumber',
         ['supplierName', 'supplierId'],
         'taxId',
     ];
 
-    private $snippetData = [
+    private array $snippetData = [
         'orderNumber' => [
             'adapters/ordernumber_required',
             'Order number is required.',

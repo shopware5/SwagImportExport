@@ -13,11 +13,11 @@ use SwagImportExport\Components\Utils\SnippetsHelper;
 
 class CustomerValidator extends Validator
 {
-    private $requiredFields = [
+    private array $requiredFields = [
         'email',
     ];
 
-    private $requiredFieldsForCreate = [
+    private array $requiredFieldsForCreate = [
         'unhashedPassword',
         'encoder',
         'customergroup',
@@ -30,7 +30,7 @@ class CustomerValidator extends Validator
         'billingCountryID',
     ];
 
-    private $snippetData = [
+    private array $snippetData = [
         'email' => [
             'adapters/customer/email_required',
             'User email is required field.',

@@ -12,7 +12,7 @@ use SwagImportExport\Components\Validators\Validator;
 
 class ConfiguratorValidator extends Validator
 {
-    public static $mapper = [
+    public static array $mapper = [
         'int' => [
             'configSetId',
             'configSetType',
