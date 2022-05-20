@@ -16,10 +16,7 @@ use SwagImportExport\Tests\Helper\DataProvider\ProfileDataProvider;
 
 trait FixturesImportTrait
 {
-    /**
-     * @var ModelManager
-     */
-    private $modelManager;
+    private ModelManager $modelManager;
 
     abstract public function getContainer(): Container;
 

@@ -59,12 +59,9 @@ class ProfileDataProvider
     /**
      * @var array - Indexed by profile type
      */
-    private $profileIds = [];
+    private array $profileIds = [];
 
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
     public function __construct(Connection $connection)
     {

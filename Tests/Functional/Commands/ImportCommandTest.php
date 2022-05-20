@@ -26,10 +26,7 @@ class ImportCommandTest extends TestCase
 
     public const CLI_IMPORT_COMMAND = 'sw:importexport:import -p';
 
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
     public function setUp(): void
     {

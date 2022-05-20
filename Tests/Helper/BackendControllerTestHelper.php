@@ -14,7 +14,10 @@ class BackendControllerTestHelper
 {
     public const EXPECTED_EXPORT_FILES_DIR = __DIR__ . '/ExportFiles';
 
-    private $files = [];
+    /**
+     * @var array<string>
+     */
+    private array $files = [];
 
     public function tearDown(): void
     {

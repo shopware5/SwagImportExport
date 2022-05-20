@@ -12,7 +12,7 @@ use SwagImportExport\Tests\Helper\DbAdapterTestHelper;
 
 class NewsletterDbAdapterTest extends DbAdapterTestHelper
 {
-    protected $yamlFile = 'TestCases/newslettersDbAdapter.yml';
+    protected string $yamlFile = 'TestCases/newslettersDbAdapter.yml';
 
     public function setUp(): void
     {

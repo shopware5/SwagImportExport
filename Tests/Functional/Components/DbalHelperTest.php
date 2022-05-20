@@ -32,15 +32,9 @@ class DbalHelperTest extends TestCase
     public const UPDATE_RECORD_BY_ID = 999;
     public const CREATE_INSERT_STATEMENT = false;
 
-    /**
-     * @var ModelManager
-     */
-    private $modelManager;
+    private ModelManager $modelManager;
 
-    /**
-     * @var DbalHelper
-     */
-    private $dbalHelper;
+    private DbalHelper $dbalHelper;
 
     protected function setUp(): void
     {

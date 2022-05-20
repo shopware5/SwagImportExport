@@ -18,7 +18,7 @@ trait CommandTestCaseTrait
     /**
      * @var array<string>
      */
-    private $files = [];
+    private array $files = [];
 
     abstract public function getContainer(): Container;
 

@@ -15,7 +15,7 @@ class CustomersDbAdapterTest extends DbAdapterTestHelper
 {
     use ContainerTrait;
 
-    protected $yamlFile = 'TestCases/customersDbAdapter.yml';
+    protected string $yamlFile = 'TestCases/customersDbAdapter.yml';
 
     public function setUp(): void
     {

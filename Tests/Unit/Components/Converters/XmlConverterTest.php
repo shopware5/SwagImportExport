@@ -13,10 +13,7 @@ use SwagImportExport\Components\Converter\XmlConverter;
 
 class XmlConverterTest extends TestCase
 {
-    /**
-     * @var XmlConverter
-     */
-    private $xmlConverter;
+    private XmlConverter $xmlConverter;
 
     protected function setUp(): void
     {

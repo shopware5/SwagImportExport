@@ -13,15 +13,9 @@ use SwagImportExport\Components\UploadPathProvider;
 
 trait ExportControllerTrait
 {
-    /**
-     * @var BackendControllerTestHelper
-     */
-    private $backendControllerTestHelper;
+    private BackendControllerTestHelper $backendControllerTestHelper;
 
-    /**
-     * @var UploadPathProvider
-     */
-    private $uploadPathProvider;
+    private UploadPathProvider $uploadPathProvider;
 
     abstract public function getContainer(): Container;
 

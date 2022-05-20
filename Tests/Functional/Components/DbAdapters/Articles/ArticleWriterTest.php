@@ -24,15 +24,9 @@ class ArticleWriterTest extends TestCase
 {
     use ContainerTrait;
 
-    /**
-     * @var ArticleWriter
-     */
-    private $articleWriter;
+    private ArticleWriter $articleWriter;
 
-    /**
-     * @var ModelManager
-     */
-    private $modelManager;
+    private ModelManager $modelManager;
 
     protected function setUp(): void
     {

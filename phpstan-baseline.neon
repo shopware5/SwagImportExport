@@ -8951,11 +8951,6 @@ parameters:
 			path: Tests/Helper/BackendControllerTestHelper.php
 
 		-
-			message: "#^Property SwagImportExport\\\\Tests\\\\Helper\\\\BackendControllerTestHelper\\:\\:\\$files has no type specified\\.$#"
-			count: 1
-			path: Tests/Helper/BackendControllerTestHelper.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Helper\\\\DataProvider\\\\ProfileDataProvider\\:\\:createProfiles\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Helper/DataProvider/ProfileDataProvider.php
@@ -9022,16 +9017,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$yamlFile of method SwagImportExport\\\\Tests\\\\Helper\\\\DbAdapterTestHelper\\:\\:parseYaml\\(\\) expects string, string\\|false given\\.$#"
-			count: 1
-			path: Tests/Helper/DbAdapterTestHelper.php
-
-		-
-			message: "#^Property SwagImportExport\\\\Tests\\\\Helper\\\\DbAdapterTestHelper\\:\\:\\$dataProvider has no type specified\\.$#"
-			count: 1
-			path: Tests/Helper/DbAdapterTestHelper.php
-
-		-
-			message: "#^Property SwagImportExport\\\\Tests\\\\Helper\\\\DbAdapterTestHelper\\:\\:\\$yamlFile has no type specified\\.$#"
 			count: 1
 			path: Tests/Helper/DbAdapterTestHelper.php
 
@@ -9116,11 +9101,6 @@ parameters:
 			path: Tests/Integration/Components/ArticlesPricesDbAdapterTest.php
 
 		-
-			message: "#^Property SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\ArticlesPricesDbAdapterTest\\:\\:\\$yamlFile has no type specified\\.$#"
-			count: 1
-			path: Tests/Integration/Components/ArticlesPricesDbAdapterTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\CustomersDbAdapterTest\\:\\:readProvider\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Integration/Components/CustomersDbAdapterTest.php
@@ -9196,11 +9176,6 @@ parameters:
 			path: Tests/Integration/Components/CustomersDbAdapterTest.php
 
 		-
-			message: "#^Property SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\CustomersDbAdapterTest\\:\\:\\$yamlFile has no type specified\\.$#"
-			count: 1
-			path: Tests/Integration/Components/CustomersDbAdapterTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\DataFlattenTransformerTest\\:\\:testExportHeader\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Integration/Components/DataFlattenTransformerTest.php
@@ -9267,11 +9242,6 @@ parameters:
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\NewsletterDbAdapterTest\\:\\:writeProvider\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/Components/NewsletterDbAdapterTest.php
-
-		-
-			message: "#^Property SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\NewsletterDbAdapterTest\\:\\:\\$yamlFile has no type specified\\.$#"
 			count: 1
 			path: Tests/Integration/Components/NewsletterDbAdapterTest.php
 

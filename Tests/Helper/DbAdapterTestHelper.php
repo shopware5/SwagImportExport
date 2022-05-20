@@ -15,24 +15,18 @@ class DbAdapterTestHelper extends ImportExportTestHelper
 {
     use ContainerTrait;
 
-    /**
-     * @var string
-     */
-    protected $dbAdapter;
+    protected string $dbAdapter;
+
+    protected string $dbTable;
+
+    protected ?Parser $parser = null;
+
+    protected string $yamlFile;
 
     /**
-     * @var string
+     * @var array<string, array<string, mixed>>|null
      */
-    protected $dbTable;
-
-    /**
-     * @var Parser
-     */
-    protected $parser;
-
-    protected $yamlFile;
-
-    protected $dataProvider;
+    protected ?array $dataProvider = null;
 
     /**
      * @param string $testCase

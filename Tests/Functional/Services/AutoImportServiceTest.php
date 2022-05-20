@@ -20,10 +20,7 @@ class AutoImportServiceTest extends TestCase
     use DatabaseTestCaseTrait;
     use ContainerTrait;
 
-    /**
-     * @var array
-     */
-    private $files = [];
+    private array $files = [];
 
     /**
      * @after

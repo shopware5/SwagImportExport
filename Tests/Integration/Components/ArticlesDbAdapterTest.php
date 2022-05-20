@@ -24,10 +24,7 @@ class ArticlesDbAdapterTest extends DbAdapterTestHelper
 
     private const PRODUCT_VARIANTS_IDS = [123, 124, 14, 257, 15, 258, 16, 259, 253, 254, 255, 250, 251];
 
-    /**
-     * @var string
-     */
-    protected $yamlFile = 'TestCases/articleDbAdapter.yml';
+    protected string $yamlFile = 'TestCases/articleDbAdapter.yml';
 
     public function setUp(): void
     {
