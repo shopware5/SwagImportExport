@@ -132,11 +132,9 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     }
 
     /**
-     * @param Session $dataSession
-     *
      * @return DataIO
      */
-    public function createDataIO(DataDbAdapter $dbAdapter, $dataSession, Logger $logger)
+    public function createDataIO(DataDbAdapter $dbAdapter, Session $dataSession, Logger $logger)
     {
         $uploadPathProvider = $this->uploadPathProvider;
 
@@ -145,10 +143,8 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
 
     /**
      * Returns the necessary adapter
-     *
-     * @param string $adapterType
      */
-    public function createDbAdapter($adapterType): DataDbAdapter
+    public function createDbAdapter(string $adapterType): DataDbAdapter
     {
         $event = $this->fireCreateFactoryEvent($adapterType);
         if ($event && $event instanceof \Enlight_Event_EventArgs
@@ -194,11 +190,9 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     /**
      * Return necessary data manager
      *
-     * @param string $managerType
-     *
      * @return object dbAdapter
      */
-    public function createDataManager($managerType)
+    public function createDataManager(string $managerType)
     {
         switch ($managerType) {
             case DataDbAdapter::CATEGORIES_ADAPTER:
@@ -213,11 +207,9 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
     }
 
     /**
-     * @param array $data
-     *
      * @return Session
      */
-    public function loadSession($data)
+    public function loadSession(array $data)
     {
         $sessionId = $data['sessionId'];
 
@@ -255,17 +247,15 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
      *
      * @return \SwagImportExport\Components\Utils\DataFilter
      */
-    public function createFilter($filter)
+    public function createFilter(array $filter)
     {
         return new DataFilter($filter);
     }
 
     /**
-     * @param string $adapterType
-     *
      * @return \Enlight_Event_EventArgs|null
      */
-    protected function fireCreateFactoryEvent($adapterType)
+    protected function fireCreateFactoryEvent(string $adapterType)
     {
         return $this->eventManager->notifyUntil(
             'Shopware_Components_SwagImportExport_Factories_CreateDbAdapter',

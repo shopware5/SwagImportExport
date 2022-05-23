@@ -33,7 +33,7 @@ class FactoryTest extends ImportExportTestHelper
     {
         $postData = [
             'columnOptions' => 'id, parent, description, active',
-            'filter' => '',
+            'filter' => [],
             'limit' => ['limit' => 50, 'offset' => 150],
             'max_record_count' => 100,
         ];

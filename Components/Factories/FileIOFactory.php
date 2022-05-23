@@ -36,13 +36,11 @@ class FileIOFactory extends \Enlight_Class implements \Enlight_Hook
     }
 
     /**
-     * @param string $format
-     *
      * @throws \Exception
      *
      * @return CsvFileReader|XmlFileReader
      */
-    public function createFileReader($format)
+    public function createFileReader(string $format)
     {
         switch ($format) {
             case 'csv':
@@ -55,13 +53,11 @@ class FileIOFactory extends \Enlight_Class implements \Enlight_Hook
     }
 
     /**
-     * @param string $format
-     *
      * @throws \Exception
      *
      * @return CsvFileWriter|XmlFileWriter
      */
-    public function createFileWriter($format)
+    public function createFileWriter(string $format)
     {
         switch ($format) {
             case 'csv':

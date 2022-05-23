@@ -22,12 +22,9 @@ class DataTransformerFactory extends \Enlight_Class implements \Enlight_Hook
      * Creates a data transformer chain by consuming data found a profile.
      * The $dataUserOptions is an object that will return info for the output file structure - tree or flat.
      *
-     * @param \SwagImportExport\Components\Profile\Profile $profile
-     * @param array                                        $dataUserOptions
-     *
      * @return \SwagImportExport\Components\Transformers\DataTransformerChain
      */
-    public function createDataTransformerChain($profile, $dataUserOptions)
+    public function createDataTransformerChain(\SwagImportExport\Components\Profile\Profile $profile, array $dataUserOptions)
     {
         // this can be put in a separate hookable function
         $dataTransformerChain = new DataTransformerChain();
