@@ -24,15 +24,11 @@ class CsvFileReader implements FileReader
     /**
      * Reads csv records
      *
-     * @param string $fileName
-     * @param int    $position
-     * @param int    $step
-     *
      * @throws \Exception
      *
-     * @return array
+     * @return array<mixed>
      */
-    public function readRecords($fileName, $position, $step)
+    public function readRecords(string $fileName, int $position, int $step)
     {
         // Make sure to detect CR LF (Windows) line breaks
         \ini_set('auto_detect_line_endings', true);
@@ -58,6 +54,14 @@ class CsvFileReader implements FileReader
         $data = [];
         for ($i = 1; $i <= $step; ++$i) {
             $row = $file->current();
+
+            if ($row === false) {
+                break;
+            }
+
+            if (\is_string($row)) {
+                $row = [$row];
+            }
 
             if ($this->isInvalidRecord($row)) {
                 break;
@@ -87,9 +91,9 @@ class CsvFileReader implements FileReader
     }
 
     /**
-     * @param array $tree
+     * @param array<mixed> $tree
      */
-    public function setTree($tree)
+    public function setTree(array $tree)
     {
     }
 
@@ -100,7 +104,7 @@ class CsvFileReader implements FileReader
      *
      * @return int
      */
-    public function getTotalCount($fileName)
+    public function getTotalCount(string $fileName)
     {
         $fileHandler = \fopen($fileName, 'rb');
 
@@ -123,6 +127,8 @@ class CsvFileReader implements FileReader
     }
 
     /**
+     * @param array<int, array<string, mixed>> $rows
+     *
      * @return array
      */
     protected function toUtf8(array $rows)
@@ -150,7 +156,7 @@ class CsvFileReader implements FileReader
     /**
      * Returns column names of the given CSV file
      *
-     * @return array
+     * @return array<string>
      */
     private function getColumnNames(\SplFileObject $file)
     {
@@ -167,11 +173,11 @@ class CsvFileReader implements FileReader
     }
 
     /**
-     * @param array $row
+     * @param array<mixed> $row
      *
      * @return bool
      */
-    private function isInvalidRecord($row)
+    private function isInvalidRecord(array $row)
     {
         return $row[0] === null;
     }

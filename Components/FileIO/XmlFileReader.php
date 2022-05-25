@@ -10,13 +10,19 @@ namespace SwagImportExport\Components\FileIO;
 
 class XmlFileReader implements FileReader
 {
+    /**
+     * @var array<mixed>
+     */
     protected array $iterationPath = [];
 
+    /**
+     * @var array<mixed>
+     */
     protected array $iterationTag = [];
 
     protected bool $treeStructure = true;
 
-    public function setTree($tree)
+    public function setTree(array $tree)
     {
         $this->iterationPath = [];
         $this->iterationTag = [];
@@ -26,7 +32,7 @@ class XmlFileReader implements FileReader
     /**
      * @return array
      */
-    public function readRecords($fileName, $position, $count)
+    public function readRecords(string $fileName, int $position, int $count)
     {
         //todo: add string argument
         $reader = new \XMLReader();
@@ -66,7 +72,7 @@ class XmlFileReader implements FileReader
     /**
      * @return int
      */
-    public function getTotalCount($fileName)
+    public function getTotalCount(string $fileName)
     {
         $z = new \XMLReader();
         $z->open($fileName);
@@ -85,11 +91,9 @@ class XmlFileReader implements FileReader
     }
 
     /**
-     * @param string $path
-     *
      * @return array|string
      */
-    protected function toArrayTree(\DOMElement $node, $path)
+    protected function toArrayTree(\DOMElement $node, string $path)
     {
         $hasChildren = false;
         $record = [];
@@ -124,9 +128,10 @@ class XmlFileReader implements FileReader
     }
 
     /**
-     * @param array $node
+     * @param array<mixed> $node
+     * @param array<mixed> $path
      */
-    protected function findIterationNode($node, array $path)
+    protected function findIterationNode(array $node, array $path)
     {
         $path[] = $node['name'];
         if (isset($node['children'])) {

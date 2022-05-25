@@ -10,11 +10,26 @@ namespace SwagImportExport\Components\FileIO;
 
 interface FileWriter
 {
-    public function writeHeader($fileName, $headerData);
+    /**
+     * @param array<mixed> $headerData
+     *
+     * @return void
+     */
+    public function writeHeader(string $fileName, array $headerData);
 
-    public function writeRecords($fileName, $treeData);
+    /**
+     * @param array<mixed> $treeData
+     *
+     * @return void
+     */
+    public function writeRecords(string $fileName, array $treeData);
 
-    public function writeFooter($fileName, $footerData);
+    /**
+     * @param array<mixed> $footerData
+     *
+     * @return void
+     */
+    public function writeFooter(string $fileName, ?array $footerData);
 
     /**
      * @return bool
