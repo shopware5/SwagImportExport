@@ -357,7 +357,7 @@ class MainOrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @param array<string>|string $columns
+     * @param array<string> $columns
      * @param array<int>           $ids
      *
      * @return QueryBuilder

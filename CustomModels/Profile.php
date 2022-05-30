@@ -29,7 +29,7 @@ class Profile extends ModelEntity
     protected int $id;
 
     /**
-     * @var Collection<Expression>
+     * @var Collection<int,Expression>|null
      *
      * @ORM\OneToMany(targetEntity="SwagImportExport\CustomModels\Expression", mappedBy="profile")
      * @ORM\JoinColumn(nullable=true)

@@ -8,12 +8,6 @@
 
 namespace SwagImportExport;
 
-if (file_exists(__DIR__ . '/vendor/autoload.php')) {
-    require_once __DIR__ . '/vendor/autoload.php';
-} else {
-    throw new \Exception('Vendor is missing');
-}
-
 use Shopware\Components\CacheManager;
 use Shopware\Components\Plugin;
 use Shopware\Components\Plugin\Context\ActivateContext;
