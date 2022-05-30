@@ -9,6 +9,7 @@
 namespace SwagImportExport\Components\Service;
 
 use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Model\ModelRepository;
 use SwagImportExport\Components\Factories\ProfileFactory;
 use SwagImportExport\Components\UploadPathProvider;
 use SwagImportExport\Components\Utils\CommandHelper;
@@ -68,12 +69,10 @@ class AutoImportService implements AutoImportServiceInterface
         \unlink($lockerFileLocation);
     }
 
-    /**
-     * @param string $lockerFileLocation
-     */
-    private function importFiles(array $files, $lockerFileLocation)
+    private function importFiles(array $files, string $lockerFileLocation)
     {
         $profileRepository = $this->modelManager->getRepository(Profile::class);
+
         foreach ($files as $file) {
             $fileExtension = \strtolower(\pathinfo($file, \PATHINFO_EXTENSION));
             $fileName = \strtolower(\pathinfo($file, \PATHINFO_FILENAME));
@@ -134,14 +133,11 @@ class AutoImportService implements AutoImportServiceInterface
     }
 
     /**
-     * @param string   $fileName
-     * @param resource $file
+     * @param ModelRepository<Profile> $profileRepository
      *
-     * @throws \Exception
-     *
-     * @return bool|Profile
+     * @return Profile
      */
-    private function getProfile($fileName, $file, $profileRepository)
+    private function getProfile(string $fileName, string $file, ModelRepository $profileRepository)
     {
         $profile = CommandHelper::findProfileByName($file, $profileRepository);
 
@@ -168,10 +164,8 @@ class AutoImportService implements AutoImportServiceInterface
 
     /**
      * Create empty file to flag cron as running
-     *
-     * @param string $lockerFileLocation
      */
-    private function flagCronAsRunning($lockerFileLocation)
+    private function flagCronAsRunning(string $lockerFileLocation)
     {
         $timeout = \time() + 1800;
         $file = \fopen($lockerFileLocation, 'wb');
@@ -192,13 +186,9 @@ class AutoImportService implements AutoImportServiceInterface
     }
 
     /**
-     * @param bool|Profile $profileModel
-     * @param string       $inputFile
-     * @param string       $format
-     *
      * @return array
      */
-    private function start($profileModel, $inputFile, $format)
+    private function start(Profile $profileModel, string $inputFile, string $format)
     {
         $commandHelper = new CommandHelper(
             [

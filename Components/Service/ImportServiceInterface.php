@@ -16,23 +16,19 @@ interface ImportServiceInterface
      * Prepares import session based on profile and input file
      * and delivers information on how many records to import.
      *
-     * @param string $inputFileName
-     *
      * @throws \Exception
      *
      * @return PreparationResultStruct
      */
-    public function prepareImport(array $requestData, $inputFileName);
+    public function prepareImport(array $requestData, string $inputFileName);
 
     /**
      * Processes import based on profile and session and will be called
      * many times based on batch size.
      *
-     * @param string $inputFile
-     *
      * @throws \Exception
      *
      * @return array
      */
-    public function import(array $requestData, array $unprocessedFiles, $inputFile);
+    public function import(array $requestData, array $unprocessedFiles, string $inputFile);
 }

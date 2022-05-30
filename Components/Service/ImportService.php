@@ -16,12 +16,9 @@ use SwagImportExport\Components\Utils\SnippetsHelper;
 class ImportService extends AbstractImportExportService implements ImportServiceInterface
 {
     /**
-     * @param string $inputFileName
-     *
      * @return PreparationResultStruct
-     * @trows \Exception
      */
-    public function prepareImport(array $requestData, $inputFileName)
+    public function prepareImport(array $requestData, string $inputFileName)
     {
         $serviceHelpers = $this->buildServiceHelpers($requestData);
 
@@ -34,13 +31,9 @@ class ImportService extends AbstractImportExportService implements ImportService
     }
 
     /**
-     * @param string $inputFile
-     *
-     * @throws \Exception
-     *
      * @return array
      */
-    public function import(array $requestData, array $unprocessedFiles, $inputFile)
+    public function import(array $requestData, array $unprocessedFiles, string $inputFile)
     {
         $serviceHelpers = $this->buildServiceHelpers($requestData);
 
@@ -115,11 +108,7 @@ class ImportService extends AbstractImportExportService implements ImportService
         }
     }
 
-    /**
-     * @param string $profileName
-     * @param string $outputFile
-     */
-    protected function afterImport(array $unprocessedData, $profileName, $outputFile)
+    protected function afterImport(array $unprocessedData, string $profileName, string $outputFile)
     {
         //loads hidden profile for article
         $profile = $this->profileFactory->loadHiddenProfile($profileName);
@@ -139,11 +128,9 @@ class ImportService extends AbstractImportExportService implements ImportService
      * Checks for unprocessed data
      * Returns unprocessed file for import
      *
-     * @param array $unprocessedFiles
-     *
      * @return array|bool
      */
-    protected function processData(&$unprocessedFiles)
+    protected function processData(array &$unprocessedFiles)
     {
         foreach ($unprocessedFiles as $hiddenProfile => $inputFile) {
             if (\is_readable($inputFile)) {

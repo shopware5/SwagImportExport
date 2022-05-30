@@ -102,11 +102,9 @@ abstract class AbstractImportExportService
     }
 
     /**
-     * @param bool $hasTreeStructure
-     *
      * @return DataTransformerChain
      */
-    protected function createDataTransformerChain(Profile $profile, $hasTreeStructure)
+    protected function createDataTransformerChain(Profile $profile, bool $hasTreeStructure)
     {
         $dataTransformerChain = $this->dataTransformerFactory->createDataTransformerChain(
             $profile,
@@ -116,14 +114,7 @@ abstract class AbstractImportExportService
         return $dataTransformerChain;
     }
 
-    /**
-     * @param string $writeStatus
-     * @param string $filename
-     * @param string $profileName
-     * @param string $logMessage
-     * @param string $status
-     */
-    protected function logProcessing($writeStatus, $filename, $profileName, $logMessage, $status, Session $session)
+    protected function logProcessing(string $writeStatus, string $filename, string $profileName, string $logMessage, string $status, Session $session)
     {
         $this->logger->write([$logMessage], $writeStatus, $session);
 
@@ -139,11 +130,9 @@ abstract class AbstractImportExportService
     }
 
     /**
-     * @param string $format
-     *
      * @return FileReader
      */
-    private function createFileReader(Profile $profile, $format)
+    private function createFileReader(Profile $profile, string $format)
     {
         $fileReader = $this->fileIOFactory->createFileReader($format);
         if ($format === 'xml') {

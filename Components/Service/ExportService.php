@@ -34,8 +34,6 @@ class ExportService extends AbstractImportExportService implements ExportService
     }
 
     /**
-     * @throws \Exception
-     *
      * @return array
      */
     public function export(array $requestData, array $filterParams)
@@ -80,12 +78,9 @@ class ExportService extends AbstractImportExportService implements ExportService
     }
 
     /**
-     * @param string $profileType
-     * @param array  $filterParams
-     *
      * @return array
      */
-    private function prepareFilter($profileType, $filterParams)
+    private function prepareFilter(string $profileType, array $filterParams)
     {
         $filterParams = \array_filter($filterParams, 'strlen');
         $filter = [];

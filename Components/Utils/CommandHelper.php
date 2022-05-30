@@ -9,6 +9,7 @@
 namespace SwagImportExport\Components\Utils;
 
 use Doctrine\DBAL\Connection;
+use Shopware\Components\Model\ModelRepository;
 use SwagImportExport\Components\DataWorkflow;
 use SwagImportExport\Components\Factories\DataFactory;
 use SwagImportExport\Components\Factories\DataTransformerFactory;
@@ -135,11 +136,12 @@ class CommandHelper
     /**
      * Tries to find profile by given name
      *
+     * @param ModelRepository<\SwagImportExport\CustomModels\Profile> $repository
      * @param string $filename
      *
-     * @return bool|ProfileEntity
+     * @return false|ProfileEntity
      */
-    public static function findProfileByName($filename, ProfileRepository $repository)
+    public static function findProfileByName(string $filename, ModelRepository $repository)
     {
         $parts = \explode('.', $filename);
 

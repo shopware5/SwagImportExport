@@ -86,13 +86,11 @@ class ProfileService implements ProfileServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function exportProfile($profileId)
+    public function exportProfile(int $profileId)
     {
         $profileRepository = $this->modelManager->getRepository(Profile::class);
         $profile = $profileRepository->findOneBy(['id' => $profileId]);
 
-        $profileDataStruct = new ProfileDataStruct($profile);
-
-        return $profileDataStruct;
+        return new ProfileDataStruct($profile);
     }
 }

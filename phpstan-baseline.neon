@@ -2966,11 +2966,6 @@ parameters:
 			path: Components/Service/AutoImportService.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Service\\\\AutoImportService\\:\\:getProfile\\(\\) has parameter \\$profileRepository with no type specified\\.$#"
-			count: 1
-			path: Components/Service/AutoImportService.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Service\\\\AutoImportService\\:\\:importFiles\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Components/Service/AutoImportService.php
@@ -2992,11 +2987,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$arr1 of function array_diff expects array, array\\<int, string\\>\\|false given\\.$#"
-			count: 1
-			path: Components/Service/AutoImportService.php
-
-		-
-			message: "#^Parameter \\#1 \\$filename of static method SwagImportExport\\\\Components\\\\Utils\\\\CommandHelper\\:\\:findProfileByName\\(\\) expects string, resource given\\.$#"
 			count: 1
 			path: Components/Service/AutoImportService.php
 

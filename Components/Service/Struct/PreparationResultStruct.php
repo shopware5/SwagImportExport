@@ -14,11 +14,7 @@ class PreparationResultStruct
 
     private int $totalResultCount;
 
-    /**
-     * @param int $position
-     * @param int $totalResultCount
-     */
-    public function __construct($position, $totalResultCount)
+    public function __construct(int $position, int $totalResultCount)
     {
         $this->position = $position;
         $this->totalResultCount = $totalResultCount;

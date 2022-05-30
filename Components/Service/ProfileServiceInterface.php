@@ -19,9 +19,7 @@ interface ProfileServiceInterface
     public function importProfile(UploadedFile $file);
 
     /**
-     * @param int $profileId
-     *
      * @return ProfileDataStruct
      */
-    public function exportProfile($profileId);
+    public function exportProfile(int $profileId);
 }

@@ -11,9 +11,7 @@ namespace SwagImportExport\Components\Service;
 interface UnderscoreToCamelCaseServiceInterface
 {
     /**
-     * @param string $string
-     *
      * @return string
      */
-    public function underscoreToCamelCase($string);
+    public function underscoreToCamelCase(string $string);
 }
