@@ -19,10 +19,7 @@ class Profile
 
     private array $defaultValues = [];
 
-    /**
-     * @param ProfileEntity $profile
-     */
-    public function __construct($profile, array $configNames = [])
+    public function __construct(ProfileEntity $profile, array $configNames = [])
     {
         $this->profileEntity = $profile;
         $this->configNames = $configNames ?: ['exportConversion', 'tree', 'decimals'];
@@ -61,11 +58,9 @@ class Profile
     }
 
     /**
-     * @throws \RuntimeException
-     *
      * @return array|\SwagImportExport\CustomModels\Expression[]|string|array{0: \Enlight_Config, 1: Profile}
      */
-    public function getConfig($name)
+    public function getConfig(string $name)
     {
         switch ($name) {
             case 'exportConversion':
@@ -79,10 +74,7 @@ class Profile
         }
     }
 
-    /**
-     * @throws \RuntimeException
-     */
-    public function setConfig($name, $value)
+    public function setConfig(string $name, string $value)
     {
         switch ($name) {
             case 'tree':
@@ -113,7 +105,7 @@ class Profile
      *
      * @return array
      */
-    public function getDefaultValues($tree)
+    public function getDefaultValues(array $tree)
     {
         return $this->getDefaultFields($tree);
     }
@@ -121,11 +113,9 @@ class Profile
     /**
      * Check if current node have default value
      *
-     * @param array $node
-     *
      * @return array
      */
-    private function getDefaultFields($node)
+    private function getDefaultFields(array $node)
     {
         if ($node) {
             foreach ($node['children'] as $key => $leaf) {
