@@ -36,9 +36,9 @@ class Session
     }
 
     /**
-     * @throws \Exception
+     * @param array<mixed> $arguments
      */
-    public function __call($method, $arguments)
+    public function __call(string $method, array $arguments)
     {
         $session = $this->getEntity();
         if (\method_exists($session, $method)) {
@@ -147,10 +147,9 @@ class Session
      * Updates the session position with the current position (stored in a member variable).
      * Updates the file size of the output file
      *
-     * @param int  $step
      * @param null $file
      */
-    public function progress($step, $file = null)
+    public function progress(int $step, string $file = null)
     {
         $sessionEntity = $this->getEntity();
 
@@ -221,7 +220,7 @@ class Session
      *
      * @param ?string $username
      */
-    public function setUsername($username)
+    public function setUsername(?string $username)
     {
         $sessionEntity = $this->getEntity();
 

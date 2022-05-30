@@ -3196,22 +3196,7 @@ parameters:
 			path: Components/Service/UnderscoreToCamelCaseService.php
 
 		-
-			message: "#^Left side of && is always false\\.$#"
-			count: 1
-			path: Components/Session/Session.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Session\\\\Session\\:\\:__call\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Session/Session.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Session\\\\Session\\:\\:__call\\(\\) has parameter \\$arguments with no type specified\\.$#"
-			count: 1
-			path: Components/Session/Session.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Session\\\\Session\\:\\:__call\\(\\) has parameter \\$method with no type specified\\.$#"
 			count: 1
 			path: Components/Session/Session.php
 
