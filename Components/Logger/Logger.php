@@ -49,11 +49,9 @@ class Logger implements LoggerInterface
     /**
      * {@inheritdoc}
      */
-    public function write($messages, $status, Session $session)
+    public function write(array $messages, string $status, Session $session)
     {
         $loggerModel = new LoggerEntity();
-
-        $messages = (array) $messages;
 
         $messages = \implode(';', $messages);
         $loggerModel->setSession($session);
@@ -85,10 +83,7 @@ class Logger implements LoggerInterface
         return $filePath;
     }
 
-    /**
-     * @param string $filePath
-     */
-    private function createLogFile($filePath)
+    private function createLogFile(string $filePath)
     {
         $columns = ['date/time', 'file', 'profile', 'message', 'successFlag'];
         $this->fileWriter->writeHeader($filePath, $columns);

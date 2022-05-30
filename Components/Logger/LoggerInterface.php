@@ -21,11 +21,8 @@ interface LoggerInterface
 
     /**
      * Writes a log entry to the database.
-     *
-     * @param string|array $messages
-     * @param string       $status
      */
-    public function write($messages, $status, Session $session);
+    public function write(array $messages, string $status, Session $session);
 
     /**
      * Writes a log entry to the import/export log file.

@@ -318,7 +318,7 @@ class CommandHelper
             SnippetsHelper::getNamespace('backend/swag_import_export/log')->get('export/success')
         );
 
-        $this->logger->write($message, 'false', $dataSession->getEntity());
+        $this->logger->write([$message], 'false', $dataSession->getEntity());
 
         $logData = new LogDataStruct(
             \date('Y-m-d H:i:s'),
@@ -493,7 +493,7 @@ class CommandHelper
                     SnippetsHelper::getNamespace('backend/swag_import_export/log')->get('import/success')
                 );
 
-                $this->logger->write($message, 'false', $dataSession->getEntity());
+                $this->logger->write([$message], 'false', $dataSession->getEntity());
 
                 $logDataStruct = new LogDataStruct(
                     \date('Y-m-d H:i:s'),
@@ -508,7 +508,7 @@ class CommandHelper
 
             return ['success' => true, 'data' => $resultData];
         } catch (\Exception $e) {
-            $this->logger->write($e->getMessage(), 'true', $dataSession->getEntity());
+            $this->logger->write([$e->getMessage()], 'true', $dataSession->getEntity());
 
             $logDataStruct = new LogDataStruct(
                 \date('Y-m-d H:i:s'),

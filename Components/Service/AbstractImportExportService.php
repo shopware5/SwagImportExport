@@ -125,7 +125,7 @@ abstract class AbstractImportExportService
      */
     protected function logProcessing($writeStatus, $filename, $profileName, $logMessage, $status, Session $session)
     {
-        $this->logger->write($logMessage, $writeStatus, $session);
+        $this->logger->write([$logMessage], $writeStatus, $session);
 
         $logDataStruct = new LogDataStruct(
             \date('Y-m-d H:i:s'),

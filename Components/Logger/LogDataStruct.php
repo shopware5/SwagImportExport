@@ -20,14 +20,7 @@ class LogDataStruct
 
     private string $status;
 
-    /**
-     * @param string $date
-     * @param string $fileName
-     * @param string $profileName
-     * @param string $messages
-     * @param string $status
-     */
-    public function __construct($date, $fileName, $profileName, $messages, $status)
+    public function __construct(string $date, string $fileName, string $profileName, string $messages, string $status)
     {
         $this->date = $date;
         $this->fileName = $fileName;
@@ -44,10 +37,7 @@ class LogDataStruct
         return $this->date;
     }
 
-    /**
-     * @param string $date
-     */
-    public function setDate($date)
+    public function setDate(string $date)
     {
         if ($date instanceof \DateTime) {
             throw new \InvalidArgumentException('Got ' . \DateTime::class . ', expected string.');
@@ -63,10 +53,7 @@ class LogDataStruct
         return $this->fileName;
     }
 
-    /**
-     * @param string $fileName
-     */
-    public function setFileName($fileName)
+    public function setFileName(string $fileName)
     {
         $this->fileName = $fileName;
     }
@@ -79,10 +66,7 @@ class LogDataStruct
         return $this->profileName;
     }
 
-    /**
-     * @param string $profileName
-     */
-    public function setProfileName($profileName)
+    public function setProfileName(string $profileName)
     {
         $this->profileName = $profileName;
     }
@@ -95,10 +79,7 @@ class LogDataStruct
         return $this->messages;
     }
 
-    /**
-     * @param string $messages
-     */
-    public function setMessages($messages)
+    public function setMessages(string $messages)
     {
         $this->messages = $messages;
     }
@@ -111,10 +92,7 @@ class LogDataStruct
         return $this->status;
     }
 
-    /**
-     * @param string $status
-     */
-    public function setStatus($status)
+    public function setStatus(string $status)
     {
         $this->status = $status;
     }
