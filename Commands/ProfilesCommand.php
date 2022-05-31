@@ -33,7 +33,7 @@ class ProfilesCommand extends ShopwareCommand
     /**
      * {@inheritdoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('sw:importexport:profiles')
             ->setDescription('Show all profiles.')

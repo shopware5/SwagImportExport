@@ -36,7 +36,7 @@ $finder = PhpCsFixer\Finder::create()
 //    ->in(__DIR__ . '/CustomModels')
 //    ->in(__DIR__ . '/Setup')
 //    ->in(__DIR__ . '/Subscribers')
-    ->in(__DIR__ . '/Tests')
+//    ->in(__DIR__ . '/Tests')
 
 ;
 
@@ -78,8 +78,7 @@ return (new Config())
         'php_unit_test_case_static_method_calls' => true,
         'single_line_throw' => false,
         'yoda_style' => ['equal' => false, 'identical' => false, 'less_and_greater' => false],
-        'phpdoc_to_property_type' => true,
-        'phpdoc_to_param_type' => true,
+        'phpdoc_to_return_type' => true,
 
         NoSuperfluousConcatenationFixer::name() => true,
         NoUselessCommentFixer::name() => true,

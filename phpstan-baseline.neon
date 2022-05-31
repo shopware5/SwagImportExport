@@ -1,54 +1,14 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Method SwagImportExport\\\\Commands\\\\ExportCommand\\:\\:configure\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Commands/ExportCommand.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Commands\\\\ExportCommand\\:\\:execute\\(\\) should return int but return statement is missing\\.$#"
 			count: 1
 			path: Commands/ExportCommand.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Commands\\\\ExportCommand\\:\\:prepareExportInputValidation\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Commands/ExportCommand.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Commands\\\\ExportCommand\\:\\:validateCustomerStream\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Commands/ExportCommand.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Commands\\\\ExportCommand\\:\\:validateProfiles\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Commands/ExportCommand.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Commands\\\\ImportCommand\\:\\:configure\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Commands/ImportCommand.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Commands\\\\ImportCommand\\:\\:execute\\(\\) should return int but return statement is missing\\.$#"
 			count: 1
 			path: Commands/ImportCommand.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Commands\\\\ImportCommand\\:\\:prepareImportInputValidation\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Commands/ImportCommand.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Commands\\\\ImportCommand\\:\\:start\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Commands/ImportCommand.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Commands\\\\ProfilesCommand\\:\\:configure\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Commands/ProfilesCommand.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Commands\\\\ProfilesCommand\\:\\:execute\\(\\) should return int but return statement is missing\\.$#"

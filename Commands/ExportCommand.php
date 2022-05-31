@@ -68,7 +68,7 @@ class ExportCommand extends ShopwareCommand
     /**
      * {@inheritdoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('sw:importexport:export')
             ->setDescription('Export data to files.')
@@ -147,10 +147,7 @@ class ExportCommand extends ShopwareCommand
         }
     }
 
-    /**
-     * @throws \RuntimeException
-     */
-    protected function prepareExportInputValidation(InputInterface $input)
+    protected function prepareExportInputValidation(InputInterface $input): void
     {
         $this->profile = $input->getOption('profile');
         $this->customerStream = $input->getOption('customerstream');
@@ -227,11 +224,7 @@ class ExportCommand extends ShopwareCommand
         }
     }
 
-    /**
-     * @throws \RuntimeException
-     * @throws \InvalidArgumentException
-     */
-    protected function validateProfiles(InputInterface $input)
+    protected function validateProfiles(InputInterface $input): void
     {
         if (!$this->profileEntity) {
             throw new \RuntimeException(\sprintf('Invalid profile: \'%s\'!', $this->profile));
@@ -246,10 +239,7 @@ class ExportCommand extends ShopwareCommand
         }
     }
 
-    /**
-     * @throws \RuntimeException
-     */
-    protected function validateCustomerStream(?CustomerStream $customerStream)
+    protected function validateCustomerStream(?CustomerStream $customerStream): void
     {
         if (!$customerStream) {
             throw new \RuntimeException(\sprintf('Invalid stream: \'%s\'! There is no customer stream with this id.', $this->customerStream));

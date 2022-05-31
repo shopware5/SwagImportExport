@@ -58,7 +58,7 @@ class ImportCommand extends ShopwareCommand
     /**
      * {@inheritdoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('sw:importexport:import')
             ->setDescription('Import data from files.')
@@ -108,7 +108,7 @@ class ImportCommand extends ShopwareCommand
         }
     }
 
-    protected function start(OutputInterface $output, ProfileEntity $profileModel, string $file, string $format)
+    protected function start(OutputInterface $output, ProfileEntity $profileModel, string $file, string $format): void
     {
         $helper = new CommandHelper(
             [
@@ -137,10 +137,7 @@ class ImportCommand extends ShopwareCommand
         }
     }
 
-    /**
-     * @throws \Exception
-     */
-    protected function prepareImportInputValidation(InputInterface $input)
+    protected function prepareImportInputValidation(InputInterface $input): void
     {
         $this->profile = $input->getOption('profile');
         $this->format = $input->getOption('format');
