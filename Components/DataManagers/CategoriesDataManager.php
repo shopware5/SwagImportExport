@@ -13,9 +13,9 @@ use SwagImportExport\Components\DataType\CategoryDataType;
 class CategoriesDataManager extends DataManager implements \Enlight_Hook
 {
     /**
-     * @return array
+     * @return array<string, array<string>>
      */
-    public function getDefaultFields()
+    public function getDefaultFields(): array
     {
         return CategoryDataType::$defaultFieldsForCreate;
     }
@@ -23,14 +23,13 @@ class CategoriesDataManager extends DataManager implements \Enlight_Hook
     /**
      * Return fields which should be set by default
      *
-     * @return array
+     * @return array<string>
      */
-    public function getDefaultFieldsName()
+    public function getDefaultFieldsName(): array
     {
         $defaultFieldsForCreate = $this->getDefaultFields();
-        $defaultFields = $this->getFields($defaultFieldsForCreate);
 
-        return $defaultFields;
+        return $this->getFields($defaultFieldsForCreate);
     }
 
     /**
@@ -38,8 +37,10 @@ class CategoriesDataManager extends DataManager implements \Enlight_Hook
      *
      * @param array<string, string|int> $record
      * @param array<string, mixed>      $defaultValues
+     *
+     * @return array<string, mixed>
      */
-    public function setDefaultFieldsForCreate(array $record, array $defaultValues)
+    public function setDefaultFieldsForCreate(array $record, array $defaultValues): array
     {
         $getDefaultFields = $this->getDefaultFieldsName();
         foreach ($getDefaultFields as $key) {

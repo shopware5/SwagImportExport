@@ -33,9 +33,9 @@ class NewsletterDataManager extends DataManager implements \Enlight_Hook
     }
 
     /**
-     * @return array
+     * @return array<string, array<string>>
      */
-    public function getDefaultFields()
+    public function getDefaultFields(): array
     {
         return NewsletterDataType::$defaultFieldsForCreate;
     }
@@ -43,9 +43,9 @@ class NewsletterDataManager extends DataManager implements \Enlight_Hook
     /**
      * Return fields which should be set by default
      *
-     * @return array
+     * @return array<string>
      */
-    public function getDefaultFieldsName()
+    public function getDefaultFieldsName(): array
     {
         $defaultFieldsForCreate = $this->getDefaultFields();
 
@@ -58,9 +58,9 @@ class NewsletterDataManager extends DataManager implements \Enlight_Hook
      * @param array<string, string|int> $record
      * @param array<string, mixed>      $defaultValues
      *
-     * @throws AdapterException
+     * @return array<string, mixed>
      */
-    public function setDefaultFieldsForCreate(array $record, array $defaultValues)
+    public function setDefaultFieldsForCreate(array $record, array $defaultValues): array
     {
         $getDefaultFields = $this->getDefaultFieldsName();
         foreach ($getDefaultFields as $key) {
@@ -84,10 +84,8 @@ class NewsletterDataManager extends DataManager implements \Enlight_Hook
      * Returns newsletter default group name.
      *
      * @throws AdapterException
-     *
-     * @return string
      */
-    private function getGroupName(string $email, ?string $groupName)
+    private function getGroupName(string $email, ?string $groupName): string
     {
         $group = $this->groupRepository->findOneBy(['name' => $groupName]);
         if ($group instanceof Group) {

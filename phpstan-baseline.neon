@@ -221,96 +221,6 @@ parameters:
 			path: Components/DataIO.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataManagers\\\\ArticleImageDataManager\\:\\:setDefaultFields\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/DataManagers/ArticleImageDataManager.php
-
-		-
-			message: "#^Property SwagImportExport\\\\Components\\\\DataManagers\\\\ArticleImageDataManager\\:\\:\\$defaultFields type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DataManagers/ArticleImageDataManager.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataManagers\\\\ArticlePriceDataManager\\:\\:setDefaultFields\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/DataManagers/ArticlePriceDataManager.php
-
-		-
-			message: "#^Property SwagImportExport\\\\Components\\\\DataManagers\\\\ArticlePriceDataManager\\:\\:\\$defaultFields type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DataManagers/ArticlePriceDataManager.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataManagers\\\\Articles\\\\ArticleDataManager\\:\\:fixDefaultValues\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DataManagers/Articles/ArticleDataManager.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataManagers\\\\Articles\\\\ArticleDataManager\\:\\:getDefaultFields\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DataManagers/Articles/ArticleDataManager.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataManagers\\\\Articles\\\\ArticleDataManager\\:\\:getDefaultFieldsName\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DataManagers/Articles/ArticleDataManager.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataManagers\\\\Articles\\\\ArticleDataManager\\:\\:getSuppliers\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DataManagers/Articles/ArticleDataManager.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataManagers\\\\Articles\\\\ArticleDataManager\\:\\:getTaxByTaxRate\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/DataManagers/Articles/ArticleDataManager.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataManagers\\\\Articles\\\\ArticleDataManager\\:\\:getTaxRates\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DataManagers/Articles/ArticleDataManager.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataManagers\\\\Articles\\\\ArticleDataManager\\:\\:prepareTaxRates\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DataManagers/Articles/ArticleDataManager.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataManagers\\\\Articles\\\\ArticleDataManager\\:\\:setArticleData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DataManagers/Articles/ArticleDataManager.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataManagers\\\\Articles\\\\ArticleDataManager\\:\\:setArticleVariantData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DataManagers/Articles/ArticleDataManager.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataManagers\\\\Articles\\\\ArticleDataManager\\:\\:setDefaultFields\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/DataManagers/Articles/ArticleDataManager.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataManagers\\\\Articles\\\\ArticleDataManager\\:\\:setDefaultFieldsForCreate\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/DataManagers/Articles/ArticleDataManager.php
-
-		-
-			message: "#^Parameter \\#1 \\$record of method SwagImportExport\\\\Components\\\\DataManagers\\\\Articles\\\\ArticleDataManager\\:\\:getSupplierId\\(\\) expects array\\<string, int\\|string\\>, array\\<int\\|string, mixed\\> given\\.$#"
-			count: 2
-			path: Components/DataManagers/Articles/ArticleDataManager.php
-
-		-
-			message: "#^Parameter \\#1 \\$record of method SwagImportExport\\\\Components\\\\DataManagers\\\\Articles\\\\ArticleDataManager\\:\\:getTaxId\\(\\) expects array\\<string, int\\|string\\>, array\\<int\\|string, mixed\\> given\\.$#"
-			count: 2
-			path: Components/DataManagers/Articles/ArticleDataManager.php
-
-		-
-			message: "#^Parameter \\#1 \\$records of method SwagImportExport\\\\Components\\\\DataManagers\\\\Articles\\\\ArticleDataManager\\:\\:fixDefaultValues\\(\\) expects array\\<string, int\\|string\\>, array\\<int\\|string, mixed\\> given\\.$#"
-			count: 1
-			path: Components/DataManagers/Articles/ArticleDataManager.php
-
-		-
 			message: "#^Parameter \\#1 \\$taxRate of method SwagImportExport\\\\Components\\\\DataManagers\\\\Articles\\\\ArticleDataManager\\:\\:getTaxByTaxRate\\(\\) expects float, int\\|string given\\.$#"
 			count: 1
 			path: Components/DataManagers/Articles/ArticleDataManager.php
@@ -326,52 +236,7 @@ parameters:
 			path: Components/DataManagers/Articles/ArticleDataManager.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataManagers\\\\Articles\\\\PriceDataManager\\:\\:fixDefaultValues\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DataManagers/Articles/PriceDataManager.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataManagers\\\\Articles\\\\PriceDataManager\\:\\:setDefaultFields\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/DataManagers/Articles/PriceDataManager.php
-
-		-
-			message: "#^Property SwagImportExport\\\\Components\\\\DataManagers\\\\Articles\\\\PriceDataManager\\:\\:\\$defaultFields type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DataManagers/Articles/PriceDataManager.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataManagers\\\\CategoriesDataManager\\:\\:getDefaultFields\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DataManagers/CategoriesDataManager.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataManagers\\\\CategoriesDataManager\\:\\:getDefaultFieldsName\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DataManagers/CategoriesDataManager.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataManagers\\\\CategoriesDataManager\\:\\:setDefaultFieldsForCreate\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/DataManagers/CategoriesDataManager.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataManagers\\\\CustomerDataManager\\:\\:fixDefaultValues\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DataManagers/CustomerDataManager.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\DataManagers\\\\CustomerDataManager\\:\\:getAutogeneratedCustomernumber\\(\\) should return string but returns int\\|string\\.$#"
-			count: 1
-			path: Components/DataManagers/CustomerDataManager.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataManagers\\\\CustomerDataManager\\:\\:getDefaultFields\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DataManagers/CustomerDataManager.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataManagers\\\\CustomerDataManager\\:\\:getDefaultFieldsName\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/DataManagers/CustomerDataManager.php
 
@@ -381,29 +246,9 @@ parameters:
 			path: Components/DataManagers/CustomerDataManager.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataManagers\\\\CustomerDataManager\\:\\:getPayment\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/DataManagers/CustomerDataManager.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\DataManagers\\\\CustomerDataManager\\:\\:getSubShopDefaultPaymentId\\(\\) should return string but returns string\\|false\\|null\\.$#"
 			count: 1
 			path: Components/DataManagers/CustomerDataManager.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataManagers\\\\CustomerDataManager\\:\\:setDefaultFieldsForCreate\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/DataManagers/CustomerDataManager.php
-
-		-
-			message: "#^Parameter \\#1 \\$records of method SwagImportExport\\\\Components\\\\DataManagers\\\\CustomerDataManager\\:\\:fixDefaultValues\\(\\) expects array\\<string, int\\|string\\>, array\\<int\\|string, mixed\\> given\\.$#"
-			count: 1
-			path: Components/DataManagers/CustomerDataManager.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataManagers\\\\DataManager\\:\\:castDefaultValue\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/DataManagers/DataManager.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Components\\\\DataManagers\\\\DataManager\\:\\:fixFieldsValues\\(\\) has parameter \\$fieldsValues with no value type specified in iterable type array\\.$#"
@@ -426,99 +271,9 @@ parameters:
 			path: Components/DataManagers/DataManager.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataManagers\\\\DataManager\\:\\:getFields\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DataManagers/DataManager.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataManagers\\\\DataManager\\:\\:mapFields\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DataManagers/DataManager.php
-
-		-
-			message: "#^Unreachable statement \\- code above always terminates\\.$#"
-			count: 3
-			path: Components/DataManagers/DataManager.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataManagers\\\\NewsletterDataManager\\:\\:getDefaultFields\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DataManagers/NewsletterDataManager.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataManagers\\\\NewsletterDataManager\\:\\:getDefaultFieldsName\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DataManagers/NewsletterDataManager.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataManagers\\\\NewsletterDataManager\\:\\:setDefaultFieldsForCreate\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/DataManagers/NewsletterDataManager.php
-
-		-
-			message: "#^Property SwagImportExport\\\\Components\\\\DataType\\\\ArticleDataType\\:\\:\\$articleFieldsMapping type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DataType/ArticleDataType.php
-
-		-
-			message: "#^Property SwagImportExport\\\\Components\\\\DataType\\\\ArticleDataType\\:\\:\\$articleVariantFieldsMapping type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DataType/ArticleDataType.php
-
-		-
-			message: "#^Property SwagImportExport\\\\Components\\\\DataType\\\\ArticleDataType\\:\\:\\$defaultFieldsForCreate type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DataType/ArticleDataType.php
-
-		-
-			message: "#^Property SwagImportExport\\\\Components\\\\DataType\\\\ArticleDataType\\:\\:\\$defaultFieldsValues type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DataType/ArticleDataType.php
-
-		-
-			message: "#^Property SwagImportExport\\\\Components\\\\DataType\\\\ArticleDataType\\:\\:\\$mapper type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DataType/ArticleDataType.php
-
-		-
 			message: "#^Property SwagImportExport\\\\Components\\\\DataType\\\\ArticlePriceDataType\\:\\:\\$defaultFieldsValues type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/DataType/ArticlePriceDataType.php
-
-		-
-			message: "#^Property SwagImportExport\\\\Components\\\\DataType\\\\CategoryDataType\\:\\:\\$defaultFieldsForCreate type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DataType/CategoryDataType.php
-
-		-
-			message: "#^Property SwagImportExport\\\\Components\\\\DataType\\\\CategoryDataType\\:\\:\\$mapper type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DataType/CategoryDataType.php
-
-		-
-			message: "#^Property SwagImportExport\\\\Components\\\\DataType\\\\CustomerDataType\\:\\:\\$defaultFieldsForCreate type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DataType/CustomerDataType.php
-
-		-
-			message: "#^Property SwagImportExport\\\\Components\\\\DataType\\\\CustomerDataType\\:\\:\\$defaultFieldsValues type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DataType/CustomerDataType.php
-
-		-
-			message: "#^Property SwagImportExport\\\\Components\\\\DataType\\\\CustomerDataType\\:\\:\\$mapper type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DataType/CustomerDataType.php
-
-		-
-			message: "#^Property SwagImportExport\\\\Components\\\\DataType\\\\NewsletterDataType\\:\\:\\$defaultFieldsForCreate type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DataType/NewsletterDataType.php
-
-		-
-			message: "#^Property SwagImportExport\\\\Components\\\\DataType\\\\NewsletterDataType\\:\\:\\$mapper type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DataType/NewsletterDataType.php
 
 		-
 			message: "#^Call to an undefined method SwagImportExport\\\\Components\\\\FileIO\\\\FileReader\\|SwagImportExport\\\\Components\\\\FileIO\\\\FileWriter\\:\\:getTotalCount\\(\\)\\.$#"
@@ -3911,11 +3666,6 @@ parameters:
 			path: Components/Utils/TreeHelper.php
 
 		-
-			message: "#^Parameter \\#2 \\$type of static method SwagImportExport\\\\Components\\\\DataManagers\\\\DataManager\\:\\:castDefaultValue\\(\\) expects string, bool\\|int\\|string given\\.$#"
-			count: 1
-			path: Components/Utils/TreeHelper.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Validators\\\\AddressValidator\\:\\:checkRequiredFields\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Components/Validators/AddressValidator.php
@@ -4739,11 +4489,6 @@ parameters:
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DataManagers\\\\CustomerDataManagerTest\\:\\:testSetDefaultFieldsForCreateShouldAddANewCustomerNumber\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Functional/Components/DataManagers/CustomerDataManagerTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DataManagers\\\\Mocks\\\\CustomerDataManagerMock\\:\\:getDefaultFields\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DataManagers/Mocks/CustomerDataManagerMock.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\TransformerChainMock\\:\\:composeHeader\\(\\) return type has no value type specified in iterable type array\\.$#"

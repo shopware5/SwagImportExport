@@ -12,6 +12,8 @@ class ArticlePriceDataManager implements \Enlight_Hook
 {
     /**
      * Define which field should be set by default
+     *
+     * @var array<string>
      */
     private array $defaultFields = [
         'priceGroup',
@@ -24,8 +26,10 @@ class ArticlePriceDataManager implements \Enlight_Hook
      * Sets fields which are empty by default.
      *
      * @param array<string, mixed> $record
+     *
+     * @return array<string, mixed>
      */
-    public function setDefaultFields(array $record)
+    public function setDefaultFields(array $record): array
     {
         foreach ($this->defaultFields as $key) {
             if (isset($record[$key])) {

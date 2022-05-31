@@ -10,6 +10,9 @@ namespace SwagImportExport\Components\DataType;
 
 class CategoryDataType
 {
+    /**
+     * @var array<string, array<string>>
+     */
     public static array $mapper = [
         'int' => [
             'categoryId',
@@ -36,6 +39,9 @@ class CategoryDataType
         ],
     ];
 
+    /**
+     * @var array<string, array<string>>
+     */
     public static array $defaultFieldsForCreate = [
         'id' => [
             'parentId',

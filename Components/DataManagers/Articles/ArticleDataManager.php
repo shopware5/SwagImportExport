@@ -33,9 +33,9 @@ class ArticleDataManager extends DataManager implements \Enlight_Hook
     }
 
     /**
-     * @return array
+     * @return array<string, array<string>>
      */
-    public function getDefaultFields()
+    public function getDefaultFields(): array
     {
         return ArticleDataType::$defaultFieldsForCreate;
     }
@@ -43,9 +43,9 @@ class ArticleDataManager extends DataManager implements \Enlight_Hook
     /**
      * Return fields which should be set by default
      *
-     * @return array
+     * @return array<string>
      */
-    public function getDefaultFieldsName()
+    public function getDefaultFieldsName(): array
     {
         $defaultFieldsForCreate = $this->getDefaultFields();
 
@@ -57,8 +57,10 @@ class ArticleDataManager extends DataManager implements \Enlight_Hook
      *
      * @param array<string, string|int> $record
      * @param array<string, mixed>      $defaultValues
+     *
+     * @return array<string, mixed>
      */
-    public function setDefaultFieldsForCreate(array $record, array $defaultValues)
+    public function setDefaultFieldsForCreate(array $record, array $defaultValues): array
     {
         $getDefaultFields = $this->getDefaultFieldsName();
         foreach ($getDefaultFields as $key) {
@@ -180,9 +182,7 @@ class ArticleDataManager extends DataManager implements \Enlight_Hook
 
         $record['taxId'] = $this->getTaxId($record);
 
-        $record = $this->fixDefaultValues($record);
-
-        return $record;
+        return $this->fixDefaultValues($record);
     }
 
     /**
@@ -190,9 +190,9 @@ class ArticleDataManager extends DataManager implements \Enlight_Hook
      *
      * @param array<string, mixed> $record
      *
-     * @throws AdapterException
+     * @return array<string, mixed>
      */
-    public function setDefaultFields(array $record)
+    public function setDefaultFields(array $record): array
     {
         $getDefaultFields = $this->getDefaultFieldsName();
         foreach ($getDefaultFields as $key) {
@@ -222,14 +222,13 @@ class ArticleDataManager extends DataManager implements \Enlight_Hook
      *
      * @param array<string, int|string> $records
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    public function fixDefaultValues(array $records)
+    public function fixDefaultValues(array $records): array
     {
         $defaultFieldsValues = ArticleDataType::$defaultFieldsValues;
-        $records = $this->fixFieldsValues($records, $defaultFieldsValues);
 
-        return $records;
+        return $this->fixFieldsValues($records, $defaultFieldsValues);
     }
 
     /**
@@ -239,9 +238,9 @@ class ArticleDataManager extends DataManager implements \Enlight_Hook
      * @param array<string, string|int> $record
      * @param array<string, string|int> $mapping
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    public function setArticleData(array $record, array $mapping)
+    public function setArticleData(array $record, array $mapping): array
     {
         return $this->mapFields($record, $mapping);
     }
@@ -253,9 +252,9 @@ class ArticleDataManager extends DataManager implements \Enlight_Hook
      * @param array<string, string|int> $record
      * @param array<string, string|int> $mapping
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    public function setArticleVariantData(array $record, array $mapping)
+    public function setArticleVariantData(array $record, array $mapping): array
     {
         return $this->mapFields($record, $mapping);
     }
@@ -263,19 +262,9 @@ class ArticleDataManager extends DataManager implements \Enlight_Hook
     /**
      * Returns available taxes.
      *
-     * @return array
+     * @return array<int, int>
      */
-    private function getTaxRates()
-    {
-        return $this->prepareTaxRates();
-    }
-
-    /**
-     * Return list with all shop taxes
-     *
-     * @return array
-     */
-    private function prepareTaxRates()
+    private function getTaxRates(): array
     {
         $taxes = $this->db->fetchPairs('SELECT id, tax FROM s_core_tax');
         if (!\is_array($taxes)) {
@@ -289,19 +278,9 @@ class ArticleDataManager extends DataManager implements \Enlight_Hook
     /**
      * Returns available suppliers.
      *
-     * @return array
-     */
-    private function getSuppliers()
-    {
-        return $this->prepareSuppliers();
-    }
-
-    /**
-     * Return list with suppliers
-     *
      * @return array<int, string>
      */
-    private function prepareSuppliers()
+    private function getSuppliers(): array
     {
         $suppliers = $this->db->fetchPairs('SELECT name, id FROM s_articles_supplier');
         if (!\is_array($suppliers)) {
@@ -318,29 +297,29 @@ class ArticleDataManager extends DataManager implements \Enlight_Hook
      *
      * @throws AdapterException
      *
-     * @return bool|mixed
+     * @return ?int
      */
-    private function getTaxId(array $record)
+    private function getTaxId(array $record): ?int
     {
         $taxes = $this->getTaxRates();
 
         $taxIds = \array_keys($taxes);
 
         if (isset($record['taxId']) && \in_array($record['taxId'], $taxIds)) {
-            return $record['taxId'];
+            return (int) $record['taxId'];
         }
 
         if (isset($record['tax'])) {
             return $this->getTaxByTaxRate($record['tax'], $record['orderNumber']);
         }
 
-        return false;
+        return null;
     }
 
     /**
      * @throws AdapterException
      */
-    private function getTaxByTaxRate(float $taxRate, string $orderNumber)
+    private function getTaxByTaxRate(float $taxRate, string $orderNumber): int
     {
         $taxRate = \number_format($taxRate, 2);
 
@@ -354,15 +333,13 @@ class ArticleDataManager extends DataManager implements \Enlight_Hook
             throw new AdapterException(\sprintf($message, $taxRate, $orderNumber));
         }
 
-        return $taxId;
+        return (int) $taxId;
     }
 
     /**
      * @param array<string, string|int> $record
-     *
-     * @return string
      */
-    private function getSupplierId(array $record)
+    private function getSupplierId(array $record): int
     {
         $this->suppliers = $this->getSuppliers();
         $name = $record['supplierName'];
@@ -381,6 +358,6 @@ class ArticleDataManager extends DataManager implements \Enlight_Hook
             $this->suppliers[$name] = $supplierId;
         }
 
-        return $supplierId;
+        return (int) $supplierId;
     }
 }

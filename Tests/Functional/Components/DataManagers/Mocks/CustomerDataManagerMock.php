@@ -12,7 +12,10 @@ use SwagImportExport\Components\DataManagers\CustomerDataManager;
 
 class CustomerDataManagerMock extends CustomerDataManager
 {
-    public function getDefaultFields()
+    /**
+     * @return  array<string, array<string>>
+     */
+    public function getDefaultFields(): array
     {
         return [
             'string' => [

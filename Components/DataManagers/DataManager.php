@@ -15,9 +15,9 @@ abstract class DataManager
      *
      * @param array<string, array<string>> $defaultFields Contains default fields name and types
      *
-     * @return array
+     * @return array<string>
      */
-    public function getFields(array $defaultFields)
+    public function getFields(array $defaultFields): array
     {
         $defaultValues = [];
         foreach ($defaultFields as $type => $fields) {
@@ -31,10 +31,8 @@ abstract class DataManager
 
     /**
      * Return type of default field
-     *
-     * @return bool|int|string
      */
-    public static function getFieldType(array $record, array $mapper)
+    public static function getFieldType(array $record, array $mapper): string
     {
         foreach ($mapper as $type => $fields) {
             if (\in_array($record, $fields)) {
@@ -42,7 +40,7 @@ abstract class DataManager
             }
         }
 
-        return false;
+        throw new \Exception('Field not found');
     }
 
     /**
@@ -54,13 +52,8 @@ abstract class DataManager
             case 'id':
             case 'integer':
                 return (int) $value;
-                break;
             case 'boolean':
                 return ($value == 'true') ? 1 : 0;
-                break;
-            default:
-                return $value;
-                break;
         }
     }
 
@@ -69,7 +62,7 @@ abstract class DataManager
      *
      * @return array<string, int|string>
      */
-    public function fixFieldsValues(array $records, array $fieldsValues)
+    public function fixFieldsValues(array $records, array $fieldsValues): array
     {
         foreach ($fieldsValues as $type => $fields) {
             foreach ($fields as $field) {
@@ -101,9 +94,9 @@ abstract class DataManager
      * @param array<string, string|int> $records
      * @param array<string, string|int> $adapterFields
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    public function mapFields(array $records, array $adapterFields)
+    public function mapFields(array $records, array $adapterFields): array
     {
         foreach ($adapterFields as $tableField => $adapterField) {
             if (isset($records[$adapterField])) {
