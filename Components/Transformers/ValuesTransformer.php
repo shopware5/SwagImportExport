@@ -22,6 +22,8 @@ class ValuesTransformer implements DataTransformerAdapter
 
     /**
      * The $config must contain the smarty or php transformation of values.
+     *
+     * @param array{expression: iterable<object>, evaluator: ExpressionEvaluator} $config
      */
     public function initialize($config)
     {
@@ -32,11 +34,11 @@ class ValuesTransformer implements DataTransformerAdapter
     /**
      * Maps the values by using the config export smarty fields and returns the new array
      *
-     * @param array $data
+     * @param array<string, array<mixed>> $data
      *
      * @return array
      */
-    public function transformForward($data)
+    public function transformForward(array $data)
     {
         $data = $this->transform('export', $data);
 
@@ -46,11 +48,11 @@ class ValuesTransformer implements DataTransformerAdapter
     /**
      * Changes and returns the new values, before importing
      *
-     * @param array $data
+     * @param array<string, array<mixed>> $data
      *
      * @return array
      */
-    public function transformBackward($data)
+    public function transformBackward(array $data)
     {
         $data = $this->transform('import', $data);
 
@@ -58,15 +60,16 @@ class ValuesTransformer implements DataTransformerAdapter
     }
 
     /**
-     * @param string $type
-     * @param array  $data
-     *
-     * @throws \Exception
+     * @param array<string, array<mixed>> $data
      *
      * @return array
      */
-    public function transform($type, $data)
+    public function transform(?string $type, ?array $data): array
     {
+        if(!is_array($data)) {
+            $data = [];
+        }
+
         $conversions = [];
 
         switch ($type) {

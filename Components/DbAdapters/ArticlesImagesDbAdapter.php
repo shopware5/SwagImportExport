@@ -483,7 +483,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
             foreach ($attributes as $attribute) {
                 $attr = $this->underscoreToCamelCaseService->underscoreToCamelCase($attribute);
 
-                if(empty($attr)) {
+                if (empty($attr)) {
                     continue;
                 }
 

@@ -167,7 +167,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      *
      * @return mixed
      */
-    public function transform(array $node, ?array $mapper)
+    public function transform(array $node, ?array $mapper = [])
     {
         if (isset($node['children'])) {
             if (isset($node['attributes'])) {
@@ -484,7 +484,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
     /**
      * Returns first element of the array
      *
-     * @param array<mixed> $data
+     * @param array<string, mixed> $data
      *
      * @return string
      */
@@ -1241,7 +1241,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
         return $this->tempData;
     }
 
-    public function saveTempData(string $data)
+    public function saveTempData(?string $data)
     {
         $this->tempData[] = $data;
     }

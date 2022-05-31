@@ -528,7 +528,7 @@ class OrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
         foreach ($attributes as $attribute) {
             $catAttr = $this->underscoreToCamelCaseService->underscoreToCamelCase($attribute);
 
-            if(empty($catAttr)) {
+            if (empty($catAttr)) {
                 continue;
             }
 

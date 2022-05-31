@@ -3576,11 +3576,6 @@ parameters:
 			path: Components/Transformers/FlattenTransformer.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:transform\\(\\) invoked with 1 parameter, 2 required\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:transformBackward\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Transformers/FlattenTransformer.php
@@ -3626,8 +3621,8 @@ parameters:
 			path: Components/Transformers/FlattenTransformer.php
 
 		-
-			message: "#^Parameter \\#1 \\$data of method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:saveTempData\\(\\) expects string, null given\\.$#"
-			count: 1
+			message: "#^Parameter \\#1 \\$data of method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:getFirstElement\\(\\) expects array\\<string, mixed\\>, array\\<int, string\\> given\\.$#"
+			count: 3
 			path: Components/Transformers/FlattenTransformer.php
 
 		-
@@ -3731,7 +3726,7 @@ parameters:
 			path: Components/Transformers/TreeTransformer.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\TreeTransformer\\:\\:buildIterationNode\\(\\) has parameter \\$node with no value type specified in iterable type array\\.$#"
+			message: "#^Else branch is unreachable because previous condition is always true\\.$#"
 			count: 1
 			path: Components/Transformers/TreeTransformer.php
 
@@ -3742,11 +3737,6 @@ parameters:
 
 		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\TreeTransformer\\:\\:buildRawData\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Transformers/TreeTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\TreeTransformer\\:\\:buildRawData\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Transformers/TreeTransformer.php
 
@@ -3776,32 +3766,12 @@ parameters:
 			path: Components/Transformers/TreeTransformer.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\TreeTransformer\\:\\:createIterationNodeMapper\\(\\) has parameter \\$node with no type specified\\.$#"
-			count: 1
-			path: Components/Transformers/TreeTransformer.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\TreeTransformer\\:\\:findIterationPart\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Components/Transformers/TreeTransformer.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\TreeTransformer\\:\\:findIterationPart\\(\\) has parameter \\$tree with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Transformers/TreeTransformer.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\TreeTransformer\\:\\:generateMapper\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Transformers/TreeTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\TreeTransformer\\:\\:generateMapper\\(\\) has parameter \\$node with no type specified\\.$#"
-			count: 1
-			path: Components/Transformers/TreeTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\TreeTransformer\\:\\:getBufferData\\(\\) has parameter \\$type with no type specified\\.$#"
 			count: 1
 			path: Components/Transformers/TreeTransformer.php
 
@@ -3851,16 +3821,6 @@ parameters:
 			path: Components/Transformers/TreeTransformer.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\TreeTransformer\\:\\:getPreparedData\\(\\) has parameter \\$recordLink with no type specified\\.$#"
-			count: 1
-			path: Components/Transformers/TreeTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\TreeTransformer\\:\\:getPreparedData\\(\\) has parameter \\$type with no type specified\\.$#"
-			count: 1
-			path: Components/Transformers/TreeTransformer.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\TreeTransformer\\:\\:getRawData\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Components/Transformers/TreeTransformer.php
@@ -3871,37 +3831,7 @@ parameters:
 			path: Components/Transformers/TreeTransformer.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\TreeTransformer\\:\\:initialize\\(\\) has parameter \\$config with no type specified\\.$#"
-			count: 1
-			path: Components/Transformers/TreeTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\TreeTransformer\\:\\:parseFooter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Transformers/TreeTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\TreeTransformer\\:\\:parseFooter\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Transformers/TreeTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\TreeTransformer\\:\\:parseHeader\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Transformers/TreeTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\TreeTransformer\\:\\:parseHeader\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Transformers/TreeTransformer.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\TreeTransformer\\:\\:removeIterationPart\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Transformers/TreeTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\TreeTransformer\\:\\:removeIterationPart\\(\\) has parameter \\$node with no type specified\\.$#"
 			count: 1
 			path: Components/Transformers/TreeTransformer.php
 
@@ -3926,27 +3856,12 @@ parameters:
 			path: Components/Transformers/TreeTransformer.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\TreeTransformer\\:\\:setBufferData\\(\\) has parameter \\$bufferData with no type specified\\.$#"
-			count: 1
-			path: Components/Transformers/TreeTransformer.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\TreeTransformer\\:\\:setData\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Components/Transformers/TreeTransformer.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\TreeTransformer\\:\\:setData\\(\\) has parameter \\$data with no type specified\\.$#"
-			count: 1
-			path: Components/Transformers/TreeTransformer.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\TreeTransformer\\:\\:setMainType\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Transformers/TreeTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\TreeTransformer\\:\\:setMainType\\(\\) has parameter \\$mainType with no type specified\\.$#"
 			count: 1
 			path: Components/Transformers/TreeTransformer.php
 
@@ -3961,11 +3876,6 @@ parameters:
 			path: Components/Transformers/TreeTransformer.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\TreeTransformer\\:\\:setRawData\\(\\) has parameter \\$type with no type specified\\.$#"
-			count: 1
-			path: Components/Transformers/TreeTransformer.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\TreeTransformer\\:\\:transformBackward\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Transformers/TreeTransformer.php
@@ -3976,27 +3886,7 @@ parameters:
 			path: Components/Transformers/TreeTransformer.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\TreeTransformer\\:\\:transformFromTree\\(\\) has parameter \\$adapter with no type specified\\.$#"
-			count: 1
-			path: Components/Transformers/TreeTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\TreeTransformer\\:\\:transformFromTree\\(\\) has parameter \\$importMapper with no type specified\\.$#"
-			count: 1
-			path: Components/Transformers/TreeTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\TreeTransformer\\:\\:transformFromTree\\(\\) has parameter \\$node with no type specified\\.$#"
-			count: 1
-			path: Components/Transformers/TreeTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\TreeTransformer\\:\\:transformToTree\\(\\) has parameter \\$mapper with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Transformers/TreeTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\TreeTransformer\\:\\:transformToTree\\(\\) has parameter \\$node with no value type specified in iterable type array\\.$#"
+			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\TreeTransformer\\:\\:transformFromTree\\(\\) has parameter \\$importMapper with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Transformers/TreeTransformer.php
 
@@ -4006,23 +3896,28 @@ parameters:
 			path: Components/Transformers/TreeTransformer.php
 
 		-
+			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\TreeTransformer\\:\\:transformToTree\\(\\) should return array but returns array\\<int\\|string, array\\|string\\>\\|string\\.$#"
+			count: 1
+			path: Components/Transformers/TreeTransformer.php
+
+		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\TreeTransformer\\:\\:unsetBufferData\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Components/Transformers/TreeTransformer.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\TreeTransformer\\:\\:unsetBufferData\\(\\) has parameter \\$type with no type specified\\.$#"
-			count: 1
+			message: "#^Offset mixed does not exist on array\\<string, string\\>\\|null\\.$#"
+			count: 5
 			path: Components/Transformers/TreeTransformer.php
 
 		-
-			message: "#^Offset mixed does not exist on array\\|null\\.$#"
-			count: 7
-			path: Components/Transformers/TreeTransformer.php
-
-		-
-			message: "#^PHPDoc tag @param for parameter \\$data with type mixed is not subtype of native type array\\.$#"
+			message: "#^Offset string does not exist on array\\|null\\.$#"
 			count: 2
+			path: Components/Transformers/TreeTransformer.php
+
+		-
+			message: "#^PHPDoc tag @param for parameter \\$importMapper with type array\\<string, string\\>\\|string is not subtype of native type array\\.$#"
+			count: 1
 			path: Components/Transformers/TreeTransformer.php
 
 		-
@@ -4032,11 +3927,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$json of function json_decode expects string, string\\|null given\\.$#"
-			count: 2
-			path: Components/Transformers/TreeTransformer.php
-
-		-
-			message: "#^Parameter \\#3 \\$adapterType of method SwagImportExport\\\\Components\\\\Transformers\\\\TreeTransformer\\:\\:transformToTree\\(\\) expects null, mixed given\\.$#"
 			count: 2
 			path: Components/Transformers/TreeTransformer.php
 
@@ -4066,32 +3956,12 @@ parameters:
 			path: Components/Transformers/ValuesTransformer.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\ValuesTransformer\\:\\:initialize\\(\\) has parameter \\$config with no type specified\\.$#"
-			count: 1
-			path: Components/Transformers/ValuesTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\ValuesTransformer\\:\\:transform\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Transformers/ValuesTransformer.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\ValuesTransformer\\:\\:transform\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Transformers/ValuesTransformer.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\ValuesTransformer\\:\\:transformBackward\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Transformers/ValuesTransformer.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\ValuesTransformer\\:\\:transformBackward\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Transformers/ValuesTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\ValuesTransformer\\:\\:transformForward\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Transformers/ValuesTransformer.php
 
@@ -5838,16 +5708,6 @@ parameters:
 		-
 			message: "#^Method ValuesTransformerTest\\:\\:transform_test_dataProvider\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
-			path: Tests/Functional/Components/Transformers/ValuesTransformerTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$type of method SwagImportExport\\\\Components\\\\Transformers\\\\ValuesTransformer\\:\\:transform\\(\\) expects string, null given\\.$#"
-			count: 2
-			path: Tests/Functional/Components/Transformers/ValuesTransformerTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$data of method SwagImportExport\\\\Components\\\\Transformers\\\\ValuesTransformer\\:\\:transform\\(\\) expects array, null given\\.$#"
-			count: 2
 			path: Tests/Functional/Components/Transformers/ValuesTransformerTest.php
 
 		-
