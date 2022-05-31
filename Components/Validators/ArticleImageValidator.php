@@ -8,9 +8,6 @@
 
 namespace SwagImportExport\Components\Validators;
 
-use SwagImportExport\Components\Exception\AdapterException;
-use SwagImportExport\Components\Utils\SnippetsHelper;
-
 class ArticleImageValidator extends Validator
 {
     /**
@@ -34,7 +31,7 @@ class ArticleImageValidator extends Validator
     /**
      * @var array<string>
      */
-    private array $requiredFields = [
+    protected array $requiredFields = [
         'ordernumber',
         'image',
     ];
@@ -42,7 +39,7 @@ class ArticleImageValidator extends Validator
     /**
      * @var array<string, array<string>>
      */
-    private array $snippetData = [
+    protected array $snippetData = [
         'ordernumber' => [
             'adapters/articlesImages/ordernumber_image_required',
             'Ordernumber and image are required',
@@ -52,25 +49,4 @@ class ArticleImageValidator extends Validator
             'Ordernumber and image are required',
         ],
     ];
-
-    /**
-     * Checks whether required fields are filled-in
-     *
-     * @param array $record
-     *
-     * @throws AdapterException
-     */
-    public function checkRequiredFields($record)
-    {
-        foreach ($this->requiredFields as $key) {
-            if (isset($record[$key])) {
-                continue;
-            }
-
-            [$snippetName, $snippetMessage] = $this->snippetData[$key];
-
-            $message = SnippetsHelper::getNamespace()->get($snippetName, $snippetMessage);
-            throw new AdapterException($message);
-        }
-    }
 }

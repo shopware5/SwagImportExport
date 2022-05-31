@@ -551,7 +551,7 @@ class CommandHelper
     /**
      * @throws \RuntimeException
      *
-     * @return string|null
+     * @return int|null
      */
     private function getProductStreamIdByName(?string $productStreamName)
     {
@@ -581,6 +581,6 @@ class CommandHelper
             throw new \RuntimeException(\sprintf('There are no streams with the name: %s', $productStreamName));
         }
 
-        return \array_shift($id);
+        return (int) \array_shift($id);
     }
 }

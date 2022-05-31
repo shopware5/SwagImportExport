@@ -29,14 +29,14 @@ class PriceValidator extends Validator
     /**
      * @var array<array<string>>
      */
-    private array $requiredFields = [
+    protected array $requiredFields = [
         ['price', 'priceGroup'],
     ];
 
     /**
      * @var array<string, array<string>>
      */
-    private array $snippetData = [
+    protected array $snippetData = [
         'price' => [
             'adapters/articles/incorrect_price',
             'Price value is incorrect for article with number %s',
@@ -46,12 +46,9 @@ class PriceValidator extends Validator
     /**
      * Checks whether required fields are filled-in
      *
-     * @param array  $record
-     * @param string $orderNumber
-     *
-     * @throws AdapterException
+     * @param array<string, mixed> $record
      */
-    public function checkRequiredFields($record, $orderNumber)
+    public function checkRequiredFields(array $record, string $orderNumber = ''): void
     {
         foreach ($this->requiredFields as $key) {
             [$price, $priceGroup] = $key;

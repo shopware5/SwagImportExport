@@ -16,14 +16,14 @@ class NewsletterValidator extends Validator
     /**
      * @var array<string>
      */
-    private array $requiredFields = [
+    protected array $requiredFields = [
         'email',
     ];
 
     /**
      * @var array<string, array<string>>
      */
-    private array $snippetData = [
+    protected array $snippetData = [
         'email' => [
             'adapters/newsletter/email_required',
             'Email address is required field.',
@@ -33,11 +33,9 @@ class NewsletterValidator extends Validator
     /**
      * Checks whether required fields are filled-in
      *
-     * @param array $record
-     *
-     * @throws AdapterException
+     * @param array<string, mixed> $record
      */
-    public function checkRequiredFields($record)
+    public function checkRequiredFields(array $record): void
     {
         foreach ($this->requiredFields as $key) {
             if (isset($record[$key]) && \strlen($record[$key])) {

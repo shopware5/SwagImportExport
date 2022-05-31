@@ -3986,17 +3986,12 @@ parameters:
 			path: Components/Utils/CommandHelper.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Utils\\\\CommandHelper\\:\\:afterImport\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Utils/CommandHelper.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Utils\\\\CommandHelper\\:\\:exportAction\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Utils/CommandHelper.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Utils\\\\CommandHelper\\:\\:getProductStreamIdByName\\(\\) has parameter \\$productStreamName with no type specified\\.$#"
+			message: "#^Method SwagImportExport\\\\Components\\\\Utils\\\\CommandHelper\\:\\:getProductStreamIdByName\\(\\) should return int\\|null but returns string\\|null\\.$#"
 			count: 1
 			path: Components/Utils/CommandHelper.php
 
@@ -4041,29 +4036,9 @@ parameters:
 			path: Components/Utils/DataColumnOptions.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Utils\\\\DataFilter\\:\\:__construct\\(\\) has parameter \\$filter with no type specified\\.$#"
-			count: 1
-			path: Components/Utils/DataFilter.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Utils\\\\DataFilter\\:\\:getFilter\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Components/Utils/DataFilter.php
-
-		-
-			message: "#^Property SwagImportExport\\\\Components\\\\Utils\\\\DataFilter\\:\\:\\$filter has no type specified\\.$#"
-			count: 1
-			path: Components/Utils/DataFilter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Utils\\\\DataHelper\\:\\:formatFileSize\\(\\) has parameter \\$bytes with no type specified\\.$#"
-			count: 1
-			path: Components/Utils/DataHelper.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Utils\\\\DataHelper\\:\\:generateMappingFromColumns\\(\\) has parameter \\$column with no type specified\\.$#"
-			count: 1
-			path: Components/Utils/DataHelper.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Utils\\\\DataHelper\\:\\:generateMappingFromColumns\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -4106,31 +4081,6 @@ parameters:
 			path: Components/Utils/TreeHelper.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Utils\\\\TreeHelper\\:\\:appendNode\\(\\) has parameter \\$child with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Utils/TreeHelper.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Utils\\\\TreeHelper\\:\\:appendNode\\(\\) has parameter \\$node with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Utils/TreeHelper.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Utils\\\\TreeHelper\\:\\:changeNode\\(\\) has parameter \\$child with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Utils/TreeHelper.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Utils\\\\TreeHelper\\:\\:changeNode\\(\\) has parameter \\$defaultFields with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Utils/TreeHelper.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Utils\\\\TreeHelper\\:\\:changeNode\\(\\) has parameter \\$node with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Utils/TreeHelper.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Utils\\\\TreeHelper\\:\\:convertToExtJSTree\\(\\) has parameter \\$node with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Utils/TreeHelper.php
@@ -4141,37 +4091,7 @@ parameters:
 			path: Components/Utils/TreeHelper.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Utils\\\\TreeHelper\\:\\:deleteNode\\(\\) has parameter \\$child with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Utils/TreeHelper.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Utils\\\\TreeHelper\\:\\:deleteNode\\(\\) has parameter \\$node with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Utils/TreeHelper.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Utils\\\\TreeHelper\\:\\:getNodeById\\(\\) has parameter \\$node with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Utils/TreeHelper.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Utils\\\\TreeHelper\\:\\:getNodeById\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Utils/TreeHelper.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Utils\\\\TreeHelper\\:\\:moveNode\\(\\) has parameter \\$child with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Utils/TreeHelper.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Utils\\\\TreeHelper\\:\\:moveNode\\(\\) has parameter \\$node with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Utils/TreeHelper.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Utils\\\\TreeHelper\\:\\:reorderTree\\(\\) has parameter \\$node with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Utils/TreeHelper.php
 
@@ -4191,22 +4111,7 @@ parameters:
 			path: Components/Validators/AddressValidator.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Validators\\\\AddressValidator\\:\\:checkRequiredFields\\(\\) has parameter \\$addressRecord with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Validators/AddressValidator.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Validators\\\\AddressValidator\\:\\:recordToString\\(\\) has parameter \\$addressRecord with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Validators/AddressValidator.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Validators\\\\AddressValidator\\:\\:validateAddressFields\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Validators/AddressValidator.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Validators\\\\AddressValidator\\:\\:validateAddressFields\\(\\) has parameter \\$addressRecord with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Validators/AddressValidator.php
 
@@ -4216,67 +4121,12 @@ parameters:
 			path: Components/Validators/AddressValidator.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Validators\\\\AddressValidator\\:\\:validateCustomerCanBeIdentified\\(\\) has parameter \\$addressRecord with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Validators/AddressValidator.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Validators\\\\AddressValidator\\:\\:validateEmptyAddressRecord\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Components/Validators/AddressValidator.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Validators\\\\AddressValidator\\:\\:validateEmptyAddressRecord\\(\\) has parameter \\$addressRecord with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Validators/AddressValidator.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Validators\\\\ArticleImageValidator\\:\\:checkRequiredFields\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Validators/ArticleImageValidator.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Validators\\\\ArticleImageValidator\\:\\:checkRequiredFields\\(\\) has parameter \\$record with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Validators/ArticleImageValidator.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Validators\\\\ArticleInStockValidator\\:\\:checkRequiredFields\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Validators/ArticleInStockValidator.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Validators\\\\ArticleInStockValidator\\:\\:checkRequiredFields\\(\\) has parameter \\$record with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Validators/ArticleInStockValidator.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Validators\\\\ArticlePriceValidator\\:\\:checkRequiredFields\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Validators/ArticlePriceValidator.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Validators\\\\ArticlePriceValidator\\:\\:checkRequiredFields\\(\\) has parameter \\$record with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Validators/ArticlePriceValidator.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Validators\\\\ArticleTranslationValidator\\:\\:checkRequiredFields\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Validators/ArticleTranslationValidator.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Validators\\\\ArticleTranslationValidator\\:\\:checkRequiredFields\\(\\) has parameter \\$record with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Validators/ArticleTranslationValidator.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Validators\\\\Articles\\\\ArticleValidator\\:\\:checkRequiredFields\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Validators/Articles/ArticleValidator.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Validators\\\\Articles\\\\ArticleValidator\\:\\:checkRequiredFields\\(\\) has parameter \\$record with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Validators/Articles/ArticleValidator.php
 
@@ -4286,57 +4136,12 @@ parameters:
 			path: Components/Validators/Articles/ArticleValidator.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Validators\\\\Articles\\\\ArticleValidator\\:\\:checkRequiredFieldsForCreate\\(\\) has parameter \\$record with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Validators/Articles/ArticleValidator.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Validators\\\\Articles\\\\ConfiguratorValidator\\:\\:checkRequiredFields\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Validators/Articles/ConfiguratorValidator.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Validators\\\\Articles\\\\ConfiguratorValidator\\:\\:checkRequiredFields\\(\\) has parameter \\$record with no type specified\\.$#"
-			count: 1
-			path: Components/Validators/Articles/ConfiguratorValidator.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Validators\\\\Articles\\\\PriceValidator\\:\\:checkRequiredFields\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Validators/Articles/PriceValidator.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Validators\\\\Articles\\\\PriceValidator\\:\\:checkRequiredFields\\(\\) has parameter \\$record with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Validators/Articles/PriceValidator.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Validators\\\\CategoryTranslationValidator\\:\\:checkRequiredFields\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Validators/CategoryTranslationValidator.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Validators\\\\CategoryTranslationValidator\\:\\:checkRequiredFields\\(\\) has parameter \\$record with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Validators/CategoryTranslationValidator.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Validators\\\\CategoryValidator\\:\\:checkRequiredFields\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Components/Validators/CategoryValidator.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Validators\\\\CategoryValidator\\:\\:checkRequiredFields\\(\\) has parameter \\$record with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Validators/CategoryValidator.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Validators\\\\CustomerValidator\\:\\:checkRequiredFields\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Validators/CustomerValidator.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Validators\\\\CustomerValidator\\:\\:checkRequiredFields\\(\\) has parameter \\$record with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Validators/CustomerValidator.php
 
@@ -4351,16 +4156,6 @@ parameters:
 			path: Components/Validators/CustomerValidator.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Validators\\\\NewsletterValidator\\:\\:checkRequiredFields\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Validators/NewsletterValidator.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Validators\\\\NewsletterValidator\\:\\:checkRequiredFields\\(\\) has parameter \\$record with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Validators/NewsletterValidator.php
-
-		-
 			message: "#^Elseif branch is unreachable because previous condition is always true\\.$#"
 			count: 1
 			path: Components/Validators/OrderValidator.php
@@ -4371,17 +4166,7 @@ parameters:
 			path: Components/Validators/OrderValidator.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Validators\\\\OrderValidator\\:\\:checkRequiredFields\\(\\) has parameter \\$record with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Validators/OrderValidator.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Validators\\\\TranslationValidator\\:\\:checkRequiredFields\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Validators/TranslationValidator.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Validators\\\\TranslationValidator\\:\\:checkRequiredFields\\(\\) has parameter \\$record with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Validators/TranslationValidator.php
 
@@ -4389,6 +4174,21 @@ parameters:
 			message: "#^Property SwagImportExport\\\\Components\\\\Validators\\\\TranslationValidator\\:\\:\\$requiredFields type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Validators/TranslationValidator.php
+
+		-
+			message: "#^Access to an undefined property SwagImportExport\\\\Components\\\\Validators\\\\Validator\\:\\:\\$requiredFields\\.$#"
+			count: 1
+			path: Components/Validators/Validator.php
+
+		-
+			message: "#^Access to an undefined property SwagImportExport\\\\Components\\\\Validators\\\\Validator\\:\\:\\$snippetData\\.$#"
+			count: 1
+			path: Components/Validators/Validator.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Components\\\\Validators\\\\Validator\\:\\:checkRequiredFields\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: Components/Validators/Validator.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Validators\\\\Validator\\:\\:filterEmptyString\\(\\) has parameter \\$record with no value type specified in iterable type array\\.$#"
@@ -4452,11 +4252,6 @@ parameters:
 
 		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Validators\\\\Validator\\:\\:validateType\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Validators/Validator.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Validators\\\\Validator\\:\\:validateType\\(\\) has parameter \\$value with no type specified\\.$#"
 			count: 1
 			path: Components/Validators/Validator.php
 
@@ -4632,6 +4427,11 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_SwagImportExportSession\\:\\:getSessionsAction\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: Controllers/Backend/SwagImportExportSession.php
+
+		-
+			message: "#^Parameter \\#1 \\$bytes of static method SwagImportExport\\\\Components\\\\Utils\\\\DataHelper\\:\\:formatFileSize\\(\\) expects int, int\\|null given\\.$#"
 			count: 1
 			path: Controllers/Backend/SwagImportExportSession.php
 

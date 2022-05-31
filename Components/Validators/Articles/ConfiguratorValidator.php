@@ -20,13 +20,9 @@ class ConfiguratorValidator extends Validator
             'configSetId',
             'configSetType',
         ],
-        'string' => [ //TODO: maybe we don't need to check fields which contains string?
+        'string' => [
             'configGroupName',
             'configOptionName',
         ],
     ];
-
-    public function checkRequiredFields($record)
-    {
-    }
 }

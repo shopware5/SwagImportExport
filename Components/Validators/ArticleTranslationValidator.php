@@ -31,7 +31,7 @@ class ArticleTranslationValidator extends Validator
     /**
      * @var array<string>
      */
-    private array $requiredFields = [
+    protected array $requiredFields = [
         'articleNumber' => 'adapters/ordernumber_required',
         'languageId' => 'adapters/translations/language_not_found',
     ];
@@ -39,11 +39,9 @@ class ArticleTranslationValidator extends Validator
     /**
      * Checks whether required fields are filled-in
      *
-     * @param array $record
-     *
-     * @throws AdapterException
+     * @param array<string, mixed> $record
      */
-    public function checkRequiredFields($record)
+    public function checkRequiredFields(array $record): void
     {
         foreach ($this->requiredFields as $requiredField => $snippetName) {
             if (isset($record[$requiredField])) {

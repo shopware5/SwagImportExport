@@ -16,7 +16,7 @@ class AddressValidator extends Validator
     /**
      * @var array<string, array<string>>
      */
-    private array $requiredFields = [
+    protected array $requiredFields = [
         'firstname' => [
             'snippet' => 'adapters/address/firstname_required',
             'default' => 'Field firstname is required. Record %s',
@@ -40,10 +40,9 @@ class AddressValidator extends Validator
     ];
 
     /**
-     * @param array $addressRecord
-     * @param bool  $updateAddress
+     * @param array<string, mixed> $addressRecord
      */
-    public function checkRequiredFields($addressRecord, $updateAddress = false)
+    public function checkRequiredFields(array $addressRecord, bool $updateAddress = false)
     {
         $this->validateEmptyAddressRecord($addressRecord);
         $this->validateCustomerCanBeIdentified($addressRecord);
@@ -56,11 +55,9 @@ class AddressValidator extends Validator
     }
 
     /**
-     * @param array $addressRecord
-     *
-     * @throws AdapterException
+     * @param array<string, mixed> $addressRecord
      */
-    private function validateEmptyAddressRecord($addressRecord)
+    private function validateEmptyAddressRecord(array $addressRecord)
     {
         if (\count($addressRecord) === 0) {
             throw new AdapterException(
@@ -73,11 +70,9 @@ class AddressValidator extends Validator
     }
 
     /**
-     * @param array $addressRecord
-     *
-     * @throws AdapterException
+     * @param array<string, mixed> $addressRecord
      */
-    private function validateAddressFields($addressRecord)
+    private function validateAddressFields(array $addressRecord)
     {
         foreach ($this->requiredFields as $field => $snippetData) {
             if ($addressRecord[$field] !== '') {
@@ -91,11 +86,9 @@ class AddressValidator extends Validator
     }
 
     /**
-     * @param array $addressRecord
-     *
-     * @throws AdapterException
+     * @param array<string, mixed> $addressRecord
      */
-    private function validateCustomerCanBeIdentified($addressRecord)
+    private function validateCustomerCanBeIdentified(array $addressRecord)
     {
         if (
             !($addressRecord['customernumber'] && $addressRecord['email'])
@@ -108,11 +101,11 @@ class AddressValidator extends Validator
     }
 
     /**
-     * @param array $addressRecord
+     * @param array<string, mixed> $addressRecord
      *
      * @return string
      */
-    private function recordToString($addressRecord)
+    private function recordToString(array $addressRecord)
     {
         $messageTemplate = '%s: %s, ';
         $message = '';
@@ -127,11 +120,9 @@ class AddressValidator extends Validator
     }
 
     /**
-     * @param string $message
-     *
      * @return string
      */
-    private function removeLastComma($message)
+    private function removeLastComma(string $message)
     {
         return \substr($message, 0, -2);
     }

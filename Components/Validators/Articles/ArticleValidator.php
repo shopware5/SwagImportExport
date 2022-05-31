@@ -17,7 +17,7 @@ class ArticleValidator extends Validator
     /**
      * @var array<string>
      */
-    private array $requiredFields = [
+    protected array $requiredFields = [
         'orderNumber',
         'mainNumber',
     ];
@@ -25,7 +25,7 @@ class ArticleValidator extends Validator
     /**
      * @var array<string|array<string>>
      */
-    private array $requiredFieldsForCreate = [
+    protected array $requiredFieldsForCreate = [
         'name',
         'mainNumber',
         ['supplierName', 'supplierId'],
@@ -35,7 +35,7 @@ class ArticleValidator extends Validator
     /**
      * @var array<string, array<string>>
      */
-    private array $snippetData = [
+    protected array $snippetData = [
         'orderNumber' => [
             'adapters/ordernumber_required',
             'Order number is required.',
@@ -61,11 +61,9 @@ class ArticleValidator extends Validator
     /**
      * Checks whether required fields are filled-in
      *
-     * @param array $record
-     *
-     * @throws AdapterException
+     * @param array<string, mixed> $record
      */
-    public function checkRequiredFields($record)
+    public function checkRequiredFields(array $record)
     {
         foreach ($this->requiredFields as $key) {
             if (isset($record[$key]) && \strlen($record[$key])) {
@@ -82,11 +80,9 @@ class ArticleValidator extends Validator
     /**
      * Checks whether required fields for create are filled-in
      *
-     * @param array $record
-     *
-     * @throws AdapterException
+     * @param array<string, mixed> $record
      */
-    public function checkRequiredFieldsForCreate($record)
+    public function checkRequiredFieldsForCreate(array $record)
     {
         foreach ($this->requiredFieldsForCreate as $key) {
             if (\is_array($key)) {

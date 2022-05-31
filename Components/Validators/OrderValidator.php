@@ -69,14 +69,14 @@ class OrderValidator extends Validator
     /**
      * @var array<array<string>>
      */
-    private array $requiredFields = [
+    protected array $requiredFields = [
         ['orderId', 'number', 'orderDetailId'], //one of these fields must be set
     ];
 
     /**
      * @var array<string, array<string>>
      */
-    private array $snippetData = [
+    protected array $snippetData = [
         'orderId' => [
             'adapters/orders/ordernumber_order_details_requires',
             'Order number or order detail id must be provided',
@@ -86,11 +86,9 @@ class OrderValidator extends Validator
     /**
      * Checks whether required fields are filled-in
      *
-     * @param array $record
-     *
-     * @throws AdapterException
+     * @param array<string, mixed> $record
      */
-    public function checkRequiredFields($record)
+    public function checkRequiredFields(array $record)
     {
         foreach ($this->requiredFields as $key) {
             if (\is_array($key)) {

@@ -16,7 +16,7 @@ class CategoryValidator extends Validator
     /**
      * @var array<string>
      */
-    private array $requiredFields = [
+    protected array $requiredFields = [
         'name',
         'parentId',
         'categoryId',
@@ -25,7 +25,7 @@ class CategoryValidator extends Validator
     /**
      * @var array<string, array<string>>
      */
-    private array $snippetData = [
+    protected array $snippetData = [
         'name' => [
             'adapters/categories/name_required',
             'Category name is required',
@@ -45,11 +45,9 @@ class CategoryValidator extends Validator
     /**
      * Checks whether required fields are filled-in
      *
-     * @param array $record
-     *
      * @throws AdapterException
      */
-    public function checkRequiredFields($record)
+    public function checkRequiredFields(array $record)
     {
         foreach ($this->requiredFields as $key) {
             if (isset($record[$key])) {

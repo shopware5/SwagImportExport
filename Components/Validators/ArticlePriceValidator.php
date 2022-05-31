@@ -8,9 +8,6 @@
 
 namespace SwagImportExport\Components\Validators;
 
-use SwagImportExport\Components\Exception\AdapterException;
-use SwagImportExport\Components\Utils\SnippetsHelper;
-
 class ArticlePriceValidator extends Validator
 {
     /**
@@ -38,38 +35,17 @@ class ArticlePriceValidator extends Validator
     /**
      * @var array<string>
      */
-    private array $requiredFields = [
+    protected array $requiredFields = [
         'orderNumber',
     ];
 
     /**
      * @var array<string, array<string>>
      */
-    private array $snippetData = [
+    protected array $snippetData = [
         'orderNumber' => [
             'adapters/ordernumber_required',
             'Order number is required.',
         ],
     ];
-
-    /**
-     * Checks whether required fields are filled-in
-     *
-     * @param array $record
-     *
-     * @throws AdapterException
-     */
-    public function checkRequiredFields($record)
-    {
-        foreach ($this->requiredFields as $key) {
-            if (isset($record[$key])) {
-                continue;
-            }
-
-            [$snippetName, $snippetMessage] = $this->snippetData[$key];
-
-            $message = SnippetsHelper::getNamespace()->get($snippetName, $snippetMessage);
-            throw new AdapterException($message);
-        }
-    }
 }

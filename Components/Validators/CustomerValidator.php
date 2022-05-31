@@ -89,11 +89,9 @@ class CustomerValidator extends Validator
     /**
      * Checks whether required fields are filled-in
      *
-     * @param array $record
-     *
      * @throws AdapterException
      */
-    public function checkRequiredFields($record)
+    public function checkRequiredFields(array $record)
     {
         foreach ($this->requiredFields as $key) {
             if (isset($record[$key])) {
@@ -110,11 +108,9 @@ class CustomerValidator extends Validator
     /**
      * Checks whether required fields for create are filled-in
      *
-     * @param array $record
-     *
      * @throws AdapterException
      */
-    public function checkRequiredFieldsForCreate($record)
+    public function checkRequiredFieldsForCreate(array $record)
     {
         foreach ($this->requiredFieldsForCreate as $columnName) {
             if (isset($record[$columnName])) {

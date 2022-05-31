@@ -16,11 +16,9 @@ abstract class Validator
     /**
      * Removes fields which contain empty string.
      *
-     * @param array $record
-     *
      * @return array
      */
-    public function filterEmptyString($record)
+    public function filterEmptyString(array $record)
     {
         return \array_filter($record, 'strlen');
     }
@@ -28,13 +26,10 @@ abstract class Validator
     /**
      * Validates fields types.
      *
-     * @param array $record
-     * @param array $mapper
-     *
      * @throws AdapterException
      * @throws \Exception
      */
-    public function validate($record, $mapper)
+    public function validate(array $record, array $mapper)
     {
         foreach ($record as $fieldName => $value) {
             foreach ($mapper as $type => $fields) {
@@ -59,11 +54,9 @@ abstract class Validator
     /**
      * Validates fields with float type.
      *
-     * @param string $value
-     *
      * @return int
      */
-    public function validateFloat($value)
+    public function validateFloat(string $value)
     {
         return \preg_match('/^-?\d+((\.|,){0,1}\d+)*$/', $value);
     }
@@ -102,15 +95,32 @@ abstract class Validator
     }
 
     /**
-     * Helper function, which is used to validate current field's value.
+     * Checks whether required fields are filled-in
      *
-     * @param string $type
-     * @param string $fieldName
+     * @param array<string, mixed> $record
      *
      * @throws AdapterException
-     * @throws \Exception
      */
-    private function validateType($type, $value, $fieldName)
+    public function checkRequiredFields(array $record)
+    {
+        foreach ($this->requiredFields as $key) {
+            if (isset($record[$key])) {
+                continue;
+            }
+
+            [$snippetName, $snippetMessage] = $this->snippetData[$key];
+
+            $message = SnippetsHelper::getNamespace()->get($snippetName, $snippetMessage);
+            throw new AdapterException($message);
+        }
+    }
+
+    /**
+     * Helper function, which is used to validate current field's value.
+     *
+     * @param mixed $value
+     */
+    private function validateType(string $type, $value, string $fieldName)
     {
         $action = 'validate' . \ucfirst($type);
         if (!\is_callable([$this, $action])) {

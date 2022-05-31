@@ -8,36 +8,13 @@
 
 namespace SwagImportExport\Components\Validators;
 
-use SwagImportExport\Components\Exception\AdapterException;
-use SwagImportExport\Components\Utils\SnippetsHelper;
-
 class CategoryTranslationValidator extends Validator
 {
     /**
      * @var array<string>
      */
-    private array $requiredFields = [
+    protected array $requiredFields = [
         'categoryId' => 'adapters/category_required',
         'languageId' => 'adapters/translations/language_not_found',
     ];
-
-    /**
-     * Checks whether required fields are filled-in
-     *
-     * @param array $record
-     *
-     * @throws AdapterException
-     */
-    public function checkRequiredFields($record)
-    {
-        foreach ($this->requiredFields as $requiredField => $snippetName) {
-            if (isset($record[$requiredField])) {
-                continue;
-            }
-
-            $message = SnippetsHelper::getNamespace()->get($snippetName);
-
-            throw new AdapterException($message);
-        }
-    }
 }

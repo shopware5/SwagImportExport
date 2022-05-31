@@ -25,7 +25,7 @@ class TranslationValidator extends Validator
      * Indexed by field name
      * Value: snippet name
      */
-    private array $requiredFields = [
+    protected array $requiredFields = [
         'objectType' => 'adapters/translations/object_type_not_found',
         'objectKey' => 'adapters/translations/object_key_not_found',
         'name' => 'adapters/translations/element_name_not_found',
@@ -35,11 +35,9 @@ class TranslationValidator extends Validator
     /**
      * Checks whether required fields are filled-in
      *
-     * @param array $record
-     *
-     * @throws AdapterException
+     * @param array<string, mixed> $record
      */
-    public function checkRequiredFields($record)
+    public function checkRequiredFields(array $record)
     {
         foreach ($this->requiredFields as $field => $snippet) {
             if (isset($record[$field])) {
