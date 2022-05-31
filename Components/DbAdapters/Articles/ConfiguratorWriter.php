@@ -257,7 +257,7 @@ class ConfiguratorWriter
         unset($data['id']);
 
         $builder = $this->dbalHelper
-            ->getQueryBuilderForEntity($data, Set::class, false);
+            ->getQueryBuilderForEntity($data, Set::class, null);
         $builder->execute();
 
         return $this->connection->lastInsertId();
@@ -271,7 +271,7 @@ class ConfiguratorWriter
     protected function createGroup(array $data)
     {
         $builder = $this->dbalHelper
-            ->getQueryBuilderForEntity($data, Group::class, false);
+            ->getQueryBuilderForEntity($data, Group::class, null);
         $builder->execute();
 
         return $this->connection->lastInsertId();
@@ -285,7 +285,7 @@ class ConfiguratorWriter
     protected function createOption(array $data)
     {
         $builder = $this->dbalHelper
-            ->getQueryBuilderForEntity($data, Option::class, false);
+            ->getQueryBuilderForEntity($data, Option::class, null);
         $builder->execute();
 
         return $this->connection->lastInsertId();

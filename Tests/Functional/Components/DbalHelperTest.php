@@ -64,7 +64,7 @@ class DbalHelperTest extends TestCase
             self::ANOTHER_MODEL_FIELD_NAME => self::ANOTHER_IMPORT_VALUE,
         ];
 
-        $builder = $this->dbalHelper->getQueryBuilderForEntity($importData, Article::class, self::CREATE_INSERT_STATEMENT);
+        $builder = $this->dbalHelper->getQueryBuilderForEntity($importData, Article::class, null);
 
         static::assertEquals($expectedSQL, $builder->getSQL(), 'Could not generate insert sql statement.');
     }

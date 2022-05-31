@@ -18,7 +18,7 @@ class UploadPathProvider
     /**
      * @param string $rootPath - Root path to shopware
      */
-    public function __construct($rootPath)
+    public function __construct(string $rootPath)
     {
         $this->rootPath = $rootPath;
     }
@@ -26,32 +26,25 @@ class UploadPathProvider
     /**
      * Returns the absolute file path with file name.
      *
-     * @param string $fileName
-     * @param string $directory
-     *
      * @return string
      */
-    public function getRealPath($fileName, $directory = self::DIR)
+    public function getRealPath(string $fileName, string $directory = self::DIR)
     {
         return $this->getPath($directory) . '/' . $fileName;
     }
 
     /**
-     * @param string $path
-     *
      * @return string
      */
-    public function getFileNameFromPath($path)
+    public function getFileNameFromPath(string $path)
     {
         return \pathinfo($path, \PATHINFO_BASENAME);
     }
 
     /**
-     * @param string $path
-     *
      * @return string
      */
-    public function getFileExtension($path)
+    public function getFileExtension(string $path)
     {
         return \pathinfo($path, \PATHINFO_EXTENSION);
     }
@@ -59,11 +52,9 @@ class UploadPathProvider
     /**
      * Return the path to the upload directory.
      *
-     * @param string $directory
-     *
      * @return string
      */
-    public function getPath($directory = self::DIR)
+    public function getPath(string $directory = self::DIR)
     {
         if ($directory === self::CRON_DIR) {
             return $this->rootPath . self::CRON_DIR;

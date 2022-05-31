@@ -214,11 +214,11 @@ class CommandHelper
         $colOpts = $dataFactory->createColOpts('');
         $limit = $dataFactory->createLimit($postData['limit']);
         $filter = $dataFactory->createFilter($postData['filter']);
-        $maxRecordCount = $postData['max_record_count'] ?? 0;
+        $maxRecordCount = (int) ($postData['max_record_count'] ?? 0);
         $type = $postData['type'];
         $format = $postData['format'];
 
-        $dataIO->initialize($colOpts, $limit, $filter, $maxRecordCount, $type, $format);
+        $dataIO->initialize($colOpts, $limit, $filter, $type, $format, $maxRecordCount);
 
         $ids = $dataIO->preloadRecordIds()->getRecordIds();
 
@@ -289,7 +289,7 @@ class CommandHelper
         $colOpts = $dataFactory->createColOpts($postData['columnOptions']);
         $limit = $dataFactory->createLimit($postData['limit']);
         $filter = $dataFactory->createFilter($postData['filter']);
-        $maxRecordCount = $postData['max_record_count'];
+        $maxRecordCount = (int) ($postData['max_record_count'] ?? 0);
         $type = $postData['type'];
         $format = $postData['format'];
 
@@ -442,7 +442,7 @@ class CommandHelper
         $colOpts = $dataFactory->createColOpts($postData['columnOptions']);
         $limit = $dataFactory->createLimit($postData['limit']);
         $filter = $dataFactory->createFilter($postData['filter']);
-        $maxRecordCount = $postData['max_record_count'];
+        $maxRecordCount = (int) ($postData['max_record_count'] ?? 0);
         $type = $postData['type'];
         $format = $postData['format'];
 

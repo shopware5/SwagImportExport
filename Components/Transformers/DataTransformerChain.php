@@ -86,13 +86,11 @@ class DataTransformerChain
     /**
      * Returns the last transformer implementing the composer-interface.
      *
-     * @param array $transformers
-     *
      * @throws \Exception
      *
      * @return ComposerInterface
      */
-    private function getLastComposerTransformer($transformers)
+    private function getLastComposerTransformer(array $transformers)
     {
         $transformers = \array_reverse($transformers);
         foreach ($transformers as $transformer) {

@@ -109,7 +109,7 @@ class PropertyWriter
         $builder = $this->dbalHelper->getQueryBuilderForEntity(
             $data,
             $entityName,
-            false
+            null
         );
         $builder->execute();
 

@@ -35,12 +35,9 @@ class DataWorkflow
     protected $dbAdapter;
 
     /**
-     * @param ?DataIO               $dataIO
-     * @param Profile               $profile
-     * @param DataTransformerChain  $transformerChain
      * @param FileWriter|FileReader $fileIO
      */
-    public function __construct($dataIO, $profile, $transformerChain, $fileIO)
+    public function __construct(?DataIO $dataIO, Profile $profile, DataTransformerChain $transformerChain, $fileIO)
     {
         $this->dataIO = $dataIO;
         $this->profile = $profile;
@@ -49,11 +46,9 @@ class DataWorkflow
     }
 
     /**
-     * @param string $outputFileName
-     *
-     * @throws \Exception
+     * @param array<string, mixed> $postData
      */
-    public function export($postData, $outputFileName = '')
+    public function export(array $postData, string $outputFileName = '')
     {
         if ($this->dataIO->getSessionState() === 'closed') {
             $postData['position'] = $this->dataIO->getSessionPosition();
@@ -125,9 +120,9 @@ class DataWorkflow
     }
 
     /**
-     * @throws \Exception
+     * @param array<string, mixed> $postData
      */
-    public function import($postData, $inputFile)
+    public function import(array $postData, string $inputFile)
     {
         $tree = \json_decode($this->profile->getConfig('tree'), true);
         if ($postData['format'] === 'xml') {
@@ -184,7 +179,10 @@ class DataWorkflow
         return $postData;
     }
 
-    public function saveUnprocessedData($postData, $profileName, $outputFile)
+    /**
+     * @param array<string, mixed> $postData
+     */
+    public function saveUnprocessedData(array $postData, string $profileName, string $outputFile)
     {
         if ($postData['session']['prevState'] === 'new' || !\filesize($outputFile)) {
             $header = $this->transformerChain->composeHeader();

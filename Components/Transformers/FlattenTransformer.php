@@ -164,8 +164,6 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      *
      * @param array<string, mixed> $node
      * @param array<string, mixed> $mapper
-     *
-     * @return mixed
      */
     public function transform(array $node, ?array $mapper = [])
     {
@@ -528,7 +526,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
         if ($this->iterationParts[$path] === 'price') {
             $priceProfile = $this->getNodeFromProfile($this->getMainIterationPart(), 'price');
 
-            if(!is_array($priceProfile)) {
+            if (!\is_array($priceProfile)) {
                 return;
             }
 
@@ -541,7 +539,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
         } elseif ($this->iterationParts[$path] === 'configurator') {
             $configuratorProfile = $this->getNodeFromProfile($this->getMainIterationPart(), 'configurator');
 
-            if(!is_array($configuratorProfile)) {
+            if (!\is_array($configuratorProfile)) {
                 return;
             }
 
@@ -553,7 +551,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
         } elseif ($this->iterationParts[$path] === 'propertyValue') {
             $propertyProfile = $this->getNodeFromProfile($this->getMainIterationPart(), 'propertyValue');
 
-            if(!is_array($propertyProfile)) {
+            if (!\is_array($propertyProfile)) {
                 return;
             }
 
@@ -565,7 +563,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
         } elseif ($this->iterationParts[$path] === 'translation') {
             $translationProfile = $this->getNodeFromProfile($this->getMainIterationPart(), 'translation');
 
-            if(!is_array($translationProfile)) {
+            if (!\is_array($translationProfile)) {
                 return;
             }
 
@@ -579,7 +577,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
         } elseif ($this->iterationParts[$path] === 'taxRateSum') {
             $taxSumProfile = $this->getNodeFromProfile($this->getMainIterationPart(), 'taxRateSum');
 
-            if(!is_array($taxSumProfile)) {
+            if (!\is_array($taxSumProfile)) {
                 return;
             }
 
@@ -728,7 +726,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
             if ($this->iterationParts[$path] === 'price') {
                 $priceProfile = $this->getNodeFromProfile($this->getMainIterationPart(), 'price');
 
-                if(!is_array($priceProfile)) {
+                if (!\is_array($priceProfile)) {
                     return;
                 }
 
@@ -749,7 +747,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
             } elseif ($this->iterationParts[$path] === 'configurator') {
                 $configuratorProfile = $this->getNodeFromProfile($this->getMainIterationPart(), 'configurator');
 
-                if(!is_array($configuratorProfile)) {
+                if (!\is_array($configuratorProfile)) {
                     return;
                 }
 
@@ -780,7 +778,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
             } elseif ($this->iterationParts[$path] === 'propertyValue') {
                 $propertyValueProfile = $this->getNodeFromProfile($this->getMainIterationPart(), 'propertyValue');
 
-                if(!is_array($propertyValueProfile)) {
+                if (!\is_array($propertyValueProfile)) {
                     return;
                 }
 
@@ -808,7 +806,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
             } elseif ($this->iterationParts[$path] === 'translation') {
                 $translationProfile = $this->getNodeFromProfile($this->getMainIterationPart(), 'translation');
 
-                if(!is_array($translationProfile)) {
+                if (!\is_array($translationProfile)) {
                     return;
                 }
 
@@ -821,7 +819,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
             } elseif ($this->iterationParts[$path] === 'translationProperty') {
                 $translationPProfile = $this->getNodeFromProfile($this->getMainIterationPart(), 'translationProperty');
 
-                if(!is_array($translationPProfile)) {
+                if (!\is_array($translationPProfile)) {
                     return;
                 }
 
@@ -847,7 +845,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
             } elseif ($this->iterationParts[$path] === 'taxRateSum') {
                 $taxSumProfile = $this->getNodeFromProfile($this->getMainIterationPart(), 'taxRateSum');
 
-                if(!is_array($taxSumProfile)) {
+                if (!\is_array($taxSumProfile)) {
                     return;
                 }
 
@@ -1496,7 +1494,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
     /**
      * Transform flat configurator data into tree array
      *
-     * @param array<string, mixed> $node
+     * @param array<string, mixed>     $node
      * @param array<int|string, mixed> $data
      *
      * @return array

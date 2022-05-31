@@ -216,7 +216,7 @@ class ArticleWriter
         $builder = $this->dbalHelper->getQueryBuilderForEntity(
             $product,
             Article::class,
-            $shouldCreateMainProduct ? false : $productId
+            $shouldCreateMainProduct ? null : $productId
         );
         $builder->execute();
 
@@ -239,7 +239,7 @@ class ArticleWriter
         $builder = $this->dbalHelper->getQueryBuilderForEntity(
             $attributes,
             ProductAttribute::class,
-            $createProduct ? false : $this->getAttrId($variantId)
+            $createProduct ? null : $this->getAttrId($variantId)
         );
         $builder->execute();
     }

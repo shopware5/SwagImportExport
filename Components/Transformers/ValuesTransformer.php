@@ -61,12 +61,10 @@ class ValuesTransformer implements DataTransformerAdapter
 
     /**
      * @param array<string, array<mixed>> $data
-     *
-     * @return array
      */
     public function transform(?string $type, ?array $data): array
     {
-        if(!is_array($data)) {
+        if (!\is_array($data)) {
             $data = [];
         }
 

@@ -117,8 +117,6 @@ abstract class Validator
 
     /**
      * Helper function, which is used to validate current field's value.
-     *
-     * @param mixed $value
      */
     private function validateType(string $type, $value, string $fieldName)
     {

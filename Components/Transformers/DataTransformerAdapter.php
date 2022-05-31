@@ -22,7 +22,8 @@ interface DataTransformerAdapter
     /**
      * Transforms the data in direction to formatted output file and returns the transformed data.
      *
-     * @param  array<string, array<int, mixed>> $data
+     * @param array<string, array<int, mixed>> $data
+     *
      * @return array
      */
     public function transformForward(array $data);
@@ -31,6 +32,7 @@ interface DataTransformerAdapter
      * Transforms the data in direction from formatted output file and returns the transformed data.
      *
      * @param array<string, array<int, mixed>> $data
+     *
      * @return array
      */
     public function transformBackward(array $data);

@@ -47,7 +47,7 @@ class DataIO
 
     private string $fileName;
 
-    private string $fileSize;
+    private int $fileSize;
 
     private ?string $username = null;
 
@@ -57,11 +57,7 @@ class DataIO
 
     private UploadPathProvider $uploadPathProvider;
 
-    /**
-     * @param Session $dataSession
-     * @param Logger  $logger
-     */
-    public function __construct(DataDbAdapter $dbAdapter, $dataSession, $logger, UploadPathProvider $uploadPathProvider)
+    public function __construct(DataDbAdapter $dbAdapter, Session $dataSession, Logger $logger, UploadPathProvider $uploadPathProvider)
     {
         $this->dbAdapter = $dbAdapter;
         $this->dataSession = $dataSession;
@@ -69,20 +65,24 @@ class DataIO
         $this->uploadPathProvider = $uploadPathProvider;
     }
 
-    public function initialize($colOpts, $limit, $filter, $type, $format, $maxRecordCount)
+    public function initialize(
+        DataColumnOptions $colOpts,
+        DataLimit $limit,
+        DataFilter $filter,
+        ?string $type,
+        string $format,
+        int $maxRecordCount
+    )
     {
         $this->columnOptions = $colOpts;
         $this->limit = $limit;
         $this->filter = $filter;
         $this->type = $type;
         $this->format = $format;
-        $this->maxRecordCount = (int) $maxRecordCount;
+        $this->maxRecordCount = $maxRecordCount;
     }
 
-    /**
-     * @param int $numberOfRecords
-     */
-    public function read($numberOfRecords)
+    public function read(int $numberOfRecords)
     {
         $start = $this->getSessionPosition();
 
@@ -95,7 +95,11 @@ class DataIO
         return $dbAdapter->read($ids, $columns);
     }
 
-    public function write($data, $defaults)
+    /**
+     * @param array<string, mixed> $data
+     * @param array<string, mixed> $defaults
+     */
+    public function write(array $data, array $defaults)
     {
         $dbAdapter = $this->getDbAdapter();
 
@@ -107,11 +111,7 @@ class DataIO
         $dbAdapter->write($data);
     }
 
-    /**
-     * @param string $fileName
-     * @param string $profileName
-     */
-    public function writeLog($fileName, $profileName)
+    public function writeLog(string $fileName, string $profileName)
     {
         $dbAdapter = $this->getDbAdapter();
 
@@ -234,11 +234,9 @@ class DataIO
     /**
      * Generates random hash depends on the length
      *
-     * @param int $length
-     *
      * @return string
      */
-    public function generateRandomHash($length)
+    public function generateRandomHash(int $length)
     {
         return \substr(\md5(\uniqid()), 0, $length);
     }
@@ -262,11 +260,9 @@ class DataIO
     /**
      * Creates directory
      *
-     * @param string $path
-     *
      * @throws \Exception
      */
-    public function createDirectory($path)
+    public function createDirectory(string $path)
     {
         if (!\mkdir($path, 0777, true)) {
             $message = SnippetsHelper::getNamespace()->get('dataio/no_profile', 'Failed to create directory %s');
@@ -325,10 +321,8 @@ class DataIO
      * Checks if the number of processed records has reached the current max records count.
      * If reached then the session state will be set to "stopped"
      * Updates the session position with the current position (stored in a member variable).
-     *
-     * @param null $outputFileName
      */
-    public function progressSession($step, $outputFileName = null)
+    public function progressSession(int $step, string $outputFileName = null)
     {
         $this->getDataSession()->progress($step, $outputFileName);
     }
@@ -419,7 +413,10 @@ class DataIO
         return $this->recordIds;
     }
 
-    public function setRecordIds($recordIds)
+    /**
+     * @param array<int> $recordIds
+     */
+    public function setRecordIds(array $recordIds)
     {
         $this->recordIds = $recordIds;
     }
@@ -456,7 +453,7 @@ class DataIO
         return $this->fileName;
     }
 
-    public function setFileName($fileName)
+    public function setFileName(string $fileName)
     {
         $this->fileName = $fileName;
     }
@@ -469,7 +466,7 @@ class DataIO
         return $this->fileSize;
     }
 
-    public function setFileSize($fileSize)
+    public function setFileSize(int $fileSize)
     {
         $this->fileSize = $fileSize;
     }
@@ -482,7 +479,7 @@ class DataIO
         return $this->username;
     }
 
-    public function setUsername($username)
+    public function setUsername(?string $username)
     {
         $this->username = $username;
     }
@@ -506,14 +503,11 @@ class DataIO
     /**
      * Returns number of ids
      *
-     * @param int $start
-     * @param int $numberOfRecords
-     *
      * @throws \Exception
      *
      * @return array
      */
-    private function loadIds($start, $numberOfRecords)
+    private function loadIds(int $start, int $numberOfRecords)
     {
         $storedIds = $this->getRecordIds();
 

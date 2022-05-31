@@ -38,8 +38,6 @@ class DecimalTransformer implements DataTransformerAdapter
 
     /**
      * Sets the main config which defines the data restructuring
-     *
-     * @param array $params
      */
     public function initialize($params)
     {
@@ -50,11 +48,9 @@ class DecimalTransformer implements DataTransformerAdapter
     /**
      * Transforms the data in direction to formatted output file and returns the transformed data.
      *
-     * @param array $data
-     *
      * @return array
      */
-    public function transformForward($data)
+    public function transformForward(array $data)
     {
         if (!$this->pluginConfig->get('useCommaDecimal')) {
             return $data;
@@ -66,11 +62,9 @@ class DecimalTransformer implements DataTransformerAdapter
     /**
      * Transforms the data in direction from formatted output file and returns the transformed data.
      *
-     * @param array $data
-     *
      * @return array
      */
-    public function transformBackward($data)
+    public function transformBackward(array $data)
     {
         if (!$this->pluginConfig->get('useCommaDecimal')) {
             return $data;
@@ -85,12 +79,9 @@ class DecimalTransformer implements DataTransformerAdapter
      * Transforms the data.
      * Direction (forward / backward) is given by the parameter $direction.
      *
-     * @param array $data
-     * @param bool  $isForward
-     *
      * @return array
      */
-    public function transform($data, $isForward = true)
+    public function transform(array $data, bool $isForward = true)
     {
         foreach ($data as &$records) {
             $records = $this->transformRecord($records, $isForward);
@@ -103,11 +94,9 @@ class DecimalTransformer implements DataTransformerAdapter
      * Transforms a record both forward and backwards.
      * It replaces the decimal-delimiter.
      *
-     * @param bool $isForward
-     *
      * @return array
      */
-    public function transformRecord(array $records, $isForward = true)
+    public function transformRecord(array $records, bool $isForward = true)
     {
         foreach ($records as &$record) {
             foreach ($record as $key => &$value) {
@@ -161,11 +150,9 @@ class DecimalTransformer implements DataTransformerAdapter
     /**
      * Returns if the given key is an adapter.
      *
-     * @param string $key
-     *
      * @return bool
      */
-    private function isAdapter($key)
+    private function isAdapter(string $key)
     {
         return isset($this->treeData['adapters'][$key]);
     }
@@ -173,11 +160,9 @@ class DecimalTransformer implements DataTransformerAdapter
     /**
      * Returns if the given key is a node.
      *
-     * @param string $key
-     *
      * @return bool
      */
-    private function isNode($key)
+    private function isNode(string $key)
     {
         return isset($this->treeData['nodes'][$key]);
     }

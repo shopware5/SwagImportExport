@@ -92,7 +92,7 @@ abstract class AbstractImportExportService
         $colOpts = $this->dataFactory->createColOpts($requestData['columnOptions']);
         $limit = $this->dataFactory->createLimit($requestData['limit']);
         $filter = $this->dataFactory->createFilter($requestData['filter']);
-        $maxRecordCount = $requestData['max_record_count'];
+        $maxRecordCount = (int) ($requestData['max_record_count'] ?? 0);
         $type = $requestData['type'];
         $format = $requestData['format'];
         $username = $this->auth->getIdentity()->username;

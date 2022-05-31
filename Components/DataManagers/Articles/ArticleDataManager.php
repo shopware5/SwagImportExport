@@ -374,7 +374,7 @@ class ArticleDataManager extends DataManager implements \Enlight_Hook
             $builder = $this->dbalHelper->getQueryBuilderForEntity(
                 $data,
                 Supplier::class,
-                false
+                null
             );
             $builder->execute();
             $supplierId = $this->db->lastInsertId();
