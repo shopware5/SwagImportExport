@@ -4376,16 +4376,6 @@ parameters:
 			path: CustomModels/Session.php
 
 		-
-			message: "#^Property SwagImportExport\\\\CustomModels\\\\Session\\:\\:\\$ids type mapping mismatch\\: property can contain string\\|null but database expects string\\.$#"
-			count: 1
-			path: CustomModels/Session.php
-
-		-
-			message: "#^Property SwagImportExport\\\\CustomModels\\\\Session\\:\\:\\$position type mapping mismatch\\: property can contain int\\|null but database expects int\\.$#"
-			count: 1
-			path: CustomModels/Session.php
-
-		-
 			message: "#^Cannot call method fetchColumn\\(\\) on PDOStatement\\|false\\.$#"
 			count: 2
 			path: Resources/migrations/3-add-acl.php

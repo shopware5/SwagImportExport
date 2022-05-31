@@ -21,12 +21,10 @@ class SessionRepository extends ModelRepository
      *
      * @param array<string, string>|array<array{property: string, value: mixed, expression?: string}> $filterBy
      * @param array<array{property: string, direction: string}>                                       $orderBy
-     * @param int|null                                                                                $limit
-     * @param int|null                                                                                $offset
      *
      * @return QueryBuilder
      */
-    public function getSessionsListQuery(array $filterBy = [], array $orderBy = [], $limit = null, $offset = null)
+    public function getSessionsListQuery(array $filterBy = [], array $orderBy = [], ?int $limit = null, ?int $offset = null)
     {
         /** @var QueryBuilder $builder */
         $builder = $this->createQueryBuilder('s');

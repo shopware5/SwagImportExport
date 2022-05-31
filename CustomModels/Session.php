@@ -183,11 +183,9 @@ class Session extends ModelEntity
     }
 
     /**
-     * @param string $type
-     *
      * @return Session
      */
-    public function setType($type)
+    public function setType(string $type)
     {
         $this->type = $type;
 
@@ -195,11 +193,9 @@ class Session extends ModelEntity
     }
 
     /**
-     * @param string $ids
-     *
      * @return Session
      */
-    public function setIds($ids)
+    public function setIds(string $ids)
     {
         $this->ids = $ids;
 
@@ -207,11 +203,9 @@ class Session extends ModelEntity
     }
 
     /**
-     * @param int $position
-     *
      * @return Session
      */
-    public function setPosition($position)
+    public function setPosition(int $position)
     {
         $this->position = $position;
 
@@ -219,11 +213,9 @@ class Session extends ModelEntity
     }
 
     /**
-     * @param int $totalCount
-     *
      * @return Session
      */
-    public function setTotalCount($totalCount)
+    public function setTotalCount(int $totalCount)
     {
         $this->totalCount = $totalCount;
 
@@ -243,11 +235,9 @@ class Session extends ModelEntity
     }
 
     /**
-     * @param string $fileName
-     *
      * @return Session
      */
-    public function setFileName($fileName)
+    public function setFileName(string $fileName)
     {
         $this->fileName = $fileName;
 
@@ -255,11 +245,9 @@ class Session extends ModelEntity
     }
 
     /**
-     * @param string $format
-     *
      * @return Session
      */
-    public function setFormat($format)
+    public function setFormat(string $format)
     {
         $this->format = $format;
 
@@ -267,11 +255,9 @@ class Session extends ModelEntity
     }
 
     /**
-     * @param int $fileSize
-     *
      * @return Session
      */
-    public function setFileSize($fileSize)
+    public function setFileSize(int $fileSize)
     {
         $this->fileSize = $fileSize;
 
@@ -279,11 +265,9 @@ class Session extends ModelEntity
     }
 
     /**
-     * @param string $state
-     *
      * @return Session
      */
-    public function setState($state)
+    public function setState(string $state)
     {
         $this->state = $state;
 
@@ -291,11 +275,9 @@ class Session extends ModelEntity
     }
 
     /**
-     * @param \DateTime $createdAt
-     *
      * @return Session
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt(\DateTime $createdAt)
     {
         $this->createdAt = $createdAt;
 
