@@ -17,7 +17,7 @@ class SmartyExpressionEvaluator implements ExpressionEvaluator
      *
      * @return string
      */
-    public function evaluate($expression, $variables)
+    public function evaluate(string $expression, ?array $variables)
     {
         if (empty($expression)) {
             throw new \Exception('Empty expression in smarty evaluator');
@@ -52,9 +52,9 @@ class SmartyExpressionEvaluator implements ExpressionEvaluator
     }
 
     /**
-     * @param array $variables
+     * @param array<string, mixed> $variables
      */
-    protected function convertPricesColumnsToFloat(&$variables)
+    protected function convertPricesColumnsToFloat(array &$variables)
     {
         if (isset($variables['price'])) {
             $variables['price'] = (float) \str_replace(',', '.', $variables['price']);

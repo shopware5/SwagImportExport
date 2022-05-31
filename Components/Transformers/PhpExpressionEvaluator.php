@@ -15,7 +15,7 @@ class PhpExpressionEvaluator implements ExpressionEvaluator
      *
      * @return mixed|void
      */
-    public function evaluate($expression, $variables)
+    public function evaluate(string $expression, ?array $variables)
     {
         if (empty($expression) || $expression == '') {
             return;

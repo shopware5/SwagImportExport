@@ -10,5 +10,8 @@ namespace SwagImportExport\Components\Transformers;
 
 interface ExpressionEvaluator
 {
-    public function evaluate($expression, $variables);
+    /**
+     * @param array<string, mixed>|null $variables
+     */
+    public function evaluate(string $expression, ?array $variables);
 }

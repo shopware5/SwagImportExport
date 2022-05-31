@@ -613,6 +613,10 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
             foreach ($attributes as $attribute) {
                 $attr = $this->underscoreToCamelCaseService->underscoreToCamelCase($attribute);
 
+                if(empty($attr)) {
+                    continue;
+                }
+
                 $attributesSelect[] = \sprintf('%s.%s as attribute%s', $prefix, $attr, \ucwords($attr));
             }
         }

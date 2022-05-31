@@ -258,7 +258,11 @@ class MainOrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
         $prefix = 'attr';
         $attributesSelect = [];
         foreach ($attributes as $attribute) {
-            $catAttr = $this->underscoreToCamelCaseService->underscoreToCamelCase($attribute);
+            $catAttr = $this->underscoreToCamelCaseService->underscoreToCamelCase((string) $attribute);
+
+            if(empty($catAttr)) {
+                continue;
+            }
 
             $attributesSelect[] = \sprintf('%s.%s as attribute%s', $prefix, $catAttr, \ucwords($catAttr));
         }

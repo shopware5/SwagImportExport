@@ -527,6 +527,11 @@ class OrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
         $attributesSelect = [];
         foreach ($attributes as $attribute) {
             $catAttr = $this->underscoreToCamelCaseService->underscoreToCamelCase($attribute);
+
+            if(empty($catAttr)) {
+                continue;
+            }
+
             $attributesSelect[] = \sprintf('%s.%s as %s%s', $joinAlias, $catAttr, $prefix, \ucwords($catAttr));
         }
 
