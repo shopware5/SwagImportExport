@@ -3186,26 +3186,6 @@ parameters:
 			path: Components/Transformers/ComposerInterface.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\ComposerInterface\\:\\:parseFooter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Transformers/ComposerInterface.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\ComposerInterface\\:\\:parseFooter\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Transformers/ComposerInterface.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\ComposerInterface\\:\\:parseHeader\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Transformers/ComposerInterface.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\ComposerInterface\\:\\:parseHeader\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Transformers/ComposerInterface.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\DataTransformerAdapter\\:\\:initialize\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Components/Transformers/DataTransformerAdapter.php
@@ -3216,17 +3196,7 @@ parameters:
 			path: Components/Transformers/DataTransformerAdapter.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\DataTransformerAdapter\\:\\:transformBackward\\(\\) has parameter \\$data with no type specified\\.$#"
-			count: 1
-			path: Components/Transformers/DataTransformerAdapter.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\DataTransformerAdapter\\:\\:transformBackward\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Transformers/DataTransformerAdapter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\DataTransformerAdapter\\:\\:transformForward\\(\\) has parameter \\$data with no type specified\\.$#"
 			count: 1
 			path: Components/Transformers/DataTransformerAdapter.php
 
@@ -3252,26 +3222,6 @@ parameters:
 
 		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\DataTransformerChain\\:\\:getLastComposerTransformer\\(\\) has parameter \\$transformers with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Transformers/DataTransformerChain.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\DataTransformerChain\\:\\:parseFooter\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Transformers/DataTransformerChain.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\DataTransformerChain\\:\\:parseFooter\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Transformers/DataTransformerChain.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\DataTransformerChain\\:\\:parseHeader\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Transformers/DataTransformerChain.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\DataTransformerChain\\:\\:parseHeader\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Transformers/DataTransformerChain.php
 
@@ -3401,27 +3351,7 @@ parameters:
 			path: Components/Transformers/FlattenTransformer.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:collectConfiguratorData\\(\\) has parameter \\$mapper with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:collectConfiguratorData\\(\\) has parameter \\$node with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:collectConfiguratorData\\(\\) has parameter \\$originalNode with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:collectData\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:collectData\\(\\) has parameter \\$node with no type specified\\.$#"
 			count: 1
 			path: Components/Transformers/FlattenTransformer.php
 
@@ -3431,17 +3361,7 @@ parameters:
 			path: Components/Transformers/FlattenTransformer.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:collectHeader\\(\\) has parameter \\$node with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:collectIterationData\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:collectIterationData\\(\\) has parameter \\$node with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Transformers/FlattenTransformer.php
 
@@ -3451,32 +3371,7 @@ parameters:
 			path: Components/Transformers/FlattenTransformer.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:collectPriceData\\(\\) has parameter \\$mapper with no type specified\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:collectPriceData\\(\\) has parameter \\$node with no type specified\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:collectPropertyData\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:collectPropertyData\\(\\) has parameter \\$mapper with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:collectPropertyData\\(\\) has parameter \\$node with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:collectPropertyData\\(\\) has parameter \\$originalNode with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Transformers/FlattenTransformer.php
 
@@ -3486,32 +3381,7 @@ parameters:
 			path: Components/Transformers/FlattenTransformer.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:collectTaxRateData\\(\\) has parameter \\$mapper with no type specified\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:collectTaxRateData\\(\\) has parameter \\$node with no type specified\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:collectTranslationData\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:collectTranslationData\\(\\) has parameter \\$mapper with no type specified\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:collectTranslationData\\(\\) has parameter \\$node with no type specified\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:collectTranslationData\\(\\) has parameter \\$path with no type specified\\.$#"
 			count: 1
 			path: Components/Transformers/FlattenTransformer.php
 
@@ -3531,32 +3401,7 @@ parameters:
 			path: Components/Transformers/FlattenTransformer.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:convertToFlat\\(\\) has parameter \\$node with no type specified\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:convertToFlat\\(\\) has parameter \\$path with no type specified\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:createHeaderPriceGroup\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:createHeaderPriceGroup\\(\\) has parameter \\$node with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:createHeaderPriceNodes\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:createHeaderPriceNodes\\(\\) has parameter \\$node with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Transformers/FlattenTransformer.php
 
@@ -3566,17 +3411,7 @@ parameters:
 			path: Components/Transformers/FlattenTransformer.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:createHeaderTaxSumNodes\\(\\) has parameter \\$node with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:createHeaderTranslation\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:createHeaderTranslation\\(\\) has parameter \\$node with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Transformers/FlattenTransformer.php
 
@@ -3586,32 +3421,7 @@ parameters:
 			path: Components/Transformers/FlattenTransformer.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:createHeaderValues\\(\\) has parameter \\$node with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:createHeaderValues\\(\\) has parameter \\$skipList with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:createMapperFromProfile\\(\\) has parameter \\$node with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:createMapperFromProfile\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:findConfigurationGroupValue\\(\\) has parameter \\$mapper with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:findConfigurationGroupValue\\(\\) has parameter \\$node with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Transformers/FlattenTransformer.php
 
@@ -3626,17 +3436,7 @@ parameters:
 			path: Components/Transformers/FlattenTransformer.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:findMainIterationPart\\(\\) has parameter \\$tree with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:findNodeByPriceGroup\\(\\) has parameter \\$mapper with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:findNodeByPriceGroup\\(\\) has parameter \\$node with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Transformers/FlattenTransformer.php
 
@@ -3647,21 +3447,6 @@ parameters:
 
 		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:findNodeByPriceGroup\\(\\) should return array but return statement is missing\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:findNodeByShopwareField\\(\\) has parameter \\$node with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:findNodeByTaxRate\\(\\) has parameter \\$mapper with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:findNodeByTaxRate\\(\\) has parameter \\$node with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Transformers/FlattenTransformer.php
 
@@ -3681,16 +3466,6 @@ parameters:
 			path: Components/Transformers/FlattenTransformer.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:findPropertyOptionName\\(\\) has parameter \\$mapper with no type specified\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:findPropertyOptionName\\(\\) has parameter \\$node with no type specified\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:getAllTranslationColumns\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Transformers/FlattenTransformer.php
@@ -3702,16 +3477,6 @@ parameters:
 
 		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:getDataValue\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:getDataValue\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:getFirstElement\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Transformers/FlattenTransformer.php
 
@@ -3736,57 +3501,12 @@ parameters:
 			path: Components/Transformers/FlattenTransformer.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:getMergedPath\\(\\) has parameter \\$key with no type specified\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:getMergedPath\\(\\) has parameter \\$path with no type specified\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:getNodeFromProfile\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:getNodeFromProfile\\(\\) has parameter \\$adapter with no type specified\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:getNodeFromProfile\\(\\) has parameter \\$node with no type specified\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:getPriceGroupFromNode\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Components/Transformers/FlattenTransformer.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:getPriceGroupFromNode\\(\\) has parameter \\$mapper with no type specified\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:getPriceGroupFromNode\\(\\) has parameter \\$node with no type specified\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:getTaxRateFromNode\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:getTaxRateFromNode\\(\\) has parameter \\$mapper with no type specified\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:getTaxRateFromNode\\(\\) has parameter \\$node with no type specified\\.$#"
 			count: 1
 			path: Components/Transformers/FlattenTransformer.php
 
@@ -3816,32 +3536,7 @@ parameters:
 			path: Components/Transformers/FlattenTransformer.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:parseFooter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:parseFooter\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:parseHeader\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:parseHeader\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:processIterationParts\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:processIterationParts\\(\\) has parameter \\$nodes with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Transformers/FlattenTransformer.php
 
@@ -3866,11 +3561,6 @@ parameters:
 			path: Components/Transformers/FlattenTransformer.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:saveIterationTempData\\(\\) has parameter \\$currentPath with no type specified\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:saveIterationTempData\\(\\) has parameter \\$value with no type specified\\.$#"
 			count: 1
 			path: Components/Transformers/FlattenTransformer.php
@@ -3886,27 +3576,7 @@ parameters:
 			path: Components/Transformers/FlattenTransformer.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:saveTempMapper\\(\\) has parameter \\$path with no type specified\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:transform\\(\\) has parameter \\$mapper with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:transform\\(\\) has parameter \\$node with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:transform\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:transformBackward\\(\\) has parameter \\$data with no type specified\\.$#"
+			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:transform\\(\\) invoked with 1 parameter, 2 required\\.$#"
 			count: 1
 			path: Components/Transformers/FlattenTransformer.php
 
@@ -3916,22 +3586,7 @@ parameters:
 			path: Components/Transformers/FlattenTransformer.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:transformConfiguratorToTree\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:transformConfiguratorToTree\\(\\) has parameter \\$node with no type specified\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:transformConfiguratorToTree\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:transformForward\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Transformers/FlattenTransformer.php
 
@@ -3941,27 +3596,7 @@ parameters:
 			path: Components/Transformers/FlattenTransformer.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:transformPricesToTree\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:transformPricesToTree\\(\\) has parameter \\$node with no type specified\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:transformPricesToTree\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:transformToTree\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:transformToTree\\(\\) has parameter \\$node with no type specified\\.$#"
 			count: 1
 			path: Components/Transformers/FlattenTransformer.php
 
@@ -3986,13 +3621,8 @@ parameters:
 			path: Components/Transformers/FlattenTransformer.php
 
 		-
-			message: "#^Offset mixed does not exist on array\\|null\\.$#"
+			message: "#^Offset mixed does not exist on array\\<string, mixed\\>\\|null\\.$#"
 			count: 4
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^PHPDoc tag @param for parameter \\$data with type mixed is not subtype of native type array\\.$#"
-			count: 2
 			path: Components/Transformers/FlattenTransformer.php
 
 		-
@@ -4002,11 +3632,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$json of function json_decode expects string, string\\|null given\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Parameter \\#1 \\$node of method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:findConfigurationGroupValue\\(\\) expects array, array\\|null given\\.$#"
 			count: 1
 			path: Components/Transformers/FlattenTransformer.php
 
@@ -4027,41 +3652,11 @@ parameters:
 
 		-
 			message: "#^Parameter \\#2 \\$str of function explode expects string, string\\|null given\\.$#"
-			count: 5
+			count: 4
 			path: Components/Transformers/FlattenTransformer.php
 
 		-
 			message: "#^Parameter \\#2 \\.\\.\\.\\$args of function array_merge expects array, array\\|false given\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Parameter \\#3 \\$nodePath of method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:transformToTree\\(\\) expects null, string given\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Parameter \\#3 \\$path of method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:collectPriceData\\(\\) expects null, string given\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Parameter \\#3 \\$path of method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:collectTaxRateData\\(\\) expects null, string given\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Parameter \\#3 \\$path of method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:findPropertyOptionName\\(\\) expects null, string given\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Parameter \\#3 \\$path of method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:getPriceGroupFromNode\\(\\) expects null, string given\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Parameter \\#3 \\$path of method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:getTaxRateFromNode\\(\\) expects null, string given\\.$#"
 			count: 1
 			path: Components/Transformers/FlattenTransformer.php
 
@@ -4371,17 +3966,7 @@ parameters:
 			path: Components/Transformers/TreeTransformer.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\TreeTransformer\\:\\:transformBackward\\(\\) has parameter \\$data with no type specified\\.$#"
-			count: 1
-			path: Components/Transformers/TreeTransformer.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\TreeTransformer\\:\\:transformBackward\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Transformers/TreeTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\TreeTransformer\\:\\:transformForward\\(\\) has parameter \\$data with no type specified\\.$#"
 			count: 1
 			path: Components/Transformers/TreeTransformer.php
 

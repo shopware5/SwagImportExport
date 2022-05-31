@@ -84,36 +84,6 @@ class DataTransformerChain
     }
 
     /**
-     * Parse the header data by using the last transformer in the chain.
-     * (Always last because that is the closest transformer to the export/import physical file)
-     *
-     * @param array $data
-     *
-     * @return array
-     */
-    public function parseHeader($data)
-    {
-        $transformer = $this->getLastComposerTransformer($this->chain);
-
-        return $transformer->parseHeader($data);
-    }
-
-    /**
-     * Parse the footer data by using the last transformer in the chain.
-     * (Always last because that is the closest transformer to the export/import physical file)
-     *
-     * @param array $data
-     *
-     * @return array
-     */
-    public function parseFooter($data)
-    {
-        $transformer = $this->getLastComposerTransformer($this->chain);
-
-        return $transformer->parseFooter($data);
-    }
-
-    /**
      * Returns the last transformer implementing the composer-interface.
      *
      * @param array $transformers
