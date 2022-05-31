@@ -77,13 +77,7 @@ class CategoryExportTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertEquals(1, $mappedCategoryCsv[3]['parentID'], 'Category Deutsch has no parent category.');
     }
 
-    /**
-     * @param string $filePath
-     * @param string $categoryId
-     * @param string $attribute
-     * @param string $expected
-     */
-    private function assertCategoryAttributeInXml($filePath, $categoryId, $attribute, $expected)
+    private function assertCategoryAttributeInXml(string $filePath, string $categoryId, string $attribute, string $expected)
     {
         $categoryNodeList = $this->queryXpath($filePath, "//category[categoryId='{$categoryId}']/{$attribute}");
         $nodeValue = $categoryNodeList->item(0)->nodeValue;

@@ -444,9 +444,9 @@ class AddressDbAdapterTest extends TestCase
     }
 
     /**
-     * @param array $createdAddresses
+     * @param array<int, array<string, mixed>> $createdAddresses
      */
-    private function assertAddress($createdAddresses)
+    private function assertAddress(array $createdAddresses)
     {
         static::assertEquals('My firstname', $createdAddresses[0]['firstname']);
         static::assertEquals('My lastname', $createdAddresses[0]['lastname']);

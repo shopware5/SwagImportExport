@@ -56,11 +56,9 @@ class ArticlesDbAdapterTest extends DbAdapterTestHelper
     }
 
     /**
-     * @param array $data
-     *
      * @dataProvider writeProvider
      */
-    public function testWrite($data): void
+    public function testWrite(array $data): void
     {
         $expectedOrderNumber = 'test9999';
 
@@ -81,7 +79,7 @@ class ArticlesDbAdapterTest extends DbAdapterTestHelper
         static::assertEquals(50, $prices[1]['price']);
     }
 
-    public function testReadVariantIdsOfProdcutStream(): void
+    public function testReadVariantIdsOfProductStream(): void
     {
         $this->addProductStream();
 

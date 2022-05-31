@@ -474,13 +474,7 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertCount(10, $mappedVariantList);
     }
 
-    /**
-     * @param string $filePath
-     * @param string $orderNumber
-     * @param string $attribute
-     * @param string $expected
-     */
-    private function assertArticleAttributeInXml($filePath, $orderNumber, $attribute, $expected)
+    private function assertArticleAttributeInXml(string $filePath, string $orderNumber, string $attribute, string $expected)
     {
         $articleDomNodeList = $this->queryXpath($filePath, "//article[ordernumber='{$orderNumber}']/{$attribute}");
         $nodeValue = $articleDomNodeList->item(0)->nodeValue;
@@ -488,11 +482,9 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
     }
 
     /**
-     * @param string $file
-     *
      * @return array
      */
-    private function readCsvIndexedByOrdernumber($file)
+    private function readCsvIndexedByOrdernumber(string $file)
     {
         return $this->csvToArrayIndexedByFieldValue($file, 'ordernumber');
     }

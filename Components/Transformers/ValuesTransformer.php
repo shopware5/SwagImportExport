@@ -8,13 +8,15 @@
 
 namespace SwagImportExport\Components\Transformers;
 
+use SwagImportExport\CustomModels\Expression;
+
 /**
  * The responsibility of this class is to modify the values of the data values due to given user small scripts.
  */
 class ValuesTransformer implements DataTransformerAdapter
 {
     /**
-     * @var iterable<object>
+     * @var array<Expression>
      */
     private ?iterable $config = null;
 
@@ -23,7 +25,7 @@ class ValuesTransformer implements DataTransformerAdapter
     /**
      * The $config must contain the smarty or php transformation of values.
      *
-     * @param array{expression: iterable<object>, evaluator: ExpressionEvaluator} $config
+     * @param array{expression: array<Expression>, evaluator: ExpressionEvaluator} $config
      */
     public function initialize($config)
     {

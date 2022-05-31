@@ -23,12 +23,11 @@ class NewsletterDbAdapterTest extends DbAdapterTestHelper
     }
 
     /**
-     * @param array $data
-     * @param int   $expectedInsertedRows
-     *
      * @dataProvider writeProvider
+     *
+     * @param array<string, mixed> $data
      */
-    public function testWrite($data, $expectedInsertedRows)
+    public function testWrite(array $data, int $expectedInsertedRows)
     {
         $this->write($data, $expectedInsertedRows);
     }

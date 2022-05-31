@@ -64,19 +64,17 @@ class FileIoMock extends DataIO
     }
 
     /**
-     * @param string     $outputFile
      * @param mixed|null $data
      */
-    public function writeHeader($outputFile, $data): void
+    public function writeHeader(string $outputFile, $data): void
     {
         \file_put_contents($outputFile, $data);
     }
 
     /**
-     * @param string     $outputFile
      * @param mixed|null $data
      */
-    public function writeRecords($outputFile, $data): void
+    public function writeRecords(string $outputFile, $data): void
     {
         \file_put_contents($outputFile, $data, \FILE_APPEND);
     }

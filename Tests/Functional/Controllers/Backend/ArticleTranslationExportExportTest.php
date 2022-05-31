@@ -73,13 +73,7 @@ class ArticleTranslationExportExportTest extends \Enlight_Components_Test_Contro
         static::assertEquals(2, $mappedTranslationList['SW10002.3']['languageId']);
     }
 
-    /**
-     * @param string $filePath
-     * @param string $orderNumber
-     * @param string $attribute
-     * @param string $expected
-     */
-    private function assertTranslationAttributeInXml($filePath, $orderNumber, $attribute, $expected)
+    private function assertTranslationAttributeInXml(string $filePath, string $orderNumber, string $attribute, string $expected)
     {
         $translationNodeList = $this->queryXpath($filePath, "//Translation[articlenumber='{$orderNumber}']/{$attribute}");
         $nodeValue = $translationNodeList->item(0)->nodeValue;

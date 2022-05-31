@@ -56,11 +56,6 @@ class ProfileDataProvider
     public const NEWSLETTER_PROFILE_NAME = 'newsletter_profile';
     public const NEWSLETTER_TABLE = 's_campaigns_mailaddresses';
 
-    /**
-     * @var array - Indexed by profile type
-     */
-    private array $profileIds = [];
-
     private Connection $connection;
 
     public function __construct(Connection $connection)
@@ -82,20 +77,6 @@ class ProfileDataProvider
         $this->createProfile(self::MAIN_ORDERS_PROFILE_TYPE, self::MAIN_ORDERS_PROFILE_NAME);
         $this->createProfile(self::TRANSLATIONS_PROFILE_TYPE, self::TRANSLATIONS_PROFILE_NAME);
         $this->createProfile(self::NEWSLETTER_PROFILE_TYPE, self::NEWSLETTER_PROFILE_NAME);
-    }
-
-    /**
-     * @param string $type
-     *
-     * @return int
-     */
-    public function getIdByProfileType($type)
-    {
-        if (!\array_key_exists($type, $this->profileIds)) {
-            throw new \RuntimeException("Profile type {$type} not found.");
-        }
-
-        return $this->profileIds[$type];
     }
 
     public function getProfileId(string $profile): int
@@ -135,8 +116,6 @@ class ProfileDataProvider
             ->setParameter('tree', $defaultTree);
 
         $queryBuilder->execute();
-
-        $this->profileIds[$profileType] = $queryBuilder->getConnection()->lastInsertId();
     }
 
     private function isProfileInstalled(string $profileType): bool

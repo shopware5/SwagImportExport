@@ -30,12 +30,9 @@ trait ExportControllerTrait
     }
 
     /**
-     * @param string $filePath
-     * @param string $xpath
-     *
      * @return \DOMNodeList<\DOMNode>
      */
-    private function queryXpath($filePath, $xpath)
+    private function queryXpath(string $filePath, string $xpath)
     {
         $domDocument = new \DOMDocument();
         $domDocument->loadXML(\file_get_contents($filePath));
@@ -50,12 +47,9 @@ trait ExportControllerTrait
     }
 
     /**
-     * @param string $filePath
-     * @param string $indexField
-     *
      * @return array
      */
-    private function csvToArrayIndexedByFieldValue($filePath, $indexField)
+    private function csvToArrayIndexedByFieldValue(string $filePath, string $indexField)
     {
         $csv = \fopen($filePath, 'rb');
         $mappedCsv = [];
@@ -70,7 +64,7 @@ trait ExportControllerTrait
     }
 
     /**
-     * @return array
+     * @return array<string, string>
      */
     private function getExportRequestParams()
     {

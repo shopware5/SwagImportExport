@@ -7,6 +7,7 @@
  */
 
 use PHPUnit\Framework\TestCase;
+use SwagImportExport\Components\Transformers\ExpressionEvaluator;
 use SwagImportExport\Components\Transformers\SmartyExpressionEvaluator;
 use SwagImportExport\Components\Transformers\ValuesTransformer;
 
@@ -14,14 +15,10 @@ class ValuesTransformerTest extends TestCase
 {
     /**
      * @dataProvider transform_test_dataProvider
-     *
-     * @param null $type
-     * @param null $data
-     * @param bool $expectException
-     * @param null $expectedResult
-     * @param null $evaluator
+     * @param array<string, mixed>|null $data
+     * @param array<string, mixed>|null $expectedResult
      */
-    public function testTransform($type = null, $data = null, $expectException = false, $expectedResult = null, $evaluator = null)
+    public function testTransform(?string $type, ?array $data, bool $expectException = false, ?array $expectedResult = null, ?ExpressionEvaluator $evaluator = null)
     {
         $transformer = $this->getValuesTransformer($evaluator);
 
@@ -69,7 +66,7 @@ class ValuesTransformerTest extends TestCase
     /**
      * @return ValuesTransformer
      */
-    private function getValuesTransformer($evaluator)
+    private function getValuesTransformer(?ExpressionEvaluator $evaluator)
     {
         $expression1 = new \SwagImportExport\CustomModels\Expression();
         $expression1->fromArray(['id' => 1, 'variable' => 'testVar', 'importConversion' => 'importConversion', 'exportConversion' => 'exportConversion']);

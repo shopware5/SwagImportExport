@@ -26,14 +26,11 @@ class CustomersDbAdapterTest extends DbAdapterTestHelper
     }
 
     /**
-     * @param array $columns
      * @param int[] $ids
-     * @param array $expected
-     * @param int   $expectedCount
      *
      * @dataProvider readProvider
      */
-    public function testRead($columns, $ids, $expected, $expectedCount)
+    public function testRead(array $columns, array $ids, array $expected, int $expectedCount)
     {
         $this->read($columns, $ids, $expected, $expectedCount);
     }
@@ -47,14 +44,11 @@ class CustomersDbAdapterTest extends DbAdapterTestHelper
     }
 
     /**
-     * @param int   $start
-     * @param array $limit
      * @param int[] $expectedIds
-     * @param int   $expectedCount
      *
      * @dataProvider readRecordIdsProvider
      */
-    public function testReadRecordIds($start, $limit, $expectedIds, $expectedCount)
+    public function testReadRecordIds(int $start, int $limit, array $expectedIds, int $expectedCount)
     {
         $this->readRecordIds($start, $limit, [], $expectedIds, $expectedCount);
     }
@@ -69,8 +63,10 @@ class CustomersDbAdapterTest extends DbAdapterTestHelper
 
     /**
      * @dataProvider writeWithEmptyFile
+     *
+     * @param array<string, mixed> $records
      */
-    public function testWriteWithEmptyFile($records, $expectedInsertedRows)
+    public function testWriteWithEmptyFile(array $records, int $expectedInsertedRows)
     {
         self::expectException(\Exception::class);
 
@@ -86,12 +82,9 @@ class CustomersDbAdapterTest extends DbAdapterTestHelper
     }
 
     /**
-     * @param array $records
-     * @param int   $expectedInsertedRows
-     *
      * @dataProvider writeProvider
      */
-    public function testWrite($records, $expectedInsertedRows)
+    public function testWrite(array $records, int $expectedInsertedRows)
     {
         $this->write($records, $expectedInsertedRows);
     }

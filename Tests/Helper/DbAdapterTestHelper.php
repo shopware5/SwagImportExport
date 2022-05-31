@@ -29,11 +29,9 @@ class DbAdapterTestHelper extends ImportExportTestHelper
     protected ?array $dataProvider = null;
 
     /**
-     * @param string $testCase
-     *
      * @return array
      */
-    public function getDataProvider($testCase)
+    public function getDataProvider(string $testCase)
     {
         if ($this->dataProvider === null) {
             $this->dataProvider = $this->parseYaml(
@@ -47,11 +45,9 @@ class DbAdapterTestHelper extends ImportExportTestHelper
     }
 
     /**
-     * @param string $yamlFile
-     *
      * @return array
      */
-    public function parseYaml($yamlFile)
+    public function parseYaml(string $yamlFile)
     {
         if ($this->parser === null) {
             $this->parser = new Parser();
@@ -61,13 +57,9 @@ class DbAdapterTestHelper extends ImportExportTestHelper
     }
 
     /**
-     * @param array  $columns
-     * @param int[]  $ids
-     * @param array  $expectedResults
-     * @param int    $expectedCount
-     * @param string $section
+     * @param int[] $ids
      */
-    public function read($columns, $ids, $expectedResults, $expectedCount, $section = 'default')
+    public function read(array $columns, array $ids, array $expectedResults, int $expectedCount, string $section = 'default')
     {
         /* @var DataFactory $dataFactory */
         $dataFactory = $this->getContainer()->get(DataFactory::class);
@@ -83,14 +75,7 @@ class DbAdapterTestHelper extends ImportExportTestHelper
         $this->assertCount($expectedCount, $rawData[$section]);
     }
 
-    /**
-     * @param int   $start
-     * @param int   $limit
-     * @param array $filter
-     * @param array $expectedIds
-     * @param int   $expectedCount
-     */
-    public function readRecordIds($start, $limit, $filter, $expectedIds, $expectedCount)
+    public function readRecordIds(int $start, int $limit, array $filter, array $expectedIds, int $expectedCount)
     {
         /* @var DataFactory $dataFactory */
         $dataFactory = $this->getContainer()->get(DataFactory::class);
@@ -111,11 +96,7 @@ class DbAdapterTestHelper extends ImportExportTestHelper
         $this->assertCount($expectedCount, $ids);
     }
 
-    /**
-     * @param array $records
-     * @param int   $expectedInsertedRows
-     */
-    public function write($records, $expectedInsertedRows)
+    public function write(array $records, int $expectedInsertedRows)
     {
         $recordsCountBeforeImport = $this->getTableCount($this->dbTable);
 
@@ -130,11 +111,9 @@ class DbAdapterTestHelper extends ImportExportTestHelper
     }
 
     /**
-     * @param string $fileName
-     *
      * @return string
      */
-    protected function getYamlFile($fileName)
+    protected function getYamlFile(string $fileName)
     {
         return __DIR__ . '/../Integration/Components/' . $fileName;
     }

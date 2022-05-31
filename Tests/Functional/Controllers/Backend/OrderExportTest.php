@@ -288,13 +288,7 @@ class OrderExportTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertEquals('17', $mappedOrderList[20002]['paymentStatusId']);
     }
 
-    /**
-     * @param string $filePath
-     * @param string $number
-     * @param string $attribute
-     * @param string $expected
-     */
-    private function assertOrderAttributeInXmlFile($filePath, $number, $attribute, $expected)
+    private function assertOrderAttributeInXmlFile(string $filePath, string $number, string $attribute, string $expected)
     {
         $orderDomNodeList = $this->queryXpath($filePath, "//order[number='{$number}']/{$attribute}");
         $nodeValue = $orderDomNodeList->item(0)->nodeValue;
@@ -302,11 +296,9 @@ class OrderExportTest extends \Enlight_Components_Test_Controller_TestCase
     }
 
     /**
-     * @param string $file
-     *
      * @return array
      */
-    private function readCsvMappedByNumber($file)
+    private function readCsvMappedByNumber(string $file)
     {
         return $this->csvToArrayIndexedByFieldValue($file, 'number');
     }

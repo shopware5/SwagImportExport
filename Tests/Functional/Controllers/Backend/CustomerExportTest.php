@@ -77,13 +77,7 @@ class CustomerExportTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertEquals(0, $mappedCustomerList[20001]['newsletter']);
     }
 
-    /**
-     * @param string $filePath
-     * @param string $customerNumber
-     * @param string $attribute
-     * @param string $expected
-     */
-    private function assertCustomerAttributeInXml($filePath, $customerNumber, $attribute, $expected)
+    private function assertCustomerAttributeInXml(string $filePath, string $customerNumber, string $attribute, string $expected)
     {
         $customerDomNodeList = $this->queryXpath($filePath, "//customer[customernumber='{$customerNumber}']/{$attribute}");
         $nodeValue = $customerDomNodeList->item(0)->nodeValue;

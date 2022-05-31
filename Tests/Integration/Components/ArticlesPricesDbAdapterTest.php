@@ -22,14 +22,11 @@ class ArticlesPricesDbAdapterTest extends DbAdapterTestHelper
     }
 
     /**
-     * @param array $columns
      * @param int[] $ids
-     * @param array $expected
-     * @param int   $expectedCount
      *
      * @dataProvider readProvider
      */
-    public function testRead($columns, $ids, $expected, $expectedCount)
+    public function testRead(array $columns, array $ids, array $expected, int $expectedCount)
     {
         $this->read($columns, $ids, $expected, $expectedCount);
     }
@@ -43,14 +40,9 @@ class ArticlesPricesDbAdapterTest extends DbAdapterTestHelper
     }
 
     /**
-     * @param int   $start
-     * @param array $limit
-     * @param array $expected
-     * @param int   $expectedCount
-     *
      * @dataProvider readRecordIdsProvider
      */
-    public function testReadRecordIds($start, $limit, $expected, $expectedCount)
+    public function testReadRecordIds(int $start, int $limit, array $expected, int $expectedCount)
     {
         $this->readRecordIds($start, $limit, [], $expected, $expectedCount);
     }

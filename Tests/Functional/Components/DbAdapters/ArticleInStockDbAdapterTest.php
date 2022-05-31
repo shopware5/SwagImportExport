@@ -105,7 +105,7 @@ class ArticleInStockDbAdapterTest extends TestCase
     }
 
     /**
-     * @return array
+     * @return array<string>
      */
     private function getReadColumns()
     {

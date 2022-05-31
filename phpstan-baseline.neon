@@ -3851,11 +3851,6 @@ parameters:
 			path: Components/Transformers/TreeTransformer.php
 
 		-
-			message: "#^Call to an undefined method object\\:\\:getVariable\\(\\)\\.$#"
-			count: 1
-			path: Components/Transformers/ValuesTransformer.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\ValuesTransformer\\:\\:initialize\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Components/Transformers/ValuesTransformer.php
@@ -4876,11 +4871,6 @@ parameters:
 			path: Tests/Functional/Components/DbAdapters/AddressDbAdapterTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\AddressDbAdapterTest\\:\\:assertAddress\\(\\) has parameter \\$createdAddresses with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/AddressDbAdapterTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\AddressDbAdapterTest\\:\\:testGetColumnsShouldGetAllRequiredColumns\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Functional/Components/DbAdapters/AddressDbAdapterTest.php
@@ -4979,11 +4969,6 @@ parameters:
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\AddressDbAdapterTest\\:\\:testWriteShouldUpdateState\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Functional/Components/DbAdapters/AddressDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\ArticleInStockDbAdapterTest\\:\\:getReadColumns\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/ArticleInStockDbAdapterTest.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\ArticleInStockDbAdapterTest\\:\\:testRead\\(\\) has no return type specified\\.$#"
@@ -5396,22 +5381,17 @@ parameters:
 			path: Tests/Functional/Components/FileIO/XmlFileReaderTest.php
 
 		-
-			message: "#^Call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertSame\\(\\) with null and array will always evaluate to false\\.$#"
-			count: 1
-			path: Tests/Functional/Components/Transformers/ValuesTransformerTest.php
-
-		-
-			message: "#^Method ValuesTransformerTest\\:\\:getValuesTransformer\\(\\) has parameter \\$evaluator with no type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/Transformers/ValuesTransformerTest.php
-
-		-
 			message: "#^Method ValuesTransformerTest\\:\\:testTransform\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Functional/Components/Transformers/ValuesTransformerTest.php
 
 		-
 			message: "#^Method ValuesTransformerTest\\:\\:transform_test_dataProvider\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Tests/Functional/Components/Transformers/ValuesTransformerTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$config of method SwagImportExport\\\\Components\\\\Transformers\\\\ValuesTransformer\\:\\:initialize\\(\\) expects array\\{expression\\: array\\<SwagImportExport\\\\CustomModels\\\\Expression\\>, evaluator\\: SwagImportExport\\\\Components\\\\Transformers\\\\ExpressionEvaluator\\}, array\\{evaluator\\: SwagImportExport\\\\Components\\\\Transformers\\\\ExpressionEvaluator\\|null, expression\\: array\\{SwagImportExport\\\\CustomModels\\\\Expression, SwagImportExport\\\\CustomModels\\\\Expression\\}\\} given\\.$#"
 			count: 1
 			path: Tests/Functional/Components/Transformers/ValuesTransformerTest.php
 
@@ -5531,11 +5511,6 @@ parameters:
 			path: Tests/Functional/Controllers/Backend/AddressExportTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\AddressExportTest\\:\\:getExportRequestParams\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/AddressExportTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\AddressExportTest\\:\\:loadDependenciesBefore\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/AddressExportTest.php
@@ -5587,11 +5562,6 @@ parameters:
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticleExportTest\\:\\:csvToArrayIndexedByFieldValue\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticleExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticleExportTest\\:\\:getExportRequestParams\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/ArticleExportTest.php
 
@@ -5736,11 +5706,6 @@ parameters:
 			path: Tests/Functional/Controllers/Backend/ArticlePricesExportTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticlePricesExportTest\\:\\:getExportRequestParams\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticlePricesExportTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticlePricesExportTest\\:\\:loadDependenciesBefore\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/ArticlePricesExportTest.php
@@ -5796,11 +5761,6 @@ parameters:
 			path: Tests/Functional/Controllers/Backend/ArticleTranslationExportExportTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticleTranslationExportExportTest\\:\\:getExportRequestParams\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticleTranslationExportExportTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticleTranslationExportExportTest\\:\\:loadDependenciesBefore\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/ArticleTranslationExportExportTest.php
@@ -5852,11 +5812,6 @@ parameters:
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticlesInstockExportTest\\:\\:csvToArrayIndexedByFieldValue\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticlesInstockExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticlesInstockExportTest\\:\\:getExportRequestParams\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/ArticlesInstockExportTest.php
 
@@ -6001,11 +5956,6 @@ parameters:
 			path: Tests/Functional/Controllers/Backend/CategoryExportTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\CategoryExportTest\\:\\:getExportRequestParams\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/CategoryExportTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\CategoryExportTest\\:\\:loadDependenciesBefore\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/CategoryExportTest.php
@@ -6061,11 +6011,6 @@ parameters:
 			path: Tests/Functional/Controllers/Backend/CustomerExportTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\CustomerExportTest\\:\\:getExportRequestParams\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/CustomerExportTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\CustomerExportTest\\:\\:loadDependenciesBefore\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/CustomerExportTest.php
@@ -6112,11 +6057,6 @@ parameters:
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\NewsletterExportTest\\:\\:csvToArrayIndexedByFieldValue\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/NewsletterExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\NewsletterExportTest\\:\\:getExportRequestParams\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/NewsletterExportTest.php
 
@@ -6172,11 +6112,6 @@ parameters:
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\OrderExportTest\\:\\:csvToArrayIndexedByFieldValue\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/OrderExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\OrderExportTest\\:\\:getExportRequestParams\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/OrderExportTest.php
 
@@ -6361,11 +6296,6 @@ parameters:
 			path: Tests/Helper/DataProvider/ProfileDataProvider.php
 
 		-
-			message: "#^Property SwagImportExport\\\\Tests\\\\Helper\\\\DataProvider\\\\ProfileDataProvider\\:\\:\\$profileIds type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Helper/DataProvider/ProfileDataProvider.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Helper\\\\DbAdapterTestHelper\\:\\:getDataProvider\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Helper/DbAdapterTestHelper.php
@@ -6491,16 +6421,6 @@ parameters:
 			path: Tests/Integration/Components/ArticlesPricesDbAdapterTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\ArticlesPricesDbAdapterTest\\:\\:testReadRecordIds\\(\\) has parameter \\$limit with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/Components/ArticlesPricesDbAdapterTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$limit of method SwagImportExport\\\\Tests\\\\Helper\\\\DbAdapterTestHelper\\:\\:readRecordIds\\(\\) expects int, array given\\.$#"
-			count: 1
-			path: Tests/Integration/Components/ArticlesPricesDbAdapterTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\CustomersDbAdapterTest\\:\\:readProvider\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Integration/Components/CustomersDbAdapterTest.php
@@ -6531,11 +6451,6 @@ parameters:
 			path: Tests/Integration/Components/CustomersDbAdapterTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\CustomersDbAdapterTest\\:\\:testReadRecordIds\\(\\) has parameter \\$limit with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/Components/CustomersDbAdapterTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\CustomersDbAdapterTest\\:\\:testWrite\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Integration/Components/CustomersDbAdapterTest.php
@@ -6551,27 +6466,12 @@ parameters:
 			path: Tests/Integration/Components/CustomersDbAdapterTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\CustomersDbAdapterTest\\:\\:testWriteWithEmptyFile\\(\\) has parameter \\$expectedInsertedRows with no type specified\\.$#"
-			count: 1
-			path: Tests/Integration/Components/CustomersDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\CustomersDbAdapterTest\\:\\:testWriteWithEmptyFile\\(\\) has parameter \\$records with no type specified\\.$#"
-			count: 1
-			path: Tests/Integration/Components/CustomersDbAdapterTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\CustomersDbAdapterTest\\:\\:writeProvider\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Integration/Components/CustomersDbAdapterTest.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\CustomersDbAdapterTest\\:\\:writeWithEmptyFile\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/Components/CustomersDbAdapterTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$limit of method SwagImportExport\\\\Tests\\\\Helper\\\\DbAdapterTestHelper\\:\\:readRecordIds\\(\\) expects int, array given\\.$#"
 			count: 1
 			path: Tests/Integration/Components/CustomersDbAdapterTest.php
 
@@ -6606,11 +6506,6 @@ parameters:
 			path: Tests/Integration/Components/ExpressionEvaluatorTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\FactoryTest\\:\\:getPostData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/Components/FactoryTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\FactoryTest\\:\\:testDbAdapters\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Integration/Components/FactoryTest.php
@@ -6632,11 +6527,6 @@ parameters:
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\NewsletterDbAdapterTest\\:\\:testWrite\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/Components/NewsletterDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\NewsletterDbAdapterTest\\:\\:testWrite\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Integration/Components/NewsletterDbAdapterTest.php
 
@@ -7081,11 +6971,6 @@ parameters:
 			path: Tests/Integration/TestTraits/ExportControllerTraitTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\TestTraits\\\\ExportControllerTraitTest\\:\\:getExportRequestParams\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/TestTraits/ExportControllerTraitTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\TestTraits\\\\ExportControllerTraitTest\\:\\:loadDependenciesBefore\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Integration/TestTraits/ExportControllerTraitTest.php
@@ -7202,16 +7087,6 @@ parameters:
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Services\\\\UnderscoreToCamelCaseServiceTest\\:\\:testUnderscoreToCamelCase\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Services/UnderscoreToCamelCaseServiceTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Services\\\\UnderscoreToCamelCaseServiceTest\\:\\:testUnderscoreToCamelCase\\(\\) has parameter \\$expectedResult with no type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Services/UnderscoreToCamelCaseServiceTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Services\\\\UnderscoreToCamelCaseServiceTest\\:\\:testUnderscoreToCamelCase\\(\\) has parameter \\$string with no type specified\\.$#"
 			count: 1
 			path: Tests/Unit/Services/UnderscoreToCamelCaseServiceTest.php
 

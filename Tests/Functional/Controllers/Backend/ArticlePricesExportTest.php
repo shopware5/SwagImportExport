@@ -77,13 +77,7 @@ class ArticlePricesExportTest extends \Enlight_Components_Test_Controller_TestCa
         static::assertEquals('1,5 Liter', $mappedPriceList['SW10002.1']['_additionaltext']);
     }
 
-    /**
-     * @param string $filePath
-     * @param string $orderNumber
-     * @param string $attribute
-     * @param string $expected
-     */
-    private function assertPriceAttributeInXml($filePath, $orderNumber, $attribute, $expected)
+    private function assertPriceAttributeInXml(string $filePath, string $orderNumber, string $attribute, string $expected)
     {
         $articleDomNodeList = $this->queryXpath($filePath, "//Price[ordernumber='{$orderNumber}']/{$attribute}");
         $nodeValue = $articleDomNodeList->item(0)->nodeValue;

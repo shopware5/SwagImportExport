@@ -27,7 +27,7 @@ class FactoryTest extends ImportExportTestHelper
     use ContainerTrait;
 
     /**
-     * @return array
+     * @return array<string, mixed>
      */
     public function getPostData()
     {
