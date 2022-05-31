@@ -68,11 +68,9 @@ class Shopware_Controllers_Backend_SwagImportExportCron extends Shopware_Control
      * Returns plugin bootstrap if plugin exits, is enabled, and active.
      * Otherwise return null.
      *
-     * @param string $pluginName
-     *
      * @return Enlight_Plugin_Bootstrap|null
      */
-    private function getPluginBootstrap($pluginName)
+    private function getPluginBootstrap(string $pluginName)
     {
         /** @var Shopware_Components_Plugin_Namespace $namespace */
         $namespace = $this->get('plugin_manager')->Core();

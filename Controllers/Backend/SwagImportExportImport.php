@@ -110,11 +110,9 @@ class Shopware_Controllers_Backend_SwagImportExportImport extends Shopware_Contr
     /**
      * Check is file format valid
      *
-     * @param string $extension
-     *
      * @return bool
      */
-    private function isFormatValid($extension)
+    private function isFormatValid(string $extension)
     {
         switch ($extension) {
             case 'csv':
