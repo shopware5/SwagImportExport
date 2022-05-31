@@ -10,9 +10,15 @@ namespace SwagImportExport\Components\Utils;
 
 class DataFilter
 {
-    private $filter;
+    /**
+     * @var array<string, mixed>
+     */
+    private array $filter;
 
-    public function __construct($filter)
+    /**
+     * @param array<string, mixed> $filter
+     */
+    public function __construct(array $filter)
     {
         $this->filter = $filter;
     }

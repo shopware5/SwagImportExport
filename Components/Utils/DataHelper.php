@@ -19,7 +19,7 @@ class DataHelper
      *
      * @return array
      */
-    public static function generateMappingFromColumns($column)
+    public static function generateMappingFromColumns(string $column)
     {
         if (!\preg_match('/(?<=as ).*/', $column, $alias)) {
             return [];
@@ -32,7 +32,7 @@ class DataHelper
         return [$alias, $name];
     }
 
-    public static function formatFileSize($bytes): string
+    public static function formatFileSize(int $bytes): string
     {
         if ($bytes > 0) {
             $unit = (int) \log($bytes, 1024);
@@ -44,6 +44,6 @@ class DataHelper
             }
         }
 
-        return $bytes;
+        return (string) $bytes;
     }
 }

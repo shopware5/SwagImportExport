@@ -10,10 +10,7 @@ namespace SwagImportExport\Components\Utils;
 
 class SwagVersionHelper
 {
-    /**
-     * @param string $version
-     */
-    public static function hasMinimumVersion($version): bool
+    public static function hasMinimumVersion(string $version): bool
     {
         $actualVersion = Shopware()->Config()->version;
 

@@ -15,11 +15,8 @@ class TreeHelper
 {
     /**
      * Converts the JSON tree to ExtJS tree
-     *
-     * @param bool   $isInIteration
-     * @param string $adapter
      */
-    public static function convertToExtJSTree(array $node, $isInIteration = false, $adapter = ''): array
+    public static function convertToExtJSTree(array $node, bool $isInIteration = false, string $adapter = ''): array
     {
         $parentKey = '';
         $children = [];
@@ -82,6 +79,9 @@ class TreeHelper
 
     /**
      * Helper function which appends child node to the tree
+     *
+     * @param array<string, mixed> $child
+     * @param array<string, mixed> $node
      */
     public static function appendNode(array $child, array &$node): bool
     {
@@ -138,12 +138,11 @@ class TreeHelper
     /**
      * Helper function which finds node from the tree
      *
-     * @param string $id
-     * @param string $parentId
+     * @param array<string, mixed> $node
      *
      * @return bool|array
      */
-    public static function getNodeById($id, array $node, $parentId = 'root')
+    public static function getNodeById(string $id, array $node, string $parentId = 'root')
     {
         if ($node['id'] == $id) { // the node is found
             $node['parentId'] = $parentId;
@@ -172,6 +171,9 @@ class TreeHelper
 
     /**
      * Helper function which appends child node to the tree
+     *
+     * @param array<string, mixed> $child
+     * @param array<string, mixed> $node
      */
     public static function moveNode(array $child, array &$node): bool
     {
@@ -203,9 +205,11 @@ class TreeHelper
     /**
      * Helper function which finds and changes node from the tree
      *
-     * @param array $defaultFields
+     * @param array<string, mixed> $child
+     * @param array<string, mixed> $node
+     * @param array<string, mixed> $defaultFields
      */
-    public static function changeNode(array $child, array &$node, $defaultFields = []): bool
+    public static function changeNode(array $child, array &$node, array $defaultFields = []): bool
     {
         if ($node['id'] == $child['id']) { // the node is found
             $node['name'] = $child['text'];
@@ -261,6 +265,9 @@ class TreeHelper
 
     /**
      * Helper function which finds and deletes node from the tree
+     *
+     * @param array<string, mixed> $child
+     * @param array<string, mixed> $node
      */
     public static function deleteNode(array $child, array &$node): bool
     {
@@ -299,9 +306,9 @@ class TreeHelper
     /**
      * Sorting tree via index key
      *
-     * @param array $node
+     * @param array<string, mixed> $node
      */
-    public static function reorderTree($node): array
+    public static function reorderTree(array $node): array
     {
         $reorderdNode = [];
         if (\is_array($node) && isset($node['children'])) {
@@ -333,11 +340,9 @@ class TreeHelper
      * Returns the default tree for a profile by given profile type. <br/>
      * Note: The id of the root node MUST be 'root', but the name may be different.
      *
-     * @param string $profileType
-     *
      * @throws \Exception
      */
-    public static function getDefaultTreeByProfileType($profileType): string
+    public static function getDefaultTreeByProfileType(string $profileType): string
     {
         switch ($profileType) {
             case 'categories':
@@ -367,10 +372,7 @@ class TreeHelper
         }
     }
 
-    /**
-     * @param int $baseProfileId
-     */
-    public static function getDefaultTreeByBaseProfile($baseProfileId): string
+    public static function getDefaultTreeByBaseProfile(int $baseProfileId): string
     {
         return Shopware()->Container()->get('models')
             ->getRepository(Profile::class)
@@ -383,11 +385,9 @@ class TreeHelper
     }
 
     /**
-     * @param string $profileType
-     *
      * @throws \Exception
      */
-    public static function getTreeByHiddenProfileType($profileType): string
+    public static function getTreeByHiddenProfileType(string $profileType): string
     {
         switch ($profileType) {
             case 'articles':

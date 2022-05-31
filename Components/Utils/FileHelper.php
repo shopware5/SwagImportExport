@@ -11,13 +11,9 @@ namespace SwagImportExport\Components\Utils;
 class FileHelper
 {
     /**
-     * @param string   $file
-     * @param string   $content
-     * @param int|null $flag
-     *
      * @throws \Exception
      */
-    public function writeStringToFile($file, $content, $flag = null)
+    public function writeStringToFile(string $file, string $content, ?int $flag = null)
     {
         try {
             \file_put_contents($file, $content, $flag);

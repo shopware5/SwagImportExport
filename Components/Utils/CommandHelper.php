@@ -23,7 +23,6 @@ use SwagImportExport\Components\Profile\Profile;
 use SwagImportExport\Components\Transformers\DataTransformerChain;
 use SwagImportExport\Components\UploadPathProvider;
 use SwagImportExport\CustomModels\Profile as ProfileEntity;
-use SwagImportExport\CustomModels\ProfileRepository;
 
 class CommandHelper
 {
@@ -137,7 +136,6 @@ class CommandHelper
      * Tries to find profile by given name
      *
      * @param ModelRepository<\SwagImportExport\CustomModels\Profile> $repository
-     * @param string $filename
      *
      * @return false|ProfileEntity
      */
@@ -529,11 +527,9 @@ class CommandHelper
     /**
      * Saves unprocessed data to csv file
      *
-     * @param array  $data
-     * @param string $profileName
-     * @param string $outputFile
+     * @param array<string, mixed> $data
      */
-    protected function afterImport($data, $profileName, $outputFile)
+    protected function afterImport(array $data, string $profileName, string $outputFile)
     {
         /** @var FileIOFactory $fileFactory */
         $fileFactory = $this->fileIoFactory;
@@ -555,9 +551,9 @@ class CommandHelper
     /**
      * @throws \RuntimeException
      *
-     * @return int|null
+     * @return string|null
      */
-    private function getProductStreamIdByName($productStreamName)
+    private function getProductStreamIdByName(?string $productStreamName)
     {
         $tempProductStreamName = (int) $productStreamName;
         if ($tempProductStreamName) {
