@@ -24,10 +24,8 @@ class XmlConverter
 
     /**
      * @param array<string, mixed> $array
-     *
-     * @return string
      */
-    public function encode(array $array)
+    public function encode(array $array): string
     {
         $standalone = $this->sSettings['standalone'] ? 'yes' : 'no';
         $ret =
@@ -91,9 +89,9 @@ class XmlConverter
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      */
-    public function decode(string $contents)
+    public function decode(string $contents): array
     {
         if (!$contents) {
             return [];
@@ -182,20 +180,15 @@ class XmlConverter
         return $xml_array;
     }
 
-    /**
-     * @return bool
-     */
-    private function isEmpty($item)
+    private function isEmpty($item): bool
     {
         return empty($item) && $item !== '0' && $item !== false && $item !== 0;
     }
 
     /**
      * Checks if special xml characters were used.
-     *
-     * @return int
      */
-    private function hasSpecialCharacters(string $item)
+    private function hasSpecialCharacters(string $item): int
     {
         return \preg_match('#<|>|&(?<!amp;)#', $item);
     }

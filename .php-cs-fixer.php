@@ -17,8 +17,8 @@ use PhpCsFixerCustomFixers\Fixer\SingleSpaceBeforeStatementFixer;
 use PhpCsFixerCustomFixers\Fixers;
 
 $finder = PhpCsFixer\Finder::create()
-    ->in(__DIR__ . '/Commands')
-//    ->in(__DIR__ . '/Components/Converter')
+//    ->in(__DIR__ . '/Commands')
+    ->in(__DIR__ . '/Components/Converter')
 //    ->in(__DIR__ . '/Components/DataManagers')
 //    ->in(__DIR__ . '/Components/DataType')
 //    ->in(__DIR__ . '/Components/DbAdapters')
@@ -79,6 +79,7 @@ return (new Config())
         'single_line_throw' => false,
         'yoda_style' => ['equal' => false, 'identical' => false, 'less_and_greater' => false],
         'phpdoc_to_return_type' => true,
+        'void_return' => true,
 
         NoSuperfluousConcatenationFixer::name() => true,
         NoUselessCommentFixer::name() => true,

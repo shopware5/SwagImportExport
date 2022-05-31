@@ -23,10 +23,7 @@ class CsvConverter
         'escaped_newline' => '',
     ];
 
-    /**
-     * @return string
-     */
-    public function encode(array $array, array $keys = [])
+    public function encode(array $array, array $keys = []): string
     {
         if (!\is_array($keys) || !\count($keys)) {
             $keys = \array_keys(\current($array));
@@ -40,9 +37,10 @@ class CsvConverter
     }
 
     /**
-     * @return string
+     * @param array<string, string>  $line
+     * @param array<int, int|string> $keys
      */
-    public function _encode_line($line, $keys)
+    public function _encode_line(array $line, array $keys): string
     {
         $csv = '';
 
@@ -82,9 +80,11 @@ class CsvConverter
     }
 
     /**
-     * @return array
+     * @param array<int, string> $keys
+     *
+     * @return array<int, array<string, string>>
      */
-    public function decode(string $csv, array $keys = [])
+    public function decode(string $csv, array $keys = []): array
     {
         $csv = \file_get_contents($csv);
 
@@ -98,12 +98,21 @@ class CsvConverter
             $lines = \preg_split("/\n|\r/", $csv, -1, \PREG_SPLIT_NO_EMPTY);
         }
 
+        if (!\is_array($lines)) {
+            throw new \Exception('Invalid lines');
+        }
+
         if (empty($keys) || !\is_array($keys)) {
             if (empty($this->sSettings['fieldmark'])) {
                 $keys = \explode($this->sSettings['separator'], $lines[0]);
             } else {
                 $keys = $this->_decode_line($lines[0]);
             }
+
+            if (!\is_array($keys)) {
+                throw new \Exception('Invalid keys');
+            }
+
             foreach ($keys as $i => $key) {
                 $keys[$i] = \trim($key, "? \n\t\r");
             }
@@ -117,6 +126,10 @@ class CsvConverter
             } else {
                 $line = $this->_decode_line($line);
             }
+            if (!\is_array($line)) {
+                throw new \Exception('Invalid line');
+            }
+
             foreach ($keys as $pos => $key) {
                 if (isset($line[$pos])) {
                     $tmp[$key] = $line[$pos];
@@ -129,9 +142,9 @@ class CsvConverter
     }
 
     /**
-     * @return array
+     * @return array<string>
      */
-    public function _decode_line($line)
+    public function _decode_line(string $line): array
     {
         $fieldmark = $this->sSettings['fieldmark'];
         $elements = \explode($this->sSettings['separator'], $line);
@@ -168,9 +181,9 @@ class CsvConverter
     }
 
     /**
-     * @return array
+     * @return array<int, string>
      */
-    private function _split_line(string $csv)
+    private function _split_line(string $csv): array
     {
         $lines = [];
         $elements = \explode($this->sSettings['newline'], $csv);

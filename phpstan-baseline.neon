@@ -16,56 +16,6 @@ parameters:
 			path: Commands/ProfilesCommand.php
 
 		-
-			message: "#^Argument of an invalid type array\\|false supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: Components/Converter/CsvConverter.php
-
-		-
-			message: "#^Cannot access offset \\(int\\|string\\) on array\\|false\\.$#"
-			count: 1
-			path: Components/Converter/CsvConverter.php
-
-		-
-			message: "#^Cannot access offset 0 on array\\|false\\.$#"
-			count: 3
-			path: Components/Converter/CsvConverter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Converter\\\\CsvConverter\\:\\:_decode_line\\(\\) has parameter \\$line with no type specified\\.$#"
-			count: 1
-			path: Components/Converter/CsvConverter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Converter\\\\CsvConverter\\:\\:_decode_line\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Converter/CsvConverter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Converter\\\\CsvConverter\\:\\:_encode_line\\(\\) has parameter \\$keys with no type specified\\.$#"
-			count: 1
-			path: Components/Converter/CsvConverter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Converter\\\\CsvConverter\\:\\:_encode_line\\(\\) has parameter \\$line with no type specified\\.$#"
-			count: 1
-			path: Components/Converter/CsvConverter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Converter\\\\CsvConverter\\:\\:_split_line\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Converter/CsvConverter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Converter\\\\CsvConverter\\:\\:decode\\(\\) has parameter \\$keys with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Converter/CsvConverter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Converter\\\\CsvConverter\\:\\:decode\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Converter/CsvConverter.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Converter\\\\CsvConverter\\:\\:encode\\(\\) has parameter \\$array with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Converter/CsvConverter.php
@@ -94,11 +44,6 @@ parameters:
 			message: "#^Variable \\$array might not be defined\\.$#"
 			count: 1
 			path: Components/Converter/CsvConverter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Converter\\\\XmlConverter\\:\\:decode\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Converter/XmlConverter.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Converter\\\\XmlConverter\\:\\:hasSpecialCharacters\\(\\) should return int but returns int\\|false\\.$#"
