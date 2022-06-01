@@ -10,6 +10,8 @@ namespace SwagImportExport\Components\Factories;
 
 use SwagImportExport\Components\FileIO\CsvFileReader;
 use SwagImportExport\Components\FileIO\CsvFileWriter;
+use SwagImportExport\Components\FileIO\FileReader;
+use SwagImportExport\Components\FileIO\FileWriter;
 use SwagImportExport\Components\FileIO\XmlFileReader;
 use SwagImportExport\Components\FileIO\XmlFileWriter;
 
@@ -35,12 +37,7 @@ class FileIOFactory extends \Enlight_Class implements \Enlight_Hook
         $this->xmlFileReader = $xmlFileReader;
     }
 
-    /**
-     * @throws \Exception
-     *
-     * @return CsvFileReader|XmlFileReader
-     */
-    public function createFileReader(string $format)
+    public function createFileReader(string $format): FileReader
     {
         switch ($format) {
             case 'csv':
@@ -52,12 +49,7 @@ class FileIOFactory extends \Enlight_Class implements \Enlight_Hook
         }
     }
 
-    /**
-     * @throws \Exception
-     *
-     * @return CsvFileWriter|XmlFileWriter
-     */
-    public function createFileWriter(string $format)
+    public function createFileWriter(string $format): FileWriter
     {
         switch ($format) {
             case 'csv':

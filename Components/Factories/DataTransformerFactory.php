@@ -8,8 +8,11 @@
 
 namespace SwagImportExport\Components\Factories;
 
+use SwagImportExport\Components\Profile\Profile;
+use SwagImportExport\Components\Transformers\DataTransformerAdapter;
 use SwagImportExport\Components\Transformers\DataTransformerChain;
 use SwagImportExport\Components\Transformers\DecimalTransformer;
+use SwagImportExport\Components\Transformers\ExpressionEvaluator;
 use SwagImportExport\Components\Transformers\FlattenTransformer;
 use SwagImportExport\Components\Transformers\PhpExpressionEvaluator;
 use SwagImportExport\Components\Transformers\SmartyExpressionEvaluator;
@@ -22,9 +25,9 @@ class DataTransformerFactory extends \Enlight_Class implements \Enlight_Hook
      * Creates a data transformer chain by consuming data found a profile.
      * The $dataUserOptions is an object that will return info for the output file structure - tree or flat.
      *
-     * @return \SwagImportExport\Components\Transformers\DataTransformerChain
+     * @param array<string, bool> $dataUserOptions
      */
-    public function createDataTransformerChain(\SwagImportExport\Components\Profile\Profile $profile, array $dataUserOptions)
+    public function createDataTransformerChain(Profile $profile, array $dataUserOptions): DataTransformerChain
     {
         // this can be put in a separate hookable function
         $dataTransformerChain = new DataTransformerChain();
@@ -51,10 +54,8 @@ class DataTransformerFactory extends \Enlight_Class implements \Enlight_Hook
      * Creates a concrete data transformer due to the given type - "values", "tree", "flatten"
      *
      * @throws \Exception
-     *
-     * @return FlattenTransformer|TreeTransformer|ValuesTransformer
      */
-    public function createDataTransformer($transformerType, $config)
+    public function createDataTransformer(string $transformerType, $config): DataTransformerAdapter
     {
         switch ($transformerType) {
             case 'tree':
@@ -82,12 +83,7 @@ class DataTransformerFactory extends \Enlight_Class implements \Enlight_Hook
         return $transformer;
     }
 
-    /**
-     * @throws \Exception
-     *
-     * @return PhpExpressionEvaluator|SmartyExpressionEvaluator
-     */
-    public function createValueConvertor($convertorType)
+    public function createValueConvertor(string $convertorType): ExpressionEvaluator
     {
         switch ($convertorType) {
             case 'phpEvaluator':

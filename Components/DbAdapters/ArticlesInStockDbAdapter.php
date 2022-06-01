@@ -275,10 +275,7 @@ class ArticlesInStockDbAdapter implements DataDbAdapter, \Enlight_Hook
         ];
     }
 
-    /**
-     * @return bool|mixed
-     */
-    public function getColumns(string $section)
+    public function getColumns(string $section): array
     {
         $method = 'get' . \ucfirst($section) . 'Columns';
 
@@ -286,7 +283,7 @@ class ArticlesInStockDbAdapter implements DataDbAdapter, \Enlight_Hook
             return $this->{$method}();
         }
 
-        return false;
+        return [];
     }
 
     public function saveMessage(string $message): void

@@ -29,12 +29,8 @@ class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
 
     /**
      * @param array{profileId?: int} $params
-     *
-     * @throws \Exception
-     *
-     * @return Profile
      */
-    public function loadProfile($params)
+    public function loadProfile(array $params): Profile
     {
         if (!isset($params['profileId'])) {
             throw new \Exception('Profile id is empty');
@@ -51,12 +47,9 @@ class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
     }
 
     /**
-     * @throws \Enlight_Exception
-     * @throws \Exception
-     *
-     * @return ProfileEntity
+     * @param array<string, mixed> $data
      */
-    public function createProfileModel($data)
+    public function createProfileModel(array $data): ProfileEntity
     {
         $event = $this->eventManager->notifyUntil(
             'Shopware_Components_SwagImportExport_Factories_CreateProfileModel',
@@ -98,12 +91,7 @@ class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
         return $profileEntity;
     }
 
-    /**
-     * @throws \Exception
-     *
-     * @return Profile
-     */
-    public function loadHiddenProfile($type)
+    public function loadHiddenProfile(string $type): Profile
     {
         $profileRepository = $this->modelManager->getRepository(ProfileEntity::class);
         $profileEntity = $profileRepository->findOneBy(['type' => $type, 'hidden' => 1]);

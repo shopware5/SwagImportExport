@@ -131,10 +131,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
         $this->sessionRepository = $this->entityManager->getRepository(SessionEntity::class);
     }
 
-    /**
-     * @return DataIO
-     */
-    public function createDataIO(DataDbAdapter $dbAdapter, Session $dataSession, Logger $logger)
+    public function createDataIO(DataDbAdapter $dbAdapter, Session $dataSession, Logger $logger): DataIO
     {
         $uploadPathProvider = $this->uploadPathProvider;
 
@@ -192,7 +189,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
      *
      * @return object dbAdapter
      */
-    public function createDataManager(string $managerType)
+    public function createDataManager(string $managerType): object
     {
         switch ($managerType) {
             case DataDbAdapter::CATEGORIES_ADAPTER:
@@ -206,10 +203,7 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
         }
     }
 
-    /**
-     * @return Session
-     */
-    public function loadSession(array $data)
+    public function loadSession(array $data): Session
     {
         $sessionId = $data['sessionId'];
 
@@ -224,38 +218,29 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
 
     /**
      * Returns columnOptions adapter
-     *
-     * @return \SwagImportExport\Components\Utils\DataColumnOptions
      */
-    public function createColOpts($options)
+    public function createColOpts($options): DataColumnOptions
     {
         return new DataColumnOptions($options);
     }
 
     /**
      * Returns limit adapter
-     *
-     * @return \SwagImportExport\Components\Utils\DataLimit
      */
-    public function createLimit(array $limit)
+    public function createLimit(array $limit): DataLimit
     {
         return new DataLimit($limit);
     }
 
     /**
      * @param array<string, mixed> $filter
-     *
-     * @return \SwagImportExport\Components\Utils\DataFilter
      */
-    public function createFilter(array $filter)
+    public function createFilter(array $filter): DataFilter
     {
         return new DataFilter($filter);
     }
 
-    /**
-     * @return \Enlight_Event_EventArgs|null
-     */
-    protected function fireCreateFactoryEvent(string $adapterType)
+    protected function fireCreateFactoryEvent(string $adapterType): ?\Enlight_Event_EventArgs
     {
         return $this->eventManager->notifyUntil(
             'Shopware_Components_SwagImportExport_Factories_CreateDbAdapter',
