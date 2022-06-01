@@ -1336,42 +1336,12 @@ parameters:
 			path: Components/Session/Session.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Session\\\\Session\\:\\:close\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Session/Session.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Session\\\\Session\\:\\:progress\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Session/Session.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Session\\\\Session\\:\\:resume\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Session/Session.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Session\\\\Session\\:\\:setTotalCount\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Session/Session.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Session\\\\Session\\:\\:setTotalCount\\(\\) has parameter \\$totalCount with no type specified\\.$#"
-			count: 1
-			path: Components/Session/Session.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Session\\\\Session\\:\\:setUsername\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Session/Session.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Session\\\\Session\\:\\:start\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Session/Session.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Session\\\\Session\\:\\:start\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Session/Session.php
 

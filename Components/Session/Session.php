@@ -49,10 +49,8 @@ class Session
 
     /**
      * Returns session entity
-     *
-     * @return SessionEntity
      */
-    public function getEntity()
+    public function getEntity(): SessionEntity
     {
         if ($this->sessionEntity === null) {
             $session = $this->getSessionRepository()->findOneBy(['id' => $this->getSessionId()]);
@@ -65,10 +63,7 @@ class Session
         return $this->sessionEntity;
     }
 
-    /**
-     * @return int
-     */
-    public function getSessionId()
+    public function getSessionId(): int
     {
         return $this->sessionId;
     }
@@ -79,9 +74,11 @@ class Session
      * Then writes these ids to the session and sets the session state to "active".
      * For now we will write the ids as a serialized array.
      *
+     * @param array<string, mixed> $data
+     *
      * @throws \Exception
      */
-    public function start(Profile $profile, array $data)
+    public function start(Profile $profile, array $data): void
     {
         $sessionEntity = $this->getEntity();
 
@@ -146,10 +143,8 @@ class Session
      * If reached then the session state will be set to "stopped"
      * Updates the session position with the current position (stored in a member variable).
      * Updates the file size of the output file
-     *
-     * @param null $file
      */
-    public function progress(int $step, string $file = null)
+    public function progress(int $step, string $file = null): void
     {
         $sessionEntity = $this->getEntity();
 
@@ -179,9 +174,9 @@ class Session
      * Checks also the current position - if all the ids of the session are done, then the function does nothing.
      * Otherwise it sets the session state from "suspended" to "active", so that it is ready again for processing.
      *
-     * @return array
+     * @retrun array{recordIds: array<int>, fileName: string}
      */
-    public function resume()
+    public function resume(): array
     {
         $sessionEntity = $this->getEntity();
 
@@ -193,19 +188,17 @@ class Session
 
         $this->getManager()->flush();
 
-        $data = [
+        return [
             'recordIds' => empty($recordIds) ? [] : \unserialize($recordIds),
             'fileName' => $sessionEntity->getFileName(),
         ];
-
-        return $data;
     }
 
     /**
      * Marks the session as closed (sets the session state as "closed").
      * If the session progress has not reached to the end, throws an exception.
      */
-    public function close()
+    public function close(): void
     {
         $sessionEntity = $this->getEntity();
         $sessionEntity->setState('closed');
@@ -220,7 +213,7 @@ class Session
      *
      * @param ?string $username
      */
-    public function setUsername(?string $username)
+    public function setUsername(?string $username): void
     {
         $sessionEntity = $this->getEntity();
 
@@ -232,10 +225,8 @@ class Session
 
     /**
      * Returns entity manager
-     *
-     * @return ModelManager
      */
-    public function getManager()
+    public function getManager(): ModelManager
     {
         if ($this->manager === null) {
             $this->manager = Shopware()->Models();
@@ -244,10 +235,7 @@ class Session
         return $this->manager;
     }
 
-    /**
-     * @return ?int
-     */
-    public function getSessionPosition()
+    public function getSessionPosition(): ?int
     {
         return $this->getEntity()->getPosition();
     }
@@ -265,15 +253,13 @@ class Session
      *     or the final db save is yet not performed (in case of import).
      * closed:
      *     Session is closed, file is fully exported/imported
-     *
-     * @return string
      */
-    public function getState()
+    public function getState(): string
     {
         return $this->getEntity()->getState();
     }
 
-    public function setTotalCount($totalCount)
+    public function setTotalCount($totalCount): void
     {
         $this->getEntity()->setTotalCount($totalCount);
     }

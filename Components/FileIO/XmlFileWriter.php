@@ -83,9 +83,9 @@ class XmlFileWriter implements FileWriter
     /**
      * Splitting the tree into two parts
      *
-     * @return array<string>
-     *
      * @throws \Exception
+     *
+     * @return array<string>
      */
     protected function splitHeaderFooter(array $data): array
     {
