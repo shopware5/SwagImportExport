@@ -29,15 +29,12 @@ class LogDataStruct
         $this->status = $status;
     }
 
-    /**
-     * @return string
-     */
-    public function getDate()
+    public function getDate(): string
     {
         return $this->date;
     }
 
-    public function setDate(string $date)
+    public function setDate(string $date): void
     {
         if ($date instanceof \DateTime) {
             throw new \InvalidArgumentException('Got ' . \DateTime::class . ', expected string.');
@@ -45,62 +42,47 @@ class LogDataStruct
         $this->date = $date;
     }
 
-    /**
-     * @return string
-     */
-    public function getFileName()
+    public function getFileName(): string
     {
         return $this->fileName;
     }
 
-    public function setFileName(string $fileName)
+    public function setFileName(string $fileName): void
     {
         $this->fileName = $fileName;
     }
 
-    /**
-     * @return string
-     */
-    public function getProfileName()
+    public function getProfileName(): string
     {
         return $this->profileName;
     }
 
-    public function setProfileName(string $profileName)
+    public function setProfileName(string $profileName): void
     {
         $this->profileName = $profileName;
     }
 
-    /**
-     * @return string
-     */
-    public function getMessages()
+    public function getMessages(): string
     {
         return $this->messages;
     }
 
-    public function setMessages(string $messages)
+    public function setMessages(string $messages): void
     {
         $this->messages = $messages;
     }
 
-    /**
-     * @return string
-     */
-    public function getStatus()
+    public function getStatus(): string
     {
         return $this->status;
     }
 
-    public function setStatus(string $status)
+    public function setStatus(string $status): void
     {
         $this->status = $status;
     }
 
-    /**
-     * @return array
-     */
-    public function toArray()
+    public function toArray(): array
     {
         return \get_object_vars($this);
     }

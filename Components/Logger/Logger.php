@@ -34,10 +34,7 @@ class Logger implements LoggerInterface
         $this->loggerRepository = $this->modelManager->getRepository(LoggerEntity::class);
     }
 
-    /**
-     * @return string|null
-     */
-    public function getMessage()
+    public function getMessage(): ?string
     {
         if (!$this->loggerEntity) {
             return null;
@@ -49,7 +46,7 @@ class Logger implements LoggerInterface
     /**
      * {@inheritdoc}
      */
-    public function write(array $messages, string $status, Session $session)
+    public function write(array $messages, string $status, Session $session): void
     {
         $loggerModel = new LoggerEntity();
 
@@ -63,16 +60,13 @@ class Logger implements LoggerInterface
         $this->modelManager->flush();
     }
 
-    public function writeToFile(LogDataStruct $logDataStruct)
+    public function writeToFile(LogDataStruct $logDataStruct): void
     {
         $file = $this->getLogFile();
         $this->fileWriter->writeRecords($file, [$logDataStruct->toArray()]);
     }
 
-    /**
-     * @return string
-     */
-    private function getLogFile()
+    private function getLogFile(): string
     {
         $filePath = $this->logDirectory . '/importexport.log';
 
@@ -83,7 +77,7 @@ class Logger implements LoggerInterface
         return $filePath;
     }
 
-    private function createLogFile(string $filePath)
+    private function createLogFile(string $filePath): void
     {
         $columns = ['date/time', 'file', 'profile', 'message', 'successFlag'];
         $this->fileWriter->writeHeader($filePath, $columns);

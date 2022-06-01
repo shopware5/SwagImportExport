@@ -1181,44 +1181,9 @@ parameters:
 			path: Components/Logger/LogDataStruct.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Logger\\\\LogDataStruct\\:\\:setDate\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Logger/LogDataStruct.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Logger\\\\LogDataStruct\\:\\:setFileName\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Logger/LogDataStruct.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Logger\\\\LogDataStruct\\:\\:setMessages\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Logger/LogDataStruct.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Logger\\\\LogDataStruct\\:\\:setProfileName\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Logger/LogDataStruct.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Logger\\\\LogDataStruct\\:\\:setStatus\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Logger/LogDataStruct.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Logger\\\\LogDataStruct\\:\\:toArray\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Logger/LogDataStruct.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Logger\\\\Logger\\:\\:createLogFile\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Logger/Logger.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Logger\\\\Logger\\:\\:write\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Logger/Logger.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Logger\\\\Logger\\:\\:write\\(\\) has parameter \\$messages with no value type specified in iterable type array\\.$#"
@@ -1226,22 +1191,7 @@ parameters:
 			path: Components/Logger/Logger.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Logger\\\\Logger\\:\\:writeToFile\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Logger/Logger.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Logger\\\\LoggerInterface\\:\\:write\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Logger/LoggerInterface.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Logger\\\\LoggerInterface\\:\\:write\\(\\) has parameter \\$messages with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Logger/LoggerInterface.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Logger\\\\LoggerInterface\\:\\:writeToFile\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Components/Logger/LoggerInterface.php
 

@@ -14,18 +14,16 @@ interface LoggerInterface
 {
     /**
      * Returns the message of the log entity.
-     *
-     * @return string|null
      */
-    public function getMessage();
+    public function getMessage(): ?string;
 
     /**
      * Writes a log entry to the database.
      */
-    public function write(array $messages, string $status, Session $session);
+    public function write(array $messages, string $status, Session $session): void;
 
     /**
      * Writes a log entry to the import/export log file.
      */
-    public function writeToFile(LogDataStruct $logDataStruct);
+    public function writeToFile(LogDataStruct $logDataStruct): void;
 }

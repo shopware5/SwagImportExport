@@ -80,7 +80,10 @@ class XmlFileReader implements FileReader
         return $count;
     }
 
-    protected function toArrayTree(\DOMElement $node, string $path): array
+    /**
+     * @return array<mixed>|string
+     */
+    protected function toArrayTree(\DOMElement $node, string $path)
     {
         $hasChildren = false;
         $record = [];
@@ -108,7 +111,7 @@ class XmlFileReader implements FileReader
                 $record['_value'] = $node->nodeValue;
             }
         } elseif (!$hasChildren && \is_string($node->nodeValue)) {
-            $record = [\trim($node->nodeValue)];
+            $record = \trim($node->nodeValue);
         }
 
         return $record;
