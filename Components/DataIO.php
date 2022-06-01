@@ -487,7 +487,7 @@ class DataIO
     /**
      * Returns db columns
      *
-     * @return array
+     * @return array<int|string, array<string>|string>|string
      */
     public function getColumns()
     {

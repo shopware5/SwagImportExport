@@ -136,10 +136,8 @@ class CommandHelper
      * Tries to find profile by given name
      *
      * @param ModelRepository<\SwagImportExport\CustomModels\Profile> $repository
-     *
-     * @return false|ProfileEntity
      */
-    public static function findProfileByName(string $filename, ModelRepository $repository)
+    public static function findProfileByName(string $filename, ModelRepository $repository): ?ProfileEntity
     {
         $parts = \explode('.', $filename);
 
@@ -153,15 +151,15 @@ class CommandHelper
             }
         }
 
-        return false;
+        return null;
     }
 
     /**
      * Prepares export
      *
-     * @return array
+     * @return array{position: int, count: int}
      */
-    public function prepareExport()
+    public function prepareExport(): array
     {
         $this->sessionId = null;
         $postData = [
@@ -234,9 +232,9 @@ class CommandHelper
     /**
      * Executes export action
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    public function exportAction()
+    public function exportAction(): array
     {
         $postData = [
             'profileId' => (int) $this->profileEntity->getId(),
@@ -338,11 +336,9 @@ class CommandHelper
     /**
      * Prepares import
      *
-     * @throws \Exception
-     *
-     * @return array
+     * @return array{success: true, position: int, count: int}
      */
-    public function prepareImport()
+    public function prepareImport(): array
     {
         $this->sessionId = null;
         $postData = [
@@ -394,9 +390,9 @@ class CommandHelper
      *
      * @throws \Exception
      *
-     * @return array
+     * @return array{success: bool, data: array}
      */
-    public function importAction()
+    public function importAction(): array
     {
         /** @var UploadPathProvider $uploadPathProvider */
         $uploadPathProvider = Shopware()->Container()->get('swag_import_export.upload_path_provider');
@@ -529,7 +525,7 @@ class CommandHelper
      *
      * @param array<string, mixed> $data
      */
-    protected function afterImport(array $data, string $profileName, string $outputFile)
+    protected function afterImport(array $data, string $profileName, string $outputFile): void
     {
         /** @var FileIOFactory $fileFactory */
         $fileFactory = $this->fileIoFactory;
@@ -550,10 +546,8 @@ class CommandHelper
 
     /**
      * @throws \RuntimeException
-     *
-     * @return int|null
      */
-    private function getProductStreamIdByName(?string $productStreamName)
+    private function getProductStreamIdByName(?string $productStreamName): ?int
     {
         $tempProductStreamName = (int) $productStreamName;
         if ($tempProductStreamName) {

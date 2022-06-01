@@ -23,7 +23,10 @@ class DataFilter
         $this->filter = $filter;
     }
 
-    public function getFilter()
+    /**
+     * @return array<string, mixed>
+     */
+    public function getFilter(): array
     {
         return $this->filter;
     }

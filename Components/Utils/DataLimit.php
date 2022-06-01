@@ -25,12 +25,12 @@ class DataLimit
         }
     }
 
-    public function getLimit()
+    public function getLimit(): ?int
     {
         return $this->limit;
     }
 
-    public function getOffset()
+    public function getOffset(): ?int
     {
         return $this->offset;
     }

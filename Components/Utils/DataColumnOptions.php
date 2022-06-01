@@ -17,7 +17,7 @@ class DataColumnOptions
         $this->columnOptions = $columnOptions;
     }
 
-    public function getColumnOptions()
+    public function getColumnOptions(): ?string
     {
         return $this->columnOptions;
     }

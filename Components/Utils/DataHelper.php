@@ -16,10 +16,8 @@ class DataHelper
      * and the in the query used alias.
      *
      * example: 'customer.number as customerNumber' results in ['customerNumber', 'number']
-     *
-     * @return array
      */
-    public static function generateMappingFromColumns(string $column)
+    public static function generateMappingFromColumns(string $column): array
     {
         if (!\preg_match('/(?<=as ).*/', $column, $alias)) {
             return [];

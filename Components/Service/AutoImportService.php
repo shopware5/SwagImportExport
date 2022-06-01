@@ -139,7 +139,7 @@ class AutoImportService implements AutoImportServiceInterface
     {
         $profile = CommandHelper::findProfileByName($file, $profileRepository);
 
-        if ($profile === false) {
+        if (!$profile instanceof Profile) {
             $message = SnippetsHelper::getNamespace()->get('cronjob/no_profile', 'No profile found %s');
 
             throw new \Exception(\sprintf($message, $fileName));

@@ -13,7 +13,7 @@ class FileHelper
     /**
      * @throws \Exception
      */
-    public function writeStringToFile(string $file, string $content, ?int $flag = null)
+    public function writeStringToFile(string $file, string $content, ?int $flag = null): void
     {
         try {
             \file_put_contents($file, $content, $flag);

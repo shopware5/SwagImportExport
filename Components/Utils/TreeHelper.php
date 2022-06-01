@@ -15,6 +15,8 @@ class TreeHelper
 {
     /**
      * Converts the JSON tree to ExtJS tree
+     *
+     * @return array<string, mixed>
      */
     public static function convertToExtJSTree(array $node, bool $isInIteration = false, string $adapter = ''): array
     {
@@ -140,9 +142,9 @@ class TreeHelper
      *
      * @param array<string, mixed> $node
      *
-     * @return bool|array
+     * @return array<string, mixed>
      */
-    public static function getNodeById(string $id, array $node, string $parentId = 'root')
+    public static function getNodeById(string $id, array $node, string $parentId = 'root'): ?array
     {
         if ($node['id'] == $id) { // the node is found
             $node['parentId'] = $parentId;
@@ -166,7 +168,7 @@ class TreeHelper
             }
         }
 
-        return false;
+        return null;
     }
 
     /**
@@ -307,6 +309,8 @@ class TreeHelper
      * Sorting tree via index key
      *
      * @param array<string, mixed> $node
+     *
+     * @return array<string, mixed>
      */
     public static function reorderTree(array $node): array
     {

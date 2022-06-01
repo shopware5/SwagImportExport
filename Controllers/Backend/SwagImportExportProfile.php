@@ -410,6 +410,10 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
 
             $changedNode = TreeHelper::getNodeById($node['id'], $tree);
 
+            if(!is_array($changedNode)) {
+                throw new \Exception("Node not found");
+            }
+
             if ($node['parentId'] != $changedNode['parentId']) {
                 $changedNode['parentId'] = $node['parentId'];
                 $changedNode['index'] = $node['index'];
