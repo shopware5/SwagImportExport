@@ -10,25 +10,14 @@ namespace SwagImportExport\Components\FileIO;
 
 interface FileReader
 {
-    /**
-     * @return array
-     */
-    public function readRecords(string $fileName, int $position, int $count);
+    public function readRecords(string $fileName, int $position, int $count): array;
 
-    /**
-     * @return int
-     */
-    public function getTotalCount(string $fileName);
+    public function getTotalCount(string $fileName): int;
 
     /**
      * @param array<string, array|string> $tree
-     *
-     * @return void
      */
-    public function setTree(array $tree);
+    public function setTree(array $tree): void;
 
-    /**
-     * @return bool
-     */
-    public function hasTreeStructure();
+    public function hasTreeStructure(): bool;
 }

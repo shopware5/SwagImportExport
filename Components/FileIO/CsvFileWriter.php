@@ -22,7 +22,7 @@ class CsvFileWriter implements FileWriter
         $this->fileHelper = $fileHelper;
     }
 
-    public function writeHeader(string $fileName, array $headerData)
+    public function writeHeader(string $fileName, array $headerData): void
     {
         if (!\is_array($headerData)) {
             throw new \Exception('Header data is not valid');
@@ -31,7 +31,7 @@ class CsvFileWriter implements FileWriter
         $this->getFileHelper()->writeStringToFile($fileName, $columnNames);
     }
 
-    public function writeRecords(string $fileName, array $data)
+    public function writeRecords(string $fileName, array $data): void
     {
         $flatData = '';
 
@@ -43,14 +43,11 @@ class CsvFileWriter implements FileWriter
         $this->getFileHelper()->writeStringToFile($fileName, $flatData, \FILE_APPEND);
     }
 
-    public function writeFooter(string $fileName, ?array $footerData)
+    public function writeFooter(string $fileName, ?array $footerData): void
     {
     }
 
-    /**
-     * @return bool
-     */
-    public function hasTreeStructure()
+    public function hasTreeStructure(): bool
     {
         return $this->treeStructure;
     }

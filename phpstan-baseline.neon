@@ -1086,11 +1086,6 @@ parameters:
 			path: Components/Factories/DataFactory.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Factories\\\\DataFactory\\:\\:createDataManager\\(\\) should return object but return statement is missing\\.$#"
-			count: 1
-			path: Components/Factories/DataFactory.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Factories\\\\DataFactory\\:\\:createLimit\\(\\) has parameter \\$limit with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Factories/DataFactory.php
@@ -1114,36 +1109,6 @@ parameters:
 			message: "#^Method SwagImportExport\\\\Components\\\\Factories\\\\DataTransformerFactory\\:\\:createDataTransformer\\(\\) has parameter \\$config with no type specified\\.$#"
 			count: 1
 			path: Components/Factories/DataTransformerFactory.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Factories\\\\DataTransformerFactory\\:\\:createDataTransformer\\(\\) has parameter \\$transformerType with no type specified\\.$#"
-			count: 1
-			path: Components/Factories/DataTransformerFactory.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Factories\\\\DataTransformerFactory\\:\\:createDataTransformer\\(\\) should return SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\|SwagImportExport\\\\Components\\\\Transformers\\\\TreeTransformer\\|SwagImportExport\\\\Components\\\\Transformers\\\\ValuesTransformer but returns SwagImportExport\\\\Components\\\\Transformers\\\\DecimalTransformer\\|SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\|SwagImportExport\\\\Components\\\\Transformers\\\\TreeTransformer\\|SwagImportExport\\\\Components\\\\Transformers\\\\ValuesTransformer\\.$#"
-			count: 1
-			path: Components/Factories/DataTransformerFactory.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Factories\\\\DataTransformerFactory\\:\\:createDataTransformerChain\\(\\) has parameter \\$dataUserOptions with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Factories/DataTransformerFactory.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Factories\\\\DataTransformerFactory\\:\\:createValueConvertor\\(\\) has parameter \\$convertorType with no type specified\\.$#"
-			count: 1
-			path: Components/Factories/DataTransformerFactory.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Factories\\\\ProfileFactory\\:\\:createProfileModel\\(\\) has parameter \\$data with no type specified\\.$#"
-			count: 1
-			path: Components/Factories/ProfileFactory.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Factories\\\\ProfileFactory\\:\\:loadHiddenProfile\\(\\) has parameter \\$type with no type specified\\.$#"
-			count: 1
-			path: Components/Factories/ProfileFactory.php
 
 		-
 			message: "#^Argument of an invalid type array\\|string\\|false supplied for foreach, only iterables are supported\\.$#"
@@ -1172,11 +1137,6 @@ parameters:
 
 		-
 			message: "#^Argument of an invalid type DOMNamedNodeMap\\|null supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: Components/FileIO/XmlFileReader.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\FileIO\\\\XmlFileReader\\:\\:findIterationNode\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Components/FileIO/XmlFileReader.php
 

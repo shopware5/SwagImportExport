@@ -28,7 +28,7 @@ class CsvFileReader implements FileReader
      *
      * @return array<mixed>
      */
-    public function readRecords(string $fileName, int $position, int $step)
+    public function readRecords(string $fileName, int $position, int $step): array
     {
         // Make sure to detect CR LF (Windows) line breaks
         \ini_set('auto_detect_line_endings', true);
@@ -82,10 +82,7 @@ class CsvFileReader implements FileReader
         return $this->toUtf8($readRows);
     }
 
-    /**
-     * @return bool
-     */
-    public function hasTreeStructure()
+    public function hasTreeStructure(): bool
     {
         return $this->treeStructure;
     }
@@ -93,7 +90,7 @@ class CsvFileReader implements FileReader
     /**
      * @param array<mixed> $tree
      */
-    public function setTree(array $tree)
+    public function setTree(array $tree): void
     {
     }
 
@@ -101,10 +98,8 @@ class CsvFileReader implements FileReader
      * Counts total rows of the entire CSV file
      *
      * @throws \Exception
-     *
-     * @return int
      */
-    public function getTotalCount(string $fileName)
+    public function getTotalCount(string $fileName): int
     {
         $fileHandler = \fopen($fileName, 'rb');
 
@@ -128,10 +123,8 @@ class CsvFileReader implements FileReader
 
     /**
      * @param array<int, array<string, mixed>> $rows
-     *
-     * @return array
      */
-    protected function toUtf8(array $rows)
+    protected function toUtf8(array $rows): array
     {
         // detect whether the input is UTF-8 or ISO-8859-1
         \array_walk_recursive(
@@ -158,7 +151,7 @@ class CsvFileReader implements FileReader
      *
      * @return array<string>
      */
-    private function getColumnNames(\SplFileObject $file)
+    private function getColumnNames(\SplFileObject $file): array
     {
         //Rewinds to first line
         $file->rewind();
@@ -174,10 +167,8 @@ class CsvFileReader implements FileReader
 
     /**
      * @param array<mixed> $row
-     *
-     * @return bool
      */
-    private function isInvalidRecord(array $row)
+    private function isInvalidRecord(array $row): bool
     {
         return $row[0] === null;
     }

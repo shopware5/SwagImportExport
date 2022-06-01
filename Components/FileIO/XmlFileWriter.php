@@ -34,7 +34,7 @@ class XmlFileWriter implements FileWriter
      *
      * @throws \Exception
      */
-    public function writeHeader(string $fileName, array $headerData)
+    public function writeHeader(string $fileName, array $headerData): void
     {
         $dataParts = $this->splitHeaderFooter($headerData);
         $this->getFileHelper()->writeStringToFile($fileName, $dataParts[0]);
@@ -47,7 +47,7 @@ class XmlFileWriter implements FileWriter
      *
      * @throws \Exception
      */
-    public function writeRecords(string $fileName, array $data)
+    public function writeRecords(string $fileName, array $data): void
     {
         //converting the whole template tree without the interation part
         $data = $this->xmlConvertor->_encode($data);
@@ -61,7 +61,7 @@ class XmlFileWriter implements FileWriter
      *
      * @throws \Exception
      */
-    public function writeFooter(string $fileName, ?array $footerData)
+    public function writeFooter(string $fileName, ?array $footerData): void
     {
         $dataParts = $this->splitHeaderFooter($footerData ?? []);
 
@@ -70,18 +70,12 @@ class XmlFileWriter implements FileWriter
         $this->getFileHelper()->writeStringToFile($fileName, $data, \FILE_APPEND);
     }
 
-    /**
-     * @return bool
-     */
-    public function hasTreeStructure()
+    public function hasTreeStructure(): bool
     {
         return $this->treeStructure;
     }
 
-    /**
-     * @return FileHelper
-     */
-    public function getFileHelper()
+    public function getFileHelper(): FileHelper
     {
         return $this->fileHelper;
     }
@@ -90,10 +84,8 @@ class XmlFileWriter implements FileWriter
      * Splitting the tree into two parts
      *
      * @throws \Exception
-     *
-     * @return string
      */
-    protected function splitHeaderFooter(array $data)
+    protected function splitHeaderFooter(array $data): string
     {
         //converting the whole template tree without the iteration part
         $data = $this->xmlConvertor->encode($data);

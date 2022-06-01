@@ -12,27 +12,18 @@ interface FileWriter
 {
     /**
      * @param array<mixed> $headerData
-     *
-     * @return void
      */
-    public function writeHeader(string $fileName, array $headerData);
+    public function writeHeader(string $fileName, array $headerData): void;
 
     /**
      * @param array<mixed> $treeData
-     *
-     * @return void
      */
-    public function writeRecords(string $fileName, array $treeData);
+    public function writeRecords(string $fileName, array $treeData): void;
 
     /**
      * @param array<mixed> $footerData
-     *
-     * @return void
      */
-    public function writeFooter(string $fileName, ?array $footerData);
+    public function writeFooter(string $fileName, ?array $footerData): void;
 
-    /**
-     * @return bool
-     */
-    public function hasTreeStructure();
+    public function hasTreeStructure(): bool;
 }

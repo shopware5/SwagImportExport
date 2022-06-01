@@ -22,19 +22,15 @@ class XmlFileReader implements FileReader
 
     protected bool $treeStructure = true;
 
-    public function setTree(array $tree)
+    public function setTree(array $tree): void
     {
         $this->iterationPath = [];
         $this->iterationTag = [];
         $this->findIterationNode($tree, []);
     }
 
-    /**
-     * @return array
-     */
-    public function readRecords(string $fileName, int $position, int $count)
+    public function readRecords(string $fileName, int $position, int $count): array
     {
-        //todo: add string argument
         $reader = new \XMLReader();
         $reader->open($fileName);
 
@@ -61,18 +57,12 @@ class XmlFileReader implements FileReader
         return $records;
     }
 
-    /**
-     * @return bool
-     */
-    public function hasTreeStructure()
+    public function hasTreeStructure(): bool
     {
         return $this->treeStructure;
     }
 
-    /**
-     * @return int
-     */
-    public function getTotalCount(string $fileName)
+    public function getTotalCount(string $fileName): int
     {
         $z = new \XMLReader();
         $z->open($fileName);
@@ -90,10 +80,7 @@ class XmlFileReader implements FileReader
         return $count;
     }
 
-    /**
-     * @return array|string
-     */
-    protected function toArrayTree(\DOMElement $node, string $path)
+    protected function toArrayTree(\DOMElement $node, string $path): array
     {
         $hasChildren = false;
         $record = [];
@@ -121,7 +108,7 @@ class XmlFileReader implements FileReader
                 $record['_value'] = $node->nodeValue;
             }
         } elseif (!$hasChildren && \is_string($node->nodeValue)) {
-            $record = \trim($node->nodeValue);
+            $record = [\trim($node->nodeValue)];
         }
 
         return $record;
@@ -131,7 +118,7 @@ class XmlFileReader implements FileReader
      * @param array<mixed> $node
      * @param array<mixed> $path
      */
-    protected function findIterationNode(array $node, array $path)
+    protected function findIterationNode(array $node, array $path): void
     {
         $path[] = $node['name'];
         if (isset($node['children'])) {
