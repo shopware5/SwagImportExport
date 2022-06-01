@@ -17,7 +17,7 @@ class ProfileSerializer
         $this->profile = $profile;
     }
 
-    public function readProfileConfig(string $key)
+    public function readProfileConfig(string $key): void
     {
         $key = \ucfirst($key);
         $method = 'get' . $key;

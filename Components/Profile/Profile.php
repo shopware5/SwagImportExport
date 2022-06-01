@@ -25,34 +25,22 @@ class Profile
         $this->configNames = $configNames ?: ['exportConversion', 'tree', 'decimals'];
     }
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): int
     {
         return $this->profileEntity->getId();
     }
 
-    /**
-     * @return string
-     */
-    public function getType()
+    public function getType(): string
     {
         return $this->profileEntity->getType();
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->profileEntity->getName();
     }
 
-    /**
-     * @return array
-     */
-    public function getConfigNames()
+    public function getConfigNames(): array
     {
         return $this->configNames;
     }
@@ -74,7 +62,7 @@ class Profile
         }
     }
 
-    public function setConfig(string $name, string $value)
+    public function setConfig(string $name, string $value): void
     {
         switch ($name) {
             case 'tree':
@@ -85,15 +73,12 @@ class Profile
         }
     }
 
-    /**
-     * @return ProfileEntity
-     */
-    public function getEntity()
+    public function getEntity(): ProfileEntity
     {
         return $this->profileEntity;
     }
 
-    public function persist()
+    public function persist(): void
     {
         Shopware()->Models()->persist($this->profileEntity);
     }
@@ -102,20 +87,16 @@ class Profile
      * Return list with default fields and values for current profile
      *
      * @param array $tree profile tree
-     *
-     * @return array
      */
-    public function getDefaultValues(array $tree)
+    public function getDefaultValues(array $tree): array
     {
         return $this->getDefaultFields($tree);
     }
 
     /**
      * Check if current node have default value
-     *
-     * @return array
      */
-    private function getDefaultFields(array $node)
+    private function getDefaultFields(array $node): array
     {
         if ($node) {
             foreach ($node['children'] as $key => $leaf) {
