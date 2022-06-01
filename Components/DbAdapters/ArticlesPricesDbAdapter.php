@@ -31,8 +31,14 @@ class ArticlesPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
 {
     protected ModelManager $manager;
 
+    /**
+     * @return array<array<int>>
+     */
     protected array $categoryIdCollection;
 
+    /**
+     * @var array<string>
+     */
     protected array $logMessages = [];
 
     protected ?string $logState = null;
@@ -81,7 +87,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
      *
      * @return array<int>
      */
-    public function readRecordIds(?int $start, ?int $limit, array $filter = [])
+    public function readRecordIds(?int $start, ?int $limit, array $filter = []): array
     {
         $builder = $this->manager->createQueryBuilder();
 
@@ -168,7 +174,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * @throws \Exception
      */
-    public function read(array $ids, array $columns)
+    public function read(array $ids, array $columns): array
     {
         if (empty($ids)) {
             $message = SnippetsHelper::getNamespace()
@@ -212,10 +218,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
         return $result;
     }
 
-    /**
-     * @return array
-     */
-    public function getDefaultColumns()
+    public function getDefaultColumns(): array
     {
         $columns = [
             'detail.number as orderNumber',
@@ -241,10 +244,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
         return $columns;
     }
 
-    /**
-     * @return array
-     */
-    public function getUnprocessedData()
+    public function getUnprocessedData(): array
     {
         return $this->unprocessedData;
     }
@@ -256,7 +256,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
      * @throws \Enlight_Event_Exception
      * @throws \Exception
      */
-    public function write(array $records)
+    public function write(array $records): void
     {
         $this->unprocessedData = [];
 
@@ -399,20 +399,14 @@ class ArticlesPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
         $this->manager->flush();
     }
 
-    /**
-     * @return array
-     */
-    public function getSections()
+    public function getSections(): array
     {
         return [
             ['id' => 'default', 'name' => 'default '],
         ];
     }
 
-    /**
-     * @return bool|mixed
-     */
-    public function getColumns(string $section)
+    public function getColumns(string $section): array
     {
         $method = 'get' . \ucfirst($section) . 'Columns';
 
@@ -420,13 +414,10 @@ class ArticlesPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
             return $this->{$method}();
         }
 
-        return false;
+        return [];
     }
 
-    /**
-     * @throws \Exception
-     */
-    public function saveMessage(string $message)
+    public function saveMessage(string $message): void
     {
         $errorMode = $this->config->get('SwagImportExportErrorMode');
 
@@ -438,41 +429,38 @@ class ArticlesPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
         $this->setLogState('true');
     }
 
-    /**
-     * @return array
-     */
-    public function getLogMessages()
+    public function getLogMessages(): array
     {
         return $this->logMessages;
     }
 
-    public function setLogMessages(string $logMessages)
+    public function setLogMessages(string $logMessages): void
     {
         $this->logMessages[] = $logMessages;
     }
 
-    /**
-     * @return ?string
-     */
-    public function getLogState()
+    public function getLogState(): ?string
     {
         return $this->logState;
     }
 
-    public function setLogState(string $logState)
+    public function setLogState(string $logState): void
     {
         $this->logState = $logState;
     }
 
     /**
-     * @return array
+     * @return array<array<int>>
      */
-    public function getCategoryIdCollection()
+    public function getCategoryIdCollection(): array
     {
         return $this->categoryIdCollection;
     }
 
-    public function setCategoryIdCollection($categoryIdCollection)
+    /**
+     * @param array<int> $categoryIdCollection
+     */
+    public function setCategoryIdCollection(array $categoryIdCollection): void
     {
         $this->categoryIdCollection[] = $categoryIdCollection;
     }
@@ -480,10 +468,8 @@ class ArticlesPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * @param array<array<string>|string> $columns
      * @param array<int>                  $ids
-     *
-     * @return QueryBuilder
      */
-    public function getBuilder(array $columns, array $ids)
+    public function getBuilder(array $columns, array $ids): QueryBuilder
     {
         $builder = $this->manager->createQueryBuilder();
 
@@ -500,13 +486,10 @@ class ArticlesPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
         return $builder;
     }
 
-    /**
-     * Collects recursively category ids
-     */
-    protected function collectCategoryIds(Category $categoryModel)
+    protected function collectCategoryIds(Category $categoryModel): void
     {
         $categoryId = $categoryModel->getId();
-        $this->setCategoryIdCollection($categoryId);
+        $this->setCategoryIdCollection([$categoryId]);
         $categories = $categoryModel->getChildren();
 
         if (!$categories) {
@@ -521,7 +504,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * @param array<string, mixed> $record
      */
-    private function updateArticleFromPrice(array $record, int $articleDetailId)
+    private function updateArticleFromPrice(array $record, int $articleDetailId): void
     {
         $dql = 'DELETE FROM Shopware\Models\Article\Price price
                 WHERE price.customerGroup = :customerGroup
@@ -539,7 +522,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * @param array<string, mixed> $record
      */
-    private function updateArticleToPrice(array $record, int $articleDetailId, int $articleId)
+    private function updateArticleToPrice(array $record, int $articleDetailId, int $articleId): void
     {
         $dql = "UPDATE Shopware\Models\Article\Price price SET price.to = :toValue
                 WHERE price.customerGroup = :customerGroup

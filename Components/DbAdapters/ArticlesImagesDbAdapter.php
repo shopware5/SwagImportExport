@@ -10,12 +10,12 @@ namespace SwagImportExport\Components\DbAdapters;
 
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\QueryBuilder;
 use GuzzleHttp\Client;
 use Shopware\Bundle\MediaBundle\MediaService;
 use Shopware\Components\ContainerAwareEventManager;
 use Shopware\Components\HttpClient\GuzzleFactory;
 use Shopware\Components\Model\ModelManager;
-use Shopware\Components\Model\QueryBuilder;
 use Shopware\Components\Thumbnail\Manager;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Configurator\Group;
@@ -117,7 +117,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * {@inheritDoc}
      */
-    public function readRecordIds(int $start = null, int $limit = null, array $filter = null)
+    public function readRecordIds(int $start = null, int $limit = null, array $filter = null): array
     {
         $builder = $this->manager->createQueryBuilder();
 
@@ -143,10 +143,8 @@ class ArticlesImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
 
     /**
      * Returns article images
-     *
-     * @return array
      */
-    public function read(array $ids, array $columns)
+    public function read(array $ids, array $columns): array
     {
         if (empty($ids)) {
             $message = SnippetsHelper::getNamespace()
@@ -197,10 +195,8 @@ class ArticlesImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
 
     /**
      * Returns default image columns name
-     *
-     * @return array
      */
-    public function getDefaultColumns()
+    public function getDefaultColumns(): array
     {
         $path = $this->request->getScheme() . '://' . $this->request->getHttpHost() . $this->request->getBasePath() . '/media/image/';
 
@@ -223,10 +219,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
         return $columns;
     }
 
-    /**
-     * @return array
-     */
-    public function getUnprocessedData()
+    public function getUnprocessedData(): array
     {
         return $this->unprocessedData;
     }
@@ -238,7 +231,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
      * @throws \Exception
      * @throws \Zend_Db_Adapter_Exception
      */
-    public function write(array $records)
+    public function write(array $records): void
     {
         if (empty($records['default'])) {
             $message = SnippetsHelper::getNamespace()->get(
@@ -376,20 +369,14 @@ class ArticlesImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
         }
     }
 
-    /**
-     * @return array
-     */
-    public function getSections()
+    public function getSections(): array
     {
         return [
             ['id' => 'default', 'name' => 'default'],
         ];
     }
 
-    /**
-     * @return bool|mixed
-     */
-    public function getColumns(string $section)
+    public function getColumns(string $section): array
     {
         $method = 'get' . \ucfirst($section) . 'Columns';
 
@@ -397,13 +384,13 @@ class ArticlesImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
             return $this->{$method}();
         }
 
-        return false;
+        return [];
     }
 
     /**
      * @throws \RuntimeException
      */
-    public function saveMessage(string $message)
+    public function saveMessage(string $message): void
     {
         if ($this->importExportErrorMode === false) {
             throw new \RuntimeException($message);
@@ -413,36 +400,31 @@ class ArticlesImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
         $this->setLogState('true');
     }
 
-    /**
-     * @return array
-     */
-    public function getLogMessages()
+    public function getLogMessages(): array
     {
         return $this->logMessages;
     }
 
-    public function setLogMessages(string $logMessages)
+    public function setLogMessages(string $logMessages): void
     {
         $this->logMessages[] = $logMessages;
     }
 
-    /**
-     * @return ?string
-     */
-    public function getLogState()
+    public function getLogState(): ?string
     {
         return $this->logState;
     }
 
-    public function setLogState(string $logState)
+    public function setLogState(string $logState): void
     {
         $this->logState = $logState;
     }
 
     /**
-     * @return \Doctrine\ORM\QueryBuilder|QueryBuilder
+     * @param array<array<string>|string> $columns
+     * @param array<int>                  $ids
      */
-    public function getBuilder(array $columns, array $ids)
+    public function getBuilder(array $columns, array $ids): QueryBuilder
     {
         $builder = $this->manager->createQueryBuilder();
         $builder->select($columns)
@@ -462,9 +444,9 @@ class ArticlesImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @return array
+     * @return array<string>
      */
-    protected function getAttributesColumns()
+    protected function getAttributesColumns(): array
     {
         $stmt = $this->db->query('SHOW COLUMNS FROM `s_articles_img_attributes`');
         $columns = $stmt->fetchAll();
@@ -501,9 +483,11 @@ class ArticlesImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @return array
+     * @param array<string, mixed> $image
+     *
+     * @return array<string, mixed>
      */
-    protected function mapAttributes(array $image)
+    protected function mapAttributes(array $image): array
     {
         $attributes = [];
         foreach ($image as $key => $value) {
@@ -521,8 +505,10 @@ class ArticlesImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
 
     /**
      * Sets image mapping for variants
+     *
+     * @param array<int, array<int, array{option: Option}>> $relationGroups
      */
-    protected function setImageMappings(array $relationGroups, int $imageId)
+    protected function setImageMappings(array $relationGroups, int $imageId): void
     {
         /** @var Repository $articleRepository */
         $articleRepository = $this->manager->getRepository(Article::class);
@@ -554,11 +540,15 @@ class ArticlesImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @param Option[] $options
-     * @param mixed    $parent  Image
+     * @param Option[]             $options
+     * @param array<string, mixed> $imageData
      */
-    protected function createImagesForOptions(array $options, $imageData, $parent)
+    protected function createImagesForOptions(array $options, array $imageData, Image $parent): void
     {
+        if (!$parent->getArticle() instanceof Article) {
+            throw new \Exception('Article must be set');
+        }
+
         $articleId = $parent->getArticle()->getId();
         $imageData['path'] = null;
         $imageData['parent'] = $parent;
@@ -586,15 +576,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
         }
     }
 
-    /**
-     * @param string      $url          URL of the resource that should be loaded (ftp, http, file)
-     * @param string|null $baseFilename Optional: Instead of creating a hash, create a filename based on the given one
-     *
-     * @throws \Exception
-     *
-     * @return bool|string returns the absolute path of the downloaded file
-     */
-    protected function load(string $url, ?string $baseFilename = null)
+    protected function load(string $url, ?string $baseFilename = null): string
     {
         if (!\is_dir($this->docPath)) {
             \mkdir($this->docPath, 0777, true);

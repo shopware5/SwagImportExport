@@ -46,7 +46,7 @@ abstract class DataManager
     /**
      * Cast default value to it proper type
      */
-    public static function castDefaultValue(string $value, string $type)
+    public static function castDefaultValue(string $value, string $type): int
     {
         switch ($type) {
             case 'id':
@@ -55,6 +55,8 @@ abstract class DataManager
             case 'boolean':
                 return ($value == 'true') ? 1 : 0;
         }
+
+        throw new \Exception(sprintf('Unknown type provided with %s', $type));
     }
 
     /**

@@ -14,6 +14,7 @@ use SwagImportExport\Components\Factories\ProfileFactory;
 use SwagImportExport\Components\Service\ProfileService;
 use SwagImportExport\Components\Utils\TreeHelper;
 use SwagImportExport\CustomModels\Profile;
+use SwagImportExport\CustomModels\ProfileRepository;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
@@ -67,6 +68,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
     {
         $manager = $this->getModelManager();
 
+        /** @var ProfileRepository $profileRepository */
         $profileRepository = $manager->getRepository(Profile::class);
 
         $query = $profileRepository->getProfilesListQuery(
@@ -534,6 +536,9 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         // merge all sections
         if ($section === 'default' && \count($dbAdapter->getSections()) > 1) {
             $columns = \array_reduce($columns, function ($carry, $item) {
+                if(is_string($item)) {
+                    $item = [$item];
+                }
                 return \array_merge($carry, $item);
             }, []);
         }

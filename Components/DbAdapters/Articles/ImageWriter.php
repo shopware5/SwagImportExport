@@ -35,10 +35,7 @@ class ImageWriter
         $this->articlesDbAdapter = $articlesDbAdapter;
     }
 
-    /**
-     * @return ArticlesDbAdapter
-     */
-    public function getArticlesDbAdapter()
+    public function getArticlesDbAdapter(): ArticlesDbAdapter
     {
         return $this->articlesDbAdapter;
     }
@@ -48,7 +45,7 @@ class ImageWriter
      *
      * @throws AdapterException
      */
-    public function write(int $articleId, string $mainDetailOrderNumber, array $images)
+    public function write(int $articleId, string $mainDetailOrderNumber, array $images): void
     {
         $newImages = [];
         foreach ($images as $image) {
@@ -89,11 +86,11 @@ class ImageWriter
 
             $image['mediaId'] = $media['id'];
 
-            if (!$this->isImageExists($articleId, $image['mediaId'])) {
+            if (!$this->isImageExists($articleId, (int) $image['mediaId'])) {
                 $newImages['medias'][] = $media;
                 $newImages['images'][] = $image;
 
-                $isImageNameCorrect = $this->isImageNameCorrect($image['mediaId'], $image['path']);
+                $isImageNameCorrect = $this->isImageNameCorrect((int) $image['mediaId'], $image['path']);
                 if (!$isImageNameCorrect) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/articles/image_not_found', 'Image with name %s could not be found');
@@ -107,30 +104,35 @@ class ImageWriter
         }
     }
 
-    protected function getMediaById(int $mediaId)
+    /**
+     * @return array<string, string>
+     */
+    protected function getMediaById(int $mediaId): array
     {
-        $media = $this->db->fetchRow(
+        return $this->db->fetchRow(
             'SELECT id, name, description, extension FROM s_media WHERE id = ?',
             [$mediaId]
         );
-
-        return $media;
     }
 
-    protected function getMediaByName(string $name)
+    /**
+     * @return array<string, string>
+     */
+    protected function getMediaByName(string $name): ?array
     {
         $media = $this->db->fetchRow(
             'SELECT id, name, description, extension FROM s_media media WHERE media.name = ?',
             [$name]
         );
 
+        if (\is_bool($media)) {
+            return null;
+        }
+
         return $media;
     }
 
-    /**
-     * @return bool
-     */
-    protected function isImageExists(int $articleId, int $mediaId)
+    protected function isImageExists(int $articleId, int $mediaId): bool
     {
         $isImageExists = $this->db->fetchOne(
             'SELECT id FROM s_articles_img WHERE articleID = ? AND media_id = ?',
@@ -140,10 +142,7 @@ class ImageWriter
         return \is_numeric($isImageExists);
     }
 
-    /**
-     * @return bool
-     */
-    protected function isImageNameCorrect(int $mediaId, string $imageName)
+    protected function isImageNameCorrect(int $mediaId, string $imageName): bool
     {
         $isImageNameCorrect = $this->db->fetchOne(
             'SELECT media.id FROM s_media media WHERE media.id = ? AND media.name = ?',
@@ -158,12 +157,12 @@ class ImageWriter
      *
      * @throws \Doctrine\DBAL\DBALException
      */
-    protected function insertImages(array $data, int $articleId)
+    protected function insertImages(array $data, int $articleId): void
     {
         $medias = $data['medias'];
         $images = $data['images'];
 
-        list($imageData, $mediaId) = $this->prepareImageData($medias, $images);
+        [$imageData, $mediaId] = $this->prepareImageData($medias, $images);
 
         $values = \implode(
             ', ',
@@ -187,10 +186,8 @@ class ImageWriter
     /**
      * @param array<string, mixed> $medias
      * @param array<string, mixed> $images
-     *
-     * @return array
      */
-    protected function prepareImageData(array $medias, array $images)
+    protected function prepareImageData(array $medias, array $images): array
     {
         $mediaId = null;
         $imageData = [];
@@ -210,7 +207,7 @@ class ImageWriter
         return [$imageData, $mediaId];
     }
 
-    protected function setMainImage(int $articleId, ?int $mediaId)
+    protected function setMainImage(int $articleId, ?int $mediaId): void
     {
         $count = $this->countOfMainImages($articleId);
         if ($count == 1) {
@@ -224,10 +221,7 @@ class ImageWriter
         }
     }
 
-    /**
-     * @return string
-     */
-    protected function countOfMainImages(int $articleId)
+    protected function countOfMainImages(int $articleId): string
     {
         $count = $this->db->fetchOne(
             'SELECT COUNT(main)
@@ -242,7 +236,7 @@ class ImageWriter
     /**
      * @throws \Doctrine\DBAL\DBALException
      */
-    protected function setFirstImageAsMain(int $articleId)
+    protected function setFirstImageAsMain(int $articleId): void
     {
         $update = "UPDATE s_articles_img SET main = 1 WHERE articleID = {$articleId} ORDER BY id ASC LIMIT 1";
         $this->connection->exec($update);
@@ -251,7 +245,7 @@ class ImageWriter
     /**
      * @throws \Doctrine\DBAL\DBALException
      */
-    protected function updateMain(int $articleId, int $mediaId)
+    protected function updateMain(int $articleId, int $mediaId): void
     {
         $update = "UPDATE s_articles_img SET main = 2 WHERE articleID = {$articleId} AND media_id != {$mediaId}";
         $this->connection->exec($update);

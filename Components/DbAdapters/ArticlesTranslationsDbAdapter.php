@@ -30,6 +30,9 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
      */
     protected array $unprocessedData = [];
 
+    /**
+     * @var array<string>
+     */
     protected array $logMessages = [];
 
     protected ?string $logState = null;
@@ -58,7 +61,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * {@inheritDoc}
      */
-    public function getDefaultColumns()
+    public function getDefaultColumns(): array
     {
         $translation = [
             'd.ordernumber as articleNumber',
@@ -86,7 +89,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * {@inheritDoc}
      */
-    public function getUnprocessedData()
+    public function getUnprocessedData(): array
     {
         return $this->unprocessedData;
     }
@@ -94,7 +97,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * {@inheritDoc}
      */
-    public function readRecordIds(?int $start, ?int $limit, array $filter = [])
+    public function readRecordIds(?int $start, ?int $limit, array $filter = []): array
     {
         $builder = $this->manager->createQueryBuilder();
 
@@ -112,17 +115,11 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
         }
 
         $records = $builder->getQuery()->getArrayResult();
-        $result = \array_column($records, 'id');
 
-        return $result;
+        return \array_column($records, 'id');
     }
 
-    /**
-     * @throws \Exception
-     *
-     * @return array
-     */
-    public function read(array $ids, array $columns)
+    public function read(array $ids, array $columns): array
     {
         if (empty($ids)) {
             $message = SnippetsHelper::getNamespace()
@@ -141,7 +138,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
      * @throws \Enlight_Event_Exception
      * @throws \RuntimeException
      */
-    public function write(array $records)
+    public function write(array $records): void
     {
         $this->unprocessedData = [];
 
@@ -235,7 +232,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * @throws \Exception
      */
-    public function saveMessage(string $message)
+    public function saveMessage(string $message): void
     {
         if ($this->importExportErrorMode === false) {
             throw new \Exception($message);
@@ -246,45 +243,36 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @return array
+     * @return array<string>
      */
-    public function getLogMessages()
+    public function getLogMessages(): array
     {
         return $this->logMessages;
     }
 
-    public function setLogMessages(string $logMessages)
+    public function setLogMessages(string $logMessages): void
     {
         $this->logMessages[] = $logMessages;
     }
 
-    /**
-     * @return ?string
-     */
-    public function getLogState()
+    public function getLogState(): ?string
     {
         return $this->logState;
     }
 
-    public function setLogState(string $logState)
+    public function setLogState(string $logState): void
     {
         $this->logState = $logState;
     }
 
-    /**
-     * @return array
-     */
-    public function getSections()
+    public function getSections(): array
     {
         return [
             ['id' => 'default', 'name' => 'default '],
         ];
     }
 
-    /**
-     * @return bool|mixed
-     */
-    public function getColumns(string $section)
+    public function getColumns(string $section): array
     {
         $method = 'get' . \ucfirst($section) . 'Columns';
 
@@ -292,17 +280,15 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
             return $this->{$method}();
         }
 
-        return false;
+        return [];
     }
 
     /**
      * @param array<int> $ids
      *
-     * @throws \Zend_Db_Statement_Exception
-     *
-     * @return array
+     * @return array<string, string>
      */
-    public function getTranslations(array $ids)
+    public function getTranslations(array $ids): array
     {
         $translationIds = \implode(',', $ids);
 
@@ -333,9 +319,9 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
      *
      * @param array<string, mixed> $translations
      *
-     * @return array
+     * @return array<array<string, string>>
      */
-    protected function prepareTranslations(array $translations)
+    protected function prepareTranslations(array $translations): array
     {
         $translationAttr = [];
 
@@ -386,9 +372,9 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @return array
+     * @return array<array<string>>
      */
-    private function getAttributes()
+    private function getAttributes(): array
     {
         $repository = $this->manager->getRepository(Configuration::class);
 
@@ -407,9 +393,9 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
      * @param array<string, mixed> $data
      * @param array<string, mixed> $attributes
      *
-     * @return array
+     * @return array<string, string>
      */
-    private function prepareAttributePrefix(array $data, array $attributes)
+    private function prepareAttributePrefix(array $data, array $attributes): array
     {
         $result = [];
         $attributes = \array_column($attributes, 'columnName');

@@ -31,8 +31,14 @@ class NewsletterDbAdapter implements DataDbAdapter, \Enlight_Hook
 
     protected ModelManager $manager;
 
+    /**
+     * @var array<mixed>
+     */
     protected array $unprocessedData = [];
 
+    /**
+     * @var array<string>
+     */
     protected array $logMessages = [];
 
     protected ?string $logState = null;
@@ -60,10 +66,7 @@ class NewsletterDbAdapter implements DataDbAdapter, \Enlight_Hook
         $this->eventManager = $eventManager;
     }
 
-    /**
-     * @return array
-     */
-    public function getDefaultColumns()
+    public function getDefaultColumns(): array
     {
         $columns = [
             'na.email as email',
@@ -94,15 +97,12 @@ class NewsletterDbAdapter implements DataDbAdapter, \Enlight_Hook
      *
      * @param array<string, mixed> $values default values for nodes
      */
-    public function setDefaultValues(array $values)
+    public function setDefaultValues(array $values): void
     {
         $this->defaultValues = $values;
     }
 
-    /**
-     * @return bool
-     */
-    public function hasAdditionalShippingAddress()
+    public function hasAdditionalShippingAddress(): bool
     {
         $sql = "SHOW COLUMNS FROM `s_user_shippingaddress` LIKE 'additional_address_line1'";
         $result = $this->db->fetchRow($sql);
@@ -111,14 +111,14 @@ class NewsletterDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
-    public function getUnprocessedData()
+    public function getUnprocessedData(): array
     {
         return $this->unprocessedData;
     }
 
-    public function read(array $ids, array $columns)
+    public function read(array $ids, array $columns): array
     {
         $builder = $this->getBuilder($columns, $ids);
         $result['default'] = $builder->getQuery()->getArrayResult();
@@ -129,7 +129,7 @@ class NewsletterDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * {@inheritDoc}
      */
-    public function readRecordIds(?int $start, ?int $limit, array $filter = [])
+    public function readRecordIds(?int $start, ?int $limit, array $filter = []): array
     {
         $builder = $this->manager->createQueryBuilder();
 
@@ -163,7 +163,7 @@ class NewsletterDbAdapter implements DataDbAdapter, \Enlight_Hook
      * @throws \Enlight_Event_Exception
      * @throws \Exception
      */
-    public function write(array $records)
+    public function write(array $records): void
     {
         $this->unprocessedData = [];
 
@@ -271,7 +271,7 @@ class NewsletterDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * @throws \Exception
      */
-    public function saveMessage(string $message)
+    public function saveMessage(string $message): void
     {
         if ($this->errorMode === false) {
             throw new \Exception($message);
@@ -282,42 +282,36 @@ class NewsletterDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @return array
+     * @return array<string>
      */
-    public function getLogMessages()
+    public function getLogMessages(): array
     {
         return $this->logMessages;
     }
 
-    public function setLogMessages(string $logMessages)
+    public function setLogMessages(string $logMessages): void
     {
         $this->logMessages[] = $logMessages;
     }
 
-    /**
-     * @return ?string
-     */
-    public function getLogState()
+    public function getLogState(): ?string
     {
         return $this->logState;
     }
 
-    public function setLogState(string $logState)
+    public function setLogState(string $logState): void
     {
         $this->logState = $logState;
     }
 
-    /**
-     * @return array
-     */
-    public function getSections()
+    public function getSections(): array
     {
         return [
             ['id' => 'default', 'name' => 'default '],
         ];
     }
 
-    public function getColumns(string $section)
+    public function getColumns(string $section): array
     {
         $method = 'get' . \ucfirst($section) . 'Columns';
 
@@ -325,16 +319,14 @@ class NewsletterDbAdapter implements DataDbAdapter, \Enlight_Hook
             return $this->{$method}();
         }
 
-        return false;
+        return [];
     }
 
     /**
      * @param array<array<string>|string> $columns
      * @param array<int>                  $ids
-     *
-     * @return QueryBuilder
      */
-    public function getBuilder(array $columns, array $ids)
+    public function getBuilder(array $columns, array $ids): QueryBuilder
     {
         $builder = $this->manager->createQueryBuilder();
 
@@ -353,9 +345,9 @@ class NewsletterDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * @param array<string, mixed> $record
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    protected function prepareNewsletterAddress(array $record)
+    protected function prepareNewsletterAddress(array $record): array
     {
         $keys = [
             'email' => 'email',
@@ -382,9 +374,9 @@ class NewsletterDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * Return list with default values for fields which are empty or don't exists
      *
-     * @return array
+     * @return array<mixed>
      */
-    private function getDefaultValues()
+    private function getDefaultValues(): array
     {
         return $this->defaultValues;
     }

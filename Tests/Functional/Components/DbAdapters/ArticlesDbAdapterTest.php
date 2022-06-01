@@ -340,7 +340,7 @@ class ArticlesDbAdapterTest extends TestCase
     public function testReadShouldThrowExceptionIfIdsAreEmpty(): void
     {
         $productDbAdapter = $this->getProductDbAdapter();
-        $columns = ['article' => 'article.id as articleId'];
+        $columns = ['article' => ['article.id as articleId']];
         $ids = [];
 
         $this->expectException(\Exception::class);

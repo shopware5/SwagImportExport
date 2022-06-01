@@ -44,7 +44,7 @@ class TranslationWriter
      *
      * @throws AdapterException
      */
-    public function write(int $articleId, int $articleDetailId, int $mainDetailId, array $translations)
+    public function write(int $articleId, int $articleDetailId, int $mainDetailId, array $translations): void
     {
         $whiteList = [
             'name',
@@ -117,34 +117,22 @@ class TranslationWriter
     /**
      * Returns all shops
      *
-     * @return array
+     * @return array<int|string, mixed>
      */
-    public function getShops()
+    public function getShops(): array
     {
-        $shops = [];
-        $result = $this->connection->fetchAll('SELECT `id`, `name` FROM s_core_shops');
-
-        foreach ($result as $row) {
-            $shops[$row['id']] = $row['name'];
-        }
-
-        return $shops;
+        return $this->connection->fetchAllKeyValue('SELECT `id`, `name` FROM s_core_shops');
     }
 
-    /**
-     * @return string
-     */
-    public function getShop(int $shopId)
+    public function getShop(int $shopId): ?string
     {
         return $this->shops[$shopId];
     }
 
     /**
      * @param array<string, mixed> $translation
-     *
-     * @return bool
      */
-    private function isValid(array $translation)
+    private function isValid(array $translation): bool
     {
         if (!isset($translation['languageId']) || empty($translation['languageId'])) {
             return false;
@@ -154,9 +142,9 @@ class TranslationWriter
     }
 
     /**
-     * @return array
+     * @return array<array<string,string>>
      */
-    private function getAttributes()
+    private function getAttributes(): array
     {
         $repository = $this->manager->getRepository(Configuration::class);
 
@@ -173,10 +161,8 @@ class TranslationWriter
     /**
      * @param array<string, mixed> $translation
      * @param array<int, mixed>    $whiteList
-     *
-     * @return array
      */
-    private function filterWhitelistedFields(array $translation, array $whiteList)
+    private function filterWhitelistedFields(array $translation, array $whiteList): array
     {
         return \array_intersect_key($translation, \array_flip($whiteList));
     }
@@ -184,9 +170,9 @@ class TranslationWriter
     /**
      * @param array<string, mixed> $attributes
      *
-     * @return array
+     * @return array<string, string>
      */
-    private function prepareAttributePrefix(array $data, array $attributes)
+    private function prepareAttributePrefix(array $data, array $attributes): array
     {
         $result = [];
         $attributes = \array_column($attributes, 'columnName');

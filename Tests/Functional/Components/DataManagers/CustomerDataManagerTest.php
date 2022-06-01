@@ -11,10 +11,12 @@ namespace SwagImportExport\Tests\Functional\Components\DataManagers;
 use PHPUnit\Framework\TestCase;
 use SwagImportExport\Tests\Functional\Components\DataManagers\Mocks\CustomerDataManagerMock;
 use SwagImportExport\Tests\Helper\ContainerTrait;
+use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 
 class CustomerDataManagerTest extends TestCase
 {
     use ContainerTrait;
+    use DatabaseTestCaseTrait;
 
     public function testSetDefaultFieldsForCreateShouldAddANewCustomerNumber()
     {
@@ -31,6 +33,6 @@ class CustomerDataManagerTest extends TestCase
         $result = $service->setDefaultFieldsForCreate($record, $defaultFields);
 
         static::assertSame('bcrypt', $result['encoder']);
-        static::assertStringStartsWith('200', $result['customernnumber']);
+        static::assertStringStartsWith('20', $result['customernnumber']);
     }
 }

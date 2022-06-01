@@ -38,19 +38,6 @@ class PropertyWriterTest extends TestCase
 
     public const NOT_EXISTING_FILTER_GROUP_ID = '999999';
 
-    public function testWriteShouldReturnNullIfNoPropertiesWereGiven()
-    {
-        $propertyWriter = $this->getPropertyWriterAdapter();
-        $propertyValues = null;
-
-        $result = $propertyWriter->writeUpdateCreatePropertyGroupsFilterAndValues(
-            self::ARTICLE_ID_WITH_PROPERTIES,
-            self::ARTICLE_ORDERNUMBER,
-            $propertyValues
-        );
-        static::assertNull($result);
-    }
-
     public function testWriteShouldNotCreateNewGroupWithExistingArticleAndExistingProperties()
     {
         $propertyWriter = $this->getPropertyWriterAdapter();

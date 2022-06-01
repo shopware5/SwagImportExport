@@ -57,7 +57,7 @@ class ArticlesInStockDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * {@inheritDoc}
      */
-    public function getDefaultColumns()
+    public function getDefaultColumns(): array
     {
         return [
             'variant.number as orderNumber',
@@ -72,7 +72,7 @@ class ArticlesInStockDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * {@inheritDoc}
      */
-    public function read(array $ids, array $columns)
+    public function read(array $ids, array $columns): array
     {
         if (empty($ids)) {
             $message = $this->snippetHelper->getNamespace()
@@ -111,7 +111,7 @@ class ArticlesInStockDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * {@inheritDoc}
      */
-    public function getUnprocessedData()
+    public function getUnprocessedData(): array
     {
         return $this->unprocessedData;
     }
@@ -119,7 +119,7 @@ class ArticlesInStockDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * {@inheritDoc}
      */
-    public function readRecordIds(?int $start, ?int $limit, array $filter = [])
+    public function readRecordIds(?int $start, ?int $limit, array $filter = []): array
     {
         $stockFilter = $filter['stockFilter'];
         if ($stockFilter === null) {
@@ -219,7 +219,7 @@ class ArticlesInStockDbAdapter implements DataDbAdapter, \Enlight_Hook
      * @throws \Enlight_Event_Exception
      * @throws \Exception
      */
-    public function write(array $records)
+    public function write(array $records): void
     {
         $articleCount = 0;
         $this->unprocessedData = [];
@@ -265,10 +265,7 @@ class ArticlesInStockDbAdapter implements DataDbAdapter, \Enlight_Hook
         $this->modelManager->flush();
     }
 
-    /**
-     * @return array
-     */
-    public function getSections()
+    public function getSections(): array
     {
         return [
             [
@@ -292,10 +289,7 @@ class ArticlesInStockDbAdapter implements DataDbAdapter, \Enlight_Hook
         return false;
     }
 
-    /**
-     * @throws \Exception
-     */
-    public function saveMessage(string $message)
+    public function saveMessage(string $message): void
     {
         $errorMode = $this->config->get('SwagImportExportErrorMode');
 
@@ -307,28 +301,22 @@ class ArticlesInStockDbAdapter implements DataDbAdapter, \Enlight_Hook
         $this->setLogState('true');
     }
 
-    /**
-     * @return array
-     */
-    public function getLogMessages()
+    public function getLogMessages(): array
     {
         return $this->logMessages;
     }
 
-    public function setLogMessages(string $logMessages)
+    public function setLogMessages(string $logMessages): void
     {
         $this->logMessages[] = $logMessages;
     }
 
-    /**
-     * @return ?string
-     */
-    public function getLogState()
+    public function getLogState(): ?string
     {
         return $this->logState;
     }
 
-    public function setLogState(string $logState)
+    public function setLogState(string $logState): void
     {
         $this->logState = $logState;
     }
@@ -336,10 +324,8 @@ class ArticlesInStockDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * @param array<array<string>|string> $columns
      * @param array<int>                  $ids
-     *
-     * @return QueryBuilder
      */
-    public function getBuilder(array $columns, array $ids)
+    public function getBuilder(array $columns, array $ids): QueryBuilder
     {
         $builder = $this->modelManager->createQueryBuilder();
         $builder->select($columns)

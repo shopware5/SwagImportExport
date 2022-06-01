@@ -10,6 +10,7 @@ namespace SwagImportExport\Components\DbAdapters;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\AbstractQuery;
+use Shopware\Components\Model\QueryBuilder;
 use Shopware\Models\Customer\Customer;
 use Shopware\Models\Order\Order;
 use SwagImportExport\Components\Utils\DbAdapterHelper;
@@ -20,12 +21,12 @@ class CustomerCompleteDbAdapter extends CustomerDbAdapter
     /**
      * {@inheritDoc}
      */
-    public function getDefaultColumns()
+    public function getDefaultColumns(): array
     {
         return $this->getCustomerColumns();
     }
 
-    public function getCustomerColumns()
+    public function getCustomerColumns(): array
     {
         return [
             'customer',
@@ -33,10 +34,7 @@ class CustomerCompleteDbAdapter extends CustomerDbAdapter
         ];
     }
 
-    /**
-     * @return \Shopware\Components\Model\QueryBuilder
-     */
-    public function getBuilder(array $columns, array $ids)
+    public function getBuilder(array $columns, array $ids): QueryBuilder
     {
         $builder = $this->manager->createQueryBuilder();
         $builder->select($columns)
@@ -52,7 +50,7 @@ class CustomerCompleteDbAdapter extends CustomerDbAdapter
     /**
      * {@inheritDoc}
      */
-    public function readRecordIds(?int $start, ?int $limit, array $filter = [])
+    public function readRecordIds(?int $start, ?int $limit, array $filter = []): array
     {
         $query = $this->manager->getConnection()->createQueryBuilder();
         $query->select(['customer.id']);
@@ -78,10 +76,7 @@ class CustomerCompleteDbAdapter extends CustomerDbAdapter
         }, $ids);
     }
 
-    /**
-     * @return array
-     */
-    public function read(array $ids, array $columns)
+    public function read(array $ids, array $columns): array
     {
         foreach ($columns as $key => $value) {
             if ($value === 'unhashedPassword') {
@@ -127,9 +122,9 @@ class CustomerCompleteDbAdapter extends CustomerDbAdapter
     /**
      * @param array<int> $ids
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    private function getAddresses(array $ids)
+    private function getAddresses(array $ids): array
     {
         $dbalQueryBuilder = $this->manager->getConnection()->createQueryBuilder();
 
@@ -145,9 +140,9 @@ class CustomerCompleteDbAdapter extends CustomerDbAdapter
     /**
      * @param array<int> $ids
      *
-     * @return array
+     * @return array<string|int, array<int, mixed>>
      */
-    private function getCustomerOrders(array $ids)
+    private function getCustomerOrders(array $ids): array
     {
         $builder = $this->manager->createQueryBuilder();
 
@@ -204,9 +199,9 @@ class CustomerCompleteDbAdapter extends CustomerDbAdapter
     /**
      * @param array<int> $ids
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    private function getNewsletterRecipients(array $ids)
+    private function getNewsletterRecipients(array $ids): array
     {
         $dbalQueryBuilder = $this->manager->getConnection()->createQueryBuilder();
 

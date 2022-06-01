@@ -53,10 +53,8 @@ class ArticleWriter
      * @param array<string, mixed> $defaultValues
      *
      * @throws AdapterException
-     *
-     * @return ArticleWriterResult
      */
-    public function write(array $article, array $defaultValues)
+    public function write(array $article, array $defaultValues): ArticleWriterResult
     {
         $article = $this->validator->filterEmptyString($article);
         $this->validator->checkRequiredFields($article);
@@ -69,10 +67,8 @@ class ArticleWriter
      * @param array<string, mixed> $defaultValues
      *
      * @throws AdapterException
-     *
-     * @return ArticleWriterResult
      */
-    protected function insertOrUpdateArticle(array $article, array $defaultValues)
+    protected function insertOrUpdateArticle(array $article, array $defaultValues): ArticleWriterResult
     {
         $shouldCreateMainArticle = false;
         [$mainVariantId, $productId, $variantId] = $this->findExistingEntries($article);
@@ -136,7 +132,7 @@ class ArticleWriter
      *
      * @return array{0: int, 1: int, 2: int}
      */
-    protected function findExistingEntries(array $article)
+    protected function findExistingEntries(array $article): array
     {
         $productId = 0;
         $mainVariantId = 0;
@@ -174,7 +170,7 @@ class ArticleWriter
      *
      * @return array<string, mixed>
      */
-    protected function mapArticleAttributes(array $article)
+    protected function mapArticleAttributes(array $article): array
     {
         $attributes = [];
         foreach ($article as $key => $value) {
@@ -190,10 +186,7 @@ class ArticleWriter
         return $attributes;
     }
 
-    /**
-     * @return int
-     */
-    protected function getAttrId(int $detailId)
+    protected function getAttrId(int $detailId): int
     {
         $sql = 'SELECT id FROM s_articles_attributes WHERE articledetailsID = ?';
 

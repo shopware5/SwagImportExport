@@ -23,26 +23,17 @@ class ArticleWriterResult
         $this->detailId = $detailId;
     }
 
-    /**
-     * @return int
-     */
-    public function getArticleId()
+    public function getArticleId(): int
     {
         return $this->articleId;
     }
 
-    /**
-     * @return int
-     */
-    public function getMainDetailId()
+    public function getMainDetailId(): int
     {
         return $this->mainDetailId;
     }
 
-    /**
-     * @return int
-     */
-    public function getDetailId()
+    public function getDetailId(): int
     {
         return $this->detailId;
     }

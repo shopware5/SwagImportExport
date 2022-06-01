@@ -48,7 +48,7 @@ class CategoryWriter
      *
      * @throws DBALException
      */
-    public function write(string $articleId, array $categories)
+    public function write(string $articleId, array $categories): void
     {
         if (!$categories) {
             return;
@@ -75,10 +75,8 @@ class CategoryWriter
 
     /**
      * Checks whether a category with the given id exists
-     *
-     * @return bool
      */
-    protected function isCategoryExists(int $categoryId)
+    protected function isCategoryExists(int $categoryId): bool
     {
         $isCategoryExists = $this->db->fetchOne(
             'SELECT id FROM s_categories WHERE id = ?',
@@ -92,12 +90,8 @@ class CategoryWriter
      * Returns categoryId by path
      *
      * @param string $categoryPath -> 'English->Cars->Mazda'
-     *
-     * @throws AdapterException
-     *
-     * @return int|string - categoryId
      */
-    protected function getCategoryId(string $categoryPath)
+    protected function getCategoryId(string $categoryPath): int
     {
         $id = null;
         $path = '|';
@@ -112,7 +106,7 @@ class CategoryWriter
 
         $categoryIds = \array_keys($data);
 
-        return \end($categoryIds);
+        return (int) \end($categoryIds);
     }
 
     /**
@@ -121,9 +115,9 @@ class CategoryWriter
      *
      * @throws AdapterException
      *
-     * @return int|string - categoryId
+     * @return int - categoryId
      */
-    protected function getId(string $description, ?int $id, string $path)
+    protected function getId(string $description, ?int $id, string $path): int
     {
         if ($id === null) {
             $sql = 'SELECT id FROM s_categories WHERE description = ? AND path IS NULL';
@@ -149,7 +143,7 @@ class CategoryWriter
             $this->insertCategoryAttributes($parentId);
         }
 
-        return $parentId;
+        return (int) $parentId;
     }
 
     /**
@@ -157,7 +151,7 @@ class CategoryWriter
      *
      * @return int created category id
      */
-    protected function insertCategory(string $description, ?int $id, string $path)
+    protected function insertCategory(string $description, ?int $id, string $path): int
     {
         if ($id === null) {
             $this->isRootExists();
@@ -177,7 +171,7 @@ class CategoryWriter
     /**
      * @throws \RuntimeException
      */
-    protected function isRootExists()
+    protected function isRootExists(): void
     {
         $sql = 'SELECT id FROM s_categories WHERE id = 1';
         $rootId = $this->db->fetchOne($sql);
@@ -192,7 +186,7 @@ class CategoryWriter
     /**
      * Creates categories' attributes
      */
-    protected function insertCategoryAttributes(int $categoryId)
+    protected function insertCategoryAttributes(int $categoryId): void
     {
         $sql = "INSERT INTO s_categories_attributes (categoryID) VALUES ({$categoryId})";
         $this->db->exec($sql);
@@ -200,10 +194,8 @@ class CategoryWriter
 
     /**
      * Checks whether the category is a leaf
-     *
-     * @return bool
      */
-    protected function isLeaf(int $categoryId)
+    protected function isLeaf(int $categoryId): bool
     {
         $isParent = $this->db->fetchOne(
             'SELECT id FROM s_categories WHERE parent = ?',
@@ -216,7 +208,7 @@ class CategoryWriter
     /**
      * Updates s_articles_categories_ro table
      */
-    protected function updateArticlesCategoriesRO(string $articleId)
+    protected function updateArticlesCategoriesRO(string $articleId): void
     {
         foreach ($this->categoryIds as $categoryId) {
             $this->categorySubscriber->backlogAddAssignment($articleId, $categoryId);
@@ -225,10 +217,8 @@ class CategoryWriter
 
     /**
      * @param array<string, mixed> $categories
-     *
-     * @return string
      */
-    private function prepareValues(array $categories, string $articleId)
+    private function prepareValues(array $categories, string $articleId): string
     {
         $this->categoryIds = [];
         $values = \implode(

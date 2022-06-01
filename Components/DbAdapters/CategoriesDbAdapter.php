@@ -12,6 +12,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Model\QueryBuilder;
 use Shopware\Models\Category\Category;
 use Shopware\Models\Customer\Group;
 use SwagImportExport\Components\DataManagers\CategoriesDataManager;
@@ -31,8 +32,14 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook
 
     protected EntityRepository $repository;
 
+    /**
+     * @var array<array<mixed>>
+     */
     protected array $unprocessedData = [];
 
+    /**
+     * @var array<string>
+     */
     protected array $logMessages = [];
 
     protected ?string $logState = null;
@@ -43,7 +50,10 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook
 
     protected array $defaultValues = [];
 
-    private $categoryAvoidCustomerGroups;
+    /**
+     * @var array<array<string,mixed>>|null
+     */
+    private ?array $categoryAvoidCustomerGroups = null;
 
     private UnderscoreToCamelCaseServiceInterface $underscoreToCamelCaseService;
 
@@ -72,7 +82,7 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * {@inheritDoc}
      */
-    public function readRecordIds(int $start = null, int $limit = null, array $filter = null)
+    public function readRecordIds(int $start = null, int $limit = null, array $filter = null): array
     {
         $builder = $this->modelManager->createQueryBuilder();
 
@@ -107,7 +117,7 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook
      *
      * @throws \Exception
      */
-    public function read(array $ids, array $columns)
+    public function read(array $ids, array $columns): array
     {
         if (empty($ids)) {
             $message = SnippetsHelper::getNamespace()
@@ -141,10 +151,8 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * @param array<string>|string $columns
      * @param array<int>           $ids
-     *
-     * @return \Shopware\Components\Model\QueryBuilder
      */
-    public function getBuilder(array $columns, array $ids)
+    public function getBuilder(array $columns, array $ids): QueryBuilder
     {
         $builder = $this->modelManager->createQueryBuilder();
         $builder->select($columns)
@@ -158,38 +166,34 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook
         return $builder;
     }
 
-    /**
-     * @return array
-     */
-    public function getUnprocessedData()
+    public function getUnprocessedData(): array
     {
         return $this->unprocessedData;
     }
 
     /**
-     * @throws \Zend_Db_Statement_Exception
-     *
-     * @return array|string
+     * @return array<int, string>
      */
-    public function getAttributes()
+    public function getAttributes(): array
     {
         $stmt = $this->db->query('SHOW COLUMNS FROM s_categories_attributes');
         $columns = $stmt->fetchAll();
         $attributes = $this->getFieldNames($columns);
 
-        $attributesSelect = '';
-        if ($attributes) {
-            $prefix = 'attr';
-            $attributesSelect = [];
-            foreach ($attributes as $attribute) {
-                $catAttr = $this->underscoreToCamelCaseService->underscoreToCamelCase($attribute);
+        if (!$attributes) {
+            return [];
+        }
 
-                if (empty($catAttr)) {
-                    continue;
-                }
+        $prefix = 'attr';
+        $attributesSelect = [];
+        foreach ($attributes as $attribute) {
+            $catAttr = $this->underscoreToCamelCaseService->underscoreToCamelCase($attribute);
 
-                $attributesSelect[] = \sprintf('%s.%s as attribute%s', $prefix, $catAttr, \ucwords($catAttr));
+            if (empty($catAttr)) {
+                continue;
             }
+
+            $attributesSelect[] = \sprintf('%s.%s as attribute%s', $prefix, $catAttr, \ucwords($catAttr));
         }
 
         return $attributesSelect;
@@ -198,7 +202,7 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * @param array<string, mixed> $records
      */
-    public function write(array $records)
+    public function write(array $records): void
     {
         $this->unprocessedData = [];
 
@@ -244,10 +248,7 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook
         }
     }
 
-    /**
-     * @return array
-     */
-    public function getSections()
+    public function getSections(): array
     {
         return [
             ['id' => 'default', 'name' => 'default'],
@@ -256,9 +257,9 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @return array
+     * @return string[]
      */
-    public function getParentKeys(string $section)
+    public function getParentKeys(string $section): array
     {
         switch ($section) {
             case 'customerGroups':
@@ -270,20 +271,20 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook
         throw new \RuntimeException(sprintf('No case found for section "%s"', $section));
     }
 
-    public function getColumns(string $section)
+    public function getColumns(string $section): array
     {
         $method = 'get' . \ucfirst($section) . 'Columns';
         if (\method_exists($this, $method)) {
             return $this->{$method}();
         }
 
-        return false;
+        return [];
     }
 
     /**
-     * @return array
+     * @return array<string>
      */
-    public function getCustomerGroupsColumns()
+    public function getCustomerGroupsColumns(): array
     {
         return [
             'c.id as categoryId',
@@ -294,10 +295,8 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * Returns default categories columns name
      * and category attributes
-     *
-     * @return array
      */
-    public function getDefaultColumns()
+    public function getDefaultColumns(): array
     {
         $columns['default'] = [
             'c.id as categoryId',
@@ -327,19 +326,14 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * Set default values for fields which are empty or don't exists
-     *
      * @param array $values default values for nodes
      */
-    public function setDefaultValues(array $values)
+    public function setDefaultValues(array $values): void
     {
         $this->defaultValues = $values;
     }
 
-    /**
-     * @throws \Exception
-     */
-    public function saveMessage(string $message)
+    public function saveMessage(string $message): void
     {
         $errorMode = $this->config->get('SwagImportExportErrorMode');
 
@@ -352,27 +346,24 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @return array
+     * @return array<string>
      */
-    public function getLogMessages()
+    public function getLogMessages(): array
     {
         return $this->logMessages;
     }
 
-    public function setLogMessages(string $logMessages)
+    public function setLogMessages(string $logMessages): void
     {
         $this->logMessages[] = $logMessages;
     }
 
-    /**
-     * @return ?string
-     */
-    public function getLogState()
+    public function getLogState(): ?string
     {
         return $this->logState;
     }
 
-    public function setLogState(string $logState)
+    public function setLogState(string $logState): void
     {
         $this->logState = $logState;
     }
@@ -380,9 +371,9 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * @param array<string, mixed> $data
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    protected function prepareData(array $data, int $index, int $categoryId, array $groups = [])
+    protected function prepareData(array $data, int $index, int $categoryId, array $groups = []): array
     {
         // prepares attribute associated data
         foreach ($data as $column => $value) {
@@ -414,9 +405,9 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook
      *
      * @param array<string> $columns
      *
-     * @return array
+     * @return array<string>
      */
-    private function getFieldNames(array $columns)
+    private function getFieldNames(array $columns): array
     {
         $attributes = [];
         foreach ($columns as $column) {
@@ -431,14 +422,14 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * @param array<string, array<string, mixed>> $array
      *
-     * @return array
+     * @return array<int>
      */
-    private function getCustomerGroupIdsFromIndex(array $array, int $currentIndex)
+    private function getCustomerGroupIdsFromIndex(array $array, int $currentIndex): array
     {
         $returnArray = [];
         foreach ($array as $customerGroupEntry) {
             if ($customerGroupEntry['parentIndexElement'] == $currentIndex) {
-                $returnArray[] = $customerGroupEntry['customerGroupId'];
+                $returnArray[] = (int) $customerGroupEntry['customerGroupId'];
             }
         }
 
@@ -447,10 +438,8 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook
 
     /**
      * Create the Category by hand. The method ->fromArray do not work
-     *
-     * @return Category|null
      */
-    private function findCategoryById(?int $id)
+    private function findCategoryById(?int $id): ?Category
     {
         if ($id === null) {
             return null;
@@ -459,10 +448,7 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook
         return $this->repository->find($id);
     }
 
-    /**
-     * @return bool
-     */
-    private function checkIfRelationExists(int $categoryId, int $customerGroupId)
+    private function checkIfRelationExists(int $categoryId, int $customerGroupId): bool
     {
         if ($this->categoryAvoidCustomerGroups === null) {
             $this->setCategoryAvoidCustomerGroups();
@@ -477,25 +463,19 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook
         return false;
     }
 
-    private function setCategoryAvoidCustomerGroups()
+    private function setCategoryAvoidCustomerGroups(): void
     {
         $sql = 'SELECT categoryID, customergroupID FROM s_categories_avoid_customergroups';
         $this->categoryAvoidCustomerGroups = $this->db->fetchAll($sql);
     }
 
-    /**
-     * @return Group|null
-     */
-    private function getCustomerGroupById(int $id)
+    private function getCustomerGroupById(int $id): ?Group
     {
         /* @var Group $group */
         return $this->modelManager->getRepository(Group::class)->find($id);
     }
 
-    /**
-     * @return Category
-     */
-    private function createCategoryAndSetId(?int $categoryId)
+    private function createCategoryAndSetId(?int $categoryId): Category
     {
         $category = new Category();
         if ($categoryId) {
@@ -508,7 +488,7 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * @throws AdapterException
      */
-    private function validateCategoryModel(Category $category)
+    private function validateCategoryModel(Category $category): void
     {
         $violations = $this->modelManager->validate($category);
         if ($violations->count() > 0) {
@@ -523,7 +503,7 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook
      *
      * @throws AdapterException
      */
-    private function validateParentCategory(array $record)
+    private function validateParentCategory(array $record): void
     {
         if (!$record['parent'] instanceof Category) {
             $message = SnippetsHelper::getNamespace()
@@ -535,7 +515,7 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * @throws \Exception
      */
-    private function validateRecordsShouldNotBeEmpty(?array $records)
+    private function validateRecordsShouldNotBeEmpty(?array $records): void
     {
         if (empty($records)) {
             $message = SnippetsHelper::getNamespace()

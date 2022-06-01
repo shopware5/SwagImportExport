@@ -33,7 +33,7 @@ interface DataDbAdapter
      *
      * @return array<string, mixed>
      */
-    public function read(array $ids, array $columns);
+    public function read(array $ids, array $columns): array;
 
     /**
      * Returns all ids for the given export with the given parameters.
@@ -42,23 +42,23 @@ interface DataDbAdapter
      *
      * @return array<int>
      */
-    public function readRecordIds(?int $start, ?int $limit, array $filter = []);
+    public function readRecordIds(?int $start, ?int $limit, array $filter = []): array;
 
     /**
      * Returns the default column.
      *
      * @see DataDbAdapter::getColumns()
      *
-     * @return array<string>
+     * @return array<int|string, array<string>|string>
      */
-    public function getDefaultColumns();
+    public function getDefaultColumns(): array;
 
     /**
      * Returns all iteration nodes, i.e. for articles it configuratiors, similar, ...
      *
      * @return array<array<string>>
      */
-    public function getSections();
+    public function getSections(): array;
 
     /**
      * Returns all column names.
@@ -69,18 +69,16 @@ interface DataDbAdapter
      *  'address.firstname as firstname'
      * ]
      *
-     * @return bool|mixed
+     * @return array<string|array<string>>
      */
-    public function getColumns(string $section);
+    public function getColumns(string $section): array;
 
     /**
      * Creates, updates and validates the imported records.
      *
      * @param array<string, mixed> $records
-     *
-     * @return void
      */
-    public function write(array $records);
+    public function write(array $records): void;
 
     /**
      * Returns unprocessed data. This will be used every time if an import wants to create data which relies on created data.
@@ -88,19 +86,19 @@ interface DataDbAdapter
      *
      * @return array<mixed>
      */
-    public function getUnprocessedData();
+    public function getUnprocessedData(): array;
 
     /**
      * Returns all log messages as an array.
      *
      * @return array<string>
      */
-    public function getLogMessages();
+    public function getLogMessages(): array;
 
     /**
      * Returns true if log messages are available.
      *
      * @return ?string
      */
-    public function getLogState();
+    public function getLogState(): ?string;
 }

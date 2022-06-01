@@ -23,6 +23,9 @@ class CategoryTranslationDbAdapter implements DataDbAdapter, \Enlight_Hook
 
     protected bool $importExportErrorMode;
 
+    /**
+     * @var array<string>
+     */
     protected array $logMessages = [];
 
     protected ?string $logState = null;
@@ -52,7 +55,7 @@ class CategoryTranslationDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * {@inheritdoc}
      */
-    public function getDefaultColumns()
+    public function getDefaultColumns(): array
     {
         return [
             'c.categoryId as categoryId',
@@ -72,7 +75,7 @@ class CategoryTranslationDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * {@inheritdoc}
      */
-    public function read(array $ids, array $columns)
+    public function read(array $ids, array $columns): array
     {
         if (empty($ids)) {
             $message = SnippetsHelper::getNamespace()
@@ -89,7 +92,7 @@ class CategoryTranslationDbAdapter implements DataDbAdapter, \Enlight_Hook
         $translationRows = $this->getTranslations($ids);
 
         if (!$translationRows) {
-            return;
+            return [];
         }
 
         foreach ($translationRows as &$translationRow) {
@@ -108,7 +111,7 @@ class CategoryTranslationDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * {@inheritdoc}
      */
-    public function readRecordIds(?int $start, ?int $limit, array $filter = [])
+    public function readRecordIds(?int $start, ?int $limit, array $filter = []): array
     {
         $builder = $this->manager->createQueryBuilder();
 
@@ -133,7 +136,7 @@ class CategoryTranslationDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * {@inheritdoc}
      */
-    public function getSections()
+    public function getSections(): array
     {
         return [
             ['id' => 'default', 'name' => 'default '],
@@ -143,7 +146,7 @@ class CategoryTranslationDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * {@inheritdoc}
      */
-    public function getColumns(string $section)
+    public function getColumns(string $section): array
     {
         $method = 'get' . \ucfirst($section) . 'Columns';
 
@@ -151,13 +154,13 @@ class CategoryTranslationDbAdapter implements DataDbAdapter, \Enlight_Hook
             return $this->{$method}();
         }
 
-        return false;
+        return [];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function write(array $records)
+    public function write(array $records): void
     {
         $records = $this->eventManager->filter(
             'Shopware_Components_SwagImportExport_DbAdapters_CategoryTranslationsDbAdapter_Write',
@@ -197,7 +200,7 @@ class CategoryTranslationDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * {@inheritdoc}
      */
-    public function getUnprocessedData()
+    public function getUnprocessedData(): array
     {
         return [];
     }
@@ -205,7 +208,7 @@ class CategoryTranslationDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * {@inheritdoc}
      */
-    public function getLogMessages()
+    public function getLogMessages(): array
     {
         return $this->logMessages;
     }
@@ -213,7 +216,7 @@ class CategoryTranslationDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * {@inheritdoc}
      */
-    public function getLogState()
+    public function getLogState(): ?string
     {
         return $this->logState;
     }
@@ -221,9 +224,9 @@ class CategoryTranslationDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * @param array<int> $ids
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    private function getTranslations(array $ids)
+    private function getTranslations(array $ids): array
     {
         return $this->connection->createQueryBuilder()
             ->select([
@@ -248,7 +251,7 @@ class CategoryTranslationDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * @throws AdapterException
      */
-    private function checkIfShopExist(int $objectLanguage, int $objectKey)
+    private function checkIfShopExist(int $objectLanguage, int $objectKey): void
     {
         $shopExists = $this->connection->createQueryBuilder()
             ->select('id')
@@ -269,7 +272,7 @@ class CategoryTranslationDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * @throws AdapterException
      */
-    private function checkIfCategoryExist(int $objectKey)
+    private function checkIfCategoryExist(int $objectKey): void
     {
         $categoryExists = $this->connection->createQueryBuilder()
             ->select('id')

@@ -49,7 +49,7 @@ class PriceWriter
      *
      * @throws AdapterException
      */
-    public function write(int $articleId, int $articleDetailId, array $prices)
+    public function write(int $articleId, int $articleDetailId, array $prices): void
     {
         $tax = $this->getArticleTaxRate($articleId);
 
@@ -92,8 +92,10 @@ class PriceWriter
 
     /**
      * @param array<string, mixed> $price
+     *
+     * @return array<string, mixed>
      */
-    protected function calculatePrice(array $price, bool $newPrice, float $tax)
+    protected function calculatePrice(array $price, bool $newPrice, float $tax): array
     {
         $taxInput = $this->customerGroups[$price['priceGroup']];
 
@@ -147,7 +149,7 @@ class PriceWriter
      *
      * @throws AdapterException
      */
-    protected function checkRequirements(array $price, string $orderNumber)
+    protected function checkRequirements(array $price, string $orderNumber): void
     {
         if (!\array_key_exists($price['priceGroup'], $this->customerGroups)) {
             $message = SnippetsHelper::getNamespace()->get(
@@ -168,10 +170,8 @@ class PriceWriter
 
     /**
      * @throws AdapterException
-     *
-     * @return float
      */
-    protected function getArticleTaxRate(int $articleId)
+    protected function getArticleTaxRate(int $articleId): float
     {
         $sql = 'SELECT coretax.tax FROM s_core_tax AS coretax
                 LEFT JOIN s_articles AS article ON article.taxID = coretax.id
@@ -185,28 +185,19 @@ class PriceWriter
         return (float) $tax;
     }
 
-    /**
-     * @return string
-     */
-    protected function getArticleOrderNumber(int $articleDetailId)
+    protected function getArticleOrderNumber(int $articleDetailId): string
     {
         $sql = 'SELECT ordernumber FROM s_articles_details WHERE id = ?';
 
         return $this->db->fetchOne($sql, [$articleDetailId]);
     }
 
-    /**
-     * @return array
-     */
-    private function getCustomerGroup()
+    private function getCustomerGroup(): array
     {
         return $this->db->fetchPairs('SELECT groupkey, taxinput FROM s_core_customergroups');
     }
 
-    /**
-     * @return float
-     */
-    private function formatToFloatValue(string $price)
+    private function formatToFloatValue(string $price): float
     {
         return (float) \str_replace(',', '.', $price);
     }

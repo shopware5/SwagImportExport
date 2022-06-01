@@ -53,10 +53,7 @@ class RelationWriter
         $this->articlesDbAdapter = $articlesDbAdapter;
     }
 
-    /**
-     * @return ArticlesDbAdapter
-     */
-    public function getArticlesDbAdapter()
+    public function getArticlesDbAdapter(): ArticlesDbAdapter
     {
         return $this->articlesDbAdapter;
     }
@@ -64,7 +61,7 @@ class RelationWriter
     /**
      * @throws AdapterException
      */
-    public function write(int $articleId, string $mainOrderNumber, array $relations, string $relationType, bool $processedFlag)
+    public function write(int $articleId, string $mainOrderNumber, array $relations, string $relationType, bool $processedFlag): void
     {
         if (!\is_numeric($articleId)) {
             return;
@@ -140,7 +137,7 @@ class RelationWriter
      * Sets the idKey used to access relation's id. Example: accessory - $relation['accessoryId'],
      * similar - $relation['similarId']
      */
-    protected function initializeRelationData(string $relationType)
+    protected function initializeRelationData(string $relationType): void
     {
         $this->checkRelation($relationType);
 
@@ -155,7 +152,7 @@ class RelationWriter
      *
      * @throws \Exception
      */
-    protected function checkRelation(string $relationType)
+    protected function checkRelation(string $relationType): void
     {
         if (!\in_array($relationType, $this->relationTypes)) {
             $message = "Wrong relation type is used! Allowed types are: 'accessory' or 'similar'";
@@ -165,10 +162,8 @@ class RelationWriter
 
     /**
      * Gets relation id by orderNumber.
-     *
-     * @return string
      */
-    protected function getRelationIdByOrderNumber(string $orderNumber)
+    protected function getRelationIdByOrderNumber(string $orderNumber): string
     {
         $relationId = $this->db->fetchOne(
             'SELECT articleID FROM s_articles_details WHERE ordernumber = ?',
@@ -180,10 +175,8 @@ class RelationWriter
 
     /**
      * Checks whether this article exists.
-     *
-     * @return bool
      */
-    protected function isRelationIdExists($relationId)
+    protected function isRelationIdExists($relationId): bool
     {
         $articleId = $this->db->fetchOne(
             'SELECT articleID FROM s_articles_details WHERE articleID = ?',
@@ -195,10 +188,8 @@ class RelationWriter
 
     /**
      * Checks whether this relation exists.
-     *
-     * @return bool
      */
-    protected function isRelationExists($relationId, $articleId)
+    protected function isRelationExists($relationId, $articleId): bool
     {
         $isRelationExists = $this->db->fetchOne(
             "SELECT id FROM {$this->table} WHERE relatedarticle = ? AND articleID = ?",
@@ -213,7 +204,7 @@ class RelationWriter
      *
      * @throws \Doctrine\DBAL\DBALException
      */
-    private function deleteAllRelations($articleId)
+    private function deleteAllRelations($articleId): void
     {
         $delete = "DELETE FROM {$this->table} WHERE articleID = {$articleId}";
         $this->connection->exec($delete);
@@ -224,7 +215,7 @@ class RelationWriter
      *
      * @throws \Doctrine\DBAL\DBALException
      */
-    private function deleteRelations($relations, $articleId)
+    private function deleteRelations($relations, $articleId): void
     {
         $relatedIds = \implode(
             ', ',
@@ -245,7 +236,7 @@ class RelationWriter
      *
      * @throws \Doctrine\DBAL\DBALException
      */
-    private function insertRelations($relations, $articleId)
+    private function insertRelations($relations, $articleId): void
     {
         $values = \implode(
             ', ',
