@@ -65,10 +65,7 @@ abstract class AbstractImportExportService
         $this->config = $config;
     }
 
-    /**
-     * @return ServiceHelperStruct
-     */
-    protected function buildServiceHelpers(array $requestData)
+    protected function buildServiceHelpers(array $requestData): ServiceHelperStruct
     {
         $profile = $this->profileFactory->loadProfile($requestData);
         $session = $this->dataFactory->loadSession($requestData);
@@ -87,7 +84,7 @@ abstract class AbstractImportExportService
         );
     }
 
-    protected function initializeDataIO(DataIO $dataIO, array $requestData)
+    protected function initializeDataIO(DataIO $dataIO, array $requestData): void
     {
         $colOpts = $this->dataFactory->createColOpts($requestData['columnOptions']);
         $limit = $this->dataFactory->createLimit($requestData['limit']);
@@ -101,10 +98,7 @@ abstract class AbstractImportExportService
         $dataIO->setUsername($username);
     }
 
-    /**
-     * @return DataTransformerChain
-     */
-    protected function createDataTransformerChain(Profile $profile, bool $hasTreeStructure)
+    protected function createDataTransformerChain(Profile $profile, bool $hasTreeStructure): DataTransformerChain
     {
         $dataTransformerChain = $this->dataTransformerFactory->createDataTransformerChain(
             $profile,
@@ -114,7 +108,7 @@ abstract class AbstractImportExportService
         return $dataTransformerChain;
     }
 
-    protected function logProcessing(string $writeStatus, string $filename, string $profileName, string $logMessage, string $status, Session $session)
+    protected function logProcessing(string $writeStatus, string $filename, string $profileName, string $logMessage, string $status, Session $session): void
     {
         $this->logger->write([$logMessage], $writeStatus, $session);
 
@@ -129,10 +123,7 @@ abstract class AbstractImportExportService
         $this->logger->writeToFile($logDataStruct);
     }
 
-    /**
-     * @return FileReader
-     */
-    private function createFileReader(Profile $profile, string $format)
+    private function createFileReader(Profile $profile, string $format): FileReader
     {
         $fileReader = $this->fileIOFactory->createFileReader($format);
         if ($format === 'xml') {

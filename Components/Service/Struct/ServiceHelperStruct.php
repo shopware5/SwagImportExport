@@ -45,50 +45,32 @@ class ServiceHelperStruct
         $this->dataIO = $dataIO;
     }
 
-    /**
-     * @return Profile
-     */
-    public function getProfile()
+    public function getProfile(): Profile
     {
         return $this->profile;
     }
 
-    /**
-     * @return Session
-     */
-    public function getSession()
+    public function getSession(): Session
     {
         return $this->session;
     }
 
-    /**
-     * @return DataDbAdapter
-     */
-    public function getDbAdapter()
+    public function getDbAdapter(): DataDbAdapter
     {
         return $this->dbAdapter;
     }
 
-    /**
-     * @return FileReader
-     */
-    public function getFileReader()
+    public function getFileReader(): FileReader
     {
         return $this->fileReader;
     }
 
-    /**
-     * @return FileWriter
-     */
-    public function getFileWriter()
+    public function getFileWriter(): FileWriter
     {
         return $this->fileWriter;
     }
 
-    /**
-     * @return DataIO
-     */
-    public function getDataIO()
+    public function getDataIO(): DataIO
     {
         return $this->dataIO;
     }

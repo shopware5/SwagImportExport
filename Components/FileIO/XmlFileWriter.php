@@ -83,6 +83,8 @@ class XmlFileWriter implements FileWriter
     /**
      * Splitting the tree into two parts
      *
+     * @return array<string>
+     *
      * @throws \Exception
      */
     protected function splitHeaderFooter(array $data): array
@@ -91,8 +93,6 @@ class XmlFileWriter implements FileWriter
         $data = $this->xmlConvertor->encode($data);
 
         //spliting the the tree in to two parts
-        $dataParts = \explode('<_currentMarker></_currentMarker>', $data);
-
-        return $dataParts;
+        return \explode('<_currentMarker></_currentMarker>', $data);
     }
 }

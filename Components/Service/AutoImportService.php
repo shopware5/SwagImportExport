@@ -36,7 +36,7 @@ class AutoImportService implements AutoImportServiceInterface
         $this->profileFactory = $profileFactory;
     }
 
-    public function runAutoImport()
+    public function runAutoImport(): void
     {
         $files = $this->getFiles();
 
@@ -56,7 +56,7 @@ class AutoImportService implements AutoImportServiceInterface
             \unlink($lockerFileLocation);
         }
 
-        if ($files === false || \count($files) === 0) {
+        if (\count($files) === 0) {
             echo 'No import files are found.' . \PHP_EOL;
 
             return;
@@ -69,7 +69,7 @@ class AutoImportService implements AutoImportServiceInterface
         \unlink($lockerFileLocation);
     }
 
-    private function importFiles(array $files, string $lockerFileLocation)
+    private function importFiles(array $files, string $lockerFileLocation): void
     {
         $profileRepository = $this->modelManager->getRepository(Profile::class);
 
@@ -134,10 +134,8 @@ class AutoImportService implements AutoImportServiceInterface
 
     /**
      * @param ModelRepository<Profile> $profileRepository
-     *
-     * @return Profile
      */
-    private function getProfile(string $fileName, string $file, ModelRepository $profileRepository)
+    private function getProfile(string $fileName, string $file, ModelRepository $profileRepository): Profile
     {
         $profile = CommandHelper::findProfileByName($file, $profileRepository);
 
@@ -151,9 +149,9 @@ class AutoImportService implements AutoImportServiceInterface
     }
 
     /**
-     * @return array
+     * @return array<string>
      */
-    private function getFiles()
+    private function getFiles(): array
     {
         $directory = $this->getDirectory();
 
@@ -165,7 +163,7 @@ class AutoImportService implements AutoImportServiceInterface
     /**
      * Create empty file to flag cron as running
      */
-    private function flagCronAsRunning(string $lockerFileLocation)
+    private function flagCronAsRunning(string $lockerFileLocation): void
     {
         $timeout = \time() + 1800;
         $file = \fopen($lockerFileLocation, 'wb');
@@ -173,10 +171,7 @@ class AutoImportService implements AutoImportServiceInterface
         \fclose($file);
     }
 
-    /**
-     * @return string
-     */
-    private function getDirectory()
+    private function getDirectory(): string
     {
         if (!$this->directory) {
             $this->directory = $this->uploadPathProvider->getPath(UploadPathProvider::CRON_DIR);
@@ -185,10 +180,7 @@ class AutoImportService implements AutoImportServiceInterface
         return $this->directory;
     }
 
-    /**
-     * @return array
-     */
-    private function start(Profile $profileModel, string $inputFile, string $format)
+    private function start(Profile $profileModel, string $inputFile, string $format): array
     {
         $commandHelper = new CommandHelper(
             [

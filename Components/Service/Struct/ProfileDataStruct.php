@@ -25,39 +25,30 @@ class ProfileDataStruct
         $this->tree = \json_decode($profile->getTree(), true);
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return string
-     */
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
 
-    public function getTree()
+    public function getTree(): array
     {
         return $this->tree;
     }
 
-    /**
-     * @return string
-     */
-    public function getExportData()
+    public function getExportData(): string
     {
         return \json_encode($this->asArray(), \JSON_PRETTY_PRINT);
     }
 
     /**
-     * @return array
+     * @return array{name: string, type: string, tree: array}
      */
-    private function asArray()
+    private function asArray(): array
     {
         return [
             'name' => $this->getName(),

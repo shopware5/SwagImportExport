@@ -17,10 +17,8 @@ interface ImportServiceInterface
      * and delivers information on how many records to import.
      *
      * @param array<string, mixed> $requestData
-     *
-     * @return PreparationResultStruct
      */
-    public function prepareImport(array $requestData, string $inputFileName);
+    public function prepareImport(array $requestData, string $inputFileName): PreparationResultStruct;
 
     /**
      * Processes import based on profile and session and will be called
@@ -29,7 +27,7 @@ interface ImportServiceInterface
      * @param array<string, mixed>  $requestData
      * @param array<string, string> $unprocessedFiles
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    public function import(array $requestData, array $unprocessedFiles, string $inputFile);
+    public function import(array $requestData, array $unprocessedFiles, string $inputFile): array;
 }

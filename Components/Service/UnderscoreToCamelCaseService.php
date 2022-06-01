@@ -10,10 +10,7 @@ namespace SwagImportExport\Components\Service;
 
 class UnderscoreToCamelCaseService implements UnderscoreToCamelCaseServiceInterface
 {
-    /**
-     * @return ?string
-     */
-    public function underscoreToCamelCase(?string $string)
+    public function underscoreToCamelCase(?string $string): ?string
     {
         if (!\is_string($string)) {
             return '';

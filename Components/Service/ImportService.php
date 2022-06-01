@@ -15,10 +15,7 @@ use SwagImportExport\Components\Utils\SnippetsHelper;
 
 class ImportService extends AbstractImportExportService implements ImportServiceInterface
 {
-    /**
-     * @return PreparationResultStruct
-     */
-    public function prepareImport(array $requestData, string $inputFileName)
+    public function prepareImport(array $requestData, string $inputFileName): PreparationResultStruct
     {
         $serviceHelpers = $this->buildServiceHelpers($requestData);
 
@@ -30,10 +27,7 @@ class ImportService extends AbstractImportExportService implements ImportService
         return new PreparationResultStruct($position, $totalCount);
     }
 
-    /**
-     * @return array
-     */
-    public function import(array $requestData, array $unprocessedFiles, string $inputFile)
+    public function import(array $requestData, array $unprocessedFiles, string $inputFile): array
     {
         $serviceHelpers = $this->buildServiceHelpers($requestData);
 
@@ -76,7 +70,7 @@ class ImportService extends AbstractImportExportService implements ImportService
                     $postProcessedData = $this->processData($unprocessedFiles);
                 }
 
-                if ($postProcessedData) {
+                if (!empty($postProcessedData)) {
                     unset($resultData['sessionId']);
                     unset($resultData['adapter']);
 
@@ -108,7 +102,7 @@ class ImportService extends AbstractImportExportService implements ImportService
         }
     }
 
-    protected function afterImport(array $unprocessedData, string $profileName, string $outputFile)
+    protected function afterImport(array $unprocessedData, string $profileName, string $outputFile): void
     {
         //loads hidden profile for article
         $profile = $this->profileFactory->loadHiddenProfile($profileName);
@@ -128,9 +122,9 @@ class ImportService extends AbstractImportExportService implements ImportService
      * Checks for unprocessed data
      * Returns unprocessed file for import
      *
-     * @return array|bool
+     * @return array{importFile: string, profileId: int, count: int, position: int, format: string, load: bool}|array{}
      */
-    protected function processData(array &$unprocessedFiles)
+    protected function processData(array &$unprocessedFiles): array
     {
         foreach ($unprocessedFiles as $hiddenProfile => $inputFile) {
             if (\is_readable($inputFile)) {
@@ -164,6 +158,6 @@ class ImportService extends AbstractImportExportService implements ImportService
             }
         }
 
-        return false;
+        return [];
     }
 }

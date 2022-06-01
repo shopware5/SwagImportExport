@@ -20,18 +20,12 @@ class PreparationResultStruct
         $this->totalResultCount = $totalResultCount;
     }
 
-    /**
-     * @return int
-     */
-    public function getPosition()
+    public function getPosition(): int
     {
         return $this->position;
     }
 
-    /**
-     * @return int
-     */
-    public function getTotalResultCount()
+    public function getTotalResultCount(): int
     {
         return $this->totalResultCount;
     }

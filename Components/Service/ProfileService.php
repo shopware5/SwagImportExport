@@ -32,7 +32,7 @@ class ProfileService implements ProfileServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function importProfile(UploadedFile $file)
+    public function importProfile(UploadedFile $file): void
     {
         /** @var \Shopware_Components_Plugin_Namespace $namespace */
         $namespace = $this->snippetManager->getNamespace('backend/swag_import_export/controller');
@@ -86,7 +86,7 @@ class ProfileService implements ProfileServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function exportProfile(int $profileId)
+    public function exportProfile(int $profileId): ProfileDataStruct
     {
         $profileRepository = $this->modelManager->getRepository(Profile::class);
         $profile = $profileRepository->findOneBy(['id' => $profileId]);

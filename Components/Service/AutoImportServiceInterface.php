@@ -13,5 +13,5 @@ interface AutoImportServiceInterface
     /**
      * Imports all files in "files/import_cron"
      */
-    public function runAutoImport();
+    public function runAutoImport(): void;
 }

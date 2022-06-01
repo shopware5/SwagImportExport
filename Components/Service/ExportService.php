@@ -16,9 +16,10 @@ use SwagImportExport\Components\Utils\SnippetsHelper;
 class ExportService extends AbstractImportExportService implements ExportServiceInterface
 {
     /**
-     * @return PreparationResultStruct
+     * @param array<string, mixed> $requestData
+     * @param array<string, mixed> $filterParams
      */
-    public function prepareExport(array $requestData, array $filterParams)
+    public function prepareExport(array $requestData, array $filterParams): PreparationResultStruct
     {
         $serviceHelpers = $this->buildServiceHelpers($requestData);
         $requestData['filter'] = $this->prepareFilter($serviceHelpers->getProfile()->getType(), $filterParams);
@@ -34,9 +35,11 @@ class ExportService extends AbstractImportExportService implements ExportService
     }
 
     /**
-     * @return array
+     * @param array<string, mixed> $requestData
+     * @param array<string, mixed> $filterParams
+     * @return array<string, mixed>
      */
-    public function export(array $requestData, array $filterParams)
+    public function export(array $requestData, array $filterParams): array
     {
         $serviceHelpers = $this->buildServiceHelpers($requestData);
         $requestData['filter'] = $this->prepareFilter($serviceHelpers->getProfile()->getType(), $filterParams);
@@ -78,9 +81,11 @@ class ExportService extends AbstractImportExportService implements ExportService
     }
 
     /**
-     * @return array
+     * @param array<string, mixed> $filterParams
+     *
+     * @return array<string, mixed>
      */
-    private function prepareFilter(string $profileType, array $filterParams)
+    private function prepareFilter(string $profileType, array $filterParams): array
     {
         $filterParams = \array_filter($filterParams, 'strlen');
         $filter = [];

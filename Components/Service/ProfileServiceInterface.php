@@ -16,10 +16,7 @@ interface ProfileServiceInterface
     /**
      * @throws \Exception
      */
-    public function importProfile(UploadedFile $file);
+    public function importProfile(UploadedFile $file): void;
 
-    /**
-     * @return ProfileDataStruct
-     */
-    public function exportProfile(int $profileId);
+    public function exportProfile(int $profileId): ProfileDataStruct;
 }

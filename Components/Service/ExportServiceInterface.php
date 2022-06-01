@@ -18,10 +18,8 @@ interface ExportServiceInterface
      *
      * @param array<string, mixed> $requestData
      * @param array<string, mixed> $filterParams
-     *
-     * @return PreparationResultStruct
      */
-    public function prepareExport(array $requestData, array $filterParams);
+    public function prepareExport(array $requestData, array $filterParams): PreparationResultStruct;
 
     /**
      * Processes export based on profile and session and accepts special
@@ -30,7 +28,7 @@ interface ExportServiceInterface
      * @param array<string, mixed> $requestData
      * @param array<string, mixed> $filterParams
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    public function export(array $requestData, array $filterParams);
+    public function export(array $requestData, array $filterParams): array;
 }

@@ -1151,22 +1151,12 @@ parameters:
 			path: Components/FileIO/XmlFileReader.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\FileIO\\\\XmlFileReader\\:\\:toArrayTree\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/FileIO/XmlFileReader.php
-
-		-
 			message: "#^Parameter \\#1 \\$node of method SwagImportExport\\\\Components\\\\FileIO\\\\XmlFileReader\\:\\:toArrayTree\\(\\) expects DOMElement, DOMNode\\|false given\\.$#"
 			count: 1
 			path: Components/FileIO/XmlFileReader.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Components\\\\FileIO\\\\XmlFileWriter\\:\\:splitHeaderFooter\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/FileIO/XmlFileWriter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\FileIO\\\\XmlFileWriter\\:\\:splitHeaderFooter\\(\\) should return string but returns array\\<int, string\\>\\.$#"
 			count: 1
 			path: Components/FileIO/XmlFileWriter.php
 
@@ -1231,16 +1221,6 @@ parameters:
 			path: Components/Profile/Profile.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Profile\\\\Profile\\:\\:persist\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Profile/Profile.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Profile\\\\Profile\\:\\:setConfig\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Profile/Profile.php
-
-		-
 			message: "#^Property SwagImportExport\\\\Components\\\\Profile\\\\Profile\\:\\:\\$configNames type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Profile/Profile.php
@@ -1251,17 +1231,7 @@ parameters:
 			path: Components/Profile/Profile.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Profile\\\\ProfileSerializer\\:\\:readProfileConfig\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Profile/ProfileSerializer.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Service\\\\AbstractImportExportService\\:\\:buildServiceHelpers\\(\\) has parameter \\$requestData with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Service/AbstractImportExportService.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Service\\\\AbstractImportExportService\\:\\:initializeDataIO\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Components/Service/AbstractImportExportService.php
 
@@ -1271,37 +1241,12 @@ parameters:
 			path: Components/Service/AbstractImportExportService.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Service\\\\AbstractImportExportService\\:\\:logProcessing\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Service/AbstractImportExportService.php
-
-		-
 			message: "#^Parameter \\#1 \\$json of function json_decode expects string, array\\<Enlight_Config\\|SwagImportExport\\\\Components\\\\Profile\\\\Profile\\|SwagImportExport\\\\CustomModels\\\\Expression\\>\\|string given\\.$#"
 			count: 1
 			path: Components/Service/AbstractImportExportService.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Service\\\\AutoImportService\\:\\:flagCronAsRunning\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Service/AutoImportService.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Service\\\\AutoImportService\\:\\:getFiles\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Service/AutoImportService.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Service\\\\AutoImportService\\:\\:importFiles\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Service/AutoImportService.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Service\\\\AutoImportService\\:\\:importFiles\\(\\) has parameter \\$files with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Service/AutoImportService.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Service\\\\AutoImportService\\:\\:runAutoImport\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Components/Service/AutoImportService.php
 
@@ -1331,43 +1276,8 @@ parameters:
 			path: Components/Service/AutoImportService.php
 
 		-
-			message: "#^Strict comparison using \\=\\=\\= between array and false will always evaluate to false\\.$#"
-			count: 1
-			path: Components/Service/AutoImportService.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Service\\\\AutoImportServiceInterface\\:\\:runAutoImport\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Service/AutoImportServiceInterface.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Service\\\\ExportService\\:\\:export\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Service/ExportService.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Service\\\\ExportService\\:\\:prepareFilter\\(\\) has parameter \\$filterParams with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Service/ExportService.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Service\\\\ExportService\\:\\:prepareFilter\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Service/ExportService.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Service\\\\ExportServiceInterface\\:\\:export\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Service/ExportServiceInterface.php
-
-		-
 			message: "#^Call to an undefined method SwagImportExport\\\\Components\\\\Session\\\\Session\\:\\:getTotalCount\\(\\)\\.$#"
 			count: 2
-			path: Components/Service/ImportService.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Service\\\\ImportService\\:\\:afterImport\\(\\) has no return type specified\\.$#"
-			count: 1
 			path: Components/Service/ImportService.php
 
 		-
@@ -1376,34 +1286,9 @@ parameters:
 			path: Components/Service/ImportService.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Service\\\\ImportService\\:\\:import\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Service/ImportService.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Service\\\\ImportService\\:\\:processData\\(\\) has parameter \\$unprocessedFiles with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Service/ImportService.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Service\\\\ImportService\\:\\:processData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Service/ImportService.php
-
-		-
-			message: "#^Parameter \\#2 \\.\\.\\.\\$args of function array_merge expects array, array\\|true given\\.$#"
-			count: 1
-			path: Components/Service/ImportService.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Service\\\\ImportServiceInterface\\:\\:import\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Service/ImportServiceInterface.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Service\\\\ProfileService\\:\\:importProfile\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Service/ProfileService.php
 
 		-
 			message: "#^Parameter \\#1 \\$message of class Exception constructor expects string, Enlight_Plugin_Bootstrap\\|Enlight_Plugin_Namespace\\|null given\\.$#"
@@ -1421,11 +1306,6 @@ parameters:
 			path: Components/Service/ProfileService.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Service\\\\ProfileServiceInterface\\:\\:importProfile\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Service/ProfileServiceInterface.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Service\\\\Struct\\\\ProfileDataStruct\\:\\:asArray\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Service/Struct/ProfileDataStruct.php
@@ -1436,7 +1316,7 @@ parameters:
 			path: Components/Service/Struct/ProfileDataStruct.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Service\\\\Struct\\\\ProfileDataStruct\\:\\:getTree\\(\\) has no return type specified\\.$#"
+			message: "#^Method SwagImportExport\\\\Components\\\\Service\\\\Struct\\\\ProfileDataStruct\\:\\:getTree\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Service/Struct/ProfileDataStruct.php
 
