@@ -21,7 +21,7 @@ class ArticleImageUrlProfileTest extends TestCase
     use DatabaseTestCaseTrait;
     use ContainerTrait;
 
-    public function testImportShouldAddNewImageToArticle()
+    public function testImportShouldAddNewImageToArticle(): void
     {
         $imagePath = 'file://' . \realpath(__DIR__) . '/../../../Helper/ImportFiles/sw-icon_blue128.png';
         $importFile = $this->getImportFile('article_image_url_create.csv');

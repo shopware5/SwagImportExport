@@ -14,7 +14,7 @@ use SwagImportExport\Components\Validators\NewsletterValidator;
 
 class NewsletterValidatorTest extends TestCase
 {
-    public function testCheckRequiredFieldsThrowsExceptionWithEmptyRecordArray()
+    public function testCheckRequiredFieldsThrowsExceptionWithEmptyRecordArray(): void
     {
         $newsletterValidator = $this->createNewsletterValidator();
 
@@ -23,7 +23,7 @@ class NewsletterValidatorTest extends TestCase
         $newsletterValidator->checkRequiredFields([]);
     }
 
-    public function testCheckRequiredFieldsThrowsExceptionWithEmptyEmailAddress()
+    public function testCheckRequiredFieldsThrowsExceptionWithEmptyEmailAddress(): void
     {
         $newsletterValidator = $this->createNewsletterValidator();
         $record = [
@@ -35,10 +35,7 @@ class NewsletterValidatorTest extends TestCase
         $newsletterValidator->checkRequiredFields($record);
     }
 
-    /**
-     * @return NewsletterValidator
-     */
-    private function createNewsletterValidator()
+    private function createNewsletterValidator(): NewsletterValidator
     {
         return new NewsletterValidator();
     }

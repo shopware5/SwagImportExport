@@ -18,10 +18,7 @@ class DataIOTest extends ImportExportTestHelper
 {
     use ContainerTrait;
 
-    /**
-     * @return array
-     */
-    public function getPostData()
+    public function getPostData(): array
     {
         return [
             'adapter' => 'categories',
@@ -34,7 +31,7 @@ class DataIOTest extends ImportExportTestHelper
         ];
     }
 
-    public function testPreloadRecordIds()
+    public function testPreloadRecordIds(): void
     {
         $postData = $this->getPostData();
         $postData['limit'] = [];
@@ -56,7 +53,7 @@ class DataIOTest extends ImportExportTestHelper
         static::assertCount(62, $allIds);
     }
 
-    public function testGenerateDirectory()
+    public function testGenerateDirectory(): void
     {
         $postData = $this->getPostData();
 
@@ -70,10 +67,7 @@ class DataIOTest extends ImportExportTestHelper
         static::assertDirectoryExists($directory);
     }
 
-    /**
-     * @return Logger
-     */
-    private function getLogger()
+    private function getLogger(): Logger
     {
         return $this->getContainer()->get(Logger::class);
     }

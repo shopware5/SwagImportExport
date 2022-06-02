@@ -16,7 +16,7 @@ class TranslationProfileTest extends TestCase
 {
     use DefaultProfileTestCaseTrait;
 
-    public function testItCanBeCreated()
+    public function testItCanBeCreated(): void
     {
         $translationProfile = new TranslationProfile();
 
@@ -25,11 +25,11 @@ class TranslationProfileTest extends TestCase
         static::assertInstanceOf(ProfileMetaData::class, $translationProfile);
     }
 
-    public function testItShouldReturnValidProfile()
+    public function testItShouldReturnValidProfile(): void
     {
         $translationProfile = new TranslationProfile();
 
-        $this->walkRecursive($translationProfile->jsonSerialize(), function ($node) {
+        $this->walkRecursive($translationProfile->jsonSerialize(), function ($node): void {
             $this->assertArrayHasKey('id', $node, 'Current array: ' . \print_r($node, true));
             $this->assertArrayHasKey('type', $node, 'Current array: ' . \print_r($node, true));
             $this->assertArrayHasKey('name', $node, 'Current array: ' . \print_r($node, true));

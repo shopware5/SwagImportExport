@@ -35,7 +35,7 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
     }
 
-    public function testArticleXmlExport()
+    public function testArticleXmlExport(): void
     {
         $params = $this->getExportRequestParams();
 
@@ -61,7 +61,7 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
         $this->assertArticleAttributeInXml($file, 'SW10009', 'supplier', 'Feinbrennerei Sasse');
     }
 
-    public function testArticleCsvExport()
+    public function testArticleCsvExport(): void
     {
         $params = $this->getExportRequestParams();
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::ARTICLE_PROFILE_TYPE);
@@ -87,7 +87,7 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertEquals('Feinbrennerei Sasse', $exportedArticles['SW10009']['supplier']);
     }
 
-    public function testArticleXmlExportWithLimit()
+    public function testArticleXmlExportWithLimit(): void
     {
         $limit = 10;
 
@@ -110,7 +110,7 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertEquals($limit, $articleList->length);
     }
 
-    public function testArticleCsvExportWithLimit()
+    public function testArticleCsvExportWithLimit(): void
     {
         $limit = 10;
 
@@ -133,7 +133,7 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertCount($limit, $mappedArticleList);
     }
 
-    public function testArticleXmlExportWithOffset210()
+    public function testArticleXmlExportWithOffset210(): void
     {
         $offset = 210;
 
@@ -156,7 +156,7 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertEquals(15, $articleListWithOffset->length);
     }
 
-    public function testArticleCsvExportWithOffset210()
+    public function testArticleCsvExportWithOffset210(): void
     {
         $offset = 210;
 
@@ -179,7 +179,7 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertCount(15, $mappedArticleList);
     }
 
-    public function testArticleXmlExportWithCategoryFilter()
+    public function testArticleXmlExportWithCategoryFilter(): void
     {
         $categoryId = self::CATEGORY_ID_VINTAGE;
 
@@ -203,7 +203,7 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertEquals(10, $articleDomNodeList->length);
     }
 
-    public function testArticleCsvExportWithCategoryFilter()
+    public function testArticleCsvExportWithCategoryFilter(): void
     {
         $categoryId = self::CATEGORY_ID_VINTAGE;
 
@@ -226,7 +226,7 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertCount(10, $mappedArticleList);
     }
 
-    public function testProductXmlExportWithProductStreamFilter()
+    public function testProductXmlExportWithProductStreamFilter(): void
     {
         $productStreamId = self::PRODUCT_STREAM_ID;
 
@@ -250,7 +250,7 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertEquals(12, $productList->length);
     }
 
-    public function testProductCsvExportWithProductStreamFilter()
+    public function testProductCsvExportWithProductStreamFilter(): void
     {
         $productStreamId = self::PRODUCT_STREAM_ID;
 
@@ -274,7 +274,7 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertCount(12, $mappedProductList);
     }
 
-    public function testVariantXmlExport()
+    public function testVariantXmlExport(): void
     {
         $exportVariants = 'true';
 
@@ -297,7 +297,7 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertEquals(3, $variantList->length);
     }
 
-    public function testVariantCsvExport()
+    public function testVariantCsvExport(): void
     {
         $exportVariants = 'true';
 
@@ -324,7 +324,7 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertEquals('1,5 Liter', $mappedArticleList['SW10002.1']['additionalText']);
     }
 
-    public function testVariantXmlExportWithLimit()
+    public function testVariantXmlExportWithLimit(): void
     {
         $exportVariants = 'true';
         $limit = 10;
@@ -349,7 +349,7 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertEquals($limit, $variantListWithLimit->length);
     }
 
-    public function testVariantCsvExportWithLimit()
+    public function testVariantCsvExportWithLimit(): void
     {
         $limit = 10;
 
@@ -373,7 +373,7 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertCount($limit, $mappedArticleList);
     }
 
-    public function testVariantXmlExportWithOffset()
+    public function testVariantXmlExportWithOffset(): void
     {
         $variants = 'true';
         $offset = '380';
@@ -398,7 +398,7 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertEquals(20, $variantsNodeListWithOffset->length);
     }
 
-    public function testVariantCsvExportWithOffset()
+    public function testVariantCsvExportWithOffset(): void
     {
         $exportVariants = 'true';
         $offset = '380';
@@ -423,7 +423,7 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertCount(20, $mappedVariantList);
     }
 
-    public function testVariantXmlExportWithCategoryFilter()
+    public function testVariantXmlExportWithCategoryFilter(): void
     {
         $exportVariants = 'true';
         $categoryId = self::CATEGORY_ID_VINTAGE;
@@ -449,7 +449,7 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertEquals(10, $variantNodeListWithCategoryFilter->length);
     }
 
-    public function testVariantCsvExportWithCategoryFilter()
+    public function testVariantCsvExportWithCategoryFilter(): void
     {
         $exportVariants = 'true';
         $categoryId = self::CATEGORY_ID_VINTAGE;
@@ -474,17 +474,14 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertCount(10, $mappedVariantList);
     }
 
-    private function assertArticleAttributeInXml(string $filePath, string $orderNumber, string $attribute, string $expected)
+    private function assertArticleAttributeInXml(string $filePath, string $orderNumber, string $attribute, string $expected): void
     {
         $articleDomNodeList = $this->queryXpath($filePath, "//article[ordernumber='{$orderNumber}']/{$attribute}");
         $nodeValue = $articleDomNodeList->item(0)->nodeValue;
         static::assertEquals($expected, $nodeValue);
     }
 
-    /**
-     * @return array
-     */
-    private function readCsvIndexedByOrdernumber(string $file)
+    private function readCsvIndexedByOrdernumber(string $file): array
     {
         return $this->csvToArrayIndexedByFieldValue($file, 'ordernumber');
     }

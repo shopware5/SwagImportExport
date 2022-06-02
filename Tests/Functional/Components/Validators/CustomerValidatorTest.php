@@ -14,15 +14,12 @@ use SwagImportExport\Components\Validators\CustomerValidator;
 
 class CustomerValidatorTest extends TestCase
 {
-    /**
-     * @return CustomerValidator
-     */
-    public function createCustomerValidator()
+    public function createCustomerValidator(): CustomerValidator
     {
         return new CustomerValidator();
     }
 
-    public function testValidatorWithEmptyRecord()
+    public function testValidatorWithEmptyRecord(): void
     {
         $customerValidator = $this->createCustomerValidator();
 
@@ -31,7 +28,7 @@ class CustomerValidatorTest extends TestCase
         $customerValidator->checkRequiredFields([]);
     }
 
-    public function testValidatorWithoutPasswordThrowsException()
+    public function testValidatorWithoutPasswordThrowsException(): void
     {
         $customerValidator = new CustomerValidator();
 
@@ -40,7 +37,7 @@ class CustomerValidatorTest extends TestCase
         $customerValidator->checkRequiredFieldsForCreate([]);
     }
 
-    public function testValidatorWithoutPasswordAndGivenUnhashedThrowsException()
+    public function testValidatorWithoutPasswordAndGivenUnhashedThrowsException(): void
     {
         $customerValidator = new CustomerValidator();
 
@@ -54,7 +51,7 @@ class CustomerValidatorTest extends TestCase
         );
     }
 
-    public function testValidatorWithoutCustomerGroupThrowsException()
+    public function testValidatorWithoutCustomerGroupThrowsException(): void
     {
         $customerValidator = new CustomerValidator();
 
@@ -70,7 +67,7 @@ class CustomerValidatorTest extends TestCase
         );
     }
 
-    public function testValidatorWithoutBillingSalutationThrowsException()
+    public function testValidatorWithoutBillingSalutationThrowsException(): void
     {
         $customerValidator = new CustomerValidator();
 
@@ -87,7 +84,7 @@ class CustomerValidatorTest extends TestCase
         );
     }
 
-    public function testValidatorWithoutBillingFirstNameThrowsException()
+    public function testValidatorWithoutBillingFirstNameThrowsException(): void
     {
         $customerValidator = new CustomerValidator();
 
@@ -105,7 +102,7 @@ class CustomerValidatorTest extends TestCase
         );
     }
 
-    public function testValidatorWithoutBillingLastNameThrowsException()
+    public function testValidatorWithoutBillingLastNameThrowsException(): void
     {
         $customerValidator = new CustomerValidator();
 
@@ -124,7 +121,7 @@ class CustomerValidatorTest extends TestCase
         );
     }
 
-    public function testValidatorWithoutBillingStreetThrowsException()
+    public function testValidatorWithoutBillingStreetThrowsException(): void
     {
         $customerValidator = new CustomerValidator();
 
@@ -144,7 +141,7 @@ class CustomerValidatorTest extends TestCase
         );
     }
 
-    public function testValidatorWithoutBillingZipCodeThrowsException()
+    public function testValidatorWithoutBillingZipCodeThrowsException(): void
     {
         $customerValidator = new CustomerValidator();
 
@@ -165,7 +162,7 @@ class CustomerValidatorTest extends TestCase
         );
     }
 
-    public function testValidatorWithoutBillingCityThrowsException()
+    public function testValidatorWithoutBillingCityThrowsException(): void
     {
         $customerValidator = new CustomerValidator();
 
@@ -187,7 +184,7 @@ class CustomerValidatorTest extends TestCase
         );
     }
 
-    public function testValidatorWithoutBillingCountryIdThrowsException()
+    public function testValidatorWithoutBillingCountryIdThrowsException(): void
     {
         $customerValidator = new CustomerValidator();
 

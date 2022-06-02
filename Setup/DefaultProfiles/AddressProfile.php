@@ -39,7 +39,7 @@ class AddressProfile implements ProfileMetaData, \JsonSerializable
     /**
      * {@inheritdoc}
      */
-    public function jsonSerialize(): \JsonSerializable
+    public function jsonSerialize()
     {
         return [
             'id' => 'root',

@@ -6,19 +6,23 @@
  * file that was distributed with this source code.
  */
 
+namespace SwagImportExport\Tests\Functional\Components\Transformers;
+
 use PHPUnit\Framework\TestCase;
 use SwagImportExport\Components\Transformers\ExpressionEvaluator;
 use SwagImportExport\Components\Transformers\SmartyExpressionEvaluator;
 use SwagImportExport\Components\Transformers\ValuesTransformer;
+use SwagImportExport\CustomModels\Expression;
 
 class ValuesTransformerTest extends TestCase
 {
     /**
      * @dataProvider transform_test_dataProvider
+     *
      * @param array<string, mixed>|null $data
      * @param array<string, mixed>|null $expectedResult
      */
-    public function testTransform(?string $type, ?array $data, bool $expectException = false, ?array $expectedResult = null, ?ExpressionEvaluator $evaluator = null)
+    public function testTransform(?string $type, ?array $data, bool $expectException = false, ?array $expectedResult = null, ?ExpressionEvaluator $evaluator = null): void
     {
         $transformer = $this->getValuesTransformer($evaluator);
 
@@ -36,9 +40,9 @@ class ValuesTransformerTest extends TestCase
     }
 
     /**
-     * @return array
+     * @return array<array<mixed>>
      */
-    public function transform_test_dataProvider()
+    public function transform_test_dataProvider(): array
     {
         $data = [
             [['testVar' => 'someValue'], ['otherTestVar' => 'someValue']],
@@ -63,15 +67,12 @@ class ValuesTransformerTest extends TestCase
         ];
     }
 
-    /**
-     * @return ValuesTransformer
-     */
-    private function getValuesTransformer(?ExpressionEvaluator $evaluator)
+    private function getValuesTransformer(?ExpressionEvaluator $evaluator): ValuesTransformer
     {
-        $expression1 = new \SwagImportExport\CustomModels\Expression();
+        $expression1 = new Expression();
         $expression1->fromArray(['id' => 1, 'variable' => 'testVar', 'importConversion' => 'importConversion', 'exportConversion' => 'exportConversion']);
 
-        $expression2 = new \SwagImportExport\CustomModels\Expression();
+        $expression2 = new Expression();
         $expression2->fromArray(['id' => 2, 'variable' => 'otherTestVar', 'importConversion' => 'importConversion1', 'exportConversion' => 'exportConversion1']);
 
         $config['evaluator'] = $evaluator;

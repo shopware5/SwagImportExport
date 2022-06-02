@@ -26,10 +26,7 @@ class BackendControllerTestHelper
         }
     }
 
-    /**
-     * @return int
-     */
-    public function getProfileIdByType(string $type)
+    public function getProfileIdByType(string $type): int
     {
         $profileDataProvider = new ProfileDataProvider(
             Shopware()->Container()->get('dbal_connection')
@@ -38,7 +35,7 @@ class BackendControllerTestHelper
         return $profileDataProvider->getProfileId($type);
     }
 
-    public function addFile(string $file)
+    public function addFile(string $file): void
     {
         $this->files[] = $file;
     }

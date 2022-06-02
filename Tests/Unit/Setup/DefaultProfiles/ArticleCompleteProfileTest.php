@@ -16,7 +16,7 @@ class ArticleCompleteProfileTest extends TestCase
 {
     use DefaultProfileTestCaseTrait;
 
-    public function testItCanBeCreated()
+    public function testItCanBeCreated(): void
     {
         $articleProfile = new ArticleCompleteProfile();
 
@@ -25,21 +25,18 @@ class ArticleCompleteProfileTest extends TestCase
         static::assertInstanceOf(\JsonSerializable::class, $articleProfile);
     }
 
-    public function testItShouldReturnValidProfileTree()
+    public function testItShouldReturnValidProfileTree(): void
     {
         $articleAllProfile = $this->createArticleAllProfile();
 
-        $this->walkRecursive($articleAllProfile->jsonSerialize(), function ($node) {
+        $this->walkRecursive($articleAllProfile->jsonSerialize(), function ($node): void {
             $this->assertArrayHasKey('id', $node, 'Current array: ' . \print_r($node, true));
             $this->assertArrayHasKey('name', $node, 'Current array: ' . \print_r($node, true));
             $this->assertArrayHasKey('type', $node, 'Current array: ' . \print_r($node, true));
         });
     }
 
-    /**
-     * @return ArticleCompleteProfile
-     */
-    private function createArticleAllProfile()
+    private function createArticleAllProfile(): ArticleCompleteProfile
     {
         return new ArticleCompleteProfile();
     }

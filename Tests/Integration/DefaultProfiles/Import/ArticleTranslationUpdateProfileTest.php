@@ -21,7 +21,7 @@ class ArticleTranslationUpdateProfileTest extends TestCase
     use DatabaseTestCaseTrait;
     use ContainerTrait;
 
-    public function testImportShouldUpdateExistingArticleTranslation()
+    public function testImportShouldUpdateExistingArticleTranslation(): void
     {
         $filePath = __DIR__ . '/_fixtures/article_translation_profile_update.csv';
         $expectedArticleName = 'Munsterland Aperitif 16% Super deluxe';

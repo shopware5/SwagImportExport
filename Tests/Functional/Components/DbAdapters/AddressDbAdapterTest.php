@@ -28,7 +28,7 @@ class AddressDbAdapterTest extends TestCase
     public const NOT_EXISTING_USERID = 999999;
     public const STATE_ID_ALABAMA = 20;
 
-    public function testItCanBeCreated()
+    public function testItCanBeCreated(): void
     {
         $addressDbAdapter = $this->getAddressDbAdapter();
 
@@ -36,7 +36,7 @@ class AddressDbAdapterTest extends TestCase
         static::assertInstanceOf(DataDbAdapter::class, $addressDbAdapter);
     }
 
-    public function testReadRecordIdsShouldReturnIds()
+    public function testReadRecordIdsShouldReturnIds(): void
     {
         $allAddressIdsInDatabase = [1, 2, 3, 4];
         $addressDbAdapter = $this->getAddressDbAdapter();
@@ -46,7 +46,7 @@ class AddressDbAdapterTest extends TestCase
         static::assertEquals($allAddressIdsInDatabase, $addressIds);
     }
 
-    public function testReadRecordIdsWithStartShouldReturnTwoIds()
+    public function testReadRecordIdsWithStartShouldReturnTwoIds(): void
     {
         $fetchedAmountOfIds = 2;
         $firstResult = 2;
@@ -57,7 +57,7 @@ class AddressDbAdapterTest extends TestCase
         static::assertCount($fetchedAmountOfIds, $addressIds);
     }
 
-    public function testReadRecordIdsWithLimitShouldReturnTwoIds()
+    public function testReadRecordIdsWithLimitShouldReturnTwoIds(): void
     {
         $fetchedAmountOfIds = 2;
         $limit = 2;
@@ -68,7 +68,7 @@ class AddressDbAdapterTest extends TestCase
         static::assertCount($fetchedAmountOfIds, $addressIds);
     }
 
-    public function testReadShouldReturnAddressesByIdsAndSelectGivenColumns()
+    public function testReadShouldReturnAddressesByIdsAndSelectGivenColumns(): void
     {
         $addressIdsToFetch = [1, 2];
         $selectedColumns = ['address.company', 'address.firstname', 'address.lastname', 'customer.email'];
@@ -84,7 +84,7 @@ class AddressDbAdapterTest extends TestCase
         static::assertCount(2, $addresses);
     }
 
-    public function testReadShouldReturnAttributes()
+    public function testReadShouldReturnAttributes(): void
     {
         $connection = $this->getContainer()->get('dbal_connection');
         $sql = \file_get_contents(__DIR__ . '/_fixtures/address_attribute_demo.sql');
@@ -101,7 +101,7 @@ class AddressDbAdapterTest extends TestCase
         static::assertEquals('Attr value', $addresses[0]['text1']);
     }
 
-    public function testWriteShouldCreateNewAddressWithAllRequiredFields()
+    public function testWriteShouldCreateNewAddressWithAllRequiredFields(): void
     {
         $addresses = [
             'address' => [
@@ -125,7 +125,7 @@ class AddressDbAdapterTest extends TestCase
         $this->assertAddress($createdAddresses);
     }
 
-    public function testWriteShouldIdentifyCustomerByEmailAndCustomernumber()
+    public function testWriteShouldIdentifyCustomerByEmailAndCustomernumber(): void
     {
         $addresses = [
             'address' => [
@@ -150,7 +150,7 @@ class AddressDbAdapterTest extends TestCase
         $this->assertAddress($createdAddresses);
     }
 
-    public function testWriteShouldIdentifyCustomerByEmailAndCustomernumberIfAnInvalidIdWasGiven()
+    public function testWriteShouldIdentifyCustomerByEmailAndCustomernumberIfAnInvalidIdWasGiven(): void
     {
         $addresses = [
             'address' => [
@@ -176,7 +176,7 @@ class AddressDbAdapterTest extends TestCase
         $this->assertAddress($createdAddresses);
     }
 
-    public function testWriteShouldUpdateExistingAddress()
+    public function testWriteShouldUpdateExistingAddress(): void
     {
         $connection = $this->getContainer()->get('dbal_connection');
         $demoSQL = \file_get_contents(__DIR__ . '/_fixtures/address_demo.sql');
@@ -210,7 +210,7 @@ class AddressDbAdapterTest extends TestCase
         $this->assertAddress($createdAddresses);
     }
 
-    public function testWriteShouldImportVatId()
+    public function testWriteShouldImportVatId(): void
     {
         $addresses = [
             'address' => [
@@ -236,7 +236,7 @@ class AddressDbAdapterTest extends TestCase
         static::assertEquals('My VatId', $createdAddresses[0]['ustid']);
     }
 
-    public function testWriteShouldImportAdditionalAddressLines()
+    public function testWriteShouldImportAdditionalAddressLines(): void
     {
         $addresses = [
             'address' => [
@@ -264,7 +264,7 @@ class AddressDbAdapterTest extends TestCase
         static::assertEquals('My additional address2', $createdAddresses[0]['additional_address_line2']);
     }
 
-    public function testWriteShouldImportAttributes()
+    public function testWriteShouldImportAttributes(): void
     {
         $addresses = [
             'address' => [
@@ -292,7 +292,7 @@ class AddressDbAdapterTest extends TestCase
         static::assertEquals('text2', $createdAttribute[0]['text2']);
     }
 
-    public function testWriteShouldCreateAddressWithGivenId()
+    public function testWriteShouldCreateAddressWithGivenId(): void
     {
         $addresses = [
             'address' => [
@@ -319,7 +319,7 @@ class AddressDbAdapterTest extends TestCase
         static::assertEquals(99999, $addressId);
     }
 
-    public function testGetColumnsShouldGetAllRequiredColumns()
+    public function testGetColumnsShouldGetAllRequiredColumns(): void
     {
         $addressDbAdapter = $this->getAddressDbAdapter();
         $columns = $addressDbAdapter->getColumns();
@@ -341,7 +341,7 @@ class AddressDbAdapterTest extends TestCase
         static::assertContains('customer.id as userID', $columns);
     }
 
-    public function testGetColumnsShouldGetAttributeColumns()
+    public function testGetColumnsShouldGetAttributeColumns(): void
     {
         $addressDbAdapter = $this->getAddressDbAdapter();
         $columns = $addressDbAdapter->getColumns();
@@ -350,7 +350,7 @@ class AddressDbAdapterTest extends TestCase
         static::assertContains('attribute.text2 as attributeText2', $columns);
     }
 
-    public function testWriteShouldThrowExceptionIfNoAddressesWereGiven()
+    public function testWriteShouldThrowExceptionIfNoAddressesWereGiven(): void
     {
         $addressDbAdapter = $this->getAddressDbAdapter();
 
@@ -358,7 +358,7 @@ class AddressDbAdapterTest extends TestCase
         $addressDbAdapter->write([]);
     }
 
-    public function testWriteShouldThrowExceptionIfCustomerDoesNotEixst()
+    public function testWriteShouldThrowExceptionIfCustomerDoesNotEixst(): void
     {
         $addresses = [
             'address' => [
@@ -380,7 +380,7 @@ class AddressDbAdapterTest extends TestCase
         $addressDbAdapter->write($addresses);
     }
 
-    public function testWriteShouldUpdateState()
+    public function testWriteShouldUpdateState(): void
     {
         $connection = $this->getContainer()->get('dbal_connection');
         $sql = \file_get_contents(__DIR__ . '/_fixtures/address_with_state_demo.sql');
@@ -412,7 +412,7 @@ class AddressDbAdapterTest extends TestCase
         static::assertEquals(self::STATE_ID_ALABAMA, $updateAddress[0]['state_id']);
     }
 
-    public function testWriteShouldThrowExceptionIfStateIDWasNotFound()
+    public function testWriteShouldThrowExceptionIfStateIDWasNotFound(): void
     {
         $addresses = [
             'address' => [
@@ -435,10 +435,7 @@ class AddressDbAdapterTest extends TestCase
         $addressDbAdapter->write($addresses);
     }
 
-    /**
-     * @return AddressDbAdapter
-     */
-    private function getAddressDbAdapter()
+    private function getAddressDbAdapter(): AddressDbAdapter
     {
         return $this->getContainer()->get(AddressDbAdapter::class);
     }
@@ -446,7 +443,7 @@ class AddressDbAdapterTest extends TestCase
     /**
      * @param array<int, array<string, mixed>> $createdAddresses
      */
-    private function assertAddress(array $createdAddresses)
+    private function assertAddress(array $createdAddresses): void
     {
         static::assertEquals('My firstname', $createdAddresses[0]['firstname']);
         static::assertEquals('My lastname', $createdAddresses[0]['lastname']);

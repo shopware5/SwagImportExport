@@ -19,7 +19,7 @@ class CategoriesDbAdapterTest extends TestCase
     use DatabaseTestCaseTrait;
     use ContainerTrait;
 
-    public function testWriteShouldThrowExceptionIfRecordsAreEmpty()
+    public function testWriteShouldThrowExceptionIfRecordsAreEmpty(): void
     {
         $categoriesDbAdapter = $this->getCategoriesDbAdapter();
 
@@ -28,7 +28,7 @@ class CategoriesDbAdapterTest extends TestCase
         $categoriesDbAdapter->write([]);
     }
 
-    public function testWriteShouldThrowExceptionIfParentCategoryDoesNotExist()
+    public function testWriteShouldThrowExceptionIfParentCategoryDoesNotExist(): void
     {
         $categoryRecords = ['default' => [
                 ['categoryId' => '123', 'name' => 'Category with invalid parent', 'parentId' => '123123'],
@@ -42,7 +42,7 @@ class CategoriesDbAdapterTest extends TestCase
         $categoriesDbAdapter->write($categoryRecords);
     }
 
-    public function testWriteShouldNotIncrementIdOnCreationWhenIdIsGiven()
+    public function testWriteShouldNotIncrementIdOnCreationWhenIdIsGiven(): void
     {
         $categoryRecords = ['default' => [
                 ['categoryId' => '99999', 'name' => 'New Category', 'parentId' => '3'],
@@ -62,7 +62,7 @@ class CategoriesDbAdapterTest extends TestCase
         static::assertEquals($categoryRecords['default'][1]['categoryId'], $createdCategory2[0]['id']);
     }
 
-    public function testWriteShouldThrowExceptionIfCategoryHasNoId()
+    public function testWriteShouldThrowExceptionIfCategoryHasNoId(): void
     {
         $categoryRecords = ['default' => [
                 ['name' => 'New Category', 'parentId' => '3'],
@@ -75,10 +75,7 @@ class CategoriesDbAdapterTest extends TestCase
         $categoriesDbAdapter->write($categoryRecords);
     }
 
-    /**
-     * @return CategoriesDbAdapter
-     */
-    private function getCategoriesDbAdapter()
+    private function getCategoriesDbAdapter(): CategoriesDbAdapter
     {
         return $this->getContainer()->get(CategoriesDbAdapter::class);
     }

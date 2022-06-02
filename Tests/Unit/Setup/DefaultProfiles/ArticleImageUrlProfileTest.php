@@ -15,21 +15,18 @@ class ArticleImageUrlProfileTest extends TestCase
 {
     use DefaultProfileTestCaseTrait;
 
-    public function testItShouldReturnValidProfileTree()
+    public function testItShouldReturnValidProfileTree(): void
     {
         $articleImageUrlProfile = $this->createArticleImageUrlProfile();
 
-        $this->walkRecursive($articleImageUrlProfile->jsonSerialize(), function ($node) {
+        $this->walkRecursive($articleImageUrlProfile->jsonSerialize(), function ($node): void {
             $this->assertArrayHasKey('id', $node, 'Current array: ' . \print_r($node, true));
             $this->assertArrayHasKey('name', $node, 'Current array: ' . \print_r($node, true));
             $this->assertArrayHasKey('type', $node, 'Current array: ' . \print_r($node, true));
         });
     }
 
-    /**
-     * @return ArticleImageUrlProfile
-     */
-    private function createArticleImageUrlProfile()
+    private function createArticleImageUrlProfile(): ArticleImageUrlProfile
     {
         return new ArticleImageUrlProfile();
     }

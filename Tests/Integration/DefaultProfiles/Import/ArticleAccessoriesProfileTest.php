@@ -21,7 +21,7 @@ class ArticleAccessoriesProfileTest extends TestCase
     use DatabaseTestCaseTrait;
     use ContainerTrait;
 
-    public function testShouldWriteAssertNewArticleAsseccory()
+    public function testShouldWriteAssertNewArticleAsseccory(): void
     {
         $filePath = __DIR__ . '/_fixtures/article_accessories_profile.csv';
         $expectedOrderNumber = 'SW10003';

@@ -19,7 +19,7 @@ class ArticleInStockDbAdapterTest extends TestCase
     use DatabaseTestCaseTrait;
     use ContainerTrait;
 
-    public function testWriteShouldUpdateArticleStock()
+    public function testWriteShouldUpdateArticleStock(): void
     {
         $articleInStockDbAdapter = $this->createArticlesInStockAbAdapter();
         $updateInStockRecord = [
@@ -39,7 +39,7 @@ class ArticleInStockDbAdapterTest extends TestCase
         static::assertEquals(3, $updatedArticleInStock[0]['instock']);
     }
 
-    public function testWriteWithInvalidOrderNumberThrowsException()
+    public function testWriteWithInvalidOrderNumberThrowsException(): void
     {
         $articleInStockDbAdapter = $this->createArticlesInStockAbAdapter();
         $updateInStockRecord = [
@@ -56,7 +56,7 @@ class ArticleInStockDbAdapterTest extends TestCase
         $articleInStockDbAdapter->write($updateInStockRecord);
     }
 
-    public function testReadAndReadRecordsShouldGetSameResultCount()
+    public function testReadAndReadRecordsShouldGetSameResultCount(): void
     {
         $articleInStockDbAdapter = $this->createArticlesInStockAbAdapter();
         $filter = [
@@ -69,7 +69,7 @@ class ArticleInStockDbAdapterTest extends TestCase
         static::assertCount(\count($preparedExportData), $exportedData['default']);
     }
 
-    public function testRead()
+    public function testRead(): void
     {
         $articleInStockDbAdapter = $this->createArticlesInStockAbAdapter();
         $ids = [3];
@@ -85,7 +85,7 @@ class ArticleInStockDbAdapterTest extends TestCase
         static::assertArrayHasKey('tax', $result['default'][0], 'Could not fetch tax rate.');
     }
 
-    public function testReadShouldThrowExceptionIfIdsAreEmpty()
+    public function testReadShouldThrowExceptionIfIdsAreEmpty(): void
     {
         $articleInStockDbAdapter = $this->createArticlesInStockAbAdapter();
         $columns = ['variant.number as orderNumber'];
@@ -96,10 +96,7 @@ class ArticleInStockDbAdapterTest extends TestCase
         $articleInStockDbAdapter->read($ids, $columns);
     }
 
-    /**
-     * @return ArticlesInStockDbAdapter
-     */
-    private function createArticlesInStockAbAdapter()
+    private function createArticlesInStockAbAdapter(): ArticlesInStockDbAdapter
     {
         return $this->getContainer()->get(ArticlesInStockDbAdapter::class);
     }
@@ -107,7 +104,7 @@ class ArticleInStockDbAdapterTest extends TestCase
     /**
      * @return array<string>
      */
-    private function getReadColumns()
+    private function getReadColumns(): array
     {
         return [
             'variant.number as orderNumber',

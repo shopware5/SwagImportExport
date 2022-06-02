@@ -21,7 +21,7 @@ class CustomersProfileTest extends TestCase
     use DatabaseTestCaseTrait;
     use ContainerTrait;
 
-    public function testImportShouldUpdateCustomerShippingAddress()
+    public function testImportShouldUpdateCustomerShippingAddress(): void
     {
         $filePath = __DIR__ . '/_fixtures/customers_profile.csv';
         $expectedCity = 'New Shipping City';

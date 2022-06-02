@@ -21,7 +21,7 @@ class ArticleSimilarsProfileTest extends TestCase
     use DatabaseTestCaseTrait;
     use ContainerTrait;
 
-    public function testWriteShouldAssertNewSimilarArticle()
+    public function testWriteShouldAssertNewSimilarArticle(): void
     {
         $filePath = __DIR__ . '/_fixtures/article_similars_profile.csv';
         $expectedOrderNumber = 'SW10003';

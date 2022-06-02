@@ -13,7 +13,7 @@ use SwagImportExport\Components\DataManagers\CustomerDataManager;
 class CustomerDataManagerMock extends CustomerDataManager
 {
     /**
-     * @return  array<string, array<string>>
+     * @return array<string, array<string>>
      */
     public function getDefaultFields(): array
     {

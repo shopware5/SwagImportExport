@@ -29,19 +29,17 @@ class FactoryTest extends ImportExportTestHelper
     /**
      * @return array<string, mixed>
      */
-    public function getPostData()
+    public function getPostData(): array
     {
-        $postData = [
+        return [
             'columnOptions' => 'id, parent, description, active',
             'filter' => [],
             'limit' => ['limit' => 50, 'offset' => 150],
             'max_record_count' => 100,
         ];
-
-        return $postData;
     }
 
-    public function testFactories()
+    public function testFactories(): void
     {
         $dataFactory = $this->getContainer()->get(DataFactory::class);
         static::assertInstanceOf(DataFactory::class, $dataFactory, 'Is not a instance of DataFactory');
@@ -50,7 +48,7 @@ class FactoryTest extends ImportExportTestHelper
         static::assertInstanceOf(FileIOFactory::class, $fileIOFactory, 'Is not a instance of DataFactory');
     }
 
-    public function testDbAdapters()
+    public function testDbAdapters(): void
     {
         $dataFactory = $this->getContainer()->get(DataFactory::class);
 
@@ -63,7 +61,7 @@ class FactoryTest extends ImportExportTestHelper
         static::assertInstanceOf(ArticlesDbAdapter::class, $articlesDbAdapter, 'Is not a instance of ArticlesDbAdapter');
     }
 
-    public function testUtils()
+    public function testUtils(): void
     {
         $dataFactory = $this->getContainer()->get(DataFactory::class);
         $postData = $this->getPostData();
@@ -78,7 +76,7 @@ class FactoryTest extends ImportExportTestHelper
         static::assertInstanceOf(DataFilter::class, $filter, 'Is not a instance of DataFilter');
     }
 
-    public function testFileIO()
+    public function testFileIO(): void
     {
         $fileIOFactory = $this->getContainer()->get(FileIOFactory::class);
 

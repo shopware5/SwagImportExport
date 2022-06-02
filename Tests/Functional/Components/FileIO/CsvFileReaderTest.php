@@ -17,7 +17,7 @@ class CsvFileReaderTest extends TestCase
     public const AMOUNT_OF_RECORDS_WITHOUT_EMPTY_LINE = 1;
     public const AMOUNT_OF_RECORDS_WITH_EMPTY_LINE = 1;
 
-    public function testReadRecordsWithCsvFileWithoutEmptyLineAtEndOfFile()
+    public function testReadRecordsWithCsvFileWithoutEmptyLineAtEndOfFile(): void
     {
         $expectedResult = [
             [
@@ -32,7 +32,7 @@ class CsvFileReaderTest extends TestCase
         static::assertEquals($expectedResult, $actualRows);
     }
 
-    public function testGetTotalCountWithoutEmptyLineAtTheEndOfFile()
+    public function testGetTotalCountWithoutEmptyLineAtTheEndOfFile(): void
     {
         $csvFileReader = $this->createCsvFileReader();
         $countOfRecords = $csvFileReader->getTotalCount(__DIR__ . '/_fixtures/without_empty_line_on_end.csv');
@@ -40,7 +40,7 @@ class CsvFileReaderTest extends TestCase
         static::assertEquals(self::AMOUNT_OF_RECORDS_WITHOUT_EMPTY_LINE, $countOfRecords);
     }
 
-    public function testGetTotalCountWithMultipleEmptyLinesAtTheEndOfFile()
+    public function testGetTotalCountWithMultipleEmptyLinesAtTheEndOfFile(): void
     {
         $csvFileReader = $this->createCsvFileReader();
         $countOfRecords = $csvFileReader->getTotalCount(__DIR__ . '/_fixtures/empty_lines_on_end.csv');
@@ -48,10 +48,7 @@ class CsvFileReaderTest extends TestCase
         static::assertEquals(self::AMOUNT_OF_RECORDS_WITH_EMPTY_LINE, $countOfRecords);
     }
 
-    /**
-     * @return CsvFileReader
-     */
-    private function createCsvFileReader()
+    private function createCsvFileReader(): CsvFileReader
     {
         $uploadPathProvider = new UploadPathProvider(Shopware()->DocPath());
 

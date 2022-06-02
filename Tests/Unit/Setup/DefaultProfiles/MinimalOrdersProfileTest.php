@@ -16,7 +16,7 @@ class MinimalOrdersProfileTest extends TestCase
 {
     use DefaultProfileTestCaseTrait;
 
-    public function testItCanBeCreated()
+    public function testItCanBeCreated(): void
     {
         $minimalOrdersProfile = $this->createMinimalOrdersProfile();
 
@@ -25,22 +25,19 @@ class MinimalOrdersProfileTest extends TestCase
         static::assertInstanceOf(ProfileMetaData::class, $minimalOrdersProfile);
     }
 
-    public function testItShouldReturnValidProfileTree()
+    public function testItShouldReturnValidProfileTree(): void
     {
         $minimalOrdersProfile = $this->createMinimalOrdersProfile();
 
         $profileTree = $minimalOrdersProfile->jsonSerialize();
-        $this->walkRecursive($profileTree, function ($node) {
+        $this->walkRecursive($profileTree, function ($node): void {
             $this->assertArrayHasKey('id', $node, 'Current array: ' . \print_r($node, true));
             $this->assertArrayHasKey('type', $node, 'Current array: ' . \print_r($node, true));
             $this->assertArrayHasKey('name', $node, 'Current array: ' . \print_r($node, true));
         });
     }
 
-    /**
-     * @return MinimalOrdersProfile
-     */
-    private function createMinimalOrdersProfile()
+    private function createMinimalOrdersProfile(): MinimalOrdersProfile
     {
         return new MinimalOrdersProfile();
     }

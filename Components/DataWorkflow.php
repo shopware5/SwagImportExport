@@ -47,6 +47,7 @@ class DataWorkflow
 
     /**
      * @param array<string, mixed> $postData
+     *
      * @return array<string, mixed>
      */
     public function export(array $postData, string $outputFileName = ''): array
@@ -122,6 +123,7 @@ class DataWorkflow
 
     /**
      * @param array<string, mixed> $postData
+     *
      * @return array<string, mixed>
      */
     public function import(array $postData, string $inputFile): array

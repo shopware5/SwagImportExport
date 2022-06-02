@@ -33,7 +33,7 @@ class ImportCommandTest extends TestCase
         $this->connection = $this->getContainer()->get('dbal_connection');
     }
 
-    public function testCustomerXmlImport()
+    public function testCustomerXmlImport(): void
     {
         $actualLineAmount = $this->getRowCountForTable(ProfileDataProvider::CUSTOMER_TABLE);
         $customerProfileName = 'default_customers';
@@ -50,7 +50,7 @@ class ImportCommandTest extends TestCase
         static::assertEquals($expectedImportedCustomersAmount, $importedCustomersAmount);
     }
 
-    public function testCustomerCsvImport()
+    public function testCustomerCsvImport(): void
     {
         $actualLineAmount = $this->getRowCountForTable(ProfileDataProvider::CUSTOMER_TABLE);
         $customerProfileName = 'default_customers';
@@ -67,7 +67,7 @@ class ImportCommandTest extends TestCase
         static::assertEquals($expectedImportedCustomersAmount, $importedCustomersAmount);
     }
 
-    public function testCategoryXmlImport()
+    public function testCategoryXmlImport(): void
     {
         $actualLineAmount = $this->getRowCountForTable(ProfileDataProvider::CATEGORY_TABLE);
         $categoryProfileName = 'default_categories';
@@ -84,7 +84,7 @@ class ImportCommandTest extends TestCase
         static::assertEquals($expectedImportedCategories, $importedCategoriesAmount);
     }
 
-    public function testCategoryCsvImport()
+    public function testCategoryCsvImport(): void
     {
         $actualLineAmount = $this->getRowCountForTable(ProfileDataProvider::CATEGORY_TABLE);
         $profile = 'default_categories';
@@ -101,7 +101,7 @@ class ImportCommandTest extends TestCase
         static::assertEquals($expectedImportedCategories, $importedCategoriesAmount);
     }
 
-    public function testNewsletterRecipientXmlImport()
+    public function testNewsletterRecipientXmlImport(): void
     {
         $actualLineAmount = $this->getRowCountForTable(ProfileDataProvider::NEWSLETTER_TABLE);
         $profile = 'default_newsletter_recipient';
@@ -118,7 +118,7 @@ class ImportCommandTest extends TestCase
         static::assertEquals($expectedImportedNewsletterRecipients, $importedNewsletterAmount);
     }
 
-    public function testNewsletterRecipientCsvImport()
+    public function testNewsletterRecipientCsvImport(): void
     {
         $actualLineAmount = $this->getRowCountForTable(ProfileDataProvider::NEWSLETTER_TABLE);
         $profile = 'default_newsletter_recipient';
@@ -135,7 +135,7 @@ class ImportCommandTest extends TestCase
         static::assertEquals($expectedImportedNewsletterRecipients, $importedNewsletterAmount);
     }
 
-    public function testArticleXmlImport()
+    public function testArticleXmlImport(): void
     {
         $actualLineAmount = $this->getRowCountForTable(ProfileDataProvider::ARTICLE_TABLE);
         $profile = 'default_articles';
@@ -152,7 +152,7 @@ class ImportCommandTest extends TestCase
         static::assertEquals($expectedImportedArticles, $importedArticlesAmount);
     }
 
-    public function testArticleCsvImport()
+    public function testArticleCsvImport(): void
     {
         $actualLineAmount = $this->getRowCountForTable(ProfileDataProvider::ARTICLE_TABLE);
         $profile = 'default_articles';
@@ -169,7 +169,7 @@ class ImportCommandTest extends TestCase
         static::assertEquals($expectedImportedArticles, $importedArticlesAmount);
     }
 
-    public function testVariantXmlImport()
+    public function testVariantXmlImport(): void
     {
         $actualLineAmount = $this->getRowCountForTable(ProfileDataProvider::VARIANT_TABLE);
         $profile = 'default_article_variants_minimal';
@@ -186,7 +186,7 @@ class ImportCommandTest extends TestCase
         static::assertEquals($expectedImportedVariants, $importedVariantsAmount);
     }
 
-    public function testVariantCsvImport()
+    public function testVariantCsvImport(): void
     {
         $actualLineAmount = $this->getRowCountForTable(ProfileDataProvider::VARIANT_TABLE);
         $profile = 'default_article_variants_minimal';
@@ -203,7 +203,7 @@ class ImportCommandTest extends TestCase
         static::assertEquals($expectedImportedVariants, $importedVariantsAmount, 'Expected 2 new rows in s_articles_details.');
     }
 
-    public function testArticleInStockXmlImport()
+    public function testArticleInStockXmlImport(): void
     {
         $profile = 'default_article_in_stock';
         $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'ArticleInStockImport.xml';
@@ -214,7 +214,7 @@ class ImportCommandTest extends TestCase
         static::assertEquals('Total count: 405.', $consoleOutput[3]);
     }
 
-    public function testArticleInStockCsvImport()
+    public function testArticleInStockCsvImport(): void
     {
         $profile = 'default_article_in_stock';
         $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'ArticleInStockImport.csv';
@@ -225,7 +225,7 @@ class ImportCommandTest extends TestCase
         static::assertEquals('Total count: 405.', $consoleOutput[3]);
     }
 
-    public function testArticlePriceXmlImport()
+    public function testArticlePriceXmlImport(): void
     {
         $profile = 'default_article_prices';
         $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'ArticlePricesImport.xml';
@@ -236,7 +236,7 @@ class ImportCommandTest extends TestCase
         static::assertEquals('Total count: 27.', $consoleOutput[3]);
     }
 
-    public function testArticlePriceCsvImport()
+    public function testArticlePriceCsvImport(): void
     {
         $profile = 'default_article_prices';
         $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'ArticlePricesImport.csv';
@@ -247,7 +247,7 @@ class ImportCommandTest extends TestCase
         static::assertEquals('Total count: 98.', $consoleOutput[3]);
     }
 
-    public function testArticleTranslationXmlImport()
+    public function testArticleTranslationXmlImport(): void
     {
         $profile = 'default_article_translations';
         $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'ArticleTranslationImport.xml';
@@ -258,7 +258,7 @@ class ImportCommandTest extends TestCase
         static::assertEquals('Total count: 103.', $consoleOutput[3]);
     }
 
-    public function testArticleTranslationCsvImport()
+    public function testArticleTranslationCsvImport(): void
     {
         $profile = 'default_article_translations';
         $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'ArticleTranslationImport.csv';
@@ -269,7 +269,7 @@ class ImportCommandTest extends TestCase
         static::assertEquals('Total count: 103.', $consoleOutput[3]);
     }
 
-    public function testOrderXmlImport()
+    public function testOrderXmlImport(): void
     {
         $profile = 'default_orders_minimal';
         $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'OrderImport.xml';
@@ -286,7 +286,7 @@ class ImportCommandTest extends TestCase
         static::assertEquals('Total count: 17.', $consoleOutput[3]);
     }
 
-    public function testOrderCsvImport()
+    public function testOrderCsvImport(): void
     {
         $profile = 'default_orders_minimal';
         $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'OrderImport.csv';
@@ -303,7 +303,7 @@ class ImportCommandTest extends TestCase
         static::assertEquals('Total count: 17.', $consoleOutput[3]);
     }
 
-    public function testMainOrderXmlImport()
+    public function testMainOrderXmlImport(): void
     {
         $profile = 'default_order_main_data';
         $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'MainOrderImport.xml';
@@ -312,7 +312,7 @@ class ImportCommandTest extends TestCase
         $this->runCommand(self::CLI_IMPORT_COMMAND . " {$profile} {$filePath}");
     }
 
-    public function testMainOrderCsvImport()
+    public function testMainOrderCsvImport(): void
     {
         $profile = 'default_order_main_data';
         $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'MainOrderImport.csv';
@@ -321,7 +321,7 @@ class ImportCommandTest extends TestCase
         $this->runCommand(self::CLI_IMPORT_COMMAND . " {$profile} {$filePath}");
     }
 
-    public function testTranslationXmlImport()
+    public function testTranslationXmlImport(): void
     {
         $profile = 'default_system_translations';
         $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'TranslationImport.xml';
@@ -332,7 +332,7 @@ class ImportCommandTest extends TestCase
         static::assertEquals('Total count: 15.', $consoleOutput[3]);
     }
 
-    public function testTranslationCsvImport()
+    public function testTranslationCsvImport(): void
     {
         $profile = 'default_system_translations';
         $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'TranslationImport.csv';

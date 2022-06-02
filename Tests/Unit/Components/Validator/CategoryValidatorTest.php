@@ -14,7 +14,7 @@ use SwagImportExport\Components\Validators\CategoryValidator;
 
 class CategoryValidatorTest extends TestCase
 {
-    public function testItShouldThrowException()
+    public function testItShouldThrowException(): void
     {
         $categoryValidator = new CategoryValidator();
 

@@ -19,7 +19,7 @@ class CustomerDbAdapterTest extends TestCase
     use DatabaseTestCaseTrait;
     use ContainerTrait;
 
-    public function testWriteWithoutRecordsThrowsException()
+    public function testWriteWithoutRecordsThrowsException(): void
     {
         $customersDbAdapter = $this->getCustomerDbAdapter();
 
@@ -28,7 +28,7 @@ class CustomerDbAdapterTest extends TestCase
         $customersDbAdapter->write([]);
     }
 
-    public function testWriteShouldCreateCustomer()
+    public function testWriteShouldCreateCustomer(): void
     {
         $customersDbAdapter = $this->getCustomerDbAdapter();
         $records = [
@@ -51,7 +51,7 @@ class CustomerDbAdapterTest extends TestCase
         static::assertEquals($records['default'][0]['customerNumber'], $updatedUser[0]['customernumber']);
     }
 
-    public function testWriteShouldUpdateCustomer()
+    public function testWriteShouldUpdateCustomer(): void
     {
         $customerDbAdapter = $this->getCustomerDbAdapter();
 
@@ -80,7 +80,7 @@ class CustomerDbAdapterTest extends TestCase
         static::assertEquals($records['default'][0]['active'], $updatedUser[0]['active']);
     }
 
-    public function testWriteShouldUpdateBillingCity()
+    public function testWriteShouldUpdateBillingCity(): void
     {
         $customerDbAdapter = $this->getCustomerDbAdapter();
 
@@ -112,7 +112,7 @@ class CustomerDbAdapterTest extends TestCase
         static::assertEquals($records['default'][0]['billingZipcode'], $updatedUserBillingAddress[0]['zipcode']);
     }
 
-    public function testWriteShouldUpdateCustomerGroup()
+    public function testWriteShouldUpdateCustomerGroup(): void
     {
         $customerDbAdapter = $this->getCustomerDbAdapter();
 
@@ -142,7 +142,7 @@ class CustomerDbAdapterTest extends TestCase
         static::assertEquals($records['default'][0]['customergroup'], $updatedUser[0]['customergroup']);
     }
 
-    public function testWriteWithCustomerGroupIdThrowsException()
+    public function testWriteWithCustomerGroupIdThrowsException(): void
     {
         $customerDbAdapter = $this->getCustomerDbAdapter();
 
@@ -164,7 +164,7 @@ class CustomerDbAdapterTest extends TestCase
         $customerDbAdapter->write($records);
     }
 
-    public function testWriteShouldUpdatePhoneNumber()
+    public function testWriteShouldUpdatePhoneNumber(): void
     {
         $customerDbAdapter = $this->getCustomerDbAdapter();
 
@@ -194,7 +194,7 @@ class CustomerDbAdapterTest extends TestCase
         static::assertEquals($records['default'][0]['billingPhone'], $updatedUserBillingAddress[0]['phone']);
     }
 
-    public function testWriteShouldUpdatePaymentId()
+    public function testWriteShouldUpdatePaymentId(): void
     {
         $customerDbAdapter = $this->getCustomerDbAdapter();
 
@@ -223,7 +223,7 @@ class CustomerDbAdapterTest extends TestCase
         static::assertEquals($records['default'][0]['paymentID'], $updatedUser[0]['paymentID']);
     }
 
-    public function testWriteShouldUpdateLastLogin()
+    public function testWriteShouldUpdateLastLogin(): void
     {
         $customerDbAdapter = $this->getCustomerDbAdapter();
 
@@ -252,7 +252,7 @@ class CustomerDbAdapterTest extends TestCase
         static::assertEquals('2016-11-29 12:13:45', $updatedUser[0]['lastlogin']);
     }
 
-    public function testWriteWithoutEmailThrowsException()
+    public function testWriteWithoutEmailThrowsException(): void
     {
         $customerDbAdapter = $this->getCustomerDbAdapter();
 
@@ -272,7 +272,7 @@ class CustomerDbAdapterTest extends TestCase
         $customerDbAdapter->write($records);
     }
 
-    public function testWriteWithoutPasswordThrowsException()
+    public function testWriteWithoutPasswordThrowsException(): void
     {
         $customerDbAdapter = $this->getCustomerDbAdapter();
 
@@ -291,7 +291,7 @@ class CustomerDbAdapterTest extends TestCase
         $customerDbAdapter->write($records);
     }
 
-    public function testWriteCreateCustomerWithExistingEmailThrowsException()
+    public function testWriteCreateCustomerWithExistingEmailThrowsException(): void
     {
         $customerDbAdapter = $this->getCustomerDbAdapter();
 
@@ -310,7 +310,7 @@ class CustomerDbAdapterTest extends TestCase
         $customerDbAdapter->write($records);
     }
 
-    public function testWriteWithInvalidSubShopThrowsException()
+    public function testWriteWithInvalidSubShopThrowsException(): void
     {
         $customerDbAdapter = $this->getCustomerDbAdapter();
 
@@ -329,7 +329,7 @@ class CustomerDbAdapterTest extends TestCase
         $customerDbAdapter->write($records);
     }
 
-    public function testWriteWithInvalidLanguageIdThrowsException()
+    public function testWriteWithInvalidLanguageIdThrowsException(): void
     {
         $customerDbAdapter = $this->getCustomerDbAdapter();
 
@@ -348,7 +348,7 @@ class CustomerDbAdapterTest extends TestCase
         $customerDbAdapter->write($records);
     }
 
-    public function testWriteShouldUpdateEmailAddress()
+    public function testWriteShouldUpdateEmailAddress(): void
     {
         $customerDbAdapter = $this->getCustomerDbAdapter();
 
@@ -376,7 +376,7 @@ class CustomerDbAdapterTest extends TestCase
         static::assertEquals('test@exampleNew.com', $updatedUser[0]['email']);
     }
 
-    public function testWriteShouldUpdateCustomerPassword()
+    public function testWriteShouldUpdateCustomerPassword(): void
     {
         $customerDbAdapter = $this->getCustomerDbAdapter();
 
@@ -405,7 +405,7 @@ class CustomerDbAdapterTest extends TestCase
         static::assertEquals('ac1ef17c2db40995e9fdd40b04a5a649', $updatedUser[0]['password']);
     }
 
-    public function testWriteNewCustomerWithoutBillingDataThrowsException()
+    public function testWriteNewCustomerWithoutBillingDataThrowsException(): void
     {
         $customerDbAdapter = $this->getCustomerDbAdapter();
 
@@ -434,10 +434,7 @@ class CustomerDbAdapterTest extends TestCase
         return $this->getContainer()->get(CustomerDbAdapter::class);
     }
 
-    /**
-     * @return array
-     */
-    private function getTestUserDataRecord()
+    private function getTestUserDataRecord(): array
     {
         return [
             'customerNumber' => '21999',

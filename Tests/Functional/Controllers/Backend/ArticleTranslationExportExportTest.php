@@ -32,7 +32,7 @@ class ArticleTranslationExportExportTest extends \Enlight_Components_Test_Contro
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
     }
 
-    public function testArticlesTranslationsXmlExport()
+    public function testArticlesTranslationsXmlExport(): void
     {
         $params = $this->getExportRequestParams();
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::ARTICLES_TRANSLATIONS_PROFILE_TYPE);
@@ -52,7 +52,7 @@ class ArticleTranslationExportExportTest extends \Enlight_Components_Test_Contro
         $this->assertTranslationAttributeInXml($file, 'SW10002.3', 'languageId', '2');
     }
 
-    public function testArticlesTranslationsCsvExport()
+    public function testArticlesTranslationsCsvExport(): void
     {
         $params = $this->getExportRequestParams();
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::ARTICLES_TRANSLATIONS_PROFILE_TYPE);
@@ -73,7 +73,7 @@ class ArticleTranslationExportExportTest extends \Enlight_Components_Test_Contro
         static::assertEquals(2, $mappedTranslationList['SW10002.3']['languageId']);
     }
 
-    private function assertTranslationAttributeInXml(string $filePath, string $orderNumber, string $attribute, string $expected)
+    private function assertTranslationAttributeInXml(string $filePath, string $orderNumber, string $attribute, string $expected): void
     {
         $translationNodeList = $this->queryXpath($filePath, "//Translation[articlenumber='{$orderNumber}']/{$attribute}");
         $nodeValue = $translationNodeList->item(0)->nodeValue;

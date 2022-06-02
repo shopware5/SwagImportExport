@@ -21,7 +21,7 @@ class MinimalOrdersProfileTest extends TestCase
     use DatabaseTestCaseTrait;
     use ContainerTrait;
 
-    public function testWriteShouldUpdateOrderStatus()
+    public function testWriteShouldUpdateOrderStatus(): void
     {
         $filePath = __DIR__ . '/_fixtures/minimal_orders_profile.csv';
         $expectedOrderId = 15;

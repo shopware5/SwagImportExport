@@ -17,7 +17,7 @@ class AddressValidatorTest extends TestCase
 {
     public const DONT_UPDATE_ADDRESS = false;
 
-    public function testItCanBeCreated()
+    public function testItCanBeCreated(): void
     {
         $addressValidator = new AddressValidator();
 
@@ -25,7 +25,7 @@ class AddressValidatorTest extends TestCase
         static::assertInstanceOf(Validator::class, $addressValidator);
     }
 
-    public function testCheckRquieredFieldsShouldThrowExceptionIfAddressIsEmpty()
+    public function testCheckRquieredFieldsShouldThrowExceptionIfAddressIsEmpty(): void
     {
         $emptyAddressRecord = [];
 
@@ -36,7 +36,7 @@ class AddressValidatorTest extends TestCase
         $addressValidator->checkRequiredFields($emptyAddressRecord, self::DONT_UPDATE_ADDRESS);
     }
 
-    public function testCheckRequiredFieldsShouldThrowExceptionIfRequiredFieldIsEmpty()
+    public function testCheckRequiredFieldsShouldThrowExceptionIfRequiredFieldIsEmpty(): void
     {
         $emptyAddressRecord = [
             'userID' => 999,
@@ -51,7 +51,7 @@ class AddressValidatorTest extends TestCase
         $addressValidator->checkRequiredFields($emptyAddressRecord, self::DONT_UPDATE_ADDRESS);
     }
 
-    public function testCheckRequiredFieldsShouldThrowExceptionIfCustomerCouldNotBeIdentified()
+    public function testCheckRequiredFieldsShouldThrowExceptionIfCustomerCouldNotBeIdentified(): void
     {
         $addressWithoutCustomerId = [
             'firstname' => 'some value',
@@ -68,7 +68,7 @@ class AddressValidatorTest extends TestCase
         $addressValidator->checkRequiredFields($addressWithoutCustomerId, self::DONT_UPDATE_ADDRESS);
     }
 
-    public function testCheckRequiredFieldsShouldThrowExceptionIfAddressHasNoEmailButCustomernumberIsGiven()
+    public function testCheckRequiredFieldsShouldThrowExceptionIfAddressHasNoEmailButCustomernumberIsGiven(): void
     {
         $addressWithoutEmail = [
             'firstname' => 'some value',
@@ -86,7 +86,7 @@ class AddressValidatorTest extends TestCase
         $addressValidator->checkRequiredFields($addressWithoutEmail, self::DONT_UPDATE_ADDRESS);
     }
 
-    public function testCheckRequiredFieldsShouldThrowExceptionIfAddressHasCustomernumberButEmailIsGiven()
+    public function testCheckRequiredFieldsShouldThrowExceptionIfAddressHasCustomernumberButEmailIsGiven(): void
     {
         $addressWithoutCustomernumber = [
             'firstname' => 'some value',

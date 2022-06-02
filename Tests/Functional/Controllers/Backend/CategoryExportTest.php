@@ -32,7 +32,7 @@ class CategoryExportTest extends \Enlight_Components_Test_Controller_TestCase
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
     }
 
-    public function testCategoryXmlExport()
+    public function testCategoryXmlExport(): void
     {
         $params = $this->getExportRequestParams();
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::CATEGORY_PROFILE_TYPE);
@@ -55,7 +55,7 @@ class CategoryExportTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertEquals(62, $categoryNodeList->length);
     }
 
-    public function testCategoryCsvExport()
+    public function testCategoryCsvExport(): void
     {
         $params = $this->getExportRequestParams();
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::CATEGORY_PROFILE_TYPE);
@@ -77,7 +77,7 @@ class CategoryExportTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertEquals(1, $mappedCategoryCsv[3]['parentID'], 'Category Deutsch has no parent category.');
     }
 
-    private function assertCategoryAttributeInXml(string $filePath, string $categoryId, string $attribute, string $expected)
+    private function assertCategoryAttributeInXml(string $filePath, string $categoryId, string $attribute, string $expected): void
     {
         $categoryNodeList = $this->queryXpath($filePath, "//category[categoryId='{$categoryId}']/{$attribute}");
         $nodeValue = $categoryNodeList->item(0)->nodeValue;

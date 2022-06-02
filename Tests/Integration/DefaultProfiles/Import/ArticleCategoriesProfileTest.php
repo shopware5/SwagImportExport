@@ -21,7 +21,7 @@ class ArticleCategoriesProfileTest extends TestCase
     use DatabaseTestCaseTrait;
     use ContainerTrait;
 
-    public function testShouldUpdateExistingArticleCategories()
+    public function testShouldUpdateExistingArticleCategories(): void
     {
         $filePath = __DIR__ . '/_fixtures/article_categories_profile.csv';
         $expectedOrderNumber = 'SW10002.3';

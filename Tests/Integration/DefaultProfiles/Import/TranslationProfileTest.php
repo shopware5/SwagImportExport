@@ -28,7 +28,7 @@ class TranslationProfileTest extends TestCase
     public const AMOUNT_OF_IMPORTED_CONFIGURATOR_TRANSLATIONS = 3;
     public const CONFIGURATOR_15LITER_INDEX = 0;
 
-    public function testImportTranslationsShouldCreateNewTranslationsForProperties()
+    public function testImportTranslationsShouldCreateNewTranslationsForProperties(): void
     {
         $this->truncateTranslationTable();
 
@@ -46,7 +46,7 @@ class TranslationProfileTest extends TestCase
         static::assertEquals('a:1:{s:11:"optionValue";s:15:"chocolate brown";}', $importedPropertyTranslations[self::CHOCOLATE_BROWN_PROPERTYGROUP_INDEX]['objectdata']);
     }
 
-    public function testImportTranslationsShouldUpdateTranslationsForProperties()
+    public function testImportTranslationsShouldUpdateTranslationsForProperties(): void
     {
         $this->truncateTranslationTable();
 
@@ -63,7 +63,7 @@ class TranslationProfileTest extends TestCase
         static::assertEquals('a:1:{s:11:"optionValue";s:22:"chocolate brown UPDATE";}', $updatedPropertyTranslations[self::CHOCOLATE_BROWN_PROPERTYGROUP_INDEX]['objectdata']);
     }
 
-    public function testImportTranslationsShouldCreateTranslationsForConfigurators()
+    public function testImportTranslationsShouldCreateTranslationsForConfigurators(): void
     {
         $this->truncateTranslationTable();
         $filePath = __DIR__ . '/_fixtures/translations_configurators_create.csv';
@@ -78,7 +78,7 @@ class TranslationProfileTest extends TestCase
         static::assertCount(self::AMOUNT_OF_IMPORTED_CONFIGURATOR_TRANSLATIONS, $importedConfiguratorTranslations);
     }
 
-    public function testImportTranslationsShouldUpdateConfiguratorTranslations()
+    public function testImportTranslationsShouldUpdateConfiguratorTranslations(): void
     {
         $this->truncateTranslationTable();
         $connection = $this->getContainer()->get('dbal_connection');
@@ -97,7 +97,7 @@ class TranslationProfileTest extends TestCase
         static::assertEquals(self::LANGUAGE_ENGLISH_ID, $updatedConfiguratorTranslations[self::CONFIGURATOR_15LITER_INDEX]['objectlanguage']);
     }
 
-    private function truncateTranslationTable()
+    private function truncateTranslationTable(): void
     {
         $connection = $this->getContainer()->get('dbal_connection');
         $connection->executeQuery('DELETE FROM s_core_translations WHERE id > 0');

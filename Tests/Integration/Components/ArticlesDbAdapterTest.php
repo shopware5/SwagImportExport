@@ -106,10 +106,7 @@ class ArticlesDbAdapterTest extends DbAdapterTestHelper
         return $this->getDataProvider('testWrite');
     }
 
-    /**
-     * @return DataDbAdapter
-     */
-    private function createArticlesDbAdapter()
+    private function createArticlesDbAdapter(): DataDbAdapter
     {
         $dataFactory = $this->getContainer()->get(DataFactory::class);
 

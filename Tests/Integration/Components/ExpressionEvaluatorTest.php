@@ -16,7 +16,7 @@ class ExpressionEvaluatorTest extends ImportExportTestHelper
 {
     use ContainerTrait;
 
-    public function testPhpEvaluator()
+    public function testPhpEvaluator(): void
     {
         $variables = [
             'title' => 'Product',
@@ -38,7 +38,7 @@ class ExpressionEvaluatorTest extends ImportExportTestHelper
         static::assertEquals($evalVariable2, 'Product-Test');
     }
 
-    public function testSmartyEvaluator()
+    public function testSmartyEvaluator(): void
     {
         $variables = [
             'title' => 'Product',

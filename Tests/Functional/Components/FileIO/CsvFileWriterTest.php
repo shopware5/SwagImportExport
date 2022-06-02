@@ -21,7 +21,7 @@ class CsvFileWriterTest extends TestCase
         \unlink(self::TEST_FILE);
     }
 
-    public function testItShouldCreateCsv()
+    public function testItShouldCreateCsv(): void
     {
         $exampleData = [['row1-column1', 'row1-column2']];
 
@@ -31,10 +31,7 @@ class CsvFileWriterTest extends TestCase
         static::assertFileEquals(__DIR__ . '/_fixtures/created_csv_file.csv', self::TEST_FILE);
     }
 
-    /**
-     * @return CsvFileWriter
-     */
-    private function createCsvFileWriter()
+    private function createCsvFileWriter(): CsvFileWriter
     {
         return new CsvFileWriter(new FileHelper());
     }

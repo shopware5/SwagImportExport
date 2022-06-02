@@ -32,7 +32,7 @@ class CustomerExportTest extends \Enlight_Components_Test_Controller_TestCase
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
     }
 
-    public function testCustomerXmlExport()
+    public function testCustomerXmlExport(): void
     {
         $params = $this->getExportRequestParams();
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::CUSTOMER_PROFILE_TYPE);
@@ -54,7 +54,7 @@ class CustomerExportTest extends \Enlight_Components_Test_Controller_TestCase
         $this->assertCustomerAttributeInXml($file, '20001', 'newsletter', '0');
     }
 
-    public function testCustomerCsvExport()
+    public function testCustomerCsvExport(): void
     {
         $params = $this->getExportRequestParams();
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::CUSTOMER_PROFILE_TYPE);
@@ -77,7 +77,7 @@ class CustomerExportTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertEquals(0, $mappedCustomerList[20001]['newsletter']);
     }
 
-    private function assertCustomerAttributeInXml(string $filePath, string $customerNumber, string $attribute, string $expected)
+    private function assertCustomerAttributeInXml(string $filePath, string $customerNumber, string $attribute, string $expected): void
     {
         $customerDomNodeList = $this->queryXpath($filePath, "//customer[customernumber='{$customerNumber}']/{$attribute}");
         $nodeValue = $customerDomNodeList->item(0)->nodeValue;

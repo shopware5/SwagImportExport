@@ -16,15 +16,12 @@ class ArticleInStockProfileTest extends TestCase
 {
     use DefaultProfileTestCaseTrait;
 
-    /**
-     * @return ArticleInStockProfile
-     */
-    public function createArticleInStockProfile()
+    public function createArticleInStockProfile(): ArticleInStockProfile
     {
         return new ArticleInStockProfile();
     }
 
-    public function testItCanBeCreated()
+    public function testItCanBeCreated(): void
     {
         $articleInStockProfile = $this->createArticleInStockProfile();
 
@@ -33,11 +30,11 @@ class ArticleInStockProfileTest extends TestCase
         static::assertInstanceOf(\JsonSerializable::class, $articleInStockProfile);
     }
 
-    public function testItShouldReturnValidProfileTree()
+    public function testItShouldReturnValidProfileTree(): void
     {
         $articleProfile = $this->createArticleInStockProfile();
 
-        $this->walkRecursive($articleProfile->jsonSerialize(), function ($node) {
+        $this->walkRecursive($articleProfile->jsonSerialize(), function ($node): void {
             $this->assertArrayHasKey('id', $node, 'Current array: ' . \print_r($node, true));
             $this->assertArrayHasKey('name', $node, 'Current array: ' . \print_r($node, true));
             $this->assertArrayHasKey('type', $node, 'Current array: ' . \print_r($node, true));

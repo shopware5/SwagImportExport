@@ -16,7 +16,7 @@ class MinimalArticleVariantsProfileTest extends TestCase
 {
     use DefaultProfileTestCaseTrait;
 
-    public function testItCanBeCreated()
+    public function testItCanBeCreated(): void
     {
         $articleVariantsMinimalProfile = $this->createMinimalArticleVariantsProfile();
 
@@ -25,21 +25,18 @@ class MinimalArticleVariantsProfileTest extends TestCase
         static::assertInstanceOf(ProfileMetaData::class, $articleVariantsMinimalProfile);
     }
 
-    public function testItShouldReturnValidProfileTree()
+    public function testItShouldReturnValidProfileTree(): void
     {
         $articleProfile = $this->createMinimalArticleVariantsProfile();
 
-        $this->walkRecursive($articleProfile->jsonSerialize(), function ($node) {
+        $this->walkRecursive($articleProfile->jsonSerialize(), function ($node): void {
             $this->assertArrayHasKey('id', $node, 'Current array: ' . \print_r($node, true));
             $this->assertArrayHasKey('name', $node, 'Current array: ' . \print_r($node, true));
             $this->assertArrayHasKey('type', $node, 'Current array: ' . \print_r($node, true));
         });
     }
 
-    /**
-     * @return MinimalArticleVariantsProfile
-     */
-    private function createMinimalArticleVariantsProfile()
+    private function createMinimalArticleVariantsProfile(): MinimalArticleVariantsProfile
     {
         return new MinimalArticleVariantsProfile();
     }

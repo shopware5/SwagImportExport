@@ -19,7 +19,7 @@ class CategoryWriterTest extends TestCase
     use DatabaseTestCaseTrait;
     use ContainerTrait;
 
-    public function testWriteWithInvalidCategoryIdThrowsException()
+    public function testWriteWithInvalidCategoryIdThrowsException(): void
     {
         $categoryWriterAdapter = $this->getCategoryWriterAdapter();
         $validArticleId = 3;
@@ -34,7 +34,7 @@ class CategoryWriterTest extends TestCase
         $categoryWriterAdapter->write($validArticleId, $invalidCategoryArray);
     }
 
-    public function testWriteWithNoCategoryIdAndNewPathCreatesCategories()
+    public function testWriteWithNoCategoryIdAndNewPathCreatesCategories(): void
     {
         $categoryWriterAdapter = $this->getCategoryWriterAdapter();
         $validArticleId = 3;
@@ -53,7 +53,7 @@ class CategoryWriterTest extends TestCase
         static::assertSame('Path', $articleCategories[3]['description']);
     }
 
-    public function testWriteShouldInsertArticleCategoryAssociation()
+    public function testWriteShouldInsertArticleCategoryAssociation(): void
     {
         $categoryWriterAdapter = $this->getCategoryWriterAdapter();
         $articleId = 3;

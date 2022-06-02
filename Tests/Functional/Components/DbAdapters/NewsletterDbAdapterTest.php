@@ -19,7 +19,7 @@ class NewsletterDbAdapterTest extends TestCase
     use DatabaseTestCaseTrait;
     use ContainerTrait;
 
-    public function testWriteThrowsExceptionIfRecordsAreEmpty()
+    public function testWriteThrowsExceptionIfRecordsAreEmpty(): void
     {
         $newsletterDbAdapter = $this->getNewsletterAdapter();
 
@@ -28,7 +28,7 @@ class NewsletterDbAdapterTest extends TestCase
         $newsletterDbAdapter->write([]);
     }
 
-    public function testShouldAddCustomerAsNewsletterRecipient()
+    public function testShouldAddCustomerAsNewsletterRecipient(): void
     {
         $newsletterDbAdapter = $this->getNewsletterAdapter();
         $customerData = [
@@ -49,7 +49,7 @@ class NewsletterDbAdapterTest extends TestCase
         static::assertEquals($customerData['default'][0]['email'], $createdRecipient[0]['email']);
     }
 
-    public function testWriteShouldCreateNewsletterRecipient()
+    public function testWriteShouldCreateNewsletterRecipient(): void
     {
         $newsletterDbAdapter = $this->getNewsletterAdapter();
 
@@ -68,7 +68,7 @@ class NewsletterDbAdapterTest extends TestCase
         static::assertEquals($notExistingRecipient['default'][0]['email'], $createdRecipient[0]['email']);
     }
 
-    public function testWriteShouldCreateNewsletterRecipientContactData()
+    public function testWriteShouldCreateNewsletterRecipientContactData(): void
     {
         $newsletterDBAdapter = $this->getNewsletterAdapter();
 
@@ -92,7 +92,7 @@ class NewsletterDbAdapterTest extends TestCase
         static::assertEquals($recipientWithContactData['default'][0]['zipcode'], '12345');
     }
 
-    public function testWriteShouldCreateNewsletterGroup()
+    public function testWriteShouldCreateNewsletterGroup(): void
     {
         $newsletterDbAdapter = $this->getNewsletterAdapter();
 
@@ -112,7 +112,7 @@ class NewsletterDbAdapterTest extends TestCase
         static::assertEquals('New newsletter group', $createdNewsletterGroup[0]['name']);
     }
 
-    public function testWriteShouldIgnoreExistingCustomerRegisteredInCustomerGroup()
+    public function testWriteShouldIgnoreExistingCustomerRegisteredInCustomerGroup(): void
     {
         $newsletterDbAdapter = $this->getNewsletterAdapter();
         /** @var Connection $dbalConnection */

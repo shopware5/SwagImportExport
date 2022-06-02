@@ -15,10 +15,8 @@ class UnderscoreToCamelCaseServiceTest extends TestCase
 {
     /**
      * @dataProvider underscoreToCamelCaseTest_provider
-     *
-     * @param mixed $string
      */
-    public function testUnderscoreToCamelCase($string, string $expectedResult)
+    public function testUnderscoreToCamelCase($string, string $expectedResult): void
     {
         $service = new UnderscoreToCamelCaseService();
 
@@ -27,10 +25,7 @@ class UnderscoreToCamelCaseServiceTest extends TestCase
         static::assertSame($expectedResult, $result);
     }
 
-    /**
-     * @return array
-     */
-    public function underscoreToCamelCaseTest_provider()
+    public function underscoreToCamelCaseTest_provider(): array
     {
         return [
             [null, ''],

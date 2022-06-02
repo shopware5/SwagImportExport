@@ -23,7 +23,7 @@ class ProfileServiceTest extends TestCase
 
     use ContainerTrait;
 
-    public function testProfileExportShouldGiveCorrectResult()
+    public function testProfileExportShouldGiveCorrectResult(): void
     {
         $service = $this->getProfileService();
         /** @var Connection $dbalConnection */
@@ -38,7 +38,7 @@ class ProfileServiceTest extends TestCase
         static::assertEquals($profile['tree'], \json_encode($profileDataStruct->getTree()));
     }
 
-    public function testProfileImportShouldThrowExceptionWrongFiletype()
+    public function testProfileImportShouldThrowExceptionWrongFiletype(): void
     {
         $service = $this->getProfileService();
         /** @var UploadPathProvider $uploadPathProvider */
@@ -55,7 +55,7 @@ class ProfileServiceTest extends TestCase
         $service->importProfile($file);
     }
 
-    public function testProfileImportShouldThrowExceptionNoContent()
+    public function testProfileImportShouldThrowExceptionNoContent(): void
     {
         $service = $this->getProfileService();
         /** @var UploadPathProvider $uploadPathProvider */
@@ -72,7 +72,7 @@ class ProfileServiceTest extends TestCase
         $service->importProfile($file);
     }
 
-    public function testProfileImportShouldThrowExceptionWrongData()
+    public function testProfileImportShouldThrowExceptionWrongData(): void
     {
         $service = $this->getProfileService();
         /** @var UploadPathProvider $uploadPathProvider */
@@ -89,7 +89,7 @@ class ProfileServiceTest extends TestCase
         $service->importProfile($file);
     }
 
-    public function testProfileImportShouldThrowExceptionEmptyValue()
+    public function testProfileImportShouldThrowExceptionEmptyValue(): void
     {
         $service = $this->getProfileService();
         /** @var UploadPathProvider $uploadPathProvider */
@@ -106,7 +106,7 @@ class ProfileServiceTest extends TestCase
         $service->importProfile($file);
     }
 
-    public function testProfileImportShouldSucceed()
+    public function testProfileImportShouldSucceed(): void
     {
         $service = $this->getProfileService();
         /** @var Connection $dbalConnection */
@@ -129,10 +129,7 @@ class ProfileServiceTest extends TestCase
         static::assertEquals(0, $importedProfile['hidden']);
     }
 
-    /**
-     * @return ProfileService
-     */
-    private function getProfileService()
+    private function getProfileService(): ProfileService
     {
         return $this->getContainer()->get('swag_import_export.profile_service');
     }

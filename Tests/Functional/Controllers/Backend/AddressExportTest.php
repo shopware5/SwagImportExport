@@ -28,7 +28,7 @@ class AddressExportTest extends \Enlight_Components_Test_Controller_TestCase
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
     }
 
-    public function testAddressExportWithXml()
+    public function testAddressExportWithXml(): void
     {
         $params = $this->getExportRequestParams();
 
@@ -58,7 +58,7 @@ class AddressExportTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertEquals('Max', $company->item(0)->nodeValue);
     }
 
-    public function testAddressExportWithCsv()
+    public function testAddressExportWithCsv(): void
     {
         $params = $this->getExportRequestParams();
 

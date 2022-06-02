@@ -63,7 +63,7 @@ class ProfileDataProvider
         $this->connection = $connection;
     }
 
-    public function createProfiles()
+    public function createProfiles(): void
     {
         $this->createProfile(self::ARTICLE_PROFILE_TYPE, self::ARTICLE_PROFILE_NAME);
         $this->createProfile(self::VARIANT_PROFILE_TYPE, self::VARIANT_PROFILE_NAME);

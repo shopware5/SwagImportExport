@@ -19,7 +19,7 @@ class ArticlePriceProfileTest extends TestCase
     {
         $articleProfile = $this->createArticlePriceProfile();
 
-        $this->walkRecursive($articleProfile->jsonSerialize(), function ($node) {
+        $this->walkRecursive($articleProfile->jsonSerialize(), function ($node): void {
             $this->assertArrayHasKey('id', $node, 'Current array: ' . \print_r($node, true));
             $this->assertArrayHasKey('name', $node, 'Current array: ' . \print_r($node, true));
             $this->assertArrayHasKey('type', $node, 'Current array: ' . \print_r($node, true));

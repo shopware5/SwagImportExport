@@ -25,7 +25,7 @@ class CategoriesProfileTest extends TestCase
     use DatabaseTestCaseTrait;
     use ContainerTrait;
 
-    public function testImportShouldCreateCategoryWithImportedId()
+    public function testImportShouldCreateCategoryWithImportedId(): void
     {
         $filePath = $this->getImportFile('categories_profile_test.csv');
         $this->runCommand("sw:import:import -p default_categories {$filePath}");

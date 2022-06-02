@@ -38,7 +38,7 @@ class PropertyWriterTest extends TestCase
 
     public const NOT_EXISTING_FILTER_GROUP_ID = '999999';
 
-    public function testWriteShouldNotCreateNewGroupWithExistingArticleAndExistingProperties()
+    public function testWriteShouldNotCreateNewGroupWithExistingArticleAndExistingProperties(): void
     {
         $propertyWriter = $this->getPropertyWriterAdapter();
         $importData = [
@@ -64,7 +64,7 @@ class PropertyWriterTest extends TestCase
         static::assertEmpty($importedFilter, 'Filter groups will only be created if a new product will be created.');
     }
 
-    public function testWriteShouldUpdateGroupRelations()
+    public function testWriteShouldUpdateGroupRelations(): void
     {
         $propertyWriter = $this->getPropertyWriterAdapter();
         $expectedMinId = 0;
@@ -93,7 +93,7 @@ class PropertyWriterTest extends TestCase
         static::assertGreaterThan($expectedMinId, $filterGroupId, 'Could not update filter group for article.');
     }
 
-    public function testWriteShouldCreateValue()
+    public function testWriteShouldCreateValue(): void
     {
         $propertyWriter = $this->getPropertyWriterAdapter();
         $importData = [
@@ -121,7 +121,7 @@ class PropertyWriterTest extends TestCase
         static::assertEquals(self::NOT_EXISTING_VALUE_NAME, $createdPropertyValue, 'Could not create property value.');
     }
 
-    public function testWriteShouldCreateOption()
+    public function testWriteShouldCreateOption(): void
     {
         $propertyWriter = $this->getPropertyWriterAdapter();
         $importData = [
@@ -149,7 +149,7 @@ class PropertyWriterTest extends TestCase
         static::assertEquals(self::NOT_EXISTING_OPTION_NAME, $createdPropertyValue, 'Could not create property value.');
     }
 
-    public function testWriteShouldThrowExceptionWithEmptyPropertyOptionName()
+    public function testWriteShouldThrowExceptionWithEmptyPropertyOptionName(): void
     {
         $propertyWriter = $this->getPropertyWriterAdapter();
         $importData = [
@@ -169,7 +169,7 @@ class PropertyWriterTest extends TestCase
         );
     }
 
-    public function testWriteShouldCreateValueRelation()
+    public function testWriteShouldCreateValueRelation(): void
     {
         $propertyWriter = $this->getPropertyWriterAdapter();
         $importData = [
@@ -196,7 +196,7 @@ class PropertyWriterTest extends TestCase
         static::assertEquals(self::EXISTING_PROPERTY_VALUE_ID, $valueIdRelationToTestedArticle);
     }
 
-    public function testWriteShouldCreateOptionRelation()
+    public function testWriteShouldCreateOptionRelation(): void
     {
         $propertyWriter = $this->getPropertyWriterAdapter();
         $importData = [
@@ -223,7 +223,7 @@ class PropertyWriterTest extends TestCase
         static::assertNotFalse($createOptionRelation, 'Could not update option relations.');
     }
 
-    public function testWriteShouldCreateGroup()
+    public function testWriteShouldCreateGroup(): void
     {
         $propertyWriter = $this->getPropertyWriterAdapter();
         $importData = [
@@ -250,10 +250,7 @@ class PropertyWriterTest extends TestCase
         static::assertEquals(self::NOT_EXISTING_FILTER_GROUP_NAME, $createdGroupName, 'Could not create filter group.');
     }
 
-    /**
-     * @return PropertyWriter
-     */
-    private function getPropertyWriterAdapter()
+    private function getPropertyWriterAdapter(): PropertyWriter
     {
         return $this->getContainer()->get(PropertyWriter::class);
     }

@@ -16,7 +16,7 @@ class ArticleSimilarsProfileTest extends TestCase
 {
     use DefaultProfileTestCaseTrait;
 
-    public function testItCanBeCreated()
+    public function testItCanBeCreated(): void
     {
         $articleSimilarsProfile = $this->createArticlSimilarsProfile();
 
@@ -25,21 +25,18 @@ class ArticleSimilarsProfileTest extends TestCase
         static::assertInstanceOf(\JsonSerializable::class, $articleSimilarsProfile);
     }
 
-    public function testItShouldReturnValidProfileTree()
+    public function testItShouldReturnValidProfileTree(): void
     {
         $articleSimilarsProfile = $this->createArticlSimilarsProfile();
 
-        $this->walkRecursive($articleSimilarsProfile->jsonSerialize(), function ($node) {
+        $this->walkRecursive($articleSimilarsProfile->jsonSerialize(), function ($node): void {
             $this->assertArrayHasKey('id', $node, 'Current array: ' . \print_r($node, true));
             $this->assertArrayHasKey('name', $node, 'Current array: ' . \print_r($node, true));
             $this->assertArrayHasKey('type', $node, 'Current array: ' . \print_r($node, true));
         });
     }
 
-    /**
-     * @return ArticleSimilarsProfile
-     */
-    private function createArticlSimilarsProfile()
+    private function createArticlSimilarsProfile(): ArticleSimilarsProfile
     {
         return new ArticleSimilarsProfile();
     }

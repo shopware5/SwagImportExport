@@ -18,7 +18,7 @@ class CustomerDataManagerTest extends TestCase
     use ContainerTrait;
     use DatabaseTestCaseTrait;
 
-    public function testSetDefaultFieldsForCreateShouldAddANewCustomerNumber()
+    public function testSetDefaultFieldsForCreateShouldAddANewCustomerNumber(): void
     {
         $record = [];
         $defaultFields = [];

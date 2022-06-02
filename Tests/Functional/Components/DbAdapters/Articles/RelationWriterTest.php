@@ -19,10 +19,7 @@ class RelationWriterTest extends TestCase
     use DatabaseTestCaseTrait;
     use ContainerTrait;
 
-    /**
-     * @return RelationWriter
-     */
-    public function getRelationWriterAdapter()
+    public function getRelationWriterAdapter(): RelationWriter
     {
         //We need to get an instance of the ArticlesDbAdapter because of the given dependency
         $articlesDbAdapter = $this->getContainer()->get(ArticlesDbAdapter::class);
@@ -33,7 +30,7 @@ class RelationWriterTest extends TestCase
         return $relationWriter;
     }
 
-    public function testWriteAccessoryWithInvalidDataThrowsException()
+    public function testWriteAccessoryWithInvalidDataThrowsException(): void
     {
         $relationWriterAdapter = $this->getRelationWriterAdapter();
 
@@ -49,7 +46,7 @@ class RelationWriterTest extends TestCase
         $relationWriterAdapter->write('3', 'SW10003', $invalidRelationData, 'accessory', true);
     }
 
-    public function testWriteSimilarWithInvalidDataThrowsException()
+    public function testWriteSimilarWithInvalidDataThrowsException(): void
     {
         $relationWriterAdapter = $this->getRelationWriterAdapter();
 

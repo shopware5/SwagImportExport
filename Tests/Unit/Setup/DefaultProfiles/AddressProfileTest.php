@@ -17,7 +17,7 @@ class AddressProfileTest extends TestCase
 {
     use DefaultProfileTestCaseTrait;
 
-    public function testItCanBeCreated()
+    public function testItCanBeCreated(): void
     {
         $addressProfile = new AddressProfile();
         static::assertInstanceOf(AddressProfile::class, $addressProfile);
@@ -25,12 +25,12 @@ class AddressProfileTest extends TestCase
         static::assertInstanceOf(\JsonSerializable::class, $addressProfile);
     }
 
-    public function testItShouldReturnValidProfileTree()
+    public function testItShouldReturnValidProfileTree(): void
     {
         $addressProfile = new AddressProfile();
 
         $profileTree = $addressProfile->jsonSerialize();
-        $this->walkRecursive($profileTree, function ($node) {
+        $this->walkRecursive($profileTree, function ($node): void {
             $this->assertArrayHasKey('id', $node, 'Current array: ' . \print_r($node, true));
             $this->assertArrayHasKey('type', $node, 'Current array: ' . \print_r($node, true));
             $this->assertArrayHasKey('name', $node, 'Current array: ' . \print_r($node, true));

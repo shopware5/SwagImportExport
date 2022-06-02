@@ -16,7 +16,7 @@ class CustomerProfileTest extends TestCase
 {
     use DefaultProfileTestCaseTrait;
 
-    public function testItCanBeCreated()
+    public function testItCanBeCreated(): void
     {
         $categoryProfile = $this->createCustomerProfile();
 
@@ -25,12 +25,12 @@ class CustomerProfileTest extends TestCase
         static::assertInstanceOf(ProfileMetaData::class, $categoryProfile);
     }
 
-    public function testItShouldReturnValidProfileTree()
+    public function testItShouldReturnValidProfileTree(): void
     {
         $categoryProfile = $this->createCustomerProfile();
 
         $profileTree = $categoryProfile->jsonSerialize();
-        $this->walkRecursive($profileTree, function ($node) {
+        $this->walkRecursive($profileTree, function ($node): void {
             $this->assertArrayHasKey('id', $node, 'Current array: ' . \print_r($node, true));
             $this->assertArrayHasKey('name', $node, 'Current array: ' . \print_r($node, true));
             $this->assertArrayHasKey('type', $node, 'Current array: ' . \print_r($node, true));
@@ -40,10 +40,7 @@ class CustomerProfileTest extends TestCase
         static::assertJson($profileJson);
     }
 
-    /**
-     * @return CustomerProfile
-     */
-    private function createCustomerProfile()
+    private function createCustomerProfile(): CustomerProfile
     {
         return new CustomerProfile();
     }

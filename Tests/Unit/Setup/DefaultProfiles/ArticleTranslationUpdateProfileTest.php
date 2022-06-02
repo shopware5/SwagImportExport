@@ -16,7 +16,7 @@ class ArticleTranslationUpdateProfileTest extends TestCase
 {
     use DefaultProfileTestCaseTrait;
 
-    public function testItCanBeCreated()
+    public function testItCanBeCreated(): void
     {
         $articleTranslationUpdateProfile = $this->createArticleTranslationUpdateProfile();
 
@@ -25,21 +25,18 @@ class ArticleTranslationUpdateProfileTest extends TestCase
         static::assertInstanceOf(ProfileMetaData::class, $articleTranslationUpdateProfile);
     }
 
-    public function testItShouldReturnValidProfileTree()
+    public function testItShouldReturnValidProfileTree(): void
     {
         $articleTranslationUpdateProfile = $this->createArticleTranslationUpdateProfile();
 
-        $this->walkRecursive($articleTranslationUpdateProfile->jsonSerialize(), function ($node) {
+        $this->walkRecursive($articleTranslationUpdateProfile->jsonSerialize(), function ($node): void {
             $this->assertArrayHasKey('id', $node, 'Current array: ' . \print_r($node, true));
             $this->assertArrayHasKey('name', $node, 'Current array: ' . \print_r($node, true));
             $this->assertArrayHasKey('type', $node, 'Current array: ' . \print_r($node, true));
         });
     }
 
-    /**
-     * @return ArticleTranslationUpdateProfile
-     */
-    private function createArticleTranslationUpdateProfile()
+    private function createArticleTranslationUpdateProfile(): ArticleTranslationUpdateProfile
     {
         return new ArticleTranslationUpdateProfile();
     }

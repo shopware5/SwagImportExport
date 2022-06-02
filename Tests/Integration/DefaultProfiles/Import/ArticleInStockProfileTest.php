@@ -21,7 +21,7 @@ class ArticleInStockProfileTest extends TestCase
     use DatabaseTestCaseTrait;
     use ContainerTrait;
 
-    public function testWriteShouldUpdateArticleStock()
+    public function testWriteShouldUpdateArticleStock(): void
     {
         $filePath = __DIR__ . '/_fixtures/article_in_stock_profile.csv';
         $expectedArticleOrderNumber = 'SW10003';

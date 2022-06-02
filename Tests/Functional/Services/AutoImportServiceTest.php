@@ -25,7 +25,7 @@ class AutoImportServiceTest extends TestCase
     /**
      * @after
      */
-    public function deleteFilesAfter()
+    public function deleteFilesAfter(): void
     {
         foreach ($this->files as $file) {
             \file_exists($file) ? \unlink($file) : '';
@@ -34,7 +34,7 @@ class AutoImportServiceTest extends TestCase
         $this->files = [];
     }
 
-    public function testRunAutoImportThereIsAlreadyAnImportInProgress()
+    public function testRunAutoImportThereIsAlreadyAnImportInProgress(): void
     {
         $service = $this->getService();
 
@@ -57,14 +57,14 @@ class AutoImportServiceTest extends TestCase
         $service->runAutoImport();
     }
 
-    public function testRunAutoImportNoFilesForImport()
+    public function testRunAutoImportNoFilesForImport(): void
     {
         $service = $this->getService();
         $this->expectOutputString('No import files are found.' . \PHP_EOL);
         $service->runAutoImport();
     }
 
-    public function testRunAutoImportShouldThrowNoProfileException()
+    public function testRunAutoImportShouldThrowNoProfileException(): void
     {
         $service = $this->getService();
 
@@ -84,7 +84,7 @@ class AutoImportServiceTest extends TestCase
         $service->runAutoImport();
     }
 
-    public function testRunAutoImportShouldImportFiles()
+    public function testRunAutoImportShouldImportFiles(): void
     {
         $service = $this->getService();
 
@@ -104,15 +104,12 @@ class AutoImportServiceTest extends TestCase
         $service->runAutoImport();
     }
 
-    private function installProfile(string $filename, $content)
+    private function installProfile(string $filename, $content): void
     {
         \file_put_contents($filename, $content);
     }
 
-    /**
-     * @return AutoImportService
-     */
-    private function getService()
+    private function getService(): AutoImportService
     {
         return new AutoImportService(
             new UploadPathProvider(Shopware()->DocPath()),

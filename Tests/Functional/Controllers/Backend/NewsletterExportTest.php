@@ -32,7 +32,7 @@ class NewsletterExportTest extends \Enlight_Components_Test_Controller_TestCase
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
     }
 
-    public function testNewsletterXmlExport()
+    public function testNewsletterXmlExport(): void
     {
         $this->importNewsletterDemoData();
 
@@ -57,7 +57,7 @@ class NewsletterExportTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertEquals('test_0@example.com', $newsletterNodeList->item(0)->nodeValue);
     }
 
-    public function testNewsletterCsvExport()
+    public function testNewsletterCsvExport(): void
     {
         $this->importNewsletterDemoData();
 

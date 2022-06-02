@@ -72,8 +72,7 @@ class DataIO
         ?string $type,
         string $format,
         int $maxRecordCount
-    )
-    {
+    ) {
         $this->columnOptions = $colOpts;
         $this->limit = $limit;
         $this->filter = $filter;
@@ -192,9 +191,6 @@ class DataIO
         return $this->dataSession->getState();
     }
 
-    /**
-     * @return int
-     */
     public function getSessionPosition(): int
     {
         $position = $this->dataSession->getPosition();

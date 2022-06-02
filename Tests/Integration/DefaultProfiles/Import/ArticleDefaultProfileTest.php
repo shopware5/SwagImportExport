@@ -21,7 +21,7 @@ class ArticleDefaultProfileTest extends TestCase
     use DatabaseTestCaseTrait;
     use ContainerTrait;
 
-    public function testImportShouldUpdateExistingArticle()
+    public function testImportShouldUpdateExistingArticle(): void
     {
         $filePath = __DIR__ . '/_fixtures/article_profile_update.csv';
         $expectedArticleName = 'Münsterländer Aperitif Update';
@@ -34,7 +34,7 @@ class ArticleDefaultProfileTest extends TestCase
         static::assertEquals($expectedArticleName, $updatedArticle[0]['name']);
     }
 
-    public function testImportShouldCreateArticleAndSupplier()
+    public function testImportShouldCreateArticleAndSupplier(): void
     {
         $filePath = __DIR__ . '/_fixtures/article_profile_create.csv';
         $expectedName = 'New Created Article';
@@ -51,7 +51,7 @@ class ArticleDefaultProfileTest extends TestCase
         static::assertEquals('New Supplier', $createdSupplier[0]['name']);
     }
 
-    public function testImportShouldCreateVariant()
+    public function testImportShouldCreateVariant(): void
     {
         $filePath = __DIR__ . '/_fixtures/article_profile_create_variant.csv';
         $expectedArticleName = 'Some long drink';

@@ -17,27 +17,7 @@ use PhpCsFixerCustomFixers\Fixer\SingleSpaceBeforeStatementFixer;
 use PhpCsFixerCustomFixers\Fixers;
 
 $finder = PhpCsFixer\Finder::create()
-//    ->in(__DIR__ . '/Commands')
-//    ->in(__DIR__ . '/Components/Converter')
-//    ->in(__DIR__ . '/Components/DataManagers')
-//    ->in(__DIR__ . '/Components/DataType')
-//    ->in(__DIR__ . '/Components/DbAdapters')
-//    ->in(__DIR__ . '/Components/Exception')
-//    ->in(__DIR__ . '/Components/Factories')
-//    ->in(__DIR__ . '/Components/FileIO')
-//    ->in(__DIR__ . '/Components/Logger')
-//    ->in(__DIR__ . '/Components/Profile')
-//    ->in(__DIR__ . '/Components/Service')
-//    ->in(__DIR__ . '/Components/Session')
-//    ->in(__DIR__ . '/Components/Utils')
-//    ->in(__DIR__ . '/Components/Transformers')
-//    ->in(__DIR__ . '/Components/Validators')
-//      ->in(__DIR__ . '/Components')
-//    ->in(__DIR__ . '/Controllers')
-//    ->in(__DIR__ . '/CustomModels')
-    ->in(__DIR__ . '/Setup')
-//    ->in(__DIR__ . '/Subscribers')
-//    ->in(__DIR__ . '/Tests')
+    ->in(__DIR__)
 
 ;
 
@@ -79,8 +59,6 @@ return (new Config())
         'php_unit_test_case_static_method_calls' => true,
         'single_line_throw' => false,
         'yoda_style' => ['equal' => false, 'identical' => false, 'less_and_greater' => false],
-        'phpdoc_to_return_type' => true,
-        'void_return' => true,
 
         NoSuperfluousConcatenationFixer::name() => true,
         NoUselessCommentFixer::name() => true,

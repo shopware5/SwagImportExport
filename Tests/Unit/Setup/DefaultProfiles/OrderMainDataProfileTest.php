@@ -16,7 +16,7 @@ class OrderMainDataProfileTest extends TestCase
 {
     use DefaultProfileTestCaseTrait;
 
-    public function testItCanBeCreated()
+    public function testItCanBeCreated(): void
     {
         $orderMainDataProfile = new OrderMainDataProfile();
 
@@ -25,11 +25,11 @@ class OrderMainDataProfileTest extends TestCase
         static::assertInstanceOf(\JsonSerializable::class, $orderMainDataProfile);
     }
 
-    public function testItShouldReturnValidProfile()
+    public function testItShouldReturnValidProfile(): void
     {
         $orderMainDataProfile = new OrderMainDataProfile();
 
-        $this->walkRecursive($orderMainDataProfile->jsonSerialize(), function ($node) {
+        $this->walkRecursive($orderMainDataProfile->jsonSerialize(), function ($node): void {
             $this->assertArrayHasKey('id', $node, 'Current array: ' . \print_r($node, true));
             $this->assertArrayHasKey('type', $node, 'Current array: ' . \print_r($node, true));
             $this->assertArrayHasKey('name', $node, 'Current array: ' . \print_r($node, true));

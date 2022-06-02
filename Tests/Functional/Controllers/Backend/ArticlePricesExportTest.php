@@ -32,7 +32,7 @@ class ArticlePricesExportTest extends \Enlight_Components_Test_Controller_TestCa
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
     }
 
-    public function testArticlesPricesXmlExport()
+    public function testArticlesPricesXmlExport(): void
     {
         $params = $this->getExportRequestParams();
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::ARTICLES_PRICES_PROFILE_TYPE);
@@ -54,7 +54,7 @@ class ArticlePricesExportTest extends \Enlight_Components_Test_Controller_TestCa
         $this->assertPriceAttributeInXml($file, 'SW10002.1', '_additionaltext', '1,5 Liter');
     }
 
-    public function testArticlesPricesCsvExport()
+    public function testArticlesPricesCsvExport(): void
     {
         $params = $this->getExportRequestParams();
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::ARTICLES_PRICES_PROFILE_TYPE);
@@ -77,7 +77,7 @@ class ArticlePricesExportTest extends \Enlight_Components_Test_Controller_TestCa
         static::assertEquals('1,5 Liter', $mappedPriceList['SW10002.1']['_additionaltext']);
     }
 
-    private function assertPriceAttributeInXml(string $filePath, string $orderNumber, string $attribute, string $expected)
+    private function assertPriceAttributeInXml(string $filePath, string $orderNumber, string $attribute, string $expected): void
     {
         $articleDomNodeList = $this->queryXpath($filePath, "//Price[ordernumber='{$orderNumber}']/{$attribute}");
         $nodeValue = $articleDomNodeList->item(0)->nodeValue;

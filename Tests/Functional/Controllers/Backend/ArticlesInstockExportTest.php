@@ -32,7 +32,7 @@ class ArticlesInstockExportTest extends \Enlight_Components_Test_Controller_Test
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
     }
 
-    public function testArticlesInstockXmlExport()
+    public function testArticlesInstockXmlExport(): void
     {
         $params = $this->getExportRequestParams();
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::ARTICLES_INSTOCK_PROFILE_TYPE);
@@ -52,7 +52,7 @@ class ArticlesInstockExportTest extends \Enlight_Components_Test_Controller_Test
         $this->assertArticleAttributeInXml($file, 'SW10023', '_price', 35);
     }
 
-    public function testArticlesInstockCsvExport()
+    public function testArticlesInstockCsvExport(): void
     {
         $params = $this->getExportRequestParams();
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::ARTICLES_INSTOCK_PROFILE_TYPE);
@@ -73,7 +73,7 @@ class ArticlesInstockExportTest extends \Enlight_Components_Test_Controller_Test
         static::assertEquals(35, $mappedArticleInstockList['SW10023']['_price']);
     }
 
-    public function testArticlesInstockXmlExportWithInstockFilter()
+    public function testArticlesInstockXmlExportWithInstockFilter(): void
     {
         $params = $this->getExportRequestParams();
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::ARTICLES_INSTOCK_PROFILE_TYPE);
@@ -96,7 +96,7 @@ class ArticlesInstockExportTest extends \Enlight_Components_Test_Controller_Test
         $this->assertArticleAttributeInXml($file, 'SW10003', '_price', 14.95);
     }
 
-    public function testArticlesInstockCsvExportWithInstockFilter()
+    public function testArticlesInstockCsvExportWithInstockFilter(): void
     {
         $params = $this->getExportRequestParams();
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::ARTICLES_INSTOCK_PROFILE_TYPE);
@@ -118,7 +118,7 @@ class ArticlesInstockExportTest extends \Enlight_Components_Test_Controller_Test
         static::assertEquals(14.95, $mappedArticleInstockList['SW10003']['_price']);
     }
 
-    public function testArticlesInstockXmlExportWithNotInstockFilter()
+    public function testArticlesInstockXmlExportWithNotInstockFilter(): void
     {
         $params = $this->getExportRequestParams();
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::ARTICLES_INSTOCK_PROFILE_TYPE);
@@ -140,7 +140,7 @@ class ArticlesInstockExportTest extends \Enlight_Components_Test_Controller_Test
         $this->assertArticleAttributeInXml($file, 'SW10023', '_supplier', 'Teapavilion');
     }
 
-    public function testArticlesInstockCsvExportWithNotInstockFilter()
+    public function testArticlesInstockCsvExportWithNotInstockFilter(): void
     {
         $params = $this->getExportRequestParams();
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::ARTICLES_INSTOCK_PROFILE_TYPE);
@@ -163,7 +163,7 @@ class ArticlesInstockExportTest extends \Enlight_Components_Test_Controller_Test
         static::assertEquals('Teapavilion', $mappedArticleInstockList['SW10023']['_supplier']);
     }
 
-    public function testArticlesInstockXmlExportWithInStockOnSaleFilter()
+    public function testArticlesInstockXmlExportWithInStockOnSaleFilter(): void
     {
         $params = $this->getExportRequestParams();
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::ARTICLES_INSTOCK_PROFILE_TYPE);
@@ -185,7 +185,7 @@ class ArticlesInstockExportTest extends \Enlight_Components_Test_Controller_Test
         $this->assertArticleAttributeInXml($file, 'SW10082', '_price', 7.99);
     }
 
-    public function testArticlesInstockCsvExportWithInStockOnSaleFilter()
+    public function testArticlesInstockCsvExportWithInStockOnSaleFilter(): void
     {
         $params = $this->getExportRequestParams();
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::ARTICLES_INSTOCK_PROFILE_TYPE);
@@ -208,7 +208,7 @@ class ArticlesInstockExportTest extends \Enlight_Components_Test_Controller_Test
         static::assertEquals(7.99, $mappedArticleList['SW10082']['_price']);
     }
 
-    public function testArticlesInstockXmlExportWithNotInStockOnSaleFilter()
+    public function testArticlesInstockXmlExportWithNotInStockOnSaleFilter(): void
     {
         $params = $this->getExportRequestParams();
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::ARTICLES_INSTOCK_PROFILE_TYPE);
@@ -230,7 +230,7 @@ class ArticlesInstockExportTest extends \Enlight_Components_Test_Controller_Test
         $this->assertArticleAttributeInXml($file, 'SW10198', '_supplier', 'Example');
     }
 
-    public function testArticlesInstockCsvExportWithNotInStockOnSaleFilter()
+    public function testArticlesInstockCsvExportWithNotInStockOnSaleFilter(): void
     {
         $params = $this->getExportRequestParams();
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::ARTICLES_INSTOCK_PROFILE_TYPE);
@@ -253,7 +253,7 @@ class ArticlesInstockExportTest extends \Enlight_Components_Test_Controller_Test
         static::assertEquals('Example', $mappedArticleInstockList['SW10198']['_supplier']);
     }
 
-    public function testArticlesInstockXmlExportWithNotInStockMinStockFilter()
+    public function testArticlesInstockXmlExportWithNotInStockMinStockFilter(): void
     {
         $params = $this->getExportRequestParams();
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::ARTICLES_INSTOCK_PROFILE_TYPE);
@@ -275,7 +275,7 @@ class ArticlesInstockExportTest extends \Enlight_Components_Test_Controller_Test
         $this->assertArticleAttributeInXml($file, 'SW10200', '_price', 99);
     }
 
-    public function testArticlesInstockCsvExportNotInStockMinStockFilter()
+    public function testArticlesInstockCsvExportNotInStockMinStockFilter(): void
     {
         $params = $this->getExportRequestParams();
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::ARTICLES_INSTOCK_PROFILE_TYPE);
@@ -298,7 +298,7 @@ class ArticlesInstockExportTest extends \Enlight_Components_Test_Controller_Test
         static::assertEquals(99, $mappedArticleList['SW10200']['_price']);
     }
 
-    public function testArticlesInstockXmlExportWithCustomInstockGreaterThanFilter()
+    public function testArticlesInstockXmlExportWithCustomInstockGreaterThanFilter(): void
     {
         $params = $this->getExportRequestParams();
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::ARTICLES_INSTOCK_PROFILE_TYPE);
@@ -322,7 +322,7 @@ class ArticlesInstockExportTest extends \Enlight_Components_Test_Controller_Test
         $this->assertArticleAttributeInXml($file, 'SW10014', '_supplier', 'Teapavilion');
     }
 
-    public function testArticlesInstockCsvExportWithCustomInstockGreaterThanFilter()
+    public function testArticlesInstockCsvExportWithCustomInstockGreaterThanFilter(): void
     {
         $params = $this->getExportRequestParams();
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::ARTICLES_INSTOCK_PROFILE_TYPE);
@@ -347,7 +347,7 @@ class ArticlesInstockExportTest extends \Enlight_Components_Test_Controller_Test
         static::assertEquals('Teapavilion', $mappedArticleInstockList['SW10014']['_supplier']);
     }
 
-    public function testArticlesInstockXmlExportWithCustomInstockLowerThanFilter()
+    public function testArticlesInstockXmlExportWithCustomInstockLowerThanFilter(): void
     {
         $params = $this->getExportRequestParams();
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::ARTICLES_INSTOCK_PROFILE_TYPE);
@@ -371,7 +371,7 @@ class ArticlesInstockExportTest extends \Enlight_Components_Test_Controller_Test
         $this->assertArticleAttributeInXml($file, 'SW10203.5', '_price', 15);
     }
 
-    public function testArticlesInstockCsvExportWithCustomInstockLowerThanFilter()
+    public function testArticlesInstockCsvExportWithCustomInstockLowerThanFilter(): void
     {
         $params = $this->getExportRequestParams();
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::ARTICLES_INSTOCK_PROFILE_TYPE);
@@ -396,17 +396,14 @@ class ArticlesInstockExportTest extends \Enlight_Components_Test_Controller_Test
         static::assertEquals(15, $mappedArticleInstockList['SW10203.5']['_price']);
     }
 
-    private function assertArticleAttributeInXml(string $filePath, string $orderNumber, string $attribute, string $expected)
+    private function assertArticleAttributeInXml(string $filePath, string $orderNumber, string $attribute, string $expected): void
     {
         $articleDomNodeList = $this->queryXpath($filePath, "//article[ordernumber='{$orderNumber}']/{$attribute}");
         $nodeValue = $articleDomNodeList->item(0)->nodeValue;
         static::assertEquals($expected, $nodeValue);
     }
 
-    /**
-     * @return array
-     */
-    private function readCsvIndexedByOrdernumber(string $file)
+    private function readCsvIndexedByOrdernumber(string $file): array
     {
         return $this->csvToArrayIndexedByFieldValue($file, 'ordernumber');
     }

@@ -30,15 +30,12 @@ class CustomersDbAdapterTest extends DbAdapterTestHelper
      *
      * @dataProvider readProvider
      */
-    public function testRead(array $columns, array $ids, array $expected, int $expectedCount)
+    public function testRead(array $columns, array $ids, array $expected, int $expectedCount): void
     {
         $this->read($columns, $ids, $expected, $expectedCount);
     }
 
-    /**
-     * @return array
-     */
-    public function readProvider()
+    public function readProvider(): array
     {
         return $this->getDataProvider('testRead');
     }
@@ -48,15 +45,12 @@ class CustomersDbAdapterTest extends DbAdapterTestHelper
      *
      * @dataProvider readRecordIdsProvider
      */
-    public function testReadRecordIds(int $start, int $limit, array $expectedIds, int $expectedCount)
+    public function testReadRecordIds(int $start, int $limit, array $expectedIds, int $expectedCount): void
     {
         $this->readRecordIds($start, $limit, [], $expectedIds, $expectedCount);
     }
 
-    /**
-     * @return array
-     */
-    public function readRecordIdsProvider()
+    public function readRecordIdsProvider(): array
     {
         return $this->getDataProvider('testReadRecordIds');
     }
@@ -66,17 +60,14 @@ class CustomersDbAdapterTest extends DbAdapterTestHelper
      *
      * @param array<string, mixed> $records
      */
-    public function testWriteWithEmptyFile(array $records, int $expectedInsertedRows)
+    public function testWriteWithEmptyFile(array $records, int $expectedInsertedRows): void
     {
         self::expectException(\Exception::class);
 
         $this->write($records, $expectedInsertedRows);
     }
 
-    /**
-     * @return array
-     */
-    public function writeWithEmptyFile()
+    public function writeWithEmptyFile(): array
     {
         return $this->getDataProvider('writeWithEmptyFile');
     }
@@ -84,15 +75,12 @@ class CustomersDbAdapterTest extends DbAdapterTestHelper
     /**
      * @dataProvider writeProvider
      */
-    public function testWrite(array $records, int $expectedInsertedRows)
+    public function testWrite(array $records, int $expectedInsertedRows): void
     {
         $this->write($records, $expectedInsertedRows);
     }
 
-    /**
-     * @return array
-     */
-    public function writeProvider()
+    public function writeProvider(): array
     {
         return $this->getDataProvider('testWrite');
     }

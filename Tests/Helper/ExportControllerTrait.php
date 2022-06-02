@@ -22,7 +22,7 @@ trait ExportControllerTrait
     /**
      * @before
      */
-    protected function loadDependenciesBefore()
+    protected function loadDependenciesBefore(): void
     {
         $this->backendControllerTestHelper = new BackendControllerTestHelper();
 
@@ -32,7 +32,7 @@ trait ExportControllerTrait
     /**
      * @return \DOMNodeList<\DOMNode>
      */
-    private function queryXpath(string $filePath, string $xpath)
+    private function queryXpath(string $filePath, string $xpath): \DOMNodeList
     {
         $domDocument = new \DOMDocument();
         $domDocument->loadXML(\file_get_contents($filePath));
@@ -46,10 +46,7 @@ trait ExportControllerTrait
         return $path;
     }
 
-    /**
-     * @return array
-     */
-    private function csvToArrayIndexedByFieldValue(string $filePath, string $indexField)
+    private function csvToArrayIndexedByFieldValue(string $filePath, string $indexField): array
     {
         $csv = \fopen($filePath, 'rb');
         $mappedCsv = [];
@@ -66,7 +63,7 @@ trait ExportControllerTrait
     /**
      * @return array<string, string>
      */
-    private function getExportRequestParams()
+    private function getExportRequestParams(): array
     {
         return [
             'profileId' => '',

@@ -26,15 +26,12 @@ class ArticlesPricesDbAdapterTest extends DbAdapterTestHelper
      *
      * @dataProvider readProvider
      */
-    public function testRead(array $columns, array $ids, array $expected, int $expectedCount)
+    public function testRead(array $columns, array $ids, array $expected, int $expectedCount): void
     {
         $this->read($columns, $ids, $expected, $expectedCount);
     }
 
-    /**
-     * @return array
-     */
-    public function readProvider()
+    public function readProvider(): array
     {
         return $this->getDataProvider('testRead');
     }
@@ -42,15 +39,12 @@ class ArticlesPricesDbAdapterTest extends DbAdapterTestHelper
     /**
      * @dataProvider readRecordIdsProvider
      */
-    public function testReadRecordIds(int $start, int $limit, array $expected, int $expectedCount)
+    public function testReadRecordIds(int $start, int $limit, array $expected, int $expectedCount): void
     {
         $this->readRecordIds($start, $limit, [], $expected, $expectedCount);
     }
 
-    /**
-     * @return array
-     */
-    public function readRecordIdsProvider()
+    public function readRecordIdsProvider(): array
     {
         return $this->getDataProvider('testReadRecordIds');
     }

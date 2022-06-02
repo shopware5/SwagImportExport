@@ -19,7 +19,7 @@ class ArticlesTranslationsDbAdapterTest extends TestCase
     use DatabaseTestCaseTrait;
     use ContainerTrait;
 
-    public function testReadShouldThrowExceptionIfIdsAreEmpty()
+    public function testReadShouldThrowExceptionIfIdsAreEmpty(): void
     {
         $articlesTranslationsDbAdapter = $this->getArticlesTranslationsDbAdapter();
 
@@ -28,7 +28,7 @@ class ArticlesTranslationsDbAdapterTest extends TestCase
         $articlesTranslationsDbAdapter->read([], []);
     }
 
-    public function testReadShouldRespondCorrectTranslations()
+    public function testReadShouldRespondCorrectTranslations(): void
     {
         $articlesTranslationsDbAdapter = $this->getArticlesTranslationsDbAdapter();
         $translations = $articlesTranslationsDbAdapter->read([151, 152], $articlesTranslationsDbAdapter->getDefaultColumns());
@@ -38,7 +38,7 @@ class ArticlesTranslationsDbAdapterTest extends TestCase
         static::assertEquals('Beach bag Sailor', $translations['default'][1]['name']);
     }
 
-    public function testWriteShouldThrowExceptionIfRecordsAreEmpty()
+    public function testWriteShouldThrowExceptionIfRecordsAreEmpty(): void
     {
         $articlesTranslationsDbAdapter = $this->getArticlesTranslationsDbAdapter();
 
@@ -47,7 +47,7 @@ class ArticlesTranslationsDbAdapterTest extends TestCase
         $articlesTranslationsDbAdapter->write([]);
     }
 
-    public function testWriteShouldUpdateArticleTranslationToDatabase()
+    public function testWriteShouldUpdateArticleTranslationToDatabase(): void
     {
         $articlesTranslationsDbAdapter = $this->getArticlesTranslationsDbAdapter();
         $records = [
