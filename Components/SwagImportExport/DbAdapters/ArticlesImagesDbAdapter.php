@@ -674,7 +674,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
         if (!$put_handle) {
             $message = SnippetsHelper::getNamespace()
                 ->get('adapters/articlesImages/could_open_dir_file', 'Could not open %s/%s for writing');
-            throw new AdapterException(\sprintf($message), $destPath, $filename);
+            throw new AdapterException(\sprintf($message, $destPath, $filename));
         }
 
         //replace empty spaces
