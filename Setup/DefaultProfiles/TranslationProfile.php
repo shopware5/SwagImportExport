@@ -15,7 +15,7 @@ class TranslationProfile implements \JsonSerializable, ProfileMetaData
     /**
      * {@inheritdoc}
      */
-    public function getAdapter()
+    public function getAdapter(): string
     {
         return DataDbAdapter::TRANSLATION_ADAPTER;
     }
@@ -23,7 +23,7 @@ class TranslationProfile implements \JsonSerializable, ProfileMetaData
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'default_system_translations';
     }
@@ -31,7 +31,7 @@ class TranslationProfile implements \JsonSerializable, ProfileMetaData
     /**
      * {@inheritdoc}
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return 'default_system_translations_description';
     }
@@ -84,10 +84,7 @@ class TranslationProfile implements \JsonSerializable, ProfileMetaData
         ];
     }
 
-    /**
-     * @return array
-     */
-    private function getTranslationFields()
+    private function getTranslationFields(): array
     {
         return [
             [

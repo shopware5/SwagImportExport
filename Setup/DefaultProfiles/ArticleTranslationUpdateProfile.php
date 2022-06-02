@@ -15,7 +15,7 @@ class ArticleTranslationUpdateProfile implements \JsonSerializable, ProfileMetaD
     /**
      * {@inheritdoc}
      */
-    public function getAdapter()
+    public function getAdapter(): string
     {
         return DataDbAdapter::ARTICLE_ADAPTER;
     }
@@ -23,7 +23,7 @@ class ArticleTranslationUpdateProfile implements \JsonSerializable, ProfileMetaD
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'default_article_translations_update';
     }
@@ -31,7 +31,7 @@ class ArticleTranslationUpdateProfile implements \JsonSerializable, ProfileMetaD
     /**
      * {@inheritdoc}
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return 'default_article_translations_update_description';
     }
@@ -95,10 +95,7 @@ class ArticleTranslationUpdateProfile implements \JsonSerializable, ProfileMetaD
         ];
     }
 
-    /**
-     * @return array
-     */
-    private function getTranslationFields()
+    private function getTranslationFields(): array
     {
         return [
             0 => [

@@ -15,7 +15,7 @@ class ArticleCompleteProfile implements ProfileMetaData, \JsonSerializable
     /**
      * {@inheritdoc}
      */
-    public function getAdapter()
+    public function getAdapter(): string
     {
         return DataDbAdapter::ARTICLE_ADAPTER;
     }
@@ -23,7 +23,7 @@ class ArticleCompleteProfile implements ProfileMetaData, \JsonSerializable
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'default_articles_complete';
     }
@@ -31,7 +31,7 @@ class ArticleCompleteProfile implements ProfileMetaData, \JsonSerializable
     /**
      * {@inheritdoc}
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return 'default_articles_complete_description';
     }
@@ -356,10 +356,7 @@ class ArticleCompleteProfile implements ProfileMetaData, \JsonSerializable
         ];
     }
 
-    /**
-     * @return array
-     */
-    private function getPriceFields()
+    private function getPriceFields(): array
     {
         return [
             'id' => '53e0d44938a70',
@@ -426,10 +423,7 @@ class ArticleCompleteProfile implements ProfileMetaData, \JsonSerializable
         ];
     }
 
-    /**
-     * @return array
-     */
-    private function getConfiguratorFields()
+    private function getConfiguratorFields(): array
     {
         return [
             'id' => '53e0d5f7d03d4',
@@ -482,10 +476,7 @@ class ArticleCompleteProfile implements ProfileMetaData, \JsonSerializable
         ];
     }
 
-    /**
-     * @return array
-     */
-    private function getSimilarFields()
+    private function getSimilarFields(): array
     {
         return [
             'id' => '541afdba8e926',
@@ -507,10 +498,7 @@ class ArticleCompleteProfile implements ProfileMetaData, \JsonSerializable
         ];
     }
 
-    /**
-     * @return array
-     */
-    private function getPropertyValueFields()
+    private function getPropertyValueFields(): array
     {
         return [
             'id' => '582d9f2dc9dc4',
@@ -550,10 +538,7 @@ class ArticleCompleteProfile implements ProfileMetaData, \JsonSerializable
         ];
     }
 
-    /**
-     * @return array
-     */
-    private function getAccessoryFields()
+    private function getAccessoryFields(): array
     {
         return [
             'id' => '582d9f40109da',
@@ -577,10 +562,7 @@ class ArticleCompleteProfile implements ProfileMetaData, \JsonSerializable
         ];
     }
 
-    /**
-     * @return array
-     */
-    private function getTranslationFields()
+    private function getTranslationFields(): array
     {
         return [
             'id' => '582d9f63d5128',
@@ -700,10 +682,7 @@ class ArticleCompleteProfile implements ProfileMetaData, \JsonSerializable
         ];
     }
 
-    /**
-     * @return array
-     */
-    private function getImagesFields()
+    private function getImagesFields(): array
     {
         return [
             'id' => '582d9f8997e45',
@@ -735,10 +714,7 @@ class ArticleCompleteProfile implements ProfileMetaData, \JsonSerializable
         ];
     }
 
-    /**
-     * @return array
-     */
-    private function getCategoryFields()
+    private function getCategoryFields(): array
     {
         return [
             'id' => '54211df500e93',

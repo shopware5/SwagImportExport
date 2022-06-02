@@ -15,7 +15,7 @@ class ArticleImageUrlProfile implements \JsonSerializable, ProfileMetaData
     /**
      * {@inheritdoc}
      */
-    public function getAdapter()
+    public function getAdapter(): string
     {
         return DataDbAdapter::ARTICLE_ADAPTER;
     }
@@ -23,7 +23,7 @@ class ArticleImageUrlProfile implements \JsonSerializable, ProfileMetaData
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'default_article_images_url';
     }
@@ -31,7 +31,7 @@ class ArticleImageUrlProfile implements \JsonSerializable, ProfileMetaData
     /**
      * {@inheritdoc}
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return 'default_article_images_url_description';
     }

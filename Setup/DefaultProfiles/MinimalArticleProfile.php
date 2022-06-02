@@ -15,7 +15,7 @@ class MinimalArticleProfile implements \JsonSerializable, ProfileMetaData
     /**
      * {@inheritdoc}
      */
-    public function getAdapter()
+    public function getAdapter(): string
     {
         return DataDbAdapter::ARTICLE_ADAPTER;
     }
@@ -23,7 +23,7 @@ class MinimalArticleProfile implements \JsonSerializable, ProfileMetaData
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'default_articles_minimal';
     }
@@ -31,7 +31,7 @@ class MinimalArticleProfile implements \JsonSerializable, ProfileMetaData
     /**
      * {@inheritdoc}
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return 'default_articles_minimal_description';
     }
@@ -58,10 +58,7 @@ class MinimalArticleProfile implements \JsonSerializable, ProfileMetaData
         ];
     }
 
-    /**
-     * @return array
-     */
-    private function getArticleFields()
+    private function getArticleFields(): array
     {
         return [
             0 => [

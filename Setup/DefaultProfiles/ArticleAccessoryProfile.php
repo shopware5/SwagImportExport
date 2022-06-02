@@ -15,7 +15,7 @@ class ArticleAccessoryProfile implements \JsonSerializable, ProfileMetaData
     /**
      * {@inheritdoc}
      */
-    public function getAdapter()
+    public function getAdapter(): string
     {
         return DataDbAdapter::ARTICLE_ADAPTER;
     }
@@ -23,7 +23,7 @@ class ArticleAccessoryProfile implements \JsonSerializable, ProfileMetaData
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'default_article_accessories';
     }
@@ -31,7 +31,7 @@ class ArticleAccessoryProfile implements \JsonSerializable, ProfileMetaData
     /**
      * {@inheritdoc}
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return 'default_article_accessories_description';
     }
@@ -70,10 +70,7 @@ class ArticleAccessoryProfile implements \JsonSerializable, ProfileMetaData
         ];
     }
 
-    /**
-     * @return array
-     */
-    private function getArticleAccessoryFields()
+    private function getArticleAccessoryFields(): array
     {
         return [
             0 => [

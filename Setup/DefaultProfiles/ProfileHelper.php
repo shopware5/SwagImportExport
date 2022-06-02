@@ -13,7 +13,7 @@ class ProfileHelper
     /**
      * @return ProfileMetaData[]
      */
-    public static function getProfileInstances()
+    public static function getProfileInstances(): array
     {
         return [
             new MinimalCategoryProfile(),

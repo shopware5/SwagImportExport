@@ -15,7 +15,7 @@ class MinimalCategoryProfile implements \JsonSerializable, ProfileMetaData
     /**
      * {@inheritdoc}
      */
-    public function getAdapter()
+    public function getAdapter(): string
     {
         return DataDbAdapter::CATEGORIES_ADAPTER;
     }
@@ -23,7 +23,7 @@ class MinimalCategoryProfile implements \JsonSerializable, ProfileMetaData
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'default_categories_minimal';
     }
@@ -31,7 +31,7 @@ class MinimalCategoryProfile implements \JsonSerializable, ProfileMetaData
     /**
      * {@inheritdoc}
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return 'default_categories_minimal_description';
     }
@@ -86,10 +86,7 @@ class MinimalCategoryProfile implements \JsonSerializable, ProfileMetaData
         ];
     }
 
-    /**
-     * @return array
-     */
-    private function getCategoryIdField()
+    private function getCategoryIdField(): array
     {
         return [
             'id' => '53e9f539a997d',
@@ -100,10 +97,7 @@ class MinimalCategoryProfile implements \JsonSerializable, ProfileMetaData
         ];
     }
 
-    /**
-     * @return array
-     */
-    private function getParentIdField()
+    private function getParentIdField(): array
     {
         return [
             'id' => '53e0a853f1b98',
@@ -114,10 +108,7 @@ class MinimalCategoryProfile implements \JsonSerializable, ProfileMetaData
         ];
     }
 
-    /**
-     * @return array
-     */
-    private function getNameField()
+    private function getNameField(): array
     {
         return [
             'id' => '57ff840eab2d9',

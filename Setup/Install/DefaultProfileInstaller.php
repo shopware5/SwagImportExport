@@ -21,7 +21,7 @@ class DefaultProfileInstaller
         $this->connection = $connection;
     }
 
-    public function install()
+    public function install(): void
     {
         $sql = '
             INSERT IGNORE INTO s_import_export_profile

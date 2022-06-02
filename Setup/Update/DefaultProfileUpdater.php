@@ -28,7 +28,7 @@ class DefaultProfileUpdater
      * Only changes to the profile tree should
      * be made and make sense.
      */
-    public function update()
+    public function update(): void
     {
         $sql = '
             UPDATE s_import_export_profile

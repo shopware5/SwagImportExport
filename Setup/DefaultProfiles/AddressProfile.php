@@ -15,7 +15,7 @@ class AddressProfile implements ProfileMetaData, \JsonSerializable
     /**
      * {@inheritdoc}
      */
-    public function getAdapter()
+    public function getAdapter(): string
     {
         return DataDbAdapter::ADDRESS_ADAPTER;
     }
@@ -23,7 +23,7 @@ class AddressProfile implements ProfileMetaData, \JsonSerializable
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'default_addresses';
     }
@@ -31,7 +31,7 @@ class AddressProfile implements ProfileMetaData, \JsonSerializable
     /**
      * {@inheritdoc}
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return 'default_addresses_description';
     }
@@ -39,7 +39,7 @@ class AddressProfile implements ProfileMetaData, \JsonSerializable
     /**
      * {@inheritdoc}
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): \JsonSerializable
     {
         return [
             'id' => 'root',
@@ -67,10 +67,7 @@ class AddressProfile implements ProfileMetaData, \JsonSerializable
         ];
     }
 
-    /**
-     * @return array
-     */
-    private function getAddressFields()
+    private function getAddressFields(): array
     {
         return [
             [

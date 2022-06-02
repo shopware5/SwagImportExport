@@ -15,7 +15,7 @@ class ArticleInStockProfile implements \JsonSerializable, ProfileMetaData
     /**
      * {@inheritdoc}
      */
-    public function getAdapter()
+    public function getAdapter(): string
     {
         return DataDbAdapter::ARTICLE_INSTOCK_ADAPTER;
     }
@@ -23,7 +23,7 @@ class ArticleInStockProfile implements \JsonSerializable, ProfileMetaData
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'default_article_in_stock';
     }
@@ -31,7 +31,7 @@ class ArticleInStockProfile implements \JsonSerializable, ProfileMetaData
     /**
      * {@inheritdoc}
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return 'default_article_in_stock_description';
     }
@@ -85,10 +85,7 @@ class ArticleInStockProfile implements \JsonSerializable, ProfileMetaData
         ];
     }
 
-    /**
-     * @return array
-     */
-    private function getArticleInStockFields()
+    private function getArticleInStockFields(): array
     {
         return [
             0 => [

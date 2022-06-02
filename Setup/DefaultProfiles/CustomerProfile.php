@@ -15,7 +15,7 @@ class CustomerProfile implements \JsonSerializable, ProfileMetaData
     /**
      * {@inheritdoc}
      */
-    public function getAdapter()
+    public function getAdapter(): string
     {
         return DataDbAdapter::CUSTOMER_ADAPTER;
     }
@@ -23,7 +23,7 @@ class CustomerProfile implements \JsonSerializable, ProfileMetaData
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'default_customers';
     }
@@ -31,7 +31,7 @@ class CustomerProfile implements \JsonSerializable, ProfileMetaData
     /**
      * {@inheritdoc}
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return 'default_customers_description';
     }
@@ -84,10 +84,7 @@ class CustomerProfile implements \JsonSerializable, ProfileMetaData
         ];
     }
 
-    /**
-     * @return array
-     */
-    private function getCustomerFields()
+    private function getCustomerFields(): array
     {
         return [
             0 => [

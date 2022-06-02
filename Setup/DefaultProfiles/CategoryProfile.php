@@ -15,7 +15,7 @@ class CategoryProfile implements \JsonSerializable, ProfileMetaData
     /**
      * {@inheritdoc}
      */
-    public function getAdapter()
+    public function getAdapter(): string
     {
         return DataDbAdapter::CATEGORIES_ADAPTER;
     }
@@ -23,7 +23,7 @@ class CategoryProfile implements \JsonSerializable, ProfileMetaData
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'default_categories';
     }
@@ -31,7 +31,7 @@ class CategoryProfile implements \JsonSerializable, ProfileMetaData
     /**
      * {@inheritdoc}
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return 'default_categories_description';
     }
@@ -80,10 +80,7 @@ class CategoryProfile implements \JsonSerializable, ProfileMetaData
         ];
     }
 
-    /**
-     * @return array
-     */
-    private function getCategoryFields()
+    private function getCategoryFields(): array
     {
         return [
             '0' => [

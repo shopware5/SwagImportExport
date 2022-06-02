@@ -15,7 +15,7 @@ class OrderMainDataProfile implements \JsonSerializable, ProfileMetaData
     /**
      * {@inheritdoc}
      */
-    public function getAdapter()
+    public function getAdapter(): string
     {
         return DataDbAdapter::MAIN_ORDER_ADAPTER;
     }
@@ -23,7 +23,7 @@ class OrderMainDataProfile implements \JsonSerializable, ProfileMetaData
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'default_order_main_data';
     }
@@ -31,7 +31,7 @@ class OrderMainDataProfile implements \JsonSerializable, ProfileMetaData
     /**
      * {@inheritdoc}
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return 'default_order_main_data_description';
     }
@@ -69,10 +69,7 @@ class OrderMainDataProfile implements \JsonSerializable, ProfileMetaData
         ];
     }
 
-    /**
-     * @return array
-     */
-    private function getOrderMainDataFields()
+    private function getOrderMainDataFields(): array
     {
         return [
             0 => [
@@ -408,10 +405,7 @@ class OrderMainDataProfile implements \JsonSerializable, ProfileMetaData
         ];
     }
 
-    /**
-     * @return array
-     */
-    private function getTaxFields()
+    private function getTaxFields(): array
     {
         return [
             0 => [

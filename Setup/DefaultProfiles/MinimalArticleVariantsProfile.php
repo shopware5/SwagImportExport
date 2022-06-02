@@ -15,7 +15,7 @@ class MinimalArticleVariantsProfile implements \JsonSerializable, ProfileMetaDat
     /**
      * {@inheritdoc}
      */
-    public function getAdapter()
+    public function getAdapter(): string
     {
         return DataDbAdapter::ARTICLE_ADAPTER;
     }
@@ -23,7 +23,7 @@ class MinimalArticleVariantsProfile implements \JsonSerializable, ProfileMetaDat
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'default_article_variants_minimal';
     }
@@ -31,7 +31,7 @@ class MinimalArticleVariantsProfile implements \JsonSerializable, ProfileMetaDat
     /**
      * {@inheritdoc}
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return 'default_article_variants_minimal_description';
     }
@@ -70,10 +70,7 @@ class MinimalArticleVariantsProfile implements \JsonSerializable, ProfileMetaDat
         ];
     }
 
-    /**
-     * @return array
-     */
-    private function getArticleVariantFields()
+    private function getArticleVariantFields(): array
     {
         return [
             0 => [

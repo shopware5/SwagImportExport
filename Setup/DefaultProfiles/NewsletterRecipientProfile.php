@@ -15,7 +15,7 @@ class NewsletterRecipientProfile implements \JsonSerializable, ProfileMetaData
     /**
      * {@inheritdoc}
      */
-    public function getAdapter()
+    public function getAdapter(): string
     {
         return DataDbAdapter::NEWSLETTER_RECIPIENTS_ADAPTER;
     }
@@ -23,7 +23,7 @@ class NewsletterRecipientProfile implements \JsonSerializable, ProfileMetaData
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'default_newsletter_recipient';
     }
@@ -31,7 +31,7 @@ class NewsletterRecipientProfile implements \JsonSerializable, ProfileMetaData
     /**
      * {@inheritdoc}
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return 'default_newsletter_recipient_description';
     }
@@ -71,10 +71,7 @@ class NewsletterRecipientProfile implements \JsonSerializable, ProfileMetaData
         ];
     }
 
-    /**
-     * @return array
-     */
-    private function getNewsletterFields()
+    private function getNewsletterFields(): array
     {
         return [
             0 => [

@@ -16,7 +16,7 @@ class ArticlePriceProfile implements \JsonSerializable, ProfileMetaData
     /**
      * {@inheritdoc}
      */
-    public function getAdapter()
+    public function getAdapter(): string
     {
         return DataDbAdapter::ARTICLE_PRICE_ADAPTER;
     }
@@ -24,7 +24,7 @@ class ArticlePriceProfile implements \JsonSerializable, ProfileMetaData
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'default_article_prices';
     }
@@ -32,7 +32,7 @@ class ArticlePriceProfile implements \JsonSerializable, ProfileMetaData
     /**
      * {@inheritdoc}
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return 'default_article_prices_description';
     }
@@ -50,10 +50,7 @@ class ArticlePriceProfile implements \JsonSerializable, ProfileMetaData
         ];
     }
 
-    /**
-     * @return array
-     */
-    private function getArticlePriceFields()
+    private function getArticlePriceFields(): array
     {
         $columns = [
             0 => [

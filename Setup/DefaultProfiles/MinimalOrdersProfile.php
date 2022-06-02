@@ -15,7 +15,7 @@ class MinimalOrdersProfile implements \JsonSerializable, ProfileMetaData
     /**
      * {@inheritdoc}
      */
-    public function getAdapter()
+    public function getAdapter(): string
     {
         return DataDbAdapter::ORDER_ADAPTER;
     }
@@ -23,7 +23,7 @@ class MinimalOrdersProfile implements \JsonSerializable, ProfileMetaData
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'default_orders_minimal';
     }
@@ -31,7 +31,7 @@ class MinimalOrdersProfile implements \JsonSerializable, ProfileMetaData
     /**
      * {@inheritdoc}
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return 'default_orders_minimal_description';
     }
@@ -86,10 +86,7 @@ class MinimalOrdersProfile implements \JsonSerializable, ProfileMetaData
         ];
     }
 
-    /**
-     * @return array
-     */
-    private function getOrderStatusFields()
+    private function getOrderStatusFields(): array
     {
         return [
             0 => [
