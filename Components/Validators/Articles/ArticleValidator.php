@@ -63,7 +63,7 @@ class ArticleValidator extends Validator
      *
      * @param array<string, mixed> $record
      */
-    public function checkRequiredFields(array $record)
+    public function checkRequiredFields(array $record): void
     {
         foreach ($this->requiredFields as $key) {
             if (isset($record[$key]) && \strlen($record[$key])) {
@@ -82,7 +82,7 @@ class ArticleValidator extends Validator
      *
      * @param array<string, mixed> $record
      */
-    public function checkRequiredFieldsForCreate(array $record)
+    public function checkRequiredFieldsForCreate(array $record): void
     {
         foreach ($this->requiredFieldsForCreate as $key) {
             if (\is_array($key)) {

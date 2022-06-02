@@ -15,10 +15,8 @@ abstract class Validator
 {
     /**
      * Removes fields which contain empty string.
-     *
-     * @return array
      */
-    public function filterEmptyString(array $record)
+    public function filterEmptyString(array $record): array
     {
         return \array_filter($record, 'strlen');
     }
@@ -29,7 +27,7 @@ abstract class Validator
      * @throws AdapterException
      * @throws \Exception
      */
-    public function validate(array $record, array $mapper)
+    public function validate(array $record, array $mapper): void
     {
         foreach ($record as $fieldName => $value) {
             foreach ($mapper as $type => $fields) {
@@ -43,30 +41,24 @@ abstract class Validator
 
     /**
      * Validates fields with int type. It is possible this field to has as a value '-1'.
-     *
-     * @return int
      */
-    public function validateInt($value)
+    public function validateInt($value): int
     {
         return \preg_match('/^-{0,1}\d+$/', $value);
     }
 
     /**
      * Validates fields with float type.
-     *
-     * @return int
      */
-    public function validateFloat(string $value)
+    public function validateFloat(string $value): int
     {
         return \preg_match('/^-?\d+((\.|,){0,1}\d+)*$/', $value);
     }
 
     /**
      * Validates fields which contains date data.
-     *
-     * @return bool
      */
-    public function validateDateTime($value)
+    public function validateDateTime($value): bool
     {
         return (bool) \strtotime($value);
     }
@@ -76,7 +68,7 @@ abstract class Validator
      *
      * @throws \Exception
      */
-    public function validateEmail($email)
+    public function validateEmail($email): bool
     {
         /** @var \Shopware\Components\Validator\EmailValidatorInterface $emailValidator */
         $emailValidator = Shopware()->Container()->get('validator.email');
@@ -86,10 +78,8 @@ abstract class Validator
 
     /**
      * Validates fields which contains string.
-     *
-     * @return bool
      */
-    public function validateString($value)
+    public function validateString($value): bool
     {
         return \is_string($value);
     }
@@ -101,7 +91,7 @@ abstract class Validator
      *
      * @throws AdapterException
      */
-    public function checkRequiredFields(array $record)
+    public function checkRequiredFields(array $record): void
     {
         foreach ($this->requiredFields as $key) {
             if (isset($record[$key])) {
@@ -118,7 +108,7 @@ abstract class Validator
     /**
      * Helper function, which is used to validate current field's value.
      */
-    private function validateType(string $type, $value, string $fieldName)
+    private function validateType(string $type, $value, string $fieldName): void
     {
         $action = 'validate' . \ucfirst($type);
         if (!\is_callable([$this, $action])) {

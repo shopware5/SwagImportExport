@@ -37,7 +37,7 @@ class TranslationValidator extends Validator
      *
      * @param array<string, mixed> $record
      */
-    public function checkRequiredFields(array $record)
+    public function checkRequiredFields(array $record): void
     {
         foreach ($this->requiredFields as $field => $snippet) {
             if (isset($record[$field])) {

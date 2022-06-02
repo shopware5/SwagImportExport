@@ -88,7 +88,7 @@ class OrderValidator extends Validator
      *
      * @param array<string, mixed> $record
      */
-    public function checkRequiredFields(array $record)
+    public function checkRequiredFields(array $record): void
     {
         foreach ($this->requiredFields as $key) {
             if (\is_array($key)) {

@@ -42,7 +42,7 @@ class AddressValidator extends Validator
     /**
      * @param array<string, mixed> $addressRecord
      */
-    public function checkRequiredFields(array $addressRecord, bool $updateAddress = false)
+    public function checkRequiredFields(array $addressRecord, bool $updateAddress = false): void
     {
         $this->validateEmptyAddressRecord($addressRecord);
         $this->validateCustomerCanBeIdentified($addressRecord);
@@ -57,7 +57,7 @@ class AddressValidator extends Validator
     /**
      * @param array<string, mixed> $addressRecord
      */
-    private function validateEmptyAddressRecord(array $addressRecord)
+    private function validateEmptyAddressRecord(array $addressRecord): void
     {
         if (\count($addressRecord) === 0) {
             throw new AdapterException(
@@ -72,7 +72,7 @@ class AddressValidator extends Validator
     /**
      * @param array<string, mixed> $addressRecord
      */
-    private function validateAddressFields(array $addressRecord)
+    private function validateAddressFields(array $addressRecord): void
     {
         foreach ($this->requiredFields as $field => $snippetData) {
             if ($addressRecord[$field] !== '') {
@@ -88,7 +88,7 @@ class AddressValidator extends Validator
     /**
      * @param array<string, mixed> $addressRecord
      */
-    private function validateCustomerCanBeIdentified(array $addressRecord)
+    private function validateCustomerCanBeIdentified(array $addressRecord): void
     {
         if (
             !($addressRecord['customernumber'] && $addressRecord['email'])
@@ -102,10 +102,8 @@ class AddressValidator extends Validator
 
     /**
      * @param array<string, mixed> $addressRecord
-     *
-     * @return string
      */
-    private function recordToString(array $addressRecord)
+    private function recordToString(array $addressRecord): string
     {
         $messageTemplate = '%s: %s, ';
         $message = '';
@@ -119,10 +117,7 @@ class AddressValidator extends Validator
         return $this->removeLastComma($message);
     }
 
-    /**
-     * @return string
-     */
-    private function removeLastComma(string $message)
+    private function removeLastComma(string $message): string
     {
         return \substr($message, 0, -2);
     }

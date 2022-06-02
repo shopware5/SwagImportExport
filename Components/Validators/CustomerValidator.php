@@ -91,7 +91,7 @@ class CustomerValidator extends Validator
      *
      * @throws AdapterException
      */
-    public function checkRequiredFields(array $record)
+    public function checkRequiredFields(array $record): void
     {
         foreach ($this->requiredFields as $key) {
             if (isset($record[$key])) {
@@ -110,7 +110,7 @@ class CustomerValidator extends Validator
      *
      * @throws AdapterException
      */
-    public function checkRequiredFieldsForCreate(array $record)
+    public function checkRequiredFieldsForCreate(array $record): void
     {
         foreach ($this->requiredFieldsForCreate as $columnName) {
             if (isset($record[$columnName])) {
