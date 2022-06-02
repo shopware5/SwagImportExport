@@ -21,7 +21,7 @@ class RelationWriterTest extends TestCase
 
     public function getRelationWriterAdapter(): RelationWriter
     {
-        //We need to get an instance of the ArticlesDbAdapter because of the given dependency
+        // We need to get an instance of the ArticlesDbAdapter because of the given dependency
         $articlesDbAdapter = $this->getContainer()->get(ArticlesDbAdapter::class);
 
         $relationWriter = $this->getContainer()->get(RelationWriter::class);

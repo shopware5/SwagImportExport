@@ -105,7 +105,7 @@ class DataIO
     {
         $dbAdapter = $this->getDbAdapter();
 
-        //Pass default values to adapter for further use
+        // Pass default values to adapter for further use
         if ($defaults) {
             $dbAdapter->setDefaultValues($defaults);
         }

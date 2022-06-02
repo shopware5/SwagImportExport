@@ -18,7 +18,6 @@ use PhpCsFixerCustomFixers\Fixers;
 
 $finder = PhpCsFixer\Finder::create()
     ->in(__DIR__)
-
 ;
 
 $header = <<<EOF

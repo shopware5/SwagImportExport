@@ -137,10 +137,10 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
         $paginator = $this->getModelManager()->createPaginator($query);
 
-        //returns the total count of the query
+        // returns the total count of the query
         $total = $paginator->count();
 
-        //returns the customer data
+        // returns the customer data
         $data = $paginator->getIterator()->getArrayCopy();
 
         $this->View()->assign([

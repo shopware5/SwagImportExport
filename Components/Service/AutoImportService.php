@@ -94,7 +94,7 @@ class AutoImportService implements AutoImportServiceInterface
 
                     $profilesMapper = ['articles', 'articlesImages'];
 
-                    //loops the unprocessed data
+                    // loops the unprocessed data
                     $pathInfo = \pathinfo($mediaPath);
                     foreach ($profilesMapper as $profileName) {
                         $tmpFile = $this->uploadPathProvider->getRealPath(

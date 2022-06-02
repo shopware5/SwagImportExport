@@ -83,7 +83,7 @@ class Session extends ModelEntity
     /**
      * @ORM\Column(name="created_at", type="datetime")
      */
-    protected \Datetime $createdAt;
+    protected \DateTime $createdAt;
 
     /**
      * @var Collection<string, Logger>

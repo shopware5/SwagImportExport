@@ -17,7 +17,7 @@ class TranslationValidator extends Validator
      * @var array<string, array<string>>
      */
     public static array $mapper = [
-        'string' => ['name', 'baseName', 'objectType', 'description'], //TODO: maybe we don't need to check fields which contains string?
+        'string' => ['name', 'baseName', 'objectType', 'description'], // TODO: maybe we don't need to check fields which contains string?
         'int' => ['objectKey', 'languageId'],
     ];
 

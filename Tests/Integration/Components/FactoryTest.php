@@ -52,11 +52,11 @@ class FactoryTest extends ImportExportTestHelper
     {
         $dataFactory = $this->getContainer()->get(DataFactory::class);
 
-        //tests categories data adapter
+        // tests categories data adapter
         $catergoriesDbAdapter = $dataFactory->createDbAdapter('categories');
         static::assertInstanceOf(CategoriesDbAdapter::class, $catergoriesDbAdapter, 'Is not a instance of CategoriesDbAdapter');
 
-        //tests articles data adapter
+        // tests articles data adapter
         $articlesDbAdapter = $dataFactory->createDbAdapter('articles');
         static::assertInstanceOf(ArticlesDbAdapter::class, $articlesDbAdapter, 'Is not a instance of ArticlesDbAdapter');
     }

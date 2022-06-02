@@ -49,7 +49,7 @@ class XmlFileWriter implements FileWriter
      */
     public function writeRecords(string $fileName, array $data): void
     {
-        //converting the whole template tree without the interation part
+        // converting the whole template tree without the interation part
         $data = $this->xmlConvertor->_encode($data);
 
         $this->getFileHelper()->writeStringToFile($fileName, \trim($data), \FILE_APPEND);
@@ -89,10 +89,10 @@ class XmlFileWriter implements FileWriter
      */
     protected function splitHeaderFooter(array $data): array
     {
-        //converting the whole template tree without the iteration part
+        // converting the whole template tree without the iteration part
         $data = $this->xmlConvertor->encode($data);
 
-        //spliting the the tree in to two parts
+        // spliting the the tree in to two parts
         return \explode('<_currentMarker></_currentMarker>', $data);
     }
 }

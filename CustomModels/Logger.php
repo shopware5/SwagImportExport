@@ -48,7 +48,7 @@ class Logger extends ModelEntity
     /**
      * @ORM\Column(name="created_at", type="datetime")
      */
-    protected \Datetime $createdAt;
+    protected \DateTime $createdAt;
 
     public function getId(): int
     {
@@ -79,7 +79,7 @@ class Logger extends ModelEntity
         return $this;
     }
 
-    public function getCreatedAt(): \Datetime
+    public function getCreatedAt(): \DateTime
     {
         return $this->createdAt;
     }

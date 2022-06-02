@@ -88,7 +88,7 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
             unset($this->currentRecord);
         }
 
-        //creates iteration array
+        // creates iteration array
         $tree = [$iterationPart['name'] => $transformData];
 
         $tree = Shopware()->Events()->filter(
@@ -113,7 +113,7 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
             ['subject' => $this]
         );
 
-        //gets iteration nodes
+        // gets iteration nodes
         $this->getIterationNodes();
 
         $iterationPart = $this->getIterationPart();
@@ -148,13 +148,13 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
         $type = $node['adapter'];
         $parentKey = $node['parentKey'];
 
-        //gets connections between iteration nodes
+        // gets connections between iteration nodes
         $recordLink = $this->currentRecord[$parentKey];
 
-        //prepares raw data
+        // prepares raw data
         $data = $this->getPreparedData($type, $parentKey);
 
-        //gets records for the current iteration node
+        // gets records for the current iteration node
         $records = $data[$recordLink];
 
         if (!$records) {
@@ -175,8 +175,8 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
      */
     public function buildRawData(array $data, string $type, ?string $nodePath = null): void
     {
-        //creates import mapper
-        //["Prices_Price_groupName"]=> "pricegroup"
+        // creates import mapper
+        // ["Prices_Price_groupName"]=> "pricegroup"
         $importMapper = $this->getImportMapper();
 
         foreach ($data as $record) {
@@ -362,7 +362,7 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
     {
         if (!\is_array($this->headerFooterData)) {
             $tree = \json_decode($this->config, true);
-            //replacing iteration part with custom marker
+            // replacing iteration part with custom marker
             $this->removeIterationPart($tree);
 
             $modifiedTree = $this->transformToTree($tree);

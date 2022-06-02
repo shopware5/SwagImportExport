@@ -104,7 +104,7 @@ class ImportService extends AbstractImportExportService implements ImportService
 
     protected function afterImport(array $unprocessedData, string $profileName, string $outputFile): void
     {
-        //loads hidden profile for article
+        // loads hidden profile for article
         $profile = $this->profileFactory->loadHiddenProfile($profileName);
 
         $fileWriter = $this->fileIOFactory->createFileWriter('csv');

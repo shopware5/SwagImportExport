@@ -71,13 +71,13 @@ class MainOrdersDbAdapterTest extends TestCase
 
         $exportedOrders = $mainOrdersDbAdapter->read($ids, $columns);
 
-        /*Check order details*/
+        /* Check order details */
         static::assertSame('15', $exportedOrders['order'][0]['orderId']);
         static::assertSame('20001', $exportedOrders['order'][0]['orderNumber']);
         static::assertSame('998.56', $exportedOrders['order'][0]['invoiceAmount']);
         static::assertSame('839.13', $exportedOrders['order'][0]['invoiceAmountNet']);
 
-        /*Check order tax details*/
+        /* Check order tax details */
         static::assertSame('15', $exportedOrders['taxRateSum'][0]['orderId']);
         static::assertSame('159.44', $exportedOrders['taxRateSum'][0]['taxRateSums']);
         static::assertSame('19', $exportedOrders['taxRateSum'][0]['taxRate']);

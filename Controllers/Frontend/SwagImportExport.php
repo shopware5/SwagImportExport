@@ -26,7 +26,7 @@ class Shopware_Controllers_Frontend_SwagImportExport extends Enlight_Controller_
      */
     public function preDispatch(): void
     {
-        //Call cron only if request is not from browser
+        // Call cron only if request is not from browser
         if (\PHP_SAPI === 'cli') {
             $this->cronAction();
         }

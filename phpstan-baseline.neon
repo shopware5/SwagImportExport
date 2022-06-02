@@ -1956,16 +1956,6 @@ parameters:
 			path: CustomModels/Profile.php
 
 		-
-			message: "#^Property SwagImportExport\\\\CustomModels\\\\Profile\\:\\:\\$expressions type mapping mismatch\\: database can contain Doctrine\\\\Common\\\\Collections\\\\Collection&iterable\\<SwagImportExport\\\\CustomModels\\\\Expression\\> but property expects Doctrine\\\\Common\\\\Collections\\\\Collection\\<int, SwagImportExport\\\\CustomModels\\\\Expression\\>\\|null\\.$#"
-			count: 1
-			path: CustomModels/Profile.php
-
-		-
-			message: "#^Property SwagImportExport\\\\CustomModels\\\\Profile\\:\\:\\$expressions type mapping mismatch\\: property can contain Doctrine\\\\Common\\\\Collections\\\\Collection\\<int, SwagImportExport\\\\CustomModels\\\\Expression\\>\\|null but database expects Doctrine\\\\Common\\\\Collections\\\\Collection&iterable\\<SwagImportExport\\\\CustomModels\\\\Expression\\>\\.$#"
-			count: 1
-			path: CustomModels/Profile.php
-
-		-
 			message: "#^Method SwagImportExport\\\\CustomModels\\\\Session\\:\\:getProfile\\(\\) should return SwagImportExport\\\\CustomModels\\\\Profile but returns SwagImportExport\\\\CustomModels\\\\Profile\\|null\\.$#"
 			count: 1
 			path: CustomModels/Session.php
@@ -1977,18 +1967,8 @@ parameters:
 
 		-
 			message: "#^Cannot call method fetchAll\\(\\) on PDOStatement\\|false\\.$#"
-			count: 2
-			path: Resources/migrations/4-rename-duplicate-profile-names.php
-
-		-
-			message: "#^Cannot call method fetchAll\\(\\) on PDOStatement\\|false\\.$#"
 			count: 1
 			path: Resources/migrations/5-rename-duplicate-profile-names.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\AddressProfile\\:\\:getAdapter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Setup/DefaultProfiles/AddressProfile.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\AddressProfile\\:\\:getAddressFields\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -1996,19 +1976,9 @@ parameters:
 			path: Setup/DefaultProfiles/AddressProfile.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ArticleAccessoryProfile\\:\\:getAdapter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Setup/DefaultProfiles/ArticleAccessoryProfile.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ArticleAccessoryProfile\\:\\:getArticleAccessoryFields\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Setup/DefaultProfiles/ArticleAccessoryProfile.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ArticleCategoriesProfile\\:\\:getAdapter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Setup/DefaultProfiles/ArticleCategoriesProfile.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ArticleCategoriesProfile\\:\\:getArticleCategoriesFields\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -2017,11 +1987,6 @@ parameters:
 
 		-
 			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ArticleCompleteProfile\\:\\:getAccessoryFields\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Setup/DefaultProfiles/ArticleCompleteProfile.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ArticleCompleteProfile\\:\\:getAdapter\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Setup/DefaultProfiles/ArticleCompleteProfile.php
 
@@ -2061,24 +2026,9 @@ parameters:
 			path: Setup/DefaultProfiles/ArticleCompleteProfile.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ArticleImageUrlProfile\\:\\:getAdapter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Setup/DefaultProfiles/ArticleImageUrlProfile.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ArticleImagesProfile\\:\\:getAdapter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Setup/DefaultProfiles/ArticleImagesProfile.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ArticleImagesProfile\\:\\:getArticleImagesFields\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Setup/DefaultProfiles/ArticleImagesProfile.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ArticleInStockProfile\\:\\:getAdapter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Setup/DefaultProfiles/ArticleInStockProfile.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ArticleInStockProfile\\:\\:getArticleInStockFields\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -2086,19 +2036,9 @@ parameters:
 			path: Setup/DefaultProfiles/ArticleInStockProfile.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ArticlePriceProfile\\:\\:getAdapter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Setup/DefaultProfiles/ArticlePriceProfile.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ArticlePriceProfile\\:\\:getArticlePriceFields\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Setup/DefaultProfiles/ArticlePriceProfile.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ArticleProfile\\:\\:getAdapter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Setup/DefaultProfiles/ArticleProfile.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ArticleProfile\\:\\:getArticleFields\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -2106,19 +2046,9 @@ parameters:
 			path: Setup/DefaultProfiles/ArticleProfile.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ArticlePropertiesProfile\\:\\:getAdapter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Setup/DefaultProfiles/ArticlePropertiesProfile.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ArticlePropertiesProfile\\:\\:getArticlePropertiesFields\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Setup/DefaultProfiles/ArticlePropertiesProfile.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ArticleSimilarsProfile\\:\\:getAdapter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Setup/DefaultProfiles/ArticleSimilarsProfile.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ArticleSimilarsProfile\\:\\:getArticleSimilarsFields\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -2126,19 +2056,9 @@ parameters:
 			path: Setup/DefaultProfiles/ArticleSimilarsProfile.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ArticleTranslationProfile\\:\\:getAdapter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Setup/DefaultProfiles/ArticleTranslationProfile.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ArticleTranslationProfile\\:\\:getArticleTranslationFields\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Setup/DefaultProfiles/ArticleTranslationProfile.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ArticleTranslationUpdateProfile\\:\\:getAdapter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Setup/DefaultProfiles/ArticleTranslationUpdateProfile.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ArticleTranslationUpdateProfile\\:\\:getTranslationFields\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -2146,19 +2066,9 @@ parameters:
 			path: Setup/DefaultProfiles/ArticleTranslationUpdateProfile.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\CategoryProfile\\:\\:getAdapter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Setup/DefaultProfiles/CategoryProfile.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\CategoryProfile\\:\\:getCategoryFields\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Setup/DefaultProfiles/CategoryProfile.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\CategoryTranslationProfile\\:\\:getAdapter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Setup/DefaultProfiles/CategoryTranslationProfile.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\CategoryTranslationProfile\\:\\:getTranslationFields\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -2166,19 +2076,9 @@ parameters:
 			path: Setup/DefaultProfiles/CategoryTranslationProfile.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\CustomerCompleteProfile\\:\\:getAdapter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Setup/DefaultProfiles/CustomerCompleteProfile.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\CustomerCompleteProfile\\:\\:getCustomerFields\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Setup/DefaultProfiles/CustomerCompleteProfile.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\CustomerProfile\\:\\:getAdapter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Setup/DefaultProfiles/CustomerProfile.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\CustomerProfile\\:\\:getCustomerFields\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -2186,29 +2086,14 @@ parameters:
 			path: Setup/DefaultProfiles/CustomerProfile.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\MinimalArticleProfile\\:\\:getAdapter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Setup/DefaultProfiles/MinimalArticleProfile.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\MinimalArticleProfile\\:\\:getArticleFields\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Setup/DefaultProfiles/MinimalArticleProfile.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\MinimalArticleVariantsProfile\\:\\:getAdapter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Setup/DefaultProfiles/MinimalArticleVariantsProfile.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\MinimalArticleVariantsProfile\\:\\:getArticleVariantFields\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Setup/DefaultProfiles/MinimalArticleVariantsProfile.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\MinimalCategoryProfile\\:\\:getAdapter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Setup/DefaultProfiles/MinimalCategoryProfile.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\MinimalCategoryProfile\\:\\:getCategoryIdField\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -2226,29 +2111,14 @@ parameters:
 			path: Setup/DefaultProfiles/MinimalCategoryProfile.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\MinimalOrdersProfile\\:\\:getAdapter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Setup/DefaultProfiles/MinimalOrdersProfile.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\MinimalOrdersProfile\\:\\:getOrderStatusFields\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Setup/DefaultProfiles/MinimalOrdersProfile.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\NewsletterRecipientProfile\\:\\:getAdapter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Setup/DefaultProfiles/NewsletterRecipientProfile.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\NewsletterRecipientProfile\\:\\:getNewsletterFields\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Setup/DefaultProfiles/NewsletterRecipientProfile.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\OrderMainDataProfile\\:\\:getAdapter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Setup/DefaultProfiles/OrderMainDataProfile.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\OrderMainDataProfile\\:\\:getOrderMainDataFields\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -2261,39 +2131,14 @@ parameters:
 			path: Setup/DefaultProfiles/OrderMainDataProfile.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\OrderProfile\\:\\:getAdapter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Setup/DefaultProfiles/OrderProfile.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\OrderProfile\\:\\:getOrderFields\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Setup/DefaultProfiles/OrderProfile.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ProfileMetaData\\:\\:getAdapter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Setup/DefaultProfiles/ProfileMetaData.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\TranslationProfile\\:\\:getAdapter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Setup/DefaultProfiles/TranslationProfile.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\TranslationProfile\\:\\:getTranslationFields\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Setup/DefaultProfiles/TranslationProfile.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Setup\\\\Install\\\\DefaultProfileInstaller\\:\\:install\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Setup/Install/DefaultProfileInstaller.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Setup\\\\Update\\\\DefaultProfileUpdater\\:\\:update\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Setup/Update/DefaultProfileUpdater.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Commands\\\\ExportCommandTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
@@ -2316,124 +2161,9 @@ parameters:
 			path: Tests/Functional/Commands/ImportCommandTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Commands\\\\ImportCommandTest\\:\\:testArticleCsvImport\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Commands/ImportCommandTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Commands\\\\ImportCommandTest\\:\\:testArticleInStockCsvImport\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Commands/ImportCommandTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Commands\\\\ImportCommandTest\\:\\:testArticleInStockXmlImport\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Commands/ImportCommandTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Commands\\\\ImportCommandTest\\:\\:testArticlePriceCsvImport\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Commands/ImportCommandTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Commands\\\\ImportCommandTest\\:\\:testArticlePriceXmlImport\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Commands/ImportCommandTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Commands\\\\ImportCommandTest\\:\\:testArticleTranslationCsvImport\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Commands/ImportCommandTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Commands\\\\ImportCommandTest\\:\\:testArticleTranslationXmlImport\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Commands/ImportCommandTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Commands\\\\ImportCommandTest\\:\\:testArticleXmlImport\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Commands/ImportCommandTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Commands\\\\ImportCommandTest\\:\\:testCategoryCsvImport\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Commands/ImportCommandTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Commands\\\\ImportCommandTest\\:\\:testCategoryXmlImport\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Commands/ImportCommandTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Commands\\\\ImportCommandTest\\:\\:testCustomerCsvImport\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Commands/ImportCommandTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Commands\\\\ImportCommandTest\\:\\:testCustomerXmlImport\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Commands/ImportCommandTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Commands\\\\ImportCommandTest\\:\\:testMainOrderCsvImport\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Commands/ImportCommandTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Commands\\\\ImportCommandTest\\:\\:testMainOrderXmlImport\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Commands/ImportCommandTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Commands\\\\ImportCommandTest\\:\\:testNewsletterRecipientCsvImport\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Commands/ImportCommandTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Commands\\\\ImportCommandTest\\:\\:testNewsletterRecipientXmlImport\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Commands/ImportCommandTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Commands\\\\ImportCommandTest\\:\\:testOrderCsvImport\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Commands/ImportCommandTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Commands\\\\ImportCommandTest\\:\\:testOrderXmlImport\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Commands/ImportCommandTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Commands\\\\ImportCommandTest\\:\\:testTranslationCsvImport\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Commands/ImportCommandTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Commands\\\\ImportCommandTest\\:\\:testTranslationXmlImport\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Commands/ImportCommandTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Commands\\\\ImportCommandTest\\:\\:testVariantCsvImport\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Commands/ImportCommandTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Commands\\\\ImportCommandTest\\:\\:testVariantXmlImport\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Commands/ImportCommandTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
 			count: 1
 			path: Tests/Functional/Commands/ImportCommandTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DataManagers\\\\CustomerDataManagerTest\\:\\:testSetDefaultFieldsForCreateShouldAddANewCustomerNumber\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DataManagers/CustomerDataManagerTest.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\TransformerChainMock\\:\\:composeHeader\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -2451,194 +2181,9 @@ parameters:
 			path: Tests/Functional/Components/DataWorkflowTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\AddressDbAdapterTest\\:\\:assertAddress\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/AddressDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\AddressDbAdapterTest\\:\\:testGetColumnsShouldGetAllRequiredColumns\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/AddressDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\AddressDbAdapterTest\\:\\:testGetColumnsShouldGetAttributeColumns\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/AddressDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\AddressDbAdapterTest\\:\\:testItCanBeCreated\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/AddressDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\AddressDbAdapterTest\\:\\:testReadRecordIdsShouldReturnIds\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/AddressDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\AddressDbAdapterTest\\:\\:testReadRecordIdsWithLimitShouldReturnTwoIds\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/AddressDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\AddressDbAdapterTest\\:\\:testReadRecordIdsWithStartShouldReturnTwoIds\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/AddressDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\AddressDbAdapterTest\\:\\:testReadShouldReturnAddressesByIdsAndSelectGivenColumns\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/AddressDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\AddressDbAdapterTest\\:\\:testReadShouldReturnAttributes\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/AddressDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\AddressDbAdapterTest\\:\\:testWriteShouldCreateAddressWithGivenId\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/AddressDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\AddressDbAdapterTest\\:\\:testWriteShouldCreateNewAddressWithAllRequiredFields\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/AddressDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\AddressDbAdapterTest\\:\\:testWriteShouldIdentifyCustomerByEmailAndCustomernumber\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/AddressDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\AddressDbAdapterTest\\:\\:testWriteShouldIdentifyCustomerByEmailAndCustomernumberIfAnInvalidIdWasGiven\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/AddressDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\AddressDbAdapterTest\\:\\:testWriteShouldImportAdditionalAddressLines\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/AddressDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\AddressDbAdapterTest\\:\\:testWriteShouldImportAttributes\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/AddressDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\AddressDbAdapterTest\\:\\:testWriteShouldImportVatId\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/AddressDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\AddressDbAdapterTest\\:\\:testWriteShouldThrowExceptionIfCustomerDoesNotEixst\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/AddressDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\AddressDbAdapterTest\\:\\:testWriteShouldThrowExceptionIfNoAddressesWereGiven\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/AddressDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\AddressDbAdapterTest\\:\\:testWriteShouldThrowExceptionIfStateIDWasNotFound\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/AddressDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\AddressDbAdapterTest\\:\\:testWriteShouldUpdateExistingAddress\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/AddressDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\AddressDbAdapterTest\\:\\:testWriteShouldUpdateState\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/AddressDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\ArticleInStockDbAdapterTest\\:\\:testRead\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/ArticleInStockDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\ArticleInStockDbAdapterTest\\:\\:testReadAndReadRecordsShouldGetSameResultCount\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/ArticleInStockDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\ArticleInStockDbAdapterTest\\:\\:testReadShouldThrowExceptionIfIdsAreEmpty\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/ArticleInStockDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\ArticleInStockDbAdapterTest\\:\\:testWriteShouldUpdateArticleStock\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/ArticleInStockDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\ArticleInStockDbAdapterTest\\:\\:testWriteWithInvalidOrderNumberThrowsException\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/ArticleInStockDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\Articles\\\\CategoryWriterTest\\:\\:testWriteShouldInsertArticleCategoryAssociation\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/Articles/CategoryWriterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\Articles\\\\CategoryWriterTest\\:\\:testWriteWithInvalidCategoryIdThrowsException\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/Articles/CategoryWriterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\Articles\\\\CategoryWriterTest\\:\\:testWriteWithNoCategoryIdAndNewPathCreatesCategories\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/Articles/CategoryWriterTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$articleId of method SwagImportExport\\\\Components\\\\DbAdapters\\\\Articles\\\\CategoryWriter\\:\\:write\\(\\) expects string, int given\\.$#"
 			count: 3
 			path: Tests/Functional/Components/DbAdapters/Articles/CategoryWriterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\Articles\\\\PropertyWriterTest\\:\\:testWriteShouldCreateGroup\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/Articles/PropertyWriterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\Articles\\\\PropertyWriterTest\\:\\:testWriteShouldCreateOption\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/Articles/PropertyWriterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\Articles\\\\PropertyWriterTest\\:\\:testWriteShouldCreateOptionRelation\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/Articles/PropertyWriterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\Articles\\\\PropertyWriterTest\\:\\:testWriteShouldCreateValue\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/Articles/PropertyWriterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\Articles\\\\PropertyWriterTest\\:\\:testWriteShouldCreateValueRelation\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/Articles/PropertyWriterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\Articles\\\\PropertyWriterTest\\:\\:testWriteShouldNotCreateNewGroupWithExistingArticleAndExistingProperties\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/Articles/PropertyWriterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\Articles\\\\PropertyWriterTest\\:\\:testWriteShouldThrowExceptionWithEmptyPropertyOptionName\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/Articles/PropertyWriterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\Articles\\\\PropertyWriterTest\\:\\:testWriteShouldUpdateGroupRelations\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/Articles/PropertyWriterTest.php
 
 		-
 			message: "#^Parameter \\#1 \\$articleId of method SwagImportExport\\\\Components\\\\DbAdapters\\\\Articles\\\\PropertyWriter\\:\\:writeUpdateCreatePropertyGroupsFilterAndValues\\(\\) expects int, string given\\.$#"
@@ -2646,179 +2191,14 @@ parameters:
 			path: Tests/Functional/Components/DbAdapters/Articles/PropertyWriterTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\Articles\\\\RelationWriterTest\\:\\:testWriteAccessoryWithInvalidDataThrowsException\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/Articles/RelationWriterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\Articles\\\\RelationWriterTest\\:\\:testWriteSimilarWithInvalidDataThrowsException\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/Articles/RelationWriterTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$articleId of method SwagImportExport\\\\Components\\\\DbAdapters\\\\Articles\\\\RelationWriter\\:\\:write\\(\\) expects int, string given\\.$#"
 			count: 2
 			path: Tests/Functional/Components/DbAdapters/Articles/RelationWriterTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\ArticlesTranslationsDbAdapterTest\\:\\:testReadShouldRespondCorrectTranslations\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/ArticlesTranslationsDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\ArticlesTranslationsDbAdapterTest\\:\\:testReadShouldThrowExceptionIfIdsAreEmpty\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/ArticlesTranslationsDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\ArticlesTranslationsDbAdapterTest\\:\\:testWriteShouldThrowExceptionIfRecordsAreEmpty\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/ArticlesTranslationsDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\ArticlesTranslationsDbAdapterTest\\:\\:testWriteShouldUpdateArticleTranslationToDatabase\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/ArticlesTranslationsDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\CategoriesDbAdapterTest\\:\\:testWriteShouldNotIncrementIdOnCreationWhenIdIsGiven\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/CategoriesDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\CategoriesDbAdapterTest\\:\\:testWriteShouldThrowExceptionIfCategoryHasNoId\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/CategoriesDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\CategoriesDbAdapterTest\\:\\:testWriteShouldThrowExceptionIfParentCategoryDoesNotExist\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/CategoriesDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\CategoriesDbAdapterTest\\:\\:testWriteShouldThrowExceptionIfRecordsAreEmpty\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/CategoriesDbAdapterTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\CustomerDbAdapterTest\\:\\:getTestUserDataRecord\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Functional/Components/DbAdapters/CustomerDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\CustomerDbAdapterTest\\:\\:testWriteCreateCustomerWithExistingEmailThrowsException\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/CustomerDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\CustomerDbAdapterTest\\:\\:testWriteNewCustomerWithoutBillingDataThrowsException\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/CustomerDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\CustomerDbAdapterTest\\:\\:testWriteShouldCreateCustomer\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/CustomerDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\CustomerDbAdapterTest\\:\\:testWriteShouldUpdateBillingCity\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/CustomerDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\CustomerDbAdapterTest\\:\\:testWriteShouldUpdateCustomer\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/CustomerDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\CustomerDbAdapterTest\\:\\:testWriteShouldUpdateCustomerGroup\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/CustomerDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\CustomerDbAdapterTest\\:\\:testWriteShouldUpdateCustomerPassword\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/CustomerDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\CustomerDbAdapterTest\\:\\:testWriteShouldUpdateEmailAddress\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/CustomerDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\CustomerDbAdapterTest\\:\\:testWriteShouldUpdateLastLogin\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/CustomerDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\CustomerDbAdapterTest\\:\\:testWriteShouldUpdatePaymentId\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/CustomerDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\CustomerDbAdapterTest\\:\\:testWriteShouldUpdatePhoneNumber\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/CustomerDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\CustomerDbAdapterTest\\:\\:testWriteWithCustomerGroupIdThrowsException\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/CustomerDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\CustomerDbAdapterTest\\:\\:testWriteWithInvalidLanguageIdThrowsException\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/CustomerDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\CustomerDbAdapterTest\\:\\:testWriteWithInvalidSubShopThrowsException\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/CustomerDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\CustomerDbAdapterTest\\:\\:testWriteWithoutEmailThrowsException\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/CustomerDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\CustomerDbAdapterTest\\:\\:testWriteWithoutPasswordThrowsException\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/CustomerDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\CustomerDbAdapterTest\\:\\:testWriteWithoutRecordsThrowsException\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/CustomerDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\NewsletterDbAdapterTest\\:\\:testShouldAddCustomerAsNewsletterRecipient\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/NewsletterDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\NewsletterDbAdapterTest\\:\\:testWriteShouldCreateNewsletterGroup\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/NewsletterDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\NewsletterDbAdapterTest\\:\\:testWriteShouldCreateNewsletterRecipient\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/NewsletterDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\NewsletterDbAdapterTest\\:\\:testWriteShouldCreateNewsletterRecipientContactData\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/NewsletterDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\NewsletterDbAdapterTest\\:\\:testWriteShouldIgnoreExistingCustomerRegisteredInCustomerGroup\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/NewsletterDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\NewsletterDbAdapterTest\\:\\:testWriteThrowsExceptionIfRecordsAreEmpty\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/NewsletterDbAdapterTest.php
 
 		-
 			message: "#^Parameter \\#1 \\$entityName of class Doctrine\\\\ORM\\\\Mapping\\\\ClassMetadata constructor expects class\\-string\\<ExampleEntity\\>, string given\\.$#"
@@ -2829,81 +2209,6 @@ parameters:
 			message: "#^Property Doctrine\\\\ORM\\\\Mapping\\\\ClassMetadataInfo\\<ExampleEntity\\>\\:\\:\\$table \\(array\\{name\\: string, schema\\: string, indexes\\: array, uniqueConstraints\\: array, options\\: array\\<string, mixed\\>, quoted\\?\\: bool\\}\\) does not accept array\\{name\\: 'example_table'\\}\\.$#"
 			count: 1
 			path: Tests/Functional/Components/DbalHelperTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Functional\\\\Components\\\\Factories\\\\DataFactoryTest\\:\\:testCreateDbAdapterShouldCreateAddressDbAdapter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/Factories/DataFactoryTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Functional\\\\Components\\\\Factories\\\\DataFactoryTest\\:\\:testCreateDbAdapterShouldCreateArticlesDbAdapter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/Factories/DataFactoryTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Functional\\\\Components\\\\Factories\\\\DataFactoryTest\\:\\:testCreateDbAdapterShouldCreateArticlesImagesDbAdapter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/Factories/DataFactoryTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Functional\\\\Components\\\\Factories\\\\DataFactoryTest\\:\\:testCreateDbAdapterShouldCreateArticlesInstockDbAdapter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/Factories/DataFactoryTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Functional\\\\Components\\\\Factories\\\\DataFactoryTest\\:\\:testCreateDbAdapterShouldCreateArticlesPricesDbAdapter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/Factories/DataFactoryTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Functional\\\\Components\\\\Factories\\\\DataFactoryTest\\:\\:testCreateDbAdapterShouldCreateCategoriesDbAdapter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/Factories/DataFactoryTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Functional\\\\Components\\\\Factories\\\\DataFactoryTest\\:\\:testCreateDbAdapterShouldCreateCustomerDbAdapter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/Factories/DataFactoryTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Functional\\\\Components\\\\Factories\\\\DataFactoryTest\\:\\:testCreateDbAdapterShouldCreateMainOrderDbAdapter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/Factories/DataFactoryTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Functional\\\\Components\\\\Factories\\\\DataFactoryTest\\:\\:testCreateDbAdapterShouldCreateNewsletterDbAdapter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/Factories/DataFactoryTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Functional\\\\Components\\\\Factories\\\\DataFactoryTest\\:\\:testCreateDbAdapterShouldCreateOrdersDbAdapter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/Factories/DataFactoryTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Functional\\\\Components\\\\Factories\\\\DataFactoryTest\\:\\:testCreateDbAdapterShouldCreateTranslationsDbAdapter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/Factories/DataFactoryTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\FileIO\\\\CsvFileReaderTest\\:\\:testGetTotalCountWithMultipleEmptyLinesAtTheEndOfFile\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/FileIO/CsvFileReaderTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\FileIO\\\\CsvFileReaderTest\\:\\:testGetTotalCountWithoutEmptyLineAtTheEndOfFile\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/FileIO/CsvFileReaderTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\FileIO\\\\CsvFileReaderTest\\:\\:testReadRecordsWithCsvFileWithoutEmptyLineAtEndOfFile\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/FileIO/CsvFileReaderTest.php
-
-		-
-			message: "#^Method SawgImportExport\\\\Tests\\\\Functional\\\\Components\\\\FileIO\\\\CsvFileWriterTest\\:\\:testItShouldCreateCsv\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/FileIO/CsvFileWriterTest.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\FileIO\\\\XmlFileReaderTest\\:\\:getArticleTranslationTree\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -2961,114 +2266,9 @@ parameters:
 			path: Tests/Functional/Components/FileIO/XmlFileReaderTest.php
 
 		-
-			message: "#^Method ValuesTransformerTest\\:\\:testTransform\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/Transformers/ValuesTransformerTest.php
-
-		-
-			message: "#^Method ValuesTransformerTest\\:\\:transform_test_dataProvider\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Functional/Components/Transformers/ValuesTransformerTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$config of method SwagImportExport\\\\Components\\\\Transformers\\\\ValuesTransformer\\:\\:initialize\\(\\) expects array\\{expression\\: array\\<SwagImportExport\\\\CustomModels\\\\Expression\\>, evaluator\\: SwagImportExport\\\\Components\\\\Transformers\\\\ExpressionEvaluator\\}, array\\{evaluator\\: SwagImportExport\\\\Components\\\\Transformers\\\\ExpressionEvaluator\\|null, expression\\: array\\{SwagImportExport\\\\CustomModels\\\\Expression, SwagImportExport\\\\CustomModels\\\\Expression\\}\\} given\\.$#"
 			count: 1
 			path: Tests/Functional/Components/Transformers/ValuesTransformerTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\Validators\\\\AddressValidatorTest\\:\\:testCheckRequiredFieldsShouldThrowExceptionIfAddressHasCustomernumberButEmailIsGiven\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/Validators/AddressValidatorTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\Validators\\\\AddressValidatorTest\\:\\:testCheckRequiredFieldsShouldThrowExceptionIfAddressHasNoEmailButCustomernumberIsGiven\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/Validators/AddressValidatorTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\Validators\\\\AddressValidatorTest\\:\\:testCheckRequiredFieldsShouldThrowExceptionIfCustomerCouldNotBeIdentified\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/Validators/AddressValidatorTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\Validators\\\\AddressValidatorTest\\:\\:testCheckRequiredFieldsShouldThrowExceptionIfRequiredFieldIsEmpty\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/Validators/AddressValidatorTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\Validators\\\\AddressValidatorTest\\:\\:testCheckRquieredFieldsShouldThrowExceptionIfAddressIsEmpty\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/Validators/AddressValidatorTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\Validators\\\\AddressValidatorTest\\:\\:testItCanBeCreated\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/Validators/AddressValidatorTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\Validators\\\\CustomerValidatorTest\\:\\:testValidatorWithEmptyRecord\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/Validators/CustomerValidatorTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\Validators\\\\CustomerValidatorTest\\:\\:testValidatorWithoutBillingCityThrowsException\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/Validators/CustomerValidatorTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\Validators\\\\CustomerValidatorTest\\:\\:testValidatorWithoutBillingCountryIdThrowsException\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/Validators/CustomerValidatorTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\Validators\\\\CustomerValidatorTest\\:\\:testValidatorWithoutBillingFirstNameThrowsException\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/Validators/CustomerValidatorTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\Validators\\\\CustomerValidatorTest\\:\\:testValidatorWithoutBillingLastNameThrowsException\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/Validators/CustomerValidatorTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\Validators\\\\CustomerValidatorTest\\:\\:testValidatorWithoutBillingSalutationThrowsException\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/Validators/CustomerValidatorTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\Validators\\\\CustomerValidatorTest\\:\\:testValidatorWithoutBillingStreetThrowsException\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/Validators/CustomerValidatorTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\Validators\\\\CustomerValidatorTest\\:\\:testValidatorWithoutBillingZipCodeThrowsException\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/Validators/CustomerValidatorTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\Validators\\\\CustomerValidatorTest\\:\\:testValidatorWithoutCustomerGroupThrowsException\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/Validators/CustomerValidatorTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\Validators\\\\CustomerValidatorTest\\:\\:testValidatorWithoutPasswordAndGivenUnhashedThrowsException\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/Validators/CustomerValidatorTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\Validators\\\\CustomerValidatorTest\\:\\:testValidatorWithoutPasswordThrowsException\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/Validators/CustomerValidatorTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\Validators\\\\NewsletterValidatorTest\\:\\:testCheckRequiredFieldsThrowsExceptionWithEmptyEmailAddress\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/Validators/NewsletterValidatorTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\Validators\\\\NewsletterValidatorTest\\:\\:testCheckRequiredFieldsThrowsExceptionWithEmptyRecordArray\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/Validators/NewsletterValidatorTest.php
 
 		-
 			message: "#^Cannot access offset string on array\\|false\\.$#"
@@ -3091,21 +2291,6 @@ parameters:
 			path: Tests/Functional/Controllers/Backend/AddressExportTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\AddressExportTest\\:\\:loadDependenciesBefore\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/AddressExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\AddressExportTest\\:\\:testAddressExportWithCsv\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/AddressExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\AddressExportTest\\:\\:testAddressExportWithXml\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/AddressExportTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$fp of function fgetcsv expects resource, resource\\|false given\\.$#"
 			count: 2
 			path: Tests/Functional/Controllers/Backend/AddressExportTest.php
@@ -3132,11 +2317,6 @@ parameters:
 
 		-
 			message: "#^Cannot access property \\$nodeValue on DOMNode\\|null\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticleExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticleExportTest\\:\\:assertArticleAttributeInXml\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/ArticleExportTest.php
 
@@ -3146,102 +2326,7 @@ parameters:
 			path: Tests/Functional/Controllers/Backend/ArticleExportTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticleExportTest\\:\\:loadDependenciesBefore\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticleExportTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticleExportTest\\:\\:readCsvIndexedByOrdernumber\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticleExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticleExportTest\\:\\:testArticleCsvExport\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticleExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticleExportTest\\:\\:testArticleCsvExportWithCategoryFilter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticleExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticleExportTest\\:\\:testArticleCsvExportWithLimit\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticleExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticleExportTest\\:\\:testArticleCsvExportWithOffset210\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticleExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticleExportTest\\:\\:testArticleXmlExport\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticleExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticleExportTest\\:\\:testArticleXmlExportWithCategoryFilter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticleExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticleExportTest\\:\\:testArticleXmlExportWithLimit\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticleExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticleExportTest\\:\\:testArticleXmlExportWithOffset210\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticleExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticleExportTest\\:\\:testProductCsvExportWithProductStreamFilter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticleExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticleExportTest\\:\\:testProductXmlExportWithProductStreamFilter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticleExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticleExportTest\\:\\:testVariantCsvExport\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticleExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticleExportTest\\:\\:testVariantCsvExportWithCategoryFilter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticleExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticleExportTest\\:\\:testVariantCsvExportWithLimit\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticleExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticleExportTest\\:\\:testVariantCsvExportWithOffset\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticleExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticleExportTest\\:\\:testVariantXmlExport\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticleExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticleExportTest\\:\\:testVariantXmlExportWithCategoryFilter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticleExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticleExportTest\\:\\:testVariantXmlExportWithLimit\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticleExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticleExportTest\\:\\:testVariantXmlExportWithOffset\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/ArticleExportTest.php
 
@@ -3272,11 +2357,6 @@ parameters:
 
 		-
 			message: "#^Cannot access property \\$nodeValue on DOMNode\\|null\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticlePricesExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticlePricesExportTest\\:\\:assertPriceAttributeInXml\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/ArticlePricesExportTest.php
 
@@ -3286,21 +2366,6 @@ parameters:
 			path: Tests/Functional/Controllers/Backend/ArticlePricesExportTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticlePricesExportTest\\:\\:loadDependenciesBefore\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticlePricesExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticlePricesExportTest\\:\\:testArticlesPricesCsvExport\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticlePricesExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticlePricesExportTest\\:\\:testArticlesPricesXmlExport\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticlePricesExportTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$fp of function fgetcsv expects resource, resource\\|false given\\.$#"
 			count: 2
 			path: Tests/Functional/Controllers/Backend/ArticlePricesExportTest.php
@@ -3327,11 +2392,6 @@ parameters:
 
 		-
 			message: "#^Cannot access property \\$nodeValue on DOMNode\\|null\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticleTranslationExportExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticleTranslationExportExportTest\\:\\:assertTranslationAttributeInXml\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/ArticleTranslationExportExportTest.php
 
@@ -3341,21 +2401,6 @@ parameters:
 			path: Tests/Functional/Controllers/Backend/ArticleTranslationExportExportTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticleTranslationExportExportTest\\:\\:loadDependenciesBefore\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticleTranslationExportExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticleTranslationExportExportTest\\:\\:testArticlesTranslationsCsvExport\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticleTranslationExportExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticleTranslationExportExportTest\\:\\:testArticlesTranslationsXmlExport\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticleTranslationExportExportTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$fp of function fgetcsv expects resource, resource\\|false given\\.$#"
 			count: 2
 			path: Tests/Functional/Controllers/Backend/ArticleTranslationExportExportTest.php
@@ -3386,102 +2431,12 @@ parameters:
 			path: Tests/Functional/Controllers/Backend/ArticlesInstockExportTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticlesInstockExportTest\\:\\:assertArticleAttributeInXml\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticlesInstockExportTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticlesInstockExportTest\\:\\:csvToArrayIndexedByFieldValue\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/ArticlesInstockExportTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticlesInstockExportTest\\:\\:loadDependenciesBefore\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticlesInstockExportTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticlesInstockExportTest\\:\\:readCsvIndexedByOrdernumber\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticlesInstockExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticlesInstockExportTest\\:\\:testArticlesInstockCsvExport\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticlesInstockExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticlesInstockExportTest\\:\\:testArticlesInstockCsvExportNotInStockMinStockFilter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticlesInstockExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticlesInstockExportTest\\:\\:testArticlesInstockCsvExportWithCustomInstockGreaterThanFilter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticlesInstockExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticlesInstockExportTest\\:\\:testArticlesInstockCsvExportWithCustomInstockLowerThanFilter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticlesInstockExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticlesInstockExportTest\\:\\:testArticlesInstockCsvExportWithInStockOnSaleFilter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticlesInstockExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticlesInstockExportTest\\:\\:testArticlesInstockCsvExportWithInstockFilter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticlesInstockExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticlesInstockExportTest\\:\\:testArticlesInstockCsvExportWithNotInStockOnSaleFilter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticlesInstockExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticlesInstockExportTest\\:\\:testArticlesInstockCsvExportWithNotInstockFilter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticlesInstockExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticlesInstockExportTest\\:\\:testArticlesInstockXmlExport\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticlesInstockExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticlesInstockExportTest\\:\\:testArticlesInstockXmlExportWithCustomInstockGreaterThanFilter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticlesInstockExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticlesInstockExportTest\\:\\:testArticlesInstockXmlExportWithCustomInstockLowerThanFilter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticlesInstockExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticlesInstockExportTest\\:\\:testArticlesInstockXmlExportWithInStockOnSaleFilter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticlesInstockExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticlesInstockExportTest\\:\\:testArticlesInstockXmlExportWithInstockFilter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticlesInstockExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticlesInstockExportTest\\:\\:testArticlesInstockXmlExportWithNotInStockMinStockFilter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticlesInstockExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticlesInstockExportTest\\:\\:testArticlesInstockXmlExportWithNotInStockOnSaleFilter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticlesInstockExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticlesInstockExportTest\\:\\:testArticlesInstockXmlExportWithNotInstockFilter\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/ArticlesInstockExportTest.php
 
@@ -3526,27 +2481,7 @@ parameters:
 			path: Tests/Functional/Controllers/Backend/CategoryExportTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\CategoryExportTest\\:\\:assertCategoryAttributeInXml\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/CategoryExportTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\CategoryExportTest\\:\\:csvToArrayIndexedByFieldValue\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/CategoryExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\CategoryExportTest\\:\\:loadDependenciesBefore\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/CategoryExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\CategoryExportTest\\:\\:testCategoryCsvExport\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/CategoryExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\CategoryExportTest\\:\\:testCategoryXmlExport\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/CategoryExportTest.php
 
@@ -3581,27 +2516,7 @@ parameters:
 			path: Tests/Functional/Controllers/Backend/CustomerExportTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\CustomerExportTest\\:\\:assertCustomerAttributeInXml\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/CustomerExportTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\CustomerExportTest\\:\\:csvToArrayIndexedByFieldValue\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/CustomerExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\CustomerExportTest\\:\\:loadDependenciesBefore\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/CustomerExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\CustomerExportTest\\:\\:testCustomerCsvExport\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/CustomerExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\CustomerExportTest\\:\\:testCustomerXmlExport\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/CustomerExportTest.php
 
@@ -3641,21 +2556,6 @@ parameters:
 			path: Tests/Functional/Controllers/Backend/NewsletterExportTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\NewsletterExportTest\\:\\:loadDependenciesBefore\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/NewsletterExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\NewsletterExportTest\\:\\:testNewsletterCsvExport\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/NewsletterExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\NewsletterExportTest\\:\\:testNewsletterXmlExport\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/NewsletterExportTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$fp of function fgetcsv expects resource, resource\\|false given\\.$#"
 			count: 2
 			path: Tests/Functional/Controllers/Backend/NewsletterExportTest.php
@@ -3686,82 +2586,12 @@ parameters:
 			path: Tests/Functional/Controllers/Backend/OrderExportTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\OrderExportTest\\:\\:assertOrderAttributeInXmlFile\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/OrderExportTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\OrderExportTest\\:\\:csvToArrayIndexedByFieldValue\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/OrderExportTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\OrderExportTest\\:\\:loadDependenciesBefore\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/OrderExportTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\OrderExportTest\\:\\:readCsvMappedByNumber\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/OrderExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\OrderExportTest\\:\\:testOrdersCsvExport\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/OrderExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\OrderExportTest\\:\\:testOrdersCsvExportWithDateFromFilter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/OrderExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\OrderExportTest\\:\\:testOrdersCsvExportWithDateToFilter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/OrderExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\OrderExportTest\\:\\:testOrdersCsvExportWithOrdernumberFromFilter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/OrderExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\OrderExportTest\\:\\:testOrdersCsvExportWithOrderstateFilter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/OrderExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\OrderExportTest\\:\\:testOrdersCsvExportWithPaymentstateFilter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/OrderExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\OrderExportTest\\:\\:testOrdersXmlExport\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/OrderExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\OrderExportTest\\:\\:testOrdersXmlExportWithDateFromFilter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/OrderExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\OrderExportTest\\:\\:testOrdersXmlExportWithDateToFilter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/OrderExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\OrderExportTest\\:\\:testOrdersXmlExportWithOrdernumberFromFilter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/OrderExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\OrderExportTest\\:\\:testOrdersXmlExportWithOrderstateFilter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/OrderExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\OrderExportTest\\:\\:testOrdersXmlExportWithPaymentstateFilter\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/OrderExportTest.php
 
@@ -3791,37 +2621,7 @@ parameters:
 			path: Tests/Functional/Controllers/Backend/OrderExportTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Services\\\\AutoImportServiceTest\\:\\:deleteFilesAfter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Services/AutoImportServiceTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Services\\\\AutoImportServiceTest\\:\\:installProfile\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Services/AutoImportServiceTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Services\\\\AutoImportServiceTest\\:\\:installProfile\\(\\) has parameter \\$content with no type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Services/AutoImportServiceTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Services\\\\AutoImportServiceTest\\:\\:testRunAutoImportNoFilesForImport\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Services/AutoImportServiceTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Services\\\\AutoImportServiceTest\\:\\:testRunAutoImportShouldImportFiles\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Services/AutoImportServiceTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Services\\\\AutoImportServiceTest\\:\\:testRunAutoImportShouldThrowNoProfileException\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Services/AutoImportServiceTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Services\\\\AutoImportServiceTest\\:\\:testRunAutoImportThereIsAlreadyAnImportInProgress\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Functional/Services/AutoImportServiceTest.php
 
@@ -3829,46 +2629,6 @@ parameters:
 			message: "#^Property SwagImportExport\\\\Tests\\\\Functional\\\\Services\\\\AutoImportServiceTest\\:\\:\\$files type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Functional/Services/AutoImportServiceTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Services\\\\ProfileServiceTest\\:\\:testProfileExportShouldGiveCorrectResult\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Services/ProfileServiceTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Services\\\\ProfileServiceTest\\:\\:testProfileImportShouldSucceed\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Services/ProfileServiceTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Services\\\\ProfileServiceTest\\:\\:testProfileImportShouldThrowExceptionEmptyValue\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Services/ProfileServiceTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Services\\\\ProfileServiceTest\\:\\:testProfileImportShouldThrowExceptionNoContent\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Services/ProfileServiceTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Services\\\\ProfileServiceTest\\:\\:testProfileImportShouldThrowExceptionWrongData\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Services/ProfileServiceTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Services\\\\ProfileServiceTest\\:\\:testProfileImportShouldThrowExceptionWrongFiletype\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Services/ProfileServiceTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Helper\\\\BackendControllerTestHelper\\:\\:addFile\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Helper/BackendControllerTestHelper.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Helper\\\\DataProvider\\\\ProfileDataProvider\\:\\:createProfiles\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Helper/DataProvider/ProfileDataProvider.php
 
 		-
 			message: "#^Parameter \\#2 \\$value of method Doctrine\\\\DBAL\\\\Query\\\\QueryBuilder\\:\\:setValue\\(\\) expects string, int given\\.$#"
@@ -3886,11 +2646,6 @@ parameters:
 			path: Tests/Helper/DbAdapterTestHelper.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Helper\\\\DbAdapterTestHelper\\:\\:read\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Helper/DbAdapterTestHelper.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Helper\\\\DbAdapterTestHelper\\:\\:read\\(\\) has parameter \\$columns with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Helper/DbAdapterTestHelper.php
@@ -3901,22 +2656,12 @@ parameters:
 			path: Tests/Helper/DbAdapterTestHelper.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Helper\\\\DbAdapterTestHelper\\:\\:readRecordIds\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Helper/DbAdapterTestHelper.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Helper\\\\DbAdapterTestHelper\\:\\:readRecordIds\\(\\) has parameter \\$expectedIds with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Helper/DbAdapterTestHelper.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Helper\\\\DbAdapterTestHelper\\:\\:readRecordIds\\(\\) has parameter \\$filter with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Helper/DbAdapterTestHelper.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Helper\\\\DbAdapterTestHelper\\:\\:write\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Helper/DbAdapterTestHelper.php
 
@@ -3976,22 +2721,12 @@ parameters:
 			path: Tests/Integration/Components/ArticlesPricesDbAdapterTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\ArticlesPricesDbAdapterTest\\:\\:testRead\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/Components/ArticlesPricesDbAdapterTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\ArticlesPricesDbAdapterTest\\:\\:testRead\\(\\) has parameter \\$columns with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Integration/Components/ArticlesPricesDbAdapterTest.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\ArticlesPricesDbAdapterTest\\:\\:testRead\\(\\) has parameter \\$expected with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/Components/ArticlesPricesDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\ArticlesPricesDbAdapterTest\\:\\:testReadRecordIds\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Integration/Components/ArticlesPricesDbAdapterTest.php
 
@@ -4011,11 +2746,6 @@ parameters:
 			path: Tests/Integration/Components/CustomersDbAdapterTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\CustomersDbAdapterTest\\:\\:testRead\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/Components/CustomersDbAdapterTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\CustomersDbAdapterTest\\:\\:testRead\\(\\) has parameter \\$columns with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Integration/Components/CustomersDbAdapterTest.php
@@ -4026,22 +2756,7 @@ parameters:
 			path: Tests/Integration/Components/CustomersDbAdapterTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\CustomersDbAdapterTest\\:\\:testReadRecordIds\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/Components/CustomersDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\CustomersDbAdapterTest\\:\\:testWrite\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/Components/CustomersDbAdapterTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\CustomersDbAdapterTest\\:\\:testWrite\\(\\) has parameter \\$records with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/Components/CustomersDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\CustomersDbAdapterTest\\:\\:testWriteWithEmptyFile\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Integration/Components/CustomersDbAdapterTest.php
 
@@ -4056,59 +2771,9 @@ parameters:
 			path: Tests/Integration/Components/CustomersDbAdapterTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\DataFlattenTransformerTest\\:\\:testExportHeader\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/Components/DataFlattenTransformerTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\DataIOTest\\:\\:getPostData\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Integration/Components/DataIOTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\DataIOTest\\:\\:testGenerateDirectory\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/Components/DataIOTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\DataIOTest\\:\\:testPreloadRecordIds\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/Components/DataIOTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\ExpressionEvaluatorTest\\:\\:testPhpEvaluator\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/Components/ExpressionEvaluatorTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\ExpressionEvaluatorTest\\:\\:testSmartyEvaluator\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/Components/ExpressionEvaluatorTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\FactoryTest\\:\\:testDbAdapters\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/Components/FactoryTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\FactoryTest\\:\\:testFactories\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/Components/FactoryTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\FactoryTest\\:\\:testFileIO\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/Components/FactoryTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\FactoryTest\\:\\:testUtils\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/Components/FactoryTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\NewsletterDbAdapterTest\\:\\:testWrite\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/Components/NewsletterDbAdapterTest.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\NewsletterDbAdapterTest\\:\\:writeProvider\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -4117,16 +2782,6 @@ parameters:
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\AddressProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/AddressProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\AddressProfileTest\\:\\:testShouldImportNewAddresses\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/AddressProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\AddressProfileTest\\:\\:testShouldUpdateExistingAddressesById\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/AddressProfileTest.php
 
@@ -4141,11 +2796,6 @@ parameters:
 			path: Tests/Integration/DefaultProfiles/Import/ArticleAccessoriesProfileTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleAccessoriesProfileTest\\:\\:testShouldWriteAssertNewArticleAsseccory\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleAccessoriesProfileTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/ArticleAccessoriesProfileTest.php
@@ -4156,62 +2806,12 @@ parameters:
 			path: Tests/Integration/DefaultProfiles/Import/ArticleCategoriesProfileTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleCategoriesProfileTest\\:\\:testShouldUpdateExistingArticleCategories\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleCategoriesProfileTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/ArticleCategoriesProfileTest.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleCompleteProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleCompleteProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleCompleteProfileTest\\:\\:testImportShouldCreateAccessoryAssociations\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleCompleteProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleCompleteProfileTest\\:\\:testImportShouldCreateArticleWithDifferentPricesForCustomerGroups\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleCompleteProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleCompleteProfileTest\\:\\:testImportShouldCreateArticleWithVariants\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleCompleteProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleCompleteProfileTest\\:\\:testImportShouldCreateMediaFromExternalRessource\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleCompleteProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleCompleteProfileTest\\:\\:testImportShouldCreateSimilarAssociations\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleCompleteProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleCompleteProfileTest\\:\\:testImportShouldCreateVariantWithDifferentPricesForCustomerGroups\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleCompleteProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleCompleteProfileTest\\:\\:testImportShouldImportArticleWithAttributes\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleCompleteProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleCompleteProfileTest\\:\\:testImportShouldImportTranslations\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleCompleteProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleCompleteProfileTest\\:\\:testImportShouldImportVariantWithAttributes\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/ArticleCompleteProfileTest.php
 
@@ -4231,21 +2831,6 @@ parameters:
 			path: Tests/Integration/DefaultProfiles/Import/ArticleDefaultProfileTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleDefaultProfileTest\\:\\:testImportShouldCreateArticleAndSupplier\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleDefaultProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleDefaultProfileTest\\:\\:testImportShouldCreateVariant\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleDefaultProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleDefaultProfileTest\\:\\:testImportShouldUpdateExistingArticle\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleDefaultProfileTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/ArticleDefaultProfileTest.php
@@ -4256,22 +2841,12 @@ parameters:
 			path: Tests/Integration/DefaultProfiles/Import/ArticleImageUrlProfileTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleImageUrlProfileTest\\:\\:testImportShouldAddNewImageToArticle\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleImageUrlProfileTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/ArticleImageUrlProfileTest.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleInStockProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleInStockProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleInStockProfileTest\\:\\:testWriteShouldUpdateArticleStock\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/ArticleInStockProfileTest.php
 
@@ -4296,37 +2871,12 @@ parameters:
 			path: Tests/Integration/DefaultProfiles/Import/ArticlePropertiesProfileTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticlePropertiesProfileTest\\:\\:testWriteShouldCreateNewPropertyGroup\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticlePropertiesProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticlePropertiesProfileTest\\:\\:testWriteShouldCreateNewPropertyOption\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticlePropertiesProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticlePropertiesProfileTest\\:\\:testWriteShouldCreateNewPropertyValue\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticlePropertiesProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticlePropertiesProfileTest\\:\\:testWriteShouldUpdateExistingProperty\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticlePropertiesProfileTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/ArticlePropertiesProfileTest.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleSimilarsProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleSimilarsProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleSimilarsProfileTest\\:\\:testWriteShouldAssertNewSimilarArticle\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/ArticleSimilarsProfileTest.php
 
@@ -4341,22 +2891,12 @@ parameters:
 			path: Tests/Integration/DefaultProfiles/Import/ArticleTranslationProfileTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleTranslationProfileTest\\:\\:testImportShouldCreateArticleTranslation\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleTranslationProfileTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/ArticleTranslationProfileTest.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleTranslationUpdateProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleTranslationUpdateProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleTranslationUpdateProfileTest\\:\\:testImportShouldUpdateExistingArticleTranslation\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/ArticleTranslationUpdateProfileTest.php
 
@@ -4371,22 +2911,12 @@ parameters:
 			path: Tests/Integration/DefaultProfiles/Import/CategoriesProfileTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\CategoriesProfileTest\\:\\:testImportShouldCreateCategoryWithImportedId\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/CategoriesProfileTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/CategoriesProfileTest.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\CustomersProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/CustomersProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\CustomersProfileTest\\:\\:testImportShouldUpdateCustomerShippingAddress\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/CustomersProfileTest.php
 
@@ -4401,32 +2931,12 @@ parameters:
 			path: Tests/Integration/DefaultProfiles/Import/MinimalArticleProfileTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\MinimalArticleProfileTest\\:\\:testImportShouldCreateArticle\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/MinimalArticleProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\MinimalArticleProfileTest\\:\\:testImportShouldCreateSupplier\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/MinimalArticleProfileTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/MinimalArticleProfileTest.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\MinimalArticleVariantsProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/MinimalArticleVariantsProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\MinimalArticleVariantsProfileTest\\:\\:testImportShouldInsertNewArticleWithVariant\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/MinimalArticleVariantsProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\MinimalArticleVariantsProfileTest\\:\\:testImportShouldInsertNewVariant\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/MinimalArticleVariantsProfileTest.php
 
@@ -4441,22 +2951,12 @@ parameters:
 			path: Tests/Integration/DefaultProfiles/Import/MinimalCategoriesProfileTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\MinimalCategoriesProfileTest\\:\\:testImportShouldImportCategories\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/MinimalCategoriesProfileTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/MinimalCategoriesProfileTest.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\MinimalOrdersProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/MinimalOrdersProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\MinimalOrdersProfileTest\\:\\:testWriteShouldUpdateOrderStatus\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/MinimalOrdersProfileTest.php
 
@@ -4471,21 +2971,6 @@ parameters:
 			path: Tests/Integration/DefaultProfiles/Import/NewsletterDefaultProfileTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\NewsletterDefaultProfileTest\\:\\:testCustomNewsletterGroupImportAndAssignedRecipient\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/NewsletterDefaultProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\NewsletterDefaultProfileTest\\:\\:testImportedRecipientAssignedToExistingShopCustomer\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/NewsletterDefaultProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\NewsletterDefaultProfileTest\\:\\:testNewsletterRecipientShouldBeImported\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/NewsletterDefaultProfileTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/NewsletterDefaultProfileTest.php
@@ -4496,42 +2981,12 @@ parameters:
 			path: Tests/Integration/DefaultProfiles/Import/OrderProfileTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\OrderProfileTest\\:\\:testWriteShouldUpdateOrderStatus\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/OrderProfileTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/OrderProfileTest.php
 
 		-
 			message: "#^Method SwagImportExport\\\\TestsIntegration\\\\DefaultProfiles\\\\Import\\\\TranslationProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/TranslationProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\TestsIntegration\\\\DefaultProfiles\\\\Import\\\\TranslationProfileTest\\:\\:testImportTranslationsShouldCreateNewTranslationsForProperties\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/TranslationProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\TestsIntegration\\\\DefaultProfiles\\\\Import\\\\TranslationProfileTest\\:\\:testImportTranslationsShouldCreateTranslationsForConfigurators\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/TranslationProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\TestsIntegration\\\\DefaultProfiles\\\\Import\\\\TranslationProfileTest\\:\\:testImportTranslationsShouldUpdateConfiguratorTranslations\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/TranslationProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\TestsIntegration\\\\DefaultProfiles\\\\Import\\\\TranslationProfileTest\\:\\:testImportTranslationsShouldUpdateTranslationsForProperties\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/TranslationProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\TestsIntegration\\\\DefaultProfiles\\\\Import\\\\TranslationProfileTest\\:\\:truncateTranslationTable\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/TranslationProfileTest.php
 
@@ -4547,26 +3002,6 @@ parameters:
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\TestTraits\\\\ExportControllerTraitTest\\:\\:csvToArrayIndexedByFieldValue\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/TestTraits/ExportControllerTraitTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\TestTraits\\\\ExportControllerTraitTest\\:\\:loadDependenciesBefore\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/TestTraits/ExportControllerTraitTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\TestTraits\\\\ExportControllerTraitTest\\:\\:testCsvToArrayIndexedByFieldValueShouldFillMissingFields\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/TestTraits/ExportControllerTraitTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\TestTraits\\\\ExportControllerTraitTest\\:\\:testCsvToArrayIndexedByFieldValueShouldRemoveHeader\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Integration/TestTraits/ExportControllerTraitTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\TestTraits\\\\ExportControllerTraitTest\\:\\:testCsvToArrayIndexedByFieldValueShouldReturnMappedArrayAndIndexedByIdentifier\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Integration/TestTraits/ExportControllerTraitTest.php
 
@@ -4591,67 +3026,7 @@ parameters:
 			path: Tests/Integration/TestTraits/ExportControllerTraitTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Components\\\\Validator\\\\CategoryValidatorTest\\:\\:testItShouldThrowException\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Components/Validator/CategoryValidatorTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Components\\\\Validator\\\\ValidatorTest\\:\\:getDemoRecordForFilterEmptyStringTest\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Unit/Components/Validator/ValidatorTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Components\\\\Validator\\\\ValidatorTest\\:\\:testFilterEmptyStringShouldFilterEmptyString\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Components/Validator/ValidatorTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Components\\\\Validator\\\\ValidatorTest\\:\\:testFilterEmptyStringShouldNotFilterOtherDataTypes\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Components/Validator/ValidatorTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Components\\\\Validator\\\\ValidatorTest\\:\\:testValidateFloatShouldBeValid\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Components/Validator/ValidatorTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Components\\\\Validator\\\\ValidatorTest\\:\\:testValidateFloatWithCharacterShouldBeInvalid\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Components/Validator/ValidatorTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Components\\\\Validator\\\\ValidatorTest\\:\\:testValidateFloatWithCommaButWithoutDecimalDigitsShouldBeInvalid\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Components/Validator/ValidatorTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Components\\\\Validator\\\\ValidatorTest\\:\\:testValidateFloatWithCommaSeparatedStringShouldBeValid\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Components/Validator/ValidatorTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Components\\\\Validator\\\\ValidatorTest\\:\\:testValidateFloatWithEmptyStringShouldBeInvalid\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Components/Validator/ValidatorTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Components\\\\Validator\\\\ValidatorTest\\:\\:testValidateFloatWithNegativeNumberShouldBeValid\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Components/Validator/ValidatorTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Components\\\\Validator\\\\ValidatorTest\\:\\:testValidateFloatWithNegativeNumberWithCommaShouldBeValid\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Components/Validator/ValidatorTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Components\\\\Validator\\\\ValidatorTest\\:\\:testValidateFloatWithNumbersAtTheBeginningOfAStringShouldBeInvalid\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Components/Validator/ValidatorTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Components\\\\Validator\\\\ValidatorTest\\:\\:testValidateFloatWithNumbersAtTheEndOfAStringShouldBeInvalid\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Tests/Unit/Components/Validator/ValidatorTest.php
 
@@ -4666,7 +3041,7 @@ parameters:
 			path: Tests/Unit/Components/Validator/ValidatorTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Services\\\\UnderscoreToCamelCaseServiceTest\\:\\:testUnderscoreToCamelCase\\(\\) has no return type specified\\.$#"
+			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Services\\\\UnderscoreToCamelCaseServiceTest\\:\\:testUnderscoreToCamelCase\\(\\) has parameter \\$string with no type specified\\.$#"
 			count: 1
 			path: Tests/Unit/Services/UnderscoreToCamelCaseServiceTest.php
 
@@ -4676,39 +3051,9 @@ parameters:
 			path: Tests/Unit/Services/UnderscoreToCamelCaseServiceTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\AddressProfileTest\\:\\:testItCanBeCreated\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/AddressProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\AddressProfileTest\\:\\:testItShouldReturnValidProfileTree\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/AddressProfileTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$actualJson of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertJson\\(\\) expects string, string\\|false given\\.$#"
 			count: 1
 			path: Tests/Unit/Setup/DefaultProfiles/AddressProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\ArticleAccessoriesTest\\:\\:testItCanBeCreated\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/ArticleAccessoriesTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\ArticleAccessoriesTest\\:\\:testItShouldReturnValidProfileTree\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/ArticleAccessoriesTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\ArticleCategoriesProfileTest\\:\\:testItCanBeCreated\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/ArticleCategoriesProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\ArticleCategoriesProfileTest\\:\\:testItShouldReturnValidProfileTree\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/ArticleCategoriesProfileTest.php
 
 		-
 			message: "#^Parameter \\#1 \\$actualJson of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertJson\\(\\) expects string, string\\|false given\\.$#"
@@ -4716,104 +3061,9 @@ parameters:
 			path: Tests/Unit/Setup/DefaultProfiles/ArticleCategoriesProfileTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\ArticleCompleteProfileTest\\:\\:testItCanBeCreated\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/ArticleCompleteProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\ArticleCompleteProfileTest\\:\\:testItShouldReturnValidProfileTree\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/ArticleCompleteProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\ArticleImageUrlProfileTest\\:\\:testItShouldReturnValidProfileTree\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/ArticleImageUrlProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\ArticleImagesProfileTest\\:\\:testItCanBeCreated\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/ArticleImagesProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\ArticleImagesProfileTest\\:\\:testItShouldReturnValidProfileTree\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/ArticleImagesProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\ArticleInStockProfileTest\\:\\:testItCanBeCreated\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/ArticleInStockProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\ArticleInStockProfileTest\\:\\:testItShouldReturnValidProfileTree\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/ArticleInStockProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\ArticleProfileTest\\:\\:testItCanBeCreated\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/ArticleProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\ArticleProfileTest\\:\\:testItShouldReturnValidProfileTree\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/ArticleProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\ArticlePropertiesProfileTest\\:\\:testItCanBeCreated\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/ArticlePropertiesProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\ArticlePropertiesProfileTest\\:\\:testItShouldReturnValidProfileTree\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/ArticlePropertiesProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\ArticleSimilarsProfileTest\\:\\:testItCanBeCreated\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/ArticleSimilarsProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\ArticleSimilarsProfileTest\\:\\:testItShouldReturnValidProfileTree\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/ArticleSimilarsProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\ArticleTranslationUpdateProfileTest\\:\\:testItCanBeCreated\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/ArticleTranslationUpdateProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\ArticleTranslationUpdateProfileTest\\:\\:testItShouldReturnValidProfileTree\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/ArticleTranslationUpdateProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\CategoryProfileTest\\:\\:testItCanBeCreated\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/CategoryProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\CategoryProfileTest\\:\\:testItShouldReturnValidProfileTree\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/CategoryProfileTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$actualJson of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertJson\\(\\) expects string, string\\|false given\\.$#"
 			count: 1
 			path: Tests/Unit/Setup/DefaultProfiles/CategoryProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\CustomerProfileTest\\:\\:testItCanBeCreated\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/CustomerProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\CustomerProfileTest\\:\\:testItShouldReturnValidProfileTree\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/CustomerProfileTest.php
 
 		-
 			message: "#^Parameter \\#1 \\$actualJson of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertJson\\(\\) expects string, string\\|false given\\.$#"
@@ -4821,82 +3071,12 @@ parameters:
 			path: Tests/Unit/Setup/DefaultProfiles/CustomerProfileTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\MinimalArticleProfileTest\\:\\:testItCanBeCreated\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/MinimalArticleProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\MinimalArticleProfileTest\\:\\:testItShouldReturnValidProfileTree\\(\\) has no return type specified\\.$#"
+			message: "#^Parameter \\#1 \\$actualJson of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertJson\\(\\) expects string, string\\|false given\\.$#"
 			count: 1
 			path: Tests/Unit/Setup/DefaultProfiles/MinimalArticleProfileTest.php
 
 		-
 			message: "#^Parameter \\#1 \\$actualJson of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertJson\\(\\) expects string, string\\|false given\\.$#"
 			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/MinimalArticleProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\MinimalArticleVariantsProfileTest\\:\\:testItCanBeCreated\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/MinimalArticleVariantsProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\MinimalArticleVariantsProfileTest\\:\\:testItShouldReturnValidProfileTree\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/MinimalArticleVariantsProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\MinimalCategoryProfileTest\\:\\:testItCanBeCreated\\(\\) has no return type specified\\.$#"
-			count: 1
 			path: Tests/Unit/Setup/DefaultProfiles/MinimalCategoryProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\MinimalCategoryProfileTest\\:\\:testItShouldReturnValidProfileTree\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/MinimalCategoryProfileTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$actualJson of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertJson\\(\\) expects string, string\\|false given\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/MinimalCategoryProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\MinimalOrdersProfileTest\\:\\:testItCanBeCreated\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/MinimalOrdersProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\MinimalOrdersProfileTest\\:\\:testItShouldReturnValidProfileTree\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/MinimalOrdersProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\NewsletterProfileTest\\:\\:testItCanBeCreated\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/NewsletterProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\NewsletterProfileTest\\:\\:testItShouldReturnValidProfile\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/NewsletterProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\OrderMainDataProfileTest\\:\\:testItCanBeCreated\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/OrderMainDataProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\OrderMainDataProfileTest\\:\\:testItShouldReturnValidProfile\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/OrderMainDataProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\TranslationProfileTest\\:\\:testItCanBeCreated\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/TranslationProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Setup\\\\DefaultProfiles\\\\TranslationProfileTest\\:\\:testItShouldReturnValidProfile\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/TranslationProfileTest.php
 
