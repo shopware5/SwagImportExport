@@ -15,16 +15,13 @@ use SwagImportExport\CustomModels\Session;
  */
 class Shopware_Controllers_Backend_SwagImportExportSession extends Shopware_Controllers_Backend_ExtJs
 {
-    public function initAcl()
+    public function initAcl(): void
     {
         $this->addAclPermission('getSessions', 'read', 'Insuficient Permissions (getSessions)');
         $this->addAclPermission('deleteSession', 'export', 'Insuficient Permissions (deleteSession)');
     }
 
-    /**
-     * @return void
-     */
-    public function getSessionDetailsAction()
+    public function getSessionDetailsAction(): void
     {
         $manager = $this->getModelManager();
         $sessionId = $this->Request()->getParam('sessionId');
@@ -60,7 +57,7 @@ class Shopware_Controllers_Backend_SwagImportExportSession extends Shopware_Cont
         $this->View()->assign(['success' => true, 'data' => $result]);
     }
 
-    public function getSessionsAction()
+    public function getSessionsAction(): void
     {
         $manager = $this->get('models');
         $query = $manager->getRepository(Session::class)->getSessionsListQuery(
@@ -95,7 +92,7 @@ class Shopware_Controllers_Backend_SwagImportExportSession extends Shopware_Cont
      * Deletes a single order from the database.
      * Expects a single order id which placed in the parameter id
      */
-    public function deleteSessionAction()
+    public function deleteSessionAction(): void
     {
         $manager = $this->getModelManager();
         try {

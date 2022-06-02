@@ -23,7 +23,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
 
     private ProfileFactory $profileFactory;
 
-    public function preDispatch()
+    public function preDispatch(): void
     {
         $this->dataFactory = $this->container->get(DataFactory::class);
         $this->profileFactory = $this->container->get(ProfileFactory::class);
@@ -36,14 +36,14 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
      *
      * @return string[]
      */
-    public function getWhitelistedCSRFActions()
+    public function getWhitelistedCSRFActions(): array
     {
         return [
             'exportProfile',
         ];
     }
 
-    public function initAcl()
+    public function initAcl(): void
     {
         $this->addAclPermission('getProfiles', 'profile', 'Insuficient Permissions (getProfiles)');
         $this->addAclPermission('createProfiles', 'profile', 'Insuficient Permissions (createProfiles)');
@@ -64,7 +64,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
     /**
      * Returns all profiles into an array
      */
-    public function getProfilesAction()
+    public function getProfilesAction(): void
     {
         $manager = $this->getModelManager();
 
@@ -129,10 +129,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         }
     }
 
-    /**
-     * @return Enlight_View|Enlight_View_Default
-     */
-    public function deleteProfilesAction()
+    public function deleteProfilesAction(): void
     {
         $manager = $this->getModelManager();
         $data = $this->Request()->getParam('data', 1);
@@ -149,20 +146,17 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
             }
             $manager->flush();
         } catch (\Exception $e) {
-            return $this->View()->assign([
+            $this->View()->assign([
                 'success' => false,
             ]);
+
+            return;
         }
 
-        return $this->View()->assign(['success' => true]);
+        $this->View()->assign(['success' => true]);
     }
 
-    /**
-     * @throws Exception
-     *
-     * @return Enlight_View|Enlight_View_Default
-     */
-    public function updateProfilesAction()
+    public function updateProfilesAction(): void
     {
         $manager = $this->getModelManager();
         $data = $this->Request()->getParam('data', 1);
@@ -180,18 +174,22 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         try {
             $manager->flush();
         } catch (DBALException $e) {
-            return $this->View()->assign([
+            $this->View()->assign([
                 'success' => false,
                 'message' => $this->get('snippets')->getNamespace('backend/swag_import_export/controller')->get('swag_import_export/profile/duplicate_unique_error_msg'),
             ]);
+
+            return;
         } catch (\Exception $e) {
-            return $this->View()->assign([
+            $this->View()->assign([
                 'success' => false,
                 'message' => $e->getMessage(),
             ]);
+
+            return;
         }
 
-        return $this->View()->assign([
+        $this->View()->assign([
             'success' => true,
             'data' => [
                 'id' => $profileEntity->getId(),
@@ -204,16 +202,15 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         ]);
     }
 
-    /**
-     * @return Enlight_View|Enlight_View_Default
-     */
-    public function getProfileAction()
+    public function getProfileAction(): void
     {
         $manager = $this->getModelManager();
         $profileId = $this->Request()->getParam('profileId', -1);
 
         if ($profileId === -1) {
-            return $this->View()->assign(['success' => false, 'children' => []]);
+            $this->View()->assign(['success' => false, 'children' => []]);
+
+            return;
         }
 
         $profileRepository = $manager->getRepository(Profile::class);
@@ -222,15 +219,10 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         $tree = $profileEntity->getTree();
         $root = TreeHelper::convertToExtJSTree(\json_decode($tree, true));
 
-        return $this->View()->assign(['success' => true, 'children' => $root]);
+        $this->View()->assign(['success' => true, 'children' => $root]);
     }
 
-    /**
-     * @throws Exception
-     *
-     * @return Enlight_View|Enlight_View_Default
-     */
-    public function duplicateProfileAction()
+    public function duplicateProfileAction(): void
     {
         $manager = $this->getModelManager();
         $snippetManager = $this->get('snippets');
@@ -253,18 +245,22 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         try {
             $manager->flush();
         } catch (DBALException $e) {
-            return $this->View()->assign([
+            $this->View()->assign([
                 'success' => false,
                 'message' => $snippetManager->getNamespace('backend/swag_import_export/controller')->get('swag_import_export/profile/duplicate_unique_error_msg'),
             ]);
+
+            return;
         } catch (\Exception $e) {
-            return $this->View()->assign([
+            $this->View()->assign([
                 'success' => false,
                 'message' => $e->getMessage(),
             ]);
+
+            return;
         }
 
-        return $this->View()->assign([
+        $this->View()->assign([
             'success' => true,
             'data' => [
                 'id' => $profile->getId(),
@@ -277,7 +273,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         ]);
     }
 
-    public function exportProfileAction()
+    public function exportProfileAction(): void
     {
         $profileId = $this->Request()->get('profileId', null);
 
@@ -314,10 +310,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         echo $exportDataStruct->getExportData();
     }
 
-    /**
-     * @return Enlight_View|Enlight_View_Default
-     */
-    public function importProfileAction()
+    public function importProfileAction(): void
     {
         /** @var UploadedFile $file */
         $file = Symfony\Component\HttpFoundation\Request::createFromGlobals()->files->get('profilefile');
@@ -328,18 +321,20 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         try {
             $service->importProfile($file);
         } catch (\Exception $e) {
-            return $this->View()->assign([
+            $this->View()->assign([
                 'success' => false,
                 'message' => $e->getMessage(),
             ]);
+
+            return;
         }
 
-        return $this->View()->assign([
+        $this->View()->assign([
             'success' => true,
         ]);
     }
 
-    public function createNodeAction()
+    public function createNodeAction(): void
     {
         $manager = $this->getModelManager();
         $profileId = $this->Request()->getParam('profileId', 1);
@@ -374,7 +369,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         }
     }
 
-    public function updateNodeAction()
+    public function updateNodeAction(): void
     {
         $manager = $this->getModelManager();
         $profileId = $this->Request()->getParam('profileId', 1);
@@ -410,8 +405,8 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
 
             $changedNode = TreeHelper::getNodeById($node['id'], $tree);
 
-            if(!is_array($changedNode)) {
-                throw new \Exception("Node not found");
+            if (!\is_array($changedNode)) {
+                throw new \Exception('Node not found');
             }
 
             if ($node['parentId'] != $changedNode['parentId']) {
@@ -443,7 +438,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         }
     }
 
-    public function deleteNodeAction()
+    public function deleteNodeAction(): void
     {
         $manager = $this->getModelManager();
         $profileId = $this->Request()->getParam('profileId', 1);
@@ -477,7 +472,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         }
     }
 
-    public function getSectionsAction()
+    public function getSectionsAction(): void
     {
         $postData['profileId'] = $this->Request()->getParam('profileId');
 
@@ -503,7 +498,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         ]);
     }
 
-    public function getColumnsAction()
+    public function getColumnsAction(): void
     {
         $postData['profileId'] = $this->Request()->getParam('profileId');
         $section = $this->Request()->getParam('adapter', 'default');
@@ -540,9 +535,10 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         // merge all sections
         if ($section === 'default' && \count($dbAdapter->getSections()) > 1) {
             $columns = \array_reduce($columns, function ($carry, $item) {
-                if(is_string($item)) {
+                if (\is_string($item)) {
                     $item = [$item];
                 }
+
                 return \array_merge($carry, $item);
             }, []);
         }
@@ -576,7 +572,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         ]);
     }
 
-    public function getParentKeysAction()
+    public function getParentKeysAction(): void
     {
         $postData['profileId'] = $this->Request()->getParam('profileId');
         $section = $this->Request()->getParam('adapter', 'default');

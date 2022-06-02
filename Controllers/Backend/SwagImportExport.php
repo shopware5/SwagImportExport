@@ -23,14 +23,14 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
      *
      * @return string[]
      */
-    public function getWhitelistedCSRFActions()
+    public function getWhitelistedCSRFActions(): array
     {
         return [
             'downloadFile',
         ];
     }
 
-    public function uploadFileAction()
+    public function uploadFileAction(): void
     {
         /** @var UploadPathProvider $uploadPathProvider */
         $uploadPathProvider = $this->get('swag_import_export.upload_path_provider');
@@ -57,7 +57,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
      *
      * Returns the created pdf file with an echo.
      */
-    public function downloadFileAction()
+    public function downloadFileAction(): void
     {
         /** @var UploadPathProvider $uploadPathProvider */
         $uploadPathProvider = $this->get('swag_import_export.upload_path_provider');
@@ -121,7 +121,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         }
     }
 
-    public function getLogsAction()
+    public function getLogsAction(): void
     {
         /** @var LoggerRepository $loggerRepository */
         $loggerRepository = $this->getModelManager()->getRepository(Logger::class);
@@ -151,7 +151,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
     /**
      * Registers acl permissions for controller actions
      */
-    public function initAcl()
+    public function initAcl(): void
     {
         $this->addAclPermission('uploadFile', 'import', 'Insuficient Permissions (uploadFile)');
         $this->addAclPermission('downloadFile', 'export', 'Insuficient Permissions (downloadFile)');

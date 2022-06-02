@@ -15,13 +15,13 @@ use SwagImportExport\Components\Service\ExportService;
  */
 class Shopware_Controllers_Backend_SwagImportExportExport extends Shopware_Controllers_Backend_ExtJs
 {
-    public function initAcl()
+    public function initAcl(): void
     {
         $this->addAclPermission('prepareExport', 'export', 'Insufficient Permissions (prepareExport)');
         $this->addAclPermission('export', 'export', 'Insufficient Permissions (export)');
     }
 
-    public function prepareExportAction()
+    public function prepareExportAction(): void
     {
         $limit = null;
         if ($this->Request()->getParam('limit')) {
@@ -69,7 +69,7 @@ class Shopware_Controllers_Backend_SwagImportExportExport extends Shopware_Contr
         ]);
     }
 
-    public function exportAction()
+    public function exportAction(): void
     {
         $limit = null;
         if ($this->Request()->getParam('limit')) {

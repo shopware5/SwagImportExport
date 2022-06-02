@@ -1881,42 +1881,7 @@ parameters:
 			path: Components/Validators/Validator.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_SwagImportExport\\:\\:downloadFileAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Controllers/Backend/SwagImportExport.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_SwagImportExport\\:\\:getLogsAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Controllers/Backend/SwagImportExport.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_SwagImportExport\\:\\:uploadFileAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Controllers/Backend/SwagImportExport.php
-
-		-
 			message: "#^Cannot call method getId\\(\\) on SwagImportExport\\\\CustomModels\\\\Profile\\|null\\.$#"
-			count: 1
-			path: Controllers/Backend/SwagImportExportConversion.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_SwagImportExportConversion\\:\\:createConversionAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Controllers/Backend/SwagImportExportConversion.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_SwagImportExportConversion\\:\\:deleteConversionAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Controllers/Backend/SwagImportExportConversion.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_SwagImportExportConversion\\:\\:getConversionsAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Controllers/Backend/SwagImportExportConversion.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_SwagImportExportConversion\\:\\:updateConversionAction\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Controllers/Backend/SwagImportExportConversion.php
 
@@ -1931,29 +1896,9 @@ parameters:
 			path: Controllers/Backend/SwagImportExportCron.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_SwagImportExportCron\\:\\:cronAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Controllers/Backend/SwagImportExportCron.php
-
-		-
 			message: "#^Negated boolean expression is always false\\.$#"
 			count: 1
 			path: Controllers/Backend/SwagImportExportCron.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_SwagImportExportExport\\:\\:exportAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Controllers/Backend/SwagImportExportExport.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_SwagImportExportExport\\:\\:prepareExportAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Controllers/Backend/SwagImportExportExport.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_SwagImportExportImport\\:\\:importAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Controllers/Backend/SwagImportExportImport.php
 
 		-
 			message: "#^Call to an undefined method object\\:\\:getDefaultFields\\(\\)\\.$#"
@@ -1991,46 +1936,6 @@ parameters:
 			path: Controllers/Backend/SwagImportExportProfile.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_SwagImportExportProfile\\:\\:createNodeAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Controllers/Backend/SwagImportExportProfile.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_SwagImportExportProfile\\:\\:deleteNodeAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Controllers/Backend/SwagImportExportProfile.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_SwagImportExportProfile\\:\\:exportProfileAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Controllers/Backend/SwagImportExportProfile.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_SwagImportExportProfile\\:\\:getColumnsAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Controllers/Backend/SwagImportExportProfile.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_SwagImportExportProfile\\:\\:getParentKeysAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Controllers/Backend/SwagImportExportProfile.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_SwagImportExportProfile\\:\\:getProfilesAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Controllers/Backend/SwagImportExportProfile.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_SwagImportExportProfile\\:\\:getSectionsAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Controllers/Backend/SwagImportExportProfile.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_SwagImportExportProfile\\:\\:updateNodeAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Controllers/Backend/SwagImportExportProfile.php
-
-		-
 			message: "#^Parameter \\#1 \\$entity of method Doctrine\\\\ORM\\\\EntityManager\\:\\:persist\\(\\) expects object, SwagImportExport\\\\CustomModels\\\\Profile\\|null given\\.$#"
 			count: 3
 			path: Controllers/Backend/SwagImportExportProfile.php
@@ -2041,24 +1946,9 @@ parameters:
 			path: Controllers/Backend/SwagImportExportProfile.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_SwagImportExportSession\\:\\:deleteSessionAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Controllers/Backend/SwagImportExportSession.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_SwagImportExportSession\\:\\:getSessionsAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Controllers/Backend/SwagImportExportSession.php
-
-		-
 			message: "#^Parameter \\#1 \\$bytes of static method SwagImportExport\\\\Components\\\\Utils\\\\DataHelper\\:\\:formatFileSize\\(\\) expects int, int\\|null given\\.$#"
 			count: 1
 			path: Controllers/Backend/SwagImportExportSession.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_SwagImportExport\\:\\:init\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Controllers/Frontend/SwagImportExport.php
 
 		-
 			message: "#^Property SwagImportExport\\\\CustomModels\\\\Profile\\:\\:\\$expressions \\(Doctrine\\\\Common\\\\Collections\\\\Collection\\<int, SwagImportExport\\\\CustomModels\\\\Expression\\>\\|null\\) does not accept array\\{SwagImportExport\\\\CustomModels\\\\Expression\\}\\|Doctrine\\\\Common\\\\Collections\\\\Collection\\<int, SwagImportExport\\\\CustomModels\\\\Expression\\>\\.$#"

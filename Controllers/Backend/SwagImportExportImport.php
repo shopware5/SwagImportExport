@@ -17,16 +17,13 @@ use SwagImportExport\Components\UploadPathProvider;
  */
 class Shopware_Controllers_Backend_SwagImportExportImport extends Shopware_Controllers_Backend_ExtJs
 {
-    public function initAcl()
+    public function initAcl(): void
     {
         $this->addAclPermission('prepareImport', 'import', 'Insuficient Permissions (prepareImport)');
         $this->addAclPermission('import', 'import', 'Insuficient Permissions (import)');
     }
 
-    /**
-     * @return Enlight_View|Enlight_View_Default
-     */
-    public function prepareImportAction()
+    public function prepareImportAction(): void
     {
         /** @var UploadPathProvider $uploadPathProvider */
         $uploadPathProvider = $this->get('swag_import_export.upload_path_provider');
@@ -40,7 +37,9 @@ class Shopware_Controllers_Backend_SwagImportExportImport extends Shopware_Contr
         ];
 
         if (empty($postData['file'])) {
-            return $this->View()->assign(['success' => false, 'msg' => 'No valid file']);
+            $this->View()->assign(['success' => false, 'msg' => 'No valid file']);
+
+            return;
         }
 
         // get file format
@@ -48,7 +47,9 @@ class Shopware_Controllers_Backend_SwagImportExportImport extends Shopware_Contr
         $extension = $uploadPathProvider->getFileExtension($postData['file']);
 
         if (!$this->isFormatValid($extension)) {
-            return $this->View()->assign(['success' => false, 'msg' => 'No valid file format']);
+            $this->View()->assign(['success' => false, 'msg' => 'No valid file format']);
+
+            return;
         }
 
         $postData['format'] = $extension;
@@ -59,17 +60,19 @@ class Shopware_Controllers_Backend_SwagImportExportImport extends Shopware_Contr
             /** @var PreparationResultStruct $resultStruct */
             $resultStruct = $importService->prepareImport($postData, $inputFileName);
         } catch (\Exception $e) {
-            return $this->View()->assign(['success' => false, 'msg' => $e->getMessage()]);
+            $this->View()->assign(['success' => false, 'msg' => $e->getMessage()]);
+
+            return;
         }
 
-        return $this->View()->assign([
+        $this->View()->assign([
             'success' => true,
             'position' => $resultStruct->getPosition(),
             'count' => $resultStruct->getTotalResultCount(),
         ]);
     }
 
-    public function importAction()
+    public function importAction(): void
     {
         /** @var UploadPathProvider $uploadPathProvider */
         $uploadPathProvider = $this->get('swag_import_export.upload_path_provider');
@@ -109,10 +112,8 @@ class Shopware_Controllers_Backend_SwagImportExportImport extends Shopware_Contr
 
     /**
      * Check is file format valid
-     *
-     * @return bool
      */
-    private function isFormatValid(string $extension)
+    private function isFormatValid(string $extension): bool
     {
         switch ($extension) {
             case 'csv':

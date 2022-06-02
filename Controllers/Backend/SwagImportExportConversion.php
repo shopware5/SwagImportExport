@@ -7,6 +7,7 @@
  */
 
 use SwagImportExport\CustomModels\Expression;
+use SwagImportExport\CustomModels\ExpressionRepository;
 use SwagImportExport\CustomModels\Profile;
 
 /**
@@ -14,7 +15,7 @@ use SwagImportExport\CustomModels\Profile;
  */
 class Shopware_Controllers_Backend_SwagImportExportConversion extends Shopware_Controllers_Backend_ExtJs
 {
-    public function initAcl()
+    public function initAcl(): void
     {
         $this->addAclPermission('getConversions', 'export', 'Insuficient Permissions (getConversions)');
         $this->addAclPermission('createConversion', 'export', 'Insuficient Permissions (createConversion)');
@@ -22,13 +23,14 @@ class Shopware_Controllers_Backend_SwagImportExportConversion extends Shopware_C
         $this->addAclPermission('deleteConversion', 'export', 'Insuficient Permissions (deleteConversion)');
     }
 
-    public function getConversionsAction()
+    public function getConversionsAction(): void
     {
         $profileId = $this->Request()->getParam('profileId');
         $filter = $this->Request()->getParam('filter', []);
 
         $manager = $this->getModelManager();
 
+        /** @var ExpressionRepository $expressionRepository */
         $expressionRepository = $manager->getRepository(Expression::class);
 
         $filter = \array_merge(['p.id' => $profileId], $filter);
@@ -49,7 +51,7 @@ class Shopware_Controllers_Backend_SwagImportExportConversion extends Shopware_C
         ]);
     }
 
-    public function createConversionAction()
+    public function createConversionAction(): void
     {
         $profileId = $this->Request()->getParam('profileId');
         $data = $this->Request()->getParam('data', 1);
@@ -79,7 +81,7 @@ class Shopware_Controllers_Backend_SwagImportExportConversion extends Shopware_C
         ]);
     }
 
-    public function updateConversionAction()
+    public function updateConversionAction(): void
     {
         $data = $this->Request()->getParam('data', 1);
 
@@ -110,7 +112,7 @@ class Shopware_Controllers_Backend_SwagImportExportConversion extends Shopware_C
         }
     }
 
-    public function deleteConversionAction()
+    public function deleteConversionAction(): void
     {
         $data = $this->Request()->getParam('data', 1);
 

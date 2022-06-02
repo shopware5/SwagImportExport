@@ -15,7 +15,7 @@ class Shopware_Controllers_Frontend_SwagImportExport extends Enlight_Controller_
 {
     protected ModelManager $manager;
 
-    public function init()
+    public function init(): void
     {
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         Shopware()->Plugins()->Controller()->ViewRenderer()->setNoRender();
@@ -24,7 +24,7 @@ class Shopware_Controllers_Frontend_SwagImportExport extends Enlight_Controller_
     /**
      * Check for terminal call for cron action
      */
-    public function preDispatch()
+    public function preDispatch(): void
     {
         //Call cron only if request is not from browser
         if (\PHP_SAPI === 'cli') {
@@ -34,10 +34,8 @@ class Shopware_Controllers_Frontend_SwagImportExport extends Enlight_Controller_
 
     /**
      * Custom cronjob for import (forward request)
-     *
-     * @return bool
      */
-    public function cronAction()
+    public function cronAction(): bool
     {
         return $this->forward('cron', 'SwagImportExportCron', 'backend');
     }

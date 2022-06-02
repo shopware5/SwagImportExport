@@ -19,14 +19,14 @@ class Shopware_Controllers_Backend_SwagImportExportCron extends Shopware_Control
     /**
      * {@inheritdoc}
      */
-    public function getWhitelistedCSRFActions()
+    public function getWhitelistedCSRFActions(): array
     {
         return [
             'cron',
         ];
     }
 
-    public function init()
+    public function init(): void
     {
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         Shopware()->Plugins()->Controller()->ViewRenderer()->setNoRender();
@@ -35,7 +35,7 @@ class Shopware_Controllers_Backend_SwagImportExportCron extends Shopware_Control
     /**
      * Check for terminal call on cron action
      */
-    public function preDispatch()
+    public function preDispatch(): void
     {
         //Call cron only if request is not from browser
         if (\PHP_SAPI === 'cli') {
@@ -46,7 +46,7 @@ class Shopware_Controllers_Backend_SwagImportExportCron extends Shopware_Control
     /**
      * Custom cronjob for import
      */
-    public function cronAction()
+    public function cronAction(): void
     {
         /** @var Shopware_Plugins_Core_Cron_Bootstrap $cronBootstrap */
         $cronBootstrap = $this->getPluginBootstrap('Cron');
@@ -67,10 +67,8 @@ class Shopware_Controllers_Backend_SwagImportExportCron extends Shopware_Control
     /**
      * Returns plugin bootstrap if plugin exits, is enabled, and active.
      * Otherwise return null.
-     *
-     * @return Enlight_Plugin_Bootstrap|null
      */
-    private function getPluginBootstrap(string $pluginName)
+    private function getPluginBootstrap(string $pluginName): ?Enlight_Plugin_Bootstrap
     {
         /** @var Shopware_Components_Plugin_Namespace $namespace */
         $namespace = $this->get('plugin_manager')->Core();
