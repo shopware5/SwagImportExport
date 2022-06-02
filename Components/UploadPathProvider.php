@@ -25,36 +25,26 @@ class UploadPathProvider
 
     /**
      * Returns the absolute file path with file name.
-     *
-     * @return string
      */
-    public function getRealPath(string $fileName, string $directory = self::DIR)
+    public function getRealPath(string $fileName, string $directory = self::DIR): string
     {
         return $this->getPath($directory) . '/' . $fileName;
     }
 
-    /**
-     * @return string
-     */
-    public function getFileNameFromPath(string $path)
+    public function getFileNameFromPath(string $path): string
     {
         return \pathinfo($path, \PATHINFO_BASENAME);
     }
 
-    /**
-     * @return string
-     */
-    public function getFileExtension(string $path)
+    public function getFileExtension(string $path): string
     {
         return \pathinfo($path, \PATHINFO_EXTENSION);
     }
 
     /**
      * Return the path to the upload directory.
-     *
-     * @return string
      */
-    public function getPath(string $directory = self::DIR)
+    public function getPath(string $directory = self::DIR): string
     {
         if ($directory === self::CRON_DIR) {
             return $this->rootPath . self::CRON_DIR;

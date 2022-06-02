@@ -82,7 +82,10 @@ class DataIO
         $this->maxRecordCount = $maxRecordCount;
     }
 
-    public function read(int $numberOfRecords)
+    /**
+     * @return array<string, mixed>
+     */
+    public function read(int $numberOfRecords): array
     {
         $start = $this->getSessionPosition();
 
@@ -99,7 +102,7 @@ class DataIO
      * @param array<string, mixed> $data
      * @param array<string, mixed> $defaults
      */
-    public function write(array $data, array $defaults)
+    public function write(array $data, array $defaults): void
     {
         $dbAdapter = $this->getDbAdapter();
 
@@ -111,7 +114,7 @@ class DataIO
         $dbAdapter->write($data);
     }
 
-    public function writeLog(string $fileName, string $profileName)
+    public function writeLog(string $fileName, string $profileName): void
     {
         $dbAdapter = $this->getDbAdapter();
 
@@ -137,21 +140,16 @@ class DataIO
     }
 
     /**
-     * @return array|null
+     * @return array<mixed>|null
      */
-    public function getUnprocessedData()
+    public function getUnprocessedData(): ?array
     {
         $dbAdapter = $this->getDbAdapter();
 
         return $dbAdapter->getUnprocessedData();
     }
 
-    /**
-     * Loads the record ids
-     *
-     * @return \SwagImportExport\Components\DataIO
-     */
-    public function preloadRecordIds()
+    public function preloadRecordIds(): self
     {
         $session = $this->dataSession;
         $storedIds = $session->getIds();
@@ -188,10 +186,8 @@ class DataIO
      *     or the final db save is yet not performed (in case of import).
      * closed:
      *     Session is closed, file is fully exported/imported
-     *
-     * @return string
      */
-    public function getSessionState()
+    public function getSessionState(): string
     {
         return $this->dataSession->getState();
     }
@@ -199,19 +195,14 @@ class DataIO
     /**
      * @return int
      */
-    public function getSessionPosition()
+    public function getSessionPosition(): int
     {
         $position = $this->dataSession->getPosition();
 
         return $position == null ? 0 : $position;
     }
 
-    /**
-     * Generates file name
-     *
-     * @return string
-     */
-    public function generateFileName(Profile $profile)
+    public function generateFileName(Profile $profile): string
     {
         $operationType = $this->getType();
         $fileFormat = $this->getFormat();
@@ -231,22 +222,12 @@ class DataIO
         return $fileName;
     }
 
-    /**
-     * Generates random hash depends on the length
-     *
-     * @return string
-     */
-    public function generateRandomHash(int $length)
+    public function generateRandomHash(int $length): string
     {
         return \substr(\md5(\uniqid()), 0, $length);
     }
 
-    /**
-     * Returns directory of the import/export plugin
-     *
-     * @return string
-     */
-    public function getDirectory()
+    public function getDirectory(): string
     {
         $directory = $this->uploadPathProvider->getPath();
 
@@ -257,12 +238,7 @@ class DataIO
         return $directory;
     }
 
-    /**
-     * Creates directory
-     *
-     * @throws \Exception
-     */
-    public function createDirectory(string $path)
+    public function createDirectory(string $path): void
     {
         if (!\mkdir($path, 0777, true)) {
             $message = SnippetsHelper::getNamespace()->get('dataio/no_profile', 'Failed to create directory %s');
@@ -275,10 +251,8 @@ class DataIO
      * If the session has no ids, then the db adapter must be used to retrieve them.
      * Then writes these ids to the session and sets the session state to "active".
      * For now we will write the ids as a serialized array.
-     *
-     * @throws \Exception
      */
-    public function startSession(Profile $profile)
+    public function startSession(Profile $profile): void
     {
         $sessionData = [
             'type' => $this->getType(),
@@ -322,7 +296,7 @@ class DataIO
      * If reached then the session state will be set to "stopped"
      * Updates the session position with the current position (stored in a member variable).
      */
-    public function progressSession(int $step, string $outputFileName = null)
+    public function progressSession(int $step, string $outputFileName = null): void
     {
         $this->getDataSession()->progress($step, $outputFileName);
     }
@@ -331,7 +305,7 @@ class DataIO
      * Marks the session as closed (sets the session state as "closed").
      * If the session progress has not reached to the end, throws an exception.
      */
-    public function closeSession()
+    public function closeSession(): void
     {
         $this->getDataSession()->close();
     }
@@ -339,7 +313,7 @@ class DataIO
     /**
      * Change username for current session
      */
-    public function usernameSession()
+    public function usernameSession(): void
     {
         $username = $this->getUsername();
         $this->getDataSession()->setUsername($username);
@@ -349,7 +323,7 @@ class DataIO
      * Checks also the current position - if all the ids of the session are done, then the function does nothing.
      * Otherwise it sets the session state from "suspended" to "active", so that it is ready again for processing.
      */
-    public function resumeSession()
+    public function resumeSession(): void
     {
         $sessionData = $this->getDataSession()->resume();
 
@@ -358,7 +332,7 @@ class DataIO
         $this->setFileName($sessionData['fileName']);
     }
 
-    public function getSessionId()
+    public function getSessionId(): int
     {
         $session = $this->getDataSession();
 
@@ -368,47 +342,35 @@ class DataIO
     /**
      * Returns the max records count initialized in the constructor.
      */
-    public function getMaxRecordsCount()
+    public function getMaxRecordsCount(): int
     {
         return $this->maxRecordCount;
     }
 
-    /**
-     * @return DataDbAdapter
-     */
-    public function getDbAdapter()
+    public function getDbAdapter(): DataDbAdapter
     {
         return $this->dbAdapter;
     }
 
-    /**
-     * @return DataColumnOptions
-     */
-    public function getColumnOptionsAdapter()
+    public function getColumnOptionsAdapter(): DataColumnOptions
     {
         return $this->columnOptions;
     }
 
-    /**
-     * @return DataLimit
-     */
-    public function getLimitAdapter()
+    public function getLimitAdapter(): DataLimit
     {
         return $this->limit;
     }
 
-    /**
-     * @return DataFilter
-     */
-    public function getFilterAdapter()
+    public function getFilterAdapter(): DataFilter
     {
         return $this->filter;
     }
 
     /**
-     * @return array
+     * @return array<int>
      */
-    public function getRecordIds()
+    public function getRecordIds(): array
     {
         return $this->recordIds;
     }
@@ -416,70 +378,52 @@ class DataIO
     /**
      * @param array<int> $recordIds
      */
-    public function setRecordIds(array $recordIds)
+    public function setRecordIds(array $recordIds): void
     {
         $this->recordIds = $recordIds;
     }
 
-    /**
-     * @return Session
-     */
-    public function getDataSession()
+    public function getDataSession(): Session
     {
         return $this->dataSession;
     }
 
-    /**
-     * @return ?string
-     */
-    public function getType()
+    public function getType(): ?string
     {
         return $this->type;
     }
 
-    /**
-     * @return string
-     */
-    public function getFormat()
+    public function getFormat(): string
     {
         return $this->format;
     }
 
-    /**
-     * @return string
-     */
-    public function getFileName()
+    public function getFileName(): string
     {
         return $this->fileName;
     }
 
-    public function setFileName(string $fileName)
+    public function setFileName(string $fileName): void
     {
         $this->fileName = $fileName;
     }
 
-    /**
-     * @return string
-     */
-    public function getFileSize()
+    public function getFileSize(): string
     {
         return $this->fileSize;
     }
 
-    public function setFileSize(int $fileSize)
+    public function setFileSize(int $fileSize): void
     {
         $this->fileSize = $fileSize;
     }
 
-    /**
-     * @return ?string
-     */
-    public function getUsername()
+    public function getUsername(): ?string
     {
         return $this->username;
     }
 
-    public function setUsername(?string $username)
+    public function setUsername(?string $username): void
     {
         $this->username = $username;
     }
@@ -487,9 +431,9 @@ class DataIO
     /**
      * Returns db columns
      *
-     * @return array<int|string, array<string>|string>|string
+     * @return array<int|string, array<string>|string>
      */
-    public function getColumns()
+    public function getColumns(): array
     {
         $colOptions = $this->getColumnOptionsAdapter()->getColumnOptions();
 
@@ -505,13 +449,13 @@ class DataIO
      *
      * @throws \Exception
      *
-     * @return array
+     * @return array<int>
      */
-    private function loadIds(int $start, int $numberOfRecords)
+    private function loadIds(int $start, int $numberOfRecords): array
     {
         $storedIds = $this->getRecordIds();
 
-        if ($storedIds === null || empty($storedIds)) {
+        if (empty($storedIds)) {
             $message = SnippetsHelper::getNamespace()->get('dataio/no_loaded_records', 'No loaded record ids');
             throw new \Exception($message);
         }

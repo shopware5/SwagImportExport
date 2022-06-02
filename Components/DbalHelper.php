@@ -32,10 +32,8 @@ class DbalHelper
     /**
      * @param array<string, mixed> $data
      * @param class-string         $entity
-     *
-     * @return QueryBuilder
      */
-    public function getQueryBuilderForEntity(array $data, string $entity, ?int $primaryId)
+    public function getQueryBuilderForEntity(array $data, string $entity, ?int $primaryId): QueryBuilder
     {
         $metaData = $this->modelManager->getClassMetadata($entity);
         $table = $metaData->table['name'];
@@ -89,10 +87,7 @@ class DbalHelper
         return new QueryBuilder($this->connection);
     }
 
-    /**
-     * @return string
-     */
-    protected function getNamedParameter(?string $value, string $key, ClassMetadata $metaData, QueryBuilder $builder)
+    protected function getNamedParameter(?string $value, string $key, ClassMetadata $metaData, QueryBuilder $builder): string
     {
         $pdoTypeMapping = [
             'string' => \PDO::PARAM_STR,

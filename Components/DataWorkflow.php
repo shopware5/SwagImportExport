@@ -47,8 +47,9 @@ class DataWorkflow
 
     /**
      * @param array<string, mixed> $postData
+     * @return array<string, mixed>
      */
-    public function export(array $postData, string $outputFileName = '')
+    public function export(array $postData, string $outputFileName = ''): array
     {
         if ($this->dataIO->getSessionState() === 'closed') {
             $postData['position'] = $this->dataIO->getSessionPosition();
@@ -121,8 +122,9 @@ class DataWorkflow
 
     /**
      * @param array<string, mixed> $postData
+     * @return array<string, mixed>
      */
-    public function import(array $postData, string $inputFile)
+    public function import(array $postData, string $inputFile): array
     {
         $tree = \json_decode($this->profile->getConfig('tree'), true);
         if ($postData['format'] === 'xml') {
@@ -182,7 +184,7 @@ class DataWorkflow
     /**
      * @param array<string, mixed> $postData
      */
-    public function saveUnprocessedData(array $postData, string $profileName, string $outputFile)
+    public function saveUnprocessedData(array $postData, string $profileName, string $outputFile): void
     {
         if ($postData['session']['prevState'] === 'new' || !\filesize($outputFile)) {
             $header = $this->transformerChain->composeHeader();
@@ -194,10 +196,7 @@ class DataWorkflow
         $this->fileIO->writeRecords($outputFile, $data);
     }
 
-    /**
-     * @return UploadPathProvider
-     */
-    private function getUploadPathProvider()
+    private function getUploadPathProvider(): UploadPathProvider
     {
         /* @var UploadPathProvider $uploadPathProvider */
         return Shopware()->Container()->get('swag_import_export.upload_path_provider');

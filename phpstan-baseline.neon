@@ -106,12 +106,7 @@ parameters:
 			path: Components/DataIO.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataIO\\:\\:closeSession\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/DataIO.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataIO\\:\\:createDirectory\\(\\) has no return type specified\\.$#"
+			message: "#^Method SwagImportExport\\\\Components\\\\DataIO\\:\\:getColumns\\(\\) should return array\\<int\\|string, array\\<string\\>\\|string\\> but returns array\\<int\\|string, array\\<string\\>\\|string\\>\\|string\\.$#"
 			count: 1
 			path: Components/DataIO.php
 
@@ -121,102 +116,12 @@ parameters:
 			path: Components/DataIO.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataIO\\:\\:getMaxRecordsCount\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/DataIO.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataIO\\:\\:getRecordIds\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DataIO.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataIO\\:\\:getSessionId\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/DataIO.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataIO\\:\\:getUnprocessedData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DataIO.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\DataIO\\:\\:initialize\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Components/DataIO.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataIO\\:\\:loadIds\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DataIO.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataIO\\:\\:progressSession\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/DataIO.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataIO\\:\\:read\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/DataIO.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataIO\\:\\:resumeSession\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/DataIO.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataIO\\:\\:setFileName\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/DataIO.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataIO\\:\\:setFileSize\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/DataIO.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataIO\\:\\:setRecordIds\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/DataIO.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataIO\\:\\:setUsername\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/DataIO.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataIO\\:\\:startSession\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/DataIO.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataIO\\:\\:usernameSession\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/DataIO.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataIO\\:\\:write\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/DataIO.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataIO\\:\\:writeLog\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/DataIO.php
-
-		-
-			message: "#^Parameter \\#2 \\$columns of method SwagImportExport\\\\Components\\\\DbAdapters\\\\DataDbAdapter\\:\\:read\\(\\) expects array\\<int\\|string, array\\<string\\>\\|string\\>, array\\<int\\|string, array\\<string\\>\\|string\\>\\|string given\\.$#"
-			count: 1
-			path: Components/DataIO.php
-
-		-
 			message: "#^Property SwagImportExport\\\\Components\\\\DataIO\\:\\:\\$recordIds type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DataIO.php
-
-		-
-			message: "#^Strict comparison using \\=\\=\\= between array and null will always evaluate to false\\.$#"
 			count: 1
 			path: Components/DataIO.php
 
@@ -397,21 +302,6 @@ parameters:
 
 		-
 			message: "#^Cannot call method writeLog\\(\\) on SwagImportExport\\\\Components\\\\DataIO\\|null\\.$#"
-			count: 1
-			path: Components/DataWorkflow.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataWorkflow\\:\\:export\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/DataWorkflow.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataWorkflow\\:\\:import\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/DataWorkflow.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataWorkflow\\:\\:saveUnprocessedData\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Components/DataWorkflow.php
 
