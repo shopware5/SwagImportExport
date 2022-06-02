@@ -29,7 +29,7 @@ class Profile extends ModelEntity
     protected int $id;
 
     /**
-     * @var Collection<int,Expression>|null
+     * @var Collection<Expression>
      *
      * @ORM\OneToMany(targetEntity="SwagImportExport\CustomModels\Expression", mappedBy="profile")
      * @ORM\JoinColumn(nullable=true)
@@ -69,11 +69,11 @@ class Profile extends ModelEntity
     protected string $tree;
 
     /**
-     * @var int hidden
+     * @var bool hidden
      *
-     * @ORM\Column(name="hidden", type="integer")
+     * @ORM\Column(name="hidden", type="boolean")
      */
-    protected int $hidden = 0;
+    protected bool $hidden = false;
 
     /**
      * @ORM\Column(name="is_default", type="boolean")
@@ -156,12 +156,12 @@ class Profile extends ModelEntity
         $this->description = $description;
     }
 
-    public function getHidden(): int
+    public function getHidden(): bool
     {
         return $this->hidden;
     }
 
-    public function setHidden(int $hidden): void
+    public function setHidden(bool $hidden): void
     {
         $this->hidden = $hidden;
     }

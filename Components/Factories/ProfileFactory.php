@@ -82,7 +82,7 @@ class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
         $profileEntity->setTree($tree);
 
         if (isset($data['hidden'])) {
-            $profileEntity->setHidden($data['hidden']);
+            $profileEntity->setHidden((bool) $data['hidden']);
         }
 
         $this->modelManager->persist($profileEntity);

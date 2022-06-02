@@ -11,16 +11,15 @@ namespace SwagImportExport\Subscribers;
 
 use Enlight\Event\SubscriberInterface;
 use SwagImportExport\Components\Service\AutoImportServiceInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class Cronjob implements SubscriberInterface
 {
-    private ContainerInterface $container;
+    private AutoImportServiceInterface $importService;
 
     public function __construct(
-        ContainerInterface $container
+        AutoImportServiceInterface $importService
     ) {
-        $this->container = $container;
+        $this->importService = $importService;
     }
 
     public static function getSubscribedEvents(): array
@@ -32,8 +31,6 @@ class Cronjob implements SubscriberInterface
 
     public function onCronImport(): void
     {
-        /** @var AutoImportServiceInterface $importService */
-        $importService = $this->container->get('swag_import_export.auto_importer');
-        $importService->runAutoImport();
+        $this->importService->runAutoImport();
     }
 }

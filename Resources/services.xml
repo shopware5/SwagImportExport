@@ -15,7 +15,7 @@
         <service id="SwagImportExport\Components\Utils\FileHelper"/>
 
         <service id="SwagImportExport\Subscribers\Cronjob">
-            <argument id="service_container" type="service"/>
+            <argument id="swag_import_export.auto_importer" type="service"/>
 
             <tag name="shopware.event_subscriber"/>
         </service>

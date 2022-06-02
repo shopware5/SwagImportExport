@@ -41,7 +41,7 @@ class Session extends ModelEntity
     /**
      * @ORM\Column(name="ids", type="text", nullable=false)
      */
-    protected ?string $ids = null;
+    protected string $ids = '';
 
     /**
      * @ORM\Column(name="position", type="integer", nullable=false)

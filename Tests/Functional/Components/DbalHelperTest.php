@@ -30,7 +30,6 @@ class DbalHelperTest extends TestCase
     public const ANOTHER_IMPORT_VALUE = 'field value 02';
 
     public const UPDATE_RECORD_BY_ID = 999;
-    public const CREATE_INSERT_STATEMENT = false;
 
     private ModelManager $modelManager;
 
