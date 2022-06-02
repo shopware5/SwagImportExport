@@ -13,10 +13,10 @@ interface ComposerInterface
     /**
      * Composes the header of the formatted output file.
      */
-    public function composeHeader();
+    public function composeHeader(): array;
 
     /**
      * Composes the footer of the formatted output file.
      */
-    public function composeFooter();
+    public function composeFooter(): array;
 }

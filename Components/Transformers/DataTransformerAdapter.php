@@ -17,23 +17,19 @@ interface DataTransformerAdapter
     /**
      * Sets the main config which defines the data restructuring
      */
-    public function initialize($config);
+    public function initialize($config): void;
 
     /**
      * Transforms the data in direction to formatted output file and returns the transformed data.
      *
      * @param array<string, array<int, mixed>> $data
-     *
-     * @return array
      */
-    public function transformForward(array $data);
+    public function transformForward(array $data): array;
 
     /**
      * Transforms the data in direction from formatted output file and returns the transformed data.
      *
      * @param array<string, array<int, mixed>> $data
-     *
-     * @return array
      */
-    public function transformBackward(array $data);
+    public function transformBackward(array $data): array;
 }

@@ -28,8 +28,8 @@ interface DataDbAdapter
     /**
      * Reads all records with the given ids and selects the passed columns.
      *
-     * @param array<int>                                 $ids
-     * @param array<string>|array<string, array<string>> $columns
+     * @param array<int>                              $ids
+     * @param array<int|string, array<string>|string> $columns
      *
      * @return array<string, mixed>
      */

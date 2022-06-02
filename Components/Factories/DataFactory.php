@@ -201,6 +201,8 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
             case DataDbAdapter::NEWSLETTER_RECIPIENTS_ADAPTER:
                 return $this->newsletterDataManager;
         }
+
+        throw new \Exception('Data manager not found');
     }
 
     public function loadSession(array $data): Session

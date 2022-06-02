@@ -27,7 +27,7 @@ class ValuesTransformer implements DataTransformerAdapter
      *
      * @param array{expression: array<Expression>, evaluator: ExpressionEvaluator} $config
      */
-    public function initialize($config)
+    public function initialize($config): void
     {
         $this->config = $config['expression'];
         $this->evaluator = $config['evaluator'];
@@ -37,10 +37,8 @@ class ValuesTransformer implements DataTransformerAdapter
      * Maps the values by using the config export smarty fields and returns the new array
      *
      * @param array<string, array<mixed>> $data
-     *
-     * @return array
      */
-    public function transformForward(array $data)
+    public function transformForward(array $data): array
     {
         $data = $this->transform('export', $data);
 
@@ -51,10 +49,8 @@ class ValuesTransformer implements DataTransformerAdapter
      * Changes and returns the new values, before importing
      *
      * @param array<string, array<mixed>> $data
-     *
-     * @return array
      */
-    public function transformBackward(array $data)
+    public function transformBackward(array $data): array
     {
         $data = $this->transform('import', $data);
 

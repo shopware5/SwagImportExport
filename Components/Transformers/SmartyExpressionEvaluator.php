@@ -14,10 +14,8 @@ class SmartyExpressionEvaluator implements ExpressionEvaluator
 
     /**
      * @throws \Exception
-     *
-     * @return string
      */
-    public function evaluate(string $expression, ?array $variables)
+    public function evaluate(string $expression, ?array $variables): string
     {
         if (empty($expression)) {
             throw new \Exception('Empty expression in smarty evaluator');
@@ -38,10 +36,8 @@ class SmartyExpressionEvaluator implements ExpressionEvaluator
 
     /**
      * Returns compiler
-     *
-     * @return \Shopware_Components_StringCompiler
      */
-    protected function getCompiler()
+    protected function getCompiler(): \Shopware_Components_StringCompiler
     {
         if ($this->compiler === null) {
             $view = Shopware()->Template();
@@ -54,7 +50,7 @@ class SmartyExpressionEvaluator implements ExpressionEvaluator
     /**
      * @param array<string, mixed> $variables
      */
-    protected function convertPricesColumnsToFloat(array &$variables)
+    protected function convertPricesColumnsToFloat(array &$variables): void
     {
         if (isset($variables['price'])) {
             $variables['price'] = (float) \str_replace(',', '.', $variables['price']);

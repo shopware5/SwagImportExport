@@ -39,7 +39,7 @@ class DecimalTransformer implements DataTransformerAdapter
     /**
      * Sets the main config which defines the data restructuring
      */
-    public function initialize($params)
+    public function initialize($params): void
     {
         list($this->pluginConfig, $this->profile) = $params;
         $this->treeData = $this->getTreeData();
@@ -47,10 +47,8 @@ class DecimalTransformer implements DataTransformerAdapter
 
     /**
      * Transforms the data in direction to formatted output file and returns the transformed data.
-     *
-     * @return array
      */
-    public function transformForward(array $data)
+    public function transformForward(array $data): array
     {
         if (!$this->pluginConfig->get('useCommaDecimal')) {
             return $data;
@@ -61,10 +59,8 @@ class DecimalTransformer implements DataTransformerAdapter
 
     /**
      * Transforms the data in direction from formatted output file and returns the transformed data.
-     *
-     * @return array
      */
-    public function transformBackward(array $data)
+    public function transformBackward(array $data): array
     {
         if (!$this->pluginConfig->get('useCommaDecimal')) {
             return $data;
@@ -78,10 +74,8 @@ class DecimalTransformer implements DataTransformerAdapter
     /**
      * Transforms the data.
      * Direction (forward / backward) is given by the parameter $direction.
-     *
-     * @return array
      */
-    public function transform(array $data, bool $isForward = true)
+    public function transform(array $data, bool $isForward = true): array
     {
         foreach ($data as &$records) {
             $records = $this->transformRecord($records, $isForward);
@@ -93,10 +87,8 @@ class DecimalTransformer implements DataTransformerAdapter
     /**
      * Transforms a record both forward and backwards.
      * It replaces the decimal-delimiter.
-     *
-     * @return array
      */
-    public function transformRecord(array $records, bool $isForward = true)
+    public function transformRecord(array $records, bool $isForward = true): array
     {
         foreach ($records as &$record) {
             foreach ($record as $key => &$value) {
@@ -137,10 +129,8 @@ class DecimalTransformer implements DataTransformerAdapter
 
     /**
      * Returns all information known from the profile-tree.
-     *
-     * @return array
      */
-    private function getTreeData()
+    private function getTreeData(): array
     {
         $profileTree = $this->getProfileTree();
 
@@ -149,30 +139,24 @@ class DecimalTransformer implements DataTransformerAdapter
 
     /**
      * Returns if the given key is an adapter.
-     *
-     * @return bool
      */
-    private function isAdapter(string $key)
+    private function isAdapter(string $key): bool
     {
         return isset($this->treeData['adapters'][$key]);
     }
 
     /**
      * Returns if the given key is a node.
-     *
-     * @return bool
      */
-    private function isNode(string $key)
+    private function isNode(string $key): bool
     {
         return isset($this->treeData['nodes'][$key]);
     }
 
     /**
      * Iterates recursively through the profile-tree and returns a flat-array of all the profile-fields.
-     *
-     * @return array
      */
-    private function iterateTree(array $currentNode, array $result = [])
+    private function iterateTree(array $currentNode, array $result = []): array
     {
         $currentEl = $currentNode;
         unset($currentEl['children']);
@@ -202,10 +186,8 @@ class DecimalTransformer implements DataTransformerAdapter
 
     /**
      * Returns the profile tree.
-     *
-     * @return array
      */
-    private function getProfileTree()
+    private function getProfileTree(): array
     {
         return \json_decode($this->profile->getEntity()->getTree(), true);
     }

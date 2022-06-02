@@ -87,13 +87,13 @@ class TransformerChainMock extends DataTransformerChain
         // DO NOTHING
     }
 
-    public function composeHeader()
+    public function composeHeader(): array
     {
-        return 'new | empty | header | test';
+        return ['new | empty | header | test'];
     }
 
-    public function transformForward($data)
+    public function transformForward($data): array
     {
-        return \PHP_EOL . 'just | another | return | value';
+        return [\PHP_EOL . 'just | another | return | value'];
     }
 }

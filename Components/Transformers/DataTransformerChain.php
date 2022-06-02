@@ -22,17 +22,15 @@ class DataTransformerChain
     /**
      * Installs a new transformer in the chain.
      */
-    public function add(DataTransformerAdapter $transformer)
+    public function add(DataTransformerAdapter $transformer): void
     {
         $this->chain[] = $transformer;
     }
 
     /**
      * Execute the transformers in the way they were installed
-     *
-     * @return array
      */
-    public function transformForward($data)
+    public function transformForward($data): array
     {
         /** @var DataTransformerAdapter $transformer */
         foreach ($this->chain as $transformer) {
@@ -44,10 +42,8 @@ class DataTransformerChain
 
     /**
      * Execute the transformers back in the web they were installed
-     *
-     * @return array
      */
-    public function transformBackward($data)
+    public function transformBackward($data): array
     {
         /** @var DataTransformerAdapter $transformer */
         foreach (\array_reverse($this->chain) as $transformer) {
@@ -60,10 +56,8 @@ class DataTransformerChain
     /**
      * Compose the headers by using the last transformer in the chain.
      * (Always last because that is the closest transformer to the export/import physical file)
-     *
-     * @return array
      */
-    public function composeHeader()
+    public function composeHeader(): array
     {
         $transformer = $this->getLastComposerTransformer($this->chain);
 
@@ -73,10 +67,8 @@ class DataTransformerChain
     /**
      * Compose the footers by using the last transformer in the chain.
      * (Always last because that is the closest transformer to the export/import physical file)
-     *
-     * @return array
      */
-    public function composeFooter()
+    public function composeFooter(): array
     {
         $transformer = $this->getLastComposerTransformer($this->chain);
 
@@ -87,10 +79,8 @@ class DataTransformerChain
      * Returns the last transformer implementing the composer-interface.
      *
      * @throws \Exception
-     *
-     * @return ComposerInterface
      */
-    private function getLastComposerTransformer(array $transformers)
+    private function getLastComposerTransformer(array $transformers): ComposerInterface
     {
         $transformers = \array_reverse($transformers);
         foreach ($transformers as $transformer) {

@@ -12,6 +12,8 @@ interface ExpressionEvaluator
 {
     /**
      * @param array<string, mixed>|null $variables
+     *
+     * @return mixed|void
      */
     public function evaluate(string $expression, ?array $variables);
 }

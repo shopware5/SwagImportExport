@@ -32,7 +32,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      */
     protected array $iterationParts = [];
 
-    protected ?array $iterationTempData = null;
+    protected array $iterationTempData = [];
 
     /**
      * @var array<string|int, mixed>
@@ -52,7 +52,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
     /**
      * Sets the config that has the tree structure
      */
-    public function initialize($config)
+    public function initialize($config): void
     {
         $this->config = $config;
     }
@@ -63,10 +63,8 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      * @param array<string, array<mixed>> $data
      *
      * @throws \Enlight_Event_Exception
-     *
-     * @return array
      */
-    public function transformForward(array $data)
+    public function transformForward(array $data): array
     {
         $mainNode = $this->getMainIterationPart();
         $this->processIterationParts($mainNode);
@@ -93,10 +91,8 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      * Transforms a list of nodes containing children and attributes into flat array.
      *
      * @param array<string, mixed> $data
-     *
-     * @return array
      */
-    public function transformBackward(array $data)
+    public function transformBackward(array $data): array
     {
         $data = Shopware()->Events()->filter(
             'Shopware_Components_SwagImportExport_Transformers_FlattenTransformer_TransformBackward',
@@ -117,10 +113,8 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
 
     /**
      * Composes a header column names based on config
-     *
-     * @return array
      */
-    public function composeHeader()
+    public function composeHeader(): array
     {
         $mainNode = $this->getMainIterationPart();
         $this->processIterationParts($mainNode);
@@ -133,9 +127,12 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
 
     /**
      * Composes a tree footer based on config
+     *
+     * @retrun array{}
      */
-    public function composeFooter()
+    public function composeFooter(): array
     {
+        return [];
     }
 
     /**
@@ -143,7 +140,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      *
      * Search the iteration part of the tree template
      */
-    public function findMainIterationPart(array $tree)
+    public function findMainIterationPart(array $tree): void
     {
         foreach ($tree as $key => $value) {
             if ($key === 'adapter') {
@@ -196,8 +193,6 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      * Creates and returns mapper of provided profile node
      *
      * @param array<string, mixed> $node
-     *
-     * @return array
      */
     public function createMapperFromProfile(array $node)
     {
@@ -233,8 +228,6 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      * @param array<string, mixed> $node
      *
      * @throws \Exception
-     *
-     * @return array
      */
     public function transformToTree(array $node, array $data, ?string $nodePath = null, int $iteration = 0)
     {
@@ -483,10 +476,8 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      * Returns first element of the array
      *
      * @param array<string, mixed> $data
-     *
-     * @return string
      */
-    public function getFirstElement(array $data)
+    public function getFirstElement(array $data): string
     {
         if (\is_array($data)) {
             \reset($data);
@@ -521,7 +512,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      *
      * @param array<string, mixed> $node
      */
-    public function collectHeader(array $node, string $path)
+    public function collectHeader(array $node, string $path): void
     {
         if ($this->iterationParts[$path] === 'price') {
             $priceProfile = $this->getNodeFromProfile($this->getMainIterationPart(), 'price');
@@ -609,7 +600,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      *
      * @param array<string, mixed> $node
      */
-    public function createHeaderPriceNodes(array $node, string $groupKey, string $path = null)
+    public function createHeaderPriceNodes(array $node, string $groupKey, string $path = null): void
     {
         foreach ($node as $key => $value) {
             if (\is_array($value)) {
@@ -636,7 +627,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      *
      * @param array<string, mixed> $node
      */
-    public function createHeaderTaxSumNodes(array $node, string $taxRate, string $path = null)
+    public function createHeaderTaxSumNodes(array $node, string $taxRate, string $path = null): void
     {
         foreach ($node as $key => $value) {
             if (\is_array($value)) {
@@ -665,7 +656,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      * @param array<string, mixed> $node
      * @param array<int|string>    $skipList
      */
-    public function createHeaderValues(array $node, array $skipList, string $path = null)
+    public function createHeaderValues(array $node, array $skipList, string $path = null): void
     {
         foreach ($node as $key => $value) {
             if (\is_array($value)) {
@@ -692,7 +683,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      *
      * @param array<string, mixed> $node
      */
-    public function createHeaderTranslation(array $node, int $shopId, string $path = null)
+    public function createHeaderTranslation(array $node, int $shopId, string $path = null): void
     {
         foreach ($node as $key => $value) {
             if (\is_array($value)) {
@@ -720,7 +711,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      *
      * @param array<string, mixed> $node
      */
-    public function collectData(array $node, string $path)
+    public function collectData(array $node, string $path): void
     {
         if (isset($this->iterationParts[$path]) && $this->iterationParts[$path] != $this->getMainAdapter()) {
             if ($this->iterationParts[$path] === 'price') {
@@ -892,7 +883,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
     /**
      * @param array<string, mixed> $node
      */
-    public function collectIterationData(array $node, ?string $path = null)
+    public function collectIterationData(array $node, ?string $path = null): void
     {
         foreach ($node as $key => $value) {
             $currentPath = $this->getMergedPath($path, $key);
@@ -912,7 +903,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      *
      * @return array
      */
-    public function findNodeByPriceGroup(array $node, string $groupKey, array $mapper)
+    public function findNodeByPriceGroup(array $node, string $groupKey, array $mapper): ?array
     {
         foreach ($node as $value) {
             $priceKey = $this->getPriceGroupFromNode($value, $mapper);
@@ -920,13 +911,15 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                 return $value;
             }
         }
+
+        return null;
     }
 
     /**
      * @param array<string, mixed> $node
      * @param array<string, mixed> $mapper
      */
-    public function getPriceGroupFromNode(array $node, array $mapper, string $path = null)
+    public function getPriceGroupFromNode(array $node, array $mapper, string $path = null): ?string
     {
         foreach ($node as $key => $value) {
             $currentPath = $this->getMergedPath($path, $key);
@@ -943,13 +936,15 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                 return $value;
             }
         }
+
+        return null;
     }
 
     /**
      * @param array<string, mixed> $node
      * @param array<string, mixed> $mapper
      */
-    public function collectPriceData(array $node, array $mapper, string $path = null, bool $emptyResult = false)
+    public function collectPriceData(array $node, array $mapper, string $path = null, bool $emptyResult = false): void
     {
         foreach ($node as $key => $value) {
             $currentPath = $this->getMergedPath($path, $key);
@@ -968,7 +963,12 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
         }
     }
 
-    public function treeToFlat($node)
+    /**
+     * @param array<string, mixed> $node
+     *
+     * @return mixed[]
+     */
+    public function treeToFlat(array $node): array
     {
         $this->resetTempMapper();
         $this->convertToFlat($node, null);
@@ -978,10 +978,8 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
 
     /**
      * Returns the iteration part of the tree
-     *
-     * @return array
      */
-    public function getMainIterationPart()
+    public function getMainIterationPart(): array
     {
         if ($this->mainIterationPart == null) {
             $tree = \json_decode($this->config, true);
@@ -991,7 +989,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
         return $this->mainIterationPart;
     }
 
-    public function getMainAdapter()
+    public function getMainAdapter(): string
     {
         if ($this->mainAdapter == null) {
             $mainIterationPart = $this->getMainIterationPart();
@@ -1006,7 +1004,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      *
      * @param array<string, mixed> $nodes
      */
-    public function processIterationParts(array $nodes, string $path = null)
+    public function processIterationParts(array $nodes, string $path = null): void
     {
         foreach ($nodes as $key => $node) {
             if (isset($nodes['name'])) {
@@ -1025,17 +1023,17 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
         }
     }
 
-    public function saveIterationTempData(string $currentPath, $value)
+    public function saveIterationTempData(string $currentPath, $value): void
     {
         $this->iterationTempData[$currentPath][] = $value;
     }
 
-    public function getIterationTempData()
+    public function getIterationTempData(): array
     {
         return $this->iterationTempData;
     }
 
-    public function unsetIterationTempData()
+    public function unsetIterationTempData(): void
     {
         unset($this->iterationTempData);
     }
@@ -1072,7 +1070,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      *
      * @return string
      */
-    public function findConfigurationGroupValue(array $node, array $mapper, string $path = null)
+    public function findConfigurationGroupValue(array $node, array $mapper, string $path = null): ?string
     {
         foreach ($node as $key => $value) {
             $currentPath = $this->getMergedPath($path, $key);
@@ -1089,13 +1087,15 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                 }
             }
         }
+
+        return null;
     }
 
     /**
      * @param array<string, mixed>  $node
      * @param array<string, string> $mapper
      */
-    public function findPropertyOptionName(array $node, array $mapper, ?string $path = null)
+    public function findPropertyOptionName(array $node, array $mapper, ?string $path = null): ?string
     {
         foreach ($node as $key => $value) {
             $currentPath = $this->getMergedPath($path, $key);
@@ -1112,6 +1112,8 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                 }
             }
         }
+
+        return null;
     }
 
     /**
@@ -1119,7 +1121,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      * @param array<string, string> $mapper
      * @param ?array<string, mixed> $originalNode
      */
-    public function collectConfiguratorData(array $node, array $mapper, string $path = null, array $originalNode = null)
+    public function collectConfiguratorData(array $node, array $mapper, string $path = null, array $originalNode = null): void
     {
         foreach ($node as $key => $value) {
             $currentPath = $this->getMergedPath($path, $key);
@@ -1156,7 +1158,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      * @param array<string, string> $mapper
      * @param ?array<string, mixed> $originalNode
      */
-    public function collectPropertyData(array $node, array $mapper, string $path = null, array $originalNode = null)
+    public function collectPropertyData(array $node, array $mapper, string $path = null, array $originalNode = null): void
     {
         foreach ($node as $key => $value) {
             $currentPath = $this->getMergedPath($path, $key);
@@ -1188,7 +1190,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      * @param array<string, mixed>  $node
      * @param array<string, string> $mapper
      */
-    public function collectTranslationData(array $node, array $mapper, string $path = null)
+    public function collectTranslationData(array $node, array $mapper, string $path = null): void
     {
         foreach ($node as $key => $value) {
             $currentPath = $this->getMergedPath($path, $key);
@@ -1204,10 +1206,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
         }
     }
 
-    /**
-     * @return string
-     */
-    public function getMergedPath(?string $path, string $key)
+    public function getMergedPath(?string $path, string $key): string
     {
         if ($path) {
             $newPath = $path . '/' . $key;
@@ -1221,40 +1220,43 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
     /**
      * Saves iteration parts
      */
-    public function saveIterationParts(string $path, string $adapter)
+    public function saveIterationParts(string $path, string $adapter): void
     {
         $this->iterationParts[$path] = $adapter;
     }
 
-    public function resetTempData()
+    public function resetTempData(): void
     {
         $this->tempData = [];
     }
 
     /**
-     * @return array
+     * @return array<string>
      */
-    public function getTempData()
+    public function getTempData(): array
     {
         return $this->tempData;
     }
 
-    public function saveTempData(?string $data)
+    public function saveTempData(?string $data): void
     {
         $this->tempData[] = $data;
     }
 
-    public function resetTempMapper()
+    public function resetTempMapper(): void
     {
         $this->tempMapper = [];
     }
 
-    public function getTempMapper()
+    /**
+     * @return array<int|string, mixed>
+     */
+    public function getTempMapper(): array
     {
         return $this->tempMapper;
     }
 
-    public function saveTempMapper(string $path, string $data)
+    public function saveTempMapper(string $path, string $data): void
     {
         $this->tempMapper[$path] = $data;
     }
@@ -1262,27 +1264,23 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
     /**
      * @return \Shopware\Models\Customer\Group[]
      */
-    public function getCustomerGroups()
+    public function getCustomerGroups(): array
     {
-        $groups = Shopware()->Models()->getRepository(Group::class)->findAll();
-
-        return $groups;
+        return Shopware()->Models()->getRepository(Group::class)->findAll();
     }
 
     /**
      * @return \Shopware\Models\Shop\Shop[]
      */
-    public function getShops()
+    public function getShops(): array
     {
-        $shops = Shopware()->Models()->getRepository(Shop::class)->findAll();
-
-        return $shops;
+        return Shopware()->Models()->getRepository(Shop::class)->findAll();
     }
 
     /**
-     * @return array
+     * @return array<string>
      */
-    public function getAllTranslationColumns()
+    public function getAllTranslationColumns(): array
     {
         if ($this->translationColumns === null) {
             $translationFields = [
@@ -1307,9 +1305,9 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
     /**
      * @throws \Zend_Db_Statement_Exception
      *
-     * @return array
+     * @return array<array<string>>
      */
-    public function getTaxRates()
+    public function getTaxRates(): array
     {
         $sql = '(SELECT tax as taxRate FROM s_core_tax)
                 UNION
@@ -1329,7 +1327,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      *
      * @return array
      */
-    public function findNodeByTaxRate(array $node, string $taxRate, array $mapper)
+    public function findNodeByTaxRate(array $node, string $taxRate, array $mapper): ?array
     {
         foreach ($node as $value) {
             $rate = $this->getTaxRateFromNode($value, $mapper);
@@ -1345,7 +1343,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      * @param array<string, mixed>  $node
      * @param array<string, string> $mapper
      */
-    public function getTaxRateFromNode(array $node, array $mapper, string $path = null)
+    public function getTaxRateFromNode(array $node, array $mapper, string $path = null): ?string
     {
         foreach ($node as $key => $value) {
             $currentPath = $this->getMergedPath($path, $key);
@@ -1361,13 +1359,15 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                 return $value;
             }
         }
+
+        return null;
     }
 
     /**
      * @param array<string, mixed>  $node
      * @param array<string, string> $mapper
      */
-    public function collectTaxRateData(array $node, array $mapper, string $path = null, bool $emptyResult = false)
+    public function collectTaxRateData(array $node, array $mapper, string $path = null, bool $emptyResult = false): void
     {
         foreach ($node as $key => $value) {
             $currentPath = $this->getMergedPath($path, $key);
@@ -1382,10 +1382,8 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
 
     /**
      * Returns the columns of the article attributes table
-     *
-     * @return array
      */
-    protected function getAttributeColumns()
+    protected function getAttributeColumns(): array
     {
         /** @var AbstractSchemaManager $schemaManager */
         $schemaManager = Shopware()->Container()->get('models')->getConnection()->getSchemaManager();
@@ -1398,7 +1396,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      *
      * @param array<string, mixed> $node
      *
-     * @return string|bool
+     * @return string|false
      */
     protected function findNodeByShopwareField(array $node, string $shopwareField)
     {
@@ -1430,8 +1428,6 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      *
      * @param array<string, mixed> $node
      * @param array<string, mixed> $data
-     *
-     * @return array
      */
     protected function transformPricesToTree(array $node, array $data, string $group)
     {
@@ -1496,8 +1492,6 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      *
      * @param array<string, mixed>     $node
      * @param array<int|string, mixed> $data
-     *
-     * @return array
      */
     protected function transformConfiguratorToTree(array $node, array $data)
     {
@@ -1551,7 +1545,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
     /**
      * @param array<string, mixed> $node
      */
-    protected function convertToFlat(array $node, ?string $path)
+    protected function convertToFlat(array $node, ?string $path): void
     {
         foreach ($node as $key => $value) {
             $currentPath = $this->getMergedPath($path, $key);
