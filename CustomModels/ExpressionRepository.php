@@ -21,10 +21,8 @@ class ExpressionRepository extends ModelRepository
      *
      * @param array<string, string>|array<array{property: string, value: mixed, expression?: string}> $filterBy
      * @param array<array{property: string, direction: string}>                                       $orderBy
-     *
-     * @return QueryBuilder
      */
-    public function getExpressionsListQuery(array $filterBy = [], array $orderBy = [], ?int $limit = null, ?int $offset = null)
+    public function getExpressionsListQuery(array $filterBy = [], array $orderBy = [], ?int $limit = null, ?int $offset = null): QueryBuilder
     {
         /** @var QueryBuilder $builder */
         $builder = $this->createQueryBuilder('e');

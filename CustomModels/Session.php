@@ -147,18 +147,12 @@ class Session extends ModelEntity
         return $this->fileSize;
     }
 
-    /**
-     * @return string
-     */
-    public function getState()
+    public function getState(): string
     {
         return $this->state;
     }
 
-    /**
-     * @return \DateTime
-     */
-    public function getCreatedAt()
+    public function getCreatedAt(): \DateTime
     {
         return $this->createdAt;
     }
@@ -172,50 +166,36 @@ class Session extends ModelEntity
      * Sets the profile object.
      *
      * @param ?Profile $profile
-     *
-     * @return Session
      */
-    public function setProfile(?Profile $profile = null)
+    public function setProfile(?Profile $profile = null): Session
     {
         $this->profile = $profile;
 
         return $this;
     }
 
-    /**
-     * @return Session
-     */
-    public function setType(string $type)
+    public function setType(string $type): Session
     {
         $this->type = $type;
 
         return $this;
     }
 
-    /**
-     * @return Session
-     */
-    public function setIds(string $ids)
+    public function setIds(string $ids): Session
     {
         $this->ids = $ids;
 
         return $this;
     }
 
-    /**
-     * @return Session
-     */
-    public function setPosition(int $position)
+    public function setPosition(int $position): Session
     {
         $this->position = $position;
 
         return $this;
     }
 
-    /**
-     * @return Session
-     */
-    public function setTotalCount(int $totalCount)
+    public function setTotalCount(int $totalCount): Session
     {
         $this->totalCount = $totalCount;
 
@@ -224,60 +204,43 @@ class Session extends ModelEntity
 
     /**
      * @param ?string $userName
-     *
-     * @return Session
      */
-    public function setUserName($userName)
+    public function setUserName($userName): Session
     {
         $this->userName = $userName;
 
         return $this;
     }
 
-    /**
-     * @return Session
-     */
-    public function setFileName(string $fileName)
+    public function setFileName(string $fileName): Session
     {
         $this->fileName = $fileName;
 
         return $this;
     }
 
-    /**
-     * @return Session
-     */
-    public function setFormat(string $format)
+    public function setFormat(string $format): Session
     {
         $this->format = $format;
 
         return $this;
     }
 
-    /**
-     * @return Session
-     */
-    public function setFileSize(int $fileSize)
+    public function setFileSize(int $fileSize): Session
     {
         $this->fileSize = $fileSize;
 
         return $this;
     }
 
-    /**
-     * @return Session
-     */
-    public function setState(string $state)
+    public function setState(string $state): Session
     {
         $this->state = $state;
 
         return $this;
     }
 
-    /**
-     * @return Session
-     */
-    public function setCreatedAt(\DateTime $createdAt)
+    public function setCreatedAt(\DateTime $createdAt): Session
     {
         $this->createdAt = $createdAt;
 

@@ -50,10 +50,7 @@ class Logger extends ModelEntity
      */
     protected \Datetime $createdAt;
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -89,10 +86,8 @@ class Logger extends ModelEntity
 
     /**
      * @param \DateTime|string $createdAt
-     *
-     * @return Logger
      */
-    public function setCreatedAt($createdAt = 'now')
+    public function setCreatedAt($createdAt = 'now'): Logger
     {
         if (!($createdAt instanceof \DateTime)) {
             $this->createdAt = new \DateTime($createdAt);
