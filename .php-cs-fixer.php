@@ -17,7 +17,8 @@ use PhpCsFixerCustomFixers\Fixer\SingleSpaceBeforeStatementFixer;
 use PhpCsFixerCustomFixers\Fixers;
 
 $finder = PhpCsFixer\Finder::create()
-    ->in(__DIR__)
+//    ->in(__DIR__)
+    ->in(__DIR__ . "/Commands")
 ;
 
 $header = <<<EOF
@@ -58,6 +59,7 @@ return (new Config())
         'php_unit_test_case_static_method_calls' => true,
         'single_line_throw' => false,
         'yoda_style' => ['equal' => false, 'identical' => false, 'less_and_greater' => false],
+        'declare_strict_types' => true,
 
         NoSuperfluousConcatenationFixer::name() => true,
         NoUselessCommentFixer::name() => true,

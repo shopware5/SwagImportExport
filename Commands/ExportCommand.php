@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -25,7 +26,7 @@ class ExportCommand extends ShopwareCommand
 
     protected ?Profile $profileEntity;
 
-    protected ?string $exportVariants = null;
+    protected bool $exportVariants = false;
 
     protected int $limit;
 
