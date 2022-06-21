@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -72,7 +73,7 @@ class XmlConverter
                         . "$pad</$key>{$this->sSettings['newline']}";
                 }
             } else {
-                if ($this->hasSpecialCharacters($item)) {
+                if ($this->hasSpecialCharacters((string) $item)) {
                     $item = \str_replace(']]>', ']]]]><![CDATA[>', $item);
                     $ret .= "$pad<$key$attributes><![CDATA[" . $item . "]]></$key>{$this->sSettings['newline']}";
                 } else {

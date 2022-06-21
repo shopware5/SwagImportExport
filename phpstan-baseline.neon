@@ -1956,22 +1956,12 @@ parameters:
 			path: CustomModels/Profile.php
 
 		-
-			message: "#^Property SwagImportExport\\\\CustomModels\\\\Profile\\:\\:\\$expressions type mapping mismatch\\: property can contain \\(Doctrine\\\\Common\\\\Collections\\\\Collection&iterable\\<SwagImportExport\\\\CustomModels\\\\Expression\\>\\)\\|null but database expects Doctrine\\\\Common\\\\Collections\\\\Collection&iterable\\<SwagImportExport\\\\CustomModels\\\\Expression\\>\\.$#"
-			count: 1
-			path: CustomModels/Profile.php
-
-		-
 			message: "#^Property SwagImportExport\\\\CustomModels\\\\Profile\\:\\:\\$expressions with generic interface Doctrine\\\\Common\\\\Collections\\\\Collection does not specify its types\\: TKey, T$#"
 			count: 1
 			path: CustomModels/Profile.php
 
 		-
 			message: "#^Method SwagImportExport\\\\CustomModels\\\\Session\\:\\:getProfile\\(\\) should return SwagImportExport\\\\CustomModels\\\\Profile but returns SwagImportExport\\\\CustomModels\\\\Profile\\|null\\.$#"
-			count: 1
-			path: CustomModels/Session.php
-
-		-
-			message: "#^Property SwagImportExport\\\\CustomModels\\\\Session\\:\\:\\$position type mapping mismatch\\: property can contain int\\|null but database expects int\\.$#"
 			count: 1
 			path: CustomModels/Session.php
 
@@ -2217,11 +2207,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$entityName of class Doctrine\\\\ORM\\\\Mapping\\\\ClassMetadata constructor expects class\\-string\\<ExampleEntity\\>, string given\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbalHelperTest.php
-
-		-
-			message: "#^Property Doctrine\\\\ORM\\\\Mapping\\\\ClassMetadataInfo\\<ExampleEntity\\>\\:\\:\\$table \\(array\\{name\\: string, schema\\: string, indexes\\: array, uniqueConstraints\\: array, options\\: array\\<string, mixed\\>, quoted\\?\\: bool\\}\\) does not accept array\\{name\\: 'example_table'\\}\\.$#"
 			count: 1
 			path: Tests/Functional/Components/DbalHelperTest.php
 
