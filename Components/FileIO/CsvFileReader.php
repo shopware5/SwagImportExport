@@ -32,7 +32,7 @@ class CsvFileReader implements FileReader
     public function readRecords(string $fileName, int $position, int $step): array
     {
         // Make sure to detect CR LF (Windows) line breaks
-        \ini_set('auto_detect_line_endings', 'true');
+        \ini_set('auto_detect_line_endings', '1');
 
         $tempFileName = '';
         if (\file_exists($fileName)) {

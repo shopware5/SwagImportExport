@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -43,7 +44,7 @@ class RelationWriterTest extends TestCase
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Zubehör mit Bestellnummer invalid-order-number nicht gefunden.');
-        $relationWriterAdapter->write('3', 'SW10003', $invalidRelationData, 'accessory', true);
+        $relationWriterAdapter->write(3, 'SW10003', $invalidRelationData, 'accessory', true);
     }
 
     public function testWriteSimilarWithInvalidDataThrowsException(): void
@@ -59,6 +60,6 @@ class RelationWriterTest extends TestCase
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Ähnlicher Artikel mit Bestellnummer invalid-order-number nicht gefunden.');
-        $relationWriterAdapter->write('3', 'SW10003', $invalidRelationData, 'similar', true);
+        $relationWriterAdapter->write(3, 'SW10003', $invalidRelationData, 'similar', true);
     }
 }

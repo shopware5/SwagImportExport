@@ -43,17 +43,17 @@ abstract class Validator
     /**
      * Validates fields with int type. It is possible this field to has as a value '-1'.
      */
-    public function validateInt(string $value): int
+    public function validateInt(string $value): bool
     {
-        return \preg_match('/^-{0,1}\d+$/', $value);
+        return (bool) \preg_match('/^-{0,1}\d+$/', $value);
     }
 
     /**
      * Validates fields with float type.
      */
-    public function validateFloat(string $value): int
+    public function validateFloat(string $value): bool
     {
-        return \preg_match('/^-?\d+((\.|,){0,1}\d+)*$/', $value);
+        return (bool) \preg_match('/^-?\d+((\.|,){0,1}\d+)*$/', $value);
     }
 
     /**

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -93,7 +94,7 @@ class OrderExportTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
-        $this->assertOrderAttributeInXmlFile($file, '20001', 'orderId', 15);
+        $this->assertOrderAttributeInXmlFile($file, '20001', 'orderId', '15');
         $this->assertOrderAttributeInXmlFile($file, '20001', 'paymentStatusId', '17');
     }
 

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -39,7 +40,7 @@ class CommandHelperTest extends TestCase
             'productStream' => '12',
         ]);
 
-        static::assertSame('12', $this->getProductStreamValue($commandHelper));
+        static::assertSame(12, $this->getProductStreamValue($commandHelper));
     }
 
     public function testGetProductStreamIdByNameShouldFoundCorrectId(): void
@@ -55,7 +56,7 @@ class CommandHelperTest extends TestCase
             'productStream' => 'TestStream',
         ]);
 
-        static::assertSame('1', $this->getProductStreamValue($commandHelper));
+        static::assertSame(1, $this->getProductStreamValue($commandHelper));
     }
 
     public function testGetProductStreamIdByNameExpectExceptionNoStreamFound(): void
@@ -88,7 +89,7 @@ class CommandHelperTest extends TestCase
         ]);
     }
 
-    private function getProductStreamValue(CommandHelper $commandHelper): ?string
+    private function getProductStreamValue(CommandHelper $commandHelper): ?int
     {
         $reflectionProperty = (new \ReflectionClass(CommandHelper::class))->getProperty('productStream');
         $reflectionProperty->setAccessible(true);

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -31,7 +32,7 @@ class ProfileServiceTest extends TestCase
         $profile = $dbalConnection->executeQuery('SELECT * FROM s_import_export_profile LIMIT 1')->fetch(\PDO::FETCH_ASSOC);
 
         /** @var ProfileDataStruct $profileDataStruct */
-        $profileDataStruct = $service->exportProfile($profile['id']);
+        $profileDataStruct = $service->exportProfile((int) $profile['id']);
 
         static::assertEquals($profile['name'], $profileDataStruct->getName());
         static::assertEquals($profile['type'], $profileDataStruct->getType());

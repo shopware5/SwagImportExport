@@ -44,7 +44,7 @@ class PropertyWriter
     }
 
     /**
-     * @param array<string|int, array<string, string>>|null $propertiesData
+     * @param array<string|int, array<string, int|string>>|null $propertiesData
      *
      * @throws AdapterException
      */

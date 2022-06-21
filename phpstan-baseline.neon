@@ -26,21 +26,6 @@ parameters:
 			path: Components/Converter/CsvConverter.php
 
 		-
-			message: "#^Parameter \\#1 \\$csv of method SwagImportExport\\\\Components\\\\Converter\\\\CsvConverter\\:\\:_split_line\\(\\) expects string, string\\|false given\\.$#"
-			count: 1
-			path: Components/Converter/CsvConverter.php
-
-		-
-			message: "#^Parameter \\#1 \\$data of function utf8_decode expects string, string\\|false given\\.$#"
-			count: 1
-			path: Components/Converter/CsvConverter.php
-
-		-
-			message: "#^Parameter \\#2 \\$subject of function preg_split expects string, string\\|false given\\.$#"
-			count: 1
-			path: Components/Converter/CsvConverter.php
-
-		-
 			message: "#^Variable \\$array might not be defined\\.$#"
 			count: 1
 			path: Components/Converter/CsvConverter.php
@@ -359,11 +344,6 @@ parameters:
 			message: "#^Variable \\$optionId might not be defined\\.$#"
 			count: 2
 			path: Components/DbAdapters/Articles/ConfiguratorWriter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\Articles\\\\ImageWriter\\:\\:countOfMainImages\\(\\) should return string but returns string\\|false\\|null\\.$#"
-			count: 1
-			path: Components/DbAdapters/Articles/ImageWriter.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\Articles\\\\ImageWriter\\:\\:prepareImageData\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -1771,16 +1751,6 @@ parameters:
 			path: Components/Validators/Validator.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Validators\\\\Validator\\:\\:validateFloat\\(\\) should return int but returns int\\|false\\.$#"
-			count: 1
-			path: Components/Validators/Validator.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Validators\\\\Validator\\:\\:validateInt\\(\\) should return int but returns int\\|false\\.$#"
-			count: 1
-			path: Components/Validators/Validator.php
-
-		-
 			message: "#^Cannot call method getId\\(\\) on SwagImportExport\\\\CustomModels\\\\Profile\\|null\\.$#"
 			count: 1
 			path: Controllers/Backend/SwagImportExportConversion.php
@@ -2096,16 +2066,6 @@ parameters:
 			path: Tests/Functional/Components/DataWorkflowTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$articleId of method SwagImportExport\\\\Components\\\\DbAdapters\\\\Articles\\\\PropertyWriter\\:\\:writeUpdateCreatePropertyGroupsFilterAndValues\\(\\) expects int, string given\\.$#"
-			count: 8
-			path: Tests/Functional/Components/DbAdapters/Articles/PropertyWriterTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$articleId of method SwagImportExport\\\\Components\\\\DbAdapters\\\\Articles\\\\RelationWriter\\:\\:write\\(\\) expects int, string given\\.$#"
-			count: 2
-			path: Tests/Functional/Components/DbAdapters/Articles/RelationWriterTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\CustomerDbAdapterTest\\:\\:getTestUserDataRecord\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Functional/Components/DbAdapters/CustomerDbAdapterTest.php
@@ -2366,16 +2326,6 @@ parameters:
 			path: Tests/Functional/Controllers/Backend/ArticlesInstockExportTest.php
 
 		-
-			message: "#^Parameter \\#4 \\$expected of method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticlesInstockExportTest\\:\\:assertArticleAttributeInXml\\(\\) expects string, float given\\.$#"
-			count: 3
-			path: Tests/Functional/Controllers/Backend/ArticlesInstockExportTest.php
-
-		-
-			message: "#^Parameter \\#4 \\$expected of method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticlesInstockExportTest\\:\\:assertArticleAttributeInXml\\(\\) expects string, int given\\.$#"
-			count: 13
-			path: Tests/Functional/Controllers/Backend/ArticlesInstockExportTest.php
-
-		-
 			message: "#^Cannot access offset string on array\\|false\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/CategoryExportTest.php
@@ -2517,11 +2467,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#2 \\$values of function array_combine expects array, array\\|null given\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/OrderExportTest.php
-
-		-
-			message: "#^Parameter \\#4 \\$expected of method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\OrderExportTest\\:\\:assertOrderAttributeInXmlFile\\(\\) expects string, int given\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/OrderExportTest.php
 
@@ -2932,16 +2877,6 @@ parameters:
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Components\\\\Validator\\\\ValidatorTest\\:\\:getDemoRecordForFilterEmptyStringTest\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Unit/Components/Validator/ValidatorTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$value of method SwagImportExport\\\\Components\\\\Validators\\\\Validator\\:\\:validateFloat\\(\\) expects string, float given\\.$#"
-			count: 1
-			path: Tests/Unit/Components/Validator/ValidatorTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$value of method SwagImportExport\\\\Components\\\\Validators\\\\Validator\\:\\:validateFloat\\(\\) expects string, int given\\.$#"
 			count: 1
 			path: Tests/Unit/Components/Validator/ValidatorTest.php
 

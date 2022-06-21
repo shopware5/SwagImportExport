@@ -222,7 +222,7 @@ class ImageWriter
         }
     }
 
-    protected function countOfMainImages(int $articleId): string
+    protected function countOfMainImages(int $articleId): int
     {
         $count = $this->db->fetchOne(
             'SELECT COUNT(main)
@@ -231,7 +231,7 @@ class ImageWriter
             [$articleId]
         );
 
-        return $count;
+        return (int) $count;
     }
 
     /**

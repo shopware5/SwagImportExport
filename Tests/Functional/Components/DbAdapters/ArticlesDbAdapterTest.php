@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -38,8 +39,8 @@ class ArticlesDbAdapterTest extends TestCase
                     'mainNumber' => 'SW-99999',
                     'supplierId' => 2,
                     'supplierName' => 'Feinbrennerei Sasse',
-                    'taxId' => '1',
-                    'purchasePrice' => '10',
+                    'taxId' => 1,
+                    'purchasePrice' => 10.0,
                 ],
             ],
         ];
@@ -50,9 +51,9 @@ class ArticlesDbAdapterTest extends TestCase
         $createdProduct = $dbalConnection->executeQuery("SELECT a.* FROM s_articles as a JOIN s_articles_details as d ON d.articleID = a.id WHERE d.orderNumber='SW-99999'")->fetchAll();
 
         static::assertSame($newProductRecord['article'][0]['name'], $createdProduct[0]['name']);
-        static::assertSame($newProductRecord['article'][0]['taxId'], $createdProduct[0]['taxID']);
+        static::assertSame($newProductRecord['article'][0]['taxId'], (int) $createdProduct[0]['taxID']);
         static::assertSame($newProductRecord['article'][0]['orderNumber'], $createdProductVariant[0]['ordernumber']);
-        static::assertSame($newProductRecord['article'][0]['purchasePrice'], $createdProductVariant[0]['purchaseprice']);
+        static::assertSame($newProductRecord['article'][0]['purchasePrice'], (float) $createdProductVariant[0]['purchaseprice']);
     }
 
     public function testWriteShouldAssignNewSimilarProducts(): void
@@ -215,7 +216,7 @@ class ArticlesDbAdapterTest extends TestCase
         $image = $dbalConnection->executeQuery("SELECT * FROM s_articles_img WHERE img = 'Muensterlaender_Lagerkorn' AND articleID = ?", [$productId])->fetch(\PDO::FETCH_ASSOC);
 
         static::assertSame($productId, $image['articleID']);
-        static::assertSame($records['image'][0]['mediaId'], $image['media_id']);
+        static::assertSame((int) $records['image'][0]['mediaId'], (int) $image['media_id']);
         static::assertSame($records['image'][0]['description'], $image['description']);
         static::assertSame('jpg', $image['extension']);
     }
@@ -237,7 +238,7 @@ class ArticlesDbAdapterTest extends TestCase
                     'orderNumber' => 'ordernumber.2',
                     'mainNumber' => 'ordernumber.1',
                     'supplierName' => 'shopware AG',
-                    'taxId' => '1',
+                    'taxId' => 1,
                 ],
             ],
         ];
@@ -248,7 +249,7 @@ class ArticlesDbAdapterTest extends TestCase
         $createdProduct = $dbalConnection->executeQuery("SELECT * FROM s_articles WHERE id='{$createdProductVariant[0]['articleID']}'")->fetchAll();
 
         static::assertSame($newProductWithVariantRecord['article'][1]['name'], $createdProduct[0]['name']);
-        static::assertSame($newProductWithVariantRecord['article'][1]['taxId'], $createdProduct[0]['taxID']);
+        static::assertSame($newProductWithVariantRecord['article'][1]['taxId'], (int) $createdProduct[0]['taxID']);
         static::assertSame($newProductWithVariantRecord['article'][1]['orderNumber'], $createdProductVariant[0]['ordernumber']);
     }
 

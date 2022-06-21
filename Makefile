@@ -49,7 +49,7 @@ fix-eslint-backend: ESLINT_FIX= --fix
 fix-eslint-backend: check-eslint-backend
 
 phpstan: ## Run PHPStan
-	./../../../vendor/bin/phpstan analyse  . --memory-limit 4G
+	./../../../vendor/bin/phpstan analyse .
 
 phpstan-generate-baseline: ## Run PHPStan and generate a baseline file
 	./../../../vendor/bin/phpstan analyse . --generate-baseline

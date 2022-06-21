@@ -270,7 +270,7 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
             } else {
                 $record['price'] = \round($record['price'], 2);
                 $record['pseudoPrice'] = \round($record['pseudoPrice'], 2);
-                if (SwagVersionHelper::isShopware578()) {
+                if (SwagVersionHelper::isShopware578() && isset($record['regulationPrice'])) {
                     $record['regulationPrice'] = round($record['regulationPrice'], 2);
                 }
             }
@@ -1332,7 +1332,7 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
                     );
 
                     $categoryWriter->write(
-                        (int) $articleWriterResult->getArticleId(),
+                        $articleWriterResult->getArticleId(),
                         \array_filter(
                             $records['category'] ?? [],
                             function ($category) use ($index) {

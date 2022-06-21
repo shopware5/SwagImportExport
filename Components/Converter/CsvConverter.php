@@ -89,6 +89,10 @@ class CsvConverter
     {
         $csv = \file_get_contents($csv);
 
+        if (\is_bool($csv)) {
+            throw new \Exception('File could not be found');
+        }
+
         if ($this->sSettings['encoding'] === 'UTF-8') {
             $csv = \utf8_decode($csv);
         }

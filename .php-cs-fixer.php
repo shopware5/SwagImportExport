@@ -17,11 +17,7 @@ use PhpCsFixerCustomFixers\Fixer\SingleSpaceBeforeStatementFixer;
 use PhpCsFixerCustomFixers\Fixers;
 
 $finder = PhpCsFixer\Finder::create()
-//    ->in(__DIR__)
-    ->in(__DIR__ . "/Commands")
-    ->in(__DIR__ . "/Controllers")
-    ->in(__DIR__ . "/CustomModels")
-    ->in(__DIR__ . "/Components");
+    ->in(__DIR__)
 ;
 
 $header = <<<EOF

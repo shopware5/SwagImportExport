@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -30,8 +31,8 @@ class UnderscoreToCamelCaseServiceTest extends TestCase
         return [
             [null, ''],
             ['', ''],
-            [234, '234'],
-            [234.123, '234.123'],
+            ['234', '234'],
+            ['234.123', '234.123'],
             ['foo_10_bar', 'foo_10Bar'],
             ['foo_10_bar_this_is_1_test', 'foo_10BarThisIs_1Test'],
             ['foo_10_bar_this_is_a_2._test', 'foo_10BarThisIsA_2.Test'],

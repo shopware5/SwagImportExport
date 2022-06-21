@@ -206,7 +206,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
             } else {
                 $record['price'] = \round($record['price'], 2);
                 $record['pseudoPrice'] = \round($record['pseudoPrice'], 2);
-                if (SwagVersionHelper::isShopware578()) {
+                if (SwagVersionHelper::isShopware578() && isset($record['regulationPrice'])) {
                     $record['regulationPrice'] = \round($record['regulationPrice'], 2);
                 }
             }
@@ -324,23 +324,23 @@ class ArticlesPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
                 }
 
                 if (isset($record['price'])) {
-                    $record['price'] = (float) \str_replace(',', '.', $record['price']);
+                    $record['price'] = (float) \str_replace(',', '.', (string) $record['price']);
                 }
 
                 if (isset($record['pseudoPrice'])) {
-                    $record['pseudoPrice'] = (float) \str_replace(',', '.', $record['pseudoPrice']);
+                    $record['pseudoPrice'] = (float) \str_replace(',', '.', (string) $record['pseudoPrice']);
                 }
 
                 if (isset($record['regulationPrice'])) {
-                    $record['regulationPrice'] = (float) \str_replace(',', '.', $record['regulationPrice']);
+                    $record['regulationPrice'] = (float) \str_replace(',', '.', (string) $record['regulationPrice']);
                 }
 
                 if (isset($record['purchasePrice'])) {
-                    $record['purchasePrice'] = (float) \str_replace(',', '.', $record['purchasePrice']);
+                    $record['purchasePrice'] = (float) \str_replace(',', '.', (string) $record['purchasePrice']);
                 }
 
                 if (isset($record['percent'])) {
-                    $record['percent'] = (float) \str_replace(',', '.', $record['percent']);
+                    $record['percent'] = (float) \str_replace(',', '.', (string) $record['percent']);
                 }
 
                 // removes price with same from value from database

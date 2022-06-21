@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -22,8 +23,8 @@ class PropertyWriterTest extends TestCase
     public const ARTICLE_ORDERNUMBER = 'SW10002.1';
     public const ARTICLE_ORDERNUMBER_WITHOUT_PROPERTIES = 'SW10239';
 
-    public const ARTICLE_ID_WITH_PROPERTIES = '2';
-    public const ARTICLE_ID_WITHOUT_PROPERTIES = '272';
+    public const ARTICLE_ID_WITH_PROPERTIES = 2;
+    public const ARTICLE_ID_WITHOUT_PROPERTIES = 272;
 
     public const NOT_EXISTING_FILTER_GROUP_NAME = 'T-Shirts';
     public const EXISTING_FILTER_GROUP_NAME = 'Edelbrände';

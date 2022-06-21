@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -25,7 +26,7 @@ class ValidatorTest extends TestCase
 
     public function testValidateFloatShouldBeValid(): void
     {
-        $validatedValue = 100;
+        $validatedValue = '100';
         $result = $this->validator->validateFloat($validatedValue);
 
         static::assertEquals(self::VALID_TYPE_RESULT, $result);
@@ -49,7 +50,7 @@ class ValidatorTest extends TestCase
 
     public function testValidateFloatWithNegativeNumberShouldBeValid(): void
     {
-        $validatedValue = -1.2;
+        $validatedValue = '-1.2';
         $result = $this->validator->validateFloat($validatedValue);
 
         static::assertEquals(self::VALID_TYPE_RESULT, $result);

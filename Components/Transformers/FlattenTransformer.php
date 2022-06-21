@@ -581,7 +581,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
 
             $taxRates = $this->getTaxRates();
             foreach ($taxRates as $taxRate) {
-                $this->createHeaderTaxSumNodes($taxSumNodeMapper, $taxRate['taxRate']);
+                $this->createHeaderTaxSumNodes($taxSumNodeMapper, (float) $taxRate['taxRate']);
             }
         } else {
             foreach ($node as $key => $value) {
@@ -632,7 +632,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      *
      * @param array<string, mixed> $node
      */
-    public function createHeaderTaxSumNodes(array $node, string $taxRate, string $path = null): void
+    public function createHeaderTaxSumNodes(array $node, float $taxRate, string $path = null): void
     {
         foreach ($node as $key => $value) {
             if (\is_array($value)) {
@@ -850,7 +850,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
 
                 $taxRates = $this->getTaxRates();
                 foreach ($taxRates as $taxRate) {
-                    $taxRateNode = $this->findNodeByTaxRate($node, $taxRate['taxRate'], $taxSumFlatMapper);
+                    $taxRateNode = $this->findNodeByTaxRate($node, (float) $taxRate['taxRate'], $taxSumFlatMapper);
                     if ($taxRateNode) {
                         $this->collectTaxRateData($taxRateNode, $taxSumFlatMapper);
                     } else {
@@ -1332,7 +1332,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      *
      * @return array
      */
-    public function findNodeByTaxRate(array $node, string $taxRate, array $mapper): ?array
+    public function findNodeByTaxRate(array $node, float $taxRate, array $mapper): ?array
     {
         foreach ($node as $value) {
             $rate = $this->getTaxRateFromNode($value, $mapper);
@@ -1348,7 +1348,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      * @param array<string|int, mixed> $node
      * @param array<string, string>    $mapper
      */
-    public function getTaxRateFromNode(array $node, array $mapper, string $path = null): ?string
+    public function getTaxRateFromNode(array $node, array $mapper, string $path = null): ?float
     {
         foreach ($node as $key => $value) {
             $currentPath = $this->getMergedPath($path, (string) $key);
@@ -1361,7 +1361,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
             }
 
             if ($mapper[$currentPath] === 'taxRate') {
-                return $value;
+                return (float) $value;
             }
         }
 

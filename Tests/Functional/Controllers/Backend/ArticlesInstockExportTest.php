@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -48,8 +49,8 @@ class ArticlesInstockExportTest extends \Enlight_Components_Test_Controller_Test
         static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
-        $this->assertArticleAttributeInXml($file, 'SW10023', 'instock', 0);
-        $this->assertArticleAttributeInXml($file, 'SW10023', '_price', 35);
+        $this->assertArticleAttributeInXml($file, 'SW10023', 'instock', '0');
+        $this->assertArticleAttributeInXml($file, 'SW10023', '_price', '35');
     }
 
     public function testArticlesInstockCsvExport(): void
@@ -92,8 +93,8 @@ class ArticlesInstockExportTest extends \Enlight_Components_Test_Controller_Test
 
         $articleNodeList = $this->queryXpath($file, '//article');
         static::assertEquals(342, $articleNodeList->length);
-        $this->assertArticleAttributeInXml($file, 'SW10003', 'instock', 25);
-        $this->assertArticleAttributeInXml($file, 'SW10003', '_price', 14.95);
+        $this->assertArticleAttributeInXml($file, 'SW10003', 'instock', '25');
+        $this->assertArticleAttributeInXml($file, 'SW10003', '_price', '14.95');
     }
 
     public function testArticlesInstockCsvExportWithInstockFilter(): void
@@ -135,8 +136,8 @@ class ArticlesInstockExportTest extends \Enlight_Components_Test_Controller_Test
         static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
-        $this->assertArticleAttributeInXml($file, 'SW10023', '_price', 35);
-        $this->assertArticleAttributeInXml($file, 'SW10023', 'instock', 0);
+        $this->assertArticleAttributeInXml($file, 'SW10023', '_price', '35');
+        $this->assertArticleAttributeInXml($file, 'SW10023', 'instock', '0');
         $this->assertArticleAttributeInXml($file, 'SW10023', '_supplier', 'Teapavilion');
     }
 
@@ -180,9 +181,9 @@ class ArticlesInstockExportTest extends \Enlight_Components_Test_Controller_Test
         static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
-        $this->assertArticleAttributeInXml($file, 'SW10082', 'instock', 5);
+        $this->assertArticleAttributeInXml($file, 'SW10082', 'instock', '5');
         $this->assertArticleAttributeInXml($file, 'SW10082', '_supplier', 'Das blaue Haus');
-        $this->assertArticleAttributeInXml($file, 'SW10082', '_price', 7.99);
+        $this->assertArticleAttributeInXml($file, 'SW10082', '_price', '7.99');
     }
 
     public function testArticlesInstockCsvExportWithInStockOnSaleFilter(): void
@@ -225,8 +226,8 @@ class ArticlesInstockExportTest extends \Enlight_Components_Test_Controller_Test
         static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
-        $this->assertArticleAttributeInXml($file, 'SW10198', 'instock', 0);
-        $this->assertArticleAttributeInXml($file, 'SW10198', '_price', 238);
+        $this->assertArticleAttributeInXml($file, 'SW10198', 'instock', '0');
+        $this->assertArticleAttributeInXml($file, 'SW10198', '_price', '238');
         $this->assertArticleAttributeInXml($file, 'SW10198', '_supplier', 'Example');
     }
 
@@ -271,8 +272,8 @@ class ArticlesInstockExportTest extends \Enlight_Components_Test_Controller_Test
         $this->backendControllerTestHelper->addFile($file);
 
         $this->assertArticleAttributeInXml($file, 'SW10200', '_supplier', 'Example');
-        $this->assertArticleAttributeInXml($file, 'SW10200', 'instock', 0);
-        $this->assertArticleAttributeInXml($file, 'SW10200', '_price', 99);
+        $this->assertArticleAttributeInXml($file, 'SW10200', 'instock', '0');
+        $this->assertArticleAttributeInXml($file, 'SW10200', '_price', '99');
     }
 
     public function testArticlesInstockCsvExportNotInStockMinStockFilter(): void
@@ -317,8 +318,8 @@ class ArticlesInstockExportTest extends \Enlight_Components_Test_Controller_Test
         static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
-        $this->assertArticleAttributeInXml($file, 'SW10014', 'instock', 178);
-        $this->assertArticleAttributeInXml($file, 'SW10014', '_price', 3.8);
+        $this->assertArticleAttributeInXml($file, 'SW10014', 'instock', '178');
+        $this->assertArticleAttributeInXml($file, 'SW10014', '_price', '3.8');
         $this->assertArticleAttributeInXml($file, 'SW10014', '_supplier', 'Teapavilion');
     }
 
@@ -366,9 +367,9 @@ class ArticlesInstockExportTest extends \Enlight_Components_Test_Controller_Test
         static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
-        $this->assertArticleAttributeInXml($file, 'SW10203.5', 'instock', 2);
+        $this->assertArticleAttributeInXml($file, 'SW10203.5', 'instock', '2');
         $this->assertArticleAttributeInXml($file, 'SW10203.5', '_supplier', 'Example');
-        $this->assertArticleAttributeInXml($file, 'SW10203.5', '_price', 15);
+        $this->assertArticleAttributeInXml($file, 'SW10203.5', '_price', '15');
     }
 
     public function testArticlesInstockCsvExportWithCustomInstockLowerThanFilter(): void
