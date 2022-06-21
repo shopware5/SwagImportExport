@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -32,7 +33,7 @@ class CommandHelper
 
     protected string $format;
 
-    protected ?string $exportVariants = null;
+    protected bool $exportVariants = false;
 
     protected ?int $limit = null;
 
@@ -124,7 +125,7 @@ class CommandHelper
                 $data['productStream'] = \array_shift($data['productStream']);
             }
 
-            $this->productStream = $this->getProductStreamIdByName($data['productStream']);
+            $this->productStream = $this->getProductStreamByNameOrId($data['productStream']);
         }
 
         if (!empty($data['customerStream'])) {
@@ -544,37 +545,28 @@ class CommandHelper
         $dataWorkflow->saveUnprocessedData($data, $profileName, $outputFile);
     }
 
-    /**
-     * @throws \RuntimeException
-     */
-    private function getProductStreamIdByName(?string $productStreamName): ?int
+    private function getProductStreamByNameOrId(string $productStreamName): int
     {
-        $tempProductStreamName = (int) $productStreamName;
-        if ($tempProductStreamName) {
-            return $productStreamName;
+        if (filter_var($productStreamName, \FILTER_VALIDATE_INT)) {
+            return (int) $productStreamName;
         }
 
-        if (!$productStreamName) {
-            return null;
-        }
-
-        $id = $this->connection->createQueryBuilder()
+        $ids = $this->connection->createQueryBuilder()
             ->select('id')
             ->from('s_product_streams')
             ->where('name LIKE :productStreamName')
             ->setParameter('productStreamName', $productStreamName)
             ->execute()
-            ->fetchAll(\PDO::FETCH_COLUMN);
+            ->fetchAllNumeric();
 
-        $idAmount = \count($id);
-        if ($idAmount > 1) {
-            throw new \RuntimeException(\sprintf('There are %d streams with the name: %s. Please use the stream id.', $idAmount, $productStreamName));
-        }
-
-        if ($idAmount < 1) {
+        if (empty($ids)) {
             throw new \RuntimeException(\sprintf('There are no streams with the name: %s', $productStreamName));
         }
 
-        return (int) \array_shift($id);
+        if (\count($ids) > 1) {
+            throw new \RuntimeException(\sprintf('There are %d streams with the name: %s. Please use the stream id.', \count($ids), $productStreamName));
+        }
+
+        return (int) array_shift($ids);
     }
 }

@@ -227,12 +227,9 @@ class DataFactory extends \Enlight_Class implements \Enlight_Hook
         return new DataColumnOptions($options);
     }
 
-    /**
-     * Returns limit adapter
-     */
-    public function createLimit(array $limit): DataLimit
+    public function createLimit(array $options): DataLimit
     {
-        return new DataLimit($limit);
+        return new DataLimit($options);
     }
 
     /**

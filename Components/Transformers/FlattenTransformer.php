@@ -502,7 +502,6 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      * If data don't match with the csv column names, throws exception
      *
      * @param array<string, mixed> $data
-     * @return string
      */
     public function getDataValue(array $data, string $key): string
     {
@@ -1123,9 +1122,9 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
     }
 
     /**
-     * @param array<string|int, mixed> $node
-     * @param array<string, string>    $mapper
-     * @param ?array<string|int, mixed>    $originalNode
+     * @param array<string|int, mixed>  $node
+     * @param array<string, string>     $mapper
+     * @param ?array<string|int, mixed> $originalNode
      */
     public function collectConfiguratorData(array $node, array $mapper, string $path = null, array $originalNode = null): void
     {
@@ -1160,9 +1159,9 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
     }
 
     /**
-     * @param array<string|int, mixed> $node
-     * @param array<string, string>    $mapper
-     * @param ?array<string|int, mixed>    $originalNode
+     * @param array<string|int, mixed>  $node
+     * @param array<string, string>     $mapper
+     * @param ?array<string|int, mixed> $originalNode
      */
     public function collectPropertyData(array $node, array $mapper, string $path = null, array $originalNode = null): void
     {
@@ -1328,8 +1327,8 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
     /**
      * Returns price node by price group
      *
-     * @param array<string|int, mixed>  $node
-     * @param array<string, string> $mapper
+     * @param array<string|int, mixed> $node
+     * @param array<string, string>    $mapper
      *
      * @return array
      */

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -17,11 +18,11 @@ class DataLimit
     public function __construct(array $options)
     {
         if (isset($options['limit'])) {
-            $this->limit = $options['limit'];
+            $this->limit = (int) $options['limit'];
         }
 
         if (isset($options['offset'])) {
-            $this->offset = $options['offset'];
+            $this->offset = (int) $options['offset'];
         }
     }
 

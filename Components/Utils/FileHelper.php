@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -13,7 +14,7 @@ class FileHelper
     /**
      * @throws \Exception
      */
-    public function writeStringToFile(string $file, string $content, ?int $flag = null): void
+    public function writeStringToFile(string $file, string $content, int $flag = 0): void
     {
         try {
             \file_put_contents($file, $content, $flag);

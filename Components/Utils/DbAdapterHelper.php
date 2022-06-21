@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -27,7 +28,7 @@ class DbAdapterHelper
                 }
 
                 if (!\is_array($value)) {
-                    $value = \html_entity_decode($value, \ENT_COMPAT | \ENT_HTML401, 'UTF-8');
+                    $value = \html_entity_decode((string) $value, \ENT_COMPAT | \ENT_HTML401, 'UTF-8');
                 }
             }
         }
