@@ -25,6 +25,7 @@ $finder = PhpCsFixer\Finder::create()
     ->in(__DIR__ . "/Components/DbAdapters")
     ->in(__DIR__ . "/Components/Exception")
     ->in(__DIR__ . "/Components/Factories")
+    ->in(__DIR__ . "/Components/FileIO")
 ;
 
 $header = <<<EOF

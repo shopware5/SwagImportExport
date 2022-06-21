@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -31,7 +32,7 @@ class CsvFileReader implements FileReader
     public function readRecords(string $fileName, int $position, int $step): array
     {
         // Make sure to detect CR LF (Windows) line breaks
-        \ini_set('auto_detect_line_endings', true);
+        \ini_set('auto_detect_line_endings', 'true');
 
         $tempFileName = '';
         if (\file_exists($fileName)) {

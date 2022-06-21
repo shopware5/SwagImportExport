@@ -971,11 +971,6 @@ parameters:
 			path: Components/FileIO/CsvFileReader.php
 
 		-
-			message: "#^Parameter \\#2 \\$newvalue of function ini_set expects string, true given\\.$#"
-			count: 1
-			path: Components/FileIO/CsvFileReader.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\FileIO\\\\FileReader\\:\\:readRecords\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/FileIO/FileReader.php
