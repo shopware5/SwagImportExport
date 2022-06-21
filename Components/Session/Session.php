@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -112,7 +113,7 @@ class Session
         );
 
         if (isset($data['fileSize'])) {
-            $sessionEntity->setFileSize($data['fileSize']);
+            $sessionEntity->setFileSize((int) $data['fileSize']);
         }
 
         if (!isset($data['format'])) {
@@ -162,7 +163,7 @@ class Session
 
         if ($file && \file_exists($file)) {
             $fileSize = \sprintf('%u', \filesize($file));
-            $sessionEntity->setFileSize($fileSize);
+            $sessionEntity->setFileSize((int) $fileSize);
         }
 
         $this->getManager()->merge($sessionEntity);
