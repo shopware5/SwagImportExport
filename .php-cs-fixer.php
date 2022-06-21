@@ -32,6 +32,7 @@ $finder = PhpCsFixer\Finder::create()
     ->in(__DIR__ . "/Components/Session")
     ->in(__DIR__ . "/Components/Transformers")
     ->in(__DIR__ . "/Components/Utils")
+    ->in(__DIR__ . "/Components/Validators")
 ;
 
 $header = <<<EOF

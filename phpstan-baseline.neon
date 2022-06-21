@@ -936,7 +936,7 @@ parameters:
 			path: Components/Factories/DataFactory.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Factories\\\\DataFactory\\:\\:createLimit\\(\\) has parameter \\$limit with no value type specified in iterable type array\\.$#"
+			message: "#^Method SwagImportExport\\\\Components\\\\Factories\\\\DataFactory\\:\\:createLimit\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Factories/DataFactory.php
 
@@ -1196,11 +1196,6 @@ parameters:
 			path: Components/Session/Session.php
 
 		-
-			message: "#^Parameter \\#1 \\$fileSize of method SwagImportExport\\\\CustomModels\\\\Session\\:\\:setFileSize\\(\\) expects int, string given\\.$#"
-			count: 1
-			path: Components/Session/Session.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\ComposerInterface\\:\\:composeFooter\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Transformers/ComposerInterface.php
@@ -1376,11 +1371,6 @@ parameters:
 			path: Components/Transformers/FlattenTransformer.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:getDataValue\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:getIterationTempData\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Transformers/FlattenTransformer.php
@@ -1453,11 +1443,6 @@ parameters:
 		-
 			message: "#^Parameter \\#1 \\$path of method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:saveIterationParts\\(\\) expects string, string\\|null given\\.$#"
 			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Parameter \\#2 \\$key of method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:getDataValue\\(\\) expects string, string\\|false given\\.$#"
-			count: 2
 			path: Components/Transformers/FlattenTransformer.php
 
 		-
@@ -1691,27 +1676,22 @@ parameters:
 			path: Components/Utils/CommandHelper.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Utils\\\\CommandHelper\\:\\:getProductStreamIdByName\\(\\) should return int\\|null but returns string\\|null\\.$#"
-			count: 1
-			path: Components/Utils/CommandHelper.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Utils\\\\CommandHelper\\:\\:importAction\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Utils/CommandHelper.php
 
 		-
-			message: "#^Offset 'columnOptions' does not exist on array\\{profileId\\: int, type\\: 'export', format\\: string, sessionId\\: int\\|null, fileName\\: string, filter\\: array\\{\\}\\|array\\{variants\\?\\: non\\-empty\\-string, categories\\?\\: non\\-empty\\-string, productStreamId\\?\\: int\\<min, \\-1\\>\\|int\\<1, max\\>, customerStreamId\\?\\: int\\<min, \\-1\\>\\|int\\<1, max\\>, dateFrom\\?\\: non\\-empty\\-string, dateTo\\?\\: non\\-empty\\-string\\}, limit\\: array\\{limit\\: int\\|null, offset\\: int\\|null\\}\\}\\.$#"
+			message: "#^Offset 'columnOptions' does not exist on array\\{profileId\\: int, type\\: 'export', format\\: string, sessionId\\: int\\|null, fileName\\: string, filter\\: array\\{\\}\\|array\\{variants\\?\\: true, categories\\?\\: non\\-empty\\-string, productStreamId\\?\\: int\\<min, \\-1\\>\\|int\\<1, max\\>, customerStreamId\\?\\: int\\<min, \\-1\\>\\|int\\<1, max\\>, dateFrom\\?\\: non\\-empty\\-string, dateTo\\?\\: non\\-empty\\-string\\}, limit\\: array\\{limit\\: int\\|null, offset\\: int\\|null\\}\\}\\.$#"
 			count: 1
 			path: Components/Utils/CommandHelper.php
 
 		-
-			message: "#^Offset 'max_record_count' on array\\{profileId\\: int, type\\: 'export', format\\: string, sessionId\\: int\\|null, fileName\\: string, filter\\: array\\{\\}\\|array\\{variants\\?\\: non\\-empty\\-string, categories\\?\\: non\\-empty\\-string, productStreamId\\?\\: int\\<min, \\-1\\>\\|int\\<1, max\\>, customerStreamId\\?\\: int\\<min, \\-1\\>\\|int\\<1, max\\>, dateFrom\\?\\: non\\-empty\\-string, dateTo\\?\\: non\\-empty\\-string\\}, limit\\: array\\{limit\\: int\\|null, offset\\: int\\|null\\}\\} on left side of \\?\\? does not exist\\.$#"
+			message: "#^Offset 'max_record_count' on array\\{profileId\\: int, type\\: 'export', format\\: string, sessionId\\: int\\|null, fileName\\: string, filter\\: array\\{\\}\\|array\\{variants\\?\\: true, categories\\?\\: non\\-empty\\-string, productStreamId\\?\\: int\\<min, \\-1\\>\\|int\\<1, max\\>, customerStreamId\\?\\: int\\<min, \\-1\\>\\|int\\<1, max\\>, dateFrom\\?\\: non\\-empty\\-string, dateTo\\?\\: non\\-empty\\-string\\}, limit\\: array\\{limit\\: int\\|null, offset\\: int\\|null\\}\\} on left side of \\?\\? does not exist\\.$#"
 			count: 1
 			path: Components/Utils/CommandHelper.php
 
 		-
-			message: "#^Offset 'max_record_count' on array\\{sessionId\\: null, profileId\\: int, type\\: 'export', format\\: string, filter\\: array\\{\\}\\|array\\{variants\\?\\: non\\-empty\\-string, categories\\?\\: non\\-empty\\-string, productStreamId\\?\\: int\\<min, \\-1\\>\\|int\\<1, max\\>, customerStreamId\\?\\: int\\<min, \\-1\\>\\|int\\<1, max\\>, dateFrom\\?\\: non\\-empty\\-string, dateTo\\?\\: non\\-empty\\-string\\}, limit\\: array\\{limit\\: int\\|null, offset\\: int\\|null\\}\\} on left side of \\?\\? does not exist\\.$#"
+			message: "#^Offset 'max_record_count' on array\\{sessionId\\: null, profileId\\: int, type\\: 'export', format\\: string, filter\\: array\\{\\}\\|array\\{variants\\?\\: true, categories\\?\\: non\\-empty\\-string, productStreamId\\?\\: int\\<min, \\-1\\>\\|int\\<1, max\\>, customerStreamId\\?\\: int\\<min, \\-1\\>\\|int\\<1, max\\>, dateFrom\\?\\: non\\-empty\\-string, dateTo\\?\\: non\\-empty\\-string\\}, limit\\: array\\{limit\\: int\\|null, offset\\: int\\|null\\}\\} on left side of \\?\\? does not exist\\.$#"
 			count: 1
 			path: Components/Utils/CommandHelper.php
 
@@ -1734,11 +1714,6 @@ parameters:
 			message: "#^Method SwagImportExport\\\\Components\\\\Utils\\\\DataLimit\\:\\:__construct\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Utils/DataLimit.php
-
-		-
-			message: "#^Parameter \\#3 \\$flags of function file_put_contents expects int, int\\|null given\\.$#"
-			count: 1
-			path: Components/Utils/FileHelper.php
 
 		-
 			message: "#^Access to an undefined property Shopware_Components_Config\\:\\:\\$version\\.$#"
@@ -1801,37 +1776,12 @@ parameters:
 			path: Components/Validators/Validator.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Validators\\\\Validator\\:\\:validateDateTime\\(\\) has parameter \\$value with no type specified\\.$#"
-			count: 1
-			path: Components/Validators/Validator.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Validators\\\\Validator\\:\\:validateEmail\\(\\) has parameter \\$email with no type specified\\.$#"
-			count: 1
-			path: Components/Validators/Validator.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Validators\\\\Validator\\:\\:validateFloat\\(\\) should return int but returns int\\|false\\.$#"
 			count: 1
 			path: Components/Validators/Validator.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Validators\\\\Validator\\:\\:validateInt\\(\\) has parameter \\$value with no type specified\\.$#"
-			count: 1
-			path: Components/Validators/Validator.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Validators\\\\Validator\\:\\:validateInt\\(\\) should return int but returns int\\|false\\.$#"
-			count: 1
-			path: Components/Validators/Validator.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Validators\\\\Validator\\:\\:validateString\\(\\) has parameter \\$value with no type specified\\.$#"
-			count: 1
-			path: Components/Validators/Validator.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Validators\\\\Validator\\:\\:validateType\\(\\) has parameter \\$value with no type specified\\.$#"
 			count: 1
 			path: Components/Validators/Validator.php
 

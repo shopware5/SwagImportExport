@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -32,7 +33,7 @@ abstract class Validator
         foreach ($record as $fieldName => $value) {
             foreach ($mapper as $type => $fields) {
                 if (\in_array($fieldName, $fields)) {
-                    $this->validateType($type, $value, $fieldName);
+                    $this->validateType($type, (string) $value, $fieldName);
                     break;
                 }
             }
@@ -42,7 +43,7 @@ abstract class Validator
     /**
      * Validates fields with int type. It is possible this field to has as a value '-1'.
      */
-    public function validateInt($value): int
+    public function validateInt(string $value): int
     {
         return \preg_match('/^-{0,1}\d+$/', $value);
     }
@@ -58,7 +59,7 @@ abstract class Validator
     /**
      * Validates fields which contains date data.
      */
-    public function validateDateTime($value): bool
+    public function validateDateTime(string $value): bool
     {
         return (bool) \strtotime($value);
     }
@@ -68,7 +69,7 @@ abstract class Validator
      *
      * @throws \Exception
      */
-    public function validateEmail($email): bool
+    public function validateEmail(string $email): bool
     {
         /** @var \Shopware\Components\Validator\EmailValidatorInterface $emailValidator */
         $emailValidator = Shopware()->Container()->get('validator.email');
@@ -79,9 +80,9 @@ abstract class Validator
     /**
      * Validates fields which contains string.
      */
-    public function validateString($value): bool
+    public function validateString(string $value): bool
     {
-        return \is_string($value);
+        return true;
     }
 
     /**
@@ -108,7 +109,7 @@ abstract class Validator
     /**
      * Helper function, which is used to validate current field's value.
      */
-    private function validateType(string $type, $value, string $fieldName): void
+    private function validateType(string $type, string $value, string $fieldName): void
     {
         $action = 'validate' . \ucfirst($type);
         if (!\is_callable([$this, $action])) {
