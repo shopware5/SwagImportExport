@@ -20,6 +20,7 @@ $finder = PhpCsFixer\Finder::create()
 //    ->in(__DIR__)
     ->in(__DIR__ . "/Commands")
     ->in(__DIR__ . "/Components/Converter")
+    ->in(__DIR__ . "/Components/DataManagers")
 
 ;
 

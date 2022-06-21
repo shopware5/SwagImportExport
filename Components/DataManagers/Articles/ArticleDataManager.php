@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -203,7 +204,7 @@ class ArticleDataManager extends DataManager implements \Enlight_Hook
             switch ($key) {
                 case 'taxId':
                     if (isset($record['tax'])) {
-                        $record[$key] = $this->getTaxByTaxRate($record['tax'], $record['orderNumber']);
+                        $record[$key] = $this->getTaxByTaxRate((float)$record['tax'], $record['orderNumber']);
                     }
                     break;
                 case 'supplierId':
@@ -310,7 +311,7 @@ class ArticleDataManager extends DataManager implements \Enlight_Hook
         }
 
         if (isset($record['tax'])) {
-            return $this->getTaxByTaxRate($record['tax'], $record['orderNumber']);
+            return $this->getTaxByTaxRate((float) $record['tax'], $record['orderNumber']);
         }
 
         return null;
