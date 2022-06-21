@@ -19,20 +19,7 @@ use PhpCsFixerCustomFixers\Fixers;
 $finder = PhpCsFixer\Finder::create()
 //    ->in(__DIR__)
     ->in(__DIR__ . "/Commands")
-    ->in(__DIR__ . "/Components/Converter")
-    ->in(__DIR__ . "/Components/DataManagers")
-    ->in(__DIR__ . "/Components/DataType")
-    ->in(__DIR__ . "/Components/DbAdapters")
-    ->in(__DIR__ . "/Components/Exception")
-    ->in(__DIR__ . "/Components/Factories")
-    ->in(__DIR__ . "/Components/FileIO")
-    ->in(__DIR__ . "/Components/Logger")
-    ->in(__DIR__ . "/Components/Profile")
-    ->in(__DIR__ . "/Components/Service")
-    ->in(__DIR__ . "/Components/Session")
-    ->in(__DIR__ . "/Components/Transformers")
-    ->in(__DIR__ . "/Components/Utils")
-    ->in(__DIR__ . "/Components/Validators")
+    ->in(__DIR__ . "/Components");
 ;
 
 $header = <<<EOF

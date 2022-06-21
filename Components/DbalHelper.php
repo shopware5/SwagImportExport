@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -71,7 +72,7 @@ class DbalHelper
 
             $key = $this->connection->quoteIdentifier($metaData->fieldMappings[$field]['columnName']);
 
-            $value = $this->getNamedParameter($value, $field, $metaData, $builder);
+            $value = $this->getNamedParameter((string) $value, $field, $metaData, $builder);
             if ($primaryId) {
                 $builder->set($key, $value);
             } else {

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -404,7 +405,7 @@ class DataIO
         $this->fileName = $fileName;
     }
 
-    public function getFileSize(): string
+    public function getFileSize(): int
     {
         return $this->fileSize;
     }
