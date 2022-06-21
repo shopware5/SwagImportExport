@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -100,7 +101,7 @@ class ConfiguratorWriter
             if (isset($configurator['configOptionId']) && !empty($configurator['configOptionId'])) {
                 $optionResult = $this->getOptionRow($configurator['configOptionId']);
 
-                $optionId = $optionResult['id'];
+                $optionId = (int) $optionResult['id'];
                 $groupId = $optionResult['group_id'];
 
                 if (!$optionId) {
@@ -136,7 +137,7 @@ class ConfiguratorWriter
                 $optionId = $this->createOption($dataOption);
             }
 
-            $this->updateOptionRelation($articleWriterResult->getDetailId(), $optionId);
+            $this->updateOptionRelation($articleWriterResult->getDetailId(), (int) $optionId);
             $this->updateSetOptionRelation($configuratorSetId, $optionId);
 
             unset($groupId);
@@ -167,13 +168,13 @@ class ConfiguratorWriter
         return (int) $id;
     }
 
-    public function getOptionIdByOptionNameAndGroupId(string $optionName, int $groupId): string
+    public function getOptionIdByOptionNameAndGroupId(string $optionName, int $groupId): ?int
     {
         $sql = 'SELECT `id`
                 FROM s_article_configurator_options
                 WHERE `name` = ? AND `group_id` = ?';
 
-        return $this->db->fetchOne($sql, [$optionName, $groupId]);
+        return (int) $this->db->fetchOne($sql, [$optionName, $groupId]) ?: null;
     }
 
     /**
@@ -278,13 +279,13 @@ class ConfiguratorWriter
         return (int) $this->connection->lastInsertId();
     }
 
-    protected function getOrderNumber(int $articleId): string
+    protected function getOrderNumber(int $articleId): ?string
     {
         $sql = 'SELECT `ordernumber`
                 FROM s_articles_details
                 WHERE kind = 1 AND articleID = ?';
 
-        return $this->connection->fetchOne($sql, [$articleId]);
+        return $this->connection->fetchOne($sql, [$articleId]) ?: null;
     }
 
     /**
@@ -337,7 +338,7 @@ class ConfiguratorWriter
     private function getConfiguratorGroup(array $data): int
     {
         if (isset($data['configGroupId'])) {
-            if ($this->checkExistence('s_article_configurator_groups', $data['configGroupId'])) {
+            if ($this->checkExistence('s_article_configurator_groups', (int) $data['configGroupId'])) {
                 $groupId = $data['configGroupId'];
             }
         }
@@ -403,8 +404,8 @@ class ConfiguratorWriter
     private function updateConfiguratorSetTypeIfConfigSetIdIsNotEmptyAndSetDoesExistAndMatchSetName(int $articleId, ?int $configuratorSetId, array $configurator): ?int
     {
         if (!$configuratorSetId && isset($configurator['configSetId']) && !empty($configurator['configSetId'])) {
-            $setExists = $this->checkExistence('s_article_configurator_sets', $configurator['configSetId']);
-            $match = $this->compareSetIdByName($articleId, $configurator['configSetId']);
+            $setExists = $this->checkExistence('s_article_configurator_sets', (int) $configurator['configSetId']);
+            $match = $this->compareSetIdByName($articleId, (int) $configurator['configSetId']);
             if ($setExists && $match) {
                 $configuratorSetId = $configurator['configSetId'];
                 $this->updateConfiguratorSet($configurator);

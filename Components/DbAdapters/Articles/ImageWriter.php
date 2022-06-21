@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -59,7 +60,7 @@ class ImageWriter
             }
 
             if (isset($image['mediaId']) && !empty($image['mediaId'])) {
-                $media = $this->getMediaById($image['mediaId']);
+                $media = $this->getMediaById((int) $image['mediaId']);
                 $image['path'] = $media['name'];
             } elseif (isset($image['path']) && !empty($image['path'])) {
                 $media = $this->getMediaByName($image['path']);

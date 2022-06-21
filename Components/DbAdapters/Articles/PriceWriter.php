@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -99,14 +100,14 @@ class PriceWriter
     {
         $taxInput = $this->customerGroups[$price['priceGroup']];
 
-        $price['price'] = $this->formatToFloatValue($price['price']);
+        $price['price'] = $this->formatToFloatValue((string) $price['price']);
 
         if (isset($price['purchasePrice'])) {
-            $price['purchasePrice'] = $this->formatToFloatValue($price['purchasePrice']);
+            $price['purchasePrice'] = $this->formatToFloatValue((string) $price['purchasePrice']);
         }
 
         if (isset($price['pseudoPrice'])) {
-            $price['pseudoPrice'] = $this->formatToFloatValue($price['pseudoPrice']);
+            $price['pseudoPrice'] = $this->formatToFloatValue((string) $price['pseudoPrice']);
         } else {
             if ($newPrice) {
                 $price['pseudoPrice'] = 0;
@@ -119,7 +120,7 @@ class PriceWriter
 
         if (SwagVersionHelper::isShopware578()) {
             if (isset($price['regulationPrice'])) {
-                $price['regulationPrice'] = $this->formatToFloatValue($price['regulationPrice']);
+                $price['regulationPrice'] = $this->formatToFloatValue((string) $price['regulationPrice']);
             } else {
                 if ($newPrice) {
                     $price['regulationPrice'] = 0;
@@ -132,7 +133,7 @@ class PriceWriter
         }
 
         if (isset($price['percent'])) {
-            $price['percent'] = $this->formatToFloatValue($price['percent']);
+            $price['percent'] = $this->formatToFloatValue((string) $price['percent']);
         }
 
         if ($taxInput) {

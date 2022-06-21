@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -368,7 +369,7 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
             $rows[$variantId][$languageId]['languageId'] = $languageId;
             $rows[$variantId][$languageId]['variantKind'] = $kind;
 
-            $objectData = \unserialize($record['objectdata']);
+            $objectData = $record['objectdata'] ? \unserialize($record['objectdata']) : null;
             if (!empty($objectData)) {
                 foreach ($objectData as $key => $value) {
                     if (isset($translationFields[$key])) {
@@ -429,6 +430,10 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
                     $result[$index][$field] = $serializeData[$key];
                 }
 
+                continue;
+            }
+
+            if (!\is_string($matchedProductTranslation['objectdata'])) {
                 continue;
             }
 
@@ -1327,7 +1332,7 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
                     );
 
                     $categoryWriter->write(
-                        $articleWriterResult->getArticleId(),
+                        (int) $articleWriterResult->getArticleId(),
                         \array_filter(
                             $records['category'] ?? [],
                             function ($category) use ($index) {

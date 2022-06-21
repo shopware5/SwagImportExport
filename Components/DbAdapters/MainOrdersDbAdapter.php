@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -472,8 +473,8 @@ class MainOrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
         foreach ($sum as $orderId => $taxSum) {
             foreach ($taxSum['taxRateSums'] as $taxRate => $vat) {
                 $shippingTaxRate = $this->getShippingRate(
-                    $orderRecords[$orderId]['invoiceShipping'],
-                    $orderRecords[$orderId]['invoiceShippingNet']
+                    (float) $orderRecords[$orderId]['invoiceShipping'],
+                    (float) $orderRecords[$orderId]['invoiceShippingNet']
                 );
                 if ($taxRate == $shippingTaxRate) {
                     $vat += $orderRecords[$orderId]['taxSumShipping'];

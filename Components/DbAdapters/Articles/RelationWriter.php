@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -160,17 +161,14 @@ class RelationWriter
         }
     }
 
-    /**
-     * Gets relation id by orderNumber.
-     */
-    protected function getRelationIdByOrderNumber(string $orderNumber): string
+    protected function getRelationIdByOrderNumber(string $orderNumber): ?int
     {
         $relationId = $this->db->fetchOne(
             'SELECT articleID FROM s_articles_details WHERE ordernumber = ?',
             [$orderNumber]
         );
 
-        return $relationId;
+        return (int) $relationId ?: null;
     }
 
     /**

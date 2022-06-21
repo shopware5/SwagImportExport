@@ -321,11 +321,6 @@ parameters:
 			path: Components/DbAdapters/AddressDbAdapter.php
 
 		-
-			message: "#^Parameter \\#1 \\$articleId of method Shopware\\\\Components\\\\Model\\\\CategorySubscriber\\:\\:backlogAddAssignment\\(\\) expects int, string given\\.$#"
-			count: 1
-			path: Components/DbAdapters/Articles/CategoryWriter.php
-
-		-
 			message: "#^Parameter \\#1 \\$categories of method SwagImportExport\\\\Components\\\\DbAdapters\\\\Articles\\\\CategoryWriter\\:\\:prepareValues\\(\\) expects array\\<string, mixed\\>, array\\<int, array\\<string, int\\|string\\>\\> given\\.$#"
 			count: 1
 			path: Components/DbAdapters/Articles/CategoryWriter.php
@@ -342,11 +337,6 @@ parameters:
 
 		-
 			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\Articles\\\\ConfiguratorWriter\\:\\:createSet\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DbAdapters/Articles/ConfiguratorWriter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\Articles\\\\ConfiguratorWriter\\:\\:getOptionIdByOptionNameAndGroupId\\(\\) should return string but returns string\\|false\\|null\\.$#"
 			count: 1
 			path: Components/DbAdapters/Articles/ConfiguratorWriter.php
 
@@ -436,11 +426,6 @@ parameters:
 			path: Components/DbAdapters/Articles/RelationWriter.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\Articles\\\\RelationWriter\\:\\:getRelationIdByOrderNumber\\(\\) should return string but returns string\\|false\\|null\\.$#"
-			count: 1
-			path: Components/DbAdapters/Articles/RelationWriter.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\Articles\\\\RelationWriter\\:\\:insertRelations\\(\\) has parameter \\$articleId with no type specified\\.$#"
 			count: 1
 			path: Components/DbAdapters/Articles/RelationWriter.php
@@ -497,11 +482,6 @@ parameters:
 
 		-
 			message: "#^Negated boolean expression is always false\\.$#"
-			count: 1
-			path: Components/DbAdapters/ArticlesDbAdapter.php
-
-		-
-			message: "#^Parameter \\#1 \\$articleId of method SwagImportExport\\\\Components\\\\DbAdapters\\\\Articles\\\\CategoryWriter\\:\\:write\\(\\) expects string, int given\\.$#"
 			count: 1
 			path: Components/DbAdapters/ArticlesDbAdapter.php
 
@@ -2164,11 +2144,6 @@ parameters:
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\TransformerChainMock\\:\\:transformForward\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Functional/Components/DataWorkflowTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$articleId of method SwagImportExport\\\\Components\\\\DbAdapters\\\\Articles\\\\CategoryWriter\\:\\:write\\(\\) expects string, int given\\.$#"
-			count: 3
-			path: Tests/Functional/Components/DbAdapters/Articles/CategoryWriterTest.php
 
 		-
 			message: "#^Parameter \\#1 \\$articleId of method SwagImportExport\\\\Components\\\\DbAdapters\\\\Articles\\\\PropertyWriter\\:\\:writeUpdateCreatePropertyGroupsFilterAndValues\\(\\) expects int, string given\\.$#"

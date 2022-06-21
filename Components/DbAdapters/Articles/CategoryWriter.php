@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -48,7 +49,7 @@ class CategoryWriter
      *
      * @throws DBALException
      */
-    public function write(string $articleId, array $categories): void
+    public function write(int $articleId, array $categories): void
     {
         if (!$categories) {
             return;
@@ -205,10 +206,7 @@ class CategoryWriter
         return $isParent === false;
     }
 
-    /**
-     * Updates s_articles_categories_ro table
-     */
-    protected function updateArticlesCategoriesRO(string $articleId): void
+    protected function updateArticlesCategoriesRO(int $articleId): void
     {
         foreach ($this->categoryIds as $categoryId) {
             $this->categorySubscriber->backlogAddAssignment($articleId, $categoryId);
@@ -218,7 +216,7 @@ class CategoryWriter
     /**
      * @param array<string, mixed> $categories
      */
-    private function prepareValues(array $categories, string $articleId): string
+    private function prepareValues(array $categories, int $articleId): string
     {
         $this->categoryIds = [];
         $values = \implode(
@@ -227,7 +225,7 @@ class CategoryWriter
                 function ($category) use ($articleId) {
                     $isCategoryExists = false;
                     if (!empty($category['categoryId'])) {
-                        $isCategoryExists = $this->isCategoryExists($category['categoryId']);
+                        $isCategoryExists = $this->isCategoryExists((int) $category['categoryId']);
                     }
 
                     // if categoryId exists, the article will be assigned to it, no matter of the categoryPath

@@ -22,6 +22,7 @@ $finder = PhpCsFixer\Finder::create()
     ->in(__DIR__ . "/Components/Converter")
     ->in(__DIR__ . "/Components/DataManagers")
     ->in(__DIR__ . "/Components/DataType")
+    ->in(__DIR__ . "/Components/DbAdapters")
 ;
 
 $header = <<<EOF

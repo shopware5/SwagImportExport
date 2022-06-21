@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -219,10 +220,10 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook
             try {
                 $record = $this->validator->filterEmptyString($record);
 
-                $category = $this->findCategoryById($record['categoryId']);
+                $category = $this->findCategoryById((int) $record['categoryId']);
                 if (!$category instanceof Category) {
                     $record = $this->dataManager->setDefaultFieldsForCreate($record, $this->defaultValues);
-                    $category = $this->createCategoryAndSetId($record['categoryId']);
+                    $category = $this->createCategoryAndSetId((int) $record['categoryId']);
                 }
 
                 $this->validator->checkRequiredFields($record);
