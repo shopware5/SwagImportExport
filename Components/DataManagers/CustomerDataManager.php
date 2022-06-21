@@ -166,13 +166,13 @@ class CustomerDataManager extends DataManager implements \Enlight_Hook
 
         // get defaultPaymentId for subShop
         $defaultPaymentId = $this->getSubShopDefaultPaymentId((int) $subShopId);
-        if (is_string($defaultPaymentId)) {
+        if (\is_string($defaultPaymentId)) {
             return \unserialize($defaultPaymentId);
         }
 
         // get defaultPaymentId for mainShop
         $defaultPaymentId = $this->getMainShopDefaultPaymentId((int) $subShopId);
-        if (is_string($defaultPaymentId)) {
+        if (\is_string($defaultPaymentId)) {
             return \unserialize($defaultPaymentId);
         }
 

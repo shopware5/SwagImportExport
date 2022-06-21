@@ -204,7 +204,7 @@ class ArticleDataManager extends DataManager implements \Enlight_Hook
             switch ($key) {
                 case 'taxId':
                     if (isset($record['tax'])) {
-                        $record[$key] = $this->getTaxByTaxRate((float)$record['tax'], $record['orderNumber']);
+                        $record[$key] = $this->getTaxByTaxRate((float) $record['tax'], $record['orderNumber']);
                     }
                     break;
                 case 'supplierId':
