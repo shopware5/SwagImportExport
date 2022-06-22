@@ -16,7 +16,6 @@ use Enlight_Components_Db_Adapter_Pdo_Mysql;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchInterface;
-use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 use Shopware\Components\ContainerAwareEventManager;
@@ -193,7 +192,6 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
             $criteria = new Criteria();
             $this->streamRepo->prepareCriteria($criteria, $productStreamId);
 
-            /** @var ProductNumberSearchResult $products */
             $products = $this->productNumberSearch->search($criteria, $context);
             if (empty($products->getProducts())) {
                 return [];
@@ -450,7 +448,7 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @return \Shopware\Models\Shop\Shop[]
+     * @return Shop[]
      */
     public function getShops(): array
     {
@@ -521,25 +519,6 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
         );
 
         $this->performImport($records);
-    }
-
-    /**
-     * @throws AdapterException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
-     *
-     * @return \Shopware\Models\Shop\Shop $shop
-     */
-    public function getShop(int $id): Shop
-    {
-        $shop = $this->modelManager->find(Shop::class, $id);
-        if (!$shop) {
-            $message = SnippetsHelper::getNamespace()->get('adapters/articles/no_shop_id', 'Shop by id %s not found');
-            throw new AdapterException(\sprintf($message, $id));
-        }
-
-        return $shop;
     }
 
     /**
@@ -627,13 +606,11 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
             }
         }
 
-        $attributesSelect = $this->eventManager->filter(
+        return $this->eventManager->filter(
             'Shopware_Components_SwagImportExport_DbAdapters_ArticlesDbAdapter_GetArticleAttributes',
             $attributesSelect,
             ['subject' => $this]
         );
-
-        return $attributesSelect;
     }
 
     public function getColumns(string $section): array

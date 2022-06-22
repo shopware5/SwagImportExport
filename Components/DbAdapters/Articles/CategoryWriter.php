@@ -69,7 +69,7 @@ class CategoryWriter
             ON DUPLICATE KEY UPDATE categoryID=VALUES(categoryID), articleID=VALUES(articleID)
         ";
 
-        $this->connection->exec($sql);
+        $this->connection->executeStatement($sql);
 
         $this->updateArticlesCategoriesRO($articleId);
     }
@@ -219,7 +219,8 @@ class CategoryWriter
     private function prepareValues(array $categories, int $articleId): string
     {
         $this->categoryIds = [];
-        $values = \implode(
+
+        return \implode(
             ', ',
             \array_map(
                 function ($category) use ($articleId) {
@@ -264,7 +265,5 @@ class CategoryWriter
                 $categories
             )
         );
-
-        return $values;
     }
 }

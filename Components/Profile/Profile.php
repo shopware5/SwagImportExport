@@ -63,25 +63,9 @@ class Profile
         }
     }
 
-    public function setConfig(string $name, string $value): void
-    {
-        switch ($name) {
-            case 'tree':
-                $this->profileEntity->setTree($value);
-                break;
-            default:
-                throw new \RuntimeException('Config does not exists');
-        }
-    }
-
     public function getEntity(): ProfileEntity
     {
         return $this->profileEntity;
-    }
-
-    public function persist(): void
-    {
-        Shopware()->Models()->persist($this->profileEntity);
     }
 
     /**

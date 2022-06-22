@@ -47,7 +47,7 @@ class CommandHelperTest extends TestCase
     {
         $sql = \file_get_contents(__DIR__ . '/_fixtures/stream.sql');
         static::assertIsString($sql);
-        $this->getContainer()->get('dbal_connection')->exec($sql);
+        $this->getContainer()->get('dbal_connection')->executeStatement($sql);
 
         $commandHelper = new CommandHelper([
             'profileEntity' => new Profile(),
@@ -76,7 +76,7 @@ class CommandHelperTest extends TestCase
     {
         $sql = \file_get_contents(__DIR__ . '/_fixtures/multiple_streams.sql');
         static::assertIsString($sql);
-        $this->getContainer()->get('dbal_connection')->exec($sql);
+        $this->getContainer()->get('dbal_connection')->executeStatement($sql);
 
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('There are 2 streams with the name: TestStream. Please use the stream id.');

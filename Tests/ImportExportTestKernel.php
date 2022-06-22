@@ -51,7 +51,7 @@ class ImportExportTestKernel extends Kernel
     {
         $sql = 'SELECT 1 FROM s_core_plugins WHERE name = ? AND active = 1';
 
-        return (bool) self::getKernel()->getContainer()->get('dbal_connection')->fetchColumn($sql, ['SwagImportExport']);
+        return (bool) self::getKernel()->getContainer()->get('dbal_connection')->fetchOne($sql, ['SwagImportExport']);
     }
 }
 

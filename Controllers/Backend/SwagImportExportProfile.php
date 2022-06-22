@@ -276,7 +276,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
 
     public function exportProfileAction(): void
     {
-        $profileId = $this->Request()->get('profileId', null);
+        $profileId = $this->Request()->get('profileId');
 
         if (empty($profileId)) {
             $this->View()->assign([
@@ -393,7 +393,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
 
         $errors = false;
 
-        foreach ($data as &$node) {
+        foreach ($data as $node) {
             if (!TreeHelper::changeNode($node, $tree, $defaultFields)) {
                 $errors = true;
                 break;
@@ -455,7 +455,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
 
         $errors = false;
 
-        foreach ($data as &$node) {
+        foreach ($data as $node) {
             if (!TreeHelper::deleteNode($node, $tree)) {
                 $errors = true;
             }

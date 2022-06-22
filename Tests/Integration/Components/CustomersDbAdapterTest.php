@@ -63,7 +63,7 @@ class CustomersDbAdapterTest extends DbAdapterTestHelper
      */
     public function testWriteWithEmptyFile(array $records, int $expectedInsertedRows): void
     {
-        self::expectException(\Exception::class);
+        $this->expectException(\Exception::class);
 
         $this->write($records, $expectedInsertedRows);
     }

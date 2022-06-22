@@ -178,7 +178,7 @@ class CategoryTranslationDbAdapter implements DataDbAdapter, \Enlight_Hook
                 unset($record['categoryId']);
                 unset($record['languageId']);
 
-                $this->checkIfShopExist($objectLanguage, $objectKey);
+                $this->checkIfShopExist($objectLanguage);
                 $this->checkIfCategoryExist($objectKey);
 
                 $this->translationComponent->write(
@@ -252,7 +252,7 @@ class CategoryTranslationDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * @throws AdapterException
      */
-    private function checkIfShopExist(int $objectLanguage, int $objectKey): void
+    private function checkIfShopExist(int $objectLanguage): void
     {
         $shopExists = $this->connection->createQueryBuilder()
             ->select('id')
@@ -260,7 +260,7 @@ class CategoryTranslationDbAdapter implements DataDbAdapter, \Enlight_Hook
             ->where('id = :id')
             ->setParameter('id', $objectLanguage)
             ->execute()
-            ->fetch(\PDO::FETCH_COLUMN);
+            ->fetchOne();
 
         if (!$shopExists) {
             $message = SnippetsHelper::getNamespace()
@@ -281,7 +281,7 @@ class CategoryTranslationDbAdapter implements DataDbAdapter, \Enlight_Hook
             ->where('id = :id')
             ->setParameter('id', $objectKey)
             ->execute()
-            ->fetch(\PDO::FETCH_COLUMN);
+            ->fetchOne();
 
         if (!$categoryExists) {
             $message = SnippetsHelper::getNamespace()

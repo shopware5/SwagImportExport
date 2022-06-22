@@ -53,7 +53,7 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook
 
     protected CustomerDataManager $dataManager;
 
-    protected \Shopware\Components\Password\Manager $passwordManager;
+    protected Manager $passwordManager;
 
     protected \Shopware_Components_Config $config;
 
@@ -85,16 +85,12 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook
 
     public function getDefaultColumns(): array
     {
-        $default = [];
-
-        $default = \array_merge(
-            $default,
+        return \array_merge(
+            [],
             $this->getCustomerColumns(),
             $this->getBillingColumns(),
             $this->getShippingColumns()
         );
-
-        return $default;
     }
 
     /**
@@ -730,28 +726,6 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook
 
         $sql = "INSERT INTO s_user_attributes (userID) VALUES ({$customerId})";
         $this->db->exec($sql);
-    }
-
-    protected function preparePayment(int $subShopID): ?int
-    {
-        // on missing shopId return defaultPaymentId
-        if (!isset($subShopID) || $subShopID === '') {
-            return $this->config->get('sDEFAULTPAYMENT');
-        }
-
-        // get defaultPaymentId for subShiopId = $subShopID
-        $defaultPaymentId = $this->getSubShopDefaultPaymentId($subShopID);
-        if ($defaultPaymentId) {
-            return \unserialize($defaultPaymentId['value']);
-        }
-
-        // get defaultPaymentId for mainShiopId
-        $defaultPaymentId = $this->getMainShopDefaultPaymentId($subShopID);
-        if ($defaultPaymentId) {
-            return \unserialize($defaultPaymentId['value']);
-        }
-
-        return (int) $this->config->get('sDEFAULTPAYMENT');
     }
 
     protected function getSubShopDefaultPaymentId(int $subShopID): array

@@ -67,7 +67,7 @@ class ArticleValidator extends Validator
     public function checkRequiredFields(array $record): void
     {
         foreach ($this->requiredFields as $key) {
-            if (isset($record[$key]) && \strlen($record[$key])) {
+            if (isset($record[$key]) && $record[$key] != '') {
                 continue;
             }
 

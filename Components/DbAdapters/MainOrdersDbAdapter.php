@@ -166,14 +166,6 @@ class MainOrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * @return array<string>
      */
-    public function getTaxRateSumColumns(): array
-    {
-        return ['taxRateSums', 'taxRate'];
-    }
-
-    /**
-     * @return array<string>
-     */
     public function getOrderColumns(): array
     {
         $columns = [

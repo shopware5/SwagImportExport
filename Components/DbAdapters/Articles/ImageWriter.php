@@ -179,7 +179,7 @@ class ImageWriter
             )
         );
         $insert = "INSERT INTO s_articles_img (articleID, img, main, description, extension, article_detail_id, media_id) VALUES {$values}";
-        $this->connection->exec($insert);
+        $this->connection->executeStatement($insert);
 
         $this->setMainImage($articleId, $mediaId);
     }
@@ -240,7 +240,7 @@ class ImageWriter
     protected function setFirstImageAsMain(int $articleId): void
     {
         $update = "UPDATE s_articles_img SET main = 1 WHERE articleID = {$articleId} ORDER BY id ASC LIMIT 1";
-        $this->connection->exec($update);
+        $this->connection->executeStatement($update);
     }
 
     /**
@@ -249,6 +249,6 @@ class ImageWriter
     protected function updateMain(int $articleId, int $mediaId): void
     {
         $update = "UPDATE s_articles_img SET main = 2 WHERE articleID = {$articleId} AND media_id != {$mediaId}";
-        $this->connection->exec($update);
+        $this->connection->executeStatement($update);
     }
 }

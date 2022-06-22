@@ -37,18 +37,6 @@ class Session
     }
 
     /**
-     * @param array<mixed> $arguments
-     */
-    public function __call(string $method, array $arguments)
-    {
-        $session = $this->getEntity();
-        if (\method_exists($session, $method)) {
-            return $session->$method($arguments);
-        }
-        throw new \Exception("Method $method does not exists.");
-    }
-
-    /**
      * Returns session entity
      */
     public function getEntity(): SessionEntity
@@ -234,11 +222,6 @@ class Session
         }
 
         return $this->manager;
-    }
-
-    public function getSessionPosition(): ?int
-    {
-        return $this->getEntity()->getPosition();
     }
 
     /**

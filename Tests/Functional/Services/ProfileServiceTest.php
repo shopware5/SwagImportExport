@@ -12,7 +12,6 @@ namespace SwagImportExport\Tests\Functional\Services;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use SwagImportExport\Components\Service\ProfileService;
-use SwagImportExport\Components\Service\Struct\ProfileDataStruct;
 use SwagImportExport\Components\UploadPathProvider;
 use SwagImportExport\Tests\Helper\ContainerTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
@@ -31,7 +30,6 @@ class ProfileServiceTest extends TestCase
         $dbalConnection = $this->getContainer()->get('dbal_connection');
         $profile = $dbalConnection->executeQuery('SELECT * FROM s_import_export_profile LIMIT 1')->fetch(\PDO::FETCH_ASSOC);
 
-        /** @var ProfileDataStruct $profileDataStruct */
         $profileDataStruct = $service->exportProfile((int) $profile['id']);
 
         static::assertEquals($profile['name'], $profileDataStruct->getName());

@@ -78,7 +78,7 @@ class ArticlesDbAdapterTest extends TestCase
 
         $dbalConnection = $this->getContainer()->get('dbal_connection');
         $sql = "SELECT articleID FROM s_articles_details WHERE orderNumber='SW10003'";
-        $productId = $dbalConnection->executeQuery($sql)->fetch(\PDO::FETCH_COLUMN);
+        $productId = $dbalConnection->executeQuery($sql)->fetchOne();
         $createdProductSimilar = $dbalConnection->executeQuery('SELECT * FROM s_articles_similar WHERE articleID = ?', [$productId])->fetchAll();
 
         static::assertEmpty($unprocessedData);
@@ -158,7 +158,7 @@ class ArticlesDbAdapterTest extends TestCase
         $unprocessedData = $productDbAdapter->getUnprocessedData();
 
         $dbalConnection = $this->getContainer()->get('dbal_connection');
-        $productId = $dbalConnection->executeQuery("SELECT articleID FROM s_articles_details WHERE orderNumber='SW10003'")->fetch(\PDO::FETCH_COLUMN);
+        $productId = $dbalConnection->executeQuery("SELECT articleID FROM s_articles_details WHERE orderNumber='SW10003'")->fetchOne();
         $createdProductAccessory = $dbalConnection->executeQuery('SELECT * FROM s_articles_relationships WHERE articleID = ?', [$productId])->fetchAll();
 
         static::assertEmpty($unprocessedData);
@@ -212,7 +212,7 @@ class ArticlesDbAdapterTest extends TestCase
         $productDbAdapter->write($records);
 
         $dbalConnection = $this->getContainer()->get('dbal_connection');
-        $productId = $dbalConnection->executeQuery("SELECT articleID FROM s_articles_details WHERE orderNumber='SW10006'")->fetch(\PDO::FETCH_COLUMN);
+        $productId = $dbalConnection->executeQuery("SELECT articleID FROM s_articles_details WHERE orderNumber='SW10006'")->fetchOne();
         $image = $dbalConnection->executeQuery("SELECT * FROM s_articles_img WHERE img = 'Muensterlaender_Lagerkorn' AND articleID = ?", [$productId])->fetch(\PDO::FETCH_ASSOC);
 
         static::assertSame($productId, $image['articleID']);
@@ -306,7 +306,7 @@ class ArticlesDbAdapterTest extends TestCase
         $this->getContainer()->get('shopware.cache_manager')->clearProxyCache();
 
         $dbalConnection = $this->getContainer()->get('dbal_connection');
-        $productId = $dbalConnection->executeQuery("SELECT articleID FROM s_articles_details WHERE orderNumber='SW10006'")->fetch(\PDO::FETCH_COLUMN);
+        $productId = $dbalConnection->executeQuery("SELECT articleID FROM s_articles_details WHERE orderNumber='SW10006'")->fetchOne();
         $result = $dbalConnection->executeQuery("SELECT * FROM s_core_translations WHERE objecttype='article' AND objectkey={$productId}")->fetchAll();
         $importedTranslation = \unserialize($result[0]['objectdata']);
 

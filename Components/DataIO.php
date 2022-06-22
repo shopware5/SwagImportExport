@@ -44,8 +44,6 @@ class DataIO
      */
     private string $format;
 
-    private int $maxRecordCount;
-
     private string $fileName;
 
     private int $fileSize;
@@ -71,15 +69,13 @@ class DataIO
         DataLimit $limit,
         DataFilter $filter,
         ?string $type,
-        string $format,
-        int $maxRecordCount
+        string $format
     ) {
         $this->columnOptions = $colOpts;
         $this->limit = $limit;
         $this->filter = $filter;
         $this->type = $type;
         $this->format = $format;
-        $this->maxRecordCount = $maxRecordCount;
     }
 
     /**
@@ -152,7 +148,7 @@ class DataIO
     public function preloadRecordIds(): self
     {
         $session = $this->dataSession;
-        $storedIds = $session->getIds();
+        $storedIds = $session->getEntity()->getIds();
 
         if ($storedIds) {
             $ids = \unserialize($storedIds);
@@ -194,7 +190,7 @@ class DataIO
 
     public function getSessionPosition(): int
     {
-        $position = $this->dataSession->getPosition();
+        $position = $this->dataSession->getEntity()->getPosition();
 
         return $position == null ? 0 : $position;
     }
@@ -327,21 +323,6 @@ class DataIO
         $this->setRecordIds($sessionData['recordIds']);
 
         $this->setFileName($sessionData['fileName']);
-    }
-
-    public function getSessionId(): int
-    {
-        $session = $this->getDataSession();
-
-        return $session->getId();
-    }
-
-    /**
-     * Returns the max records count initialized in the constructor.
-     */
-    public function getMaxRecordsCount(): int
-    {
-        return $this->maxRecordCount;
     }
 
     public function getDbAdapter(): DataDbAdapter

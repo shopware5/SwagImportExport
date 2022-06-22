@@ -41,9 +41,7 @@ class ValuesTransformer implements DataTransformerAdapter
      */
     public function transformForward(array $data): array
     {
-        $data = $this->transform('export', $data);
-
-        return $data;
+        return $this->transform('export', $data);
     }
 
     /**
@@ -53,9 +51,7 @@ class ValuesTransformer implements DataTransformerAdapter
      */
     public function transformBackward(array $data): array
     {
-        $data = $this->transform('import', $data);
-
-        return $data;
+        return $this->transform('import', $data);
     }
 
     /**

@@ -17,7 +17,6 @@ use SwagImportExport\Components\Factories\DataTransformerFactory;
 use SwagImportExport\Components\Factories\FileIOFactory;
 use SwagImportExport\Components\Factories\ProfileFactory;
 use SwagImportExport\Components\FileIO\FileReader;
-use SwagImportExport\Components\FileIO\FileWriter;
 use SwagImportExport\Components\Logger\LogDataStruct;
 use SwagImportExport\Components\Logger\Logger;
 use SwagImportExport\Components\Profile\Profile;
@@ -213,11 +212,10 @@ class CommandHelper
         $colOpts = $dataFactory->createColOpts('');
         $limit = $dataFactory->createLimit($postData['limit']);
         $filter = $dataFactory->createFilter($postData['filter']);
-        $maxRecordCount = (int) ($postData['max_record_count'] ?? 0);
         $type = $postData['type'];
         $format = $postData['format'];
 
-        $dataIO->initialize($colOpts, $limit, $filter, $type, $format, $maxRecordCount);
+        $dataIO->initialize($colOpts, $limit, $filter, $type, $format);
 
         $ids = $dataIO->preloadRecordIds()->getRecordIds();
 
@@ -288,18 +286,16 @@ class CommandHelper
         $colOpts = $dataFactory->createColOpts($postData['columnOptions']);
         $limit = $dataFactory->createLimit($postData['limit']);
         $filter = $dataFactory->createFilter($postData['filter']);
-        $maxRecordCount = (int) ($postData['max_record_count'] ?? 0);
         $type = $postData['type'];
         $format = $postData['format'];
 
-        $dataIO->initialize($colOpts, $limit, $filter, $type, $format, $maxRecordCount);
+        $dataIO->initialize($colOpts, $limit, $filter, $type, $format);
         $dataIO->setUsername($this->username);
 
         // we create the file writer that will write (partially) the result file
         /** @var FileIOFactory $fileFactory */
         $fileFactory = $this->fileIoFactory;
 
-        /** @var FileWriter $fileWriter */
         $fileWriter = $fileFactory->createFileWriter($postData['format']);
 
         /** @var DataTransformerChain $dataTransformerChain */
@@ -439,11 +435,10 @@ class CommandHelper
         $colOpts = $dataFactory->createColOpts($postData['columnOptions']);
         $limit = $dataFactory->createLimit($postData['limit']);
         $filter = $dataFactory->createFilter($postData['filter']);
-        $maxRecordCount = (int) ($postData['max_record_count'] ?? 0);
         $type = $postData['type'];
         $format = $postData['format'];
 
-        $dataIO->initialize($colOpts, $limit, $filter, $type, $format, $maxRecordCount);
+        $dataIO->initialize($colOpts, $limit, $filter, $type, $format);
         $dataIO->setUsername($this->username);
 
         /** @var DataTransformerChain $dataTransformerChain */
@@ -472,13 +467,12 @@ class CommandHelper
                     );
 
                     $this->afterImport($unprocessedData, $profileName, $outputFile);
-                    $unprocessedFiles[$profileName] = $outputFile;
                 }
             }
 
             $this->sessionId = $resultData['sessionId'];
 
-            $dataSessionTotalCount = $dataSession->getTotalCount();
+            $dataSessionTotalCount = $dataSession->getEntity()->getTotalCount();
             if ($dataSessionTotalCount > 0
                 && ($dataSessionTotalCount == $resultData['position'])
                 && $this->logger->getMessage() === null

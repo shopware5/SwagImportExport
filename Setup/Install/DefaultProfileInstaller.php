@@ -11,7 +11,6 @@ namespace SwagImportExport\Setup\Install;
 
 use Doctrine\DBAL\Connection;
 use SwagImportExport\Setup\DefaultProfiles\ProfileHelper;
-use SwagImportExport\Setup\DefaultProfiles\ProfileMetaData;
 
 class DefaultProfileInstaller
 {
@@ -31,7 +30,6 @@ class DefaultProfileInstaller
             (:type, :name, :description, :tree, :hidden, :is_default)
         ';
 
-        /** @var ProfileMetaData[] $profiles */
         $profiles = ProfileHelper::getProfileInstances();
 
         foreach ($profiles as $profile) {

@@ -291,7 +291,7 @@ class TreeHelper
             }
         }
         if (isset($node['attributes'])) {
-            foreach ($node['attributes'] as $key => &$childNode) {
+            foreach ($node['attributes'] as $key => $childNode) {
                 if ($childNode['id'] == $child['id']) {
                     unset($node['attributes'][$key]);
                     if (\count($node['attributes']) == 0) {

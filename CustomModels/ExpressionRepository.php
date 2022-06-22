@@ -25,7 +25,6 @@ class ExpressionRepository extends ModelRepository
      */
     public function getExpressionsListQuery(array $filterBy = [], array $orderBy = [], ?int $limit = null, ?int $offset = null): QueryBuilder
     {
-        /** @var QueryBuilder $builder */
         $builder = $this->createQueryBuilder('e');
 
         $builder->select(

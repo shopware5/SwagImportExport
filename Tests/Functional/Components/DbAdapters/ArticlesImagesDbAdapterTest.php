@@ -63,7 +63,7 @@ class ArticlesImagesDbAdapterTest extends TestCase
         $productsImagesDbAdapter->write($records);
 
         $dbalConnection = $this->getContainer()->get('dbal_connection');
-        $productId = $dbalConnection->executeQuery("SELECT articleID FROM s_articles_details WHERE orderNumber='SW10001'")->fetch(\PDO::FETCH_COLUMN);
+        $productId = $dbalConnection->executeQuery("SELECT articleID FROM s_articles_details WHERE orderNumber='SW10001'")->fetchOne();
         $image = $dbalConnection->executeQuery("SELECT * FROM s_articles_img WHERE description = 'testimport1'")->fetch(\PDO::FETCH_ASSOC);
 
         static::assertSame($records['default'][0]['description'], $image['description']);
@@ -87,7 +87,7 @@ class ArticlesImagesDbAdapterTest extends TestCase
         $productsImagesDbAdapter->write($records);
 
         $dbalConnection = $this->getContainer()->get('dbal_connection');
-        $productId = $dbalConnection->executeQuery("SELECT articleID FROM s_articles_details WHERE orderNumber='SW10001'")->fetch(\PDO::FETCH_COLUMN);
+        $productId = $dbalConnection->executeQuery("SELECT articleID FROM s_articles_details WHERE orderNumber='SW10001'")->fetchOne();
         $image = $dbalConnection->executeQuery("SELECT * FROM s_articles_img WHERE description = 'testimport1'")->fetch(\PDO::FETCH_ASSOC);
 
         static::assertSame($records['default'][0]['description'], $image['description']);

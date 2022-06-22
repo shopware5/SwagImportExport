@@ -31,6 +31,14 @@ trait ExportControllerTrait
     }
 
     /**
+     * @after
+     */
+    protected function unlinkFiles(): void
+    {
+        $this->backendControllerTestHelper->tearDown();
+    }
+
+    /**
      * @return \DOMNodeList<\DOMNode>
      */
     private function queryXpath(string $filePath, string $xpath): \DOMNodeList

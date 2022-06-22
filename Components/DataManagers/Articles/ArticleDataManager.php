@@ -22,11 +22,6 @@ class ArticleDataManager extends DataManager implements \Enlight_Hook
 
     private DbalHelper $dbalHelper;
 
-    /**
-     * @var array<int, string>
-     */
-    private array $suppliers;
-
     public function __construct(\Enlight_Components_Db_Adapter_Pdo_Mysql $db, DbalHelper $dbalHelper)
     {
         $this->db = $db;
@@ -342,9 +337,9 @@ class ArticleDataManager extends DataManager implements \Enlight_Hook
      */
     private function getSupplierId(array $record): int
     {
-        $this->suppliers = $this->getSuppliers();
+        $suppliers = $this->getSuppliers();
         $name = $record['supplierName'];
-        $supplierId = $this->suppliers[$name];
+        $supplierId = $suppliers[$name];
 
         // creates supplier if does not exists
         if (!$supplierId) {
@@ -356,7 +351,7 @@ class ArticleDataManager extends DataManager implements \Enlight_Hook
             );
             $builder->execute();
             $supplierId = $this->db->lastInsertId();
-            $this->suppliers[$name] = $supplierId;
+            $suppliers[$name] = $supplierId;
         }
 
         return (int) $supplierId;

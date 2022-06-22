@@ -91,7 +91,7 @@ class ProfileDataProvider
             ->setParameter('profileType', $profile)
             ->setParameter('profileName', $profile)
             ->execute()
-            ->fetch(\PDO::FETCH_COLUMN);
+            ->fetchOne();
     }
 
     private function createProfile(string $profileType, string $profileName): void

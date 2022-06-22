@@ -134,7 +134,7 @@ class NewsletterDbAdapterTest extends TestCase
         ];
 
         $newsletterDbAdapter->write($record);
-        $groupCount = $dbalConnection->executeQuery('SELECT COUNT(*) FROM s_campaigns_groups')->fetchColumn();
+        $groupCount = $dbalConnection->executeQuery('SELECT COUNT(*) FROM s_campaigns_groups')->fetchOne();
 
         // check that no new group is created
         static::assertEquals(1, $groupCount);

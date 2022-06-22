@@ -10,15 +10,12 @@ declare(strict_types=1);
 namespace SwagImportExport\Tests\Helper;
 
 use Shopware\Components\DependencyInjection\Container;
-use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Newsletter\Address;
 use Shopware\Models\Newsletter\Group;
 use SwagImportExport\Tests\Helper\DataProvider\ProfileDataProvider;
 
 trait FixturesImportTrait
 {
-    private ModelManager $modelManager;
-
     abstract public function getContainer(): Container;
 
     /**
@@ -35,8 +32,8 @@ trait FixturesImportTrait
 
     private function importNewsletterDemoData(): void
     {
-        $this->modelManager = $this->getContainer()->get('models');
-        $newsletterGroup = $this->modelManager->find(Group::class, 1);
+        $modelManager = $this->getContainer()->get('models');
+        $newsletterGroup = $modelManager->find(Group::class, 1);
 
         self::assertInstanceOf(Group::class, $newsletterGroup);
 
@@ -47,8 +44,8 @@ trait FixturesImportTrait
             $address->setNewsletterGroup($newsletterGroup);
             $address->setIsCustomer(false);
 
-            $this->modelManager->persist($address);
-            $this->modelManager->flush();
+            $modelManager->persist($address);
+            $modelManager->flush();
         }
     }
 
@@ -76,6 +73,6 @@ SQL;
             ->from('s_product_streams')
             ->where('id = 999999')
             ->execute()
-            ->fetch(\PDO::FETCH_COLUMN);
+            ->fetchOne();
     }
 }

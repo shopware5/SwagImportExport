@@ -60,7 +60,7 @@ class PropertyWriterTest extends TestCase
         $importedFilter = $dbalConnection->executeQuery(
             'SELECT * FROM s_filter WHERE name = ?',
             [self::NOT_EXISTING_FILTER_GROUP_NAME]
-        )->fetch(\PDO::FETCH_COLUMN);
+        )->fetchOne();
 
         static::assertEmpty($importedFilter, 'Filter groups will only be created if a new product will be created.');
     }
@@ -89,7 +89,7 @@ class PropertyWriterTest extends TestCase
         $filterGroupId = $dbalConnection->executeQuery(
             'SELECT filterGroupId FROM s_articles WHERE id = ?',
             [self::ARTICLE_ID_WITHOUT_PROPERTIES]
-        )->fetch(\PDO::FETCH_COLUMN);
+        )->fetchOne();
 
         static::assertGreaterThan($expectedMinId, $filterGroupId, 'Could not update filter group for article.');
     }
@@ -117,7 +117,7 @@ class PropertyWriterTest extends TestCase
         $createdPropertyValue = $dbalConnection->executeQuery(
             'SELECT `value` FROM s_filter_values WHERE value = ?',
             [self::NOT_EXISTING_VALUE_NAME]
-        )->fetch(\PDO::FETCH_COLUMN);
+        )->fetchOne();
 
         static::assertEquals(self::NOT_EXISTING_VALUE_NAME, $createdPropertyValue, 'Could not create property value.');
     }
@@ -145,7 +145,7 @@ class PropertyWriterTest extends TestCase
         $createdPropertyValue = $dbalConnection->executeQuery(
             'SELECT `name` FROM s_filter_options WHERE name = ?',
             [self::NOT_EXISTING_OPTION_NAME]
-        )->fetch(\PDO::FETCH_COLUMN);
+        )->fetchOne();
 
         static::assertEquals(self::NOT_EXISTING_OPTION_NAME, $createdPropertyValue, 'Could not create property value.');
     }
@@ -192,7 +192,7 @@ class PropertyWriterTest extends TestCase
         $valueIdRelationToTestedArticle = $dbalConnection->executeQuery(
             'SELECT valueID FROM s_filter_articles WHERE articleID = ?',
             [self::ARTICLE_ID_WITHOUT_PROPERTIES]
-        )->fetch(\PDO::FETCH_COLUMN);
+        )->fetchOne();
 
         static::assertEquals(self::EXISTING_PROPERTY_VALUE_ID, $valueIdRelationToTestedArticle);
     }
@@ -219,7 +219,7 @@ class PropertyWriterTest extends TestCase
         $createOptionRelation = $dbalConnection->executeQuery(
             'SELECT optionID FROM s_filter_relations LEFT JOIN s_articles ON s_articles.filterGroupID = s_filter_relations.groupID WHERE s_articles.id = ?',
             [self::ARTICLE_ID_WITHOUT_PROPERTIES]
-        )->fetch(\PDO::FETCH_COLUMN);
+        )->fetchOne();
 
         static::assertNotFalse($createOptionRelation, 'Could not update option relations.');
     }
@@ -246,7 +246,7 @@ class PropertyWriterTest extends TestCase
         $createdGroupName = $dbalConnection->executeQuery(
             'SELECT name FROM s_filter WHERE name = ?',
             [self::NOT_EXISTING_FILTER_GROUP_NAME]
-        )->fetch(\PDO::FETCH_COLUMN);
+        )->fetchOne();
 
         static::assertEquals(self::NOT_EXISTING_FILTER_GROUP_NAME, $createdGroupName, 'Could not create filter group.');
     }

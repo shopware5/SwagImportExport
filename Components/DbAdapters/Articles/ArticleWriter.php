@@ -191,7 +191,7 @@ class ArticleWriter
     {
         $sql = 'SELECT id FROM s_articles_attributes WHERE articledetailsID = ?';
 
-        return (int) $this->connection->fetchColumn($sql, [$detailId]);
+        return (int) $this->connection->fetchOne($sql, [$detailId]);
     }
 
     /**

@@ -92,13 +92,11 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
         // creates iteration array
         $tree = [$iterationPart['name'] => $transformData];
 
-        $tree = Shopware()->Events()->filter(
+        return Shopware()->Events()->filter(
             'Shopware_Components_SwagImportExport_Transformers_TreeTransformer_TransformForward',
             $tree,
             ['subject' => $this]
         );
-
-        return $tree;
     }
 
     /**

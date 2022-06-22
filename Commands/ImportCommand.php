@@ -12,7 +12,6 @@ namespace SwagImportExport\Commands;
 use Doctrine\ORM\EntityManagerInterface;
 use Shopware\Commands\ShopwareCommand;
 use SwagImportExport\Components\Factories\ProfileFactory;
-use SwagImportExport\Components\Profile\Profile;
 use SwagImportExport\Components\UploadPathProvider;
 use SwagImportExport\Components\Utils\CommandHelper;
 use SwagImportExport\CustomModels\Profile as ProfileEntity;
@@ -31,8 +30,6 @@ class ImportCommand extends ShopwareCommand
     protected ?string $format = null;
 
     protected string $filePath;
-
-    protected int $sessionId;
 
     private ProfileFactory $profileFactory;
 
@@ -64,8 +61,8 @@ class ImportCommand extends ShopwareCommand
         $this->setName('sw:importexport:import')
             ->setDescription('Import data from files.')
             ->addArgument('filepath', InputArgument::REQUIRED, 'Path to file to read from.')
-            ->addOption('profile', 'p', InputOption::VALUE_REQUIRED, 'Which profile will be used?', null)
-            ->addOption('format', 'f', InputOption::VALUE_REQUIRED, 'What is the format of the imported file - XML or CSV?', null)
+            ->addOption('profile', 'p', InputOption::VALUE_REQUIRED, 'Which profile will be used?')
+            ->addOption('format', 'f', InputOption::VALUE_REQUIRED, 'What is the format of the imported file - XML or CSV?')
             ->setHelp('The <info>%command.name%</info> imports data from a file.');
     }
 

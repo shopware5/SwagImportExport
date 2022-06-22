@@ -28,13 +28,6 @@ class DataWorkflow
      */
     protected object $fileIO;
 
-    protected Session $dataSession;
-
-    /**
-     * @var
-     */
-    protected $dbAdapter;
-
     /**
      * @param FileWriter|FileReader $fileIO
      */
@@ -112,7 +105,7 @@ class DataWorkflow
         $postData['position'] = $this->dataIO->getSessionPosition();
 
         if (!$postData['sessionId']) {
-            $postData['sessionId'] = $this->dataIO->getDataSession()->getId();
+            $postData['sessionId'] = $this->dataIO->getDataSession()->getEntity()->getId();
         }
 
         if (!$postData['fileName']) {
@@ -178,7 +171,7 @@ class DataWorkflow
         $postData['position'] = $this->dataIO->getSessionPosition();
 
         if (!$postData['sessionId']) {
-            $postData['sessionId'] = $this->dataIO->getDataSession()->getId();
+            $postData['sessionId'] = $this->dataIO->getDataSession()->getEntity()->getId();
         }
 
         return $postData;

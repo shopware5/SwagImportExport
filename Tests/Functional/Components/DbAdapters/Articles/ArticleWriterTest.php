@@ -216,13 +216,13 @@ class ArticleWriterTest extends TestCase
     {
         $connection = $this->modelManager->getConnection();
 
-        return (bool) $connection->executeQuery('SELECT active FROM s_articles WHERE id = ?', [$articleId])->fetchColumn();
+        return (bool) $connection->executeQuery('SELECT active FROM s_articles WHERE id = ?', [$articleId])->fetchOne();
     }
 
     protected function getArticleDetailActiveFlag(int $detailId): bool
     {
         $connection = $this->modelManager->getConnection();
 
-        return (bool) $connection->executeQuery('SELECT active FROM s_articles_details WHERE id = ?', [$detailId])->fetchColumn();
+        return (bool) $connection->executeQuery('SELECT active FROM s_articles_details WHERE id = ?', [$detailId])->fetchOne();
     }
 }

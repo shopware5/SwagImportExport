@@ -137,9 +137,8 @@ class ArticlesImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
         }
 
         $records = $builder->getQuery()->getResult();
-        $result = \array_column($records, 'id');
 
-        return $result;
+        return \array_column($records, 'id');
     }
 
     /**
@@ -215,9 +214,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
             ' \'1\' as thumbnail',
         ];
 
-        $columns = \array_merge($columns, $this->getAttributesColumns());
-
-        return $columns;
+        return \array_merge($columns, $this->getAttributesColumns());
     }
 
     public function getUnprocessedData(): array
@@ -296,7 +293,6 @@ class ArticlesImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
                     }
                 }
 
-                /** @var Article $article */
                 $article = $articleDetailModel->getArticle();
 
                 $name = \pathinfo($record['image'], \PATHINFO_FILENAME);
@@ -474,13 +470,11 @@ class ArticlesImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
             }
         }
 
-        $attributesSelect = $this->eventManager->filter(
+        return $this->eventManager->filter(
             'Shopware_Components_SwagImportExport_DbAdapters_ArticlesImagesDbAdapter_GetArticleImagesAttributes',
             $attributesSelect,
             ['subject' => $this]
         );
-
-        return $attributesSelect;
     }
 
     /**
@@ -611,7 +605,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
         if (!$put_handle) {
             $message = SnippetsHelper::getNamespace()
                 ->get('adapters/articlesImages/could_open_dir_file', 'Could not open %s/%s for writing');
-            throw new AdapterException(\sprintf($message), $destPath, $filename);
+            throw new AdapterException($message, $destPath, $filename);
         }
 
         // replace empty spaces

@@ -13,8 +13,6 @@ use Shopware\Components\Migrations\AbstractPluginMigration;
 
 class Migration4 extends AbstractPluginMigration
 {
-    public const CURRENT_MENU_ITEM_CLASS = 'sprite-arrow-circle-double-135 contents--import-export';
-
     public function up($modus): void
     {
         if ($modus === AbstractPluginMigration::MODUS_UPDATE) {

@@ -25,7 +25,6 @@ class ProfileRepository extends ModelRepository
      */
     public function getProfilesListQuery(array $filterBy = [], array $orderBy = [], ?int $limit = null, ?int $offset = null): QueryBuilder
     {
-        /** @var QueryBuilder $builder */
         $builder = $this->createQueryBuilder('p');
         $builder->select(
             [

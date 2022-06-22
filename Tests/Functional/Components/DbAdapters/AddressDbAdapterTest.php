@@ -182,7 +182,7 @@ class AddressDbAdapterTest extends TestCase
         $connection = $this->getContainer()->get('dbal_connection');
         $demoSQL = \file_get_contents(__DIR__ . '/_fixtures/address_demo.sql');
         static::assertIsString($demoSQL);
-        $connection->executeUpdate($demoSQL);
+        $connection->executeStatement($demoSQL);
 
         $updatedAddressId = $connection->lastInsertId();
 
@@ -286,7 +286,7 @@ class AddressDbAdapterTest extends TestCase
         $addressDbAdapter->write($addresses);
 
         $connection = $this->getContainer()->get('dbal_connection');
-        $addressId = $connection->executeQuery("SELECT id FROM s_user_addresses WHERE firstname='My firstname'")->fetchColumn();
+        $addressId = $connection->executeQuery("SELECT id FROM s_user_addresses WHERE firstname='My firstname'")->fetchOne();
         $createdAttribute = $connection->executeQuery("SELECT * FROM s_user_addresses_attributes WHERE address_id={$addressId}")->fetchAll();
 
         static::assertEquals('text1', $createdAttribute[0]['text1']);
@@ -315,7 +315,7 @@ class AddressDbAdapterTest extends TestCase
         $addressDbAdapter->write($addresses);
 
         $connection = $this->getContainer()->get('dbal_connection');
-        $addressId = $connection->executeQuery("SELECT id FROM s_user_addresses WHERE firstname='My firstname'")->fetchColumn();
+        $addressId = $connection->executeQuery("SELECT id FROM s_user_addresses WHERE firstname='My firstname'")->fetchOne();
 
         static::assertEquals(99999, $addressId);
     }

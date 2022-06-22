@@ -88,6 +88,7 @@ class CsvConverter
     public function decode(string $csv, array $keys = []): array
     {
         $csv = \file_get_contents($csv);
+        $array = [];
 
         if (\is_bool($csv)) {
             throw new \Exception('File could not be found');

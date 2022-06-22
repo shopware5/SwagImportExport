@@ -90,23 +90,20 @@ abstract class AbstractImportExportService
         $colOpts = $this->dataFactory->createColOpts($requestData['columnOptions']);
         $limit = $this->dataFactory->createLimit($requestData['limit']);
         $filter = $this->dataFactory->createFilter($requestData['filter']);
-        $maxRecordCount = (int) ($requestData['max_record_count'] ?? 0);
         $type = $requestData['type'];
         $format = $requestData['format'];
         $username = $this->auth->getIdentity()->username;
 
-        $dataIO->initialize($colOpts, $limit, $filter, $type, $format, $maxRecordCount);
+        $dataIO->initialize($colOpts, $limit, $filter, $type, $format);
         $dataIO->setUsername($username);
     }
 
     protected function createDataTransformerChain(Profile $profile, bool $hasTreeStructure): DataTransformerChain
     {
-        $dataTransformerChain = $this->dataTransformerFactory->createDataTransformerChain(
+        return $this->dataTransformerFactory->createDataTransformerChain(
             $profile,
             ['isTree' => $hasTreeStructure]
         );
-
-        return $dataTransformerChain;
     }
 
     protected function logProcessing(string $writeStatus, string $filename, string $profileName, string $logMessage, string $status, Session $session): void

@@ -42,8 +42,6 @@ class ExportCommand extends ShopwareCommand
 
     protected ?string $category = null;
 
-    protected int $sessionId;
-
     protected ?int $customerStream = null;
 
     private ?int $productStream = null;
@@ -181,7 +179,7 @@ class ExportCommand extends ShopwareCommand
 
         if (!empty($this->dateFrom) && !empty($this->dateTo)) {
             if ($this->dateFrom > $this->dateTo) {
-                throw new \RuntimeException(\sprintf('from date must be greater than to date'));
+                throw new \RuntimeException('from date must be greater than to date');
             }
         }
 

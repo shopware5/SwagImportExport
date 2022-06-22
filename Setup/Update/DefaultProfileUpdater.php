@@ -11,7 +11,6 @@ namespace SwagImportExport\Setup\Update;
 
 use Doctrine\DBAL\Connection;
 use SwagImportExport\Setup\DefaultProfiles\ProfileHelper;
-use SwagImportExport\Setup\DefaultProfiles\ProfileMetaData;
 
 class DefaultProfileUpdater
 {
@@ -37,7 +36,6 @@ class DefaultProfileUpdater
             WHERE `name` = :name AND is_default = 1
         ';
 
-        /** @var ProfileMetaData[] $profiles */
         $profiles = ProfileHelper::getProfileInstances();
 
         foreach ($profiles as $profile) {

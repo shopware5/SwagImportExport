@@ -116,14 +116,12 @@ class TranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
 
         $records = $builder->getQuery()->getResult();
 
-        $result = \array_map(
+        return \array_map(
             function ($item) {
                 return $item['id'];
             },
             $records
         );
-
-        return $result;
     }
 
     /**
@@ -273,7 +271,7 @@ class TranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
                 if (!$element) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/translations/element_objectKey_baseName_not_found', 'Please provide objectKey or baseName');
-                    throw new AdapterException(\sprintf($message));
+                    throw new AdapterException($message);
                 }
 
                 $key = $importMapper[$record['objectType']];

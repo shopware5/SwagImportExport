@@ -25,7 +25,6 @@ class LoggerRepository extends ModelRepository
      */
     public function getLogListQuery(array $filterBy = [], array $orderBy = [], ?int $limit = null, ?int $offset = null): QueryBuilder
     {
-        /** @var QueryBuilder $builder */
         $builder = $this->createQueryBuilder('l');
 
         $builder->select(

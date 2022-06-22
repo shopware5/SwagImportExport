@@ -116,6 +116,6 @@ class DbAdapterTestHelper extends ImportExportTestHelper
             ->select('COUNT(id)')
             ->from($tableName)
             ->execute()
-            ->fetch(\PDO::FETCH_COLUMN);
+            ->fetchOne();
     }
 }

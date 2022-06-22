@@ -22,11 +22,6 @@ class XmlConverterTest extends TestCase
         $this->xmlConverter = new XmlConverter();
     }
 
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-    }
-
     public function testEncodeWithEmptyInputArray(): void
     {
         $emptyArray = [];

@@ -186,7 +186,7 @@ class OrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
                 $this->validator->validate($record, OrderValidator::$mapper);
 
                 if (isset($record['orderDetailId']) && $record['orderDetailId']) {
-                    /** @var \Shopware\Models\Order\Detail $orderDetailModel */
+                    /** @var Detail $orderDetailModel */
                     $orderDetailModel = $orderRepository->find($record['orderDetailId']);
                 } else {
                     $orderDetailModel = $orderRepository->findOneBy(['number' => $record['number']]);
@@ -496,9 +496,7 @@ class OrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
             $columns = \array_merge($columns, $attributesSelect);
         }
 
-        $columns = $this->eventManager->filter(self::OrderDBAdapterColumnsEvent, $columns);
-
-        return $columns;
+        return $this->eventManager->filter(self::OrderDBAdapterColumnsEvent, $columns);
     }
 
     /**

@@ -88,7 +88,6 @@ class PropertyWriter
 
                 $optionRelationInsertStatements[] = "($optionId, $filterGroupId)";
                 $valueRelationInsertStatements[] = "($valueId, $articleId)";
-                continue;
             }
         }
 
@@ -132,7 +131,7 @@ class PropertyWriter
             ON DUPLICATE KEY UPDATE groupID=VALUES(groupID), optionID=VALUES(optionID)
         ";
 
-        $this->connection->exec($sql);
+        $this->connection->executeStatement($sql);
     }
 
     /**
@@ -150,7 +149,7 @@ class PropertyWriter
             ON DUPLICATE KEY UPDATE articleID=VALUES(articleID), valueID=VALUES(valueID)
         ";
 
-        $this->connection->exec($sql);
+        $this->connection->executeStatement($sql);
     }
 
     /**
@@ -172,14 +171,6 @@ class PropertyWriter
     private function getFilterGroupIdByNameFromCacheProperty(string $name): ?int
     {
         return ((int) $this->getFilterGroups()[$name]) ?? null;
-    }
-
-    /**
-     * @return array<string, string>
-     */
-    private function getOptions(): array
-    {
-        return $this->db->fetchPairs('SELECT `name`, `id` FROM s_filter_options');
     }
 
     /**

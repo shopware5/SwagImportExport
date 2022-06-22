@@ -205,7 +205,7 @@ class RelationWriter
     private function deleteAllRelations($articleId): void
     {
         $delete = "DELETE FROM {$this->table} WHERE articleID = {$articleId}";
-        $this->connection->exec($delete);
+        $this->connection->executeStatement($delete);
     }
 
     /**
@@ -226,7 +226,7 @@ class RelationWriter
         );
 
         $delete = "DELETE FROM {$this->table} WHERE articleID = {$articleId} AND relatedarticle NOT IN ({$relatedIds})";
-        $this->connection->exec($delete);
+        $this->connection->executeStatement($delete);
     }
 
     /**
@@ -247,6 +247,6 @@ class RelationWriter
         );
 
         $insert = "INSERT INTO {$this->table} (articleID, relatedarticle) VALUES {$values}";
-        $this->connection->exec($insert);
+        $this->connection->executeStatement($insert);
     }
 }

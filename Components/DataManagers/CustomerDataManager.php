@@ -133,9 +133,7 @@ class CustomerDataManager extends DataManager implements \Enlight_Hook
             }
         }
 
-        $record = $this->fixDefaultValues($record);
-
-        return $record;
+        return $this->fixDefaultValues($record);
     }
 
     /**
@@ -148,9 +146,8 @@ class CustomerDataManager extends DataManager implements \Enlight_Hook
     public function fixDefaultValues(array $records): array
     {
         $defaultFieldsValues = CustomerDataType::$defaultFieldsValues;
-        $records = $this->fixFieldsValues($records, $defaultFieldsValues);
 
-        return $records;
+        return $this->fixFieldsValues($records, $defaultFieldsValues);
     }
 
     /**

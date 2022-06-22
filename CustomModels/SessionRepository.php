@@ -25,7 +25,6 @@ class SessionRepository extends ModelRepository
      */
     public function getSessionsListQuery(array $filterBy = [], array $orderBy = [], ?int $limit = null, ?int $offset = null): QueryBuilder
     {
-        /** @var QueryBuilder $builder */
         $builder = $this->createQueryBuilder('s');
 
         $builder->select(

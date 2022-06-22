@@ -106,7 +106,7 @@ class DbalHelperTest extends TestCase
         $classMetaData = new ClassMetadata('ExampleEntity', null);
 
         $classMetaData->table = [
-            'name' => 'example_table',
+            'name' => self::EXAMPLE_TABLE,
         ];
 
         $classMetaData->fieldMappings = [

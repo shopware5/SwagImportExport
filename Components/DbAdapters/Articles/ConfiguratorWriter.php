@@ -159,7 +159,7 @@ class ConfiguratorWriter
                 FROM s_article_configurator_groups
                 WHERE `name` = ?';
 
-        $id = $this->connection->fetchColumn($sql, [$name]);
+        $id = $this->connection->fetchOne($sql, [$name]);
 
         if (\is_bool($id)) {
             return null;
@@ -203,7 +203,7 @@ class ConfiguratorWriter
                 VALUES ($setId, $groupId)
                 ON DUPLICATE KEY UPDATE set_id=VALUES(set_id), group_id=VALUES(group_id)";
 
-        $this->connection->exec($sql);
+        $this->connection->executeStatement($sql);
     }
 
     /**
@@ -215,7 +215,7 @@ class ConfiguratorWriter
                 VALUES ($articleDetailId, $optionId)
                 ON DUPLICATE KEY UPDATE article_id=VALUES(article_id), option_id=VALUES(option_id)";
 
-        $this->connection->exec($sql);
+        $this->connection->executeStatement($sql);
     }
 
     /**
@@ -227,7 +227,7 @@ class ConfiguratorWriter
                 VALUES ($setId, $optionId)
                 ON DUPLICATE KEY UPDATE set_id=VALUES(set_id), option_id=VALUES(option_id)";
 
-        $this->connection->exec($sql);
+        $this->connection->executeStatement($sql);
     }
 
     /**
@@ -327,9 +327,9 @@ class ConfiguratorWriter
     private function checkExistence(string $table, int $id): bool
     {
         $sql = "SELECT `id` FROM $table WHERE id = ?";
-        $result = $this->connection->fetchColumn($sql, [$id]);
+        $result = $this->connection->fetchOne($sql, [$id]);
 
-        return $result ? true : false;
+        return (bool) $result;
     }
 
     /**
@@ -354,7 +354,6 @@ class ConfiguratorWriter
                 ];
 
                 $groupId = $this->createGroup($groupData);
-                $this->groups[$groupData['name']] = $groupId;
             }
         }
 

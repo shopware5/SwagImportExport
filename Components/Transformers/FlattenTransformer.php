@@ -79,13 +79,11 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
             $flatData[] = $this->getTempData();
         }
 
-        $flatData = Shopware()->Events()->filter(
+        return Shopware()->Events()->filter(
             'Shopware_Components_SwagImportExport_Transformers_FlattenTransformer_TransformForward',
             $flatData,
             ['subject' => $this]
         );
-
-        return $flatData;
     }
 
     /**
@@ -230,10 +228,9 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      *
      * @throws \Exception
      */
-    public function transformToTree(array $node, array $data, ?string $nodePath = null, int $iteration = 0)
+    public function transformToTree(array $node, array $data, ?string $nodePath = null)
     {
         if (isset($this->iterationParts[$nodePath])) { // iteration
-            ++$iteration;
             if ($node['adapter'] == 'price') {
                 // find name of column with *price* values
                 $priceColumnName = $this->findNodeByShopwareField($node, 'price');
@@ -249,7 +246,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
 
                 // find groups
                 $priceColumns = \preg_grep('/^' . $priceColumnName . '_+(.*)/i', $dataColumns);
-                foreach ($priceColumns as &$columns) {
+                foreach ($priceColumns as $columns) {
                     \preg_match('/' . $priceColumnName . '_+(?P<group>.*)$/i', $columns, $matches);
                     $groups[] = $matches['group'];
                 }
@@ -371,10 +368,9 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                 }
 
                 foreach ($mapper as $key => $value) {
-                    if ($mapper[$key] === 'propertyGroupName') {
+                    if ($value === 'propertyGroupName') {
                         $propertyGroupName = $this->getDataValue($data, $key);
-                    } elseif ($mapper[$key] === 'propertyGroupId') {
-                        $propertyGroupId = $this->getDataValue($data, $key);
+                    } elseif ($value === 'propertyGroupId') {
                     } else {
                         $collectedData[$key] = \explode('|', $this->getDataValue($data, $key));
                     }
@@ -1267,7 +1263,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
     }
 
     /**
-     * @return \Shopware\Models\Customer\Group[]
+     * @return Group[]
      */
     public function getCustomerGroups(): array
     {
@@ -1275,7 +1271,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
     }
 
     /**
-     * @return \Shopware\Models\Shop\Shop[]
+     * @return Shop[]
      */
     public function getShops(): array
     {
