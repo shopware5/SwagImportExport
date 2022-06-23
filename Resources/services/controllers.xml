@@ -1,0 +1,53 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+<services>
+    <service id="SwagImportExport\Controllers\Backend\Shopware_Controllers_Backend_SwagImportExport">
+        <argument type="service" id="swag_import_export.upload_path_provider"/>
+
+        <tag name="shopware.controller" module="backend" controller="SwagImportExport"/>
+    </service>
+
+    <service id="SwagImportExport\Controllers\Backend\Shopware_Controllers_Backend_SwagImportExportConversion">
+        <tag name="shopware.controller" module="backend" controller="SwagImportExportConversion"/>
+    </service>
+
+    <service id="SwagImportExport\Controllers\Backend\Shopware_Controllers_Backend_SwagImportExportCron">
+        <tag name="shopware.controller" module="backend" controller="SwagImportExportCron"/>
+    </service>
+
+    <service id="SwagImportExport\Controllers\Backend\Shopware_Controllers_Backend_SwagImportExportExport">
+        <argument type="service" id="SwagImportExport\Components\Service\ExportService"/>
+
+        <tag name="shopware.controller" module="backend" controller="SwagImportExportExport"/>
+    </service>
+
+    <service id="SwagImportExport\Controllers\Backend\Shopware_Controllers_Backend_SwagImportExportImport">
+        <argument type="service" id="SwagImportExport\Components\UploadPathProvider"/>
+        <argument type="service" id="SwagImportExport\Components\Service\ImportService"/>
+
+        <tag name="shopware.controller" module="backend" controller="SwagImportExportImport"/>
+    </service>
+
+    <service id="SwagImportExport\Controllers\Backend\Shopware_Controllers_Backend_SwagImportExportProfile">
+        <argument type="service" id="snippets"/>
+        <argument type="service" id="SwagImportExport\Components\Factories\DataFactory"/>
+        <argument type="service" id="SwagImportExport\Components\Factories\ProfileFactory"/>
+        <argument type="service" id="SwagImportExport\Components\Service\ProfileService"/>
+
+        <tag name="shopware.controller" module="backend" controller="SwagImportExportProfile"/>
+    </service>
+
+    <service id="SwagImportExport\Controllers\Backend\Shopware_Controllers_Backend_SwagImportExportSession">
+        <argument type="service" id="snippets"/>
+
+        <tag name="shopware.controller" module="backend" controller="SwagImportExportSession"/>
+    </service>
+
+    <service id="SwagImportExport\Controllers\Frontend\Shopware_Controllers_Frontend_SwagImportExport">
+        <tag name="shopware.controller" module="frontend" controller="SwagImportExport"/>
+    </service>
+</services>
+</container>

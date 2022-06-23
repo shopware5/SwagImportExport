@@ -7,12 +7,14 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
+namespace SwagImportExport\Controllers\Frontend;
+
 use Shopware\Components\Model\ModelManager;
 
 /**
  * Shopware ImportExport Plugin
  */
-class Shopware_Controllers_Frontend_SwagImportExport extends Enlight_Controller_Action
+class Shopware_Controllers_Frontend_SwagImportExport extends \Enlight_Controller_Action
 {
     protected ModelManager $manager;
 

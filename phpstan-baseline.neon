@@ -1668,72 +1668,72 @@ parameters:
 		-
 			message: "#^Cannot call method getId\\(\\) on SwagImportExport\\\\CustomModels\\\\Profile\\|null\\.$#"
 			count: 1
-			path: Controllers/Backend/SwagImportExportConversion.php
+			path: Controllers/Backend/Shopware_Controllers_Backend_SwagImportExportConversion.php
 
 		-
 			message: "#^Call to an undefined method Enlight_Plugin_Bootstrap\\:\\:getId\\(\\)\\.$#"
 			count: 1
-			path: Controllers/Backend/SwagImportExportCron.php
+			path: Controllers/Backend/Shopware_Controllers_Backend_SwagImportExportCron.php
 
 		-
 			message: "#^Left side of && is always true\\.$#"
 			count: 1
-			path: Controllers/Backend/SwagImportExportCron.php
+			path: Controllers/Backend/Shopware_Controllers_Backend_SwagImportExportCron.php
 
 		-
 			message: "#^Negated boolean expression is always false\\.$#"
 			count: 1
-			path: Controllers/Backend/SwagImportExportCron.php
+			path: Controllers/Backend/Shopware_Controllers_Backend_SwagImportExportCron.php
 
 		-
 			message: "#^Call to an undefined method object\\:\\:getDefaultFields\\(\\)\\.$#"
 			count: 2
-			path: Controllers/Backend/SwagImportExportProfile.php
+			path: Controllers/Backend/Shopware_Controllers_Backend_SwagImportExportProfile.php
 
 		-
 			message: "#^Call to an undefined method object\\:\\:getDefaultFieldsName\\(\\)\\.$#"
 			count: 1
-			path: Controllers/Backend/SwagImportExportProfile.php
+			path: Controllers/Backend/Shopware_Controllers_Backend_SwagImportExportProfile.php
 
 		-
 			message: "#^Call to an undefined method object\\:\\:getFieldType\\(\\)\\.$#"
 			count: 1
-			path: Controllers/Backend/SwagImportExportProfile.php
+			path: Controllers/Backend/Shopware_Controllers_Backend_SwagImportExportProfile.php
 
 		-
 			message: "#^Cannot call method getTree\\(\\) on SwagImportExport\\\\CustomModels\\\\Profile\\|null\\.$#"
 			count: 4
-			path: Controllers/Backend/SwagImportExportProfile.php
+			path: Controllers/Backend/Shopware_Controllers_Backend_SwagImportExportProfile.php
 
 		-
 			message: "#^Cannot call method getType\\(\\) on SwagImportExport\\\\CustomModels\\\\Profile\\|null\\.$#"
 			count: 1
-			path: Controllers/Backend/SwagImportExportProfile.php
+			path: Controllers/Backend/Shopware_Controllers_Backend_SwagImportExportProfile.php
 
 		-
 			message: "#^Cannot call method setTree\\(\\) on SwagImportExport\\\\CustomModels\\\\Profile\\|null\\.$#"
 			count: 3
-			path: Controllers/Backend/SwagImportExportProfile.php
+			path: Controllers/Backend/Shopware_Controllers_Backend_SwagImportExportProfile.php
 
 		-
 			message: "#^If condition is always true\\.$#"
 			count: 2
-			path: Controllers/Backend/SwagImportExportProfile.php
+			path: Controllers/Backend/Shopware_Controllers_Backend_SwagImportExportProfile.php
 
 		-
 			message: "#^Parameter \\#1 \\$entity of method Doctrine\\\\ORM\\\\EntityManager\\:\\:persist\\(\\) expects object, SwagImportExport\\\\CustomModels\\\\Profile\\|null given\\.$#"
 			count: 3
-			path: Controllers/Backend/SwagImportExportProfile.php
+			path: Controllers/Backend/Shopware_Controllers_Backend_SwagImportExportProfile.php
 
 		-
 			message: "#^Parameter \\#1 \\$entity of method Doctrine\\\\ORM\\\\EntityManager\\:\\:remove\\(\\) expects object, SwagImportExport\\\\CustomModels\\\\Profile\\|null given\\.$#"
 			count: 1
-			path: Controllers/Backend/SwagImportExportProfile.php
+			path: Controllers/Backend/Shopware_Controllers_Backend_SwagImportExportProfile.php
 
 		-
 			message: "#^Parameter \\#1 \\$bytes of static method SwagImportExport\\\\Components\\\\Utils\\\\DataHelper\\:\\:formatFileSize\\(\\) expects int, int\\|null given\\.$#"
 			count: 1
-			path: Controllers/Backend/SwagImportExportSession.php
+			path: Controllers/Backend/Shopware_Controllers_Backend_SwagImportExportSession.php
 
 		-
 			message: "#^Call to an undefined method Doctrine\\\\ORM\\\\QueryBuilder\\:\\:addFilter\\(\\)\\.$#"

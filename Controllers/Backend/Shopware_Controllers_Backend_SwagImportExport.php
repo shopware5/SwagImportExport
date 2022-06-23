@@ -7,6 +7,8 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
+namespace SwagImportExport\Controllers\Backend;
+
 use Shopware\Components\CSRFWhitelistAware;
 use SwagImportExport\Components\UploadPathProvider;
 use SwagImportExport\CustomModels\Logger;
@@ -17,8 +19,15 @@ use Symfony\Component\HttpFoundation\FileBag;
 /**
  * Shopware ImportExport Plugin
  */
-class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
+class Shopware_Controllers_Backend_SwagImportExport extends \Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
+    private UploadPathProvider $uploadPathProvider;
+
+    public function __construct(UploadPathProvider $uploadPathProvider)
+    {
+        $this->uploadPathProvider = $uploadPathProvider;
+    }
+
     /**
      * Returns a list with actions which should not be validated for CSRF protection
      *
@@ -33,21 +42,19 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
     public function uploadFileAction(): void
     {
-        /** @var UploadPathProvider $uploadPathProvider */
-        $uploadPathProvider = $this->get('swag_import_export.upload_path_provider');
         $fileBag = new FileBag($_FILES);
 
         $clientOriginalName = '';
         /** @var UploadedFile $file */
         foreach ($fileBag->getIterator() as $file) {
             $clientOriginalName = $file->getClientOriginalName();
-            $file->move($uploadPathProvider->getPath(), $clientOriginalName);
+            $file->move($this->uploadPathProvider->getPath(), $clientOriginalName);
         }
 
         $this->view->assign([
             'success' => true,
             'data' => [
-                'path' => $uploadPathProvider->getRealPath($clientOriginalName),
+                'path' => $this->uploadPathProvider->getRealPath($clientOriginalName),
                 'fileName' => $clientOriginalName,
             ],
         ]);
@@ -60,9 +67,6 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
      */
     public function downloadFileAction(): void
     {
-        /** @var UploadPathProvider $uploadPathProvider */
-        $uploadPathProvider = $this->get('swag_import_export.upload_path_provider');
-
         try {
             $fileName = $this->Request()->getParam('fileName');
 
@@ -70,9 +74,9 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
                 throw new \Exception('File name must be provided');
             }
 
-            $filePath = $uploadPathProvider->getRealPath($fileName);
+            $filePath = $this->uploadPathProvider->getRealPath($fileName);
 
-            $extension = $uploadPathProvider->getFileExtension($fileName);
+            $extension = $this->uploadPathProvider->getFileExtension($fileName);
             switch ($extension) {
                 case 'csv':
                     $application = 'text/csv';

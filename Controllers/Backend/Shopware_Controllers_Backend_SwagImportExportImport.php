@@ -7,6 +7,8 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
+namespace SwagImportExport\Controllers\Backend;
+
 use SwagImportExport\Components\Service\ImportService;
 use SwagImportExport\Components\Service\Struct\PreparationResultStruct;
 use SwagImportExport\Components\UploadPathProvider;
@@ -16,8 +18,20 @@ use SwagImportExport\Components\UploadPathProvider;
  *
  * Import controller to handle all imports.
  */
-class Shopware_Controllers_Backend_SwagImportExportImport extends Shopware_Controllers_Backend_ExtJs
+class Shopware_Controllers_Backend_SwagImportExportImport extends \Shopware_Controllers_Backend_ExtJs
 {
+    private UploadPathProvider $uploadPathProvider;
+
+    private ImportService $importService;
+
+    public function __construct(
+        UploadPathProvider $uploadPathProvider,
+        ImportService $importService
+    ) {
+        $this->uploadPathProvider = $uploadPathProvider;
+        $this->importService = $importService;
+    }
+
     public function initAcl(): void
     {
         $this->addAclPermission('prepareImport', 'import', 'Insuficient Permissions (prepareImport)');
@@ -26,15 +40,13 @@ class Shopware_Controllers_Backend_SwagImportExportImport extends Shopware_Contr
 
     public function prepareImportAction(): void
     {
-        /** @var UploadPathProvider $uploadPathProvider */
-        $uploadPathProvider = $this->get('swag_import_export.upload_path_provider');
         $request = $this->Request();
 
         $postData = [
             'sessionId' => $request->getParam('sessionId'),
             'profileId' => (int) $request->getParam('profileId'),
             'type' => 'import',
-            'file' => $uploadPathProvider->getRealPath($request->getParam('importFile')),
+            'file' => $this->uploadPathProvider->getRealPath($request->getParam('importFile')),
         ];
 
         if (empty($postData['file'])) {
@@ -44,8 +56,8 @@ class Shopware_Controllers_Backend_SwagImportExportImport extends Shopware_Contr
         }
 
         // get file format
-        $inputFileName = $uploadPathProvider->getFileNameFromPath($postData['file']);
-        $extension = $uploadPathProvider->getFileExtension($postData['file']);
+        $inputFileName = $this->uploadPathProvider->getFileNameFromPath($postData['file']);
+        $extension = $this->uploadPathProvider->getFileExtension($postData['file']);
 
         if (!$this->isFormatValid($extension)) {
             $this->View()->assign(['success' => false, 'msg' => 'No valid file format']);
@@ -55,11 +67,9 @@ class Shopware_Controllers_Backend_SwagImportExportImport extends Shopware_Contr
 
         $postData['format'] = $extension;
 
-        $importService = $this->get('swag_import_export.import_service');
-
         try {
             /** @var PreparationResultStruct $resultStruct */
-            $resultStruct = $importService->prepareImport($postData, $inputFileName);
+            $resultStruct = $this->importService->prepareImport($postData, $inputFileName);
         } catch (\Exception $e) {
             $this->View()->assign(['success' => false, 'msg' => $e->getMessage()]);
 
@@ -75,10 +85,8 @@ class Shopware_Controllers_Backend_SwagImportExportImport extends Shopware_Contr
 
     public function importAction(): void
     {
-        /** @var UploadPathProvider $uploadPathProvider */
-        $uploadPathProvider = $this->get('swag_import_export.upload_path_provider');
         $request = $this->Request();
-        $inputFile = $uploadPathProvider->getRealPath($request->getParam('importFile'));
+        $inputFile = $this->uploadPathProvider->getRealPath($request->getParam('importFile'));
 
         $unprocessedFiles = [];
         $postData = [
@@ -94,11 +102,8 @@ class Shopware_Controllers_Backend_SwagImportExportImport extends Shopware_Contr
             $unprocessedFiles = \json_decode($request->getParam('unprocessedFiles'), true);
         }
 
-        /** @var ImportService $importService */
-        $importService = $this->get('swag_import_export.import_service');
-
         try {
-            $resultData = $importService->import($postData, $unprocessedFiles, $inputFile);
+            $resultData = $this->importService->import($postData, $unprocessedFiles, $inputFile);
             $this->View()->assign([
                 'success' => true,
                 'data' => $resultData,

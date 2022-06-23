@@ -15,17 +15,27 @@ class ControllerSubscriber implements SubscriberInterface
 {
     private string $pluginDirectory;
 
+    private \Enlight_Template_Manager $template;
+
     public function __construct(
-        string $pluginDirectory
+        string $pluginDirectory,
+        \Enlight_Template_Manager $template
     ) {
         $this->pluginDirectory = $pluginDirectory;
+        $this->template = $template;
     }
 
     public static function getSubscribedEvents(): array
     {
         return [
             'Enlight_Controller_Action_PostDispatch_Backend_Index' => 'injectBackendAceEditor',
+            'Enlight_Controller_Action_PreDispatch' => 'loadViews',
         ];
+    }
+
+    public function loadViews(): void
+    {
+        $this->template->addTemplateDir($this->pluginDirectory . '/Resources/views/');
     }
 
     /**

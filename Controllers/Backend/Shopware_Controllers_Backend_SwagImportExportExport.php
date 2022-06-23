@@ -7,6 +7,8 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
+namespace SwagImportExport\Controllers\Backend;
+
 use SwagImportExport\Components\Service\ExportService;
 
 /**
@@ -14,8 +16,16 @@ use SwagImportExport\Components\Service\ExportService;
  *
  * Export Controller to handle all exports
  */
-class Shopware_Controllers_Backend_SwagImportExportExport extends Shopware_Controllers_Backend_ExtJs
+class Shopware_Controllers_Backend_SwagImportExportExport extends \Shopware_Controllers_Backend_ExtJs
 {
+    private ExportService $exportService;
+
+    public function __construct(
+        ExportService $exportService
+    ) {
+        $this->exportService = $exportService;
+    }
+
     public function initAcl(): void
     {
         $this->addAclPermission('prepareExport', 'export', 'Insufficient Permissions (prepareExport)');
@@ -46,11 +56,8 @@ class Shopware_Controllers_Backend_SwagImportExportExport extends Shopware_Contr
             ],
         ];
 
-        /** @var ExportService $exportService */
-        $exportService = $this->get('swag_import_export.export_service');
-
         try {
-            $resultStruct = $exportService->prepareExport($postData, $this->Request()->getParams());
+            $resultStruct = $this->exportService->prepareExport($postData, $this->Request()->getParams());
         } catch (\Exception $e) {
             $this->View()->assign(['success' => false, 'msg' => $e->getMessage()]);
 
@@ -95,11 +102,8 @@ class Shopware_Controllers_Backend_SwagImportExportExport extends Shopware_Contr
             ],
         ];
 
-        /** @var ExportService $exportService */
-        $exportService = $this->get('swag_import_export.export_service');
-
         try {
-            $resultData = $exportService->export($postData, $this->Request()->getParams());
+            $resultData = $this->exportService->export($postData, $this->Request()->getParams());
             $this->View()->assign(['success' => true, 'data' => $resultData]);
         } catch (\Exception $e) {
             $this->View()->assign(['success' => false, 'msg' => $e->getMessage()]);

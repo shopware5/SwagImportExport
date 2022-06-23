@@ -10,6 +10,7 @@
         <import resource="services/factories.xml"/>
         <import resource="services/article_writer.xml"/>
         <import resource="services/db_adapters.xml"/>
+        <import resource="services/controllers.xml"/>
     </imports>
     <services>
         <service id="SwagImportExport\Components\Utils\FileHelper"/>
@@ -22,17 +23,7 @@
 
         <service id="SwagImportExport\Subscribers\ControllerSubscriber">
             <argument>%swag_import_export.plugin_dir%</argument>
-            <tag name="shopware.event_subscriber"/>
-        </service>
-
-        <service id="SwagImportExport\Subscribers\ControllerRegistration\BackendControllerSubscriber">
-            <argument>%swag_import_export.plugin_dir%</argument>
             <argument type="service" id="template"/>
-            <tag name="shopware.event_subscriber"/>
-        </service>
-
-        <service id="SwagImportExport\Subscribers\ControllerRegistration\FrontendControllerSubscriber">
-            <argument>%swag_import_export.plugin_dir%</argument>
             <tag name="shopware.event_subscriber"/>
         </service>
 

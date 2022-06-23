@@ -7,6 +7,8 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
+namespace SwagImportExport\Controllers\Backend;
+
 use SwagImportExport\CustomModels\Expression;
 use SwagImportExport\CustomModels\ExpressionRepository;
 use SwagImportExport\CustomModels\Profile;
@@ -14,7 +16,7 @@ use SwagImportExport\CustomModels\Profile;
 /**
  * Shopware ImportExport Plugin
  */
-class Shopware_Controllers_Backend_SwagImportExportConversion extends Shopware_Controllers_Backend_ExtJs
+class Shopware_Controllers_Backend_SwagImportExportConversion extends \Shopware_Controllers_Backend_ExtJs
 {
     public function initAcl(): void
     {

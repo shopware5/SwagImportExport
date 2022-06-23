@@ -7,28 +7,44 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
+namespace SwagImportExport\Controllers\Backend;
+
 use Doctrine\DBAL\DBALException;
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\Snippet\DbAdapter;
 use SwagImportExport\Components\Factories\DataFactory;
 use SwagImportExport\Components\Factories\ProfileFactory;
-use SwagImportExport\Components\Service\ProfileService;
+use SwagImportExport\Components\Service\ProfileServiceInterface;
 use SwagImportExport\Components\Utils\TreeHelper;
 use SwagImportExport\CustomModels\Profile;
 use SwagImportExport\CustomModels\ProfileRepository;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\Request;
 
-class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
+class Shopware_Controllers_Backend_SwagImportExportProfile extends \Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
     private DataFactory $dataFactory;
 
     private ProfileFactory $profileFactory;
 
+    private \Shopware_Components_Snippet_Manager $snippetManager;
+
+    private ProfileServiceInterface $profileService;
+
+    public function __construct(
+        \Shopware_Components_Snippet_Manager $snippetManager,
+        DataFactory $dataFactory,
+        ProfileFactory $profileFactory,
+        ProfileServiceInterface $profileService
+    ) {
+        $this->snippetManager = $snippetManager;
+        $this->dataFactory = $dataFactory;
+        $this->profileFactory = $profileFactory;
+        $this->profileService = $profileService;
+    }
+
     public function preDispatch(): void
     {
-        $this->dataFactory = $this->container->get(DataFactory::class);
-        $this->profileFactory = $this->container->get(ProfileFactory::class);
-
         parent::preDispatch();
     }
 
@@ -82,8 +98,8 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         $count = $manager->getQueryCount($query);
 
         $data = $query->getArrayResult();
-        /** @var Enlight_Components_Snippet_Namespace $namespace */
-        $namespace = $this->get('snippets')->getNamespace('backend/swag_import_export/default_profiles');
+
+        $namespace = $this->snippetManager->getNamespace('backend/swag_import_export/default_profiles');
 
         foreach ($data as &$profile) {
             if ($profile['default'] === true) {
@@ -98,7 +114,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
     }
 
     /**
-     * @return Enlight_View|Enlight_View_Default
+     * @return \Enlight_View|\Enlight_View_Default
      */
     public function createProfilesAction()
     {
@@ -177,7 +193,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         } catch (DBALException $e) {
             $this->View()->assign([
                 'success' => false,
-                'message' => $this->get('snippets')->getNamespace('backend/swag_import_export/controller')->get('swag_import_export/profile/duplicate_unique_error_msg'),
+                'message' => $this->snippetManager->getNamespace('backend/swag_import_export/controller')->get('swag_import_export/profile/duplicate_unique_error_msg'),
             ]);
 
             return;
@@ -226,7 +242,6 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
     public function duplicateProfileAction(): void
     {
         $manager = $this->getModelManager();
-        $snippetManager = $this->get('snippets');
         $profileId = (int) $this->Request()->getParam('profileId');
 
         $loadedProfile = $manager->find(Profile::class, $profileId);
@@ -238,7 +253,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         $profile = new Profile();
 
         $profile->setBaseProfile($loadedProfile->getId());
-        $profile->setName($loadedProfile->getName() . ' (' . $snippetManager->getNamespace('backend/swag_import_export/controller')->get('swag_import_export/profile/copy') . ')');
+        $profile->setName($loadedProfile->getName() . ' (' . $this->snippetManager->getNamespace('backend/swag_import_export/controller')->get('swag_import_export/profile/copy') . ')');
         $profile->setType($loadedProfile->getType());
         $profile->setTree($loadedProfile->getTree());
 
@@ -248,7 +263,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
         } catch (DBALException $e) {
             $this->View()->assign([
                 'success' => false,
-                'message' => $snippetManager->getNamespace('backend/swag_import_export/controller')->get('swag_import_export/profile/duplicate_unique_error_msg'),
+                'message' => $this->snippetManager->getNamespace('backend/swag_import_export/controller')->get('swag_import_export/profile/duplicate_unique_error_msg'),
             ]);
 
             return;
@@ -286,11 +301,8 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
             return;
         }
 
-        /** @var ProfileService $service */
-        $service = $this->get('swag_import_export.profile_service');
-
         try {
-            $exportDataStruct = $service->exportProfile($profileId);
+            $exportDataStruct = $this->profileService->exportProfile($profileId);
         } catch (\Exception $e) {
             $this->View()->assign([
                 'success' => false,
@@ -314,13 +326,10 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
     public function importProfileAction(): void
     {
         /** @var UploadedFile $file */
-        $file = Symfony\Component\HttpFoundation\Request::createFromGlobals()->files->get('profilefile');
-
-        /** @var ProfileService $service */
-        $service = $this->get('swag_import_export.profile_service');
+        $file = Request::createFromGlobals()->files->get('profilefile');
 
         try {
-            $service->importProfile($file);
+            $this->profileService->importProfile($file);
         } catch (\Exception $e) {
             $this->View()->assign([
                 'success' => false,
@@ -602,7 +611,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends Shopware_Cont
 
         try {
             $columns = $dbAdapter->getParentKeys($section);
-        } catch (RuntimeException $e) {
+        } catch (\RuntimeException $e) {
             $this->View()->assign([
                'success' => false, 'message' => $e->getMessage(),
             ]);

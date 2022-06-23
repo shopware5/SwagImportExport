@@ -7,6 +7,8 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
+namespace SwagImportExport\Controllers\Backend;
+
 use Doctrine\ORM\AbstractQuery;
 use SwagImportExport\Components\Utils\DataHelper;
 use SwagImportExport\CustomModels\Session;
@@ -14,8 +16,16 @@ use SwagImportExport\CustomModels\Session;
 /**
  * Shopware ImportExport Plugin
  */
-class Shopware_Controllers_Backend_SwagImportExportSession extends Shopware_Controllers_Backend_ExtJs
+class Shopware_Controllers_Backend_SwagImportExportSession extends \Shopware_Controllers_Backend_ExtJs
 {
+    private \Shopware_Components_Snippet_Manager $snippetManager;
+
+    public function __construct(
+        \Shopware_Components_Snippet_Manager $snippetManager
+    ) {
+        $this->snippetManager = $snippetManager;
+    }
+
     public function initAcl(): void
     {
         $this->addAclPermission('getSessions', 'read', 'Insuficient Permissions (getSessions)');
@@ -129,7 +139,7 @@ class Shopware_Controllers_Backend_SwagImportExportSession extends Shopware_Cont
                 'success' => true,
                 'data' => $this->Request()->getParams(),
             ]);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->View()->assign([
                 'success' => false,
                 'data' => $this->Request()->getParams(),
@@ -145,11 +155,11 @@ class Shopware_Controllers_Backend_SwagImportExportSession extends Shopware_Cont
      */
     private function translateDataSet(array $data): array
     {
-        $namespace = $this->get('snippets')->getNamespace('backend/swag_import_export/session_data');
+        $namespace = $this->snippetManager->getNamespace('backend/swag_import_export/session_data');
         $result = [];
 
         foreach ($data as $key => $value) {
-            $result[(string) $namespace->get($key, $key)] = $namespace->get($value, $value);
+            $result[(string) $namespace->get($key, $key)] = $namespace->get((string) $value, (string) $value);
         }
 
         return $result;
