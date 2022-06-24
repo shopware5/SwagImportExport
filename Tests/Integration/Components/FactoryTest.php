@@ -9,8 +9,8 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Tests\Integration\Components;
 
-use SwagImportExport\Components\DbAdapters\ArticlesDbAdapter;
 use SwagImportExport\Components\DbAdapters\CategoriesDbAdapter;
+use SwagImportExport\Components\DbAdapters\ProductsDbAdapter;
 use SwagImportExport\Components\FileIO\CsvFileReader;
 use SwagImportExport\Components\FileIO\CsvFileWriter;
 use SwagImportExport\Components\FileIO\XmlFileReader;
@@ -54,9 +54,9 @@ class FactoryTest extends ImportExportTestHelper
         $catergoriesDbAdapter = $dataProvider->createDbAdapter('categories');
         static::assertInstanceOf(CategoriesDbAdapter::class, $catergoriesDbAdapter, 'Is not a instance of CategoriesDbAdapter');
 
-        // tests articles data adapter
-        $articlesDbAdapter = $dataProvider->createDbAdapter('articles');
-        static::assertInstanceOf(ArticlesDbAdapter::class, $articlesDbAdapter, 'Is not a instance of ArticlesDbAdapter');
+        // tests products data adapter
+        $productsDbAdapter = $dataProvider->createDbAdapter('articles');
+        static::assertInstanceOf(ProductsDbAdapter::class, $productsDbAdapter, 'Is not a instance of ProductsDbAdapter');
     }
 
     public function testFileIO(): void

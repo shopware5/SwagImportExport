@@ -14,9 +14,9 @@ use SwagImportExport\Components\Utils\TreeHelper;
 
 class ProfileDataProvider
 {
-    public const ARTICLE_PROFILE_TYPE = 'articles';
-    public const ARTICLE_PROFILE_NAME = 'article_profile';
-    public const ARTICLE_TABLE = 's_articles';
+    public const PRODUCT_PROFILE_TYPE = 'articles';
+    public const PRODUCT_PROFILE_NAME = 'article_profile';
+    public const PRODUCT_TABLE = 's_articles';
 
     public const VARIANT_PROFILE_TYPE = 'articles';
     public const VARIANT_PROFILE_NAME = 'variant_profile';
@@ -30,17 +30,17 @@ class ProfileDataProvider
     public const CATEGORY_PROFILE_NAME = 'category_profile';
     public const CATEGORY_TABLE = 's_categories';
 
-    public const ARTICLES_INSTOCK_PROFILE_TYPE = 'articlesInStock';
-    public const ARTICLES_INSTOCK_PROFILE_NAME = 'article_instock_profile';
+    public const PRODUCTS_INSTOCK_PROFILE_TYPE = 'articlesInStock';
+    public const PRODUCTS_INSTOCK_PROFILE_NAME = 'article_instock_profile';
 
-    public const ARTICLES_PRICES_PROFILE_TYPE = 'articlesPrices';
-    public const ARTICLES_PRICES_PROFILE_NAME = 'articles_price_profile';
+    public const PRODUCTS_PRICES_PROFILE_TYPE = 'articlesPrices';
+    public const PRODUCTS_PRICES_PROFILE_NAME = 'articles_price_profile';
 
-    public const ARTICLES_IMAGES_PROFILE_TYPE = 'articlesImages';
-    public const ARTICLES_IMAGE_PROFILE_NAME = 'articles_image_profile';
+    public const PRODUCTS_IMAGES_PROFILE_TYPE = 'articlesImages';
+    public const PRODUCTS_IMAGE_PROFILE_NAME = 'articles_image_profile';
 
-    public const ARTICLES_TRANSLATIONS_PROFILE_TYPE = 'articlesTranslations';
-    public const ARTICLES_TRANSLATIONS_PROFILE_NAME = 'articles_translations_profile';
+    public const PRODUCTS_TRANSLATIONS_PROFILE_TYPE = 'articlesTranslations';
+    public const PRODUCTS_TRANSLATIONS_PROFILE_NAME = 'articles_translations_profile';
 
     public const ORDERS_PROFILE_TYPE = 'orders';
     public const ORDERS_PROFILE_NAME = 'order_profile';
@@ -66,14 +66,14 @@ class ProfileDataProvider
 
     public function createProfiles(): void
     {
-        $this->createProfile(self::ARTICLE_PROFILE_TYPE, self::ARTICLE_PROFILE_NAME);
+        $this->createProfile(self::PRODUCT_PROFILE_TYPE, self::PRODUCT_PROFILE_NAME);
         $this->createProfile(self::VARIANT_PROFILE_TYPE, self::VARIANT_PROFILE_NAME);
         $this->createProfile(self::CUSTOMER_PROFILE_TYPE, self::CUSTOMER_PROFILE_NAME);
         $this->createProfile(self::CATEGORY_PROFILE_TYPE, self::CATEGORY_PROFILE_NAME);
-        $this->createProfile(self::ARTICLES_INSTOCK_PROFILE_TYPE, self::ARTICLES_INSTOCK_PROFILE_NAME);
-        $this->createProfile(self::ARTICLES_PRICES_PROFILE_TYPE, self::ARTICLES_PRICES_PROFILE_NAME);
-        $this->createProfile(self::ARTICLES_IMAGES_PROFILE_TYPE, self::ARTICLES_IMAGE_PROFILE_NAME);
-        $this->createProfile(self::ARTICLES_TRANSLATIONS_PROFILE_TYPE, self::ARTICLES_TRANSLATIONS_PROFILE_NAME);
+        $this->createProfile(self::PRODUCTS_INSTOCK_PROFILE_TYPE, self::PRODUCTS_INSTOCK_PROFILE_NAME);
+        $this->createProfile(self::PRODUCTS_PRICES_PROFILE_TYPE, self::PRODUCTS_PRICES_PROFILE_NAME);
+        $this->createProfile(self::PRODUCTS_IMAGES_PROFILE_TYPE, self::PRODUCTS_IMAGE_PROFILE_NAME);
+        $this->createProfile(self::PRODUCTS_TRANSLATIONS_PROFILE_TYPE, self::PRODUCTS_TRANSLATIONS_PROFILE_NAME);
         $this->createProfile(self::ORDERS_PROFILE_TYPE, self::ORDERS_PROFILE_NAME);
         $this->createProfile(self::MAIN_ORDERS_PROFILE_TYPE, self::MAIN_ORDERS_PROFILE_NAME);
         $this->createProfile(self::TRANSLATIONS_PROFILE_TYPE, self::TRANSLATIONS_PROFILE_NAME);

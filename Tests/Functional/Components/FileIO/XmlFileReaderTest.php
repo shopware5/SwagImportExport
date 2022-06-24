@@ -18,23 +18,23 @@ class XmlFileReaderTest extends TestCase
 
     public function testWrongFiletype(): void
     {
-        $tree = $this->getDefaultArticleTree();
+        $tree = $this->getDefaultProductTree();
         $count = $this->getReaderCount($tree, 'ArticleImport.csv');
 
         static::assertEquals(0, $count);
     }
 
-    public function testDefaultArticleCount(): void
+    public function testDefaultProductCount(): void
     {
-        $tree = $this->getDefaultArticleTree();
+        $tree = $this->getDefaultProductTree();
         $count = $this->getReaderCount($tree, 'ArticleImport.xml');
 
         static::assertEquals(2, $count);
     }
 
-    public function testDefaultArticlesRead(): void
+    public function testDefaultProductsRead(): void
     {
-        $tree = $this->getDefaultArticleTree();
+        $tree = $this->getDefaultProductTree();
         $records = $this->getReaderRecords($tree, 'ArticleImport.xml');
 
         static::assertCount(2, $records);
@@ -45,17 +45,17 @@ class XmlFileReaderTest extends TestCase
         static::assertEquals('Set-SW10002', $records[1]['configurators']['configurator'][0]['configSetName']);
     }
 
-    public function testMinimalArticleCount(): void
+    public function testMinimalProductCount(): void
     {
-        $tree = $this->getMinimalArticleTree();
+        $tree = $this->getMinimalProductTree();
         $count = $this->getReaderCount($tree, 'ArticleImport.xml');
 
         static::assertEquals(2, $count);
     }
 
-    public function testMinimalArticlesRead(): void
+    public function testMinimalProductsRead(): void
     {
-        $tree = $this->getMinimalArticleTree();
+        $tree = $this->getMinimalProductTree();
         $records = $this->getReaderRecords($tree, 'ArticleImport.xml', 1, 1);
 
         static::assertCount(1, $records);
@@ -112,17 +112,17 @@ class XmlFileReaderTest extends TestCase
         static::assertEquals('mf5 Password', $lastRecord['shipping_firstname']);
     }
 
-    public function testArticleTranslationCount(): void
+    public function testProductTranslationCount(): void
     {
-        $tree = $this->getArticleTranslationTree();
+        $tree = $this->getProductTranslationTree();
         $count = $this->getReaderCount($tree, 'ArticleTranslationImport.xml');
 
         static::assertEquals(103, $count);
     }
 
-    public function testArticleTranslationRead(): void
+    public function testProductTranslationRead(): void
     {
-        $tree = $this->getArticleTranslationTree();
+        $tree = $this->getProductTranslationTree();
         $records = $this->getReaderRecords($tree, 'ArticleTranslationImport.xml', 50, 53);
 
         static::assertCount(53, $records);
@@ -230,7 +230,7 @@ class XmlFileReaderTest extends TestCase
     /**
      * @return array<string, string|array>
      */
-    private function getDefaultArticleTree(): array
+    private function getDefaultProductTree(): array
     {
         return [
             'id' => 'root',
@@ -652,7 +652,7 @@ class XmlFileReaderTest extends TestCase
     /**
      * @return array<string, string|array>
      */
-    private function getMinimalArticleTree(): array
+    private function getMinimalProductTree(): array
     {
         return [
             'id' => 'root',
@@ -1039,7 +1039,7 @@ class XmlFileReaderTest extends TestCase
     /**
      * @return array<string, string|array>
      */
-    private function getArticleTranslationTree(): array
+    private function getProductTranslationTree(): array
     {
         return [
             'id' => 'root',

@@ -4,7 +4,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
 
-        <service id="SwagImportExport\Components\DataManagers\Articles\ArticleDataManager" public="true">
+        <service id="SwagImportExport\Components\DataManagers\Products\ProductDataManager" public="true">
             <argument type="service" id="db"/>
             <argument type="service" id="SwagImportExport\Components\DbalHelper"/>
 
@@ -12,17 +12,17 @@
             <tag name="import_export.proxyable"/>
         </service>
 
-        <service id="SwagImportExport\Components\DataManagers\Articles\PriceDataManager" public="true">
+        <service id="SwagImportExport\Components\DataManagers\Products\PriceDataManager" public="true">
             <tag name="import_export.proxyable"/>
         </service>
 
-        <service id="SwagImportExport\Components\DataManagers\ArticleImageDataManager" public="true">
+        <service id="SwagImportExport\Components\DataManagers\ProductImageDataManager" public="true">
             <argument type="service" id="db"/>
 
             <tag name="import_export.proxyable"/>
         </service>
 
-        <service id="SwagImportExport\Components\DataManagers\ArticlePriceDataManager" public="true">
+        <service id="SwagImportExport\Components\DataManagers\ProductPriceDataManager" public="true">
             <tag name="import_export.proxyable"/>
         </service>
 

@@ -80,7 +80,7 @@ class ExportRequest
             $this->filter['dateTo'] = $data['dateTo'];
         }
 
-        if ($this->profileEntity->getType() === DataDbAdapter::ARTICLE_INSTOCK_ADAPTER) {
+        if ($this->profileEntity->getType() === DataDbAdapter::PRODUCT_INSTOCK_ADAPTER) {
             if ($data['stockFilter']) {
                 $this->filter['stockFilter'] = $data['stockFilter'];
             }

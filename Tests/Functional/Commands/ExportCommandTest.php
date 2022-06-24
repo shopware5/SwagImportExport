@@ -23,7 +23,7 @@ class ExportCommandTest extends TestCase
     use DatabaseTestCaseTrait;
     use ContainerTrait;
 
-    public function testArticlesCsvExportCommand(): void
+    public function testProductsCsvExportCommand(): void
     {
         $expectedLineAmount = 290;
         $profileName = 'default_articles';
@@ -99,7 +99,7 @@ class ExportCommandTest extends TestCase
         );
     }
 
-    public function testArticlesInStockCsvExportCommand(): void
+    public function testProductsInStockCsvExportCommand(): void
     {
         $expectedLineAmount = 405;
         $profileName = 'default_article_in_stock';
@@ -121,7 +121,7 @@ class ExportCommandTest extends TestCase
         );
     }
 
-    public function testArticlesPricesCsvExportCommand(): void
+    public function testProductsPricesCsvExportCommand(): void
     {
         $expectedLineAmount = 406;
         $profileName = 'default_article_prices';
@@ -143,7 +143,7 @@ class ExportCommandTest extends TestCase
         );
     }
 
-    public function testArticlesImagesCsvExportCommand(): void
+    public function testProductsImagesCsvExportCommand(): void
     {
         $profileName = 'default_article_images';
 
@@ -153,7 +153,7 @@ class ExportCommandTest extends TestCase
         $this->runCommand(sprintf('sw:importexport:export -p %s %s', $profileName, $fileName));
     }
 
-    public function testArticlesTranslationsCsvExportCommand(): void
+    public function testProductsTranslationsCsvExportCommand(): void
     {
         $profileName = 'default_article_translations_update';
 
@@ -256,7 +256,7 @@ class ExportCommandTest extends TestCase
         );
     }
 
-    public function testArticlesXmlExportCommandWithLimit(): void
+    public function testProductsXmlExportCommandWithLimit(): void
     {
         $expectedLineAmount = 6462;
         $profileName = 'default_articles';
@@ -348,7 +348,7 @@ class ExportCommandTest extends TestCase
         );
     }
 
-    public function testArticlesInStockXmlExportCommandWithLimit(): void
+    public function testProductsInStockXmlExportCommandWithLimit(): void
     {
         $expectedLineAmount = 1408;
         $profileName = 'default_article_in_stock';
@@ -370,7 +370,7 @@ class ExportCommandTest extends TestCase
         );
     }
 
-    public function testArticlesPricesXmlExportCommandWithLimit(): void
+    public function testProductsPricesXmlExportCommandWithLimit(): void
     {
         if (SwagVersionHelper::isShopware578()) {
             $expectedLineAmount = 1308;
@@ -396,7 +396,7 @@ class ExportCommandTest extends TestCase
         );
     }
 
-    public function testArticlesImagesXmlExportCommandWithLimit(): void
+    public function testProductsImagesXmlExportCommandWithLimit(): void
     {
         $profileName = 'default_article_images';
 
@@ -406,7 +406,7 @@ class ExportCommandTest extends TestCase
         $this->runCommand(sprintf('sw:importexport:export -p %s -l 50 %s', $profileName, $fileName));
     }
 
-    public function testArticlesTranslationsXmlExportCommandWithLimit(): void
+    public function testProductsTranslationsXmlExportCommandWithLimit(): void
     {
         $profileName = 'default_article_translations_update';
 

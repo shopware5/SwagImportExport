@@ -11,16 +11,16 @@ namespace SwagImportExport\Components\Functional\Components\Factories;
 
 use PHPUnit\Framework\TestCase;
 use SwagImportExport\Components\DbAdapters\AddressDbAdapter;
-use SwagImportExport\Components\DbAdapters\ArticlesDbAdapter;
-use SwagImportExport\Components\DbAdapters\ArticlesImagesDbAdapter;
-use SwagImportExport\Components\DbAdapters\ArticlesInStockDbAdapter;
-use SwagImportExport\Components\DbAdapters\ArticlesPricesDbAdapter;
 use SwagImportExport\Components\DbAdapters\CategoriesDbAdapter;
 use SwagImportExport\Components\DbAdapters\CustomerDbAdapter;
 use SwagImportExport\Components\DbAdapters\DataDbAdapter;
 use SwagImportExport\Components\DbAdapters\MainOrdersDbAdapter;
 use SwagImportExport\Components\DbAdapters\NewsletterDbAdapter;
 use SwagImportExport\Components\DbAdapters\OrdersDbAdapter;
+use SwagImportExport\Components\DbAdapters\ProductsDbAdapter;
+use SwagImportExport\Components\DbAdapters\ProductsImagesDbAdapter;
+use SwagImportExport\Components\DbAdapters\ProductsInStockDbAdapter;
+use SwagImportExport\Components\DbAdapters\ProductsPricesDbAdapter;
 use SwagImportExport\Components\DbAdapters\TranslationsDbAdapter;
 use SwagImportExport\Components\Providers\DataProvider;
 use SwagImportExport\Tests\Helper\ContainerTrait;
@@ -49,34 +49,34 @@ class DataProviderTest extends TestCase
         static::assertInstanceOf(DataDbAdapter::class, $categoriesDbAdapter);
     }
 
-    public function testCreateDbAdapterShouldCreateArticlesDbAdapter(): void
+    public function testCreateDbAdapterShouldCreateProductsDbAdapter(): void
     {
         $dataProvider = $this->getDataProvider();
 
-        $articlesDbAdapter = $dataProvider->createDbAdapter('articles');
+        $productsDbAdapter = $dataProvider->createDbAdapter('articles');
 
-        static::assertInstanceOf(ArticlesDbAdapter::class, $articlesDbAdapter);
-        static::assertInstanceOf(DataDbAdapter::class, $articlesDbAdapter);
+        static::assertInstanceOf(ProductsDbAdapter::class, $productsDbAdapter);
+        static::assertInstanceOf(DataDbAdapter::class, $productsDbAdapter);
     }
 
-    public function testCreateDbAdapterShouldCreateArticlesInstockDbAdapter(): void
+    public function testCreateDbAdapterShouldCreateProductsInstockDbAdapter(): void
     {
         $dataProvider = $this->getDataProvider();
 
-        $articlesInstockDbAdapter = $dataProvider->createDbAdapter('articlesInStock');
+        $productsInstockDbAdapter = $dataProvider->createDbAdapter('articlesInStock');
 
-        static::assertInstanceOf(ArticlesInStockDbAdapter::class, $articlesInstockDbAdapter);
-        static::assertInstanceOf(DataDbAdapter::class, $articlesInstockDbAdapter);
+        static::assertInstanceOf(ProductsInStockDbAdapter::class, $productsInstockDbAdapter);
+        static::assertInstanceOf(DataDbAdapter::class, $productsInstockDbAdapter);
     }
 
-    public function testCreateDbAdapterShouldCreateArticlesPricesDbAdapter(): void
+    public function testCreateDbAdapterShouldCreateProductsPricesDbAdapter(): void
     {
         $dataProvider = $this->getDataProvider();
 
-        $articlesPricesDbAdapter = $dataProvider->createDbAdapter('articlesPrices');
+        $productsPricesDbAdapter = $dataProvider->createDbAdapter('articlesPrices');
 
-        static::assertInstanceOf(ArticlesPricesDbAdapter::class, $articlesPricesDbAdapter);
-        static::assertInstanceOf(DataDbAdapter::class, $articlesPricesDbAdapter);
+        static::assertInstanceOf(ProductsPricesDbAdapter::class, $productsPricesDbAdapter);
+        static::assertInstanceOf(DataDbAdapter::class, $productsPricesDbAdapter);
     }
 
     public function testCreateDbAdapterShouldCreateOrdersDbAdapter(): void
@@ -129,14 +129,14 @@ class DataProviderTest extends TestCase
         static::assertInstanceOf(DataDbAdapter::class, $translationsDbAdapter);
     }
 
-    public function testCreateDbAdapterShouldCreateArticlesImagesDbAdapter(): void
+    public function testCreateDbAdapterShouldCreateProductsImagesDbAdapter(): void
     {
         $dataProvider = $this->getDataProvider();
 
-        $articlesImagesDbAdapter = $dataProvider->createDbAdapter('articlesImages');
+        $productsImagesDbAdapter = $dataProvider->createDbAdapter('articlesImages');
 
-        static::assertInstanceOf(ArticlesImagesDbAdapter::class, $articlesImagesDbAdapter);
-        static::assertInstanceOf(DataDbAdapter::class, $articlesImagesDbAdapter);
+        static::assertInstanceOf(ProductsImagesDbAdapter::class, $productsImagesDbAdapter);
+        static::assertInstanceOf(DataDbAdapter::class, $productsImagesDbAdapter);
     }
 
     private function getDataProvider(): DataProvider

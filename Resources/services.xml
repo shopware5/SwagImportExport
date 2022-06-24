@@ -8,7 +8,7 @@
         <import resource="services/data_managers.xml"/>
         <import resource="services/commands.xml"/>
         <import resource="services/factories.xml"/>
-        <import resource="services/article_writer.xml"/>
+        <import resource="services/product_writer.xml"/>
         <import resource="services/db_adapters.xml"/>
         <import resource="services/controllers.xml"/>
         <import resource="services/transformers.xml"/>

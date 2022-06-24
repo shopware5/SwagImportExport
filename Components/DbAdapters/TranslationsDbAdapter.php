@@ -373,7 +373,7 @@ class TranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
      */
     protected function getTranslations(array $ids): array
     {
-        $articleDetailIds = \implode(',', $ids);
+        $productDetailIds = \implode(',', $ids);
 
         $translationColumns = 'ct.objecttype, ct.objectkey, ct.objectdata as objectdata, ct.objectlanguage as languageId';
 
@@ -383,7 +383,7 @@ class TranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
                 LEFT JOIN s_article_configurator_groups AS cgroup
                 ON cgroup.id = ct.objectkey
 
-                WHERE ct.id IN ($articleDetailIds) AND ct.objecttype = 'configuratorgroup')
+                WHERE ct.id IN ($productDetailIds) AND ct.objecttype = 'configuratorgroup')
 
                 UNION
 
@@ -393,7 +393,7 @@ class TranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
                 LEFT JOIN s_article_configurator_options AS coptions
                 ON coptions.id = ct.objectkey
 
-                WHERE ct.id IN ($articleDetailIds) AND ct.objecttype = 'configuratoroption')
+                WHERE ct.id IN ($productDetailIds) AND ct.objecttype = 'configuratoroption')
 
                 UNION
 
@@ -403,7 +403,7 @@ class TranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
                 LEFT JOIN s_filter AS pgroup
                 ON pgroup.id = ct.objectkey
 
-                WHERE ct.id IN ($articleDetailIds) AND ct.objecttype = 'propertygroup')
+                WHERE ct.id IN ($productDetailIds) AND ct.objecttype = 'propertygroup')
 
                 UNION
 
@@ -413,7 +413,7 @@ class TranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
                 LEFT JOIN s_filter_options AS poptions
                 ON poptions.id = ct.objectkey
 
-                WHERE ct.id IN ($articleDetailIds) AND ct.objecttype = 'propertyoption')
+                WHERE ct.id IN ($productDetailIds) AND ct.objecttype = 'propertyoption')
 
                 UNION
 
@@ -423,7 +423,7 @@ class TranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
                 LEFT JOIN s_filter_values AS pvalues
                 ON pvalues.id = ct.objectkey
 
-                WHERE ct.id IN ($articleDetailIds) AND ct.objecttype = 'propertyvalue')
+                WHERE ct.id IN ($productDetailIds) AND ct.objecttype = 'propertyvalue')
                 ";
 
         return $this->db->query($sql)->fetchAll();

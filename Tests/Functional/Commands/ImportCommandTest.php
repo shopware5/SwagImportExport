@@ -136,38 +136,38 @@ class ImportCommandTest extends TestCase
         static::assertEquals($expectedImportedNewsletterRecipients, $importedNewsletterAmount);
     }
 
-    public function testArticleXmlImport(): void
+    public function testProductXmlImport(): void
     {
-        $actualLineAmount = $this->getRowCountForTable(ProfileDataProvider::ARTICLE_TABLE);
+        $actualLineAmount = $this->getRowCountForTable(ProfileDataProvider::PRODUCT_TABLE);
         $profile = 'default_articles';
         $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'ArticleImport.xml';
-        $expectedImportedArticles = 2;
+        $expectedImportedProducts = 2;
 
         $consoleOutput = $this->runCommand(self::CLI_IMPORT_COMMAND . " {$profile} {$filePath}");
 
-        $resultLineAmount = $this->getRowCountForTable(ProfileDataProvider::ARTICLE_TABLE);
-        $importedArticlesAmount = $resultLineAmount - $actualLineAmount;
+        $resultLineAmount = $this->getRowCountForTable(ProfileDataProvider::PRODUCT_TABLE);
+        $importedProductsAmount = $resultLineAmount - $actualLineAmount;
 
         static::assertEquals('Using format: xml.', $consoleOutput[1]);
-        static::assertEquals("Total count: {$expectedImportedArticles}.", $consoleOutput[3]);
-        static::assertEquals($expectedImportedArticles, $importedArticlesAmount);
+        static::assertEquals("Total count: {$expectedImportedProducts}.", $consoleOutput[3]);
+        static::assertEquals($expectedImportedProducts, $importedProductsAmount);
     }
 
-    public function testArticleCsvImport(): void
+    public function testProductCsvImport(): void
     {
-        $actualLineAmount = $this->getRowCountForTable(ProfileDataProvider::ARTICLE_TABLE);
+        $actualLineAmount = $this->getRowCountForTable(ProfileDataProvider::PRODUCT_TABLE);
         $profile = 'default_articles';
         $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'ArticleImport.csv';
-        $expectedImportedArticles = 2;
+        $expectedImportedProducts = 2;
 
         $consoleOutput = $this->runCommand(self::CLI_IMPORT_COMMAND . " {$profile} {$filePath}");
 
-        $resultLineAmount = $this->getRowCountForTable(ProfileDataProvider::ARTICLE_TABLE);
-        $importedArticlesAmount = $resultLineAmount - $actualLineAmount;
+        $resultLineAmount = $this->getRowCountForTable(ProfileDataProvider::PRODUCT_TABLE);
+        $importedProductsAmount = $resultLineAmount - $actualLineAmount;
 
         static::assertEquals('Using format: csv.', $consoleOutput[1]);
-        static::assertEquals("Total count: {$expectedImportedArticles}.", $consoleOutput[3]);
-        static::assertEquals($expectedImportedArticles, $importedArticlesAmount);
+        static::assertEquals("Total count: {$expectedImportedProducts}.", $consoleOutput[3]);
+        static::assertEquals($expectedImportedProducts, $importedProductsAmount);
     }
 
     public function testVariantXmlImport(): void
@@ -204,7 +204,7 @@ class ImportCommandTest extends TestCase
         static::assertEquals($expectedImportedVariants, $importedVariantsAmount, 'Expected 2 new rows in s_articles_details.');
     }
 
-    public function testArticleInStockXmlImport(): void
+    public function testProductInStockXmlImport(): void
     {
         $profile = 'default_article_in_stock';
         $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'ArticleInStockImport.xml';
@@ -215,7 +215,7 @@ class ImportCommandTest extends TestCase
         static::assertEquals('Total count: 405.', $consoleOutput[3]);
     }
 
-    public function testArticleInStockCsvImport(): void
+    public function testProductInStockCsvImport(): void
     {
         $profile = 'default_article_in_stock';
         $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'ArticleInStockImport.csv';
@@ -226,7 +226,7 @@ class ImportCommandTest extends TestCase
         static::assertEquals('Total count: 405.', $consoleOutput[3]);
     }
 
-    public function testArticlePriceXmlImport(): void
+    public function testProductPriceXmlImport(): void
     {
         $profile = 'default_article_prices';
         $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'ArticlePricesImport.xml';
@@ -237,7 +237,7 @@ class ImportCommandTest extends TestCase
         static::assertEquals('Total count: 27.', $consoleOutput[3]);
     }
 
-    public function testArticlePriceCsvImport(): void
+    public function testProductPriceCsvImport(): void
     {
         $profile = 'default_article_prices';
         $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'ArticlePricesImport.csv';
@@ -248,7 +248,7 @@ class ImportCommandTest extends TestCase
         static::assertEquals('Total count: 98.', $consoleOutput[3]);
     }
 
-    public function testArticleTranslationXmlImport(): void
+    public function testProductTranslationXmlImport(): void
     {
         $profile = 'default_article_translations';
         $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'ArticleTranslationImport.xml';
@@ -259,7 +259,7 @@ class ImportCommandTest extends TestCase
         static::assertEquals('Total count: 103.', $consoleOutput[3]);
     }
 
-    public function testArticleTranslationCsvImport(): void
+    public function testProductTranslationCsvImport(): void
     {
         $profile = 'default_article_translations';
         $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'ArticleTranslationImport.csv';

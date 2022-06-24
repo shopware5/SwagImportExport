@@ -33,6 +33,9 @@
         <argument type="service" id="SwagImportExport\Components\Factories\ProfileFactory"/>
         <argument type="service" id="SwagImportExport\Components\Session\SessionService"/>
 
+        <argument type="service" id="SwagImportExport\Components\Factories\ProfileFactory"/>
+        <argument type="service" id="SwagImportExport\Components\Session\SessionService"/>
+
         <tag name="shopware.controller" module="backend" controller="SwagImportExportImport"/>
     </service>
 

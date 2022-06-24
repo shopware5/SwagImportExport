@@ -15,7 +15,7 @@ use SwagImportExport\Tests\Helper\DataProvider\ProfileDataProvider;
 use SwagImportExport\Tests\Helper\ExportControllerTrait;
 use SwagImportExport\Tests\Helper\FixturesImportTrait;
 
-class ArticlePricesExportTest extends \Enlight_Components_Test_Controller_TestCase
+class ProductPricesExportTest extends \Enlight_Components_Test_Controller_TestCase
 {
     use FixturesImportTrait;
     use DatabaseTestCaseTrait;
@@ -33,10 +33,10 @@ class ArticlePricesExportTest extends \Enlight_Components_Test_Controller_TestCa
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
     }
 
-    public function testArticlesPricesXmlExport(): void
+    public function testProductsPricesXmlExport(): void
     {
         $params = $this->getExportRequestParams();
-        $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::ARTICLES_PRICES_PROFILE_TYPE);
+        $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::PRODUCTS_PRICES_PROFILE_TYPE);
         $params['format'] = self::FORMAT_XML;
         $params['variants'] = 1;
         $this->Request()->setParams($params);
@@ -55,10 +55,10 @@ class ArticlePricesExportTest extends \Enlight_Components_Test_Controller_TestCa
         $this->assertPriceAttributeInXml($file, 'SW10002.1', '_additionaltext', '1,5 Liter');
     }
 
-    public function testArticlesPricesCsvExport(): void
+    public function testProductsPricesCsvExport(): void
     {
         $params = $this->getExportRequestParams();
-        $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::ARTICLES_PRICES_PROFILE_TYPE);
+        $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::PRODUCTS_PRICES_PROFILE_TYPE);
         $params['format'] = self::FORMAT_CSV;
         $params['variants'] = 1;
         $this->Request()->setParams($params);
@@ -80,8 +80,8 @@ class ArticlePricesExportTest extends \Enlight_Components_Test_Controller_TestCa
 
     private function assertPriceAttributeInXml(string $filePath, string $orderNumber, string $attribute, string $expected): void
     {
-        $articleDomNodeList = $this->queryXpath($filePath, "//Price[ordernumber='{$orderNumber}']/{$attribute}");
-        $nodeValue = $articleDomNodeList->item(0)->nodeValue;
+        $productDomNodeList = $this->queryXpath($filePath, "//Price[ordernumber='{$orderNumber}']/{$attribute}");
+        $nodeValue = $productDomNodeList->item(0)->nodeValue;
         static::assertEquals($expected, $nodeValue);
     }
 }

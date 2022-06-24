@@ -66,11 +66,6 @@ parameters:
 			path: Components/Converter/XmlConverter.php
 
 		-
-			message: "#^Parameter \\#2 \\$orderNumber of method SwagImportExport\\\\Components\\\\DataManagers\\\\Articles\\\\ArticleDataManager\\:\\:getTaxByTaxRate\\(\\) expects string, int\\|string given\\.$#"
-			count: 1
-			path: Components/DataManagers/Articles/ArticleDataManager.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\DataManagers\\\\DataManager\\:\\:fixFieldsValues\\(\\) has parameter \\$fieldsValues with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/DataManagers/DataManager.php
@@ -86,9 +81,14 @@ parameters:
 			path: Components/DataManagers/DataManager.php
 
 		-
-			message: "#^Property SwagImportExport\\\\Components\\\\DataType\\\\ArticlePriceDataType\\:\\:\\$defaultFieldsValues type has no value type specified in iterable type array\\.$#"
+			message: "#^Parameter \\#2 \\$orderNumber of method SwagImportExport\\\\Components\\\\DataManagers\\\\Products\\\\ProductDataManager\\:\\:getTaxByTaxRate\\(\\) expects string, int\\|string given\\.$#"
 			count: 1
-			path: Components/DataType/ArticlePriceDataType.php
+			path: Components/DataManagers/Products/ProductDataManager.php
+
+		-
+			message: "#^Property SwagImportExport\\\\Components\\\\DataType\\\\ProductPriceDataType\\:\\:\\$defaultFieldsValues type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Components/DataType/ProductPriceDataType.php
 
 		-
 			message: "#^Cannot call method getId\\(\\) on Shopware\\\\Models\\\\Country\\\\Country\\|null\\.$#"
@@ -104,286 +104,6 @@ parameters:
 			message: "#^Parameter \\#1 \\$country of method Shopware\\\\Models\\\\Customer\\\\Address\\:\\:setCountry\\(\\) expects Shopware\\\\Models\\\\Country\\\\Country, Shopware\\\\Models\\\\Country\\\\Country\\|null given\\.$#"
 			count: 2
 			path: Components/DbAdapters/AddressDbAdapter.php
-
-		-
-			message: "#^Parameter \\#1 \\$categories of method SwagImportExport\\\\Components\\\\DbAdapters\\\\Articles\\\\CategoryWriter\\:\\:prepareValues\\(\\) expects array\\<string, mixed\\>, array\\<int, array\\<string, int\\|string\\>\\> given\\.$#"
-			count: 1
-			path: Components/DbAdapters/Articles/CategoryWriter.php
-
-		-
-			message: "#^Property SwagImportExport\\\\Components\\\\DbAdapters\\\\Articles\\\\CategoryWriter\\:\\:\\$categoryIds type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DbAdapters/Articles/CategoryWriter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\Articles\\\\ConfiguratorWriter\\:\\:createSet\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DbAdapters/Articles/ConfiguratorWriter.php
-
-		-
-			message: "#^Negated boolean expression is always false\\.$#"
-			count: 2
-			path: Components/DbAdapters/Articles/ConfiguratorWriter.php
-
-		-
-			message: "#^Property SwagImportExport\\\\Components\\\\DbAdapters\\\\Articles\\\\ConfiguratorWriter\\:\\:\\$sets type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DbAdapters/Articles/ConfiguratorWriter.php
-
-		-
-			message: "#^Result of && is always false\\.$#"
-			count: 1
-			path: Components/DbAdapters/Articles/ConfiguratorWriter.php
-
-		-
-			message: "#^Variable \\$groupId might not be defined\\.$#"
-			count: 2
-			path: Components/DbAdapters/Articles/ConfiguratorWriter.php
-
-		-
-			message: "#^Variable \\$optionId might not be defined\\.$#"
-			count: 2
-			path: Components/DbAdapters/Articles/ConfiguratorWriter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\Articles\\\\ImageWriter\\:\\:prepareImageData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DbAdapters/Articles/ImageWriter.php
-
-		-
-			message: "#^Variable \\$media might not be defined\\.$#"
-			count: 1
-			path: Components/DbAdapters/Articles/ImageWriter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\Articles\\\\PriceWriter\\:\\:getArticleOrderNumber\\(\\) should return string but returns string\\|false\\|null\\.$#"
-			count: 1
-			path: Components/DbAdapters/Articles/PriceWriter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\Articles\\\\PriceWriter\\:\\:getCustomerGroup\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DbAdapters/Articles/PriceWriter.php
-
-		-
-			message: "#^Property SwagImportExport\\\\Components\\\\DbAdapters\\\\Articles\\\\PriceWriter\\:\\:\\$customerGroups type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DbAdapters/Articles/PriceWriter.php
-
-		-
-			message: "#^Expression on left side of \\?\\? is not nullable\\.$#"
-			count: 1
-			path: Components/DbAdapters/Articles/PropertyWriter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\Articles\\\\PropertyWriter\\:\\:getFilterGroupIdByNameFromCacheProperty\\(\\) never returns null so it can be removed from the return type\\.$#"
-			count: 1
-			path: Components/DbAdapters/Articles/PropertyWriter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\Articles\\\\PropertyWriter\\:\\:updateOrCreateOptionAndValuesByValueName\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DbAdapters/Articles/PropertyWriter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\Articles\\\\RelationWriter\\:\\:deleteAllRelations\\(\\) has parameter \\$articleId with no type specified\\.$#"
-			count: 1
-			path: Components/DbAdapters/Articles/RelationWriter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\Articles\\\\RelationWriter\\:\\:deleteRelations\\(\\) has parameter \\$articleId with no type specified\\.$#"
-			count: 1
-			path: Components/DbAdapters/Articles/RelationWriter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\Articles\\\\RelationWriter\\:\\:deleteRelations\\(\\) has parameter \\$relations with no type specified\\.$#"
-			count: 1
-			path: Components/DbAdapters/Articles/RelationWriter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\Articles\\\\RelationWriter\\:\\:insertRelations\\(\\) has parameter \\$articleId with no type specified\\.$#"
-			count: 1
-			path: Components/DbAdapters/Articles/RelationWriter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\Articles\\\\RelationWriter\\:\\:insertRelations\\(\\) has parameter \\$relations with no type specified\\.$#"
-			count: 1
-			path: Components/DbAdapters/Articles/RelationWriter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\Articles\\\\RelationWriter\\:\\:isRelationExists\\(\\) has parameter \\$articleId with no type specified\\.$#"
-			count: 1
-			path: Components/DbAdapters/Articles/RelationWriter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\Articles\\\\RelationWriter\\:\\:isRelationExists\\(\\) has parameter \\$relationId with no type specified\\.$#"
-			count: 1
-			path: Components/DbAdapters/Articles/RelationWriter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\Articles\\\\RelationWriter\\:\\:isRelationIdExists\\(\\) has parameter \\$relationId with no type specified\\.$#"
-			count: 1
-			path: Components/DbAdapters/Articles/RelationWriter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\Articles\\\\RelationWriter\\:\\:write\\(\\) has parameter \\$relations with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DbAdapters/Articles/RelationWriter.php
-
-		-
-			message: "#^Property SwagImportExport\\\\Components\\\\DbAdapters\\\\Articles\\\\RelationWriter\\:\\:\\$relationTables type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DbAdapters/Articles/RelationWriter.php
-
-		-
-			message: "#^Property SwagImportExport\\\\Components\\\\DbAdapters\\\\Articles\\\\RelationWriter\\:\\:\\$relationTypes type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DbAdapters/Articles/RelationWriter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\Articles\\\\TranslationWriter\\:\\:filterWhitelistedFields\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DbAdapters/Articles/TranslationWriter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\Articles\\\\TranslationWriter\\:\\:prepareAttributePrefix\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DbAdapters/Articles/TranslationWriter.php
-
-		-
-			message: "#^Property SwagImportExport\\\\Components\\\\DbAdapters\\\\Articles\\\\TranslationWriter\\:\\:\\$shops type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DbAdapters/Articles/TranslationWriter.php
-
-		-
-			message: "#^Negated boolean expression is always false\\.$#"
-			count: 1
-			path: Components/DbAdapters/ArticlesDbAdapter.php
-
-		-
-			message: "#^Property SwagImportExport\\\\Components\\\\DbAdapters\\\\ArticlesDbAdapter\\:\\:\\$defaultValues type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DbAdapters/ArticlesDbAdapter.php
-
-		-
-			message: "#^Property SwagImportExport\\\\Components\\\\DbAdapters\\\\ArticlesDbAdapter\\:\\:\\$logMessages type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DbAdapters/ArticlesDbAdapter.php
-
-		-
-			message: "#^Property SwagImportExport\\\\Components\\\\DbAdapters\\\\ArticlesDbAdapter\\:\\:\\$unprocessedData type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DbAdapters/ArticlesDbAdapter.php
-
-		-
-			message: "#^Cannot call method getBasePath\\(\\) on Enlight_Controller_Request_Request\\|null\\.$#"
-			count: 1
-			path: Components/DbAdapters/ArticlesImagesDbAdapter.php
-
-		-
-			message: "#^Cannot call method getHttpHost\\(\\) on Enlight_Controller_Request_Request\\|null\\.$#"
-			count: 1
-			path: Components/DbAdapters/ArticlesImagesDbAdapter.php
-
-		-
-			message: "#^Cannot call method getScheme\\(\\) on Enlight_Controller_Request_Request\\|null\\.$#"
-			count: 1
-			path: Components/DbAdapters/ArticlesImagesDbAdapter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\ArticlesImagesDbAdapter\\:\\:createAttribute\\(\\) has parameter \\$record with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DbAdapters/ArticlesImagesDbAdapter.php
-
-		-
-			message: "#^Negated boolean expression is always false\\.$#"
-			count: 1
-			path: Components/DbAdapters/ArticlesImagesDbAdapter.php
-
-		-
-			message: "#^Parameter \\#1 \\$album of method Shopware\\\\Models\\\\Media\\\\Media\\:\\:setAlbum\\(\\) expects Shopware\\\\Models\\\\Media\\\\Album, Shopware\\\\Models\\\\Media\\\\Album\\|null given\\.$#"
-			count: 1
-			path: Components/DbAdapters/ArticlesImagesDbAdapter.php
-
-		-
-			message: "#^Parameter \\#1 \\$file of method Shopware\\\\Models\\\\Media\\\\Media\\:\\:setFile\\(\\) expects Symfony\\\\Component\\\\HttpFoundation\\\\File\\\\UploadedFile, Symfony\\\\Component\\\\HttpFoundation\\\\File\\\\File given\\.$#"
-			count: 1
-			path: Components/DbAdapters/ArticlesImagesDbAdapter.php
-
-		-
-			message: "#^Parameter \\#1 \\$filename of function file_exists expects string, string\\|false given\\.$#"
-			count: 1
-			path: Components/DbAdapters/ArticlesImagesDbAdapter.php
-
-		-
-			message: "#^Parameter \\#1 \\$filename of function is_writable expects string, string\\|false given\\.$#"
-			count: 1
-			path: Components/DbAdapters/ArticlesImagesDbAdapter.php
-
-		-
-			message: "#^Parameter \\#1 \\$prefix of function uniqid expects string, int given\\.$#"
-			count: 1
-			path: Components/DbAdapters/ArticlesImagesDbAdapter.php
-
-		-
-			message: "#^Parameter \\#2 \\$code of class SwagImportExport\\\\Components\\\\Exception\\\\AdapterException constructor expects int, string\\|false given\\.$#"
-			count: 1
-			path: Components/DbAdapters/ArticlesImagesDbAdapter.php
-
-		-
-			message: "#^Parameter \\#2 \\$str of function explode expects string, string\\|null given\\.$#"
-			count: 1
-			path: Components/DbAdapters/ArticlesImagesDbAdapter.php
-
-		-
-			message: "#^Parameter \\#3 \\$previous of class SwagImportExport\\\\Components\\\\Exception\\\\AdapterException constructor expects Exception\\|null, string given\\.$#"
-			count: 1
-			path: Components/DbAdapters/ArticlesImagesDbAdapter.php
-
-		-
-			message: "#^Property SwagImportExport\\\\Components\\\\DbAdapters\\\\ArticlesImagesDbAdapter\\:\\:\\$httpClient \\(GuzzleHttp\\\\Client\\) does not accept GuzzleHttp\\\\ClientInterface\\.$#"
-			count: 1
-			path: Components/DbAdapters/ArticlesImagesDbAdapter.php
-
-		-
-			message: "#^Property SwagImportExport\\\\Components\\\\DbAdapters\\\\ArticlesImagesDbAdapter\\:\\:\\$logMessages type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DbAdapters/ArticlesImagesDbAdapter.php
-
-		-
-			message: "#^Call to an undefined method Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\:\\:addFilter\\(\\)\\.$#"
-			count: 1
-			path: Components/DbAdapters/ArticlesInStockDbAdapter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\ArticlesInStockDbAdapter\\:\\:getBuilder\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: Components/DbAdapters/ArticlesInStockDbAdapter.php
-
-		-
-			message: "#^Property SwagImportExport\\\\Components\\\\DbAdapters\\\\ArticlesInStockDbAdapter\\:\\:\\$logMessages type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DbAdapters/ArticlesInStockDbAdapter.php
-
-		-
-			message: "#^Cannot call method getId\\(\\) on Shopware\\\\Models\\\\Category\\\\Category\\|null\\.$#"
-			count: 1
-			path: Components/DbAdapters/ArticlesPricesDbAdapter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\ArticlesPricesDbAdapter\\:\\:getBuilder\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: Components/DbAdapters/ArticlesPricesDbAdapter.php
-
-		-
-			message: "#^Negated boolean expression is always false\\.$#"
-			count: 3
-			path: Components/DbAdapters/ArticlesPricesDbAdapter.php
-
-		-
-			message: "#^Property SwagImportExport\\\\Components\\\\DbAdapters\\\\ArticlesPricesDbAdapter\\:\\:\\$categoryIdCollection type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DbAdapters/ArticlesPricesDbAdapter.php
 
 		-
 			message: "#^Argument of an invalid type array\\<array\\<string, mixed\\>\\>\\|null supplied for foreach, only iterables are supported\\.$#"
@@ -659,6 +379,261 @@ parameters:
 			message: "#^Variable \\$orderData might not be defined\\.$#"
 			count: 1
 			path: Components/DbAdapters/OrdersDbAdapter.php
+
+		-
+			message: "#^Parameter \\#1 \\$categories of method SwagImportExport\\\\Components\\\\DbAdapters\\\\Products\\\\CategoryWriter\\:\\:prepareValues\\(\\) expects array\\<string, mixed\\>, array\\<int, array\\<string, int\\|string\\>\\> given\\.$#"
+			count: 1
+			path: Components/DbAdapters/Products/CategoryWriter.php
+
+		-
+			message: "#^Property SwagImportExport\\\\Components\\\\DbAdapters\\\\Products\\\\CategoryWriter\\:\\:\\$categoryIds type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Components/DbAdapters/Products/CategoryWriter.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\Products\\\\ConfiguratorWriter\\:\\:createSet\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Components/DbAdapters/Products/ConfiguratorWriter.php
+
+		-
+			message: "#^Negated boolean expression is always false\\.$#"
+			count: 2
+			path: Components/DbAdapters/Products/ConfiguratorWriter.php
+
+		-
+			message: "#^Property SwagImportExport\\\\Components\\\\DbAdapters\\\\Products\\\\ConfiguratorWriter\\:\\:\\$sets type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Components/DbAdapters/Products/ConfiguratorWriter.php
+
+		-
+			message: "#^Result of && is always false\\.$#"
+			count: 1
+			path: Components/DbAdapters/Products/ConfiguratorWriter.php
+
+		-
+			message: "#^Variable \\$groupId might not be defined\\.$#"
+			count: 2
+			path: Components/DbAdapters/Products/ConfiguratorWriter.php
+
+		-
+			message: "#^Variable \\$optionId might not be defined\\.$#"
+			count: 2
+			path: Components/DbAdapters/Products/ConfiguratorWriter.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\Products\\\\ImageWriter\\:\\:prepareImageData\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Components/DbAdapters/Products/ImageWriter.php
+
+		-
+			message: "#^Variable \\$media might not be defined\\.$#"
+			count: 1
+			path: Components/DbAdapters/Products/ImageWriter.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\Products\\\\PriceWriter\\:\\:getCustomerGroup\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Components/DbAdapters/Products/PriceWriter.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\Products\\\\PriceWriter\\:\\:getProductOrderNumber\\(\\) should return string but returns string\\|false\\|null\\.$#"
+			count: 1
+			path: Components/DbAdapters/Products/PriceWriter.php
+
+		-
+			message: "#^Property SwagImportExport\\\\Components\\\\DbAdapters\\\\Products\\\\PriceWriter\\:\\:\\$customerGroups type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Components/DbAdapters/Products/PriceWriter.php
+
+		-
+			message: "#^Expression on left side of \\?\\? is not nullable\\.$#"
+			count: 1
+			path: Components/DbAdapters/Products/PropertyWriter.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\Products\\\\PropertyWriter\\:\\:getFilterGroupIdByNameFromCacheProperty\\(\\) never returns null so it can be removed from the return type\\.$#"
+			count: 1
+			path: Components/DbAdapters/Products/PropertyWriter.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\Products\\\\PropertyWriter\\:\\:updateOrCreateOptionAndValuesByValueName\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Components/DbAdapters/Products/PropertyWriter.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\Products\\\\RelationWriter\\:\\:deleteRelations\\(\\) has parameter \\$relations with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Components/DbAdapters/Products/RelationWriter.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\Products\\\\RelationWriter\\:\\:insertRelations\\(\\) has parameter \\$relations with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Components/DbAdapters/Products/RelationWriter.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\Products\\\\RelationWriter\\:\\:write\\(\\) has parameter \\$relations with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Components/DbAdapters/Products/RelationWriter.php
+
+		-
+			message: "#^Property SwagImportExport\\\\Components\\\\DbAdapters\\\\Products\\\\RelationWriter\\:\\:\\$relationTables type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Components/DbAdapters/Products/RelationWriter.php
+
+		-
+			message: "#^Property SwagImportExport\\\\Components\\\\DbAdapters\\\\Products\\\\RelationWriter\\:\\:\\$relationTypes type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Components/DbAdapters/Products/RelationWriter.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\Products\\\\TranslationWriter\\:\\:filterWhitelistedFields\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Components/DbAdapters/Products/TranslationWriter.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\Products\\\\TranslationWriter\\:\\:prepareAttributePrefix\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Components/DbAdapters/Products/TranslationWriter.php
+
+		-
+			message: "#^Property SwagImportExport\\\\Components\\\\DbAdapters\\\\Products\\\\TranslationWriter\\:\\:\\$shops type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Components/DbAdapters/Products/TranslationWriter.php
+
+		-
+			message: "#^Negated boolean expression is always false\\.$#"
+			count: 1
+			path: Components/DbAdapters/ProductsDbAdapter.php
+
+		-
+			message: "#^Property SwagImportExport\\\\Components\\\\DbAdapters\\\\ProductsDbAdapter\\:\\:\\$defaultValues type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Components/DbAdapters/ProductsDbAdapter.php
+
+		-
+			message: "#^Property SwagImportExport\\\\Components\\\\DbAdapters\\\\ProductsDbAdapter\\:\\:\\$logMessages type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Components/DbAdapters/ProductsDbAdapter.php
+
+		-
+			message: "#^Property SwagImportExport\\\\Components\\\\DbAdapters\\\\ProductsDbAdapter\\:\\:\\$unprocessedData type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Components/DbAdapters/ProductsDbAdapter.php
+
+		-
+			message: "#^Call to an undefined method Shopware\\\\Models\\\\Article\\\\Repository\\:\\:getProductImageDataQuery\\(\\)\\.$#"
+			count: 1
+			path: Components/DbAdapters/ProductsImagesDbAdapter.php
+
+		-
+			message: "#^Cannot call method getBasePath\\(\\) on Enlight_Controller_Request_Request\\|null\\.$#"
+			count: 1
+			path: Components/DbAdapters/ProductsImagesDbAdapter.php
+
+		-
+			message: "#^Cannot call method getHttpHost\\(\\) on Enlight_Controller_Request_Request\\|null\\.$#"
+			count: 1
+			path: Components/DbAdapters/ProductsImagesDbAdapter.php
+
+		-
+			message: "#^Cannot call method getScheme\\(\\) on Enlight_Controller_Request_Request\\|null\\.$#"
+			count: 1
+			path: Components/DbAdapters/ProductsImagesDbAdapter.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\ProductsImagesDbAdapter\\:\\:createAttribute\\(\\) has parameter \\$record with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Components/DbAdapters/ProductsImagesDbAdapter.php
+
+		-
+			message: "#^Negated boolean expression is always false\\.$#"
+			count: 1
+			path: Components/DbAdapters/ProductsImagesDbAdapter.php
+
+		-
+			message: "#^Parameter \\#1 \\$album of method Shopware\\\\Models\\\\Media\\\\Media\\:\\:setAlbum\\(\\) expects Shopware\\\\Models\\\\Media\\\\Album, Shopware\\\\Models\\\\Media\\\\Album\\|null given\\.$#"
+			count: 1
+			path: Components/DbAdapters/ProductsImagesDbAdapter.php
+
+		-
+			message: "#^Parameter \\#1 \\$file of method Shopware\\\\Models\\\\Media\\\\Media\\:\\:setFile\\(\\) expects Symfony\\\\Component\\\\HttpFoundation\\\\File\\\\UploadedFile, Symfony\\\\Component\\\\HttpFoundation\\\\File\\\\File given\\.$#"
+			count: 1
+			path: Components/DbAdapters/ProductsImagesDbAdapter.php
+
+		-
+			message: "#^Parameter \\#1 \\$filename of function file_exists expects string, string\\|false given\\.$#"
+			count: 1
+			path: Components/DbAdapters/ProductsImagesDbAdapter.php
+
+		-
+			message: "#^Parameter \\#1 \\$filename of function is_writable expects string, string\\|false given\\.$#"
+			count: 1
+			path: Components/DbAdapters/ProductsImagesDbAdapter.php
+
+		-
+			message: "#^Parameter \\#1 \\$prefix of function uniqid expects string, int given\\.$#"
+			count: 1
+			path: Components/DbAdapters/ProductsImagesDbAdapter.php
+
+		-
+			message: "#^Parameter \\#2 \\$code of class SwagImportExport\\\\Components\\\\Exception\\\\AdapterException constructor expects int, string\\|false given\\.$#"
+			count: 1
+			path: Components/DbAdapters/ProductsImagesDbAdapter.php
+
+		-
+			message: "#^Parameter \\#2 \\$str of function explode expects string, string\\|null given\\.$#"
+			count: 1
+			path: Components/DbAdapters/ProductsImagesDbAdapter.php
+
+		-
+			message: "#^Parameter \\#3 \\$previous of class SwagImportExport\\\\Components\\\\Exception\\\\AdapterException constructor expects Exception\\|null, string given\\.$#"
+			count: 1
+			path: Components/DbAdapters/ProductsImagesDbAdapter.php
+
+		-
+			message: "#^Property SwagImportExport\\\\Components\\\\DbAdapters\\\\ProductsImagesDbAdapter\\:\\:\\$httpClient \\(GuzzleHttp\\\\Client\\) does not accept GuzzleHttp\\\\ClientInterface\\.$#"
+			count: 1
+			path: Components/DbAdapters/ProductsImagesDbAdapter.php
+
+		-
+			message: "#^Property SwagImportExport\\\\Components\\\\DbAdapters\\\\ProductsImagesDbAdapter\\:\\:\\$logMessages type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Components/DbAdapters/ProductsImagesDbAdapter.php
+
+		-
+			message: "#^Call to an undefined method Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\:\\:addFilter\\(\\)\\.$#"
+			count: 1
+			path: Components/DbAdapters/ProductsInStockDbAdapter.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\ProductsInStockDbAdapter\\:\\:getBuilder\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
+			count: 1
+			path: Components/DbAdapters/ProductsInStockDbAdapter.php
+
+		-
+			message: "#^Property SwagImportExport\\\\Components\\\\DbAdapters\\\\ProductsInStockDbAdapter\\:\\:\\$logMessages type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Components/DbAdapters/ProductsInStockDbAdapter.php
+
+		-
+			message: "#^Cannot call method getId\\(\\) on Shopware\\\\Models\\\\Category\\\\Category\\|null\\.$#"
+			count: 1
+			path: Components/DbAdapters/ProductsPricesDbAdapter.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\ProductsPricesDbAdapter\\:\\:getBuilder\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
+			count: 1
+			path: Components/DbAdapters/ProductsPricesDbAdapter.php
+
+		-
+			message: "#^Negated boolean expression is always false\\.$#"
+			count: 3
+			path: Components/DbAdapters/ProductsPricesDbAdapter.php
+
+		-
+			message: "#^Property SwagImportExport\\\\Components\\\\DbAdapters\\\\ProductsPricesDbAdapter\\:\\:\\$categoryIdCollection type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Components/DbAdapters/ProductsPricesDbAdapter.php
 
 		-
 			message: "#^Call to an undefined method object\\:\\:getId\\(\\)\\.$#"
@@ -1491,96 +1466,6 @@ parameters:
 			path: Setup/DefaultProfiles/AddressProfile.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ArticleAccessoryProfile\\:\\:getArticleAccessoryFields\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Setup/DefaultProfiles/ArticleAccessoryProfile.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ArticleCategoriesProfile\\:\\:getArticleCategoriesFields\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Setup/DefaultProfiles/ArticleCategoriesProfile.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ArticleCompleteProfile\\:\\:getAccessoryFields\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Setup/DefaultProfiles/ArticleCompleteProfile.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ArticleCompleteProfile\\:\\:getCategoryFields\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Setup/DefaultProfiles/ArticleCompleteProfile.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ArticleCompleteProfile\\:\\:getConfiguratorFields\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Setup/DefaultProfiles/ArticleCompleteProfile.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ArticleCompleteProfile\\:\\:getImagesFields\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Setup/DefaultProfiles/ArticleCompleteProfile.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ArticleCompleteProfile\\:\\:getPriceFields\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Setup/DefaultProfiles/ArticleCompleteProfile.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ArticleCompleteProfile\\:\\:getPropertyValueFields\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Setup/DefaultProfiles/ArticleCompleteProfile.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ArticleCompleteProfile\\:\\:getSimilarFields\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Setup/DefaultProfiles/ArticleCompleteProfile.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ArticleCompleteProfile\\:\\:getTranslationFields\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Setup/DefaultProfiles/ArticleCompleteProfile.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ArticleImagesProfile\\:\\:getArticleImagesFields\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Setup/DefaultProfiles/ArticleImagesProfile.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ArticleInStockProfile\\:\\:getArticleInStockFields\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Setup/DefaultProfiles/ArticleInStockProfile.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ArticlePriceProfile\\:\\:getArticlePriceFields\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Setup/DefaultProfiles/ArticlePriceProfile.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ArticleProfile\\:\\:getArticleFields\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Setup/DefaultProfiles/ArticleProfile.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ArticlePropertiesProfile\\:\\:getArticlePropertiesFields\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Setup/DefaultProfiles/ArticlePropertiesProfile.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ArticleSimilarsProfile\\:\\:getArticleSimilarsFields\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Setup/DefaultProfiles/ArticleSimilarsProfile.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ArticleTranslationProfile\\:\\:getArticleTranslationFields\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Setup/DefaultProfiles/ArticleTranslationProfile.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ArticleTranslationUpdateProfile\\:\\:getTranslationFields\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Setup/DefaultProfiles/ArticleTranslationUpdateProfile.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\CategoryProfile\\:\\:getCategoryFields\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Setup/DefaultProfiles/CategoryProfile.php
@@ -1599,16 +1484,6 @@ parameters:
 			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\CustomerProfile\\:\\:getCustomerFields\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Setup/DefaultProfiles/CustomerProfile.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\MinimalArticleProfile\\:\\:getArticleFields\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Setup/DefaultProfiles/MinimalArticleProfile.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\MinimalArticleVariantsProfile\\:\\:getArticleVariantFields\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Setup/DefaultProfiles/MinimalArticleVariantsProfile.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\MinimalCategoryProfile\\:\\:getCategoryIdField\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -1631,6 +1506,16 @@ parameters:
 			path: Setup/DefaultProfiles/MinimalOrdersProfile.php
 
 		-
+			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\MinimalProductProfile\\:\\:getProductFields\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Setup/DefaultProfiles/MinimalProductProfile.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\MinimalProductVariantsProfile\\:\\:getProductVariantFields\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Setup/DefaultProfiles/MinimalProductVariantsProfile.php
+
+		-
 			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\NewsletterRecipientProfile\\:\\:getNewsletterFields\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Setup/DefaultProfiles/NewsletterRecipientProfile.php
@@ -1649,6 +1534,96 @@ parameters:
 			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\OrderProfile\\:\\:getOrderFields\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Setup/DefaultProfiles/OrderProfile.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ProductAccessoryProfile\\:\\:getProductAccessoryFields\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Setup/DefaultProfiles/ProductAccessoryProfile.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ProductCategoriesProfile\\:\\:getProductCategoriesFields\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Setup/DefaultProfiles/ProductCategoriesProfile.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ProductCompleteProfile\\:\\:getAccessoryFields\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Setup/DefaultProfiles/ProductCompleteProfile.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ProductCompleteProfile\\:\\:getCategoryFields\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Setup/DefaultProfiles/ProductCompleteProfile.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ProductCompleteProfile\\:\\:getConfiguratorFields\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Setup/DefaultProfiles/ProductCompleteProfile.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ProductCompleteProfile\\:\\:getImagesFields\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Setup/DefaultProfiles/ProductCompleteProfile.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ProductCompleteProfile\\:\\:getPriceFields\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Setup/DefaultProfiles/ProductCompleteProfile.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ProductCompleteProfile\\:\\:getPropertyValueFields\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Setup/DefaultProfiles/ProductCompleteProfile.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ProductCompleteProfile\\:\\:getSimilarFields\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Setup/DefaultProfiles/ProductCompleteProfile.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ProductCompleteProfile\\:\\:getTranslationFields\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Setup/DefaultProfiles/ProductCompleteProfile.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ProductImagesProfile\\:\\:getProductImagesFields\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Setup/DefaultProfiles/ProductImagesProfile.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ProductInStockProfile\\:\\:getProductInStockFields\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Setup/DefaultProfiles/ProductInStockProfile.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ProductPriceProfile\\:\\:getProductPriceFields\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Setup/DefaultProfiles/ProductPriceProfile.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ProductProfile\\:\\:getProductFields\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Setup/DefaultProfiles/ProductProfile.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ProductPropertiesProfile\\:\\:getProductPropertiesFields\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Setup/DefaultProfiles/ProductPropertiesProfile.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ProductSimilarsProfile\\:\\:getProductSimilarsFields\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Setup/DefaultProfiles/ProductSimilarsProfile.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ProductTranslationProfile\\:\\:getProductTranslationFields\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Setup/DefaultProfiles/ProductTranslationProfile.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ProductTranslationUpdateProfile\\:\\:getTranslationFields\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Setup/DefaultProfiles/ProductTranslationUpdateProfile.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\TranslationProfile\\:\\:getTranslationFields\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -1686,22 +1661,32 @@ parameters:
 			path: Tests/Functional/Components/DbAdapters/CustomerDbAdapterTest.php
 
 		-
+			message: "#^Cannot call method getMainDetail\\(\\) on Shopware\\\\Models\\\\Article\\\\Article\\|null\\.$#"
+			count: 2
+			path: Tests/Functional/Components/DbAdapters/Products/ProductWriterTest.php
+
+		-
+			message: "#^Cannot call method getSupplier\\(\\) on Shopware\\\\Models\\\\Article\\\\Article\\|null\\.$#"
+			count: 2
+			path: Tests/Functional/Components/DbAdapters/Products/ProductWriterTest.php
+
+		-
+			message: "#^Variable \\$insertedArticle in PHPDoc tag @var does not match assigned variable \\$insertedProduct\\.$#"
+			count: 1
+			path: Tests/Functional/Components/DbAdapters/Products/ProductWriterTest.php
+
+		-
+			message: "#^Variable \\$updatedArticle in PHPDoc tag @var does not match assigned variable \\$updatedProduct\\.$#"
+			count: 1
+			path: Tests/Functional/Components/DbAdapters/Products/ProductWriterTest.php
+
+		-
 			message: "#^Parameter \\#1 \\$entityName of class Doctrine\\\\ORM\\\\Mapping\\\\ClassMetadata constructor expects class\\-string\\<ExampleEntity\\>, string given\\.$#"
 			count: 1
 			path: Tests/Functional/Components/DbalHelperTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\FileIO\\\\XmlFileReaderTest\\:\\:getArticleTranslationTree\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Functional/Components/FileIO/XmlFileReaderTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\FileIO\\\\XmlFileReaderTest\\:\\:getDefaultArticleTree\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Functional/Components/FileIO/XmlFileReaderTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\FileIO\\\\XmlFileReaderTest\\:\\:getMinimalArticleTree\\(\\) return type has no value type specified in iterable type array\\.$#"
+			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\FileIO\\\\XmlFileReaderTest\\:\\:getDefaultProductTree\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Functional/Components/FileIO/XmlFileReaderTest.php
 
@@ -1712,6 +1697,11 @@ parameters:
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\FileIO\\\\XmlFileReaderTest\\:\\:getMinimalCustomerTree\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Tests/Functional/Components/FileIO/XmlFileReaderTest.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\FileIO\\\\XmlFileReaderTest\\:\\:getMinimalProductTree\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Functional/Components/FileIO/XmlFileReaderTest.php
 
@@ -1727,6 +1717,11 @@ parameters:
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\FileIO\\\\XmlFileReaderTest\\:\\:getOrdersTree\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Tests/Functional/Components/FileIO/XmlFileReaderTest.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\FileIO\\\\XmlFileReaderTest\\:\\:getProductTranslationTree\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Functional/Components/FileIO/XmlFileReaderTest.php
 
@@ -1788,46 +1783,6 @@ parameters:
 		-
 			message: "#^Cannot access offset string on array\\|false\\.$#"
 			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticleExportTest.php
-
-		-
-			message: "#^Cannot access property \\$nodeValue on DOMNode\\|null\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticleExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticleExportTest\\:\\:csvToArrayIndexedByFieldValue\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticleExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticleExportTest\\:\\:readCsvIndexedByOrdernumber\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticleExportTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$fp of function fgetcsv expects resource, resource\\|false given\\.$#"
-			count: 2
-			path: Tests/Functional/Controllers/Backend/ArticleExportTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$keys of function array_combine expects array, array\\|false\\|null given\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticleExportTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$source of method DOMDocument\\:\\:loadXML\\(\\) expects string, string\\|false given\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticleExportTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$values of function array_combine expects array, array\\|null given\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticleExportTest.php
-
-		-
-			message: "#^Cannot access offset string on array\\|false\\.$#"
-			count: 1
 			path: Tests/Functional/Controllers/Backend/ArticlePricesExportTest.php
 
 		-
@@ -1836,7 +1791,7 @@ parameters:
 			path: Tests/Functional/Controllers/Backend/ArticlePricesExportTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticlePricesExportTest\\:\\:csvToArrayIndexedByFieldValue\\(\\) return type has no value type specified in iterable type array\\.$#"
+			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ProductPricesExportTest\\:\\:csvToArrayIndexedByFieldValue\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/ArticlePricesExportTest.php
 
@@ -1859,81 +1814,6 @@ parameters:
 			message: "#^Parameter \\#2 \\$values of function array_combine expects array, array\\|null given\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/ArticlePricesExportTest.php
-
-		-
-			message: "#^Cannot access offset string on array\\|false\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticleTranslationExportExportTest.php
-
-		-
-			message: "#^Cannot access property \\$nodeValue on DOMNode\\|null\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticleTranslationExportExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticleTranslationExportExportTest\\:\\:csvToArrayIndexedByFieldValue\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticleTranslationExportExportTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$fp of function fgetcsv expects resource, resource\\|false given\\.$#"
-			count: 2
-			path: Tests/Functional/Controllers/Backend/ArticleTranslationExportExportTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$keys of function array_combine expects array, array\\|false\\|null given\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticleTranslationExportExportTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$source of method DOMDocument\\:\\:loadXML\\(\\) expects string, string\\|false given\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticleTranslationExportExportTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$values of function array_combine expects array, array\\|null given\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticleTranslationExportExportTest.php
-
-		-
-			message: "#^Cannot access offset string on array\\|false\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticlesInstockExportTest.php
-
-		-
-			message: "#^Cannot access property \\$nodeValue on DOMNode\\|null\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticlesInstockExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticlesInstockExportTest\\:\\:csvToArrayIndexedByFieldValue\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticlesInstockExportTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticlesInstockExportTest\\:\\:readCsvIndexedByOrdernumber\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticlesInstockExportTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$fp of function fgetcsv expects resource, resource\\|false given\\.$#"
-			count: 2
-			path: Tests/Functional/Controllers/Backend/ArticlesInstockExportTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$keys of function array_combine expects array, array\\|false\\|null given\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticlesInstockExportTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$source of method DOMDocument\\:\\:loadXML\\(\\) expects string, string\\|false given\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticlesInstockExportTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$values of function array_combine expects array, array\\|null given\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ArticlesInstockExportTest.php
 
 		-
 			message: "#^Cannot access offset string on array\\|false\\.$#"
@@ -2081,6 +1961,121 @@ parameters:
 			path: Tests/Functional/Controllers/Backend/OrderExportTest.php
 
 		-
+			message: "#^Cannot access offset string on array\\|false\\.$#"
+			count: 1
+			path: Tests/Functional/Controllers/Backend/ProductExportTest.php
+
+		-
+			message: "#^Cannot access property \\$nodeValue on DOMNode\\|null\\.$#"
+			count: 1
+			path: Tests/Functional/Controllers/Backend/ProductExportTest.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ProductExportTest\\:\\:csvToArrayIndexedByFieldValue\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Tests/Functional/Controllers/Backend/ProductExportTest.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ProductExportTest\\:\\:readCsvIndexedByOrdernumber\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Tests/Functional/Controllers/Backend/ProductExportTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$fp of function fgetcsv expects resource, resource\\|false given\\.$#"
+			count: 2
+			path: Tests/Functional/Controllers/Backend/ProductExportTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$keys of function array_combine expects array, array\\|false\\|null given\\.$#"
+			count: 1
+			path: Tests/Functional/Controllers/Backend/ProductExportTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$source of method DOMDocument\\:\\:loadXML\\(\\) expects string, string\\|false given\\.$#"
+			count: 1
+			path: Tests/Functional/Controllers/Backend/ProductExportTest.php
+
+		-
+			message: "#^Parameter \\#2 \\$values of function array_combine expects array, array\\|null given\\.$#"
+			count: 1
+			path: Tests/Functional/Controllers/Backend/ProductExportTest.php
+
+		-
+			message: "#^Cannot access offset string on array\\|false\\.$#"
+			count: 1
+			path: Tests/Functional/Controllers/Backend/ProductTranslationExportExportTest.php
+
+		-
+			message: "#^Cannot access property \\$nodeValue on DOMNode\\|null\\.$#"
+			count: 1
+			path: Tests/Functional/Controllers/Backend/ProductTranslationExportExportTest.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ProductTranslationExportExportTest\\:\\:csvToArrayIndexedByFieldValue\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Tests/Functional/Controllers/Backend/ProductTranslationExportExportTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$fp of function fgetcsv expects resource, resource\\|false given\\.$#"
+			count: 2
+			path: Tests/Functional/Controllers/Backend/ProductTranslationExportExportTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$keys of function array_combine expects array, array\\|false\\|null given\\.$#"
+			count: 1
+			path: Tests/Functional/Controllers/Backend/ProductTranslationExportExportTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$source of method DOMDocument\\:\\:loadXML\\(\\) expects string, string\\|false given\\.$#"
+			count: 1
+			path: Tests/Functional/Controllers/Backend/ProductTranslationExportExportTest.php
+
+		-
+			message: "#^Parameter \\#2 \\$values of function array_combine expects array, array\\|null given\\.$#"
+			count: 1
+			path: Tests/Functional/Controllers/Backend/ProductTranslationExportExportTest.php
+
+		-
+			message: "#^Cannot access offset string on array\\|false\\.$#"
+			count: 1
+			path: Tests/Functional/Controllers/Backend/ProductsInstockExportTest.php
+
+		-
+			message: "#^Cannot access property \\$nodeValue on DOMNode\\|null\\.$#"
+			count: 1
+			path: Tests/Functional/Controllers/Backend/ProductsInstockExportTest.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ProductsInstockExportTest\\:\\:csvToArrayIndexedByFieldValue\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Tests/Functional/Controllers/Backend/ProductsInstockExportTest.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ProductsInstockExportTest\\:\\:readCsvIndexedByOrdernumber\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Tests/Functional/Controllers/Backend/ProductsInstockExportTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$fp of function fgetcsv expects resource, resource\\|false given\\.$#"
+			count: 2
+			path: Tests/Functional/Controllers/Backend/ProductsInstockExportTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$keys of function array_combine expects array, array\\|false\\|null given\\.$#"
+			count: 1
+			path: Tests/Functional/Controllers/Backend/ProductsInstockExportTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$source of method DOMDocument\\:\\:loadXML\\(\\) expects string, string\\|false given\\.$#"
+			count: 1
+			path: Tests/Functional/Controllers/Backend/ProductsInstockExportTest.php
+
+		-
+			message: "#^Parameter \\#2 \\$values of function array_combine expects array, array\\|null given\\.$#"
+			count: 1
+			path: Tests/Functional/Controllers/Backend/ProductsInstockExportTest.php
+
+		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Services\\\\AutoImportServiceTest\\:\\:installProfile\\(\\) has parameter \\$content with no type specified\\.$#"
 			count: 1
 			path: Tests/Functional/Services/AutoImportServiceTest.php
@@ -2136,66 +2131,6 @@ parameters:
 			path: Tests/Helper/DbAdapterTestHelper.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\ArticlesDbAdapterTest\\:\\:getProductDataResult\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/Components/ArticlesDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\ArticlesDbAdapterTest\\:\\:getProductPriceResult\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/Components/ArticlesDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\ArticlesDbAdapterTest\\:\\:readProvider\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/Components/ArticlesDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\ArticlesDbAdapterTest\\:\\:testRead\\(\\) has parameter \\$columns with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/Components/ArticlesDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\ArticlesDbAdapterTest\\:\\:testRead\\(\\) has parameter \\$expected with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/Components/ArticlesDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\ArticlesDbAdapterTest\\:\\:testWrite\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/Components/ArticlesDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\ArticlesDbAdapterTest\\:\\:writeProvider\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/Components/ArticlesDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\ArticlesPricesDbAdapterTest\\:\\:readProvider\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/Components/ArticlesPricesDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\ArticlesPricesDbAdapterTest\\:\\:readRecordIdsProvider\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/Components/ArticlesPricesDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\ArticlesPricesDbAdapterTest\\:\\:testRead\\(\\) has parameter \\$columns with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/Components/ArticlesPricesDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\ArticlesPricesDbAdapterTest\\:\\:testRead\\(\\) has parameter \\$expected with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/Components/ArticlesPricesDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\ArticlesPricesDbAdapterTest\\:\\:testReadRecordIds\\(\\) has parameter \\$expected with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/Components/ArticlesPricesDbAdapterTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\CustomersDbAdapterTest\\:\\:readProvider\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Integration/Components/CustomersDbAdapterTest.php
@@ -2236,6 +2171,66 @@ parameters:
 			path: Tests/Integration/Components/NewsletterDbAdapterTest.php
 
 		-
+			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\ProductsDbAdapterTest\\:\\:getProductDataResult\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Tests/Integration/Components/ProductsDbAdapterTest.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\ProductsDbAdapterTest\\:\\:getProductPriceResult\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Tests/Integration/Components/ProductsDbAdapterTest.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\ProductsDbAdapterTest\\:\\:readProvider\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Tests/Integration/Components/ProductsDbAdapterTest.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\ProductsDbAdapterTest\\:\\:testRead\\(\\) has parameter \\$columns with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Tests/Integration/Components/ProductsDbAdapterTest.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\ProductsDbAdapterTest\\:\\:testRead\\(\\) has parameter \\$expected with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Tests/Integration/Components/ProductsDbAdapterTest.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\ProductsDbAdapterTest\\:\\:testWrite\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Tests/Integration/Components/ProductsDbAdapterTest.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\ProductsDbAdapterTest\\:\\:writeProvider\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Tests/Integration/Components/ProductsDbAdapterTest.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\ProductsPricesDbAdapterTest\\:\\:readProvider\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Tests/Integration/Components/ProductsPricesDbAdapterTest.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\ProductsPricesDbAdapterTest\\:\\:readRecordIdsProvider\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Tests/Integration/Components/ProductsPricesDbAdapterTest.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\ProductsPricesDbAdapterTest\\:\\:testRead\\(\\) has parameter \\$columns with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Tests/Integration/Components/ProductsPricesDbAdapterTest.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\ProductsPricesDbAdapterTest\\:\\:testRead\\(\\) has parameter \\$expected with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Tests/Integration/Components/ProductsPricesDbAdapterTest.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\ProductsPricesDbAdapterTest\\:\\:testReadRecordIds\\(\\) has parameter \\$expected with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Tests/Integration/Components/ProductsPricesDbAdapterTest.php
+
+		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\AddressProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/AddressProfileTest.php
@@ -2244,121 +2239,6 @@ parameters:
 			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/AddressProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleAccessoriesProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleAccessoriesProfileTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleAccessoriesProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleCategoriesProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleCategoriesProfileTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleCategoriesProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleCompleteProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleCompleteProfileTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleCompleteProfileTest.php
-
-		-
-			message: "#^Parameter \\#3 \\$subject of function str_replace expects array\\|string, string\\|false given\\.$#"
-			count: 2
-			path: Tests/Integration/DefaultProfiles/Import/ArticleCompleteProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleDefaultProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleDefaultProfileTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleDefaultProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleImageUrlProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleImageUrlProfileTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleImageUrlProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleInStockProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleInStockProfileTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleInStockProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticlePriceProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticlePriceProfileTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticlePriceProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticlePropertiesProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticlePropertiesProfileTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticlePropertiesProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleSimilarsProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleSimilarsProfileTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleSimilarsProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleTranslationProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleTranslationProfileTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleTranslationProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ArticleTranslationUpdateProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleTranslationUpdateProfileTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/ArticleTranslationUpdateProfileTest.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\CategoriesProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
@@ -2381,26 +2261,6 @@ parameters:
 			path: Tests/Integration/DefaultProfiles/Import/CustomersProfileTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\MinimalArticleProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/MinimalArticleProfileTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/MinimalArticleProfileTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\MinimalArticleVariantsProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/MinimalArticleVariantsProfileTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: Tests/Integration/DefaultProfiles/Import/MinimalArticleVariantsProfileTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\MinimalCategoriesProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/MinimalCategoriesProfileTest.php
@@ -2421,6 +2281,26 @@ parameters:
 			path: Tests/Integration/DefaultProfiles/Import/MinimalOrdersProfileTest.php
 
 		-
+			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\MinimalProductProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
+			count: 1
+			path: Tests/Integration/DefaultProfiles/Import/MinimalProductProfileTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
+			count: 1
+			path: Tests/Integration/DefaultProfiles/Import/MinimalProductProfileTest.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\MinimalProductVariantsProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
+			count: 1
+			path: Tests/Integration/DefaultProfiles/Import/MinimalProductVariantsProfileTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
+			count: 1
+			path: Tests/Integration/DefaultProfiles/Import/MinimalProductVariantsProfileTest.php
+
+		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\NewsletterDefaultProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/NewsletterDefaultProfileTest.php
@@ -2439,6 +2319,121 @@ parameters:
 			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
 			count: 1
 			path: Tests/Integration/DefaultProfiles/Import/OrderProfileTest.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ProductAccessoriesProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
+			count: 1
+			path: Tests/Integration/DefaultProfiles/Import/ProductAccessoriesProfileTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
+			count: 1
+			path: Tests/Integration/DefaultProfiles/Import/ProductAccessoriesProfileTest.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ProductCategoriesProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
+			count: 1
+			path: Tests/Integration/DefaultProfiles/Import/ProductCategoriesProfileTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
+			count: 1
+			path: Tests/Integration/DefaultProfiles/Import/ProductCategoriesProfileTest.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ProductCompleteProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
+			count: 1
+			path: Tests/Integration/DefaultProfiles/Import/ProductCompleteProfileTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
+			count: 1
+			path: Tests/Integration/DefaultProfiles/Import/ProductCompleteProfileTest.php
+
+		-
+			message: "#^Parameter \\#3 \\$subject of function str_replace expects array\\|string, string\\|false given\\.$#"
+			count: 2
+			path: Tests/Integration/DefaultProfiles/Import/ProductCompleteProfileTest.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ProductDefaultProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
+			count: 1
+			path: Tests/Integration/DefaultProfiles/Import/ProductDefaultProfileTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
+			count: 1
+			path: Tests/Integration/DefaultProfiles/Import/ProductDefaultProfileTest.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ProductImageUrlProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
+			count: 1
+			path: Tests/Integration/DefaultProfiles/Import/ProductImageUrlProfileTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
+			count: 1
+			path: Tests/Integration/DefaultProfiles/Import/ProductImageUrlProfileTest.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ProductInStockProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
+			count: 1
+			path: Tests/Integration/DefaultProfiles/Import/ProductInStockProfileTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
+			count: 1
+			path: Tests/Integration/DefaultProfiles/Import/ProductInStockProfileTest.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ProductPriceProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
+			count: 1
+			path: Tests/Integration/DefaultProfiles/Import/ProductPriceProfileTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
+			count: 1
+			path: Tests/Integration/DefaultProfiles/Import/ProductPriceProfileTest.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ProductPropertiesProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
+			count: 1
+			path: Tests/Integration/DefaultProfiles/Import/ProductPropertiesProfileTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
+			count: 1
+			path: Tests/Integration/DefaultProfiles/Import/ProductPropertiesProfileTest.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ProductSimilarsProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
+			count: 1
+			path: Tests/Integration/DefaultProfiles/Import/ProductSimilarsProfileTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
+			count: 1
+			path: Tests/Integration/DefaultProfiles/Import/ProductSimilarsProfileTest.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ProductTranslationProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
+			count: 1
+			path: Tests/Integration/DefaultProfiles/Import/ProductTranslationProfileTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
+			count: 1
+			path: Tests/Integration/DefaultProfiles/Import/ProductTranslationProfileTest.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\DefaultProfiles\\\\Import\\\\ProductTranslationUpdateProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
+			count: 1
+			path: Tests/Integration/DefaultProfiles/Import/ProductTranslationUpdateProfileTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
+			count: 1
+			path: Tests/Integration/DefaultProfiles/Import/ProductTranslationUpdateProfileTest.php
 
 		-
 			message: "#^Method SwagImportExport\\\\TestsIntegration\\\\DefaultProfiles\\\\Import\\\\TranslationProfileTest\\:\\:readConsoleOutput\\(\\) has parameter \\$fp with no type specified\\.$#"
@@ -2503,11 +2498,6 @@ parameters:
 		-
 			message: "#^Parameter \\#1 \\$actualJson of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertJson\\(\\) expects string, string\\|false given\\.$#"
 			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/ArticleCategoriesProfileTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$actualJson of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertJson\\(\\) expects string, string\\|false given\\.$#"
-			count: 1
 			path: Tests/Unit/Setup/DefaultProfiles/CategoryProfileTest.php
 
 		-
@@ -2518,10 +2508,15 @@ parameters:
 		-
 			message: "#^Parameter \\#1 \\$actualJson of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertJson\\(\\) expects string, string\\|false given\\.$#"
 			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/MinimalArticleProfileTest.php
+			path: Tests/Unit/Setup/DefaultProfiles/MinimalCategoryProfileTest.php
 
 		-
 			message: "#^Parameter \\#1 \\$actualJson of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertJson\\(\\) expects string, string\\|false given\\.$#"
 			count: 1
-			path: Tests/Unit/Setup/DefaultProfiles/MinimalCategoryProfileTest.php
+			path: Tests/Unit/Setup/DefaultProfiles/MinimalProductProfileTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$actualJson of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertJson\\(\\) expects string, string\\|false given\\.$#"
+			count: 1
+			path: Tests/Unit/Setup/DefaultProfiles/ProductCategoriesProfileTest.php
 

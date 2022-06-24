@@ -11,11 +11,11 @@ namespace SwagImportExport\Components\DbAdapters;
 
 interface DataDbAdapter
 {
-    public const ARTICLE_ADAPTER = 'articles';
-    public const ARTICLE_IMAGE_ADAPTER = 'articlesImages';
-    public const ARTICLE_INSTOCK_ADAPTER = 'articlesInStock';
-    public const ARTICLE_TRANSLATION_ADAPTER = 'articlesTranslations';
-    public const ARTICLE_PRICE_ADAPTER = 'articlesPrices';
+    public const PRODUCT_ADAPTER = 'articles';
+    public const PRODUCT_IMAGE_ADAPTER = 'articlesImages';
+    public const PRODUCT_INSTOCK_ADAPTER = 'articlesInStock';
+    public const PRODUCT_TRANSLATION_ADAPTER = 'articlesTranslations';
+    public const PRODUCT_PRICE_ADAPTER = 'articlesPrices';
     public const CATEGORIES_ADAPTER = 'categories';
     public const CATEGORIES_TRANSLATION_ADAPTER = 'categoriesTranslations';
     public const ORDER_ADAPTER = 'orders';
