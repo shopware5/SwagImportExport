@@ -2,24 +2,11 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/shopware/5.3/engine/Shopware/Components/Plugin/schema/config.xsd">
     <elements>
-        <element required="false" type="combo" scope="locale">
+        <element required="false" type="boolean" scope="locale">
             <name>SwagImportExportErrorMode</name>
             <label lang="de">Mit Import/Export fortfahren, wenn ein Fehler auftritt</label>
             <label lang="en">Continue import/export if an error occurs during the process</label>
             <value>false</value>
-
-            <options>
-                <option>
-                    <id>true</id>
-                    <name>Yes</name>
-                    <name lang="de-DE">Ja</name>
-                </option>
-                <option>
-                    <id>false</id>
-                    <name>No</name>
-                    <name lang="de-DE">Nein</name>
-                </option>
-            </options>
         </element>
 
         <element required="false" type="number" scope="locale">
@@ -29,24 +16,18 @@
             <value>1000</value>
         </element>
 
-        <element required="false" type="combo" scope="locale">
-            <name>SwagImportExportImageMode</name>
-            <label lang="de">Bildimport-Modus</label>
-            <label lang="en">Image import mode</label>
-            <value>2</value>
+        <element required="false" type="number" scope="locale">
+            <name>batch-size-import</name>
+            <label lang="de">Batch-Size Import</label>
+            <label lang="en">Batch-Size Export</label>
+            <value>50</value>
+        </element>
 
-            <options>
-                <option>
-                    <id>1</id>
-                    <name>Re-use same product images</name>
-                    <name lang="de-DE">Bestehende Produktbilder erneut verwenden</name>
-                </option>
-                <option>
-                    <id>2</id>
-                    <name>Don\'t re-use product images</name>
-                    <name lang="de-DE">Bestehende Produktbilder nicht erneut verwenden</name>
-                </option>
-            </options>
+        <element required="false" type="boolean" scope="locale">
+            <name>SwagImportExportImageMode</name>
+            <label lang="de">Bestehende Produktbilder erneut verwenden</label>
+            <label lang="en">Re-use same product images</label>
+            <value>true</value>
         </element>
 
         <element type="boolean">

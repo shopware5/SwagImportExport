@@ -1756,11 +1756,6 @@ parameters:
 			path: CustomModels/LoggerRepository.php
 
 		-
-			message: "#^Property SwagImportExport\\\\CustomModels\\\\Profile\\:\\:\\$expressions type mapping mismatch\\: property can contain \\(Doctrine\\\\Common\\\\Collections\\\\Collection&iterable\\<SwagImportExport\\\\CustomModels\\\\Expression\\>\\)\\|null but database expects Doctrine\\\\Common\\\\Collections\\\\Collection&iterable\\<SwagImportExport\\\\CustomModels\\\\Expression\\>\\.$#"
-			count: 1
-			path: CustomModels/Profile.php
-
-		-
 			message: "#^Method SwagImportExport\\\\CustomModels\\\\LoggerRepository\\:\\:getLogListQuery\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
 			count: 1
 			path: CustomModels/LoggerRepository.php
@@ -1772,6 +1767,11 @@ parameters:
 
 		-
 			message: "#^Property SwagImportExport\\\\CustomModels\\\\Profile\\:\\:\\$expressions \\(\\(Doctrine\\\\Common\\\\Collections\\\\Collection&iterable\\<SwagImportExport\\\\CustomModels\\\\Expression\\>\\)\\|null\\) does not accept array\\<int, SwagImportExport\\\\CustomModels\\\\Expression\\>\\|\\(Doctrine\\\\Common\\\\Collections\\\\Collection&iterable\\<SwagImportExport\\\\CustomModels\\\\Expression\\>\\)\\.$#"
+			count: 1
+			path: CustomModels/Profile.php
+
+		-
+			message: "#^Property SwagImportExport\\\\CustomModels\\\\Profile\\:\\:\\$expressions type mapping mismatch\\: property can contain \\(Doctrine\\\\Common\\\\Collections\\\\Collection&iterable\\<SwagImportExport\\\\CustomModels\\\\Expression\\>\\)\\|null but database expects Doctrine\\\\Common\\\\Collections\\\\Collection&iterable\\<SwagImportExport\\\\CustomModels\\\\Expression\\>\\.$#"
 			count: 1
 			path: CustomModels/Profile.php
 
@@ -1829,6 +1829,11 @@ parameters:
 			message: "#^Cannot call method fetchAll\\(\\) on PDOStatement\\|false\\.$#"
 			count: 1
 			path: Resources/migrations/5-rename-duplicate-profile-names.php
+
+		-
+			message: "#^Cannot call method fetchColumn\\(\\) on PDOStatement\\|false\\.$#"
+			count: 1
+			path: Resources/migrations/6-update-config.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\AddressProfile\\:\\:getAddressFields\\(\\) return type has no value type specified in iterable type array\\.$#"
