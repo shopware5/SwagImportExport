@@ -24,18 +24,13 @@ use SwagImportExport\Components\Exception\AdapterException;
 use SwagImportExport\Components\Utils\SnippetsHelper;
 use SwagImportExport\Components\Validators\NewsletterValidator;
 
-class NewsletterDbAdapter implements DataDbAdapter, \Enlight_Hook
+class NewsletterDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleable
 {
     protected \Enlight_Components_Db_Adapter_Pdo_Mysql $db;
 
     protected bool $errorMode;
 
     protected ModelManager $manager;
-
-    /**
-     * @var array<mixed>
-     */
-    protected array $unprocessedData = [];
 
     /**
      * @var array<string>
@@ -121,7 +116,7 @@ class NewsletterDbAdapter implements DataDbAdapter, \Enlight_Hook
      */
     public function getUnprocessedData(): array
     {
-        return $this->unprocessedData;
+        return [];
     }
 
     public function read(array $ids, array $columns): array
@@ -171,8 +166,6 @@ class NewsletterDbAdapter implements DataDbAdapter, \Enlight_Hook
      */
     public function write(array $records): void
     {
-        $this->unprocessedData = [];
-
         if (empty($records['default'])) {
             $message = SnippetsHelper::getNamespace()->get(
                 'adapters/newsletter/no_records',

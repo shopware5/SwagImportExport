@@ -68,8 +68,6 @@ class ArticlesImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
 
     protected \Enlight_Components_Db_Adapter_Pdo_Mysql $db;
 
-    protected array $unprocessedData;
-
     protected array $logMessages = [];
 
     protected ?string $logState = null;
@@ -224,7 +222,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
 
     public function getUnprocessedData(): array
     {
-        return $this->unprocessedData;
+        return [];
     }
 
     /**
@@ -249,8 +247,6 @@ class ArticlesImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
             $records,
             ['subject' => $this]
         );
-
-        $this->unprocessedData = [];
 
         foreach ($records['default'] as $record) {
             try {

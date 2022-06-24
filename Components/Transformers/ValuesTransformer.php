@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace SwagImportExport\Components\Transformers;
 
 use SwagImportExport\Components\Profile\Profile;
-use SwagImportExport\CustomModels\Expression;
+use SwagImportExport\Models\Expression;
 
 /**
  * The responsibility of this class is to modify the values of the data values due to given user small scripts.
@@ -22,7 +22,7 @@ class ValuesTransformer implements DataTransformerAdapter
     /**
      * @var array<Expression>
      */
-    private ?iterable $config = null;
+    private array $config;
 
     private ?ExpressionEvaluator $evaluator;
 
@@ -55,7 +55,16 @@ class ValuesTransformer implements DataTransformerAdapter
      */
     public function transformForward(array $data): array
     {
-        return $this->transform('export', $data);
+        if (!\is_array($data)) {
+            $data = [];
+        }
+
+        $conversions = [];
+        foreach ($this->config as $expression) {
+            $conversions[$expression->getVariable()] = $expression->getExportConversion();
+        }
+
+        return $this->handleConversion($conversions, $data);
     }
 
     /**
@@ -65,39 +74,26 @@ class ValuesTransformer implements DataTransformerAdapter
      */
     public function transformBackward(array $data): array
     {
-        return $this->transform('import', $data);
-    }
-
-    /**
-     * @param array<string, array<mixed>> $data
-     */
-    public function transform(?string $type, ?array $data): array
-    {
         if (!\is_array($data)) {
             $data = [];
         }
 
         $conversions = [];
-
-        switch ($type) {
-            case 'export':
-                $method = 'getExportConversion';
-                break;
-            case 'import':
-                $method = 'getImportConversion';
-                break;
-            default:
-                throw new \Exception("Convert type $type does not exist.");
-        }
-
-        if (!\is_array($this->config)) {
-            return $data;
-        }
-
         foreach ($this->config as $expression) {
-            $conversions[$expression->getVariable()] = $expression->{$method}();
+            $conversions[$expression->getVariable()] = $expression->getImportConversion();
         }
 
+        return $this->handleConversion($conversions, $data);
+    }
+
+    /**
+     * @param array<string, string>              $conversions
+     * @param array<array<array<string, mixed>>> $data
+     *
+     * @return array<array<array<string, mixed>>>
+     */
+    private function handleConversion(array $conversions, array $data): array
+    {
         if (!empty($conversions)) {
             foreach ($data as &$records) {
                 foreach ($records as &$record) {

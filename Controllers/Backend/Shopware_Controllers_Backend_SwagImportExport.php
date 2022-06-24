@@ -11,8 +11,8 @@ namespace SwagImportExport\Controllers\Backend;
 
 use Shopware\Components\CSRFWhitelistAware;
 use SwagImportExport\Components\UploadPathProvider;
-use SwagImportExport\CustomModels\Logger;
-use SwagImportExport\CustomModels\LoggerRepository;
+use SwagImportExport\Models\Logger;
+use SwagImportExport\Models\LoggerRepository;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\FileBag;
 
@@ -134,8 +134,8 @@ class Shopware_Controllers_Backend_SwagImportExport extends \Shopware_Controller
         $query = $loggerRepository->getLogListQuery(
             $this->Request()->getParam('filter', []),
             $this->Request()->getParam('sort', []),
-            $this->Request()->getParam('limit', 25),
-            $this->Request()->getParam('start', 0)
+            (int) $this->Request()->getParam('limit', 25),
+            (int) $this->Request()->getParam('start', 0)
         )->getQuery();
 
         $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);

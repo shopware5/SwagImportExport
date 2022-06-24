@@ -9,11 +9,13 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Tests\Functional\Controllers\Backend;
 
+use Doctrine\DBAL\Connection;
 use SwagImportExport\Tests\Helper\ContainerTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use SwagImportExport\Tests\Helper\DataProvider\ProfileDataProvider;
 use SwagImportExport\Tests\Helper\ExportControllerTrait;
 use SwagImportExport\Tests\Helper\FixturesImportTrait;
+use SwagImportExport\Tests\Helper\ReflectionHelperTrait;
 
 class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
 {
@@ -21,6 +23,7 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
     use FixturesImportTrait;
     use DatabaseTestCaseTrait;
     use ContainerTrait;
+    use ReflectionHelperTrait;
 
     public const FORMAT_XML = 'xml';
     public const FORMAT_CSV = 'csv';
@@ -183,6 +186,33 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
     public function testArticleXmlExportWithCategoryFilter(): void
     {
         $categoryId = self::CATEGORY_ID_VINTAGE;
+
+        $params = $this->getExportRequestParams();
+        $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::ARTICLE_PROFILE_TYPE);
+        $params['format'] = self::FORMAT_XML;
+        $params['categories'] = $categoryId;
+        $this->Request()->setParams($params);
+
+        $this->dispatch('backend/SwagImportExportExport/export');
+        $assigned = $this->View()->getAssign('data');
+
+        $fileName = $assigned['fileName'];
+        $file = $this->uploadPathProvider->getRealPath($fileName);
+
+        static::assertFileExists($file, "File not found {$fileName}");
+        $this->backendControllerTestHelper->addFile($file);
+
+        // Fetch all article nodes with given category
+        $articleDomNodeList = $this->queryXpath($file, "//article/category[categories='{$categoryId}']");
+        static::assertEquals(10, $articleDomNodeList->length);
+    }
+
+    public function testArticleXmlExportWithCategoryFilterWithBatchSize(): void
+    {
+        $categoryId = self::CATEGORY_ID_VINTAGE;
+
+        $connection = $this->getConnection();
+        $connection->executeStatement('Update s_core_config_elements set value = "i:1;" where name = "batch-size-export"');
 
         $params = $this->getExportRequestParams();
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::ARTICLE_PROFILE_TYPE);
@@ -485,5 +515,10 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
     private function readCsvIndexedByOrdernumber(string $file): array
     {
         return $this->csvToArrayIndexedByFieldValue($file, 'ordernumber');
+    }
+
+    private function getConnection(): Connection
+    {
+        return $this->getContainer()->get('dbal_connection');
     }
 }

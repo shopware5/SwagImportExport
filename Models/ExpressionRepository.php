@@ -7,34 +7,37 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace SwagImportExport\CustomModels;
+namespace SwagImportExport\Models;
 
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Model\QueryBuilder;
 
 /**
- * @extends ModelRepository<Logger>
+ * @extends ModelRepository<Expression>
  */
-class LoggerRepository extends ModelRepository
+class ExpressionRepository extends ModelRepository
 {
     /**
-     * Returns a query builder object to get all logs.
+     * Returns a query builder object to get all expressions.
      *
      * @param array<string, string>|array<array{property: string, value: mixed, expression?: string}> $filterBy
      * @param array<array{property: string, direction: string}>                                       $orderBy
      */
-    public function getLogListQuery(array $filterBy = [], array $orderBy = [], ?int $limit = null, ?int $offset = null): QueryBuilder
+    public function getExpressionsListQuery(array $filterBy = [], array $orderBy = [], ?int $limit = null, ?int $offset = null): QueryBuilder
     {
-        $builder = $this->createQueryBuilder('l');
+        $builder = $this->createQueryBuilder('e');
 
         $builder->select(
             [
-                'l.id as id',
-                'l.message as message',
-                'l.state as errorState',
-                'l.createdAt as logDate',
+                'e.id as id',
+                'p.id as profileId',
+                'e.variable as variable',
+                'e.exportConversion as exportConversion',
+                'e.importConversion as importConversion',
             ]
         );
+
+        $builder->join('e.profile', 'p');
 
         if (!empty($filterBy)) {
             $builder->addFilter($filterBy);

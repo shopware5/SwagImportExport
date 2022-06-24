@@ -82,7 +82,8 @@ class Shopware_Controllers_Backend_SwagImportExportCron extends \Shopware_Contro
         }
 
         /** @var Plugin $plugin */
-        $plugin = $this->get('models')->find(Plugin::class, $pluginBootstrap->getId());
+        $plugin = $this->getModelManager()->find(Plugin::class, $pluginBootstrap->getId());
+
         if (!$plugin) {
             return null;
         }

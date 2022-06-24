@@ -7,38 +7,34 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace SwagImportExport\CustomModels;
+namespace SwagImportExport\Models;
 
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Model\QueryBuilder;
 
 /**
- * @extends ModelRepository<Profile>
+ * @extends ModelRepository<Logger>
  */
-class ProfileRepository extends ModelRepository
+class LoggerRepository extends ModelRepository
 {
     /**
-     * Returns a query builder object to get all profiles.
+     * Returns a query builder object to get all logs.
      *
      * @param array<string, string>|array<array{property: string, value: mixed, expression?: string}> $filterBy
      * @param array<array{property: string, direction: string}>                                       $orderBy
      */
-    public function getProfilesListQuery(array $filterBy = [], array $orderBy = [], ?int $limit = null, ?int $offset = null): QueryBuilder
+    public function getLogListQuery(array $filterBy = [], array $orderBy = [], ?int $limit = null, ?int $offset = null): QueryBuilder
     {
-        $builder = $this->createQueryBuilder('p');
+        $builder = $this->createQueryBuilder('l');
+
         $builder->select(
             [
-                'p.id as id',
-                'p.type as type',
-                'p.name as name',
-                'p.description as description',
-                'p.tree as tree',
-                'p.default as default',
-                'p.baseProfile as baseProfile',
+                'l.id as id',
+                'l.message as message',
+                'l.state as errorState',
+                'l.createdAt as logDate',
             ]
         );
-
-        $builder->addFilter(['hidden' => '0']);
 
         if (!empty($filterBy)) {
             $builder->addFilter($filterBy);
@@ -49,8 +45,7 @@ class ProfileRepository extends ModelRepository
         }
 
         if ($offset !== null && $limit !== null) {
-            $builder->setFirstResult($offset)
-                ->setMaxResults($limit);
+            $builder->setFirstResult($offset)->setMaxResults($limit);
         }
 
         return $builder;

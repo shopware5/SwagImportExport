@@ -11,17 +11,15 @@ namespace SwagImportExport\Components\Logger;
 
 use Shopware\Components\Model\ModelManager;
 use SwagImportExport\Components\FileIO\FileWriter;
-use SwagImportExport\CustomModels\Logger as LoggerEntity;
-use SwagImportExport\CustomModels\LoggerRepository;
-use SwagImportExport\CustomModels\Session;
+use SwagImportExport\Components\Session\Session;
+use SwagImportExport\Models\Logger as LoggerEntity;
+use SwagImportExport\Models\LoggerRepository;
 
 class Logger implements LoggerInterface
 {
     protected ModelManager $modelManager;
 
     protected LoggerRepository $loggerRepository;
-
-    protected ?LoggerEntity $loggerEntity = null;
 
     protected FileWriter $fileWriter;
 
@@ -35,15 +33,6 @@ class Logger implements LoggerInterface
         $this->loggerRepository = $this->modelManager->getRepository(LoggerEntity::class);
     }
 
-    public function getMessage(): ?string
-    {
-        if (!$this->loggerEntity) {
-            return null;
-        }
-
-        return $this->loggerEntity->getMessage();
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -52,13 +41,28 @@ class Logger implements LoggerInterface
         $loggerModel = new LoggerEntity();
 
         $messages = \implode(';', $messages);
-        $loggerModel->setSession($session);
+        $loggerModel->setSession($session->getEntity());
         $loggerModel->setMessage($messages);
         $loggerModel->setCreatedAt();
         $loggerModel->setStatus($status);
 
         $this->modelManager->persist($loggerModel);
         $this->modelManager->flush();
+    }
+
+    public function logProcessing(string $writeStatus, string $filename, string $profileName, string $logMessage, string $status, Session $session): void
+    {
+        $this->write([$logMessage], $writeStatus, $session);
+
+        $logDataStruct = new LogDataStruct(
+            \date('Y-m-d H:i:s'),
+            $filename,
+            $profileName,
+            $logMessage,
+            $status
+        );
+
+        $this->writeToFile($logDataStruct);
     }
 
     public function writeToFile(LogDataStruct $logDataStruct): void

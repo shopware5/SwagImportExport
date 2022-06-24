@@ -55,7 +55,7 @@ class DataFlattenTransformerTest extends TestCase
         ];
 
         $flattenTransformer = new FlattenTransformer();
-        $profileEntity = new \SwagImportExport\CustomModels\Profile();
+        $profileEntity = new \SwagImportExport\Models\Profile();
         $profileEntity->setTree($jsonTree);
         $profile = new Profile($profileEntity);
         $flattenTransformer->initialize($profile);

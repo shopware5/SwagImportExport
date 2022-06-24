@@ -11,7 +11,7 @@ namespace SwagImportExport\Controllers\Backend;
 
 use Doctrine\ORM\AbstractQuery;
 use SwagImportExport\Components\Utils\DataHelper;
-use SwagImportExport\CustomModels\Session;
+use SwagImportExport\Models\Session;
 
 /**
  * Shopware ImportExport Plugin
@@ -74,8 +74,8 @@ class Shopware_Controllers_Backend_SwagImportExportSession extends \Shopware_Con
         $query = $manager->getRepository(Session::class)->getSessionsListQuery(
             $this->Request()->getParam('filter', []),
             $this->Request()->getParam('sort', []),
-            $this->Request()->getParam('limit', 25),
-            $this->Request()->getParam('start', 0)
+            (int) $this->Request()->getParam('limit', 25),
+            (int) $this->Request()->getParam('start', 0)
         )->getQuery();
 
         $query->setHydrationMode(AbstractQuery::HYDRATE_ARRAY);

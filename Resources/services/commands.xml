@@ -6,23 +6,29 @@
 
         <service id="SwagImportExport\Commands\ImportCommand">
             <argument type="service" id="SwagImportExport\Components\Factories\ProfileFactory"/>
-            <argument type="service" id="SwagImportExport\Components\UploadPathProvider"/>
-            <argument type="service" id="models"/>
-            <argument type="service" id="SwagImportExport\CustomModels\ProfileRepository"/>
+            <argument type="service" id="SwagImportExport\Models\ProfileRepository"/>
+            <argument type="service" id="SwagImportExport\Components\Session\SessionService"/>
+            <argument type="service" id="SwagImportExport\Components\Service\ImportService"/>
 
             <tag name="console.command" command="sw:importexport:import"/>
         </service>
 
         <service id="SwagImportExport\Commands\ExportCommand">
-            <argument type="service" id="SwagImportExport\CustomModels\ProfileRepository"/>
+            <argument type="service" id="SwagImportExport\Models\ProfileRepository"/>
+            <argument type="service" id="SwagImportExport\Components\Factories\ProfileFactory"/>
             <argument type="service" id="models"/>
+            <argument type="service" id="SwagImportExport\Components\Session\SessionService"/>
+            <argument type="service" id="SwagImportExport\Components\UploadPathProvider"/>
             <argument>%kernel.root_dir%</argument>
+            <argument type="service" id="SwagImportExport\Components\Logger\Logger"/>
+            <argument type="service" id="SwagImportExport\Components\Service\ExportService"/>
+
 
             <tag name="console.command" command="sw:importexport:export"/>
         </service>
 
         <service id="SwagImportExport\Commands\ProfilesCommand">
-            <argument type="service" id="SwagImportExport\CustomModels\ProfileRepository"/>
+            <argument type="service" id="SwagImportExport\Models\ProfileRepository"/>
             <argument type="service" id="models"/>
 
             <tag name="console.command" command="sw:importexport:profiles"/>

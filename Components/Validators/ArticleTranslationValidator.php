@@ -18,7 +18,7 @@ class ArticleTranslationValidator extends Validator
      * @var array<string, array<string>>
      */
     public static array $mapper = [
-        'string' => [ // TODO: maybe we don't need to check fields which contains string?
+        'string' => [
             'articleNumber',
             'name',
             'description',

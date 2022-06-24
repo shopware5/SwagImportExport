@@ -44,8 +44,6 @@ class ArticlesPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
 
     protected ?string $logState = null;
 
-    protected array $unprocessedData;
-
     protected ArticlePriceValidator $validator;
 
     protected ArticlePriceDataManager $dataManager;
@@ -252,7 +250,7 @@ class ArticlesPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
 
     public function getUnprocessedData(): array
     {
-        return $this->unprocessedData;
+        return [];
     }
 
     /**
@@ -264,8 +262,6 @@ class ArticlesPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
      */
     public function write(array $records): void
     {
-        $this->unprocessedData = [];
-
         if (empty($records['default'])) {
             $message = SnippetsHelper::getNamespace()->get(
                 'adapters/articlesPrices/no_records',

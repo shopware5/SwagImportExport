@@ -9,26 +9,22 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Components\Service;
 
-use SwagImportExport\Components\Service\Struct\PreparationResultStruct;
+use SwagImportExport\Components\Session\Session;
+use SwagImportExport\Components\Structs\ImportRequest;
 
 interface ImportServiceInterface
 {
     /**
      * Prepares import session based on profile and input file
      * and delivers information on how many records to import.
-     *
-     * @param array<string, mixed> $requestData
      */
-    public function prepareImport(array $requestData, string $inputFileName): PreparationResultStruct;
+    public function prepareImport(ImportRequest $importRequest): int;
 
     /**
      * Processes import based on profile and session and will be called
      * many times based on batch size.
      *
-     * @param array<string, mixed>  $requestData
-     * @param array<string, string> $unprocessedFiles
-     *
-     * @return array<string, mixed>
+     * @return \Generator<string, int>
      */
-    public function import(array $requestData, array $unprocessedFiles, string $inputFile): array;
+    public function import(ImportRequest $importRequest, Session $session): \Generator;
 }

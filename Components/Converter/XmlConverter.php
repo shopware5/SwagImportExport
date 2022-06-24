@@ -9,12 +9,12 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Components\Converter;
 
-class XmlConverter
+class XmlConverter implements ConverterInterface
 {
     /**
      * @var array<string, mixed>
      */
-    public array $sSettings = [
+    private array $settings = [
         'encoding' => 'UTF-8',
         'standalone' => true,
         'attributes' => true,
@@ -23,14 +23,19 @@ class XmlConverter
         'newline' => "\r\n",
     ];
 
+    public function getNewline(): string
+    {
+        return "\r\n";
+    }
+
     /**
      * @param array<string, mixed> $array
      */
     public function encode(array $array): string
     {
-        $standalone = $this->sSettings['standalone'] ? 'yes' : 'no';
+        $standalone = $this->settings['standalone'] ? 'yes' : 'no';
         $ret =
-            "<?xml version=\"1.0\" encoding=\"{$this->sSettings['encoding']}\" standalone=\"$standalone\"?>{$this->sSettings['newline']}";
+            "<?xml version=\"1.0\" encoding=\"{$this->settings['encoding']}\" standalone=\"$standalone\"?>{$this->settings['newline']}";
         $ret .= $this->_encode($array);
 
         return $ret;
@@ -42,8 +47,8 @@ class XmlConverter
     public function _encode(array $array, int $pos = 0, string $ekey = ''): string
     {
         $ret = '';
-        if ($this->sSettings['padding'] !== false) {
-            $pad = \str_repeat($this->sSettings['padding'], $pos);
+        if ($this->settings['padding'] !== false) {
+            $pad = \str_repeat($this->settings['padding'], $pos);
         } else {
             $pad = '';
         }
@@ -63,25 +68,25 @@ class XmlConverter
                 }
             }
             if ($this->isEmpty($item)) {
-                $ret .= "$pad<$key$attributes></$key>{$this->sSettings['newline']}";
+                $ret .= "$pad<$key$attributes></$key>{$this->settings['newline']}";
             } elseif (\is_array($item)) {
                 if (\is_numeric(\key($item))) {
                     $ret .= $this->_encode($item, $pos, $key);
                 } else {
-                    $ret .= "$pad<$key$attributes>{$this->sSettings['newline']}"
+                    $ret .= "$pad<$key$attributes>{$this->settings['newline']}"
                         . $this->_encode($item, $pos + 1)
-                        . "$pad</$key>{$this->sSettings['newline']}";
+                        . "$pad</$key>{$this->settings['newline']}";
                 }
             } else {
                 if ($this->hasSpecialCharacters((string) $item)) {
                     $item = \str_replace(']]>', ']]]]><![CDATA[>', $item);
-                    $ret .= "$pad<$key$attributes><![CDATA[" . $item . "]]></$key>{$this->sSettings['newline']}";
+                    $ret .= "$pad<$key$attributes><![CDATA[" . $item . "]]></$key>{$this->settings['newline']}";
                 } else {
                     if ($item === false) {
                         $item = 0;
                     }
 
-                    $ret .= "$pad<$key$attributes>" . $item . "</$key>{$this->sSettings['newline']}";
+                    $ret .= "$pad<$key$attributes>" . $item . "</$key>{$this->settings['newline']}";
                 }
             }
         }
@@ -103,7 +108,7 @@ class XmlConverter
         $parser = \xml_parser_create();
         \xml_parser_set_option($parser, \XML_OPTION_CASE_FOLDING, 0);
         \xml_parser_set_option($parser, \XML_OPTION_SKIP_WHITE, 1);
-        \xml_parser_set_option($parser, \XML_OPTION_TARGET_ENCODING, $this->sSettings['encoding']);
+        \xml_parser_set_option($parser, \XML_OPTION_TARGET_ENCODING, $this->settings['encoding']);
         \xml_parse_into_struct($parser, \file_get_contents($contents), $xml_values);
         \xml_parser_free($parser);
 
@@ -127,7 +132,7 @@ class XmlConverter
                 // Set the attributes too.
                 if (isset($attributes)) {
                     foreach ($attributes as $attr => $val) {
-                        if ($this->sSettings['attributes']) {
+                        if ($this->settings['attributes']) {
                             $result['_attributes'][$attr] = $val;
                         } // Set all the attributes in a array called 'attr'
                         /*  TO DO should we change the key name to '_attr'? Someone may use the tagname 'attr'. Same goes for 'value' too */
@@ -160,10 +165,10 @@ class XmlConverter
                 } else { // If taken, put all things inside a list(array)
                     if ((\is_array(
                         $current[$tag]
-                    ) && $this->sSettings['attributes'] == 0) // If it is already an array...
+                    ) && $this->settings['attributes'] == 0) // If it is already an array...
                         || (isset($current[$tag][0]) && \is_array(
                             $current[$tag]
-                        ) && $this->sSettings['attributes'] == 1)
+                        ) && $this->settings['attributes'] == 1)
                     ) {
                         // array_push($current[$tag],$result); // ...push the new element into that array.
                         $current[$tag][] = $result;

@@ -12,40 +12,38 @@ namespace SwagImportExport\Controllers\Backend;
 use Doctrine\DBAL\DBALException;
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\Snippet\DbAdapter;
-use SwagImportExport\Components\Factories\DataFactory;
 use SwagImportExport\Components\Factories\ProfileFactory;
+use SwagImportExport\Components\Providers\DataProvider;
 use SwagImportExport\Components\Service\ProfileServiceInterface;
 use SwagImportExport\Components\Utils\TreeHelper;
-use SwagImportExport\CustomModels\Profile;
-use SwagImportExport\CustomModels\ProfileRepository;
+use SwagImportExport\Models\Profile;
+use SwagImportExport\Models\ProfileRepository;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpFoundation\Request;
 
 class Shopware_Controllers_Backend_SwagImportExportProfile extends \Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
-    private DataFactory $dataFactory;
+    private DataProvider $dataProvider;
 
     private ProfileFactory $profileFactory;
 
     private \Shopware_Components_Snippet_Manager $snippetManager;
 
+    private ProfileRepository $profileRepository;
+
     private ProfileServiceInterface $profileService;
 
     public function __construct(
         \Shopware_Components_Snippet_Manager $snippetManager,
-        DataFactory $dataFactory,
+        DataProvider $dataProvider,
         ProfileFactory $profileFactory,
+        ProfileRepository $profileRepository,
         ProfileServiceInterface $profileService
     ) {
         $this->snippetManager = $snippetManager;
-        $this->dataFactory = $dataFactory;
+        $this->dataProvider = $dataProvider;
         $this->profileFactory = $profileFactory;
+        $this->profileRepository = $profileRepository;
         $this->profileService = $profileService;
-    }
-
-    public function preDispatch(): void
-    {
-        parent::preDispatch();
     }
 
     /**
@@ -85,20 +83,16 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends \Shopware_Con
     {
         $manager = $this->getModelManager();
 
-        /** @var ProfileRepository $profileRepository */
-        $profileRepository = $manager->getRepository(Profile::class);
-
-        $query = $profileRepository->getProfilesListQuery(
+        $query = $this->profileRepository->getProfilesListQuery(
             $this->Request()->getParam('filter', []),
             $this->Request()->getParam('sort', []),
-            $this->Request()->getParam('limit'),
-            $this->Request()->getParam('start')
+            $this->Request()->getParam('limit') ? (int) $this->Request()->getParam('limit') : null,
+            $this->Request()->getParam('start') ? (int) $this->Request()->getParam('start') : null
         )->getQuery();
 
         $count = $manager->getQueryCount($query);
 
         $data = $query->getArrayResult();
-
         $namespace = $this->snippetManager->getNamespace('backend/swag_import_export/default_profiles');
 
         foreach ($data as &$profile) {
@@ -122,6 +116,10 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends \Shopware_Con
 
         try {
             $profileEntity = $this->profileFactory->createProfileModel($data);
+
+            if (!$profileEntity) {
+                throw new \Exception('Could not create profile');
+            }
 
             return $this->View()->assign([
                 'success' => true,
@@ -222,7 +220,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends \Shopware_Con
     public function getProfileAction(): void
     {
         $manager = $this->getModelManager();
-        $profileId = $this->Request()->getParam('profileId', -1);
+        $profileId = (int) $this->Request()->getParam('profileId', -1);
 
         if ($profileId === -1) {
             $this->View()->assign(['success' => false, 'children' => []]);
@@ -347,7 +345,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends \Shopware_Con
     public function createNodeAction(): void
     {
         $manager = $this->getModelManager();
-        $profileId = $this->Request()->getParam('profileId', 1);
+        $profileId = (int) $this->Request()->getParam('profileId', 1);
         $data = $this->Request()->getParam('data', 1);
         $profileRepository = $manager->getRepository(Profile::class);
         $profileEntity = $profileRepository->findOneBy(['id' => $profileId]);
@@ -382,14 +380,14 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends \Shopware_Con
     public function updateNodeAction(): void
     {
         $manager = $this->getModelManager();
-        $profileId = $this->Request()->getParam('profileId', 1);
+        $profileId = (int) $this->Request()->getParam('profileId', 1);
         $data = $this->Request()->getParam('data', 1);
         $profileRepository = $manager->getRepository(Profile::class);
         $profileEntity = $profileRepository->findOneBy(['id' => $profileId]);
         $profileType = $profileEntity->getType();
         $defaultFields = [];
 
-        $dataManager = $this->dataFactory->createDataManager($profileType);
+        $dataManager = $this->dataProvider->createDataManager($profileType);
         if ($dataManager) {
             $defaultFields = $dataManager->getDefaultFields();
         }
@@ -451,7 +449,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends \Shopware_Con
     public function deleteNodeAction(): void
     {
         $manager = $this->getModelManager();
-        $profileId = $this->Request()->getParam('profileId', 1);
+        $profileId = (int) $this->Request()->getParam('profileId', 1);
         $data = $this->Request()->getParam('data', 1);
         $profileRepository = $manager->getRepository(Profile::class);
         $profileEntity = $profileRepository->findOneBy(['id' => $profileId]);
@@ -484,7 +482,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends \Shopware_Con
 
     public function getSectionsAction(): void
     {
-        $postData['profileId'] = $this->Request()->getParam('profileId');
+        $postData['profileId'] = (int) $this->Request()->getParam('profileId');
 
         if (!$postData['profileId']) {
             $this->View()->assign([
@@ -494,10 +492,10 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends \Shopware_Con
             return;
         }
 
-        $profile = $this->profileFactory->loadProfile($postData);
+        $profile = $this->profileFactory->loadProfile($postData['profileId']);
         $type = $profile->getType();
 
-        $dbAdapter = $this->dataFactory->createDbAdapter($type);
+        $dbAdapter = $this->dataProvider->createDbAdapter($type);
 
         $sections = $dbAdapter->getSections();
 
@@ -521,11 +519,11 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends \Shopware_Con
             return;
         }
 
-        $profile = $this->profileFactory->loadProfile($postData);
+        $profile = $this->profileFactory->loadProfile((int) $postData['profileId']);
         $type = $profile->getType();
 
-        $dbAdapter = $this->dataFactory->createDbAdapter($type);
-        $dataManager = $this->dataFactory->createDataManager($type);
+        $dbAdapter = $this->dataProvider->createDbAdapter($type);
+        $dataManager = $this->dataProvider->createDataManager($type);
 
         $defaultFieldsName = null;
         $defaultFields = [];
@@ -557,6 +555,9 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends \Shopware_Con
             $match = '';
             \preg_match('/(?<=as ).*/', $column, $match);
 
+            if (!$match[0]) {
+                continue;
+            }
             $match = \trim($match[0]);
 
             if ($match != '') {
@@ -595,11 +596,11 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends \Shopware_Con
             return;
         }
 
-        $profile = $this->profileFactory->loadProfile($postData);
+        $profile = $this->profileFactory->loadProfile((int) $postData['profileId']);
         $type = $profile->getType();
 
         /** @var DbAdapter $dbAdapter */
-        $dbAdapter = $this->dataFactory->createDbAdapter($type);
+        $dbAdapter = $this->dataProvider->createDbAdapter($type);
 
         if (!\method_exists($dbAdapter, 'getParentKeys')) {
             $this->View()->assign([

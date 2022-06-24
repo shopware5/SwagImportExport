@@ -25,18 +25,13 @@ use SwagImportExport\Components\Utils\DbAdapterHelper;
 use SwagImportExport\Components\Utils\SnippetsHelper;
 use SwagImportExport\Components\Validators\CategoryValidator;
 
-class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook
+class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleable
 {
     protected ModelManager $modelManager;
 
     protected \Enlight_Components_Db_Adapter_Pdo_Mysql $db;
 
     protected EntityRepository $repository;
-
-    /**
-     * @var array<array<mixed>>
-     */
-    protected array $unprocessedData = [];
 
     /**
      * @var array<string>
@@ -174,7 +169,7 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook
 
     public function getUnprocessedData(): array
     {
-        return $this->unprocessedData;
+        return [];
     }
 
     /**
@@ -210,8 +205,6 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook
      */
     public function write(array $records): void
     {
-        $this->unprocessedData = [];
-
         $records = $records['default'];
         $this->validateRecordsShouldNotBeEmpty($records);
 

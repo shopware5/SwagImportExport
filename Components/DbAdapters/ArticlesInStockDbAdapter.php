@@ -22,11 +22,6 @@ class ArticlesInStockDbAdapter implements DataDbAdapter, \Enlight_Hook
 {
     protected ModelManager $modelManager;
 
-    /**
-     * @var array<mixed>
-     */
-    protected array $unprocessedData = [];
-
     protected array $logMessages = [];
 
     protected ?string $logState = null;
@@ -119,7 +114,7 @@ class ArticlesInStockDbAdapter implements DataDbAdapter, \Enlight_Hook
      */
     public function getUnprocessedData(): array
     {
-        return $this->unprocessedData;
+        return [];
     }
 
     /**
@@ -228,7 +223,6 @@ class ArticlesInStockDbAdapter implements DataDbAdapter, \Enlight_Hook
     public function write(array $records): void
     {
         $articleCount = 0;
-        $this->unprocessedData = [];
 
         if (empty($records['default'])) {
             $message = SnippetsHelper::getNamespace()

@@ -38,7 +38,7 @@ abstract class DataManager
     /**
      * Return type of default field
      */
-    public static function getFieldType(array $record, array $mapper): string
+    public static function getFieldType(string $record, array $mapper): string
     {
         foreach ($mapper as $type => $fields) {
             if (\in_array($record, $fields)) {

@@ -9,151 +9,64 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Components\Service;
 
-use SwagImportExport\Components\DataWorkflow;
-use SwagImportExport\Components\DbAdapters\DataDbAdapter;
-use SwagImportExport\Components\Service\Struct\PreparationResultStruct;
+use SwagImportExport\Components\DataIO;
+use SwagImportExport\Components\Logger\Logger;
+use SwagImportExport\Components\Providers\DataProvider;
+use SwagImportExport\Components\Session\Session;
+use SwagImportExport\Components\Structs\ExportRequest;
 use SwagImportExport\Components\Utils\SnippetsHelper;
 
 class ExportService implements ExportServiceInterface
 {
-    private ImportExportServiceHelper $importExportServiceHelper;
+    private DataProvider $dataProvider;
+
+    private Logger $logger;
+
+    private DataWorkflow $dataWorkflow;
 
     public function __construct(
-        ImportExportServiceHelper $importExportServiceHelper
+        DataProvider $dataProvider,
+        Logger $logger,
+        DataWorkflow $dataWorkflow
     ) {
-        $this->importExportServiceHelper = $importExportServiceHelper;
+        $this->dataProvider = $dataProvider;
+        $this->logger = $logger;
+        $this->dataWorkflow = $dataWorkflow;
+    }
+
+    public function prepareExport(ExportRequest $request, Session $session): int
+    {
+        $dbAdapter = $this->dataProvider->createDbAdapter($request->profileEntity->getType());
+        $dataIo = new DataIO($dbAdapter, $session, $this->logger);
+
+        $recordIds = $dataIo->preloadRecordIds($request, $session);
+
+        return \count($recordIds);
     }
 
     /**
-     * @param array<string, mixed> $requestData
-     * @param array<string, mixed> $filterParams
+     * @return \Generator<int>
      */
-    public function prepareExport(array $requestData, array $filterParams): PreparationResultStruct
+    public function export(ExportRequest $request, Session $session): \Generator
     {
-        $serviceHelpers = $this->importExportServiceHelper->buildServiceHelpers($requestData);
-        $requestData['filter'] = $this->prepareFilter($serviceHelpers->getProfile()->getType(), $filterParams);
-
-        $this->importExportServiceHelper->initializeDataIO($serviceHelpers->getDataIO(), $requestData);
-
-        $recordIds = $serviceHelpers->getDataIO()->preloadRecordIds()->getRecordIds();
-
-        $position = $serviceHelpers->getDataIO()->getSessionPosition();
-
-        return new PreparationResultStruct($position, \count($recordIds));
-    }
-
-    /**
-     * @param array<string, mixed> $requestData
-     * @param array<string, mixed> $filterParams
-     *
-     * @return array<string, mixed>
-     */
-    public function export(array $requestData, array $filterParams): array
-    {
-        $serviceHelpers = $this->importExportServiceHelper->buildServiceHelpers($requestData);
-        $requestData['filter'] = $this->prepareFilter($serviceHelpers->getProfile()->getType(), $filterParams);
-
-        $this->importExportServiceHelper->initializeDataIO($serviceHelpers->getDataIO(), $requestData);
-
-        $dataTransformerChain = $this->importExportServiceHelper->createDataTransformerChain(
-            $serviceHelpers->getProfile(),
-            $serviceHelpers->getFileWriter()->hasTreeStructure()
-        );
-
-        $dataWorkflow = new DataWorkflow(
-            $serviceHelpers->getDataIO(),
-            $serviceHelpers->getProfile(),
-            $dataTransformerChain,
-            $serviceHelpers->getFileWriter()
-        );
-
-        $session = $serviceHelpers->getSession()->getEntity();
-
         try {
-            $resultData = $dataWorkflow->export($requestData);
+            do {
+                $position = $this->dataWorkflow->export($request, $session);
+                yield $position;
+            } while ($session->getState() !== Session::SESSION_CLOSE);
+
             $message = \sprintf(
                 '%s %s %s',
-                $resultData['position'],
-                SnippetsHelper::getNamespace('backend/swag_import_export/default_profiles')->get('type/' . $serviceHelpers->getProfile()->getType()),
+                $position,
+                SnippetsHelper::getNamespace('backend/swag_import_export/default_profiles')->get('type/' . $request->profileEntity->getType()),
                 SnippetsHelper::getNamespace('backend/swag_import_export/log')->get('export/success')
             );
 
-            $this->importExportServiceHelper->logProcessing('false', $resultData['fileName'], $serviceHelpers->getProfile()->getName(), $message, 'true', $session);
-            unset($resultData['filter']);
-
-            return $resultData;
+            $this->logger->logProcessing('false', $request->filePath, $request->profileEntity->getName(), $message, 'true', $session);
         } catch (\Exception $e) {
-            $this->importExportServiceHelper->logProcessing('true', $requestData['fileName'], $serviceHelpers->getProfile()->getName(), $e->getMessage(), 'false', $session);
+            $this->logger->logProcessing('true', $request->filePath, $request->profileEntity->getName(), $e->getMessage(), 'false', $session);
 
             throw $e;
         }
-    }
-
-    /**
-     * @param array<string, mixed> $filterParams
-     *
-     * @return array<string, mixed>
-     */
-    private function prepareFilter(string $profileType, array $filterParams): array
-    {
-        $filterParams = \array_filter($filterParams, 'strlen');
-        $filter = [];
-
-        // prepare article filter
-        if ($profileType === DataDbAdapter::ARTICLE_ADAPTER || $profileType === DataDbAdapter::ARTICLE_PRICE_ADAPTER) {
-            $filter['variants'] = (bool) $filterParams['variants'];
-            if (isset($filterParams['categories'])) {
-                $filter['categories'] = [$filterParams['categories']];
-            } elseif (isset($filterParams['productStreamId'])) {
-                $filter['productStreamId'] = [$filterParams['productStreamId']];
-            }
-        }
-
-        // prepare articlesInStock filter
-        if ($profileType === DataDbAdapter::ARTICLE_INSTOCK_ADAPTER && isset($filterParams['stockFilter'])) {
-            $filter['stockFilter'] = $filterParams['stockFilter'];
-            if ($filter['stockFilter'] === 'custom') {
-                $filter['direction'] = $filterParams['customFilterDirection'];
-                $filter['value'] = $filterParams['customFilterValue'];
-            }
-        }
-
-        // prepare orders and mainOrders filter
-        if (\in_array($profileType, [DataDbAdapter::ORDER_ADAPTER, DataDbAdapter::MAIN_ORDER_ADAPTER], true)) {
-            if (isset($filterParams['ordernumberFrom'])) {
-                $filter['ordernumberFrom'] = $filterParams['ordernumberFrom'];
-            }
-
-            if (isset($filterParams['dateFrom'])) {
-                $filter['dateFrom'] = new \DateTime($filterParams['dateFrom']);
-            }
-
-            if (isset($filterParams['dateTo'])) {
-                $dateTo = new \DateTime($filterParams['dateTo']);
-                $dateTo->setTime(23, 59, 59);
-                $filter['dateTo'] = $dateTo;
-            }
-
-            if (isset($filterParams['orderstate'])) {
-                $filter['orderstate'] = $filterParams['orderstate'];
-            }
-
-            if (isset($filterParams['paymentstate'])) {
-                $filter['paymentstate'] = $filterParams['paymentstate'];
-            }
-        }
-
-        // customer stream filter for addresses and customers
-        if (\in_array($profileType, [DataDbAdapter::CUSTOMER_ADAPTER, DataDbAdapter::ADDRESS_ADAPTER], true)) {
-            if (isset($filterParams['customerStreamId'])) {
-                $filter['customerStreamId'] = $filterParams['customerStreamId'];
-            }
-        }
-
-        if ($profileType === DataDbAdapter::CUSTOMER_COMPLETE_ADAPTER && isset($filterParams['customerId'])) {
-            $filter['customerId'] = $filterParams['customerId'];
-        }
-
-        return $filter;
     }
 }

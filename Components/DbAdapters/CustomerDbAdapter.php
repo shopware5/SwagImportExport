@@ -28,7 +28,7 @@ use SwagImportExport\Components\Utils\DbAdapterHelper;
 use SwagImportExport\Components\Utils\SnippetsHelper;
 use SwagImportExport\Components\Validators\CustomerValidator;
 
-class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook
+class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleable
 {
     protected ModelManager $manager;
 
@@ -37,11 +37,6 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook
     protected ?array $billingMap = null;
 
     protected ?array $shippingMap = null;
-
-    /**
-     * @var array<mixed>
-     */
-    protected array $unprocessedData = [];
 
     protected array $logMessages = [];
 
@@ -155,7 +150,7 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook
      */
     public function getUnprocessedData(): array
     {
-        return $this->unprocessedData;
+        return [];
     }
 
     public function getBillingColumns(): array
@@ -273,7 +268,6 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook
      */
     public function write(array $records): void
     {
-        $this->unprocessedData = [];
         $customerCount = 0;
 
         if (empty($records)) {

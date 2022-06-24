@@ -9,42 +9,47 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Components\Service;
 
-use Shopware\Components\Model\ModelManager;
-use Shopware\Components\Model\ModelRepository;
 use SwagImportExport\Components\Factories\ProfileFactory;
+use SwagImportExport\Components\Profile\Profile;
+use SwagImportExport\Components\Session\SessionService;
+use SwagImportExport\Components\Structs\ImportRequest;
 use SwagImportExport\Components\UploadPathProvider;
-use SwagImportExport\Components\Utils\CommandHelper;
 use SwagImportExport\Components\Utils\SnippetsHelper;
-use SwagImportExport\CustomModels\Profile;
 
 class AutoImportService implements AutoImportServiceInterface
 {
-    private UploadPathProvider $uploadPathProvider;
+    private const LOCKED_FILENAME = '__running';
 
-    private ModelManager $modelManager;
+    private UploadPathProvider $uploadPathProvider;
 
     private ProfileFactory $profileFactory;
 
-    private ?string $directory = null;
+    private string $directory;
+
+    private SessionService $sessionService;
+
+    private ImportService $importService;
 
     public function __construct(
         UploadPathProvider $uploadPathProvider,
-        ModelManager $modelManager,
-        ProfileFactory $profileFactory
+        ProfileFactory $profileFactory,
+        SessionService $sessionService,
+        ImportService $importService
     ) {
         $this->uploadPathProvider = $uploadPathProvider;
-        $this->modelManager = $modelManager;
         $this->profileFactory = $profileFactory;
+        $this->sessionService = $sessionService;
+        $this->directory = $this->uploadPathProvider->getPath(UploadPathProvider::CRON_DIR);
+        $this->importService = $importService;
     }
 
     public function runAutoImport(): void
     {
         $files = $this->getFiles();
 
-        $lockerFilename = '__running';
-        $lockerFileLocation = $this->getDirectory() . '/' . $lockerFilename;
+        $lockerFileLocation = $this->directory . '/' . self::LOCKED_FILENAME;
 
-        if (\in_array($lockerFilename, $files)) {
+        if (\in_array(self::LOCKED_FILENAME, $files)) {
             $file = \fopen($lockerFileLocation, 'rb');
             $fileContent = (int) \fread($file, (int) \filesize($lockerFileLocation));
             \fclose($file);
@@ -72,15 +77,13 @@ class AutoImportService implements AutoImportServiceInterface
 
     private function importFiles(array $files, string $lockerFileLocation): void
     {
-        $profileRepository = $this->modelManager->getRepository(Profile::class);
-
         foreach ($files as $file) {
             $fileExtension = \strtolower(\pathinfo($file, \PATHINFO_EXTENSION));
             $fileName = \strtolower(\pathinfo($file, \PATHINFO_FILENAME));
 
-            if ($fileExtension === 'xml' || $fileExtension === 'csv') {
+            if (\in_array($fileExtension, ['xml', 'csv'])) {
                 try {
-                    $profile = $this->getProfile($fileName, $file, $profileRepository);
+                    $profile = $this->getProfile($fileName, $file);
 
                     $mediaPath = $this->uploadPathProvider->getRealPath($file, UploadPathProvider::CRON_DIR);
                 } catch (\Exception $e) {
@@ -91,30 +94,7 @@ class AutoImportService implements AutoImportServiceInterface
                 }
 
                 try {
-                    $return = $this->start($profile, $mediaPath, $fileExtension);
-
-                    $profilesMapper = ['articles', 'articlesImages'];
-
-                    // loops the unprocessed data
-                    $pathInfo = \pathinfo($mediaPath);
-                    foreach ($profilesMapper as $profileName) {
-                        $tmpFile = $this->uploadPathProvider->getRealPath(
-                            $pathInfo['basename'] . '-' . $profileName . '-tmp.csv'
-                        );
-
-                        if (\file_exists($tmpFile)) {
-                            $outputFile = \str_replace('-tmp', '-swag', $tmpFile);
-                            \rename($tmpFile, $outputFile);
-
-                            $profile = $this->profileFactory->loadHiddenProfile($profileName);
-                            $profileEntity = $profile->getEntity();
-
-                            $this->start($profileEntity, $outputFile, 'csv');
-                        }
-                    }
-
-                    $message = $return['data']['position'] . ' ' . $return['data']['adapter'] . ' imported successfully' . \PHP_EOL;
-                    echo $message;
+                    $this->start($profile, $mediaPath, $fileExtension);
                     \unlink($mediaPath);
                 } catch (\Exception $e) {
                     // copy file as broken
@@ -133,12 +113,9 @@ class AutoImportService implements AutoImportServiceInterface
         }
     }
 
-    /**
-     * @param ModelRepository<Profile> $profileRepository
-     */
-    private function getProfile(string $fileName, string $file, ModelRepository $profileRepository): Profile
+    private function getProfile(string $fileName, string $file): Profile
     {
-        $profile = CommandHelper::findProfileByName($file, $profileRepository);
+        $profile = $this->profileFactory->loadProfileByFileName($file);
 
         if (!$profile instanceof Profile) {
             $message = SnippetsHelper::getNamespace()->get('cronjob/no_profile', 'No profile found %s');
@@ -154,9 +131,7 @@ class AutoImportService implements AutoImportServiceInterface
      */
     private function getFiles(): array
     {
-        $directory = $this->getDirectory();
-
-        $allFiles = \scandir($directory);
+        $allFiles = \scandir($this->directory);
 
         return \array_diff($allFiles, ['.', '..', '.htaccess']);
     }
@@ -172,34 +147,23 @@ class AutoImportService implements AutoImportServiceInterface
         \fclose($file);
     }
 
-    private function getDirectory(): string
+    private function start(Profile $profileModel, string $inputFile, string $format): void
     {
-        if (!$this->directory) {
-            $this->directory = $this->uploadPathProvider->getPath(UploadPathProvider::CRON_DIR);
-        }
-
-        return $this->directory;
-    }
-
-    private function start(Profile $profileModel, string $inputFile, string $format): array
-    {
-        $commandHelper = new CommandHelper(
+        $importRequest = new ImportRequest();
+        $importRequest->setData(
             [
                 'profileEntity' => $profileModel,
-                'filePath' => $inputFile,
+                'inputFileName' => $inputFile,
                 'format' => $format,
                 'username' => 'Cron',
             ]
         );
 
-        $return = $commandHelper->prepareImport();
-        $count = $return['count'];
+        $session = $this->sessionService->createSession();
 
-        do {
-            $return = $commandHelper->importAction();
-            $position = $return['data']['position'];
-        } while ($position < $count);
-
-        return $return;
+        foreach ($this->importService->import($importRequest, $session) as [$profileName, $position]) {
+            $message = $position . ' ' . $profileName . ' imported successfully' . \PHP_EOL;
+            echo $message;
+        }
     }
 }

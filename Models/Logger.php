@@ -7,7 +7,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace SwagImportExport\CustomModels;
+namespace SwagImportExport\Models;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
@@ -29,7 +29,7 @@ class Logger extends ModelEntity
     protected int $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="SwagImportExport\CustomModels\Session", inversedBy="logs")
+     * @ORM\ManyToOne(targetEntity="SwagImportExport\Models\Session", inversedBy="logs")
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected ?Session $session;

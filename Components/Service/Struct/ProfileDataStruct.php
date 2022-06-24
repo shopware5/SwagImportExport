@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Components\Service\Struct;
 
-use SwagImportExport\CustomModels\Profile;
+use SwagImportExport\Models\Profile;
 
 class ProfileDataStruct
 {

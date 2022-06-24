@@ -38,7 +38,7 @@ class OrderValidator extends Validator
             'mode',
             'esd',
         ],
-        'string' => [ // TODO: maybe we don't need to check fields which contains string?
+        'string' => [
             'number',
             'comment',
             'transactionId',

@@ -9,31 +9,30 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Components\Session;
 
-use Doctrine\ORM\EntityRepository;
 use Shopware\Components\Model\ModelManager;
 use SwagImportExport\Components\Profile\Profile;
 use SwagImportExport\Components\UploadPathProvider;
-use SwagImportExport\CustomModels\Session as SessionEntity;
+use SwagImportExport\Models\Session as SessionEntity;
 
-/**
- * @method int getTotalCount
- */
 class Session
 {
-    protected ?SessionEntity $sessionEntity;
+    public const SESSION_CLOSE = 'closed';
+    public const SESSION_NEW = 'new';
+    public const SESSION_ACTIVE = 'active';
+    public const SESSION_FINISHED = 'finished';
 
-    /**
-     * @var EntityRepository<SessionEntity>|null
-     */
-    protected ?EntityRepository $sessionRepository;
+    protected SessionEntity $sessionEntity;
 
     protected int $sessionId;
 
-    protected ?ModelManager $manager = null;
+    protected ModelManager $manager;
 
-    public function __construct(SessionEntity $session)
-    {
+    public function __construct(
+        SessionEntity $session,
+        ModelManager $manager
+    ) {
         $this->sessionEntity = $session;
+        $this->manager = $manager;
     }
 
     /**
@@ -41,20 +40,7 @@ class Session
      */
     public function getEntity(): SessionEntity
     {
-        if ($this->sessionEntity === null) {
-            $session = $this->getSessionRepository()->findOneBy(['id' => $this->getSessionId()]);
-            if (!$session instanceof SessionEntity) {
-                throw new \RuntimeException(sprintf('Cannot find %s with ID "%s"', SessionEntity::class, $this->getSessionId()));
-            }
-            $this->sessionEntity = $session;
-        }
-
         return $this->sessionEntity;
-    }
-
-    public function getSessionId(): int
-    {
-        return $this->sessionId;
     }
 
     /**
@@ -69,25 +55,23 @@ class Session
      */
     public function start(Profile $profile, array $data): void
     {
-        $sessionEntity = $this->getEntity();
-
         if (isset($data['totalCountedIds']) && $data['totalCountedIds'] > 0) {
             // set count
-            $sessionEntity->setTotalCount($data['totalCountedIds']);
+            $this->sessionEntity->setTotalCount($data['totalCountedIds']);
         }
         // set ids
-        $sessionEntity->setIds($data['serializedIds']);
+        $this->sessionEntity->setIds($data['serializedIds']);
 
         // set type
-        $sessionEntity->setType($data['type']);
+        $this->sessionEntity->setType($data['type']);
 
         // set position
-        $sessionEntity->setPosition(0);
+        $this->sessionEntity->setPosition(0);
 
         $dateTime = new \DateTime('now');
 
         // set date/time
-        $sessionEntity->setCreatedAt($dateTime);
+        $this->sessionEntity->setCreatedAt($dateTime);
 
         if (!isset($data['fileName'])) {
             throw new \Exception('Invalid file name.');
@@ -96,12 +80,12 @@ class Session
         /** @var UploadPathProvider $uploadPathProvider */
         $uploadPathProvider = Shopware()->Container()->get('swag_import_export.upload_path_provider');
         // set fileName
-        $sessionEntity->setFileName(
+        $this->sessionEntity->setFileName(
             $uploadPathProvider->getFileNameFromPath($data['fileName'])
         );
 
         if (isset($data['fileSize'])) {
-            $sessionEntity->setFileSize((int) $data['fileSize']);
+            $this->sessionEntity->setFileSize((int) $data['fileSize']);
         }
 
         if (!isset($data['format'])) {
@@ -109,22 +93,19 @@ class Session
         }
 
         // set username
-        $sessionEntity->setUserName($data['username']);
+        $this->sessionEntity->setUserName($data['username']);
 
         // set format
-        $sessionEntity->setFormat($data['format']);
+        $this->sessionEntity->setFormat($data['format']);
 
         // change state
-        $sessionEntity->setState('active');
+        $this->sessionEntity->setState(self::SESSION_ACTIVE);
 
         // set profile
-        $sessionEntity->setProfile($profile->getEntity());
+        $this->sessionEntity->setProfile($profile->getEntity());
 
-        $this->getManager()->persist($sessionEntity);
-
-        $this->getManager()->flush();
-
-        $this->sessionId = $sessionEntity->getId();
+        $this->manager->persist($this->sessionEntity);
+        $this->manager->flush();
     }
 
     /**
@@ -143,7 +124,7 @@ class Session
         $newPosition = $position + $step;
 
         if ($newPosition >= $count) {
-            $sessionEntity->setState('finished');
+            $sessionEntity->setState(self::SESSION_FINISHED);
             $sessionEntity->setPosition($count);
         } else {
             $sessionEntity->setPosition($newPosition);
@@ -154,9 +135,8 @@ class Session
             $sessionEntity->setFileSize((int) $fileSize);
         }
 
-        $this->getManager()->merge($sessionEntity);
-
-        $this->getManager()->flush();
+        $this->manager->merge($sessionEntity);
+        $this->manager->flush();
     }
 
     /**
@@ -165,22 +145,11 @@ class Session
      *
      * @retrun array{recordIds: array<int>, fileName: string}
      */
-    public function resume(): array
+    public function resume(): void
     {
-        $sessionEntity = $this->getEntity();
-
-        $recordIds = $sessionEntity->getIds();
-
-        $sessionEntity->setState('active');
-
-        $this->getManager()->persist($sessionEntity);
-
-        $this->getManager()->flush();
-
-        return [
-            'recordIds' => empty($recordIds) ? [] : \unserialize($recordIds),
-            'fileName' => $sessionEntity->getFileName(),
-        ];
+        $this->sessionEntity->setState(self::SESSION_ACTIVE);
+        $this->manager->persist($this->sessionEntity);
+        $this->manager->flush();
     }
 
     /**
@@ -189,12 +158,10 @@ class Session
      */
     public function close(): void
     {
-        $sessionEntity = $this->getEntity();
-        $sessionEntity->setState('closed');
+        $this->sessionEntity->setState(self::SESSION_CLOSE);
 
-        $this->getManager()->merge($sessionEntity);
-
-        $this->getManager()->flush();
+        $this->manager->merge($this->sessionEntity);
+        $this->manager->flush();
     }
 
     /**
@@ -204,12 +171,10 @@ class Session
      */
     public function setUsername(?string $username): void
     {
-        $sessionEntity = $this->getEntity();
+        $this->sessionEntity->setUserName($username);
 
-        $sessionEntity->setUserName($username);
-
-        $this->getManager()->persist($sessionEntity);
-        $this->getManager()->flush();
+        $this->manager->persist($this->sessionEntity);
+        $this->manager->flush();
     }
 
     /**
@@ -231,34 +196,47 @@ class Session
         return $this->getEntity()->getState();
     }
 
+    public function getFileName(): string
+    {
+        return $this->getEntity()->getFileName();
+    }
+
     public function setTotalCount($totalCount): void
     {
         $this->getEntity()->setTotalCount($totalCount);
     }
 
-    /**
-     * Returns entity manager
-     */
-    private function getManager(): ModelManager
+    public function getPosition(): int
     {
-        if ($this->manager === null) {
-            $this->manager = Shopware()->Models();
-        }
+        return $this->getEntity()->getPosition() ?? 0;
+    }
 
-        return $this->manager;
+    public function getId(): int
+    {
+        return $this->getEntity()->getId();
+    }
+
+    public function getTotalCount(): int
+    {
+        return $this->getEntity()->getTotalCount();
     }
 
     /**
-     * Helper Method to get access to the session repository.
-     *
-     * @return EntityRepository<SessionEntity>
+     * @return array<int>
      */
-    private function getSessionRepository(): EntityRepository
+    public function getRecordIds(): array
     {
-        if ($this->sessionRepository === null) {
-            $this->sessionRepository = Shopware()->Models()->getRepository(SessionEntity::class);
-        }
+        $recordIds = $this->sessionEntity->getIds() ?? '';
+        $unserilized = \unserialize($recordIds, []);
 
-        return $this->sessionRepository;
+        return \is_array($unserilized) ? $unserilized : [];
+    }
+
+    /**
+     * @param array<int> $ids
+     */
+    public function setRecordIds(array $ids): void
+    {
+        $this->sessionEntity->setIds(serialize($ids));
     }
 }

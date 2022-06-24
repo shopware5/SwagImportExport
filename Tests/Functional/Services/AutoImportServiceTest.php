@@ -10,9 +10,7 @@ declare(strict_types=1);
 namespace SwagImportExport\Tests\Functional\Services;
 
 use PHPUnit\Framework\TestCase;
-use SwagImportExport\Components\Factories\ProfileFactory;
 use SwagImportExport\Components\Service\AutoImportService;
-use SwagImportExport\Components\UploadPathProvider;
 use SwagImportExport\Tests\Helper\ContainerTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 
@@ -41,9 +39,9 @@ class AutoImportServiceTest extends TestCase
 
         $reflectionClass = new \ReflectionClass(AutoImportService::class);
 
-        $methodGetDirectory = $reflectionClass->getMethod('getDirectory');
-        $methodGetDirectory->setAccessible(true);
-        $directory = $methodGetDirectory->invoke($service);
+        $property = $reflectionClass->getProperty('directory');
+        $property->setAccessible(true);
+        $directory = $property->getValue($service);
 
         $directory .= '/__running';
 
@@ -70,9 +68,9 @@ class AutoImportServiceTest extends TestCase
         $service = $this->getService();
 
         $reflectionClass = new \ReflectionClass(AutoImportService::class);
-        $methodGetDirectory = $reflectionClass->getMethod('getDirectory');
-        $methodGetDirectory->setAccessible(true);
-        $baseDirectory = $methodGetDirectory->invoke($service);
+        $property = $reflectionClass->getProperty('directory');
+        $property->setAccessible(true);
+        $baseDirectory = $property->getValue($service);
 
         $directory = $baseDirectory . '/no-profile.xml';
 
@@ -90,9 +88,9 @@ class AutoImportServiceTest extends TestCase
         $service = $this->getService();
 
         $reflectionClass = new \ReflectionClass(AutoImportService::class);
-        $methodGetDirectory = $reflectionClass->getMethod('getDirectory');
-        $methodGetDirectory->setAccessible(true);
-        $baseDirectory = $methodGetDirectory->invoke($service);
+        $property = $reflectionClass->getProperty('directory');
+        $property->setAccessible(true);
+        $baseDirectory = $property->getValue($service);
 
         $userFile = $baseDirectory . '/default_customers.Shopware.csv';
 
@@ -101,7 +99,7 @@ class AutoImportServiceTest extends TestCase
 
         $this->installProfile($userFile, \file_get_contents(__DIR__ . '/_fixtures/export.customers.csv'));
 
-        $this->expectOutputString('3 customers imported successfully' . \PHP_EOL);
+        $this->expectOutputString('3 default_customers imported successfully' . \PHP_EOL);
         $service->runAutoImport();
     }
 
@@ -112,10 +110,6 @@ class AutoImportServiceTest extends TestCase
 
     private function getService(): AutoImportService
     {
-        return new AutoImportService(
-            new UploadPathProvider(Shopware()->DocPath()),
-            $this->getContainer()->get('models'),
-            $this->getContainer()->get(ProfileFactory::class)
-        );
+        return $this->getContainer()->get(AutoImportService::class);
     }
 }

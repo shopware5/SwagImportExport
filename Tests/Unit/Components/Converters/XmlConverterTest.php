@@ -42,16 +42,6 @@ class XmlConverterTest extends TestCase
         static::assertEquals($expectedElementContent, $result, 'Expected empty element content, but root element contains elements.');
     }
 
-    public function testEncodeWithoutPadding(): void
-    {
-        $expectedElementContent = "<article></article>\r\n";
-
-        $this->xmlConverter->sSettings['padding'] = false;
-        $result = $this->xmlConverter->_encode(['article' => []]);
-
-        static::assertXmlStringEqualsXmlString($expectedElementContent, $result, 'Expected only root element.');
-    }
-
     public function testEncodeWithCustomRootElementName(): void
     {
         $customRootElement = 'customRoot';

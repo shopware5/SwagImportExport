@@ -69,16 +69,7 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
     public function initialize(Profile $profile): void
     {
         $this->config = $profile->getEntity()->getTree();
-        $this->iterationPart = null;
-        $this->headerFooterData = null;
-        $this->mainType = null;
-        $this->rawData = [];
-        $this->bufferData = null;
-        $this->importMapper = null;
-        $this->data = null;
-        $this->currentRecord = null;
-        $this->preparedData = null;
-        $this->iterationNodes = [];
+        $this->reset();
     }
 
     /**
@@ -90,6 +81,7 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
      */
     public function transformForward(array $data): array
     {
+        $this->reset();
         $this->setData($data);
         $transformData = [];
 
@@ -570,5 +562,19 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
                 $this->removeIterationPart($child);
             }
         }
+    }
+
+    private function reset(): void
+    {
+        $this->iterationPart = null;
+        $this->headerFooterData = null;
+        $this->mainType = null;
+        $this->rawData = [];
+        $this->bufferData = null;
+        $this->importMapper = null;
+        $this->data = null;
+        $this->currentRecord = null;
+        $this->preparedData = null;
+        $this->iterationNodes = [];
     }
 }

@@ -13,7 +13,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use SwagImportExport\Components\DbAdapters\ArticlesDbAdapter;
 use SwagImportExport\Components\DbAdapters\DataDbAdapter;
-use SwagImportExport\Components\Factories\DataFactory;
+use SwagImportExport\Components\Providers\DataProvider;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use SwagImportExport\Tests\Helper\DbAdapterTestHelper;
 use SwagImportExport\Tests\Helper\FixturesImportTrait;
@@ -109,9 +109,9 @@ class ArticlesDbAdapterTest extends DbAdapterTestHelper
 
     private function createArticlesDbAdapter(): DataDbAdapter
     {
-        $dataFactory = $this->getContainer()->get(DataFactory::class);
+        $dataProvider = $this->getContainer()->get(DataProvider::class);
 
-        return $dataFactory->createDbAdapter($this->dbAdapter);
+        return $dataProvider->createDbAdapter($this->dbAdapter);
     }
 
     private function getProductDataResult(string $number): array

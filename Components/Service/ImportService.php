@@ -9,192 +9,157 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Components\Service;
 
-use SwagImportExport\Components\DataWorkflow;
-use SwagImportExport\Components\DbAdapters\DataDbAdapter;
-use SwagImportExport\Components\Factories\DataTransformerFactory;
-use SwagImportExport\Components\Factories\FileIOFactory;
+use Shopware\Components\Model\ModelManager;
 use SwagImportExport\Components\Factories\ProfileFactory;
+use SwagImportExport\Components\FileIO\FileReader;
 use SwagImportExport\Components\Logger\Logger;
-use SwagImportExport\Components\Service\Struct\PreparationResultStruct;
+use SwagImportExport\Components\Providers\FileIOProvider;
+use SwagImportExport\Components\Session\Session;
+use SwagImportExport\Components\Session\SessionService;
+use SwagImportExport\Components\Structs\ImportRequest;
 use SwagImportExport\Components\UploadPathProvider;
 use SwagImportExport\Components\Utils\SnippetsHelper;
 
 class ImportService implements ImportServiceInterface
 {
-    private ImportExportServiceHelper $importExportServiceHelper;
-
     private UploadPathProvider $uploadPathProvider;
-
-    private ProfileFactory $profileFactory;
-
-    private \Shopware_Components_Config $config;
 
     private Logger $logger;
 
-    private FileIOFactory $fileIOFactory;
+    private FileIOProvider $fileIOFactory;
 
-    private DataTransformerFactory $dataTransformerFactory;
+    private DataWorkflow $dataWorkflow;
+
+    private ProfileFactory $profileFactory;
+
+    private ModelManager $modelManager;
 
     public function __construct(
-        ImportExportServiceHelper $importExportServiceHelper,
-        FileIOFactory $fileIOFactory,
-        DataTransformerFactory $dataTransformerFactory,
+        FileIOProvider $fileIOFactory,
         UploadPathProvider $uploadPathProvider,
-        ProfileFactory $profileFactory,
         Logger $logger,
-        \Shopware_Components_Config $config
+        DataWorkflow $dataWorkflow,
+        ProfileFactory $profileFactory,
+        ModelManager $modelManager
     ) {
-        $this->importExportServiceHelper = $importExportServiceHelper;
         $this->uploadPathProvider = $uploadPathProvider;
-        $this->profileFactory = $profileFactory;
-        $this->config = $config;
         $this->logger = $logger;
         $this->fileIOFactory = $fileIOFactory;
-        $this->dataTransformerFactory = $dataTransformerFactory;
+        $this->dataWorkflow = $dataWorkflow;
+        $this->profileFactory = $profileFactory;
+        $this->modelManager = $modelManager;
     }
 
-    public function prepareImport(array $requestData, string $inputFileName): PreparationResultStruct
+    public function prepareImport(ImportRequest $request): int
     {
-        $serviceHelpers = $this->importExportServiceHelper->buildServiceHelpers($requestData);
+        // we create the file reader that will read the result file
+        /** @var FileReader $fileReader */
+        $fileReader = $this->fileIOFactory->getFileReader($request->format);
 
-        $position = $serviceHelpers->getDataIO()->getSessionPosition();
+        if ($request->format === 'xml') {
+            $tree = \json_decode($request->profileEntity->getEntity()->getTree(), true);
+            $fileReader->setTree($tree);
+        }
 
-        $totalCount = $serviceHelpers->getFileReader()->getTotalCount($this->uploadPathProvider->getRealPath($inputFileName));
-
-        return new PreparationResultStruct($position, $totalCount);
+        return $fileReader->getTotalCount($request->inputFileName);
     }
 
-    public function import(array $requestData, array $unprocessedFiles, string $inputFile): array
+    public function import(ImportRequest $request, Session $session): \Generator
     {
-        $serviceHelpers = $this->importExportServiceHelper->buildServiceHelpers($requestData);
-
-        // set default batchsize for adapter
-        $requestData['batchSize'] = $serviceHelpers->getProfile()->getType() === 'articlesImages' ? 1 : $this->config->getByNamespace('SwagImportExport', 'batch-size-import');
-
-        $this->importExportServiceHelper->initializeDataIO($serviceHelpers->getDataIO(), $requestData);
-
-        $dataTransformerChain = $this->importExportServiceHelper->createDataTransformerChain($serviceHelpers->getProfile(), $serviceHelpers->getFileReader()->hasTreeStructure());
-
-        $sessionState = $serviceHelpers->getSession()->getState();
-
-        $dataWorkflow = new DataWorkflow($serviceHelpers->getDataIO(), $serviceHelpers->getProfile(), $dataTransformerChain, $serviceHelpers->getFileReader());
-
-        try {
-            $resultData = $dataWorkflow->import($requestData, $inputFile);
-
-            if (!empty($resultData['unprocessedData'])) {
-                $unprocessedData = [
-                    'data' => $resultData['unprocessedData'],
-                    'session' => [
-                        'prevState' => $sessionState,
-                        'currentState' => $serviceHelpers->getDataIO()->getSessionState(),
-                    ],
-                ];
-
-                foreach ($unprocessedData['data'] as $profileName => $value) {
-                    $outputFile = $this->uploadPathProvider->getRealPath(
-                        $this->uploadPathProvider->getFileNameFromPath($inputFile) . '-' . $profileName . '-tmp.csv'
-                    );
-                    $this->afterImport($unprocessedData, $profileName, $outputFile);
-                    $unprocessedFiles[$profileName] = $outputFile;
-                }
-            }
-
-            if ($serviceHelpers->getSession()->getTotalCount() > 0 && ($serviceHelpers->getSession()->getTotalCount() === $resultData['position'])) {
-                // unprocessed files
-                $postProcessedData = null;
-                if ($unprocessedFiles) {
-                    $postProcessedData = $this->processData($unprocessedFiles);
-                }
-
-                if (!empty($postProcessedData)) {
-                    unset($resultData['sessionId']);
-                    unset($resultData['adapter']);
-
-                    $resultData = \array_merge($resultData, $postProcessedData);
-                }
-
-                if ($this->logger->getMessage() === null) {
-                    $message = \sprintf(
-                        '%s %s %s',
-                        $resultData['position'],
-                        SnippetsHelper::getNamespace('backend/swag_import_export/default_profiles')->get($resultData['adapter']),
-                        SnippetsHelper::getNamespace('backend/swag_import_export/log')->get('import/success')
-                    );
-                    $session = $serviceHelpers->getSession()->getEntity();
-                    $this->importExportServiceHelper->logProcessing('false', $inputFile, $serviceHelpers->getProfile()->getName(), $message, 'true', $session);
-                }
-            }
-
-            unset($resultData['unprocessedData']);
-            $resultData['unprocessedFiles'] = \json_encode($unprocessedFiles);
-            $resultData['importFile'] = $this->uploadPathProvider->getFileNameFromPath($resultData['importFile']);
-
-            return $resultData;
-        } catch (\Exception $e) {
-            $session = $serviceHelpers->getSession()->getEntity();
-            $this->importExportServiceHelper->logProcessing('true', $inputFile, $serviceHelpers->getProfile()->getName(), $e->getMessage(), 'false', $session);
-
-            throw $e;
+        yield from $this->doImport($request, $session);
+        $this->modelManager->clear();
+        foreach ($this->importUnprocessedData($request) as $nth) {
+            // nth
         }
     }
 
     protected function afterImport(array $unprocessedData, string $profileName, string $outputFile): void
     {
-        // loads hidden profile for article
-        $profile = $this->profileFactory->loadHiddenProfile($profileName);
-
-        $fileWriter = $this->fileIOFactory->createFileWriter('csv');
-
-        $dataTransformerChain = $this->dataTransformerFactory->createDataTransformerChain(
-            $profile,
-            ['isTree' => $fileWriter->hasTreeStructure()]
-        );
-
-        $dataWorkflow = new DataWorkflow(null, $profile, $dataTransformerChain, $fileWriter);
-        $dataWorkflow->saveUnprocessedData($unprocessedData, $profileName, $outputFile);
+        $this->dataWorkflow->saveUnprocessedData($unprocessedData, $profileName, $outputFile);
     }
 
-    /**
-     * Checks for unprocessed data
-     * Returns unprocessed file for import
-     *
-     * @return array{importFile: string, profileId: int, count: int, position: int, format: string, load: bool}|array{}
-     */
-    protected function processData(array &$unprocessedFiles): array
+    protected function importUnprocessedData(ImportRequest $request): \Generator
     {
-        foreach ($unprocessedFiles as $hiddenProfile => $inputFile) {
-            if (\is_readable($inputFile)) {
-                // renames
-                $outputFile = \str_replace('-tmp', '-swag', $inputFile);
-                \rename($inputFile, $outputFile);
+        $profilesMapper = ['articles', 'articlesImages'];
 
-                $profile = $this->profileFactory->loadHiddenProfile($hiddenProfile);
-                $profileId = $profile->getId();
+        // loops the unprocessed data
+        $pathInfo = \pathinfo($request->inputFileName);
+        foreach ($profilesMapper as $profileName) {
+            $tmpFile = $this->uploadPathProvider->getRealPath(
+                $pathInfo['basename'] . '-' . $profileName . '-tmp.csv'
+            );
 
-                $fileReader = $this->fileIOFactory->createFileReader('csv');
-                $totalCount = $fileReader->getTotalCount($outputFile);
+            if (\file_exists($tmpFile)) {
+                $outputFile = \str_replace('-tmp', '-swag', $tmpFile);
+                \rename($tmpFile, $outputFile);
 
-                unset($unprocessedFiles[$hiddenProfile]);
+                $profile = $this->profileFactory->loadHiddenProfile($profileName);
 
-                $postData = [
-                    'importFile' => $outputFile,
-                    'profileId' => $profileId,
-                    'count' => $totalCount,
-                    'position' => 0,
-                    'format' => 'csv',
-                    'load' => true,
-                ];
+                $innerSession = Shopware()->Container()->get(SessionService::class)->createSession();
 
-                if ($hiddenProfile === DataDbAdapter::ARTICLE_IMAGE_ADAPTER) {
-                    // set to one because of thumbnail generation memory cost
-                    $postData['batchSize'] = 1;
-                }
+                $subRequest = new ImportRequest();
+                $subRequest->setData(
+                    [
+                        'profileEntity' => $profile,
+                        'inputFileName' => $outputFile,
+                        'format' => 'csv',
+                        'username' => $request->username,
+                        'batchSize' => $profile->getEntity()->getType() === 'articlesImages' ? 1 : $request->batchSize,
+                    ]
+                );
 
-                return $postData;
+                yield from $this->doImport($subRequest, $innerSession);
             }
         }
+    }
 
-        return [];
+    private function doImport(ImportRequest $request, Session $session): \Generator
+    {
+        $sessionState = $session->getState();
+
+        do {
+            try {
+                $resultData = $this->dataWorkflow->import($request, $session);
+                if (!empty($resultData['unprocessedData'])) {
+                    $unprocessedData = [
+                        'data' => $resultData['unprocessedData'],
+                        'session' => [
+                            'prevState' => $sessionState,
+                            'currentState' => $session->getState(),
+                        ],
+                    ];
+
+                    foreach ($unprocessedData['data'] as $profileName => $value) {
+                        $outputFile = $this->uploadPathProvider->getRealPath(
+                            $this->uploadPathProvider->getFileNameFromPath($request->inputFileName) . '-' . $profileName . '-tmp.csv'
+                        );
+                        $this->afterImport($unprocessedData, $profileName, $outputFile);
+                        $unprocessedFiles[$profileName] = $outputFile;
+                    }
+                }
+
+                $message = \sprintf(
+                    '%s %s %s',
+                    $resultData['position'],
+                    SnippetsHelper::getNamespace('backend/swag_import_export/default_profiles')->get($resultData['adapter']),
+                    SnippetsHelper::getNamespace('backend/swag_import_export/log')->get('import/success')
+                );
+
+                $this->logger->logProcessing(
+                    'false',
+                    $request->inputFileName,
+                    $request->profileEntity->getName(),
+                    $message,
+                    'false',
+                    $session
+                );
+
+                yield [$request->profileEntity->getName(), $resultData['position']];
+            } catch (\Exception $e) {
+                $this->logger->logProcessing('true', $request->inputFileName, $request->profileEntity->getName(), $e->getMessage(), 'false', $session);
+
+                throw $e;
+            }
+        } while ($session->getState() !== Session::SESSION_CLOSE);
     }
 }

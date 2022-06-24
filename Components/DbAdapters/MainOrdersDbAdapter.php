@@ -23,8 +23,6 @@ use SwagImportExport\Components\Utils\SnippetsHelper;
 
 class MainOrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
 {
-    protected array $unprocessedData;
-
     protected array $logMessages = [];
 
     protected ?string $logState = null;
@@ -277,7 +275,7 @@ class MainOrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
      */
     public function getUnprocessedData(): array
     {
-        return $this->unprocessedData;
+        return [];
     }
 
     public function saveMessage(string $message): void

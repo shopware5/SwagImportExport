@@ -11,15 +11,12 @@ namespace SwagImportExport\Tests\Integration\Components;
 
 use SwagImportExport\Components\DbAdapters\ArticlesDbAdapter;
 use SwagImportExport\Components\DbAdapters\CategoriesDbAdapter;
-use SwagImportExport\Components\Factories\DataFactory;
-use SwagImportExport\Components\Factories\FileIOFactory;
 use SwagImportExport\Components\FileIO\CsvFileReader;
 use SwagImportExport\Components\FileIO\CsvFileWriter;
 use SwagImportExport\Components\FileIO\XmlFileReader;
 use SwagImportExport\Components\FileIO\XmlFileWriter;
-use SwagImportExport\Components\Utils\DataColumnOptions;
-use SwagImportExport\Components\Utils\DataFilter;
-use SwagImportExport\Components\Utils\DataLimit;
+use SwagImportExport\Components\Providers\DataProvider;
+use SwagImportExport\Components\Providers\FileIOProvider;
 use SwagImportExport\Tests\Helper\ContainerTrait;
 use SwagImportExport\Tests\Helper\ImportExportTestHelper;
 
@@ -42,55 +39,40 @@ class FactoryTest extends ImportExportTestHelper
 
     public function testFactories(): void
     {
-        $dataFactory = $this->getContainer()->get(DataFactory::class);
-        static::assertInstanceOf(DataFactory::class, $dataFactory, 'Is not a instance of DataFactory');
+        $dataProvider = $this->getContainer()->get(DataProvider::class);
+        static::assertInstanceOf(DataProvider::class, $dataProvider, 'Is not a instance of DataProvider');
 
-        $fileIOFactory = $this->getContainer()->get(FileIOFactory::class);
-        static::assertInstanceOf(FileIOFactory::class, $fileIOFactory, 'Is not a instance of DataFactory');
+        $fileIOFactory = $this->getContainer()->get(FileIOProvider::class);
+        static::assertInstanceOf(FileIOProvider::class, $fileIOFactory, 'Is not a instance of DataProvider');
     }
 
     public function testDbAdapters(): void
     {
-        $dataFactory = $this->getContainer()->get(DataFactory::class);
+        $dataProvider = $this->getContainer()->get(DataProvider::class);
 
         // tests categories data adapter
-        $catergoriesDbAdapter = $dataFactory->createDbAdapter('categories');
+        $catergoriesDbAdapter = $dataProvider->createDbAdapter('categories');
         static::assertInstanceOf(CategoriesDbAdapter::class, $catergoriesDbAdapter, 'Is not a instance of CategoriesDbAdapter');
 
         // tests articles data adapter
-        $articlesDbAdapter = $dataFactory->createDbAdapter('articles');
+        $articlesDbAdapter = $dataProvider->createDbAdapter('articles');
         static::assertInstanceOf(ArticlesDbAdapter::class, $articlesDbAdapter, 'Is not a instance of ArticlesDbAdapter');
-    }
-
-    public function testUtils(): void
-    {
-        $dataFactory = $this->getContainer()->get(DataFactory::class);
-        $postData = $this->getPostData();
-
-        $colOpts = $dataFactory->createColOpts($postData['columnOptions']);
-        static::assertInstanceOf(DataColumnOptions::class, $colOpts, 'Is not a instance of DataColumnOptions');
-
-        $limit = $dataFactory->createLimit($postData['limit']);
-        static::assertInstanceOf(DataLimit::class, $limit, 'Is not a instance of DataLimit');
-
-        $filter = $dataFactory->createFilter($postData['filter']);
-        static::assertInstanceOf(DataFilter::class, $filter, 'Is not a instance of DataFilter');
     }
 
     public function testFileIO(): void
     {
-        $fileIOFactory = $this->getContainer()->get(FileIOFactory::class);
+        $fileIOFactory = $this->getContainer()->get(FileIOProvider::class);
 
-        $csvFileWriter = $fileIOFactory->createFileWriter('csv');
+        $csvFileWriter = $fileIOFactory->getFileWriter('csv');
         static::assertInstanceOf(CsvFileWriter::class, $csvFileWriter, 'Is not a instance of CsvFileWriter');
 
-        $xmlFileWriter = $fileIOFactory->createFileWriter('xml');
+        $xmlFileWriter = $fileIOFactory->getFileWriter('xml');
         static::assertInstanceOf(XmlFileWriter::class, $xmlFileWriter, 'Is not a instance of XmlFileWriter');
 
-        $csvFileReader = $fileIOFactory->createFileReader('csv');
+        $csvFileReader = $fileIOFactory->getFileReader('csv');
         static::assertInstanceOf(CsvFileReader::class, $csvFileReader, 'Is not a instance of CsvFileReader');
 
-        $xmlFileReader = $fileIOFactory->createFileReader('xml');
+        $xmlFileReader = $fileIOFactory->getFileReader('xml');
         static::assertInstanceOf(XmlFileReader::class, $xmlFileReader, 'Is not a instance of XmlFileReader');
     }
 }

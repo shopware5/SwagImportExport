@@ -9,27 +9,22 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Components\Service;
 
-use SwagImportExport\Components\Service\Struct\PreparationResultStruct;
+use SwagImportExport\Components\Session\Session;
+use SwagImportExport\Components\Structs\ExportRequest;
 
 interface ExportServiceInterface
 {
     /**
      * Prepares export session based on profile and delivers
      * information on how many records to export.\
-     *
-     * @param array<string, mixed> $requestData
-     * @param array<string, mixed> $filterParams
      */
-    public function prepareExport(array $requestData, array $filterParams): PreparationResultStruct;
+    public function prepareExport(ExportRequest $request, Session $session): int;
 
     /**
      * Processes export based on profile and session and accepts special
      * filtering for several dataDbAdapters.
      *
-     * @param array<string, mixed> $requestData
-     * @param array<string, mixed> $filterParams
-     *
-     * @return array<string, mixed>
+     * @return \Generator<int>
      */
-    public function export(array $requestData, array $filterParams): array;
+    public function export(ExportRequest $request, Session $session): \Generator;
 }

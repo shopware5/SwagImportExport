@@ -7,37 +7,44 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace SwagImportExport\CustomModels;
+namespace SwagImportExport\Models;
 
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Model\QueryBuilder;
 
 /**
- * @extends ModelRepository<Expression>
+ * @extends ModelRepository<Session>
  */
-class ExpressionRepository extends ModelRepository
+class SessionRepository extends ModelRepository
 {
     /**
-     * Returns a query builder object to get all expressions.
+     * Returns a query builder object to get all sessions.
      *
      * @param array<string, string>|array<array{property: string, value: mixed, expression?: string}> $filterBy
      * @param array<array{property: string, direction: string}>                                       $orderBy
      */
-    public function getExpressionsListQuery(array $filterBy = [], array $orderBy = [], ?int $limit = null, ?int $offset = null): QueryBuilder
+    public function getSessionsListQuery(array $filterBy = [], array $orderBy = [], ?int $limit = null, ?int $offset = null): QueryBuilder
     {
-        $builder = $this->createQueryBuilder('e');
+        $builder = $this->createQueryBuilder('s');
 
         $builder->select(
             [
-                'e.id as id',
+                's.id as id',
                 'p.id as profileId',
-                'e.variable as variable',
-                'e.exportConversion as exportConversion',
-                'e.importConversion as importConversion',
+                'p.name as profileName',
+                's.type as type',
+                's.position as position',
+                's.totalCount as totalCount',
+                's.userName as username',
+                's.fileName as fileName',
+                's.format as format',
+                's.fileSize as fileSize',
+                's.state as state',
+                's.createdAt as createdAt',
             ]
         );
 
-        $builder->join('e.profile', 'p');
+        $builder->join('s.profile', 'p');
 
         if (!empty($filterBy)) {
             $builder->addFilter($filterBy);
@@ -48,7 +55,8 @@ class ExpressionRepository extends ModelRepository
         }
 
         if ($offset !== null && $limit !== null) {
-            $builder->setFirstResult($offset)->setMaxResults($limit);
+            $builder->setFirstResult($offset)
+                ->setMaxResults($limit);
         }
 
         return $builder;

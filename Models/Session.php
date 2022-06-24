@@ -7,7 +7,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace SwagImportExport\CustomModels;
+namespace SwagImportExport\Models;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -29,7 +29,7 @@ class Session extends ModelEntity
     protected int $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="SwagImportExport\CustomModels\Profile", inversedBy="sessions", cascade={"persist", "refresh"})
+     * @ORM\ManyToOne(targetEntity="SwagImportExport\Models\Profile", inversedBy="sessions", cascade={"persist", "refresh"})
      * @ORM\JoinColumn(name="profile_id", onDelete="CASCADE")
      */
     protected ?Profile $profile;
@@ -47,12 +47,12 @@ class Session extends ModelEntity
     /**
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
-    protected ?int $position = null;
+    protected int $position = 0;
 
     /**
      * @ORM\Column(name="total_count", type="integer", nullable=false)
      */
-    protected int $totalCount;
+    protected int $totalCount = 0;
 
     /**
      * @ORM\Column(name="username", type="string", length=200, nullable=true)
@@ -89,7 +89,7 @@ class Session extends ModelEntity
     /**
      * @var Collection<string, Logger>
      *
-     * @ORM\OneToMany(targetEntity="SwagImportExport\CustomModels\Logger", mappedBy="session")
+     * @ORM\OneToMany(targetEntity="SwagImportExport\Models\Logger", mappedBy="session")
      */
     protected Collection $logs;
 

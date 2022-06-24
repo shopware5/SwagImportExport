@@ -20,6 +20,9 @@
 
     <service id="SwagImportExport\Controllers\Backend\Shopware_Controllers_Backend_SwagImportExportExport">
         <argument type="service" id="SwagImportExport\Components\Service\ExportService"/>
+        <argument type="service" id="SwagImportExport\Components\Factories\ProfileFactory"/>
+        <argument type="service" id="SwagImportExport\Components\Session\SessionService"/>
+        <argument type="service" id="SwagImportExport\Components\UploadPathProvider"/>
 
         <tag name="shopware.controller" module="backend" controller="SwagImportExportExport"/>
     </service>
@@ -27,14 +30,17 @@
     <service id="SwagImportExport\Controllers\Backend\Shopware_Controllers_Backend_SwagImportExportImport">
         <argument type="service" id="SwagImportExport\Components\UploadPathProvider"/>
         <argument type="service" id="SwagImportExport\Components\Service\ImportService"/>
+        <argument type="service" id="SwagImportExport\Components\Factories\ProfileFactory"/>
+        <argument type="service" id="SwagImportExport\Components\Session\SessionService"/>
 
         <tag name="shopware.controller" module="backend" controller="SwagImportExportImport"/>
     </service>
 
     <service id="SwagImportExport\Controllers\Backend\Shopware_Controllers_Backend_SwagImportExportProfile">
         <argument type="service" id="snippets"/>
-        <argument type="service" id="SwagImportExport\Components\Factories\DataFactory"/>
+        <argument type="service" id="SwagImportExport\Components\Providers\DataProvider"/>
         <argument type="service" id="SwagImportExport\Components\Factories\ProfileFactory"/>
+        <argument type="service" id="SwagImportExport\Models\ProfileRepository"/>
         <argument type="service" id="SwagImportExport\Components\Service\ProfileService"/>
 
         <tag name="shopware.controller" module="backend" controller="SwagImportExportProfile"/>

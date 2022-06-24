@@ -9,13 +9,14 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Commands;
 
-use Doctrine\ORM\EntityManagerInterface;
 use Shopware\Commands\ShopwareCommand;
 use SwagImportExport\Components\Factories\ProfileFactory;
-use SwagImportExport\Components\UploadPathProvider;
-use SwagImportExport\Components\Utils\CommandHelper;
-use SwagImportExport\CustomModels\Profile as ProfileEntity;
-use SwagImportExport\CustomModels\ProfileRepository;
+use SwagImportExport\Components\Profile\Profile;
+use SwagImportExport\Components\Service\ImportService;
+use SwagImportExport\Components\Session\SessionService;
+use SwagImportExport\Components\Structs\ImportRequest;
+use SwagImportExport\Models\Profile as ProfileEntity;
+use SwagImportExport\Models\ProfileRepository;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -25,7 +26,7 @@ class ImportCommand extends ShopwareCommand
 {
     protected string $profile;
 
-    protected ?ProfileEntity $profileEntity;
+    protected ?Profile $profileEntity;
 
     protected ?string $format = null;
 
@@ -33,24 +34,24 @@ class ImportCommand extends ShopwareCommand
 
     private ProfileFactory $profileFactory;
 
-    private UploadPathProvider $uploadPathProvider;
-
-    private EntityManagerInterface $entityManager;
-
     private ProfileRepository $profileRepository;
+
+    private SessionService $sessionService;
+
+    private ImportService $importService;
 
     public function __construct(
         ProfileFactory $profileFactory,
-        UploadPathProvider $uploadPathProvider,
-        EntityManagerInterface $entityManager,
-        ProfileRepository $profileRepository
+        ProfileRepository $profileRepository,
+        SessionService $sessionService,
+        ImportService $importService
     ) {
         $this->profileFactory = $profileFactory;
-        $this->uploadPathProvider = $uploadPathProvider;
-        $this->entityManager = $entityManager;
         $this->profileRepository = $profileRepository;
 
         parent::__construct();
+        $this->sessionService = $sessionService;
+        $this->importService = $importService;
     }
 
     /**
@@ -74,7 +75,7 @@ class ImportCommand extends ShopwareCommand
         $this->prepareImportInputValidation($input);
 
         // validate profile
-        if (!$this->profileEntity instanceof ProfileEntity) {
+        if (!$this->profileEntity instanceof Profile) {
             throw new \Exception(\sprintf('Invalid profile: \'%s\'!', $this->profile));
         }
 
@@ -83,53 +84,35 @@ class ImportCommand extends ShopwareCommand
         }
 
         $this->start($output, $this->profileEntity, $this->filePath, $this->format);
-
-        $profilesMapper = ['articles', 'articlesImages'];
-
-        // loops the unprocessed data
-        $pathInfo = \pathinfo($this->filePath);
-        foreach ($profilesMapper as $profileName) {
-            $tmpFile = $this->uploadPathProvider->getRealPath(
-                $pathInfo['basename'] . '-' . $profileName . '-tmp.csv'
-            );
-            if (\file_exists($tmpFile)) {
-                $outputFile = \str_replace('-tmp', '-swag', $tmpFile);
-                \rename($tmpFile, $outputFile);
-
-                $profile = $this->profileFactory->loadHiddenProfile($profileName);
-                $profileEntity = $profile->getEntity();
-
-                $this->start($output, $profileEntity, $outputFile, 'csv');
-            }
-        }
     }
 
-    protected function start(OutputInterface $output, ProfileEntity $profileModel, string $file, string $format): void
+    protected function start(OutputInterface $output, Profile $profileModel, string $file, string $format): void
     {
-        $helper = new CommandHelper(
-            [
-                'profileEntity' => $profileModel,
-                'filePath' => $file,
-                'format' => $format,
-                'username' => 'Commandline',
-            ]
-        );
+        $session = $this->sessionService->createSession();
+
+        $profile = $this->profileFactory->loadProfile($profileModel->getId());
+
+        $importRequest = new ImportRequest();
+        $importRequest->setData([
+            'profileEntity' => $profile,
+            'inputFileName' => $file,
+            'format' => $format,
+            'username' => 'Commandline',
+            'batchSize' => $profileModel->getType() === 'articlesImages' ? 1 : 50,
+        ]);
 
         $output->writeln('<info>' . \sprintf('Using profile: %s.', $profileModel->getName()) . '</info>');
         $output->writeln('<info>' . \sprintf('Using format: %s.', $format) . '</info>');
         $output->writeln('<info>' . \sprintf('Using file: %s.', $file) . '</info>');
 
-        $preparationData = $helper->prepareImport();
-        $count = $preparationData['count'];
+        $count = $this->importService->prepareImport($importRequest);
+
         $output->writeln('<info>' . \sprintf('Total count: %d.', $count) . '</info>');
 
-        $position = 0;
-
-        while ($position < $count) {
-            $data = $helper->importAction();
-            $this->entityManager->clear();
-            $position = $data['data']['position'];
-            $output->writeln('<info>' . \sprintf('Processed: %d.', $position) . '</info>');
+        $lastPosition = 0;
+        foreach ($this->importService->import($importRequest, $session) as [$profileName, $position]) {
+            $output->writeln('<info>' . \sprintf('Processed profileName: %d.', $lastPosition) . '</info>');
+            $lastPosition = $position;
         }
     }
 
@@ -139,24 +122,27 @@ class ImportCommand extends ShopwareCommand
         $this->format = $input->getOption('format');
         $this->filePath = $input->getArgument('filepath');
 
-        $parts = \explode('.', $this->filePath);
-
         // if no profile is specified try to find it from the filename
         if ($this->profile === null) {
-            foreach ($parts as $part) {
-                $part = \strtolower($part);
-                $this->profileEntity = $this->profileRepository->findOneBy(['name' => $part]);
-                if ($this->profileEntity !== null) {
-                    $this->profile = $part;
-                    break;
-                }
+            $profile = $this->profileFactory->loadProfileByFileName($this->filePath);
+
+            if (!$profile instanceof Profile) {
+                throw new \Exception(sprintf('Profile could not be determinated by file path %s.', $this->filePath));
             }
+
+            $this->profileEntity = $profile;
         } else {
-            $this->profileEntity = $this->profileRepository->findOneBy(['name' => $this->profile]);
+            $profile = $this->profileRepository->findOneBy(['name' => $this->profile]);
+
+            if (!$profile instanceof ProfileEntity) {
+                throw new \Exception(sprintf('Profile was not found by the name %s', $this->profile));
+            }
+
+            $this->profileEntity = new Profile($profile);
         }
 
         // validate profile
-        if (!$this->profileEntity instanceof ProfileEntity) {
+        if (!$this->profileEntity instanceof Profile) {
             throw new \Exception(\sprintf('Invalid profile: \'%s\'!', $this->profile));
         }
 

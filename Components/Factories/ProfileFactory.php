@@ -12,7 +12,7 @@ namespace SwagImportExport\Components\Factories;
 use Shopware\Components\Model\ModelManager;
 use SwagImportExport\Components\Profile\Profile;
 use SwagImportExport\Components\Utils\TreeHelper;
-use SwagImportExport\CustomModels\Profile as ProfileEntity;
+use SwagImportExport\Models\Profile as ProfileEntity;
 
 class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
 {
@@ -28,23 +28,35 @@ class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
         $this->eventManager = $eventManager;
     }
 
-    /**
-     * @param array{profileId?: int} $params
-     */
-    public function loadProfile(array $params): Profile
+    public function loadProfile(int $profileId): Profile
     {
-        if (!isset($params['profileId'])) {
-            throw new \Exception('Profile id is empty');
-        }
-
         $profileRepository = $this->modelManager->getRepository(ProfileEntity::class);
-        $profileEntity = $profileRepository->findOneBy(['id' => $params['profileId']]);
+        $profileEntity = $profileRepository->findOneBy(['id' => $profileId]);
 
         if (!$profileEntity instanceof ProfileEntity) {
             throw new \Exception('Profile does not exists');
         }
 
         return new Profile($profileEntity);
+    }
+
+    public function loadProfileByFileName(string $filename): ?Profile
+    {
+        $repository = $this->modelManager->getRepository(ProfileEntity::class);
+
+        $parts = \explode('.', $filename);
+
+        foreach ($parts as $part) {
+            $part = \strtolower($part);
+
+            $profileEntity = $repository->findOneBy(['name' => $part]);
+
+            if ($profileEntity !== null) {
+                return new Profile($profileEntity);
+            }
+        }
+
+        return null;
     }
 
     /**

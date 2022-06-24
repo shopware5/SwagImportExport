@@ -64,13 +64,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
     public function initialize(Profile $profile): void
     {
         $this->config = $profile->getEntity()->getTree();
-        $this->mainIterationPart = null;
-        $this->mainAdapter = null;
-        $this->iterationParts = [];
-        $this->iterationTempData = [];
-        $this->tempData = [];
-        $this->tempMapper = [];
-        $this->translationColumns = null;
+        $this->reset();
     }
 
     /**
@@ -82,6 +76,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      */
     public function transformForward(array $data): array
     {
+        $this->reset();
         $mainNode = $this->getMainIterationPart();
         $this->processIterationParts($mainNode);
 
@@ -1570,5 +1565,16 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                 $this->saveTempMapper($currentPath, $value);
             }
         }
+    }
+
+    private function reset(): void
+    {
+        $this->mainIterationPart = null;
+        $this->mainAdapter = null;
+        $this->iterationParts = [];
+        $this->iterationTempData = [];
+        $this->tempData = [];
+        $this->tempMapper = [];
+        $this->translationColumns = null;
     }
 }

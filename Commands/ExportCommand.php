@@ -12,9 +12,18 @@ namespace SwagImportExport\Commands;
 use Doctrine\ORM\EntityManagerInterface;
 use Shopware\Commands\ShopwareCommand;
 use Shopware\Models\CustomerStream\CustomerStream;
-use SwagImportExport\Components\Utils\CommandHelper;
-use SwagImportExport\CustomModels\Profile;
-use SwagImportExport\CustomModels\ProfileRepository;
+use SwagImportExport\Components\Factories\ProfileFactory;
+use SwagImportExport\Components\Logger\LogDataStruct;
+use SwagImportExport\Components\Logger\Logger;
+use SwagImportExport\Components\Profile\Profile;
+use SwagImportExport\Components\Service\ExportServiceInterface;
+use SwagImportExport\Components\Session\SessionService;
+use SwagImportExport\Components\Structs\ExportRequest;
+use SwagImportExport\Components\UploadPathProvider;
+use SwagImportExport\Components\Utils\FileNameGenerator;
+use SwagImportExport\Components\Utils\SnippetsHelper;
+use SwagImportExport\Models\Profile as ProfileModel;
+use SwagImportExport\Models\ProfileRepository;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -24,7 +33,7 @@ class ExportCommand extends ShopwareCommand
 {
     protected string $profile;
 
-    protected ?Profile $profileEntity;
+    protected Profile $profileEntity;
 
     protected bool $exportVariants = false;
 
@@ -52,16 +61,36 @@ class ExportCommand extends ShopwareCommand
 
     private string $path;
 
+    private SessionService $sessionService;
+
+    private UploadPathProvider $uploadPathProvider;
+
+    private ProfileFactory $profileFactory;
+
+    private Logger $logger;
+
+    private ExportServiceInterface $exportService;
+
     public function __construct(
         ProfileRepository $profileRepository,
+        ProfileFactory $profileFactory,
         EntityManagerInterface $entityManager,
-        string $path
+        SessionService $sessionService,
+        UploadPathProvider $uploadPathProvider,
+        string $path,
+        Logger $logger,
+        ExportServiceInterface $exportService
     ) {
         $this->profileRepository = $profileRepository;
         $this->entityManager = $entityManager;
+        $this->path = $path;
+        $this->sessionService = $sessionService;
+        $this->uploadPathProvider = $uploadPathProvider;
+        $this->profileFactory = $profileFactory;
+        $this->logger = $logger;
+        $this->exportService = $exportService;
 
         parent::__construct();
-        $this->path = $path;
     }
 
     /**
@@ -93,12 +122,19 @@ class ExportCommand extends ShopwareCommand
         // Validation of user input
         $this->prepareExportInputValidation($input);
 
-        $this->registerErrorHandler($output);
+        if (empty($this->filePath) && $this->format) {
+            $this->filePath = $this->uploadPathProvider->getRealPath(FileNameGenerator::generateFileName('export', $this->format, $this->profileEntity->getEntity()));
+        } else {
+            $this->filePath = $this->path . \DIRECTORY_SEPARATOR . $this->filePath;
+        }
 
-        $helper = new CommandHelper(
+        $profile = $this->profileFactory->loadProfile($this->profileEntity->getId());
+
+        $exportRequest = new ExportRequest();
+        $exportRequest->setData(
             [
-                'profileEntity' => $this->profileEntity,
-                'filePath' => $this->path . \DIRECTORY_SEPARATOR . $this->filePath,
+                'profileEntity' => $profile,
+                'filePath' => $this->filePath,
                 'customerStream' => $this->customerStream,
                 'format' => $this->format,
                 'exportVariants' => $this->exportVariants,
@@ -110,6 +146,7 @@ class ExportCommand extends ShopwareCommand
                 'username' => 'Commandline',
                 'category' => $this->category ? [$this->category] : null,
                 'productStream' => $this->productStream ? [$this->productStream] : null,
+                'batchSize' => Shopware()->Config()->getByNamespace('SwagImportExport', 'batch-size-export', 1000),
             ]
         );
 
@@ -119,6 +156,7 @@ class ExportCommand extends ShopwareCommand
         }
         $output->writeln('<info>' . \sprintf('Using format: %s.', $this->format) . '</info>');
         $output->writeln('<info>' . \sprintf('Using file: %s.', $this->filePath) . '</info>');
+
         if ($this->category) {
             $output->writeln('<info>' . \sprintf('Using category as filter: %s.', $this->category) . '</info>');
         } elseif ($this->productStream) {
@@ -133,17 +171,34 @@ class ExportCommand extends ShopwareCommand
             $output->writeln('<info>' . \sprintf('to: %s.', $this->dateTo->format('d.m.Y H:i:s')) . '</info>');
         }
 
-        $preparationData = $helper->prepareExport();
-        $count = $preparationData['count'];
+        $session = $this->sessionService->createSession();
+        $count = $this->exportService->prepareExport($exportRequest, $session);
         $output->writeln('<info>' . \sprintf('Total count: %d.', $count) . '</info>');
 
-        $position = 0;
-
-        while ($position < $count) {
-            $data = $helper->exportAction();
-            $position = $data['position'];
+        $lastPositions = 0;
+        foreach ($this->exportService->export($exportRequest, $session) as $position) {
+            $lastPositions = $position;
             $output->writeln('<info>' . \sprintf('Processed: %d.', $position) . '</info>');
         }
+
+        $message = \sprintf(
+            '%s %s %s',
+            $lastPositions,
+            SnippetsHelper::getNamespace('backend/swag_import_export/default_profiles')->get('type/' . $exportRequest->profileEntity->getType()),
+            SnippetsHelper::getNamespace('backend/swag_import_export/log')->get('export/success')
+        );
+
+        $this->logger->write([$message], 'false', $session);
+
+        $logData = new LogDataStruct(
+            \date('Y-m-d H:i:s'),
+            $exportRequest->filePath,
+            $exportRequest->profileEntity->getName(),
+            $message,
+            'true'
+        );
+
+        $this->logger->writeToFile($logData);
     }
 
     protected function prepareExportInputValidation(InputInterface $input): void
@@ -187,22 +242,26 @@ class ExportCommand extends ShopwareCommand
             throw new \RuntimeException('File path is required.');
         }
 
-        $parts = \explode('.', $this->filePath);
-
         // if no profile is specified try to find it from the filename
         if ($this->profile === null) {
-            foreach ($parts as $part) {
-                $part = \strtolower($part);
-                $this->profileEntity = $this->profileRepository->findOneBy(['name' => $part]);
-                if ($this->profileEntity !== null) {
-                    $this->profile = $part;
-                    break;
-                }
+            $profile = $this->profileFactory->loadProfileByFileName($this->filePath);
+
+            if (!$profile instanceof Profile) {
+                throw new \Exception(sprintf('Profile could not be determinated by file path %s.', $this->filePath));
             }
+
+            $this->profileEntity = $profile;
         } else {
-            $this->profileEntity = $this->profileRepository->findOneBy(['name' => $this->profile]);
-            $this->validateProfiles($input);
+            $profile = $this->profileRepository->findOneBy(['name' => $this->profile]);
+
+            if (!$profile instanceof ProfileModel) {
+                throw new \Exception(sprintf('Profile not found by name %s.', $profile));
+            }
+
+            $this->profileEntity = new Profile($profile);
         }
+
+        $this->validateProfiles($input);
 
         if (!empty($this->customerStream)) {
             $customerStream = $this->entityManager->find(CustomerStream::class, $this->customerStream);
@@ -225,7 +284,7 @@ class ExportCommand extends ShopwareCommand
 
     protected function validateProfiles(InputInterface $input): void
     {
-        if (!$this->profileEntity) {
+        if (!isset($this->profileEntity)) {
             throw new \RuntimeException(\sprintf('Invalid profile: \'%s\'!', $this->profile));
         }
 

@@ -9,15 +9,10 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Components\Logger;
 
-use SwagImportExport\CustomModels\Session;
+use SwagImportExport\Components\Session\Session;
 
 interface LoggerInterface
 {
-    /**
-     * Returns the message of the log entity.
-     */
-    public function getMessage(): ?string;
-
     /**
      * Writes a log entry to the database.
      */

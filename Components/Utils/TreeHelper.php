@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace SwagImportExport\Components\Utils;
 
 use SwagImportExport\Components\DataManagers\DataManager;
-use SwagImportExport\CustomModels\Profile;
+use SwagImportExport\Models\Profile;
 
 class TreeHelper
 {

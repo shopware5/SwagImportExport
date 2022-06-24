@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace SwagImportExport\Tests\Functional\Controllers\Backend;
 
 use Shopware\Components\Model\ModelManager;
-use SwagImportExport\CustomModels\Profile;
+use SwagImportExport\Models\Profile;
 use SwagImportExport\Tests\Helper\ContainerTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use SwagImportExport\Tests\Helper\ExportControllerTrait;

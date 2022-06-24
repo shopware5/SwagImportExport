@@ -7,7 +7,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace SwagImportExport\CustomModels;
+namespace SwagImportExport\Models;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -33,7 +33,7 @@ class Profile extends ModelEntity
     /**
      * @var Collection<Expression>
      *
-     * @ORM\OneToMany(targetEntity="SwagImportExport\CustomModels\Expression", mappedBy="profile")
+     * @ORM\OneToMany(targetEntity="SwagImportExport\Models\Expression", mappedBy="profile")
      * @ORM\JoinColumn(nullable=true)
      */
     protected Collection $expressions;
@@ -41,7 +41,7 @@ class Profile extends ModelEntity
     /**
      * @var Collection<string|null, Session>
      *
-     * @ORM\OneToMany(targetEntity="SwagImportExport\CustomModels\Session", mappedBy="profile")
+     * @ORM\OneToMany(targetEntity="SwagImportExport\Models\Session", mappedBy="profile")
      */
     protected Collection $sessions;
 

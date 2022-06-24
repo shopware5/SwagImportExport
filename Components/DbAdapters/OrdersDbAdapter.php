@@ -28,11 +28,6 @@ class OrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
     protected ModelManager $modelManager;
 
     /**
-     * @var array<mixed>
-     */
-    protected array $unprocessedData = [];
-
-    /**
      * @var array<string>
      */
     protected array $logMessages = [];
@@ -156,7 +151,7 @@ class OrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
      */
     public function getUnprocessedData(): array
     {
-        return $this->unprocessedData;
+        return [];
     }
 
     /**
@@ -164,8 +159,6 @@ class OrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
      */
     public function write(array $records): void
     {
-        $this->unprocessedData = [];
-
         $records = $this->eventManager->filter(
             'Shopware_Components_SwagImportExport_DbAdapters_OrdersDbAdapter_Write',
             $records,
@@ -304,6 +297,7 @@ class OrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
             } catch (AdapterException $e) {
                 $message = $e->getMessage();
                 $this->saveMessage($message);
+                throw $e;
             }
         }
 

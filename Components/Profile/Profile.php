@@ -9,20 +9,15 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Components\Profile;
 
-use SwagImportExport\CustomModels\Profile as ProfileEntity;
+use SwagImportExport\Models\Profile as ProfileEntity;
 
 class Profile
 {
-    private const DEFAULT_CONFIG_NAMES = ['exportConversion', 'tree', 'decimals'];
-
     private ProfileEntity $profileEntity;
 
-    private array $configNames;
-
-    public function __construct(ProfileEntity $profile, array $configNames = [])
+    public function __construct(ProfileEntity $profile)
     {
         $this->profileEntity = $profile;
-        $this->configNames = $configNames ?: self::DEFAULT_CONFIG_NAMES;
     }
 
     public function getId(): int
@@ -38,11 +33,6 @@ class Profile
     public function getName(): string
     {
         return $this->profileEntity->getName();
-    }
-
-    public function getConfigNames(): array
-    {
-        return $this->configNames;
     }
 
     public function getEntity(): ProfileEntity

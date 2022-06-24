@@ -9,12 +9,12 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Components\Converter;
 
-class CsvConverter
+class CsvConverter implements ConverterInterface
 {
     /**
      * @var array<string, string>
      */
-    public array $sSettings = [
+    private array $settings = [
         'fieldmark' => '"',
         'separator' => ';',
         'encoding' => 'ISO-8859-1', // UTF-8
@@ -29,9 +29,9 @@ class CsvConverter
         if (!\is_array($keys) || !\count($keys)) {
             $keys = \array_keys(\current($array));
         }
-        $csv = $this->_encode_line(\array_combine($keys, $keys), $keys) . $this->sSettings['newline'];
+        $csv = $this->_encode_line(\array_combine($keys, $keys), $keys) . $this->settings['newline'];
         foreach ($array as $line) {
-            $csv .= $this->_encode_line($line, $keys) . $this->sSettings['newline'];
+            $csv .= $this->_encode_line($line, $keys) . $this->settings['newline'];
         }
 
         return $csv;
@@ -45,8 +45,8 @@ class CsvConverter
     {
         $csv = '';
 
-        if (isset($this->sSettings['fieldmark'])) {
-            $fieldmark = $this->sSettings['fieldmark'];
+        if (isset($this->settings['fieldmark'])) {
+            $fieldmark = $this->settings['fieldmark'];
         } else {
             $fieldmark = '';
         }
@@ -56,16 +56,16 @@ class CsvConverter
                 if (\strpos($line[$key], "\r") !== false
                     || \strpos($line[$key], "\n") !== false
                     || \strpos($line[$key], $fieldmark) !== false
-                    || \strpos($line[$key], $this->sSettings['separator']) !== false
+                    || \strpos($line[$key], $this->settings['separator']) !== false
                 ) {
                     $csv .= $fieldmark;
-                    if ($this->sSettings['encoding'] === 'UTF-8') {
+                    if ($this->settings['encoding'] === 'UTF-8') {
                         $line[$key] = \utf8_decode($line[$key]);
                     }
                     if (!empty($fieldmark)) {
-                        $csv .= \str_replace($fieldmark, $this->sSettings['escaped_fieldmark'], $line[$key]);
+                        $csv .= \str_replace($fieldmark, $this->settings['escaped_fieldmark'], $line[$key]);
                     } else {
-                        $csv .= \str_replace($this->sSettings['separator'], $this->sSettings['escaped_separator'], $line[$key]);
+                        $csv .= \str_replace($this->settings['separator'], $this->settings['escaped_separator'], $line[$key]);
                     }
                     $csv .= $fieldmark;
                 } else {
@@ -73,7 +73,7 @@ class CsvConverter
                 }
             }
             if ($lastkey != $key) {
-                $csv .= $this->sSettings['separator'];
+                $csv .= $this->settings['separator'];
             }
         }
 
@@ -94,11 +94,11 @@ class CsvConverter
             throw new \Exception('File could not be found');
         }
 
-        if ($this->sSettings['encoding'] === 'UTF-8') {
+        if ($this->settings['encoding'] === 'UTF-8') {
             $csv = \utf8_decode($csv);
         }
 
-        if (isset($this->sSettings['escaped_newline']) && $this->sSettings['escaped_newline'] !== false && isset($this->sSettings['fieldmark']) && $this->sSettings['fieldmark'] !== false) {
+        if (isset($this->settings['escaped_newline']) && $this->settings['escaped_newline'] !== false && isset($this->settings['fieldmark']) && $this->settings['fieldmark'] !== false) {
             $lines = $this->_split_line($csv);
         } else {
             $lines = \preg_split("/\n|\r/", $csv, -1, \PREG_SPLIT_NO_EMPTY);
@@ -109,8 +109,8 @@ class CsvConverter
         }
 
         if (empty($keys) || !\is_array($keys)) {
-            if (empty($this->sSettings['fieldmark'])) {
-                $keys = \explode($this->sSettings['separator'], $lines[0]);
+            if (empty($this->settings['fieldmark'])) {
+                $keys = \explode($this->settings['separator'], $lines[0]);
             } else {
                 $keys = $this->_decode_line($lines[0]);
             }
@@ -127,8 +127,8 @@ class CsvConverter
 
         foreach ($lines as $line) {
             $tmp = [];
-            if (empty($this->sSettings['fieldmark'])) {
-                $line = \explode($this->sSettings['separator'], $line);
+            if (empty($this->settings['fieldmark'])) {
+                $line = \explode($this->settings['separator'], $line);
             } else {
                 $line = $this->_decode_line($line);
             }
@@ -152,18 +152,18 @@ class CsvConverter
      */
     public function _decode_line(string $line): array
     {
-        $fieldmark = $this->sSettings['fieldmark'];
-        $elements = \explode($this->sSettings['separator'], $line);
+        $fieldmark = $this->settings['fieldmark'];
+        $elements = \explode($this->settings['separator'], $line);
         $tmp_elements = [];
         if (!\is_array($elements)) {
             return $tmp_elements;
         }
 
         foreach ($elements as $i => $element) {
-            $nquotes = \substr_count($elements[$i], $this->sSettings['fieldmark']);
+            $nquotes = \substr_count($elements[$i], $this->settings['fieldmark']);
             if ($nquotes % 2 == 1) {
                 if (isset($elements[$i + 1])) {
-                    $elements[$i + 1] = $element . $this->sSettings['separator'] . $elements[$i + 1];
+                    $elements[$i + 1] = $element . $this->settings['separator'] . $elements[$i + 1];
                 }
             } else {
                 if ($nquotes > 0) {
@@ -174,8 +174,8 @@ class CsvConverter
                         $elements[$i] = \substr($elements[$i], 0, -1);
                     }
                     $elements[$i] = \str_replace(
-                        $this->sSettings['escaped_fieldmark'],
-                        $this->sSettings['fieldmark'],
+                        $this->settings['escaped_fieldmark'],
+                        $this->settings['fieldmark'],
                         $elements[$i]
                     );
                 }
@@ -186,21 +186,26 @@ class CsvConverter
         return $tmp_elements;
     }
 
+    public function getNewline(): string
+    {
+        return "\n";
+    }
+
     /**
      * @return array<int, string>
      */
     private function _split_line(string $csv): array
     {
         $lines = [];
-        $elements = \explode($this->sSettings['newline'], $csv);
+        $elements = \explode($this->settings['newline'], $csv);
         if (!\is_array($elements)) {
             return $lines;
         }
 
         foreach ($elements as $i => $element) {
-            $nquotes = \substr_count($elements[$i], $this->sSettings['fieldmark']);
+            $nquotes = \substr_count($elements[$i], $this->settings['fieldmark']);
             if ($nquotes % 2 == 1) {
-                $elements[$i + 1] = $element . $this->sSettings['newline'] . $elements[$i + 1];
+                $elements[$i + 1] = $element . $this->settings['newline'] . $elements[$i + 1];
             } else {
                 $lines[] = $element;
             }

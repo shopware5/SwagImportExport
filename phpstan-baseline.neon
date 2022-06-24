@@ -66,26 +66,6 @@ parameters:
 			path: Components/Converter/XmlConverter.php
 
 		-
-			message: "#^Call to an undefined method SwagImportExport\\\\Components\\\\DbAdapters\\\\DataDbAdapter\\:\\:setDefaultValues\\(\\)\\.$#"
-			count: 1
-			path: Components/DataIO.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataIO\\:\\:getColumns\\(\\) should return array\\<int\\|string, array\\<string\\>\\|string\\> but returns array\\<int\\|string, array\\<string\\>\\|string\\>\\|string\\.$#"
-			count: 1
-			path: Components/DataIO.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataIO\\:\\:initialize\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Components/DataIO.php
-
-		-
-			message: "#^Property SwagImportExport\\\\Components\\\\DataIO\\:\\:\\$recordIds type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DataIO.php
-
-		-
 			message: "#^Parameter \\#2 \\$orderNumber of method SwagImportExport\\\\Components\\\\DataManagers\\\\Articles\\\\ArticleDataManager\\:\\:getTaxByTaxRate\\(\\) expects string, int\\|string given\\.$#"
 			count: 1
 			path: Components/DataManagers/Articles/ArticleDataManager.php
@@ -106,139 +86,9 @@ parameters:
 			path: Components/DataManagers/DataManager.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataManagers\\\\DataManager\\:\\:getFieldType\\(\\) has parameter \\$record with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DataManagers/DataManager.php
-
-		-
 			message: "#^Property SwagImportExport\\\\Components\\\\DataType\\\\ArticlePriceDataType\\:\\:\\$defaultFieldsValues type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/DataType/ArticlePriceDataType.php
-
-		-
-			message: "#^Call to an undefined method SwagImportExport\\\\Components\\\\FileIO\\\\FileReader\\|SwagImportExport\\\\Components\\\\FileIO\\\\FileWriter\\:\\:getTotalCount\\(\\)\\.$#"
-			count: 1
-			path: Components/DataWorkflow.php
-
-		-
-			message: "#^Call to an undefined method SwagImportExport\\\\Components\\\\FileIO\\\\FileReader\\|SwagImportExport\\\\Components\\\\FileIO\\\\FileWriter\\:\\:readRecords\\(\\)\\.$#"
-			count: 1
-			path: Components/DataWorkflow.php
-
-		-
-			message: "#^Call to an undefined method SwagImportExport\\\\Components\\\\FileIO\\\\FileReader\\|SwagImportExport\\\\Components\\\\FileIO\\\\FileWriter\\:\\:setTree\\(\\)\\.$#"
-			count: 1
-			path: Components/DataWorkflow.php
-
-		-
-			message: "#^Call to an undefined method SwagImportExport\\\\Components\\\\FileIO\\\\FileReader\\|SwagImportExport\\\\Components\\\\FileIO\\\\FileWriter\\:\\:writeFooter\\(\\)\\.$#"
-			count: 1
-			path: Components/DataWorkflow.php
-
-		-
-			message: "#^Call to an undefined method SwagImportExport\\\\Components\\\\FileIO\\\\FileReader\\|SwagImportExport\\\\Components\\\\FileIO\\\\FileWriter\\:\\:writeHeader\\(\\)\\.$#"
-			count: 2
-			path: Components/DataWorkflow.php
-
-		-
-			message: "#^Call to an undefined method SwagImportExport\\\\Components\\\\FileIO\\\\FileReader\\|SwagImportExport\\\\Components\\\\FileIO\\\\FileWriter\\:\\:writeRecords\\(\\)\\.$#"
-			count: 2
-			path: Components/DataWorkflow.php
-
-		-
-			message: "#^Call to an undefined method SwagImportExport\\\\Components\\\\Session\\\\Session\\:\\:getFileName\\(\\)\\.$#"
-			count: 1
-			path: Components/DataWorkflow.php
-
-		-
-			message: "#^Cannot call method closeSession\\(\\) on SwagImportExport\\\\Components\\\\DataIO\\|null\\.$#"
-			count: 2
-			path: Components/DataWorkflow.php
-
-		-
-			message: "#^Cannot call method generateFileName\\(\\) on SwagImportExport\\\\Components\\\\DataIO\\|null\\.$#"
-			count: 1
-			path: Components/DataWorkflow.php
-
-		-
-			message: "#^Cannot call method getDataSession\\(\\) on SwagImportExport\\\\Components\\\\DataIO\\|null\\.$#"
-			count: 4
-			path: Components/DataWorkflow.php
-
-		-
-			message: "#^Cannot call method getDirectory\\(\\) on SwagImportExport\\\\Components\\\\DataIO\\|null\\.$#"
-			count: 1
-			path: Components/DataWorkflow.php
-
-		-
-			message: "#^Cannot call method getFileName\\(\\) on SwagImportExport\\\\Components\\\\DataIO\\|null\\.$#"
-			count: 1
-			path: Components/DataWorkflow.php
-
-		-
-			message: "#^Cannot call method getSessionPosition\\(\\) on SwagImportExport\\\\Components\\\\DataIO\\|null\\.$#"
-			count: 4
-			path: Components/DataWorkflow.php
-
-		-
-			message: "#^Cannot call method getSessionState\\(\\) on SwagImportExport\\\\Components\\\\DataIO\\|null\\.$#"
-			count: 7
-			path: Components/DataWorkflow.php
-
-		-
-			message: "#^Cannot call method getUnprocessedData\\(\\) on SwagImportExport\\\\Components\\\\DataIO\\|null\\.$#"
-			count: 1
-			path: Components/DataWorkflow.php
-
-		-
-			message: "#^Cannot call method progressSession\\(\\) on SwagImportExport\\\\Components\\\\DataIO\\|null\\.$#"
-			count: 2
-			path: Components/DataWorkflow.php
-
-		-
-			message: "#^Cannot call method read\\(\\) on SwagImportExport\\\\Components\\\\DataIO\\|null\\.$#"
-			count: 1
-			path: Components/DataWorkflow.php
-
-		-
-			message: "#^Cannot call method resumeSession\\(\\) on SwagImportExport\\\\Components\\\\DataIO\\|null\\.$#"
-			count: 2
-			path: Components/DataWorkflow.php
-
-		-
-			message: "#^Cannot call method setFileName\\(\\) on SwagImportExport\\\\Components\\\\DataIO\\|null\\.$#"
-			count: 2
-			path: Components/DataWorkflow.php
-
-		-
-			message: "#^Cannot call method setFileSize\\(\\) on SwagImportExport\\\\Components\\\\DataIO\\|null\\.$#"
-			count: 1
-			path: Components/DataWorkflow.php
-
-		-
-			message: "#^Cannot call method startSession\\(\\) on SwagImportExport\\\\Components\\\\DataIO\\|null\\.$#"
-			count: 2
-			path: Components/DataWorkflow.php
-
-		-
-			message: "#^Cannot call method usernameSession\\(\\) on SwagImportExport\\\\Components\\\\DataIO\\|null\\.$#"
-			count: 1
-			path: Components/DataWorkflow.php
-
-		-
-			message: "#^Cannot call method write\\(\\) on SwagImportExport\\\\Components\\\\DataIO\\|null\\.$#"
-			count: 1
-			path: Components/DataWorkflow.php
-
-		-
-			message: "#^Cannot call method writeLog\\(\\) on SwagImportExport\\\\Components\\\\DataIO\\|null\\.$#"
-			count: 1
-			path: Components/DataWorkflow.php
-
-		-
-			message: "#^Variable \\$fileName might not be defined\\.$#"
-			count: 1
-			path: Components/DataWorkflow.php
 
 		-
 			message: "#^Cannot call method getId\\(\\) on Shopware\\\\Models\\\\Country\\\\Country\\|null\\.$#"
@@ -501,12 +351,7 @@ parameters:
 			path: Components/DbAdapters/ArticlesImagesDbAdapter.php
 
 		-
-			message: "#^Property SwagImportExport\\\\Components\\\\DbAdapters\\\\ArticlesImagesDbAdapter\\:\\:\\$unprocessedData type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DbAdapters/ArticlesImagesDbAdapter.php
-
-		-
-			message: "#^Call to an undefined method Doctrine\\\\ORM\\\\QueryBuilder\\:\\:addFilter\\(\\)\\.$#"
+			message: "#^Call to an undefined method Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\:\\:addFilter\\(\\)\\.$#"
 			count: 1
 			path: Components/DbAdapters/ArticlesInStockDbAdapter.php
 
@@ -537,11 +382,6 @@ parameters:
 
 		-
 			message: "#^Property SwagImportExport\\\\Components\\\\DbAdapters\\\\ArticlesPricesDbAdapter\\:\\:\\$categoryIdCollection type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DbAdapters/ArticlesPricesDbAdapter.php
-
-		-
-			message: "#^Property SwagImportExport\\\\Components\\\\DbAdapters\\\\ArticlesPricesDbAdapter\\:\\:\\$unprocessedData type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/DbAdapters/ArticlesPricesDbAdapter.php
 
@@ -721,11 +561,6 @@ parameters:
 			path: Components/DbAdapters/MainOrdersDbAdapter.php
 
 		-
-			message: "#^Property SwagImportExport\\\\Components\\\\DbAdapters\\\\MainOrdersDbAdapter\\:\\:\\$unprocessedData type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DbAdapters/MainOrdersDbAdapter.php
-
-		-
 			message: "#^Call to an undefined method Doctrine\\\\ORM\\\\QueryBuilder\\:\\:addFilter\\(\\)\\.$#"
 			count: 1
 			path: Components/DbAdapters/NewsletterDbAdapter.php
@@ -841,21 +676,6 @@ parameters:
 			path: Components/DbAdapters/TranslationsDbAdapter.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Factories\\\\DataFactory\\:\\:loadSession\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Factories/DataFactory.php
-
-		-
-			message: "#^Parameter \\#1 \\$sessionEntity of method SwagImportExport\\\\Components\\\\Factories\\\\DataFactory\\:\\:createSession\\(\\) expects SwagImportExport\\\\CustomModels\\\\Session, object given\\.$#"
-			count: 1
-			path: Components/Factories/DataFactory.php
-
-		-
-			message: "#^Property SwagImportExport\\\\Components\\\\Factories\\\\DataFactory\\:\\:\\$sessionRepository with generic class Doctrine\\\\ORM\\\\EntityRepository does not specify its types\\: TEntityClass$#"
-			count: 1
-			path: Components/Factories/DataFactory.php
-
-		-
 			message: "#^Argument of an invalid type array\\|string\\|false supplied for foreach, only iterables are supported\\.$#"
 			count: 1
 			path: Components/FileIO/CsvFileReader.php
@@ -926,27 +746,7 @@ parameters:
 			path: Components/Logger/LoggerInterface.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Profile\\\\Profile\\:\\:__construct\\(\\) has parameter \\$configNames with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Profile/Profile.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Profile\\\\Profile\\:\\:getConfigNames\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Profile/Profile.php
-
-		-
-			message: "#^Property SwagImportExport\\\\Components\\\\Profile\\\\Profile\\:\\:\\$configNames type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Profile/Profile.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Service\\\\AutoImportService\\:\\:importFiles\\(\\) has parameter \\$files with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Service/AutoImportService.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Service\\\\AutoImportService\\:\\:start\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Service/AutoImportService.php
 
@@ -971,32 +771,12 @@ parameters:
 			path: Components/Service/AutoImportService.php
 
 		-
-			message: "#^Parameter \\#2 \\$requestData of method SwagImportExport\\\\Components\\\\Service\\\\ImportExportServiceHelper\\:\\:initializeDataIO\\(\\) expects array\\{columnOptions\\: string\\|null, limit\\: array\\{limit\\: int\\|null, offset\\: int\\|null\\}, filter\\: array\\<string, mixed\\>, type\\: string\\|null, format\\: string\\}, non\\-empty\\-array\\<string, mixed\\> given\\.$#"
-			count: 2
-			path: Components/Service/ExportService.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Service\\\\ImportExportServiceHelper\\:\\:buildServiceHelpers\\(\\) has parameter \\$requestData with no value type specified in iterable type array\\.$#"
+			message: "#^Parameter \\#4 \\$fileSize of method SwagImportExport\\\\Components\\\\Session\\\\SessionService\\:\\:startImportSession\\(\\) expects int, int\\<0, max\\>\\|false given\\.$#"
 			count: 1
-			path: Components/Service/ImportExportServiceHelper.php
-
-		-
-			message: "#^Call to an undefined method SwagImportExport\\\\Components\\\\Session\\\\Session\\:\\:getTotalCount\\(\\)\\.$#"
-			count: 2
-			path: Components/Service/ImportService.php
+			path: Components/Service/DataWorkflow.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Service\\\\ImportService\\:\\:afterImport\\(\\) has parameter \\$unprocessedData with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Service/ImportService.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Service\\\\ImportService\\:\\:processData\\(\\) has parameter \\$unprocessedFiles with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Service/ImportService.php
-
-		-
-			message: "#^Parameter \\#2 \\$requestData of method SwagImportExport\\\\Components\\\\Service\\\\ImportExportServiceHelper\\:\\:initializeDataIO\\(\\) expects array\\{columnOptions\\: string\\|null, limit\\: array\\{limit\\: int\\|null, offset\\: int\\|null\\}, filter\\: array\\<string, mixed\\>, type\\: string\\|null, format\\: string\\}, non\\-empty\\-array\\<string, mixed\\> given\\.$#"
 			count: 1
 			path: Components/Service/ImportService.php
 
@@ -1006,12 +786,12 @@ parameters:
 			path: Components/Service/ProfileService.php
 
 		-
-			message: "#^Parameter \\#1 \\$profile of class SwagImportExport\\\\Components\\\\Service\\\\Struct\\\\ProfileDataStruct constructor expects SwagImportExport\\\\CustomModels\\\\Profile, SwagImportExport\\\\CustomModels\\\\Profile\\|null given\\.$#"
+			message: "#^Parameter \\#1 \\$profile of class SwagImportExport\\\\Components\\\\Service\\\\Struct\\\\ProfileDataStruct constructor expects SwagImportExport\\\\Models\\\\Profile, SwagImportExport\\\\Models\\\\Profile\\|null given\\.$#"
 			count: 1
 			path: Components/Service/ProfileService.php
 
 		-
-			message: "#^Parameter \\#1 \\$tree of method SwagImportExport\\\\CustomModels\\\\Profile\\:\\:setTree\\(\\) expects string, string\\|false given\\.$#"
+			message: "#^Parameter \\#1 \\$tree of method SwagImportExport\\\\Models\\\\Profile\\:\\:setTree\\(\\) expects string, string\\|false given\\.$#"
 			count: 1
 			path: Components/Service/ProfileService.php
 
@@ -1041,17 +821,7 @@ parameters:
 			path: Components/Service/UnderscoreToCamelCaseService.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Session\\\\Session\\:\\:resume\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Session/Session.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Session\\\\Session\\:\\:setTotalCount\\(\\) has parameter \\$totalCount with no type specified\\.$#"
-			count: 1
-			path: Components/Session/Session.php
-
-		-
-			message: "#^PHPDoc tag @method has invalid value \\(int getTotalCount\\)\\: Unexpected token \"\\\\n \", expected '\\(' at offset 32$#"
 			count: 1
 			path: Components/Session/Session.php
 
@@ -1486,11 +1256,6 @@ parameters:
 			path: Components/Transformers/TreeTransformer.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\ValuesTransformer\\:\\:transform\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Transformers/ValuesTransformer.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\ValuesTransformer\\:\\:transformBackward\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Transformers/ValuesTransformer.php
@@ -1499,31 +1264,6 @@ parameters:
 			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\ValuesTransformer\\:\\:transformForward\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Transformers/ValuesTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Utils\\\\CommandHelper\\:\\:__construct\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Utils/CommandHelper.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Utils\\\\CommandHelper\\:\\:importAction\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Utils/CommandHelper.php
-
-		-
-			message: "#^Offset 'columnOptions' does not exist on array\\{profileId\\: int, type\\: 'export', format\\: string, sessionId\\: int\\|null, fileName\\: string, filter\\: array\\{\\}\\|array\\{variants\\?\\: true, categories\\?\\: non\\-empty\\-string, productStreamId\\?\\: int\\<min, \\-1\\>\\|int\\<1, max\\>, customerStreamId\\?\\: int\\<min, \\-1\\>\\|int\\<1, max\\>, dateFrom\\?\\: non\\-empty\\-string, dateTo\\?\\: non\\-empty\\-string\\}, limit\\: array\\{limit\\: int\\|null, offset\\: int\\|null\\}\\}\\.$#"
-			count: 1
-			path: Components/Utils/CommandHelper.php
-
-		-
-			message: "#^Parameter \\#1 \\$options of method SwagImportExport\\\\Components\\\\Factories\\\\DataFactory\\:\\:createLimit\\(\\) expects array\\{limit\\: int\\|null, offset\\: int\\|null\\}, array\\{\\} given\\.$#"
-			count: 1
-			path: Components/Utils/CommandHelper.php
-
-		-
-			message: "#^Unreachable statement \\- code above always terminates\\.$#"
-			count: 1
-			path: Components/Utils/CommandHelper.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Utils\\\\DataHelper\\:\\:generateMappingFromColumns\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -1591,7 +1331,7 @@ parameters:
 			path: Components/Validators/Validator.php
 
 		-
-			message: "#^Cannot call method getId\\(\\) on SwagImportExport\\\\CustomModels\\\\Profile\\|null\\.$#"
+			message: "#^Cannot call method getId\\(\\) on SwagImportExport\\\\Models\\\\Profile\\|null\\.$#"
 			count: 1
 			path: Controllers/Backend/Shopware_Controllers_Backend_SwagImportExportConversion.php
 
@@ -1621,37 +1361,42 @@ parameters:
 			path: Controllers/Backend/Shopware_Controllers_Backend_SwagImportExportProfile.php
 
 		-
-			message: "#^Call to an undefined method object\\:\\:getFieldType\\(\\)\\.$#"
+			message: "#^Call to static method createFromGlobals\\(\\) on an unknown class SwagImportExport\\\\Controllers\\\\Backend\\\\Request\\.$#"
 			count: 1
 			path: Controllers/Backend/Shopware_Controllers_Backend_SwagImportExportProfile.php
 
 		-
-			message: "#^Cannot call method getTree\\(\\) on SwagImportExport\\\\CustomModels\\\\Profile\\|null\\.$#"
+			message: "#^Cannot call method getFieldType\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: Controllers/Backend/Shopware_Controllers_Backend_SwagImportExportProfile.php
+
+		-
+			message: "#^Cannot call method getTree\\(\\) on SwagImportExport\\\\Models\\\\Profile\\|null\\.$#"
 			count: 4
 			path: Controllers/Backend/Shopware_Controllers_Backend_SwagImportExportProfile.php
 
 		-
-			message: "#^Cannot call method getType\\(\\) on SwagImportExport\\\\CustomModels\\\\Profile\\|null\\.$#"
+			message: "#^Cannot call method getType\\(\\) on SwagImportExport\\\\Models\\\\Profile\\|null\\.$#"
 			count: 1
 			path: Controllers/Backend/Shopware_Controllers_Backend_SwagImportExportProfile.php
 
 		-
-			message: "#^Cannot call method setTree\\(\\) on SwagImportExport\\\\CustomModels\\\\Profile\\|null\\.$#"
+			message: "#^Cannot call method setTree\\(\\) on SwagImportExport\\\\Models\\\\Profile\\|null\\.$#"
 			count: 3
 			path: Controllers/Backend/Shopware_Controllers_Backend_SwagImportExportProfile.php
 
 		-
-			message: "#^If condition is always true\\.$#"
-			count: 2
+			message: "#^Negated boolean expression is always false\\.$#"
+			count: 1
 			path: Controllers/Backend/Shopware_Controllers_Backend_SwagImportExportProfile.php
 
 		-
-			message: "#^Parameter \\#1 \\$entity of method Doctrine\\\\ORM\\\\EntityManager\\:\\:persist\\(\\) expects object, SwagImportExport\\\\CustomModels\\\\Profile\\|null given\\.$#"
+			message: "#^Parameter \\#1 \\$entity of method Doctrine\\\\ORM\\\\EntityManager\\:\\:persist\\(\\) expects object, SwagImportExport\\\\Models\\\\Profile\\|null given\\.$#"
 			count: 3
 			path: Controllers/Backend/Shopware_Controllers_Backend_SwagImportExportProfile.php
 
 		-
-			message: "#^Parameter \\#1 \\$entity of method Doctrine\\\\ORM\\\\EntityManager\\:\\:remove\\(\\) expects object, SwagImportExport\\\\CustomModels\\\\Profile\\|null given\\.$#"
+			message: "#^Parameter \\#1 \\$entity of method Doctrine\\\\ORM\\\\EntityManager\\:\\:remove\\(\\) expects object, SwagImportExport\\\\Models\\\\Profile\\|null given\\.$#"
 			count: 1
 			path: Controllers/Backend/Shopware_Controllers_Backend_SwagImportExportProfile.php
 
@@ -1663,97 +1408,82 @@ parameters:
 		-
 			message: "#^Call to an undefined method Doctrine\\\\ORM\\\\QueryBuilder\\:\\:addFilter\\(\\)\\.$#"
 			count: 1
-			path: CustomModels/ExpressionRepository.php
+			path: Models/ExpressionRepository.php
 
 		-
-			message: "#^Method SwagImportExport\\\\CustomModels\\\\ExpressionRepository\\:\\:getExpressionsListQuery\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
+			message: "#^Method SwagImportExport\\\\Models\\\\ExpressionRepository\\:\\:getExpressionsListQuery\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
 			count: 1
-			path: CustomModels/ExpressionRepository.php
+			path: Models/ExpressionRepository.php
 
 		-
 			message: "#^Parameter \\#1 \\$sort of method Doctrine\\\\ORM\\\\QueryBuilder\\:\\:addOrderBy\\(\\) expects Doctrine\\\\ORM\\\\Query\\\\Expr\\\\OrderBy\\|string, array\\<array\\<string, string\\>\\> given\\.$#"
 			count: 1
-			path: CustomModels/ExpressionRepository.php
+			path: Models/ExpressionRepository.php
 
 		-
 			message: "#^Call to an undefined method Doctrine\\\\ORM\\\\QueryBuilder\\:\\:addFilter\\(\\)\\.$#"
 			count: 1
-			path: CustomModels/LoggerRepository.php
+			path: Models/LoggerRepository.php
 
 		-
-			message: "#^Method SwagImportExport\\\\CustomModels\\\\LoggerRepository\\:\\:getLogListQuery\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
+			message: "#^Method SwagImportExport\\\\Models\\\\LoggerRepository\\:\\:getLogListQuery\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
 			count: 1
-			path: CustomModels/LoggerRepository.php
+			path: Models/LoggerRepository.php
 
 		-
 			message: "#^Parameter \\#1 \\$sort of method Doctrine\\\\ORM\\\\QueryBuilder\\:\\:addOrderBy\\(\\) expects Doctrine\\\\ORM\\\\Query\\\\Expr\\\\OrderBy\\|string, array\\<array\\<string, string\\>\\> given\\.$#"
 			count: 1
-			path: CustomModels/LoggerRepository.php
+			path: Models/LoggerRepository.php
 
 		-
-			message: "#^Method SwagImportExport\\\\CustomModels\\\\Profile\\:\\:getExpressions\\(\\) return type with generic interface Doctrine\\\\Common\\\\Collections\\\\Collection does not specify its types\\: TKey, T$#"
+			message: "#^Method SwagImportExport\\\\Models\\\\Profile\\:\\:getExpressions\\(\\) return type with generic interface Doctrine\\\\Common\\\\Collections\\\\Collection does not specify its types\\: TKey, T$#"
 			count: 1
-			path: CustomModels/Profile.php
+			path: Models/Profile.php
 
 		-
-			message: "#^Property SwagImportExport\\\\CustomModels\\\\Profile\\:\\:\\$expressions with generic interface Doctrine\\\\Common\\\\Collections\\\\Collection does not specify its types\\: TKey, T$#"
+			message: "#^Property SwagImportExport\\\\Models\\\\Profile\\:\\:\\$expressions with generic interface Doctrine\\\\Common\\\\Collections\\\\Collection does not specify its types\\: TKey, T$#"
 			count: 1
-			path: CustomModels/Profile.php
+			path: Models/Profile.php
 
 		-
 			message: "#^Call to an undefined method Doctrine\\\\ORM\\\\QueryBuilder\\:\\:addFilter\\(\\)\\.$#"
 			count: 2
-			path: CustomModels/ProfileRepository.php
+			path: Models/ProfileRepository.php
 
 		-
-			message: "#^Method SwagImportExport\\\\CustomModels\\\\ProfileRepository\\:\\:getProfilesListQuery\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
+			message: "#^Method SwagImportExport\\\\Models\\\\ProfileRepository\\:\\:getProfilesListQuery\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
 			count: 1
-			path: CustomModels/ProfileRepository.php
+			path: Models/ProfileRepository.php
 
 		-
 			message: "#^Parameter \\#1 \\$sort of method Doctrine\\\\ORM\\\\QueryBuilder\\:\\:addOrderBy\\(\\) expects Doctrine\\\\ORM\\\\Query\\\\Expr\\\\OrderBy\\|string, array\\<array\\<string, string\\>\\> given\\.$#"
 			count: 1
-			path: CustomModels/ProfileRepository.php
+			path: Models/ProfileRepository.php
 
 		-
-			message: "#^Method SwagImportExport\\\\CustomModels\\\\Session\\:\\:getProfile\\(\\) should return SwagImportExport\\\\CustomModels\\\\Profile but returns SwagImportExport\\\\CustomModels\\\\Profile\\|null\\.$#"
+			message: "#^Method SwagImportExport\\\\Models\\\\Session\\:\\:getProfile\\(\\) should return SwagImportExport\\\\Models\\\\Profile but returns SwagImportExport\\\\Models\\\\Profile\\|null\\.$#"
 			count: 1
-			path: CustomModels/Session.php
-
-		-
-			message: "#^Property SwagImportExport\\\\CustomModels\\\\Session\\:\\:\\$position type mapping mismatch\\: property can contain int\\|null but database expects int\\.$#"
-			count: 1
-			path: CustomModels/Session.php
+			path: Models/Session.php
 
 		-
 			message: "#^Call to an undefined method Doctrine\\\\ORM\\\\QueryBuilder\\:\\:addFilter\\(\\)\\.$#"
 			count: 1
-			path: CustomModels/SessionRepository.php
+			path: Models/SessionRepository.php
 
 		-
-			message: "#^Method SwagImportExport\\\\CustomModels\\\\SessionRepository\\:\\:getSessionsListQuery\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
+			message: "#^Method SwagImportExport\\\\Models\\\\SessionRepository\\:\\:getSessionsListQuery\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
 			count: 1
-			path: CustomModels/SessionRepository.php
+			path: Models/SessionRepository.php
 
 		-
 			message: "#^Parameter \\#1 \\$sort of method Doctrine\\\\ORM\\\\QueryBuilder\\:\\:addOrderBy\\(\\) expects Doctrine\\\\ORM\\\\Query\\\\Expr\\\\OrderBy\\|string, array\\<array\\<string, string\\>\\> given\\.$#"
 			count: 1
-			path: CustomModels/SessionRepository.php
+			path: Models/SessionRepository.php
 
 		-
-			message: "#^Cannot call method fetchColumn\\(\\) on PDOStatement\\|false\\.$#"
-			count: 2
-			path: Resources/migrations/3-add-acl.php
-
-		-
-			message: "#^Cannot call method fetchAll\\(\\) on PDOStatement\\|false\\.$#"
+			message: "#^Parameter \\#1 \\$profiles of method SwagImportExport\\\\Migrations\\\\Migration5\\:\\:addSuffixToProfileNames\\(\\) expects array\\<int, array\\{name\\: string, id\\: int\\}\\>, array\\<int, array\\{id\\: numeric\\-string, 0\\: numeric\\-string, type\\: string, 1\\: string, base_profile\\: numeric\\-string\\|null, 2\\: numeric\\-string\\|null, name\\: string, 3\\: string, \\.\\.\\.\\}\\> given\\.$#"
 			count: 1
 			path: Resources/migrations/5-rename-duplicate-profile-names.php
-
-		-
-			message: "#^Cannot call method fetchColumn\\(\\) on PDOStatement\\|false\\.$#"
-			count: 1
-			path: Resources/migrations/6-update-config.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\AddressProfile\\:\\:getAddressFields\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -1951,21 +1681,6 @@ parameters:
 			path: Tests/Functional/Commands/ImportCommandTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\TransformerChainMock\\:\\:composeHeader\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DataWorkflowTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\TransformerChainMock\\:\\:transformForward\\(\\) has parameter \\$data with no type specified\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DataWorkflowTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\TransformerChainMock\\:\\:transformForward\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DataWorkflowTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\DbAdapters\\\\CustomerDbAdapterTest\\:\\:getTestUserDataRecord\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Functional/Components/DbAdapters/CustomerDbAdapterTest.php
@@ -2041,7 +1756,7 @@ parameters:
 			path: Tests/Functional/Controllers/Backend/AddressExportTest.php
 
 		-
-			message: "#^Cannot call method getId\\(\\) on SwagImportExport\\\\CustomModels\\\\Profile\\|null\\.$#"
+			message: "#^Cannot call method getId\\(\\) on SwagImportExport\\\\Models\\\\Profile\\|null\\.$#"
 			count: 2
 			path: Tests/Functional/Controllers/Backend/AddressExportTest.php
 
@@ -2514,21 +2229,6 @@ parameters:
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\CustomersDbAdapterTest\\:\\:writeWithEmptyFile\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Integration/Components/CustomersDbAdapterTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DataIO\\:\\:initialize\\(\\) invoked with 6 parameters, 5 required\\.$#"
-			count: 1
-			path: Tests/Integration/Components/DataIOTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\DataIOTest\\:\\:getPostData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Integration/Components/DataIOTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$options of method SwagImportExport\\\\Components\\\\Factories\\\\DataFactory\\:\\:createLimit\\(\\) expects array\\{limit\\: int\\|null, offset\\: int\\|null\\}, array\\{\\} given\\.$#"
-			count: 1
-			path: Tests/Integration/Components/DataIOTest.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\NewsletterDbAdapterTest\\:\\:writeProvider\\(\\) return type has no value type specified in iterable type array\\.$#"

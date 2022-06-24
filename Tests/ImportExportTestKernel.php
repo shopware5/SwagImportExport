@@ -38,8 +38,6 @@ class ImportExportTestKernel extends Kernel
         $container->get('dbal_connection')->executeQuery(
             'UPDATE s_core_config_elements SET value = \'b:0;\' WHERE name = \'useCommaDecimal\''
         );
-
-        $container->get('cache')->clean();
     }
 
     public static function getKernel(): ImportExportTestKernel

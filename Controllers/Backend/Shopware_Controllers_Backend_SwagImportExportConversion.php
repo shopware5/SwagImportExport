@@ -9,9 +9,9 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Controllers\Backend;
 
-use SwagImportExport\CustomModels\Expression;
-use SwagImportExport\CustomModels\ExpressionRepository;
-use SwagImportExport\CustomModels\Profile;
+use SwagImportExport\Models\Expression;
+use SwagImportExport\Models\ExpressionRepository;
+use SwagImportExport\Models\Profile;
 
 /**
  * Shopware ImportExport Plugin
@@ -77,7 +77,7 @@ class Shopware_Controllers_Backend_SwagImportExportConversion extends \Shopware_
             'success' => true,
             'data' => [
                 'id' => $expressionEntity->getId(),
-                'profileId' => $expressionEntity->getProfile()->getId(),
+                'profileId' => $profileEntity->getId(),
                 'exportConversion' => $expressionEntity->getExportConversion(),
                 'importConversion' => $expressionEntity->getImportConversion(),
             ],

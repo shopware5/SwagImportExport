@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Tests\Helper;
 
-use SwagImportExport\Components\Factories\DataFactory;
+use SwagImportExport\Components\Providers\DataProvider;
 use Symfony\Component\Yaml\Parser;
 
 class DbAdapterTestHelper extends ImportExportTestHelper
@@ -56,9 +56,9 @@ class DbAdapterTestHelper extends ImportExportTestHelper
      */
     public function read(array $columns, array $ids, array $expectedResults, int $expectedCount, string $section = 'default'): void
     {
-        /* @var DataFactory $dataFactory */
-        $dataFactory = $this->getContainer()->get(DataFactory::class);
-        $dbAdapter = $dataFactory->createDbAdapter($this->dbAdapter);
+        /* @var DataProvider $dataProvider */
+        $dataProvider = $this->getContainer()->get(DataProvider::class);
+        $dbAdapter = $dataProvider->createDbAdapter($this->dbAdapter);
 
         $rawData = $dbAdapter->read($ids, $columns);
         foreach ($expectedResults as $index => $expectedResult) {
@@ -72,9 +72,9 @@ class DbAdapterTestHelper extends ImportExportTestHelper
 
     public function readRecordIds(int $start, int $limit, array $filter, array $expectedIds, int $expectedCount): void
     {
-        /* @var DataFactory $dataFactory */
-        $dataFactory = $this->getContainer()->get(DataFactory::class);
-        $dbAdapter = $dataFactory->createDbAdapter($this->dbAdapter);
+        /* @var DataProvider $dataProvider */
+        $dataProvider = $this->getContainer()->get(DataProvider::class);
+        $dbAdapter = $dataProvider->createDbAdapter($this->dbAdapter);
 
         $ids = $dbAdapter->readRecordIds($start, $limit, $filter);
 
@@ -95,9 +95,9 @@ class DbAdapterTestHelper extends ImportExportTestHelper
     {
         $recordsCountBeforeImport = $this->getTableCount($this->dbTable);
 
-        $dataFactory = $this->getContainer()->get(DataFactory::class);
+        $dataProvider = $this->getContainer()->get(DataProvider::class);
 
-        $dbAdapter = $dataFactory->createDbAdapter($this->dbAdapter);
+        $dbAdapter = $dataProvider->createDbAdapter($this->dbAdapter);
         $dbAdapter->write($records);
 
         $recordsCountAfterImport = $this->getTableCount($this->dbTable);

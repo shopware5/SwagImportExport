@@ -36,7 +36,7 @@ class CsvFileWriter implements FileWriter
             throw new \Exception('Header data is not valid');
         }
         $columnNames = \implode(';', $headerData) . "\n";
-        $this->getFileHelper()->writeStringToFile($fileName, $columnNames);
+        $this->fileHelper->writeStringToFile($fileName, $columnNames);
     }
 
     public function writeRecords(string $fileName, array $data): void
@@ -46,9 +46,9 @@ class CsvFileWriter implements FileWriter
         $convertor = new CsvConverter();
         $keys = \array_keys(\current($data));
         foreach ($data as $line) {
-            $flatData .= $convertor->_encode_line($line, $keys) . $convertor->sSettings['newline'];
+            $flatData .= $convertor->_encode_line($line, $keys) . $convertor->getNewline();
         }
-        $this->getFileHelper()->writeStringToFile($fileName, $flatData, \FILE_APPEND);
+        $this->fileHelper->writeStringToFile($fileName, $flatData, \FILE_APPEND);
     }
 
     public function writeFooter(string $fileName, ?array $footerData): void
@@ -58,10 +58,5 @@ class CsvFileWriter implements FileWriter
     public function hasTreeStructure(): bool
     {
         return $this->treeStructure;
-    }
-
-    public function getFileHelper(): FileHelper
-    {
-        return $this->fileHelper;
     }
 }

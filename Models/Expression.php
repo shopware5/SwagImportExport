@@ -7,7 +7,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace SwagImportExport\CustomModels;
+namespace SwagImportExport\Models;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
@@ -31,7 +31,7 @@ class Expression extends ModelEntity
     protected int $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="SwagImportExport\CustomModels\Profile", cascade={"persist", "refresh"})
+     * @ORM\ManyToOne(targetEntity="SwagImportExport\Models\Profile", cascade={"persist", "refresh"})
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected ?Profile $profile;

@@ -7,12 +7,12 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace SwagImportExport\Components\Factories;
+namespace SwagImportExport\Components\Providers;
 
 use SwagImportExport\Components\FileIO\FileReader;
 use SwagImportExport\Components\FileIO\FileWriter;
 
-class FileIOFactory extends \Enlight_Class implements \Enlight_Hook
+class FileIOProvider extends \Enlight_Class implements \Enlight_Hook
 {
     /**
      * @var iterable<FileWriter>
@@ -36,7 +36,7 @@ class FileIOFactory extends \Enlight_Class implements \Enlight_Hook
         $this->fileReader = $fileReader;
     }
 
-    public function createFileReader(string $format): FileReader
+    public function getFileReader(string $format): FileReader
     {
         foreach ($this->fileReader as $reader) {
             if ($reader->supports($format)) {
@@ -47,7 +47,7 @@ class FileIOFactory extends \Enlight_Class implements \Enlight_Hook
         throw new \Exception('File reader ' . $format . ' does not exists.');
     }
 
-    public function createFileWriter(string $format): FileWriter
+    public function getFileWriter(string $format): FileWriter
     {
         foreach ($this->fileWriter as $writer) {
             if ($writer->supports($format)) {

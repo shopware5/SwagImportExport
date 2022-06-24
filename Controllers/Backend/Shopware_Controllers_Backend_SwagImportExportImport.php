@@ -9,8 +9,10 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Controllers\Backend;
 
+use SwagImportExport\Components\Factories\ProfileFactory;
 use SwagImportExport\Components\Service\ImportService;
-use SwagImportExport\Components\Service\Struct\PreparationResultStruct;
+use SwagImportExport\Components\Session\SessionService;
+use SwagImportExport\Components\Structs\ImportRequest;
 use SwagImportExport\Components\UploadPathProvider;
 
 /**
@@ -24,12 +26,20 @@ class Shopware_Controllers_Backend_SwagImportExportImport extends \Shopware_Cont
 
     private ImportService $importService;
 
+    private ProfileFactory $profileFactory;
+
+    private SessionService $sessionService;
+
     public function __construct(
         UploadPathProvider $uploadPathProvider,
-        ImportService $importService
+        ImportService $importService,
+        ProfileFactory $profileFactory,
+        SessionService $sessionService
     ) {
         $this->uploadPathProvider = $uploadPathProvider;
         $this->importService = $importService;
+        $this->profileFactory = $profileFactory;
+        $this->sessionService = $sessionService;
     }
 
     public function initAcl(): void
@@ -41,35 +51,27 @@ class Shopware_Controllers_Backend_SwagImportExportImport extends \Shopware_Cont
     public function prepareImportAction(): void
     {
         $request = $this->Request();
+        $profile = $this->profileFactory->loadProfile((int) $request->getParam('profileId'));
 
-        $postData = [
-            'sessionId' => $request->getParam('sessionId'),
-            'profileId' => (int) $request->getParam('profileId'),
+        $importFile = $this->uploadPathProvider->getRealPath($request->getParam('importFile'));
+
+        $importRequest = new ImportRequest();
+        $importRequest->setData([
+            'sessionId' => $request->getParam('sessionId') ? (int) $request->getParam('sessionId') : null,
+            'profileEntity' => $profile,
             'type' => 'import',
-            'file' => $this->uploadPathProvider->getRealPath($request->getParam('importFile')),
-        ];
+            'inputFileName' => $this->uploadPathProvider->getFileNameFromPath($importFile),
+            'format' => $this->uploadPathProvider->getFileExtension($importFile),
+        ]);
 
-        if (empty($postData['file'])) {
+        if (empty($importRequest->inputFileName)) {
             $this->View()->assign(['success' => false, 'msg' => 'No valid file']);
 
             return;
         }
 
-        // get file format
-        $inputFileName = $this->uploadPathProvider->getFileNameFromPath($postData['file']);
-        $extension = $this->uploadPathProvider->getFileExtension($postData['file']);
-
-        if (!$this->isFormatValid($extension)) {
-            $this->View()->assign(['success' => false, 'msg' => 'No valid file format']);
-
-            return;
-        }
-
-        $postData['format'] = $extension;
-
         try {
-            /** @var PreparationResultStruct $resultStruct */
-            $resultStruct = $this->importService->prepareImport($postData, $inputFileName);
+            $totalCount = $this->importService->prepareImport($importRequest);
         } catch (\Exception $e) {
             $this->View()->assign(['success' => false, 'msg' => $e->getMessage()]);
 
@@ -78,8 +80,8 @@ class Shopware_Controllers_Backend_SwagImportExportImport extends \Shopware_Cont
 
         $this->View()->assign([
             'success' => true,
-            'position' => $resultStruct->getPosition(),
-            'count' => $resultStruct->getTotalResultCount(),
+            'position' => 0,
+            'count' => $totalCount,
         ]);
     }
 
@@ -88,22 +90,38 @@ class Shopware_Controllers_Backend_SwagImportExportImport extends \Shopware_Cont
         $request = $this->Request();
         $inputFile = $this->uploadPathProvider->getRealPath($request->getParam('importFile'));
 
-        $unprocessedFiles = [];
-        $postData = [
-            'type' => 'import',
-            'profileId' => (int) $request->getParam('profileId'),
-            'importFile' => $inputFile,
-            'sessionId' => $request->getParam('sessionId'),
-            'limit' => [],
-            'format' => \pathinfo($inputFile, \PATHINFO_EXTENSION),
-        ];
+        $importRequest = new ImportRequest();
 
-        if ($request->getParam('unprocessedFiles')) {
-            $unprocessedFiles = \json_decode($request->getParam('unprocessedFiles'), true);
-        }
+        $config = $this->get('config');
+
+        $profile = $this->profileFactory->loadProfile((int) $request->getParam('profileId'));
+
+        $importRequest->setData(
+            [
+                'type' => 'import',
+                'profileEntity' => $profile,
+                'inputFileName' => $inputFile,
+                'sessionId' => $request->getParam('sessionId') ? (int) $request->getParam('sessionId') : null,
+                'limit' => [],
+                'format' => \pathinfo($inputFile, \PATHINFO_EXTENSION),
+                'batchSize' => $profile->getType() === 'articlesImages' ? 1 : (int) $config->getByNamespace('SwagImportExport', 'batch-size-import', 1000),
+        ]
+        );
+
+        $session = $this->sessionService->createSession();
 
         try {
-            $resultData = $this->importService->import($postData, $unprocessedFiles, $inputFile);
+            $lastPosition = 0;
+            foreach ($this->importService->import($importRequest, $session) as [$profileName, $position]) {
+                if ($profileName === $importRequest->profileEntity->getName()) {
+                    $lastPosition = $position;
+                }
+            }
+            $resultData = [
+                'importFile' => $importRequest->inputFileName,
+                'position' => $lastPosition,
+            ];
+
             $this->View()->assign([
                 'success' => true,
                 'data' => $resultData,
@@ -113,20 +131,6 @@ class Shopware_Controllers_Backend_SwagImportExportImport extends \Shopware_Cont
                 'success' => false,
                 'msg' => $e->getMessage(),
             ]);
-        }
-    }
-
-    /**
-     * Check is file format valid
-     */
-    private function isFormatValid(string $extension): bool
-    {
-        switch ($extension) {
-            case 'csv':
-            case 'xml':
-                return true;
-            default:
-                return false;
         }
     }
 }

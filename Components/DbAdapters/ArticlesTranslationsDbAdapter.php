@@ -27,11 +27,6 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
     protected bool $importExportErrorMode;
 
     /**
-     * @var array<mixed>
-     */
-    protected array $unprocessedData = [];
-
-    /**
      * @var array<string>
      */
     protected array $logMessages = [];
@@ -97,7 +92,7 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
      */
     public function getUnprocessedData(): array
     {
-        return $this->unprocessedData;
+        return [];
     }
 
     /**
@@ -146,8 +141,6 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
      */
     public function write(array $records): void
     {
-        $this->unprocessedData = [];
-
         if (empty($records['default'])) {
             $message = SnippetsHelper::getNamespace()
                 ->get('adapters/articlesTranslations/no_records', 'No article translation records were found.');

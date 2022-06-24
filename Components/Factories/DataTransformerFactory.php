@@ -15,6 +15,8 @@ use SwagImportExport\Components\Transformers\DataTransformerChain;
 
 class DataTransformerFactory implements \Enlight_Hook
 {
+    private const DEFAULT_CONFIG_NAMES = ['exportConversion', 'tree', 'decimals'];
+
     /**
      * @var iterable<DataTransformerAdapter>
      */
@@ -40,17 +42,14 @@ class DataTransformerFactory implements \Enlight_Hook
         // this can be put in a separate hookable function
         $dataTransformerChain = new DataTransformerChain();
 
-        // for every config we create a transformer and add it to the chain
-        $names = $profile->getConfigNames();
-
-        foreach ($names as $name) {
-            $transformer = $this->createDataTransformer($name, $profile);
+        foreach (self::DEFAULT_CONFIG_NAMES as $name) {
+            $transformer = $this->getDataTransformer($name, $profile);
             $dataTransformerChain->add($transformer);
         }
 
         // a little hack: if we are in csv, we flatten the tree by adding a flattener at the end
         if (!$dataUserOptions['isTree']) {
-            $transformer = $this->createDataTransformer('flatten', $profile);
+            $transformer = $this->getDataTransformer('flatten', $profile);
             $dataTransformerChain->add($transformer);
         }
 
@@ -62,7 +61,7 @@ class DataTransformerFactory implements \Enlight_Hook
      *
      * @throws \Exception
      */
-    public function createDataTransformer(string $transformerType, Profile $profile): DataTransformerAdapter
+    private function getDataTransformer(string $transformerType, Profile $profile): DataTransformerAdapter
     {
         $fittingTransformer = null;
 

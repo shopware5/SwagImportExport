@@ -9,7 +9,12 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Controllers\Backend;
 
+use SwagImportExport\Components\Factories\ProfileFactory;
 use SwagImportExport\Components\Service\ExportService;
+use SwagImportExport\Components\Session\SessionService;
+use SwagImportExport\Components\Structs\ExportRequest;
+use SwagImportExport\Components\UploadPathProvider;
+use SwagImportExport\Components\Utils\FileNameGenerator;
 
 /**
  * Shopware ImportExport Plugin
@@ -20,10 +25,22 @@ class Shopware_Controllers_Backend_SwagImportExportExport extends \Shopware_Cont
 {
     private ExportService $exportService;
 
+    private ProfileFactory $profileFactory;
+
+    private SessionService $sessionService;
+
+    private UploadPathProvider $uploadPathProvider;
+
     public function __construct(
-        ExportService $exportService
+        ExportService $exportService,
+        ProfileFactory $profileFactory,
+        SessionService $sessionService,
+        UploadPathProvider $uploadPathProvider
     ) {
         $this->exportService = $exportService;
+        $this->profileFactory = $profileFactory;
+        $this->sessionService = $sessionService;
+        $this->uploadPathProvider = $uploadPathProvider;
     }
 
     public function initAcl(): void
@@ -44,27 +61,32 @@ class Shopware_Controllers_Backend_SwagImportExportExport extends \Shopware_Cont
             $offset = $this->Request()->getParam('offset');
         }
 
-        $postData = [
-            'sessionId' => $this->Request()->getParam('sessionId'),
-            'profileId' => (int) $this->Request()->getParam('profileId'),
-            'type' => 'export',
-            'format' => $this->Request()->getParam('format'),
-            'filter' => [],
-            'limit' => [
+        $profile = $this->profileFactory->loadProfile((int) $this->Request()->getParam('profileId'));
+
+        $exportRequest = new ExportRequest();
+        $exportRequest->setData(
+            [
+                'sessionId' => $this->Request()->getParam('sessionId') ? (int) $this->Request()->getParam('sessionId') : null,
+                'profileEntity' => $profile,
+                'type' => 'export',
+                'format' => $this->Request()->getParam('format'),
+                'filter' => [],
                 'limit' => $limit,
                 'offset' => $offset,
-            ],
-        ];
+            ]
+        );
+
+        $session = $this->sessionService->loadSession($exportRequest->sessionId);
 
         try {
-            $resultStruct = $this->exportService->prepareExport($postData, $this->Request()->getParams());
+            $count = $this->exportService->prepareExport($exportRequest, $session);
         } catch (\Exception $e) {
             $this->View()->assign(['success' => false, 'msg' => $e->getMessage()]);
 
             return;
         }
 
-        if ($resultStruct->getTotalResultCount() === 0) {
+        if ($count === 0) {
             $this->View()->assign(['success' => false, 'msg' => 'No data to export', 'position' => 0, 'count' => 0]);
 
             return;
@@ -72,8 +94,8 @@ class Shopware_Controllers_Backend_SwagImportExportExport extends \Shopware_Cont
 
         $this->View()->assign([
             'success' => true,
-            'position' => $resultStruct->getPosition(),
-            'count' => $resultStruct->getTotalResultCount(),
+            'position' => 0,
+            'count' => $count,
         ]);
     }
 
@@ -81,32 +103,79 @@ class Shopware_Controllers_Backend_SwagImportExportExport extends \Shopware_Cont
     {
         $limit = null;
         if ($this->Request()->getParam('limit')) {
-            $limit = $this->Request()->getParam('limit');
+            $limit = (int) $this->Request()->getParam('limit');
         }
 
         $offset = null;
         if ($this->Request()->getParam('offset')) {
-            $offset = $this->Request()->getParam('offset');
+            $offset = (int) $this->Request()->getParam('offset');
         }
 
-        $postData = [
-            'profileId' => (int) $this->Request()->getParam('profileId'),
-            'type' => 'export',
-            'format' => $this->Request()->getParam('format'),
-            'sessionId' => $this->Request()->getParam('sessionId'),
-            'fileName' => $this->Request()->getParam('fileName'),
-            'filter' => [],
-            'limit' => [
+        $sessionId = null;
+        if ($this->Request()->getParam('sessionId')) {
+            $sessionId = (int) $this->Request()->getParam('sessionId');
+        }
+
+        if (!$this->Request()->getParam('profileId')) {
+            throw new \Exception('ProfileId must be set');
+        }
+
+        $format = $this->Request()->getParam('format');
+        if (!$format) {
+            throw new \Exception('Format must be set');
+        }
+
+        $profile = $this->profileFactory->loadProfile((int) $this->Request()->getParam('profileId'));
+
+        $fileName = $this->Request()->getParam('fileName');
+        if (!$fileName) {
+            $fileName = FileNameGenerator::generateFileName('export', $format, $profile->getEntity());
+        }
+
+        $exportRequest = new ExportRequest();
+        $exportRequest->setData(
+            [
+                'profileEntity' => $profile,
+                'type' => 'export',
+                'format' => $this->Request()->getParam('format'),
+                'sessionId' => $sessionId,
+                'filePath' => $this->uploadPathProvider->getRealPath($fileName),
+                'filter' => [],
                 'limit' => $limit,
                 'offset' => $offset,
-            ],
-        ];
+                'category' => $this->Request()->getParam('categories') ? [$this->Request()->getParam('categories')] : null,
+                'batchSize' => Shopware()->Config()->getByNamespace('SwagImportExport', 'batch-size-export', 1),
+                'productStream' => $this->Request()->getParam('productStreamId') ? [$this->Request()->getParam('productStreamId')] : null,
+                'exportVariants' => $this->Request()->getParam('variants') ? (bool) $this->Request()->getParam('variants') : null,
+                'stockFilter' => $this->Request()->getParam('stockFilter') ? $this->Request()->getParam('stockFilter') : null,
+                'customFilterDirection' => $this->Request()->getParam('customFilterDirection') ? $this->Request()->getParam('customFilterDirection') : null,
+                'customFilterValue' => $this->Request()->getParam('customFilterValue') ? $this->Request()->getParam('customFilterValue') : null,
+                'ordernumberFrom' => $this->Request()->getParam('ordernumberFrom') ? $this->Request()->getParam('ordernumberFrom') : null,
+                'dateFrom' => $this->Request()->getParam('dateFrom') ? $this->Request()->getParam('dateFrom') : null,
+                'dateTo' => $this->Request()->getParam('dateTo') ? $this->Request()->getParam('dateTo') : null,
+                'orderstate' => $this->Request()->getParam('orderstate') ? $this->Request()->getParam('orderstate') : null,
+                'paymentstate' => $this->Request()->getParam('paymentstate') ? $this->Request()->getParam('paymentstate') : null,
+                'customerStreamId' => $this->Request()->getParam('customerStreamId') ? $this->Request()->getParam('customerStreamId') : null,
+                'customerId' => $this->Request()->getParam('customerId') ? $this->Request()->getParam('customerId') : null,
+            ]
+        );
 
+        $session = $this->sessionService->loadSession($exportRequest->sessionId);
+
+        $lastPosition = 0;
         try {
-            $resultData = $this->exportService->export($postData, $this->Request()->getParams());
-            $this->View()->assign(['success' => true, 'data' => $resultData]);
-        } catch (\Exception $e) {
+            foreach ($this->exportService->export($exportRequest, $session) as $position) {
+                $lastPosition = $position;
+            }
+        } catch (\Throwable $e) {
             $this->View()->assign(['success' => false, 'msg' => $e->getMessage()]);
+
+            return;
         }
+
+        $this->View()->assign(['success' => true, 'data' => [
+            'position' => $lastPosition,
+            'fileName' => $fileName,
+        ]]);
     }
 }

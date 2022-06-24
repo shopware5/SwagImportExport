@@ -16,10 +16,6 @@ class FileHelper
      */
     public function writeStringToFile(string $file, string $content, int $flag = 0): void
     {
-        try {
-            \file_put_contents($file, $content, $flag);
-        } catch (\Exception $e) {
-            throw new \Exception("Cannot write in '$file'");
-        }
+        \file_put_contents($file, $content, $flag);
     }
 }

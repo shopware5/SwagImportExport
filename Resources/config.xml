@@ -19,7 +19,7 @@
         <element required="false" type="number" scope="locale">
             <name>batch-size-import</name>
             <label lang="de">Batch-Size Import</label>
-            <label lang="en">Batch-Size Export</label>
+            <label lang="en">Batch-Size Import</label>
             <value>50</value>
         </element>
 
