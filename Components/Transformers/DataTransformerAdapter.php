@@ -9,16 +9,20 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Components\Transformers;
 
+use SwagImportExport\Components\Profile\Profile;
+
 /**
  * This interface defines the way the transformers must work.
  * Each of them must be able to compose headers and footers, and to transform the data in both directions.
  */
 interface DataTransformerAdapter
 {
+    public function supports(string $type): bool;
+
     /**
      * Sets the main config which defines the data restructuring
      */
-    public function initialize($config): void;
+    public function initialize(Profile $config): void;
 
     /**
      * Transforms the data in direction to formatted output file and returns the transformed data.

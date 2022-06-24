@@ -19,6 +19,11 @@ use SwagImportExport\Components\Utils\SwagVersionHelper;
 
 class CustomerCompleteDbAdapter extends CustomerDbAdapter
 {
+    public function supports(string $adapter): bool
+    {
+        return $adapter === DataDbAdapter::CUSTOMER_COMPLETE_ADAPTER;
+    }
+
     /**
      * {@inheritDoc}
      */

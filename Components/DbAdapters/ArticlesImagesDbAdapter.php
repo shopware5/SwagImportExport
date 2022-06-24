@@ -115,6 +115,11 @@ class ArticlesImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
         $this->request = $front->Request();
     }
 
+    public function supports(string $adapter): bool
+    {
+        return $adapter === DataDbAdapter::ARTICLE_IMAGE_ADAPTER;
+    }
+
     /**
      * {@inheritDoc}
      */

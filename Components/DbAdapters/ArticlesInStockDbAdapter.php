@@ -55,6 +55,11 @@ class ArticlesInStockDbAdapter implements DataDbAdapter, \Enlight_Hook
         $this->config = $config;
     }
 
+    public function supports(string $adapter): bool
+    {
+        return $adapter === DataDbAdapter::ARTICLE_INSTOCK_ADAPTER;
+    }
+
     /**
      * {@inheritDoc}
      */

@@ -15,6 +15,9 @@ class DataLimit
 
     protected ?int $offset = null;
 
+    /**
+     * @param array{limit: ?int, offset: ?int} $options
+     */
     public function __construct(array $options)
     {
         if (isset($options['limit'])) {

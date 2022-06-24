@@ -7,24 +7,8 @@
     <service id="SwagImportExport\Components\Factories\DataFactory" public="true">
         <argument type="service" id="events"/>
         <argument type="service" id="models"/>
-        <argument type="service" id="SwagImportExport\Components\DbAdapters\CategoriesDbAdapter"/>
-        <argument type="service" id="SwagImportExport\Components\DbAdapters\ArticlesDbAdapter"/>
-        <argument type="service" id="SwagImportExport\Components\DbAdapters\ArticlesInStockDbAdapter"/>
-        <argument type="service" id="SwagImportExport\Components\DbAdapters\ArticlesTranslationsDbAdapter"/>
-        <argument type="service" id="SwagImportExport\Components\DbAdapters\ArticlesPricesDbAdapter"/>
-        <argument type="service" id="SwagImportExport\Components\DbAdapters\ArticlesImagesDbAdapter"/>
-        <argument type="service" id="SwagImportExport\Components\DbAdapters\OrdersDbAdapter"/>
-        <argument type="service" id="SwagImportExport\Components\DbAdapters\MainOrdersDbAdapter"/>
-        <argument type="service" id="SwagImportExport\Components\DbAdapters\CustomerDbAdapter"/>
-        <argument type="service" id="SwagImportExport\Components\DbAdapters\CustomerCompleteDbAdapter"/>
-        <argument type="service" id="SwagImportExport\Components\DbAdapters\NewsletterDbAdapter"/>
-        <argument type="service" id="SwagImportExport\Components\DbAdapters\TranslationsDbAdapter"/>
-        <argument type="service" id="SwagImportExport\Components\DbAdapters\AddressDbAdapter"/>
-        <argument type="service" id="SwagImportExport\Components\DbAdapters\CategoryTranslationDbAdapter"/>
-        <argument type="service" id="SwagImportExport\Components\DataManagers\CategoriesDataManager"/>
-        <argument type="service" id="SwagImportExport\Components\DataManagers\Articles\ArticleDataManager"/>
-        <argument type="service" id="SwagImportExport\Components\DataManagers\CustomerDataManager"/>
-        <argument type="service" id="SwagImportExport\Components\DataManagers\NewsletterDataManager"/>
+        <argument type="tagged" tag="import_export.db_adapter"/>
+        <argument type="tagged" tag="import_export.data_manager"/>
         <argument type="service" id="SwagImportExport\Components\UploadPathProvider"/>
 
         <tag name="import_export.proxyable"/>
@@ -38,15 +22,15 @@
     </service>
 
     <service id="SwagImportExport\Components\Factories\FileIOFactory" public="true">
-        <argument type="service" id="SwagImportExport\Components\FileIO\CsvFileReader"/>
-        <argument type="service" id="SwagImportExport\Components\FileIO\CsvFileWriter"/>
-        <argument type="service" id="SwagImportExport\Components\FileIO\XmlFileReader"/>
-        <argument type="service" id="SwagImportExport\Components\FileIO\XmlFileWriter"/>
+        <argument type="tagged" tag="import_export.file_writer"/>
+        <argument type="tagged" tag="import_export.file_reader"/>
 
         <tag name="import_export.proxyable"/>
     </service>
 
     <service id="SwagImportExport\Components\Factories\DataTransformerFactory" public="true">
+        <argument type="tagged" tag="import_export.transformers"/>
+
         <tag name="import_export.proxyable"/>
     </service>
 </services>

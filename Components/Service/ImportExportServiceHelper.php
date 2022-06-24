@@ -24,7 +24,7 @@ use SwagImportExport\Components\Transformers\DataTransformerChain;
 use SwagImportExport\Components\UploadPathProvider;
 use SwagImportExport\CustomModels\Session;
 
-abstract class AbstractImportExportService
+class ImportExportServiceHelper
 {
     protected DataFactory $dataFactory;
 
@@ -66,7 +66,7 @@ abstract class AbstractImportExportService
         $this->config = $config;
     }
 
-    protected function buildServiceHelpers(array $requestData): ServiceHelperStruct
+    public function buildServiceHelpers(array $requestData): ServiceHelperStruct
     {
         $profile = $this->profileFactory->loadProfile($requestData);
         $session = $this->dataFactory->loadSession($requestData);
@@ -85,7 +85,10 @@ abstract class AbstractImportExportService
         );
     }
 
-    protected function initializeDataIO(DataIO $dataIO, array $requestData): void
+    /**
+     * @param array{columnOptions: ?string, limit: array{limit: ?int, offset: ?int}, filter: array<string, mixed>, type: ?string, format: string} $requestData
+     */
+    public function initializeDataIO(DataIO $dataIO, array $requestData): void
     {
         $colOpts = $this->dataFactory->createColOpts($requestData['columnOptions']);
         $limit = $this->dataFactory->createLimit($requestData['limit']);
@@ -98,7 +101,7 @@ abstract class AbstractImportExportService
         $dataIO->setUsername($username);
     }
 
-    protected function createDataTransformerChain(Profile $profile, bool $hasTreeStructure): DataTransformerChain
+    public function createDataTransformerChain(Profile $profile, bool $hasTreeStructure): DataTransformerChain
     {
         return $this->dataTransformerFactory->createDataTransformerChain(
             $profile,
@@ -106,7 +109,7 @@ abstract class AbstractImportExportService
         );
     }
 
-    protected function logProcessing(string $writeStatus, string $filename, string $profileName, string $logMessage, string $status, Session $session): void
+    public function logProcessing(string $writeStatus, string $filename, string $profileName, string $logMessage, string $status, Session $session): void
     {
         $this->logger->write([$logMessage], $writeStatus, $session);
 
@@ -121,11 +124,11 @@ abstract class AbstractImportExportService
         $this->logger->writeToFile($logDataStruct);
     }
 
-    private function createFileReader(Profile $profile, string $format): FileReader
+    public function createFileReader(Profile $profile, string $format): FileReader
     {
         $fileReader = $this->fileIOFactory->createFileReader($format);
         if ($format === 'xml') {
-            $tree = \json_decode($profile->getConfig('tree'), true);
+            $tree = \json_decode($profile->getEntity()->getTree(), true);
 
             $fileReader->setTree($tree);
         }

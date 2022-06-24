@@ -12,6 +12,7 @@ namespace SwagImportExport\Components\DataManagers;
 use Shopware\Components\NumberRangeIncrementerInterface;
 use Shopware\Components\Password\Manager;
 use SwagImportExport\Components\DataType\CustomerDataType;
+use SwagImportExport\Components\DbAdapters\DataDbAdapter;
 
 class CustomerDataManager extends DataManager implements \Enlight_Hook
 {
@@ -36,6 +37,11 @@ class CustomerDataManager extends DataManager implements \Enlight_Hook
         $this->config = $config;
         $this->passwordManager = $passwordManager;
         $this->numbergenerator = $numberRangeIncrementer;
+    }
+
+    public function supports(string $managerType): bool
+    {
+        return $managerType === DataDbAdapter::CUSTOMER_ADAPTER;
     }
 
     /**

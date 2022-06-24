@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="SwagImportExport\Components\Transformers\ValuesTransformer" public="true">
+            <tag name="import_export.transformers"/>
+        </service>
+
+        <service id="SwagImportExport\Components\Transformers\TreeTransformer" public="true">
+            <tag name="import_export.transformers"/>
+        </service>
+
+        <service id="SwagImportExport\Components\Transformers\FlattenTransformer" public="true">
+            <tag name="import_export.transformers"/>
+        </service>
+
+        <service id="SwagImportExport\Components\Transformers\DecimalTransformer" public="true">
+            <argument type="service" id="Shopware\Components\Plugin\Configuration\CachedReader"/>
+
+            <tag name="import_export.transformers"/>
+        </service>
+    </services>
+</container>

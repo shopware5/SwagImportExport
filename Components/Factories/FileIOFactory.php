@@ -9,56 +9,52 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Components\Factories;
 
-use SwagImportExport\Components\FileIO\CsvFileReader;
-use SwagImportExport\Components\FileIO\CsvFileWriter;
 use SwagImportExport\Components\FileIO\FileReader;
 use SwagImportExport\Components\FileIO\FileWriter;
-use SwagImportExport\Components\FileIO\XmlFileReader;
-use SwagImportExport\Components\FileIO\XmlFileWriter;
 
 class FileIOFactory extends \Enlight_Class implements \Enlight_Hook
 {
-    private CsvFileReader $csvFileReader;
+    /**
+     * @var iterable<FileWriter>
+     */
+    private iterable $fileWriter;
 
-    private CsvFileWriter $csvFileWriter;
+    /**
+     * @var iterable<FileReader>
+     */
+    private iterable $fileReader;
 
-    private XmlFileWriter $xmlFileWriter;
-
-    private XmlFileReader $xmlFileReader;
-
+    /**
+     * @param iterable<FileWriter> $fileWriter
+     * @param iterable<FileReader> $fileReader
+     */
     public function __construct(
-        CsvFileReader $csvFileReader,
-        CsvFileWriter $csvFileWriter,
-        XmlFileReader $xmlFileReader,
-        XmlFileWriter $xmlFileWriter
+        iterable $fileWriter,
+        iterable $fileReader
     ) {
-        $this->csvFileReader = $csvFileReader;
-        $this->csvFileWriter = $csvFileWriter;
-        $this->xmlFileWriter = $xmlFileWriter;
-        $this->xmlFileReader = $xmlFileReader;
+        $this->fileWriter = $fileWriter;
+        $this->fileReader = $fileReader;
     }
 
     public function createFileReader(string $format): FileReader
     {
-        switch ($format) {
-            case 'csv':
-                return $this->csvFileReader;
-            case 'xml':
-                return $this->xmlFileReader;
-            default:
-                throw new \Exception('File reader ' . $format . ' does not exists.');
+        foreach ($this->fileReader as $reader) {
+            if ($reader->supports($format)) {
+                return $reader;
+            }
         }
+
+        throw new \Exception('File reader ' . $format . ' does not exists.');
     }
 
     public function createFileWriter(string $format): FileWriter
     {
-        switch ($format) {
-            case 'csv':
-                return $this->csvFileWriter;
-            case 'xml':
-                return $this->xmlFileWriter;
-            default:
-                throw new \Exception('File writer' . $format . ' does not exists.');
+        foreach ($this->fileWriter as $writer) {
+            if ($writer->supports($format)) {
+                return $writer;
+            }
         }
+
+        throw new \Exception('File writer' . $format . ' does not exists.');
     }
 }

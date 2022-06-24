@@ -83,6 +83,11 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook
         $this->validator = new CustomerValidator();
     }
 
+    public function supports(string $adapter): bool
+    {
+        return $adapter === DataDbAdapter::CUSTOMER_ADAPTER;
+    }
+
     public function getDefaultColumns(): array
     {
         return \array_merge(

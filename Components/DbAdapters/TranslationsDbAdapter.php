@@ -89,6 +89,11 @@ class TranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
         $this->validator = new TranslationValidator();
     }
 
+    public function supports(string $adapter): bool
+    {
+        return $adapter === DataDbAdapter::TRANSLATION_ADAPTER;
+    }
+
     /**
      * {@inheritDoc}
      */

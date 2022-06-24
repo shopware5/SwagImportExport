@@ -11,6 +11,8 @@ namespace SwagImportExport\Components\FileIO;
 
 interface FileReader
 {
+    public function supports(string $format): bool;
+
     public function readRecords(string $fileName, int $position, int $count): array;
 
     public function getTotalCount(string $fileName): int;

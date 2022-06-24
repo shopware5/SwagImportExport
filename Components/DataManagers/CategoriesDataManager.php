@@ -10,9 +10,15 @@ declare(strict_types=1);
 namespace SwagImportExport\Components\DataManagers;
 
 use SwagImportExport\Components\DataType\CategoryDataType;
+use SwagImportExport\Components\DbAdapters\DataDbAdapter;
 
 class CategoriesDataManager extends DataManager implements \Enlight_Hook
 {
+    public function supports(string $managerType): bool
+    {
+        return $managerType === DataDbAdapter::CATEGORIES_ADAPTER;
+    }
+
     /**
      * @return array<string, array<string>>
      */

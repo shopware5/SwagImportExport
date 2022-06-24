@@ -12,6 +12,7 @@ namespace SwagImportExport\Components\Transformers;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Shopware\Models\Customer\Group;
 use Shopware\Models\Shop\Shop;
+use SwagImportExport\Components\Profile\Profile;
 use SwagImportExport\Components\Utils\SnippetsHelper;
 
 /**
@@ -19,6 +20,8 @@ use SwagImportExport\Components\Utils\SnippetsHelper;
  */
 class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
 {
+    public const TYPE = 'flatten';
+
     protected ?string $config = null;
 
     /**
@@ -50,12 +53,24 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      */
     protected ?array $translationColumns = null;
 
+    public function supports(string $type): bool
+    {
+        return $type === self::TYPE;
+    }
+
     /**
      * Sets the config that has the tree structure
      */
-    public function initialize($config): void
+    public function initialize(Profile $profile): void
     {
-        $this->config = $config;
+        $this->config = $profile->getEntity()->getTree();
+        $this->mainIterationPart = null;
+        $this->mainAdapter = null;
+        $this->iterationParts = [];
+        $this->iterationTempData = [];
+        $this->tempData = [];
+        $this->tempMapper = [];
+        $this->translationColumns = null;
     }
 
     /**

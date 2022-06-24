@@ -67,6 +67,11 @@ class NewsletterDbAdapter implements DataDbAdapter, \Enlight_Hook
         $this->eventManager = $eventManager;
     }
 
+    public function supports(string $adapter): bool
+    {
+        return $adapter === DataDbAdapter::NEWSLETTER_RECIPIENTS_ADAPTER;
+    }
+
     public function getDefaultColumns(): array
     {
         $columns = [

@@ -9,11 +9,14 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Components\Transformers;
 
+use Shopware\Components\Plugin\Configuration\ReaderInterface;
 use SwagImportExport\Components\Profile\Profile;
 
 class DecimalTransformer implements DataTransformerAdapter
 {
-    private array $decimalValues = [
+    public const TYPE = 'decimals';
+
+    private const DECIMAL_VALUES = [
         'weight',
         'width',
         'height',
@@ -31,18 +34,32 @@ class DecimalTransformer implements DataTransformerAdapter
         'invoiceShippingNet',
     ];
 
-    private \Enlight_Config $pluginConfig;
+    private bool $useCommaDecimal = false;
 
     private Profile $profile;
 
     private array $treeData;
 
+    private ReaderInterface $reader;
+
+    public function __construct(
+        ReaderInterface $reader
+    ) {
+        $this->reader = $reader;
+    }
+
+    public function supports(string $type): bool
+    {
+        return $type === self::TYPE;
+    }
+
     /**
      * Sets the main config which defines the data restructuring
      */
-    public function initialize($params): void
+    public function initialize(Profile $profile): void
     {
-        list($this->pluginConfig, $this->profile) = $params;
+        $this->profile = $profile;
+        $this->useCommaDecimal = $this->reader->getByPluginName('SwagImportExport')['useCommaDecimal'] ?? false;
         $this->treeData = $this->getTreeData();
     }
 
@@ -51,7 +68,7 @@ class DecimalTransformer implements DataTransformerAdapter
      */
     public function transformForward(array $data): array
     {
-        if (!$this->pluginConfig->get('useCommaDecimal')) {
+        if (!$this->useCommaDecimal) {
             return $data;
         }
 
@@ -63,7 +80,7 @@ class DecimalTransformer implements DataTransformerAdapter
      */
     public function transformBackward(array $data): array
     {
-        if (!$this->pluginConfig->get('useCommaDecimal')) {
+        if (!$this->useCommaDecimal) {
             return $data;
         }
 
@@ -112,7 +129,7 @@ class DecimalTransformer implements DataTransformerAdapter
 
                 $realKey = $this->treeData['fields'][$key];
 
-                if (!\in_array($realKey, $this->decimalValues) || !$realKey) {
+                if (!\in_array($realKey, self::DECIMAL_VALUES) || !$realKey) {
                     continue;
                 }
 

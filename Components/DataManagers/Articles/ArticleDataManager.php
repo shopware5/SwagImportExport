@@ -12,6 +12,7 @@ namespace SwagImportExport\Components\DataManagers\Articles;
 use Shopware\Models\Article\Supplier;
 use SwagImportExport\Components\DataManagers\DataManager;
 use SwagImportExport\Components\DataType\ArticleDataType;
+use SwagImportExport\Components\DbAdapters\DataDbAdapter;
 use SwagImportExport\Components\DbalHelper;
 use SwagImportExport\Components\Exception\AdapterException;
 use SwagImportExport\Components\Utils\SnippetsHelper;
@@ -26,6 +27,11 @@ class ArticleDataManager extends DataManager implements \Enlight_Hook
     {
         $this->db = $db;
         $this->dbalHelper = $dbalHelper;
+    }
+
+    public function supports(string $managerType): bool
+    {
+        return $managerType === DataDbAdapter::ARTICLE_ADAPTER;
     }
 
     /**

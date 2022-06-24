@@ -14,6 +14,8 @@ use SwagImportExport\Components\Utils\FileHelper;
 
 class CsvFileWriter implements FileWriter
 {
+    private const FORMAT = 'csv';
+
     protected bool $treeStructure = false;
 
     protected FileHelper $fileHelper;
@@ -21,6 +23,11 @@ class CsvFileWriter implements FileWriter
     public function __construct(FileHelper $fileHelper)
     {
         $this->fileHelper = $fileHelper;
+    }
+
+    public function supports(string $format): bool
+    {
+        return $format === self::FORMAT;
     }
 
     public function writeHeader(string $fileName, array $headerData): void

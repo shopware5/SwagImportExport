@@ -73,8 +73,6 @@ class ImportCommand extends ShopwareCommand
     {
         $this->prepareImportInputValidation($input);
 
-        $this->registerErrorHandler($output);
-
         // validate profile
         if (!$this->profileEntity instanceof ProfileEntity) {
             throw new \Exception(\sprintf('Invalid profile: \'%s\'!', $this->profile));

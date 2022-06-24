@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace SwagImportExport\CustomModels;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
@@ -35,7 +36,7 @@ class Profile extends ModelEntity
      * @ORM\OneToMany(targetEntity="SwagImportExport\CustomModels\Expression", mappedBy="profile")
      * @ORM\JoinColumn(nullable=true)
      */
-    protected ?Collection $expressions = null;
+    protected Collection $expressions;
 
     /**
      * @var Collection<string|null, Session>
@@ -81,6 +82,11 @@ class Profile extends ModelEntity
      */
     protected bool $default = false;
 
+    public function __construct()
+    {
+        $this->expressions = new ArrayCollection();
+    }
+
     public function getId(): int
     {
         return $this->id;
@@ -102,9 +108,9 @@ class Profile extends ModelEntity
     }
 
     /**
-     * @return iterable<Expression>|null
+     * @return Collection<Expression>
      */
-    public function getExpressions(): ?iterable
+    public function getExpressions(): Collection
     {
         return $this->expressions;
     }

@@ -13,6 +13,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Shopware\Models\Newsletter\Group;
 use Shopware\Models\Newsletter\Repository;
 use SwagImportExport\Components\DataType\NewsletterDataType;
+use SwagImportExport\Components\DbAdapters\DataDbAdapter;
 use SwagImportExport\Components\Exception\AdapterException;
 use SwagImportExport\Components\Utils\SnippetsHelper;
 
@@ -31,6 +32,11 @@ class NewsletterDataManager extends DataManager implements \Enlight_Hook
     ) {
         $this->groupRepository = $entityManager->getRepository(Group::class);
         $this->config = $config;
+    }
+
+    public function supports(string $managerType): bool
+    {
+        return $managerType === DataDbAdapter::NEWSLETTER_RECIPIENTS_ADAPTER;
     }
 
     /**

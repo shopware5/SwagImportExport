@@ -9,21 +9,20 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Components\Profile;
 
-use Shopware\Components\Plugin\Configuration\CachedReader;
 use SwagImportExport\CustomModels\Profile as ProfileEntity;
 
 class Profile
 {
+    private const DEFAULT_CONFIG_NAMES = ['exportConversion', 'tree', 'decimals'];
+
     private ProfileEntity $profileEntity;
 
     private array $configNames;
 
-    private array $defaultValues = [];
-
     public function __construct(ProfileEntity $profile, array $configNames = [])
     {
         $this->profileEntity = $profile;
-        $this->configNames = $configNames ?: ['exportConversion', 'tree', 'decimals'];
+        $this->configNames = $configNames ?: self::DEFAULT_CONFIG_NAMES;
     }
 
     public function getId(): int
@@ -46,55 +45,8 @@ class Profile
         return $this->configNames;
     }
 
-    /**
-     * @return array|\SwagImportExport\CustomModels\Expression[]|string|array{0: \Enlight_Config, 1: Profile}
-     */
-    public function getConfig(string $name)
-    {
-        switch ($name) {
-            case 'exportConversion':
-                return $this->profileEntity->getExpressions();
-            case 'tree':
-                return $this->profileEntity->getTree();
-            case 'decimals':
-                return [new \Enlight_Config(Shopware()->Container()->get(CachedReader::class)->getByPluginName($this->getName()), true), $this];
-            default:
-                throw new \RuntimeException('Config does not exists');
-        }
-    }
-
     public function getEntity(): ProfileEntity
     {
         return $this->profileEntity;
-    }
-
-    /**
-     * Return list with default fields and values for current profile
-     *
-     * @param array $tree profile tree
-     */
-    public function getDefaultValues(array $tree): array
-    {
-        return $this->getDefaultFields($tree);
-    }
-
-    /**
-     * Check if current node have default value
-     */
-    private function getDefaultFields(array $node): array
-    {
-        if ($node) {
-            foreach ($node['children'] as $key => $leaf) {
-                if ($leaf['children']) {
-                    $this->getDefaultFields($leaf);
-                }
-
-                if (isset($leaf['defaultValue']) && $leaf['defaultValue'] != '') {
-                    $this->defaultValues[$leaf['shopwareField']] = $leaf['defaultValue'];
-                }
-            }
-        }
-
-        return $this->defaultValues;
     }
 }

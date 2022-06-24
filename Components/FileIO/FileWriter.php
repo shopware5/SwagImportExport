@@ -11,6 +11,8 @@ namespace SwagImportExport\Components\FileIO;
 
 interface FileWriter
 {
+    public function supports(string $format): bool;
+
     /**
      * @param array<mixed> $headerData
      */

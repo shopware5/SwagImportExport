@@ -53,6 +53,11 @@ class MainOrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
         $this->config = $config;
     }
 
+    public function supports(string $adapter): bool
+    {
+        return $adapter === DataDbAdapter::MAIN_ORDER_ADAPTER;
+    }
+
     /**
      * {@inheritDoc}
      */

@@ -12,16 +12,23 @@ namespace SwagImportExport\Components\Factories;
 use SwagImportExport\Components\Profile\Profile;
 use SwagImportExport\Components\Transformers\DataTransformerAdapter;
 use SwagImportExport\Components\Transformers\DataTransformerChain;
-use SwagImportExport\Components\Transformers\DecimalTransformer;
-use SwagImportExport\Components\Transformers\ExpressionEvaluator;
-use SwagImportExport\Components\Transformers\FlattenTransformer;
-use SwagImportExport\Components\Transformers\PhpExpressionEvaluator;
-use SwagImportExport\Components\Transformers\SmartyExpressionEvaluator;
-use SwagImportExport\Components\Transformers\TreeTransformer;
-use SwagImportExport\Components\Transformers\ValuesTransformer;
 
-class DataTransformerFactory extends \Enlight_Class implements \Enlight_Hook
+class DataTransformerFactory implements \Enlight_Hook
 {
+    /**
+     * @var iterable<DataTransformerAdapter>
+     */
+    private iterable $transformers;
+
+    /**
+     * @param iterable<DataTransformerAdapter> $transformers
+     */
+    public function __construct(
+        iterable $transformers
+    ) {
+        $this->transformers = $transformers;
+    }
+
     /**
      * Creates a data transformer chain by consuming data found a profile.
      * The $dataUserOptions is an object that will return info for the output file structure - tree or flat.
@@ -37,14 +44,13 @@ class DataTransformerFactory extends \Enlight_Class implements \Enlight_Hook
         $names = $profile->getConfigNames();
 
         foreach ($names as $name) {
-            $config = $profile->getConfig($name);
-            $transformer = $this->createDataTransformer($name, $config);
+            $transformer = $this->createDataTransformer($name, $profile);
             $dataTransformerChain->add($transformer);
         }
 
         // a little hack: if we are in csv, we flatten the tree by adding a flattener at the end
         if (!$dataUserOptions['isTree']) {
-            $transformer = $this->createDataTransformer('flatten', $profile->getConfig('tree'));
+            $transformer = $this->createDataTransformer('flatten', $profile);
             $dataTransformerChain->add($transformer);
         }
 
@@ -56,43 +62,25 @@ class DataTransformerFactory extends \Enlight_Class implements \Enlight_Hook
      *
      * @throws \Exception
      */
-    public function createDataTransformer(string $transformerType, $config): DataTransformerAdapter
+    public function createDataTransformer(string $transformerType, Profile $profile): DataTransformerAdapter
     {
-        switch ($transformerType) {
-            case 'tree':
-                $transformer = new TreeTransformer();
-                break;
-            case 'exportConversion':
-                $config = [
-                    'expression' => $config,
-                    'evaluator' => $this->createValueConvertor('smartyEvaluator'),
-                ];
-                $transformer = new ValuesTransformer();
-                break;
-            case 'flatten':
-                $transformer = new FlattenTransformer();
-                break;
-            case 'decimals':
-                $transformer = new DecimalTransformer();
-                break;
-            default:
-                throw new \Exception("Transformer $transformerType is not valid");
+        $fittingTransformer = null;
+
+        foreach ($this->transformers as $transformer) {
+            if (!$transformer->supports($transformerType)) {
+                continue;
+            }
+
+            $fittingTransformer = $transformer;
+            break;
         }
 
-        $transformer->initialize($config);
-
-        return $transformer;
-    }
-
-    public function createValueConvertor(string $convertorType): ExpressionEvaluator
-    {
-        switch ($convertorType) {
-            case 'phpEvaluator':
-                return new PhpExpressionEvaluator();
-            case 'smartyEvaluator':
-                return new SmartyExpressionEvaluator();
-            default:
-                throw new \Exception("Transformer $convertorType is not valid");
+        if (!$fittingTransformer instanceof DataTransformerAdapter) {
+            throw new \Exception(sprintf('Transformer %s is not valid', $transformerType));
         }
+
+        $fittingTransformer->initialize($profile);
+
+        return $fittingTransformer;
     }
 }

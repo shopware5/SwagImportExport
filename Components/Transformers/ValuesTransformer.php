@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Components\Transformers;
 
+use SwagImportExport\Components\Profile\Profile;
 use SwagImportExport\CustomModels\Expression;
 
 /**
@@ -16,6 +17,8 @@ use SwagImportExport\CustomModels\Expression;
  */
 class ValuesTransformer implements DataTransformerAdapter
 {
+    public const TYPE = 'exportConversion';
+
     /**
      * @var array<Expression>
      */
@@ -23,15 +26,26 @@ class ValuesTransformer implements DataTransformerAdapter
 
     private ?ExpressionEvaluator $evaluator;
 
+    public function __construct(?ExpressionEvaluator $evaluator = null)
+    {
+        $this->evaluator = $evaluator;
+
+        if (!$this->evaluator instanceof ExpressionEvaluator) {
+            $this->evaluator = new SmartyExpressionEvaluator();
+        }
+    }
+
+    public function supports(string $type): bool
+    {
+        return $type === self::TYPE;
+    }
+
     /**
      * The $config must contain the smarty or php transformation of values.
-     *
-     * @param array{expression: array<Expression>, evaluator: ExpressionEvaluator} $config
      */
-    public function initialize($config): void
+    public function initialize(Profile $profile): void
     {
-        $this->config = $config['expression'];
-        $this->evaluator = $config['evaluator'];
+        $this->config = $profile->getEntity()->getExpressions()->toArray();
     }
 
     /**

@@ -11,6 +11,8 @@ namespace SwagImportExport\Components\FileIO;
 
 class XmlFileReader implements FileReader
 {
+    private const FORMAT = 'xml';
+
     /**
      * @var array<mixed>
      */
@@ -22,6 +24,11 @@ class XmlFileReader implements FileReader
     protected array $iterationTag = [];
 
     protected bool $treeStructure = true;
+
+    public function supports(string $format): bool
+    {
+        return $format === self::FORMAT;
+    }
 
     public function setTree(array $tree): void
     {

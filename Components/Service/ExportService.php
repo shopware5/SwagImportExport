@@ -14,23 +14,30 @@ use SwagImportExport\Components\DbAdapters\DataDbAdapter;
 use SwagImportExport\Components\Service\Struct\PreparationResultStruct;
 use SwagImportExport\Components\Utils\SnippetsHelper;
 
-class ExportService extends AbstractImportExportService implements ExportServiceInterface
+class ExportService implements ExportServiceInterface
 {
+    private ImportExportServiceHelper $importExportServiceHelper;
+
+    public function __construct(
+        ImportExportServiceHelper $importExportServiceHelper
+    ) {
+        $this->importExportServiceHelper = $importExportServiceHelper;
+    }
+
     /**
      * @param array<string, mixed> $requestData
      * @param array<string, mixed> $filterParams
      */
     public function prepareExport(array $requestData, array $filterParams): PreparationResultStruct
     {
-        $serviceHelpers = $this->buildServiceHelpers($requestData);
+        $serviceHelpers = $this->importExportServiceHelper->buildServiceHelpers($requestData);
         $requestData['filter'] = $this->prepareFilter($serviceHelpers->getProfile()->getType(), $filterParams);
 
-        $this->initializeDataIO($serviceHelpers->getDataIO(), $requestData);
+        $this->importExportServiceHelper->initializeDataIO($serviceHelpers->getDataIO(), $requestData);
 
         $recordIds = $serviceHelpers->getDataIO()->preloadRecordIds()->getRecordIds();
 
         $position = $serviceHelpers->getDataIO()->getSessionPosition();
-        $position = $position == null ? 0 : $position;
 
         return new PreparationResultStruct($position, \count($recordIds));
     }
@@ -43,12 +50,12 @@ class ExportService extends AbstractImportExportService implements ExportService
      */
     public function export(array $requestData, array $filterParams): array
     {
-        $serviceHelpers = $this->buildServiceHelpers($requestData);
+        $serviceHelpers = $this->importExportServiceHelper->buildServiceHelpers($requestData);
         $requestData['filter'] = $this->prepareFilter($serviceHelpers->getProfile()->getType(), $filterParams);
 
-        $this->initializeDataIO($serviceHelpers->getDataIO(), $requestData);
+        $this->importExportServiceHelper->initializeDataIO($serviceHelpers->getDataIO(), $requestData);
 
-        $dataTransformerChain = $this->createDataTransformerChain(
+        $dataTransformerChain = $this->importExportServiceHelper->createDataTransformerChain(
             $serviceHelpers->getProfile(),
             $serviceHelpers->getFileWriter()->hasTreeStructure()
         );
@@ -71,12 +78,12 @@ class ExportService extends AbstractImportExportService implements ExportService
                 SnippetsHelper::getNamespace('backend/swag_import_export/log')->get('export/success')
             );
 
-            $this->logProcessing('false', $resultData['fileName'], $serviceHelpers->getProfile()->getName(), $message, 'true', $session);
+            $this->importExportServiceHelper->logProcessing('false', $resultData['fileName'], $serviceHelpers->getProfile()->getName(), $message, 'true', $session);
             unset($resultData['filter']);
 
             return $resultData;
         } catch (\Exception $e) {
-            $this->logProcessing('true', $requestData['fileName'], $serviceHelpers->getProfile()->getName(), $e->getMessage(), 'false', $session);
+            $this->importExportServiceHelper->logProcessing('true', $requestData['fileName'], $serviceHelpers->getProfile()->getName(), $e->getMessage(), 'false', $session);
 
             throw $e;
         }

@@ -43,6 +43,7 @@ class ProfileService implements ProfileServiceInterface
 
             throw new \Exception($namespace->get('swag_import_export/profile/profile_import_no_json_error'));
         }
+
         $content = \file_get_contents($file->getPathname());
 
         if (empty($content)) {

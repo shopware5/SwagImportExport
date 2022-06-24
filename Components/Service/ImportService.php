@@ -11,17 +11,53 @@ namespace SwagImportExport\Components\Service;
 
 use SwagImportExport\Components\DataWorkflow;
 use SwagImportExport\Components\DbAdapters\DataDbAdapter;
+use SwagImportExport\Components\Factories\DataTransformerFactory;
+use SwagImportExport\Components\Factories\FileIOFactory;
+use SwagImportExport\Components\Factories\ProfileFactory;
+use SwagImportExport\Components\Logger\Logger;
 use SwagImportExport\Components\Service\Struct\PreparationResultStruct;
+use SwagImportExport\Components\UploadPathProvider;
 use SwagImportExport\Components\Utils\SnippetsHelper;
 
-class ImportService extends AbstractImportExportService implements ImportServiceInterface
+class ImportService implements ImportServiceInterface
 {
+    private ImportExportServiceHelper $importExportServiceHelper;
+
+    private UploadPathProvider $uploadPathProvider;
+
+    private ProfileFactory $profileFactory;
+
+    private \Shopware_Components_Config $config;
+
+    private Logger $logger;
+
+    private FileIOFactory $fileIOFactory;
+
+    private DataTransformerFactory $dataTransformerFactory;
+
+    public function __construct(
+        ImportExportServiceHelper $importExportServiceHelper,
+        FileIOFactory $fileIOFactory,
+        DataTransformerFactory $dataTransformerFactory,
+        UploadPathProvider $uploadPathProvider,
+        ProfileFactory $profileFactory,
+        Logger $logger,
+        \Shopware_Components_Config $config
+    ) {
+        $this->importExportServiceHelper = $importExportServiceHelper;
+        $this->uploadPathProvider = $uploadPathProvider;
+        $this->profileFactory = $profileFactory;
+        $this->config = $config;
+        $this->logger = $logger;
+        $this->fileIOFactory = $fileIOFactory;
+        $this->dataTransformerFactory = $dataTransformerFactory;
+    }
+
     public function prepareImport(array $requestData, string $inputFileName): PreparationResultStruct
     {
-        $serviceHelpers = $this->buildServiceHelpers($requestData);
+        $serviceHelpers = $this->importExportServiceHelper->buildServiceHelpers($requestData);
 
         $position = $serviceHelpers->getDataIO()->getSessionPosition();
-        $position = $position == null ? 0 : $position;
 
         $totalCount = $serviceHelpers->getFileReader()->getTotalCount($this->uploadPathProvider->getRealPath($inputFileName));
 
@@ -30,14 +66,14 @@ class ImportService extends AbstractImportExportService implements ImportService
 
     public function import(array $requestData, array $unprocessedFiles, string $inputFile): array
     {
-        $serviceHelpers = $this->buildServiceHelpers($requestData);
+        $serviceHelpers = $this->importExportServiceHelper->buildServiceHelpers($requestData);
 
         // set default batchsize for adapter
         $requestData['batchSize'] = $serviceHelpers->getProfile()->getType() === 'articlesImages' ? 1 : $this->config->getByNamespace('SwagImportExport', 'batch-size-import');
 
-        $this->initializeDataIO($serviceHelpers->getDataIO(), $requestData);
+        $this->importExportServiceHelper->initializeDataIO($serviceHelpers->getDataIO(), $requestData);
 
-        $dataTransformerChain = $this->createDataTransformerChain($serviceHelpers->getProfile(), $serviceHelpers->getFileReader()->hasTreeStructure());
+        $dataTransformerChain = $this->importExportServiceHelper->createDataTransformerChain($serviceHelpers->getProfile(), $serviceHelpers->getFileReader()->hasTreeStructure());
 
         $sessionState = $serviceHelpers->getSession()->getState();
 
@@ -64,7 +100,7 @@ class ImportService extends AbstractImportExportService implements ImportService
                 }
             }
 
-            if ($serviceHelpers->getSession()->getTotalCount() > 0 && ($serviceHelpers->getSession()->getTotalCount() == $resultData['position'])) {
+            if ($serviceHelpers->getSession()->getTotalCount() > 0 && ($serviceHelpers->getSession()->getTotalCount() === $resultData['position'])) {
                 // unprocessed files
                 $postProcessedData = null;
                 if ($unprocessedFiles) {
@@ -86,7 +122,7 @@ class ImportService extends AbstractImportExportService implements ImportService
                         SnippetsHelper::getNamespace('backend/swag_import_export/log')->get('import/success')
                     );
                     $session = $serviceHelpers->getSession()->getEntity();
-                    $this->logProcessing('false', $inputFile, $serviceHelpers->getProfile()->getName(), $message, 'true', $session);
+                    $this->importExportServiceHelper->logProcessing('false', $inputFile, $serviceHelpers->getProfile()->getName(), $message, 'true', $session);
                 }
             }
 
@@ -97,7 +133,7 @@ class ImportService extends AbstractImportExportService implements ImportService
             return $resultData;
         } catch (\Exception $e) {
             $session = $serviceHelpers->getSession()->getEntity();
-            $this->logProcessing('true', $inputFile, $serviceHelpers->getProfile()->getName(), $e->getMessage(), 'false', $session);
+            $this->importExportServiceHelper->logProcessing('true', $inputFile, $serviceHelpers->getProfile()->getName(), $e->getMessage(), 'false', $session);
 
             throw $e;
         }

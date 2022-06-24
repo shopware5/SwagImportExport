@@ -29,6 +29,11 @@ class DataWorkflow
     protected object $fileIO;
 
     /**
+     * @var array<string>|array<string, mixed>
+     */
+    private array $defaultValues = [];
+
+    /**
      * @param FileWriter|FileReader $fileIO
      */
     public function __construct(?DataIO $dataIO, Profile $profile, DataTransformerChain $transformerChain, $fileIO)
@@ -122,7 +127,7 @@ class DataWorkflow
      */
     public function import(array $postData, string $inputFile): array
     {
-        $tree = \json_decode($this->profile->getConfig('tree'), true);
+        $tree = \json_decode($this->profile->getEntity()->getTree(), true);
         if ($postData['format'] === 'xml') {
             $this->fileIO->setTree($tree);
         }
@@ -149,7 +154,8 @@ class DataWorkflow
 
             $data = $this->transformerChain->transformBackward($records);
 
-            $defaultValues = $this->profile->getDefaultValues($tree);
+            $this->defaultValues = [];
+            $defaultValues = $this->getDefaultFields($tree);
 
             // inserts/update data into the database
             $this->dataIO->write($data, $defaultValues);
@@ -196,5 +202,29 @@ class DataWorkflow
     {
         /* @var UploadPathProvider $uploadPathProvider */
         return Shopware()->Container()->get('swag_import_export.upload_path_provider');
+    }
+
+    /**
+     * Check if current node have default value
+     *
+     * @param array<string|int , mixed> $node
+     *
+     * @return array<string>|array<string, array<string>>
+     */
+    private function getDefaultFields(array $node): array
+    {
+        if ($node) {
+            foreach ($node['children'] as $key => $leaf) {
+                if ($leaf['children']) {
+                    $this->getDefaultFields($leaf);
+                }
+
+                if (isset($leaf['defaultValue']) && $leaf['defaultValue'] != '') {
+                    $this->defaultValues[$leaf['shopwareField']] = $leaf['defaultValue'];
+                }
+            }
+        }
+
+        return $this->defaultValues;
     }
 }

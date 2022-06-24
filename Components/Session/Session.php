@@ -213,18 +213,6 @@ class Session
     }
 
     /**
-     * Returns entity manager
-     */
-    public function getManager(): ModelManager
-    {
-        if ($this->manager === null) {
-            $this->manager = Shopware()->Models();
-        }
-
-        return $this->manager;
-    }
-
-    /**
      * Returns the state of the session.
      * active:
      *     Session is running and we can read/write records.
@@ -249,11 +237,23 @@ class Session
     }
 
     /**
+     * Returns entity manager
+     */
+    private function getManager(): ModelManager
+    {
+        if ($this->manager === null) {
+            $this->manager = Shopware()->Models();
+        }
+
+        return $this->manager;
+    }
+
+    /**
      * Helper Method to get access to the session repository.
      *
      * @return EntityRepository<SessionEntity>
      */
-    public function getSessionRepository(): EntityRepository
+    private function getSessionRepository(): EntityRepository
     {
         if ($this->sessionRepository === null) {
             $this->sessionRepository = Shopware()->Models()->getRepository(SessionEntity::class);

@@ -13,6 +13,8 @@ use SwagImportExport\Components\UploadPathProvider;
 
 class CsvFileReader implements FileReader
 {
+    private const FORMAT = 'csv';
+
     protected bool $treeStructure = false;
 
     private UploadPathProvider $uploadPathProvider;
@@ -20,6 +22,11 @@ class CsvFileReader implements FileReader
     public function __construct(UploadPathProvider $uploadPathProvider)
     {
         $this->uploadPathProvider = $uploadPathProvider;
+    }
+
+    public function supports(string $format): bool
+    {
+        return $format === self::FORMAT;
     }
 
     /**

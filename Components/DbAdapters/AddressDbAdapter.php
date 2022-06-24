@@ -44,6 +44,11 @@ class AddressDbAdapter implements DataDbAdapter, \Enlight_Hook
         $this->config = $config;
     }
 
+    public function supports(string $adapter): bool
+    {
+        return $adapter === DataDbAdapter::ADDRESS_ADAPTER;
+    }
+
     /**
      * {@inheritdoc}
      *

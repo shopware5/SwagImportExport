@@ -59,6 +59,11 @@ class ArticlesTranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
         $this->eventManager = $eventManager;
     }
 
+    public function supports(string $adapter): bool
+    {
+        return $adapter === DataDbAdapter::ARTICLE_TRANSLATION_ADAPTER;
+    }
+
     /**
      * {@inheritDoc}
      */

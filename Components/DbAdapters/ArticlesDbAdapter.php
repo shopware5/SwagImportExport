@@ -142,6 +142,11 @@ class ArticlesDbAdapter implements DataDbAdapter, \Enlight_Hook
         $this->imageWriter = $imageWriter;
     }
 
+    public function supports(string $adapter): bool
+    {
+        return $adapter === DataDbAdapter::ARTICLE_ADAPTER;
+    }
+
     /**
      * {@inheritDoc}
      */

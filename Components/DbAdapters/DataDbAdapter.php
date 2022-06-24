@@ -26,6 +26,8 @@ interface DataDbAdapter
     public const TRANSLATION_ADAPTER = 'translations';
     public const ADDRESS_ADAPTER = 'addresses';
 
+    public function supports(string $adapter): bool;
+
     /**
      * Reads all records with the given ids and selects the passed columns.
      *

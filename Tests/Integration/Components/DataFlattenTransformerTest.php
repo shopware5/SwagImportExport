@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace SwagImportExport\Tests\Integration\Components;
 
 use PHPUnit\Framework\TestCase;
+use SwagImportExport\Components\Profile\Profile;
 use SwagImportExport\Components\Transformers\FlattenTransformer;
 use SwagImportExport\Tests\Helper\ContainerTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
@@ -54,7 +55,10 @@ class DataFlattenTransformerTest extends TestCase
         ];
 
         $flattenTransformer = new FlattenTransformer();
-        $flattenTransformer->initialize($jsonTree);
+        $profileEntity = new \SwagImportExport\CustomModels\Profile();
+        $profileEntity->setTree($jsonTree);
+        $profile = new Profile($profileEntity);
+        $flattenTransformer->initialize($profile);
 
         $data = $flattenTransformer->composeHeader();
         static::assertEquals($expectedData, $data);

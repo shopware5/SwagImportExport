@@ -53,6 +53,11 @@ class CategoryTranslationDbAdapter implements DataDbAdapter, \Enlight_Hook
         $this->validator = new CategoryTranslationValidator();
     }
 
+    public function supports(string $adapter): bool
+    {
+        return $adapter === DataDbAdapter::CATEGORIES_TRANSLATION_ADAPTER;
+    }
+
     /**
      * {@inheritdoc}
      */

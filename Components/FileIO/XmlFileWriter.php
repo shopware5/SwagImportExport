@@ -18,6 +18,8 @@ use SwagImportExport\Components\Utils\FileHelper;
  */
 class XmlFileWriter implements FileWriter
 {
+    private const FORMAT = 'xml';
+
     protected bool $treeStructure = true;
 
     protected XmlConverter $xmlConvertor;
@@ -28,6 +30,11 @@ class XmlFileWriter implements FileWriter
     {
         $this->fileHelper = $fileHelper;
         $this->xmlConvertor = new XmlConverter();
+    }
+
+    public function supports(string $format): bool
+    {
+        return $format === self::FORMAT;
     }
 
     /**

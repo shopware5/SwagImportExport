@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace SwagImportExport\Tests\Functional\Components\Transformers;
 
 use PHPUnit\Framework\TestCase;
+use SwagImportExport\Components\Profile\Profile;
 use SwagImportExport\Components\Transformers\ExpressionEvaluator;
 use SwagImportExport\Components\Transformers\SmartyExpressionEvaluator;
 use SwagImportExport\Components\Transformers\ValuesTransformer;
@@ -76,15 +77,15 @@ class ValuesTransformerTest extends TestCase
         $expression2 = new Expression();
         $expression2->fromArray(['id' => 2, 'variable' => 'otherTestVar', 'importConversion' => 'importConversion1', 'exportConversion' => 'exportConversion1']);
 
-        $config['evaluator'] = $evaluator;
-        $config['expression'] = [
-            $expression1,
-            $expression2,
-        ];
+        $profileEntity = new \SwagImportExport\CustomModels\Profile();
+        $profileEntity->addExpression($expression1);
+        $profileEntity->addExpression($expression2);
 
-        $transformer = new ValuesTransformer();
+        $profile = new Profile($profileEntity);
 
-        $transformer->initialize($config);
+        $transformer = new ValuesTransformer($evaluator);
+
+        $transformer->initialize($profile);
 
         return $transformer;
     }

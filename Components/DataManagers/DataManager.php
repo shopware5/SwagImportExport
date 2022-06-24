@@ -11,6 +11,11 @@ namespace SwagImportExport\Components\DataManagers;
 
 abstract class DataManager
 {
+    public function supports(string $managerType): bool
+    {
+        throw new \Exception('Supports is not yet implemented');
+    }
+
     /**
      * Return fields which should be set by default
      *

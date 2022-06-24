@@ -236,11 +236,6 @@ parameters:
 			path: Components/DataWorkflow.php
 
 		-
-			message: "#^Parameter \\#1 \\$json of function json_decode expects string, array\\<Enlight_Config\\|SwagImportExport\\\\Components\\\\Profile\\\\Profile\\|SwagImportExport\\\\CustomModels\\\\Expression\\>\\|string given\\.$#"
-			count: 1
-			path: Components/DataWorkflow.php
-
-		-
 			message: "#^Variable \\$fileName might not be defined\\.$#"
 			count: 1
 			path: Components/DataWorkflow.php
@@ -846,16 +841,6 @@ parameters:
 			path: Components/DbAdapters/TranslationsDbAdapter.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Factories\\\\DataFactory\\:\\:createColOpts\\(\\) has parameter \\$options with no type specified\\.$#"
-			count: 1
-			path: Components/Factories/DataFactory.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Factories\\\\DataFactory\\:\\:createLimit\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Factories/DataFactory.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Factories\\\\DataFactory\\:\\:loadSession\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Factories/DataFactory.php
@@ -869,11 +854,6 @@ parameters:
 			message: "#^Property SwagImportExport\\\\Components\\\\Factories\\\\DataFactory\\:\\:\\$sessionRepository with generic class Doctrine\\\\ORM\\\\EntityRepository does not specify its types\\: TEntityClass$#"
 			count: 1
 			path: Components/Factories/DataFactory.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Factories\\\\DataTransformerFactory\\:\\:createDataTransformer\\(\\) has parameter \\$config with no type specified\\.$#"
-			count: 1
-			path: Components/Factories/DataTransformerFactory.php
 
 		-
 			message: "#^Argument of an invalid type array\\|string\\|false supplied for foreach, only iterables are supported\\.$#"
@@ -951,32 +931,7 @@ parameters:
 			path: Components/Profile/Profile.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Profile\\\\Profile\\:\\:getConfig\\(\\) should return array\\<Enlight_Config\\|SwagImportExport\\\\Components\\\\Profile\\\\Profile\\|SwagImportExport\\\\CustomModels\\\\Expression\\>\\|string but returns iterable\\<SwagImportExport\\\\CustomModels\\\\Expression\\>\\|null\\.$#"
-			count: 1
-			path: Components/Profile/Profile.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Profile\\\\Profile\\:\\:getConfigNames\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Profile/Profile.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Profile\\\\Profile\\:\\:getDefaultFields\\(\\) has parameter \\$node with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Profile/Profile.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Profile\\\\Profile\\:\\:getDefaultFields\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Profile/Profile.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Profile\\\\Profile\\:\\:getDefaultValues\\(\\) has parameter \\$tree with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Profile/Profile.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Profile\\\\Profile\\:\\:getDefaultValues\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Profile/Profile.php
 
@@ -984,26 +939,6 @@ parameters:
 			message: "#^Property SwagImportExport\\\\Components\\\\Profile\\\\Profile\\:\\:\\$configNames type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Profile/Profile.php
-
-		-
-			message: "#^Property SwagImportExport\\\\Components\\\\Profile\\\\Profile\\:\\:\\$defaultValues type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Profile/Profile.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Service\\\\AbstractImportExportService\\:\\:buildServiceHelpers\\(\\) has parameter \\$requestData with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Service/AbstractImportExportService.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Service\\\\AbstractImportExportService\\:\\:initializeDataIO\\(\\) has parameter \\$requestData with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Service/AbstractImportExportService.php
-
-		-
-			message: "#^Parameter \\#1 \\$json of function json_decode expects string, array\\<Enlight_Config\\|SwagImportExport\\\\Components\\\\Profile\\\\Profile\\|SwagImportExport\\\\CustomModels\\\\Expression\\>\\|string given\\.$#"
-			count: 1
-			path: Components/Service/AbstractImportExportService.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Service\\\\AutoImportService\\:\\:importFiles\\(\\) has parameter \\$files with no value type specified in iterable type array\\.$#"
@@ -1036,6 +971,16 @@ parameters:
 			path: Components/Service/AutoImportService.php
 
 		-
+			message: "#^Parameter \\#2 \\$requestData of method SwagImportExport\\\\Components\\\\Service\\\\ImportExportServiceHelper\\:\\:initializeDataIO\\(\\) expects array\\{columnOptions\\: string\\|null, limit\\: array\\{limit\\: int\\|null, offset\\: int\\|null\\}, filter\\: array\\<string, mixed\\>, type\\: string\\|null, format\\: string\\}, non\\-empty\\-array\\<string, mixed\\> given\\.$#"
+			count: 2
+			path: Components/Service/ExportService.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Components\\\\Service\\\\ImportExportServiceHelper\\:\\:buildServiceHelpers\\(\\) has parameter \\$requestData with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Components/Service/ImportExportServiceHelper.php
+
+		-
 			message: "#^Call to an undefined method SwagImportExport\\\\Components\\\\Session\\\\Session\\:\\:getTotalCount\\(\\)\\.$#"
 			count: 2
 			path: Components/Service/ImportService.php
@@ -1047,6 +992,11 @@ parameters:
 
 		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Service\\\\ImportService\\:\\:processData\\(\\) has parameter \\$unprocessedFiles with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Components/Service/ImportService.php
+
+		-
+			message: "#^Parameter \\#2 \\$requestData of method SwagImportExport\\\\Components\\\\Service\\\\ImportExportServiceHelper\\:\\:initializeDataIO\\(\\) expects array\\{columnOptions\\: string\\|null, limit\\: array\\{limit\\: int\\|null, offset\\: int\\|null\\}, filter\\: array\\<string, mixed\\>, type\\: string\\|null, format\\: string\\}, non\\-empty\\-array\\<string, mixed\\> given\\.$#"
 			count: 1
 			path: Components/Service/ImportService.php
 
@@ -1116,11 +1066,6 @@ parameters:
 			path: Components/Transformers/ComposerInterface.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\DataTransformerAdapter\\:\\:initialize\\(\\) has parameter \\$config with no type specified\\.$#"
-			count: 1
-			path: Components/Transformers/DataTransformerAdapter.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\DataTransformerAdapter\\:\\:transformBackward\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Transformers/DataTransformerAdapter.php
@@ -1181,11 +1126,6 @@ parameters:
 			path: Components/Transformers/DecimalTransformer.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\DecimalTransformer\\:\\:initialize\\(\\) has parameter \\$params with no type specified\\.$#"
-			count: 1
-			path: Components/Transformers/DecimalTransformer.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\DecimalTransformer\\:\\:iterateTree\\(\\) has parameter \\$currentNode with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Transformers/DecimalTransformer.php
@@ -1227,11 +1167,6 @@ parameters:
 
 		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\DecimalTransformer\\:\\:transformRecord\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Transformers/DecimalTransformer.php
-
-		-
-			message: "#^Property SwagImportExport\\\\Components\\\\Transformers\\\\DecimalTransformer\\:\\:\\$decimalValues type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Transformers/DecimalTransformer.php
 
@@ -1292,11 +1227,6 @@ parameters:
 
 		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:getMainIterationPart\\(\\) should return array but returns array\\<string, mixed\\>\\|null\\.$#"
-			count: 1
-			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:initialize\\(\\) has parameter \\$config with no type specified\\.$#"
 			count: 1
 			path: Components/Transformers/FlattenTransformer.php
 
@@ -1419,11 +1349,6 @@ parameters:
 			message: "#^Variable \\$translations might not be defined\\.$#"
 			count: 1
 			path: Components/Transformers/FlattenTransformer.php
-
-		-
-			message: "#^Right side of \\|\\| is always false\\.$#"
-			count: 1
-			path: Components/Transformers/PhpExpressionEvaluator.php
 
 		-
 			message: "#^Cannot assign offset string to string\\.$#"
@@ -1591,6 +1516,11 @@ parameters:
 			path: Components/Utils/CommandHelper.php
 
 		-
+			message: "#^Parameter \\#1 \\$options of method SwagImportExport\\\\Components\\\\Factories\\\\DataFactory\\:\\:createLimit\\(\\) expects array\\{limit\\: int\\|null, offset\\: int\\|null\\}, array\\{\\} given\\.$#"
+			count: 1
+			path: Components/Utils/CommandHelper.php
+
+		-
 			message: "#^Unreachable statement \\- code above always terminates\\.$#"
 			count: 1
 			path: Components/Utils/CommandHelper.php
@@ -1599,11 +1529,6 @@ parameters:
 			message: "#^Method SwagImportExport\\\\Components\\\\Utils\\\\DataHelper\\:\\:generateMappingFromColumns\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Utils/DataHelper.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Utils\\\\DataLimit\\:\\:__construct\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Utils/DataLimit.php
 
 		-
 			message: "#^Access to an undefined property Shopware_Components_Config\\:\\:\\$version\\.$#"
@@ -1766,12 +1691,7 @@ parameters:
 			path: CustomModels/LoggerRepository.php
 
 		-
-			message: "#^Property SwagImportExport\\\\CustomModels\\\\Profile\\:\\:\\$expressions \\(\\(Doctrine\\\\Common\\\\Collections\\\\Collection&iterable\\<SwagImportExport\\\\CustomModels\\\\Expression\\>\\)\\|null\\) does not accept array\\<int, SwagImportExport\\\\CustomModels\\\\Expression\\>\\|\\(Doctrine\\\\Common\\\\Collections\\\\Collection&iterable\\<SwagImportExport\\\\CustomModels\\\\Expression\\>\\)\\.$#"
-			count: 1
-			path: CustomModels/Profile.php
-
-		-
-			message: "#^Property SwagImportExport\\\\CustomModels\\\\Profile\\:\\:\\$expressions type mapping mismatch\\: property can contain \\(Doctrine\\\\Common\\\\Collections\\\\Collection&iterable\\<SwagImportExport\\\\CustomModels\\\\Expression\\>\\)\\|null but database expects Doctrine\\\\Common\\\\Collections\\\\Collection&iterable\\<SwagImportExport\\\\CustomModels\\\\Expression\\>\\.$#"
+			message: "#^Method SwagImportExport\\\\CustomModels\\\\Profile\\:\\:getExpressions\\(\\) return type with generic interface Doctrine\\\\Common\\\\Collections\\\\Collection does not specify its types\\: TKey, T$#"
 			count: 1
 			path: CustomModels/Profile.php
 
@@ -2109,11 +2029,6 @@ parameters:
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Components\\\\FileIO\\\\XmlFileReaderTest\\:\\:getReaderRecords\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Functional/Components/FileIO/XmlFileReaderTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$config of method SwagImportExport\\\\Components\\\\Transformers\\\\ValuesTransformer\\:\\:initialize\\(\\) expects array\\{expression\\: array\\<SwagImportExport\\\\CustomModels\\\\Expression\\>, evaluator\\: SwagImportExport\\\\Components\\\\Transformers\\\\ExpressionEvaluator\\}, array\\{evaluator\\: SwagImportExport\\\\Components\\\\Transformers\\\\ExpressionEvaluator\\|null, expression\\: array\\{SwagImportExport\\\\CustomModels\\\\Expression, SwagImportExport\\\\CustomModels\\\\Expression\\}\\} given\\.$#"
-			count: 1
-			path: Tests/Functional/Components/Transformers/ValuesTransformerTest.php
 
 		-
 			message: "#^Cannot access offset string on array\\|false\\.$#"
@@ -2607,6 +2522,11 @@ parameters:
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Integration\\\\Components\\\\DataIOTest\\:\\:getPostData\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Tests/Integration/Components/DataIOTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$options of method SwagImportExport\\\\Components\\\\Factories\\\\DataFactory\\:\\:createLimit\\(\\) expects array\\{limit\\: int\\|null, offset\\: int\\|null\\}, array\\{\\} given\\.$#"
 			count: 1
 			path: Tests/Integration/Components/DataIOTest.php
 

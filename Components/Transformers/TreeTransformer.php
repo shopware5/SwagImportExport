@@ -9,11 +9,15 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Components\Transformers;
 
+use SwagImportExport\Components\Profile\Profile;
+
 /**
  * The responsibility of this class is to restructure the flat array to tree and vise versa
  */
 class TreeTransformer implements DataTransformerAdapter, ComposerInterface
 {
+    public const TYPE = 'tree';
+
     protected ?string $config = null;
 
     protected ?array $iterationPart = null;
@@ -57,14 +61,24 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
      */
     protected array $iterationNodes = [];
 
-    /**
-     * Sets the config that has the tree structure
-     *
-     * @param ?string $config
-     */
-    public function initialize($config): void
+    public function supports(string $type): bool
     {
-        $this->config = $config;
+        return $type === self::TYPE;
+    }
+
+    public function initialize(Profile $profile): void
+    {
+        $this->config = $profile->getEntity()->getTree();
+        $this->iterationPart = null;
+        $this->headerFooterData = null;
+        $this->mainType = null;
+        $this->rawData = [];
+        $this->bufferData = null;
+        $this->importMapper = null;
+        $this->data = null;
+        $this->currentRecord = null;
+        $this->preparedData = null;
+        $this->iterationNodes = [];
     }
 
     /**
