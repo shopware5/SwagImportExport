@@ -267,8 +267,6 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                     $isEkGroupMissing = true;
                 }
 
-                // TODO: add filters here
-
                 // extract values
                 foreach ($groups as $group) {
                     // special case for EK group ('_EK' may be missing)
@@ -735,7 +733,6 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                 $priceTreeMapper = $this->createMapperFromProfile($priceProfile);
                 $priceFlatMapper = $this->treeToFlat($priceTreeMapper);
 
-                // todo: check price group flag
                 foreach ($this->getCustomerGroups() as $group) {
                     $priceNode = $this->findNodeByPriceGroup($node, $group->getKey(), $priceFlatMapper);
 

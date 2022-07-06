@@ -27,6 +27,5 @@ SQL);
 
     public function down(bool $keepUserData): void
     {
-        // @todo: Implement down
     }
 }

@@ -322,8 +322,6 @@ class ProductsImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
                     $this->manager->persist($media);
                     $this->manager->flush();
 
-                    // thumbnail flag
-                    // TODO: validate thumbnail
                     $thumbnail = (bool) $record['thumbnail'];
 
                     // generate thumbnails

@@ -43,7 +43,6 @@ class Migration5 extends AbstractPluginMigration
 
     public function down(bool $keepUserData): void
     {
-        // @todo: Implement down
     }
 
     /**

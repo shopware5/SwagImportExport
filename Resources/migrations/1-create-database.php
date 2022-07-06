@@ -28,8 +28,6 @@ class Migration1 extends AbstractPluginMigration
         ALTER TABLE s_import_export_log ADD CONSTRAINT FK_8F9D86BB613FECDF FOREIGN KEY (session_id) REFERENCES s_import_export_session (id) ON DELETE SET NULL;
         ALTER TABLE s_import_export_expression ADD CONSTRAINT FK_42CE4B73CCFA12B8 FOREIGN KEY (profile_id) REFERENCES s_import_export_profile (id) ON DELETE CASCADE;
 SQL);
-
-        // @todo: Implement up
     }
 
     public function down(bool $keepUserData): void
@@ -42,7 +40,5 @@ SQL);
             DROP TABLE s_import_export_session;
             SET foreign_key_checks = 1;
 SQL);
-
-        // @todo: Implement down
     }
 }
