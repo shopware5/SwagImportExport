@@ -12,7 +12,5 @@
             <argument type="service" id="SwagImportExport\Components\UploadPathProvider"/>
             <tag name="import_export.file_reader"/>
         </service>
-
-        <service id="swag_import_export.csv_file_reader" alias="SwagImportExport\Components\FileIO\CsvFileReader" public="true"/>
     </services>
 </container>

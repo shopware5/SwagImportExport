@@ -2096,6 +2096,11 @@ parameters:
 			path: Tests/Functional/Services/AutoImportServiceTest.php
 
 		-
+			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Services\\\\ProfileServiceTest\\:\\:getProfileService\\(\\) should return SwagImportExport\\\\Components\\\\Service\\\\ProfileService but returns object\\|null\\.$#"
+			count: 1
+			path: Tests/Functional/Services/ProfileServiceTest.php
+
+		-
 			message: "#^Parameter \\#2 \\$value of method Doctrine\\\\DBAL\\\\Query\\\\QueryBuilder\\:\\:setValue\\(\\) expects string, int given\\.$#"
 			count: 2
 			path: Tests/Helper/DataProvider/ProfileDataProvider.php

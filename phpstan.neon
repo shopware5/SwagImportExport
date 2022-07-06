@@ -23,3 +23,9 @@ parameters:
     ignoreErrors:
         # Needs some improvements in the doctrine PHPStan extensions: see https://github.com/phpstan/phpstan-doctrine/pull/167
         - '#Cannot call method fetch.*\(\) on Doctrine\\DBAL\\.*\|int#'
+        -
+            message: '#Service .* is private.#'
+            path: Tests
+        -
+            message: '#Service .* is not registered in the container.#'
+            path: Tests

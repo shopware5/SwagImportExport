@@ -10,7 +10,6 @@
 
             <tag name="import_export.file_writer"/>
         </service>
-        <service id="swag_import_export.csv_file_writer" alias="SwagImportExport\Components\FileIO\CsvFileWriter" public="true" />
 
         <service
             id="SwagImportExport\Components\FileIO\XmlFileWriter">

@@ -20,7 +20,7 @@
         <service id="SwagImportExport\Components\Utils\FileHelper"/>
 
         <service id="SwagImportExport\Subscribers\Cronjob">
-            <argument id="swag_import_export.auto_importer" type="service"/>
+            <argument id="SwagImportExport\Components\Service\AutoImportService" type="service"/>
 
             <tag name="shopware.event_subscriber"/>
         </service>
@@ -33,42 +33,34 @@
 
 
         <service id="SwagImportExport\Components\Service\UnderscoreToCamelCaseService"
-                 public="true"/>
-        <service id="swag_import_export.underscore_camelcase_service" alias="SwagImportExport\Components\Service\UnderscoreToCamelCaseService" public="true"/>
+                />
 
         <service
-            id="SwagImportExport\Components\UploadPathProvider" public="true">
+            id="SwagImportExport\Components\UploadPathProvider">
             <argument type="expression">service('application').DocPath()</argument>
         </service>
 
-        <service id="swag_import_export.upload_path_provider" alias="SwagImportExport\Components\UploadPathProvider" public="true"/>
-
         <service
             id="SwagImportExport\Components\Service\AutoImportService"
-            public="true"
+
         >
             <argument type="service" id="SwagImportExport\Components\UploadPathProvider"/>
             <argument type="service" id="SwagImportExport\Components\Factories\ProfileFactory"/>
             <argument type="service" id="SwagImportExport\Components\Session\SessionService"/>
             <argument type="service" id="SwagImportExport\Components\Service\ImportService"/>
         </service>
-        <service id="swag_import_export.auto_importer" alias="SwagImportExport\Components\Service\AutoImportService" public="true"/>
-
 
         <service id="SwagImportExport\Components\Service\ProfileService">
             <argument type="service" id="models"/>
             <argument type="service" id="file_system"/>
             <argument type="service" id="snippets"/>
         </service>
-        <service id="swag_import_export.profile_service" alias="SwagImportExport\Components\Service\ProfileService" public="true"/>
 
         <service id="SwagImportExport\Components\Service\ExportService">
             <argument type="service" id="SwagImportExport\Components\Providers\DataProvider"/>
             <argument type="service" id="SwagImportExport\Components\Logger\Logger"/>
             <argument type="service" id="SwagImportExport\Components\Service\DataWorkflow"/>
-
         </service>
-        <service id="swag_import_export.export_service" alias="SwagImportExport\Components\Service\ExportService" public="true"/>
 
         <service id="SwagImportExport\Components\Service\ImportService">
             <argument type="service" id="SwagImportExport\Components\Providers\FileIOProvider"/>
@@ -80,14 +72,11 @@
             <argument type="service" id="SwagImportExport\Components\Session\SessionService"/>
         </service>
 
-        <service id="swag_import_export.import_service" alias="SwagImportExport\Components\Service\ImportService" public="true"/>
-
-        <service id="SwagImportExport\Components\Logger\Logger" public="true">
+        <service id="SwagImportExport\Components\Logger\Logger">
             <argument type="service" id="SwagImportExport\Components\FileIO\CsvFileWriter"/>
             <argument type="service" id="models"/>
             <argument>%shopware.app.rootDir%/var/log</argument>
         </service>
-        <service id="swag_import_export.logger" alias="SwagImportExport\Components\Logger\Logger" public="true"/>
 
         <service id="SwagImportExport\Models\ProfileRepository">
             <factory service="models" method="getRepository"/>
@@ -100,7 +89,7 @@
             <argument type="service" id="events"/>
         </service>
 
-        <service id="SwagImportExport\Components\Session\SessionService" public="true">
+        <service id="SwagImportExport\Components\Session\SessionService">
             <argument type="service" id="models"/>
             <argument type="service" id="SwagImportExport\Components\UploadPathProvider"/>
         </service>
