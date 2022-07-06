@@ -18,7 +18,6 @@ use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 class DataFlattenTransformerTest extends TestCase
 {
     use DatabaseTestCaseTrait;
-
     use ContainerTrait;
 
     public function getExampleExportData(): string
@@ -54,7 +53,11 @@ class DataFlattenTransformerTest extends TestCase
             'CustomerGroup',
         ];
 
-        $flattenTransformer = new FlattenTransformer();
+        $flattenTransformer = new FlattenTransformer(
+            $this->getContainer()->get('events'),
+            $this->getContainer()->get('models'),
+            $this->getContainer()->get('db')
+        );
         $profileEntity = new \SwagImportExport\Models\Profile();
         $profileEntity->setTree($jsonTree);
         $profile = new Profile($profileEntity);

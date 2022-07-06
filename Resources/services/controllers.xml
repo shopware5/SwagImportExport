@@ -15,6 +15,8 @@
     </service>
 
     <service id="SwagImportExport\Controllers\Backend\Shopware_Controllers_Backend_SwagImportExportCron">
+        <argument type="service" id="plugins"/>
+
         <tag name="shopware.controller" module="backend" controller="SwagImportExportCron"/>
     </service>
 
@@ -23,6 +25,7 @@
         <argument type="service" id="SwagImportExport\Components\Factories\ProfileFactory"/>
         <argument type="service" id="SwagImportExport\Components\Session\SessionService"/>
         <argument type="service" id="SwagImportExport\Components\UploadPathProvider"/>
+        <argument type="service" id="config"/>
 
         <tag name="shopware.controller" module="backend" controller="SwagImportExportExport"/>
     </service>
@@ -56,6 +59,8 @@
     </service>
 
     <service id="SwagImportExport\Controllers\Frontend\Shopware_Controllers_Frontend_SwagImportExport">
+        <argument type="service" id="Shopware\Controllers\Backend\PluginManager"/>
+
         <tag name="shopware.controller" module="frontend" controller="SwagImportExport"/>
     </service>
 </services>

@@ -28,7 +28,7 @@ class ExpressionEvaluatorTest extends ImportExportTestHelper
         $expression1 = '{if $active} false {else} true {/if}';
         $expression2 = '{if $title == \'Product\'} {$title}-Test {/if}';
 
-        $smartyEval = new SmartyExpressionEvaluator();
+        $smartyEval = new SmartyExpressionEvaluator($this->getContainer()->get('template'));
 
         $evalVariable1 = $smartyEval->evaluate($expression1, $variables);
         $evalVariable2 = $smartyEval->evaluate($expression2, $variables);

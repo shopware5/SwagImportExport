@@ -31,16 +31,20 @@ class Shopware_Controllers_Backend_SwagImportExportExport extends \Shopware_Cont
 
     private UploadPathProvider $uploadPathProvider;
 
+    private \Shopware_Components_Config $config;
+
     public function __construct(
         ExportService $exportService,
         ProfileFactory $profileFactory,
         SessionService $sessionService,
-        UploadPathProvider $uploadPathProvider
+        UploadPathProvider $uploadPathProvider,
+        \Shopware_Components_Config $config
     ) {
         $this->exportService = $exportService;
         $this->profileFactory = $profileFactory;
         $this->sessionService = $sessionService;
         $this->uploadPathProvider = $uploadPathProvider;
+        $this->config = $config;
     }
 
     public function initAcl(): void
@@ -144,7 +148,7 @@ class Shopware_Controllers_Backend_SwagImportExportExport extends \Shopware_Cont
                 'limit' => $limit,
                 'offset' => $offset,
                 'category' => $this->Request()->getParam('categories') ? [$this->Request()->getParam('categories')] : null,
-                'batchSize' => Shopware()->Config()->getByNamespace('SwagImportExport', 'batch-size-export', 1),
+                'batchSize' => $this->config->getByNamespace('SwagImportExport', 'batch-size-export', 1),
                 'productStream' => $this->Request()->getParam('productStreamId') ? [$this->Request()->getParam('productStreamId')] : null,
                 'exportVariants' => $this->Request()->getParam('variants') ? (bool) $this->Request()->getParam('variants') : null,
                 'stockFilter' => $this->Request()->getParam('stockFilter') ? $this->Request()->getParam('stockFilter') : null,

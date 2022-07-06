@@ -24,21 +24,9 @@ class ValuesTransformerTest extends TestCase
      * @param array<string, mixed>      $data
      * @param array<string, mixed>|null $expectedResult
      */
-    public function testTransform(string $type, array $data, bool $expectException = false, ?array $expectedResult = null, ?ExpressionEvaluator $evaluator = null): void
+    public function testTransform(string $type, array $data, ?array $expectedResult = null, ExpressionEvaluator $evaluator): void
     {
         $transformer = $this->getValuesTransformer($evaluator);
-
-        if ($expectException) {
-            $this->expectException(\Exception::class);
-
-            if ($type === 'import') {
-                $transformer->transformBackward($data);
-            } else {
-                $transformer->transformForward($data);
-            }
-
-            return;
-        }
 
         if ($type === 'import') {
             $result = $transformer->transformBackward($data);
@@ -65,16 +53,14 @@ class ValuesTransformerTest extends TestCase
         $evaluator2->method('evaluate')->willReturn('1');
 
         return [
-            ['import', [], false, []],
-            ['export', [], false, []],
-            ['import', $data, false, [[['testVar' => '0'], ['otherTestVar' => '0']]], $evaluator1],
-            ['export', $data, false, [[['testVar' => '0'], ['otherTestVar' => '0']]], $evaluator1],
-            ['import', $data, false, [[['testVar' => '1'], ['otherTestVar' => '1']]], $evaluator2],
-            ['export', $data, false, [[['testVar' => '1'], ['otherTestVar' => '1']]], $evaluator2],
+            ['import', $data, [[['testVar' => '0'], ['otherTestVar' => '0']]], $evaluator1],
+            ['export', $data, [[['testVar' => '0'], ['otherTestVar' => '0']]], $evaluator1],
+            ['import', $data, [[['testVar' => '1'], ['otherTestVar' => '1']]], $evaluator2],
+            ['export', $data, [[['testVar' => '1'], ['otherTestVar' => '1']]], $evaluator2],
         ];
     }
 
-    private function getValuesTransformer(?ExpressionEvaluator $evaluator): ValuesTransformer
+    private function getValuesTransformer(ExpressionEvaluator $evaluator): ValuesTransformer
     {
         $expression1 = new Expression();
         $expression1->fromArray(['id' => 1, 'variable' => 'testVar', 'importConversion' => 'importConversion', 'exportConversion' => 'exportConversion']);

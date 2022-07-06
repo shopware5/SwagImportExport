@@ -11,7 +11,13 @@ namespace SwagImportExport\Components\Transformers;
 
 class SmartyExpressionEvaluator implements ExpressionEvaluator
 {
-    protected ?\Shopware_Components_StringCompiler $compiler = null;
+    protected \Shopware_Components_StringCompiler $compiler;
+
+    public function __construct(
+        \Enlight_Template_Manager $templateManager
+    ) {
+        $this->compiler = new \Shopware_Components_StringCompiler($templateManager);
+    }
 
     /**
      * @throws \Exception
@@ -26,26 +32,11 @@ class SmartyExpressionEvaluator implements ExpressionEvaluator
             throw new \Exception('Invalid variables passed to smarty evaluator');
         }
 
-        $compiler = $this->getCompiler();
-
         $this->convertPricesColumnsToFloat($variables);
 
-        $evaledParam = $compiler->compileSmartyString($expression, $variables);
+        $evaledParam = $this->compiler->compileSmartyString($expression, $variables);
 
         return \trim($evaledParam);
-    }
-
-    /**
-     * Returns compiler
-     */
-    protected function getCompiler(): \Shopware_Components_StringCompiler
-    {
-        if ($this->compiler === null) {
-            $view = Shopware()->Template();
-            $this->compiler = new \Shopware_Components_StringCompiler($view);
-        }
-
-        return $this->compiler;
     }
 
     /**

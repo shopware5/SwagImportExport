@@ -167,7 +167,6 @@
 
             <tag name="import_export.db_adapter"/>
             <tag name="import_export.proxyable"/>
-
         </service>
 
         <service id="SwagImportExport\Components\DbAdapters\TranslationsDbAdapter" public="true">

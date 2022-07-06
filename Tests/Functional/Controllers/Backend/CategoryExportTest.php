@@ -29,8 +29,8 @@ class CategoryExportTest extends \Enlight_Components_Test_Controller_TestCase
     {
         parent::setUp();
 
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
-        Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
+        $this->getContainer()->get('plugin_manager')->Backend()->Auth()->setNoAuth();
+        $this->getContainer()->get('plugin_manager')->Backend()->Auth()->setNoAcl();
     }
 
     public function testCategoryXmlExport(): void

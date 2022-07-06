@@ -14,6 +14,7 @@ use Shopware\Components\Model\ModelManager;
 use SwagImportExport\Components\Profile\Profile;
 use SwagImportExport\Components\Structs\ExportRequest;
 use SwagImportExport\Components\Structs\ImportRequest;
+use SwagImportExport\Components\UploadPathProvider;
 use SwagImportExport\Components\Utils\SnippetsHelper;
 use SwagImportExport\Models\Session as SessionEntity;
 
@@ -26,10 +27,15 @@ class SessionService
 
     private ModelManager $modelManager;
 
-    public function __construct(ModelManager $modelManager)
-    {
+    private UploadPathProvider $uploadPathProvider;
+
+    public function __construct(
+        ModelManager $modelManager,
+        UploadPathProvider $uploadPathProvider
+    ) {
         $this->sessionRepository = $modelManager->getRepository(SessionEntity::class);
         $this->modelManager = $modelManager;
+        $this->uploadPathProvider = $uploadPathProvider;
     }
 
     public function createSession(): Session
@@ -84,7 +90,7 @@ class SessionService
 
         $sessionData = [
             'type' => 'export',
-            'fileName' => $exportRequest->filePath,
+            'fileName' => $this->uploadPathProvider->getFileNameFromPath($exportRequest->filePath),
             'format' => $exportRequest->format,
             'username' => $exportRequest->username,
             'serializedIds' => \serialize($ids),

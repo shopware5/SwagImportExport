@@ -71,6 +71,8 @@ class ExportCommand extends ShopwareCommand
 
     private ExportServiceInterface $exportService;
 
+    private \Shopware_Components_Config $config;
+
     public function __construct(
         ProfileRepository $profileRepository,
         ProfileFactory $profileFactory,
@@ -79,7 +81,8 @@ class ExportCommand extends ShopwareCommand
         UploadPathProvider $uploadPathProvider,
         string $path,
         Logger $logger,
-        ExportServiceInterface $exportService
+        ExportServiceInterface $exportService,
+        \Shopware_Components_Config $config
     ) {
         $this->profileRepository = $profileRepository;
         $this->entityManager = $entityManager;
@@ -89,6 +92,7 @@ class ExportCommand extends ShopwareCommand
         $this->profileFactory = $profileFactory;
         $this->logger = $logger;
         $this->exportService = $exportService;
+        $this->config = $config;
 
         parent::__construct();
     }
@@ -146,7 +150,6 @@ class ExportCommand extends ShopwareCommand
                 'username' => 'Commandline',
                 'category' => $this->category ? [$this->category] : null,
                 'productStream' => $this->productStream ? [$this->productStream] : null,
-                'batchSize' => Shopware()->Config()->getByNamespace('SwagImportExport', 'batch-size-export', 1000),
             ]
         );
 

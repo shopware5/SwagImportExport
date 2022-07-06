@@ -61,6 +61,14 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
      */
     protected array $iterationNodes = [];
 
+    private \Enlight_Event_EventManager $eventManager;
+
+    public function __construct(
+        \Enlight_Event_EventManager $eventManager
+    ) {
+        $this->eventManager = $eventManager;
+    }
+
     public function supports(string $type): bool
     {
         return $type === self::TYPE;
@@ -98,7 +106,7 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
         // creates iteration array
         $tree = [$iterationPart['name'] => $transformData];
 
-        return Shopware()->Events()->filter(
+        return $this->eventManager->filter(
             'Shopware_Components_SwagImportExport_Transformers_TreeTransformer_TransformForward',
             $tree,
             ['subject' => $this]
@@ -112,7 +120,7 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
      */
     public function transformBackward(array $data): array
     {
-        $data = Shopware()->Events()->filter(
+        $data = $this->eventManager->filter(
             'Shopware_Components_SwagImportExport_Transformers_TreeTransformer_TransformBackward',
             $data,
             ['subject' => $this]

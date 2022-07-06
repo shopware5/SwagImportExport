@@ -71,10 +71,7 @@ abstract class Validator
      */
     public function validateEmail(string $email): bool
     {
-        /** @var \Shopware\Components\Validator\EmailValidatorInterface $emailValidator */
-        $emailValidator = Shopware()->Container()->get('validator.email');
-
-        return $emailValidator->isValid($email);
+        return (bool) preg_match('/^\S+\@\S+\.\S+$/', $email);
     }
 
     /**

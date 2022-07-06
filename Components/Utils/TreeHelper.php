@@ -377,18 +377,6 @@ class TreeHelper
         }
     }
 
-    public static function getDefaultTreeByBaseProfile(int $baseProfileId): string
-    {
-        return Shopware()->Container()->get('models')
-            ->getRepository(Profile::class)
-            ->createQueryBuilder('p')
-            ->select('p.tree')
-            ->where('p.id = :baseProfileId')
-            ->setParameter('baseProfileId', $baseProfileId)
-            ->getQuery()
-            ->getSingleScalarResult();
-    }
-
     /**
      * @throws \Exception
      */

@@ -1381,6 +1381,16 @@ parameters:
 			path: Controllers/Backend/Shopware_Controllers_Backend_SwagImportExportSession.php
 
 		-
+			message: "#^Call to an undefined method Shopware\\\\Controllers\\\\Backend\\\\PluginManager\\:\\:Backend\\(\\)\\.$#"
+			count: 1
+			path: Controllers/Frontend/Shopware_Controllers_Frontend_SwagImportExport.php
+
+		-
+			message: "#^Call to an undefined method Shopware\\\\Controllers\\\\Backend\\\\PluginManager\\:\\:Controller\\(\\)\\.$#"
+			count: 1
+			path: Controllers/Frontend/Shopware_Controllers_Frontend_SwagImportExport.php
+
+		-
 			message: "#^Call to an undefined method Doctrine\\\\ORM\\\\QueryBuilder\\:\\:addFilter\\(\\)\\.$#"
 			count: 1
 			path: Models/ExpressionRepository.php

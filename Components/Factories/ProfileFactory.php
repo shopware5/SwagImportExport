@@ -83,7 +83,7 @@ class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
         if (isset($data['hidden']) && $data['hidden']) {
             $tree = TreeHelper::getTreeByHiddenProfileType($data['type']);
         } elseif (isset($data['baseProfile'])) {
-            $tree = TreeHelper::getDefaultTreeByBaseProfile($data['baseProfile']);
+            $tree = $this->getDefaultTreeByBaseProfile($data['baseProfile']);
         } else {
             $tree = TreeHelper::getDefaultTreeByProfileType($data['type']);
         }
@@ -119,5 +119,17 @@ class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
         }
 
         return new Profile($profileEntity);
+    }
+
+    public function getDefaultTreeByBaseProfile(int $baseProfileId): string
+    {
+        return $this->modelManager
+            ->getRepository(ProfileEntity::class)
+            ->createQueryBuilder('p')
+            ->select('p.tree')
+            ->where('p.id = :baseProfileId')
+            ->setParameter('baseProfileId', $baseProfileId)
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 }

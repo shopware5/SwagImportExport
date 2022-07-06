@@ -34,13 +34,16 @@ class ImportService implements ImportServiceInterface
 
     private ModelManager $modelManager;
 
+    private SessionService $sessionService;
+
     public function __construct(
         FileIOProvider $fileIOFactory,
         UploadPathProvider $uploadPathProvider,
         Logger $logger,
         DataWorkflow $dataWorkflow,
         ProfileFactory $profileFactory,
-        ModelManager $modelManager
+        ModelManager $modelManager,
+        SessionService $sessionService
     ) {
         $this->uploadPathProvider = $uploadPathProvider;
         $this->logger = $logger;
@@ -48,6 +51,7 @@ class ImportService implements ImportServiceInterface
         $this->dataWorkflow = $dataWorkflow;
         $this->profileFactory = $profileFactory;
         $this->modelManager = $modelManager;
+        $this->sessionService = $sessionService;
     }
 
     public function prepareImport(ImportRequest $request): int
@@ -66,54 +70,12 @@ class ImportService implements ImportServiceInterface
 
     public function import(ImportRequest $request, Session $session): \Generator
     {
-        yield from $this->doImport($request, $session);
+        yield from $this->_import($request, $session);
         $this->modelManager->clear();
-        foreach ($this->importUnprocessedData($request) as $nth) {
-            // nth
-        }
+        yield from $this->importUnprocessedData($request, $session);
     }
 
-    protected function afterImport(array $unprocessedData, string $profileName, string $outputFile): void
-    {
-        $this->dataWorkflow->saveUnprocessedData($unprocessedData, $profileName, $outputFile);
-    }
-
-    protected function importUnprocessedData(ImportRequest $request): \Generator
-    {
-        $profilesMapper = ['articles', 'articlesImages'];
-
-        // loops the unprocessed data
-        $pathInfo = \pathinfo($request->inputFileName);
-        foreach ($profilesMapper as $profileName) {
-            $tmpFile = $this->uploadPathProvider->getRealPath(
-                $pathInfo['basename'] . '-' . $profileName . '-tmp.csv'
-            );
-
-            if (\file_exists($tmpFile)) {
-                $outputFile = \str_replace('-tmp', '-swag', $tmpFile);
-                \rename($tmpFile, $outputFile);
-
-                $profile = $this->profileFactory->loadHiddenProfile($profileName);
-
-                $innerSession = Shopware()->Container()->get(SessionService::class)->createSession();
-
-                $subRequest = new ImportRequest();
-                $subRequest->setData(
-                    [
-                        'profileEntity' => $profile,
-                        'inputFileName' => $outputFile,
-                        'format' => 'csv',
-                        'username' => $request->username,
-                        'batchSize' => $profile->getEntity()->getType() === 'articlesImages' ? 1 : $request->batchSize,
-                    ]
-                );
-
-                yield from $this->doImport($subRequest, $innerSession);
-            }
-        }
-    }
-
-    private function doImport(ImportRequest $request, Session $session): \Generator
+    public function _import(ImportRequest $request, Session $session): \Generator
     {
         $sessionState = $session->getState();
 
@@ -161,5 +123,45 @@ class ImportService implements ImportServiceInterface
                 throw $e;
             }
         } while ($session->getState() !== Session::SESSION_CLOSE);
+    }
+
+    protected function afterImport(array $unprocessedData, string $profileName, string $outputFile): void
+    {
+        $this->dataWorkflow->saveUnprocessedData($unprocessedData, $profileName, $outputFile);
+    }
+
+    protected function importUnprocessedData(ImportRequest $request, Session $session): \Generator
+    {
+        $profilesMapper = ['articles', 'articlesImages'];
+
+        // loops the unprocessed data
+        $pathInfo = \pathinfo($request->inputFileName);
+        foreach ($profilesMapper as $profileName) {
+            $tmpFile = $this->uploadPathProvider->getRealPath(
+                $pathInfo['basename'] . '-' . $profileName . '-tmp.csv'
+            );
+
+            if (\file_exists($tmpFile)) {
+                $outputFile = \str_replace('-tmp', '-swag', $tmpFile);
+                \rename($tmpFile, $outputFile);
+
+                $profile = $this->profileFactory->loadHiddenProfile($profileName);
+
+                $innerSession = $this->sessionService->createSession();
+
+                $subRequest = new ImportRequest();
+                $subRequest->setData(
+                    [
+                        'profileEntity' => $profile,
+                        'inputFileName' => $outputFile,
+                        'format' => 'csv',
+                        'username' => $request->username,
+                        'batchSize' => $profile->getEntity()->getType() === 'articlesImages' ? 1 : 50,
+                    ]
+                );
+
+                yield from $this->_import($subRequest, $innerSession);
+            }
+        }
     }
 }

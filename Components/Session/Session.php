@@ -11,7 +11,6 @@ namespace SwagImportExport\Components\Session;
 
 use Shopware\Components\Model\ModelManager;
 use SwagImportExport\Components\Profile\Profile;
-use SwagImportExport\Components\UploadPathProvider;
 use SwagImportExport\Models\Session as SessionEntity;
 
 class Session
@@ -77,12 +76,8 @@ class Session
             throw new \Exception('Invalid file name.');
         }
 
-        /** @var UploadPathProvider $uploadPathProvider */
-        $uploadPathProvider = Shopware()->Container()->get('swag_import_export.upload_path_provider');
         // set fileName
-        $this->sessionEntity->setFileName(
-            $uploadPathProvider->getFileNameFromPath($data['fileName'])
-        );
+        $this->sessionEntity->setFileName($data['fileName']);
 
         if (isset($data['fileSize'])) {
             $this->sessionEntity->setFileSize((int) $data['fileSize']);

@@ -77,7 +77,7 @@
             <argument type="service" id="SwagImportExport\Components\Service\DataWorkflow"/>
             <argument type="service" id="SwagImportExport\Components\Factories\ProfileFactory"/>
             <argument type="service" id="models"/>
-
+            <argument type="service" id="SwagImportExport\Components\Session\SessionService"/>
         </service>
 
         <service id="swag_import_export.import_service" alias="SwagImportExport\Components\Service\ImportService" public="true"/>
@@ -102,6 +102,7 @@
 
         <service id="SwagImportExport\Components\Session\SessionService" public="true">
             <argument type="service" id="models"/>
+            <argument type="service" id="SwagImportExport\Components\UploadPathProvider"/>
         </service>
 
         <service id="SwagImportExport\Components\Utils\SnippetsHelper"/>

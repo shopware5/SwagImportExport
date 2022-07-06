@@ -24,15 +24,11 @@ class ValuesTransformer implements DataTransformerAdapter
      */
     private array $config;
 
-    private ?ExpressionEvaluator $evaluator;
+    private ExpressionEvaluator $evaluator;
 
-    public function __construct(?ExpressionEvaluator $evaluator = null)
+    public function __construct(ExpressionEvaluator $evaluator)
     {
         $this->evaluator = $evaluator;
-
-        if (!$this->evaluator instanceof ExpressionEvaluator) {
-            $this->evaluator = new SmartyExpressionEvaluator();
-        }
     }
 
     public function supports(string $type): bool
@@ -98,10 +94,6 @@ class ValuesTransformer implements DataTransformerAdapter
             foreach ($data as &$records) {
                 foreach ($records as &$record) {
                     foreach ($conversions as $variableName => $conversion) {
-                        if (!$this->evaluator) {
-                            throw new \Exception('Evaluator is not set');
-                        }
-
                         if (isset($record[$variableName]) && !empty($conversion)) {
                             $evalData = $this->evaluator->evaluate($conversion, $record);
                             if ($evalData || $evalData === '0') {

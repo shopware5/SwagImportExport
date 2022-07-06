@@ -19,6 +19,13 @@ use SwagImportExport\Components\Service\AutoImportServiceInterface;
  */
 class Shopware_Controllers_Backend_SwagImportExportCron extends \Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
+    private \Enlight_Plugin_PluginManager $pluginManager;
+
+    public function __construct(\Enlight_Plugin_PluginManager $pluginManager)
+    {
+        $this->pluginManager = $pluginManager;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -31,8 +38,8 @@ class Shopware_Controllers_Backend_SwagImportExportCron extends \Shopware_Contro
 
     public function init(): void
     {
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
-        Shopware()->Plugins()->Controller()->ViewRenderer()->setNoRender();
+        $this->pluginManager->Backend()->Auth()->setNoAuth();
+        $this->pluginManager->Controller()->ViewRenderer()->setNoRender();
     }
 
     /**

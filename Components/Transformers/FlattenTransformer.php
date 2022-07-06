@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace SwagImportExport\Components\Transformers;
 
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Customer\Group;
 use Shopware\Models\Shop\Shop;
 use SwagImportExport\Components\Profile\Profile;
@@ -53,6 +54,22 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      */
     protected ?array $translationColumns = null;
 
+    private \Enlight_Event_EventManager $eventManager;
+
+    private ModelManager $modelManager;
+
+    private \Enlight_Components_Db_Adapter_Pdo_Mysql $db;
+
+    public function __construct(
+        \Enlight_Event_EventManager $eventManager,
+        ModelManager $modelManager,
+        \Enlight_Components_Db_Adapter_Pdo_Mysql $db
+    ) {
+        $this->eventManager = $eventManager;
+        $this->modelManager = $modelManager;
+        $this->db = $db;
+    }
+
     public function supports(string $type): bool
     {
         return $type === self::TYPE;
@@ -89,7 +106,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
             $flatData[] = $this->getTempData();
         }
 
-        return Shopware()->Events()->filter(
+        return $this->eventManager->filter(
             'Shopware_Components_SwagImportExport_Transformers_FlattenTransformer_TransformForward',
             $flatData,
             ['subject' => $this]
@@ -103,7 +120,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      */
     public function transformBackward(array $data): array
     {
-        $data = Shopware()->Events()->filter(
+        $data = $this->eventManager->filter(
             'Shopware_Components_SwagImportExport_Transformers_FlattenTransformer_TransformBackward',
             $data,
             ['subject' => $this]
@@ -1274,7 +1291,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      */
     public function getCustomerGroups(): array
     {
-        return Shopware()->Models()->getRepository(Group::class)->findAll();
+        return $this->modelManager->getRepository(Group::class)->findAll();
     }
 
     /**
@@ -1282,7 +1299,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      */
     public function getShops(): array
     {
-        return Shopware()->Models()->getRepository(Shop::class)->findAll();
+        return $this->modelManager->getRepository(Shop::class)->findAll();
     }
 
     /**
@@ -1324,7 +1341,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                 (SELECT tax as taxRate FROM s_core_tax_rules)
                 ORDER BY taxRate ASC';
 
-        return Shopware()->Db()->query($sql)->fetchAll();
+        return $this->db->query($sql)->fetchAll();
     }
 
     /**
@@ -1394,7 +1411,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
     protected function getAttributeColumns(): array
     {
         /** @var AbstractSchemaManager $schemaManager */
-        $schemaManager = Shopware()->Container()->get('models')->getConnection()->getSchemaManager();
+        $schemaManager = $this->modelManager->getConnection()->getSchemaManager();
 
         return \array_keys($schemaManager->listTableColumns('s_articles_attributes'));
     }

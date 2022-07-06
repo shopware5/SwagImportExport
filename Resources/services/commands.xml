@@ -22,7 +22,7 @@
             <argument>%kernel.root_dir%</argument>
             <argument type="service" id="SwagImportExport\Components\Logger\Logger"/>
             <argument type="service" id="SwagImportExport\Components\Service\ExportService"/>
-
+            <argument type="service" id="config"/>
 
             <tag name="console.command" command="sw:importexport:export"/>
         </service>

@@ -5,14 +5,22 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <service id="SwagImportExport\Components\Transformers\ValuesTransformer" public="true">
+            <argument type="service" id="SwagImportExport\Components\Transformers\SmartyExpressionEvaluator"/>
+
             <tag name="import_export.transformers"/>
         </service>
 
         <service id="SwagImportExport\Components\Transformers\TreeTransformer" public="true">
+            <argument type="service" id="events"/>
+
             <tag name="import_export.transformers"/>
         </service>
 
         <service id="SwagImportExport\Components\Transformers\FlattenTransformer" public="true">
+            <argument type="service" id="events"/>
+            <argument type="service" id="models"/>
+            <argument type="service" id="db"/>
+
             <tag name="import_export.transformers"/>
         </service>
 
@@ -20,6 +28,10 @@
             <argument type="service" id="Shopware\Components\Plugin\Configuration\CachedReader"/>
 
             <tag name="import_export.transformers"/>
+        </service>
+
+        <service id="SwagImportExport\Components\Transformers\SmartyExpressionEvaluator">
+            <argument type="service" id="template"/>
         </service>
     </services>
 </container>
