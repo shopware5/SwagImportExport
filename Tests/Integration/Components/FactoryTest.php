@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Tests\Integration\Components;
 
+use PHPUnit\Framework\TestCase;
 use SwagImportExport\Components\DbAdapters\CategoriesDbAdapter;
 use SwagImportExport\Components\DbAdapters\ProductsDbAdapter;
 use SwagImportExport\Components\FileIO\CsvFileReader;
@@ -18,10 +19,11 @@ use SwagImportExport\Components\FileIO\XmlFileWriter;
 use SwagImportExport\Components\Providers\DataProvider;
 use SwagImportExport\Components\Providers\FileIOProvider;
 use SwagImportExport\Tests\Helper\ContainerTrait;
-use SwagImportExport\Tests\Helper\ImportExportTestHelper;
+use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 
-class FactoryTest extends ImportExportTestHelper
+class FactoryTest extends TestCase
 {
+    use DatabaseTestCaseTrait;
     use ContainerTrait;
 
     /**

@@ -9,11 +9,13 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Tests\Helper;
 
+use PHPUnit\Framework\TestCase;
 use SwagImportExport\Components\Providers\DataProvider;
 use Symfony\Component\Yaml\Parser;
 
-class DbAdapterTestHelper extends ImportExportTestHelper
+class DbAdapterTestHelper extends TestCase
 {
+    use DatabaseTestCaseTrait;
     use ContainerTrait;
 
     protected string $dbAdapter;
@@ -63,11 +65,11 @@ class DbAdapterTestHelper extends ImportExportTestHelper
         $rawData = $dbAdapter->read($ids, $columns);
         foreach ($expectedResults as $index => $expectedResult) {
             foreach ($expectedResult as $column => $value) {
-                $this->assertEquals($value, $rawData[$section][$index][$column], "The value of `$column` field does not match!");
+                static::assertEquals($value, $rawData[$section][$index][$column], "The value of `$column` field does not match!");
             }
         }
 
-        $this->assertCount($expectedCount, $rawData[$section]);
+        static::assertCount($expectedCount, $rawData[$section]);
     }
 
     public function readRecordIds(int $start, int $limit, array $filter, array $expectedIds, int $expectedCount): void
@@ -79,16 +81,16 @@ class DbAdapterTestHelper extends ImportExportTestHelper
         $ids = $dbAdapter->readRecordIds($start, $limit, $filter);
 
         foreach ($ids as $index => $id) {
-            $this->assertSame($expectedIds[$index], $id, 'Expected id = ' . $expectedIds[$index] . ' does not match with actual id = ' . $id);
+            static::assertSame($expectedIds[$index], $id, 'Expected id = ' . $expectedIds[$index] . ' does not match with actual id = ' . $id);
         }
 
         // no records found check
         if ($ids === []) {
-            $this->assertEmpty($ids);
-            $this->assertEmpty($expectedIds, 'There are no actual ids, but we received expected ids.');
+            static::assertEmpty($ids);
+            static::assertEmpty($expectedIds, 'There are no actual ids, but we received expected ids.');
         }
 
-        $this->assertCount($expectedCount, $ids);
+        static::assertCount($expectedCount, $ids);
     }
 
     public function write(array $records, int $expectedInsertedRows): void
@@ -102,7 +104,7 @@ class DbAdapterTestHelper extends ImportExportTestHelper
 
         $recordsCountAfterImport = $this->getTableCount($this->dbTable);
 
-        $this->assertEquals($expectedInsertedRows, $recordsCountAfterImport - $recordsCountBeforeImport);
+        static::assertEquals($expectedInsertedRows, $recordsCountAfterImport - $recordsCountBeforeImport);
     }
 
     protected function getYamlFile(string $fileName): string

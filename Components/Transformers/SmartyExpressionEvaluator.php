@@ -20,9 +20,9 @@ class SmartyExpressionEvaluator implements ExpressionEvaluator
     }
 
     /**
-     * @throws \Exception
+     * {@inheritDoc}
      */
-    public function evaluate(string $expression, ?array $variables): string
+    public function evaluate(string $expression, ?array $variables)
     {
         if (empty($expression)) {
             throw new \Exception('Empty expression in smarty evaluator');

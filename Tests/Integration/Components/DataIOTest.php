@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Tests\Integration\Components;
 
+use PHPUnit\Framework\TestCase;
 use SwagImportExport\Components\DataIO;
 use SwagImportExport\Components\Factories\ProfileFactory;
 use SwagImportExport\Components\Logger\Logger;
@@ -16,10 +17,11 @@ use SwagImportExport\Components\Providers\DataProvider;
 use SwagImportExport\Components\Session\SessionService;
 use SwagImportExport\Components\Structs\ExportRequest;
 use SwagImportExport\Tests\Helper\ContainerTrait;
-use SwagImportExport\Tests\Helper\ImportExportTestHelper;
+use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 
-class DataIOTest extends ImportExportTestHelper
+class DataIOTest extends TestCase
 {
+    use DatabaseTestCaseTrait;
     use ContainerTrait;
 
     public function testPreloadRecordIds(): void

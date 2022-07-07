@@ -9,12 +9,14 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Tests\Integration\Components;
 
+use PHPUnit\Framework\TestCase;
 use SwagImportExport\Components\Transformers\SmartyExpressionEvaluator;
 use SwagImportExport\Tests\Helper\ContainerTrait;
-use SwagImportExport\Tests\Helper\ImportExportTestHelper;
+use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 
-class ExpressionEvaluatorTest extends ImportExportTestHelper
+class ExpressionEvaluatorTest extends TestCase
 {
+    use DatabaseTestCaseTrait;
     use ContainerTrait;
 
     public function testSmartyEvaluator(): void
