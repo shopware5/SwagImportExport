@@ -150,6 +150,7 @@ class ExportCommand extends ShopwareCommand
                 'username' => 'Commandline',
                 'category' => $this->category ? [$this->category] : null,
                 'productStream' => $this->productStream ? [$this->productStream] : null,
+                'batchSize' => $this->config->getByNamespace('SwagImportExport', 'batch-size-export', 1000),
             ]
         );
 

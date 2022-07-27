@@ -3,7 +3,9 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="SwagImportExport\Components\DbAdapters\Products\ProductWriter" public="true">
+        <defaults public="true"/>
+
+        <service id="SwagImportExport\Components\DbAdapters\Products\ProductWriter">
             <argument type="service" id="dbal_connection"/>
             <argument type="service" id="db"/>
             <argument type="service" id="SwagImportExport\Components\DbalHelper"/>
@@ -11,43 +13,43 @@
                       id="SwagImportExport\Components\DataManagers\Products\ProductDataManager"/>
         </service>
 
-        <service id="SwagImportExport\Components\DbAdapters\Products\CategoryWriter" public="true">
+        <service id="SwagImportExport\Components\DbAdapters\Products\CategoryWriter">
             <argument type="service" id="db"/>
             <argument type="service" id="dbal_connection"/>
             <argument type="service" id="events"/>
             <argument type="service" id="categorysubscriber"/>
         </service>
 
-        <service id="SwagImportExport\Components\DbAdapters\Products\ConfiguratorWriter" public="true">
+        <service id="SwagImportExport\Components\DbAdapters\Products\ConfiguratorWriter">
             <argument type="service" id="SwagImportExport\Components\DbalHelper"/>
             <argument type="service" id="dbal_connection"/>
             <argument type="service" id="db"/>
         </service>
 
-        <service id="SwagImportExport\Components\DbAdapters\Products\ImageWriter" public="true">
+        <service id="SwagImportExport\Components\DbAdapters\Products\ImageWriter">
             <argument type="service" id="db"/>
             <argument type="service" id="dbal_connection"/>
         </service>
 
-        <service id="SwagImportExport\Components\DbAdapters\Products\PriceWriter" public="true">
+        <service id="SwagImportExport\Components\DbAdapters\Products\PriceWriter">
             <argument type="service" id="db"/>
             <argument type="service" id="SwagImportExport\Components\DbalHelper"/>
             <argument type="service" id="SwagImportExport\Components\DataManagers\Products\PriceDataManager"/>
         </service>
 
-        <service id="SwagImportExport\Components\DbAdapters\Products\PropertyWriter" public="true">
+        <service id="SwagImportExport\Components\DbAdapters\Products\PropertyWriter">
             <argument type="service" id="SwagImportExport\Components\DbalHelper"/>
             <argument type="service" id="dbal_connection"/>
             <argument type="service" id="db"/>
             <argument type="service" id="SwagImportExport\Components\Utils\SnippetsHelper"/>
         </service>
 
-        <service id="SwagImportExport\Components\DbAdapters\Products\RelationWriter" public="true">
+        <service id="SwagImportExport\Components\DbAdapters\Products\RelationWriter">
             <argument type="service" id="db"/>
             <argument type="service" id="dbal_connection"/>
         </service>
 
-        <service id="SwagImportExport\Components\DbAdapters\Products\TranslationWriter" public="true">
+        <service id="SwagImportExport\Components\DbAdapters\Products\TranslationWriter">
             <argument type="service" id="models"/>
             <argument type="service" id="dbal_connection"/>
             <argument type="service" id="translation"/>

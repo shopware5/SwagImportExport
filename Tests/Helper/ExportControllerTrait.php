@@ -27,7 +27,7 @@ trait ExportControllerTrait
     {
         $this->backendControllerTestHelper = new BackendControllerTestHelper();
 
-        $this->uploadPathProvider = $this->getContainer()->get('swag_import_export.upload_path_provider');
+        $this->uploadPathProvider = $this->getContainer()->get(UploadPathProvider::class);
     }
 
     /**

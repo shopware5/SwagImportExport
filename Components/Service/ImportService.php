@@ -70,12 +70,54 @@ class ImportService implements ImportServiceInterface
 
     public function import(ImportRequest $request, Session $session): \Generator
     {
-        yield from $this->_import($request, $session);
+        yield from $this->doImport($request, $session);
         $this->modelManager->clear();
-        yield from $this->importUnprocessedData($request, $session);
+        foreach ($this->importUnprocessedData($request) as $nth) {
+            // nth
+        }
     }
 
-    public function _import(ImportRequest $request, Session $session): \Generator
+    protected function afterImport(array $unprocessedData, string $profileName, string $outputFile): void
+    {
+        $this->dataWorkflow->saveUnprocessedData($unprocessedData, $profileName, $outputFile);
+    }
+
+    protected function importUnprocessedData(ImportRequest $request): \Generator
+    {
+        $profilesMapper = ['articles', 'articlesImages'];
+
+        // loops the unprocessed data
+        $pathInfo = \pathinfo($request->inputFileName);
+        foreach ($profilesMapper as $profileName) {
+            $tmpFile = $this->uploadPathProvider->getRealPath(
+                $pathInfo['basename'] . '-' . $profileName . '-tmp.csv'
+            );
+
+            if (\file_exists($tmpFile)) {
+                $outputFile = \str_replace('-tmp', '-swag', $tmpFile);
+                \rename($tmpFile, $outputFile);
+
+                $profile = $this->profileFactory->loadHiddenProfile($profileName);
+
+                $innerSession = $this->sessionService->createSession();
+
+                $subRequest = new ImportRequest();
+                $subRequest->setData(
+                    [
+                        'profileEntity' => $profile,
+                        'inputFileName' => $outputFile,
+                        'format' => 'csv',
+                        'username' => $request->username,
+                        'batchSize' => $profile->getEntity()->getType() === 'articlesImages' ? 1 : $request->batchSize,
+                    ]
+                );
+
+                yield from $this->doImport($subRequest, $innerSession);
+            }
+        }
+    }
+
+    private function doImport(ImportRequest $request, Session $session): \Generator
     {
         $sessionState = $session->getState();
 
@@ -123,45 +165,5 @@ class ImportService implements ImportServiceInterface
                 throw $e;
             }
         } while ($session->getState() !== Session::SESSION_CLOSE);
-    }
-
-    protected function afterImport(array $unprocessedData, string $profileName, string $outputFile): void
-    {
-        $this->dataWorkflow->saveUnprocessedData($unprocessedData, $profileName, $outputFile);
-    }
-
-    protected function importUnprocessedData(ImportRequest $request, Session $session): \Generator
-    {
-        $profilesMapper = ['articles', 'articlesImages'];
-
-        // loops the unprocessed data
-        $pathInfo = \pathinfo($request->inputFileName);
-        foreach ($profilesMapper as $profileName) {
-            $tmpFile = $this->uploadPathProvider->getRealPath(
-                $pathInfo['basename'] . '-' . $profileName . '-tmp.csv'
-            );
-
-            if (\file_exists($tmpFile)) {
-                $outputFile = \str_replace('-tmp', '-swag', $tmpFile);
-                \rename($tmpFile, $outputFile);
-
-                $profile = $this->profileFactory->loadHiddenProfile($profileName);
-
-                $innerSession = $this->sessionService->createSession();
-
-                $subRequest = new ImportRequest();
-                $subRequest->setData(
-                    [
-                        'profileEntity' => $profile,
-                        'inputFileName' => $outputFile,
-                        'format' => 'csv',
-                        'username' => $request->username,
-                        'batchSize' => $profile->getEntity()->getType() === 'articlesImages' ? 1 : 50,
-                    ]
-                );
-
-                yield from $this->_import($subRequest, $innerSession);
-            }
-        }
     }
 }

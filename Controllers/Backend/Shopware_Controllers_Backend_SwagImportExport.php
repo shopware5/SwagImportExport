@@ -112,7 +112,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends \Shopware_Controller
             $response->sendHeaders();
 
             \readfile($filePath);
-            exit();
+            exit;
         } catch (\Exception $e) {
             $this->View()->assign(
                 [

@@ -41,7 +41,7 @@ class ProfileServiceTest extends TestCase
     {
         $service = $this->getProfileService();
         /** @var UploadPathProvider $uploadPathProvider */
-        $uploadPathProvider = $this->getContainer()->get('swag_import_export.upload_path_provider');
+        $uploadPathProvider = $this->getContainer()->get(UploadPathProvider::class);
 
         // create copy of profile.json testfile because it will be deleted by service
         \copy(__DIR__ . '/_fixtures/profile_import.json', $uploadPathProvider->getPath() . '/test.csv');
@@ -58,7 +58,7 @@ class ProfileServiceTest extends TestCase
     {
         $service = $this->getProfileService();
         /** @var UploadPathProvider $uploadPathProvider */
-        $uploadPathProvider = $this->getContainer()->get('swag_import_export.upload_path_provider');
+        $uploadPathProvider = $this->getContainer()->get(UploadPathProvider::class);
 
         // create copy of profile.json testfile because it will be deleted by service
         \copy(__DIR__ . '/_fixtures/empty.json', $uploadPathProvider->getPath() . '/empty.json');
@@ -75,7 +75,7 @@ class ProfileServiceTest extends TestCase
     {
         $service = $this->getProfileService();
         /** @var UploadPathProvider $uploadPathProvider */
-        $uploadPathProvider = $this->getContainer()->get('swag_import_export.upload_path_provider');
+        $uploadPathProvider = $this->getContainer()->get(UploadPathProvider::class);
 
         // create copy of profile.json testfile because it will be deleted by service
         \copy(__DIR__ . '/_fixtures/wrong.json', $uploadPathProvider->getPath() . '/wrong.json');
@@ -92,7 +92,7 @@ class ProfileServiceTest extends TestCase
     {
         $service = $this->getProfileService();
         /** @var UploadPathProvider $uploadPathProvider */
-        $uploadPathProvider = $this->getContainer()->get('swag_import_export.upload_path_provider');
+        $uploadPathProvider = $this->getContainer()->get(UploadPathProvider::class);
 
         // create copy of profile.json testfile because it will be deleted by service
         \copy(__DIR__ . '/_fixtures/empty_value.json', $uploadPathProvider->getPath() . '/empty_value.json');
@@ -111,7 +111,7 @@ class ProfileServiceTest extends TestCase
         /** @var Connection $dbalConnection */
         $dbalConnection = $this->getContainer()->get('dbal_connection');
         /** @var UploadPathProvider $uploadPathProvider */
-        $uploadPathProvider = $this->getContainer()->get('swag_import_export.upload_path_provider');
+        $uploadPathProvider = $this->getContainer()->get(UploadPathProvider::class);
 
         // create copy of profile.json testfile because it will be deleted by service
         \copy(__DIR__ . '/_fixtures/profile_import.json', $uploadPathProvider->getPath() . '/profile_import.json');
@@ -130,6 +130,6 @@ class ProfileServiceTest extends TestCase
 
     private function getProfileService(): ProfileService
     {
-        return $this->getContainer()->get('swag_import_export.profile_service');
+        return $this->getContainer()->get(ProfileService::class);
     }
 }

@@ -4,7 +4,9 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="SwagImportExport\Components\Providers\DataProvider" public="true">
+        <defaults public="true"/>
+
+        <service id="SwagImportExport\Components\Providers\DataProvider">
             <argument type="service" id="events"/>
             <argument type="tagged" tag="import_export.db_adapter"/>
             <argument type="tagged" tag="import_export.data_manager"/>
@@ -12,7 +14,7 @@
             <tag name="import_export.proxyable"/>
         </service>
 
-        <service id="SwagImportExport\Components\Providers\FileIOProvider" public="true">
+        <service id="SwagImportExport\Components\Providers\FileIOProvider">
             <argument type="tagged" tag="import_export.file_writer"/>
             <argument type="tagged" tag="import_export.file_reader"/>
 

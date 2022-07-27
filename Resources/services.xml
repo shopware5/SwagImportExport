@@ -17,6 +17,7 @@
         <import resource="services/providers.xml"/>
     </imports>
     <services>
+        <defaults public="true" />
         <service id="SwagImportExport\Components\Utils\FileHelper"/>
 
         <service id="SwagImportExport\Subscribers\Cronjob">

@@ -40,15 +40,6 @@ class ImportExportTestKernel extends Kernel
         );
     }
 
-    public function buildContainer()
-    {
-        $containerBuilder = parent::buildContainer();
-
-        $containerBuilder->addCompilerPass($this->createPublicTestDefinitionsCompilerPass());
-
-        return $containerBuilder;
-    }
-
     public static function getKernel(): ImportExportTestKernel
     {
         return self::$kernel;

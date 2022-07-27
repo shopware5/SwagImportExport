@@ -4,6 +4,8 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 <services>
+    <defaults public="true"/>
+
     <service id="SwagImportExport\Controllers\Backend\Shopware_Controllers_Backend_SwagImportExport">
         <argument type="service" id="SwagImportExport\Components\UploadPathProvider"/>
 
