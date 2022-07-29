@@ -151,14 +151,6 @@ class OrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * {@inheritDoc}
      */
-    public function getUnprocessedData(): array
-    {
-        return [];
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function write(array $records): void
     {
         $records = $this->eventManager->filter(

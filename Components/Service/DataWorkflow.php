@@ -159,8 +159,10 @@ class DataWorkflow
 
             $session->progress($batchSize);
 
-            // gets unprocessed data from the adapter
-            $postData['unprocessedData'] = $dataIo->getUnprocessedData();
+            if ($dataIo->supportsUnprocessedData()) {
+                // gets unprocessed data from the adapter
+                $postData['unprocessedData'] = $dataIo->getUnprocessedData();
+            }
         }
 
         if ($session->getState() === Session::SESSION_FINISHED) {
@@ -175,7 +177,7 @@ class DataWorkflow
     /**
      * @param array<string, mixed> $postData
      */
-    public function saveUnprocessedData(array $postData, string $profileName, string $outputFile): void
+    public function saveUnprocessedData(array $postData, string $profileName, string $outputFile, string $prevState): void
     {
         $writer = $this->fileIOProvider->getFileWriter('csv');
         $profile = $this->profileFactory->loadHiddenProfile($profileName);
@@ -185,12 +187,12 @@ class DataWorkflow
             ['isTree' => $writer->hasTreeStructure()]
         );
 
-        if ($postData['session']['prevState'] === Session::SESSION_NEW || !\filesize($outputFile)) {
+        if ($prevState === Session::SESSION_NEW || !\filesize($outputFile)) {
             $header = $transformerChain->composeHeader();
             $writer->writeHeader($outputFile, $header);
         }
 
-        $data = $transformerChain->transformForward($postData['data'][$profileName]);
+        $data = $transformerChain->transformForward($postData[$profileName]);
 
         $writer->writeRecords($outputFile, $data);
     }

@@ -220,11 +220,6 @@ class ProductsImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
         return \array_merge($columns, $this->getAttributesColumns());
     }
 
-    public function getUnprocessedData(): array
-    {
-        return [];
-    }
-
     /**
      * Insert/Update data into db
      *

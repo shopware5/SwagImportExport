@@ -248,11 +248,6 @@ class ProductsPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
         return $columns;
     }
 
-    public function getUnprocessedData(): array
-    {
-        return [];
-    }
-
     /**
      * Imports the records. <br/>
      * <b>Note:</b> The logic is copied from the old Import/Export Module

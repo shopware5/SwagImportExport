@@ -194,14 +194,6 @@ class AddressDbAdapter implements DataDbAdapter, \Enlight_Hook
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getUnprocessedData(): array
-    {
-        return [];
-    }
-
     public function setLogMessages(string $logMessages): void
     {
         $this->logMessages[] = $logMessages;

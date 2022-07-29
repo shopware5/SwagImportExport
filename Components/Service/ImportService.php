@@ -77,9 +77,9 @@ class ImportService implements ImportServiceInterface
         }
     }
 
-    protected function afterImport(array $unprocessedData, string $profileName, string $outputFile): void
+    protected function afterImport(array $unprocessedData, string $profileName, string $outputFile, string $prevState): void
     {
-        $this->dataWorkflow->saveUnprocessedData($unprocessedData, $profileName, $outputFile);
+        $this->dataWorkflow->saveUnprocessedData($unprocessedData, $profileName, $outputFile, $prevState);
     }
 
     protected function importUnprocessedData(ImportRequest $request): \Generator
@@ -90,30 +90,29 @@ class ImportService implements ImportServiceInterface
         $pathInfo = \pathinfo($request->inputFileName);
         foreach ($profilesMapper as $profileName) {
             $tmpFile = $this->uploadPathProvider->getRealPath(
-                $pathInfo['basename'] . '-' . $profileName . '-tmp.csv'
+                $pathInfo['basename'] . '-' . $profileName . '-swag.csv'
             );
 
-            if (\file_exists($tmpFile)) {
-                $outputFile = \str_replace('-tmp', '-swag', $tmpFile);
-                \rename($tmpFile, $outputFile);
-
-                $profile = $this->profileFactory->loadHiddenProfile($profileName);
-
-                $innerSession = $this->sessionService->createSession();
-
-                $subRequest = new ImportRequest();
-                $subRequest->setData(
-                    [
-                        'profileEntity' => $profile,
-                        'inputFileName' => $outputFile,
-                        'format' => 'csv',
-                        'username' => $request->username,
-                        'batchSize' => $profile->getEntity()->getType() === 'articlesImages' ? 1 : $request->batchSize,
-                    ]
-                );
-
-                yield from $this->doImport($subRequest, $innerSession);
+            if (!\file_exists($tmpFile)) {
+                continue;
             }
+
+            $profile = $this->profileFactory->loadHiddenProfile($profileName);
+
+            $innerSession = $this->sessionService->createSession();
+
+            $subRequest = new ImportRequest();
+            $subRequest->setData(
+                [
+                    'profileEntity' => $profile,
+                    'inputFileName' => $tmpFile,
+                    'format' => 'csv',
+                    'username' => $request->username,
+                    'batchSize' => $profile->getEntity()->getType() === 'articlesImages' ? 1 : $request->batchSize,
+                ]
+            );
+
+            yield from $this->doImport($subRequest, $innerSession);
         }
     }
 
@@ -124,21 +123,14 @@ class ImportService implements ImportServiceInterface
         do {
             try {
                 $resultData = $this->dataWorkflow->import($request, $session);
-                if (!empty($resultData['unprocessedData'])) {
-                    $unprocessedData = [
-                        'data' => $resultData['unprocessedData'],
-                        'session' => [
-                            'prevState' => $sessionState,
-                            'currentState' => $session->getState(),
-                        ],
-                    ];
 
-                    foreach ($unprocessedData['data'] as $profileName => $value) {
+                if (!empty($resultData['unprocessedData'])) {
+                    foreach ($resultData['unprocessedData'] as $profileName => $value) {
                         $outputFile = $this->uploadPathProvider->getRealPath(
-                            $this->uploadPathProvider->getFileNameFromPath($request->inputFileName) . '-' . $profileName . '-tmp.csv'
+                            $this->uploadPathProvider->getFileNameFromPath($request->inputFileName) . '-' . $profileName . '-swag.csv'
                         );
-                        $this->afterImport($unprocessedData, $profileName, $outputFile);
-                        $unprocessedFiles[$profileName] = $outputFile;
+
+                        $this->afterImport($resultData['unprocessedData'], $profileName, $outputFile, $sessionState);
                     }
                 }
 

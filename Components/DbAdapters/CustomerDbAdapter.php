@@ -145,14 +145,6 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
         return $columns;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getUnprocessedData(): array
-    {
-        return [];
-    }
-
     public function getBillingColumns(): array
     {
         $columns = [

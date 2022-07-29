@@ -84,14 +84,6 @@ interface DataDbAdapter
     public function write(array $records): void;
 
     /**
-     * Returns unprocessed data. This will be used every time if an import wants to create data which relies on created data.
-     * For instance article images, similar or accessory articles.
-     *
-     * @return array<mixed>
-     */
-    public function getUnprocessedData(): array;
-
-    /**
      * Returns all log messages as an array.
      *
      * @return array<string>

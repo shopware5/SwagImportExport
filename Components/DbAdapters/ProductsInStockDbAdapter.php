@@ -112,14 +112,6 @@ class ProductsInStockDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * {@inheritDoc}
      */
-    public function getUnprocessedData(): array
-    {
-        return [];
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function readRecordIds(?int $start, ?int $limit, array $filter = []): array
     {
         $stockFilter = $filter['stockFilter'];

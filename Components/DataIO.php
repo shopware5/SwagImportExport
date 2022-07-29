@@ -11,6 +11,7 @@ namespace SwagImportExport\Components;
 
 use SwagImportExport\Components\DbAdapters\DataDbAdapter;
 use SwagImportExport\Components\DbAdapters\DefaultHandleable;
+use SwagImportExport\Components\DbAdapters\UnprocessedDataDbAdapter;
 use SwagImportExport\Components\Logger\LogDataStruct;
 use SwagImportExport\Components\Logger\Logger;
 use SwagImportExport\Components\Session\Session;
@@ -19,6 +20,9 @@ use SwagImportExport\Components\Utils\SnippetsHelper;
 
 class DataIO
 {
+    /**
+     * @var DataDbAdapter+UnprocessedDataDbAdapter
+     */
     private DataDbAdapter $dbAdapter;
 
     private Session $dataSession;
@@ -87,6 +91,10 @@ class DataIO
      */
     public function getUnprocessedData(): array
     {
+        if (!$this->dbAdapter instanceof UnprocessedDataDbAdapter) {
+            throw new \DomainException(sprintf('dbAdapter must be of type %s', UnprocessedDataDbAdapter::class));
+        }
+
         return $this->dbAdapter->getUnprocessedData();
     }
 
@@ -104,6 +112,11 @@ class DataIO
         $session->setRecordIds($ids);
 
         return $ids;
+    }
+
+    public function supportsUnprocessedData(): bool
+    {
+        return $this->dbAdapter instanceof UnprocessedDataDbAdapter;
     }
 
     /**

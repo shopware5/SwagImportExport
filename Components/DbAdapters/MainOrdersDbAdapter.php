@@ -270,14 +270,6 @@ class MainOrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
         throw new \RuntimeException($message);
     }
 
-    /**
-     * @return array<mixed>
-     */
-    public function getUnprocessedData(): array
-    {
-        return [];
-    }
-
     public function saveMessage(string $message): void
     {
         $errorMode = $this->config->get('SwagImportExportErrorMode');

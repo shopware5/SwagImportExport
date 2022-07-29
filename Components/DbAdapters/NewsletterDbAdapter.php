@@ -110,14 +110,6 @@ class NewsletterDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandle
         return !empty($result);
     }
 
-    /**
-     * @return array<mixed>
-     */
-    public function getUnprocessedData(): array
-    {
-        return [];
-    }
-
     public function read(array $ids, array $columns): array
     {
         $builder = $this->getBuilder($columns, $ids);

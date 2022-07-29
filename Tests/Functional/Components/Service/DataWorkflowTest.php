@@ -25,14 +25,13 @@ class DataWorkflowTest extends TestCase
 {
     public function testSaveUnprocessedDataShouldWriteHeader(): void
     {
-        $postData['session']['prevState'] = 'old';
         $file = __DIR__ . '/../_fixtures/emptyFile.csv';
         $handle = \fopen($file, 'r+');
         static::assertIsResource($handle);
         \ftruncate($handle, 0);
         \fclose($handle);
         $workflow = $this->getWorkflow();
-        $workflow->saveUnprocessedData($postData, 'someProfileName', $file);
+        $workflow->saveUnprocessedData([], 'someProfileName', $file, 'old');
 
         $expected = 'new | empty | header | test' . \PHP_EOL . 'just | another | return | value';
         $result = \file_get_contents($file);

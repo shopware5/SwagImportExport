@@ -298,11 +298,6 @@ class TranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
         }
     }
 
-    public function getUnprocessedData(): array
-    {
-        return [];
-    }
-
     /**
      * @throws \Exception
      */

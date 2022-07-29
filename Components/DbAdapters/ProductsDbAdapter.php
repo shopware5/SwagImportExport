@@ -43,7 +43,7 @@ use SwagImportExport\Components\Utils\SnippetsHelper;
 use SwagImportExport\Components\Utils\SwagVersionHelper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleable
+class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleable, UnprocessedDataDbAdapter
 {
     public const VARIANTS_FILTER_KEY = 'variants';
     public const CATEGORIES_FILTER_KEY = 'categories';

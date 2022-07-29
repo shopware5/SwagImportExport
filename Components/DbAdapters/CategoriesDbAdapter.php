@@ -167,11 +167,6 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandle
         return $builder;
     }
 
-    public function getUnprocessedData(): array
-    {
-        return [];
-    }
-
     /**
      * @return array<int, string>
      */

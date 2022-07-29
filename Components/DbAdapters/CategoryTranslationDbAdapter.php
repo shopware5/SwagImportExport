@@ -206,14 +206,6 @@ class CategoryTranslationDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * {@inheritdoc}
      */
-    public function getUnprocessedData(): array
-    {
-        return [];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getLogMessages(): array
     {
         return $this->logMessages;
