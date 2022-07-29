@@ -9,10 +9,12 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Components\DbAdapters;
 
+use Shopware\Components\Model\Exception\ModelNotFoundException;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\QueryBuilder;
 use Shopware\Models\Order\Detail;
 use Shopware\Models\Order\DetailStatus;
+use Shopware\Models\Order\Order;
 use Shopware\Models\Order\Status;
 use SwagImportExport\Components\Exception\AdapterException;
 use SwagImportExport\Components\Service\UnderscoreToCamelCaseServiceInterface;
@@ -179,6 +181,7 @@ class OrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
 
         foreach ($records['default'] as $index => $record) {
             try {
+                $orderData = [];
                 $record = $this->validator->filterEmptyString($record);
                 $this->validator->checkRequiredFields($record);
                 $this->validator->validate($record, OrderValidator::$mapper);
@@ -197,6 +200,14 @@ class OrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
                 }
 
                 $orderModel = $orderDetailModel->getOrder();
+
+                if (!$orderModel instanceof Order) {
+                    throw new ModelNotFoundException(
+                        Order::class,
+                        $record['orderDetailId'] ?? $record['number'],
+                        'orderDetailId or number'
+                    );
+                }
 
                 if (isset($record['paymentId']) && \is_numeric($record['paymentId'])) {
                     $paymentStatusModel = $orderStatusRepository->find($record['cleared']);
@@ -285,7 +296,7 @@ class OrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
                     }
                 }
 
-                if ($orderData) {
+                if (empty($orderData)) {
                     $orderModel->fromArray($orderData);
                 }
 

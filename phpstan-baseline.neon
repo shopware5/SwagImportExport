@@ -26,22 +26,12 @@ parameters:
 			path: Components/Converter/CsvConverter.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Converter\\\\XmlConverter\\:\\:hasSpecialCharacters\\(\\) should return int but returns int\\|false\\.$#"
-			count: 1
-			path: Components/Converter/XmlConverter.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Converter\\\\XmlConverter\\:\\:isEmpty\\(\\) has parameter \\$item with no type specified\\.$#"
 			count: 1
 			path: Components/Converter/XmlConverter.php
 
 		-
 			message: "#^Parameter \\#2 \\$data of function xml_parse_into_struct expects string, string\\|false given\\.$#"
-			count: 1
-			path: Components/Converter/XmlConverter.php
-
-		-
-			message: "#^Variable \\$attributes in isset\\(\\) always exists and is not nullable\\.$#"
 			count: 1
 			path: Components/Converter/XmlConverter.php
 
@@ -81,11 +71,6 @@ parameters:
 			path: Components/DataManagers/DataManager.php
 
 		-
-			message: "#^Parameter \\#2 \\$orderNumber of method SwagImportExport\\\\Components\\\\DataManagers\\\\Products\\\\ProductDataManager\\:\\:getTaxByTaxRate\\(\\) expects string, int\\|string given\\.$#"
-			count: 1
-			path: Components/DataManagers/Products/ProductDataManager.php
-
-		-
 			message: "#^Property SwagImportExport\\\\Components\\\\DataType\\\\ProductPriceDataType\\:\\:\\$defaultFieldsValues type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/DataType/ProductPriceDataType.php
@@ -104,21 +89,6 @@ parameters:
 			message: "#^Parameter \\#1 \\$country of method Shopware\\\\Models\\\\Customer\\\\Address\\:\\:setCountry\\(\\) expects Shopware\\\\Models\\\\Country\\\\Country, Shopware\\\\Models\\\\Country\\\\Country\\|null given\\.$#"
 			count: 2
 			path: Components/DbAdapters/AddressDbAdapter.php
-
-		-
-			message: "#^Argument of an invalid type array\\<array\\<string, mixed\\>\\>\\|null supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: Components/DbAdapters/CategoriesDbAdapter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\CategoriesDbAdapter\\:\\:findCategoryById\\(\\) should return Shopware\\\\Models\\\\Category\\\\Category\\|null but returns object\\|null\\.$#"
-			count: 1
-			path: Components/DbAdapters/CategoriesDbAdapter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\CategoriesDbAdapter\\:\\:getBuilder\\(\\) has parameter \\$columns with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DbAdapters/CategoriesDbAdapter.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\CategoriesDbAdapter\\:\\:getBuilder\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
@@ -146,12 +116,7 @@ parameters:
 			path: Components/DbAdapters/CategoriesDbAdapter.php
 
 		-
-			message: "#^PHPDoc tag @param for parameter \\$columns with type array\\<string\\>\\|string is not subtype of native type array\\.$#"
-			count: 1
-			path: Components/DbAdapters/CategoriesDbAdapter.php
-
-		-
-			message: "#^Parameter \\#1 \\$columns of method SwagImportExport\\\\Components\\\\DbAdapters\\\\CategoriesDbAdapter\\:\\:getBuilder\\(\\) expects array, array\\<string\\>\\|string given\\.$#"
+			message: "#^Parameter \\#1 \\$columns of method SwagImportExport\\\\Components\\\\DbAdapters\\\\CategoriesDbAdapter\\:\\:getBuilder\\(\\) expects array\\<string\\>, array\\<string\\>\\|string given\\.$#"
 			count: 1
 			path: Components/DbAdapters/CategoriesDbAdapter.php
 
@@ -162,11 +127,6 @@ parameters:
 
 		-
 			message: "#^Property SwagImportExport\\\\Components\\\\DbAdapters\\\\CategoriesDbAdapter\\:\\:\\$defaultValues type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DbAdapters/CategoriesDbAdapter.php
-
-		-
-			message: "#^Property SwagImportExport\\\\Components\\\\DbAdapters\\\\CategoriesDbAdapter\\:\\:\\$repository with generic class Doctrine\\\\ORM\\\\EntityRepository does not specify its types\\: TEntityClass$#"
 			count: 1
 			path: Components/DbAdapters/CategoriesDbAdapter.php
 
@@ -291,92 +251,12 @@ parameters:
 			path: Components/DbAdapters/NewsletterDbAdapter.php
 
 		-
-			message: "#^PHPDoc tag @var for variable \\$addressRepository contains generic class Doctrine\\\\ORM\\\\EntityRepository but does not specify its types\\: TEntityClass$#"
-			count: 1
-			path: Components/DbAdapters/NewsletterDbAdapter.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$contactDataRepository contains generic class Doctrine\\\\ORM\\\\EntityRepository but does not specify its types\\: TEntityClass$#"
-			count: 1
-			path: Components/DbAdapters/NewsletterDbAdapter.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$groupRepository contains generic class Doctrine\\\\ORM\\\\EntityRepository but does not specify its types\\: TEntityClass$#"
-			count: 1
-			path: Components/DbAdapters/NewsletterDbAdapter.php
-
-		-
 			message: "#^Property SwagImportExport\\\\Components\\\\DbAdapters\\\\NewsletterDbAdapter\\:\\:\\$defaultValues type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/DbAdapters/NewsletterDbAdapter.php
 
 		-
-			message: "#^Cannot call method fromArray\\(\\) on Shopware\\\\Models\\\\Order\\\\Order\\|null\\.$#"
-			count: 1
-			path: Components/DbAdapters/OrdersDbAdapter.php
-
-		-
-			message: "#^Cannot call method getNumber\\(\\) on Shopware\\\\Models\\\\Order\\\\Order\\|null\\.$#"
-			count: 2
-			path: Components/DbAdapters/OrdersDbAdapter.php
-
-		-
-			message: "#^Cannot call method setClearedDate\\(\\) on Shopware\\\\Models\\\\Order\\\\Order\\|null\\.$#"
-			count: 1
-			path: Components/DbAdapters/OrdersDbAdapter.php
-
-		-
-			message: "#^Cannot call method setComment\\(\\) on Shopware\\\\Models\\\\Order\\\\Order\\|null\\.$#"
-			count: 1
-			path: Components/DbAdapters/OrdersDbAdapter.php
-
-		-
-			message: "#^Cannot call method setCustomerComment\\(\\) on Shopware\\\\Models\\\\Order\\\\Order\\|null\\.$#"
-			count: 1
-			path: Components/DbAdapters/OrdersDbAdapter.php
-
-		-
-			message: "#^Cannot call method setInternalComment\\(\\) on Shopware\\\\Models\\\\Order\\\\Order\\|null\\.$#"
-			count: 1
-			path: Components/DbAdapters/OrdersDbAdapter.php
-
-		-
-			message: "#^Cannot call method setOrderStatus\\(\\) on Shopware\\\\Models\\\\Order\\\\Order\\|null\\.$#"
-			count: 1
-			path: Components/DbAdapters/OrdersDbAdapter.php
-
-		-
-			message: "#^Cannot call method setPaymentStatus\\(\\) on Shopware\\\\Models\\\\Order\\\\Order\\|null\\.$#"
-			count: 1
-			path: Components/DbAdapters/OrdersDbAdapter.php
-
-		-
-			message: "#^Cannot call method setTrackingCode\\(\\) on Shopware\\\\Models\\\\Order\\\\Order\\|null\\.$#"
-			count: 1
-			path: Components/DbAdapters/OrdersDbAdapter.php
-
-		-
-			message: "#^Cannot call method setTransactionId\\(\\) on Shopware\\\\Models\\\\Order\\\\Order\\|null\\.$#"
-			count: 1
-			path: Components/DbAdapters/OrdersDbAdapter.php
-
-		-
-			message: "#^If condition is always true\\.$#"
-			count: 1
-			path: Components/DbAdapters/OrdersDbAdapter.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\OrdersDbAdapter\\:\\:getBuilder\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: Components/DbAdapters/OrdersDbAdapter.php
-
-		-
-			message: "#^Parameter \\#1 \\$entity of method Doctrine\\\\ORM\\\\EntityManager\\:\\:persist\\(\\) expects object, Shopware\\\\Models\\\\Order\\\\Order\\|null given\\.$#"
-			count: 1
-			path: Components/DbAdapters/OrdersDbAdapter.php
-
-		-
-			message: "#^Variable \\$orderData might not be defined\\.$#"
 			count: 1
 			path: Components/DbAdapters/OrdersDbAdapter.php
 
@@ -396,37 +276,12 @@ parameters:
 			path: Components/DbAdapters/Products/ConfiguratorWriter.php
 
 		-
-			message: "#^Negated boolean expression is always false\\.$#"
-			count: 2
-			path: Components/DbAdapters/Products/ConfiguratorWriter.php
-
-		-
 			message: "#^Property SwagImportExport\\\\Components\\\\DbAdapters\\\\Products\\\\ConfiguratorWriter\\:\\:\\$sets type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/DbAdapters/Products/ConfiguratorWriter.php
 
 		-
-			message: "#^Result of && is always false\\.$#"
-			count: 1
-			path: Components/DbAdapters/Products/ConfiguratorWriter.php
-
-		-
-			message: "#^Variable \\$groupId might not be defined\\.$#"
-			count: 2
-			path: Components/DbAdapters/Products/ConfiguratorWriter.php
-
-		-
-			message: "#^Variable \\$optionId might not be defined\\.$#"
-			count: 2
-			path: Components/DbAdapters/Products/ConfiguratorWriter.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\Products\\\\ImageWriter\\:\\:prepareImageData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DbAdapters/Products/ImageWriter.php
-
-		-
-			message: "#^Variable \\$media might not be defined\\.$#"
 			count: 1
 			path: Components/DbAdapters/Products/ImageWriter.php
 
@@ -444,16 +299,6 @@ parameters:
 			message: "#^Property SwagImportExport\\\\Components\\\\DbAdapters\\\\Products\\\\PriceWriter\\:\\:\\$customerGroups type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/DbAdapters/Products/PriceWriter.php
-
-		-
-			message: "#^Expression on left side of \\?\\? is not nullable\\.$#"
-			count: 1
-			path: Components/DbAdapters/Products/PropertyWriter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\Products\\\\PropertyWriter\\:\\:getFilterGroupIdByNameFromCacheProperty\\(\\) never returns null so it can be removed from the return type\\.$#"
-			count: 1
-			path: Components/DbAdapters/Products/PropertyWriter.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\Products\\\\PropertyWriter\\:\\:updateOrCreateOptionAndValuesByValueName\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -521,6 +366,11 @@ parameters:
 			path: Components/DbAdapters/ProductsDbAdapter.php
 
 		-
+			message: "#^Call to an undefined method GuzzleHttp\\\\ClientInterface\\:\\:get\\(\\)\\.$#"
+			count: 1
+			path: Components/DbAdapters/ProductsImagesDbAdapter.php
+
+		-
 			message: "#^Call to an undefined method Shopware\\\\Models\\\\Article\\\\Repository\\:\\:getProductImageDataQuery\\(\\)\\.$#"
 			count: 1
 			path: Components/DbAdapters/ProductsImagesDbAdapter.php
@@ -576,22 +426,7 @@ parameters:
 			path: Components/DbAdapters/ProductsImagesDbAdapter.php
 
 		-
-			message: "#^Parameter \\#2 \\$code of class SwagImportExport\\\\Components\\\\Exception\\\\AdapterException constructor expects int, string\\|false given\\.$#"
-			count: 1
-			path: Components/DbAdapters/ProductsImagesDbAdapter.php
-
-		-
 			message: "#^Parameter \\#2 \\$str of function explode expects string, string\\|null given\\.$#"
-			count: 1
-			path: Components/DbAdapters/ProductsImagesDbAdapter.php
-
-		-
-			message: "#^Parameter \\#3 \\$previous of class SwagImportExport\\\\Components\\\\Exception\\\\AdapterException constructor expects Exception\\|null, string given\\.$#"
-			count: 1
-			path: Components/DbAdapters/ProductsImagesDbAdapter.php
-
-		-
-			message: "#^Property SwagImportExport\\\\Components\\\\DbAdapters\\\\ProductsImagesDbAdapter\\:\\:\\$httpClient \\(GuzzleHttp\\\\Client\\) does not accept GuzzleHttp\\\\ClientInterface\\.$#"
 			count: 1
 			path: Components/DbAdapters/ProductsImagesDbAdapter.php
 
@@ -786,7 +621,7 @@ parameters:
 			path: Components/Service/Struct/ProfileDataStruct.php
 
 		-
-			message: "#^Property SwagImportExport\\\\Components\\\\Service\\\\Struct\\\\ProfileDataStruct\\:\\:\\$tree has no type specified\\.$#"
+			message: "#^Property SwagImportExport\\\\Components\\\\Service\\\\Struct\\\\ProfileDataStruct\\:\\:\\$tree type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Service/Struct/ProfileDataStruct.php
 
@@ -794,11 +629,6 @@ parameters:
 			message: "#^Parameter \\#1 \\$str of function lcfirst expects string, string\\|null given\\.$#"
 			count: 1
 			path: Components/Service/UnderscoreToCamelCaseService.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Session\\\\Session\\:\\:setTotalCount\\(\\) has parameter \\$totalCount with no type specified\\.$#"
-			count: 1
-			path: Components/Session/Session.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\ComposerInterface\\:\\:composeFooter\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -836,7 +666,7 @@ parameters:
 			path: Components/Transformers/DataTransformerChain.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\DataTransformerChain\\:\\:transformBackward\\(\\) has parameter \\$data with no type specified\\.$#"
+			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\DataTransformerChain\\:\\:transformBackward\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Transformers/DataTransformerChain.php
 
@@ -846,7 +676,7 @@ parameters:
 			path: Components/Transformers/DataTransformerChain.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\DataTransformerChain\\:\\:transformForward\\(\\) has parameter \\$data with no type specified\\.$#"
+			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\DataTransformerChain\\:\\:transformForward\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Transformers/DataTransformerChain.php
 
@@ -981,7 +811,7 @@ parameters:
 			path: Components/Transformers/FlattenTransformer.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:transform\\(\\) has no return type specified\\.$#"
+			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:transform\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Transformers/FlattenTransformer.php
 
@@ -1022,6 +852,11 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$json of function json_decode expects string, string\\|null given\\.$#"
+			count: 1
+			path: Components/Transformers/FlattenTransformer.php
+
+		-
+			message: "#^Parameter \\#1 \\$node of method SwagImportExport\\\\Components\\\\Transformers\\\\FlattenTransformer\\:\\:collectHeader\\(\\) expects array\\<string, mixed\\>, array\\|null given\\.$#"
 			count: 1
 			path: Components/Transformers/FlattenTransformer.php
 
@@ -1101,11 +936,6 @@ parameters:
 			path: Components/Transformers/TreeTransformer.php
 
 		-
-			message: "#^Else branch is unreachable because previous condition is always true\\.$#"
-			count: 1
-			path: Components/Transformers/TreeTransformer.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\TreeTransformer\\:\\:buildIterationNode\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Transformers/TreeTransformer.php
@@ -1156,12 +986,7 @@ parameters:
 			path: Components/Transformers/TreeTransformer.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\TreeTransformer\\:\\:saveBufferData\\(\\) has parameter \\$adapter with no type specified\\.$#"
-			count: 1
-			path: Components/Transformers/TreeTransformer.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\TreeTransformer\\:\\:setRawData\\(\\) has parameter \\$rawData with no type specified\\.$#"
+			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\TreeTransformer\\:\\:setRawData\\(\\) has parameter \\$rawData with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Transformers/TreeTransformer.php
 
@@ -1171,7 +996,7 @@ parameters:
 			path: Components/Transformers/TreeTransformer.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\TreeTransformer\\:\\:transformFromTree\\(\\) has parameter \\$importMapper with no value type specified in iterable type array\\.$#"
+			message: "#^Method SwagImportExport\\\\Components\\\\Transformers\\\\TreeTransformer\\:\\:transformFromTree\\(\\) has parameter \\$node with no type specified\\.$#"
 			count: 1
 			path: Components/Transformers/TreeTransformer.php
 
@@ -1193,11 +1018,6 @@ parameters:
 		-
 			message: "#^Offset string does not exist on array\\|null\\.$#"
 			count: 2
-			path: Components/Transformers/TreeTransformer.php
-
-		-
-			message: "#^PHPDoc tag @param for parameter \\$importMapper with type array\\<string, string\\>\\|string is not subtype of native type array\\.$#"
-			count: 1
 			path: Components/Transformers/TreeTransformer.php
 
 		-
@@ -1661,26 +1481,6 @@ parameters:
 			path: Tests/Functional/Components/DbAdapters/CustomerDbAdapterTest.php
 
 		-
-			message: "#^Cannot call method getMainDetail\\(\\) on Shopware\\\\Models\\\\Article\\\\Article\\|null\\.$#"
-			count: 2
-			path: Tests/Functional/Components/DbAdapters/Products/ProductWriterTest.php
-
-		-
-			message: "#^Cannot call method getSupplier\\(\\) on Shopware\\\\Models\\\\Article\\\\Article\\|null\\.$#"
-			count: 2
-			path: Tests/Functional/Components/DbAdapters/Products/ProductWriterTest.php
-
-		-
-			message: "#^Variable \\$insertedArticle in PHPDoc tag @var does not match assigned variable \\$insertedProduct\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/Products/ProductWriterTest.php
-
-		-
-			message: "#^Variable \\$updatedArticle in PHPDoc tag @var does not match assigned variable \\$updatedProduct\\.$#"
-			count: 1
-			path: Tests/Functional/Components/DbAdapters/Products/ProductWriterTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$entityName of class Doctrine\\\\ORM\\\\Mapping\\\\ClassMetadata constructor expects class\\-string\\<ExampleEntity\\>, string given\\.$#"
 			count: 1
 			path: Tests/Functional/Components/DbalHelperTest.php
@@ -2076,7 +1876,7 @@ parameters:
 			path: Tests/Functional/Controllers/Backend/ProductsInstockExportTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Services\\\\AutoImportServiceTest\\:\\:installProfile\\(\\) has parameter \\$content with no type specified\\.$#"
+			message: "#^Parameter \\#2 \\$content of method SwagImportExport\\\\Tests\\\\Functional\\\\Services\\\\AutoImportServiceTest\\:\\:installProfile\\(\\) expects string, string\\|false given\\.$#"
 			count: 1
 			path: Tests/Functional/Services/AutoImportServiceTest.php
 
@@ -2479,11 +2279,6 @@ parameters:
 			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Components\\\\Validator\\\\ValidatorTest\\:\\:getDemoRecordForFilterEmptyStringTest\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Unit/Components/Validator/ValidatorTest.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Services\\\\UnderscoreToCamelCaseServiceTest\\:\\:testUnderscoreToCamelCase\\(\\) has parameter \\$string with no type specified\\.$#"
-			count: 1
-			path: Tests/Unit/Services/UnderscoreToCamelCaseServiceTest.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Unit\\\\Services\\\\UnderscoreToCamelCaseServiceTest\\:\\:underscoreToCamelCaseTest_provider\\(\\) return type has no value type specified in iterable type array\\.$#"

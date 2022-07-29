@@ -31,7 +31,7 @@ class DataTransformerChain
     /**
      * Execute the transformers in the way they were installed
      */
-    public function transformForward($data): array
+    public function transformForward(array $data): array
     {
         /** @var DataTransformerAdapter $transformer */
         foreach ($this->chain as $transformer) {
@@ -44,7 +44,7 @@ class DataTransformerChain
     /**
      * Execute the transformers back in the web they were installed
      */
-    public function transformBackward($data): array
+    public function transformBackward(array $data): array
     {
         /** @var DataTransformerAdapter $transformer */
         foreach (\array_reverse($this->chain) as $transformer) {

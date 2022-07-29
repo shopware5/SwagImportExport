@@ -170,7 +170,7 @@ class PropertyWriter
 
     private function getFilterGroupIdByNameFromCacheProperty(string $name): ?int
     {
-        return ((int) $this->getFilterGroups()[$name]) ?? null;
+        return $this->getFilterGroups()[$name] ? (int) $this->getFilterGroups()[$name] : null;
     }
 
     /**

@@ -10,7 +10,7 @@
     <license>MIT</license>
     <link>http://store.shopware.com</link>
     <author>shopware AG</author>
-    <compatibility minVersion="5.7.0" maxVersion="5.99.99"/>
+    <compatibility minVersion="5.7.4" maxVersion="5.99.99"/>
 
     <description lang="de">Das Importieren und Exportieren von Artikeln, Kunden oder Kategorien gehört zum Alltag vieler Shopbetreiber: Schnell lassen sich so Lagerbestände aktualisieren, Preise anpassen oder Erstimporte vornehmen.</description>
     <description lang="en">Importing and exporting product and customer data, categories as well as product images is a standard task of any shop owner. Keeping that in mind, Shopware wants to make it as easy as possible for you to quickly edit inventory, prices or even perform a customized import.</description>

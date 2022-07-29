@@ -10,11 +10,11 @@ declare(strict_types=1);
 namespace SwagImportExport\Components\DbAdapters;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\QueryBuilder;
 use Shopware\Models\Category\Category;
+use Shopware\Models\Category\Repository;
 use Shopware\Models\Customer\Group;
 use SwagImportExport\Components\DataManagers\CategoriesDataManager;
 use SwagImportExport\Components\DataType\CategoryDataType;
@@ -31,7 +31,7 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandle
 
     protected \Enlight_Components_Db_Adapter_Pdo_Mysql $db;
 
-    protected EntityRepository $repository;
+    protected Repository $repository;
 
     /**
      * @var array<string>
@@ -47,9 +47,9 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandle
     protected array $defaultValues = [];
 
     /**
-     * @var array<array<string,mixed>>|null
+     * @var array<array<string,mixed>>
      */
-    private ?array $categoryAvoidCustomerGroups = null;
+    private array $categoryAvoidCustomerGroups = [];
 
     private UnderscoreToCamelCaseServiceInterface $underscoreToCamelCaseService;
 
@@ -150,8 +150,8 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandle
     }
 
     /**
-     * @param array<string>|string $columns
-     * @param array<int>           $ids
+     * @param array<string> $columns
+     * @param array<int>    $ids
      */
     public function getBuilder(array $columns, array $ids): QueryBuilder
     {
@@ -449,7 +449,7 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandle
 
     private function checkIfRelationExists(int $categoryId, int $customerGroupId): bool
     {
-        if ($this->categoryAvoidCustomerGroups === null) {
+        if (empty($this->categoryAvoidCustomerGroups)) {
             $this->setCategoryAvoidCustomerGroups();
         }
 

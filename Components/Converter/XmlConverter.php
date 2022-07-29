@@ -130,13 +130,11 @@ class XmlConverter implements ConverterInterface
                 }
 
                 // Set the attributes too.
-                if (isset($attributes)) {
-                    foreach ($attributes as $attr => $val) {
-                        if ($this->settings['attributes']) {
-                            $result['_attributes'][$attr] = $val;
-                        } // Set all the attributes in a array called 'attr'
-                        /*  TO DO should we change the key name to '_attr'? Someone may use the tagname 'attr'. Same goes for 'value' too */
-                    }
+                foreach ($attributes as $attr => $val) {
+                    if ($this->settings['attributes']) {
+                        $result['_attributes'][$attr] = $val;
+                    } // Set all the attributes in a array called 'attr'
+                    /*  TO DO should we change the key name to '_attr'? Someone may use the tagname 'attr'. Same goes for 'value' too */
                 }
             } elseif (isset($value)) {
                 $result = $value;
@@ -194,8 +192,8 @@ class XmlConverter implements ConverterInterface
     /**
      * Checks if special xml characters were used.
      */
-    private function hasSpecialCharacters(string $item): int
+    private function hasSpecialCharacters(string $item): bool
     {
-        return \preg_match('#<|>|&(?<!amp;)#', $item);
+        return (bool) \preg_match('#<|>|&(?<!amp;)#', $item);
     }
 }

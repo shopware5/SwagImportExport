@@ -12,7 +12,7 @@ namespace SwagImportExport\Components\DbAdapters;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
-use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
 use Shopware\Bundle\MediaBundle\MediaService;
 use Shopware\Components\ContainerAwareEventManager;
 use Shopware\Components\HttpClient\GuzzleFactory;
@@ -80,7 +80,7 @@ class ProductsImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
 
     private DbalHelper $dbalHelper;
 
-    private Client $httpClient;
+    private ClientInterface $httpClient;
 
     public function __construct(
         ModelManager $manager,
@@ -604,7 +604,7 @@ class ProductsImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
         if (!$put_handle) {
             $message = SnippetsHelper::getNamespace()
                 ->get('adapters/articlesImages/could_open_dir_file', 'Could not open %s/%s for writing');
-            throw new AdapterException($message, $destPath, $filename);
+            throw new AdapterException(\sprintf($message, $destPath, $filename));
         }
 
         // replace empty spaces

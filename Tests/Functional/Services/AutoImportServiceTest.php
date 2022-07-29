@@ -103,7 +103,7 @@ class AutoImportServiceTest extends TestCase
         $service->runAutoImport();
     }
 
-    private function installProfile(string $filename, $content): void
+    private function installProfile(string $filename, string $content): void
     {
         \file_put_contents($filename, $content);
     }

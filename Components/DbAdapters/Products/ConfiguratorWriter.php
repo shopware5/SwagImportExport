@@ -54,6 +54,8 @@ class ConfiguratorWriter
         $configuratorSetId = null;
 
         foreach ($configuratorData as $configurator) {
+            $optionId = null;
+
             if (!$this->isValid($configurator)) {
                 continue;
             }
@@ -337,6 +339,8 @@ class ConfiguratorWriter
      */
     private function getConfiguratorGroup(array $data): int
     {
+        $groupId = null;
+
         if (isset($data['configGroupId'])) {
             if ($this->checkExistence('s_article_configurator_groups', (int) $data['configGroupId'])) {
                 $groupId = $data['configGroupId'];

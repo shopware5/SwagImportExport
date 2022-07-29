@@ -14,7 +14,6 @@ use Doctrine\ORM\Query\Expr\Join;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\QueryBuilder;
 use Shopware\Models\Customer\Customer;
-use Shopware\Models\Customer\Repository;
 use Shopware\Models\Newsletter\Address;
 use Shopware\Models\Newsletter\ContactData;
 use Shopware\Models\Newsletter\Group;
@@ -181,13 +180,13 @@ class NewsletterDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandle
         );
 
         $defaultValues = $this->getDefaultValues();
-        /** @var Repository $customerRepository */
+        /** @var EntityRepository<Customer> $customerRepository */
         $customerRepository = $this->manager->getRepository(Customer::class);
-        /** @var EntityRepository $addressRepository */
+        /** @var EntityRepository<Address> $addressRepository */
         $addressRepository = $this->manager->getRepository(Address::class);
-        /** @var EntityRepository $groupRepository */
+        /** @var EntityRepository<Group> $groupRepository */
         $groupRepository = $this->manager->getRepository(Group::class);
-        /** @var EntityRepository $contactDataRepository */
+        /** @var EntityRepository<ContactData> $contactDataRepository */
         $contactDataRepository = $this->manager->getRepository(ContactData::class);
         $count = 0;
 

@@ -55,6 +55,8 @@ class ImageWriter
                 break;
             }
 
+            $media = null;
+
             if (empty($image['mediaId']) && empty($image['path']) && empty($image['imageUrl'])) {
                 continue;
             }

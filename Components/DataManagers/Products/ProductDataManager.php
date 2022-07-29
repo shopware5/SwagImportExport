@@ -205,7 +205,7 @@ class ProductDataManager extends DataManager implements \Enlight_Hook
             switch ($key) {
                 case 'taxId':
                     if (isset($record['tax'])) {
-                        $record[$key] = $this->getTaxByTaxRate((float) $record['tax'], $record['orderNumber']);
+                        $record[$key] = $this->getTaxByTaxRate((float) $record['tax'], (string) $record['orderNumber']);
                     }
                     break;
                 case 'supplierId':
@@ -312,7 +312,7 @@ class ProductDataManager extends DataManager implements \Enlight_Hook
         }
 
         if (isset($record['tax'])) {
-            return $this->getTaxByTaxRate((float) $record['tax'], $record['orderNumber']);
+            return $this->getTaxByTaxRate((float) $record['tax'], (string) $record['orderNumber']);
         }
 
         return null;

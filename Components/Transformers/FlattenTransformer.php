@@ -188,7 +188,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      * @param array<string, mixed> $node
      * @param array<string, mixed> $mapper
      */
-    public function transform(array $node, ?array $mapper = [])
+    public function transform(array $node, ?array $mapper = []): ?array
     {
         if (isset($node['children'])) {
             if (isset($node['attributes'])) {
@@ -209,38 +209,6 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                 $currentNode['_value'] = $mapper[$node['shopwareField']];
             } else {
                 $currentNode = $mapper[$node['shopwareField']];
-            }
-        }
-
-        return $currentNode;
-    }
-
-    /**
-     * Creates and returns mapper of provided profile node
-     *
-     * @param array<string, mixed> $node
-     */
-    public function createMapperFromProfile(array $node)
-    {
-        if (isset($node['children'])) {
-            if (isset($node['attributes'])) {
-                foreach ($node['attributes'] as $attribute) {
-                    $currentNode['_attributes'][$attribute['name']] = $attribute['shopwareField'];
-                }
-            }
-
-            foreach ($node['children'] as $child) {
-                $currentNode[$child['name']] = $this->createMapperFromProfile($child);
-            }
-        } else {
-            if (isset($node['attributes'])) {
-                foreach ($node['attributes'] as $attribute) {
-                    $currentNode['_attributes'][$attribute['name']] = $attribute['shopwareField'];
-                }
-
-                $currentNode['_value'] = $node['shopwareField'];
-            } else {
-                $currentNode = $node['shopwareField'];
             }
         }
 
@@ -1447,70 +1415,6 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
     }
 
     /**
-     * Transform flat price data into tree array
-     *
-     * @param array<string, mixed> $node
-     * @param array<string, mixed> $data
-     */
-    protected function transformPricesToTree(array $node, array $data, string $group)
-    {
-        // special case for EK group ('_EK' may be missing)
-        if ($group != '') {
-            $groupValue = $group;
-            $groupExtension = '_' . $group;
-        } else {
-            $groupValue = 'EK';
-            $groupExtension = '';
-        }
-
-        if (isset($node['children'])) {
-            if (isset($node['attributes'])) {
-                foreach ($node['attributes'] as $attribute) {
-                    if ($attribute['shopwareField'] !== 'priceGroup') {
-                        $value = $this->getDataValue($data, $attribute['name'] . $groupExtension);
-                    } else {
-                        $value = $groupValue;
-                    }
-                    $currentNode['_attributes'][$attribute['name']] = $value;
-                }
-            }
-
-            // the check for group value is not done here, but on the next level (recursion)
-            // because the node may have attribute(s)
-            foreach ($node['children'] as $child) {
-                $currentNode[$child['name']] = $this->transformPricesToTree($child, $data, $group);
-            }
-        } else {
-            if (isset($node['attributes'])) {
-                foreach ($node['attributes'] as $attribute) {
-                    if ($attribute['shopwareField'] !== 'priceGroup') {
-                        $value = $this->getDataValue($data, $attribute['name'] . $groupExtension);
-                    } else {
-                        $value = $groupValue;
-                    }
-                    $currentNode['_attributes'][$attribute['name']] = $value;
-                }
-
-                if ($node['shopwareField'] !== 'priceGroup') {
-                    $value = $this->getDataValue($data, $node['name'] . $groupExtension);
-                } else {
-                    $value = $groupValue;
-                }
-                $currentNode['_value'] = $value;
-            } else {
-                if ($node['shopwareField'] !== 'priceGroup') {
-                    $value = $this->getDataValue($data, $node['name'] . $groupExtension);
-                } else {
-                    $value = $groupValue;
-                }
-                $currentNode = $value;
-            }
-        }
-
-        return $currentNode;
-    }
-
-    /**
      * Transform flat configurator data into tree array
      *
      * @param array<string, mixed>     $node
@@ -1579,6 +1483,102 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                 $this->saveTempMapper($currentPath, $value);
             }
         }
+    }
+
+    /**
+     * Creates and returns mapper of provided profile node
+     *
+     * @param array<string, mixed> $node
+     */
+    private function createMapperFromProfile(array $node)
+    {
+        if (isset($node['children'])) {
+            if (isset($node['attributes'])) {
+                foreach ($node['attributes'] as $attribute) {
+                    $currentNode['_attributes'][$attribute['name']] = $attribute['shopwareField'];
+                }
+            }
+
+            foreach ($node['children'] as $child) {
+                $currentNode[$child['name']] = $this->createMapperFromProfile($child);
+            }
+        } else {
+            if (isset($node['attributes'])) {
+                foreach ($node['attributes'] as $attribute) {
+                    $currentNode['_attributes'][$attribute['name']] = $attribute['shopwareField'];
+                }
+
+                $currentNode['_value'] = $node['shopwareField'];
+            } else {
+                $currentNode = $node['shopwareField'];
+            }
+        }
+
+        return $currentNode;
+    }
+
+    /**
+     * Transform flat price data into tree array
+     *
+     * @param array<string, mixed> $node
+     * @param array<string, mixed> $data
+     */
+    private function transformPricesToTree(array $node, array $data, string $group)
+    {
+        // special case for EK group ('_EK' may be missing)
+        if ($group != '') {
+            $groupValue = $group;
+            $groupExtension = '_' . $group;
+        } else {
+            $groupValue = 'EK';
+            $groupExtension = '';
+        }
+
+        if (isset($node['children'])) {
+            if (isset($node['attributes'])) {
+                foreach ($node['attributes'] as $attribute) {
+                    if ($attribute['shopwareField'] !== 'priceGroup') {
+                        $value = $this->getDataValue($data, $attribute['name'] . $groupExtension);
+                    } else {
+                        $value = $groupValue;
+                    }
+                    $currentNode['_attributes'][$attribute['name']] = $value;
+                }
+            }
+
+            // the check for group value is not done here, but on the next level (recursion)
+            // because the node may have attribute(s)
+            foreach ($node['children'] as $child) {
+                $currentNode[$child['name']] = $this->transformPricesToTree($child, $data, $group);
+            }
+        } else {
+            if (isset($node['attributes'])) {
+                foreach ($node['attributes'] as $attribute) {
+                    if ($attribute['shopwareField'] !== 'priceGroup') {
+                        $value = $this->getDataValue($data, $attribute['name'] . $groupExtension);
+                    } else {
+                        $value = $groupValue;
+                    }
+                    $currentNode['_attributes'][$attribute['name']] = $value;
+                }
+
+                if ($node['shopwareField'] !== 'priceGroup') {
+                    $value = $this->getDataValue($data, $node['name'] . $groupExtension);
+                } else {
+                    $value = $groupValue;
+                }
+                $currentNode['_value'] = $value;
+            } else {
+                if ($node['shopwareField'] !== 'priceGroup') {
+                    $value = $this->getDataValue($data, $node['name'] . $groupExtension);
+                } else {
+                    $value = $groupValue;
+                }
+                $currentNode = $value;
+            }
+        }
+
+        return $currentNode;
     }
 
     private function reset(): void

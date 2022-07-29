@@ -17,7 +17,7 @@ class ProfileDataStruct
 
     private string $type;
 
-    private $tree;
+    private array $tree;
 
     public function __construct(Profile $profile)
     {

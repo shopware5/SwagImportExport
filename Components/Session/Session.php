@@ -196,7 +196,7 @@ class Session
         return $this->getEntity()->getFileName();
     }
 
-    public function setTotalCount($totalCount): void
+    public function setTotalCount(int $totalCount): void
     {
         $this->getEntity()->setTotalCount($totalCount);
     }

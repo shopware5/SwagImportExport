@@ -89,7 +89,7 @@ class ProductWriterTest extends TestCase
 
         $productWriterResult = $this->productWriter->write($expectedNewProduct, []);
 
-        /** @var Article $insertedArticle */
+        /** @var Article $insertedProduct */
         $insertedProduct = $this->modelManager->find(Article::class, $productWriterResult->getProductId());
 
         $mainDetail = $insertedProduct->getMainDetail();
@@ -128,7 +128,7 @@ class ProductWriterTest extends TestCase
 
         $productWriterResult = $this->productWriter->write($expectedModifiedProduct, []);
 
-        /** @var Article $updatedArticle */
+        /** @var Article $updatedProduct */
         $updatedProduct = $this->modelManager->find(Article::class, $productWriterResult->getProductId());
 
         $mainDetail = $updatedProduct->getMainDetail();
