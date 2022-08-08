@@ -32,7 +32,7 @@ class ExportRequest
      */
     public array $filter = [];
 
-    public ?string $username = 'Cli';
+    public string $username = 'Cli';
 
     public ?int $sessionId = null;
 

@@ -1,21 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Method SwagImportExport\\\\Commands\\\\ExportCommand\\:\\:execute\\(\\) should return int but return statement is missing\\.$#"
-			count: 1
-			path: Commands/ExportCommand.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Commands\\\\ImportCommand\\:\\:execute\\(\\) should return int but return statement is missing\\.$#"
-			count: 1
-			path: Commands/ImportCommand.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Commands\\\\ProfilesCommand\\:\\:execute\\(\\) should return int but return statement is missing\\.$#"
-			count: 1
-			path: Commands/ProfilesCommand.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Converter\\\\CsvConverter\\:\\:encode\\(\\) has parameter \\$array with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Converter/CsvConverter.php
@@ -1152,11 +1137,6 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method object\\:\\:getDefaultFieldsName\\(\\)\\.$#"
-			count: 1
-			path: Controllers/Backend/Shopware_Controllers_Backend_SwagImportExportProfile.php
-
-		-
-			message: "#^Call to static method createFromGlobals\\(\\) on an unknown class SwagImportExport\\\\Controllers\\\\Backend\\\\Request\\.$#"
 			count: 1
 			path: Controllers/Backend/Shopware_Controllers_Backend_SwagImportExportProfile.php
 

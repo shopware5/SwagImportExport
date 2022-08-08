@@ -132,9 +132,9 @@ class DataWorkflow
         }
 
         if ($session->getState() === Session::SESSION_NEW) {
-            $totalCount = $fileReader->getTotalCount($request->inputFileName);
+            $totalCount = $fileReader->getTotalCount($request->inputFile);
             $session->setTotalCount($totalCount);
-            $this->sessionService->startImportSession($request, $request->profileEntity, $session, \filesize($request->inputFileName));
+            $this->sessionService->startImportSession($request, $request->profileEntity, $session, \filesize($request->inputFile));
         }
 
         if ($session->getState() === Session::SESSION_ACTIVE) {
@@ -143,7 +143,7 @@ class DataWorkflow
 
             $position = $session->getPosition();
 
-            $records = $fileReader->readRecords($request->inputFileName, $position, $batchSize);
+            $records = $fileReader->readRecords($request->inputFile, $position, $batchSize);
 
             $data = $transformerChain->transformBackward($records);
 
@@ -155,7 +155,7 @@ class DataWorkflow
 
             // writes into database log table
             $profileName = $request->profileEntity->getName();
-            $dataIo->writeLog($request->inputFileName, $profileName);
+            $dataIo->writeLog($request->inputFile, $profileName);
 
             $session->progress($batchSize);
 

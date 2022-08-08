@@ -84,6 +84,8 @@ class ImportCommand extends ShopwareCommand
         }
 
         $this->start($output, $this->profileEntity, $this->filePath, $this->format);
+
+        return 0;
     }
 
     protected function start(OutputInterface $output, Profile $profileModel, string $file, string $format): void
@@ -95,7 +97,7 @@ class ImportCommand extends ShopwareCommand
         $importRequest = new ImportRequest();
         $importRequest->setData([
             'profileEntity' => $profile,
-            'inputFileName' => $file,
+            'inputFile' => $file,
             'format' => $format,
             'username' => 'Commandline',
             'batchSize' => $profileModel->getType() === 'articlesImages' ? 1 : 50,

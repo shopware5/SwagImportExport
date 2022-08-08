@@ -203,6 +203,8 @@ class ExportCommand extends ShopwareCommand
         );
 
         $this->logger->writeToFile($logData);
+
+        return 0;
     }
 
     protected function prepareExportInputValidation(InputInterface $input): void

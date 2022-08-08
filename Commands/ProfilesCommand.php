@@ -60,5 +60,7 @@ class ProfilesCommand extends ShopwareCommand
                 . '</info>'
             );
         }
+
+        return 0;
     }
 }

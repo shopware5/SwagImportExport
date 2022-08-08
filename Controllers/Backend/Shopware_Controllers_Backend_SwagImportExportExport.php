@@ -33,18 +33,22 @@ class Shopware_Controllers_Backend_SwagImportExportExport extends \Shopware_Cont
 
     private \Shopware_Components_Config $config;
 
+    private \Shopware_Components_Auth $auth;
+
     public function __construct(
         ExportService $exportService,
         ProfileFactory $profileFactory,
         SessionService $sessionService,
         UploadPathProvider $uploadPathProvider,
-        \Shopware_Components_Config $config
+        \Shopware_Components_Config $config,
+        \Shopware_Components_Auth $auth
     ) {
         $this->exportService = $exportService;
         $this->profileFactory = $profileFactory;
         $this->sessionService = $sessionService;
         $this->uploadPathProvider = $uploadPathProvider;
         $this->config = $config;
+        $this->auth = $auth;
     }
 
     public function initAcl(): void
@@ -65,6 +69,10 @@ class Shopware_Controllers_Backend_SwagImportExportExport extends \Shopware_Cont
             $offset = $this->Request()->getParam('offset');
         }
 
+        if (!$this->Request()->getParam('profileId')) {
+            throw new \Exception('ProfileId must be set');
+        }
+
         $profile = $this->profileFactory->loadProfile((int) $this->Request()->getParam('profileId'));
 
         $exportRequest = new ExportRequest();
@@ -77,6 +85,21 @@ class Shopware_Controllers_Backend_SwagImportExportExport extends \Shopware_Cont
                 'filter' => [],
                 'limit' => $limit,
                 'offset' => $offset,
+                'username' => $this->auth->getIdentity()->name ?: 'Cli',
+                'category' => $this->Request()->getParam('categories') ? [$this->Request()->getParam('categories')] : null,
+                'batchSize' => $this->config->getByNamespace('SwagImportExport', 'batch-size-export', 1),
+                'productStream' => $this->Request()->getParam('productStreamId') ? [$this->Request()->getParam('productStreamId')] : null,
+                'exportVariants' => $this->Request()->getParam('variants') ? (bool) $this->Request()->getParam('variants') : null,
+                'stockFilter' => $this->Request()->getParam('stockFilter') ? $this->Request()->getParam('stockFilter') : null,
+                'customFilterDirection' => $this->Request()->getParam('customFilterDirection') ? $this->Request()->getParam('customFilterDirection') : null,
+                'customFilterValue' => $this->Request()->getParam('customFilterValue') ? $this->Request()->getParam('customFilterValue') : null,
+                'ordernumberFrom' => $this->Request()->getParam('ordernumberFrom') ? $this->Request()->getParam('ordernumberFrom') : null,
+                'dateFrom' => $this->Request()->getParam('dateFrom') ? $this->Request()->getParam('dateFrom') : null,
+                'dateTo' => $this->Request()->getParam('dateTo') ? $this->Request()->getParam('dateTo') : null,
+                'orderstate' => $this->Request()->getParam('orderstate') ? $this->Request()->getParam('orderstate') : null,
+                'paymentstate' => $this->Request()->getParam('paymentstate') ? $this->Request()->getParam('paymentstate') : null,
+                'customerStreamId' => $this->Request()->getParam('customerStreamId') ? $this->Request()->getParam('customerStreamId') : null,
+                'customerId' => $this->Request()->getParam('customerId') ? $this->Request()->getParam('customerId') : null,
             ]
         );
 
@@ -147,6 +170,7 @@ class Shopware_Controllers_Backend_SwagImportExportExport extends \Shopware_Cont
                 'filter' => [],
                 'limit' => $limit,
                 'offset' => $offset,
+                'username' => $this->auth->getIdentity()->name ?: 'Cli',
                 'category' => $this->Request()->getParam('categories') ? [$this->Request()->getParam('categories')] : null,
                 'batchSize' => $this->config->getByNamespace('SwagImportExport', 'batch-size-export', 1),
                 'productStream' => $this->Request()->getParam('productStreamId') ? [$this->Request()->getParam('productStreamId')] : null,
@@ -180,6 +204,7 @@ class Shopware_Controllers_Backend_SwagImportExportExport extends \Shopware_Cont
         $this->View()->assign(['success' => true, 'data' => [
             'position' => $lastPosition,
             'fileName' => $fileName,
+            'profileId' => $this->Request()->getParam('profileId'),
         ]]);
     }
 }

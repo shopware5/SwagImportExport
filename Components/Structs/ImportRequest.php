@@ -18,9 +18,9 @@ class ImportRequest
 
     public Profile $profileEntity;
 
-    public string $inputFileName;
+    public string $inputFile;
 
-    public ?string $username = 'Cli';
+    public string $username = 'Cli';
 
     public ?int $sessionId = null;
 

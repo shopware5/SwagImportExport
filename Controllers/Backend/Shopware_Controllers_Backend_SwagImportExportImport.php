@@ -14,6 +14,7 @@ use SwagImportExport\Components\Service\ImportService;
 use SwagImportExport\Components\Session\SessionService;
 use SwagImportExport\Components\Structs\ImportRequest;
 use SwagImportExport\Components\UploadPathProvider;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Shopware ImportExport Plugin
@@ -30,16 +31,20 @@ class Shopware_Controllers_Backend_SwagImportExportImport extends \Shopware_Cont
 
     private SessionService $sessionService;
 
+    private \Shopware_Components_Auth $auth;
+
     public function __construct(
         UploadPathProvider $uploadPathProvider,
         ImportService $importService,
         ProfileFactory $profileFactory,
-        SessionService $sessionService
+        SessionService $sessionService,
+        \Shopware_Components_Auth $auth
     ) {
         $this->uploadPathProvider = $uploadPathProvider;
         $this->importService = $importService;
         $this->profileFactory = $profileFactory;
         $this->sessionService = $sessionService;
+        $this->auth = $auth;
     }
 
     public function initAcl(): void
@@ -48,23 +53,31 @@ class Shopware_Controllers_Backend_SwagImportExportImport extends \Shopware_Cont
         $this->addAclPermission('import', 'import', 'Insuficient Permissions (import)');
     }
 
-    public function prepareImportAction(): void
+    public function prepareImportAction(Request $request): void
     {
-        $request = $this->Request();
-        $profile = $this->profileFactory->loadProfile((int) $request->getParam('profileId'));
+        if (!$request->get('profileId')) {
+            throw new \Exception('ProfileId must be set');
+        }
 
-        $importFile = $this->uploadPathProvider->getRealPath($request->getParam('importFile'));
+        if (!$request->get('importFile')) {
+            throw new \Exception('importFile must be set');
+        }
+
+        $profile = $this->profileFactory->loadProfile((int) $request->get('profileId'));
+
+        $importFile = $this->uploadPathProvider->getRealPath($request->get('importFile'));
 
         $importRequest = new ImportRequest();
         $importRequest->setData([
-            'sessionId' => $request->getParam('sessionId') ? (int) $request->getParam('sessionId') : null,
+            'sessionId' => $request->get('sessionId') ? (int) $request->get('sessionId') : null,
             'profileEntity' => $profile,
             'type' => 'import',
-            'inputFileName' => $this->uploadPathProvider->getFileNameFromPath($importFile),
+            'inputFile' => $importFile,
             'format' => $this->uploadPathProvider->getFileExtension($importFile),
+            'username' => $this->auth->getIdentity()->name ?: 'Cli',
         ]);
 
-        if (empty($importRequest->inputFileName)) {
+        if (empty($importRequest->inputFile)) {
             $this->View()->assign(['success' => false, 'msg' => 'No valid file']);
 
             return;
@@ -103,8 +116,9 @@ class Shopware_Controllers_Backend_SwagImportExportImport extends \Shopware_Cont
                 'inputFileName' => $inputFile,
                 'sessionId' => $request->getParam('sessionId') ? (int) $request->getParam('sessionId') : null,
                 'limit' => [],
-                'format' => \pathinfo($inputFile, \PATHINFO_EXTENSION),
+                'format' => $this->uploadPathProvider->getFileExtension($inputFile),
                 'batchSize' => $profile->getType() === 'articlesImages' ? 1 : (int) $config->getByNamespace('SwagImportExport', 'batch-size-import', 1000),
+                'username' => $this->auth->getIdentity()->name ?: 'Cli',
         ]
         );
 
@@ -118,7 +132,7 @@ class Shopware_Controllers_Backend_SwagImportExportImport extends \Shopware_Cont
                 }
             }
             $resultData = [
-                'importFile' => $importRequest->inputFileName,
+                'importFile' => $importRequest->inputFile,
                 'position' => $lastPosition,
             ];
 

@@ -67,7 +67,7 @@ class SessionService
     {
         $sessionData = [
             'type' => 'import',
-            'fileName' => $importRequest->inputFileName,
+            'fileName' => $this->uploadPathProvider->getFileNameFromPath($importRequest->inputFile),
             'format' => $importRequest->format,
             'serializedIds' => '',
             'username' => $importRequest->username,

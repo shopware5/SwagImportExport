@@ -28,6 +28,7 @@
         <argument type="service" id="SwagImportExport\Components\Session\SessionService"/>
         <argument type="service" id="SwagImportExport\Components\UploadPathProvider"/>
         <argument type="service" id="config"/>
+        <argument type="service" id="auth"/>
 
         <tag name="shopware.controller" module="backend" controller="SwagImportExportExport"/>
     </service>
@@ -37,9 +38,7 @@
         <argument type="service" id="SwagImportExport\Components\Service\ImportService"/>
         <argument type="service" id="SwagImportExport\Components\Factories\ProfileFactory"/>
         <argument type="service" id="SwagImportExport\Components\Session\SessionService"/>
-
-        <argument type="service" id="SwagImportExport\Components\Factories\ProfileFactory"/>
-        <argument type="service" id="SwagImportExport\Components\Session\SessionService"/>
+        <argument type="service" id="auth"/>
 
         <tag name="shopware.controller" module="backend" controller="SwagImportExportImport"/>
     </service>

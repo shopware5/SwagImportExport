@@ -65,7 +65,7 @@ class ImportService implements ImportServiceInterface
             $fileReader->setTree($tree);
         }
 
-        return $fileReader->getTotalCount($request->inputFileName);
+        return $fileReader->getTotalCount($request->inputFile);
     }
 
     public function import(ImportRequest $request, Session $session): \Generator
@@ -87,7 +87,7 @@ class ImportService implements ImportServiceInterface
         $profilesMapper = ['articles', 'articlesImages'];
 
         // loops the unprocessed data
-        $pathInfo = \pathinfo($request->inputFileName);
+        $pathInfo = \pathinfo($request->inputFile);
         foreach ($profilesMapper as $profileName) {
             $tmpFile = $this->uploadPathProvider->getRealPath(
                 $pathInfo['basename'] . '-' . $profileName . '-swag.csv'
@@ -105,7 +105,7 @@ class ImportService implements ImportServiceInterface
             $subRequest->setData(
                 [
                     'profileEntity' => $profile,
-                    'inputFileName' => $tmpFile,
+                    'inputFile' => $tmpFile,
                     'format' => 'csv',
                     'username' => $request->username,
                     'batchSize' => $profile->getEntity()->getType() === 'articlesImages' ? 1 : $request->batchSize,
@@ -127,7 +127,7 @@ class ImportService implements ImportServiceInterface
                 if (!empty($resultData['unprocessedData'])) {
                     foreach ($resultData['unprocessedData'] as $profileName => $value) {
                         $outputFile = $this->uploadPathProvider->getRealPath(
-                            $this->uploadPathProvider->getFileNameFromPath($request->inputFileName) . '-' . $profileName . '-swag.csv'
+                            $this->uploadPathProvider->getFileNameFromPath($request->inputFile) . '-' . $profileName . '-swag.csv'
                         );
 
                         $this->afterImport($resultData['unprocessedData'], $profileName, $outputFile, $sessionState);
@@ -143,7 +143,7 @@ class ImportService implements ImportServiceInterface
 
                 $this->logger->logProcessing(
                     'false',
-                    $request->inputFileName,
+                    $request->inputFile,
                     $request->profileEntity->getName(),
                     $message,
                     'false',
@@ -152,7 +152,7 @@ class ImportService implements ImportServiceInterface
 
                 yield [$request->profileEntity->getName(), $resultData['position']];
             } catch (\Exception $e) {
-                $this->logger->logProcessing('true', $request->inputFileName, $request->profileEntity->getName(), $e->getMessage(), 'false', $session);
+                $this->logger->logProcessing('true', $request->inputFile, $request->profileEntity->getName(), $e->getMessage(), 'false', $session);
 
                 throw $e;
             }

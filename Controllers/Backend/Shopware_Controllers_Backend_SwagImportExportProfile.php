@@ -19,6 +19,7 @@ use SwagImportExport\Components\Utils\TreeHelper;
 use SwagImportExport\Models\Profile;
 use SwagImportExport\Models\ProfileRepository;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\Request;
 
 class Shopware_Controllers_Backend_SwagImportExportProfile extends \Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
@@ -287,17 +288,18 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends \Shopware_Con
         ]);
     }
 
-    public function exportProfileAction(): void
+    public function exportProfileAction(Request $request): void
     {
-        $profileId = $this->Request()->get('profileId');
-
-        if (empty($profileId)) {
+        if (!$request->get('profileId')) {
             $this->View()->assign([
                 'success' => false,
+                'msg' => 'No profile provided',
             ]);
 
             return;
         }
+
+        $profileId = (int) $request->get('profileId');
 
         try {
             $exportDataStruct = $this->profileService->exportProfile($profileId);

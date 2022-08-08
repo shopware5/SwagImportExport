@@ -225,10 +225,14 @@ class TreeHelper
             }
 
             if (isset($child['defaultValue'])) {
-                $type = DataManager::getFieldType($child['swColumn'], $defaultFields);
-                $defaultValue = DataManager::castDefaultValue($child['defaultValue'], $type);
+                try {
+                    $type = DataManager::getFieldType($child['swColumn'], $defaultFields);
+                    $defaultValue = DataManager::castDefaultValue($child['defaultValue'], $type);
 
-                $node['defaultValue'] = $defaultValue;
+                    $node['defaultValue'] = $defaultValue;
+                } catch (\Exception $exception) {
+                    // nth
+                }
             } else {
                 unset($node['defaultValue']);
             }

@@ -41,8 +41,8 @@ class Shopware_Controllers_Backend_SwagImportExportConversion extends \Shopware_
         $query = $expressionRepository->getExpressionsListQuery(
             $filter,
             $this->Request()->getParam('sort', []),
-            $this->Request()->getParam('limit'),
-            $this->Request()->getParam('start')
+            $this->Request()->getParam('limit') ? (int) $this->Request()->getParam('limit') : null,
+            $this->Request()->getParam('start') ? (int) $this->Request()->getParam('start') : null,
         )->getQuery();
 
         $count = $manager->getQueryCount($query);

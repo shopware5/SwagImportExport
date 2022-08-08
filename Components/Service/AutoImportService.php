@@ -153,7 +153,7 @@ class AutoImportService implements AutoImportServiceInterface
         $importRequest->setData(
             [
                 'profileEntity' => $profileModel,
-                'inputFileName' => $inputFile,
+                'inputFile' => $inputFile,
                 'format' => $format,
                 'username' => 'Cron',
             ]

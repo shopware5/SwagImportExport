@@ -15,7 +15,6 @@ class FileNameGenerator
 {
     public static function generateFileName(string $operation, string $format, Profile $profile): string
     {
-        $operationType = $operation;
         $fileFormat = $format;
 
         $adapterType = $profile->getType();
