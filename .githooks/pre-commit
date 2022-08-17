@@ -1,5 +1,11 @@
 #!/usr/bin/env php
 <?php
+/**
+ * (c) shopware AG <info@shopware.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 /**
  * .git/hooks/pre-commit
@@ -18,7 +24,7 @@ class PreCommitChecks
         $this->writeln();
 
         if ($this->isRebase()) {
-            echo 'Not on branch' . PHP_EOL;
+            echo 'Not on branch' . \PHP_EOL;
 
             return 0;
         }
@@ -38,14 +44,14 @@ class PreCommitChecks
     private function writeln(string $output = '', int $level = 1): void
     {
         $this->write($output, $level);
-        echo PHP_EOL;
+        echo \PHP_EOL;
     }
 
     private function write(string $output = '', int $level = 1): void
     {
         $spaces = $level * 3;
 
-        echo str_pad($output, strlen($output) + $spaces, ' ', STR_PAD_LEFT);
+        echo str_pad($output, \strlen($output) + $spaces, ' ', \STR_PAD_LEFT);
     }
 
     private function isRebase(): bool
@@ -57,7 +63,6 @@ class PreCommitChecks
     }
 
     /**
-     * @param string $extension
      * @return string[]
      */
     private function getCommittedFileList(string $extension = 'php'): array
@@ -97,11 +102,11 @@ class PreCommitChecks
         }
 
         foreach ($fileList as $file) {
-            exec('./../../../../../../vendor/bin/php-cs-fixer fix -v --no-ansi --dry-run ' . escapeshellarg($file) . ' 2>&1', $output, $return);
+            exec('./../../../vendor/bin/php-cs-fixer fix -v --no-ansi --dry-run ' . escapeshellarg($file) . ' 2>&1', $output, $return);
 
             if ($return !== 0) {
                 $this->writeln('- ' . preg_replace('#^(\s+)?\d\)\s#', '', $output[3]), 2);
-                $fixes[] = './../../../../../../vendor/bin/php-cs-fixer fix -v ' . escapeshellarg($file);
+                $fixes[] = './../../../vendor/bin/php-cs-fixer fix -v ' . escapeshellarg($file);
                 $this->error = true;
             }
         }
@@ -134,7 +139,7 @@ class PreCommitChecks
             return;
         }
 
-        exec('./../../../../../../vendor/bin/phpstan analyse .', $output, $return);
+        exec('./../../../vendor/bin/phpstan analyse .', $output, $return);
         if ($return !== 0) {
             $this->error = true;
             $this->writeln('> PHPStan errors found');
@@ -160,19 +165,19 @@ class PreCommitChecks
         $this->writeln();
     }
 
-    public function isPHPCSFixerAvailable(): bool
+    private function isPHPCSFixerAvailable(): bool
     {
-        return is_executable('./../../../../../../vendor/bin/php-cs-fixer');
+        return is_executable('./../../../vendor/bin/php-cs-fixer');
     }
 
     private function isPHPStanAvailable(): bool
     {
-        return is_executable('./../../../../../../vendor/bin/phpstan');
+        return is_executable('./../../../vendor/bin/phpstan');
     }
 
-    public function isESLintAvailable(): bool
+    private function isESLintAvailable(): bool
     {
-        return is_executable('./../../../../../../themes/node_modules/eslint/bin/eslint.js');
+        return is_executable('./../../../themes/node_modules/eslint/bin/eslint.js');
     }
 
     private function checkESLint(array $fileList = []): void
@@ -180,9 +185,9 @@ class PreCommitChecks
         $output = [];
         $return = 0;
         exec(
-            './../../../../../../themes/node_modules/eslint/bin/eslint.js ' .
+            './../../../themes/node_modules/eslint/bin/eslint.js ' .
             '--ignore-path .eslintignore ' .
-            '-c ./../../../../../../themes/.eslintrc.js ' .
+            '-c ./../../../themes/.eslintrc.js ' .
             '--global "Ext" ' .
             implode(' ', $fileList),
             $output,
@@ -199,9 +204,9 @@ class PreCommitChecks
 
             $this->writeln('Help:', 2);
             $this->writeln(
-                './../../../../../../themes/node_modules/eslint/bin/eslint.js ' .
+                './../../../themes/node_modules/eslint/bin/eslint.js ' .
                 '--fix --ignore-path .eslintignore ' .
-                '-c ./../../../../../../themes/.eslintrc.js ' .
+                '-c ./../../../themes/.eslintrc.js ' .
                 '--global "Ext" ' .
                 implode(' ', $fileList),
                 3
