@@ -41,12 +41,15 @@ class ProductImportTest extends TestCase
             'importFile' => 'ArticleImport.xml',
         ]));
 
-        static::assertEquals($view->getAssign('count'), 2);
+        static::assertEquals(2, $view->getAssign('count'));
     }
 
     private function getImportController(): Shopware_Controllers_Backend_SwagImportExportImport
     {
-        return $this->getContainer()->get(Shopware_Controllers_Backend_SwagImportExportImport::class);
+        $controller = $this->getContainer()->get(Shopware_Controllers_Backend_SwagImportExportImport::class);
+        $controller->setContainer($this->getContainer());
+
+        return $controller;
     }
 
     private function getUploadFileProvider(): UploadPathProvider

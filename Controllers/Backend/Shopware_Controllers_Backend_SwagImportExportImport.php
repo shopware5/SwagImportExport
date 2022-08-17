@@ -56,26 +56,14 @@ class Shopware_Controllers_Backend_SwagImportExportImport extends \Shopware_Cont
     public function prepareImportAction(Request $request): void
     {
         if (!$request->get('profileId')) {
-            throw new \Exception('ProfileId must be set');
+            throw new \UnexpectedValueException('ProfileId must be set');
         }
 
         if (!$request->get('importFile')) {
-            throw new \Exception('importFile must be set');
+            throw new \UnexpectedValueException('importFile must be set');
         }
 
-        $profile = $this->profileFactory->loadProfile((int) $request->get('profileId'));
-
-        $importFile = $this->uploadPathProvider->getRealPath($request->get('importFile'));
-
-        $importRequest = new ImportRequest();
-        $importRequest->setData([
-            'sessionId' => $request->get('sessionId') ? (int) $request->get('sessionId') : null,
-            'profileEntity' => $profile,
-            'type' => 'import',
-            'inputFile' => $importFile,
-            'format' => $this->uploadPathProvider->getFileExtension($importFile),
-            'username' => $this->auth->getIdentity()->name ?: 'Cli',
-        ]);
+        $importRequest = $this->getImportRequest($request);
 
         if (empty($importRequest->inputFile)) {
             $this->View()->assign(['success' => false, 'msg' => 'No valid file']);
@@ -98,29 +86,9 @@ class Shopware_Controllers_Backend_SwagImportExportImport extends \Shopware_Cont
         ]);
     }
 
-    public function importAction(): void
+    public function importAction(Request $request): void
     {
-        $request = $this->Request();
-        $inputFile = $this->uploadPathProvider->getRealPath($request->getParam('importFile'));
-
-        $importRequest = new ImportRequest();
-
-        $config = $this->get('config');
-
-        $profile = $this->profileFactory->loadProfile((int) $request->getParam('profileId'));
-
-        $importRequest->setData(
-            [
-                'type' => 'import',
-                'profileEntity' => $profile,
-                'inputFileName' => $inputFile,
-                'sessionId' => $request->getParam('sessionId') ? (int) $request->getParam('sessionId') : null,
-                'limit' => [],
-                'format' => $this->uploadPathProvider->getFileExtension($inputFile),
-                'batchSize' => $profile->getType() === 'articlesImages' ? 1 : (int) $config->getByNamespace('SwagImportExport', 'batch-size-import', 1000),
-                'username' => $this->auth->getIdentity()->name ?: 'Cli',
-        ]
-        );
+        $importRequest = $this->getImportRequest($request);
 
         $session = $this->sessionService->createSession();
 
@@ -146,5 +114,25 @@ class Shopware_Controllers_Backend_SwagImportExportImport extends \Shopware_Cont
                 'msg' => $e->getMessage(),
             ]);
         }
+    }
+
+    private function getImportRequest(Request $request): ImportRequest
+    {
+        $config = $this->get('config');
+        $inputFile = $this->uploadPathProvider->getRealPath($request->get('importFile'));
+        $profile = $this->profileFactory->loadProfile((int) $request->get('profileId'));
+
+        $importRequest = new ImportRequest();
+        $importRequest->setData([
+            'sessionId' => $request->get('sessionId') ? (int) $request->get('sessionId') : null,
+            'profileEntity' => $profile,
+            'type' => 'import',
+            'inputFile' => $inputFile,
+            'format' => $this->uploadPathProvider->getFileExtension($inputFile),
+            'username' => $this->auth->getIdentity()->name ?: 'Cli',
+            'batchSize' => $profile->getType() === 'articlesImages' ? 1 : (int) $config->getByNamespace('SwagImportExport', 'batch-size-import', 1000),
+        ]);
+
+        return $importRequest;
     }
 }

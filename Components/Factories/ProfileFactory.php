@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Components\Factories;
 
+use Shopware\Components\Model\Exception\ModelNotFoundException;
 use Shopware\Components\Model\ModelManager;
 use SwagImportExport\Components\Profile\Profile;
 use SwagImportExport\Components\Utils\TreeHelper;
@@ -20,21 +21,18 @@ class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
 
     private \Enlight_Event_EventManager $eventManager;
 
-    public function __construct(
-        ModelManager $modelManager,
-        \Enlight_Event_EventManager $eventManager
-    ) {
+    public function __construct(ModelManager $modelManager, \Enlight_Event_EventManager $eventManager)
+    {
         $this->modelManager = $modelManager;
         $this->eventManager = $eventManager;
     }
 
     public function loadProfile(int $profileId): Profile
     {
-        $profileRepository = $this->modelManager->getRepository(ProfileEntity::class);
-        $profileEntity = $profileRepository->findOneBy(['id' => $profileId]);
+        $profileEntity = $this->modelManager->getRepository(ProfileEntity::class)->findOneBy(['id' => $profileId]);
 
         if (!$profileEntity instanceof ProfileEntity) {
-            throw new \Exception('Profile does not exists');
+            throw new ModelNotFoundException(ProfileEntity::class, $profileId);
         }
 
         return new Profile($profileEntity);
@@ -74,13 +72,13 @@ class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
         }
 
         if (!isset($data['name'])) {
-            throw new \Exception('Profile name is required');
+            throw new \RuntimeException('Profile name is required');
         }
         if (!isset($data['type'])) {
-            throw new \Exception('Profile type is required');
+            throw new \RuntimeException('Profile type is required');
         }
 
-        if (isset($data['hidden']) && $data['hidden']) {
+        if (!empty($data['hidden'])) {
             $tree = TreeHelper::getTreeByHiddenProfileType($data['type']);
         } elseif (isset($data['baseProfile'])) {
             $tree = $this->getDefaultTreeByBaseProfile($data['baseProfile']);
