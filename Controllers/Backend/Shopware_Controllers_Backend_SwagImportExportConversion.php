@@ -9,8 +9,8 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Controllers\Backend;
 
+use Shopware\Components\Model\Exception\ModelNotFoundException;
 use SwagImportExport\Models\Expression;
-use SwagImportExport\Models\ExpressionRepository;
 use SwagImportExport\Models\Profile;
 
 /**
@@ -20,10 +20,10 @@ class Shopware_Controllers_Backend_SwagImportExportConversion extends \Shopware_
 {
     public function initAcl(): void
     {
-        $this->addAclPermission('getConversions', 'export', 'Insuficient Permissions (getConversions)');
-        $this->addAclPermission('createConversion', 'export', 'Insuficient Permissions (createConversion)');
-        $this->addAclPermission('updateConversion', 'export', 'Insuficient Permissions (updateConversion)');
-        $this->addAclPermission('deleteConversion', 'export', 'Insuficient Permissions (deleteConversion)');
+        $this->addAclPermission('getConversions', 'export', 'Insufficient Permissions (getConversions)');
+        $this->addAclPermission('createConversion', 'export', 'Insufficient Permissions (createConversion)');
+        $this->addAclPermission('updateConversion', 'export', 'Insufficient Permissions (updateConversion)');
+        $this->addAclPermission('deleteConversion', 'export', 'Insufficient Permissions (deleteConversion)');
     }
 
     public function getConversionsAction(): void
@@ -33,7 +33,6 @@ class Shopware_Controllers_Backend_SwagImportExportConversion extends \Shopware_
 
         $manager = $this->getModelManager();
 
-        /** @var ExpressionRepository $expressionRepository */
         $expressionRepository = $manager->getRepository(Expression::class);
 
         $filter = \array_merge(['p.id' => $profileId], $filter);
@@ -60,8 +59,10 @@ class Shopware_Controllers_Backend_SwagImportExportConversion extends \Shopware_
         $data = $this->Request()->getParam('data', 1);
 
         $manager = $this->getModelManager();
-        $profileRepository = $manager->getRepository(Profile::class);
-        $profileEntity = $profileRepository->findOneBy(['id' => $profileId]);
+        $profileEntity = $manager->getRepository(Profile::class)->findOneBy(['id' => $profileId]);
+        if (!$profileEntity instanceof Profile) {
+            throw new ModelNotFoundException(Profile::class, $profileId);
+        }
 
         $expressionEntity = new Expression();
 

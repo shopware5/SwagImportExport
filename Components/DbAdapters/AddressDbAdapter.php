@@ -226,7 +226,7 @@ class AddressDbAdapter implements DataDbAdapter, \Enlight_Hook
             return $addressModel;
         }
 
-        if ($addressModel->getCountry()->getId() !== $addressRecord['countryID'] && $addressRecord['countryID'] > 0) {
+        if ($addressModel->getCountry() && $addressModel->getCountry()->getId() !== $addressRecord['countryID'] && $addressRecord['countryID'] > 0) {
             $addressModel->setCountry($this->modelManager->find(Country::class, $addressRecord['countryID']));
         }
 
@@ -238,9 +238,7 @@ class AddressDbAdapter implements DataDbAdapter, \Enlight_Hook
      */
     private function findCustomerByEmailAndNumber(array $addressRecord): ?Customer
     {
-        $customerRepository = $this->modelManager->getRepository(Customer::class);
-
-        return $customerRepository->findOneBy([
+        return $this->modelManager->getRepository(Customer::class)->findOneBy([
             'number' => $addressRecord['customernumber'],
             'email' => $addressRecord['email'],
         ]);

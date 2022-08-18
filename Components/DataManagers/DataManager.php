@@ -17,6 +17,11 @@ abstract class DataManager
     }
 
     /**
+     * @return array<string, array<string>>
+     */
+    abstract public function getDefaultFields(): array;
+
+    /**
      * Return fields which should be set by default
      *
      * @param array<string, array<string>> $defaultFields Contains default fields name and types
@@ -46,7 +51,7 @@ abstract class DataManager
             }
         }
 
-        throw new \Exception('Field not found');
+        throw new \RuntimeException('Field not found');
     }
 
     /**

@@ -23,7 +23,6 @@ use Shopware\Models\Article\Configurator\Group;
 use Shopware\Models\Article\Configurator\Option;
 use Shopware\Models\Article\Detail;
 use Shopware\Models\Article\Image;
-use Shopware\Models\Article\Repository;
 use Shopware\Models\Attribute\ArticleImage as ProductImageAttribute;
 use Shopware\Models\Media\Album;
 use Shopware\Models\Media\Media;
@@ -35,6 +34,7 @@ use SwagImportExport\Components\Service\UnderscoreToCamelCaseServiceInterface;
 use SwagImportExport\Components\Utils\SnippetsHelper;
 use SwagImportExport\Components\Validators\ProductImageValidator;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\Request;
 
 class ProductsImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
 {
@@ -201,6 +201,10 @@ class ProductsImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
      */
     public function getDefaultColumns(): array
     {
+        if (!$this->request instanceof \Enlight_Controller_Request_Request) {
+            throw new \RuntimeException(sprintf('Request needs to be set in order to use %s', __METHOD__));
+        }
+
         $path = $this->request->getScheme() . '://' . $this->request->getHttpHost() . $this->request->getBasePath() . '/media/image/';
 
         $columns = [
@@ -248,11 +252,10 @@ class ProductsImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
                 $record = $this->validator->filterEmptyString($record);
                 $this->validator->checkRequiredFields($record);
 
-                /** @var Detail $productDetailModel */
                 $productDetailModel = $this->manager->getRepository(Detail::class)->findOneBy(['number' => $record['ordernumber']]);
-                if (!$productDetailModel) {
+                if (!$productDetailModel instanceof Detail) {
                     $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/articlesImages/article_not_found', 'Article with number %s does not exists');
+                        ->get('adapters/articlesImages/article_not_found', 'Article with number %s does not exist');
                     throw new AdapterException(\sprintf($message, $record['ordernumber']));
                 }
 
@@ -499,9 +502,7 @@ class ProductsImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
      */
     protected function setImageMappings(array $relationGroups, int $imageId): void
     {
-        /** @var Repository $articleRepository */
-        $articleRepository = $this->manager->getRepository(Article::class);
-        $query = $articleRepository->getProductImageDataQuery($imageId);
+        $query = $this->manager->getRepository(Article::class)->getArticleImageDataQuery($imageId);
         $image = $query->getOneOrNullResult(AbstractQuery::HYDRATE_OBJECT);
         $imageData = $query->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
 
@@ -622,7 +623,7 @@ class ProductsImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
             \fclose($get_handle);
         } else {
             try {
-                $contents = $this->httpClient->get($url)->getBody()->getContents();
+                $contents = $this->httpClient->request(Request::METHOD_GET, $url)->getBody()->getContents();
             } catch (\Throwable $exception) {
                 $message = SnippetsHelper::getNamespace()
                     ->get('adapters/articlesImages/could_not_open_url', 'Could not open %s for reading');

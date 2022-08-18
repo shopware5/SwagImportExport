@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace SwagImportExport\Controllers\Backend;
 
 use SwagImportExport\Components\Factories\ProfileFactory;
-use SwagImportExport\Components\Service\ImportService;
+use SwagImportExport\Components\Service\ImportServiceInterface;
 use SwagImportExport\Components\Session\SessionService;
 use SwagImportExport\Components\Structs\ImportRequest;
 use SwagImportExport\Components\UploadPathProvider;
@@ -25,7 +25,7 @@ class Shopware_Controllers_Backend_SwagImportExportImport extends \Shopware_Cont
 {
     private UploadPathProvider $uploadPathProvider;
 
-    private ImportService $importService;
+    private ImportServiceInterface $importService;
 
     private ProfileFactory $profileFactory;
 
@@ -35,7 +35,7 @@ class Shopware_Controllers_Backend_SwagImportExportImport extends \Shopware_Cont
 
     public function __construct(
         UploadPathProvider $uploadPathProvider,
-        ImportService $importService,
+        ImportServiceInterface $importService,
         ProfileFactory $profileFactory,
         SessionService $sessionService,
         \Shopware_Components_Auth $auth
@@ -49,8 +49,8 @@ class Shopware_Controllers_Backend_SwagImportExportImport extends \Shopware_Cont
 
     public function initAcl(): void
     {
-        $this->addAclPermission('prepareImport', 'import', 'Insuficient Permissions (prepareImport)');
-        $this->addAclPermission('import', 'import', 'Insuficient Permissions (import)');
+        $this->addAclPermission('prepareImport', 'import', 'Insufficient Permissions (prepareImport)');
+        $this->addAclPermission('import', 'import', 'Insufficient Permissions (import)');
     }
 
     public function prepareImportAction(Request $request): void

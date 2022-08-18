@@ -11,7 +11,6 @@ namespace SwagImportExport\Components\Service;
 
 use Shopware\Components\Model\ModelManager;
 use SwagImportExport\Components\Factories\ProfileFactory;
-use SwagImportExport\Components\FileIO\FileReader;
 use SwagImportExport\Components\Logger\Logger;
 use SwagImportExport\Components\Providers\FileIOProvider;
 use SwagImportExport\Components\Session\Session;
@@ -57,7 +56,6 @@ class ImportService implements ImportServiceInterface
     public function prepareImport(ImportRequest $request): int
     {
         // we create the file reader that will read the result file
-        /** @var FileReader $fileReader */
         $fileReader = $this->fileIOFactory->getFileReader($request->format);
 
         if ($request->format === 'xml') {

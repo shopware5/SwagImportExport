@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Components\Transformers;
 
-use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Customer\Group;
 use Shopware\Models\Shop\Shop;
@@ -1380,7 +1379,6 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      */
     protected function getAttributeColumns(): array
     {
-        /** @var AbstractSchemaManager $schemaManager */
         $schemaManager = $this->modelManager->getConnection()->getSchemaManager();
 
         return \array_keys($schemaManager->listTableColumns('s_articles_attributes'));

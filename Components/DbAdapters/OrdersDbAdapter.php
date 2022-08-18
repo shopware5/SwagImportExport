@@ -179,7 +179,6 @@ class OrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
                 $this->validator->validate($record, OrderValidator::$mapper);
 
                 if (isset($record['orderDetailId']) && $record['orderDetailId']) {
-                    /** @var Detail $orderDetailModel */
                     $orderDetailModel = $orderRepository->find($record['orderDetailId']);
                 } else {
                     $orderDetailModel = $orderRepository->findOneBy(['number' => $record['number']]);

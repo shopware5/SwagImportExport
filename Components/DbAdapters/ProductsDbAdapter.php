@@ -19,6 +19,7 @@ use Shopware\Bundle\SearchBundle\ProductNumberSearchInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 use Shopware\Components\ContainerAwareEventManager;
+use Shopware\Components\Model\Exception\ModelNotFoundException;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\ProductStream\Repository;
 use Shopware\Models\Article\Article;
@@ -165,8 +166,10 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
         }
 
         if ($filter[self::CATEGORIES_FILTER_KEY]) {
-            /** @var Category $category */
             $category = $this->modelManager->find(Category::class, $filter['categories'][0]);
+            if (!$category instanceof Category) {
+                throw new ModelNotFoundException(Category::class, $filter['categories'][0]);
+            }
 
             $categories = [];
             $this->collectCategoryIds($category, $categories);

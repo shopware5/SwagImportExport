@@ -44,9 +44,6 @@ class CustomerDataManager extends DataManager implements \Enlight_Hook
         return $managerType === DataDbAdapter::CUSTOMER_ADAPTER;
     }
 
-    /**
-     * @return array<string, array<string>>
-     */
     public function getDefaultFields(): array
     {
         return CustomerDataType::$defaultFieldsForCreate;

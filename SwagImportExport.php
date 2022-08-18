@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace SwagImportExport;
 
-use Shopware\Components\CacheManager;
 use Shopware\Components\Plugin;
 use Shopware\Components\Plugin\Context\ActivateContext;
 use Shopware\Components\Plugin\Context\DeactivateContext;
@@ -39,7 +38,6 @@ class SwagImportExport extends Plugin
      */
     public function install(InstallContext $context): void
     {
-        /** @var CacheManager $cacheManager */
         $cacheManager = $this->container->get('shopware.cache_manager');
         $cacheManager->clearProxyCache();
 
@@ -53,7 +51,6 @@ class SwagImportExport extends Plugin
      */
     public function update(UpdateContext $context): void
     {
-        /** @var CacheManager $cacheManager */
         $cacheManager = $this->container->get('shopware.cache_manager');
         $cacheManager->clearProxyCache();
 

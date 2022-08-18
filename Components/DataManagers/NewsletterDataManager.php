@@ -39,9 +39,6 @@ class NewsletterDataManager extends DataManager implements \Enlight_Hook
         return $managerType === DataDbAdapter::NEWSLETTER_RECIPIENTS_ADAPTER;
     }
 
-    /**
-     * @return array<string, array<string>>
-     */
     public function getDefaultFields(): array
     {
         return NewsletterDataType::$defaultFieldsForCreate;

@@ -223,7 +223,7 @@ class TranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
         if (empty($records['default'])) {
             $message = SnippetsHelper::getNamespace()
                 ->get('adapters/translations/no_records', 'No translation records were found.');
-            throw new \Exception($message);
+            throw new \RuntimeException($message);
         }
 
         $records = $this->eventManager->filter(
@@ -284,6 +284,10 @@ class TranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
 
                 if ($record['objectType'] === 'configuratorgroup') {
                     $data['description'] = $record['description'];
+                }
+
+                if (!method_exists($element, 'getId')) {
+                    throw new \RuntimeException(sprintf('%s has no getter for ID', \get_class($element)));
                 }
 
                 $this->translation->write($shop->getId(), $record['objectType'], $element->getId(), $data);

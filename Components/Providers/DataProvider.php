@@ -63,10 +63,8 @@ class DataProvider implements \Enlight_Hook
 
     /**
      * Return necessary data manager
-     *
-     * @return object|DataManager|null
      */
-    public function createDataManager(string $managerType): ?object
+    public function createDataManager(string $managerType): ?DataManager
     {
         foreach ($this->dataManagers as $manager) {
             if ($manager->supports($managerType)) {

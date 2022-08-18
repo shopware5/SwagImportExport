@@ -34,9 +34,6 @@ class ProductDataManager extends DataManager implements \Enlight_Hook
         return $managerType === DataDbAdapter::PRODUCT_ADAPTER;
     }
 
-    /**
-     * @return array<string, array<string>>
-     */
     public function getDefaultFields(): array
     {
         return ProductDataType::$defaultFieldsForCreate;

@@ -11,7 +11,6 @@ namespace SwagImportExport\Controllers\Backend;
 
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Models\Plugin\Plugin;
-use SwagImportExport\Components\Service\AutoImportServiceInterface;
 
 /**
  * This is a controller and not a correct implementation of a Shopware cron job. By implementing the cron job as
@@ -58,8 +57,7 @@ class Shopware_Controllers_Backend_SwagImportExportCron extends \Shopware_Contro
      */
     public function cronAction(): void
     {
-        /** @var \Shopware_Plugins_Core_Cron_Bootstrap $cronBootstrap */
-        $cronBootstrap = $this->getPluginBootstrap('Cron');
+        $cronBootstrap = $this->getCronPluginBootstrap();
         if ($cronBootstrap && !$cronBootstrap->authorizeCronAction($this->Request())) {
             $this->Response()
                 ->clearHeaders()
@@ -69,29 +67,25 @@ class Shopware_Controllers_Backend_SwagImportExportCron extends \Shopware_Contro
             return;
         }
 
-        /** @var AutoImportServiceInterface $autoImporter */
         $autoImporter = $this->get('swag_import_export.auto_importer');
         $autoImporter->runAutoImport();
     }
 
     /**
      * Returns plugin bootstrap if plugin exits, is enabled, and active.
-     * Otherwise return null.
+     * Otherwise, return null.
      */
-    private function getPluginBootstrap(string $pluginName): ?\Enlight_Plugin_Bootstrap
+    private function getCronPluginBootstrap(): ?\Shopware_Plugins_Core_Cron_Bootstrap
     {
-        /** @var \Shopware_Components_Plugin_Namespace $namespace */
-        $namespace = $this->get('plugin_manager')->Core();
-        $pluginBootstrap = $namespace->get($pluginName);
+        $pluginBootstrap = $this->get('plugin_manager')->Core()->get('Cron');
 
-        if (!$pluginBootstrap instanceof \Enlight_Plugin_Bootstrap) {
+        if (!$pluginBootstrap instanceof \Shopware_Plugins_Core_Cron_Bootstrap) {
             return null;
         }
 
-        /** @var Plugin $plugin */
         $plugin = $this->getModelManager()->find(Plugin::class, $pluginBootstrap->getId());
 
-        if (!$plugin) {
+        if (!$plugin instanceof Plugin) {
             return null;
         }
 

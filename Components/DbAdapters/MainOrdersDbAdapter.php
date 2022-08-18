@@ -63,7 +63,6 @@ class MainOrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
     {
         $connection = $this->modelManager->getConnection();
 
-        /* @var \Doctrine\DBAL\Query\QueryBuilder */
         $builder = $connection->createQueryBuilder();
         $builder->select('id')
             ->from('s_order');
@@ -501,7 +500,6 @@ class MainOrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
         if (!empty($taxData['taxRate'])) {
             $taxValue = $taxData['taxRate'];
         } elseif ($taxData['taxId'] !== null) {
-            /** @var Tax $taxModel */
             $taxModel = $this->modelManager->getRepository(Tax::class)->find($taxData['taxId']);
             if ($taxModel !== null) {
                 $taxId = $taxModel->getId();

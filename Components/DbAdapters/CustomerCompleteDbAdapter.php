@@ -179,11 +179,9 @@ class CustomerCompleteDbAdapter extends CustomerDbAdapter
 
         $indexedOrders = [];
         foreach ($orders as $order) {
-            /** @var \DateTime $orderTime */
             $orderTime = $order['orderTime'];
             $order['orderTime'] = $orderTime->format('Y-m-d H:i:s');
             foreach ($order['details'] as &$detail) {
-                /** @var \DateTime $releaseDate */
                 $releaseDate = $detail['releaseDate'];
 
                 if (!$releaseDate instanceof \DateTime) {

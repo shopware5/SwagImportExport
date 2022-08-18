@@ -51,6 +51,11 @@ class PriceDataManager extends DataManager implements \Enlight_Hook
         return $record;
     }
 
+    public function getDefaultFields(): array
+    {
+        return [];
+    }
+
     /**
      * Return proper values for article price fields which have values NULL
      *

@@ -33,7 +33,6 @@ class DataTransformerChain
      */
     public function transformForward(array $data): array
     {
-        /** @var DataTransformerAdapter $transformer */
         foreach ($this->chain as $transformer) {
             $data = $transformer->transformForward($data);
         }
@@ -46,7 +45,6 @@ class DataTransformerChain
      */
     public function transformBackward(array $data): array
     {
-        /** @var DataTransformerAdapter $transformer */
         foreach (\array_reverse($this->chain) as $transformer) {
             $data = $transformer->transformBackward($data);
         }

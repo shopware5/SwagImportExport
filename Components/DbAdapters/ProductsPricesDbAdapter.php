@@ -12,6 +12,7 @@ namespace SwagImportExport\Components\DbAdapters;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchInterface;
 use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Components\Model\Exception\ModelNotFoundException;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\QueryBuilder;
 use Shopware\Components\ProductStream\Repository;
@@ -110,8 +111,10 @@ class ProductsPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
             }
 
             if (isset($filter['categories'])) {
-                /** @var Category $category */
                 $category = $this->manager->find(Category::class, $filter['categories'][0]);
+                if (!$category instanceof Category) {
+                    throw new ModelNotFoundException(Category::class, $filter['categories'][0]);
+                }
 
                 $this->collectCategoryIds($category);
                 $categories = $this->getCategoryIdCollection();
@@ -124,25 +127,22 @@ class ProductsPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
                     ->setParameter('cids', $categories)
                     ->groupBy('article.id');
 
-                $articleIds = \array_map(
-                    function ($item) {
-                        return $item['id'];
-                    },
-                    $categoriesBuilder->getQuery()->getResult()
-                );
+                $productIds = \array_column($categoriesBuilder->getQuery()->getResult(), 'id');
 
                 $builder
                     ->andWhere('article.id IN (:ids)')
-                    ->setParameter('ids', $articleIds);
+                    ->setParameter('ids', $productIds);
             } else {
                 if (isset($filter['productStreamId'])) {
                     $productStreamId = $filter['productStreamId'][0];
 
-                    /** @var \Shopware\Models\Shop\Repository $shopRepo */
-                    $shopRepo = $this->manager->getRepository(Shop::class);
-                    $shop = $shopRepo->getActiveDefault();
+                    $shop = $this->manager->getRepository(Shop::class)->getActiveDefault();
                     $context = $this->contextService->createShopContext($shop->getId());
-                    $criteria = $this->storeFrontCriteriaFactory->createBaseCriteria([$shop->getCategory()->getId()], $context);
+                    $shopCategory = $shop->getCategory();
+                    if (!$shopCategory instanceof Category) {
+                        throw new \RuntimeException('Shop has no assigned category. Should not happen.');
+                    }
+                    $criteria = $this->storeFrontCriteriaFactory->createBaseCriteria([$shopCategory->getId()], $context);
                     $this->productStreamRepository->prepareCriteria($criteria, $productStreamId);
                     $products = $this->productNumberSearch->search($criteria, $context);
                     $productNumbers = \array_keys($products->getProducts());
@@ -283,17 +283,15 @@ class ProductsPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
                 $record = $this->dataManager->setDefaultFields($record);
                 $this->validator->validate($record, ProductPriceValidator::$mapper);
 
-                /** @var CustomerGroup $customerGroup */
                 $customerGroup = $customerGroupRepository->findOneBy(['key' => $record['priceGroup']]);
-                if (!$customerGroup) {
+                if (!$customerGroup instanceof CustomerGroup) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/articlesPrices/price_group_not_found', 'Price group %s was not found');
                     throw new AdapterException(\sprintf($message, $record['priceGroup']));
                 }
 
-                /** @var Detail $articleDetail */
-                $articleDetail = $detailRepository->findOneBy(['number' => $record['orderNumber']]);
-                if (!$articleDetail) {
+                $productVariant = $detailRepository->findOneBy(['number' => $record['orderNumber']]);
+                if (!$productVariant instanceof Detail) {
                     $message = SnippetsHelper::getNamespace()
                         ->get('adapters/article_number_not_found', 'Article with order number %s does not exists');
                     throw new AdapterException(\sprintf($message, $record['orderNumber']));
@@ -340,16 +338,16 @@ class ProductsPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
                 }
 
                 // removes price with same from value from database
-                $this->updateProductFromPrice($record, $articleDetail->getId());
+                $this->updateProductFromPrice($record, $productVariant->getId());
                 // checks if price belongs to graduation price
                 if ((int) $record['from'] !== 1) {
                     // updates graduation to value with from value - 1
-                    $this->updateProductToPrice($record, $articleDetail->getId(), $articleDetail->getArticleId());
+                    $this->updateProductToPrice($record, $productVariant->getId(), $productVariant->getArticleId());
                 }
 
                 // remove tax
                 if ($customerGroup->getTaxInput()) {
-                    $tax = $articleDetail->getArticle()->getTax();
+                    $tax = $productVariant->getArticle()->getTax();
                     if ($tax instanceof Tax) {
                         $record['price'] = $record['price'] / (100 + (float) $tax->getTax()) * 100;
                         $record['pseudoPrice'] = $record['pseudoPrice'] / (100 + (float) $tax->getTax()) * 100;
@@ -360,8 +358,8 @@ class ProductsPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
                 }
 
                 $price = new ProductPrice();
-                $price->setArticle($articleDetail->getArticle());
-                $price->setDetail($articleDetail);
+                $price->setArticle($productVariant->getArticle());
+                $price->setDetail($productVariant);
                 $price->setCustomerGroup($customerGroup);
                 $price->setFrom($record['from']);
                 $price->setTo($record['to']);
@@ -376,7 +374,7 @@ class ProductsPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
                 }
 
                 if (isset($record['purchasePrice'])) {
-                    $articleDetail->setPurchasePrice($record['purchasePrice']);
+                    $productVariant->setPurchasePrice($record['purchasePrice']);
                 }
 
                 $price->setPercent($record['percent']);
@@ -487,13 +485,7 @@ class ProductsPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
     {
         $categoryId = $categoryModel->getId();
         $this->setCategoryIdCollection([$categoryId]);
-        $categories = $categoryModel->getChildren();
-
-        if (!$categories) {
-            return;
-        }
-
-        foreach ($categories as $category) {
+        foreach ($categoryModel->getChildren() as $category) {
             $this->collectCategoryIds($category);
         }
     }

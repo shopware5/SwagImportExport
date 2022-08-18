@@ -9,11 +9,11 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Controllers\Backend;
 
+use Doctrine\ORM\AbstractQuery;
 use Shopware\Components\CSRFWhitelistAware;
 use SwagImportExport\Components\UploadPathProvider;
 use SwagImportExport\Models\Logger;
 use SwagImportExport\Models\LoggerRepository;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\FileBag;
 
 /**
@@ -45,7 +45,6 @@ class Shopware_Controllers_Backend_SwagImportExport extends \Shopware_Controller
         $fileBag = new FileBag($_FILES);
 
         $clientOriginalName = '';
-        /** @var UploadedFile $file */
         foreach ($fileBag->getIterator() as $file) {
             $clientOriginalName = $file->getClientOriginalName();
             $file->move($this->uploadPathProvider->getPath(), $clientOriginalName);
@@ -71,7 +70,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends \Shopware_Controller
             $fileName = $this->Request()->getParam('fileName');
 
             if ($fileName === null) {
-                throw new \Exception('File name must be provided');
+                throw new \InvalidArgumentException('File name must be provided');
             }
 
             $filePath = $this->uploadPathProvider->getRealPath($fileName);
@@ -85,7 +84,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends \Shopware_Controller
                     $application = 'application/xml';
                     break;
                 default:
-                    throw new \Exception('File extension is not valid');
+                    throw new \UnexpectedValueException('File extension is not valid');
             }
 
             if (\file_exists($filePath)) {
@@ -128,19 +127,19 @@ class Shopware_Controllers_Backend_SwagImportExport extends \Shopware_Controller
 
     public function getLogsAction(): void
     {
-        /** @var LoggerRepository $loggerRepository */
-        $loggerRepository = $this->getModelManager()->getRepository(Logger::class);
-
-        $query = $loggerRepository->getLogListQuery(
+        $modelManager = $this->getModelManager();
+        /** @var LoggerRepository $repo */
+        $repo = $modelManager->getRepository(Logger::class);
+        $query = $repo->getLogListQuery(
             $this->Request()->getParam('filter', []),
             $this->Request()->getParam('sort', []),
             (int) $this->Request()->getParam('limit', 25),
             (int) $this->Request()->getParam('start', 0)
         )->getQuery();
 
-        $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $query->setHydrationMode(AbstractQuery::HYDRATE_ARRAY);
 
-        $paginator = $this->getModelManager()->createPaginator($query);
+        $paginator = $modelManager->createPaginator($query);
 
         // returns the total count of the query
         $total = $paginator->count();
@@ -158,7 +157,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends \Shopware_Controller
      */
     public function initAcl(): void
     {
-        $this->addAclPermission('uploadFile', 'import', 'Insuficient Permissions (uploadFile)');
-        $this->addAclPermission('downloadFile', 'export', 'Insuficient Permissions (downloadFile)');
+        $this->addAclPermission('uploadFile', 'import', 'Insufficient Permissions (uploadFile)');
+        $this->addAclPermission('downloadFile', 'export', 'Insufficient Permissions (downloadFile)');
     }
 }

@@ -465,7 +465,6 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandle
 
     private function getCustomerGroupById(int $id): ?Group
     {
-        /* @var Group $group */
         return $this->modelManager->getRepository(Group::class)->find($id);
     }
 

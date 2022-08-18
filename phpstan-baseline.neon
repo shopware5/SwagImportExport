@@ -61,11 +61,6 @@ parameters:
 			path: Components/DataType/ProductPriceDataType.php
 
 		-
-			message: "#^Cannot call method getId\\(\\) on Shopware\\\\Models\\\\Country\\\\Country\\|null\\.$#"
-			count: 1
-			path: Components/DbAdapters/AddressDbAdapter.php
-
-		-
 			message: "#^Negated boolean expression is always false\\.$#"
 			count: 1
 			path: Components/DbAdapters/AddressDbAdapter.php
@@ -74,11 +69,6 @@ parameters:
 			message: "#^Parameter \\#1 \\$country of method Shopware\\\\Models\\\\Customer\\\\Address\\:\\:setCountry\\(\\) expects Shopware\\\\Models\\\\Country\\\\Country, Shopware\\\\Models\\\\Country\\\\Country\\|null given\\.$#"
 			count: 2
 			path: Components/DbAdapters/AddressDbAdapter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\CategoriesDbAdapter\\:\\:getBuilder\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: Components/DbAdapters/CategoriesDbAdapter.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\CategoriesDbAdapter\\:\\:prepareData\\(\\) has parameter \\$groups with no value type specified in iterable type array\\.$#"
@@ -116,22 +106,12 @@ parameters:
 			path: Components/DbAdapters/CategoriesDbAdapter.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\CustomerCompleteDbAdapter\\:\\:getBuilder\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: Components/DbAdapters/CustomerCompleteDbAdapter.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\CustomerDbAdapter\\:\\:getAttributesFieldsByTableName\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/DbAdapters/CustomerDbAdapter.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\CustomerDbAdapter\\:\\:getBillingColumns\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DbAdapters/CustomerDbAdapter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\CustomerDbAdapter\\:\\:getBuilder\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
 			count: 1
 			path: Components/DbAdapters/CustomerDbAdapter.php
 
@@ -196,16 +176,6 @@ parameters:
 			path: Components/DbAdapters/MainOrdersDbAdapter.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\MainOrdersDbAdapter\\:\\:getOrderBuilder\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: Components/DbAdapters/MainOrdersDbAdapter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\MainOrdersDbAdapter\\:\\:getTaxSumBuilder\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: Components/DbAdapters/MainOrdersDbAdapter.php
-
-		-
 			message: "#^Offset 'description' does not exist on string\\.$#"
 			count: 1
 			path: Components/DbAdapters/MainOrdersDbAdapter.php
@@ -226,24 +196,9 @@ parameters:
 			path: Components/DbAdapters/MainOrdersDbAdapter.php
 
 		-
-			message: "#^Call to an undefined method Doctrine\\\\ORM\\\\QueryBuilder\\:\\:addFilter\\(\\)\\.$#"
-			count: 1
-			path: Components/DbAdapters/NewsletterDbAdapter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\NewsletterDbAdapter\\:\\:getBuilder\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: Components/DbAdapters/NewsletterDbAdapter.php
-
-		-
 			message: "#^Property SwagImportExport\\\\Components\\\\DbAdapters\\\\NewsletterDbAdapter\\:\\:\\$defaultValues type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/DbAdapters/NewsletterDbAdapter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\OrdersDbAdapter\\:\\:getBuilder\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: Components/DbAdapters/OrdersDbAdapter.php
 
 		-
 			message: "#^Parameter \\#1 \\$categories of method SwagImportExport\\\\Components\\\\DbAdapters\\\\Products\\\\CategoryWriter\\:\\:prepareValues\\(\\) expects array\\<string, mixed\\>, array\\<int, array\\<string, int\\|string\\>\\> given\\.$#"
@@ -351,37 +306,7 @@ parameters:
 			path: Components/DbAdapters/ProductsDbAdapter.php
 
 		-
-			message: "#^Call to an undefined method GuzzleHttp\\\\ClientInterface\\:\\:get\\(\\)\\.$#"
-			count: 1
-			path: Components/DbAdapters/ProductsImagesDbAdapter.php
-
-		-
-			message: "#^Call to an undefined method Shopware\\\\Models\\\\Article\\\\Repository\\:\\:getProductImageDataQuery\\(\\)\\.$#"
-			count: 1
-			path: Components/DbAdapters/ProductsImagesDbAdapter.php
-
-		-
-			message: "#^Cannot call method getBasePath\\(\\) on Enlight_Controller_Request_Request\\|null\\.$#"
-			count: 1
-			path: Components/DbAdapters/ProductsImagesDbAdapter.php
-
-		-
-			message: "#^Cannot call method getHttpHost\\(\\) on Enlight_Controller_Request_Request\\|null\\.$#"
-			count: 1
-			path: Components/DbAdapters/ProductsImagesDbAdapter.php
-
-		-
-			message: "#^Cannot call method getScheme\\(\\) on Enlight_Controller_Request_Request\\|null\\.$#"
-			count: 1
-			path: Components/DbAdapters/ProductsImagesDbAdapter.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\ProductsImagesDbAdapter\\:\\:createAttribute\\(\\) has parameter \\$record with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DbAdapters/ProductsImagesDbAdapter.php
-
-		-
-			message: "#^Negated boolean expression is always false\\.$#"
 			count: 1
 			path: Components/DbAdapters/ProductsImagesDbAdapter.php
 
@@ -421,49 +346,14 @@ parameters:
 			path: Components/DbAdapters/ProductsImagesDbAdapter.php
 
 		-
-			message: "#^Call to an undefined method Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\:\\:addFilter\\(\\)\\.$#"
-			count: 1
-			path: Components/DbAdapters/ProductsInStockDbAdapter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\ProductsInStockDbAdapter\\:\\:getBuilder\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: Components/DbAdapters/ProductsInStockDbAdapter.php
-
-		-
 			message: "#^Property SwagImportExport\\\\Components\\\\DbAdapters\\\\ProductsInStockDbAdapter\\:\\:\\$logMessages type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/DbAdapters/ProductsInStockDbAdapter.php
 
 		-
-			message: "#^Cannot call method getId\\(\\) on Shopware\\\\Models\\\\Category\\\\Category\\|null\\.$#"
-			count: 1
-			path: Components/DbAdapters/ProductsPricesDbAdapter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\ProductsPricesDbAdapter\\:\\:getBuilder\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: Components/DbAdapters/ProductsPricesDbAdapter.php
-
-		-
-			message: "#^Negated boolean expression is always false\\.$#"
-			count: 3
-			path: Components/DbAdapters/ProductsPricesDbAdapter.php
-
-		-
 			message: "#^Property SwagImportExport\\\\Components\\\\DbAdapters\\\\ProductsPricesDbAdapter\\:\\:\\$categoryIdCollection type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/DbAdapters/ProductsPricesDbAdapter.php
-
-		-
-			message: "#^Call to an undefined method object\\:\\:getId\\(\\)\\.$#"
-			count: 1
-			path: Components/DbAdapters/TranslationsDbAdapter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\TranslationsDbAdapter\\:\\:getBuilder\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: Components/DbAdapters/TranslationsDbAdapter.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\TranslationsDbAdapter\\:\\:getRepository\\(\\) return type with generic class Shopware\\\\Components\\\\Model\\\\ModelRepository does not specify its types\\: TEntityClass$#"
@@ -569,11 +459,6 @@ parameters:
 			message: "#^Method SwagImportExport\\\\Components\\\\Service\\\\ImportService\\:\\:afterImport\\(\\) has parameter \\$unprocessedData with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Service/ImportService.php
-
-		-
-			message: "#^Parameter \\#1 \\$message of class Exception constructor expects string, Enlight_Plugin_Bootstrap\\|Enlight_Plugin_Namespace\\|null given\\.$#"
-			count: 4
-			path: Components/Service/ProfileService.php
 
 		-
 			message: "#^Parameter \\#1 \\$profile of class SwagImportExport\\\\Components\\\\Service\\\\Struct\\\\ProfileDataStruct constructor expects SwagImportExport\\\\Models\\\\Profile, SwagImportExport\\\\Models\\\\Profile\\|null given\\.$#"
@@ -1106,106 +991,6 @@ parameters:
 			path: Components/Validators/Validator.php
 
 		-
-			message: "#^Cannot call method getId\\(\\) on SwagImportExport\\\\Models\\\\Profile\\|null\\.$#"
-			count: 1
-			path: Controllers/Backend/Shopware_Controllers_Backend_SwagImportExportConversion.php
-
-		-
-			message: "#^Call to an undefined method Enlight_Plugin_Bootstrap\\:\\:getId\\(\\)\\.$#"
-			count: 1
-			path: Controllers/Backend/Shopware_Controllers_Backend_SwagImportExportCron.php
-
-		-
-			message: "#^Left side of && is always true\\.$#"
-			count: 1
-			path: Controllers/Backend/Shopware_Controllers_Backend_SwagImportExportCron.php
-
-		-
-			message: "#^Negated boolean expression is always false\\.$#"
-			count: 1
-			path: Controllers/Backend/Shopware_Controllers_Backend_SwagImportExportCron.php
-
-		-
-			message: "#^Call to an undefined method object\\:\\:getDefaultFields\\(\\)\\.$#"
-			count: 2
-			path: Controllers/Backend/Shopware_Controllers_Backend_SwagImportExportProfile.php
-
-		-
-			message: "#^Call to an undefined method object\\:\\:getDefaultFieldsName\\(\\)\\.$#"
-			count: 1
-			path: Controllers/Backend/Shopware_Controllers_Backend_SwagImportExportProfile.php
-
-		-
-			message: "#^Cannot call method getFieldType\\(\\) on object\\|null\\.$#"
-			count: 1
-			path: Controllers/Backend/Shopware_Controllers_Backend_SwagImportExportProfile.php
-
-		-
-			message: "#^Cannot call method getTree\\(\\) on SwagImportExport\\\\Models\\\\Profile\\|null\\.$#"
-			count: 4
-			path: Controllers/Backend/Shopware_Controllers_Backend_SwagImportExportProfile.php
-
-		-
-			message: "#^Cannot call method getType\\(\\) on SwagImportExport\\\\Models\\\\Profile\\|null\\.$#"
-			count: 1
-			path: Controllers/Backend/Shopware_Controllers_Backend_SwagImportExportProfile.php
-
-		-
-			message: "#^Cannot call method setTree\\(\\) on SwagImportExport\\\\Models\\\\Profile\\|null\\.$#"
-			count: 3
-			path: Controllers/Backend/Shopware_Controllers_Backend_SwagImportExportProfile.php
-
-		-
-			message: "#^Negated boolean expression is always false\\.$#"
-			count: 1
-			path: Controllers/Backend/Shopware_Controllers_Backend_SwagImportExportProfile.php
-
-		-
-			message: "#^Parameter \\#1 \\$entity of method Doctrine\\\\ORM\\\\EntityManager\\:\\:persist\\(\\) expects object, SwagImportExport\\\\Models\\\\Profile\\|null given\\.$#"
-			count: 3
-			path: Controllers/Backend/Shopware_Controllers_Backend_SwagImportExportProfile.php
-
-		-
-			message: "#^Parameter \\#1 \\$entity of method Doctrine\\\\ORM\\\\EntityManager\\:\\:remove\\(\\) expects object, SwagImportExport\\\\Models\\\\Profile\\|null given\\.$#"
-			count: 1
-			path: Controllers/Backend/Shopware_Controllers_Backend_SwagImportExportProfile.php
-
-		-
-			message: "#^Parameter \\#1 \\$bytes of static method SwagImportExport\\\\Components\\\\Utils\\\\DataHelper\\:\\:formatFileSize\\(\\) expects int, int\\|null given\\.$#"
-			count: 1
-			path: Controllers/Backend/Shopware_Controllers_Backend_SwagImportExportSession.php
-
-		-
-			message: "#^Call to an undefined method Doctrine\\\\ORM\\\\QueryBuilder\\:\\:addFilter\\(\\)\\.$#"
-			count: 1
-			path: Models/ExpressionRepository.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Models\\\\ExpressionRepository\\:\\:getExpressionsListQuery\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: Models/ExpressionRepository.php
-
-		-
-			message: "#^Parameter \\#1 \\$sort of method Doctrine\\\\ORM\\\\QueryBuilder\\:\\:addOrderBy\\(\\) expects Doctrine\\\\ORM\\\\Query\\\\Expr\\\\OrderBy\\|string, array\\<array\\<string, string\\>\\> given\\.$#"
-			count: 1
-			path: Models/ExpressionRepository.php
-
-		-
-			message: "#^Call to an undefined method Doctrine\\\\ORM\\\\QueryBuilder\\:\\:addFilter\\(\\)\\.$#"
-			count: 1
-			path: Models/LoggerRepository.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Models\\\\LoggerRepository\\:\\:getLogListQuery\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: Models/LoggerRepository.php
-
-		-
-			message: "#^Parameter \\#1 \\$sort of method Doctrine\\\\ORM\\\\QueryBuilder\\:\\:addOrderBy\\(\\) expects Doctrine\\\\ORM\\\\Query\\\\Expr\\\\OrderBy\\|string, array\\<array\\<string, string\\>\\> given\\.$#"
-			count: 1
-			path: Models/LoggerRepository.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Models\\\\Profile\\:\\:getExpressions\\(\\) return type with generic interface Doctrine\\\\Common\\\\Collections\\\\Collection does not specify its types\\: TKey, T$#"
 			count: 1
 			path: Models/Profile.php
@@ -1216,39 +1001,9 @@ parameters:
 			path: Models/Profile.php
 
 		-
-			message: "#^Call to an undefined method Doctrine\\\\ORM\\\\QueryBuilder\\:\\:addFilter\\(\\)\\.$#"
-			count: 2
-			path: Models/ProfileRepository.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Models\\\\ProfileRepository\\:\\:getProfilesListQuery\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: Models/ProfileRepository.php
-
-		-
-			message: "#^Parameter \\#1 \\$sort of method Doctrine\\\\ORM\\\\QueryBuilder\\:\\:addOrderBy\\(\\) expects Doctrine\\\\ORM\\\\Query\\\\Expr\\\\OrderBy\\|string, array\\<array\\<string, string\\>\\> given\\.$#"
-			count: 1
-			path: Models/ProfileRepository.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Models\\\\Session\\:\\:getProfile\\(\\) should return SwagImportExport\\\\Models\\\\Profile but returns SwagImportExport\\\\Models\\\\Profile\\|null\\.$#"
 			count: 1
 			path: Models/Session.php
-
-		-
-			message: "#^Call to an undefined method Doctrine\\\\ORM\\\\QueryBuilder\\:\\:addFilter\\(\\)\\.$#"
-			count: 1
-			path: Models/SessionRepository.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Models\\\\SessionRepository\\:\\:getSessionsListQuery\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\|Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: Models/SessionRepository.php
-
-		-
-			message: "#^Parameter \\#1 \\$sort of method Doctrine\\\\ORM\\\\QueryBuilder\\:\\:addOrderBy\\(\\) expects Doctrine\\\\ORM\\\\Query\\\\Expr\\\\OrderBy\\|string, array\\<array\\<string, string\\>\\> given\\.$#"
-			count: 1
-			path: Models/SessionRepository.php
 
 		-
 			message: "#^Parameter \\#1 \\$profiles of method SwagImportExport\\\\Migrations\\\\Migration5\\:\\:addSuffixToProfileNames\\(\\) expects array\\<int, array\\{name\\: string, id\\: int\\}\\>, array\\<int, array\\{id\\: numeric\\-string, 0\\: numeric\\-string, type\\: string, 1\\: string, base_profile\\: numeric\\-string\\|null, 2\\: numeric\\-string\\|null, name\\: string, 3\\: string, \\.\\.\\.\\}\\> given\\.$#"

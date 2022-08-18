@@ -11,7 +11,7 @@ namespace SwagImportExport\Controllers\Backend;
 
 use SwagImportExport\Components\Factories\ProfileFactory;
 use SwagImportExport\Components\Profile\Profile;
-use SwagImportExport\Components\Service\ExportService;
+use SwagImportExport\Components\Service\ExportServiceInterface;
 use SwagImportExport\Components\Session\SessionService;
 use SwagImportExport\Components\Structs\ExportRequest;
 use SwagImportExport\Components\UploadPathProvider;
@@ -24,7 +24,7 @@ use SwagImportExport\Components\Utils\FileNameGenerator;
  */
 class Shopware_Controllers_Backend_SwagImportExportExport extends \Shopware_Controllers_Backend_ExtJs
 {
-    private ExportService $exportService;
+    private ExportServiceInterface $exportService;
 
     private ProfileFactory $profileFactory;
 
@@ -37,7 +37,7 @@ class Shopware_Controllers_Backend_SwagImportExportExport extends \Shopware_Cont
     private \Shopware_Components_Auth $auth;
 
     public function __construct(
-        ExportService $exportService,
+        ExportServiceInterface $exportService,
         ProfileFactory $profileFactory,
         SessionService $sessionService,
         UploadPathProvider $uploadPathProvider,

@@ -43,7 +43,6 @@ class ControllerSubscriber implements SubscriberInterface
      */
     public function injectBackendAceEditor(\Enlight_Event_EventArgs $args): void
     {
-        /** @var \Shopware_Controllers_Backend_Index $controller */
         $controller = $args->get('subject');
         $request = $controller->Request();
         $response = $controller->Response();

@@ -28,8 +28,8 @@ class Shopware_Controllers_Backend_SwagImportExportSession extends \Shopware_Con
 
     public function initAcl(): void
     {
-        $this->addAclPermission('getSessions', 'read', 'Insuficient Permissions (getSessions)');
-        $this->addAclPermission('deleteSession', 'export', 'Insuficient Permissions (deleteSession)');
+        $this->addAclPermission('getSessions', 'read', 'Insufficient Permissions (getSessions)');
+        $this->addAclPermission('deleteSession', 'export', 'Insufficient Permissions (deleteSession)');
     }
 
     public function getSessionDetailsAction(): void
@@ -42,10 +42,9 @@ class Shopware_Controllers_Backend_SwagImportExportSession extends \Shopware_Con
 
             return;
         }
-        $sessionRepository = $manager->getRepository(Session::class);
-        $sessionModel = $sessionRepository->find($sessionId);
+        $sessionModel = $manager->getRepository(Session::class)->find($sessionId);
 
-        if (empty($sessionModel)) {
+        if (!$sessionModel instanceof Session) {
             $this->View()->assign(['success' => false, 'message' => 'No session found']);
 
             return;
@@ -57,7 +56,7 @@ class Shopware_Controllers_Backend_SwagImportExportSession extends \Shopware_Con
             'profile' => $sessionModel->getProfile()->getName(),
             'dataset' => $sessionModel->getTotalCount(),
             'position' => $sessionModel->getPosition(),
-            'fileSize' => DataHelper::formatFileSize($sessionModel->getFileSize()),
+            'fileSize' => DataHelper::formatFileSize((int) $sessionModel->getFileSize()),
             'userName' => $sessionModel->getUserName(),
             'date' => $sessionModel->getCreatedAt()->format('d.m.Y H:i'),
             'status' => $sessionModel->getState(),
@@ -132,7 +131,7 @@ class Shopware_Controllers_Backend_SwagImportExportSession extends \Shopware_Con
                 }
             }
 
-            // Performs all of the collected actions.
+            // Performs all the collected actions.
             $manager->flush();
 
             $this->View()->assign([

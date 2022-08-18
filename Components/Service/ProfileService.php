@@ -35,7 +35,6 @@ class ProfileService implements ProfileServiceInterface
      */
     public function importProfile(UploadedFile $file): void
     {
-        /** @var \Shopware_Components_Plugin_Namespace $namespace */
         $namespace = $this->snippetManager->getNamespace('backend/swag_import_export/controller');
 
         if (\strtolower($file->getClientOriginalExtension()) !== 'json') {

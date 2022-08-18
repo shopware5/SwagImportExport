@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Components\DbAdapters;
 
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\QueryBuilder;
@@ -172,13 +171,9 @@ class NewsletterDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandle
         );
 
         $defaultValues = $this->getDefaultValues();
-        /** @var EntityRepository<Customer> $customerRepository */
         $customerRepository = $this->manager->getRepository(Customer::class);
-        /** @var EntityRepository<Address> $addressRepository */
         $addressRepository = $this->manager->getRepository(Address::class);
-        /** @var EntityRepository<Group> $groupRepository */
         $groupRepository = $this->manager->getRepository(Group::class);
-        /** @var EntityRepository<ContactData> $contactDataRepository */
         $contactDataRepository = $this->manager->getRepository(ContactData::class);
         $count = 0;
 
@@ -214,7 +209,6 @@ class NewsletterDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandle
                 $this->validator->validate($newsletterData, NewsletterDataType::$mapper);
 
                 if ($newsletterData['groupName']) {
-                    /** @var Group $group */
                     $group = $groupRepository->findOneBy(['name' => $newsletterData['groupName']]);
 
                     if (!$group instanceof Group) {
