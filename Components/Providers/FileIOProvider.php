@@ -12,7 +12,7 @@ namespace SwagImportExport\Components\Providers;
 use SwagImportExport\Components\FileIO\FileReader;
 use SwagImportExport\Components\FileIO\FileWriter;
 
-class FileIOProvider extends \Enlight_Class implements \Enlight_Hook
+class FileIOProvider implements \Enlight_Hook
 {
     /**
      * @var iterable<FileWriter>
@@ -44,7 +44,7 @@ class FileIOProvider extends \Enlight_Class implements \Enlight_Hook
             }
         }
 
-        throw new \Exception('File reader ' . $format . ' does not exists.');
+        throw new \RuntimeException('File reader ' . $format . ' does not exist.');
     }
 
     public function getFileWriter(string $format): FileWriter
@@ -55,6 +55,6 @@ class FileIOProvider extends \Enlight_Class implements \Enlight_Hook
             }
         }
 
-        throw new \Exception('File writer' . $format . ' does not exists.');
+        throw new \RuntimeException('File writer' . $format . ' does not exist.');
     }
 }

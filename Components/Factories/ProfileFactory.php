@@ -15,7 +15,7 @@ use SwagImportExport\Components\Profile\Profile;
 use SwagImportExport\Components\Utils\TreeHelper;
 use SwagImportExport\Models\Profile as ProfileEntity;
 
-class ProfileFactory extends \Enlight_Class implements \Enlight_Hook
+class ProfileFactory implements \Enlight_Hook
 {
     private ModelManager $modelManager;
 

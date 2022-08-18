@@ -12,7 +12,7 @@ namespace SwagImportExport\Components\Providers;
 use SwagImportExport\Components\DataManagers\DataManager;
 use SwagImportExport\Components\DbAdapters\DataDbAdapter;
 
-class DataProvider extends \Enlight_Class implements \Enlight_Hook
+class DataProvider implements \Enlight_Hook
 {
     private \Enlight_Event_EventManager $eventManager;
 
