@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Tests\Functional\Components\DbAdapters\Products;
 
-use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use SwagImportExport\Components\DbAdapters\Products\CategoryWriter;
 use SwagImportExport\Tests\Helper\ContainerTrait;
@@ -47,9 +46,8 @@ class CategoryWriterTest extends TestCase
         ];
 
         $categoryWriterAdapter->write($validProductId, $invalidCategoryArray);
-        /** @var Connection $dbalConnection */
         $dbalConnection = $this->getContainer()->get('dbal_connection');
-        $productCategories = $dbalConnection->executeQuery('SELECT * FROM s_categories c LEFT JOIN s_articles_categories ac ON ac.categoryID = c.id WHERE ac.articleID=?', [3])->fetchAll();
+        $productCategories = $dbalConnection->executeQuery('SELECT * FROM s_categories c LEFT JOIN s_articles_categories ac ON ac.categoryID = c.id WHERE ac.articleID=?', [3])->fetchAllAssociative();
 
         static::assertSame('Path', $productCategories[3]['description']);
     }
@@ -66,9 +64,8 @@ class CategoryWriterTest extends TestCase
 
         $categoryWriterAdapter->write($productId, $categoryArray);
 
-        /** @var Connection $dbalConnection */
         $dbalConnection = $this->getContainer()->get('dbal_connection');
-        $updatedProduct = $dbalConnection->executeQuery('SELECT * FROM s_articles_categories WHERE articleID=?', [$productId])->fetchAll();
+        $updatedProduct = $dbalConnection->executeQuery('SELECT * FROM s_articles_categories WHERE articleID=?', [$productId])->fetchAllAssociative();
 
         static::assertEquals($categoryArray[0]['categoryId'], $updatedProduct[2]['categoryID']);
     }

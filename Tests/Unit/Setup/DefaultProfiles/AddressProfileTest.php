@@ -7,24 +7,14 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace SwagImportExport\Unit\Setup\DefaultProfiles;
+namespace SwagImportExport\Tests\Unit\Setup\DefaultProfiles;
 
 use PHPUnit\Framework\TestCase;
 use SwagImportExport\Setup\DefaultProfiles\AddressProfile;
-use SwagImportExport\Setup\DefaultProfiles\ProfileMetaData;
-use SwagImportExport\Tests\Unit\Setup\DefaultProfiles\DefaultProfileTestCaseTrait;
 
 class AddressProfileTest extends TestCase
 {
     use DefaultProfileTestCaseTrait;
-
-    public function testItCanBeCreated(): void
-    {
-        $addressProfile = new AddressProfile();
-        static::assertInstanceOf(AddressProfile::class, $addressProfile);
-        static::assertInstanceOf(ProfileMetaData::class, $addressProfile);
-        static::assertInstanceOf(\JsonSerializable::class, $addressProfile);
-    }
 
     public function testItShouldReturnValidProfileTree(): void
     {
@@ -32,12 +22,12 @@ class AddressProfileTest extends TestCase
 
         $profileTree = $addressProfile->jsonSerialize();
         $this->walkRecursive($profileTree, function ($node): void {
-            $this->assertArrayHasKey('id', $node, 'Current array: ' . \print_r($node, true));
-            $this->assertArrayHasKey('type', $node, 'Current array: ' . \print_r($node, true));
-            $this->assertArrayHasKey('name', $node, 'Current array: ' . \print_r($node, true));
+            static::assertArrayHasKey('id', $node, 'Current array: ' . \print_r($node, true));
+            static::assertArrayHasKey('type', $node, 'Current array: ' . \print_r($node, true));
+            static::assertArrayHasKey('name', $node, 'Current array: ' . \print_r($node, true));
         });
 
-        $profileJson = \json_encode($addressProfile);
+        $profileJson = \json_encode($addressProfile, \JSON_THROW_ON_ERROR);
         static::assertJson($profileJson);
     }
 }

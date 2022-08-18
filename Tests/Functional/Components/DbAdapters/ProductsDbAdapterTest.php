@@ -47,8 +47,8 @@ class ProductsDbAdapterTest extends TestCase
         $productDbAdapter->write($newProductRecord);
 
         $dbalConnection = $this->getContainer()->get('dbal_connection');
-        $createdProductVariant = $dbalConnection->executeQuery("SELECT * FROM s_articles_details WHERE orderNumber='SW-99999'")->fetchAll();
-        $createdProduct = $dbalConnection->executeQuery("SELECT a.* FROM s_articles as a JOIN s_articles_details as d ON d.articleID = a.id WHERE d.orderNumber='SW-99999'")->fetchAll();
+        $createdProductVariant = $dbalConnection->executeQuery("SELECT * FROM s_articles_details WHERE orderNumber='SW-99999'")->fetchAllAssociative();
+        $createdProduct = $dbalConnection->executeQuery("SELECT a.* FROM s_articles as a JOIN s_articles_details as d ON d.articleID = a.id WHERE d.orderNumber='SW-99999'")->fetchAllAssociative();
 
         static::assertSame($newProductRecord['article'][0]['name'], $createdProduct[0]['name']);
         static::assertSame($newProductRecord['article'][0]['taxId'], (int) $createdProduct[0]['taxID']);
@@ -79,7 +79,7 @@ class ProductsDbAdapterTest extends TestCase
         $dbalConnection = $this->getContainer()->get('dbal_connection');
         $sql = "SELECT articleID FROM s_articles_details WHERE orderNumber='SW10003'";
         $productId = $dbalConnection->executeQuery($sql)->fetchOne();
-        $createdProductSimilar = $dbalConnection->executeQuery('SELECT * FROM s_articles_similar WHERE articleID = ?', [$productId])->fetchAll();
+        $createdProductSimilar = $dbalConnection->executeQuery('SELECT * FROM s_articles_similar WHERE articleID = ?', [$productId])->fetchAllAssociative();
 
         static::assertEmpty($unprocessedData);
         static::assertSame('7', $createdProductSimilar[4]['relatedarticle']);
@@ -104,7 +104,7 @@ class ProductsDbAdapterTest extends TestCase
 
         $dbalConnection = $this->getContainer()->get('dbal_connection');
         $sql = "SELECT * FROM s_articles_supplier WHERE name='Test Supplier'";
-        $createdProductSupplier = $dbalConnection->executeQuery($sql)->fetchAll();
+        $createdProductSupplier = $dbalConnection->executeQuery($sql)->fetchAllAssociative();
 
         static::assertSame($productRecordWithNewSupplier['article'][0]['supplierName'], $createdProductSupplier[0]['name']);
     }
@@ -159,7 +159,7 @@ class ProductsDbAdapterTest extends TestCase
 
         $dbalConnection = $this->getContainer()->get('dbal_connection');
         $productId = $dbalConnection->executeQuery("SELECT articleID FROM s_articles_details WHERE orderNumber='SW10003'")->fetchOne();
-        $createdProductAccessory = $dbalConnection->executeQuery('SELECT * FROM s_articles_relationships WHERE articleID = ?', [$productId])->fetchAll();
+        $createdProductAccessory = $dbalConnection->executeQuery('SELECT * FROM s_articles_relationships WHERE articleID = ?', [$productId])->fetchAllAssociative();
 
         static::assertEmpty($unprocessedData);
         static::assertSame('4', $createdProductAccessory[1]['relatedarticle']);
@@ -213,7 +213,8 @@ class ProductsDbAdapterTest extends TestCase
 
         $dbalConnection = $this->getContainer()->get('dbal_connection');
         $productId = $dbalConnection->executeQuery("SELECT articleID FROM s_articles_details WHERE orderNumber='SW10006'")->fetchOne();
-        $image = $dbalConnection->executeQuery("SELECT * FROM s_articles_img WHERE img = 'Muensterlaender_Lagerkorn' AND articleID = ?", [$productId])->fetch(\PDO::FETCH_ASSOC);
+        $image = $dbalConnection->executeQuery("SELECT * FROM s_articles_img WHERE img = 'Muensterlaender_Lagerkorn' AND articleID = ?", [$productId])->fetchAssociative();
+        static::assertIsArray($image);
 
         static::assertSame($productId, $image['articleID']);
         static::assertSame((int) $records['image'][0]['mediaId'], (int) $image['media_id']);
@@ -245,8 +246,8 @@ class ProductsDbAdapterTest extends TestCase
         $productDbAdapter->write($newProductWithVariantRecord);
 
         $dbalConnection = $this->getContainer()->get('dbal_connection');
-        $createdProductVariant = $dbalConnection->executeQuery("SELECT * FROM s_articles_details WHERE orderNumber='ordernumber.2'")->fetchAll();
-        $createdProduct = $dbalConnection->executeQuery("SELECT * FROM s_articles WHERE id='{$createdProductVariant[0]['articleID']}'")->fetchAll();
+        $createdProductVariant = $dbalConnection->executeQuery("SELECT * FROM s_articles_details WHERE orderNumber='ordernumber.2'")->fetchAllAssociative();
+        $createdProduct = $dbalConnection->executeQuery("SELECT * FROM s_articles WHERE id='{$createdProductVariant[0]['articleID']}'")->fetchAllAssociative();
 
         static::assertSame($newProductWithVariantRecord['article'][1]['name'], $createdProduct[0]['name']);
         static::assertSame($newProductWithVariantRecord['article'][1]['taxId'], (int) $createdProduct[0]['taxID']);
@@ -307,7 +308,7 @@ class ProductsDbAdapterTest extends TestCase
 
         $dbalConnection = $this->getContainer()->get('dbal_connection');
         $productId = $dbalConnection->executeQuery("SELECT articleID FROM s_articles_details WHERE orderNumber='SW10006'")->fetchOne();
-        $result = $dbalConnection->executeQuery("SELECT * FROM s_core_translations WHERE objecttype='article' AND objectkey={$productId}")->fetchAll();
+        $result = $dbalConnection->executeQuery("SELECT * FROM s_core_translations WHERE objecttype='article' AND objectkey={$productId}")->fetchAllAssociative();
         $importedTranslation = \unserialize($result[0]['objectdata']);
 
         // trait rollback not working - so we roll back manually

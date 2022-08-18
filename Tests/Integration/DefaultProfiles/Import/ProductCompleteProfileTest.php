@@ -26,7 +26,7 @@ class ProductCompleteProfileTest extends TestCase
     {
         $csvFile = __DIR__ . '/_fixtures/article_complete.csv';
         $fixtureImagePath = 'file://' . \realpath(__DIR__) . '/../../../Helper/ImportFiles/sw-icon_blue128.png';
-        $csvContentWithExternalImagePath = \str_replace('[placeholder_for_fixture_image]', $fixtureImagePath, \file_get_contents($csvFile));
+        $csvContentWithExternalImagePath = \str_replace('[placeholder_for_fixture_image]', $fixtureImagePath, (string) \file_get_contents($csvFile));
         \file_put_contents($csvFile, $csvContentWithExternalImagePath);
     }
 
@@ -34,7 +34,7 @@ class ProductCompleteProfileTest extends TestCase
     {
         $csvFile = __DIR__ . '/_fixtures/article_complete.csv';
         $fixtureImagePath = 'file://' . \realpath(__DIR__) . '/../../../Helper/ImportFiles/sw-icon_blue128.png';
-        $csvContentWithPlaceholder = \str_replace($fixtureImagePath, '[placeholder_for_fixture_image]', \file_get_contents($csvFile));
+        $csvContentWithPlaceholder = \str_replace($fixtureImagePath, '[placeholder_for_fixture_image]', (string) \file_get_contents($csvFile));
         \file_put_contents($csvFile, $csvContentWithPlaceholder);
     }
 

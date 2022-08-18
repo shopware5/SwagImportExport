@@ -77,7 +77,9 @@ class ProductTranslationExportExportTest extends \Enlight_Components_Test_Contro
     private function assertTranslationAttributeInXml(string $filePath, string $orderNumber, string $attribute, string $expected): void
     {
         $translationNodeList = $this->queryXpath($filePath, "//Translation[articlenumber='{$orderNumber}']/{$attribute}");
-        $nodeValue = $translationNodeList->item(0)->nodeValue;
+        $node = $translationNodeList->item(0);
+        static::assertInstanceOf(\DOMNode::class, $node);
+        $nodeValue = $node->nodeValue;
         static::assertEquals($expected, $nodeValue);
     }
 }

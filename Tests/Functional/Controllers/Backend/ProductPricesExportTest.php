@@ -81,7 +81,9 @@ class ProductPricesExportTest extends \Enlight_Components_Test_Controller_TestCa
     private function assertPriceAttributeInXml(string $filePath, string $orderNumber, string $attribute, string $expected): void
     {
         $productDomNodeList = $this->queryXpath($filePath, "//Price[ordernumber='{$orderNumber}']/{$attribute}");
-        $nodeValue = $productDomNodeList->item(0)->nodeValue;
+        $node = $productDomNodeList->item(0);
+        static::assertInstanceOf(\DOMNode::class, $node);
+        $nodeValue = $node->nodeValue;
         static::assertEquals($expected, $nodeValue);
     }
 }

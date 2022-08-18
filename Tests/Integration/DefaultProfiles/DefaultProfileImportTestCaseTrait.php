@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Tests\Integration\DefaultProfiles;
 
-use Doctrine\DBAL\Statement;
 use Shopware\Components\DependencyInjection\Container;
 
 trait DefaultProfileImportTestCaseTrait
@@ -22,15 +21,10 @@ trait DefaultProfileImportTestCaseTrait
     }
 
     /**
-     * @param \PDO::FETCH_* $fetchMode
-     *
-     * @return mixed[]
+     * @return array<int,array<string,mixed>>
      */
-    private function executeQuery(string $sql, int $fetchMode = \PDO::FETCH_BOTH): array
+    private function executeQuery(string $sql): array
     {
-        /** @var Statement $stmt */
-        $stmt = $this->getContainer()->get('dbal_connection')->executeQuery($sql);
-
-        return $stmt->fetchAll($fetchMode);
+        return $this->getContainer()->get('dbal_connection')->executeQuery($sql)->fetchAllAssociative();
     }
 }

@@ -9,18 +9,15 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Tests\Integration\Components;
 
-use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use SwagImportExport\Components\DbAdapters\DataDbAdapter;
 use SwagImportExport\Components\DbAdapters\ProductsDbAdapter;
 use SwagImportExport\Components\Providers\DataProvider;
-use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use SwagImportExport\Tests\Helper\DbAdapterTestHelper;
 use SwagImportExport\Tests\Helper\FixturesImportTrait;
 
 class ProductsDbAdapterTest extends DbAdapterTestHelper
 {
-    use DatabaseTestCaseTrait;
     use FixturesImportTrait;
 
     private const PRODUCT_VARIANTS_IDS = [123, 124, 14, 257, 15, 258, 16, 259, 253, 254, 255, 250, 251];
@@ -42,9 +39,7 @@ class ProductsDbAdapterTest extends DbAdapterTestHelper
      */
     public function testRead(array $columns, array $ids, array $expected): void
     {
-        $dbAdapter = $this->createProductsDbAdapter();
-
-        $rawData = $dbAdapter->read($ids, $columns);
+        $rawData = $this->createProductsDbAdapter()->read($ids, $columns);
 
         foreach ($rawData['article'] as &$item) {
             unset($item['articleId']);
@@ -63,7 +58,6 @@ class ProductsDbAdapterTest extends DbAdapterTestHelper
     {
         $expectedOrderNumber = 'test9999';
 
-        /** @var ProductsDbAdapter $dbAdapter */
         $dbAdapter = $this->createProductsDbAdapter();
         $dbAdapter->write($data);
 
@@ -91,8 +85,7 @@ class ProductsDbAdapterTest extends DbAdapterTestHelper
             ],
         ];
 
-        $productsDbAdapter = $this->createProductsDbAdapter();
-        $recordIds = $productsDbAdapter->readRecordIds(0, \PHP_INT_MAX, $filter);
+        $recordIds = $this->createProductsDbAdapter()->readRecordIds(0, \PHP_INT_MAX, $filter);
 
         static::assertCount(13, array_intersect(self::PRODUCT_VARIANTS_IDS, $recordIds));
     }
@@ -109,9 +102,7 @@ class ProductsDbAdapterTest extends DbAdapterTestHelper
 
     private function createProductsDbAdapter(): DataDbAdapter
     {
-        $dataProvider = $this->getContainer()->get(DataProvider::class);
-
-        return $dataProvider->createDbAdapter($this->dbAdapter);
+        return $this->getContainer()->get(DataProvider::class)->createDbAdapter($this->dbAdapter);
     }
 
     private function getProductDataResult(string $number): array
@@ -125,7 +116,7 @@ class ProductsDbAdapterTest extends DbAdapterTestHelper
         $builder->where('details.ordernumber = :number');
         $builder->setParameter('number', $number);
 
-        return $builder->execute()->fetchAll();
+        return $builder->execute()->fetchAllAssociative();
     }
 
     private function getProductPriceResult(string $number): array
@@ -138,12 +129,11 @@ class ProductsDbAdapterTest extends DbAdapterTestHelper
         $builder->where('details.ordernumber = :number');
         $builder->setParameter('number', $number);
 
-        return $builder->execute()->fetchAll();
+        return $builder->execute()->fetchAllAssociative();
     }
 
     private function getQueryBuilder(): QueryBuilder
     {
-        /** @var Connection $connection */
         $connection = $this->getContainer()->get('dbal_connection');
 
         return $connection->createQueryBuilder();

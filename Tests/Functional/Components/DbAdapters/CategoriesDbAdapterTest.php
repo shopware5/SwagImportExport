@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Tests\Functional\Components\DbAdapters;
 
-use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use SwagImportExport\Components\DbAdapters\CategoriesDbAdapter;
 use SwagImportExport\Tests\Helper\ContainerTrait;
@@ -54,10 +53,9 @@ class CategoriesDbAdapterTest extends TestCase
         $categoriesDbAdapter = $this->getCategoriesDbAdapter();
         $categoriesDbAdapter->write($categoryRecords);
 
-        /** @var Connection $dbalConnection */
         $dbalConnection = $this->getContainer()->get('dbal_connection');
-        $createdCategory = $dbalConnection->executeQuery("SELECT * FROM s_categories WHERE description='New Category'")->fetchAll();
-        $createdCategory2 = $dbalConnection->executeQuery("SELECT * FROM s_categories WHERE description='Second New Category'")->fetchAll();
+        $createdCategory = $dbalConnection->executeQuery("SELECT * FROM s_categories WHERE description='New Category'")->fetchAllAssociative();
+        $createdCategory2 = $dbalConnection->executeQuery("SELECT * FROM s_categories WHERE description='Second New Category'")->fetchAllAssociative();
 
         static::assertEquals($categoryRecords['default'][0]['categoryId'], $createdCategory[0]['id']);
         static::assertEquals($categoryRecords['default'][1]['categoryId'], $createdCategory2[0]['id']);

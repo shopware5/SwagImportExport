@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Tests\Functional\Components\DbAdapters\Products;
 
-use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use SwagImportExport\Components\DbAdapters\Products\PriceWriter;
 use SwagImportExport\Components\Utils\SwagVersionHelper;
@@ -90,9 +89,8 @@ class PriceWriterTest extends TestCase
 
         $priceWriterAdapter->write($productId, $productOrderNumber, $productPriceData);
 
-        /** @var Connection $dbalConnection */
         $dbalConnection = $this->getContainer()->get('dbal_connection');
-        $updatedProduct = $dbalConnection->executeQuery("SELECT * FROM s_articles_prices WHERE articleID='{$productId}'")->fetchAll();
+        $updatedProduct = $dbalConnection->executeQuery("SELECT * FROM s_articles_prices WHERE articleID='{$productId}'")->fetchAllAssociative();
 
         static::assertEquals($expectedProductPrice, $updatedProduct[0]['price']);
     }
@@ -113,9 +111,8 @@ class PriceWriterTest extends TestCase
 
         $priceWriterAdapter->write($productId, $productOrderNumber, $productPriceData);
 
-        /** @var Connection $dbalConnection */
         $dbalConnection = $this->getContainer()->get('dbal_connection');
-        $updatedProduct = $dbalConnection->executeQuery("SELECT * FROM s_articles_prices WHERE articleID='{$productId}'")->fetchAll();
+        $updatedProduct = $dbalConnection->executeQuery("SELECT * FROM s_articles_prices WHERE articleID='{$productId}'")->fetchAllAssociative();
 
         static::assertEquals($expectedProductPrice, $updatedProduct[0]['price']);
     }
@@ -137,9 +134,8 @@ class PriceWriterTest extends TestCase
 
         $priceWriterAdapter->write($productId, $productOrderNumber, $productPriceData);
 
-        /** @var Connection $dbalConnection */
         $dbalConnection = $this->getContainer()->get('dbal_connection');
-        $updatedProduct = $dbalConnection->executeQuery("SELECT * FROM s_articles_prices WHERE articleID='{$productId}'")->fetchAll();
+        $updatedProduct = $dbalConnection->executeQuery("SELECT * FROM s_articles_prices WHERE articleID='{$productId}'")->fetchAllAssociative();
 
         static::assertEquals($expectedProductPseudoPrice, $updatedProduct[0]['pseudoprice']);
     }
@@ -165,9 +161,8 @@ class PriceWriterTest extends TestCase
 
         $priceWriterAdapter->write($productId, $productOrderNumber, $productPriceData);
 
-        /** @var Connection $dbalConnection */
         $dbalConnection = $this->getContainer()->get('dbal_connection');
-        $updatedProduct = $dbalConnection->executeQuery("SELECT * FROM s_articles_prices WHERE articleID='{$productId}'")->fetchAll();
+        $updatedProduct = $dbalConnection->executeQuery("SELECT * FROM s_articles_prices WHERE articleID='{$productId}'")->fetchAllAssociative();
 
         static::assertEquals($expectedProductRegulationPrice, $updatedProduct[0]['regulation_price']);
     }

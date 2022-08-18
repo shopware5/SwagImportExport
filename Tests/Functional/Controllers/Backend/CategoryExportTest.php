@@ -81,7 +81,9 @@ class CategoryExportTest extends \Enlight_Components_Test_Controller_TestCase
     private function assertCategoryAttributeInXml(string $filePath, string $categoryId, string $attribute, string $expected): void
     {
         $categoryNodeList = $this->queryXpath($filePath, "//category[categoryId='{$categoryId}']/{$attribute}");
-        $nodeValue = $categoryNodeList->item(0)->nodeValue;
+        $node = $categoryNodeList->item(0);
+        static::assertInstanceOf(\DOMNode::class, $node);
+        $nodeValue = $node->nodeValue;
         static::assertEquals($expected, $nodeValue);
     }
 }

@@ -55,7 +55,9 @@ class NewsletterExportTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertEquals(25, $newsletterNodeList->length);
 
         $newsletterNodeList = $this->queryXpath($file, "//user[email='test_0@example.com']/email");
-        static::assertEquals('test_0@example.com', $newsletterNodeList->item(0)->nodeValue);
+        $node = $newsletterNodeList->item(0);
+        static::assertInstanceOf(\DOMNode::class, $node);
+        static::assertEquals('test_0@example.com', $node->nodeValue);
     }
 
     public function testNewsletterCsvExport(): void

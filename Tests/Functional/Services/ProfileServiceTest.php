@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Tests\Functional\Services;
 
-use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use SwagImportExport\Components\Service\ProfileService;
 use SwagImportExport\Components\UploadPathProvider;
@@ -26,9 +25,9 @@ class ProfileServiceTest extends TestCase
     public function testProfileExportShouldGiveCorrectResult(): void
     {
         $service = $this->getProfileService();
-        /** @var Connection $dbalConnection */
         $dbalConnection = $this->getContainer()->get('dbal_connection');
-        $profile = $dbalConnection->executeQuery('SELECT * FROM s_import_export_profile LIMIT 1')->fetch(\PDO::FETCH_ASSOC);
+        $profile = $dbalConnection->executeQuery('SELECT * FROM s_import_export_profile LIMIT 1')->fetchAssociative();
+        static::assertIsArray($profile);
 
         $profileDataStruct = $service->exportProfile((int) $profile['id']);
 
@@ -40,7 +39,6 @@ class ProfileServiceTest extends TestCase
     public function testProfileImportShouldThrowExceptionWrongFiletype(): void
     {
         $service = $this->getProfileService();
-        /** @var UploadPathProvider $uploadPathProvider */
         $uploadPathProvider = $this->getContainer()->get(UploadPathProvider::class);
 
         // create copy of profile.json testfile because it will be deleted by service
@@ -57,7 +55,6 @@ class ProfileServiceTest extends TestCase
     public function testProfileImportShouldThrowExceptionNoContent(): void
     {
         $service = $this->getProfileService();
-        /** @var UploadPathProvider $uploadPathProvider */
         $uploadPathProvider = $this->getContainer()->get(UploadPathProvider::class);
 
         // create copy of profile.json testfile because it will be deleted by service
@@ -74,7 +71,6 @@ class ProfileServiceTest extends TestCase
     public function testProfileImportShouldThrowExceptionWrongData(): void
     {
         $service = $this->getProfileService();
-        /** @var UploadPathProvider $uploadPathProvider */
         $uploadPathProvider = $this->getContainer()->get(UploadPathProvider::class);
 
         // create copy of profile.json testfile because it will be deleted by service
@@ -91,7 +87,6 @@ class ProfileServiceTest extends TestCase
     public function testProfileImportShouldThrowExceptionEmptyValue(): void
     {
         $service = $this->getProfileService();
-        /** @var UploadPathProvider $uploadPathProvider */
         $uploadPathProvider = $this->getContainer()->get(UploadPathProvider::class);
 
         // create copy of profile.json testfile because it will be deleted by service
@@ -108,9 +103,7 @@ class ProfileServiceTest extends TestCase
     public function testProfileImportShouldSucceed(): void
     {
         $service = $this->getProfileService();
-        /** @var Connection $dbalConnection */
         $dbalConnection = $this->getContainer()->get('dbal_connection');
-        /** @var UploadPathProvider $uploadPathProvider */
         $uploadPathProvider = $this->getContainer()->get(UploadPathProvider::class);
 
         // create copy of profile.json testfile because it will be deleted by service
@@ -120,7 +113,8 @@ class ProfileServiceTest extends TestCase
 
         $service->importProfile($file);
 
-        $importedProfile = $dbalConnection->executeQuery("SELECT * FROM s_import_export_profile WHERE `name` = 'My imported profile test'")->fetch(\PDO::FETCH_ASSOC);
+        $importedProfile = $dbalConnection->executeQuery("SELECT * FROM s_import_export_profile WHERE `name` = 'My imported profile test'")->fetchAssociative();
+        static::assertIsArray($importedProfile);
 
         static::assertEquals('categories', $importedProfile['type']);
         static::assertEquals('{"id":"root","name":"Root","type":"node","children":[{"id":"537359399c80a","name":"Header","index":"0","type":"node","children":[{"id":"537385ed7c799","name":"HeaderChild","index":"0","type":"node"}]},{"id":"537359399c8b7","name":"categories","index":"1","type":"node","children":[{"id":"537359399c90d","name":"category","index":"0","type":"iteration","adapter":"default","children":[{"id":"53e9f539a997d","type":"leaf","index":"0","name":"categoryId","shopwareField":"categoryId"},{"id":"53e0a853f1b98","type":"leaf","index":"1","name":"parentID","shopwareField":"parentId"},{"id":"53e0cf5cad595","type":"leaf","index":"2","name":"description","shopwareField":"name"},{"id":"53e9f69bf2edb","type":"leaf","index":"3","name":"position","shopwareField":"position"},{"id":"53e0d1414b0ad","type":"leaf","index":"4","name":"metatitle","shopwareField":"metaTitle"},{"id":"53e0d1414b0d7","type":"leaf","index":"5","name":"metakeywords","shopwareField":"metaKeywords"},{"id":"53e0d17da1f06","type":"leaf","index":"6","name":"metadescription","shopwareField":"metaDescription"},{"id":"53e9f5c0eedaf","type":"leaf","index":"7","name":"cmsheadline","shopwareField":"cmsHeadline"},{"id":"53e9f5d80f10f","type":"leaf","index":"8","name":"cmstext","shopwareField":"cmsText"},{"id":"53e9f5e603ffe","type":"leaf","index":"9","name":"template","shopwareField":"template"},{"id":"53e9f5f87c87a","type":"leaf","index":"10","name":"active","shopwareField":"active"},{"id":"53e9f609c56eb","type":"leaf","index":"11","name":"blog","shopwareField":"blog"},{"id":"53e9f62a03f55","type":"leaf","index":"13","name":"external","shopwareField":"external"},{"id":"53e9f637aa1fe","type":"leaf","index":"14","name":"hidefilter","shopwareField":"hideFilter"},{"id":"541c35c378bc9","type":"leaf","index":"15","name":"attribute_attribute1","shopwareField":"attributeAttribute1"},{"id":"541c36d0bba0f","type":"leaf","index":"16","name":"attribute_attribute2","shopwareField":"attributeAttribute2"},{"id":"541c36d63fac6","type":"leaf","index":"17","name":"attribute_attribute3","shopwareField":"attributeAttribute3"},{"id":"541c36da52222","type":"leaf","index":"18","name":"attribute_attribute4","shopwareField":"attributeAttribute4"},{"id":"541c36dc540e3","type":"leaf","index":"19","name":"attribute_attribute5","shopwareField":"attributeAttribute5"},{"id":"541c36dd9e130","type":"leaf","index":"20","name":"attribute_attribute6","shopwareField":"attributeAttribute6"},{"id":"54dc86ff4bee5","name":"CustomerGroups","index":"21","type":"iteration","adapter":"customerGroups","parentKey":"categoryId","children":[{"id":"54dc87118ad11","type":"leaf","index":"0","name":"CustomerGroup","shopwareField":"customerGroupId"}]}]}]}]}', $importedProfile['tree']);

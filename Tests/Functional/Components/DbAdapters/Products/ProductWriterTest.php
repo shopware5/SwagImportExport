@@ -89,8 +89,8 @@ class ProductWriterTest extends TestCase
 
         $productWriterResult = $this->productWriter->write($expectedNewProduct, []);
 
-        /** @var Article $insertedProduct */
         $insertedProduct = $this->modelManager->find(Article::class, $productWriterResult->getProductId());
+        static::assertInstanceOf(Article::class, $insertedProduct);
 
         $mainDetail = $insertedProduct->getMainDetail();
         static::assertInstanceOf(Detail::class, $mainDetail);
@@ -128,8 +128,8 @@ class ProductWriterTest extends TestCase
 
         $productWriterResult = $this->productWriter->write($expectedModifiedProduct, []);
 
-        /** @var Article $updatedProduct */
         $updatedProduct = $this->modelManager->find(Article::class, $productWriterResult->getProductId());
+        static::assertInstanceOf(Article::class, $updatedProduct);
 
         $mainDetail = $updatedProduct->getMainDetail();
         static::assertInstanceOf(Detail::class, $mainDetail);

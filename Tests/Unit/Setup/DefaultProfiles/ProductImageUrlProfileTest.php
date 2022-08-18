@@ -21,9 +21,9 @@ class ProductImageUrlProfileTest extends TestCase
         $productImageUrlProfile = $this->createProductImageUrlProfile();
 
         $this->walkRecursive($productImageUrlProfile->jsonSerialize(), function ($node): void {
-            $this->assertArrayHasKey('id', $node, 'Current array: ' . \print_r($node, true));
-            $this->assertArrayHasKey('name', $node, 'Current array: ' . \print_r($node, true));
-            $this->assertArrayHasKey('type', $node, 'Current array: ' . \print_r($node, true));
+            static::assertArrayHasKey('id', $node, 'Current array: ' . \print_r($node, true));
+            static::assertArrayHasKey('name', $node, 'Current array: ' . \print_r($node, true));
+            static::assertArrayHasKey('type', $node, 'Current array: ' . \print_r($node, true));
         });
     }
 

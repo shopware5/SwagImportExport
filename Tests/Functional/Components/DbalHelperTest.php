@@ -13,6 +13,7 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Article\Article;
+use Shopware\Models\Customer\Customer;
 use SwagImportExport\Components\DbalHelper;
 use SwagImportExport\Tests\Helper\ContainerTrait;
 
@@ -103,7 +104,7 @@ class DbalHelperTest extends TestCase
 
     private function createClassMetadataObject(): ClassMetadata
     {
-        $classMetaData = new ClassMetadata('ExampleEntity', null);
+        $classMetaData = new ClassMetadata(Customer::class, null);
 
         $classMetaData->table = [
             'name' => self::EXAMPLE_TABLE,

@@ -44,25 +44,32 @@ trait ExportControllerTrait
     private function queryXpath(string $filePath, string $xpath): \DOMNodeList
     {
         $domDocument = new \DOMDocument();
-        $domDocument->loadXML(\file_get_contents($filePath));
+        $xml = \file_get_contents($filePath);
+        static::assertIsString($xml);
+        $domDocument->loadXML($xml);
 
-        $domXpath = new \DOMXPath($domDocument);
-
-        $path = $domXpath->query($xpath);
+        $path = (new \DOMXPath($domDocument))->query($xpath);
 
         self::assertInstanceOf(\DOMNodeList::class, $path);
 
         return $path;
     }
 
+    /**
+     * @return array<array<string, mixed>>
+     */
     private function csvToArrayIndexedByFieldValue(string $filePath, string $indexField): array
     {
         $csv = \fopen($filePath, 'rb');
+        static::assertIsResource($csv);
         $mappedCsv = [];
 
         $header = \fgetcsv($csv, 0, ';');
+        static::assertIsArray($header);
         while (($row = \fgetcsv($csv, 0, ';')) !== false) {
+            static::assertIsArray($row);
             $tmpRow = \array_combine($header, $row);
+            static::assertIsArray($tmpRow);
             $mappedCsv[$tmpRow[$indexField]] = $tmpRow;
         }
 

@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Tests\Functional\Components\DbAdapters;
 
-use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use SwagImportExport\Components\DbAdapters\CustomerDbAdapter;
 use SwagImportExport\Tests\Helper\ContainerTrait;
@@ -40,13 +39,12 @@ class CustomerDbAdapterTest extends TestCase
 
         $customersDbAdapter->write($records);
 
-        /** @var Connection $dbalConnection */
         $dbalConnection = $this->getContainer()->get('dbal_connection');
         $updatedUser = $dbalConnection->executeQuery(
             "
               SELECT * FROM s_user
               WHERE customernumber = '21999'"
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         static::assertEquals($records['default'][0]['active'], $updatedUser[0]['active']);
         static::assertEquals($records['default'][0]['customerNumber'], $updatedUser[0]['customernumber']);
@@ -70,13 +68,12 @@ class CustomerDbAdapterTest extends TestCase
 
         $customerDbAdapter->write($records);
 
-        /** @var Connection $dbalConnection */
         $dbalConnection = $this->getContainer()->get('dbal_connection');
         $updatedUser = $dbalConnection->executeQuery(
             "
               SELECT * FROM s_user
               WHERE customernumber = '20001'"
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         static::assertEquals($records['default'][0]['active'], $updatedUser[0]['active']);
     }
@@ -101,13 +98,12 @@ class CustomerDbAdapterTest extends TestCase
 
         $customerDbAdapter->write($records);
 
-        /** @var Connection $dbalConnection */
         $dbalConnection = $this->getContainer()->get('dbal_connection');
         $updatedUserBillingAddress = $dbalConnection->executeQuery(
             "
               SELECT * FROM s_user_addresses
               WHERE user_id = '1'"
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         static::assertEquals($records['default'][0]['billingCity'], $updatedUserBillingAddress[0]['city']);
         static::assertEquals($records['default'][0]['billingZipcode'], $updatedUserBillingAddress[0]['zipcode']);
@@ -132,13 +128,12 @@ class CustomerDbAdapterTest extends TestCase
 
         $customerDbAdapter->write($records);
 
-        /** @var Connection $dbalConnection */
         $dbalConnection = $this->getContainer()->get('dbal_connection');
         $updatedUser = $dbalConnection->executeQuery(
             "
               SELECT * FROM s_user
               WHERE customernumber = '20001'"
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         static::assertEquals($records['default'][0]['customergroup'], $updatedUser[0]['customergroup']);
     }
@@ -184,13 +179,12 @@ class CustomerDbAdapterTest extends TestCase
 
         $customerDbAdapter->write($records);
 
-        /** @var Connection $dbalConnection */
         $dbalConnection = $this->getContainer()->get('dbal_connection');
         $updatedUserBillingAddress = $dbalConnection->executeQuery(
             "
               SELECT * FROM s_user_addresses
               WHERE user_id = '1'"
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         static::assertEquals($records['default'][0]['billingPhone'], $updatedUserBillingAddress[0]['phone']);
     }
@@ -213,13 +207,12 @@ class CustomerDbAdapterTest extends TestCase
 
         $customerDbAdapter->write($records);
 
-        /** @var Connection $dbalConnection */
         $dbalConnection = $this->getContainer()->get('dbal_connection');
         $updatedUser = $dbalConnection->executeQuery(
             "
               SELECT * FROM s_user
               WHERE customernumber = '20001'"
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         static::assertEquals($records['default'][0]['paymentID'], $updatedUser[0]['paymentID']);
     }
@@ -242,13 +235,12 @@ class CustomerDbAdapterTest extends TestCase
 
         $customerDbAdapter->write($records);
 
-        /** @var Connection $dbalConnection */
         $dbalConnection = $this->getContainer()->get('dbal_connection');
         $updatedUser = $dbalConnection->executeQuery(
             "
               SELECT * FROM s_user
               WHERE customernumber = '20001'"
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         static::assertEquals('2016-11-29 12:13:45', $updatedUser[0]['lastlogin']);
     }
@@ -366,13 +358,12 @@ class CustomerDbAdapterTest extends TestCase
 
         $customerDbAdapter->write($records);
 
-        /** @var Connection $dbalConnection */
         $dbalConnection = $this->getContainer()->get('dbal_connection');
         $updatedUser = $dbalConnection->executeQuery(
             "
               SELECT * FROM s_user
               WHERE customernumber = '20001'"
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         static::assertEquals('test@exampleNew.com', $updatedUser[0]['email']);
     }
@@ -395,13 +386,12 @@ class CustomerDbAdapterTest extends TestCase
 
         $customerDbAdapter->write($records);
 
-        /** @var Connection $dbalConnection */
         $dbalConnection = $this->getContainer()->get('dbal_connection');
         $updatedUser = $dbalConnection->executeQuery(
             "
               SELECT * FROM s_user
               WHERE customernumber = '20001'"
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         static::assertEquals('ac1ef17c2db40995e9fdd40b04a5a649', $updatedUser[0]['password']);
     }

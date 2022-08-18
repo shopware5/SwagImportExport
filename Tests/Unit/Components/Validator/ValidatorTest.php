@@ -117,6 +117,9 @@ class ValidatorTest extends TestCase
         static::assertEquals($expectedFilteredData, $result);
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function getDemoRecordForFilterEmptyStringTest(): array
     {
         return [

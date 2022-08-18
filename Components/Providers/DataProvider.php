@@ -46,7 +46,7 @@ class DataProvider extends \Enlight_Class implements \Enlight_Hook
     public function createDbAdapter(string $adapterType): DataDbAdapter
     {
         $event = $this->fireCreateFactoryEvent($adapterType);
-        if ($event && $event instanceof \Enlight_Event_EventArgs
+        if ($event instanceof \Enlight_Event_EventArgs
             && $event->getReturn() instanceof DataDbAdapter
         ) {
             return $event->getReturn();
@@ -58,7 +58,7 @@ class DataProvider extends \Enlight_Class implements \Enlight_Hook
             }
         }
 
-        throw new \Exception('Db adapter type is not valid');
+        throw new \RuntimeException('Db adapter type is not valid');
     }
 
     /**

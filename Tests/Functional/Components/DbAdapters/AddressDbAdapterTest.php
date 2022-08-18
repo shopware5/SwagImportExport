@@ -11,7 +11,6 @@ namespace SwagImportExport\Tests\Functional\Components\DbAdapters;
 
 use PHPUnit\Framework\TestCase;
 use SwagImportExport\Components\DbAdapters\AddressDbAdapter;
-use SwagImportExport\Components\DbAdapters\DataDbAdapter;
 use SwagImportExport\Tests\Helper\ContainerTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 
@@ -29,20 +28,10 @@ class AddressDbAdapterTest extends TestCase
     public const NOT_EXISTING_USERID = 999999;
     public const STATE_ID_ALABAMA = 20;
 
-    public function testItCanBeCreated(): void
-    {
-        $addressDbAdapter = $this->getAddressDbAdapter();
-
-        static::assertInstanceOf(AddressDbAdapter::class, $addressDbAdapter);
-        static::assertInstanceOf(DataDbAdapter::class, $addressDbAdapter);
-    }
-
     public function testReadRecordIdsShouldReturnIds(): void
     {
         $allAddressIdsInDatabase = [1, 2, 3, 4];
-        $addressDbAdapter = $this->getAddressDbAdapter();
-
-        $addressIds = $addressDbAdapter->readRecordIds(self::NO_START, self::NO_LIMIT, self::NO_FILTER);
+        $addressIds = $this->getAddressDbAdapter()->readRecordIds(self::NO_START, self::NO_LIMIT, self::NO_FILTER);
 
         static::assertEquals($allAddressIdsInDatabase, $addressIds);
     }
@@ -51,9 +40,7 @@ class AddressDbAdapterTest extends TestCase
     {
         $fetchedAmountOfIds = 2;
         $firstResult = 2;
-        $addressDbAdapter = $this->getAddressDbAdapter();
-
-        $addressIds = $addressDbAdapter->readRecordIds($firstResult, self::NO_LIMIT, self::NO_FILTER);
+        $addressIds = $this->getAddressDbAdapter()->readRecordIds($firstResult, self::NO_LIMIT, self::NO_FILTER);
 
         static::assertCount($fetchedAmountOfIds, $addressIds);
     }
@@ -62,9 +49,7 @@ class AddressDbAdapterTest extends TestCase
     {
         $fetchedAmountOfIds = 2;
         $limit = 2;
-        $addressDbAdapter = $this->getAddressDbAdapter();
-
-        $addressIds = $addressDbAdapter->readRecordIds(self::NO_START, $limit, self::NO_FILTER);
+        $addressIds = $this->getAddressDbAdapter()->readRecordIds(self::NO_START, $limit, self::NO_FILTER);
 
         static::assertCount($fetchedAmountOfIds, $addressIds);
     }
@@ -74,8 +59,7 @@ class AddressDbAdapterTest extends TestCase
         $addressIdsToFetch = [1, 2];
         $selectedColumns = ['address.company', 'address.firstname', 'address.lastname', 'customer.email'];
 
-        $addressDbAdapter = $this->getAddressDbAdapter();
-        $addresses = $addressDbAdapter->read($addressIdsToFetch, $selectedColumns);
+        $addresses = $this->getAddressDbAdapter()->read($addressIdsToFetch, $selectedColumns);
 
         $addresses = $addresses['address'];
         static::assertEquals('Max', $addresses[0]['firstname']);
@@ -95,8 +79,7 @@ class AddressDbAdapterTest extends TestCase
         $addressIdsToFetch = [1];
         $selectedColumns = ['attribute.text1', 'attribute.text2'];
 
-        $addressDbAdapter = $this->getAddressDbAdapter();
-        $addresses = $addressDbAdapter->read($addressIdsToFetch, $selectedColumns);
+        $addresses = $this->getAddressDbAdapter()->read($addressIdsToFetch, $selectedColumns);
 
         $addresses = $addresses['address'];
         static::assertEquals('Attr value', $addresses[0]['text1']);
@@ -120,8 +103,7 @@ class AddressDbAdapterTest extends TestCase
         $addressDbAdapter = $this->getAddressDbAdapter();
         $addressDbAdapter->write($addresses);
 
-        $connection = $this->getContainer()->get('dbal_connection');
-        $createdAddresses = $connection->executeQuery("SELECT * FROM s_user_addresses WHERE firstname='My firstname'")->fetchAll();
+        $createdAddresses = $this->getContainer()->get('dbal_connection')->executeQuery("SELECT * FROM s_user_addresses WHERE firstname='My firstname'")->fetchAllAssociative();
 
         $this->assertAddress($createdAddresses);
     }
@@ -145,8 +127,7 @@ class AddressDbAdapterTest extends TestCase
         $addressDbAdapter = $this->getAddressDbAdapter();
         $addressDbAdapter->write($addresses);
 
-        $connection = $this->getContainer()->get('dbal_connection');
-        $createdAddresses = $connection->executeQuery("SELECT * FROM s_user_addresses WHERE firstname='My firstname'")->fetchAll();
+        $createdAddresses = $this->getContainer()->get('dbal_connection')->executeQuery("SELECT * FROM s_user_addresses WHERE firstname='My firstname'")->fetchAllAssociative();
 
         $this->assertAddress($createdAddresses);
     }
@@ -171,8 +152,7 @@ class AddressDbAdapterTest extends TestCase
         $addressesDbAdapter = $this->getAddressDbAdapter();
         $addressesDbAdapter->write($addresses);
 
-        $connection = $this->getContainer()->get('dbal_connection');
-        $createdAddresses = $connection->executeQuery("SELECT * FROM s_user_addresses WHERE firstname='My firstname'")->fetchAll();
+        $createdAddresses = $this->getContainer()->get('dbal_connection')->executeQuery("SELECT * FROM s_user_addresses WHERE firstname='My firstname'")->fetchAllAssociative();
 
         $this->assertAddress($createdAddresses);
     }
@@ -206,7 +186,7 @@ class AddressDbAdapterTest extends TestCase
         $createdAddresses = $connection->executeQuery(
             'SELECT * FROM s_user_addresses WHERE id=?',
             [$updatedAddressId]
-        )->fetchAll();
+        )->fetchAllAssociative();
 
         $this->assertAddress($createdAddresses);
     }
@@ -230,8 +210,7 @@ class AddressDbAdapterTest extends TestCase
         $addressDbAdapter = $this->getAddressDbAdapter();
         $addressDbAdapter->write($addresses);
 
-        $connection = $this->getContainer()->get('dbal_connection');
-        $createdAddresses = $connection->executeQuery("SELECT * FROM s_user_addresses WHERE firstname='My firstname'")->fetchAll();
+        $createdAddresses = $this->getContainer()->get('dbal_connection')->executeQuery("SELECT * FROM s_user_addresses WHERE firstname='My firstname'")->fetchAllAssociative();
 
         $this->assertAddress($createdAddresses);
         static::assertEquals('My VatId', $createdAddresses[0]['ustid']);
@@ -257,8 +236,7 @@ class AddressDbAdapterTest extends TestCase
         $addressDbAdapter = $this->getAddressDbAdapter();
         $addressDbAdapter->write($addresses);
 
-        $connection = $this->getContainer()->get('dbal_connection');
-        $createdAddresses = $connection->executeQuery("SELECT * FROM s_user_addresses WHERE firstname='My firstname'")->fetchAll();
+        $createdAddresses = $this->getContainer()->get('dbal_connection')->executeQuery("SELECT * FROM s_user_addresses WHERE firstname='My firstname'")->fetchAllAssociative();
 
         $this->assertAddress($createdAddresses);
         static::assertEquals('My additional address', $createdAddresses[0]['additional_address_line1']);
@@ -287,7 +265,7 @@ class AddressDbAdapterTest extends TestCase
 
         $connection = $this->getContainer()->get('dbal_connection');
         $addressId = $connection->executeQuery("SELECT id FROM s_user_addresses WHERE firstname='My firstname'")->fetchOne();
-        $createdAttribute = $connection->executeQuery("SELECT * FROM s_user_addresses_attributes WHERE address_id={$addressId}")->fetchAll();
+        $createdAttribute = $connection->executeQuery("SELECT * FROM s_user_addresses_attributes WHERE address_id={$addressId}")->fetchAllAssociative();
 
         static::assertEquals('text1', $createdAttribute[0]['text1']);
         static::assertEquals('text2', $createdAttribute[0]['text2']);
@@ -314,16 +292,14 @@ class AddressDbAdapterTest extends TestCase
         $addressDbAdapter = $this->getAddressDbAdapter();
         $addressDbAdapter->write($addresses);
 
-        $connection = $this->getContainer()->get('dbal_connection');
-        $addressId = $connection->executeQuery("SELECT id FROM s_user_addresses WHERE firstname='My firstname'")->fetchOne();
+        $addressId = $this->getContainer()->get('dbal_connection')->executeQuery("SELECT id FROM s_user_addresses WHERE firstname='My firstname'")->fetchOne();
 
         static::assertEquals(99999, $addressId);
     }
 
     public function testGetColumnsShouldGetAllRequiredColumns(): void
     {
-        $addressDbAdapter = $this->getAddressDbAdapter();
-        $columns = $addressDbAdapter->getColumns();
+        $columns = $this->getAddressDbAdapter()->getColumns();
 
         static::assertContains('address.id as id', $columns);
         static::assertContains('address.company as company', $columns);
@@ -344,8 +320,7 @@ class AddressDbAdapterTest extends TestCase
 
     public function testGetColumnsShouldGetAttributeColumns(): void
     {
-        $addressDbAdapter = $this->getAddressDbAdapter();
-        $columns = $addressDbAdapter->getColumns();
+        $columns = $this->getAddressDbAdapter()->getColumns();
 
         static::assertContains('attribute.text1 as attributeText1', $columns);
         static::assertContains('attribute.text2 as attributeText2', $columns);
@@ -408,7 +383,7 @@ class AddressDbAdapterTest extends TestCase
         $addressDbAdapter->write($addresses);
 
         $connection = $this->getContainer()->get('dbal_connection');
-        $updateAddress = $connection->executeQuery("SELECT * FROM s_user_addresses WHERE id={$addressId}")->fetchAll();
+        $updateAddress = $connection->executeQuery("SELECT * FROM s_user_addresses WHERE id={$addressId}")->fetchAllAssociative();
 
         static::assertEquals(self::STATE_ID_ALABAMA, $updateAddress[0]['state_id']);
     }

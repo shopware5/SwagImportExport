@@ -292,7 +292,9 @@ class OrderExportTest extends \Enlight_Components_Test_Controller_TestCase
     private function assertOrderAttributeInXmlFile(string $filePath, string $number, string $attribute, string $expected): void
     {
         $orderDomNodeList = $this->queryXpath($filePath, "//order[number='{$number}']/{$attribute}");
-        $nodeValue = $orderDomNodeList->item(0)->nodeValue;
+        $node = $orderDomNodeList->item(0);
+        static::assertInstanceOf(\DOMNode::class, $node);
+        $nodeValue = $node->nodeValue;
         static::assertEquals($expected, $nodeValue);
     }
 

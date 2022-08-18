@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Tests\Functional\Components\DbAdapters;
 
-use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use SwagImportExport\Components\DbAdapters\ProductsInStockDbAdapter;
 use SwagImportExport\Tests\Helper\ContainerTrait;
@@ -33,9 +32,8 @@ class ProductInStockDbAdapterTest extends TestCase
         ];
         $productInStockDbAdapter->write($updateInStockRecord);
 
-        /** @var Connection $dbalConnection */
         $dbalConnection = $this->getContainer()->get('dbal_connection');
-        $updatedProductInStock = $dbalConnection->executeQuery("SELECT * FROM s_articles_details WHERE orderNumber='SW10004'")->fetchAll();
+        $updatedProductInStock = $dbalConnection->executeQuery("SELECT * FROM s_articles_details WHERE orderNumber='SW10004'")->fetchAllAssociative();
 
         static::assertEquals(3, $updatedProductInStock[0]['instock']);
     }

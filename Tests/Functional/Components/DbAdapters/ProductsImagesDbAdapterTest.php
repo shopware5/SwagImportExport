@@ -64,7 +64,8 @@ class ProductsImagesDbAdapterTest extends TestCase
 
         $dbalConnection = $this->getContainer()->get('dbal_connection');
         $productId = $dbalConnection->executeQuery("SELECT articleID FROM s_articles_details WHERE orderNumber='SW10001'")->fetchOne();
-        $image = $dbalConnection->executeQuery("SELECT * FROM s_articles_img WHERE description = 'testimport1'")->fetch(\PDO::FETCH_ASSOC);
+        $image = $dbalConnection->executeQuery("SELECT * FROM s_articles_img WHERE description = 'testimport1'")->fetchAssociative();
+        static::assertIsArray($image);
 
         static::assertSame($records['default'][0]['description'], $image['description']);
         static::assertSame($productId, $image['articleID']);
@@ -88,7 +89,8 @@ class ProductsImagesDbAdapterTest extends TestCase
 
         $dbalConnection = $this->getContainer()->get('dbal_connection');
         $productId = $dbalConnection->executeQuery("SELECT articleID FROM s_articles_details WHERE orderNumber='SW10001'")->fetchOne();
-        $image = $dbalConnection->executeQuery("SELECT * FROM s_articles_img WHERE description = 'testimport1'")->fetch(\PDO::FETCH_ASSOC);
+        $image = $dbalConnection->executeQuery("SELECT * FROM s_articles_img WHERE description = 'testimport1'")->fetchAssociative();
+        static::assertIsArray($image);
 
         static::assertSame($records['default'][0]['description'], $image['description']);
         static::assertSame($productId, $image['articleID']);

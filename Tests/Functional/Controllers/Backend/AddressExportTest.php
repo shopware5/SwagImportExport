@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Tests\Functional\Controllers\Backend;
 
-use Shopware\Components\Model\ModelManager;
 use SwagImportExport\Models\Profile;
 use SwagImportExport\Tests\Helper\ContainerTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
@@ -33,11 +32,8 @@ class AddressExportTest extends \Enlight_Components_Test_Controller_TestCase
     {
         $params = $this->getExportRequestParams();
 
-        /** @var ModelManager $modelManager */
-        $modelManager = $this->getContainer()->get('models');
-        $repo = $modelManager->getRepository(Profile::class);
-        $profile = $repo->findOneBy(['name' => 'default_addresses']);
-
+        $profile = $this->getContainer()->get('models')->getRepository(Profile::class)->findOneBy(['name' => 'default_addresses']);
+        static::assertInstanceOf(Profile::class, $profile);
         $params['profileId'] = $profile->getId();
         $params['format'] = 'xml';
 
@@ -53,21 +49,22 @@ class AddressExportTest extends \Enlight_Components_Test_Controller_TestCase
         $this->backendControllerTestHelper->addFile($file);
 
         $company = $this->queryXpath($file, "//address[company='Muster GmbH']/company");
-        static::assertEquals('Muster GmbH', $company->item(0)->nodeValue);
+        $node = $company->item(0);
+        static::assertInstanceOf(\DOMNode::class, $node);
+        static::assertEquals('Muster GmbH', $node->nodeValue);
 
         $company = $this->queryXpath($file, "//address[company='Muster GmbH']/firstname");
-        static::assertEquals('Max', $company->item(0)->nodeValue);
+        $node = $company->item(0);
+        static::assertInstanceOf(\DOMNode::class, $node);
+        static::assertEquals('Max', $node->nodeValue);
     }
 
     public function testAddressExportWithCsv(): void
     {
         $params = $this->getExportRequestParams();
 
-        /** @var ModelManager $modelManager */
-        $modelManager = $this->getContainer()->get('models');
-        $repo = $modelManager->getRepository(Profile::class);
-        $profile = $repo->findOneBy(['name' => 'default_addresses']);
-
+        $profile = $this->getContainer()->get('models')->getRepository(Profile::class)->findOneBy(['name' => 'default_addresses']);
+        static::assertInstanceOf(Profile::class, $profile);
         $params['profileId'] = $profile->getId();
         $params['format'] = 'csv';
         $this->Request()->setParams($params);
@@ -83,8 +80,8 @@ class AddressExportTest extends \Enlight_Components_Test_Controller_TestCase
 
         $exportedAddresses = $this->csvToArrayIndexedByFieldValue($file, 'id');
 
-        static::assertEquals($exportedAddresses[1]['company'], 'Muster GmbH');
-        static::assertEquals($exportedAddresses[1]['firstname'], 'Max');
-        static::assertEquals($exportedAddresses[1]['lastname'], 'Mustermann');
+        static::assertEquals('Muster GmbH', $exportedAddresses[1]['company']);
+        static::assertEquals('Max', $exportedAddresses[1]['firstname']);
+        static::assertEquals('Mustermann', $exportedAddresses[1]['lastname']);
     }
 }

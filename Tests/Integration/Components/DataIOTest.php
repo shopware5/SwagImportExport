@@ -27,12 +27,10 @@ class DataIOTest extends TestCase
     public function testPreloadRecordIds(): void
     {
         $dataProvider = $this->getContainer()->get(DataProvider::class);
-        $sessionService = $this->getContainer()->get(SessionService::class);
-        $session = $sessionService->createSession();
+        $session = $this->getContainer()->get(SessionService::class)->createSession();
         $dbAdapter = $dataProvider->createDbAdapter('categories');
         $logger = $this->getContainer()->get(Logger::class);
-        $profileFactory = $this->getContainer()->get(ProfileFactory::class);
-        $profile = $profileFactory->loadProfile(1);
+        $profile = $this->getContainer()->get(ProfileFactory::class)->loadProfile(1);
 
         $dataIO = new DataIO($dbAdapter, $session, $logger);
 

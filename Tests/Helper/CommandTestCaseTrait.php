@@ -34,7 +34,7 @@ trait CommandTestCaseTrait
     }
 
     /**
-     * @return array<mixed>
+     * @return array<string>
      */
     protected function runCommand(string $command): array
     {
@@ -42,6 +42,9 @@ trait CommandTestCaseTrait
         $application->setAutoExit(true);
 
         $fp = \tmpfile();
+        if (!\is_resource($fp)) {
+            throw new \RuntimeException('Could not create tmp file');
+        }
         $input = new StringInput($command);
         $output = new StreamOutput($fp);
 
@@ -62,6 +65,9 @@ trait CommandTestCaseTrait
         return Shopware()->DocPath() . $fileName;
     }
 
+    /**
+     * @param resource $fp
+     */
     private function readConsoleOutput($fp): string
     {
         \fseek($fp, 0);
@@ -72,7 +78,7 @@ trait CommandTestCaseTrait
         \fclose($fp);
 
         if (!\is_string($output)) {
-            throw new \Exception(sprintf('Could not read filepath %s', $fp));
+            throw new \RuntimeException(sprintf('Could not read filepath %s', (string) $fp));
         }
 
         return $output;

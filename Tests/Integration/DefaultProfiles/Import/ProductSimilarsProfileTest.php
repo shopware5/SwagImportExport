@@ -34,14 +34,14 @@ class ProductSimilarsProfileTest extends TestCase
 
         $this->runCommand("sw:import:import -p default_similar_articles {$filePath}");
 
-        $updatedProductId = $this->executeQuery("SELECT articleID FROM s_articles_details WHERE ordernumber='{$expectedOrderNumber}'", \PDO::FETCH_COLUMN)[0];
-        $updatedProductSimilars = $this->executeQuery("SELECT * FROM s_articles_similar WHERE articleID='{$updatedProductId}'");
+        $updatedProductId = $this->executeQuery(sprintf("SELECT articleID FROM s_articles_details WHERE ordernumber='%s'", $expectedOrderNumber))[0]['articleID'];
+        $updatedProductSimilars = $this->executeQuery(sprintf("SELECT * FROM s_articles_similar WHERE articleID='%s'", $updatedProductId));
 
         foreach (\array_keys($expectedRelatedProductId) as $key) {
             static::assertEquals($expectedRelatedProductId[$key], $updatedProductSimilars[$key]['relatedarticle']);
         }
 
         // Now deleted element
-        static::assertNull($updatedProductSimilars[3]);
+        static::assertEmpty($updatedProductSimilars[3]);
     }
 }

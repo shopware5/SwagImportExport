@@ -61,7 +61,7 @@ class TranslationWriterTest extends TestCase
 
         $connection = $this->getContainer()->get('dbal_connection');
         $sql = "SELECT * FROM s_core_translations WHERE objecttype='article' AND objectkey=273";
-        $result = $connection->executeQuery($sql)->fetchAll();
+        $result = $connection->executeQuery($sql)->fetchAllAssociative();
         $importedTranslation = \unserialize($result[0]['objectdata']);
 
         static::assertSame($translations[0]['name'], $importedTranslation['txtArtikel']);
@@ -98,7 +98,7 @@ class TranslationWriterTest extends TestCase
         $attributeService->delete('s_articles_attributes', 'mycustomfield');
 
         $sql = "SELECT * FROM s_core_translations WHERE objecttype='article' AND objectkey=272";
-        $result = $dbalConnection->executeQuery($sql)->fetchAll();
+        $result = $dbalConnection->executeQuery($sql)->fetchAllAssociative();
         $importedTranslation = \unserialize($result[0]['objectdata']);
 
         // trait rollback not working - so we roll back manually
@@ -133,7 +133,7 @@ class TranslationWriterTest extends TestCase
 
         $connection = $this->getContainer()->get('dbal_connection');
         $sql = "SELECT * FROM s_core_translations WHERE objecttype='variant' AND objectkey=1053";
-        $result = $connection->executeQuery($sql)->fetchAll();
+        $result = $connection->executeQuery($sql)->fetchAllAssociative();
         $importedTranslation = \unserialize($result[0]['objectdata']);
 
         static::assertSame($translations[0]['additionalText'], $importedTranslation['txtzusatztxt']);

@@ -399,8 +399,10 @@ class ProductsInstockExportTest extends \Enlight_Components_Test_Controller_Test
 
     private function assertProductAttributeInXml(string $filePath, string $orderNumber, string $attribute, string $expected): void
     {
-        $articleDomNodeList = $this->queryXpath($filePath, "//article[ordernumber='{$orderNumber}']/{$attribute}");
-        $nodeValue = $articleDomNodeList->item(0)->nodeValue;
+        $productDomNodeList = $this->queryXpath($filePath, "//article[ordernumber='{$orderNumber}']/{$attribute}");
+        $node = $productDomNodeList->item(0);
+        static::assertInstanceOf(\DOMNode::class, $node);
+        $nodeValue = $node->nodeValue;
         static::assertEquals($expected, $nodeValue);
     }
 

@@ -32,8 +32,7 @@ class ProductTranslationUpdateProfileTest extends TestCase
         $this->runCommand("sw:import:import -p default_article_translations_update {$filePath}");
 
         $queryResult = $this->executeQuery(
-            "SELECT * FROM s_core_translations as t JOIN s_articles_details as a ON t.objectkey = a.id AND t.objecttype = 'article' WHERE a.ordernumber = 'SW10003'",
-            \PDO::FETCH_ASSOC
+            "SELECT * FROM s_core_translations as t JOIN s_articles_details as a ON t.objectkey = a.id AND t.objecttype = 'article' WHERE a.ordernumber = 'SW10003'"
         );
 
         $product = $queryResult[0];

@@ -7,7 +7,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace SawgImportExport\Tests\Functional\Components\FileIO;
+namespace SwagImportExport\Tests\Functional\Components\FileIO;
 
 use PHPUnit\Framework\TestCase;
 use SwagImportExport\Components\FileIO\CsvFileWriter;
@@ -29,7 +29,7 @@ class CsvFileWriterTest extends TestCase
         $csvFileWriter = $this->createCsvFileWriter();
         $csvFileWriter->writeRecords(self::TEST_FILE, $exampleData);
 
-        static::assertFileEquals(__DIR__ . '/_fixtures/created_csv_file.csv', self::TEST_FILE);
+        static::assertFileEquals(self::TEST_FILE, __DIR__ . '/_fixtures/created_csv_file.csv');
     }
 
     private function createCsvFileWriter(): CsvFileWriter

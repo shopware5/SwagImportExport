@@ -11,20 +11,10 @@ namespace SwagImportExport\Tests\Unit\Setup\DefaultProfiles;
 
 use PHPUnit\Framework\TestCase;
 use SwagImportExport\Setup\DefaultProfiles\CustomerProfile;
-use SwagImportExport\Setup\DefaultProfiles\ProfileMetaData;
 
 class CustomerProfileTest extends TestCase
 {
     use DefaultProfileTestCaseTrait;
-
-    public function testItCanBeCreated(): void
-    {
-        $categoryProfile = $this->createCustomerProfile();
-
-        static::assertInstanceOf(CustomerProfile::class, $categoryProfile);
-        static::assertInstanceOf(\JsonSerializable::class, $categoryProfile);
-        static::assertInstanceOf(ProfileMetaData::class, $categoryProfile);
-    }
 
     public function testItShouldReturnValidProfileTree(): void
     {
@@ -32,12 +22,12 @@ class CustomerProfileTest extends TestCase
 
         $profileTree = $categoryProfile->jsonSerialize();
         $this->walkRecursive($profileTree, function ($node): void {
-            $this->assertArrayHasKey('id', $node, 'Current array: ' . \print_r($node, true));
-            $this->assertArrayHasKey('name', $node, 'Current array: ' . \print_r($node, true));
-            $this->assertArrayHasKey('type', $node, 'Current array: ' . \print_r($node, true));
+            static::assertArrayHasKey('id', $node, 'Current array: ' . \print_r($node, true));
+            static::assertArrayHasKey('name', $node, 'Current array: ' . \print_r($node, true));
+            static::assertArrayHasKey('type', $node, 'Current array: ' . \print_r($node, true));
         });
 
-        $profileJson = \json_encode($categoryProfile);
+        $profileJson = \json_encode($categoryProfile, \JSON_THROW_ON_ERROR);
         static::assertJson($profileJson);
     }
 

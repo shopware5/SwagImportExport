@@ -70,19 +70,19 @@ class FileIoMock implements FileWriter
     }
 
     /**
-     * @param mixed|null $data
+     * @param mixed|null $headerData
      */
-    public function writeHeader(string $outputFile, $data): void
+    public function writeHeader(string $fileName, $headerData): void
     {
-        \file_put_contents($outputFile, $data);
+        \file_put_contents($fileName, $headerData);
     }
 
     /**
-     * @param mixed|null $data
+     * @param mixed|null $treeData
      */
-    public function writeRecords(string $outputFile, $data): void
+    public function writeRecords(string $fileName, $treeData): void
     {
-        \file_put_contents($outputFile, $data, \FILE_APPEND);
+        \file_put_contents($fileName, $treeData, \FILE_APPEND);
     }
 
     public function supports(string $format): bool

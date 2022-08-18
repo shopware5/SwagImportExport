@@ -40,8 +40,8 @@ class ImportExportProfileTest extends TestCase
 
         $profile = json_decode($content, true);
 
-        static::assertEquals($profile['name'], 'default_categories_minimal');
-        static::assertEquals($profile['type'], 'categories');
+        static::assertEquals('default_categories_minimal', $profile['name']);
+        static::assertEquals('categories', $profile['type']);
     }
 
     public function getProfileController(): Shopware_Controllers_Backend_SwagImportExportProfile

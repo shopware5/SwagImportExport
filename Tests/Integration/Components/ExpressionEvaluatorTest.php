@@ -35,7 +35,7 @@ class ExpressionEvaluatorTest extends TestCase
         $evalVariable1 = $smartyEval->evaluate($expression1, $variables);
         $evalVariable2 = $smartyEval->evaluate($expression2, $variables);
 
-        static::assertEquals($evalVariable1, 'false');
-        static::assertEquals($evalVariable2, 'Product-Test');
+        static::assertEquals('false', $evalVariable1);
+        static::assertEquals('Product-Test', $evalVariable2);
     }
 }

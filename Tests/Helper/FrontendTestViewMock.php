@@ -15,12 +15,9 @@ class FrontendTestViewMock extends \Enlight_View_Default
     /**
      * @var array<string, mixed>
      */
-    public $viewAssign = [];
+    public array $viewAssign = [];
 
-    /**
-     * @var string
-     */
-    public $templateDir;
+    public string $templateDir;
 
     public function __construct()
     {
@@ -28,29 +25,29 @@ class FrontendTestViewMock extends \Enlight_View_Default
     }
 
     /**
-     * @param string|array<string, mixed> $key
+     * @param string|array<string, mixed> $spec
      * @param null                        $nocache
      * @param null                        $scope
      */
-    public function assign($key, $value = null, $nocache = null, $scope = null)
+    public function assign($spec, $value = null, $nocache = null, $scope = null)
     {
-        if (\is_array($key)) {
-            $this->viewAssign = $key;
+        if (\is_array($spec)) {
+            $this->viewAssign = $spec;
 
             return $this;
         }
 
-        $this->viewAssign[$key] = $value;
+        $this->viewAssign[$spec] = $value;
 
         return $this;
     }
 
     /**
-     * @param string $key
+     * @param string $spec
      */
-    public function getAssign($key = null)
+    public function getAssign($spec = null)
     {
-        return $this->viewAssign[$key];
+        return $this->viewAssign[$spec];
     }
 
     /**

@@ -34,11 +34,7 @@ class DbAdapterTestHelper extends TestCase
     public function getDataProvider(string $testCase): array
     {
         if ($this->dataProvider === null) {
-            $this->dataProvider = $this->parseYaml(
-                \file_get_contents(
-                    $this->getYamlFile($this->yamlFile)
-                )
-            );
+            $this->dataProvider = $this->parseYaml((string) \file_get_contents($this->getYamlFile($this->yamlFile)));
         }
 
         return $this->dataProvider[$testCase];
@@ -54,15 +50,13 @@ class DbAdapterTestHelper extends TestCase
     }
 
     /**
-     * @param int[] $ids
+     * @param array<string> $columns
+     * @param array<int>    $ids
      */
     public function read(array $columns, array $ids, array $expectedResults, int $expectedCount, string $section = 'default'): void
     {
-        /* @var DataProvider $dataProvider */
         $dataProvider = $this->getContainer()->get(DataProvider::class);
-        $dbAdapter = $dataProvider->createDbAdapter($this->dbAdapter);
-
-        $rawData = $dbAdapter->read($ids, $columns);
+        $rawData = $dataProvider->createDbAdapter($this->dbAdapter)->read($ids, $columns);
         foreach ($expectedResults as $index => $expectedResult) {
             foreach ($expectedResult as $column => $value) {
                 static::assertEquals($value, $rawData[$section][$index][$column], "The value of `$column` field does not match!");
@@ -74,11 +68,8 @@ class DbAdapterTestHelper extends TestCase
 
     public function readRecordIds(int $start, int $limit, array $filter, array $expectedIds, int $expectedCount): void
     {
-        /* @var DataProvider $dataProvider */
         $dataProvider = $this->getContainer()->get(DataProvider::class);
-        $dbAdapter = $dataProvider->createDbAdapter($this->dbAdapter);
-
-        $ids = $dbAdapter->readRecordIds($start, $limit, $filter);
+        $ids = $dataProvider->createDbAdapter($this->dbAdapter)->readRecordIds($start, $limit, $filter);
 
         foreach ($ids as $index => $id) {
             static::assertSame($expectedIds[$index], $id, 'Expected id = ' . $expectedIds[$index] . ' does not match with actual id = ' . $id);
@@ -97,9 +88,7 @@ class DbAdapterTestHelper extends TestCase
     {
         $recordsCountBeforeImport = $this->getTableCount($this->dbTable);
 
-        $dataProvider = $this->getContainer()->get(DataProvider::class);
-
-        $dbAdapter = $dataProvider->createDbAdapter($this->dbAdapter);
+        $dbAdapter = $this->getContainer()->get(DataProvider::class)->createDbAdapter($this->dbAdapter);
         $dbAdapter->write($records);
 
         $recordsCountAfterImport = $this->getTableCount($this->dbTable);

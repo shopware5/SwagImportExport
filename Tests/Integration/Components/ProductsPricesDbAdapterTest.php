@@ -23,7 +23,9 @@ class ProductsPricesDbAdapterTest extends DbAdapterTestHelper
     }
 
     /**
-     * @param int[] $ids
+     * @param array<string>               $columns
+     * @param array<int>                  $ids
+     * @param array<array<string, mixed>> $expected
      *
      * @dataProvider readProvider
      */
@@ -32,6 +34,9 @@ class ProductsPricesDbAdapterTest extends DbAdapterTestHelper
         $this->read($columns, $ids, $expected, $expectedCount);
     }
 
+    /**
+     * @return array<string, array{columns: array<string>, ids: array<int>, expected: array<array<string, mixed>>, expectedCount: int}>
+     */
     public function readProvider(): array
     {
         return $this->getDataProvider('testRead');
@@ -39,12 +44,17 @@ class ProductsPricesDbAdapterTest extends DbAdapterTestHelper
 
     /**
      * @dataProvider readRecordIdsProvider
+     *
+     * @param list<int> $expected
      */
     public function testReadRecordIds(int $start, int $limit, array $expected, int $expectedCount): void
     {
         $this->readRecordIds($start, $limit, [], $expected, $expectedCount);
     }
 
+    /**
+     * @return array<string, array{start: int, limit: int, expected: list<int>, expectedCount: int}>
+     */
     public function readRecordIdsProvider(): array
     {
         return $this->getDataProvider('testReadRecordIds');

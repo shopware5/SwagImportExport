@@ -27,7 +27,9 @@ class AutoImportServiceTest extends TestCase
     public function deleteFilesAfter(): void
     {
         foreach ($this->files as $file) {
-            \file_exists($file) ? \unlink($file) : '';
+            if (\file_exists($file)) {
+                \unlink($file);
+            }
         }
 
         $this->files = [];
@@ -67,8 +69,7 @@ class AutoImportServiceTest extends TestCase
     {
         $service = $this->getService();
 
-        $reflectionClass = new \ReflectionClass(AutoImportService::class);
-        $property = $reflectionClass->getProperty('directory');
+        $property = (new \ReflectionClass(AutoImportService::class))->getProperty('directory');
         $property->setAccessible(true);
         $baseDirectory = $property->getValue($service);
 
@@ -87,8 +88,7 @@ class AutoImportServiceTest extends TestCase
     {
         $service = $this->getService();
 
-        $reflectionClass = new \ReflectionClass(AutoImportService::class);
-        $property = $reflectionClass->getProperty('directory');
+        $property = (new \ReflectionClass(AutoImportService::class))->getProperty('directory');
         $property->setAccessible(true);
         $baseDirectory = $property->getValue($service);
 
@@ -97,7 +97,7 @@ class AutoImportServiceTest extends TestCase
         $this->files[] = $baseDirectory . '/__running';
         $this->files[] = $userFile;
 
-        $this->installProfile($userFile, \file_get_contents(__DIR__ . '/_fixtures/export.customers.csv'));
+        $this->installProfile($userFile, (string) \file_get_contents(__DIR__ . '/_fixtures/export.customers.csv'));
 
         $this->expectOutputString('3 default_customers imported successfully' . \PHP_EOL);
         $service->runAutoImport();

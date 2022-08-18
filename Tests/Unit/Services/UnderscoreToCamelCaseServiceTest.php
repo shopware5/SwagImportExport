@@ -15,18 +15,19 @@ use SwagImportExport\Components\Service\UnderscoreToCamelCaseService;
 class UnderscoreToCamelCaseServiceTest extends TestCase
 {
     /**
-     * @dataProvider underscoreToCamelCaseTest_provider
+     * @dataProvider underscoreToCamelCaseTestProvider
      */
     public function testUnderscoreToCamelCase(?string $string, string $expectedResult): void
     {
-        $service = new UnderscoreToCamelCaseService();
-
-        $result = $service->underscoreToCamelCase($string);
+        $result = (new UnderscoreToCamelCaseService())->underscoreToCamelCase($string);
 
         static::assertSame($expectedResult, $result);
     }
 
-    public function underscoreToCamelCaseTest_provider(): array
+    /**
+     * @return array<list<string|null>>
+     */
+    public function underscoreToCamelCaseTestProvider(): array
     {
         return [
             [null, ''],

@@ -38,10 +38,10 @@ class ProductImageUrlProfileTest extends TestCase
 
         $this->runCommand("sw:import:import -p default_article_images_url {$importFile}");
 
-        $productResult = $this->executeQuery("SELECT articleID FROM s_articles_details WHERE orderNumber='SW10001'", \PDO::FETCH_COLUMN);
-        $images = $this->executeQuery("SELECT * FROM s_articles_img WHERE articleID = '{$productResult[0]}'", \PDO::FETCH_ASSOC);
+        $productResult = $this->executeQuery("SELECT articleID FROM s_articles_details WHERE orderNumber='SW10001'");
+        $images = $this->executeQuery(sprintf("SELECT * FROM s_articles_img WHERE articleID = '%s'", $productResult[0]['articleID']));
 
-        static::assertEquals($productResult[0], $images[1]['articleID']);
+        static::assertEquals($productResult[0]['articleID'], $images[1]['articleID']);
         static::assertEquals(2, $images[1]['position']);
         static::assertStringStartsWith('sw-icon_blue', $images[1]['img']);
 

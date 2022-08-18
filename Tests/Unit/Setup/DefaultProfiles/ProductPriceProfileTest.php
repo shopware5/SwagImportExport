@@ -21,9 +21,9 @@ class ProductPriceProfileTest extends TestCase
         $priceProfile = $this->createProductPriceProfile();
 
         $this->walkRecursive($priceProfile->jsonSerialize(), function ($node): void {
-            $this->assertArrayHasKey('id', $node, 'Current array: ' . \print_r($node, true));
-            $this->assertArrayHasKey('name', $node, 'Current array: ' . \print_r($node, true));
-            $this->assertArrayHasKey('type', $node, 'Current array: ' . \print_r($node, true));
+            static::assertArrayHasKey('id', $node, 'Current array: ' . \print_r($node, true));
+            static::assertArrayHasKey('name', $node, 'Current array: ' . \print_r($node, true));
+            static::assertArrayHasKey('type', $node, 'Current array: ' . \print_r($node, true));
         });
     }
 

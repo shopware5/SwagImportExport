@@ -19,12 +19,12 @@ use SwagImportExport\Models\Expression;
 class ValuesTransformerTest extends TestCase
 {
     /**
-     * @dataProvider transform_test_dataProvider
+     * @dataProvider transformTestDataProvider
      *
      * @param array<string, mixed>      $data
      * @param array<string, mixed>|null $expectedResult
      */
-    public function testTransform(string $type, array $data, ?array $expectedResult = null, ExpressionEvaluator $evaluator): void
+    public function testTransform(string $type, array $data, ?array $expectedResult, ExpressionEvaluator $evaluator): void
     {
         $transformer = $this->getValuesTransformer($evaluator);
 
@@ -40,7 +40,7 @@ class ValuesTransformerTest extends TestCase
     /**
      * @return array<array<mixed>>
      */
-    public function transform_test_dataProvider(): array
+    public function transformTestDataProvider(): array
     {
         $data = [
             [['testVar' => 'someValue'], ['otherTestVar' => 'someValue']],

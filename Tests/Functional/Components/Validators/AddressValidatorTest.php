@@ -12,19 +12,10 @@ namespace SwagImportExport\Tests\Functional\Components\Validators;
 use PHPUnit\Framework\TestCase;
 use SwagImportExport\Components\Exception\AdapterException;
 use SwagImportExport\Components\Validators\AddressValidator;
-use SwagImportExport\Components\Validators\Validator;
 
 class AddressValidatorTest extends TestCase
 {
     public const DONT_UPDATE_ADDRESS = false;
-
-    public function testItCanBeCreated(): void
-    {
-        $addressValidator = new AddressValidator();
-
-        static::assertInstanceOf(AddressValidator::class, $addressValidator);
-        static::assertInstanceOf(Validator::class, $addressValidator);
-    }
 
     public function testCheckRquieredFieldsShouldThrowExceptionIfAddressIsEmpty(): void
     {

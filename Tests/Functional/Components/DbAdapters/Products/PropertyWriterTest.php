@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Tests\Functional\Components\DbAdapters\Products;
 
-use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use SwagImportExport\Components\DbAdapters\Products\PropertyWriter;
 use SwagImportExport\Tests\Helper\ContainerTrait;
@@ -55,7 +54,6 @@ class PropertyWriterTest extends TestCase
             [$importData]
         );
 
-        /** @var Connection $dbalConnection */
         $dbalConnection = $this->getContainer()->get('dbal_connection');
         $importedFilter = $dbalConnection->executeQuery(
             'SELECT * FROM s_filter WHERE name = ?',
@@ -84,7 +82,6 @@ class PropertyWriterTest extends TestCase
             $importData
         );
 
-        /** @var Connection $dbalConnection */
         $dbalConnection = $this->getContainer()->get('dbal_connection');
         $filterGroupId = $dbalConnection->executeQuery(
             'SELECT filterGroupId FROM s_articles WHERE id = ?',
@@ -112,7 +109,6 @@ class PropertyWriterTest extends TestCase
             $importData
         );
 
-        /** @var Connection $dbalConnection */
         $dbalConnection = $this->getContainer()->get('dbal_connection');
         $createdPropertyValue = $dbalConnection->executeQuery(
             'SELECT `value` FROM s_filter_values WHERE value = ?',
@@ -140,7 +136,6 @@ class PropertyWriterTest extends TestCase
             $importData
         );
 
-        /** @var Connection $dbalConnection */
         $dbalConnection = $this->getContainer()->get('dbal_connection');
         $createdPropertyValue = $dbalConnection->executeQuery(
             'SELECT `name` FROM s_filter_options WHERE name = ?',
@@ -187,7 +182,6 @@ class PropertyWriterTest extends TestCase
             $importData
         );
 
-        /** @var Connection $dbalConnection */
         $dbalConnection = $this->getContainer()->get('dbal_connection');
         $valueIdRelationToTestedProduct = $dbalConnection->executeQuery(
             'SELECT valueID FROM s_filter_articles WHERE articleID = ?',
@@ -214,7 +208,6 @@ class PropertyWriterTest extends TestCase
             $importData
         );
 
-        /** @var Connection $dbalConnection */
         $dbalConnection = $this->getContainer()->get('dbal_connection');
         $createOptionRelation = $dbalConnection->executeQuery(
             'SELECT optionID FROM s_filter_relations LEFT JOIN s_articles ON s_articles.filterGroupID = s_filter_relations.groupID WHERE s_articles.id = ?',
@@ -241,7 +234,6 @@ class PropertyWriterTest extends TestCase
             $importData
         );
 
-        /** @var Connection $dbalConnection */
         $dbalConnection = $this->getContainer()->get('dbal_connection');
         $createdGroupName = $dbalConnection->executeQuery(
             'SELECT name FROM s_filter WHERE name = ?',

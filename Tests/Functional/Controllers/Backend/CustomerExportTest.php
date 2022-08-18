@@ -81,7 +81,9 @@ class CustomerExportTest extends \Enlight_Components_Test_Controller_TestCase
     private function assertCustomerAttributeInXml(string $filePath, string $customerNumber, string $attribute, string $expected): void
     {
         $customerDomNodeList = $this->queryXpath($filePath, "//customer[customernumber='{$customerNumber}']/{$attribute}");
-        $nodeValue = $customerDomNodeList->item(0)->nodeValue;
+        $node = $customerDomNodeList->item(0);
+        static::assertInstanceOf(\DOMNode::class, $node);
+        $nodeValue = $node->nodeValue;
         static::assertEquals($expected, $nodeValue);
     }
 }
