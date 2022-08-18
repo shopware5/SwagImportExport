@@ -44,7 +44,7 @@ class ProfilesCommand extends ShopwareCommand
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $query = $this->profileRepository->getProfilesListQuery()->getQuery();
 
@@ -52,8 +52,7 @@ class ProfilesCommand extends ShopwareCommand
 
         $output->writeln('<info>' . \sprintf('Total count: %d.', $count) . '</info>');
 
-        $data = $query->getArrayResult();
-        foreach ($data as $profile) {
+        foreach ($query->getArrayResult() as $profile) {
             $output->writeln(
                 '<info>'
                 . \sprintf("\tProfile %d: '%s', type: %s", $profile['id'], $profile['name'], $profile['type'])

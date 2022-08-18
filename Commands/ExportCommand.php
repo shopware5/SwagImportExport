@@ -14,7 +14,7 @@ use Shopware\Commands\ShopwareCommand;
 use Shopware\Models\CustomerStream\CustomerStream;
 use SwagImportExport\Components\Factories\ProfileFactory;
 use SwagImportExport\Components\Logger\LogDataStruct;
-use SwagImportExport\Components\Logger\Logger;
+use SwagImportExport\Components\Logger\LoggerInterface;
 use SwagImportExport\Components\Profile\Profile;
 use SwagImportExport\Components\Service\ExportServiceInterface;
 use SwagImportExport\Components\Session\SessionService;
@@ -67,7 +67,7 @@ class ExportCommand extends ShopwareCommand
 
     private ProfileFactory $profileFactory;
 
-    private Logger $logger;
+    private LoggerInterface $logger;
 
     private ExportServiceInterface $exportService;
 
@@ -80,7 +80,7 @@ class ExportCommand extends ShopwareCommand
         SessionService $sessionService,
         UploadPathProvider $uploadPathProvider,
         string $path,
-        Logger $logger,
+        LoggerInterface $logger,
         ExportServiceInterface $exportService,
         \Shopware_Components_Config $config
     ) {
@@ -121,7 +121,7 @@ class ExportCommand extends ShopwareCommand
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         // Validation of user input
         $this->prepareExportInputValidation($input);
@@ -207,7 +207,7 @@ class ExportCommand extends ShopwareCommand
         return 0;
     }
 
-    protected function prepareExportInputValidation(InputInterface $input): void
+    private function prepareExportInputValidation(InputInterface $input): void
     {
         $this->profile = $input->getOption('profile');
         $this->customerStream = $input->getOption('customerstream');
@@ -238,10 +238,8 @@ class ExportCommand extends ShopwareCommand
             }
         }
 
-        if (!empty($this->dateFrom) && !empty($this->dateTo)) {
-            if ($this->dateFrom > $this->dateTo) {
-                throw new \RuntimeException('from date must be greater than to date');
-            }
+        if (!empty($this->dateFrom) && !empty($this->dateTo) && $this->dateFrom > $this->dateTo) {
+            throw new \RuntimeException('from date must be greater than to date');
         }
 
         if (!$this->filePath) {
@@ -253,7 +251,7 @@ class ExportCommand extends ShopwareCommand
             $profile = $this->profileFactory->loadProfileByFileName($this->filePath);
 
             if (!$profile instanceof Profile) {
-                throw new \Exception(sprintf('Profile could not be determinated by file path %s.', $this->filePath));
+                throw new \InvalidArgumentException(sprintf('Profile could not be determinated by file path %s.', $this->filePath));
             }
 
             $this->profileEntity = $profile;
@@ -261,7 +259,7 @@ class ExportCommand extends ShopwareCommand
             $profile = $this->profileRepository->findOneBy(['name' => $this->profile]);
 
             if (!$profile instanceof ProfileModel) {
-                throw new \Exception(sprintf('Profile not found by name %s.', $profile));
+                throw new \InvalidArgumentException(sprintf('Profile not found by name %s.', $profile));
             }
 
             $this->profileEntity = new Profile($profile);
@@ -279,7 +277,7 @@ class ExportCommand extends ShopwareCommand
             $this->format = \pathinfo($this->filePath, \PATHINFO_EXTENSION);
         }
 
-        // format should be case insensitive
+        // format should be case-insensitive
         $this->format = \strtolower($this->format);
 
         // validate type
@@ -288,7 +286,7 @@ class ExportCommand extends ShopwareCommand
         }
     }
 
-    protected function validateProfiles(InputInterface $input): void
+    private function validateProfiles(InputInterface $input): void
     {
         if (!isset($this->profileEntity)) {
             throw new \RuntimeException(\sprintf('Invalid profile: \'%s\'!', $this->profile));
@@ -303,13 +301,13 @@ class ExportCommand extends ShopwareCommand
         }
     }
 
-    protected function validateCustomerStream(?CustomerStream $customerStream): void
+    private function validateCustomerStream(?CustomerStream $customerStream): void
     {
         if (!$customerStream) {
             throw new \RuntimeException(\sprintf('Invalid stream: \'%s\'! There is no customer stream with this id.', $this->customerStream));
         }
 
-        if (!$this->profileEntity instanceof Profile || !\in_array($this->profileEntity->getType(), ['customers', 'addresses'], true)) {
+        if (!\in_array($this->profileEntity->getType(), ['customers', 'addresses'], true)) {
             throw new \RuntimeException(\sprintf('Customer stream export can not be used with profile: \'%s\'!', $this->profile));
         }
     }

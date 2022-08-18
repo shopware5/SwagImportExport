@@ -12,7 +12,7 @@ namespace SwagImportExport\Commands;
 use Shopware\Commands\ShopwareCommand;
 use SwagImportExport\Components\Factories\ProfileFactory;
 use SwagImportExport\Components\Profile\Profile;
-use SwagImportExport\Components\Service\ImportService;
+use SwagImportExport\Components\Service\ImportServiceInterface;
 use SwagImportExport\Components\Session\SessionService;
 use SwagImportExport\Components\Structs\ImportRequest;
 use SwagImportExport\Models\Profile as ProfileEntity;
@@ -38,13 +38,13 @@ class ImportCommand extends ShopwareCommand
 
     private SessionService $sessionService;
 
-    private ImportService $importService;
+    private ImportServiceInterface $importService;
 
     public function __construct(
         ProfileFactory $profileFactory,
         ProfileRepository $profileRepository,
         SessionService $sessionService,
-        ImportService $importService
+        ImportServiceInterface $importService
     ) {
         $this->profileFactory = $profileFactory;
         $this->profileRepository = $profileRepository;
@@ -70,17 +70,17 @@ class ImportCommand extends ShopwareCommand
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->prepareImportInputValidation($input);
 
         // validate profile
         if (!$this->profileEntity instanceof Profile) {
-            throw new \Exception(\sprintf('Invalid profile: \'%s\'!', $this->profile));
+            throw new \InvalidArgumentException(\sprintf('Invalid profile: \'%s\'!', $this->profile));
         }
 
         if (!\is_string($this->format)) {
-            throw new \Exception('Format could not be determined');
+            throw new \InvalidArgumentException('Format could not be determined');
         }
 
         $this->start($output, $this->profileEntity, $this->filePath, $this->format);
@@ -129,7 +129,7 @@ class ImportCommand extends ShopwareCommand
             $profile = $this->profileFactory->loadProfileByFileName($this->filePath);
 
             if (!$profile instanceof Profile) {
-                throw new \Exception(sprintf('Profile could not be determinated by file path %s.', $this->filePath));
+                throw new \InvalidArgumentException(sprintf('Profile could not be determinated by file path %s.', $this->filePath));
             }
 
             $this->profileEntity = $profile;
@@ -137,15 +137,10 @@ class ImportCommand extends ShopwareCommand
             $profile = $this->profileRepository->findOneBy(['name' => $this->profile]);
 
             if (!$profile instanceof ProfileEntity) {
-                throw new \Exception(sprintf('Profile was not found by the name %s', $this->profile));
+                throw new \InvalidArgumentException(sprintf('Profile was not found by the name %s', $this->profile));
             }
 
             $this->profileEntity = new Profile($profile);
-        }
-
-        // validate profile
-        if (!$this->profileEntity instanceof Profile) {
-            throw new \Exception(\sprintf('Invalid profile: \'%s\'!', $this->profile));
         }
 
         // if no format is specified try to find it from the filename
@@ -153,17 +148,17 @@ class ImportCommand extends ShopwareCommand
             $this->format = \pathinfo($this->filePath, \PATHINFO_EXTENSION);
         }
 
-        // format should be case insensitive
+        // format should be case-insensitive
         $this->format = \strtolower($this->format);
 
         // validate type
         if (!\in_array($this->format, ['csv', 'xml'])) {
-            throw new \Exception(\sprintf('Invalid format: \'%s\'! Valid formats are: CSV and XML.', $this->format));
+            throw new \InvalidArgumentException(\sprintf('Invalid format: \'%s\'! Valid formats are: CSV and XML.', $this->format));
         }
 
         // validate path
         if (!\file_exists($this->filePath)) {
-            throw new \Exception(\sprintf('File \'%s\' not found!', $this->filePath));
+            throw new \InvalidArgumentException(\sprintf('File \'%s\' not found!', $this->filePath));
         }
     }
 }
