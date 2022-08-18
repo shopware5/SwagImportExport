@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -30,7 +31,6 @@ EOF;
 return (new Config())
     ->registerCustomFixers(new Fixers())
     ->setRiskyAllowed(true)
-    ->setUsingCache(false)
     ->setRules([
         '@PSR12' => true,
         '@Symfony' => true,

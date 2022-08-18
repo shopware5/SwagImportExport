@@ -32,20 +32,17 @@ class CsvFileWriter implements FileWriter
 
     public function writeHeader(string $fileName, array $headerData): void
     {
-        if (!\is_array($headerData)) {
-            throw new \Exception('Header data is not valid');
-        }
         $columnNames = \implode(';', $headerData) . "\n";
         $this->fileHelper->writeStringToFile($fileName, $columnNames);
     }
 
-    public function writeRecords(string $fileName, array $data): void
+    public function writeRecords(string $fileName, array $treeData): void
     {
         $flatData = '';
 
         $convertor = new CsvConverter();
-        $keys = \array_keys(\current($data));
-        foreach ($data as $line) {
+        $keys = \array_keys(\current($treeData));
+        foreach ($treeData as $line) {
             $flatData .= $convertor->_encode_line($line, $keys) . $convertor->getNewline();
         }
         $this->fileHelper->writeStringToFile($fileName, $flatData, \FILE_APPEND);

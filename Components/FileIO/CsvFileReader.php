@@ -44,12 +44,12 @@ class CsvFileReader implements FileReader
         $tempFileName = '';
         if (\file_exists($fileName)) {
             $tempFileName = $this->uploadPathProvider->getRealPath(\md5(\microtime() . '.csv'));
-            \file_put_contents($tempFileName, \file_get_contents($fileName));
+            \copy($fileName, $tempFileName);
             $fileName = $tempFileName;
         }
 
         $file = new \SplFileObject($fileName);
-        $file->setCsvControl(';', '"');
+        $file->setCsvControl(';');
         $file->setFlags(\SplFileObject::READ_CSV);
 
         $columnNames = $this->getColumnNames($file);
@@ -76,7 +76,7 @@ class CsvFileReader implements FileReader
             }
 
             foreach ($columnNames as $key => $name) {
-                $data[$name] = isset($row[$key]) ? $row[$key] : '';
+                $data[$name] = $row[$key] ?? '';
             }
 
             $readRows[] = $data;
@@ -142,8 +142,7 @@ class CsvFileReader implements FileReader
                 // $isUtf8 = (utf8_encode(utf8_decode($value)) == $value);
 
                 // might have issues with encodings other than utf-8 and latin-1
-                $isUtf8 = \mb_detect_encoding($value, 'UTF-8', true) !== false;
-                if (!$isUtf8) {
+                if (!\mb_detect_encoding($value, 'UTF-8', true) !== false) {
                     $value = \utf8_encode($value);
                 }
 

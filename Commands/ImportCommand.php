@@ -24,7 +24,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ImportCommand extends ShopwareCommand
 {
-    protected string $profile;
+    protected ?string $profile = null;
 
     protected ?Profile $profileEntity;
 

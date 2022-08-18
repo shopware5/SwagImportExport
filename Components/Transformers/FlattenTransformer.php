@@ -190,6 +190,8 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      */
     public function transform(array $node, ?array $mapper = []): ?array
     {
+        $currentNode = null;
+
         if (isset($node['children'])) {
             if (isset($node['attributes'])) {
                 foreach ($node['attributes'] as $attribute) {
@@ -208,7 +210,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
 
                 $currentNode['_value'] = $mapper[$node['shopwareField']];
             } else {
-                $currentNode = $mapper[$node['shopwareField']];
+                $currentNode = $mapper[$node['shopwareField']] ?? null;
             }
         }
 

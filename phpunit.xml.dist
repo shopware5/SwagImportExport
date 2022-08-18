@@ -1,16 +1,21 @@
 <?xml version="1.0"?>
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="./Tests/ImportExportTestKernel.php" backupGlobals="false" stopOnFailure="true" colors="true" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
-  <coverage>
-    <include>
-      <directory suffix=".php">./</directory>
-    </include>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         bootstrap="./Tests/ImportExportTestKernel.php"
+         backupGlobals="false"
+         colors="true"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+    <coverage>
+        <include>
+            <directory suffix=".php">./</directory>
+        </include>
 
-    <exclude>
-      <directory suffix=".php">./Tests</directory>
-      <directory suffix=".php">./vendor</directory>
-    </exclude>
-  </coverage>
-  <testsuite name="SwagImportExport Test Suite">
-    <directory>./Tests</directory>
-  </testsuite>
+        <exclude>
+            <directory suffix=".php">./Tests</directory>
+            <directory suffix=".php">./vendor</directory>
+        </exclude>
+    </coverage>
+
+    <testsuite name="SwagImportExport Test Suite">
+        <directory>./Tests</directory>
+    </testsuite>
 </phpunit>

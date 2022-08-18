@@ -37,7 +37,7 @@ class XmlFileReader implements FileReader
         $this->findIterationNode($tree, []);
     }
 
-    public function readRecords(string $fileName, int $position, int $count): array
+    public function readRecords(string $fileName, int $position, int $step): array
     {
         $reader = new \XMLReader();
         $reader->open($fileName);
@@ -56,10 +56,12 @@ class XmlFileReader implements FileReader
 
         $j = 0;
         $records = [];
-        while ($j < $count && $reader->next($this->iterationTag[0])) {
+        while ($j < $step && $reader->next($this->iterationTag[0])) {
             $node = $reader->expand();
-            $records[] = $this->toArrayTree($node, $this->iterationPath[0]);
-            ++$j;
+            if ($node instanceof \DOMElement) {
+                $records[] = $this->toArrayTree($node, $this->iterationPath[0]);
+                ++$j;
+            }
         }
 
         return $records;

@@ -195,7 +195,7 @@ class DecimalTransformer implements DataTransformerAdapter
                 break;
         }
 
-        foreach ($currentNode['children'] as $child) {
+        foreach ($currentNode['children'] ?? [] as $child) {
             $result = $this->iterateTree($child, $result);
         }
 

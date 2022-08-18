@@ -170,6 +170,7 @@ class DataWorkflow
         }
 
         $postData['position'] = $session->getPosition();
+        $postData['adapter'] = $request->profileEntity->getName();
 
         return $postData;
     }
@@ -207,12 +208,12 @@ class DataWorkflow
     private function getDefaultFields(array $node): array
     {
         if ($node) {
-            foreach ($node['children'] as $key => $leaf) {
-                if ($leaf['children']) {
+            foreach ($node['children'] as $leaf) {
+                if (isset($leaf['children'])) {
                     $this->getDefaultFields($leaf);
                 }
 
-                if (isset($leaf['defaultValue']) && $leaf['defaultValue'] != '') {
+                if (!empty($leaf['defaultValue'])) {
                     $this->defaultValues[$leaf['shopwareField']] = $leaf['defaultValue'];
                 }
             }

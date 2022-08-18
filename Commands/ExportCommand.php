@@ -31,7 +31,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ExportCommand extends ShopwareCommand
 {
-    protected string $profile;
+    protected ?string $profile = null;
 
     protected Profile $profileEntity;
 

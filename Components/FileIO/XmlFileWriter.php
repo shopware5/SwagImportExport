@@ -55,12 +55,12 @@ class XmlFileWriter implements FileWriter
      *
      * @throws \Exception
      */
-    public function writeRecords(string $fileName, array $data): void
+    public function writeRecords(string $fileName, array $treeData): void
     {
-        // converting the whole template tree without the interation part
-        $data = $this->xmlConvertor->_encode($data);
+        // converting the whole template tree without the iteration part
+        $encodedTreeData = $this->xmlConvertor->_encode($treeData);
 
-        $this->getFileHelper()->writeStringToFile($fileName, \trim($data), \FILE_APPEND);
+        $this->getFileHelper()->writeStringToFile($fileName, \trim($encodedTreeData), \FILE_APPEND);
     }
 
     /**
@@ -73,7 +73,7 @@ class XmlFileWriter implements FileWriter
     {
         $dataParts = $this->splitHeaderFooter($footerData ?? []);
 
-        $data = isset($dataParts[1]) ? $dataParts[1] : null;
+        $data = $dataParts[1] ?? null;
 
         $this->getFileHelper()->writeStringToFile($fileName, $data, \FILE_APPEND);
     }
@@ -98,9 +98,9 @@ class XmlFileWriter implements FileWriter
     protected function splitHeaderFooter(array $data): array
     {
         // converting the whole template tree without the iteration part
-        $data = $this->xmlConvertor->encode($data);
+        $encodedData = $this->xmlConvertor->encode($data);
 
-        // spliting the the tree in to two parts
-        return \explode('<_currentMarker></_currentMarker>', $data);
+        // splitting the tree in to two parts
+        return \explode('<_currentMarker></_currentMarker>', $encodedData);
     }
 }
