@@ -79,7 +79,7 @@ class PriceDataManager extends DataManager implements \Enlight_Hook
     {
         $to = !empty($to) ? (int) $to : 0;
 
-        // if the "to" value isn't numeric, set the place holder 'beliebig'
+        // if the "to" value isn't numeric, set the placeholder 'beliebig'
         if ($to <= 0) {
             $to = 'beliebig';
         }

@@ -92,7 +92,7 @@ class NewsletterDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandle
     }
 
     /**
-     * Set default values for fields which are empty or don't exists
+     * Set default values for fields which are empty or don't exist
      *
      * @param array<string, mixed> $values default values for nodes
      */
@@ -356,7 +356,7 @@ class NewsletterDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandle
     }
 
     /**
-     * Return list with default values for fields which are empty or don't exists
+     * Return list with default values for fields which are empty or don't exist
      *
      * @return array<mixed>
      */

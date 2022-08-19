@@ -37,7 +37,7 @@ class CategoriesProfileTest extends TestCase
 
         // Assert updated category
         static::assertEquals(3, $updateCategory[0]['id'], 'Could not find updated category');
-        static::assertEquals('Update', $updateCategory[0]['description'], 'Could not update descirption of a category.');
+        static::assertEquals('Update', $updateCategory[0]['description'], 'Could not update description of a category.');
         static::assertEquals(1000, $updateCategory[0]['position'], 'Could not update position');
 
         // Assertions for parent category

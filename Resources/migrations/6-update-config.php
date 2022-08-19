@@ -9,13 +9,14 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Migrations;
 
+use Shopware\Components\Migrations\AbstractMigration;
 use Shopware\Components\Migrations\AbstractPluginMigration;
 
 class Migration6 extends AbstractPluginMigration
 {
     public function up($modus): void
     {
-        if ($modus === AbstractPluginMigration::MODUS_INSTALL) {
+        if ($modus === AbstractMigration::MODUS_INSTALL) {
             return;
         }
 

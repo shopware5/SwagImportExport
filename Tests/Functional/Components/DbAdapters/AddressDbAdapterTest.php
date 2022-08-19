@@ -108,7 +108,7 @@ class AddressDbAdapterTest extends TestCase
         $this->assertAddress($createdAddresses);
     }
 
-    public function testWriteShouldIdentifyCustomerByEmailAndCustomernumber(): void
+    public function testWriteShouldIdentifyCustomerByEmailAndCustomerNumber(): void
     {
         $addresses = [
             'address' => [
@@ -132,7 +132,7 @@ class AddressDbAdapterTest extends TestCase
         $this->assertAddress($createdAddresses);
     }
 
-    public function testWriteShouldIdentifyCustomerByEmailAndCustomernumberIfAnInvalidIdWasGiven(): void
+    public function testWriteShouldIdentifyCustomerByEmailAndCustomerNumberIfAnInvalidIdWasGiven(): void
     {
         $addresses = [
             'address' => [
@@ -334,7 +334,7 @@ class AddressDbAdapterTest extends TestCase
         $addressDbAdapter->write([]);
     }
 
-    public function testWriteShouldThrowExceptionIfCustomerDoesNotEixst(): void
+    public function testWriteShouldThrowExceptionIfCustomerDoesNotExist(): void
     {
         $addresses = [
             'address' => [
@@ -352,7 +352,7 @@ class AddressDbAdapterTest extends TestCase
         $addressDbAdapter = $this->getAddressDbAdapter();
 
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Konnte Kunden nicht finden. Email: , Customernumber: , userID: 999999');
+        $this->expectExceptionMessage('Konnte Kunden nicht finden. Email: , Customer number: , userID: 999999');
         $addressDbAdapter->write($addresses);
     }
 

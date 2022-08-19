@@ -8,7 +8,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
         process: '{s name="swag_import_export/import/process"}Importing... {/s}',
         start: '{s name="swag_import_export/import/start"}Start importing{/s}',
         close: '{s name="swag_import_export/import/close"}Close{/s}',
-        failure: '{s name="swag_import_export/import/failure-title"}An error occured{/s}',
+        failure: '{s name="swag_import_export/import/failure-title"}An error occurred{/s}',
         unprocess: '{s name="swag_import_export/import/unprocessed"}Start importing unprocessed data{/s}'
     },
 
@@ -75,7 +75,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
         if (Ext.isEmpty(values.profile) || values.profile < 1) {
             Shopware.Notification.createGrowlMessage(
                 '{s name="swag_import_export/import/error_title"}Swag import export{/s}',
-                '{s name="swag_import_export/import/error_msg_profle"}Please select a profile{/s}'
+                '{s name="swag_import_export/import/error_msg_profile"}Please select a profile{/s}'
             );
             return;
         }
@@ -203,7 +203,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
             },
             failure: function(response) {
                 Shopware.Msg.createStickyGrowlMessage({
-                    title: 'An error occured',
+                    title: 'An error occurred',
                     text: response.responseText
                 });
             }
@@ -301,7 +301,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
             },
             failure: function(response) {
                 Shopware.Msg.createStickyGrowlMessage({
-                    title: '{s name="swag_import_export/import/failure-title"}An error occured{/s}',
+                    title: '{s name="swag_import_export/import/failure-title"}An error occurred{/s}',
                     text: response.responseText
                 });
                 me.onProcessFinish(win);

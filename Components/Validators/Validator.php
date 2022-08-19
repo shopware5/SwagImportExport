@@ -41,7 +41,7 @@ abstract class Validator
     }
 
     /**
-     * Validates fields with int type. It is possible this field to has as a value '-1'.
+     * Validates fields with int type. It is possible this field to have as a value '-1'.
      */
     public function validateInt(string $value): bool
     {

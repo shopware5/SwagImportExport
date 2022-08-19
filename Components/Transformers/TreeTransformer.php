@@ -331,7 +331,7 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
             $modifiedTree = $this->transformToTree($tree);
 
             if (!isset($tree['name'])) {
-                throw new \RuntimeException('Root category in the tree does not exists');
+                throw new \RuntimeException('Root category in the tree does not exist');
             }
 
             $this->headerFooterData = [$tree['name'] => $modifiedTree];
@@ -524,7 +524,7 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
 
     /**
      * Preparing/Modifying nodes to converting into xml
-     * and puts db data into this formated array
+     * and puts db data into this formatted array
      *
      * @param array<string, string> $mapper
      * @param array<string, mixed>  $node

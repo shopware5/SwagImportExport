@@ -293,7 +293,7 @@ class ProductsPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
                 $productVariant = $detailRepository->findOneBy(['number' => $record['orderNumber']]);
                 if (!$productVariant instanceof Detail) {
                     $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/article_number_not_found', 'Article with order number %s does not exists');
+                        ->get('adapters/article_number_not_found', 'Article with order number %s does not exist');
                     throw new AdapterException(\sprintf($message, $record['orderNumber']));
                 }
 
@@ -381,7 +381,7 @@ class ProductsPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
 
                 $this->manager->persist($price);
 
-                // perform entitymanager flush every 20th record to improve performance
+                // perform entity manager flush every 20th record to improve performance
                 if (($flushCounter % 20) === 0) {
                     $this->manager->flush();
                 }

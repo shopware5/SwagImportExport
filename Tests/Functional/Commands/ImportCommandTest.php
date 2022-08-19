@@ -200,7 +200,7 @@ class ImportCommandTest extends TestCase
         $importedVariantsAmount = $resultLineAmount - $actualLineAmount;
 
         static::assertEquals('Using format: csv.', $consoleOutput[1], 'Returned not the expected export file format.');
-        static::assertEquals("Total count: {$expectedImportedVariants}.", $consoleOutput[3], 'Did not processed the expected amount of data rows.');
+        static::assertEquals("Total count: {$expectedImportedVariants}.", $consoleOutput[3], 'Did not process the expected amount of data rows.');
         static::assertEquals($expectedImportedVariants, $importedVariantsAmount, 'Expected 2 new rows in s_articles_details.');
     }
 

@@ -319,7 +319,7 @@ class TreeHelper
      */
     public static function reorderTree(array $node): array
     {
-        $reorderdNode = [];
+        $reorderedNode = [];
         if (\is_array($node) && isset($node['children'])) {
             foreach ($node as $key => $value) {
                 if ($key === 'children' || $key === 'attributes') {
@@ -328,21 +328,21 @@ class TreeHelper
                         $value3 = self::reorderTree($innerValue);
 
                         // fix for to-be-deleted nodes
-                        if (isset($reorderdNode[$key][$innerValue['index']])) {
-                            $reorderdNode[$key][$count + $currentIndex] = $reorderdNode[$key][$innerValue['index']];
+                        if (isset($reorderedNode[$key][$innerValue['index']])) {
+                            $reorderedNode[$key][$count + $currentIndex] = $reorderedNode[$key][$innerValue['index']];
                         }
-                        $reorderdNode[$key][$innerValue['index']] = $value3;
+                        $reorderedNode[$key][$innerValue['index']] = $value3;
                     }
-                    \ksort($reorderdNode[$key]);
+                    \ksort($reorderedNode[$key]);
                 } else {
-                    $reorderdNode[$key] = $value;
+                    $reorderedNode[$key] = $value;
                 }
             }
         } else {
-            $reorderdNode = $node;
+            $reorderedNode = $node;
         }
 
-        return $reorderdNode;
+        return $reorderedNode;
     }
 
     /**
@@ -392,7 +392,7 @@ class TreeHelper
             case 'articlesImages':
                 return '{"id":"root","name":"Root","type":"node","children":[{"id":"537359399c80a","name":"Header","index":0,"type":"node","children":[{"id":"537385ed7c799","name":"HeaderChild","index":0,"type":"node","shopwareField":""}]},{"id":"537359399c8b7","name":"images","index":1,"type":"node","shopwareField":"","children":[{"id":"537359399c90d","name":"image","index":0,"type":"iteration","adapter":"default","parentKey":"","shopwareField":"","children":[{"id":"53ff1e618a9ad","type":"leaf","index":0,"name":"ordernumber","shopwareField":"ordernumber"},{"id":"5373865547d06","name":"image","index":1,"type":"leaf","shopwareField":"image"},{"id":"55152b922111d","type":"leaf","index":2,"name":"thumbnail","shopwareField":"thumbnail"}]}]}]}';
             default:
-                throw new \Exception('The profile type does not exists.');
+                throw new \Exception('The profile type does not exist.');
         }
     }
 }

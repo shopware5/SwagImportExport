@@ -73,7 +73,7 @@ class PriceWriterTest extends TestCase
         $priceWriterDbAdapter->write($productId, $productOrderNumber, $productPriceData);
     }
 
-    public function testWriteShouldUpdatePriceWithDotSeperation(): void
+    public function testWriteShouldUpdatePriceWithDotSeparation(): void
     {
         $priceWriterAdapter = $this->getPriceWriterAdapter();
 

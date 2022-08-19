@@ -34,7 +34,7 @@ class CustomerValidatorTest extends TestCase
         $customerValidator = new CustomerValidator();
 
         $this->expectException(AdapterException::class);
-        $this->expectExceptionMessage('Es muss ein ungehashtes Passwort für die E-Mail  übergeben werden.');
+        $this->expectExceptionMessage("Es muss ein ungehashtes Passwort für die E-Mail '' übergeben werden.");
         $customerValidator->checkRequiredFieldsForCreate([]);
     }
 

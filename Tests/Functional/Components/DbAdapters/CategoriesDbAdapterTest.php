@@ -69,7 +69,7 @@ class CategoriesDbAdapterTest extends TestCase
         ];
         $categoriesDbAdapter = $this->getCategoriesDbAdapter();
 
-        $this->expectExceptionMessage('Die Kategorie ID ist ein Pflichtfeld. Wenn keine ID mitimportiert wird wäre es nicht möglich Kind- und Vaterkategorien zu referenzieren.');
+        $this->expectExceptionMessage("Category id is required. If you don't import an id, child- and father categories could not get referenced to each other.");
         $this->expectException(\Exception::class);
         $categoriesDbAdapter->write($categoryRecords);
     }

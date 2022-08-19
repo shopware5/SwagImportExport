@@ -9,13 +9,14 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Migrations;
 
+use Shopware\Components\Migrations\AbstractMigration;
 use Shopware\Components\Migrations\AbstractPluginMigration;
 
 class Migration3 extends AbstractPluginMigration
 {
     public function up($modus): void
     {
-        if ($modus === AbstractPluginMigration::MODUS_UPDATE) {
+        if ($modus === AbstractMigration::MODUS_UPDATE) {
             return;
         }
 
@@ -58,7 +59,7 @@ SQL;
         $resourceId = $this->connection->query("SELECT id from s_core_acl_resources WHERE name = 'swagimportexport'")->fetchColumn();
 
         if (!\is_string($resourceId)) {
-            throw new \Exception('No result');
+            throw new \RuntimeException('No result');
         }
 
         $this->connection->prepare(<<<SQL

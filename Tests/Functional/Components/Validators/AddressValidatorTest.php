@@ -17,7 +17,7 @@ class AddressValidatorTest extends TestCase
 {
     public const DONT_UPDATE_ADDRESS = false;
 
-    public function testCheckRquieredFieldsShouldThrowExceptionIfAddressIsEmpty(): void
+    public function testCheckRequiredFieldsShouldThrowExceptionIfAddressIsEmpty(): void
     {
         $emptyAddressRecord = [];
 
@@ -56,7 +56,7 @@ class AddressValidatorTest extends TestCase
         $addressValidator = new AddressValidator();
 
         $this->expectException(AdapterException::class);
-        $this->expectExceptionMessage('Kunde konnte nicht zugeordnet werden. Email und customernumber oder userID ist nötig. Datensatz: firstname: some value,');
+        $this->expectExceptionMessage('Kunde konnte nicht zugeordnet werden. E-Mail und customer number oder userID ist nötig. Datensatz: firstname: some value,');
         $addressValidator->checkRequiredFields($addressWithoutCustomerId, self::DONT_UPDATE_ADDRESS);
     }
 
@@ -74,7 +74,7 @@ class AddressValidatorTest extends TestCase
         $addressValidator = new AddressValidator();
 
         $this->expectException(AdapterException::class);
-        $this->expectExceptionMessage('Kunde konnte nicht zugeordnet werden. Email und customernumber oder userID ist nötig. Datensatz: firstname: some value');
+        $this->expectExceptionMessage('Kunde konnte nicht zugeordnet werden. E-Mail und customer number oder userID ist nötig. Datensatz: firstname: some value');
         $addressValidator->checkRequiredFields($addressWithoutEmail, self::DONT_UPDATE_ADDRESS);
     }
 
@@ -92,7 +92,7 @@ class AddressValidatorTest extends TestCase
         $addressValidator = new AddressValidator();
 
         $this->expectException(AdapterException::class);
-        $this->expectExceptionMessage('Kunde konnte nicht zugeordnet werden. Email und customernumber oder userID ist nötig. Datensatz: firstname: some value');
+        $this->expectExceptionMessage('Kunde konnte nicht zugeordnet werden. E-Mail und customer number oder userID ist nötig. Datensatz: firstname: some value');
         $addressValidator->checkRequiredFields($addressWithoutCustomernumber, self::DONT_UPDATE_ADDRESS);
     }
 }

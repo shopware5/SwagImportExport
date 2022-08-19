@@ -19,15 +19,10 @@ class FileNameGenerator
 
         $adapterType = $profile->getType();
 
-        $hash = self::generateRandomHash(8);
+        $hash = \substr(\md5(\uniqid()), 0, 8);
 
         $dateTime = new \DateTime('now');
 
         return sprintf('%s.%s.%s-%s.%s', $operation, $adapterType, $dateTime->format('Y.m.d.h.i.s'), $hash, $fileFormat);
-    }
-
-    private static function generateRandomHash(int $length): string
-    {
-        return \substr(\md5(\uniqid()), 0, $length);
     }
 }

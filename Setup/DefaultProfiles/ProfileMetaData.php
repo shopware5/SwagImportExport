@@ -23,8 +23,7 @@ interface ProfileMetaData
     public function getName(): string;
 
     /**
-     * Returns a snippet key which is used to deliver a profile explaining
-     * descriptional text to the backend user.
+     * Returns a snippet key which is used to deliver a profile explaining descriptive text to the backend user.
      */
     public function getDescription(): string;
 }

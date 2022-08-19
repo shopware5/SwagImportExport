@@ -30,9 +30,7 @@ class DefaultProfileInstaller
             (:type, :name, :description, :tree, :hidden, :is_default)
         ';
 
-        $profiles = ProfileHelper::getProfileInstances();
-
-        foreach ($profiles as $profile) {
+        foreach (ProfileHelper::getProfileInstances() as $profile) {
             $serializedTree = \json_encode($profile);
 
             $params = [

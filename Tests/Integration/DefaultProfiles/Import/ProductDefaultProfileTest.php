@@ -46,7 +46,7 @@ class ProductDefaultProfileTest extends TestCase
         $createdMainVariant = $this->executeQuery("SELECT * FROM s_articles_details WHERE articleID='{$createdProduct[0]['id']}'");
         $createdSupplier = $this->executeQuery("SELECT * FROM s_articles_supplier WHERE id='{$createdProduct[0]['supplierID']}'");
 
-        static::assertEquals('This is my brand new article', $createdProduct[0]['description']);
+        static::assertEquals('This is my brand-new product', $createdProduct[0]['description']);
         static::assertEquals('test9999', $createdMainVariant[0]['ordernumber']);
         static::assertEquals($expectedName, $createdProduct[0]['name']);
         static::assertEquals('New Supplier', $createdSupplier[0]['name']);

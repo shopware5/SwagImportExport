@@ -20,7 +20,7 @@ testReadRecordIds:
     test1:
         start: 0
         limit: 6
-        exptected: [3, 4, 6, 20, 21, 22]
+        expected: [3, 4, 6, 20, 21, 22]
         expectedCount: 6
 testWrite:
     test1:

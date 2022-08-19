@@ -342,12 +342,7 @@ class AddressDbAdapter implements DataDbAdapter, \Enlight_Hook
         }
 
         $this->setLogMessages($message);
-        $this->setLogState('true');
-    }
-
-    private function setLogState(string $logState): void
-    {
-        $this->logState = $logState;
+        $this->logState = 'true';
     }
 
     /**

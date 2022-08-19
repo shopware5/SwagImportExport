@@ -16,9 +16,8 @@ class DefaultProfileUpdater
 {
     private Connection $connection;
 
-    public function __construct(
-        Connection $connection
-    ) {
+    public function __construct(Connection $connection)
+    {
         $this->connection = $connection;
     }
 
@@ -36,9 +35,7 @@ class DefaultProfileUpdater
             WHERE `name` = :name AND is_default = 1
         ';
 
-        $profiles = ProfileHelper::getProfileInstances();
-
-        foreach ($profiles as $profile) {
+        foreach (ProfileHelper::getProfileInstances() as $profile) {
             $serializedTree = \json_encode($profile);
 
             $params = [

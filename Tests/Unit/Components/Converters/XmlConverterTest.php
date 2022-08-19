@@ -197,7 +197,7 @@ EOD;
         ];
 
         $result = $this->xmlConverter->_encode($transformArray);
-        static::assertXmlStringEqualsXmlString($expectedXml, $result, 'Failed creating multiple elements by having one to many associations via numeric indexed arrays.');
+        static::assertXmlStringEqualsXmlString($expectedXml, $result, 'Failed creating multiple elements by having one-to-many associations via numeric indexed arrays.');
     }
 
     public function testEncodeWithBooleanValues(): void

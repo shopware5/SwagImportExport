@@ -119,7 +119,7 @@ class RelationWriter
         }
 
         if ($allRelations && !$processedFlag) {
-            // delete the relations that don't exist in the csv file, but exist in the db"
+            // delete the relations that don't exist in the csv file, but exist in the DB
             $this->deleteRelations($allRelations, $productId);
         }
 
@@ -141,7 +141,7 @@ class RelationWriter
         $this->table = $this->relationTables[$relationType];
         $this->idKey = \strtolower($relationType) . 'Id';
         $this->snippetName = 'adapters/articles/' . \strtolower($relationType) . '_not_found';
-        $this->defaultSnippetMessage = \ucfirst($relationType) . ' with ordernumber %s does not exists';
+        $this->defaultSnippetMessage = \ucfirst($relationType) . ' with ordernumber %s does not exist';
     }
 
     /**

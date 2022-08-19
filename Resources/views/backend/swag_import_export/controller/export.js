@@ -127,7 +127,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
             },
             failure: function(response) {
                 Shopware.Msg.createStickyGrowlMessage({
-                    title: '{s name="swag_import_export/export/error_occured"}An error occured{/s}',
+                    title: '{s name="swag_import_export/export/error_occurred"}An error occurred{/s}',
                     text: response.responseText
                 });
             }
@@ -215,7 +215,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Export', {
             },
             failure: function(response) {
                 Shopware.Msg.createStickyGrowlMessage({
-                    title: '{s name="swag_import_export/export/error_occured"}An error occured{/s}',
+                    title: '{s name="swag_import_export/export/error_occurred"}An error occurred{/s}',
                     text: response.responseText
                 });
 

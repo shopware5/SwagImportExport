@@ -46,7 +46,7 @@ class Session
      * Check if the session contains ids.
      * If the session has no ids, then the db adapter must be used to retrieve them.
      * Then writes these ids to the session and sets the session state to "active".
-     * For now we will write the ids as a serialized array.
+     * For now, we will write the ids as a serialized array.
      *
      * @param array<string, mixed> $data
      *
@@ -136,7 +136,7 @@ class Session
 
     /**
      * Checks also the current position - if all the ids of the session are done, then the function does nothing.
-     * Otherwise it sets the session state from "suspended" to "active", so that it is ready again for processing.
+     * Otherwise, it sets the session state from "suspended" to "active", so that it is ready again for processing.
      *
      * @retrun array{recordIds: array<int>, fileName: string}
      */
@@ -175,7 +175,7 @@ class Session
     /**
      * Returns the state of the session.
      * active:
-     *     Session is running and we can read/write records.
+     *     Session is running, and we can read/write records.
      * stopped:
      *     Session is stopped because we have reached the max number of records per operation.
      * new:
@@ -222,9 +222,9 @@ class Session
     public function getRecordIds(): array
     {
         $recordIds = $this->sessionEntity->getIds() ?? '';
-        $unserilized = \unserialize($recordIds, []);
+        $unserialized = \unserialize($recordIds, []);
 
-        return \is_array($unserilized) ? $unserilized : [];
+        return \is_array($unserialized) ? $unserialized : [];
     }
 
     /**

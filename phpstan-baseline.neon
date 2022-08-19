@@ -991,11 +991,6 @@ parameters:
 			path: Components/Validators/Validator.php
 
 		-
-			message: "#^Parameter \\#1 \\$profiles of method SwagImportExport\\\\Migrations\\\\Migration5\\:\\:addSuffixToProfileNames\\(\\) expects array\\<int, array\\{name\\: string, id\\: int\\}\\>, array\\<int, array\\{id\\: numeric\\-string, 0\\: numeric\\-string, type\\: string, 1\\: string, base_profile\\: numeric\\-string\\|null, 2\\: numeric\\-string\\|null, name\\: string, 3\\: string, \\.\\.\\.\\}\\> given\\.$#"
-			count: 1
-			path: Resources/migrations/5-rename-duplicate-profile-names.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\AddressProfile\\:\\:getAddressFields\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Setup/DefaultProfiles/AddressProfile.php

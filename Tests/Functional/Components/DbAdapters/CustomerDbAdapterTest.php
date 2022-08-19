@@ -280,7 +280,7 @@ class CustomerDbAdapterTest extends TestCase
         ];
 
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Es muss ein ungehashtes Passwort für die E-Mail test@userCompany.com übergeben werden.');
+        $this->expectExceptionMessage("Es muss ein ungehashtes Passwort für die E-Mail 'test@userCompany.com' übergeben werden.");
         $customerDbAdapter->write($records);
     }
 
@@ -299,7 +299,7 @@ class CustomerDbAdapterTest extends TestCase
         ];
 
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Es sind bereits E-Mail Adressen mit test@example.com und unterschiedlichen Kundennummern vorhanden. Bitte geben Sie auch die SubshopID an oder gleichen Sie die Kundennummer an.');
+        $this->expectExceptionMessage('Es sind bereits E-Mail-Adressen mit test@example.com und unterschiedlichen Kundennummern vorhanden. Bitte geben Sie auch die SubshopID an oder gleichen Sie die Kundennummer an.');
         $customerDbAdapter->write($records);
     }
 

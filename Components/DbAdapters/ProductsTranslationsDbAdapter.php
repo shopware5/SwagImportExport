@@ -185,7 +185,7 @@ class ProductsTranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
 
                 if (!$shop) {
                     $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/articlesTranslations/lang_id_not_found', 'Language with id %s does not exists for article %s');
+                        ->get('adapters/articlesTranslations/lang_id_not_found', 'Language with id %s does not exist for article %s');
                     throw new AdapterException(\sprintf($message, $record['languageId'], $record['articleNumber']));
                 }
 
@@ -371,9 +371,9 @@ class ProductsTranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
 
         return $repository->createQueryBuilder('configuration')
             ->select('configuration.columnName')
-            ->where('configuration.tableName = :tablename')
+            ->where('configuration.tableName = :tableName')
             ->andWhere('configuration.translatable = 1')
-            ->setParameter('tablename', 's_articles_attributes')
+            ->setParameter('tableName', 's_articles_attributes')
             ->getQuery()
             ->getArrayResult();
     }

@@ -34,9 +34,9 @@ class SmartyExpressionEvaluator implements ExpressionEvaluator
 
         $this->convertPricesColumnsToFloat($variables);
 
-        $evaledParam = $this->compiler->compileSmartyString($expression, $variables);
+        $evaluatedParam = $this->compiler->compileSmartyString($expression, $variables);
 
-        return \trim($evaledParam);
+        return \trim($evaluatedParam);
     }
 
     /**

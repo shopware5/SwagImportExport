@@ -133,7 +133,7 @@ class XmlConverter implements ConverterInterface
                 foreach ($attributes as $attr => $val) {
                     if ($this->settings['attributes']) {
                         $result['_attributes'][$attr] = $val;
-                    } // Set all the attributes in a array called 'attr'
+                    } // Set all the attributes in an array called 'attr'
                     /*  TO DO should we change the key name to '_attr'? Someone may use the tagname 'attr'. Same goes for 'value' too */
                 }
             } elseif (isset($value)) {

@@ -49,11 +49,11 @@ class DataProviderTest extends TestCase
         static::assertInstanceOf(ProductsDbAdapter::class, $productsDbAdapter);
     }
 
-    public function testCreateDbAdapterShouldCreateProductsInstockDbAdapter(): void
+    public function testCreateDbAdapterShouldCreateProductsInStockDbAdapter(): void
     {
-        $productsInstockDbAdapter = $this->getDataProvider()->createDbAdapter('articlesInStock');
+        $productsInStockDbAdapter = $this->getDataProvider()->createDbAdapter('articlesInStock');
 
-        static::assertInstanceOf(ProductsInStockDbAdapter::class, $productsInstockDbAdapter);
+        static::assertInstanceOf(ProductsInStockDbAdapter::class, $productsInStockDbAdapter);
     }
 
     public function testCreateDbAdapterShouldCreateProductsPricesDbAdapter(): void

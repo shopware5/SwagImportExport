@@ -144,7 +144,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
         configurator.hideFormFields();
 
         // use standard load with params here because
-        // we dont want proxy set to existing profile id
+        // we don't want proxy set to an existing profile id
         // and just load data for preview
         treeStore.load({
             params: {
@@ -329,7 +329,7 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Profile', {
             },
             failure: function(response) {
                 Shopware.Msg.createStickyGrowlMessage({
-                    title: 'An error occured',
+                    title: 'An error occurred',
                     text: 'Profile was not created'
                 });
             }

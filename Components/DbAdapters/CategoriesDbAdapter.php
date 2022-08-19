@@ -500,7 +500,7 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandle
     {
         if (!$record['parent'] instanceof Category) {
             $message = SnippetsHelper::getNamespace()
-                ->get('adapters/categories/parent_not_exists', 'Parent category does not exists for category %s');
+                ->get('adapters/categories/parent_not_exists', 'Parent category does not exist for category %s');
             throw new AdapterException(\sprintf($message, $record['name']));
         }
     }

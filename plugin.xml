@@ -213,7 +213,7 @@
         PT-9243 - Hilfetext für CLI-Command korrigiert;
     </changes>
     <changes lang="en">
-        PT-9090 - Fix error on export of orders, if a non valid tax is set;
+        PT-9090 - Fix error on export of orders, if a non-valid tax is set;
         PT-9243 - Fix help text for CLI command;
     </changes>
     </changelog>
@@ -397,7 +397,7 @@
         PT-5114 - Bugfix: Customer import links now to the correct language shops;
         PT-5340 - Bugfix: Fixed client export with birthdays;
         PT-5633 - Bugfix: Combined image mappings are imported correctly;
-        PT-5886 - Bugfix: Relations of propertie sets can be imported;
+        PT-5886 - Bugfix: Relations of property sets can be imported;
         PT-6833 - Bugfix: Layout when opening many instances;
         PT-6836 - Bugfix: Fixed problem with xml imports and wrong counted elements;
     </changes>
@@ -405,7 +405,7 @@
     <changelog version="1.2.3">
     <changes lang="de">
         PT-6788 - Bugfix: URL generierung für XML downloads für NGINX-Systeme angepasst;
-        PT-6736 - Aktive Hauptvarianten aktivieren auch den gesamten Aritkel - Boolische Werte werden nun korrekt exportiert;
+        PT-6736 - Aktive Hauptvarianten aktivieren auch den gesamten Artikel - Boolesche Werte werden nun korrekt exportiert;
         PT-6729 - 0 Werte können wieder importiert werden;
         PT-6711 - Bestellimport gefixed und automatisierte Tests hinzugefügt;
         PT-6710 - Exportierte und Importierte Dateien können wieder heruntergeladen werden;
@@ -433,7 +433,7 @@
         PT-5754 - Feature: Konfiguration für Dezimal-Trennzeichen;
         PT-5810 - Bugfix: Einkaufspreis;
         PT-6100 - Bugfix: Pflichtfeldprüfung für Übersetzungen;
-        PT-6365 - Feature: Kategoriefilter für das Export Kommando;
+        PT-6365 - Feature: Kategoriefilter für das Export-Kommando;
         PT-6371 - Bugfix: Refaktorierung Logger;
         PT-6392 - Bugfix: Paginierung im Profil-Dropdown;
     </changes>
@@ -598,14 +598,14 @@
         PT-2818 - Verbesserung: Kunden-Referenz über die ID;
         PT-2819 - Verbesserung: Kunden-Updates ohne Password;
         PT-2850 - Verbesserung: Übersetzung von Varianten, Konfiguratoren und Eigenschaften;
-        PT-2815 - SW5 Kompatiblität
+        PT-2815 - SW5 Kompatibilität
     </changes>
     <changes lang="en">
         PT-2785 - Improvement: Image uploads from within the article profile;
         PT-2810 - Bugfix: Images with whitespaces;
         PT-2818 - Improvement: Reference customers via ID;
-        PT-2819 - Improvemend: Customer updates without passwords;
-        PT-2850 - Improvement: Translate variants, configuratos and properties;
+        PT-2819 - Improvement: Customer updates without passwords;
+        PT-2850 - Improvement: Translate variants, configurations and properties;
         PT-2815 - SW5 compatibility
     </changes>
     </changelog>
@@ -613,12 +613,12 @@
     <changes lang="de">
         PT-2514 Feature: Artikel-Lagerbestand-Filter;
         PT-2530 Feature: Eigenschaften-Import hinzugefügt;
-        PT-2531 Feature: Konfiguratior-Optionen über IDs ansprechen;
-        PT-2533 Feature: Aktualisierung von Bezahlstati;
+        PT-2531 Feature: Konfigurator-Optionen über IDs ansprechen;
+        PT-2533 Feature: Aktualisierung von Bezahlstatus;
         PT-2536 Fix: Optionale Spalten beim Bildimport;
         PT-2538 Fix: Konfiguratorgruppen mit Doppelpunkten;
         PT-2618 Feature: Kategorie-Kundengruppen-Ausschlüsse;
-        PT-2642 Fix: Kompatiblität mit BusinessEssentials;
+        PT-2642 Fix: Kompatibilität mit BusinessEssentials;
         PT-2650 Fix: Logeinträge beim Kundenimport;
         PT-2662 Fix: Konfigurator-Positionen;
     </changes>
@@ -658,9 +658,9 @@
     <changelog version="1.0.2">
     <changes lang="de">
         Korrektur: Import von gegenseitig abhängigen Artikeln (ähnliche / related Artikel). Feature: Überpringen von Datensätzen;
-        Feature: Events für Erweiterung des Moduls.;
+        Feature: Events für Erweiterung des Moduls;
         Feature: Setze Standard-Werte beim Benutzer-Import (active-flag, default payment);
-        Instock-Filter für Exporte hinzugefügt.;
+        Instock-Filter für Exporte hinzugefügt;
         Korrektur des DB-Schema-Updates;
         Korrektur: Import von Preisstaffeln;
         Import/Export von eigenen Attributen im Übersetzungsadapter hinzugefügt;

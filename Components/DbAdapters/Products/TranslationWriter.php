@@ -151,9 +151,9 @@ class TranslationWriter
 
         return $repository->createQueryBuilder('configuration')
             ->select('configuration.columnName')
-            ->where('configuration.tableName = :tablename')
+            ->where('configuration.tableName = :tableName')
             ->andWhere('configuration.translatable = 1')
-            ->setParameter('tablename', 's_articles_attributes')
+            ->setParameter('tableName', 's_articles_attributes')
             ->getQuery()
             ->getArrayResult()
         ;

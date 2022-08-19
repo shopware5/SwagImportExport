@@ -237,7 +237,7 @@ class ProductsInStockDbAdapter implements DataDbAdapter, \Enlight_Hook
                 $productDetail = $this->repository->findOneBy(['number' => $record['orderNumber']]);
                 if (!$productDetail instanceof Detail) {
                     $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/articlesImages/article_not_found', 'Product with number %s does not exists.');
+                        ->get('adapters/articlesImages/article_not_found', 'Product with number %s does not exist.');
                     throw new AdapterException(\sprintf($message, $record['orderNumber']));
                 }
 

@@ -18,7 +18,7 @@ class Migration5 extends AbstractPluginMigration
         $profiles = $this->connection->query('SELECT COUNT(id) as count, name FROM s_import_export_profile GROUP BY name')->fetchAll();
 
         if (!\is_array($profiles)) {
-            throw new \Exception('No result');
+            throw new \RuntimeException('No result');
         }
 
         foreach ($profiles as $profile) {
@@ -34,7 +34,7 @@ class Migration5 extends AbstractPluginMigration
             $profilesWithSameName = $stm->fetchAll();
 
             if (!\is_array($profilesWithSameName)) {
-                throw new \Exception('No result');
+                throw new \RuntimeException('No result');
             }
 
             $this->addSuffixToProfileNames($profilesWithSameName);
@@ -46,7 +46,7 @@ class Migration5 extends AbstractPluginMigration
     }
 
     /**
-     * @param array<int, array{name: string, id: int}> $profiles
+     * @param list<array<array-key, mixed>> $profiles
      */
     private function addSuffixToProfileNames(array $profiles): void
     {

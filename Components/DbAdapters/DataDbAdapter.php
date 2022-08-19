@@ -57,7 +57,7 @@ interface DataDbAdapter
     public function getDefaultColumns(): array;
 
     /**
-     * Returns all iteration nodes, i.e. for articles it configuratiors, similar, ...
+     * Returns all iteration nodes, i.e. for products, their configurations, similar, ...
      *
      * @return array<array<string>>
      */

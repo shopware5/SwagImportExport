@@ -22,7 +22,7 @@ class ProductAccessoriesProfileTest extends TestCase
     use DatabaseTestCaseTrait;
     use ContainerTrait;
 
-    public function testShouldWriteAssertNewProductAsseccory(): void
+    public function testShouldWriteAssertNewProductAccessory(): void
     {
         $filePath = __DIR__ . '/_fixtures/article_accessories_profile.csv';
         $expectedOrderNumber = 'SW10003';

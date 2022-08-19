@@ -160,15 +160,15 @@ class CsvConverter implements ConverterInterface
         }
 
         foreach ($elements as $i => $element) {
-            $nquotes = \substr_count($elements[$i], $this->settings['fieldmark']);
-            if ($nquotes % 2 == 1) {
+            $nQuotes = \substr_count($element, $this->settings['fieldmark']);
+            if ($nQuotes % 2 === 1) {
                 if (isset($elements[$i + 1])) {
                     $elements[$i + 1] = $element . $this->settings['separator'] . $elements[$i + 1];
                 }
             } else {
-                if ($nquotes > 0) {
-                    if (\strpos($elements[$i], $fieldmark) === 0) {
-                        $elements[$i] = \substr($elements[$i], 1);
+                if ($nQuotes > 0) {
+                    if (\strpos($element, $fieldmark) === 0) {
+                        $elements[$i] = \substr($element, 1);
                     }
                     if (\substr($elements[$i], -1, 1) == $fieldmark) {
                         $elements[$i] = \substr($elements[$i], 0, -1);
@@ -203,7 +203,7 @@ class CsvConverter implements ConverterInterface
         }
 
         foreach ($elements as $i => $element) {
-            $nquotes = \substr_count($elements[$i], $this->settings['fieldmark']);
+            $nquotes = \substr_count($element, $this->settings['fieldmark']);
             if ($nquotes % 2 == 1) {
                 $elements[$i + 1] = $element . $this->settings['newline'] . $elements[$i + 1];
             } else {

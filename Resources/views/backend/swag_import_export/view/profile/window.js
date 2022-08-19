@@ -19,7 +19,7 @@ Ext.define('Shopware.apps.SwagImportExport.view.profile.Window', {
 
     /**
      * After saving a new profile, set new profileId
-     * change buttons, and active profileconfigurator tree
+     * change buttons, and active profile configurator tree
      *
      * @param newValue
      * @param oldValue

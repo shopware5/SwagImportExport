@@ -87,7 +87,7 @@ class ProductWriter
         // if detail needs to be created and the (different) mainDetail does not exist: error
         if ($createDetail && !$mainVariantId && !$this->isMainDetail($product)) {
             $message = SnippetsHelper::getNamespace()
-                ->get('adapters/articles/variant_existence', 'Variant with number %s does not exists.');
+                ->get('adapters/articles/variant_existence', 'Variant with number %s does not exist.');
             throw new AdapterException(sprintf($message, $product['mainNumber']));
         }
 

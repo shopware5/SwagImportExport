@@ -223,7 +223,7 @@ class CategoryWriter
         return \implode(
             ', ',
             \array_map(
-                function ($category) use ($productId) {
+                function (array $category) use ($productId): string {
                     $isCategoryExists = false;
                     if (!empty($category['categoryId'])) {
                         $isCategoryExists = $this->isCategoryExists((int) $category['categoryId']);
@@ -249,9 +249,7 @@ class CategoryWriter
                         $category['categoryId'] = $this->getCategoryId($category['categoryPath']);
 
                         // check whether the category is a leaf
-                        $isLeaf = $this->isLeaf($category['categoryId']);
-
-                        if (!$isLeaf) {
+                        if (!$this->isLeaf($category['categoryId'])) {
                             $message = SnippetsHelper::getNamespace()
                                 ->get('adapters/articles/category_not_leaf', "Category with id '%s' is not a leaf");
                             throw new AdapterException(\sprintf($message, $category['categoryId']));
@@ -261,6 +259,8 @@ class CategoryWriter
 
                         return "({$productId}, {$category['categoryId']})";
                     }
+
+                    return '';
                 },
                 $categories
             )

@@ -93,17 +93,17 @@ class DataWorkflow
             // process that array with the full transformation chain
             $data = $transformerChain->transformForward($data);
 
-            // now the array should be a tree and we write it to the file
+            // now the array should be a tree, and we write it to the file
             $fileWriter->writeRecords($exportRequest->filePath, $data);
 
             // writing is successful, so we write the new position in the session;
-            // if if the new position goes above the limits provided by the
+            // if the new position goes above the limits provided by the
             $session->progress($exportRequest->batchSize, $exportRequest->filePath);
         }
 
         if ($session->getState() === Session::SESSION_FINISHED) {
             // Session finished means we have exported all the ids in the session.
-            // Therefore we can close the file with a footer and mark the session as done.
+            // Therefore, we can close the file with a footer and mark the session as done.
             $footer = $transformerChain->composeFooter();
             $fileWriter->writeFooter($exportRequest->filePath, $footer);
             $session->close();

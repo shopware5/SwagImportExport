@@ -82,8 +82,8 @@ class ProductWriterTest extends TestCase
             'active' => '1',
             'inStock' => '25',
             'stockMin' => '0',
-            'description' => 'This is the description of a very good product..',
-            'descriptionLong' => 'This product gives you the best abilities to sleep. Dont try it at work, you will get fired!',
+            'description' => 'This is the description of a very good product.',
+            'descriptionLong' => "This product gives you the best abilities to sleep. Don't try it at work, you will get fired!",
             'unitId' => '1',
         ];
 
@@ -101,7 +101,7 @@ class ProductWriterTest extends TestCase
         static::assertNotNull($insertedProduct, 'Could not insert article');
         static::assertEquals($expectedNewProduct['orderNumber'], $mainDetail->getNumber(), 'Could not insert field ordernumber.');
         static::assertEquals($expectedNewProduct['description'], $insertedProduct->getDescription(), 'Could not insert field description.');
-        static::assertEquals($expectedNewProduct['descriptionLong'], $insertedProduct->getDescriptionLong(), 'Could not insert field descrption_long.');
+        static::assertEquals($expectedNewProduct['descriptionLong'], $insertedProduct->getDescriptionLong(), 'Could not insert field description_long.');
         static::assertEquals($expectedNewProduct['inStock'], $mainDetail->getInStock(), 'Could not insert field instock.');
         static::assertEquals($expectedNewProduct['active'], $insertedProduct->getActive(), 'Could not insert field active.');
         static::assertEquals($expectedNewProduct['supplierName'], $supplier->getName(), 'Could not insert field supplier name.');

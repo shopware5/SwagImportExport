@@ -41,11 +41,13 @@ class Migration2 extends AbstractPluginMigration
      */
     private function getDoctrineModels(): array
     {
+        $manager = $this->getEntityManager();
+
         return [
-            $this->getEntityManager()->getClassMetadata(Session::class),
-            $this->getEntityManager()->getClassMetadata(Logger::class),
-            $this->getEntityManager()->getClassMetadata(Profile::class),
-            $this->getEntityManager()->getClassMetadata(Expression::class),
+            $manager->getClassMetadata(Session::class),
+            $manager->getClassMetadata(Logger::class),
+            $manager->getClassMetadata(Profile::class),
+            $manager->getClassMetadata(Expression::class),
         ];
     }
 }
