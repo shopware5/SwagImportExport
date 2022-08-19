@@ -87,7 +87,7 @@ class Session extends ModelEntity
     protected \DateTime $createdAt;
 
     /**
-     * @var Collection<string, Logger>
+     * @var Collection<int, Logger>
      *
      * @ORM\OneToMany(targetEntity="SwagImportExport\Models\Logger", mappedBy="session")
      */
@@ -103,7 +103,7 @@ class Session extends ModelEntity
         return $this->id;
     }
 
-    public function getProfile(): Profile
+    public function getProfile(): ?Profile
     {
         return $this->profile;
     }
@@ -165,8 +165,6 @@ class Session extends ModelEntity
 
     /**
      * Sets the profile object.
-     *
-     * @param ?Profile $profile
      */
     public function setProfile(?Profile $profile = null): Session
     {
@@ -203,10 +201,7 @@ class Session extends ModelEntity
         return $this;
     }
 
-    /**
-     * @param ?string $userName
-     */
-    public function setUserName($userName): Session
+    public function setUserName(?string $userName): Session
     {
         $this->userName = $userName;
 

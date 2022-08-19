@@ -31,7 +31,7 @@ class Profile extends ModelEntity
     protected int $id;
 
     /**
-     * @var Collection<Expression>
+     * @var Collection<int, Expression>
      *
      * @ORM\OneToMany(targetEntity="SwagImportExport\Models\Expression", mappedBy="profile")
      * @ORM\JoinColumn(nullable=true)
@@ -39,7 +39,7 @@ class Profile extends ModelEntity
     protected Collection $expressions;
 
     /**
-     * @var Collection<string|null, Session>
+     * @var Collection<int, Session>
      *
      * @ORM\OneToMany(targetEntity="SwagImportExport\Models\Session", mappedBy="profile")
      */
@@ -108,7 +108,7 @@ class Profile extends ModelEntity
     }
 
     /**
-     * @return Collection<Expression>
+     * @return Collection<int, Expression>
      */
     public function getExpressions(): Collection
     {
@@ -182,7 +182,7 @@ class Profile extends ModelEntity
     }
 
     /**
-     * Adds an session to the profile.
+     * Adds a session to the profile.
      */
     public function addSession(Session $session): Profile
     {

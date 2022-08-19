@@ -991,21 +991,6 @@ parameters:
 			path: Components/Validators/Validator.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Models\\\\Profile\\:\\:getExpressions\\(\\) return type with generic interface Doctrine\\\\Common\\\\Collections\\\\Collection does not specify its types\\: TKey, T$#"
-			count: 1
-			path: Models/Profile.php
-
-		-
-			message: "#^Property SwagImportExport\\\\Models\\\\Profile\\:\\:\\$expressions with generic interface Doctrine\\\\Common\\\\Collections\\\\Collection does not specify its types\\: TKey, T$#"
-			count: 1
-			path: Models/Profile.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Models\\\\Session\\:\\:getProfile\\(\\) should return SwagImportExport\\\\Models\\\\Profile but returns SwagImportExport\\\\Models\\\\Profile\\|null\\.$#"
-			count: 1
-			path: Models/Session.php
-
-		-
 			message: "#^Parameter \\#1 \\$profiles of method SwagImportExport\\\\Migrations\\\\Migration5\\:\\:addSuffixToProfileNames\\(\\) expects array\\<int, array\\{name\\: string, id\\: int\\}\\>, array\\<int, array\\{id\\: numeric\\-string, 0\\: numeric\\-string, type\\: string, 1\\: string, base_profile\\: numeric\\-string\\|null, 2\\: numeric\\-string\\|null, name\\: string, 3\\: string, \\.\\.\\.\\}\\> given\\.$#"
 			count: 1
 			path: Resources/migrations/5-rename-duplicate-profile-names.php

@@ -53,7 +53,7 @@ class Shopware_Controllers_Backend_SwagImportExportSession extends \Shopware_Con
         $dataSet = [
             'fileName' => $sessionModel->getFileName(),
             'type' => $sessionModel->getType(),
-            'profile' => $sessionModel->getProfile()->getName(),
+            'profile' => $sessionModel->getProfile() ? $sessionModel->getProfile()->getName() : '',
             'dataset' => $sessionModel->getTotalCount(),
             'position' => $sessionModel->getPosition(),
             'fileSize' => DataHelper::formatFileSize((int) $sessionModel->getFileSize()),
