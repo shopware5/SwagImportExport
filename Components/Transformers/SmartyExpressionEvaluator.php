@@ -42,7 +42,7 @@ class SmartyExpressionEvaluator implements ExpressionEvaluator
     /**
      * @param array<string, mixed> $variables
      */
-    protected function convertPricesColumnsToFloat(array &$variables): void
+    private function convertPricesColumnsToFloat(array &$variables): void
     {
         if (isset($variables['price'])) {
             $variables['price'] = (float) \str_replace(',', '.', $variables['price']);

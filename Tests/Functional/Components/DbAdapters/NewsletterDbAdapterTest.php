@@ -42,8 +42,7 @@ class NewsletterDbAdapterTest extends TestCase
 
         $newsletterDbAdapter->write($customerData);
 
-        $dbalConnection = $this->getContainer()->get('dbal_connection');
-        $createdRecipient = $dbalConnection->executeQuery("SELECT * FROM s_campaigns_mailaddresses WHERE email='test@example.com'")->fetchAllAssociative();
+        $createdRecipient = $this->getContainer()->get('dbal_connection')->executeQuery("SELECT * FROM s_campaigns_mailaddresses WHERE email='test@example.com'")->fetchAllAssociative();
 
         static::assertEquals($customerData['default'][0]['email'], $createdRecipient[0]['email']);
     }
@@ -60,8 +59,7 @@ class NewsletterDbAdapterTest extends TestCase
 
         $newsletterDbAdapter->write($notExistingRecipient);
 
-        $dbalConnection = $this->getContainer()->get('dbal_connection');
-        $createdRecipient = $dbalConnection->executeQuery("SELECT * FROM s_campaigns_mailaddresses WHERE email='email_address_which_does_not_exist@example.org'")->fetchAllAssociative();
+        $createdRecipient = $this->getContainer()->get('dbal_connection')->executeQuery("SELECT * FROM s_campaigns_mailaddresses WHERE email='email_address_which_does_not_exist@example.org'")->fetchAllAssociative();
 
         static::assertEquals($notExistingRecipient['default'][0]['email'], $createdRecipient[0]['email']);
     }
@@ -81,8 +79,7 @@ class NewsletterDbAdapterTest extends TestCase
 
         $newsletterDBAdapter->write($recipientWithContactData);
 
-        $dbalConnection = $this->getContainer()->get('dbal_connection');
-        $createdRecipient = $dbalConnection->executeQuery("SELECT * FROM s_campaigns_maildata WHERE email='email_address_which_does_not_exists@example.org'")->fetchAllAssociative();
+        $createdRecipient = $this->getContainer()->get('dbal_connection')->executeQuery("SELECT * FROM s_campaigns_maildata WHERE email='email_address_which_does_not_exists@example.org'")->fetchAllAssociative();
 
         static::assertEquals($recipientWithContactData['default'][0]['firstname'], $createdRecipient[0]['firstname']);
         static::assertEquals($recipientWithContactData['default'][0]['lastname'], $createdRecipient[0]['lastname']);
@@ -102,8 +99,7 @@ class NewsletterDbAdapterTest extends TestCase
 
         $newsletterDbAdapter->write($recipientWithNewNewsletterGroup);
 
-        $dbalConnection = $this->getContainer()->get('dbal_connection');
-        $createdNewsletterGroup = $dbalConnection->executeQuery("SELECT * FROM s_campaigns_groups WHERE name='New newsletter group'")->fetchAllAssociative();
+        $createdNewsletterGroup = $this->getContainer()->get('dbal_connection')->executeQuery("SELECT * FROM s_campaigns_groups WHERE name='New newsletter group'")->fetchAllAssociative();
 
         static::assertEquals('New newsletter group', $createdNewsletterGroup[0]['name']);
     }

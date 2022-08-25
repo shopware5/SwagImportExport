@@ -54,8 +54,7 @@ class PropertyWriterTest extends TestCase
             [$importData]
         );
 
-        $dbalConnection = $this->getContainer()->get('dbal_connection');
-        $importedFilter = $dbalConnection->executeQuery(
+        $importedFilter = $this->getContainer()->get('dbal_connection')->executeQuery(
             'SELECT * FROM s_filter WHERE name = ?',
             [self::NOT_EXISTING_FILTER_GROUP_NAME]
         )->fetchOne();
@@ -82,8 +81,7 @@ class PropertyWriterTest extends TestCase
             $importData
         );
 
-        $dbalConnection = $this->getContainer()->get('dbal_connection');
-        $filterGroupId = $dbalConnection->executeQuery(
+        $filterGroupId = $this->getContainer()->get('dbal_connection')->executeQuery(
             'SELECT filterGroupId FROM s_articles WHERE id = ?',
             [self::PRODUCT_ID_WITHOUT_PROPERTIES]
         )->fetchOne();
@@ -109,8 +107,7 @@ class PropertyWriterTest extends TestCase
             $importData
         );
 
-        $dbalConnection = $this->getContainer()->get('dbal_connection');
-        $createdPropertyValue = $dbalConnection->executeQuery(
+        $createdPropertyValue = $this->getContainer()->get('dbal_connection')->executeQuery(
             'SELECT `value` FROM s_filter_values WHERE value = ?',
             [self::NOT_EXISTING_VALUE_NAME]
         )->fetchOne();
@@ -136,8 +133,7 @@ class PropertyWriterTest extends TestCase
             $importData
         );
 
-        $dbalConnection = $this->getContainer()->get('dbal_connection');
-        $createdPropertyValue = $dbalConnection->executeQuery(
+        $createdPropertyValue = $this->getContainer()->get('dbal_connection')->executeQuery(
             'SELECT `name` FROM s_filter_options WHERE name = ?',
             [self::NOT_EXISTING_OPTION_NAME]
         )->fetchOne();
@@ -182,8 +178,7 @@ class PropertyWriterTest extends TestCase
             $importData
         );
 
-        $dbalConnection = $this->getContainer()->get('dbal_connection');
-        $valueIdRelationToTestedProduct = $dbalConnection->executeQuery(
+        $valueIdRelationToTestedProduct = $this->getContainer()->get('dbal_connection')->executeQuery(
             'SELECT valueID FROM s_filter_articles WHERE articleID = ?',
             [self::PRODUCT_ID_WITHOUT_PROPERTIES]
         )->fetchOne();
@@ -208,8 +203,7 @@ class PropertyWriterTest extends TestCase
             $importData
         );
 
-        $dbalConnection = $this->getContainer()->get('dbal_connection');
-        $createOptionRelation = $dbalConnection->executeQuery(
+        $createOptionRelation = $this->getContainer()->get('dbal_connection')->executeQuery(
             'SELECT optionID FROM s_filter_relations LEFT JOIN s_articles ON s_articles.filterGroupID = s_filter_relations.groupID WHERE s_articles.id = ?',
             [self::PRODUCT_ID_WITHOUT_PROPERTIES]
         )->fetchOne();
@@ -234,8 +228,7 @@ class PropertyWriterTest extends TestCase
             $importData
         );
 
-        $dbalConnection = $this->getContainer()->get('dbal_connection');
-        $createdGroupName = $dbalConnection->executeQuery(
+        $createdGroupName = $this->getContainer()->get('dbal_connection')->executeQuery(
             'SELECT name FROM s_filter WHERE name = ?',
             [self::NOT_EXISTING_FILTER_GROUP_NAME]
         )->fetchOne();

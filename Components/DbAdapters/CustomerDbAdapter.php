@@ -207,12 +207,10 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
             }
         }
 
-        $builder = $this->getBuilder($columns, $ids);
-        $query = $builder->getQuery();
+        $query = $this->getBuilder($columns, $ids)->getQuery();
         $query->setHydrationMode(AbstractQuery::HYDRATE_ARRAY);
 
-        $paginator = $this->manager->createPaginator($query);
-        $customers = $paginator->getIterator()->getArrayCopy();
+        $customers = $this->manager->createPaginator($query)->getIterator()->getArrayCopy();
 
         $result['default'] = DbAdapterHelper::decodeHtmlEntities($customers);
 
@@ -246,11 +244,9 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
             $query->setParameter(':streamId', $filter['customerStreamId']);
         }
 
-        $ids = $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
+        $ids = $query->execute()->fetchFirstColumn();
 
-        return \array_map(function ($id) {
-            return (int) $id;
-        }, $ids);
+        return \array_map('\intval', $ids);
     }
 
     /**
@@ -443,8 +439,7 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
 
     public function getAttributesFieldsByTableName(string $tableName, string $columnName, string $prefixField, string $prefixSelect): array
     {
-        $stmt = $this->db->query("SHOW COLUMNS FROM $tableName");
-        $columns = $stmt->fetchAll();
+        $columns = $this->db->query("SHOW COLUMNS FROM $tableName")->fetchAll();
 
         $columnNames = [];
         foreach ($columns as $column) {
@@ -543,9 +538,7 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
                 $record['encoder'] = $passwordManager->getDefaultPasswordEncoderName();
             }
 
-            $encoder = $passwordManager->getEncoderByName($record['encoder']);
-
-            $record['password'] = $encoder->encodePassword($record['unhashedPassword']);
+            $record['password'] = $passwordManager->getEncoderByName($record['encoder'])->encodePassword($record['unhashedPassword']);
 
             unset($record['unhashedPassword']);
         }
@@ -569,10 +562,7 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
         if ($this->customerMap === null) {
             $columns = $this->getCustomerColumns();
 
-            $columns = \array_merge($columns, [
-                'customer.subshopID as subshopID',
-                'customer.languageID as languageId',
-            ]);
+            array_push($columns, 'customer.subshopID as subshopID', 'customer.languageID as languageId');
 
             foreach ($columns as $column) {
                 $map = DataHelper::generateMappingFromColumns($column);
@@ -587,7 +577,7 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
 
         foreach ($record as $key => $value) {
             if (strpos($key, 'attrCustomer') === 0) {
-                $newKey = \lcfirst(\preg_replace('/^attrCustomer/', '', $key));
+                $newKey = \lcfirst((string) \preg_replace('/^attrCustomer/', '', $key));
                 $customerData['attribute'][$newKey] = $value;
                 unset($record[$key]);
             } elseif (isset($this->customerMap[$key])) {
@@ -607,7 +597,7 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
             }
         }
 
-        if (isset($customerData['hashPassword']) && !empty($customerData['hashPassword'])) {
+        if (!empty($customerData['hashPassword'])) {
             $customerData['rawPassword'] = $customerData['hashPassword'];
         }
 
@@ -624,9 +614,7 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
     protected function prepareBilling(array &$record): array
     {
         if ($this->billingMap === null) {
-            $columns = $this->getBillingColumns();
-
-            foreach ($columns as $column) {
+            foreach ($this->getBillingColumns() as $column) {
                 $map = DataHelper::generateMappingFromColumns($column);
                 if (empty($map)) {
                     continue;
@@ -640,7 +628,7 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
         foreach ($record as $key => $value) {
             // prepares the attributes
             if (strpos($key, 'attrBilling') === 0) {
-                $newKey = \lcfirst(\preg_replace('/^attrBilling/', '', $key));
+                $newKey = \lcfirst((string) \preg_replace('/^attrBilling/', '', $key));
                 $billingData['attribute'][$newKey] = $value;
                 unset($record[$key]);
             } elseif (isset($this->billingMap[$key])) {
@@ -661,9 +649,7 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
     protected function prepareShipping(array &$record, bool $newCustomer, array $billing): array
     {
         if ($this->shippingMap === null) {
-            $columns = $this->getShippingColumns();
-
-            foreach ($columns as $column) {
+            foreach ($this->getShippingColumns() as $column) {
                 $map = DataHelper::generateMappingFromColumns($column);
                 if (empty($map)) {
                     continue;
@@ -693,7 +679,7 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
         foreach ($record as $key => $value) {
             // prepares the attributes
             if (strpos($key, 'attrShipping') === 0) {
-                $newKey = \lcfirst(\preg_replace('/^attrShipping/', '', $key));
+                $newKey = \lcfirst((string) \preg_replace('/^attrShipping/', '', $key));
                 $shippingData['attribute'][$newKey] = $value;
                 unset($record[$key]);
             } elseif (isset($this->shippingMap[$key])) {

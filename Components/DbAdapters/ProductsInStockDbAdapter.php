@@ -30,20 +30,16 @@ class ProductsInStockDbAdapter implements DataDbAdapter, \Enlight_Hook
 
     protected ProductInStockValidator $validator;
 
-    private SnippetsHelper $snippetHelper;
-
     private \Enlight_Event_EventManager $eventManager;
 
     private \Shopware_Components_Config $config;
 
     public function __construct(
-        SnippetsHelper $snippetHelper,
         ModelManager $modelManager,
         \Enlight_Event_EventManager $eventManager,
         \Shopware_Components_Config $config
     ) {
         $this->validator = new ProductInStockValidator();
-        $this->snippetHelper = $snippetHelper;
         $this->modelManager = $modelManager;
         $this->repository = $this->modelManager->getRepository(Detail::class);
         $this->eventManager = $eventManager;
@@ -76,25 +72,18 @@ class ProductsInStockDbAdapter implements DataDbAdapter, \Enlight_Hook
     public function read(array $ids, array $columns): array
     {
         if (empty($ids)) {
-            $message = $this->snippetHelper->getNamespace()
+            $message = SnippetsHelper::getNamespace()
                 ->get('adapters/articles_no_ids', 'Can not read articles without ids.');
             throw new \Exception($message);
         }
 
         // prices
-        $columns = \array_merge(
-            $columns,
-            ['customerGroup.taxInput as taxInput', 'articleTax.tax as tax']
-        );
+        array_push($columns, 'customerGroup.taxInput as taxInput', 'articleTax.tax as tax');
 
-        $builder = $this->getBuilder($columns, $ids);
-
-        $query = $builder->getQuery();
+        $query = $this->getBuilder($columns, $ids)->getQuery();
         $query->setHydrationMode(AbstractQuery::HYDRATE_ARRAY);
 
-        $paginator = $this->modelManager->createPaginator($query);
-
-        $result['default'] = $paginator->getIterator()->getArrayCopy();
+        $result['default'] = $this->modelManager->createPaginator($query)->getIterator()->getArrayCopy();
 
         foreach ($result['default'] as &$record) {
             if ($record['taxInput']) {
@@ -195,9 +184,7 @@ class ProductsInStockDbAdapter implements DataDbAdapter, \Enlight_Hook
 
         $query = $builder->getQuery();
         $query->setHydrationMode(AbstractQuery::HYDRATE_ARRAY);
-        $paginator = $this->modelManager->createPaginator($query);
-
-        $records = $paginator->getIterator()->getArrayCopy();
+        $records = $this->modelManager->createPaginator($query)->getIterator()->getArrayCopy();
         $result = [];
         if ($records) {
             foreach ($records as $value) {

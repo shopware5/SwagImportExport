@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace SwagImportExport\Components\DbAdapters\Products;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DBALException;
 use Enlight_Components_Db_Adapter_Pdo_Mysql as PDOConnection;
 use SwagImportExport\Components\DbAdapters\ProductsDbAdapter;
 use SwagImportExport\Components\Exception\AdapterException;
@@ -61,12 +62,12 @@ class ImageWriter
                 continue;
             }
 
-            if (isset($image['mediaId']) && !empty($image['mediaId'])) {
+            if (!empty($image['mediaId'])) {
                 $media = $this->getMediaById((int) $image['mediaId']);
                 $image['path'] = $media['name'];
-            } elseif (isset($image['path']) && !empty($image['path'])) {
+            } elseif (!empty($image['path'])) {
                 $media = $this->getMediaByName($image['path']);
-            } elseif (isset($image['imageUrl']) && !empty($image['imageUrl'])) {
+            } elseif (!empty($image['imageUrl'])) {
                 $name = \pathinfo($image['imageUrl'], \PATHINFO_FILENAME);
                 $media = $this->getMediaByName($name);
                 $image['path'] = $name;
@@ -158,7 +159,7 @@ class ImageWriter
     /**
      * @param array<string, mixed> $data
      *
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws DBALException
      */
     protected function insertImages(array $data, int $productId): void
     {
@@ -172,15 +173,15 @@ class ImageWriter
             \array_map(
                 function ($image) use ($productId) {
                     if ($image['variantId']) {
-                        return "({$productId}, '{$image['name']}', '{$image['main']}', '{$image['description']}', '{$image['extension']}', '{$image['variantId']}', {$image['id']})";
+                        return sprintf("(%s, '%s', '%s', '%s', '%s', '%s', %s)", $productId, $image['name'], $image['main'], $image['description'], $image['extension'], $image['variantId'], $image['id']);
                     }
 
-                    return "({$productId}, '{$image['name']}', '{$image['main']}', '{$image['description']}', '{$image['extension']}', NULL, {$image['id']})";
+                    return sprintf("(%s, '%s', '%s', '%s', '%s', NULL, %s)", $productId, $image['name'], $image['main'], $image['description'], $image['extension'], $image['id']);
                 },
                 $imageData
             )
         );
-        $insert = "INSERT INTO s_articles_img (articleID, img, main, description, extension, article_detail_id, media_id) VALUES {$values}";
+        $insert = sprintf('INSERT INTO s_articles_img (articleID, img, main, description, extension, article_detail_id, media_id) VALUES %s', $values);
         $this->connection->executeStatement($insert);
 
         $this->setMainImage($productId, $mediaId);
@@ -237,20 +238,20 @@ class ImageWriter
     }
 
     /**
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws DBALException
      */
     protected function setFirstImageAsMain(int $productId): void
     {
-        $update = "UPDATE s_articles_img SET main = 1 WHERE articleID = {$productId} ORDER BY id ASC LIMIT 1";
-        $this->connection->executeStatement($update);
+        $update = 'UPDATE s_articles_img SET main = 1 WHERE articleID = :productId ORDER BY id ASC LIMIT 1';
+        $this->connection->executeStatement($update, ['productId' => $productId]);
     }
 
     /**
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws DBALException
      */
     protected function updateMain(int $productId, int $mediaId): void
     {
-        $update = "UPDATE s_articles_img SET main = 2 WHERE articleID = {$productId} AND media_id != {$mediaId}";
-        $this->connection->executeStatement($update);
+        $update = 'UPDATE s_articles_img SET main = 2 WHERE articleID = :productId AND media_id != :mediaId';
+        $this->connection->executeStatement($update, ['productId' => $productId, 'mediaId' => $mediaId]);
     }
 }

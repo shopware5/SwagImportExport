@@ -20,9 +20,8 @@ class Shopware_Controllers_Frontend_SwagImportExport extends \Enlight_Controller
 
     private \Enlight_Plugin_PluginManager $pluginManager;
 
-    public function __construct(
-        \Enlight_Plugin_PluginManager $pluginManager
-    ) {
+    public function __construct(\Enlight_Plugin_PluginManager $pluginManager)
+    {
         $this->pluginManager = $pluginManager;
     }
 

@@ -30,7 +30,7 @@ class ProductTranslationValidator extends Validator
     ];
 
     /**
-     * @var array<string>
+     * @var array<string, string>
      */
     protected array $requiredFields = [
         'articleNumber' => 'adapters/ordernumber_required',

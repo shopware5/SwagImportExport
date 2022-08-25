@@ -46,8 +46,7 @@ class CategoriesDataManager extends DataManager implements \Enlight_Hook
      */
     public function setDefaultFieldsForCreate(array $record, array $defaultValues): array
     {
-        $getDefaultFields = $this->getDefaultFieldsName();
-        foreach ($getDefaultFields as $key) {
+        foreach ($this->getDefaultFieldsName() as $key) {
             if (isset($record[$key])) {
                 continue;
             }

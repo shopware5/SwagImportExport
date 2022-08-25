@@ -22,7 +22,7 @@ interface DataTransformerAdapter
     /**
      * Sets the main config which defines the data restructuring
      */
-    public function initialize(Profile $config): void;
+    public function initialize(Profile $profile): void;
 
     /**
      * Transforms the data in direction to formatted output file and returns the transformed data.

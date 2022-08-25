@@ -51,10 +51,6 @@ class ValuesTransformer implements DataTransformerAdapter
      */
     public function transformForward(array $data): array
     {
-        if (!\is_array($data)) {
-            $data = [];
-        }
-
         $conversions = [];
         foreach ($this->config as $expression) {
             $conversions[$expression->getVariable()] = $expression->getExportConversion();
@@ -70,10 +66,6 @@ class ValuesTransformer implements DataTransformerAdapter
      */
     public function transformBackward(array $data): array
     {
-        if (!\is_array($data)) {
-            $data = [];
-        }
-
         $conversions = [];
         foreach ($this->config as $expression) {
             $conversions[$expression->getVariable()] = $expression->getImportConversion();

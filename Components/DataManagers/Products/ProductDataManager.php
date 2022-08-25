@@ -61,8 +61,7 @@ class ProductDataManager extends DataManager implements \Enlight_Hook
      */
     public function setDefaultFieldsForCreate(array $record, array $defaultValues): array
     {
-        $getDefaultFields = $this->getDefaultFieldsName();
-        foreach ($getDefaultFields as $key) {
+        foreach ($this->getDefaultFieldsName() as $key) {
             if (isset($record[$key])) {
                 continue;
             }
@@ -84,97 +83,41 @@ class ProductDataManager extends DataManager implements \Enlight_Hook
                     $record[$key] = \date('Y-m-d');
                     break;
                 case 'description':
-                    $record[$key] = '';
-                    break;
                 case 'descriptionLong':
-                    $record[$key] = '';
-                    break;
                 case 'metaTitle':
-                    $record[$key] = '';
-                    break;
                 case 'keywords':
-                    $record[$key] = '';
-                    break;
                 case 'shippingTime':
-                    $record[$key] = '';
-                    break;
                 case 'supplierNumber':
-                    $record[$key] = '';
-                    break;
                 case 'additionalText':
-                    $record[$key] = '';
-                    break;
                 case 'ean':
-                    $record[$key] = '';
-                    break;
                 case 'packUnit':
+                case 'attributeAttr1':
+                case 'attributeAttr2':
+                case 'attributeAttr3':
+                case 'attributeAttr4':
+                case 'attributeAttr5':
+                case 'attributeAttr6':
+                case 'attributeAttr7':
+                case 'attributeAttr8':
+                case 'attributeAttr9':
+                case 'attributeAttr10':
+                case 'attributeAttr11':
+                case 'attributeAttr12':
+                case 'attributeAttr13':
+                case 'attributeAttr14':
+                case 'attributeAttr15':
+                case 'attributeAttr16':
+                case 'attributeAttr18':
+                case 'attributeAttr19':
+                case 'attributeAttr20':
                     $record[$key] = '';
                     break;
                 case 'inStock':
-                    $record[$key] = 0;
-                    break;
                 case 'stockMin':
                     $record[$key] = 0;
                     break;
                 case 'weight':
                     $record[$key] = 0.0;
-                    break;
-                case 'attributeAttr1':
-                    $record[$key] = '';
-                    break;
-                case 'attributeAttr2':
-                    $record[$key] = '';
-                    break;
-                case 'attributeAttr3':
-                    $record[$key] = '';
-                    break;
-                case 'attributeAttr4':
-                    $record[$key] = '';
-                    break;
-                case 'attributeAttr5':
-                    $record[$key] = '';
-                    break;
-                case 'attributeAttr6':
-                    $record[$key] = '';
-                    break;
-                case 'attributeAttr7':
-                    $record[$key] = '';
-                    break;
-                case 'attributeAttr8':
-                    $record[$key] = '';
-                    break;
-                case 'attributeAttr9':
-                    $record[$key] = '';
-                    break;
-                case 'attributeAttr10':
-                    $record[$key] = '';
-                    break;
-                case 'attributeAttr11':
-                    $record[$key] = '';
-                    break;
-                case 'attributeAttr12':
-                    $record[$key] = '';
-                    break;
-                case 'attributeAttr13':
-                    $record[$key] = '';
-                    break;
-                case 'attributeAttr14':
-                    $record[$key] = '';
-                    break;
-                case 'attributeAttr15':
-                    $record[$key] = '';
-                    break;
-                case 'attributeAttr16':
-                    $record[$key] = '';
-                    break;
-                case 'attributeAttr18':
-                    $record[$key] = '';
-                    break;
-                case 'attributeAttr19':
-                    $record[$key] = '';
-                    break;
-                case 'attributeAttr20':
-                    $record[$key] = '';
                     break;
             }
         }
@@ -193,8 +136,7 @@ class ProductDataManager extends DataManager implements \Enlight_Hook
      */
     public function setDefaultFields(array $record): array
     {
-        $getDefaultFields = $this->getDefaultFieldsName();
-        foreach ($getDefaultFields as $key) {
+        foreach ($this->getDefaultFieldsName() as $key) {
             if (isset($record[$key])) {
                 continue;
             }
@@ -354,7 +296,6 @@ class ProductDataManager extends DataManager implements \Enlight_Hook
             );
             $builder->execute();
             $supplierId = $this->db->lastInsertId();
-            $suppliers[$name] = $supplierId;
         }
 
         return (int) $supplierId;

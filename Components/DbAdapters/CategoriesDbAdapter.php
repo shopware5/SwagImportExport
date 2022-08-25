@@ -19,7 +19,6 @@ use Shopware\Models\Customer\Group;
 use SwagImportExport\Components\DataManagers\CategoriesDataManager;
 use SwagImportExport\Components\DataType\CategoryDataType;
 use SwagImportExport\Components\Exception\AdapterException;
-use SwagImportExport\Components\Service\UnderscoreToCamelCaseService;
 use SwagImportExport\Components\Service\UnderscoreToCamelCaseServiceInterface;
 use SwagImportExport\Components\Utils\DbAdapterHelper;
 use SwagImportExport\Components\Utils\SnippetsHelper;
@@ -61,7 +60,7 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandle
         ModelManager $modelManager,
         CategoriesDataManager $dataManager,
         \Enlight_Components_Db_Adapter_Pdo_Mysql $db,
-        UnderscoreToCamelCaseService $underscoreToCamelCase,
+        UnderscoreToCamelCaseServiceInterface $underscoreToCamelCase,
         \Enlight_Event_EventManager $eventManager,
         \Shopware_Components_Config $config
     ) {
@@ -132,9 +131,7 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandle
             throw new \Exception($message);
         }
 
-        $builder = $this->getBuilder($columns['default'], $ids);
-
-        $categories = $builder->getQuery()->getArrayResult();
+        $categories = $this->getBuilder($columns['default'], $ids)->getQuery()->getArrayResult();
 
         $result = [];
         foreach ($categories as $category) {
@@ -150,10 +147,10 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandle
     }
 
     /**
-     * @param array<string> $columns
-     * @param array<int>    $ids
+     * @param array<string>|string $columns
+     * @param array<int>           $ids
      */
-    public function getBuilder(array $columns, array $ids): QueryBuilder
+    public function getBuilder($columns, array $ids): QueryBuilder
     {
         $builder = $this->modelManager->createQueryBuilder();
         $builder->select($columns)
@@ -172,8 +169,7 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandle
      */
     public function getAttributes(): array
     {
-        $stmt = $this->db->query('SHOW COLUMNS FROM s_categories_attributes');
-        $columns = $stmt->fetchAll();
+        $columns = $this->db->query('SHOW COLUMNS FROM s_categories_attributes')->fetchAll();
         $attributes = $this->getFieldNames($columns);
 
         if (!$attributes) {
@@ -255,11 +251,10 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandle
      */
     public function getParentKeys(string $section): array
     {
-        switch ($section) {
-            case 'customerGroups':
-                return [
-                    'c.id as categoryId',
-                ];
+        if ($section === 'customerGroups') {
+            return [
+                'c.id as categoryId',
+            ];
         }
 
         throw new \RuntimeException(sprintf('No case found for section "%s"', $section));
@@ -372,7 +367,7 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandle
         // prepares attribute associated data
         foreach ($data as $column => $value) {
             if (strpos($column, 'attribute') === 0) {
-                $newKey = \lcfirst(\preg_replace('/^attribute/', '', $column));
+                $newKey = \lcfirst((string) \preg_replace('/^attribute/', '', $column));
                 $data['attribute'][$newKey] = $value;
                 unset($data[$column]);
             }
@@ -380,8 +375,7 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandle
 
         // prepares customer groups associated data
         $customerGroups = [];
-        $customerGroupIds = $this->getCustomerGroupIdsFromIndex($groups, $index);
-        foreach ($customerGroupIds as $customerGroupID) {
+        foreach ($this->getCustomerGroupIdsFromIndex($groups, $index) as $customerGroupID) {
             $customerGroup = $this->getCustomerGroupById($customerGroupID);
             if ($customerGroup && !$this->checkIfRelationExists($categoryId, $customerGroup->getId())) {
                 $customerGroups[] = $customerGroup;
@@ -397,7 +391,7 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandle
     /**
      * Helper method: Filtered the field names and return them
      *
-     * @param array<string> $columns
+     * @param array<array<string, string>> $columns
      *
      * @return array<string>
      */

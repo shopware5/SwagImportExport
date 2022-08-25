@@ -92,16 +92,12 @@ class OrderValidator extends Validator
     public function checkRequiredFields(array $record): void
     {
         foreach ($this->requiredFields as $key) {
-            if (\is_array($key)) {
-                [$orderId, $number, $orderDetailId] = $key;
+            [$orderId, $number, $orderDetailId] = $key;
 
-                if (isset($record[$orderId]) || isset($record[$number]) || isset($record[$orderDetailId])) {
-                    continue;
-                }
-                $key = $orderId;
-            } elseif (isset($record[$key])) {
+            if (isset($record[$orderId]) || isset($record[$number]) || isset($record[$orderDetailId])) {
                 continue;
             }
+            $key = $orderId;
 
             [$snippetName, $snippetMessage] = $this->snippetData[$key];
 

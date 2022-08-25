@@ -15,7 +15,6 @@ use Shopware\Components\Model\QueryBuilder;
 use Shopware\Models\Customer\Customer;
 use Shopware\Models\Order\Order;
 use SwagImportExport\Components\Utils\DbAdapterHelper;
-use SwagImportExport\Components\Utils\SwagVersionHelper;
 
 class CustomerCompleteDbAdapter extends CustomerDbAdapter
 {
@@ -70,16 +69,14 @@ class CustomerCompleteDbAdapter extends CustomerDbAdapter
             $query->setMaxResults($limit);
         }
 
-        if (SwagVersionHelper::hasMinimumVersion('5.4.0') && \array_key_exists('customerId', $filter)) {
+        if (\array_key_exists('customerId', $filter)) {
             $query->andWhere('customer.id = :customerId');
             $query->setParameter('customerId', $filter['customerId']);
         }
 
-        $ids = $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
+        $ids = $query->execute()->fetchFirstColumn();
 
-        return \array_map(function ($id) {
-            return (int) $id;
-        }, $ids);
+        return \array_map('\intval', $ids);
     }
 
     public function read(array $ids, array $columns): array
@@ -90,12 +87,10 @@ class CustomerCompleteDbAdapter extends CustomerDbAdapter
             }
         }
 
-        $builder = $this->getBuilder($columns, $ids);
-        $query = $builder->getQuery();
+        $query = $this->getBuilder($columns, $ids)->getQuery();
         $query->setHydrationMode(AbstractQuery::HYDRATE_ARRAY);
 
-        $paginator = $this->manager->createPaginator($query);
-        $customers = $paginator->getIterator()->getArrayCopy();
+        $customers = $this->manager->createPaginator($query)->getIterator()->getArrayCopy();
 
         $customerIds = \array_column($customers, 'id');
         $addresses = $this->getAddresses($customerIds);
@@ -132,9 +127,8 @@ class CustomerCompleteDbAdapter extends CustomerDbAdapter
      */
     private function getAddresses(array $ids): array
     {
-        $dbalQueryBuilder = $this->manager->getConnection()->createQueryBuilder();
-
-        return $dbalQueryBuilder->select('address.user_id, address.*', 'attribute.*')
+        return $this->manager->getConnection()->createQueryBuilder()
+            ->select('address.user_id, address.*', 'attribute.*')
             ->from('s_user_addresses', 'address')
             ->leftJoin('address', 's_user_addresses_attributes', 'attribute', 'address.id = attribute.address_id')
             ->where('address.user_id IN (:ids)')
@@ -150,9 +144,7 @@ class CustomerCompleteDbAdapter extends CustomerDbAdapter
      */
     private function getCustomerOrders(array $ids): array
     {
-        $builder = $this->manager->createQueryBuilder();
-
-        $orders = $builder->from(Order::class, 'o')
+        $orders = $this->manager->createQueryBuilder()->from(Order::class, 'o')
             ->select([
                 'o',
                 'attr',
@@ -179,8 +171,7 @@ class CustomerCompleteDbAdapter extends CustomerDbAdapter
 
         $indexedOrders = [];
         foreach ($orders as $order) {
-            $orderTime = $order['orderTime'];
-            $order['orderTime'] = $orderTime->format('Y-m-d H:i:s');
+            $order['orderTime'] = $order['orderTime']->format('Y-m-d H:i:s');
             foreach ($order['details'] as &$detail) {
                 $releaseDate = $detail['releaseDate'];
 
@@ -207,9 +198,8 @@ class CustomerCompleteDbAdapter extends CustomerDbAdapter
      */
     private function getNewsletterRecipients(array $ids): array
     {
-        $dbalQueryBuilder = $this->manager->getConnection()->createQueryBuilder();
-
-        return $dbalQueryBuilder->select('customer.id, mailaddress.email')
+        return $this->manager->getConnection()->createQueryBuilder()
+            ->select('customer.id, mailaddress.email')
             ->from('s_campaigns_mailaddresses', 'mailaddress')
             ->innerJoin('mailaddress', 's_user', 'customer', 'customer.email = mailaddress.email')
             ->where('customer.id IN (:ids)')

@@ -12,14 +12,15 @@ namespace SwagImportExport\Tests\Functional\Components\Service;
 use PHPUnit\Framework\TestCase;
 use SwagImportExport\Components\Factories\DataTransformerFactory;
 use SwagImportExport\Components\Factories\ProfileFactory;
-use SwagImportExport\Components\FileIO\FileWriter;
 use SwagImportExport\Components\Logger\Logger;
 use SwagImportExport\Components\Profile\Profile;
 use SwagImportExport\Components\Providers\DataProvider;
 use SwagImportExport\Components\Providers\FileIOProvider;
 use SwagImportExport\Components\Service\DataWorkflow;
 use SwagImportExport\Components\Session\SessionService;
-use SwagImportExport\Components\Transformers\DataTransformerChain;
+use SwagImportExport\Models\Profile as ProfileModel;
+use SwagImportExport\Tests\Functional\Components\Service\Mock\FileIoMock;
+use SwagImportExport\Tests\Functional\Components\Service\Mock\TransformerChainMock;
 
 class DataWorkflowTest extends TestCase
 {
@@ -49,7 +50,7 @@ class DataWorkflowTest extends TestCase
         $sessionService = $this->getMockBuilder(SessionService::class)->disableOriginalConstructor()->getMock();
         $logger = $this->getMockBuilder(Logger::class)->disableOriginalConstructor()->getMock();
         $profileFactory = $this->getMockBuilder(ProfileFactory::class)->disableOriginalConstructor()->getMock();
-        $profileFactory->method('loadHiddenProfile')->willReturn(new Profile(new \SwagImportExport\Models\Profile()));
+        $profileFactory->method('loadHiddenProfile')->willReturn(new Profile(new ProfileModel()));
 
         return new DataWorkflow(
             $dataProvider,
@@ -59,70 +60,5 @@ class DataWorkflowTest extends TestCase
             $logger,
             $profileFactory
         );
-    }
-}
-
-class FileIoMock implements FileWriter
-{
-    public function __construct()
-    {
-        // DO NOTHING
-    }
-
-    /**
-     * @param mixed|null $headerData
-     */
-    public function writeHeader(string $fileName, $headerData): void
-    {
-        \file_put_contents($fileName, $headerData);
-    }
-
-    /**
-     * @param mixed|null $treeData
-     */
-    public function writeRecords(string $fileName, $treeData): void
-    {
-        \file_put_contents($fileName, $treeData, \FILE_APPEND);
-    }
-
-    public function supports(string $format): bool
-    {
-        return true;
-    }
-
-    public function writeFooter(string $fileName, ?array $footerData): void
-    {
-        // nth
-    }
-
-    public function hasTreeStructure(): bool
-    {
-        return false;
-    }
-}
-
-class TransformerChainMock extends DataTransformerChain
-{
-    public function __construct()
-    {
-        // DO NOTHING
-    }
-
-    /**
-     * @return array<string>
-     */
-    public function composeHeader(): array
-    {
-        return ['new | empty | header | test'];
-    }
-
-    /**
-     * @param array<string, array<int, mixed>> $data
-     *
-     * @return array<string>
-     */
-    public function transformForward($data): array
-    {
-        return [\PHP_EOL . 'just | another | return | value'];
     }
 }

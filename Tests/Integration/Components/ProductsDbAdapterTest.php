@@ -107,35 +107,31 @@ class ProductsDbAdapterTest extends DbAdapterTestHelper
 
     private function getProductDataResult(string $number): array
     {
-        $builder = $this->getQueryBuilder();
-
-        $builder->select(['details.ordernumber', 'articles.name', 'prices.price']);
-        $builder->from('s_articles', 'articles');
-        $builder->leftJoin('articles', 's_articles_details', 'details', 'details.articleID = articles.id');
-        $builder->leftJoin('details', 's_articles_prices', 'prices', 'prices.articledetailsID = details.id');
-        $builder->where('details.ordernumber = :number');
-        $builder->setParameter('number', $number);
-
-        return $builder->execute()->fetchAllAssociative();
+        return $this->getQueryBuilder()
+            ->select(['details.ordernumber', 'articles.name', 'prices.price'])
+            ->from('s_articles', 'articles')
+            ->leftJoin('articles', 's_articles_details', 'details', 'details.articleID = articles.id')
+            ->leftJoin('details', 's_articles_prices', 'prices', 'prices.articledetailsID = details.id')
+            ->where('details.ordernumber = :number')
+            ->setParameter('number', $number)
+            ->execute()
+            ->fetchAllAssociative();
     }
 
     private function getProductPriceResult(string $number): array
     {
-        $builder = $this->getQueryBuilder();
-
-        $builder->select('prices.pricegroup', 'prices.price');
-        $builder->from('s_articles_prices', 'prices');
-        $builder->leftJoin('prices', 's_articles_details', 'details', 'details.id = prices.articledetailsID');
-        $builder->where('details.ordernumber = :number');
-        $builder->setParameter('number', $number);
-
-        return $builder->execute()->fetchAllAssociative();
+        return $this->getQueryBuilder()
+            ->select('prices.pricegroup', 'prices.price')
+            ->from('s_articles_prices', 'prices')
+            ->leftJoin('prices', 's_articles_details', 'details', 'details.id = prices.articledetailsID')
+            ->where('details.ordernumber = :number')
+            ->setParameter('number', $number)
+            ->execute()
+            ->fetchAllAssociative();
     }
 
     private function getQueryBuilder(): QueryBuilder
     {
-        $connection = $this->getContainer()->get('dbal_connection');
-
-        return $connection->createQueryBuilder();
+        return $this->getContainer()->get('dbal_connection')->createQueryBuilder();
     }
 }

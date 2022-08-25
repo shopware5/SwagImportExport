@@ -19,7 +19,7 @@ abstract class Validator
      */
     public function filterEmptyString(array $record): array
     {
-        return \array_filter($record, 'strlen');
+        return \array_filter($record, '\strlen');
     }
 
     /**
@@ -45,7 +45,7 @@ abstract class Validator
      */
     public function validateInt(string $value): bool
     {
-        return (bool) \preg_match('/^-{0,1}\d+$/', $value);
+        return (bool) \preg_match('/^-?\d+$/', $value);
     }
 
     /**
@@ -53,7 +53,7 @@ abstract class Validator
      */
     public function validateFloat(string $value): bool
     {
-        return (bool) \preg_match('/^-?\d+((\.|,){0,1}\d+)*$/', $value);
+        return (bool) \preg_match('/^-?\d+((\.|,)?\d+)*$/', $value);
     }
 
     /**
@@ -91,6 +91,10 @@ abstract class Validator
      */
     public function checkRequiredFields(array $record): void
     {
+        if (!property_exists($this, 'requiredFields') || !property_exists($this, 'snippetData')) {
+            throw new \RuntimeException('Property "requiredFields" and/or "snippetData" do not exist.');
+        }
+
         foreach ($this->requiredFields as $key) {
             if (isset($record[$key])) {
                 continue;

@@ -163,6 +163,9 @@ class CsvFileReader implements FileReader
         // Rewinds to first line
         $file->rewind();
         $columnNames = $file->current();
+        if (!\is_array($columnNames)) {
+            throw new \RuntimeException('Column names needs to be an array');
+        }
 
         // removes UTF-8 BOM
         foreach ($columnNames as $index => $name) {

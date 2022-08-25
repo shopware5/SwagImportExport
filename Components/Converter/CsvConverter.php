@@ -26,7 +26,7 @@ class CsvConverter implements ConverterInterface
 
     public function encode(array $array, array $keys = []): string
     {
-        if (!\is_array($keys) || !\count($keys)) {
+        if (!\count($keys)) {
             $keys = \array_keys(\current($array));
         }
         $csv = $this->_encode_line(\array_combine($keys, $keys), $keys) . $this->settings['newline'];
@@ -45,11 +45,7 @@ class CsvConverter implements ConverterInterface
     {
         $csv = '';
 
-        if (isset($this->settings['fieldmark'])) {
-            $fieldmark = $this->settings['fieldmark'];
-        } else {
-            $fieldmark = '';
-        }
+        $fieldmark = $this->settings['fieldmark'] ?? '';
         $lastkey = \end($keys);
         foreach ($keys as $key) {
             if (!empty($line[$key]) || $line[$key] === '0') {
@@ -87,36 +83,35 @@ class CsvConverter implements ConverterInterface
      */
     public function decode(string $csv, array $keys = []): array
     {
-        $csv = \file_get_contents($csv);
+        $csvContent = \file_get_contents($csv);
         $array = [];
 
-        if (\is_bool($csv)) {
+        if (\is_bool($csvContent)) {
             throw new \Exception('File could not be found');
         }
 
         if ($this->settings['encoding'] === 'UTF-8') {
-            $csv = \utf8_decode($csv);
+            $csvContent = \utf8_decode($csvContent);
         }
 
         if (isset($this->settings['escaped_newline']) && $this->settings['escaped_newline'] !== false && isset($this->settings['fieldmark']) && $this->settings['fieldmark'] !== false) {
-            $lines = $this->_split_line($csv);
+            $lines = $this->_split_line($csvContent);
         } else {
-            $lines = \preg_split("/\n|\r/", $csv, -1, \PREG_SPLIT_NO_EMPTY);
+            $lines = \preg_split("/\n|\r/", $csvContent, -1, \PREG_SPLIT_NO_EMPTY);
         }
 
         if (!\is_array($lines)) {
             throw new \Exception('Invalid lines');
         }
 
-        if (empty($keys) || !\is_array($keys)) {
+        if (empty($keys)) {
             if (empty($this->settings['fieldmark'])) {
                 $keys = \explode($this->settings['separator'], $lines[0]);
+                if (!\is_array($keys)) {
+                    throw new \Exception('Invalid keys');
+                }
             } else {
                 $keys = $this->_decode_line($lines[0]);
-            }
-
-            if (!\is_array($keys)) {
-                throw new \Exception('Invalid keys');
             }
 
             foreach ($keys as $i => $key) {

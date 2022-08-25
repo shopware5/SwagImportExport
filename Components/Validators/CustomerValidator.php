@@ -109,6 +109,8 @@ class CustomerValidator extends Validator
     /**
      * Checks whether required fields for create are filled-in
      *
+     * @param array<string, string|int> $record
+     *
      * @throws AdapterException
      */
     public function checkRequiredFieldsForCreate(array $record): void
@@ -118,12 +120,8 @@ class CustomerValidator extends Validator
                 continue;
             }
 
-            switch ($columnName) {
-                case 'unhashedPassword':
-                    if (isset($record['password']) && isset($record['encoder'])) {
-                        continue 2;
-                    }
-                    break;
+            if (isset($record['password'], $record['encoder']) && ($columnName === 'unhashedPassword')) {
+                continue;
             }
 
             [$snippetName, $snippetMessage] = $this->snippetData[$columnName];

@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Components\DataManagers;
 
-use Doctrine\ORM\EntityManagerInterface;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Newsletter\Group;
 use Shopware\Models\Newsletter\Repository;
 use SwagImportExport\Components\DataType\NewsletterDataType;
@@ -28,7 +28,7 @@ class NewsletterDataManager extends DataManager implements \Enlight_Hook
      */
     public function __construct(
         \Shopware_Components_Config $config,
-        EntityManagerInterface $entityManager
+        ModelManager $entityManager
     ) {
         $this->groupRepository = $entityManager->getRepository(Group::class);
         $this->config = $config;
@@ -66,8 +66,7 @@ class NewsletterDataManager extends DataManager implements \Enlight_Hook
      */
     public function setDefaultFieldsForCreate(array $record, array $defaultValues): array
     {
-        $getDefaultFields = $this->getDefaultFieldsName();
-        foreach ($getDefaultFields as $key) {
+        foreach ($this->getDefaultFieldsName() as $key) {
             if (isset($record[$key])) {
                 continue;
             }

@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Components\Service;
 
+use Shopware\Components\Model\Exception\ModelNotFoundException;
 use Shopware\Components\Model\ModelManager;
 use SwagImportExport\Components\Service\Struct\ProfileDataStruct;
 use SwagImportExport\Models\Profile;
@@ -65,7 +66,7 @@ class ProfileService implements ProfileServiceInterface
             $profile = new Profile();
             $profile->setName($profileData['name']);
             $profile->setType($profileData['type']);
-            $profile->setTree(\json_encode($profileData['tree']));
+            $profile->setTree(\json_encode($profileData['tree'], \JSON_THROW_ON_ERROR));
 
             $this->modelManager->persist($profile);
             $this->modelManager->flush($profile);
@@ -84,13 +85,12 @@ class ProfileService implements ProfileServiceInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function exportProfile(int $profileId): ProfileDataStruct
     {
-        $profileRepository = $this->modelManager->getRepository(Profile::class);
-        $profile = $profileRepository->findOneBy(['id' => $profileId]);
+        $profile = $this->modelManager->getRepository(Profile::class)->findOneBy(['id' => $profileId]);
+        if (!$profile instanceof Profile) {
+            throw new ModelNotFoundException(Profile::class, $profileId);
+        }
 
         return new ProfileDataStruct($profile);
     }

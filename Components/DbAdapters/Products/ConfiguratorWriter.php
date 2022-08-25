@@ -100,7 +100,7 @@ class ConfiguratorWriter
             /*
              * configurator option
              */
-            if (isset($configurator['configOptionId']) && !empty($configurator['configOptionId'])) {
+            if (!empty($configurator['configOptionId'])) {
                 $optionResult = $this->getOptionRow($configurator['configOptionId']);
 
                 $optionId = (int) $optionResult['id'];
@@ -124,7 +124,7 @@ class ConfiguratorWriter
 
             // creates option
             if (!$optionId) {
-                if (isset($configurator['configOptionPosition']) && !empty($configurator['configOptionPosition'])) {
+                if (!empty($configurator['configOptionPosition'])) {
                     $position = $configurator['configOptionPosition'];
                 } else {
                     $position = $this->getNextOptionPosition($groupId);
@@ -139,11 +139,10 @@ class ConfiguratorWriter
                 $optionId = $this->createOption($dataOption);
             }
 
-            $this->updateOptionRelation($productWriterResult->getDetailId(), (int) $optionId);
+            $this->updateOptionRelation($productWriterResult->getDetailId(), $optionId);
             $this->updateSetOptionRelation($configuratorSetId, $optionId);
 
-            unset($groupId);
-            unset($optionId);
+            unset($groupId, $optionId);
         }
     }
 
@@ -309,7 +308,7 @@ class ConfiguratorWriter
      */
     private function isValid(array $configurator): bool
     {
-        if (!isset($configurator['configOptionId']) || empty($configurator['configOptionId'])) {
+        if (empty($configurator['configOptionId'])) {
             if (!isset($configurator['configGroupName']) && !isset($configurator['configGroupId'])) {
                 return false;
             }
@@ -341,10 +340,10 @@ class ConfiguratorWriter
     {
         $groupId = null;
 
-        if (isset($data['configGroupId'])) {
-            if ($this->checkExistence('s_article_configurator_groups', (int) $data['configGroupId'])) {
-                $groupId = $data['configGroupId'];
-            }
+        if (isset($data['configGroupId'])
+            && $this->checkExistence('s_article_configurator_groups', (int) $data['configGroupId'])
+        ) {
+            $groupId = $data['configGroupId'];
         }
 
         if (isset($data['configGroupName']) && !$groupId) {
@@ -406,7 +405,7 @@ class ConfiguratorWriter
      */
     private function updateConfiguratorSetTypeIfConfigSetIdIsNotEmptyAndSetDoesExistAndMatchSetName(int $productId, ?int $configuratorSetId, array $configurator): ?int
     {
-        if (!$configuratorSetId && isset($configurator['configSetId']) && !empty($configurator['configSetId'])) {
+        if (!$configuratorSetId && !empty($configurator['configSetId'])) {
             $setExists = $this->checkExistence('s_article_configurator_sets', (int) $configurator['configSetId']);
             $match = $this->compareSetIdByName($productId, (int) $configurator['configSetId']);
             if ($setExists && $match) {

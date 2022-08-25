@@ -13,9 +13,10 @@ use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use GuzzleHttp\ClientInterface;
-use Shopware\Bundle\MediaBundle\MediaService;
+use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Components\ContainerAwareEventManager;
 use Shopware\Components\HttpClient\GuzzleFactory;
+use Shopware\Components\Model\Exception\ModelNotFoundException;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Thumbnail\Manager;
 use Shopware\Models\Article\Article;
@@ -29,7 +30,6 @@ use Shopware\Models\Media\Media;
 use SwagImportExport\Components\DataManagers\ProductImageDataManager;
 use SwagImportExport\Components\DbalHelper;
 use SwagImportExport\Components\Exception\AdapterException;
-use SwagImportExport\Components\Service\UnderscoreToCamelCaseService;
 use SwagImportExport\Components\Service\UnderscoreToCamelCaseServiceInterface;
 use SwagImportExport\Components\Utils\SnippetsHelper;
 use SwagImportExport\Components\Validators\ProductImageValidator;
@@ -52,7 +52,7 @@ class ProductsImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
 
     protected ModelManager $manager;
 
-    protected MediaService $mediaService;
+    protected MediaServiceInterface $mediaService;
 
     protected ?\Enlight_Controller_Request_Request $request;
 
@@ -85,11 +85,11 @@ class ProductsImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
     public function __construct(
         ModelManager $manager,
         \Enlight_Components_Db_Adapter_Pdo_Mysql $db,
-        MediaService $mediaService,
+        MediaServiceInterface $mediaService,
         ContainerAwareEventManager $eventManager,
         ProductImageDataManager $dataManager,
         Manager $thumbnailManager,
-        UnderscoreToCamelCaseService $underscoreToCamelCaseService,
+        UnderscoreToCamelCaseServiceInterface $underscoreToCamelCaseService,
         DbalHelper $dbalHelper,
         GuzzleFactory $guzzleFactory,
         \Shopware_Components_Config $config,
@@ -161,8 +161,7 @@ class ProductsImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
             throw new \Exception($message);
         }
 
-        $builder = $this->getBuilder($columns, $ids);
-        $result['default'] = $builder->getQuery()->getArrayResult();
+        $result['default'] = $this->getBuilder($columns, $ids)->getQuery()->getArrayResult();
 
         foreach ($result['default'] as &$image) {
             $image['image'] = $this->mediaService->getUrl($image['image']);
@@ -264,15 +263,12 @@ class ProductsImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
 
                 $relations = [];
                 if (isset($record['relations'])) {
-                    $importedRelations = \explode('&', $record['relations']);
-
-                    foreach ($importedRelations as $key => $relation) {
+                    foreach (\explode('&', $record['relations']) as $key => $relation) {
                         if ($relation === '') {
                             continue;
                         }
 
-                        $variantConfig = \explode('|', \preg_replace('/{|}/', '', $relation));
-                        foreach ($variantConfig as $config) {
+                        foreach (\explode('|', (string) \preg_replace('/{|}/', '', $relation)) as $config) {
                             [$group, $option] = \explode(':', $config);
 
                             // Get configurator group
@@ -298,8 +294,7 @@ class ProductsImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
 
                 $media = false;
                 if ($this->imageImportMode === 1) {
-                    $mediaRepository = $this->manager->getRepository(Media::class);
-                    $media = $mediaRepository->findOneBy(['name' => $name]);
+                    $media = $this->manager->getRepository(Media::class)->findOneBy(['name' => $name]);
                 }
 
                 // create new media
@@ -309,7 +304,11 @@ class ProductsImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
 
                     $media = new Media();
                     $media->setAlbumId(-1);
-                    $media->setAlbum($this->manager->getRepository(Album::class)->find(-1));
+                    $album = $this->manager->getRepository(Album::class)->find(-1);
+                    if (!$album instanceof Album) {
+                        throw new ModelNotFoundException(Album::class, -1);
+                    }
+                    $media->setAlbum($album);
 
                     $media->setFile($file);
                     $media->setName(\pathinfo($record['image'], \PATHINFO_FILENAME));
@@ -386,7 +385,7 @@ class ProductsImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
      */
     public function saveMessage(string $message): void
     {
-        if ($this->importExportErrorMode === false) {
+        if (!$this->importExportErrorMode) {
             throw new \RuntimeException($message);
         }
 
@@ -442,8 +441,7 @@ class ProductsImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
      */
     protected function getAttributesColumns(): array
     {
-        $stmt = $this->db->query('SHOW COLUMNS FROM `s_articles_img_attributes`');
-        $columns = $stmt->fetchAll();
+        $columns = $this->db->query('SHOW COLUMNS FROM `s_articles_img_attributes`')->fetchAll();
 
         $attributes = [];
         foreach ($columns as $column) {
@@ -484,7 +482,7 @@ class ProductsImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
         $attributes = [];
         foreach ($image as $key => $value) {
             $position = \strpos($key, 'attribute');
-            if ($position === false || $position !== 0) {
+            if ($position !== 0) {
                 continue;
             }
 
@@ -539,25 +537,23 @@ class ProductsImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
             throw new \Exception('Article must be set');
         }
 
-        $articleId = $parent->getArticle()->getId();
+        $productId = $parent->getArticle()->getId();
         $imageData['path'] = null;
         $imageData['parent'] = $parent;
 
         $join = '';
         foreach ($options as $option) {
             $alias = 'alias' . $option->getId();
-            $join = $join . ' INNER JOIN s_article_configurator_option_relations alias' . $option->getId() .
-                    ' ON ' . $alias . '.option_id = ' . $option->getId() .
-                    ' AND ' . $alias . '.article_id = d.id ';
+            $join .= ' INNER JOIN s_article_configurator_option_relations alias' . $option->getId() .
+                ' ON ' . $alias . '.option_id = ' . $option->getId() .
+                ' AND ' . $alias . '.article_id = d.id ';
         }
         $sql = 'SELECT d.id
                 FROM s_articles_details d
         ' . $join . '
-        WHERE d.articleID = ' . (int) $articleId;
+        WHERE d.articleID = ' . $productId;
 
-        $details = $this->db->fetchCol($sql);
-
-        foreach ($details as $detailId) {
+        foreach ($this->db->fetchCol($sql) as $detailId) {
             $detail = $this->manager->getReference(Detail::class, $detailId);
             $image = new Image();
             $image->fromArray($imageData);
@@ -573,6 +569,9 @@ class ProductsImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
         }
 
         $destPath = \realpath($this->docPath);
+        if (!\is_string($destPath)) {
+            throw new \RuntimeException(sprintf('Could not get path of "%s"', $this->docPath));
+        }
 
         if (!\file_exists($destPath)) {
             $message = SnippetsHelper::getNamespace()
@@ -594,7 +593,7 @@ class ProductsImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
             throw new AdapterException(\sprintf($message, $urlScheme ?? '"No URL scheme given"'));
         }
 
-        $filename = $baseFilename ?? \md5(\uniqid(\mt_rand(), true));
+        $filename = $baseFilename ?? \md5(\uniqid((string) \mt_rand(), true));
 
         $put_handle = \fopen(sprintf('%s/%s', $destPath, $filename), 'wb+');
         if (!$put_handle) {

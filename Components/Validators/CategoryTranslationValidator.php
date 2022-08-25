@@ -12,7 +12,7 @@ namespace SwagImportExport\Components\Validators;
 class CategoryTranslationValidator extends Validator
 {
     /**
-     * @var array<string>
+     * @var array<string, string>
      */
     protected array $requiredFields = [
         'categoryId' => 'adapters/category_required',

@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Components\Session;
 
-use Doctrine\Persistence\ObjectRepository;
 use Shopware\Components\Model\ModelManager;
 use SwagImportExport\Components\Profile\Profile;
 use SwagImportExport\Components\Structs\ExportRequest;
@@ -17,13 +16,11 @@ use SwagImportExport\Components\Structs\ImportRequest;
 use SwagImportExport\Components\UploadPathProvider;
 use SwagImportExport\Components\Utils\SnippetsHelper;
 use SwagImportExport\Models\Session as SessionEntity;
+use SwagImportExport\Models\SessionRepository;
 
 class SessionService
 {
-    /**
-     * @var \SwagImportExport\Models\SessionRepository
-     */
-    private ObjectRepository $sessionRepository;
+    private SessionRepository $sessionRepository;
 
     private ModelManager $modelManager;
 
@@ -47,7 +44,7 @@ class SessionService
     {
         $sessionEntity = $this->sessionRepository->findOneBy(['id' => $sessionId]);
 
-        if (!$sessionEntity instanceof \SwagImportExport\Models\Session) {
+        if (!$sessionEntity instanceof SessionEntity) {
             throw new \Exception('Session is not existing');
         }
 

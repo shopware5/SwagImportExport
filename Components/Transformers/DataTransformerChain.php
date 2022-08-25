@@ -16,7 +16,7 @@ namespace SwagImportExport\Components\Transformers;
 class DataTransformerChain
 {
     /**
-     * @var array DataTransformerAdapter[]
+     * @var array<DataTransformerAdapter>
      */
     private array $chain = [];
 
@@ -58,9 +58,7 @@ class DataTransformerChain
      */
     public function composeHeader(): array
     {
-        $transformer = $this->getLastComposerTransformer($this->chain);
-
-        return $transformer->composeHeader();
+        return $this->getLastComposerTransformer($this->chain)->composeHeader();
     }
 
     /**
@@ -69,9 +67,7 @@ class DataTransformerChain
      */
     public function composeFooter(): array
     {
-        $transformer = $this->getLastComposerTransformer($this->chain);
-
-        return $transformer->composeFooter();
+        return $this->getLastComposerTransformer($this->chain)->composeFooter();
     }
 
     /**

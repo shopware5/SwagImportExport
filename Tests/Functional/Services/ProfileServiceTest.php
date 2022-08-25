@@ -25,8 +25,7 @@ class ProfileServiceTest extends TestCase
     public function testProfileExportShouldGiveCorrectResult(): void
     {
         $service = $this->getProfileService();
-        $dbalConnection = $this->getContainer()->get('dbal_connection');
-        $profile = $dbalConnection->executeQuery('SELECT * FROM s_import_export_profile LIMIT 1')->fetchAssociative();
+        $profile = $this->getContainer()->get('dbal_connection')->executeQuery('SELECT * FROM s_import_export_profile LIMIT 1')->fetchAssociative();
         static::assertIsArray($profile);
 
         $profileDataStruct = $service->exportProfile((int) $profile['id']);

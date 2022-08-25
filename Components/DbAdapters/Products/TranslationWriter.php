@@ -135,7 +135,7 @@ class TranslationWriter
      */
     private function isValid(array $translation): bool
     {
-        if (!isset($translation['languageId']) || empty($translation['languageId'])) {
+        if (empty($translation['languageId'])) {
             return false;
         }
 
@@ -147,9 +147,8 @@ class TranslationWriter
      */
     private function getAttributes(): array
     {
-        $repository = $this->manager->getRepository(Configuration::class);
-
-        return $repository->createQueryBuilder('configuration')
+        return $this->manager->getRepository(Configuration::class)
+            ->createQueryBuilder('configuration')
             ->select('configuration.columnName')
             ->where('configuration.tableName = :tableName')
             ->andWhere('configuration.translatable = 1')

@@ -99,9 +99,7 @@ class TranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
      */
     public function readRecordIds(?int $start, ?int $limit, array $filter = []): array
     {
-        $manager = $this->manager;
-
-        $builder = $manager->createQueryBuilder();
+        $builder = $this->manager->createQueryBuilder();
 
         $builder->select('t.id');
         $builder->from(Translation::class, 't')
@@ -121,12 +119,7 @@ class TranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
 
         $records = $builder->getQuery()->getResult();
 
-        return \array_map(
-            function ($item) {
-                return $item['id'];
-            },
-            $records
-        );
+        return \array_column($records, 'id');
     }
 
     /**
@@ -234,7 +227,7 @@ class TranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
 
         $importMapper = $this->getElementMapper();
 
-        foreach ($records['default'] as $index => $record) {
+        foreach ($records['default'] as $record) {
             try {
                 $record = $this->validator->filterEmptyString($record);
                 $this->validator->checkRequiredFields($record);
@@ -292,9 +285,7 @@ class TranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
 
                 $this->translation->write($shop->getId(), $record['objectType'], $element->getId(), $data);
 
-                unset($shop);
-                unset($element);
-                unset($data);
+                unset($shop, $element, $data);
             } catch (AdapterException $e) {
                 $message = $e->getMessage();
                 $this->saveMessage($message);

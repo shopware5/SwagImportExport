@@ -9,11 +9,13 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Components\Utils;
 
+use Shopware\Bundle\CustomerSearchBundle\Condition\HasNoAddressWithCountryCondition;
+
 class SwagVersionHelper
 {
     public static function hasMinimumVersion(string $version): bool
     {
-        $actualVersion = Shopware()->Config()->version;
+        $actualVersion = Shopware()->Config()->get('version');
 
         if ($actualVersion === '___VERSION___') {
             return true;
@@ -24,6 +26,6 @@ class SwagVersionHelper
 
     public static function isShopware578(): bool
     {
-        return class_exists('Shopware\Bundle\CustomerSearchBundle\Condition\HasNoAddressWithCountryCondition');
+        return class_exists(HasNoAddressWithCountryCondition::class);
     }
 }

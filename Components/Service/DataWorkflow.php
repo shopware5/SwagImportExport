@@ -12,7 +12,7 @@ namespace SwagImportExport\Components\Service;
 use SwagImportExport\Components\DataIO;
 use SwagImportExport\Components\Factories\DataTransformerFactory;
 use SwagImportExport\Components\Factories\ProfileFactory;
-use SwagImportExport\Components\Logger\Logger;
+use SwagImportExport\Components\Logger\LoggerInterface;
 use SwagImportExport\Components\Providers\DataProvider;
 use SwagImportExport\Components\Providers\FileIOProvider;
 use SwagImportExport\Components\Session\Session;
@@ -35,7 +35,7 @@ class DataWorkflow
 
     private FileIOProvider $fileIOProvider;
 
-    private Logger $logger;
+    private LoggerInterface $logger;
 
     private ProfileFactory $profileFactory;
 
@@ -44,7 +44,7 @@ class DataWorkflow
         DataTransformerFactory $dataTransformerFactory,
         FileIOProvider $fileIOProvider,
         SessionService $sessionService,
-        Logger $logger,
+        LoggerInterface $logger,
         ProfileFactory $profileFactory
     ) {
         $this->sessionService = $sessionService;
@@ -134,12 +134,12 @@ class DataWorkflow
         if ($session->getState() === Session::SESSION_NEW) {
             $totalCount = $fileReader->getTotalCount($request->inputFile);
             $session->setTotalCount($totalCount);
-            $this->sessionService->startImportSession($request, $request->profileEntity, $session, \filesize($request->inputFile));
+            $this->sessionService->startImportSession($request, $request->profileEntity, $session, (int) \filesize($request->inputFile));
         }
 
         if ($session->getState() === Session::SESSION_ACTIVE) {
             // get current session position
-            $batchSize = (int) $request->batchSize;
+            $batchSize = $request->batchSize;
 
             $position = $session->getPosition();
 

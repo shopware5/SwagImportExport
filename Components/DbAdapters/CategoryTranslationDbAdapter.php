@@ -180,8 +180,7 @@ class CategoryTranslationDbAdapter implements DataDbAdapter, \Enlight_Hook
 
                 $objectKey = (int) $record['categoryId'];
                 $objectLanguage = (int) $record['languageId'];
-                unset($record['categoryId']);
-                unset($record['languageId']);
+                unset($record['categoryId'], $record['languageId']);
 
                 $this->checkIfShopExist($objectLanguage);
                 $this->checkIfCategoryExist($objectKey);
@@ -194,7 +193,7 @@ class CategoryTranslationDbAdapter implements DataDbAdapter, \Enlight_Hook
                 );
             }
         } catch (\Exception $exception) {
-            if ($this->importExportErrorMode === false) {
+            if (!$this->importExportErrorMode) {
                 throw new \Exception($exception->getMessage());
             }
 
@@ -222,7 +221,7 @@ class CategoryTranslationDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * @param array<int> $ids
      *
-     * @return array<string, mixed>
+     * @return array<array<string, mixed>>
      */
     private function getTranslations(array $ids): array
     {
@@ -243,7 +242,7 @@ class CategoryTranslationDbAdapter implements DataDbAdapter, \Enlight_Hook
             ->orderBy('translation.objectlanguage', 'ASC')
             ->setParameter('translationIds', $ids, Connection::PARAM_INT_ARRAY)
             ->execute()
-            ->fetchAll();
+            ->fetchAllAssociative();
     }
 
     /**

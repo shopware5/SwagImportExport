@@ -37,9 +37,6 @@ class LogDataStruct
 
     public function setDate(string $date): void
     {
-        if ($date instanceof \DateTime) {
-            throw new \InvalidArgumentException('Got ' . \DateTime::class . ', expected string.');
-        }
         $this->date = $date;
     }
 

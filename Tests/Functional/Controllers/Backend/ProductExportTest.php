@@ -78,7 +78,7 @@ class ProductExportTest extends \Enlight_Components_Test_Controller_TestCase
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
 
-        static::assertFileExists($file, "File not found {$fileName}");
+        static::assertFileExists($file, sprintf('File not found %s', $fileName));
         $this->backendControllerTestHelper->addFile($file);
 
         $exportedProducts = $this->csvToArrayIndexedByFieldValue($file, 'ordernumber');

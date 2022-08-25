@@ -192,11 +192,9 @@ class ProductsPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
             throw new \Exception($message);
         }
 
-        $columns = \array_merge($columns, ['customerGroup.taxInput as taxInput', 'articleTax.tax as tax']);
+        array_push($columns, 'customerGroup.taxInput as taxInput', 'articleTax.tax as tax');
 
-        $builder = $this->getBuilder($columns, $ids);
-
-        $result['default'] = $builder->getQuery()->getResult();
+        $result['default'] = $this->getBuilder($columns, $ids)->getQuery()->getResult();
 
         // add the tax if needed
         foreach ($result['default'] as &$record) {

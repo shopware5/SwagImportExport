@@ -108,7 +108,7 @@ class ProductWriter
         }
 
         $product['articleId'] = $productId;
-        if (!isset($product['kind']) || empty($product['kind'])) {
+        if (empty($product['kind'])) {
             $product['kind'] = $mainVariantId === $variantId ? self::MAIN_KIND : self::VARIANT_KIND;
         }
         [$product, $variantId] = $this->createOrUpdateProductVariant($product, $defaultValues, $variantId, $createDetail);

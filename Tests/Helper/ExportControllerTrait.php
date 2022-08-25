@@ -68,6 +68,7 @@ trait ExportControllerTrait
         static::assertIsArray($header);
         while (($row = \fgetcsv($csv, 0, ';')) !== false) {
             static::assertIsArray($row);
+            static::assertCount(\count($header), $row);
             $tmpRow = \array_combine($header, $row);
             static::assertIsArray($tmpRow);
             $mappedCsv[$tmpRow[$indexField]] = $tmpRow;

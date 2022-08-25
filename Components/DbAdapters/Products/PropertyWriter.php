@@ -29,18 +29,14 @@ class PropertyWriter
 
     private PDOConnection $db;
 
-    private SnippetsHelper $snippetsHelper;
-
     public function __construct(
         DbalHelper $dbalHelper,
         Connection $connection,
-        PDOConnection $db,
-        SnippetsHelper $snippetsHelper
+        PDOConnection $db
     ) {
         $this->dbalHelper = $dbalHelper;
         $this->connection = $connection;
         $this->db = $db;
-        $this->snippetsHelper = $snippetsHelper;
     }
 
     /**
@@ -65,12 +61,12 @@ class PropertyWriter
             /*
              * Only update relations if value and option id were passed.
              */
-            if (isset($propertyData['propertyValueId']) && !empty($propertyData['propertyValueId'])) {
+            if (!empty($propertyData['propertyValueId'])) {
                 $valueId = $propertyData['propertyValueId'];
                 $optionId = $this->getOptionByValueId((int) $valueId);
 
                 if (!$optionId) {
-                    $message = $this->snippetsHelper->getNamespace()
+                    $message = SnippetsHelper::getNamespace()
                         ->get('adapters/articles/property_id_not_found', 'Property value by id %s not found for article %s');
                     throw new AdapterException(\sprintf($message, $valueId, $orderNumber));
                 }
@@ -83,7 +79,7 @@ class PropertyWriter
             /*
              * Update or create options by value name
              */
-            if (isset($propertyData['propertyValueName']) && !empty($propertyData['propertyValueName'])) {
+            if (!empty($propertyData['propertyValueName'])) {
                 [$optionId, $valueId] = $this->updateOrCreateOptionAndValuesByValueName($orderNumber, $propertyData);
 
                 $optionRelationInsertStatements[] = "($optionId, $filterGroupId)";
@@ -271,9 +267,9 @@ class PropertyWriter
      */
     private function updateOrCreateOptionAndValuesByValueName(string $orderNumber, array $propertyData): array
     {
-        if (isset($propertyData['propertyOptionId']) && !empty($propertyData['propertyOptionId'])) {
+        if (!empty($propertyData['propertyOptionId'])) {
             $optionId = $propertyData['propertyOptionId'];
-        } elseif (isset($propertyData['propertyOptionName']) && !empty($propertyData['propertyOptionName'])) {
+        } elseif (!empty($propertyData['propertyOptionName'])) {
             $optionName = $propertyData['propertyOptionName'];
             $optionId = $this->getOptionByName($optionName);
 
@@ -281,7 +277,7 @@ class PropertyWriter
                 $optionId = $this->createOption($optionName, $propertyData);
             }
         } else {
-            $message = $this->snippetsHelper->getNamespace()
+            $message = SnippetsHelper::getNamespace()
                 ->get('adapters/articles/property_option_required', '');
             throw new AdapterException(\sprintf($message, $orderNumber));
         }

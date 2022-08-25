@@ -116,10 +116,10 @@ class ExportRequest
         }
 
         // customer stream filter for addresses and customers
-        if (\in_array($this->profileEntity->getType(), [DataDbAdapter::CUSTOMER_ADAPTER, DataDbAdapter::ADDRESS_ADAPTER], true)) {
-            if ($data['customerStreamId']) {
-                $this->filter['customerStreamId'] = $data['customerStreamId'];
-            }
+        if (\in_array($this->profileEntity->getType(), [DataDbAdapter::CUSTOMER_ADAPTER, DataDbAdapter::ADDRESS_ADAPTER], true)
+            && $data['customerStreamId']
+        ) {
+            $this->filter['customerStreamId'] = $data['customerStreamId'];
         }
 
         if ($this->profileEntity->getType() === DataDbAdapter::CUSTOMER_COMPLETE_ADAPTER && $data['customerId']) {

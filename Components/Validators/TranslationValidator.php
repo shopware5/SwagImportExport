@@ -25,6 +25,8 @@ class TranslationValidator extends Validator
     /**
      * Indexed by field name
      * Value: snippet name
+     *
+     * @var array<string, string>
      */
     protected array $requiredFields = [
         'objectType' => 'adapters/translations/object_type_not_found',

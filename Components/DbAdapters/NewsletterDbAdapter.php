@@ -111,8 +111,7 @@ class NewsletterDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandle
 
     public function read(array $ids, array $columns): array
     {
-        $builder = $this->getBuilder($columns, $ids);
-        $result['default'] = $builder->getQuery()->getArrayResult();
+        $result['default'] = $this->getBuilder($columns, $ids)->getQuery()->getArrayResult();
 
         return $result;
     }

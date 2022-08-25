@@ -15,7 +15,7 @@ use SwagImportExport\Components\Utils\SnippetsHelper;
 class AddressValidator extends Validator
 {
     /**
-     * @var array<string, array<string>>
+     * @var array<string, array<string, string>>
      */
     protected array $requiredFields = [
         'firstname' => [

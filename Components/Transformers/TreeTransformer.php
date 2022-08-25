@@ -18,48 +18,48 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
 {
     public const TYPE = 'tree';
 
-    protected ?string $config = null;
+    private ?string $config = null;
 
-    protected ?array $iterationPart = null;
+    private ?array $iterationPart = null;
 
-    protected ?array $headerFooterData = null;
+    private ?array $headerFooterData = null;
 
-    protected ?string $mainType = null;
+    private ?string $mainType = null;
 
     /**
      * @var array<string, array<int, mixed>>
      */
-    protected array $rawData = [];
+    private array $rawData = [];
 
     /**
-     * @var array<int|string, string>
+     * @var array<string, array<string, string|null>>|null
      */
-    protected ?array $bufferData = null;
-
-    /**
-     * @var array<string, mixed>
-     */
-    protected ?array $importMapper = null;
+    private ?array $bufferData = null;
 
     /**
      * @var array<string, mixed>|null
      */
-    protected ?array $data = null;
+    private ?array $importMapper = null;
 
     /**
-     * @var array<string, string>
+     * @var array<string, array<string, mixed>>|null
      */
-    protected ?array $currentRecord = null;
+    private ?array $data = null;
 
     /**
-     * @var array<string|int, string|array<mixed>
+     * @var array<string, string>|null
      */
-    protected ?array $preparedData = null;
+    private ?array $currentRecord = null;
+
+    /**
+     * @var array<string, array<string, array<array-key, mixed>>>|null
+     */
+    private ?array $preparedData = null;
 
     /**
      * @var array<string, mixed>
      */
-    protected array $iterationNodes = [];
+    private array $iterationNodes = [];
 
     private \Enlight_Event_EventManager $eventManager;
 
@@ -138,11 +138,27 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
     }
 
     /**
+     * Composes a tree header based on config
+     */
+    public function composeHeader(): array
+    {
+        return $this->getHeaderAndFooterData();
+    }
+
+    /**
+     * Composes a tree footer based on config
+     */
+    public function composeFooter(): array
+    {
+        return $this->getHeaderAndFooterData();
+    }
+
+    /**
      * Helper method which creates iteration nodes array structure
      *
      * @param array<string, mixed> $node
      */
-    public function buildIterationNode(array $node): array
+    private function buildIterationNode(array $node): array
     {
         $transformData = [];
 
@@ -168,10 +184,10 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
         $data = $this->getPreparedData($type, $parentKey);
 
         // gets records for the current iteration node
-        $records = $data[$recordLink];
+        $records = $data[$recordLink] ?? [];
 
-        if (!$records) {
-            $transformData[] = $this->transformToTree($node, null, $type);
+        if (empty($records)) {
+            $transformData[] = $this->transformToTree($node, [], $type);
         } else {
             foreach ($records as $record) {
                 $transformData[] = $this->transformToTree($node, $record, $type);
@@ -186,7 +202,7 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
      *
      * @param array<string, array<mixed>> $data
      */
-    public function buildRawData(array $data, string $type, ?string $nodePath = null): void
+    private function buildRawData(array $data, string $type, ?string $nodePath = null): void
     {
         // creates import mapper
         // ["Prices_Price_groupName"]=> "pricegroup"
@@ -214,7 +230,7 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
     /**
      * Get iteration nodes from profile
      */
-    public function getIterationNodes(): void
+    private function getIterationNodes(): void
     {
         $iterationPart = $this->getIterationPart();
 
@@ -222,27 +238,12 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
     }
 
     /**
-     * Composes a tree header based on config
-     */
-    public function composeHeader(): array
-    {
-        return $this->getHeaderAndFooterData();
-    }
-
-    /**
-     * Composes a tree footer based on config
-     */
-    public function composeFooter(): array
-    {
-        return $this->getHeaderAndFooterData();
-    }
-
-    /**
      * Transforms read it data into raw data
      *
-     * @param array<string, string> $importMapper
+     * @param array<string, mixed>|string|null $node
+     * @param array<string, string>            $importMapper
      */
-    public function transformFromTree($node, array $importMapper, string $adapter, ?string $nodePath = null): void
+    private function transformFromTree($node, array $importMapper, string $adapter, ?string $nodePath = null): void
     {
         $separator = null;
 
@@ -251,6 +252,9 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
         }
 
         if (isset($this->iterationNodes[$nodePath]) && $adapter !== $this->iterationNodes[$nodePath]) {
+            if (!\is_array($node)) {
+                throw new \RuntimeException('Parameter "node" must be an array at this point');
+            }
             $this->buildRawData($node, $this->iterationNodes[$nodePath], $nodePath);
 
             return;
@@ -286,7 +290,7 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
      *
      * @param array<string, mixed> $tree
      */
-    public function findIterationPart(array $tree): void
+    private function findIterationPart(array $tree): void
     {
         foreach ($tree as $key => $value) {
             if ($key === 'adapter') {
@@ -304,9 +308,12 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
     /**
      * Returns the iteration part of the tree
      */
-    public function getIterationPart(): array
+    private function getIterationPart(): array
     {
         if (!\is_array($this->iterationPart)) {
+            if (!\is_string($this->config)) {
+                throw new \RuntimeException('Tree config not initialized');
+            }
             $tree = \json_decode($this->config, true);
             $this->findIterationPart($tree);
         }
@@ -321,9 +328,12 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
     /**
      * @throws \RuntimeException
      */
-    public function getHeaderAndFooterData(): ?array
+    private function getHeaderAndFooterData(): array
     {
         if (!\is_array($this->headerFooterData)) {
+            if (!\is_string($this->config)) {
+                throw new \RuntimeException('Tree config not initialized');
+            }
             $tree = \json_decode($this->config, true);
             // replacing iteration part with custom marker
             $this->removeIterationPart($tree);
@@ -343,7 +353,7 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
     /**
      * Returns import mapper
      */
-    public function getImportMapper(): array
+    private function getImportMapper(): array
     {
         if ($this->importMapper === null) {
             $iterationPart = $this->getIterationPart();
@@ -360,12 +370,12 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
     /**
      * @throws \Exception
      */
-    public function saveMapper(string $key, string $value): void
+    private function saveMapper(string $key, string $value): void
     {
         $this->importMapper[$key] = $value;
     }
 
-    public function saveBufferData(string $adapter, string $key, ?string $value): void
+    private function saveBufferData(string $adapter, string $key, ?string $value): void
     {
         $this->bufferData[$adapter][$key] = $value;
     }
@@ -373,42 +383,33 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
     /**
      * @return array<string, array<mixed>>
      */
-    public function getRawData(): array
+    private function getRawData(): array
     {
         return $this->rawData;
     }
 
-    public function setRawData(string $type, ?array $rawData): void
+    private function setRawData(string $type, ?array $rawData): void
     {
         $this->rawData[$type][] = $rawData;
     }
 
-    public function getBufferData(string $type): ?array
-    {
-        if (isset($this->bufferData[$type])) {
-            return $this->bufferData[$type];
-        }
-
-        return null;
-    }
-
     /**
-     * @param array<int|string, string> $bufferData
+     * @return array<string, string|null>|null
      */
-    public function setBufferData(array $bufferData): void
+    private function getBufferData(string $type): ?array
     {
-        $this->bufferData = $bufferData;
+        return $this->bufferData[$type] ?? null;
     }
 
-    public function unsetBufferData(string $type): void
+    private function unsetBufferData(string $type): void
     {
         unset($this->bufferData[$type]);
     }
 
     /**
-     * @return array<string, mixed>|null
+     * @return array<string, array<string, mixed>>|null
      */
-    public function getData(): ?array
+    private function getData(): ?array
     {
         return $this->data;
     }
@@ -416,35 +417,32 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
     /**
      * @param array<string, array<mixed>> $data
      */
-    public function setData(array $data): void
+    private function setData(array $data): void
     {
         $this->data = $data;
     }
 
-    public function getMainType(): ?string
+    private function getMainType(): ?string
     {
         return $this->mainType;
     }
 
-    public function setMainType(string $mainType): void
-    {
-        $this->mainType = $mainType;
-    }
-
     /**
-     * @return array<string, mixed>|null
+     * @return array<string, array<array-key, mixed>>
      */
-    public function getPreparedData(string $type, string $recordLink): ?array
+    private function getPreparedData(string $type, string $recordLink): array
     {
-        if (\is_null($this->preparedData[$type])) {
-            $data = $this->getData();
-
-            foreach ($data[$type] as $record) {
-                $this->preparedData[$type][$record[$recordLink]][] = $record;
-            }
+        if (isset($this->preparedData[$type])) {
+            return $this->preparedData[$type];
         }
 
-        return $this->preparedData[$type];
+        $data = $this->getData() ?? [];
+
+        foreach ($data[$type] as $record) {
+            $this->preparedData[$type][(string) $record[$recordLink]][] = $record;
+        }
+
+        return $this->preparedData[$type] ?? [];
     }
 
     /**
@@ -452,7 +450,7 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
      *
      * @param array<string, mixed> $node
      */
-    protected function createIterationNodeMapper(array $node, ?string $nodePath = null): void
+    private function createIterationNodeMapper(array $node, ?string $nodePath = null): void
     {
         $separator = $nodePath ? '_' : null;
         if (isset($node['adapter']) && $nodePath) {
@@ -472,7 +470,7 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
      *
      * @param array<string, mixed> $node
      */
-    protected function generateMapper(array $node, ?string $nodePath = null): void
+    private function generateMapper(array $node, ?string $nodePath = null): void
     {
         $separator = null;
 
@@ -509,7 +507,7 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
      *
      * @param array<string, mixed> $node
      */
-    protected function removeIterationPart(array &$node): void
+    private function removeIterationPart(array &$node): void
     {
         if (isset($node['adapter'])) {
             $node = ['name' => '_currentMarker'];
@@ -528,16 +526,18 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
      *
      * @param array<string, string> $mapper
      * @param array<string, mixed>  $node
+     *
+     * @return array<array<mixed>|string>|string
      */
-    private function transformToTree(array $node, array $mapper = null, string $adapterType = null)
+    private function transformToTree(array $node, array $mapper = [], string $adapterType = null)
     {
-        if (isset($node['adapter']) && \is_array($node) && $node['adapter'] != $adapterType) {
+        if (isset($node['adapter']) && $node['adapter'] !== $adapterType) {
             return $this->buildIterationNode($node);
         }
 
         $currentNode = [];
 
-        if (!isset($node['rawKey']) && isset($node['children']) && \is_array($node) && \count($node['children']) > 0) {
+        if (!isset($node['rawKey']) && isset($node['children']) && \count($node['children']) > 0) {
             if (isset($node['attributes'])) {
                 foreach ($node['attributes'] as $attribute) {
                     $currentNode['_attributes'][$attribute['name']] = $mapper[$attribute['shopwareField']];
@@ -548,7 +548,7 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
                 $currentNode[$child['name']] = $this->transformToTree($child, $mapper, $node['adapter']);
             }
         } else {
-            if (isset($node['attributes']) && \is_array($node)) {
+            if (isset($node['attributes'])) {
                 foreach ($node['attributes'] as $attribute) {
                     $currentNode['_attributes'][$attribute['name']] = $mapper[$attribute['shopwareField']];
                 }
@@ -559,7 +559,7 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
                 if ($node['type'] === 'raw') {
                     $currentNode = $mapper[$node['rawKey']];
 
-                    if (isset($node['children']) && \is_array($node) && \count($node['children']) > 0) {
+                    if (isset($node['children']) && \count($node['children']) > 0) {
                         foreach ($node['children'] as $child) {
                             $currentNode[$child['name']] = $this->transformToTree($child, $currentNode, $node['adapter']);
                         }

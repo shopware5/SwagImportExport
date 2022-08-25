@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace SwagImportExport\Components\DbAdapters\Products;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\DBALException;
 use Enlight_Components_Db_Adapter_Pdo_Mysql as PDOConnection;
 use Enlight_Event_EventManager as EventManager;
 use Shopware\Components\Model\CategorySubscriber;
@@ -46,8 +45,6 @@ class CategoryWriter
 
     /**
      * @param array<int, array<string, int|string>> $categories
-     *
-     * @throws DBALException
      */
     public function write(int $productId, array $categories): void
     {
@@ -97,9 +94,7 @@ class CategoryWriter
         $id = null;
         $path = '|';
         $data = [];
-        $descriptions = \explode('->', $categoryPath);
-
-        foreach ($descriptions as $description) {
+        foreach (\explode('->', $categoryPath) as $description) {
             $id = $this->getId($description, $id ? (int) $id : null, $path);
             $path = '|' . $id . $path;
             $data[$id] = $description;
@@ -214,7 +209,7 @@ class CategoryWriter
     }
 
     /**
-     * @param array<string, mixed> $categories
+     * @param array<int, array<string, int|string>> $categories
      */
     private function prepareValues(array $categories, int $productId): string
     {
@@ -246,7 +241,7 @@ class CategoryWriter
                     // if categoryPath exists, the article will be assign based on the path
                     if (!empty($category['categoryPath'])) {
                         // get categoryId by given path: 'English->Cars->Mazda'
-                        $category['categoryId'] = $this->getCategoryId($category['categoryPath']);
+                        $category['categoryId'] = $this->getCategoryId((string) $category['categoryPath']);
 
                         // check whether the category is a leaf
                         if (!$this->isLeaf($category['categoryId'])) {
@@ -255,7 +250,7 @@ class CategoryWriter
                             throw new AdapterException(\sprintf($message, $category['categoryId']));
                         }
 
-                        $this->categoryIds[$category['categoryId']] = (int) $category['categoryId'];
+                        $this->categoryIds[$category['categoryId']] = $category['categoryId'];
 
                         return "({$productId}, {$category['categoryId']})";
                     }

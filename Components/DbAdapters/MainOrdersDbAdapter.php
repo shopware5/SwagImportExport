@@ -61,9 +61,7 @@ class MainOrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
      */
     public function readRecordIds(int $start = null, int $limit = null, array $filter = null): array
     {
-        $connection = $this->modelManager->getConnection();
-
-        $builder = $connection->createQueryBuilder();
+        $builder = $this->modelManager->getConnection()->createQueryBuilder();
         $builder->select('id')
             ->from('s_order');
 
@@ -82,14 +80,14 @@ class MainOrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
             $builder->setParameter('orderNumberFrom', $filter['ordernumberFrom']);
         }
 
-        if (isset($filter['dateFrom']) && $filter['dateFrom']) {
+        if (!empty($filter['dateFrom'])) {
             $dateFrom = $filter['dateFrom'];
             $dateFrom->setTime(0, 0, 0);
             $builder->andWhere('ordertime >= :dateFrom');
             $builder->setParameter('dateFrom', $dateFrom->format('Y-m-d H:i:s'));
         }
 
-        if (isset($filter['dateTo']) && $filter['dateTo']) {
+        if (!empty($filter['dateTo'])) {
             $dateTo = $filter['dateTo'];
             $builder->andWhere('ordertime <= :dateTo');
             $builder->setParameter('dateTo', $dateTo->format('Y-m-d H:i:s'));
@@ -103,9 +101,7 @@ class MainOrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
             $builder->setMaxResults($limit);
         }
 
-        $ids = $builder->execute()->fetchAll(\PDO::FETCH_COLUMN);
-
-        return \is_array($ids) ? $ids : [];
+        return $builder->execute()->fetchFirstColumn();
     }
 
     /**
@@ -136,8 +132,7 @@ class MainOrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
         // orders
         $orders = [];
         if (!empty($columns['order'])) {
-            $orderBuilder = $this->getOrderBuilder($columns['order'], $ids);
-            $orders = $orderBuilder->getQuery()->getResult();
+            $orders = $this->getOrderBuilder($columns['order'], $ids)->getQuery()->getResult();
             $orders = DbAdapterHelper::decodeHtmlEntities($orders);
             $orders = DbAdapterHelper::escapeNewLines($orders);
             $orders = $this->addOrderAndPaymentState($orders);
@@ -234,8 +229,7 @@ class MainOrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
     public function getAttributes(): array
     {
         // Attributes
-        $stmt = $this->db->query('SELECT * FROM s_order_attributes LIMIT 1');
-        $attributes = $stmt->fetch();
+        $attributes = $this->db->query('SELECT * FROM s_order_attributes LIMIT 1')->fetch();
 
         if (!$attributes) {
             return [];
@@ -333,10 +327,10 @@ class MainOrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @param array<string> $columns
-     * @param array<int>    $ids
+     * @param array<string>|string $columns
+     * @param array<int>           $ids
      */
-    public function getOrderBuilder(array $columns, array $ids): QueryBuilder
+    public function getOrderBuilder($columns, array $ids): QueryBuilder
     {
         $builder = $this->modelManager->createQueryBuilder();
         $builder->select($columns)
@@ -396,7 +390,7 @@ class MainOrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @param array<int, string> $states
+     * @param array<array<string, mixed>> $states
      */
     private function getStateName(int $id, array $states): string
     {
@@ -410,7 +404,7 @@ class MainOrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @return array<int, string>
+     * @return array<array<string, mixed>>
      */
     private function getStates(): array
     {
@@ -443,8 +437,7 @@ class MainOrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
         }
 
         $sum = [];
-        $taxSumBuilder = $this->getTaxSumBuilder($ids);
-        $taxData = $taxSumBuilder->getQuery()->getResult();
+        $taxData = $this->getTaxSumBuilder($ids)->getQuery()->getResult();
         foreach ($ids as $orderId) {
             foreach ($taxData as $data) {
                 if ($data['orderId'] != $orderId) {
@@ -469,7 +462,7 @@ class MainOrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
                 $result[] = [
                     'orderId' => $orderId,
                     'taxRateSums' => $vat,
-                    'taxRate' => $taxRate,
+                    'taxRate' => (string) $taxRate,
                 ];
             }
         }

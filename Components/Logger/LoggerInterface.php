@@ -19,6 +19,11 @@ interface LoggerInterface
     public function write(array $messages, string $status, Session $session): void;
 
     /**
+     * Write a log entry to the database and to the import/export log file.
+     */
+    public function logProcessing(string $writeStatus, string $filename, string $profileName, string $logMessage, string $status, Session $session): void;
+
+    /**
      * Writes a log entry to the import/export log file.
      */
     public function writeToFile(LogDataStruct $logDataStruct): void;

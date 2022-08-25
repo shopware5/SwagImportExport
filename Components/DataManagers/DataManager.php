@@ -31,7 +31,7 @@ abstract class DataManager
     public function getFields(array $defaultFields): array
     {
         $defaultValues = [];
-        foreach ($defaultFields as $type => $fields) {
+        foreach ($defaultFields as $fields) {
             foreach ($fields as $field) {
                 $defaultValues[] = $field;
             }
@@ -64,7 +64,7 @@ abstract class DataManager
             case 'integer':
                 return (int) $value;
             case 'boolean':
-                return ($value == 'true') ? 1 : 0;
+                return ($value === 'true') ? 1 : 0;
         }
 
         throw new \Exception(sprintf('Unknown type provided with %s', $type));

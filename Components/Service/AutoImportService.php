@@ -28,13 +28,13 @@ class AutoImportService implements AutoImportServiceInterface
 
     private SessionService $sessionService;
 
-    private ImportService $importService;
+    private ImportServiceInterface $importService;
 
     public function __construct(
         UploadPathProvider $uploadPathProvider,
         ProfileFactory $profileFactory,
         SessionService $sessionService,
-        ImportService $importService
+        ImportServiceInterface $importService
     ) {
         $this->uploadPathProvider = $uploadPathProvider;
         $this->profileFactory = $profileFactory;
@@ -51,6 +51,9 @@ class AutoImportService implements AutoImportServiceInterface
 
         if (\in_array(self::LOCKED_FILENAME, $files)) {
             $file = \fopen($lockerFileLocation, 'rb');
+            if (!\is_resource($file)) {
+                throw new \RuntimeException(sprintf('Could not open file at "%s"', $lockerFileLocation));
+            }
             $fileContent = (int) \fread($file, (int) \filesize($lockerFileLocation));
             \fclose($file);
 
@@ -131,6 +134,9 @@ class AutoImportService implements AutoImportServiceInterface
     private function getFiles(): array
     {
         $allFiles = \scandir($this->directory);
+        if (!\is_array($allFiles)) {
+            throw new \RuntimeException(sprintf('Could not scan directory "%s"', $this->directory));
+        }
 
         return \array_diff($allFiles, ['.', '..', '.htaccess']);
     }
@@ -142,6 +148,9 @@ class AutoImportService implements AutoImportServiceInterface
     {
         $timeout = \time() + 1800;
         $file = \fopen($lockerFileLocation, 'wb');
+        if (!\is_resource($file)) {
+            throw new \RuntimeException(sprintf('Could not open file at "%s"', $lockerFileLocation));
+        }
         \fwrite($file, (string) $timeout);
         \fclose($file);
     }
@@ -161,8 +170,7 @@ class AutoImportService implements AutoImportServiceInterface
         $session = $this->sessionService->createSession();
 
         foreach ($this->importService->import($importRequest, $session) as [$profileName, $position]) {
-            $message = $position . ' ' . $profileName . ' imported successfully' . \PHP_EOL;
-            echo $message;
+            echo $position . ' ' . $profileName . ' imported successfully' . \PHP_EOL;
         }
     }
 }

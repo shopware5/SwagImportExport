@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace SwagImportExport\Components\Service;
 
 use SwagImportExport\Components\DataIO;
-use SwagImportExport\Components\Logger\Logger;
+use SwagImportExport\Components\Logger\LoggerInterface;
 use SwagImportExport\Components\Providers\DataProvider;
 use SwagImportExport\Components\Session\Session;
 use SwagImportExport\Components\Structs\ExportRequest;
@@ -20,13 +20,13 @@ class ExportService implements ExportServiceInterface
 {
     private DataProvider $dataProvider;
 
-    private Logger $logger;
+    private LoggerInterface $logger;
 
     private DataWorkflow $dataWorkflow;
 
     public function __construct(
         DataProvider $dataProvider,
-        Logger $logger,
+        LoggerInterface $logger,
         DataWorkflow $dataWorkflow
     ) {
         $this->dataProvider = $dataProvider;
@@ -37,9 +37,7 @@ class ExportService implements ExportServiceInterface
     public function prepareExport(ExportRequest $request, Session $session): int
     {
         $dbAdapter = $this->dataProvider->createDbAdapter($request->profileEntity->getType());
-        $dataIo = new DataIO($dbAdapter, $session, $this->logger);
-
-        $recordIds = $dataIo->preloadRecordIds($request, $session);
+        $recordIds = (new DataIO($dbAdapter, $session, $this->logger))->preloadRecordIds($request, $session);
 
         return \count($recordIds);
     }

@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace SwagImportExport\Components\DbAdapters;
 
 use Doctrine\DBAL\Connection;
+use Shopware\Components\Model\Exception\ModelNotFoundException;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Attribute\CustomerAddress as CustomerAddressAttribute;
 use Shopware\Models\Country\Country;
@@ -102,7 +103,7 @@ class AddressDbAdapter implements DataDbAdapter, \Enlight_Hook
             unset($filter['customerStreamId']);
         }
 
-        return $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
+        return $query->execute()->fetchFirstColumn();
     }
 
     /**
@@ -221,13 +222,21 @@ class AddressDbAdapter implements DataDbAdapter, \Enlight_Hook
     protected function setCountry(Address $addressModel, array $addressRecord): Address
     {
         if (!$addressModel->getCountry() && $addressRecord['countryID']) {
-            $addressModel->setCountry($this->modelManager->find(Country::class, $addressRecord['countryID']));
+            $country = $this->modelManager->find(Country::class, $addressRecord['countryID']);
+            if (!$country instanceof Country) {
+                throw new ModelNotFoundException(Country::class, $addressRecord['countryID']);
+            }
+            $addressModel->setCountry($country);
 
             return $addressModel;
         }
 
         if ($addressModel->getCountry() && $addressModel->getCountry()->getId() !== $addressRecord['countryID'] && $addressRecord['countryID'] > 0) {
-            $addressModel->setCountry($this->modelManager->find(Country::class, $addressRecord['countryID']));
+            $country = $this->modelManager->find(Country::class, $addressRecord['countryID']);
+            if (!$country instanceof Country) {
+                throw new ModelNotFoundException(Country::class, $addressRecord['countryID']);
+            }
+            $addressModel->setCountry($country);
         }
 
         return $addressModel;
@@ -384,7 +393,7 @@ class AddressDbAdapter implements DataDbAdapter, \Enlight_Hook
             'Could not find customer. Email: %s, Customernumber: %s, userID: %s'
         );
 
-        if (!$addressModel->getCustomer()) {
+        if (!$addressModel->getCustomer() instanceof Customer) {
             $customer = $this->getCustomer($addressRecord);
             if (!$customer) {
                 throw new AdapterException(

@@ -24,8 +24,8 @@ use SwagImportExport\Components\Validators\OrderValidator;
 
 class OrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
 {
-    public const OrderDBAdapterQueryEvent = 'OrdersDbAdapter::getQuery';
-    public const OrderDBAdapterColumnsEvent = 'OrdersDbAdapter::adjustColumns';
+    private const ORDERS_DB_ADAPTER_GET_QUERY = 'OrdersDbAdapter::getQuery';
+    private const ORDERS_DB_ADAPTER_ADJUST_COLUMNS = 'OrdersDbAdapter::adjustColumns';
 
     protected ModelManager $modelManager;
 
@@ -137,9 +137,7 @@ class OrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
             throw new \Exception($message);
         }
 
-        $builder = $this->getBuilder($columns, $ids);
-
-        $orders = $builder->getQuery()->getResult();
+        $orders = $this->getBuilder($columns, $ids)->getQuery()->getResult();
 
         $orders = DbAdapterHelper::decodeHtmlEntities($orders);
 
@@ -171,7 +169,7 @@ class OrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
         $orderStatusRepository = $this->modelManager->getRepository(Status::class);
         $orderDetailStatusRepository = $this->modelManager->getRepository(DetailStatus::class);
 
-        foreach ($records['default'] as $index => $record) {
+        foreach ($records['default'] as $record) {
             try {
                 $orderData = [];
                 $record = $this->validator->filterEmptyString($record);
@@ -267,7 +265,7 @@ class OrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
                 // prepares the detail attributes
                 $orderDetailData = [];
                 foreach ($record as $key => $value) {
-                    if (preg_match('/^detailAttribute/', $key) && $newKey = preg_replace('/^detailAttribute/', '', $key)) {
+                    if ((strpos($key, 'detailAttribute') === 0) && $newKey = preg_replace('/^detailAttribute/', '', $key)) {
                         $newKey = lcfirst($newKey);
                         $orderDetailData['attribute'][$newKey] = $value;
                         unset($record[$key]);
@@ -293,9 +291,7 @@ class OrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
 
                 $this->modelManager->persist($orderModel);
 
-                unset($orderDetailModel);
-                unset($orderModel);
-                unset($orderData);
+                unset($orderDetailModel, $orderModel, $orderData);
             } catch (AdapterException $e) {
                 $message = $e->getMessage();
                 $this->saveMessage($message);
@@ -497,7 +493,7 @@ class OrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
             $columns = \array_merge($columns, $attributesSelect);
         }
 
-        return $this->eventManager->filter(self::OrderDBAdapterColumnsEvent, $columns);
+        return $this->eventManager->filter(self::ORDERS_DB_ADAPTER_ADJUST_COLUMNS, $columns);
     }
 
     /**
@@ -514,8 +510,7 @@ class OrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
             unset($columns[$field]);
         }
 
-        unset($columns['id']);
-        unset($columns['orderid']);
+        unset($columns['id'], $columns['orderid']);
 
         $attributes = \array_map(function ($column) {
             return $column->getName();
@@ -563,7 +558,7 @@ class OrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
             ->where('details.id IN (:ids)')
             ->setParameter('ids', $ids);
 
-        $this->eventManager->notify(self::OrderDBAdapterQueryEvent, [
+        $this->eventManager->notify(self::ORDERS_DB_ADAPTER_GET_QUERY, [
             'builder' => $builder,
         ]);
 

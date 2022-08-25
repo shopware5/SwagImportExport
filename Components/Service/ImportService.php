@@ -11,7 +11,7 @@ namespace SwagImportExport\Components\Service;
 
 use Shopware\Components\Model\ModelManager;
 use SwagImportExport\Components\Factories\ProfileFactory;
-use SwagImportExport\Components\Logger\Logger;
+use SwagImportExport\Components\Logger\LoggerInterface;
 use SwagImportExport\Components\Providers\FileIOProvider;
 use SwagImportExport\Components\Session\Session;
 use SwagImportExport\Components\Session\SessionService;
@@ -23,7 +23,7 @@ class ImportService implements ImportServiceInterface
 {
     private UploadPathProvider $uploadPathProvider;
 
-    private Logger $logger;
+    private LoggerInterface $logger;
 
     private FileIOProvider $fileIOFactory;
 
@@ -38,7 +38,7 @@ class ImportService implements ImportServiceInterface
     public function __construct(
         FileIOProvider $fileIOFactory,
         UploadPathProvider $uploadPathProvider,
-        Logger $logger,
+        LoggerInterface $logger,
         DataWorkflow $dataWorkflow,
         ProfileFactory $profileFactory,
         ModelManager $modelManager,
@@ -53,24 +53,24 @@ class ImportService implements ImportServiceInterface
         $this->sessionService = $sessionService;
     }
 
-    public function prepareImport(ImportRequest $request): int
+    public function prepareImport(ImportRequest $importRequest): int
     {
         // we create the file reader that will read the result file
-        $fileReader = $this->fileIOFactory->getFileReader($request->format);
+        $fileReader = $this->fileIOFactory->getFileReader($importRequest->format);
 
-        if ($request->format === 'xml') {
-            $tree = \json_decode($request->profileEntity->getEntity()->getTree(), true);
+        if ($importRequest->format === 'xml') {
+            $tree = \json_decode($importRequest->profileEntity->getEntity()->getTree(), true);
             $fileReader->setTree($tree);
         }
 
-        return $fileReader->getTotalCount($request->inputFile);
+        return $fileReader->getTotalCount($importRequest->inputFile);
     }
 
-    public function import(ImportRequest $request, Session $session): \Generator
+    public function import(ImportRequest $importRequest, Session $session): \Generator
     {
-        yield from $this->doImport($request, $session);
+        yield from $this->doImport($importRequest, $session);
         $this->modelManager->clear();
-        foreach ($this->importUnprocessedData($request) as $nth) {
+        foreach ($this->importUnprocessedData($importRequest) as $ignored) {
             // nth
         }
     }
@@ -85,10 +85,10 @@ class ImportService implements ImportServiceInterface
         $profilesMapper = ['articles', 'articlesImages'];
 
         // loops the unprocessed data
-        $pathInfo = \pathinfo($request->inputFile);
+        $pathInfoBaseName = \pathinfo($request->inputFile, \PATHINFO_BASENAME);
         foreach ($profilesMapper as $profileName) {
             $tmpFile = $this->uploadPathProvider->getRealPath(
-                $pathInfo['basename'] . '-' . $profileName . '-swag.csv'
+                $pathInfoBaseName . '-' . $profileName . '-swag.csv'
             );
 
             if (!\file_exists($tmpFile)) {

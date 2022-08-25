@@ -11,7 +11,7 @@ namespace SwagImportExport\Components\Service;
 
 class UnderscoreToCamelCaseService implements UnderscoreToCamelCaseServiceInterface
 {
-    public function underscoreToCamelCase(?string $string): ?string
+    public function underscoreToCamelCase(?string $string): string
     {
         if (!\is_string($string)) {
             return '';
@@ -21,6 +21,6 @@ class UnderscoreToCamelCaseService implements UnderscoreToCamelCaseServiceInterf
             return \strtoupper($c[1]);
         };
 
-        return \lcfirst(\preg_replace_callback('/_([a-zA-Z])/', $func, $string));
+        return \lcfirst((string) \preg_replace_callback('/_([a-zA-Z])/', $func, $string));
     }
 }

@@ -39,8 +39,7 @@ class CustomerDbAdapterTest extends TestCase
 
         $customersDbAdapter->write($records);
 
-        $dbalConnection = $this->getContainer()->get('dbal_connection');
-        $updatedUser = $dbalConnection->executeQuery(
+        $updatedUser = $this->getContainer()->get('dbal_connection')->executeQuery(
             "
               SELECT * FROM s_user
               WHERE customernumber = '21999'"
@@ -68,8 +67,7 @@ class CustomerDbAdapterTest extends TestCase
 
         $customerDbAdapter->write($records);
 
-        $dbalConnection = $this->getContainer()->get('dbal_connection');
-        $updatedUser = $dbalConnection->executeQuery(
+        $updatedUser = $this->getContainer()->get('dbal_connection')->executeQuery(
             "
               SELECT * FROM s_user
               WHERE customernumber = '20001'"
@@ -98,8 +96,7 @@ class CustomerDbAdapterTest extends TestCase
 
         $customerDbAdapter->write($records);
 
-        $dbalConnection = $this->getContainer()->get('dbal_connection');
-        $updatedUserBillingAddress = $dbalConnection->executeQuery(
+        $updatedUserBillingAddress = $this->getContainer()->get('dbal_connection')->executeQuery(
             "
               SELECT * FROM s_user_addresses
               WHERE user_id = '1'"
@@ -128,8 +125,7 @@ class CustomerDbAdapterTest extends TestCase
 
         $customerDbAdapter->write($records);
 
-        $dbalConnection = $this->getContainer()->get('dbal_connection');
-        $updatedUser = $dbalConnection->executeQuery(
+        $updatedUser = $this->getContainer()->get('dbal_connection')->executeQuery(
             "
               SELECT * FROM s_user
               WHERE customernumber = '20001'"
@@ -179,8 +175,7 @@ class CustomerDbAdapterTest extends TestCase
 
         $customerDbAdapter->write($records);
 
-        $dbalConnection = $this->getContainer()->get('dbal_connection');
-        $updatedUserBillingAddress = $dbalConnection->executeQuery(
+        $updatedUserBillingAddress = $this->getContainer()->get('dbal_connection')->executeQuery(
             "
               SELECT * FROM s_user_addresses
               WHERE user_id = '1'"
@@ -207,8 +202,7 @@ class CustomerDbAdapterTest extends TestCase
 
         $customerDbAdapter->write($records);
 
-        $dbalConnection = $this->getContainer()->get('dbal_connection');
-        $updatedUser = $dbalConnection->executeQuery(
+        $updatedUser = $this->getContainer()->get('dbal_connection')->executeQuery(
             "
               SELECT * FROM s_user
               WHERE customernumber = '20001'"
@@ -235,8 +229,7 @@ class CustomerDbAdapterTest extends TestCase
 
         $customerDbAdapter->write($records);
 
-        $dbalConnection = $this->getContainer()->get('dbal_connection');
-        $updatedUser = $dbalConnection->executeQuery(
+        $updatedUser = $this->getContainer()->get('dbal_connection')->executeQuery(
             "
               SELECT * FROM s_user
               WHERE customernumber = '20001'"
@@ -358,8 +351,7 @@ class CustomerDbAdapterTest extends TestCase
 
         $customerDbAdapter->write($records);
 
-        $dbalConnection = $this->getContainer()->get('dbal_connection');
-        $updatedUser = $dbalConnection->executeQuery(
+        $updatedUser = $this->getContainer()->get('dbal_connection')->executeQuery(
             "
               SELECT * FROM s_user
               WHERE customernumber = '20001'"
@@ -386,8 +378,7 @@ class CustomerDbAdapterTest extends TestCase
 
         $customerDbAdapter->write($records);
 
-        $dbalConnection = $this->getContainer()->get('dbal_connection');
-        $updatedUser = $dbalConnection->executeQuery(
+        $updatedUser = $this->getContainer()->get('dbal_connection')->executeQuery(
             "
               SELECT * FROM s_user
               WHERE customernumber = '20001'"

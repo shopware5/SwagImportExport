@@ -182,16 +182,11 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
                 ->setParameter('cids', $categories)
                 ->groupBy('article.id');
 
-            $articleIds = \array_map(
-                function ($item) {
-                    return $item['id'];
-                },
-                $categoriesBuilder->getQuery()->getResult()
-            );
+            $productIds = \array_column($categoriesBuilder->getQuery()->getResult(), 'id');
 
             $builder->join('detail.article', 'article')
                 ->andWhere('article.id IN (:ids)')
-                ->setParameter('ids', $articleIds);
+                ->setParameter('ids', $productIds);
         } elseif ($filter[self::PRODUCT_STREAM_ID_FILTER_KEY]) {
             $productStreamId = $filter[self::PRODUCT_STREAM_ID_FILTER_KEY][0];
 
@@ -284,8 +279,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
         unset($record);
 
         // images
-        $imageBuilder = $this->getImageBuilder($columns['image'], $ids);
-        $tempImageResult = $imageBuilder->getQuery()->getResult();
+        $tempImageResult = $this->getImageBuilder($columns['image'], $ids)->getQuery()->getResult();
         foreach ($tempImageResult as &$tempImage) {
             $tempImage['imageUrl'] = $this->mediaService->getUrl($tempImage['imageUrl']);
         }
@@ -297,16 +291,13 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
         $result['propertyValue'] = $propertyValuesBuilder->getQuery()->getResult();
 
         // configurator
-        $configBuilder = $this->getConfiguratorBuilder($columns['configurator'], $ids);
-        $result['configurator'] = $configBuilder->getQuery()->getResult();
+        $result['configurator'] = $this->getConfiguratorBuilder($columns['configurator'], $ids)->getQuery()->getResult();
 
         // similar
-        $similarsBuilder = $this->getSimilarBuilder($columns['similar'], $ids);
-        $result['similar'] = $similarsBuilder->getQuery()->getResult();
+        $result['similar'] = $this->getSimilarBuilder($columns['similar'], $ids)->getQuery()->getResult();
 
         // accessories
-        $accessoryBuilder = $this->getAccessoryBuilder($columns['accessory'], $ids);
-        $result['accessory'] = $accessoryBuilder->getQuery()->getResult();
+        $result['accessory'] = $this->getAccessoryBuilder($columns['accessory'], $ids)->getQuery()->getResult();
 
         // categories
         $result['category'] = $this->prepareCategoryExport($ids, $columns['category']);
@@ -359,7 +350,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
         // all translation fields that can be translated for an article
         $translationFields = $this->getTranslationFields();
         $rows = [];
-        foreach ($translations as $index => $record) {
+        foreach ($translations as $record) {
             $productId = $record['articleId'];
             $variantId = $record['variantId'];
             $languageId = $record['languageId'];
@@ -591,8 +582,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
      */
     public function getProductAttributes(): array
     {
-        $stmt = $this->db->query('SHOW COLUMNS FROM `s_articles_attributes`');
-        $columns = $stmt->fetchAll();
+        $columns = $this->db->query('SHOW COLUMNS FROM `s_articles_attributes`')->fetchAll();
 
         $attributes = $this->filterAttributeColumns($columns);
 
@@ -645,29 +635,14 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
                     'prices.articleDetailsId as variantId',
                 ];
             case 'propertyValue':
-                return [
-                    'article.id as articleId',
-                ];
             case 'similar':
-                return [
-                    'article.id as articleId',
-                ];
             case 'accessory':
-                return [
-                    'article.id as articleId',
-                ];
             case 'image':
-                return [
-                    'article.id as articleId',
-                ];
-            case 'configurator':
-                return [
-                    'variant.id as variantId',
-                ];
             case 'category':
                 return [
                     'article.id as articleId',
                 ];
+            case 'configurator':
             case 'translation':
                 return [
                     'variant.id as variantId',
@@ -1217,11 +1192,10 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
      */
     protected function collectCategoryIds(Category $categoryModel, array &$categoriesReturn): void
     {
-        $categoryId = $categoryModel->getId();
-        $categoriesReturn[] = $categoryId;
+        $categoriesReturn[] = $categoryModel->getId();
         $categories = $categoryModel->getChildren();
 
-        if (!$categories) {
+        if (\count($categories) === 0) {
             return;
         }
 
@@ -1248,8 +1222,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
             'txtshippingtime' => 'shippingTime',
         ];
 
-        $attributes = $this->getTranslatableAttributes();
-        foreach ($attributes as $attribute) {
+        foreach ($this->getTranslatableAttributes() as $attribute) {
             $translationFields['__attribute_' . $attribute['columnName']] = $attribute['columnName'];
         }
 
@@ -1412,9 +1385,8 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
      */
     private function getTranslatableAttributes(): array
     {
-        $repository = $this->modelManager->getRepository(Configuration::class);
-
-        return $repository->createQueryBuilder('configuration')
+        return $this->modelManager->getRepository(Configuration::class)
+                ->createQueryBuilder('configuration')
             ->select('configuration.columnName')
             ->where('configuration.tableName = :tablename')
             ->andWhere('configuration.translatable = 1')

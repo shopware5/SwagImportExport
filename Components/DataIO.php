@@ -13,7 +13,7 @@ use SwagImportExport\Components\DbAdapters\DataDbAdapter;
 use SwagImportExport\Components\DbAdapters\DefaultHandleable;
 use SwagImportExport\Components\DbAdapters\UnprocessedDataDbAdapter;
 use SwagImportExport\Components\Logger\LogDataStruct;
-use SwagImportExport\Components\Logger\Logger;
+use SwagImportExport\Components\Logger\LoggerInterface;
 use SwagImportExport\Components\Session\Session;
 use SwagImportExport\Components\Structs\ExportRequest;
 use SwagImportExport\Components\Utils\SnippetsHelper;
@@ -27,9 +27,9 @@ class DataIO
 
     private Session $dataSession;
 
-    private Logger $logger;
+    private LoggerInterface $logger;
 
-    public function __construct(DataDbAdapter $dbAdapter, Session $dataSession, Logger $logger)
+    public function __construct(DataDbAdapter $dbAdapter, Session $dataSession, LoggerInterface $logger)
     {
         $this->dbAdapter = $dbAdapter;
         $this->dataSession = $dataSession;
@@ -67,7 +67,7 @@ class DataIO
     {
         $messages = $this->dbAdapter->getLogMessages();
         $state = $this->dbAdapter->getLogState();
-        $status = isset($state) ? $state : 'false';
+        $status = $state ?? 'false';
 
         if (empty($messages)) {
             return;

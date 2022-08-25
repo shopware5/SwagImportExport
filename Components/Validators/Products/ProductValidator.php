@@ -93,7 +93,7 @@ class ProductValidator extends Validator
                     continue;
                 }
                 $key = $supplierName;
-            } elseif (isset($record[$key]) && !empty($record[$key])) {
+            } elseif (!empty($record[$key])) {
                 continue;
             }
 

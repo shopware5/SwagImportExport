@@ -93,7 +93,7 @@ class DecimalTransformer implements DataTransformerAdapter
      * Transforms the data.
      * Direction (forward / backward) is given by the parameter $direction.
      */
-    public function transform(array $data, bool $isForward = true): array
+    private function transform(array $data, bool $isForward = true): array
     {
         foreach ($data as &$records) {
             $records = $this->transformRecord($records, $isForward);
@@ -106,7 +106,7 @@ class DecimalTransformer implements DataTransformerAdapter
      * Transforms a record both forward and backwards.
      * It replaces the decimal-delimiter.
      */
-    public function transformRecord(array $records, bool $isForward = true): array
+    private function transformRecord(array $records, bool $isForward = true): array
     {
         foreach ($records as &$record) {
             foreach ($record as $key => &$value) {

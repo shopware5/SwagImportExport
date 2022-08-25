@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace SwagImportExport\Components\DbAdapters\Products;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DBALException;
 use Enlight_Components_Db_Adapter_Pdo_Mysql as PDOConnection;
 use SwagImportExport\Components\DbAdapters\ProductsDbAdapter;
 use SwagImportExport\Components\Exception\AdapterException;
@@ -196,7 +197,7 @@ class RelationWriter
     /**
      * Deletes all relations.
      *
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws DBALException
      */
     private function deleteAllRelations(int $productId): void
     {
@@ -207,18 +208,13 @@ class RelationWriter
     /**
      * Deletes unnecessary relations.
      *
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws DBALException
      */
     private function deleteRelations(array $relations, int $productId): void
     {
         $relatedIds = \implode(
             ', ',
-            \array_map(
-                function ($relation) {
-                    return $relation[$this->idKey];
-                },
-                $relations
-            )
+            \array_column($relations, $this->idKey)
         );
 
         $delete = "DELETE FROM {$this->table} WHERE articleID = {$productId} AND relatedarticle NOT IN ({$relatedIds})";
@@ -228,7 +224,7 @@ class RelationWriter
     /**
      * Inserts new relations.
      *
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws DBALException
      */
     private function insertRelations(array $relations, int $productId): void
     {

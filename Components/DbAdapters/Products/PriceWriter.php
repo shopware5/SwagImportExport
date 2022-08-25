@@ -190,7 +190,7 @@ class PriceWriter
     {
         $sql = 'SELECT ordernumber FROM s_articles_details WHERE id = ?';
 
-        return $this->db->fetchOne($sql, [$productDetailId]);
+        return (string) $this->db->fetchOne($sql, [$productDetailId]);
     }
 
     private function getCustomerGroup(): array

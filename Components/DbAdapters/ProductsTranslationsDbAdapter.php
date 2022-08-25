@@ -172,7 +172,7 @@ class ProductsTranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
         $productDetailRepository = $this->manager->getRepository(Detail::class);
         $shopRepository = $this->manager->getRepository(Shop::class);
 
-        foreach ($records['default'] as $index => $record) {
+        foreach ($records['default'] as $record) {
             try {
                 $record = $this->validator->filterEmptyString($record);
                 $this->validator->checkRequiredFields($record);
@@ -225,7 +225,7 @@ class ProductsTranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
      */
     public function saveMessage(string $message): void
     {
-        if ($this->importExportErrorMode === false) {
+        if (!$this->importExportErrorMode) {
             throw new \Exception($message);
         }
 
@@ -354,8 +354,7 @@ class ProductsTranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
                     }
                 }
 
-                unset($translations[$index]['articleData']);
-                unset($translations[$index]['variantData']);
+                unset($translations[$index]['articleData'], $translations[$index]['variantData']);
             }
         }
 
@@ -367,9 +366,8 @@ class ProductsTranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
      */
     private function getAttributes(): array
     {
-        $repository = $this->manager->getRepository(Configuration::class);
-
-        return $repository->createQueryBuilder('configuration')
+        return $this->manager->getRepository(Configuration::class)
+            ->createQueryBuilder('configuration')
             ->select('configuration.columnName')
             ->where('configuration.tableName = :tableName')
             ->andWhere('configuration.translatable = 1')

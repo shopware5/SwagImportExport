@@ -42,9 +42,7 @@ class ProfileFactory implements \Enlight_Hook
     {
         $repository = $this->modelManager->getRepository(ProfileEntity::class);
 
-        $parts = \explode('.', $filename);
-
-        foreach ($parts as $part) {
+        foreach (\explode('.', $filename) as $part) {
             $part = \strtolower($part);
 
             $profileEntity = $repository->findOneBy(['name' => $part]);
@@ -104,8 +102,7 @@ class ProfileFactory implements \Enlight_Hook
 
     public function loadHiddenProfile(string $type): Profile
     {
-        $profileRepository = $this->modelManager->getRepository(ProfileEntity::class);
-        $profileEntity = $profileRepository->findOneBy(['type' => $type, 'hidden' => 1]);
+        $profileEntity = $this->modelManager->getRepository(ProfileEntity::class)->findOneBy(['type' => $type, 'hidden' => 1]);
 
         if (!$profileEntity instanceof ProfileEntity) {
             $data = [

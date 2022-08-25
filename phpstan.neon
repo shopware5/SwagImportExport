@@ -20,5 +20,10 @@ parameters:
         - .githooks
         - vendor
     ignoreErrors:
-        # Needs some improvements in the doctrine PHPStan extensions: see https://github.com/phpstan/phpstan-doctrine/pull/167
-        - '#Cannot call method fetch.*\(\) on Doctrine\\DBAL\\.*\|int#'
+        - # Needs some improvements in the doctrine PHPStan extensions: see https://github.com/phpstan/phpstan-doctrine/pull/167
+            message: '#Cannot call method fetchFirstColumn\(\) on Doctrine\\DBAL\\.*\|int#'
+            paths:
+                - Components/DbAdapters/AddressDbAdapter.php
+                - Components/DbAdapters/CustomerCompleteDbAdapter.php
+                - Components/DbAdapters/CustomerDbAdapter.php
+                - Components/DbAdapters/MainOrdersDbAdapter.php

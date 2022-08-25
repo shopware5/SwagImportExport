@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace SwagImportExport\Components\Utils;
 
 use SwagImportExport\Components\DataManagers\DataManager;
-use SwagImportExport\Models\Profile;
 
 class TreeHelper
 {
@@ -49,7 +48,6 @@ class TreeHelper
                     'leaf' => true,
                     'expanded' => false,
                     'iconCls' => 'sprite-sticky-notes-pin',
-                    'type' => 'attribute',
                     'swColumn' => $attribute['shopwareField'],
                     'inIteration' => $isInIteration,
                 ];
@@ -227,9 +225,7 @@ class TreeHelper
             if (isset($child['defaultValue'])) {
                 try {
                     $type = DataManager::getFieldType($child['swColumn'], $defaultFields);
-                    $defaultValue = DataManager::castDefaultValue($child['defaultValue'], $type);
-
-                    $node['defaultValue'] = $defaultValue;
+                    $node['defaultValue'] = DataManager::castDefaultValue($child['defaultValue'], $type);
                 } catch (\Exception $exception) {
                     // nth
                 }
@@ -320,7 +316,7 @@ class TreeHelper
     public static function reorderTree(array $node): array
     {
         $reorderedNode = [];
-        if (\is_array($node) && isset($node['children'])) {
+        if (isset($node['children'])) {
             foreach ($node as $key => $value) {
                 if ($key === 'children' || $key === 'attributes') {
                     $count = \count($value);

@@ -32,8 +32,7 @@ class ProductInStockDbAdapterTest extends TestCase
         ];
         $productInStockDbAdapter->write($updateInStockRecord);
 
-        $dbalConnection = $this->getContainer()->get('dbal_connection');
-        $updatedProductInStock = $dbalConnection->executeQuery("SELECT * FROM s_articles_details WHERE orderNumber='SW10004'")->fetchAllAssociative();
+        $updatedProductInStock = $this->getContainer()->get('dbal_connection')->executeQuery("SELECT * FROM s_articles_details WHERE orderNumber='SW10004'")->fetchAllAssociative();
 
         static::assertEquals(3, $updatedProductInStock[0]['instock']);
     }

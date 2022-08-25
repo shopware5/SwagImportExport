@@ -89,8 +89,7 @@ class PriceWriterTest extends TestCase
 
         $priceWriterAdapter->write($productId, $productOrderNumber, $productPriceData);
 
-        $dbalConnection = $this->getContainer()->get('dbal_connection');
-        $updatedProduct = $dbalConnection->executeQuery("SELECT * FROM s_articles_prices WHERE articleID='{$productId}'")->fetchAllAssociative();
+        $updatedProduct = $this->getContainer()->get('dbal_connection')->executeQuery("SELECT * FROM s_articles_prices WHERE articleID='{$productId}'")->fetchAllAssociative();
 
         static::assertEquals($expectedProductPrice, $updatedProduct[0]['price']);
     }
@@ -111,8 +110,7 @@ class PriceWriterTest extends TestCase
 
         $priceWriterAdapter->write($productId, $productOrderNumber, $productPriceData);
 
-        $dbalConnection = $this->getContainer()->get('dbal_connection');
-        $updatedProduct = $dbalConnection->executeQuery("SELECT * FROM s_articles_prices WHERE articleID='{$productId}'")->fetchAllAssociative();
+        $updatedProduct = $this->getContainer()->get('dbal_connection')->executeQuery("SELECT * FROM s_articles_prices WHERE articleID='{$productId}'")->fetchAllAssociative();
 
         static::assertEquals($expectedProductPrice, $updatedProduct[0]['price']);
     }
@@ -134,8 +132,7 @@ class PriceWriterTest extends TestCase
 
         $priceWriterAdapter->write($productId, $productOrderNumber, $productPriceData);
 
-        $dbalConnection = $this->getContainer()->get('dbal_connection');
-        $updatedProduct = $dbalConnection->executeQuery("SELECT * FROM s_articles_prices WHERE articleID='{$productId}'")->fetchAllAssociative();
+        $updatedProduct = $this->getContainer()->get('dbal_connection')->executeQuery("SELECT * FROM s_articles_prices WHERE articleID='{$productId}'")->fetchAllAssociative();
 
         static::assertEquals($expectedProductPseudoPrice, $updatedProduct[0]['pseudoprice']);
     }
@@ -161,8 +158,7 @@ class PriceWriterTest extends TestCase
 
         $priceWriterAdapter->write($productId, $productOrderNumber, $productPriceData);
 
-        $dbalConnection = $this->getContainer()->get('dbal_connection');
-        $updatedProduct = $dbalConnection->executeQuery("SELECT * FROM s_articles_prices WHERE articleID='{$productId}'")->fetchAllAssociative();
+        $updatedProduct = $this->getContainer()->get('dbal_connection')->executeQuery("SELECT * FROM s_articles_prices WHERE articleID='{$productId}'")->fetchAllAssociative();
 
         static::assertEquals($expectedProductRegulationPrice, $updatedProduct[0]['regulation_price']);
     }

@@ -71,8 +71,7 @@ class CustomerDataManager extends DataManager implements \Enlight_Hook
      */
     public function setDefaultFieldsForCreate(array $record, array $defaultValues): array
     {
-        $getDefaultFields = $this->getDefaultFieldsName();
-        foreach ($getDefaultFields as $key) {
+        foreach ($this->getDefaultFieldsName() as $key) {
             if (isset($record[$key])) {
                 continue;
             }
@@ -98,38 +97,16 @@ class CustomerDataManager extends DataManager implements \Enlight_Hook
                     }
                     break;
                 case 'attrBillingText1':
-                    $record[$key] = '';
-                    break;
                 case 'attrBillingText2':
-                    $record[$key] = '';
-                    break;
                 case 'attrBillingText3':
-                    $record[$key] = '';
-                    break;
                 case 'attrBillingText4':
-                    $record[$key] = '';
-                    break;
                 case 'attrBillingText5':
-                    $record[$key] = '';
-                    break;
                 case 'attrBillingText6':
-                    $record[$key] = '';
-                    break;
                 case 'attrShippingText1':
-                    $record[$key] = '';
-                    break;
                 case 'attrShippingText2':
-                    $record[$key] = '';
-                    break;
                 case 'attrShippingText3':
-                    $record[$key] = '';
-                    break;
                 case 'attrShippingText4':
-                    $record[$key] = '';
-                    break;
                 case 'attrShippingText5':
-                    $record[$key] = '';
-                    break;
                 case 'attrShippingText6':
                     $record[$key] = '';
                     break;
