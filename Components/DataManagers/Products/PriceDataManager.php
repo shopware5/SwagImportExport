@@ -14,6 +14,8 @@ use SwagImportExport\Components\DataType\ProductPriceDataType;
 
 class PriceDataManager extends DataManager implements \Enlight_Hook
 {
+    public const NO_UPPER_LIMIT_GRADUATED_PRICES = 'beliebig';
+
     /**
      * Define which field should be set by default
      *
@@ -43,7 +45,7 @@ class PriceDataManager extends DataManager implements \Enlight_Hook
                     $record[$key] = empty($record[$key]) ? 1 : (int) $record[$key];
                     break;
                 case 'to':
-                    $record[$key] = $this->getTo($record[$key]);
+                    $record[$key] = $this->getTo($record[$key] ?? self::NO_UPPER_LIMIT_GRADUATED_PRICES);
                     break;
             }
         }
@@ -81,7 +83,7 @@ class PriceDataManager extends DataManager implements \Enlight_Hook
 
         // if the "to" value isn't numeric, set the placeholder 'beliebig'
         if ($to <= 0) {
-            $to = 'beliebig';
+            $to = self::NO_UPPER_LIMIT_GRADUATED_PRICES;
         }
 
         return $to;

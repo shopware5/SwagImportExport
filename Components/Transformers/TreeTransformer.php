@@ -479,7 +479,7 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
         }
 
         if (isset($node['children'])) {
-            if (isset($node['attributes'])) {
+            if (isset($node['attributes']) && \is_array($node['attributes'])) {
                 foreach ($node['attributes'] as $attr) {
                     $currentPath = $nodePath . $separator . $attr['name'];
                     $this->saveMapper($currentPath, $attr['shopwareField']);
@@ -538,14 +538,14 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
         $currentNode = [];
 
         if (!isset($node['rawKey']) && isset($node['children']) && \count($node['children']) > 0) {
-            if (isset($node['attributes'])) {
+            if (isset($node['attributes']) && \is_array($node['attributes'])) {
                 foreach ($node['attributes'] as $attribute) {
                     $currentNode['_attributes'][$attribute['name']] = $mapper[$attribute['shopwareField']];
                 }
             }
 
             foreach ($node['children'] as $child) {
-                $currentNode[$child['name']] = $this->transformToTree($child, $mapper, $node['adapter']);
+                $currentNode[$child['name']] = $this->transformToTree($child, $mapper, $node['adapter'] ?? null);
             }
         } else {
             if (isset($node['attributes'])) {
@@ -555,13 +555,19 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
 
                 $currentNode['_value'] = $mapper[$node['shopwareField']];
             } else {
-                $currentNode = $mapper[$node['shopwareField']];
-                if ($node['type'] === 'raw') {
-                    $currentNode = $mapper[$node['rawKey']];
+                $currentNode = $mapper[$node['shopwareField'] ?? ''] ?? '';
+                if (($node['type'] ?? '') === 'raw') {
+                    $currentNode = $mapper[$node['rawKey']] ?? [];
 
                     if (isset($node['children']) && \count($node['children']) > 0) {
                         foreach ($node['children'] as $child) {
-                            $currentNode[$child['name']] = $this->transformToTree($child, $currentNode, $node['adapter']);
+                            if ($this->isAssociativeArray($currentNode)) {
+                                $currentNode[$child['name']] = $this->transformToTree($child, $currentNode, $node['adapter'] ?? null);
+                            } else {
+                                foreach ($currentNode as $key => $currentNodeItem) {
+                                    $currentNode[$key][$child['name']] = $this->transformToTree($child, $currentNodeItem, $node['adapter'] ?? null);
+                                }
+                            }
                         }
                     }
                 }
@@ -583,5 +589,13 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
         $this->currentRecord = null;
         $this->preparedData = null;
         $this->iterationNodes = [];
+    }
+
+    /**
+     * @param array<mixed> $arrayToCheck
+     */
+    private function isAssociativeArray(array $arrayToCheck): bool
+    {
+        return \array_keys($arrayToCheck) !== \range(0, \count($arrayToCheck) - 1);
     }
 }

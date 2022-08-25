@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace SwagImportExport\Components\DbAdapters\Products;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\DBALException;
 use Shopware\Models\Article\Configurator\Group;
 use Shopware\Models\Article\Configurator\Option;
 use Shopware\Models\Article\Configurator\Set;
@@ -148,7 +147,7 @@ class ConfiguratorWriter
 
     public function getSetIdBySetName(string $name): ?int
     {
-        return $this->sets[$name];
+        return $this->sets[$name] ?? null;
     }
 
     /**
@@ -160,13 +159,7 @@ class ConfiguratorWriter
                 FROM s_article_configurator_groups
                 WHERE `name` = ?';
 
-        $id = $this->connection->fetchOne($sql, [$name]);
-
-        if (\is_bool($id)) {
-            return null;
-        }
-
-        return (int) $id;
+        return (int) $this->connection->fetchOne($sql, [$name]) ?: null;
     }
 
     public function getOptionIdByOptionNameAndGroupId(string $optionName, int $groupId): ?int
@@ -195,9 +188,6 @@ class ConfiguratorWriter
         $this->db->query('UPDATE s_articles SET configurator_set_id = ? WHERE id = ?', [$setId, $productId]);
     }
 
-    /**
-     * @throws DBALException
-     */
     protected function updateGroupsRelation(int $setId, int $groupId): void
     {
         $sql = "INSERT INTO s_article_configurator_set_group_relations (set_id, group_id)
@@ -207,9 +197,6 @@ class ConfiguratorWriter
         $this->connection->executeStatement($sql);
     }
 
-    /**
-     * @throws DBALException
-     */
     protected function updateOptionRelation(int $productDetailId, int $optionId): void
     {
         $sql = "INSERT INTO s_article_configurator_option_relations (article_id, option_id)
@@ -219,9 +206,6 @@ class ConfiguratorWriter
         $this->connection->executeStatement($sql);
     }
 
-    /**
-     * @throws DBALException
-     */
     protected function updateSetOptionRelation(int $setId, int $optionId): void
     {
         $sql = "INSERT INTO s_article_configurator_set_option_relations (set_id, option_id)
@@ -249,8 +233,7 @@ class ConfiguratorWriter
         // Delete id to avoid unique constraint violations
         unset($data['id']);
 
-        $builder = $this->dbalHelper
-            ->getQueryBuilderForEntity($data, Set::class, null);
+        $builder = $this->dbalHelper->getQueryBuilderForEntity($data, Set::class, null);
         $builder->execute();
 
         return (int) $this->connection->lastInsertId();
@@ -261,8 +244,7 @@ class ConfiguratorWriter
      */
     protected function createGroup(array $data): int
     {
-        $builder = $this->dbalHelper
-            ->getQueryBuilderForEntity($data, Group::class, null);
+        $builder = $this->dbalHelper->getQueryBuilderForEntity($data, Group::class, null);
         $builder->execute();
 
         return (int) $this->connection->lastInsertId();
@@ -273,8 +255,7 @@ class ConfiguratorWriter
      */
     protected function createOption(array $data): int
     {
-        $builder = $this->dbalHelper
-            ->getQueryBuilderForEntity($data, Option::class, null);
+        $builder = $this->dbalHelper->getQueryBuilderForEntity($data, Option::class, null);
         $builder->execute();
 
         return (int) $this->connection->lastInsertId();

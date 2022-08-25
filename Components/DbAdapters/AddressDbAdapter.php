@@ -124,8 +124,8 @@ class AddressDbAdapter implements DataDbAdapter, \Enlight_Hook
             'address.city as city',
             'address.vatId as vatId',
             'address.phone as phone',
-            'address.additionalAddressLine1 as additional_address_line1',
-            'address.additionalAddressLine2 as additional_address_line2',
+            'address.additionalAddressLine1',
+            'address.additionalAddressLine2',
             'customer.id as userID',
             'customer.email as email',
             'customer.number as customernumber',
@@ -422,7 +422,7 @@ class AddressDbAdapter implements DataDbAdapter, \Enlight_Hook
      */
     private function setState(Address $addressModel, array $addressRecord): array
     {
-        if (!$addressRecord['stateID']) {
+        if (!isset($addressRecord['stateID'])) {
             return $addressRecord;
         }
 
@@ -432,7 +432,7 @@ class AddressDbAdapter implements DataDbAdapter, \Enlight_Hook
         );
 
         $state = $this->findStateById($addressRecord);
-        if (!$state) {
+        if (!$state instanceof State) {
             throw new AdapterException(\sprintf($errorMessage, $addressRecord['stateID']));
         }
 

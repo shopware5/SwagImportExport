@@ -48,7 +48,7 @@ class CsvConverter implements ConverterInterface
         $fieldmark = $this->settings['fieldmark'] ?? '';
         $lastkey = \end($keys);
         foreach ($keys as $key) {
-            if (!empty($line[$key]) || $line[$key] === '0') {
+            if (!empty($line[$key]) || (isset($line[$key]) && $line[$key] === '0')) {
                 if (\strpos($line[$key], "\r") !== false
                     || \strpos($line[$key], "\n") !== false
                     || \strpos($line[$key], $fieldmark) !== false

@@ -11,6 +11,7 @@ namespace SwagImportExport\Tests\Integration\Components;
 
 use PHPUnit\Framework\TestCase;
 use SwagImportExport\Components\DbAdapters\CategoriesDbAdapter;
+use SwagImportExport\Components\DbAdapters\DataDbAdapter;
 use SwagImportExport\Components\DbAdapters\ProductsDbAdapter;
 use SwagImportExport\Components\FileIO\CsvFileReader;
 use SwagImportExport\Components\FileIO\CsvFileWriter;
@@ -53,11 +54,11 @@ class FactoryTest extends TestCase
         $dataProvider = $this->getContainer()->get(DataProvider::class);
 
         // tests categories data adapter
-        $catergoriesDbAdapter = $dataProvider->createDbAdapter('categories');
+        $catergoriesDbAdapter = $dataProvider->createDbAdapter(DataDbAdapter::CATEGORIES_ADAPTER);
         static::assertInstanceOf(CategoriesDbAdapter::class, $catergoriesDbAdapter, 'Is not an instance of CategoriesDbAdapter');
 
         // tests products data adapter
-        $productsDbAdapter = $dataProvider->createDbAdapter('articles');
+        $productsDbAdapter = $dataProvider->createDbAdapter(DataDbAdapter::PRODUCT_ADAPTER);
         static::assertInstanceOf(ProductsDbAdapter::class, $productsDbAdapter, 'Is not an instance of ProductsDbAdapter');
     }
 

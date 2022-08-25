@@ -95,6 +95,10 @@ class Session
 
         // change state
         $this->sessionEntity->setState(self::SESSION_ACTIVE);
+        if ($this->sessionEntity->getTotalCount() === 0) {
+            // If there is no data to be imported or exported, directly finish the session, so the XML footer is correctly written
+            $this->sessionEntity->setState(self::SESSION_FINISHED);
+        }
 
         // set profile
         $this->sessionEntity->setProfile($profile->getEntity());

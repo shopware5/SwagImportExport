@@ -37,45 +37,45 @@ class ImportCommandTest extends TestCase
     public function testCustomerXmlImport(): void
     {
         $actualLineAmount = $this->getRowCountForTable(ProfileDataProvider::CUSTOMER_TABLE);
-        $customerProfileName = 'default_customers';
-        $importFilePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'CustomerImport.xml';
+        $profile = 'default_customers';
+        $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'CustomerImport.xml';
         $expectedImportedCustomersAmount = 4;
 
-        $consoleOutput = $this->runCommand(self::CLI_IMPORT_COMMAND . " {$customerProfileName} {$importFilePath}");
+        $consoleOutput = $this->runCommand(sprintf('%s %s %s', self::CLI_IMPORT_COMMAND, $profile, $filePath));
 
         $resultLineAmount = $this->getRowCountForTable(ProfileDataProvider::CUSTOMER_TABLE);
         $importedCustomersAmount = $resultLineAmount - $actualLineAmount;
 
         static::assertEquals('Using format: xml.', $consoleOutput[1]);
-        static::assertEquals("Total count: {$expectedImportedCustomersAmount}.", $consoleOutput[3]);
+        static::assertEquals(sprintf('Total count: %s.', $expectedImportedCustomersAmount), $consoleOutput[3]);
         static::assertEquals($expectedImportedCustomersAmount, $importedCustomersAmount);
     }
 
     public function testCustomerCsvImport(): void
     {
         $actualLineAmount = $this->getRowCountForTable(ProfileDataProvider::CUSTOMER_TABLE);
-        $customerProfileName = 'default_customers';
-        $importFilePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'CustomerImport.csv';
+        $profile = 'default_customers';
+        $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'CustomerImport.csv';
         $expectedImportedCustomersAmount = 4;
 
-        $consoleOutput = $this->runCommand(self::CLI_IMPORT_COMMAND . " {$customerProfileName} {$importFilePath}");
+        $consoleOutput = $this->runCommand(sprintf('%s %s %s', self::CLI_IMPORT_COMMAND, $profile, $filePath));
 
         $resultLineAmount = $this->getRowCountForTable(ProfileDataProvider::CUSTOMER_TABLE);
         $importedCustomersAmount = $resultLineAmount - $actualLineAmount;
 
         static::assertEquals('Using format: csv.', $consoleOutput[1]);
-        static::assertEquals("Total count: {$expectedImportedCustomersAmount}.", $consoleOutput[3]);
+        static::assertEquals(sprintf('Total count: %s.', $expectedImportedCustomersAmount), $consoleOutput[3]);
         static::assertEquals($expectedImportedCustomersAmount, $importedCustomersAmount);
     }
 
     public function testCategoryXmlImport(): void
     {
         $actualLineAmount = $this->getRowCountForTable(ProfileDataProvider::CATEGORY_TABLE);
-        $categoryProfileName = 'default_categories';
-        $importFilePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'CategoriesImport.xml';
+        $profile = 'default_categories';
+        $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'CategoriesImport.xml';
         $expectedImportedCategories = 16;
 
-        $consoleOutput = $this->runCommand(self::CLI_IMPORT_COMMAND . " {$categoryProfileName} {$importFilePath}");
+        $consoleOutput = $this->runCommand(sprintf('%s %s %s', self::CLI_IMPORT_COMMAND, $profile, $filePath));
 
         $resultLineAmount = $this->getRowCountForTable(ProfileDataProvider::CATEGORY_TABLE);
         $importedCategoriesAmount = $resultLineAmount - $actualLineAmount;
@@ -92,7 +92,7 @@ class ImportCommandTest extends TestCase
         $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'CategoriesImport.csv';
         $expectedImportedCategories = 16;
 
-        $consoleOutput = $this->runCommand(self::CLI_IMPORT_COMMAND . " {$profile} {$filePath}");
+        $consoleOutput = $this->runCommand(sprintf('%s %s %s', self::CLI_IMPORT_COMMAND, $profile, $filePath));
 
         $resultLineAmount = $this->getRowCountForTable(ProfileDataProvider::CATEGORY_TABLE);
         $importedCategoriesAmount = $resultLineAmount - $actualLineAmount;
@@ -109,7 +109,7 @@ class ImportCommandTest extends TestCase
         $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'NewsletterRecipientImport.xml';
         $expectedImportedNewsletterRecipients = 6;
 
-        $consoleOutput = $this->runCommand(self::CLI_IMPORT_COMMAND . " {$profile} {$filePath}");
+        $consoleOutput = $this->runCommand(sprintf('%s %s %s', self::CLI_IMPORT_COMMAND, $profile, $filePath));
 
         $resultLineAmount = $this->getRowCountForTable(ProfileDataProvider::NEWSLETTER_TABLE);
         $importedNewsletterAmount = $resultLineAmount - $actualLineAmount;
@@ -126,7 +126,7 @@ class ImportCommandTest extends TestCase
         $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'NewsletterRecipientImport.csv';
         $expectedImportedNewsletterRecipients = 6;
 
-        $consoleOutput = $this->runCommand(self::CLI_IMPORT_COMMAND . " {$profile} {$filePath}");
+        $consoleOutput = $this->runCommand(sprintf('%s %s %s', self::CLI_IMPORT_COMMAND, $profile, $filePath));
 
         $resultLineAmount = $this->getRowCountForTable(ProfileDataProvider::NEWSLETTER_TABLE);
         $importedNewsletterAmount = $resultLineAmount - $actualLineAmount;
@@ -143,7 +143,7 @@ class ImportCommandTest extends TestCase
         $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'ArticleImport.xml';
         $expectedImportedProducts = 2;
 
-        $consoleOutput = $this->runCommand(self::CLI_IMPORT_COMMAND . " {$profile} {$filePath}");
+        $consoleOutput = $this->runCommand(sprintf('%s %s %s', self::CLI_IMPORT_COMMAND, $profile, $filePath));
 
         $resultLineAmount = $this->getRowCountForTable(ProfileDataProvider::PRODUCT_TABLE);
         $importedProductsAmount = $resultLineAmount - $actualLineAmount;
@@ -160,7 +160,7 @@ class ImportCommandTest extends TestCase
         $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'ArticleImport.csv';
         $expectedImportedProducts = 2;
 
-        $consoleOutput = $this->runCommand(self::CLI_IMPORT_COMMAND . " {$profile} {$filePath}");
+        $consoleOutput = $this->runCommand(sprintf('%s %s %s', self::CLI_IMPORT_COMMAND, $profile, $filePath));
 
         $resultLineAmount = $this->getRowCountForTable(ProfileDataProvider::PRODUCT_TABLE);
         $importedProductsAmount = $resultLineAmount - $actualLineAmount;
@@ -177,7 +177,7 @@ class ImportCommandTest extends TestCase
         $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'VariantsImport.xml';
         $expectedImportedVariants = 2;
 
-        $consoleOutput = $this->runCommand(self::CLI_IMPORT_COMMAND . " {$profile} {$filePath}");
+        $consoleOutput = $this->runCommand(sprintf('%s %s %s', self::CLI_IMPORT_COMMAND, $profile, $filePath));
 
         $resultLineAmount = $this->getRowCountForTable(ProfileDataProvider::VARIANT_TABLE);
         $importedVariantsAmount = $resultLineAmount - $actualLineAmount;
@@ -194,7 +194,7 @@ class ImportCommandTest extends TestCase
         $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'VariantsImport.csv';
         $expectedImportedVariants = 2;
 
-        $consoleOutput = $this->runCommand(self::CLI_IMPORT_COMMAND . " {$profile} {$filePath}");
+        $consoleOutput = $this->runCommand(sprintf('%s %s %s', self::CLI_IMPORT_COMMAND, $profile, $filePath));
 
         $resultLineAmount = $this->getRowCountForTable(ProfileDataProvider::VARIANT_TABLE);
         $importedVariantsAmount = $resultLineAmount - $actualLineAmount;
@@ -209,7 +209,7 @@ class ImportCommandTest extends TestCase
         $profile = 'default_article_in_stock';
         $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'ArticleInStockImport.xml';
 
-        $consoleOutput = $this->runCommand(self::CLI_IMPORT_COMMAND . " {$profile} {$filePath}");
+        $consoleOutput = $this->runCommand(sprintf('%s %s %s', self::CLI_IMPORT_COMMAND, $profile, $filePath));
 
         static::assertEquals('Using format: xml.', $consoleOutput[1]);
         static::assertEquals('Total count: 405.', $consoleOutput[3]);
@@ -220,7 +220,7 @@ class ImportCommandTest extends TestCase
         $profile = 'default_article_in_stock';
         $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'ArticleInStockImport.csv';
 
-        $consoleOutput = $this->runCommand(self::CLI_IMPORT_COMMAND . " {$profile} {$filePath}");
+        $consoleOutput = $this->runCommand(sprintf('%s %s %s', self::CLI_IMPORT_COMMAND, $profile, $filePath));
 
         static::assertEquals('Using format: csv.', $consoleOutput[1]);
         static::assertEquals('Total count: 405.', $consoleOutput[3]);
@@ -231,7 +231,7 @@ class ImportCommandTest extends TestCase
         $profile = 'default_article_prices';
         $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'ArticlePricesImport.xml';
 
-        $consoleOutput = $this->runCommand(self::CLI_IMPORT_COMMAND . " {$profile} {$filePath}");
+        $consoleOutput = $this->runCommand(sprintf('%s %s %s', self::CLI_IMPORT_COMMAND, $profile, $filePath));
 
         static::assertEquals('Using format: xml.', $consoleOutput[1]);
         static::assertEquals('Total count: 27.', $consoleOutput[3]);
@@ -242,7 +242,7 @@ class ImportCommandTest extends TestCase
         $profile = 'default_article_prices';
         $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'ArticlePricesImport.csv';
 
-        $consoleOutput = $this->runCommand(self::CLI_IMPORT_COMMAND . " {$profile} {$filePath}");
+        $consoleOutput = $this->runCommand(sprintf('%s %s %s', self::CLI_IMPORT_COMMAND, $profile, $filePath));
 
         static::assertEquals('Using format: csv.', $consoleOutput[1]);
         static::assertEquals('Total count: 98.', $consoleOutput[3]);
@@ -253,7 +253,7 @@ class ImportCommandTest extends TestCase
         $profile = 'default_article_translations';
         $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'ArticleTranslationImport.xml';
 
-        $consoleOutput = $this->runCommand(self::CLI_IMPORT_COMMAND . " {$profile} {$filePath}");
+        $consoleOutput = $this->runCommand(sprintf('%s %s %s', self::CLI_IMPORT_COMMAND, $profile, $filePath));
 
         static::assertEquals('Using format: xml.', $consoleOutput[1]);
         static::assertEquals('Total count: 103.', $consoleOutput[3]);
@@ -264,7 +264,7 @@ class ImportCommandTest extends TestCase
         $profile = 'default_article_translations';
         $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'ArticleTranslationImport.csv';
 
-        $consoleOutput = $this->runCommand(self::CLI_IMPORT_COMMAND . " {$profile} {$filePath}");
+        $consoleOutput = $this->runCommand(sprintf('%s %s %s', self::CLI_IMPORT_COMMAND, $profile, $filePath));
 
         static::assertEquals('Using format: csv.', $consoleOutput[1]);
         static::assertEquals('Total count: 103.', $consoleOutput[3]);
@@ -277,7 +277,7 @@ class ImportCommandTest extends TestCase
         $actualLineAmount = $this->getRowCountForTable(ProfileDataProvider::ORDER_TABLE);
         $expectedImportedOrders = 0;
 
-        $consoleOutput = $this->runCommand(self::CLI_IMPORT_COMMAND . " {$profile} {$filePath}");
+        $consoleOutput = $this->runCommand(sprintf('%s %s %s', self::CLI_IMPORT_COMMAND, $profile, $filePath));
 
         $resultLineAmount = $this->getRowCountForTable(ProfileDataProvider::ORDER_TABLE);
         $importedOrdersAmount = $resultLineAmount - $actualLineAmount;
@@ -294,7 +294,7 @@ class ImportCommandTest extends TestCase
         $actualLineAmount = $this->getRowCountForTable(ProfileDataProvider::ORDER_TABLE);
         $expectedImportedOrders = 0;
 
-        $consoleOutput = $this->runCommand(self::CLI_IMPORT_COMMAND . " {$profile} {$filePath}");
+        $consoleOutput = $this->runCommand(sprintf('%s %s %s', self::CLI_IMPORT_COMMAND, $profile, $filePath));
 
         $resultLineAmount = $this->getRowCountForTable(ProfileDataProvider::ORDER_TABLE);
         $importedOrdersAmount = $resultLineAmount - $actualLineAmount;
@@ -327,7 +327,7 @@ class ImportCommandTest extends TestCase
         $profile = 'default_system_translations';
         $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'TranslationImport.xml';
 
-        $consoleOutput = $this->runCommand(self::CLI_IMPORT_COMMAND . " {$profile} {$filePath}");
+        $consoleOutput = $this->runCommand(sprintf('%s %s %s', self::CLI_IMPORT_COMMAND, $profile, $filePath));
 
         static::assertEquals('Using format: xml.', $consoleOutput[1]);
         static::assertEquals('Total count: 15.', $consoleOutput[3]);
@@ -338,7 +338,7 @@ class ImportCommandTest extends TestCase
         $profile = 'default_system_translations';
         $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'TranslationImport.csv';
 
-        $consoleOutput = $this->runCommand(self::CLI_IMPORT_COMMAND . " {$profile} {$filePath}");
+        $consoleOutput = $this->runCommand(sprintf('%s %s %s', self::CLI_IMPORT_COMMAND, $profile, $filePath));
 
         static::assertEquals('Using format: csv.', $consoleOutput[1]);
         static::assertEquals('Total count: 15.', $consoleOutput[3]);
@@ -346,7 +346,7 @@ class ImportCommandTest extends TestCase
 
     private function getRowCountForTable(string $table): int
     {
-        $statement = $this->connection->executeQuery("SELECT * FROM {$table}");
+        $statement = $this->connection->executeQuery(sprintf('SELECT * FROM %s', $table));
 
         return (int) $statement->rowCount();
     }

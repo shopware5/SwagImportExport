@@ -81,18 +81,18 @@ class ExportRequest
         }
 
         if ($this->profileEntity->getType() === DataDbAdapter::PRODUCT_INSTOCK_ADAPTER) {
-            if ($data['stockFilter']) {
+            if (isset($data['stockFilter'])) {
                 $this->filter['stockFilter'] = $data['stockFilter'];
             }
 
-            if ($data['stockFilter'] === self::CUSTOM_STOCK_FILTER) {
+            if (isset($data['stockFilter']) && $data['stockFilter'] === self::CUSTOM_STOCK_FILTER) {
                 $this->filter['direction'] = $data['customFilterDirection'];
                 $this->filter['value'] = $data['customFilterValue'];
             }
         }
 
         if (\in_array($this->profileEntity->getType(), [DataDbAdapter::ORDER_ADAPTER, DataDbAdapter::MAIN_ORDER_ADAPTER], true)) {
-            if ($data['ordernumberFrom']) {
+            if (isset($data['ordernumberFrom'])) {
                 $this->filter['ordernumberFrom'] = $data['ordernumberFrom'];
             }
 
@@ -106,23 +106,23 @@ class ExportRequest
                 $this->filter['dateTo'] = $dateTo;
             }
 
-            if ($data['orderstate']) {
+            if (isset($data['orderstate'])) {
                 $this->filter['orderstate'] = $data['orderstate'];
             }
 
-            if ($data['paymentstate']) {
+            if (isset($data['paymentstate'])) {
                 $this->filter['paymentstate'] = $data['paymentstate'];
             }
         }
 
         // customer stream filter for addresses and customers
         if (\in_array($this->profileEntity->getType(), [DataDbAdapter::CUSTOMER_ADAPTER, DataDbAdapter::ADDRESS_ADAPTER], true)
-            && $data['customerStreamId']
+            && isset($data['customerStreamId'])
         ) {
             $this->filter['customerStreamId'] = $data['customerStreamId'];
         }
 
-        if ($this->profileEntity->getType() === DataDbAdapter::CUSTOMER_COMPLETE_ADAPTER && $data['customerId']) {
+        if ($this->profileEntity->getType() === DataDbAdapter::CUSTOMER_COMPLETE_ADAPTER && isset($data['customerId'])) {
             $this->filter['customerId'] = $data['customerId'];
         }
     }

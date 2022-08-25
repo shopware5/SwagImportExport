@@ -14,7 +14,6 @@ use SwagImportExport\Components\Profile\Profile;
 use SwagImportExport\Components\Structs\ExportRequest;
 use SwagImportExport\Components\Structs\ImportRequest;
 use SwagImportExport\Components\UploadPathProvider;
-use SwagImportExport\Components\Utils\SnippetsHelper;
 use SwagImportExport\Models\Session as SessionEntity;
 use SwagImportExport\Models\SessionRepository;
 
@@ -79,21 +78,13 @@ class SessionService
      */
     public function startExportSession(ExportRequest $exportRequest, Profile $profile, Session $session, array $ids): void
     {
-        if (empty($ids)) {
-            $message = SnippetsHelper::getNamespace()
-                ->get('dataio/no_export_records', 'No records found to be exported');
-            throw new \Exception($message);
-        }
-
-        $sessionData = [
+        $session->start($profile, [
             'type' => 'export',
             'fileName' => $this->uploadPathProvider->getFileNameFromPath($exportRequest->filePath),
             'format' => $exportRequest->format,
             'username' => $exportRequest->username,
             'serializedIds' => \serialize($ids),
             'totalCountedIds' => \count($ids),
-        ];
-
-        $session->start($profile, $sessionData);
+        ]);
     }
 }

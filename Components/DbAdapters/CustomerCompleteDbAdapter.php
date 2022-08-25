@@ -100,13 +100,13 @@ class CustomerCompleteDbAdapter extends CustomerDbAdapter
 
         foreach ($customers as &$customer) {
             $customer['newsletter'] = false;
-            if ($newsletterRecipients[$customer['id']]) {
+            if (isset($newsletterRecipients[$customer['id']])) {
                 $customer['newsletter'] = true;
             }
             if ($addresses[$customer['id']]) {
                 $customer['addresses'] = DbAdapterHelper::decodeHtmlEntities($addresses[$customer['id']]);
             }
-            if ($orders[$customer['id']]) {
+            if (isset($orders[$customer['id']])) {
                 $customer['orders'] = DbAdapterHelper::decodeHtmlEntities($orders[$customer['id']]);
             }
             if (\array_key_exists('attribute', $customer)) {
@@ -115,7 +115,7 @@ class CustomerCompleteDbAdapter extends CustomerDbAdapter
         }
         unset($customer);
 
-        $result['customers'] = DbAdapterHelper::decodeHtmlEntities($customers);
+        $result['default'] = DbAdapterHelper::decodeHtmlEntities($customers);
 
         return $result;
     }

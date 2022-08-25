@@ -103,7 +103,7 @@ class ProductsInStockDbAdapter implements DataDbAdapter, \Enlight_Hook
      */
     public function readRecordIds(?int $start, ?int $limit, array $filter = []): array
     {
-        $stockFilter = $filter['stockFilter'];
+        $stockFilter = $filter['stockFilter'] ?? null;
         if ($stockFilter === null) {
             $stockFilter = 'all';
         }

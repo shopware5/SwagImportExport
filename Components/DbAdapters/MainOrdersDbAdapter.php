@@ -444,7 +444,7 @@ class MainOrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
                     continue;
                 }
 
-                $sum[$orderId]['taxRateSums'][(string) $data['taxRate']] += $this->calculateTaxSum($data);
+                $sum[$orderId]['taxRateSums'][(string) $data['taxRate']] = ($sum[$orderId]['taxRateSums'][(string) $data['taxRate']] ?? 0) + $this->calculateTaxSum($data);
             }
         }
 

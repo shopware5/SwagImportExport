@@ -167,7 +167,7 @@ class TranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
                 'objectType' => $translation['objecttype'],
                 'baseName' => $translation['baseName'],
                 'name' => $data[$key],
-                'description' => $data['description'],
+                'description' => $data['description'] ?? '',
                 'languageId' => $translation['languageId'],
             ];
         }
@@ -240,7 +240,7 @@ class TranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
 
                 if (!$shop instanceof Shop) {
                     $message = SnippetsHelper::getNamespace()
-                        ->get('adapters/translations/lang_id_not_found', 'Language with id %s does not exist');
+                        ->get('adapters/translations/lang_id_not_found', 'Language with ID %s does not exist');
                     throw new AdapterException(\sprintf($message, $record['languageId']));
                 }
 

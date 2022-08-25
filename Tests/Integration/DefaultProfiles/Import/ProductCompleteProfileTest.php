@@ -41,7 +41,7 @@ class ProductCompleteProfileTest extends TestCase
     public function testImportShouldCreateProductWithVariants(): void
     {
         $filePath = __DIR__ . '/_fixtures/article_complete.csv';
-        $this->runCommand("sw:import:import -p default_articles_complete {$filePath}");
+        $this->runCommand(sprintf('sw:import:import -p default_articles_complete %s', $filePath));
 
         $importedProduct = $this->executeQuery("SELECT * FROM s_articles WHERE name='Article with Variants'");
         static::assertEquals('Article with Variants', $importedProduct[0]['name']);
@@ -57,7 +57,7 @@ class ProductCompleteProfileTest extends TestCase
     public function testImportShouldCreateVariantWithDifferentPricesForCustomerGroups(): void
     {
         $filePath = __DIR__ . '/_fixtures/article_complete.csv';
-        $this->runCommand("sw:import:import -p default_articles_complete {$filePath}");
+        $this->runCommand(sprintf('sw:import:import -p default_articles_complete %s', $filePath));
 
         $importedVariantWithDifferentPrice = $this->executeQuery("SELECT * FROM s_articles_details WHERE ordernumber='test-10001.2'");
 
@@ -69,7 +69,7 @@ class ProductCompleteProfileTest extends TestCase
     public function testImportShouldCreateProductWithDifferentPricesForCustomerGroups(): void
     {
         $filePath = __DIR__ . '/_fixtures/article_complete.csv';
-        $this->runCommand("sw:import:import -p default_articles_complete {$filePath}");
+        $this->runCommand(sprintf('sw:import:import -p default_articles_complete %s', $filePath));
 
         $importedMainVariant = $this->executeQuery("SELECT * FROM s_articles_details WHERE ordernumber='test-10001.1'");
 
@@ -81,7 +81,7 @@ class ProductCompleteProfileTest extends TestCase
     public function testImportShouldImportProductWithAttributes(): void
     {
         $filePath = __DIR__ . '/_fixtures/article_complete.csv';
-        $this->runCommand("sw:import:import -p default_articles_complete {$filePath}");
+        $this->runCommand(sprintf('sw:import:import -p default_articles_complete %s', $filePath));
 
         $importedProduct = $this->executeQuery("SELECT * FROM s_articles WHERE name='Article with Variants'");
         $importedAttributes = $this->executeQuery("SELECT * FROM s_articles_attributes WHERE articledetailsID={$importedProduct[0]['main_detail_id']}");
@@ -93,7 +93,7 @@ class ProductCompleteProfileTest extends TestCase
     public function testImportShouldImportVariantWithAttributes(): void
     {
         $filePath = __DIR__ . '/_fixtures/article_complete.csv';
-        $this->runCommand("sw:import:import -p default_articles_complete {$filePath}");
+        $this->runCommand(sprintf('sw:import:import -p default_articles_complete %s', $filePath));
 
         $importedVariant = $this->executeQuery("SELECT * FROM s_articles_details WHERE ordernumber='test-10001.1'");
         $importedAttributes = $this->executeQuery("SELECT * FROM s_articles_attributes WHERE articledetailsID={$importedVariant[0]['id']}");
@@ -105,7 +105,7 @@ class ProductCompleteProfileTest extends TestCase
     public function testImportShouldImportTranslations(): void
     {
         $filePath = __DIR__ . '/_fixtures/article_complete.csv';
-        $this->runCommand("sw:import:import -p default_articles_complete {$filePath}");
+        $this->runCommand(sprintf('sw:import:import -p default_articles_complete %s', $filePath));
 
         $importedVariant = $this->executeQuery("SELECT * FROM s_articles_details WHERE ordernumber='test-10001.1'");
         $result = $this->executeQuery("SELECT * FROM s_core_translations WHERE objecttype='article' AND objectkey='{$importedVariant[0]['articleID']}'");
@@ -119,7 +119,7 @@ class ProductCompleteProfileTest extends TestCase
     public function testImportShouldCreateSimilarAssociations(): void
     {
         $filePath = __DIR__ . '/_fixtures/article_complete.csv';
-        $this->runCommand("sw:import:import -p default_articles_complete {$filePath}");
+        $this->runCommand(sprintf('sw:import:import -p default_articles_complete %s', $filePath));
 
         $importedProduct = $this->executeQuery("SELECT * FROM s_articles WHERE name='Article with Variants'");
         $similarRelation = $this->executeQuery("SELECT * FROM s_articles_similar WHERE articleID={$importedProduct[0]['id']}");
@@ -131,7 +131,7 @@ class ProductCompleteProfileTest extends TestCase
     public function testImportShouldCreateAccessoryAssociations(): void
     {
         $filePath = __DIR__ . '/_fixtures/article_complete.csv';
-        $this->runCommand("sw:import:import -p default_articles_complete {$filePath}");
+        $this->runCommand(sprintf('sw:import:import -p default_articles_complete %s', $filePath));
 
         $importedProduct = $this->executeQuery("SELECT * FROM s_articles WHERE name='Article with Variants'");
         $similarRelation = $this->executeQuery("SELECT * FROM s_articles_relationships WHERE articleID={$importedProduct[0]['id']}");
@@ -143,7 +143,7 @@ class ProductCompleteProfileTest extends TestCase
     public function testImportShouldCreateMediaFromExternalRessource(): void
     {
         $filePath = __DIR__ . '/_fixtures/article_complete.csv';
-        $this->runCommand("sw:import:import -p default_articles_complete {$filePath}");
+        $this->runCommand(sprintf('sw:import:import -p default_articles_complete %s', $filePath));
 
         $importedProduct = $this->executeQuery("SELECT * FROM s_articles WHERE name='Article with Variants'");
         $mediaRelation = $this->executeQuery("SELECT * FROM s_articles_img WHERE articleID='{$importedProduct[0]['id']}'");

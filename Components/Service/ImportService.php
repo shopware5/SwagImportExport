@@ -18,9 +18,15 @@ use SwagImportExport\Components\Session\SessionService;
 use SwagImportExport\Components\Structs\ImportRequest;
 use SwagImportExport\Components\UploadPathProvider;
 use SwagImportExport\Components\Utils\SnippetsHelper;
+use SwagImportExport\Tests\Helper\DataProvider\ProfileDataProvider;
 
 class ImportService implements ImportServiceInterface
 {
+    private const SUPPORTED_UNPROCESSED_DATA_PROFILE_TYPES = [
+        ProfileDataProvider::PRODUCT_PROFILE_TYPE,
+        ProfileDataProvider::PRODUCTS_IMAGES_PROFILE_TYPE,
+    ];
+
     private UploadPathProvider $uploadPathProvider;
 
     private LoggerInterface $logger;
@@ -70,8 +76,11 @@ class ImportService implements ImportServiceInterface
     {
         yield from $this->doImport($importRequest, $session);
         $this->modelManager->clear();
-        foreach ($this->importUnprocessedData($importRequest) as $ignored) {
-            // nth
+        $profileType = $importRequest->profileEntity->getType();
+        if (\in_array($profileType, self::SUPPORTED_UNPROCESSED_DATA_PROFILE_TYPES, true)) {
+            foreach ($this->importUnprocessedData($importRequest) as $ignored) {
+                // nth
+            }
         }
     }
 
@@ -82,20 +91,18 @@ class ImportService implements ImportServiceInterface
 
     protected function importUnprocessedData(ImportRequest $request): \Generator
     {
-        $profilesMapper = ['articles', 'articlesImages'];
-
         // loops the unprocessed data
         $pathInfoBaseName = \pathinfo($request->inputFile, \PATHINFO_BASENAME);
-        foreach ($profilesMapper as $profileName) {
+        foreach (self::SUPPORTED_UNPROCESSED_DATA_PROFILE_TYPES as $profileType) {
             $tmpFile = $this->uploadPathProvider->getRealPath(
-                $pathInfoBaseName . '-' . $profileName . '-swag.csv'
+                $pathInfoBaseName . '-' . $profileType . '-swag.csv'
             );
 
             if (!\file_exists($tmpFile)) {
                 continue;
             }
 
-            $profile = $this->profileFactory->loadHiddenProfile($profileName);
+            $profile = $this->profileFactory->loadHiddenProfile($profileType);
 
             $innerSession = $this->sessionService->createSession();
 

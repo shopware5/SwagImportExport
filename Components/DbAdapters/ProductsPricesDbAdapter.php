@@ -24,6 +24,7 @@ use Shopware\Models\Customer\Group as CustomerGroup;
 use Shopware\Models\Shop\Shop;
 use Shopware\Models\Tax\Tax;
 use SwagImportExport\Components\DataManagers\ProductPriceDataManager;
+use SwagImportExport\Components\DataManagers\Products\PriceDataManager;
 use SwagImportExport\Components\Exception\AdapterException;
 use SwagImportExport\Components\Utils\SnippetsHelper;
 use SwagImportExport\Components\Utils\SwagVersionHelper;
@@ -515,7 +516,7 @@ class ProductsPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
                 WHERE price.customerGroup = :customerGroup
                 AND price.articleDetailsId = :detailId
                 AND price.articleId = :articleId
-                AND price.to LIKE 'beliebig'";
+                AND price.to LIKE :noUpperLimitGraduatedPrices";
 
         $query = $this->manager->createQuery($dql);
 
@@ -523,6 +524,7 @@ class ProductsPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
             ->setParameter('customerGroup', $record['priceGroup'])
             ->setParameter('detailId', $articleDetailId)
             ->setParameter('articleId', $articleId)
+            ->setParameter('noUpperLimitGraduatedPrices', PriceDataManager::NO_UPPER_LIMIT_GRADUATED_PRICES)
             ->execute();
     }
 }

@@ -111,10 +111,8 @@ class ImportCommand extends ShopwareCommand
 
         $output->writeln('<info>' . \sprintf('Total count: %d.', $count) . '</info>');
 
-        $lastPosition = 0;
         foreach ($this->importService->import($importRequest, $session) as [$profileName, $position]) {
-            $output->writeln('<info>' . \sprintf('Processed profileName: %d.', $lastPosition) . '</info>');
-            $lastPosition = $position;
+            $output->writeln('<info>' . \sprintf('Processed %s: %d.', $profileName, $position) . '</info>');
         }
     }
 

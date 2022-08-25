@@ -41,7 +41,11 @@ class Logger implements LoggerInterface
         $loggerModel = new LoggerEntity();
 
         $messages = \implode(';', $messages);
-        $loggerModel->setSession($session->getEntity());
+        $sessionEntity = $session->getEntity();
+        // Do not write session if it was not started at all
+        if ($sessionEntity->getState() !== Session::SESSION_NEW) {
+            $loggerModel->setSession($sessionEntity);
+        }
         $loggerModel->setMessage($messages);
         $loggerModel->setCreatedAt();
         $loggerModel->setStatus($status);

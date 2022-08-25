@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Components\DataManagers;
 
+use SwagImportExport\Components\DataManagers\Products\PriceDataManager;
+
 class ProductPriceDataManager implements \Enlight_Hook
 {
     /**
@@ -45,7 +47,7 @@ class ProductPriceDataManager implements \Enlight_Hook
                     $record[$key] = 1;
                     break;
                 case 'to':
-                    $record[$key] = 'beliebig';
+                    $record[$key] = PriceDataManager::NO_UPPER_LIMIT_GRADUATED_PRICES;
                     break;
                 case 'percent':
                     $record[$key] = 0.0;

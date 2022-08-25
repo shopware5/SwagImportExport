@@ -161,14 +161,14 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
             ->orderBy('detail.articleId', 'ASC')
             ->orderBy('detail.kind', 'ASC');
 
-        if (!$filter[self::VARIANTS_FILTER_KEY]) {
+        if (!isset($filter[self::VARIANTS_FILTER_KEY])) {
             $builder->andWhere('detail.kind = ' . self::MAIN_KIND);
         }
 
-        if ($filter[self::CATEGORIES_FILTER_KEY]) {
-            $category = $this->modelManager->find(Category::class, $filter['categories'][0]);
+        if (isset($filter[self::CATEGORIES_FILTER_KEY])) {
+            $category = $this->modelManager->find(Category::class, $filter[self::CATEGORIES_FILTER_KEY][0]);
             if (!$category instanceof Category) {
-                throw new ModelNotFoundException(Category::class, $filter['categories'][0]);
+                throw new ModelNotFoundException(Category::class, $filter[self::CATEGORIES_FILTER_KEY][0]);
             }
 
             $categories = [];
@@ -187,7 +187,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
             $builder->join('detail.article', 'article')
                 ->andWhere('article.id IN (:ids)')
                 ->setParameter('ids', $productIds);
-        } elseif ($filter[self::PRODUCT_STREAM_ID_FILTER_KEY]) {
+        } elseif (isset($filter[self::PRODUCT_STREAM_ID_FILTER_KEY])) {
             $productStreamId = $filter[self::PRODUCT_STREAM_ID_FILTER_KEY][0];
 
             $shop = $this->shopRepository->getActiveDefault();
@@ -272,7 +272,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
                 }
             }
 
-            if (!$record['inStock']) {
+            if (empty($record['inStock'])) {
                 $record['inStock'] = '0';
             }
         }
@@ -416,17 +416,19 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
         }
 
         foreach ($result as $index => $translation) {
-            $matchedProductTranslation = $mappedProducts[$translation['articleId']][$translation['languageId']];
+            $matchedProductTranslation = $mappedProducts[$translation['articleId']][$translation['languageId']] ?? [];
             if ((int) $translation['variantKind'] === 1 && $matchedProductTranslation) {
                 $serializeData = \unserialize($matchedProductTranslation['objectdata']);
                 foreach ($translationFields as $key => $field) {
-                    $result[$index][$field] = $serializeData[$key];
+                    if (isset($serializeData[$key])) {
+                        $result[$index][$field] = $serializeData[$key];
+                    }
                 }
 
                 continue;
             }
 
-            if (!\is_string($matchedProductTranslation['objectdata'])) {
+            if (!isset($matchedProductTranslation['objectdata']) || !\is_string($matchedProductTranslation['objectdata'])) {
                 continue;
             }
 
@@ -1090,7 +1092,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
             ->groupBy('article.id');
 
         return \array_map(
-            function ($item) {
+            function (array $item) {
                 return (int) $item['id'];
             },
             $productIds->getQuery()->getResult()
@@ -1148,7 +1150,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
         $ids = [];
         if (!empty($category['categoryPath'])) {
             foreach (\explode('|', $category['categoryPath']) as $id) {
-                $ids[] = $mapper[$id];
+                $ids[] = $mapper[$id] ?? null;
             }
         }
         \krsort($ids);
@@ -1182,7 +1184,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
             'processed' => 1,
         ];
 
-        $this->setUnprocessedData('articles', 'article', $articleData);
+        $this->setUnprocessedData(self::PRODUCT_ADAPTER, 'article', $articleData);
     }
 
     /**
@@ -1279,7 +1281,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
                         $articleWriterResult->getDetailId(),
                         \array_filter(
                             $records['price'] ?? [],
-                            function ($price) use ($index) {
+                            function (array $price) use ($index) {
                                 return (int) $price['parentIndexElement'] === $index;
                             }
                         )
@@ -1289,9 +1291,9 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
                         $articleWriterResult->getProductId(),
                         \array_filter(
                             $records['category'] ?? [],
-                            function ($category) use ($index) {
+                            function (array $category) use ($index) {
                                 return (int) $category['parentIndexElement'] === $index
-                                    && ($category['categoryId'] || $category['categoryPath']);
+                                    && ($category['categoryId'] || ($category['categoryPath'] ?? null));
                             }
                         )
                     );
@@ -1300,7 +1302,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
                         $articleWriterResult,
                         \array_filter(
                             $records['configurator'] ?? [],
-                            function ($configurator) use ($index) {
+                            function (array $configurator) use ($index) {
                                 return (int) $configurator['parentIndexElement'] === $index;
                             }
                         )
@@ -1318,7 +1320,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
                         $articleWriterResult->getMainDetailId(),
                         \array_filter(
                             $records['translation'] ?? [],
-                            function ($translation) use ($index) {
+                            function (array $translation) use ($index) {
                                 return (int) $translation['parentIndexElement'] === $index;
                             }
                         )
@@ -1337,7 +1339,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
                     $article['mainNumber'],
                     \array_filter(
                         $records['accessory'] ?? [],
-                        function ($accessory) use ($index, $articleWriterResult) {
+                        function (array $accessory) use ($index, $articleWriterResult) {
                             return (int) $accessory['parentIndexElement'] === $index
                                 && $articleWriterResult->getMainDetailId() === $articleWriterResult->getDetailId();
                         }
@@ -1351,7 +1353,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
                     $article['mainNumber'],
                     \array_filter(
                         $records['similar'] ?? [],
-                        function ($similar) use ($index, $articleWriterResult) {
+                        function (array $similar) use ($index, $articleWriterResult) {
                             return (int) $similar['parentIndexElement'] === $index
                                 && $articleWriterResult->getMainDetailId() === $articleWriterResult->getDetailId();
                         }
@@ -1365,7 +1367,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
                     $article['mainNumber'],
                     \array_filter(
                         $records['image'] ?? [],
-                        function ($image) use ($index) {
+                        function (array $image) use ($index) {
                             return (int) $image['parentIndexElement'] === $index;
                         }
                     )
@@ -1404,7 +1406,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
     {
         return \array_filter(
             $records['propertyValue'] ?? [],
-            function ($property) use ($index, $articleWriterResult) {
+            function (array $property) use ($index, $articleWriterResult) {
                 return (int) $property['parentIndexElement'] === $index
                     && $articleWriterResult->getMainDetailId() === $articleWriterResult->getDetailId();
             }

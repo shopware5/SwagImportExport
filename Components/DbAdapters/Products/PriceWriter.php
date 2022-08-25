@@ -127,7 +127,7 @@ class PriceWriter
                 }
 
                 if ($taxInput) {
-                    $price['regulationPrice'] = \round($price['regulationPrice'] * (100 + $tax) / 100, 2);
+                    $price['regulationPrice'] = \round(($price['regulationPrice'] ?? 0) * (100 + $tax) / 100, 2);
                 }
             }
         }

@@ -74,7 +74,7 @@ class CustomerCompleteProfile implements \JsonSerializable, ProfileMetaData
                             'name' => 'customer',
                             'index' => 0,
                             'type' => 'iteration',
-                            'adapter' => 'customers',
+                            'adapter' => 'default',
                             'parentKey' => '',
                             'shopwareField' => '',
                             'children' => $this->getCustomerFields(),

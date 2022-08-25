@@ -74,7 +74,7 @@ class ProductWriter
         $shouldCreateMainProduct = false;
         [$mainVariantId, $productId, $variantId] = $this->findExistingEntries($product);
 
-        if ($product['processed']) {
+        if (isset($product['processed'])) {
             if (!$mainVariantId) {
                 $mainVariantId = $variantId;
             }

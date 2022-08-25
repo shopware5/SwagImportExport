@@ -515,7 +515,7 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
             $customer = $this->manager->getRepository(Customer::class)->findBy($filter);
 
             // checks for multiple email address
-            if (\count($customer) > 0 && $customer[0]->getNumber() !== $record['customerNumber']) {
+            if (\count($customer) > 0 && (isset($record['customerNumber']) && $customer[0]->getNumber() !== $record['customerNumber'])) {
                 $message = SnippetsHelper::getNamespace()
                     ->get('adapters/customer/multiple_email', 'There are existing email address/es with %s having different customer numbers. Please provide subshopID or equalize customer number');
                 throw new AdapterException(\sprintf($message, $record['email']));
