@@ -20,32 +20,39 @@ class Migration3 extends AbstractPluginMigration
             return;
         }
 
-        $pluginId = $this->connection->query(<<<SQL
-        SELECT id FROM s_core_plugins WHERE name = 'SwagImportExport'
-SQL)->fetchColumn();
+        $pluginId = (int) $this->connection->query("SELECT id FROM s_core_plugins WHERE name = 'SwagImportExport'")->fetchColumn();
 
-        $sql = <<<SQL
-            INSERT IGNORE INTO s_core_acl_resources
-            (`name`, `pluginID`)
-            VALUES
-            ('swagimportexport', :pluginId);
+        $aclResourceId = (int) $this->connection->query("SELECT id FROM s_core_acl_resources WHERE name = 'swagimportexport'")->fetchColumn();
+
+        if ($aclResourceId === 0) {
+            $sql = <<<SQL
+INSERT INTO s_core_acl_resources
+(`name`, `pluginID`)
+VALUES
+('swagimportexport', :pluginId);
 SQL;
-
-        $this->connection->prepare($sql)->execute(['pluginId' => $pluginId]);
-
-        $lastInsertedId = $this->connection->lastInsertId();
+            $this->connection->prepare($sql)->execute(['pluginId' => $pluginId]);
+            $aclResourceId = $this->connection->lastInsertId();
+        } else {
+            $sql = <<<SQL
+UPDATE s_core_acl_resources
+SET `pluginID` = :pluginId
+WHERE id = :aclResourceId;
+SQL;
+            $this->connection->prepare($sql)->execute(['pluginId' => $pluginId, 'aclResourceId' => $aclResourceId]);
+        }
 
         foreach (['export', 'import', 'profile', 'read'] as $action) {
             $sql = <<<SQL
             INSERT IGNORE INTO s_core_acl_privileges
             (`name`, `resourceID`)
             VALUES
-            (:action, :lastInsertedId);
+            (:action, :aclResourceId);
             SQL;
 
             $this->connection->prepare($sql)->execute([
                 'action' => $action,
-                'lastInsertedId' => $lastInsertedId,
+                'aclResourceId' => $aclResourceId,
             ]);
         }
     }
