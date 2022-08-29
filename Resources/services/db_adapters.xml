@@ -143,7 +143,6 @@
             <argument type="service" id="models"/>
             <argument type="service" id="SwagImportExport\Components\Service\UnderscoreToCamelCaseService"/>
             <argument type="service" id="shopware.components.state_translator"/>
-            <argument type="service" id="config"/>
 
             <tag name="import_export.db_adapter"/>
             <tag name="import_export.proxyable"/>

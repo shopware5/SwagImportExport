@@ -95,7 +95,7 @@ class XmlFileWriter implements FileWriter
      *
      * @return array<string>
      */
-    protected function splitHeaderFooter(array $data): array
+    private function splitHeaderFooter(array $data): array
     {
         // converting the whole template tree without the iteration part
         $encodedData = $this->xmlConvertor->encode($data);

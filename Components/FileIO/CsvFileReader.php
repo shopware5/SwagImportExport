@@ -132,7 +132,7 @@ class CsvFileReader implements FileReader
     /**
      * @param array<int, array<string, mixed>> $rows
      */
-    protected function toUtf8(array $rows): array
+    private function toUtf8(array $rows): array
     {
         // detect whether the input is UTF-8 or ISO-8859-1
         \array_walk_recursive(

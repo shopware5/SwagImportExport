@@ -35,20 +35,16 @@ class MainOrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
 
     private StateTranslatorServiceInterface $stateTranslator;
 
-    private \Shopware_Components_Config $config;
-
     public function __construct(
         Enlight_Components_Db_Adapter_Pdo_Mysql $db,
         ModelManager $entityManager,
         UnderscoreToCamelCaseServiceInterface $underscoreToCamelCaseService,
-        StateTranslatorServiceInterface $stateTranslator,
-        \Shopware_Components_Config $config
+        StateTranslatorServiceInterface $stateTranslator
     ) {
         $this->db = $db;
         $this->modelManager = $entityManager;
         $this->underscoreToCamelCaseService = $underscoreToCamelCaseService;
         $this->stateTranslator = $stateTranslator;
-        $this->config = $config;
     }
 
     public function supports(string $adapter): bool
@@ -161,9 +157,61 @@ class MainOrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
+     * @param array<string, mixed> $records
+     */
+    public function write(array $records): void
+    {
+        $message = SnippetsHelper::getNamespace()
+            ->get('adapters/mainOrders/use_order_profile_for_import', 'This is only an export profile. Please use `Orders` profile for imports!');
+        throw new \RuntimeException($message);
+    }
+
+    /**
      * @return array<string>
      */
-    public function getOrderColumns(): array
+    public function getLogMessages(): array
+    {
+        return $this->logMessages;
+    }
+
+    public function getLogState(): ?string
+    {
+        return $this->logState;
+    }
+
+    public function getSections(): array
+    {
+        return [
+            ['id' => 'order', 'name' => 'order'],
+            ['id' => 'taxRateSum', 'name' => 'taxRateSum'],
+        ];
+    }
+
+    /**
+     * @return array<string>
+     */
+    public function getParentKeys(): array
+    {
+        return ['orders.id as orderId'];
+    }
+
+    /**
+     * @return array<string>
+     */
+    public function getColumns(string $section): array
+    {
+        $method = 'get' . \ucfirst($section) . 'Columns';
+        if (\method_exists($this, $method)) {
+            return $this->{$method}();
+        }
+
+        return [];
+    }
+
+    /**
+     * @return array<string>
+     */
+    private function getOrderColumns(): array
     {
         $columns = [
             'orders.id as orderId',
@@ -226,7 +274,7 @@ class MainOrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * @return array<string>
      */
-    public function getAttributes(): array
+    private function getAttributes(): array
     {
         // Attributes
         $attributes = $this->db->query('SELECT * FROM s_order_attributes LIMIT 1')->fetch();
@@ -254,83 +302,10 @@ class MainOrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @param array<string, mixed> $records
-     */
-    public function write(array $records): void
-    {
-        $message = SnippetsHelper::getNamespace()
-            ->get('adapters/mainOrders/use_order_profile_for_import', 'This is only an export profile. Please use `Orders` profile for imports!');
-        throw new \RuntimeException($message);
-    }
-
-    public function saveMessage(string $message): void
-    {
-        $errorMode = $this->config->get('SwagImportExportErrorMode');
-        if ($errorMode === false) {
-            throw new \RuntimeException($message);
-        }
-
-        $this->setLogMessages($message);
-        $this->setLogState('true');
-    }
-
-    /**
-     * @return array<string>
-     */
-    public function getLogMessages(): array
-    {
-        return $this->logMessages;
-    }
-
-    public function setLogMessages(string $logMessages): void
-    {
-        $this->logMessages[] = $logMessages;
-    }
-
-    public function getLogState(): ?string
-    {
-        return $this->logState;
-    }
-
-    public function setLogState(string $logState): void
-    {
-        $this->logState = $logState;
-    }
-
-    public function getSections(): array
-    {
-        return [
-            ['id' => 'order', 'name' => 'order'],
-            ['id' => 'taxRateSum', 'name' => 'taxRateSum'],
-        ];
-    }
-
-    /**
-     * @return array<string>
-     */
-    public function getParentKeys(): array
-    {
-        return ['orders.id as orderId'];
-    }
-
-    /**
-     * @return array<string>
-     */
-    public function getColumns(string $section): array
-    {
-        $method = 'get' . \ucfirst($section) . 'Columns';
-        if (\method_exists($this, $method)) {
-            return $this->{$method}();
-        }
-
-        return [];
-    }
-
-    /**
      * @param array<string>|string $columns
      * @param array<int>           $ids
      */
-    public function getOrderBuilder($columns, array $ids): QueryBuilder
+    private function getOrderBuilder($columns, array $ids): QueryBuilder
     {
         $builder = $this->modelManager->createQueryBuilder();
         $builder->select($columns)
@@ -358,7 +333,7 @@ class MainOrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * @param array<int> $ids
      */
-    public function getTaxSumBuilder(array $ids): QueryBuilder
+    private function getTaxSumBuilder(array $ids): QueryBuilder
     {
         $builder = $this->modelManager->createQueryBuilder();
         $builder->select(['details.orderId, orders.invoiceAmount, orders.invoiceAmountNet, orders.invoiceShipping, orders.invoiceShippingNet, orders.net, details.price, details.quantity, details.taxId, details.taxRate'])

@@ -164,19 +164,6 @@ class Session
     }
 
     /**
-     * Update session username
-     *
-     * @param ?string $username
-     */
-    public function setUsername(?string $username): void
-    {
-        $this->sessionEntity->setUserName($username);
-
-        $this->manager->persist($this->sessionEntity);
-        $this->manager->flush();
-    }
-
-    /**
      * Returns the state of the session.
      * active:
      *     Session is running, and we can read/write records.
@@ -208,16 +195,6 @@ class Session
     public function getPosition(): int
     {
         return $this->getEntity()->getPosition() ?? 0;
-    }
-
-    public function getId(): int
-    {
-        return $this->getEntity()->getId();
-    }
-
-    public function getTotalCount(): int
-    {
-        return $this->getEntity()->getTotalCount();
     }
 
     /**

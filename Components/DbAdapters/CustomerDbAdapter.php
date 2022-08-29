@@ -103,102 +103,6 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
         $this->defaultValues = $values;
     }
 
-    /**
-     * @return array<string>
-     */
-    public function getCustomerColumns(): array
-    {
-        $columns = [
-            'customer.id as id',
-            'customer.hashPassword as password',
-            'unhashedPassword',
-            'customer.encoderName as encoder',
-            'customer.email as email',
-            'customer.active as active',
-            'customer.accountMode as accountMode',
-            'customer.paymentId as paymentID',
-            "DATE_FORMAT(customer.firstLogin, '%Y-%m-%d') as firstLogin",
-            "DATE_FORMAT(customer.lastLogin, '%Y-%m-%d') as lastLogin",
-            'customer.sessionId as sessionId',
-            'customer.newsletter as newsletter',
-            'customer.validation as validation',
-            'customer.affiliate as affiliate',
-            'customer.groupKey as customergroup',
-            'customer.paymentPreset as paymentPreset',
-            'customer.languageId as language',
-            'customer.shopId as subshopID',
-            'customer.referer as referer',
-            'customer.priceGroupId as priceGroupId',
-            'customer.internalComment as internalComment',
-            'customer.failedLogins as failedLogins',
-            'customer.lockedUntil as lockedUntil',
-            'customer.number as customerNumber',
-            "DATE_FORMAT(customer.birthday, '%Y-%m-%d') as birthday",
-        ];
-
-        $attributesSelect = $this->getAttributesFieldsByTableName('s_user_attributes', 'userID', 'attribute', 'attrCustomer');
-
-        if (!empty($attributesSelect)) {
-            $columns = \array_merge($columns, $attributesSelect);
-        }
-
-        return $columns;
-    }
-
-    public function getBillingColumns(): array
-    {
-        $columns = [
-            'billing.company as billingCompany',
-            'billing.department as billingDepartment',
-            'billing.salutation as billingSalutation',
-            'billing.firstname as billingFirstname',
-            'billing.lastname as billingLastname',
-            'billing.street as billingStreet',
-            'billing.zipcode as billingZipcode',
-            'billing.city as billingCity',
-            'billing.phone as billingPhone',
-            'billing.countryId as billingCountryID',
-            'billing.stateId as billingStateID',
-            'billing.vatId as ustid',
-            'billing.additionalAddressLine1 as billingAdditionalAddressLine1',
-            'billing.additionalAddressLine2 as billingAdditionalAddressLine2',
-        ];
-
-        $attributesSelect = $this->getAttributesFieldsByTableName('s_user_addresses_attributes', 'address_id', 'billingAttribute', 'attrBilling');
-
-        if (!empty($attributesSelect)) {
-            $columns = \array_merge($columns, $attributesSelect);
-        }
-
-        return $columns;
-    }
-
-    public function getShippingColumns(): array
-    {
-        $columns = [
-            'shipping.company as shippingCompany',
-            'shipping.department as shippingDepartment',
-            'shipping.salutation as shippingSalutation',
-            'shipping.firstname as shippingFirstname',
-            'shipping.lastname as shippingLastname',
-            'shipping.street as shippingStreet',
-            'shipping.zipcode as shippingZipcode',
-            'shipping.city as shippingCity',
-            'shipping.countryId as shippingCountryID',
-            'shipping.stateId as shippingStateID',
-            'shipping.additionalAddressLine1 as shippingAdditionalAddressLine1',
-            'shipping.additionalAddressLine2 as shippingAdditionalAddressLine2',
-        ];
-
-        $attributesSelect = $this->getAttributesFieldsByTableName('s_user_addresses_attributes', 'address_id', 'shippingAttribute', 'attrShipping');
-
-        if (!empty($attributesSelect)) {
-            $columns = \array_merge($columns, $attributesSelect);
-        }
-
-        return $columns;
-    }
-
     public function read(array $ids, array $columns): array
     {
         foreach ($columns as $key => $value) {
@@ -386,32 +290,9 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
         $this->manager->flush();
     }
 
-    /**
-     * @throws \Exception
-     */
-    public function saveMessage(string $message): void
-    {
-        $errorMode = $this->config->get('SwagImportExportErrorMode');
-
-        if ($errorMode === false) {
-            throw new \Exception($message);
-        }
-
-        $this->setLogMessages([$message]);
-        $this->setLogState('true');
-    }
-
     public function getLogMessages(): array
     {
         return $this->logMessages;
-    }
-
-    /**
-     * @param array<string> $logMessages
-     */
-    public function setLogMessages(array $logMessages): void
-    {
-        $this->logMessages[] = $logMessages;
     }
 
     /**
@@ -420,11 +301,6 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
     public function getLogState(): ?string
     {
         return $this->logState;
-    }
-
-    public function setLogState(?string $logState): void
-    {
-        $this->logState = $logState;
     }
 
     public function getSections(): array
@@ -437,7 +313,142 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
         ];
     }
 
-    public function getAttributesFieldsByTableName(string $tableName, string $columnName, string $prefixField, string $prefixSelect): array
+    public function getColumns(string $section): array
+    {
+        $method = 'get' . \ucfirst($section) . 'Columns';
+
+        if (\method_exists($this, $method)) {
+            return $this->{$method}();
+        }
+
+        return [];
+    }
+
+    /**
+     * @return array<string>
+     */
+    private function getCustomerColumns(): array
+    {
+        $columns = [
+            'customer.id as id',
+            'customer.hashPassword as password',
+            'unhashedPassword',
+            'customer.encoderName as encoder',
+            'customer.email as email',
+            'customer.active as active',
+            'customer.accountMode as accountMode',
+            'customer.paymentId as paymentID',
+            "DATE_FORMAT(customer.firstLogin, '%Y-%m-%d') as firstLogin",
+            "DATE_FORMAT(customer.lastLogin, '%Y-%m-%d') as lastLogin",
+            'customer.sessionId as sessionId',
+            'customer.newsletter as newsletter',
+            'customer.validation as validation',
+            'customer.affiliate as affiliate',
+            'customer.groupKey as customergroup',
+            'customer.paymentPreset as paymentPreset',
+            'customer.languageId as language',
+            'customer.shopId as subshopID',
+            'customer.referer as referer',
+            'customer.priceGroupId as priceGroupId',
+            'customer.internalComment as internalComment',
+            'customer.failedLogins as failedLogins',
+            'customer.lockedUntil as lockedUntil',
+            'customer.number as customerNumber',
+            "DATE_FORMAT(customer.birthday, '%Y-%m-%d') as birthday",
+        ];
+
+        $attributesSelect = $this->getAttributesFieldsByTableName('s_user_attributes', 'userID', 'attribute', 'attrCustomer');
+
+        if (!empty($attributesSelect)) {
+            $columns = \array_merge($columns, $attributesSelect);
+        }
+
+        return $columns;
+    }
+
+    private function getBillingColumns(): array
+    {
+        $columns = [
+            'billing.company as billingCompany',
+            'billing.department as billingDepartment',
+            'billing.salutation as billingSalutation',
+            'billing.firstname as billingFirstname',
+            'billing.lastname as billingLastname',
+            'billing.street as billingStreet',
+            'billing.zipcode as billingZipcode',
+            'billing.city as billingCity',
+            'billing.phone as billingPhone',
+            'billing.countryId as billingCountryID',
+            'billing.stateId as billingStateID',
+            'billing.vatId as ustid',
+            'billing.additionalAddressLine1 as billingAdditionalAddressLine1',
+            'billing.additionalAddressLine2 as billingAdditionalAddressLine2',
+        ];
+
+        $attributesSelect = $this->getAttributesFieldsByTableName('s_user_addresses_attributes', 'address_id', 'billingAttribute', 'attrBilling');
+
+        if (!empty($attributesSelect)) {
+            $columns = \array_merge($columns, $attributesSelect);
+        }
+
+        return $columns;
+    }
+
+    private function getShippingColumns(): array
+    {
+        $columns = [
+            'shipping.company as shippingCompany',
+            'shipping.department as shippingDepartment',
+            'shipping.salutation as shippingSalutation',
+            'shipping.firstname as shippingFirstname',
+            'shipping.lastname as shippingLastname',
+            'shipping.street as shippingStreet',
+            'shipping.zipcode as shippingZipcode',
+            'shipping.city as shippingCity',
+            'shipping.countryId as shippingCountryID',
+            'shipping.stateId as shippingStateID',
+            'shipping.additionalAddressLine1 as shippingAdditionalAddressLine1',
+            'shipping.additionalAddressLine2 as shippingAdditionalAddressLine2',
+        ];
+
+        $attributesSelect = $this->getAttributesFieldsByTableName('s_user_addresses_attributes', 'address_id', 'shippingAttribute', 'attrShipping');
+
+        if (!empty($attributesSelect)) {
+            $columns = \array_merge($columns, $attributesSelect);
+        }
+
+        return $columns;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    private function saveMessage(string $message): void
+    {
+        $errorMode = $this->config->get('SwagImportExportErrorMode');
+
+        if ($errorMode === false) {
+            throw new \Exception($message);
+        }
+
+        $this->setLogMessages([$message]);
+        $this->setLogState('true');
+    }
+
+    /**
+     * @param array<string> $logMessages
+     */
+    private function setLogMessages(array $logMessages): void
+    {
+        $this->logMessages[] = $logMessages;
+    }
+
+    private function setLogState(?string $logState): void
+    {
+        $this->logState = $logState;
+    }
+
+    private function getAttributesFieldsByTableName(string $tableName, string $columnName, string $prefixField, string $prefixSelect): array
     {
         $columns = $this->db->query("SHOW COLUMNS FROM $tableName")->fetchAll();
 
@@ -457,22 +468,11 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
         return $attributesSelect;
     }
 
-    public function getColumns(string $section): array
-    {
-        $method = 'get' . \ucfirst($section) . 'Columns';
-
-        if (\method_exists($this, $method)) {
-            return $this->{$method}();
-        }
-
-        return [];
-    }
-
     /**
      * @param array<array<string>|string> $columns
      * @param array<int>                  $ids
      */
-    public function getBuilder(array $columns, array $ids): QueryBuilder
+    private function getBuilder(array $columns, array $ids): QueryBuilder
     {
         $builder = $this->manager->createQueryBuilder();
         $builder->select($columns)
@@ -493,8 +493,9 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
     /**
      * @param array<string, mixed> $record
      */
-    protected function findExistingEntries(array $record): ?Customer
+    private function findExistingEntries(array $record): ?Customer
     {
+        $customer = null;
         if (isset($record['id'])) {
             $customer = $this->manager->getRepository(Customer::class)->findOneBy(['id' => $record['id']]);
         }
@@ -505,32 +506,32 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
             ]);
         }
 
-        if (!isset($customer)) {
-            $accountMode = isset($record['accountMode']) ? (int) $record['accountMode'] : 0;
-            $filter = ['email' => $record['email'], 'accountMode' => $accountMode];
-            if (isset($record['subshopID'])) {
-                $filter['shopId'] = $record['subshopID'];
-            }
-
-            $customer = $this->manager->getRepository(Customer::class)->findBy($filter);
-
-            // checks for multiple email address
-            if (\count($customer) > 0 && (isset($record['customerNumber']) && $customer[0]->getNumber() !== $record['customerNumber'])) {
-                $message = SnippetsHelper::getNamespace()
-                    ->get('adapters/customer/multiple_email', 'There are existing email address/es with %s having different customer numbers. Please provide subshopID or equalize customer number');
-                throw new AdapterException(\sprintf($message, $record['email']));
-            }
-
-            $customer = $customer[0];
+        if ($customer instanceof Customer) {
+            return $customer;
         }
 
-        return $customer;
+        $accountMode = isset($record['accountMode']) ? (int) $record['accountMode'] : 0;
+        $filter = ['email' => $record['email'], 'accountMode' => $accountMode];
+        if (isset($record['subshopID'])) {
+            $filter['shopId'] = $record['subshopID'];
+        }
+
+        $customer = $this->manager->getRepository(Customer::class)->findBy($filter);
+
+        // checks for multiple email address
+        if (\count($customer) > 0 && (isset($record['customerNumber']) && $customer[0]->getNumber() !== $record['customerNumber'])) {
+            $message = SnippetsHelper::getNamespace()
+                ->get('adapters/customer/multiple_email', 'There are existing email address/es with %s having different customer numbers. Please provide subshopID or equalize customer number');
+            throw new AdapterException(\sprintf($message, $record['email']));
+        }
+
+        return $customer[0] ?? null;
     }
 
     /**
      * @param array<string, mixed> $record
      */
-    protected function preparePassword(array &$record): void
+    private function preparePassword(array &$record): void
     {
         $passwordManager = $this->passwordManager;
         if (isset($record['unhashedPassword']) && !isset($record['password'])) {
@@ -557,7 +558,7 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
      *
      * @return array<string|int, mixed>
      */
-    protected function prepareCustomer(array &$record): array
+    private function prepareCustomer(array &$record): array
     {
         if ($this->customerMap === null) {
             $columns = $this->getCustomerColumns();
@@ -611,7 +612,7 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
      *
      * @return array<string|int, mixed>
      */
-    protected function prepareBilling(array &$record): array
+    private function prepareBilling(array &$record): array
     {
         if ($this->billingMap === null) {
             foreach ($this->getBillingColumns() as $column) {
@@ -646,7 +647,7 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
      *
      * @return array<int|string, mixed>
      */
-    protected function prepareShipping(array &$record, bool $newCustomer, array $billing): array
+    private function prepareShipping(array &$record, bool $newCustomer, array $billing): array
     {
         if ($this->shippingMap === null) {
             foreach ($this->getShippingColumns() as $column) {
@@ -691,7 +692,7 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
         return $shippingData;
     }
 
-    protected function insertCustomerAttributes(array $customerData, int $customerId, bool $newCustomer): void
+    private function insertCustomerAttributes(array $customerData, int $customerId, bool $newCustomer): void
     {
         if ($newCustomer === false) {
             return;
@@ -703,28 +704,6 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
 
         $sql = "INSERT INTO s_user_attributes (userID) VALUES ({$customerId})";
         $this->db->exec($sql);
-    }
-
-    protected function getSubShopDefaultPaymentId(int $subShopID): array
-    {
-        $query = 'SELECT `value`.value
-                   FROM s_core_config_elements AS element
-                   JOIN s_core_config_values AS `value` ON `value`.element_id = element.id
-                   WHERE `value`.shop_id = ?
-                         AND element.name = ?';
-
-        return $this->db->fetchRow($query, [$subShopID, 'defaultpayment']);
-    }
-
-    protected function getMainShopDefaultPaymentId(int $subShopID): array
-    {
-        $query = 'SELECT `value`.value
-                   FROM s_core_config_elements AS element
-                   JOIN s_core_config_values AS `value` ON `value`.element_id = element.id
-                   WHERE `value`.shop_id = (SELECT main_id FROM s_core_shops WHERE id = ?)
-                         AND element.name = ?';
-
-        return $this->db->fetchRow($query, [$subShopID, 'defaultpayment']);
     }
 
     /**

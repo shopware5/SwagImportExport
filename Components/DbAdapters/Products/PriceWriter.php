@@ -96,7 +96,7 @@ class PriceWriter
      *
      * @return array<string, mixed>
      */
-    protected function calculatePrice(array $price, bool $newPrice, float $tax): array
+    private function calculatePrice(array $price, bool $newPrice, float $tax): array
     {
         $taxInput = $this->customerGroups[$price['priceGroup']];
 
@@ -150,7 +150,7 @@ class PriceWriter
      *
      * @throws AdapterException
      */
-    protected function checkRequirements(array $price, string $orderNumber): void
+    private function checkRequirements(array $price, string $orderNumber): void
     {
         if (!\array_key_exists($price['priceGroup'], $this->customerGroups)) {
             $message = SnippetsHelper::getNamespace()->get(
@@ -172,7 +172,7 @@ class PriceWriter
     /**
      * @throws AdapterException
      */
-    protected function getProductTaxRate(int $productId): float
+    private function getProductTaxRate(int $productId): float
     {
         $sql = 'SELECT coretax.tax FROM s_core_tax AS coretax
                 LEFT JOIN s_articles AS article ON article.taxID = coretax.id
@@ -186,7 +186,7 @@ class PriceWriter
         return (float) $tax;
     }
 
-    protected function getProductOrderNumber(int $productDetailId): string
+    private function getProductOrderNumber(int $productDetailId): string
     {
         $sql = 'SELECT ordernumber FROM s_articles_details WHERE id = ?';
 

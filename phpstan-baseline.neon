@@ -66,17 +66,7 @@ parameters:
 			path: Components/DbAdapters/CustomerDbAdapter.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\CustomerDbAdapter\\:\\:getMainShopDefaultPaymentId\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DbAdapters/CustomerDbAdapter.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\CustomerDbAdapter\\:\\:getShippingColumns\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DbAdapters/CustomerDbAdapter.php
-
-		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\CustomerDbAdapter\\:\\:getSubShopDefaultPaymentId\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/DbAdapters/CustomerDbAdapter.php
 

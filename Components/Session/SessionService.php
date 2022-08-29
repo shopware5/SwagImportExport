@@ -39,17 +39,6 @@ class SessionService
         return new Session(new SessionEntity(), $this->modelManager);
     }
 
-    public function resumeSession(int $sessionId): Session
-    {
-        $sessionEntity = $this->sessionRepository->findOneBy(['id' => $sessionId]);
-
-        if (!$sessionEntity instanceof SessionEntity) {
-            throw new \Exception('Session is not existing');
-        }
-
-        return new Session($sessionEntity, $this->modelManager);
-    }
-
     public function loadSession(?int $sessionId = null): Session
     {
         if (\is_int($sessionId)) {
@@ -61,16 +50,14 @@ class SessionService
 
     public function startImportSession(ImportRequest $importRequest, Profile $profile, Session $session, int $fileSize): void
     {
-        $sessionData = [
+        $session->start($profile, [
             'type' => 'import',
             'fileName' => $this->uploadPathProvider->getFileNameFromPath($importRequest->inputFile),
             'format' => $importRequest->format,
             'serializedIds' => '',
             'username' => $importRequest->username,
             'fileSize' => $fileSize,
-        ];
-
-        $session->start($profile, $sessionData);
+        ]);
     }
 
     /**
@@ -86,5 +73,16 @@ class SessionService
             'serializedIds' => \serialize($ids),
             'totalCountedIds' => \count($ids),
         ]);
+    }
+
+    private function resumeSession(int $sessionId): Session
+    {
+        $sessionEntity = $this->sessionRepository->findOneBy(['id' => $sessionId]);
+
+        if (!$sessionEntity instanceof SessionEntity) {
+            throw new \Exception('Session is not existing');
+        }
+
+        return new Session($sessionEntity, $this->modelManager);
     }
 }

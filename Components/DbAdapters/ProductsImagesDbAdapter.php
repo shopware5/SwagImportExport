@@ -380,10 +380,20 @@ class ProductsImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
         return [];
     }
 
+    public function getLogMessages(): array
+    {
+        return $this->logMessages;
+    }
+
+    public function getLogState(): ?string
+    {
+        return $this->logState;
+    }
+
     /**
      * @throws \RuntimeException
      */
-    public function saveMessage(string $message): void
+    private function saveMessage(string $message): void
     {
         if (!$this->importExportErrorMode) {
             throw new \RuntimeException($message);
@@ -393,22 +403,12 @@ class ProductsImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
         $this->setLogState('true');
     }
 
-    public function getLogMessages(): array
-    {
-        return $this->logMessages;
-    }
-
-    public function setLogMessages(string $logMessages): void
+    private function setLogMessages(string $logMessages): void
     {
         $this->logMessages[] = $logMessages;
     }
 
-    public function getLogState(): ?string
-    {
-        return $this->logState;
-    }
-
-    public function setLogState(string $logState): void
+    private function setLogState(string $logState): void
     {
         $this->logState = $logState;
     }
@@ -417,7 +417,7 @@ class ProductsImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
      * @param array<array<string>|string> $columns
      * @param array<int>                  $ids
      */
-    public function getBuilder(array $columns, array $ids): QueryBuilder
+    private function getBuilder(array $columns, array $ids): QueryBuilder
     {
         $builder = $this->manager->createQueryBuilder();
         $builder->select($columns)
@@ -439,7 +439,7 @@ class ProductsImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * @return array<string>
      */
-    protected function getAttributesColumns(): array
+    private function getAttributesColumns(): array
     {
         $columns = $this->db->query('SHOW COLUMNS FROM `s_articles_img_attributes`')->fetchAll();
 
@@ -477,7 +477,7 @@ class ProductsImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
      *
      * @return array<string, mixed>
      */
-    protected function mapAttributes(array $image): array
+    private function mapAttributes(array $image): array
     {
         $attributes = [];
         foreach ($image as $key => $value) {
@@ -498,7 +498,7 @@ class ProductsImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
      *
      * @param array<int, array<int, array{option: Option}>> $relationGroups
      */
-    protected function setImageMappings(array $relationGroups, int $imageId): void
+    private function setImageMappings(array $relationGroups, int $imageId): void
     {
         $query = $this->manager->getRepository(Article::class)->getArticleImageDataQuery($imageId);
         $image = $query->getOneOrNullResult(AbstractQuery::HYDRATE_OBJECT);
@@ -531,7 +531,7 @@ class ProductsImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
      * @param Option[]             $options
      * @param array<string, mixed> $imageData
      */
-    protected function createImagesForOptions(array $options, array $imageData, Image $parent): void
+    private function createImagesForOptions(array $options, array $imageData, Image $parent): void
     {
         if (!$parent->getArticle() instanceof Article) {
             throw new \Exception('Article must be set');
@@ -562,7 +562,7 @@ class ProductsImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
         }
     }
 
-    protected function load(string $url, ?string $baseFilename = null): string
+    private function load(string $url, ?string $baseFilename = null): string
     {
         if (!\is_dir($this->docPath)) {
             \mkdir($this->docPath, 0777, true);

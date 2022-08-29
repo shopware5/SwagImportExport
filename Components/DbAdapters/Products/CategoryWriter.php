@@ -74,7 +74,7 @@ class CategoryWriter
     /**
      * Checks whether a category with the given id exists
      */
-    protected function isCategoryExists(int $categoryId): bool
+    private function isCategoryExists(int $categoryId): bool
     {
         $isCategoryExists = $this->db->fetchOne(
             'SELECT id FROM s_categories WHERE id = ?',
@@ -89,7 +89,7 @@ class CategoryWriter
      *
      * @param string $categoryPath -> 'English->Cars->Mazda'
      */
-    protected function getCategoryId(string $categoryPath): int
+    private function getCategoryId(string $categoryPath): int
     {
         $id = null;
         $path = '|';
@@ -113,7 +113,7 @@ class CategoryWriter
      *
      * @return int - categoryId
      */
-    protected function getId(string $description, ?int $id, string $path): int
+    private function getId(string $description, ?int $id, string $path): int
     {
         if ($id === null) {
             $sql = 'SELECT id FROM s_categories WHERE description = ? AND path IS NULL';
@@ -147,7 +147,7 @@ class CategoryWriter
      *
      * @return int created category id
      */
-    protected function insertCategory(string $description, ?int $id, string $path): int
+    private function insertCategory(string $description, ?int $id, string $path): int
     {
         if ($id === null) {
             $this->isRootExists();
@@ -167,7 +167,7 @@ class CategoryWriter
     /**
      * @throws \RuntimeException
      */
-    protected function isRootExists(): void
+    private function isRootExists(): void
     {
         $sql = 'SELECT id FROM s_categories WHERE id = 1';
         $rootId = $this->db->fetchOne($sql);
@@ -182,7 +182,7 @@ class CategoryWriter
     /**
      * Creates categories' attributes
      */
-    protected function insertCategoryAttributes(int $categoryId): void
+    private function insertCategoryAttributes(int $categoryId): void
     {
         $sql = "INSERT INTO s_categories_attributes (categoryID) VALUES ({$categoryId})";
         $this->db->exec($sql);
@@ -191,7 +191,7 @@ class CategoryWriter
     /**
      * Checks whether the category is a leaf
      */
-    protected function isLeaf(int $categoryId): bool
+    private function isLeaf(int $categoryId): bool
     {
         $isParent = $this->db->fetchOne(
             'SELECT id FROM s_categories WHERE parent = ?',
@@ -201,7 +201,7 @@ class CategoryWriter
         return $isParent === false;
     }
 
-    protected function updateProductsCategoriesRO(int $productId): void
+    private function updateProductsCategoriesRO(int $productId): void
     {
         foreach ($this->categoryIds as $categoryId) {
             $this->categorySubscriber->backlogAddAssignment($productId, $categoryId);

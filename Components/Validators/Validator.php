@@ -41,48 +41,6 @@ abstract class Validator
     }
 
     /**
-     * Validates fields with int type. It is possible this field to have as a value '-1'.
-     */
-    public function validateInt(string $value): bool
-    {
-        return (bool) \preg_match('/^-?\d+$/', $value);
-    }
-
-    /**
-     * Validates fields with float type.
-     */
-    public function validateFloat(string $value): bool
-    {
-        return (bool) \preg_match('/^-?\d+((\.|,)?\d+)*$/', $value);
-    }
-
-    /**
-     * Validates fields which contains date data.
-     */
-    public function validateDateTime(string $value): bool
-    {
-        return (bool) \strtotime($value);
-    }
-
-    /**
-     * Validates email fields.
-     *
-     * @throws \Exception
-     */
-    public function validateEmail(string $email): bool
-    {
-        return (bool) preg_match('/^\S+\@\S+\.\S+$/', $email);
-    }
-
-    /**
-     * Validates fields which contains string.
-     */
-    public function validateString(string $value): bool
-    {
-        return true;
-    }
-
-    /**
      * Checks whether required fields are filled-in
      *
      * @param array<string, mixed> $record
@@ -105,6 +63,48 @@ abstract class Validator
             $message = SnippetsHelper::getNamespace()->get($snippetName, $snippetMessage);
             throw new AdapterException($message);
         }
+    }
+
+    /**
+     * Validates fields with int type. It is possible this field to have as a value '-1'.
+     */
+    private function validateInt(string $value): bool
+    {
+        return (bool) \preg_match('/^-?\d+$/', $value);
+    }
+
+    /**
+     * Validates fields with float type.
+     */
+    private function validateFloat(string $value): bool
+    {
+        return (bool) \preg_match('/^-?\d+((\.|,)?\d+)*$/', $value);
+    }
+
+    /**
+     * Validates fields which contains date data.
+     */
+    private function validateDateTime(string $value): bool
+    {
+        return (bool) \strtotime($value);
+    }
+
+    /**
+     * Validates email fields.
+     *
+     * @throws \Exception
+     */
+    private function validateEmail(string $email): bool
+    {
+        return (bool) preg_match('/^\S+\@\S+\.\S+$/', $email);
+    }
+
+    /**
+     * Validates fields which contains string.
+     */
+    private function validateString(string $value): bool
+    {
+        return true;
     }
 
     /**

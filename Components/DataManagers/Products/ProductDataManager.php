@@ -159,20 +159,6 @@ class ProductDataManager extends DataManager implements \Enlight_Hook
     }
 
     /**
-     * Return proper values for article fields which have values NULL
-     *
-     * @param array<string, int|string> $records
-     *
-     * @return array<string, mixed>
-     */
-    public function fixDefaultValues(array $records): array
-    {
-        $defaultFieldsValues = ProductDataType::$defaultFieldsValues;
-
-        return $this->fixFieldsValues($records, $defaultFieldsValues);
-    }
-
-    /**
      * Update article records which are missing because
      * doctrine property and database mismatch
      *
@@ -198,6 +184,20 @@ class ProductDataManager extends DataManager implements \Enlight_Hook
     public function setProductVariantData(array $record, array $mapping): array
     {
         return $this->mapFields($record, $mapping);
+    }
+
+    /**
+     * Return proper values for article fields which have values NULL
+     *
+     * @param array<string, int|string> $records
+     *
+     * @return array<string, mixed>
+     */
+    private function fixDefaultValues(array $records): array
+    {
+        $defaultFieldsValues = ProductDataType::$defaultFieldsValues;
+
+        return $this->fixFieldsValues($records, $defaultFieldsValues);
     }
 
     /**

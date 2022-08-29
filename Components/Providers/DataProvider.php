@@ -75,7 +75,7 @@ class DataProvider implements \Enlight_Hook
         return null;
     }
 
-    protected function fireCreateFactoryEvent(string $adapterType): ?\Enlight_Event_EventArgs
+    private function fireCreateFactoryEvent(string $adapterType): ?\Enlight_Event_EventArgs
     {
         return $this->eventManager->notifyUntil(
             'Shopware_Components_SwagImportExport_Factories_CreateDbAdapter',

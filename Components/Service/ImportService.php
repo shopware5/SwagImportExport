@@ -84,12 +84,12 @@ class ImportService implements ImportServiceInterface
         }
     }
 
-    protected function afterImport(array $unprocessedData, string $profileName, string $outputFile, string $prevState): void
+    private function afterImport(array $unprocessedData, string $profileName, string $outputFile, string $prevState): void
     {
         $this->dataWorkflow->saveUnprocessedData($unprocessedData, $profileName, $outputFile, $prevState);
     }
 
-    protected function importUnprocessedData(ImportRequest $request): \Generator
+    private function importUnprocessedData(ImportRequest $request): \Generator
     {
         // loops the unprocessed data
         $pathInfoBaseName = \pathinfo($request->inputFile, \PATHINFO_BASENAME);

@@ -47,12 +47,6 @@ class Shopware_Controllers_Backend_SwagImportExportImport extends \Shopware_Cont
         $this->auth = $auth;
     }
 
-    public function initAcl(): void
-    {
-        $this->addAclPermission('prepareImport', 'import', 'Insufficient Permissions (prepareImport)');
-        $this->addAclPermission('import', 'import', 'Insufficient Permissions (import)');
-    }
-
     public function prepareImportAction(Request $request): void
     {
         if (!$request->get('profileId')) {
@@ -114,6 +108,12 @@ class Shopware_Controllers_Backend_SwagImportExportImport extends \Shopware_Cont
                 'msg' => $e->getMessage(),
             ]);
         }
+    }
+
+    protected function initAcl(): void
+    {
+        $this->addAclPermission('prepareImport', 'import', 'Insufficient Permissions (prepareImport)');
+        $this->addAclPermission('import', 'import', 'Insufficient Permissions (import)');
     }
 
     private function getImportRequest(Request $request): ImportRequest

@@ -147,51 +147,6 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandle
     }
 
     /**
-     * @param array<string>|string $columns
-     * @param array<int>           $ids
-     */
-    public function getBuilder($columns, array $ids): QueryBuilder
-    {
-        $builder = $this->modelManager->createQueryBuilder();
-        $builder->select($columns)
-            ->from(Category::class, 'c')
-            ->leftJoin('c.attribute', 'attr')
-            ->leftJoin('c.customerGroups', 'customerGroups')
-            ->where('c.id IN (:ids)')
-            ->setParameter('ids', $ids, Connection::PARAM_INT_ARRAY)
-            ->distinct();
-
-        return $builder;
-    }
-
-    /**
-     * @return array<int, string>
-     */
-    public function getAttributes(): array
-    {
-        $columns = $this->db->query('SHOW COLUMNS FROM s_categories_attributes')->fetchAll();
-        $attributes = $this->getFieldNames($columns);
-
-        if (!$attributes) {
-            return [];
-        }
-
-        $prefix = 'attr';
-        $attributesSelect = [];
-        foreach ($attributes as $attribute) {
-            $catAttr = $this->underscoreToCamelCaseService->underscoreToCamelCase($attribute);
-
-            if (empty($catAttr)) {
-                continue;
-            }
-
-            $attributesSelect[] = \sprintf('%s.%s as attribute%s', $prefix, $catAttr, \ucwords($catAttr));
-        }
-
-        return $attributesSelect;
-    }
-
-    /**
      * @param array<string, mixed> $records
      */
     public function write(array $records): void
@@ -271,17 +226,6 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandle
     }
 
     /**
-     * @return array<string>
-     */
-    public function getCustomerGroupsColumns(): array
-    {
-        return [
-            'c.id as categoryId',
-            'customerGroups.id as customerGroupId',
-        ];
-    }
-
-    /**
      * Returns default categories columns name
      * and category attributes
      */
@@ -322,7 +266,76 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandle
         $this->defaultValues = $values;
     }
 
-    public function saveMessage(string $message): void
+    /**
+     * @return array<string>
+     */
+    public function getLogMessages(): array
+    {
+        return $this->logMessages;
+    }
+
+    public function getLogState(): ?string
+    {
+        return $this->logState;
+    }
+
+    /**
+     * @param array<string>|string $columns
+     * @param array<int>           $ids
+     */
+    private function getBuilder($columns, array $ids): QueryBuilder
+    {
+        $builder = $this->modelManager->createQueryBuilder();
+        $builder->select($columns)
+            ->from(Category::class, 'c')
+            ->leftJoin('c.attribute', 'attr')
+            ->leftJoin('c.customerGroups', 'customerGroups')
+            ->where('c.id IN (:ids)')
+            ->setParameter('ids', $ids, Connection::PARAM_INT_ARRAY)
+            ->distinct();
+
+        return $builder;
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function getAttributes(): array
+    {
+        $columns = $this->db->query('SHOW COLUMNS FROM s_categories_attributes')->fetchAll();
+        $attributes = $this->getFieldNames($columns);
+
+        if (!$attributes) {
+            return [];
+        }
+
+        $prefix = 'attr';
+        $attributesSelect = [];
+        foreach ($attributes as $attribute) {
+            $catAttr = $this->underscoreToCamelCaseService->underscoreToCamelCase($attribute);
+
+            if (empty($catAttr)) {
+                continue;
+            }
+
+            $attributesSelect[] = \sprintf('%s.%s as attribute%s', $prefix, $catAttr, \ucwords($catAttr));
+        }
+
+        return $attributesSelect;
+    }
+
+    /**
+     * @return array<string>
+     */
+    private function getCustomerGroupsColumns(): array
+    {
+        return [
+            'c.id as categoryId',
+            'customerGroups.id as customerGroupId',
+        ];
+    }
+
+    private function saveMessage(string $message): void
     {
         $errorMode = $this->config->get('SwagImportExportErrorMode');
 
@@ -334,25 +347,12 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandle
         $this->setLogState('true');
     }
 
-    /**
-     * @return array<string>
-     */
-    public function getLogMessages(): array
-    {
-        return $this->logMessages;
-    }
-
-    public function setLogMessages(string $logMessages): void
+    private function setLogMessages(string $logMessages): void
     {
         $this->logMessages[] = $logMessages;
     }
 
-    public function getLogState(): ?string
-    {
-        return $this->logState;
-    }
-
-    public function setLogState(string $logState): void
+    private function setLogState(string $logState): void
     {
         $this->logState = $logState;
     }
@@ -362,7 +362,7 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandle
      *
      * @return array<string, mixed>
      */
-    protected function prepareData(array $data, int $index, int $categoryId, array $groups = []): array
+    private function prepareData(array $data, int $index, int $categoryId, array $groups = []): array
     {
         // prepares attribute associated data
         foreach ($data as $column => $value) {

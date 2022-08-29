@@ -13,17 +13,6 @@ use Shopware\Bundle\CustomerSearchBundle\Condition\HasNoAddressWithCountryCondit
 
 class SwagVersionHelper
 {
-    public static function hasMinimumVersion(string $version): bool
-    {
-        $actualVersion = Shopware()->Config()->get('version');
-
-        if ($actualVersion === '___VERSION___') {
-            return true;
-        }
-
-        return \version_compare($actualVersion, $version, '>=');
-    }
-
     public static function isShopware578(): bool
     {
         return class_exists(HasNoAddressWithCountryCondition::class);

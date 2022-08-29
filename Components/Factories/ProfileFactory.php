@@ -116,7 +116,7 @@ class ProfileFactory implements \Enlight_Hook
         return new Profile($profileEntity);
     }
 
-    public function getDefaultTreeByBaseProfile(int $baseProfileId): string
+    private function getDefaultTreeByBaseProfile(int $baseProfileId): string
     {
         return $this->modelManager
             ->getRepository(ProfileEntity::class)

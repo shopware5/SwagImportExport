@@ -52,12 +52,6 @@ class Shopware_Controllers_Backend_SwagImportExportExport extends \Shopware_Cont
         $this->auth = $auth;
     }
 
-    public function initAcl(): void
-    {
-        $this->addAclPermission('prepareExport', 'export', 'Insufficient Permissions (prepareExport)');
-        $this->addAclPermission('export', 'export', 'Insufficient Permissions (export)');
-    }
-
     public function prepareExportAction(): void
     {
         $profile = $this->getProfile();
@@ -118,6 +112,12 @@ class Shopware_Controllers_Backend_SwagImportExportExport extends \Shopware_Cont
             'fileName' => $fileName,
             'profileId' => $this->Request()->getParam('profileId'),
         ]]);
+    }
+
+    protected function initAcl(): void
+    {
+        $this->addAclPermission('prepareExport', 'export', 'Insufficient Permissions (prepareExport)');
+        $this->addAclPermission('export', 'export', 'Insufficient Permissions (export)');
     }
 
     private function getExportRequest(Profile $profile, string $format): ExportRequest

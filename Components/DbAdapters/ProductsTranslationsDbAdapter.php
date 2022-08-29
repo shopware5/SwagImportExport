@@ -221,19 +221,6 @@ class ProductsTranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @throws \Exception
-     */
-    public function saveMessage(string $message): void
-    {
-        if (!$this->importExportErrorMode) {
-            throw new \Exception($message);
-        }
-
-        $this->setLogMessages($message);
-        $this->setLogState('true');
-    }
-
-    /**
      * @return array<string>
      */
     public function getLogMessages(): array
@@ -241,19 +228,9 @@ class ProductsTranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
         return $this->logMessages;
     }
 
-    public function setLogMessages(string $logMessages): void
-    {
-        $this->logMessages[] = $logMessages;
-    }
-
     public function getLogState(): ?string
     {
         return $this->logState;
-    }
-
-    public function setLogState(string $logState): void
-    {
-        $this->logState = $logState;
     }
 
     public function getSections(): array
@@ -275,11 +252,34 @@ class ProductsTranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
+     * @throws \Exception
+     */
+    private function saveMessage(string $message): void
+    {
+        if (!$this->importExportErrorMode) {
+            throw new \Exception($message);
+        }
+
+        $this->setLogMessages($message);
+        $this->setLogState('true');
+    }
+
+    private function setLogMessages(string $logMessages): void
+    {
+        $this->logMessages[] = $logMessages;
+    }
+
+    private function setLogState(string $logState): void
+    {
+        $this->logState = $logState;
+    }
+
+    /**
      * @param array<int> $ids
      *
      * @return array<string, string>
      */
-    public function getTranslations(array $ids): array
+    private function getTranslations(array $ids): array
     {
         $translationIds = \implode(',', $ids);
 
@@ -312,7 +312,7 @@ class ProductsTranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
      *
      * @return array<array<string, string>>
      */
-    protected function prepareTranslations(array $translations): array
+    private function prepareTranslations(array $translations): array
     {
         $translationAttr = [];
 

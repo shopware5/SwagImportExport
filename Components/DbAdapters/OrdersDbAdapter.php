@@ -302,18 +302,6 @@ class OrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
         $this->modelManager->flush();
     }
 
-    public function saveMessage(string $message): void
-    {
-        $errorMode = $this->config->get('SwagImportExportErrorMode');
-
-        if ($errorMode === false) {
-            throw new \Exception($message);
-        }
-
-        $this->setLogMessages($message);
-        $this->setLogState('true');
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -322,22 +310,12 @@ class OrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
         return $this->logMessages;
     }
 
-    public function setLogMessages(string $logMessages): void
-    {
-        $this->logMessages[] = $logMessages;
-    }
-
     /**
      * {@inheritDoc}
      */
     public function getLogState(): ?string
     {
         return $this->logState;
-    }
-
-    public function setLogState(string $logState): void
-    {
-        $this->logState = $logState;
     }
 
     /**
@@ -494,6 +472,28 @@ class OrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
         }
 
         return $this->eventManager->filter(self::ORDERS_DB_ADAPTER_ADJUST_COLUMNS, $columns);
+    }
+
+    private function saveMessage(string $message): void
+    {
+        $errorMode = $this->config->get('SwagImportExportErrorMode');
+
+        if ($errorMode === false) {
+            throw new \Exception($message);
+        }
+
+        $this->setLogMessages($message);
+        $this->setLogState('true');
+    }
+
+    private function setLogMessages(string $logMessages): void
+    {
+        $this->logMessages[] = $logMessages;
+    }
+
+    private function setLogState(string $logState): void
+    {
+        $this->logState = $logState;
     }
 
     /**

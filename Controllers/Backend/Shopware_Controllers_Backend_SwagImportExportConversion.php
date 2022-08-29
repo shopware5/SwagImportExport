@@ -18,14 +18,6 @@ use SwagImportExport\Models\Profile;
  */
 class Shopware_Controllers_Backend_SwagImportExportConversion extends \Shopware_Controllers_Backend_ExtJs
 {
-    public function initAcl(): void
-    {
-        $this->addAclPermission('getConversions', 'export', 'Insufficient Permissions (getConversions)');
-        $this->addAclPermission('createConversion', 'export', 'Insufficient Permissions (createConversion)');
-        $this->addAclPermission('updateConversion', 'export', 'Insufficient Permissions (updateConversion)');
-        $this->addAclPermission('deleteConversion', 'export', 'Insufficient Permissions (deleteConversion)');
-    }
-
     public function getConversionsAction(): void
     {
         $profileId = $this->Request()->getParam('profileId');
@@ -141,5 +133,13 @@ class Shopware_Controllers_Backend_SwagImportExportConversion extends \Shopware_
         } catch (\Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage(), 'data' => $data]);
         }
+    }
+
+    protected function initAcl(): void
+    {
+        $this->addAclPermission('getConversions', 'export', 'Insufficient Permissions (getConversions)');
+        $this->addAclPermission('createConversion', 'export', 'Insufficient Permissions (createConversion)');
+        $this->addAclPermission('updateConversion', 'export', 'Insufficient Permissions (updateConversion)');
+        $this->addAclPermission('deleteConversion', 'export', 'Insufficient Permissions (deleteConversion)');
     }
 }

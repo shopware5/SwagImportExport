@@ -31,27 +31,6 @@ class CustomerCompleteDbAdapter extends CustomerDbAdapter
         return $this->getCustomerColumns();
     }
 
-    public function getCustomerColumns(): array
-    {
-        return [
-            'customer',
-            'attribute',
-        ];
-    }
-
-    public function getBuilder(array $columns, array $ids): QueryBuilder
-    {
-        $builder = $this->manager->createQueryBuilder();
-        $builder->select($columns)
-            ->from(Customer::class, 'customer')
-            ->leftJoin('customer.attribute', 'attribute')
-            ->groupBy('customer.id')
-            ->where('customer.id IN (:ids)')
-            ->setParameter('ids', $ids);
-
-        return $builder;
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -118,6 +97,34 @@ class CustomerCompleteDbAdapter extends CustomerDbAdapter
         $result['default'] = DbAdapterHelper::decodeHtmlEntities($customers);
 
         return $result;
+    }
+
+    /**
+     * @return array<string>
+     */
+    private function getCustomerColumns(): array
+    {
+        return [
+            'customer',
+            'attribute',
+        ];
+    }
+
+    /**
+     * @param array<array<string>|string> $columns
+     * @param array<int>                  $ids
+     */
+    private function getBuilder(array $columns, array $ids): QueryBuilder
+    {
+        $builder = $this->manager->createQueryBuilder();
+        $builder->select($columns)
+            ->from(Customer::class, 'customer')
+            ->leftJoin('customer.attribute', 'attribute')
+            ->groupBy('customer.id')
+            ->where('customer.id IN (:ids)')
+            ->setParameter('ids', $ids);
+
+        return $builder;
     }
 
     /**

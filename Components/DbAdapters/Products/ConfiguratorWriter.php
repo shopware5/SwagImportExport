@@ -145,7 +145,7 @@ class ConfiguratorWriter
         }
     }
 
-    public function getSetIdBySetName(string $name): ?int
+    private function getSetIdBySetName(string $name): ?int
     {
         return $this->sets[$name] ?? null;
     }
@@ -153,7 +153,7 @@ class ConfiguratorWriter
     /**
      * @return int
      */
-    public function getGroupIdByGroupName(string $name): ?int
+    private function getGroupIdByGroupName(string $name): ?int
     {
         $sql = 'SELECT `id`
                 FROM s_article_configurator_groups
@@ -162,7 +162,7 @@ class ConfiguratorWriter
         return (int) $this->connection->fetchOne($sql, [$name]) ?: null;
     }
 
-    public function getOptionIdByOptionNameAndGroupId(string $optionName, int $groupId): ?int
+    private function getOptionIdByOptionNameAndGroupId(string $optionName, int $groupId): ?int
     {
         $sql = 'SELECT `id`
                 FROM s_article_configurator_options
@@ -174,7 +174,7 @@ class ConfiguratorWriter
     /**
      * @return array<string, mixed>
      */
-    public function getOptionRow(int $id): array
+    private function getOptionRow(int $id): array
     {
         $sql = 'SELECT `id`, `group_id`, `name`, `position`
                 FROM s_article_configurator_options
@@ -183,12 +183,12 @@ class ConfiguratorWriter
         return $this->db->fetchRow($sql, [$id]);
     }
 
-    protected function updateProductSetsRelation(int $productId, int $setId): void
+    private function updateProductSetsRelation(int $productId, int $setId): void
     {
         $this->db->query('UPDATE s_articles SET configurator_set_id = ? WHERE id = ?', [$setId, $productId]);
     }
 
-    protected function updateGroupsRelation(int $setId, int $groupId): void
+    private function updateGroupsRelation(int $setId, int $groupId): void
     {
         $sql = "INSERT INTO s_article_configurator_set_group_relations (set_id, group_id)
                 VALUES ($setId, $groupId)
@@ -197,7 +197,7 @@ class ConfiguratorWriter
         $this->connection->executeStatement($sql);
     }
 
-    protected function updateOptionRelation(int $productDetailId, int $optionId): void
+    private function updateOptionRelation(int $productDetailId, int $optionId): void
     {
         $sql = "INSERT INTO s_article_configurator_option_relations (article_id, option_id)
                 VALUES ($productDetailId, $optionId)
@@ -206,7 +206,7 @@ class ConfiguratorWriter
         $this->connection->executeStatement($sql);
     }
 
-    protected function updateSetOptionRelation(int $setId, int $optionId): void
+    private function updateSetOptionRelation(int $setId, int $optionId): void
     {
         $sql = "INSERT INTO s_article_configurator_set_option_relations (set_id, option_id)
                 VALUES ($setId, $optionId)
@@ -218,17 +218,17 @@ class ConfiguratorWriter
     /**
      * @return array<int|string, mixed>
      */
-    protected function getSets(): array
+    private function getSets(): array
     {
         return $this->connection->fetchAllKeyValue('SELECT `name`, `id` FROM s_article_configurator_sets');
     }
 
-    protected function getConfiguratorSetIdByProductId(int $productId): int
+    private function getConfiguratorSetIdByProductId(int $productId): int
     {
         return (int) $this->connection->fetchOne('SELECT configurator_set_id FROM s_articles WHERE id = ?', [$productId]);
     }
 
-    protected function createSet(array $data): int
+    private function createSet(array $data): int
     {
         // Delete id to avoid unique constraint violations
         unset($data['id']);
@@ -242,7 +242,7 @@ class ConfiguratorWriter
     /**
      * @param array<string, mixed> $data
      */
-    protected function createGroup(array $data): int
+    private function createGroup(array $data): int
     {
         $builder = $this->dbalHelper->getQueryBuilderForEntity($data, Group::class, null);
         $builder->execute();
@@ -253,7 +253,7 @@ class ConfiguratorWriter
     /**
      * @param array<string, mixed> $data
      */
-    protected function createOption(array $data): int
+    private function createOption(array $data): int
     {
         $builder = $this->dbalHelper->getQueryBuilderForEntity($data, Option::class, null);
         $builder->execute();
@@ -261,7 +261,7 @@ class ConfiguratorWriter
         return (int) $this->connection->lastInsertId();
     }
 
-    protected function getOrderNumber(int $productId): ?string
+    private function getOrderNumber(int $productId): ?string
     {
         $sql = 'SELECT `ordernumber`
                 FROM s_articles_details

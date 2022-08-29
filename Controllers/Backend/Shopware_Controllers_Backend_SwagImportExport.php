@@ -155,7 +155,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends \Shopware_Controller
     /**
      * Registers acl permissions for controller actions
      */
-    public function initAcl(): void
+    protected function initAcl(): void
     {
         $this->addAclPermission('uploadFile', 'import', 'Insufficient Permissions (uploadFile)');
         $this->addAclPermission('downloadFile', 'export', 'Insufficient Permissions (downloadFile)');

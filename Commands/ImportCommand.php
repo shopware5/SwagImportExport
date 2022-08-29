@@ -88,7 +88,7 @@ class ImportCommand extends ShopwareCommand
         return 0;
     }
 
-    protected function start(OutputInterface $output, Profile $profileModel, string $file, string $format): void
+    private function start(OutputInterface $output, Profile $profileModel, string $file, string $format): void
     {
         $session = $this->sessionService->createSession();
 
@@ -116,7 +116,7 @@ class ImportCommand extends ShopwareCommand
         }
     }
 
-    protected function prepareImportInputValidation(InputInterface $input): void
+    private function prepareImportInputValidation(InputInterface $input): void
     {
         $this->profile = $input->getOption('profile');
         $this->format = $input->getOption('format');

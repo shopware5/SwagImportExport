@@ -69,7 +69,7 @@ class ProductWriter
      *
      * @throws AdapterException
      */
-    protected function insertOrUpdateProduct(array $product, array $defaultValues): ProductWriterResult
+    private function insertOrUpdateProduct(array $product, array $defaultValues): ProductWriterResult
     {
         $shouldCreateMainProduct = false;
         [$mainVariantId, $productId, $variantId] = $this->findExistingEntries($product);
@@ -133,7 +133,7 @@ class ProductWriter
      *
      * @return array{0: int, 1: int, 2: int}
      */
-    protected function findExistingEntries(array $product): array
+    private function findExistingEntries(array $product): array
     {
         $productId = 0;
         $mainVariantId = 0;
@@ -171,7 +171,7 @@ class ProductWriter
      *
      * @return array<string, mixed>
      */
-    protected function mapProductAttributes(array $product): array
+    private function mapProductAttributes(array $product): array
     {
         $attributes = [];
         foreach ($product as $key => $value) {
@@ -187,7 +187,7 @@ class ProductWriter
         return $attributes;
     }
 
-    protected function getAttrId(int $detailId): int
+    private function getAttrId(int $detailId): int
     {
         $sql = 'SELECT id FROM s_articles_attributes WHERE articledetailsID = ?';
 

@@ -195,11 +195,6 @@ class AddressDbAdapter implements DataDbAdapter, \Enlight_Hook
         }
     }
 
-    public function setLogMessages(string $logMessages): void
-    {
-        $this->logMessages[] = $logMessages;
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -216,10 +211,15 @@ class AddressDbAdapter implements DataDbAdapter, \Enlight_Hook
         return $this->logState;
     }
 
+    private function setLogMessages(string $logMessages): void
+    {
+        $this->logMessages[] = $logMessages;
+    }
+
     /**
      * @param array<string, mixed> $addressRecord
      */
-    protected function setCountry(Address $addressModel, array $addressRecord): Address
+    private function setCountry(Address $addressModel, array $addressRecord): Address
     {
         if (!$addressModel->getCountry() && $addressRecord['countryID']) {
             $country = $this->modelManager->find(Country::class, $addressRecord['countryID']);

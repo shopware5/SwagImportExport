@@ -22,25 +22,6 @@ abstract class DataManager
     abstract public function getDefaultFields(): array;
 
     /**
-     * Return fields which should be set by default
-     *
-     * @param array<string, array<string>> $defaultFields Contains default fields name and types
-     *
-     * @return array<string>
-     */
-    public function getFields(array $defaultFields): array
-    {
-        $defaultValues = [];
-        foreach ($defaultFields as $fields) {
-            foreach ($fields as $field) {
-                $defaultValues[] = $field;
-            }
-        }
-
-        return $defaultValues;
-    }
-
-    /**
      * Return type of default field
      */
     public static function getFieldType(string $record, array $mapper): string
@@ -71,11 +52,30 @@ abstract class DataManager
     }
 
     /**
+     * Return fields which should be set by default
+     *
+     * @param array<string, array<string>> $defaultFields Contains default fields name and types
+     *
+     * @return array<string>
+     */
+    protected function getFields(array $defaultFields): array
+    {
+        $defaultValues = [];
+        foreach ($defaultFields as $fields) {
+            foreach ($fields as $field) {
+                $defaultValues[] = $field;
+            }
+        }
+
+        return $defaultValues;
+    }
+
+    /**
      * Return proper values for fields which have values NULL
      *
      * @return array<string, int|string>
      */
-    public function fixFieldsValues(array $records, array $fieldsValues): array
+    protected function fixFieldsValues(array $records, array $fieldsValues): array
     {
         foreach ($fieldsValues as $type => $fields) {
             foreach ($fields as $field) {
@@ -109,7 +109,7 @@ abstract class DataManager
      *
      * @return array<string, mixed>
      */
-    public function mapFields(array $records, array $adapterFields): array
+    protected function mapFields(array $records, array $adapterFields): array
     {
         foreach ($adapterFields as $tableField => $adapterField) {
             if (isset($records[$adapterField])) {

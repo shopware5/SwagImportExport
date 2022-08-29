@@ -55,11 +55,6 @@ class RelationWriter
         $this->productsDbAdapter = $productsDbAdapter;
     }
 
-    public function getProductsDbAdapter(): ProductsDbAdapter
-    {
-        return $this->productsDbAdapter;
-    }
-
     /**
      * @throws AdapterException
      */
@@ -96,7 +91,7 @@ class RelationWriter
                         'ordernumber' => $relation['ordernumber'],
                     ];
 
-                    $this->getProductsDbAdapter()->saveUnprocessedData(
+                    $this->productsDbAdapter->saveUnprocessedData(
                         'articles',
                         \strtolower($relationType),
                         $mainOrderNumber,
@@ -135,7 +130,7 @@ class RelationWriter
      * Sets the idKey used to access relation's id. Example: accessory - $relation['accessoryId'],
      * similar - $relation['similarId']
      */
-    protected function initializeRelationData(string $relationType): void
+    private function initializeRelationData(string $relationType): void
     {
         $this->checkRelation($relationType);
 
@@ -150,7 +145,7 @@ class RelationWriter
      *
      * @throws \Exception
      */
-    protected function checkRelation(string $relationType): void
+    private function checkRelation(string $relationType): void
     {
         if (!\in_array($relationType, $this->relationTypes)) {
             $message = "Wrong relation type is used! Allowed types are: 'accessory' or 'similar'";
@@ -158,7 +153,7 @@ class RelationWriter
         }
     }
 
-    protected function getRelationIdByOrderNumber(string $orderNumber): ?int
+    private function getRelationIdByOrderNumber(string $orderNumber): ?int
     {
         $relationId = $this->db->fetchOne(
             'SELECT articleID FROM s_articles_details WHERE ordernumber = ?',
@@ -171,7 +166,7 @@ class RelationWriter
     /**
      * Checks whether this article exists.
      */
-    protected function isRelationIdExists(int $relationId): bool
+    private function isRelationIdExists(int $relationId): bool
     {
         $productId = $this->db->fetchOne(
             'SELECT articleID FROM s_articles_details WHERE articleID = ?',
@@ -184,7 +179,7 @@ class RelationWriter
     /**
      * Checks whether this relation exists.
      */
-    protected function isRelationExists(int $relationId, int $productId): bool
+    private function isRelationExists(int $relationId, int $productId): bool
     {
         $isRelationExists = $this->db->fetchOne(
             "SELECT id FROM {$this->table} WHERE relatedarticle = ? AND articleID = ?",

@@ -212,14 +212,14 @@ class ProductWriterTest extends TestCase
         static::assertTrue($isMainProductActive, 'Article active flag was updated, but only article detail should be updated.');
     }
 
-    protected function getProductsActiveFlag(int $productId): bool
+    private function getProductsActiveFlag(int $productId): bool
     {
         $connection = $this->modelManager->getConnection();
 
         return (bool) $connection->executeQuery('SELECT active FROM s_articles WHERE id = ?', [$productId])->fetchOne();
     }
 
-    protected function getProductDetailActiveFlag(int $detailId): bool
+    private function getProductDetailActiveFlag(int $detailId): bool
     {
         $connection = $this->modelManager->getConnection();
 

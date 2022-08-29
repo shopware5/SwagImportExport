@@ -83,12 +83,12 @@ class DbalHelper
         return $builder;
     }
 
-    protected function getQueryBuilder(): QueryBuilder
+    private function getQueryBuilder(): QueryBuilder
     {
         return new QueryBuilder($this->connection);
     }
 
-    protected function getNamedParameter(?string $value, string $key, ClassMetadata $metaData, QueryBuilder $builder): string
+    private function getNamedParameter(?string $value, string $key, ClassMetadata $metaData, QueryBuilder $builder): string
     {
         $pdoTypeMapping = [
             'string' => \PDO::PARAM_STR,

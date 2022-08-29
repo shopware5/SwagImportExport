@@ -25,9 +25,8 @@ class DataTransformerFactory implements \Enlight_Hook
     /**
      * @param iterable<DataTransformerAdapter> $transformers
      */
-    public function __construct(
-        iterable $transformers
-    ) {
+    public function __construct(iterable $transformers)
+    {
         $this->transformers = $transformers;
     }
 

@@ -11,11 +11,14 @@ namespace SwagImportExport\Tests\Unit\Components\Validator;
 
 use PHPUnit\Framework\TestCase;
 use SwagImportExport\Components\Validators\Validator;
+use SwagImportExport\Tests\Helper\ReflectionHelperTrait;
 
 class ValidatorTest extends TestCase
 {
-    public const VALID_TYPE_RESULT = 1;
-    public const INVALID_TYPE_RESULT = 0;
+    use ReflectionHelperTrait;
+
+    public const VALID_TYPE_RESULT = true;
+    public const INVALID_TYPE_RESULT = false;
 
     private Validator $validator;
 
@@ -26,74 +29,47 @@ class ValidatorTest extends TestCase
 
     public function testValidateFloatShouldBeValid(): void
     {
-        $validatedValue = '100';
-        $result = $this->validator->validateFloat($validatedValue);
-
-        static::assertEquals(self::VALID_TYPE_RESULT, $result);
+        static::assertSame(self::VALID_TYPE_RESULT, $this->assertFloatValue('100'));
     }
 
     public function testValidateFloatWithCommaSeparatedStringShouldBeValid(): void
     {
-        $validatedValue = '100,2';
-        $result = $this->validator->validateFloat($validatedValue);
-
-        static::assertEquals(self::VALID_TYPE_RESULT, $result);
+        static::assertSame(self::VALID_TYPE_RESULT, $this->assertFloatValue('100,2'));
     }
 
     public function testValidateFloatWithNegativeNumberWithCommaShouldBeValid(): void
     {
-        $validatedValue = '-1,2';
-        $result = $this->validator->validateFloat($validatedValue);
-
-        static::assertEquals(self::VALID_TYPE_RESULT, $result);
+        static::assertSame(self::VALID_TYPE_RESULT, $this->assertFloatValue('-1,2'));
     }
 
     public function testValidateFloatWithNegativeNumberShouldBeValid(): void
     {
-        $validatedValue = '-1.2';
-        $result = $this->validator->validateFloat($validatedValue);
-
-        static::assertEquals(self::VALID_TYPE_RESULT, $result);
+        static::assertSame(self::VALID_TYPE_RESULT, $this->assertFloatValue('-1.2'));
     }
 
     public function testValidateFloatWithCharacterShouldBeInvalid(): void
     {
-        $validatedValue = 'test';
-        $result = $this->validator->validateFloat($validatedValue);
-
-        static::assertEquals(self::INVALID_TYPE_RESULT, $result);
+        static::assertSame(self::INVALID_TYPE_RESULT, $this->assertFloatValue('test'));
     }
 
     public function testValidateFloatWithNumbersAtTheBeginningOfAStringShouldBeInvalid(): void
     {
-        $validatedValue = '123.0 abc';
-        $result = $this->validator->validateFloat($validatedValue);
-
-        static::assertEquals(self::INVALID_TYPE_RESULT, $result);
+        static::assertSame(self::INVALID_TYPE_RESULT, $this->assertFloatValue('123.0 abc'));
     }
 
     public function testValidateFloatWithNumbersAtTheEndOfAStringShouldBeInvalid(): void
     {
-        $validatedValue = 'abc 123.0';
-        $result = $this->validator->validateFloat($validatedValue);
-
-        static::assertEquals(self::INVALID_TYPE_RESULT, $result);
+        static::assertSame(self::INVALID_TYPE_RESULT, $this->assertFloatValue('abc 123.0'));
     }
 
     public function testValidateFloatWithCommaButWithoutDecimalDigitsShouldBeInvalid(): void
     {
-        $validatedValue = '1,';
-        $result = $this->validator->validateFloat($validatedValue);
-
-        static::assertEquals(self::INVALID_TYPE_RESULT, $result);
+        static::assertSame(self::INVALID_TYPE_RESULT, $this->assertFloatValue('1,'));
     }
 
     public function testValidateFloatWithEmptyStringShouldBeInvalid(): void
     {
-        $validatedValue = '';
-        $result = $this->validator->validateFloat($validatedValue);
-
-        static::assertEquals(self::INVALID_TYPE_RESULT, $result);
+        static::assertSame(self::INVALID_TYPE_RESULT, $this->assertFloatValue(''));
     }
 
     public function testFilterEmptyStringShouldFilterEmptyString(): void
@@ -114,7 +90,7 @@ class ValidatorTest extends TestCase
 
         $result = $this->validator->filterEmptyString($this->getDemoRecordForFilterEmptyStringTest());
 
-        static::assertEquals($expectedFilteredData, $result);
+        static::assertSame($expectedFilteredData, $result);
     }
 
     /**
@@ -129,5 +105,12 @@ class ValidatorTest extends TestCase
             'filteredEmptyString' => '',
             'boolean' => true,
         ];
+    }
+
+    private function assertFloatValue(string $validatedValue): bool
+    {
+        $reflectionMethod = $this->getReflectionMethod(Validator::class, 'validateFloat');
+
+        return $reflectionMethod->invoke($this->validator, $validatedValue);
     }
 }

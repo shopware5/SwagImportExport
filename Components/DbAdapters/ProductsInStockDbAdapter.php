@@ -265,7 +265,17 @@ class ProductsInStockDbAdapter implements DataDbAdapter, \Enlight_Hook
         return [];
     }
 
-    public function saveMessage(string $message): void
+    public function getLogMessages(): array
+    {
+        return $this->logMessages;
+    }
+
+    public function getLogState(): ?string
+    {
+        return $this->logState;
+    }
+
+    private function saveMessage(string $message): void
     {
         $errorMode = $this->config->get('SwagImportExportErrorMode');
 
@@ -277,22 +287,12 @@ class ProductsInStockDbAdapter implements DataDbAdapter, \Enlight_Hook
         $this->setLogState('true');
     }
 
-    public function getLogMessages(): array
-    {
-        return $this->logMessages;
-    }
-
-    public function setLogMessages(string $logMessages): void
+    private function setLogMessages(string $logMessages): void
     {
         $this->logMessages[] = $logMessages;
     }
 
-    public function getLogState(): ?string
-    {
-        return $this->logState;
-    }
-
-    public function setLogState(string $logState): void
+    private function setLogState(string $logState): void
     {
         $this->logState = $logState;
     }
@@ -301,7 +301,7 @@ class ProductsInStockDbAdapter implements DataDbAdapter, \Enlight_Hook
      * @param array<array<string>|string> $columns
      * @param array<int>                  $ids
      */
-    public function getBuilder(array $columns, array $ids): QueryBuilder
+    private function getBuilder(array $columns, array $ids): QueryBuilder
     {
         $builder = $this->modelManager->createQueryBuilder();
         $builder->select($columns)

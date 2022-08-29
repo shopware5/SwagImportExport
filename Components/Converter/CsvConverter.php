@@ -29,9 +29,9 @@ class CsvConverter implements ConverterInterface
         if (!\count($keys)) {
             $keys = \array_keys(\current($array));
         }
-        $csv = $this->_encode_line(\array_combine($keys, $keys), $keys) . $this->settings['newline'];
+        $csv = $this->encodeLine(\array_combine($keys, $keys), $keys) . $this->settings['newline'];
         foreach ($array as $line) {
-            $csv .= $this->_encode_line($line, $keys) . $this->settings['newline'];
+            $csv .= $this->encodeLine($line, $keys) . $this->settings['newline'];
         }
 
         return $csv;
@@ -41,7 +41,7 @@ class CsvConverter implements ConverterInterface
      * @param array<string, string>  $line
      * @param array<int, int|string> $keys
      */
-    public function _encode_line(array $line, array $keys): string
+    public function encodeLine(array $line, array $keys): string
     {
         $csv = '';
 
@@ -76,136 +76,8 @@ class CsvConverter implements ConverterInterface
         return $csv;
     }
 
-    /**
-     * @param array<int, string> $keys
-     *
-     * @return array<int, array<string, string>>
-     */
-    public function decode(string $csv, array $keys = []): array
-    {
-        $csvContent = \file_get_contents($csv);
-        $array = [];
-
-        if (\is_bool($csvContent)) {
-            throw new \Exception('File could not be found');
-        }
-
-        if ($this->settings['encoding'] === 'UTF-8') {
-            $csvContent = \utf8_decode($csvContent);
-        }
-
-        if (isset($this->settings['escaped_newline']) && $this->settings['escaped_newline'] !== false && isset($this->settings['fieldmark']) && $this->settings['fieldmark'] !== false) {
-            $lines = $this->_split_line($csvContent);
-        } else {
-            $lines = \preg_split("/\n|\r/", $csvContent, -1, \PREG_SPLIT_NO_EMPTY);
-        }
-
-        if (!\is_array($lines)) {
-            throw new \Exception('Invalid lines');
-        }
-
-        if (empty($keys)) {
-            if (empty($this->settings['fieldmark'])) {
-                $keys = \explode($this->settings['separator'], $lines[0]);
-                if (!\is_array($keys)) {
-                    throw new \Exception('Invalid keys');
-                }
-            } else {
-                $keys = $this->_decode_line($lines[0]);
-            }
-
-            foreach ($keys as $i => $key) {
-                $keys[$i] = \trim($key, "? \n\t\r");
-            }
-            unset($lines[0]);
-        }
-
-        foreach ($lines as $line) {
-            $tmp = [];
-            if (empty($this->settings['fieldmark'])) {
-                $line = \explode($this->settings['separator'], $line);
-            } else {
-                $line = $this->_decode_line($line);
-            }
-            if (!\is_array($line)) {
-                throw new \Exception('Invalid line');
-            }
-
-            foreach ($keys as $pos => $key) {
-                if (isset($line[$pos])) {
-                    $tmp[$key] = $line[$pos];
-                }
-            }
-            $array[] = $tmp;
-        }
-
-        return $array;
-    }
-
-    /**
-     * @return array<string>
-     */
-    public function _decode_line(string $line): array
-    {
-        $fieldmark = $this->settings['fieldmark'];
-        $elements = \explode($this->settings['separator'], $line);
-        $tmp_elements = [];
-        if (!\is_array($elements)) {
-            return $tmp_elements;
-        }
-
-        foreach ($elements as $i => $element) {
-            $nQuotes = \substr_count($element, $this->settings['fieldmark']);
-            if ($nQuotes % 2 === 1) {
-                if (isset($elements[$i + 1])) {
-                    $elements[$i + 1] = $element . $this->settings['separator'] . $elements[$i + 1];
-                }
-            } else {
-                if ($nQuotes > 0) {
-                    if (\strpos($element, $fieldmark) === 0) {
-                        $elements[$i] = \substr($element, 1);
-                    }
-                    if (\substr($elements[$i], -1, 1) == $fieldmark) {
-                        $elements[$i] = \substr($elements[$i], 0, -1);
-                    }
-                    $elements[$i] = \str_replace(
-                        $this->settings['escaped_fieldmark'],
-                        $this->settings['fieldmark'],
-                        $elements[$i]
-                    );
-                }
-                $tmp_elements[] = $element;
-            }
-        }
-
-        return $tmp_elements;
-    }
-
     public function getNewline(): string
     {
         return "\n";
-    }
-
-    /**
-     * @return array<int, string>
-     */
-    private function _split_line(string $csv): array
-    {
-        $lines = [];
-        $elements = \explode($this->settings['newline'], $csv);
-        if (!\is_array($elements)) {
-            return $lines;
-        }
-
-        foreach ($elements as $i => $element) {
-            $nquotes = \substr_count($element, $this->settings['fieldmark']);
-            if ($nquotes % 2 == 1) {
-                $elements[$i + 1] = $element . $this->settings['newline'] . $elements[$i + 1];
-            } else {
-                $lines[] = $element;
-            }
-        }
-
-        return $lines;
     }
 }

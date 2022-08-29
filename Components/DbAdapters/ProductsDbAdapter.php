@@ -86,7 +86,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
 
     private ShopRepository $shopRepository;
 
-    private ProductWriter $articleWriter;
+    private ProductWriter $productWriter;
 
     private PriceWriter $priceWriter;
 
@@ -113,7 +113,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
         ContextServiceInterface $contextService,
         Repository $streamRepo,
         ProductNumberSearchInterface $productNumberSearch,
-        ProductWriter $articleWriter,
+        ProductWriter $productWriter,
         PriceWriter $priceWriter,
         CategoryWriter $categoryWriter,
         ConfiguratorWriter $configuratorWriter,
@@ -133,7 +133,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
         $this->streamRepo = $streamRepo;
         $this->productNumberSearch = $productNumberSearch;
         $this->shopRepository = $this->modelManager->getRepository(Shop::class);
-        $this->articleWriter = $articleWriter;
+        $this->productWriter = $productWriter;
         $this->priceWriter = $priceWriter;
         $this->categoryWriter = $categoryWriter;
         $this->configuratorWriter = $configuratorWriter;
@@ -308,12 +308,177 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
     }
 
     /**
+     * Returns default columns
+     *
+     * @return array<string, array<string>>
+     */
+    public function getDefaultColumns(): array
+    {
+        $otherColumns = [
+            'variantsUnit.unit as unit',
+            'articleEsd.file as esd',
+        ];
+
+        $columns['article'] = \array_merge(
+            $this->getProductColumns(),
+            $otherColumns
+        );
+
+        $columns['price'] = $this->getPriceColumns();
+        $columns['image'] = $this->getImageColumns();
+        $columns['propertyValues'] = $this->getPropertyValueColumns();
+        $columns['similar'] = $this->getSimilarColumns();
+        $columns['accessory'] = $this->getAccessoryColumns();
+        $columns['configurator'] = $this->getConfiguratorColumns();
+        $columns['category'] = $this->getCategoryColumns();
+        $columns['translation'] = $this->getTranslationColumns();
+
+        return $columns;
+    }
+
+    /**
+     * Set default values for fields which are empty or don't exist
+     *
+     * @param array<string, mixed> $values default values for nodes
+     */
+    public function setDefaultValues(array $values): void
+    {
+        $this->defaultValues = $values;
+    }
+
+    /**
+     * Writes articles into the database
+     *
+     * @param array<string, mixed> $records
+     *
+     * @throws \RuntimeException
+     */
+    public function write(array $records): void
+    {
+        // articles
+        if (empty($records['article'])) {
+            $message = SnippetsHelper::getNamespace()->get(
+                'adapters/articles/no_records',
+                'No article records were found.'
+            );
+            throw new \RuntimeException($message);
+        }
+
+        $records = $this->eventManager->filter(
+            'Shopware_Components_SwagImportExport_DbAdapters_ArticlesDbAdapter_Write',
+            $records,
+            ['subject' => $this]
+        );
+
+        $this->performImport($records);
+    }
+
+    /**
+     * @return array<array<string, string>>
+     */
+    public function getSections(): array
+    {
+        return [
+            ['id' => 'article', 'name' => 'article'],
+            ['id' => 'price', 'name' => 'price'],
+            ['id' => 'image', 'name' => 'image'],
+            ['id' => 'propertyValue', 'name' => 'propertyValue'],
+            ['id' => 'similar', 'name' => 'similar'],
+            ['id' => 'accessory', 'name' => 'accessory'],
+            ['id' => 'configurator', 'name' => 'configurator'],
+            ['id' => 'category', 'name' => 'category'],
+            ['id' => 'translation', 'name' => 'translation'],
+        ];
+    }
+
+    public function getColumns(string $section): array
+    {
+        $method = 'get' . \ucfirst($section) . 'Columns';
+
+        if (\method_exists($this, $method)) {
+            return $this->{$method}();
+        }
+
+        return [];
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getParentKeys(string $section): array
+    {
+        switch ($section) {
+            case 'article':
+                return [
+                    'article.id as articleId',
+                    'variant.id as variantId',
+                    'variant.number as orderNumber',
+                ];
+            case 'price':
+                return [
+                    'prices.articleDetailsId as variantId',
+                ];
+            case 'propertyValue':
+            case 'similar':
+            case 'accessory':
+            case 'image':
+            case 'category':
+                return [
+                    'article.id as articleId',
+                ];
+            case 'configurator':
+            case 'translation':
+                return [
+                    'variant.id as variantId',
+                ];
+        }
+
+        throw new \RuntimeException(sprintf('No case found for section "%s"', $section));
+    }
+
+    /**
+     * @return array<string>
+     */
+    public function getLogMessages(): array
+    {
+        return $this->logMessages;
+    }
+
+    public function getLogState(): ?string
+    {
+        return $this->logState;
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public function saveUnprocessedData(string $profileName, string $type, string $articleNumber, array $data): void
+    {
+        $this->saveProductData($articleNumber);
+
+        $this->setUnprocessedData($profileName, $type, $data);
+    }
+
+    public function getUnprocessedData(): array
+    {
+        return $this->unprocessedData;
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public function setUnprocessedData(string $profileName, string $type, array $data): void
+    {
+        $this->unprocessedData[$profileName][$type][] = $data;
+    }
+
+    /**
      * @param array<int>    $ids
      * @param array<string> $categoryColumns
      *
      * @return array<string, mixed>
      */
-    public function prepareCategoryExport(array $ids, array $categoryColumns): array
+    private function prepareCategoryExport(array $ids, array $categoryColumns): array
     {
         $mappedArticleIds = $this->getProductIdsByDetailIds($ids);
 
@@ -335,7 +500,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
      *
      * @return array<int, array<string, mixed>>
      */
-    public function prepareTranslationExport(array $ids): array
+    private function prepareTranslationExport(array $ids): array
     {
         $productDetailIds = \implode(',', $ids);
 
@@ -447,99 +612,15 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
     /**
      * @return Shop[]
      */
-    public function getShops(): array
+    private function getShops(): array
     {
         return $this->modelManager->getRepository(Shop::class)->findAll();
     }
 
     /**
-     * Returns default columns
-     *
-     * @return array<string, array<string>>
-     */
-    public function getDefaultColumns(): array
-    {
-        $otherColumns = [
-            'variantsUnit.unit as unit',
-            'articleEsd.file as esd',
-        ];
-
-        $columns['article'] = \array_merge(
-            $this->getProductColumns(),
-            $otherColumns
-        );
-
-        $columns['price'] = $this->getPriceColumns();
-        $columns['image'] = $this->getImageColumns();
-        $columns['propertyValues'] = $this->getPropertyValueColumns();
-        $columns['similar'] = $this->getSimilarColumns();
-        $columns['accessory'] = $this->getAccessoryColumns();
-        $columns['configurator'] = $this->getConfiguratorColumns();
-        $columns['category'] = $this->getCategoryColumns();
-        $columns['translation'] = $this->getTranslationColumns();
-
-        return $columns;
-    }
-
-    /**
-     * Set default values for fields which are empty or don't exist
-     *
-     * @param array<string, mixed> $values default values for nodes
-     */
-    public function setDefaultValues(array $values): void
-    {
-        $this->defaultValues = $values;
-    }
-
-    /**
-     * Writes articles into the database
-     *
-     * @param array<string, mixed> $records
-     *
-     * @throws \RuntimeException
-     */
-    public function write(array $records): void
-    {
-        // articles
-        if (empty($records['article'])) {
-            $message = SnippetsHelper::getNamespace()->get(
-                'adapters/articles/no_records',
-                'No article records were found.'
-            );
-            throw new \RuntimeException($message);
-        }
-
-        $records = $this->eventManager->filter(
-            'Shopware_Components_SwagImportExport_DbAdapters_ArticlesDbAdapter_Write',
-            $records,
-            ['subject' => $this]
-        );
-
-        $this->performImport($records);
-    }
-
-    /**
-     * @return array<array<string, string>>
-     */
-    public function getSections(): array
-    {
-        return [
-            ['id' => 'article', 'name' => 'article'],
-            ['id' => 'price', 'name' => 'price'],
-            ['id' => 'image', 'name' => 'image'],
-            ['id' => 'propertyValue', 'name' => 'propertyValue'],
-            ['id' => 'similar', 'name' => 'similar'],
-            ['id' => 'accessory', 'name' => 'accessory'],
-            ['id' => 'configurator', 'name' => 'configurator'],
-            ['id' => 'category', 'name' => 'category'],
-            ['id' => 'translation', 'name' => 'translation'],
-        ];
-    }
-
-    /**
      * @return array<string>
      */
-    public function getProductColumns(): array
+    private function getProductColumns(): array
     {
         return \array_merge($this->getProductVariantColumns(), $this->getVariantColumns());
     }
@@ -547,7 +628,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
     /**
      * @return array<string>
      */
-    public function getProductVariantColumns(): array
+    private function getProductVariantColumns(): array
     {
         return [
             'article.id as articleId',
@@ -582,7 +663,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
      *
      * @return array<string>
      */
-    public function getProductAttributes(): array
+    private function getProductAttributes(): array
     {
         $columns = $this->db->query('SHOW COLUMNS FROM `s_articles_attributes`')->fetchAll();
 
@@ -609,55 +690,10 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
         );
     }
 
-    public function getColumns(string $section): array
-    {
-        $method = 'get' . \ucfirst($section) . 'Columns';
-
-        if (\method_exists($this, $method)) {
-            return $this->{$method}();
-        }
-
-        return [];
-    }
-
     /**
      * @return string[]
      */
-    public function getParentKeys(string $section): array
-    {
-        switch ($section) {
-            case 'article':
-                return [
-                    'article.id as articleId',
-                    'variant.id as variantId',
-                    'variant.number as orderNumber',
-                ];
-            case 'price':
-                return [
-                    'prices.articleDetailsId as variantId',
-                ];
-            case 'propertyValue':
-            case 'similar':
-            case 'accessory':
-            case 'image':
-            case 'category':
-                return [
-                    'article.id as articleId',
-                ];
-            case 'configurator':
-            case 'translation':
-                return [
-                    'variant.id as variantId',
-                ];
-        }
-
-        throw new \RuntimeException(sprintf('No case found for section "%s"', $section));
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getVariantColumns(): array
+    private function getVariantColumns(): array
     {
         $columns = [
             'variant.id as variantId',
@@ -702,7 +738,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
     /**
      * @return array<string>
      */
-    public function getPriceColumns(): array
+    private function getPriceColumns(): array
     {
         $columns = [
             'prices.articleDetailsId as variantId',
@@ -724,7 +760,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
     /**
      * @return array<string>
      */
-    public function getImageColumns(): array
+    private function getImageColumns(): array
     {
         return [
             'images.id as id',
@@ -741,7 +777,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
     /**
      * @return array<string>
      */
-    public function getPropertyValueColumns(): array
+    private function getPropertyValueColumns(): array
     {
         return [
             'article.id as articleId',
@@ -756,7 +792,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
     /**
      * @return array<string>
      */
-    public function getSimilarColumns(): array
+    private function getSimilarColumns(): array
     {
         return [
             'similar.id as similarId',
@@ -768,7 +804,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
     /**
      * @return array<string>
      */
-    public function getAccessoryColumns(): array
+    private function getAccessoryColumns(): array
     {
         return [
             'accessory.id as accessoryId',
@@ -780,7 +816,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
     /**
      * @return array<string>
      */
-    public function getConfiguratorColumns(): array
+    private function getConfiguratorColumns(): array
     {
         return [
             'variant.id as variantId',
@@ -799,7 +835,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
     /**
      * @return array<string>
      */
-    public function getCategoryColumns(): array
+    private function getCategoryColumns(): array
     {
         return [
             'categories.id as categoryId',
@@ -811,7 +847,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
     /**
      * @return array<string>
      */
-    public function getTranslationColumns(): array
+    private function getTranslationColumns(): array
     {
         $columns = [
             'article.id as articleId',
@@ -841,7 +877,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
     /**
      * @throws \RuntimeException
      */
-    public function saveMessage(string $message): void
+    private function saveMessage(string $message): void
     {
         $errorMode = $this->config->get('SwagImportExportErrorMode');
 
@@ -853,61 +889,25 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
         $this->setLogState('true');
     }
 
-    /**
-     * @return array<string>
-     */
-    public function getLogMessages(): array
-    {
-        return $this->logMessages;
-    }
-
-    public function setLogMessages(string $logMessages): void
+    private function setLogMessages(string $logMessages): void
     {
         $this->logMessages[] = $logMessages;
     }
 
-    public function getLogState(): ?string
-    {
-        return $this->logState;
-    }
-
-    public function setLogState(string $logState): void
+    private function setLogState(string $logState): void
     {
         $this->logState = $logState;
     }
 
     /**
-     * @param array<string, mixed> $data
-     */
-    public function saveUnprocessedData(string $profileName, string $type, string $articleNumber, array $data): void
-    {
-        $this->saveProductData($articleNumber);
-
-        $this->setUnprocessedData($profileName, $type, $data);
-    }
-
-    public function getUnprocessedData(): array
-    {
-        return $this->unprocessedData;
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public function setUnprocessedData(string $profileName, string $type, array $data): void
-    {
-        $this->unprocessedData[$profileName][$type][] = $data;
-    }
-
-    /**
      * @return array<string, string>|null
      */
-    public function getTempData(): ?array
+    private function getTempData(): ?array
     {
         return $this->tempData;
     }
 
-    public function setTempData(string $tempData): void
+    private function setTempData(string $tempData): void
     {
         $this->tempData[$tempData] = $tempData;
     }
@@ -916,7 +916,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
      * @param array<string> $columns
      * @param array<int>    $ids
      */
-    public function getProductBuilder(array $columns, array $ids): QueryBuilder
+    private function getProductBuilder(array $columns, array $ids): QueryBuilder
     {
         $articleBuilder = $this->modelManager->createQueryBuilder();
         $articleBuilder->select($columns)
@@ -940,7 +940,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
      * @param array<string> $columns
      * @param array<int>    $ids
      */
-    public function getPriceBuilder(array $columns, array $ids): QueryBuilder
+    private function getPriceBuilder(array $columns, array $ids): QueryBuilder
     {
         $priceBuilder = $this->modelManager->createQueryBuilder();
         $priceBuilder->select($columns)
@@ -959,7 +959,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
      * @param array<string> $columns
      * @param array<int>    $ids
      */
-    public function getImageBuilder(array $columns, array $ids): QueryBuilder
+    private function getImageBuilder(array $columns, array $ids): QueryBuilder
     {
         $imageBuilder = $this->modelManager->createQueryBuilder();
         $imageBuilder->select($columns)
@@ -978,7 +978,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
      * @param array<string> $columns
      * @param array<int>    $ids
      */
-    public function getPropertyValueBuilder(array $columns, array $ids): QueryBuilder
+    private function getPropertyValueBuilder(array $columns, array $ids): QueryBuilder
     {
         $propertyValueBuilder = $this->modelManager->createQueryBuilder();
         $propertyValueBuilder->select($columns)
@@ -999,7 +999,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
      * @param array<string> $columns
      * @param array<int>    $ids
      */
-    public function getConfiguratorBuilder(array $columns, array $ids): QueryBuilder
+    private function getConfiguratorBuilder(array $columns, array $ids): QueryBuilder
     {
         $configBuilder = $this->modelManager->createQueryBuilder();
         $configBuilder->select($columns)
@@ -1021,7 +1021,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
      * @param array<string> $columns
      * @param array<int>    $ids
      */
-    public function getSimilarBuilder(array $columns, array $ids): QueryBuilder
+    private function getSimilarBuilder(array $columns, array $ids): QueryBuilder
     {
         $similarBuilder = $this->modelManager->createQueryBuilder();
         $similarBuilder->select($columns)
@@ -1042,7 +1042,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
      * @param array<string> $columns
      * @param array<int>    $ids
      */
-    public function getAccessoryBuilder(array $columns, array $ids): QueryBuilder
+    private function getAccessoryBuilder(array $columns, array $ids): QueryBuilder
     {
         $accessoryBuilder = $this->modelManager->createQueryBuilder();
         $accessoryBuilder->select($columns)
@@ -1063,7 +1063,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
      * @param array<string> $columns
      * @param array<int>    $ids
      */
-    public function getCategoryBuilder(array $columns, array $ids): QueryBuilder
+    private function getCategoryBuilder(array $columns, array $ids): QueryBuilder
     {
         $categoryBuilder = $this->modelManager->createQueryBuilder();
         $categoryBuilder->select($columns)
@@ -1081,7 +1081,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
      *
      * @return array<int>
      */
-    protected function getProductIdsByDetailIds(array $detailIds): array
+    private function getProductIdsByDetailIds(array $detailIds): array
     {
         $productIds = $this->modelManager->createQueryBuilder()
             ->select('article.id')
@@ -1106,7 +1106,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
      *
      * @return array<int, string>
      */
-    protected function getAssignedCategoryNames(array $categories): array
+    private function getAssignedCategoryNames(array $categories): array
     {
         $categoryIds = [];
         foreach ($categories as $category) {
@@ -1145,7 +1145,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
      * @param array<string, mixed> $category contains category data
      * @param array<string>        $mapper   contains categories' names
      */
-    protected function generatePath(array $category, array $mapper): string
+    private function generatePath(array $category, array $mapper): string
     {
         $ids = [];
         if (!empty($category['categoryPath'])) {
@@ -1167,7 +1167,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
     /**
      * This data is for matching similars and accessories
      */
-    protected function saveProductData(string $articleNumber): void
+    private function saveProductData(string $articleNumber): void
     {
         $tempData = $this->getTempData();
 
@@ -1192,7 +1192,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
      *
      * @param array<int> $categoriesReturn
      */
-    protected function collectCategoryIds(Category $categoryModel, array &$categoriesReturn): void
+    private function collectCategoryIds(Category $categoryModel, array &$categoriesReturn): void
     {
         $categoriesReturn[] = $categoryModel->getId();
         $categories = $categoryModel->getChildren();
@@ -1248,7 +1248,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
      */
     private function performImport(array $records): void
     {
-        $articleWriter = $this->articleWriter;
+        $productWriter = $this->productWriter;
         $pricesWriter = $this->priceWriter;
         $categoryWriter = $this->categoryWriter;
         $configuratorWriter = $this->configuratorWriter;
@@ -1268,7 +1268,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
             try {
                 $this->modelManager->getConnection()->beginTransaction();
 
-                $articleWriterResult = $articleWriter->write($article, $defaultValues);
+                $productWriterResult = $productWriter->write($article, $defaultValues);
 
                 $processedFlag = isset($article['processed']) && (int) $article['processed'] === 1;
 
@@ -1277,8 +1277,8 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
                  */
                 if (!$processedFlag) {
                     $pricesWriter->write(
-                        $articleWriterResult->getProductId(),
-                        $articleWriterResult->getDetailId(),
+                        $productWriterResult->getProductId(),
+                        $productWriterResult->getDetailId(),
                         \array_filter(
                             $records['price'] ?? [],
                             function (array $price) use ($index) {
@@ -1288,7 +1288,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
                     );
 
                     $categoryWriter->write(
-                        $articleWriterResult->getProductId(),
+                        $productWriterResult->getProductId(),
                         \array_filter(
                             $records['category'] ?? [],
                             function (array $category) use ($index) {
@@ -1299,7 +1299,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
                     );
 
                     $configuratorWriter->writeOrUpdateConfiguratorSet(
-                        $articleWriterResult,
+                        $productWriterResult,
                         \array_filter(
                             $records['configurator'] ?? [],
                             function (array $configurator) use ($index) {
@@ -1309,15 +1309,15 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
                     );
 
                     $propertyWriter->writeUpdateCreatePropertyGroupsFilterAndValues(
-                        $articleWriterResult->getProductId(),
+                        $productWriterResult->getProductId(),
                         $article['orderNumber'],
-                        $this->filterPropertyValues($records, $index, $articleWriterResult)
+                        $this->filterPropertyValues($records, $index, $productWriterResult)
                     );
 
                     $translationWriter->write(
-                        $articleWriterResult->getProductId(),
-                        $articleWriterResult->getDetailId(),
-                        $articleWriterResult->getMainDetailId(),
+                        $productWriterResult->getProductId(),
+                        $productWriterResult->getDetailId(),
+                        $productWriterResult->getMainDetailId(),
                         \array_filter(
                             $records['translation'] ?? [],
                             function (array $translation) use ($index) {
@@ -1335,13 +1335,13 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
                 }
 
                 $relationWriter->write(
-                    $articleWriterResult->getProductId(),
+                    $productWriterResult->getProductId(),
                     $article['mainNumber'],
                     \array_filter(
                         $records['accessory'] ?? [],
-                        function (array $accessory) use ($index, $articleWriterResult) {
+                        function (array $accessory) use ($index, $productWriterResult) {
                             return (int) $accessory['parentIndexElement'] === $index
-                                && $articleWriterResult->getMainDetailId() === $articleWriterResult->getDetailId();
+                                && $productWriterResult->getMainDetailId() === $productWriterResult->getDetailId();
                         }
                     ),
                     'accessory',
@@ -1349,13 +1349,13 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
                 );
 
                 $relationWriter->write(
-                    $articleWriterResult->getProductId(),
+                    $productWriterResult->getProductId(),
                     $article['mainNumber'],
                     \array_filter(
                         $records['similar'] ?? [],
-                        function (array $similar) use ($index, $articleWriterResult) {
+                        function (array $similar) use ($index, $productWriterResult) {
                             return (int) $similar['parentIndexElement'] === $index
-                                && $articleWriterResult->getMainDetailId() === $articleWriterResult->getDetailId();
+                                && $productWriterResult->getMainDetailId() === $productWriterResult->getDetailId();
                         }
                     ),
                     'similar',
@@ -1363,7 +1363,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
                 );
 
                 $imageWriter->write(
-                    $articleWriterResult->getProductId(),
+                    $productWriterResult->getProductId(),
                     $article['mainNumber'],
                     \array_filter(
                         $records['image'] ?? [],

@@ -23,6 +23,7 @@ default:
     services:
         -   name: mysql:5.7
             alias: mysql
+    interruptible: true
     before_script:
         - zip -rq plugin.zip .
         - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.shopware.com/shopware/5/product/shopware.git shopware --depth=1 -b ${CHECKOUT_SHOPWARE_BRANCH}

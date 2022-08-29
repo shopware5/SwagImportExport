@@ -123,7 +123,7 @@ class CustomerDataManager extends DataManager implements \Enlight_Hook
      *
      * @return array<string, mixed>
      */
-    public function fixDefaultValues(array $records): array
+    private function fixDefaultValues(array $records): array
     {
         $defaultFieldsValues = CustomerDataType::$defaultFieldsValues;
 

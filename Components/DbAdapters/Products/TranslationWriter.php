@@ -120,12 +120,12 @@ class TranslationWriter
      *
      * @return array<int|string, mixed>
      */
-    public function getShops(): array
+    private function getShops(): array
     {
         return $this->connection->fetchAllKeyValue('SELECT `id`, `name` FROM s_core_shops');
     }
 
-    public function getShop(int $shopId): ?string
+    private function getShop(int $shopId): ?string
     {
         return $this->shops[$shopId];
     }

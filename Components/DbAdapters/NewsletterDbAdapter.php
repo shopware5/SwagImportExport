@@ -101,14 +101,6 @@ class NewsletterDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandle
         $this->defaultValues = $values;
     }
 
-    public function hasAdditionalShippingAddress(): bool
-    {
-        $sql = "SHOW COLUMNS FROM `s_user_shippingaddress` LIKE 'additional_address_line1'";
-        $result = $this->db->fetchRow($sql);
-
-        return !empty($result);
-    }
-
     public function read(array $ids, array $columns): array
     {
         $result['default'] = $this->getBuilder($columns, $ids)->getQuery()->getArrayResult();
@@ -252,19 +244,6 @@ class NewsletterDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandle
     }
 
     /**
-     * @throws \Exception
-     */
-    public function saveMessage(string $message): void
-    {
-        if ($this->errorMode === false) {
-            throw new \Exception($message);
-        }
-
-        $this->setLogMessages($message);
-        $this->setLogState('true');
-    }
-
-    /**
      * @return array<string>
      */
     public function getLogMessages(): array
@@ -272,19 +251,9 @@ class NewsletterDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandle
         return $this->logMessages;
     }
 
-    public function setLogMessages(string $logMessages): void
-    {
-        $this->logMessages[] = $logMessages;
-    }
-
     public function getLogState(): ?string
     {
         return $this->logState;
-    }
-
-    public function setLogState(string $logState): void
-    {
-        $this->logState = $logState;
     }
 
     public function getSections(): array
@@ -305,11 +274,42 @@ class NewsletterDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandle
         return [];
     }
 
+    private function hasAdditionalShippingAddress(): bool
+    {
+        $sql = "SHOW COLUMNS FROM `s_user_shippingaddress` LIKE 'additional_address_line1'";
+        $result = $this->db->fetchRow($sql);
+
+        return !empty($result);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    private function saveMessage(string $message): void
+    {
+        if ($this->errorMode === false) {
+            throw new \Exception($message);
+        }
+
+        $this->setLogMessages($message);
+        $this->setLogState('true');
+    }
+
+    private function setLogMessages(string $logMessages): void
+    {
+        $this->logMessages[] = $logMessages;
+    }
+
+    private function setLogState(string $logState): void
+    {
+        $this->logState = $logState;
+    }
+
     /**
      * @param array<array<string>|string> $columns
      * @param array<int>                  $ids
      */
-    public function getBuilder(array $columns, array $ids): QueryBuilder
+    private function getBuilder(array $columns, array $ids): QueryBuilder
     {
         $builder = $this->manager->createQueryBuilder();
 
@@ -330,7 +330,7 @@ class NewsletterDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandle
      *
      * @return array<string, mixed>
      */
-    protected function prepareNewsletterAddress(array $record): array
+    private function prepareNewsletterAddress(array $record): array
     {
         $keys = [
             'email' => 'email',

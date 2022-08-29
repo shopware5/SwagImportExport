@@ -59,24 +59,6 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends \Shopware_Con
         ];
     }
 
-    public function initAcl(): void
-    {
-        $this->addAclPermission('getProfiles', 'profile', 'Insufficient Permissions (getProfiles)');
-        $this->addAclPermission('createProfiles', 'profile', 'Insufficient Permissions (createProfiles)');
-        $this->addAclPermission('updateProfiles', 'profile', 'Insufficient Permissions (updateProfiles)');
-        $this->addAclPermission('deleteProfiles', 'profile', 'Insufficient Permissions (deleteProfiles)');
-        $this->addAclPermission('getProfile', 'profile', 'Insufficient Permissions (getProfile)');
-        $this->addAclPermission('duplicateProfile', 'profile', 'Insufficient Permissions (duplicateProfile)');
-        $this->addAclPermission('exportProfile', 'profile', 'Insufficient Permissions (exportProfile)');
-        $this->addAclPermission('importProfile', 'profile', 'Insufficient Permissions (importProfile)');
-        $this->addAclPermission('createNode', 'export', 'Insufficient Permissions (createNode)');
-        $this->addAclPermission('updateNode', 'export', 'Insufficient Permissions (updateNode)');
-        $this->addAclPermission('deleteNode', 'export', 'Insufficient Permissions (deleteNode)');
-        $this->addAclPermission('getSections', 'profile', 'Insufficient Permissions (getSections)');
-        $this->addAclPermission('getColumns', 'profile', 'Insufficient Permissions (getColumns)');
-        $this->addAclPermission('getParentKeys', 'profile', 'Insufficient Permissions (getParentKeys)');
-    }
-
     /**
      * Returns all profiles into an array
      */
@@ -561,6 +543,24 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends \Shopware_Con
         $this->View()->assign([
             'success' => true, 'data' => $columns, 'total' => \count($columns),
         ]);
+    }
+
+    protected function initAcl(): void
+    {
+        $this->addAclPermission('getProfiles', 'profile', 'Insufficient Permissions (getProfiles)');
+        $this->addAclPermission('createProfiles', 'profile', 'Insufficient Permissions (createProfiles)');
+        $this->addAclPermission('updateProfiles', 'profile', 'Insufficient Permissions (updateProfiles)');
+        $this->addAclPermission('deleteProfiles', 'profile', 'Insufficient Permissions (deleteProfiles)');
+        $this->addAclPermission('getProfile', 'profile', 'Insufficient Permissions (getProfile)');
+        $this->addAclPermission('duplicateProfile', 'profile', 'Insufficient Permissions (duplicateProfile)');
+        $this->addAclPermission('exportProfile', 'profile', 'Insufficient Permissions (exportProfile)');
+        $this->addAclPermission('importProfile', 'profile', 'Insufficient Permissions (importProfile)');
+        $this->addAclPermission('createNode', 'export', 'Insufficient Permissions (createNode)');
+        $this->addAclPermission('updateNode', 'export', 'Insufficient Permissions (updateNode)');
+        $this->addAclPermission('deleteNode', 'export', 'Insufficient Permissions (deleteNode)');
+        $this->addAclPermission('getSections', 'profile', 'Insufficient Permissions (getSections)');
+        $this->addAclPermission('getColumns', 'profile', 'Insufficient Permissions (getColumns)');
+        $this->addAclPermission('getParentKeys', 'profile', 'Insufficient Permissions (getParentKeys)');
     }
 
     private function saveProfile(Profile $profile): void

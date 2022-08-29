@@ -26,12 +26,6 @@ class Shopware_Controllers_Backend_SwagImportExportSession extends \Shopware_Con
         $this->snippetManager = $snippetManager;
     }
 
-    public function initAcl(): void
-    {
-        $this->addAclPermission('getSessions', 'read', 'Insufficient Permissions (getSessions)');
-        $this->addAclPermission('deleteSession', 'export', 'Insufficient Permissions (deleteSession)');
-    }
-
     public function getSessionDetailsAction(): void
     {
         $manager = $this->getModelManager();
@@ -145,6 +139,12 @@ class Shopware_Controllers_Backend_SwagImportExportSession extends \Shopware_Con
                 'message' => $e->getMessage(),
             ]);
         }
+    }
+
+    protected function initAcl(): void
+    {
+        $this->addAclPermission('getSessions', 'read', 'Insufficient Permissions (getSessions)');
+        $this->addAclPermission('deleteSession', 'export', 'Insufficient Permissions (deleteSession)');
     }
 
     /**

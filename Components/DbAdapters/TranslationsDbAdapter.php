@@ -11,7 +11,6 @@ namespace SwagImportExport\Components\DbAdapters;
 
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\ModelRepository;
-use Shopware\Components\Model\QueryBuilder;
 use Shopware\Models\Article\Configurator\Group as ConfiguratorGroup;
 use Shopware\Models\Article\Configurator\Option as ConfiguratorOption;
 use Shopware\Models\Property\Group as PropertyGroup;
@@ -146,35 +145,6 @@ class TranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
         return $result;
     }
 
-    /**
-     * @param array<array<string, mixed>> $translations
-     *
-     * @return array<array<string, string>>
-     */
-    public function prepareTranslations(array $translations): array
-    {
-        $mapper = $this->getElementMapper();
-
-        $result = [];
-        foreach ($translations as $translation) {
-            $data = \unserialize($translation['objectdata']);
-
-            // key for different translation types
-            $key = $mapper[$translation['objecttype']];
-
-            $result[] = [
-                'objectKey' => $translation['objectkey'],
-                'objectType' => $translation['objecttype'],
-                'baseName' => $translation['baseName'],
-                'name' => $data[$key],
-                'description' => $data['description'] ?? '',
-                'languageId' => $translation['languageId'],
-            ];
-        }
-
-        return $result;
-    }
-
     public function getDefaultColumns(): array
     {
         return [
@@ -293,10 +263,49 @@ class TranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
         }
     }
 
+    public function getLogMessages(): array
+    {
+        return $this->logMessages;
+    }
+
+    public function getLogState(): ?string
+    {
+        return $this->logState;
+    }
+
+    /**
+     * @param array<array<string, mixed>> $translations
+     *
+     * @return array<array<string, string>>
+     */
+    private function prepareTranslations(array $translations): array
+    {
+        $mapper = $this->getElementMapper();
+
+        $result = [];
+        foreach ($translations as $translation) {
+            $data = \unserialize($translation['objectdata']);
+
+            // key for different translation types
+            $key = $mapper[$translation['objecttype']];
+
+            $result[] = [
+                'objectKey' => $translation['objectkey'],
+                'objectType' => $translation['objecttype'],
+                'baseName' => $translation['baseName'],
+                'name' => $data[$key],
+                'description' => $data['description'] ?? '',
+                'languageId' => $translation['languageId'],
+            ];
+        }
+
+        return $result;
+    }
+
     /**
      * @throws \Exception
      */
-    public function saveMessage(string $message): void
+    private function saveMessage(string $message): void
     {
         $errorMode = $this->config->get('SwagImportExportErrorMode');
 
@@ -308,44 +317,20 @@ class TranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
         $this->setLogState('true');
     }
 
-    public function getLogMessages(): array
-    {
-        return $this->logMessages;
-    }
-
-    public function setLogMessages(string $logMessages): void
+    private function setLogMessages(string $logMessages): void
     {
         $this->logMessages[] = $logMessages;
     }
 
-    public function getLogState(): ?string
-    {
-        return $this->logState;
-    }
-
-    public function setLogState(string $logState): void
+    private function setLogState(string $logState): void
     {
         $this->logState = $logState;
     }
 
     /**
-     * @param array<int> $ids
-     */
-    public function getBuilder(array $ids): QueryBuilder
-    {
-        $builder = $this->manager->createQueryBuilder();
-        $builder->select('translation')
-            ->from(Translation::class, 'translation')
-            ->where('translation.id IN (:ids)')
-            ->setParameter('ids', $ids);
-
-        return $builder;
-    }
-
-    /**
      * @return array<string>
      */
-    protected function getElementMapper(): array
+    private function getElementMapper(): array
     {
         return [
             'configuratorgroup' => 'name',
@@ -361,7 +346,7 @@ class TranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
      *
      * @return array<array<string, mixed>>
      */
-    protected function getTranslations(array $ids): array
+    private function getTranslations(array $ids): array
     {
         $productDetailIds = \implode(',', $ids);
 
@@ -422,7 +407,7 @@ class TranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * @throws AdapterException
      */
-    protected function getRepository(string $type): ModelRepository
+    private function getRepository(string $type): ModelRepository
     {
         switch ($type) {
             case 'configuratorgroup':

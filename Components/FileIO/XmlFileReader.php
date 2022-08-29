@@ -93,7 +93,7 @@ class XmlFileReader implements FileReader
     /**
      * @return array<mixed>|string
      */
-    protected function toArrayTree(\DOMElement $node, string $path)
+    private function toArrayTree(\DOMElement $node, string $path)
     {
         $hasChildren = false;
         $record = [];
@@ -131,7 +131,7 @@ class XmlFileReader implements FileReader
      * @param array<mixed> $node
      * @param array<mixed> $path
      */
-    protected function findIterationNode(array $node, array $path): void
+    private function findIterationNode(array $node, array $path): void
     {
         $path[] = $node['name'];
         if (isset($node['children'])) {

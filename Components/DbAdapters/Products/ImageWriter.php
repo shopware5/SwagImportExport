@@ -37,11 +37,6 @@ class ImageWriter
         $this->productsDbAdapter = $productsDbAdapter;
     }
 
-    public function getProductsDbAdapter(): ProductsDbAdapter
-    {
-        return $this->productsDbAdapter;
-    }
-
     /**
      * @param array<string, mixed> $images
      *
@@ -80,7 +75,7 @@ class ImageWriter
                         'thumbnail' => $thumbnail,
                     ];
                     // set unprocessed data to use hidden profile for articleImages
-                    $this->getProductsDbAdapter()->setUnprocessedData('articlesImages', 'default', $data);
+                    $this->productsDbAdapter->setUnprocessedData('articlesImages', 'default', $data);
                 }
             }
 
@@ -111,7 +106,7 @@ class ImageWriter
     /**
      * @return array<string, string>
      */
-    protected function getMediaById(int $mediaId): array
+    private function getMediaById(int $mediaId): array
     {
         return $this->db->fetchRow(
             'SELECT id, name, description, extension FROM s_media WHERE id = ?',
@@ -122,7 +117,7 @@ class ImageWriter
     /**
      * @return array<string, string>
      */
-    protected function getMediaByName(string $name): ?array
+    private function getMediaByName(string $name): ?array
     {
         $media = $this->db->fetchRow(
             'SELECT id, name, description, extension FROM s_media media WHERE media.name = ?',
@@ -136,7 +131,7 @@ class ImageWriter
         return $media;
     }
 
-    protected function isImageExists(int $productId, int $mediaId): bool
+    private function isImageExists(int $productId, int $mediaId): bool
     {
         $isImageExists = $this->db->fetchOne(
             'SELECT id FROM s_articles_img WHERE articleID = ? AND media_id = ?',
@@ -146,7 +141,7 @@ class ImageWriter
         return \is_numeric($isImageExists);
     }
 
-    protected function isImageNameCorrect(int $mediaId, string $imageName): bool
+    private function isImageNameCorrect(int $mediaId, string $imageName): bool
     {
         $isImageNameCorrect = $this->db->fetchOne(
             'SELECT media.id FROM s_media media WHERE media.id = ? AND media.name = ?',
@@ -161,7 +156,7 @@ class ImageWriter
      *
      * @throws DBALException
      */
-    protected function insertImages(array $data, int $productId): void
+    private function insertImages(array $data, int $productId): void
     {
         $medias = $data['medias'];
         $images = $data['images'];
@@ -191,7 +186,7 @@ class ImageWriter
      * @param array<string, mixed> $medias
      * @param array<string, mixed> $images
      */
-    protected function prepareImageData(array $medias, array $images): array
+    private function prepareImageData(array $medias, array $images): array
     {
         $mediaId = null;
         $imageData = [];
@@ -211,7 +206,7 @@ class ImageWriter
         return [$imageData, $mediaId];
     }
 
-    protected function setMainImage(int $productId, ?int $mediaId): void
+    private function setMainImage(int $productId, ?int $mediaId): void
     {
         $count = $this->countOfMainImages($productId);
         if ($count == 1) {
@@ -225,7 +220,7 @@ class ImageWriter
         }
     }
 
-    protected function countOfMainImages(int $productId): int
+    private function countOfMainImages(int $productId): int
     {
         $count = $this->db->fetchOne(
             'SELECT COUNT(main)
@@ -240,7 +235,7 @@ class ImageWriter
     /**
      * @throws DBALException
      */
-    protected function setFirstImageAsMain(int $productId): void
+    private function setFirstImageAsMain(int $productId): void
     {
         $update = 'UPDATE s_articles_img SET main = 1 WHERE articleID = :productId ORDER BY id ASC LIMIT 1';
         $this->connection->executeStatement($update, ['productId' => $productId]);
@@ -249,7 +244,7 @@ class ImageWriter
     /**
      * @throws DBALException
      */
-    protected function updateMain(int $productId, int $mediaId): void
+    private function updateMain(int $productId, int $mediaId): void
     {
         $update = 'UPDATE s_articles_img SET main = 2 WHERE articleID = :productId AND media_id != :mediaId';
         $this->connection->executeStatement($update, ['productId' => $productId, 'mediaId' => $mediaId]);

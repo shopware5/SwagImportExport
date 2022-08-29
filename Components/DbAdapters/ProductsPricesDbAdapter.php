@@ -411,7 +411,17 @@ class ProductsPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
         return [];
     }
 
-    public function saveMessage(string $message): void
+    public function getLogMessages(): array
+    {
+        return $this->logMessages;
+    }
+
+    public function getLogState(): ?string
+    {
+        return $this->logState;
+    }
+
+    private function saveMessage(string $message): void
     {
         $errorMode = $this->config->get('SwagImportExportErrorMode');
 
@@ -423,22 +433,12 @@ class ProductsPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
         $this->setLogState('true');
     }
 
-    public function getLogMessages(): array
-    {
-        return $this->logMessages;
-    }
-
-    public function setLogMessages(string $logMessages): void
+    private function setLogMessages(string $logMessages): void
     {
         $this->logMessages[] = $logMessages;
     }
 
-    public function getLogState(): ?string
-    {
-        return $this->logState;
-    }
-
-    public function setLogState(string $logState): void
+    private function setLogState(string $logState): void
     {
         $this->logState = $logState;
     }
@@ -446,7 +446,7 @@ class ProductsPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * @return array<array<int>>
      */
-    public function getCategoryIdCollection(): array
+    private function getCategoryIdCollection(): array
     {
         return $this->categoryIdCollection;
     }
@@ -454,7 +454,7 @@ class ProductsPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * @param array<int> $categoryIdCollection
      */
-    public function setCategoryIdCollection(array $categoryIdCollection): void
+    private function setCategoryIdCollection(array $categoryIdCollection): void
     {
         $this->categoryIdCollection[] = $categoryIdCollection;
     }
@@ -463,7 +463,7 @@ class ProductsPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
      * @param array<array<string>|string> $columns
      * @param array<int>                  $ids
      */
-    public function getBuilder(array $columns, array $ids): QueryBuilder
+    private function getBuilder(array $columns, array $ids): QueryBuilder
     {
         $builder = $this->manager->createQueryBuilder();
 
@@ -480,7 +480,7 @@ class ProductsPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
         return $builder;
     }
 
-    protected function collectCategoryIds(Category $categoryModel): void
+    private function collectCategoryIds(Category $categoryModel): void
     {
         $categoryId = $categoryModel->getId();
         $this->setCategoryIdCollection([$categoryId]);

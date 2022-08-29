@@ -43,7 +43,7 @@ class CsvFileWriter implements FileWriter
         $convertor = new CsvConverter();
         $keys = \array_keys(\current($treeData));
         foreach ($treeData as $line) {
-            $flatData .= $convertor->_encode_line($line, $keys) . $convertor->getNewline();
+            $flatData .= $convertor->encodeLine($line, $keys) . $convertor->getNewline();
         }
         $this->fileHelper->writeStringToFile($fileName, $flatData, \FILE_APPEND);
     }
